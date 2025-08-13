@@ -1,0 +1,95 @@
+{
+  "common": {
+    "home": "Home",
+    "shop": "Shop",
+    "about": "About",
+    "contact": "Contact",
+    "cart": "Cart",
+    "account": "My Account",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "search": "Search",
+    "language": "Language",
+    "currency": "EUR",
+    "addToCart": "Add to Cart",
+    "viewDetails": "View Details",
+    "price": "Price",
+    "quantity": "Quantity",
+    "total": "Total",
+    "checkout": "Checkout",
+    "continueShopping": "Continue Shopping"
+  },
+  "home": {
+    "hero": {
+      "title": "Authentic Moldovan Products",
+      "subtitle": "Discover the unique flavors of Moldova with home delivery in Spain",
+      "cta": "Explore Products"
+    },
+    "features": {
+      "quality": {
+        "title": "Premium Quality",
+        "description": "Products selected directly from the best Moldovan producers"
+      },
+      "delivery": {
+        "title": "Fast Delivery",
+        "description": "Home delivery throughout Spain in 2-5 business days"
+      },
+      "authentic": {
+        "title": "100% Authentic",
+        "description": "Guaranteed traditional Moldovan products"
+      },
+      "support": {
+        "title": "24/7 Support",
+        "description": "We're here to help you anytime"
+      }
+    }
+  },
+  "products": {
+    "categories": {
+      "all": "All",
+      "wine": "Wines",
+      "food": "Food",
+      "preserves": "Preserves",
+      "dairy": "Dairy",
+      "sweets": "Sweets"
+    },
+    "filters": {
+      "sortBy": "Sort by",
+      "priceRange": "Price Range",
+      "category": "Category",
+      "availability": "Availability",
+      "inStock": "In Stock",
+      "outOfStock": "Out of Stock"
+    }
+  },
+  "footer": {
+    "info": {
+      "title": "Information",
+      "about": "About Us",
+      "terms": "Terms & Conditions",
+      "privacy": "Privacy Policy",
+      "shipping": "Shipping Information"
+    },
+    "help": {
+      "title": "Help",
+      "contact": "Contact",
+      "faq": "FAQ",
+      "returns": "Returns",
+      "track": "Track Order"
+    },
+    "social": {
+      "title": "Follow Us",
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "twitter": "Twitter"
+    },
+    "newsletter": {
+      "title": "Newsletter",
+      "description": "Subscribe to receive special offers",
+      "placeholder": "Your email",
+      "button": "Subscribe"
+    },
+    "copyright": "© 2024 Moldova Direct. All rights reserved."
+  }
+}

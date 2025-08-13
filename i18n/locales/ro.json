@@ -1,0 +1,95 @@
+{
+  "common": {
+    "home": "Acasă",
+    "shop": "Magazin",
+    "about": "Despre",
+    "contact": "Contact",
+    "cart": "Coș",
+    "account": "Contul Meu",
+    "login": "Autentificare",
+    "register": "Înregistrare",
+    "logout": "Deconectare",
+    "search": "Căutare",
+    "language": "Limbă",
+    "currency": "EUR",
+    "addToCart": "Adaugă în Coș",
+    "viewDetails": "Vezi Detalii",
+    "price": "Preț",
+    "quantity": "Cantitate",
+    "total": "Total",
+    "checkout": "Finalizare Comandă",
+    "continueShopping": "Continuă Cumpărăturile"
+  },
+  "home": {
+    "hero": {
+      "title": "Produse Autentice Moldovenești",
+      "subtitle": "Descoperă aromele unice ale Moldovei cu livrare la domiciliu în Spania",
+      "cta": "Explorează Produsele"
+    },
+    "features": {
+      "quality": {
+        "title": "Calitate Premium",
+        "description": "Produse selectate direct de la cei mai buni producători moldoveni"
+      },
+      "delivery": {
+        "title": "Livrare Rapidă",
+        "description": "Livrare la domiciliu în toată Spania în 2-5 zile lucrătoare"
+      },
+      "authentic": {
+        "title": "100% Autentic",
+        "description": "Produse tradiționale moldovenești garantate"
+      },
+      "support": {
+        "title": "Suport 24/7",
+        "description": "Suntem aici să te ajutăm oricând"
+      }
+    }
+  },
+  "products": {
+    "categories": {
+      "all": "Toate",
+      "wine": "Vinuri",
+      "food": "Alimente",
+      "preserves": "Conserve",
+      "dairy": "Lactate",
+      "sweets": "Dulciuri"
+    },
+    "filters": {
+      "sortBy": "Sortează după",
+      "priceRange": "Interval de Preț",
+      "category": "Categorie",
+      "availability": "Disponibilitate",
+      "inStock": "În Stoc",
+      "outOfStock": "Stoc Epuizat"
+    }
+  },
+  "footer": {
+    "info": {
+      "title": "Informații",
+      "about": "Despre Noi",
+      "terms": "Termeni și Condiții",
+      "privacy": "Politica de Confidențialitate",
+      "shipping": "Informații despre Livrare"
+    },
+    "help": {
+      "title": "Ajutor",
+      "contact": "Contact",
+      "faq": "Întrebări Frecvente",
+      "returns": "Returnări",
+      "track": "Urmărește Comanda"
+    },
+    "social": {
+      "title": "Urmărește-ne",
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "twitter": "Twitter"
+    },
+    "newsletter": {
+      "title": "Newsletter",
+      "description": "Abonează-te pentru a primi oferte speciale",
+      "placeholder": "Email-ul tău",
+      "button": "Abonează-te"
+    },
+    "copyright": "© 2024 Moldova Direct. Toate drepturile rezervate."
+  }
+}

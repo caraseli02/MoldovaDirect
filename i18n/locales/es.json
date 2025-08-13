@@ -1,0 +1,95 @@
+{
+  "common": {
+    "home": "Inicio",
+    "shop": "Tienda",
+    "about": "Acerca de",
+    "contact": "Contacto",
+    "cart": "Carrito",
+    "account": "Mi Cuenta",
+    "login": "Iniciar Sesión",
+    "register": "Registrarse",
+    "logout": "Cerrar Sesión",
+    "search": "Buscar",
+    "language": "Idioma",
+    "currency": "EUR",
+    "addToCart": "Añadir al Carrito",
+    "viewDetails": "Ver Detalles",
+    "price": "Precio",
+    "quantity": "Cantidad",
+    "total": "Total",
+    "checkout": "Finalizar Compra",
+    "continueShopping": "Continuar Comprando"
+  },
+  "home": {
+    "hero": {
+      "title": "Productos Auténticos de Moldavia",
+      "subtitle": "Descubre los sabores únicos de Moldavia con entrega a domicilio en España",
+      "cta": "Explorar Productos"
+    },
+    "features": {
+      "quality": {
+        "title": "Calidad Premium",
+        "description": "Productos seleccionados directamente de los mejores productores moldavos"
+      },
+      "delivery": {
+        "title": "Entrega Rápida",
+        "description": "Entrega a domicilio en toda España en 2-5 días laborables"
+      },
+      "authentic": {
+        "title": "100% Auténtico",
+        "description": "Productos tradicionales moldavos garantizados"
+      },
+      "support": {
+        "title": "Soporte 24/7",
+        "description": "Estamos aquí para ayudarte en cualquier momento"
+      }
+    }
+  },
+  "products": {
+    "categories": {
+      "all": "Todos",
+      "wine": "Vinos",
+      "food": "Alimentos",
+      "preserves": "Conservas",
+      "dairy": "Lácteos",
+      "sweets": "Dulces"
+    },
+    "filters": {
+      "sortBy": "Ordenar por",
+      "priceRange": "Rango de Precio",
+      "category": "Categoría",
+      "availability": "Disponibilidad",
+      "inStock": "En Stock",
+      "outOfStock": "Agotado"
+    }
+  },
+  "footer": {
+    "info": {
+      "title": "Información",
+      "about": "Acerca de Nosotros",
+      "terms": "Términos y Condiciones",
+      "privacy": "Política de Privacidad",
+      "shipping": "Información de Envío"
+    },
+    "help": {
+      "title": "Ayuda",
+      "contact": "Contacto",
+      "faq": "Preguntas Frecuentes",
+      "returns": "Devoluciones",
+      "track": "Rastrear Pedido"
+    },
+    "social": {
+      "title": "Síguenos",
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "twitter": "Twitter"
+    },
+    "newsletter": {
+      "title": "Newsletter",
+      "description": "Suscríbete para recibir ofertas especiales",
+      "placeholder": "Tu correo electrónico",
+      "button": "Suscribirse"
+    },
+    "copyright": "© 2024 Moldova Direct. Todos los derechos reservados."
+  }
+}
