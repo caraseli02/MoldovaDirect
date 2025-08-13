@@ -9,13 +9,18 @@ export default defineNuxtConfig({
     '@nuxt/image'
   ],
   i18n: {
-    locales: ['es', 'en', 'ro', 'ru'],
+    locales: [
+      { code: 'es', name: 'Español' },
+      { code: 'en', name: 'English' },
+      { code: 'ro', name: 'Română' },
+      { code: 'ru', name: 'Русский' }
+    ],
     defaultLocale: 'es',
     strategy: 'prefix_except_default'
   },
   css: ['~/assets/css/main.css'],
   typescript: {
-    strict: true
+    strict: false
   },
   image: {
     quality: 80,

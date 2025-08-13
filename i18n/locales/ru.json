@@ -18,7 +18,9 @@
     "quantity": "Количество",
     "total": "Итого",
     "checkout": "Оформить заказ",
-    "continueShopping": "Продолжить покупки"
+    "continueShopping": "Продолжить покупки",
+    "previous": "Предыдущий",
+    "next": "Следующий"
   },
   "home": {
     "hero": {
@@ -46,6 +48,34 @@
     }
   },
   "products": {
+    "browseDescription": "Исследуйте наш выбор подлинных молдавских продуктов",
+    "searchPlaceholder": "Поиск товаров...",
+    "allCategories": "Все категории",
+    "sortNewest": "Новейшие",
+    "sortName": "Название",
+    "sortPrice": "Цена",
+    "sortFeatured": "Рекомендуемые",
+    "search": "Поиск",
+    "category": "Категория",
+    "noResults": "Товары не найдены",
+    "noProducts": "Нет доступных товаров",
+    "tryDifferentFilters": "Попробуйте другие фильтры",
+    "comingSoon": "Товары скоро появятся",
+    "addToCart": "В корзину",
+    "outOfStock": "Нет в наличии",
+    "featured": "Рекомендуемый",
+    "sale": "Скидка",
+    "off": "скидка",
+    "notFound": "Товар не найден",
+    "notFoundDescription": "Товар, который вы ищете, не существует или был удален",
+    "backToProducts": "Назад к товарам",
+    "details": "Детали",
+    "origin": "Происхождение",
+    "volume": "Объем",
+    "alcoholContent": "Содержание алкоголя",
+    "weight": "Вес",
+    "availability": "Наличие",
+    "description": "Описание",
     "categories": {
       "all": "Все",
       "wine": "Вина",

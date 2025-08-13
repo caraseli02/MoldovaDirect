@@ -18,7 +18,9 @@
     "quantity": "Cantidad",
     "total": "Total",
     "checkout": "Finalizar Compra",
-    "continueShopping": "Continuar Comprando"
+    "continueShopping": "Continuar Comprando",
+    "previous": "Anterior",
+    "next": "Siguiente"
   },
   "home": {
     "hero": {
@@ -46,6 +48,34 @@
     }
   },
   "products": {
+    "browseDescription": "Explora nuestra selección de productos auténticos de Moldavia",
+    "searchPlaceholder": "Buscar productos...",
+    "allCategories": "Todas las categorías",
+    "sortNewest": "Más recientes",
+    "sortName": "Nombre",
+    "sortPrice": "Precio",
+    "sortFeatured": "Destacados",
+    "search": "Búsqueda",
+    "category": "Categoría",
+    "noResults": "No se encontraron productos",
+    "noProducts": "No hay productos disponibles",
+    "tryDifferentFilters": "Prueba con filtros diferentes",
+    "comingSoon": "Productos próximamente",
+    "addToCart": "Añadir al Carrito",
+    "outOfStock": "Agotado",
+    "featured": "Destacado",
+    "sale": "Oferta",
+    "off": "descuento",
+    "notFound": "Producto no encontrado",
+    "notFoundDescription": "El producto que buscas no existe o ha sido eliminado",
+    "backToProducts": "Volver a productos",
+    "details": "Detalles",
+    "origin": "Origen",
+    "volume": "Volumen",
+    "alcoholContent": "Contenido alcohólico",
+    "weight": "Peso",
+    "availability": "Disponibilidad",
+    "description": "Descripción",
     "categories": {
       "all": "Todos",
       "wine": "Vinos",

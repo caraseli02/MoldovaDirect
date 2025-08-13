@@ -18,7 +18,9 @@
     "quantity": "Cantitate",
     "total": "Total",
     "checkout": "Finalizare Comandă",
-    "continueShopping": "Continuă Cumpărăturile"
+    "continueShopping": "Continuă Cumpărăturile",
+    "previous": "Anterior",
+    "next": "Următorul"
   },
   "home": {
     "hero": {
@@ -46,6 +48,34 @@
     }
   },
   "products": {
+    "browseDescription": "Explorează selecția noastră de produse autentice moldovenești",
+    "searchPlaceholder": "Caută produse...",
+    "allCategories": "Toate categoriile",
+    "sortNewest": "Cele mai noi",
+    "sortName": "Nume",
+    "sortPrice": "Preț",
+    "sortFeatured": "Recomandate",
+    "search": "Căutare",
+    "category": "Categorie",
+    "noResults": "Nu s-au găsit produse",
+    "noProducts": "Nu sunt produse disponibile",
+    "tryDifferentFilters": "Încearcă filtre diferite",
+    "comingSoon": "Produse în curând",
+    "addToCart": "Adaugă în Coș",
+    "outOfStock": "Stoc Epuizat",
+    "featured": "Recomandat",
+    "sale": "Ofertă",
+    "off": "reducere",
+    "notFound": "Produs negăsit",
+    "notFoundDescription": "Produsul pe care îl cauți nu există sau a fost eliminat",
+    "backToProducts": "Înapoi la produse",
+    "details": "Detalii",
+    "origin": "Origine",
+    "volume": "Volum",
+    "alcoholContent": "Conținut alcool",
+    "weight": "Greutate",
+    "availability": "Disponibilitate",
+    "description": "Descriere",
     "categories": {
       "all": "Toate",
       "wine": "Vinuri",
