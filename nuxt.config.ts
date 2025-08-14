@@ -12,7 +12,7 @@ export default defineNuxtConfig({
   hub: {
     database: true,  // Enable Cloudflare D1
     kv: true,        // Enable KV storage for sessions/cache
-    blob: true,      // Enable R2 for file storage
+    blob: false,     // Disable R2 for now (requires paid plan)
     cache: true,     // Enable edge caching
     analytics: true, // Enable Cloudflare Analytics
     ai: false        // Disable AI features for now

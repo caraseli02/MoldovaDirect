@@ -75,13 +75,25 @@ wrangler kv:namespace create "sessions"
 
 **IMPORTANT**: Copy the `id` from the output!
 
-### 4.3 R2 Storage (Handled by NuxtHub)
+### 4.3 R2 Storage (Optional - Requires Paid Plan)
 ```bash
-# R2 storage is automatically handled by NuxtHub!
-# During development: Files are stored locally in .data/hub/blob
-# In production: NuxtHub automatically provisions R2 storage
-# No manual setup needed! 🎉
+# R2 Storage is disabled by default (requires Cloudflare paid plan)
+# To enable R2 storage later:
+
+# 1. Go to Cloudflare Dashboard → R2 Object Storage
+# 2. Click "Purchase R2" (starts at $0.015/GB/month)
+# 3. After enabling, update nuxt.config.ts:
+#    hub: { blob: true }
+# 4. Re-enable upload endpoints by renaming:
+#    - server/api/upload/image.post.ts.disabled → image.post.ts
+#    - server/api/upload/list.get.ts.disabled → list.get.ts
+
+# For now, we'll deploy without file uploads
 ```
+
+**Note**: If you need file uploads immediately, you can:
+1. Enable R2 on Cloudflare (paid feature)
+2. Or use alternative storage like Uploadcare/Cloudinary for images
 
 ## Step 5: Update Configuration (2 minutes)
 
