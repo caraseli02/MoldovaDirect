@@ -39,12 +39,16 @@ E-commerce platform enabling international customers (primarily from Spain) to p
 - **ORM**: Prisma or Drizzle
 - **Authentication**: JWT with refresh tokens
 
-### Infrastructure
-- **Frontend Hosting**: Vercel
-- **Backend Hosting**: Railway or Render (FastAPI + PostgreSQL)
-- **File Storage**: Cloudinary or S3 (product images)
+### Infrastructure (NuxtHub + Cloudflare)
+- **Frontend Hosting**: Cloudflare Pages via NuxtHub
+- **Edge Runtime**: Cloudflare Workers
+- **Database**: Cloudflare D1 (SQLite at the edge)
+- **File Storage**: Cloudflare R2 (S3-compatible)
+- **Cache/Sessions**: Cloudflare KV
+- **CDN**: Cloudflare Global Network (300+ locations)
+- **Image Optimization**: Cloudflare Images
 - **Email Service**: SendGrid or Resend
-- **Monitoring**: Sentry (error tracking)
+- **Monitoring**: Cloudflare Analytics + Sentry
 
 ## Database Schema
 

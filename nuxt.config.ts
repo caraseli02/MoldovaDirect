@@ -3,11 +3,26 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
   modules: [
+    '@nuxthub/core',
     '@nuxtjs/tailwindcss',
     '@nuxtjs/i18n',
     '@pinia/nuxt',
     '@nuxt/image'
   ],
+  hub: {
+    database: true,  // Enable Cloudflare D1
+    kv: true,        // Enable KV storage for sessions/cache
+    blob: true,      // Enable R2 for file storage
+    cache: true,     // Enable edge caching
+    analytics: true, // Enable Cloudflare Analytics
+    ai: false        // Disable AI features for now
+  },
+  nitro: {
+    preset: 'cloudflare-pages',
+    experimental: {
+      wasm: true
+    }
+  },
   i18n: {
     locales: [
       { code: 'es', name: 'Español' },
@@ -23,8 +38,9 @@ export default defineNuxtConfig({
     strict: false
   },
   image: {
+    provider: 'cloudflare',
     quality: 80,
-    format: ['webp'],
+    format: ['webp', 'avif'],
     screens: {
       xs: 320,
       sm: 640,

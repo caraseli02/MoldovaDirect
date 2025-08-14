@@ -1,0 +1,32 @@
+name = "moldova-direct"
+compatibility_date = "2024-11-01"
+pages_build_output_dir = ".output/public"
+
+# D1 Database binding
+[[d1_databases]]
+binding = "DB"
+database_name = "moldova-direct-db"
+database_id = "YOUR_DATABASE_ID" # Will be set after creating the database
+
+# KV Namespace for sessions/cache
+[[kv_namespaces]]
+binding = "KV"
+id = "YOUR_KV_NAMESPACE_ID" # Will be set after creating the namespace
+
+# R2 Bucket for file storage (optional - NuxtHub handles this)
+# [[r2_buckets]]
+# binding = "BUCKET"
+# bucket_name = "moldova-direct-assets"
+
+# Environment variables
+[vars]
+NODE_ENV = "production"
+NUXT_PUBLIC_SITE_URL = "https://moldovadirect.com"
+
+# Development settings
+[env.development]
+vars = { NODE_ENV = "development", NUXT_PUBLIC_SITE_URL = "http://localhost:3000" }
+
+# Staging environment
+[env.staging]
+vars = { NODE_ENV = "staging", NUXT_PUBLIC_SITE_URL = "https://staging.moldovadirect.com" }

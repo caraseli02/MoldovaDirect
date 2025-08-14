@@ -1,11 +1,9 @@
-import { db } from '~/server/database/connection'
-import { products, categories, productImages } from '~/server/database/schema'
-import { eq, and, or, like, gte, lte, desc, asc, sql } from 'drizzle-orm'
-import type { ProductFilters, ProductListResponse } from '~/types/database'
+import { useDB, tables, desc, eq, and, or, gte, lte, sql } from '~/server/utils/database'
 
-export default defineEventHandler(async (event) => {
+export default defineCachedEventHandler(async (event) => {
   try {
-    const query = getQuery(event) as ProductFilters
+    const db = useDB()
+    const query = getQuery(event)
     
     // Parse query parameters
     const {
@@ -14,70 +12,39 @@ export default defineEventHandler(async (event) => {
       minPrice,
       maxPrice,
       inStock = false,
-      featured,
-      tags = [],
-      sortBy = 'created',
-      sortOrder = 'desc',
       page = 1,
       limit = 12
     } = query
 
     // Build where conditions
-    const conditions = [
-      eq(products.isActive, true)
-    ]
+    const conditions = []
+    conditions.push(eq(tables.products.isActive, true))
 
     if (categoryId) {
-      conditions.push(eq(products.categoryId, Number(categoryId)))
+      conditions.push(eq(tables.products.categoryId, Number(categoryId)))
     }
 
     if (search) {
-      // Search in name and description (all languages)
+      // For SQLite/D1, we use LIKE for text search
       conditions.push(
         or(
-          sql`${products.name}::text ILIKE ${`%${search}%`}`,
-          sql`${products.description}::text ILIKE ${`%${search}%`}`,
-          like(products.sku, `%${search}%`)
+          sql`json_extract(${tables.products.nameTranslations}, '$.es') LIKE ${`%${search}%`}`,
+          sql`json_extract(${tables.products.nameTranslations}, '$.en') LIKE ${`%${search}%`}`,
+          sql`${tables.products.sku} LIKE ${`%${search}%`}`
         )
       )
     }
 
     if (minPrice !== undefined) {
-      conditions.push(gte(products.price, String(minPrice)))
+      conditions.push(gte(tables.products.priceEur, Number(minPrice)))
     }
 
     if (maxPrice !== undefined) {
-      conditions.push(lte(products.price, String(maxPrice)))
+      conditions.push(lte(tables.products.priceEur, Number(maxPrice)))
     }
 
     if (inStock) {
-      conditions.push(gte(products.stockQuantity, 1))
-    }
-
-    if (featured !== undefined) {
-      conditions.push(eq(products.isFeatured, Boolean(featured)))
-    }
-
-    if (Array.isArray(tags) && tags.length > 0) {
-      conditions.push(
-        sql`${products.tags} && ${tags}`
-      )
-    }
-
-    // Build order by clause
-    let orderBy
-    switch (sortBy) {
-      case 'name':
-        orderBy = sortOrder === 'asc' ? asc(sql`${products.name}->>'es'`) : desc(sql`${products.name}->>'es'`)
-        break
-      case 'price':
-        orderBy = sortOrder === 'asc' ? asc(products.price) : desc(products.price)
-        break
-      case 'featured':
-        orderBy = desc(products.isFeatured)
-        break
-      default:
-        orderBy = sortOrder === 'asc' ? asc(products.createdAt) : desc(products.createdAt)
+      conditions.push(gte(tables.products.stockQuantity, 1))
     }
 
     // Calculate offset
@@ -86,78 +53,48 @@ export default defineEventHandler(async (event) => {
     // Execute query with joins
     const result = await db
       .select({
-        id: products.id,
-        name: products.name,
-        slug: products.slug,
-        description: products.description,
-        shortDescription: products.shortDescription,
-        price: products.price,
-        comparePrice: products.comparePrice,
-        sku: products.sku,
-        stockQuantity: products.stockQuantity,
-        categoryId: products.categoryId,
-        isActive: products.isActive,
-        isFeatured: products.isFeatured,
-        tags: products.tags,
-        origin: products.origin,
-        alcoholContent: products.alcoholContent,
-        volume: products.volume,
-        createdAt: products.createdAt,
-        updatedAt: products.updatedAt,
+        id: tables.products.id,
+        sku: tables.products.sku,
+        nameTranslations: tables.products.nameTranslations,
+        descriptionTranslations: tables.products.descriptionTranslations,
+        priceEur: tables.products.priceEur,
+        compareAtPriceEur: tables.products.compareAtPriceEur,
+        stockQuantity: tables.products.stockQuantity,
+        categoryId: tables.products.categoryId,
+        images: tables.products.images,
+        attributes: tables.products.attributes,
+        isActive: tables.products.isActive,
+        createdAt: tables.products.createdAt,
+        updatedAt: tables.products.updatedAt,
         category: {
-          id: categories.id,
-          name: categories.name,
-          slug: categories.slug,
-          description: categories.description
+          id: tables.categories.id,
+          nameTranslations: tables.categories.nameTranslations,
+          slug: tables.categories.slug
         }
       })
-      .from(products)
-      .leftJoin(categories, eq(products.categoryId, categories.id))
-      .where(and(...conditions))
-      .orderBy(orderBy)
+      .from(tables.products)
+      .leftJoin(tables.categories, eq(tables.products.categoryId, tables.categories.id))
+      .where(conditions.length > 0 ? and(...conditions) : undefined)
+      .orderBy(desc(tables.products.createdAt))
       .limit(Number(limit))
       .offset(offset)
 
-    // Get images for each product
-    const productIds = result.map(p => p.id)
-    const images = productIds.length > 0 ? await db
-      .select()
-      .from(productImages)
-      .where(sql`${productImages.productId} = ANY(${productIds})`)
-      .orderBy(desc(productImages.isPrimary), asc(productImages.sortOrder)) : []
-
-    // Group images by product ID
-    const imagesByProduct = images.reduce((acc, img) => {
-      if (!acc[img.productId]) acc[img.productId] = []
-      acc[img.productId].push(img)
-      return acc
-    }, {} as Record<number, typeof images>)
-
-    // Combine products with their images and categories
-    const productsWithRelations = result.map(product => ({
-      ...product,
-      images: imagesByProduct[product.id] || []
-    }))
-
     // Get total count for pagination
     const totalResult = await db
-      .select({ count: sql<number>`cast(count(*) as int)` })
-      .from(products)
-      .leftJoin(categories, eq(products.categoryId, categories.id))
-      .where(and(...conditions))
+      .select({ count: sql<number>`count(*)` })
+      .from(tables.products)
+      .where(conditions.length > 0 ? and(...conditions) : undefined)
 
     const total = totalResult[0]?.count || 0
     const totalPages = Math.ceil(total / Number(limit))
 
-    const response: ProductListResponse = {
-      products: productsWithRelations,
+    return {
+      products: result,
       total,
       page: Number(page),
       limit: Number(limit),
       totalPages
     }
-
-    return response
   } catch (error) {
     console.error('Error fetching products:', error)
     throw createError({
@@ -165,4 +102,8 @@ export default defineEventHandler(async (event) => {
       statusMessage: 'Failed to fetch products'
     })
   }
+}, {
+  maxAge: 60 * 5, // Cache for 5 minutes
+  name: 'products-list',
+  swr: true // Stale-while-revalidate
 })
