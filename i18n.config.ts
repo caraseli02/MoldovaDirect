@@ -22,7 +22,66 @@ export default defineI18nConfig(() => ({
         quantity: "Cantidad",
         total: "Total",
         checkout: "Finalizar Compra",
-        continueShopping: "Continuar Comprando"
+        continueShopping: "Continuar Comprando",
+        loading: "Cargando...",
+        optional: "Opcional",
+        and: "y"
+      },
+      auth: {
+        signIn: "Iniciar Sesión",
+        signUp: "Registrarse",
+        createAccount: "Crear Cuenta",
+        email: "Correo Electrónico",
+        password: "Contraseña",
+        confirmPassword: "Confirmar Contraseña",
+        fullName: "Nombre Completo",
+        phone: "Número de Teléfono",
+        rememberMe: "Recordarme",
+        forgotPassword: "¿Olvidaste tu contraseña?",
+        noAccount: "¿No tienes una cuenta?",
+        haveAccount: "¿Ya tienes una cuenta?",
+        acceptTerms: "Acepto los",
+        passwordHint: "Al menos 8 caracteres",
+        passwordMismatch: "Las contraseñas no coinciden",
+        passwordTooShort: "La contraseña debe tener al menos 8 caracteres",
+        loginError: "Correo o contraseña incorrectos",
+        registerError: "Error al registrarse. Por favor, inténtalo de nuevo.",
+        signInRequired: "Inicio de sesión requerido",
+        signInToViewAccount: "Por favor, inicia sesión para ver tu cuenta"
+      },
+      account: {
+        dashboard: "Panel",
+        orders: "Pedidos",
+        addresses: "Direcciones",
+        settings: "Configuración",
+        welcomeBack: "Bienvenido de nuevo",
+        totalOrders: "Total de Pedidos",
+        wishlistItems: "Artículos en Lista de Deseos",
+        recentOrders: "Pedidos Recientes",
+        noOrdersYet: "Aún no tienes pedidos"
+      },
+      footer: {
+        info: {
+          title: "Información",
+          about: "Acerca de Nosotros",
+          terms: "Términos y Condiciones",
+          privacy: "Política de Privacidad",
+          shipping: "Información de Envío"
+        },
+        help: {
+          title: "Ayuda",
+          contact: "Contacto",
+          faq: "Preguntas Frecuentes",
+          returns: "Devoluciones",
+          track: "Rastrear Pedido"
+        },
+        newsletter: {
+          title: "Boletín",
+          description: "Suscríbete para recibir ofertas especiales",
+          placeholder: "Tu correo electrónico",
+          button: "Suscribirse"
+        },
+        copyright: "© 2024 Moldova Direct. Todos los derechos reservados."
       },
       home: {
         hero: {
@@ -70,7 +129,66 @@ export default defineI18nConfig(() => ({
         quantity: "Quantity",
         total: "Total",
         checkout: "Checkout",
-        continueShopping: "Continue Shopping"
+        continueShopping: "Continue Shopping",
+        loading: "Loading...",
+        optional: "Optional",
+        and: "and"
+      },
+      auth: {
+        signIn: "Sign In",
+        signUp: "Sign Up",
+        createAccount: "Create Account",
+        email: "Email Address",
+        password: "Password",
+        confirmPassword: "Confirm Password",
+        fullName: "Full Name",
+        phone: "Phone Number",
+        rememberMe: "Remember me",
+        forgotPassword: "Forgot your password?",
+        noAccount: "Don't have an account?",
+        haveAccount: "Already have an account?",
+        acceptTerms: "I accept the",
+        passwordHint: "At least 8 characters",
+        passwordMismatch: "Passwords do not match",
+        passwordTooShort: "Password must be at least 8 characters",
+        loginError: "Invalid email or password",
+        registerError: "Registration failed. Please try again.",
+        signInRequired: "Sign In Required",
+        signInToViewAccount: "Please sign in to view your account"
+      },
+      account: {
+        dashboard: "Dashboard",
+        orders: "Orders",
+        addresses: "Addresses",
+        settings: "Settings",
+        welcomeBack: "Welcome Back",
+        totalOrders: "Total Orders",
+        wishlistItems: "Wishlist Items",
+        recentOrders: "Recent Orders",
+        noOrdersYet: "You don't have any orders yet"
+      },
+      footer: {
+        info: {
+          title: "Information",
+          about: "About Us",
+          terms: "Terms & Conditions",
+          privacy: "Privacy Policy",
+          shipping: "Shipping Information"
+        },
+        help: {
+          title: "Help",
+          contact: "Contact",
+          faq: "FAQ",
+          returns: "Returns",
+          track: "Track Order"
+        },
+        newsletter: {
+          title: "Newsletter",
+          description: "Subscribe to receive special offers",
+          placeholder: "Your email",
+          button: "Subscribe"
+        },
+        copyright: "© 2024 Moldova Direct. All rights reserved."
       },
       home: {
         hero: {
