@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken'
-import bcrypt from 'bcrypt'
 import type { H3Event } from 'h3'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production'
@@ -12,13 +11,81 @@ export interface JWTPayload {
   email: string
 }
 
-export async function hashPassword(password: string): Promise<string> {
-  const saltRounds = 10
-  return await bcrypt.hash(password, saltRounds)
+// Using Web Crypto API instead of bcrypt for Cloudflare Workers compatibility
+async function getPasswordKey(password: string): Promise<CryptoKey> {
+  const encoder = new TextEncoder()
+  const passwordData = encoder.encode(password)
+  
+  const passwordKey = await crypto.subtle.importKey(
+    'raw',
+    passwordData,
+    'PBKDF2',
+    false,
+    ['deriveBits']
+  )
+  
+  return passwordKey
 }
 
-export async function verifyPassword(password: string, hash: string): Promise<boolean> {
-  return await bcrypt.compare(password, hash)
+export async function hashPassword(password: string): Promise<string> {
+  const salt = crypto.getRandomValues(new Uint8Array(16))
+  
+  const passwordKey = await getPasswordKey(password)
+  
+  const derivedBits = await crypto.subtle.deriveBits(
+    {
+      name: 'PBKDF2',
+      salt: salt,
+      iterations: 100000,
+      hash: 'SHA-256'
+    },
+    passwordKey,
+    256
+  )
+  
+  const hashArray = new Uint8Array(derivedBits)
+  const hashHex = Array.from(hashArray)
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('')
+  
+  // Store salt and hash together
+  const saltHex = Array.from(salt)
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('')
+  
+  return `${saltHex}:${hashHex}`
+}
+
+export async function verifyPassword(password: string, storedHash: string): Promise<boolean> {
+  const [saltHex, hashHex] = storedHash.split(':')
+  
+  if (!saltHex || !hashHex) {
+    return false
+  }
+  
+  const salt = new Uint8Array(
+    saltHex.match(/.{2}/g)!.map(byte => parseInt(byte, 16))
+  )
+  
+  const passwordKey = await getPasswordKey(password)
+  
+  const derivedBits = await crypto.subtle.deriveBits(
+    {
+      name: 'PBKDF2',
+      salt: salt,
+      iterations: 100000,
+      hash: 'SHA-256'
+    },
+    passwordKey,
+    256
+  )
+  
+  const hashArray = new Uint8Array(derivedBits)
+  const computedHashHex = Array.from(hashArray)
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('')
+  
+  return computedHashHex === hashHex
 }
 
 export function generateAccessToken(payload: JWTPayload): string {

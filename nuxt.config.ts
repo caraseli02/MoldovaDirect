@@ -31,7 +31,8 @@ export default defineNuxtConfig({
       { code: 'ru', name: 'Русский' }
     ],
     defaultLocale: 'es',
-    strategy: 'prefix_except_default'
+    strategy: 'prefix_except_default',
+    vueI18n: './i18n.config.ts'
   },
   css: ['~/assets/css/main.css'],
   typescript: {
