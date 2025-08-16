@@ -46,8 +46,8 @@ export default defineEventHandler(async (event) => {
     preferredLanguage: preferredLanguage || 'es'
   }).returning().get()
   
-  const accessToken = generateAccessToken({ userId: newUser.id, email: newUser.email })
-  const refreshToken = generateRefreshToken({ userId: newUser.id, email: newUser.email })
+  const accessToken = await generateAccessToken({ userId: newUser.id, email: newUser.email })
+  const refreshToken = await generateRefreshToken({ userId: newUser.id, email: newUser.email })
   
   const sessionId = uuidv4()
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()

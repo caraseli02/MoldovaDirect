@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
     })
   }
   
-  const payload = verifyAccessToken(token)
+  const payload = await verifyAccessToken(token)
   if (!payload) {
     throw createError({
       statusCode: 401,

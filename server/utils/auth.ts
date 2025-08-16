@@ -1,8 +1,12 @@
-import jwt from 'jsonwebtoken'
+import { SignJWT, jwtVerify } from 'jose'
 import type { H3Event } from 'h3'
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production'
-const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'your-refresh-secret-change-in-production'
+const JWT_SECRET = new TextEncoder().encode(
+  process.env.JWT_SECRET || 'your-secret-key-change-in-production'
+)
+const JWT_REFRESH_SECRET = new TextEncoder().encode(
+  process.env.JWT_REFRESH_SECRET || 'your-refresh-secret-change-in-production'
+)
 const ACCESS_TOKEN_EXPIRY = '15m'
 const REFRESH_TOKEN_EXPIRY = '7d'
 
@@ -88,25 +92,35 @@ export async function verifyPassword(password: string, storedHash: string): Prom
   return computedHashHex === hashHex
 }
 
-export function generateAccessToken(payload: JWTPayload): string {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: ACCESS_TOKEN_EXPIRY })
+export async function generateAccessToken(payload: JWTPayload): Promise<string> {
+  return await new SignJWT({ ...payload })
+    .setProtectedHeader({ alg: 'HS256' })
+    .setExpirationTime(ACCESS_TOKEN_EXPIRY)
+    .setIssuedAt()
+    .sign(JWT_SECRET)
 }
 
-export function generateRefreshToken(payload: JWTPayload): string {
-  return jwt.sign(payload, JWT_REFRESH_SECRET, { expiresIn: REFRESH_TOKEN_EXPIRY })
+export async function generateRefreshToken(payload: JWTPayload): Promise<string> {
+  return await new SignJWT({ ...payload })
+    .setProtectedHeader({ alg: 'HS256' })
+    .setExpirationTime(REFRESH_TOKEN_EXPIRY)
+    .setIssuedAt()
+    .sign(JWT_REFRESH_SECRET)
 }
 
-export function verifyAccessToken(token: string): JWTPayload | null {
+export async function verifyAccessToken(token: string): Promise<JWTPayload | null> {
   try {
-    return jwt.verify(token, JWT_SECRET) as JWTPayload
+    const { payload } = await jwtVerify(token, JWT_SECRET)
+    return payload as JWTPayload
   } catch (error) {
     return null
   }
 }
 
-export function verifyRefreshToken(token: string): JWTPayload | null {
+export async function verifyRefreshToken(token: string): Promise<JWTPayload | null> {
   try {
-    return jwt.verify(token, JWT_REFRESH_SECRET) as JWTPayload
+    const { payload } = await jwtVerify(token, JWT_REFRESH_SECRET)
+    return payload as JWTPayload
   } catch (error) {
     return null
   }

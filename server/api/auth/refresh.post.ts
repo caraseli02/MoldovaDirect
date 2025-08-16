@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
     })
   }
   
-  const payload = verifyRefreshToken(refreshToken)
+  const payload = await verifyRefreshToken(refreshToken)
   if (!payload) {
     throw createError({
       statusCode: 401,
@@ -40,8 +40,8 @@ export default defineEventHandler(async (event) => {
     })
   }
   
-  const newAccessToken = generateAccessToken({ userId: user.id, email: user.email })
-  const newRefreshToken = generateRefreshToken({ userId: user.id, email: user.email })
+  const newAccessToken = await generateAccessToken({ userId: user.id, email: user.email })
+  const newRefreshToken = await generateRefreshToken({ userId: user.id, email: user.email })
   
   await db.delete(sessions).where(eq(sessions.id, session.id))
   

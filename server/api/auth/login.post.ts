@@ -41,8 +41,8 @@ export default defineEventHandler(async (event) => {
     })
   }
   
-  const accessToken = generateAccessToken({ userId: user.id, email: user.email })
-  const refreshToken = generateRefreshToken({ userId: user.id, email: user.email })
+  const accessToken = await generateAccessToken({ userId: user.id, email: user.email })
+  const refreshToken = await generateRefreshToken({ userId: user.id, email: user.email })
   
   await db.delete(sessions).where(eq(sessions.userId, user.id))
   
