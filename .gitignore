@@ -18,7 +18,20 @@ logs
 .fleet
 .idea
 
+# Wrangler temp files
+.wrangler
+
 # Local env files
 .env
 .env.*
 !.env.example
+
+# Playwright/Testing
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/tests/fixtures/.auth/
+/tests/visual/screenshots/
+/tests-examples/
+**/*.spec.ts-snapshots/

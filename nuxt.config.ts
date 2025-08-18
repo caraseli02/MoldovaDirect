@@ -25,14 +25,14 @@ export default defineNuxtConfig({
   },
   i18n: {
     locales: [
-      { code: 'es', name: 'Español' },
-      { code: 'en', name: 'English' },
-      { code: 'ro', name: 'Română' },
-      { code: 'ru', name: 'Русский' }
+      { code: 'es', name: 'Español', file: 'es.json' },
+      { code: 'en', name: 'English', file: 'en.json' },
+      { code: 'ro', name: 'Română', file: 'ro.json' },
+      { code: 'ru', name: 'Русский', file: 'ru.json' }
     ],
     defaultLocale: 'es',
     strategy: 'prefix_except_default',
-    vueI18n: './i18n.config.ts'
+    langDir: 'locales/'
   },
   css: ['~/assets/css/main.css'],
   typescript: {
