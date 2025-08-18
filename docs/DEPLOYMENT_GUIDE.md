@@ -149,11 +149,15 @@ NUXT_PUBLIC_SITE_URL=https://moldova-direct.pages.dev
 # Generate migrations
 npm run db:generate
 
-# Push schema to D1
+# Push schema to D1 (local development)
 wrangler d1 execute moldova-direct-db --local --file=./server/database/migrations/0000_*.sql
 
 # For production database
 wrangler d1 execute moldova-direct-db --file=./server/database/migrations/0000_*.sql
+
+# Seed with sample data (optional)
+# This will add sample products for testing
+npm run seed
 ```
 
 ## Step 7: Deploy to Cloudflare Pages (5 minutes)
@@ -313,11 +317,13 @@ Your Moldova Direct e-commerce platform is now running on Cloudflare's edge netw
 - **DDoS protection** included
 
 ### Next Steps:
-1. Add sample products to the database
-2. Configure payment providers (Stripe/PayPal)
-3. Set up email service (SendGrid/Resend)
-4. Enable Cloudflare Analytics
-5. Configure Web Application Firewall (WAF)
+1. Run E2E tests: `npm run test`
+2. Add sample products: `npm run seed`
+3. Configure payment providers (Stripe/PayPal)
+4. Set up email service (SendGrid/Resend)
+5. Enable Cloudflare Analytics
+6. Configure Web Application Firewall (WAF)
+7. Set up monitoring and alerts
 
 ### Useful Links:
 - **Your Live Site**: https://moldova-direct.pages.dev

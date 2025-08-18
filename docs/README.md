@@ -29,7 +29,8 @@ Moldova Direct is a modern, multi-language e-commerce platform designed to conne
 - **Database**: Cloudflare D1 (SQLite)
 - **ORM**: Drizzle ORM
 - **Storage**: Cloudflare KV (sessions)
-- **Authentication**: JWT + bcrypt
+- **Authentication**: JWT + Web Crypto API (PBKDF2)
+- **JWT Library**: jose (edge-compatible)
 - **API**: RESTful endpoints
 
 ### Project Structure
@@ -63,8 +64,9 @@ The platform supports four languages with URL-based routing:
 - **Russian (ru)**: `/ru/...`
 
 ### Translation Management
-- Translations stored in `i18n.config.ts`
-- Lazy loading support ready for external files
+- Translations stored in JSON files (`locales/` directory)
+- Dynamic language switcher component
+- Client-side i18n setup plugin
 - Language switching preserves current page context
 
 ## 📱 Responsive Design
@@ -219,15 +221,26 @@ CLOUDINARY_CLOUD_NAME="..."
 
 ## 🧪 Testing Strategy
 
-### Unit Testing
-- Component testing with Vue Test Utils
-- Utility function testing
-- Store testing (Pinia)
+### E2E Testing (Playwright)
+- Comprehensive test coverage for auth, products, checkout flows
+- Multi-language testing across all locales
+- Visual regression testing with screenshots
+- Mobile and desktop responsive testing
+- CI/CD integration with GitHub Actions
 
-### E2E Testing
-- Critical user flows
-- Multi-language navigation
-- Responsive design validation
+### Test Structure
+```
+tests/
+├── e2e/                    # End-to-end tests
+│   ├── auth.spec.ts       # Authentication flows
+│   ├── basic.spec.ts      # Basic navigation
+│   ├── checkout.spec.ts   # Checkout process
+│   ├── i18n.spec.ts       # Internationalization
+│   └── products.spec.ts   # Product catalog
+├── fixtures/              # Test utilities
+├── visual/                # Visual regression tests
+└── global-setup.ts       # Test environment setup
+```
 
 ### Performance Testing
 - Lighthouse audits
@@ -237,11 +250,12 @@ CLOUDINARY_CLOUD_NAME="..."
 ## 🔒 Security Implementation
 
 ### Authentication Security
-- **JWT Tokens**: Access (15min) and refresh (7d) tokens
-- **Password Hashing**: bcrypt with salt rounds
+- **JWT Tokens**: Access (15min) and refresh (7d) tokens using jose library
+- **Password Hashing**: Web Crypto API with PBKDF2 (100,000 iterations)
 - **HTTP-Only Cookies**: Prevent XSS attacks
 - **Secure Flag**: HTTPS-only cookie transmission
 - **SameSite**: CSRF protection
+- **Edge Compatible**: No Node.js dependencies for Cloudflare Workers
 
 ### API Security
 - Protected routes with middleware
