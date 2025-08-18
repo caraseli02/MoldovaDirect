@@ -99,6 +99,7 @@ const { locale } = useI18n()
 const localePath = useLocalePath()
 const mobileMenuOpen = ref(false)
 
-// Mock cart items count - will be replaced with actual store
-const cartItemsCount = ref(0)
+// Cart functionality
+const { itemCount } = useCart()
+const cartItemsCount = computed(() => itemCount.value)
 </script>

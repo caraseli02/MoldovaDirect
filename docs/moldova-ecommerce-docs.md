@@ -1,11 +1,13 @@
 # Moldova Direct - E-Commerce Platform Documentation
 
 ## Project Overview
+
 E-commerce platform enabling international customers (primarily from Spain) to purchase Moldovan food and wine products with home delivery.
 
 ## Business Requirements
 
 ### Core Business Model
+
 - **Product Type**: Food and wine from Moldova
 - **Seller Model**: Single seller (not marketplace)
 - **Target Market**: Spain (primary)
@@ -16,6 +18,7 @@ E-commerce platform enabling international customers (primarily from Spain) to p
 - **Delivery**: Handled by external company (integration pending)
 
 ### Technical Requirements
+
 - **Mobile-first** design approach
 - **Real-time inventory tracking**
 - **Order tracking** within platform
@@ -25,6 +28,7 @@ E-commerce platform enabling international customers (primarily from Spain) to p
 ## Technology Stack
 
 ### Frontend
+
 - **Framework**: Nuxt 3 with TypeScript
 - **CSS**: TailwindCSS
 - **UI Components**: Reka UI
@@ -33,6 +37,7 @@ E-commerce platform enabling international customers (primarily from Spain) to p
 - **Internationalization**: @nuxtjs/i18n
 
 ### Backend
+
 - **API**: Nuxt 3 server routes (simple operations)
 - **Microservice**: FastAPI (complex operations - payments, inventory)
 - **Database**: PostgreSQL
@@ -40,6 +45,7 @@ E-commerce platform enabling international customers (primarily from Spain) to p
 - **Authentication**: JWT with refresh tokens
 
 ### Infrastructure (NuxtHub + Cloudflare)
+
 - **Frontend Hosting**: Cloudflare Pages via NuxtHub
 - **Edge Runtime**: Cloudflare Workers
 - **Database**: Cloudflare D1 (SQLite at the edge)
@@ -389,9 +395,11 @@ moldova-direct/
 ## Feature-Based Development Roadmap
 
 ### Feature 1: Foundation & Static Pages ✅
+
 **Deliverable**: Basic working website with multi-language support
 
 #### Implementation Steps:
+
 1. Initialize Nuxt 3 project with TypeScript
 2. Configure TailwindCSS and Reka UI
 3. Set up i18n with 4 languages
@@ -402,36 +410,39 @@ moldova-direct/
 8. Deploy to Vercel
 
 #### Key Files to Create:
+
 ```typescript
 // nuxt.config.ts
 export default defineNuxtConfig({
   modules: [
-    '@nuxtjs/tailwindcss',
-    '@nuxtjs/i18n',
-    '@pinia/nuxt',
-    '@nuxt/image',
-    'reka-ui/nuxt'
+    "@nuxtjs/tailwindcss",
+    "@nuxtjs/i18n",
+    "@pinia/nuxt",
+    "@nuxt/image",
+    "reka-ui/nuxt",
   ],
   i18n: {
     locales: [
-      { code: 'es', name: 'Español', file: 'es.json' },
-      { code: 'en', name: 'English', file: 'en.json' },
-      { code: 'ro', name: 'Română', file: 'ro.json' },
-      { code: 'ru', name: 'Русский', file: 'ru.json' }
+      { code: "es", name: "Español", file: "es.json" },
+      { code: "en", name: "English", file: "en.json" },
+      { code: "ro", name: "Română", file: "ro.json" },
+      { code: "ru", name: "Русский", file: "ru.json" },
     ],
-    defaultLocale: 'es',
+    defaultLocale: "es",
     lazy: true,
-    langDir: 'locales/'
-  }
-})
+    langDir: "locales/",
+  },
+});
 ```
 
 ---
 
 ### Feature 2: Product Showcase ✅
+
 **Deliverable**: Product catalog without purchase capability
 
 #### Implementation Steps:
+
 1. Set up PostgreSQL database
 2. Create products and categories tables
 3. Implement product listing page with filters
@@ -442,12 +453,13 @@ export default defineNuxtConfig({
 8. Add product admin interface (basic CRUD)
 
 #### Key Components:
+
 ```vue
 <!-- components/product/ProductCard.vue -->
 <template>
   <div class="bg-white rounded-lg shadow-md overflow-hidden">
-    <NuxtImg 
-      :src="product.images[0]" 
+    <NuxtImg
+      :src="product.images[0]"
       :alt="product.name"
       class="w-full h-48 object-cover"
     />
@@ -462,9 +474,11 @@ export default defineNuxtConfig({
 ---
 
 ### Feature 3: User Authentication ✅
+
 **Deliverable**: Complete user account system
 
 #### Implementation Steps:
+
 1. Create user registration flow
 2. Implement JWT authentication with refresh tokens
 3. Build login/logout functionality
@@ -475,32 +489,35 @@ export default defineNuxtConfig({
 8. Set up email verification
 
 #### Authentication Flow:
+
 ```typescript
 // composables/useAuth.ts
 export const useAuth = () => {
   const login = async (credentials: LoginCredentials) => {
-    const { data } = await $fetch('/api/auth/login', {
-      method: 'POST',
-      body: credentials
-    })
-    navigateTo('/account')
-  }
-  
+    const { data } = await $fetch("/api/auth/login", {
+      method: "POST",
+      body: credentials,
+    });
+    navigateTo("/account");
+  };
+
   const logout = async () => {
-    await $fetch('/api/auth/logout', { method: 'POST' })
-    navigateTo('/')
-  }
-  
-  return { login, logout }
-}
+    await $fetch("/api/auth/logout", { method: "POST" });
+    navigateTo("/");
+  };
+
+  return { login, logout };
+};
 ```
 
 ---
 
 ### Feature 4: Shopping Cart ✅
+
 **Deliverable**: Persistent shopping cart functionality
 
 #### Implementation Steps:
+
 1. Create cart store with Pinia
 2. Implement add to cart functionality
 3. Build cart drawer/page
@@ -511,39 +528,43 @@ export const useAuth = () => {
 8. Build saved cart feature for users
 
 #### Cart Store Example:
+
 ```typescript
 // stores/cart.ts
-export const useCartStore = defineStore('cart', () => {
-  const items = ref<CartItem[]>([])
-  
+export const useCartStore = defineStore("cart", () => {
+  const items = ref<CartItem[]>([]);
+
   const addItem = async (product: Product, quantity: number = 1) => {
-    const existingItem = items.value.find(i => i.product.id === product.id)
-    
+    const existingItem = items.value.find((i) => i.product.id === product.id);
+
     if (existingItem) {
-      existingItem.quantity += quantity
+      existingItem.quantity += quantity;
     } else {
-      items.value.push({ product, quantity })
+      items.value.push({ product, quantity });
     }
-    
-    await saveCart()
-  }
-  
-  const total = computed(() => 
-    items.value.reduce((sum, item) => 
-      sum + (item.product.price_eur * item.quantity), 0
+
+    await saveCart();
+  };
+
+  const total = computed(() =>
+    items.value.reduce(
+      (sum, item) => sum + item.product.price_eur * item.quantity,
+      0
     )
-  )
-  
-  return { items, addItem, total }
-})
+  );
+
+  return { items, addItem, total };
+});
 ```
 
 ---
 
 ### Feature 5: Checkout & Payments ✅
+
 **Deliverable**: Complete purchase flow with payment processing
 
 #### Implementation Steps:
+
 1. Create multi-step checkout flow
 2. Build address selection/creation
 3. Integrate Stripe payment
@@ -554,32 +575,35 @@ export const useCartStore = defineStore('cart', () => {
 8. Generate invoices
 
 #### Payment Integration:
+
 ```typescript
 // server/api/payment/stripe-intent.post.ts
 export default defineEventHandler(async (event) => {
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
-  const { amount, currency } = await readBody(event)
-  
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+  const { amount, currency } = await readBody(event);
+
   const paymentIntent = await stripe.paymentIntents.create({
     amount: Math.round(amount * 100),
-    currency: currency || 'eur',
+    currency: currency || "eur",
     automatic_payment_methods: {
       enabled: true,
     },
-  })
-  
+  });
+
   return {
-    clientSecret: paymentIntent.client_secret
-  }
-})
+    clientSecret: paymentIntent.client_secret,
+  };
+});
 ```
 
 ---
 
 ### Feature 6: Order Management ✅
+
 **Deliverable**: Order tracking and history
 
 #### Implementation Steps:
+
 1. Create order history page
 2. Build order detail views
 3. Implement order status updates
@@ -591,9 +615,11 @@ export default defineEventHandler(async (event) => {
 ---
 
 ### Feature 7: Inventory System ✅
+
 **Deliverable**: Automated inventory management
 
 #### Implementation Steps:
+
 1. Implement real-time stock updates
 2. Add low stock alerts
 3. Create stock reservation during checkout
@@ -604,9 +630,11 @@ export default defineEventHandler(async (event) => {
 ---
 
 ### Feature 8: Admin Dashboard ✅
+
 **Deliverable**: Complete business management interface
 
 #### Implementation Steps:
+
 1. Create admin authentication
 2. Build order management interface
 3. Implement product CRUD operations
@@ -619,9 +647,11 @@ export default defineEventHandler(async (event) => {
 ---
 
 ### Feature 9: Enhanced Features ✅
+
 **Deliverable**: Marketing and growth tools
 
 #### Implementation Steps:
+
 1. Add discount codes system
 2. Implement abandoned cart recovery
 3. Create product recommendations
@@ -638,7 +668,8 @@ export default defineEventHandler(async (event) => {
 ```vue
 <!-- Always design for mobile first -->
 <template>
-  <div class="px-4 sm:px-6 lg:px-8"> <!-- Responsive padding -->
+  <div class="px-4 sm:px-6 lg:px-8">
+    <!-- Responsive padding -->
     <div class="space-y-4 sm:space-y-0 sm:grid sm:grid-cols-2 lg:grid-cols-4">
       <!-- Mobile: Stack | Tablet: 2 cols | Desktop: 4 cols -->
     </div>
@@ -657,40 +688,40 @@ export default defineEventHandler(async (event) => {
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import type { PropType } from 'vue'
+import { ref, computed } from "vue";
+import type { PropType } from "vue";
 
 // Props
 const props = defineProps({
   item: {
     type: Object as PropType<ItemType>,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
 // Emits
 const emit = defineEmits<{
-  update: [value: string]
-}>()
+  update: [value: string];
+}>();
 
 // Composables
-const { t } = useI18n()
+const { t } = useI18n();
 
 // State
-const isLoading = ref(false)
+const isLoading = ref(false);
 
 // Computed
-const formattedPrice = computed(() => 
-  new Intl.NumberFormat('es-ES', { 
-    style: 'currency', 
-    currency: 'EUR' 
+const formattedPrice = computed(() =>
+  new Intl.NumberFormat("es-ES", {
+    style: "currency",
+    currency: "EUR",
   }).format(props.item.price)
-)
+);
 
 // Methods
 const handleClick = async () => {
   // Implementation
-}
+};
 </script>
 
 <style scoped>
@@ -704,54 +735,54 @@ const handleClick = async () => {
 // server/api/resource/action.method.ts
 export default defineEventHandler(async (event) => {
   // Authentication check
-  const user = await requireAuth(event)
-  
+  const user = await requireAuth(event);
+
   // Validation
-  const body = await readBody(event)
-  const validated = validateSchema(body)
-  
+  const body = await readBody(event);
+  const validated = validateSchema(body);
+
   // Business logic
   try {
-    const result = await performAction(validated)
+    const result = await performAction(validated);
     return {
       success: true,
-      data: result
-    }
+      data: result,
+    };
   } catch (error) {
     throw createError({
       statusCode: 400,
-      statusMessage: error.message
-    })
+      statusMessage: error.message,
+    });
   }
-})
+});
 ```
 
 ### State Management Pattern
 
 ```typescript
 // stores/storeName.ts
-export const useStoreName = defineStore('storeName', () => {
+export const useStoreName = defineStore("storeName", () => {
   // State
-  const items = ref([])
-  const isLoading = ref(false)
-  const error = ref(null)
-  
+  const items = ref([]);
+  const isLoading = ref(false);
+  const error = ref(null);
+
   // Getters
-  const itemCount = computed(() => items.value.length)
-  
+  const itemCount = computed(() => items.value.length);
+
   // Actions
   const fetchItems = async () => {
-    isLoading.value = true
+    isLoading.value = true;
     try {
-      const data = await $fetch('/api/items')
-      items.value = data
+      const data = await $fetch("/api/items");
+      items.value = data;
     } catch (err) {
-      error.value = err
+      error.value = err;
     } finally {
-      isLoading.value = false
+      isLoading.value = false;
     }
-  }
-  
+  };
+
   // Return public interface
   return {
     // State
@@ -761,9 +792,9 @@ export const useStoreName = defineStore('storeName', () => {
     // Getters
     itemCount,
     // Actions
-    fetchItems
-  }
-})
+    fetchItems,
+  };
+});
 ```
 
 ## Environment Variables
@@ -821,6 +852,7 @@ NODE_ENV="development"
 ## Performance Optimization
 
 ### Image Optimization
+
 ```vue
 <NuxtImg
   src="/product.jpg"
@@ -832,59 +864,67 @@ NODE_ENV="development"
 ```
 
 ### Code Splitting
+
 ```typescript
 // Lazy load heavy components
-const HeavyComponent = defineAsyncComponent(() => 
-  import('~/components/HeavyComponent.vue')
-)
+const HeavyComponent = defineAsyncComponent(
+  () => import("~/components/HeavyComponent.vue")
+);
 ```
 
 ### Caching Strategy
+
 ```typescript
 // API caching example
-export default cachedEventHandler(async () => {
-  return await getProducts()
-}, {
-  maxAge: 60 * 60, // 1 hour
-  name: 'products-list',
-  getKey: (event) => event.node.req.url
-})
+export default cachedEventHandler(
+  async () => {
+    return await getProducts();
+  },
+  {
+    maxAge: 60 * 60, // 1 hour
+    name: "products-list",
+    getKey: (event) => event.node.req.url,
+  }
+);
 ```
 
 ## Testing Strategy
 
 ### Unit Tests (Vitest)
+
 ```typescript
 // tests/unit/cart.test.ts
-import { describe, it, expect } from 'vitest'
-import { useCartStore } from '~/stores/cart'
+import { describe, it, expect } from "vitest";
+import { useCartStore } from "~/stores/cart";
 
-describe('Cart Store', () => {
-  it('adds item to cart', () => {
-    const cart = useCartStore()
-    cart.addItem(mockProduct)
-    expect(cart.items.length).toBe(1)
-  })
-})
+describe("Cart Store", () => {
+  it("adds item to cart", () => {
+    const cart = useCartStore();
+    cart.addItem(mockProduct);
+    expect(cart.items.length).toBe(1);
+  });
+});
 ```
 
 ### E2E Tests (Playwright)
+
 ```typescript
 // tests/e2e/checkout.spec.ts
-import { test, expect } from '@playwright/test'
+import { test, expect } from "@playwright/test";
 
-test('complete checkout flow', async ({ page }) => {
-  await page.goto('/products')
-  await page.click('[data-testid="add-to-cart"]')
-  await page.goto('/checkout')
+test("complete checkout flow", async ({ page }) => {
+  await page.goto("/products");
+  await page.click('[data-testid="add-to-cart"]');
+  await page.goto("/checkout");
   // ... complete checkout steps
-  await expect(page).toHaveURL('/checkout/success')
-})
+  await expect(page).toHaveURL("/checkout/success");
+});
 ```
 
 ## Deployment Guide
 
 ### Vercel Deployment (Frontend)
+
 ```bash
 # Install Vercel CLI
 npm i -g vercel
@@ -897,6 +937,7 @@ vercel --prod
 ```
 
 ### Railway/Render Deployment (Backend)
+
 ```yaml
 # railway.toml or render.yaml
 services:
@@ -945,6 +986,7 @@ vercel --prod
 # Moldova Direct - Progress Tracker
 
 ## Completed ✅
+
 - [ ] Project setup
 - [ ] Foundation & Static Pages
   - [ ] Nuxt 3 + TypeScript
@@ -954,6 +996,7 @@ vercel --prod
   - [ ] Static pages
 
 ## In Progress 🚧
+
 - [ ] Product Showcase
   - [ ] Database setup
   - [ ] Product listing
@@ -961,6 +1004,7 @@ vercel --prod
   - [ ] Search & filters
 
 ## Upcoming 📋
+
 - [ ] User Authentication
 - [ ] Shopping Cart
 - [ ] Checkout & Payments
@@ -970,6 +1014,7 @@ vercel --prod
 - [ ] Enhanced Features
 
 ## Notes
+
 - Last worked on: [Date]
 - Next priority: [Feature]
 - Blockers: [Any issues]
@@ -978,6 +1023,7 @@ vercel --prod
 ## Useful Resources
 
 ### Documentation
+
 - [Nuxt 3 Docs](https://nuxt.com/docs)
 - [Vue 3 Docs](https://vuejs.org/)
 - [TailwindCSS](https://tailwindcss.com/docs)
@@ -986,39 +1032,46 @@ vercel --prod
 - [Prisma](https://www.prisma.io/docs)
 
 ### Payment Integration
+
 - [Stripe Docs](https://stripe.com/docs)
 - [PayPal Developer](https://developer.paypal.com/)
 
 ### Tools
+
 - [Nuxt DevTools](https://devtools.nuxtjs.org/)
 - [Vue DevTools](https://devtools.vuejs.org/)
 - [Prisma Studio](https://www.prisma.io/studio)
 
 ### Testing
+
 - [Vitest](https://vitest.dev/)
 - [Playwright](https://playwright.dev/)
 
 ## Solo Developer Tips
 
 ### Time Management
+
 1. **Work in 2-hour focused sessions**
 2. **Complete one feature fully before moving on**
 3. **Deploy after every feature**
 4. **Document as you code**
 
 ### Code Quality
+
 1. **Use TypeScript strictly**
 2. **Write self-documenting code**
 3. **Keep components under 200 lines**
 4. **Extract reusable logic to composables**
 
 ### Avoiding Burnout
+
 1. **No artificial deadlines**
 2. **Celebrate small wins**
 3. **Take breaks between features**
 4. **Ask for help when stuck**
 
 ### Maintaining Momentum
+
 1. **Keep a development log**
 2. **Use TODO comments liberally**
 3. **Screenshot progress regularly**
@@ -1026,5 +1079,5 @@ vercel --prod
 
 ---
 
-*Last updated: [Current Date]*
-*Version: 1.0.0*
+_Last updated: [Current Date]_
+_Version: 1.0.0_

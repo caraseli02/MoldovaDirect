@@ -1,5 +1,5 @@
 import { drizzle } from 'drizzle-orm/d1'
-import * as schema from '../database/schema'
+import * as schema from '../database/schema/index'
 
 // Export all commonly used Drizzle ORM functions
 export { 

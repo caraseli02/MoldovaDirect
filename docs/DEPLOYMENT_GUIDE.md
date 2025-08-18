@@ -10,7 +10,7 @@ Follow these steps to deploy your app live on Cloudflare/NuxtHub.
 ## Step 1: Create Accounts (5 minutes)
 
 ### 1.1 Cloudflare Account
-1. Go to [cloudflare.com](https://cloudflaare.com)
+1. Go to [cloudflare.com](https://cloudflare.com)
 2. Sign up for a free account
 3. Go to your dashboard
 4. Copy your **Account ID** from the right sidebar

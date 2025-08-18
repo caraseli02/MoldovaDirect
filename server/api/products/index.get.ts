@@ -52,32 +52,41 @@ export default defineCachedEventHandler(async (event) => {
 
     // Execute query with joins
     const result = await db
-      .select({
-        id: tables.products.id,
-        sku: tables.products.sku,
-        nameTranslations: tables.products.nameTranslations,
-        descriptionTranslations: tables.products.descriptionTranslations,
-        priceEur: tables.products.priceEur,
-        compareAtPriceEur: tables.products.compareAtPriceEur,
-        stockQuantity: tables.products.stockQuantity,
-        categoryId: tables.products.categoryId,
-        images: tables.products.images,
-        attributes: tables.products.attributes,
-        isActive: tables.products.isActive,
-        createdAt: tables.products.createdAt,
-        updatedAt: tables.products.updatedAt,
-        category: {
-          id: tables.categories.id,
-          nameTranslations: tables.categories.nameTranslations,
-          slug: tables.categories.slug
-        }
-      })
+      .select()
       .from(tables.products)
       .leftJoin(tables.categories, eq(tables.products.categoryId, tables.categories.id))
       .where(conditions.length > 0 ? and(...conditions) : undefined)
       .orderBy(desc(tables.products.createdAt))
       .limit(Number(limit))
       .offset(offset)
+    
+    // Transform the results to match the expected format
+    const transformedProducts = result.map(row => ({
+      id: row.products.id,
+      sku: row.products.sku,
+      slug: row.products.sku, // Using SKU as slug since we don't have a slug field
+      name: row.products.nameTranslations,
+      description: row.products.descriptionTranslations,
+      price: row.products.priceEur,
+      comparePrice: row.products.compareAtPriceEur,
+      weight: row.products.weightKg,
+      stockQuantity: row.products.stockQuantity,
+      images: row.products.images?.map((url: string, index: number) => ({ 
+        url, 
+        isPrimary: index === 0 
+      })) || [],
+      attributes: row.products.attributes,
+      isActive: row.products.isActive,
+      category: row.categories ? {
+        id: row.categories.id,
+        name: row.categories.nameTranslations,
+        slug: row.categories.slug
+      } : null,
+      // Extract attributes for display
+      origin: row.products.attributes?.origin,
+      volume: row.products.attributes?.volume_ml,
+      alcoholContent: row.products.attributes?.alcohol_percentage
+    }))
 
     // Get total count for pagination
     const totalResult = await db
@@ -89,7 +98,7 @@ export default defineCachedEventHandler(async (event) => {
     const totalPages = Math.ceil(total / Number(limit))
 
     return {
-      products: result,
+      products: transformedProducts,
       total,
       page: Number(page),
       limit: Number(limit),

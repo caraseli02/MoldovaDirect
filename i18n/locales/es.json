@@ -23,7 +23,13 @@
     "optional": "Opcional",
     "and": "y",
     "previous": "Anterior",
-    "next": "Siguiente"
+    "next": "Siguiente",
+    "remove": "Eliminar",
+    "update": "Actualizar",
+    "subtotal": "Subtotal",
+    "shipping": "Envío",
+    "tax": "Impuestos",
+    "orderSummary": "Resumen del Pedido"
   },
   "auth": {
     "signIn": "Iniciar Sesión",
@@ -95,6 +101,11 @@
     "availability": "Disponibilidad",
     "addToCart": "Añadir al Carrito",
     "outOfStock": "Agotado",
+    "inCart": "En el Carrito",
+    "adding": "Añadiendo...",
+    "cartEmpty": "Tu carrito está vacío",
+    "cartEmptyDescription": "Comienza a comprar para añadir artículos a tu carrito",
+    "itemsInCart": "artículos en el carrito",
     "description": "Descripción",
     "notFound": "Producto no encontrado",
     "notFoundDescription": "El producto que buscas no existe o ha sido eliminado",

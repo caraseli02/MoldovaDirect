@@ -1,6 +1,4 @@
-import { db } from '~/server/database/connection'
-import { products, categories, productImages } from '~/server/database/schema'
-import { eq, and, desc, asc } from 'drizzle-orm'
+import { useDB, tables, eq, and } from '~/server/utils/database'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -13,44 +11,16 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // Get product with category
+    const db = useDB()
+
+    // Get product with category by SKU (since we don't have slug in the schema)
     const result = await db
-      .select({
-        id: products.id,
-        name: products.name,
-        slug: products.slug,
-        description: products.description,
-        shortDescription: products.shortDescription,
-        price: products.price,
-        comparePrice: products.comparePrice,
-        sku: products.sku,
-        barcode: products.barcode,
-        weight: products.weight,
-        stockQuantity: products.stockQuantity,
-        minStockLevel: products.minStockLevel,
-        categoryId: products.categoryId,
-        isActive: products.isActive,
-        isFeatured: products.isFeatured,
-        metaTitle: products.metaTitle,
-        metaDescription: products.metaDescription,
-        tags: products.tags,
-        origin: products.origin,
-        alcoholContent: products.alcoholContent,
-        volume: products.volume,
-        createdAt: products.createdAt,
-        updatedAt: products.updatedAt,
-        category: {
-          id: categories.id,
-          name: categories.name,
-          slug: categories.slug,
-          description: categories.description
-        }
-      })
-      .from(products)
-      .leftJoin(categories, eq(products.categoryId, categories.id))
+      .select()
+      .from(tables.products)
+      .leftJoin(tables.categories, eq(tables.products.categoryId, tables.categories.id))
       .where(and(
-        eq(products.slug, slug),
-        eq(products.isActive, true)
+        eq(tables.products.sku, slug), // Using SKU as slug
+        eq(tables.products.isActive, true)
       ))
       .limit(1)
 
@@ -63,17 +33,11 @@ export default defineEventHandler(async (event) => {
 
     const product = result[0]
 
-    // Get product images
-    const images = await db
-      .select()
-      .from(productImages)
-      .where(eq(productImages.productId, product.id))
-      .orderBy(desc(productImages.isPrimary), asc(productImages.sortOrder))
-
-    // Return product with relations
+    // Return product with images from JSON field
     return {
-      ...product,
-      images
+      ...product.products,
+      category: product.categories,
+      images: product.products?.images || []
     }
   } catch (error) {
     if (error.statusCode) {

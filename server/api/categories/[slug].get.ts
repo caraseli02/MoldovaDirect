@@ -1,6 +1,4 @@
-import { db } from '~/server/database/connection'
-import { categories } from '~/server/database/schema'
-import { eq, and, asc } from 'drizzle-orm'
+import { useDB, tables, eq, and, asc } from '~/server/utils/database'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -13,13 +11,15 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    const db = useDB()
+
     // Get category
     const result = await db
       .select()
-      .from(categories)
+      .from(tables.categories)
       .where(and(
-        eq(categories.slug, slug),
-        eq(categories.isActive, true)
+        eq(tables.categories.slug, slug),
+        eq(tables.categories.isActive, true)
       ))
       .limit(1)
 
@@ -37,8 +37,8 @@ export default defineEventHandler(async (event) => {
     if (category.parentId) {
       const parentResult = await db
         .select()
-        .from(categories)
-        .where(eq(categories.id, category.parentId))
+        .from(tables.categories)
+        .where(eq(tables.categories.id, category.parentId))
         .limit(1)
       
       if (parentResult.length > 0) {
@@ -49,12 +49,12 @@ export default defineEventHandler(async (event) => {
     // Get child categories
     const children = await db
       .select()
-      .from(categories)
+      .from(tables.categories)
       .where(and(
-        eq(categories.parentId, category.id),
-        eq(categories.isActive, true)
+        eq(tables.categories.parentId, category.id),
+        eq(tables.categories.isActive, true)
       ))
-      .orderBy(asc(categories.sortOrder))
+      .orderBy(asc(tables.categories.sortOrder))
 
     return {
       ...category,
