@@ -3,26 +3,19 @@
     <div class="container">
       <h1 class="text-4xl font-bold mb-8">{{ $t('common.cart') }}</h1>
       
-      <!-- Loading State -->
-      <div v-if="loading" class="text-center py-20">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
-        <p class="mt-4 text-gray-600">Loading cart...</p>
-      </div>
-
-      <!-- Error State -->
-      <div v-else-if="error" class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-        <div class="flex">
-          <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-          </svg>
-          <div class="ml-3">
-            <p class="text-sm text-red-800">{{ error }}</p>
-          </div>
+      <ErrorBoundary
+        :fallback-action="() => navigateTo(localePath('/products'))"
+        fallback-action-text="Continuar comprando"
+        @error="handleCartError"
+      >
+        <!-- Loading State -->
+        <div v-if="loading" class="text-center py-20">
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
+          <p class="mt-4 text-gray-600">{{ $t('common.loading') }}</p>
         </div>
-      </div>
       
       <!-- Empty Cart -->
-      <div v-else-if="isEmpty" class="text-center py-20">
+      <div v-else-if="isEmpty" class="text-center py-20" data-testid="empty-cart-message">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
         </svg>
@@ -48,6 +41,7 @@
                 <div 
                   v-for="item in items" 
                   :key="item.id"
+                  :data-testid="`cart-item-${item.product.id}`"
                   class="flex items-center space-x-4 p-4 border border-gray-100 rounded-lg"
                 >
                   <!-- Product Image -->
@@ -72,8 +66,9 @@
                   <!-- Quantity Controls -->
                   <div class="flex items-center space-x-2">
                     <button 
-                      @click="updateQuantity(item.id, item.quantity - 1)"
+                      @click="safeUpdateQuantity(item.id, item.quantity - 1)"
                       :disabled="loading"
+                      :data-testid="`decrease-quantity-${item.product.id}`"
                       class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 disabled:opacity-50"
                     >
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -81,11 +76,12 @@
                       </svg>
                     </button>
                     
-                    <span class="w-8 text-center text-sm font-medium">{{ item.quantity }}</span>
+                    <span class="w-8 text-center text-sm font-medium" :data-testid="`quantity-display-${item.product.id}`">{{ item.quantity }}</span>
                     
                     <button 
-                      @click="updateQuantity(item.id, item.quantity + 1)"
+                      @click="safeUpdateQuantity(item.id, item.quantity + 1)"
                       :disabled="loading || item.quantity >= item.product.stock"
+                      :data-testid="`increase-quantity-${item.product.id}`"
                       class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 disabled:opacity-50"
                     >
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -103,9 +99,11 @@
                   
                   <!-- Remove Button -->
                   <button 
-                    @click="removeItem(item.id)"
+                    @click="safeRemoveItem(item.id)"
                     :disabled="loading"
+                    :data-testid="`remove-item-${item.product.id}`"
                     class="text-red-500 hover:text-red-700 disabled:opacity-50"
+                    :title="$t('common.remove')"
                   >
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -161,12 +159,14 @@
           </div>
         </div>
       </div>
+      </ErrorBoundary>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 const localePath = useLocalePath()
+const toast = useToast()
 
 // Cart functionality
 const {
@@ -183,9 +183,39 @@ const {
   validateCart
 } = useCart()
 
-// Validate cart on page load
-onMounted(() => {
-  validateCart()
+// Error handling for cart operations
+const handleCartError = (error: Error) => {
+  console.error('Cart page error:', error)
+  toast.error('Error en el carrito', error.message)
+}
+
+// Enhanced cart operations with error handling
+const safeUpdateQuantity = async (itemId: string, quantity: number) => {
+  try {
+    await updateQuantity(itemId, quantity)
+  } catch (error) {
+    // Error is already handled by the store with toast notifications
+    console.error('Failed to update quantity:', error)
+  }
+}
+
+const safeRemoveItem = async (itemId: string) => {
+  try {
+    await removeItem(itemId)
+  } catch (error) {
+    // Error is already handled by the store with toast notifications
+    console.error('Failed to remove item:', error)
+  }
+}
+
+// Validate cart on page load with error handling
+onMounted(async () => {
+  try {
+    await validateCart()
+  } catch (error) {
+    console.error('Failed to validate cart:', error)
+    toast.error('Error de validación', 'No se pudo validar el carrito')
+  }
 })
 
 // SEO Meta

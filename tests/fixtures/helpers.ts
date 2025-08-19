@@ -83,8 +83,26 @@ export class TestHelpers {
   }
 
   async checkToast(message: string) {
-    const toast = this.page.locator('[data-testid="toast-message"]')
+    const toast = this.page.locator('[data-testid="toast"]').first()
     await expect(toast).toContainText(message)
+  }
+
+  async checkToastType(type: 'success' | 'error' | 'warning' | 'info') {
+    const toast = this.page.locator('[data-testid="toast"]').first()
+    const typeIcon = toast.locator(`[data-testid="toast-type-${type}"]`)
+    await expect(typeIcon).toBeVisible()
+  }
+
+  async clickToastAction() {
+    const toast = this.page.locator('[data-testid="toast"]').first()
+    const actionButton = toast.locator('[data-testid="toast-action-button"]')
+    await actionButton.click()
+  }
+
+  async dismissToast() {
+    const toast = this.page.locator('[data-testid="toast"]').first()
+    const closeButton = toast.locator('[data-testid="toast-close-button"]')
+    await closeButton.click()
   }
 
   async checkPageTitle(title: string) {

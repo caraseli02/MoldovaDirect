@@ -23,7 +23,8 @@
     "optional": "Opțional",
     "and": "și",
     "previous": "Anterior",
-    "next": "Următorul"
+    "next": "Următorul",
+    "retry": "Reîncearcă"
   },
   "auth": {
     "signIn": "Autentificare",
@@ -157,5 +158,39 @@
       "button": "Abonează-te"
     },
     "copyright": "© 2024 Moldova Direct. Toate drepturile rezervate."
+  },
+  "cart": {
+    "success": {
+      "added": "Produs adăugat în coș",
+      "updated": "Cantitate actualizată",
+      "removed": "Produs eliminat din coș",
+      "cleared": "Coș golit",
+      "productAdded": "{product} adăugat în coș"
+    },
+    "error": {
+      "addFailed": "Eroare la adăugarea produsului",
+      "updateFailed": "Eroare la actualizarea cantității",
+      "removeFailed": "Eroare la eliminarea produsului",
+      "loadFailed": "Eroare la încărcarea coșului",
+      "stockInsufficient": "Stoc insuficient",
+      "productNotFound": "Produs negăsit",
+      "networkError": "Eroare de rețea",
+      "storageError": "Eroare de stocare",
+      "validationFailed": "Eroare de validare",
+      "tryAgain": "Vă rugăm să încercați din nou",
+      "boundary": {
+        "title": "Eroare coș",
+        "message": "A apărut o eroare neașteptată. Puteți încerca să reîncărcați sau să continuați cumpărăturile.",
+        "showDetails": "Arată detalii",
+        "hideDetails": "Ascunde detalii",
+        "fallback": "Continuă cumpărăturile"
+      }
+    },
+    "warning": {
+      "stockLimited": "Stoc limitat",
+      "priceChanged": "Preț actualizat",
+      "itemUnavailable": "Produs indisponibil",
+      "sessionExpired": "Sesiune expirată"
+    }
   }
 }

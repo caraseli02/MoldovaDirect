@@ -29,7 +29,8 @@
     "subtotal": "Subtotal",
     "shipping": "Envío",
     "tax": "Impuestos",
-    "orderSummary": "Resumen del Pedido"
+    "orderSummary": "Resumen del Pedido",
+    "retry": "Reintentar"
   },
   "auth": {
     "signIn": "Iniciar Sesión",
@@ -168,5 +169,39 @@
       "button": "Suscribirse"
     },
     "copyright": "© 2024 Moldova Direct. Todos los derechos reservados."
+  },
+  "cart": {
+    "success": {
+      "added": "Producto añadido al carrito",
+      "updated": "Cantidad actualizada",
+      "removed": "Producto eliminado del carrito",
+      "cleared": "Carrito vaciado",
+      "productAdded": "{product} añadido al carrito"
+    },
+    "error": {
+      "addFailed": "Error al añadir producto",
+      "updateFailed": "Error al actualizar cantidad",
+      "removeFailed": "Error al eliminar producto",
+      "loadFailed": "Error al cargar carrito",
+      "stockInsufficient": "Stock insuficiente",
+      "productNotFound": "Producto no encontrado",
+      "networkError": "Error de conexión",
+      "storageError": "Error de almacenamiento",
+      "validationFailed": "Error de validación",
+      "tryAgain": "Por favor, inténtalo de nuevo",
+      "boundary": {
+        "title": "Error en el carrito",
+        "message": "Ha ocurrido un error inesperado. Puedes intentar recargar o continuar comprando.",
+        "showDetails": "Mostrar detalles",
+        "hideDetails": "Ocultar detalles",
+        "fallback": "Continuar comprando"
+      }
+    },
+    "warning": {
+      "stockLimited": "Stock limitado",
+      "priceChanged": "Precio actualizado",
+      "itemUnavailable": "Producto no disponible",
+      "sessionExpired": "Sesión expirada"
+    }
   }
 }

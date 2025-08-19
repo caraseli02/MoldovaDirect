@@ -99,12 +99,28 @@ export class CartPage {
     await quantityInput.fill(quantity.toString())
   }
 
+  async increaseQuantity(productId: string) {
+    await this.page.click(`[data-testid="increase-quantity-${productId}"]`)
+  }
+
+  async decreaseQuantity(productId: string) {
+    await this.page.click(`[data-testid="decrease-quantity-${productId}"]`)
+  }
+
   async removeItem(productId: string) {
-    await this.page.click(`[data-testid="remove-${productId}"]`)
+    await this.page.click(`[data-testid="remove-item-${productId}"]`)
   }
 
   async proceedToCheckout() {
     await this.checkoutButton.click()
+  }
+
+  getCartItem(productId: string) {
+    return this.page.locator(`[data-testid="cart-item-${productId}"]`)
+  }
+
+  getQuantityDisplay(productId: string) {
+    return this.page.locator(`[data-testid="quantity-display-${productId}"]`)
   }
 }
 
