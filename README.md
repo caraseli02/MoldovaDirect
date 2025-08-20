@@ -17,32 +17,25 @@ http://localhost:3000
 
 ## 📚 Documentation
 
-All project documentation is organized in the `/docs` folder:
+All project documentation follows Kiro's spec-driven development approach in the `.kiro/` folder:
 
-- **[PROGRESS.md](docs/PROGRESS.md)** - Development progress and completed features
-- **[README.md](docs/README.md)** - Detailed project documentation and technical specs
-- **[moldova-ecommerce-docs.md](docs/moldova-ecommerce-docs.md)** - Original project specifications and requirements
+- **[Documentation Hub](.kiro/README.md)** - Complete documentation index
+- **[Project Status](.kiro/PROJECT_STATUS.md)** - Current state and health
+- **[Roadmap](.kiro/ROADMAP.md)** - Development timeline
+- **[Progress](.kiro/PROGRESS.md)** - Completed milestones
+- **[Specifications](.kiro/specs/)** - Feature requirements and designs
 
 ## 🎯 Current Status
 
-✅ **Phase 1 Complete** - Foundation & Static Pages
-- Multi-language support (ES/EN/RO/RU)
-- Responsive layouts and navigation
-- Static pages and SEO optimization
+✅ **Completed Phases**
+- Phase 1: Foundation & Static Pages
+- Phase 2: Product Showcase
+- Phase 3: User Authentication
+- Phase 4: Shopping Cart & Error Handling
 
-✅ **Phase 2 Complete** - Product Showcase
-- Product catalog with search/filtering
-- Category navigation
-- Admin product management
-- Sample Moldovan products
+🚀 **Next Phase** - Phase 5: Checkout & Payment Integration
 
-✅ **Phase 3 Complete** - User Authentication
-- JWT-based authentication
-- User registration/login
-- Protected routes & account dashboard
-- Secure password handling
-
-🔄 **Next Phase** - Phase 4: Shopping Cart & Checkout
+See [.kiro/ROADMAP.md](.kiro/ROADMAP.md) for detailed timeline.
 
 ## 🛠 Tech Stack
 

@@ -1,3 +1,8 @@
+---
+include: prompt
+weight: 30
+---
+
 # Technology Stack
 
 ## Core Framework

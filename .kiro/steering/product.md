@@ -1,3 +1,8 @@
+---
+include: prompt
+weight: 10
+---
+
 # Product Overview
 
 Moldova Direct is an e-commerce platform specializing in authentic Moldovan food and wine products with delivery to Spain. The platform serves as a single-seller marketplace (not multi-vendor) targeting Spanish customers who want access to premium Moldovan products.

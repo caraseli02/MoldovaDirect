@@ -1,3 +1,8 @@
+---
+include: prompt
+weight: 20
+---
+
 # Project Structure & Conventions
 
 ## Directory Organization
