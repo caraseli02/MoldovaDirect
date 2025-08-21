@@ -3,12 +3,56 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --background: 255 255 255;
+    --foreground: 15 23 42;
+    --card: 255 255 255;
+    --card-foreground: 15 23 42;
+    --popover: 255 255 255;
+    --popover-foreground: 15 23 42;
+    --primary: 37 99 235;
+    --primary-foreground: 255 255 255;
+    --secondary: 241 245 249;
+    --secondary-foreground: 15 23 42;
+    --muted: 241 245 249;
+    --muted-foreground: 100 116 139;
+    --accent: 241 245 249;
+    --accent-foreground: 15 23 42;
+    --destructive: 239 68 68;
+    --destructive-foreground: 255 255 255;
+    --border: 226 232 240;
+    --input: 226 232 240;
+    --ring: 37 99 235;
+  }
+
+  .dark {
+    --background: 15 23 42;
+    --foreground: 241 245 249;
+    --card: 30 41 59;
+    --card-foreground: 241 245 249;
+    --popover: 30 41 59;
+    --popover-foreground: 241 245 249;
+    --primary: 59 130 246;
+    --primary-foreground: 255 255 255;
+    --secondary: 51 65 85;
+    --secondary-foreground: 241 245 249;
+    --muted: 51 65 85;
+    --muted-foreground: 148 163 184;
+    --accent: 51 65 85;
+    --accent-foreground: 241 245 249;
+    --destructive: 220 38 38;
+    --destructive-foreground: 255 255 255;
+    --border: 51 65 85;
+    --input: 51 65 85;
+    --ring: 59 130 246;
+  }
+
   html {
     @apply scroll-smooth;
   }
   
   body {
-    @apply text-gray-900 antialiased;
+    @apply bg-white text-slate-900 antialiased dark:bg-slate-900 dark:text-slate-100 transition-colors duration-300;
   }
 }
 
@@ -18,10 +62,18 @@
   }
   
   .btn-primary {
-    @apply bg-blue-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200;
+    @apply bg-blue-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-colors duration-200;
   }
   
   .btn-secondary {
-    @apply bg-gray-200 text-gray-800 font-medium py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors duration-200;
+    @apply bg-gray-200 text-gray-800 font-medium py-2 px-4 rounded-lg hover:bg-gray-300 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600 transition-colors duration-200;
+  }
+
+  .card {
+    @apply bg-white dark:bg-slate-800 rounded-lg shadow-sm dark:shadow-slate-900/20 transition-colors duration-300;
+  }
+
+  .input {
+    @apply bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-gray-900 dark:text-slate-100 placeholder-gray-500 dark:placeholder-slate-400 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-colors duration-300;
   }
 }

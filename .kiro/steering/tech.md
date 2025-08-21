@@ -17,10 +17,10 @@ weight: 30
 - **Inter font** for typography
 
 ## Database & Backend
-- **Cloudflare D1** - SQLite database at the edge
-- **Drizzle ORM** - Type-safe database toolkit
-- **Cloudflare KV** - Key-value storage for sessions/cache
-- **JWT Authentication** with refresh tokens
+- **Supabase** - Managed PostgreSQL with built-in authentication
+- **Supabase Auth** - Complete authentication system with email verification
+- **Row Level Security (RLS)** - Fine-grained access control
+- **Real-time subscriptions** - Live data updates (when needed)
 
 ## State Management & Data
 - **Pinia** - Vue state management
@@ -38,9 +38,9 @@ weight: 30
 - **Visual regression testing** with screenshot comparison
 
 ## Deployment & Infrastructure
-- **Cloudflare Pages** via NuxtHub - Frontend hosting
-- **Cloudflare Workers** - Edge runtime
-- **Wrangler** - Cloudflare development tool
+- **Vercel** - Frontend hosting with automatic deployments
+- **Supabase Cloud** - Managed database and authentication
+- **GitHub Actions** - CI/CD pipeline for testing
 
 ## Common Commands
 
@@ -53,9 +53,10 @@ npm run preview         # Preview production build
 
 ### Database
 ```bash
-npm run db:generate     # Generate database migrations
-npm run db:push         # Push schema changes to database
-npm run db:studio       # Open Drizzle Studio
+# Database management is handled through Supabase dashboard
+# SQL Editor for schema changes
+# Table Editor for data management
+# Authentication → Users for user management
 ```
 
 ### Testing
@@ -74,14 +75,8 @@ npm run deploy          # Deploy to production
 npm run deploy:preview  # Deploy preview environment
 ```
 
-### Cloudflare Commands
-```bash
-npm run cf:db:create    # Create D1 database
-npm run cf:kv:create    # Create KV namespace
-npm run cf:r2:create    # Create R2 bucket
-```
-
 ## Environment Setup
 - Copy `.env.example` to `.env` for local development
-- Cloudflare credentials required for database operations
-- JWT secrets needed for authentication
+- Supabase project URL and anon key required
+- Email service (Resend) API key for transactional emails
+- Payment provider keys (optional) for checkout

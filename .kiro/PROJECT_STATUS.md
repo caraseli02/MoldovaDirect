@@ -13,19 +13,19 @@ Moldova Direct is an e-commerce platform specializing in authentic Moldovan food
 - **Frontend**: Nuxt 3.17.7 + Vue 3 Composition API + TypeScript
 - **Styling**: TailwindCSS with custom design system
 - **State Management**: Pinia stores
-- **Database**: Cloudflare D1 (SQLite) with Drizzle ORM
-- **Authentication**: JWT (jose library) with Web Crypto API
-- **Storage**: Cloudflare KV for sessions, localStorage for cart
-- **Deployment**: Cloudflare Pages with NuxtHub CI/CD
+- **Database**: Supabase (PostgreSQL) with Row Level Security
+- **Authentication**: Supabase Auth with email verification
+- **Storage**: localStorage for cart, Supabase for user data
+- **Deployment**: Vercel with automatic deployments
 - **Testing**: Playwright E2E with multi-browser support
 - **Internationalization**: Full support for ES/EN/RO/RU
 
 ### Infrastructure Status
-- ✅ Cloudflare Pages deployment active
-- ✅ D1 Database configured (ID: 5d80e417-460f-4367-9441-23c81f066d9f)
-- ✅ KV Namespace for sessions (ID: 34e59bb47e6d4ff5916789fd09794296)
+- ✅ Supabase project configured for database and auth
+- ✅ Vercel deployment ready
 - ✅ GitHub Actions CI/CD pipeline
-- ✅ Edge-compatible runtime (Cloudflare Workers)
+- ✅ Row Level Security policies implemented
+- ✅ Authentication system fully migrated to Supabase
 
 ## 📊 Development Progress
 
@@ -46,13 +46,14 @@ Moldova Direct is an e-commerce platform specializing in authentic Moldovan food
 - Multi-language product content
 - Image optimization and galleries
 
-#### Phase 3: User Authentication
-- JWT-based authentication system
-- User registration and login flows
-- Protected routes and API endpoints
-- Session management with KV storage
-- Account dashboard
-- Role-based access control (user/admin)
+#### Phase 3: User Authentication (Migrated to Supabase)
+- Supabase Auth with built-in security features
+- User registration with email verification
+- Magic link authentication option
+- Password reset functionality
+- Protected routes with RLS policies
+- Account dashboard with user profile
+- Automatic session management
 
 #### Phase 4: Shopping Cart & Error Handling (LATEST)
 - **Cart Core Functionality**

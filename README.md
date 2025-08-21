@@ -8,11 +8,64 @@
 # Install dependencies
 npm install
 
+# Set up environment variables
+cp .env.example .env
+# Edit .env with your Supabase credentials
+
 # Start development server
 npm run dev
 
 # Open browser
 http://localhost:3000
+```
+
+## 🔧 Development Setup
+
+### Prerequisites
+- Node.js 20.11+
+- Supabase account and project
+
+### Environment Variables
+Create a `.env` file with:
+
+```bash
+# Supabase Configuration
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_ANON_KEY=your-anon-key
+
+# Application
+APP_URL=http://localhost:3000
+NODE_ENV=development
+
+# Email Service (optional for development)
+RESEND_API_KEY=re_your_resend_api_key
+```
+
+### Supabase Setup
+1. Create a new project at [supabase.com](https://supabase.com)
+2. Copy your project URL and anon key to `.env`
+3. Run the SQL schema from `supabase-schema.sql` in your Supabase SQL editor
+4. Enable authentication in your Supabase dashboard
+
+For detailed setup instructions, see [SUPABASE_SETUP.md](./SUPABASE_SETUP.md).
+
+### Database Management
+With Supabase, database management is handled through the Supabase dashboard:
+
+- **Schema Changes**: Apply SQL directly in Supabase SQL Editor
+- **Database GUI**: Use built-in Supabase Table Editor
+- **Migrations**: Version controlled through Supabase CLI or SQL scripts
+
+### Deployment Commands
+```bash
+# Build for production
+npm run build
+
+# Deploy to Vercel (production)
+npm run deploy
+
+# Deploy to Vercel (preview)
+npm run deploy:preview
 ```
 
 ## 📚 Documentation
@@ -40,21 +93,70 @@ See [.kiro/ROADMAP.md](.kiro/ROADMAP.md) for detailed timeline.
 ## 🛠 Tech Stack
 
 - **Nuxt 3** + TypeScript
-- **TailwindCSS** for styling
+- **TailwindCSS** for styling with dark mode support
 - **Vue 3** Composition API
-- **Drizzle ORM** + Cloudflare D1
-- **JWT** Authentication
+- **Supabase** for database and authentication
 - **i18n** for internationalization
 - **Pinia** for state management
+- **Vercel** for deployment
 
 ## 🔐 Authentication Features
 
-- User registration with email/password
-- Secure login with JWT tokens
-- Protected routes and API endpoints
+- User registration with email verification
+- Secure login with Supabase Auth
+- Magic link authentication
+- Password reset functionality
+- Protected routes with RLS policies
 - Account dashboard
-- Session management
 - Multi-language support
+- Dark/light theme toggle with system preference detection
+
+## 🎨 Theme System
+
+The application supports both light and dark themes with seamless switching:
+
+### Features
+- **Automatic Detection**: Respects user's system color scheme preference
+- **Manual Toggle**: Theme switch button in the header navigation
+- **Persistent Storage**: Remembers user's theme choice via localStorage
+- **Smooth Transitions**: All UI elements transition smoothly between themes
+- **Complete Coverage**: All components and pages support dark mode
+
+### Implementation
+- **TailwindCSS**: Uses `dark:` variant classes for dark mode styling
+- **CSS Variables**: Custom color variables for consistent theming
+- **Vue Composable**: `useTheme()` composable for theme management
+- **Plugin**: Automatic theme initialization on app start
+
+### Usage for Developers
+```typescript
+// Use the theme composable in components
+const { theme, toggleTheme, setTheme } = useTheme()
+
+// Check current theme
+console.log(theme.value) // 'light' or 'dark'
+
+// Toggle theme programmatically
+toggleTheme()
+
+// Set specific theme
+setTheme('dark')
+```
+
+### Adding Dark Mode to New Components
+When creating new components, ensure to include dark mode variants:
+
+```vue
+<template>
+  <!-- Light background with dark mode variant -->
+  <div class="bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100">
+    <!-- Button with dark mode support -->
+    <button class="bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-600">
+      Click me
+    </button>
+  </div>
+</template>
+```
 
 ## 🧪 Testing
 

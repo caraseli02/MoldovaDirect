@@ -1,7 +1,7 @@
 <template>
-  <div class="relative bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-300">
+  <div class="relative bg-white dark:bg-slate-800 rounded-lg shadow-sm dark:shadow-slate-900/20 border border-gray-200 dark:border-slate-700 hover:shadow-md dark:hover:shadow-slate-900/30 transition-shadow duration-300">
     <!-- Product Image -->
-    <div class="aspect-square overflow-hidden rounded-t-lg bg-gray-100">
+    <div class="aspect-square overflow-hidden rounded-t-lg bg-gray-100 dark:bg-slate-700">
       <nuxt-link :to="`/products/${product.slug}`">
         <img
           v-if="primaryImage"
@@ -10,7 +10,7 @@
           class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
           loading="lazy"
         />
-        <div v-else class="w-full h-full flex items-center justify-center text-gray-400">
+        <div v-else class="w-full h-full flex items-center justify-center text-gray-400 dark:text-slate-500">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
@@ -21,19 +21,19 @@
     <!-- Product Info -->
     <div class="p-4">
       <!-- Category -->
-      <p class="text-sm text-gray-500 mb-2">
+      <p class="text-sm text-gray-500 dark:text-slate-400 mb-2">
         {{ getLocalizedText(product.category?.name) }}
       </p>
 
       <!-- Product Name -->
-      <h3 class="font-semibold text-gray-900 mb-2 line-clamp-2">
-        <nuxt-link :to="`/products/${product.slug}`" class="hover:text-blue-600 transition-colors">
+      <h3 class="font-semibold text-gray-900 dark:text-slate-100 mb-2 line-clamp-2">
+        <nuxt-link :to="`/products/${product.slug}`" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
           {{ getLocalizedText(product.name) }}
         </nuxt-link>
       </h3>
 
       <!-- Short Description -->
-      <p v-if="product.shortDescription" class="text-sm text-gray-600 mb-3 line-clamp-2">
+      <p v-if="product.shortDescription" class="text-sm text-gray-600 dark:text-slate-300 mb-3 line-clamp-2">
         {{ getLocalizedText(product.shortDescription) }}
       </p>
 
@@ -42,17 +42,17 @@
         <span
           v-for="tag in product.tags.slice(0, 2)"
           :key="tag"
-          class="inline-block bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full"
+          class="inline-block bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 text-xs px-2 py-1 rounded-full"
         >
           {{ tag }}
         </span>
-        <span v-if="product.tags.length > 2" class="text-xs text-gray-500">
+        <span v-if="product.tags.length > 2" class="text-xs text-gray-500 dark:text-slate-400">
           +{{ product.tags.length - 2 }}
         </span>
       </div>
 
       <!-- Product Details -->
-      <div class="flex flex-wrap gap-2 text-xs text-gray-500 mb-3">
+      <div class="flex flex-wrap gap-2 text-xs text-gray-500 dark:text-slate-400 mb-3">
         <span v-if="product.origin" class="flex items-center">
           🌍 {{ product.origin }}
         </span>
@@ -68,12 +68,12 @@
       <div class="flex items-center justify-between">
         <div class="flex items-center space-x-2">
           <!-- Current Price -->
-          <span class="font-bold text-lg text-gray-900">
+          <span class="font-bold text-lg text-gray-900 dark:text-slate-100">
             €{{ formatPrice(product.price) }}
           </span>
           
           <!-- Compare Price (if on sale) -->
-          <span v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)" class="text-sm text-gray-500 line-through">
+          <span v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)" class="text-sm text-gray-500 dark:text-slate-400 line-through">
             €{{ formatPrice(product.comparePrice) }}
           </span>
         </div>
@@ -87,7 +87,7 @@
           >
             {{ stockStatusText }}
           </span>
-          <span v-else class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-red-100 text-red-800">
+          <span v-else class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300">
             {{ $t('products.outOfStock') }}
           </span>
         </div>
@@ -99,10 +99,10 @@
         class="w-full mt-4 py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
         :class="[
           isInCart(product.id) 
-            ? 'bg-green-600 text-white hover:bg-green-700' 
-            : 'bg-blue-600 text-white hover:bg-blue-700',
+            ? 'bg-green-600 dark:bg-green-500 text-white hover:bg-green-700 dark:hover:bg-green-600' 
+            : 'bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-600',
           (product.stockQuantity <= 0 || cartLoading) 
-            ? 'bg-gray-300 cursor-not-allowed' 
+            ? 'bg-gray-300 dark:bg-slate-600 cursor-not-allowed' 
             : ''
         ]"
         @click="addToCart"
@@ -169,9 +169,9 @@ const primaryImage = computed(() => {
 
 const stockStatusClass = computed(() => {
   const stock = props.product.stockQuantity
-  if (stock > 10) return 'bg-green-100 text-green-800'
-  if (stock > 0) return 'bg-yellow-100 text-yellow-800'
-  return 'bg-red-100 text-red-800'
+  if (stock > 10) return 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300'
+  if (stock > 0) return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300'
+  return 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300'
 })
 
 const stockStatusText = computed(() => {

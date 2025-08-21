@@ -17,6 +17,10 @@
         <div v-if="error" class="rounded-md bg-red-50 p-4">
           <div class="text-sm text-red-800">{{ error }}</div>
         </div>
+
+        <div v-if="success" class="rounded-md bg-green-50 p-4">
+          <div class="text-sm text-green-800">{{ success }}</div>
+        </div>
         
         <div class="space-y-4">
           <div>
@@ -136,11 +140,17 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from '~/stores/auth'
-
+const supabase = useSupabaseClient()
+const user = useSupabaseUser()
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
-const authStore = useAuthStore()
+
+// Redirect if already logged in
+watchEffect(() => {
+  if (user.value) {
+    navigateTo(localePath('/dashboard'))
+  }
+})
 
 const form = ref({
   name: '',
@@ -152,10 +162,12 @@ const form = ref({
 })
 
 const error = ref('')
+const success = ref('')
 const loading = ref(false)
 
 const handleRegister = async () => {
   error.value = ''
+  success.value = ''
   
   if (form.value.password !== form.value.confirmPassword) {
     error.value = t('auth.passwordMismatch')
@@ -170,15 +182,26 @@ const handleRegister = async () => {
   loading.value = true
   
   try {
-    await authStore.register({
-      name: form.value.name,
+    const { error: authError } = await supabase.auth.signUp({
       email: form.value.email,
-      phone: form.value.phone || undefined,
       password: form.value.password,
-      preferredLanguage: locale.value
+      options: {
+        data: {
+          name: form.value.name,
+          phone: form.value.phone || null,
+          preferred_language: locale.value
+        },
+        emailRedirectTo: `${window.location.origin}${localePath('/auth/confirm')}`
+      }
     })
+
+    if (authError) {
+      throw authError
+    }
+
+    success.value = t('auth.registrationSuccess')
   } catch (err: any) {
-    error.value = err.data?.statusMessage || t('auth.registerError')
+    error.value = err.message || t('auth.registerError')
   } finally {
     loading.value = false
   }

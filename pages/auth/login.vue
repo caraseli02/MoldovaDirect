@@ -17,6 +17,10 @@
         <div v-if="error" class="rounded-md bg-red-50 p-4">
           <div class="text-sm text-red-800">{{ error }}</div>
         </div>
+
+        <div v-if="success" class="rounded-md bg-green-50 p-4">
+          <div class="text-sm text-green-800">{{ success }}</div>
+        </div>
         
         <div class="rounded-md shadow-sm -space-y-px">
           <div>
@@ -48,19 +52,6 @@
         </div>
 
         <div class="flex items-center justify-between">
-          <div class="flex items-center">
-            <input
-              id="remember-me"
-              v-model="form.rememberMe"
-              name="remember-me"
-              type="checkbox"
-              class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-            >
-            <label for="remember-me" class="ml-2 block text-sm text-gray-900">
-              {{ $t('auth.rememberMe') }}
-            </label>
-          </div>
-
           <div class="text-sm">
             <NuxtLink :to="localePath('/auth/forgot-password')" class="font-medium text-primary-600 hover:text-primary-500">
               {{ $t('auth.forgotPassword') }}
@@ -77,37 +68,107 @@
             {{ loading ? $t('common.loading') : $t('auth.signIn') }}
           </button>
         </div>
+
+        <!-- Divider -->
+        <div class="relative">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-gray-300" />
+          </div>
+          <div class="relative flex justify-center text-sm">
+            <span class="px-2 bg-gray-50 text-gray-500">{{ $t('auth.orContinueWith') }}</span>
+          </div>
+        </div>
+
+        <!-- Magic Link Login -->
+        <div>
+          <button
+            type="button"
+            @click="handleMagicLink"
+            :disabled="loadingMagic"
+            class="group relative w-full flex justify-center py-2 px-4 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
+          >
+            {{ loadingMagic ? $t('common.loading') : $t('auth.sendMagicLink') }}
+          </button>
+        </div>
       </form>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from '~/stores/auth'
-
+const supabase = useSupabaseClient()
+const user = useSupabaseUser()
 const { t } = useI18n()
 const localePath = useLocalePath()
-const authStore = useAuthStore()
+
+// Redirect if already logged in
+watchEffect(() => {
+  if (user.value) {
+    navigateTo(localePath('/dashboard'))
+  }
+})
 
 const form = ref({
   email: '',
-  password: '',
-  rememberMe: false
+  password: ''
 })
 
 const error = ref('')
+const success = ref('')
 const loading = ref(false)
+const loadingMagic = ref(false)
 
 const handleLogin = async () => {
   error.value = ''
+  success.value = ''
   loading.value = true
   
   try {
-    await authStore.login(form.value.email, form.value.password)
+    const { error: authError } = await supabase.auth.signInWithPassword({
+      email: form.value.email,
+      password: form.value.password
+    })
+
+    if (authError) {
+      throw authError
+    }
+
+    // Redirect will happen automatically via watcher
+    success.value = t('auth.loginSuccess')
   } catch (err: any) {
-    error.value = err.data?.statusMessage || t('auth.loginError')
+    error.value = err.message || t('auth.loginError')
   } finally {
     loading.value = false
+  }
+}
+
+const handleMagicLink = async () => {
+  if (!form.value.email) {
+    error.value = t('auth.emailRequired')
+    return
+  }
+
+  error.value = ''
+  success.value = ''
+  loadingMagic.value = true
+
+  try {
+    const { error: authError } = await supabase.auth.signInWithOtp({
+      email: form.value.email,
+      options: {
+        emailRedirectTo: `${window.location.origin}${localePath('/auth/confirm')}`
+      }
+    })
+
+    if (authError) {
+      throw authError
+    }
+
+    success.value = t('auth.magicLinkSent')
+  } catch (err: any) {
+    error.value = err.message || t('auth.magicLinkError')
+  } finally {
+    loadingMagic.value = false
   }
 }
 

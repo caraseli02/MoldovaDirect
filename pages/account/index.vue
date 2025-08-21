@@ -1,7 +1,7 @@
 <template>
   <div class="py-12">
     <div class="container">
-      <div v-if="!authStore.isAuthenticated" class="text-center py-20">
+      <div v-if="!isAuthenticated" class="text-center py-20">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
         </svg>
@@ -32,12 +32,12 @@
               <div class="flex items-center mb-4">
                 <div class="h-16 w-16 bg-primary-100 rounded-full flex items-center justify-center">
                   <span class="text-2xl font-semibold text-primary-600">
-                    {{ authStore.user?.name?.charAt(0).toUpperCase() }}
+                    {{ userProfile?.name?.charAt(0).toUpperCase() }}
                   </span>
                 </div>
                 <div class="ml-4">
-                  <h2 class="text-xl font-semibold">{{ authStore.user?.name }}</h2>
-                  <p class="text-gray-600">{{ authStore.user?.email }}</p>
+                  <h2 class="text-xl font-semibold">{{ userProfile?.name }}</h2>
+                  <p class="text-gray-600">{{ userProfile?.email }}</p>
                 </div>
               </div>
               
@@ -127,21 +127,29 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from '~/stores/auth'
-
+const supabase = useSupabaseClient()
+const user = useSupabaseUser()
 const { t } = useI18n()
 const localePath = useLocalePath()
 const route = useRoute()
-const authStore = useAuthStore()
 
-onMounted(async () => {
-  if (!authStore.user) {
-    await authStore.fetchUser()
-  }
-})
+// Computed properties to replace auth store functionality
+const isAuthenticated = computed(() => !!user.value)
+const userProfile = computed(() => user.value ? {
+  name: user.value.user_metadata?.name || user.value.email?.split('@')[0] || 'User',
+  email: user.value.email,
+  phone: user.value.user_metadata?.phone
+} : null)
 
 const handleLogout = async () => {
-  await authStore.logout()
+  try {
+    const { error } = await supabase.auth.signOut()
+    if (error) throw error
+    
+    await navigateTo(localePath('/'))
+  } catch (error) {
+    console.error('Logout error:', error)
+  }
 }
 
 useHead({
