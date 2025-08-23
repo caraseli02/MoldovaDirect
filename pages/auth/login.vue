@@ -104,7 +104,7 @@ const localePath = useLocalePath()
 // Redirect if already logged in
 watchEffect(() => {
   if (user.value) {
-    navigateTo(localePath('/dashboard'))
+    navigateTo(localePath('/account'))
   }
 })
 

@@ -25,7 +25,7 @@
                 {{ $t('auth.accountConfirmed') }}
               </h3>
               <p class="mt-1 text-sm text-green-700">
-                {{ $t('auth.redirectingToDashboard') }}
+                {{ $t('auth.redirectingToAccount') }}
               </p>
             </div>
           </div>
@@ -80,7 +80,7 @@ const handleAuthCallback = async () => {
       
       // Redirect to dashboard after a brief success message
       setTimeout(() => {
-        navigateTo(localePath('/dashboard'))
+        navigateTo(localePath('/account'))
       }, 2000)
     } else {
       throw new Error('Authentication failed')
