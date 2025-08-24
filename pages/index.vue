@@ -74,19 +74,49 @@
     <!-- Featured Products Section -->
     <section class="py-16 md:py-24 bg-gray-50">
       <div class="container">
-        <h2 class="text-3xl font-bold text-center mb-12">Featured Products</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          <!-- Product cards will go here -->
-          <div v-for="i in 4" :key="i" class="bg-white rounded-lg shadow-md overflow-hidden">
+        <h2 class="text-3xl font-bold text-center mb-12">{{ $t('home.featuredProducts.title') }}</h2>
+        
+        <!-- Loading State -->
+        <div v-if="featuredPending" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div v-for="i in 4" :key="i" class="bg-white rounded-lg shadow-md overflow-hidden animate-pulse">
             <div class="h-48 bg-gray-200"></div>
-            <div class="p-4">
-              <h3 class="font-semibold mb-2">Product Name</h3>
-              <p class="text-gray-600 mb-2">€19.99</p>
-              <button class="w-full bg-primary-600 text-white py-2 rounded-lg hover:bg-primary-700 transition-colors">
-                {{ $t('common.addToCart') }}
-              </button>
+            <div class="p-4 space-y-2">
+              <div class="h-4 bg-gray-200 rounded"></div>
+              <div class="h-4 bg-gray-200 rounded w-2/3"></div>
+              <div class="h-8 bg-gray-200 rounded"></div>
             </div>
           </div>
+        </div>
+        
+        <!-- Featured Products -->
+        <div v-else-if="featuredProducts?.length" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <ProductCard
+            v-for="product in featuredProducts"
+            :key="product.id"
+            :product="product"
+          />
+        </div>
+        
+        <!-- No Products Fallback -->
+        <div v-else class="text-center py-8">
+          <p class="text-gray-500 mb-4">{{ $t('home.featuredProducts.noProducts') }}</p>
+          <NuxtLink 
+            :to="localePath('/products')" 
+            class="inline-block bg-primary-600 text-white px-6 py-2 rounded-lg hover:bg-primary-700 transition-colors"
+          >
+            {{ $t('home.featuredProducts.viewAll') }}
+          </NuxtLink>
+        </div>
+        
+        <!-- Error State -->
+        <div v-if="featuredError" class="text-center py-8">
+          <p class="text-red-500 mb-4">{{ $t('home.featuredProducts.error') }}</p>
+          <button 
+            @click="refreshFeatured"
+            class="inline-block bg-primary-600 text-white px-6 py-2 rounded-lg hover:bg-primary-700 transition-colors"
+          >
+            {{ $t('common.retry') }}
+          </button>
         </div>
       </div>
     </section>
@@ -95,6 +125,20 @@
 
 <script setup lang="ts">
 const localePath = useLocalePath()
+const { locale } = useI18n()
+
+// Fetch featured products
+const { data: featuredData, pending: featuredPending, error: featuredError, refresh: refreshFeatured } = await useFetch('/api/products/featured', {
+  query: {
+    limit: 4,
+    locale: locale.value
+  },
+  server: true,
+  lazy: false
+})
+
+// Extract products from the API response
+const featuredProducts = computed(() => featuredData.value?.products || [])
 
 // SEO Meta
 useHead({

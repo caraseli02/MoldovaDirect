@@ -121,6 +121,12 @@
         "title": "Soporte 24/7",
         "description": "Estamos aquí para ayudarte en cualquier momento"
       }
+    },
+    "featuredProducts": {
+      "title": "Productos Destacados",
+      "noProducts": "No hay productos destacados disponibles en este momento.",
+      "viewAll": "Ver Todos los Productos",
+      "error": "Error al cargar los productos destacados."
     }
   },
   "products": {
