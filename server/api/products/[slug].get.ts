@@ -1,0 +1,186 @@
+import { serverSupabaseClient } from '#supabase/server'
+
+// Helper function to get localized content with fallback
+function getLocalizedContent(content: Record<string, string>, locale: string): string {
+  // 1. Try requested locale
+  if (content[locale]) return content[locale]
+  
+  // 2. Try default locale (Spanish)
+  if (content.es) return content.es
+  
+  // 3. Try English as fallback
+  if (content.en) return content.en
+  
+  // 4. Return first available translation
+  return Object.values(content)[0] || ''
+}
+
+export default defineEventHandler(async (event) => {
+  try {
+    const supabase = await serverSupabaseClient(event)
+    const slug = getRouterParam(event, 'slug')
+    const query = getQuery(event)
+    const locale = (query.locale as string) || 'es'
+
+    if (!slug) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: 'Product slug is required'
+      })
+    }
+
+    // First, find the product by SKU (using slug as SKU for now)
+    const { data: product, error } = await supabase
+      .from('products')
+      .select(`
+        id,
+        sku,
+        name_translations,
+        description_translations,
+        price_eur,
+        compare_at_price_eur,
+        stock_quantity,
+        low_stock_threshold,
+        images,
+        attributes,
+        is_active,
+        created_at,
+        updated_at,
+        categories!inner (
+          id,
+          slug,
+          name_translations,
+          description_translations,
+          parent_id
+        )
+      `)
+      .eq('sku', slug)
+      .eq('is_active', true)
+      .single()
+
+    if (error || !product) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: 'Product not found'
+      })
+    }
+
+    // Get related products from the same category
+    const { data: relatedProducts } = await supabase
+      .from('products')
+      .select(`
+        id,
+        sku,
+        name_translations,
+        price_eur,
+        stock_quantity,
+        images,
+        categories!inner (
+          id,
+          slug,
+          name_translations
+        )
+      `)
+      .eq('category_id', product.categories.id)
+      .eq('is_active', true)
+      .neq('id', product.id)
+      .limit(4)
+
+    // Build category breadcrumb
+    const buildBreadcrumb = async (categoryId: number): Promise<any[]> => {
+      const breadcrumb = []
+      let currentCategoryId = categoryId
+
+      while (currentCategoryId) {
+        const { data: category } = await supabase
+          .from('categories')
+          .select('id, slug, name_translations, parent_id')
+          .eq('id', currentCategoryId)
+          .single()
+
+        if (category) {
+          breadcrumb.unshift({
+            id: category.id,
+            slug: category.slug,
+            name: getLocalizedContent(category.name_translations, locale)
+          })
+          currentCategoryId = category.parent_id
+        } else {
+          break
+        }
+      }
+
+      return breadcrumb
+    }
+
+    const breadcrumb = await buildBreadcrumb(product.categories.id)
+
+    // Transform product data with localization
+    const transformedProduct = {
+      id: product.id,
+      sku: product.sku,
+      slug: product.sku, // Using SKU as slug for now
+      name: getLocalizedContent(product.name_translations, locale),
+      description: getLocalizedContent(product.description_translations, locale),
+      nameTranslations: product.name_translations,
+      descriptionTranslations: product.description_translations,
+      price: product.price_eur,
+      formattedPrice: `€${product.price_eur.toFixed(2)}`,
+      compareAtPrice: product.compare_at_price_eur,
+      formattedCompareAtPrice: product.compare_at_price_eur 
+        ? `€${product.compare_at_price_eur.toFixed(2)}` 
+        : null,
+      stock: product.stock_quantity,
+      lowStockThreshold: product.low_stock_threshold,
+      stockStatus: product.stock_quantity > product.low_stock_threshold ? 'in_stock' : 
+                   product.stock_quantity > 0 ? 'low_stock' : 'out_of_stock',
+      images: product.images || [],
+      primaryImage: product.images?.[0]?.url || '/placeholder-product.jpg',
+      attributes: product.attributes || {},
+      category: {
+        id: product.categories.id,
+        slug: product.categories.slug,
+        name: getLocalizedContent(product.categories.name_translations, locale),
+        description: getLocalizedContent(product.categories.description_translations || {}, locale),
+        nameTranslations: product.categories.name_translations,
+        breadcrumb
+      },
+      relatedProducts: relatedProducts?.map((related: any) => ({
+        id: related.id,
+        sku: related.sku,
+        slug: related.sku,
+        name: getLocalizedContent(related.name_translations, locale),
+        price: related.price_eur,
+        formattedPrice: `€${related.price_eur.toFixed(2)}`,
+        stock: related.stock_quantity,
+        stockStatus: related.stock_quantity > 5 ? 'in_stock' : 
+                     related.stock_quantity > 0 ? 'low_stock' : 'out_of_stock',
+        primaryImage: related.images?.[0]?.url || '/placeholder-product.jpg',
+        category: {
+          id: related.categories.id,
+          slug: related.categories.slug,
+          name: getLocalizedContent(related.categories.name_translations, locale)
+        }
+      })) || [],
+      isActive: product.is_active,
+      createdAt: product.created_at,
+      updatedAt: product.updated_at,
+      locale,
+      availableLocales: Object.keys(product.name_translations)
+    }
+
+    return transformedProduct
+
+  } catch (error) {
+    console.error('Product detail API error:', error)
+    
+    if (error.statusCode) {
+      throw error
+    }
+    
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Internal server error'
+    })
+  }
+})

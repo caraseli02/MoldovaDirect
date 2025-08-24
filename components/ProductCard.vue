@@ -151,7 +151,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ProductWithRelations } from '~/types/database'
+import type { ProductWithRelations } from '~/types'
 
 interface Props {
   product: ProductWithRelations

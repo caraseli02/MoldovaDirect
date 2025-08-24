@@ -127,3 +127,9 @@ playwright-report/
 # Temporary folders
 .tmp/
 .temp/
+
+# Screenshots
+screenshots/
+*.png
+*.jpg
+*.jpeg

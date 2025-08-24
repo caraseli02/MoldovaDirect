@@ -1,450 +1,204 @@
-# Product Catalog Implementation Tasks
+# Implementation Plan
 
-## Task Breakdown
+- [x] 1. Set up core database schema and data models
 
-### Phase 1: Database Schema and Data Model
+  - ✅ Supabase database schema is complete with products, categories, and images tables
+  - ✅ JSON-based translation schema implemented for multi-language support
+  - ✅ Proper indexes and relationships defined in supabase-schema.sql
+  - _Requirements: 1.1, 2.1, 6.1, 7.1_
 
-**Status**: ✅ Completed  
-**Estimated Duration**: 3-4 days
+- [x] 2. Create core API endpoints
+- [x] 2.1 Create product listing API with filtering and pagination
 
-#### Core Schema Implementation
+  - ✅ Built `server/api/products/index.get.ts` endpoint with Supabase integration
+  - ✅ Added category, price, and stock filtering with query parameters
+  - ✅ Implemented pagination and sort functionality (price, name, newest, featured)
+  - _Requirements: 1.1, 2.3, 4.1, 4.3_
 
-- [x] Create category table with hierarchical structure
-- [x] Create product table with multi-language support
-- [x] Create product_image table for image management
-- [x] Create product_attribute table for flexible attributes
-- [x] Set up proper indexes for performance optimization
-- [x] Implement database migrations and seed data
+- [x] 2.2 Build product detail API endpoint
 
-#### Translation Infrastructure
+  - ✅ Created `server/api/products/[slug].get.ts` endpoint for individual product data
+  - ✅ Connected to Supabase products table with proper joins for images and category
+  - ✅ Added multi-language content with fallback logic
+  - _Requirements: 1.2, 7.1, 7.2, 9.1_
 
-- [x] Design JSON-based translation schema
-- [x] Implement fallback logic for missing translations
-- [x] Create helper functions for localized content
-- [x] Set up validation for required translations
-- [x] Add support for partial translations
+- [x] 2.3 Implement category API endpoints
 
-### Phase 2: Core API Development
+  - ✅ Built `server/api/categories/index.get.ts` for hierarchical category listing
+  - ✅ Created `server/api/categories/[slug].get.ts` for category-specific products
+  - ✅ Added product count per category and breadcrumb data
+  - _Requirements: 2.1, 2.2, 2.4_
 
-**Status**: ✅ Partially Completed  
-**Estimated Duration**: 5-6 days
+- [x] 2.4 Add database seeding and sample data
 
-#### Product API Endpoints
+  - ✅ Created `server/api/admin/seed.post.ts` endpoint for populating test data
+  - ✅ Added sample products, categories, and images to test the frontend
+  - ✅ Implemented data validation and error handling
+  - _Requirements: All requirements for testing_
 
-- [x] Implement product listing endpoint (`/api/products`)
-- [x] Create product detail endpoint (`/api/products/[slug]`)
-- [x] Build category listing endpoint (`/api/categories`)
-- [x] Develop category products endpoint (`/api/categories/[slug]`)
-- [ ] Add featured products endpoint (`/api/products/featured`)
-- [ ] Create related products endpoint (`/api/products/related/[id]`)
+- [x] 3. Implement frontend components and pages
+- [x] 3.1 Product listing page implementation
 
-#### Search and Filtering
+  - ✅ Complete product grid with responsive design in `pages/products/index.vue`
+  - ✅ Search, filtering, and pagination UI implemented
+  - ✅ Integrated with API endpoints for real-time data
+  - _Requirements: 1.1, 2.3, 4.1, 5.1_
 
-- [ ] Implement full-text search endpoint (`/api/search`)
-- [x] Add basic filtering capabilities (category, price, stock)
-- [ ] Create search suggestions endpoint
-- [x] Implement sort functionality (price, name, newest)
-- [x] Add pagination for large result sets
-- [ ] Optimize query performance with proper indexing
+- [x] 3.2 Product detail page implementation
 
-### Phase 3: Frontend Component Library
+  - ✅ Comprehensive product detail page in `pages/products/[slug].vue`
+  - ✅ Image gallery, breadcrumbs, and product information display
+  - ✅ Integrated with API endpoints for real-time data
+  - _Requirements: 1.2, 6.2, 7.1_
 
-**Status**: ✅ Partially Completed  
-**Estimated Duration**: 6-7 days
+- [x] 3.3 ProductCard component
 
-#### Core Components
+  - ✅ Fully implemented with cart integration, stock status, and mobile optimization
+  - ✅ Touch-friendly design with proper sizing and transitions
+  - ✅ Multi-language support and price formatting
+  - _Requirements: 1.1, 5.1, 8.1, 8.4_
 
-- [ ] Create ProductGrid component for listings (using basic grid in pages)
-- [x] Build ProductCard component with responsive design
-- [x] Develop ProductDetail component for product pages
-- [ ] Implement ProductImageGallery with touch support (basic gallery exists)
-- [ ] Create CategoryNavigation component
-- [ ] Build CategoryBreadcrumb for navigation (basic breadcrumb exists)
+- [x] 3.4 Create TypeScript interfaces and types
 
-#### Advanced Components
+  - ✅ Defined comprehensive type system in `types/database.ts` and `types/index.ts`
+  - ✅ Created `ProductWithRelations`, `CategoryWithChildren`, and `ProductFilters` types
+  - ✅ Added proper type definitions for API responses and database operations
+  - _Requirements: All requirements for type safety_
 
-- [ ] Develop ProductFilter sidebar component
-- [ ] Create ProductSearch with autocomplete
-- [ ] Implement ProductQuickView modal
-- [ ] Build RelatedProducts section
-- [ ] Add ProductComparison functionality
-- [ ] Create EmptyState component for no results (basic empty state exists)
+- [x] 4. Add advanced search and recommendation features
+- [x] 4.1 Implement full-text search API
 
-### Phase 4: State Management and Caching
+  - Build `server/api/search/index.get.ts` endpoint with PostgreSQL full-text search
+  - Add search ranking, relevance scoring, and suggestions
+  - Implement search result highlighting and autocomplete
+  - _Requirements: 3.1, 3.2, 3.4_
 
-**Status**: ❌ Not Started  
-**Estimated Duration**: 3-4 days
+- [x] 4.2 Build product recommendation system
 
-#### Pinia Store Implementation
-
-- [ ] Create products store with reactive state
-- [ ] Implement category store with hierarchical data
-- [ ] Add search store for query management
-- [ ] Create filter store for advanced filtering
-- [ ] Implement caching strategies
-- [ ] Add optimistic updates for better UX
-
-#### Performance Optimization
-
-- [ ] Implement client-side caching
-- [x] Add lazy loading for images
-- [ ] Create infinite scroll for product listings
-- [ ] Optimize API response caching
-- [ ] Implement progressive loading strategies
-
-### Phase 5: Mobile-First Responsive Design
-
-**Status**: ✅ Partially Completed  
-**Estimated Duration**: 4-5 days
-
-#### Mobile Optimization
-
-- [x] Design mobile-first product grid layouts
-- [x] Optimize product cards for touch interaction
-- [ ] Implement mobile-friendly filtering interface
-- [ ] Create swipeable image galleries
-- [ ] Add pull-to-refresh functionality
-- [x] Optimize touch targets (44px minimum)
-
-#### Progressive Web App Features
-
-- [ ] Implement service worker for offline caching
-- [ ] Add app-like navigation experience
-- [ ] Create offline product browsing capability
-- [ ] Implement push notifications for new products
-- [ ] Add home screen installation prompt
-
-### Phase 6: Multi-Language Integration
-
-**Status**: ✅ Completed  
-**Estimated Duration**: 3-4 days
-
-#### Internationalization
-
-- [x] Create translation files for catalog interface
-- [x] Implement product content localization
-- [x] Add category name translations
-- [x] Create localized search functionality
-- [x] Implement price formatting per locale
-- [x] Add RTL support preparation
-
-#### Content Management
-
-- [x] Build admin interface for managing translations
-- [x] Create bulk translation import/export
-- [x] Implement translation validation
-- [x] Add missing translation detection
-- [x] Create translation fallback mechanisms
-
-### Phase 7: Search and Discovery Features
-
-**Status**: ❌ Not Started  
-**Estimated Duration**: 4-5 days
-
-#### Advanced Search
-
-- [ ] Implement full-text search with ranking
-- [ ] Add search autocomplete and suggestions
-- [ ] Create search filters and faceted search
-- [ ] Implement search result highlighting
-- [ ] Add search analytics and tracking
-- [ ] Create saved searches functionality
-
-#### Product Discovery
-
-- [ ] Implement recommendation algorithms
-- [ ] Add "customers also viewed" section
-- [ ] Create "frequently bought together"
-- [ ] Build trending products section
-- [ ] Add personalized recommendations
-- [ ] Implement A/B testing for recommendations
-
-### Phase 8: Image Management and Optimization
-
-**Status**: ✅ Partially Completed  
-**Estimated Duration**: 3-4 days
-
-#### Image Pipeline
-
-- [ ] Set up Cloudflare Image Resizing
-- [ ] Implement responsive image delivery
-- [ ] Add WebP format support with fallbacks
-- [x] Create image lazy loading with IntersectionObserver
-- [ ] Implement progressive image loading
-- [ ] Add image optimization for different screen sizes
-
-#### Gallery Features
-
-- [ ] Create touch-friendly image gallery
-- [ ] Implement pinch-to-zoom functionality
-- [ ] Add image preloading for smooth navigation
-- [ ] Create lightbox for full-screen viewing
-- [ ] Implement social sharing for product images
-
-### Phase 9: Performance Optimization
-
-**Status**: ❌ Not Started  
-**Estimated Duration**: 3-4 days
-
-#### Frontend Performance
-
-- [ ] Implement code splitting for catalog routes
-- [ ] Add bundle size optimization
-- [x] Create efficient pagination strategies
-- [ ] Implement virtual scrolling for large lists
-- [ ] Optimize re-rendering with memoization
-- [ ] Add performance monitoring
-
-#### Backend Performance
-
-- [ ] Optimize database queries with proper indexing
-- [ ] Implement Redis caching for frequently accessed data
-- [ ] Add CDN caching for product images
-- [x] Create efficient pagination algorithms
-- [ ] Implement database connection pooling
-
-### Phase 10: Testing and Quality Assurance
-
-**Status**: ❌ Not Started  
-**Estimated Duration**: 5-6 days
-
-#### Unit Testing
-
-- [ ] Write tests for product API endpoints
-- [ ] Test search and filtering functionality
-- [ ] Create component unit tests
-- [ ] Test translation and localization
-- [ ] Add image loading and optimization tests
-- [ ] Test state management logic
-
-#### Integration Testing
-
-- [ ] Test complete product browsing flows
-- [ ] Verify search and filtering integration
-- [ ] Test multi-language functionality
-- [ ] Validate image gallery interactions
-- [ ] Test mobile responsive behavior
-
-#### End-to-End Testing
-
-- [ ] Create Playwright tests for catalog browsing
-- [ ] Test product search workflows
-- [ ] Verify filtering and sorting functionality
-- [ ] Test mobile catalog experience
-- [ ] Validate performance metrics
-- [ ] Test across multiple browsers and devices
-
-## Remaining Implementation Tasks
-
-Based on the current codebase analysis, the following tasks need to be completed to fully implement the product catalog requirements:
-
-### 🔄 Missing API Endpoints
-
-- [ ] **1. Implement featured products endpoint**
-
-  - Create `/api/products/featured` endpoint
-  - Add featured product filtering logic
-  - Support limit parameter for featured product count
-  - _Requirements: 1.1, 9.1_
-
-- [ ] **2. Create related products endpoint**
-
-  - Implement `/api/products/related/[id]` endpoint
-  - Add recommendation algorithm based on category and attributes
-  - Return products excluding the current product
-  - _Requirements: 9.1, 9.2_
-
-- [ ] **3. Build search API endpoint**
-  - Create `/api/search` endpoint with full-text search
-  - Implement search ranking and relevance scoring
-  - Add search suggestions and autocomplete
-  - Support search result highlighting
-  - _Requirements: 3.1, 3.2, 3.3_
-
-### 🎨 Missing Frontend Components
-
-- [ ] **4. Create ProductGrid component**
-
-  - Extract grid layout logic from pages into reusable component
-  - Add support for different grid layouts (2, 3, 4, 5 columns)
-  - Implement loading states and skeleton screens
-  - _Requirements: 1.1, 5.1_
-
-- [ ] **5. Build ProductFilter sidebar component**
-
-  - Create collapsible filter sidebar for desktop
-  - Implement mobile-friendly filter modal
-  - Add price range slider and category tree
-  - Support multiple filter types (checkboxes, ranges, etc.)
-  - _Requirements: 4.1, 4.2, 5.2_
-
-- [ ] **6. Implement ProductImageGallery with touch support**
-
-  - Create touch-friendly image gallery with swipe navigation
-  - Add pinch-to-zoom functionality for mobile
-  - Implement image preloading and smooth transitions
-  - Add lightbox for full-screen viewing
-  - _Requirements: 6.2, 6.4, 5.3_
-
-- [ ] **7. Create CategoryNavigation component**
-
-  - Build hierarchical category navigation menu
-  - Support both dropdown and sidebar layouts
-  - Add category icons and product counts
-  - _Requirements: 2.1, 2.2_
-
-- [ ] **8. Build ProductSearch with autocomplete**
-
-  - Create search input with real-time suggestions
-  - Implement search history and popular searches
-  - Add search result highlighting
-  - Support voice search on mobile
-  - _Requirements: 3.1, 3.2_
-
-- [ ] **9. Implement ProductQuickView modal**
-
-  - Create modal for quick product preview
-  - Include essential product info and add-to-cart
-  - Support keyboard navigation and accessibility
-  - _Requirements: 1.1, 1.2_
-
-- [ ] **10. Build RelatedProducts section**
-  - Create component to display related products
-  - Support different recommendation types
-  - Add horizontal scrolling for mobile
-  - _Requirements: 9.1, 9.2_
-
-### 🏪 State Management Implementation
-
-- [ ] **11. Create products Pinia store**
-
-  - Implement reactive product state management
-  - Add caching and optimistic updates
-  - Support pagination and infinite scroll
-  - _Requirements: 1.1, 10.1_
-
-- [ ] **12. Implement search store**
-
-  - Create search state management
-  - Add search history and suggestions
-  - Implement debounced search queries
-  - _Requirements: 3.1, 3.2_
-
-- [ ] **13. Build filter store**
-  - Create advanced filtering state
-  - Support multiple filter combinations
-  - Add filter persistence in URL
-  - _Requirements: 4.1, 4.2_
-
-### 🚀 Performance Optimizations
-
-- [ ] **14. Implement image optimization pipeline**
-
-  - Set up Cloudflare Image Resizing integration
-  - Add WebP format support with fallbacks
-  - Implement responsive image delivery
-  - Add progressive image loading
-  - _Requirements: 6.1, 6.2, 10.1_
-
-- [ ] **15. Add infinite scroll for product listings**
-
-  - Replace pagination with infinite scroll option
-  - Implement intersection observer for loading
-  - Add loading states and error handling
-  - _Requirements: 2.3, 10.1_
-
-- [ ] **16. Implement client-side caching**
-  - Add product and category caching
-  - Implement cache invalidation strategies
-  - Support offline browsing capabilities
-  - _Requirements: 10.1, 10.2_
-
-### 📱 Mobile Enhancements
-
-- [ ] **17. Create mobile-friendly filtering interface**
-
-  - Build slide-up filter modal for mobile
-  - Add touch-friendly filter controls
-  - Implement filter chips for active filters
-  - _Requirements: 5.2, 4.1_
-
-- [ ] **18. Add pull-to-refresh functionality**
-
-  - Implement pull-to-refresh for product listings
-  - Add visual feedback and loading states
-  - Support both iOS and Android patterns
-  - _Requirements: 5.1, 5.2_
-
-- [ ] **19. Implement Progressive Web App features**
-  - Add service worker for offline caching
-  - Create app manifest for installation
-  - Implement push notifications for new products
-  - _Requirements: 5.1, 10.1_
-
-### 🔍 Search and Discovery Features
-
-- [ ] **20. Build recommendation algorithms**
-
-  - Implement "customers also viewed" logic
-  - Create "frequently bought together" recommendations
-  - Add trending products based on views
+  - Create `server/api/products/related/[id].get.ts` endpoint
+  - Implement recommendation algorithms based on category and attributes
+  - Add "frequently bought together" and "customers also viewed" logic
   - _Requirements: 9.1, 9.2, 9.3_
 
-- [ ] **21. Add search analytics and tracking**
-  - Track search queries and success rates
-  - Monitor filter usage patterns
-  - Implement conversion tracking
-  - _Requirements: 3.4, 9.4_
+- [x] 4.3 Add featured products endpoint
 
-### 🧪 Testing Implementation
+  - Create `server/api/products/featured.get.ts` endpoint
+  - Support category-specific featured products
+  - Add configurable limit parameter for featured product count
+  - _Requirements: 9.3, 1.1_
 
-- [ ] **22. Write comprehensive unit tests**
+- [ ] 5. Enhance UI components and user experience
+- [ ] 5.1 Create ProductFilter sidebar component
 
-  - Test all API endpoints and business logic
-  - Create component unit tests
-  - Test search and filtering functionality
+  - Build collapsible filter sidebar with category tree
+  - Add price range slider and attribute checkboxes
+  - Implement mobile-friendly filter modal with slide-up animation
+  - _Requirements: 4.1, 4.2, 5.2_
+
+- [ ] 5.2 Create CategoryNavigation component
+
+  - Build hierarchical category menu with dropdown/sidebar layouts
+  - Add category icons and product counts display
+  - Implement mobile-friendly collapsible navigation
+  - _Requirements: 2.1, 2.2, 2.4, 5.2_
+
+- [ ] 5.3 Implement state management with Pinia stores
+
+  - Create products store for catalog state management with caching
+  - Build search and filter stores with query history
+  - Add category store for navigation state management
+  - _Requirements: 1.1, 3.1, 4.1, 10.1, 10.2_
+
+- [ ] 6. Optimize images and implement responsive delivery
+- [ ] 6.1 Set up image optimization pipeline
+
+  - Configure Nuxt Image with Cloudflare Image Resizing
+  - Add WebP format support with JPEG fallbacks
+  - Implement responsive image sizing for different screen sizes
+  - _Requirements: 6.1, 6.2, 10.1_
+
+- [ ] 6.2 Enhance image gallery with touch support
+
+  - Add swipeable image gallery with pinch-to-zoom functionality
+  - Implement image preloading and smooth transition animations
+  - Create lightbox modal for full-screen viewing
+  - _Requirements: 6.2, 6.4, 5.3_
+
+- [ ] 6.3 Add progressive image loading
+
+  - Implement lazy loading with intersection observer
+  - Add blur-to-clear progressive loading effect
+  - Create fallback images for missing product photos
+  - _Requirements: 6.1, 6.3, 10.1_
+
+- [ ] 7. Enhance mobile experience and PWA features
+- [ ] 7.1 Implement mobile-specific interactions
+
+  - Add pull-to-refresh functionality for product listings
+  - Create touch-friendly swipe gestures for navigation
+  - Implement haptic feedback for touch interactions
+  - _Requirements: 5.1, 5.2_
+
+- [ ] 7.2 Build Progressive Web App capabilities
+
+  - Add service worker for offline product browsing
+  - Create app manifest for home screen installation
+  - Implement push notifications for stock alerts and new products
+  - _Requirements: 5.1, 8.3, 10.1_
+
+- [ ] 7.3 Optimize mobile performance
+
+  - Implement virtual scrolling for large product lists
+  - Add code splitting for mobile-specific components
+  - Create efficient touch event handling
+  - _Requirements: 5.1, 5.2, 10.1_
+
+- [ ] 8. Add performance optimizations and caching
+- [ ] 8.1 Implement client-side caching strategies
+
+  - Add product and category data caching with TTL
+  - Create cache invalidation logic for real-time updates
+  - Implement offline browsing with cached product data
+  - _Requirements: 10.1, 10.2, 10.4_
+
+- [ ] 8.2 Optimize database queries and server caching
+
+  - Add Redis caching for frequently accessed product data
+  - Implement database query optimization with proper indexes
+  - Create CDN caching for product images and static assets
+  - _Requirements: 10.1, 10.2_
+
+- [ ] 8.3 Add infinite scroll and pagination optimization
+
+  - Replace traditional pagination with infinite scroll option
+  - Implement efficient data loading with intersection observer
+  - Add loading states and error handling for smooth UX
+  - _Requirements: 2.3, 10.1, 10.3_
+
+- [ ] 9. Implement comprehensive testing suite
+- [ ] 9.1 Write unit tests for API endpoints and business logic
+
+  - Test product CRUD operations and filtering logic
+  - Create search functionality tests with mock data
+  - Add translation and localization unit tests
   - _Requirements: All requirements validation_
 
-- [ ] **23. Implement integration tests**
+- [ ] 9.2 Build component unit tests
 
-  - Test complete product browsing flows
-  - Verify search and filtering integration
-  - Test multi-language functionality
+  - Test all product catalog components with Vue Test Utils
+  - Create interaction tests for filtering and search components
+  - Add accessibility tests for keyboard navigation and screen readers
   - _Requirements: All requirements validation_
 
-- [ ] **24. Create end-to-end tests**
-  - Build Playwright tests for catalog browsing
-  - Test mobile catalog experience
-  - Validate performance metrics
+- [ ] 9.3 Create integration tests for complete workflows
+
+  - Test end-to-end product browsing and search flows
+  - Verify multi-language functionality across all components
+  - Add mobile-specific interaction tests
   - _Requirements: All requirements validation_
 
-## Current Implementation Status
-
-### ✅ Completed Features
-
-- **Basic Product Listings**: Product grid with pagination
-- **Product Details**: Comprehensive product pages with image display
-- **Category API**: Hierarchical category structure
-- **Multi-Language Support**: Complete translation system
-- **Basic Filtering**: Category and price filtering
-- **Mobile Responsive**: Mobile-first design approach
-- **Cart Integration**: Add to cart functionality
-
-### 🔧 Partially Implemented
-
-- **Product Card Component**: Exists but needs enhancement
-- **Image Gallery**: Basic gallery without touch features
-- **Search**: Basic search in product listings, no dedicated endpoint
-- **Breadcrumbs**: Basic implementation in product detail page
-
-### ❌ Missing Features
-
-- **Advanced Search**: No dedicated search API or autocomplete
-- **Product Recommendations**: No related products or discovery features
-- **Advanced Filtering**: No sidebar filters or advanced options
-- **State Management**: No Pinia stores for products/search
-- **Performance Optimizations**: No caching or image optimization
-- **PWA Features**: No service worker or offline capabilities
-- **Testing**: No test coverage for catalog features
-
-The product catalog has a solid foundation but requires significant additional work to meet all the requirements specified in the design document.
+- [ ] 9.4 Implement performance and accessibility testing
+  - Add Lighthouse performance audits for mobile and desktop
+  - Create WCAG 2.1 AA compliance tests
+  - Implement cross-browser compatibility testing
+  - _Requirements: 5.1, 10.1, 10.4_

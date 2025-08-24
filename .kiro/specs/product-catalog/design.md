@@ -1,10 +1,12 @@
 # Product Catalog Design Document
 
-## Architecture Overview
+## Overview
 
 The product catalog system is designed as a high-performance, multi-language e-commerce catalog optimized for Moldovan food and wine products. The architecture emphasizes fast loading, excellent mobile experience, and seamless internationalization while maintaining scalability for growing product inventories.
 
-## System Architecture
+The system supports comprehensive product browsing, advanced search and filtering, multi-language content management, and mobile-first responsive design. It integrates with the existing cart system and provides real-time inventory management with performance optimization through caching and lazy loading strategies.
+
+## Architecture
 
 ### Data Architecture
 
@@ -734,22 +736,115 @@ export const useProductTranslations = () => {
 }
 ```
 
-## Integration Points
+## Components and Interfaces
 
-### Cart Integration
-- **Add to cart**: Seamless integration with shopping cart
-- **Stock validation**: Real-time stock checking before adding
-- **Price updates**: Automatic price synchronization
-- **Quantity management**: Stock-aware quantity selection
+### Frontend Components
+- **ProductGrid.vue**: Main product listing component with responsive grid layout
+- **ProductCard.vue**: Individual product display with image, name, price, and actions
+- **ProductDetail.vue**: Comprehensive product detail page with gallery and specifications
+- **ProductFilter.vue**: Advanced filtering sidebar with category, price, and attribute filters
+- **ProductSearch.vue**: Search component with autocomplete and suggestions
+- **CategoryNavigation.vue**: Hierarchical category navigation with breadcrumbs
 
-### User Preferences
-- **Favorites**: Save products for later viewing
-- **Recently viewed**: Track and display recently viewed products
-- **Personalization**: Customize product recommendations
-- **Notifications**: Stock alerts and price notifications
+### API Interfaces
+- **Product API**: RESTful endpoints for product CRUD operations and filtering
+- **Search API**: Full-text search with ranking and suggestions
+- **Category API**: Hierarchical category management with localization
+- **Image API**: Optimized image serving with multiple formats and sizes
 
-### Analytics Integration
-- **Product views**: Track product detail page visits
-- **Search analytics**: Monitor search queries and results
-- **Filter usage**: Analyze how users filter products
-- **Conversion tracking**: Track add-to-cart and purchase rates
+### Integration Points
+- **Cart Integration**: Seamless add-to-cart functionality with stock validation
+- **User Preferences**: Favorites, recently viewed, and personalized recommendations
+- **Analytics Integration**: Product view tracking and conversion analytics
+
+## Data Models
+
+### Core Data Structures
+
+#### Product Model
+```typescript
+interface Product {
+  id: number
+  slug: string
+  sku: string
+  nameTranslations: Record<string, string>
+  descriptionTranslations: Record<string, string>
+  shortDescriptionTranslations: Record<string, string>
+  priceCents: number
+  stockQuantity: number
+  categoryId: number
+  attributes: Record<string, any>
+  featured: boolean
+  active: boolean
+  images: ProductImage[]
+  category: Category
+}
+```
+
+#### Category Model
+```typescript
+interface Category {
+  id: number
+  slug: string
+  nameTranslations: Record<string, string>
+  descriptionTranslations: Record<string, string>
+  imageUrl?: string
+  parentId?: number
+  sortOrder: number
+  active: boolean
+  children?: Category[]
+  productCount: number
+}
+```
+
+#### Database Schema
+- **SQLite-based schema** with JSON columns for translations
+- **Optimized indexes** for performance on category, price, and stock queries
+- **Full-text search** implementation using SQLite FTS5
+- **Image management** with multiple sizes and formats
+
+## Error Handling
+
+### Client-Side Error Handling
+- **Network failures**: Graceful degradation with cached content and retry mechanisms
+- **Image loading errors**: Fallback to placeholder images with proper alt text
+- **Search failures**: Display helpful error messages with suggested actions
+- **Filter errors**: Reset to safe state with user notification
+
+### Server-Side Error Handling
+- **Database connection issues**: Automatic retry with exponential backoff
+- **Invalid product data**: Validation with detailed error responses
+- **Search service failures**: Fallback to basic database queries
+- **Cache failures**: Direct database queries with performance logging
+
+### Error Recovery Strategies
+- **Progressive enhancement**: Core functionality works without JavaScript
+- **Offline support**: Service worker caching for essential product data
+- **Graceful degradation**: Simplified experience when advanced features fail
+- **User feedback**: Clear error messages with actionable next steps
+
+## Testing Strategy
+
+### Unit Testing
+- **Component testing**: Vue Test Utils for all product components
+- **API testing**: Comprehensive endpoint testing with mock data
+- **Utility functions**: Full coverage of search, filtering, and localization logic
+- **Data validation**: Schema validation and transformation testing
+
+### Integration Testing
+- **Database operations**: Test product queries, filtering, and search functionality
+- **API integration**: End-to-end testing of product catalog workflows
+- **Cache behavior**: Verify caching strategies and invalidation logic
+- **Multi-language support**: Test content fallback and localization
+
+### Performance Testing
+- **Load testing**: Simulate high traffic on product listing pages
+- **Image optimization**: Verify lazy loading and responsive image delivery
+- **Search performance**: Test search response times with large datasets
+- **Mobile performance**: Lighthouse audits for mobile user experience
+
+### User Acceptance Testing
+- **Cross-browser compatibility**: Test on major browsers and devices
+- **Accessibility compliance**: WCAG 2.1 AA compliance verification
+- **Mobile usability**: Touch interaction and responsive design validation
+- **Multi-language functionality**: Complete workflow testing in all supported languages
