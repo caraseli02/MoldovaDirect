@@ -1,20 +1,5 @@
 import { serverSupabaseClient } from '#supabase/server'
 
-// Helper function to get localized content with fallback
-function getLocalizedContent(content: Record<string, string>, locale: string): string {
-  // 1. Try requested locale
-  if (content[locale]) return content[locale]
-  
-  // 2. Try default locale (Spanish)
-  if (content.es) return content.es
-  
-  // 3. Try English as fallback
-  if (content.en) return content.en
-  
-  // 4. Return first available translation
-  return Object.values(content)[0] || ''
-}
-
 export default defineEventHandler(async (event) => {
   try {
     const supabase = await serverSupabaseClient(event)
@@ -140,11 +125,12 @@ export default defineEventHandler(async (event) => {
         id: product.id,
         sku: product.sku,
         slug: product.sku,
-        name: getLocalizedContent(product.name_translations, locale),
-        nameTranslations: product.name_translations,
-        shortDescription: getLocalizedContent(product.description_translations || {}, locale),
+        name: product.name_translations, // Return the translations object, not a string
+        description: product.description_translations,
+        shortDescription: product.description_translations,
         price: product.price_eur,
         formattedPrice: `€${product.price_eur.toFixed(2)}`,
+        comparePrice: product.compare_at_price_eur,
         compareAtPrice: product.compare_at_price_eur,
         formattedCompareAtPrice: product.compare_at_price_eur 
           ? `€${product.compare_at_price_eur.toFixed(2)}` 
@@ -155,14 +141,18 @@ export default defineEventHandler(async (event) => {
                      product.stock_quantity > 0 ? 'low_stock' : 'out_of_stock',
         images: Array.isArray(product.images) ? product.images.map((img: any, index: number) => ({
           url: img.url || img,
-          altText: img.alt || img.alt_text || getLocalizedContent(product.name_translations, locale),
+          altText: img.alt || img.alt_text || product.name_translations,
           isPrimary: img.is_primary || index === 0
         })) : [],
-        primaryImage: product.images?.[0]?.url || product.images?.[0] || '/placeholder-product.jpg',
+        primaryImage: product.images?.[0] ? {
+          url: product.images[0].url || product.images[0],
+          altText: product.images[0].alt || product.images[0].alt_text || product.name_translations,
+          isPrimary: true
+        } : null,
         category: {
           id: product.categories.id,
           slug: product.categories.slug,
-          name: getLocalizedContent(product.categories.name_translations, locale)
+          name: product.categories.name_translations
         },
         attributes: attributes,
         featuredReason: attributes.featured ? 'explicitly_featured' :
@@ -189,8 +179,8 @@ export default defineEventHandler(async (event) => {
         categoryInfo = {
           id: categoryData.id,
           slug: categoryData.slug,
-          name: getLocalizedContent(categoryData.name_translations, locale),
-          description: getLocalizedContent(categoryData.description_translations || {}, locale)
+          name: categoryData.name_translations,
+          description: categoryData.description_translations || {}
         }
       }
     }

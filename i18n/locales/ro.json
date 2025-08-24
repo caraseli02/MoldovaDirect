@@ -121,6 +121,12 @@
         "title": "Suport 24/7",
         "description": "Suntem aici să te ajutăm oricând"
       }
+    },
+    "featuredProducts": {
+      "title": "Produse Recomandate",
+      "noProducts": "Nu sunt produse recomandate disponibile în acest moment.",
+      "viewAll": "Vezi Toate Produsele",
+      "error": "Eroare la încărcarea produselor recomandate."
     }
   },
   "products": {

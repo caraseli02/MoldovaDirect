@@ -121,6 +121,12 @@
         "title": "24/7 Support",
         "description": "We're here to help you anytime"
       }
+    },
+    "featuredProducts": {
+      "title": "Featured Products",
+      "noProducts": "No featured products available at the moment.",
+      "viewAll": "View All Products",
+      "error": "Error loading featured products."
     }
   },
   "products": {
