@@ -30,7 +30,10 @@
     "shipping": "Envío",
     "tax": "Impuestos",
     "orderSummary": "Resumen del Pedido",
-    "retry": "Reintentar"
+    "retry": "Reintentar",
+    "cancel": "Cancelar",
+    "showMore": "Mostrar Más",
+    "showLess": "Mostrar Menos"
   },
   "auth": {
     "signIn": "Iniciar Sesión",
@@ -172,12 +175,23 @@
       "sweets": "Dulces"
     },
     "filters": {
+      "title": "Filtros",
       "sortBy": "Ordenar por",
       "priceRange": "Rango de Precio",
       "category": "Categoría",
+      "categories": "Categorías",
       "availability": "Disponibilidad",
       "inStock": "En Stock",
-      "outOfStock": "Agotado"
+      "inStockOnly": "Solo en stock",
+      "outOfStock": "Agotado",
+      "featuredOnly": "Solo destacados",
+      "active": "Filtros Activos",
+      "clearAll": "Limpiar Todo",
+      "apply": "Aplicar Filtros",
+      "minPrice": "Precio Mínimo",
+      "maxPrice": "Precio Máximo",
+      "removeFilter": "Eliminar filtro {filter}",
+      "unknownCategory": "Categoría Desconocida"
     }
   },
   "footer": {

@@ -30,7 +30,10 @@
     "shipping": "Shipping",
     "tax": "Tax",
     "orderSummary": "Order Summary",
-    "retry": "Retry"
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "showMore": "Show More",
+    "showLess": "Show Less"
   },
   "auth": {
     "signIn": "Sign In",
@@ -172,12 +175,23 @@
       "sweets": "Sweets"
     },
     "filters": {
+      "title": "Filters",
       "sortBy": "Sort by",
       "priceRange": "Price Range",
       "category": "Category",
+      "categories": "Categories",
       "availability": "Availability",
       "inStock": "In Stock",
-      "outOfStock": "Out of Stock"
+      "inStockOnly": "In stock only",
+      "outOfStock": "Out of Stock",
+      "featuredOnly": "Featured only",
+      "active": "Active Filters",
+      "clearAll": "Clear All",
+      "apply": "Apply Filters",
+      "minPrice": "Min Price",
+      "maxPrice": "Max Price",
+      "removeFilter": "Remove {filter} filter",
+      "unknownCategory": "Unknown Category"
     }
   },
   "footer": {
