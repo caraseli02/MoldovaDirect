@@ -1,9 +1,4 @@
 {
-  "functions": {
-    "server/**/*.{js,ts}": {
-      "maxDuration": 10
-    }
-  },
   "build": {
     "env": {
       "NITRO_PRESET": "vercel"
