@@ -127,22 +127,28 @@ const isDragging = ref(false)
 const dragType = ref<'min' | 'max' | null>(null)
 
 // Methods
-const updateValue = useDebounceFn(() => {
-  // Ensure min <= max
-  if (localValue.value[0] > localValue.value[1]) {
-    if (dragType.value === 'min') {
-      localValue.value[1] = localValue.value[0]
-    } else {
-      localValue.value[0] = localValue.value[1]
+// Debounce utility
+let updateTimeout: NodeJS.Timeout
+
+const updateValue = () => {
+  clearTimeout(updateTimeout)
+  updateTimeout = setTimeout(() => {
+    // Ensure min <= max
+    if (localValue.value[0] > localValue.value[1]) {
+      if (dragType.value === 'min') {
+        localValue.value[1] = localValue.value[0]
+      } else {
+        localValue.value[0] = localValue.value[1]
+      }
     }
-  }
-  
-  // Clamp values to bounds
-  localValue.value[0] = Math.max(props.min, Math.min(props.max, localValue.value[0]))
-  localValue.value[1] = Math.max(props.min, Math.min(props.max, localValue.value[1]))
-  
-  emit('update:value', [...localValue.value])
-}, 300)
+    
+    // Clamp values to bounds
+    localValue.value[0] = Math.max(props.min, Math.min(props.max, localValue.value[0]))
+    localValue.value[1] = Math.max(props.min, Math.min(props.max, localValue.value[1]))
+    
+    emit('update:value', [...localValue.value])
+  }, 300)
+}
 
 const startDrag = (type: 'min' | 'max', event: MouseEvent | TouchEvent) => {
   isDragging.value = true

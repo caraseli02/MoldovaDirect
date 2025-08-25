@@ -30,7 +30,12 @@
     "shipping": "Livrare",
     "tax": "Taxe",
     "orderSummary": "Rezumat Comandă",
-    "retry": "Reîncearcă"
+    "retry": "Reîncearcă",
+    "cancel": "Anulează",
+    "showMore": "Arată Mai Mult",
+    "showLess": "Arată Mai Puțin",
+    "swipe_to_remove": "Glisează pentru a elimina",
+    "release_to_remove": "Eliberează pentru a elimina"
   },
   "auth": {
     "signIn": "Autentificare",

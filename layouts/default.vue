@@ -5,7 +5,9 @@
       <slot />
     </main>
     <AppFooter />
-    <ToastContainer />
+    <ClientOnly>
+      <ToastContainer />
+    </ClientOnly>
   </div>
 </template>
 

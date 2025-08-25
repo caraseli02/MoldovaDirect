@@ -3,9 +3,9 @@
  * Provides reactive device type detection and screen size information
  */
 export const useDevice = () => {
-  // Reactive state
-  const windowWidth = ref(0)
-  const windowHeight = ref(0)
+  // Reactive state - Default to desktop for SSR consistency
+  const windowWidth = ref(1024)
+  const windowHeight = ref(768)
 
   // Computed properties for device types
   const isMobile = computed(() => windowWidth.value < 768)

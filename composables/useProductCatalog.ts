@@ -1,3 +1,5 @@
+import type { ProductFilters } from '~/types'
+
 /**
  * Product Catalog Composable
  * Provides integrated access to products, categories, and search functionality

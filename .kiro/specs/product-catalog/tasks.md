@@ -87,7 +87,6 @@
   - Add configurable limit parameter for featured product count
   - _Requirements: 9.3, 1.1_
 
-- [x] 5. Enhance UI components and user experience
 - [x] 5.1 Create ProductFilter sidebar component
 
   - Build collapsible filter sidebar with category tree

@@ -9,6 +9,12 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxt/image'
   ],
+  components: [
+    {
+      path: '~/components',
+      pathPrefix: false,
+    }
+  ],
   nitro: {
     preset: 'vercel'
   },

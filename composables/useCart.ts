@@ -90,6 +90,161 @@ export const useCart = () => {
     directClearCart: cartStore.clearCart,
     directValidateCart: cartStore.validateCart,
 
+    // Storage management actions
+    recoverCart: async () => {
+      try {
+        return await cartStore.recoverCartData()
+      } catch (error) {
+        console.error('Failed to recover cart:', error)
+        toast.error('Error de recuperación', 'No se pudo recuperar el carrito')
+        return false
+      }
+    },
+
+    forceSync: () => {
+      try {
+        return cartStore.forceSyncToStorage()
+      } catch (error) {
+        console.error('Failed to force sync:', error)
+        toast.error('Error de sincronización', 'No se pudo sincronizar el carrito')
+        return false
+      }
+    },
+
+    // Storage info
+    storageType: computed(() => cartStore.storageType),
+    lastSyncAt: computed(() => cartStore.lastSyncAt),
+
+    // Validation info
+    validationInProgress: computed(() => cartStore.validationInProgress),
+    backgroundValidationEnabled: computed(() => cartStore.backgroundValidationEnabled),
+    lastBackgroundValidation: computed(() => cartStore.lastBackgroundValidation),
+
+    // Validation controls
+    toggleBackgroundValidation: () => {
+      cartStore.backgroundValidationEnabled = !cartStore.backgroundValidationEnabled
+      if (cartStore.backgroundValidationEnabled) {
+        cartStore.startBackgroundValidation()
+      } else {
+        cartStore.stopBackgroundValidation()
+      }
+    },
+
+    clearValidationCache: (productId?: string) => {
+      cartStore.clearValidationCache(productId)
+    },
+
+    validateCartWithRetry: async (maxRetries?: number) => {
+      try {
+        return await cartStore.validateCartWithRetry(maxRetries)
+      } catch (error) {
+        console.error('Failed to validate cart with retry:', error)
+        return false
+      }
+    },
+
+    // Advanced features - Bulk operations
+    selectedItems: computed(() => cartStore.selectedItems),
+    selectedItemsCount: computed(() => cartStore.selectedItemsCount),
+    selectedItemsSubtotal: computed(() => cartStore.selectedItemsSubtotal),
+    allItemsSelected: computed(() => cartStore.allItemsSelected),
+    hasSelectedItems: computed(() => cartStore.hasSelectedItems),
+    bulkOperationInProgress: computed(() => cartStore.bulkOperationInProgress),
+    isItemSelected: (itemId: string) => cartStore.isItemSelected(itemId),
+    getSelectedItems: computed(() => cartStore.getSelectedItems),
+
+    // Bulk operations actions
+    toggleItemSelection: (itemId: string) => cartStore.toggleItemSelection(itemId),
+    selectAllItems: () => cartStore.selectAllItems(),
+    clearSelection: () => cartStore.clearSelection(),
+    bulkRemoveSelected: async () => {
+      try {
+        await cartStore.bulkRemoveSelected()
+      } catch (error) {
+        console.error('Failed to bulk remove:', error)
+        toast.error('Error al eliminar', 'No se pudieron eliminar los productos seleccionados')
+      }
+    },
+    bulkUpdateQuantity: async (quantity: number) => {
+      try {
+        await cartStore.bulkUpdateQuantity(quantity)
+      } catch (error) {
+        console.error('Failed to bulk update quantity:', error)
+        toast.error('Error al actualizar', 'No se pudieron actualizar las cantidades')
+      }
+    },
+    bulkSaveForLater: async () => {
+      try {
+        await cartStore.bulkSaveForLater()
+      } catch (error) {
+        console.error('Failed to bulk save for later:', error)
+        toast.error('Error al guardar', 'No se pudieron guardar los productos')
+      }
+    },
+
+    // Save for later functionality
+    savedForLater: computed(() => cartStore.savedForLater),
+    savedForLaterCount: computed(() => cartStore.savedForLaterCount),
+    isProductSavedForLater: (productId: string) => cartStore.isProductSavedForLater(productId),
+    getSavedForLaterItem: (itemId: string) => cartStore.getSavedForLaterItem(itemId),
+
+    // Save for later actions
+    saveItemForLater: async (itemId: string) => {
+      try {
+        await cartStore.saveItemForLater(itemId)
+      } catch (error) {
+        console.error('Failed to save for later:', error)
+        toast.error('Error al guardar', 'No se pudo guardar el producto')
+      }
+    },
+    moveFromSavedToCart: async (savedItemId: string) => {
+      try {
+        await cartStore.moveFromSavedToCart(savedItemId)
+      } catch (error) {
+        console.error('Failed to move from saved to cart:', error)
+        toast.error('Error al mover', 'No se pudo mover el producto al carrito')
+      }
+    },
+    removeFromSavedForLater: async (savedItemId: string) => {
+      try {
+        await cartStore.removeFromSavedForLater(savedItemId)
+      } catch (error) {
+        console.error('Failed to remove from saved for later:', error)
+        toast.error('Error al eliminar', 'No se pudo eliminar el producto guardado')
+      }
+    },
+    clearSavedForLater: async () => {
+      try {
+        await cartStore.clearSavedForLater()
+      } catch (error) {
+        console.error('Failed to clear saved for later:', error)
+        toast.error('Error al limpiar', 'No se pudieron eliminar los productos guardados')
+      }
+    },
+
+    // Recommendations functionality
+    recommendations: computed(() => cartStore.recommendations),
+    recommendationsLoading: computed(() => cartStore.recommendationsLoading),
+
+    // Recommendations actions
+    loadRecommendations: async () => {
+      try {
+        await cartStore.loadRecommendations()
+      } catch (error) {
+        console.error('Failed to load recommendations:', error)
+        toast.error('Error al cargar recomendaciones', 'No se pudieron cargar las recomendaciones')
+      }
+    },
+    addRecommendedProduct: async (product: any, quantity: number = 1) => {
+      try {
+        await cartStore.addRecommendedProduct(product, quantity)
+      } catch (error) {
+        console.error('Failed to add recommended product:', error)
+        throw error // Re-throw to allow component-level handling
+      }
+    },
+    clearRecommendations: () => cartStore.clearRecommendations(),
+
     // Utility methods
     formatPrice: (price: number) => {
       try {
@@ -113,6 +268,19 @@ export const useCart = () => {
       } catch (error) {
         console.error('Failed to format subtotal:', error)
         return `€${cartStore.subtotal.toFixed(2)}`
+      }
+    }),
+
+    // Get formatted selected items subtotal
+    formattedSelectedSubtotal: computed(() => {
+      try {
+        return new Intl.NumberFormat('es-ES', {
+          style: 'currency',
+          currency: 'EUR'
+        }).format(cartStore.selectedItemsSubtotal)
+      } catch (error) {
+        console.error('Failed to format selected subtotal:', error)
+        return `€${cartStore.selectedItemsSubtotal.toFixed(2)}`
       }
     })
   }

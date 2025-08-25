@@ -51,6 +51,7 @@
     "@nuxtjs/supabase": "^1.6.0",
     "@playwright/test": "^1.54.2",
     "@vue/test-utils": "^2.4.6",
+    "jsdom": "^26.1.0",
     "playwright": "^1.54.2",
     "vitest": "^3.2.4"
   }

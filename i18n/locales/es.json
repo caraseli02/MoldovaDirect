@@ -31,9 +31,26 @@
     "tax": "Impuestos",
     "orderSummary": "Resumen del Pedido",
     "retry": "Reintentar",
+    "tryAgain": "Intentar de nuevo",
+    "error": "Error",
+    "errorGeneric": "Ha ocurrido un error. Por favor, inténtalo de nuevo.",
     "cancel": "Cancelar",
     "showMore": "Mostrar Más",
-    "showLess": "Mostrar Menos"
+    "showLess": "Mostrar Menos",
+    "swipe_to_remove": "Desliza para eliminar",
+    "release_to_remove": "Suelta para eliminar",
+    "selectAll": "Seleccionar todo",
+    "deselectAll": "Deseleccionar todo",
+    "bulkOperations": "Operaciones en lote",
+    "saveForLater": "Guardar para después",
+    "savedForLater": "Guardado para después",
+    "moveToCart": "Mover al carrito",
+    "recommendations": "Recomendaciones",
+    "alsoInterested": "También te puede interesar",
+    "quickAdd": "Añadir rápido",
+    "inCart": "En carrito",
+    "outOfStock": "Agotado",
+    "onlyAvailable": "Solo {count} disponibles"
   },
   "auth": {
     "signIn": "Iniciar Sesión",
@@ -159,7 +176,13 @@
     "sortNewest": "Más recientes",
     "sortName": "Nombre",
     "sortPrice": "Precio",
+    "sortPriceAsc": "Precio: Menor a Mayor",
+    "sortPriceDesc": "Precio: Mayor a Menor",
     "sortFeatured": "Destacados",
+    "sortPriceLowHigh": "Precio: Menor a Mayor",
+    "sortPriceHighLow": "Precio: Mayor a Menor", 
+    "showingResults": "Mostrando {start}-{end} de {total} productos",
+    "results": "{count} resultados | {count} resultado | {count} resultados",
     "search": "Búsqueda",
     "category": "Categoría",
     "noResults": "No se encontraron resultados",
@@ -192,7 +215,8 @@
       "maxPrice": "Precio Máximo",
       "removeFilter": "Eliminar filtro {filter}",
       "unknownCategory": "Categoría Desconocida"
-    }
+    },
+    "results": "productos encontrados"
   },
   "footer": {
     "info": {

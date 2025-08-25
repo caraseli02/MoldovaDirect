@@ -33,7 +33,9 @@
     "retry": "Retry",
     "cancel": "Cancel",
     "showMore": "Show More",
-    "showLess": "Show Less"
+    "showLess": "Show Less",
+    "swipe_to_remove": "Swipe to remove",
+    "release_to_remove": "Release to remove"
   },
   "auth": {
     "signIn": "Sign In",
@@ -159,13 +161,21 @@
     "sortNewest": "Newest",
     "sortName": "Name",
     "sortPrice": "Price",
+    "sortPriceAsc": "Price: Low to High",
+    "sortPriceDesc": "Price: High to Low",
     "sortFeatured": "Featured",
+    "results": "{count} results | {count} result | {count} results",
     "search": "Search",
     "category": "Category",
     "noResults": "No results found",
     "noProducts": "No products available",
     "tryDifferentFilters": "Try different filters",
     "comingSoon": "We will have products available soon",
+    "showingResults": "Showing {start}-{end} of {total} products",
+    "filtersApplied": "Filters applied",
+    "clearFilters": "Clear all filters",
+    "sortPriceLowHigh": "Price: Low to High",
+    "sortPriceHighLow": "Price: High to Low",
     "categories": {
       "all": "All",
       "wine": "Wines",
@@ -192,7 +202,8 @@
       "maxPrice": "Max Price",
       "removeFilter": "Remove {filter} filter",
       "unknownCategory": "Unknown Category"
-    }
+    },
+    "results": "products found"
   },
   "footer": {
     "info": {
