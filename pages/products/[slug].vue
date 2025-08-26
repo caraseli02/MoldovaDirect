@@ -249,14 +249,14 @@
 </template>
 
 <script setup lang="ts">
-import type { ProductWithDetails } from '~/types/database'
+import type { ProductWithRelations } from '~/types/database'
 
 // Get the product slug from route
 const route = useRoute()
 const slug = route.params.slug as string
 
 // Fetch product data
-const { data: product, pending, error } = await useLazyFetch<ProductWithDetails>(`/api/products/${slug}`)
+const { data: product, pending, error } = await useLazyFetch<ProductWithRelations>(`/api/products/${slug}`)
 
 // Reactive state
 const selectedImageIndex = ref(0)
