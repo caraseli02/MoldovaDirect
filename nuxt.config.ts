@@ -40,7 +40,7 @@ export default defineNuxtConfig({
     ],
     defaultLocale: 'es',
     strategy: 'prefix_except_default',
-    langDir: 'i18n/locales/'
+    langDir: 'locales/'
   },
   css: ['~/assets/css/main.css'],
   typescript: {
