@@ -87,14 +87,10 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
   name: string
   class?: string
 }>()
 
 const className = computed(() => props.class || 'w-5 h-5')
-const props = defineProps<{
-  name: string
-  class?: string
-}>()
 </script>
