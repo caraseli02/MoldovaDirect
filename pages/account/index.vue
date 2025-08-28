@@ -127,6 +127,11 @@
 </template>
 
 <script setup lang="ts">
+// Apply authentication middleware
+definePageMeta({
+  middleware: 'auth'
+})
+
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 const { t } = useI18n()

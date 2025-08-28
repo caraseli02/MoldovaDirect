@@ -191,6 +191,9 @@
 </template>
 
 <script setup lang="ts">
+// Cart allows guest access - users can view cart without authentication
+// Authentication is only required at checkout
+
 // Import advanced cart components
 import CartBulkOperations from '~/components/cart/BulkOperations.vue'
 import CartSavedForLater from '~/components/cart/SavedForLater.vue'

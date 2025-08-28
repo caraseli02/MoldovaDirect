@@ -249,7 +249,8 @@
 import type { ProductWithRelations, CategoryWithChildren } from '~/types/database'
 
 definePageMeta({
-  layout: 'admin'
+  layout: 'admin',
+  middleware: 'auth'
 })
 
 // Reactive state

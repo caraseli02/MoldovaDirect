@@ -157,17 +157,25 @@
 </template>
 
 <script setup lang="ts">
+// Apply guest middleware - redirect authenticated users
+definePageMeta({
+  middleware: 'guest'
+})
+
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 const { t } = useI18n()
 const localePath = useLocalePath()
+const route = useRoute()
 
-// Redirect if already logged in
-watchEffect(() => {
-  if (user.value) {
-    navigateTo(localePath('/account'))
+// Handle redirect after successful login
+const handleRedirectAfterLogin = () => {
+  const redirect = route.query.redirect as string
+  if (redirect && redirect.startsWith('/')) {
+    return navigateTo(redirect)
   }
-})
+  return navigateTo(localePath('/account'))
+}
 
 const form = ref({
   email: '',
@@ -196,8 +204,10 @@ const handleLogin = async () => {
       throw authError
     }
 
-    // Redirect will happen automatically via watcher
     success.value = t('auth.loginSuccess')
+    
+    // Handle redirect after successful login (Requirement 10.2)
+    await handleRedirectAfterLogin()
   } catch (err: any) {
     error.value = err.message || t('auth.loginError')
   } finally {

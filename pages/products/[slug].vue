@@ -210,17 +210,17 @@
               <select
                 id="quantity"
                 v-model="selectedQuantity"
-                :disabled="product.stockQuantity <= 0"
+                :disabled="(product.stockQuantity || 0) <= 0"
                 class="border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
               >
-                <option v-for="n in Math.min(10, product.stockQuantity)" :key="n" :value="n">
+                <option v-for="n in Math.min(10, Math.max(1, product.stockQuantity || 1))" :key="n" :value="n">
                   {{ n }}
                 </option>
               </select>
             </div>
             
             <button
-              :disabled="product.stockQuantity <= 0"
+              :disabled="(product.stockQuantity || 0) <= 0"
               class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors duration-200 flex items-center justify-center space-x-2"
               @click="addToCart"
             >
@@ -228,7 +228,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m2.6 8L6 21h13M7 13v4a1 1 0 001 1h9a1 1 0 001-1v-4M7 13L6 9" />
               </svg>
               <span>
-                {{ product.stockQuantity > 0 ? $t('products.addToCart') : $t('products.outOfStock') }}
+                {{ (product.stockQuantity || 0) > 0 ? $t('products.addToCart') : $t('products.outOfStock') }}
               </span>
             </button>
           </div>

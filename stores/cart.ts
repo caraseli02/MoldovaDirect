@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { useToastStore } from './toast'
+import { useStoreI18n } from '~/composables/useStoreI18n'
 
 interface Product {
   id: string
@@ -267,7 +268,8 @@ export const useCartStore = defineStore('cart', {
           await Promise.allSettled(validationPromises)
         } catch (error) {
           console.error('Batch validation error:', error)
-          toastStore.warning('Validación parcial', 'Algunos productos no se pudieron validar')
+          const { t } = useStoreI18n()
+          toastStore.warning(t('cart.validation.partial'), t('cart.validation.someProductsFailed'))
         }
       }
     },
@@ -299,22 +301,25 @@ export const useCartStore = defineStore('cart', {
         // Price change notification
         if (originalPrice !== currentProduct.price) {
           hasChanges = true
-          toastStore.info('Precio actualizado', 
-            `${cartItem.product.name}: €${originalPrice} → €${currentProduct.price}`)
+          const { t } = useStoreI18n()
+          toastStore.info(t('cart.notification.priceUpdated'), 
+            t('cart.notification.priceChange', { product: cartItem.product.name, oldPrice: originalPrice, newPrice: currentProduct.price }))
         }
         
         // Stock validation and adjustment
         if (currentProduct.stock === 0) {
           hasChanges = true
           await this.removeItem(cartItem.id)
-          toastStore.warning('Producto agotado', 
-            `${cartItem.product.name} ha sido eliminado del carrito`)
+          const { t } = useStoreI18n()
+          toastStore.warning(t('cart.notification.outOfStock'), 
+            t('cart.notification.removedOutOfStock', { product: cartItem.product.name }))
         } else if (cartItem.quantity > currentProduct.stock) {
           hasChanges = true
           const oldQuantity = cartItem.quantity
           cartItem.quantity = currentProduct.stock
-          toastStore.warning('Cantidad ajustada', 
-            `${cartItem.product.name}: ${oldQuantity} → ${currentProduct.stock}`)
+          const { t } = useStoreI18n()
+          toastStore.warning(t('cart.notification.quantityAdjusted'), 
+            t('cart.notification.quantityChange', { product: cartItem.product.name, oldQty: oldQuantity, newQty: currentProduct.stock }))
         }
         
         // Remove from validation queue on success
@@ -331,8 +336,9 @@ export const useCartStore = defineStore('cart', {
         if (error.statusCode === 404) {
           // Product no longer exists
           await this.removeItem(cartItem.id)
-          toastStore.warning('Producto eliminado', 
-            `${cartItem.product.name} ya no está disponible`)
+          const { t } = useStoreI18n()
+          toastStore.warning(t('cart.notification.productRemoved'), 
+            t('cart.notification.noLongerAvailable', { product: cartItem.product.name }))
         } else {
           // Network or other error - add to retry queue
           const queueItem = this.validationQueue[productId]
@@ -341,8 +347,9 @@ export const useCartStore = defineStore('cart', {
             if (queueItem.retryCount >= 3) {
               // Max retries reached, remove from queue
               this.removeFromValidationQueue(productId)
-              toastStore.error('Error de validación', 
-                `No se pudo validar ${cartItem.product.name}`)
+              const { t } = useStoreI18n()
+              toastStore.error(t('cart.error.validationFailed'), 
+                t('cart.error.couldNotValidate', { product: cartItem.product.name }))
             }
           }
           
@@ -455,9 +462,10 @@ export const useCartStore = defineStore('cart', {
 
         // Validate stock availability using current product data
         if (quantity > currentProduct.stock) {
-          const errorMsg = `Only ${currentProduct.stock} items available in stock`
-          toastStore.error('Stock insuficiente', errorMsg, {
-            actionText: 'Ver producto',
+          const { t } = useStoreI18n()
+          const errorMsg = t('cart.error.onlyAvailable', { count: currentProduct.stock })
+          toastStore.error(t('cart.error.insufficientStock'), errorMsg, {
+            actionText: t('cart.action.viewProduct'),
             actionHandler: () => {
               navigateTo(`/products/${currentProduct.slug}`)
             }
@@ -472,10 +480,11 @@ export const useCartStore = defineStore('cart', {
           const newQuantity = existingItem.quantity + quantity
           
           if (newQuantity > currentProduct.stock) {
+            const { t } = useStoreI18n()
             const available = currentProduct.stock - existingItem.quantity
-            const errorMsg = `Cannot add ${quantity} more items. Only ${available} available`
-            toastStore.error('Stock insuficiente', errorMsg, {
-              actionText: 'Ajustar cantidad',
+            const errorMsg = t('cart.error.cannotAddMore', { quantity, available })
+            toastStore.error(t('cart.error.insufficientStock'), errorMsg, {
+              actionText: t('cart.action.adjustQuantity'),
               actionHandler: () => {
                 this.updateQuantity(existingItem.id, currentProduct.stock)
               }
@@ -486,7 +495,8 @@ export const useCartStore = defineStore('cart', {
           existingItem.quantity = newQuantity
           // Update product data with latest information
           existingItem.product = { ...existingItem.product, ...currentProduct }
-          toastStore.success('Cantidad actualizada', `${currentProduct.name} - Nueva cantidad: ${newQuantity}`)
+          const { t } = useStoreI18n()
+          toastStore.success(t('cart.success.quantityUpdated'), t('cart.success.newQuantity', { product: currentProduct.name, quantity: newQuantity }))
         } else {
           // Add new item to cart
           const cartItem: CartItem = {
@@ -496,7 +506,8 @@ export const useCartStore = defineStore('cart', {
             addedAt: new Date()
           }
           this.items.push(cartItem)
-          toastStore.success('Producto añadido', `${currentProduct.name} añadido al carrito`)
+          const { t } = useStoreI18n()
+          toastStore.success(t('cart.success.productAdded'), t('cart.success.addedToCart', { product: currentProduct.name }))
         }
 
         // Cache the successful validation
@@ -513,8 +524,9 @@ export const useCartStore = defineStore('cart', {
         
         // Show error toast if not already shown
         if (!error.message?.includes('stock')) {
-          toastStore.error('Error al añadir producto', this.error, {
-            actionText: 'Reintentar',
+          const { t } = useStoreI18n()
+          toastStore.error(t('cart.error.addFailed'), this.error, {
+            actionText: t('common.retry'),
             actionHandler: () => this.addItem(product, quantity)
           })
         }
@@ -535,9 +547,10 @@ export const useCartStore = defineStore('cart', {
         const item = this.items.find(item => item.id === itemId)
         
         if (!item) {
-          const errorMsg = 'Item not found in cart'
-          toastStore.error('Producto no encontrado', errorMsg, {
-            actionText: 'Recargar carrito',
+          const { t } = useStoreI18n()
+          const errorMsg = t('cart.error.itemNotFound')
+          toastStore.error(t('cart.error.productNotFound'), errorMsg, {
+            actionText: t('cart.action.reloadCart'),
             actionHandler: () => this.validateCart()
           })
           throw new Error(errorMsg)
@@ -569,9 +582,10 @@ export const useCartStore = defineStore('cart', {
 
         // Validate stock availability using current product data
         if (quantity > currentProduct.stock) {
-          const errorMsg = `Only ${currentProduct.stock} items available in stock`
-          toastStore.error('Stock insuficiente', errorMsg, {
-            actionText: 'Ajustar al máximo',
+          const { t } = useStoreI18n()
+          const errorMsg = t('cart.error.onlyAvailable', { count: currentProduct.stock })
+          toastStore.error(t('cart.error.insufficientStock'), errorMsg, {
+            actionText: t('cart.action.adjustToMax'),
             actionHandler: () => this.updateQuantity(itemId, currentProduct.stock)
           })
           throw new Error(errorMsg)
@@ -590,15 +604,17 @@ export const useCartStore = defineStore('cart', {
         this.saveToStorage()
         
         // Show success toast
-        toastStore.success('Cantidad actualizada', `${currentProduct.name}: ${oldQuantity} → ${quantity}`)
+        const { t } = useStoreI18n()
+        toastStore.success(t('cart.success.quantityUpdated'), t('cart.success.quantityChange', { product: currentProduct.name, oldQty: oldQuantity, newQty: quantity }))
 
       } catch (error) {
         this.error = error instanceof Error ? error.message : 'Failed to update quantity'
         
         // Show error toast if not already shown
         if (!error.message?.includes('stock') && !error.message?.includes('not found')) {
-          toastStore.error('Error al actualizar', this.error, {
-            actionText: 'Reintentar',
+          const { t } = useStoreI18n()
+          toastStore.error(t('cart.error.updateFailed'), this.error, {
+            actionText: t('common.retry'),
             actionHandler: () => this.updateQuantity(itemId, quantity)
           })
         }
@@ -619,9 +635,10 @@ export const useCartStore = defineStore('cart', {
         const index = this.items.findIndex(item => item.id === itemId)
         
         if (index === -1) {
-          const errorMsg = 'Item not found in cart'
-          toastStore.error('Producto no encontrado', errorMsg, {
-            actionText: 'Recargar carrito',
+          const { t } = useStoreI18n()
+          const errorMsg = t('cart.error.itemNotFound')
+          toastStore.error(t('cart.error.productNotFound'), errorMsg, {
+            actionText: t('cart.action.reloadCart'),
             actionHandler: () => this.validateCart()
           })
           throw new Error(errorMsg)
@@ -633,13 +650,15 @@ export const useCartStore = defineStore('cart', {
         this.saveToStorage()
         
         // Show success message with undo option
-        toastStore.success('Producto eliminado', `${removedItem.product.name} eliminado del carrito`, {
-          actionText: 'Deshacer',
+        const { t } = useStoreI18n()
+        toastStore.success(t('cart.success.productRemoved'), t('cart.success.removedFromCart', { product: removedItem.product.name }), {
+          actionText: t('common.undo'),
           actionHandler: () => {
             // Re-add the item
             this.items.splice(index, 0, removedItem)
             this.saveToStorage()
-            toastStore.success('Producto restaurado', `${removedItem.product.name} restaurado al carrito`)
+            const { t: t2 } = useStoreI18n()
+            toastStore.success(t2('cart.success.productRestored'), t2('cart.success.restoredToCart', { product: removedItem.product.name }))
           },
           duration: 8000 // Longer duration for undo action
         })
@@ -649,8 +668,9 @@ export const useCartStore = defineStore('cart', {
         
         // Show error toast if not already shown
         if (!error.message?.includes('not found')) {
-          toastStore.error('Error al eliminar', this.error, {
-            actionText: 'Reintentar',
+          const { t } = useStoreI18n()
+          toastStore.error(t('cart.error.removeFailed'), this.error, {
+            actionText: t('common.retry'),
             actionHandler: () => this.removeItem(itemId)
           })
         }
@@ -664,18 +684,20 @@ export const useCartStore = defineStore('cart', {
     // Clear entire cart
     async clearCart() {
       const toastStore = useToastStore()
+      const { t } = useStoreI18n()
       const itemsBackup = [...this.items] // Backup for undo
       
       this.items = []
       this.saveToStorage()
       
       // Show success message with undo option
-      toastStore.success('Carrito vaciado', 'Todos los productos han sido eliminados', {
-        actionText: 'Deshacer',
+      toastStore.success(t('cart.success.cartCleared'), t('cart.success.allItemsRemoved'), {
+        actionText: t('common.undo'),
         actionHandler: () => {
           this.items = itemsBackup
           this.saveToStorage()
-          toastStore.success('Carrito restaurado', 'Productos restaurados al carrito')
+          const { t: t2 } = useStoreI18n()
+          toastStore.success(t2('cart.success.cartRestored'), t2('cart.success.itemsRestoredToCart'))
         },
         duration: 10000 // Longer duration for undo action
       })
@@ -805,7 +827,8 @@ export const useCartStore = defineStore('cart', {
             storage.removeItem('moldova-direct-cart')
             
             const toastStore = useToastStore()
-            toastStore.success('Carrito migrado', `Datos del carrito migrados a ${toStorage}`)
+            const { t } = useStoreI18n()
+            toastStore.success(t('cart.success.cartMigrated'), t('cart.success.dataMigratedTo', { storage: toStorage }))
             return true
           }
         }
@@ -862,11 +885,13 @@ export const useCartStore = defineStore('cart', {
             saved = true
             this.lastSyncAt = new Date()
             
-            toastStore.warning('Almacenamiento limitado', 'El carrito se guardará solo para esta sesión debido a limitaciones de almacenamiento')
+            const { t } = useStoreI18n()
+            toastStore.warning(t('cart.warning.limitedStorage'), t('cart.warning.sessionOnlyStorage'))
           } catch (sessionError) {
             console.error('Both localStorage and sessionStorage failed:', sessionError)
             this.storageType = 'memory'
-            toastStore.error('Error de almacenamiento', 'No se pudo guardar el carrito. Los cambios se perderán al cerrar la página.')
+            const { t } = useStoreI18n()
+            toastStore.error(t('cart.error.storageError'), t('cart.error.changesWillBeLost'))
           }
         }
       } else if (this.storageType === 'sessionStorage') {
@@ -877,13 +902,15 @@ export const useCartStore = defineStore('cart', {
         } catch (error) {
           console.error('sessionStorage failed:', error)
           this.storageType = 'memory'
-          toastStore.error('Error de almacenamiento', 'No se pudo guardar el carrito. Los cambios se perderán al cerrar la página.')
+          const { t } = useStoreI18n()
+          toastStore.error(t('cart.error.storageError'), t('cart.error.changesWillBeLost'))
         }
       }
 
       // If we're in memory mode, warn user periodically
       if (this.storageType === 'memory' && !saved) {
-        toastStore.warning('Modo temporal', 'El carrito no se puede guardar. Los cambios se perderán al cerrar la página.')
+        const { t } = useStoreI18n()
+        toastStore.warning(t('cart.warning.temporaryMode'), t('cart.warning.cannotSave'))
       }
     },
 
@@ -939,16 +966,18 @@ export const useCartStore = defineStore('cart', {
         this.saveToStorage()
 
         // Show success message with undo option
+        const { t } = useStoreI18n()
         toastStore.success(
-          'Productos eliminados', 
-          `${removedItems.length} productos eliminados del carrito`,
+          t('cart.success.productsRemoved'), 
+          t('cart.success.itemsRemovedCount', { count: removedItems.length }),
           {
-            actionText: 'Deshacer',
+            actionText: t('common.undo'),
             actionHandler: () => {
               // Restore removed items
               this.items.push(...removedItems)
               this.saveToStorage()
-              toastStore.success('Productos restaurados', 'Productos restaurados al carrito')
+              const { t: t2 } = useStoreI18n()
+              toastStore.success(t2('cart.success.productsRestored'), t2('cart.success.itemsRestoredToCart'))
             },
             duration: 8000
           }
@@ -956,7 +985,8 @@ export const useCartStore = defineStore('cart', {
 
       } catch (error) {
         console.error('Bulk remove failed:', error)
-        toastStore.error('Error al eliminar', 'No se pudieron eliminar los productos seleccionados')
+        const { t } = useStoreI18n()
+        toastStore.error(t('cart.error.bulkRemoveFailed'), t('cart.error.couldNotRemoveSelected'))
       } finally {
         this.bulkOperationInProgress = false
       }
@@ -981,9 +1011,10 @@ export const useCartStore = defineStore('cart', {
               item.quantity = newQuantity
               updatedCount++
             } else {
+              const { t } = useStoreI18n()
               toastStore.warning(
-                'Stock insuficiente', 
-                `${item.product.name}: Solo ${item.product.stock} disponibles`
+                t('cart.error.insufficientStock'), 
+                t('cart.error.onlyAvailableFor', { product: item.product.name, count: item.product.stock })
               )
             }
           }
@@ -996,15 +1027,17 @@ export const useCartStore = defineStore('cart', {
         this.saveToStorage()
 
         if (updatedCount > 0) {
+          const { t } = useStoreI18n()
           toastStore.success(
-            'Cantidades actualizadas', 
-            `${updatedCount} productos actualizados a cantidad ${newQuantity}`
+            t('cart.success.quantitiesUpdated'), 
+            t('cart.success.productsUpdatedTo', { count: updatedCount, quantity: newQuantity })
           )
         }
 
       } catch (error) {
         console.error('Bulk quantity update failed:', error)
-        toastStore.error('Error al actualizar', 'No se pudieron actualizar las cantidades')
+        const { t } = useStoreI18n()
+        toastStore.error(t('cart.error.bulkUpdateFailed'), t('cart.error.couldNotUpdateQuantities'))
       } finally {
         this.bulkOperationInProgress = false
       }
@@ -1046,11 +1079,12 @@ export const useCartStore = defineStore('cart', {
         // Save to storage
         this.saveToStorage()
 
+        const { t } = useStoreI18n()
         toastStore.success(
-          'Guardado para después', 
-          `${savedItems.length} productos guardados para después`,
+          t('cart.success.savedForLater'), 
+          t('cart.success.itemsSavedCount', { count: savedItems.length }),
           {
-            actionText: 'Deshacer',
+            actionText: t('common.undo'),
             actionHandler: () => {
               // Move items back to cart
               for (const savedItem of savedItems) {
@@ -1063,7 +1097,8 @@ export const useCartStore = defineStore('cart', {
 
       } catch (error) {
         console.error('Bulk save for later failed:', error)
-        toastStore.error('Error al guardar', 'No se pudieron guardar los productos')
+        const { t } = useStoreI18n()
+        toastStore.error(t('cart.error.saveForLaterFailed'), t('cart.error.couldNotSaveProducts'))
       } finally {
         this.bulkOperationInProgress = false
       }
@@ -1096,11 +1131,12 @@ export const useCartStore = defineStore('cart', {
         this.savedForLater.push(savedItem)
         this.saveToStorage()
 
+        const { t } = useStoreI18n()
         toastStore.success(
-          'Guardado para después', 
-          `${cartItem.product.name} guardado para después`,
+          t('cart.success.savedForLater'), 
+          t('cart.success.productSavedForLater', { product: cartItem.product.name }),
           {
-            actionText: 'Deshacer',
+            actionText: t('common.undo'),
             actionHandler: () => {
               this.moveFromSavedToCart(savedItem.id)
             },
@@ -1110,7 +1146,8 @@ export const useCartStore = defineStore('cart', {
 
       } catch (error) {
         console.error('Save for later failed:', error)
-        toastStore.error('Error al guardar', 'No se pudo guardar el producto')
+        const { t } = useStoreI18n()
+        toastStore.error(t('cart.error.saveForLaterFailed'), t('cart.error.couldNotSaveProduct'))
       }
     },
 
@@ -1135,23 +1172,26 @@ export const useCartStore = defineStore('cart', {
           
           if (newQuantity <= savedItem.product.stock) {
             existingItem.quantity = newQuantity
+            const { t } = useStoreI18n()
             toastStore.success(
-              'Movido al carrito', 
-              `${savedItem.product.name} - Nueva cantidad: ${newQuantity}`
+              t('cart.success.movedToCart'), 
+              t('cart.success.newQuantity', { product: savedItem.product.name, quantity: newQuantity })
             )
           } else {
             // Add maximum possible quantity
             const availableQuantity = savedItem.product.stock - existingItem.quantity
             if (availableQuantity > 0) {
               existingItem.quantity = savedItem.product.stock
+              const { t } = useStoreI18n()
               toastStore.warning(
-                'Cantidad ajustada', 
-                `${savedItem.product.name} - Cantidad ajustada a ${savedItem.product.stock} (máximo disponible)`
+                t('cart.warning.quantityAdjusted'), 
+                t('cart.warning.adjustedToMax', { product: savedItem.product.name, max: savedItem.product.stock })
               )
             } else {
+              const { t } = useStoreI18n()
               toastStore.error(
-                'Stock insuficiente', 
-                `${savedItem.product.name} ya está en el carrito con la cantidad máxima disponible`
+                t('cart.error.insufficientStock'), 
+                t('cart.error.alreadyMaxInCart', { product: savedItem.product.name })
               )
               // Put item back in saved for later
               this.savedForLater.splice(savedIndex, 0, savedItem)
@@ -1168,14 +1208,16 @@ export const useCartStore = defineStore('cart', {
           }
           
           this.items.push(cartItem)
-          toastStore.success('Movido al carrito', `${savedItem.product.name} movido al carrito`)
+          const { t } = useStoreI18n()
+          toastStore.success(t('cart.success.movedToCart'), t('cart.success.productMovedToCart', { product: savedItem.product.name }))
         }
 
         this.saveToStorage()
 
       } catch (error) {
         console.error('Move from saved to cart failed:', error)
-        toastStore.error('Error al mover', 'No se pudo mover el producto al carrito')
+        const { t } = useStoreI18n()
+        toastStore.error(t('cart.error.moveToCartFailed'), t('cart.error.couldNotMoveToCart'))
       }
     },
 
@@ -1192,15 +1234,17 @@ export const useCartStore = defineStore('cart', {
         const removedItem = this.savedForLater.splice(savedIndex, 1)[0]
         this.saveToStorage()
 
+        const { t } = useStoreI18n()
         toastStore.success(
-          'Producto eliminado', 
-          `${removedItem.product.name} eliminado de guardados`,
+          t('cart.success.productRemoved'), 
+          t('cart.success.removedFromSaved', { product: removedItem.product.name }),
           {
-            actionText: 'Deshacer',
+            actionText: t('common.undo'),
             actionHandler: () => {
               this.savedForLater.splice(savedIndex, 0, removedItem)
               this.saveToStorage()
-              toastStore.success('Producto restaurado', `${removedItem.product.name} restaurado`)
+              const { t: t2 } = useStoreI18n()
+              toastStore.success(t2('cart.success.productRestored'), t2('cart.success.restoredProduct', { product: removedItem.product.name }))
             },
             duration: 8000
           }
@@ -1208,7 +1252,8 @@ export const useCartStore = defineStore('cart', {
 
       } catch (error) {
         console.error('Remove from saved for later failed:', error)
-        toastStore.error('Error al eliminar', 'No se pudo eliminar el producto guardado')
+        const { t } = useStoreI18n()
+        toastStore.error(t('cart.error.removeFailed'), t('cart.error.couldNotRemoveSaved'))
       }
     },
 
@@ -1220,15 +1265,17 @@ export const useCartStore = defineStore('cart', {
       this.savedForLater = []
       this.saveToStorage()
       
+      const { t } = useStoreI18n()
       toastStore.success(
-        'Guardados eliminados', 
-        'Todos los productos guardados han sido eliminados',
+        t('cart.success.savedCleared'), 
+        t('cart.success.allSavedRemoved'),
         {
-          actionText: 'Deshacer',
+          actionText: t('common.undo'),
           actionHandler: () => {
             this.savedForLater = itemsBackup
             this.saveToStorage()
-            toastStore.success('Guardados restaurados', 'Productos guardados restaurados')
+            const { t: t2 } = useStoreI18n()
+            toastStore.success(t2('cart.success.savedRestored'), t2('cart.success.savedItemsRestored'))
           },
           duration: 10000
         }
@@ -1307,7 +1354,8 @@ export const useCartStore = defineStore('cart', {
       this.storageType = this.detectAvailableStorage()
       
       if (this.storageType === 'memory') {
-        toastStore.warning('Almacenamiento no disponible', 'El carrito funcionará en modo temporal')
+        const { t } = useStoreI18n()
+        toastStore.warning(t('cart.warning.storageUnavailable'), t('cart.warning.temporaryMode'))
         this.sessionId = this.generateSessionId()
         return
       }
@@ -1348,7 +1396,8 @@ export const useCartStore = defineStore('cart', {
             cartData = JSON.parse(savedCart)
           } catch (parseError) {
             console.error('Failed to parse cart data:', parseError)
-            toastStore.error('Datos corruptos', 'Los datos del carrito estaban corruptos y se han reiniciado')
+            const { t } = useStoreI18n()
+            toastStore.error(t('cart.error.dataCorrupted'), t('cart.error.cartDataReset'))
             this.clearStorageData()
             this.sessionId = this.generateSessionId()
             return
@@ -1359,7 +1408,8 @@ export const useCartStore = defineStore('cart', {
           
           if (validation.errors.length > 0) {
             console.warn('Cart data validation errors:', validation.errors)
-            toastStore.warning('Carrito reparado', 'Se detectaron y corrigieron algunos problemas en el carrito')
+            const { t } = useStoreI18n()
+            toastStore.warning(t('cart.warning.cartRepaired'), t('cart.warning.issuesDetectedAndFixed'))
           }
 
           if (validation.fixedData) {
@@ -1373,7 +1423,8 @@ export const useCartStore = defineStore('cart', {
               // Cart is expired
               this.clearStorageData()
               this.sessionId = this.generateSessionId()
-              toastStore.info('Carrito expirado', 'El carrito anterior ha expirado y se ha limpiado')
+              const { t } = useStoreI18n()
+              toastStore.info(t('cart.info.cartExpired'), t('cart.info.cartCleanedDueToExpiry'))
               return
             }
 
@@ -1433,16 +1484,18 @@ export const useCartStore = defineStore('cart', {
 
             // Notify user about successful load
             if (this.items.length > 0) {
+              const { t } = useStoreI18n()
               const message = sourceStorage === 'sessionStorage' 
-                ? 'Carrito restaurado desde la sesión actual'
-                : 'Carrito restaurado'
-              toastStore.success('Carrito cargado', message)
+                ? t('cart.success.restoredFromSession')
+                : t('cart.success.cartRestored')
+              toastStore.success(t('cart.success.cartLoaded'), message)
             }
           } else {
             // Data is completely invalid
             this.clearStorageData()
             this.sessionId = this.generateSessionId()
-            toastStore.error('Datos inválidos', 'Los datos del carrito no se pudieron recuperar')
+            const { t } = useStoreI18n()
+            toastStore.error(t('cart.error.invalidData'), t('cart.error.couldNotRecoverCart'))
           }
         } else {
           // No saved cart found
@@ -1454,7 +1507,8 @@ export const useCartStore = defineStore('cart', {
         this.sessionId = this.generateSessionId()
         this.storageType = 'memory'
         
-        toastStore.error('Error al cargar carrito', 'No se pudo cargar el carrito guardado')
+        const { t } = useStoreI18n()
+        toastStore.error(t('cart.error.loadFailed'), t('cart.error.couldNotLoadSavedCart'))
       }
     },
 
@@ -1485,7 +1539,8 @@ export const useCartStore = defineStore('cart', {
         
         if (availableStorage !== this.storageType) {
           this.storageType = availableStorage
-          toastStore.info('Almacenamiento cambiado', `Cambiado a ${availableStorage}`)
+          const { t } = useStoreI18n()
+          toastStore.info(t('cart.info.storageChanged'), t('cart.info.storageChangedDetails', { storage: availableStorage }))
         }
 
         // Try to load from any available storage
@@ -1494,14 +1549,16 @@ export const useCartStore = defineStore('cart', {
         // If we have items, validate them
         if (this.items.length > 0) {
           await this.validateCart()
-          toastStore.success('Carrito recuperado', 'Los datos del carrito han sido recuperados y validados')
+          const { t } = useStoreI18n()
+          toastStore.success(t('cart.success.cartRecovered'), t('cart.success.dataRecoveredAndValidated'))
           return true
         }
         
         return false
       } catch (error) {
         console.error('Cart recovery failed:', error)
-        toastStore.error('Recuperación fallida', 'No se pudo recuperar el carrito')
+        const { t } = useStoreI18n()
+        toastStore.error(t('cart.error.recoveryFailed'), t('cart.error.couldNotRecoverCart'))
         return false
       }
     },
@@ -1536,35 +1593,40 @@ export const useCartStore = defineStore('cart', {
         
         if (validationSummary.hasChanges) {
           if (validationSummary.removedItems.length > 0) {
-            toastStore.warning('Productos no disponibles', 
-              `Eliminados: ${validationSummary.removedItems.join(', ')}`, {
+            const { t } = useStoreI18n()
+            toastStore.warning(t('cart.warning.productsUnavailable'), 
+              t('cart.warning.removedItems', { items: validationSummary.removedItems.join(', ') }), {
               duration: 8000
             })
           }
           
           if (validationSummary.adjustedItems.length > 0) {
-            toastStore.warning('Cantidades ajustadas', 
+            const { t } = useStoreI18n()
+            toastStore.warning(t('cart.warning.quantitiesAdjusted'), 
               validationSummary.adjustedItems.join('; '), {
               duration: 8000
             })
           }
           
           if (validationSummary.priceChanges.length > 0) {
-            toastStore.info('Precios actualizados', 
+            const { t } = useStoreI18n()
+            toastStore.info(t('cart.info.pricesUpdated'), 
               validationSummary.priceChanges.join('; '), {
               duration: 6000
             })
           }
         } else {
-          toastStore.success('Carrito validado', 'Todos los productos están disponibles y actualizados')
+          const { t } = useStoreI18n()
+          toastStore.success(t('cart.success.cartValidated'), t('cart.success.allProductsAvailable'))
         }
         
         this.saveToStorage()
         
       } catch (error) {
-        this.error = 'Failed to validate cart items'
-        toastStore.error('Error de validación', 'No se pudo validar el carrito', {
-          actionText: 'Reintentar',
+        const { t } = useStoreI18n()
+        this.error = t('cart.error.validationFailed')
+        toastStore.error(t('cart.error.validationFailed'), t('cart.error.couldNotValidateCart'), {
+          actionText: t('common.retry'),
           actionHandler: () => this.validateCart()
         })
       } finally {
@@ -1603,8 +1665,9 @@ export const useCartStore = defineStore('cart', {
           
           if (retryCount > maxRetries) {
             const toastStore = useToastStore()
-            toastStore.error('Validación fallida', 
-              'No se pudo validar el carrito después de varios intentos')
+            const { t } = useStoreI18n()
+            toastStore.error(t('cart.error.validationFailed'), 
+              t('cart.error.validationFailedAfterRetries'))
             return false
           }
           

@@ -30,8 +30,8 @@
           <!-- Product Image -->
           <div class="aspect-square mb-3">
             <img 
-              :src="product.images?.[0] || '/placeholder-product.jpg'" 
-              :alt="product.name"
+              :src="product.primaryImage || product.images?.[0]?.url || '/placeholder-product.jpg'" 
+              :alt="getLocalizedText(product.name)"
               class="w-full h-full object-cover rounded-lg"
             >
           </div>
@@ -39,7 +39,7 @@
           <!-- Product Info -->
           <div class="space-y-2">
             <h3 class="text-sm font-medium text-gray-900 line-clamp-2">
-              {{ product.name }}
+              {{ getLocalizedText(product.name) }}
             </h3>
             
             <div class="flex items-center justify-between">
@@ -50,7 +50,7 @@
               <div class="flex items-center space-x-1">
                 <button
                   @click="quickAdd(product, 1)"
-                  :disabled="isInCart(product.id) || product.stock === 0"
+                  :disabled="isInCart(product.id) || product.stockQuantity === 0"
                   class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <svg v-if="isInCart(product.id)" class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -61,15 +61,15 @@
                   </svg>
                   
                   <span v-if="isInCart(product.id)">En carrito</span>
-                  <span v-else-if="product.stock === 0">Agotado</span>
+                  <span v-else-if="product.stockQuantity === 0">Agotado</span>
                   <span v-else>Añadir</span>
                 </button>
               </div>
             </div>
             
             <!-- Stock indicator -->
-            <div v-if="product.stock > 0 && product.stock <= 5" class="text-xs text-orange-600">
-              Solo {{ product.stock }} disponibles
+            <div v-if="product.stockQuantity > 0 && product.stockQuantity <= 5" class="text-xs text-orange-600">
+              Solo {{ product.stockQuantity }} disponibles
             </div>
           </div>
         </div>
@@ -87,6 +87,8 @@
 </template>
 
 <script setup lang="ts">
+const { locale } = useI18n()
+
 const {
   recommendations,
   recommendationsLoading,
@@ -98,6 +100,22 @@ const {
 } = useCart()
 
 const toast = useToast()
+
+// Helper function to get localized text from translation objects
+const getLocalizedText = (translationObj: any): string => {
+  if (!translationObj) return ''
+  
+  if (typeof translationObj === 'string') {
+    return translationObj
+  }
+  
+  if (typeof translationObj === 'object') {
+    const currentLocale = locale.value || 'es'
+    return translationObj[currentLocale] || translationObj.es || translationObj.en || ''
+  }
+  
+  return String(translationObj)
+}
 
 // Only show recommendations if cart has items
 const shouldShowRecommendations = computed(() => {

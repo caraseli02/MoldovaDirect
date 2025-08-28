@@ -30,7 +30,11 @@
     "test:setup": "npm run test:install && npm run test:install:deps",
     "test:ci": "playwright test --project=chromium-es --project=firefox-es",
     "test:smoke": "playwright test --grep @smoke",
-    "test:regression": "playwright test --grep @regression"
+    "test:regression": "playwright test --grep @regression",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest",
+    "test:unit:ui": "vitest --ui",
+    "test:translations": "vitest run tests/unit/auth-translations.test.ts"
   },
   "dependencies": {
     "@nuxt/image": "^1.11.0",

@@ -18,7 +18,7 @@
       />
 
       <!-- Main Content -->
-      <div class="flex-1 lg:ml-80">
+      <div class="flex-1">
         <div class="p-6 lg:p-8">
           <!-- Header -->
           <div class="mb-8">

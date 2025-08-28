@@ -198,19 +198,15 @@
 </template>
 
 <script setup lang="ts">
+// Apply guest middleware - redirect authenticated users
+definePageMeta({
+  middleware: 'guest'
+})
+
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
-
-// Redirect if already logged in
-watchEffect(() => {
-  console.log(user.value);
-  
-  if (user.value) {
-    navigateTo(localePath('/account'))
-  }
-})
 
 const form = ref({
   name: '',
