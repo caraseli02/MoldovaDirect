@@ -34,6 +34,17 @@
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
     "test:unit:ui": "vitest --ui",
+    "test:unit:auth": "vitest run tests/unit/auth-*.test.ts tests/unit/use-auth.test.ts tests/unit/middleware-auth.test.ts",
+    "test:integration": "vitest run tests/integration/",
+    "test:integration:auth": "vitest run tests/integration/auth-*.test.ts",
+    "test:e2e:auth": "playwright test tests/e2e/auth*.spec.ts",
+    "test:e2e:auth-mobile": "playwright test tests/e2e/auth-mobile-responsive.spec.ts",
+    "test:e2e:auth-accessibility": "playwright test tests/e2e/auth-accessibility.spec.ts",
+    "test:e2e:auth-workflows": "playwright test tests/e2e/auth-email-workflows.spec.ts",
+    "test:auth:comprehensive": "tsx tests/run-auth-tests.ts",
+    "test:auth:unit": "npm run test:unit:auth",
+    "test:auth:integration": "npm run test:integration:auth",
+    "test:auth:e2e": "npm run test:e2e:auth",
     "test:translations": "vitest run tests/unit/auth-translations.test.ts"
   },
   "dependencies": {
