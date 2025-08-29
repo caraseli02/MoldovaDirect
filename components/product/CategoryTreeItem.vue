@@ -7,7 +7,7 @@
       <button
         v-if="category.children && category.children.length > 0"
         @click="toggleExpanded"
-        class="mr-2 p-0.5 text-gray-400 hover:text-gray-600 transition-colors"
+        class="mr-2 p-0.5 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400 transition-colors"
       >
         <Icon 
           :name="isExpanded ? 'heroicons:chevron-down' : 'heroicons:chevron-right'" 
@@ -21,13 +21,13 @@
           :checked="isSelected"
           type="radio"
           :name="'category-' + level"
-          class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+          class="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 bg-white dark:bg-gray-700"
           @change="handleSelection"
         >
-        <span class="ml-2 text-sm text-gray-700 flex-1">
+        <span class="ml-2 text-sm text-gray-700 dark:text-gray-300 flex-1">
           {{ category.name }}
         </span>
-        <span class="text-xs text-gray-500 ml-2">
+        <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">
           ({{ category.count }})
         </span>
       </label>

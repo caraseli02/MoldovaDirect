@@ -22,8 +22,8 @@
 
   <div v-else-if="error" class="py-12">
     <div class="container text-center">
-      <h1 class="text-4xl font-bold text-gray-900 mb-4">{{ $t('products.notFound') }}</h1>
-      <p class="text-gray-600 mb-8">{{ $t('products.notFoundDescription') }}</p>
+      <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">{{ $t('products.notFound') }}</h1>
+      <p class="text-gray-600 dark:text-gray-400 mb-8">{{ $t('products.notFoundDescription') }}</p>
       <nuxt-link
         to="/products"
         class="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -39,25 +39,25 @@
       <nav class="flex mb-8 text-sm">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
           <li>
-            <nuxt-link to="/" class="text-gray-500 hover:text-gray-700">
+            <nuxt-link to="/" class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
               {{ $t('common.home') }}
             </nuxt-link>
           </li>
           <li>
             <span class="mx-2 text-gray-400">/</span>
-            <nuxt-link to="/products" class="text-gray-500 hover:text-gray-700">
+            <nuxt-link to="/products" class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
               {{ $t('common.shop') }}
             </nuxt-link>
           </li>
           <li v-if="product.category">
             <span class="mx-2 text-gray-400">/</span>
-            <nuxt-link :to="`/products?category=${product.category.id}`" class="text-gray-500 hover:text-gray-700">
+            <nuxt-link :to="`/products?category=${product.category.id}`" class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
               {{ getLocalizedText(product.category.name) }}
             </nuxt-link>
           </li>
           <li>
             <span class="mx-2 text-gray-400">/</span>
-            <span class="text-gray-900">{{ getLocalizedText(product.name) }}</span>
+            <span class="text-gray-900 dark:text-white">{{ getLocalizedText(product.name) }}</span>
           </li>
         </ol>
       </nav>
@@ -67,7 +67,7 @@
         <!-- Product Images -->
         <div class="space-y-4">
           <!-- Main Image -->
-          <div class="aspect-square overflow-hidden rounded-lg bg-gray-100 relative">
+          <div class="aspect-square overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800 relative">
             <img
               v-if="selectedImage"
               :src="selectedImage.url"
@@ -100,7 +100,7 @@
               :key="image.id"
               :class="[
                 'aspect-square overflow-hidden rounded border-2 transition-colors',
-                selectedImageIndex === index ? 'border-blue-500' : 'border-gray-200 hover:border-gray-300'
+                selectedImageIndex === index ? 'border-blue-500' : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
               ]"
               @click="selectedImageIndex = index"
             >
@@ -119,20 +119,20 @@
           <div v-if="product.category">
             <nuxt-link
               :to="`/products?category=${product.category.id}`"
-              class="text-blue-600 hover:text-blue-700 text-sm font-medium"
+              class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium"
             >
               {{ getLocalizedText(product.category.name) }}
             </nuxt-link>
           </div>
 
           <!-- Product Name -->
-          <h1 class="text-3xl lg:text-4xl font-bold text-gray-900">
+          <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white">
             {{ getLocalizedText(product.name) }}
           </h1>
 
           <!-- Price -->
           <div class="flex items-center space-x-4">
-            <span class="text-3xl font-bold text-gray-900">
+            <span class="text-3xl font-bold text-gray-900 dark:text-white">
               €{{ formatPrice(product.price) }}
             </span>
             <span v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)" class="text-xl text-gray-500 line-through">
@@ -144,33 +144,33 @@
           </div>
 
           <!-- Short Description -->
-          <p v-if="product.shortDescription" class="text-lg text-gray-600">
+          <p v-if="product.shortDescription" class="text-lg text-gray-600 dark:text-gray-400">
             {{ getLocalizedText(product.shortDescription) }}
           </p>
 
           <!-- Product Details -->
-          <div class="border-t border-gray-200 pt-6">
-            <h3 class="text-lg font-semibold mb-4">{{ $t('products.details') }}</h3>
+          <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
+            <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">{{ $t('products.details') }}</h3>
             <dl class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
               <div v-if="product.origin">
-                <dt class="font-medium text-gray-900">{{ $t('products.origin') }}</dt>
-                <dd class="text-gray-600">{{ product.origin }}</dd>
+                <dt class="font-medium text-gray-900 dark:text-white">{{ $t('products.origin') }}</dt>
+                <dd class="text-gray-600 dark:text-gray-400">{{ product.origin }}</dd>
               </div>
               <div v-if="product.volume">
-                <dt class="font-medium text-gray-900">{{ $t('products.volume') }}</dt>
-                <dd class="text-gray-600">{{ product.volume }}ml</dd>
+                <dt class="font-medium text-gray-900 dark:text-white">{{ $t('products.volume') }}</dt>
+                <dd class="text-gray-600 dark:text-gray-400">{{ product.volume }}ml</dd>
               </div>
               <div v-if="product.alcoholContent">
-                <dt class="font-medium text-gray-900">{{ $t('products.alcoholContent') }}</dt>
-                <dd class="text-gray-600">{{ product.alcoholContent }}%</dd>
+                <dt class="font-medium text-gray-900 dark:text-white">{{ $t('products.alcoholContent') }}</dt>
+                <dd class="text-gray-600 dark:text-gray-400">{{ product.alcoholContent }}%</dd>
               </div>
               <div v-if="product.weight">
-                <dt class="font-medium text-gray-900">{{ $t('products.weight') }}</dt>
-                <dd class="text-gray-600">{{ product.weight }}kg</dd>
+                <dt class="font-medium text-gray-900 dark:text-white">{{ $t('products.weight') }}</dt>
+                <dd class="text-gray-600 dark:text-gray-400">{{ product.weight }}kg</dd>
               </div>
               <div v-if="product.sku">
-                <dt class="font-medium text-gray-900">SKU</dt>
-                <dd class="text-gray-600">{{ product.sku }}</dd>
+                <dt class="font-medium text-gray-900 dark:text-white">SKU</dt>
+                <dd class="text-gray-600 dark:text-gray-400">{{ product.sku }}</dd>
               </div>
             </dl>
           </div>
@@ -180,16 +180,16 @@
             <span
               v-for="tag in product.tags"
               :key="tag"
-              class="inline-block bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm"
+              class="inline-block bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1 rounded-full text-sm"
             >
               {{ tag }}
             </span>
           </div>
 
           <!-- Stock Status -->
-          <div class="border-t border-gray-200 pt-6">
+          <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
             <div class="flex items-center space-x-4">
-              <span class="text-sm font-medium text-gray-900">{{ $t('products.availability') }}:</span>
+              <span class="text-sm font-medium text-gray-900 dark:text-white">{{ $t('products.availability') }}:</span>
               <span
                 :class="[
                   'inline-flex items-center px-3 py-1 rounded-full text-sm font-medium',
@@ -202,16 +202,16 @@
           </div>
 
           <!-- Add to Cart -->
-          <div class="border-t border-gray-200 pt-6">
+          <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
             <div class="flex items-center space-x-4 mb-4">
-              <label for="quantity" class="text-sm font-medium text-gray-900">
+              <label for="quantity" class="text-sm font-medium text-gray-900 dark:text-white">
                 {{ $t('common.quantity') }}:
               </label>
               <select
                 id="quantity"
                 v-model="selectedQuantity"
                 :disabled="(product.stockQuantity || 0) <= 0"
-                class="border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+                class="border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 dark:disabled:bg-gray-700 disabled:cursor-not-allowed bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
               >
                 <option v-for="n in Math.min(10, Math.max(1, product.stockQuantity || 1))" :key="n" :value="n">
                   {{ n }}
@@ -236,9 +236,9 @@
       </div>
 
       <!-- Description -->
-      <div v-if="product.description" class="mt-12 border-t border-gray-200 pt-12">
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">{{ $t('products.description') }}</h2>
-        <div class="prose max-w-none text-gray-600">
+      <div v-if="product.description" class="mt-12 border-t border-gray-200 dark:border-gray-700 pt-12">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">{{ $t('products.description') }}</h2>
+        <div class="prose max-w-none text-gray-600 dark:text-gray-400">
           <p v-for="paragraph in getLocalizedText(product.description).split('\n')" :key="paragraph" class="mb-4">
             {{ paragraph }}
           </p>

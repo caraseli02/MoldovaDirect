@@ -2,7 +2,7 @@
   <div class="filter-content space-y-6">
     <!-- Active Filters -->
     <div v-if="hasActiveFilters" class="filter-section">
-      <h3 class="text-sm font-medium text-gray-900 mb-3">
+      <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-3">
         {{ $t('products.filters.active') }}
       </h3>
       <div class="flex flex-wrap gap-2">
@@ -17,7 +17,7 @@
 
     <!-- Category Filter -->
     <div v-if="availableFilters.categories.length > 0" class="filter-section">
-      <h3 class="text-sm font-medium text-gray-900 mb-3">
+      <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-3">
         {{ $t('products.filters.categories') }}
       </h3>
       <CategoryTree
@@ -29,7 +29,7 @@
 
     <!-- Price Range Filter -->
     <div v-if="availableFilters.priceRange" class="filter-section">
-      <h3 class="text-sm font-medium text-gray-900 mb-3">
+      <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-3">
         {{ $t('products.filters.priceRange') }}
       </h3>
       <PriceRangeSlider
@@ -42,7 +42,7 @@
 
     <!-- Stock Filter -->
     <div class="filter-section">
-      <h3 class="text-sm font-medium text-gray-900 mb-3">
+      <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-3">
         {{ $t('products.filters.availability') }}
       </h3>
       <div class="space-y-2">
@@ -50,10 +50,10 @@
           <input
             v-model="localFilters.inStock"
             type="checkbox"
-            class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            class="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 bg-white dark:bg-gray-700"
             @change="updateFilters({ inStock: localFilters.inStock })"
           >
-          <span class="ml-2 text-sm text-gray-700">
+          <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
             {{ $t('products.filters.inStockOnly') }}
           </span>
         </label>
@@ -61,10 +61,10 @@
           <input
             v-model="localFilters.featured"
             type="checkbox"
-            class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            class="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 bg-white dark:bg-gray-700"
             @change="updateFilters({ featured: localFilters.featured })"
           >
-          <span class="ml-2 text-sm text-gray-700">
+          <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
             {{ $t('products.filters.featuredOnly') }}
           </span>
         </label>
@@ -77,7 +77,7 @@
       :key="attribute.name"
       class="filter-section"
     >
-      <h3 class="text-sm font-medium text-gray-900 mb-3">
+      <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-3">
         {{ attribute.label }}
       </h3>
       <AttributeCheckboxGroup
@@ -291,6 +291,6 @@ watch(() => props.filters, (newFilters) => {
 
 <style scoped>
 .filter-section {
-  @apply border-b border-gray-100 pb-6 last:border-b-0 last:pb-0;
+  @apply border-b border-gray-100 dark:border-gray-700 pb-6 last:border-b-0 last:pb-0;
 }
 </style>

@@ -2,18 +2,18 @@
   <nav class="category-navigation">
     <!-- Desktop Navigation -->
     <div v-if="!isMobile" class="hidden lg:block">
-      <div class="bg-white border-b border-gray-200">
+      <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex items-center justify-between h-16">
             <!-- Main Categories -->
             <div class="flex space-x-8">
               <NuxtLink
                 to="/products"
-                class="text-gray-900 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
-                :class="{ 'text-blue-600 border-b-2 border-blue-600': !currentCategory }"
+                class="text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 text-sm font-medium transition-colors"
+                :class="{ 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400': !currentCategory }"
               >
                 {{ $t('products.categories.all') }}
-                <span v-if="showProductCount && totalProductCount" class="ml-1 text-gray-500 text-xs">
+                <span v-if="showProductCount && totalProductCount" class="ml-1 text-gray-500 dark:text-gray-400 text-xs">
                   ({{ totalProductCount }})
                 </span>
               </NuxtLink>
@@ -24,15 +24,15 @@
                 class="relative group"
               >
                 <button
-                  class="flex items-center text-gray-900 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
-                  :class="{ 'text-blue-600 border-b-2 border-blue-600': isCurrentCategory(category) }"
+                  class="flex items-center text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 text-sm font-medium transition-colors"
+                  :class="{ 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400': isCurrentCategory(category) }"
                   @click="navigateToCategory(category)"
                   @mouseenter="showDropdown(category.id)"
                   @mouseleave="hideDropdown"
                 >
                   <Icon v-if="category.icon" :name="category.icon" class="w-4 h-4 mr-2" />
                   {{ category.name }}
-                  <span v-if="showProductCount" class="ml-1 text-gray-500 text-xs">
+                  <span v-if="showProductCount" class="ml-1 text-gray-500 dark:text-gray-400 text-xs">
                     ({{ category.productCount }})
                   </span>
                   <Icon 
@@ -45,7 +45,7 @@
                 <!-- Dropdown Menu -->
                 <div
                   v-if="category.children && category.children.length > 0 && activeDropdown === category.id"
-                  class="absolute left-0 top-full mt-1 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50"
+                  class="absolute left-0 top-full mt-1 w-64 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50"
                   @mouseenter="showDropdown(category.id)"
                   @mouseleave="hideDropdown"
                 >
@@ -54,12 +54,12 @@
                       v-for="child in category.children"
                       :key="child.id"
                       :to="`/products?category=${child.slug || child.id}`"
-                      class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-colors"
-                      :class="{ 'bg-blue-50 text-blue-600': isCurrentCategory(child) }"
+                      class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                      :class="{ 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400': isCurrentCategory(child) }"
                     >
                       <Icon v-if="child.icon" :name="child.icon" class="w-4 h-4 mr-3" />
                       {{ child.name }}
-                      <span v-if="showProductCount" class="ml-auto text-gray-500 text-xs">
+                      <span v-if="showProductCount" class="ml-auto text-gray-500 dark:text-gray-400 text-xs">
                         {{ child.productCount }}
                       </span>
                     </NuxtLink>
@@ -77,15 +77,15 @@
       <!-- Mobile Category Button -->
       <button
         @click="showMobileNav = true"
-        class="w-full flex items-center justify-between p-4 bg-white border-b border-gray-200 text-left"
+        class="w-full flex items-center justify-between p-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 text-left"
       >
         <div class="flex items-center">
-          <Icon name="heroicons:squares-2x2" class="w-5 h-5 mr-3 text-gray-400" />
-          <span class="font-medium text-gray-900">
+          <Icon name="heroicons:squares-2x2" class="w-5 h-5 mr-3 text-gray-400 dark:text-gray-500" />
+          <span class="font-medium text-gray-900 dark:text-white">
             {{ currentCategoryName || $t('products.categories.all') }}
           </span>
         </div>
-        <Icon name="heroicons:chevron-down" class="w-5 h-5 text-gray-400" />
+        <Icon name="heroicons:chevron-down" class="w-5 h-5 text-gray-400 dark:text-gray-500" />
       </button>
 
       <!-- Mobile Category Modal -->
@@ -98,18 +98,18 @@
           <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" />
           
           <div
-            class="fixed bottom-0 left-0 right-0 bg-white rounded-t-xl max-h-[80vh] overflow-hidden transform transition-transform"
+            class="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 rounded-t-xl max-h-[80vh] overflow-hidden transform transition-transform"
             :class="showMobileNav ? 'translate-y-0' : 'translate-y-full'"
             @click.stop
           >
             <!-- Mobile Header -->
-            <div class="flex items-center justify-between p-4 border-b border-gray-200">
-              <h2 class="text-lg font-semibold text-gray-900">
+            <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+              <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
                 {{ $t('products.filters.categories') }}
               </h2>
               <button
                 @click="showMobileNav = false"
-                class="p-2 text-gray-400 hover:text-gray-600"
+                class="p-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400"
               >
                 <Icon name="heroicons:x-mark" class="w-5 h-5" />
               </button>
@@ -121,15 +121,15 @@
                 <!-- All Products -->
                 <NuxtLink
                   to="/products"
-                  class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors"
-                  :class="{ 'bg-blue-50 text-blue-600': !currentCategory }"
+                  class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                  :class="{ 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400': !currentCategory }"
                   @click="showMobileNav = false"
                 >
                   <div class="flex items-center">
                     <Icon name="heroicons:squares-2x2" class="w-5 h-5 mr-3" />
-                    <span class="font-medium">{{ $t('products.categories.all') }}</span>
+                    <span class="font-medium text-gray-900 dark:text-white">{{ $t('products.categories.all') }}</span>
                   </div>
-                  <span v-if="showProductCount && totalProductCount" class="text-sm text-gray-500">
+                  <span v-if="showProductCount && totalProductCount" class="text-sm text-gray-500 dark:text-gray-400">
                     {{ totalProductCount }}
                   </span>
                 </NuxtLink>
@@ -152,14 +152,14 @@
     </div>
 
     <!-- Breadcrumb Navigation -->
-    <div v-if="breadcrumbs.length > 0" class="bg-gray-50 border-b border-gray-200">
+    <div v-if="breadcrumbs.length > 0" class="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav class="flex py-3" aria-label="Breadcrumb">
           <ol class="flex items-center space-x-2">
             <li>
               <NuxtLink
                 to="/products"
-                class="text-gray-500 hover:text-gray-700 text-sm transition-colors"
+                class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 text-sm transition-colors"
               >
                 {{ $t('products.categories.all') }}
               </NuxtLink>
@@ -169,17 +169,17 @@
               :key="breadcrumb.id"
               class="flex items-center"
             >
-              <Icon name="heroicons:chevron-right" class="w-4 h-4 text-gray-400 mx-2" />
+              <Icon name="heroicons:chevron-right" class="w-4 h-4 text-gray-400 dark:text-gray-500 mx-2" />
               <NuxtLink
                 v-if="index < breadcrumbs.length - 1"
                 :to="`/products?category=${breadcrumb.slug || breadcrumb.id}`"
-                class="text-gray-500 hover:text-gray-700 text-sm transition-colors"
+                class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 text-sm transition-colors"
               >
                 {{ breadcrumb.name }}
               </NuxtLink>
               <span
                 v-else
-                class="text-gray-900 text-sm font-medium"
+                class="text-gray-900 dark:text-white text-sm font-medium"
               >
                 {{ breadcrumb.name }}
               </span>

@@ -1,14 +1,14 @@
 <template>
-  <div v-if="shouldShowRecommendations" class="bg-white rounded-lg shadow-sm border border-gray-200 mt-6">
+  <div v-if="shouldShowRecommendations" class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 mt-6">
     <div class="p-4 md:p-6">
       <div class="flex items-center justify-between mb-4">
-        <h2 class="text-lg font-semibold text-gray-900">
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
           También te puede interesar
         </h2>
         <button
           @click="refreshRecommendations"
           :disabled="recommendationsLoading"
-          class="text-sm text-blue-600 hover:text-blue-800 underline disabled:opacity-50"
+          class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline disabled:opacity-50"
         >
           <span v-if="recommendationsLoading">Cargando...</span>
           <span v-else>Actualizar</span>
@@ -25,7 +25,7 @@
         <div
           v-for="product in recommendations"
           :key="product.id"
-          class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+          class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow bg-white dark:bg-gray-900"
         >
           <!-- Product Image -->
           <div class="aspect-square mb-3">
@@ -38,12 +38,12 @@
           
           <!-- Product Info -->
           <div class="space-y-2">
-            <h3 class="text-sm font-medium text-gray-900 line-clamp-2">
+            <h3 class="text-sm font-medium text-gray-900 dark:text-white line-clamp-2">
               {{ getLocalizedText(product.name) }}
             </h3>
             
             <div class="flex items-center justify-between">
-              <span class="text-lg font-semibold text-gray-900">
+              <span class="text-lg font-semibold text-gray-900 dark:text-white">
                 {{ formatPrice(product.price) }}
               </span>
               
@@ -51,7 +51,7 @@
                 <button
                   @click="quickAdd(product, 1)"
                   :disabled="isInCart(product.id) || product.stockQuantity === 0"
-                  class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 dark:bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-800 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <svg v-if="isInCart(product.id)" class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -68,7 +68,7 @@
             </div>
             
             <!-- Stock indicator -->
-            <div v-if="product.stockQuantity > 0 && product.stockQuantity <= 5" class="text-xs text-orange-600">
+            <div v-if="product.stockQuantity > 0 && product.stockQuantity <= 5" class="text-xs text-orange-600 dark:text-orange-400">
               Solo {{ product.stockQuantity }} disponibles
             </div>
           </div>
@@ -76,8 +76,8 @@
       </div>
 
       <!-- Empty State -->
-      <div v-else class="text-center py-8 text-gray-500">
-        <svg class="w-12 h-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div v-else class="text-center py-8 text-gray-500 dark:text-gray-400">
+        <svg class="w-12 h-12 mx-auto mb-4 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
         </svg>
         <p>No hay recomendaciones disponibles en este momento</p>

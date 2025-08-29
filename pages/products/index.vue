@@ -7,7 +7,7 @@
       :show-product-count="true"
     />
 
-    <div class="flex min-h-screen bg-gray-50">
+    <div class="flex min-h-screen bg-gray-50 dark:bg-gray-900">
       <!-- Product Filter Sidebar -->
       <ProductFilter
         :filters="filters"
@@ -22,8 +22,8 @@
         <div class="p-6 lg:p-8">
           <!-- Header -->
           <div class="mb-8">
-            <h1 class="text-3xl lg:text-4xl font-bold mb-4">{{ $t('common.shop') }}</h1>
-            <p class="text-gray-600">{{ $t('products.browseDescription') }}</p>
+            <h1 class="text-3xl lg:text-4xl font-bold mb-4 text-gray-900 dark:text-white">{{ $t('common.shop') }}</h1>
+            <p class="text-gray-600 dark:text-gray-400">{{ $t('products.browseDescription') }}</p>
           </div>
 
           <!-- Search and Sort Bar -->
@@ -51,7 +51,7 @@
                     type="text"
                     :placeholder="$t('products.searchPlaceholder')"
                     :disabled="loading"
-                    class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:cursor-not-allowed"
+                    class="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 dark:disabled:bg-gray-800 disabled:cursor-not-allowed bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                     @input="handleSearchInput"
                   />
                 </div>
@@ -61,7 +61,7 @@
               <div class="sm:w-48">
                 <select
                   v-model="sortBy"
-                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                   @change="handleSortChange"
                 >
                   <option value="created">{{ $t('products.sortNewest') }}</option>
@@ -74,7 +74,7 @@
             </div>
 
             <!-- Results Summary -->
-            <div class="flex items-center justify-between text-sm text-gray-600">
+            <div class="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
               <span>
                 {{ $t('products.showingResults', { 
                   start: ((pagination.page - 1) * pagination.limit) + 1,
@@ -84,7 +84,7 @@
               </span>
               <span v-if="hasActiveFilters">
                 {{ $t('products.filtersApplied') }}
-                <button @click="clearAllFilters" class="ml-2 text-blue-600 hover:text-blue-800">
+                <button @click="clearAllFilters" class="ml-2 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
                   {{ $t('products.clearFilters') }}
                 </button>
               </span>
@@ -96,10 +96,10 @@
         <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-red-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <h2 class="text-2xl font-semibold text-gray-900 mb-2">
+        <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
           {{ $t('common.error') }}
         </h2>
-        <p class="text-gray-600 mb-4">
+        <p class="text-gray-600 dark:text-gray-400 mb-4">
           {{ error || $t('common.errorGeneric') }}
         </p>
         <button 
@@ -133,10 +133,10 @@
         <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
         </svg>
-        <h2 class="text-2xl font-semibold text-gray-900 mb-2">
+        <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
           {{ hasActiveFilters ? $t('products.noResults') : $t('products.noProducts') }}
         </h2>
-        <p class="text-gray-600">
+        <p class="text-gray-600 dark:text-gray-400">
           {{ hasActiveFilters ? $t('products.tryDifferentFilters') : $t('products.comingSoon') }}
         </p>
         <button v-if="hasActiveFilters" @click="clearAllFilters" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
@@ -150,7 +150,7 @@
               <button
                 :disabled="pagination.page <= 1"
                 @click="goToPage(pagination.page - 1)"
-                class="px-3 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
               >
                 {{ $t('common.previous') }}
               </button>
@@ -160,7 +160,7 @@
                   v-if="page !== '...'"
                   :class="[
                     'px-3 py-2 border rounded-lg',
-                    page === pagination.page ? 'bg-blue-500 text-white border-blue-500' : 'border-gray-300 hover:bg-gray-50'
+                    page === pagination.page ? 'bg-blue-500 text-white border-blue-500' : 'border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white'
                   ]"
                   @click="goToPage(page)"
                 >
@@ -172,7 +172,7 @@
               <button
                 :disabled="pagination.page >= pagination.totalPages"
                 @click="goToPage(pagination.page + 1)"
-                class="px-3 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
               >
                 {{ $t('common.next') }}
               </button>

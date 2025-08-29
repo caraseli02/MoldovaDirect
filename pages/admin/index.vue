@@ -2,14 +2,14 @@
   <div>
     <!-- Page Header -->
     <div class="mb-8">
-      <h1 class="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-      <p class="text-gray-600">Manage your Moldova Direct e-commerce platform</p>
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Admin Dashboard</h1>
+      <p class="text-gray-600 dark:text-gray-400">Manage your Moldova Direct e-commerce platform</p>
     </div>
 
     <!-- Stats Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
       <!-- Total Products -->
-      <div class="bg-white rounded-lg shadow p-6">
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
         <div class="flex items-center">
           <div class="flex-shrink-0">
             <svg class="h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -18,15 +18,15 @@
           </div>
           <div class="ml-5 w-0 flex-1">
             <dl>
-              <dt class="text-sm font-medium text-gray-500 truncate">Total Products</dt>
-              <dd class="text-lg font-medium text-gray-900">{{ stats.totalProducts || 0 }}</dd>
+              <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Total Products</dt>
+              <dd class="text-lg font-medium text-gray-900 dark:text-white">{{ stats.totalProducts || 0 }}</dd>
             </dl>
           </div>
         </div>
       </div>
 
       <!-- Active Products -->
-      <div class="bg-white rounded-lg shadow p-6">
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
         <div class="flex items-center">
           <div class="flex-shrink-0">
             <svg class="h-8 w-8 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -35,15 +35,15 @@
           </div>
           <div class="ml-5 w-0 flex-1">
             <dl>
-              <dt class="text-sm font-medium text-gray-500 truncate">Active Products</dt>
-              <dd class="text-lg font-medium text-gray-900">{{ stats.activeProducts || 0 }}</dd>
+              <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Active Products</dt>
+              <dd class="text-lg font-medium text-gray-900 dark:text-white">{{ stats.activeProducts || 0 }}</dd>
             </dl>
           </div>
         </div>
       </div>
 
       <!-- Low Stock -->
-      <div class="bg-white rounded-lg shadow p-6">
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
         <div class="flex items-center">
           <div class="flex-shrink-0">
             <svg class="h-8 w-8 text-yellow-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -52,15 +52,15 @@
           </div>
           <div class="ml-5 w-0 flex-1">
             <dl>
-              <dt class="text-sm font-medium text-gray-500 truncate">Low Stock Items</dt>
-              <dd class="text-lg font-medium text-gray-900">{{ stats.lowStockProducts || 0 }}</dd>
+              <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Low Stock Items</dt>
+              <dd class="text-lg font-medium text-gray-900 dark:text-white">{{ stats.lowStockProducts || 0 }}</dd>
             </dl>
           </div>
         </div>
       </div>
 
       <!-- Categories -->
-      <div class="bg-white rounded-lg shadow p-6">
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
         <div class="flex items-center">
           <div class="flex-shrink-0">
             <svg class="h-8 w-8 text-purple-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -69,8 +69,8 @@
           </div>
           <div class="ml-5 w-0 flex-1">
             <dl>
-              <dt class="text-sm font-medium text-gray-500 truncate">Total Categories</dt>
-              <dd class="text-lg font-medium text-gray-900">{{ stats.totalCategories || 0 }}</dd>
+              <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Total Categories</dt>
+              <dd class="text-lg font-medium text-gray-900 dark:text-white">{{ stats.totalCategories || 0 }}</dd>
             </dl>
           </div>
         </div>
@@ -79,14 +79,14 @@
 
     <!-- Quick Actions -->
     <div class="bg-white rounded-lg shadow mb-8">
-      <div class="px-6 py-4 border-b border-gray-200">
-        <h2 class="text-lg font-medium text-gray-900">Quick Actions</h2>
+      <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+        <h2 class="text-lg font-medium text-gray-900 dark:text-white">Quick Actions</h2>
       </div>
       <div class="p-6">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <nuxt-link
             to="/admin/products/new"
-            class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+            class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 dark:bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-800"
           >
             <svg class="h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -96,7 +96,7 @@
           
           <nuxt-link
             to="/admin/categories/new"
-            class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700"
+            class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 dark:bg-green-700 hover:bg-green-700 dark:hover:bg-green-800"
           >
             <svg class="h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
@@ -105,7 +105,7 @@
           </nuxt-link>
           
           <button
-            class="inline-flex items-center justify-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+            class="inline-flex items-center justify-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700"
             @click="refreshStats"
           >
             <svg class="h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -116,7 +116,7 @@
           
           <button
             :disabled="seeding"
-            class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+            class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-yellow-600 dark:bg-yellow-700 hover:bg-yellow-700 dark:hover:bg-yellow-800 disabled:bg-gray-400 dark:disabled:bg-gray-600 disabled:cursor-not-allowed"
             @click="seedDatabase"
           >
             <svg v-if="seeding" class="animate-spin h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -134,40 +134,40 @@
 
     <!-- Recent Activity -->
     <div class="bg-white rounded-lg shadow">
-      <div class="px-6 py-4 border-b border-gray-200">
-        <h2 class="text-lg font-medium text-gray-900">Recent Activity</h2>
+      <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+        <h2 class="text-lg font-medium text-gray-900 dark:text-white">Recent Activity</h2>
       </div>
       <div class="p-6">
-        <div v-if="!recentProducts?.length" class="text-center py-8 text-gray-500">
-          No products yet. <nuxt-link to="/admin/products/new" class="text-blue-600 hover:text-blue-700">Add your first product</nuxt-link>
+        <div v-if="!recentProducts?.length" class="text-center py-8 text-gray-500 dark:text-gray-400">
+          No products yet. <nuxt-link to="/admin/products/new" class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">Add your first product</nuxt-link>
         </div>
         <div v-else class="space-y-4">
           <div
             v-for="product in recentProducts"
             :key="product.id"
-            class="flex items-center justify-between py-3 border-b border-gray-100 last:border-0"
+            class="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-700 last:border-0"
           >
             <div class="flex items-center space-x-3">
-              <div class="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center">
-                <svg class="h-6 w-6 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div class="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                <svg class="h-6 w-6 text-gray-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                 </svg>
               </div>
               <div>
-                <p class="text-sm font-medium text-gray-900">{{ getLocalizedText(product.name) }}</p>
-                <p class="text-sm text-gray-500">Created {{ formatDate(product.createdAt) }}</p>
+                <p class="text-sm font-medium text-gray-900 dark:text-white">{{ getLocalizedText(product.name) }}</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Created {{ formatDate(product.createdAt) }}</p>
               </div>
             </div>
             <div class="flex items-center space-x-2">
               <span :class="[
                 'inline-flex items-center px-2 py-1 rounded-full text-xs font-medium',
-                product.isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                product.isActive ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
               ]">
                 {{ product.isActive ? 'Active' : 'Inactive' }}
               </span>
               <nuxt-link
                 :to="`/admin/products/${product.id}`"
-                class="text-blue-600 hover:text-blue-700 text-sm font-medium"
+                class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium"
               >
                 Edit
               </nuxt-link>
