@@ -31,8 +31,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h3 class="text-lg font-semibold mb-2">{{ $t('home.features.quality.title') }}</h3>
-            <p class="text-gray-600">{{ $t('home.features.quality.description') }}</p>
+            <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">{{ $t('home.features.quality.title') }}</h3>
+            <p class="text-gray-600 dark:text-gray-400">{{ $t('home.features.quality.description') }}</p>
           </div>
           
           <!-- Delivery Feature -->
@@ -42,8 +42,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
               </svg>
             </div>
-            <h3 class="text-lg font-semibold mb-2">{{ $t('home.features.delivery.title') }}</h3>
-            <p class="text-gray-600">{{ $t('home.features.delivery.description') }}</p>
+            <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">{{ $t('home.features.delivery.title') }}</h3>
+            <p class="text-gray-600 dark:text-gray-400">{{ $t('home.features.delivery.description') }}</p>
           </div>
           
           <!-- Authentic Feature -->
@@ -53,8 +53,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h3 class="text-lg font-semibold mb-2">{{ $t('home.features.authentic.title') }}</h3>
-            <p class="text-gray-600">{{ $t('home.features.authentic.description') }}</p>
+            <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">{{ $t('home.features.authentic.title') }}</h3>
+            <p class="text-gray-600 dark:text-gray-400">{{ $t('home.features.authentic.description') }}</p>
           </div>
           
           <!-- Support Feature -->
@@ -64,21 +64,21 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
               </svg>
             </div>
-            <h3 class="text-lg font-semibold mb-2">{{ $t('home.features.support.title') }}</h3>
-            <p class="text-gray-600">{{ $t('home.features.support.description') }}</p>
+            <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">{{ $t('home.features.support.title') }}</h3>
+            <p class="text-gray-600 dark:text-gray-400">{{ $t('home.features.support.description') }}</p>
           </div>
         </div>
       </div>
     </section>
     
     <!-- Featured Products Section -->
-    <section class="py-16 md:py-24 bg-gray-50">
+    <section class="py-16 md:py-24 bg-gray-50 dark:bg-gray-900">
       <div class="container">
-        <h2 class="text-3xl font-bold text-center mb-12">{{ $t('home.featuredProducts.title') }}</h2>
+        <h2 class="text-3xl font-bold text-center mb-12 text-gray-900 dark:text-white">{{ $t('home.featuredProducts.title') }}</h2>
         
         <!-- Loading State -->
         <div v-if="featuredPending" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          <div v-for="i in 4" :key="i" class="bg-white rounded-lg shadow-md overflow-hidden animate-pulse">
+          <div v-for="i in 4" :key="i" class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden animate-pulse">
             <div class="h-48 bg-gray-200"></div>
             <div class="p-4 space-y-2">
               <div class="h-4 bg-gray-200 rounded"></div>
@@ -99,7 +99,7 @@
         
         <!-- No Products Fallback -->
         <div v-else class="text-center py-8">
-          <p class="text-gray-500 mb-4">{{ $t('home.featuredProducts.noProducts') }}</p>
+          <p class="text-gray-500 dark:text-gray-400 mb-4">{{ $t('home.featuredProducts.noProducts') }}</p>
           <NuxtLink 
             :to="localePath('/products')" 
             class="inline-block bg-primary-600 text-white px-6 py-2 rounded-lg hover:bg-primary-700 transition-colors"
@@ -110,7 +110,7 @@
         
         <!-- Error State -->
         <div v-if="featuredError" class="text-center py-8">
-          <p class="text-red-500 mb-4">{{ $t('home.featuredProducts.error') }}</p>
+          <p class="text-red-500 dark:text-red-400 mb-4">{{ $t('home.featuredProducts.error') }}</p>
           <button 
             @click="refreshFeatured"
             class="inline-block bg-primary-600 text-white px-6 py-2 rounded-lg hover:bg-primary-700 transition-colors"

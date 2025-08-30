@@ -7,11 +7,13 @@ import type {
   Category,
   CategoryWithChildren,
   ProductFilters,
-  Translations,
-  StockStatus,
-  LanguageCode,
-  ProductSortOption
-} from './index'
+  Translations
+} from './database'
+
+// Define these types locally to avoid circular imports
+export type LanguageCode = 'es' | 'en' | 'ro' | 'ru'
+export type ProductSortOption = 'name' | 'price_asc' | 'price_desc' | 'newest' | 'featured' | 'created'
+export type StockStatus = 'in_stock' | 'low_stock' | 'out_of_stock'
 
 // =============================================
 // TYPE GUARDS

@@ -9,6 +9,7 @@ export interface Translations {
   en: string
   ro?: string
   ru?: string
+  [key: string]: string | undefined  // Allow index signature for compatibility
 }
 
 // =============================================
@@ -29,14 +30,11 @@ export interface Category {
 export interface CategoryWithChildren extends Category {
   children?: CategoryWithChildren[]
   productCount: number
+  // Convenience properties for templates  
+  name: Translations
+  icon?: string
 }
 
-export interface CategoryFilter {
-  id: number
-  name: string
-  count: number
-  children?: CategoryFilter[]
-}
 
 // =============================================
 // PRODUCT TYPES
@@ -114,6 +112,14 @@ export interface ProductFilters {
 export interface PriceRange {
   min: number
   max: number
+}
+
+export interface CategoryFilter {
+  id: number
+  name: Translations
+  slug: string
+  productCount: number
+  children?: CategoryFilter[]
 }
 
 export interface AttributeFilter {

@@ -13,7 +13,7 @@
         data-testid="toast"
         role="alert"
         aria-live="polite"
-        class="fixed top-4 right-4 z-50 max-w-sm w-full bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden"
+        class="fixed top-4 right-4 z-50 max-w-sm w-full bg-white dark:bg-gray-800 shadow-lg rounded-lg pointer-events-auto ring-1 ring-black dark:ring-gray-600 ring-opacity-5 overflow-hidden"
       >
         <div class="p-4">
           <div class="flex items-start">
@@ -86,8 +86,8 @@
             </div>
             
             <div class="ml-3 w-0 flex-1 pt-0.5">
-              <p class="text-sm font-medium text-gray-900">{{ title }}</p>
-              <p v-if="message" class="mt-1 text-sm text-gray-500">{{ message }}</p>
+              <p class="text-sm font-medium text-gray-900 dark:text-white">{{ title }}</p>
+              <p v-if="message" class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ message }}</p>
               
               <!-- Action Button -->
               <div v-if="actionText && actionHandler" class="mt-3">
@@ -105,7 +105,7 @@
               <button
                 @click="close"
                 data-testid="toast-close-button"
-                class="bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                class="bg-white dark:bg-gray-800 rounded-md inline-flex text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
               >
                 <span class="sr-only">Close</span>
                 <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">

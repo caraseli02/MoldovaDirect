@@ -62,7 +62,7 @@ export default defineEventHandler(async (event) => {
         attributes,
         is_active,
         created_at,
-        categories!inner (
+        categories (
           id,
           slug,
           name_translations
@@ -137,7 +137,7 @@ export default defineEventHandler(async (event) => {
             attributes,
             is_active,
             created_at,
-            categories!inner (
+            categories (
               id,
               slug,
               name_translations
@@ -161,7 +161,7 @@ export default defineEventHandler(async (event) => {
             attributes,
             is_active,
             created_at,
-            categories!inner (
+            categories (
               id,
               slug,
               name_translations
@@ -207,11 +207,34 @@ export default defineEventHandler(async (event) => {
         break
     }
 
-    // Get total count for pagination
-    const { count } = await supabase
+    // Get total count for pagination with same filters
+    let countQueryBuilder = supabase
       .from('products')
       .select('*', { count: 'exact', head: true })
       .eq('is_active', true)
+
+    // Apply same filters for count
+    if (category) {
+      countQueryBuilder = countQueryBuilder.eq('categories.slug', category)
+    }
+    if (priceMin !== undefined) {
+      countQueryBuilder = countQueryBuilder.gte('price_eur', priceMin)
+    }
+    if (priceMax !== undefined) {
+      countQueryBuilder = countQueryBuilder.lte('price_eur', priceMax)
+    }
+    if (inStock === true) {
+      countQueryBuilder = countQueryBuilder.gt('stock_quantity', 0)
+    }
+    
+    // For search results, use the filtered count
+    let totalCount = 0
+    if (search && allProductsForSearch) {
+      totalCount = allProductsForSearch.length
+    } else {
+      const { count } = await countQueryBuilder
+      totalCount = count || 0
+    }
 
     // Apply pagination
     const offset = (page - 1) * limit
@@ -246,11 +269,11 @@ export default defineEventHandler(async (event) => {
         isPrimary: img.is_primary || index === 0
       })) : [],
       primaryImage: product.images?.[0]?.url || product.images?.[0] || '/placeholder-product.jpg',
-      category: {
+      category: product.categories ? {
         id: product.categories.id,
         slug: product.categories.slug,
         name: product.categories.name_translations
-      },
+      } : null,
       // Extract attributes for display
       origin: product.attributes?.origin,
       volume: product.attributes?.volume ? parseInt(product.attributes.volume) : null,
@@ -262,14 +285,14 @@ export default defineEventHandler(async (event) => {
     })) || []
 
     // Calculate pagination info
-    const totalPages = Math.ceil((count || 0) / limit)
+    const totalPages = Math.ceil(totalCount / limit)
 
     return {
       products: transformedProducts,
       pagination: {
         page,
         limit,
-        total: count || 0,
+        total: totalCount,
         totalPages,
         hasNext: page < totalPages,
         hasPrev: page > 1

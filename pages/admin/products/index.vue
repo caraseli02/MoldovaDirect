@@ -3,14 +3,14 @@
     <!-- Page Header -->
     <div class="flex justify-between items-center mb-8">
       <div>
-        <h1 class="text-3xl font-bold text-gray-900">Products</h1>
-        <p class="text-gray-600">Manage your product catalog</p>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Products</h1>
+        <p class="text-gray-600 dark:text-gray-400">Manage your product catalog</p>
       </div>
       <nuxt-link
         to="/admin/products/new"
-        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 dark:bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-800"
       >
-        <svg class="h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
         </svg>
         Add Product
@@ -18,283 +18,181 @@
     </div>
 
     <!-- Filters -->
-    <div class="bg-white rounded-lg shadow mb-6">
-      <div class="p-6">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <input
-            v-model="searchQuery"
-            type="text"
-            placeholder="Search products..."
-            class="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-          
-          <select
-            v-model="selectedCategory"
-            class="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          >
-            <option value="">All Categories</option>
-            <option v-for="category in categories" :key="category.id" :value="category.id">
-              {{ getLocalizedText(category.name) }}
-            </option>
-          </select>
-          
-          <select
-            v-model="statusFilter"
-            class="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          >
-            <option value="">All Status</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-          </select>
-          
-          <select
-            v-model="stockFilter"
-            class="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          >
-            <option value="">All Stock</option>
-            <option value="in-stock">In Stock</option>
-            <option value="low-stock">Low Stock</option>
-            <option value="out-of-stock">Out of Stock</option>
-          </select>
-        </div>
-      </div>
-    </div>
+    <AdminProductFilters
+      :search="adminProductsStore.filters.search"
+      :category-id="adminProductsStore.filters.categoryId"
+      :status="adminProductsStore.filters.status"
+      :stock-level="adminProductsStore.filters.stockLevel"
+      :categories="categories"
+      :total="adminProductsStore.pagination.total"
+      :loading="adminProductsStore.loading"
+      @update-search="adminProductsStore.updateSearch"
+      @update-category="adminProductsStore.updateCategoryFilter"
+      @update-status="adminProductsStore.updateStatusFilter"
+      @update-stock="adminProductsStore.updateStockFilter"
+      @clear-filters="adminProductsStore.clearFilters"
+    />
 
     <!-- Products Table -->
-    <div class="bg-white rounded-lg shadow overflow-hidden">
-      <div v-if="pending" class="p-6">
-        <div class="animate-pulse space-y-4">
-          <div v-for="n in 5" :key="n" class="flex space-x-4">
-            <div class="w-12 h-12 bg-gray-200 rounded"></div>
-            <div class="flex-1 space-y-2">
-              <div class="h-4 bg-gray-200 rounded w-1/4"></div>
-              <div class="h-3 bg-gray-200 rounded w-1/6"></div>
-            </div>
+    <AdminProductTable
+      :products="adminProductsStore.productsWithAdminData"
+      :loading="adminProductsStore.loading"
+      :has-active-filters="adminProductsStore.hasActiveFilters"
+      :has-selected-products="adminProductsStore.hasSelectedProducts"
+      :all-visible-selected="adminProductsStore.allVisibleSelected"
+      :selected-count="adminProductsStore.selectedCount"
+      :bulk-operation-in-progress="adminProductsStore.bulkOperationInProgress"
+      :sort-by="adminProductsStore.filters.sortBy"
+      :sort-order="adminProductsStore.filters.sortOrder"
+      @toggle-product-selection="adminProductsStore.toggleProductSelection"
+      @toggle-all-visible="adminProductsStore.toggleAllVisible"
+      @clear-selection="adminProductsStore.clearSelection"
+      @update-sort="adminProductsStore.updateSort"
+      @edit-stock="handleEditStock"
+      @delete-product="handleDeleteProduct"
+      @bulk-activate="handleBulkActivate"
+      @bulk-deactivate="handleBulkDeactivate"
+      @bulk-delete="handleBulkDelete"
+    />
+
+    <!-- Pagination -->
+    <AdminPagination
+      :page="adminProductsStore.pagination.page"
+      :limit="adminProductsStore.pagination.limit"
+      :total="adminProductsStore.pagination.total"
+      :total-pages="adminProductsStore.pagination.totalPages"
+      :has-next="adminProductsStore.pagination.hasNext"
+      :has-prev="adminProductsStore.pagination.hasPrev"
+      @go-to-page="adminProductsStore.goToPage"
+      @next-page="adminProductsStore.nextPage"
+      @prev-page="adminProductsStore.prevPage"
+      @update-limit="handleUpdateLimit"
+    />
+
+    <!-- Stock Edit Modal -->
+    <div v-if="stockEditModal.show" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+      <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-gray-800">
+        <div class="mt-3">
+          <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">
+            Edit Stock for {{ stockEditModal.product?.name ? getLocalizedText(stockEditModal.product.name) : '' }}
+          </h3>
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Stock Quantity
+            </label>
+            <input
+              v-model.number="stockEditModal.quantity"
+              type="number"
+              min="0"
+              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            />
           </div>
-        </div>
-      </div>
-
-      <div v-else-if="!products?.length" class="p-12 text-center">
-        <svg class="h-12 w-12 text-gray-400 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-        </svg>
-        <h3 class="text-lg font-medium text-gray-900 mb-2">No products found</h3>
-        <p class="text-gray-600 mb-4">Get started by creating your first product</p>
-        <nuxt-link
-          to="/admin/products/new"
-          class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
-        >
-          Add Product
-        </nuxt-link>
-      </div>
-
-      <div v-else>
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
-            <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Product
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Category
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Price
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Stock
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
-            <tr v-for="product in products" :key="product.id" class="hover:bg-gray-50">
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="flex items-center">
-                  <div class="w-10 h-10 bg-gray-200 rounded-lg flex-shrink-0 flex items-center justify-center">
-                    <img
-                      v-if="product.images?.[0]"
-                      :src="product.images[0].url"
-                      :alt="getLocalizedText(product.name)"
-                      class="w-10 h-10 rounded-lg object-cover"
-                    />
-                    <svg v-else class="h-6 w-6 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                  <div class="ml-4">
-                    <div class="text-sm font-medium text-gray-900">
-                      {{ getLocalizedText(product.name) }}
-                    </div>
-                    <div class="text-sm text-gray-500">
-                      SKU: {{ product.sku || 'N/A' }}
-                    </div>
-                  </div>
-                </div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                {{ getLocalizedText(product.category?.name) }}
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                €{{ formatPrice(product.price) }}
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <span :class="[
-                  'inline-flex items-center px-2 py-1 rounded-full text-xs font-medium',
-                  getStockStatusClass(product.stockQuantity)
-                ]">
-                  {{ product.stockQuantity }}
-                </span>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <span :class="[
-                  'inline-flex items-center px-2 py-1 rounded-full text-xs font-medium',
-                  product.isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
-                ]">
-                  {{ product.isActive ? 'Active' : 'Inactive' }}
-                </span>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                <nuxt-link
-                  :to="`/products/${product.slug}`"
-                  target="_blank"
-                  class="text-gray-600 hover:text-gray-700"
-                  title="View Product"
-                >
-                  <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                  </svg>
-                </nuxt-link>
-                <nuxt-link
-                  :to="`/admin/products/${product.id}`"
-                  class="text-blue-600 hover:text-blue-700"
-                  title="Edit Product"
-                >
-                  <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                  </svg>
-                </nuxt-link>
-                <button
-                  @click="deleteProduct(product.id)"
-                  class="text-red-600 hover:text-red-700"
-                  title="Delete Product"
-                >
-                  <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                  </svg>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <!-- Pagination -->
-        <div v-if="totalPages > 1" class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
-          <div class="flex items-center justify-between">
-            <div class="flex-1 flex justify-between sm:hidden">
-              <button
-                :disabled="currentPage <= 1"
-                @click="currentPage = currentPage - 1"
-                class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Previous
-              </button>
-              <button
-                :disabled="currentPage >= totalPages"
-                @click="currentPage = currentPage + 1"
-                class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Next
-              </button>
-            </div>
-            <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-              <div>
-                <p class="text-sm text-gray-700">
-                  Showing {{ ((currentPage - 1) * 20) + 1 }} to {{ Math.min(currentPage * 20, total) }} of {{ total }} results
-                </p>
-              </div>
-              <div>
-                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
-                  <button
-                    :disabled="currentPage <= 1"
-                    @click="currentPage = currentPage - 1"
-                    class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Previous
-                  </button>
-                  <button
-                    :disabled="currentPage >= totalPages"
-                    @click="currentPage = currentPage + 1"
-                    class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Next
-                  </button>
-                </nav>
-              </div>
-            </div>
+          <div class="flex justify-end space-x-3">
+            <button
+              @click="closeStockEditModal"
+              class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-600 rounded-md hover:bg-gray-200 dark:hover:bg-gray-500"
+            >
+              Cancel
+            </button>
+            <button
+              @click="saveStockEdit"
+              :disabled="stockEditModal.saving"
+              class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:opacity-50"
+            >
+              {{ stockEditModal.saving ? 'Saving...' : 'Save' }}
+            </button>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Delete Confirmation Dialog -->
+    <UiConfirmDialog
+      :show="deleteDialog.show"
+      type="danger"
+      :title="deleteDialog.title"
+      :message="deleteDialog.message"
+      :details="deleteDialog.details"
+      confirm-text="Delete"
+      :loading="deleteDialog.loading"
+      loading-text="Deleting..."
+      @confirm="confirmDelete"
+      @cancel="cancelDelete"
+    />
+
+    <!-- Bulk Operations Progress Bar -->
+    <AdminBulkOperationsBar
+      :show="bulkOperations.show"
+      :in-progress="bulkOperations.inProgress"
+      :completed="bulkOperations.completed"
+      :error="bulkOperations.error"
+      :success="bulkOperations.success"
+      :progress="bulkOperations.progress"
+      :operation-text="bulkOperations.operationText"
+      :progress-text="bulkOperations.progressText"
+      :result-message="bulkOperations.resultMessage"
+      :result-details="bulkOperations.resultDetails"
+      :error-message="bulkOperations.errorMessage"
+      @close="closeBulkOperations"
+      @retry="retryBulkOperation"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import type { ProductWithRelations, CategoryWithChildren } from '~/types/database'
+import type { CategoryWithChildren } from '~/types/database'
 
 definePageMeta({
-  layout: 'admin'
+  layout: 'admin',
+  middleware: 'auth'
 })
 
-// Reactive state
-const searchQuery = ref('')
-const selectedCategory = ref('')
-const statusFilter = ref('')
-const stockFilter = ref('')
-const currentPage = ref(1)
+// Initialize stores
+const adminProductsStore = useAdminProductsStore()
 
 // Fetch categories
 const { data: categoriesData } = await useFetch<{ categories: CategoryWithChildren[] }>('/api/categories')
 const categories = computed(() => categoriesData.value?.categories || [])
 
-// Build query parameters
-const queryParams = computed(() => {
-  const params: any = {
-    page: currentPage.value,
-    limit: 20
-  }
-  
-  if (searchQuery.value) params.search = searchQuery.value
-  if (selectedCategory.value) params.categoryId = Number(selectedCategory.value)
-  if (statusFilter.value === 'active') params.active = true
-  if (statusFilter.value === 'inactive') params.active = false
-  if (stockFilter.value === 'in-stock') params.inStock = true
-  if (stockFilter.value === 'out-of-stock') params.outOfStock = true
-  if (stockFilter.value === 'low-stock') params.lowStock = true
-  
-  return params
+// Stock edit modal state
+const stockEditModal = ref({
+  show: false,
+  product: null as any,
+  quantity: 0,
+  saving: false
 })
 
-// Fetch products
-const { data: productsData, pending } = await useLazyFetch<{
-  products: ProductWithRelations[]
-  total: number
-  page: number
-  limit: number
-  totalPages: number
-}>('/api/products', {
-  query: queryParams
+// Delete confirmation dialog state
+const deleteDialog = ref({
+  show: false,
+  title: '',
+  message: '',
+  details: '',
+  loading: false,
+  productId: null as number | null,
+  isBulk: false
 })
 
-const products = computed(() => productsData.value?.products || [])
-const total = computed(() => productsData.value?.total || 0)
-const totalPages = computed(() => productsData.value?.totalPages || 0)
+// Bulk operations state
+const bulkOperations = ref({
+  show: false,
+  inProgress: false,
+  completed: false,
+  error: false,
+  success: false,
+  progress: 0,
+  operationText: '',
+  progressText: '',
+  resultMessage: '',
+  resultDetails: '',
+  errorMessage: '',
+  currentOperation: null as (() => Promise<void>) | null
+})
+
+// Initialize the store on mount
+onMounted(async () => {
+  await adminProductsStore.initialize()
+})
 
 // Utility functions
 const getLocalizedText = (text: Record<string, string> | null) => {
@@ -302,27 +200,228 @@ const getLocalizedText = (text: Record<string, string> | null) => {
   return text.es || Object.values(text)[0] || ''
 }
 
-const formatPrice = (price: string | number) => {
-  return Number(price).toFixed(2)
-}
-
-const getStockStatusClass = (stock: number) => {
-  if (stock > 10) return 'bg-green-100 text-green-800'
-  if (stock > 0) return 'bg-yellow-100 text-yellow-800'
-  return 'bg-red-100 text-red-800'
-}
-
-const deleteProduct = async (productId: number) => {
-  if (confirm('Are you sure you want to delete this product?')) {
-    // TODO: Implement delete functionality
-    console.log('Delete product:', productId)
+// Event handlers
+const handleEditStock = (product: any) => {
+  stockEditModal.value = {
+    show: true,
+    product,
+    quantity: product.stockQuantity,
+    saving: false
   }
 }
 
-// Watch for filter changes
-watch([searchQuery, selectedCategory, statusFilter, stockFilter], () => {
-  currentPage.value = 1
-})
+const closeStockEditModal = () => {
+  stockEditModal.value = {
+    show: false,
+    product: null,
+    quantity: 0,
+    saving: false
+  }
+}
+
+const saveStockEdit = async () => {
+  if (!stockEditModal.value.product) return
+  
+  stockEditModal.value.saving = true
+  try {
+    await adminProductsStore.updateInventory(
+      stockEditModal.value.product.id,
+      stockEditModal.value.quantity
+    )
+    closeStockEditModal()
+  } catch (error) {
+    console.error('Failed to update stock:', error)
+  } finally {
+    stockEditModal.value.saving = false
+  }
+}
+
+const handleDeleteProduct = async (productId: number) => {
+  const product = adminProductsStore.products.find(p => p.id === productId)
+  const productName = product ? getLocalizedText(product.name) : 'this product'
+  
+  deleteDialog.value = {
+    show: true,
+    title: 'Delete Product',
+    message: `Are you sure you want to delete "${productName}"?`,
+    details: 'This action cannot be undone. The product will be permanently removed from your catalog.',
+    loading: false,
+    productId,
+    isBulk: false
+  }
+}
+
+const handleBulkActivate = async () => {
+  const count = adminProductsStore.selectedCount
+  await performBulkOperation(
+    () => adminProductsStore.bulkUpdateStatus(true),
+    `Activating ${count} products...`,
+    `Successfully activated ${count} products`,
+    'activate'
+  )
+}
+
+const handleBulkDeactivate = async () => {
+  const count = adminProductsStore.selectedCount
+  await performBulkOperation(
+    () => adminProductsStore.bulkUpdateStatus(false),
+    `Deactivating ${count} products...`,
+    `Successfully deactivated ${count} products`,
+    'deactivate'
+  )
+}
+
+const handleBulkDelete = async () => {
+  const count = adminProductsStore.selectedCount
+  
+  deleteDialog.value = {
+    show: true,
+    title: 'Delete Products',
+    message: `Are you sure you want to delete ${count} selected products?`,
+    details: 'This action cannot be undone. All selected products will be permanently removed from your catalog.',
+    loading: false,
+    productId: null,
+    isBulk: true
+  }
+}
+
+const handleUpdateLimit = async (limit: number) => {
+  adminProductsStore.pagination.limit = limit
+  adminProductsStore.pagination.page = 1
+  await adminProductsStore.fetchProducts()
+}
+
+// Delete confirmation handlers
+const confirmDelete = async () => {
+  deleteDialog.value.loading = true
+  
+  try {
+    if (deleteDialog.value.isBulk) {
+      const count = adminProductsStore.selectedCount
+      await performBulkOperation(
+        () => adminProductsStore.bulkDelete(),
+        `Deleting ${count} products...`,
+        `Successfully deleted ${count} products`,
+        'delete'
+      )
+    } else if (deleteDialog.value.productId) {
+      await adminProductsStore.deleteProduct(deleteDialog.value.productId)
+    }
+    
+    deleteDialog.value.show = false
+  } catch (error) {
+    console.error('Failed to delete:', error)
+  } finally {
+    deleteDialog.value.loading = false
+  }
+}
+
+const cancelDelete = () => {
+  deleteDialog.value = {
+    show: false,
+    title: '',
+    message: '',
+    details: '',
+    loading: false,
+    productId: null,
+    isBulk: false
+  }
+}
+
+// Bulk operations handlers
+const performBulkOperation = async (
+  operation: () => Promise<void>,
+  operationText: string,
+  successMessage: string,
+  operationType: string
+) => {
+  bulkOperations.value = {
+    show: true,
+    inProgress: true,
+    completed: false,
+    error: false,
+    success: false,
+    progress: 0,
+    operationText,
+    progressText: 'Initializing...',
+    resultMessage: '',
+    resultDetails: '',
+    errorMessage: '',
+    currentOperation: operation
+  }
+
+  try {
+    // Simulate progress updates
+    const progressInterval = setInterval(() => {
+      if (bulkOperations.value.progress < 90) {
+        bulkOperations.value.progress += Math.random() * 20
+        bulkOperations.value.progressText = `Processing... ${Math.round(bulkOperations.value.progress)}%`
+      }
+    }, 200)
+
+    await operation()
+
+    clearInterval(progressInterval)
+    
+    bulkOperations.value.progress = 100
+    bulkOperations.value.inProgress = false
+    bulkOperations.value.completed = true
+    bulkOperations.value.success = true
+    bulkOperations.value.resultMessage = successMessage
+    
+    // Auto-close after 3 seconds
+    setTimeout(() => {
+      closeBulkOperations()
+    }, 3000)
+    
+  } catch (error) {
+    bulkOperations.value.inProgress = false
+    bulkOperations.value.error = true
+    bulkOperations.value.success = false
+    bulkOperations.value.errorMessage = error instanceof Error ? error.message : `Failed to ${operationType} products`
+  }
+}
+
+const closeBulkOperations = () => {
+  bulkOperations.value = {
+    show: false,
+    inProgress: false,
+    completed: false,
+    error: false,
+    success: false,
+    progress: 0,
+    operationText: '',
+    progressText: '',
+    resultMessage: '',
+    resultDetails: '',
+    errorMessage: '',
+    currentOperation: null
+  }
+}
+
+const retryBulkOperation = async () => {
+  if (bulkOperations.value.currentOperation) {
+    const operation = bulkOperations.value.currentOperation
+    const operationText = bulkOperations.value.operationText
+    
+    bulkOperations.value.error = false
+    bulkOperations.value.inProgress = true
+    bulkOperations.value.progress = 0
+    bulkOperations.value.progressText = 'Retrying...'
+    
+    try {
+      await operation()
+      bulkOperations.value.inProgress = false
+      bulkOperations.value.completed = true
+      bulkOperations.value.success = true
+      bulkOperations.value.resultMessage = 'Operation completed successfully'
+    } catch (error) {
+      bulkOperations.value.inProgress = false
+      bulkOperations.value.error = true
+      bulkOperations.value.errorMessage = error instanceof Error ? error.message : 'Operation failed'
+    }
+  }
+}
 
 // SEO
 useHead({

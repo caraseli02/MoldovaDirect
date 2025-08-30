@@ -153,17 +153,11 @@ export type {
 } from './auth'
 
 // =============================================
-// COMMONLY USED TYPE UNIONS
+// COMMONLY USED TYPE UNIONS (imported from guards to avoid circular imports)
 // =============================================
 
-// Language codes
-export type LanguageCode = 'es' | 'en' | 'ro' | 'ru'
-
-// Sort options
-export type ProductSortOption = 'name' | 'price_asc' | 'price_desc' | 'newest' | 'featured' | 'created'
-
-// Stock status
-export type StockStatus = 'in_stock' | 'low_stock' | 'out_of_stock'
+// Import and re-export commonly used types from guards
+export type { LanguageCode, ProductSortOption, StockStatus } from './guards'
 
 // Order status
 export type OrderStatus = 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'

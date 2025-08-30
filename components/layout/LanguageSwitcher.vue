@@ -39,7 +39,7 @@ const currentLocale = computed(() => {
   return locales.value.find(l => l.code === locale.value)
 })
 
-const switchLanguage = async (code: string) => {
+const switchLanguage = async (code: 'es' | 'en' | 'ro' | 'ru') => {
   await navigateTo(switchLocalePath(code))
   isOpen.value = false
 }

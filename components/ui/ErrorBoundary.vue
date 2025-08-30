@@ -1,6 +1,6 @@
 <template>
   <div v-if="hasError" class="error-boundary" data-testid="error-boundary">
-    <div class="bg-red-50 border border-red-200 rounded-lg p-6">
+    <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6">
       <div class="flex">
         <div class="flex-shrink-0">
           <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
@@ -8,12 +8,12 @@
           </svg>
         </div>
         <div class="ml-3">
-          <h3 class="text-sm font-medium text-red-800">
+          <h3 class="text-sm font-medium text-red-800 dark:text-red-300">
             {{ title || $t('cart.error.boundary.title') }}
           </h3>
-          <div class="mt-2 text-sm text-red-700">
+          <div class="mt-2 text-sm text-red-700 dark:text-red-400">
             <p>{{ message || $t('cart.error.boundary.message') }}</p>
-            <p v-if="showDetails && errorDetails" class="mt-2 font-mono text-xs bg-red-100 p-2 rounded" data-testid="error-details">
+            <p v-if="showDetails && errorDetails" class="mt-2 font-mono text-xs bg-red-100 dark:bg-red-900/30 p-2 rounded" data-testid="error-details">
               {{ errorDetails }}
             </p>
           </div>
@@ -21,7 +21,7 @@
             <button
               @click="retry"
               data-testid="error-retry-button"
-              class="bg-red-100 px-3 py-2 rounded-md text-sm font-medium text-red-800 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+              class="bg-red-100 dark:bg-red-900/30 px-3 py-2 rounded-md text-sm font-medium text-red-800 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-900/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
             >
               {{ $t('common.retry') }}
             </button>
@@ -29,7 +29,7 @@
               v-if="showDetails !== undefined"
               @click="toggleDetails"
               :data-testid="showDetails ? 'hide-details-button' : 'show-details-button'"
-              class="bg-red-100 px-3 py-2 rounded-md text-sm font-medium text-red-800 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+              class="bg-red-100 dark:bg-red-900/30 px-3 py-2 rounded-md text-sm font-medium text-red-800 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-900/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
             >
               {{ showDetails ? $t('cart.error.boundary.hideDetails') : $t('cart.error.boundary.showDetails') }}
             </button>
@@ -37,7 +37,7 @@
               v-if="fallbackAction"
               @click="fallbackAction"
               data-testid="error-fallback-button"
-              class="bg-primary-100 px-3 py-2 rounded-md text-sm font-medium text-primary-800 hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+              class="bg-primary-100 dark:bg-primary-900/30 px-3 py-2 rounded-md text-sm font-medium text-primary-800 dark:text-primary-300 hover:bg-primary-200 dark:hover:bg-primary-900/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
             >
               {{ fallbackActionText || $t('cart.error.boundary.fallback') }}
             </button>

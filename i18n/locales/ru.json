@@ -30,7 +30,12 @@
     "shipping": "Доставка",
     "tax": "Налог",
     "orderSummary": "Итог заказа",
-    "retry": "Повторить"
+    "retry": "Повторить",
+    "cancel": "Отменить",
+    "showMore": "Показать больше",
+    "showLess": "Показать меньше",
+    "swipe_to_remove": "Проведите для удаления",
+    "release_to_remove": "Отпустите для удаления"
   },
   "auth": {
     "signIn": "Войти",
@@ -85,7 +90,132 @@
     "resetPasswordInstructions": "Введите ваш новый пароль ниже.",
     "passwordResetSuccess": "Пароль успешно сброшен!",
     "resetPasswordError": "Ошибка сброса пароля. Попробуйте снова.",
-    "missingToken": "Токен сброса отсутствует. Используйте ссылку из вашего письма."
+    "missingToken": "Токен сброса отсутствует. Используйте ссылку из вашего письма.",
+    "errors": {
+      "invalidCredentials": "Неверный email или пароль",
+      "emailRequired": "Email обязателен",
+      "passwordRequired": "Пароль обязателен",
+      "accountLocked": "Аккаунт временно заблокирован на {minutes} минут",
+      "emailNotVerified": "Пожалуйста, подтвердите ваш email перед продолжением",
+      "emailExists": "Этот email уже зарегистрирован",
+      "weakPassword": "Пароль должен содержать минимум 8 символов, заглавную букву, строчную букву и цифру",
+      "passwordMismatch": "Пароли не совпадают",
+      "termsRequired": "Вы должны принять условия использования",
+      "sessionExpired": "Ваша сессия истекла. Пожалуйста, войдите снова",
+      "rateLimitExceeded": "Слишком много попыток. Попробуйте снова через {minutes} минут",
+      "tokenExpired": "Ссылка для подтверждения истекла",
+      "tokenInvalid": "Недействительная ссылка для подтверждения",
+      "userNotFound": "Пользователь не найден",
+      "emailInvalid": "Пожалуйста, введите действительный email",
+      "passwordWeak": "Пароль слишком слабый",
+      "networkError": "Ошибка сети. Проверьте подключение к интернету",
+      "serverError": "Ошибка сервера. Попробуйте позже",
+      "unknownError": "Произошла неожиданная ошибка"
+    },
+    "validation": {
+      "email": {
+        "required": "Email обязателен",
+        "invalid": "Введите действительный email",
+        "exists": "Этот email уже зарегистрирован",
+        "notFound": "Email не найден"
+      },
+      "password": {
+        "required": "Пароль обязателен",
+        "minLength": "Пароль должен содержать минимум 8 символов",
+        "uppercase": "Должен содержать хотя бы одну заглавную букву",
+        "lowercase": "Должен содержать хотя бы одну строчную букву",
+        "number": "Должен содержать хотя бы одну цифру",
+        "mismatch": "Пароли не совпадают",
+        "weak": "Пароль слишком слабый",
+        "current": "Текущий пароль обязателен"
+      },
+      "name": {
+        "required": "Полное имя обязательно",
+        "minLength": "Имя должно содержать минимум 2 символа",
+        "invalid": "Пожалуйста, введите действительное имя"
+      },
+      "phone": {
+        "invalid": "Пожалуйста, введите действительный номер телефона"
+      },
+      "terms": {
+        "required": "Вы должны принять условия использования"
+      },
+      "token": {
+        "required": "Токен подтверждения обязателен",
+        "invalid": "Недействительный токен подтверждения",
+        "expired": "Токен подтверждения истек"
+      }
+    },
+    "success": {
+      "loginSuccess": "Успешный вход! Перенаправление...",
+      "registrationSuccess": "Аккаунт успешно создан! Пожалуйста, проверьте вашу почту для подтверждения аккаунта.",
+      "emailVerified": "Email успешно подтвержден! Теперь вы можете войти в систему.",
+      "passwordResetSent": "Инструкции по сбросу пароля отправлены на ваш email.",
+      "passwordResetSuccess": "Пароль успешно сброшен! Теперь вы можете войти с новым паролем.",
+      "verificationResent": "Письмо подтверждения успешно отправлено!",
+      "logoutSuccess": "Вы успешно вышли из системы",
+      "accountCreated": "Ваш аккаунт был успешно создан",
+      "profileUpdated": "Профиль успешно обновлен",
+      "emailUpdated": "Email успешно обновлен",
+      "passwordUpdated": "Пароль успешно обновлен"
+    },
+    "messages": {
+      "loginRequired": "Пожалуйста, войдите в систему для доступа к этой странице",
+      "emailVerificationRequired": "Пожалуйста, подтвердите ваш адрес электронной почты для продолжения",
+      "checkEmail": "Пожалуйста, проверьте вашу почту для дальнейших инструкций",
+      "redirecting": "Перенаправление...",
+      "processing": "Обрабатываем ваш запрос...",
+      "loading": "Загрузка...",
+      "welcomeBack": "Добро пожаловать обратно!",
+      "accountLocked": "Ваш аккаунт был временно заблокирован из-за множественных неудачных попыток входа. Пожалуйста, попробуйте снова через {minutes} минут.",
+      "sessionExpired": "Ваша сессия истекла по соображениям безопасности. Пожалуйста, войдите снова.",
+      "verificationPending": "Мы отправили письмо подтверждения на ваш адрес. Пожалуйста, проверьте вашу почту и нажмите на ссылку подтверждения.",
+      "passwordResetInstructions": "Введите ваш адрес электронной почты, и мы отправим вам инструкции для сброса пароля.",
+      "newPasswordInstructions": "Пожалуйста, введите ваш новый пароль. Убедитесь, что он надежный и безопасный.",
+      "alreadyVerified": "Ваш email уже подтвержден. Вы можете войти в систему сейчас.",
+      "resendAvailable": "Не получили письмо? Вы можете запросить новое.",
+      "securityNotice": "Для вашей безопасности мы вышли из всех устройств."
+    },
+    "placeholders": {
+      "email": "Введите ваш адрес электронной почты",
+      "password": "Введите ваш пароль",
+      "newPassword": "Введите новый пароль",
+      "confirmPassword": "Подтвердите ваш пароль",
+      "fullName": "Введите ваше полное имя",
+      "phone": "Введите ваш номер телефона (необязательно)"
+    },
+    "buttons": {
+      "signIn": "Войти",
+      "signUp": "Регистрация",
+      "signOut": "Выйти",
+      "createAccount": "Создать Аккаунт",
+      "resetPassword": "Сбросить Пароль",
+      "sendResetEmail": "Отправить Инструкции",
+      "verifyEmail": "Подтвердить Email",
+      "resendVerification": "Отправить Подтверждение Повторно",
+      "backToLogin": "Вернуться к Входу",
+      "continueToAccount": "Перейти к Аккаунту",
+      "tryAgain": "Попробовать Снова",
+      "cancel": "Отменить",
+      "confirm": "Подтвердить",
+      "save": "Сохранить Изменения",
+      "update": "Обновить"
+    },
+    "labels": {
+      "email": "Адрес Электронной Почты",
+      "password": "Пароль",
+      "newPassword": "Новый Пароль",
+      "currentPassword": "Текущий Пароль",
+      "confirmPassword": "Подтвердить Пароль",
+      "fullName": "Полное Имя",
+      "firstName": "Имя",
+      "lastName": "Фамилия",
+      "phone": "Номер Телефона",
+      "rememberMe": "Запомнить меня на 30 дней",
+      "acceptTerms": "Я принимаю Условия Использования и Политику Конфиденциальности",
+      "language": "Предпочитаемый Язык",
+      "notifications": "Уведомления по Email"
+    }
   },
   "account": {
     "dashboard": "Панель",
@@ -96,7 +226,12 @@
     "totalOrders": "Всего заказов",
     "wishlistItems": "Товары в списке желаний",
     "recentOrders": "Недавние заказы",
-    "noOrdersYet": "У вас пока нет заказов"
+    "noOrdersYet": "У вас пока нет заказов",
+    "sections": {
+      "admin": "Админ",
+      "adminUser": "Пользователь-админ",
+      "administrator": "Администратор"
+    }
   },
   "home": {
     "hero": {
@@ -236,6 +371,317 @@
       "priceChanged": "Цена обновлена",
       "itemUnavailable": "Товар недоступен",
       "sessionExpired": "Сессия истекла"
+    }
+  },
+  "admin": {
+    "navigation": {
+      "dashboard": "Панель управления",
+      "products": "Товары",
+      "orders": "Заказы",
+      "users": "Пользователи",
+      "analytics": "Аналитика"
+    },
+    "dashboard": {
+      "title": "Панель управления",
+      "welcome": "Добро пожаловать обратно! Вот что происходит с вашим магазином.",
+      "autoRefresh": "Автообновление",
+      "refreshAll": "Обновить все",
+      "lastUpdated": "Последнее обновление: {time}",
+      "refresh": "Обновить",
+      "quickActions": "Быстрые действия",
+      "criticalAlerts": "Критические оповещения",
+      "systemStatus": "Статус системы",
+      "stats": {
+        "totalProducts": "Всего товаров",
+        "activeProducts": "{count} активных",
+        "lowStockProducts": "{count} товаров с низким запасом",
+        "totalUsers": "Всего пользователей",
+        "activeUsers": "{count} активных",
+        "newUsersToday": "{count} новых сегодня",
+        "totalOrders": "Всего заказов",
+        "conversionRate": "{rate} конверсия",
+        "totalRevenue": "Общий доход",
+        "revenueToday": "{amount} сегодня"
+      },
+      "quickActions": {
+        "addNewProduct": "Добавить новый товар",
+        "viewOrders": "Посмотреть заказы",
+        "manageUsers": "Управлять пользователями"
+      },
+      "systemStatus": {
+        "database": "База данных",
+        "api": "API",
+        "lastBackup": "Последняя резервная копия",
+        "online": "Онлайн",
+        "operational": "Работает",
+        "offline": "Не в сети",
+        "error": "Ошибка",
+        "hoursAgo": "{hours} часов назад"
+      },
+      "recentActivity": {
+        "title": "Недавняя активность",
+        "noActivity": "Нет недавней активности",
+        "activityDescription": "Активность будет появляться здесь, когда пользователи взаимодействуют с вашим магазином",
+        "justNow": "Только что",
+        "minutesAgo": "{minutes}м назад",
+        "hoursAgo": "{hours}ч назад",
+        "daysAgo": "{days}д назад",
+        "types": {
+          "userRegistration": "Пользователь",
+          "newOrder": "Заказ",
+          "lowStock": "Уведомление о запасах",
+          "productUpdate": "Товар"
+        }
+      },
+      "errors": {
+        "loadingData": "Ошибка загрузки данных панели",
+        "tryAgain": "Пожалуйста, попробуйте снова"
+      }
+    },
+    "products": {
+      "title": "Товары",
+      "subtitle": "Управляйте каталогом товаров",
+      "addProduct": "Добавить товар",
+      "editProduct": "Редактировать товар",
+      "deleteProduct": "Удалить товар",
+      "bulkActions": "Массовые действия",
+      "selectAll": "Выбрать все",
+      "deselectAll": "Отменить выбор",
+      "selectedCount": "{count} выбрано",
+      "clearSelection": "Очистить выбор",
+      "filters": {
+        "search": "Поиск товаров...",
+        "category": "Категория",
+        "allCategories": "Все категории",
+        "status": "Статус",
+        "allStatuses": "Все статусы",
+        "active": "Активный",
+        "inactive": "Неактивный",
+        "stockLevel": "Уровень запасов",
+        "allStock": "Все запасы",
+        "inStock": "В наличии",
+        "lowStock": "Низкий запас",
+        "outOfStock": "Нет в наличии",
+        "clearFilters": "Очистить фильтры",
+        "resultsCount": "Найдено {count} результатов"
+      },
+      "table": {
+        "name": "Название",
+        "sku": "Артикул",
+        "category": "Категория",
+        "price": "Цена",
+        "stock": "Запас",
+        "status": "Статус",
+        "actions": "Действия",
+        "edit": "Редактировать",
+        "delete": "Удалить",
+        "editStock": "Редактировать запас",
+        "noProducts": "Товары не найдены",
+        "noProductsMessage": "Создайте свой первый товар, чтобы начать"
+      },
+      "form": {
+        "basicInformation": "Основная информация",
+        "productName": "Название товара",
+        "productNameRequired": "Название товара обязательно",
+        "sku": "Артикул",
+        "skuRequired": "Артикул обязателен",
+        "category": "Категория",
+        "categoryRequired": "Категория обязательна",
+        "selectCategory": "Выберите категорию",
+        "description": "Описание",
+        "pricing": "Цены",
+        "price": "Цена (EUR)",
+        "priceRequired": "Цена обязательна",
+        "salePrice": "Цена со скидкой (EUR)",
+        "inventory": "Инвентарь",
+        "stockQuantity": "Количество на складе",
+        "stockRequired": "Количество на складе обязательно",
+        "lowStockThreshold": "Порог низкого запаса",
+        "trackInventory": "Отслеживать инвентарь",
+        "allowBackorders": "Разрешить предзаказы",
+        "media": "Медиа",
+        "productImages": "Изображения товара",
+        "dragImages": "Перетащите изображения сюда или нажмите для загрузки",
+        "maxImages": "Максимум 5 изображений",
+        "supportedFormats": "Поддерживаемые форматы: JPG, PNG, WebP",
+        "maxFileSize": "Максимальный размер файла: 5МБ",
+        "settings": "Настройки",
+        "featured": "Рекомендуемый товар",
+        "status": "Статус",
+        "active": "Активный",
+        "inactive": "Неактивный",
+        "metaData": "SEO и мета-данные",
+        "metaTitle": "Мета-заголовок",
+        "metaDescription": "Мета-описание",
+        "save": "Сохранить товар",
+        "saving": "Сохранение...",
+        "cancel": "Отменить",
+        "errors": {
+          "saveFailed": "Не удалось сохранить товар",
+          "invalidData": "Пожалуйста, проверьте данные формы",
+          "networkError": "Произошла ошибка сети"
+        }
+      },
+      "stockModal": {
+        "title": "Редактировать запас для {product}",
+        "stockQuantity": "Количество на складе",
+        "cancel": "Отменить",
+        "save": "Сохранить запас",
+        "saving": "Сохранение..."
+      },
+      "bulkOperations": {
+        "activate": "Активировать выбранные",
+        "deactivate": "Деактивировать выбранные",
+        "delete": "Удалить выбранные",
+        "confirmDelete": "Вы уверены, что хотите удалить {count} товаров?",
+        "confirmDeleteSingle": "Вы уверены, что хотите удалить этот товар?",
+        "deleteWarning": "Это действие нельзя отменить.",
+        "operationInProgress": "Операция выполняется..."
+      },
+      "pagination": {
+        "showing": "Показано с {start} по {end} из {total} товаров",
+        "previous": "Предыдущая",
+        "next": "Следующая",
+        "page": "Страница {page}",
+        "perPage": "На странице",
+        "goToPage": "Перейти на страницу {page}"
+      },
+      "success": {
+        "productSaved": "Товар сохранен успешно",
+        "productDeleted": "Товар удален успешно",
+        "stockUpdated": "Запас обновлен успешно",
+        "bulkActivated": "{count} товаров активировано",
+        "bulkDeactivated": "{count} товаров деактивировано",
+        "bulkDeleted": "{count} товаров удалено"
+      },
+      "errors": {
+        "loadFailed": "Не удалось загрузить товары",
+        "saveFailed": "Не удалось сохранить товар",
+        "deleteFailed": "Не удалось удалить товар",
+        "stockUpdateFailed": "Не удалось обновить запас",
+        "bulkOperationFailed": "Массовая операция не удалась"
+      }
+    },
+    "orders": {
+      "title": "Заказы",
+      "subtitle": "Управление заказами клиентов",
+      "viewOrder": "Посмотреть заказ",
+      "editOrder": "Редактировать заказ",
+      "deleteOrder": "Удалить заказ",
+      "orderNumber": "Заказ #{number}",
+      "customer": "Клиент",
+      "total": "Итого",
+      "status": "Статус",
+      "date": "Дата",
+      "actions": "Действия",
+      "statuses": {
+        "pending": "В ожидании",
+        "processing": "Обрабатывается",
+        "shipped": "Отправлено",
+        "delivered": "Доставлено",
+        "cancelled": "Отменено",
+        "refunded": "Возвращено"
+      }
+    },
+    "users": {
+      "title": "Пользователи",
+      "subtitle": "Управление учетными записями пользователей",
+      "viewUser": "Посмотреть пользователя",
+      "editUser": "Редактировать пользователя",
+      "deleteUser": "Удалить пользователя",
+      "userId": "ID пользователя",
+      "name": "Имя",
+      "email": "Email",
+      "role": "Роль",
+      "status": "Статус",
+      "registered": "Зарегистрирован",
+      "lastLogin": "Последний вход",
+      "actions": "Действия",
+      "roles": {
+        "admin": "Администратор",
+        "user": "Клиент",
+        "manager": "Менеджер"
+      },
+      "statuses": {
+        "active": "Активный",
+        "inactive": "Неактивный",
+        "banned": "Заблокированный"
+      }
+    },
+    "analytics": {
+      "title": "Аналитика",
+      "subtitle": "Просмотр производительности магазина",
+      "revenue": "Доход",
+      "orders": "Заказы",
+      "customers": "Клиенты",
+      "products": "Товары",
+      "conversionRate": "Коэффициент конверсии",
+      "averageOrderValue": "Средняя стоимость заказа",
+      "topProducts": "Топ товары",
+      "topCategories": "Топ категории",
+      "recentSales": "Недавние продажи",
+      "performanceMetrics": "Показатели производительности"
+    },
+    "common": {
+      "save": "Сохранить",
+      "cancel": "Отменить",
+      "delete": "Удалить",
+      "edit": "Редактировать",
+      "view": "Посмотреть",
+      "create": "Создать",
+      "update": "Обновить",
+      "search": "Поиск",
+      "filter": "Фильтр",
+      "sort": "Сортировка",
+      "export": "Экспорт",
+      "import": "Импорт",
+      "loading": "Загрузка...",
+      "saving": "Сохранение...",
+      "deleting": "Удаление...",
+      "noData": "Нет доступных данных",
+      "error": "Произошла ошибка",
+      "success": "Операция завершена успешно",
+      "confirm": "Вы уверены?",
+      "yes": "Да",
+      "no": "Нет",
+      "close": "Закрыть",
+      "back": "Назад",
+      "next": "Далее",
+      "previous": "Предыдущий",
+      "showMore": "Показать больше",
+      "showLess": "Показать меньше",
+      "selectAll": "Выбрать все",
+      "deselectAll": "Отменить выбор",
+      "required": "Обязательно",
+      "optional": "Необязательно"
+    },
+    "breadcrumbs": {
+      "admin": "Админ",
+      "dashboard": "Панель",
+      "products": "Товары",
+      "newProduct": "Новый товар",
+      "editProduct": "Редактировать товар",
+      "orders": "Заказы",
+      "users": "Пользователи",
+      "analytics": "Аналитика"
+    },
+    "userMenu": {
+      "profile": "Профиль",
+      "settings": "Настройки",
+      "logout": "Выйти",
+      "adminUser": "Пользователь-админ",
+      "administrator": "Администратор"
+    },
+    "notifications": {
+      "title": "Уведомления",
+      "noNotifications": "Нет новых уведомлений",
+      "markAllRead": "Отметить все как прочитанные"
+    },
+    "autoRefresh": {
+      "enabled": "Автообновление включено",
+      "disabled": "Автообновление отключено",
+      "interval": "Обновлять каждые {minutes} минут",
+      "lastRefresh": "Последнее обновление: {time}"
     }
   }
 }

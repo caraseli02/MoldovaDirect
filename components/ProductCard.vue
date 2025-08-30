@@ -175,10 +175,11 @@ const stockStatusClass = computed(() => {
 })
 
 const stockStatusText = computed(() => {
+  const { t } = useI18n()
   const stock = props.product.stockQuantity
-  if (stock > 10) return 'En stock' // TODO: Translate
-  if (stock > 0) return `${stock} restantes`
-  return 'Agotado'
+  if (stock > 10) return t('products.filters.inStock')
+  if (stock > 0) return `${stock} ${t('products.remaining')}`
+  return t('products.outOfStock')
 })
 
 // Utility functions

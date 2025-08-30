@@ -30,9 +30,25 @@
     "test:setup": "npm run test:install && npm run test:install:deps",
     "test:ci": "playwright test --project=chromium-es --project=firefox-es",
     "test:smoke": "playwright test --grep @smoke",
-    "test:regression": "playwright test --grep @regression"
+    "test:regression": "playwright test --grep @regression",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest",
+    "test:unit:ui": "vitest --ui",
+    "test:unit:auth": "vitest run tests/unit/auth-*.test.ts tests/unit/use-auth.test.ts tests/unit/middleware-auth.test.ts",
+    "test:integration": "vitest run tests/integration/",
+    "test:integration:auth": "vitest run tests/integration/auth-*.test.ts",
+    "test:e2e:auth": "playwright test tests/e2e/auth*.spec.ts",
+    "test:e2e:auth-mobile": "playwright test tests/e2e/auth-mobile-responsive.spec.ts",
+    "test:e2e:auth-accessibility": "playwright test tests/e2e/auth-accessibility.spec.ts",
+    "test:e2e:auth-workflows": "playwright test tests/e2e/auth-email-workflows.spec.ts",
+    "test:auth:comprehensive": "tsx tests/run-auth-tests.ts",
+    "test:auth:unit": "npm run test:unit:auth",
+    "test:auth:integration": "npm run test:integration:auth",
+    "test:auth:e2e": "npm run test:e2e:auth",
+    "test:translations": "vitest run tests/unit/auth-translations.test.ts"
   },
   "dependencies": {
+    "@nuxt/icon": "^2.0.0",
     "@nuxt/image": "^1.11.0",
     "@nuxtjs/i18n": "^10.0.3",
     "@nuxtjs/tailwindcss": "^6.14.0",
@@ -51,6 +67,7 @@
     "@nuxtjs/supabase": "^1.6.0",
     "@playwright/test": "^1.54.2",
     "@vue/test-utils": "^2.4.6",
+    "jsdom": "^26.1.0",
     "playwright": "^1.54.2",
     "vitest": "^3.2.4"
   }

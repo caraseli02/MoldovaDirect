@@ -7,7 +7,8 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@nuxtjs/i18n',
     '@pinia/nuxt',
-    '@nuxt/image'
+    '@nuxt/image',
+    '@nuxt/icon'
   ],
   nitro: {
     preset: 'vercel'
@@ -16,7 +17,7 @@ export default defineNuxtConfig({
     redirectOptions: {
       login: '/auth/login',
       callback: '/auth/confirm',
-      exclude: ['/', '/products', '/products/*', '/auth/register', '/auth/forgot-password', '/auth/reset-password', '/auth/verify-email']
+      exclude: ['/', '/products', '/products/*', '/cart', '/en', '/ro', '/ru', '/en/*', '/ro/*', '/ru/*', '/auth/register', '/auth/forgot-password', '/auth/reset-password', '/auth/verify-email']
     }
   },
   runtimeConfig: {
@@ -34,7 +35,6 @@ export default defineNuxtConfig({
     ],
     defaultLocale: 'es',
     strategy: 'prefix_except_default',
-    langDir: 'locales/'
   },
   css: ['~/assets/css/main.css'],
   typescript: {
