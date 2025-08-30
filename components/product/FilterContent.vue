@@ -6,7 +6,7 @@
         {{ $t('products.filters.active') }}
       </h3>
       <div class="flex flex-wrap gap-2">
-        <FilterTag
+        <ProductFilterTag
           v-for="filter in activeFilters"
           :key="filter.id"
           :label="filter.label"
@@ -20,7 +20,7 @@
       <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-3">
         {{ $t('products.filters.categories') }}
       </h3>
-      <CategoryTree
+      <ProductCategoryTree
         :categories="availableFilters.categories"
         :selected="selectedCategories"
         @update:selected="updateCategoryFilter"
@@ -32,7 +32,7 @@
       <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-3">
         {{ $t('products.filters.priceRange') }}
       </h3>
-      <PriceRangeSlider
+      <ProductPriceRangeSlider
         :min="availableFilters.priceRange.min"
         :max="availableFilters.priceRange.max"
         :value="[localFilters.priceMin || availableFilters.priceRange.min, localFilters.priceMax || availableFilters.priceRange.max]"
@@ -80,7 +80,7 @@
       <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-3">
         {{ attribute.label }}
       </h3>
-      <AttributeCheckboxGroup
+      <ProductAttributeCheckboxGroup
         :options="attribute.values"
         :selected="localFilters.attributes?.[attribute.name] || []"
         @update:selected="updateAttributeFilter(attribute.name, $event)"

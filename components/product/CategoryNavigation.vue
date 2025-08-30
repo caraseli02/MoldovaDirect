@@ -135,7 +135,7 @@
                 </NuxtLink>
 
                 <!-- Category Tree -->
-                <MobileCategoryItem
+                <ProductMobileCategoryItem
                   v-for="category in categories"
                   :key="category.id"
                   :category="category"

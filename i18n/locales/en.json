@@ -264,7 +264,12 @@
     "totalOrders": "Total Orders",
     "wishlistItems": "Wishlist Items",
     "recentOrders": "Recent Orders",
-    "noOrdersYet": "You don't have any orders yet"
+    "noOrdersYet": "You don't have any orders yet",
+    "sections": {
+      "admin": "Admin",
+      "adminUser": "Admin User",
+      "administrator": "Administrator"
+    }
   },
   "profile": {
     "title": "Profile Settings",
@@ -630,6 +635,317 @@
       "adjustQuantity": "Adjust quantity",
       "adjustToMax": "Adjust to maximum",
       "reloadCart": "Reload cart"
+    }
+  },
+  "admin": {
+    "navigation": {
+      "dashboard": "Dashboard",
+      "products": "Products",
+      "orders": "Orders",
+      "users": "Users",
+      "analytics": "Analytics"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "welcome": "Welcome back! Here's what's happening with your store.",
+      "autoRefresh": "Auto-refresh",
+      "refreshAll": "Refresh All",
+      "lastUpdated": "Last updated: {time}",
+      "refresh": "Refresh",
+      "quickActions": "Quick Actions",
+      "criticalAlerts": "Critical Alerts",
+      "systemStatus": "System Status",
+      "stats": {
+        "totalProducts": "Total Products",
+        "activeProducts": "{count} active",
+        "lowStockProducts": "{count} products low in stock",
+        "totalUsers": "Total Users",
+        "activeUsers": "{count} active",
+        "newUsersToday": "{count} new today",
+        "totalOrders": "Total Orders",
+        "conversionRate": "{rate} conversion",
+        "totalRevenue": "Total Revenue",
+        "revenueToday": "{amount} today"
+      },
+      "quickActions": {
+        "addNewProduct": "Add New Product",
+        "viewOrders": "View Orders",
+        "manageUsers": "Manage Users"
+      },
+      "systemStatus": {
+        "database": "Database",
+        "api": "API",
+        "lastBackup": "Last Backup",
+        "online": "Online",
+        "operational": "Operational",
+        "offline": "Offline",
+        "error": "Error",
+        "hoursAgo": "{hours} hours ago"
+      },
+      "recentActivity": {
+        "title": "Recent Activity",
+        "noActivity": "No recent activity",
+        "activityDescription": "Activity will appear here as users interact with your store",
+        "justNow": "Just now",
+        "minutesAgo": "{minutes}m ago",
+        "hoursAgo": "{hours}h ago",
+        "daysAgo": "{days}d ago",
+        "types": {
+          "userRegistration": "User",
+          "newOrder": "Order",
+          "lowStock": "Stock Alert",
+          "productUpdate": "Product"
+        }
+      },
+      "errors": {
+        "loadingData": "Error loading dashboard data",
+        "tryAgain": "Please try again"
+      }
+    },
+    "products": {
+      "title": "Products",
+      "subtitle": "Manage your product catalog",
+      "addProduct": "Add Product",
+      "editProduct": "Edit Product",
+      "deleteProduct": "Delete Product",
+      "bulkActions": "Bulk Actions",
+      "selectAll": "Select All",
+      "deselectAll": "Deselect All",
+      "selectedCount": "{count} selected",
+      "clearSelection": "Clear Selection",
+      "filters": {
+        "search": "Search products...",
+        "category": "Category",
+        "allCategories": "All Categories",
+        "status": "Status",
+        "allStatuses": "All Statuses",
+        "active": "Active",
+        "inactive": "Inactive",
+        "stockLevel": "Stock Level",
+        "allStock": "All Stock",
+        "inStock": "In Stock",
+        "lowStock": "Low Stock",
+        "outOfStock": "Out of Stock",
+        "clearFilters": "Clear Filters",
+        "resultsCount": "{count} results found"
+      },
+      "table": {
+        "name": "Name",
+        "sku": "SKU",
+        "category": "Category",
+        "price": "Price",
+        "stock": "Stock",
+        "status": "Status",
+        "actions": "Actions",
+        "edit": "Edit",
+        "delete": "Delete",
+        "editStock": "Edit Stock",
+        "noProducts": "No products found",
+        "noProductsMessage": "Create your first product to get started"
+      },
+      "form": {
+        "basicInformation": "Basic Information",
+        "productName": "Product Name",
+        "productNameRequired": "Product name is required",
+        "sku": "SKU",
+        "skuRequired": "SKU is required",
+        "category": "Category",
+        "categoryRequired": "Category is required",
+        "selectCategory": "Select a category",
+        "description": "Description",
+        "pricing": "Pricing",
+        "price": "Price (EUR)",
+        "priceRequired": "Price is required",
+        "salePrice": "Sale Price (EUR)",
+        "inventory": "Inventory",
+        "stockQuantity": "Stock Quantity",
+        "stockRequired": "Stock quantity is required",
+        "lowStockThreshold": "Low Stock Threshold",
+        "trackInventory": "Track Inventory",
+        "allowBackorders": "Allow Backorders",
+        "media": "Media",
+        "productImages": "Product Images",
+        "dragImages": "Drag images here or click to upload",
+        "maxImages": "Maximum 5 images",
+        "supportedFormats": "Supported formats: JPG, PNG, WebP",
+        "maxFileSize": "Max file size: 5MB",
+        "settings": "Settings",
+        "featured": "Featured Product",
+        "status": "Status",
+        "active": "Active",
+        "inactive": "Inactive",
+        "metaData": "SEO & Meta Data",
+        "metaTitle": "Meta Title",
+        "metaDescription": "Meta Description",
+        "save": "Save Product",
+        "saving": "Saving...",
+        "cancel": "Cancel",
+        "errors": {
+          "saveFailed": "Failed to save product",
+          "invalidData": "Please check the form data",
+          "networkError": "Network error occurred"
+        }
+      },
+      "stockModal": {
+        "title": "Edit Stock for {product}",
+        "stockQuantity": "Stock Quantity",
+        "cancel": "Cancel",
+        "save": "Save Stock",
+        "saving": "Saving..."
+      },
+      "bulkOperations": {
+        "activate": "Activate Selected",
+        "deactivate": "Deactivate Selected",
+        "delete": "Delete Selected",
+        "confirmDelete": "Are you sure you want to delete {count} products?",
+        "confirmDeleteSingle": "Are you sure you want to delete this product?",
+        "deleteWarning": "This action cannot be undone.",
+        "operationInProgress": "Operation in progress..."
+      },
+      "pagination": {
+        "showing": "Showing {start} to {end} of {total} products",
+        "previous": "Previous",
+        "next": "Next",
+        "page": "Page {page}",
+        "perPage": "Per page",
+        "goToPage": "Go to page {page}"
+      },
+      "success": {
+        "productSaved": "Product saved successfully",
+        "productDeleted": "Product deleted successfully",
+        "stockUpdated": "Stock updated successfully",
+        "bulkActivated": "{count} products activated",
+        "bulkDeactivated": "{count} products deactivated",
+        "bulkDeleted": "{count} products deleted"
+      },
+      "errors": {
+        "loadFailed": "Failed to load products",
+        "saveFailed": "Failed to save product",
+        "deleteFailed": "Failed to delete product",
+        "stockUpdateFailed": "Failed to update stock",
+        "bulkOperationFailed": "Bulk operation failed"
+      }
+    },
+    "orders": {
+      "title": "Orders",
+      "subtitle": "Manage customer orders",
+      "viewOrder": "View Order",
+      "editOrder": "Edit Order",
+      "deleteOrder": "Delete Order",
+      "orderNumber": "Order #{number}",
+      "customer": "Customer",
+      "total": "Total",
+      "status": "Status",
+      "date": "Date",
+      "actions": "Actions",
+      "statuses": {
+        "pending": "Pending",
+        "processing": "Processing",
+        "shipped": "Shipped",
+        "delivered": "Delivered",
+        "cancelled": "Cancelled",
+        "refunded": "Refunded"
+      }
+    },
+    "users": {
+      "title": "Users",
+      "subtitle": "Manage user accounts",
+      "viewUser": "View User",
+      "editUser": "Edit User",
+      "deleteUser": "Delete User",
+      "userId": "User ID",
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "status": "Status",
+      "registered": "Registered",
+      "lastLogin": "Last Login",
+      "actions": "Actions",
+      "roles": {
+        "admin": "Administrator",
+        "user": "Customer",
+        "manager": "Manager"
+      },
+      "statuses": {
+        "active": "Active",
+        "inactive": "Inactive",
+        "banned": "Banned"
+      }
+    },
+    "analytics": {
+      "title": "Analytics",
+      "subtitle": "View store performance",
+      "revenue": "Revenue",
+      "orders": "Orders",
+      "customers": "Customers",
+      "products": "Products",
+      "conversionRate": "Conversion Rate",
+      "averageOrderValue": "Average Order Value",
+      "topProducts": "Top Products",
+      "topCategories": "Top Categories",
+      "recentSales": "Recent Sales",
+      "performanceMetrics": "Performance Metrics"
+    },
+    "common": {
+      "save": "Save",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "edit": "Edit",
+      "view": "View",
+      "create": "Create",
+      "update": "Update",
+      "search": "Search",
+      "filter": "Filter",
+      "sort": "Sort",
+      "export": "Export",
+      "import": "Import",
+      "loading": "Loading...",
+      "saving": "Saving...",
+      "deleting": "Deleting...",
+      "noData": "No data available",
+      "error": "An error occurred",
+      "success": "Operation completed successfully",
+      "confirm": "Are you sure?",
+      "yes": "Yes",
+      "no": "No",
+      "close": "Close",
+      "back": "Back",
+      "next": "Next",
+      "previous": "Previous",
+      "showMore": "Show More",
+      "showLess": "Show Less",
+      "selectAll": "Select All",
+      "deselectAll": "Deselect All",
+      "required": "Required",
+      "optional": "Optional"
+    },
+    "breadcrumbs": {
+      "admin": "Admin",
+      "dashboard": "Dashboard",
+      "products": "Products",
+      "newProduct": "New Product",
+      "editProduct": "Edit Product",
+      "orders": "Orders",
+      "users": "Users",
+      "analytics": "Analytics"
+    },
+    "userMenu": {
+      "profile": "Profile",
+      "settings": "Settings",
+      "logout": "Logout",
+      "adminUser": "Admin User",
+      "administrator": "Administrator"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "noNotifications": "No new notifications",
+      "markAllRead": "Mark all as read"
+    },
+    "autoRefresh": {
+      "enabled": "Auto-refresh enabled",
+      "disabled": "Auto-refresh disabled",
+      "interval": "Refresh every {minutes} minutes",
+      "lastRefresh": "Last refresh: {time}"
     }
   }
 }

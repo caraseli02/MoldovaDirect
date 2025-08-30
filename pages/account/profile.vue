@@ -268,7 +268,7 @@
     </div>
 
     <!-- Address Form Modal -->
-    <AddressFormModal
+    <ProfileAddressFormModal
       v-if="showAddressForm"
       :address="editingAddress"
       @save="handleAddressSave"
@@ -276,7 +276,7 @@
     />
 
     <!-- Delete Account Confirmation Modal -->
-    <DeleteAccountModal
+    <ProfileDeleteAccountModal
       v-if="showDeleteConfirmation"
       @confirm="handleDeleteAccount"
       @close="showDeleteConfirmation = false"
@@ -286,8 +286,8 @@
 
 <script setup lang="ts">
 // Component imports
-import AddressFormModal from '~/components/modals/AddressFormModal.vue'
-import DeleteAccountModal from '~/components/modals/DeleteAccountModal.vue'
+import AddressFormModal from '~/components/profile/AddressFormModal.vue'
+import DeleteAccountModal from '~/components/profile/DeleteAccountModal.vue'
 
 // Apply authentication middleware
 definePageMeta({
@@ -513,7 +513,8 @@ const handleFileUpload = async (event: Event) => {
     $toast.success(t('profile.success.pictureUpdated'))
   } catch (error) {
     console.error('Error uploading profile picture:', error)
-    $toast.error(t('profile.errors.uploadFailed'))
+    const errorMessage = error instanceof Error ? error.message : 'An error occurred'
+    $toast.error(t('profile.errors.uploadFailed') + ': ' + errorMessage)
   } finally {
     isLoading.value = false
   }

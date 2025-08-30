@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Category Navigation -->
-    <CategoryNavigation
+    <ProductCategoryNavigation
       :categories="categoriesTree"
       :current-category="currentCategory"
       :show-product-count="true"

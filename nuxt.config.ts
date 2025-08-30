@@ -7,13 +7,8 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@nuxtjs/i18n',
     '@pinia/nuxt',
-    '@nuxt/image'
-  ],
-  components: [
-    {
-      path: '~/components',
-      pathPrefix: false,
-    }
+    '@nuxt/image',
+    '@nuxt/icon'
   ],
   nitro: {
     preset: 'vercel'

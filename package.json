@@ -48,6 +48,7 @@
     "test:translations": "vitest run tests/unit/auth-translations.test.ts"
   },
   "dependencies": {
+    "@nuxt/icon": "^2.0.0",
     "@nuxt/image": "^1.11.0",
     "@nuxtjs/i18n": "^10.0.3",
     "@nuxtjs/tailwindcss": "^6.14.0",

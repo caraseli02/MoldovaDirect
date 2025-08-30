@@ -19,7 +19,7 @@
           </button>
         </div>
         
-        <FilterContent 
+        <ProductFilterContent 
           :filters="localFilters"
           :available-filters="availableFilters"
           @update:filters="updateFilters"
@@ -77,7 +77,7 @@
 
           <!-- Mobile Filter Content -->
           <div class="overflow-y-auto max-h-[calc(80vh-80px)] p-4">
-            <FilterContent 
+            <ProductFilterContent 
               :filters="localFilters"
               :available-filters="availableFilters"
               @update:filters="updateFilters"

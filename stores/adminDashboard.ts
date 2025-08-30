@@ -1,0 +1,279 @@
+/**
+ * Admin Dashboard Store using Pinia
+ * 
+ * Requirements addressed:
+ * - 3.1: Dashboard statistics management and display
+ * - 6.4: Real-time data refresh functionality
+ * 
+ * Manages:
+ * - Dashboard statistics (products, users, orders, revenue)
+ * - Recent activity feed
+ * - Real-time data refresh
+ * - Loading and error states
+ */
+
+import { defineStore } from 'pinia'
+import type { DashboardStats } from '~/server/api/admin/dashboard/stats.get'
+import type { ActivityItem } from '~/server/api/admin/dashboard/activity.get'
+
+interface AdminDashboardState {
+  stats: DashboardStats | null
+  recentActivity: ActivityItem[]
+  loading: boolean
+  statsLoading: boolean
+  activityLoading: boolean
+  error: string | null
+  lastRefresh: Date | null
+  autoRefreshInterval: number | null
+}
+
+export const useAdminDashboardStore = defineStore('adminDashboard', {
+  state: (): AdminDashboardState => ({
+    stats: null,
+    recentActivity: [],
+    loading: false,
+    statsLoading: false,
+    activityLoading: false,
+    error: null,
+    lastRefresh: null,
+    autoRefreshInterval: null
+  }),
+
+  getters: {
+    /**
+     * Check if any data is currently loading
+     */
+    isLoading: (state): boolean => {
+      return state.loading || state.statsLoading || state.activityLoading
+    },
+
+    /**
+     * Get formatted revenue with currency
+     */
+    formattedRevenue: (state): string => {
+      if (!state.stats) return '€0.00'
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'EUR'
+      }).format(state.stats.revenue)
+    },
+
+    /**
+     * Get formatted today's revenue
+     */
+    formattedRevenueToday: (state): string => {
+      if (!state.stats) return '€0.00'
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'EUR'
+      }).format(state.stats.revenueToday)
+    },
+
+    /**
+     * Get conversion rate as percentage string
+     */
+    formattedConversionRate: (state): string => {
+      if (!state.stats) return '0%'
+      return `${state.stats.conversionRate.toFixed(1)}%`
+    },
+
+    /**
+     * Check if data needs refresh (older than 5 minutes)
+     */
+    needsRefresh: (state): boolean => {
+      if (!state.lastRefresh) return true
+      const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000)
+      return state.lastRefresh < fiveMinutesAgo
+    },
+
+    /**
+     * Get time since last refresh
+     */
+    timeSinceRefresh: (state): string => {
+      if (!state.lastRefresh) return 'Never'
+      
+      const now = new Date()
+      const diff = now.getTime() - state.lastRefresh.getTime()
+      const minutes = Math.floor(diff / (1000 * 60))
+      
+      if (minutes < 1) return 'Just now'
+      if (minutes === 1) return '1 minute ago'
+      return `${minutes} minutes ago`
+    },
+
+    /**
+     * Get recent activities grouped by type
+     */
+    activitiesByType: (state) => {
+      const grouped: Record<string, ActivityItem[]> = {}
+      
+      state.recentActivity.forEach(activity => {
+        if (!grouped[activity.type]) {
+          grouped[activity.type] = []
+        }
+        grouped[activity.type].push(activity)
+      })
+      
+      return grouped
+    },
+
+    /**
+     * Get critical alerts (low stock, failed orders, etc.)
+     */
+    criticalAlerts: (state): ActivityItem[] => {
+      return state.recentActivity.filter(activity => 
+        activity.type === 'low_stock'
+      )
+    }
+  },
+
+  actions: {
+    /**
+     * Fetch dashboard statistics
+     */
+    async fetchStats() {
+      this.statsLoading = true
+      this.error = null
+      
+      try {
+        const response = await $fetch<{ success: boolean; data: DashboardStats }>('/api/admin/dashboard/stats')
+        
+        if (response.success) {
+          this.stats = response.data
+          this.lastRefresh = new Date()
+        } else {
+          throw new Error('Failed to fetch dashboard statistics')
+        }
+      } catch (error) {
+        this.error = error instanceof Error ? error.message : 'Failed to fetch statistics'
+        console.error('Error fetching dashboard stats:', error)
+      } finally {
+        this.statsLoading = false
+      }
+    },
+
+    /**
+     * Fetch recent activity
+     */
+    async fetchActivity() {
+      this.activityLoading = true
+      
+      try {
+        const response = await $fetch<{ success: boolean; data: ActivityItem[] }>('/api/admin/dashboard/activity')
+        
+        if (response.success) {
+          this.recentActivity = response.data
+        } else {
+          throw new Error('Failed to fetch recent activity')
+        }
+      } catch (error) {
+        console.error('Error fetching dashboard activity:', error)
+        // Don't set error for activity as it's not critical
+      } finally {
+        this.activityLoading = false
+      }
+    },
+
+    /**
+     * Fetch all dashboard data
+     */
+    async fetchDashboardData() {
+      this.loading = true
+      this.error = null
+      
+      try {
+        await Promise.all([
+          this.fetchStats(),
+          this.fetchActivity()
+        ])
+      } catch (error) {
+        this.error = error instanceof Error ? error.message : 'Failed to fetch dashboard data'
+      } finally {
+        this.loading = false
+      }
+    },
+
+    /**
+     * Refresh dashboard data
+     */
+    async refresh() {
+      await this.fetchDashboardData()
+    },
+
+    /**
+     * Start auto-refresh interval
+     */
+    startAutoRefresh(intervalMinutes: number = 5) {
+      this.stopAutoRefresh() // Clear any existing interval
+      
+      const intervalMs = intervalMinutes * 60 * 1000
+      this.autoRefreshInterval = window.setInterval(() => {
+        this.fetchDashboardData()
+      }, intervalMs)
+    },
+
+    /**
+     * Stop auto-refresh interval
+     */
+    stopAutoRefresh() {
+      if (this.autoRefreshInterval) {
+        clearInterval(this.autoRefreshInterval)
+        this.autoRefreshInterval = null
+      }
+    },
+
+    /**
+     * Clear all data
+     */
+    clearData() {
+      this.stats = null
+      this.recentActivity = []
+      this.error = null
+      this.lastRefresh = null
+    },
+
+    /**
+     * Clear error state
+     */
+    clearError() {
+      this.error = null
+    },
+
+    /**
+     * Update a specific stat (for real-time updates)
+     */
+    updateStat(key: keyof DashboardStats, value: any) {
+      if (this.stats) {
+        this.stats[key] = value
+        this.stats.lastUpdated = new Date().toISOString()
+      }
+    },
+
+    /**
+     * Add new activity item (for real-time updates)
+     */
+    addActivity(activity: ActivityItem) {
+      this.recentActivity.unshift(activity)
+      
+      // Keep only the 10 most recent activities
+      if (this.recentActivity.length > 10) {
+        this.recentActivity = this.recentActivity.slice(0, 10)
+      }
+    },
+
+    /**
+     * Initialize dashboard (fetch data and start auto-refresh)
+     */
+    async initialize() {
+      await this.fetchDashboardData()
+      this.startAutoRefresh(5) // Refresh every 5 minutes
+    },
+
+    /**
+     * Cleanup (stop auto-refresh)
+     */
+    cleanup() {
+      this.stopAutoRefresh()
+    }
+  }
+})

@@ -241,7 +241,12 @@
     "totalOrders": "Total de Pedidos",
     "wishlistItems": "Artículos en Lista de Deseos",
     "recentOrders": "Pedidos Recientes",
-    "noOrdersYet": "Aún no tienes pedidos"
+    "noOrdersYet": "Aún no tienes pedidos",
+    "sections": {
+      "admin": "Admin",
+      "adminUser": "Usuario Admin",
+      "administrator": "Administrador"
+    }
   },
   "profile": {
     "title": "Configuración del Perfil",
@@ -605,6 +610,317 @@
       "adjustQuantity": "Ajustar cantidad",
       "adjustToMax": "Ajustar al máximo",
       "reloadCart": "Recargar carrito"
+    }
+  },
+  "admin": {
+    "navigation": {
+      "dashboard": "Panel de Control",
+      "products": "Productos",
+      "orders": "Pedidos",
+      "users": "Usuarios",
+      "analytics": "Analíticas"
+    },
+    "dashboard": {
+      "title": "Panel de Control",
+      "welcome": "¡Bienvenido de vuelta! Aquí tienes lo que está pasando en tu tienda.",
+      "autoRefresh": "Auto-actualizar",
+      "refreshAll": "Actualizar Todo",
+      "lastUpdated": "Última actualización: {time}",
+      "refresh": "Actualizar",
+      "quickActions": "Acciones Rápidas",
+      "criticalAlerts": "Alertas Críticas",
+      "systemStatus": "Estado del Sistema",
+      "stats": {
+        "totalProducts": "Total de Productos",
+        "activeProducts": "{count} activos",
+        "lowStockProducts": "{count} productos con stock bajo",
+        "totalUsers": "Total de Usuarios",
+        "activeUsers": "{count} activos",
+        "newUsersToday": "{count} nuevos hoy",
+        "totalOrders": "Total de Pedidos",
+        "conversionRate": "{rate} conversión",
+        "totalRevenue": "Ingresos Totales",
+        "revenueToday": "{amount} hoy"
+      },
+      "quickActions": {
+        "addNewProduct": "Añadir Nuevo Producto",
+        "viewOrders": "Ver Pedidos",
+        "manageUsers": "Gestionar Usuarios"
+      },
+      "systemStatus": {
+        "database": "Base de Datos",
+        "api": "API",
+        "lastBackup": "Última Copia de Seguridad",
+        "online": "En línea",
+        "operational": "Operativo",
+        "offline": "Desconectado",
+        "error": "Error",
+        "hoursAgo": "hace {hours} horas"
+      },
+      "recentActivity": {
+        "title": "Actividad Reciente",
+        "noActivity": "Sin actividad reciente",
+        "activityDescription": "La actividad aparecerá aquí cuando los usuarios interactúen con tu tienda",
+        "justNow": "Ahora mismo",
+        "minutesAgo": "hace {minutes}m",
+        "hoursAgo": "hace {hours}h",
+        "daysAgo": "hace {days}d",
+        "types": {
+          "userRegistration": "Usuario",
+          "newOrder": "Pedido",
+          "lowStock": "Alerta de Stock",
+          "productUpdate": "Producto"
+        }
+      },
+      "errors": {
+        "loadingData": "Error al cargar datos del panel",
+        "tryAgain": "Por favor, inténtalo de nuevo"
+      }
+    },
+    "products": {
+      "title": "Productos",
+      "subtitle": "Gestiona tu catálogo de productos",
+      "addProduct": "Añadir Producto",
+      "editProduct": "Editar Producto",
+      "deleteProduct": "Eliminar Producto",
+      "bulkActions": "Acciones en Lote",
+      "selectAll": "Seleccionar Todo",
+      "deselectAll": "Deseleccionar Todo",
+      "selectedCount": "{count} seleccionados",
+      "clearSelection": "Limpiar Selección",
+      "filters": {
+        "search": "Buscar productos...",
+        "category": "Categoría",
+        "allCategories": "Todas las Categorías",
+        "status": "Estado",
+        "allStatuses": "Todos los Estados",
+        "active": "Activo",
+        "inactive": "Inactivo",
+        "stockLevel": "Nivel de Stock",
+        "allStock": "Todo el Stock",
+        "inStock": "En Stock",
+        "lowStock": "Stock Bajo",
+        "outOfStock": "Sin Stock",
+        "clearFilters": "Limpiar Filtros",
+        "resultsCount": "{count} resultados encontrados"
+      },
+      "table": {
+        "name": "Nombre",
+        "sku": "SKU",
+        "category": "Categoría",
+        "price": "Precio",
+        "stock": "Stock",
+        "status": "Estado",
+        "actions": "Acciones",
+        "edit": "Editar",
+        "delete": "Eliminar",
+        "editStock": "Editar Stock",
+        "noProducts": "No se encontraron productos",
+        "noProductsMessage": "Crea tu primer producto para empezar"
+      },
+      "form": {
+        "basicInformation": "Información Básica",
+        "productName": "Nombre del Producto",
+        "productNameRequired": "El nombre del producto es obligatorio",
+        "sku": "SKU",
+        "skuRequired": "El SKU es obligatorio",
+        "category": "Categoría",
+        "categoryRequired": "La categoría es obligatoria",
+        "selectCategory": "Selecciona una categoría",
+        "description": "Descripción",
+        "pricing": "Precios",
+        "price": "Precio (EUR)",
+        "priceRequired": "El precio es obligatorio",
+        "salePrice": "Precio de Oferta (EUR)",
+        "inventory": "Inventario",
+        "stockQuantity": "Cantidad en Stock",
+        "stockRequired": "La cantidad en stock es obligatoria",
+        "lowStockThreshold": "Umbral de Stock Bajo",
+        "trackInventory": "Seguimiento de Inventario",
+        "allowBackorders": "Permitir Pedidos Pendientes",
+        "media": "Medios",
+        "productImages": "Imágenes del Producto",
+        "dragImages": "Arrastra las imágenes aquí o haz clic para subir",
+        "maxImages": "Máximo 5 imágenes",
+        "supportedFormats": "Formatos soportados: JPG, PNG, WebP",
+        "maxFileSize": "Tamaño máximo de archivo: 5MB",
+        "settings": "Configuración",
+        "featured": "Producto Destacado",
+        "status": "Estado",
+        "active": "Activo",
+        "inactive": "Inactivo",
+        "metaData": "SEO y Meta Datos",
+        "metaTitle": "Meta Título",
+        "metaDescription": "Meta Descripción",
+        "save": "Guardar Producto",
+        "saving": "Guardando...",
+        "cancel": "Cancelar",
+        "errors": {
+          "saveFailed": "Error al guardar el producto",
+          "invalidData": "Por favor revisa los datos del formulario",
+          "networkError": "Error de red ocurrido"
+        }
+      },
+      "stockModal": {
+        "title": "Editar Stock para {product}",
+        "stockQuantity": "Cantidad en Stock",
+        "cancel": "Cancelar",
+        "save": "Guardar Stock",
+        "saving": "Guardando..."
+      },
+      "bulkOperations": {
+        "activate": "Activar Seleccionados",
+        "deactivate": "Desactivar Seleccionados",
+        "delete": "Eliminar Seleccionados",
+        "confirmDelete": "¿Estás seguro de que quieres eliminar {count} productos?",
+        "confirmDeleteSingle": "¿Estás seguro de que quieres eliminar este producto?",
+        "deleteWarning": "Esta acción no se puede deshacer.",
+        "operationInProgress": "Operación en progreso..."
+      },
+      "pagination": {
+        "showing": "Mostrando {start} a {end} de {total} productos",
+        "previous": "Anterior",
+        "next": "Siguiente",
+        "page": "Página {page}",
+        "perPage": "Por página",
+        "goToPage": "Ir a la página {page}"
+      },
+      "success": {
+        "productSaved": "Producto guardado exitosamente",
+        "productDeleted": "Producto eliminado exitosamente",
+        "stockUpdated": "Stock actualizado exitosamente",
+        "bulkActivated": "{count} productos activados",
+        "bulkDeactivated": "{count} productos desactivados",
+        "bulkDeleted": "{count} productos eliminados"
+      },
+      "errors": {
+        "loadFailed": "Error al cargar productos",
+        "saveFailed": "Error al guardar producto",
+        "deleteFailed": "Error al eliminar producto",
+        "stockUpdateFailed": "Error al actualizar stock",
+        "bulkOperationFailed": "Error en operación en lote"
+      }
+    },
+    "orders": {
+      "title": "Pedidos",
+      "subtitle": "Gestiona los pedidos de clientes",
+      "viewOrder": "Ver Pedido",
+      "editOrder": "Editar Pedido",
+      "deleteOrder": "Eliminar Pedido",
+      "orderNumber": "Pedido #{number}",
+      "customer": "Cliente",
+      "total": "Total",
+      "status": "Estado",
+      "date": "Fecha",
+      "actions": "Acciones",
+      "statuses": {
+        "pending": "Pendiente",
+        "processing": "Procesando",
+        "shipped": "Enviado",
+        "delivered": "Entregado",
+        "cancelled": "Cancelado",
+        "refunded": "Reembolsado"
+      }
+    },
+    "users": {
+      "title": "Usuarios",
+      "subtitle": "Gestiona las cuentas de usuario",
+      "viewUser": "Ver Usuario",
+      "editUser": "Editar Usuario",
+      "deleteUser": "Eliminar Usuario",
+      "userId": "ID de Usuario",
+      "name": "Nombre",
+      "email": "Email",
+      "role": "Rol",
+      "status": "Estado",
+      "registered": "Registrado",
+      "lastLogin": "Último Acceso",
+      "actions": "Acciones",
+      "roles": {
+        "admin": "Administrador",
+        "user": "Cliente",
+        "manager": "Gerente"
+      },
+      "statuses": {
+        "active": "Activo",
+        "inactive": "Inactivo",
+        "banned": "Prohibido"
+      }
+    },
+    "analytics": {
+      "title": "Analíticas",
+      "subtitle": "Ver el rendimiento de la tienda",
+      "revenue": "Ingresos",
+      "orders": "Pedidos",
+      "customers": "Clientes",
+      "products": "Productos",
+      "conversionRate": "Tasa de Conversión",
+      "averageOrderValue": "Valor Promedio de Pedido",
+      "topProducts": "Productos Principales",
+      "topCategories": "Categorías Principales",
+      "recentSales": "Ventas Recientes",
+      "performanceMetrics": "Métricas de Rendimiento"
+    },
+    "common": {
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "delete": "Eliminar",
+      "edit": "Editar",
+      "view": "Ver",
+      "create": "Crear",
+      "update": "Actualizar",
+      "search": "Buscar",
+      "filter": "Filtrar",
+      "sort": "Ordenar",
+      "export": "Exportar",
+      "import": "Importar",
+      "loading": "Cargando...",
+      "saving": "Guardando...",
+      "deleting": "Eliminando...",
+      "noData": "No hay datos disponibles",
+      "error": "Ocurrió un error",
+      "success": "Operación completada exitosamente",
+      "confirm": "¿Estás seguro?",
+      "yes": "Sí",
+      "no": "No",
+      "close": "Cerrar",
+      "back": "Atrás",
+      "next": "Siguiente",
+      "previous": "Anterior",
+      "showMore": "Mostrar Más",
+      "showLess": "Mostrar Menos",
+      "selectAll": "Seleccionar Todo",
+      "deselectAll": "Deseleccionar Todo",
+      "required": "Obligatorio",
+      "optional": "Opcional"
+    },
+    "breadcrumbs": {
+      "admin": "Admin",
+      "dashboard": "Panel",
+      "products": "Productos",
+      "newProduct": "Nuevo Producto",
+      "editProduct": "Editar Producto",
+      "orders": "Pedidos",
+      "users": "Usuarios",
+      "analytics": "Analíticas"
+    },
+    "userMenu": {
+      "profile": "Perfil",
+      "settings": "Configuración",
+      "logout": "Cerrar Sesión",
+      "adminUser": "Usuario Admin",
+      "administrator": "Administrador"
+    },
+    "notifications": {
+      "title": "Notificaciones",
+      "noNotifications": "No hay nuevas notificaciones",
+      "markAllRead": "Marcar todas como leídas"
+    },
+    "autoRefresh": {
+      "enabled": "Auto-actualización habilitada",
+      "disabled": "Auto-actualización deshabilitada",
+      "interval": "Actualizar cada {minutes} minutos",
+      "lastRefresh": "Última actualización: {time}"
     }
   }
 }

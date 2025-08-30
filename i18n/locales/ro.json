@@ -226,7 +226,12 @@
     "totalOrders": "Total Comenzi",
     "wishlistItems": "Elemente Lista de Dorințe",
     "recentOrders": "Comenzi Recente",
-    "noOrdersYet": "Nu ai încă nicio comandă"
+    "noOrdersYet": "Nu ai încă nicio comandă",
+    "sections": {
+      "admin": "Admin",
+      "adminUser": "Utilizator Admin",
+      "administrator": "Administrator"
+    }
   },
   "home": {
     "hero": {
@@ -476,6 +481,317 @@
       "adjustQuantity": "Ajustează cantitatea",
       "adjustToMax": "Ajustează la maxim",
       "reloadCart": "Reîncarcă coșul"
+    }
+  },
+  "admin": {
+    "navigation": {
+      "dashboard": "Panou de Control",
+      "products": "Produse",
+      "orders": "Comenzi",
+      "users": "Utilizatori",
+      "analytics": "Analize"
+    },
+    "dashboard": {
+      "title": "Panou de Control",
+      "welcome": "Bine ai revenit! Iată ce se întâmplă în magazinul tău.",
+      "autoRefresh": "Reîmprospătare automată",
+      "refreshAll": "Reîmprospătare totală",
+      "lastUpdated": "Ultima actualizare: {time}",
+      "refresh": "Reîmprospătează",
+      "quickActions": "Acțiuni Rapide",
+      "criticalAlerts": "Alerte Critice",
+      "systemStatus": "Starea Sistemului",
+      "stats": {
+        "totalProducts": "Total Produse",
+        "activeProducts": "{count} active",
+        "lowStockProducts": "{count} produse cu stoc scăzut",
+        "totalUsers": "Total Utilizatori",
+        "activeUsers": "{count} activi",
+        "newUsersToday": "{count} noi astăzi",
+        "totalOrders": "Total Comenzi",
+        "conversionRate": "{rate} conversie",
+        "totalRevenue": "Venituri Totale",
+        "revenueToday": "{amount} astăzi"
+      },
+      "quickActions": {
+        "addNewProduct": "Adaugă Produs Nou",
+        "viewOrders": "Vezi Comenzile",
+        "manageUsers": "Gestionează Utilizatorii"
+      },
+      "systemStatus": {
+        "database": "Baza de Date",
+        "api": "API",
+        "lastBackup": "Ultima Copie de Siguranță",
+        "online": "Online",
+        "operational": "Operațional",
+        "offline": "Offline",
+        "error": "Eroare",
+        "hoursAgo": "acum {hours} ore"
+      },
+      "recentActivity": {
+        "title": "Activitate Recentă",
+        "noActivity": "Fără activitate recentă",
+        "activityDescription": "Activitatea va apărea aici când utilizatorii interacționează cu magazinul tău",
+        "justNow": "Chiar acum",
+        "minutesAgo": "acum {minutes}m",
+        "hoursAgo": "acum {hours}h",
+        "daysAgo": "acum {days}z",
+        "types": {
+          "userRegistration": "Utilizator",
+          "newOrder": "Comandă",
+          "lowStock": "Alertă Stoc",
+          "productUpdate": "Produs"
+        }
+      },
+      "errors": {
+        "loadingData": "Eroare la încărcarea datelor panoului",
+        "tryAgain": "Te rugăm să încerci din nou"
+      }
+    },
+    "products": {
+      "title": "Produse",
+      "subtitle": "Gestionează catalogul tău de produse",
+      "addProduct": "Adaugă Produs",
+      "editProduct": "Editează Produsul",
+      "deleteProduct": "Șterge Produsul",
+      "bulkActions": "Acțiuni în Lot",
+      "selectAll": "Selectează Tot",
+      "deselectAll": "Deselectează Tot",
+      "selectedCount": "{count} selectate",
+      "clearSelection": "Șterge Selecția",
+      "filters": {
+        "search": "Caută produse...",
+        "category": "Categorie",
+        "allCategories": "Toate Categoriile",
+        "status": "Stare",
+        "allStatuses": "Toate Stările",
+        "active": "Activ",
+        "inactive": "Inactiv",
+        "stockLevel": "Nivel Stoc",
+        "allStock": "Tot Stocul",
+        "inStock": "În Stoc",
+        "lowStock": "Stoc Scăzut",
+        "outOfStock": "Stoc Epuizat",
+        "clearFilters": "Șterge Filtrele",
+        "resultsCount": "{count} rezultate găsite"
+      },
+      "table": {
+        "name": "Nume",
+        "sku": "SKU",
+        "category": "Categorie",
+        "price": "Preț",
+        "stock": "Stoc",
+        "status": "Stare",
+        "actions": "Acțiuni",
+        "edit": "Editează",
+        "delete": "Șterge",
+        "editStock": "Editează Stocul",
+        "noProducts": "Nu s-au găsit produse",
+        "noProductsMessage": "Creează primul tău produs pentru a începe"
+      },
+      "form": {
+        "basicInformation": "Informații de Bază",
+        "productName": "Numele Produsului",
+        "productNameRequired": "Numele produsului este obligatoriu",
+        "sku": "SKU",
+        "skuRequired": "SKU-ul este obligatoriu",
+        "category": "Categorie",
+        "categoryRequired": "Categoria este obligatorie",
+        "selectCategory": "Selectează o categorie",
+        "description": "Descriere",
+        "pricing": "Prețuri",
+        "price": "Preț (EUR)",
+        "priceRequired": "Prețul este obligatoriu",
+        "salePrice": "Preț de Reducere (EUR)",
+        "inventory": "Inventar",
+        "stockQuantity": "Cantitatea în Stoc",
+        "stockRequired": "Cantitatea în stoc este obligatorie",
+        "lowStockThreshold": "Pragul de Stoc Scăzut",
+        "trackInventory": "Urmărire Inventar",
+        "allowBackorders": "Permite Comenzi în Așteptare",
+        "media": "Media",
+        "productImages": "Imagini Produs",
+        "dragImages": "Trage imaginile aici sau fă clic pentru a încărca",
+        "maxImages": "Maxim 5 imagini",
+        "supportedFormats": "Formate suportate: JPG, PNG, WebP",
+        "maxFileSize": "Dimensiune maximă fișier: 5MB",
+        "settings": "Setări",
+        "featured": "Produs Recomandat",
+        "status": "Stare",
+        "active": "Activ",
+        "inactive": "Inactiv",
+        "metaData": "SEO și Meta Date",
+        "metaTitle": "Meta Titlu",
+        "metaDescription": "Meta Descriere",
+        "save": "Salvează Produsul",
+        "saving": "Se salvează...",
+        "cancel": "Anulează",
+        "errors": {
+          "saveFailed": "Eroare la salvarea produsului",
+          "invalidData": "Te rugăm să verifici datele din formular",
+          "networkError": "S-a produs o eroare de rețea"
+        }
+      },
+      "stockModal": {
+        "title": "Editează Stocul pentru {product}",
+        "stockQuantity": "Cantitatea în Stoc",
+        "cancel": "Anulează",
+        "save": "Salvează Stocul",
+        "saving": "Se salvează..."
+      },
+      "bulkOperations": {
+        "activate": "Activează Selectate",
+        "deactivate": "Dezactivează Selectate",
+        "delete": "Șterge Selectate",
+        "confirmDelete": "Ești sigur că vrei să ștergi {count} produse?",
+        "confirmDeleteSingle": "Ești sigur că vrei să ștergi acest produs?",
+        "deleteWarning": "Această acțiune nu poate fi anulată.",
+        "operationInProgress": "Operațiune în progres..."
+      },
+      "pagination": {
+        "showing": "Afișează {start} până la {end} din {total} produse",
+        "previous": "Anterior",
+        "next": "Următorul",
+        "page": "Pagina {page}",
+        "perPage": "Pe pagină",
+        "goToPage": "Du-te la pagina {page}"
+      },
+      "success": {
+        "productSaved": "Produs salvat cu succes",
+        "productDeleted": "Produs șters cu succes",
+        "stockUpdated": "Stoc actualizat cu succes",
+        "bulkActivated": "{count} produse activate",
+        "bulkDeactivated": "{count} produse dezactivate",
+        "bulkDeleted": "{count} produse șterse"
+      },
+      "errors": {
+        "loadFailed": "Eroare la încărcarea produselor",
+        "saveFailed": "Eroare la salvarea produsului",
+        "deleteFailed": "Eroare la ștergerea produsului",
+        "stockUpdateFailed": "Eroare la actualizarea stocului",
+        "bulkOperationFailed": "Eroare la operațiunea în lot"
+      }
+    },
+    "orders": {
+      "title": "Comenzi",
+      "subtitle": "Gestionează comenzile clienților",
+      "viewOrder": "Vezi Comanda",
+      "editOrder": "Editează Comanda",
+      "deleteOrder": "Șterge Comanda",
+      "orderNumber": "Comanda #{number}",
+      "customer": "Client",
+      "total": "Total",
+      "status": "Stare",
+      "date": "Data",
+      "actions": "Acțiuni",
+      "statuses": {
+        "pending": "În Așteptare",
+        "processing": "În Procesare",
+        "shipped": "Expediat",
+        "delivered": "Livrat",
+        "cancelled": "Anulat",
+        "refunded": "Rambursat"
+      }
+    },
+    "users": {
+      "title": "Utilizatori",
+      "subtitle": "Gestionează conturile utilizatorilor",
+      "viewUser": "Vezi Utilizatorul",
+      "editUser": "Editează Utilizatorul",
+      "deleteUser": "Șterge Utilizatorul",
+      "userId": "ID Utilizator",
+      "name": "Nume",
+      "email": "Email",
+      "role": "Rol",
+      "status": "Stare",
+      "registered": "Înregistrat",
+      "lastLogin": "Ultima Conectare",
+      "actions": "Acțiuni",
+      "roles": {
+        "admin": "Administrator",
+        "user": "Client",
+        "manager": "Manager"
+      },
+      "statuses": {
+        "active": "Activ",
+        "inactive": "Inactiv",
+        "banned": "Interzis"
+      }
+    },
+    "analytics": {
+      "title": "Analize",
+      "subtitle": "Vezi performanța magazinului",
+      "revenue": "Venituri",
+      "orders": "Comenzi",
+      "customers": "Clienți",
+      "products": "Produse",
+      "conversionRate": "Rata de Conversie",
+      "averageOrderValue": "Valoarea Medie a Comenzii",
+      "topProducts": "Produse de Top",
+      "topCategories": "Categorii de Top",
+      "recentSales": "Vânzări Recente",
+      "performanceMetrics": "Metrici de Performanță"
+    },
+    "common": {
+      "save": "Salvează",
+      "cancel": "Anulează",
+      "delete": "Șterge",
+      "edit": "Editează",
+      "view": "Vezi",
+      "create": "Creează",
+      "update": "Actualizează",
+      "search": "Caută",
+      "filter": "Filtrează",
+      "sort": "Sortează",
+      "export": "Exportă",
+      "import": "Importă",
+      "loading": "Se încarcă...",
+      "saving": "Se salvează...",
+      "deleting": "Se șterge...",
+      "noData": "Nu există date disponibile",
+      "error": "A apărut o eroare",
+      "success": "Operațiunea s-a finalizat cu succes",
+      "confirm": "Ești sigur?",
+      "yes": "Da",
+      "no": "Nu",
+      "close": "Închide",
+      "back": "Înapoi",
+      "next": "Următorul",
+      "previous": "Anterior",
+      "showMore": "Arată Mai Mult",
+      "showLess": "Arată Mai Puțin",
+      "selectAll": "Selectează Tot",
+      "deselectAll": "Deselectează Tot",
+      "required": "Obligatoriu",
+      "optional": "Opțional"
+    },
+    "breadcrumbs": {
+      "admin": "Admin",
+      "dashboard": "Panou",
+      "products": "Produse",
+      "newProduct": "Produs Nou",
+      "editProduct": "Editează Produsul",
+      "orders": "Comenzi",
+      "users": "Utilizatori",
+      "analytics": "Analize"
+    },
+    "userMenu": {
+      "profile": "Profil",
+      "settings": "Setări",
+      "logout": "Deconectare",
+      "adminUser": "Utilizator Admin",
+      "administrator": "Administrator"
+    },
+    "notifications": {
+      "title": "Notificări",
+      "noNotifications": "Nu există notificări noi",
+      "markAllRead": "Marchează toate ca citite"
+    },
+    "autoRefresh": {
+      "enabled": "Reîmprospătare automată activată",
+      "disabled": "Reîmprospătare automată dezactivată",
+      "interval": "Reîmprospătare la fiecare {minutes} minute",
+      "lastRefresh": "Ultima reîmprospătare: {time}"
     }
   }
 }

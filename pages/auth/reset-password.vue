@@ -79,7 +79,7 @@
                 </button>
                 
                 <!-- Password strength meter -->
-                <PasswordStrengthMeter 
+                <AuthPasswordStrengthMeter 
                   :password="form.password" 
                   :show-requirements="true"
                   class="mt-2"

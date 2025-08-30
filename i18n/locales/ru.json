@@ -226,7 +226,12 @@
     "totalOrders": "Всего заказов",
     "wishlistItems": "Товары в списке желаний",
     "recentOrders": "Недавние заказы",
-    "noOrdersYet": "У вас пока нет заказов"
+    "noOrdersYet": "У вас пока нет заказов",
+    "sections": {
+      "admin": "Админ",
+      "adminUser": "Пользователь-админ",
+      "administrator": "Администратор"
+    }
   },
   "home": {
     "hero": {
@@ -366,6 +371,317 @@
       "priceChanged": "Цена обновлена",
       "itemUnavailable": "Товар недоступен",
       "sessionExpired": "Сессия истекла"
+    }
+  },
+  "admin": {
+    "navigation": {
+      "dashboard": "Панель управления",
+      "products": "Товары",
+      "orders": "Заказы",
+      "users": "Пользователи",
+      "analytics": "Аналитика"
+    },
+    "dashboard": {
+      "title": "Панель управления",
+      "welcome": "Добро пожаловать обратно! Вот что происходит с вашим магазином.",
+      "autoRefresh": "Автообновление",
+      "refreshAll": "Обновить все",
+      "lastUpdated": "Последнее обновление: {time}",
+      "refresh": "Обновить",
+      "quickActions": "Быстрые действия",
+      "criticalAlerts": "Критические оповещения",
+      "systemStatus": "Статус системы",
+      "stats": {
+        "totalProducts": "Всего товаров",
+        "activeProducts": "{count} активных",
+        "lowStockProducts": "{count} товаров с низким запасом",
+        "totalUsers": "Всего пользователей",
+        "activeUsers": "{count} активных",
+        "newUsersToday": "{count} новых сегодня",
+        "totalOrders": "Всего заказов",
+        "conversionRate": "{rate} конверсия",
+        "totalRevenue": "Общий доход",
+        "revenueToday": "{amount} сегодня"
+      },
+      "quickActions": {
+        "addNewProduct": "Добавить новый товар",
+        "viewOrders": "Посмотреть заказы",
+        "manageUsers": "Управлять пользователями"
+      },
+      "systemStatus": {
+        "database": "База данных",
+        "api": "API",
+        "lastBackup": "Последняя резервная копия",
+        "online": "Онлайн",
+        "operational": "Работает",
+        "offline": "Не в сети",
+        "error": "Ошибка",
+        "hoursAgo": "{hours} часов назад"
+      },
+      "recentActivity": {
+        "title": "Недавняя активность",
+        "noActivity": "Нет недавней активности",
+        "activityDescription": "Активность будет появляться здесь, когда пользователи взаимодействуют с вашим магазином",
+        "justNow": "Только что",
+        "minutesAgo": "{minutes}м назад",
+        "hoursAgo": "{hours}ч назад",
+        "daysAgo": "{days}д назад",
+        "types": {
+          "userRegistration": "Пользователь",
+          "newOrder": "Заказ",
+          "lowStock": "Уведомление о запасах",
+          "productUpdate": "Товар"
+        }
+      },
+      "errors": {
+        "loadingData": "Ошибка загрузки данных панели",
+        "tryAgain": "Пожалуйста, попробуйте снова"
+      }
+    },
+    "products": {
+      "title": "Товары",
+      "subtitle": "Управляйте каталогом товаров",
+      "addProduct": "Добавить товар",
+      "editProduct": "Редактировать товар",
+      "deleteProduct": "Удалить товар",
+      "bulkActions": "Массовые действия",
+      "selectAll": "Выбрать все",
+      "deselectAll": "Отменить выбор",
+      "selectedCount": "{count} выбрано",
+      "clearSelection": "Очистить выбор",
+      "filters": {
+        "search": "Поиск товаров...",
+        "category": "Категория",
+        "allCategories": "Все категории",
+        "status": "Статус",
+        "allStatuses": "Все статусы",
+        "active": "Активный",
+        "inactive": "Неактивный",
+        "stockLevel": "Уровень запасов",
+        "allStock": "Все запасы",
+        "inStock": "В наличии",
+        "lowStock": "Низкий запас",
+        "outOfStock": "Нет в наличии",
+        "clearFilters": "Очистить фильтры",
+        "resultsCount": "Найдено {count} результатов"
+      },
+      "table": {
+        "name": "Название",
+        "sku": "Артикул",
+        "category": "Категория",
+        "price": "Цена",
+        "stock": "Запас",
+        "status": "Статус",
+        "actions": "Действия",
+        "edit": "Редактировать",
+        "delete": "Удалить",
+        "editStock": "Редактировать запас",
+        "noProducts": "Товары не найдены",
+        "noProductsMessage": "Создайте свой первый товар, чтобы начать"
+      },
+      "form": {
+        "basicInformation": "Основная информация",
+        "productName": "Название товара",
+        "productNameRequired": "Название товара обязательно",
+        "sku": "Артикул",
+        "skuRequired": "Артикул обязателен",
+        "category": "Категория",
+        "categoryRequired": "Категория обязательна",
+        "selectCategory": "Выберите категорию",
+        "description": "Описание",
+        "pricing": "Цены",
+        "price": "Цена (EUR)",
+        "priceRequired": "Цена обязательна",
+        "salePrice": "Цена со скидкой (EUR)",
+        "inventory": "Инвентарь",
+        "stockQuantity": "Количество на складе",
+        "stockRequired": "Количество на складе обязательно",
+        "lowStockThreshold": "Порог низкого запаса",
+        "trackInventory": "Отслеживать инвентарь",
+        "allowBackorders": "Разрешить предзаказы",
+        "media": "Медиа",
+        "productImages": "Изображения товара",
+        "dragImages": "Перетащите изображения сюда или нажмите для загрузки",
+        "maxImages": "Максимум 5 изображений",
+        "supportedFormats": "Поддерживаемые форматы: JPG, PNG, WebP",
+        "maxFileSize": "Максимальный размер файла: 5МБ",
+        "settings": "Настройки",
+        "featured": "Рекомендуемый товар",
+        "status": "Статус",
+        "active": "Активный",
+        "inactive": "Неактивный",
+        "metaData": "SEO и мета-данные",
+        "metaTitle": "Мета-заголовок",
+        "metaDescription": "Мета-описание",
+        "save": "Сохранить товар",
+        "saving": "Сохранение...",
+        "cancel": "Отменить",
+        "errors": {
+          "saveFailed": "Не удалось сохранить товар",
+          "invalidData": "Пожалуйста, проверьте данные формы",
+          "networkError": "Произошла ошибка сети"
+        }
+      },
+      "stockModal": {
+        "title": "Редактировать запас для {product}",
+        "stockQuantity": "Количество на складе",
+        "cancel": "Отменить",
+        "save": "Сохранить запас",
+        "saving": "Сохранение..."
+      },
+      "bulkOperations": {
+        "activate": "Активировать выбранные",
+        "deactivate": "Деактивировать выбранные",
+        "delete": "Удалить выбранные",
+        "confirmDelete": "Вы уверены, что хотите удалить {count} товаров?",
+        "confirmDeleteSingle": "Вы уверены, что хотите удалить этот товар?",
+        "deleteWarning": "Это действие нельзя отменить.",
+        "operationInProgress": "Операция выполняется..."
+      },
+      "pagination": {
+        "showing": "Показано с {start} по {end} из {total} товаров",
+        "previous": "Предыдущая",
+        "next": "Следующая",
+        "page": "Страница {page}",
+        "perPage": "На странице",
+        "goToPage": "Перейти на страницу {page}"
+      },
+      "success": {
+        "productSaved": "Товар сохранен успешно",
+        "productDeleted": "Товар удален успешно",
+        "stockUpdated": "Запас обновлен успешно",
+        "bulkActivated": "{count} товаров активировано",
+        "bulkDeactivated": "{count} товаров деактивировано",
+        "bulkDeleted": "{count} товаров удалено"
+      },
+      "errors": {
+        "loadFailed": "Не удалось загрузить товары",
+        "saveFailed": "Не удалось сохранить товар",
+        "deleteFailed": "Не удалось удалить товар",
+        "stockUpdateFailed": "Не удалось обновить запас",
+        "bulkOperationFailed": "Массовая операция не удалась"
+      }
+    },
+    "orders": {
+      "title": "Заказы",
+      "subtitle": "Управление заказами клиентов",
+      "viewOrder": "Посмотреть заказ",
+      "editOrder": "Редактировать заказ",
+      "deleteOrder": "Удалить заказ",
+      "orderNumber": "Заказ #{number}",
+      "customer": "Клиент",
+      "total": "Итого",
+      "status": "Статус",
+      "date": "Дата",
+      "actions": "Действия",
+      "statuses": {
+        "pending": "В ожидании",
+        "processing": "Обрабатывается",
+        "shipped": "Отправлено",
+        "delivered": "Доставлено",
+        "cancelled": "Отменено",
+        "refunded": "Возвращено"
+      }
+    },
+    "users": {
+      "title": "Пользователи",
+      "subtitle": "Управление учетными записями пользователей",
+      "viewUser": "Посмотреть пользователя",
+      "editUser": "Редактировать пользователя",
+      "deleteUser": "Удалить пользователя",
+      "userId": "ID пользователя",
+      "name": "Имя",
+      "email": "Email",
+      "role": "Роль",
+      "status": "Статус",
+      "registered": "Зарегистрирован",
+      "lastLogin": "Последний вход",
+      "actions": "Действия",
+      "roles": {
+        "admin": "Администратор",
+        "user": "Клиент",
+        "manager": "Менеджер"
+      },
+      "statuses": {
+        "active": "Активный",
+        "inactive": "Неактивный",
+        "banned": "Заблокированный"
+      }
+    },
+    "analytics": {
+      "title": "Аналитика",
+      "subtitle": "Просмотр производительности магазина",
+      "revenue": "Доход",
+      "orders": "Заказы",
+      "customers": "Клиенты",
+      "products": "Товары",
+      "conversionRate": "Коэффициент конверсии",
+      "averageOrderValue": "Средняя стоимость заказа",
+      "topProducts": "Топ товары",
+      "topCategories": "Топ категории",
+      "recentSales": "Недавние продажи",
+      "performanceMetrics": "Показатели производительности"
+    },
+    "common": {
+      "save": "Сохранить",
+      "cancel": "Отменить",
+      "delete": "Удалить",
+      "edit": "Редактировать",
+      "view": "Посмотреть",
+      "create": "Создать",
+      "update": "Обновить",
+      "search": "Поиск",
+      "filter": "Фильтр",
+      "sort": "Сортировка",
+      "export": "Экспорт",
+      "import": "Импорт",
+      "loading": "Загрузка...",
+      "saving": "Сохранение...",
+      "deleting": "Удаление...",
+      "noData": "Нет доступных данных",
+      "error": "Произошла ошибка",
+      "success": "Операция завершена успешно",
+      "confirm": "Вы уверены?",
+      "yes": "Да",
+      "no": "Нет",
+      "close": "Закрыть",
+      "back": "Назад",
+      "next": "Далее",
+      "previous": "Предыдущий",
+      "showMore": "Показать больше",
+      "showLess": "Показать меньше",
+      "selectAll": "Выбрать все",
+      "deselectAll": "Отменить выбор",
+      "required": "Обязательно",
+      "optional": "Необязательно"
+    },
+    "breadcrumbs": {
+      "admin": "Админ",
+      "dashboard": "Панель",
+      "products": "Товары",
+      "newProduct": "Новый товар",
+      "editProduct": "Редактировать товар",
+      "orders": "Заказы",
+      "users": "Пользователи",
+      "analytics": "Аналитика"
+    },
+    "userMenu": {
+      "profile": "Профиль",
+      "settings": "Настройки",
+      "logout": "Выйти",
+      "adminUser": "Пользователь-админ",
+      "administrator": "Администратор"
+    },
+    "notifications": {
+      "title": "Уведомления",
+      "noNotifications": "Нет новых уведомлений",
+      "markAllRead": "Отметить все как прочитанные"
+    },
+    "autoRefresh": {
+      "enabled": "Автообновление включено",
+      "disabled": "Автообновление отключено",
+      "interval": "Обновлять каждые {minutes} минут",
+      "lastRefresh": "Последнее обновление: {time}"
     }
   }
 }
