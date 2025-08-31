@@ -159,20 +159,3 @@ defineEmits<{
   close: []
 }>()
 </script>
-
-<style scoped>
-.mobile-nav-enter-active,
-.mobile-nav-leave-active {
-  transition: all 0.3s ease;
-}
-
-.mobile-nav-enter-from {
-  opacity: 0;
-  transform: translateX(-100%);
-}
-
-.mobile-nav-leave-to {
-  opacity: 0;
-  transform: translateX(-100%);
-}
-</style>

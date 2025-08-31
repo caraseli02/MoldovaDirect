@@ -2,7 +2,7 @@
   <div 
     ref="cartItemRef"
     :class="[
-      'relative overflow-hidden rounded-lg border border-gray-100 bg-white',
+      'relative overflow-hidden rounded-lg border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800',
       'transition-all duration-300 ease-out',
       swipeOffset !== 0 ? 'shadow-lg' : '',
       isRemoving ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
@@ -39,14 +39,14 @@
     </div>
 
     <!-- Cart Item Content -->
-    <div class="relative bg-white p-4">
+    <div class="relative bg-white dark:bg-gray-800 p-4">
       <!-- Selection Checkbox -->
       <div class="absolute top-2 left-2 z-10">
         <input
           type="checkbox"
           :checked="isSelected"
           @change="toggleSelection"
-          class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+          class="w-5 h-5 text-blue-600 border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded focus:ring-blue-500"
         >
       </div>
 
@@ -63,13 +63,13 @@
           </div>
           
           <div class="flex-1 min-w-0">
-            <h3 class="text-base font-medium text-gray-900 leading-tight mb-1">
+            <h3 class="text-base font-medium text-gray-900 dark:text-white leading-tight mb-1">
               {{ item.product.name }}
             </h3>
-            <p class="text-sm text-gray-500 mb-2">
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">
               {{ formatPrice(item.product.price) }} each
             </p>
-            <p class="text-lg font-semibold text-gray-900">
+            <p class="text-lg font-semibold text-gray-900 dark:text-white">
               {{ formatPrice(item.product.price * item.quantity) }}
             </p>
           </div>
@@ -78,12 +78,12 @@
         <!-- Quantity Controls and Actions Row -->
         <div class="space-y-3">
           <!-- Quantity Controls -->
-          <div class="flex items-center bg-gray-50 rounded-lg p-1 w-fit">
+          <div class="flex items-center bg-gray-50 dark:bg-gray-700 rounded-lg p-1 w-fit">
             <button 
               @click="updateQuantity(item.quantity - 1)"
               :disabled="loading"
               :data-testid="`decrease-quantity-${item.product.id}`"
-              class="w-11 h-11 rounded-md border border-gray-300 bg-white flex items-center justify-center hover:bg-gray-50 disabled:opacity-50 active:bg-gray-100 transition-colors"
+              class="w-11 h-11 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 active:bg-gray-100 dark:active:bg-gray-600 transition-colors"
             >
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
@@ -91,7 +91,7 @@
             </button>
             
             <div class="px-4 py-2 min-w-[3rem] text-center">
-              <span class="text-lg font-medium" :data-testid="`quantity-display-${item.product.id}`">
+              <span class="text-lg font-medium text-gray-900 dark:text-white" :data-testid="`quantity-display-${item.product.id}`">
                 {{ item.quantity }}
               </span>
             </div>
@@ -100,7 +100,7 @@
               @click="updateQuantity(item.quantity + 1)"
               :disabled="loading || item.quantity >= item.product.stock"
               :data-testid="`increase-quantity-${item.product.id}`"
-              class="w-11 h-11 rounded-md border border-gray-300 bg-white flex items-center justify-center hover:bg-gray-50 disabled:opacity-50 active:bg-gray-100 transition-colors"
+              class="w-11 h-11 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 active:bg-gray-100 dark:active:bg-gray-600 transition-colors"
             >
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -114,7 +114,7 @@
             <button 
               @click="saveForLater"
               :disabled="loading"
-              class="inline-flex items-center px-3 py-2 text-sm text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded-md transition-colors"
+              class="inline-flex items-center px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors"
             >
               <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
@@ -127,7 +127,7 @@
               @click="removeItem"
               :disabled="loading"
               :data-testid="`remove-item-${item.product.id}`"
-              class="w-11 h-11 rounded-md text-red-500 hover:text-red-700 hover:bg-red-50 disabled:opacity-50 active:bg-red-100 transition-colors flex items-center justify-center"
+              class="w-11 h-11 rounded-md text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50 active:bg-red-100 dark:active:bg-red-900/30 transition-colors flex items-center justify-center"
               :title="$t('common.remove')"
             >
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -151,10 +151,10 @@
         
         <!-- Product Info -->
         <div class="flex-1 min-w-0">
-          <h3 class="text-sm font-medium text-gray-900 truncate">
+          <h3 class="text-sm font-medium text-gray-900 dark:text-white truncate">
             {{ item.product.name }}
           </h3>
-          <p class="text-sm text-gray-500">
+          <p class="text-sm text-gray-500 dark:text-gray-400">
             {{ formatPrice(item.product.price) }} each
           </p>
         </div>
@@ -165,14 +165,14 @@
             @click="updateQuantity(item.quantity - 1)"
             :disabled="loading"
             :data-testid="`decrease-quantity-${item.product.id}`"
-            class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 disabled:opacity-50"
+            class="w-8 h-8 rounded-full border border-gray-300 dark:border-gray-600 flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
             </svg>
           </button>
           
-          <span class="w-8 text-center text-sm font-medium" :data-testid="`quantity-display-${item.product.id}`">
+          <span class="w-8 text-center text-sm font-medium text-gray-900 dark:text-white" :data-testid="`quantity-display-${item.product.id}`">
             {{ item.quantity }}
           </span>
           
@@ -180,7 +180,7 @@
             @click="updateQuantity(item.quantity + 1)"
             :disabled="loading || item.quantity >= item.product.stock"
             :data-testid="`increase-quantity-${item.product.id}`"
-            class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 disabled:opacity-50"
+            class="w-8 h-8 rounded-full border border-gray-300 dark:border-gray-600 flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -190,7 +190,7 @@
         
         <!-- Item Total -->
         <div class="text-right">
-          <p class="text-sm font-medium text-gray-900">
+          <p class="text-sm font-medium text-gray-900 dark:text-white">
             {{ formatPrice(item.product.price * item.quantity) }}
           </p>
         </div>
@@ -201,7 +201,7 @@
           <button 
             @click="saveForLater"
             :disabled="loading"
-            class="text-gray-500 hover:text-gray-700 disabled:opacity-50 p-1"
+            class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 disabled:opacity-50 p-1"
             :title="'Guardar para después'"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -375,22 +375,3 @@ onUnmounted(() => {
 })
 </script>
 
-<style scoped>
-/* Smooth transitions for swipe animations */
-.transition-all {
-  transition-property: transform, opacity, box-shadow;
-}
-
-/* Prevent text selection during drag */
-.select-none {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-/* Touch action for better mobile performance */
-[data-swipeable] {
-  touch-action: pan-y;
-}
-</style>

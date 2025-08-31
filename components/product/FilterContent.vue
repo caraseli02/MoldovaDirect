@@ -289,8 +289,3 @@ watch(() => props.filters, (newFilters) => {
 }, { deep: true })
 </script>
 
-<style scoped>
-.filter-section {
-  @apply border-b border-gray-100 dark:border-gray-700 pb-6 last:border-b-0 last:pb-0;
-}
-</style>

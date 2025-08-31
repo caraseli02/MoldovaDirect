@@ -13,9 +13,9 @@
 -->
 
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
     <!-- Sidebar -->
-    <div class="fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0"
+    <div class="fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0"
          :class="{ '-translate-x-full': !sidebarOpen }">
       
       <!-- Logo -->
@@ -77,7 +77,7 @@
     <!-- Main Content -->
     <div class="lg:ml-64">
       <!-- Header -->
-      <header class="bg-white shadow-sm border-b border-gray-200">
+      <header class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div class="flex items-center justify-between px-6 py-4">
           <!-- Mobile menu button -->
           <button

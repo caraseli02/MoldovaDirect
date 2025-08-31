@@ -4,14 +4,14 @@
 -->
 
 <template>
-  <div class="min-h-screen bg-gray-50 p-6">
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
     <div class="max-w-4xl mx-auto">
-      <h1 class="text-3xl font-bold text-gray-900 mb-8">Admin API Test</h1>
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-8">Admin API Test</h1>
       
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Stats API Test -->
-        <div class="bg-white rounded-lg shadow p-6">
-          <h2 class="text-xl font-semibold mb-4">Dashboard Stats API</h2>
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <h2 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Dashboard Stats API</h2>
           <button 
             @click="testStatsAPI" 
             :disabled="loading"
@@ -21,8 +21,8 @@
           </button>
           
           <div v-if="statsResult" class="mt-4">
-            <h3 class="font-medium text-gray-900 mb-2">Result:</h3>
-            <pre class="bg-gray-100 p-3 rounded text-sm overflow-auto">{{ JSON.stringify(statsResult, null, 2) }}</pre>
+            <h3 class="font-medium text-gray-900 dark:text-white mb-2">Result:</h3>
+            <pre class="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-3 rounded text-sm overflow-auto">{{ JSON.stringify(statsResult, null, 2) }}</pre>
           </div>
           
           <div v-if="statsError" class="mt-4 text-red-600">
@@ -32,8 +32,8 @@
         </div>
 
         <!-- Activity API Test -->
-        <div class="bg-white rounded-lg shadow p-6">
-          <h2 class="text-xl font-semibold mb-4">Recent Activity API</h2>
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <h2 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Recent Activity API</h2>
           <button 
             @click="testActivityAPI" 
             :disabled="loading"
@@ -43,8 +43,8 @@
           </button>
           
           <div v-if="activityResult" class="mt-4">
-            <h3 class="font-medium text-gray-900 mb-2">Result:</h3>
-            <pre class="bg-gray-100 p-3 rounded text-sm overflow-auto">{{ JSON.stringify(activityResult, null, 2) }}</pre>
+            <h3 class="font-medium text-gray-900 dark:text-white mb-2">Result:</h3>
+            <pre class="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-3 rounded text-sm overflow-auto">{{ JSON.stringify(activityResult, null, 2) }}</pre>
           </div>
           
           <div v-if="activityError" class="mt-4 text-red-600">
@@ -55,8 +55,8 @@
       </div>
 
       <!-- Store Test -->
-      <div class="bg-white rounded-lg shadow p-6 mt-6">
-        <h2 class="text-xl font-semibold mb-4">Dashboard Store Test</h2>
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mt-6">
+        <h2 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Dashboard Store Test</h2>
         <button 
           @click="testStore" 
           :disabled="loading"
@@ -66,15 +66,15 @@
         </button>
         
         <div v-if="storeResult" class="mt-4">
-          <h3 class="font-medium text-gray-900 mb-2">Store State:</h3>
+          <h3 class="font-medium text-gray-900 dark:text-white mb-2">Store State:</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <h4 class="font-medium text-gray-700 mb-2">Statistics:</h4>
-              <pre class="bg-gray-100 p-3 rounded text-sm overflow-auto">{{ JSON.stringify(storeResult.stats, null, 2) }}</pre>
+              <h4 class="font-medium text-gray-700 dark:text-gray-300 mb-2">Statistics:</h4>
+              <pre class="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-3 rounded text-sm overflow-auto">{{ JSON.stringify(storeResult.stats, null, 2) }}</pre>
             </div>
             <div>
-              <h4 class="font-medium text-gray-700 mb-2">Recent Activity:</h4>
-              <pre class="bg-gray-100 p-3 rounded text-sm overflow-auto">{{ JSON.stringify(storeResult.activity, null, 2) }}</pre>
+              <h4 class="font-medium text-gray-700 dark:text-gray-300 mb-2">Recent Activity:</h4>
+              <pre class="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-3 rounded text-sm overflow-auto">{{ JSON.stringify(storeResult.activity, null, 2) }}</pre>
             </div>
           </div>
         </div>

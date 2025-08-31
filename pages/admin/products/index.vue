@@ -107,7 +107,7 @@
     </div>
 
     <!-- Delete Confirmation Dialog -->
-    <UiConfirmDialog
+    <CustomConfirmDialog
       :show="deleteDialog.show"
       type="danger"
       :title="deleteDialog.title"

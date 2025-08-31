@@ -160,40 +160,4 @@ watch(() => props.currentStep, (newStep, oldStep) => {
 })
 </script>
 
-<style scoped>
-/* Ensure smooth transitions for all progress elements */
-.transition-all {
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 300ms;
-}
-
-/* Focus styles for accessibility */
-[role="progressbar"]:focus {
-  outline: 2px solid theme('colors.primary.500');
-  outline-offset: 2px;
-}
-
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-  .bg-primary-600 {
-    background-color: ButtonText;
-  }
-  
-  .border-primary-600 {
-    border-color: ButtonText;
-  }
-  
-  .text-primary-600 {
-    color: ButtonText;
-  }
-}
-
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-  .transition-all {
-    transition: none;
-  }
-}
-</style>
 </content>
