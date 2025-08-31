@@ -59,6 +59,7 @@ export default defineEventHandler(async (event) => {
         compare_at_price_eur,
         stock_quantity,
         low_stock_threshold,
+        reorder_point,
         images,
         attributes,
         is_active,
@@ -142,6 +143,7 @@ export default defineEventHandler(async (event) => {
             compare_at_price_eur,
             stock_quantity,
             low_stock_threshold,
+            reorder_point,
             images,
             attributes,
             is_active,
@@ -264,6 +266,7 @@ export default defineEventHandler(async (event) => {
       comparePrice: product.compare_at_price_eur,
       stockQuantity: product.stock_quantity,
       lowStockThreshold: product.low_stock_threshold || 5,
+      reorderPoint: product.reorder_point || 10,
       stockStatus: product.stock_quantity > (product.low_stock_threshold || 5) ? 'high' : 
                    product.stock_quantity > 0 ? 'low' : 'out',
       images: Array.isArray(product.images) ? product.images.map((img: any, index: number) => ({

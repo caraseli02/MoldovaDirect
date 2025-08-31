@@ -207,23 +207,15 @@
 
             <!-- Stock -->
             <td class="px-6 py-4 whitespace-nowrap">
-              <div class="flex items-center space-x-2">
-                <span 
-                  :class="getStockStatusClass(product.stockQuantity, product.lowStockThreshold)"
-                  class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
-                >
-                  {{ product.stockQuantity }}
-                </span>
-                <button
-                  @click="editStock(product)"
-                  class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                  title="Edit stock"
-                >
-                  <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                  </svg>
-                </button>
-              </div>
+              <AdminInlineInventoryEditor
+                :product-id="product.id"
+                :stock-quantity="product.stockQuantity"
+                :low-stock-threshold="product.lowStockThreshold || 5"
+                :reorder-point="product.reorderPoint || 10"
+                size="sm"
+                @updated="handleInventoryUpdated"
+                @error="handleInventoryError"
+              />
             </td>
 
             <!-- Status -->
@@ -300,11 +292,12 @@ interface Emits {
   (e: 'toggle-all-visible'): void
   (e: 'clear-selection'): void
   (e: 'update-sort', sortBy: string, sortOrder?: 'asc' | 'desc'): void
-  (e: 'edit-stock', product: any): void
   (e: 'delete-product', productId: number): void
   (e: 'bulk-activate'): void
   (e: 'bulk-deactivate'): void
   (e: 'bulk-delete'): void
+  (e: 'inventory-updated', data: { productId: number; newQuantity: number; oldQuantity: number }): void
+  (e: 'inventory-error', error: string): void
 }
 
 const props = defineProps<Props>()
@@ -328,11 +321,7 @@ const formatDate = (dateString: string) => {
   })
 }
 
-const getStockStatusClass = (stock: number, threshold: number = 5) => {
-  if (stock > threshold) return 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200'
-  if (stock > 0) return 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200'
-  return 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
-}
+
 
 // Event handlers
 const toggleProductSelection = (productId: number) => {
@@ -352,7 +341,11 @@ const updateSort = (sortBy: string) => {
   emit('update-sort', sortBy, newOrder)
 }
 
-const editStock = (product: any) => {
-  emit('edit-stock', product)
+const handleInventoryUpdated = (data: { productId: number; newQuantity: number; oldQuantity: number }) => {
+  emit('inventory-updated', data)
+}
+
+const handleInventoryError = (error: string) => {
+  emit('inventory-error', error)
 }
 </script>

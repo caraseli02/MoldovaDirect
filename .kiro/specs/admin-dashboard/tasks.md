@@ -43,7 +43,7 @@
   - Add progress indicators for bulk operations to prevent UI blocking
   - _Requirements: 1.6, 6.6_
 
-- [-] 5. Develop inventory management system
+- [x] 5. Develop inventory management system
 - [x] 5.1 Create inventory tracking and stock level indicators
 
   - Implement visual stock level indicators (red/yellow/green) in product listings
@@ -58,7 +58,7 @@
   - Add real-time inventory updates across admin interface
   - _Requirements: 2.3, 2.4_
 
-- [-] 5.3 Implement inventory movement tracking and reporting
+- [x] 5.3 Implement inventory movement tracking and reporting
 
   - Create inventory movements database table and API endpoints
   - Build inventory history display showing stock changes over time
