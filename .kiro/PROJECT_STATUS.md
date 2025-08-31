@@ -4,28 +4,31 @@
 
 Moldova Direct is an e-commerce platform specializing in authentic Moldovan food and wine products with delivery to Spain. The project is currently in active development with significant progress across foundation, product catalog, authentication, and shopping cart features.
 
-**Current Phase**: Phase 4 - Shopping Cart & Error Handling ✅ COMPLETED  
-**Next Phase**: Phase 5 - Checkout & Payment Integration
+**Current Phase**: Phase 5 - Admin Dashboard & Checkout Implementation  
+**Previous Phase**: shadcn-vue UI Migration ✅ COMPLETED (Aug 31, 2025)
 
 ## 🏗️ Architecture Overview
 
 ### Technology Stack
-- **Frontend**: Nuxt 3.17.7 + Vue 3 Composition API + TypeScript
-- **Styling**: TailwindCSS with custom design system
-- **State Management**: Pinia stores
+- **Frontend**: Nuxt 3.17+ + Vue 3.5 Composition API + TypeScript
+- **UI Components**: shadcn-vue component library (migrated Aug 31, 2025)
+- **Styling**: Tailwind CSS v4 with CSS variables and dark mode
+- **State Management**: Pinia stores with TypeScript
 - **Database**: Supabase (PostgreSQL) with Row Level Security
 - **Authentication**: Supabase Auth with email verification
-- **Storage**: localStorage for cart, Supabase for user data
-- **Deployment**: Vercel with automatic deployments
+- **Storage**: localStorage for cart, Supabase Storage for media
+- **Deployment**: Vercel with automatic deployments from GitHub
 - **Testing**: Playwright E2E with multi-browser support
-- **Internationalization**: Full support for ES/EN/RO/RU
+- **Internationalization**: @nuxtjs/i18n for ES/EN/RO/RU
 
 ### Infrastructure Status
 - ✅ Supabase project configured for database and auth
-- ✅ Vercel deployment ready
-- ✅ GitHub Actions CI/CD pipeline
+- ✅ Vercel deployment with automatic preview/production builds
+- ✅ GitHub Actions CI/CD pipeline for testing
 - ✅ Row Level Security policies implemented
-- ✅ Authentication system fully migrated to Supabase
+- ✅ Authentication system with Supabase Auth
+- ✅ shadcn-vue component system integrated
+- ✅ Tailwind CSS v4 with modern configuration
 
 ## 📊 Development Progress
 
@@ -55,7 +58,7 @@ Moldova Direct is an e-commerce platform specializing in authentic Moldovan food
 - Account dashboard with user profile
 - Automatic session management
 
-#### Phase 4: Shopping Cart & Error Handling (LATEST)
+#### Phase 4: Shopping Cart & Error Handling ✅ COMPLETED
 - **Cart Core Functionality**
   - Add/remove products with quantity management
   - Real-time inventory validation
@@ -78,16 +81,24 @@ Moldova Direct is an e-commerce platform specializing in authentic Moldovan food
 
 ## 🚧 Current Development Status
 
-### Recently Completed (Latest Commit)
+### Recently Completed (Latest Updates)
+
+#### August 31, 2025 - shadcn-vue Migration
 ```
-feat: Implement robust cart error handling and user feedback system
-- Toast notification system with ToastContainer and Toast components
-- Client-side cart initialization plugin
-- Comprehensive error handling with recovery actions
-- Cart validation with inventory checking
-- Multi-language error messages
-- E2E tests for error scenarios
+feat: Migrate to shadcn-vue UI component system
+- Replaced custom UI components with shadcn-vue components
+- Updated Tailwind CSS to v4 with CSS variables
+- Moved custom components to components/custom/ directory
+- Added proper TypeScript support and component aliases
+- Updated all pages and components to use new UI system
+- Cleaned up test files and unnecessary configurations
 ```
+
+#### Previous Milestones
+- User profile management system implementation
+- Comprehensive dark theme support across all components
+- Mobile accessibility enhancements for authentication
+- Cart error handling and user feedback system
 
 ### Active Work Items
 Based on `.kiro/specs/shopping-cart/tasks.md`:
@@ -182,19 +193,20 @@ Based on `.kiro/specs/shopping-cart/tasks.md`:
 ## 🚀 Deployment & Operations
 
 ### Production Environment
-- **URL**: Deployed via Cloudflare Pages
-- **Database**: Cloudflare D1 (SQLite edge database)
-- **Sessions**: Cloudflare KV storage
-- **CDN**: Cloudflare global network
-- **CI/CD**: GitHub Actions with NuxtHub
+- **URL**: Deployed via Vercel (vercel.app domain)
+- **Database**: Supabase PostgreSQL (hosted)
+- **Authentication**: Supabase Auth
+- **Storage**: Supabase Storage buckets
+- **CDN**: Vercel Edge Network
+- **CI/CD**: GitHub Actions for testing, Vercel for deployment
 
 ### Environment Variables Required
 ```env
-CLOUDFLARE_ACCOUNT_ID=bea8c7f66acae533a5f917ee9f832a7a
-CLOUDFLARE_DATABASE_ID=5d80e417-460f-4367-9441-23c81f066d9f
-JWT_SECRET=[configured]
-JWT_REFRESH_SECRET=[configured]
-ADMIN_EMAIL=[configured]
+SUPABASE_URL=https://[project].supabase.co
+SUPABASE_ANON_KEY=[anon_key]
+SUPABASE_SERVICE_KEY=[service_key] # For admin operations
+APP_URL=https://[your-domain].vercel.app
+NODE_ENV=production
 ```
 
 ## 🎯 Success Metrics & Goals
@@ -291,8 +303,8 @@ ADMIN_EMAIL=[configured]
 
 ---
 
-**Last Updated**: 2025-08-19
+**Last Updated**: 2025-08-31
 **Status**: ✅ On Track
-**Health**: 🟢 Good
+**Health**: 🟢 Excellent - Major UI migration completed successfully
 
 This document provides a comprehensive overview of the Moldova Direct project status. It should be updated regularly as development progresses.

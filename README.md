@@ -80,25 +80,39 @@ All project documentation follows Kiro's spec-driven development approach in the
 
 ## 🎯 Current Status
 
-✅ **Completed Phases**
-- Phase 1: Foundation & Static Pages
-- Phase 2: Product Showcase
-- Phase 3: User Authentication
-- Phase 4: Shopping Cart & Error Handling
+✅ **Completed Features**
+- Foundation with multi-language support (ES/EN/RO/RU)
+- Product catalog with categories and search
+- User authentication with Supabase Auth
+- Shopping cart with persistence
+- Dark/light theme system
+- User profile management
+- Mobile-responsive design
+- **NEW**: shadcn-vue UI component migration
 
-🚀 **Next Phase** - Phase 5: Checkout & Payment Integration
+🚧 **In Progress**
+- Admin dashboard for product management
+- Checkout flow with payment integration
+- Order management system
 
 See [.kiro/ROADMAP.md](.kiro/ROADMAP.md) for detailed timeline.
 
 ## 🛠 Tech Stack
 
-- **Nuxt 3** + TypeScript
-- **TailwindCSS** for styling with dark mode support
-- **Vue 3** Composition API
-- **Supabase** for database and authentication
-- **i18n** for internationalization
-- **Pinia** for state management
-- **Vercel** for deployment
+### Frontend
+- **Framework**: Nuxt 3.17+ with Vue 3.5 Composition API
+- **Language**: TypeScript with strict type checking
+- **UI Components**: shadcn-vue component library
+- **Styling**: Tailwind CSS v4 with CSS variables
+- **State Management**: Pinia stores
+- **Internationalization**: @nuxtjs/i18n (ES/EN/RO/RU)
+
+### Backend & Infrastructure
+- **Database**: Supabase (PostgreSQL) with Row Level Security
+- **Authentication**: Supabase Auth with email verification
+- **Storage**: Supabase Storage for images
+- **Deployment**: Vercel with automatic deployments
+- **CI/CD**: GitHub Actions
 
 ## 🔐 Authentication Features
 
@@ -378,10 +392,21 @@ npm run test:debug -- tests/e2e/auth.spec.ts
 
 ## 🚀 Deployment
 
-- **Platform**: Cloudflare Pages
-- **Database**: Cloudflare D1
-- **Storage**: Cloudflare KV
-- **CI/CD**: GitHub Actions with NuxtHub
+### Production Environment
+- **Platform**: Vercel (automatic deployments from main branch)
+- **Database**: Supabase PostgreSQL (hosted)
+- **Storage**: Supabase Storage buckets
+- **CDN**: Vercel Edge Network
+- **CI/CD**: GitHub Actions for testing, Vercel for deployment
+
+### Deployment Commands
+```bash
+# Deploy to production
+vercel --prod
+
+# Deploy preview
+vercel
+```
 
 ---
 
