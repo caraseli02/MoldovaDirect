@@ -126,19 +126,3 @@ const actionText = computed(() => {
 })
 </script>
 
-<style scoped>
-.slide-fade-enter-active,
-.slide-fade-leave-active {
-  transition: all 0.3s ease;
-}
-
-.slide-fade-enter-from {
-  transform: translateY(-10px);
-  opacity: 0;
-}
-
-.slide-fade-leave-to {
-  transform: translateY(10px);
-  opacity: 0;
-}
-</style>

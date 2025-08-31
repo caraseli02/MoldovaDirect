@@ -312,26 +312,3 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
-.category-navigation {
-  position: sticky;
-  top: 0;
-  z-index: 40;
-}
-
-/* Smooth dropdown animations */
-.group:hover .absolute {
-  animation: fadeInDown 0.2s ease-out;
-}
-
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-</style>

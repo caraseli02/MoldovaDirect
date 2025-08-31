@@ -109,8 +109,3 @@ onErrorCaptured((error: Error) => {
 })
 </script>
 
-<style scoped>
-.error-boundary {
-  margin: 1rem 0;
-}
-</style>
