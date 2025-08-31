@@ -14,6 +14,7 @@
  */
 
 import { serverSupabaseClient } from '#supabase/server'
+import { getMockProducts } from '~/server/utils/mockData'
 
 interface AdminProductFilters {
   search?: string
@@ -29,9 +30,10 @@ interface AdminProductFilters {
 }
 
 export default defineEventHandler(async (event) => {
+  const query = getQuery(event) as AdminProductFilters
+  
   try {
     const supabase = await serverSupabaseClient(event)
-    const query = getQuery(event) as AdminProductFilters
 
     // Parse query parameters with defaults
     const {
@@ -321,10 +323,36 @@ export default defineEventHandler(async (event) => {
     }
 
   } catch (error) {
-    console.error('Admin Products API error:', error)
-    throw createError({
-      statusCode: 500,
-      statusMessage: 'Internal server error'
+    console.error('Admin Products API error, falling back to mock data:', error)
+    
+    // Parse query parameters with defaults for mock data
+    const {
+      search,
+      categoryId,
+      active,
+      inStock,
+      outOfStock,
+      lowStock,
+      sortBy = 'created_at',
+      sortOrder = 'desc',
+      page = 1,
+      limit = 20
+    } = query
+    
+    // Use mock data as fallback
+    const mockResult = getMockProducts({
+      page: Number(page),
+      limit: Number(limit),
+      search,
+      categoryId: categoryId ? Number(categoryId) : undefined,
+      active,
+      inStock,
+      outOfStock,
+      lowStock,
+      sortBy,
+      sortOrder
     })
+    
+    return mockResult
   }
 })

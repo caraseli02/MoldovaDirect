@@ -28,8 +28,8 @@
         <div class="px-4 space-y-2">
           <NuxtLink
             to="/admin"
-            class="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors"
-            active-class="bg-blue-50 text-blue-700"
+            class="flex items-center px-4 py-2 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            active-class="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400"
           >
             <Icon name="heroicons:home" class="w-5 h-5 mr-3" />
             {{ $t('admin.navigation.dashboard') }}
@@ -37,17 +37,26 @@
           
           <NuxtLink
             to="/admin/products"
-            class="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors"
-            active-class="bg-blue-50 text-blue-700"
+            class="flex items-center px-4 py-2 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            active-class="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400"
           >
             <Icon name="heroicons:cube" class="w-5 h-5 mr-3" />
             {{ $t('admin.navigation.products') }}
           </NuxtLink>
           
           <NuxtLink
+            to="/admin/inventory"
+            class="flex items-center px-4 py-2 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            active-class="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400"
+          >
+            <Icon name="heroicons:squares-2x2" class="w-5 h-5 mr-3" />
+            {{ $t('admin.navigation.inventory') }}
+          </NuxtLink>
+          
+          <NuxtLink
             to="/admin/orders"
-            class="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors"
-            active-class="bg-blue-50 text-blue-700"
+            class="flex items-center px-4 py-2 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            active-class="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400"
           >
             <Icon name="heroicons:shopping-bag" class="w-5 h-5 mr-3" />
             {{ $t('admin.navigation.orders') }}
@@ -55,8 +64,8 @@
           
           <NuxtLink
             to="/admin/users"
-            class="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors"
-            active-class="bg-blue-50 text-blue-700"
+            class="flex items-center px-4 py-2 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            active-class="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400"
           >
             <Icon name="heroicons:users" class="w-5 h-5 mr-3" />
             {{ $t('admin.navigation.users') }}
@@ -64,8 +73,8 @@
           
           <NuxtLink
             to="/admin/analytics"
-            class="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors"
-            active-class="bg-blue-50 text-blue-700"
+            class="flex items-center px-4 py-2 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            active-class="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400"
           >
             <Icon name="heroicons:chart-bar" class="w-5 h-5 mr-3" />
             {{ $t('admin.navigation.analytics') }}
@@ -100,7 +109,7 @@
                 <li v-if="currentPageName">
                   <div class="flex items-center">
                     <Icon name="heroicons:chevron-right" class="w-4 h-4 text-gray-400" />
-                    <span class="ml-2 text-sm font-medium text-gray-900">{{ currentPageName }}</span>
+                    <span class="ml-2 text-sm font-medium text-gray-900 dark:text-white">{{ currentPageName }}</span>
                   </div>
                 </li>
               </ol>
@@ -155,6 +164,7 @@ const currentPageName = computed(() => {
   const path = route.path
   if (path === '/admin' || path === '/admin/') return t('admin.navigation.dashboard')
   if (path.startsWith('/admin/products')) return t('admin.navigation.products')
+  if (path.startsWith('/admin/inventory')) return t('admin.navigation.inventory')
   if (path.startsWith('/admin/orders')) return t('admin.navigation.orders')
   if (path.startsWith('/admin/users')) return t('admin.navigation.users')
   if (path.startsWith('/admin/analytics')) return t('admin.navigation.analytics')

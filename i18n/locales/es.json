@@ -618,7 +618,8 @@
       "products": "Productos",
       "orders": "Pedidos",
       "users": "Usuarios",
-      "analytics": "Analíticas"
+      "analytics": "Analíticas",
+      "inventory": "Inventario"
     },
     "dashboard": {
       "title": "Panel de Control",
@@ -902,7 +903,8 @@
       "editProduct": "Editar Producto",
       "orders": "Pedidos",
       "users": "Usuarios",
-      "analytics": "Analíticas"
+      "analytics": "Analíticas",
+      "inventory": "Inventario"
     },
     "userMenu": {
       "profile": "Perfil",

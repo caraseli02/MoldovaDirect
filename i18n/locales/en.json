@@ -643,7 +643,8 @@
       "products": "Products",
       "orders": "Orders",
       "users": "Users",
-      "analytics": "Analytics"
+      "analytics": "Analytics",
+      "inventory": "Inventory"
     },
     "dashboard": {
       "title": "Dashboard",
@@ -927,7 +928,8 @@
       "editProduct": "Edit Product",
       "orders": "Orders",
       "users": "Users",
-      "analytics": "Analytics"
+      "analytics": "Analytics",
+      "inventory": "Inventory"
     },
     "userMenu": {
       "profile": "Profile",
