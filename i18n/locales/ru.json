@@ -379,7 +379,8 @@
       "products": "Товары",
       "orders": "Заказы",
       "users": "Пользователи",
-      "analytics": "Аналитика"
+      "analytics": "Аналитика",
+      "inventory": "Инвентарь"
     },
     "dashboard": {
       "title": "Панель управления",
@@ -663,7 +664,8 @@
       "editProduct": "Редактировать товар",
       "orders": "Заказы",
       "users": "Пользователи",
-      "analytics": "Аналитика"
+      "analytics": "Аналитика",
+      "inventory": "Инвентарь"
     },
     "userMenu": {
       "profile": "Профиль",

@@ -330,22 +330,35 @@ export const useAdminProductsStore = defineStore('adminProducts', {
     /**
      * Update inventory for a product
      */
-    async updateInventory(productId: number, quantity: number) {
+    async updateInventory(productId: number, quantity: number, reason?: string, notes?: string) {
       try {
-        await $fetch(`/api/admin/products/${productId}/inventory`, {
+        const response = await $fetch<{
+          success: boolean
+          product: any
+          movement: any
+          statusChanged: boolean
+          message: string
+        }>(`/api/admin/products/${productId}/inventory`, {
           method: 'PUT',
-          body: { quantity }
+          body: { quantity, reason, notes }
         })
 
-        // Update local state
+        // Update local state with the response data
         const product = this.products.find(p => p.id === productId)
-        if (product) {
-          product.stockQuantity = quantity
+        if (product && response.product) {
+          product.stockQuantity = response.product.stockQuantity
+          product.lowStockThreshold = response.product.lowStockThreshold
+          product.reorderPoint = response.product.reorderPoint
+          product.isActive = response.product.isActive
+          product.stockStatus = response.product.stockStatus
+          product.updatedAt = response.product.updatedAt
         }
 
-        // Show success toast
+        // Show success toast with appropriate message
         const toast = useToastStore()
-        toast.success('Inventory updated successfully')
+        toast.success(response.message)
+
+        return response
       } catch (error) {
         const toast = useToastStore()
         toast.error('Failed to update inventory')

@@ -489,7 +489,8 @@
       "products": "Produse",
       "orders": "Comenzi",
       "users": "Utilizatori",
-      "analytics": "Analize"
+      "analytics": "Analize",
+      "inventory": "Inventar"
     },
     "dashboard": {
       "title": "Panou de Control",
@@ -773,7 +774,8 @@
       "editProduct": "Editează Produsul",
       "orders": "Comenzi",
       "users": "Utilizatori",
-      "analytics": "Analize"
+      "analytics": "Analize",
+      "inventory": "Inventar"
     },
     "userMenu": {
       "profile": "Profil",
