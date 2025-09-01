@@ -68,12 +68,12 @@
     <div class="mt-6">
       <!-- Inventory Reports Tab -->
       <div v-if="activeTab === 'reports'">
-        <InventoryReports />
+        <AdminInventoryReports />
       </div>
 
       <!-- Inventory Movements Tab -->
       <div v-if="activeTab === 'movements'">
-        <InventoryMovements />
+        <AdminInventoryMovements />
       </div>
     </div>
   </div>
@@ -109,7 +109,7 @@ const setupInventorySchema = async () => {
   setupLoading.value = true
   
   try {
-    const response = await $fetch('/api/admin/setup-inventory', {
+    await $fetch('/api/admin/setup-inventory', {
       method: 'POST'
     })
     
