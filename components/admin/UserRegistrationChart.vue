@@ -17,7 +17,7 @@
     </div>
     
     <div class="h-80">
-      <BaseChart
+      <AdminBaseChart
         type="line"
         :data="chartData"
         :options="chartOptions"

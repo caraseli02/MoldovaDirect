@@ -40,6 +40,11 @@ import {
   Legend,
   Filler,
   TimeScale,
+  LineController,
+  BarController,
+  DoughnutController,
+  PieController,
+  ArcElement,
   type ChartConfiguration,
   type ChartData,
   type ChartOptions
@@ -53,11 +58,16 @@ Chart.register(
   PointElement,
   LineElement,
   BarElement,
+  ArcElement,
   Title,
   Tooltip,
   Legend,
   Filler,
-  TimeScale
+  TimeScale,
+  LineController,
+  BarController,
+  DoughnutController,
+  PieController
 )
 
 interface Props {
