@@ -14,15 +14,15 @@ The shopping cart feature enables customers to collect products they wish to pur
 
 **WHEN** a customer clicks "Add to Cart" on a product page  
 **THEN** the system **SHALL** add the specified quantity to their cart  
-**AND** the system **SHALL** validate the quantity against available stock  
+**AND** the system **SHALL** validate the quantity against available stock
 
 **WHEN** a product is already in the cart  
 **THEN** the system **SHALL** increase the quantity by the specified amount  
-**AND** the system **SHALL** update the item total price immediately  
+**AND** the system **SHALL** update the item total price immediately
 
 **WHEN** adding a product would exceed available stock  
 **THEN** the system **SHALL** display an error message and prevent the addition  
-**AND** the system **SHALL** show the maximum available quantity  
+**AND** the system **SHALL** show the maximum available quantity
 
 **WHEN** a product is successfully added  
 **THEN** the system **SHALL** display a confirmation message  
@@ -37,20 +37,20 @@ The shopping cart feature enables customers to collect products they wish to pur
 
 **WHEN** a customer adds items to their cart  
 **THEN** the system **SHALL** save the cart data to localStorage immediately  
-**AND** the system **SHALL** include timestamp information for expiry tracking  
+**AND** the system **SHALL** include timestamp information for expiry tracking
 
 **WHEN** a customer returns to the site  
 **THEN** the system **SHALL** restore their previous cart contents  
 **AND** the system **SHALL** validate item availability and pricing  
-**AND** the system **SHALL** notify of any changes since last visit  
+**AND** the system **SHALL** notify of any changes since last visit
 
 **WHEN** cart data is older than 30 days  
 **THEN** the system **SHALL** clear the expired cart data  
-**AND** the system **SHALL** not notify the user of the cleared cart  
+**AND** the system **SHALL** not notify the user of the cleared cart
 
 **WHEN** localStorage is unavailable  
 **THEN** the system **SHALL** maintain cart data for the current session only  
-**AND** the system **SHALL** warn the user about temporary cart storage  
+**AND** the system **SHALL** warn the user about temporary cart storage
 
 **WHEN** a customer's session expires  
 **THEN** the system **SHALL** generate a new session ID while preserving cart contents  
@@ -64,24 +64,24 @@ The shopping cart feature enables customers to collect products they wish to pur
 
 **WHEN** a customer increases quantity using the plus button  
 **THEN** the system **SHALL** increment the quantity by 1  
-**AND** the system **SHALL** validate against available stock before applying  
+**AND** the system **SHALL** validate against available stock before applying
 
 **WHEN** a customer decreases quantity using the minus button  
 **THEN** the system **SHALL** decrement the quantity by 1  
-**AND** the system **SHALL** ensure quantity remains positive  
+**AND** the system **SHALL** ensure quantity remains positive
 
 **WHEN** quantity reaches zero through decrement  
 **THEN** the system **SHALL** remove the item from the cart  
-**AND** the system **SHALL** display a confirmation of item removal  
+**AND** the system **SHALL** display a confirmation of item removal
 
 **WHEN** increasing quantity would exceed available stock  
 **THEN** the system **SHALL** prevent the increase and show an error message  
-**AND** the system **SHALL** display the maximum available quantity  
+**AND** the system **SHALL** display the maximum available quantity
 
 **WHEN** quantity is manually entered in an input field  
 **THEN** the system **SHALL** validate the input is a positive integer  
 **AND** the system **SHALL** validate against available stock  
-**AND** the system **SHALL** revert to previous quantity if validation fails  
+**AND** the system **SHALL** revert to previous quantity if validation fails
 
 **WHEN** quantity changes by any method  
 **THEN** the system **SHALL** update the item total and cart subtotal immediately  
@@ -95,12 +95,12 @@ The shopping cart feature enables customers to collect products they wish to pur
 
 **WHEN** a customer clicks the remove button on a cart item  
 **THEN** the system **SHALL** remove the item completely from the cart  
-**AND** the system **SHALL** update localStorage immediately  
+**AND** the system **SHALL** update localStorage immediately
 
 **WHEN** an item is removed  
 **THEN** the system **SHALL** display a confirmation message  
 **AND** the system **SHALL** provide an undo option for 5 seconds  
-**AND** the system **SHALL** update the cart totals immediately  
+**AND** the system **SHALL** update the cart totals immediately
 
 **WHEN** the last item is removed from the cart  
 **THEN** the system **SHALL** display the empty cart state  
@@ -115,22 +115,22 @@ The shopping cart feature enables customers to collect products they wish to pur
 
 **WHEN** a customer views their cart  
 **THEN** the system **SHALL** validate all items against current inventory  
-**AND** the system **SHALL** check for price changes since items were added  
+**AND** the system **SHALL** check for price changes since items were added
 
 **WHEN** a product becomes completely out of stock  
 **THEN** the system **SHALL** remove it from the cart automatically  
 **AND** the system **SHALL** notify the customer with specific item details  
-**AND** the system **SHALL** offer to notify when item is back in stock  
+**AND** the system **SHALL** offer to notify when item is back in stock
 
 **WHEN** a product's available quantity is less than cart quantity  
 **THEN** the system **SHALL** adjust cart quantity to maximum available stock  
 **AND** the system **SHALL** notify the customer of the quantity change  
-**AND** the system **SHALL** update pricing based on new quantity  
+**AND** the system **SHALL** update pricing based on new quantity
 
 **WHEN** a product is no longer available (discontinued)  
 **THEN** the system **SHALL** remove it from the cart  
 **AND** the system **SHALL** display a notification explaining the removal  
-**AND** the system **SHALL** suggest similar alternative products  
+**AND** the system **SHALL** suggest similar alternative products
 
 **WHEN** inventory validation occurs  
 **THEN** the system **SHALL** update product information in the cart  
@@ -146,22 +146,22 @@ The shopping cart feature enables customers to collect products they wish to pur
 **WHEN** viewing the cart  
 **THEN** the system **SHALL** display the subtotal of all items  
 **AND** the system **SHALL** show individual item totals (price × quantity)  
-**AND** the system **SHALL** format all prices according to EUR currency standards  
+**AND** the system **SHALL** format all prices according to EUR currency standards
 
 **WHEN** item quantities change  
 **THEN** the system **SHALL** recalculate totals immediately  
 **AND** the system **SHALL** update both item totals and cart subtotal  
-**AND** the system **SHALL** animate price changes for visual feedback  
+**AND** the system **SHALL** animate price changes for visual feedback
 
 **WHEN** displaying prices in different locales  
 **THEN** the system **SHALL** format them according to the selected locale  
 **AND** the system **SHALL** use appropriate decimal separators and thousand separators  
-**AND** the system **SHALL** maintain EUR currency symbol placement per locale  
+**AND** the system **SHALL** maintain EUR currency symbol placement per locale
 
 **WHEN** calculating totals  
 **THEN** the system **SHALL** use the most current product prices  
 **AND** the system **SHALL** handle rounding to two decimal places consistently  
-**AND** the system **SHALL** notify users if prices have changed since items were added  
+**AND** the system **SHALL** notify users if prices have changed since items were added
 
 **WHEN** the cart is empty  
 **THEN** the system **SHALL** display a subtotal of €0.00  
@@ -177,12 +177,12 @@ The shopping cart feature enables customers to collect products they wish to pur
 **WHEN** the cart is empty  
 **THEN** the system **SHALL** display an empty cart message in the user's selected language  
 **AND** the system **SHALL** show a "Continue Shopping" button linking to the products page  
-**AND** the system **SHALL** display an appropriate empty cart icon or illustration  
+**AND** the system **SHALL** display an appropriate empty cart icon or illustration
 
 **WHEN** the cart is empty  
 **THEN** the checkout button **SHALL** be disabled or hidden  
 **AND** cart summary sections **SHALL** be hidden  
-**AND** the cart page **SHALL** focus on encouraging product discovery  
+**AND** the cart page **SHALL** focus on encouraging product discovery
 
 **WHEN** displaying the empty cart state  
 **THEN** the system **SHALL** suggest popular or featured products  
@@ -198,17 +198,17 @@ The shopping cart feature enables customers to collect products they wish to pur
 **WHEN** a customer changes language  
 **THEN** all cart interface text **SHALL** update to the selected language immediately  
 **AND** button labels, headings, and messages **SHALL** be translated  
-**AND** the cart **SHALL** maintain its current state during language switch  
+**AND** the cart **SHALL** maintain its current state during language switch
 
 **WHEN** displaying product names in the cart  
 **THEN** the system **SHALL** show them in the customer's selected language  
 **AND** the system **SHALL** fall back to default language if translation unavailable  
-**AND** the system **SHALL** maintain consistent name display across all cart views  
+**AND** the system **SHALL** maintain consistent name display across all cart views
 
 **WHEN** showing error messages or notifications  
 **THEN** the system **SHALL** display them in the customer's selected language  
 **AND** error messages **SHALL** be culturally appropriate and clear  
-**AND** action buttons in error dialogs **SHALL** use translated text  
+**AND** action buttons in error dialogs **SHALL** use translated text
 
 **WHEN** formatting prices for different locales  
 **THEN** the system **SHALL** use the appropriate locale formatting for EUR  
@@ -224,17 +224,17 @@ The shopping cart feature enables customers to collect products they wish to pur
 **WHEN** accessing the cart on mobile devices  
 **THEN** all functionality **SHALL** work without horizontal scrolling  
 **AND** the layout **SHALL** adapt to portrait and landscape orientations  
-**AND** touch targets **SHALL** meet minimum size requirements (44px)  
+**AND** touch targets **SHALL** meet minimum size requirements (44px)
 
 **WHEN** viewing cart items on mobile  
 **THEN** product information **SHALL** be clearly readable without zooming  
 **AND** product images **SHALL** be appropriately sized for mobile screens  
-**AND** item details **SHALL** be organized for easy scanning  
+**AND** item details **SHALL** be organized for easy scanning
 
 **WHEN** using quantity controls on mobile  
 **THEN** plus/minus buttons **SHALL** be appropriately sized for touch interaction  
 **AND** quantity input fields **SHALL** trigger numeric keyboards  
-**AND** buttons **SHALL** provide haptic feedback where supported  
+**AND** buttons **SHALL** provide haptic feedback where supported
 
 **WHEN** viewing the cart summary on mobile  
 **THEN** it **SHALL** be easily accessible and readable  
@@ -250,22 +250,22 @@ The shopping cart feature enables customers to collect products they wish to pur
 **WHEN** cart operations are in progress (add, remove, update)  
 **THEN** the system **SHALL** display loading indicators on affected UI elements  
 **AND** the system **SHALL** disable relevant buttons to prevent duplicate actions  
-**AND** loading states **SHALL** provide clear visual feedback  
+**AND** loading states **SHALL** provide clear visual feedback
 
 **WHEN** cart operations complete successfully  
 **THEN** loading states **SHALL** be cleared immediately  
 **AND** the system **SHALL** show success confirmation  
-**AND** UI elements **SHALL** be re-enabled for further interaction  
+**AND** UI elements **SHALL** be re-enabled for further interaction
 
 **WHEN** cart data is loading on page load  
 **THEN** the system **SHALL** show a loading spinner or skeleton UI  
 **AND** the system **SHALL** load critical cart information first  
-**AND** secondary details **SHALL** load progressively  
+**AND** secondary details **SHALL** load progressively
 
 **WHEN** cart operations fail  
 **THEN** the system **SHALL** display appropriate error messages  
 **AND** the system **SHALL** provide retry options for failed operations  
-**AND** the system **SHALL** revert to previous state if operation cannot be completed  
+**AND** the system **SHALL** revert to previous state if operation cannot be completed
 
 **WHEN** the cart page loads initially  
 **THEN** it **SHALL** render within 2 seconds on standard connections  

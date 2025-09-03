@@ -398,7 +398,7 @@
     "sortPriceDesc": "Precio: Mayor a Menor",
     "sortFeatured": "Destacados",
     "sortPriceLowHigh": "Precio: Menor a Mayor",
-    "sortPriceHighLow": "Precio: Mayor a Menor", 
+    "sortPriceHighLow": "Precio: Mayor a Menor",
     "showingResults": "Mostrando {start}-{end} de {total} productos",
     "results": "{count} resultados | {count} resultado | {count} resultados",
     "search": "Búsqueda",
@@ -924,5 +924,24 @@
       "interval": "Actualizar cada {minutes} minutos",
       "lastRefresh": "Última actualización: {time}"
     }
+  },
+  "pwa": {
+    "installTitle": "Instalar Moldova Direct",
+    "installDescription": "Instala nuestra app para una experiencia más rápida y acceso sin conexión",
+    "install": "Instalar",
+    "installing": "Instalando...",
+    "notNow": "Ahora no",
+    "updateAvailable": "Actualización disponible",
+    "updateDescription": "Una nueva versión está disponible",
+    "update": "Actualizar",
+    "updating": "Actualizando...",
+    "offlineTitle": "Sin conexión",
+    "offlineMessage": "Estás navegando sin conexión. Algunas funciones pueden no estar disponibles.",
+    "backOnline": "Conexión restaurada",
+    "stockAlert": "Alerta de stock",
+    "stockAlertDescription": "Te notificaremos cuando este producto esté disponible",
+    "enableNotifications": "Activar notificaciones",
+    "notificationsEnabled": "Notificaciones activadas",
+    "notificationsDisabled": "Notificaciones desactivadas"
   }
 }

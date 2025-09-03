@@ -1,5 +1,13 @@
 <template>
-  <div class="relative bg-white dark:bg-slate-800 rounded-lg shadow-sm dark:shadow-slate-900/20 border border-gray-200 dark:border-slate-700 hover:shadow-md dark:hover:shadow-slate-900/30 transition-shadow duration-300">
+  <div 
+    ref="cardRef"
+    class="relative bg-white dark:bg-slate-800 rounded-lg shadow-sm dark:shadow-slate-900/20 border border-gray-200 dark:border-slate-700 hover:shadow-md dark:hover:shadow-slate-900/30 transition-all duration-300"
+    :class="{ 
+      'active:scale-95': isMobile,
+      'touch-manipulation': isMobile 
+    }"
+    @touchstart="handleTouchStart"
+  >
     <!-- Product Image -->
     <div class="aspect-square overflow-hidden rounded-t-lg bg-gray-100 dark:bg-slate-700">
       <nuxt-link :to="`/products/${product.slug}`">
@@ -96,16 +104,18 @@
       <!-- Add to Cart Button -->
       <button
         :disabled="product.stockQuantity <= 0 || cartLoading"
-        class="w-full mt-4 py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
+        class="w-full mt-4 py-3 px-4 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2 touch-manipulation"
         :class="[
           isInCart(product.id) 
             ? 'bg-green-600 dark:bg-green-500 text-white hover:bg-green-700 dark:hover:bg-green-600' 
             : 'bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-600',
           (product.stockQuantity <= 0 || cartLoading) 
             ? 'bg-gray-300 dark:bg-slate-600 cursor-not-allowed' 
-            : ''
+            : 'active:scale-95',
+          isMobile ? 'min-h-[44px]' : '' // Ensure minimum touch target size
         ]"
         @click="addToCart"
+        @touchstart="isMobile && !cartLoading && vibrate('tap')"
       >
         <!-- Loading Spinner -->
         <svg v-if="cartLoading" class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -161,6 +171,12 @@ const props = defineProps<Props>()
 
 // Composables
 const { locale } = useI18n()
+const { isMobile } = useDevice()
+const { vibrate } = useHapticFeedback()
+const touchEvents = useTouchEvents()
+
+// Template refs
+const cardRef = ref<HTMLElement>()
 
 // Computed properties
 const primaryImage = computed(() => {
@@ -195,9 +211,21 @@ const formatPrice = (price: string | number) => {
 // Cart functionality
 const { addItem, loading: cartLoading, isInCart } = useCart()
 
+// Touch event handlers
+const handleTouchStart = (event: TouchEvent) => {
+  if (isMobile.value) {
+    vibrate('tap')
+  }
+}
+
 // Actions
 const addToCart = async () => {
   try {
+    // Haptic feedback for mobile users
+    if (isMobile.value) {
+      vibrate('buttonPress')
+    }
+    
     // Convert the product to the format expected by the cart
     const cartProduct = {
       id: props.product.id,
@@ -209,8 +237,42 @@ const addToCart = async () => {
     }
     
     await addItem(cartProduct, 1)
+    
+    // Success haptic feedback
+    if (isMobile.value) {
+      vibrate('success')
+    }
   } catch (error) {
     console.error('Failed to add item to cart:', error)
+    
+    // Error haptic feedback
+    if (isMobile.value) {
+      vibrate('error')
+    }
   }
 }
+
+// Setup touch optimizations for mobile
+onMounted(() => {
+  if (isMobile.value && cardRef.value) {
+    // Setup efficient touch event handling
+    touchEvents.setHandlers({
+      onTap: () => {
+        // Navigate to product detail on tap (if not button)
+        const router = useRouter()
+        router.push(`/products/${props.product.slug}`)
+      }
+    })
+    
+    const cleanup = touchEvents.setupTouchListeners(cardRef.value, {
+      passive: true
+    })
+    
+    // Cleanup on unmount
+    onUnmounted(() => {
+      cleanup()
+      touchEvents.cleanup()
+    })
+  }
+})
 </script>

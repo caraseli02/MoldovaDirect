@@ -55,6 +55,7 @@
     "@pinia/nuxt": "^0.11.2",
     "@tailwindcss/vite": "^4.1.12",
     "@types/uuid": "^10.0.0",
+    "@vite-pwa/nuxt": "^1.0.4",
     "@vueuse/core": "^13.8.0",
     "chart.js": "^4.5.0",
     "chartjs-adapter-date-fns": "^3.0.0",

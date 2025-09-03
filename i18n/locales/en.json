@@ -949,5 +949,24 @@
       "interval": "Refresh every {minutes} minutes",
       "lastRefresh": "Last refresh: {time}"
     }
+  },
+  "pwa": {
+    "installTitle": "Install Moldova Direct",
+    "installDescription": "Install our app for a faster experience and offline access",
+    "install": "Install",
+    "installing": "Installing...",
+    "notNow": "Not now",
+    "updateAvailable": "Update available",
+    "updateDescription": "A new version is available",
+    "update": "Update",
+    "updating": "Updating...",
+    "offlineTitle": "Offline",
+    "offlineMessage": "You're browsing offline. Some features may not be available.",
+    "backOnline": "Back online",
+    "stockAlert": "Stock alert",
+    "stockAlertDescription": "We'll notify you when this product is available",
+    "enableNotifications": "Enable notifications",
+    "notificationsEnabled": "Notifications enabled",
+    "notificationsDisabled": "Notifications disabled"
   }
 }
