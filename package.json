@@ -80,7 +80,9 @@
     "@nuxt/test-utils": "^3.19.2",
     "@nuxtjs/supabase": "^1.6.0",
     "@playwright/test": "^1.54.2",
+    "@types/node": "^24.3.0",
     "@vue/test-utils": "^2.4.6",
+    "dotenv": "^17.2.1",
     "jsdom": "^26.1.0",
     "playwright": "^1.55.0",
     "vitest": "^3.2.4"
