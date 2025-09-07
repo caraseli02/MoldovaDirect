@@ -374,13 +374,15 @@ onMounted(() => {
 
 /* Enhanced focus states for accessibility */
 button:focus {
-  @apply outline-none ring-2 ring-blue-500 ring-offset-2 dark:ring-offset-gray-800 rounded-md;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+  border-radius: 0.375rem;
 }
 
 /* Card hover effect on desktop */
 @media (min-width: 1024px) {
   .bg-white:hover {
-    @apply shadow-lg;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   }
 }
 

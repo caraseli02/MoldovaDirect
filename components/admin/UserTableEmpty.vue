@@ -245,7 +245,9 @@ const inviteUser = () => {
 
 /* Enhanced focus states for accessibility */
 button:focus {
-  @apply outline-none ring-2 ring-blue-500 ring-offset-2 dark:ring-offset-gray-800 rounded-lg;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+  border-radius: 0.5rem;
 }
 
 /* Smooth animations */
