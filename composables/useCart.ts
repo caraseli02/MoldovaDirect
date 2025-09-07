@@ -1,13 +1,29 @@
 import { useCartStore } from '~/stores/cart'
+import { useCartAnalytics } from '~/composables/useCartAnalytics'
 
 export const useCart = () => {
   const cartStore = useCartStore()
   const toast = useToast()
+  const cartAnalytics = useCartAnalytics()
 
   // Initialize cart on first use with error handling
   if (process.client && !cartStore.sessionId) {
     try {
       cartStore.initializeCart()
+      
+      // Setup cart analytics abandonment detection
+      const cleanupAbandonmentDetection = cartAnalytics.setupAbandonmentDetection(
+        computed(() => cartStore.items)
+      )
+      
+      // Cleanup on unmount (if in a component context)
+      if (getCurrentInstance()) {
+        onUnmounted(() => {
+          if (cleanupAbandonmentDetection) {
+            cleanupAbandonmentDetection()
+          }
+        })
+      }
     } catch (error) {
       console.error('Failed to initialize cart:', error)
       toast.error('Error de inicialización', 'No se pudo cargar el carrito')
@@ -244,6 +260,25 @@ export const useCart = () => {
       }
     },
     clearRecommendations: () => cartStore.clearRecommendations(),
+
+    // Analytics methods
+    trackCartView: () => {
+      if (process.client) {
+        cartAnalytics.trackCartView(cartStore.subtotal, cartStore.itemCount)
+      }
+    },
+    
+    trackCheckoutStart: () => {
+      if (process.client) {
+        cartAnalytics.trackCheckoutStart(cartStore.subtotal, cartStore.itemCount, cartStore.items)
+      }
+    },
+    
+    trackCheckoutComplete: (orderId: number) => {
+      if (process.client) {
+        cartAnalytics.trackCheckoutComplete(orderId, cartStore.subtotal, cartStore.itemCount, cartStore.items)
+      }
+    },
 
     // Utility methods
     formatPrice: (price: number) => {

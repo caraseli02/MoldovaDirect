@@ -1,0 +1,22 @@
+{
+  "enabled": true,
+  "name": "I18n Translation Sync",
+  "description": "Monitors changes to localization files and automatically generates translations for all configured target languages while maintaining context and locale-specific conventions",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "i18n/locales/*.json",
+      "lang/*.json",
+      "lang/*.yaml",
+      "lang/*.yml",
+      "locales/*.json",
+      "locales/*.yaml",
+      "locales/*.yml"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A localization file has been modified. Please analyze the changes and:\n\n1. Identify any new or modified text content in the primary language file\n2. Generate accurate translations for all configured target languages (es, ro, ru based on the existing locale files)\n3. Ensure translations maintain proper context and meaning\n4. Apply locale-specific conventions and cultural adaptations where appropriate\n5. Preserve existing translation keys and structure\n6. Update only the target language files that need changes\n\nFocus on maintaining consistency with existing translations and ensuring the new content fits naturally within the application's tone and style."
+  }
+}

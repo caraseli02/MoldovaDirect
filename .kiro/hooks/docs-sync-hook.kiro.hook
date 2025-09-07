@@ -1,0 +1,34 @@
+{
+  "enabled": true,
+  "name": "Documentation Sync",
+  "description": "Monitors all TypeScript/Vue source files and configuration files for changes, then prompts the agent to update documentation in README.md and /docs folder to keep it synchronized with code changes",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "*.ts",
+      "*.vue",
+      "*.js",
+      "*.mjs",
+      "*.json",
+      "components/**/*.vue",
+      "composables/**/*.ts",
+      "pages/**/*.vue",
+      "server/**/*.ts",
+      "stores/**/*.ts",
+      "middleware/**/*.ts",
+      "plugins/**/*.ts",
+      "types/**/*.ts",
+      "lib/**/*.ts",
+      "nuxt.config.ts",
+      "package.json",
+      "tsconfig.json",
+      "app.config.ts",
+      "app.vue"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Source files have been modified in this Nuxt.js/TypeScript project. Please review the changes and update the documentation accordingly. Focus on:\n\n1. Update README.md with any new features, components, or API changes\n2. Update relevant documentation in the /docs folder if it exists\n3. Ensure all new components, composables, pages, or API endpoints are properly documented\n4. Update any setup instructions, configuration details, or usage examples that may have changed\n5. Check if any new dependencies or configuration changes need to be documented\n\nPlease analyze the changed files and provide comprehensive documentation updates that reflect the current state of the codebase."
+  }
+}
