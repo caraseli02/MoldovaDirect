@@ -7,7 +7,7 @@
       :show-product-count="true"
     />
 
-    <div class="flex min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div class="flex min-h-screen bg-gray-50 dark:bg-gray-900" ref="mainContainer">
       <!-- Product Filter Sidebar -->
       <ProductFilter
         :filters="filters"
@@ -18,8 +18,19 @@
       />
 
       <!-- Main Content -->
-      <div class="flex-1">
-        <div class="p-6 lg:p-8">
+      <div class="flex-1" ref="contentContainer">
+        <!-- Pull to Refresh Indicator (Mobile Only) -->
+        <MobilePullToRefreshIndicator
+          v-if="isMobile"
+          :is-refreshing="pullToRefresh.isRefreshing.value"
+          :is-pulling="pullToRefresh.isPulling.value"
+          :can-refresh="pullToRefresh.canRefresh.value"
+          :pull-distance="pullToRefresh.pullDistance.value"
+          :status-text="pullToRefresh.pullStatusText.value"
+          :indicator-style="pullToRefresh.pullIndicatorStyle.value"
+        />
+        
+        <div class="p-6 lg:p-8" ref="scrollContainer">
           <!-- Header -->
           <div class="mb-8">
             <h1 class="text-3xl lg:text-4xl font-bold mb-4 text-gray-900 dark:text-white">{{ $t('common.shop') }}</h1>
@@ -120,12 +131,24 @@
       </div>
 
       <!-- Products Grid -->
-      <div v-else-if="products?.length" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
-        <ProductCard
-          v-for="product in products"
-          :key="product.id"
-          :product="product"
+      <div v-else-if="products?.length" class="mb-8">
+        <!-- Virtual scrolling for mobile -->
+        <MobileVirtualProductGrid
+          v-if="isMobile && products.length > 20"
+          :items="products"
+          :container-height="600"
+          :loading="loading"
+          @load-more="loadMoreProducts"
         />
+        
+        <!-- Regular grid for desktop or small lists -->
+        <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <ProductCard
+            v-for="product in products"
+            :key="product.id"
+            :product="product"
+          />
+        </div>
       </div>
 
       <!-- Empty State -->
@@ -187,6 +210,9 @@
 <script setup lang="ts">
 import type { ProductFilters } from '~/types'
 
+// Mobile-specific imports
+import MobilePullToRefreshIndicator from '~/components/mobile/PullToRefreshIndicator.vue'
+
 // Use product catalog composable for integrated functionality
 const {
   // Initialization
@@ -224,6 +250,24 @@ const {
 // Local reactive state for UI
 const searchQuery = ref('')
 const sortBy = ref<string>('created')
+
+// Mobile functionality
+const { isMobile } = useDevice()
+const { vibrate } = useHapticFeedback()
+
+// Template refs
+const mainContainer = ref<HTMLElement>()
+const contentContainer = ref<HTMLElement>()
+const scrollContainer = ref<HTMLElement>()
+
+// Pull to refresh functionality
+const pullToRefresh = usePullToRefresh(async () => {
+  vibrate('pullRefresh')
+  await refreshProducts()
+})
+
+// Swipe gestures for navigation
+const swipeGestures = useSwipeGestures()
 
 // Initialize the catalog
 await initialize()
@@ -378,14 +422,96 @@ const goToPage = (page: number) => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
+// Refresh products function
+const refreshProducts = async () => {
+  try {
+    const currentFilters = {
+      ...filters.value,
+      sortBy: sortBy.value as any,
+      page: 1
+    }
+    
+    if (searchQuery.value.trim()) {
+      await search(searchQuery.value.trim(), currentFilters)
+    } else {
+      await fetchProducts(currentFilters)
+    }
+  } catch (error) {
+    console.error('Failed to refresh products:', error)
+  }
+}
+
 // Error handling
 const retryLoad = () => {
   fetchProducts({ sortBy: 'created', page: 1, limit: 12 })
 }
 
+// Setup mobile interactions
+const setupMobileInteractions = () => {
+  if (!isMobile.value || !scrollContainer.value) return
+  
+  // Setup pull to refresh
+  pullToRefresh.setupPullToRefresh(scrollContainer.value)
+  
+  // Setup swipe gestures for navigation
+  swipeGestures.setupSwipeListeners(scrollContainer.value)
+  swipeGestures.setSwipeHandlers({
+    onLeft: () => {
+      // Navigate to next page if available
+      if (pagination.value.page < pagination.value.totalPages) {
+        goToPage(pagination.value.page + 1)
+      }
+    },
+    onRight: () => {
+      // Navigate to previous page if available
+      if (pagination.value.page > 1) {
+        goToPage(pagination.value.page - 1)
+      }
+    }
+  })
+}
+
+// Cleanup mobile interactions
+const cleanupMobileInteractions = () => {
+  pullToRefresh.cleanupPullToRefresh()
+  swipeGestures.cleanupSwipeListeners()
+}
+
+// Load more products for virtual scrolling
+const loadMoreProducts = async () => {
+  if (loading.value || pagination.value.page >= pagination.value.totalPages) return
+  
+  try {
+    const nextPage = pagination.value.page + 1
+    const currentFilters = {
+      ...filters.value,
+      sortBy: sortBy.value as any,
+      page: nextPage
+    }
+    
+    if (searchQuery.value.trim()) {
+      await search(searchQuery.value.trim(), currentFilters)
+    } else {
+      await fetchProducts(currentFilters)
+    }
+  } catch (error) {
+    console.error('Failed to load more products:', error)
+  }
+}
+
 // Load initial products
 onMounted(() => {
   fetchProducts({ sortBy: 'created', page: 1, limit: 12 })
+  
+  // Setup mobile interactions after DOM is ready
+  nextTick(() => {
+    setupMobileInteractions()
+  })
+})
+
+// Cleanup on unmount
+onUnmounted(() => {
+  cleanupMobileInteractions()
 })
 
 // SEO Meta

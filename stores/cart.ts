@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { useToastStore } from './toast'
 import { useStoreI18n } from '~/composables/useStoreI18n'
+import { useCartAnalytics } from '~/composables/useCartAnalytics'
 
 interface Product {
   id: string
@@ -9,6 +10,7 @@ interface Product {
   price: number
   images: string[]
   stock: number
+  category?: string
 }
 
 interface CartItem {
@@ -430,6 +432,12 @@ export const useCartStore = defineStore('cart', {
       if (this.backgroundValidationEnabled && process.client) {
         this.startBackgroundValidation()
       }
+
+      // Initialize cart analytics
+      if (process.client) {
+        const cartAnalytics = useCartAnalytics()
+        cartAnalytics.initializeCartSession(this.sessionId)
+      }
     },
 
     // Generate unique session ID
@@ -516,6 +524,12 @@ export const useCartStore = defineStore('cart', {
         // Remove from validation queue since we just validated
         this.removeFromValidationQueue(product.id)
 
+        // Track analytics for add to cart
+        if (process.client) {
+          const cartAnalytics = useCartAnalytics()
+          cartAnalytics.trackAddToCart(currentProduct, quantity, this.subtotal, this.itemCount)
+        }
+
         // Persist to storage
         this.saveToStorage()
 
@@ -600,6 +614,12 @@ export const useCartStore = defineStore('cart', {
         // Remove from validation queue since we just validated
         this.removeFromValidationQueue(item.product.id)
         
+        // Track analytics for quantity update
+        if (process.client) {
+          const cartAnalytics = useCartAnalytics()
+          cartAnalytics.trackQuantityUpdate(currentProduct, oldQuantity, quantity, this.subtotal, this.itemCount)
+        }
+        
         // Persist to storage
         this.saveToStorage()
         
@@ -645,6 +665,12 @@ export const useCartStore = defineStore('cart', {
         }
 
         const removedItem = this.items.splice(index, 1)[0]
+        
+        // Track analytics for item removal
+        if (process.client) {
+          const cartAnalytics = useCartAnalytics()
+          cartAnalytics.trackRemoveFromCart(removedItem.product, removedItem.quantity, this.subtotal, this.itemCount)
+        }
         
         // Persist to storage
         this.saveToStorage()

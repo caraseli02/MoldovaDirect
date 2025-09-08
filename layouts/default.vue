@@ -7,6 +7,10 @@
     <LayoutAppFooter />
     <ClientOnly>
       <CustomToastContainer />
+      <!-- PWA Components -->
+      <MobilePWAInstallPrompt />
+      <MobilePWAUpdatePrompt />
+      <MobileOfflineIndicator />
     </ClientOnly>
   </div>
 </template>

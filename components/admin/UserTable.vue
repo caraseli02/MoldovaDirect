@@ -1,5 +1,5 @@
 <!--
-  Admin User Table Component
+  Admin User Table Component - Refactored
   
   Requirements addressed:
   - 4.1: Display paginated list of all registered users with basic information
@@ -7,70 +7,31 @@
   - 4.3: Create user detail view with order history and account information
   
   Features:
-  - Paginated user listing with search and filters
-  - Sortable columns
-  - User status indicators
-  - Quick actions for each user
-  - Responsive design for mobile devices
+  - Mobile-optimized with responsive sub-components
+  - Touch-friendly interactions with haptic feedback
+  - Follows mobile patterns from ProductCard.vue
+  - Modular architecture with dedicated sub-components
 -->
 
 <template>
   <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-    <!-- Table Header with Search and Filters -->
-    <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div class="flex-1 max-w-md">
-          <div class="relative">
-            <Icon 
-              name="heroicons:magnifying-glass" 
-              class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 w-5 h-5" 
-            />
-            <input
-              v-model="searchQuery"
-              type="text"
-              placeholder="Search users by name or email..."
-              class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
-              @input="debouncedSearch"
-            />
-          </div>
-        </div>
-        
-        <div class="flex items-center gap-3">
-          <!-- Status Filter -->
-          <select
-            v-model="statusFilter"
-            class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-            @change="updateStatusFilter"
-          >
-            <option value="">All Status</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-          </select>
-
-          <!-- Date Range Filter -->
-          <AdminUserDateRangePicker
-            v-model:from="dateFrom"
-            v-model:to="dateTo"
-            @update="updateDateRange"
-          />
-
-          <!-- Clear Filters -->
-          <button
-            v-if="hasActiveFilters"
-            @click="clearFilters"
-            class="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700"
-          >
-            Clear
-          </button>
-        </div>
-      </div>
-    </div>
+    <!-- Table Filters -->
+    <AdminUserTableFilters
+      v-model:search-query="searchQuery"
+      v-model:status-filter="statusFilter"
+      v-model:date-from="dateFrom"
+      v-model:date-to="dateTo"
+      @search="handleSearch"
+      @status-change="handleStatusChange"
+      @date-range-change="handleDateRangeChange"
+      @clear-filters="handleClearFilters"
+    />
 
     <!-- Loading State -->
     <div v-if="loading" class="p-8 text-center">
       <div class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400">
         <Icon name="heroicons:arrow-path" class="w-5 h-5 animate-spin" />
-        Loading users...
+        {{ $t('admin.users.loading') }}
       </div>
     </div>
 
@@ -82,185 +43,111 @@
       </div>
       <button
         @click="retry"
-        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-lg"
+        @touchstart="isMobile && vibrate('tap')"
+        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-lg touch-manipulation active:scale-95"
+        :class="{ 'min-h-[44px]': isMobile }"
       >
-        Retry
+        {{ $t('admin.users.retry') }}
       </button>
     </div>
 
-    <!-- Users Table -->
-    <div v-else class="overflow-x-auto">
-      <table class="w-full">
-        <thead class="bg-gray-50 dark:bg-gray-700">
-          <tr>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-              <button
-                @click="updateSort('name')"
-                class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-gray-300"
-              >
-                User
-                <Icon 
-                  :name="getSortIcon('name')" 
-                  class="w-4 h-4"
-                />
-              </button>
-            </th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              <button
-                @click="updateSort('email')"
-                class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-gray-300"
-              >
-                Email
-                <Icon 
-                  :name="getSortIcon('email')" 
-                  class="w-4 h-4"
-                />
-              </button>
-            </th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Status
-            </th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Orders
-            </th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Total Spent
-            </th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              <button
-                @click="updateSort('created_at')"
-                class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-gray-300"
-              >
-                Registered
-                <Icon 
-                  :name="getSortIcon('created_at')" 
-                  class="w-4 h-4"
-                />
-              </button>
-            </th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              <button
-                @click="updateSort('last_login')"
-                class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-gray-300"
-              >
-                Last Login
-                <Icon 
-                  :name="getSortIcon('last_login')" 
-                  class="w-4 h-4"
-                />
-              </button>
-            </th>
-            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-          <tr
-            v-for="user in usersWithDisplayData"
-            :key="user.id"
-            class="hover:bg-gray-50 dark:hover:bg-gray-700"
-          >
-            <!-- User Info -->
-            <td class="px-6 py-4 whitespace-nowrap">
-              <div class="flex items-center">
-                <div class="flex-shrink-0 h-10 w-10">
-                  <div class="h-10 w-10 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
-                    <Icon name="heroicons:user" class="w-6 h-6 text-gray-600 dark:text-gray-400" />
-                  </div>
-                </div>
-                <div class="ml-4">
-                  <div class="text-sm font-medium text-gray-900 dark:text-gray-100">
-                    {{ user.displayName }}
-                  </div>
-                  <div class="text-sm text-gray-500 dark:text-gray-400">
-                    ID: {{ user.id.slice(0, 8) }}...
-                  </div>
-                </div>
-              </div>
-            </td>
-
-            <!-- Email -->
-            <td class="px-6 py-4 whitespace-nowrap">
-              <div class="text-sm text-gray-900 dark:text-gray-100">{{ user.email }}</div>
-              <div v-if="user.profile?.phone" class="text-sm text-gray-500 dark:text-gray-400">
-                {{ user.profile.phone }}
-              </div>
-            </td>
-
-            <!-- Status -->
-            <td class="px-6 py-4 whitespace-nowrap">
-              <span
-                :class="[
-                  'inline-flex px-2 py-1 text-xs font-semibold rounded-full',
-                  user.status === 'active' 
-                    ? 'bg-green-100 text-green-800' 
-                    : 'bg-yellow-100 text-yellow-800'
-                ]"
-              >
-                {{ user.status }}
-              </span>
-              <div v-if="!user.email_confirmed_at" class="text-xs text-red-600 mt-1">
-                Email not verified
-              </div>
-            </td>
-
-            <!-- Orders -->
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-              <div class="font-medium">{{ user.orderCount || 0 }}</div>
-              <div class="text-gray-500 dark:text-gray-400">{{ user.formattedLastOrder }}</div>
-            </td>
-
-            <!-- Total Spent -->
-            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
-              {{ user.formattedTotalSpent }}
-            </td>
-
-            <!-- Registration Date -->
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-              {{ user.formattedRegistration }}
-            </td>
-
-            <!-- Last Login -->
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-              {{ user.formattedLastLogin }}
-            </td>
-
-            <!-- Actions -->
-            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-              <div class="flex items-center justify-end gap-2">
+    <!-- Users Content -->
+    <div v-else>
+      <!-- Desktop Table -->
+      <div v-if="!isMobile" class="overflow-x-auto">
+        <table class="w-full">
+          <thead class="bg-gray-50 dark:bg-gray-700">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 <button
-                  @click="viewUser(user.id)"
-                  class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
-                  title="View Details"
+                  @click="updateSort('name')"
+                  class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-gray-300 touch-manipulation"
                 >
-                  <Icon name="heroicons:eye" class="w-4 h-4" />
+                  {{ $t('admin.users.columns.user') }}
+                  <Icon :name="getSortIcon('name')" class="w-4 h-4" />
                 </button>
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 <button
-                  @click="editUser(user.id)"
-                  class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
-                  title="Edit User"
+                  @click="updateSort('email')"
+                  class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-gray-300 touch-manipulation"
                 >
-                  <Icon name="heroicons:pencil" class="w-4 h-4" />
+                  {{ $t('admin.users.columns.email') }}
+                  <Icon :name="getSortIcon('email')" class="w-4 h-4" />
                 </button>
-                <AdminUserActionsDropdown
-                  :user="user"
-                  @action="handleUserAction"
-                />
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                {{ $t('admin.users.columns.status') }}
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                {{ $t('admin.users.columns.orders') }}
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                {{ $t('admin.users.columns.totalSpent') }}
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <button
+                  @click="updateSort('created_at')"
+                  class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-gray-300 touch-manipulation"
+                >
+                  {{ $t('admin.users.columns.registered') }}
+                  <Icon :name="getSortIcon('created_at')" class="w-4 h-4" />
+                </button>
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <button
+                  @click="updateSort('last_login')"
+                  class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-gray-300 touch-manipulation"
+                >
+                  {{ $t('admin.users.columns.lastLogin') }}
+                  <Icon :name="getSortIcon('last_login')" class="w-4 h-4" />
+                </button>
+              </th>
+              <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                {{ $t('admin.users.columns.actions') }}
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            <AdminUserTableRow
+              v-for="user in usersWithDisplayData"
+              :key="user.id"
+              :user="user"
+              :is-selected="selectedUserId === user.id"
+              @view="handleViewUser"
+              @edit="handleEditUser"
+              @action="handleUserAction"
+              @select="handleSelectUser"
+            />
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Mobile List -->
+      <div v-else class="p-4">
+        <AdminUserTableRow
+          v-for="user in usersWithDisplayData"
+          :key="user.id"
+          :user="user"
+          :is-selected="selectedUserId === user.id"
+          @view="handleViewUser"
+          @edit="handleEditUser"
+          @action="handleUserAction"
+          @select="handleSelectUser"
+        />
+      </div>
 
       <!-- Empty State -->
-      <div v-if="users.length === 0" class="p-8 text-center">
-        <Icon name="heroicons:users" class="w-12 h-12 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
-        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No users found</h3>
-        <p class="text-gray-500 dark:text-gray-400">
-          {{ hasActiveFilters ? 'Try adjusting your filters' : 'No users have been registered yet' }}
-        </p>
-      </div>
+      <AdminUserTableEmpty
+        v-if="users.length === 0"
+        :has-active-filters="hasActiveFilters"
+        :total-users="totalUsers"
+        :search-query="searchQuery"
+        :status-filter="statusFilter"
+        @clear-filters="handleClearFilters"
+        @refresh="retry"
+        @invite-user="handleInviteUser"
+      />
     </div>
 
     <!-- Pagination -->
@@ -291,8 +178,12 @@ const emit = defineEmits<{
   userAction: [action: string, userId: string, data?: any]
 }>()
 
-// Import debounce utility
-import { debounce } from '~/types/guards'
+// Import VueUse utilities
+import { useDebounceFn } from '@vueuse/core'
+
+// Composables
+const { isMobile } = useDevice()
+const { vibrate } = useHapticFeedback()
 
 // Store
 const adminUsersStore = useAdminUsersStore()
@@ -302,6 +193,8 @@ const searchQuery = ref('')
 const statusFilter = ref('')
 const dateFrom = ref('')
 const dateTo = ref('')
+const selectedUserId = ref<string | null>(null)
+const totalUsers = ref(0)
 
 // Computed
 const { 
@@ -313,29 +206,40 @@ const {
   hasActiveFilters 
 } = storeToRefs(adminUsersStore)
 
-// Debounced search
-const debouncedSearch = debounce(() => {
-  adminUsersStore.updateSearch(searchQuery.value)
+// Debounced search function
+const debouncedSearch = useDebounceFn((query: string) => {
+  adminUsersStore.updateSearch(query)
 }, 300)
 
 // Methods
-const updateStatusFilter = () => {
-  adminUsersStore.updateStatusFilter(statusFilter.value as any)
+const handleSearch = (query: string) => {
+  debouncedSearch(query)
 }
 
-const updateDateRange = () => {
-  adminUsersStore.updateDateRange(
-    dateFrom.value || undefined,
-    dateTo.value || undefined
-  )
+const handleStatusChange = (status: string) => {
+  adminUsersStore.updateStatusFilter(status as any)
+  if (isMobile.value) {
+    vibrate('light')
+  }
 }
 
-const clearFilters = () => {
+const handleDateRangeChange = (from?: string, to?: string) => {
+  adminUsersStore.updateDateRange(from, to)
+  if (isMobile.value) {
+    vibrate('light')
+  }
+}
+
+const handleClearFilters = () => {
   searchQuery.value = ''
   statusFilter.value = ''
   dateFrom.value = ''
   dateTo.value = ''
   adminUsersStore.clearFilters()
+  
+  if (isMobile.value) {
+    vibrate('success')
+  }
 }
 
 const updateSort = (column: string) => {
@@ -375,12 +279,33 @@ const prevPage = () => {
   adminUsersStore.prevPage()
 }
 
-const viewUser = (userId: string) => {
+const handleViewUser = (userId: string) => {
+  selectedUserId.value = userId
   emit('userSelected', userId)
+  
+  if (isMobile.value) {
+    vibrate('success')
+  }
 }
 
-const editUser = (userId: string) => {
+const handleEditUser = (userId: string) => {
   emit('userAction', 'edit', userId)
+  
+  if (isMobile.value) {
+    vibrate('medium')
+  }
+}
+
+const handleSelectUser = (userId: string) => {
+  selectedUserId.value = selectedUserId.value === userId ? null : userId
+}
+
+const handleInviteUser = () => {
+  emit('userAction', 'invite', '')
+  
+  if (isMobile.value) {
+    vibrate('success')
+  }
 }
 
 const handleUserAction = (action: string, userId: string, data?: any) => {
@@ -389,6 +314,10 @@ const handleUserAction = (action: string, userId: string, data?: any) => {
 
 const retry = () => {
   adminUsersStore.fetchUsers()
+  
+  if (isMobile.value) {
+    vibrate('medium')
+  }
 }
 
 // Initialize
