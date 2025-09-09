@@ -129,8 +129,28 @@
 <script setup lang="ts">
 import { useAdminDashboardStore } from '~/stores/adminDashboard'
 
-// Store
-const dashboardStore = useAdminDashboardStore()
+// Store - safely access with fallback
+let dashboardStore: any = null
+
+try {
+  if (process.client) {
+    dashboardStore = useAdminDashboardStore()
+  }
+} catch (error) {
+  console.warn('Admin dashboard store not available during SSR/hydration')
+}
+
+if (!dashboardStore) {
+  dashboardStore = {
+    stats: ref({}),
+    isLoading: ref(false),
+    formattedRevenue: ref('€0.00'),
+    formattedRevenueToday: ref('€0.00'),
+    formattedConversionRate: ref('0%'),
+    timeSinceRefresh: ref(''),
+    refresh: () => Promise.resolve(),
+  }
+}
 
 // Computed properties
 const stats = computed(() => dashboardStore.stats)

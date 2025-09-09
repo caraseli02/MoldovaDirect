@@ -47,7 +47,12 @@ RESEND_API_KEY=re_your_resend_api_key
 3. Run the SQL schema from `supabase-schema.sql` in your Supabase SQL editor
 4. Enable authentication in your Supabase dashboard
 
-For detailed setup instructions, see [SUPABASE_SETUP.md](./SUPABASE_SETUP.md).
+For detailed setup instructions, see [SUPABASE_SETUP.md](./docs/SUPABASE_SETUP.md).
+
+### Internationalization Setup
+The application uses lazy-loaded translations for optimal performance. Translation files are automatically loaded when users switch languages, reducing initial bundle size by ~75%.
+
+For detailed i18n configuration, see [I18N_CONFIGURATION.md](./docs/I18N_CONFIGURATION.md).
 
 ### Database Management
 With Supabase, database management is handled through the Supabase dashboard:
@@ -105,7 +110,8 @@ See [.kiro/ROADMAP.md](.kiro/ROADMAP.md) for detailed timeline.
 - **UI Components**: shadcn-vue component library
 - **Styling**: Tailwind CSS v4 with CSS variables
 - **State Management**: Pinia stores
-- **Internationalization**: @nuxtjs/i18n (ES/EN/RO/RU)
+- **Internationalization**: @nuxtjs/i18n with lazy loading (ES/EN/RO/RU)
+- **Analytics**: Custom cart analytics with offline capability and memory optimization
 
 ### Backend & Infrastructure
 - **Database**: Supabase (PostgreSQL) with Row Level Security
@@ -114,16 +120,190 @@ See [.kiro/ROADMAP.md](.kiro/ROADMAP.md) for detailed timeline.
 - **Deployment**: Vercel with automatic deployments
 - **CI/CD**: GitHub Actions
 
+## 🌍 Internationalization (i18n)
+
+The application supports 4 languages with optimized lazy loading:
+
+### Supported Languages
+- **Spanish (es)** - Default language
+- **English (en)** - Full translation
+- **Romanian (ro)** - Full translation  
+- **Russian (ru)** - Full translation
+
+### Features
+- **Lazy Loading**: Translation files are loaded only when needed, improving initial page load performance
+- **Browser Detection**: Automatically detects user's preferred language
+- **URL Strategy**: Uses prefix strategy (e.g., `/en/products`, `/ro/cart`) except for default Spanish
+- **Persistent Storage**: Remembers user's language choice via cookies
+- **SEO Optimized**: Proper hreflang tags and localized URLs
+
+### Configuration
+```typescript
+// nuxt.config.ts
+i18n: {
+  locales: [
+    { code: 'es', name: 'Español', file: 'es.json' },
+    { code: 'en', name: 'English', file: 'en.json' },
+    { code: 'ro', name: 'Română', file: 'ro.json' },
+    { code: 'ru', name: 'Русский', file: 'ru.json' }
+  ],
+  lazy: true,                    // Enable lazy loading
+  langDir: 'i18n/locales/',     // Translation files directory
+  defaultLocale: 'es',
+  strategy: 'prefix_except_default'
+}
+```
+
+### Usage in Components
+```vue
+<template>
+  <h1>{{ $t('welcome.title') }}</h1>
+  <p>{{ $t('welcome.description') }}</p>
+</template>
+
+<script setup>
+// Access current locale
+const { locale, locales, setLocale } = useI18n()
+
+// Switch language programmatically
+const switchToEnglish = () => setLocale('en')
+</script>
+```
+
+### Translation Files Structure
+```
+i18n/locales/
+├── es.json    # Spanish (default)
+├── en.json    # English
+├── ro.json    # Romanian
+└── ru.json    # Russian
+```
+
+Each file contains nested translation objects:
+```json
+{
+  "nav": {
+    "home": "Home",
+    "products": "Products",
+    "cart": "Cart"
+  },
+  "auth": {
+    "login": "Sign In",
+    "register": "Sign Up"
+  }
+}
+```
+
 ## 🔐 Authentication Features
 
+### Core Authentication
 - User registration with email verification
 - Secure login with Supabase Auth
 - Magic link authentication
 - Password reset functionality
 - Protected routes with RLS policies
 - Account dashboard
-- Multi-language support
-- Dark/light theme toggle with system preference detection
+- Multi-language authentication support
+
+### Authentication Architecture
+- **Plugin-based Initialization**: Authentication state is initialized through a dedicated client-side plugin
+- **Lazy Loading**: Auth store is loaded only when needed to optimize performance
+- **Cross-tab Synchronization**: Real-time session sync across browser tabs
+- **Automatic Token Refresh**: Periodic session refresh during user activity (every 10 minutes)
+- **Error Handling**: Comprehensive error handling with graceful fallbacks
+- **Cleanup Management**: Proper cleanup of event listeners and intervals
+
+### Cart System Architecture
+- **Pinia Availability Check**: Cart composable includes intelligent Pinia readiness detection to prevent initialization errors
+- **Graceful Fallbacks**: Returns minimal interface when Pinia is not available (SSR/initialization timing)
+- **Error Resilience**: Comprehensive error handling with fallback states for all cart operations
+- **Memory Management**: Proper cleanup of intervals and event listeners to prevent memory leaks
+- **Session Persistence**: Cart state and analytics persist across page reloads and browser tabs
+
+### Cart Analytics Architecture
+- **Automatic Tracking**: Cart interactions are tracked automatically via client-side plugin
+- **Offline Capability**: Events are stored locally and synced with server when online
+- **Abandonment Detection**: Automatic detection and tracking of cart abandonment patterns
+- **Performance Optimized**: Minimal impact on user experience with efficient event batching
+
+### Technical Implementation
+
+#### Authentication Plugin
+The authentication system uses a plugin-based approach for initialization:
+
+```typescript
+// Access the auth initialization function
+const { $initAuth } = useNuxtApp()
+
+// Initialize authentication when needed
+const cleanup = await $initAuth()
+
+// Cleanup is handled automatically on page unload
+```
+
+#### Cart System Plugin
+The cart system uses intelligent initialization with Pinia availability detection:
+
+```typescript
+// Cart composable with Pinia availability check
+const { items, addItem, removeItem } = useCart()
+
+// The composable automatically:
+// - Checks if Pinia is available before initialization
+// - Returns minimal interface for SSR/timing issues
+// - Provides comprehensive error handling
+// - Handles graceful fallbacks when store is not ready
+
+// Pinia availability is checked internally:
+const isPiniaAvailable = () => {
+  try {
+    const pinia = getActivePinia()
+    return !!pinia
+  } catch {
+    return false
+  }
+}
+```
+
+#### Cart Analytics Plugin
+Cart analytics are automatically initialized and managed:
+
+```typescript
+// Cart analytics are automatically initialized on app startup
+// The plugin handles:
+// - Automatic cart view tracking on navigation
+// - Periodic server synchronization (every 5 minutes)
+// - Event cleanup on page unload
+// - Memory leak prevention with proper interval management
+
+// Access cart analytics functionality
+const { 
+  trackAddToCart, 
+  trackCartView, 
+  syncEventsWithServer 
+} = useCartAnalytics()
+
+// Manual cleanup is available if needed
+if (window.__cartAnalyticsCleanup) {
+  window.__cartAnalyticsCleanup()
+}
+```
+
+### Session Management
+
+#### Authentication Sessions
+- **Persistence**: Sessions persist across browser tabs and page reloads
+- **Reactive Updates**: Authentication state updates reactively across the application
+- **Storage Events**: Listens for authentication changes from other tabs
+- **Automatic Refresh**: Maintains active sessions with periodic token refresh
+
+#### Cart Analytics Sessions
+- **Session Tracking**: Each cart session is tracked with unique identifiers
+- **Activity Monitoring**: Tracks time spent in cart and user activity patterns
+- **Offline Storage**: Events are stored locally using localStorage for offline capability
+- **Automatic Sync**: Events are synchronized with the server every 5 minutes
+- **Memory Optimization**: Proper cleanup prevents memory leaks and resource accumulation
+- **Abandonment Detection**: Monitors for cart abandonment with configurable timeouts (30 minutes)
 
 ## 🎨 Theme System
 

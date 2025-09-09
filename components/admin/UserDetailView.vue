@@ -294,8 +294,25 @@ const emit = defineEmits<{
   action: [action: string, userId: string, data?: any]
 }>()
 
-// Store
-const adminUsersStore = useAdminUsersStore()
+// Store - safely access with fallback
+let adminUsersStore: any = null
+
+try {
+  if (process.client) {
+    adminUsersStore = useAdminUsersStore()
+  }
+} catch (error) {
+  console.warn('Admin users store not available during SSR/hydration')
+}
+
+if (!adminUsersStore) {
+  adminUsersStore = {
+    // Add fallback properties as needed
+    users: ref([]),
+    isLoading: ref(false),
+    error: ref(null),
+  }
+}
 
 // State
 const activeTab = ref('profile')

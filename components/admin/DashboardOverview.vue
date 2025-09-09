@@ -166,8 +166,31 @@
 <script setup lang="ts">
 import { useAdminDashboardStore } from '~/stores/adminDashboard'
 
-// Store
-const dashboardStore = useAdminDashboardStore()
+// Store - safely access with fallback
+let dashboardStore: any = null
+
+try {
+  if (process.client) {
+    dashboardStore = useAdminDashboardStore()
+  }
+} catch (error) {
+  console.warn('Admin dashboard store not available during SSR/hydration')
+  // Create fallback store interface
+  dashboardStore = {
+    isLoading: ref(false),
+    error: ref(null),
+    criticalAlerts: ref([]),
+    // Add other properties as needed
+  }
+}
+
+if (!dashboardStore) {
+  dashboardStore = {
+    isLoading: ref(false),
+    error: ref(null),
+    criticalAlerts: ref([]),
+  }
+}
 
 // State
 const autoRefreshEnabled = ref(true)

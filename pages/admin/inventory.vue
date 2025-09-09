@@ -113,11 +113,11 @@ const setupInventorySchema = async () => {
       method: 'POST'
     })
     
-    const toast = useToastStore()
+    const toast = useToast()
     toast.success('Inventory database schema setup successfully')
   } catch (error) {
     console.error('Failed to setup inventory schema:', error)
-    const toast = useToastStore()
+    const toast = useToast()
     toast.error('Failed to setup inventory database schema')
   } finally {
     setupLoading.value = false

@@ -2,7 +2,36 @@ import { useToastStore } from '~/stores/toast'
 import type { Toast } from '~/stores/toast'
 
 export const useToast = () => {
-  const toastStore = useToastStore()
+  // Try to access the store, fallback if not available
+  let toastStore: any = null
+
+  try {
+    if (process.client) {
+      toastStore = useToastStore()
+    }
+  } catch (error) {
+    // Pinia not ready yet, use fallback
+    console.warn('Pinia not ready, using toast fallback')
+  }
+
+  // If store is not available, return minimal interface
+  if (!toastStore) {
+    // Return minimal interface for SSR
+    return {
+      addToast: () => {},
+      removeToast: () => {},
+      clearAll: () => {},
+      success: () => {},
+      error: () => {},
+      warning: () => {},
+      info: () => {},
+      cartSuccess: () => {},
+      cartError: () => {},
+      cartWarning: () => {}
+    }
+  }
+
+  // toastStore is already defined from the try-catch above
 
   return {
     // Direct access to store methods

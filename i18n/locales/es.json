@@ -50,7 +50,9 @@
     "quickAdd": "Añadir rápido",
     "inCart": "En carrito",
     "outOfStock": "Agotado",
-    "onlyAvailable": "Solo {count} disponibles"
+    "onlyAvailable": "Solo {count} disponibles",
+    "menu": "Menú",
+    "preferences": "Preferencias"
   },
   "auth": {
     "signIn": "Iniciar Sesión",

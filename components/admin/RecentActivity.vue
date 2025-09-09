@@ -104,8 +104,24 @@ import type { ActivityItem } from '~/server/api/admin/dashboard/activity.get'
 
 const { t } = useI18n()
 
-// Store
-const dashboardStore = useAdminDashboardStore()
+// Store - safely access with fallback
+let dashboardStore: any = null
+
+try {
+  if (process.client) {
+    dashboardStore = useAdminDashboardStore()
+  }
+} catch (error) {
+  console.warn('Admin dashboard store not available during SSR/hydration')
+}
+
+if (!dashboardStore) {
+  dashboardStore = {
+    recentActivity: ref([]),
+    activityLoading: ref(false),
+    loadRecentActivity: () => Promise.resolve(),
+  }
+}
 
 // Computed properties
 const recentActivity = computed(() => dashboardStore.recentActivity)

@@ -17,11 +17,23 @@
 <script setup lang="ts">
 import { useToastStore } from '~/stores/toast'
 
-const toastStore = useToastStore()
+// Safely access the toast store
+let toastStore: any = null
+let toasts = ref([])
 
-const toasts = computed(() => toastStore.toasts)
+try {
+  if (process.client) {
+    toastStore = useToastStore()
+    toasts = computed(() => toastStore.toasts)
+  }
+} catch (error) {
+  console.warn('Toast store not available during SSR/hydration')
+  toasts = ref([])
+}
 
 const removeToast = (id: string) => {
-  toastStore.removeToast(id)
+  if (toastStore) {
+    toastStore.removeToast(id)
+  }
 }
 </script>

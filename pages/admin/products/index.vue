@@ -147,8 +147,24 @@ definePageMeta({
   middleware: 'auth'
 })
 
-// Initialize stores
-const adminProductsStore = useAdminProductsStore()
+// Initialize stores - safely access with fallback
+let adminProductsStore: any = null
+
+try {
+  if (process.client) {
+    adminProductsStore = useAdminProductsStore()
+  }
+} catch (error) {
+  console.warn('Admin products store not available during SSR/hydration')
+}
+
+if (!adminProductsStore) {
+  adminProductsStore = {
+    products: ref([]),
+    isLoading: ref(false),
+    loadProducts: () => Promise.resolve(),
+  }
+}
 
 // Fetch categories
 const { data: categoriesData } = await useFetch<{ categories: CategoryWithChildren[] }>('/api/categories')

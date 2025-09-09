@@ -185,8 +185,26 @@ import { useDebounceFn } from '@vueuse/core'
 const { isMobile } = useDevice()
 const { vibrate } = useHapticFeedback()
 
-// Store
-const adminUsersStore = useAdminUsersStore()
+// Store - safely access with fallback
+let adminUsersStore: any = null
+
+try {
+  if (process.client) {
+    adminUsersStore = useAdminUsersStore()
+  }
+} catch (error) {
+  console.warn('Admin users store not available during SSR/hydration')
+}
+
+if (!adminUsersStore) {
+  adminUsersStore = {
+    users: ref([]),
+    isLoading: ref(false),
+    error: ref(null),
+    loadUsers: () => Promise.resolve(),
+    deleteUser: () => Promise.resolve(),
+  }
+}
 
 // Reactive state
 const searchQuery = ref('')

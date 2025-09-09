@@ -372,11 +372,11 @@ const saveChanges = async () => {
 
     emit('permissionChanged', props.userId, changes)
 
-    const toast = useToastStore()
+    const toast = useToast()
     toast.success('Permissions updated successfully')
 
   } catch (err) {
-    const toast = useToastStore()
+    const toast = useToast()
     toast.error('Failed to update permissions')
     console.error('Error saving permissions:', err)
   } finally {

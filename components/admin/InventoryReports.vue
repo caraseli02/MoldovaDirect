@@ -436,7 +436,7 @@ const generateReport = async () => {
     reportData.value = response.data
   } catch (error) {
     console.error('Failed to generate report:', error)
-    const toast = useToastStore()
+    const toast = useToast()
     toast.error('Failed to generate inventory report')
   } finally {
     loading.value = false

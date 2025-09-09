@@ -183,7 +183,7 @@ For screenshot capture and UI testing:
 
 ### Testing Tools:
 - `scripts/create-test-user.ts`
-- `plugins/mock-auth.client.ts` (for testing)
+- Authentication testing via `$initAuth()` plugin method
 
 ## Conclusion
 

@@ -7,6 +7,12 @@ weight: 40
 
 ## TypeScript Standards
 
+### Code Style
+- Use **double quotes** for strings consistently
+- Always use **semicolons** to terminate statements
+- Use consistent indentation (2 spaces)
+- Add trailing commas in multi-line objects and arrays
+
 ### Type Definitions
 - Use `interface` for object types that may be extended
 - Use `type` for unions, intersections, and computed types
@@ -14,14 +20,14 @@ weight: 40
 - Use `unknown` instead of `any` when type is uncertain
 
 ```typescript
-// Preferred
+// Preferred - Note the consistent use of double quotes and semicolons
 interface User {
   id: number;
   email: string;
   preferences: UserPreferences;
 }
 
-type Status = 'pending' | 'approved' | 'rejected';
+type Status = "pending" | "approved" | "rejected";
 
 // Function with explicit return type
 function getUser(id: number): Promise<User | null> {
@@ -37,15 +43,15 @@ function getUser(id: number): Promise<User | null> {
 
 ```typescript
 // External libraries
-import { ref, computed } from 'vue'
-import { z } from 'zod'
+import { ref, computed } from "vue";
+import { z } from "zod";
 
 // Internal utilities
-import { formatPrice } from '~/utils/currency'
-import { useCart } from '~/composables/useCart'
+import { formatPrice } from "~/utils/currency";
+import { useCart } from "~/composables/useCart";
 
 // Type imports
-import type { Product, CartItem } from '~/types'
+import type { Product, CartItem } from "~/types";
 ```
 
 ## Vue Component Standards
@@ -68,54 +74,54 @@ Follow this order in `<script setup>`:
 ```vue
 <script setup lang="ts">
 // 1. Type imports
-import type { Product } from '~/types'
+import type { Product } from "~/types";
 
 // 2. Library imports
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted } from "vue";
 
 // 3. Component imports
-import ProductCard from '~/components/ProductCard.vue'
+import ProductCard from "~/components/ProductCard.vue";
 
 // 4. Utility imports
-import { formatPrice } from '~/utils/currency'
+import { formatPrice } from "~/utils/currency";
 
 // 5. Props
 interface Props {
-  product: Product
-  showDetails?: boolean
+  product: Product;
+  showDetails?: boolean;
 }
 const props = withDefaults(defineProps<Props>(), {
-  showDetails: false
-})
+  showDetails: false,
+});
 
 // 6. Emits
 interface Emits {
-  addToCart: [product: Product, quantity: number]
+  addToCart: [product: Product, quantity: number];
 }
-const emit = defineEmits<Emits>()
+const emit = defineEmits<Emits>();
 
 // 7. Composables
-const { addItem } = useCart()
+const { addItem } = useCart();
 
 // 8. Reactive state
-const quantity = ref(1)
-const isLoading = ref(false)
+const quantity = ref(1);
+const isLoading = ref(false);
 
 // 9. Computed properties
-const formattedPrice = computed(() => formatPrice(props.product.price))
+const formattedPrice = computed(() => formatPrice(props.product.price));
 
 // 10. Methods
 const handleAddToCart = async () => {
-  isLoading.value = true
-  await addItem(props.product, quantity.value)
-  emit('addToCart', props.product, quantity.value)
-  isLoading.value = false
-}
+  isLoading.value = true;
+  await addItem(props.product, quantity.value);
+  emit("addToCart", props.product, quantity.value);
+  isLoading.value = false;
+};
 
 // 11. Lifecycle hooks
 onMounted(() => {
   // initialization logic
-})
+});
 </script>
 ```
 
@@ -172,29 +178,29 @@ onMounted(() => {
 // server/api/products/[id].get.ts
 export default defineEventHandler(async (event) => {
   try {
-    const id = getRouterParam(event, 'id')
-    const productId = z.string().parse(id)
+    const id = getRouterParam(event, "id");
+    const productId = z.string().parse(id);
     
-    const product = await getProductById(parseInt(productId))
+    const product = await getProductById(parseInt(productId));
     
     if (!product) {
       throw createError({
         statusCode: 404,
-        statusMessage: 'Product not found'
-      })
+        statusMessage: "Product not found",
+      });
     }
     
-    return product
+    return product;
   } catch (error) {
     if (error instanceof z.ZodError) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Invalid product ID'
-      })
+        statusMessage: "Invalid product ID",
+      });
     }
-    throw error
+    throw error;
   }
-})
+});
 ```
 
 ### Request/Response Patterns
@@ -206,14 +212,14 @@ export default defineEventHandler(async (event) => {
 ```typescript
 // Response format
 interface ApiResponse<T> {
-  data: T
-  message?: string
+  data: T;
+  message?: string;
 }
 
 interface ApiError {
-  statusCode: number
-  statusMessage: string
-  details?: any // Only in development
+  statusCode: number;
+  statusMessage: string;
+  details?: any; // Only in development
 }
 ```
 
@@ -228,18 +234,18 @@ interface ApiError {
 
 ```typescript
 // schema/products.ts
-export const product = sqliteTable('product', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  slug: text('slug').notNull().unique(),
-  nameTranslations: text('name_translations', { mode: 'json' })
+export const product = sqliteTable("product", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  slug: text("slug").notNull().unique(),
+  nameTranslations: text("name_translations", { mode: "json" })
     .$type<Record<string, string>>()
     .notNull(),
-  price: integer('price').notNull(), // Store as cents
-  stock: integer('stock').notNull().default(0),
-  categoryId: integer('category_id').references(() => category.id),
-  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
-  updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`)
-})
+  price: integer("price").notNull(), // Store as cents
+  stock: integer("stock").notNull().default(0),
+  categoryId: integer("category_id").references(() => category.id),
+  createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text("updated_at").default(sql`CURRENT_TIMESTAMP`),
+});
 ```
 
 ### Query Patterns
@@ -257,17 +263,17 @@ async function getProductWithCategory(productId: number): Promise<ProductWithCat
       .from(product)
       .leftJoin(category, eq(product.categoryId, category.id))
       .where(eq(product.id, productId))
-      .limit(1)
+      .limit(1);
     
-    if (result.length === 0) return null
+    if (result.length === 0) return null;
     
     return {
       ...result[0].product,
-      category: result[0].category
-    }
+      category: result[0].category,
+    };
   } catch (error) {
-    console.error('Failed to get product:', error)
-    throw new Error('Database query failed')
+    console.error("Failed to get product:", error);
+    throw new Error("Database query failed");
   }
 }
 ```
@@ -282,19 +288,19 @@ async function getProductWithCategory(productId: number): Promise<ProductWithCat
 
 ```typescript
 // tests/e2e/shopping-cart.spec.ts
-test.describe('Shopping Cart', () => {
-  test('should add product to cart and update count', async ({ page }) => {
+test.describe("Shopping Cart", () => {
+  test("should add product to cart and update count", async ({ page }) => {
     // Arrange
-    await page.goto('/products/test-product')
+    await page.goto("/products/test-product");
     
     // Act
-    await page.click('[data-testid="add-to-cart-btn"]')
+    await page.click('[data-testid="add-to-cart-btn"]');
     
     // Assert
-    await expect(page.locator('[data-testid="cart-count"]')).toHaveText('1')
-    await expect(page.locator('.toast')).toContainText('Product added to cart')
-  })
-})
+    await expect(page.locator('[data-testid="cart-count"]')).toHaveText("1");
+    await expect(page.locator(".toast")).toContainText("Product added to cart");
+  });
+});
 ```
 
 ### Data Attributes
@@ -328,23 +334,23 @@ export const useErrorHandler = () => {
     if (error.statusCode >= 500) {
       // Server error - show generic message
       showToast({
-        type: 'error',
-        message: 'Something went wrong. Please try again later.'
-      })
+        type: "error",
+        message: "Something went wrong. Please try again later.",
+      });
     } else if (error.statusCode >= 400) {
       // Client error - show specific message
       showToast({
-        type: 'error',
-        message: error.statusMessage || 'Invalid request'
-      })
+        type: "error",
+        message: error.statusMessage || "Invalid request",
+      });
     }
     
     // Log for debugging
-    console.error('API Error:', error)
-  }
+    console.error("API Error:", error);
+  };
   
-  return { handleApiError }
-}
+  return { handleApiError };
+};
 ```
 
 ### Server-Side Errors

@@ -7,8 +7,10 @@ MoldovaDirect/
 ├── README.md                      # Main project README
 ├── docs/                          # Technical documentation
 │   ├── README.md                  # This file - docs index
+│   ├── AUTHENTICATION_ARCHITECTURE.md # Auth system architecture
 │   ├── SHADCN_MIGRATION.md       # UI component migration guide
 │   ├── SUPABASE_SETUP.md         # Database setup guide
+│   ├── I18N_CONFIGURATION.md     # Internationalization setup
 │   ├── REMAINING_WORK_SUMMARY.md # Development roadmap
 │   └── authentication-translations.md # Auth translations
 │
@@ -58,6 +60,8 @@ MoldovaDirect/
 
 ### For Setup
 - [Supabase Setup](./SUPABASE_SETUP.md) - Database configuration
+- [i18n Configuration](./I18N_CONFIGURATION.md) - Internationalization setup
+- [Authentication Architecture](./AUTHENTICATION_ARCHITECTURE.md) - Auth system technical details
 - [Deployment Guide](./../.kiro/docs/DEPLOYMENT_GUIDE.md) - Deploy to production
 - [Testing Guide](./../tests/AUTH_TESTING_GUIDE.md) - Run tests
 
@@ -66,6 +70,8 @@ MoldovaDirect/
 - [Product Catalog](./../.kiro/specs/product-catalog/) - Product management
 - [Shopping Cart](./../.kiro/specs/shopping-cart/) - Cart functionality
 - [Admin Dashboard](./../.kiro/specs/admin-dashboard/) - Admin features
+- [Cart System Architecture](./CART_SYSTEM_ARCHITECTURE.md) - Cart system technical architecture
+- [Cart Analytics](./CART_ANALYTICS.md) - Cart analytics system documentation
 
 ## 📚 Documentation Guidelines
 
@@ -76,6 +82,8 @@ MoldovaDirect/
    - Migration guides
    - API documentation
    - Development guides
+   - Architecture documentation
+   - Analytics system documentation
 
 2. **Project Specifications** → `/.kiro/specs/`
    - Feature requirements
@@ -112,6 +120,11 @@ When making changes:
 
 ## 🔄 Recent Updates
 
+- **Sep 8, 2025**: Enhanced cart system with Pinia availability detection and comprehensive architecture documentation
+- **Sep 8, 2025**: Fixed TypeScript issues in cart analytics plugin and improved code formatting
+- **Sep 8, 2025**: Added cart analytics system documentation and memory management improvements
+- **Sep 8, 2025**: Added comprehensive authentication architecture documentation
+- **Sep 8, 2025**: Enhanced i18n configuration with lazy loading optimization
 - **Aug 31, 2025**: Major documentation cleanup and reorganization
 - **Aug 31, 2025**: Migrated to shadcn-vue UI components
 - **Aug 30, 2025**: Completed user profile management

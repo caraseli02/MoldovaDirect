@@ -112,9 +112,26 @@ useHead({
   ]
 })
 
-// Store
-const adminUsersStore = useAdminUsersStore()
-const toast = useToastStore()
+// Store - safely access with fallback
+let adminUsersStore: any = null
+
+try {
+  if (process.client) {
+    adminUsersStore = useAdminUsersStore()
+  }
+} catch (error) {
+  console.warn('Admin users store not available during SSR/hydration')
+}
+
+if (!adminUsersStore) {
+  adminUsersStore = {
+    users: ref([]),
+    isLoading: ref(false),
+    loadUsers: () => Promise.resolve(),
+  }
+}
+
+const toast = useToast()
 
 // State
 const selectedUserId = ref<string | null>(null)

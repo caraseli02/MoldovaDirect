@@ -99,8 +99,23 @@ const activityResult = ref(null)
 const activityError = ref('')
 const storeResult = ref(null)
 
-// Store
-const dashboardStore = useAdminDashboardStore()
+// Store - safely access with fallback
+let dashboardStore: any = null
+
+try {
+  if (process.client) {
+    dashboardStore = useAdminDashboardStore()
+  }
+} catch (error) {
+  console.warn('Admin dashboard store not available during SSR/hydration')
+}
+
+if (!dashboardStore) {
+  dashboardStore = {
+    // Add fallback properties as needed
+    refresh: () => Promise.resolve(),
+  }
+}
 
 // Methods
 const testStatsAPI = async () => {

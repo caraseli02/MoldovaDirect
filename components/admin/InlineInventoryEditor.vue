@@ -125,7 +125,25 @@ const emit = defineEmits<Emits>()
 
 // Composables
 const { validateStockQuantity } = useInventory()
-const adminProductsStore = useAdminProductsStore()
+// Store - safely access with fallback
+let adminProductsStore: any = null
+
+try {
+  if (process.client) {
+    adminProductsStore = useAdminProductsStore()
+  }
+} catch (error) {
+  console.warn('Admin products store not available during SSR/hydration')
+}
+
+if (!adminProductsStore) {
+  adminProductsStore = {
+    // Add fallback properties as needed
+    products: ref([]),
+    isLoading: ref(false),
+    updateProduct: () => Promise.resolve(),
+  }
+}
 
 // Reactive state
 const isEditing = ref(false)
