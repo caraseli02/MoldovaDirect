@@ -119,7 +119,7 @@ if (!dashboardStore) {
   dashboardStore = {
     recentActivity: ref([]),
     activityLoading: ref(false),
-    loadRecentActivity: () => Promise.resolve(),
+    fetchActivity: () => Promise.resolve(),
   }
 }
 

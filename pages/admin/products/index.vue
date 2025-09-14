@@ -163,6 +163,27 @@ if (!adminProductsStore) {
     products: ref([]),
     isLoading: ref(false),
     loadProducts: () => Promise.resolve(),
+    filters: {
+      search: '',
+      categoryId: undefined,
+      status: '',
+      stockLevel: '',
+      sortBy: 'created_at',
+      sortOrder: 'desc'
+    },
+    pagination: {
+      page: 1,
+      limit: 20,
+      total: 0,
+      totalPages: 0,
+      hasNext: false,
+      hasPrev: false
+    },
+    loading: false,
+    error: null,
+    selectedProducts: [],
+    bulkOperationInProgress: false,
+    initialize: () => Promise.resolve()
   }
 }
 

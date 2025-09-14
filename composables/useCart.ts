@@ -3,19 +3,13 @@ import { useCartAnalytics } from "~/composables/useCartAnalytics";
 import { getActivePinia } from "pinia";
 
 export const useCart = () => {
-  // Try to access the store, fallback if not available
-  let cartStore: any = null;
-  let cartAnalytics: any = null;
+  // access the store, fallback if not available
+    const pinia = usePinia()
+  
+    const  cartStore = useCartStore(pinia);
+    const  cartAnalytics = useCartAnalytics(pinia);
 
-  try {
-    if (process.client) {
-      cartStore = useCartStore();
-      cartAnalytics = useCartAnalytics();
-    }
-  } catch (error) {
-    // Pinia not ready yet, use fallback
-    console.warn("Pinia not ready, using cart fallback");
-  }
+
 
   // If store is not available, return minimal interface
   if (!cartStore) {

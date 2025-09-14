@@ -175,12 +175,17 @@ try {
   }
 } catch (error) {
   console.warn('Admin dashboard store not available during SSR/hydration')
-  // Create fallback store interface
+  // Create fallback store interface with all methods
   dashboardStore = {
     isLoading: ref(false),
     error: ref(null),
     criticalAlerts: ref([]),
-    // Add other properties as needed
+    initialize: () => Promise.resolve(),
+    refresh: () => Promise.resolve(),
+    clearError: () => {},
+    startAutoRefresh: () => {},
+    stopAutoRefresh: () => {},
+    cleanup: () => {},
   }
 }
 
@@ -189,6 +194,12 @@ if (!dashboardStore) {
     isLoading: ref(false),
     error: ref(null),
     criticalAlerts: ref([]),
+    initialize: () => Promise.resolve(),
+    refresh: () => Promise.resolve(),
+    clearError: () => {},
+    startAutoRefresh: () => {},
+    stopAutoRefresh: () => {},
+    cleanup: () => {},
   }
 }
 

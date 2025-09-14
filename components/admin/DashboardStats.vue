@@ -149,6 +149,7 @@ if (!dashboardStore) {
     formattedConversionRate: ref('0%'),
     timeSinceRefresh: ref(''),
     refresh: () => Promise.resolve(),
+    fetchStats: () => Promise.resolve(),
   }
 }
 

@@ -253,26 +253,29 @@ const addToCart = async () => {
 }
 
 // Setup touch optimizations for mobile
-onMounted(() => {
-  if (isMobile.value && cardRef.value) {
-    // Setup efficient touch event handling
-    touchEvents.setHandlers({
-      onTap: () => {
-        // Navigate to product detail on tap (if not button)
-        const router = useRouter()
-        router.push(`/products/${props.product.slug}`)
-      }
-    })
-    
-    const cleanup = touchEvents.setupTouchListeners(cardRef.value, {
-      passive: true
-    })
-    
-    // Cleanup on unmount
-    onUnmounted(() => {
-      cleanup()
-      touchEvents.cleanup()
-    })
-  }
-})
+const setupMobileTouch = () => {
+  if (!isMobile.value || !cardRef.value) return
+  
+  // Setup efficient touch event handling
+  touchEvents.setHandlers({
+    onTap: () => {
+      // Navigate to product detail on tap (if not button)
+      const router = useRouter()
+      const productPath = `/products/${props.product.slug}`
+      router.push(productPath)
+    }
+  })
+  
+  const cleanup = touchEvents.setupTouchListeners(cardRef.value, {
+    passive: true
+  })
+  
+  // Cleanup on unmount
+  onUnmounted(() => {
+    cleanup()
+    touchEvents.cleanup()
+  })
+}
+
+onMounted(setupMobileTouch)
 </script>

@@ -4,7 +4,7 @@
   "description": "Monitors changes to localization files and automatically generates translations for all configured target languages while maintaining context and locale-specific conventions",
   "version": "1",
   "when": {
-    "type": "fileEdited",
+    "type": "userTriggered",
     "patterns": [
       "i18n/locales/*.json",
       "lang/*.json",

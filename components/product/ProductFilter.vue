@@ -192,16 +192,19 @@ watch(() => props.filters, (newFilters) => {
 }, { deep: true })
 
 // Close mobile filters on escape key
-onMounted(() => {
+const setupEscapeHandler = () => {
   const handleEscape = (e: KeyboardEvent) => {
     if (e.key === 'Escape' && showMobileFilters.value) {
       showMobileFilters.value = false
     }
   }
+  
   document.addEventListener('keydown', handleEscape)
   
   onUnmounted(() => {
     document.removeEventListener('keydown', handleEscape)
   })
-})
+}
+
+onMounted(setupEscapeHandler)
 </script>

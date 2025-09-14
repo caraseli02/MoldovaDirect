@@ -295,12 +295,13 @@ const handleMobileCategorySelect = (category: CategoryWithChildren) => {
 }
 
 // Close mobile nav on escape key
-onMounted(() => {
+const setupEscapeHandler = () => {
   const handleEscape = (e: KeyboardEvent) => {
     if (e.key === 'Escape' && showMobileNav.value) {
       showMobileNav.value = false
     }
   }
+  
   document.addEventListener('keydown', handleEscape)
   
   onUnmounted(() => {
@@ -309,6 +310,8 @@ onMounted(() => {
       clearTimeout(dropdownTimeout.value)
     }
   })
-})
+}
+
+onMounted(setupEscapeHandler)
 </script>
 

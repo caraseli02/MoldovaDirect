@@ -1,14 +1,14 @@
 import type { ProductFilters } from '~/types'
-
 /**
  * Product Catalog Composable
  * Provides integrated access to products, categories, and search functionality
  */
 export const useProductCatalog = () => {
   // Store instances
-  const productsStore = useProductsStore()
-  const searchStore = useSearchStore()
-  const categoriesStore = useCategoriesStore()
+  const pinia = usePinia()
+  const productsStore = useProductsStore(pinia)
+  const searchStore = useSearchStore(pinia)
+  const categoriesStore = useCategoriesStore(pinia)
 
   // Initialize stores
   const initialize = async () => {
@@ -136,4 +136,8 @@ export const useProductCatalog = () => {
     searchStore,
     categoriesStore
   }
+}
+
+function createPinia() {
+  throw new Error('Function not implemented.')
 }

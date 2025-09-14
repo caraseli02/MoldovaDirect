@@ -203,6 +203,19 @@ if (!adminUsersStore) {
     error: ref(null),
     loadUsers: () => Promise.resolve(),
     deleteUser: () => Promise.resolve(),
+    filters: {
+      search: '',
+      status: '',
+      dateFrom: '',
+      dateTo: '',
+      sortBy: 'created_at',
+      sortOrder: 'desc'
+    },
+    updateSort: () => {},
+    updateSearch: () => {},
+    updateStatusFilter: () => {},
+    updateDateRange: () => {},
+    initialize: () => Promise.resolve()
   }
 }
 

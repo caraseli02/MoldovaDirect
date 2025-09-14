@@ -203,7 +203,7 @@ const cancelAction = () => {
 // Close dropdown when clicking outside
 const dropdownRef = ref()
 
-onMounted(() => {
+const setupClickOutsideHandler = () => {
   const handleClickOutside = (event: MouseEvent) => {
     if (dropdownRef.value && !dropdownRef.value.contains(event.target as Node)) {
       isOpen.value = false
@@ -215,5 +215,7 @@ onMounted(() => {
   onUnmounted(() => {
     document.removeEventListener('click', handleClickOutside)
   })
-})
+}
+
+onMounted(setupClickOutsideHandler)
 </script>

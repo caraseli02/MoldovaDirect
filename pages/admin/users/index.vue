@@ -128,6 +128,10 @@ if (!adminUsersStore) {
     users: ref([]),
     isLoading: ref(false),
     loadUsers: () => Promise.resolve(),
+    initialize: () => Promise.resolve(),
+    clearCurrentUser: () => {},
+    summary: ref({}),
+    actionLoading: ref(false)
   }
 }
 

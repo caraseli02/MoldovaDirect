@@ -148,6 +148,8 @@
 </template>
 
 <script setup lang="ts">
+import { useDebounceFn } from '@vueuse/core'
+
 interface Props {
   searchQuery?: string
   statusFilter?: string
