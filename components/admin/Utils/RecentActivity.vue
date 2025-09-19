@@ -22,7 +22,7 @@
           :disabled="isLoading"
           class="text-sm text-blue-600 hover:text-blue-700 disabled:opacity-50"
         >
-          <Icon 
+          <commonIcon 
             name="heroicons:arrow-path" 
             :class="`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`"
           />
@@ -57,7 +57,7 @@
               class="w-8 h-8 rounded-full flex items-center justify-center"
               :class="getActivityIconClass(activity.type)"
             >
-              <Icon :name="getActivityIcon(activity.type)" class="w-4 h-4" />
+              <commonIcon :name="getActivityIcon(activity.type)" class="w-4 h-4" />
             </div>
           </div>
 
@@ -88,7 +88,7 @@
 
       <!-- Empty State -->
       <div v-else class="text-center py-8">
-        <Icon name="heroicons:clock" class="w-12 h-12 text-gray-400 mx-auto mb-4" />
+        <commonIcon name="heroicons:clock" class="w-12 h-12 text-gray-400 mx-auto mb-4" />
         <p class="text-gray-500">{{ $t('admin.dashboard.recentActivity.noActivity') }}</p>
         <p class="text-sm text-gray-400 mt-1">
           {{ $t('admin.dashboard.recentActivity.activityDescription') }}

@@ -6,7 +6,7 @@
         {{ $t('products.filters.active') }}
       </h3>
       <div class="flex flex-wrap gap-2">
-        <ProductFilterTag
+        <productFilterTag
           v-for="filter in activeFilters"
           :key="filter.id"
           :label="filter.label"
@@ -20,7 +20,7 @@
       <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-3">
         {{ $t('products.filters.categories') }}
       </h3>
-      <ProductCategoryTree
+      <productCategoryTree
         :categories="availableFilters.categories"
         :selected="selectedCategories"
         @update:selected="updateCategoryFilter"
@@ -32,7 +32,7 @@
       <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-3">
         {{ $t('products.filters.priceRange') }}
       </h3>
-      <ProductPriceRangeSlider
+      <productMobilePriceRangeSlider
         :min="availableFilters.priceRange.min"
         :max="availableFilters.priceRange.max"
         :value="[localFilters.priceMin || availableFilters.priceRange.min, localFilters.priceMax || availableFilters.priceRange.max]"
@@ -80,7 +80,7 @@
       <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-3">
         {{ attribute.label }}
       </h3>
-      <ProductAttributeCheckboxGroup
+      <productAttributeCheckboxGroup
         :options="attribute.values"
         :selected="localFilters.attributes?.[attribute.name] || []"
         @update:selected="updateAttributeFilter(attribute.name, $event)"
@@ -239,7 +239,7 @@ const updateCategoryFilter = (categories: string[]) => {
 const updatePriceRange = (range: [number, number]) => {
   const [min, max] = range
   const { min: availableMin, max: availableMax } = props.availableFilters.priceRange
-  
+
   updateFilters({
     priceMin: min > availableMin ? min : undefined,
     priceMax: max < availableMax ? max : undefined
@@ -248,13 +248,13 @@ const updatePriceRange = (range: [number, number]) => {
 
 const updateAttributeFilter = (attributeName: string, values: string[]) => {
   const attributes = { ...localFilters.value.attributes }
-  
+
   if (values.length > 0) {
     attributes[attributeName] = values
   } else {
     delete attributes[attributeName]
   }
-  
+
   updateFilters({ attributes })
 }
 
@@ -288,4 +288,3 @@ watch(() => props.filters, (newFilters) => {
   localFilters.value = { ...newFilters }
 }, { deep: true })
 </script>
-

@@ -1,8 +1,8 @@
 <template>
   <div class="product-filter">
     <!-- Desktop Sidebar -->
-    <aside 
-      v-if="!isMobile" 
+    <aside
+      v-if="!isMobile"
       class="hidden lg:block w-80 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 h-full overflow-y-auto"
     >
       <div class="p-6">
@@ -18,8 +18,8 @@
             {{ $t('products.filters.clearAll') }}
           </button>
         </div>
-        
-        <ProductFilterContent 
+
+        <productFilterContent
           :filters="localFilters"
           :available-filters="availableFilters"
           @update:filters="updateFilters"
@@ -33,7 +33,7 @@
       @click="showMobileFilters = true"
       class="lg:hidden fixed bottom-4 right-4 z-40 bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-colors"
     >
-      <Icon name="heroicons:funnel" class="w-6 h-6" />
+      <commonIcon name="heroicons:funnel" class="w-6 h-6" />
       <span v-if="activeFilterCount > 0" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
         {{ activeFilterCount }}
       </span>
@@ -47,7 +47,7 @@
         @click="showMobileFilters = false"
       >
         <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" />
-        
+
         <div
           class="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 rounded-t-xl max-h-[80vh] overflow-hidden transform transition-transform"
           :class="showMobileFilters ? 'translate-y-0' : 'translate-y-full'"
@@ -70,14 +70,14 @@
                 @click="showMobileFilters = false"
                 class="p-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400"
               >
-                <Icon name="heroicons:x-mark" class="w-5 h-5" />
+                <commonIcon name="heroicons:x-mark" class="w-5 h-5" />
               </button>
             </div>
           </div>
 
           <!-- Mobile Filter Content -->
           <div class="overflow-y-auto max-h-[calc(80vh-80px)] p-4">
-            <ProductFilterContent 
+            <productFilterContent
               :filters="localFilters"
               :available-filters="availableFilters"
               @update:filters="updateFilters"
@@ -198,9 +198,9 @@ const setupEscapeHandler = () => {
       showMobileFilters.value = false
     }
   }
-  
+
   document.addEventListener('keydown', handleEscape)
-  
+
   onUnmounted(() => {
     document.removeEventListener('keydown', handleEscape)
   })

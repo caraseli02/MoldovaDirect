@@ -27,7 +27,7 @@
           </p>
         </div>
         <div class="p-3 bg-blue-50 rounded-full">
-          <Icon name="heroicons:cube" class="w-6 h-6 text-blue-600" />
+          <commonIcon name="heroicons:cube" class="w-6 h-6 text-blue-600" />
         </div>
       </div>
       
@@ -35,7 +35,7 @@
       <div v-if="stats?.lowStockProducts && stats.lowStockProducts > 0" 
            class="mt-4 p-2 bg-red-50 rounded-md">
         <p class="text-xs text-red-700">
-          <Icon name="heroicons:exclamation-triangle" class="w-4 h-4 inline mr-1" />
+          <commonIcon name="heroicons:exclamation-triangle" class="w-4 h-4 inline mr-1" />
           {{ $t('admin.dashboard.stats.lowStockProducts', { count: stats.lowStockProducts }) }}
         </p>
       </div>
@@ -54,7 +54,7 @@
           </p>
         </div>
         <div class="p-3 bg-green-50 rounded-full">
-          <Icon name="heroicons:users" class="w-6 h-6 text-green-600" />
+          <commonIcon name="heroicons:users" class="w-6 h-6 text-green-600" />
         </div>
       </div>
       
@@ -62,7 +62,7 @@
       <div v-if="stats?.newUsersToday && stats.newUsersToday > 0" 
            class="mt-4 p-2 bg-green-50 rounded-md">
         <p class="text-xs text-green-700">
-          <Icon name="heroicons:arrow-trending-up" class="w-4 h-4 inline mr-1" />
+          <commonIcon name="heroicons:arrow-trending-up" class="w-4 h-4 inline mr-1" />
           {{ $t('admin.dashboard.stats.newUsersToday', { count: stats.newUsersToday }) }}
         </p>
       </div>
@@ -81,7 +81,7 @@
           </p>
         </div>
         <div class="p-3 bg-purple-50 rounded-full">
-          <Icon name="heroicons:shopping-bag" class="w-6 h-6 text-purple-600" />
+          <commonIcon name="heroicons:shopping-bag" class="w-6 h-6 text-purple-600" />
         </div>
       </div>
     </div>
@@ -99,7 +99,7 @@
           </p>
         </div>
         <div class="p-3 bg-yellow-50 rounded-full">
-          <Icon name="heroicons:currency-euro" class="w-6 h-6 text-yellow-600" />
+          <commonIcon name="heroicons:currency-euro" class="w-6 h-6 text-yellow-600" />
         </div>
       </div>
     </div>
@@ -108,7 +108,7 @@
   <!-- Refresh Info -->
   <div class="mt-4 flex items-center justify-between text-sm text-gray-500">
     <div class="flex items-center space-x-2">
-      <Icon name="heroicons:clock" class="w-4 h-4" />
+      <commonIcon name="heroicons:clock" class="w-4 h-4" />
       <span>{{ $t('admin.dashboard.lastUpdated', { time: timeSinceRefresh }) }}</span>
     </div>
     
@@ -117,7 +117,7 @@
       :disabled="isLoading"
       class="flex items-center space-x-1 px-3 py-1 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-colors disabled:opacity-50"
     >
-      <Icon 
+      <commonIcon 
         name="heroicons:arrow-path" 
         :class="`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`"
       />

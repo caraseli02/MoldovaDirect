@@ -48,7 +48,7 @@
           :disabled="isLoading"
           class="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
         >
-          <Icon 
+          <commonIcon 
             name="heroicons:arrow-path" 
             :class="`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`"
           />
@@ -60,7 +60,7 @@
     <!-- Error Alert -->
     <div v-if="error" class="bg-red-50 border border-red-200 rounded-lg p-4">
       <div class="flex items-center">
-        <Icon name="heroicons:exclamation-triangle" class="w-5 h-5 text-red-600 mr-2" />
+        <commonIcon name="heroicons:exclamation-triangle" class="w-5 h-5 text-red-600 mr-2" />
         <div class="flex-1">
           <h3 class="text-sm font-medium text-red-800">{{ $t('admin.dashboard.errors.loadingData') }}</h3>
           <p class="text-sm text-red-700 mt-1">{{ error }}</p>
@@ -69,7 +69,7 @@
           @click="clearError"
           class="text-red-600 hover:text-red-700"
         >
-          <Icon name="heroicons:x-mark" class="w-5 h-5" />
+          <commonIcon name="heroicons:x-mark" class="w-5 h-5" />
         </button>
       </div>
     </div>
@@ -94,7 +94,7 @@
               to="/admin/products/new"
               class="flex items-center space-x-3 p-3 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors"
             >
-              <Icon name="heroicons:plus" class="w-5 h-5 text-blue-600" />
+              <commonIcon name="heroicons:plus" class="w-5 h-5 text-blue-600" />
               <span class="text-sm font-medium">{{ $t('admin.dashboard.quickActions.addNewProduct') }}</span>
             </NuxtLink>
             
@@ -102,7 +102,7 @@
               to="/admin/orders"
               class="flex items-center space-x-3 p-3 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors"
             >
-              <Icon name="heroicons:shopping-bag" class="w-5 h-5 text-green-600" />
+              <commonIcon name="heroicons:shopping-bag" class="w-5 h-5 text-green-600" />
               <span class="text-sm font-medium">{{ $t('admin.dashboard.quickActions.viewOrders') }}</span>
             </NuxtLink>
             
@@ -110,7 +110,7 @@
               to="/admin/users"
               class="flex items-center space-x-3 p-3 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors"
             >
-              <Icon name="heroicons:users" class="w-5 h-5 text-purple-600" />
+              <commonIcon name="heroicons:users" class="w-5 h-5 text-purple-600" />
               <span class="text-sm font-medium">{{ $t('admin.dashboard.quickActions.manageUsers') }}</span>
             </NuxtLink>
           </div>
@@ -119,7 +119,7 @@
         <!-- Critical Alerts -->
         <div v-if="criticalAlerts.length" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <h3 class="text-lg font-medium text-gray-900 mb-4 flex items-center">
-            <Icon name="heroicons:exclamation-triangle" class="w-5 h-5 text-red-600 mr-2" />
+            <commonIcon name="heroicons:exclamation-triangle" class="w-5 h-5 text-red-600 mr-2" />
             {{ $t('admin.dashboard.criticalAlerts') }}
           </h3>
           <div class="space-y-3">

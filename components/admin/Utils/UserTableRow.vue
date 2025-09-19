@@ -123,7 +123,7 @@
           class="p-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 touch-manipulation active:scale-90 transition-all"
           :title="$t('admin.users.actions.view')"
         >
-          <Icon name="heroicons:eye" class="w-5 h-5" />
+          <commonIcon name="heroicons:eye" class="w-5 h-5" />
         </button>
         <button
           @click.stop="handleEdit"
@@ -131,7 +131,7 @@
           class="p-2 text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 touch-manipulation active:scale-90 transition-all"
           :title="$t('admin.users.actions.edit')"
         >
-          <Icon name="heroicons:pencil" class="w-5 h-5" />
+          <commonIcon name="heroicons:pencil" class="w-5 h-5" />
         </button>
         <AdminUserActionsDropdown
           :user="user"
@@ -164,21 +164,21 @@
     <!-- Mobile Details -->
     <div class="space-y-2 text-sm">
       <div v-if="user.profile?.phone" class="flex items-center text-gray-600 dark:text-gray-400">
-        <Icon name="heroicons:phone" class="w-4 h-4 mr-2" />
+        <commonIcon name="heroicons:phone" class="w-4 h-4 mr-2" />
         {{ user.profile.phone }}
       </div>
       <div class="flex items-center justify-between text-gray-500 dark:text-gray-400">
         <span class="flex items-center">
-          <Icon name="heroicons:calendar-days" class="w-4 h-4 mr-2" />
+          <commonIcon name="heroicons:calendar-days" class="w-4 h-4 mr-2" />
           {{ $t('admin.users.registered') }}: {{ formattedRegistration }}
         </span>
       </div>
       <div v-if="formattedLastLogin !== 'Never'" class="flex items-center text-gray-500 dark:text-gray-400">
-        <Icon name="heroicons:clock" class="w-4 h-4 mr-2" />
+        <commonIcon name="heroicons:clock" class="w-4 h-4 mr-2" />
         {{ $t('admin.users.lastLogin') }}: {{ formattedLastLogin }}
       </div>
       <div v-if="formattedLastOrder" class="flex items-center text-gray-500 dark:text-gray-400">
-        <Icon name="heroicons:shopping-bag" class="w-4 h-4 mr-2" />
+        <commonIcon name="heroicons:shopping-bag" class="w-4 h-4 mr-2" />
         {{ $t('admin.users.lastOrder') }}: {{ formattedLastOrder }}
       </div>
     </div>
@@ -188,7 +188,7 @@
       v-if="hasExpandableContent"
       class="flex justify-center mt-3 pt-2 border-t border-gray-200 dark:border-gray-700"
     >
-      <Icon 
+      <commonIcon 
         name="heroicons:chevron-down" 
         class="w-4 h-4 text-gray-400 transition-transform"
         :class="{ 'rotate-180': isExpanded }"

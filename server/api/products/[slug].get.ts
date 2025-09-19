@@ -115,13 +115,13 @@ export default defineEventHandler(async (event) => {
 
     const breadcrumb = await buildBreadcrumb(product.categories.id)
 
-    // Transform product data with localization
+    // Transform product data to match products list API format
     const transformedProduct = {
       id: product.id,
       sku: product.sku,
       slug: product.sku, // Using SKU as slug for now
-      name: getLocalizedContent(product.name_translations, locale),
-      description: getLocalizedContent(product.description_translations, locale),
+      name: product.name_translations,
+      shortDescription: product.description_translations,
       nameTranslations: product.name_translations,
       descriptionTranslations: product.description_translations,
       price: product.price_eur,
@@ -130,9 +130,8 @@ export default defineEventHandler(async (event) => {
       formattedCompareAtPrice: product.compare_at_price_eur 
         ? `€${product.compare_at_price_eur.toFixed(2)}` 
         : null,
-      stock: product.stock_quantity,
-      lowStockThreshold: product.low_stock_threshold,
-      stockStatus: product.stock_quantity > product.low_stock_threshold ? 'in_stock' : 
+      stockQuantity: product.stock_quantity,
+      stockStatus: product.stock_quantity > 5 ? 'in_stock' :
                    product.stock_quantity > 0 ? 'low_stock' : 'out_of_stock',
       images: product.images || [],
       primaryImage: product.images?.[0]?.url || '/placeholder-product.jpg',
@@ -149,17 +148,17 @@ export default defineEventHandler(async (event) => {
         id: related.id,
         sku: related.sku,
         slug: related.sku,
-        name: getLocalizedContent(related.name_translations, locale),
+        name: related.name_translations,
         price: related.price_eur,
         formattedPrice: `€${related.price_eur.toFixed(2)}`,
-        stock: related.stock_quantity,
-        stockStatus: related.stock_quantity > 5 ? 'in_stock' : 
+        stockQuantity: related.stock_quantity,
+        stockStatus: related.stock_quantity > 5 ? 'in_stock' :
                      related.stock_quantity > 0 ? 'low_stock' : 'out_of_stock',
         primaryImage: related.images?.[0]?.url || '/placeholder-product.jpg',
         category: {
           id: related.categories.id,
           slug: related.categories.slug,
-          name: getLocalizedContent(related.categories.name_translations, locale)
+          name: related.categories.name_translations
         }
       })) || [],
       isActive: product.is_active,

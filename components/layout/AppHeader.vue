@@ -120,7 +120,7 @@
 import { ref, onUnmounted } from 'vue'
 import LanguageSwitcher from './LanguageSwitcher.vue'
 import MobileNav from './MobileNav.vue'
-import ThemeToggle from '../ThemeToggle.vue'
+import ThemeToggle from './ThemeToggle.vue'
 
 const { locale } = useI18n()
 const localePath = useLocalePath()

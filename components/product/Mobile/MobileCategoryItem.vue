@@ -18,14 +18,14 @@
           @click.stop="toggleExpanded"
           class="mr-2 p-1 text-gray-400 hover:text-gray-600 transition-colors"
         >
-          <Icon 
+          <commonIcon 
             :name="isExpanded ? 'heroicons:chevron-down' : 'heroicons:chevron-right'" 
             class="w-4 h-4" 
           />
         </button>
         <div v-else class="w-6" />
         
-        <Icon v-if="category.icon" :name="category.icon" class="w-5 h-5 mr-3" />
+        <commonIcon v-if="category.icon" :name="category.icon" class="w-5 h-5 mr-3" />
         <span class="font-medium">{{ category.name }}</span>
       </button>
       
@@ -33,7 +33,7 @@
         <span v-if="showProductCount" class="text-sm text-gray-500">
           {{ category.productCount }}
         </span>
-        <Icon 
+        <commonIcon 
           v-if="isCurrentCategory"
           name="heroicons:check" 
           class="w-5 h-5 text-blue-600" 

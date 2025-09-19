@@ -14,7 +14,7 @@
   >
     <!-- Empty State Icon -->
     <div class="mb-4">
-      <Icon 
+      <commonIcon 
         :name="emptyStateIcon" 
         :class="iconSizeClasses"
         class="text-gray-400 dark:text-gray-500 mx-auto"
@@ -50,7 +50,7 @@
         }"
         type="button"
       >
-        <Icon name="heroicons:funnel" class="w-4 h-4 mr-2" />
+        <commonIcon name="heroicons:funnel" class="w-4 h-4 mr-2" />
         {{ $t('admin.users.actions.clearFilters') }}
       </button>
 
@@ -71,7 +71,7 @@
           }"
           type="button"
         >
-          <Icon name="heroicons:arrow-path" class="w-4 h-4 mr-2" />
+          <commonIcon name="heroicons:arrow-path" class="w-4 h-4 mr-2" />
           {{ $t('admin.users.actions.refresh') }}
         </button>
 
@@ -86,7 +86,7 @@
           }"
           type="button"
         >
-          <Icon name="heroicons:user-plus" class="w-4 h-4 mr-2" />
+          <commonIcon name="heroicons:user-plus" class="w-4 h-4 mr-2" />
           {{ $t('admin.users.actions.invite') }}
         </button>
       </div>
@@ -103,15 +103,15 @@
       <div class="mb-2">{{ $t('admin.users.empty.helpTitle') }}</div>
       <ul class="text-left max-w-md mx-auto space-y-1">
         <li class="flex items-center">
-          <Icon name="heroicons:check" class="w-3 h-3 mr-2 text-green-500" />
+          <commonIcon name="heroicons:check" class="w-3 h-3 mr-2 text-green-500" />
           {{ $t('admin.users.empty.helpTip1') }}
         </li>
         <li class="flex items-center">
-          <Icon name="heroicons:check" class="w-3 h-3 mr-2 text-green-500" />
+          <commonIcon name="heroicons:check" class="w-3 h-3 mr-2 text-green-500" />
           {{ $t('admin.users.empty.helpTip2') }}
         </li>
         <li class="flex items-center">
-          <Icon name="heroicons:check" class="w-3 h-3 mr-2 text-green-500" />
+          <commonIcon name="heroicons:check" class="w-3 h-3 mr-2 text-green-500" />
           {{ $t('admin.users.empty.helpTip3') }}
         </li>
       </ul>
@@ -122,7 +122,7 @@
       v-if="isMobile && hasActiveFilters"
       class="mt-6 flex items-center justify-center text-xs text-gray-400 dark:text-gray-500"
     >
-      <Icon name="heroicons:hand-raised" class="w-4 h-4 mr-1" />
+      <commonIcon name="heroicons:hand-raised" class="w-4 h-4 mr-1" />
       {{ $t('admin.users.empty.swipeHint') }}
     </div>
   </div>

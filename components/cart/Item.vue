@@ -1,5 +1,5 @@
 <template>
-  <div 
+  <div
     ref="cartItemRef"
     :class="[
       'relative overflow-hidden rounded-lg border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800',
@@ -17,7 +17,7 @@
     @mouseleave="handleMouseEnd"
   >
     <!-- Remove Action Background -->
-    <div 
+    <div
       :class="[
         'absolute inset-y-0 right-0 flex items-center justify-center',
         'bg-red-500 text-white transition-all duration-300',
@@ -55,13 +55,13 @@
         <!-- Product Image and Info Row -->
         <div class="flex items-start space-x-3 mb-3">
           <div class="flex-shrink-0">
-            <img 
-              :src="item.product.images[0] || '/placeholder-product.jpg'" 
+            <img
+              :src="item.product.images[0] || '/placeholder-product.jpg'"
               :alt="item.product.name"
               class="w-20 h-20 object-cover rounded-lg"
             >
           </div>
-          
+
           <div class="flex-1 min-w-0">
             <h3 class="text-base font-medium text-gray-900 dark:text-white leading-tight mb-1">
               {{ item.product.name }}
@@ -79,7 +79,7 @@
         <div class="space-y-3">
           <!-- Quantity Controls -->
           <div class="flex items-center bg-gray-50 dark:bg-gray-700 rounded-lg p-1 w-fit">
-            <button 
+            <button
               @click="updateQuantity(item.quantity - 1)"
               :disabled="loading"
               :data-testid="`decrease-quantity-${item.product.id}`"
@@ -89,14 +89,14 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
               </svg>
             </button>
-            
+
             <div class="px-4 py-2 min-w-[3rem] text-center">
               <span class="text-lg font-medium text-gray-900 dark:text-white" :data-testid="`quantity-display-${item.product.id}`">
                 {{ item.quantity }}
               </span>
             </div>
-            
-            <button 
+
+            <button
               @click="updateQuantity(item.quantity + 1)"
               :disabled="loading || item.quantity >= item.product.stock"
               :data-testid="`increase-quantity-${item.product.id}`"
@@ -111,7 +111,7 @@
           <!-- Action Buttons -->
           <div class="flex items-center justify-between">
             <!-- Save for Later Button -->
-            <button 
+            <button
               @click="saveForLater"
               :disabled="loading"
               class="inline-flex items-center px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors"
@@ -123,7 +123,7 @@
             </button>
 
             <!-- Remove Button -->
-            <button 
+            <button
               @click="removeItem"
               :disabled="loading"
               :data-testid="`remove-item-${item.product.id}`"
@@ -142,13 +142,13 @@
       <div class="hidden md:flex md:items-center md:space-x-4 pl-8">
         <!-- Product Image -->
         <div class="flex-shrink-0">
-          <img 
-            :src="item.product.images[0] || '/placeholder-product.jpg'" 
+          <img
+            :src="item.product.images[0] || '/placeholder-product.jpg'"
             :alt="item.product.name"
             class="w-16 h-16 object-cover rounded-lg"
           >
         </div>
-        
+
         <!-- Product Info -->
         <div class="flex-1 min-w-0">
           <h3 class="text-sm font-medium text-gray-900 dark:text-white truncate">
@@ -158,10 +158,10 @@
             {{ formatPrice(item.product.price) }} each
           </p>
         </div>
-        
+
         <!-- Quantity Controls -->
         <div class="flex items-center space-x-2">
-          <button 
+          <button
             @click="updateQuantity(item.quantity - 1)"
             :disabled="loading"
             :data-testid="`decrease-quantity-${item.product.id}`"
@@ -171,12 +171,12 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
             </svg>
           </button>
-          
+
           <span class="w-8 text-center text-sm font-medium text-gray-900 dark:text-white" :data-testid="`quantity-display-${item.product.id}`">
             {{ item.quantity }}
           </span>
-          
-          <button 
+
+          <button
             @click="updateQuantity(item.quantity + 1)"
             :disabled="loading || item.quantity >= item.product.stock"
             :data-testid="`increase-quantity-${item.product.id}`"
@@ -187,18 +187,18 @@
             </svg>
           </button>
         </div>
-        
+
         <!-- Item Total -->
         <div class="text-right">
           <p class="text-sm font-medium text-gray-900 dark:text-white">
             {{ formatPrice(item.product.price * item.quantity) }}
           </p>
         </div>
-        
+
         <!-- Actions -->
         <div class="flex items-center space-x-2">
           <!-- Save for Later Button -->
-          <button 
+          <button
             @click="saveForLater"
             :disabled="loading"
             class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 disabled:opacity-50 p-1"
@@ -210,7 +210,7 @@
           </button>
 
           <!-- Remove Button -->
-          <button 
+          <button
             @click="removeItem"
             :disabled="loading"
             :data-testid="`remove-item-${item.product.id}`"
@@ -305,7 +305,7 @@ const handleMouseMove = (e: MouseEvent) => {
 const updateDrag = (x: number, y: number) => {
   const deltaX = x - startX.value
   const deltaY = y - startY.value
-  
+
   // Only allow horizontal swipe if it's more horizontal than vertical
   if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 10) {
     // Only allow left swipe (negative deltaX)
@@ -325,15 +325,15 @@ const handleMouseEnd = () => {
 
 const endDrag = () => {
   if (!isDragging.value) return
-  
+
   isDragging.value = false
-  
+
   // Check if swipe threshold was reached
   if (Math.abs(swipeOffset.value) > removeThreshold) {
     // Trigger remove animation
     isRemoving.value = true
     swipeOffset.value = -300 // Animate off screen
-    
+
     // Emit swipe remove event after animation
     setTimeout(() => {
       emit('swipe-remove', props.item.id)
@@ -374,4 +374,3 @@ onUnmounted(() => {
   swipeOffset.value = 0
 })
 </script>
-

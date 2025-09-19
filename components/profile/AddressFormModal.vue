@@ -17,7 +17,7 @@
             @click="$emit('close')"
             class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
           >
-            <Icon name="x" class="h-6 w-6" />
+            <commonIcon name="x" class="h-6 w-6" />
           </button>
         </div>
 
@@ -174,7 +174,7 @@
               class="px-6 py-2 bg-primary-600 text-white text-sm font-medium rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               <span v-if="isLoading" class="flex items-center">
-                <Icon name="spinner" class="animate-spin h-4 w-4 mr-2" />
+                <commonIcon name="spinner" class="animate-spin h-4 w-4 mr-2" />
                 {{ $t('common.loading') }}
               </span>
               <span v-else>

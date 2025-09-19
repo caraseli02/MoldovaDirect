@@ -19,7 +19,7 @@
       :title="$t('admin.users.actions.view')"
       type="button"
     >
-      <Icon name="heroicons:eye" :class="iconSizeClass" />
+      <commonIcon name="heroicons:eye" :class="iconSizeClass" />
     </button>
 
     <!-- Edit Button -->
@@ -34,7 +34,7 @@
       :title="$t('admin.users.actions.edit')"
       type="button"
     >
-      <Icon name="heroicons:pencil" :class="iconSizeClass" />
+      <commonIcon name="heroicons:pencil" :class="iconSizeClass" />
     </button>
 
     <!-- Actions Dropdown -->

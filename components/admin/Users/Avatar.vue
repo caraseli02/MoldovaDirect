@@ -27,7 +27,7 @@
       {{ initials }}
     </span>
     <!-- Default Icon -->
-    <Icon
+    <commonIcon
       v-else
       name="heroicons:user"
       :class="iconSizeClasses"

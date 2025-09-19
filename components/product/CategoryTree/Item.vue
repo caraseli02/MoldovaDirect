@@ -1,6 +1,6 @@
 <template>
   <div class="category-tree-item">
-    <div 
+    <div
       class="flex items-center py-1"
       :class="{ 'pl-4': level > 0 }"
     >
@@ -9,13 +9,13 @@
         @click="toggleExpanded"
         class="mr-2 p-0.5 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400 transition-colors"
       >
-        <Icon 
-          :name="isExpanded ? 'heroicons:chevron-down' : 'heroicons:chevron-right'" 
-          class="w-4 h-4" 
+        <commonIcon
+          :name="isExpanded ? 'heroicons:chevron-down' : 'heroicons:chevron-right'"
+          class="w-4 h-4"
         />
       </button>
       <div v-else class="w-6" />
-      
+
       <label class="flex items-center flex-1 cursor-pointer">
         <input
           :checked="isSelected"
@@ -32,12 +32,12 @@
         </span>
       </label>
     </div>
-    
+
     <div
       v-if="category.children && category.children.length > 0 && isExpanded"
       class="ml-2"
     >
-      <CategoryTreeItem
+      <productCategoryTreeItem
         v-for="child in category.children"
         :key="child.id"
         :category="child"
@@ -91,9 +91,9 @@ const handleSelection = () => {
 // Auto-expand if this category or any child is selected
 watch(() => props.selected, (newSelected) => {
   if (props.category.children) {
-    const hasSelectedChild = props.category.children.some(child => 
+    const hasSelectedChild = props.category.children.some(child =>
       newSelected.includes(child.id.toString()) ||
-      (child.children && child.children.some(grandchild => 
+      (child.children && child.children.some(grandchild =>
         newSelected.includes(grandchild.id.toString())
       ))
     )

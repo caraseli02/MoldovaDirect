@@ -146,7 +146,7 @@
 
 <script setup lang="ts">
 import LanguageSwitcher from './LanguageSwitcher.vue'
-import ThemeToggle from '../ThemeToggle.vue'
+import ThemeToggle from './ThemeToggle.vue'
 
 const localePath = useLocalePath()
 const { t } = useI18n()

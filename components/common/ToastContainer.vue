@@ -16,6 +16,7 @@
 
 <script setup lang="ts">
 import { useToastStore } from '~/stores/toast'
+import Toast from './Toast.vue'
 
 // Safely access the toast store
 let toastStore: any = null

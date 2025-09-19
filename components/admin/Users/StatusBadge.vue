@@ -15,7 +15,7 @@
         sizeClasses
       ]"
     >
-      <Icon
+      <commonIcon
         v-if="statusIcon"
         :name="statusIcon"
         class="mr-1"
@@ -32,7 +32,7 @@
         sizeClasses
       ]"
     >
-      <Icon
+      <commonIcon
         name="heroicons:exclamation-triangle"
         class="mr-1"
         :class="iconSizeClasses"
@@ -48,7 +48,7 @@
         sizeClasses
       ]"
     >
-      <Icon
+      <commonIcon
         name="heroicons:lock-closed"
         class="mr-1"
         :class="iconSizeClasses"

@@ -9,7 +9,7 @@
 
     <div class="flex min-h-screen bg-gray-50 dark:bg-gray-900" ref="mainContainer">
       <!-- Product Filter Sidebar -->
-      <ProductFilter
+      <productFilterMain
         :filters="filters"
         :available-filters="availableFilters"
         :filtered-product-count="products?.length || 0"
@@ -43,10 +43,10 @@
               <!-- Search -->
               <div class="flex-1">
                 <div class="relative">
-                  <Icon 
-                    v-if="!loading" 
-                    name="heroicons:magnifying-glass" 
-                    class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" 
+                  <commonIcon
+                    v-if="!loading"
+                    name="heroicons:magnifying-glass"
+                    class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"
                   />
                   <div 
                     v-else 
@@ -209,6 +209,13 @@
 
 <script setup lang="ts">
 import type { ProductFilters } from '~/types'
+
+// Component imports
+import ProductCategoryNavigation from '~/components/product/CategoryNavigation.vue'
+import productFilterMain from '~/components/product/Filter/Main.vue'
+import ProductCard from '~/components/product/Card.vue'
+import commonIcon from '~/components/common/Icon.vue'
+import MobileVirtualProductGrid from '~/components/mobile/VirtualProductGrid.vue'
 
 // Mobile-specific imports
 import MobilePullToRefreshIndicator from '~/components/mobile/PullToRefreshIndicator.vue'

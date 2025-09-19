@@ -17,7 +17,7 @@
       <!-- Search Input -->
       <div class="flex-1 max-w-md">
         <div class="relative">
-          <Icon 
+          <commonIcon 
             name="heroicons:magnifying-glass" 
             class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 w-5 h-5" 
           />
@@ -46,7 +46,7 @@
             }"
             type="button"
           >
-            <Icon name="heroicons:x-mark" class="w-4 h-4" />
+            <commonIcon name="heroicons:x-mark" class="w-4 h-4" />
           </button>
         </div>
       </div>
@@ -101,7 +101,7 @@
           class="sm:hidden px-3 py-2 text-sm bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 rounded-lg touch-manipulation active:scale-95 min-h-[44px]"
           type="button"
         >
-          <Icon :name="showMobileFilters ? 'heroicons:chevron-up' : 'heroicons:chevron-down'" class="w-4 h-4 mr-1" />
+          <commonIcon :name="showMobileFilters ? 'heroicons:chevron-up' : 'heroicons:chevron-down'" class="w-4 h-4 mr-1" />
           {{ $t('admin.users.filters.toggle') }}
         </button>
       </div>
@@ -126,7 +126,7 @@
             @touchstart="vibrate('tap')"
             class="ml-2 text-blue-600 hover:text-blue-800 dark:text-blue-300 dark:hover:text-blue-100"
           >
-            <Icon name="heroicons:x-mark" class="w-3 h-3" />
+            <commonIcon name="heroicons:x-mark" class="w-3 h-3" />
           </button>
         </span>
         <span
@@ -139,7 +139,7 @@
             @touchstart="vibrate('tap')"
             class="ml-2 text-green-600 hover:text-green-800 dark:text-green-300 dark:hover:text-green-100"
           >
-            <Icon name="heroicons:x-mark" class="w-3 h-3" />
+            <commonIcon name="heroicons:x-mark" class="w-3 h-3" />
           </button>
         </span>
       </div>

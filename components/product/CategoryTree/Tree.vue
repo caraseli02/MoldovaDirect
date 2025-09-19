@@ -1,7 +1,7 @@
 <template>
   <div class="category-tree">
     <div class="space-y-1">
-      <CategoryTreeItem
+      <productCategoryTreeItem
         v-for="category in categories"
         :key="category.id"
         :category="category"

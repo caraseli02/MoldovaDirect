@@ -30,7 +30,7 @@
     <!-- Loading State -->
     <div v-if="loading" class="p-8 text-center">
       <div class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400">
-        <Icon name="heroicons:arrow-path" class="w-5 h-5 animate-spin" />
+        <commonIcon name="heroicons:arrow-path" class="w-5 h-5 animate-spin" />
         {{ $t('admin.users.loading') }}
       </div>
     </div>
@@ -38,7 +38,7 @@
     <!-- Error State -->
     <div v-else-if="error" class="p-8 text-center">
       <div class="text-red-600 dark:text-red-400 mb-4">
-        <Icon name="heroicons:exclamation-triangle" class="w-8 h-8 mx-auto mb-2" />
+        <commonIcon name="heroicons:exclamation-triangle" class="w-8 h-8 mx-auto mb-2" />
         {{ error }}
       </div>
       <button
@@ -64,7 +64,7 @@
                   class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-gray-300 touch-manipulation"
                 >
                   {{ $t('admin.users.columns.user') }}
-                  <Icon :name="getSortIcon('name')" class="w-4 h-4" />
+                  <commonIcon :name="getSortIcon('name')" class="w-4 h-4" />
                 </button>
               </th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
@@ -73,7 +73,7 @@
                   class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-gray-300 touch-manipulation"
                 >
                   {{ $t('admin.users.columns.email') }}
-                  <Icon :name="getSortIcon('email')" class="w-4 h-4" />
+                  <commonIcon :name="getSortIcon('email')" class="w-4 h-4" />
                 </button>
               </th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
@@ -91,7 +91,7 @@
                   class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-gray-300 touch-manipulation"
                 >
                   {{ $t('admin.users.columns.registered') }}
-                  <Icon :name="getSortIcon('created_at')" class="w-4 h-4" />
+                  <commonIcon :name="getSortIcon('created_at')" class="w-4 h-4" />
                 </button>
               </th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
@@ -100,7 +100,7 @@
                   class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-gray-300 touch-manipulation"
                 >
                   {{ $t('admin.users.columns.lastLogin') }}
-                  <Icon :name="getSortIcon('last_login')" class="w-4 h-4" />
+                  <commonIcon :name="getSortIcon('last_login')" class="w-4 h-4" />
                 </button>
               </th>
               <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
