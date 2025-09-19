@@ -116,22 +116,20 @@ useHead({
 let adminUsersStore: any = null
 
 try {
-  if (process.client) {
-    adminUsersStore = useAdminUsersStore()
-  }
+  adminUsersStore = useAdminUsersStore()
 } catch (error) {
   console.warn('Admin users store not available during SSR/hydration')
 }
 
 if (!adminUsersStore) {
   adminUsersStore = {
-    users: ref([]),
-    isLoading: ref(false),
+    users: [],
+    isLoading: false,
     loadUsers: () => Promise.resolve(),
     initialize: () => Promise.resolve(),
     clearCurrentUser: () => {},
-    summary: ref({}),
-    actionLoading: ref(false)
+    summary: {},
+    actionLoading: false
   }
 }
 
@@ -141,7 +139,8 @@ const toast = useToast()
 const selectedUserId = ref<string | null>(null)
 
 // Computed
-const { summary, actionLoading } = storeToRefs(adminUsersStore)
+const summary = computed(() => adminUsersStore.summary)
+const actionLoading = computed(() => adminUsersStore.actionLoading)
 
 // Methods
 const showUserDetail = (userId: string) => {

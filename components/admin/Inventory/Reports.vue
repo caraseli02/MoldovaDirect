@@ -255,7 +255,7 @@
                     </div>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
-                    <AdminStockLevelIndicator
+                    <AdminInventoryStockIndicator
                       :stock-quantity="product.stockQuantity"
                       :low-stock-threshold="product.lowThreshold"
                       size="sm"
@@ -348,7 +348,7 @@
                     </div>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
-                    <AdminStockLevelIndicator
+                    <AdminInventoryStockIndicator
                       :stock-quantity="product.stockQuantity"
                       :reorder-point="product.reorderPoint"
                       size="sm"

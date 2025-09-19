@@ -97,7 +97,7 @@
       </div>
 
       <!-- Product Form -->
-      <AdminProductForm
+      <AdminProductsForm
         :product="product"
         :categories="categories"
         :is-editing="true"

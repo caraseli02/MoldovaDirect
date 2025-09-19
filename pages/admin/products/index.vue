@@ -18,7 +18,7 @@
     </div>
 
     <!-- Filters -->
-    <AdminProductFilters
+    <AdminProductsFilters
       :search="adminProductsStore.filters.search"
       :category-id="adminProductsStore.filters.categoryId"
       :status="adminProductsStore.filters.status"
@@ -34,7 +34,7 @@
     />
 
     <!-- Products Table -->
-    <AdminProductTable
+    <AdminProductsTable
       :products="adminProductsStore.productsWithAdminData"
       :loading="adminProductsStore.loading"
       :has-active-filters="adminProductsStore.hasActiveFilters"
@@ -56,7 +56,7 @@
     />
 
     <!-- Pagination -->
-    <AdminPagination
+    <AdminUtilsPagination
       :page="adminProductsStore.pagination.page"
       :limit="adminProductsStore.pagination.limit"
       :total="adminProductsStore.pagination.total"
@@ -107,7 +107,7 @@
     </div>
 
     <!-- Delete Confirmation Dialog -->
-    <CustomConfirmDialog
+    <CommonConfirmDialog
       :show="deleteDialog.show"
       type="danger"
       :title="deleteDialog.title"
@@ -121,7 +121,7 @@
     />
 
     <!-- Bulk Operations Progress Bar -->
-    <AdminBulkOperationsBar
+    <AdminUtilsBulkOperationsBar
       :show="bulkOperations.show"
       :in-progress="bulkOperations.inProgress"
       :completed="bulkOperations.completed"
@@ -140,52 +140,17 @@
 </template>
 
 <script setup lang="ts">
-import type { CategoryWithChildren } from '~/types/database'
-
+import type { CategoryWithChildren, ProductWithRelations } from '~/types/database'
+import { usePinia } from '#imports'
 definePageMeta({
   layout: 'admin',
   middleware: 'auth'
 })
 
 // Initialize stores - safely access with fallback
-let adminProductsStore: any = null
+const pinia = usePinia()
+const adminProductsStore = useAdminProductsStore(pinia)
 
-try {
-  if (process.client) {
-    adminProductsStore = useAdminProductsStore()
-  }
-} catch (error) {
-  console.warn('Admin products store not available during SSR/hydration')
-}
-
-if (!adminProductsStore) {
-  adminProductsStore = {
-    products: ref([]),
-    isLoading: ref(false),
-    loadProducts: () => Promise.resolve(),
-    filters: {
-      search: '',
-      categoryId: undefined,
-      status: '',
-      stockLevel: '',
-      sortBy: 'created_at',
-      sortOrder: 'desc'
-    },
-    pagination: {
-      page: 1,
-      limit: 20,
-      total: 0,
-      totalPages: 0,
-      hasNext: false,
-      hasPrev: false
-    },
-    loading: false,
-    error: null,
-    selectedProducts: [],
-    bulkOperationInProgress: false,
-    initialize: () => Promise.resolve()
-  }
-}
 
 // Fetch categories
 const { data: categoriesData } = await useFetch<{ categories: CategoryWithChildren[] }>('/api/categories')
@@ -274,7 +239,7 @@ const saveStockEdit = async () => {
 }
 
 const handleDeleteProduct = async (productId: number) => {
-  const product = adminProductsStore.products.find(p => p.id === productId)
+  const product = adminProductsStore.products.find((p: ProductWithRelations) => p.id === productId)
   const productName = product ? getLocalizedText(product.name) : 'this product'
   
   deleteDialog.value = {
@@ -439,7 +404,6 @@ const closeBulkOperations = () => {
 const retryBulkOperation = async () => {
   if (bulkOperations.value.currentOperation) {
     const operation = bulkOperations.value.currentOperation
-    const operationText = bulkOperations.value.operationText
     
     bulkOperations.value.error = false
     bulkOperations.value.inProgress = true

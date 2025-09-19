@@ -170,16 +170,14 @@ import { useAdminDashboardStore } from '~/stores/adminDashboard'
 let dashboardStore: any = null
 
 try {
-  if (process.client) {
-    dashboardStore = useAdminDashboardStore()
-  }
+  dashboardStore = useAdminDashboardStore()
 } catch (error) {
   console.warn('Admin dashboard store not available during SSR/hydration')
   // Create fallback store interface with all methods
   dashboardStore = {
-    isLoading: ref(false),
-    error: ref(null),
-    criticalAlerts: ref([]),
+    isLoading: false,
+    error: null,
+    criticalAlerts: [],
     initialize: () => Promise.resolve(),
     refresh: () => Promise.resolve(),
     clearError: () => {},
@@ -191,9 +189,9 @@ try {
 
 if (!dashboardStore) {
   dashboardStore = {
-    isLoading: ref(false),
-    error: ref(null),
-    criticalAlerts: ref([]),
+    isLoading: false,
+    error: null,
+    criticalAlerts: [],
     initialize: () => Promise.resolve(),
     refresh: () => Promise.resolve(),
     clearError: () => {},

@@ -133,21 +133,19 @@ import { useAdminDashboardStore } from '~/stores/adminDashboard'
 let dashboardStore: any = null
 
 try {
-  if (process.client) {
-    dashboardStore = useAdminDashboardStore()
-  }
+  dashboardStore = useAdminDashboardStore()
 } catch (error) {
   console.warn('Admin dashboard store not available during SSR/hydration')
 }
 
 if (!dashboardStore) {
   dashboardStore = {
-    stats: ref({}),
-    isLoading: ref(false),
-    formattedRevenue: ref('€0.00'),
-    formattedRevenueToday: ref('€0.00'),
-    formattedConversionRate: ref('0%'),
-    timeSinceRefresh: ref(''),
+    stats: {},
+    isLoading: false,
+    get formattedRevenue() { return '€0.00' },
+    get formattedRevenueToday() { return '€0.00' },
+    get formattedConversionRate() { return '0%' },
+    get timeSinceRefresh() { return 'Never' },
     refresh: () => Promise.resolve(),
     fetchStats: () => Promise.resolve(),
   }

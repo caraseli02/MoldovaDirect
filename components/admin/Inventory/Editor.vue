@@ -22,7 +22,7 @@
       class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 rounded px-2 py-1 transition-colors"
       :title="'Click to edit stock quantity'"
     >
-      <AdminStockLevelIndicator
+      <AdminInventoryStockIndicator
         :stock-quantity="currentQuantity"
         :low-stock-threshold="lowStockThreshold"
         :reorder-point="reorderPoint"

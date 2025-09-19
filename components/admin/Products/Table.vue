@@ -207,7 +207,7 @@
 
             <!-- Stock -->
             <td class="px-6 py-4 whitespace-nowrap">
-              <AdminInlineInventoryEditor
+              <AdminInventoryEditor
                 :product-id="product.id"
                 :stock-quantity="product.stockQuantity"
                 :low-stock-threshold="product.lowStockThreshold || 5"

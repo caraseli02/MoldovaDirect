@@ -71,7 +71,7 @@
     </div>
 
     <!-- Product Form -->
-    <AdminProductForm
+    <AdminProductsForm
       :categories="categories"
       :is-editing="false"
       @submit="handleSubmit"
