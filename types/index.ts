@@ -152,6 +152,61 @@ export type {
   RateLimitConfig
 } from './auth'
 
+// Recommendation types
+export type {
+  // Core types
+  RecommendationContext,
+  RecommendationAlgorithm,
+  RecommendationReasonType,
+  
+  // Request/Response types
+  RecommendationRequest,
+  RecommendationResponse,
+  ProductRecommendation,
+  RecommendationReason,
+  RecommendationMetadata,
+  
+  // Analytics types
+  RecommendationInteractionType,
+  RecommendationAnalyticsEvent,
+  RecommendationAnalyticsBatch,
+  
+  // User preferences
+  UserRecommendationPreferences,
+  AnonymousRecommendationPreferences,
+  
+  // Recently viewed types
+  RecentlyViewedProduct,
+  RecentlyViewedStorage,
+  
+  // Error types
+  RecommendationErrorCode,
+  RecommendationError,
+  
+  // Component prop types
+  ProductRecommendationsProps,
+  RecommendationCardProps,
+  RecentlyViewedProps,
+  
+  // Composable return types
+  UseRecommendationsReturn,
+  UseRecentlyViewedReturn,
+  UseRecommendationAnalyticsReturn,
+  
+  // Algorithm types
+  ContentBasedParams,
+  CollaborativeFilteringParams,
+  BehavioralParams,
+  AlgorithmConfig,
+  
+  // Cache types
+  RecommendationCacheKey,
+  CachedRecommendation
+} from './recommendations'
+
+// Recommendation constants
+export { RecommendationErrorCodes } from './recommendations'
+
 // =============================================
 // COMMONLY USED TYPE UNIONS (imported from guards to avoid circular imports)
 // =============================================
