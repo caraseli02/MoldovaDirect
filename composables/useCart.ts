@@ -8,6 +8,7 @@ export const useCart = () => {
   
     const  cartStore = useCartStore(pinia);
     const  cartAnalytics = useCartAnalytics(pinia);
+    const  cartPerformance = useCartPerformance();
 
 
 
@@ -119,33 +120,51 @@ export const useCart = () => {
     }
   }
 
-  // Enhanced actions with error handling
+  // Enhanced actions with error handling and performance monitoring
   const safeAddItem = async (product: any, quantity: number = 1) => {
-    try {
-      await cartStore.addItem(product, quantity);
-    } catch (error) {
-      // Error is already handled by the store, but we can add additional logic here
-      console.error("Failed to add item:", error);
-      throw error; // Re-throw to allow component-level handling
-    }
+    return await cartPerformance.measureOperation(
+      'addItem',
+      async () => {
+        try {
+          await cartStore.addItem(product, quantity);
+        } catch (error) {
+          // Error is already handled by the store, but we can add additional logic here
+          console.error("Failed to add item:", error);
+          throw error; // Re-throw to allow component-level handling
+        }
+      },
+      { itemCount: cartStore.itemCount }
+    );
   };
 
   const safeUpdateQuantity = async (itemId: string, quantity: number) => {
-    try {
-      await cartStore.updateQuantity(itemId, quantity);
-    } catch (error) {
-      console.error("Failed to update quantity:", error);
-      throw error;
-    }
+    return await cartPerformance.measureOperation(
+      'updateQuantity',
+      async () => {
+        try {
+          await cartStore.updateQuantity(itemId, quantity);
+        } catch (error) {
+          console.error("Failed to update quantity:", error);
+          throw error;
+        }
+      },
+      { itemCount: cartStore.itemCount }
+    );
   };
 
   const safeRemoveItem = async (itemId: string) => {
-    try {
-      await cartStore.removeItem(itemId);
-    } catch (error) {
-      console.error("Failed to remove item:", error);
-      throw error;
-    }
+    return await cartPerformance.measureOperation(
+      'removeItem',
+      async () => {
+        try {
+          await cartStore.removeItem(itemId);
+        } catch (error) {
+          console.error("Failed to remove item:", error);
+          throw error;
+        }
+      },
+      { itemCount: cartStore.itemCount }
+    );
   };
 
   const safeClearCart = async () => {
@@ -159,12 +178,18 @@ export const useCart = () => {
   };
 
   const safeValidateCart = async () => {
-    try {
-      await cartStore.validateCart();
-    } catch (error) {
-      console.error("Failed to validate cart:", error);
-      throw error;
-    }
+    return await cartPerformance.measureOperation(
+      'validateCart',
+      async () => {
+        try {
+          await cartStore.validateCart();
+        } catch (error) {
+          console.error("Failed to validate cart:", error);
+          throw error;
+        }
+      },
+      { itemCount: cartStore.itemCount }
+    );
   };
 
   return {
@@ -446,5 +471,12 @@ export const useCart = () => {
         return `€${cartStore.selectedItemsSubtotal.toFixed(2)}`;
       }
     }),
+
+    // Performance monitoring
+    startPerformanceMonitoring: cartPerformance.startMonitoring,
+    stopPerformanceMonitoring: cartPerformance.stopMonitoring,
+    getPerformanceStats: cartPerformance.getPerformanceStats,
+    getPerformanceRecommendations: cartPerformance.getPerformanceRecommendations,
+    exportPerformanceMetrics: cartPerformance.exportMetrics,
   };
 };

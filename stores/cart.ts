@@ -63,6 +63,11 @@ interface CartState {
   savedForLater: SavedForLaterItem[]
   recommendations: Product[]
   recommendationsLoading: boolean
+  // Performance optimization caches
+  _cachedItemCount?: number
+  _cachedSubtotal?: number
+  _lastItemsHash?: string
+  _currentItemsHash?: string
 }
 
 export const useCartStore = defineStore('cart', {
@@ -83,23 +88,43 @@ export const useCartStore = defineStore('cart', {
     bulkOperationInProgress: false,
     savedForLater: [],
     recommendations: [],
-    recommendationsLoading: false
+    recommendationsLoading: false,
+    // Performance optimization caches
+    _cachedItemCount: undefined,
+    _cachedSubtotal: undefined,
+    _lastItemsHash: '',
+    _currentItemsHash: ''
   }),
 
   getters: {
-    // Total number of items in cart
+    // Memoized total number of items in cart
     itemCount: (state): number => {
-      return state.items.reduce((total, item) => total + item.quantity, 0)
+      // Use cached calculation if items haven't changed
+      if (state._cachedItemCount && state._lastItemsHash === state._currentItemsHash) {
+        return state._cachedItemCount
+      }
+      
+      const count = state.items.reduce((total, item) => total + item.quantity, 0)
+      state._cachedItemCount = count
+      return count
     },
 
-    // Total price of all items
+    // Memoized total price of all items
     subtotal: (state): number => {
-      return state.items.reduce((total, item) => {
-        return total + (item.product.price * item.quantity)
+      // Use cached calculation if items haven't changed
+      if (state._cachedSubtotal && state._lastItemsHash === state._currentItemsHash) {
+        return state._cachedSubtotal
+      }
+      
+      const total = state.items.reduce((sum, item) => {
+        return sum + (item.product.price * item.quantity)
       }, 0)
+      
+      state._cachedSubtotal = total
+      return total
     },
 
-    // Check if cart is empty
+    // Check if cart is empty (simple check, no caching needed)
     isEmpty: (state): boolean => {
       return state.items.length === 0
     },
@@ -428,6 +453,12 @@ export const useCartStore = defineStore('cart', {
       // Initialize debounced validation
       this.createDebouncedValidation()
       
+      // Initialize debounced save
+      this.createDebouncedSave()
+      
+      // Initialize calculation cache
+      this.invalidateCalculationCache()
+      
       // Start background validation if enabled
       if (this.backgroundValidationEnabled && process.client) {
         this.startBackgroundValidation()
@@ -437,6 +468,9 @@ export const useCartStore = defineStore('cart', {
       if (process.client) {
         const cartAnalytics = useCartAnalytics()
         cartAnalytics.initializeCartSession(this.sessionId)
+        
+        // Initialize cart caching
+        this.initializeCartCaching()
       }
     },
 
@@ -447,6 +481,11 @@ export const useCartStore = defineStore('cart', {
 
     // Add item to cart with optimized validation
     async addItem(product: Product, quantity: number = 1) {
+      // Ensure debounced validation is initialized
+      if (!this.debouncedValidateProduct) {
+        this.createDebouncedValidation()
+      }
+
       this.loading = true
       this.error = null
       const toastStore = useToastStore()
@@ -530,8 +569,8 @@ export const useCartStore = defineStore('cart', {
           cartAnalytics.trackAddToCart(currentProduct, quantity, this.subtotal, this.itemCount)
         }
 
-        // Persist to storage
-        this.saveToStorage()
+        // Save and cache cart data
+        this.saveAndCacheCartData()
 
       } catch (error) {
         this.error = error instanceof Error ? error.message : 'Failed to add item to cart'
@@ -620,8 +659,8 @@ export const useCartStore = defineStore('cart', {
           cartAnalytics.trackQuantityUpdate(currentProduct, oldQuantity, quantity, this.subtotal, this.itemCount)
         }
         
-        // Persist to storage
-        this.saveToStorage()
+        // Save and cache cart data
+        this.saveAndCacheCartData()
         
         // Show success toast
         const { t } = useStoreI18n()
@@ -672,8 +711,8 @@ export const useCartStore = defineStore('cart', {
           cartAnalytics.trackRemoveFromCart(removedItem.product, removedItem.quantity, this.subtotal, this.itemCount)
         }
         
-        // Persist to storage
-        this.saveToStorage()
+        // Save and cache cart data
+        this.saveAndCacheCartData()
         
         // Show success message with undo option
         const { t } = useStoreI18n()
@@ -714,6 +753,7 @@ export const useCartStore = defineStore('cart', {
       const itemsBackup = [...this.items] // Backup for undo
       
       this.items = []
+      this.invalidateCalculationCache()
       this.saveToStorage()
       
       // Show success message with undo option
@@ -732,6 +772,88 @@ export const useCartStore = defineStore('cart', {
     // Generate unique item ID
     generateItemId(): string {
       return 'item_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)
+    },
+
+    // Performance optimization methods
+    generateItemsHash(): string {
+      // Generate a hash of current items for cache invalidation
+      return this.items.map(item => `${item.id}-${item.quantity}-${item.product.price}`).join('|')
+    },
+
+    invalidateCalculationCache() {
+      // Update hashes to invalidate cached calculations
+      this._lastItemsHash = this._currentItemsHash
+      this._currentItemsHash = this.generateItemsHash()
+      
+      // Clear cached values if hash changed
+      if (this._lastItemsHash !== this._currentItemsHash) {
+        this._cachedItemCount = undefined
+        this._cachedSubtotal = undefined
+      }
+    },
+
+    // Debounced save to storage to reduce I/O operations
+    debouncedSaveToStorage: null as any,
+
+    createDebouncedSave() {
+      let timeoutId: NodeJS.Timeout | null = null
+      
+      this.debouncedSaveToStorage = () => {
+        if (timeoutId) {
+          clearTimeout(timeoutId)
+        }
+        
+        timeoutId = setTimeout(() => {
+          this.saveToStorage()
+        }, 300) // 300ms debounce
+      }
+    },
+
+    // Cart caching methods
+    async initializeCartCaching() {
+      if (!process.client) return
+      
+      try {
+        const { initializeCartCache } = await import('~/composables/useCartCache')
+        const cartCache = useCartCache()
+        await cartCache.initializeCartCache()
+      } catch (error) {
+        console.error('Failed to initialize cart caching:', error)
+      }
+    },
+
+    async cacheCartData() {
+      if (!process.client) return
+      
+      try {
+        const { useCartCache } = await import('~/composables/useCartCache')
+        const cartCache = useCartCache()
+        const cartData = {
+          items: this.items,
+          sessionId: this.sessionId,
+          updatedAt: new Date().toISOString(),
+          subtotal: this.subtotal,
+          itemCount: this.itemCount
+        }
+        
+        await cartCache.cacheCartData(cartData)
+      } catch (error) {
+        console.error('Failed to cache cart data:', error)
+      }
+    },
+
+    // Helper method to save and cache cart data
+    saveAndCacheCartData() {
+      this.invalidateCalculationCache()
+      
+      if (this.debouncedSaveToStorage) {
+        this.debouncedSaveToStorage()
+      } else {
+        this.saveToStorage()
+      }
+      
+      // Cache cart data for offline access
+      this.cacheCartData()
     },
 
     // Validate cart data structure and fix corruption
