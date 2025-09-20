@@ -56,7 +56,7 @@
   - Add screen reader support for cart status updates
   - _Requirements: Accessibility compliance_
 
-- [ ] 9. Create cart integration tests
+- [-] 9. Create cart integration tests
 
   - Write E2E tests for complete cart workflows
   - Add integration tests for cart persistence
