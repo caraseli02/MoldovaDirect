@@ -223,7 +223,10 @@ const {
   selectAllItems,
   clearSelection,
   toggleItemSelection,
-  saveItemForLater
+  saveItemForLater,
+  // Performance monitoring
+  startPerformanceMonitoring,
+  getPerformanceStats
 } = useCart()
 
 // Error handling for cart operations
@@ -289,11 +292,24 @@ const toggleSelectAll = () => {
 
 // Validate cart on page load with error handling
 onMounted(async () => {
+  // Start performance monitoring for cart operations
+  startPerformanceMonitoring()
+  
   try {
     await validateCart()
   } catch (error) {
     console.error('Failed to validate cart:', error)
     toast.error('Error de validación', 'No se pudo validar el carrito')
+  }
+})
+
+// Log performance stats when component unmounts (for debugging)
+onUnmounted(() => {
+  if (process.env.NODE_ENV === 'development') {
+    const stats = getPerformanceStats()
+    if (stats) {
+      console.log('Cart performance stats:', stats)
+    }
   }
 })
 

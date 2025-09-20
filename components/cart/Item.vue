@@ -55,11 +55,14 @@
         <!-- Product Image and Info Row -->
         <div class="flex items-start space-x-3 mb-3">
           <div class="flex-shrink-0">
-            <img
+            <CommonLazyImage
               :src="item.product.images[0] || '/placeholder-product.jpg'"
               :alt="item.product.name"
-              class="w-20 h-20 object-cover rounded-lg"
-            >
+              container-class="w-20 h-20 rounded-lg"
+              image-class="rounded-lg"
+              aspect-ratio="1"
+              root-margin="100px"
+            />
           </div>
 
           <div class="flex-1 min-w-0">
@@ -142,11 +145,14 @@
       <div class="hidden md:flex md:items-center md:space-x-4 pl-8">
         <!-- Product Image -->
         <div class="flex-shrink-0">
-          <img
+          <CommonLazyImage
             :src="item.product.images[0] || '/placeholder-product.jpg'"
             :alt="item.product.name"
-            class="w-16 h-16 object-cover rounded-lg"
-          >
+            container-class="w-16 h-16 rounded-lg"
+            image-class="rounded-lg"
+            aspect-ratio="1"
+            root-margin="100px"
+          />
         </div>
 
         <!-- Product Info -->
