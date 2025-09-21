@@ -1,7 +1,12 @@
 import { Page, expect } from '@playwright/test'
+import { CartTestHelpers } from './cart-helpers'
 
 export class TestHelpers {
-  constructor(private page: Page) {}
+  readonly cart: CartTestHelpers
+
+  constructor(private page: Page) {
+    this.cart = new CartTestHelpers(page)
+  }
 
   async waitForPageLoad() {
     await this.page.waitForLoadState('networkidle')
