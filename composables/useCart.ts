@@ -221,6 +221,56 @@ export const useCart = () => {
     directClearCart: cartStore.clearCart,
     directValidateCart: cartStore.validateCart,
 
+    // Secure cart operations
+    secureAddItem: async (product: any, quantity: number = 1) => {
+      try {
+        await cartStore.secureAddItem(product, quantity);
+      } catch (error) {
+        console.error("Failed to securely add item:", error);
+        throw error;
+      }
+    },
+    secureUpdateQuantity: async (itemId: string, quantity: number) => {
+      try {
+        await cartStore.secureUpdateQuantity(itemId, quantity);
+      } catch (error) {
+        console.error("Failed to securely update quantity:", error);
+        throw error;
+      }
+    },
+    secureRemoveItem: async (itemId: string) => {
+      try {
+        await cartStore.secureRemoveItem(itemId);
+      } catch (error) {
+        console.error("Failed to securely remove item:", error);
+        throw error;
+      }
+    },
+    secureClearCart: async () => {
+      try {
+        await cartStore.secureClearCart();
+      } catch (error) {
+        console.error("Failed to securely clear cart:", error);
+        throw error;
+      }
+    },
+    secureValidateCart: async () => {
+      try {
+        await cartStore.secureValidateCart();
+      } catch (error) {
+        console.error("Failed to securely validate cart:", error);
+        throw error;
+      }
+    },
+
+    // Security management
+    toggleSecurity: (enabled: boolean) => cartStore.toggleSecurity(enabled),
+    getSecurityStatus: () => cartStore.getSecurityStatus(),
+    clearSecurityErrors: () => cartStore.clearSecurityErrors(),
+    securityEnabled: computed(() => cartStore.securityEnabled),
+    securityErrors: computed(() => cartStore.securityErrors),
+    lastSecurityCheck: computed(() => cartStore.lastSecurityCheck),
+
     // Storage management actions
     recoverCart: async () => {
       try {
