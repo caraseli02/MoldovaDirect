@@ -16,7 +16,8 @@ import {
   sanitizeCartData,
   securityHeaders,
   validateSessionId,
-  isValidProductId
+  isValidProductId,
+  rateLimitConfig
 } from '~/server/utils/cartSecurity'
 
 interface SecureCartOperation {
