@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { useToastStore } from './toast'
 import { useStoreI18n } from '~/composables/useStoreI18n'
 import { useCartAnalytics } from '~/composables/useCartAnalytics'
+import { useCartSecurity } from '~/composables/useCartSecurity'
 
 interface Product {
   id: string
@@ -57,6 +58,10 @@ interface CartState {
   backgroundValidationEnabled: boolean
   lastBackgroundValidation: Date | null
   validationInProgress: boolean
+  // Security features
+  securityEnabled: boolean
+  lastSecurityCheck: Date | null
+  securityErrors: string[]
   // Advanced features
   selectedItems: Set<string>
   bulkOperationInProgress: boolean
@@ -83,6 +88,10 @@ export const useCartStore = defineStore('cart', {
     backgroundValidationEnabled: true,
     lastBackgroundValidation: null,
     validationInProgress: false,
+    // Security features
+    securityEnabled: true,
+    lastSecurityCheck: null,
+    securityErrors: [],
     // Advanced features
     selectedItems: new Set<string>(),
     bulkOperationInProgress: false,
@@ -588,6 +597,385 @@ export const useCartStore = defineStore('cart', {
       } finally {
         this.loading = false
       }
+    },
+
+    // Security-enhanced cart operations
+    async secureAddItem(product: Product, quantity: number = 1) {
+      if (!this.securityEnabled) {
+        return this.addItem(product, quantity)
+      }
+
+      const cartSecurity = useCartSecurity()
+      
+      try {
+        // Validate session ID
+        if (!this.sessionId || !cartSecurity.isValidSessionId(this.sessionId)) {
+          this.sessionId = cartSecurity.generateSecureSessionId()
+        }
+
+        // Validate product ID format
+        if (!cartSecurity.isValidProductId(product.id)) {
+          throw new Error('Invalid product ID format')
+        }
+
+        // Client-side validation
+        const validation = cartSecurity.validateCartData('addItem', {
+          productId: product.id,
+          quantity
+        })
+
+        if (!validation.isValid) {
+          throw new Error(`Validation failed: ${validation.errors.join(', ')}`)
+        }
+
+        // Use secure API endpoint
+        const result = await cartSecurity.secureAddItem(product.id, quantity, this.sessionId)
+        
+        // Update local cart with validated data
+        const existingItem = this.getItemByProductId(product.id)
+        
+        if (existingItem) {
+          existingItem.quantity += quantity
+          existingItem.product = { ...existingItem.product, ...result.product }
+        } else {
+          const cartItem: CartItem = {
+            id: this.generateItemId(),
+            product: result.product,
+            quantity,
+            addedAt: new Date()
+          }
+          this.items.push(cartItem)
+        }
+
+        // Update security check timestamp
+        this.lastSecurityCheck = new Date()
+        this.securityErrors = []
+
+        // Persist to storage
+        this.saveToStorage()
+
+        // Track analytics
+        if (process.client) {
+          const cartAnalytics = useCartAnalytics()
+          cartAnalytics.trackAddToCart(result.product, quantity, this.subtotal, this.itemCount)
+        }
+
+        // Show success message
+        const toastStore = useToastStore()
+        const { t } = useStoreI18n()
+        toastStore.success(t('cart.success.productAdded'), t('cart.success.addedToCart', { product: result.product.name }))
+
+      } catch (error) {
+        this.securityErrors.push(error.message)
+        this.error = error.message
+        
+        const toastStore = useToastStore()
+        const { t } = useStoreI18n()
+        toastStore.error(t('cart.error.addFailed'), error.message)
+        
+        throw error
+      }
+    },
+
+    async secureUpdateQuantity(itemId: string, quantity: number) {
+      if (!this.securityEnabled) {
+        return this.updateQuantity(itemId, quantity)
+      }
+
+      const cartSecurity = useCartSecurity()
+      
+      try {
+        // Validate session ID
+        if (!this.sessionId || !cartSecurity.isValidSessionId(this.sessionId)) {
+          this.sessionId = cartSecurity.generateSecureSessionId()
+        }
+
+        // Client-side validation
+        const validation = cartSecurity.validateCartData('updateQuantity', {
+          itemId,
+          quantity
+        })
+
+        if (!validation.isValid) {
+          throw new Error(`Validation failed: ${validation.errors.join(', ')}`)
+        }
+
+        // Handle removal if quantity is 0
+        if (quantity === 0) {
+          return this.secureRemoveItem(itemId)
+        }
+
+        // Use secure API endpoint
+        const result = await cartSecurity.secureUpdateQuantity(itemId, quantity, this.sessionId)
+        
+        // Update local cart
+        const item = this.items.find(item => item.id === itemId)
+        if (item) {
+          const oldQuantity = item.quantity
+          item.quantity = quantity
+          
+          // Track analytics
+          if (process.client) {
+            const cartAnalytics = useCartAnalytics()
+            cartAnalytics.trackQuantityUpdate(item.product, oldQuantity, quantity, this.subtotal, this.itemCount)
+          }
+        }
+
+        // Update security check timestamp
+        this.lastSecurityCheck = new Date()
+        this.securityErrors = []
+
+        // Persist to storage
+        this.saveToStorage()
+
+        // Show success message
+        const toastStore = useToastStore()
+        const { t } = useStoreI18n()
+        toastStore.success(t('cart.success.quantityUpdated'), t('cart.success.quantityChange', { product: item?.product.name, oldQty: item ? item.quantity : 0, newQty: quantity }))
+
+      } catch (error) {
+        this.securityErrors.push(error.message)
+        this.error = error.message
+        
+        const toastStore = useToastStore()
+        const { t } = useStoreI18n()
+        toastStore.error(t('cart.error.updateFailed'), error.message)
+        
+        throw error
+      }
+    },
+
+    async secureRemoveItem(itemId: string) {
+      if (!this.securityEnabled) {
+        return this.removeItem(itemId)
+      }
+
+      const cartSecurity = useCartSecurity()
+      
+      try {
+        // Validate session ID
+        if (!this.sessionId || !cartSecurity.isValidSessionId(this.sessionId)) {
+          this.sessionId = cartSecurity.generateSecureSessionId()
+        }
+
+        // Client-side validation
+        const validation = cartSecurity.validateCartData('removeItem', { itemId })
+
+        if (!validation.isValid) {
+          throw new Error(`Validation failed: ${validation.errors.join(', ')}`)
+        }
+
+        // Find item before removal for analytics
+        const item = this.items.find(item => item.id === itemId)
+        if (!item) {
+          throw new Error('Item not found')
+        }
+
+        // Use secure API endpoint
+        await cartSecurity.secureRemoveItem(itemId, this.sessionId)
+        
+        // Remove from local cart
+        const index = this.items.findIndex(item => item.id === itemId)
+        if (index !== -1) {
+          const removedItem = this.items.splice(index, 1)[0]
+          
+          // Track analytics
+          if (process.client) {
+            const cartAnalytics = useCartAnalytics()
+            cartAnalytics.trackRemoveFromCart(removedItem.product, removedItem.quantity, this.subtotal, this.itemCount)
+          }
+        }
+
+        // Update security check timestamp
+        this.lastSecurityCheck = new Date()
+        this.securityErrors = []
+
+        // Persist to storage
+        this.saveToStorage()
+
+        // Show success message with undo option
+        const toastStore = useToastStore()
+        const { t } = useStoreI18n()
+        toastStore.success(t('cart.success.productRemoved'), t('cart.success.removedFromCart', { product: item.product.name }), {
+          actionText: t('common.undo'),
+          actionHandler: () => {
+            // Re-add the item
+            this.items.splice(index, 0, item)
+            this.saveToStorage()
+            const { t: t2 } = useStoreI18n()
+            toastStore.success(t2('cart.success.productRestored'), t2('cart.success.restoredToCart', { product: item.product.name }))
+          },
+          duration: 8000
+        })
+
+      } catch (error) {
+        this.securityErrors.push(error.message)
+        this.error = error.message
+        
+        const toastStore = useToastStore()
+        const { t } = useStoreI18n()
+        toastStore.error(t('cart.error.removeFailed'), error.message)
+        
+        throw error
+      }
+    },
+
+    async secureClearCart() {
+      if (!this.securityEnabled) {
+        return this.clearCart()
+      }
+
+      const cartSecurity = useCartSecurity()
+      
+      try {
+        // Validate session ID
+        if (!this.sessionId || !cartSecurity.isValidSessionId(this.sessionId)) {
+          this.sessionId = cartSecurity.generateSecureSessionId()
+        }
+
+        // Use secure API endpoint
+        await cartSecurity.secureClearCart(this.sessionId)
+        
+        // Backup items for undo
+        const itemsBackup = [...this.items]
+        
+        // Clear local cart
+        this.items = []
+
+        // Update security check timestamp
+        this.lastSecurityCheck = new Date()
+        this.securityErrors = []
+
+        // Persist to storage
+        this.saveToStorage()
+
+        // Show success message with undo option
+        const toastStore = useToastStore()
+        const { t } = useStoreI18n()
+        toastStore.success(t('cart.success.cartCleared'), t('cart.success.allItemsRemoved'), {
+          actionText: t('common.undo'),
+          actionHandler: () => {
+            this.items = itemsBackup
+            this.saveToStorage()
+            const { t: t2 } = useStoreI18n()
+            toastStore.success(t2('cart.success.cartRestored'), t2('cart.success.itemsRestoredToCart'))
+          },
+          duration: 10000
+        })
+
+      } catch (error) {
+        this.securityErrors.push(error.message)
+        this.error = error.message
+        
+        const toastStore = useToastStore()
+        const { t } = useStoreI18n()
+        toastStore.error(t('cart.error.clearFailed'), error.message)
+        
+        throw error
+      }
+    },
+
+    async secureValidateCart() {
+      if (!this.securityEnabled) {
+        return this.validateCart()
+      }
+
+      const cartSecurity = useCartSecurity()
+      
+      try {
+        // Validate session ID
+        if (!this.sessionId || !cartSecurity.isValidSessionId(this.sessionId)) {
+          this.sessionId = cartSecurity.generateSecureSessionId()
+        }
+
+        // Prepare items for validation
+        const items = this.items.map(item => ({
+          id: item.id,
+          productId: item.product.id,
+          quantity: item.quantity
+        }))
+
+        // Use secure API endpoint
+        const result = await cartSecurity.secureValidateCart(items, this.sessionId)
+        
+        // Process validation results
+        let hasChanges = false
+        const toastStore = useToastStore()
+        const { t } = useStoreI18n()
+
+        for (const validation of result.validationResults) {
+          const item = this.items.find(item => item.id === validation.itemId)
+          if (!item) continue
+
+          if (!validation.valid) {
+            hasChanges = true
+            
+            switch (validation.action) {
+              case 'remove':
+                // Remove invalid item
+                const index = this.items.findIndex(item => item.id === validation.itemId)
+                if (index !== -1) {
+                  this.items.splice(index, 1)
+                  toastStore.warning(t('cart.notification.productRemoved'), validation.error)
+                }
+                break
+                
+              case 'adjust':
+                // Adjust quantity
+                if (validation.suggestedQuantity) {
+                  item.quantity = validation.suggestedQuantity
+                  toastStore.warning(t('cart.notification.quantityAdjusted'), validation.error)
+                }
+                break
+            }
+          } else if (validation.product) {
+            // Update product data
+            item.product = { ...item.product, ...validation.product }
+          }
+        }
+
+        // Update security check timestamp
+        this.lastSecurityCheck = new Date()
+        this.securityErrors = []
+
+        if (hasChanges) {
+          this.saveToStorage()
+        }
+
+      } catch (error) {
+        this.securityErrors.push(error.message)
+        this.error = error.message
+        
+        const toastStore = useToastStore()
+        const { t } = useStoreI18n()
+        toastStore.error(t('cart.error.validationFailed'), error.message)
+        
+        throw error
+      }
+    },
+
+    // Toggle security features
+    toggleSecurity(enabled: boolean) {
+      this.securityEnabled = enabled
+      if (enabled) {
+        this.lastSecurityCheck = null
+        this.securityErrors = []
+      }
+    },
+
+    // Get security status
+    getSecurityStatus() {
+      return {
+        enabled: this.securityEnabled,
+        lastCheck: this.lastSecurityCheck,
+        errors: [...this.securityErrors],
+        hasErrors: this.securityErrors.length > 0
+      }
+    },
+
+    // Clear security errors
+    clearSecurityErrors() {
+      this.securityErrors = []
     },
 
     // Update item quantity with optimized validation
