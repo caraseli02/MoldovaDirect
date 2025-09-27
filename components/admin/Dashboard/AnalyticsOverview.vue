@@ -2,7 +2,7 @@
   <div class="space-y-6">
     <!-- Date Range Picker -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
-      <AdminDateRangePicker
+      <AdminUtilsDateRangePicker
         v-model="dateRange"
         @change="handleDateRangeChange"
       />
@@ -56,7 +56,7 @@
           Revenue Trend
         </h3>
         <div class="h-80">
-          <AdminBaseChart
+          <AdminChartsBase
             type="line"
             :data="revenueChartData"
             :options="revenueChartOptions"
@@ -72,7 +72,7 @@
           User Growth
         </h3>
         <div class="h-80">
-          <AdminBaseChart
+          <AdminChartsBase
             type="bar"
             :data="userGrowthChartData"
             :options="userGrowthChartOptions"

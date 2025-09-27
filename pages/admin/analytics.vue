@@ -54,7 +54,7 @@
       <div class="space-y-8">
         <!-- Overview Tab -->
         <div v-if="activeTab === 'overview'">
-          <AdminAnalyticsOverview
+          <AdminDashboardAnalyticsOverview
             :data="analyticsOverview"
             :loading="loading"
             :error="error"
@@ -65,19 +65,19 @@
         <!-- Users Tab -->
         <div v-if="activeTab === 'users'" class="space-y-6">
           <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
-            <AdminDateRangePicker
+            <AdminUtilsDateRangePicker
               v-model="dateRange"
               @change="handleDateRangeChange"
             />
           </div>
 
           <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
-            <AdminUserRegistrationChart
+            <AdminChartsUserRegistration
               :data="userAnalytics"
               :loading="loading"
               :error="error"
             />
-            <AdminUserActivityChart
+            <AdminChartsUserActivity
               :data="userAnalytics"
               :loading="loading"
               :error="error"
@@ -111,14 +111,14 @@
         <!-- Products Tab -->
         <div v-if="activeTab === 'products'" class="space-y-6">
           <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
-            <AdminDateRangePicker
+            <AdminUtilsDateRangePicker
               v-model="dateRange"
               @change="handleDateRangeChange"
             />
           </div>
 
           <!-- Conversion Funnel -->
-          <AdminConversionFunnelChart
+          <AdminChartsConversionFunnel
             :data="productAnalytics"
             :loading="loading"
             :error="error"
@@ -126,12 +126,12 @@
 
           <!-- Product Performance Chart and Top Products -->
           <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
-            <AdminProductPerformanceChart
+            <AdminChartsProductPerformance
               :data="productAnalytics"
               :loading="loading"
               :error="error"
             />
-            <AdminTopProductsTable
+            <AdminUtilsTopProductsTable
               :data="productAnalytics"
               :loading="loading"
               :error="error"
@@ -141,7 +141,7 @@
           </div>
 
           <!-- Detailed Product Table -->
-          <AdminTopProductsTable
+          <AdminUtilsTopProductsTable
             :data="productAnalytics"
             :loading="loading"
             :error="error"

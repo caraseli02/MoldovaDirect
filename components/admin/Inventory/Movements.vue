@@ -215,7 +215,7 @@
 
     <!-- Pagination -->
     <div v-if="pagination && pagination.totalPages > 1" class="px-6 py-4 border-t border-gray-200 dark:border-gray-700">
-      <AdminPagination
+      <AdminUtilsPagination
         :current-page="pagination.page"
         :total-pages="pagination.totalPages"
         :total-items="pagination.total"
