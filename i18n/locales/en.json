@@ -23,6 +23,7 @@
     "optional": "Optional",
     "and": "and",
     "to": "to",
+    "of": "of",
     "previous": "Previous",
     "next": "Next",
     "remove": "Remove",
@@ -36,7 +37,8 @@
     "showMore": "Show More",
     "showLess": "Show Less",
     "swipe_to_remove": "Swipe to remove",
-    "release_to_remove": "Release to remove"
+    "release_to_remove": "Release to remove",
+    "help": "Help"
   },
   "auth": {
     "signIn": "Sign In",
@@ -636,6 +638,88 @@
       "adjustQuantity": "Adjust quantity",
       "adjustToMax": "Adjust to maximum",
       "reloadCart": "Reload cart"
+    }
+  },
+  "checkout": {
+    "title": "Checkout",
+    "secureCheckout": "Secure Checkout",
+    "steps": {
+      "shipping": {
+        "name": "Shipping",
+        "description": "Delivery information",
+        "title": "Shipping Information",
+        "subtitle": "Where should we deliver your order?"
+      },
+      "payment": {
+        "name": "Payment",
+        "description": "Payment method",
+        "title": "Payment Method",
+        "subtitle": "How would you like to pay?"
+      },
+      "review": {
+        "name": "Review",
+        "description": "Order summary",
+        "title": "Review Your Order",
+        "subtitle": "Please review your order details before completing your purchase"
+      },
+      "confirmation": {
+        "name": "Confirmation",
+        "description": "Order complete",
+        "title": "Order Confirmed!",
+        "subtitle": "Thank you for your order. We'll send you a confirmation email shortly.",
+        "emailSent": "A confirmation email has been sent to your email address",
+        "orderDetails": "Order Details",
+        "orderDetailsPlaceholder": "Your order details will be displayed here",
+        "viewOrders": "View My Orders",
+        "continueShopping": "Continue Shopping"
+      }
+    },
+    "guestCheckout": {
+      "title": "Checkout Options",
+      "description": "You can create an account for faster checkout or continue as a guest."
+    },
+    "continueAsGuest": "Continue as Guest",
+    "backToCart": "Back to Cart",
+    "continueToPayment": "Continue to Payment",
+    "backToShipping": "Back to Shipping",
+    "reviewOrder": "Review Order",
+    "backToPayment": "Back to Payment",
+    "placeOrder": "Place Order",
+    "shippingForm": {
+      "title": "Shipping Information",
+      "placeholder": "Shipping form will be implemented in the next task"
+    },
+    "paymentForm": {
+      "title": "Payment Method",
+      "placeholder": "Payment form will be implemented in the next task"
+    },
+    "orderReview": {
+      "title": "Order Summary",
+      "placeholder": "Order review will be implemented in the next task"
+    },
+    "success": {
+      "shippingUpdated": "Shipping Updated",
+      "shippingInfoSaved": "Your shipping information has been saved",
+      "paymentUpdated": "Payment Updated",
+      "paymentMethodSaved": "Your payment method has been saved",
+      "orderCompleted": "Order Completed",
+      "orderConfirmation": "Your order has been successfully placed"
+    },
+    "validation": {
+      "firstNameRequired": "First name is required",
+      "lastNameRequired": "Last name is required",
+      "streetRequired": "Street address is required",
+      "cityRequired": "City is required",
+      "postalCodeRequired": "Postal code is required",
+      "countryRequired": "Country is required",
+      "shippingMethodRequired": "Shipping method is required",
+      "cardNumberRequired": "Card number is required",
+      "cardNumberInvalid": "Invalid card number",
+      "expiryRequired": "Expiry date is required",
+      "cvvRequired": "CVV is required",
+      "cvvInvalid": "Invalid CVV",
+      "holderNameRequired": "Cardholder name is required",
+      "paypalEmailRequired": "PayPal email is required"
     }
   },
   "admin": {
