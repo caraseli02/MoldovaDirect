@@ -14,7 +14,7 @@
         @change="updateRange"
       />
     </div>
-    <span class="text-gray-500 text-sm">to</span>
+    <span class="text-gray-500 text-sm">{{ $t('common.to') }}</span>
     <div class="relative">
       <input
         v-model="toDate"

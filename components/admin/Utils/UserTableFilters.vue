@@ -69,7 +69,7 @@
         </select>
 
         <!-- Date Range Filter -->
-        <AdminUserDateRangePicker
+        <AdminUtilsUserDateRangePicker
           v-model:from="localDateFrom"
           v-model:to="localDateTo"
           :class="{

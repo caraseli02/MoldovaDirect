@@ -16,7 +16,7 @@
 <template>
   <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
     <!-- Table Filters -->
-    <AdminUserTableFilters
+    <AdminUtilsUserTableFilters
       v-model:search-query="searchQuery"
       v-model:status-filter="statusFilter"
       v-model:date-from="dateFrom"
@@ -109,7 +109,7 @@
             </tr>
           </thead>
           <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-            <AdminUserTableRow
+            <AdminUtilsUserTableRow
               v-for="user in usersWithDisplayData"
               :key="user.id"
               :user="user"
@@ -125,7 +125,7 @@
 
       <!-- Mobile List -->
       <div v-else class="p-4">
-        <AdminUserTableRow
+        <AdminUtilsUserTableRow
           v-for="user in usersWithDisplayData"
           :key="user.id"
           :user="user"
@@ -138,7 +138,7 @@
       </div>
 
       <!-- Empty State -->
-      <AdminUserTableEmpty
+      <AdminUtilsUserTableEmpty
         v-if="users.length === 0"
         :has-active-filters="hasActiveFilters"
         :total-users="totalUsers"
@@ -151,7 +151,7 @@
     </div>
 
     <!-- Pagination -->
-    <AdminPagination
+    <AdminUtilsPagination
       v-if="users.length > 0"
       :current-page="pagination.page"
       :total-pages="pagination.totalPages"

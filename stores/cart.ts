@@ -3,6 +3,7 @@ import { useToastStore } from './toast'
 import { useStoreI18n } from '~/composables/useStoreI18n'
 import { useCartAnalytics } from '~/composables/useCartAnalytics'
 import { useCartSecurity } from '~/composables/useCartSecurity'
+import { navigateTo } from '#imports'
 
 interface Product {
   id: string
@@ -523,6 +524,7 @@ export const useCartStore = defineStore('cart', {
           toastStore.error(t('cart.error.insufficientStock'), errorMsg, {
             actionText: t('cart.action.viewProduct'),
             actionHandler: () => {
+              const { navigateTo } = useNuxtApp()
               navigateTo(`/products/${currentProduct.slug}`)
             }
           })
@@ -541,9 +543,9 @@ export const useCartStore = defineStore('cart', {
             const errorMsg = t('cart.error.cannotAddMore', { quantity, available })
             toastStore.error(t('cart.error.insufficientStock'), errorMsg, {
               actionText: t('cart.action.adjustQuantity'),
-              actionHandler: () => {
+              actionHandler: function() {
                 this.updateQuantity(existingItem.id, currentProduct.stock)
-              }
+              }.bind(this)
             })
             throw new Error(errorMsg)
           }
@@ -798,13 +800,13 @@ export const useCartStore = defineStore('cart', {
         const { t } = useStoreI18n()
         toastStore.success(t('cart.success.productRemoved'), t('cart.success.removedFromCart', { product: item.product.name }), {
           actionText: t('common.undo'),
-          actionHandler: () => {
+          actionHandler: function() {
             // Re-add the item
             this.items.splice(index, 0, item)
             this.saveToStorage()
             const { t: t2 } = useStoreI18n()
             toastStore.success(t2('cart.success.productRestored'), t2('cart.success.restoredToCart', { product: item.product.name }))
-          },
+          }.bind(this),
           duration: 8000
         })
 
@@ -854,12 +856,12 @@ export const useCartStore = defineStore('cart', {
         const { t } = useStoreI18n()
         toastStore.success(t('cart.success.cartCleared'), t('cart.success.allItemsRemoved'), {
           actionText: t('common.undo'),
-          actionHandler: () => {
+          actionHandler: function() {
             this.items = itemsBackup
             this.saveToStorage()
             const { t: t2 } = useStoreI18n()
             toastStore.success(t2('cart.success.cartRestored'), t2('cart.success.itemsRestoredToCart'))
-          },
+          }.bind(this),
           duration: 10000
         })
 

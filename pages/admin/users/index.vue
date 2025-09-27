@@ -46,7 +46,7 @@
       </div>
 
       <!-- User Table -->
-      <AdminUserTable
+      <AdminUsersTable
         @user-selected="showUserDetail"
         @user-action="handleUserAction"
       />
@@ -71,7 +71,7 @@
           
           <!-- Modal Content -->
           <div class="overflow-y-auto max-h-[calc(90vh-80px)]">
-            <AdminUserDetailView
+            <AdminUsersDetailView
               :user-id="selectedUserId"
               @edit="handleUserEdit"
               @action="handleUserAction"

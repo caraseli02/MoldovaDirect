@@ -22,6 +22,7 @@
     "loading": "Se încarcă...",
     "optional": "Opțional",
     "and": "și",
+    "to": "la",
     "previous": "Anterior",
     "next": "Următorul",
     "remove": "Elimină",
@@ -707,7 +708,15 @@
       "status": "Stare",
       "registered": "Înregistrat",
       "lastLogin": "Ultima Conectare",
+      "lastOrder": "Ultima Comandă",
+      "orders": "Comenzi",
+      "totalSpent": "Total Cheltuit",
+      "language": "Limbă",
+      "avgOrderValue": "Valoarea Medie a Comenzii",
       "actions": "Acțiuni",
+      "loading": "Se încarcă utilizatorii...",
+      "retry": "Reîncearcă",
+      "searchPlaceholder": "Caută utilizatori după nume, email sau ID...",
       "roles": {
         "admin": "Administrator",
         "user": "Client",
@@ -716,7 +725,50 @@
       "statuses": {
         "active": "Activ",
         "inactive": "Inactiv",
-        "banned": "Interzis"
+        "banned": "Interzis",
+        "unverified": "Neverificat",
+        "locked": "Blocat"
+      },
+      "columns": {
+        "user": "Utilizator",
+        "email": "Email",
+        "status": "Stare",
+        "orders": "Comenzi",
+        "totalSpent": "Total Cheltuit",
+        "registered": "Înregistrat",
+        "lastLogin": "Ultima Conectare",
+        "actions": "Acțiuni"
+      },
+      "filters": {
+        "allStatus": "Toate Stările",
+        "active": "Activ",
+        "inactive": "Inactiv",
+        "clear": "Șterge Filtrele",
+        "toggle": "Filtre",
+        "activeFilters": "Filtre Active",
+        "from": "De la",
+        "to": "Până la"
+      },
+      "actions": {
+        "view": "Vezi detaliile utilizatorului",
+        "edit": "Editează utilizatorul",
+        "clearFilters": "Șterge Filtrele",
+        "refresh": "Reîmprospătează",
+        "invite": "Invită Utilizator"
+      },
+      "empty": {
+        "noResults": "Nu s-au găsit utilizatori",
+        "noUsers": "Încă nu există utilizatori",
+        "noData": "Nu sunt date disponibile",
+        "noResultsForQuery": "Nu s-au găsit utilizatori pentru '{query}'",
+        "tryDifferentFilters": "Încearcă filtre sau termeni de căutare diferiți",
+        "noUsersDescription": "Încă nu s-au înregistrat utilizatori. Utilizatorii vor apărea aici odată ce își creează conturi.",
+        "checkConnection": "Verifică conexiunea și încearcă din nou",
+        "helpTitle": "Sfaturi pentru gestionarea utilizatorilor:",
+        "helpTip1": "Folosește căutarea pentru a găsi utilizatori specifici rapid",
+        "helpTip2": "Filtrează după stare pentru a te concentra pe grupuri specifice de utilizatori",
+        "helpTip3": "Fă clic pe orice utilizator pentru a vedea informații detaliate",
+        "swipeHint": "Glisează spre stânga pe mobil pentru acțiuni rapide"
       }
     },
     "analytics": {

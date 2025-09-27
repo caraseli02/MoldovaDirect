@@ -22,6 +22,7 @@
     "loading": "Loading...",
     "optional": "Optional",
     "and": "and",
+    "to": "to",
     "previous": "Previous",
     "next": "Next",
     "remove": "Remove",
@@ -861,7 +862,15 @@
       "status": "Status",
       "registered": "Registered",
       "lastLogin": "Last Login",
+      "lastOrder": "Last Order",
+      "orders": "Orders",
+      "totalSpent": "Total Spent",
+      "language": "Language",
+      "avgOrderValue": "Avg Order Value",
       "actions": "Actions",
+      "loading": "Loading users...",
+      "retry": "Retry",
+      "searchPlaceholder": "Search users by name, email, or ID...",
       "roles": {
         "admin": "Administrator",
         "user": "Customer",
@@ -870,7 +879,50 @@
       "statuses": {
         "active": "Active",
         "inactive": "Inactive",
-        "banned": "Banned"
+        "banned": "Banned",
+        "unverified": "Unverified",
+        "locked": "Locked"
+      },
+      "columns": {
+        "user": "User",
+        "email": "Email",
+        "status": "Status",
+        "orders": "Orders",
+        "totalSpent": "Total Spent",
+        "registered": "Registered",
+        "lastLogin": "Last Login",
+        "actions": "Actions"
+      },
+      "filters": {
+        "allStatus": "All Status",
+        "active": "Active",
+        "inactive": "Inactive",
+        "clear": "Clear Filters",
+        "toggle": "Filters",
+        "activeFilters": "Active Filters",
+        "from": "From",
+        "to": "To"
+      },
+      "actions": {
+        "view": "View user details",
+        "edit": "Edit user",
+        "clearFilters": "Clear Filters",
+        "refresh": "Refresh",
+        "invite": "Invite User"
+      },
+      "empty": {
+        "noResults": "No users found",
+        "noUsers": "No users yet",
+        "noData": "No data available",
+        "noResultsForQuery": "No users found for '{query}'",
+        "tryDifferentFilters": "Try different filters or search terms",
+        "noUsersDescription": "No users have registered yet. Users will appear here once they create accounts.",
+        "checkConnection": "Check your connection and try again",
+        "helpTitle": "Tips for managing users:",
+        "helpTip1": "Use search to find specific users quickly",
+        "helpTip2": "Filter by status to focus on specific user groups",
+        "helpTip3": "Click on any user to view detailed information",
+        "swipeHint": "Swipe left on mobile for quick actions"
       }
     },
     "analytics": {

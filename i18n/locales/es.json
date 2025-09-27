@@ -22,6 +22,7 @@
     "loading": "Cargando...",
     "optional": "Opcional",
     "and": "y",
+    "to": "a",
     "previous": "Anterior",
     "next": "Siguiente",
     "remove": "Eliminar",
@@ -838,7 +839,15 @@
       "status": "Estado",
       "registered": "Registrado",
       "lastLogin": "Último Acceso",
+      "lastOrder": "Último Pedido",
+      "orders": "Pedidos",
+      "totalSpent": "Total Gastado",
+      "language": "Idioma",
+      "avgOrderValue": "Valor Promedio de Pedido",
       "actions": "Acciones",
+      "loading": "Cargando usuarios...",
+      "retry": "Reintentar",
+      "searchPlaceholder": "Buscar usuarios por nombre, email o ID...",
       "roles": {
         "admin": "Administrador",
         "user": "Cliente",
@@ -847,7 +856,50 @@
       "statuses": {
         "active": "Activo",
         "inactive": "Inactivo",
-        "banned": "Prohibido"
+        "banned": "Prohibido",
+        "unverified": "Sin Verificar",
+        "locked": "Bloqueado"
+      },
+      "columns": {
+        "user": "Usuario",
+        "email": "Email",
+        "status": "Estado",
+        "orders": "Pedidos",
+        "totalSpent": "Total Gastado",
+        "registered": "Registrado",
+        "lastLogin": "Último Acceso",
+        "actions": "Acciones"
+      },
+      "filters": {
+        "allStatus": "Todos los Estados",
+        "active": "Activo",
+        "inactive": "Inactivo",
+        "clear": "Limpiar Filtros",
+        "toggle": "Filtros",
+        "activeFilters": "Filtros Activos",
+        "from": "Desde",
+        "to": "Hasta"
+      },
+      "actions": {
+        "view": "Ver detalles del usuario",
+        "edit": "Editar usuario",
+        "clearFilters": "Limpiar Filtros",
+        "refresh": "Actualizar",
+        "invite": "Invitar Usuario"
+      },
+      "empty": {
+        "noResults": "No se encontraron usuarios",
+        "noUsers": "Aún no hay usuarios",
+        "noData": "No hay datos disponibles",
+        "noResultsForQuery": "No se encontraron usuarios para '{query}'",
+        "tryDifferentFilters": "Prueba con filtros o términos de búsqueda diferentes",
+        "noUsersDescription": "Aún no se han registrado usuarios. Los usuarios aparecerán aquí una vez que creen cuentas.",
+        "checkConnection": "Verifica tu conexión e inténtalo de nuevo",
+        "helpTitle": "Consejos para gestionar usuarios:",
+        "helpTip1": "Usa la búsqueda para encontrar usuarios específicos rápidamente",
+        "helpTip2": "Filtra por estado para enfocarte en grupos específicos de usuarios",
+        "helpTip3": "Haz clic en cualquier usuario para ver información detallada",
+        "swipeHint": "Desliza hacia la izquierda en móvil para acciones rápidas"
       }
     },
     "analytics": {

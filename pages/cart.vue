@@ -224,10 +224,7 @@ const {
   clearSelection,
   toggleItemSelection,
   saveItemForLater,
-  // Performance monitoring
-  startPerformanceMonitoring,
-  getPerformanceStats
-} = useCart()
+  } = useCart()
 
 // Error handling for cart operations
 const handleCartError = (error: Error) => {
@@ -292,9 +289,6 @@ const toggleSelectAll = () => {
 
 // Validate cart on page load with error handling
 onMounted(async () => {
-  // Start performance monitoring for cart operations
-  startPerformanceMonitoring()
-  
   try {
     await validateCart()
   } catch (error) {
@@ -303,13 +297,10 @@ onMounted(async () => {
   }
 })
 
-// Log performance stats when component unmounts (for debugging)
+// Component cleanup on unmount
 onUnmounted(() => {
   if (process.env.NODE_ENV === 'development') {
-    const stats = getPerformanceStats()
-    if (stats) {
-      console.log('Cart performance stats:', stats)
-    }
+    console.log('Cart page unmounted')
   }
 })
 
