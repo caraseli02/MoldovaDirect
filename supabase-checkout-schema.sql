@@ -193,29 +193,21 @@ CREATE TRIGGER set_order_number_trigger
 -- ADMIN POLICIES FOR ORDER MANAGEMENT
 -- =============================================
 
--- Admin users can view all orders
-CREATE POLICY "Admins can view all orders" ON orders
-  FOR SELECT USING (
-    EXISTS (
-      SELECT 1 FROM profiles 
-      WHERE profiles.id = auth.uid() 
-      AND profiles.id IN (
-        SELECT user_id FROM user_roles WHERE role = 'admin'
-      )
-    )
-  );
-
--- Admin users can update orders
-CREATE POLICY "Admins can update orders" ON orders
-  FOR UPDATE USING (
-    EXISTS (
-      SELECT 1 FROM profiles 
-      WHERE profiles.id = auth.uid() 
-      AND profiles.id IN (
-        SELECT user_id FROM user_roles WHERE role = 'admin'
-      )
-    )
-  );
-
--- Note: user_roles table would need to be created separately for role management
--- For now, we'll handle admin permissions in the API layer
+-- Note: Admin policies are handled in the API layer for now
+-- Future implementation could use a user_roles table:
+-- 
+-- CREATE TABLE user_roles (
+--   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+--   role TEXT NOT NULL CHECK (role IN ('admin', 'manager', 'user')),
+--   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+--   PRIMARY KEY (user_id, role)
+-- );
+--
+-- Then add policies like:
+-- CREATE POLICY "Admins can view all orders" ON orders
+--   FOR SELECT USING (
+--     EXISTS (
+--       SELECT 1 FROM user_roles 
+--       WHERE user_id = auth.uid() AND role = 'admin'
+--     )
+--   );
