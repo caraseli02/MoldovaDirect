@@ -22,7 +22,7 @@
   - Create checkout route protection middleware
   - _Requirements: 1.1, 1.2, 6.1, 6.5_
 
-- [ ] 4. Implement shipping information step
+- [x] 4. Implement shipping information step
 
   - Create ShippingStep.vue component with address form
   - Build AddressForm.vue reusable component with validation

@@ -719,8 +719,75 @@
       "cvvRequired": "CVV is required",
       "cvvInvalid": "Invalid CVV",
       "holderNameRequired": "Cardholder name is required",
-      "paypalEmailRequired": "PayPal email is required"
-    }
+      "paypalEmailRequired": "PayPal email is required",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email address"
+    },
+    "addressForm": {
+      "shipping": {
+        "title": "Shipping Address",
+        "subtitle": "Where should we deliver your order?"
+      },
+      "billing": {
+        "title": "Billing Address",
+        "subtitle": "Where should we send your invoice?"
+      },
+      "savedAddresses": "Saved Addresses",
+      "useNewAddress": "Use a new address",
+      "default": "Default",
+      "firstName": "First Name",
+      "firstNamePlaceholder": "Enter your first name",
+      "lastName": "Last Name",
+      "lastNamePlaceholder": "Enter your last name",
+      "company": "Company",
+      "companyPlaceholder": "Company name (optional)",
+      "street": "Street Address",
+      "streetPlaceholder": "Enter your street address",
+      "city": "City",
+      "cityPlaceholder": "Enter your city",
+      "postalCode": "Postal Code",
+      "postalCodePlaceholder": "Enter postal code",
+      "province": "Province/State",
+      "provincePlaceholder": "Province or state (optional)",
+      "country": "Country",
+      "selectCountry": "Select a country",
+      "phone": "Phone Number",
+      "phonePlaceholder": "Enter your phone number (optional)",
+      "saveAddress": "Save this address for future orders"
+    },
+    "shippingMethod": {
+      "title": "Shipping Method",
+      "subtitle": "Choose how you'd like to receive your order",
+      "free": "Free",
+      "express": "Express",
+      "noMethods": "No shipping methods available",
+      "noMethodsDescription": "Please check your address or contact support",
+      "error": "Error loading shipping methods",
+      "standard": {
+        "name": "Standard Shipping",
+        "description": "Delivery in 3-5 business days"
+      },
+      "express": {
+        "name": "Express Shipping", 
+        "description": "Delivery in 1-2 business days"
+      },
+      "free": {
+        "name": "Free Shipping",
+        "description": "Delivery in 5-7 business days (orders over €50)"
+      }
+    },
+    "guestInfo": {
+      "title": "Contact Information",
+      "email": "Email Address",
+      "emailPlaceholder": "Enter your email address",
+      "emailUpdates": "Send me email updates about my order"
+    },
+    "shippingInstructions": {
+      "title": "Delivery Instructions",
+      "placeholder": "Any special instructions for delivery? (e.g., leave at door, ring bell, etc.)",
+      "help": "These instructions will be shared with the delivery service"
+    },
+    "processing": "Processing..."
   },
   "admin": {
     "navigation": {

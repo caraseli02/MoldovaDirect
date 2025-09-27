@@ -615,6 +615,155 @@
       "reloadCart": "Recargar carrito"
     }
   },
+  "checkout": {
+    "title": "Finalizar Compra",
+    "secureCheckout": "Compra Segura",
+    "steps": {
+      "shipping": {
+        "name": "Envío",
+        "description": "Información de entrega",
+        "title": "Información de Envío",
+        "subtitle": "¿Dónde debemos entregar tu pedido?"
+      },
+      "payment": {
+        "name": "Pago",
+        "description": "Método de pago",
+        "title": "Método de Pago",
+        "subtitle": "¿Cómo te gustaría pagar?"
+      },
+      "review": {
+        "name": "Revisar",
+        "description": "Resumen del pedido",
+        "title": "Revisar tu Pedido",
+        "subtitle": "Por favor revisa los detalles de tu pedido antes de completar la compra"
+      },
+      "confirmation": {
+        "name": "Confirmación",
+        "description": "Pedido completado",
+        "title": "¡Pedido Confirmado!",
+        "subtitle": "Gracias por tu pedido. Te enviaremos un email de confirmación en breve.",
+        "emailSent": "Se ha enviado un email de confirmación a tu dirección de correo",
+        "orderDetails": "Detalles del Pedido",
+        "orderDetailsPlaceholder": "Los detalles de tu pedido se mostrarán aquí",
+        "viewOrders": "Ver Mis Pedidos",
+        "continueShopping": "Continuar Comprando"
+      }
+    },
+    "guestCheckout": {
+      "title": "Opciones de Compra",
+      "description": "Puedes crear una cuenta para una compra más rápida o continuar como invitado."
+    },
+    "continueAsGuest": "Continuar como Invitado",
+    "backToCart": "Volver al Carrito",
+    "continueToPayment": "Continuar al Pago",
+    "backToShipping": "Volver al Envío",
+    "reviewOrder": "Revisar Pedido",
+    "backToPayment": "Volver al Pago",
+    "placeOrder": "Realizar Pedido",
+    "shippingForm": {
+      "title": "Información de Envío",
+      "placeholder": "El formulario de envío se implementará en la siguiente tarea"
+    },
+    "paymentForm": {
+      "title": "Método de Pago",
+      "placeholder": "El formulario de pago se implementará en la siguiente tarea"
+    },
+    "orderReview": {
+      "title": "Resumen del Pedido",
+      "placeholder": "La revisión del pedido se implementará en la siguiente tarea"
+    },
+    "success": {
+      "shippingUpdated": "Envío Actualizado",
+      "shippingInfoSaved": "Tu información de envío ha sido guardada",
+      "paymentUpdated": "Pago Actualizado",
+      "paymentMethodSaved": "Tu método de pago ha sido guardado",
+      "orderCompleted": "Pedido Completado",
+      "orderConfirmation": "Tu pedido ha sido realizado exitosamente"
+    },
+    "validation": {
+      "firstNameRequired": "El nombre es requerido",
+      "lastNameRequired": "El apellido es requerido",
+      "streetRequired": "La dirección es requerida",
+      "cityRequired": "La ciudad es requerida",
+      "postalCodeRequired": "El código postal es requerido",
+      "countryRequired": "El país es requerido",
+      "shippingMethodRequired": "El método de envío es requerido",
+      "cardNumberRequired": "El número de tarjeta es requerido",
+      "cardNumberInvalid": "Número de tarjeta inválido",
+      "expiryRequired": "La fecha de vencimiento es requerida",
+      "cvvRequired": "El CVV es requerido",
+      "cvvInvalid": "CVV inválido",
+      "holderNameRequired": "El nombre del titular es requerido",
+      "paypalEmailRequired": "El email de PayPal es requerido",
+      "emailRequired": "El email es requerido",
+      "emailInvalid": "Por favor ingresa un email válido"
+    },
+    "addressForm": {
+      "shipping": {
+        "title": "Dirección de Envío",
+        "subtitle": "¿Dónde debemos entregar tu pedido?"
+      },
+      "billing": {
+        "title": "Dirección de Facturación",
+        "subtitle": "¿Dónde debemos enviar tu factura?"
+      },
+      "savedAddresses": "Direcciones Guardadas",
+      "useNewAddress": "Usar una nueva dirección",
+      "default": "Predeterminada",
+      "firstName": "Nombre",
+      "firstNamePlaceholder": "Ingresa tu nombre",
+      "lastName": "Apellido",
+      "lastNamePlaceholder": "Ingresa tu apellido",
+      "company": "Empresa",
+      "companyPlaceholder": "Nombre de la empresa (opcional)",
+      "street": "Dirección",
+      "streetPlaceholder": "Ingresa tu dirección",
+      "city": "Ciudad",
+      "cityPlaceholder": "Ingresa tu ciudad",
+      "postalCode": "Código Postal",
+      "postalCodePlaceholder": "Ingresa el código postal",
+      "province": "Provincia/Estado",
+      "provincePlaceholder": "Provincia o estado (opcional)",
+      "country": "País",
+      "selectCountry": "Selecciona un país",
+      "phone": "Número de Teléfono",
+      "phonePlaceholder": "Ingresa tu número de teléfono (opcional)",
+      "saveAddress": "Guardar esta dirección para futuros pedidos"
+    },
+    "shippingMethod": {
+      "title": "Método de Envío",
+      "subtitle": "Elige cómo te gustaría recibir tu pedido",
+      "free": "Gratis",
+      "express": "Express",
+      "noMethods": "No hay métodos de envío disponibles",
+      "noMethodsDescription": "Por favor verifica tu dirección o contacta soporte",
+      "error": "Error cargando métodos de envío",
+      "standard": {
+        "name": "Envío Estándar",
+        "description": "Entrega en 3-5 días hábiles"
+      },
+      "express": {
+        "name": "Envío Express", 
+        "description": "Entrega en 1-2 días hábiles"
+      },
+      "free": {
+        "name": "Envío Gratis",
+        "description": "Entrega en 5-7 días hábiles (pedidos sobre €50)"
+      }
+    },
+    "guestInfo": {
+      "title": "Información de Contacto",
+      "email": "Dirección de Email",
+      "emailPlaceholder": "Ingresa tu dirección de email",
+      "emailUpdates": "Enviarme actualizaciones por email sobre mi pedido"
+    },
+    "shippingInstructions": {
+      "title": "Instrucciones de Entrega",
+      "placeholder": "¿Alguna instrucción especial para la entrega? (ej: dejar en la puerta, tocar timbre, etc.)",
+      "help": "Estas instrucciones se compartirán con el servicio de entrega"
+    },
+    "processing": "Procesando..."
+  },
   "admin": {
     "navigation": {
       "dashboard": "Panel de Control",
