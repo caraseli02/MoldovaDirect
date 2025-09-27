@@ -476,8 +476,14 @@ export const useCartStore = defineStore('cart', {
 
       // Initialize cart analytics
       if (process.client) {
-        const cartAnalytics = useCartAnalytics()
-        cartAnalytics.initializeCartSession(this.sessionId)
+        try {
+          const cartAnalytics = useCartAnalytics()
+          if (cartAnalytics && cartAnalytics.initializeCartSession) {
+            cartAnalytics.initializeCartSession(this.sessionId)
+          }
+        } catch (analyticsError) {
+          console.warn('Cart analytics initialization failed:', analyticsError)
+        }
         
         // Initialize cart caching
         this.initializeCartCaching()
@@ -491,9 +497,17 @@ export const useCartStore = defineStore('cart', {
 
     // Add item to cart with optimized validation
     async addItem(product: Product, quantity: number = 1) {
-      // Ensure debounced validation is initialized
+      // Ensure cart is properly initialized
+      if (!this.sessionId) {
+        this.initializeCart()
+      }
+      
+      // Ensure debounced functions are initialized
       if (!this.debouncedValidateProduct) {
         this.createDebouncedValidation()
+      }
+      if (!this.debouncedSaveToStorage) {
+        this.createDebouncedSave()
       }
 
       this.loading = true
@@ -512,8 +526,15 @@ export const useCartStore = defineStore('cart', {
           this.addToValidationQueue(product.id, 'high')
           
           // Trigger immediate validation for critical operations
-          if (this.debouncedValidateProduct) {
-            this.debouncedValidateProduct(product.id, 100) // Very short delay for add operations
+          if (!this.debouncedValidateProduct) {
+            this.createDebouncedValidation()
+          }
+          if (this.debouncedValidateProduct && typeof this.debouncedValidateProduct === 'function') {
+            try {
+              this.debouncedValidateProduct(product.id, 100) // Very short delay for add operations
+            } catch (validationError) {
+              console.warn('Debounced validation failed:', validationError)
+            }
           }
         }
 
@@ -524,7 +545,6 @@ export const useCartStore = defineStore('cart', {
           toastStore.error(t('cart.error.insufficientStock'), errorMsg, {
             actionText: t('cart.action.viewProduct'),
             actionHandler: () => {
-              const { navigateTo } = useNuxtApp()
               navigateTo(`/products/${currentProduct.slug}`)
             }
           })
@@ -543,9 +563,9 @@ export const useCartStore = defineStore('cart', {
             const errorMsg = t('cart.error.cannotAddMore', { quantity, available })
             toastStore.error(t('cart.error.insufficientStock'), errorMsg, {
               actionText: t('cart.action.adjustQuantity'),
-              actionHandler: function() {
-                this.updateQuantity(existingItem.id, currentProduct.stock)
-              }.bind(this)
+              actionHandler: () => {
+              this.updateQuantity(existingItem.id, currentProduct.stock)
+            }
             })
             throw new Error(errorMsg)
           }
@@ -576,8 +596,14 @@ export const useCartStore = defineStore('cart', {
 
         // Track analytics for add to cart
         if (process.client) {
-          const cartAnalytics = useCartAnalytics()
-          cartAnalytics.trackAddToCart(currentProduct, quantity, this.subtotal, this.itemCount)
+          try {
+            const cartAnalytics = useCartAnalytics()
+            if (cartAnalytics && cartAnalytics.trackAddToCart) {
+              cartAnalytics.trackAddToCart(currentProduct, quantity, this.subtotal, this.itemCount)
+            }
+          } catch (analyticsError) {
+            console.warn('Cart analytics tracking failed:', analyticsError)
+          }
         }
 
         // Save and cache cart data
@@ -658,8 +684,14 @@ export const useCartStore = defineStore('cart', {
 
         // Track analytics
         if (process.client) {
-          const cartAnalytics = useCartAnalytics()
-          cartAnalytics.trackAddToCart(result.product, quantity, this.subtotal, this.itemCount)
+          try {
+            const cartAnalytics = useCartAnalytics()
+            if (cartAnalytics && cartAnalytics.trackAddToCart) {
+              cartAnalytics.trackAddToCart(result.product, quantity, this.subtotal, this.itemCount)
+            }
+          } catch (analyticsError) {
+            console.warn('Cart analytics tracking failed:', analyticsError)
+          }
         }
 
         // Show success message
@@ -718,8 +750,14 @@ export const useCartStore = defineStore('cart', {
           
           // Track analytics
           if (process.client) {
-            const cartAnalytics = useCartAnalytics()
-            cartAnalytics.trackQuantityUpdate(item.product, oldQuantity, quantity, this.subtotal, this.itemCount)
+            try {
+              const cartAnalytics = useCartAnalytics()
+              if (cartAnalytics && cartAnalytics.trackQuantityUpdate) {
+                cartAnalytics.trackQuantityUpdate(item.product, oldQuantity, quantity, this.subtotal, this.itemCount)
+              }
+            } catch (analyticsError) {
+              console.warn('Cart analytics tracking failed:', analyticsError)
+            }
           }
         }
 
@@ -783,8 +821,14 @@ export const useCartStore = defineStore('cart', {
           
           // Track analytics
           if (process.client) {
-            const cartAnalytics = useCartAnalytics()
-            cartAnalytics.trackRemoveFromCart(removedItem.product, removedItem.quantity, this.subtotal, this.itemCount)
+            try {
+              const cartAnalytics = useCartAnalytics()
+              if (cartAnalytics && cartAnalytics.trackRemoveFromCart) {
+                cartAnalytics.trackRemoveFromCart(removedItem.product, removedItem.quantity, this.subtotal, this.itemCount)
+              }
+            } catch (analyticsError) {
+              console.warn('Cart analytics tracking failed:', analyticsError)
+            }
           }
         }
 
@@ -1045,8 +1089,14 @@ export const useCartStore = defineStore('cart', {
         
         // Track analytics for quantity update
         if (process.client) {
-          const cartAnalytics = useCartAnalytics()
-          cartAnalytics.trackQuantityUpdate(currentProduct, oldQuantity, quantity, this.subtotal, this.itemCount)
+          try {
+            const cartAnalytics = useCartAnalytics()
+            if (cartAnalytics && cartAnalytics.trackQuantityUpdate) {
+              cartAnalytics.trackQuantityUpdate(currentProduct, oldQuantity, quantity, this.subtotal, this.itemCount)
+            }
+          } catch (analyticsError) {
+            console.warn('Cart analytics tracking failed:', analyticsError)
+          }
         }
         
         // Save and cache cart data
@@ -1097,8 +1147,14 @@ export const useCartStore = defineStore('cart', {
         
         // Track analytics for item removal
         if (process.client) {
-          const cartAnalytics = useCartAnalytics()
-          cartAnalytics.trackRemoveFromCart(removedItem.product, removedItem.quantity, this.subtotal, this.itemCount)
+          try {
+            const cartAnalytics = useCartAnalytics()
+            if (cartAnalytics && cartAnalytics.trackRemoveFromCart) {
+              cartAnalytics.trackRemoveFromCart(removedItem.product, removedItem.quantity, this.subtotal, this.itemCount)
+            }
+          } catch (analyticsError) {
+            console.warn('Cart analytics tracking failed:', analyticsError)
+          }
         }
         
         // Save and cache cart data
@@ -1236,8 +1292,18 @@ export const useCartStore = defineStore('cart', {
     saveAndCacheCartData() {
       this.invalidateCalculationCache()
       
-      if (this.debouncedSaveToStorage) {
-        this.debouncedSaveToStorage()
+      // Ensure debounced save is initialized
+      if (!this.debouncedSaveToStorage) {
+        this.createDebouncedSave()
+      }
+      
+      if (this.debouncedSaveToStorage && typeof this.debouncedSaveToStorage === 'function') {
+        try {
+          this.debouncedSaveToStorage()
+        } catch (saveError) {
+          console.warn('Debounced save failed:', saveError)
+          this.saveToStorage() // Fallback to direct save
+        }
       } else {
         this.saveToStorage()
       }

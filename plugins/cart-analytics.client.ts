@@ -28,8 +28,14 @@ export default defineNuxtPlugin(() => {
       // Use setTimeout to ensure Pinia is ready
       setTimeout(() => {
         try {
-          const { trackCartView } = useCart();
-          trackCartView();
+          const cartAnalytics = useCartAnalytics();
+          const cartStore = useCartStore();
+          
+          if (cartAnalytics.trackCartView && cartStore) {
+            const cartValue = cartStore.totalPrice || 0;
+            const itemCount = cartStore.totalItems || 0;
+            cartAnalytics.trackCartView(cartValue, itemCount);
+          }
         } catch (error) {
           console.warn("Failed to track cart view:", error);
         }

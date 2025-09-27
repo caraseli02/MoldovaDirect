@@ -161,7 +161,14 @@
 </template>
 
 <script setup lang="ts">
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import type { ProductWithRelations } from '~/types'
+import { useCart } from '~/composables/useCart'
+import { useDevice } from '~/composables/useDevice'
+import { useHapticFeedback } from '~/composables/useHapticFeedback'
+import { useTouchEvents } from '~/composables/useTouchEvents'
+import { useRouter } from '#imports'
+import { useI18n } from '#imports'
 
 interface Props {
   product: ProductWithRelations
@@ -174,6 +181,7 @@ const { locale } = useI18n()
 const { isMobile } = useDevice()
 const { vibrate } = useHapticFeedback()
 const touchEvents = useTouchEvents()
+const { addItem, loading: cartLoading, isInCart } = useCart()
 
 // Template refs
 const cardRef = ref<HTMLElement>()
@@ -208,8 +216,6 @@ const formatPrice = (price: string | number) => {
   return Number(price).toFixed(2)
 }
 
-// Cart functionality
-const { addItem, loading: cartLoading, isInCart } = useCart()
 
 // Touch event handlers
 const handleTouchStart = (event: TouchEvent) => {

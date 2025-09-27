@@ -215,16 +215,21 @@ const {
   error,
   updateQuantity,
   removeItem,
-  formatPrice,
-  formattedSubtotal,
-  validateCart,
+    validateCart,
   // Advanced features
   allItemsSelected,
-  selectAllItems,
-  clearSelection,
   toggleItemSelection,
-  saveItemForLater,
   } = useCart()
+
+// Utility functions
+const formatPrice = (price: number) => {
+  return new Intl.NumberFormat('es-ES', {
+    style: 'currency',
+    currency: 'EUR'
+  }).format(price)
+}
+
+const formattedSubtotal = computed(() => formatPrice(subtotal.value))
 
 // Error handling for cart operations
 const handleCartError = (error: Error) => {

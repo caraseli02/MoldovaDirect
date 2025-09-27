@@ -89,13 +89,14 @@
 <script setup lang="ts">
 const { locale } = useI18n()
 
+import { formatPrice } from '~/types/guards'
+
 const {
   recommendations,
   recommendationsLoading,
   loadRecommendations,
   addRecommendedProduct,
   isInCart,
-  formatPrice,
   itemCount
 } = useCart()
 

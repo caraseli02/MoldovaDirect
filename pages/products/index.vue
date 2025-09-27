@@ -210,6 +210,9 @@
 <script setup lang="ts">
 import type { ProductFilters } from '~/types'
 
+// Vue imports
+import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
+
 // Component imports
 import ProductCategoryNavigation from '~/components/product/CategoryNavigation.vue'
 import productFilterMain from '~/components/product/Filter/Main.vue'
@@ -219,6 +222,16 @@ import MobileVirtualProductGrid from '~/components/mobile/VirtualProductGrid.vue
 
 // Mobile-specific imports
 import MobilePullToRefreshIndicator from '~/components/mobile/PullToRefreshIndicator.vue'
+
+// Composable imports
+import { useProductCatalog } from '~/composables/useProductCatalog'
+import { useDevice } from '~/composables/useDevice'
+import { useHapticFeedback } from '~/composables/useHapticFeedback'
+import { usePullToRefresh } from '~/composables/usePullToRefresh'
+import { useSwipeGestures } from '~/composables/useSwipeGestures'
+
+// Head management
+import { useHead } from '#imports'
 
 // Use product catalog composable for integrated functionality
 const {
@@ -361,13 +374,13 @@ const handleSearchInput = () => {
       search(searchQuery.value.trim(), {
         ...filters.value,
         page: 1,
-        sortBy: sortBy.value as any
+        sort: sortBy.value as any
       })
     } else {
       fetchProducts({
         ...filters.value,
         page: 1,
-        sortBy: sortBy.value as any
+        sort: sortBy.value as any
       })
     }
   }, 300)
@@ -376,7 +389,7 @@ const handleSearchInput = () => {
 const handleSortChange = () => {
   const currentFilters = {
     ...filters.value,
-    sortBy: sortBy.value as any,
+    sort: sortBy.value as any,
     page: 1
   }
   
@@ -394,7 +407,7 @@ const handleFiltersUpdate = (newFilters: Partial<ProductFilters>) => {
 const handleApplyFilters = () => {
   const currentFilters = {
     ...filters.value,
-    sortBy: sortBy.value as any,
+    sort: sortBy.value as any,
     page: 1
   }
   
@@ -409,13 +422,13 @@ const clearAllFilters = () => {
   searchQuery.value = ''
   sortBy.value = 'created'
   clearFilters()
-  fetchProducts({ sortBy: 'created', page: 1, limit: 12 })
+  fetchProducts({ sort: 'created', page: 1, limit: 12 })
 }
 
 const goToPage = (page: number) => {
   const currentFilters = {
     ...filters.value,
-    sortBy: sortBy.value as any,
+    sort: sortBy.value as any,
     page
   }
   
@@ -434,7 +447,7 @@ const refreshProducts = async () => {
   try {
     const currentFilters = {
       ...filters.value,
-      sortBy: sortBy.value as any,
+      sort: sortBy.value as any,
       page: 1
     }
     
@@ -450,7 +463,7 @@ const refreshProducts = async () => {
 
 // Error handling
 const retryLoad = () => {
-  fetchProducts({ sortBy: 'created', page: 1, limit: 12 })
+  fetchProducts({ sort: 'created', page: 1, limit: 12 })
 }
 
 // Setup mobile interactions
@@ -492,7 +505,7 @@ const loadMoreProducts = async () => {
     const nextPage = pagination.value.page + 1
     const currentFilters = {
       ...filters.value,
-      sortBy: sortBy.value as any,
+      sort: sortBy.value as any,
       page: nextPage
     }
     
@@ -508,7 +521,7 @@ const loadMoreProducts = async () => {
 
 // Load initial products
 onMounted(() => {
-  fetchProducts({ sortBy: 'created', page: 1, limit: 12 })
+  fetchProducts({ sort: 'created', page: 1, limit: 12 })
   
   // Setup mobile interactions after DOM is ready
   nextTick(() => {

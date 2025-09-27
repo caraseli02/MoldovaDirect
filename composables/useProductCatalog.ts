@@ -1,143 +1,278 @@
-import type { ProductFilters } from '~/types'
+import type { ProductFilters, ProductWithRelations, CategoryWithChildren } from '~/types'
+
 /**
  * Product Catalog Composable
  * Provides integrated access to products, categories, and search functionality
+ * Uses direct API calls for SSR compatibility
  */
 export const useProductCatalog = () => {
-  // Store instances
-  const pinia = usePinia()
-  const productsStore = useProductsStore(pinia)
-  const searchStore = useSearchStore(pinia)
-  const categoriesStore = useCategoriesStore(pinia)
+  // Use Nuxt's useState for SSR-compatible reactive state
+  const products = useState<ProductWithRelations[]>('products', () => [])
+  const categories = useState<CategoryWithChildren[]>('categories', () => [])
+  const categoriesTree = useState<CategoryWithChildren[]>('categoriesTree', () => [])
+  const currentCategory = useState<CategoryWithChildren | null>('currentCategory', () => null)
+  const searchResults = useState<ProductWithRelations[]>('searchResults', () => [])
+  const searchQuery = useState<string>('searchQuery', () => '')
+  const filters = useState<ProductFilters>('filters', () => ({}))
+  const pagination = useState('pagination', () => ({ page: 1, limit: 12, total: 0, totalPages: 1 }))
+  const loading = useState<boolean>('loading', () => false)
+  const error = useState<string | null>('error', () => null)
 
-  // Initialize stores
+  // Initialize the catalog
   const initialize = async () => {
-    searchStore.initialize()
-    
     // Fetch categories if not already loaded
-    if (categoriesStore.categories.length === 0) {
-      await categoriesStore.fetchCategories()
+    if (categories.value.length === 0) {
+      await fetchCategories()
     }
   }
 
-  // Product operations
-  const fetchProducts = (filters?: ProductFilters) => {
-    return productsStore.fetchProducts(filters)
+  // Fetch products with filters
+  const fetchProducts = async (productFilters: ProductFilters = {}) => {
+    loading.value = true
+    error.value = null
+
+    try {
+      // Build query parameters
+      const params = new URLSearchParams()
+
+      if (productFilters.category) params.append('category', productFilters.category.toString())
+      if (productFilters.search) params.append('search', productFilters.search)
+      if (productFilters.priceMin) params.append('priceMin', productFilters.priceMin.toString())
+      if (productFilters.priceMax) params.append('priceMax', productFilters.priceMax.toString())
+      if (productFilters.inStock) params.append('inStock', 'true')
+      if (productFilters.featured) params.append('featured', 'true')
+      if (productFilters.sort) params.append('sort', productFilters.sort)
+      if (productFilters.page) params.append('page', productFilters.page.toString())
+      if (productFilters.limit) params.append('limit', productFilters.limit.toString())
+
+      // Add attribute filters
+      if (productFilters.attributes) {
+        Object.entries(productFilters.attributes).forEach(([key, values]) => {
+          values.forEach(value => {
+            params.append(`attributes[${key}]`, value)
+          })
+        })
+      }
+
+      const response = await $fetch<{
+        products: ProductWithRelations[]
+        pagination: { page: number; limit: number; total: number; totalPages: number }
+        filters: any
+      }>(`/api/products?${params.toString()}`)
+
+      products.value = response.products
+      pagination.value = response.pagination
+      filters.value = { ...productFilters }
+
+    } catch (err) {
+      error.value = err instanceof Error ? err.message : 'Failed to fetch products'
+      console.error('Error fetching products:', err)
+    } finally {
+      loading.value = false
+    }
   }
 
-  const fetchProduct = (slug: string) => {
-    return productsStore.fetchProduct(slug)
+  // Fetch single product by slug
+  const fetchProduct = async (slug: string) => {
+    loading.value = true
+    error.value = null
+
+    try {
+      const response = await $fetch<{
+        product: ProductWithRelations
+        relatedProducts: ProductWithRelations[]
+      }>(`/api/products/${slug}`)
+
+      // Update current product in products array if needed
+      const existingIndex = products.value.findIndex(p => p.slug === slug)
+      if (existingIndex >= 0) {
+        products.value[existingIndex] = response.product
+      }
+
+      return response.product
+
+    } catch (err) {
+      error.value = err instanceof Error ? err.message : 'Failed to fetch product'
+      console.error('Error fetching product:', err)
+      return null
+    } finally {
+      loading.value = false
+    }
   }
 
-  const fetchFeaturedProducts = (limit?: number, category?: string) => {
-    return productsStore.fetchFeaturedProducts(limit, category)
+  // Fetch featured products
+  const fetchFeaturedProducts = async (limit: number = 8, category?: string) => {
+    try {
+      const params = new URLSearchParams()
+      params.append('limit', limit.toString())
+      if (category) params.append('category', category)
+
+      const response = await $fetch<{ products: ProductWithRelations[] }>(`/api/products/featured?${params.toString()}`)
+      return response.products
+
+    } catch (err) {
+      console.error('Error fetching featured products:', err)
+      return []
+    }
   }
 
-  // Search operations
-  const search = (query: string, filters?: ProductFilters) => {
-    return searchStore.search(query, filters)
+  // Search products
+  const search = async (query: string, searchFilters: ProductFilters = {}) => {
+    loading.value = true
+    error.value = null
+    searchQuery.value = query.trim()
+
+    try {
+      const params = new URLSearchParams()
+      params.append('q', query)
+
+      if (searchFilters.category) params.append('category', searchFilters.category.toString())
+      if (searchFilters.sort) params.append('sort', searchFilters.sort)
+      if (searchFilters.page) params.append('page', searchFilters.page?.toString() || '1')
+      if (searchFilters.limit) params.append('limit', searchFilters.limit?.toString() || '24')
+
+      const response = await $fetch<{
+        products: ProductWithRelations[]
+        suggestions: string[]
+        query: string
+      }>(`/api/search?${params.toString()}`)
+
+      searchResults.value = response.products
+      products.value = response.products // Update main products array
+
+      // Update pagination
+      pagination.value = {
+        ...pagination.value,
+        page: searchFilters.page || 1,
+        limit: searchFilters.limit || 24,
+        total: response.products.length,
+        totalPages: Math.ceil(response.products.length / (searchFilters.limit || 24))
+      }
+
+      filters.value = { ...searchFilters }
+
+    } catch (err) {
+      error.value = err instanceof Error ? err.message : 'Search failed'
+      searchResults.value = []
+      console.error('Error searching products:', err)
+    } finally {
+      loading.value = false
+    }
   }
 
-  const getSuggestions = (query: string) => {
-    return searchStore.getSuggestions(query)
+  // Get search suggestions
+  const getSuggestions = async (query: string) => {
+    if (!query.trim() || query.length < 2) {
+      return []
+    }
+
+    try {
+      const response = await $fetch<{ suggestions: string[] }>(`/api/search/suggestions?q=${encodeURIComponent(query)}`)
+      return response.suggestions
+    } catch (err) {
+      console.error('Error fetching suggestions:', err)
+      return []
+    }
   }
 
-  // Category operations
-  const fetchCategories = () => {
-    return categoriesStore.fetchCategories()
+  // Fetch categories
+  const fetchCategories = async () => {
+    loading.value = true
+    error.value = null
+
+    try {
+      const response = await $fetch<{ categories: CategoryWithChildren[] }>('/api/categories')
+      categories.value = response.categories
+
+      // Build categories tree
+      const buildTree = (parentId?: number): CategoryWithChildren[] => {
+        return response.categories
+          .filter(cat => cat.parentId === parentId)
+          .map(cat => ({
+            ...cat,
+            children: buildTree(cat.id)
+          }))
+          .sort((a, b) => a.sortOrder - b.sortOrder)
+      }
+
+      categoriesTree.value = buildTree()
+
+    } catch (err) {
+      error.value = err instanceof Error ? err.message : 'Failed to fetch categories'
+      console.error('Error fetching categories:', err)
+    } finally {
+      loading.value = false
+    }
   }
 
+  // Set current category
   const setCurrentCategory = (identifier: string | null) => {
-    categoriesStore.setCurrentCategory(identifier)
+    if (!identifier) {
+      currentCategory.value = null
+      return
+    }
+
+    const category = categories.value.find(cat =>
+      cat.slug === identifier || cat.id.toString() === identifier
+    )
+
+    if (category) {
+      currentCategory.value = category
+    }
   }
 
-  // Filter operations
-  const updateFilters = (filters: Partial<ProductFilters>) => {
-    productsStore.updateFilters(filters)
+  // Update filters
+  const updateFilters = (newFilters: Partial<ProductFilters>) => {
+    filters.value = { ...filters.value, ...newFilters }
+
+    // Reset pagination when filters change
+    if (newFilters.category !== undefined ||
+        newFilters.search !== undefined ||
+        newFilters.priceMin !== undefined ||
+        newFilters.priceMax !== undefined ||
+        newFilters.attributes !== undefined) {
+      filters.value.page = 1
+    }
   }
 
+  // Clear filters
   const clearFilters = () => {
-    productsStore.clearFilters()
-    searchStore.clearSearch()
+    filters.value = {}
+    searchQuery.value = ''
+    searchResults.value = []
   }
-
-  // Reactive state
-  const products = computed(() => productsStore.products)
-  const currentProduct = computed(() => productsStore.currentProduct)
-  const featuredProducts = computed(() => productsStore.featuredProducts)
-  const relatedProducts = computed(() => productsStore.relatedProducts)
-  
-  const categories = computed(() => categoriesStore.categories)
-  const categoriesTree = computed(() => categoriesStore.categoriesTree)
-  const currentCategory = computed(() => categoriesStore.currentCategory)
-  const breadcrumbs = computed(() => categoriesStore.breadcrumbs)
-  
-  const searchResults = computed(() => searchStore.results)
-  const searchQuery = computed(() => searchStore.query)
-  const searchSuggestions = computed(() => searchStore.suggestions)
-  const searchHistory = computed(() => searchStore.recentSearches)
-  
-  const filters = computed(() => productsStore.filters)
-  const pagination = computed(() => productsStore.pagination)
-  
-  const loading = computed(() => 
-    productsStore.loading || searchStore.loading || categoriesStore.loading
-  )
-  
-  const error = computed(() => 
-    productsStore.error || searchStore.error || categoriesStore.error
-  )
 
   return {
     // Initialization
     initialize,
-    
+
     // Product operations
     fetchProducts,
     fetchProduct,
     fetchFeaturedProducts,
-    
+
     // Search operations
     search,
     getSuggestions,
-    
+
     // Category operations
     fetchCategories,
     setCurrentCategory,
-    
+
     // Filter operations
     updateFilters,
     clearFilters,
-    
+
     // Reactive state
     products,
-    currentProduct,
-    featuredProducts,
-    relatedProducts,
-    
     categories,
     categoriesTree,
     currentCategory,
-    breadcrumbs,
-    
     searchResults,
     searchQuery,
-    searchSuggestions,
-    searchHistory,
-    
     filters,
     pagination,
-    
     loading,
-    error,
-    
-    // Store instances (for advanced usage)
-    productsStore,
-    searchStore,
-    categoriesStore
+    error
   }
-}
-
-function createPinia() {
-  throw new Error('Function not implemented.')
 }

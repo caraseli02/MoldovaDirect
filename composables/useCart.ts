@@ -1,6 +1,4 @@
 import { useCartStore } from "~/stores/cart";
-import { useCartAnalytics } from "~/composables/useCartAnalytics";
-import { useCartPerformance } from "~/composables/useCartPerformance";
 import { getActivePinia } from "pinia";
 import { ref, computed } from "vue";
 
@@ -80,8 +78,11 @@ export const useCart = () => {
   }
 
   const cartStore = useCartStore(pinia);
-  const cartAnalytics = useCartAnalytics(pinia);
-  const cartPerformance = useCartPerformance(pinia);
+
+  // Initialize cart if not already initialized
+  if (!cartStore.sessionId) {
+    cartStore.initializeCart()
+  }
 
   // If store is not available, return minimal interface
   if (!cartStore) {
@@ -179,14 +180,39 @@ export const useCart = () => {
   const recommendationsLoading = computed(() => cartStore.recommendationsLoading)
   const performanceMetrics = computed(() => cartStore.performanceMetrics)
 
-  // Store methods
-  const isInCart = (productId: string) => cartStore.isInCart(productId)
-  const getItemByProductId = (productId: string) => cartStore.getItemByProductId(productId)
-  const addItem = async (product: any, quantity?: number) => cartStore.addItem(product, quantity)
-  const updateQuantity = async (itemId: string, quantity: number) => cartStore.updateQuantity(itemId, quantity)
-  const removeItem = async (itemId: string) => cartStore.removeItem(itemId)
-  const clearCart = async () => cartStore.clearCart()
-  const validateCart = async () => cartStore.validateCart()
+  // Store methods with defensive checks
+  const isInCart = (productId: string) => cartStore?.isInCart ? cartStore.isInCart(productId) : false
+  const getItemByProductId = (productId: string) => cartStore?.getItemByProductId ? cartStore.getItemByProductId(productId) : undefined
+  const addItem = async (product: any, quantity?: number) => {
+    if (cartStore?.addItem) {
+      return cartStore.addItem(product, quantity)
+    }
+    throw new Error('Cart store not available')
+  }
+  const updateQuantity = async (itemId: string, quantity: number) => {
+    if (cartStore?.updateQuantity) {
+      return cartStore.updateQuantity(itemId, quantity)
+    }
+    throw new Error('Cart store not available')
+  }
+  const removeItem = async (itemId: string) => {
+    if (cartStore?.removeItem) {
+      return cartStore.removeItem(itemId)
+    }
+    throw new Error('Cart store not available')
+  }
+  const clearCart = async () => {
+    if (cartStore?.clearCart) {
+      return cartStore.clearCart()
+    }
+    throw new Error('Cart store not available')
+  }
+  const validateCart = async () => {
+    if (cartStore?.validateCart) {
+      return cartStore.validateCart()
+    }
+    throw new Error('Cart store not available')
+  }
   const directAddItem = async (product: any, quantity?: number) => cartStore.directAddItem(product, quantity)
   const directUpdateQuantity = async (itemId: string, quantity: number) => cartStore.directUpdateQuantity(itemId, quantity)
   const directRemoveItem = async (itemId: string) => cartStore.directRemoveItem(itemId)
