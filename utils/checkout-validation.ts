@@ -7,13 +7,13 @@ import type { Address, PaymentMethod, ShippingInformation } from '~/stores/check
 // VALIDATION RESULT TYPES
 // =============================================
 
-export interface ValidationResult {
+export interface CheckoutValidationResult {
   isValid: boolean
-  errors: ValidationError[]
+  errors: CheckoutValidationError[]
   warnings?: ValidationWarning[]
 }
 
-export interface ValidationError {
+export interface CheckoutValidationError {
   field: string
   code: string
   message: string
@@ -30,8 +30,8 @@ export interface ValidationWarning {
 // ADDRESS VALIDATION
 // =============================================
 
-export function validateAddress(address: Partial<Address>, type: 'shipping' | 'billing' = 'shipping'): ValidationResult {
-  const errors: ValidationError[] = []
+export function validateAddress(address: Partial<Address>, type: 'shipping' | 'billing' = 'shipping'): CheckoutValidationResult {
+  const errors: CheckoutValidationError[] = []
   const warnings: ValidationWarning[] = []
 
   // Required field validation
@@ -206,8 +206,8 @@ export function validateAddress(address: Partial<Address>, type: 'shipping' | 'b
 // PAYMENT METHOD VALIDATION
 // =============================================
 
-export function validatePaymentMethod(paymentMethod: Partial<PaymentMethod>): ValidationResult {
-  const errors: ValidationError[] = []
+export function validatePaymentMethod(paymentMethod: Partial<PaymentMethod>): CheckoutValidationResult {
+  const errors: CheckoutValidationError[] = []
   const warnings: ValidationWarning[] = []
 
   if (!paymentMethod.type) {
@@ -243,8 +243,8 @@ export function validatePaymentMethod(paymentMethod: Partial<PaymentMethod>): Va
   }
 }
 
-function validateCreditCard(creditCard?: PaymentMethod['creditCard']): ValidationResult {
-  const errors: ValidationError[] = []
+function validateCreditCard(creditCard?: PaymentMethod['creditCard']): CheckoutValidationResult {
+  const errors: CheckoutValidationError[] = []
   const warnings: ValidationWarning[] = []
 
   if (!creditCard) {
@@ -372,7 +372,7 @@ function validateCreditCard(creditCard?: PaymentMethod['creditCard']): Validatio
   }
 }
 
-function validatePayPal(paypal?: PaymentMethod['paypal']): ValidationResult {
+function validatePayPal(paypal?: PaymentMethod['paypal']): CheckoutValidationResult {
   const errors: ValidationError[] = []
   const warnings: ValidationWarning[] = []
 

@@ -4,6 +4,8 @@
 
 The Checkout & Payment Processing system provides a secure, multi-step checkout flow that integrates with the existing cart, authentication, and product catalog systems. The design follows a progressive enhancement approach, supporting both guest and authenticated users while maintaining security best practices and mobile responsiveness.
 
+**Current Implementation:** The system currently operates with cash on delivery as the primary payment method. Online payment methods (credit card, PayPal, bank transfer) are fully implemented and configured but disabled in the UI, allowing for easy future activation when needed.
+
 The system is built on the existing Nuxt.js architecture with Supabase backend, utilizing the established patterns for state management (Pinia stores), internationalization (i18n), and component structure. The checkout flow consists of four main steps: shipping information, payment method selection, order review, and confirmation.
 
 ## Architecture
@@ -84,10 +86,11 @@ interface CheckoutState {
 - Shipping method selection
 
 **PaymentStep.vue**
-- Payment method selection (Credit Card, PayPal, Bank Transfer)
-- Secure payment form integration
-- Saved payment methods for authenticated users
-- PCI-compliant card input handling
+- Cash on delivery as primary payment method
+- Payment method selection (Credit Card, PayPal, Bank Transfer) - configured but disabled
+- Secure payment form integration (ready for future activation)
+- Saved payment methods for authenticated users (for future online payments)
+- PCI-compliant card input handling (implemented but inactive)
 
 **ReviewStep.vue**
 - Complete order summary
@@ -141,7 +144,10 @@ interface PaymentFormProps {
 }
 
 interface PaymentMethod {
-  type: 'credit_card' | 'paypal' | 'bank_transfer'
+  type: 'cash' | 'credit_card' | 'paypal' | 'bank_transfer'
+  cash?: {
+    confirmed: boolean
+  }
   creditCard?: {
     number: string
     expiryMonth: string
@@ -221,8 +227,8 @@ CREATE TABLE orders (
 CREATE TABLE payment_methods (
   id SERIAL PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-  type TEXT NOT NULL CHECK (type IN ('credit_card', 'paypal')),
-  provider_id TEXT NOT NULL, -- Stripe customer ID, PayPal reference, etc.
+  type TEXT NOT NULL CHECK (type IN ('cash', 'credit_card', 'paypal')),
+  provider_id TEXT, -- Stripe customer ID, PayPal reference, etc. (NULL for cash)
   last_four TEXT,
   brand TEXT,
   expires_month INTEGER,
@@ -419,6 +425,54 @@ describe('Checkout Flow Integration', () => {
 - GDPR compliance validation
 - Session security testing
 - Input sanitization verification
+
+## Current Implementation Status
+
+### Active Features
+- ✅ Cash on Delivery payment method
+- ✅ Complete checkout flow (shipping, payment, review, confirmation)
+- ✅ Mobile-responsive design
+- ✅ Multi-language support (English, Spanish)
+- ✅ Guest and authenticated user support
+- ✅ Order management and confirmation emails
+- ✅ Comprehensive testing suite
+
+### Configured but Disabled Features
+- 🔧 Stripe credit card processing (API integration ready)
+- 🔧 PayPal payment integration (SDK integration ready)
+- 🔧 Bank transfer payment option (UI and backend ready)
+- 🔧 Saved payment methods (database schema and API ready)
+
+### Future Activation Steps
+
+To enable online payment methods:
+
+1. **Environment Configuration**
+   ```bash
+   # Add to .env
+   STRIPE_PUBLISHABLE_KEY=pk_live_...
+   STRIPE_SECRET_KEY=sk_live_...
+   PAYPAL_CLIENT_ID=...
+   PAYPAL_CLIENT_SECRET=...
+   PAYPAL_ENVIRONMENT=production
+   ```
+
+2. **UI Activation**
+   ```typescript
+   // In PaymentStep.vue, change:
+   const selectPaymentType = (type: PaymentMethod['type']) => {
+     // Remove this restriction:
+     // if (type !== 'cash') return
+     
+     paymentMethod.value = { type, saveForFuture: false }
+   }
+   ```
+
+3. **Testing and Validation**
+   - Test payment flows in sandbox environment
+   - Validate PCI DSS compliance
+   - Perform security audit
+   - Test error handling and edge cases
 
 ## Implementation Considerations
 

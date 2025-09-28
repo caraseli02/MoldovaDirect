@@ -2,7 +2,9 @@
 
 ## Introduction
 
-The Checkout & Payment Processing feature enables customers to complete their purchase journey by providing shipping information, selecting payment methods, and securely processing payments. This feature builds upon the existing cart functionality and integrates with the user authentication system to provide both guest and authenticated checkout experiences. The system must support multiple payment methods, multi-language functionality, mobile responsiveness, and maintain security best practices throughout the payment process.
+The Checkout & Payment Processing feature enables customers to complete their purchase journey by providing shipping information, selecting payment methods, and securely processing payments. This feature builds upon the existing cart functionality and integrates with the user authentication system to provide both guest and authenticated checkout experiences. 
+
+**Current Implementation:** The system currently supports cash on delivery as the primary payment method, with online payment methods (credit card, PayPal, bank transfer) configured but disabled for future activation. The system maintains security best practices, multi-language functionality, and mobile responsiveness throughout the payment process.
 
 ## Requirements
 
@@ -38,13 +40,13 @@ The Checkout & Payment Processing feature enables customers to complete their pu
 
 #### Acceptance Criteria
 
-1. WHEN a customer reaches the payment method step THEN the system SHALL display available payment options (credit card, PayPal, bank transfer)
-2. WHEN a customer selects credit card payment THEN the system SHALL display secure form fields for card number, expiry date, CVV, and cardholder name
-3. WHEN a customer selects PayPal THEN the system SHALL integrate with PayPal's payment flow
-4. WHEN a customer selects bank transfer THEN the system SHALL display bank account details and payment instructions
-5. WHEN an authenticated customer has saved payment methods THEN the system SHALL display their saved cards as selectable options
-6. IF a customer wants to save their payment method THEN the system SHALL provide an option to securely save the payment information
-7. WHEN payment information is submitted THEN the system SHALL validate the payment details using secure validation
+1. WHEN a customer reaches the payment method step THEN the system SHALL display cash on delivery as the primary payment option
+2. WHEN a customer selects cash on delivery THEN the system SHALL display payment instructions and delivery information
+3. WHEN displaying payment options THEN the system SHALL show online payment methods (credit card, PayPal, bank transfer) as "coming soon" but disabled
+4. WHEN a customer confirms cash payment THEN the system SHALL proceed to order review without requiring additional payment validation
+5. WHEN online payments are enabled in the future THEN the system SHALL support credit card, PayPal, and bank transfer options
+6. WHEN an authenticated customer has saved payment methods THEN the system SHALL display their saved cards as selectable options (for future online payments)
+7. WHEN payment information is submitted THEN the system SHALL validate the payment details using secure validation (for future online payments)
 
 ### Requirement 4
 

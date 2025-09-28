@@ -32,7 +32,7 @@ export interface Address {
 }
 
 export interface PaymentMethod {
-  type: 'credit_card' | 'paypal' | 'bank_transfer'
+  type: 'cash' | 'credit_card' | 'paypal' | 'bank_transfer'
   creditCard?: {
     number: string
     expiryMonth: string
@@ -46,12 +46,15 @@ export interface PaymentMethod {
   bankTransfer?: {
     reference: string
   }
+  cash?: {
+    confirmed: boolean
+  }
   saveForFuture?: boolean
 }
 
 export interface SavedPaymentMethod {
   id: string
-  type: 'credit_card' | 'paypal'
+  type: 'cash' | 'credit_card' | 'paypal'
   lastFour?: string
   brand?: string
   expiryMonth?: number
@@ -565,7 +568,10 @@ export const useCheckoutStore = defineStore('checkout', {
         }
       }
 
-      if (method.type === 'credit_card' && method.creditCard) {
+      if (method.type === 'cash') {
+        // Cash payment is always valid
+        return errors
+      } else if (method.type === 'credit_card' && method.creditCard) {
         const card = method.creditCard
         
         if (!card.number?.trim()) {
@@ -645,7 +651,9 @@ export const useCheckoutStore = defineStore('checkout', {
       try {
         let paymentResult
 
-        if (this.paymentMethod.type === 'credit_card') {
+        if (this.paymentMethod.type === 'cash') {
+          paymentResult = await this.processCashPayment()
+        } else if (this.paymentMethod.type === 'credit_card') {
           paymentResult = await this.processCreditCardPayment()
         } else if (this.paymentMethod.type === 'paypal') {
           paymentResult = await this.processPayPalPayment()
@@ -671,6 +679,16 @@ export const useCheckoutStore = defineStore('checkout', {
         throw error
       } finally {
         this.processing = false
+      }
+    },
+
+    async processCashPayment(): Promise<any> {
+      // Cash payment doesn't require online processing
+      return {
+        success: true,
+        transactionId: 'cash_' + Date.now(),
+        paymentMethod: 'cash',
+        status: 'pending_delivery'
       }
     },
 
@@ -840,10 +858,29 @@ export const useCheckoutStore = defineStore('checkout', {
     // =============================================
 
     async loadSavedData(): Promise<void> {
-      // This would load saved addresses and payment methods for authenticated users
-      // For now, using mock data
-      this.savedAddresses = []
-      this.savedPaymentMethods = []
+      try {
+        // Load saved addresses and payment methods for authenticated users
+        const authStore = useAuthStore()
+        if (!authStore.isAuthenticated) {
+          this.savedAddresses = []
+          this.savedPaymentMethods = []
+          return
+        }
+
+        // Load saved payment methods
+        const response = await $fetch('/api/checkout/payment-methods')
+        if (response.success) {
+          this.savedPaymentMethods = response.paymentMethods
+        }
+
+        // Load saved addresses (would be implemented in address management)
+        this.savedAddresses = []
+
+      } catch (error) {
+        console.error('Failed to load saved data:', error)
+        this.savedAddresses = []
+        this.savedPaymentMethods = []
+      }
     },
 
     async saveAddress(address: Address): Promise<void> {
@@ -852,8 +889,39 @@ export const useCheckoutStore = defineStore('checkout', {
     },
 
     async savePaymentMethodData(method: SavedPaymentMethod): Promise<void> {
-      // This would save payment method to database for authenticated users
-      this.savedPaymentMethods.push(method)
+      try {
+        const authStore = useAuthStore()
+        if (!authStore.isAuthenticated) {
+          return
+        }
+
+        const response = await $fetch('/api/checkout/save-payment-method', {
+          method: 'POST',
+          body: {
+            paymentMethodId: method.id,
+            type: method.type,
+            lastFour: method.lastFour,
+            brand: method.brand,
+            expiryMonth: method.expiryMonth,
+            expiryYear: method.expiryYear,
+            isDefault: method.isDefault
+          }
+        })
+
+        if (response.success) {
+          // Update local state
+          const existingIndex = this.savedPaymentMethods.findIndex(m => m.id === method.id)
+          if (existingIndex >= 0) {
+            this.savedPaymentMethods[existingIndex] = response.paymentMethod
+          } else {
+            this.savedPaymentMethods.push(response.paymentMethod)
+          }
+        }
+
+      } catch (error) {
+        console.error('Failed to save payment method:', error)
+        throw error
+      }
     },
 
     // =============================================
