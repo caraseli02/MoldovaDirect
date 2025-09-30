@@ -1,158 +1,155 @@
 <template>
-  <div v-if="shouldShowRecommendations" class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 mt-6">
+  <div v-if="recommendations && recommendations.length > 0" class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
     <div class="p-4 md:p-6">
       <div class="flex items-center justify-between mb-4">
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-          También te puede interesar
-        </h2>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+          {{ $t('cart.recommendedProducts') }}
+        </h3>
+        
         <button
-          @click="refreshRecommendations"
-          :disabled="recommendationsLoading"
-          class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline disabled:opacity-50"
+          v-if="!recommendationsLoading"
+          @click="handleLoadRecommendations"
+          class="text-sm text-blue-600 dark:text-blue-400 hover:underline"
         >
-          <span v-if="recommendationsLoading">Cargando...</span>
-          <span v-else>Actualizar</span>
+          {{ $t('common.refresh') }}
         </button>
       </div>
-
+      
       <!-- Loading State -->
-      <div v-if="recommendationsLoading" class="flex justify-center py-8">
-        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <div v-if="recommendationsLoading" class="flex items-center justify-center py-8">
+        <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+        <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">{{ $t('common.loading') }}</span>
       </div>
-
+      
+      <!-- Empty State -->
+      <div v-else-if="recommendations.length === 0" class="text-center py-8">
+        <svg class="w-12 h-12 text-gray-400 dark:text-gray-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+        </svg>
+        <p class="text-sm text-gray-500 dark:text-gray-400">{{ $t('cart.recommendations.noRecommendations') }}</p>
+      </div>
+      
       <!-- Recommendations Grid -->
-      <div v-else-if="recommendations.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <div
-          v-for="product in recommendations"
-          :key="product.id"
-          class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow bg-white dark:bg-gray-900"
+          v-for="recommendation in recommendations"
+          :key="recommendation.id"
+          class="border border-gray-200 dark:border-gray-700 rounded-lg p-3 hover:shadow-md transition-shadow"
         >
           <!-- Product Image -->
           <div class="aspect-square mb-3">
-            <img 
-              :src="product.primaryImage || product.images?.[0]?.url || '/placeholder-product.jpg'" 
-              :alt="getLocalizedText(product.name)"
+            <NuxtImg
+              :src="recommendation.product.images?.[0] || '/placeholder-product.jpg'"
+              :alt="recommendation.product.name"
               class="w-full h-full object-cover rounded-lg"
-            >
+              loading="lazy"
+            />
           </div>
-          
-          <!-- Product Info -->
+
+          <!-- Product Details -->
           <div class="space-y-2">
-            <h3 class="text-sm font-medium text-gray-900 dark:text-white line-clamp-2">
-              {{ getLocalizedText(product.name) }}
-            </h3>
+            <h4 class="text-sm font-medium text-gray-900 dark:text-white line-clamp-2">
+              {{ recommendation.product.name }}
+            </h4>
             
             <div class="flex items-center justify-between">
-              <span class="text-lg font-semibold text-gray-900 dark:text-white">
-                {{ formatPrice(product.price) }}
+              <span class="text-sm font-semibold text-gray-900 dark:text-white">
+                {{ formatPrice(recommendation.product.price) }}
               </span>
               
-              <div class="flex items-center space-x-1">
-                <button
-                  @click="quickAdd(product, 1)"
-                  :disabled="isInCart(product.id) || product.stockQuantity === 0"
-                  class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 dark:bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-800 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <svg v-if="isInCart(product.id)" class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  <svg v-else class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                  </svg>
-                  
-                  <span v-if="isInCart(product.id)">En carrito</span>
-                  <span v-else-if="product.stockQuantity === 0">Agotado</span>
-                  <span v-else>Añadir</span>
-                </button>
-              </div>
+              <span class="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                {{ getReasonText(recommendation.reason) }}
+              </span>
             </div>
             
-            <!-- Stock indicator -->
-            <div v-if="product.stockQuantity > 0 && product.stockQuantity <= 5" class="text-xs text-orange-600 dark:text-orange-400">
-              Solo {{ product.stockQuantity }} disponibles
-            </div>
+            <!-- Add to Cart Button -->
+            <button
+              @click="handleAddToCart(recommendation.product)"
+              :disabled="isInCart(recommendation.product.id)"
+              class="w-full text-xs bg-blue-600 text-white py-2 px-3 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+            >
+              {{ isInCart(recommendation.product.id) ? $t('cart.inCart') : $t('cart.addToCart') }}
+            </button>
           </div>
         </div>
-      </div>
-
-      <!-- Empty State -->
-      <div v-else class="text-center py-8 text-gray-500 dark:text-gray-400">
-        <svg class="w-12 h-12 mx-auto mb-4 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-        </svg>
-        <p>No hay recomendaciones disponibles en este momento</p>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-const { locale } = useI18n()
+const toast = useToast()
 
-import { formatPrice } from '~/types/guards'
-
+// Cart functionality
 const {
   recommendations,
   recommendationsLoading,
   loadRecommendations,
-  addRecommendedProduct,
-  isInCart,
-  itemCount
+  addItem,
+  isInCart
 } = useCart()
 
-const toast = useToast()
-
-// Helper function to get localized text from translation objects
-const getLocalizedText = (translationObj: any): string => {
-  if (!translationObj) return ''
-  
-  if (typeof translationObj === 'string') {
-    return translationObj
+// Load recommendations on mount
+onMounted(async () => {
+  if (!recommendations.value || recommendations.value.length === 0) {
+    try {
+      await handleLoadRecommendations()
+    } catch (error) {
+      // Silently handle recommendation loading errors
+      console.debug('Recommendations not available:', error.message)
+    }
   }
-  
-  if (typeof translationObj === 'object') {
-    const currentLocale = locale.value || 'es'
-    return translationObj[currentLocale] || translationObj.es || translationObj.en || ''
-  }
-  
-  return String(translationObj)
-}
-
-// Only show recommendations if cart has items
-const shouldShowRecommendations = computed(() => {
-  return itemCount.value > 0
 })
 
-const quickAdd = async (product: any, quantity: number = 1) => {
+// Utility functions
+const formatPrice = (price: number) => {
+  return new Intl.NumberFormat('es-ES', {
+    style: 'currency',
+    currency: 'EUR'
+  }).format(price)
+}
+
+const getReasonText = (reason: string) => {
+  const reasonMap: Record<string, string> = {
+    'frequently_bought_together': 'Comprados juntos',
+    'similar_products': 'Productos similares',
+    'price_drop': 'Precio rebajado',
+    'back_in_stock': 'Disponible otra vez'
+  }
+  return reasonMap[reason] || 'Recomendado'
+}
+
+// Handle recommendations operations
+const handleLoadRecommendations = async () => {
   try {
-    await addRecommendedProduct(product, quantity)
+    await loadRecommendations()
   } catch (error) {
-    // Error is already handled by the store
-    console.error('Failed to add recommended product:', error)
+    // Only show error toast for non-404 errors
+    if (error.statusCode !== 404) {
+      console.error('Failed to load recommendations:', error)
+      toast.error('Error', 'No se pudieron cargar las recomendaciones')
+    } else {
+      console.debug('Recommendations API not available')
+    }
   }
 }
 
-const refreshRecommendations = async () => {
-  await loadRecommendations()
+const handleAddToCart = async (product: any) => {
+  try {
+    await addItem(product, 1)
+    toast.success('Producto añadido', `${product.name} ha sido añadido al carrito`)
+  } catch (error) {
+    console.error('Failed to add recommended product to cart:', error)
+    toast.error('Error', 'No se pudo añadir el producto al carrito')
+  }
 }
-
-// Load recommendations when component mounts and cart has items
-onMounted(() => {
-  if (shouldShowRecommendations.value) {
-    loadRecommendations()
-  }
-})
-
-// Watch for cart changes to reload recommendations
-watch(() => itemCount.value, (newCount, oldCount) => {
-  // Load recommendations when items are added to an empty cart
-  if (oldCount === 0 && newCount > 0) {
-    loadRecommendations()
-  }
-  // Clear recommendations when cart becomes empty
-  else if (newCount === 0 && oldCount > 0) {
-    // Clear recommendations handled by store
-  }
-})
 </script>
 
+<style scoped>
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+</style>

@@ -1,105 +1,84 @@
 <template>
-  <div v-if="hasSelectedItems" class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-    <div class="flex items-center justify-between mb-3">
-      <div class="flex items-center space-x-2">
-        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  <div v-if="hasSelectedItems" class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <span class="text-sm font-medium text-blue-900">
-          {{ selectedItemsCount }} {{ selectedItemsCount === 1 ? 'producto seleccionado' : 'productos seleccionados' }}
+        <span class="text-sm font-medium text-blue-900 dark:text-blue-100">
+          {{ selectedItemsCount }} {{ $t('cart.itemsSelected') }}
         </span>
-        <span class="text-sm text-blue-700">
-          ({{ formattedSelectedSubtotal }})
+        <span class="text-sm text-blue-700 dark:text-blue-300">
+          ({{ formatPrice(selectedItemsSubtotal) }})
         </span>
       </div>
       
-      <button 
-        @click="clearSelection"
-        class="text-sm text-blue-600 hover:text-blue-800 underline"
-      >
-        Deseleccionar todo
-      </button>
-    </div>
-
-    <div class="flex flex-wrap gap-2">
-      <!-- Bulk Remove -->
-      <button
-        @click="handleBulkRemove"
-        :disabled="bulkOperationInProgress"
-        class="inline-flex items-center px-3 py-2 border border-red-300 text-sm font-medium rounded-md text-red-700 bg-white hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-        </svg>
-        Eliminar seleccionados
-      </button>
-
-      <!-- Bulk Save for Later -->
-      <button
-        @click="handleBulkSaveForLater"
-        :disabled="bulkOperationInProgress"
-        class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-        </svg>
-        Guardar para después
-      </button>
-
-      <!-- Bulk Quantity Update -->
       <div class="flex items-center space-x-2">
-        <label class="text-sm text-gray-700">Cantidad:</label>
-        <select
-          v-model="bulkQuantity"
-          class="border border-gray-300 rounded-md px-2 py-1 text-sm"
-        >
-          <option v-for="qty in [1, 2, 3, 4, 5]" :key="qty" :value="qty">{{ qty }}</option>
-        </select>
         <button
-          @click="handleBulkQuantityUpdate"
+          @click="handleMoveToSavedForLater"
           :disabled="bulkOperationInProgress"
-          class="inline-flex items-center px-3 py-2 border border-blue-300 text-sm font-medium rounded-md text-blue-700 bg-white hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Actualizar
+          {{ $t('cart.saveForLater') }}
+        </button>
+        
+        <button
+          @click="handleRemoveSelected"
+          :disabled="bulkOperationInProgress"
+          class="text-sm text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {{ $t('cart.removeSelected') }}
         </button>
       </div>
     </div>
-
-    <!-- Loading indicator -->
-    <div v-if="bulkOperationInProgress" class="mt-3 flex items-center space-x-2 text-sm text-blue-600">
+    
+    <!-- Loading indicator for bulk operations -->
+    <div v-if="bulkOperationInProgress" class="mt-3 flex items-center space-x-2">
       <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
-      <span>Procesando operación...</span>
+      <span class="text-sm text-blue-700 dark:text-blue-300">{{ $t('cart.processingBulkOperation') }}</span>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+const toast = useToast()
+
+// Cart functionality
 const {
   hasSelectedItems,
   selectedItemsCount,
-  formattedSelectedSubtotal,
+  selectedItemsSubtotal,
   bulkOperationInProgress,
-  clearSelection,
-  bulkRemoveSelected,
-  bulkSaveForLater,
-  bulkUpdateQuantity
+  removeSelectedItems,
+  moveSelectedToSavedForLater
 } = useCart()
 
-const bulkQuantity = ref(1)
+// Utility functions
+const formatPrice = (price: number) => {
+  return new Intl.NumberFormat('es-ES', {
+    style: 'currency',
+    currency: 'EUR'
+  }).format(price)
+}
 
-const handleBulkRemove = async () => {
-  if (confirm(`¿Estás seguro de que quieres eliminar ${selectedItemsCount.value} productos del carrito?`)) {
-    await bulkRemoveSelected()
+// Handle bulk operations
+const handleRemoveSelected = async () => {
+  try {
+    await removeSelectedItems()
+    toast.success('Productos eliminados', 'Los productos seleccionados han sido eliminados del carrito')
+  } catch (error) {
+    console.error('Failed to remove selected items:', error)
+    toast.error('Error', 'No se pudieron eliminar los productos seleccionados')
   }
 }
 
-const handleBulkSaveForLater = async () => {
-  await bulkSaveForLater()
-}
-
-const handleBulkQuantityUpdate = async () => {
-  if (confirm(`¿Actualizar la cantidad de ${selectedItemsCount.value} productos a ${bulkQuantity.value}?`)) {
-    await bulkUpdateQuantity(bulkQuantity.value)
+const handleMoveToSavedForLater = async () => {
+  try {
+    await moveSelectedToSavedForLater()
+    toast.success('Productos guardados', 'Los productos seleccionados han sido guardados para más tarde')
+  } catch (error) {
+    console.error('Failed to move selected items to saved for later:', error)
+    toast.error('Error', 'No se pudieron guardar los productos para más tarde')
   }
 }
 </script>

@@ -215,10 +215,12 @@ const {
   error,
   updateQuantity,
   removeItem,
-    validateCart,
+  validateCart,
   // Advanced features
   allItemsSelected,
   toggleItemSelection,
+  toggleSelectAll: toggleSelectAllItems,
+  addToSavedForLater,
   } = useCart()
 
 // Utility functions
@@ -272,7 +274,12 @@ const handleSwipeRemove = async (itemId: string) => {
 // Handle save for later
 const handleSaveForLater = async (itemId: string) => {
   try {
-    await saveItemForLater(itemId)
+    // Find the item first
+    const item = items.value.find(i => i.id === itemId)
+    if (item) {
+      await addToSavedForLater(item.product, item.quantity)
+      await removeItem(itemId)
+    }
   } catch (error) {
     console.error('Failed to save item for later:', error)
   }
@@ -285,11 +292,7 @@ const handleToggleSelection = (itemId: string) => {
 
 // Handle select all toggle
 const toggleSelectAll = () => {
-  if (allItemsSelected.value) {
-    clearSelection()
-  } else {
-    selectAllItems()
-  }
+  toggleSelectAllItems()
 }
 
 // Validate cart on page load with error handling

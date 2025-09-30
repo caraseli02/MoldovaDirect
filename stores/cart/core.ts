@@ -1,0 +1,419 @@
+/**
+ * Cart Core Module
+ * 
+ * Handles basic cart operations: add, remove, update items
+ * This module contains the essential cart functionality
+ */
+
+import { ref, computed } from 'vue'
+import type { 
+  Product, 
+  CartItem, 
+  CartCoreState, 
+  CartCoreActions, 
+  CartCoreGetters,
+  CartError 
+} from './types'
+
+// =============================================
+// STATE MANAGEMENT
+// =============================================
+
+const state = ref<CartCoreState>({
+  items: [],
+  sessionId: null,
+  loading: false,
+  error: null,
+  lastSyncAt: null
+})
+
+// Performance optimization caches
+const _cachedItemCount = ref<number | undefined>(undefined)
+const _cachedSubtotal = ref<number | undefined>(undefined)
+const _lastItemsHash = ref<string>('')
+const _currentItemsHash = ref<string>('')
+
+// =============================================
+// COMPUTED PROPERTIES (GETTERS)
+// =============================================
+
+const getters: CartCoreGetters = {
+  // Memoized total number of items in cart
+  get itemCount(): number {
+    // Use cached calculation if items haven't changed
+    if (
+      _cachedItemCount.value !== undefined &&
+      _lastItemsHash.value === _currentItemsHash.value
+    ) {
+      return _cachedItemCount.value
+    }
+
+    const count = state.value.items.reduce(
+      (total, item) => total + item.quantity,
+      0
+    )
+    _cachedItemCount.value = count
+    return count
+  },
+
+  // Memoized total price of all items
+  get subtotal(): number {
+    // Use cached calculation if items haven't changed
+    if (
+      _cachedSubtotal.value !== undefined &&
+      _lastItemsHash.value === _currentItemsHash.value
+    ) {
+      return _cachedSubtotal.value
+    }
+
+    const total = state.value.items.reduce((sum, item) => {
+      return sum + item.product.price * item.quantity
+    }, 0)
+
+    _cachedSubtotal.value = total
+    return total
+  },
+
+  // Check if cart is empty
+  get isEmpty(): boolean {
+    return state.value.items.length === 0
+  },
+
+  // Get item by product ID
+  getItemByProductId(productId: string): CartItem | undefined {
+    return state.value.items.find((item) => item.product.id === productId)
+  },
+
+  // Check if product is in cart
+  isInCart(productId: string): boolean {
+    return state.value.items.some((item) => item.product.id === productId)
+  }
+}
+
+// =============================================
+// UTILITY FUNCTIONS
+// =============================================
+
+/**
+ * Generate unique item ID
+ */
+function generateItemId(): string {
+  return 'item_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)
+}
+
+/**
+ * Generate unique session ID
+ */
+function generateSessionId(): string {
+  return 'cart_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)
+}
+
+/**
+ * Invalidate calculation cache when items change
+ */
+function invalidateCalculationCache(): void {
+  _lastItemsHash.value = _currentItemsHash.value
+  _currentItemsHash.value = JSON.stringify(
+    state.value.items.map(item => ({ id: item.id, quantity: item.quantity, price: item.product.price }))
+  )
+  _cachedItemCount.value = undefined
+  _cachedSubtotal.value = undefined
+}
+
+/**
+ * Create cart error object
+ */
+function createCartError(
+  type: CartError['type'],
+  code: string,
+  message: string,
+  retryable: boolean = false,
+  context?: Record<string, any>
+): CartError {
+  return {
+    type,
+    code,
+    message,
+    retryable,
+    timestamp: new Date(),
+    context
+  }
+}
+
+/**
+ * Validate product data
+ */
+function validateProduct(product: Product): void {
+  if (!product.id) {
+    throw createCartError('validation', 'INVALID_PRODUCT_ID', 'Product ID is required')
+  }
+  if (!product.name) {
+    throw createCartError('validation', 'INVALID_PRODUCT_NAME', 'Product name is required')
+  }
+  if (typeof product.price !== 'number' || product.price < 0) {
+    throw createCartError('validation', 'INVALID_PRODUCT_PRICE', 'Product price must be a positive number')
+  }
+  if (typeof product.stock !== 'number' || product.stock < 0) {
+    throw createCartError('validation', 'INVALID_PRODUCT_STOCK', 'Product stock must be a non-negative number')
+  }
+}
+
+/**
+ * Validate quantity
+ */
+function validateQuantity(quantity: number): void {
+  if (!Number.isInteger(quantity) || quantity <= 0) {
+    throw createCartError('validation', 'INVALID_QUANTITY', 'Quantity must be a positive integer')
+  }
+}
+
+// =============================================
+// CORE ACTIONS
+// =============================================
+
+const actions: CartCoreActions = {
+  /**
+   * Initialize cart session
+   */
+  initializeCart(): void {
+    if (!state.value.sessionId) {
+      state.value.sessionId = generateSessionId()
+    }
+    invalidateCalculationCache()
+  },
+
+  /**
+   * Add item to cart
+   */
+  async addItem(product: Product, quantity: number = 1): Promise<void> {
+    state.value.loading = true
+    state.value.error = null
+
+    try {
+      // Validate inputs
+      validateProduct(product)
+      validateQuantity(quantity)
+
+      // Check stock availability
+      if (quantity > product.stock) {
+        throw createCartError(
+          'inventory',
+          'INSUFFICIENT_STOCK',
+          `Only ${product.stock} items available`,
+          false,
+          { productId: product.id, requestedQuantity: quantity, availableStock: product.stock }
+        )
+      }
+
+      const existingItem = getters.getItemByProductId(product.id)
+
+      if (existingItem) {
+        // Update quantity if item already exists
+        const newQuantity = existingItem.quantity + quantity
+
+        if (newQuantity > product.stock) {
+          const available = product.stock - existingItem.quantity
+          throw createCartError(
+            'inventory',
+            'INSUFFICIENT_STOCK_UPDATE',
+            `Can only add ${available} more items`,
+            false,
+            { 
+              productId: product.id, 
+              currentQuantity: existingItem.quantity,
+              requestedAddition: quantity,
+              availableStock: product.stock 
+            }
+          )
+        }
+
+        existingItem.quantity = newQuantity
+        existingItem.lastModified = new Date()
+        // Update product data with latest information
+        existingItem.product = { ...existingItem.product, ...product }
+      } else {
+        // Add new item to cart
+        const cartItem: CartItem = {
+          id: generateItemId(),
+          product,
+          quantity,
+          addedAt: new Date(),
+          source: 'manual'
+        }
+        state.value.items.push(cartItem)
+      }
+
+      // Invalidate cache and update sync time
+      invalidateCalculationCache()
+      state.value.lastSyncAt = new Date()
+
+    } catch (error) {
+      const cartError = error instanceof Error && 'type' in error 
+        ? error as CartError
+        : createCartError('validation', 'ADD_ITEM_FAILED', error instanceof Error ? error.message : 'Failed to add item to cart')
+      
+      state.value.error = cartError.message
+      throw cartError
+    } finally {
+      state.value.loading = false
+    }
+  },
+
+  /**
+   * Remove item from cart
+   */
+  async removeItem(itemId: string): Promise<void> {
+    state.value.loading = true
+    state.value.error = null
+
+    try {
+      if (!itemId) {
+        throw createCartError('validation', 'INVALID_ITEM_ID', 'Item ID is required')
+      }
+
+      const index = state.value.items.findIndex((item) => item.id === itemId)
+      if (index === -1) {
+        throw createCartError('validation', 'ITEM_NOT_FOUND', 'Item not found in cart', false, { itemId })
+      }
+
+      // Remove item from cart
+      state.value.items.splice(index, 1)
+
+      // Invalidate cache and update sync time
+      invalidateCalculationCache()
+      state.value.lastSyncAt = new Date()
+
+    } catch (error) {
+      const cartError = error instanceof Error && 'type' in error 
+        ? error as CartError
+        : createCartError('validation', 'REMOVE_ITEM_FAILED', error instanceof Error ? error.message : 'Failed to remove item from cart')
+      
+      state.value.error = cartError.message
+      throw cartError
+    } finally {
+      state.value.loading = false
+    }
+  },
+
+  /**
+   * Update item quantity
+   */
+  async updateQuantity(itemId: string, quantity: number): Promise<void> {
+    state.value.loading = true
+    state.value.error = null
+
+    try {
+      if (!itemId) {
+        throw createCartError('validation', 'INVALID_ITEM_ID', 'Item ID is required')
+      }
+
+      // Handle removal if quantity is 0
+      if (quantity === 0) {
+        return actions.removeItem(itemId)
+      }
+
+      validateQuantity(quantity)
+
+      const item = state.value.items.find((item) => item.id === itemId)
+      if (!item) {
+        throw createCartError('validation', 'ITEM_NOT_FOUND', 'Item not found in cart', false, { itemId })
+      }
+
+      // Check stock availability
+      if (quantity > item.product.stock) {
+        throw createCartError(
+          'inventory',
+          'INSUFFICIENT_STOCK',
+          `Only ${item.product.stock} items available`,
+          false,
+          { 
+            productId: item.product.id, 
+            requestedQuantity: quantity, 
+            availableStock: item.product.stock 
+          }
+        )
+      }
+
+      // Update quantity
+      item.quantity = quantity
+      item.lastModified = new Date()
+
+      // Invalidate cache and update sync time
+      invalidateCalculationCache()
+      state.value.lastSyncAt = new Date()
+
+    } catch (error) {
+      const cartError = error instanceof Error && 'type' in error 
+        ? error as CartError
+        : createCartError('validation', 'UPDATE_QUANTITY_FAILED', error instanceof Error ? error.message : 'Failed to update item quantity')
+      
+      state.value.error = cartError.message
+      throw cartError
+    } finally {
+      state.value.loading = false
+    }
+  },
+
+  /**
+   * Clear all items from cart
+   */
+  async clearCart(): Promise<void> {
+    state.value.loading = true
+    state.value.error = null
+
+    try {
+      state.value.items = []
+      
+      // Invalidate cache and update sync time
+      invalidateCalculationCache()
+      state.value.lastSyncAt = new Date()
+
+    } catch (error) {
+      const cartError = createCartError('validation', 'CLEAR_CART_FAILED', error instanceof Error ? error.message : 'Failed to clear cart')
+      state.value.error = cartError.message
+      throw cartError
+    } finally {
+      state.value.loading = false
+    }
+  },
+
+  generateItemId,
+  generateSessionId
+}
+
+// =============================================
+// COMPOSABLE INTERFACE
+// =============================================
+
+export function useCartCore() {
+  return {
+    // State
+    state: readonly(state),
+    
+    // Getters
+    itemCount: computed(() => getters.itemCount),
+    subtotal: computed(() => getters.subtotal),
+    isEmpty: computed(() => getters.isEmpty),
+    getItemByProductId: getters.getItemByProductId,
+    isInCart: getters.isInCart,
+    
+    // Actions
+    ...actions,
+    
+    // Utilities
+    invalidateCalculationCache
+  }
+}
+
+// =============================================
+// DIRECT EXPORTS FOR STORE USAGE
+// =============================================
+
+export {
+  state as cartCoreState,
+  getters as cartCoreGetters,
+  actions as cartCoreActions,
+  generateItemId,
+  generateSessionId,
+  invalidateCalculationCache
+}

@@ -613,7 +613,27 @@
       "adjustQuantity": "Ajustar cantidad",
       "adjustToMax": "Ajustar al máximo",
       "reloadCart": "Recargar carrito"
-    }
+    },
+    "recommendations": {
+      "title": "Productos recomendados",
+      "noRecommendations": "No hay recomendaciones disponibles en este momento",
+      "loadingRecommendations": "Cargando recomendaciones...",
+      "refreshRecommendations": "Actualizar recomendaciones"
+    },
+    "bulk": {
+      "itemsSelected": "elementos seleccionados",
+      "removeSelected": "Eliminar seleccionados",
+      "saveSelected": "Guardar seleccionados",
+      "processingBulkOperation": "Procesando operación..."
+    },
+    "savedForLater": "Guardado para después",
+    "saveForLater": "Guardar para después",
+    "moveToCart": "Mover al carrito",
+    "savedOn": "Guardado el",
+    "each": "cada uno",
+    "addToCart": "Añadir al carrito",
+    "inCart": "En el carrito",
+    "recommendedProducts": "Productos recomendados"
   },
   "checkout": {
     "title": "Finalizar Compra",
