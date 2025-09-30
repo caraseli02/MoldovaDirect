@@ -51,7 +51,7 @@
                     class="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 bg-white dark:bg-gray-700"
                   >
                   <label class="text-sm text-gray-600 dark:text-gray-400">
-                    {{ allItemsSelected ? 'Deseleccionar todo' : 'Seleccionar todo' }}
+                    {{ $t(allItemsSelected ? 'common.deselectAll' : 'common.selectAll') }}
                   </label>
                 </div>
               </div>
@@ -236,7 +236,7 @@ const formattedSubtotal = computed(() => formatPrice(subtotal.value))
 // Error handling for cart operations
 const handleCartError = (error: Error) => {
   console.error('Cart page error:', error)
-  toast.error('Error en el carrito', error.message)
+  toast.error($t('common.cartError'), error.message)
 }
 
 // Enhanced cart operations with error handling
@@ -301,7 +301,7 @@ onMounted(async () => {
     await validateCart()
   } catch (error) {
     console.error('Failed to validate cart:', error)
-    toast.error('Error de validación', 'No se pudo validar el carrito')
+    toast.error($t('common.cartValidationError'), $t('cart.error.validationFailedDetails'))
   }
 })
 

@@ -38,7 +38,18 @@
     "showLess": "Show Less",
     "swipe_to_remove": "Swipe to remove",
     "release_to_remove": "Release to remove",
-    "help": "Help"
+    "help": "Help",
+    "each": "each",
+    "refresh": "Refresh",
+    "tryAgain": "Try Again",
+    "error": "Error",
+    "errorGeneric": "An error occurred. Please try again.",
+    "menu": "Menu",
+    "preferences": "Preferences",
+    "selectAll": "Select All",
+    "deselectAll": "Deselect All",
+    "cartError": "Cart Error",
+    "cartValidationError": "Validation Error"
   },
   "auth": {
     "signIn": "Sign In",
@@ -637,8 +648,37 @@
       "viewProduct": "View product",
       "adjustQuantity": "Adjust quantity",
       "adjustToMax": "Adjust to maximum",
-      "reloadCart": "Reload cart"
-    }
+      "reloadCart": "Reload cart",
+      "saveForLater": "Save for Later",
+      "addToCart": "Add to Cart",
+      "moveToCart": "Move to Cart",
+      "remove": "Remove",
+      "select": "Select",
+      "deselect": "Deselect"
+    },
+    "labels": {
+      "saveForLater": "Save for Later",
+      "savedForLater": "Saved for Later",
+      "addToCart": "Add to Cart",
+      "inCart": "In Cart",
+      "recommendedProducts": "Recommended Products",
+      "quickAdd": "Quick Add",
+      "each": "each",
+      "price": "Price",
+      "quantity": "Quantity",
+      "total": "Total",
+      "subtotal": "Subtotal",
+      "itemsSelected": "items selected",
+      "removeSelected": "Remove Selected"
+    },
+    "savedForLater": "Saved for Later",
+    "saveForLater": "Save for Later",
+    "moveToCart": "Move to Cart",
+    "savedOn": "Saved on",
+    "each": "each",
+    "addToCart": "Add to Cart",
+    "inCart": "In Cart",
+    "recommendedProducts": "Recommended Products"
   },
   "checkout": {
     "title": "Checkout",

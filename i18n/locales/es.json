@@ -35,6 +35,8 @@
     "tryAgain": "Intentar de nuevo",
     "error": "Error",
     "errorGeneric": "Ha ocurrido un error. Por favor, inténtalo de nuevo.",
+    "cartError": "Error en el carrito",
+    "cartValidationError": "Error de validación",
     "cancel": "Cancelar",
     "showMore": "Mostrar Más",
     "showLess": "Mostrar Menos",
@@ -53,7 +55,9 @@
     "outOfStock": "Agotado",
     "onlyAvailable": "Solo {count} disponibles",
     "menu": "Menú",
-    "preferences": "Preferencias"
+    "preferences": "Preferencias",
+    "each": "cada",
+    "refresh": "Actualizar"
   },
   "auth": {
     "signIn": "Iniciar Sesión",
@@ -471,6 +475,8 @@
     "copyright": "© 2024 Moldova Direct. Todos los derechos reservados."
   },
   "cart": {
+    "itemsSelected": "artículos seleccionados",
+    "removeSelected": "Eliminar seleccionados",
     "success": {
       "added": "Producto añadido",
       "addedToCart": "Añadido al carrito",
@@ -810,7 +816,7 @@
       "paypalTitle": "Pagar con PayPal",
       "paypalDescription": "Serás redirigido a PayPal para completar tu pago de forma segura.",
       "paypalEmail": "Email de PayPal",
-      "paypalEmailPlaceholder": "tu.email@ejemplo.com",
+      "paypalEmailPlaceholder": "tu.email{'@'}ejemplo.com",
       "paypalNoticeTitle": "Pago con PayPal",
       "paypalNotice": "Después de hacer clic en 'Revisar Pedido', serás redirigido a PayPal para completar tu pago.",
       "bankTransferTitle": "Transferencia Bancaria",
