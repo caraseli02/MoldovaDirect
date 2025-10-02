@@ -92,6 +92,15 @@
     "passwordResetSuccess": "Пароль успешно сброшен!",
     "resetPasswordError": "Ошибка сброса пароля. Попробуйте снова.",
     "missingToken": "Токен сброса отсутствует. Используйте ссылку из вашего письма.",
+    "accessibility": {
+      "showPassword": "Показать пароль",
+      "passwordToggleDescription": "Переключить видимость пароля",
+      "rememberMeDescription": "Запомнить мою сессию на этом устройстве",
+      "forgotPasswordLink": "Ссылка для сброса пароля",
+      "signInButton": "Кнопка входа",
+      "magicLinkButton": "Кнопка магической ссылки",
+      "magicLinkDescription": "Отправить ссылку для входа по email"
+    },
     "errors": {
       "invalidCredentials": "Неверный email или пароль",
       "emailRequired": "Email обязателен",

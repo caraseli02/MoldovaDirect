@@ -88,6 +88,7 @@ CREATE TABLE products (
   weight_kg DECIMAL(8,3),
   stock_quantity INTEGER DEFAULT 0,
   low_stock_threshold INTEGER DEFAULT 5,
+  reorder_point INTEGER DEFAULT 5,
   images JSONB,
   attributes JSONB,
   is_active BOOLEAN DEFAULT TRUE,

@@ -92,6 +92,15 @@
     "passwordResetSuccess": "Parolă resetată cu succes!",
     "resetPasswordError": "Eroare la resetarea parolei. Te rugăm să încerci din nou.",
     "missingToken": "Token-ul de resetare lipsește. Te rugăm să folosești link-ul din email.",
+    "accessibility": {
+      "showPassword": "Arată parola",
+      "passwordToggleDescription": "Comută vizibilitatea parolei",
+      "rememberMeDescription": "Ține-mă minte pe acest dispozitiv",
+      "forgotPasswordLink": "Link pentru resetarea parolei",
+      "signInButton": "Buton de autentificare",
+      "magicLinkButton": "Buton link magic",
+      "magicLinkDescription": "Trimite link de autentificare prin email"
+    },
     "errors": {
       "invalidCredentials": "Email sau parolă incorectă",
       "emailRequired": "Email-ul este obligatoriu",

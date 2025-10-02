@@ -105,6 +105,15 @@
     "passwordResetSuccess": "Password reset successfully!",
     "resetPasswordError": "Failed to reset password. Please try again.",
     "missingToken": "Reset token is missing. Please use the link from your email.",
+    "accessibility": {
+      "showPassword": "Show password",
+      "passwordToggleDescription": "Toggle password visibility",
+      "rememberMeDescription": "Remember my session on this device",
+      "forgotPasswordLink": "Link to reset password",
+      "signInButton": "Sign in button",
+      "magicLinkButton": "Magic link button",
+      "magicLinkDescription": "Send login link via email"
+    },
     "errors": {
       "invalidCredentials": "Invalid email or password",
       "emailRequired": "Email is required",

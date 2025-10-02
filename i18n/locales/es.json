@@ -113,6 +113,15 @@
     "passwordResetSuccess": "¡Contraseña restablecida exitosamente!",
     "resetPasswordError": "Error al restablecer la contraseña. Por favor, inténtalo de nuevo.",
     "missingToken": "Falta el token de restablecimiento. Por favor, usa el enlace de tu correo.",
+    "accessibility": {
+      "showPassword": "Mostrar contraseña",
+      "passwordToggleDescription": "Alternar visibilidad de la contraseña",
+      "rememberMeDescription": "Recordar mi sesión en este dispositivo",
+      "forgotPasswordLink": "Enlace para restablecer contraseña",
+      "signInButton": "Botón de iniciar sesión",
+      "magicLinkButton": "Botón de enlace mágico",
+      "magicLinkDescription": "Enviar enlace de inicio de sesión por correo"
+    },
     "errors": {
       "invalidCredentials": "Correo o contraseña incorrectos",
       "emailRequired": "El correo es obligatorio",
