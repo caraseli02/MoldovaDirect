@@ -131,8 +131,8 @@ interface RegisterRequest {
   email: string;
   password: string;
   confirmPassword: string;
-  acceptTerms: boolean; // Required field for terms acceptance (Requirement 1.9)
-  language: "es" | "en" | "ro" | "ru"; // User language preference (Requirement 6.6)
+  acceptTerms: boolean; // Required field for terms acceptance - must be true (Requirements 1.9, 1.10)
+  language: "es" | "en" | "ro" | "ru"; // User language preference stored in profile (Requirements 6.6, 6.7)
 }
 
 // Login Request
@@ -174,13 +174,13 @@ interface ErrorResponse {
 
 #### Rate Limiting and Account Protection
 
-- **Login attempts**: 5 attempts per 15 minutes per IP address with progressive delays
+- **Login attempts**: Exactly 5 attempts per 15 minutes per IP address with progressive delays (Requirement 3.10)
+- **Account lockout**: Exactly 5 failed login attempts locks account for exactly 15 minutes (Requirements 3.10, 3.11)
 - **Registration**: 3 attempts per hour per IP address to prevent spam
-- **Password reset**: 3 requests per hour per email address with cooldown periods
+- **Password reset**: 3 requests per hour per email address with cooldown periods (Requirement 7.4)
 - **Email verification**: Rate limited to prevent abuse and email flooding
 - **Implementation**: Cloudflare KV for distributed rate limit tracking across edge locations
-- **Account lockout**: 5 failed login attempts locks account for exactly 15 minutes
-- **Lockout notification**: Clear messaging showing remaining lockout time
+- **Lockout notification**: Clear messaging showing remaining lockout time with countdown (Requirement 3.11)
 
 #### Token Security and Session Management
 
@@ -242,11 +242,12 @@ components/auth/
 
 **RegisterForm.vue**
 
-- Multi-field registration form with real-time validation (Requirement 1.6, 1.7, 1.8)
+- Multi-field registration form with real-time validation (Requirements 1.6, 1.7, 1.8)
 - Password strength meter integration with strength requirements (Requirement 7.1)
-- Terms and conditions acceptance checkbox with validation (Requirement 1.9, 1.10)
-- Language preference selection and storage (Requirement 6.6, 6.7)
-- Email existence validation with link to login page (Requirement 1.4, 1.5)
+- Terms and conditions acceptance checkbox with validation - prevents submission if not checked (Requirements 1.9, 1.10)
+- Language preference selection and storage in user profile (Requirements 6.6, 6.7)
+- Email existence validation with helpful link to login page (Requirements 1.4, 1.5)
+- Preserve valid field values during error states (Requirements 1.7, 1.8)
 
 **EmailVerification.vue**
 
@@ -395,9 +396,12 @@ export const useAuthStore = defineStore("auth", () => {
     }
   };
 
-  // Cross-tab synchronization
+  // Cross-tab synchronization (Requirement 5.3)
   const syncAuthState = () => {
     // Listen for storage events to sync auth state across tabs
+    // Implementation: Use BroadcastChannel API for real-time sync
+    // Fallback to localStorage events for broader browser support
+    // Ensures login state persists across browser tabs seamlessly
   };
 
   return {
@@ -463,7 +467,7 @@ const registerSchema = z
     confirmPassword: z.string().min(1, "validation.confirmPassword.required"),
     acceptTerms: z
       .boolean()
-      .refine((val) => val === true, "validation.terms.required"), // Requirement 1.9: terms acceptance required
+      .refine((val) => val === true, "validation.terms.required"), // Requirements 1.9, 1.10: terms acceptance required and prevents account creation
     language: z.enum(["es", "en", "ro", "ru"]).default("es"), // Requirement 6.6: language preference
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -509,8 +513,38 @@ const resetPasswordSchema = z
 - **Email fields**: Immediate validation on blur with format checking
 - **Password fields**: Real-time strength indicator with progressive validation
 - **Confirm password**: Instant matching validation as user types
-- **Terms acceptance**: Validation on form submission attempt
+- **Terms acceptance**: Validation on form submission attempt - prevents account creation if not checked (Requirements 1.9, 1.10)
 - **Form preservation**: Valid field values maintained during error states (Requirement 9.2)
+
+#### Terms and Conditions Validation
+
+**Design Rationale**: Terms acceptance is mandatory for account creation and must be explicitly validated to ensure legal compliance and user consent.
+
+```typescript
+// Terms acceptance validation logic
+const validateTermsAcceptance = (acceptTerms: boolean): ValidationResult => {
+  if (!acceptTerms) {
+    return {
+      isValid: false,
+      error: 'validation.terms.required',
+      preventSubmission: true // Requirement 1.10: prevent account creation
+    };
+  }
+  return { isValid: true };
+};
+
+// Form submission handling
+const handleRegistrationSubmit = async (formData: RegisterFormData) => {
+  // Terms validation is checked first before any API calls
+  if (!formData.acceptTerms) {
+    showError('terms', 'validation.terms.required');
+    return; // Requirement 1.10: prevent submission
+  }
+  
+  // Proceed with registration only if terms are accepted
+  await submitRegistration(formData);
+};
+```
 
 ### Routing and Navigation
 
@@ -1160,6 +1194,84 @@ The testing strategy ensures comprehensive coverage of all authentication requir
 - **CSRF attacks**: Test CSRF token validation and SameSite cookie protection
 - **Email injection**: Test email template security and header injection prevention
 
+## Cross-Tab Synchronization Implementation
+
+### Technical Implementation Strategy
+
+**Design Rationale**: Cross-tab synchronization ensures users have a consistent authentication experience across multiple browser tabs, addressing Requirement 5.3 for session persistence across browser tabs.
+
+#### Primary Approach: BroadcastChannel API
+
+```typescript
+// Cross-tab communication using BroadcastChannel
+const authChannel = new BroadcastChannel('auth-sync');
+
+// Broadcast authentication state changes
+const broadcastAuthChange = (event: 'login' | 'logout' | 'token-refresh', data?: any) => {
+  authChannel.postMessage({
+    type: event,
+    timestamp: Date.now(),
+    data
+  });
+};
+
+// Listen for authentication changes from other tabs
+authChannel.addEventListener('message', (event) => {
+  const { type, data } = event.data;
+  
+  switch (type) {
+    case 'login':
+      // Update local auth state with new user data
+      updateAuthState(data.user, data.accessToken);
+      break;
+    case 'logout':
+      // Clear local auth state
+      clearAuthState();
+      break;
+    case 'token-refresh':
+      // Update access token across tabs
+      updateAccessToken(data.accessToken);
+      break;
+  }
+});
+```
+
+#### Fallback Approach: localStorage Events
+
+```typescript
+// Fallback for browsers without BroadcastChannel support
+const syncViaStorage = () => {
+  window.addEventListener('storage', (event) => {
+    if (event.key === 'auth-sync-event') {
+      const syncData = JSON.parse(event.newValue || '{}');
+      handleAuthSync(syncData);
+    }
+  });
+};
+
+// Trigger sync across tabs via localStorage
+const triggerStorageSync = (eventType: string, data: any) => {
+  localStorage.setItem('auth-sync-event', JSON.stringify({
+    type: eventType,
+    data,
+    timestamp: Date.now()
+  }));
+  
+  // Clean up immediately to avoid storage bloat
+  setTimeout(() => {
+    localStorage.removeItem('auth-sync-event');
+  }, 100);
+};
+```
+
+#### Integration with Shopping Features
+
+**Design Rationale**: Seamless integration ensures that authentication state changes properly update shopping-related features across tabs, addressing Requirements 10.1-10.3.
+
+- **Cart synchronization**: Authentication changes trigger cart data refresh across tabs
+- **Redirect preservation**: Login redirects work consistently regardless of which tab initiated the authentication
+- **User-specific data**: Profile information, order history, and preferences sync automatically
+
 ### Automated Testing Pipeline
 
 #### Continuous Integration
@@ -1168,10 +1280,12 @@ The testing strategy ensures comprehensive coverage of all authentication requir
 - **Integration test suite**: Execute integration tests on pull requests
 - **Security scanning**: Automated security vulnerability scanning
 - **Performance benchmarks**: Automated performance regression testing
+- **Cross-tab testing**: Automated testing of multi-tab authentication scenarios
 
 #### Test Coverage Requirements
 
 - **Code coverage**: Minimum 90% code coverage for authentication modules
-- **Requirement coverage**: 100% coverage of all specified requirements
+- **Requirement coverage**: 100% coverage of all specified requirements (Requirements 1-10)
 - **Edge case coverage**: Comprehensive testing of error conditions and edge cases
-- **Security test coverage**: Complete coverage of all security requirements
+- **Security test coverage**: Complete coverage of all security requirements (Requirement 7)
+- **Cross-tab coverage**: Testing of all cross-tab synchronization scenarios (Requirement 5.3)
