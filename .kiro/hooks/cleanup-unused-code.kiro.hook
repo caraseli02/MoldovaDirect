@@ -1,0 +1,24 @@
+{
+  "enabled": true,
+  "name": "Cleanup Unused Code",
+  "description": "Monitors project files for changes and identifies unused imports, dead code, unreferenced files, and orphaned dependencies to keep the codebase clean",
+  "version": "1",
+  "when": {
+    "type": "userTriggered",
+    "patterns": [
+      "components/**/*.vue",
+      "composables/**/*.ts",
+      "pages/**/*.vue",
+      "stores/**/*.ts",
+      "server/**/*.ts",
+      "types/**/*.ts",
+      "utils/**/*.ts",
+      "middleware/**/*.ts",
+      "plugins/**/*.ts"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Analyze the modified files and the entire project structure to:\n1. Identify unused imports in the changed files\n2. Detect dead code (unreachable code, unused functions/variables)\n3. Find unreferenced files that are not imported anywhere\n4. Check for orphaned components, composables, or utilities\n5. Identify unused dependencies in package.json\n6. Suggest files that can be safely deleted\n7. Recommend refactoring opportunities to reduce code duplication\n\nProvide a detailed report with:\n- List of unused imports to remove\n- Dead code blocks to delete\n- Unreferenced files that can be removed\n- Unused npm packages\n- Specific line numbers and file paths\n- Safety warnings for files that might be dynamically imported\n\nFormat the output as actionable cleanup tasks."
+  }
+}

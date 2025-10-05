@@ -23,6 +23,7 @@
     "optional": "Opțional",
     "and": "și",
     "to": "la",
+    "of": "din",
     "previous": "Anterior",
     "next": "Următorul",
     "remove": "Elimină",
@@ -36,7 +37,19 @@
     "showMore": "Arată Mai Mult",
     "showLess": "Arată Mai Puțin",
     "swipe_to_remove": "Glisează pentru a elimina",
-    "release_to_remove": "Eliberează pentru a elimina"
+    "release_to_remove": "Eliberează pentru a elimina",
+    "help": "Ajutor",
+    "each": "fiecare",
+    "refresh": "Reîmprospătează",
+    "tryAgain": "Încearcă Din Nou",
+    "error": "Eroare",
+    "errorGeneric": "A apărut o eroare. Te rugăm să încerci din nou.",
+    "menu": "Meniu",
+    "preferences": "Preferințe",
+    "selectAll": "Selectează Tot",
+    "deselectAll": "Deselectează Tot",
+    "cartError": "Eroare Coș",
+    "cartValidationError": "Eroare de Validare"
   },
   "auth": {
     "signIn": "Autentificare",
@@ -94,12 +107,31 @@
     "missingToken": "Token-ul de resetare lipsește. Te rugăm să folosești link-ul din email.",
     "accessibility": {
       "showPassword": "Arată parola",
+      "hidePassword": "Ascunde parola",
+      "passwordVisible": "Parola este acum vizibilă",
+      "passwordHidden": "Parola este acum ascunsă",
       "passwordToggleDescription": "Comută vizibilitatea parolei",
-      "rememberMeDescription": "Ține-mă minte pe acest dispozitiv",
-      "forgotPasswordLink": "Link pentru resetarea parolei",
-      "signInButton": "Buton de autentificare",
-      "magicLinkButton": "Buton link magic",
-      "magicLinkDescription": "Trimite link de autentificare prin email"
+      "passwordRequirements": "Parola trebuie să aibă cel puțin 8 caractere cu majusculă, minusculă și cifră",
+      "confirmPasswordDescription": "Reintroduceți parola pentru confirmare",
+      "rememberMeDescription": "Ține-mă autentificat pe acest dispozitiv",
+      "forgotPasswordLink": "Resetează-ți parola",
+      "signInButton": "Autentifică-te în contul tău",
+      "signingIn": "Autentificare în contul tău",
+      "processingLogin": "Procesăm cererea ta de autentificare",
+      "magicLinkButton": "Trimite link magic pe email",
+      "sendingMagicLink": "Trimitere link magic",
+      "magicLinkDescription": "Îți vom trimite un link securizat pentru autentificare fără parolă",
+      "createAccountButton": "Creează-ți contul",
+      "creatingAccount": "Creare cont",
+      "processingRegistration": "Procesăm înregistrarea ta",
+      "phoneOptional": "Numărul de telefon este opțional",
+      "termsLink": "Citește termenii și condițiile",
+      "privacyLink": "Citește politica de confidențialitate",
+      "termsDescription": "Trebuie să accepți termenii și condițiile pentru a crea un cont",
+      "passwordMatch": "Parolele se potrivesc",
+      "resetPasswordButton": "Resetează-ți parola",
+      "resettingPassword": "Resetare parolă",
+      "processingPasswordReset": "Procesăm cererea ta de resetare a parolei"
     },
     "errors": {
       "invalidCredentials": "Email sau parolă incorectă",
@@ -155,6 +187,16 @@
         "invalid": "Token de verificare invalid",
         "expired": "Token-ul de verificare a expirat"
       }
+    },
+    "progress": {
+      "step": "Pasul",
+      "of": "din",
+      "completed": "finalizat",
+      "current": "curent",
+      "upcoming": "viitor",
+      "label": "Progres autentificare: pasul {current} din {total} pentru {context}",
+      "announcement": "Acum la pasul {step} din {total}: {stepName}",
+      "stepChanged": "Trecut la pasul {step}: {stepName}"
     },
     "success": {
       "loginSuccess": "Autentificare reușită! Redirecționare...",
@@ -243,6 +285,94 @@
       "administrator": "Administrator"
     }
   },
+  "profile": {
+    "title": "Setări Profil",
+    "description": "Gestionează informațiile tale personale și preferințele contului",
+    "profilePicture": "Fotografie de Profil",
+    "profilePictureDescription": "Încarcă o fotografie de profil pentru a-ți personaliza contul",
+    "changePicture": "Schimbă Fotografia",
+    "uploadPicture": "Încarcă Fotografie",
+    "removePicture": "Elimină Fotografia",
+    "emailCannotBeChanged": "Adresa de email nu poate fi schimbată",
+    "saveChanges": "Salvează Modificările",
+    "addresses": "Adrese",
+    "addressesDescription": "Gestionează adresele tale de livrare și facturare",
+    "addAddress": "Adaugă Adresă",
+    "addFirstAddress": "Adaugă Prima Ta Adresă",
+    "editAddress": "Editează Adresa",
+    "updateAddress": "Actualizează Adresa",
+    "saveAddress": "Salvează Adresa",
+    "deleteAddress": "Șterge Adresa",
+    "confirmDeleteAddress": "Ești sigur că vrei să ștergi această adresă?",
+    "noAddresses": "Nu ai încă adrese salvate",
+    "default": "Implicită",
+    "setAsDefault": "Setează ca adresă implicită",
+    "street": "Adresa Stradală",
+    "streetPlaceholder": "Introdu adresa ta stradală",
+    "city": "Oraș",
+    "cityPlaceholder": "Introdu orașul tău",
+    "postalCode": "Cod Poștal",
+    "postalCodePlaceholder": "Introdu codul poștal",
+    "province": "Provincie/Județ",
+    "provincePlaceholder": "Introdu provincia sau județul (opțional)",
+    "country": "Țară",
+    "deleteAccount": "Șterge Contul",
+    "deleteAccountWarning": "Această acțiune nu poate fi anulată",
+    "deleteAccountConsequences": {
+      "title": "Aceasta va șterge permanent:",
+      "personalData": "Toate datele tale personale",
+      "orderHistory": "Istoricul comenzilor tale",
+      "addresses": "Toate adresele salvate",
+      "irreversible": "Această acțiune nu poate fi inversată"
+    },
+    "deleteConfirmationLabel": "Scrie 'DELETE' pentru a confirma",
+    "deleteConfirmationPlaceholder": "Scrie DELETE cu majuscule",
+    "deleteConfirmationHint": "Scrie 'DELETE' exact așa cum este afișat pentru a confirma",
+    "confirmPassword": "Confirmă cu parola ta",
+    "confirmPasswordPlaceholder": "Introdu parola ta curentă",
+    "deleteReason": "Motivul ștergerii",
+    "selectReason": "Selectează un motiv (opțional)",
+    "deleteReasons": {
+      "notUsing": "Nu mai folosesc serviciul",
+      "privacyConcerns": "Preocupări legate de confidențialitate",
+      "foundAlternative": "Am găsit un serviciu alternativ",
+      "technicalIssues": "Probleme tehnice",
+      "other": "Altele"
+    },
+    "confirmDelete": "Șterge Contul Meu",
+    "addressType": {
+      "label": "Tipul Adresei",
+      "shipping": "Adresă de Livrare",
+      "billing": "Adresă de Facturare"
+    },
+    "validation": {
+      "streetRequired": "Adresa stradală este obligatorie",
+      "cityRequired": "Orașul este obligatoriu",
+      "postalCodeRequired": "Codul poștal este obligatoriu",
+      "invalidSpanishPostalCode": "Te rugăm să introduci un cod poștal spaniol valid (5 cifre)",
+      "confirmationRequired": "Te rugăm să scrii 'DELETE' pentru a confirma",
+      "passwordRequired": "Parola este obligatorie pentru ștergerea contului"
+    },
+    "success": {
+      "profileUpdated": "Profil actualizat cu succes",
+      "pictureUpdated": "Fotografie de profil actualizată cu succes",
+      "pictureRemoved": "Fotografie de profil eliminată cu succes",
+      "addressSaved": "Adresă salvată cu succes",
+      "addressDeleted": "Adresă ștearsă cu succes",
+      "accountDeleted": "Cont șters cu succes"
+    },
+    "errors": {
+      "updateFailed": "Actualizarea profilului a eșuat. Te rugăm să încerci din nou.",
+      "invalidFileType": "Te rugăm să selectezi un fișier imagine valid",
+      "fileTooLarge": "Dimensiunea fișierului trebuie să fie mai mică de 5MB",
+      "uploadFailed": "Încărcarea fotografiei de profil a eșuat. Te rugăm să încerci din nou.",
+      "removeFailed": "Eliminarea fotografiei de profil a eșuat. Te rugăm să încerci din nou.",
+      "loadAddressesFailed": "Încărcarea adreselor a eșuat",
+      "addressSaveFailed": "Salvarea adresei a eșuat. Te rugăm să încerci din nou.",
+      "addressDeleteFailed": "Ștergerea adresei a eșuat. Te rugăm să încerci din nou.",
+      "deleteFailed": "Ștergerea contului a eșuat. Te rugăm să încerci din nou."
+    }
+  },
   "home": {
     "hero": {
       "title": "Produse Autentice Moldovenești",
@@ -286,6 +416,11 @@
     "availability": "Disponibilitate",
     "addToCart": "Adaugă în Coș",
     "outOfStock": "Stoc Epuizat",
+    "inCart": "În Coș",
+    "adding": "Se adaugă...",
+    "cartEmpty": "Coșul tău este gol",
+    "cartEmptyDescription": "Începe să cumperi pentru a adăuga articole în coș",
+    "itemsInCart": "articole în coș",
     "description": "Descriere",
     "notFound": "Produs negăsit",
     "notFoundDescription": "Produsul pe care îl cauți nu există sau a fost eliminat",
@@ -296,13 +431,21 @@
     "sortNewest": "Cele mai noi",
     "sortName": "Nume",
     "sortPrice": "Preț",
+    "sortPriceAsc": "Preț: De la Mic la Mare",
+    "sortPriceDesc": "Preț: De la Mare la Mic",
     "sortFeatured": "Recomandate",
+    "results": "{count} rezultate | {count} rezultat | {count} rezultate",
     "search": "Căutare",
     "category": "Categorie",
     "noResults": "Nu s-au găsit rezultate",
     "noProducts": "Nu sunt produse disponibile",
     "tryDifferentFilters": "Încearcă filtre diferite",
     "comingSoon": "În curând vom avea produse disponibile",
+    "showingResults": "Se afișează {start}-{end} din {total} produse",
+    "filtersApplied": "Filtre aplicate",
+    "clearFilters": "Șterge toate filtrele",
+    "sortPriceLowHigh": "Preț: De la Mic la Mare",
+    "sortPriceHighLow": "Preț: De la Mare la Mic",
     "categories": {
       "all": "Toate",
       "wine": "Vinuri",
@@ -312,15 +455,29 @@
       "sweets": "Dulciuri"
     },
     "filters": {
+      "title": "Filtre",
       "sortBy": "Sortează după",
       "priceRange": "Interval de Preț",
       "category": "Categorie",
+      "categories": "Categorii",
       "availability": "Disponibilitate",
       "inStock": "În Stoc",
-      "outOfStock": "Stoc Epuizat"
-    }
+      "inStockOnly": "Doar în stoc",
+      "outOfStock": "Stoc Epuizat",
+      "featuredOnly": "Doar recomandate",
+      "active": "Filtre Active",
+      "clearAll": "Șterge Tot",
+      "apply": "Aplică Filtrele",
+      "minPrice": "Preț Minim",
+      "maxPrice": "Preț Maxim",
+      "removeFilter": "Elimină filtrul {filter}",
+      "unknownCategory": "Categorie Necunoscută"
+    },
+    "results": "produse găsite"
   },
   "footer": {
+    "terms": "Termeni și Condiții",
+    "privacy": "Politica de Confidențialitate",
     "info": {
       "title": "Informații",
       "about": "Despre Noi",
@@ -370,6 +527,7 @@
       "cartMigrated": "Coș migrat",
       "cartMigratedDetails": "Datele coșului migrate la {storage}",
       "cartValidated": "Coș validat",
+      "allProductsAvailable": "Toate produsele sunt disponibile",
       "cartValidatedDetails": "Toate produsele sunt disponibile și actualizate",
       "cartRecovered": "Coș recuperat",
       "cartRecoveredDetails": "Datele coșului au fost recuperate și validate",
@@ -437,10 +595,11 @@
       "moveFailedDetails": "Nu s-a putut muta produsul în coș",
       "removeSavedFailed": "Eroare la eliminare",
       "removeSavedFailedDetails": "Nu s-a putut elimina produsul salvat",
-      "tryAgain": "Vă rugăm să încercați din nou",
+      "tryAgain": "Te rugăm să încerci din nou",
+      "checkoutFailed": "Eroare la finalizarea comenzii. Te rugăm să încerci din nou.",
       "boundary": {
         "title": "Eroare coș",
-        "message": "A apărut o eroare neașteptată. Puteți încerca să reîncărcați sau să continuați cumpărăturile.",
+        "message": "A apărut o eroare neașteptată. Poți încerca să reîncarci sau să continui cumpărăturile.",
         "showDetails": "Arată detalii",
         "hideDetails": "Ascunde detalii",
         "fallback": "Continuă cumpărăturile"
@@ -490,7 +649,285 @@
       "viewProduct": "Vezi produsul",
       "adjustQuantity": "Ajustează cantitatea",
       "adjustToMax": "Ajustează la maxim",
-      "reloadCart": "Reîncarcă coșul"
+      "reloadCart": "Reîncarcă coșul",
+      "saveForLater": "Salvează pentru Mai Târziu",
+      "addToCart": "Adaugă în Coș",
+      "moveToCart": "Mută în Coș",
+      "remove": "Elimină",
+      "select": "Selectează",
+      "deselect": "Deselectează"
+    },
+    "labels": {
+      "saveForLater": "Salvează pentru Mai Târziu",
+      "savedForLater": "Salvat pentru Mai Târziu",
+      "addToCart": "Adaugă în Coș",
+      "inCart": "În Coș",
+      "recommendedProducts": "Produse Recomandate",
+      "quickAdd": "Adăugare Rapidă",
+      "each": "fiecare",
+      "price": "Preț",
+      "quantity": "Cantitate",
+      "total": "Total",
+      "subtotal": "Subtotal",
+      "itemsSelected": "articole selectate",
+      "removeSelected": "Elimină Selectate"
+    },
+    "savedForLater": "Salvat pentru Mai Târziu",
+    "saveForLater": "Salvează pentru Mai Târziu",
+    "moveToCart": "Mută în Coș",
+    "savedOn": "Salvat pe",
+    "each": "fiecare",
+    "addToCart": "Adaugă în Coș",
+    "inCart": "În Coș",
+    "recommendedProducts": "Produse Recomandate"
+  },
+  "checkout": {
+    "title": "Finalizare Comandă",
+    "secureCheckout": "Finalizare Securizată",
+    "steps": {
+      "shipping": {
+        "name": "Livrare",
+        "description": "Informații de livrare",
+        "title": "Informații de Livrare",
+        "subtitle": "Unde să livrăm comanda ta?"
+      },
+      "payment": {
+        "name": "Plată",
+        "description": "Metodă de plată",
+        "title": "Metodă de Plată",
+        "subtitle": "Cum dorești să plătești?"
+      },
+      "review": {
+        "name": "Revizuire",
+        "description": "Rezumat comandă",
+        "title": "Revizuiește Comanda",
+        "subtitle": "Te rugăm să revizuiești detaliile comenzii înainte de a finaliza achiziția"
+      },
+      "confirmation": {
+        "name": "Confirmare",
+        "description": "Comandă finalizată",
+        "title": "Comandă Confirmată!",
+        "subtitle": "Mulțumim pentru comandă. Îți vom trimite un email de confirmare în curând.",
+        "emailSent": "Un email de confirmare a fost trimis la adresa ta de email",
+        "orderDetails": "Detalii Comandă",
+        "orderDetailsPlaceholder": "Detaliile comenzii tale vor fi afișate aici",
+        "viewOrders": "Vezi Comenzile Mele",
+        "continueShopping": "Continuă Cumpărăturile"
+      }
+    },
+    "guestCheckout": {
+      "title": "Opțiuni de Finalizare",
+      "description": "Poți crea un cont pentru finalizare mai rapidă sau continua ca vizitator."
+    },
+    "continueAsGuest": "Continuă ca Vizitator",
+    "backToCart": "Înapoi la Coș",
+    "continueToPayment": "Continuă la Plată",
+    "backToShipping": "Înapoi la Livrare",
+    "reviewOrder": "Revizuiește Comanda",
+    "backToPayment": "Înapoi la Plată",
+    "placeOrder": "Plasează Comanda",
+    "shippingForm": {
+      "title": "Informații de Livrare",
+      "placeholder": "Formularul de livrare va fi implementat în următoarea sarcină"
+    },
+    "paymentForm": {
+      "title": "Metodă de Plată",
+      "placeholder": "Formularul de plată va fi implementat în următoarea sarcină"
+    },
+    "orderReview": {
+      "title": "Rezumat Comandă",
+      "placeholder": "Revizuirea comenzii va fi implementată în următoarea sarcină"
+    },
+    "review": {
+      "cartItems": "Articole din Coș",
+      "editCart": "Editează Coșul",
+      "shippingInfo": "Informații de Livrare",
+      "editShipping": "Editează Livrarea",
+      "shippingAddress": "Adresă de Livrare",
+      "shippingMethod": "Metodă de Livrare",
+      "deliveryInstructions": "Instrucțiuni de Livrare",
+      "paymentMethod": "Metodă de Plată",
+      "editPayment": "Editează Plata"
+    },
+    "freeShipping": "Gratuit",
+    "processing": "Se procesează...",
+    "continueToTerms": "Continuă la Plasarea Comenzii",
+    "terms": {
+      "title": "Termeni și Condiții",
+      "acceptTerms": "Accept",
+      "termsAndConditions": "Termenii și Condițiile",
+      "privacyPolicy": "Politica de Confidențialitate",
+      "acceptPrivacy": "Consimț la procesarea datelor mele personale conform Politicii de Confidențialitate",
+      "marketingConsent": "Doresc să primesc comunicări de marketing și oferte speciale",
+      "marketingDescription": "Te poți dezabona oricând. Respectăm confidențialitatea ta.",
+      "termsRequired": "Trebuie să accepți Termenii și Condițiile pentru a continua",
+      "privacyRequired": "Trebuie să accepți Politica de Confidențialitate pentru a continua"
+    },
+    "success": {
+      "shippingUpdated": "Livrare Actualizată",
+      "shippingInfoSaved": "Informațiile tale de livrare au fost salvate",
+      "paymentUpdated": "Plată Actualizată",
+      "paymentMethodSaved": "Metoda ta de plată a fost salvată",
+      "orderCompleted": "Comandă Finalizată",
+      "orderConfirmation": "Comanda ta a fost plasată cu succes"
+    },
+    "validation": {
+      "firstNameRequired": "Prenumele este obligatoriu",
+      "lastNameRequired": "Numele de familie este obligatoriu",
+      "streetRequired": "Adresa stradală este obligatorie",
+      "cityRequired": "Orașul este obligatoriu",
+      "postalCodeRequired": "Codul poștal este obligatoriu",
+      "countryRequired": "Țara este obligatorie",
+      "shippingMethodRequired": "Metoda de livrare este obligatorie",
+      "cardNumberRequired": "Numărul cardului este obligatoriu",
+      "cardNumberInvalid": "Număr de card invalid",
+      "expiryRequired": "Data de expirare este obligatorie",
+      "cvvRequired": "CVV este obligatoriu",
+      "cvvInvalid": "CVV invalid",
+      "holderNameRequired": "Numele titularului cardului este obligatoriu",
+      "paypalEmailRequired": "Email-ul PayPal este obligatoriu",
+      "emailRequired": "Email-ul este obligatoriu",
+      "emailInvalid": "Te rugăm să introduci o adresă de email validă"
+    },
+    "addressForm": {
+      "shipping": {
+        "title": "Adresă de Livrare",
+        "subtitle": "Unde să livrăm comanda ta?"
+      },
+      "billing": {
+        "title": "Adresă de Facturare",
+        "subtitle": "Unde să trimitem factura ta?"
+      },
+      "savedAddresses": "Adrese Salvate",
+      "useNewAddress": "Folosește o adresă nouă",
+      "default": "Implicită",
+      "firstName": "Prenume",
+      "firstNamePlaceholder": "Introdu prenumele tău",
+      "lastName": "Nume de Familie",
+      "lastNamePlaceholder": "Introdu numele tău de familie",
+      "company": "Companie",
+      "companyPlaceholder": "Numele companiei (opțional)",
+      "street": "Adresa Stradală",
+      "streetPlaceholder": "Introdu adresa ta stradală",
+      "city": "Oraș",
+      "cityPlaceholder": "Introdu orașul tău",
+      "postalCode": "Cod Poștal",
+      "postalCodePlaceholder": "Introdu codul poștal",
+      "province": "Provincie/Județ",
+      "provincePlaceholder": "Provincie sau județ (opțional)",
+      "country": "Țară",
+      "selectCountry": "Selectează o țară",
+      "phone": "Număr de Telefon",
+      "phonePlaceholder": "Introdu numărul tău de telefon (opțional)",
+      "saveAddress": "Salvează această adresă pentru comenzi viitoare"
+    },
+    "shippingMethod": {
+      "title": "Metodă de Livrare",
+      "subtitle": "Alege cum dorești să primești comanda",
+      "free": "Gratuit",
+      "express": "Express",
+      "noMethods": "Nu sunt disponibile metode de livrare",
+      "noMethodsDescription": "Te rugăm să verifici adresa sau să contactezi suportul",
+      "error": "Eroare la încărcarea metodelor de livrare",
+      "standard": {
+        "name": "Livrare Standard",
+        "description": "Livrare în 3-5 zile lucrătoare"
+      },
+      "expressShipping": {
+        "name": "Livrare Express",
+        "description": "Livrare în 1-2 zile lucrătoare"
+      },
+      "freeShipping": {
+        "name": "Livrare Gratuită",
+        "description": "Livrare în 5-7 zile lucrătoare (comenzi peste €50)"
+      }
+    },
+    "guestInfo": {
+      "title": "Informații de Contact",
+      "email": "Adresă Email",
+      "emailPlaceholder": "Introdu adresa ta de email",
+      "emailUpdates": "Trimite-mi actualizări prin email despre comanda mea"
+    },
+    "shippingInstructions": {
+      "title": "Instrucțiuni de Livrare",
+      "placeholder": "Instrucțiuni speciale pentru livrare? (ex: lasă la ușă, sună la sonerie, etc.)",
+      "help": "Aceste instrucțiuni vor fi partajate cu serviciul de livrare"
+    },
+    "payment": {
+      "title": "Metodă de Plată",
+      "subtitle": "Alege cum dorești să plătești comanda",
+      "savedMethods": "Metode de Plată Salvate",
+      "useNewMethod": "Folosește o metodă de plată nouă",
+      "newMethod": "Metodă de Plată Nouă",
+      "default": "Implicită",
+      "creditCard": "Card de Credit",
+      "creditCardDesc": "Plătește cu Visa, Mastercard sau alte carduri",
+      "paypal": "PayPal",
+      "paypalDesc": "Plătește cu contul tău PayPal",
+      "bankTransfer": "Transfer Bancar",
+      "bankTransferDesc": "Transferă bani direct din banca ta",
+      "cardNumber": "Număr Card",
+      "cardNumberPlaceholder": "1234 5678 9012 3456",
+      "expiryDate": "Data de Expirare",
+      "expiryPlaceholder": "LL/AA",
+      "cvv": "CVV",
+      "cvvPlaceholder": "123",
+      "cvvHelp": "Codul de securitate de 3 cifre de pe spatele cardului (4 cifre pentru Amex)",
+      "cardholderName": "Numele Titularului Cardului",
+      "cardholderNamePlaceholder": "Numele așa cum apare pe card",
+      "saveForFuture": "Salvează această metodă de plată pentru comenzi viitoare",
+      "securePayment": "Plată Securizată",
+      "securityNotice": "Informațiile tale de plată sunt criptate și securizate. Nu stocăm niciodată detaliile cardului tău.",
+      "paypalTitle": "Plătește cu PayPal",
+      "paypalDescription": "Vei fi redirecționat către PayPal pentru a finaliza plata în siguranță.",
+      "paypalEmail": "Email PayPal",
+      "paypalEmailPlaceholder": "email.tau{'@'}exemplu.com",
+      "paypalNoticeTitle": "Plată PayPal",
+      "paypalNotice": "După ce apeși 'Revizuiește Comanda', vei fi redirecționat către PayPal pentru a finaliza plata.",
+      "bankTransferTitle": "Transfer Bancar",
+      "bankTransferDescription": "Transferă suma comenzii în contul nostru bancar folosind detaliile de mai jos.",
+      "bankDetails": "Detalii Transfer Bancar",
+      "bankName": "Numele Băncii",
+      "accountHolder": "Titular Cont",
+      "iban": "IBAN",
+      "swift": "SWIFT/BIC",
+      "reference": "Referință Plată",
+      "copyDetails": "Copiază Detaliile Bancare",
+      "bankTransferInstructions": "Instrucțiuni Importante",
+      "bankInstruction1": "Te rugăm să incluzi referința de plată în transferul tău",
+      "bankInstruction2": "Comanda ta va fi procesată după confirmarea plății",
+      "bankInstruction3": "Transferurile bancare pot dura 1-3 zile lucrătoare pentru procesare",
+      "cash": "Plată la Livrare",
+      "cashDesc": "Plătește cu numerar când comanda este livrată",
+      "cashTitle": "Plată la Livrare",
+      "cashDescription": "Vei plăti pentru comandă în numerar când va fi livrată la adresa ta.",
+      "cashInstructions": "Cum Funcționează Plata la Livrare",
+      "cashInstruction1": "Plasează comanda și o vom pregăti pentru livrare",
+      "cashInstruction2": "Echipa noastră de livrare te va contacta pentru a programa livrarea",
+      "cashInstruction3": "Plătește suma exactă în numerar când comanda ajunge",
+      "cashInstruction4": "Fără taxe suplimentare pentru serviciul de plată la livrare",
+      "contactNoticeTitle": "Contact Livrare",
+      "contactNotice": "Te vom contacta folosind informațiile furnizate pentru a aranja livrarea și plata.",
+      "comingSoon": "În Curând",
+      "error": "Eroare de Plată"
+    },
+    "navigation": {
+      "back": "Înapoi",
+      "reviewOrder": "Revizuiește Comanda",
+      "processing": "Se procesează..."
+    },
+    "processing": "Se procesează...",
+    "confirmation": {
+      "orderNumber": "Număr Comandă",
+      "orderItems": "Articole Comandă",
+      "shippingInfo": "Informații de Livrare",
+      "shippingAddress": "Adresă de Livrare",
+      "shippingMethod": "Metodă de Livrare",
+      "estimatedDelivery": "Livrare Estimată",
+      "deliveryNote": "Timpii de livrare sunt estimări și pot varia",
+      "trackOrder": "Urmărește Comanda",
+      "trackingAvailable": "Informațiile de urmărire vor fi disponibile odată ce comanda este expediată",
+      "printReceipt": "Imprimă Chitanța"
     }
   },
   "admin": {
@@ -716,12 +1153,12 @@
       "role": "Rol",
       "status": "Stare",
       "registered": "Înregistrat",
-      "lastLogin": "Ultima Conectare",
+      "lastLogin": "Ultima Autentificare",
       "lastOrder": "Ultima Comandă",
       "orders": "Comenzi",
       "totalSpent": "Total Cheltuit",
       "language": "Limbă",
-      "avgOrderValue": "Valoarea Medie a Comenzii",
+      "avgOrderValue": "Valoare Medie Comandă",
       "actions": "Acțiuni",
       "loading": "Se încarcă utilizatorii...",
       "retry": "Reîncearcă",
@@ -734,7 +1171,7 @@
       "statuses": {
         "active": "Activ",
         "inactive": "Inactiv",
-        "banned": "Interzis",
+        "banned": "Blocat",
         "unverified": "Neverificat",
         "locked": "Blocat"
       },
@@ -745,7 +1182,7 @@
         "orders": "Comenzi",
         "totalSpent": "Total Cheltuit",
         "registered": "Înregistrat",
-        "lastLogin": "Ultima Conectare",
+        "lastLogin": "Ultima Autentificare",
         "actions": "Acțiuni"
       },
       "filters": {
@@ -774,21 +1211,21 @@
         "noUsersDescription": "Încă nu s-au înregistrat utilizatori. Utilizatorii vor apărea aici odată ce își creează conturi.",
         "checkConnection": "Verifică conexiunea și încearcă din nou",
         "helpTitle": "Sfaturi pentru gestionarea utilizatorilor:",
-        "helpTip1": "Folosește căutarea pentru a găsi utilizatori specifici rapid",
+        "helpTip1": "Folosește căutarea pentru a găsi rapid utilizatori specifici",
         "helpTip2": "Filtrează după stare pentru a te concentra pe grupuri specifice de utilizatori",
         "helpTip3": "Fă clic pe orice utilizator pentru a vedea informații detaliate",
-        "swipeHint": "Glisează spre stânga pe mobil pentru acțiuni rapide"
+        "swipeHint": "Glisează la stânga pe mobil pentru acțiuni rapide"
       }
     },
     "analytics": {
       "title": "Analize",
-      "subtitle": "Vezi performanța magazinului",
+      "subtitle": "Vizualizează performanța magazinului",
       "revenue": "Venituri",
       "orders": "Comenzi",
       "customers": "Clienți",
       "products": "Produse",
-      "conversionRate": "Rata de Conversie",
-      "averageOrderValue": "Valoarea Medie a Comenzii",
+      "conversionRate": "Rată de Conversie",
+      "averageOrderValue": "Valoare Medie Comandă",
       "topProducts": "Produse de Top",
       "topCategories": "Categorii de Top",
       "recentSales": "Vânzări Recente",
@@ -810,9 +1247,9 @@
       "loading": "Se încarcă...",
       "saving": "Se salvează...",
       "deleting": "Se șterge...",
-      "noData": "Nu există date disponibile",
+      "noData": "Nu sunt date disponibile",
       "error": "A apărut o eroare",
-      "success": "Operațiunea s-a finalizat cu succes",
+      "success": "Operațiune finalizată cu succes",
       "confirm": "Ești sigur?",
       "yes": "Da",
       "no": "Nu",
@@ -853,8 +1290,27 @@
     "autoRefresh": {
       "enabled": "Reîmprospătare automată activată",
       "disabled": "Reîmprospătare automată dezactivată",
-      "interval": "Reîmprospătare la fiecare {minutes} minute",
+      "interval": "Reîmprospătează la fiecare {minutes} minute",
       "lastRefresh": "Ultima reîmprospătare: {time}"
     }
+  },
+  "pwa": {
+    "installTitle": "Instalează Moldova Direct",
+    "installDescription": "Instalează aplicația noastră pentru o experiență mai rapidă și acces offline",
+    "install": "Instalează",
+    "installing": "Se instalează...",
+    "notNow": "Nu acum",
+    "updateAvailable": "Actualizare disponibilă",
+    "updateDescription": "O nouă versiune este disponibilă",
+    "update": "Actualizează",
+    "updating": "Se actualizează...",
+    "offlineTitle": "Offline",
+    "offlineMessage": "Navighezi offline. Unele funcții pot să nu fie disponibile.",
+    "backOnline": "Înapoi online",
+    "stockAlert": "Alertă stoc",
+    "stockAlertDescription": "Te vom notifica când acest produs este disponibil",
+    "enableNotifications": "Activează notificările",
+    "notificationsEnabled": "Notificări activate",
+    "notificationsDisabled": "Notificări dezactivate"
   }
 }
