@@ -842,11 +842,11 @@
         "name": "Standard Shipping",
         "description": "Delivery in 3-5 business days"
       },
-      "express": {
-        "name": "Express Shipping", 
+      "expressShipping": {
+        "name": "Express Shipping",
         "description": "Delivery in 1-2 business days"
       },
-      "free": {
+      "freeShipping": {
         "name": "Free Shipping",
         "description": "Delivery in 5-7 business days (orders over €50)"
       }
@@ -925,7 +925,19 @@
       "reviewOrder": "Review Order",
       "processing": "Processing..."
     },
-    "processing": "Processing..."
+    "processing": "Processing...",
+    "confirmation": {
+      "orderNumber": "Order Number",
+      "orderItems": "Order Items",
+      "shippingInfo": "Shipping Information",
+      "shippingAddress": "Shipping Address",
+      "shippingMethod": "Shipping Method",
+      "estimatedDelivery": "Estimated Delivery",
+      "deliveryNote": "Delivery times are estimates and may vary",
+      "trackOrder": "Track Your Order",
+      "trackingAvailable": "Tracking information will be available once your order ships",
+      "printReceipt": "Print Receipt"
+    }
   },
   "admin": {
     "navigation": {

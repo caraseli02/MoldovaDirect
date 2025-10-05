@@ -803,11 +803,11 @@
         "name": "Envío Estándar",
         "description": "Entrega en 3-5 días hábiles"
       },
-      "express": {
-        "name": "Envío Express", 
+      "expressShipping": {
+        "name": "Envío Express",
         "description": "Entrega en 1-2 días hábiles"
       },
-      "free": {
+      "freeShipping": {
         "name": "Envío Gratis",
         "description": "Entrega en 5-7 días hábiles (pedidos sobre €50)"
       }
@@ -886,7 +886,19 @@
       "reviewOrder": "Revisar Pedido",
       "processing": "Procesando..."
     },
-    "processing": "Procesando..."
+    "processing": "Procesando...",
+    "confirmation": {
+      "orderNumber": "Número de Pedido",
+      "orderItems": "Artículos del Pedido",
+      "shippingInfo": "Información de Envío",
+      "shippingAddress": "Dirección de Envío",
+      "shippingMethod": "Método de Envío",
+      "estimatedDelivery": "Entrega Estimada",
+      "deliveryNote": "Los tiempos de entrega son estimados y pueden variar",
+      "trackOrder": "Rastrear Tu Pedido",
+      "trackingAvailable": "La información de rastreo estará disponible una vez que tu pedido sea enviado",
+      "printReceipt": "Imprimir Recibo"
+    }
   },
   "admin": {
     "navigation": {
