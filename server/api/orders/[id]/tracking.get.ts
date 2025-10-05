@@ -1,4 +1,4 @@
-// GET /api/orders/[id] - Get specific order details
+// GET /api/orders/[id]/tracking - Get tracking information for an order
 import { createClient } from '@supabase/supabase-js'
 
 export default defineEventHandler(async (event) => {
@@ -37,20 +37,10 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // Fetch order with all details
+    // Verify order ownership
     const { data: order, error: orderError } = await supabase
       .from('orders')
-      .select(`
-        *,
-        order_items (
-          id,
-          product_id,
-          product_snapshot,
-          quantity,
-          price_eur,
-          total_eur
-        )
-      `)
+      .select('id, order_number, status, tracking_number, carrier, estimated_delivery, shipped_at')
       .eq('id', orderId)
       .eq('user_id', user.id)
       .single()
@@ -68,51 +58,45 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // Fetch tracking events for this order
+    // Fetch tracking events
     const { data: trackingEvents, error: trackingError } = await supabase
       .from('order_tracking_events')
       .select('*')
       .eq('order_id', orderId)
       .order('timestamp', { ascending: false })
 
-    // Transform order_items to items and convert snake_case to camelCase
-    const transformedOrder = {
-      id: order.id,
+    if (trackingError) {
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Failed to fetch tracking events'
+      })
+    }
+
+    // Build tracking response
+    const trackingInfo = {
+      orderId: order.id,
       orderNumber: order.order_number,
-      userId: order.user_id,
       status: order.status,
-      paymentMethod: order.payment_method,
-      paymentStatus: order.payment_status,
-      paymentIntentId: order.payment_intent_id,
-      subtotalEur: order.subtotal_eur,
-      shippingCostEur: order.shipping_cost_eur,
-      taxEur: order.tax_eur,
-      totalEur: order.total_eur,
-      shippingAddress: order.shipping_address,
-      billingAddress: order.billing_address,
-      customerNotes: order.customer_notes,
-      adminNotes: order.admin_notes,
       trackingNumber: order.tracking_number,
       carrier: order.carrier,
       estimatedDelivery: order.estimated_delivery,
       shippedAt: order.shipped_at,
-      deliveredAt: order.delivered_at,
-      createdAt: order.created_at,
-      updatedAt: order.updated_at,
-      items: order.order_items || [],
-      tracking_events: trackingEvents || []
+      events: trackingEvents || [],
+      lastUpdate: trackingEvents && trackingEvents.length > 0 
+        ? trackingEvents[0].timestamp 
+        : order.shipped_at || null
     }
 
     return {
       success: true,
-      data: transformedOrder
+      data: trackingInfo
     }
   } catch (error: any) {
     if (error.statusCode) {
       throw error
     }
 
-    console.error('Order fetch error:', error)
+    console.error('Tracking fetch error:', error)
     throw createError({
       statusCode: 500,
       statusMessage: 'Internal server error'

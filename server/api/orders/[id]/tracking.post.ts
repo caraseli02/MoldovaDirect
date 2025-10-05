@@ -1,5 +1,12 @@
-// GET /api/orders/[id] - Get specific order details
+// POST /api/orders/[id]/tracking - Add tracking event to an order (admin only)
 import { createClient } from '@supabase/supabase-js'
+
+interface TrackingEventRequest {
+  status: string
+  location?: string
+  description: string
+  timestamp?: string
+}
 
 export default defineEventHandler(async (event) => {
   try {
@@ -28,6 +35,20 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    // Check if user is admin
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single()
+
+    if (profileError || profile?.role !== 'admin') {
+      throw createError({
+        statusCode: 403,
+        statusMessage: 'Admin access required'
+      })
+    }
+
     // Get order ID from route params
     const orderId = getRouterParam(event, 'id')
     if (!orderId) {
@@ -37,22 +58,22 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // Fetch order with all details
+    // Parse request body
+    const body = await readBody(event) as TrackingEventRequest
+
+    // Validate required fields
+    if (!body.status || !body.description) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: 'Status and description are required'
+      })
+    }
+
+    // Verify order exists
     const { data: order, error: orderError } = await supabase
       .from('orders')
-      .select(`
-        *,
-        order_items (
-          id,
-          product_id,
-          product_snapshot,
-          quantity,
-          price_eur,
-          total_eur
-        )
-      `)
+      .select('id, order_number')
       .eq('id', orderId)
-      .eq('user_id', user.id)
       .single()
 
     if (orderError) {
@@ -68,51 +89,36 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // Fetch tracking events for this order
-    const { data: trackingEvents, error: trackingError } = await supabase
+    // Create tracking event
+    const { data: trackingEvent, error: trackingError } = await supabase
       .from('order_tracking_events')
-      .select('*')
-      .eq('order_id', orderId)
-      .order('timestamp', { ascending: false })
+      .insert({
+        order_id: parseInt(orderId),
+        status: body.status,
+        location: body.location || null,
+        description: body.description,
+        timestamp: body.timestamp || new Date().toISOString()
+      })
+      .select()
+      .single()
 
-    // Transform order_items to items and convert snake_case to camelCase
-    const transformedOrder = {
-      id: order.id,
-      orderNumber: order.order_number,
-      userId: order.user_id,
-      status: order.status,
-      paymentMethod: order.payment_method,
-      paymentStatus: order.payment_status,
-      paymentIntentId: order.payment_intent_id,
-      subtotalEur: order.subtotal_eur,
-      shippingCostEur: order.shipping_cost_eur,
-      taxEur: order.tax_eur,
-      totalEur: order.total_eur,
-      shippingAddress: order.shipping_address,
-      billingAddress: order.billing_address,
-      customerNotes: order.customer_notes,
-      adminNotes: order.admin_notes,
-      trackingNumber: order.tracking_number,
-      carrier: order.carrier,
-      estimatedDelivery: order.estimated_delivery,
-      shippedAt: order.shipped_at,
-      deliveredAt: order.delivered_at,
-      createdAt: order.created_at,
-      updatedAt: order.updated_at,
-      items: order.order_items || [],
-      tracking_events: trackingEvents || []
+    if (trackingError) {
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Failed to create tracking event'
+      })
     }
 
     return {
       success: true,
-      data: transformedOrder
+      data: trackingEvent
     }
   } catch (error: any) {
     if (error.statusCode) {
       throw error
     }
 
-    console.error('Order fetch error:', error)
+    console.error('Tracking event creation error:', error)
     throw createError({
       statusCode: 500,
       statusMessage: 'Internal server error'

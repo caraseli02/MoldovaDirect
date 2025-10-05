@@ -1,5 +1,6 @@
-// GET /api/orders/[id] - Get specific order details
+// POST /api/orders/[id]/sync-tracking - Sync tracking from carrier API (admin only)
 import { createClient } from '@supabase/supabase-js'
+import { syncCarrierTracking } from '~/server/utils/carrierTracking'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -28,6 +29,20 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    // Check if user is admin
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single()
+
+    if (profileError || profile?.role !== 'admin') {
+      throw createError({
+        statusCode: 403,
+        statusMessage: 'Admin access required'
+      })
+    }
+
     // Get order ID from route params
     const orderId = getRouterParam(event, 'id')
     if (!orderId) {
@@ -37,22 +52,11 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // Fetch order with all details
+    // Get order with tracking info
     const { data: order, error: orderError } = await supabase
       .from('orders')
-      .select(`
-        *,
-        order_items (
-          id,
-          product_id,
-          product_snapshot,
-          quantity,
-          price_eur,
-          total_eur
-        )
-      `)
+      .select('id, order_number, tracking_number, carrier')
       .eq('id', orderId)
-      .eq('user_id', user.id)
       .single()
 
     if (orderError) {
@@ -68,51 +72,53 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // Fetch tracking events for this order
-    const { data: trackingEvents, error: trackingError } = await supabase
+    // Validate tracking info exists
+    if (!order.tracking_number || !order.carrier) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: 'Order does not have tracking information'
+      })
+    }
+
+    // Sync tracking from carrier
+    const success = await syncCarrierTracking(
+      parseInt(orderId),
+      order.tracking_number,
+      order.carrier,
+      supabase
+    )
+
+    if (!success) {
+      throw createError({
+        statusCode: 503,
+        statusMessage: 'Failed to sync tracking from carrier'
+      })
+    }
+
+    // Fetch updated tracking events
+    const { data: trackingEvents } = await supabase
       .from('order_tracking_events')
       .select('*')
       .eq('order_id', orderId)
       .order('timestamp', { ascending: false })
 
-    // Transform order_items to items and convert snake_case to camelCase
-    const transformedOrder = {
-      id: order.id,
-      orderNumber: order.order_number,
-      userId: order.user_id,
-      status: order.status,
-      paymentMethod: order.payment_method,
-      paymentStatus: order.payment_status,
-      paymentIntentId: order.payment_intent_id,
-      subtotalEur: order.subtotal_eur,
-      shippingCostEur: order.shipping_cost_eur,
-      taxEur: order.tax_eur,
-      totalEur: order.total_eur,
-      shippingAddress: order.shipping_address,
-      billingAddress: order.billing_address,
-      customerNotes: order.customer_notes,
-      adminNotes: order.admin_notes,
-      trackingNumber: order.tracking_number,
-      carrier: order.carrier,
-      estimatedDelivery: order.estimated_delivery,
-      shippedAt: order.shipped_at,
-      deliveredAt: order.delivered_at,
-      createdAt: order.created_at,
-      updatedAt: order.updated_at,
-      items: order.order_items || [],
-      tracking_events: trackingEvents || []
-    }
-
     return {
       success: true,
-      data: transformedOrder
+      data: {
+        orderId: order.id,
+        orderNumber: order.order_number,
+        trackingNumber: order.tracking_number,
+        carrier: order.carrier,
+        events: trackingEvents || [],
+        syncedAt: new Date().toISOString()
+      }
     }
   } catch (error: any) {
     if (error.statusCode) {
       throw error
     }
 
-    console.error('Order fetch error:', error)
+    console.error('Tracking sync error:', error)
     throw createError({
       statusCode: 500,
       statusMessage: 'Internal server error'
