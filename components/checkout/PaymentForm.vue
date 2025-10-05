@@ -345,7 +345,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, onMounted } from 'vue'
 import { useToast } from '~/composables/useToast'
 import type { PaymentMethod } from '~/stores/checkout'
 
@@ -632,35 +632,44 @@ const updatePaymentMethod = () => {
 // WATCHERS
 // =============================================
 
-// Initialize form data when payment method changes
+// Initialize form data when payment method changes (one-way sync only)
 watch(() => props.modelValue, (newMethod) => {
   if (newMethod.type === 'cash') {
-    // Cash payment is ready immediately
-    updatePaymentMethod()
+    // Cash payment is ready immediately - no need to update
   } else if (newMethod.type === 'credit_card' && newMethod.creditCard) {
-    creditCardData.value = { ...newMethod.creditCard }
+    // Only update if different to avoid triggering updates
+    const currentNumber = creditCardData.value.number.replace(/\s/g, '')
+    const newNumber = newMethod.creditCard.number.replace(/\s/g, '')
     
-    // Update expiry display
-    if (newMethod.creditCard.expiryMonth && newMethod.creditCard.expiryYear) {
-      expiryDisplay.value = `${newMethod.creditCard.expiryMonth}/${newMethod.creditCard.expiryYear}`
+    if (currentNumber !== newNumber || 
+        creditCardData.value.expiryMonth !== newMethod.creditCard.expiryMonth ||
+        creditCardData.value.expiryYear !== newMethod.creditCard.expiryYear ||
+        creditCardData.value.cvv !== newMethod.creditCard.cvv ||
+        creditCardData.value.holderName !== newMethod.creditCard.holderName) {
+      
+      creditCardData.value = { ...newMethod.creditCard }
+      
+      // Update expiry display
+      if (newMethod.creditCard.expiryMonth && newMethod.creditCard.expiryYear) {
+        expiryDisplay.value = `${newMethod.creditCard.expiryMonth}/${newMethod.creditCard.expiryYear}`
+      }
+      
+      // Detect card brand
+      cardBrand.value = detectCardBrand(newNumber)
     }
-    
-    // Detect card brand
-    cardBrand.value = detectCardBrand(newMethod.creditCard.number.replace(/\s/g, ''))
   } else if (newMethod.type === 'paypal' && newMethod.paypal) {
-    paypalData.value = { ...newMethod.paypal }
+    if (paypalData.value.email !== newMethod.paypal.email) {
+      paypalData.value = { ...newMethod.paypal }
+    }
   }
-}, { immediate: true, deep: true })
+}, { immediate: true })
 
-// Update payment method when form data changes
-watch([creditCardData, paypalData], () => {
-  updatePaymentMethod()
-}, { deep: true })
-
-// Initialize cash or bank transfer
-if (props.modelValue.type === 'cash' || props.modelValue.type === 'bank_transfer') {
-  updatePaymentMethod()
-}
+// Initialize cash or bank transfer on mount
+onMounted(() => {
+  if (props.modelValue.type === 'cash' || props.modelValue.type === 'bank_transfer') {
+    updatePaymentMethod()
+  }
+})
 </script>
 
 <style scoped>

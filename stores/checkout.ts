@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
 import { useToastStore } from './toast'
+import { useCartStore } from './cart'
+import { useAuthStore } from './auth'
 import { useStoreI18n } from '~/composables/useStoreI18n'
 
 // =============================================
@@ -694,6 +696,7 @@ export const useCheckoutStore = defineStore('checkout', {
       try {
         let paymentResult
 
+        // Process payment based on selected method
         if (this.paymentMethod.type === 'cash') {
           paymentResult = await this.processCashPayment()
         } else if (this.paymentMethod.type === 'credit_card') {
@@ -702,14 +705,20 @@ export const useCheckoutStore = defineStore('checkout', {
           paymentResult = await this.processPayPalPayment()
         } else if (this.paymentMethod.type === 'bank_transfer') {
           paymentResult = await this.processBankTransferPayment()
+        } else {
+          throw new Error('Invalid payment method')
         }
 
-        if (paymentResult?.success) {
-          await this.createOrder(paymentResult)
-          await this.completeCheckout()
-        } else {
+        // Check if payment was successful
+        if (!paymentResult?.success) {
           throw new Error(paymentResult?.error || 'Payment processing failed')
         }
+
+        // Create order with payment result
+        await this.createOrder(paymentResult)
+        
+        // Complete checkout process
+        await this.completeCheckout()
 
       } catch (error) {
         this.handleError({
@@ -736,21 +745,63 @@ export const useCheckoutStore = defineStore('checkout', {
     },
 
     async processCreditCardPayment(): Promise<any> {
-      // This would integrate with Stripe or other payment processor
-      // For now, return a mock success response
-      return {
-        success: true,
-        transactionId: 'txn_' + Date.now(),
-        paymentMethod: 'credit_card'
+      try {
+        if (!this.paymentIntent || !this.paymentClientSecret) {
+          throw new Error('Payment intent not initialized')
+        }
+
+        // Confirm payment with Stripe
+        const response = await $fetch('/api/checkout/confirm-payment', {
+          method: 'POST',
+          body: {
+            paymentIntentId: this.paymentIntent,
+            sessionId: this.sessionId
+          }
+        })
+
+        if (response.success && response.paymentIntent.status === 'succeeded') {
+          return {
+            success: true,
+            transactionId: response.paymentIntent.id,
+            paymentMethod: 'credit_card',
+            status: 'completed',
+            charges: response.paymentIntent.charges
+          }
+        } else if (response.requiresAction) {
+          // Payment requires additional action (3D Secure, etc.)
+          throw new Error('Payment requires additional authentication')
+        } else {
+          throw new Error(response.error || 'Payment failed')
+        }
+      } catch (error) {
+        console.error('Credit card payment failed:', error)
+        return {
+          success: false,
+          error: error instanceof Error ? error.message : 'Payment processing failed',
+          paymentMethod: 'credit_card'
+        }
       }
     },
 
     async processPayPalPayment(): Promise<any> {
-      // This would integrate with PayPal
-      return {
-        success: true,
-        transactionId: 'pp_' + Date.now(),
-        paymentMethod: 'paypal'
+      try {
+        // In a real implementation, this would integrate with PayPal SDK
+        // For now, we'll simulate a successful PayPal payment
+        // The actual PayPal integration would happen client-side with the PayPal SDK
+        
+        return {
+          success: true,
+          transactionId: 'pp_' + Date.now(),
+          paymentMethod: 'paypal',
+          status: 'completed'
+        }
+      } catch (error) {
+        console.error('PayPal payment failed:', error)
+        return {
+          success: false,
+          error: error instanceof Error ? error.message : 'PayPal payment failed',
+          paymentMethod: 'paypal'
+        }
       }
     },
 
@@ -799,8 +850,8 @@ export const useCheckoutStore = defineStore('checkout', {
 
     async completeCheckout(): Promise<void> {
       try {
-        // Clear cart (would integrate with cart store)
-        // await cartStore.clearCart()
+        // Clear cart after successful order
+        await this.clearCart()
 
         // Send confirmation email
         await this.sendConfirmationEmail()
@@ -819,6 +870,24 @@ export const useCheckoutStore = defineStore('checkout', {
       } catch (error) {
         console.error('Failed to complete checkout:', error)
         // Don't throw here as payment was successful
+      }
+    },
+
+    async clearCart(): Promise<void> {
+      try {
+        // Clear cart items from database
+        const response = await $fetch('/api/cart/clear', {
+          method: 'POST'
+        })
+
+        if (response.success) {
+          // Clear cart state in store
+          const cartStore = useCartStore()
+          await cartStore.clearCart()
+        }
+      } catch (error) {
+        console.error('Failed to clear cart:', error)
+        // Don't throw - cart clearing failure shouldn't block order completion
       }
     },
 
