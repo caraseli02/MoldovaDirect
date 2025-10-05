@@ -575,6 +575,7 @@
       "removeSavedFailed": "Error al eliminar",
       "removeSavedFailedDetails": "No se pudo eliminar el producto guardado",
       "tryAgain": "Por favor, inténtalo de nuevo",
+      "checkoutFailed": "Error al proceder al checkout. Por favor, inténtalo de nuevo.",
       "boundary": {
         "title": "Error en el carrito",
         "message": "Ha ocurrido un error inesperado. Puedes intentar recargar o continuar comprando.",
@@ -706,6 +707,31 @@
     "orderReview": {
       "title": "Resumen del Pedido",
       "placeholder": "La revisión del pedido se implementará en la siguiente tarea"
+    },
+    "review": {
+      "cartItems": "Artículos del Carrito",
+      "editCart": "Editar Carrito",
+      "shippingInfo": "Información de Envío",
+      "editShipping": "Editar Envío",
+      "shippingAddress": "Dirección de Envío",
+      "shippingMethod": "Método de Envío",
+      "deliveryInstructions": "Instrucciones de Entrega",
+      "paymentMethod": "Método de Pago",
+      "editPayment": "Editar Pago"
+    },
+    "freeShipping": "Gratis",
+    "processing": "Procesando...",
+    "continueToTerms": "Continuar para Realizar Pedido",
+    "terms": {
+      "title": "Términos y Condiciones",
+      "acceptTerms": "Acepto los",
+      "termsAndConditions": "Términos y Condiciones",
+      "privacyPolicy": "Política de Privacidad",
+      "acceptPrivacy": "Consiento el procesamiento de mis datos personales como se describe en la Política de Privacidad",
+      "marketingConsent": "Me gustaría recibir comunicaciones de marketing y ofertas especiales",
+      "marketingDescription": "Puedes darte de baja en cualquier momento. Respetamos tu privacidad.",
+      "termsRequired": "Debes aceptar los Términos y Condiciones para continuar",
+      "privacyRequired": "Debes aceptar la Política de Privacidad para continuar"
     },
     "success": {
       "shippingUpdated": "Envío Actualizado",

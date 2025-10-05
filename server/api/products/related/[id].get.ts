@@ -158,7 +158,7 @@ export default defineEventHandler(async (event) => {
         altText: img.alt || img.alt_text || getLocalizedContent(product.name_translations, locale),
         isPrimary: img.is_primary || index === 0
       })) : [],
-      primaryImage: product.images?.[0]?.url || product.images?.[0] || '/placeholder-product.jpg',
+      primaryImage: product.images?.[0]?.url || product.images?.[0] || '/placeholder-product.svg',
       category: {
         id: product.categories.id,
         slug: product.categories.slug,
@@ -232,7 +232,7 @@ export default defineEventHandler(async (event) => {
         stockQuantity: product.stock_quantity,
         stockStatus: product.stock_quantity > 5 ? 'in_stock' : 
                      product.stock_quantity > 0 ? 'low_stock' : 'out_of_stock',
-        primaryImage: product.images?.[0]?.url || product.images?.[0] || '/placeholder-product.jpg',
+        primaryImage: product.images?.[0]?.url || product.images?.[0] || '/placeholder-product.svg',
         category: {
           id: product.categories.id,
           slug: product.categories.slug,

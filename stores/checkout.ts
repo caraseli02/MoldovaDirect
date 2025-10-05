@@ -145,6 +145,11 @@ interface CheckoutState {
   // Available options
   availableShippingMethods: ShippingMethod[]
   availableCountries: string[]
+  
+  // Terms and conditions
+  termsAccepted: boolean
+  privacyAccepted: boolean
+  marketingConsent: boolean
 }
 
 // =============================================
@@ -188,7 +193,12 @@ export const useCheckoutStore = defineStore('checkout', {
     
     // Available options
     availableShippingMethods: [],
-    availableCountries: ['ES', 'RO', 'MD', 'FR', 'DE', 'IT']
+    availableCountries: ['ES', 'RO', 'MD', 'FR', 'DE', 'IT'],
+    
+    // Terms and conditions
+    termsAccepted: false,
+    privacyAccepted: false,
+    marketingConsent: false
   }),
 
   getters: {
@@ -303,6 +313,33 @@ export const useCheckoutStore = defineStore('checkout', {
     },
 
     async calculateOrderData(cartItems: any[]): Promise<void> {
+      // Use mock data for development if cart is empty
+      if (cartItems.length === 0 && process.env.NODE_ENV === 'development') {
+        const mockItems = [
+          {
+            product: {
+              id: '1',
+              name: 'Moldovan Wine - Cabernet Sauvignon',
+              price: 25.99,
+              images: ['/placeholder-product.jpg'],
+              stock: 10
+            },
+            quantity: 2
+          },
+          {
+            product: {
+              id: '2', 
+              name: 'Traditional Moldovan Honey',
+              price: 15.50,
+              images: ['/placeholder-product.jpg'],
+              stock: 5
+            },
+            quantity: 1
+          }
+        ]
+        cartItems = mockItems
+      }
+
       const subtotal = cartItems.reduce((sum, item) => sum + (item.product.price * item.quantity), 0)
       
       // Calculate shipping cost (will be updated when shipping method is selected)
@@ -343,7 +380,7 @@ export const useCheckoutStore = defineStore('checkout', {
       this.saveToStorage()
     },
 
-    async proceedToNextStep(): Promise<void> {
+    async proceedToNextStep(): Promise<CheckoutStep | null> {
       const steps: CheckoutStep[] = ['shipping', 'payment', 'review', 'confirmation']
       const currentIndex = steps.indexOf(this.currentStep)
       
@@ -352,7 +389,7 @@ export const useCheckoutStore = defineStore('checkout', {
         
         // Validate current step
         if (!this.validateCurrentStep()) {
-          return
+          return null
         }
 
         // Perform step-specific actions
@@ -364,19 +401,25 @@ export const useCheckoutStore = defineStore('checkout', {
           await this.processPayment()
         }
 
-        this.currentStep = nextStep
-        this.saveToStorage()
+        // Return the next step for the component to navigate to
+        // Don't update currentStep here - let the middleware handle it via URL navigation
+        return nextStep
       }
+      
+      return null
     },
 
-    goToPreviousStep(): void {
+    goToPreviousStep(): CheckoutStep | null {
       const steps: CheckoutStep[] = ['shipping', 'payment', 'review', 'confirmation']
       const currentIndex = steps.indexOf(this.currentStep)
       
       if (currentIndex > 0) {
-        this.currentStep = steps[currentIndex - 1]
-        this.saveToStorage()
+        // Return the previous step for the component to navigate to
+        // Don't update currentStep here - let the middleware handle it via URL navigation
+        return steps[currentIndex - 1]
       }
+      
+      return null
     },
 
     // =============================================
@@ -979,7 +1022,10 @@ export const useCheckoutStore = defineStore('checkout', {
           } : null,
           orderData: this.orderData,
           sessionExpiresAt: this.sessionExpiresAt,
-          lastSyncAt: new Date()
+          lastSyncAt: new Date(),
+          termsAccepted: this.termsAccepted,
+          privacyAccepted: this.privacyAccepted,
+          marketingConsent: this.marketingConsent
         }
 
         localStorage.setItem('checkout_session', JSON.stringify(checkoutData))
@@ -1011,6 +1057,9 @@ export const useCheckoutStore = defineStore('checkout', {
         this.orderData = checkoutData.orderData
         this.sessionExpiresAt = checkoutData.sessionExpiresAt ? new Date(checkoutData.sessionExpiresAt) : null
         this.lastSyncAt = checkoutData.lastSyncAt ? new Date(checkoutData.lastSyncAt) : null
+        this.termsAccepted = checkoutData.termsAccepted || false
+        this.privacyAccepted = checkoutData.privacyAccepted || false
+        this.marketingConsent = checkoutData.marketingConsent || false
 
       } catch (error) {
         console.error('Failed to load checkout session:', error)
@@ -1044,6 +1093,9 @@ export const useCheckoutStore = defineStore('checkout', {
       this.lastSyncAt = null
       this.validationErrors = {}
       this.isValid = false
+      this.termsAccepted = false
+      this.privacyAccepted = false
+      this.marketingConsent = false
 
       // Clear storage
       this.clearStorage()

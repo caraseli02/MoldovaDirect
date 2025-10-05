@@ -136,7 +136,7 @@ export default defineEventHandler(async (event) => {
         altText: img.alt || img.alt_text || product.name_translations,
         isPrimary: img.is_primary || index === 0
       })) : [],
-      primaryImage: product.images?.[0]?.url || product.images?.[0] || '/placeholder-product.jpg',
+      primaryImage: product.images?.[0]?.url || product.images?.[0] || '/placeholder-product.svg',
       category: {
         id: product.categories.id,
         slug: product.categories.slug,

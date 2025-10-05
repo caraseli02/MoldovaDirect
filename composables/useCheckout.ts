@@ -84,20 +84,21 @@ export function useCheckout(): UseCheckoutReturn {
     }
   }
 
-  const nextStep = async (): Promise<void> => {
+  const nextStep = async (): Promise<CheckoutStep | null> => {
     try {
-      await store.proceedToNextStep()
+      return await store.proceedToNextStep()
     } catch (error) {
       handleError(error)
       throw error
     }
   }
 
-  const previousStep = (): void => {
+  const previousStep = (): CheckoutStep | null => {
     try {
-      store.goToPreviousStep()
+      return store.goToPreviousStep()
     } catch (error) {
       handleError(error)
+      return null
     }
   }
 

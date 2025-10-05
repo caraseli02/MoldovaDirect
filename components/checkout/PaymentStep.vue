@@ -281,6 +281,7 @@ import PaymentForm from './PaymentForm.vue'
 
 const checkoutStore = useCheckoutStore()
 const authStore = useAuthStore()
+const localePath = useLocalePath()
 
 // =============================================
 // REACTIVE STATE
@@ -415,8 +416,13 @@ const getPaymentMethodDescription = (savedMethod: SavedPaymentMethod) => {
   return ''
 }
 
-const goBack = () => {
-  checkoutStore.goToPreviousStep()
+const goBack = async () => {
+  const previousStep = checkoutStore.goToPreviousStep()
+  if (previousStep) {
+    const localePath = useLocalePath()
+    const stepPath = previousStep === 'shipping' ? '/checkout' : `/checkout/${previousStep}`
+    await navigateTo(localePath(stepPath))
+  }
 }
 
 const proceedToReview = async () => {
@@ -438,7 +444,14 @@ const proceedToReview = async () => {
     }
 
     await checkoutStore.updatePaymentMethod(methodToSave)
-    await checkoutStore.proceedToNextStep()
+    
+    // Get the next step and navigate to it
+    const nextStep = await checkoutStore.proceedToNextStep()
+    if (nextStep) {
+      const localePath = useLocalePath()
+      const stepPath = nextStep === 'shipping' ? '/checkout' : `/checkout/${nextStep}`
+      await navigateTo(localePath(stepPath))
+    }
   } catch (error) {
     console.error('Failed to proceed to review:', error)
   }
@@ -463,12 +476,15 @@ watch(savedPaymentMethods, (newMethods) => {
 
 <style scoped>
 .payment-step {
-  @apply max-w-2xl mx-auto;
+  max-width: 42rem;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Custom radio button styling */
 input[type="radio"]:checked {
-  @apply bg-blue-600 border-blue-600;
+  background-color: rgb(37, 99, 235);
+  border-color: rgb(37, 99, 235);
 }
 
 /* Loading animation */

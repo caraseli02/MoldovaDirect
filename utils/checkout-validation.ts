@@ -373,7 +373,7 @@ function validateCreditCard(creditCard?: PaymentMethod['creditCard']): CheckoutV
 }
 
 function validatePayPal(paypal?: PaymentMethod['paypal']): CheckoutValidationResult {
-  const errors: ValidationError[] = []
+  const errors: CheckoutValidationError[] = []
   const warnings: ValidationWarning[] = []
 
   if (!paypal) {
@@ -409,8 +409,8 @@ function validatePayPal(paypal?: PaymentMethod['paypal']): CheckoutValidationRes
   }
 }
 
-function validateBankTransfer(bankTransfer?: PaymentMethod['bankTransfer']): ValidationResult {
-  const errors: ValidationError[] = []
+function validateBankTransfer(bankTransfer?: PaymentMethod['bankTransfer']): CheckoutValidationResult {
+  const errors: CheckoutValidationError[] = []
   const warnings: ValidationWarning[] = []
 
   // Bank transfer validation is minimal as it's processed manually
@@ -445,8 +445,8 @@ function validateBankTransfer(bankTransfer?: PaymentMethod['bankTransfer']): Val
 // SHIPPING INFORMATION VALIDATION
 // =============================================
 
-export function validateShippingInformation(shippingInfo: Partial<ShippingInformation>): ValidationResult {
-  const errors: ValidationError[] = []
+export function validateShippingInformation(shippingInfo: Partial<ShippingInformation>): CheckoutValidationResult {
+  const errors: CheckoutValidationError[] = []
   const warnings: ValidationWarning[] = []
 
   // Validate address
@@ -594,8 +594,8 @@ export function getCardBrand(cardNumber: string): string {
 export function validateCheckoutData(data: {
   shippingInfo?: Partial<ShippingInformation>
   paymentMethod?: Partial<PaymentMethod>
-}): ValidationResult {
-  const errors: ValidationError[] = []
+}): CheckoutValidationResult {
+  const errors: CheckoutValidationError[] = []
   const warnings: ValidationWarning[] = []
 
   if (data.shippingInfo) {

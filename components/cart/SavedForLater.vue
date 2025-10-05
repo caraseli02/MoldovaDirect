@@ -14,7 +14,7 @@
           <!-- Product Image -->
           <div class="flex-shrink-0">
             <NuxtImg
-              :src="item.product.images?.[0] || '/placeholder-product.jpg'"
+              :src="item.product.images?.[0] || '/placeholder-product.svg'"
               :alt="item.product.name"
               class="w-12 h-12 object-cover rounded-lg"
               loading="lazy"

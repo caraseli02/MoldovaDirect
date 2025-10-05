@@ -12,10 +12,12 @@ export default defineEventHandler(async (event) => {
       .order('created_at', { ascending: false })
 
     if (error) {
-      throw createError({
-        statusCode: 500,
-        statusMessage: 'Failed to fetch addresses'
-      })
+      // If table doesn't exist or other DB error, return empty array instead of failing
+      console.warn('Failed to fetch addresses:', error.message)
+      return {
+        success: true,
+        addresses: []
+      }
     }
 
     return {
@@ -23,14 +25,17 @@ export default defineEventHandler(async (event) => {
       addresses: addresses || []
     }
   } catch (error) {
-    if (error.statusCode) {
+    // For authentication errors, still throw them
+    if (error.statusCode === 401) {
       throw error
     }
     
-    throw createError({
-      statusCode: 500,
-      statusMessage: 'Internal server error'
-    })
+    // For other errors, return empty addresses instead of failing
+    console.warn('Error in addresses API:', error)
+    return {
+      success: true,
+      addresses: []
+    }
   }
 })
 

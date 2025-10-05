@@ -128,9 +128,9 @@ describe('Checkout Store', () => {
       store.shippingInfo = shippingInfo
       store.currentStep = 'shipping'
 
-      await store.proceedToNextStep()
+      const nextStep = await store.proceedToNextStep()
 
-      expect(store.currentStep).toBe('payment')
+      expect(nextStep).toBe('payment')
     })
 
     it('should not navigate if validation fails', () => {
@@ -148,9 +148,9 @@ describe('Checkout Store', () => {
       const store = useCheckoutStore()
       store.currentStep = 'payment'
 
-      store.goToPreviousStep()
+      const previousStep = store.goToPreviousStep()
 
-      expect(store.currentStep).toBe('shipping')
+      expect(previousStep).toBe('shipping')
     })
   })
 

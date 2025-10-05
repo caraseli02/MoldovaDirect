@@ -9,18 +9,21 @@
 ### Completed Foundation (Tasks 1-5) ✅
 
 - [x] 1. Set up database schema and API foundations
+
   - ✅ Database migrations for orders, order_items, and payment_methods tables
   - ✅ Server-side API endpoints for order management (`/api/orders/`, `/api/checkout/`)
   - ✅ Database indexes and constraints for performance and data integrity
   - _Requirements: 1.1, 2.7, 3.7, 4.6, 5.6_
 
 - [x] 2. Create core checkout store and state management
+
   - ✅ CheckoutStore using Pinia with comprehensive state management
   - ✅ Checkout session management with localStorage persistence
   - ✅ Checkout validation utilities and error handling
   - _Requirements: 1.1, 1.4, 7.1, 7.2_
 
 - [x] 3. Build checkout layout and navigation system
+
   - ✅ CheckoutLayout.vue component with step navigation
   - ✅ Checkout progress indicator component
   - ✅ Mobile-responsive checkout header and navigation
@@ -28,6 +31,7 @@
   - _Requirements: 1.1, 1.2, 6.1, 6.5_
 
 - [x] 4. Implement shipping information step
+
   - ✅ ShippingStep.vue component with address form
   - ✅ AddressForm.vue reusable component with validation
   - ✅ Saved addresses functionality for authenticated users
@@ -47,60 +51,70 @@
 
 ### Immediate Tasks - Complete Checkout Flow (This Week)
 
-- [ ] 6. Complete Order Review Step (2-3 days)
-  - [ ] 6.1 Implement ReviewStep.vue with complete order summary display
+- [x] 6. Complete Order Review Step (2-3 days)
+
+  - [x] 6.1 Implement ReviewStep.vue with complete order summary display
+
     - Show cart items with quantities, prices, and totals
     - Display shipping address and selected shipping method
     - Show payment method selection
     - Calculate and display subtotal, shipping, tax, and total
     - _Requirements: 4.1, 4.2_
-  
-  - [ ] 6.2 Add edit functionality linking back to previous steps
+
+  - [x] 6.2 Add edit functionality linking back to previous steps
+
     - Edit cart items link
-    - Edit shipping address link  
+    - Edit shipping address link
     - Edit payment method link
     - _Requirements: 4.3_
-  
-  - [ ] 6.3 Implement terms and conditions acceptance
+
+  - [x] 6.3 Implement terms and conditions acceptance
+
     - Terms checkbox with validation
     - Privacy policy acceptance
     - _Requirements: 4.4_
-  
-  - [ ] 6.4 Add order processing trigger
+
+  - [x] 6.4 Add order processing trigger
     - Place order button with loading states
     - Order validation before processing
     - _Requirements: 4.4, 4.5, 4.6_
 
 - [ ] 7. Complete Order Confirmation Step (1-2 days)
+
   - [ ] 7.1 Implement ConfirmationStep.vue with order success display
+
     - Order confirmation message with order number
     - Order details summary
     - Estimated delivery information
     - _Requirements: 5.1, 5.3_
-  
+
   - [ ] 7.2 Add order tracking and next steps
+
     - Order tracking link (if available)
     - Continue shopping button
     - Account orders link for authenticated users
     - _Requirements: 5.6_
-  
+
   - [ ] 7.3 Implement cart clearing after successful order
     - Clear cart items from database
     - Clear cart state in store
     - _Requirements: 5.4_
 
 - [ ] 8. Complete Order Processing Logic (1-2 days)
+
   - [ ] 8.1 Connect payment processing to order creation
+
     - Integrate checkout store processPayment() with order creation API
     - Handle payment success/failure scenarios
     - Update order status based on payment result
     - _Requirements: 4.5, 4.6_
-  
+
   - [ ] 8.2 Implement inventory updates on order completion
+
     - Reduce product quantities when order is placed
     - Handle out-of-stock scenarios during checkout
     - _Requirements: 5.5_
-  
+
   - [ ] 8.3 Add order confirmation email system
     - Send confirmation email after successful order
     - Include order details and tracking information
@@ -110,18 +124,21 @@
 ### Future Enhancements (Post-MVP)
 
 - [ ] 9. Enhanced mobile experience and accessibility
+
   - Mobile-optimized layouts and touch interactions
   - WCAG 2.1 AA compliance
   - Screen reader support and keyboard navigation
   - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5, 6.6_
 
 - [ ] 10. Advanced security and validation
+
   - Enhanced fraud detection
   - PCI DSS compliance validation
   - Advanced input sanitization
   - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5, 7.6_
 
 - [ ] 11. Comprehensive testing and monitoring
+
   - Unit tests for checkout components
   - Integration tests for payment flows
   - End-to-end checkout testing
@@ -136,14 +153,16 @@
   - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5_
 
 ### Files to Work On (Immediate Tasks):
+
 - `pages/checkout/review.vue` - Order review and final confirmation
-- `pages/checkout/confirmation.vue` - Order success page  
+- `pages/checkout/confirmation.vue` - Order success page
 - `stores/checkout.ts` - Connect order processing methods to UI
 - `server/api/orders/create.post.ts` - Enhance order creation endpoint
 - Email templates and notification system
 
 ### To Enable Online Payments (Future):
+
 1. Update environment variables with live payment credentials
-2. Modify PaymentStep.vue to enable online payment method selection  
+2. Modify PaymentStep.vue to enable online payment method selection
 3. Test payment flows in production environment
 4. Activate payment method UI components

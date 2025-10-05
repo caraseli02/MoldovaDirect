@@ -156,7 +156,7 @@ export const useCartCache = () => {
       // Preload common product images
       const imageLink = document.createElement('link')
       imageLink.rel = 'prefetch'
-      imageLink.href = '/placeholder-product.jpg'
+      imageLink.href = '/placeholder-product.svg'
       document.head.appendChild(imageLink)
     } catch (error) {
       console.error('Failed to preload cart resources:', error)

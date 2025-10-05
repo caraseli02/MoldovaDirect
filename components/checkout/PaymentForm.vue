@@ -665,21 +665,36 @@ if (props.modelValue.type === 'cash' || props.modelValue.type === 'bank_transfer
 
 <style scoped>
 .payment-form {
-  @apply w-full;
+  width: 100%;
 }
 
 /* Custom input styling */
 input:focus {
-  @apply ring-2 ring-blue-500 ring-opacity-50;
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+  --tw-ring-opacity: 0.5;
+  --tw-ring-color: rgb(59 130 246 / var(--tw-ring-opacity));
 }
 
 /* Card brand icon positioning */
 .card-brand-icon {
-  @apply absolute right-3 top-1/2 transform -translate-y-1/2;
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 /* Security badge styling */
 .security-badge {
-  @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 500;
+  background-color: rgb(220 252 231);
+  color: rgb(22 101 52);
 }
 </style>

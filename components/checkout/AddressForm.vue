@@ -85,13 +85,14 @@
           </label>
           <input
             id="firstName"
-            v-model="localAddress.firstName"
+            :value="localAddress.firstName"
+            @input="updateField('firstName', ($event.target as HTMLInputElement).value)"
             type="text"
             :placeholder="$t('checkout.addressForm.firstNamePlaceholder')"
             class="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors"
             :class="getFieldClasses('firstName')"
             @blur="validateField('firstName')"
-            @input="clearFieldError('firstName')"
+            @focus="clearFieldError('firstName')"
           />
           <p v-if="fieldErrors.firstName" class="mt-1 text-sm text-red-600 dark:text-red-400">
             {{ fieldErrors.firstName }}
@@ -105,13 +106,14 @@
           </label>
           <input
             id="lastName"
-            v-model="localAddress.lastName"
+            :value="localAddress.lastName"
+            @input="updateField('lastName', ($event.target as HTMLInputElement).value)"
             type="text"
             :placeholder="$t('checkout.addressForm.lastNamePlaceholder')"
             class="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors"
             :class="getFieldClasses('lastName')"
             @blur="validateField('lastName')"
-            @input="clearFieldError('lastName')"
+            @focus="clearFieldError('lastName')"
           />
           <p v-if="fieldErrors.lastName" class="mt-1 text-sm text-red-600 dark:text-red-400">
             {{ fieldErrors.lastName }}
@@ -127,7 +129,8 @@
         </label>
         <input
           id="company"
-          v-model="localAddress.company"
+          :value="localAddress.company"
+          @input="updateField('company', ($event.target as HTMLInputElement).value)"
           type="text"
           :placeholder="$t('checkout.addressForm.companyPlaceholder')"
           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
@@ -142,13 +145,14 @@
         </label>
         <input
           id="street"
-          v-model="localAddress.street"
+          :value="localAddress.street"
+          @input="updateField('street', ($event.target as HTMLInputElement).value)"
           type="text"
           :placeholder="$t('checkout.addressForm.streetPlaceholder')"
           class="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors"
           :class="getFieldClasses('street')"
           @blur="validateField('street')"
-          @input="clearFieldError('street')"
+          @focus="clearFieldError('street')"
         />
         <p v-if="fieldErrors.street" class="mt-1 text-sm text-red-600 dark:text-red-400">
           {{ fieldErrors.street }}
@@ -164,13 +168,14 @@
           </label>
           <input
             id="city"
-            v-model="localAddress.city"
+            :value="localAddress.city"
+            @input="updateField('city', ($event.target as HTMLInputElement).value)"
             type="text"
             :placeholder="$t('checkout.addressForm.cityPlaceholder')"
             class="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors"
             :class="getFieldClasses('city')"
             @blur="validateField('city')"
-            @input="clearFieldError('city')"
+            @focus="clearFieldError('city')"
           />
           <p v-if="fieldErrors.city" class="mt-1 text-sm text-red-600 dark:text-red-400">
             {{ fieldErrors.city }}
@@ -184,13 +189,14 @@
           </label>
           <input
             id="postalCode"
-            v-model="localAddress.postalCode"
+            :value="localAddress.postalCode"
+            @input="updateField('postalCode', ($event.target as HTMLInputElement).value)"
             type="text"
             :placeholder="$t('checkout.addressForm.postalCodePlaceholder')"
             class="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors"
             :class="getFieldClasses('postalCode')"
             @blur="validateField('postalCode')"
-            @input="clearFieldError('postalCode')"
+            @focus="clearFieldError('postalCode')"
           />
           <p v-if="fieldErrors.postalCode" class="mt-1 text-sm text-red-600 dark:text-red-400">
             {{ fieldErrors.postalCode }}
@@ -204,7 +210,8 @@
           </label>
           <input
             id="province"
-            v-model="localAddress.province"
+            :value="localAddress.province"
+            @input="updateField('province', ($event.target as HTMLInputElement).value)"
             type="text"
             :placeholder="$t('checkout.addressForm.provincePlaceholder')"
             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
@@ -220,11 +227,11 @@
         </label>
         <select
           id="country"
-          v-model="localAddress.country"
+          :value="localAddress.country"
+          @change="updateField('country', ($event.target as HTMLSelectElement).value); clearFieldError('country')"
           class="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors"
           :class="getFieldClasses('country')"
           @blur="validateField('country')"
-          @change="clearFieldError('country')"
         >
           <option value="">{{ $t('checkout.addressForm.selectCountry') }}</option>
           <option
@@ -248,7 +255,8 @@
         </label>
         <input
           id="phone"
-          v-model="localAddress.phone"
+          :value="localAddress.phone"
+          @input="updateField('phone', ($event.target as HTMLInputElement).value)"
           type="tel"
           :placeholder="$t('checkout.addressForm.phonePlaceholder')"
           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
@@ -259,7 +267,8 @@
       <div v-if="showSaveOption && user" class="flex items-center space-x-2">
         <input
           id="saveAddress"
-          v-model="localAddress.saveForFuture"
+          :checked="localAddress.saveForFuture"
+          @change="updateField('saveForFuture', ($event.target as HTMLInputElement).checked)"
           type="checkbox"
           class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
         />
@@ -307,34 +316,33 @@ const emit = defineEmits<Emits>()
 
 // Composables
 const user = useSupabaseUser()
+const { t } = useI18n()
 
 // Local state
-const localAddress = ref<Address>({ ...props.modelValue })
 const selectedSavedAddressId = ref<number | null>(null)
 const fieldErrors = ref<Record<string, string>>({})
+
+// Use computed property with getter/setter to avoid circular watchers
+const localAddress = computed({
+  get: () => props.modelValue,
+  set: (value: Address) => {
+    emit('update:modelValue', value)
+  }
+})
 
 // Computed
 const showForm = computed(() => {
   return !props.savedAddresses?.length || selectedSavedAddressId.value === null
 })
 
-// Watchers
-watch(() => props.modelValue, (newValue) => {
-  localAddress.value = { ...newValue }
-}, { deep: true })
-
-watch(localAddress, (newValue) => {
-  emit('update:modelValue', { ...newValue })
-}, { deep: true })
-
 // Methods
 const selectSavedAddress = (address: Address) => {
-  localAddress.value = { ...address }
+  emit('update:modelValue', { ...address })
   clearAllErrors()
 }
 
 const useNewAddress = () => {
-  localAddress.value = {
+  emit('update:modelValue', {
     type: props.type,
     firstName: '',
     lastName: '',
@@ -345,8 +353,16 @@ const useNewAddress = () => {
     province: '',
     country: '',
     phone: ''
-  }
+  })
   clearAllErrors()
+}
+
+// Helper to update a single field
+const updateField = (field: keyof Address, value: any) => {
+  emit('update:modelValue', {
+    ...localAddress.value,
+    [field]: value
+  })
 }
 
 const validateField = (fieldName: string) => {
@@ -355,32 +371,32 @@ const validateField = (fieldName: string) => {
   switch (fieldName) {
     case 'firstName':
       if (!value || !value.toString().trim()) {
-        fieldErrors.value.firstName = 'First name is required'
+        fieldErrors.value.firstName = t('checkout.validation.firstNameRequired', 'First name is required')
       }
       break
     case 'lastName':
       if (!value || !value.toString().trim()) {
-        fieldErrors.value.lastName = 'Last name is required'
+        fieldErrors.value.lastName = t('checkout.validation.lastNameRequired', 'Last name is required')
       }
       break
     case 'street':
       if (!value || !value.toString().trim()) {
-        fieldErrors.value.street = 'Street address is required'
+        fieldErrors.value.street = t('checkout.validation.streetRequired', 'Street address is required')
       }
       break
     case 'city':
       if (!value || !value.toString().trim()) {
-        fieldErrors.value.city = 'City is required'
+        fieldErrors.value.city = t('checkout.validation.cityRequired', 'City is required')
       }
       break
     case 'postalCode':
       if (!value || !value.toString().trim()) {
-        fieldErrors.value.postalCode = 'Postal code is required'
+        fieldErrors.value.postalCode = t('checkout.validation.postalCodeRequired', 'Postal code is required')
       }
       break
     case 'country':
       if (!value || !value.toString().trim()) {
-        fieldErrors.value.country = 'Country is required'
+        fieldErrors.value.country = t('checkout.validation.countryRequired', 'Country is required')
       }
       break
   }
@@ -443,7 +459,7 @@ onMounted(() => {
 
 <style scoped>
 .address-form {
-  @apply w-full;
+  width: 100%;
 }
 
 /* Smooth transitions for form interactions */

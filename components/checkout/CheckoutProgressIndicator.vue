@@ -164,7 +164,7 @@ const getCurrentStepDescription = (): string => {
 
 <style scoped>
 .checkout-progress {
-  @apply w-full;
+  width: 100%;
 }
 
 /* Smooth transitions for progress changes */

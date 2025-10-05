@@ -189,7 +189,7 @@ export default defineEventHandler(async (event) => {
       stockStatus: product.stock_quantity > 5 ? 'in_stock' : 
                    product.stock_quantity > 0 ? 'low_stock' : 'out_of_stock',
       images: product.images || [],
-      primaryImage: product.images?.[0]?.url || '/placeholder-product.jpg',
+      primaryImage: product.images?.[0]?.url || '/placeholder-product.svg',
       category: {
         id: product.categories.id,
         slug: product.categories.slug,

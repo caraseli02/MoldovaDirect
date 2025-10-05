@@ -10,15 +10,15 @@
 
 import { z } from "zod";
 
-export interface ValidationError {
+export interface AuthValidationError {
   field: string;
   message: string;
   code: string;
 }
 
-export interface ValidationResult {
+export interface AuthValidationResult {
   isValid: boolean;
-  errors: ValidationError[];
+  errors: AuthValidationError[];
   fieldErrors: Record<string, string>;
 }
 
@@ -130,7 +130,7 @@ export const useAuthValidation = () => {
   const validateForm = <T>(
     schema: z.ZodSchema<T>,
     data: unknown
-  ): ValidationResult => {
+  ): AuthValidationResult => {
     try {
       schema.parse(data);
       return {
@@ -140,7 +140,7 @@ export const useAuthValidation = () => {
       };
     } catch (error) {
       if (error instanceof z.ZodError) {
-        const errors: ValidationError[] = [];
+        const errors: AuthValidationError[] = [];
         const fieldErrors: Record<string, string> = {};
 
         error.errors.forEach((err) => {
@@ -148,7 +148,7 @@ export const useAuthValidation = () => {
           const translationKey = err.message;
           const message = t(translationKey);
 
-          const validationError: ValidationError = {
+          const validationError: AuthValidationError = {
             field,
             message,
             code: err.code,
@@ -182,14 +182,14 @@ export const useAuthValidation = () => {
   /**
    * Real-time email validation
    */
-  const validateEmail = (email: string): ValidationResult => {
+  const validateEmail = (email: string): AuthValidationResult => {
     return validateForm(emailSchema, email);
   };
 
   /**
    * Real-time password validation with strength checking
    */
-  const validatePassword = (password: string): ValidationResult => {
+  const validatePassword = (password: string): AuthValidationResult => {
     return validateForm(passwordSchema, password);
   };
 
@@ -237,35 +237,35 @@ export const useAuthValidation = () => {
   /**
    * Validate registration form
    */
-  const validateRegistration = (data: unknown): ValidationResult => {
+  const validateRegistration = (data: unknown): AuthValidationResult => {
     return validateForm(registerSchema, data);
   };
 
   /**
    * Validate login form
    */
-  const validateLogin = (data: unknown): ValidationResult => {
+  const validateLogin = (data: unknown): AuthValidationResult => {
     return validateForm(loginSchema, data);
   };
 
   /**
    * Validate forgot password form
    */
-  const validateForgotPassword = (data: unknown): ValidationResult => {
+  const validateForgotPassword = (data: unknown): AuthValidationResult => {
     return validateForm(forgotPasswordSchema, data);
   };
 
   /**
    * Validate reset password form
    */
-  const validateResetPassword = (data: unknown): ValidationResult => {
+  const validateResetPassword = (data: unknown): AuthValidationResult => {
     return validateForm(resetPasswordSchema, data);
   };
 
   /**
    * Validate email verification
    */
-  const validateEmailVerification = (data: unknown): ValidationResult => {
+  const validateEmailVerification = (data: unknown): AuthValidationResult => {
     return validateForm(verifyEmailSchema, data);
   };
 
@@ -282,7 +282,7 @@ export const useAuthValidation = () => {
   /**
    * Validate terms acceptance
    */
-  const validateTermsAcceptance = (accepted: boolean): ValidationResult => {
+  const validateTermsAcceptance = (accepted: boolean): AuthValidationResult => {
     if (!accepted) {
       return {
         isValid: false,

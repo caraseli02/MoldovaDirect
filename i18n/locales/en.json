@@ -605,6 +605,7 @@
       "removeSavedFailed": "Failed to remove product",
       "removeSavedFailedDetails": "Could not remove saved product",
       "tryAgain": "Please try again",
+      "checkoutFailed": "Failed to proceed to checkout. Please try again.",
       "boundary": {
         "title": "Cart error",
         "message": "An unexpected error occurred. You can try reloading or continue shopping.",
@@ -745,6 +746,31 @@
     "orderReview": {
       "title": "Order Summary",
       "placeholder": "Order review will be implemented in the next task"
+    },
+    "review": {
+      "cartItems": "Cart Items",
+      "editCart": "Edit Cart",
+      "shippingInfo": "Shipping Information",
+      "editShipping": "Edit Shipping",
+      "shippingAddress": "Shipping Address",
+      "shippingMethod": "Shipping Method",
+      "deliveryInstructions": "Delivery Instructions",
+      "paymentMethod": "Payment Method",
+      "editPayment": "Edit Payment"
+    },
+    "freeShipping": "Free",
+    "processing": "Processing...",
+    "continueToTerms": "Continue to Place Order",
+    "terms": {
+      "title": "Terms and Conditions",
+      "acceptTerms": "I accept the",
+      "termsAndConditions": "Terms and Conditions",
+      "privacyPolicy": "Privacy Policy",
+      "acceptPrivacy": "I consent to the processing of my personal data as described in the Privacy Policy",
+      "marketingConsent": "I would like to receive marketing communications and special offers",
+      "marketingDescription": "You can unsubscribe at any time. We respect your privacy.",
+      "termsRequired": "You must accept the Terms and Conditions to continue",
+      "privacyRequired": "You must accept the Privacy Policy to continue"
     },
     "success": {
       "shippingUpdated": "Shipping Updated",

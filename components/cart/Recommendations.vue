@@ -39,7 +39,7 @@
           <!-- Product Image -->
           <div class="aspect-square mb-3">
             <NuxtImg
-              :src="recommendation.product.images?.[0] || '/placeholder-product.jpg'"
+              :src="recommendation.product.images?.[0] || '/placeholder-product.svg'"
               :alt="recommendation.product.name"
               class="w-full h-full object-cover rounded-lg"
               loading="lazy"

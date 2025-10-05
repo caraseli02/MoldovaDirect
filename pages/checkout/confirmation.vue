@@ -90,6 +90,6 @@ onMounted(() => {
 
 <style scoped>
 .checkout-page {
-  @apply min-h-[60vh];
+  min-height: 60vh;
 }
 </style>

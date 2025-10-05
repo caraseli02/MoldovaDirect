@@ -1,8 +1,14 @@
 <template>
-  <CheckoutShippingStep />
+  <div class="checkout-page">
+    <div class="p-6 md:p-8">
+      <ShippingStep />
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
+import ShippingStep from '~/components/checkout/ShippingStep.vue'
+
 // Layout
 definePageMeta({
   layout: 'checkout',
@@ -17,3 +23,9 @@ useHead({
   ]
 })
 </script>
+
+<style scoped>
+.checkout-page {
+  min-height: 60vh;
+}
+</style>
