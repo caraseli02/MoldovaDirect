@@ -7,44 +7,50 @@
           <span class="text-sm font-medium text-blue-900 dark:text-blue-100">
             {{ selectedCount }} {{ selectedCount === 1 ? 'product' : 'products' }} selected
           </span>
-          <button
+          <Button
             @click="clearSelection"
+            variant="link"
             class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
           >
             Clear selection
-          </button>
+          </Button>
         </div>
         <div class="flex items-center space-x-2">
-          <button
+          <Button
             @click="$emit('bulk-activate')"
             :disabled="bulkOperationInProgress"
-            class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-green-700 bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:text-green-100 dark:hover:bg-green-800 disabled:opacity-50"
+            size="sm"
+            class="text-green-700 bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:text-green-100 dark:hover:bg-green-800"
           >
             <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
             </svg>
             Activate
-          </button>
-          <button
+          </Button>
+          <Button
             @click="$emit('bulk-deactivate')"
             :disabled="bulkOperationInProgress"
-            class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-gray-700 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 disabled:opacity-50"
+            variant="secondary"
+            size="sm"
+            class="dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600"
           >
             <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728" />
             </svg>
             Deactivate
-          </button>
-          <button
+          </Button>
+          <Button
             @click="$emit('bulk-delete')"
             :disabled="bulkOperationInProgress"
-            class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-red-700 bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:text-red-100 dark:hover:bg-red-800 disabled:opacity-50"
+            variant="destructive"
+            size="sm"
+            class="bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:text-red-100 dark:hover:bg-red-800 text-red-700"
           >
             <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
             </svg>
             Delete
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -255,15 +261,17 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                 </svg>
               </nuxt-link>
-              <button
+              <Button
                 @click="$emit('delete-product', product.id)"
+                variant="ghost"
+                size="icon"
                 class="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
                 title="Delete Product"
               >
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                 </svg>
-              </button>
+              </Button>
             </td>
           </tr>
         </tbody>
@@ -273,6 +281,7 @@
 </template>
 
 <script setup lang="ts">
+import { Button } from '@/components/ui/button'
 import type { ProductWithRelations } from '~/types/database'
 
 interface Props {

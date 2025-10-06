@@ -88,19 +88,19 @@
             />
           </div>
           <div class="flex justify-end space-x-3">
-            <button
+            <Button
               @click="closeStockEditModal"
-              class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-600 rounded-md hover:bg-gray-200 dark:hover:bg-gray-500"
+              variant="outline"
             >
               Cancel
-            </button>
-            <button
+            </Button>
+            <Button
               @click="saveStockEdit"
               :disabled="stockEditModal.saving"
-              class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:opacity-50"
+              type="submit"
             >
               {{ stockEditModal.saving ? 'Saving...' : 'Save' }}
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -140,6 +140,7 @@
 </template>
 
 <script setup lang="ts">
+import { Button } from '@/components/ui/button'
 import type { CategoryWithChildren, ProductWithRelations } from '~/types/database'
 import { usePinia } from '#imports'
 definePageMeta({

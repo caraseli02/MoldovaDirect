@@ -131,8 +131,11 @@
       <div class="p-4">
         <!-- Expandable Summary -->
         <div class="mb-3">
-          <button @click="showMobileSummary = !showMobileSummary"
-            class="w-full flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
+          <Button
+            variant="ghost"
+            @click="showMobileSummary = !showMobileSummary"
+            class="w-full flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 p-2 h-auto"
+          >
             <span>{{ $t('common.orderSummary') }}</span>
             <div class="flex items-center space-x-2">
               <span class="font-semibold text-gray-900 dark:text-white">{{ formattedSubtotal }}</span>
@@ -141,7 +144,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
               </svg>
             </div>
-          </button>
+          </Button>
 
           <!-- Expanded Summary -->
           <div v-show="showMobileSummary" class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 space-y-2">

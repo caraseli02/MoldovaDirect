@@ -52,14 +52,16 @@
             </div>
           </div>
           
-          <button
+          <Button
             @click="$emit('close')"
+            variant="ghost"
+            size="icon"
             class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
           >
             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
-          </button>
+          </Button>
         </div>
 
         <!-- Error State -->
@@ -81,20 +83,23 @@
           </div>
           
           <div class="flex items-center space-x-2">
-            <button
+            <Button
               @click="$emit('retry')"
-              class="px-3 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-md hover:bg-red-200 dark:bg-red-900 dark:text-red-200 dark:hover:bg-red-800"
+              size="sm"
+              class="text-red-700 bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:text-red-200 dark:hover:bg-red-800"
             >
               Retry
-            </button>
-            <button
+            </Button>
+            <Button
               @click="$emit('close')"
+              variant="ghost"
+              size="icon"
               class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
             >
               <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -103,6 +108,8 @@
 </template>
 
 <script setup lang="ts">
+import { Button } from '@/components/ui/button'
+
 interface Props {
   show: boolean
   inProgress: boolean

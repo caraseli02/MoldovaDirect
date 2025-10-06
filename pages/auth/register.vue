@@ -170,10 +170,12 @@
                 >
                   {{ $t('auth.password') }}
                 </label>
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="icon"
                   @click="togglePasswordVisibility"
-                  class="absolute right-3 top-3.5 min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded-md transition-colors"
+                  class="absolute right-3 top-3.5"
                   :aria-label="showPassword ? $t('auth.accessibility.hidePassword') : $t('auth.accessibility.showPassword')"
                   :aria-pressed="showPassword"
                 >
@@ -184,7 +186,7 @@
                   <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>
                   </svg>
-                </button>
+                </Button>
                 
                 <!-- Password strength meter -->
                 <PasswordStrengthMeter 
@@ -233,10 +235,12 @@
                 >
                   {{ $t('auth.confirmPassword') }}
                 </label>
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="icon"
                   @click="toggleConfirmPasswordVisibility"
-                  class="absolute right-3 top-3.5 min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded-md transition-colors"
+                  class="absolute right-3 top-3.5"
                   :aria-label="showConfirmPassword ? $t('auth.accessibility.hidePassword') : $t('auth.accessibility.showPassword')"
                   :aria-pressed="showConfirmPassword"
                 >
@@ -247,7 +251,7 @@
                   <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>
                   </svg>
-                </button>
+                </Button>
                 
                 <div id="confirm-password-desc" class="sr-only">
                   {{ $t('auth.accessibility.confirmPasswordDescription') }}
@@ -307,19 +311,19 @@
             </div>
 
             <!-- Submit button with accessibility improvements -->
-            <button
+            <Button
               type="submit"
               :disabled="loading || !isFormValid"
-              class="relative w-full flex justify-center items-center py-4 px-4 min-h-[48px] border border-transparent text-base font-semibold rounded-xl text-white bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transform transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg"
+              class="relative w-full flex justify-center items-center py-4 px-4 min-h-[48px] text-base font-semibold rounded-xl shadow-lg"
               :aria-label="loading ? $t('auth.accessibility.creatingAccount') : $t('auth.accessibility.createAccountButton')"
               :aria-describedby="loading ? 'register-status' : undefined"
             >
-              <svg v-if="loading" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+              <svg v-if="loading" class="animate-spin -ml-1 mr-3 h-5 w-5" fill="none" viewBox="0 0 24 24" aria-hidden="true">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
               </svg>
               {{ loading ? $t('common.loading') : $t('auth.signUp') }}
-            </button>
+            </Button>
             <div v-if="loading" id="register-status" class="sr-only" aria-live="polite">
               {{ $t('auth.accessibility.processingRegistration') }}
             </div>
@@ -331,6 +335,8 @@
 </template>
 
 <script setup lang="ts">
+import { Button } from '@/components/ui/button'
+
 // Apply guest middleware - redirect authenticated users
 definePageMeta({
   middleware: 'guest'

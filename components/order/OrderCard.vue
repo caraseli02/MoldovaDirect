@@ -62,26 +62,29 @@
 
     <!-- Quick Actions -->
     <div v-if="showActions" class="flex space-x-2" role="group" aria-label="Order actions">
-      <button
+      <Button
         v-if="canReorder"
+        variant="outline"
         @click.stop="handleReorder"
         :aria-label="$t('orders.accessibility.reorderButton')"
         class="flex-1 px-3 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 border border-blue-600 dark:border-blue-400 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
       >
         {{ $t('orders.reorder') }}
-      </button>
-      <button
+      </Button>
+      <Button
+        variant="outline"
         @click.stop="handleViewDetails"
         :aria-label="$t('orders.accessibility.viewDetailsButton')"
         class="flex-1 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
       >
         {{ $t('orders.viewDetails') }}
-      </button>
+      </Button>
     </div>
   </article>
 </template>
 
 <script setup lang="ts">
+import { Button } from '@/components/ui/button'
 import type { OrderWithItems } from '~/types'
 
 interface Props {

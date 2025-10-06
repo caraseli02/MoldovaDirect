@@ -10,29 +10,35 @@
             {{ translatedMessage }}
           </div>
           <div v-if="showAction && actionText" class="mt-2">
-            <button
+            <Button
+              variant="link"
+              size="sm"
               @click="$emit('action')"
-              class="text-sm font-medium text-green-600 hover:text-green-500 dark:text-green-400 dark:hover:text-green-300 transition-colors"
+              class="text-sm font-medium text-green-600 hover:text-green-500 dark:text-green-400 dark:hover:text-green-300 transition-colors p-0 h-auto"
             >
               {{ actionText }}
-            </button>
+            </Button>
           </div>
         </div>
-        <button
+        <Button
           v-if="dismissible"
+          variant="ghost"
+          size="icon"
           @click="$emit('dismiss')"
           class="ml-2 text-green-400 hover:text-green-600 dark:hover:text-green-300 transition-colors"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
           </svg>
-        </button>
+        </Button>
       </div>
     </div>
   </Transition>
 </template>
 
 <script setup lang="ts">
+import { Button } from '@/components/ui/button'
+
 interface Props {
   message: string | null
   dismissible?: boolean

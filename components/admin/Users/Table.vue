@@ -41,14 +41,13 @@
         <Icon name="heroicons:exclamation-triangle" class="w-8 h-8 mx-auto mb-2" />
         {{ error }}
       </div>
-      <button
+      <Button
         @click="retry"
         @touchstart="isMobile && vibrate('tap')"
-        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-lg touch-manipulation active:scale-95"
         :class="{ 'min-h-[44px]': isMobile }"
       >
         {{ $t('admin.users.retry') }}
-      </button>
+      </Button>
     </div>
 
     <!-- Users Content -->
@@ -59,22 +58,24 @@
           <thead class="bg-gray-50 dark:bg-gray-700">
             <tr>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                <button
+                <Button
                   @click="updateSort('name')"
-                  class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-gray-300 touch-manipulation"
+                  variant="ghost"
+                  class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-gray-300 touch-manipulation h-auto p-0 font-normal"
                 >
                   {{ $t('admin.users.columns.user') }}
                   <Icon :name="getSortIcon('name')" class="w-4 h-4" />
-                </button>
+                </Button>
               </th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                <button
+                <Button
                   @click="updateSort('email')"
-                  class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-gray-300 touch-manipulation"
+                  variant="ghost"
+                  class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-gray-300 touch-manipulation h-auto p-0 font-normal"
                 >
                   {{ $t('admin.users.columns.email') }}
                   <Icon :name="getSortIcon('email')" class="w-4 h-4" />
-                </button>
+                </Button>
               </th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 {{ $t('admin.users.columns.status') }}
@@ -86,22 +87,24 @@
                 {{ $t('admin.users.columns.totalSpent') }}
               </th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                <button
+                <Button
                   @click="updateSort('created_at')"
-                  class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-gray-300 touch-manipulation"
+                  variant="ghost"
+                  class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-gray-300 touch-manipulation h-auto p-0 font-normal"
                 >
                   {{ $t('admin.users.columns.registered') }}
                   <Icon :name="getSortIcon('created_at')" class="w-4 h-4" />
-                </button>
+                </Button>
               </th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                <button
+                <Button
                   @click="updateSort('last_login')"
-                  class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-gray-300 touch-manipulation"
+                  variant="ghost"
+                  class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-gray-300 touch-manipulation h-auto p-0 font-normal"
                 >
                   {{ $t('admin.users.columns.lastLogin') }}
                   <Icon :name="getSortIcon('last_login')" class="w-4 h-4" />
-                </button>
+                </Button>
               </th>
               <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 {{ $t('admin.users.columns.actions') }}
@@ -165,6 +168,8 @@
 </template>
 
 <script setup lang="ts">
+import { Button } from '@/components/ui/button'
+
 interface Props {
   showActions?: boolean
 }

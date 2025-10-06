@@ -121,10 +121,14 @@
             {{ error }}
           </p>
           <div class="mt-3">
-            <button @click="$emit('retry')"
-              class="text-sm font-medium text-red-800 dark:text-red-200 hover:text-red-900 dark:hover:text-red-100 underline">
+            <Button
+              variant="link"
+              size="sm"
+              @click="$emit('retry')"
+              class="text-sm font-medium text-red-800 dark:text-red-200 hover:text-red-900 dark:hover:text-red-100 p-0 h-auto"
+            >
               {{ $t('common.retry') }}
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -139,6 +143,7 @@
 
 <script setup lang="ts">
 import type { ShippingMethod } from '~/stores/checkout'
+import { Button } from '@/components/ui/button'
 
 interface Props {
   modelValue: ShippingMethod | null

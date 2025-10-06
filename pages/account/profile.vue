@@ -32,14 +32,16 @@
                     {{ getUserInitials() }}
                   </span>
                 </div>
-                <button
+                <Button
                   type="button"
+                  variant="default"
+                  size="icon"
                   @click="triggerFileUpload"
-                  class="absolute bottom-0 right-0 h-8 w-8 rounded-full bg-primary-600 text-white flex items-center justify-center hover:bg-primary-700 transition-colors"
+                  class="absolute bottom-0 right-0 h-8 w-8 rounded-full"
                   :title="$t('profile.changePicture')"
                 >
                   <Icon name="camera" class="h-4 w-4" />
-                </button>
+                </Button>
               </div>
               <div>
                 <h3 class="text-lg font-medium text-gray-900 dark:text-white">
@@ -49,21 +51,25 @@
                   {{ $t('profile.profilePictureDescription') }}
                 </p>
                 <div class="flex space-x-2">
-                  <button
+                  <Button
                     type="button"
+                    variant="link"
+                    size="sm"
                     @click="triggerFileUpload"
                     class="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
                   >
                     {{ profilePictureUrl ? $t('profile.changePicture') : $t('profile.uploadPicture') }}
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     v-if="profilePictureUrl"
                     type="button"
+                    variant="link"
+                    size="sm"
                     @click="removePicture"
                     class="text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
                   >
                     {{ $t('profile.removePicture') }}
-                  </button>
+                  </Button>
                 </div>
               </div>
               <input
@@ -149,27 +155,29 @@
 
             <!-- Action Buttons -->
             <div class="flex justify-between items-center pt-6 border-t border-gray-200 dark:border-gray-700">
-              <button
+              <Button
                 type="button"
+                variant="ghost"
                 @click="showDeleteConfirmation = true"
-                class="px-4 py-2 text-sm font-medium text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors"
+                class="px-4 py-2 text-sm font-medium text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20"
               >
                 {{ $t('profile.deleteAccount') }}
-              </button>
+              </Button>
 
               <div class="flex space-x-3">
-                <button
+                <Button
                   type="button"
+                  variant="outline"
                   @click="resetForm"
                   :disabled="isLoading"
-                  class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors disabled:opacity-50"
+                  class="text-sm font-medium"
                 >
                   {{ $t('common.cancel') }}
-                </button>
-                <button
+                </Button>
+                <Button
                   type="submit"
                   :disabled="isLoading || !hasChanges"
-                  class="px-6 py-2 bg-primary-600 text-white text-sm font-medium rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  class="px-6 py-2 text-sm font-medium"
                 >
                   <span v-if="isLoading" class="flex items-center">
                     <Icon name="spinner" class="animate-spin h-4 w-4 mr-2" />
@@ -178,7 +186,7 @@
                   <span v-else>
                     {{ $t('profile.saveChanges') }}
                   </span>
-                </button>
+                </Button>
               </div>
             </div>
           </form>
@@ -196,12 +204,12 @@
                   {{ $t('profile.addressesDescription') }}
                 </p>
               </div>
-              <button
+              <Button
                 @click="showAddressForm = true"
-                class="px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors"
+                class="px-4 py-2 text-sm font-medium"
               >
                 {{ $t('profile.addAddress') }}
-              </button>
+              </Button>
             </div>
 
             <!-- Address List -->
@@ -225,20 +233,24 @@
                     </span>
                   </div>
                   <div class="flex space-x-1">
-                    <button
+                    <Button
                       @click="editAddress(address)"
+                      variant="ghost"
+                      size="icon"
                       class="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                       :title="$t('profile.editAddress')"
                     >
                       <Icon name="edit" class="h-4 w-4" />
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       @click="deleteAddress(address.id)"
+                      variant="ghost"
+                      size="icon"
                       class="p-1 text-gray-400 hover:text-red-600 dark:hover:text-red-400"
                       :title="$t('profile.deleteAddress')"
                     >
                       <Icon name="trash" class="h-4 w-4" />
-                    </button>
+                    </Button>
                   </div>
                 </div>
                 <div class="text-sm text-gray-600 dark:text-gray-400">
@@ -255,12 +267,12 @@
               <p class="text-gray-600 dark:text-gray-400 mb-4">
                 {{ $t('profile.noAddresses') }}
               </p>
-              <button
+              <Button
                 @click="showAddressForm = true"
-                class="px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-md hover:bg-primary-700 transition-colors"
+                class="px-4 py-2 text-sm font-medium"
               >
                 {{ $t('profile.addFirstAddress') }}
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -286,6 +298,7 @@
 
 <script setup lang="ts">
 // Component imports
+import { Button } from '@/components/ui/button'
 import AddressFormModal from '~/components/profile/AddressFormModal.vue'
 import DeleteAccountModal from '~/components/profile/DeleteAccountModal.vue'
 

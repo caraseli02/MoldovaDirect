@@ -39,14 +39,17 @@
             <ThemeToggle />
 
             <!-- Search -->
-            <button
-              class="p-2 text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+            <Button
+              variant="ghost"
+              size="icon"
+              class="p-2 text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400"
+            >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
-            </button>
+            </Button>
 
             <!-- Account -->
             <NuxtLink :to="localePath('/account')"
@@ -93,9 +96,12 @@
             </NuxtLink>
 
             <!-- Mobile menu button -->
-            <button @click="toggleMobileMenu"
+            <Button
+              variant="ghost"
+              @click="toggleMobileMenu"
               class="relative p-2 text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-lg"
-              :class="{ 'bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400': mobileMenuOpen }">
+              :class="{ 'bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400': mobileMenuOpen }"
+            >
               <!-- Animated hamburger menu -->
               <div class="w-6 h-6 flex flex-col justify-center items-center">
                 <span class="block w-6 h-0.5 bg-current transition-all duration-300 ease-in-out"
@@ -105,7 +111,7 @@
                 <span class="block w-6 h-0.5 bg-current transition-all duration-300 ease-in-out"
                   :class="mobileMenuOpen ? '-rotate-45 -translate-y-1' : 'translate-y-1'"></span>
               </div>
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -118,6 +124,7 @@
 
 <script setup lang="ts">
 import { ref, onUnmounted } from 'vue'
+import { Button } from '@/components/ui/button'
 import LanguageSwitcher from './LanguageSwitcher.vue'
 import MobileNav from './MobileNav.vue'
 import ThemeToggle from './ThemeToggle.vue'

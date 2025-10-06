@@ -25,9 +25,10 @@
           
           <!-- Actions -->
           <div class="flex items-center space-x-3 mt-3">
-            <button
+            <Button
               @click="handleInstall"
               :disabled="installing"
+              size="sm"
               class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <svg v-if="installing" class="animate-spin -ml-1 mr-1 h-3 w-3 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -35,32 +36,38 @@
                 <path class="opacity-75" fill="currentColor" d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
               {{ installing ? $t('pwa.installing') : $t('pwa.install') }}
-            </button>
-            
-            <button
+            </Button>
+
+            <Button
+              variant="link"
+              size="sm"
               @click="handleDismiss"
-              class="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+              class="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 p-0 h-auto"
             >
               {{ $t('pwa.notNow') }}
-            </button>
+            </Button>
           </div>
         </div>
         
         <!-- Close Button -->
-        <button
+        <Button
+          variant="ghost"
+          size="icon"
           @click="handleDismiss"
           class="flex-shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
         >
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
-        </button>
+        </Button>
       </div>
     </div>
   </Transition>
 </template>
 
 <script setup lang="ts">
+import { Button } from '@/components/ui/button'
+
 const { installPWA, isInstallable } = useCustomPWA()
 const { vibrate } = useHapticFeedback()
 

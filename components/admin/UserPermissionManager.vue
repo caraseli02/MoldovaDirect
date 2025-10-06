@@ -23,15 +23,15 @@
           </p>
         </div>
         
-        <button
+        <Button
           v-if="hasChanges"
           @click="saveChanges"
           :disabled="saving"
-          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+          class="px-4 py-2"
         >
           <commonIcon v-if="saving" name="heroicons:arrow-path" class="w-4 h-4 animate-spin mr-2" />
           Save Changes
-        </button>
+        </Button>
       </div>
     </div>
 
@@ -49,12 +49,12 @@
         <commonIcon name="heroicons:exclamation-triangle" class="w-8 h-8 mx-auto mb-2" />
         {{ error }}
       </div>
-      <button
+      <Button
         @click="fetchPermissions"
-        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+        class="px-4 py-2"
       >
         Retry
-      </button>
+      </Button>
     </div>
 
     <!-- Permission Content -->

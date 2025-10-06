@@ -4,7 +4,9 @@
     class="relative"
   >
     <!-- Badge trigger button -->
-    <button
+    <Button
+      variant="ghost"
+      size="icon"
       @click="toggleDropdown"
       class="relative p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
       :aria-label="$t('orders.notifications.title')"
@@ -22,7 +24,7 @@
           d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
         />
       </svg>
-      
+
       <!-- Notification count badge -->
       <span
         v-if="unviewedCount > 0"
@@ -30,7 +32,7 @@
       >
         {{ unviewedCount > 9 ? '9+' : unviewedCount }}
       </span>
-    </button>
+    </Button>
     
     <!-- Dropdown panel -->
     <Transition
@@ -50,13 +52,15 @@
           <h3 class="text-sm font-semibold text-gray-900 dark:text-white">
             {{ $t('orders.notifications.title') }}
           </h3>
-          <button
+          <Button
             v-if="recentUpdates.length > 0"
+            variant="link"
+            size="sm"
             @click="handleClearAll"
-            class="text-xs text-blue-600 dark:text-blue-400 hover:underline"
+            class="text-xs text-blue-600 dark:text-blue-400 hover:underline p-0 h-auto"
           >
             {{ $t('orders.notifications.clearAll') }}
-          </button>
+          </Button>
         </div>
         
         <!-- Updates list -->
@@ -158,12 +162,13 @@
           v-if="recentUpdates.length > 0"
           class="px-4 py-3 border-t border-gray-200 dark:border-gray-700"
         >
-          <button
+          <Button
+            variant="link"
             @click="handleViewAllOrders"
-            class="w-full text-sm text-center text-blue-600 dark:text-blue-400 hover:underline"
+            class="w-full text-sm text-center text-blue-600 dark:text-blue-400 hover:underline p-0 h-auto"
           >
             {{ $t('orders.notifications.viewAllOrders') }}
-          </button>
+          </Button>
         </div>
       </div>
     </Transition>
@@ -178,6 +183,7 @@
 </template>
 
 <script setup lang="ts">
+import { Button } from '@/components/ui/button'
 import type { OrderStatusUpdate } from '~/composables/useOrderTracking'
 import type { OrderStatus } from '~/types'
 
