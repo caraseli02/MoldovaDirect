@@ -95,12 +95,12 @@
               class="px-4 py-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
               required
             >
-            <button
+            <Button
               type="submit"
               class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
             >
               {{ $t('footer.newsletter.button') }}
-            </button>
+            </Button>
           </form>
         </div>
       </div>
@@ -115,6 +115,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { Button } from '@/components/ui/button'
 
 const localePath = useLocalePath()
 const email = ref('')

@@ -91,18 +91,22 @@
               
               <!-- Action Button -->
               <div v-if="actionText && actionHandler" class="mt-3">
-                <button
+                <Button
+                  variant="link"
+                  size="sm"
                   @click="handleAction"
                   data-testid="toast-action-button"
-                  class="text-sm font-medium text-primary-600 hover:text-primary-500"
+                  class="text-sm font-medium text-primary-600 hover:text-primary-500 p-0 h-auto"
                 >
                   {{ actionText }}
-                </button>
+                </Button>
               </div>
             </div>
             
             <div class="ml-4 flex-shrink-0 flex">
-              <button
+              <Button
+                variant="ghost"
+                size="icon"
                 @click="close"
                 data-testid="toast-close-button"
                 class="bg-white dark:bg-gray-800 rounded-md inline-flex text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
@@ -115,7 +119,7 @@
                     clip-rule="evenodd"
                   />
                 </svg>
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -125,6 +129,8 @@
 </template>
 
 <script setup lang="ts">
+import { Button } from '@/components/ui/button'
+
 interface Props {
   type?: 'success' | 'error' | 'warning' | 'info'
   title: string

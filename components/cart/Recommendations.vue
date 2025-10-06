@@ -6,13 +6,15 @@
           {{ $t('cart.recommendedProducts') }}
         </h3>
         
-        <button
+        <Button
           v-if="!recommendationsLoading"
+          variant="link"
+          size="sm"
           @click="handleLoadRecommendations"
-          class="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+          class="text-sm text-blue-600 dark:text-blue-400 hover:underline p-0 h-auto"
         >
           {{ $t('common.refresh') }}
-        </button>
+        </Button>
       </div>
       
       <!-- Loading State -->
@@ -63,13 +65,14 @@
             </div>
             
             <!-- Add to Cart Button -->
-            <button
+            <Button
               @click="handleAddToCart(recommendation.product)"
               :disabled="isInCart(recommendation.product.id)"
+              size="sm"
               class="w-full text-xs bg-blue-600 text-white py-2 px-3 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
               {{ isInCart(recommendation.product.id) ? $t('cart.inCart') : $t('cart.addToCart') }}
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -78,6 +81,7 @@
 </template>
 
 <script setup lang="ts">
+import { Button } from '@/components/ui/button'
 const toast = useToast()
 
 // Cart functionality

@@ -58,14 +58,16 @@
             </p>
           </div>
           <div class="ml-auto pl-3">
-            <button
+            <Button
               @click="successMessage = ''"
-              class="inline-flex text-green-400 hover:text-green-600"
+              variant="ghost"
+              size="icon"
+              class="text-green-400 hover:text-green-600"
             >
               <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -84,14 +86,16 @@
             </p>
           </div>
           <div class="ml-auto pl-3">
-            <button
+            <Button
               @click="errorMessage = ''"
-              class="inline-flex text-red-400 hover:text-red-600"
+              variant="ghost"
+              size="icon"
+              class="text-red-400 hover:text-red-600"
             >
               <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -109,6 +113,7 @@
 </template>
 
 <script setup lang="ts">
+import { Button } from '@/components/ui/button'
 import type { CategoryWithChildren } from '~/types/database'
 
 definePageMeta({

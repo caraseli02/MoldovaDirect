@@ -36,19 +36,23 @@
 
           <!-- Actions -->
           <div class="flex items-center space-x-2">
-            <button
+            <Button
+              variant="link"
+              size="sm"
               @click="handleMoveToCart(item.id)"
-              class="text-xs text-blue-600 dark:text-blue-400 hover:underline"
+              class="text-xs text-blue-600 dark:text-blue-400 hover:underline p-0 h-auto"
             >
               {{ $t('cart.moveToCart') }}
-            </button>
-            
-            <button
+            </Button>
+
+            <Button
+              variant="link"
+              size="sm"
               @click="handleRemoveFromSaved(item.id)"
-              class="text-xs text-red-600 dark:text-red-400 hover:underline"
+              class="text-xs text-red-600 dark:text-red-400 hover:underline p-0 h-auto"
             >
               {{ $t('common.remove') }}
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -57,6 +61,8 @@
 </template>
 
 <script setup lang="ts">
+import { Button } from '@/components/ui/button'
+
 const toast = useToast()
 
 // Cart functionality

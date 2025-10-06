@@ -102,16 +102,13 @@
       </div>
 
       <!-- Add to Cart Button -->
-      <button
+      <Button
         :disabled="product.stockQuantity <= 0 || cartLoading"
-        class="w-full mt-4 py-3 px-4 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2 touch-manipulation"
+        class="w-full mt-4 transition-all duration-200 flex items-center justify-center space-x-2 touch-manipulation"
         :class="[
           isInCart(product.id)
             ? 'bg-green-600 dark:bg-green-500 text-white hover:bg-green-700 dark:hover:bg-green-600'
             : 'bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-600',
-          (product.stockQuantity <= 0 || cartLoading)
-            ? 'bg-gray-300 dark:bg-slate-600 cursor-not-allowed'
-            : 'active:scale-95',
           isMobile ? 'min-h-[44px]' : '' // Ensure minimum touch target size
         ]"
         @click="addToCart"
@@ -141,7 +138,7 @@
             $t('products.addToCart')
           }}
         </span>
-      </button>
+      </Button>
 
       <!-- Featured Badge -->
       <div v-if="product.isFeatured" class="absolute top-2 left-2">
@@ -162,6 +159,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { Button } from '@/components/ui/button'
 import type { ProductWithRelations } from '~/types'
 import { useCart } from '~/composables/useCart'
 import { useDevice } from '~/composables/useDevice'

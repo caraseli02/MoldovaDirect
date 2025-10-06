@@ -17,7 +17,7 @@
         <h4 class="text-md font-semibold text-green-900 dark:text-green-100 mb-4">
           {{ $t('checkout.payment.cashInstructions') }}
         </h4>
-        
+
         <ul class="space-y-3 text-sm text-green-800 dark:text-green-200">
           <li class="flex items-start space-x-2">
             <Icon name="heroicons:check-circle" class="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
@@ -63,23 +63,13 @@
             {{ $t('checkout.payment.cardNumber') }}
           </label>
           <div class="relative">
-            <input
-              id="card-number"
-              ref="cardNumberRef"
-              type="text"
-              v-model="creditCardData.number"
-              :placeholder="$t('checkout.payment.cardNumberPlaceholder')"
-              :class="[
+            <input id="card-number" ref="cardNumberRef" type="text" v-model="creditCardData.number"
+              :placeholder="$t('checkout.payment.cardNumberPlaceholder')" :class="[
                 'block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm',
-                hasError('cardNumber') 
-                  ? 'border-red-300 dark:border-red-600 text-red-900 dark:text-red-100 placeholder-red-300 focus:ring-red-500 focus:border-red-500' 
+                hasError('cardNumber')
+                  ? 'border-red-300 dark:border-red-600 text-red-900 dark:text-red-100 placeholder-red-300 focus:ring-red-500 focus:border-red-500'
                   : 'border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white'
-              ]"
-              maxlength="19"
-              autocomplete="cc-number"
-              @input="formatCardNumber"
-              @blur="validateCardNumber"
-            />
+              ]" maxlength="19" autocomplete="cc-number" @input="formatCardNumber" @blur="validateCardNumber" />
             <div v-if="cardBrand" class="absolute inset-y-0 right-0 pr-3 flex items-center">
               <Icon :name="getCardBrandIcon(cardBrand)" class="h-6 w-6" />
             </div>
@@ -94,22 +84,13 @@
           <label for="expiry-date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             {{ $t('checkout.payment.expiryDate') }}
           </label>
-          <input
-            id="expiry-date"
-            type="text"
-            v-model="expiryDisplay"
-            :placeholder="$t('checkout.payment.expiryPlaceholder')"
-            :class="[
+          <input id="expiry-date" type="text" v-model="expiryDisplay"
+            :placeholder="$t('checkout.payment.expiryPlaceholder')" :class="[
               'block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm',
-              hasError('expiry') 
-                ? 'border-red-300 dark:border-red-600 text-red-900 dark:text-red-100 placeholder-red-300 focus:ring-red-500 focus:border-red-500' 
+              hasError('expiry')
+                ? 'border-red-300 dark:border-red-600 text-red-900 dark:text-red-100 placeholder-red-300 focus:ring-red-500 focus:border-red-500'
                 : 'border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white'
-            ]"
-            maxlength="5"
-            autocomplete="cc-exp"
-            @input="formatExpiry"
-            @blur="validateExpiry"
-          />
+            ]" maxlength="5" autocomplete="cc-exp" @input="formatExpiry" @blur="validateExpiry" />
           <p v-if="hasError('expiry')" class="mt-1 text-sm text-red-600 dark:text-red-400">
             {{ getError('expiry') }}
           </p>
@@ -121,29 +102,18 @@
             {{ $t('checkout.payment.cvv') }}
           </label>
           <div class="relative">
-            <input
-              id="cvv"
-              type="text"
-              v-model="creditCardData.cvv"
-              :placeholder="$t('checkout.payment.cvvPlaceholder')"
-              :class="[
+            <input id="cvv" type="text" v-model="creditCardData.cvv"
+              :placeholder="$t('checkout.payment.cvvPlaceholder')" :class="[
                 'block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm',
-                hasError('cvv') 
-                  ? 'border-red-300 dark:border-red-600 text-red-900 dark:text-red-100 placeholder-red-300 focus:ring-red-500 focus:border-red-500' 
+                hasError('cvv')
+                  ? 'border-red-300 dark:border-red-600 text-red-900 dark:text-red-100 placeholder-red-300 focus:ring-red-500 focus:border-red-500'
                   : 'border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white'
-              ]"
-              :maxlength="cardBrand === 'amex' ? 4 : 3"
-              autocomplete="cc-csc"
-              @input="formatCVV"
-              @blur="validateCVV"
-            />
-            <button
-              type="button"
-              class="absolute inset-y-0 right-0 pr-3 flex items-center"
-              @click="showCVVHelp = !showCVVHelp"
-            >
+              ]" :maxlength="cardBrand === 'amex' ? 4 : 3" autocomplete="cc-csc" @input="formatCVV"
+              @blur="validateCVV" />
+            <Button type="button" variant="ghost" size="icon" class="absolute inset-y-0 right-0 pr-3"
+              @click="showCVVHelp = !showCVVHelp">
               <Icon name="heroicons:question-mark-circle" class="h-5 w-5 text-gray-400 hover:text-gray-500" />
-            </button>
+            </Button>
           </div>
           <p v-if="hasError('cvv')" class="mt-1 text-sm text-red-600 dark:text-red-400">
             {{ getError('cvv') }}
@@ -160,20 +130,13 @@
           <label for="cardholder-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             {{ $t('checkout.payment.cardholderName') }}
           </label>
-          <input
-            id="cardholder-name"
-            type="text"
-            v-model="creditCardData.holderName"
-            :placeholder="$t('checkout.payment.cardholderNamePlaceholder')"
-            :class="[
+          <input id="cardholder-name" type="text" v-model="creditCardData.holderName"
+            :placeholder="$t('checkout.payment.cardholderNamePlaceholder')" :class="[
               'block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm',
-              hasError('holderName') 
-                ? 'border-red-300 dark:border-red-600 text-red-900 dark:text-red-100 placeholder-red-300 focus:ring-red-500 focus:border-red-500' 
+              hasError('holderName')
+                ? 'border-red-300 dark:border-red-600 text-red-900 dark:text-red-100 placeholder-red-300 focus:ring-red-500 focus:border-red-500'
                 : 'border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white'
-            ]"
-            autocomplete="cc-name"
-            @blur="validateHolderName"
-          />
+            ]" autocomplete="cc-name" @blur="validateHolderName" />
           <p v-if="hasError('holderName')" class="mt-1 text-sm text-red-600 dark:text-red-400">
             {{ getError('holderName') }}
           </p>
@@ -206,26 +169,19 @@
         <p class="text-gray-600 dark:text-gray-400 mb-6">
           {{ $t('checkout.payment.paypalDescription') }}
         </p>
-        
+
         <!-- PayPal Email (optional for display) -->
         <div class="max-w-md mx-auto">
           <label for="paypal-email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             {{ $t('checkout.payment.paypalEmail') }}
           </label>
-          <input
-            id="paypal-email"
-            type="email"
-            v-model="paypalData.email"
-            :placeholder="$t('checkout.payment.paypalEmailPlaceholder')"
-            :class="[
+          <input id="paypal-email" type="email" v-model="paypalData.email"
+            :placeholder="$t('checkout.payment.paypalEmailPlaceholder')" :class="[
               'block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm',
-              hasError('paypalEmail') 
-                ? 'border-red-300 dark:border-red-600 text-red-900 dark:text-red-100 placeholder-red-300 focus:ring-red-500 focus:border-red-500' 
+              hasError('paypalEmail')
+                ? 'border-red-300 dark:border-red-600 text-red-900 dark:text-red-100 placeholder-red-300 focus:ring-red-500 focus:border-red-500'
                 : 'border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white'
-            ]"
-            autocomplete="email"
-            @blur="validatePayPalEmail"
-          />
+            ]" autocomplete="email" @blur="validatePayPalEmail" />
           <p v-if="hasError('paypalEmail')" class="mt-1 text-sm text-red-600 dark:text-red-400">
             {{ getError('paypalEmail') }}
           </p>
@@ -265,7 +221,7 @@
         <h4 class="text-md font-semibold text-gray-900 dark:text-white mb-4">
           {{ $t('checkout.payment.bankDetails') }}
         </h4>
-        
+
         <div class="space-y-3">
           <div class="flex justify-between">
             <span class="text-sm font-medium text-gray-600 dark:text-gray-400">
@@ -275,7 +231,7 @@
               Banca Transilvania
             </span>
           </div>
-          
+
           <div class="flex justify-between">
             <span class="text-sm font-medium text-gray-600 dark:text-gray-400">
               {{ $t('checkout.payment.accountHolder') }}:
@@ -284,7 +240,7 @@
               Moldovan Products SRL
             </span>
           </div>
-          
+
           <div class="flex justify-between">
             <span class="text-sm font-medium text-gray-600 dark:text-gray-400">
               {{ $t('checkout.payment.iban') }}:
@@ -293,7 +249,7 @@
               RO49 AAAA 1B31 0075 9384 0000
             </span>
           </div>
-          
+
           <div class="flex justify-between">
             <span class="text-sm font-medium text-gray-600 dark:text-gray-400">
               {{ $t('checkout.payment.swift') }}:
@@ -302,7 +258,7 @@
               BTRLRO22
             </span>
           </div>
-          
+
           <div class="flex justify-between">
             <span class="text-sm font-medium text-gray-600 dark:text-gray-400">
               {{ $t('checkout.payment.reference') }}:
@@ -314,14 +270,11 @@
         </div>
 
         <!-- Copy Button -->
-        <button
-          type="button"
-          @click="copyBankDetails"
-          class="mt-4 w-full inline-flex justify-center items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-        >
+        <Button type="button" variant="outline" @click="copyBankDetails"
+          class="mt-4 w-full inline-flex justify-center items-center">
           <Icon name="heroicons:clipboard-document" class="h-4 w-4 mr-2" />
           {{ $t('checkout.payment.copyDetails') }}
-        </button>
+        </Button>
       </div>
 
       <!-- Bank Transfer Instructions -->
@@ -347,6 +300,7 @@
 <script setup lang="ts">
 import { computed, ref, watch, onMounted } from 'vue'
 import { useToast } from '~/composables/useToast'
+import { Button } from '@/components/ui/button'
 import type { PaymentMethod } from '~/stores/checkout'
 
 // =============================================
@@ -422,13 +376,13 @@ const getError = (field: string): string => {
 const formatCardNumber = (event: Event) => {
   const input = event.target as HTMLInputElement
   let value = input.value.replace(/\s/g, '').replace(/[^0-9]/gi, '')
-  
+
   // Detect card brand
   cardBrand.value = detectCardBrand(value)
-  
+
   // Format with spaces
   const formattedValue = value.match(/.{1,4}/g)?.join(' ') || value
-  
+
   creditCardData.value.number = formattedValue
   updatePaymentMethod()
 }
@@ -436,20 +390,20 @@ const formatCardNumber = (event: Event) => {
 const formatExpiry = (event: Event) => {
   const input = event.target as HTMLInputElement
   let value = input.value.replace(/\D/g, '')
-  
+
   if (value.length >= 2) {
     value = value.substring(0, 2) + '/' + value.substring(2, 4)
   }
-  
+
   expiryDisplay.value = value
-  
+
   // Parse month and year
   const parts = value.split('/')
   if (parts.length === 2) {
     creditCardData.value.expiryMonth = parts[0]
     creditCardData.value.expiryYear = parts[1]
   }
-  
+
   updatePaymentMethod()
 }
 
@@ -457,7 +411,7 @@ const formatCVV = (event: Event) => {
   const input = event.target as HTMLInputElement
   const value = input.value.replace(/[^0-9]/gi, '')
   const maxLength = cardBrand.value === 'amex' ? 4 : 3
-  
+
   creditCardData.value.cvv = value.substring(0, maxLength)
   updatePaymentMethod()
 }
@@ -471,13 +425,13 @@ const detectCardBrand = (number: string): string => {
     diners: /^3[0689]/,
     jcb: /^35/
   }
-  
+
   for (const [brand, pattern] of Object.entries(patterns)) {
     if (pattern.test(number)) {
       return brand
     }
   }
-  
+
   return ''
 }
 
@@ -490,13 +444,13 @@ const getCardBrandIcon = (brand: string): string => {
     diners: 'simple-icons:dinersclub',
     jcb: 'simple-icons:jcb'
   }
-  
+
   return icons[brand as keyof typeof icons] || 'heroicons:credit-card'
 }
 
 const validateCardNumber = () => {
   const number = creditCardData.value.number.replace(/\s/g, '')
-  
+
   if (!number) {
     validationErrors.value.cardNumber = 'Card number is required'
   } else if (!/^\d{13,19}$/.test(number)) {
@@ -511,7 +465,7 @@ const validateCardNumber = () => {
 const validateExpiry = () => {
   const month = parseInt(creditCardData.value.expiryMonth)
   const year = parseInt(creditCardData.value.expiryYear)
-  
+
   if (!month || !year) {
     validationErrors.value.expiry = 'Expiry date is required'
   } else if (month < 1 || month > 12) {
@@ -520,7 +474,7 @@ const validateExpiry = () => {
     const currentDate = new Date()
     const currentYear = currentDate.getFullYear() % 100
     const currentMonth = currentDate.getMonth() + 1
-    
+
     if (year < currentYear || (year === currentYear && month < currentMonth)) {
       validationErrors.value.expiry = 'Card has expired'
     } else {
@@ -532,7 +486,7 @@ const validateExpiry = () => {
 const validateCVV = () => {
   const cvv = creditCardData.value.cvv
   const expectedLength = cardBrand.value === 'amex' ? 4 : 3
-  
+
   if (!cvv) {
     validationErrors.value.cvv = 'CVV is required'
   } else if (!/^\d+$/.test(cvv)) {
@@ -546,7 +500,7 @@ const validateCVV = () => {
 
 const validateHolderName = () => {
   const name = creditCardData.value.holderName.trim()
-  
+
   if (!name) {
     validationErrors.value.holderName = 'Cardholder name is required'
   } else if (name.length < 2) {
@@ -559,7 +513,7 @@ const validateHolderName = () => {
 const validatePayPalEmail = () => {
   const email = paypalData.value.email.trim()
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  
+
   if (!email) {
     validationErrors.value.paypalEmail = 'PayPal email is required'
   } else if (!emailRegex.test(email)) {
@@ -572,21 +526,21 @@ const validatePayPalEmail = () => {
 const luhnCheck = (number: string): boolean => {
   let sum = 0
   let alternate = false
-  
+
   for (let i = number.length - 1; i >= 0; i--) {
     let n = parseInt(number.charAt(i), 10)
-    
+
     if (alternate) {
       n *= 2
       if (n > 9) {
         n = (n % 10) + 1
       }
     }
-    
+
     sum += n
     alternate = !alternate
   }
-  
+
   return sum % 10 === 0
 }
 
@@ -598,7 +552,7 @@ IBAN: RO49 AAAA 1B31 0075 9384 0000
 SWIFT: BTRLRO22
 Reference: ${bankTransferReference.value}
   `.trim()
-  
+
   try {
     await navigator.clipboard.writeText(details)
     toast.success('Bank details copied to clipboard')
@@ -610,7 +564,7 @@ Reference: ${bankTransferReference.value}
 
 const updatePaymentMethod = () => {
   let updatedMethod: PaymentMethod = { ...props.modelValue }
-  
+
   if (props.modelValue.type === 'cash') {
     updatedMethod.cash = {
       confirmed: true
@@ -624,7 +578,7 @@ const updatePaymentMethod = () => {
       reference: bankTransferReference.value
     }
   }
-  
+
   emit('update:modelValue', updatedMethod)
 }
 
@@ -640,20 +594,20 @@ watch(() => props.modelValue, (newMethod) => {
     // Only update if different to avoid triggering updates
     const currentNumber = creditCardData.value.number.replace(/\s/g, '')
     const newNumber = newMethod.creditCard.number.replace(/\s/g, '')
-    
-    if (currentNumber !== newNumber || 
-        creditCardData.value.expiryMonth !== newMethod.creditCard.expiryMonth ||
-        creditCardData.value.expiryYear !== newMethod.creditCard.expiryYear ||
-        creditCardData.value.cvv !== newMethod.creditCard.cvv ||
-        creditCardData.value.holderName !== newMethod.creditCard.holderName) {
-      
+
+    if (currentNumber !== newNumber ||
+      creditCardData.value.expiryMonth !== newMethod.creditCard.expiryMonth ||
+      creditCardData.value.expiryYear !== newMethod.creditCard.expiryYear ||
+      creditCardData.value.cvv !== newMethod.creditCard.cvv ||
+      creditCardData.value.holderName !== newMethod.creditCard.holderName) {
+
       creditCardData.value = { ...newMethod.creditCard }
-      
+
       // Update expiry display
       if (newMethod.creditCard.expiryMonth && newMethod.creditCard.expiryYear) {
         expiryDisplay.value = `${newMethod.creditCard.expiryMonth}/${newMethod.creditCard.expiryYear}`
       }
-      
+
       // Detect card brand
       cardBrand.value = detectCardBrand(newNumber)
     }

@@ -13,16 +13,16 @@
             </p>
           </div>
           <div class="flex items-center gap-4">
-            <button
+            <Button
               @click="refreshData"
               :disabled="loading"
-              class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+              variant="outline"
             >
-              <ArrowPathIcon 
-                :class="['w-4 h-4 mr-2', loading ? 'animate-spin' : '']" 
+              <ArrowPathIcon
+                :class="['w-4 h-4 mr-2', loading ? 'animate-spin' : '']"
               />
               Refresh
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -33,20 +33,21 @@
       <!-- Tab Navigation -->
       <div class="mb-8">
         <nav class="flex space-x-8" aria-label="Tabs">
-          <button
+          <Button
             v-for="tab in tabs"
             :key="tab.id"
             @click="activeTab = tab.id"
             :class="[
-              'whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm',
+              'whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm border-0 rounded-none',
               activeTab === tab.id
-                ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
+                ? 'border-blue-500 text-blue-600 dark:text-blue-400 bg-transparent shadow-none'
+                : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600 bg-transparent shadow-none'
             ]"
+            variant="ghost"
           >
             <component :is="tab.icon" class="w-5 h-5 mr-2 inline" />
             {{ tab.name }}
-          </button>
+          </Button>
         </nav>
       </div>
 
@@ -176,12 +177,13 @@
             <p class="text-sm text-red-700 dark:text-red-300 mt-1">
               {{ error }}
             </p>
-            <button
+            <Button
               @click="refreshData"
-              class="mt-2 text-sm text-red-600 dark:text-red-400 hover:text-red-500 dark:hover:text-red-300 underline"
+              variant="link"
+              class="mt-2 text-sm text-red-600 dark:text-red-400 hover:text-red-500 dark:hover:text-red-300"
             >
               Try again
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -190,6 +192,7 @@
 </template>
 
 <script setup lang="ts">
+import { Button } from '@/components/ui/button'
 import {
   ChartBarIcon,
   UsersIcon,

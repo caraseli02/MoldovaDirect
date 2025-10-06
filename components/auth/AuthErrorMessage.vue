@@ -10,29 +10,35 @@
             {{ translatedError }}
           </div>
           <div v-if="showRetry" class="mt-2">
-            <button
+            <Button
+              variant="link"
+              size="sm"
               @click="$emit('retry')"
-              class="text-sm font-medium text-red-600 hover:text-red-500 dark:text-red-400 dark:hover:text-red-300 transition-colors"
+              class="text-sm font-medium text-red-600 hover:text-red-500 dark:text-red-400 dark:hover:text-red-300 transition-colors p-0 h-auto"
             >
               {{ $t('auth.buttons.tryAgain') }}
-            </button>
+            </Button>
           </div>
         </div>
-        <button
+        <Button
           v-if="dismissible"
+          variant="ghost"
+          size="icon"
           @click="$emit('dismiss')"
           class="ml-2 text-red-400 hover:text-red-600 dark:hover:text-red-300 transition-colors"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
           </svg>
-        </button>
+        </Button>
       </div>
     </div>
   </Transition>
 </template>
 
 <script setup lang="ts">
+import { Button } from '@/components/ui/button'
+
 interface Props {
   error: string | null
   dismissible?: boolean

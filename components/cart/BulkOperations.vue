@@ -14,21 +14,25 @@
       </div>
       
       <div class="flex items-center space-x-2">
-        <button
+        <Button
+          variant="link"
+          size="sm"
           @click="handleMoveToSavedForLater"
           :disabled="bulkOperationInProgress"
-          class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200 disabled:opacity-50 disabled:cursor-not-allowed p-0 h-auto"
         >
           {{ $t('cart.saveForLater') }}
-        </button>
-        
-        <button
+        </Button>
+
+        <Button
+          variant="link"
+          size="sm"
           @click="handleRemoveSelected"
           :disabled="bulkOperationInProgress"
-          class="text-sm text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          class="text-sm text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-200 disabled:opacity-50 disabled:cursor-not-allowed p-0 h-auto"
         >
           {{ $t('cart.removeSelected') }}
-        </button>
+        </Button>
       </div>
     </div>
     
@@ -41,6 +45,8 @@
 </template>
 
 <script setup lang="ts">
+import { Button } from '@/components/ui/button'
+
 const toast = useToast()
 
 // Cart functionality

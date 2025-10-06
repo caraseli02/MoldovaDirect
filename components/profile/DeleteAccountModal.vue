@@ -111,15 +111,19 @@
 
           <!-- Action Buttons -->
           <div class="flex justify-end space-x-3 pt-6 border-t border-gray-200 dark:border-gray-700">
-            <button
+            <Button
               type="button"
+              variant="outline"
+              size="sm"
               @click="$emit('close')"
-              class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors"
+              class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors"
             >
               {{ $t('common.cancel') }}
-            </button>
-            <button
+            </Button>
+            <Button
               type="submit"
+              variant="destructive"
+              size="sm"
               :disabled="isLoading || !isFormValid"
               class="px-6 py-2 bg-red-600 text-white text-sm font-medium rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
@@ -130,7 +134,7 @@
               <span v-else>
                 {{ $t('profile.confirmDelete') }}
               </span>
-            </button>
+            </Button>
           </div>
         </form>
       </div>
@@ -139,6 +143,8 @@
 </template>
 
 <script setup lang="ts">
+import { Button } from '@/components/ui/button'
+
 interface Emits {
   (e: 'confirm', data: { password: string; reason?: string }): void
   (e: 'close'): void

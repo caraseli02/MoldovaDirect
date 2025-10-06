@@ -95,11 +95,12 @@
 
           <!-- Thumbnail Images -->
           <div v-if="product.images?.length > 1" class="grid grid-cols-4 gap-2">
-            <button
+            <Button
               v-for="(image, index) in product.images"
               :key="image.id"
+              variant="outline"
               :class="[
-                'aspect-square overflow-hidden rounded border-2 transition-colors',
+                'aspect-square overflow-hidden rounded border-2 transition-colors p-0 h-auto',
                 selectedImageIndex === index ? 'border-blue-500' : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
               ]"
               @click="selectedImageIndex = index"
@@ -109,7 +110,7 @@
                 :alt="getLocalizedText(image.altText)"
                 class="w-full h-full object-cover"
               />
-            </button>
+            </Button>
           </div>
         </div>
 
@@ -219,7 +220,7 @@
               </select>
             </div>
             
-            <button
+            <Button
               :disabled="(product.stockQuantity || 0) <= 0"
               class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors duration-200 flex items-center justify-center space-x-2"
               @click="addToCart"
@@ -230,7 +231,7 @@
               <span>
                 {{ (product.stockQuantity || 0) > 0 ? $t('products.addToCart') : $t('products.outOfStock') }}
               </span>
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -249,6 +250,7 @@
 </template>
 
 <script setup lang="ts">
+import { Button } from '@/components/ui/button'
 import type { ProductWithRelations } from '~/types/database'
 
 // Get the product slug from route
