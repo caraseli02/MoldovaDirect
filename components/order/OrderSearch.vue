@@ -18,7 +18,9 @@
         @input="handleSearchInput"
       />
       <div v-if="searchQuery" class="absolute inset-y-0 right-0 pr-3 flex items-center">
-        <button
+        <Button
+          variant="ghost"
+          size="icon"
           @click="clearSearch"
           :aria-label="$t('orders.accessibility.clearSearch')"
           class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
@@ -26,7 +28,7 @@
           <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
-        </button>
+        </Button>
       </div>
     </div>
 
@@ -93,15 +95,17 @@
           role="listitem"
         >
           {{ $t('orders.search.searchLabel') }}: "{{ searchQuery }}"
-          <button 
-            @click="clearSearch" 
-            class="ml-1 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+          <Button
+            variant="ghost"
+            size="icon"
+            @click="clearSearch"
+            class="ml-1 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded h-4 w-4 p-0"
             :aria-label="$t('orders.accessibility.removeFilter', { filter: $t('orders.search.searchLabel') })"
           >
             <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
               <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
             </svg>
-          </button>
+          </Button>
         </span>
         <span
           v-if="selectedStatus"
@@ -109,15 +113,17 @@
           role="listitem"
         >
           {{ $t('orders.search.status') }}: {{ $t(`orders.status.${selectedStatus}`) }}
-          <button 
-            @click="clearStatus" 
-            class="ml-1 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+          <Button
+            variant="ghost"
+            size="icon"
+            @click="clearStatus"
+            class="ml-1 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded h-4 w-4 p-0"
             :aria-label="$t('orders.accessibility.removeFilter', { filter: $t('orders.search.status') })"
           >
             <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
               <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
             </svg>
-          </button>
+          </Button>
         </span>
         <span
           v-if="dateFrom || dateTo"
@@ -125,29 +131,34 @@
           role="listitem"
         >
           {{ $t('orders.search.dateRange') }}: {{ formatDateRange }}
-          <button 
-            @click="clearDateRange" 
-            class="ml-1 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+          <Button
+            variant="ghost"
+            size="icon"
+            @click="clearDateRange"
+            class="ml-1 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded h-4 w-4 p-0"
             :aria-label="$t('orders.accessibility.removeFilter', { filter: $t('orders.search.dateRange') })"
           >
             <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
               <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
             </svg>
-          </button>
+          </Button>
         </span>
       </div>
-      <button
+      <Button
+        variant="link"
+        size="sm"
         @click="clearAllFilters"
         :aria-label="$t('orders.accessibility.clearFilters')"
-        class="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2 py-1"
+        class="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2 py-1 h-auto"
       >
         {{ $t('orders.search.clearAll') }}
-      </button>
+      </Button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { Button } from '@/components/ui/button'
 import type { OrderStatus } from '~/types'
 
 interface OrderSearchFilters {

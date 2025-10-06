@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col sm:flex-row gap-3" role="group" aria-label="Order actions">
     <!-- Reorder Button -->
-    <button
+    <Button
       v-if="availableActions.includes('reorder')"
       @click="handleReorder"
       :disabled="loading"
@@ -13,11 +13,12 @@
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
       </svg>
       {{ $t('orders.actions.reorder') }}
-    </button>
+    </Button>
 
     <!-- Return Button -->
-    <button
+    <Button
       v-if="availableActions.includes('return')"
+      variant="outline"
       @click="handleReturn"
       :disabled="loading"
       :aria-label="$t('orders.accessibility.actionButton', { action: $t('orders.actions.return') })"
@@ -28,11 +29,12 @@
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
       </svg>
       {{ $t('orders.actions.return') }}
-    </button>
+    </Button>
 
     <!-- Contact Support Button -->
-    <button
+    <Button
       v-if="availableActions.includes('support')"
+      variant="outline"
       @click="handleSupport"
       :disabled="loading"
       :aria-label="$t('orders.accessibility.actionButton', { action: $t('orders.actions.support') })"
@@ -43,11 +45,12 @@
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
       </svg>
       {{ $t('orders.actions.support') }}
-    </button>
+    </Button>
 
     <!-- Track Order Button -->
-    <button
+    <Button
       v-if="availableActions.includes('track')"
+      variant="outline"
       @click="handleTrack"
       :disabled="loading"
       :aria-label="$t('orders.accessibility.actionButton', { action: $t('orders.actions.track') })"
@@ -59,7 +62,7 @@
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
       </svg>
       {{ $t('orders.actions.track') }}
-    </button>
+    </Button>
 
     <!-- Confirmation Dialog -->
     <Teleport to="body">
@@ -101,22 +104,23 @@
               </div>
             </div>
             <div class="bg-gray-50 dark:bg-gray-700 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-              <button
+              <Button
                 type="button"
                 @click="confirmAction"
                 :aria-label="confirmDialog.confirmText"
                 class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
               >
                 {{ confirmDialog.confirmText }}
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
+                variant="outline"
                 @click="cancelConfirmation"
                 :aria-label="$t('orders.accessibility.closeDialog')"
                 class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
               >
                 {{ $t('common.cancel') }}
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -126,6 +130,7 @@
 </template>
 
 <script setup lang="ts">
+import { Button } from '@/components/ui/button'
 import type { OrderWithItems } from '~/types'
 
 type ActionType = 'reorder' | 'return' | 'support' | 'track'

@@ -64,7 +64,7 @@
         
         <!-- Action buttons -->
         <div class="mt-4 flex flex-wrap gap-3">
-          <button
+          <Button
             v-if="canReorder"
             @click="handleReorder"
             class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors"
@@ -73,10 +73,11 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
             </svg>
             {{ $t('orders.actions.reorder') }}
-          </button>
-          
-          <button
+          </Button>
+
+          <Button
             v-if="canReturn"
+            variant="outline"
             @click="handleReturn"
             class="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-green-700 dark:text-green-300 text-sm font-medium rounded-lg border-2 border-green-600 dark:border-green-500 transition-colors"
           >
@@ -84,9 +85,10 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
             </svg>
             {{ $t('orders.actions.return') }}
-          </button>
-          
-          <button
+          </Button>
+
+          <Button
+            variant="outline"
             @click="handleContactSupport"
             class="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-green-700 dark:text-green-300 text-sm font-medium rounded-lg border-2 border-green-600 dark:border-green-500 transition-colors"
           >
@@ -94,7 +96,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
             </svg>
             {{ $t('orders.actions.support') }}
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -102,6 +104,7 @@
 </template>
 
 <script setup lang="ts">
+import { Button } from '@/components/ui/button'
 import type { Order, Address } from '~/types'
 
 interface Props {
