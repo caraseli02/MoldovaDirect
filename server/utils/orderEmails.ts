@@ -4,8 +4,7 @@
 // Utilities for sending order-related emails with logging and retry support
 // Requirements: 1.1, 4.1, 4.2
 
-import type { OrderWithItems } from '~/types/database'
-import type { EmailType, CreateEmailLogInput } from '~/types/email'
+import type { EmailType } from '~/types/email'
 import type { OrderEmailData, OrderItemData, AddressData, DatabaseOrder } from './emailTemplates/types'
 import { sendEmail } from './email'
 import { 
@@ -26,16 +25,6 @@ import {
   recordEmailAttempt,
   getEmailLog 
 } from './emailLogging'
-
-/**
- * Order email data structure for template rendering
- */
-export interface OrderEmailData {
-  order: OrderWithItems
-  customerName: string
-  customerEmail: string
-  locale: string
-}
 
 /**
  * Email sending result
@@ -314,8 +303,33 @@ export async function retryEmailDelivery(
       locale
     )
     
-    // Regenerate email HTML using new template system
-    const html = generateOrderConfirmationTemplate(emailData)
+    // Regenerate email HTML using original email type
+    const issueDescription = emailLog.metadata.issueDescription
+    
+    let html: string
+    
+    switch (emailLog.emailType) {
+      case 'order_confirmation':
+        html = generateOrderConfirmationTemplate(emailData)
+        break
+      case 'order_processing':
+        html = generateOrderProcessingTemplate(emailData)
+        break
+      case 'order_shipped':
+        html = generateOrderShippedTemplate(emailData)
+        break
+      case 'order_delivered':
+        html = generateOrderDeliveredTemplate(emailData)
+        break
+      case 'order_cancelled':
+        html = generateOrderCancelledTemplate(emailData)
+        break
+      case 'order_issue':
+        html = generateOrderIssueTemplate(emailData, issueDescription)
+        break
+      default:
+        html = generateOrderConfirmationTemplate(emailData)
+    }
     
     // Resend email
     const result = await sendEmail({
@@ -496,5 +510,3 @@ export function validateTrackingUrl(url: string): boolean {
     return false
   }
 }
-
-
