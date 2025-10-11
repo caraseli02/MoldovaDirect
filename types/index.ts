@@ -207,6 +207,37 @@ export type {
 // Recommendation constants
 export { RecommendationErrorCodes } from './recommendations'
 
+// Email types
+export type {
+  // Core types
+  EmailType,
+  EmailStatus,
+  EmailLog,
+  EmailMetadata,
+  
+  // Input types
+  CreateEmailLogInput,
+  UpdateEmailLogInput,
+  
+  // Response types
+  EmailLogWithOrder,
+  EmailLogFilters,
+  EmailLogListResponse,
+  
+  // Statistics types
+  EmailDeliveryStats,
+  
+  // Configuration types
+  EmailRetryConfig
+} from './email'
+
+// Email constants and utilities
+export {
+  DEFAULT_EMAIL_RETRY_CONFIG,
+  calculateRetryDelay,
+  shouldRetryEmail
+} from './email'
+
 // =============================================
 // COMMONLY USED TYPE UNIONS (imported from guards to avoid circular imports)
 // =============================================

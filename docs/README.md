@@ -74,6 +74,13 @@ MoldovaDirect/
 - [Cart Analytics](./CART_ANALYTICS.md) - Cart analytics system documentation
 - [Checkout & Orders](./CHECKOUT_FLOW.md) - Multi-step checkout UI and API overview
 
+### Key Specs Index
+Jump into the specs library when you need deeper requirements:
+- [Checkout & Payments Spec](./../.kiro/specs/checkout/) – order flow, cash-on-delivery, future Stripe/PayPal work
+- [Admin Order Management Spec](./../.kiro/specs/admin-order-management/) – dashboards, status updates, notifications
+- [Order Status Updates Spec](./../.kiro/specs/order-status-updates/) – lifecycle, tracking, customer history
+- [Order Confirmation Emails Spec](./../.kiro/specs/order-confirmation-emails/) – transactional templates and delivery (pending)
+
 ## 📚 Documentation Guidelines
 
 ### Where to Put Documentation
