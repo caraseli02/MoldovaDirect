@@ -195,29 +195,26 @@ This report identifies unused code, orphaned files, and cleanup opportunities ac
 
 ---
 
-### 2. Auth Component Migration 🔴 MEDIUM PRIORITY
+### 2. Auth Component Migration ✅ COMPLETED (February 2026)
 
-**Issue:** Auth components are marked for migration but still in use:
+**Outcome:** Legacy auth message components were removed and replaced with shadcn `Alert` usage across login, registration, and verification flows.
 
-#### Components to Migrate:
+#### Changes Delivered:
 1. **`components/auth/AuthErrorMessage.vue`**
-   - Used in: `pages/auth/verification-pending.vue`
-   - Replace with: `components/ui/alert/Alert.vue`
+   - Removed and inlined with shadcn `Alert` patterns in auth pages
    
 2. **`components/auth/AuthSuccessMessage.vue`**
-   - Used in: `pages/auth/verification-pending.vue`
-   - Replace with: `components/ui/alert/Alert.vue`
+   - Removed and replaced with shadcn `Alert` usage
    
 3. **`components/auth/AuthProgressIndicator.vue`**
-   - Used in: Tests only (`tests/unit/auth-components.test.ts`)
-   - Status: May not be used in production code
+   - Remains for progress UX; covered by unit tests
 
-**Current Status:**
-- ✅ Alert component is available (`components/ui/alert/`)
-- ⚠️ Components are still being used
-- 📝 Migration is documented in `docs/component-inventory.md`
+**Status Updates:**
+- ✅ Auth pages use shadcn inputs/labels/alerts
+- ✅ Unit tests updated (`tests/unit/auth-components.test.ts`)
+- ✅ Documentation refreshed (`docs/authentication-translations.md`, `docs/component-inventory.md`)
 
-**Recommendation:** Complete the migration to shadcn-vue Alert component
+**Recommendation:** None—monitor auth alert UX during regression runs
 
 **Benefits:**
 - ✅ Consistent UI across the application

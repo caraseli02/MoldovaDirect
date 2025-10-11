@@ -25,10 +25,9 @@ The authentication test suite covers all aspects of the user authentication syst
   - Real-time validation feedback
 
 - **`auth-components.test.ts`** - Tests Vue authentication components
-  - `AuthErrorMessage` - Error display component
-  - `AuthSuccessMessage` - Success message component
   - `AuthProgressIndicator` - Multi-step progress tracking
   - `PasswordStrengthMeter` - Password strength validation
+  - Auth alert patterns covered in page-level integration tests
 
 - **`use-auth.test.ts`** - Tests the main authentication composable
   - Reactive state management

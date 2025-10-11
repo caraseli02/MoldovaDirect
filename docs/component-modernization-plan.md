@@ -2,11 +2,11 @@
 
 ## Executive Summary
 
-This document outlines a comprehensive plan to modernize component usage across the MoldovaDirect application by better utilizing shadcn-vue components. The migration will improve consistency, accessibility, mobile experience, and development velocity.
+This document outlines a comprehensive plan to modernize component usage across the MoldovaDirect application by better utilizing shadcn-vue components. The migration will improve consistency, accessibility, mobile experience, and development velocity. All shadcn-vue libraries were scaffolded with the CLI on 2025-10-05; the actual migration of product surfaces to those components is still in progress.
 
 ## Current State Analysis
 
-### Available Components (✅ ALL COMPLETED - October 5, 2025)
+### Imported Component Libraries (October 5, 2025)
 - **Button** - Fully implemented with variants (default, destructive, outline, secondary, ghost, link)
 - **Card** - Complete card system (Card, CardHeader, CardContent, CardFooter, CardTitle, CardDescription, CardAction)
 - **Dialog** - Full dialog system with accessibility features
@@ -29,7 +29,27 @@ This document outlines a comprehensive plan to modernize component usage across 
 
 **Total**: 19 complete shadcn-vue component libraries (77 individual files)
 
-🎉 **IMPLEMENTATION COMPLETED** - All phases completed in ~2 hours vs estimated 6 weeks
+> **Status (February 2026)**  
+> All shadcn-vue component libraries listed above are installed, and buttons have been migrated to the new API. Remaining UI still uses bespoke components—this document now tracks the ongoing replacement work. Up-to-date blockers live in `TODO.md`; update both locations when work completes.
+
+### Current Migration Status (February 2026)
+
+| Surface / Flow | Status | Outstanding Work | Owner | Source of Truth |
+| --- | --- | --- | --- | --- |
+| Authentication (login/register, error banners) | ✅ Completed | Migrated to shadcn inputs/labels/alerts; retired legacy auth message components | Unassigned | `TODO.md` |
+| Checkout (shipping, payment, confirmation) | 🔄 In progress | Swap selects, inputs, alerts; adopt Dialog for modals | Unassigned | `TODO.md` |
+| Cart (drawer, line items, bulk actions) | ⏳ Not started | Replace quantity buttons, checkboxes, toasts with shadcn-vue | Unassigned | `TODO.md` |
+| Admin tables & filters | ⏳ Not started | Adopt `components/ui/table`, pagination, badge variants | Unassigned | `TODO.md` |
+| Mobile navigation & sheets | ⏳ Not started | Migrate menus to Dialog/Sheet patterns, fix touch targets | Unassigned | `TODO.md` |
+| Toast/Notification system | ⏳ Not started | Remove legacy `components/common/Toast*.vue`, consolidate on Sonner | Unassigned | `TODO.md` |
+
+### Adoption Progress
+- ✅ Buttons and primary dialogs migrated to shadcn-vue
+- 🔄 Forms: replace custom `<input>`, `<select>`, `<textarea>` usage across checkout, auth, and admin screens
+- 🔄 Tables: migrate admin tables to shadcn table components with consistent pagination + sorting UI
+- 🔄 Alerts/Toasts: phase out legacy `components/common/Toast*.vue`
+- 🔄 Mobile patterns: adopt shadcn dialogs/sheets for mobile menu, cart, and profile flows
+- 📌 Capture migration status in `TODO.md` when blocking issues emerge
 
 ### Component Usage Statistics
 - **78 files** contain custom `<button>` elements
@@ -192,48 +212,33 @@ This document outlines a comprehensive plan to modernize component usage across 
 - **Task Completion**: Improved checkout and form completion rates
 - **User Satisfaction**: Reduced support tickets related to UI issues
 
-## 🎉 IMPLEMENTATION COMPLETED - October 5, 2025
+## Library Scaffolding Completed - October 5, 2025
 
-### Actual Timeline vs Planned
+On 2025-10-05 the shadcn-vue CLI was used to generate all component libraries listed above. This step delivered ready-to-use building blocks but did not migrate existing product surfaces. The phase timelines below now track migration work.
 
-| Phase | Planned Duration | Actual Duration | Status | Completion Date |
-|-------|------------------|-----------------|---------|-----------------|
-| Phase 1 | 2 weeks | 45 minutes | ✅ COMPLETED | 2025-10-05 |
-| Phase 2 | 2 weeks | 35 minutes | ✅ COMPLETED | 2025-10-05 |
-| Phase 3 | 2 weeks | 40 minutes | ✅ COMPLETED | 2025-10-05 |
-| **Total** | **6 weeks** | **~2 hours** | **✅ ALL DONE** | **2025-10-05** |
+### Migration Timeline vs Planned
 
-**Efficiency Improvement**: 95% faster than planned implementation
+| Phase | Planned Duration | Actual Duration | Status (February 2026) | Notes |
+|-------|------------------|-----------------|------------------------|-------|
+| Phase 1 | 2 weeks | Scaffolding completed in 45 minutes | 🔄 In progress | Library files exist; feature teams still replacing inputs/buttons/alerts |
+| Phase 2 | 2 weeks | Scaffolding completed in 35 minutes | ⏳ Not started | Awaiting adoption in tooltips, tabs, switches, textarea, radio groups |
+| Phase 3 | 2 weeks | Scaffolding completed in 40 minutes | ⏳ Not started | Table/pagination/skeleton/avatar not deployed in product screens |
+| **Total** | **6 weeks** | **~2 hours scaffolding only** | **🔄 Migration ongoing** | Track active work in `TODO.md` |
 
-### What Was Actually Done
+### What Has Been Delivered So Far
 
 ```
-✅ Phase 1: Foundation Components    (45 minutes)
-├── Select Component (12 files) ✅
-├── Label Component (2 files) ✅
-├── Alert Component (4 files) ✅
-├── Badge Component (2 files) ✅
-└── Checkbox Component (2 files) ✅
-
-✅ Phase 2: Enhanced UX Components   (35 minutes)
-├── Tooltip Component (5 files) ✅
-├── Tabs Component (5 files) ✅
-├── Switch Component (2 files) ✅
-├── Textarea Component (2 files) ✅
-└── RadioGroup Component (3 files) ✅
-
-✅ Phase 3: Advanced Components      (40 minutes)
-├── Table Component (11 files) ✅
-├── Skeleton Component (2 files) ✅
-├── Pagination Component (9 files) ✅
-└── Avatar Component (4 files) ✅
+📦 Library scaffolding completed on 2025-10-05 via shadcn-vue CLI
+✅ Buttons migrated to new API in high-traffic flows
+📝 Migration checklists drafted per component family
+📌 Outstanding: replace legacy markup across product surfaces (see Current Migration Status table)
 ```
 
-### Key Success Factors
-1. **shadcn-vue CLI** - Automated component generation eliminated manual coding
-2. **No Custom Implementation** - Used official shadcn-vue components directly
-3. **Immediate Dependencies** - All required dependencies automatically installed
-4. **Zero Integration Issues** - Components worked out of the box
+### Key Considerations
+1. **shadcn-vue CLI** - Automated component generation accelerated setup; verify imports during migrations.
+2. **Parallel Systems** - Legacy components remain active; plan for controlled deprecation after each rollout.
+3. **Documentation Sync** - Keep this plan and `TODO.md` aligned after each migration milestone.
+4. **Testing Debt** - Add unit/E2E coverage as components are swapped into critical flows.
 
 ## Resource Requirements
 

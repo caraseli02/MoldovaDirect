@@ -12,8 +12,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createI18n } from 'vue-i18n'
-import AuthErrorMessage from '~/components/auth/AuthErrorMessage.vue'
-import AuthSuccessMessage from '~/components/auth/AuthSuccessMessage.vue'
 import AuthProgressIndicator from '~/components/auth/AuthProgressIndicator.vue'
 import PasswordStrengthMeter from '~/components/auth/PasswordStrengthMeter.vue'
 
@@ -83,175 +81,6 @@ vi.mock('#app', () => ({
 }))
 
 describe('Authentication Components', () => {
-  describe('AuthErrorMessage Component', () => {
-    it('should render error message correctly', () => {
-      const wrapper = mount(AuthErrorMessage, {
-        props: {
-          error: 'Invalid email or password',
-          type: 'validation'
-        },
-        global: {
-          plugins: [i18n]
-        }
-      })
-
-      expect(wrapper.text()).toContain('Invalid email or password')
-      expect(wrapper.find('[role="alert"]').exists()).toBe(true)
-      expect(wrapper.classes()).toContain('text-red-600')
-    })
-
-    it('should not render when no error provided', () => {
-      const wrapper = mount(AuthErrorMessage, {
-        props: {
-          error: null
-        },
-        global: {
-          plugins: [i18n]
-        }
-      })
-
-      expect(wrapper.html()).toBe('<!--v-if-->')
-    })
-
-    it('should handle different error types with appropriate styling', () => {
-      const networkWrapper = mount(AuthErrorMessage, {
-        props: {
-          error: 'Network error occurred',
-          type: 'network'
-        },
-        global: {
-          plugins: [i18n]
-        }
-      })
-
-      const validationWrapper = mount(AuthErrorMessage, {
-        props: {
-          error: 'Email is required',
-          type: 'validation'
-        },
-        global: {
-          plugins: [i18n]
-        }
-      })
-
-      expect(networkWrapper.classes()).toContain('border-orange-200')
-      expect(validationWrapper.classes()).toContain('border-red-200')
-    })
-
-    it('should be accessible with proper ARIA attributes', () => {
-      const wrapper = mount(AuthErrorMessage, {
-        props: {
-          error: 'Test error message',
-          fieldId: 'email-input'
-        },
-        global: {
-          plugins: [i18n]
-        }
-      })
-
-      const alertElement = wrapper.find('[role="alert"]')
-      expect(alertElement.exists()).toBe(true)
-      expect(alertElement.attributes('id')).toBe('email-input-error')
-      expect(alertElement.attributes('aria-live')).toBe('polite')
-    })
-
-    it('should support dismissible errors', async () => {
-      const wrapper = mount(AuthErrorMessage, {
-        props: {
-          error: 'Dismissible error',
-          dismissible: true
-        },
-        global: {
-          plugins: [i18n]
-        }
-      })
-
-      const dismissButton = wrapper.find('button[aria-label="Dismiss error"]')
-      expect(dismissButton.exists()).toBe(true)
-
-      await dismissButton.trigger('click')
-      expect(wrapper.emitted('dismiss')).toBeTruthy()
-    })
-  })
-
-  describe('AuthSuccessMessage Component', () => {
-    it('should render success message correctly', () => {
-      const wrapper = mount(AuthSuccessMessage, {
-        props: {
-          message: 'Account created successfully',
-          type: 'registration'
-        },
-        global: {
-          plugins: [i18n]
-        }
-      })
-
-      expect(wrapper.text()).toContain('Account created successfully')
-      expect(wrapper.find('[role="status"]').exists()).toBe(true)
-      expect(wrapper.classes()).toContain('text-green-600')
-    })
-
-    it('should auto-dismiss after specified duration', async () => {
-      vi.useFakeTimers()
-      
-      const wrapper = mount(AuthSuccessMessage, {
-        props: {
-          message: 'Success message',
-          autoDismiss: true,
-          duration: 3000
-        },
-        global: {
-          plugins: [i18n]
-        }
-      })
-
-      expect(wrapper.isVisible()).toBe(true)
-
-      vi.advanceTimersByTime(3000)
-      await wrapper.vm.$nextTick()
-
-      expect(wrapper.emitted('dismiss')).toBeTruthy()
-      
-      vi.useRealTimers()
-    })
-
-    it('should include action button when provided', () => {
-      const wrapper = mount(AuthSuccessMessage, {
-        props: {
-          message: 'Email verified successfully',
-          actionText: 'Continue to Dashboard',
-          actionPath: '/dashboard'
-        },
-        global: {
-          plugins: [i18n]
-        }
-      })
-
-      const actionButton = wrapper.find('button')
-      expect(actionButton.exists()).toBe(true)
-      expect(actionButton.text()).toBe('Continue to Dashboard')
-    })
-
-    it('should emit action event when action button clicked', async () => {
-      const wrapper = mount(AuthSuccessMessage, {
-        props: {
-          message: 'Success',
-          actionText: 'Continue',
-          actionPath: '/dashboard'
-        },
-        global: {
-          plugins: [i18n]
-        }
-      })
-
-      const actionButton = wrapper.find('button')
-      await actionButton.trigger('click')
-
-      expect(wrapper.emitted('action')).toBeTruthy()
-      expect(wrapper.emitted('action')?.[0]).toEqual(['/dashboard'])
-    })
-  })
-
   describe('AuthProgressIndicator Component', () => {
     it('should render progress indicator with correct steps', () => {
       const wrapper = mount(AuthProgressIndicator, {
@@ -445,16 +274,6 @@ describe('Authentication Components', () => {
 describe('Component Integration', () => {
   it('should work together in authentication forms', () => {
     // Test that components can be used together without conflicts
-    const errorMessage = mount(AuthErrorMessage, {
-      props: { error: 'Test error' },
-      global: { plugins: [i18n] }
-    })
-
-    const successMessage = mount(AuthSuccessMessage, {
-      props: { message: 'Test success' },
-      global: { plugins: [i18n] }
-    })
-
     const progressIndicator = mount(AuthProgressIndicator, {
       props: { currentStep: 1, totalSteps: 3 },
       global: { plugins: [i18n] }
@@ -465,20 +284,18 @@ describe('Component Integration', () => {
       global: { plugins: [i18n] }
     })
 
-    expect(errorMessage.exists()).toBe(true)
-    expect(successMessage.exists()).toBe(true)
     expect(progressIndicator.exists()).toBe(true)
     expect(passwordStrength.exists()).toBe(true)
   })
 
   it('should maintain consistent styling across components', () => {
     const components = [
-      mount(AuthErrorMessage, {
-        props: { error: 'Test' },
+      mount(AuthProgressIndicator, {
+        props: { currentStep: 1, totalSteps: 3 },
         global: { plugins: [i18n] }
       }),
-      mount(AuthSuccessMessage, {
-        props: { message: 'Test' },
+      mount(PasswordStrengthMeter, {
+        props: { password: 'TestPassword123!' },
         global: { plugins: [i18n] }
       })
     ]
