@@ -107,18 +107,45 @@
     </div>
 
     <!-- Delete Confirmation Dialog -->
-    <CommonConfirmDialog
-      :show="deleteDialog.show"
-      type="danger"
-      :title="deleteDialog.title"
-      :message="deleteDialog.message"
-      :details="deleteDialog.details"
-      confirm-text="Delete"
-      :loading="deleteDialog.loading"
-      loading-text="Deleting..."
-      @confirm="confirmDelete"
-      @cancel="cancelDelete"
-    />
+    <Dialog :open="deleteDialog.show" @update:open="handleDeleteDialogOpen">
+      <DialogContent class="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle class="text-red-600 dark:text-red-400 flex items-center gap-2">
+            <Icon name="heroicons:exclamation-triangle" class="w-5 h-5" />
+            {{ deleteDialog.title }}
+          </DialogTitle>
+          <DialogDescription>
+            {{ deleteDialog.message }}
+          </DialogDescription>
+        </DialogHeader>
+
+        <p class="text-sm text-gray-600 dark:text-gray-300">
+          {{ deleteDialog.details }}
+        </p>
+
+        <DialogFooter class="mt-6 flex justify-end gap-3">
+          <Button
+            variant="outline"
+            @click="cancelDelete"
+            :disabled="deleteDialog.loading"
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="destructive"
+            @click="confirmDelete"
+            :disabled="deleteDialog.loading"
+          >
+            <Icon
+              v-if="deleteDialog.loading"
+              name="heroicons:arrow-path"
+              class="w-4 h-4 mr-2 animate-spin"
+            />
+            {{ deleteDialog.loading ? 'Deleting...' : 'Delete' }}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
 
     <!-- Bulk Operations Progress Bar -->
     <AdminUtilsBulkOperationsBar
@@ -141,6 +168,14 @@
 
 <script setup lang="ts">
 import { Button } from '@/components/ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle
+} from '@/components/ui/dialog'
 import type { CategoryWithChildren, ProductWithRelations } from '~/types/database'
 import { usePinia } from '#imports'
 definePageMeta({
@@ -328,6 +363,12 @@ const cancelDelete = () => {
     loading: false,
     productId: null,
     isBulk: false
+  }
+}
+
+const handleDeleteDialogOpen = (open: boolean) => {
+  if (!open) {
+    cancelDelete()
   }
 }
 

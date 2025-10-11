@@ -1,164 +1,76 @@
-# 🚀 Supabase Setup Guide for Moldova Direct
+# Supabase Setup Guide for Moldova Direct
 
-This guide will help you set up Supabase for the Moldova Direct project.
+This guide walks through configuring a fresh Supabase project so it matches the current Moldova Direct backend (profiles, checkout, analytics, and order management).
 
-## 1. Create Supabase Project
+---
 
-1. **Go to Supabase Dashboard**
-   - Visit https://supabase.com
-   - Sign up/Sign in with GitHub
+## 1. Create a Supabase Project
+1. Sign in at [supabase.com](https://supabase.com) and click **New project**.
+2. Choose the team/organization, name the project (e.g. `moldova-direct`), set a strong database password, and pick a region close to your shoppers.
+3. Wait for provisioning to finish (usually 2–3 minutes).
 
-2. **Create New Project**
-   - Click "New Project"
-   - Choose your organization
-   - Name: `moldova-direct`
-   - Database Password: Generate a strong password (save it!)
-   - Region: Choose closest to your users
-   - Click "Create new project"
-
-3. **Wait for Setup** (2-3 minutes)
-   - Project will be provisioned automatically
-
-## 2. Get Project Configuration
-
-1. **Navigate to Settings**
-   - In your project dashboard, go to Settings → API
-
-2. **Copy Project Details**
-   - **Project URL**: `https://your-project-id.supabase.co`
-   - **Anon Key**: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...`
-
-## 3. Update Environment Variables
-
-Update your `.env` file with your Supabase credentials:
+## 2. Configure Environment Variables
+Grab your project credentials from **Settings → API** and update `.env` (copy from `.env.example` if needed):
 
 ```bash
-# Replace with your actual Supabase project details
 SUPABASE_URL=https://your-project-id.supabase.co
-SUPABASE_ANON_KEY=your-supabase-anon-key
+SUPABASE_ANON_KEY=public-anon-key
+SUPABASE_SERVICE_KEY=service-role-key   # required for server APIs
 
-# Keep existing variables
 APP_URL=http://localhost:3000
 NODE_ENV=development
-RESEND_API_KEY=re_7fPnuFrc_EiyvnaFLufsp5FuGsm9g5Euc
-EMAIL_FROM=Moldova Direct <noreply@moldovadirect.com>
+RESEND_API_KEY= # only if you plan to test transactional emails locally
 ```
 
-## 4. Set Up Database Schema
+Restart `npm run dev` after editing `.env` so Nuxt picks up the changes.
 
-### Option A: Import SQL Schema (Recommended)
+## 3. Apply the Database Schema
 
-1. **Go to SQL Editor**
-   - In Supabase dashboard → SQL Editor
+All SQL scripts live at the repository root. Run them in order via the Supabase SQL Editor or the Supabase CLI (`supabase db push` supports `--file`).
 
-2. **Create New Query**
-   - Click "New query"
+1. **Core schema** – `supabase-schema.sql`
+   - Profiles, addresses, categories, products, inventory logs, carts, orders, order items.
+   - Enables row-level security (RLS) on all user data tables.
+2. **Checkout and payments** – `supabase-checkout-schema.sql` and `supabase-checkout-indexes.sql`
+   - Adds checkout-specific tables, indexes, and helper functions.
+3. **Order tracking and returns** – `supabase-order-tracking-schema.sql`, `supabase-order-returns-schema.sql`, `supabase-order-indexes.sql`, `supabase-order-policies.sql`
+   - Extends orders with tracking, return workflows, and tighter policies.
+4. **Analytics and support add-ons** – run any of the optional scripts your feature work requires:
+   - `supabase-analytics-schema.sql`
+   - `supabase-cart-analytics-simple.sql`
+   - `supabase-support-tickets-schema.sql`
+   - `supabase-user-addresses-schema.sql`
+   - `supabase-add-reorder-point.sql`
+   - `supabase-mock-orders.sql` (seed data for demos; remove before production)
 
-3. **Run the Schema Script**
-   ```sql
-   -- Copy the contents of database-schema.sql (will be created) and paste here
-   -- Then click "Run"
-   ```
+> Tip: keep a log of which scripts you apply so production, staging, and local environments stay in sync.
 
-### Option B: Use Supabase Migration Tool
+## 4. Configure Authentication
+1. Navigate to **Authentication → Settings**.
+2. Set **Site URL** to `http://localhost:3000` and add `http://localhost:3000/auth/confirm` to **Redirect URLs**.
+3. Email provider is enabled by default; add OAuth providers if required.
+4. Optional: customise Supabase email templates (we send transactional emails with Resend for production-like flows).
 
-```bash
-# Install Supabase CLI
-npm install -g supabase
+## 5. Verify Row-Level Security
+The provided SQL scripts enable RLS on `profiles`, `addresses`, `carts`, `orders`, `order_items`, and related tables with policies tied to `auth.uid()`. Double-check **Policies** in the Supabase dashboard if you add new tables—mirror the existing patterns to keep data scoped per user.
 
-# Login to Supabase
-supabase login
+## 6. Seed or Reset Data (Optional)
+- Use `supabase-mock-orders.sql` to create sample orders for the admin dashboard.
+- When building new features, create dedicated seed scripts and store them alongside the other `supabase-*.sql` files so the team can reproduce your data set.
 
-# Link your project
-supabase link --project-ref your-project-id
+## 7. Smoke Test the Integration
+1. Install dependencies (`npm install`) if you haven’t already.
+2. Start Nuxt: `npm run dev`.
+3. Sign up with Supabase Auth, create a few orders from the checkout flow (cash payments function offline), and confirm the data lands in Supabase tables.
 
-# Run migrations
-supabase db push
-```
+---
 
-## 5. Configure Authentication
+## Troubleshooting
+- **Authentication loops**: confirm `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and redirect URLs all match; restart the dev server after changes.
+- **Permission errors**: ensure the relevant SQL script ran and RLS policies exist—missing policies default to *deny*.
+- **Service key missing**: any server route that writes orders or payment intents needs `SUPABASE_SERVICE_KEY`; set it locally and in deployment environments.
 
-1. **Go to Authentication Settings**
-   - Dashboard → Authentication → Settings
-
-2. **Configure Site URL**
-   - Site URL: `http://localhost:3000`
-   - Additional redirect URLs: `http://localhost:3000/auth/confirm`
-
-3. **Enable Auth Providers**
-   - Email: ✅ (enabled by default)
-   - Optional: Google, GitHub, etc.
-
-4. **Configure Email Templates** (Optional)
-   - Go to Authentication → Email Templates
-   - Customize signup, recovery emails
-
-## 6. Set Up Row Level Security (RLS)
-
-1. **Go to Authentication → Policies**
-
-2. **Enable RLS for Tables**
-   ```sql
-   -- Enable RLS on users table
-   ALTER TABLE users ENABLE ROW LEVEL SECURITY;
-   
-   -- Allow users to read their own data
-   CREATE POLICY "Users can view own profile" ON users
-     FOR SELECT USING (auth.uid() = id);
-   
-   -- Allow users to update their own data
-   CREATE POLICY "Users can update own profile" ON users
-     FOR UPDATE USING (auth.uid() = id);
-   ```
-
-## 7. Test Connection
-
-1. **Start Development Server**
-   ```bash
-   npm run dev
-   ```
-
-2. **Check Console**
-   - Should see no Supabase connection errors
-   - Navigate to http://localhost:3000
-
-## 8. Seed Sample Data (Optional)
-
-```bash
-# Run the seed script after setting up schema
-npm run db:seed
-```
-
-## 🔍 Troubleshooting
-
-### Environment Variables Not Working
-- Restart your dev server after updating `.env`
-- Check there are no extra spaces in variable values
-
-### Authentication Redirect Issues  
-- Verify `SUPABASE_URL` and `SUPABASE_ANON_KEY` are correct
-- Check Site URL in Supabase dashboard matches your local URL
-- Ensure redirect URLs are configured properly
-
-### Database Connection Issues
-- Verify your project is fully provisioned (green status in dashboard)
-- Check if RLS policies are blocking your queries
-- Use Supabase SQL Editor to test queries directly
-
-## 📚 Useful Resources
-
-- **Supabase Docs**: https://supabase.com/docs
-- **Nuxt Supabase Module**: https://supabase.nuxtjs.org/
-- **SQL Editor**: Your dashboard → SQL Editor
-- **Database Schema**: Your dashboard → Database → Tables
-
-## 🎉 Next Steps
-
-Once Supabase is set up:
-
-1. ✅ Update your `.env` file with Supabase credentials
-2. ✅ Import database schema 
-3. ✅ Test authentication flow
-4. ✅ Start development with `npm run dev`
-
-Your Moldova Direct app is now powered by Supabase! 🚀
+For deeper guidance see:
+- Supabase docs – <https://supabase.com/docs>
+- Nuxt Supabase module – <https://supabase.nuxtjs.org/>
+- Internal SQL helpers – `supabase-*.sql` files in the repo root

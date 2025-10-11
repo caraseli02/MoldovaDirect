@@ -20,8 +20,8 @@ i18n: {
     { code: 'ro', name: 'Română', file: 'ro.json' },
     { code: 'ru', name: 'Русский', file: 'ru.json' }
   ],
-  lazy: true,                    // ✨ NEW: Enable lazy loading
-  langDir: 'i18n/locales/',     // ✨ NEW: Explicit directory path
+  lazy: true,
+  langDir: 'locales/',
   defaultLocale: 'es',
   strategy: 'prefix_except_default',
   detectBrowserLanguage: {
@@ -43,7 +43,7 @@ i18n: {
   - Better Core Web Vitals scores
   - Automatic caching of loaded translations
 
-#### Language Directory (`langDir: 'i18n/locales/'`)
+#### Language Directory (`langDir: 'locales/'`)
 - **Purpose**: Explicitly defines where translation files are located
 - **Benefits**:
   - Clear project structure
@@ -388,7 +388,7 @@ i18n: {
 ### Recent Changes (Current Update)
 
 - ✅ Added `lazy: true` for performance optimization
-- ✅ Added explicit `langDir: 'i18n/locales/'` path
+- ✅ Added explicit `langDir: 'locales/'` path
 - ✅ Improved initial page load times
 - ✅ Better development experience with explicit paths
 

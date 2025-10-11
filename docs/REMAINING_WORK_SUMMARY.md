@@ -1,166 +1,55 @@
 # Remaining Work Summary - MoldovaDirect
-**Last Updated: August 31, 2025**
+**Last Updated: February 2026**
 
-## Priority 1: Admin Dashboard (95% Incomplete)
-**Estimated Effort: 2-3 weeks**
-
-### Critical Tasks:
-1. **Admin Authentication & Authorization**
-   - Create admin role verification middleware
-   - Implement role-based access control with Supabase
-   - Admin login flow with session management
-
-2. **Admin Layout & Navigation**
-   - Build responsive admin layout with sidebar
-   - Create admin header with user info
-   - Mobile-friendly collapsible navigation
-
-3. **Product Management Interface**
-   - Product listing with filters and search
-   - Product creation/editing forms with validation
-   - Image upload with multiple image support
-   - Bulk operations for products
-
-4. **Inventory Management**
-   - Stock level tracking and indicators
-   - Inline inventory editing
-   - Inventory movement history
-
-5. **User Management**
-   - User listing with search and filters
-   - User account management actions
-   - Activity tracking and permissions
-
-6. **Analytics Dashboard**
-   - User registration trends
-   - Product performance metrics
-   - Sales analytics and reporting
-
----
-
-## Priority 2: Checkout & Payment Integration (0% Complete)
+## Priority 1: Payment Integration (UI in place, backend pending)
 **Estimated Effort: 2 weeks**
 
-### Critical Tasks:
-1. **Checkout Flow**
-   - Multi-step checkout process UI
-   - Shipping address form with validation
-   - Delivery options selection
-   - Order review and confirmation page
+### Outstanding Tasks
+- Complete Stripe payment intent flow: confirm, capture, and handle webhooks for order success/failure.
+- Implement PayPal checkout option with sandbox validation and graceful fallbacks.
+- Harden payment error states in the checkout UI and surface actionable feedback to shoppers.
+- Store customer payment preferences securely and document environment variable requirements.
 
-2. **Payment Integration**
-   - Stripe payment gateway setup
-   - PayPal integration
-   - Payment method selection UI
-   - Secure payment processing
-
-3. **Order Management**
-   - Order creation and storage in Supabase
-   - Order confirmation emails
-   - Order tracking system
-   - Order history in user account
-
----
-
-## Priority 3: Email System & Notifications (0% Complete)
+## Priority 2: Transactional Email System
 **Estimated Effort: 1 week**
 
-### Tasks:
-1. **Transactional Emails**
-   - Order confirmation emails
-   - Shipping notifications
-   - Password reset emails (enhance existing)
-   - Welcome emails for new users
+### Outstanding Tasks
+- Build localized email templates for order confirmations, shipping updates, and password recovery.
+- Integrate Resend (or Supabase functions) for delivery with retry logic and logging.
+- Capture email notification preferences within the account area and honour opt-outs.
+- Automate smoke tests to verify templates render correctly across locales.
 
-2. **Email Templates**
-   - Responsive HTML email templates
-   - Multi-language email content
-   - Brand-consistent design
+## Priority 3: Admin Analytics & Reporting
+**Estimated Effort: 1-2 weeks**
 
----
+### Outstanding Tasks
+- Add sales, inventory, and customer growth widgets to the admin dashboard.
+- Surface product performance insights (best sellers, low stock) with drill-down links.
+- Schedule downloadable CSV/Excel exports and audit trails for admin actions.
+- Document monitoring/alerting expectations and wire up observability hooks.
 
-## Priority 4: Performance & SEO Optimization (20% Complete)
+## Priority 4: Checkout Hardening & QA
 **Estimated Effort: 1 week**
 
-### Remaining Tasks:
-1. **Image Optimization**
-   - Configure Nuxt Image with CDN
-   - WebP format support with fallbacks
-   - Lazy loading implementation
+### Outstanding Tasks
+- Finalize guest checkout edge cases and ensure inventory reservation is enforced via Supabase SQL.
+- Expand Playwright coverage to include full checkout success/failure paths and mobile breakpoints.
+- Add Vitest coverage for checkout composables (shipping, payment, order review).
+- Validate accessibility (keyboard navigation, screen reader cues) across the multi-step flow.
 
-2. **SEO Enhancements**
-   - Dynamic meta tags for products
-   - Structured data for products
-   - XML sitemap generation
-   - robots.txt configuration
-
-3. **Performance Improvements**
-   - Bundle size optimization
-   - Code splitting for routes
-   - Service worker for offline support
-   - Caching strategies
-
----
-
-## Priority 5: Testing & Quality Assurance (60% Complete)
+## Priority 5: Performance & SEO Enhancements
 **Estimated Effort: 1 week**
 
-### Remaining Tasks:
-1. **Test Coverage Expansion**
-   - Admin dashboard E2E tests
-   - Checkout flow E2E tests
-   - Payment integration tests
-   - Visual regression tests for new UI
-
-2. **Security Audit**
-   - Penetration testing
-   - OWASP compliance check
-   - Security headers configuration
+### Outstanding Tasks
+- Configure Nuxt Image with CDN-backed transformations and WebP fallbacks.
+- Generate structured data, sitemaps, and robots rules aligned with the latest URL schema.
+- Optimize bundle size via route-level code splitting and shared module audits.
+- Add PWA/offline improvements (service worker caching strategy, install prompts).
 
 ---
 
-## Completed Features ✅
-- Foundation with multi-language support
-- Product catalog with search and filters
-- User authentication with Supabase
-- Shopping cart with persistence
-- Dark/light theme system
-- User profile management
-- Mobile-responsive design
-- shadcn-vue UI component migration (Aug 31, 2025)
-
----
-
-## Technical Debt & Future Enhancements
-1. **Cart Improvements**
-   - Cart synchronization across tabs
-   - Save for later functionality
-   - Cart recovery mechanisms
-
-2. **PWA Features**
-   - App manifest for installation
-   - Push notifications
-   - Offline browsing capability
-
-3. **Analytics & Monitoring**
-   - Google Analytics integration
-   - Error tracking with Sentry
-   - Performance monitoring
-
----
-
-## Estimated Timeline to MVP
-- **Admin Dashboard**: 2-3 weeks
-- **Checkout & Payment**: 2 weeks
-- **Email System**: 1 week
-- **Optimization & Testing**: 1 week
-
-**Total Estimated Time**: 6-7 weeks
-
----
-
-## Notes
-- All features should maintain multi-language support (ES/EN/RO/RU)
-- Mobile-first approach for all new features
-- Maintain consistency with shadcn-vue component system
-- Ensure dark mode support for all new components
+## Recently Completed ✅
+- Multi-step checkout pages (shipping, payment, review) with responsive layouts.
+- Admin product and user management views with bulk actions and inventory controls.
+- Order API endpoints for creation, retrieval, and customer history.
+- Cart validation improvements and shadcn-vue component migration.

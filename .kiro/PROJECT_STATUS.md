@@ -4,7 +4,7 @@
 
 Moldova Direct is an e-commerce platform specializing in authentic Moldovan food and wine products with delivery to Spain. The project is currently in active development with significant progress across foundation, product catalog, authentication, and shopping cart features.
 
-**Current Phase**: Phase 5 - Admin Dashboard & Checkout Implementation  
+**Current Phase**: Phase 5 - Payment & Notifications Integration (Checkout UI delivered)  
 **Previous Phase**: shadcn-vue UI Migration ✅ COMPLETED (Aug 31, 2025)
 
 ## 🏗️ Architecture Overview
@@ -83,74 +83,52 @@ Moldova Direct is an e-commerce platform specializing in authentic Moldovan food
 
 ### Recently Completed (Latest Updates)
 
+#### February 2026 - Checkout & Admin Foundations
+```
+feat: deliver checkout flow scaffolding and admin dashboards
+- Added multi-step checkout pages (shipping, payment, review) with responsive layouts
+- Implemented checkout composables and validation helpers
+- Delivered admin product catalog management with bulk actions and inventory edits
+- Added admin user management views with detail modal and activity summaries
+- Exposed order creation, payment intent, and shipping method API endpoints
+```
+
 #### August 31, 2025 - shadcn-vue Migration
 ```
 feat: Migrate to shadcn-vue UI component system
 - Replaced custom UI components with shadcn-vue components
 - Updated Tailwind CSS to v4 with CSS variables
-- Moved custom components to components/custom/ directory
 - Added proper TypeScript support and component aliases
 - Updated all pages and components to use new UI system
-- Cleaned up test files and unnecessary configurations
 ```
 
-#### Previous Milestones
-- User profile management system implementation
-- Comprehensive dark theme support across all components
-- Mobile accessibility enhancements for authentication
-- Cart error handling and user feedback system
-
 ### Active Work Items
-Based on `.kiro/specs/shopping-cart/tasks.md`:
-
-#### ✅ Completed
-1. Enhanced cart error handling and user feedback
-
-#### 🔄 In Progress / Next Priority
-2. Cart persistence and session management improvements
-3. Inventory validation optimization
-4. Mobile cart experience enhancements
+- Stripe/PayPal payment capture: move beyond cash-only checkout, store payment methods, and finalise production configs
+- Transactional email pipeline: confirmation, fulfillment, and password recovery emails with localized templates
+- Admin analytics dashboards: product performance, sales trends, and user growth metrics surfaced in UI
+- Checkout hardening: complete guest checkout edge cases and connect inventory reservation to Supabase scripts
 
 ## 📋 Roadmap & Next Steps
 
-### Immediate Priorities (Phase 5: Checkout)
-1. **Checkout Flow Implementation**
-   - Multi-step checkout process
-   - Shipping address management
-   - Delivery options selection
-   - Order summary and review
+### Immediate Priorities (Phase 5 Focus)
+1. **Payment Providers**
+   - Enable Stripe payment intents end-to-end (capture, webhooks, error handling)
+   - Implement PayPal checkout option with sandbox testing
+   - Securely manage API keys and environment configuration
+2. **Communication & Notifications**
+   - Build transactional email templates (order confirmation, shipping updates)
+   - Integrate Resend/Supabase email delivery with localization
+   - Capture customer notification preferences
+3. **Admin Insights**
+   - Add sales, inventory, and customer analytics widgets to admin dashboard
+   - Schedule daily/weekly summary reports
+   - Document monitoring and alerting expectations
 
-2. **Payment Integration**
-   - Stripe payment gateway
-   - PayPal integration
-   - Payment method selection
-   - Secure payment processing
-
-3. **Order Management**
-   - Order creation and storage
-   - Order confirmation emails
-   - Order tracking system
-   - Order history in user account
-
-### Future Enhancements (from .kiro/specs/shopping-cart/tasks.md)
-
-#### High Priority
-- Fallback to sessionStorage when localStorage fails
-- Debounced inventory validation
-- Swipe-to-remove for mobile cart items
-- Cart synchronization across browser tabs
-
-#### Medium Priority
-- Save for Later functionality
-- Cart analytics and abandonment tracking
-- Service worker for offline cart access
-- Cart item recommendations
-
-#### Nice to Have
-- Cart sharing via URL
-- Bulk cart operations
-- A/B testing framework
-- Cart templates for repeat orders
+### Future Enhancements
+- Storage fallbacks for cart/session persistence and cross-tab sync
+- Save-for-later lists and cart recovery workflows
+- Offline and PWA improvements (service worker caching, push notifications)
+- Enhanced recommendation engine and A/B testing support
 
 ## 🧪 Testing & Quality
 

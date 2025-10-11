@@ -72,6 +72,8 @@ export default defineNuxtConfig({
       { code: "ro", name: "Română", file: "ro.json" },
       { code: "ru", name: "Русский", file: "ru.json" },
     ],
+    lazy: true,
+    langDir: "locales",
     defaultLocale: "es",
     strategy: "prefix_except_default",
     detectBrowserLanguage: {

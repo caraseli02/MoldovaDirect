@@ -72,6 +72,7 @@ MoldovaDirect/
 - [Admin Dashboard](./../.kiro/specs/admin-dashboard/) - Admin features
 - [Cart System Architecture](./CART_SYSTEM_ARCHITECTURE.md) - Cart system technical architecture
 - [Cart Analytics](./CART_ANALYTICS.md) - Cart analytics system documentation
+- [Checkout & Orders](./CHECKOUT_FLOW.md) - Multi-step checkout UI and API overview
 
 ## 📚 Documentation Guidelines
 

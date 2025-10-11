@@ -90,15 +90,15 @@ All project documentation follows Kiro's spec-driven development approach in the
 - Product catalog with categories and search
 - User authentication with Supabase Auth
 - Shopping cart with persistence
-- Dark/light theme system
-- User profile management
-- Mobile-responsive design
-- **NEW**: shadcn-vue UI component migration
+- Multi-step checkout UI with shipping, payment, and review steps
+- Order API endpoints with customer order history
+- Admin dashboard views for products and users
+- Dark/light theme system and shadcn-vue UI migration
 
 🚧 **In Progress**
-- Admin dashboard for product management
-- Checkout flow with payment integration
-- Order management system
+- Online payment capture (Stripe/PayPal) and production credentials
+- Transactional email workflows (order confirmations, shipping updates)
+- Admin analytics dashboards and advanced reporting
 
 See [.kiro/ROADMAP.md](.kiro/ROADMAP.md) for detailed timeline.
 
@@ -148,7 +148,7 @@ i18n: {
     { code: 'ru', name: 'Русский', file: 'ru.json' }
   ],
   lazy: true,                    // Enable lazy loading
-  langDir: 'i18n/locales/',     // Translation files directory
+  langDir: 'locales/',          // Translation files directory (relative to /i18n)
   defaultLocale: 'es',
   strategy: 'prefix_except_default'
 }
