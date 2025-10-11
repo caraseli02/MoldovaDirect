@@ -19,12 +19,7 @@ import {
   generateOrderIssueTemplate,
   getOrderStatusSubject
 } from './emailTemplates/orderStatusTemplates'
-import { 
-  createEmailLog, 
-  updateEmailLog, 
-  recordEmailAttempt,
-  getEmailLog 
-} from './emailLogging'
+import { createEmailLog, recordEmailAttempt, getEmailLog } from './emailLogging'
 
 /**
  * Email sending result

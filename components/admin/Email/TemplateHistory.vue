@@ -65,7 +65,7 @@
                 @click="rollbackToVersion(version)"
                 variant="outline"
                 size="sm"
-                :disabled="rolling back"
+                :disabled="rollingBack"
               >
                 Rollback
               </Button>
@@ -138,20 +138,32 @@ const emit = defineEmits<{
   rollback: []
 }>()
 
-const history = ref<any[]>([])
+const toast = useToast()
+const history = ref<TemplateHistoryEntry[]>([])
 const loading = ref(false)
 const showVersionModal = ref(false)
-const selectedVersion = ref<any>(null)
+const selectedVersion = ref<TemplateHistoryEntry | null>(null)
 const rollingBack = ref(false)
+
+interface TemplateHistoryEntry {
+  id: number
+  version: number
+  templateType: string
+  locale: string
+  subject: string
+  preheader?: string
+  translations: Record<string, unknown>
+  archivedAt: string
+}
 
 watch(() => [props.templateType, props.locale], () => {
   loadHistory()
 }, { immediate: true })
 
-async function loadHistory() {
+async function loadHistory(): Promise<void> {
   loading.value = true
   try {
-    const { data } = await useFetch('/api/admin/email-templates/history', {
+    const { data } = await useFetch<TemplateHistoryEntry[]>('/api/admin/email-templates/history', {
       params: {
         type: props.templateType,
         locale: props.locale
@@ -168,12 +180,12 @@ async function loadHistory() {
   }
 }
 
-function viewVersion(version: any) {
+function viewVersion(version: TemplateHistoryEntry): void {
   selectedVersion.value = version
   showVersionModal.value = true
 }
 
-async function rollbackToVersion(version: any) {
+async function rollbackToVersion(version: TemplateHistoryEntry): Promise<void> {
   if (!confirm(`Are you sure you want to rollback to version ${version.version}? This will create a new version with the old content.`)) {
     return
   }
@@ -189,13 +201,13 @@ async function rollbackToVersion(version: any) {
       }
     })
 
-    useToast().success('Template rolled back successfully')
+    toast.success('Template rolled back successfully')
     showVersionModal.value = false
     emit('rollback')
     await loadHistory()
   } catch (error) {
     console.error('Failed to rollback template:', error)
-    useToast().error('Failed to rollback template')
+    toast.error('Failed to rollback template')
   } finally {
     rollingBack.value = false
   }
