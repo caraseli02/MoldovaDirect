@@ -121,7 +121,7 @@
 ### Task 5.1: Checkout Flow Design
 **Description**: Create multi-step checkout process  
 **Outcome**: Shipping, payment, review steps  
-**Status**: PENDING  
+**Status**: COMPLETED  
 **Dependencies**: Task 4.3  
 **Estimated Hours**: 6  
 
@@ -156,8 +156,8 @@
 ### Task 5.6: Order Creation
 **Description**: Convert cart to order after payment  
 **Outcome**: Orders stored in database  
-**Status**: PENDING  
-**Dependencies**: Task 5.4, Task 5.5  
+**Status**: COMPLETED (cash-on-delivery path)  
+**Dependencies**: Task 5.4, Task 5.5 (required for online payments)  
 **Estimated Hours**: 4  
 
 ## Phase 6: Order Management
@@ -165,35 +165,35 @@
 ### Task 6.1: Order Schema
 **Description**: Create orders database structure  
 **Outcome**: Complete order data model  
-**Status**: PENDING  
+**Status**: COMPLETED  
 **Dependencies**: Task 1.3  
 **Estimated Hours**: 3  
 
 ### Task 6.2: Order Status Workflow
 **Description**: Implement order status transitions  
 **Outcome**: Order lifecycle management  
-**Status**: PENDING  
+**Status**: COMPLETED (admin API handles status transitions; role guard TODO)  
 **Dependencies**: Task 6.1  
 **Estimated Hours**: 4  
 
 ### Task 6.3: Customer Order History
 **Description**: Create order history page for customers  
 **Outcome**: Customers can view past orders  
-**Status**: PENDING  
+**Status**: COMPLETED  
 **Dependencies**: Task 6.1  
 **Estimated Hours**: 4  
 
 ### Task 6.4: Order Tracking
 **Description**: Implement order tracking functionality  
 **Outcome**: Real-time order status updates  
-**Status**: PENDING  
+**Status**: COMPLETED (tracking numbers + live updates UI)  
 **Dependencies**: Task 6.2  
 **Estimated Hours**: 6  
 
 ### Task 6.5: Admin Order Management
 **Description**: Create admin interface for order processing  
 **Outcome**: Admin can manage all orders  
-**Status**: PENDING  
+**Status**: COMPLETED (admin dashboards live; expand analytics later)  
 **Dependencies**: Task 6.1, Task 2.4  
 **Estimated Hours**: 8  
 
@@ -392,30 +392,29 @@
 - ✅ Phase 2: Authentication System (Supabase Auth)
 - ✅ Phase 3: Product Catalog (Advanced Features)
 - ✅ Phase 4: Shopping Cart (Security + Analytics)
+- ✅ Phase 5: Checkout Flow (cash-on-delivery path)
+- ✅ Phase 6: Order Management (customer + admin)
 - ✅ Phase 8: Admin Dashboard (Complete)
 - ✅ Partial Phase 10: Testing Setup
 
 ### Current Focus
-- 🔄 Phase 5: Checkout Process
+- 🔄 Phase 5: Payment integrations (Stripe/PayPal) and shipping calculator
+- 🔄 Phase 7: Email Notifications
 
 ### Upcoming Phases
-- Phase 5: Checkout Process
-- Phase 6: Order Management
 - Phase 7: Email Notifications
-- Phase 8: Admin Dashboard
 - Phase 9: Performance & SEO
 - Phase 11: Production Deployment
 - Phase 12: Post-Launch Features
 
 ### Total Estimated Hours Remaining
-- Phase 5: 34 hours
-- Phase 6: 25 hours
+- Phase 5: 24 hours (address validation, shipping calculator, Stripe, PayPal)
 - Phase 7: 15 hours
 - Phase 9: 13 hours
 - Phase 10: 10 hours
 - Phase 11: 12 hours
 - Phase 12: 24 hours
-- **Total: ~133 hours** (42 hours saved!)
+- **Total: ~98 hours** (updated after Phase 5/6 completions)
 
 ### Critical Path for MVP
 1. ✅ ~~Complete Shopping Cart (Phase 4)~~ **COMPLETED**

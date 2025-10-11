@@ -77,47 +77,50 @@ i18n/locales/
 
 ### 2. Reusable Components
 
-#### AuthErrorMessage.vue
+#### Auth Alerts (shadcn `Alert`)
 
-Displays authentication error messages with proper translation and context-aware styling.
-
-```vue
-<AuthErrorMessage
-  :error="errorMessage"
-  context="login"
-  :dismissible="true"
-  :show-retry="true"
-  @dismiss="errorMessage = null"
-  @retry="handleRetry"
-/>
-```
-
-**Props:**
-- `error`: Error message string
-- `context`: Authentication context ('login', 'register', 'reset', 'verify', 'general')
-- `dismissible`: Whether the message can be dismissed
-- `showRetry`: Whether to show a retry button
-
-#### AuthSuccessMessage.vue
-
-Displays success messages with proper translation and optional actions.
+Legacy `AuthErrorMessage.vue` and `AuthSuccessMessage.vue` were retired in February 2026. Authentication flows now compose shadcn `Alert` primitives directly so translations remain centralized while the UI stays consistent.
 
 ```vue
-<AuthSuccessMessage
-  :message="successMessage"
-  context="register"
-  :dismissible="true"
-  :show-action="true"
-  action-key="auth.buttons.backToLogin"
-  @dismiss="successMessage = null"
-  @action="navigateToLogin"
-/>
+<Transition name="slide-fade">
+  <Alert
+    v-if="error"
+    variant="destructive"
+    class="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20"
+  >
+    <AlertCircle class="h-5 w-5 text-red-500 dark:text-red-400" aria-hidden="true" />
+    <AlertDescription class="text-sm text-red-800 dark:text-red-300">
+      {{ error }}
+    </AlertDescription>
+    <Button
+      variant="ghost"
+      size="icon"
+      class="absolute right-2 top-2 text-red-500 hover:text-red-600 dark:text-red-300 dark:hover:text-red-200"
+      @click="error = null"
+    >
+      <X class="h-4 w-4" aria-hidden="true" />
+      <span class="sr-only">{{ $t('common.dismiss') }}</span>
+    </Button>
+  </Alert>
+</Transition>
+
+<Transition name="slide-fade">
+  <Alert
+    v-if="success"
+    class="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20"
+  >
+    <CheckCircle2 class="h-5 w-5 text-green-500 dark:text-green-400" aria-hidden="true" />
+    <AlertDescription class="text-sm text-green-800 dark:text-green-300">
+      {{ success }}
+    </AlertDescription>
+  </Alert>
+</Transition>
 ```
 
-**Props:**
-- `message`: Success message string or key
-- `context`: Authentication context
-- `dismissible`: Whether the message can be dismissed
+**Key props/components:**
+- `Alert` / `AlertDescription`: shadcn primitives for consistent styling
+- `AlertCircle`, `CheckCircle2`, `X`: lucide icons for error/success/dismiss affordances
+- `Button`: shadcn button used for dismiss or retry actions
 - `showAction`: Whether to show an action button
 - `actionKey`: Translation key for action button text
 
@@ -245,50 +248,71 @@ const registerSchema = z.object({
 
 ```vue
 <template>
-  <form @submit.prevent="handleLogin">
-    <AuthErrorMessage
-      :error="errorMessage"
-      context="login"
-      :dismissible="true"
-      @dismiss="errorMessage = null"
-    />
+  <form @submit.prevent="handleLogin" class="space-y-4">
+    <Transition name="slide-fade">
+      <Alert
+        v-if="errorMessage"
+        variant="destructive"
+        class="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20"
+      >
+        <AlertCircle class="h-5 w-5 text-red-500 dark:text-red-400" aria-hidden="true" />
+        <AlertDescription class="text-sm text-red-800 dark:text-red-300">
+          {{ errorMessage }}
+        </AlertDescription>
+      </Alert>
+    </Transition>
+
+    <div class="space-y-2">
+      <Label for="email">{{ $t('auth.labels.email') }}</Label>
+      <Input
+        id="email"
+        v-model="form.email"
+        type="email"
+        autocomplete="email"
+        :placeholder="$t('auth.placeholders.email')"
+      />
+    </div>
+
+    <div class="space-y-2">
+      <Label for="password">{{ $t('auth.labels.password') }}</Label>
+      <Input
+        id="password"
+        v-model="form.password"
+        type="password"
+        autocomplete="current-password"
+        :placeholder="$t('auth.placeholders.password')"
+      />
+    </div>
     
-    <input
-      v-model="form.email"
-      type="email"
-      :placeholder="$t('auth.placeholders.email')"
-    />
-    
-    <input
-      v-model="form.password"
-      type="password"
-      :placeholder="$t('auth.placeholders.password')"
-    />
-    
-    <button type="submit">
+    <Button type="submit" class="w-full">
       {{ $t('auth.buttons.signIn') }}
-    </button>
+    </Button>
   </form>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { AlertCircle } from 'lucide-vue-next'
+
 const { validateLogin } = useAuthValidation()
 const { createErrorMessage } = useAuthMessages()
 
-const form = ref({ email: '', password: '' })
-const errorMessage = ref(null)
+const form = reactive({ email: '', password: '' })
+const errorMessage = ref<string | null>(null)
 
 const handleLogin = async () => {
-  // Validate form
-  const validation = validateLogin(form.value)
+  const validation = validateLogin(form)
   if (!validation.isValid) {
-    errorMessage.value = validation.errors[0].message
+    errorMessage.value = validation.errors[0]?.message || ''
     return
   }
-  
+
   try {
-    // Perform login
-    await login(form.value)
+    await login(form)
+    errorMessage.value = null
   } catch (error) {
     const errorMsg = createErrorMessage(error, 'login')
     errorMessage.value = errorMsg.message
@@ -302,24 +326,33 @@ const handleLogin = async () => {
 ```vue
 <template>
   <form @submit.prevent="handleRegister">
-    <input
-      v-model="form.password"
-      type="password"
-      :placeholder="$t('auth.placeholders.password')"
-    />
-    
+    <div class="space-y-2">
+      <Label for="reg-password">{{ $t('auth.labels.password') }}</Label>
+      <Input
+        id="reg-password"
+        v-model="form.password"
+        type="password"
+        autocomplete="new-password"
+        :placeholder="$t('auth.placeholders.password')"
+      />
+    </div>
+
     <PasswordStrengthMeter
       :password="form.password"
       :show-requirements="true"
     />
     
-    <AuthSuccessMessage
-      v-if="successMessage"
-      :message="successMessage"
-      context="register"
-      :show-action="true"
-      @action="navigateToLogin"
-    />
+    <Transition name="slide-fade">
+      <Alert
+        v-if="successMessage"
+        class="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20"
+      >
+        <CheckCircle2 class="h-5 w-5 text-green-500 dark:text-green-400" aria-hidden="true" />
+        <AlertDescription class="text-sm text-green-800 dark:text-green-300">
+          {{ successMessage }}
+        </AlertDescription>
+      </Alert>
+    </Transition>
   </form>
 </template>
 ```

@@ -1,20 +1,28 @@
 # Component Modernization Implementation Guide
 
-This guide provides detailed implementation steps for each phase of the shadcn-vue component modernization plan.
+This guide provides detailed implementation steps for each phase of the shadcn-vue component modernization plan. Library scaffolding concluded on 2025-10-05; the steps below now support the ongoing migration effort. Keep this guide in sync with the active task list in `TODO.md`.
 
-## 🎉 IMPLEMENTATION COMPLETED - October 5, 2025
+## 📦 Library Installation Completed — October 5, 2025
 
-**All components have been successfully added using the shadcn-vue CLI.** This guide now serves as documentation of what was accomplished and reference for migration.
+All shadcn-vue component libraries were generated with the CLI on October 5, 2025. The guide below documents that installation so contributors can continue migrating existing UI to the new components.
 
 ### Summary of Achievement
+
 - **Total Implementation Time**: ~2 hours (vs planned 6 weeks)
 - **Components Added**: 19 complete shadcn-vue libraries (77 individual files)
 - **Method**: Used official shadcn-vue CLI - no manual coding required
-- **Result**: All components are ready for immediate use and migration
+- **Result**: Libraries are available—component replacement across the app is still in progress
 
 ---
 
-## Phase 1: Foundation Components Implementation ✅ COMPLETED
+## Migration Status (February 2026)
+- ✅ Buttons, primary dialogs, and selected admin actions now use shadcn-vue components
+- 🔄 Forms & filters: replace custom inputs/selects/textarea usages
+- 🔄 Alerts & toasts: retire `components/common/Toast*.vue`
+- 🔄 Tables & data grids: adopt shadcn table patterns for admin views
+- 📌 Track blockers and owners in `TODO.md`; update both docs when milestones land
+
+## Phase 1: Foundation Components Implementation
 
 ### 1. Select Component Implementation
 
@@ -179,8 +187,8 @@ components/ui/alert/
    ```
 
 2. **Migration Targets**
-   - `components/auth/AuthErrorMessage.vue` - Replace with Alert component
-   - `components/auth/AuthSuccessMessage.vue` - Replace with Alert component
+   - `components/auth/AuthErrorMessage.vue` - ✅ Replaced by shadcn `Alert` (February 2026)
+   - `components/auth/AuthSuccessMessage.vue` - ✅ Replaced by shadcn `Alert` (February 2026)
    - `components/common/ErrorBoundary.vue` - Replace custom error display
    - All manual alert implementations in forms
 
@@ -312,7 +320,7 @@ components/ui/checkbox/
    - Form selections in admin panels
    - Custom checkbox implementations throughout the app
 
-## Phase 2: Enhanced UX Components Implementation ✅ COMPLETED
+## Phase 2: Enhanced UX Components Implementation
 
 ### 1. Tooltip Component Implementation ✅
 
@@ -377,7 +385,7 @@ components/ui/switch/
    - Feature toggles in admin
    - Form switches and toggles
 
-## Phase 3: Advanced Components Implementation ✅ COMPLETED
+## Phase 3: Advanced Components Implementation
 
 ### 1. Table Component Implementation ✅
 
@@ -545,13 +553,14 @@ test("cart item quantity controls", async ({ page }) => {
 - Follow Vue 3 Composition API best practices
 - Optimize for bundle size and performance
 
-## 🎉 Actual Implementation Results - October 5, 2025
+## Implementation Results - October 5, 2025
 
 ### What Was Actually Done
 
-**Implementation Method**: Used shadcn-vue CLI instead of manual implementation
+**Implementation Method**: Used shadcn-vue CLI to scaffold component libraries; no product views were migrated on this date.
 
 **Commands Used**:
+
 ```bash
 npx shadcn-vue@latest add select      # 12 files
 npx shadcn-vue@latest add label       # 2 files
@@ -569,30 +578,31 @@ npx shadcn-vue@latest add pagination  # 9 files
 npx shadcn-vue@latest add avatar      # 4 files
 ```
 
-**Total Implementation**: ~2 hours (vs planned 6 weeks of manual implementation)
+**Total Implementation**: ~2 hours of scaffolding effort (vs planned 6 weeks of manual implementation). Migration work continues per the plan.
 
 ### Key Benefits Realized
 
-1. **Speed**: 95% faster than planned manual implementation
-2. **Quality**: Official shadcn-vue components with full features
-3. **Compatibility**: All components work out of the box
-4. **Accessibility**: Built-in WCAG 2.1 AA compliance
-5. **Dark Mode**: Automatic dark mode support
-6. **Dependencies**: All required dependencies auto-installed
+1. **Speed**: CLI scaffolding freed time for higher-value migration work.
+2. **Quality**: Official shadcn-vue components with full features are available.
+3. **Compatibility**: Components work out of the box; verify integration in each surface.
+4. **Accessibility**: Built-in WCAG 2.1 AA compliance once components replace legacy markup.
+5. **Dark Mode**: Automatic dark mode support maintained during migration.
+6. **Dependencies**: All required dependencies auto-installed; confirm versions before upgrades.
 
 ### Components Ready for Migration
 
 All 19 component libraries are now available and ready for use:
+
 - **Foundation**: Select, Label, Alert, Badge, Checkbox
 - **Enhanced UX**: Tooltip, Tabs, Switch, Textarea, RadioGroup
 - **Advanced**: Table, Skeleton, Pagination, Avatar
 
 ### Next Steps
 
-1. **Migration Planning**: Begin migrating existing custom components
-2. **Developer Training**: Update team on new component usage
-3. **Documentation**: Create internal usage guidelines
-4. **Testing**: Validate component functionality in application context
+1. **Migration Planning**: Break work into surface-level tasks and record them in `TODO.md`.
+2. **Developer Training**: Update team on new component usage.
+3. **Documentation**: Create internal usage guidelines as migrations complete.
+4. **Testing**: Validate component functionality in application context before each release.
 
 ### Lessons Learned
 

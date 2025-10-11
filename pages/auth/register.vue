@@ -26,31 +26,41 @@
           <form class="space-y-5" @submit.prevent="handleRegister">
             <!-- Alert messages -->
             <Transition name="slide-fade">
-              <div v-if="error" class="rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-3 sm:p-4">
-                <div class="flex items-start">
-                  <svg class="w-5 h-5 text-red-500 dark:text-red-400 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                  </svg>
-                  <div class="ml-3 text-sm text-red-800 dark:text-red-300">{{ error }}</div>
-                </div>
-              </div>
+              <Alert
+                v-if="error"
+                variant="destructive"
+                class="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20"
+              >
+                <AlertCircle class="h-5 w-5 text-red-500 dark:text-red-400" aria-hidden="true" />
+                <AlertDescription class="text-sm text-red-800 dark:text-red-300">
+                  {{ error }}
+                </AlertDescription>
+              </Alert>
             </Transition>
 
             <Transition name="slide-fade">
-              <div v-if="success" class="rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 p-3 sm:p-4">
-                <div class="flex items-start">
-                  <svg class="w-5 h-5 text-green-500 dark:text-green-400 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                  </svg>
-                  <div class="ml-3 text-sm text-green-800 dark:text-green-300">{{ success }}</div>
-                </div>
-              </div>
+              <Alert
+                v-if="success"
+                class="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20"
+              >
+                <CheckCircle2 class="h-5 w-5 text-green-500 dark:text-green-400" aria-hidden="true" />
+                <AlertDescription class="text-sm text-green-800 dark:text-green-300">
+                  {{ success }}
+                </AlertDescription>
+              </Alert>
             </Transition>
         
             <!-- Input fields with mobile optimization and accessibility -->
             <div class="space-y-4">
-              <div class="relative">
-                <input
+              <div class="space-y-2">
+                <Label
+                  for="name"
+                  class="text-sm font-medium text-gray-700 dark:text-gray-300"
+                  :class="{ 'text-red-600 dark:text-red-400': nameError }"
+                >
+                  {{ $t('auth.fullName') }}
+                </Label>
+                <Input
                   id="name"
                   v-model="form.name"
                   name="name"
@@ -62,25 +72,25 @@
                   required
                   :aria-invalid="nameError ? 'true' : 'false'"
                   :aria-describedby="nameError ? 'name-error' : undefined"
-                  class="peer w-full px-4 py-3 min-h-[44px] border-2 border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white placeholder-transparent focus:border-primary-500 dark:focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-all bg-white dark:bg-gray-700"
+                  :placeholder="$t('auth.fullName')"
+                  class="h-11 border-2 border-gray-200 bg-white text-gray-900 placeholder:text-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                   :class="{ 'border-red-500 dark:border-red-400': nameError }"
-                  placeholder="Name"
                   @blur="validateNameField"
-                >
-                <label 
-                  for="name" 
-                  class="absolute left-3 -top-2.5 bg-white dark:bg-gray-800 px-2 text-sm text-gray-600 dark:text-gray-400 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2.5 peer-focus:left-3 peer-focus:text-sm peer-focus:text-primary-600 dark:peer-focus:text-primary-400"
-                  :class="{ 'text-red-600 dark:text-red-400': nameError }"
-                >
-                  {{ $t('auth.fullName') }}
-                </label>
-                <div v-if="nameError" id="name-error" class="mt-1 text-sm text-red-600 dark:text-red-400" role="alert">
+                />
+                <p v-if="nameError" id="name-error" class="text-sm text-red-600 dark:text-red-400" role="alert">
                   {{ nameError }}
-                </div>
+                </p>
               </div>
           
-              <div class="relative">
-                <input
+              <div class="space-y-2">
+                <Label
+                  for="email"
+                  class="text-sm font-medium text-gray-700 dark:text-gray-300"
+                  :class="{ 'text-red-600 dark:text-red-400': emailError }"
+                >
+                  {{ $t('auth.email') }}
+                </Label>
+                <Input
                   id="email"
                   v-model="form.email"
                   name="email"
@@ -93,25 +103,28 @@
                   required
                   :aria-invalid="emailError ? 'true' : 'false'"
                   :aria-describedby="emailError ? 'email-error' : undefined"
-                  class="peer w-full px-4 py-3 min-h-[44px] border-2 border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white placeholder-transparent focus:border-primary-500 dark:focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-all bg-white dark:bg-gray-700"
+                  :placeholder="$t('auth.email')"
+                  class="h-11 border-2 border-gray-200 bg-white text-gray-900 placeholder:text-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                   :class="{ 'border-red-500 dark:border-red-400': emailError }"
-                  placeholder="Email"
                   @blur="validateEmailField"
-                >
-                <label 
-                  for="email" 
-                  class="absolute left-3 -top-2.5 bg-white dark:bg-gray-800 px-2 text-sm text-gray-600 dark:text-gray-400 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2.5 peer-focus:left-3 peer-focus:text-sm peer-focus:text-primary-600 dark:peer-focus:text-primary-400"
-                  :class="{ 'text-red-600 dark:text-red-400': emailError }"
-                >
-                  {{ $t('auth.email') }}
-                </label>
-                <div v-if="emailError" id="email-error" class="mt-1 text-sm text-red-600 dark:text-red-400" role="alert">
+                />
+                <p v-if="emailError" id="email-error" class="text-sm text-red-600 dark:text-red-400" role="alert">
                   {{ emailError }}
-                </div>
+                </p>
               </div>
           
-              <div class="relative">
-                <input
+              <div class="space-y-2">
+                <Label
+                  for="phone"
+                  class="text-sm font-medium text-gray-700 dark:text-gray-300"
+                  :class="{ 'text-red-600 dark:text-red-400': phoneError }"
+                >
+                  {{ $t('auth.phone') }}
+                  <span class="text-xs font-normal text-gray-500 dark:text-gray-400">
+                    ({{ $t('common.optional') }})
+                  </span>
+                </Label>
+                <Input
                   id="phone"
                   v-model="form.phone"
                   name="phone"
@@ -123,70 +136,65 @@
                   inputmode="tel"
                   :aria-invalid="phoneError ? 'true' : 'false'"
                   :aria-describedby="phoneError ? 'phone-error' : 'phone-desc'"
-                  class="peer w-full px-4 py-3 min-h-[44px] border-2 border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white placeholder-transparent focus:border-primary-500 dark:focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-all bg-white dark:bg-gray-700"
+                  :placeholder="$t('auth.phone')"
+                  class="h-11 border-2 border-gray-200 bg-white text-gray-900 placeholder:text-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                   :class="{ 'border-red-500 dark:border-red-400': phoneError }"
-                  placeholder="Phone"
                   @blur="validatePhoneField"
-                >
-                <label 
-                  for="phone" 
-                  class="absolute left-3 -top-2.5 bg-white dark:bg-gray-800 px-2 text-sm text-gray-600 dark:text-gray-400 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2.5 peer-focus:left-3 peer-focus:text-sm peer-focus:text-primary-600 dark:peer-focus:text-primary-400"
-                  :class="{ 'text-red-600 dark:text-red-400': phoneError }"
-                >
-                  {{ $t('auth.phone') }} <span class="text-xs">({{ $t('common.optional') }})</span>
-                </label>
+                />
                 <div id="phone-desc" class="sr-only">
                   {{ $t('auth.accessibility.phoneOptional') }}
                 </div>
-                <div v-if="phoneError" id="phone-error" class="mt-1 text-sm text-red-600 dark:text-red-400" role="alert">
+                <p v-if="phoneError" id="phone-error" class="text-sm text-red-600 dark:text-red-400" role="alert">
                   {{ phoneError }}
-                </div>
+                </p>
               </div>
           
-              <div class="relative">
-                <input
-                  id="password"
-                  v-model="form.password"
-                  name="password"
-                  :type="showPassword ? 'text' : 'password'"
-                  autocomplete="new-password"
-                  autocapitalize="none"
-                  autocorrect="off"
-                  spellcheck="false"
-                  required
-                  minlength="8"
-                  :aria-invalid="passwordError ? 'true' : 'false'"
-                  :aria-describedby="passwordError ? 'password-error' : 'password-requirements'"
-                  class="peer w-full px-4 py-3 pr-12 min-h-[44px] border-2 border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white placeholder-transparent focus:border-primary-500 dark:focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-all bg-white dark:bg-gray-700"
-                  :class="{ 'border-red-500 dark:border-red-400': passwordError }"
-                  placeholder="Password"
-                  @input="validatePasswordField"
-                  @blur="validatePasswordField"
-                >
-                <label 
-                  for="password" 
-                  class="absolute left-3 -top-2.5 bg-white dark:bg-gray-800 px-2 text-sm text-gray-600 dark:text-gray-400 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2.5 peer-focus:left-3 peer-focus:text-sm peer-focus:text-primary-600 dark:peer-focus:text-primary-400"
+              <div class="space-y-2">
+                <Label
+                  for="password"
+                  class="text-sm font-medium text-gray-700 dark:text-gray-300"
                   :class="{ 'text-red-600 dark:text-red-400': passwordError }"
                 >
                   {{ $t('auth.password') }}
-                </label>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  @click="togglePasswordVisibility"
-                  class="absolute right-3 top-3.5"
-                  :aria-label="showPassword ? $t('auth.accessibility.hidePassword') : $t('auth.accessibility.showPassword')"
-                  :aria-pressed="showPassword"
-                >
-                  <svg v-if="!showPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                  </svg>
-                  <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>
-                  </svg>
-                </Button>
+                </Label>
+                <div class="relative">
+                  <Input
+                    id="password"
+                    v-model="form.password"
+                    name="password"
+                    :type="showPassword ? 'text' : 'password'"
+                    autocomplete="new-password"
+                    autocapitalize="none"
+                    autocorrect="off"
+                    spellcheck="false"
+                    required
+                    minlength="8"
+                    :aria-invalid="passwordError ? 'true' : 'false'"
+                    :aria-describedby="passwordError ? 'password-error' : 'password-requirements'"
+                    :placeholder="$t('auth.password')"
+                    class="h-11 border-2 border-gray-200 bg-white pr-12 text-gray-900 placeholder:text-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                    :class="{ 'border-red-500 dark:border-red-400': passwordError }"
+                    @input="validatePasswordField"
+                    @blur="validatePasswordField"
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    @click="togglePasswordVisibility"
+                    class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-300"
+                    :aria-label="showPassword ? $t('auth.accessibility.hidePassword') : $t('auth.accessibility.showPassword')"
+                    :aria-pressed="showPassword"
+                  >
+                    <svg v-if="!showPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                    </svg>
+                    <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>
+                    </svg>
+                  </Button>
+                </div>
                 
                 <!-- Password strength meter -->
                 <PasswordStrengthMeter 
@@ -195,118 +203,122 @@
                   class="mt-2"
                 />
                 
-                <div v-if="passwordError" id="password-error" class="mt-1 text-sm text-red-600 dark:text-red-400" role="alert">
+                <p v-if="passwordError" id="password-error" class="text-sm text-red-600 dark:text-red-400" role="alert">
                   {{ passwordError }}
-                </div>
+                </p>
                 <div id="password-requirements" class="sr-only">
                   {{ $t('auth.accessibility.passwordRequirements') }}
                 </div>
               </div>
           
-              <div class="relative">
-                <input
-                  id="confirmPassword"
-                  v-model="form.confirmPassword"
-                  name="confirmPassword"
-                  :type="showConfirmPassword ? 'text' : 'password'"
-                  autocomplete="new-password"
-                  autocapitalize="none"
-                  autocorrect="off"
-                  spellcheck="false"
-                  required
-                  :aria-invalid="confirmPasswordError ? 'true' : 'false'"
-                  :aria-describedby="confirmPasswordError ? 'confirm-password-error' : 'confirm-password-desc'"
-                  class="peer w-full px-4 py-3 pr-12 min-h-[44px] border-2 border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white placeholder-transparent focus:border-primary-500 dark:focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-all bg-white dark:bg-gray-700"
-                  :class="{ 
-                    'border-red-500 dark:border-red-400': confirmPasswordError,
-                    'border-green-500 dark:border-green-400': form.confirmPassword && !confirmPasswordError && form.password === form.confirmPassword
-                  }"
-                  placeholder="Confirm Password"
-                  @input="validateConfirmPasswordField"
-                  @blur="validateConfirmPasswordField"
-                >
-                <label 
-                  for="confirmPassword" 
-                  class="absolute left-3 -top-2.5 bg-white dark:bg-gray-800 px-2 text-sm text-gray-600 dark:text-gray-400 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2.5 peer-focus:left-3 peer-focus:text-sm peer-focus:text-primary-600 dark:peer-focus:text-primary-400"
-                  :class="{ 
+              <div class="space-y-2">
+                <Label
+                  for="confirmPassword"
+                  class="text-sm font-medium text-gray-700 dark:text-gray-300"
+                  :class="{
                     'text-red-600 dark:text-red-400': confirmPasswordError,
                     'text-green-600 dark:text-green-400': form.confirmPassword && !confirmPasswordError && form.password === form.confirmPassword
                   }"
                 >
                   {{ $t('auth.confirmPassword') }}
-                </label>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  @click="toggleConfirmPasswordVisibility"
-                  class="absolute right-3 top-3.5"
-                  :aria-label="showConfirmPassword ? $t('auth.accessibility.hidePassword') : $t('auth.accessibility.showPassword')"
-                  :aria-pressed="showConfirmPassword"
-                >
-                  <svg v-if="!showConfirmPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                  </svg>
-                  <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>
-                  </svg>
-                </Button>
+                </Label>
+                <div class="relative">
+                  <Input
+                    id="confirmPassword"
+                    v-model="form.confirmPassword"
+                    name="confirmPassword"
+                    :type="showConfirmPassword ? 'text' : 'password'"
+                    autocomplete="new-password"
+                    autocapitalize="none"
+                    autocorrect="off"
+                    spellcheck="false"
+                    required
+                    :aria-invalid="confirmPasswordError ? 'true' : 'false'"
+                    :aria-describedby="confirmPasswordError ? 'confirm-password-error' : 'confirm-password-desc'"
+                    :placeholder="$t('auth.confirmPassword')"
+                    class="h-11 border-2 border-gray-200 bg-white pr-12 text-gray-900 placeholder:text-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                    :class="[
+                      confirmPasswordError ? 'border-red-500 dark:border-red-400' : '',
+                      form.confirmPassword && !confirmPasswordError && form.password === form.confirmPassword
+                        ? 'border-green-500 dark:border-green-400'
+                        : ''
+                    ]"
+                    @input="validateConfirmPasswordField"
+                    @blur="validateConfirmPasswordField"
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    @click="toggleConfirmPasswordVisibility"
+                    class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-300"
+                    :aria-label="showConfirmPassword ? $t('auth.accessibility.hidePassword') : $t('auth.accessibility.showPassword')"
+                    :aria-pressed="showConfirmPassword"
+                  >
+                    <svg v-if="!showConfirmPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                    </svg>
+                    <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>
+                    </svg>
+                  </Button>
+                </div>
                 
                 <div id="confirm-password-desc" class="sr-only">
                   {{ $t('auth.accessibility.confirmPasswordDescription') }}
                 </div>
-                <div v-if="confirmPasswordError" id="confirm-password-error" class="mt-1 text-sm text-red-600 dark:text-red-400" role="alert">
+                <p v-if="confirmPasswordError" id="confirm-password-error" class="text-sm text-red-600 dark:text-red-400" role="alert">
                   {{ confirmPasswordError }}
-                </div>
-                <div v-else-if="form.confirmPassword && form.password === form.confirmPassword" class="mt-1 text-sm text-green-600 dark:text-green-400">
+                </p>
+                <p v-else-if="form.confirmPassword && form.password === form.confirmPassword" class="text-sm text-green-600 dark:text-green-400">
                   <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                   </svg>
                   {{ $t('auth.validation.password.match') }}
-                </div>
+                </p>
               </div>
             </div>
 
             <!-- Terms checkbox with accessibility improvements -->
             <div class="flex items-start">
-              <input
+              <Checkbox
                 id="terms"
-                v-model="form.acceptTerms"
+                v-model:checked="form.acceptTerms"
                 name="terms"
-                type="checkbox"
                 required
                 :aria-invalid="termsError ? 'true' : 'false'"
                 :aria-describedby="termsError ? 'terms-error' : 'terms-desc'"
-                class="mt-1 w-5 h-5 min-w-[20px] min-h-[20px] text-primary-600 bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:outline-none"
-                :class="{ 'border-red-500 dark:border-red-400': termsError }"
-                @change="validateTermsField"
-              >
-              <label for="terms" class="ml-3 text-sm text-gray-700 dark:text-gray-300 select-none">
-                {{ $t('auth.acceptTerms') }}
-                <NuxtLink 
-                  :to="localePath('/terms')" 
-                  class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded"
-                  target="_blank"
-                  :aria-label="$t('auth.accessibility.termsLink')"
-                >
-                  {{ $t('footer.terms') }}
-                </NuxtLink>
-                {{ $t('common.and') }}
-                <NuxtLink 
-                  :to="localePath('/privacy')" 
-                  class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded"
-                  target="_blank"
-                  :aria-label="$t('auth.accessibility.privacyLink')"
-                >
-                  {{ $t('footer.privacy') }}
-                </NuxtLink>
-              </label>
-              <div id="terms-desc" class="sr-only">
-                {{ $t('auth.accessibility.termsDescription') }}
-              </div>
-              <div v-if="termsError" id="terms-error" class="mt-1 text-sm text-red-600 dark:text-red-400" role="alert">
-                {{ termsError }}
+                class="mt-1 h-5 w-5"
+                @update:checked="validateTermsField"
+              />
+              <div class="ml-3 space-y-2">
+                <Label for="terms" class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                  {{ $t('auth.acceptTerms') }}
+                  <NuxtLink 
+                    :to="localePath('/terms')" 
+                    class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded"
+                    target="_blank"
+                    :aria-label="$t('auth.accessibility.termsLink')"
+                  >
+                    {{ $t('footer.terms') }}
+                  </NuxtLink>
+                  {{ $t('common.and') }}
+                  <NuxtLink 
+                    :to="localePath('/privacy')" 
+                    class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded"
+                    target="_blank"
+                    :aria-label="$t('auth.accessibility.privacyLink')"
+                  >
+                    {{ $t('footer.privacy') }}
+                  </NuxtLink>
+                </Label>
+                <div id="terms-desc" class="sr-only">
+                  {{ $t('auth.accessibility.termsDescription') }}
+                </div>
+                <p v-if="termsError" id="terms-error" class="text-sm text-red-600 dark:text-red-400" role="alert">
+                  {{ termsError }}
+                </p>
               </div>
             </div>
 
@@ -335,7 +347,12 @@
 </template>
 
 <script setup lang="ts">
+import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { AlertCircle, CheckCircle2 } from 'lucide-vue-next'
 
 // Apply guest middleware - redirect authenticated users
 definePageMeta({
@@ -536,4 +553,3 @@ useHead({
   title: t('auth.createAccount')
 })
 </script>
-

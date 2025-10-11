@@ -1,34 +1,45 @@
 # Component Inventory and Migration Tracking
 
-This document provides a comprehensive inventory of current component usage and tracks migration progress for the shadcn-vue modernization initiative.
+This document provides a comprehensive inventory of current component usage and tracks migration progress for the shadcn-vue modernization initiative. All shadcn-vue component libraries were generated via the CLI on 2025-10-05; the focus now is migrating product surfaces onto those primitives.
 
 ## Current Component Inventory
 
 ### Available shadcn-vue Components
 
-| Component      | Status         | Files                              | File Count | Last Updated |
-| -------------- | -------------- | ---------------------------------- | ---------- | ------------ |
-| **Button**     | ✅ Implemented | `components/ui/button/`            | 2          | Current      |
-| **Card**       | ✅ Implemented | `components/ui/card/`              | 10         | Current      |
-| **Dialog**     | ✅ Implemented | `components/ui/dialog/`            | 13         | Current      |
-| **Input**      | ✅ Implemented | `components/ui/input/`             | 2          | Current      |
-| **Sonner**     | ✅ Implemented | `components/ui/sonner/`            | 2          | Current      |
-| **Select**     | ✅ Implemented | `components/ui/select/`            | 12         | 2025-10-05   |
-| **Label**      | ✅ Implemented | `components/ui/label/`             | 2          | 2025-10-05   |
-| **Alert**      | ✅ Implemented | `components/ui/alert/`             | 4          | 2025-10-05   |
-| **Badge**      | ✅ Implemented | `components/ui/badge/`             | 2          | 2025-10-05   |
-| **Checkbox**   | ✅ Implemented | `components/ui/checkbox/`          | 2          | 2025-10-05   |
-| **Tooltip**    | ✅ Implemented | `components/ui/tooltip/`           | 5          | 2025-10-05   |
-| **Tabs**       | ✅ Implemented | `components/ui/tabs/`              | 5          | 2025-10-05   |
-| **Switch**     | ✅ Implemented | `components/ui/switch/`            | 2          | 2025-10-05   |
-| **Textarea**   | ✅ Implemented | `components/ui/textarea/`          | 2          | 2025-10-05   |
-| **RadioGroup** | ✅ Implemented | `components/ui/radio-group/`       | 3          | 2025-10-05   |
-| **Table**      | ✅ Implemented | `components/ui/table/`             | 11         | 2025-10-05   |
-| **Skeleton**   | ✅ Implemented | `components/ui/skeleton/`          | 2          | 2025-10-05   |
-| **Pagination** | ✅ Implemented | `components/ui/pagination/`        | 9          | 2025-10-05   |
-| **Avatar**     | ✅ Implemented | `components/ui/avatar/`            | 4          | 2025-10-05   |
+| Component      | Status         | Files                        | File Count | Last Updated |
+| -------------- | -------------- | ---------------------------- | ---------- | ------------ |
+| **Button**     | ✅ Implemented | `components/ui/button/`      | 2          | Current      |
+| **Card**       | ✅ Implemented | `components/ui/card/`        | 10         | Current      |
+| **Dialog**     | ✅ Implemented | `components/ui/dialog/`      | 13         | Current      |
+| **Input**      | ✅ Implemented | `components/ui/input/`       | 2          | Current      |
+| **Sonner**     | ✅ Implemented | `components/ui/sonner/`      | 2          | Current      |
+| **Select**     | ✅ Implemented | `components/ui/select/`      | 12         | 2025-10-05   |
+| **Label**      | ✅ Implemented | `components/ui/label/`       | 2          | 2025-10-05   |
+| **Alert**      | ✅ Implemented | `components/ui/alert/`       | 4          | 2025-10-05   |
+| **Badge**      | ✅ Implemented | `components/ui/badge/`       | 2          | 2025-10-05   |
+| **Checkbox**   | ✅ Implemented | `components/ui/checkbox/`    | 2          | 2025-10-05   |
+| **Tooltip**    | ✅ Implemented | `components/ui/tooltip/`     | 5          | 2025-10-05   |
+| **Tabs**       | ✅ Implemented | `components/ui/tabs/`        | 5          | 2025-10-05   |
+| **Switch**     | ✅ Implemented | `components/ui/switch/`      | 2          | 2025-10-05   |
+| **Textarea**   | ✅ Implemented | `components/ui/textarea/`    | 2          | 2025-10-05   |
+| **RadioGroup** | ✅ Implemented | `components/ui/radio-group/` | 3          | 2025-10-05   |
+| **Table**      | ✅ Implemented | `components/ui/table/`       | 11         | 2025-10-05   |
+| **Skeleton**   | ✅ Implemented | `components/ui/skeleton/`    | 2          | 2025-10-05   |
+| **Pagination** | ✅ Implemented | `components/ui/pagination/`  | 9          | 2025-10-05   |
+| **Avatar**     | ✅ Implemented | `components/ui/avatar/`      | 4          | 2025-10-05   |
 
-**Total Components**: 19 complete shadcn-vue component libraries (77 individual files)
+**Total Components**: 19 shadcn-vue component libraries scaffolded (77 individual files). Adoption status varies by feature area; see the migration snapshot below.
+
+## Migration Snapshot (February 2026)
+
+| Surface / Flow | Status | Notes | Owner | Source of Truth |
+| -------------- | ------ | ----- | ----- | ---------------- |
+| Auth (login/register, alerts) | ✅ Completed | Adopted shadcn inputs/labels/alerts; legacy auth message components removed | Unassigned | `TODO.md` |
+| Checkout (shipping, payment, confirmation) | 🔄 In progress | Select/Input replacements staged; dialogs untouched | Unassigned | `TODO.md` |
+| Cart (drawer, quantity controls, bulk actions) | ⏳ Not started | Needs button/checkbox/sonner migrations | Unassigned | `TODO.md` |
+| Admin tables & filters | ⏳ Not started | Table/pagination/badge swaps outstanding | Unassigned | `TODO.md` |
+| Mobile navigation / sheets | ⏳ Not started | Dialog/sheet adoption pending; touch targets under review | Unassigned | `TODO.md` |
+| Toast / notification system | ⏳ Not started | Legacy `components/common/Toast*.vue` still active | Unassigned | `TODO.md` |
 
 ## Custom Component Usage Analysis
 
@@ -72,13 +83,15 @@ This document provides a comprehensive inventory of current component usage and 
 **Critical Custom Components to Replace:**
 | Component | Current Location | Migration Target | Priority |
 |-----------|------------------|------------------|----------|
-| AuthErrorMessage | `components/auth/AuthErrorMessage.vue` | Alert component | 🔴 High |
-| AuthSuccessMessage | `components/auth/AuthSuccessMessage.vue` | Alert component | 🔴 High |
+| AuthErrorMessage | _Removed (2026-02)_ | Replaced by shadcn `Alert` in auth flows | ✅ Completed |
+| AuthSuccessMessage | _Removed (2026-02)_ | Replaced by shadcn `Alert` in auth flows | ✅ Completed |
 | ConfirmDialog | `components/common/ConfirmDialog.vue` | Dialog component | 🔴 High |
 | ErrorBoundary | `components/common/ErrorBoundary.vue` | Alert component | 🔴 High |
 | Toast | Custom implementations | Sonner/Toast | 🟡 Medium |
 
 ## Migration Progress Tracking
+
+Statuses below reflect the library scaffolding completed on 2025-10-05. Use the Migration Snapshot for real-time adoption progress.
 
 ### Phase 1: Foundation Components
 
@@ -212,26 +225,11 @@ This document provides a comprehensive inventory of current component usage and 
 - **Dependencies**: None
 - **Completion Date**: 2025-10-05
 
-## 🎉 Phase Completion Summary
+## Library Scaffolding Summary
 
-### **ALL PHASES COMPLETED** - October 5, 2025
-
-**Total Implementation Time**: ~2 hours (vs estimated 6 weeks)
-**Total Components Created**: 19 component libraries (77 individual files)
-**Efficiency Gain**: 95% faster than manual implementation
-
-#### Key Achievements:
-- ✅ **Phase 1**: All 5 foundation components completed
-- ✅ **Phase 2**: All 5 enhanced UX components completed
-- ✅ **Phase 3**: All 4 advanced components completed
-- 🎯 **100% Component Coverage**: All required shadcn-vue components now available
-- 🚀 **Immediate Availability**: Components ready for migration and use
-
-#### Next Steps:
-1. Begin migrating existing custom components to use shadcn-vue components
-2. Update existing forms, tables, and UI elements
-3. Implement component testing and validation
-4. Update development guidelines and documentation
+- **CLI scaffolding completed**: 2025-10-05 (~2 hours total)
+- **Component coverage**: 19 libraries (77 files) now available under `components/ui/**`
+- **Next focus**: Replace legacy markup per the migration snapshot and track progress in `TODO.md`
 
 ## Component Usage Statistics
 
