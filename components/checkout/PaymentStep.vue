@@ -302,9 +302,9 @@ const paymentMethod = ref<PaymentMethod>({
 // =============================================
 
 const isAuthenticated = computed(() => authStore.isAuthenticated)
-const savedPaymentMethods = computed(() => checkoutStore.savedPaymentMethods)
+const savedPaymentMethods = computed(() => checkoutStore.savedPaymentMethods ?? [])
 const loading = computed(() => checkoutStore.loading)
-const errors = computed(() => checkoutStore.errors)
+const errors = computed(() => checkoutStore.errors ?? {})
 
 const canProceed = computed(() => {
   if (selectedSavedMethod.value) {
@@ -469,7 +469,7 @@ if (checkoutStore.paymentMethod) {
 
 // Watch for changes in saved payment methods
 watch(savedPaymentMethods, (newMethods) => {
-  if (newMethods.length === 0) {
+  if (!newMethods || newMethods.length === 0) {
     showNewPaymentForm.value = true
   }
 }, { immediate: true })

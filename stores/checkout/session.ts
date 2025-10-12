@@ -7,7 +7,10 @@ import type {
   OrderData,
   CheckoutError,
   ShippingInformation,
-  PaymentMethod
+  PaymentMethod,
+  ShippingMethod,
+  SavedPaymentMethod,
+  Address
 } from '~/types/checkout'
 
 interface PersistPayload {
@@ -74,6 +77,34 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
 
   const setOrderData = (order: OrderData | null): void => {
     state.orderData = order
+  }
+
+  const setShippingInfo = (info: ShippingInformation | null): void => {
+    state.shippingInfo = info
+  }
+
+  const setPaymentMethodState = (method: PaymentMethod | null): void => {
+    state.paymentMethod = method
+  }
+
+  const setAvailableShippingMethods = (methods: ShippingMethod[]): void => {
+    state.availableShippingMethods = methods
+  }
+
+  const setSavedPaymentMethods = (methods: SavedPaymentMethod[]): void => {
+    state.savedPaymentMethods = methods
+  }
+
+  const setSavedAddresses = (addresses: Address[]): void => {
+    state.savedAddresses = addresses
+  }
+
+  const setPaymentIntent = (id: string | null): void => {
+    state.paymentIntent = id
+  }
+
+  const setPaymentClientSecret = (secret: string | null): void => {
+    state.paymentClientSecret = secret
   }
 
   const setLoading = (value: boolean): void => {
@@ -228,6 +259,13 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
     setGuestInfo,
     setContactEmail,
     setOrderData,
+    setShippingInfo,
+    setPaymentMethodState,
+    setAvailableShippingMethods,
+    setSavedPaymentMethods,
+    setSavedAddresses,
+    setPaymentIntent,
+    setPaymentClientSecret,
     setLoading,
     setProcessing,
     generateSessionId,

@@ -543,10 +543,8 @@ onMounted(async () => {
       return
     }
 
-    // Initialize checkout if not already done
-    if (!checkoutStore.sessionId) {
-      await checkoutStore.initializeCheckout(cartStore.items)
-    }
+    // Always refresh checkout data (session store handles id reuse)
+    await checkoutStore.initializeCheckout(cartStore.items)
 
     // Validate that we have required data for review step
     if (!checkoutStore.canProceedToReview) {
