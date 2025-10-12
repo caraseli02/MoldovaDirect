@@ -108,7 +108,7 @@ export default defineEventHandler(async (event) => {
     )
 
     // Send status email
-    const result = await sendOrderStatusEmail(emailData, emailType, issueDescription)
+    const result = await sendOrderStatusEmail(emailData, emailType, issueDescription, { supabaseClient: supabase })
 
     if (!result.success) {
       throw createError({

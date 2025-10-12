@@ -150,7 +150,7 @@ export default defineEventHandler(async (event) => {
 
           // Send status email
           try {
-            emailResult = await sendOrderStatusEmail(emailData, emailType, issueDescription)
+            emailResult = await sendOrderStatusEmail(emailData, emailType, issueDescription, { supabaseClient: supabase })
           } catch (emailError: any) {
             console.error('Failed to send status email:', emailError)
             // Don't fail the entire request if email fails

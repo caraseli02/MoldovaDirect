@@ -39,7 +39,10 @@ NODE_ENV=development
 
 # Email Service (optional for development)
 RESEND_API_KEY=re_your_resend_api_key
+FROM_EMAIL="Your Brand <onboarding@resend.dev>"
 ```
+
+Use Resend's shared domain (`onboarding@resend.dev`) while you prototype. When you're ready for a branded sender, verify your own domain in Resend and update `FROM_EMAIL` accordingly.
 
 ### Supabase Setup
 1. Create a new project at [supabase.com](https://supabase.com)

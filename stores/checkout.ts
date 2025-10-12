@@ -64,6 +64,11 @@ export interface SavedPaymentMethod {
   isDefault: boolean
 }
 
+export interface GuestInfo {
+  email: string
+  emailUpdates: boolean
+}
+
 export interface ShippingInformation {
   address: Address
   method: ShippingMethod
@@ -77,6 +82,9 @@ export interface OrderData {
   total: number
   currency: string
   items: OrderItem[]
+  orderId?: number
+  orderNumber?: string
+  customerEmail?: string | null
 }
 
 export interface OrderItem {
@@ -115,6 +123,9 @@ interface CheckoutState {
   currentStep: CheckoutStep
   sessionId: string | null
   
+  // Contact information
+  guestInfo: GuestInfo | null
+  
   // Checkout data
   shippingInfo: ShippingInformation | null
   paymentMethod: PaymentMethod | null
@@ -135,6 +146,7 @@ interface CheckoutState {
   // Session management
   sessionExpiresAt: Date | null
   lastSyncAt: Date | null
+  contactEmail: string | null
   
   // Validation
   validationErrors: Record<string, string[]>
@@ -163,6 +175,10 @@ export const useCheckoutStore = defineStore('checkout', {
     // Core checkout state
     currentStep: 'shipping',
     sessionId: null,
+    
+    // Contact information
+    guestInfo: null,
+    contactEmail: null,
     
     // Checkout data
     shippingInfo: null,
@@ -265,6 +281,23 @@ export const useCheckoutStore = defineStore('checkout', {
 
   actions: {
     // =============================================
+    // GUEST CONTACT INFORMATION
+    // =============================================
+
+    updateGuestInfo(info: GuestInfo): void {
+      this.guestInfo = {
+        email: info.email.trim(),
+        emailUpdates: info.emailUpdates
+      }
+      this.contactEmail = this.guestInfo.email
+      if (this.orderData) {
+        this.orderData.customerEmail = this.contactEmail
+      }
+
+      this.saveToStorage()
+    },
+
+    // =============================================
     // SESSION MANAGEMENT
     // =============================================
 
@@ -287,6 +320,22 @@ export const useCheckoutStore = defineStore('checkout', {
 
         // Load saved data from localStorage
         this.loadFromStorage()
+
+        if (!this.contactEmail) {
+          if (this.guestInfo?.email) {
+            this.contactEmail = this.guestInfo.email.trim()
+          } else {
+            const authStore = useAuthStore()
+            const authenticatedEmail = authStore.user?.email ? authStore.user.email.trim() : null
+            if (authenticatedEmail) {
+              this.contactEmail = authenticatedEmail
+            }
+          }
+        }
+
+        if (this.contactEmail && this.orderData) {
+          this.orderData.customerEmail = this.contactEmail
+        }
 
         // Initialize order data from cart
         await this.calculateOrderData(cartItems)
@@ -364,7 +413,8 @@ export const useCheckoutStore = defineStore('checkout', {
           quantity: item.quantity,
           price: item.product.price,
           total: item.product.price * item.quantity
-        }))
+        })),
+        customerEmail: this.contactEmail
       }
     },
 
@@ -821,6 +871,28 @@ export const useCheckoutStore = defineStore('checkout', {
       }
 
       try {
+        if (!this.sessionId) {
+          this.sessionId = this.generateSessionId()
+        }
+
+        const guestEmail = this.guestInfo?.email?.trim()
+        const customerName = `${this.shippingInfo.address.firstName || ''} ${this.shippingInfo.address.lastName || ''}`.trim() || 'Customer'
+        const { locale } = useStoreI18n()
+        const authStore = useAuthStore()
+        const authenticatedEmail = authStore.user?.email ? authStore.user.email.trim() : null
+        const contactEmail = guestEmail || authenticatedEmail || null
+        this.contactEmail = 'caraseli02@gmail.com'
+
+        console.log('[Checkout] Preparing order payload', {
+          sessionId: this.sessionId,
+          guestEmail,
+          authenticatedEmail,
+          contactEmail,
+          itemCount: this.orderData.items.length,
+          paymentMethod: this.paymentMethod.type,
+          locale: locale.value
+        })
+
         const orderData = {
           sessionId: this.sessionId,
           items: this.orderData.items,
@@ -832,7 +904,11 @@ export const useCheckoutStore = defineStore('checkout', {
           shippingCost: this.orderData.shippingCost,
           tax: this.orderData.tax,
           total: this.orderData.total,
-          currency: this.orderData.currency
+          currency: this.orderData.currency,
+          guestEmail,
+          customerName,
+          locale: locale.value,
+          marketingConsent: this.guestInfo?.emailUpdates ?? false
         }
 
         const response = await $fetch('/api/checkout/create-order', {
@@ -840,10 +916,20 @@ export const useCheckoutStore = defineStore('checkout', {
           body: orderData
         })
 
+        console.log('[Checkout] Order created successfully', {
+          orderId: response.order?.id,
+          orderNumber: response.order?.orderNumber,
+          guestEmail
+        })
+
         // Store order information for confirmation step
         this.orderData = { ...this.orderData, orderId: response.order.id, orderNumber: response.order.orderNumber }
+        if (this.orderData) {
+          this.orderData.customerEmail = contactEmail
+        }
 
       } catch (error) {
+        console.error('[Checkout] Failed to create order', error)
         throw new Error('Failed to create order: ' + (error instanceof Error ? error.message : 'Unknown error'))
       }
     },
@@ -875,14 +961,32 @@ export const useCheckoutStore = defineStore('checkout', {
 
     async clearCart(): Promise<void> {
       try {
+        const cartStore = useCartStore()
+        const payload: Record<string, string | null> = {}
+
+        if (cartStore.sessionId) {
+          payload.sessionId = cartStore.sessionId
+        } else if (this.sessionId) {
+          payload.sessionId = this.sessionId
+        }
+
+        if (!payload.sessionId) {
+          await cartStore.clearCart()
+          return
+        }
+
+        console.log('[Checkout] Clearing cart with payload', payload)
+
         // Clear cart items from database
         const response = await $fetch('/api/cart/clear', {
-          method: 'POST'
+          method: 'POST',
+          body: payload
         })
+
+        console.log('[Checkout] Cart clear response', response)
 
         if (response.success) {
           // Clear cart state in store
-          const cartStore = useCartStore()
           await cartStore.clearCart()
         }
       } catch (error) {
@@ -895,13 +999,28 @@ export const useCheckoutStore = defineStore('checkout', {
       if (!this.orderData) return
 
       try {
+        const candidateEmail = this.orderData?.customerEmail || this.contactEmail || this.guestInfo?.email || null
+        const trimmedEmail = candidateEmail ? candidateEmail.trim() : undefined
+        console.log('[Checkout] Sending confirmation email', {
+          orderId: this.orderData.orderId,
+          orderNumber: this.orderData.orderNumber,
+          sessionId: this.sessionId,
+          email: trimmedEmail,
+          customerEmail: this.orderData.customerEmail,
+          contactEmail: this.contactEmail,
+          guestEmail: this.guestInfo?.email
+        })
+
         await $fetch('/api/checkout/send-confirmation', {
           method: 'POST',
           body: {
             orderId: this.orderData.orderId,
-            sessionId: this.sessionId
+            sessionId: this.sessionId,
+            email: trimmedEmail
           }
         })
+
+        console.log('[Checkout] Confirmation email request completed')
       } catch (error) {
         console.error('Failed to send confirmation email:', error)
       }
@@ -1080,6 +1199,8 @@ export const useCheckoutStore = defineStore('checkout', {
         const checkoutData = {
           sessionId: this.sessionId,
           currentStep: this.currentStep,
+          guestInfo: this.guestInfo,
+          contactEmail: this.contactEmail,
           shippingInfo: this.shippingInfo,
           paymentMethod: this.paymentMethod ? {
             ...this.paymentMethod,
@@ -1121,9 +1242,14 @@ export const useCheckoutStore = defineStore('checkout', {
         // Restore checkout state
         this.sessionId = checkoutData.sessionId
         this.currentStep = checkoutData.currentStep || 'shipping'
+        this.guestInfo = checkoutData.guestInfo || null
+        this.contactEmail = checkoutData.contactEmail || null
         this.shippingInfo = checkoutData.shippingInfo
         this.paymentMethod = checkoutData.paymentMethod
         this.orderData = checkoutData.orderData
+        if (!this.contactEmail && this.orderData?.customerEmail) {
+          this.contactEmail = this.orderData.customerEmail
+        }
         this.sessionExpiresAt = checkoutData.sessionExpiresAt ? new Date(checkoutData.sessionExpiresAt) : null
         this.lastSyncAt = checkoutData.lastSyncAt ? new Date(checkoutData.lastSyncAt) : null
         this.termsAccepted = checkoutData.termsAccepted || false
@@ -1149,6 +1275,8 @@ export const useCheckoutStore = defineStore('checkout', {
       // Reset all state to initial values
       this.currentStep = 'shipping'
       this.sessionId = null
+      this.guestInfo = null
+      this.contactEmail = null
       this.shippingInfo = null
       this.paymentMethod = null
       this.orderData = null
@@ -1173,7 +1301,7 @@ export const useCheckoutStore = defineStore('checkout', {
     // Initialize store when created
     $onAction({ name, after }) {
       // Auto-save after certain actions
-      const autoSaveActions = ['updateShippingInfo', 'updatePaymentMethod', 'goToStep']
+      const autoSaveActions = ['updateGuestInfo', 'updateShippingInfo', 'updatePaymentMethod', 'goToStep']
       if (autoSaveActions.includes(name)) {
         after(() => {
           this.saveToStorage()

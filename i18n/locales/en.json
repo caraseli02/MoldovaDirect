@@ -1124,7 +1124,8 @@
       "orders": "Orders",
       "users": "Users",
       "analytics": "Analytics",
-      "inventory": "Inventory"
+      "inventory": "Inventory",
+      "tools": "Tools"
     },
     "dashboard": {
       "title": "Dashboard",

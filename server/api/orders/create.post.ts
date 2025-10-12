@@ -291,7 +291,7 @@ async function sendOrderConfirmationEmailAsync(
     )
 
     // Send confirmation email
-    const result = await sendOrderConfirmationEmail(emailData)
+    const result = await sendOrderConfirmationEmail(emailData, { supabaseClient: supabase })
 
     if (result.success) {
       console.log(`✅ Order confirmation email sent successfully for order ${order.order_number}`)

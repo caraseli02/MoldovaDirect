@@ -1085,7 +1085,8 @@
       "orders": "Pedidos",
       "users": "Usuarios",
       "analytics": "Analíticas",
-      "inventory": "Inventario"
+      "inventory": "Inventario",
+      "tools": "Herramientas"
     },
     "dashboard": {
       "title": "Panel de Control",

@@ -1,10 +1,12 @@
 // POST /api/checkout/send-confirmation - Send order confirmation email
 import { createClient } from '@supabase/supabase-js'
-import { sendEmail, generateOrderConfirmationEmailHtml } from '~/server/utils/email'
+import { sendOrderConfirmationEmail, transformOrderToEmailData } from '~/server/utils/orderEmails'
+import type { DatabaseOrder } from '~/server/utils/emailTemplates/types'
 
 interface SendConfirmationRequest {
   orderId: number
   sessionId: string
+  email?: string
 }
 
 export default defineEventHandler(async (event) => {
@@ -16,6 +18,12 @@ export default defineEventHandler(async (event) => {
 
     // Parse request body
     const body = await readBody(event) as SendConfirmationRequest
+
+    console.log('[Checkout API] send-confirmation request received', {
+      orderId: body.orderId,
+      sessionId: body.sessionId,
+      payloadEmail: body.email
+    })
 
     // Validate required fields
     if (!body.orderId) {
@@ -50,8 +58,15 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    console.log('[Checkout API] send-confirmation order loaded', {
+      orderId: order.id,
+      orderNumber: order.order_number,
+      guestEmail: order.guest_email,
+      userId: order.user_id
+    })
+
     // Determine recipient email
-    let recipientEmail = order.guest_email
+    let recipientEmail = order.guest_email || body.email || null
     let recipientName = order.shipping_address?.firstName || 'Customer'
 
     // If user is authenticated, get their email from auth
@@ -74,7 +89,18 @@ export default defineEventHandler(async (event) => {
       }
     }
 
+    console.log('[Checkout API] send-confirmation recipient resolution', {
+      recipientEmail,
+      recipientName,
+      orderId: order.id
+    })
+
     if (!recipientEmail) {
+      console.error('[Checkout API] send-confirmation missing email', {
+        orderId: order.id,
+        guestEmail: order.guest_email,
+        payloadEmail: body.email
+      })
       throw createError({
         statusCode: 400,
         statusMessage: 'No email address found for order'
@@ -95,34 +121,35 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    // Generate email HTML
-    const emailHtml = generateOrderConfirmationEmailHtml(
+    // Transform order data for template
+    const emailData = transformOrderToEmailData(
+      order as DatabaseOrder,
       recipientName,
-      order,
+      recipientEmail,
       locale
     )
 
-    // Get subject line based on locale
-    const subjects = {
-      es: `Confirmación de pedido #${order.order_number} - Moldova Direct`,
-      en: `Order confirmation #${order.order_number} - Moldova Direct`,
-      ro: `Confirmare comandă #${order.order_number} - Moldova Direct`,
-      ru: `Подтверждение заказа #${order.order_number} - Moldova Direct`
+    // Send email via template system
+    const result = await sendOrderConfirmationEmail(emailData, { supabaseClient: supabase })
+
+    if (!result.success) {
+      throw createError({
+        statusCode: 500,
+        statusMessage: result.error || 'Failed to send confirmation email'
+      })
     }
 
-    const subject = subjects[locale as keyof typeof subjects] || subjects.es
-
-    // Send email
-    const result = await sendEmail({
-      to: recipientEmail,
-      subject,
-      html: emailHtml
+    console.log('[Checkout API] send-confirmation success', {
+      orderId: order.id,
+      emailLogId: result.emailLogId,
+      externalId: result.externalId
     })
 
     return {
       success: true,
       message: 'Confirmation email sent successfully',
-      emailId: result.id
+      emailLogId: result.emailLogId,
+      externalId: result.externalId
     }
   } catch (error: any) {
     if (error.statusCode) {

@@ -20,6 +20,7 @@ import {
   getOrderStatusSubject
 } from './emailTemplates/orderStatusTemplates'
 import { createEmailLog, recordEmailAttempt, getEmailLog } from './emailLogging'
+import { resolveSupabaseClient, type ResolvedSupabaseClient } from './supabaseAdminClient'
 
 /**
  * Email sending result
@@ -35,8 +36,13 @@ export interface EmailSendResult {
  * Send order confirmation email with logging
  * Requirements: 1.1, 4.1, 4.2
  */
+interface EmailSendOptions {
+  supabaseClient?: ResolvedSupabaseClient
+}
+
 export async function sendOrderConfirmationEmail(
-  data: OrderEmailData
+  data: OrderEmailData,
+  options: EmailSendOptions = {}
 ): Promise<EmailSendResult> {
   const { customerName, customerEmail, orderNumber, locale } = data
   
@@ -44,7 +50,7 @@ export async function sendOrderConfirmationEmail(
   const subject = getOrderConfirmationSubject(orderNumber, locale)
   
   // Get order ID from database if needed for logging
-  const supabase = useSupabaseClient()
+  const supabase = resolveSupabaseClient(options.supabaseClient)
   const { data: orderData } = await supabase
     .from('orders')
     .select('id')
@@ -72,7 +78,7 @@ export async function sendOrderConfirmationEmail(
       customerName,
       templateVersion: '2.0'
     }
-  })
+  }, supabase)
   
   try {
     // Generate email HTML using new template system
@@ -90,7 +96,8 @@ export async function sendOrderConfirmationEmail(
       emailLog.id,
       true,
       result.id,
-      undefined
+      undefined,
+      supabase
     )
     
     console.log(`✅ Order confirmation email sent for order ${orderNumber}`)
@@ -108,7 +115,8 @@ export async function sendOrderConfirmationEmail(
       emailLog.id,
       false,
       undefined,
-      error.message
+      error.message,
+      supabase
     )
     
     return {
@@ -126,7 +134,8 @@ export async function sendOrderConfirmationEmail(
 export async function sendOrderStatusEmail(
   data: OrderEmailData,
   emailType: EmailType,
-  issueDescription?: string
+  issueDescription?: string,
+  options: EmailSendOptions = {}
 ): Promise<EmailSendResult> {
   const { customerName, customerEmail, orderNumber, locale } = data
   
@@ -134,7 +143,7 @@ export async function sendOrderStatusEmail(
   const subject = getOrderStatusSubject(emailType, orderNumber, locale)
   
   // Get order ID from database
-  const supabase = useSupabaseClient()
+  const supabase = resolveSupabaseClient(options.supabaseClient)
   const { data: orderData } = await supabase
     .from('orders')
     .select('id')
@@ -163,7 +172,7 @@ export async function sendOrderStatusEmail(
       templateVersion: '2.0',
       issueDescription
     }
-  })
+  }, supabase)
   
   try {
     // Generate email HTML based on type
@@ -202,7 +211,8 @@ export async function sendOrderStatusEmail(
       emailLog.id,
       true,
       result.id,
-      undefined
+      undefined,
+      supabase
     )
     
     console.log(`✅ Order ${emailType} email sent for order ${orderNumber}`)
@@ -220,7 +230,8 @@ export async function sendOrderStatusEmail(
       emailLog.id,
       false,
       undefined,
-      error.message
+      error.message,
+      supabase
     )
     
     return {
@@ -236,10 +247,11 @@ export async function sendOrderStatusEmail(
  * Requirements: 6.3
  */
 export async function sendDeliveryConfirmationEmail(
-  data: OrderEmailData
+  data: OrderEmailData,
+  options: EmailSendOptions = {}
 ): Promise<EmailSendResult> {
   // Use the order_delivered email type
-  return sendOrderStatusEmail(data, 'order_delivered')
+  return sendOrderStatusEmail(data, 'order_delivered', undefined, options)
 }
 
 /**
@@ -247,9 +259,11 @@ export async function sendDeliveryConfirmationEmail(
  * Requirements: 4.2
  */
 export async function retryEmailDelivery(
-  emailLogId: number
+  emailLogId: number,
+  options: EmailSendOptions = {}
 ): Promise<EmailSendResult> {
-  const emailLog = await getEmailLog(emailLogId)
+  const supabase = resolveSupabaseClient(options.supabaseClient)
+  const emailLog = await getEmailLog(emailLogId, supabase)
   
   if (!emailLog) {
     throw createError({
@@ -267,7 +281,6 @@ export async function retryEmailDelivery(
   }
   
   // Get order data with items
-  const supabase = useSupabaseClient()
   const { data: order, error } = await supabase
     .from('orders')
     .select(`
@@ -338,7 +351,8 @@ export async function retryEmailDelivery(
       emailLog.id,
       true,
       result.id,
-      undefined
+      undefined,
+      supabase
     )
     
     console.log(`✅ Email retry successful for log ${emailLogId}`)
@@ -356,7 +370,8 @@ export async function retryEmailDelivery(
       emailLog.id,
       false,
       undefined,
-      error.message
+      error.message,
+      supabase
     )
     
     return {

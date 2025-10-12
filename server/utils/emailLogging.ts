@@ -13,19 +13,19 @@ import type {
   EmailLogFilters,
   EmailLogListResponse,
   EmailDeliveryStats,
-  EmailRetryConfig,
-  DEFAULT_EMAIL_RETRY_CONFIG,
-  calculateRetryDelay,
-  shouldRetryEmail
+  EmailRetryConfig
 } from '~/types/email'
+import { DEFAULT_EMAIL_RETRY_CONFIG, calculateRetryDelay, shouldRetryEmail } from '~/types/email'
+import { resolveSupabaseClient, type ResolvedSupabaseClient } from './supabaseAdminClient'
 
 /**
  * Create a new email log entry
  */
 export async function createEmailLog(
-  input: CreateEmailLogInput
+  input: CreateEmailLogInput,
+  supabaseClient?: ResolvedSupabaseClient
 ): Promise<EmailLog> {
-  const supabase = useSupabaseClient()
+  const supabase = resolveSupabaseClient(supabaseClient)
   
   const { data, error } = await supabase
     .from('email_logs')
@@ -58,9 +58,10 @@ export async function createEmailLog(
  */
 export async function updateEmailLog(
   id: number,
-  input: UpdateEmailLogInput
+  input: UpdateEmailLogInput,
+  supabaseClient?: ResolvedSupabaseClient
 ): Promise<EmailLog> {
-  const supabase = useSupabaseClient()
+  const supabase = resolveSupabaseClient(supabaseClient)
   
   const updateData: any = {}
   
@@ -94,8 +95,11 @@ export async function updateEmailLog(
 /**
  * Get email log by ID
  */
-export async function getEmailLog(id: number): Promise<EmailLog | null> {
-  const supabase = useSupabaseClient()
+export async function getEmailLog(
+  id: number,
+  supabaseClient?: ResolvedSupabaseClient
+): Promise<EmailLog | null> {
+  const supabase = resolveSupabaseClient(supabaseClient)
   
   const { data, error } = await supabase
     .from('email_logs')
@@ -122,9 +126,10 @@ export async function getEmailLog(id: number): Promise<EmailLog | null> {
  * Get email logs with filters and pagination
  */
 export async function getEmailLogs(
-  filters: EmailLogFilters = {}
+  filters: EmailLogFilters = {},
+  supabaseClient?: ResolvedSupabaseClient
 ): Promise<EmailLogListResponse> {
-  const supabase = useSupabaseClient()
+  const supabase = resolveSupabaseClient(supabaseClient)
   
   const page = filters.page || 1
   const limit = filters.limit || 50
@@ -207,9 +212,10 @@ export async function getEmailLogs(
  */
 export async function getEmailDeliveryStats(
   dateFrom?: string,
-  dateTo?: string
+  dateTo?: string,
+  supabaseClient?: ResolvedSupabaseClient
 ): Promise<EmailDeliveryStats> {
-  const supabase = useSupabaseClient()
+  const supabase = resolveSupabaseClient(supabaseClient)
   
   let query = supabase
     .from('email_logs')
@@ -261,9 +267,10 @@ export async function recordEmailAttempt(
   emailLogId: number,
   success: boolean,
   externalId?: string,
-  bounceReason?: string
+  bounceReason?: string,
+  supabaseClient?: ResolvedSupabaseClient
 ): Promise<EmailLog> {
-  const emailLog = await getEmailLog(emailLogId)
+  const emailLog = await getEmailLog(emailLogId, supabaseClient)
   
   if (!emailLog) {
     throw createError({
@@ -300,16 +307,17 @@ export async function recordEmailAttempt(
     }
   }
   
-  return updateEmailLog(emailLogId, updateData)
+  return updateEmailLog(emailLogId, updateData, supabaseClient)
 }
 
 /**
  * Mark email as delivered (webhook callback)
  */
 export async function markEmailDelivered(
-  externalId: string
+  externalId: string,
+  supabaseClient?: ResolvedSupabaseClient
 ): Promise<EmailLog | null> {
-  const supabase = useSupabaseClient()
+  const supabase = resolveSupabaseClient(supabaseClient)
   
   const { data, error } = await supabase
     .from('email_logs')
@@ -341,9 +349,10 @@ export async function markEmailDelivered(
  */
 export async function markEmailBounced(
   externalId: string,
-  bounceReason: string
+  bounceReason: string,
+  supabaseClient?: ResolvedSupabaseClient
 ): Promise<EmailLog | null> {
-  const supabase = useSupabaseClient()
+  const supabase = resolveSupabaseClient(supabaseClient)
   
   const { data, error } = await supabase
     .from('email_logs')
@@ -374,7 +383,7 @@ export async function markEmailBounced(
  * Get pending emails for retry
  */
 export async function getPendingEmailsForRetry(): Promise<EmailLog[]> {
-  const supabase = useSupabaseClient()
+  const supabase = resolveSupabaseClient()
   
   const config: EmailRetryConfig = DEFAULT_EMAIL_RETRY_CONFIG
   

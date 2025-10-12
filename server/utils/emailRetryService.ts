@@ -4,8 +4,8 @@
 // Automated retry service for failed email deliveries
 // Requirements: 4.2, 4.3
 
-import type { EmailLog, EmailRetryConfig, DEFAULT_EMAIL_RETRY_CONFIG } from '~/types/email'
-import { calculateRetryDelay, shouldRetryEmail } from '~/types/email'
+import type { EmailLog, EmailRetryConfig } from '~/types/email'
+import { DEFAULT_EMAIL_RETRY_CONFIG, calculateRetryDelay, shouldRetryEmail } from '~/types/email'
 import { getPendingEmailsForRetry } from './emailLogging'
 import { retryEmailDelivery } from './orderEmails'
 
