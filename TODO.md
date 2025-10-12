@@ -15,6 +15,13 @@
 
 - [x] Add dedicated documentation for the checkout pipeline (UI flow, API endpoints, payment intent lifecycle) and order management features now present in `server/api`.
 
+## Email Notifications
+
+- [ ] Propagate `FROM_EMAIL` Resend sender to preview and production environments so transactional emails work after deployment.
+- [ ] Update email setup docs to mention using the Resend shared domain (`onboarding@resend.dev`) for development and how to swap to a branded domain once verified.
+- [ ] Add an automated test (unit or e2e) that confirms an email log entry is created after completing the checkout flow.
+- [ ] Monitor the Supabase `email_logs` table in staging to validate retry logic once live payments are processed.
+
 ## Component Modernization
 
 - [x] Auth flows (login/register, auth alerts): replaced legacy inputs/selects with shadcn `Input`, migrated to `Label`/`Alert`, removed `Auth*Message.vue`, and updated unit coverage.

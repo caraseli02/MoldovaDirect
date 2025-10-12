@@ -79,6 +79,15 @@
             <Icon name="heroicons:chart-bar" class="w-5 h-5 mr-3" />
             {{ $t('admin.navigation.analytics') }}
           </NuxtLink>
+
+          <NuxtLink
+            to="/admin/tools/email-testing"
+            class="flex items-center px-4 py-2 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            active-class="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400"
+          >
+            <Icon name="heroicons:wrench-screwdriver" class="w-5 h-5 mr-3" />
+            {{ $t('admin.navigation.tools') }}
+          </NuxtLink>
         </div>
       </nav>
     </div>
@@ -168,6 +177,7 @@ const currentPageName = computed(() => {
   if (path.startsWith('/admin/orders')) return t('admin.navigation.orders')
   if (path.startsWith('/admin/users')) return t('admin.navigation.users')
   if (path.startsWith('/admin/analytics')) return t('admin.navigation.analytics')
+  if (path.startsWith('/admin/tools')) return t('admin.navigation.tools')
   return null
 })
 

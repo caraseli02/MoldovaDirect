@@ -1130,7 +1130,8 @@
       "orders": "Comenzi",
       "users": "Utilizatori",
       "analytics": "Analize",
-      "inventory": "Inventar"
+      "inventory": "Inventar",
+      "tools": "Instrumente"
     },
     "dashboard": {
       "title": "Panou de Control",

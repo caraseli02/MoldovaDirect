@@ -45,6 +45,10 @@ interface CreateOrderFromCheckoutRequest {
   tax: number
   total: number
   currency: string
+  guestEmail?: string
+  customerName?: string
+  locale?: string
+  marketingConsent?: boolean
 }
 
 export default defineEventHandler(async (event) => {
@@ -63,6 +67,15 @@ export default defineEventHandler(async (event) => {
 
     // Parse request body
     const body = await readBody(event) as CreateOrderFromCheckoutRequest
+
+    console.log('[Checkout API] create-order request received', {
+      sessionId: body.sessionId,
+      itemCount: body.items?.length || 0,
+      guestEmail: body.guestEmail,
+      paymentMethod: body.paymentMethod,
+      hasShippingAddress: !!body.shippingAddress,
+      hasAuthHeader: !!getHeader(event, 'authorization')
+    })
 
     // Validate required fields
     if (!body.sessionId || !body.items?.length || !body.shippingAddress || !body.paymentMethod) {
@@ -83,7 +96,7 @@ export default defineEventHandler(async (event) => {
     // Get user from session (optional for guest checkout)
     const authHeader = getHeader(event, 'authorization')
     let user = null
-    let guestEmail = null
+    let guestEmail = body.guestEmail || null
 
     if (authHeader) {
       const { data: { user: authUser }, error: authError } = await supabase.auth.getUser(
@@ -94,11 +107,14 @@ export default defineEventHandler(async (event) => {
       }
     }
 
+    console.log('[Checkout API] create-order user resolution', {
+      isAuthenticated: !!user,
+      guestEmail
+    })
+
     // For guest checkout, try to get email from shipping address or body
-    if (!user) {
-      // Guest checkout - we'll need email from somewhere
-      // For now, we'll use a placeholder or get it from the session
-      guestEmail = body.shippingAddress.phone || 'guest@checkout.com' // This should be passed in the request
+    if (!user && !guestEmail) {
+      guestEmail = null
     }
 
     // Generate order number
@@ -154,6 +170,14 @@ export default defineEventHandler(async (event) => {
       orderData.guest_email = guestEmail
     }
 
+    console.log('[Checkout API] creating order record', {
+      orderNumber,
+      userId: user?.id,
+      paymentMethod: orderData.payment_method,
+      paymentStatus,
+      hasGuestEmail: !!orderData.guest_email
+    })
+
     const { data: order, error: orderError } = await supabase
       .from('orders')
       .insert(orderData)
@@ -199,6 +223,13 @@ export default defineEventHandler(async (event) => {
         statusMessage: `Failed to create order items: ${itemsError.message || 'Unknown error'}`
       })
     }
+
+    console.log('[Checkout API] create-order success', {
+      orderId: order.id,
+      orderNumber: order.order_number,
+      guestEmail: orderData.guest_email,
+      userId: order.user_id
+    })
 
     return {
       success: true,

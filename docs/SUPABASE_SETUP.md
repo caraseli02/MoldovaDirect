@@ -20,9 +20,11 @@ SUPABASE_SERVICE_KEY=service-role-key   # required for server APIs
 APP_URL=http://localhost:3000
 NODE_ENV=development
 RESEND_API_KEY= # only if you plan to test transactional emails locally
+FROM_EMAIL="Your Brand <onboarding@resend.dev>" # use Resend shared domain unless you verify your own
 ```
 
 Restart `npm run dev` after editing `.env` so Nuxt picks up the changes.
+If you prefer a branded address, add your domain inside Resend, complete the DNS verification steps, and then swap `FROM_EMAIL` to the new address.
 
 ## 3. Apply the Database Schema
 

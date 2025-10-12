@@ -150,6 +150,13 @@ const proceedToPayment = async () => {
       instructions: shippingInstructions.value || undefined
     }
 
+    if (!user.value && showGuestForm.value) {
+      checkoutStore.updateGuestInfo({
+        email: guestInfo.value.email.trim(),
+        emailUpdates: guestInfo.value.emailUpdates
+      })
+    }
+
     // Update checkout store
     await checkoutStore.updateShippingInfo(shippingInfo)
 
@@ -176,6 +183,14 @@ onMounted(async () => {
   // Load saved addresses for authenticated users
   if (user.value) {
     await loadSavedAddresses()
+  }
+
+  if (!user.value && checkoutStore.guestInfo) {
+    showGuestForm.value = true
+    guestInfo.value = {
+      email: checkoutStore.guestInfo.email,
+      emailUpdates: checkoutStore.guestInfo.emailUpdates
+    }
   }
 
   // Load shipping methods if address is already valid (from restored session)

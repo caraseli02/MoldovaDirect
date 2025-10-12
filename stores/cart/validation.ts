@@ -171,11 +171,18 @@ async function validateSingleProduct(productId: string, cartItem?: CartItem): Pr
       warnings: []
     }
 
-  } catch (error) {
+  } catch (error: any) {
     console.warn(`Failed to validate product ${productId}:`, error)
     
     // Handle different error scenarios
-    if (error.statusCode === 404) {
+    if (error?.statusCode === 404) {
+      if (process.dev && cartItem?.product) {
+        return {
+          isValid: true,
+          product: cartItem.product,
+          warnings: ['Product not found in API; using cached cart snapshot']
+        }
+      }
       return {
         isValid: false,
         product: cartItem?.product || {} as Product,
@@ -184,6 +191,14 @@ async function validateSingleProduct(productId: string, cartItem?: CartItem): Pr
     }
 
     // Network or other error
+    if (process.dev && cartItem?.product) {
+      return {
+        isValid: true,
+        product: cartItem.product,
+        warnings: ['Product validation skipped due to network error']
+      }
+    }
+
     return {
       isValid: false,
       product: cartItem?.product || {} as Product,

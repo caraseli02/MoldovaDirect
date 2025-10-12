@@ -1,5 +1,11 @@
 // POST /api/orders/create - Create a new order from cart
 import { createClient } from '@supabase/supabase-js'
+import { sendOrderConfirmationEmail } from '~/server/utils/orderEmails'
+import { 
+  extractCustomerInfoFromOrder, 
+  transformOrderToEmailData,
+  validateOrderForEmail 
+} from '~/server/utils/orderDataTransform'
 
 interface CreateOrderRequest {
   cartId: number
@@ -185,6 +191,38 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    // Fetch complete order with items for email
+    const { data: completeOrder, error: fetchError } = await supabase
+      .from('orders')
+      .select(`
+        *,
+        order_items (
+          id,
+          product_id,
+          quantity,
+          price_eur,
+          total_eur,
+          product_snapshot
+        )
+      `)
+      .eq('id', order.id)
+      .single()
+
+    if (fetchError || !completeOrder) {
+      console.error('Failed to fetch complete order for email:', fetchError)
+    }
+
+    // Send order confirmation email (non-blocking)
+    // Requirements: 1.1, 1.6
+    if (completeOrder) {
+      // Send email asynchronously without blocking the response
+      sendOrderConfirmationEmailAsync(completeOrder, user, supabase)
+        .catch(error => {
+          console.error('Failed to send order confirmation email:', error)
+          // Email failure doesn't block order creation
+        })
+    }
+
     return {
       success: true,
       data: {
@@ -206,3 +244,62 @@ export default defineEventHandler(async (event) => {
     })
   }
 })
+
+/**
+ * Send order confirmation email asynchronously
+ * Handles both authenticated users and guest checkout
+ * Requirements: 1.1, 1.6
+ * 
+ * @param order - Complete order with items
+ * @param user - Authenticated user (if any)
+ * @param supabase - Supabase client
+ */
+async function sendOrderConfirmationEmailAsync(
+  order: any,
+  user: any,
+  supabase: any
+): Promise<void> {
+  try {
+    // Validate order data before sending email
+    const validation = validateOrderForEmail(order)
+    if (!validation.isValid) {
+      console.error('Order validation failed for email:', validation.errors)
+      return
+    }
+
+    // Get user profile if authenticated
+    let userProfile = null
+    if (user?.id) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('id, email, full_name, preferred_locale')
+        .eq('id', user.id)
+        .single()
+      
+      userProfile = profile
+    }
+
+    // Extract customer information (handles both authenticated and guest)
+    const customerInfo = await extractCustomerInfoFromOrder(order, userProfile)
+
+    // Transform order data for email template
+    const emailData = transformOrderToEmailData(
+      order,
+      customerInfo.name,
+      customerInfo.email,
+      customerInfo.locale
+    )
+
+    // Send confirmation email
+    const result = await sendOrderConfirmationEmail(emailData, { supabaseClient: supabase })
+
+    if (result.success) {
+      console.log(`✅ Order confirmation email sent successfully for order ${order.order_number}`)
+    } else {
+      console.error(`❌ Failed to send order confirmation email for order ${order.order_number}:`, result.error)
+    }
+  } catch (error) {
+    console.error('Error in sendOrderConfirmationEmailAsync:', error)
+    // Don't throw - email failure should not affect order creation
+  }
+}
