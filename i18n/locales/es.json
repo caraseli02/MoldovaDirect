@@ -23,8 +23,10 @@
     "optional": "Opcional",
     "and": "y",
     "to": "a",
+    "of": "de",
     "previous": "Anterior",
     "next": "Siguiente",
+    "back": "Atrás",
     "remove": "Eliminar",
     "update": "Actualizar",
     "subtotal": "Subtotal",
@@ -32,32 +34,23 @@
     "tax": "Impuestos",
     "orderSummary": "Resumen del Pedido",
     "retry": "Reintentar",
-    "tryAgain": "Intentar de nuevo",
-    "error": "Error",
-    "errorGeneric": "Ha ocurrido un error. Por favor, inténtalo de nuevo.",
-    "cartError": "Error en el carrito",
-    "cartValidationError": "Error de validación",
     "cancel": "Cancelar",
     "showMore": "Mostrar Más",
     "showLess": "Mostrar Menos",
     "swipe_to_remove": "Desliza para eliminar",
     "release_to_remove": "Suelta para eliminar",
-    "selectAll": "Seleccionar todo",
-    "deselectAll": "Deseleccionar todo",
-    "bulkOperations": "Operaciones en lote",
-    "saveForLater": "Guardar para después",
-    "savedForLater": "Guardado para después",
-    "moveToCart": "Mover al carrito",
-    "recommendations": "Recomendaciones",
-    "alsoInterested": "También te puede interesar",
-    "quickAdd": "Añadir rápido",
-    "inCart": "En carrito",
-    "outOfStock": "Agotado",
-    "onlyAvailable": "Solo {count} disponibles",
+    "help": "Ayuda",
+    "each": "cada",
+    "refresh": "Actualizar",
+    "tryAgain": "Intentar de nuevo",
+    "error": "Error",
+    "errorGeneric": "Ha ocurrido un error. Por favor, inténtalo de nuevo.",
     "menu": "Menú",
     "preferences": "Preferencias",
-    "each": "cada",
-    "refresh": "Actualizar"
+    "selectAll": "Seleccionar todo",
+    "deselectAll": "Deseleccionar todo",
+    "cartError": "Error en el carrito",
+    "cartValidationError": "Error de validación"
   },
   "auth": {
     "signIn": "Iniciar Sesión",
@@ -115,12 +108,31 @@
     "missingToken": "Falta el token de restablecimiento. Por favor, usa el enlace de tu correo.",
     "accessibility": {
       "showPassword": "Mostrar contraseña",
+      "hidePassword": "Ocultar contraseña",
+      "passwordVisible": "La contraseña ahora es visible",
+      "passwordHidden": "La contraseña ahora está oculta",
       "passwordToggleDescription": "Alternar visibilidad de la contraseña",
+      "passwordRequirements": "La contraseña debe tener al menos 8 caracteres con mayúsculas, minúsculas y un número",
+      "confirmPasswordDescription": "Vuelve a introducir tu contraseña para confirmarla",
       "rememberMeDescription": "Recordar mi sesión en este dispositivo",
       "forgotPasswordLink": "Enlace para restablecer contraseña",
       "signInButton": "Botón de iniciar sesión",
+      "signingIn": "Iniciando sesión en tu cuenta",
+      "processingLogin": "Procesando tu solicitud de inicio de sesión",
       "magicLinkButton": "Botón de enlace mágico",
-      "magicLinkDescription": "Enviar enlace de inicio de sesión por correo"
+      "sendingMagicLink": "Enviando enlace mágico",
+      "magicLinkDescription": "Enviar enlace de inicio de sesión por correo",
+      "createAccountButton": "Crear tu cuenta",
+      "creatingAccount": "Creando tu cuenta",
+      "processingRegistration": "Procesando tu registro",
+      "phoneOptional": "El número de teléfono es opcional",
+      "termsLink": "Leer términos y condiciones",
+      "privacyLink": "Leer política de privacidad",
+      "termsDescription": "Debes aceptar los términos y condiciones para crear una cuenta",
+      "passwordMatch": "Las contraseñas coinciden",
+      "resetPasswordButton": "Restablecer tu contraseña",
+      "resettingPassword": "Restableciendo tu contraseña",
+      "processingPasswordReset": "Procesando tu solicitud de restablecimiento de contraseña"
     },
     "errors": {
       "invalidCredentials": "Correo o contraseña incorrectos",
@@ -176,6 +188,16 @@
         "invalid": "Token de verificación inválido",
         "expired": "El token de verificación ha expirado"
       }
+    },
+    "progress": {
+      "step": "Paso",
+      "of": "de",
+      "completed": "completado",
+      "current": "actual",
+      "upcoming": "próximo",
+      "label": "Progreso de autenticación: paso {current} de {total} para {context}",
+      "announcement": "Ahora en el paso {step} de {total}: {stepName}",
+      "stepChanged": "Se ha pasado al paso {step}: {stepName}"
     },
     "success": {
       "loginSuccess": "¡Inicio de sesión exitoso! Redirigiendo...",
@@ -305,17 +327,6 @@
     "placed": "Realizado",
     "shipped": "Enviado",
     "delivered": "Entregado",
-    "actions": "Acciones",
-    "needHelp": "¿Necesitas ayuda con tu pedido?",
-    "contactUs": "Contáctanos",
-    "swipeHint": "Desliza a la izquierda o derecha para navegar por las secciones",
-    "status": {
-      "pending": "Pendiente",
-      "processing": "Procesando",
-      "shipped": "Enviado",
-      "delivered": "Entregado",
-      "cancelled": "Cancelado"
-    },
     "actions": {
       "reorder": "Volver a Pedir",
       "return": "Devolver Artículos",
@@ -325,6 +336,16 @@
       "confirmReturnMessage": "¿Estás seguro de que quieres iniciar una devolución para este pedido?",
       "initiateReturn": "Iniciar Devolución",
       "printInvoice": "Imprimir Factura"
+    },
+    "needHelp": "¿Necesitas ayuda con tu pedido?",
+    "contactUs": "Contáctanos",
+    "swipeHint": "Desliza a la izquierda o derecha para navegar por las secciones",
+    "status": {
+      "pending": "Pendiente",
+      "processing": "Procesando",
+      "shipped": "Enviado",
+      "delivered": "Entregado",
+      "cancelled": "Cancelado"
     },
     "search": {
       "placeholder": "Buscar por número de pedido o nombre de producto...",
@@ -370,7 +391,6 @@
     },
     "viewOrder": "Ver Pedido",
     "trackOrder": "Rastrear Pedido",
-    "viewAllOrders": "Ver Todos los Pedidos",
     "realTimeConnected": "Actualizaciones en tiempo real activas",
     "deliveryConfirmation": {
       "title": "¡Pedido Entregado Exitosamente!",
@@ -591,16 +611,18 @@
     "sortPriceAsc": "Precio: Menor a Mayor",
     "sortPriceDesc": "Precio: Mayor a Menor",
     "sortFeatured": "Destacados",
-    "sortPriceLowHigh": "Precio: Menor a Mayor",
-    "sortPriceHighLow": "Precio: Mayor a Menor",
-    "showingResults": "Mostrando {start}-{end} de {total} productos",
-    "results": "{count} resultados | {count} resultado | {count} resultados",
+    "results": "productos encontrados",
     "search": "Búsqueda",
     "category": "Categoría",
     "noResults": "No se encontraron resultados",
     "noProducts": "No hay productos disponibles",
     "tryDifferentFilters": "Intenta con filtros diferentes",
     "comingSoon": "Próximamente tendremos productos disponibles",
+    "showingResults": "Mostrando {start}-{end} de {total} productos",
+    "filtersApplied": "Filtros aplicados",
+    "clearFilters": "Limpiar todos los filtros",
+    "sortPriceLowHigh": "Precio: Menor a Mayor",
+    "sortPriceHighLow": "Precio: Mayor a Menor",
     "categories": {
       "all": "Todos",
       "wine": "Vinos",
@@ -627,8 +649,7 @@
       "maxPrice": "Precio Máximo",
       "removeFilter": "Eliminar filtro {filter}",
       "unknownCategory": "Categoría Desconocida"
-    },
-    "results": "productos encontrados"
+    }
   },
   "footer": {
     "terms": "Términos y Condiciones",
@@ -662,8 +683,6 @@
     "copyright": "© 2024 Moldova Direct. Todos los derechos reservados."
   },
   "cart": {
-    "itemsSelected": "artículos seleccionados",
-    "removeSelected": "Eliminar seleccionados",
     "success": {
       "added": "Producto añadido",
       "addedToCart": "Añadido al carrito",
@@ -806,19 +825,28 @@
       "viewProduct": "Ver producto",
       "adjustQuantity": "Ajustar cantidad",
       "adjustToMax": "Ajustar al máximo",
-      "reloadCart": "Recargar carrito"
+      "reloadCart": "Recargar carrito",
+      "saveForLater": "Guardar para después",
+      "addToCart": "Añadir al carrito",
+      "moveToCart": "Mover al carrito",
+      "remove": "Eliminar",
+      "select": "Seleccionar",
+      "deselect": "Deseleccionar"
     },
-    "recommendations": {
-      "title": "Productos recomendados",
-      "noRecommendations": "No hay recomendaciones disponibles en este momento",
-      "loadingRecommendations": "Cargando recomendaciones...",
-      "refreshRecommendations": "Actualizar recomendaciones"
-    },
-    "bulk": {
-      "itemsSelected": "elementos seleccionados",
-      "removeSelected": "Eliminar seleccionados",
-      "saveSelected": "Guardar seleccionados",
-      "processingBulkOperation": "Procesando operación..."
+    "labels": {
+      "saveForLater": "Guardar para después",
+      "savedForLater": "Guardado para después",
+      "addToCart": "Añadir al carrito",
+      "inCart": "En el carrito",
+      "recommendedProducts": "Productos recomendados",
+      "quickAdd": "Añadir rápido",
+      "each": "cada uno",
+      "price": "Precio",
+      "quantity": "Cantidad",
+      "total": "Total",
+      "subtotal": "Subtotal",
+      "itemsSelected": "artículos seleccionados",
+      "removeSelected": "Eliminar seleccionados"
     },
     "savedForLater": "Guardado para después",
     "saveForLater": "Guardar para después",
@@ -972,8 +1000,16 @@
     "shippingMethod": {
       "title": "Método de Envío",
       "subtitle": "Elige cómo te gustaría recibir tu pedido",
-      "free": "Gratis",
-      "express": "Express",
+      "free": {
+        "label": "Gratis",
+        "name": "Envío Gratis",
+        "description": "Entrega en 5-7 días hábiles (pedidos sobre €50)"
+      },
+      "express": {
+        "label": "Express",
+        "name": "Envío Express",
+        "description": "Entrega en 1-2 días hábiles"
+      },
       "noMethods": "No hay métodos de envío disponibles",
       "noMethodsDescription": "Por favor verifica tu dirección o contacta soporte",
       "error": "Error cargando métodos de envío",
@@ -1008,12 +1044,24 @@
       "useNewMethod": "Usar un nuevo método de pago",
       "newMethod": "Nuevo Método de Pago",
       "default": "Predeterminado",
-      "creditCard": "Tarjeta de Crédito",
-      "creditCardDesc": "Paga con Visa, Mastercard u otras tarjetas",
-      "paypal": "PayPal",
-      "paypalDesc": "Paga con tu cuenta de PayPal",
-      "bankTransfer": "Transferencia Bancaria",
-      "bankTransferDesc": "Transfiere dinero directamente desde tu banco",
+      "creditCard": {
+        "label": "Tarjeta de Crédito",
+        "summary": "Paga con Visa, Mastercard u otras tarjetas",
+        "title": "Tarjeta de Crédito",
+        "description": "Paga de forma segura usando tu tarjeta de crédito o débito."
+      },
+      "paypal": {
+        "label": "PayPal",
+        "summary": "Paga con tu cuenta de PayPal",
+        "title": "Pagar con PayPal",
+        "description": "Serás redirigido a PayPal para completar tu pago de forma segura."
+      },
+      "bankTransfer": {
+        "label": "Transferencia Bancaria",
+        "summary": "Transfiere dinero directamente desde tu banco",
+        "title": "Transferencia Bancaria",
+        "description": "Transfiere el monto del pedido a nuestra cuenta bancaria usando los detalles a continuación."
+      },
       "cardNumber": "Número de Tarjeta",
       "cardNumberPlaceholder": "1234 5678 9012 3456",
       "expiryDate": "Fecha de Vencimiento",
@@ -1026,14 +1074,10 @@
       "saveForFuture": "Guardar este método de pago para futuros pedidos",
       "securePayment": "Pago Seguro",
       "securityNotice": "Tu información de pago está encriptada y segura. Nunca almacenamos los detalles de tu tarjeta.",
-      "paypalTitle": "Pagar con PayPal",
-      "paypalDescription": "Serás redirigido a PayPal para completar tu pago de forma segura.",
       "paypalEmail": "Email de PayPal",
       "paypalEmailPlaceholder": "tu.email{'@'}ejemplo.com",
       "paypalNoticeTitle": "Pago con PayPal",
       "paypalNotice": "Después de hacer clic en 'Revisar Pedido', serás redirigido a PayPal para completar tu pago.",
-      "bankTransferTitle": "Transferencia Bancaria",
-      "bankTransferDescription": "Transfiere el monto del pedido a nuestra cuenta bancaria usando los detalles a continuación.",
       "bankDetails": "Detalles de Transferencia Bancaria",
       "bankName": "Nombre del Banco",
       "accountHolder": "Titular de la Cuenta",
@@ -1045,10 +1089,12 @@
       "bankInstruction1": "Por favor incluye la referencia de pago en tu transferencia",
       "bankInstruction2": "Tu pedido será procesado después de la confirmación del pago",
       "bankInstruction3": "Las transferencias bancarias pueden tardar 1-3 días hábiles en procesarse",
-      "cash": "Pago Contra Entrega",
-      "cashDesc": "Paga en efectivo cuando se entregue tu pedido",
-      "cashTitle": "Pago Contra Entrega",
-      "cashDescription": "Pagarás tu pedido en efectivo cuando sea entregado en tu dirección.",
+      "cash": {
+        "label": "Pago Contra Entrega",
+        "summary": "Paga en efectivo cuando se entregue tu pedido",
+        "title": "Pago Contra Entrega",
+        "description": "Pagarás tu pedido en efectivo cuando sea entregado en tu dirección."
+      },
       "cashInstructions": "Cómo Funciona el Pago Contra Entrega",
       "cashInstruction1": "Realiza tu pedido y lo prepararemos para la entrega",
       "cashInstruction2": "Nuestro equipo de entrega te contactará para programar la entrega",
@@ -1064,7 +1110,6 @@
       "reviewOrder": "Revisar Pedido",
       "processing": "Procesando..."
     },
-    "processing": "Procesando...",
     "confirmation": {
       "orderNumber": "Número de Pedido",
       "orderItems": "Artículos del Pedido",
@@ -1095,9 +1140,24 @@
       "refreshAll": "Actualizar Todo",
       "lastUpdated": "Última actualización: {time}",
       "refresh": "Actualizar",
-      "quickActions": "Acciones Rápidas",
+      "quickActions": {
+        "title": "Acciones Rápidas",
+        "addNewProduct": "Añadir Nuevo Producto",
+        "viewOrders": "Ver Pedidos",
+        "manageUsers": "Gestionar Usuarios"
+      },
       "criticalAlerts": "Alertas Críticas",
-      "systemStatus": "Estado del Sistema",
+      "systemStatus": {
+        "title": "Estado del Sistema",
+        "database": "Base de Datos",
+        "api": "API",
+        "lastBackup": "Última Copia de Seguridad",
+        "online": "En línea",
+        "operational": "Operativo",
+        "offline": "Desconectado",
+        "error": "Error",
+        "hoursAgo": "hace {hours} horas"
+      },
       "stats": {
         "totalProducts": "Total de Productos",
         "activeProducts": "{count} activos",
@@ -1109,21 +1169,6 @@
         "conversionRate": "{rate} conversión",
         "totalRevenue": "Ingresos Totales",
         "revenueToday": "{amount} hoy"
-      },
-      "quickActions": {
-        "addNewProduct": "Añadir Nuevo Producto",
-        "viewOrders": "Ver Pedidos",
-        "manageUsers": "Gestionar Usuarios"
-      },
-      "systemStatus": {
-        "database": "Base de Datos",
-        "api": "API",
-        "lastBackup": "Última Copia de Seguridad",
-        "online": "En línea",
-        "operational": "Operativo",
-        "offline": "Desconectado",
-        "error": "Error",
-        "hoursAgo": "hace {hours} horas"
       },
       "recentActivity": {
         "title": "Actividad Reciente",
@@ -1308,7 +1353,13 @@
       "totalSpent": "Total Gastado",
       "language": "Idioma",
       "avgOrderValue": "Valor Promedio de Pedido",
-      "actions": "Acciones",
+      "actions": {
+        "view": "Ver detalles del usuario",
+        "edit": "Editar usuario",
+        "clearFilters": "Limpiar Filtros",
+        "refresh": "Actualizar",
+        "invite": "Invitar Usuario"
+      },
       "loading": "Cargando usuarios...",
       "retry": "Reintentar",
       "searchPlaceholder": "Buscar usuarios por nombre, email o ID...",
@@ -1343,13 +1394,6 @@
         "activeFilters": "Filtros Activos",
         "from": "Desde",
         "to": "Hasta"
-      },
-      "actions": {
-        "view": "Ver detalles del usuario",
-        "edit": "Editar usuario",
-        "clearFilters": "Limpiar Filtros",
-        "refresh": "Actualizar",
-        "invite": "Invitar Usuario"
       },
       "empty": {
         "noResults": "No se encontraron usuarios",
