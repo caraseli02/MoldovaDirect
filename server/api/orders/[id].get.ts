@@ -44,6 +44,7 @@ export default defineEventHandler(async (event) => {
         *,
         order_items (
           id,
+          order_id,
           product_id,
           product_snapshot,
           quantity,
@@ -101,7 +102,7 @@ export default defineEventHandler(async (event) => {
       updatedAt: order.updated_at,
       items: (order.order_items || []).map((item: any) => ({
         id: item.id,
-        orderId: item.order_id,
+        orderId: item.order_id ?? order.id,
         productId: item.product_id,
         productSnapshot: item.product_snapshot,
         quantity: item.quantity,
