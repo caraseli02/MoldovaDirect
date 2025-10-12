@@ -48,11 +48,26 @@ When adding new columns or RPC functions for checkout, extend these scripts to k
 
 ## Payment Options
 
-- **Cash on Delivery**: Fully implemented in UI and order creation logic; confirmation step marks orders as `pending` with `cash` payment method.
-- **Card Payments (Stripe)**: API scaffolding exists; enable by supplying live keys and finalizing webhook handling in `server/api/checkout/confirm-payment.post.ts`.
-- **PayPal**: UI placeholders exist; wire up once credentials and REST integration are ready.
+### Current Implementation (October 2025)
 
-Remember to update `nuxt.config.ts` and deployment secrets when introducing new providers.
+- **Cash on Delivery**: ✅ Fully implemented in UI and order creation logic; confirmation step marks orders as `pending` with `cash` payment method.
+- **Card Payments (Stripe)**: ✅ Primary payment processor with API integration complete. Enable by supplying live keys and finalizing webhook handling in `server/api/checkout/confirm-payment.post.ts`.
+
+### Removed Features
+
+- **PayPal**: ❌ Removed in October 2025 cleanup. The PayPal integration was never implemented in the UI and has been completely removed from the codebase (composables, API endpoints, and configuration). If PayPal support is needed in the future, it should be implemented as a new feature with proper planning and testing.
+
+### Configuration
+
+Payment processing is configured through environment variables:
+
+```bash
+# Stripe (Primary payment processor)
+STRIPE_PUBLISHABLE_KEY=pk_test_...
+STRIPE_SECRET_KEY=sk_test_...
+```
+
+No additional payment provider configuration is needed in `nuxt.config.ts`. All payment processing is handled through Stripe's API.
 
 ---
 

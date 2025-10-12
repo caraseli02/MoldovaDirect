@@ -54,6 +54,8 @@ npm run test:regression        # Run regression tests (@regression)
 - **State Management**: Pinia stores
 - **Database**: Supabase (PostgreSQL) with Row Level Security
 - **Authentication**: Supabase Auth
+- **Payment Processing**: Stripe (PayPal integration removed October 2025)
+- **Email Service**: Resend
 - **Internationalization**: @nuxtjs/i18n with lazy loading (ES/EN/RO/RU)
 - **Testing**: Playwright for E2E, Vitest for unit tests
 - **Deployment**: Vercel
@@ -102,7 +104,17 @@ Composables provide reusable logic with consistent error handling:
 - `useCart()` - Shopping cart with Pinia availability detection
 - `useCartAnalytics()` - Cart interaction tracking and analytics
 - `useProducts()` - Product catalog and filtering
+- `useStripe()` - Stripe payment integration
+- `useCheckout()` - Checkout flow management
+- `useOrders()` - Order management and history
+- `useOrderTracking()` - Real-time order tracking
 - `useTheme()` - Theme switching (light/dark mode)
+- `useDevice()` - Device detection (mobile/tablet/desktop)
+- `useHapticFeedback()` - Mobile haptic feedback
+- `useSwipeGestures()` - Touch gesture handling
+- `usePullToRefresh()` - Pull-to-refresh functionality
+
+**Note:** PayPal integration (usePayPal) was removed in October 2025 as it was unused.
 
 ### Admin Dashboard Structure
 Admin pages follow the pattern `/admin/[feature]/[action]`:

@@ -102,27 +102,47 @@ feat: Migrate to shadcn-vue UI component system
 - Updated all pages and components to use new UI system
 ```
 
+### Recent Updates (October 2025)
+
+#### Code Cleanup & Optimization (October 12, 2025)
+```
+chore: major code cleanup - remove unused features and dependencies
+- Removed PayPal integration (composables, API endpoints, configuration)
+- Deleted unused composables (useMobileCodeSplitting, usePushNotifications)
+- Removed tw-animate-css package (unused dependency)
+- Organized test scripts into scripts/ directory
+- Updated documentation to reflect Stripe-only payment processing
+- Impact: ~850 lines of code removed, cleaner dependency tree
+```
+
 ### Active Work Items
-- Stripe/PayPal payment capture: move beyond cash-only checkout, store payment methods, and finalise production configs
-- Transactional email pipeline: confirmation, fulfillment, and password recovery emails with localized templates
-- Admin analytics dashboards: product performance, sales trends, and user growth metrics surfaced in UI
-- Checkout hardening: complete guest checkout edge cases and connect inventory reservation to Supabase scripts
+- **Stripe payment capture**: Finalize payment intent flow, webhooks, and production configuration
+- **Transactional email pipeline**: Order confirmation, shipping updates, and password recovery emails with localized templates
+- **Admin analytics dashboards**: Product performance, sales trends, and user growth metrics
+- **Checkout hardening**: Complete guest checkout edge cases and inventory reservation
+- **Toast system migration**: Migrate from custom toast system to vue-sonner (HIGH PRIORITY)
 
 ## 📋 Roadmap & Next Steps
 
 ### Immediate Priorities (Phase 5 Focus)
-1. **Payment Providers**
+1. **Payment Processing (Stripe)**
    - Enable Stripe payment intents end-to-end (capture, webhooks, error handling)
-   - Implement PayPal checkout option with sandbox testing
+   - Configure production Stripe credentials
    - Securely manage API keys and environment configuration
+   - **Note**: PayPal integration removed in October 2025 cleanup (unused feature)
 2. **Communication & Notifications**
-   - Build transactional email templates (order confirmation, shipping updates)
-   - Integrate Resend/Supabase email delivery with localization
+   - ✅ Email system integrated with Resend
+   - Build additional transactional email templates (shipping updates, returns)
    - Capture customer notification preferences
+   - Enhance email retry logic and monitoring
 3. **Admin Insights**
    - Add sales, inventory, and customer analytics widgets to admin dashboard
    - Schedule daily/weekly summary reports
    - Document monitoring and alerting expectations
+4. **Component Modernization**
+   - Migrate toast system to vue-sonner (HIGH PRIORITY)
+   - Complete checkout component migration to shadcn-vue
+   - Enhance mobile navigation with shadcn patterns
 
 ### Future Enhancements
 - Storage fallbacks for cart/session persistence and cross-tab sync

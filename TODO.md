@@ -1,5 +1,15 @@
 # Repository TODOs (2025-02)
 
+## Recent Cleanup (October 12, 2025)
+
+- [x] Removed unused PayPal integration (composable + API endpoints + config)
+- [x] Deleted unused composables (useMobileCodeSplitting, usePushNotifications)
+- [x] Removed tw-animate-css package (unused)
+- [x] Organized test scripts into `scripts/` directory
+- [x] Archived duplicate documentation (AGENTS.md)
+
+See [CLEANUP_COMPLETED_2025-10-12.md](./CLEANUP_COMPLETED_2025-10-12.md) for details.
+
 ## Blockers
 
 - [x] Replace removed `CommonConfirmDialog` usage in `pages/admin/products/index.vue` with a working shadcn dialog implementation so bulk delete and product removal flows render without runtime errors.
@@ -29,4 +39,20 @@
 - [ ] Cart experience (drawer, line items, bulk actions): adopt shadcn buttons, checkboxes, and Sonner toasts; confirm accessibility and mobile touch targets.
 - [ ] Admin tables & filters: migrate to `components/ui/table`, `Pagination`, and `Badge` variants; retire bespoke table utilities after rollout.
 - [ ] Mobile navigation & sheets: replace custom menus with shadcn dialog/sheet patterns and ensure 44px touch targets; cover drawer smoke tests.
-- [ ] Toast / notification system: consolidate on Sonner, remove `components/common/Toast*.vue`, and update notification docs/tests accordingly.
+- [ ] **Toast / notification system** (HIGH PRIORITY): consolidate on Sonner, remove `components/common/Toast*.vue`, and update notification docs/tests accordingly.
+  - Current custom system: `components/common/Toast.vue`, `ToastContainer.vue`, `composables/useToast.ts`, `stores/toast.ts`
+  - Target: Use `vue-sonner` (already installed)
+  - Benefits: Better maintained, more features, smaller bundle, consistent with shadcn-vue
+  - Estimated effort: 2-3 hours
+  - See [CODE_CLEANUP_REPORT.md](./CODE_CLEANUP_REPORT.md) for migration details
+
+## Code Quality & Maintenance
+
+- [x] Remove unused PayPal integration (composables, API endpoints, configuration)
+- [x] Remove unused composables (useMobileCodeSplitting, usePushNotifications)
+- [x] Remove unused dependencies (tw-animate-css)
+- [x] Organize test scripts into `scripts/` directory
+- [x] Update environment variable documentation
+- [ ] Migrate toast system to vue-sonner (see Component Modernization above)
+- [ ] Archive outdated documentation files (BUGFIX-recursive-updates.md, CHECKOUT-FIXES-SUMMARY.md, etc.)
+- [ ] Run dependency audit and verify all packages are actively used
