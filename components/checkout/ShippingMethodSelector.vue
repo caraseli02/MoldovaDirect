@@ -46,13 +46,13 @@
                 <!-- Free shipping badge -->
                 <span v-if="method.price === 0"
                   class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-                  {{ $t('checkout.shippingMethod.free') }}
+                  {{ $t('checkout.shippingMethod.free.label') }}
                 </span>
 
                 <!-- Express shipping badge -->
                 <span v-else-if="method.estimatedDays <= 2"
                   class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                  {{ $t('checkout.shippingMethod.express') }}
+                  {{ $t('checkout.shippingMethod.express.label') }}
                 </span>
 
                 <!-- Price -->

@@ -5,10 +5,10 @@
       <div class="text-center py-8">
         <Icon name="heroicons:banknotes" class="h-16 w-16 text-green-600 mx-auto mb-4" />
         <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
-          {{ $t('checkout.payment.cashTitle') }}
+          {{ $t('checkout.payment.cash.title') }}
         </h3>
         <p class="text-gray-600 dark:text-gray-400 mb-6">
-          {{ $t('checkout.payment.cashDescription') }}
+          {{ $t('checkout.payment.cash.description') }}
         </p>
       </div>
 
@@ -164,10 +164,10 @@
       <div class="text-center py-8">
         <Icon name="simple-icons:paypal" class="h-16 w-16 text-blue-600 mx-auto mb-4" />
         <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
-          {{ $t('checkout.payment.paypalTitle') }}
+          {{ $t('checkout.payment.paypal.title') }}
         </h3>
         <p class="text-gray-600 dark:text-gray-400 mb-6">
-          {{ $t('checkout.payment.paypalDescription') }}
+          {{ $t('checkout.payment.paypal.description') }}
         </p>
 
         <!-- PayPal Email (optional for display) -->
@@ -209,10 +209,10 @@
       <div class="text-center py-8">
         <Icon name="heroicons:building-library" class="h-16 w-16 text-gray-600 dark:text-gray-400 mx-auto mb-4" />
         <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
-          {{ $t('checkout.payment.bankTransferTitle') }}
+          {{ $t('checkout.payment.bankTransfer.title') }}
         </h3>
         <p class="text-gray-600 dark:text-gray-400 mb-6">
-          {{ $t('checkout.payment.bankTransferDescription') }}
+          {{ $t('checkout.payment.bankTransfer.description') }}
         </p>
       </div>
 

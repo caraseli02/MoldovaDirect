@@ -23,8 +23,10 @@
     "optional": "Необязательно",
     "and": "и",
     "to": "до",
+    "of": "из",
     "previous": "Предыдущий",
     "next": "Следующий",
+    "back": "Назад",
     "remove": "Удалить",
     "update": "Обновить",
     "subtotal": "Промежуточный итог",
@@ -36,7 +38,19 @@
     "showMore": "Показать больше",
     "showLess": "Показать меньше",
     "swipe_to_remove": "Проведите для удаления",
-    "release_to_remove": "Отпустите для удаления"
+    "release_to_remove": "Отпустите для удаления",
+    "help": "Помощь",
+    "each": "каждый",
+    "refresh": "Обновить",
+    "tryAgain": "Повторите попытку",
+    "error": "Ошибка",
+    "errorGeneric": "Произошла ошибка. Пожалуйста, попробуйте снова.",
+    "menu": "Меню",
+    "preferences": "Настройки",
+    "selectAll": "Выбрать все",
+    "deselectAll": "Снять выделение",
+    "cartError": "Ошибка корзины",
+    "cartValidationError": "Ошибка проверки"
   },
   "auth": {
     "signIn": "Войти",
@@ -94,12 +108,31 @@
     "missingToken": "Токен сброса отсутствует. Используйте ссылку из вашего письма.",
     "accessibility": {
       "showPassword": "Показать пароль",
+      "hidePassword": "Hide password",
+      "passwordVisible": "Password is now visible",
+      "passwordHidden": "Password is now hidden",
       "passwordToggleDescription": "Переключить видимость пароля",
+      "passwordRequirements": "Password must be at least 8 characters with uppercase, lowercase, and number",
+      "confirmPasswordDescription": "Re-enter your password to confirm",
       "rememberMeDescription": "Запомнить мою сессию на этом устройстве",
       "forgotPasswordLink": "Ссылка для сброса пароля",
       "signInButton": "Кнопка входа",
+      "signingIn": "Signing in to your account",
+      "processingLogin": "Processing your login request",
       "magicLinkButton": "Кнопка магической ссылки",
-      "magicLinkDescription": "Отправить ссылку для входа по email"
+      "sendingMagicLink": "Sending magic link",
+      "magicLinkDescription": "Отправить ссылку для входа по email",
+      "createAccountButton": "Create your account",
+      "creatingAccount": "Creating your account",
+      "processingRegistration": "Processing your registration",
+      "phoneOptional": "Phone number is optional",
+      "termsLink": "Read terms and conditions",
+      "privacyLink": "Read privacy policy",
+      "termsDescription": "You must accept the terms and conditions to create an account",
+      "passwordMatch": "Passwords match",
+      "resetPasswordButton": "Reset your password",
+      "resettingPassword": "Resetting your password",
+      "processingPasswordReset": "Processing your password reset request"
     },
     "errors": {
       "invalidCredentials": "Неверный email или пароль",
@@ -155,6 +188,16 @@
         "invalid": "Недействительный токен подтверждения",
         "expired": "Токен подтверждения истек"
       }
+    },
+    "progress": {
+      "step": "Step",
+      "of": "of",
+      "completed": "completed",
+      "current": "current",
+      "upcoming": "upcoming",
+      "label": "Authentication progress: step {current} of {total} for {context}",
+      "announcement": "Now on step {step} of {total}: {stepName}",
+      "stepChanged": "Moved to step {step}: {stepName}"
     },
     "success": {
       "loginSuccess": "Успешный вход! Перенаправление...",
@@ -284,17 +327,6 @@
     "placed": "Размещен",
     "shipped": "Отправлен",
     "delivered": "Доставлен",
-    "actions": "Действия",
-    "needHelp": "Нужна помощь с заказом?",
-    "contactUs": "Свяжитесь с нами",
-    "swipeHint": "Проведите влево или вправо для навигации по разделам",
-    "status": {
-      "pending": "Ожидается",
-      "processing": "Обрабатывается",
-      "shipped": "Отправлен",
-      "delivered": "Доставлен",
-      "cancelled": "Отменен"
-    },
     "actions": {
       "reorder": "Заказать Снова",
       "return": "Вернуть Товары",
@@ -304,6 +336,16 @@
       "confirmReturnMessage": "Вы уверены, что хотите инициировать возврат для этого заказа?",
       "initiateReturn": "Инициировать Возврат",
       "printInvoice": "Распечатать Счет"
+    },
+    "needHelp": "Нужна помощь с заказом?",
+    "contactUs": "Свяжитесь с нами",
+    "swipeHint": "Проведите влево или вправо для навигации по разделам",
+    "status": {
+      "pending": "Ожидается",
+      "processing": "Обрабатывается",
+      "shipped": "Отправлен",
+      "delivered": "Доставлен",
+      "cancelled": "Отменен"
     },
     "search": {
       "placeholder": "Поиск по номеру заказа или названию товара...",
@@ -349,7 +391,6 @@
     },
     "viewOrder": "Посмотреть Заказ",
     "trackOrder": "Отследить Заказ",
-    "viewAllOrders": "Посмотреть Все Заказы",
     "realTimeConnected": "Обновления в реальном времени активны",
     "deliveryConfirmation": {
       "title": "Заказ Успешно Доставлен!",
@@ -421,6 +462,94 @@
       "supportContactedMessage": "Наша команда поддержки свяжется с вами в ближайшее время."
     }
   },
+  "profile": {
+    "title": "Profile Settings",
+    "description": "Manage your personal information and account preferences",
+    "profilePicture": "Profile Picture",
+    "profilePictureDescription": "Upload a profile picture to personalize your account",
+    "changePicture": "Change Picture",
+    "uploadPicture": "Upload Picture",
+    "removePicture": "Remove Picture",
+    "emailCannotBeChanged": "Email address cannot be changed",
+    "saveChanges": "Save Changes",
+    "addresses": "Addresses",
+    "addressesDescription": "Manage your shipping and billing addresses",
+    "addAddress": "Add Address",
+    "addFirstAddress": "Add Your First Address",
+    "editAddress": "Edit Address",
+    "updateAddress": "Update Address",
+    "saveAddress": "Save Address",
+    "deleteAddress": "Delete Address",
+    "confirmDeleteAddress": "Are you sure you want to delete this address?",
+    "noAddresses": "You don't have any addresses saved yet",
+    "default": "Default",
+    "setAsDefault": "Set as default address",
+    "street": "Street Address",
+    "streetPlaceholder": "Enter your street address",
+    "city": "City",
+    "cityPlaceholder": "Enter your city",
+    "postalCode": "Postal Code",
+    "postalCodePlaceholder": "Enter postal code",
+    "province": "Province/State",
+    "provincePlaceholder": "Enter province or state (optional)",
+    "country": "Country",
+    "deleteAccount": "Delete Account",
+    "deleteAccountWarning": "This action cannot be undone",
+    "deleteAccountConsequences": {
+      "title": "This will permanently:",
+      "personalData": "Delete all your personal data",
+      "orderHistory": "Remove your order history",
+      "addresses": "Delete all saved addresses",
+      "irreversible": "This action cannot be reversed"
+    },
+    "deleteConfirmationLabel": "Type 'DELETE' to confirm",
+    "deleteConfirmationPlaceholder": "Type DELETE in capital letters",
+    "deleteConfirmationHint": "Type 'DELETE' exactly as shown to confirm",
+    "confirmPassword": "Confirm with your password",
+    "confirmPasswordPlaceholder": "Enter your current password",
+    "deleteReason": "Reason for deletion",
+    "selectReason": "Select a reason (optional)",
+    "deleteReasons": {
+      "notUsing": "Not using the service anymore",
+      "privacyConcerns": "Privacy concerns",
+      "foundAlternative": "Found an alternative service",
+      "technicalIssues": "Technical issues",
+      "other": "Other"
+    },
+    "confirmDelete": "Delete My Account",
+    "addressType": {
+      "label": "Address Type",
+      "shipping": "Shipping Address",
+      "billing": "Billing Address"
+    },
+    "validation": {
+      "streetRequired": "Street address is required",
+      "cityRequired": "City is required",
+      "postalCodeRequired": "Postal code is required",
+      "invalidSpanishPostalCode": "Please enter a valid Spanish postal code (5 digits)",
+      "confirmationRequired": "Please type 'DELETE' to confirm",
+      "passwordRequired": "Password is required for account deletion"
+    },
+    "success": {
+      "profileUpdated": "Profile updated successfully",
+      "pictureUpdated": "Profile picture updated successfully",
+      "pictureRemoved": "Profile picture removed successfully",
+      "addressSaved": "Address saved successfully",
+      "addressDeleted": "Address deleted successfully",
+      "accountDeleted": "Account deleted successfully"
+    },
+    "errors": {
+      "updateFailed": "Failed to update profile. Please try again.",
+      "invalidFileType": "Please select a valid image file",
+      "fileTooLarge": "File size must be less than 5MB",
+      "uploadFailed": "Failed to upload profile picture. Please try again.",
+      "removeFailed": "Failed to remove profile picture. Please try again.",
+      "loadAddressesFailed": "Failed to load addresses",
+      "addressSaveFailed": "Failed to save address. Please try again.",
+      "addressDeleteFailed": "Failed to delete address. Please try again.",
+      "deleteFailed": "Failed to delete account. Please try again."
+    }
+  },
   "home": {
     "hero": {
       "title": "Подлинные Молдавские Продукты",
@@ -464,6 +593,11 @@
     "availability": "Наличие",
     "addToCart": "В корзину",
     "outOfStock": "Нет в наличии",
+    "inCart": "In Cart",
+    "adding": "Adding...",
+    "cartEmpty": "Your cart is empty",
+    "cartEmptyDescription": "Start shopping to add items to your cart",
+    "itemsInCart": "items in cart",
     "description": "Описание",
     "notFound": "Товар не найден",
     "notFoundDescription": "Товар, который вы ищете, не существует или был удален",
@@ -474,13 +608,21 @@
     "sortNewest": "Новинки",
     "sortName": "Название",
     "sortPrice": "Цена",
+    "sortPriceAsc": "Price: Low to High",
+    "sortPriceDesc": "Price: High to Low",
     "sortFeatured": "Рекомендуемые",
+    "results": "products found",
     "search": "Поиск",
     "category": "Категория",
     "noResults": "Результаты не найдены",
     "noProducts": "Товары недоступны",
     "tryDifferentFilters": "Попробуйте другие фильтры",
     "comingSoon": "Скоро у нас будут доступны товары",
+    "showingResults": "Showing {start}-{end} of {total} products",
+    "filtersApplied": "Filters applied",
+    "clearFilters": "Clear all filters",
+    "sortPriceLowHigh": "Price: Low to High",
+    "sortPriceHighLow": "Price: High to Low",
     "categories": {
       "all": "Все",
       "wine": "Вина",
@@ -490,15 +632,28 @@
       "sweets": "Сладости"
     },
     "filters": {
+      "title": "Filters",
       "sortBy": "Сортировать по",
       "priceRange": "Диапазон цен",
       "category": "Категория",
+      "categories": "Categories",
       "availability": "Наличие",
       "inStock": "В наличии",
-      "outOfStock": "Нет в наличии"
+      "inStockOnly": "In stock only",
+      "outOfStock": "Нет в наличии",
+      "featuredOnly": "Featured only",
+      "active": "Active Filters",
+      "clearAll": "Clear All",
+      "apply": "Apply Filters",
+      "minPrice": "Min Price",
+      "maxPrice": "Max Price",
+      "removeFilter": "Remove {filter} filter",
+      "unknownCategory": "Unknown Category"
     }
   },
   "footer": {
+    "terms": "Terms and Conditions",
+    "privacy": "Privacy Policy",
     "info": {
       "title": "Информация",
       "about": "О нас",
@@ -530,22 +685,94 @@
   "cart": {
     "success": {
       "added": "Товар добавлен в корзину",
-      "updated": "Количество обновлено",
-      "removed": "Товар удален из корзины",
-      "cleared": "Корзина очищена",
-      "productAdded": "{product} добавлен в корзину"
+      "addedToCart": "Added to cart",
+      "productAdded": "{product} добавлен в корзину",
+      "quantityUpdated": "Quantity updated",
+      "quantityUpdatedDetails": "{product}: {oldQuantity} → {newQuantity}",
+      "productRemoved": "Product removed",
+      "productRemovedDetails": "{product} removed from cart",
+      "cartCleared": "Cart cleared",
+      "cartClearedDetails": "All products have been removed",
+      "cartRestored": "Cart restored",
+      "cartRestoredDetails": "Products restored to cart",
+      "productRestored": "Product restored",
+      "productRestoredDetails": "{product} restored to cart",
+      "cartLoaded": "Cart loaded",
+      "cartLoadedFromSession": "Cart restored from current session",
+      "cartLoadedFromStorage": "Cart restored",
+      "cartMigrated": "Cart migrated",
+      "cartMigratedDetails": "Cart data migrated to {storage}",
+      "cartValidated": "Cart validated",
+      "allProductsAvailable": "All products are available",
+      "cartValidatedDetails": "All products are available and updated",
+      "cartRecovered": "Cart recovered",
+      "cartRecoveredDetails": "Cart data has been recovered and validated",
+      "bulkRemoved": "Products removed",
+      "bulkRemovedDetails": "{count} products removed from cart",
+      "bulkUpdated": "Quantities updated",
+      "bulkUpdatedDetails": "{count} products updated to quantity {quantity}",
+      "productsRestored": "Products restored",
+      "productsRestoredDetails": "Products restored to cart",
+      "savedForLater": "Saved for later",
+      "savedForLaterDetails": "{product} saved for later",
+      "bulkSavedForLater": "Saved for later",
+      "bulkSavedForLaterDetails": "{count} products saved for later",
+      "movedToCart": "Moved to cart",
+      "movedToCartDetails": "{product} moved to cart",
+      "movedToCartWithQuantity": "Moved to cart",
+      "movedToCartWithQuantityDetails": "{product} - New quantity: {quantity}",
+      "savedItemRemoved": "Product removed",
+      "savedItemRemovedDetails": "{product} removed from saved items",
+      "savedItemRestored": "Product restored",
+      "savedItemRestoredDetails": "{product} restored",
+      "savedItemsCleared": "Saved items cleared",
+      "savedItemsClearedDetails": "All saved products have been removed",
+      "savedItemsRestored": "Saved items restored",
+      "savedItemsRestoredDetails": "Saved products restored",
+      "priceUpdated": "Price updated",
+      "priceUpdatedDetails": "{product}: €{oldPrice} → €{newPrice}"
     },
     "error": {
       "addFailed": "Ошибка добавления товара",
+      "addFailedDetails": "Failed to add item to cart",
       "updateFailed": "Ошибка обновления количества",
+      "updateFailedDetails": "Failed to update quantity",
       "removeFailed": "Ошибка удаления товара",
+      "removeFailedDetails": "Failed to remove item",
       "loadFailed": "Ошибка загрузки корзины",
+      "loadFailedDetails": "Could not load saved cart",
       "stockInsufficient": "Недостаточно товара",
       "productNotFound": "Товар не найден",
+      "productNotFoundDetails": "Product not found in cart",
       "networkError": "Ошибка сети",
       "storageError": "Ошибка хранения",
+      "storageErrorDetails": "Could not save cart. Changes will be lost when closing the page.",
+      "validationError": "Validation error",
+      "validationErrorDetails": "Could not validate cart",
       "validationFailed": "Ошибка валидации",
+      "validationFailedDetails": "Could not validate cart after several attempts",
+      "partialValidation": "Partial validation",
+      "partialValidationDetails": "Some products could not be validated",
+      "recoveryFailed": "Recovery failed",
+      "recoveryFailedDetails": "Could not recover cart",
+      "corruptedData": "Corrupted data",
+      "corruptedDataDetails": "Cart data was corrupted and has been reset",
+      "invalidData": "Invalid data",
+      "invalidDataDetails": "Cart data could not be recovered",
+      "bulkRemoveFailed": "Failed to remove products",
+      "bulkRemoveFailedDetails": "Could not remove selected products",
+      "bulkUpdateFailed": "Failed to update quantities",
+      "bulkUpdateFailedDetails": "Could not update quantities",
+      "saveFailed": "Failed to save product",
+      "saveFailedDetails": "Could not save product",
+      "bulkSaveFailed": "Failed to save products",
+      "bulkSaveFailedDetails": "Could not save products",
+      "moveFailed": "Failed to move product",
+      "moveFailedDetails": "Could not move product to cart",
+      "removeSavedFailed": "Failed to remove product",
+      "removeSavedFailedDetails": "Could not remove saved product",
       "tryAgain": "Пожалуйста, попробуйте снова",
+      "checkoutFailed": "Failed to proceed to checkout. Please try again.",
       "boundary": {
         "title": "Ошибка корзины",
         "message": "Произошла неожиданная ошибка. Вы можете попробовать перезагрузить или продолжить покупки.",
@@ -558,7 +785,342 @@
       "stockLimited": "Ограниченный запас",
       "priceChanged": "Цена обновлена",
       "itemUnavailable": "Товар недоступен",
-      "sessionExpired": "Сессия истекла"
+      "sessionExpired": "Сессия истекла",
+      "productOutOfStock": "Product out of stock",
+      "productOutOfStockDetails": "{product} has been removed from cart",
+      "quantityAdjusted": "Quantity adjusted",
+      "quantityAdjustedDetails": "{product}: {oldQuantity} → {newQuantity}",
+      "productRemoved": "Product removed",
+      "productRemovedUnavailable": "{product} is no longer available",
+      "cartRepaired": "Cart repaired",
+      "cartRepairedDetails": "Some cart issues were detected and fixed",
+      "cartExpired": "Cart expired",
+      "cartExpiredDetails": "Previous cart has expired and been cleared",
+      "limitedStorage": "Limited storage",
+      "limitedStorageDetails": "Cart will only be saved for this session due to storage limitations",
+      "temporaryMode": "Temporary mode",
+      "temporaryModeDetails": "Cart cannot be saved. Changes will be lost when closing the page.",
+      "storageUnavailable": "Storage unavailable",
+      "storageUnavailableDetails": "Cart will work in temporary mode",
+      "storageChanged": "Storage changed",
+      "storageChangedDetails": "Switched to {storage}",
+      "productsUnavailable": "Products unavailable",
+      "productsUnavailableDetails": "Removed: {products}",
+      "quantitiesAdjusted": "Quantities adjusted",
+      "pricesUpdated": "Prices updated",
+      "stockInsufficientProduct": "Insufficient stock",
+      "stockInsufficientProductDetails": "{product}: Only {available} available",
+      "quantityAdjustedToMax": "Quantity adjusted",
+      "quantityAdjustedToMaxDetails": "{product} - Quantity adjusted to {stock} (maximum available)",
+      "stockInsufficientForMove": "Insufficient stock",
+      "stockInsufficientForMoveDetails": "{product} is already in cart with maximum available quantity"
+    },
+    "info": {
+      "storageChanged": "Storage changed",
+      "storageChangedDetails": "Switched to {storage}"
+    },
+    "actions": {
+      "undo": "Undo",
+      "retry": "Retry",
+      "viewProduct": "View product",
+      "adjustQuantity": "Adjust quantity",
+      "adjustToMax": "Adjust to maximum",
+      "reloadCart": "Reload cart",
+      "saveForLater": "Save for Later",
+      "addToCart": "Add to Cart",
+      "moveToCart": "Move to Cart",
+      "remove": "Remove",
+      "select": "Select",
+      "deselect": "Deselect"
+    },
+    "labels": {
+      "saveForLater": "Save for Later",
+      "savedForLater": "Saved for Later",
+      "addToCart": "Add to Cart",
+      "inCart": "In Cart",
+      "recommendedProducts": "Recommended Products",
+      "quickAdd": "Quick Add",
+      "each": "each",
+      "price": "Price",
+      "quantity": "Quantity",
+      "total": "Total",
+      "subtotal": "Subtotal",
+      "itemsSelected": "items selected",
+      "removeSelected": "Remove Selected"
+    },
+    "savedForLater": "Saved for Later",
+    "saveForLater": "Save for Later",
+    "moveToCart": "Move to Cart",
+    "savedOn": "Saved on",
+    "each": "each",
+    "addToCart": "Add to Cart",
+    "inCart": "In Cart",
+    "recommendedProducts": "Recommended Products"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "secureCheckout": "Secure Checkout",
+    "steps": {
+      "shipping": {
+        "name": "Shipping",
+        "description": "Delivery information",
+        "title": "Shipping Information",
+        "subtitle": "Where should we deliver your order?"
+      },
+      "payment": {
+        "name": "Payment",
+        "description": "Payment method",
+        "title": "Payment Method",
+        "subtitle": "How would you like to pay?"
+      },
+      "review": {
+        "name": "Review",
+        "description": "Order summary",
+        "title": "Review Your Order",
+        "subtitle": "Please review your order details before completing your purchase"
+      },
+      "confirmation": {
+        "name": "Confirmation",
+        "description": "Order complete",
+        "title": "Order Confirmed!",
+        "subtitle": "Thank you for your order. We'll send you a confirmation email shortly.",
+        "emailSent": "A confirmation email has been sent to your email address",
+        "orderDetails": "Order Details",
+        "orderDetailsPlaceholder": "Your order details will be displayed here",
+        "viewOrders": "View My Orders",
+        "continueShopping": "Continue Shopping"
+      }
+    },
+    "guestCheckout": {
+      "title": "Checkout Options",
+      "description": "You can create an account for faster checkout or continue as a guest."
+    },
+    "continueAsGuest": "Continue as Guest",
+    "backToCart": "Back to Cart",
+    "continueToPayment": "Continue to Payment",
+    "backToShipping": "Back to Shipping",
+    "reviewOrder": "Review Order",
+    "backToPayment": "Back to Payment",
+    "placeOrder": "Place Order",
+    "shippingForm": {
+      "title": "Shipping Information",
+      "placeholder": "Shipping form will be implemented in the next task"
+    },
+    "paymentForm": {
+      "title": "Payment Method",
+      "placeholder": "Payment form will be implemented in the next task"
+    },
+    "orderReview": {
+      "title": "Order Summary",
+      "placeholder": "Order review will be implemented in the next task"
+    },
+    "review": {
+      "cartItems": "Cart Items",
+      "editCart": "Edit Cart",
+      "shippingInfo": "Shipping Information",
+      "editShipping": "Edit Shipping",
+      "shippingAddress": "Shipping Address",
+      "shippingMethod": "Shipping Method",
+      "deliveryInstructions": "Delivery Instructions",
+      "paymentMethod": "Payment Method",
+      "editPayment": "Edit Payment"
+    },
+    "freeShipping": "Free",
+    "processing": "Processing...",
+    "continueToTerms": "Continue to Place Order",
+    "terms": {
+      "title": "Terms and Conditions",
+      "acceptTerms": "I accept the",
+      "termsAndConditions": "Terms and Conditions",
+      "privacyPolicy": "Privacy Policy",
+      "acceptPrivacy": "I consent to the processing of my personal data as described in the Privacy Policy",
+      "marketingConsent": "I would like to receive marketing communications and special offers",
+      "marketingDescription": "You can unsubscribe at any time. We respect your privacy.",
+      "termsRequired": "You must accept the Terms and Conditions to continue",
+      "privacyRequired": "You must accept the Privacy Policy to continue"
+    },
+    "success": {
+      "shippingUpdated": "Shipping Updated",
+      "shippingInfoSaved": "Your shipping information has been saved",
+      "paymentUpdated": "Payment Updated",
+      "paymentMethodSaved": "Your payment method has been saved",
+      "orderCompleted": "Order Completed",
+      "orderConfirmation": "Your order has been successfully placed"
+    },
+    "validation": {
+      "firstNameRequired": "First name is required",
+      "lastNameRequired": "Last name is required",
+      "streetRequired": "Street address is required",
+      "cityRequired": "City is required",
+      "postalCodeRequired": "Postal code is required",
+      "countryRequired": "Country is required",
+      "shippingMethodRequired": "Shipping method is required",
+      "cardNumberRequired": "Card number is required",
+      "cardNumberInvalid": "Invalid card number",
+      "expiryRequired": "Expiry date is required",
+      "cvvRequired": "CVV is required",
+      "cvvInvalid": "Invalid CVV",
+      "holderNameRequired": "Cardholder name is required",
+      "paypalEmailRequired": "PayPal email is required",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email address"
+    },
+    "addressForm": {
+      "shipping": {
+        "title": "Shipping Address",
+        "subtitle": "Where should we deliver your order?"
+      },
+      "billing": {
+        "title": "Billing Address",
+        "subtitle": "Where should we send your invoice?"
+      },
+      "savedAddresses": "Saved Addresses",
+      "useNewAddress": "Use a new address",
+      "default": "Default",
+      "firstName": "First Name",
+      "firstNamePlaceholder": "Enter your first name",
+      "lastName": "Last Name",
+      "lastNamePlaceholder": "Enter your last name",
+      "company": "Company",
+      "companyPlaceholder": "Company name (optional)",
+      "street": "Street Address",
+      "streetPlaceholder": "Enter your street address",
+      "city": "City",
+      "cityPlaceholder": "Enter your city",
+      "postalCode": "Postal Code",
+      "postalCodePlaceholder": "Enter postal code",
+      "province": "Province/State",
+      "provincePlaceholder": "Province or state (optional)",
+      "country": "Country",
+      "selectCountry": "Select a country",
+      "phone": "Phone Number",
+      "phonePlaceholder": "Enter your phone number (optional)",
+      "saveAddress": "Save this address for future orders"
+    },
+    "shippingMethod": {
+      "title": "Shipping Method",
+      "subtitle": "Choose how you'd like to receive your order",
+      "free": {
+        "label": "Free",
+        "name": "Free Shipping",
+        "description": "Delivery in 5-7 business days (orders over €50)"
+      },
+      "express": {
+        "label": "Express",
+        "name": "Express Shipping",
+        "description": "Delivery in 1-2 business days"
+      },
+      "noMethods": "No shipping methods available",
+      "noMethodsDescription": "Please check your address or contact support",
+      "error": "Error loading shipping methods",
+      "standard": {
+        "name": "Standard Shipping",
+        "description": "Delivery in 3-5 business days"
+      },
+      "expressShipping": {
+        "name": "Express Shipping",
+        "description": "Delivery in 1-2 business days"
+      },
+      "freeShipping": {
+        "name": "Free Shipping",
+        "description": "Delivery in 5-7 business days (orders over €50)"
+      }
+    },
+    "guestInfo": {
+      "title": "Contact Information",
+      "email": "Email Address",
+      "emailPlaceholder": "Enter your email address",
+      "emailUpdates": "Send me email updates about my order"
+    },
+    "shippingInstructions": {
+      "title": "Delivery Instructions",
+      "placeholder": "Any special instructions for delivery? (e.g., leave at door, ring bell, etc.)",
+      "help": "These instructions will be shared with the delivery service"
+    },
+    "payment": {
+      "title": "Payment Method",
+      "subtitle": "Choose how you'd like to pay for your order",
+      "savedMethods": "Saved Payment Methods",
+      "useNewMethod": "Use a new payment method",
+      "newMethod": "New Payment Method",
+      "default": "Default",
+      "creditCard": {
+        "label": "Credit Card",
+        "summary": "Pay with Visa, Mastercard, or other cards",
+        "title": "Credit Card",
+        "description": "Pay securely using your credit or debit card."
+      },
+      "paypal": {
+        "label": "PayPal",
+        "summary": "Pay with your PayPal account",
+        "title": "Pay with PayPal",
+        "description": "You'll be redirected to PayPal to complete your payment securely."
+      },
+      "bankTransfer": {
+        "label": "Bank Transfer",
+        "summary": "Transfer money directly from your bank",
+        "title": "Bank Transfer",
+        "description": "Transfer the order amount to our bank account using the details below."
+      },
+      "cardNumber": "Card Number",
+      "cardNumberPlaceholder": "1234 5678 9012 3456",
+      "expiryDate": "Expiry Date",
+      "expiryPlaceholder": "MM/YY",
+      "cvv": "CVV",
+      "cvvPlaceholder": "123",
+      "cvvHelp": "The 3-digit security code on the back of your card (4 digits for Amex)",
+      "cardholderName": "Cardholder Name",
+      "cardholderNamePlaceholder": "Name as it appears on card",
+      "saveForFuture": "Save this payment method for future orders",
+      "securePayment": "Secure Payment",
+      "securityNotice": "Your payment information is encrypted and secure. We never store your card details.",
+      "paypalEmail": "PayPal Email",
+      "paypalEmailPlaceholder": "your.email{'@'}example.com",
+      "paypalNoticeTitle": "PayPal Payment",
+      "paypalNotice": "After clicking 'Review Order', you'll be redirected to PayPal to complete your payment.",
+      "bankDetails": "Bank Transfer Details",
+      "bankName": "Bank Name",
+      "accountHolder": "Account Holder",
+      "iban": "IBAN",
+      "swift": "SWIFT/BIC",
+      "reference": "Payment Reference",
+      "copyDetails": "Copy Bank Details",
+      "bankTransferInstructions": "Important Instructions",
+      "bankInstruction1": "Please include the payment reference in your transfer",
+      "bankInstruction2": "Your order will be processed after payment confirmation",
+      "bankInstruction3": "Bank transfers may take 1-3 business days to process",
+      "cash": {
+        "label": "Cash on Delivery",
+        "summary": "Pay with cash when your order is delivered",
+        "title": "Cash on Delivery",
+        "description": "You will pay for your order in cash when it is delivered to your address."
+      },
+      "cashInstructions": "How Cash on Delivery Works",
+      "cashInstruction1": "Place your order and we'll prepare it for delivery",
+      "cashInstruction2": "Our delivery team will contact you to schedule delivery",
+      "cashInstruction3": "Pay the exact amount in cash when your order arrives",
+      "cashInstruction4": "No additional fees for cash on delivery service",
+      "contactNoticeTitle": "Delivery Contact",
+      "contactNotice": "We'll contact you using the information provided to arrange delivery and payment.",
+      "comingSoon": "Coming Soon",
+      "error": "Payment Error"
+    },
+    "navigation": {
+      "back": "Back",
+      "reviewOrder": "Review Order",
+      "processing": "Processing..."
+    },
+    "confirmation": {
+      "orderNumber": "Order Number",
+      "orderItems": "Order Items",
+      "shippingInfo": "Shipping Information",
+      "shippingAddress": "Shipping Address",
+      "shippingMethod": "Shipping Method",
+      "estimatedDelivery": "Estimated Delivery",
+      "deliveryNote": "Delivery times are estimates and may vary",
+      "trackOrder": "Track Your Order",
+      "trackingAvailable": "Tracking information will be available once your order ships",
+      "printReceipt": "Print Receipt"
     }
   },
   "admin": {
@@ -577,9 +1139,24 @@
       "refreshAll": "Обновить все",
       "lastUpdated": "Последнее обновление: {time}",
       "refresh": "Обновить",
-      "quickActions": "Быстрые действия",
+      "quickActions": {
+        "title": "Быстрые действия",
+        "addNewProduct": "Добавить новый товар",
+        "viewOrders": "Посмотреть заказы",
+        "manageUsers": "Управлять пользователями"
+      },
       "criticalAlerts": "Критические оповещения",
-      "systemStatus": "Статус системы",
+      "systemStatus": {
+        "title": "Состояние системы",
+        "database": "База данных",
+        "api": "API",
+        "lastBackup": "Последняя резервная копия",
+        "online": "Онлайн",
+        "operational": "Работает",
+        "offline": "Не в сети",
+        "error": "Ошибка",
+        "hoursAgo": "{hours} часов назад"
+      },
       "stats": {
         "totalProducts": "Всего товаров",
         "activeProducts": "{count} активных",
@@ -591,21 +1168,6 @@
         "conversionRate": "{rate} конверсия",
         "totalRevenue": "Общий доход",
         "revenueToday": "{amount} сегодня"
-      },
-      "quickActions": {
-        "addNewProduct": "Добавить новый товар",
-        "viewOrders": "Посмотреть заказы",
-        "manageUsers": "Управлять пользователями"
-      },
-      "systemStatus": {
-        "database": "База данных",
-        "api": "API",
-        "lastBackup": "Последняя резервная копия",
-        "online": "Онлайн",
-        "operational": "Работает",
-        "offline": "Не в сети",
-        "error": "Ошибка",
-        "hoursAgo": "{hours} часов назад"
       },
       "recentActivity": {
         "title": "Недавняя активность",
@@ -790,7 +1352,13 @@
       "totalSpent": "Потрачено всего",
       "language": "Язык",
       "avgOrderValue": "Средняя стоимость заказа",
-      "actions": "Действия",
+      "actions": {
+        "view": "Посмотреть детали пользователя",
+        "edit": "Редактировать пользователя",
+        "clearFilters": "Очистить фильтры",
+        "refresh": "Обновить",
+        "invite": "Пригласить пользователя"
+      },
       "loading": "Загрузка пользователей...",
       "retry": "Повторить",
       "searchPlaceholder": "Поиск пользователей по имени, email или ID...",
@@ -825,13 +1393,6 @@
         "activeFilters": "Активные фильтры",
         "from": "С",
         "to": "По"
-      },
-      "actions": {
-        "view": "Посмотреть детали пользователя",
-        "edit": "Редактировать пользователя",
-        "clearFilters": "Очистить фильтры",
-        "refresh": "Обновить",
-        "invite": "Пригласить пользователя"
       },
       "empty": {
         "noResults": "Пользователи не найдены",
@@ -924,5 +1485,24 @@
       "interval": "Обновлять каждые {minutes} минут",
       "lastRefresh": "Последнее обновление: {time}"
     }
+  },
+  "pwa": {
+    "installTitle": "Install Moldova Direct",
+    "installDescription": "Install our app for a faster experience and offline access",
+    "install": "Install",
+    "installing": "Installing...",
+    "notNow": "Not now",
+    "updateAvailable": "Update available",
+    "updateDescription": "A new version is available",
+    "update": "Update",
+    "updating": "Updating...",
+    "offlineTitle": "Offline",
+    "offlineMessage": "You're browsing offline. Some features may not be available.",
+    "backOnline": "Back online",
+    "stockAlert": "Stock alert",
+    "stockAlertDescription": "We'll notify you when this product is available",
+    "enableNotifications": "Enable notifications",
+    "notificationsEnabled": "Notifications enabled",
+    "notificationsDisabled": "Notifications disabled"
   }
 }
