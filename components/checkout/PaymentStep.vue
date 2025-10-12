@@ -271,7 +271,8 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { useCheckoutStore, type PaymentMethod, type SavedPaymentMethod } from '~/stores/checkout'
+import { useCheckoutStore } from '~/stores/checkout'
+import type { PaymentMethod, SavedPaymentMethod } from '~/types/checkout'
 import { useAuthStore } from '~/stores/auth'
 import PaymentForm from './PaymentForm.vue'
 

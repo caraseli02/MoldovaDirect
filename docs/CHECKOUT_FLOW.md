@@ -13,7 +13,7 @@ This guide outlines the multi-step checkout implemented in Moldova Direct and th
 | Review | `pages/checkout/review.vue` | `components/checkout/CheckoutSummary.vue` | Display order summary, totals, shipping method, and terms |
 | Confirmation | `pages/checkout/confirmation.vue` | `components/checkout/CheckoutConfirmation.vue` | Show success/failure state after API call |
 
-Shared helpers live in `composables/useCheckout.ts` and `components/checkout/CheckoutNavigation.vue`. Progress state persists via Pinia (`stores/cart.ts` + checkout-specific state inside the composable).
+Shared helpers live in `composables/useCheckout.ts` and `components/checkout/CheckoutNavigation.vue`. Progress state persists via Pinia (`stores/cart.ts` + checkout store orchestration). API orchestration and domain types now centralize under `lib/checkout/api.ts`, `lib/checkout/order-calculation.ts`, and `types/checkout.ts` to keep the store lean.
 
 ---
 

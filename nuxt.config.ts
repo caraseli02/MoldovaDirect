@@ -9,6 +9,7 @@ export default defineNuxtConfig({
     "@nuxtjs/i18n",
     "@pinia/nuxt",
     "@nuxt/image",
+    "@nuxt/icon",
     "shadcn-nuxt",
     "@vite-pwa/nuxt",
   ],

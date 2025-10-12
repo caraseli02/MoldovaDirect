@@ -133,7 +133,7 @@
         >
           <commonIcon name="heroicons:pencil" class="w-5 h-5" />
         </button>
-        <AdminUserActionsDropdown
+        <AdminUsersActionsDropdown
           :user="user"
           mobile
           @action="handleUserAction"

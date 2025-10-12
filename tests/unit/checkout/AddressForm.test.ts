@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { ref } from 'vue'
 import AddressForm from '~/components/checkout/AddressForm.vue'
-import type { Address } from '~/stores/checkout'
+import type { Address } from '~/types/checkout'
 
 // Mock i18n
 const mockT = (key: string) => key

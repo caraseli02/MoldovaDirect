@@ -81,7 +81,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <!-- Recent Activity (2/3 width) -->
       <div class="lg:col-span-2">
-        <AdminRecentActivity />
+        <AdminUtilsRecentActivity />
       </div>
 
       <!-- Quick Actions & Alerts (1/3 width) -->

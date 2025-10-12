@@ -1,7 +1,7 @@
 // Checkout validation utilities
 // Provides comprehensive validation for checkout flow data
 
-import type { Address, PaymentMethod, ShippingInformation } from '~/stores/checkout'
+import type { Address, PaymentMethod, ShippingInformation } from '~/types/checkout'
 
 // =============================================
 // VALIDATION RESULT TYPES
