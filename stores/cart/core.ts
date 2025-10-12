@@ -5,7 +5,7 @@
  * This module contains the essential cart functionality
  */
 
-import { ref, computed } from 'vue'
+import { ref, computed, readonly } from 'vue'
 import type { 
   Product, 
   CartItem, 
@@ -53,6 +53,7 @@ const getters: CartCoreGetters = {
       0
     )
     _cachedItemCount.value = count
+    _lastItemsHash.value = _currentItemsHash.value
     return count
   },
 
@@ -71,6 +72,7 @@ const getters: CartCoreGetters = {
     }, 0)
 
     _cachedSubtotal.value = total
+    _lastItemsHash.value = _currentItemsHash.value
     return total
   },
 
