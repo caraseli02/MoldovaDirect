@@ -100,11 +100,11 @@
                   <div class="flex items-center space-x-2">
                     <Icon name="heroicons:banknotes" class="h-6 w-6 text-green-600 dark:text-green-400" />
                     <span class="font-medium text-gray-900 dark:text-white">
-                      {{ $t('checkout.payment.cash') }}
+                      {{ $t('checkout.payment.cash.label') }}
                     </span>
                   </div>
                   <p class="text-sm text-gray-600 dark:text-gray-400">
-                    {{ $t('checkout.payment.cashDesc') }}
+                    {{ $t('checkout.payment.cash.summary') }}
                   </p>
                 </div>
               </div>
@@ -129,11 +129,11 @@
                       <div class="flex items-center space-x-2">
                         <Icon name="heroicons:credit-card" class="h-6 w-6 text-gray-400" />
                         <span class="font-medium text-gray-500 dark:text-gray-400">
-                          {{ $t('checkout.payment.creditCard') }}
+                          {{ $t('checkout.payment.creditCard.label') }}
                         </span>
                       </div>
                       <p class="text-sm text-gray-400">
-                        {{ $t('checkout.payment.creditCardDesc') }}
+                        {{ $t('checkout.payment.creditCard.summary') }}
                       </p>
                     </div>
                   </div>
@@ -156,11 +156,11 @@
                       <div class="flex items-center space-x-2">
                         <Icon name="simple-icons:paypal" class="h-6 w-6 text-gray-400" />
                         <span class="font-medium text-gray-500 dark:text-gray-400">
-                          {{ $t('checkout.payment.paypal') }}
+                          {{ $t('checkout.payment.paypal.label') }}
                         </span>
                       </div>
                       <p class="text-sm text-gray-400">
-                        {{ $t('checkout.payment.paypalDesc') }}
+                        {{ $t('checkout.payment.paypal.summary') }}
                       </p>
                     </div>
                   </div>
@@ -183,11 +183,11 @@
                       <div class="flex items-center space-x-2">
                         <Icon name="heroicons:building-library" class="h-6 w-6 text-gray-400" />
                         <span class="font-medium text-gray-500 dark:text-gray-400">
-                          {{ $t('checkout.payment.bankTransfer') }}
+                          {{ $t('checkout.payment.bankTransfer.label') }}
                         </span>
                       </div>
                       <p class="text-sm text-gray-400">
-                        {{ $t('checkout.payment.bankTransferDesc') }}
+                        {{ $t('checkout.payment.bankTransfer.summary') }}
                       </p>
                     </div>
                   </div>

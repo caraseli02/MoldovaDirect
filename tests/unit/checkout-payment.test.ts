@@ -69,7 +69,7 @@ describe('PaymentForm', () => {
       }
     })
 
-    expect(wrapper.text()).toContain('checkout.payment.cashTitle')
+    expect(wrapper.text()).toContain('checkout.payment.cash.title')
     expect(wrapper.text()).toContain('checkout.payment.cashInstructions')
   })
 
@@ -116,7 +116,7 @@ describe('PaymentForm', () => {
     })
 
     expect(wrapper.find('#paypal-email').exists()).toBe(true)
-    expect(wrapper.text()).toContain('checkout.payment.paypalTitle')
+    expect(wrapper.text()).toContain('checkout.payment.paypal.title')
   })
 
   it('renders bank transfer form when type is bank_transfer', () => {

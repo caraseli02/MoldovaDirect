@@ -1000,8 +1000,16 @@
     "shippingMethod": {
       "title": "Método de Envío",
       "subtitle": "Elige cómo te gustaría recibir tu pedido",
-      "free": "Gratis",
-      "express": "Express",
+      "free": {
+        "label": "Gratis",
+        "name": "Envío Gratis",
+        "description": "Entrega en 5-7 días hábiles (pedidos sobre €50)"
+      },
+      "express": {
+        "label": "Express",
+        "name": "Envío Express",
+        "description": "Entrega en 1-2 días hábiles"
+      },
       "noMethods": "No hay métodos de envío disponibles",
       "noMethodsDescription": "Por favor verifica tu dirección o contacta soporte",
       "error": "Error cargando métodos de envío",
@@ -1036,12 +1044,24 @@
       "useNewMethod": "Usar un nuevo método de pago",
       "newMethod": "Nuevo Método de Pago",
       "default": "Predeterminado",
-      "creditCard": "Tarjeta de Crédito",
-      "creditCardDesc": "Paga con Visa, Mastercard u otras tarjetas",
-      "paypal": "PayPal",
-      "paypalDesc": "Paga con tu cuenta de PayPal",
-      "bankTransfer": "Transferencia Bancaria",
-      "bankTransferDesc": "Transfiere dinero directamente desde tu banco",
+      "creditCard": {
+        "label": "Tarjeta de Crédito",
+        "summary": "Paga con Visa, Mastercard u otras tarjetas",
+        "title": "Tarjeta de Crédito",
+        "description": "Paga de forma segura usando tu tarjeta de crédito o débito."
+      },
+      "paypal": {
+        "label": "PayPal",
+        "summary": "Paga con tu cuenta de PayPal",
+        "title": "Pagar con PayPal",
+        "description": "Serás redirigido a PayPal para completar tu pago de forma segura."
+      },
+      "bankTransfer": {
+        "label": "Transferencia Bancaria",
+        "summary": "Transfiere dinero directamente desde tu banco",
+        "title": "Transferencia Bancaria",
+        "description": "Transfiere el monto del pedido a nuestra cuenta bancaria usando los detalles a continuación."
+      },
       "cardNumber": "Número de Tarjeta",
       "cardNumberPlaceholder": "1234 5678 9012 3456",
       "expiryDate": "Fecha de Vencimiento",
@@ -1054,14 +1074,10 @@
       "saveForFuture": "Guardar este método de pago para futuros pedidos",
       "securePayment": "Pago Seguro",
       "securityNotice": "Tu información de pago está encriptada y segura. Nunca almacenamos los detalles de tu tarjeta.",
-      "paypalTitle": "Pagar con PayPal",
-      "paypalDescription": "Serás redirigido a PayPal para completar tu pago de forma segura.",
       "paypalEmail": "Email de PayPal",
       "paypalEmailPlaceholder": "tu.email{'@'}ejemplo.com",
       "paypalNoticeTitle": "Pago con PayPal",
       "paypalNotice": "Después de hacer clic en 'Revisar Pedido', serás redirigido a PayPal para completar tu pago.",
-      "bankTransferTitle": "Transferencia Bancaria",
-      "bankTransferDescription": "Transfiere el monto del pedido a nuestra cuenta bancaria usando los detalles a continuación.",
       "bankDetails": "Detalles de Transferencia Bancaria",
       "bankName": "Nombre del Banco",
       "accountHolder": "Titular de la Cuenta",
@@ -1073,10 +1089,12 @@
       "bankInstruction1": "Por favor incluye la referencia de pago en tu transferencia",
       "bankInstruction2": "Tu pedido será procesado después de la confirmación del pago",
       "bankInstruction3": "Las transferencias bancarias pueden tardar 1-3 días hábiles en procesarse",
-      "cash": "Pago Contra Entrega",
-      "cashDesc": "Paga en efectivo cuando se entregue tu pedido",
-      "cashTitle": "Pago Contra Entrega",
-      "cashDescription": "Pagarás tu pedido en efectivo cuando sea entregado en tu dirección.",
+      "cash": {
+        "label": "Pago Contra Entrega",
+        "summary": "Paga en efectivo cuando se entregue tu pedido",
+        "title": "Pago Contra Entrega",
+        "description": "Pagarás tu pedido en efectivo cuando sea entregado en tu dirección."
+      },
       "cashInstructions": "Cómo Funciona el Pago Contra Entrega",
       "cashInstruction1": "Realiza tu pedido y lo prepararemos para la entrega",
       "cashInstruction2": "Nuestro equipo de entrega te contactará para programar la entrega",
@@ -1122,12 +1140,14 @@
       "lastUpdated": "Última actualización: {time}",
       "refresh": "Actualizar",
       "quickActions": {
+        "title": "Acciones Rápidas",
         "addNewProduct": "Añadir Nuevo Producto",
         "viewOrders": "Ver Pedidos",
         "manageUsers": "Gestionar Usuarios"
       },
       "criticalAlerts": "Alertas Críticas",
       "systemStatus": {
+        "title": "Estado del Sistema",
         "database": "Base de Datos",
         "api": "API",
         "lastBackup": "Última Copia de Seguridad",

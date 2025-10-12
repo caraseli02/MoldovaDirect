@@ -88,7 +88,7 @@
       <div class="space-y-6">
         <!-- Quick Actions -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h3 class="text-lg font-medium text-gray-900 mb-4">{{ $t('admin.dashboard.quickActions') }}</h3>
+          <h3 class="text-lg font-medium text-gray-900 mb-4">{{ $t('admin.dashboard.quickActions.title') }}</h3>
           <div class="space-y-3">
             <NuxtLink
               to="/admin/products/new"
@@ -136,7 +136,7 @@
 
         <!-- System Status -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h3 class="text-lg font-medium text-gray-900 mb-4">{{ $t('admin.dashboard.systemStatus') }}</h3>
+          <h3 class="text-lg font-medium text-gray-900 mb-4">{{ $t('admin.dashboard.systemStatus.title') }}</h3>
           <div class="space-y-3">
             <div class="flex items-center justify-between">
               <span class="text-sm text-gray-600">{{ $t('admin.dashboard.systemStatus.database') }}</span>
