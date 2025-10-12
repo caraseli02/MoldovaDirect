@@ -26,6 +26,7 @@
     "of": "din",
     "previous": "Anterior",
     "next": "Următorul",
+    "back": "Înapoi",
     "remove": "Elimină",
     "update": "Actualizează",
     "subtotal": "Subtotal",
@@ -326,17 +327,6 @@
     "placed": "Plasată",
     "shipped": "Expediată",
     "delivered": "Livrată",
-    "actions": "Acțiuni",
-    "needHelp": "Ai nevoie de ajutor cu comanda ta?",
-    "contactUs": "Contactează-ne",
-    "swipeHint": "Glisează la stânga sau la dreapta pentru a naviga prin secțiuni",
-    "status": {
-      "pending": "În Așteptare",
-      "processing": "În Procesare",
-      "shipped": "Expediată",
-      "delivered": "Livrată",
-      "cancelled": "Anulată"
-    },
     "actions": {
       "reorder": "Comandă Din Nou",
       "return": "Returnează Articole",
@@ -346,6 +336,16 @@
       "confirmReturnMessage": "Ești sigur că vrei să inițiezi o returnare pentru această comandă?",
       "initiateReturn": "Inițiază Returnarea",
       "printInvoice": "Tipărește Factura"
+    },
+    "needHelp": "Ai nevoie de ajutor cu comanda ta?",
+    "contactUs": "Contactează-ne",
+    "swipeHint": "Glisează la stânga sau la dreapta pentru a naviga prin secțiuni",
+    "status": {
+      "pending": "În Așteptare",
+      "processing": "În Procesare",
+      "shipped": "Expediată",
+      "delivered": "Livrată",
+      "cancelled": "Anulată"
     },
     "search": {
       "placeholder": "Caută după număr de comandă sau nume produs...",
@@ -391,7 +391,6 @@
     },
     "viewOrder": "Vezi Comanda",
     "trackOrder": "Urmărește Comanda",
-    "viewAllOrders": "Vezi Toate Comenzile",
     "realTimeConnected": "Actualizări în timp real active",
     "deliveryConfirmation": {
       "title": "Comandă Livrată Cu Succes!",
@@ -612,7 +611,7 @@
     "sortPriceAsc": "Preț: De la Mic la Mare",
     "sortPriceDesc": "Preț: De la Mare la Mic",
     "sortFeatured": "Recomandate",
-    "results": "{count} rezultate | {count} rezultat | {count} rezultate",
+    "results": "produse găsite",
     "search": "Căutare",
     "category": "Categorie",
     "noResults": "Nu s-au găsit rezultate",
@@ -650,8 +649,7 @@
       "maxPrice": "Preț Maxim",
       "removeFilter": "Elimină filtrul {filter}",
       "unknownCategory": "Categorie Necunoscută"
-    },
-    "results": "produse găsite"
+    }
   },
   "footer": {
     "terms": "Termeni și Condiții",
@@ -1094,7 +1092,6 @@
       "reviewOrder": "Revizuiește Comanda",
       "processing": "Se procesează..."
     },
-    "processing": "Se procesează...",
     "confirmation": {
       "orderNumber": "Număr Comandă",
       "orderItems": "Articole Comandă",
@@ -1124,9 +1121,22 @@
       "refreshAll": "Reîmprospătare totală",
       "lastUpdated": "Ultima actualizare: {time}",
       "refresh": "Reîmprospătează",
-      "quickActions": "Acțiuni Rapide",
+      "quickActions": {
+        "addNewProduct": "Adaugă Produs Nou",
+        "viewOrders": "Vezi Comenzile",
+        "manageUsers": "Gestionează Utilizatorii"
+      },
       "criticalAlerts": "Alerte Critice",
-      "systemStatus": "Starea Sistemului",
+      "systemStatus": {
+        "database": "Baza de Date",
+        "api": "API",
+        "lastBackup": "Ultima Copie de Siguranță",
+        "online": "Online",
+        "operational": "Operațional",
+        "offline": "Offline",
+        "error": "Eroare",
+        "hoursAgo": "acum {hours} ore"
+      },
       "stats": {
         "totalProducts": "Total Produse",
         "activeProducts": "{count} active",
@@ -1138,21 +1148,6 @@
         "conversionRate": "{rate} conversie",
         "totalRevenue": "Venituri Totale",
         "revenueToday": "{amount} astăzi"
-      },
-      "quickActions": {
-        "addNewProduct": "Adaugă Produs Nou",
-        "viewOrders": "Vezi Comenzile",
-        "manageUsers": "Gestionează Utilizatorii"
-      },
-      "systemStatus": {
-        "database": "Baza de Date",
-        "api": "API",
-        "lastBackup": "Ultima Copie de Siguranță",
-        "online": "Online",
-        "operational": "Operațional",
-        "offline": "Offline",
-        "error": "Eroare",
-        "hoursAgo": "acum {hours} ore"
       },
       "recentActivity": {
         "title": "Activitate Recentă",
@@ -1337,7 +1332,13 @@
       "totalSpent": "Total Cheltuit",
       "language": "Limbă",
       "avgOrderValue": "Valoare Medie Comandă",
-      "actions": "Acțiuni",
+      "actions": {
+        "view": "Vezi detaliile utilizatorului",
+        "edit": "Editează utilizatorul",
+        "clearFilters": "Șterge Filtrele",
+        "refresh": "Reîmprospătează",
+        "invite": "Invită Utilizator"
+      },
       "loading": "Se încarcă utilizatorii...",
       "retry": "Reîncearcă",
       "searchPlaceholder": "Caută utilizatori după nume, email sau ID...",
@@ -1372,13 +1373,6 @@
         "activeFilters": "Filtre Active",
         "from": "De la",
         "to": "Până la"
-      },
-      "actions": {
-        "view": "Vezi detaliile utilizatorului",
-        "edit": "Editează utilizatorul",
-        "clearFilters": "Șterge Filtrele",
-        "refresh": "Reîmprospătează",
-        "invite": "Invită Utilizator"
       },
       "empty": {
         "noResults": "Nu s-au găsit utilizatori",
