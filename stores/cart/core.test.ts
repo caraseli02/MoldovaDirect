@@ -4,7 +4,7 @@
  * Unit tests for the cart core functionality
  */
 
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { useCartCore } from './core'
 import type { Product } from './types'
 
@@ -180,6 +180,42 @@ describe('Cart Core Module', () => {
       
       const nonExistent = cartCore.getItemByProductId('non-existent')
       expect(nonExistent).toBeUndefined()
+    })
+  })
+
+  describe('Memoization', () => {
+    it('should memoize item count when cart is unchanged', async () => {
+      await cartCore.addItem(mockProduct, 2)
+
+      const reduceSpy = vi.spyOn(Array.prototype, 'reduce')
+
+      try {
+        expect(cartCore.itemCount.value).toBe(2)
+        expect(reduceSpy).toHaveBeenCalledTimes(1)
+
+        reduceSpy.mockClear()
+        expect(cartCore.itemCount.value).toBe(2)
+        expect(reduceSpy).not.toHaveBeenCalled()
+      } finally {
+        reduceSpy.mockRestore()
+      }
+    })
+
+    it('should memoize subtotal when cart is unchanged', async () => {
+      await cartCore.addItem(mockProduct, 2)
+
+      const reduceSpy = vi.spyOn(Array.prototype, 'reduce')
+
+      try {
+        expect(cartCore.subtotal.value).toBe(21.98)
+        expect(reduceSpy).toHaveBeenCalledTimes(1)
+
+        reduceSpy.mockClear()
+        expect(cartCore.subtotal.value).toBe(21.98)
+        expect(reduceSpy).not.toHaveBeenCalled()
+      } finally {
+        reduceSpy.mockRestore()
+      }
     })
   })
 })
