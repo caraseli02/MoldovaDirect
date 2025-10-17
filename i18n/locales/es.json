@@ -552,33 +552,207 @@
   },
   "home": {
     "hero": {
-      "title": "Productos Auténticos de Moldavia",
-      "subtitle": "Descubre los sabores únicos de Moldavia con entrega a domicilio en España",
-      "cta": "Explorar Productos"
-    },
-    "features": {
-      "quality": {
-        "title": "Calidad Premium",
-        "description": "Productos seleccionados directamente de los mejores productores moldavos"
+      "title": "Saborea Moldavia en cada entrega",
+      "subtitle": "Vinos seleccionados, alimentos artesanales y regalos festivos enviados directamente desde productores moldavos a tu hogar en España.",
+      "primaryCta": "Comprar colecciones destacadas",
+      "secondaryCta": "Conoce a nuestros productores",
+      "trustBadge": "Más de 2.000 entregas en toda España",
+      "highlights": {
+        "orders": {
+          "value": "2k+",
+          "label": "Pedidos entregados"
+        },
+        "delivery": {
+          "value": "48h",
+          "label": "Entrega media en grandes ciudades"
+        },
+        "rating": {
+          "value": "4,9/5",
+          "label": "Índice de satisfacción de clientes"
+        }
       },
-      "delivery": {
-        "title": "Entrega Rápida",
-        "description": "Entrega a domicilio en toda España en 2-5 días laborables"
-      },
-      "authentic": {
-        "title": "100% Auténtico",
-        "description": "Productos tradicionales moldavos garantizados"
-      },
-      "support": {
-        "title": "Soporte 24/7",
-        "description": "Estamos aquí para ayudarte en cualquier momento"
+      "cards": {
+        "craft": {
+          "title": "Productores seleccionados",
+          "highlight": "Viñedos sostenibles y granjas familiares",
+          "description": "Colaboramos con artesanos moldavos para elegir ediciones limitadas y especialidades de temporada que viajan sin complicaciones.",
+          "alt": "Selección de productos gourmet moldavos"
+        },
+        "gift": {
+          "title": "Listos para regalar",
+          "highlight": "Cestas y sets de cata curados",
+          "description": "De aniversarios a sorpresas corporativas, nuestro equipo crea maridajes cuidados con un packaging elegante."
+        },
+        "delivery": {
+          "title": "Entrega refrigerada",
+          "highlight": "Frescura garantizada puerta a puerta",
+          "description": "La logística a temperatura controlada asegura que cada botella y delicatessen llegue tal como salió de Moldavia."
+        }
       }
     },
+    "categories": {
+      "title": "Comienza tu viaje",
+      "subtitle": "Explora nuestras selecciones más queridas y encuentra el maridaje ideal para cada ocasión.",
+      "viewAll": "Ver todos los productos",
+      "items": {
+        "wines": {
+          "title": "Vinos emblemáticos",
+          "description": "Pequeñas partidas y bodegas galardonadas.",
+          "cta": "Comprar vinos"
+        },
+        "gourmet": {
+          "title": "Despensa gourmet",
+          "description": "Conservas artesanas, miel y dulces de autor.",
+          "cta": "Descubrir despensa"
+        },
+        "gifts": {
+          "title": "Cestas regalo",
+          "description": "Sets listos para regalar en fiestas y celebraciones.",
+          "cta": "Ver cestas"
+        },
+        "subscriptions": {
+          "title": "Cajas mensuales",
+          "description": "Degustaciones de temporada con entregas programadas.",
+          "cta": "Ver suscripciones"
+        }
+      }
+    },
+    "howItWorks": {
+      "title": "Así funciona Moldova Direct",
+      "subtitle": "Del viñedo a tu puerta, te acercamos Moldavia sin salir de casa.",
+      "steps": {
+        "choose": {
+          "title": "Elige tus favoritos",
+          "description": "Selecciona colecciones curadas, lanzamientos limitados y hallazgos regionales."
+        },
+        "prepare": {
+          "title": "Preparamos en Moldavia",
+          "description": "Los productores embalan cada pedido a mano con materiales protectores y sostenibles."
+        },
+        "deliver": {
+          "title": "Entrega en toda España",
+          "description": "Mensajería rápida con seguimiento, transporte refrigerado y avisos proactivos."
+        }
+      }
+    },
+    "socialProof": {
+      "badge": "Socios con sellos DOP e IGP auténticos",
+      "title": "Clientes que confían en nosotros en toda España",
+      "subtitle": "Únete a una comunidad que celebra la artesanía moldava.",
+      "testimonials": {
+        "maria": {
+          "name": "María, Barcelona",
+          "quote": "Los espumosos fueron una revelación y la entrega llegó a tiempo para nuestra cena especial.",
+          "location": "Propietaria de restaurante"
+        },
+        "carlos": {
+          "name": "Carlos, Madrid",
+          "quote": "Sus cestas hicieron que los regalos corporativos fueran sencillos: premium, auténticos y con una presentación impecable.",
+          "location": "Cliente corporativo"
+        },
+        "sofia": {
+          "name": "Sofía, Valencia",
+          "quote": "Adoro las cajas de temporada; llegan refrigeradas e incluyen historias de cada productor.",
+          "location": "Suscriptora"
+        }
+      },
+      "logos": [
+        "Château Purcari",
+        "Cricova Cellars",
+        "Moldova Wine Guild",
+        "Slow Food Alliance"
+      ]
+    },
     "featuredProducts": {
-      "title": "Productos Destacados",
-      "noProducts": "No hay productos destacados disponibles en este momento.",
-      "viewAll": "Ver Todos los Productos",
-      "error": "Error al cargar los productos destacados."
+      "title": "Selección del equipo",
+      "subtitle": "Lanzamientos limitados y superventas que nos inspiran esta semana.",
+      "noProducts": "No hay productos destacados en este momento. Explora nuestro catálogo completo.",
+      "viewAll": "Ver todos los productos",
+      "error": "Ha ocurrido un problema al cargar los productos destacados."
+    },
+    "story": {
+      "title": "¿Por qué Moldova Direct?",
+      "subtitle": "Nuestra misión es acercar los ingredientes patrimoniales y la enología moldava a los paladares curiosos.",
+      "cta": "Conoce nuestra historia",
+      "points": {
+        "heritage": {
+          "title": "Patrimonio que se saborea",
+          "description": "Cada colección resalta uvas autóctonas, denominaciones protegidas y recetas regionales."
+        },
+        "craft": {
+          "title": "Sourcing artesanal",
+          "description": "Trabajamos con cooperativas y bodegas familiares que priorizan la sostenibilidad."
+        },
+        "pairings": {
+          "title": "Maridajes y expertise",
+          "description": "Notas de sumiller y sugerencias de chefs acompañan cada entrega."
+        }
+      },
+      "timeline": {
+        "title": "De Moldavia a España",
+        "description": "Hitos que han dado forma a nuestra comunidad.",
+        "items": [
+          {
+            "year": "2018",
+            "title": "Primeras alianzas de vendimia",
+            "description": "Lanzamos junto a tres bodegas pioneras de la región de Codru."
+          },
+          {
+            "year": "2020",
+            "title": "Cobertura nacional",
+            "description": "Ampliamos la logística en frío para llegar a todas las provincias de España."
+          },
+          {
+            "year": "2023",
+            "title": "Colaboraciones gastronómicas",
+            "description": "Creamos cajas de degustación con chefs y sumilleres invitados."
+          }
+        ]
+      }
+    },
+    "services": {
+      "title": "Servicios para cada ocasión",
+      "subtitle": "Desde cenas íntimas hasta grandes eventos corporativos, diseñamos la experiencia moldava perfecta.",
+      "contactCta": "Habla con nuestros especialistas",
+      "items": {
+        "gifting": {
+          "title": "Regalos personales y celebraciones",
+          "description": "Personaliza notas manuscritas, fechas de entrega y presentación para sorprender de verdad.",
+          "cta": "Planificar un regalo"
+        },
+        "corporate": {
+          "title": "Soluciones corporativas y hospitality",
+          "description": "Diseñamos menús de cata, cestas en volumen y selecciones con marca propia con acompañamiento dedicado.",
+          "cta": "Solicitar propuesta corporativa"
+        }
+      }
+    },
+    "newsletter": {
+      "title": "No te pierdas las novedades",
+      "subtitle": "Sé la primera persona en enterarte de lanzamientos de temporada, guías de maridaje e invitaciones a catas privadas.",
+      "placeholder": "Introduce tu correo electrónico",
+      "cta": "Quiero recibir novedades",
+      "success": "¡Gracias! Recibirás nuestro próximo boletín en tu bandeja.",
+      "disclaimer": "Enviamos uno o dos correos al mes y puedes darte de baja cuando quieras."
+    },
+    "faqPreview": {
+      "title": "¿Dudas antes de pedir?",
+      "subtitle": "Resolvemos lo esencial para que tu primera entrega sea sencilla.",
+      "cta": "Ver todas las preguntas frecuentes",
+      "items": {
+        "shipping": {
+          "question": "¿Cuánto tarda el envío en España?",
+          "answer": "Enviamos dos veces por semana desde nuestro hub de Madrid con entregas en 48–72 horas en la mayoría de localidades."
+        },
+        "packaging": {
+          "question": "¿Mi pedido llegará refrigerado?",
+          "answer": "Sí. Los embalajes isotermos mantienen vinos y perecederos en condiciones óptimas durante el transporte."
+        },
+        "support": {
+          "question": "¿Puedo recibir recomendaciones personalizadas?",
+          "answer": "Nuestro equipo de conserjería atiende por WhatsApp y correo para sugerir maridajes y cajas a medida."
+        }
+      }
     }
   },
   "products": {
