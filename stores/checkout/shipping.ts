@@ -10,10 +10,32 @@ import type { ShippingInformation } from '~/types/checkout'
 import type { CartItem } from '~/stores/cart/types'
 
 function normalizeCartItems(cartItems?: CartItem[] | { value: CartItem[] }): CartItem[] {
-  if (Array.isArray(cartItems)) return cartItems
-  if (cartItems && Array.isArray((cartItems as any).value)) {
-    return (cartItems as any).value
+  if (Array.isArray(cartItems)) {
+    return [...cartItems]
   }
+
+  if (cartItems && Array.isArray((cartItems as any).value)) {
+    return [...(cartItems as any).value]
+  }
+
+  return []
+}
+
+function resolveCartItems(
+  cartStoreItems: CartItem[] | { value: CartItem[] },
+  provided?: CartItem[] | { value: CartItem[] }
+): CartItem[] {
+  const prioritized = [
+    provided !== undefined ? normalizeCartItems(provided) : [],
+    normalizeCartItems(cartStoreItems)
+  ]
+
+  for (const items of prioritized) {
+    if (items.length > 0) {
+      return items
+    }
+  }
+
   return []
 }
 
@@ -25,10 +47,7 @@ export const useCheckoutShippingStore = defineStore('checkout-shipping', () => {
   const { shippingInfo, availableShippingMethods, orderData, loading, contactEmail, paymentMethod } = storeToRefs(session)
 
   const calculateOrderData = async (cartItems?: CartItem[] | { value: CartItem[] }): Promise<void> => {
-    const primaryItems = cartItems !== undefined ? normalizeCartItems(cartItems) : undefined
-    const items = primaryItems && primaryItems.length > 0
-      ? primaryItems
-      : normalizeCartItems(cartStore.items)
+    const items = resolveCartItems(cartStore.items, cartItems)
 
     if (process.dev) {
       console.info('[Checkout][Shipping] calculateOrderData', {
@@ -106,7 +125,7 @@ export const useCheckoutShippingStore = defineStore('checkout-shipping', () => {
 
       session.setShippingInfo(info)
 
-    await calculateOrderData(cartItems)
+      await calculateOrderData(cartItems)
 
       await updateShippingCosts()
       await loadShippingMethods()
