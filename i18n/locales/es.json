@@ -919,6 +919,7 @@
       "editCart": "Editar Carrito",
       "shippingInfo": "Información de Envío",
       "editShipping": "Editar Envío",
+      "emptyCart": "Tu carrito está vacío",
       "shippingAddress": "Dirección de Envío",
       "shippingMethod": "Método de Envío",
       "deliveryInstructions": "Instrucciones de Entrega",

@@ -295,8 +295,11 @@ export const useCheckoutStore = defineStore('checkout', () => {
       if (Reflect.has(target, prop)) {
         return Reflect.get(target, prop, receiver)
       }
-      if (typeof prop === 'string' && prop in sessionRefs) {
-        return (sessionRefs as any)[prop].value
+      if (typeof prop === 'string') {
+        const refCandidate = Reflect.get(sessionRefs, prop)
+        if (refCandidate && typeof refCandidate === 'object' && 'value' in refCandidate) {
+          return (refCandidate as { value: unknown }).value
+        }
       }
       return (session as any)[prop as keyof typeof session]
     },
@@ -304,9 +307,12 @@ export const useCheckoutStore = defineStore('checkout', () => {
       if (Reflect.has(target, prop)) {
         return Reflect.set(target, prop, value, target)
       }
-      if (typeof prop === 'string' && prop in sessionRefs) {
-        (sessionRefs as any)[prop].value = value
-        return true
+      if (typeof prop === 'string') {
+        const refCandidate = Reflect.get(sessionRefs, prop)
+        if (refCandidate && typeof refCandidate === 'object' && 'value' in refCandidate) {
+          (refCandidate as { value: unknown }).value = value
+          return true
+        }
       }
       (session as any)[prop as keyof typeof session] = value
       return true
