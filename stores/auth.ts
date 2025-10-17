@@ -14,10 +14,51 @@
  */
 
 import { defineStore } from 'pinia'
-import type { User } from '@supabase/supabase-js'
+import type { AuthChangeEvent, Session, User } from '@supabase/supabase-js'
+import type { WatchStopHandle } from 'vue'
 import { useAuthMessages } from '~/composables/useAuthMessages'
 import { useAuthValidation } from '~/composables/useAuthValidation'
 import { useToastStore } from './toast'
+
+type AuthSubscription = {
+  unsubscribe: () => PromiseLike<unknown>
+}
+
+const LOCKOUT_STORAGE_KEY = 'md-auth-lockout-until'
+
+const readPersistedLockout = (): Date | null => {
+  if (!process.client) {
+    return null
+  }
+
+  const storedValue = window.localStorage.getItem(LOCKOUT_STORAGE_KEY)
+  if (!storedValue) {
+    return null
+  }
+
+  const parsed = new Date(storedValue)
+  if (Number.isNaN(parsed.getTime()) || parsed <= new Date()) {
+    window.localStorage.removeItem(LOCKOUT_STORAGE_KEY)
+    return null
+  }
+
+  return parsed
+}
+
+const persistLockout = (lockoutTime: Date | null) => {
+  if (!process.client) {
+    return
+  }
+
+  if (lockoutTime) {
+    window.localStorage.setItem(LOCKOUT_STORAGE_KEY, lockoutTime.toISOString())
+  } else {
+    window.localStorage.removeItem(LOCKOUT_STORAGE_KEY)
+  }
+}
+
+let authSubscription: AuthSubscription | null = null
+let stopUserWatcher: WatchStopHandle | null = null
 
 export interface AuthUser {
   id: string
@@ -61,7 +102,7 @@ export const useAuthStore = defineStore('auth', {
     user: null,
     loading: false,
     error: null,
-    lockoutTime: null,
+    lockoutTime: readPersistedLockout(),
     sessionInitialized: false,
     profileLoading: false,
     profileError: null
@@ -130,12 +171,34 @@ export const useAuthStore = defineStore('auth', {
       if (this.sessionInitialized) return
 
       try {
+        const supabase = useSupabaseClient()
         const supabaseUser = useSupabaseUser()
-        
-        // Watch for changes in Supabase user state (cross-tab sync)
-        watch(supabaseUser, (newUser) => {
-          this.syncUserState(newUser)
-        }, { immediate: true })
+
+        if (!stopUserWatcher) {
+          stopUserWatcher = watch(supabaseUser, (newUser) => {
+            this.syncUserState(newUser)
+          }, { immediate: true })
+        } else {
+          this.syncUserState(supabaseUser.value)
+        }
+
+        const { data: sessionData, error: sessionError } = await supabase.auth.getSession()
+
+        if (sessionError) {
+          console.error('Failed to fetch auth session:', sessionError)
+          if (!this.error) {
+            this.error = 'Failed to retrieve authentication session'
+          }
+        } else if (sessionData?.session?.user) {
+          this.syncUserState(sessionData.session.user)
+        }
+
+        if (!authSubscription) {
+          const { data } = supabase.auth.onAuthStateChange((event, session) => {
+            this.handleAuthStateChange(event, session)
+          })
+          authSubscription = data.subscription
+        }
 
         this.sessionInitialized = true
       } catch (error) {
@@ -163,11 +226,26 @@ export const useAuthStore = defineStore('auth', {
         }
         this.error = null
         this.lockoutTime = null
+        persistLockout(null)
       } else {
         this.user = null
         this.error = null
         this.lockoutTime = null
+        persistLockout(null)
       }
+    },
+
+    handleAuthStateChange(event: AuthChangeEvent, session: Session | null) {
+      if (event === 'TOKEN_REFRESHED') {
+        this.error = null
+      }
+
+      if (event === 'SIGNED_OUT') {
+        this.syncUserState(null)
+        return
+      }
+
+      this.syncUserState(session?.user ?? null)
     },
 
     /**
@@ -206,15 +284,16 @@ export const useAuthStore = defineStore('auth', {
             // Redirect to verification page
             await navigateTo({
               path: '/auth/verify-email',
-              query: { 
+              query: {
                 message: 'email-verification-required',
-                email: credentials.email 
+                email: credentials.email
               }
             })
             return
           } else if (error.message.includes('Too many requests')) {
             // Handle rate limiting
             this.lockoutTime = new Date(Date.now() + 15 * 60 * 1000) // 15 minutes
+            persistLockout(this.lockoutTime)
             this.error = translateAuthError('Too many requests', 'login')
           } else {
             this.error = translateAuthError(error.message, 'login')
@@ -461,9 +540,14 @@ export const useAuthStore = defineStore('auth', {
       const toastStore = useToastStore()
 
       try {
-        const { error } = await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: `${window.location.origin}/auth/reset-password`
-        })
+        const redirectTo = process.client
+          ? new URL('/auth/reset-password', window.location.origin).toString()
+          : undefined
+
+        const { error } = await supabase.auth.resetPasswordForEmail(
+          email,
+          redirectTo ? { redirectTo } : undefined
+        )
 
         if (error) {
           this.error = translateAuthError(error.message, 'reset')
@@ -568,6 +652,7 @@ export const useAuthStore = defineStore('auth', {
         this.user = null
         this.error = null
         this.lockoutTime = null
+        persistLockout(null)
 
         toastStore.success(
           'Sesión cerrada',
@@ -587,6 +672,7 @@ export const useAuthStore = defineStore('auth', {
         this.user = null
         this.error = null
         this.lockoutTime = null
+        persistLockout(null)
         
         await navigateTo('/')
       } finally {
@@ -683,6 +769,7 @@ export const useAuthStore = defineStore('auth', {
      */
     clearLockout() {
       this.lockoutTime = null
+      persistLockout(null)
     },
 
     /**
