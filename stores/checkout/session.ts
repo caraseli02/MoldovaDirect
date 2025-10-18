@@ -20,6 +20,27 @@ interface PersistPayload {
 
 interface RestoredPayload extends PersistPayload {}
 
+// Strip sensitive payment fields before persisting to storage
+function sanitizePaymentMethodForStorage(method: PaymentMethod | null): PaymentMethod | null {
+  if (!method) return null
+
+  const sanitized: PaymentMethod = {
+    type: method.type
+  }
+
+  if (typeof method.saveForFuture !== 'undefined') {
+    sanitized.saveForFuture = method.saveForFuture
+  }
+
+  if (method.type === 'cash' && method.cash) {
+    sanitized.cash = {
+      confirmed: method.cash.confirmed
+    }
+  }
+
+  return sanitized
+}
+
 const INITIAL_STATE: CheckoutState = {
   currentStep: 'shipping',
   sessionId: null,
@@ -197,7 +218,7 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
         privacyAccepted: state.privacyAccepted,
         marketingConsent: state.marketingConsent,
         shippingInfo: payload.shippingInfo,
-        paymentMethod: payload.paymentMethod
+        paymentMethod: sanitizePaymentMethodForStorage(payload.paymentMethod)
       }
 
       localStorage.setItem('checkout_session', JSON.stringify(snapshot))
@@ -231,9 +252,12 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
       state.privacyAccepted = snapshot.privacyAccepted || false
       state.marketingConsent = snapshot.marketingConsent || false
 
+      const sanitizedPaymentMethod = sanitizePaymentMethodForStorage(snapshot.paymentMethod || null)
+      state.paymentMethod = sanitizedPaymentMethod
+
       return {
         shippingInfo: snapshot.shippingInfo || null,
-        paymentMethod: snapshot.paymentMethod || null
+        paymentMethod: sanitizedPaymentMethod
       }
     } catch (error) {
       console.error('Failed to restore checkout session:', error)
