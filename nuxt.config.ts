@@ -27,7 +27,6 @@ export default defineNuxtConfig({
       supabaseAnonKey:
         process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_KEY,
       stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
-      paypalClientId: process.env.PAYPAL_CLIENT_ID,
     },
   },
   shadcn: {

@@ -1,14 +1,19 @@
 # Remaining Work Summary - MoldovaDirect
-**Last Updated: February 2026**
+**Last Updated: October 2025**
 
-## Priority 1: Payment Integration (UI in place, backend pending)
-**Estimated Effort: 2 weeks**
+## Priority 1: Payment Integration (Stripe - Production Ready)
+**Estimated Effort: 1 week**
 
 ### Outstanding Tasks
 - Complete Stripe payment intent flow: confirm, capture, and handle webhooks for order success/failure.
-- Implement PayPal checkout option with sandbox validation and graceful fallbacks.
 - Harden payment error states in the checkout UI and surface actionable feedback to shoppers.
-- Store customer payment preferences securely and document environment variable requirements.
+- Configure production Stripe credentials and test with live payment methods.
+- Store customer payment preferences securely.
+
+### Recent Changes (October 2025)
+- ✅ Removed PayPal integration (unused feature, never implemented in UI)
+- ✅ Streamlined payment processing to focus on Stripe as primary processor
+- ✅ Cleaned up payment-related configuration and environment variables
 
 ## Priority 2: Transactional Email System
 **Estimated Effort: 1 week**
@@ -49,7 +54,16 @@
 ---
 
 ## Recently Completed ✅
-- Multi-step checkout pages (shipping, payment, review) with responsive layouts.
-- Admin product and user management views with bulk actions and inventory controls.
-- Order API endpoints for creation, retrieval, and customer history.
-- Cart validation improvements and shadcn-vue component migration.
+
+### October 2025
+- ✅ Major code cleanup: removed PayPal integration, unused composables, and dependencies
+- ✅ Organized test scripts into `scripts/` directory
+- ✅ Streamlined payment processing to Stripe-only
+- ✅ Updated documentation to reflect current architecture
+
+### September 2025
+- ✅ Multi-step checkout pages (shipping, payment, review) with responsive layouts
+- ✅ Admin product and user management views with bulk actions and inventory controls
+- ✅ Order API endpoints for creation, retrieval, and customer history
+- ✅ Cart validation improvements and shadcn-vue component migration
+- ✅ Email notification system with Resend integration

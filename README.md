@@ -32,17 +32,23 @@ Create a `.env` file with:
 # Supabase Configuration
 SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_KEY=your-service-key
 
-# Application
-APP_URL=http://localhost:3000
-NODE_ENV=development
+# Stripe Payment Processing (Primary payment processor)
+STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_publishable_key
+STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key
 
-# Email Service (optional for development)
+# Email Service (Transactional emails)
 RESEND_API_KEY=re_your_resend_api_key
 FROM_EMAIL="Your Brand <onboarding@resend.dev>"
+
+# Session Security
+NUXT_SECRET_KEY=your_secret_key_for_sessions
 ```
 
-Use Resend's shared domain (`onboarding@resend.dev`) while you prototype. When you're ready for a branded sender, verify your own domain in Resend and update `FROM_EMAIL` accordingly.
+**Payment Processing:** This application uses **Stripe** as the primary payment processor. PayPal integration was removed in October 2025 as it was never implemented in the UI.
+
+**Email Configuration:** Use Resend's shared domain (`onboarding@resend.dev`) while you prototype. When you're ready for a branded sender, verify your own domain in Resend and update `FROM_EMAIL` accordingly.
 
 ### Supabase Setup
 1. Create a new project at [supabase.com](https://supabase.com)
@@ -92,16 +98,25 @@ All project documentation follows Kiro's spec-driven development approach in the
 - Foundation with multi-language support (ES/EN/RO/RU)
 - Product catalog with categories and search
 - User authentication with Supabase Auth
-- Shopping cart with persistence
+- Shopping cart with persistence and analytics
 - Multi-step checkout UI with shipping, payment, and review steps
 - Order API endpoints with customer order history
 - Admin dashboard views for products and users
 - Dark/light theme system and shadcn-vue UI migration
+- Stripe payment integration (primary payment processor)
+- Email notification system with Resend
 
 🚧 **In Progress**
-- Online payment capture (Stripe/PayPal) and production credentials
-- Transactional email workflows (order confirmations, shipping updates)
+- Production payment credentials and testing
+- Enhanced transactional email workflows (shipping updates, order tracking)
 - Admin analytics dashboards and advanced reporting
+- Toast system migration to vue-sonner
+
+📝 **Recent Changes (October 2025)**
+- Removed PayPal integration (unused feature)
+- Cleaned up unused composables and dependencies
+- Organized test scripts into `scripts/` directory
+- Streamlined payment processing to focus on Stripe
 
 See [.kiro/ROADMAP.md](.kiro/ROADMAP.md) for detailed timeline.
 

@@ -7,7 +7,11 @@ MoldovaDirect/
 ├── README.md                      # Main project README
 ├── docs/                          # Technical documentation
 │   ├── README.md                  # This file - docs index
+│   ├── CHANGELOG.md              # Recent changes and updates
 │   ├── AUTHENTICATION_ARCHITECTURE.md # Auth system architecture
+│   ├── CART_SYSTEM_ARCHITECTURE.md # Cart system technical details
+│   ├── CART_ANALYTICS.md         # Cart analytics documentation
+│   ├── CHECKOUT_FLOW.md          # Checkout and order flow
 │   ├── SHADCN_MIGRATION.md       # UI component migration guide
 │   ├── SUPABASE_SETUP.md         # Database setup guide
 │   ├── I18N_CONFIGURATION.md     # Internationalization setup
@@ -24,13 +28,16 @@ MoldovaDirect/
 │   │   ├── product.md           # Product vision
 │   │   ├── tech.md              # Technology decisions
 │   │   ├── structure.md         # Code organization
-│   │   └── code-conventions.md  # Coding standards
+│   │   ├── code-conventions.md  # Coding standards
+│   │   └── code-cleanup.md      # Code cleanup guidelines
 │   │
 │   ├── specs/                   # Feature specifications
 │   │   ├── user-authentication/
 │   │   ├── product-catalog/
 │   │   ├── shopping-cart/
-│   │   └── admin-dashboard/
+│   │   ├── checkout/
+│   │   ├── admin-dashboard/
+│   │   └── order-confirmation-emails/
 │   │
 │   ├── docs/                    # Operational guides
 │   │   ├── DEPLOYMENT_GUIDE.md
@@ -39,9 +46,15 @@ MoldovaDirect/
 │   │   └── TESTING.md
 │   │
 │   └── archive/                 # Historical documentation
+│       ├── docs/                # Archived documentation
 │       ├── MOBILE_ACCESSIBILITY_IMPLEMENTATION.md
 │       ├── MOBILE_CART_IMPLEMENTATION.md
 │       └── PROFILE_MANAGEMENT_IMPLEMENTATION.md
+│
+├── scripts/                      # Utility scripts
+│   ├── test-email-integration.js # Email testing script
+│   ├── test-order-creation.sh   # Order creation test
+│   └── check-translations.js    # Translation validation
 │
 ├── middleware/
 │   └── README.md                # Middleware documentation
@@ -64,6 +77,11 @@ MoldovaDirect/
 - [Authentication Architecture](./AUTHENTICATION_ARCHITECTURE.md) - Auth system technical details
 - [Deployment Guide](./../.kiro/docs/DEPLOYMENT_GUIDE.md) - Deploy to production
 - [Testing Guide](./../tests/AUTH_TESTING_GUIDE.md) - Run tests
+
+### Project History
+- [Changelog](./CHANGELOG.md) - Recent changes and updates
+- [Cleanup Report](../CODE_CLEANUP_REPORT.md) - Code cleanup tracking
+- [Cleanup Completed](../CLEANUP_COMPLETED_2025-10-12.md) - Latest cleanup details
 
 ### For Features
 - [User Authentication](./../.kiro/specs/user-authentication/) - Auth system specs
@@ -128,6 +146,9 @@ When making changes:
 
 ## 🔄 Recent Updates
 
+- **Oct 12, 2025**: Major code cleanup - removed PayPal integration, unused composables, and dependencies
+- **Oct 12, 2025**: Organized test scripts into `scripts/` directory
+- **Oct 12, 2025**: Updated documentation to reflect Stripe-only payment processing
 - **Sep 8, 2025**: Enhanced cart system with Pinia availability detection and comprehensive architecture documentation
 - **Sep 8, 2025**: Fixed TypeScript issues in cart analytics plugin and improved code formatting
 - **Sep 8, 2025**: Added cart analytics system documentation and memory management improvements
