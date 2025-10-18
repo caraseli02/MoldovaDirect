@@ -930,6 +930,7 @@
       "editCart": "Edit Cart",
       "shippingInfo": "Shipping Information",
       "editShipping": "Edit Shipping",
+      "emptyCart": "Your cart is empty",
       "shippingAddress": "Shipping Address",
       "shippingMethod": "Shipping Method",
       "deliveryInstructions": "Delivery Instructions",

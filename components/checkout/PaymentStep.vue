@@ -271,7 +271,8 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { useCheckoutStore, type PaymentMethod, type SavedPaymentMethod } from '~/stores/checkout'
+import { useCheckoutStore } from '~/stores/checkout'
+import type { PaymentMethod, SavedPaymentMethod } from '~/types/checkout'
 import { useAuthStore } from '~/stores/auth'
 import PaymentForm from './PaymentForm.vue'
 
@@ -301,9 +302,9 @@ const paymentMethod = ref<PaymentMethod>({
 // =============================================
 
 const isAuthenticated = computed(() => authStore.isAuthenticated)
-const savedPaymentMethods = computed(() => checkoutStore.savedPaymentMethods)
+const savedPaymentMethods = computed(() => checkoutStore.savedPaymentMethods ?? [])
 const loading = computed(() => checkoutStore.loading)
-const errors = computed(() => checkoutStore.errors)
+const errors = computed(() => checkoutStore.errors ?? {})
 
 const canProceed = computed(() => {
   if (selectedSavedMethod.value) {
@@ -468,7 +469,7 @@ if (checkoutStore.paymentMethod) {
 
 // Watch for changes in saved payment methods
 watch(savedPaymentMethods, (newMethods) => {
-  if (newMethods.length === 0) {
+  if (!newMethods || newMethods.length === 0) {
     showNewPaymentForm.value = true
   }
 }, { immediate: true })

@@ -10,7 +10,7 @@ import {
   isValidLuhn,
   getCardBrand
 } from '~/utils/checkout-validation'
-import type { Address, PaymentMethod, ShippingInformation } from '~/stores/checkout'
+import type { Address, PaymentMethod, ShippingInformation } from '~/types/checkout'
 
 describe('Checkout Validation', () => {
   describe('Address Validation', () => {

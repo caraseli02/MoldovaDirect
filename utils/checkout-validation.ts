@@ -1,7 +1,7 @@
 // Checkout validation utilities
 // Provides comprehensive validation for checkout flow data
 
-import type { Address, PaymentMethod, ShippingInformation } from '~/stores/checkout'
+import type { Address, PaymentMethod, ShippingInformation } from '~/types/checkout'
 
 // =============================================
 // VALIDATION RESULT TYPES
@@ -221,6 +221,8 @@ export function validatePaymentMethod(paymentMethod: Partial<PaymentMethod>): Ch
   }
 
   switch (paymentMethod.type) {
+    case 'cash':
+      return { isValid: true, errors, warnings }
     case 'credit_card':
       return validateCreditCard(paymentMethod.creditCard)
     case 'paypal':

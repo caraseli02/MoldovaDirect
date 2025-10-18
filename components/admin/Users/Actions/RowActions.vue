@@ -38,7 +38,7 @@
     </button>
 
     <!-- Actions Dropdown -->
-    <AdminUserActionsDropdown
+    <AdminUsersActionsDropdown
       :user="user"
       :mobile="isMobile"
       @action="handleAction"

@@ -301,7 +301,7 @@
 import { computed, ref, watch, onMounted } from 'vue'
 import { useToast } from '~/composables/useToast'
 import { Button } from '@/components/ui/button'
-import type { PaymentMethod } from '~/stores/checkout'
+import type { PaymentMethod } from '~/types/checkout'
 
 // =============================================
 // PROPS & EMITS
