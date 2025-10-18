@@ -1,7 +1,9 @@
+import { storeToRefs } from 'pinia'
 import { useCheckoutStore } from '~/stores/checkout'
+import { useCheckoutSessionStore } from '~/stores/checkout/session'
 import { useCartStore } from '~/stores/cart'
 import type { CartItem } from '~/stores/cart/types'
-import type { CheckoutStep, OrderData, PaymentMethod, ShippingInformation } from '~/types/checkout'
+import type { CheckoutStep } from '~/types/checkout'
 
 interface ProcessOrderOptions {
   termsAccepted: boolean
@@ -16,15 +18,22 @@ interface ProcessOrderResult {
 
 export function useCheckoutReview() {
   const checkoutStore = useCheckoutStore()
+  const checkoutSession = useCheckoutSessionStore()
   const cartStore = useCartStore()
   const localePath = useLocalePath()
+
+  const {
+    orderData,
+    shippingInfo,
+    paymentMethod,
+    loading,
+    processing,
+    lastError
+  } = storeToRefs(checkoutSession)
 
   const hasInitialized = ref(false)
   const lastCartSignature = ref<string | null>(null)
 
-  const orderData = computed<OrderData | null>(() => checkoutStore.orderData)
-  const shippingInfo = computed<ShippingInformation | null>(() => checkoutStore.shippingInfo)
-  const paymentMethod = computed<PaymentMethod | null>(() => checkoutStore.paymentMethod)
   const cartItems = computed<CartItem[]>(() => {
     const items = cartStore.items
     if (Array.isArray(items)) {
@@ -33,9 +42,6 @@ export function useCheckoutReview() {
     return Array.isArray((items as any)?.value) ? (items as any).value : []
   })
 
-  const loading = computed(() => checkoutStore.loading)
-  const processing = computed(() => checkoutStore.processing)
-  const lastError = computed(() => checkoutStore.lastError)
   const baseCanProceed = computed(() => checkoutStore.canCompleteOrder && Boolean(orderData.value) && Boolean(shippingInfo.value) && Boolean(paymentMethod.value))
 
   const buildCartSignature = (items: CartItem[]): string => {

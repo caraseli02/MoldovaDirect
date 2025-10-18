@@ -41,7 +41,8 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
     orderData,
     shippingInfo,
     contactEmail,
-    sessionId
+    sessionId,
+    guestInfo
   } = storeToRefs(session)
 
   const loadSavedPaymentMethods = async (): Promise<void> => {
@@ -226,7 +227,7 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
     if (!orderData.value) return
 
     try {
-      const candidateEmail = orderData.value.customerEmail || contactEmail.value || session.guestInfo.value?.email || null
+      const candidateEmail = orderData.value.customerEmail || contactEmail.value || guestInfo.value?.email || null
       const trimmedEmail = candidateEmail ? candidateEmail.trim() : undefined
       await apiSendConfirmationEmail({
         orderId: orderData.value.orderId,
@@ -258,9 +259,9 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
         session.setSessionId(session.generateSessionId())
       }
 
-      const guestEmail = session.guestInfo.value?.email?.trim() || null
+      const guestEmail = guestInfo.value?.email?.trim() || null
       const customerName = `${shippingInfo.value.address.firstName || ''} ${shippingInfo.value.address.lastName || ''}`.trim() || 'Customer'
-      const authenticatedEmail = session.contactEmail.value || null
+      const authenticatedEmail = contactEmail.value || null
       const resolvedEmail = guestEmail || authenticatedEmail || contactEmail.value || null
       session.setContactEmail(resolvedEmail)
 
@@ -279,7 +280,7 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
         guestEmail,
         customerName,
         locale: locale.value,
-        marketingConsent: session.guestInfo.value?.emailUpdates ?? false
+        marketingConsent: guestInfo.value?.emailUpdates ?? false
       })
 
       session.setOrderData({
