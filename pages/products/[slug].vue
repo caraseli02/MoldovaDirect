@@ -52,7 +52,7 @@
           <li v-if="product.category">
             <span class="mx-2 text-gray-400">/</span>
             <nuxt-link :to="`/products?category=${product.category.id}`" class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
-              {{ getLocalizedText(product.category.name) }}
+              {{ getLocalizedText(product.category.nameTranslations) }}
             </nuxt-link>
           </li>
           <li>
@@ -122,7 +122,7 @@
               :to="`/products?category=${product.category.id}`"
               class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium"
             >
-              {{ getLocalizedText(product.category.name) }}
+              {{ getLocalizedText(product.category.nameTranslations) }}
             </nuxt-link>
           </div>
 
@@ -260,6 +260,9 @@ const slug = route.params.slug as string
 // Fetch product data
 const { data: product, pending, error } = await useLazyFetch<ProductWithRelations>(`/api/products/${slug}`)
 
+// Composables
+const { locale, t } = useI18n()
+
 // Reactive state
 const selectedImageIndex = ref(0)
 const selectedQuantity = ref(1)
@@ -271,7 +274,7 @@ const selectedImage = computed(() => {
 
 const stockStatusClass = computed(() => {
   if (!product.value) return ''
-  const stock = product.value.stockQuantity
+  const stock = product.value.stockQuantity ?? 0
   if (stock > 10) return 'bg-green-100 text-green-800'
   if (stock > 0) return 'bg-yellow-100 text-yellow-800'
   return 'bg-red-100 text-red-800'
@@ -279,14 +282,11 @@ const stockStatusClass = computed(() => {
 
 const stockStatusText = computed(() => {
   if (!product.value) return ''
-  const stock = product.value.stockQuantity
-  if (stock > 10) return 'En stock' // TODO: Translate
-  if (stock > 0) return `${stock} restantes`
-  return 'Agotado'
+  const stock = product.value.stockQuantity ?? 0
+  if (stock > 10) return t('products.stockStatus.inStock')
+  if (stock > 0) return t('products.stockStatus.onlyLeft', { count: stock })
+  return t('products.stockStatus.outOfStock')
 })
-
-// Composables
-const { locale } = useI18n()
 
 // Utility functions
 const getLocalizedText = (text: Record<string, string> | null | undefined) => {

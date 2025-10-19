@@ -116,14 +116,19 @@ export default defineEventHandler(async (event) => {
     const breadcrumb = await buildBreadcrumb(product.categories.id)
 
     // Transform product data to match products list API format
+    const descriptionTranslations = product.description_translations || {}
+    const shortDescriptionTranslations =
+      (product as any).short_description_translations || descriptionTranslations
+
     const transformedProduct = {
       id: product.id,
       sku: product.sku,
       slug: product.sku, // Using SKU as slug for now
       name: product.name_translations,
-      shortDescription: product.description_translations,
+      description: descriptionTranslations,
+      shortDescription: shortDescriptionTranslations,
       nameTranslations: product.name_translations,
-      descriptionTranslations: product.description_translations,
+      descriptionTranslations,
       price: product.price_eur,
       formattedPrice: `€${product.price_eur.toFixed(2)}`,
       compareAtPrice: product.compare_at_price_eur,
