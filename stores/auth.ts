@@ -225,13 +225,13 @@ export const useAuthStore = defineStore('auth', {
           updatedAt: supabaseUser.updated_at
         }
         this.error = null
-        this.lockoutTime = null
-        persistLockout(null)
+        this.clearLockout()
       } else {
         this.user = null
         this.error = null
-        this.lockoutTime = null
-        persistLockout(null)
+        if (this.lockoutTime && this.lockoutTime <= new Date()) {
+          this.clearLockout()
+        }
       }
     },
 
@@ -292,8 +292,7 @@ export const useAuthStore = defineStore('auth', {
             return
           } else if (error.message.includes('Too many requests')) {
             // Handle rate limiting
-            this.lockoutTime = new Date(Date.now() + 15 * 60 * 1000) // 15 minutes
-            persistLockout(this.lockoutTime)
+            this.triggerLockout(15)
             this.error = translateAuthError('Too many requests', 'login')
           } else {
             this.error = translateAuthError(error.message, 'login')
@@ -770,6 +769,17 @@ export const useAuthStore = defineStore('auth', {
     clearLockout() {
       this.lockoutTime = null
       persistLockout(null)
+    },
+
+    /**
+     * Trigger an account lockout for the specified duration (minutes)
+     */
+    triggerLockout(durationMinutes = 15) {
+      const lockoutDurationMs = Math.max(durationMinutes, 1) * 60 * 1000
+      const lockoutDeadline = new Date(Date.now() + lockoutDurationMs)
+      this.lockoutTime = lockoutDeadline
+      persistLockout(lockoutDeadline)
+      return lockoutDeadline
     },
 
     /**
