@@ -96,7 +96,7 @@
             {{ stockStatusText }}
           </span>
           <span v-else class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300">
-            {{ $t('products.outOfStock') }}
+            {{ $t('products.stockStatus.outOfStock') }}
           </span>
         </div>
       </div>
@@ -175,7 +175,7 @@ interface Props {
 const props = defineProps<Props>()
 
 // Composables
-const { locale } = useI18n()
+const { locale, t } = useI18n()
 const { isMobile } = useDevice()
 const { vibrate } = useHapticFeedback()
 const touchEvents = useTouchEvents()
@@ -197,11 +197,10 @@ const stockStatusClass = computed(() => {
 })
 
 const stockStatusText = computed(() => {
-  const { t } = useI18n()
   const stock = props.product.stockQuantity
-  if (stock > 10) return t('products.filters.inStock')
-  if (stock > 0) return `${stock} ${t('products.remaining')}`
-  return t('products.outOfStock')
+  if (stock > 10) return t('products.stockStatus.inStock')
+  if (stock > 0) return t('products.stockStatus.onlyLeft', { count: stock })
+  return t('products.stockStatus.outOfStock')
 })
 
 // Utility functions

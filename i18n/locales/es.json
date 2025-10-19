@@ -799,6 +799,11 @@
     "alcoholContent": "Contenido de Alcohol",
     "weight": "Peso",
     "availability": "Disponibilidad",
+    "stockStatus": {
+      "inStock": "En stock",
+      "onlyLeft": "Quedan {count}",
+      "outOfStock": "Agotado"
+    },
     "addToCart": "Añadir al Carrito",
     "outOfStock": "Agotado",
     "inCart": "En el Carrito",

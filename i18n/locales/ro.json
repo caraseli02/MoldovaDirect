@@ -799,6 +799,11 @@
     "alcoholContent": "Conținut Alcool",
     "weight": "Greutate",
     "availability": "Disponibilitate",
+    "stockStatus": {
+      "inStock": "În stoc",
+      "onlyLeft": "Au mai rămas {count}",
+      "outOfStock": "Stoc epuizat"
+    },
     "addToCart": "Adaugă în Coș",
     "outOfStock": "Stoc Epuizat",
     "inCart": "În Coș",

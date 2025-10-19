@@ -18,47 +18,72 @@ function getLocalizedContent(content: Record<string, string>, locale: string): s
 export default defineEventHandler(async (event) => {
   try {
     const supabase = await serverSupabaseClient(event)
-    const slug = getRouterParam(event, 'slug')
+    const slugParam = getRouterParam(event, 'slug')
     const query = getQuery(event)
     const locale = (query.locale as string) || 'es'
 
-    if (!slug) {
+    const normalizedSlug = slugParam?.trim()
+
+    if (!normalizedSlug) {
       throw createError({
         statusCode: 400,
         statusMessage: 'Product slug is required'
       })
     }
 
-    // First, find the product by SKU (using slug as SKU for now)
-    const { data: product, error } = await supabase
-      .from('products')
-      .select(`
-        id,
-        sku,
-        name_translations,
-        description_translations,
-        price_eur,
-        compare_at_price_eur,
-        stock_quantity,
-        low_stock_threshold,
-        images,
-        attributes,
-        is_active,
-        created_at,
-        updated_at,
-        categories!inner (
+    const slugCandidates = Array.from(
+      new Set(
+        [normalizedSlug, normalizedSlug.toUpperCase(), normalizedSlug.toLowerCase()]
+          .filter(Boolean)
+      )
+    )
+
+    let product: any = null
+
+    for (const candidate of slugCandidates) {
+      const { data, error } = await supabase
+        .from('products')
+        .select(`
           id,
-          slug,
+          sku,
           name_translations,
           description_translations,
-          parent_id
-        )
-      `)
-      .eq('sku', slug)
-      .eq('is_active', true)
-      .single()
+          price_eur,
+          compare_at_price_eur,
+          stock_quantity,
+          low_stock_threshold,
+          images,
+          attributes,
+          is_active,
+          created_at,
+          updated_at,
+          categories!inner (
+            id,
+            slug,
+            name_translations,
+            description_translations,
+            parent_id
+          )
+        `)
+        .eq('sku', candidate)
+        .eq('is_active', true)
+        .maybeSingle()
 
-    if (error || !product) {
+      if (error) {
+        throw createError({
+          statusCode: 500,
+          statusMessage: 'Failed to fetch product',
+          data: error
+        })
+      }
+
+      if (data) {
+        product = data
+        break
+      }
+    }
+
+    if (!product) {
       throw createError({
         statusCode: 404,
         statusMessage: 'Product not found'
@@ -116,14 +141,19 @@ export default defineEventHandler(async (event) => {
     const breadcrumb = await buildBreadcrumb(product.categories.id)
 
     // Transform product data to match products list API format
+    const descriptionTranslations = product.description_translations || {}
+    const shortDescriptionTranslations =
+      (product as any).short_description_translations || descriptionTranslations
+
     const transformedProduct = {
       id: product.id,
       sku: product.sku,
       slug: product.sku, // Using SKU as slug for now
       name: product.name_translations,
-      shortDescription: product.description_translations,
+      description: descriptionTranslations,
+      shortDescription: shortDescriptionTranslations,
       nameTranslations: product.name_translations,
-      descriptionTranslations: product.description_translations,
+      descriptionTranslations,
       price: product.price_eur,
       formattedPrice: `€${product.price_eur.toFixed(2)}`,
       compareAtPrice: product.compare_at_price_eur,

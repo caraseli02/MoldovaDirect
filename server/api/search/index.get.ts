@@ -122,7 +122,7 @@ export default defineEventHandler(async (event) => {
     const transformedProducts = limitedResults.map(product => ({
       id: product.id,
       sku: product.sku,
-      slug: product.sku.toLowerCase(),
+      slug: product.sku,
       name: product.name_translations,
       shortDescription: product.description_translations,
       price: product.price_eur,
