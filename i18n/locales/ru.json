@@ -591,6 +591,11 @@
     "alcoholContent": "Содержание алкоголя",
     "weight": "Вес",
     "availability": "Наличие",
+    "stockStatus": {
+      "inStock": "В наличии",
+      "onlyLeft": "Осталось {count}",
+      "outOfStock": "Нет в наличии"
+    },
     "addToCart": "В корзину",
     "outOfStock": "Нет в наличии",
     "inCart": "In Cart",

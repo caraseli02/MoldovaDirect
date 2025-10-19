@@ -591,6 +591,11 @@
     "alcoholContent": "Alcohol Content",
     "weight": "Weight",
     "availability": "Availability",
+    "stockStatus": {
+      "inStock": "In stock",
+      "onlyLeft": "Only {count} left",
+      "outOfStock": "Out of stock"
+    },
     "addToCart": "Add to Cart",
     "outOfStock": "Out of Stock",
     "inCart": "In Cart",

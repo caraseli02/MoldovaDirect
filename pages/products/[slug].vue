@@ -246,9 +246,9 @@
               <span
                 v-for="badge in sustainabilityBadges"
                 :key="badge"
-                class="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-2 text-sm font-medium text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-200"
+                class="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700 dark:border-blue-900/60 dark:bg-blue-900/20 dark:text-blue-200"
               >
-                <span class="inline-block h-2 w-2 rounded-full bg-emerald-500"></span>
+                <span class="inline-block h-2 w-2 rounded-full bg-blue-500"></span>
                 {{ $t(`products.sustainability.badges.${badge}`) }}
               </span>
             </div>
@@ -256,7 +256,8 @@
 
           <section class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $t('products.faq.title') }}</h2>
-            <div class="mt-4 space-y-4">
+            <p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('products.faq.subtitle') }}</p>
+            <div class="mt-4 space-y-3">
               <details
                 v-for="item in faqItems"
                 :key="item.id"
@@ -319,36 +320,16 @@
                 ]"
                 @click="addToCart"
               >
-                <svg
-                  v-if="cartLoading"
-                  class="h-5 w-5 animate-spin"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                <svg
-                  v-else
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m2.6 8L6 21h13M7 13v4a1 1 0 001 1h9a1 1 0 001-1v-4M7 13L6 9" />
                 </svg>
                 <span>
-                  {{
-                    cartLoading
-                      ? $t('products.adding')
-                      : isProductInCart
-                        ? $t('products.inCart')
-                        : (product.stockQuantity || 0) > 0
-                          ? $t('products.addToCart')
-                          : $t('products.outOfStock')
-                  }}
+                  <template v-if="(product.stockQuantity || 0) > 0">
+                    {{ isProductInCart ? $t('products.inCart') : $t('products.addToCart') }}
+                  </template>
+                  <template v-else>
+                    {{ $t('products.outOfStock') }}
+                  </template>
                 </span>
               </Button>
 
@@ -472,9 +453,9 @@ const stockStatusClass = computed(() => {
 const stockStatusText = computed(() => {
   if (!product.value) return ''
   const stock = product.value.stockQuantity
-  if (stock > 10) return t('products.stock.status.inStock')
-  if (stock > 0) return t('products.stock.status.lowStock', { count: stock })
-  return t('products.stock.status.outOfStock')
+  if (stock > 10) return t('products.stockStatus.inStock')
+  if (stock > 0) return t('products.stockStatus.onlyLeft', { count: stock })
+  return t('products.stockStatus.outOfStock')
 })
 
 const categoryLabel = computed(() => {
@@ -483,8 +464,8 @@ const categoryLabel = computed(() => {
   if (category.nameTranslations) {
     return getLocalizedText(category.nameTranslations)
   }
-  if (typeof category.name === 'string') {
-    return category.name
+  if (category.name) {
+    return typeof category.name === 'string' ? category.name : getLocalizedText(category.name)
   }
   return ''
 })
@@ -531,7 +512,8 @@ const originStory = computed(() => {
   if (product.value?.origin) {
     return t('products.story.originFallback', { origin: product.value.origin })
   }
-  const categoryName = product.value?.category?.name?.[locale.value] || product.value?.category?.name?.es || ''
+  const categoryTranslations = product.value?.category?.nameTranslations || {}
+  const categoryName = getLocalizedText(categoryTranslations)
   return t('products.story.originCategoryFallback', { category: categoryName || t('products.commonProduct') })
 })
 
@@ -600,6 +582,7 @@ const trustPromises = computed(() => [
 const relatedProducts = computed(() => product.value?.relatedProducts || [])
 
 const bundleItems = computed(() => {
+  if (!relatedProducts.value.length) return []
   return relatedProducts.value.slice(0, 3).map(item => ({
     id: item.id,
     title: getLocalizedText(item.name),
@@ -658,24 +641,13 @@ const shareProduct = async () => {
 
 const addToCart = async () => {
   if (!product.value) return
-  if ((product.value.stockQuantity || 0) <= 0) return
-  if (cartLoading.value) return
-
-  const cartProduct = {
-    id: product.value.id,
-    slug: product.value.slug,
-    name: getLocalizedText(product.value.name),
-    price: Number(product.value.price),
-    images: product.value.images?.map(image => image.url) || [],
-    stock: product.value.stockQuantity || 0,
-    category: categoryLabel.value || undefined,
-    attributes: productAttributes.value
-  }
-
   try {
-    await addItem(cartProduct, selectedQuantity.value)
-  } catch (error) {
-    console.error('Failed to add item to cart:', error)
+    await addItem({
+      productId: product.value.id,
+      quantity: selectedQuantity.value
+    })
+  } catch (err) {
+    console.error('Add to cart failed', err)
   }
 }
 
