@@ -150,7 +150,9 @@ export const useProductsStore = defineStore('products', {
 
     // Get product by slug
     getProductBySlug: (state) => (slug: string): ProductWithRelations | undefined => {
-      return state.products.find(product => product.slug === slug)
+      const normalizedSlug = slug ? slug.toLowerCase() : ''
+      if (!normalizedSlug) return undefined
+      return state.products.find(product => product.slug?.toLowerCase() === normalizedSlug)
     },
 
     // Check if data is cached and valid
@@ -261,12 +263,20 @@ export const useProductsStore = defineStore('products', {
 
     // Fetch single product by slug
     async fetchProduct(slug: string) {
+      const trimmedSlug = slug ? slug.trim() : ''
+      if (!trimmedSlug) {
+        this.error = 'Product slug is required'
+        this.loading = false
+        return
+      }
+
+      const normalizedSlug = trimmedSlug.toLowerCase()
       this.loading = true
       this.error = null
       
       try {
         // Check cache first
-        const cacheKey = `product-${slug}`
+        const cacheKey = `product-${normalizedSlug}`
         const cached = this.getCache(cacheKey)
         if (cached) {
           this.currentProduct = cached.product
@@ -275,7 +285,7 @@ export const useProductsStore = defineStore('products', {
           return
         }
         
-        const response = await $fetch<ProductDetailResponse>(`/api/products/${slug}`)
+        const response = await $fetch<ProductDetailResponse>(`/api/products/${trimmedSlug}`)
         
         this.currentProduct = response.product
         this.relatedProducts = response.relatedProducts

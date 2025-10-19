@@ -84,7 +84,8 @@ export const useProductCatalog = () => {
       }>(`/api/products/${slug}`)
 
       // Update current product in products array if needed
-      const existingIndex = products.value.findIndex(p => p.slug === slug)
+      const normalizedSlug = slug.toLowerCase()
+      const existingIndex = products.value.findIndex(p => p.slug?.toLowerCase() === normalizedSlug)
       if (existingIndex >= 0) {
         products.value[existingIndex] = response.product
       }

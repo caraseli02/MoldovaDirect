@@ -158,7 +158,7 @@ export default defineEventHandler(async (event) => {
     const transformedProduct = {
       id: newProduct.id,
       sku: newProduct.sku,
-      slug: newProduct.sku.toLowerCase(),
+      slug: newProduct.sku,
       name: newProduct.name_translations,
       description: newProduct.description_translations,
       price: newProduct.price_eur,
