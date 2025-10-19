@@ -181,7 +181,7 @@
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
       <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-6">Product Images</h3>
       
-      <AdminImageUpload
+      <AdminUtilsImageUpload
         v-model="form.images"
         :max-files="5"
         :max-file-size="5 * 1024 * 1024"

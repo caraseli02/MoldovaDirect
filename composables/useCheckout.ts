@@ -2,7 +2,7 @@
 // Provides a convenient interface for checkout functionality
 
 import { useCheckoutStore } from '~/stores/checkout'
-import type { CheckoutStep, ShippingInformation, PaymentMethod, Address } from '~/stores/checkout'
+import type { CheckoutStep, ShippingInformation, PaymentMethod, Address } from '~/types/checkout'
 import { validateCheckoutData, validateAddress, validatePaymentMethod, validateShippingInformation } from '~/utils/checkout-validation'
 import { parseApiError, logCheckoutError, isRetryableError } from '~/utils/checkout-errors'
 

@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import ShippingMethodSelector from '~/components/checkout/ShippingMethodSelector.vue'
-import type { ShippingMethod } from '~/stores/checkout'
+import type { ShippingMethod } from '~/types/checkout'
 
 // Mock i18n
 const mockT = (key: string) => key

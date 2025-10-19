@@ -14,7 +14,7 @@ import { ref } from 'vue'
 import { useShippingMethods } from '~/composables/useShippingMethods'
 import { useGuestCheckout } from '~/composables/useGuestCheckout'
 import { useShippingAddress } from '~/composables/useShippingAddress'
-import type { Address } from '~/stores/checkout'
+import type { Address } from '~/types/checkout'
 
 // Mock dependencies
 vi.mock('#app', () => ({

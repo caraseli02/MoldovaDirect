@@ -9,14 +9,21 @@ export default defineNuxtConfig({
     "@nuxtjs/i18n",
     "@pinia/nuxt",
     "@nuxt/image",
+    "@nuxt/icon",
     "shadcn-nuxt",
     "@vite-pwa/nuxt",
   ],
+  image: {
+    domains: ["images.unsplash.com"],
+  },
   runtimeConfig: {
     // Private keys (only available on server-side)
     supabaseServiceKey:
       process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_KEY,
     stripeSecretKey: process.env.STRIPE_SECRET_KEY,
+    paypalClientId: process.env.PAYPAL_CLIENT_ID,
+    paypalClientSecret: process.env.PAYPAL_CLIENT_SECRET,
+    paypalEnvironment: process.env.PAYPAL_ENVIRONMENT || "sandbox",
     // Public keys (exposed to client-side)
     public: {
       supabaseUrl: process.env.SUPABASE_URL,

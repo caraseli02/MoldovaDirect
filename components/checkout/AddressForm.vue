@@ -282,7 +282,7 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import type { Address } from '~/stores/checkout'
+import type { Address } from '~/types/checkout'
 
 interface Props {
   modelValue: Address

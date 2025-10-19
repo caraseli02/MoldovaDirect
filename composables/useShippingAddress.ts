@@ -11,7 +11,7 @@
  * - 5.4: Address form submission validation
  */
 
-import type { Address } from '~/stores/checkout'
+import type { Address } from '~/types/checkout'
 
 export function useShippingAddress() {
   const user = useSupabaseUser()

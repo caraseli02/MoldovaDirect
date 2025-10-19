@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import type { CheckoutStep } from '~/stores/checkout'
+import type { CheckoutStep } from '~/types/checkout'
 
 // Define checkout steps for progress indicator
 const checkoutSteps = [

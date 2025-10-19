@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { useCheckoutStore } from '~/stores/checkout'
-import type { ShippingInformation, PaymentMethod } from '~/stores/checkout'
+import type { ShippingInformation, PaymentMethod } from '~/types/checkout'
 
 // Mock localStorage
 const localStorageMock = {
@@ -23,7 +23,28 @@ Object.defineProperty(global, 'localStorage', {
   value: localStorageMock
 })
 
-// Mock $fetch
+// Mock checkout API helpers
+vi.mock('~/lib/checkout/api', () => ({
+  fetchShippingMethods: vi.fn().mockResolvedValue([
+    {
+      id: 'standard',
+      name: 'Standard Shipping',
+      description: 'Delivery in 3-5 business days',
+      price: 5.99,
+      estimatedDays: 3
+    }
+  ]),
+  createPaymentIntent: vi.fn().mockResolvedValue({ id: 'pi_123', clientSecret: 'secret' }),
+  confirmPaymentIntent: vi.fn().mockResolvedValue({ success: true, paymentIntent: { id: 'pi_123', status: 'succeeded', charges: [] } }),
+  createOrder: vi.fn().mockResolvedValue({ id: 1, orderNumber: 'ORD-123' }),
+  sendConfirmationEmail: vi.fn().mockResolvedValue(undefined),
+  updateInventory: vi.fn().mockResolvedValue(undefined),
+  fetchSavedPaymentMethods: vi.fn().mockResolvedValue([]),
+  savePaymentMethod: vi.fn().mockImplementation((method) => Promise.resolve(method)),
+  clearRemoteCart: vi.fn().mockResolvedValue(true)
+}))
+
+// Mock $fetch fallback (not used when API helpers mocked but kept for completeness)
 global.$fetch = vi.fn()
 
 // Mock useToastStore
@@ -35,10 +56,28 @@ vi.mock('~/stores/toast', () => ({
   })
 }))
 
+// Mock auth store
+
+vi.mock('~/stores/auth', () => ({
+  useAuthStore: () => ({
+    user: null,
+    isAuthenticated: false
+  })
+}))
+
+vi.mock('~/stores/cart', () => ({
+  useCartStore: () => ({
+    items: { value: [] },
+    sessionId: { value: null },
+    clearCart: vi.fn(() => Promise.resolve())
+  })
+}))
+
 // Mock useStoreI18n
 vi.mock('~/composables/useStoreI18n', () => ({
   useStoreI18n: () => ({
-    t: (key: string) => key // Return the key as the translation
+    t: (key: string) => key,
+    locale: { value: 'en' }
   })
 }))
 

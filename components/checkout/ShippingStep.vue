@@ -55,7 +55,7 @@ import GuestCheckoutPrompt from '~/components/checkout/GuestCheckoutPrompt.vue'
 import GuestInfoForm from '~/components/checkout/GuestInfoForm.vue'
 import ShippingInstructions from '~/components/checkout/ShippingInstructions.vue'
 import CheckoutNavigation from '~/components/checkout/CheckoutNavigation.vue'
-import type { ShippingInformation } from '~/stores/checkout'
+import type { ShippingInformation } from '~/types/checkout'
 
 // Composables
 const localePath = useLocalePath()

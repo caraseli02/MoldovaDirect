@@ -1,7 +1,7 @@
 // Checkout error handling utilities
 // Provides comprehensive error handling for checkout flow
 
-import type { CheckoutError } from '~/stores/checkout'
+import type { CheckoutError } from '~/types/checkout'
 
 // =============================================
 // ERROR TYPES AND CODES

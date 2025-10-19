@@ -11,8 +11,9 @@
  * - 2.4: Localized method names and descriptions
  */
 
-import type { ShippingMethod, Address } from '~/stores/checkout'
+import type { ShippingMethod, Address } from '~/types/checkout'
 import { useDebounceFn } from '@vueuse/core'
+import { fetchShippingMethods } from '~/lib/checkout/api'
 
 export function useShippingMethods(address: Ref<Address>) {
   const { t } = useI18n()
@@ -100,20 +101,14 @@ export function useShippingMethods(address: Ref<Address>) {
     try {
       const orderTotal = checkoutStore.orderData?.subtotal || 0
 
-      const response = await $fetch('/api/checkout/shipping-methods', {
-        query: {
-          country: address.value.country,
-          postalCode: address.value.postalCode,
-          orderTotal: orderTotal.toString()
-        }
+      const methods = await fetchShippingMethods({
+        country: address.value.country,
+        postalCode: address.value.postalCode,
+        orderTotal
       })
 
-      if (response.success) {
-        availableMethods.value = localizeShippingMethods(response.methods)
-        lastLoadedAddress.value = addressHash
-      } else {
-        throw new Error('Failed to load shipping methods')
-      }
+      availableMethods.value = localizeShippingMethods(methods)
+      lastLoadedAddress.value = addressHash
     } catch (e) {
       error.value = e instanceof Error ? e.message : 'Failed to load shipping methods'
       availableMethods.value = getFallbackMethods()
