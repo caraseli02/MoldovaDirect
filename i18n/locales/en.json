@@ -46,6 +46,7 @@
     "error": "Error",
     "errorGeneric": "An error occurred. Please try again.",
     "menu": "Menu",
+    "close": "Close",
     "preferences": "Preferences",
     "selectAll": "Select All",
     "deselectAll": "Deselect All",
@@ -556,6 +557,7 @@
       "subtitle": "Curated wines, artisan foods, and celebratory gifts shipped directly from Moldovan producers to your home in Spain.",
       "primaryCta": "Shop Featured Collections",
       "secondaryCta": "Learn About Our Producers",
+      "imageAlt": "Gift hamper with Moldovan wine and gourmet products",
       "trustBadge": "Over 2,000 deliveries across Spain",
       "highlights": {
         "orders": {
@@ -598,22 +600,54 @@
         "wines": {
           "title": "Signature Wines",
           "description": "Small-batch vintages and award-winning cellars.",
+          "imageAlt": "Bottles of red wine on a table",
           "cta": "Shop wines"
         },
         "gourmet": {
           "title": "Gourmet Pantry",
           "description": "Handmade preserves, honey, and artisanal treats.",
+          "imageAlt": "Selection of artisan Moldovan gourmet foods",
           "cta": "Browse pantry"
         },
         "gifts": {
           "title": "Gift Hampers",
           "description": "Ready-to-gift sets for holidays and celebrations.",
+          "imageAlt": "Thoughtfully wrapped gift boxes with ribbons",
           "cta": "See gift sets"
         },
         "subscriptions": {
           "title": "Monthly Boxes",
           "description": "Seasonal tastings delivered on your schedule.",
+          "imageAlt": "Monthly tasting box with wine and treats",
           "cta": "Discover subscriptions"
+        }
+      }
+    },
+    "collections": {
+      "badge": "Seasonal highlights",
+      "title": "Shop our most-loved collections",
+      "subtitle": "Browse curated drops packed with premium Moldovan wines, gourmet foods, and gifting ideas.",
+      "cards": {
+        "reserve": {
+          "title": "Reserve cellar arrivals",
+          "description": "Limited vintage releases from boutique wineries, ready to uncork for celebrations.",
+          "cta": "Explore reserve wines",
+          "tag": "New arrivals",
+          "imageAlt": "Sommelier presenting bottles of premium wine."
+        },
+        "artisan": {
+          "title": "Artisan pantry staples",
+          "description": "Honey, preserves, and charcuterie chosen for effortless pairing nights.",
+          "cta": "Fill the pantry",
+          "tag": "Editor’s pick",
+          "imageAlt": "Gourmet spread of cheeses, bread, and condiments."
+        },
+        "experience": {
+          "title": "Weekend tasting experiences",
+          "description": "Deliveries with pairing guides, playlists, and chef tips for unforgettable evenings.",
+          "cta": "Book a tasting box",
+          "tag": "Limited",
+          "imageAlt": "Friends enjoying a curated wine and food tasting at home."
         }
       }
     },

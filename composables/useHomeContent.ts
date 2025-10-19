@@ -13,6 +13,8 @@ type CategoryCard = {
   href: string
   icon: string
   accentBackground: string
+  image: string
+  imageAlt: string
 }
 
 type HowItWorksStep = {
@@ -85,6 +87,12 @@ export const useHomeContent = () => {
     'bg-gradient-to-br from-sky-500/20 via-indigo-400/20 to-blue-300/20',
     'bg-gradient-to-br from-purple-500/20 via-fuchsia-400/20 to-pink-300/20'
   ]
+  const categoryImages: Record<(typeof categoryKeys)[number], string> = {
+    wines: '/images/home/categories/signature-wines.jpg',
+    gourmet: '/images/home/categories/gourmet-pantry.jpg',
+    gifts: '/images/home/categories/gift-hampers.jpg',
+    subscriptions: '/images/home/categories/monthly-boxes.jpg'
+  }
 
   const categoryCards = computed<CategoryCard[]>(() => {
     const baseProducts = localePath('/products')
@@ -102,7 +110,9 @@ export const useHomeContent = () => {
       cta: t(`home.categories.items.${key}.cta`),
       href: `${baseProducts}?category=${queryMap[key]}`,
       icon: categoryIcons[key],
-      accentBackground: categoryAccents[index % categoryAccents.length]
+      accentBackground: categoryAccents[index % categoryAccents.length],
+      image: categoryImages[key],
+      imageAlt: t(`home.categories.items.${key}.imageAlt`)
     }))
   })
 
@@ -131,7 +141,15 @@ export const useHomeContent = () => {
     }))
   )
 
-  const partnerLogos = computed<string[]>(() => tm('home.socialProof.logos') as string[])
+  const partnerLogos = computed<string[]>(() => {
+    const logos = tm('home.socialProof.logos')
+
+    if (!Array.isArray(logos)) {
+      return []
+    }
+
+    return logos.map((_, index) => t(`home.socialProof.logos.${index}`))
+  })
 
   const storyPointKeys = ['heritage', 'craft', 'pairings'] as const
   const storyPointIcons: Record<(typeof storyPointKeys)[number], string> = {
@@ -148,9 +166,19 @@ export const useHomeContent = () => {
     }))
   )
 
-  const storyTimeline = computed<StoryTimelineItem[]>(
-    () => tm('home.story.timeline.items') as StoryTimelineItem[]
-  )
+  const storyTimeline = computed<StoryTimelineItem[]>(() => {
+    const timelineItems = tm('home.story.timeline.items')
+
+    if (!Array.isArray(timelineItems)) {
+      return []
+    }
+
+    return timelineItems.map((_, index) => ({
+      year: t(`home.story.timeline.items.${index}.year`),
+      title: t(`home.story.timeline.items.${index}.title`),
+      description: t(`home.story.timeline.items.${index}.description`)
+    }))
+  })
 
   const serviceKeys = ['gifting', 'corporate'] as const
   const serviceIcons: Record<(typeof serviceKeys)[number], string> = {

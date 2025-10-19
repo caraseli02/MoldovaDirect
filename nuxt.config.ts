@@ -12,6 +12,9 @@ export default defineNuxtConfig({
     "shadcn-nuxt",
     "@vite-pwa/nuxt",
   ],
+  image: {
+    domains: ["images.unsplash.com"],
+  },
   runtimeConfig: {
     // Private keys (only available on server-side)
     supabaseServiceKey:
