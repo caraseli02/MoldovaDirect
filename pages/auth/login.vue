@@ -27,13 +27,13 @@
             <!-- Alert messages with improved mobile styling -->
             <Transition name="slide-fade">
               <Alert
-                v-if="error"
+                v-if="displayError"
                 variant="destructive"
                 class="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20"
               >
                 <AlertCircle class="h-5 w-5 text-red-500 dark:text-red-400" aria-hidden="true" />
                 <AlertDescription class="text-sm text-red-800 dark:text-red-300">
-                  {{ error }}
+                  {{ displayError }}
                 </AlertDescription>
               </Alert>
             </Transition>
@@ -166,8 +166,10 @@
             <!-- Primary action button with mobile optimization and accessibility -->
             <Button
               type="submit"
-              :disabled="loading || !isFormValid"
-              class="relative w-full flex justify-center items-center py-4 px-4 min-h-[48px] text-base font-semibold rounded-xl shadow-lg"
+              :disabled="isLoginDisabled"
+              :aria-disabled="isLoginDisabled"
+              class="relative w-full flex justify-center items-center py-4 px-4 min-h-[48px] text-base font-semibold rounded-xl shadow-lg transition-opacity"
+              :class="{ 'opacity-60 cursor-not-allowed pointer-events-none': isLoginDisabled }"
               :aria-label="loading ? $t('auth.accessibility.signingIn') : $t('auth.accessibility.signInButton')"
               :aria-describedby="loading ? 'login-status' : undefined"
             >
@@ -196,8 +198,10 @@
               type="button"
               variant="outline"
               @click="handleMagicLink"
-              :disabled="loadingMagic || !form.email"
-              class="relative w-full flex justify-center items-center py-4 px-4 min-h-[48px] text-base font-medium rounded-xl"
+              :disabled="isMagicLinkDisabled"
+              :aria-disabled="isMagicLinkDisabled"
+              class="relative w-full flex justify-center items-center py-4 px-4 min-h-[48px] text-base font-medium rounded-xl transition-opacity"
+              :class="{ 'opacity-60 cursor-not-allowed pointer-events-none': isMagicLinkDisabled }"
               :aria-label="loadingMagic ? $t('auth.accessibility.sendingMagicLink') : $t('auth.accessibility.magicLinkButton')"
               :aria-describedby="loadingMagic ? 'magic-link-status' : 'magic-link-desc'"
             >
@@ -226,6 +230,8 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { AlertCircle, CheckCircle2 } from 'lucide-vue-next'
+import { useAuth } from '~/composables/useAuth'
+import { useAuthMessages } from '~/composables/useAuthMessages'
 
 // Apply guest middleware - redirect authenticated users
 definePageMeta({
@@ -233,31 +239,42 @@ definePageMeta({
 })
 
 const supabase = useSupabaseClient()
-const user = useSupabaseUser()
 const { t } = useI18n()
 const localePath = useLocalePath()
 const route = useRoute()
+const {
+  error: authError,
+  isAccountLocked,
+  getUnlockTime,
+  clearError,
+  ensureInitialized,
+  triggerLockout
+} = useAuth()
 
-// Handle redirect after successful login
-const handleRedirectAfterLogin = () => {
-  const redirect = route.query.redirect as string
-  if (redirect && redirect.startsWith('/')) {
-    return navigateTo(redirect)
-  }
-  return navigateTo(localePath('/account'))
-}
+const { getAccountLockoutMessage, translateAuthError } = useAuthMessages()
 
 const form = ref({
   email: '',
   password: ''
 })
 
-const error = ref('')
+// Handle redirect after successful login
+const handleRedirectAfterLogin = async () => {
+  const redirect = route.query.redirect as string
+  if (redirect && redirect.startsWith('/')) {
+    await navigateTo(redirect)
+    return
+  }
+
+  await navigateTo(localePath('/account'))
+}
+
 const success = ref('')
-const loading = ref(false)
 const loadingMagic = ref(false)
 const showPassword = ref(false)
 const rememberMe = ref(false)
+const localError = ref('')
+const loading = ref(false)
 
 // Field-level validation errors
 const emailError = ref('')
@@ -272,6 +289,14 @@ const isFormValid = computed(() => {
          form.value.password && 
          !emailError.value && 
          !passwordError.value
+})
+
+const isLoginDisabled = computed(() => {
+  return loading.value || !isFormValid.value || isAccountLocked.value
+})
+
+const isMagicLinkDisabled = computed(() => {
+  return loadingMagic.value || !form.value.email || isAccountLocked.value
 })
 
 // Field validation methods
@@ -318,26 +343,44 @@ const togglePasswordVisibility = () => {
 }
 
 const handleLogin = async () => {
-  error.value = ''
+  if (loading.value) {
+    return
+  }
+
+  localError.value = ''
   success.value = ''
+  clearError()
+
+  if (isAccountLocked.value) {
+    return
+  }
+
   loading.value = true
   
   try {
-    const { error: authError } = await supabase.auth.signInWithPassword({
+    const { data, error: authErr } = await supabase.auth.signInWithPassword({
       email: form.value.email,
       password: form.value.password
     })
 
-    if (authError) {
-      throw authError
+    if (authErr) {
+      if (authErr.message?.includes('Too many requests')) {
+        triggerLockout(15)
+        localError.value = translateAuthError('Too many requests', 'login')
+      } else {
+        localError.value = translateAuthError(authErr.message, 'login')
+      }
+      throw authErr
     }
 
-    success.value = t('auth.loginSuccess')
-    
-    // Handle redirect after successful login (Requirement 10.2)
-    await handleRedirectAfterLogin()
+    if (data?.user) {
+      success.value = t('auth.loginSuccess')
+      await handleRedirectAfterLogin()
+    }
   } catch (err: any) {
-    error.value = err.message || t('auth.loginError')
+    if (!localError.value) {
+      localError.value = err?.message || t('auth.loginError')
+    }
   } finally {
     loading.value = false
   }
@@ -345,11 +388,11 @@ const handleLogin = async () => {
 
 const handleMagicLink = async () => {
   if (!form.value.email) {
-    error.value = t('auth.emailRequired')
+    localError.value = t('auth.emailRequired')
     return
   }
 
-  error.value = ''
+  localError.value = ''
   success.value = ''
   loadingMagic.value = true
 
@@ -367,11 +410,38 @@ const handleMagicLink = async () => {
 
     success.value = t('auth.magicLinkSent')
   } catch (err: any) {
-    error.value = err.message || t('auth.magicLinkError')
+    localError.value = err.message || t('auth.magicLinkError')
   } finally {
     loadingMagic.value = false
   }
 }
+
+const lockoutMessage = computed(() => {
+  if (!isAccountLocked.value) {
+    return ''
+  }
+
+  const unlockTime = getUnlockTime()
+  if (!unlockTime) {
+    return ''
+  }
+
+  return getAccountLockoutMessage(unlockTime).message
+})
+
+watch(isAccountLocked, (locked) => {
+  if (!locked) {
+    localError.value = ''
+  }
+})
+
+const displayError = computed(() => {
+  return lockoutMessage.value || localError.value || authError.value || ''
+})
+
+onMounted(async () => {
+  await ensureInitialized()
+})
 
 useHead({
   title: t('auth.signIn')
