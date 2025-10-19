@@ -254,7 +254,7 @@ export default defineEventHandler(async (event) => {
     const transformedProducts = products?.map((product: any) => ({
       id: product.id,
       sku: product.sku,
-      slug: product.sku.toLowerCase(), // Generate slug from SKU
+      slug: product.sku, // Use SKU as slug to match product detail lookup
       name: product.name_translations,
       shortDescription: product.description_translations,
       price: product.price_eur,
