@@ -862,7 +862,160 @@
       "maxPrice": "Max Price",
       "removeFilter": "Remove {filter} filter",
       "unknownCategory": "Unknown Category"
-    }
+    },
+    "hero": {
+      "seasonal": "Seasonal highlights",
+      "title": "Discover Moldova's signature flavors",
+      "subtitle": "Shop curated wines, pantry staples, and handmade treats delivered across Spain.",
+      "cta": "Browse the collection"
+    },
+    "discovery": {
+      "title": "Find the right experience",
+      "description": "Use smart filters or jump into ready-made collections for tonight's plans.",
+      "collections": {
+        "celebration": "Celebration wines",
+        "weeknight": "Weeknight essentials",
+        "gift": "Gift-ready sets",
+        "cellar": "Cellar staples"
+      }
+    },
+    "toggles": {
+      "inStock": "In-stock only",
+      "featured": "Featured picks"
+    },
+    "filterSummary": {
+      "title": "Active filters",
+      "clear": "Reset filters"
+    },
+    "chips": {
+      "category": "Category: {value}",
+      "priceMin": "Min €{value}",
+      "priceMax": "Max €{value}",
+      "inStock": "In stock",
+      "featured": "Featured",
+      "attribute": "{label}: {value}"
+    },
+    "recentlyViewed": {
+      "title": "Recently viewed",
+      "subtitle": "Continue where you left off and compare favourites.",
+      "empty": "Start exploring to build your tasting history."
+    },
+    "editorial": {
+      "title": "From the Moldova Direct journal",
+      "subtitle": "Stories, pairing tips, and travel notes from our producers.",
+      "cta": "Read story",
+      "stories": {
+        "wineries": {
+          "title": "Meet the winemakers",
+          "description": "Step inside family cellars crafting limited-batch vintages.",
+          "tag": "Winery spotlight"
+        },
+        "pairings": {
+          "title": "Perfect pairings",
+          "description": "Chef-inspired combinations to elevate your next dinner.",
+          "tag": "Pairing guide"
+        },
+        "heritage": {
+          "title": "Taste of heritage",
+          "description": "Explore Moldovan regions and their protected delicacies.",
+          "tag": "Cultural notes"
+        }
+      }
+    },
+    "pagination": {
+      "pageOf": "Page {page} of {total}",
+      "showing": "Total of {count} products"
+    },
+    "story": {
+      "title": "Tasting journey",
+      "tastingNotes": "Tasting notes",
+      "pairings": "Pairing ideas",
+      "awards": "Accolades",
+      "origin": "Origin story",
+      "producerFallback": "Crafted with care by Moldovan producers in {category}.",
+      "defaultNotes": "Ripe berries|Sun-warmed stone fruit|Silky vanilla",
+      "defaultPairings": "Cheeses from the Carpathians|Herb-roasted meats|Freshly baked bread",
+      "originFallback": "Harvested near {origin} following traditional methods.",
+      "originCategoryFallback": "A signature creation from our {category} collection.",
+      "noAwards": "Be the first to celebrate this release."
+    },
+    "socialProof": {
+      "title": "Loved by customers",
+      "subtitle": "Real feedback from tastings, supper clubs, and gift orders.",
+      "rating": "{rating} ★ average from {count}+ reviews",
+      "highlights": "Balanced sweetness|Elegant finish|Pairs beautifully with tapas",
+      "cta": "Write a review"
+    },
+    "trust": {
+      "title": "Shop with confidence",
+      "shipping": "48h delivery across Spain & EU-friendly logistics.",
+      "returns": "30-day hassle-free returns.",
+      "authentic": "Authenticity guaranteed from Moldovan producers.",
+      "payments": "Secure payments with major cards and Bizum.",
+      "support": "Personalised concierge support in EN/ES/RO/RU."
+    },
+    "stock": {
+      "eta": "Order today for dispatch by {date}",
+      "urgencyLow": "Only {count} left in stock – almost gone!",
+      "urgencyMedium": "Just {count} bottles remaining.",
+      "status": {
+        "inStock": "Ready to ship",
+        "lowStock": "{count} remaining",
+        "outOfStock": "Temporarily sold out"
+      }
+    },
+    "bundle": {
+      "title": "Build a Moldovan gift box",
+      "description": "Combine complementary flavours and save with curated add-ons.",
+      "cta": "Preview bundle savings"
+    },
+    "faq": {
+      "title": "Product FAQs",
+      "items": {
+        "delivery": {
+          "question": "How fast do you deliver?",
+          "answer": "Orders placed before 16:00 ship the same day and arrive within 48 hours in mainland Spain."
+        },
+        "storage": {
+          "question": "How should I store it?",
+          "answer": "Keep in a cool, dry space away from direct sunlight. Wines rest best between 12–18°C."
+        },
+        "allergens": {
+          "question": "Does it contain allergens?",
+          "answer": "Full allergen and ingredient details are listed on the label and product page. Contact us for specifics."
+        },
+        "returns": {
+          "question": "What if something arrives damaged?",
+          "answer": "Let us know within 7 days and we’ll organise a replacement or full refund immediately."
+        }
+      }
+    },
+    "sustainability": {
+      "title": "Origin & quality",
+      "subtitle": "Each label includes certifications and community impact details.",
+      "badges": {
+        "organic": "Organic farming certified",
+        "handcrafted": "Handcrafted in small batches",
+        "familyOwned": "Family-owned producer",
+        "limited": "Limited release edition",
+        "heritage": "Protected geographical indication"
+      }
+    },
+    "related": {
+      "title": "Pairs well with…",
+      "subtitle": "Complete the experience with these curated recommendations."
+    },
+    "actions": {
+      "addToWishlist": "Save to wishlist",
+      "addedToWishlist": "In your wishlist",
+      "share": "Share",
+      "linkCopied": "Link copied to clipboard!",
+      "shareError": "Sharing failed. Try copying the link.",
+      "sharedSuccess": "Shared—thanks for spreading the word!",
+      "shareText": "Discover this Moldovan favourite with me.",
+      "copyFallback": "Copy this link to share with friends."
+    },
+    "commonProduct": "this product"
   },
   "footer": {
     "terms": "Terms and Conditions",

@@ -862,7 +862,160 @@
       "maxPrice": "Preț Maxim",
       "removeFilter": "Elimină filtrul {filter}",
       "unknownCategory": "Categorie Necunoscută"
-    }
+    },
+    "hero": {
+      "seasonal": "Recomandări de sezon",
+      "title": "Descoperă aromele emblematice ale Moldovei",
+      "subtitle": "Alege vinuri curate, delicatese artizanale și produse de cămară livrate în toată Spania.",
+      "cta": "Vezi colecția"
+    },
+    "discovery": {
+      "title": "Găsește experiența potrivită",
+      "description": "Aplică filtre inteligente sau intră în colecții gata pregătite pentru planurile tale.",
+      "collections": {
+        "celebration": "Vinuri de sărbătoare",
+        "weeknight": "Preferate pentru timpul săptămânii",
+        "gift": "Cadouri pregătite",
+        "cellar": "Clasice de pivniță"
+      }
+    },
+    "toggles": {
+      "inStock": "Doar în stoc",
+      "featured": "Selecții recomandate"
+    },
+    "filterSummary": {
+      "title": "Filtre active",
+      "clear": "Resetează filtrele"
+    },
+    "chips": {
+      "category": "Categorie: {value}",
+      "priceMin": "Min. €{value}",
+      "priceMax": "Max. €{value}",
+      "inStock": "În stoc",
+      "featured": "Recomandat",
+      "attribute": "{label}: {value}"
+    },
+    "recentlyViewed": {
+      "title": "Văzute recent",
+      "subtitle": "Continuă de unde ai rămas și compară preferatele.",
+      "empty": "Începe explorarea pentru a-ți construi istoricul de degustări."
+    },
+    "editorial": {
+      "title": "Din jurnalul Moldova Direct",
+      "subtitle": "Povești, idei de asortare și note de călătorie de la producători.",
+      "cta": "Citește articolul",
+      "stories": {
+        "wineries": {
+          "title": "Cunoaște cramele",
+          "description": "Intră în pivnițe de familie cu loturi limitate.",
+          "tag": "Cramă în prim-plan"
+        },
+        "pairings": {
+          "title": "Asocieri perfecte",
+          "description": "Combinări inspirate de bucătari pentru cina ta.",
+          "tag": "Ghid de asocieri"
+        },
+        "heritage": {
+          "title": "Gust de tradiție",
+          "description": "Descoperă regiunile Moldovei și produsele lor protejate.",
+          "tag": "Note culturale"
+        }
+      }
+    },
+    "pagination": {
+      "pageOf": "Pagina {page} din {total}",
+      "showing": "În total {count} produse"
+    },
+    "story": {
+      "title": "Călătorie gustativă",
+      "tastingNotes": "Note de degustare",
+      "pairings": "Idei de asortare",
+      "awards": "Distincții",
+      "origin": "Povestea originii",
+      "producerFallback": "Realizat cu grijă de producători moldoveni din categoria {category}.",
+      "defaultNotes": "Fructe roșii coapte|Fructe cu sâmbure coapte la soare|Vanilie catifelată",
+      "defaultPairings": "Brânzeturi din Carpați|Carne friptă cu ierburi|Pâine proaspăt coaptă",
+      "originFallback": "Recoltat lângă {origin} respectând metode tradiționale.",
+      "originCategoryFallback": "O creație emblematică din colecția noastră de {category}.",
+      "noAwards": "Fii primul care celebrează acest produs."
+    },
+    "socialProof": {
+      "title": "Îndrăgit de clienți",
+      "subtitle": "Feedback real din degustări, cine și cadouri.",
+      "rating": "Media {rating} ★ din peste {count} recenzii",
+      "highlights": "Dulceață echilibrată|Final elegant|Se potrivește cu tapas",
+      "cta": "Scrie o recenzie"
+    },
+    "trust": {
+      "title": "Cumpără cu încredere",
+      "shipping": "Livrare în 48h în Spania și logistică prietenoasă cu UE.",
+      "returns": "Retur simplu în 30 de zile.",
+      "authentic": "Autenticitate garantată de producători moldoveni.",
+      "payments": "Plăți sigure cu cardurile principale și Bizum.",
+      "support": "Suport personalizat în RO/ES/EN/RU."
+    },
+    "stock": {
+      "eta": "Comandă azi pentru expediere până la {date}",
+      "urgencyLow": "Au rămas doar {count} bucăți – grăbește-te!",
+      "urgencyMedium": "Mai sunt disponibile {count} sticle.",
+      "status": {
+        "inStock": "Gata de expediat",
+        "lowStock": "Au rămas {count}",
+        "outOfStock": "Momentan epuizat"
+      }
+    },
+    "bundle": {
+      "title": "Creează un pachet cadou moldovenesc",
+      "description": "Combină arome complementare și economisește cu recomandările noastre.",
+      "cta": "Vezi economiile pachetului"
+    },
+    "faq": {
+      "title": "Întrebări frecvente",
+      "items": {
+        "delivery": {
+          "question": "Cât durează livrarea?",
+          "answer": "Comenzile plasate înainte de 16:00 pleacă în aceeași zi și ajung în 48h în peninsula iberică."
+        },
+        "storage": {
+          "question": "Cum păstrez produsul?",
+          "answer": "Păstrează-l într-un loc răcoros și uscat, ferit de lumină. Vinurile se păstrează ideal între 12–18°C."
+        },
+        "allergens": {
+          "question": "Conține alergeni?",
+          "answer": "Eticheta și pagina produsului indică toți alergenii. Scrie-ne dacă ai nevoie de detalii suplimentare."
+        },
+        "returns": {
+          "question": "Ce fac dacă ajunge deteriorat?",
+          "answer": "Anunță-ne în primele 7 zile și organizăm imediat înlocuire sau rambursare."
+        }
+      }
+    },
+    "sustainability": {
+      "title": "Origine și calitate",
+      "subtitle": "Fiecare etichetă evidențiază certificări și impactul în comunitate.",
+      "badges": {
+        "organic": "Agricultură ecologică certificată",
+        "handcrafted": "Lucrat manual în loturi mici",
+        "familyOwned": "Producător de familie",
+        "limited": "Ediție limitată",
+        "heritage": "Indicație geografică protejată"
+      }
+    },
+    "related": {
+      "title": "Se potrivește cu…",
+      "subtitle": "Completează experiența cu aceste recomandări curate."
+    },
+    "actions": {
+      "addToWishlist": "Salvează în favorite",
+      "addedToWishlist": "În lista ta de favorite",
+      "share": "Distribuie",
+      "linkCopied": "Link copiat!",
+      "shareError": "Distribuirea a eșuat. Copiază linkul.",
+      "sharedSuccess": "Mulțumim că ai împărtășit descoperirea!",
+      "shareText": "Descoperă acest favorit moldovenesc alături de mine.",
+      "copyFallback": "Copiază linkul și trimite-l prietenilor."
+    },
+    "commonProduct": "acest produs"
   },
   "footer": {
     "terms": "Termeni și Condiții",

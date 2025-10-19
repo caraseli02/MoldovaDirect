@@ -6,8 +6,8 @@
       class="hidden lg:block w-80 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 h-full overflow-y-auto"
     >
       <div class="p-6">
-        <div class="flex items-center justify-between mb-6">
-          <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+        <div class="flex items-center justify-between mb-6" :class="{ 'justify-end': !showTitle }">
+          <h2 v-if="showTitle" class="text-lg font-semibold text-gray-900 dark:text-white">
             {{ $t('products.filters.title') }}
           </h2>
           <button
@@ -55,7 +55,7 @@
         >
           <!-- Mobile Header -->
           <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+            <h2 v-if="showTitle" class="text-lg font-semibold text-gray-900 dark:text-white">
               {{ $t('products.filters.title') }}
             </h2>
             <div class="flex items-center space-x-2">
@@ -118,6 +118,7 @@ interface Props {
     attributes: AttributeFilter[]
   }
   filteredProductCount?: number
+  showTitle?: boolean
 }
 
 interface Emits {
@@ -126,7 +127,8 @@ interface Emits {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  filteredProductCount: 0
+  filteredProductCount: 0,
+  showTitle: true
 })
 
 const emit = defineEmits<Emits>()
