@@ -40,8 +40,10 @@
 
             <!-- Search -->
             <Button
+              type="button"
               variant="ghost"
               size="icon"
+              :aria-label="t('common.search')"
               class="p-2 text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -52,18 +54,25 @@
             </Button>
 
             <!-- Account -->
-            <NuxtLink :to="localePath('/account')"
-              class="p-2 text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+            <NuxtLink
+              :to="localePath('/account')"
+              :aria-label="accountLabel"
+              class="p-2 text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+            >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
+              <span class="sr-only">{{ accountLabel }}</span>
             </NuxtLink>
 
             <!-- Cart -->
-            <NuxtLink :to="localePath('/cart')"
-              class="p-2 text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors relative">
+            <NuxtLink
+              :to="localePath('/cart')"
+              :aria-label="cartAriaLabel"
+              class="p-2 text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors relative"
+            >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -71,7 +80,9 @@
               </svg>
               <!-- Cart count badge -->
               <span v-if="cartItemsCount > 0"
-                class="absolute -top-1 -right-1 bg-primary-600 dark:bg-primary-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                class="absolute -top-1 -right-1 bg-primary-600 dark:bg-primary-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
+                aria-hidden="true"
+              >
                 {{ cartItemsCount }}
               </span>
             </NuxtLink>
@@ -81,8 +92,11 @@
           <div class="flex md:hidden items-center space-x-4">
 
             <!-- Cart - Essential for e-commerce -->
-            <NuxtLink :to="localePath('/cart')"
-              class="p-2 text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors relative">
+            <NuxtLink
+              :to="localePath('/cart')"
+              :aria-label="cartAriaLabel"
+              class="p-2 text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors relative"
+            >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -90,15 +104,20 @@
               </svg>
               <!-- Cart count badge -->
               <span v-if="cartItemsCount > 0"
-                class="absolute -top-1 -right-1 bg-primary-600 dark:bg-primary-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold">
+                class="absolute -top-1 -right-1 bg-primary-600 dark:bg-primary-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold"
+                aria-hidden="true"
+              >
                 {{ cartItemsCount }}
               </span>
             </NuxtLink>
 
             <!-- Mobile menu button -->
             <Button
+              type="button"
               variant="ghost"
               @click="toggleMobileMenu"
+              :aria-label="mobileMenuLabel"
+              :aria-expanded="mobileMenuOpen"
               class="relative p-2 text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-lg"
               :class="{ 'bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400': mobileMenuOpen }"
             >
@@ -129,7 +148,7 @@ import LanguageSwitcher from './LanguageSwitcher.vue'
 import MobileNav from './MobileNav.vue'
 import ThemeToggle from './ThemeToggle.vue'
 
-const { locale } = useI18n()
+const { t, locale } = useI18n()
 const localePath = useLocalePath()
 const mobileMenuOpen = ref(false)
 
@@ -151,5 +170,14 @@ onUnmounted(() => {
 // Cart functionality
 const { itemCount } = useCart()
 const cartItemsCount = computed(() => itemCount.value)
+
+const cartAriaLabel = computed(() => {
+  const base = t('common.cart')
+  return cartItemsCount.value > 0 ? `${base} (${cartItemsCount.value})` : base
+})
+
+const accountLabel = computed(() => t('common.account'))
+
+const mobileMenuLabel = computed(() => mobileMenuOpen.value ? t('common.close') : t('common.menu'))
 
 </script>

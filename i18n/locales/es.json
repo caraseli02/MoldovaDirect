@@ -46,6 +46,7 @@
     "error": "Error",
     "errorGeneric": "Ha ocurrido un error. Por favor, inténtalo de nuevo.",
     "menu": "Menú",
+    "close": "Cerrar",
     "preferences": "Preferencias",
     "selectAll": "Seleccionar todo",
     "deselectAll": "Deseleccionar todo",
@@ -556,6 +557,7 @@
       "subtitle": "Vinos seleccionados, alimentos artesanales y regalos festivos enviados directamente desde productores moldavos a tu hogar en España.",
       "primaryCta": "Comprar colecciones destacadas",
       "secondaryCta": "Conoce a nuestros productores",
+      "imageAlt": "Cesta gourmet con vino y productos moldavos",
       "trustBadge": "Más de 2.000 entregas en toda España",
       "highlights": {
         "orders": {
@@ -598,22 +600,54 @@
         "wines": {
           "title": "Vinos emblemáticos",
           "description": "Pequeñas partidas y bodegas galardonadas.",
+          "imageAlt": "Botellas de vino tinto sobre una mesa",
           "cta": "Comprar vinos"
         },
         "gourmet": {
           "title": "Despensa gourmet",
           "description": "Conservas artesanas, miel y dulces de autor.",
+          "imageAlt": "Selección de productos gourmet artesanales moldavos",
           "cta": "Descubrir despensa"
         },
         "gifts": {
           "title": "Cestas regalo",
           "description": "Sets listos para regalar en fiestas y celebraciones.",
+          "imageAlt": "Cajas de regalo envueltas con lazos",
           "cta": "Ver cestas"
         },
         "subscriptions": {
           "title": "Cajas mensuales",
           "description": "Degustaciones de temporada con entregas programadas.",
+          "imageAlt": "Caja mensual de degustación con vino y delicias",
           "cta": "Ver suscripciones"
+        }
+      }
+    },
+    "collections": {
+      "badge": "Destacados de temporada",
+      "title": "Compra nuestras colecciones más queridas",
+      "subtitle": "Descubre lanzamientos curados con vinos moldavos premium, alimentos gourmet e ideas para regalar.",
+      "cards": {
+        "reserve": {
+          "title": "Llegadas de bodega reserva",
+          "description": "Ediciones limitadas de bodegas boutique, listas para descorchar en celebraciones.",
+          "cta": "Explorar vinos reserva",
+          "tag": "Novedad",
+          "imageAlt": "Sumiller presentando botellas de vino premium."
+        },
+        "artisan": {
+          "title": "Despensa artesanal",
+          "description": "Miel, conservas y charcutería perfectas para noches de maridaje sin esfuerzo.",
+          "cta": "Llenar la despensa",
+          "tag": "Selección del editor",
+          "imageAlt": "Tabla gourmet con quesos, pan y condimentos."
+        },
+        "experience": {
+          "title": "Experiencias de degustación de fin de semana",
+          "description": "Entregas con guías de maridaje, listas de reproducción y consejos de chefs para veladas memorables.",
+          "cta": "Reservar una caja de degustación",
+          "tag": "Edición limitada",
+          "imageAlt": "Amigos disfrutando una cata de vino y comida en casa."
         }
       }
     },

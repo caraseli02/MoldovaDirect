@@ -1,6 +1,7 @@
 <template>
   <div class="bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100">
     <HomeHeroSection :highlights="heroHighlights" />
+    <HomeCollectionsShowcase />
     <HomeCategoryGrid :categories="categoryCards" />
     <HomeHowItWorksSection :steps="howItWorksSteps" />
     <HomeSocialProofSection

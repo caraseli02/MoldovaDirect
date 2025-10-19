@@ -46,6 +46,7 @@
     "error": "Eroare",
     "errorGeneric": "A apărut o eroare. Te rugăm să încerci din nou.",
     "menu": "Meniu",
+    "close": "Închide",
     "preferences": "Preferințe",
     "selectAll": "Selectează Tot",
     "deselectAll": "Deselectează Tot",
@@ -556,6 +557,7 @@
       "subtitle": "Vinuri atent alese, produse artizanale și cadouri festive trimise direct de la producători moldoveni la casa ta din Spania.",
       "primaryCta": "Cumpără colecțiile recomandate",
       "secondaryCta": "Cunoaște producătorii noștri",
+      "imageAlt": "Coș cadou cu vin și produse moldovenești",
       "trustBadge": "Peste 2.000 de livrări în toată Spania",
       "highlights": {
         "orders": {
@@ -598,22 +600,54 @@
         "wines": {
           "title": "Vinuri de semnătură",
           "description": "Ediții limitate și crame premiate.",
+          "imageAlt": "Sticle de vin roșu pe o masă",
           "cta": "Cumpără vinuri"
         },
         "gourmet": {
           "title": "Cămara gourmet",
           "description": "Conserve artizanale, miere și delicii dulci.",
+          "imageAlt": "Selecție de produse gourmet artizanale din Moldova",
           "cta": "Descoperă cămara"
         },
         "gifts": {
           "title": "Coșuri cadou",
           "description": "Seturi gata de oferit pentru sărbători și ocazii speciale.",
+          "imageAlt": "Cutii de cadou împachetate cu funde",
           "cta": "Vezi coșurile"
         },
         "subscriptions": {
           "title": "Cutii lunare",
           "description": "Degustări de sezon livrate la intervalul ales.",
+          "imageAlt": "Cutie lunară de degustare cu vin și delicatese",
           "cta": "Află despre abonamente"
+        }
+      }
+    },
+    "collections": {
+      "badge": "Noutăți de sezon",
+      "title": "Descoperă colecțiile noastre preferate",
+      "subtitle": "Explorează selecții curatoriate cu vinuri moldovenești premium, delicii gourmet și idei de cadouri.",
+      "cards": {
+        "reserve": {
+          "title": "Sosiri din pivnița de rezervă",
+          "description": "Vintage-uri limitate de la crame boutique, gata de deschis la ocazii speciale.",
+          "cta": "Vezi vinurile reserve",
+          "tag": "Noutate",
+          "imageAlt": "Somelier prezentând sticle de vin premium."
+        },
+        "artisan": {
+          "title": "Cămară artizanală",
+          "description": "Miere, conserve și mezeluri alese pentru seri de pairing fără efort.",
+          "cta": "Completează cămara",
+          "tag": "Alegerea editorului",
+          "imageAlt": "Platou gourmet cu brânzeturi, pâine și condimente."
+        },
+        "experience": {
+          "title": "Experiențe de degustare pentru weekend",
+          "description": "Livrări cu ghiduri de pairing, playlisturi și sfaturi de la bucătari pentru seri memorabile.",
+          "cta": "Rezervă o cutie de degustare",
+          "tag": "Limitat",
+          "imageAlt": "Prieteni bucurându-se de o degustare de vin și mâncare acasă."
         }
       }
     },
