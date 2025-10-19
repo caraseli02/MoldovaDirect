@@ -78,6 +78,10 @@ export const useAuth = () => {
     authStore.clearLockout()
   }
 
+  const triggerLockout = (durationMinutes?: number) => {
+    return authStore.triggerLockout(durationMinutes)
+  }
+
   /**
    * Check if user has a specific role or permission
    * This can be extended based on future role-based access control requirements
@@ -268,6 +272,7 @@ export const useAuth = () => {
     // Utilities
     clearError,
     clearLockout,
+    triggerLockout,
     hasRole,
     canAccessRoute,
     redirectToLogin,
