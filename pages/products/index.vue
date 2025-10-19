@@ -72,22 +72,7 @@
         </div>
       </Transition>
 
-      <div class="mx-auto flex w-full max-w-7xl flex-col gap-8 px-4 pb-20 pt-10 sm:px-6 lg:flex-row lg:px-8" ref="contentContainer">
-        <aside class="hidden w-full max-w-xs shrink-0 lg:block">
-          <div class="sticky top-28 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-            <h2 class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-              {{ t('products.filters.title') }}
-            </h2>
-            <productFilterMain
-              :filters="filters"
-              :available-filters="availableFilters"
-              :filtered-product-count="products?.length || 0"
-              @update:filters="handleFiltersUpdate"
-              @apply-filters="handleApplyFilters()"
-            />
-          </div>
-        </aside>
-
+      <div class="mx-auto flex w-full max-w-7xl flex-col gap-8 px-4 pb-20 pt-10 sm:px-6 lg:px-8" ref="contentContainer">
         <div class="flex-1" ref="scrollContainer">
           <MobilePullToRefreshIndicator
             v-if="isMobile"
