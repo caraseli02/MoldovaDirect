@@ -46,6 +46,7 @@
     "error": "Eroare",
     "errorGeneric": "A apărut o eroare. Te rugăm să încerci din nou.",
     "menu": "Meniu",
+    "close": "Închide",
     "preferences": "Preferințe",
     "selectAll": "Selectează Tot",
     "deselectAll": "Deselectează Tot",
@@ -552,33 +553,240 @@
   },
   "home": {
     "hero": {
-      "title": "Produse Autentice Moldovenești",
-      "subtitle": "Descoperă aromele unice ale Moldovei cu livrare la domiciliu în Spania",
-      "cta": "Explorează Produsele"
-    },
-    "features": {
-      "quality": {
-        "title": "Calitate Premium",
-        "description": "Produse selectate direct de la cei mai buni producători moldoveni"
+      "title": "Gustă Moldova la fiecare livrare",
+      "subtitle": "Vinuri atent alese, produse artizanale și cadouri festive trimise direct de la producători moldoveni la casa ta din Spania.",
+      "primaryCta": "Cumpără colecțiile recomandate",
+      "secondaryCta": "Cunoaște producătorii noștri",
+      "imageAlt": "Coș cadou cu vin și produse moldovenești",
+      "trustBadge": "Peste 2.000 de livrări în toată Spania",
+      "highlights": {
+        "orders": {
+          "value": "2k+",
+          "label": "Comenzi livrate"
+        },
+        "delivery": {
+          "value": "48h",
+          "label": "Timp mediu în marile orașe"
+        },
+        "rating": {
+          "value": "4,9/5",
+          "label": "Scor de satisfacție al clienților"
+        }
       },
-      "delivery": {
-        "title": "Livrare Rapidă",
-        "description": "Livrare la domiciliu în toată Spania în 2-5 zile lucrătoare"
-      },
-      "authentic": {
-        "title": "100% Autentic",
-        "description": "Produse tradiționale moldovenești garantate"
-      },
-      "support": {
-        "title": "Suport 24/7",
-        "description": "Suntem aici să te ajutăm oricând"
+      "cards": {
+        "craft": {
+          "title": "Producători selectați",
+          "highlight": "Podgorii sustenabile și ferme de familie",
+          "description": "Colaborăm cu artizani moldoveni pentru a selecta ediții limitate și specialități de sezon care ajung impecabil.",
+          "alt": "Selecție de produse gourmet moldovenești"
+        },
+        "gift": {
+          "title": "Cadouri gata pregătite",
+          "highlight": "Coșuri și seturi de degustare curatoriate",
+          "description": "De la aniversări la cadouri corporate, echipa noastră creează asocieri inspirate cu ambalaj elegant."
+        },
+        "delivery": {
+          "title": "Livrare refrigerată",
+          "highlight": "Prospețime garantată până la ușă",
+          "description": "Logistica cu temperatură controlată garantează că fiecare sticlă și delicatese ajung exact ca în Moldova."
+        }
       }
     },
+    "categories": {
+      "title": "Începe călătoria",
+      "subtitle": "Explorează selecțiile noastre preferate și găsește combinația potrivită pentru orice moment.",
+      "viewAll": "Vezi toate produsele",
+      "items": {
+        "wines": {
+          "title": "Vinuri de semnătură",
+          "description": "Ediții limitate și crame premiate.",
+          "imageAlt": "Sticle de vin roșu pe o masă",
+          "cta": "Cumpără vinuri"
+        },
+        "gourmet": {
+          "title": "Cămara gourmet",
+          "description": "Conserve artizanale, miere și delicii dulci.",
+          "imageAlt": "Selecție de produse gourmet artizanale din Moldova",
+          "cta": "Descoperă cămara"
+        },
+        "gifts": {
+          "title": "Coșuri cadou",
+          "description": "Seturi gata de oferit pentru sărbători și ocazii speciale.",
+          "imageAlt": "Cutii de cadou împachetate cu funde",
+          "cta": "Vezi coșurile"
+        },
+        "subscriptions": {
+          "title": "Cutii lunare",
+          "description": "Degustări de sezon livrate la intervalul ales.",
+          "imageAlt": "Cutie lunară de degustare cu vin și delicatese",
+          "cta": "Află despre abonamente"
+        }
+      }
+    },
+    "collections": {
+      "badge": "Noutăți de sezon",
+      "title": "Descoperă colecțiile noastre preferate",
+      "subtitle": "Explorează selecții curatoriate cu vinuri moldovenești premium, delicii gourmet și idei de cadouri.",
+      "cards": {
+        "reserve": {
+          "title": "Sosiri din pivnița de rezervă",
+          "description": "Vintage-uri limitate de la crame boutique, gata de deschis la ocazii speciale.",
+          "cta": "Vezi vinurile reserve",
+          "tag": "Noutate",
+          "imageAlt": "Somelier prezentând sticle de vin premium."
+        },
+        "artisan": {
+          "title": "Cămară artizanală",
+          "description": "Miere, conserve și mezeluri alese pentru seri de pairing fără efort.",
+          "cta": "Completează cămara",
+          "tag": "Alegerea editorului",
+          "imageAlt": "Platou gourmet cu brânzeturi, pâine și condimente."
+        },
+        "experience": {
+          "title": "Experiențe de degustare pentru weekend",
+          "description": "Livrări cu ghiduri de pairing, playlisturi și sfaturi de la bucătari pentru seri memorabile.",
+          "cta": "Rezervă o cutie de degustare",
+          "tag": "Limitat",
+          "imageAlt": "Prieteni bucurându-se de o degustare de vin și mâncare acasă."
+        }
+      }
+    },
+    "howItWorks": {
+      "title": "Cum funcționează Moldova Direct",
+      "subtitle": "De la podgorie la ușa ta, aducem Moldova mai aproape ca oricând.",
+      "steps": {
+        "choose": {
+          "title": "Alege preferatele",
+          "description": "Selectează colecții curatoriate, ediții limitate și descoperiri regionale."
+        },
+        "prepare": {
+          "title": "Pregătim în Moldova",
+          "description": "Producătorii împachetează manual fiecare comandă cu materiale protectoare și sustenabile."
+        },
+        "deliver": {
+          "title": "Livrare în toată Spania",
+          "description": "Curier rapid cu tracking, transport refrigerat și notificări proactive."
+        }
+      }
+    },
+    "socialProof": {
+      "badge": "Parteneri certificați DOP & IGP",
+      "title": "Iubiți de gurmanzi din întreaga Spanie",
+      "subtitle": "Alătură-te comunității care celebrează măiestria moldovenească.",
+      "testimonials": {
+        "maria": {
+          "name": "Maria, Barcelona",
+          "quote": "Vinurile spumante au fost o revelație, iar livrarea a sosit exact la timp pentru cina noastră.",
+          "location": "Proprietar de restaurant"
+        },
+        "carlos": {
+          "name": "Carlos, Madrid",
+          "quote": "Coșurile lor au simplificat cadourile corporate—premium, autentice și impecabil prezentate.",
+          "location": "Client corporate"
+        },
+        "sofia": {
+          "name": "Sofia, Valencia",
+          "quote": "Îmi plac cutiile sezoniere; sosesc reci și includ povești de la fiecare producător.",
+          "location": "Membru abonament"
+        }
+      },
+      "logos": [
+        "Château Purcari",
+        "Cricova Cellars",
+        "Moldova Wine Guild",
+        "Slow Food Alliance"
+      ]
+    },
     "featuredProducts": {
-      "title": "Produse Recomandate",
-      "noProducts": "Nu sunt produse recomandate disponibile în acest moment.",
-      "viewAll": "Vezi Toate Produsele",
-      "error": "Eroare la încărcarea produselor recomandate."
+      "title": "Alegerea editorului",
+      "subtitle": "Lansări limitate și best-seller-e care ne inspiră săptămâna aceasta.",
+      "noProducts": "Momentan nu sunt produse recomandate. Explorează întregul catalog.",
+      "viewAll": "Vezi toate produsele",
+      "error": "A apărut o problemă la încărcarea produselor recomandate."
+    },
+    "story": {
+      "title": "De ce Moldova Direct?",
+      "subtitle": "Misiunea noastră este să facem accesibile ingredientele tradiționale și vinurile Moldovei pentru toți curioșii.",
+      "cta": "Descoperă povestea noastră",
+      "points": {
+        "heritage": {
+          "title": "Moștenire pe care o guști",
+          "description": "Fiecare colecție pune în valoare soiuri autohtone, indicații protejate și rețete regionale."
+        },
+        "craft": {
+          "title": "Selecție orientată spre artizanat",
+          "description": "Lucrăm cu cooperative mici și gospodării familiale care pun pe primul loc agricultura sustenabilă."
+        },
+        "pairings": {
+          "title": "Asocieri & expertiză",
+          "description": "Notele de somelier și recomandările de plating însoțesc fiecare livrare."
+        }
+      },
+      "timeline": {
+        "title": "Din Moldova în Spania",
+        "description": "Repere care au modelat comunitatea noastră.",
+        "items": [
+          {
+            "year": "2018",
+            "title": "Primele parteneriate de recoltă",
+            "description": "Am lansat proiectul alături de trei crame vizionare din regiunea Codru."
+          },
+          {
+            "year": "2020",
+            "title": "Livrare națională",
+            "description": "Am extins lanțul frigorific pentru a acoperi toate provinciile din Spania."
+          },
+          {
+            "year": "2023",
+            "title": "Colaborări culinare",
+            "description": "Am creat cutii sezoniere împreună cu bucătari și somelieri invitați."
+          }
+        ]
+      }
+    },
+    "services": {
+      "title": "Servicii pentru orice ocazie",
+      "subtitle": "De la cine intime la evenimente corporate, creăm experiențe moldovenești memorabile.",
+      "contactCta": "Discută cu specialiștii noștri",
+      "items": {
+        "gifting": {
+          "title": "Cadouri personale și aniversări",
+          "description": "Personalizează mesaje scrise de mână, calendarul livrărilor și prezentarea pentru surprize de impact.",
+          "cta": "Planifică un cadou"
+        },
+        "corporate": {
+          "title": "Soluții corporate și hospitality",
+          "description": "Creăm meniuri de degustare, coșuri în volum și selecții private label cu suport dedicat.",
+          "cta": "Solicită o propunere corporate"
+        }
+      }
+    },
+    "newsletter": {
+      "title": "Rămâi la curent cu noutățile",
+      "subtitle": "Află primul despre edițiile de sezon, ghidurile de pairing și invitațiile la degustări private.",
+      "placeholder": "Introdu adresa de email",
+      "cta": "Mă abonez",
+      "success": "Îți mulțumim! Vei primi următorul nostru newsletter în curând.",
+      "disclaimer": "Trimitem unul sau două emailuri pe lună și te poți dezabona oricând."
+    },
+    "faqPreview": {
+      "title": "Întrebări înainte de a comanda?",
+      "subtitle": "Am adunat informațiile esențiale pentru o primă livrare fără griji.",
+      "cta": "Vezi toate întrebările frecvente",
+      "items": {
+        "shipping": {
+          "question": "Cât durează livrarea în Spania?",
+          "answer": "Expediem de două ori pe săptămână din hub-ul nostru din Madrid, iar livrarea durează 48–72 de ore pentru majoritatea localităților."
+        },
+        "packaging": {
+          "question": "Comanda ajunge păstrată la rece?",
+          "answer": "Da. Ambalajele termoizolante mențin vinurile și produsele perisabile în condiții optime pe tot traseul."
+        },
+        "support": {
+          "question": "Pot primi recomandări personalizate?",
+          "answer": "Echipa noastră de concierge răspunde pe WhatsApp și email pentru a sugera asocieri și cutii personalizate."
+        }
+      }
     }
   },
   "products": {

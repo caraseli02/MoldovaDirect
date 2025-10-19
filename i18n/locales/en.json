@@ -46,6 +46,7 @@
     "error": "Error",
     "errorGeneric": "An error occurred. Please try again.",
     "menu": "Menu",
+    "close": "Close",
     "preferences": "Preferences",
     "selectAll": "Select All",
     "deselectAll": "Deselect All",
@@ -108,12 +109,31 @@
     "missingToken": "Reset token is missing. Please use the link from your email.",
     "accessibility": {
       "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "passwordVisible": "Password is now visible",
+      "passwordHidden": "Password is now hidden",
       "passwordToggleDescription": "Toggle password visibility",
-      "rememberMeDescription": "Remember my session on this device",
-      "forgotPasswordLink": "Link to reset password",
-      "signInButton": "Sign in button",
-      "magicLinkButton": "Magic link button",
-      "magicLinkDescription": "Send login link via email"
+      "passwordRequirements": "Password must be at least 8 characters with uppercase, lowercase, and number",
+      "confirmPasswordDescription": "Re-enter your password to confirm",
+      "rememberMeDescription": "Keep me signed in on this device",
+      "forgotPasswordLink": "Reset your password",
+      "signInButton": "Sign in to your account",
+      "signingIn": "Signing in to your account",
+      "processingLogin": "Processing your login request",
+      "magicLinkButton": "Send magic link to email",
+      "sendingMagicLink": "Sending magic link",
+      "magicLinkDescription": "We'll send you a secure link to sign in without a password",
+      "createAccountButton": "Create your account",
+      "creatingAccount": "Creating your account",
+      "processingRegistration": "Processing your registration",
+      "phoneOptional": "Phone number is optional",
+      "termsLink": "Read terms and conditions",
+      "privacyLink": "Read privacy policy",
+      "termsDescription": "You must accept the terms and conditions to create an account",
+      "passwordMatch": "Passwords match",
+      "resetPasswordButton": "Reset your password",
+      "resettingPassword": "Resetting your password",
+      "processingPasswordReset": "Processing your password reset request"
     },
     "errors": {
       "invalidCredentials": "Invalid email or password",
@@ -169,34 +189,6 @@
         "invalid": "Invalid verification token",
         "expired": "Verification token has expired"
       }
-    },
-    "accessibility": {
-      "showPassword": "Show password",
-      "hidePassword": "Hide password",
-      "passwordVisible": "Password is now visible",
-      "passwordHidden": "Password is now hidden",
-      "passwordToggleDescription": "Toggle password visibility",
-      "passwordRequirements": "Password must be at least 8 characters with uppercase, lowercase, and number",
-      "confirmPasswordDescription": "Re-enter your password to confirm",
-      "rememberMeDescription": "Keep me signed in on this device",
-      "forgotPasswordLink": "Reset your password",
-      "signInButton": "Sign in to your account",
-      "signingIn": "Signing in to your account",
-      "processingLogin": "Processing your login request",
-      "magicLinkButton": "Send magic link to email",
-      "sendingMagicLink": "Sending magic link",
-      "magicLinkDescription": "We'll send you a secure link to sign in without a password",
-      "createAccountButton": "Create your account",
-      "creatingAccount": "Creating your account",
-      "processingRegistration": "Processing your registration",
-      "phoneOptional": "Phone number is optional",
-      "termsLink": "Read terms and conditions",
-      "privacyLink": "Read privacy policy",
-      "termsDescription": "You must accept the terms and conditions to create an account",
-      "passwordMatch": "Passwords match",
-      "resetPasswordButton": "Reset your password",
-      "resettingPassword": "Resetting your password",
-      "processingPasswordReset": "Processing your password reset request"
     },
     "progress": {
       "step": "Step",
@@ -336,17 +328,6 @@
     "placed": "Placed",
     "shipped": "Shipped",
     "delivered": "Delivered",
-    "actions": "Actions",
-    "needHelp": "Need help with your order?",
-    "contactUs": "Contact us",
-    "swipeHint": "Swipe left or right to navigate sections",
-    "status": {
-      "pending": "Pending",
-      "processing": "Processing",
-      "shipped": "Shipped",
-      "delivered": "Delivered",
-      "cancelled": "Cancelled"
-    },
     "actions": {
       "reorder": "Reorder",
       "return": "Return Items",
@@ -356,6 +337,16 @@
       "confirmReturnMessage": "Are you sure you want to initiate a return for this order?",
       "initiateReturn": "Initiate Return",
       "printInvoice": "Print Invoice"
+    },
+    "needHelp": "Need help with your order?",
+    "contactUs": "Contact us",
+    "swipeHint": "Swipe left or right to navigate sections",
+    "status": {
+      "pending": "Pending",
+      "processing": "Processing",
+      "shipped": "Shipped",
+      "delivered": "Delivered",
+      "cancelled": "Cancelled"
     },
     "search": {
       "placeholder": "Search by order number or product name...",
@@ -562,33 +553,240 @@
   },
   "home": {
     "hero": {
-      "title": "Authentic Moldovan Products",
-      "subtitle": "Discover the unique flavors of Moldova with home delivery in Spain",
-      "cta": "Explore Products"
-    },
-    "features": {
-      "quality": {
-        "title": "Premium Quality",
-        "description": "Products selected directly from the best Moldovan producers"
+      "title": "Taste Moldova in Every Delivery",
+      "subtitle": "Curated wines, artisan foods, and celebratory gifts shipped directly from Moldovan producers to your home in Spain.",
+      "primaryCta": "Shop Featured Collections",
+      "secondaryCta": "Learn About Our Producers",
+      "imageAlt": "Gift hamper with Moldovan wine and gourmet products",
+      "trustBadge": "Over 2,000 deliveries across Spain",
+      "highlights": {
+        "orders": {
+          "value": "2k+",
+          "label": "Orders delivered"
+        },
+        "delivery": {
+          "value": "48h",
+          "label": "Average delivery to major cities"
+        },
+        "rating": {
+          "value": "4.9/5",
+          "label": "Customer satisfaction score"
+        }
       },
-      "delivery": {
-        "title": "Fast Delivery",
-        "description": "Home delivery throughout Spain in 2-5 business days"
-      },
-      "authentic": {
-        "title": "100% Authentic",
-        "description": "Guaranteed traditional Moldovan products"
-      },
-      "support": {
-        "title": "24/7 Support",
-        "description": "We're here to help you anytime"
+      "cards": {
+        "craft": {
+          "title": "Hand-picked producers",
+          "highlight": "Sustainable vineyards & family farms",
+          "description": "We partner with Moldovan artisans to select limited batches and seasonal specialties that travel beautifully.",
+          "alt": "Selection of Moldovan gourmet products"
+        },
+        "gift": {
+          "title": "Ready to gift",
+          "highlight": "Curated hampers and tasting sets",
+          "description": "From anniversaries to client surprises, our team builds thoughtful pairings with elegant packaging."
+        },
+        "delivery": {
+          "title": "Delivered chilled",
+          "highlight": "Freshness guaranteed door to door",
+          "description": "Temperature-controlled logistics ensure every bottle and delicacy arrives exactly as it left Moldova."
+        }
       }
     },
+    "categories": {
+      "title": "Start Your Journey",
+      "subtitle": "Explore our most-loved selections and find the perfect pairing for any occasion.",
+      "viewAll": "Browse all products",
+      "items": {
+        "wines": {
+          "title": "Signature Wines",
+          "description": "Small-batch vintages and award-winning cellars.",
+          "imageAlt": "Bottles of red wine on a table",
+          "cta": "Shop wines"
+        },
+        "gourmet": {
+          "title": "Gourmet Pantry",
+          "description": "Handmade preserves, honey, and artisanal treats.",
+          "imageAlt": "Selection of artisan Moldovan gourmet foods",
+          "cta": "Browse pantry"
+        },
+        "gifts": {
+          "title": "Gift Hampers",
+          "description": "Ready-to-gift sets for holidays and celebrations.",
+          "imageAlt": "Thoughtfully wrapped gift boxes with ribbons",
+          "cta": "See gift sets"
+        },
+        "subscriptions": {
+          "title": "Monthly Boxes",
+          "description": "Seasonal tastings delivered on your schedule.",
+          "imageAlt": "Monthly tasting box with wine and treats",
+          "cta": "Discover subscriptions"
+        }
+      }
+    },
+    "collections": {
+      "badge": "Seasonal highlights",
+      "title": "Shop our most-loved collections",
+      "subtitle": "Browse curated drops packed with premium Moldovan wines, gourmet foods, and gifting ideas.",
+      "cards": {
+        "reserve": {
+          "title": "Reserve cellar arrivals",
+          "description": "Limited vintage releases from boutique wineries, ready to uncork for celebrations.",
+          "cta": "Explore reserve wines",
+          "tag": "New arrivals",
+          "imageAlt": "Sommelier presenting bottles of premium wine."
+        },
+        "artisan": {
+          "title": "Artisan pantry staples",
+          "description": "Honey, preserves, and charcuterie chosen for effortless pairing nights.",
+          "cta": "Fill the pantry",
+          "tag": "Editor’s pick",
+          "imageAlt": "Gourmet spread of cheeses, bread, and condiments."
+        },
+        "experience": {
+          "title": "Weekend tasting experiences",
+          "description": "Deliveries with pairing guides, playlists, and chef tips for unforgettable evenings.",
+          "cta": "Book a tasting box",
+          "tag": "Limited",
+          "imageAlt": "Friends enjoying a curated wine and food tasting at home."
+        }
+      }
+    },
+    "howItWorks": {
+      "title": "How Moldova Direct Works",
+      "subtitle": "From vineyard to doorstep, we make it simple to enjoy Moldova without leaving home.",
+      "steps": {
+        "choose": {
+          "title": "Choose your favourites",
+          "description": "Pick from curated collections, limited drops, and regional discoveries."
+        },
+        "prepare": {
+          "title": "We prepare in Moldova",
+          "description": "Producers pack every order by hand with protective and eco-conscious materials."
+        },
+        "deliver": {
+          "title": "Delivered across Spain",
+          "description": "Fast courier delivery with tracking, chilled transport, and proactive updates."
+        }
+      }
+    },
+    "socialProof": {
+      "badge": "Authentic PDO & PGI partners",
+      "title": "Trusted by food lovers across Spain",
+      "subtitle": "Join a growing community of customers who celebrate Moldovan craftsmanship.",
+      "testimonials": {
+        "maria": {
+          "name": "María, Barcelona",
+          "quote": "The sparkling wines were a revelation and delivery was perfectly timed for our dinner party.",
+          "location": "Restaurant owner"
+        },
+        "carlos": {
+          "name": "Carlos, Madrid",
+          "quote": "Their hampers made corporate gifting effortless—premium, authentic, and beautifully presented.",
+          "location": "Corporate gifting client"
+        },
+        "sofia": {
+          "name": "Sofía, Valencia",
+          "quote": "I love the seasonal boxes; they arrive chilled and include stories from each producer.",
+          "location": "Subscription member"
+        }
+      },
+      "logos": [
+        "Château Purcari",
+        "Cricova Cellars",
+        "Moldova Wine Guild",
+        "Slow Food Alliance"
+      ]
+    },
     "featuredProducts": {
-      "title": "Featured Products",
-      "noProducts": "No featured products available at the moment.",
-      "viewAll": "View All Products",
-      "error": "Error loading featured products."
+      "title": "Editor’s Picks",
+      "subtitle": "Limited releases and best-sellers our team is loving this week.",
+      "noProducts": "No featured products are available at the moment. Please explore our full catalogue.",
+      "viewAll": "View all products",
+      "error": "There was a problem loading featured products."
+    },
+    "story": {
+      "title": "Why Moldova Direct?",
+      "subtitle": "We are on a mission to make Moldova’s heritage ingredients and winemaking accessible to curious palates everywhere.",
+      "cta": "Discover our story",
+      "points": {
+        "heritage": {
+          "title": "Heritage you can taste",
+          "description": "Every collection highlights native grapes, protected origins, and regional recipes."
+        },
+        "craft": {
+          "title": "Craft-first sourcing",
+          "description": "We work with small cooperatives and family estates that prioritise sustainable farming."
+        },
+        "pairings": {
+          "title": "Pairings & expertise",
+          "description": "Sommelier notes and chef-inspired pairings accompany each delivery."
+        }
+      },
+      "timeline": {
+        "title": "From Moldova to Spain",
+        "description": "A few milestones that shaped our community.",
+        "items": [
+          {
+            "year": "2018",
+            "title": "First harvest partnerships",
+            "description": "Launched with three pioneering wineries from the Codru region."
+          },
+          {
+            "year": "2020",
+            "title": "Nationwide delivery",
+            "description": "Expanded cold-chain logistics to serve every province in Spain."
+          },
+          {
+            "year": "2023",
+            "title": "Culinary collaborations",
+            "description": "Partnered with chefs and sommeliers to design seasonal tasting boxes."
+          }
+        ]
+      }
+    },
+    "services": {
+      "title": "Services tailored to every occasion",
+      "subtitle": "From intimate dinners to large corporate events, our team is ready to curate the perfect Moldovan experience.",
+      "contactCta": "Talk to our specialists",
+      "items": {
+        "gifting": {
+          "title": "Personal & celebratory gifting",
+          "description": "Customise handwritten notes, delivery schedules, and presentation for memorable surprises.",
+          "cta": "Plan a gift experience"
+        },
+        "corporate": {
+          "title": "Corporate & hospitality solutions",
+          "description": "Design tasting menus, bulk hampers, and private-label selections with dedicated account support.",
+          "cta": "Request a corporate proposal"
+        }
+      }
+    },
+    "newsletter": {
+      "title": "Stay on top of new drops",
+      "subtitle": "Be the first to hear about seasonal releases, pairing guides, and invitations to private tastings.",
+      "placeholder": "Enter your email address",
+      "cta": "Join the list",
+      "success": "Thank you! Look for our next dispatch in your inbox.",
+      "disclaimer": "We send one or two emails per month and you can unsubscribe at any time."
+    },
+    "faqPreview": {
+      "title": "Questions before you order?",
+      "subtitle": "We’ve answered the essentials to make your first delivery effortless.",
+      "cta": "Browse all FAQs",
+      "items": {
+        "shipping": {
+          "question": "How fast is shipping in Spain?",
+          "answer": "Orders ship twice per week from our Madrid hub with delivery in 48–72 hours for most locations."
+        },
+        "packaging": {
+          "question": "Will my order arrive chilled?",
+          "answer": "Yes. Temperature-controlled packaging keeps wines and perishables at optimal conditions throughout transit."
+        },
+        "support": {
+          "question": "Can I speak with someone for recommendations?",
+          "answer": "Our concierge team is available via WhatsApp and email to suggest pairings and build custom boxes."
+        }
+      }
     }
   },
   "products": {
@@ -621,7 +819,7 @@
     "sortPriceAsc": "Price: Low to High",
     "sortPriceDesc": "Price: High to Low",
     "sortFeatured": "Featured",
-    "results": "{count} results | {count} result | {count} results",
+    "results": "products found",
     "search": "Search",
     "category": "Category",
     "noResults": "No results found",
@@ -659,8 +857,7 @@
       "maxPrice": "Max Price",
       "removeFilter": "Remove {filter} filter",
       "unknownCategory": "Unknown Category"
-    },
-    "results": "products found"
+    }
   },
   "footer": {
     "terms": "Terms and Conditions",
@@ -1122,7 +1319,6 @@
       "reviewOrder": "Review Order",
       "processing": "Processing..."
     },
-    "processing": "Processing...",
     "confirmation": {
       "orderNumber": "Order Number",
       "orderItems": "Order Items",
@@ -1366,7 +1562,13 @@
       "totalSpent": "Total Spent",
       "language": "Language",
       "avgOrderValue": "Avg Order Value",
-      "actions": "Actions",
+      "actions": {
+        "view": "View user details",
+        "edit": "Edit user",
+        "clearFilters": "Clear Filters",
+        "refresh": "Refresh",
+        "invite": "Invite User"
+      },
       "loading": "Loading users...",
       "retry": "Retry",
       "searchPlaceholder": "Search users by name, email, or ID...",
@@ -1401,13 +1603,6 @@
         "activeFilters": "Active Filters",
         "from": "From",
         "to": "To"
-      },
-      "actions": {
-        "view": "View user details",
-        "edit": "Edit user",
-        "clearFilters": "Clear Filters",
-        "refresh": "Refresh",
-        "invite": "Invite User"
       },
       "empty": {
         "noResults": "No users found",
