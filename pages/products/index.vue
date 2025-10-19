@@ -64,6 +64,7 @@
                 :filters="filters"
                 :available-filters="availableFilters"
                 :filtered-product-count="products?.length || 0"
+                :show-title="false"
                 @update:filters="handleFiltersUpdate"
                 @apply-filters="handleApplyFilters(true)"
               />
