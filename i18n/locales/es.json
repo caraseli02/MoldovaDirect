@@ -649,7 +649,160 @@
       "maxPrice": "Precio Máximo",
       "removeFilter": "Eliminar filtro {filter}",
       "unknownCategory": "Categoría Desconocida"
-    }
+    },
+    "hero": {
+      "seasonal": "Destacados de temporada",
+      "title": "Descubre los sabores emblemáticos de Moldavia",
+      "subtitle": "Compra vinos seleccionados, despensa gourmet y artesanías con entrega en toda España.",
+      "cta": "Ver colección"
+    },
+    "discovery": {
+      "title": "Encuentra la experiencia perfecta",
+      "description": "Aplica filtros inteligentes o entra en colecciones listas para tus planes de hoy.",
+      "collections": {
+        "celebration": "Vinos para celebrar",
+        "weeknight": "Esenciales para diario",
+        "gift": "Sets para regalar",
+        "cellar": "Imprescindibles de bodega"
+      }
+    },
+    "toggles": {
+      "inStock": "Solo disponibles",
+      "featured": "Selecciones destacadas"
+    },
+    "filterSummary": {
+      "title": "Filtros activos",
+      "clear": "Restablecer filtros"
+    },
+    "chips": {
+      "category": "Categoría: {value}",
+      "priceMin": "Mín. €{value}",
+      "priceMax": "Máx. €{value}",
+      "inStock": "En stock",
+      "featured": "Destacado",
+      "attribute": "{label}: {value}"
+    },
+    "recentlyViewed": {
+      "title": "Vistos recientemente",
+      "subtitle": "Retoma donde lo dejaste y compara tus favoritos.",
+      "empty": "Empieza a explorar para crear tu historial de catas."
+    },
+    "editorial": {
+      "title": "Desde el diario de Moldova Direct",
+      "subtitle": "Historias, maridajes y notas de viaje de nuestros productores.",
+      "cta": "Leer artículo",
+      "stories": {
+        "wineries": {
+          "title": "Conoce a los enólogos",
+          "description": "Visita bodegas familiares con producciones limitadas.",
+          "tag": "Bodega destacada"
+        },
+        "pairings": {
+          "title": "Maridajes perfectos",
+          "description": "Combinaciones de chefs para realzar tu próxima cena.",
+          "tag": "Guía de maridaje"
+        },
+        "heritage": {
+          "title": "Sabor a tradición",
+          "description": "Explora regiones moldavas y sus delicadezas protegidas.",
+          "tag": "Notas culturales"
+        }
+      }
+    },
+    "pagination": {
+      "pageOf": "Página {page} de {total}",
+      "showing": "Total de {count} productos"
+    },
+    "story": {
+      "title": "Experiencia de cata",
+      "tastingNotes": "Notas de cata",
+      "pairings": "Ideas de maridaje",
+      "awards": "Reconocimientos",
+      "origin": "Historia de origen",
+      "producerFallback": "Elaborado con esmero por productores moldavos de {category}.",
+      "defaultNotes": "Frutos rojos maduros|Fruta de hueso al sol|Vainilla sedosa",
+      "defaultPairings": "Quesos de los Cárpatos|Carnes asadas con hierbas|Pan recién horneado",
+      "originFallback": "Cosechado cerca de {origin} siguiendo métodos tradicionales.",
+      "originCategoryFallback": "Una creación emblemática de nuestra colección de {category}.",
+      "noAwards": "Sé la primera persona en celebrar este lanzamiento."
+    },
+    "socialProof": {
+      "title": "Amado por nuestros clientes",
+      "subtitle": "Opiniones reales de catas, cenas y pedidos para regalar.",
+      "rating": "Media de {rating} ★ con más de {count} reseñas",
+      "highlights": "Dulzor equilibrado|Final elegante|Perfecto con tapas",
+      "cta": "Escribir una reseña"
+    },
+    "trust": {
+      "title": "Compra con confianza",
+      "shipping": "Envío 48h en España y logística adaptable a la UE.",
+      "returns": "Devoluciones sencillas en 30 días.",
+      "authentic": "Autenticidad garantizada desde productores moldavos.",
+      "payments": "Pagos seguros con tarjetas principales y Bizum.",
+      "support": "Atención personalizada en ES/EN/RO/RU."
+    },
+    "stock": {
+      "eta": "Haz tu pedido hoy y saldrá antes de {date}",
+      "urgencyLow": "¡Solo quedan {count} unidades, casi agotado!",
+      "urgencyMedium": "Quedan {count} botellas disponibles.",
+      "status": {
+        "inStock": "Listo para enviar",
+        "lowStock": "Quedan {count}",
+        "outOfStock": "Temporalmente agotado"
+      }
+    },
+    "bundle": {
+      "title": "Crea una caja regalo moldava",
+      "description": "Combina sabores complementarios y ahorra con añadidos seleccionados.",
+      "cta": "Ver ahorro del pack"
+    },
+    "faq": {
+      "title": "Preguntas frecuentes",
+      "items": {
+        "delivery": {
+          "question": "¿Cuánto tarda el envío?",
+          "answer": "Los pedidos antes de las 16:00 salen ese mismo día y llegan en 48 horas en la península."
+        },
+        "storage": {
+          "question": "¿Cómo debo conservarlo?",
+          "answer": "Guárdalo en un lugar fresco y seco, lejos de la luz directa. Los vinos reposan mejor entre 12 y 18 °C."
+        },
+        "allergens": {
+          "question": "¿Contiene alérgenos?",
+          "answer": "La etiqueta y la ficha del producto detallan todos los alérgenos. Contáctanos si necesitas información adicional."
+        },
+        "returns": {
+          "question": "¿Qué pasa si llega dañado?",
+          "answer": "Avísanos en los primeros 7 días y gestionaremos un reemplazo o reembolso inmediato."
+        }
+      }
+    },
+    "sustainability": {
+      "title": "Origen y calidad",
+      "subtitle": "Cada etiqueta incluye certificaciones e impacto en la comunidad.",
+      "badges": {
+        "organic": "Cultivo ecológico certificado",
+        "handcrafted": "Hecho a mano en pequeños lotes",
+        "familyOwned": "Productor familiar",
+        "limited": "Edición limitada",
+        "heritage": "Indicación geográfica protegida"
+      }
+    },
+    "related": {
+      "title": "Combina con…",
+      "subtitle": "Completa la experiencia con estas recomendaciones."
+    },
+    "actions": {
+      "addToWishlist": "Guardar en favoritos",
+      "addedToWishlist": "En tu lista de favoritos",
+      "share": "Compartir",
+      "linkCopied": "¡Enlace copiado!",
+      "shareError": "No se pudo compartir. Prueba copiando el enlace.",
+      "sharedSuccess": "¡Gracias por compartir este descubrimiento!",
+      "shareText": "Descubre este favorito moldavo conmigo.",
+      "copyFallback": "Copia este enlace y envíalo a quien quieras."
+    },
+    "commonProduct": "este producto"
   },
   "footer": {
     "terms": "Términos y Condiciones",
