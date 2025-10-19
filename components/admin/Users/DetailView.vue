@@ -78,7 +78,7 @@
               <commonIcon name="heroicons:pencil" class="w-4 h-4 mr-1" />
               Edit
             </button>
-            <AdminUserActionsDropdown
+            <AdminUsersActionsDropdown
               :user="user"
               @action="handleUserAction"
             />
@@ -263,7 +263,7 @@
 
         <!-- Activity Tab -->
         <div v-if="activeTab === 'activity'">
-          <AdminUserActivityTracker
+          <AdminUtilsUserActivityTracker
             :user-id="userId"
             :user-name="user.profile?.name || user.email"
           />

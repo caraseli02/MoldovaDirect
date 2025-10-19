@@ -1,9 +1,19 @@
 import { defineConfig } from 'vitest/config'
 import { resolve } from 'path'
-import vue from '@vitejs/plugin-vue'
+
+const plugins = []
+
+try {
+  const vue = await import('@vitejs/plugin-vue')
+  if (vue?.default) {
+    plugins.push(vue.default())
+  }
+} catch (error) {
+  console.warn('[vitest] @vitejs/plugin-vue not found, proceeding without it.')
+}
 
 export default defineConfig({
-  plugins: [vue()],
+  plugins,
   test: {
     environment: 'jsdom',
     globals: true,

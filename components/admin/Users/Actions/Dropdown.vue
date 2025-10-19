@@ -121,7 +121,7 @@
     </div>
 
     <!-- Confirmation Modals -->
-    <AdminUserActionModal
+    <AdminUsersActionsModal
       v-if="showActionModal"
       :action="selectedAction"
       :user="user"

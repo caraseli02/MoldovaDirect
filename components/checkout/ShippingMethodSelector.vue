@@ -142,7 +142,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ShippingMethod } from '~/stores/checkout'
+import type { ShippingMethod } from '~/types/checkout'
 import { Button } from '@/components/ui/button'
 
 interface Props {
