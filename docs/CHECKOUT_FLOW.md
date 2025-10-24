@@ -37,10 +37,10 @@ All endpoints rely on Supabase service-role access for writes; keep environment 
 
 Run the following SQL scripts when standing up or refreshing an environment:
 
-- `supabase-schema.sql` – core tables (`orders`, `order_items`, `carts`, etc.) and RLS policies.
-- `supabase-checkout-schema.sql` & `supabase-checkout-indexes.sql` – checkout metadata, indexes, and helper functions.
-- `supabase-order-tracking-schema.sql`, `supabase-order-returns-schema.sql`, `supabase-order-indexes.sql`, `supabase-order-policies.sql` – tracking numbers, returns workflow, and stricter policies.
-- Optional seeds: `supabase-mock-orders.sql` (demos) and analytics scripts for dashboards.
+- `supabase/sql/supabase-schema.sql` – core tables (`orders`, `order_items`, `carts`, etc.) and RLS policies.
+- `supabase/sql/supabase-checkout-schema.sql` & `supabase/sql/supabase-checkout-indexes.sql` – checkout metadata, indexes, and helper functions.
+- `supabase/sql/supabase-order-tracking-schema.sql`, `supabase/sql/supabase-order-returns-schema.sql`, `supabase/sql/supabase-order-indexes.sql`, `supabase/sql/supabase-order-policies.sql` – tracking numbers, returns workflow, and stricter policies.
+- Optional seeds: `supabase/sql/supabase-mock-orders.sql` (demos) and analytics scripts for dashboards.
 
 When adding new columns or RPC functions for checkout, extend these scripts to keep every environment in sync.
 

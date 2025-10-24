@@ -15,7 +15,7 @@ The `email_logs` table tracks all email delivery attempts:
 
 ```sql
 -- Run the migration
-psql -f supabase-email-logs-schema.sql
+psql -f supabase/sql/supabase-email-logs-schema.sql
 ```
 
 ### Table Structure

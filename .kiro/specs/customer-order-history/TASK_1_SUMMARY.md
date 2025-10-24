@@ -94,7 +94,7 @@ Implemented two SQL functions:
 2. **server/api/orders/[id]/tracking.get.ts** - Tracking information endpoint
 3. **server/api/orders/[id]/tracking.post.ts** - Add tracking event endpoint
 4. **MIGRATION_GUIDE.md** - Comprehensive migration and API documentation
-5. **verify-migration.sql** - Database verification script
+5. **supabase/sql/verify-migration.sql** - Database verification script
 6. **TASK_1_SUMMARY.md** - This summary document
 
 ## Files Modified
@@ -157,7 +157,7 @@ Implemented two SQL functions:
 ## Testing & Verification
 
 ### Verification Script
-Run `verify-migration.sql` to check:
+Run `supabase/sql/verify-migration.sql` to check:
 - All columns exist
 - Table structure is correct
 - Indexes are created
@@ -203,7 +203,7 @@ With Task 1 complete, the foundation is ready for:
 
 2. **Verify the migration:**
    ```bash
-   # Run verify-migration.sql in Supabase SQL Editor
+   # Run supabase/sql/verify-migration.sql in Supabase SQL Editor
    # Check for success messages
    ```
 
