@@ -1,123 +1,55 @@
-<!--
-  Admin Layout Component
-  
-  Requirements addressed:
-  - 6.1: Responsive admin layout with sidebar navigation
-  - 6.3: Admin header component with user info
-  
-  Basic admin layout with:
-  - Sidebar navigation
-  - Header with user info
-  - Main content area
-  - Responsive design
--->
-
 <template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
-    <!-- Sidebar -->
-    <div class="fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0"
-         :class="{ '-translate-x-full': !sidebarOpen }">
-      
-      <!-- Logo -->
-      <div class="flex items-center justify-center h-16 px-4 bg-blue-600">
+    <div
+      class="fixed inset-y-0 left-0 z-50 w-64 transform bg-white shadow-lg transition-transform duration-300 ease-in-out dark:bg-gray-800 lg:translate-x-0"
+      :class="{ '-translate-x-full': !sidebarOpen }"
+    >
+      <div class="flex h-16 items-center justify-center bg-blue-600 px-4">
         <h1 class="text-xl font-bold text-white">Moldova Direct</h1>
       </div>
 
-      <!-- Navigation -->
-      <nav class="mt-8">
-        <div class="px-4 space-y-2">
-          <NuxtLink
-            to="/admin"
-            class="flex items-center px-4 py-2 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-            active-class="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400"
-          >
-            <Icon name="heroicons:home" class="w-5 h-5 mr-3" />
-            {{ $t('admin.navigation.dashboard') }}
-          </NuxtLink>
-          
-          <NuxtLink
-            to="/admin/products"
-            class="flex items-center px-4 py-2 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-            active-class="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400"
-          >
-            <Icon name="heroicons:cube" class="w-5 h-5 mr-3" />
-            {{ $t('admin.navigation.products') }}
-          </NuxtLink>
-          
-          <NuxtLink
-            to="/admin/inventory"
-            class="flex items-center px-4 py-2 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-            active-class="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400"
-          >
-            <Icon name="heroicons:cube" class="w-5 h-5 mr-3" />
-            {{ $t('admin.navigation.inventory') }}
-          </NuxtLink>
-          
-          <NuxtLink
-            to="/admin/orders"
-            class="flex items-center px-4 py-2 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-            active-class="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400"
-          >
-            <Icon name="heroicons:shopping-bag" class="w-5 h-5 mr-3" />
-            {{ $t('admin.navigation.orders') }}
-          </NuxtLink>
-          
-          <NuxtLink
-            to="/admin/users"
-            class="flex items-center px-4 py-2 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-            active-class="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400"
-          >
-            <Icon name="heroicons:users" class="w-5 h-5 mr-3" />
-            {{ $t('admin.navigation.users') }}
-          </NuxtLink>
-          
-          <NuxtLink
-            to="/admin/analytics"
-            class="flex items-center px-4 py-2 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-            active-class="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400"
-          >
-            <Icon name="heroicons:chart-bar" class="w-5 h-5 mr-3" />
-            {{ $t('admin.navigation.analytics') }}
-          </NuxtLink>
-
-          <NuxtLink
-            to="/admin/tools/email-testing"
-            class="flex items-center px-4 py-2 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-            active-class="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400"
-          >
-            <Icon name="heroicons:wrench-screwdriver" class="w-5 h-5 mr-3" />
-            {{ $t('admin.navigation.tools') }}
-          </NuxtLink>
-        </div>
+      <nav class="mt-8 px-4">
+        <ul class="space-y-2">
+          <li v-for="item in navItems" :key="item.to">
+            <NuxtLink
+              :to="item.to"
+              :class="[
+                'flex items-center gap-3 rounded-xl px-4 py-2 text-sm font-medium transition-colors',
+                isActiveRoute(item)
+                  ? 'bg-gray-800 text-white shadow-sm'
+                  : 'text-gray-500 hover:bg-gray-700 hover:text-white'
+              ]"
+            >
+              <Icon :name="item.icon" class="h-5 w-5" />
+              <span>{{ $t(item.labelKey) }}</span>
+            </NuxtLink>
+          </li>
+        </ul>
       </nav>
     </div>
 
-    <!-- Main Content -->
     <div class="lg:ml-64">
-      <!-- Header -->
-      <header class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+      <header class="border-b border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
         <div class="flex items-center justify-between px-6 py-4">
-          <!-- Mobile menu button -->
           <button
             @click="toggleSidebar"
-            class="lg:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+            class="rounded-md p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 lg:hidden"
           >
-            <Icon name="heroicons:bars-3" class="w-6 h-6" />
+            <Icon name="lucide:menu" class="h-6 w-6" />
           </button>
 
-          <!-- Breadcrumb -->
           <div class="hidden lg:block">
             <nav class="flex" aria-label="Breadcrumb">
               <ol class="flex items-center space-x-4">
                 <li>
                   <div class="flex items-center">
-                    <Icon name="heroicons:home" class="w-4 h-4 text-gray-400" />
+                    <Icon name="lucide:home" class="h-4 w-4 text-gray-400" />
                     <span class="ml-2 text-sm text-gray-500">{{ $t('account.sections.admin') }}</span>
                   </div>
                 </li>
                 <li v-if="currentPageName">
                   <div class="flex items-center">
-                    <Icon name="heroicons:chevron-right" class="w-4 h-4 text-gray-400" />
+                    <Icon name="lucide:chevron-right" class="h-4 w-4 text-gray-400" />
                     <span class="ml-2 text-sm font-medium text-gray-900 dark:text-white">{{ currentPageName }}</span>
                   </div>
                 </li>
@@ -125,17 +57,14 @@
             </nav>
           </div>
 
-          <!-- User menu -->
           <div class="flex items-center space-x-4">
-            <!-- Notifications -->
-            <button class="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md">
-              <Icon name="heroicons:bell" class="w-5 h-5" />
+            <button class="rounded-md p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900">
+              <Icon name="lucide:bell" class="h-5 w-5" />
             </button>
 
-            <!-- User profile -->
             <div class="flex items-center space-x-3">
-              <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-                <Icon name="heroicons:user" class="w-5 h-5 text-white" />
+              <div class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600">
+                <Icon name="lucide:user" class="h-5 w-5 text-white" />
               </div>
               <div class="hidden md:block">
                 <p class="text-sm font-medium text-gray-900">{{ $t('account.sections.adminUser') }}</p>
@@ -146,13 +75,11 @@
         </div>
       </header>
 
-      <!-- Page Content -->
       <main class="p-6">
         <slot />
       </main>
     </div>
 
-    <!-- Mobile sidebar overlay -->
     <div
       v-if="sidebarOpen"
       @click="closeSidebar"
@@ -163,25 +90,26 @@
 
 <script setup lang="ts">
 const { t } = useI18n()
+const route = useRoute()
 
-// State
 const sidebarOpen = ref(false)
 
-// Computed
-const route = useRoute()
+const navItems = [
+  { to: '/admin', icon: 'lucide:layout-dashboard', labelKey: 'admin.navigation.dashboard', match: (path: string) => path === '/admin' || path === '/admin/' || path.startsWith('/admin/dashboard') },
+  { to: '/admin/products', icon: 'lucide:package', labelKey: 'admin.navigation.products', match: (path: string) => path.startsWith('/admin/products') },
+  { to: '/admin/inventory', icon: 'lucide:boxes', labelKey: 'admin.navigation.inventory', match: (path: string) => path.startsWith('/admin/inventory') },
+  { to: '/admin/orders', icon: 'lucide:shopping-cart', labelKey: 'admin.navigation.orders', match: (path: string) => path.startsWith('/admin/orders') },
+  { to: '/admin/users', icon: 'lucide:users', labelKey: 'admin.navigation.users', match: (path: string) => path.startsWith('/admin/users') },
+  { to: '/admin/analytics', icon: 'lucide:bar-chart-2', labelKey: 'admin.navigation.analytics', match: (path: string) => path.startsWith('/admin/analytics') },
+  { to: '/admin/tools/email-testing', icon: 'lucide:wrench', labelKey: 'admin.navigation.tools', match: (path: string) => path.startsWith('/admin/tools') }
+]
+
 const currentPageName = computed(() => {
   const path = route.path
-  if (path === '/admin' || path === '/admin/') return t('admin.navigation.dashboard')
-  if (path.startsWith('/admin/products')) return t('admin.navigation.products')
-  if (path.startsWith('/admin/inventory')) return t('admin.navigation.inventory')
-  if (path.startsWith('/admin/orders')) return t('admin.navigation.orders')
-  if (path.startsWith('/admin/users')) return t('admin.navigation.users')
-  if (path.startsWith('/admin/analytics')) return t('admin.navigation.analytics')
-  if (path.startsWith('/admin/tools')) return t('admin.navigation.tools')
-  return null
+  const active = navItems.find(item => item.match(path))
+  return active ? t(active.labelKey) : null
 })
 
-// Methods
 const toggleSidebar = () => {
   sidebarOpen.value = !sidebarOpen.value
 }
@@ -190,8 +118,14 @@ const closeSidebar = () => {
   sidebarOpen.value = false
 }
 
-// Close sidebar on route change (mobile)
-watch(() => route.path, () => {
-  sidebarOpen.value = false
-})
+const isActiveRoute = (item: { match: (path: string) => boolean }) => {
+  return item.match(route.path)
+}
+
+watch(
+  () => route.path,
+  () => {
+    sidebarOpen.value = false
+  }
+)
 </script>
