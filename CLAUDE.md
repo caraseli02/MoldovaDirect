@@ -137,7 +137,7 @@ Admin pages follow the pattern `/admin/[feature]/[action]`:
 - **Test Data**: Managed through Supabase with isolated test environments
 
 ### Database Schema
-Supabase schema files in project root:
+Supabase schema files in `supabase/sql/`:
 - `supabase-schema.sql` - Main database schema
 - `supabase-cart-analytics-simple.sql` - Cart analytics tracking
 - `supabase-analytics-schema.sql` - Analytics and reporting schema

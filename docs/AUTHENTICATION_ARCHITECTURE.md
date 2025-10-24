@@ -50,7 +50,7 @@ Moldova Direct relies on Supabase Auth and a Pinia-powered store to deliver a mu
 
 ## Security Considerations
 
-- **Row Level Security (RLS)**: All user data tables (`profiles`, `addresses`, `orders`, `order_items`, etc.) enforce policies defined in `supabase-*.sql`. When you add tables, copy the existing pattern (`auth.uid()` guard plus optional role checks).  
+- **Row Level Security (RLS)**: All user data tables (`profiles`, `addresses`, `orders`, `order_items`, etc.) enforce policies defined in `supabase/sql/supabase-*.sql`. When you add tables, copy the existing pattern (`auth.uid()` guard plus optional role checks).
 - **Rate limiting**: Supabase handles rate limiting; augment with application-level throttling if you expose high-risk endpoints (e.g., password recovery).  
 - **Admin roles**: The current implementation trusts Supabase user metadata. Align it with managed role tables when you formalise RBAC.
 

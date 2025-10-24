@@ -7,7 +7,7 @@ Moldova Direct is a Nuxt 3 commerce platform backed by Supabase. Use this guide 
 - `composables/` centralizes Composition API logic; `stores/` defines Pinia state; `layouts/` wraps global shells.
 - `server/` exposes Nitro API routes and middleware; `plugins/` wires integrations; `scripts/` bundles ops CLIs.
 - Static assets live in `assets/` and `public/`; locales stay in `i18n/`.
-- Tests live in `tests/` (`unit/`, `integration/`, `e2e/`, `visual/`); Supabase schemas stay at the repo root as `supabase-*.sql`.
+- Tests live in `tests/` (`unit/`, `integration/`, `e2e/`, `visual/`); Supabase schemas live in `supabase/sql/` as `supabase-*.sql`.
 
 ## Build, Test & Development Commands
 - `npm run dev` starts Nuxt at `http://localhost:3000`.

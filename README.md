@@ -53,7 +53,7 @@ NUXT_SECRET_KEY=your_secret_key_for_sessions
 ### Supabase Setup
 1. Create a new project at [supabase.com](https://supabase.com)
 2. Copy your project URL and anon key to `.env`
-3. Run the SQL schema from `supabase-schema.sql` in your Supabase SQL editor
+3. Run the SQL schema from `supabase/sql/supabase-schema.sql` in your Supabase SQL editor
 4. Enable authentication in your Supabase dashboard
 
 For detailed setup instructions, see [SUPABASE_SETUP.md](./docs/SUPABASE_SETUP.md).

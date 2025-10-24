@@ -114,15 +114,15 @@
 ## 📝 SQL Files Reference
 
 ### Required Migrations (Run in order)
-1. `supabase-order-tracking-schema.sql` - Core tracking functionality
-2. `supabase-order-indexes.sql` - Performance optimization
-3. `supabase-order-returns-schema.sql` - Returns functionality
-4. `supabase-support-tickets-schema.sql` - Support tickets
+1. `supabase/sql/supabase-order-tracking-schema.sql` - Core tracking functionality
+2. `supabase/sql/supabase-order-indexes.sql` - Performance optimization
+3. `supabase/sql/supabase-order-returns-schema.sql` - Returns functionality
+4. `supabase/sql/supabase-support-tickets-schema.sql` - Support tickets
 
 ### Helper Scripts
-- `get-user-id.sql` - Get your user ID for testing
-- `supabase-mock-orders.sql` - Create test orders (update user_id first)
-- `.kiro/specs/customer-order-history/verify-migration.sql` - Verify migrations
+- `supabase/sql/get-user-id.sql` - Get your user ID for testing
+- `supabase/sql/supabase-mock-orders.sql` - Create test orders (update user_id first)
+- `supabase/sql/verify-migration.sql` - Verify migrations
 
 ## 🐛 Debugging Tips
 

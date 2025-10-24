@@ -159,7 +159,7 @@ export default defineEventHandler(async (event) => {
       instructions: [
         '1. Go to your Supabase dashboard',
         '2. Navigate to SQL Editor',
-        '3. Copy and paste the contents of supabase-schema.sql',
+        '3. Copy and paste the contents of supabase/sql/supabase-schema.sql',
         '4. Click Run to execute the schema',
         '5. Then try the seed endpoint again'
       ]
