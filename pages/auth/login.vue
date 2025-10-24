@@ -143,7 +143,7 @@
               <div class="flex items-center">
                 <Checkbox
                   id="remember"
-                  v-model:checked="rememberMe"
+                  v-model="rememberMe"
                   :aria-describedby="'remember-desc'"
                   class="h-5 w-5"
                 />

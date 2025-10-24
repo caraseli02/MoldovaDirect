@@ -284,13 +284,13 @@
             <div class="flex items-start">
               <Checkbox
                 id="terms"
-                v-model:checked="form.acceptTerms"
+                v-model="form.acceptTerms"
                 name="terms"
                 required
                 :aria-invalid="termsError ? 'true' : 'false'"
                 :aria-describedby="termsError ? 'terms-error' : 'terms-desc'"
                 class="mt-1 h-5 w-5"
-                @update:checked="validateTermsField"
+                @update:modelValue="validateTermsField"
               />
               <div class="ml-3 space-y-2">
                 <Label for="terms" class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
@@ -541,7 +541,13 @@ const handleRegister = async () => {
       throw authError
     }
 
-    success.value = t('auth.registrationSuccess')
+    const verificationPath = localePath('/auth/verification-pending')
+    const query = new URLSearchParams({
+      message: 'registration-complete',
+      email: form.value.email
+    }).toString()
+
+    await navigateTo(`${verificationPath}?${query}`)
   } catch (err: any) {
     error.value = err.message || t('auth.registerError')
   } finally {
