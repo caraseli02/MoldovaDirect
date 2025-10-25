@@ -37,7 +37,7 @@
                   </span>
                   <commonIcon 
                     v-if="category.children && category.children.length > 0"
-                    name="heroicons:chevron-down" 
+                    name="lucide:chevron-down" 
                     class="w-4 h-4 ml-1" 
                   />
                 </button>
@@ -80,12 +80,12 @@
         class="w-full flex items-center justify-between p-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 text-left"
       >
         <div class="flex items-center">
-          <commonIcon name="heroicons:squares-2x2" class="w-5 h-5 mr-3 text-gray-400 dark:text-gray-500" />
+          <commonIcon name="lucide:panels-top-left" class="w-5 h-5 mr-3 text-gray-400 dark:text-gray-500" />
           <span class="font-medium text-gray-900 dark:text-white">
             {{ currentCategoryName || $t('products.categories.all') }}
           </span>
         </div>
-        <commonIcon name="heroicons:chevron-down" class="w-5 h-5 text-gray-400 dark:text-gray-500" />
+        <commonIcon name="lucide:chevron-down" class="w-5 h-5 text-gray-400 dark:text-gray-500" />
       </button>
 
       <!-- Mobile Category Modal -->
@@ -111,7 +111,7 @@
                 @click="showMobileNav = false"
                 class="p-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400"
               >
-                <commonIcon name="heroicons:x-mark" class="w-5 h-5" />
+                <commonIcon name="lucide:x" class="w-5 h-5" />
               </button>
             </div>
 
@@ -126,7 +126,7 @@
                   @click="showMobileNav = false"
                 >
                   <div class="flex items-center">
-                    <commonIcon name="heroicons:squares-2x2" class="w-5 h-5 mr-3" />
+                    <commonIcon name="lucide:panels-top-left" class="w-5 h-5 mr-3" />
                     <span class="font-medium text-gray-900 dark:text-white">{{ $t('products.categories.all') }}</span>
                   </div>
                   <span v-if="showProductCount && totalProductCount" class="text-sm text-gray-500 dark:text-gray-400">
@@ -169,7 +169,7 @@
               :key="breadcrumb.id"
               class="flex items-center"
             >
-              <commonIcon name="heroicons:chevron-right" class="w-4 h-4 text-gray-400 dark:text-gray-500 mx-2" />
+              <commonIcon name="lucide:chevron-right" class="w-4 h-4 text-gray-400 dark:text-gray-500 mx-2" />
               <NuxtLink
                 v-if="index < breadcrumbs.length - 1"
                 :to="`/products?category=${breadcrumb.slug || breadcrumb.id}`"

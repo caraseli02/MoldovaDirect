@@ -155,15 +155,15 @@
 <script setup lang="ts">
 import type { ChartData, ChartOptions } from 'chart.js'
 import type { AnalyticsOverview } from '~/types/analytics'
-import { 
-  UsersIcon, 
-  CurrencyEuroIcon, 
-  ShoppingCartIcon, 
-  ChartBarIcon,
-  ArrowUpIcon,
-  ArrowDownIcon,
-  MinusIcon
-} from '@heroicons/vue/24/outline'
+import {
+  ArrowDown,
+  ArrowUp,
+  BarChart2,
+  Euro,
+  Minus,
+  ShoppingCart,
+  Users
+} from 'lucide-vue-next'
 
 interface Props {
   data?: AnalyticsOverview | null
@@ -196,9 +196,12 @@ const handleDateRangeChange = (newRange: { startDate: string; endDate: string })
 // Get trend icon
 const getTrendIcon = (trend: 'up' | 'down' | 'stable') => {
   switch (trend) {
-    case 'up': return ArrowUpIcon
-    case 'down': return ArrowDownIcon
-    default: return MinusIcon
+    case 'up':
+      return ArrowUp
+    case 'down':
+      return ArrowDown
+    default:
+      return Minus
   }
 }
 
@@ -213,7 +216,7 @@ const kpiCards = computed(() => {
       key: 'totalUsers',
       label: 'Total Users',
       value: kpis.totalUsers.toLocaleString(),
-      icon: UsersIcon,
+      icon: Users,
       bgColor: 'bg-blue-100 dark:bg-blue-900',
       iconColor: 'text-blue-600 dark:text-blue-400',
       trend: trends.userGrowth,
@@ -223,7 +226,7 @@ const kpiCards = computed(() => {
       key: 'totalRevenue',
       label: 'Total Revenue',
       value: `€${kpis.totalRevenue.toLocaleString()}`,
-      icon: CurrencyEuroIcon,
+      icon: Euro,
       bgColor: 'bg-green-100 dark:bg-green-900',
       iconColor: 'text-green-600 dark:text-green-400',
       trend: trends.revenueGrowth,
@@ -233,7 +236,7 @@ const kpiCards = computed(() => {
       key: 'conversionRate',
       label: 'Conversion Rate',
       value: `${kpis.conversionRate}%`,
-      icon: ShoppingCartIcon,
+      icon: ShoppingCart,
       bgColor: 'bg-purple-100 dark:bg-purple-900',
       iconColor: 'text-purple-600 dark:text-purple-400',
       trend: 'stable',
@@ -243,7 +246,7 @@ const kpiCards = computed(() => {
       key: 'avgOrderValue',
       label: 'Avg Order Value',
       value: `€${kpis.avgOrderValue.toFixed(2)}`,
-      icon: ChartBarIcon,
+      icon: BarChart2,
       bgColor: 'bg-amber-100 dark:bg-amber-900',
       iconColor: 'text-amber-600 dark:text-amber-400',
       trend: 'stable',

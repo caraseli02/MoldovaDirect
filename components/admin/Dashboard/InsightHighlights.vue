@@ -39,7 +39,7 @@
               class="inline-flex items-center gap-2 text-sm font-medium text-blue-500 transition-colors hover:text-blue-600"
             >
               {{ insight.action }}
-              <commonIcon name="heroicons:arrow-right" class="h-4 w-4" />
+              <commonIcon name="lucide:arrow-right" class="h-4 w-4" />
             </NuxtLink>
           </div>
         </div>

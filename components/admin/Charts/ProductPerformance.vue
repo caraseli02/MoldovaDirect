@@ -5,7 +5,7 @@
         Product Performance
       </h3>
       <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-        <ChartBarIcon class="w-4 h-4" />
+        <BarChart2 class="w-4 h-4" />
         <span>Revenue & Views</span>
       </div>
     </div>
@@ -18,7 +18,7 @@
     <!-- Error State -->
     <div v-else-if="error" class="flex items-center justify-center h-64">
       <div class="text-center">
-        <ExclamationTriangleIcon class="w-12 h-12 text-red-400 mx-auto mb-4" />
+        <AlertTriangle class="w-12 h-12 text-red-400 mx-auto mb-4" />
         <p class="text-gray-600 dark:text-gray-400">Failed to load chart data</p>
       </div>
     </div>
@@ -27,7 +27,7 @@
     <div v-else class="h-64">
       <div class="flex items-center justify-center h-full text-gray-500 dark:text-gray-400">
         <div class="text-center">
-          <ChartBarIcon class="w-16 h-16 mx-auto mb-4 opacity-50" />
+        <BarChart2 class="w-16 h-16 mx-auto mb-4 opacity-50" />
           <p>Product performance chart will be rendered here</p>
           <p class="text-sm mt-2">Chart library integration needed</p>
         </div>
@@ -49,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-import { ChartBarIcon, ExclamationTriangleIcon } from '@heroicons/vue/24/outline'
+import { AlertTriangle, BarChart2 } from 'lucide-vue-next'
 
 interface Props {
   data?: any

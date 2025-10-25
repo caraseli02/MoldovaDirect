@@ -70,7 +70,7 @@
               ]"
             >
               <commonIcon
-                name="heroicons:arrow-path"
+                name="lucide:refresh-ccw"
                 :class="['h-4 w-4', refreshing || isLoading ? 'animate-spin text-white' : 'text-white']"
               />
               <span>{{ $t('admin.dashboard.refreshAll') }}</span>
@@ -81,7 +81,7 @@
 
       <footer class="flex flex-col gap-3 border-t border-gray-100 bg-gray-50 px-6 py-4 text-sm text-gray-500 md:flex-row md:items-center md:justify-between">
         <div class="flex items-center gap-2">
-          <commonIcon name="heroicons:clock" class="h-4 w-4 text-blue-500" />
+          <commonIcon name="lucide:clock" class="h-4 w-4 text-blue-500" />
           <span>Last updated {{ timeSinceRefresh }}</span>
         </div>
         <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500">
@@ -101,7 +101,7 @@
 
     <div v-if="error" class="rounded-2xl border border-red-200 bg-red-50 p-6 text-sm text-red-600">
       <div class="flex items-start gap-3">
-        <commonIcon name="heroicons:exclamation-triangle" class="h-5 w-5 text-red-500" />
+        <commonIcon name="lucide:alert-triangle" class="h-5 w-5 text-red-500" />
         <div class="space-y-2">
           <p class="font-medium text-red-700">{{ $t('admin.dashboard.errors.loadingData') }}</p>
           <p>{{ error }}</p>
@@ -198,7 +198,7 @@
                   <p class="text-sm text-gray-400">Launch a new catalog item with pricing & stock</p>
                 </div>
               </div>
-              <commonIcon name="heroicons:arrow-up-right" class="h-4 w-4 text-blue-500 transition-opacity group-hover:opacity-100" />
+              <commonIcon name="lucide:arrow-up-right" class="h-4 w-4 text-blue-500 transition-opacity group-hover:opacity-100" />
             </NuxtLink>
 
             <NuxtLink
@@ -214,7 +214,7 @@
                   <p class="text-sm text-gray-400">Review fulfillment status and payment confirmations</p>
                 </div>
               </div>
-              <commonIcon name="heroicons:arrow-up-right" class="h-4 w-4 text-green-500 transition-opacity group-hover:opacity-100" />
+              <commonIcon name="lucide:arrow-up-right" class="h-4 w-4 text-green-500 transition-opacity group-hover:opacity-100" />
             </NuxtLink>
 
             <NuxtLink
@@ -230,7 +230,7 @@
                   <p class="text-sm text-gray-400">Audit roles, permissions, and customer records</p>
                 </div>
               </div>
-              <commonIcon name="heroicons:arrow-up-right" class="h-4 w-4 text-slate-500 transition-opacity group-hover:opacity-100" />
+              <commonIcon name="lucide:arrow-up-right" class="h-4 w-4 text-slate-500 transition-opacity group-hover:opacity-100" />
             </NuxtLink>
           </div>
 
@@ -257,7 +257,7 @@
 
           <div v-if="criticalAlerts.length" class="rounded-2xl border border-red-200 bg-red-50 p-4">
             <div class="mb-3 flex items-center gap-2 text-sm font-semibold text-red-600">
-              <commonIcon name="heroicons:exclamation-triangle" class="h-4 w-4" />
+              <commonIcon name="lucide:alert-triangle" class="h-4 w-4" />
               Critical alerts
             </div>
             <ul class="space-y-3 text-sm text-red-600">

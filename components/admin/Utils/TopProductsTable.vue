@@ -115,7 +115,7 @@
       v-if="!loading && (!products || products.length === 0)"
       class="px-6 py-12 text-center"
     >
-      <ShoppingBagIcon class="w-12 h-12 text-gray-400 mx-auto mb-4" />
+      <ShoppingBag class="w-12 h-12 text-gray-400 mx-auto mb-4" />
       <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
         No product data available
       </h3>
@@ -136,7 +136,7 @@
 </template>
 
 <script setup lang="ts">
-import { ShoppingBagIcon } from '@heroicons/vue/24/outline'
+import { ShoppingBag } from 'lucide-vue-next'
 import type { ProductAnalyticsData } from '~/types/analytics'
 
 interface Props {

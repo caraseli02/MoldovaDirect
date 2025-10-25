@@ -40,7 +40,7 @@
                   class="absolute bottom-0 right-0 h-8 w-8 rounded-full"
                   :title="$t('profile.changePicture')"
                 >
-                  <Icon name="camera" class="h-4 w-4" />
+                  <commonIcon name="lucide:camera" class="h-4 w-4" />
                 </Button>
               </div>
               <div>
@@ -180,7 +180,7 @@
                   class="px-6 py-2 text-sm font-medium"
                 >
                   <span v-if="isLoading" class="flex items-center">
-                    <Icon name="spinner" class="animate-spin h-4 w-4 mr-2" />
+                    <commonIcon name="lucide:loader-2" class="animate-spin h-4 w-4 mr-2" />
                     {{ $t('common.loading') }}
                   </span>
                   <span v-else>
@@ -240,7 +240,7 @@
                       class="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                       :title="$t('profile.editAddress')"
                     >
-                      <Icon name="edit" class="h-4 w-4" />
+                      <commonIcon name="lucide:square-pen" class="h-4 w-4" />
                     </Button>
                     <Button
                       @click="deleteAddress(address.id)"
@@ -249,7 +249,7 @@
                       class="p-1 text-gray-400 hover:text-red-600 dark:hover:text-red-400"
                       :title="$t('profile.deleteAddress')"
                     >
-                      <Icon name="trash" class="h-4 w-4" />
+                      <commonIcon name="lucide:trash-2" class="h-4 w-4" />
                     </Button>
                   </div>
                 </div>
@@ -263,7 +263,7 @@
             </div>
 
             <div v-else class="text-center py-8">
-              <Icon name="map-pin" class="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <commonIcon name="lucide:map-pin" class="h-12 w-12 text-gray-400 mx-auto mb-4" />
               <p class="text-gray-600 dark:text-gray-400 mb-4">
                 {{ $t('profile.noAddresses') }}
               </p>

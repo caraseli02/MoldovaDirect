@@ -57,7 +57,7 @@
     <!-- Loading State -->
     <div v-if="loading" class="p-8 text-center">
       <div class="inline-flex items-center gap-2 text-gray-600">
-        <commonIcon name="heroicons:arrow-path" class="w-5 h-5 animate-spin" />
+        <commonIcon name="lucide:refresh-ccw" class="w-5 h-5 animate-spin" />
         Loading activity...
       </div>
     </div>
@@ -65,7 +65,7 @@
     <!-- Error State -->
     <div v-else-if="error" class="p-8 text-center">
       <div class="text-red-600 mb-4">
-        <commonIcon name="heroicons:exclamation-triangle" class="w-8 h-8 mx-auto mb-2" />
+        <commonIcon name="lucide:alert-triangle" class="w-8 h-8 mx-auto mb-2" />
         {{ error }}
       </div>
       <button
@@ -108,7 +108,7 @@
 
       <!-- Activity List -->
       <div v-if="filteredActivities.length === 0" class="text-center py-8">
-        <commonIcon name="heroicons:clock" class="w-12 h-12 text-gray-400 mx-auto mb-4" />
+        <commonIcon name="lucide:clock" class="w-12 h-12 text-gray-400 mx-auto mb-4" />
         <h3 class="text-lg font-medium text-gray-900 mb-2">No activity found</h3>
         <p class="text-gray-500">
           {{ activityFilter ? 'No activities match the selected filter' : 'No activity recorded for this user' }}
@@ -147,11 +147,11 @@
                 <!-- Technical Details -->
                 <div class="mt-2 space-y-1">
                   <div v-if="activity.ip_address" class="text-xs text-gray-500">
-                    <commonIcon name="heroicons:globe-alt" class="w-3 h-3 inline mr-1" />
+                    <commonIcon name="lucide:globe-2" class="w-3 h-3 inline mr-1" />
                     IP: {{ activity.ip_address }}
                   </div>
                   <div v-if="activity.user_agent" class="text-xs text-gray-500 truncate">
-                    <commonIcon name="heroicons:computer-desktop" class="w-3 h-3 inline mr-1" />
+                    <commonIcon name="lucide:monitor" class="w-3 h-3 inline mr-1" />
                     {{ formatUserAgent(activity.user_agent) }}
                   </div>
                   <div v-if="activity.metadata" class="text-xs text-gray-500">
@@ -336,21 +336,21 @@ const filterActivities = () => {
 const getActivityIcon = (eventType: string) => {
   switch (eventType) {
     case 'login':
-      return 'heroicons:arrow-right-on-rectangle'
+      return 'lucide:log-out'
     case 'logout':
-      return 'heroicons:arrow-left-on-rectangle'
+      return 'lucide:log-in'
     case 'password_change':
-      return 'heroicons:key'
+      return 'lucide:key'
     case 'profile_update':
-      return 'heroicons:user'
+      return 'lucide:user'
     case 'order_create':
-      return 'heroicons:shopping-bag'
+      return 'lucide:shopping-bag'
     case 'cart_add':
-      return 'heroicons:shopping-cart'
+      return 'lucide:shopping-cart'
     case 'page_view':
-      return 'heroicons:eye'
+      return 'lucide:eye'
     default:
-      return 'heroicons:information-circle'
+      return 'lucide:info'
   }
 }
 

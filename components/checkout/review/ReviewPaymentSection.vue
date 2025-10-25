@@ -5,7 +5,7 @@
         {{ $t('checkout.review.paymentMethod') }}
       </h3>
       <button
-        @click="$emit('edit')"
+        @click="$emit('lucide:square-pen')"
         class="text-sm text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 font-medium"
       >
         {{ $t('checkout.review.editPayment') }}
@@ -82,6 +82,6 @@ interface Props {
 defineProps<Props>()
 
 defineEmits<{
-  (e: 'edit'): void
+  (e: 'lucide:square-pen'): void
 }>()
 </script>

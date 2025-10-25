@@ -65,7 +65,7 @@
               @click="closeUserDetail"
               class="text-gray-400 hover:text-gray-600"
             >
-              <Icon name="heroicons:x-mark" class="w-6 h-6" />
+              <commonIcon name="lucide:x" class="w-6 h-6" />
             </button>
           </div>
           
@@ -87,7 +87,7 @@
       >
         <div class="bg-white rounded-lg p-6 shadow-xl">
           <div class="flex items-center gap-3">
-            <Icon name="heroicons:arrow-path" class="w-6 h-6 animate-spin text-blue-600" />
+            <commonIcon name="lucide:refresh-ccw" class="w-6 h-6 animate-spin text-blue-600" />
             <span class="text-gray-900">Processing action...</span>
           </div>
         </div>
@@ -164,7 +164,7 @@ const handleUserAction = async (action: string, userId: string, data?: any) => {
         showUserDetail(userId)
         break
         
-      case 'edit':
+      case 'lucide:square-pen':
         handleUserEdit(userId)
         break
         

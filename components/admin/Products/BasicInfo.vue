@@ -80,14 +80,14 @@
             :class="{ 'p-1': isMobile }"
             :title="$t('admin.products.actions.generateSku')"
           >
-            <Icon name="heroicons:sparkles" class="w-4 h-4" />
+            <commonIcon name="lucide:sparkles" class="w-4 h-4" />
           </button>
           <!-- Loading spinner for SKU generation -->
           <div
             v-if="isGeneratingSku"
             class="absolute right-2 top-1/2 transform -translate-y-1/2"
           >
-            <Icon name="heroicons:arrow-path" class="w-4 h-4 animate-spin text-blue-600" />
+            <commonIcon name="lucide:refresh-ccw" class="w-4 h-4 animate-spin text-blue-600" />
           </div>
         </div>
         <p v-if="errors?.sku" class="mt-1 text-sm text-red-600">
@@ -130,7 +130,7 @@
     <!-- Mobile-specific help text -->
     <div v-if="isMobile && showMobileHints" class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
       <div class="flex items-start space-x-3">
-        <Icon name="heroicons:light-bulb" class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+        <commonIcon name="lucide:lightbulb" class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
         <div class="text-sm text-blue-800 dark:text-blue-200">
           <p class="font-medium mb-1">{{ $t('admin.products.hints.mobileTitle') }}</p>
           <ul class="space-y-1 text-xs">
@@ -144,7 +144,7 @@
           @touchstart="vibrate('tap')"
           class="text-blue-600 dark:text-blue-400 touch-manipulation p-1"
         >
-          <Icon name="heroicons:x-mark" class="w-4 h-4" />
+          <commonIcon name="lucide:x" class="w-4 h-4" />
         </button>
       </div>
     </div>

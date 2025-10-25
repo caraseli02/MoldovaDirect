@@ -104,7 +104,7 @@
           <!-- Warning Messages -->
           <div v-if="getWarningMessage()" class="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
             <div class="flex">
-              <commonIcon name="heroicons:exclamation-triangle" class="w-5 h-5 text-yellow-400 mr-2 mt-0.5" />
+              <commonIcon name="lucide:alert-triangle" class="w-5 h-5 text-yellow-400 mr-2 mt-0.5" />
               <div class="text-sm text-yellow-800">
                 {{ getWarningMessage() }}
               </div>
@@ -114,7 +114,7 @@
           <!-- Danger Messages -->
           <div v-if="getDangerMessage()" class="p-3 bg-red-50 border border-red-200 rounded-lg">
             <div class="flex">
-              <commonIcon name="heroicons:exclamation-triangle" class="w-5 h-5 text-red-400 mr-2 mt-0.5" />
+              <commonIcon name="lucide:alert-triangle" class="w-5 h-5 text-red-400 mr-2 mt-0.5" />
               <div class="text-sm text-red-800">
                 {{ getDangerMessage() }}
               </div>

@@ -23,7 +23,7 @@
           class="text-sm text-blue-600 hover:text-blue-700 disabled:opacity-50"
         >
           <commonIcon 
-            name="heroicons:arrow-path" 
+            name="lucide:refresh-ccw" 
             :class="`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`"
           />
         </button>
@@ -88,7 +88,7 @@
 
       <!-- Empty State -->
       <div v-else class="text-center py-8">
-        <commonIcon name="heroicons:clock" class="w-12 h-12 text-gray-400 mx-auto mb-4" />
+        <commonIcon name="lucide:clock" class="w-12 h-12 text-gray-400 mx-auto mb-4" />
         <p class="text-gray-500">{{ $t('admin.dashboard.recentActivity.noActivity') }}</p>
         <p class="text-sm text-gray-400 mt-1">
           {{ $t('admin.dashboard.recentActivity.activityDescription') }}
@@ -134,12 +134,12 @@ const refresh = () => {
 
 const getActivityIcon = (type: ActivityItem['type']): string => {
   const icons = {
-    user_registration: 'heroicons:user-plus',
-    new_order: 'heroicons:shopping-bag',
-    low_stock: 'heroicons:exclamation-triangle',
-    product_update: 'heroicons:pencil-square'
+    user_registration: 'lucide:user-plus',
+    new_order: 'lucide:shopping-bag',
+    low_stock: 'lucide:alert-triangle',
+    product_update: 'lucide:square-pen'
   }
-  return icons[type] || 'heroicons:information-circle'
+  return icons[type] || 'lucide:info'
 }
 
 const getActivityIconClass = (type: ActivityItem['type']): string => {

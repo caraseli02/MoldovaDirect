@@ -20,7 +20,7 @@
                   : 'text-gray-500 hover:bg-gray-700 hover:text-white'
               ]"
             >
-              <Icon :name="item.icon" class="h-5 w-5" />
+              <commonIcon :name="item.icon" class="h-5 w-5" />
               <span>{{ $t(item.labelKey) }}</span>
             </NuxtLink>
           </li>
@@ -35,7 +35,7 @@
             @click="toggleSidebar"
             class="rounded-md p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 lg:hidden"
           >
-            <Icon name="lucide:menu" class="h-6 w-6" />
+            <commonIcon name="lucide:menu" class="h-6 w-6" />
           </button>
 
           <div class="hidden lg:block">
@@ -43,13 +43,13 @@
               <ol class="flex items-center space-x-4">
                 <li>
                   <div class="flex items-center">
-                    <Icon name="lucide:home" class="h-4 w-4 text-gray-400" />
+                    <commonIcon name="lucide:home" class="h-4 w-4 text-gray-400" />
                     <span class="ml-2 text-sm text-gray-500">{{ $t('account.sections.admin') }}</span>
                   </div>
                 </li>
                 <li v-if="currentPageName">
                   <div class="flex items-center">
-                    <Icon name="lucide:chevron-right" class="h-4 w-4 text-gray-400" />
+                    <commonIcon name="lucide:chevron-right" class="h-4 w-4 text-gray-400" />
                     <span class="ml-2 text-sm font-medium text-gray-900 dark:text-white">{{ currentPageName }}</span>
                   </div>
                 </li>
@@ -59,12 +59,12 @@
 
           <div class="flex items-center space-x-4">
             <button class="rounded-md p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900">
-              <Icon name="lucide:bell" class="h-5 w-5" />
+              <commonIcon name="lucide:bell" class="h-5 w-5" />
             </button>
 
             <div class="flex items-center space-x-3">
               <div class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600">
-                <Icon name="lucide:user" class="h-5 w-5 text-white" />
+                <commonIcon name="lucide:user" class="h-5 w-5 text-white" />
               </div>
               <div class="hidden md:block">
                 <p class="text-sm font-medium text-gray-900">{{ $t('account.sections.adminUser') }}</p>

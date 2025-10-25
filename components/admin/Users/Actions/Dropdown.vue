@@ -20,7 +20,7 @@
       class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 p-1 rounded"
       title="User Actions"
     >
-      <commonIcon name="heroicons:ellipsis-vertical" class="w-4 h-4" />
+      <commonIcon name="lucide:more-vertical" class="w-4 h-4" />
     </button>
 
     <!-- Dropdown Menu -->
@@ -35,16 +35,16 @@
           @click="handleAction('view')"
           class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
         >
-          <commonIcon name="heroicons:eye" class="w-4 h-4" />
+          <commonIcon name="lucide:eye" class="w-4 h-4" />
           View Details
         </button>
 
         <!-- Edit Profile -->
         <button
-          @click="handleAction('edit')"
+          @click="handleAction('lucide:square-pen')"
           class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
         >
-          <commonIcon name="heroicons:pencil" class="w-4 h-4" />
+          <commonIcon name="lucide:pencil" class="w-4 h-4" />
           Edit Profile
         </button>
 
@@ -56,7 +56,7 @@
           @click="handleAction('verify_email')"
           class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
         >
-          <commonIcon name="heroicons:check-badge" class="w-4 h-4" />
+          <commonIcon name="lucide:badge-check" class="w-4 h-4" />
           Verify Email
         </button>
 
@@ -64,7 +64,7 @@
           @click="handleAction('reset_password')"
           class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
         >
-          <commonIcon name="heroicons:key" class="w-4 h-4" />
+          <commonIcon name="lucide:key" class="w-4 h-4" />
           Reset Password
         </button>
 
@@ -75,7 +75,7 @@
           @click="handleAction('update_role')"
           class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
         >
-          <commonIcon name="heroicons:shield-check" class="w-4 h-4" />
+          <commonIcon name="lucide:shield-check" class="w-4 h-4" />
           Manage Role
         </button>
 
@@ -87,7 +87,7 @@
           @click="handleAction('suspend')"
           class="w-full text-left px-4 py-2 text-sm text-yellow-700 dark:text-yellow-400 hover:bg-yellow-50 dark:hover:bg-yellow-900/20 flex items-center gap-2"
         >
-          <commonIcon name="heroicons:pause" class="w-4 h-4" />
+          <commonIcon name="lucide:pause" class="w-4 h-4" />
           Suspend Account
         </button>
 
@@ -96,7 +96,7 @@
           @click="handleAction('unsuspend')"
           class="w-full text-left px-4 py-2 text-sm text-green-700 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 flex items-center gap-2"
         >
-          <commonIcon name="heroicons:play" class="w-4 h-4" />
+          <commonIcon name="lucide:play" class="w-4 h-4" />
           Unsuspend Account
         </button>
 
@@ -105,7 +105,7 @@
           @click="handleAction('ban')"
           class="w-full text-left px-4 py-2 text-sm text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-2"
         >
-          <commonIcon name="heroicons:no-symbol" class="w-4 h-4" />
+          <commonIcon name="lucide:ban" class="w-4 h-4" />
           Ban Account
         </button>
 
@@ -114,7 +114,7 @@
           @click="handleAction('unban')"
           class="w-full text-left px-4 py-2 text-sm text-green-700 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 flex items-center gap-2"
         >
-          <commonIcon name="heroicons:check-circle" class="w-4 h-4" />
+          <commonIcon name="lucide:check-circle-2" class="w-4 h-4" />
           Unban Account
         </button>
       </div>

@@ -6,7 +6,7 @@
       class="ml-1 p-0.5 hover:bg-blue-200 dark:hover:bg-blue-800 rounded-full transition-colors"
       :aria-label="$t('products.filters.removeFilter', { filter: label })"
     >
-      <commonIcon name="heroicons:x-mark" class="w-3 h-3" />
+      <commonIcon name="lucide:x" class="w-3 h-3" />
     </button>
   </span>
 </template>

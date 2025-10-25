@@ -18,7 +18,7 @@
     <!-- Loading State -->
     <div v-if="loading" class="p-8 text-center">
       <div class="inline-flex items-center gap-2 text-gray-600">
-        <commonIcon name="heroicons:arrow-path" class="w-5 h-5 animate-spin" />
+        <commonIcon name="lucide:refresh-ccw" class="w-5 h-5 animate-spin" />
         Loading user details...
       </div>
     </div>
@@ -26,7 +26,7 @@
     <!-- Error State -->
     <div v-else-if="error" class="p-8 text-center">
       <div class="text-red-600 mb-4">
-        <commonIcon name="heroicons:exclamation-triangle" class="w-8 h-8 mx-auto mb-2" />
+        <commonIcon name="lucide:alert-triangle" class="w-8 h-8 mx-auto mb-2" />
         {{ error }}
       </div>
       <button
@@ -44,7 +44,7 @@
         <div class="flex items-start justify-between">
           <div class="flex items-center gap-4">
             <div class="h-16 w-16 rounded-full bg-gray-300 flex items-center justify-center">
-              <commonIcon name="heroicons:user" class="w-8 h-8 text-gray-600" />
+              <commonIcon name="lucide:user" class="w-8 h-8 text-gray-600" />
             </div>
             <div>
               <h2 class="text-xl font-semibold text-gray-900">
@@ -75,7 +75,7 @@
               @click="editUser"
               class="px-3 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
             >
-              <commonIcon name="heroicons:pencil" class="w-4 h-4 mr-1" />
+              <commonIcon name="lucide:pencil" class="w-4 h-4 mr-1" />
               Edit
             </button>
             <AdminUsersActionsDropdown
@@ -207,7 +207,7 @@
         <!-- Orders Tab -->
         <div v-if="activeTab === 'orders'">
           <div v-if="user.orders.length === 0" class="text-center py-8">
-            <commonIcon name="heroicons:shopping-bag" class="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <commonIcon name="lucide:shopping-bag" class="w-12 h-12 text-gray-400 mx-auto mb-4" />
             <h3 class="text-lg font-medium text-gray-900 mb-2">No orders yet</h3>
             <p class="text-gray-500">This user hasn't placed any orders.</p>
           </div>
@@ -371,7 +371,7 @@ const getPaymentStatusClass = (status: string) => {
 }
 
 const editUser = () => {
-  emit('edit', props.userId)
+  emit('lucide:square-pen', props.userId)
 }
 
 const handleUserAction = (action: string, userId: string, data?: any) => {

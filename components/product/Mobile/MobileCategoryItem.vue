@@ -19,7 +19,7 @@
           class="mr-2 p-1 text-gray-400 hover:text-gray-600 transition-colors"
         >
           <commonIcon 
-            :name="isExpanded ? 'heroicons:chevron-down' : 'heroicons:chevron-right'" 
+            :name="isExpanded ? 'lucide:chevron-down' : 'lucide:chevron-right'" 
             class="w-4 h-4" 
           />
         </button>
@@ -35,7 +35,7 @@
         </span>
         <commonIcon 
           v-if="isCurrentCategory"
-          name="heroicons:check" 
+          name="lucide:check" 
           class="w-5 h-5 text-blue-600" 
         />
       </div>

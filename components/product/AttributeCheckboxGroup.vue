@@ -29,7 +29,7 @@
       >
         {{ showAll ? $t('common.showLess') : $t('common.showMore') }}
         <commonIcon 
-          :name="showAll ? 'heroicons:chevron-up' : 'heroicons:chevron-down'" 
+          :name="showAll ? 'lucide:chevron-up' : 'lucide:chevron-down'" 
           class="w-4 h-4 inline ml-1" 
         />
       </button>

@@ -33,7 +33,7 @@
       ]"
     >
       <commonIcon
-        name="heroicons:exclamation-triangle"
+        name="lucide:alert-triangle"
         class="mr-1"
         :class="iconSizeClasses"
       />
@@ -49,7 +49,7 @@
       ]"
     >
       <commonIcon
-        name="heroicons:lock-closed"
+        name="lucide:lock"
         class="mr-1"
         :class="iconSizeClasses"
       />
@@ -126,11 +126,11 @@ const statusText = computed(() => {
 
 const statusIcon = computed(() => {
   const icons = {
-    active: 'heroicons:check-circle',
-    inactive: 'heroicons:clock',
-    suspended: 'heroicons:no-symbol',
-    locked: 'heroicons:lock-closed',
-    unverified: 'heroicons:exclamation-triangle'
+    active: 'lucide:check-circle-2',
+    inactive: 'lucide:clock',
+    suspended: 'lucide:ban',
+    locked: 'lucide:lock',
+    unverified: 'lucide:alert-triangle'
   }
   return icons[userStatus.value]
 })

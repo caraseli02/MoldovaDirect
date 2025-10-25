@@ -12,7 +12,7 @@
         <div class="flex items-center mb-6">
           <div class="flex-shrink-0">
             <div class="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 dark:bg-red-900 rounded-full">
-              <commonIcon name="exclamation-triangle" class="w-6 h-6 text-red-600 dark:text-red-400" />
+              <commonIcon name="lucide:alert-triangle" class="w-6 h-6 text-red-600 dark:text-red-400" />
             </div>
           </div>
           <div class="ml-4">
@@ -29,7 +29,7 @@
           <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md p-4">
             <div class="flex">
               <div class="flex-shrink-0">
-                <commonIcon name="exclamation-triangle" class="h-5 w-5 text-red-400" />
+                <commonIcon name="lucide:alert-triangle" class="h-5 w-5 text-red-400" />
               </div>
               <div class="ml-3">
                 <h4 class="text-sm font-medium text-red-800 dark:text-red-200">
@@ -128,7 +128,7 @@
               class="px-6 py-2 bg-red-600 text-white text-sm font-medium rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               <span v-if="isLoading" class="flex items-center">
-                <commonIcon name="spinner" class="animate-spin h-4 w-4 mr-2" />
+                <commonIcon name="lucide:loader-2" class="animate-spin h-4 w-4 mr-2" />
                 {{ $t('common.loading') }}
               </span>
               <span v-else>

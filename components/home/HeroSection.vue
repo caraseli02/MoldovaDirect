@@ -6,7 +6,7 @@
       <div class="grid items-center gap-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)]">
         <div>
           <div class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-medium ring-1 ring-white/30 backdrop-blur">
-            <Icon name="heroicons:shield-check" class="h-4 w-4" />
+            <commonIcon name="lucide:shield-check" class="h-4 w-4" />
             <span>{{ t('home.hero.trustBadge') }}</span>
           </div>
           <h1 class="mt-6 text-4xl font-bold tracking-tight md:text-6xl">{{ t('home.hero.title') }}</h1>
@@ -17,7 +17,7 @@
               class="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-semibold text-primary-700 shadow-lg shadow-primary-900/20 transition hover:-translate-y-0.5 hover:bg-primary-50 hover:shadow-xl"
             >
               {{ t('home.hero.primaryCta') }}
-              <Icon name="heroicons:arrow-right" class="h-5 w-5" />
+              <commonIcon name="lucide:arrow-right" class="h-5 w-5" />
             </NuxtLink>
             <NuxtLink
               :to="localePath('/about')"
@@ -47,7 +47,7 @@
             <div class="absolute bottom-6 right-6 rounded-3xl border border-white/10 bg-slate-950/75 p-6 text-white shadow-lg shadow-slate-900/40 backdrop-blur">
               <div class="flex items-center gap-3">
                 <div class="rounded-full bg-emerald-500/20 p-3 text-emerald-300">
-                  <Icon name="heroicons:truck" class="h-6 w-6" />
+                  <commonIcon name="lucide:truck" class="h-6 w-6" />
                 </div>
                 <div>
                   <p class="text-sm font-semibold">{{ t('home.hero.cards.delivery.title') }}</p>
