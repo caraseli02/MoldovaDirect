@@ -1,5 +1,5 @@
 // POST /api/checkout/send-confirmation - Send order confirmation email
-import { createClient } from '@supabase/supabase-js'
+import { serverSupabaseServiceRole } from '#supabase/server'
 import { sendOrderConfirmationEmail, transformOrderToEmailData } from '~/server/utils/orderEmails'
 import type { DatabaseOrder } from '~/server/utils/emailTemplates/types'
 
@@ -11,10 +11,7 @@ interface SendConfirmationRequest {
 
 export default defineEventHandler(async (event) => {
   try {
-    const supabase = createClient(
-      useRuntimeConfig().public.supabaseUrl,
-      useRuntimeConfig().supabaseServiceKey
-    )
+    const supabase = serverSupabaseServiceRole(event)
 
     // Parse request body
     const body = await readBody(event) as SendConfirmationRequest

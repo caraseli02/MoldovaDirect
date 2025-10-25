@@ -1,5 +1,5 @@
 // POST /api/payment-methods/create - Save a new payment method
-import { createClient } from '@supabase/supabase-js'
+import { serverSupabaseServiceRole } from '#supabase/server'
 
 interface CreatePaymentMethodRequest {
   type: 'credit_card' | 'paypal'
@@ -13,10 +13,7 @@ interface CreatePaymentMethodRequest {
 
 export default defineEventHandler(async (event) => {
   try {
-    const supabase = createClient(
-      useRuntimeConfig().public.supabaseUrl,
-      useRuntimeConfig().supabaseServiceKey
-    )
+    const supabase = serverSupabaseServiceRole(event)
 
     // Get user from session
     const authHeader = getHeader(event, 'authorization')

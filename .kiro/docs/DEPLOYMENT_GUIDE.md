@@ -29,7 +29,7 @@ Create production environment variables:
 ```bash
 # Supabase Configuration
 SUPABASE_URL=https://your-project-id.supabase.co
-SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_KEY=your-anon-key
 
 # Application
 APP_URL=https://your-app.vercel.app
@@ -116,7 +116,7 @@ vercel --prod
 ## Troubleshooting
 
 ### Supabase Connection Issues
-- Verify SUPABASE_URL and SUPABASE_ANON_KEY are correct
+- Verify SUPABASE_URL and SUPABASE_KEY are correct
 - Check if Supabase project is active (not paused)
 - Ensure environment variables are set in Vercel dashboard
 

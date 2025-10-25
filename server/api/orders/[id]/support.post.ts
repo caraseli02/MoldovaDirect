@@ -1,5 +1,5 @@
 // POST /api/orders/[id]/support - Create support ticket for an order
-import { createClient } from '@supabase/supabase-js'
+import { serverSupabaseServiceRole } from '#supabase/server'
 
 interface SupportTicketRequest {
   subject: string
@@ -10,10 +10,7 @@ interface SupportTicketRequest {
 
 export default defineEventHandler(async (event) => {
   try {
-    const supabase = createClient(
-      useRuntimeConfig().public.supabaseUrl,
-      useRuntimeConfig().supabaseServiceKey
-    )
+    const supabase = serverSupabaseServiceRole(event)
 
     // Get user from session
     const authHeader = getHeader(event, 'authorization')

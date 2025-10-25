@@ -1,5 +1,5 @@
 // PATCH /api/admin/orders/[id]/status - Update order status
-import { createClient } from '@supabase/supabase-js'
+import { serverSupabaseServiceRole } from '#supabase/server'
 
 interface UpdateOrderStatusRequest {
   status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
@@ -10,10 +10,7 @@ interface UpdateOrderStatusRequest {
 
 export default defineEventHandler(async (event) => {
   try {
-    const supabase = createClient(
-      useRuntimeConfig().public.supabaseUrl,
-      useRuntimeConfig().supabaseServiceKey
-    )
+    const supabase = serverSupabaseServiceRole(event)
 
     // Get user from session and verify admin role
     const authHeader = getHeader(event, 'authorization')

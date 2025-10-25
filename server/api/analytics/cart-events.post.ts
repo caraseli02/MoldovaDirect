@@ -9,7 +9,7 @@
  * Receives and processes comprehensive cart analytics data.
  */
 
-import { createClient } from '@supabase/supabase-js'
+import { serverSupabaseServiceRole } from '#supabase/server'
 
 interface CartAnalyticsEvent {
   eventType: 'cart_add' | 'cart_remove' | 'cart_update' | 'cart_view' | 'cart_abandon' | 'cart_checkout_start' | 'cart_checkout_complete'
@@ -66,10 +66,7 @@ export default defineEventHandler(async (event) => {
       return { success: true, message: 'No data to process' }
     }
 
-    const supabase = createClient(
-      useRuntimeConfig().public.supabaseUrl,
-      useRuntimeConfig().supabaseServiceKey
-    )
+    const supabase = serverSupabaseServiceRole(event)
 
     const results = {
       eventsProcessed: 0,

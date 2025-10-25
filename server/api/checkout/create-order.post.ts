@@ -1,5 +1,5 @@
 // POST /api/checkout/create-order - Create order from checkout session
-import { createClient } from '@supabase/supabase-js'
+import { serverSupabaseServiceRole } from '#supabase/server'
 
 interface CreateOrderFromCheckoutRequest {
   sessionId: string
@@ -54,16 +54,7 @@ interface CreateOrderFromCheckoutRequest {
 export default defineEventHandler(async (event) => {
   try {
     // Create admin client with service role key (bypasses RLS)
-    const supabase = createClient(
-      useRuntimeConfig().public.supabaseUrl,
-      useRuntimeConfig().supabaseServiceKey,
-      {
-        auth: {
-          autoRefreshToken: false,
-          persistSession: false
-        }
-      }
-    )
+    const supabase = serverSupabaseServiceRole(event)
 
     // Parse request body
     const body = await readBody(event) as CreateOrderFromCheckoutRequest
