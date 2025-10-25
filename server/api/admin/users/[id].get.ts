@@ -8,7 +8,7 @@
  * Provides detailed user information for admin user management interface.
  */
 
-import { createClient } from '@supabase/supabase-js'
+import { serverSupabaseServiceRole } from '#supabase/server'
 
 interface UserDetail {
   id: string
@@ -74,18 +74,8 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // Check if we have the required configuration
-    const config = useRuntimeConfig()
-    if (!config.public.supabaseUrl || !config.supabaseServiceKey) {
-      console.warn('Supabase configuration missing, returning mock data')
-      return getMockUserDetail(userId)
-    }
-
     // Verify admin authentication
-    const supabase = createClient(
-      config.public.supabaseUrl,
-      config.supabaseServiceKey
-    )
+    const supabase = serverSupabaseServiceRole(event)
 
     // Try to get auth user data
     let authUser: any = null

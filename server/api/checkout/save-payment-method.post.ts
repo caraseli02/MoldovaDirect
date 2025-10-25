@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js'
+import { serverSupabaseServiceRole } from '#supabase/server'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -22,11 +22,7 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    const runtimeConfig = useRuntimeConfig()
-    const supabase = createClient(
-      runtimeConfig.public.supabaseUrl,
-      runtimeConfig.supabaseServiceKey
-    )
+    const supabase = serverSupabaseServiceRole(event)
 
     // If this is set as default, unset other default payment methods
     if (isDefault) {

@@ -1,5 +1,5 @@
 // POST /api/orders/[id]/return - Initiate a return for an order
-import { createClient } from '@supabase/supabase-js'
+import { serverSupabaseServiceRole } from '#supabase/server'
 
 interface ReturnRequest {
   items: Array<{
@@ -12,10 +12,7 @@ interface ReturnRequest {
 
 export default defineEventHandler(async (event) => {
   try {
-    const supabase = createClient(
-      useRuntimeConfig().public.supabaseUrl,
-      useRuntimeConfig().supabaseServiceKey
-    )
+    const supabase = serverSupabaseServiceRole(event)
 
     // Get user from session
     const authHeader = getHeader(event, 'authorization')

@@ -1,5 +1,5 @@
 // POST /api/shipping/methods - Get available shipping methods for cart and address
-import { createClient } from '@supabase/supabase-js'
+import { serverSupabaseServiceRole } from '#supabase/server'
 import { getAvailableShippingMethods, calculateOrderTotals } from '~/server/utils/orderUtils'
 
 interface ShippingMethodsRequest {
@@ -14,10 +14,7 @@ interface ShippingMethodsRequest {
 
 export default defineEventHandler(async (event) => {
   try {
-    const supabase = createClient(
-      useRuntimeConfig().public.supabaseUrl,
-      useRuntimeConfig().supabaseServiceKey
-    )
+    const supabase = serverSupabaseServiceRole(event)
 
     // Parse request body
     const body = await readBody(event) as ShippingMethodsRequest

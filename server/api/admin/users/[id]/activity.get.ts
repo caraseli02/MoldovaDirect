@@ -7,7 +7,7 @@
  * Provides user activity history for admin interface.
  */
 
-import { createClient } from '@supabase/supabase-js'
+import { serverSupabaseServiceRole } from '#supabase/server'
 
 interface ActivityLog {
   id: string
@@ -37,18 +37,8 @@ export default defineEventHandler(async (event) => {
       offset = 0
     } = query
 
-    // Check if we have the required configuration
-    const config = useRuntimeConfig()
-    if (!config.public.supabaseUrl || !config.supabaseServiceKey) {
-      console.warn('Supabase configuration missing, returning mock activity')
-      return getMockActivity(userId)
-    }
-
     // Verify admin authentication
-    const supabase = createClient(
-      config.public.supabaseUrl,
-      config.supabaseServiceKey
-    )
+    const supabase = serverSupabaseServiceRole(event)
 
     // Verify user exists
     let user: any = null

@@ -201,7 +201,7 @@ chore: major code cleanup - remove unused features and dependencies
 ### Environment Variables Required
 ```env
 SUPABASE_URL=https://[project].supabase.co
-SUPABASE_ANON_KEY=[anon_key]
+SUPABASE_KEY=[anon_key]
 SUPABASE_SERVICE_KEY=[service_key] # For admin operations
 APP_URL=https://[your-domain].vercel.app
 NODE_ENV=production

@@ -1,5 +1,5 @@
 // POST /api/orders/create - Create a new order from cart
-import { createClient } from '@supabase/supabase-js'
+import { serverSupabaseServiceRole } from '#supabase/server'
 import { sendOrderConfirmationEmail } from '~/server/utils/orderEmails'
 import { 
   extractCustomerInfoFromOrder, 
@@ -45,10 +45,7 @@ interface CreateOrderRequest {
 
 export default defineEventHandler(async (event) => {
   try {
-    const supabase = createClient(
-      useRuntimeConfig().public.supabaseUrl,
-      useRuntimeConfig().supabaseServiceKey
-    )
+    const supabase = serverSupabaseServiceRole(event)
 
     // Parse request body
     const body = await readBody(event) as CreateOrderRequest

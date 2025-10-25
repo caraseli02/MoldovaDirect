@@ -9,7 +9,7 @@
  * Provides user account management actions for admin interface.
  */
 
-import { createClient } from '@supabase/supabase-js'
+import { serverSupabaseServiceRole } from '#supabase/server'
 
 interface UserActionRequest {
   action: 'suspend' | 'unsuspend' | 'ban' | 'unban' | 'verify_email' | 'reset_password' | 'update_role'
@@ -38,18 +38,8 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // Check if we have the required configuration
-    const config = useRuntimeConfig()
-    if (!config.public.supabaseUrl || !config.supabaseServiceKey) {
-      console.warn('Supabase configuration missing, simulating action')
-      return simulateUserAction(body.action, userId)
-    }
-
     // Verify admin authentication
-    const supabase = createClient(
-      config.public.supabaseUrl,
-      config.supabaseServiceKey
-    )
+    const supabase = serverSupabaseServiceRole(event)
 
     // Get current user to verify they exist
     let currentUser: any = null

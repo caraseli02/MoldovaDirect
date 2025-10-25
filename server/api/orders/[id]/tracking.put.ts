@@ -1,5 +1,5 @@
 // PUT /api/orders/[id]/tracking - Update order tracking information (admin only)
-import { createClient } from '@supabase/supabase-js'
+import { serverSupabaseServiceRole } from '#supabase/server'
 
 interface UpdateTrackingRequest {
   trackingNumber?: string
@@ -10,10 +10,7 @@ interface UpdateTrackingRequest {
 
 export default defineEventHandler(async (event) => {
   try {
-    const supabase = createClient(
-      useRuntimeConfig().public.supabaseUrl,
-      useRuntimeConfig().supabaseServiceKey
-    )
+    const supabase = serverSupabaseServiceRole(event)
 
     // Get user from session
     const authHeader = getHeader(event, 'authorization')

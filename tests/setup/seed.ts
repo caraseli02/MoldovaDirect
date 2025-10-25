@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = process.env.SUPABASE_URL || 'http://localhost:54321'
-const supabaseKey = process.env.SUPABASE_ANON_KEY || 'test-key'
+const supabaseKey = process.env.SUPABASE_KEY || 'test-key'
 
 // Create Supabase client for testing
 export const supabase = createClient(supabaseUrl, supabaseKey)

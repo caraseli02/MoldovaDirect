@@ -1,5 +1,5 @@
 // POST /api/checkout/update-inventory - Update product inventory after order
-import { createClient } from '@supabase/supabase-js'
+import { serverSupabaseServiceRole } from '#supabase/server'
 
 interface UpdateInventoryRequest {
   items: Array<{
@@ -11,10 +11,7 @@ interface UpdateInventoryRequest {
 
 export default defineEventHandler(async (event) => {
   try {
-    const supabase = createClient(
-      useRuntimeConfig().public.supabaseUrl,
-      useRuntimeConfig().supabaseServiceKey
-    )
+    const supabase = serverSupabaseServiceRole(event)
 
     // Parse request body
     const body = await readBody(event) as UpdateInventoryRequest

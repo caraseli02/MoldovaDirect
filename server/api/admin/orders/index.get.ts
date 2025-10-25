@@ -1,12 +1,9 @@
 // GET /api/admin/orders - Admin endpoint to get all orders with filtering and pagination
-import { createClient } from '@supabase/supabase-js'
+import { serverSupabaseServiceRole } from '#supabase/server'
 
 export default defineEventHandler(async (event) => {
   try {
-    const supabase = createClient(
-      useRuntimeConfig().public.supabaseUrl,
-      useRuntimeConfig().supabaseServiceKey
-    )
+    const supabase = serverSupabaseServiceRole(event)
 
     // Get user from session and verify admin role
     const authHeader = getHeader(event, 'authorization')

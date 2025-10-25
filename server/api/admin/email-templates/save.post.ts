@@ -1,3 +1,5 @@
+import { serverSupabaseServiceRole } from '#supabase/server'
+
 /**
  * Save email template
  * Requirements: 5.1, 5.4, 5.6
@@ -14,7 +16,7 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const supabase = useSupabaseClient()
+  const supabase = serverSupabaseServiceRole(event)
 
   // Check if template exists
   const { data: existing } = await supabase

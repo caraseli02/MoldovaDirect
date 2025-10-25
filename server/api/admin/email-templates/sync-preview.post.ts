@@ -1,3 +1,5 @@
+import { serverSupabaseServiceRole } from '#supabase/server'
+
 /**
  * Preview template synchronization changes
  * Requirements: 5.5
@@ -14,7 +16,7 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const supabase = useSupabaseClient()
+  const supabase = serverSupabaseServiceRole(event)
 
   // Get source template
   const { data: sourceTemplate, error: sourceError } = await supabase

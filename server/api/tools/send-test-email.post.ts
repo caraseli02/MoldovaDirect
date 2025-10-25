@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js'
+import { serverSupabaseServiceRole } from '#supabase/server'
 import { sendOrderConfirmationEmail, sendOrderStatusEmail } from '~/server/utils/orderEmails'
 import { transformOrderToEmailData } from '~/server/utils/orderDataTransform'
 import type { EmailType } from '~/types/email'
@@ -50,17 +50,7 @@ export default defineEventHandler(async (event) => {
   const locale = body.locale || 'en'
   const issueDescription = body.type === 'order_issue' ? body.issueDescription || 'Test issue details for QA.' : undefined
 
-  const runtimeConfig = useRuntimeConfig()
-  const supabase = createClient(
-    runtimeConfig.public.supabaseUrl,
-    runtimeConfig.supabaseServiceKey,
-    {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false
-      }
-    }
-  )
+  const supabase = serverSupabaseServiceRole(event)
 
   let createdOrderId: number | null = null
 

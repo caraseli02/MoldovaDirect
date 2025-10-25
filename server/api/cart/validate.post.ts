@@ -1,5 +1,5 @@
 // POST /api/cart/validate - Validate cart items before checkout
-import { createClient } from '@supabase/supabase-js'
+import { serverSupabaseServiceRole } from '#supabase/server'
 import { validateCartItems, calculateOrderTotals, getAvailableShippingMethods } from '~/server/utils/orderUtils'
 
 interface ValidateCartRequest {
@@ -9,10 +9,7 @@ interface ValidateCartRequest {
 
 export default defineEventHandler(async (event) => {
   try {
-    const supabase = createClient(
-      useRuntimeConfig().public.supabaseUrl,
-      useRuntimeConfig().supabaseServiceKey
-    )
+    const supabase = serverSupabaseServiceRole(event)
 
     // Parse request body
     const body = await readBody(event) as ValidateCartRequest

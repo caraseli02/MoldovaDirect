@@ -40,7 +40,7 @@ Once your project is created:
    ```env
    # Supabase Configuration
    SUPABASE_URL=https://your-project-id.supabase.co
-   SUPABASE_ANON_KEY=your-anon-key-here
+   SUPABASE_KEY=your-anon-key-here
    ```
 
 ## Database Schema Setup
@@ -152,7 +152,7 @@ supabase gen types typescript --linked > types/supabase.ts
 ## Troubleshooting
 
 ### Connection Issues
-- Verify SUPABASE_URL and SUPABASE_ANON_KEY in `.env`
+- Verify SUPABASE_URL and SUPABASE_KEY in `.env`
 - Check if your project is active in Supabase dashboard
 - Ensure you're using the correct environment variables
 

@@ -1,5 +1,5 @@
 // POST /api/orders/[id]/complete - Complete order after successful payment
-import { createClient } from '@supabase/supabase-js'
+import { serverSupabaseServiceRole } from '#supabase/server'
 
 interface CompleteOrderRequest {
   paymentIntentId?: string
@@ -9,10 +9,7 @@ interface CompleteOrderRequest {
 
 export default defineEventHandler(async (event) => {
   try {
-    const supabase = createClient(
-      useRuntimeConfig().public.supabaseUrl,
-      useRuntimeConfig().supabaseServiceKey
-    )
+    const supabase = serverSupabaseServiceRole(event)
 
     // Get order ID from route params
     const orderId = getRouterParam(event, 'id')

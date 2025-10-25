@@ -9,7 +9,7 @@
  * for admin user management interface.
  */
 
-import { createClient } from '@supabase/supabase-js'
+import { serverSupabaseServiceRole } from '#supabase/server'
 
 interface UserFilters {
   search?: string
@@ -45,18 +45,8 @@ interface UserWithProfile {
 
 export default defineEventHandler(async (event) => {
   try {
-    // Check if we have the required configuration
-    const config = useRuntimeConfig()
-    if (!config.public.supabaseUrl || !config.supabaseServiceKey) {
-      console.warn('Supabase configuration missing, returning mock data')
-      return getMockUserData()
-    }
-
     // Verify admin authentication
-    const supabase = createClient(
-      config.public.supabaseUrl,
-      config.supabaseServiceKey
-    )
+    const supabase = serverSupabaseServiceRole(event)
 
     // Parse query parameters
     const query = getQuery(event) as UserFilters

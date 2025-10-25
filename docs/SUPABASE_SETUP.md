@@ -14,7 +14,7 @@ Grab your project credentials from **Settings → API** and update `.env` (copy 
 
 ```bash
 SUPABASE_URL=https://your-project-id.supabase.co
-SUPABASE_ANON_KEY=public-anon-key
+SUPABASE_KEY=public-anon-key
 SUPABASE_SERVICE_KEY=service-role-key   # required for server APIs
 
 APP_URL=http://localhost:3000
@@ -68,7 +68,7 @@ The provided SQL scripts enable RLS on `profiles`, `addresses`, `carts`, `orders
 ---
 
 ## Troubleshooting
-- **Authentication loops**: confirm `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and redirect URLs all match; restart the dev server after changes.
+- **Authentication loops**: confirm `SUPABASE_URL`, `SUPABASE_KEY`, and redirect URLs all match; restart the dev server after changes.
 - **Permission errors**: ensure the relevant SQL script ran and RLS policies exist—missing policies default to *deny*.
 - **Service key missing**: any server route that writes orders or payment intents needs `SUPABASE_SERVICE_KEY`; set it locally and in deployment environments.
 

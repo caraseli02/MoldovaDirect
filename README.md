@@ -31,7 +31,7 @@ Create a `.env` file with:
 ```bash
 # Supabase Configuration
 SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_KEY=your-anon-key
 SUPABASE_SERVICE_KEY=your-service-key
 
 # Stripe Payment Processing (Primary payment processor)

@@ -315,14 +315,16 @@ function generateAdminAlertHtml(failedEmails: EmailRetryResult[]): string {
  */
 export async function getRetryStatistics(
   dateFrom?: string,
-  dateTo?: string
+  dateTo?: string,
+  supabaseClient?: any
 ): Promise<{
   totalRetries: number
   successfulRetries: number
   failedRetries: number
   averageAttempts: number
 }> {
-  const supabase = useSupabaseClient()
+  const { resolveSupabaseClient } = await import('./supabaseAdminClient')
+  const supabase = resolveSupabaseClient(supabaseClient)
   
   let query = supabase
     .from('email_logs')
