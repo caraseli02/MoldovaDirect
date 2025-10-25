@@ -3,6 +3,7 @@
  * Requirements: 4.2, 4.3
  */
 
+import { serverSupabaseServiceRole } from '#supabase/server'
 import { getRetryStatistics } from '~/server/utils/emailRetryService'
 
 export default defineEventHandler(async (event) => {
@@ -10,11 +11,12 @@ export default defineEventHandler(async (event) => {
     // TODO: Add admin authentication check
     // const user = await requireAdmin(event)
     
+    const supabase = serverSupabaseServiceRole(event)
     const query = getQuery(event)
     const dateFrom = query.dateFrom as string | undefined
     const dateTo = query.dateTo as string | undefined
     
-    const stats = await getRetryStatistics(dateFrom, dateTo)
+    const stats = await getRetryStatistics(dateFrom, dateTo, supabase)
     
     return {
       success: true,

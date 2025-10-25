@@ -30,8 +30,9 @@ export function resolveSupabaseClient(
     }
   }
 
+  // Fallback: use runtime config for background jobs
   const config = useRuntimeConfig()
-  const url = config.public?.supabaseUrl
+  const url = config.supabaseUrl
   const serviceKey = config.supabaseServiceKey
 
   if (!url || !serviceKey) {

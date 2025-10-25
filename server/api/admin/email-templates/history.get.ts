@@ -1,3 +1,5 @@
+import { serverSupabaseServiceRole } from '#supabase/server'
+
 /**
  * Get email template version history
  * Requirements: 5.6
@@ -15,7 +17,7 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const supabase = useSupabaseClient()
+  const supabase = serverSupabaseServiceRole(event)
 
   // Get template ID
   const { data: template } = await supabase

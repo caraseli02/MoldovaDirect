@@ -1,3 +1,5 @@
+import { serverSupabaseServiceRole } from '#supabase/server'
+
 /**
  * Rollback email template to a previous version
  * Requirements: 5.6
@@ -14,7 +16,7 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const supabase = useSupabaseClient()
+  const supabase = serverSupabaseServiceRole(event)
 
   // Get the historical version
   const { data: historicalVersion, error: historyError } = await supabase

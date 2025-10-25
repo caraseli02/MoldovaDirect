@@ -18,6 +18,9 @@ export default defineNuxtConfig({
   runtimeConfig: {
     // Private keys (only available on server-side)
     stripeSecretKey: process.env.STRIPE_SECRET_KEY,
+    // Supabase credentials for fallback service client (email jobs, etc.)
+    supabaseUrl: process.env.SUPABASE_URL,
+    supabaseServiceKey: process.env.SUPABASE_SERVICE_KEY,
     // Public keys (exposed to client-side)
     public: {
       stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
