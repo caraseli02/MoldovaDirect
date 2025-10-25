@@ -12,7 +12,7 @@
           class="relative overflow-hidden rounded-3xl bg-white p-8 text-left shadow-lg transition hover:-translate-y-1 hover:shadow-xl dark:bg-gray-950"
         >
           <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-100 text-primary-600">
-            <Icon :name="step.icon" class="h-6 w-6" />
+            <commonIcon :name="step.icon" class="h-6 w-6" />
           </div>
           <div class="mt-6">
             <p class="text-sm font-semibold text-primary-600">{{ formatStep(index + 1) }}</p>

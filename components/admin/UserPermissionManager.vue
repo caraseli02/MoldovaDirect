@@ -29,7 +29,7 @@
           :disabled="saving"
           class="px-4 py-2"
         >
-          <commonIcon v-if="saving" name="heroicons:arrow-path" class="w-4 h-4 animate-spin mr-2" />
+          <commonIcon v-if="saving" name="lucide:refresh-ccw" class="w-4 h-4 animate-spin mr-2" />
           Save Changes
         </Button>
       </div>
@@ -38,7 +38,7 @@
     <!-- Loading State -->
     <div v-if="loading" class="p-8 text-center">
       <div class="inline-flex items-center gap-2 text-gray-600">
-        <commonIcon name="heroicons:arrow-path" class="w-5 h-5 animate-spin" />
+        <commonIcon name="lucide:refresh-ccw" class="w-5 h-5 animate-spin" />
         Loading permissions...
       </div>
     </div>
@@ -46,7 +46,7 @@
     <!-- Error State -->
     <div v-else-if="error" class="p-8 text-center">
       <div class="text-red-600 mb-4">
-        <commonIcon name="heroicons:exclamation-triangle" class="w-8 h-8 mx-auto mb-2" />
+        <commonIcon name="lucide:alert-triangle" class="w-8 h-8 mx-auto mb-2" />
         {{ error }}
       </div>
       <Button

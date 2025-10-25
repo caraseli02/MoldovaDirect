@@ -13,7 +13,7 @@
         >
           <summary class="flex cursor-pointer items-center justify-between text-left text-lg font-semibold">
             <span>{{ item.question }}</span>
-            <Icon name="heroicons:chevron-down" class="h-5 w-5 transition group-open:rotate-180" />
+            <commonIcon name="lucide:chevron-down" class="h-5 w-5 transition group-open:rotate-180" />
           </summary>
           <p class="mt-4 text-sm text-gray-600 dark:text-gray-400">{{ item.answer }}</p>
         </details>
@@ -24,7 +24,7 @@
           class="inline-flex items-center gap-2 rounded-full bg-primary-600 px-6 py-3 font-semibold text-white transition hover:bg-primary-700"
         >
           {{ t('home.faqPreview.cta') }}
-          <Icon name="heroicons:arrow-right" class="h-5 w-5" />
+          <commonIcon name="lucide:arrow-right" class="h-5 w-5" />
         </NuxtLink>
       </div>
     </div>

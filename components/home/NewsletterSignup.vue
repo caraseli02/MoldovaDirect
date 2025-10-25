@@ -20,7 +20,7 @@
             type="submit"
             class="inline-flex items-center justify-center gap-2 rounded-full bg-primary-600 px-6 py-3 font-semibold text-white transition hover:bg-primary-700"
           >
-            <Icon name="heroicons:paper-airplane" class="h-5 w-5" />
+            <commonIcon name="lucide:send" class="h-5 w-5" />
             {{ t('home.newsletter.cta') }}
           </button>
         </form>

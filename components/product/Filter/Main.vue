@@ -33,7 +33,7 @@
       @click="showMobileFilters = true"
       class="lg:hidden fixed bottom-4 right-4 z-40 bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-colors"
     >
-      <commonIcon name="heroicons:funnel" class="w-6 h-6" />
+      <commonIcon name="lucide:filter" class="w-6 h-6" />
       <span v-if="activeFilterCount > 0" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
         {{ activeFilterCount }}
       </span>
@@ -70,7 +70,7 @@
                 @click="showMobileFilters = false"
                 class="p-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400"
               >
-                <commonIcon name="heroicons:x-mark" class="w-5 h-5" />
+                <commonIcon name="lucide:x" class="w-5 h-5" />
               </button>
             </div>
           </div>

@@ -111,7 +111,7 @@
       <DialogContent class="sm:max-w-md">
         <DialogHeader>
           <DialogTitle class="text-red-600 dark:text-red-400 flex items-center gap-2">
-            <Icon name="heroicons:exclamation-triangle" class="w-5 h-5" />
+            <commonIcon name="lucide:alert-triangle" class="w-5 h-5" />
             {{ deleteDialog.title }}
           </DialogTitle>
           <DialogDescription>
@@ -136,9 +136,9 @@
             @click="confirmDelete"
             :disabled="deleteDialog.loading"
           >
-            <Icon
+            <commonIcon
               v-if="deleteDialog.loading"
-              name="heroicons:arrow-path"
+              name="lucide:refresh-ccw"
               class="w-4 h-4 mr-2 animate-spin"
             />
             {{ deleteDialog.loading ? 'Deleting...' : 'Delete' }}

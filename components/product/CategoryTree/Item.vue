@@ -10,7 +10,7 @@
         class="mr-2 p-0.5 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400 transition-colors"
       >
         <commonIcon
-          :name="isExpanded ? 'heroicons:chevron-down' : 'heroicons:chevron-right'"
+          :name="isExpanded ? 'lucide:chevron-down' : 'lucide:chevron-right'"
           class="w-4 h-4"
         />
       </button>

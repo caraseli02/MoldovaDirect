@@ -8,7 +8,7 @@
           <dl class="mt-10 space-y-8">
             <div v-for="point in points" :key="point.title" class="flex gap-4">
               <div class="mt-1 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-2xl bg-primary-100 text-primary-600">
-                <Icon :name="point.icon" class="h-6 w-6" />
+                <commonIcon :name="point.icon" class="h-6 w-6" />
               </div>
               <div>
                 <dt class="text-xl font-semibold">{{ point.title }}</dt>
@@ -21,7 +21,7 @@
             class="mt-10 inline-flex items-center gap-2 rounded-full bg-primary-600 px-6 py-3 font-semibold text-white transition hover:bg-primary-700"
           >
             {{ t('home.story.cta') }}
-            <Icon name="heroicons:arrow-right" class="h-5 w-5" />
+            <commonIcon name="lucide:arrow-right" class="h-5 w-5" />
           </NuxtLink>
         </div>
         <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary-600 to-primary-400 p-1">

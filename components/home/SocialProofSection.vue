@@ -5,7 +5,7 @@
       <div class="flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">
         <div class="max-w-xl">
           <div class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-medium ring-1 ring-white/20">
-            <Icon name="heroicons:star" class="h-5 w-5" />
+            <commonIcon name="lucide:star" class="h-5 w-5" />
             <span>{{ t('home.socialProof.badge') }}</span>
           </div>
           <h2 class="mt-6 text-3xl font-bold md:text-4xl">{{ t('home.socialProof.title') }}</h2>
@@ -18,7 +18,7 @@
           </div>
           <div class="mt-10 grid gap-4 sm:grid-cols-2">
             <div v-for="logo in logos" :key="logo" class="flex items-center gap-3 rounded-2xl bg-white/5 px-5 py-4 text-sm font-semibold">
-              <Icon name="heroicons:sparkles" class="h-5 w-5 text-primary-100" />
+              <commonIcon name="lucide:sparkles" class="h-5 w-5 text-primary-100" />
               <span>{{ logo }}</span>
             </div>
           </div>

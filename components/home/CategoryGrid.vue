@@ -11,7 +11,7 @@
           class="inline-flex items-center gap-2 rounded-full border border-primary-200 px-5 py-2 text-sm font-semibold text-primary-700 transition hover:border-primary-400 hover:text-primary-800 dark:border-primary-700/40 dark:text-primary-200"
         >
           {{ t('home.categories.viewAll') }}
-          <Icon name="heroicons:arrow-right" class="h-4 w-4" />
+          <commonIcon name="lucide:arrow-right" class="h-4 w-4" />
         </NuxtLink>
       </div>
       <div class="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
@@ -37,7 +37,7 @@
           <div class="relative flex h-full min-h-[22rem] flex-col justify-between p-8 text-white">
             <div class="space-y-4">
               <span class="inline-flex items-center justify-center rounded-2xl bg-white/90 p-3 text-slate-900 shadow-lg shadow-slate-900/15 transition group-hover:bg-white">
-                <Icon :name="category.icon" class="h-6 w-6" />
+                <commonIcon :name="category.icon" class="h-6 w-6" />
               </span>
               <div class="space-y-3">
                 <h3 class="text-2xl font-semibold leading-tight">{{ category.title }}</h3>
@@ -46,7 +46,7 @@
             </div>
             <span class="inline-flex items-center gap-2 text-sm font-semibold text-white transition group-hover:translate-x-1">
               {{ category.cta }}
-              <Icon name="heroicons:arrow-right" class="h-4 w-4" />
+              <commonIcon name="lucide:arrow-right" class="h-4 w-4" />
             </span>
           </div>
         </NuxtLink>

@@ -10,7 +10,7 @@
         class="inline-flex items-center gap-2 rounded-full border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:border-gray-300 hover:text-gray-900 disabled:opacity-50"
       >
         <commonIcon
-          name="heroicons:arrow-path"
+          name="lucide:refresh-ccw"
           :class="['h-4 w-4', isLoading ? 'animate-spin text-blue-500' : 'text-gray-400']"
         />
         <span>{{ t('admin.dashboard.refresh') }}</span>
@@ -43,7 +43,7 @@
 
     <footer class="flex flex-col gap-2 text-sm text-gray-400 md:flex-row md:items-center md:justify-between">
       <div class="flex items-center gap-2">
-        <commonIcon name="heroicons:clock" class="h-4 w-4 text-blue-500" />
+        <commonIcon name="lucide:clock" class="h-4 w-4 text-blue-500" />
         <span>{{ t('admin.dashboard.lastUpdated', { time: timeSinceRefresh }) }}</span>
       </div>
       <p class="text-xs text-gray-400">

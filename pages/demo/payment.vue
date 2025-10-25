@@ -52,19 +52,19 @@
           </h3>
           <div class="space-y-2 text-sm text-blue-800 dark:text-blue-200">
             <div class="flex items-center space-x-2">
-              <Icon name="heroicons:check-circle" class="h-5 w-5 text-green-600" />
+              <commonIcon name="lucide:check-circle-2" class="h-5 w-5 text-green-600" />
               <span><strong>Cash on Delivery:</strong> Enabled and ready for use</span>
             </div>
             <div class="flex items-center space-x-2">
-              <Icon name="heroicons:clock" class="h-5 w-5 text-yellow-600" />
+              <commonIcon name="lucide:clock" class="h-5 w-5 text-yellow-600" />
               <span><strong>Credit Card Payments:</strong> Configured but disabled for now</span>
             </div>
             <div class="flex items-center space-x-2">
-              <Icon name="heroicons:clock" class="h-5 w-5 text-yellow-600" />
+              <commonIcon name="lucide:clock" class="h-5 w-5 text-yellow-600" />
               <span><strong>PayPal Payments:</strong> Configured but disabled for now</span>
             </div>
             <div class="flex items-center space-x-2">
-              <Icon name="heroicons:clock" class="h-5 w-5 text-yellow-600" />
+              <commonIcon name="lucide:clock" class="h-5 w-5 text-yellow-600" />
               <span><strong>Bank Transfer:</strong> Configured but disabled for now</span>
             </div>
           </div>

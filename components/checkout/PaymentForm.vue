@@ -3,7 +3,7 @@
     <!-- Cash Payment Form -->
     <div v-if="modelValue.type === 'cash'" class="space-y-4">
       <div class="text-center py-8">
-        <Icon name="heroicons:banknotes" class="h-16 w-16 text-green-600 mx-auto mb-4" />
+        <commonIcon name="lucide:banknote" class="h-16 w-16 text-green-600 mx-auto mb-4" />
         <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
           {{ $t('checkout.payment.cash.title') }}
         </h3>
@@ -20,19 +20,19 @@
 
         <ul class="space-y-3 text-sm text-green-800 dark:text-green-200">
           <li class="flex items-start space-x-2">
-            <Icon name="heroicons:check-circle" class="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+            <commonIcon name="lucide:check-circle-2" class="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
             <span>{{ $t('checkout.payment.cashInstruction1') }}</span>
           </li>
           <li class="flex items-start space-x-2">
-            <Icon name="heroicons:check-circle" class="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+            <commonIcon name="lucide:check-circle-2" class="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
             <span>{{ $t('checkout.payment.cashInstruction2') }}</span>
           </li>
           <li class="flex items-start space-x-2">
-            <Icon name="heroicons:check-circle" class="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+            <commonIcon name="lucide:check-circle-2" class="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
             <span>{{ $t('checkout.payment.cashInstruction3') }}</span>
           </li>
           <li class="flex items-start space-x-2">
-            <Icon name="heroicons:check-circle" class="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+            <commonIcon name="lucide:check-circle-2" class="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
             <span>{{ $t('checkout.payment.cashInstruction4') }}</span>
           </li>
         </ul>
@@ -41,7 +41,7 @@
       <!-- Contact Information Notice -->
       <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
         <div class="flex">
-          <Icon name="heroicons:information-circle" class="h-5 w-5 text-blue-400 mr-2 mt-0.5" />
+          <commonIcon name="lucide:info" class="h-5 w-5 text-blue-400 mr-2 mt-0.5" />
           <div>
             <h3 class="text-sm font-medium text-blue-800 dark:text-blue-200">
               {{ $t('checkout.payment.contactNoticeTitle') }}
@@ -71,7 +71,7 @@
                   : 'border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white'
               ]" maxlength="19" autocomplete="cc-number" @input="formatCardNumber" @blur="validateCardNumber" />
             <div v-if="cardBrand" class="absolute inset-y-0 right-0 pr-3 flex items-center">
-              <Icon :name="getCardBrandIcon(cardBrand)" class="h-6 w-6" />
+              <commonIcon :name="getCardBrandIcon(cardBrand)" class="h-6 w-6" />
             </div>
           </div>
           <p v-if="hasError('cardNumber')" class="mt-1 text-sm text-red-600 dark:text-red-400">
@@ -112,7 +112,7 @@
               @blur="validateCVV" />
             <Button type="button" variant="ghost" size="icon" class="absolute inset-y-0 right-0 pr-3"
               @click="showCVVHelp = !showCVVHelp">
-              <Icon name="heroicons:question-mark-circle" class="h-5 w-5 text-gray-400 hover:text-gray-500" />
+              <commonIcon name="lucide:circle-help" class="h-5 w-5 text-gray-400 hover:text-gray-500" />
             </Button>
           </div>
           <p v-if="hasError('cvv')" class="mt-1 text-sm text-red-600 dark:text-red-400">
@@ -146,7 +146,7 @@
       <!-- Security Notice -->
       <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
         <div class="flex">
-          <Icon name="heroicons:shield-check" class="h-5 w-5 text-green-400 mr-2 mt-0.5" />
+          <commonIcon name="lucide:shield-check" class="h-5 w-5 text-green-400 mr-2 mt-0.5" />
           <div>
             <h3 class="text-sm font-medium text-green-800 dark:text-green-200">
               {{ $t('checkout.payment.securePayment') }}
@@ -162,7 +162,7 @@
     <!-- PayPal Form -->
     <div v-else-if="modelValue.type === 'paypal'" class="space-y-4">
       <div class="text-center py-8">
-        <Icon name="simple-icons:paypal" class="h-16 w-16 text-blue-600 mx-auto mb-4" />
+        <commonIcon name="lucide:badge-dollar-sign" class="h-16 w-16 text-blue-600 mx-auto mb-4" />
         <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
           {{ $t('checkout.payment.paypal.title') }}
         </h3>
@@ -191,7 +191,7 @@
       <!-- PayPal Notice -->
       <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
         <div class="flex">
-          <Icon name="heroicons:information-circle" class="h-5 w-5 text-blue-400 mr-2 mt-0.5" />
+          <commonIcon name="lucide:info" class="h-5 w-5 text-blue-400 mr-2 mt-0.5" />
           <div>
             <h3 class="text-sm font-medium text-blue-800 dark:text-blue-200">
               {{ $t('checkout.payment.paypalNoticeTitle') }}
@@ -207,7 +207,7 @@
     <!-- Bank Transfer Form -->
     <div v-else-if="modelValue.type === 'bank_transfer'" class="space-y-4">
       <div class="text-center py-8">
-        <Icon name="heroicons:building-library" class="h-16 w-16 text-gray-600 dark:text-gray-400 mx-auto mb-4" />
+        <commonIcon name="lucide:building-2" class="h-16 w-16 text-gray-600 dark:text-gray-400 mx-auto mb-4" />
         <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
           {{ $t('checkout.payment.bankTransfer.title') }}
         </h3>
@@ -272,7 +272,7 @@
         <!-- Copy Button -->
         <Button type="button" variant="outline" @click="copyBankDetails"
           class="mt-4 w-full inline-flex justify-center items-center">
-          <Icon name="heroicons:clipboard-document" class="h-4 w-4 mr-2" />
+          <commonIcon name="lucide:clipboard-list" class="h-4 w-4 mr-2" />
           {{ $t('checkout.payment.copyDetails') }}
         </Button>
       </div>
@@ -280,7 +280,7 @@
       <!-- Bank Transfer Instructions -->
       <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
         <div class="flex">
-          <Icon name="heroicons:exclamation-triangle" class="h-5 w-5 text-yellow-400 mr-2 mt-0.5" />
+          <commonIcon name="lucide:alert-triangle" class="h-5 w-5 text-yellow-400 mr-2 mt-0.5" />
           <div>
             <h3 class="text-sm font-medium text-yellow-800 dark:text-yellow-200">
               {{ $t('checkout.payment.bankTransferInstructions') }}
@@ -435,18 +435,7 @@ const detectCardBrand = (number: string): string => {
   return ''
 }
 
-const getCardBrandIcon = (brand: string): string => {
-  const icons = {
-    visa: 'simple-icons:visa',
-    mastercard: 'simple-icons:mastercard',
-    amex: 'simple-icons:americanexpress',
-    discover: 'simple-icons:discover',
-    diners: 'simple-icons:dinersclub',
-    jcb: 'simple-icons:jcb'
-  }
-
-  return icons[brand as keyof typeof icons] || 'heroicons:credit-card'
-}
+const getCardBrandIcon = (_brand: string): string => 'lucide:credit-card'
 
 const validateCardNumber = () => {
   const number = creditCardData.value.number.replace(/\s/g, '')

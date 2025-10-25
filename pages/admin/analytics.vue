@@ -18,7 +18,7 @@
               :disabled="loading"
               variant="outline"
             >
-              <ArrowPathIcon
+              <RefreshCcw
                 :class="['w-4 h-4 mr-2', loading ? 'animate-spin' : '']"
               />
               Refresh
@@ -169,7 +169,7 @@
         class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4"
       >
         <div class="flex">
-          <ExclamationTriangleIcon class="w-5 h-5 text-red-400 mr-3 mt-0.5" />
+          <AlertTriangle class="w-5 h-5 text-red-400 mr-3 mt-0.5" />
           <div>
             <h3 class="text-sm font-medium text-red-800 dark:text-red-200">
               Failed to load analytics data
@@ -194,12 +194,12 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button'
 import {
-  ChartBarIcon,
-  UsersIcon,
-  ShoppingBagIcon,
-  ArrowPathIcon,
-  ExclamationTriangleIcon
-} from '@heroicons/vue/24/outline'
+  AlertTriangle,
+  BarChart2,
+  RefreshCcw,
+  ShoppingBag,
+  Users
+} from 'lucide-vue-next'
 
 // Page metadata
 definePageMeta({
@@ -232,17 +232,17 @@ const tabs = [
   {
     id: 'overview',
     name: 'Overview',
-    icon: ChartBarIcon
+    icon: BarChart2
   },
   {
     id: 'users',
     name: 'Users',
-    icon: UsersIcon
+    icon: Users
   },
   {
     id: 'products',
     name: 'Products',
-    icon: ShoppingBagIcon
+    icon: ShoppingBag
   }
 ]
 
@@ -256,25 +256,25 @@ const userStats = computed(() => {
     {
       label: 'Total Users',
       value: summary.totalUsers.toLocaleString(),
-      icon: UsersIcon,
+      icon: Users,
       iconColor: 'text-blue-600 dark:text-blue-400'
     },
     {
       label: 'Active Users (30d)',
       value: summary.activeUsersLast30Days.toLocaleString(),
-      icon: UsersIcon,
+      icon: Users,
       iconColor: 'text-green-600 dark:text-green-400'
     },
     {
       label: 'New Users (30d)',
       value: summary.newUsersLast30Days.toLocaleString(),
-      icon: UsersIcon,
+      icon: Users,
       iconColor: 'text-purple-600 dark:text-purple-400'
     },
     {
       label: 'Retention Rate',
       value: `${summary.userRetentionRate}%`,
-      icon: ChartBarIcon,
+      icon: BarChart2,
       iconColor: 'text-amber-600 dark:text-amber-400'
     }
   ]

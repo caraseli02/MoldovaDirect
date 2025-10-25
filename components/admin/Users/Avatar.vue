@@ -29,7 +29,7 @@
     <!-- Default Icon -->
     <commonIcon
       v-else
-      name="heroicons:user"
+      name="lucide:user"
       :class="iconSizeClasses"
     />
   </div>

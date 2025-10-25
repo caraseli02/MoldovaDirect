@@ -32,7 +32,7 @@
           class="mt-6 inline-flex items-center gap-2 rounded-full bg-primary-600 px-6 py-3 font-semibold text-white transition hover:bg-primary-700"
         >
           {{ t('home.featuredProducts.viewAll') }}
-          <Icon name="heroicons:arrow-right" class="h-5 w-5" />
+          <commonIcon name="lucide:arrow-right" class="h-5 w-5" />
         </NuxtLink>
       </div>
 
@@ -43,7 +43,7 @@
           @click="emit('retry')"
           class="mt-4 inline-flex items-center gap-2 rounded-full bg-primary-600 px-6 py-3 font-semibold text-white transition hover:bg-primary-700"
         >
-          <Icon name="heroicons:arrow-path" class="h-5 w-5" />
+          <commonIcon name="lucide:refresh-ccw" class="h-5 w-5" />
           {{ t('common.retry') }}
         </button>
       </div>

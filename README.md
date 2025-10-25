@@ -22,7 +22,7 @@ http://localhost:3000
 ## 🔧 Development Setup
 
 ### Prerequisites
-- Node.js 20.11+
+- Node.js 22+ (required for Vite/Vue tooling). Use `.nvmrc` or `.node-version` in this repo to switch.
 - Supabase account and project
 
 ### Environment Variables

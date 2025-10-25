@@ -76,10 +76,10 @@ export const useHomeContent = () => {
 
   const categoryKeys = ['wines', 'gourmet', 'gifts', 'subscriptions'] as const
   const categoryIcons: Record<(typeof categoryKeys)[number], string> = {
-    wines: 'heroicons:sparkles',
-    gourmet: 'heroicons:beaker',
-    gifts: 'heroicons:gift-top',
-    subscriptions: 'heroicons:cube-transparent'
+    wines: 'lucide:sparkles',
+    gourmet: 'lucide:flask-conical',
+    gifts: 'lucide:gift',
+    subscriptions: 'lucide:boxes'
   }
   const categoryAccents = [
     'bg-gradient-to-br from-rose-500/20 via-orange-400/20 to-amber-300/20',
@@ -118,9 +118,9 @@ export const useHomeContent = () => {
 
   const howItWorksKeys = ['choose', 'prepare', 'deliver'] as const
   const howItWorksIcons: Record<(typeof howItWorksKeys)[number], string> = {
-    choose: 'heroicons:magnifying-glass',
-    prepare: 'heroicons:sparkles',
-    deliver: 'heroicons:truck'
+    choose: 'lucide:search',
+    prepare: 'lucide:sparkles',
+    deliver: 'lucide:truck'
   }
 
   const howItWorksSteps = computed<HowItWorksStep[]>(() =>
@@ -153,9 +153,9 @@ export const useHomeContent = () => {
 
   const storyPointKeys = ['heritage', 'craft', 'pairings'] as const
   const storyPointIcons: Record<(typeof storyPointKeys)[number], string> = {
-    heritage: 'heroicons:globe-alt',
-    craft: 'heroicons:heart',
-    pairings: 'heroicons:sparkles'
+    heritage: 'lucide:globe-2',
+    craft: 'lucide:heart',
+    pairings: 'lucide:sparkles'
   }
 
   const storyPoints = computed<StoryPoint[]>(() =>
@@ -182,8 +182,8 @@ export const useHomeContent = () => {
 
   const serviceKeys = ['gifting', 'corporate'] as const
   const serviceIcons: Record<(typeof serviceKeys)[number], string> = {
-    gifting: 'heroicons:gift-top',
-    corporate: 'heroicons:users'
+    gifting: 'lucide:gift',
+    corporate: 'lucide:users'
   }
 
   const services = computed<ServiceCard[]>(() => {

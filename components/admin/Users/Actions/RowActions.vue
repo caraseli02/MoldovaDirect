@@ -19,7 +19,7 @@
       :title="$t('admin.users.actions.view')"
       type="button"
     >
-      <commonIcon name="heroicons:eye" :class="iconSizeClass" />
+      <commonIcon name="lucide:eye" :class="iconSizeClass" />
     </button>
 
     <!-- Edit Button -->
@@ -34,7 +34,7 @@
       :title="$t('admin.users.actions.edit')"
       type="button"
     >
-      <commonIcon name="heroicons:pencil" :class="iconSizeClass" />
+      <commonIcon name="lucide:pencil" :class="iconSizeClass" />
     </button>
 
     <!-- Actions Dropdown -->
@@ -53,7 +53,7 @@ interface Props {
 
 interface Emits {
   (e: 'view', userId: string): void
-  (e: 'edit', userId: string): void
+  (e: 'lucide:square-pen', userId: string): void
   (e: 'action', action: string, userId: string, data?: any): void
 }
 
@@ -75,7 +75,7 @@ const handleView = () => {
 }
 
 const handleEdit = () => {
-  emit('edit', props.user.id)
+  emit('lucide:square-pen', props.user.id)
 }
 
 const handleAction = (action: string, userId: string, data?: any) => {

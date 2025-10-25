@@ -40,8 +40,8 @@
                 />
                 <div>
                   <div class="flex items-center space-x-2">
-                    <Icon
-                      :name="getPaymentMethodIcon(savedMethod.type, savedMethod.brand)"
+                    <commonIcon
+                      :name="getPaymentMethodIcon(savedMethod.type)"
                       class="h-6 w-6"
                     />
                     <span class="font-medium text-gray-900 dark:text-white">
@@ -98,7 +98,7 @@
                 />
                 <div>
                   <div class="flex items-center space-x-2">
-                    <Icon name="heroicons:banknotes" class="h-6 w-6 text-green-600 dark:text-green-400" />
+                    <commonIcon name="lucide:banknote" class="h-6 w-6 text-green-600 dark:text-green-400" />
                     <span class="font-medium text-gray-900 dark:text-white">
                       {{ $t('checkout.payment.cash.label') }}
                     </span>
@@ -127,7 +127,7 @@
                     />
                     <div>
                       <div class="flex items-center space-x-2">
-                        <Icon name="heroicons:credit-card" class="h-6 w-6 text-gray-400" />
+                        <commonIcon name="lucide:credit-card" class="h-6 w-6 text-gray-400" />
                         <span class="font-medium text-gray-500 dark:text-gray-400">
                           {{ $t('checkout.payment.creditCard.label') }}
                         </span>
@@ -154,7 +154,7 @@
                     />
                     <div>
                       <div class="flex items-center space-x-2">
-                        <Icon name="simple-icons:paypal" class="h-6 w-6 text-gray-400" />
+                        <commonIcon name="lucide:badge-dollar-sign" class="h-6 w-6 text-gray-400" />
                         <span class="font-medium text-gray-500 dark:text-gray-400">
                           {{ $t('checkout.payment.paypal.label') }}
                         </span>
@@ -181,7 +181,7 @@
                     />
                     <div>
                       <div class="flex items-center space-x-2">
-                        <Icon name="heroicons:building-library" class="h-6 w-6 text-gray-400" />
+                        <commonIcon name="lucide:building-2" class="h-6 w-6 text-gray-400" />
                         <span class="font-medium text-gray-500 dark:text-gray-400">
                           {{ $t('checkout.payment.bankTransfer.label') }}
                         </span>
@@ -226,7 +226,7 @@
       <!-- Error Messages -->
       <div v-if="errors.payment" class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
         <div class="flex">
-          <Icon name="heroicons:exclamation-triangle" class="h-5 w-5 text-red-400 mr-2 mt-0.5" />
+          <commonIcon name="lucide:alert-triangle" class="h-5 w-5 text-red-400 mr-2 mt-0.5" />
           <div>
             <h3 class="text-sm font-medium text-red-800 dark:text-red-200">
               {{ $t('checkout.payment.error') }}
@@ -245,7 +245,7 @@
           @click="goBack"
           class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
         >
-          <Icon name="heroicons:arrow-left" class="h-4 w-4 mr-2" />
+          <commonIcon name="lucide:arrow-left" class="h-4 w-4 mr-2" />
           {{ $t('checkout.navigation.back') }}
         </button>
 
@@ -256,12 +256,12 @@
           class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <span v-if="loading" class="inline-flex items-center">
-            <Icon name="heroicons:arrow-path" class="animate-spin h-4 w-4 mr-2" />
+            <commonIcon name="lucide:refresh-ccw" class="animate-spin h-4 w-4 mr-2" />
             {{ $t('checkout.navigation.processing') }}
           </span>
           <span v-else class="inline-flex items-center">
             {{ $t('checkout.navigation.reviewOrder') }}
-            <Icon name="heroicons:arrow-right" class="h-4 w-4 ml-2" />
+            <commonIcon name="lucide:arrow-right" class="h-4 w-4 ml-2" />
           </span>
         </button>
       </div>
@@ -380,22 +380,14 @@ const updatePaymentMethod = (newMethod: PaymentMethod) => {
   paymentMethod.value = newMethod
 }
 
-const getPaymentMethodIcon = (type: string, brand?: string) => {
+const getPaymentMethodIcon = (type: string) => {
   if (type === 'credit_card') {
-    switch (brand?.toLowerCase()) {
-      case 'visa':
-        return 'simple-icons:visa'
-      case 'mastercard':
-        return 'simple-icons:mastercard'
-      case 'amex':
-        return 'simple-icons:americanexpress'
-      default:
-        return 'heroicons:credit-card'
-    }
-  } else if (type === 'paypal') {
-    return 'simple-icons:paypal'
+    return 'lucide:credit-card'
   }
-  return 'heroicons:credit-card'
+  if (type === 'paypal') {
+    return 'lucide:badge-dollar-sign'
+  }
+  return 'lucide:credit-card'
 }
 
 const getPaymentMethodLabel = (savedMethod: SavedPaymentMethod) => {

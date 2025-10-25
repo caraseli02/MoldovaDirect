@@ -3,7 +3,7 @@
     <div class="container">
       <div class="mx-auto max-w-3xl text-center">
         <span class="inline-flex items-center gap-2 rounded-full bg-primary-100 px-4 py-2 text-sm font-semibold text-primary-700 dark:bg-primary-500/20 dark:text-primary-200">
-          <Icon name="heroicons:sparkles" class="h-4 w-4" />
+          <commonIcon name="lucide:sparkles" class="h-4 w-4" />
           {{ t('home.collections.badge') }}
         </span>
         <h2 class="mt-4 text-3xl font-bold text-gray-900 dark:text-gray-50 md:text-4xl">
@@ -42,7 +42,7 @@
             </div>
             <span class="inline-flex items-center gap-2 text-sm font-semibold text-white transition group-hover:translate-x-1">
               {{ card.cta }}
-              <Icon name="heroicons:arrow-right" class="h-4 w-4" />
+              <commonIcon name="lucide:arrow-right" class="h-4 w-4" />
             </span>
           </div>
         </NuxtLink>
