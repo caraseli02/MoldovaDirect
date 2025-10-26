@@ -206,6 +206,8 @@ Components support multiple variants via props:
 1. **Import errors**: Ensure paths use `@/components/ui/[component]`
 2. **Styling conflicts**: Check for conflicting Tailwind classes
 3. **Dark mode**: Ensure dark mode classes are properly applied
+4. **Duplicate component names (Alert, Button, etc.)**: Avoid auto-scanning `components/ui`; see `docs/troubleshooting-components.md`.
+5. **Anonymous or unknown component warnings**: Use PascalCase tags and ensure `index.ts` barrels are not auto-registered as components; see `docs/troubleshooting-components.md`.
 
 ### Resources
 - [shadcn-vue Documentation](https://www.shadcn-vue.com/)

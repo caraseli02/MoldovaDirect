@@ -8,7 +8,13 @@
       ></div>
       
       <!-- Modern sidebar -->
-      <div class="relative flex w-full max-w-sm flex-col bg-white dark:bg-gray-800 shadow-2xl">
+      <div
+        ref="drawerRef"
+        class="relative flex w-full max-w-sm flex-col bg-white dark:bg-gray-800 shadow-2xl"
+        role="dialog"
+        aria-modal="true"
+        tabindex="-1"
+      >
         <!-- Modern header with gradient -->
         <div class="flex items-center justify-between px-6 py-5 bg-gradient-to-r from-primary-500 to-primary-600 dark:from-primary-600 dark:to-primary-700">
           <div class="flex items-center space-x-3">
@@ -23,6 +29,7 @@
             variant="ghost"
             size="icon"
             @click="$emit('close')"
+            ref="closeBtnRef"
             class="p-2 -mr-2 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
           >
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -114,6 +121,7 @@
               <Button
                 variant="ghost"
                 class="flex items-center w-full justify-start px-4 py-3 rounded-xl text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-600 dark:hover:text-primary-400 transition-all group"
+                @click="goToSearch"
               >
                 <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-primary-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -161,7 +169,69 @@ const { t } = useI18n()
 const { itemCount } = useCart()
 const cartItemsCount = computed(() => itemCount.value)
 
-defineEmits<{
-  close: []
-}>()
+// Accessibility: focus trap and ESC close
+const emit = defineEmits(['close'])
+const drawerRef = ref<HTMLElement | null>(null)
+const closeBtnRef = ref<HTMLElement | null>(null)
+let previousActiveElement: HTMLElement | null = null
+
+const focusFirst = () => {
+  closeBtnRef.value?.focus()
+}
+
+const getFocusable = () => {
+  if (!drawerRef.value) return [] as HTMLElement[]
+  const selectors = [
+    'a[href]',
+    'button:not([disabled])',
+    'input:not([disabled])',
+    'select:not([disabled])',
+    'textarea:not([disabled])',
+    '[tabindex]:not([tabindex="-1"])'
+  ]
+  return Array.from(drawerRef.value.querySelectorAll<HTMLElement>(selectors.join(',')))
+    .filter(el => !el.hasAttribute('disabled') && el.tabIndex !== -1 && el.offsetParent !== null)
+}
+
+const onKeydown = (e: KeyboardEvent) => {
+  if (e.key === 'Escape') {
+    emit('close')
+  } else if (e.key === 'Tab') {
+    const focusables = getFocusable()
+    if (!focusables.length) return
+    const first = focusables[0]
+    const last = focusables[focusables.length - 1]
+    const current = document.activeElement as HTMLElement | null
+    if (e.shiftKey) {
+      if (current === first || !drawerRef.value?.contains(current)) {
+        e.preventDefault()
+        last.focus()
+      }
+    } else {
+      if (current === last) {
+        e.preventDefault()
+        first.focus()
+      }
+    }
+  }
+}
+
+onMounted(() => {
+  previousActiveElement = document.activeElement as HTMLElement | null
+  nextTick(() => {
+    focusFirst()
+    drawerRef.value?.addEventListener('keydown', onKeydown)
+    drawerRef.value?.focus()
+  })
+})
+
+onUnmounted(() => {
+  drawerRef.value?.removeEventListener('keydown', onKeydown)
+  previousActiveElement?.focus?.()
+})
+
+const goToSearch = () => {
+  navigateTo(localePath({ path: '/products', query: { focus: 'search' } }))
+  emit('close')
+}
 </script>

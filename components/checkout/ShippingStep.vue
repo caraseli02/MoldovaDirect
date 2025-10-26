@@ -195,9 +195,7 @@ onMounted(async () => {
 
   // Load shipping methods if address is already valid (from restored session)
   if (isAddressValid.value && shippingAddress.value.country && shippingAddress.value.postalCode) {
-    setTimeout(() => {
-      loadShippingMethods()
-    }, 1500)
+    loadShippingMethods()
   }
 })
 </script>

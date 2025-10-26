@@ -22,7 +22,7 @@
     
     <!-- Toast Container -->
     <ClientOnly>
-      <commonToastContainer />
+      <CommonToastContainer />
     </ClientOnly>
   </div>
 </template>

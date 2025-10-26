@@ -3,7 +3,7 @@
     <div class="container px-4 md:px-6">
       <h1 class="text-2xl md:text-4xl font-bold mb-4 md:mb-8 text-gray-900 dark:text-white">{{ $t('common.cart') }}</h1>
 
-      <commonErrorBoundary :fallback-action="() => navigateTo(localePath('/products'))"
+      <CommonErrorBoundary :fallback-action="() => navigateTo(localePath('/products'))"
         fallback-action-text="Continuar comprando" @error="handleCartError">
         <!-- Loading State -->
         <div v-if="loading" class="text-center py-20">
@@ -93,7 +93,7 @@
 
                   <div class="flex justify-between text-sm">
                     <span class="text-gray-600 dark:text-gray-400">{{ $t('common.shipping') }}</span>
-                    <span class="font-medium text-gray-900 dark:text-white">{{ $t('common.checkout') }}</span>
+                    <span class="font-medium text-gray-900 dark:text-white">{{ $t('cart.shippingCalculatedAtCheckout') }}</span>
                   </div>
 
                   <div class="border-t border-gray-200 dark:border-gray-700 pt-3">
@@ -122,7 +122,7 @@
             </div>
           </div>
         </div>
-      </commonErrorBoundary>
+      </CommonErrorBoundary>
     </div>
 
     <!-- Mobile Sticky Cart Summary -->
@@ -154,7 +154,7 @@
             </div>
             <div class="flex justify-between text-sm">
               <span class="text-gray-600 dark:text-gray-400">{{ $t('common.shipping') }}</span>
-              <span class="font-medium text-gray-900 dark:text-white">{{ $t('common.checkout') }}</span>
+              <span class="font-medium text-gray-900 dark:text-white">{{ $t('cart.shippingCalculatedAtCheckout') }}</span>
             </div>
           </div>
         </div>

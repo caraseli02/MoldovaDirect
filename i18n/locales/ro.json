@@ -1049,6 +1049,7 @@
     "copyright": "© 2024 Moldova Direct. Toate drepturile rezervate."
   },
   "cart": {
+    "shippingCalculatedAtCheckout": "Se calculează la finalizare",
     "success": {
       "added": "Produs adăugat",
       "addedToCart": "Adăugat în coș",

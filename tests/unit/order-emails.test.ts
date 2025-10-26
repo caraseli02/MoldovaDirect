@@ -6,7 +6,7 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import type { EmailLog } from '~/types/email'
-import type { OrderEmailData } from '~/server/utils/emailTemplates/types'
+import type { OrderEmailData } from '~/server/utils/emailTemplates'
 
 const resolveSupabaseClientMock = vi.hoisted(() => vi.fn())
 const generateOrderConfirmationTemplateMock = vi.hoisted(() => vi.fn())

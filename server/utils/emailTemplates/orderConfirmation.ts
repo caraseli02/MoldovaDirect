@@ -8,9 +8,6 @@ import { getEmailTranslations, replaceTranslationPlaceholders } from './translat
 import { formatCurrency, formatDate, normalizeLocale } from './formatters'
 import type { OrderEmailData, OrderItemData, AddressData } from './types'
 
-// Re-export types for convenience
-export type { OrderEmailData, OrderItemData, AddressData }
-
 /**
  * Generate responsive HTML email template for order confirmation
  */

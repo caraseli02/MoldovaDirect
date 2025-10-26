@@ -91,6 +91,7 @@ All project documentation follows Kiro's spec-driven development approach in the
 - **[Roadmap](.kiro/ROADMAP.md)** - Development timeline
 - **[Progress](.kiro/PROGRESS.md)** - Completed milestones
 - **[Specifications](.kiro/specs/)** - Feature requirements and designs
+ - **[Troubleshooting Components](docs/troubleshooting-components.md)** - Fix for duplicate component names, shadcn-vue auto-imports, and casing
 
 ## 🎯 Current Status
 

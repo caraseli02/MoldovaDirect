@@ -235,7 +235,7 @@ describe('useShippingMethods', () => {
     await loadShippingMethods()
     
     // Wait for debounce
-    await new Promise(resolve => setTimeout(resolve, 1100))
+    await new Promise(resolve => setTimeout(resolve, 450))
     
     expect(global.$fetch).toHaveBeenCalledWith('/api/checkout/shipping-methods', {
       query: {
@@ -265,7 +265,7 @@ describe('useShippingMethods', () => {
     await loadShippingMethods()
     
     // Wait for debounce
-    await new Promise(resolve => setTimeout(resolve, 1100))
+    await new Promise(resolve => setTimeout(resolve, 450))
     
     expect(error.value).toBeTruthy()
     expect(availableMethods.value.length).toBeGreaterThan(0) // Should have fallback methods
