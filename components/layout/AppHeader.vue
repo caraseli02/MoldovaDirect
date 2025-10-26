@@ -45,6 +45,7 @@
               size="icon"
               :aria-label="t('common.search')"
               class="p-2 text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400"
+              @click="goToSearch"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">
@@ -179,5 +180,9 @@ const cartAriaLabel = computed(() => {
 const accountLabel = computed(() => t('common.account'))
 
 const mobileMenuLabel = computed(() => mobileMenuOpen.value ? t('common.close') : t('common.menu'))
+
+const goToSearch = () => {
+  navigateTo(localePath({ path: '/products', query: { focus: 'search' } }))
+}
 
 </script>
