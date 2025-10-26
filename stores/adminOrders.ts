@@ -113,6 +113,7 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
 
     /**
      * Get current query parameters for API calls
+     * Uses snake_case to match server expectations
      */
     queryParams: (state) => {
       const params: any = {
@@ -123,29 +124,32 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
       if (state.filters.search) {
         params.search = state.filters.search
       }
+      // Send only first status for now (server doesn't support multiple)
       if (state.filters.status && state.filters.status.length > 0) {
-        params.status = state.filters.status.join(',')
+        params.status = state.filters.status[0]
       }
+      // Send only first payment status (server doesn't support multiple)
       if (state.filters.paymentStatus && state.filters.paymentStatus.length > 0) {
-        params.paymentStatus = state.filters.paymentStatus.join(',')
+        params.payment_status = state.filters.paymentStatus[0]
       }
       if (state.filters.dateRange) {
-        params.dateFrom = state.filters.dateRange.start
-        params.dateTo = state.filters.dateRange.end
+        params.date_from = state.filters.dateRange.start
+        params.date_to = state.filters.dateRange.end
       }
       if (state.filters.amountRange) {
-        params.amountMin = state.filters.amountRange.min
-        params.amountMax = state.filters.amountRange.max
+        params.amount_min = state.filters.amountRange.min
+        params.amount_max = state.filters.amountRange.max
       }
+      // Priority and shipping method not yet supported by server
       if (state.filters.priority && state.filters.priority.length > 0) {
-        params.priority = state.filters.priority.join(',')
+        params.priority = state.filters.priority[0]
       }
       if (state.filters.shippingMethod && state.filters.shippingMethod.length > 0) {
-        params.shippingMethod = state.filters.shippingMethod.join(',')
+        params.shipping_method = state.filters.shippingMethod[0]
       }
       if (state.filters.sortBy) {
-        params.sortBy = state.filters.sortBy
-        params.sortOrder = state.filters.sortOrder
+        params.sort_by = state.filters.sortBy
+        params.sort_order = state.filters.sortOrder
       }
 
       return params

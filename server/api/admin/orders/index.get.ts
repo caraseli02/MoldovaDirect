@@ -18,6 +18,10 @@ export default defineEventHandler(async (event) => {
     const search = query.search as string
     const dateFrom = query.date_from as string
     const dateTo = query.date_to as string
+    const amountMin = query.amount_min ? parseFloat(query.amount_min as string) : undefined
+    const amountMax = query.amount_max ? parseFloat(query.amount_max as string) : undefined
+    const priority = query.priority ? parseInt(query.priority as string) : undefined
+    const shippingMethod = query.shipping_method as string
     const sortBy = (query.sort_by as string) || 'created_at'
     const sortOrder = (query.sort_order as string) || 'desc'
     const offset = (page - 1) * limit
@@ -88,6 +92,22 @@ export default defineEventHandler(async (event) => {
       ordersQuery = ordersQuery.lte('created_at', dateTo)
     }
 
+    if (amountMin !== undefined) {
+      ordersQuery = ordersQuery.gte('total_eur', amountMin)
+    }
+
+    if (amountMax !== undefined) {
+      ordersQuery = ordersQuery.lte('total_eur', amountMax)
+    }
+
+    if (priority !== undefined) {
+      ordersQuery = ordersQuery.eq('priority_level', priority)
+    }
+
+    if (shippingMethod) {
+      ordersQuery = ordersQuery.eq('shipping_method', shippingMethod)
+    }
+
     const { data: orders, error: ordersError } = await ordersQuery
 
     if (ordersError) {
@@ -121,6 +141,18 @@ export default defineEventHandler(async (event) => {
     }
     if (dateTo) {
       countQuery = countQuery.lte('created_at', dateTo)
+    }
+    if (amountMin !== undefined) {
+      countQuery = countQuery.gte('total_eur', amountMin)
+    }
+    if (amountMax !== undefined) {
+      countQuery = countQuery.lte('total_eur', amountMax)
+    }
+    if (priority !== undefined) {
+      countQuery = countQuery.eq('priority_level', priority)
+    }
+    if (shippingMethod) {
+      countQuery = countQuery.eq('shipping_method', shippingMethod)
     }
 
     const { count, error: countError } = await countQuery
