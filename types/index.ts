@@ -63,12 +63,7 @@ export type {
   
   // Store state types
   ProductStoreState,
-  CartStoreState,
-  
-  // Composable return types
-  UseProductsReturn,
-  UseCategoriesReturn,
-  UseProductReturn
+  CartStoreState
 } from './database'
 
 // API types

@@ -1,6 +1,6 @@
 # Component Modernization Implementation Guide
 
-This guide provides detailed implementation steps for each phase of the shadcn-vue component modernization plan. Library scaffolding concluded on 2025-10-05; the steps below now support the ongoing migration effort. Keep this guide in sync with the active task list in `TODO.md`.
+This guide provides detailed implementation steps for each phase of the shadcn-vue component modernization plan. Library scaffolding concluded on 2025-10-05; the steps below now support the ongoing migration effort. Keep this guide in sync with the active task list in `.kiro/PROJECT_STATUS.md`.
 
 ## 📦 Library Installation Completed — October 5, 2025
 
@@ -20,7 +20,7 @@ All shadcn-vue component libraries were generated with the CLI on October 5, 202
 - 🔄 Forms & filters: replace custom inputs/selects/textarea usages
 - 🔄 Alerts & toasts: retire `components/common/Toast*.vue`
 - 🔄 Tables & data grids: adopt shadcn table patterns for admin views
-- 📌 Track blockers and owners in `TODO.md`; update both docs when milestones land
+- 📌 Track blockers and owners in `.kiro/PROJECT_STATUS.md`; update both docs when milestones land
 
 ## Phase 1: Foundation Components Implementation
 
@@ -599,7 +599,7 @@ All 19 component libraries are now available and ready for use:
 
 ### Next Steps
 
-1. **Migration Planning**: Break work into surface-level tasks and record them in `TODO.md`.
+1. **Migration Planning**: Break work into surface-level tasks and record them in `.kiro/PROJECT_STATUS.md`.
 2. **Developer Training**: Update team on new component usage.
 3. **Documentation**: Create internal usage guidelines as migrations complete.
 4. **Testing**: Validate component functionality in application context before each release.

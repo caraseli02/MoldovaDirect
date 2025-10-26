@@ -30,18 +30,18 @@ This document outlines a comprehensive plan to modernize component usage across 
 **Total**: 19 complete shadcn-vue component libraries (77 individual files)
 
 > **Status (February 2026)**  
-> All shadcn-vue component libraries listed above are installed, and buttons have been migrated to the new API. Remaining UI still uses bespoke components—this document now tracks the ongoing replacement work. Up-to-date blockers live in `TODO.md`; update both locations when work completes.
+> All shadcn-vue component libraries listed above are installed, and buttons have been migrated to the new API. Remaining UI still uses bespoke components—this document now tracks the ongoing replacement work. Up-to-date blockers live in `.kiro/PROJECT_STATUS.md`; update both locations when work completes.
 
 ### Current Migration Status (February 2026)
 
 | Surface / Flow | Status | Outstanding Work | Owner | Source of Truth |
 | --- | --- | --- | --- | --- |
-| Authentication (login/register, error banners) | ✅ Completed | Migrated to shadcn inputs/labels/alerts; retired legacy auth message components | Unassigned | `TODO.md` |
-| Checkout (shipping, payment, confirmation) | 🔄 In progress | Swap selects, inputs, alerts; adopt Dialog for modals | Unassigned | `TODO.md` |
-| Cart (drawer, line items, bulk actions) | ⏳ Not started | Replace quantity buttons, checkboxes, toasts with shadcn-vue | Unassigned | `TODO.md` |
-| Admin tables & filters | ⏳ Not started | Adopt `components/ui/table`, pagination, badge variants | Unassigned | `TODO.md` |
-| Mobile navigation & sheets | ⏳ Not started | Migrate menus to Dialog/Sheet patterns, fix touch targets | Unassigned | `TODO.md` |
-| Toast/Notification system | ⏳ Not started | Remove legacy `components/common/Toast*.vue`, consolidate on Sonner | Unassigned | `TODO.md` |
+| Authentication (login/register, error banners) | ✅ Completed | Migrated to shadcn inputs/labels/alerts; retired legacy auth message components | Unassigned | `.kiro/PROJECT_STATUS.md` |
+| Checkout (shipping, payment, confirmation) | 🔄 In progress | Swap selects, inputs, alerts; adopt Dialog for modals | Unassigned | `.kiro/PROJECT_STATUS.md` |
+| Cart (drawer, line items, bulk actions) | ⏳ Not started | Replace quantity buttons, checkboxes, toasts with shadcn-vue | Unassigned | `.kiro/PROJECT_STATUS.md` |
+| Admin tables & filters | ⏳ Not started | Adopt `components/ui/table`, pagination, badge variants | Unassigned | `.kiro/PROJECT_STATUS.md` |
+| Mobile navigation & sheets | ⏳ Not started | Migrate menus to Dialog/Sheet patterns, fix touch targets | Unassigned | `.kiro/PROJECT_STATUS.md` |
+| Toast/Notification system | ⏳ Not started | Remove legacy `components/common/Toast*.vue`, consolidate on Sonner | Unassigned | `.kiro/PROJECT_STATUS.md` |
 
 ### Adoption Progress
 - ✅ Buttons and primary dialogs migrated to shadcn-vue
@@ -49,7 +49,7 @@ This document outlines a comprehensive plan to modernize component usage across 
 - 🔄 Tables: migrate admin tables to shadcn table components with consistent pagination + sorting UI
 - 🔄 Alerts/Toasts: phase out legacy `components/common/Toast*.vue`
 - 🔄 Mobile patterns: adopt shadcn dialogs/sheets for mobile menu, cart, and profile flows
-- 📌 Capture migration status in `TODO.md` when blocking issues emerge
+- 📌 Capture migration status in `.kiro/PROJECT_STATUS.md` when blocking issues emerge
 
 ### Component Usage Statistics
 - **78 files** contain custom `<button>` elements
@@ -223,7 +223,7 @@ On 2025-10-05 the shadcn-vue CLI was used to generate all component libraries li
 | Phase 1 | 2 weeks | Scaffolding completed in 45 minutes | 🔄 In progress | Library files exist; feature teams still replacing inputs/buttons/alerts |
 | Phase 2 | 2 weeks | Scaffolding completed in 35 minutes | ⏳ Not started | Awaiting adoption in tooltips, tabs, switches, textarea, radio groups |
 | Phase 3 | 2 weeks | Scaffolding completed in 40 minutes | ⏳ Not started | Table/pagination/skeleton/avatar not deployed in product screens |
-| **Total** | **6 weeks** | **~2 hours scaffolding only** | **🔄 Migration ongoing** | Track active work in `TODO.md` |
+| **Total** | **6 weeks** | **~2 hours scaffolding only** | **🔄 Migration ongoing** | Track active work in `.kiro/PROJECT_STATUS.md` |
 
 ### What Has Been Delivered So Far
 
@@ -237,7 +237,7 @@ On 2025-10-05 the shadcn-vue CLI was used to generate all component libraries li
 ### Key Considerations
 1. **shadcn-vue CLI** - Automated component generation accelerated setup; verify imports during migrations.
 2. **Parallel Systems** - Legacy components remain active; plan for controlled deprecation after each rollout.
-3. **Documentation Sync** - Keep this plan and `TODO.md` aligned after each migration milestone.
+3. **Documentation Sync** - Keep this plan and `.kiro/PROJECT_STATUS.md` aligned after each migration milestone.
 4. **Testing Debt** - Add unit/E2E coverage as components are swapped into critical flows.
 
 ## Resource Requirements
