@@ -118,6 +118,7 @@
                         </svg>
                       </div>
                       <input
+                        ref="searchInputRef"
                         v-model="searchQuery"
                         type="text"
                         :placeholder="t('products.searchPlaceholder')"
@@ -368,6 +369,10 @@ const {
 } = useProductCatalog()
 
 const searchQuery = ref('')
+const searchInputRef = ref<HTMLInputElement | null>(null)
+const priceRange = ref<{ min: number; max: number }>({ min: 0, max: 200 })
+const route = useRoute()
+const router = useRouter()
 const sortBy = ref<string>('created')
 const showFilterPanel = ref(false)
 const activeCollectionId = ref<string | null>(null)
@@ -415,10 +420,7 @@ const availableFilters = computed(() => {
 
   return {
     categories: convertCategories(categoriesTree.value || []),
-    priceRange: {
-      min: 0,
-      max: 200
-    },
+    priceRange: priceRange.value,
     attributes: []
   }
 })
@@ -864,6 +866,15 @@ onMounted(async () => {
   nextTick(() => {
     setupMobileInteractions()
   })
+  // Focus search if requested
+  if (route.query.focus === 'search') {
+    nextTick(() => {
+      searchInputRef.value?.focus()
+      const { focus, ...rest } = route.query
+      router.replace({ query: rest })
+    })
+  }
+  await refreshPriceRange()
 })
 
 onUnmounted(() => {
@@ -878,5 +889,26 @@ useHead({
       content: 'Browse authentic Moldovan food and wine products. Premium quality directly from Moldova to Spain.'
     }
   ]
+})
+
+// Fetch dynamic price range (category/inStock/featured scope)
+const refreshPriceRange = async () => {
+  try {
+    const params = new URLSearchParams()
+    if (filters.value.category) params.append('category', String(filters.value.category))
+    if (filters.value.inStock) params.append('inStock', 'true')
+    if (filters.value.featured) params.append('featured', 'true')
+    const res = await $fetch<{ success: boolean; min: number; max: number }>(`/api/products/price-range?${params.toString()}`)
+    if (res.success) {
+      priceRange.value = { min: res.min ?? 0, max: res.max ?? 200 }
+    }
+  } catch (e) {
+    // keep existing range on error
+    console.error('Failed to load price range', e)
+  }
+}
+
+watch(() => [filters.value.category, filters.value.inStock, filters.value.featured], async () => {
+  await refreshPriceRange()
 })
 </script>

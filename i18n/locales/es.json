@@ -53,6 +53,9 @@
     "cartError": "Error en el carrito",
     "cartValidationError": "Error de validación"
   },
+  "cart": {
+    "shippingCalculatedAtCheckout": "Se calculará en el pago"
+  },
   "auth": {
     "signIn": "Iniciar Sesión",
     "signUp": "Registrarse",

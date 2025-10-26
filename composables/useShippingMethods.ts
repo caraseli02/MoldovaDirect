@@ -116,7 +116,7 @@ export function useShippingMethods(address: Ref<Address>) {
     } finally {
       loading.value = false
     }
-  }, 1000)
+  }, 300)
 
   /**
    * Retry loading shipping methods

@@ -53,6 +53,9 @@
     "cartError": "Ошибка корзины",
     "cartValidationError": "Ошибка проверки"
   },
+  "cart": {
+    "shippingCalculatedAtCheckout": "Будет рассчитана при оформлении заказа"
+  },
   "auth": {
     "signIn": "Войти",
     "signUp": "Регистрация",
