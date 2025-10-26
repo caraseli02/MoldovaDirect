@@ -272,9 +272,9 @@ function validatePostalCode(postalCode: string, country: string): boolean {
 }
 
 /**
- * Format address for display
+ * Format address for display in order context
  */
-export function formatAddress(address: any): string {
+export function formatOrderAddress(address: any): string {
   const parts = [
     address.firstName && address.lastName ? `${address.firstName} ${address.lastName}` : '',
     address.company || '',
