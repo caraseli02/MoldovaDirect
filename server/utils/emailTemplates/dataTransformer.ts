@@ -15,33 +15,23 @@ import type {
 import { normalizeLocale } from './formatters'
 
 /**
- * Transform database order to email data format
+ * Transform database order and customer info into email payload.
  */
-export function transformOrderToEmailData(
+export function buildOrderEmailData(
   order: DatabaseOrder,
   customerInfo: UserProfile | GuestCheckoutData
 ): OrderEmailData {
-  // Determine customer name
   const customerName = getCustomerName(customerInfo)
-  
-  // Determine customer email
   const customerEmail = 'email' in customerInfo ? customerInfo.email : ''
-  
-  // Determine locale
   const locale = getCustomerLocale(customerInfo)
-  
-  // Transform order items
   const orderItems = transformOrderItems(order.order_items || [])
-  
-  // Transform addresses
   const shippingAddress = transformAddress(order.shipping_address)
   const billingAddress = order.billing_address ? transformAddress(order.billing_address) : undefined
-  
-  // Build tracking URL if tracking number exists
-  const trackingUrl = order.tracking_number && order.carrier
-    ? buildTrackingUrl(order.tracking_number, order.carrier)
-    : undefined
-  
+  const trackingUrl =
+    order.tracking_number && order.carrier
+      ? buildTrackingUrl(order.tracking_number, order.carrier)
+      : undefined
+
   return {
     customerName,
     customerEmail,
@@ -226,46 +216,14 @@ export function transformOrderToEmailDataWithLocale(
   customerInfo: UserProfile | GuestCheckoutData,
   locale?: string
 ): OrderEmailData {
-  // Determine customer name
-  const customerName = getCustomerName(customerInfo)
-  
-  // Determine customer email
-  const customerEmail = 'email' in customerInfo ? customerInfo.email : ''
-  
-  // Determine locale (use provided or get from customer)
+  const baseData = buildOrderEmailData(order, customerInfo)
+
   const finalLocale = locale || getCustomerLocale(customerInfo)
-  
-  // Transform order items with localized names
   const orderItems = transformOrderItemsWithLocale(order.order_items || [], finalLocale)
   
-  // Transform addresses
-  const shippingAddress = transformAddress(order.shipping_address)
-  const billingAddress = order.billing_address ? transformAddress(order.billing_address) : undefined
-  
-  // Build tracking URL if tracking number exists
-  const trackingUrl = order.tracking_number && order.carrier
-    ? buildTrackingUrl(order.tracking_number, order.carrier)
-    : undefined
-  
   return {
-    customerName,
-    customerEmail,
-    orderNumber: order.order_number,
-    orderDate: order.created_at,
-    estimatedDelivery: order.estimated_delivery,
+    ...baseData,
     orderItems,
-    shippingAddress,
-    billingAddress,
-    subtotal: order.subtotal_eur,
-    shippingCost: order.shipping_cost_eur,
-    tax: order.tax_eur,
-    total: order.total_eur,
-    paymentMethod: order.payment_method,
-    trackingNumber: order.tracking_number,
-    trackingUrl,
-    carrier: order.carrier,
     locale: finalLocale,
-    orderStatus: order.status,
-    customerNotes: order.customer_notes,
   }
 }

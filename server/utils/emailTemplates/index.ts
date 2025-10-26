@@ -1,57 +1,39 @@
 /**
  * Email Templates Module
- * Centralized exports for order confirmation email system
+ * Centralized exports for the email pipeline.
+ * Expose namespaces to avoid Rollup duplicate-import warnings while keeping a single entry point.
  */
 
-// Template generation
-export {
-  generateOrderConfirmationTemplate,
-  getOrderConfirmationSubject,
-  type OrderEmailData,
-  type OrderItemData,
-  type AddressData,
-} from './orderConfirmation'
+import * as orderConfirmation from './orderConfirmation'
+import * as orderStatus from './orderStatusTemplates'
+import * as translations from './translations'
+import * as formatters from './formatters'
+import * as dataTransformer from './dataTransformer'
+import * as validator from './validator'
 
-// Translations
 export {
-  getEmailTranslations,
-  replaceTranslationPlaceholders,
-  emailTranslations,
-  type EmailTranslations,
-} from './translations'
+  orderConfirmation,
+  orderStatus,
+  translations,
+  formatters,
+  dataTransformer,
+  validator,
+}
 
-// Formatters
-export {
-  formatCurrency,
-  formatDate,
-  formatDateTime,
-  formatNumber,
-  formatPercentage,
-  getOrderStatusLabel,
-  normalizeLocale,
-  getCurrencySymbol,
-  formatAddress,
-  type SupportedLocale,
-} from './formatters'
+export const emailTemplates = {
+  orderConfirmation,
+  orderStatus,
+  translations,
+  formatters,
+  dataTransformer,
+  validator,
+}
 
-// Data transformation
-export {
-  transformOrderToEmailData,
-  transformOrderToEmailDataWithLocale,
-  transformOrderItemsWithLocale,
-  getLocalizedProductName,
-} from './dataTransformer'
-
-// Validation
-export {
-  validateOrderEmailData,
-  validateAndSanitizeOrderData,
-  hasRequiredFields,
-  getMissingFields,
-} from './validator'
-
-// Types
+// Re-export types for convenience so consumers can import from a single entry point
 export type {
+  OrderEmailData,
+  OrderItemData,
+  AddressData,
   DatabaseOrder,
   DatabaseOrderItem,
   UserProfile,

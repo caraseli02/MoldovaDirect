@@ -3,8 +3,7 @@
  * Requirements: 5.1, 5.5
  */
 
-import { getEmailTranslations } from '~/server/utils/emailTemplates/translations'
-import { normalizeLocale } from '~/server/utils/emailTemplates/formatters'
+import { formatters, translations } from '~/server/utils/emailTemplates'
 
 export default defineEventHandler(async (event) => {
   // Get query parameters
@@ -20,17 +19,17 @@ export default defineEventHandler(async (event) => {
   }
 
   // Normalize locale
-  const normalizedLocale = normalizeLocale(locale)
+  const normalizedLocale = formatters.normalizeLocale(locale)
 
   // Get translations for the locale
-  const translations = getEmailTranslations(normalizedLocale)
+  const templateTranslations = translations.getEmailTranslations(normalizedLocale)
 
   // Return template data
   return {
     type,
     locale: normalizedLocale,
-    translations,
-    subject: translations.subject,
-    preheader: translations.preheader
+    translations: templateTranslations,
+    subject: templateTranslations.subject,
+    preheader: templateTranslations.preheader
   }
 })

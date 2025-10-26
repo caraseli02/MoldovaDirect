@@ -7,18 +7,10 @@
 import type { EmailType } from '~/types/email'
 import type { OrderEmailData, OrderItemData, AddressData, DatabaseOrder } from './emailTemplates/types'
 import { sendEmail } from './email'
-import { 
-  generateOrderConfirmationTemplate,
-  getOrderConfirmationSubject
-} from './emailTemplates/orderConfirmation'
+import { orderConfirmation, orderStatus } from './emailTemplates'
 import {
-  generateOrderProcessingTemplate,
-  generateOrderShippedTemplate,
-  generateOrderDeliveredTemplate,
-  generateOrderCancelledTemplate,
-  generateOrderIssueTemplate,
-  getOrderStatusSubject
-} from './emailTemplates/orderStatusTemplates'
+  transformOrderToEmailData,
+} from './orderDataTransform'
 import { createEmailLog, recordEmailAttempt, getEmailLog } from './emailLogging'
 import { resolveSupabaseClient, type ResolvedSupabaseClient } from './supabaseAdminClient'
 
@@ -47,7 +39,7 @@ export async function sendOrderConfirmationEmail(
   const { customerName, customerEmail, orderNumber, locale } = data
   
   // Generate email subject based on locale
-  const subject = getOrderConfirmationSubject(orderNumber, locale)
+  const subject = orderConfirmation.getOrderConfirmationSubject(orderNumber, locale)
   
   // Get order ID from database if needed for logging
   const supabase = resolveSupabaseClient(options.supabaseClient)
@@ -82,7 +74,7 @@ export async function sendOrderConfirmationEmail(
   
   try {
     // Generate email HTML using new template system
-    const html = generateOrderConfirmationTemplate(data)
+    const html = orderConfirmation.generateOrderConfirmationTemplate(data)
     
     // Send email
     const result = await sendEmail({
@@ -140,7 +132,7 @@ export async function sendOrderStatusEmail(
   const { customerName, customerEmail, orderNumber, locale } = data
   
   // Generate email subject based on type and locale
-  const subject = getOrderStatusSubject(emailType, orderNumber, locale)
+  const subject = orderStatus.getOrderStatusSubject(emailType, orderNumber, locale)
   
   // Get order ID from database
   const supabase = resolveSupabaseClient(options.supabaseClient)
@@ -180,23 +172,23 @@ export async function sendOrderStatusEmail(
     
     switch (emailType) {
       case 'order_processing':
-        html = generateOrderProcessingTemplate(data)
+        html = orderStatus.generateOrderProcessingTemplate(data)
         break
       case 'order_shipped':
-        html = generateOrderShippedTemplate(data)
+        html = orderStatus.generateOrderShippedTemplate(data)
         break
       case 'order_delivered':
-        html = generateOrderDeliveredTemplate(data)
+        html = orderStatus.generateOrderDeliveredTemplate(data)
         break
       case 'order_cancelled':
-        html = generateOrderCancelledTemplate(data)
+        html = orderStatus.generateOrderCancelledTemplate(data)
         break
       case 'order_issue':
-        html = generateOrderIssueTemplate(data, issueDescription)
+        html = orderStatus.generateOrderIssueTemplate(data, issueDescription)
         break
       default:
         // Fallback to order confirmation template
-        html = generateOrderConfirmationTemplate(data)
+        html = orderConfirmation.generateOrderConfirmationTemplate(data)
     }
     
     // Send email
@@ -380,112 +372,6 @@ export async function retryEmailDelivery(
       error: error.message
     }
   }
-}
-
-// =============================================
-// HELPER FUNCTIONS
-// =============================================
-
-/**
- * Transform database order to OrderEmailData format
- * Requirements: 1.2, 1.3, 1.4, 1.5
- */
-export function transformOrderToEmailData(
-  order: DatabaseOrder,
-  customerName: string,
-  customerEmail: string,
-  locale: string = 'en'
-): OrderEmailData {
-  // Transform order items
-  const orderItems: OrderItemData[] = (order.order_items || []).map((item) => {
-    const snapshot = item.product_snapshot || {}
-    const nameTranslations = snapshot.name_translations || snapshot.nameTranslations || {}
-    const productName = nameTranslations[locale] || nameTranslations.en || snapshot.name || 'Product'
-    
-    return {
-      productId: item.product_id?.toString() || '',
-      name: productName,
-      sku: snapshot.sku || '',
-      quantity: item.quantity,
-      price: item.price_eur,
-      total: item.total_eur,
-      image: snapshot.images?.[0]?.url || snapshot.primaryImage?.url
-    }
-  })
-  
-  // Transform shipping address
-  const shippingAddr = order.shipping_address || {}
-  const shippingAddress: AddressData = {
-    firstName: shippingAddr.firstName || shippingAddr.first_name || '',
-    lastName: shippingAddr.lastName || shippingAddr.last_name || '',
-    street: shippingAddr.street || shippingAddr.address || '',
-    city: shippingAddr.city || '',
-    postalCode: shippingAddr.postalCode || shippingAddr.postal_code || shippingAddr.zipCode || '',
-    province: shippingAddr.province || shippingAddr.state || '',
-    country: shippingAddr.country || '',
-    phone: shippingAddr.phone || ''
-  }
-  
-  // Transform billing address if present
-  let billingAddress: AddressData | undefined
-  if (order.billing_address) {
-    const billingAddr = order.billing_address
-    billingAddress = {
-      firstName: billingAddr.firstName || billingAddr.first_name || '',
-      lastName: billingAddr.lastName || billingAddr.last_name || '',
-      street: billingAddr.street || billingAddr.address || '',
-      city: billingAddr.city || '',
-      postalCode: billingAddr.postalCode || billingAddr.postal_code || billingAddr.zipCode || '',
-      province: billingAddr.province || billingAddr.state || '',
-      country: billingAddr.country || '',
-      phone: billingAddr.phone || ''
-    }
-  }
-  
-  return {
-    customerName,
-    customerEmail,
-    orderNumber: order.order_number,
-    orderDate: order.created_at,
-    estimatedDelivery: order.estimated_delivery,
-    orderItems,
-    shippingAddress,
-    billingAddress,
-    subtotal: order.subtotal_eur,
-    shippingCost: order.shipping_cost_eur,
-    tax: order.tax_eur,
-    total: order.total_eur,
-    paymentMethod: order.payment_method,
-    trackingNumber: order.tracking_number,
-    trackingUrl: order.tracking_number ? generateTrackingUrl(order.tracking_number, order.carrier) : undefined,
-    carrier: order.carrier,
-    locale,
-    orderStatus: order.status,
-    customerNotes: order.customer_notes
-  }
-}
-
-/**
- * Generate tracking URL based on carrier
- * Requirements: 3.2, 6.2
- */
-export function generateTrackingUrl(trackingNumber: string, carrier?: string): string | undefined {
-  if (!carrier || !trackingNumber) return undefined
-  
-  const normalizedCarrier = carrier.toLowerCase().trim()
-  
-  const trackingUrls: Record<string, string> = {
-    'correos': `https://www.correos.es/es/es/herramientas/localizador/envios?tracking=${trackingNumber}`,
-    'seur': `https://www.seur.com/livetracking/?segOnlineIdentificador=${trackingNumber}`,
-    'dhl': `https://www.dhl.com/es-es/home/tracking.html?tracking-id=${trackingNumber}`,
-    'ups': `https://www.ups.com/track?tracknum=${trackingNumber}`,
-    'fedex': `https://www.fedex.com/fedextrack/?tracknumbers=${trackingNumber}`,
-    'usps': `https://tools.usps.com/go/TrackConfirmAction?tLabels=${trackingNumber}`,
-    'posta_moldovei': `https://www.posta.md/ro/tracking?code=${trackingNumber}`,
-    'moldova_post': `https://www.posta.md/ro/tracking?code=${trackingNumber}`
-  }
-  
-  return trackingUrls[normalizedCarrier]
 }
 
 /**
