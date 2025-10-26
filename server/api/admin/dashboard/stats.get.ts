@@ -26,6 +26,13 @@ export interface DashboardStats {
   revenueToday: number
   conversionRate: number
   lastUpdated: string
+  // Order management metrics
+  pendingOrders: number
+  processingOrders: number
+  shippedOrders: number
+  deliveredOrders: number
+  ordersToday: number
+  averageOrderValue: number
 }
 
 export default defineEventHandler(async (event) => {
@@ -103,9 +110,18 @@ export default defineEventHandler(async (event) => {
     const totalOrders = orderStats.length
     const revenue = orderStats.reduce((sum, order) => sum + parseFloat(order.total_eur.toString()), 0)
     
-    const revenueToday = orderStats
-      .filter(order => new Date(order.created_at) >= today)
-      .reduce((sum, order) => sum + parseFloat(order.total_eur.toString()), 0)
+    const todaysOrders = orderStats.filter(order => new Date(order.created_at) >= today)
+    const revenueToday = todaysOrders.reduce((sum, order) => sum + parseFloat(order.total_eur.toString()), 0)
+
+    // Calculate order status counts
+    const pendingOrders = orderStats.filter(order => order.status === 'pending').length
+    const processingOrders = orderStats.filter(order => order.status === 'processing').length
+    const shippedOrders = orderStats.filter(order => order.status === 'shipped').length
+    const deliveredOrders = orderStats.filter(order => order.status === 'delivered').length
+    const ordersToday = todaysOrders.length
+
+    // Calculate average order value
+    const averageOrderValue = totalOrders > 0 ? revenue / totalOrders : 0
 
     // Calculate conversion rate (orders / total users)
     const conversionRate = totalUsers > 0 ? (totalOrders / totalUsers) * 100 : 0
@@ -121,7 +137,14 @@ export default defineEventHandler(async (event) => {
       revenue: Math.round(revenue * 100) / 100, // Round to 2 decimal places
       revenueToday: Math.round(revenueToday * 100) / 100,
       conversionRate: Math.round(conversionRate * 100) / 100,
-      lastUpdated: now.toISOString()
+      lastUpdated: now.toISOString(),
+      // Order management metrics
+      pendingOrders,
+      processingOrders,
+      shippedOrders,
+      deliveredOrders,
+      ordersToday,
+      averageOrderValue: Math.round(averageOrderValue * 100) / 100
     }
 
     return {

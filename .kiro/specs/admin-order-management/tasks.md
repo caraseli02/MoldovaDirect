@@ -1,119 +1,145 @@
 # Implementation Plan
 
-- [ ] 1. Set up database schema and core data models
+## MVP Tasks (Core Functionality)
 
-  - Create database migration for order management tables (order_status_history, order_customer_messages, order_fulfillment_tasks)
-  - Add indexes for performance optimization on orders table
-  - Extend existing Order and OrderItem types with admin-specific fields
-  - _Requirements: 1.1, 2.1, 3.1, 4.1_
+- [x] 1. Set up database schema and core data models
 
-- [ ] 2. Create admin orders store with state management
+  - Create database migration for order management tables (order_status_history, order_notes)
+  - Add RLS policies for admin access to order management tables
+  - Extend existing Order and OrderItem types in types/database.ts with admin-specific fields
+  - _Requirements: 1.1, 2.1, 3.1_
+
+- [x] 2. Create admin orders store with state management
 
   - Implement AdminOrdersStore with Pinia following existing admin store patterns
   - Add order fetching, filtering, and pagination logic
-  - Implement bulk operation state management and selected orders tracking
   - Add error handling and loading states for all store actions
-  - _Requirements: 1.1, 1.2, 8.1, 8.2_
+  - _Requirements: 1.1, 1.2_
 
-- [ ] 3. Build core API endpoints for order management
+- [x] 3. Enhance existing API endpoints for order management
 
-  - Create GET /api/admin/orders endpoint with filtering, search, and pagination
-  - Implement GET /api/admin/orders/[id] endpoint for detailed order retrieval
-  - Add PUT /api/admin/orders/[id]/status endpoint for status updates with validation
-  - Create POST /api/admin/orders/bulk endpoint for bulk operations
-  - _Requirements: 1.1, 1.2, 3.1, 3.2, 8.1_
+  - Enhance existing GET /api/admin/orders/index.get.ts with customer name filtering and sorting
+  - Create GET /api/admin/orders/[id]/index.get.ts for detailed order retrieval with items
+  - Enhance existing PATCH /api/admin/orders/[id]/status.patch.ts with validation
+  - Use serverSupabaseServiceRole for all admin operations following Supabase best practices
+  - _Requirements: 1.1, 1.2, 3.1, 3.2_
 
-- [ ] 4. Implement order listing page with filtering and search
+- [x] 4. Implement order listing page with filtering and search
 
-  - Create pages/admin/orders/index.vue with responsive order list layout
-  - Build OrderFilters component with status, date range, and search functionality
-  - Implement OrderListItem component with key order information display
-  - Add pagination controls and bulk selection checkboxes
-  - _Requirements: 1.1, 1.3, 1.4, 8.1_
+  - Create pages/admin/orders/index.vue following existing admin page patterns (similar to products/index.vue)
+  - Build components/admin/Orders/Filters.vue with status, date range, payment status, and search
+  - Create components/admin/Orders/ListItem.vue using shadcn-vue Table components
+  - Add pagination using existing components/ui/pagination components
+  - _Requirements: 1.1, 1.3, 1.4_
 
-- [ ] 5. Create order detail page with comprehensive information display
+- [x] 5. Create order detail page with comprehensive information display
 
-  - Build pages/admin/orders/[id].vue with complete order information layout
-  - Implement OrderDetailsCard component showing customer and order information
-  - Create OrderItemsList component displaying all order items with product details
-  - Add OrderTimeline component showing status history and key events
+  - Build pages/admin/orders/[id].vue following admin layout patterns with rounded-2xl cards
+  - Create components/admin/Orders/DetailsCard.vue using shadcn-vue Card components
+  - Build components/admin/Orders/ItemsList.vue using shadcn-vue Table components
+  - Display customer information, shipping/billing addresses, and payment details
   - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5_
 
-- [ ] 6. Implement order status management workflow
+- [x] 6. Implement order status management workflow
 
-  - Create OrderStatusBadge component with color-coded status display
-  - Build StatusUpdateModal component with status transition validation
-  - Add status change confirmation dialogs with notes input
-  - Implement automatic customer notification triggers for status changes
-  - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6_
+  - Create components/admin/Orders/StatusBadge.vue using shadcn-vue Badge component
+  - Build components/admin/Orders/StatusUpdateDialog.vue using shadcn-vue Dialog component
+  - Add status transition validation (pending → processing → shipped → delivered)
+  - Implement tracking number input field for shipped status using shadcn-vue Input
+  - _Requirements: 3.1, 3.2, 3.3, 3.5_
 
-- [ ] 7. Build order fulfillment workflow system
+- [x] 7. Integrate with existing admin dashboard
+  - Add "Orders" navigation link to layouts/admin.vue
+  - Update stores/adminDashboard.ts to include order metrics
+  - Add order quick action card to components/admin/Dashboard/Overview.vue
+  - Ensure consistent styling with rounded-2xl cards and existing color schemes
+  - _Requirements: 1.1, 6.1_
 
-  - Create OrderFulfillmentChecklist component with interactive task management
-  - Implement FulfillmentTask components for picking, packing, and shipping
-  - Add inventory update integration when marking items as picked
-  - Build shipping label generation interface with carrier integration
-  - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5_
+- [x] 8. UI Component Migration to shadcn-vue (Post-MVP Enhancement)
+  - Migrate Filters.vue to use shadcn-vue Select components
+  - Migrate StatusUpdateDialog.vue to use shadcn-vue Select and Textarea
+  - Replace custom loading skeleton with shadcn-vue Skeleton
+  - Improve status filter cards with shadcn-vue Card components
+  - _Benefits: Better accessibility, consistent design system, improved mobile UX_
+  - _See: .kiro/specs/admin-order-management/UI_IMPROVEMENTS.md_
 
-- [ ] 8. Implement order modification and cancellation features
+## Additional Features (Post-MVP)
 
-  - Create OrderModificationModal for quantity changes and item additions/removals
-  - Build order total recalculation logic with payment processing updates
-  - Implement OrderCancellationModal with reason selection and refund processing
-  - Add modification audit logging with admin identity and timestamps
-  - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5_
+- [ ]\* 8. Create customer communication system
 
-- [ ] 9. Create customer communication system
+  - Create components/admin/Orders/NotesSection.vue for internal admin notes
+  - Build components/admin/Orders/NoteComposer.vue using shadcn-vue Textarea
+  - Display note history with admin name, timestamp, and note content
+  - Create POST /api/admin/orders/[id]/notes.post.ts for adding admin notes
+  - _Requirements: 7.1, 7.2_
 
-  - Build CustomerMessageThread component for order-specific communications
-  - Implement MessageComposer with predefined templates for common scenarios
-  - Add real-time message notifications and response handling
-  - Create message history display with admin and customer message differentiation
-  - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5_
+- [ ]\* 9. Build order fulfillment workflow system
 
-- [ ] 10. Implement bulk operations interface
+  - Create components/admin/Orders/FulfillmentChecklist.vue using shadcn-vue Checkbox components
+  - Build fulfillment task tracking with picking, packing, and shipping stages
+  - Integrate with existing inventory system to update stock when items are picked
+  - Add order_fulfillment_tasks table to database schema
+  - _Requirements: 4.1, 4.2, 4.3_
 
-  - Create BulkOrderActions component with multi-select functionality
-  - Build bulk status update workflow with progress indicators and error handling
-  - Implement batch shipping label printing and packing slip generation
-  - Add bulk operation confirmation dialogs and summary reporting
-  - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5_
+- [ ]\* 10. Implement order modification and cancellation features
 
-- [ ] 11. Build order analytics and reporting system
+  - Create components/admin/Orders/ModificationDialog.vue using shadcn-vue Dialog and Input
+  - Build order total recalculation logic for quantity changes
+  - Create components/admin/Orders/CancellationDialog.vue with reason Select component
+  - Implement refund processing integration with Stripe (existing useStripe composable)
+  - _Requirements: 5.1, 5.2, 5.3, 5.4_
 
-  - Create OrderAnalytics component with key metrics display (total orders, revenue, AOV)
-  - Implement OrderReports with filtering by date ranges, categories, and status
-  - Add export functionality for CSV and PDF report generation
-  - Build performance metrics dashboard showing fulfillment times and shipping delays
-  - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5_
+- [ ]\* 11. Implement bulk operations interface
 
-- [ ] 12. Add real-time updates and notifications
+  - Create components/admin/Orders/BulkActions.vue following adminProducts bulk pattern
+  - Build bulk status update with shadcn-vue Dialog for confirmation
+  - Implement bulk operation state management in store
+  - Create POST /api/admin/orders/bulk.post.ts for bulk status updates
+  - Add error handling and summary reporting with toast notifications
+  - _Requirements: 8.1, 8.2, 8.3, 8.4_
 
-  - Implement WebSocket integration for real-time order status updates
-  - Create notification system for order changes and customer messages
-  - Add conflict resolution for multiple admin users working on same orders
-  - Build order locking mechanism to prevent concurrent modification conflicts
-  - _Requirements: 3.4, 4.5, 7.4_
+- [ ]\* 12. Build order analytics and reporting system
 
-- [ ]\* 13. Write comprehensive test suite
+  - Create pages/admin/orders/analytics.vue following dashboard patterns
+  - Build components/admin/Orders/Analytics/MetricsCards.vue for key metrics
+  - Implement date range filtering using existing filter patterns
+  - Add CSV export functionality for order reports
+  - _Requirements: 6.1, 6.2, 6.3_
 
+- [ ]\* 13. Add real-time updates and notifications
+
+  - Implement Supabase Realtime subscriptions for order status changes
+  - Use existing toast store for order change notifications
+  - Add optimistic locking with updated_at timestamp checks
+  - Display conflict warnings when order was modified by another admin
+  - _Requirements: 3.4, 4.5_
+
+- [ ]\* 14. Integrate email notifications for status changes
+
+  - Integrate with existing email system for customer notifications
+  - Create email templates for order status changes (processing, shipped, delivered)
+  - Add email notification triggers in status update endpoint
+  - _Requirements: 3.4, 7.3_
+
+- [ ]\* 15. Implement security and audit logging
+
+  - Create order_audit_logs table for comprehensive action tracking
+  - Log all order modifications with admin user ID, action type, and changes
+  - Add input validation using existing checkout-validation.ts patterns
+  - Implement rate limiting for bulk operations to prevent abuse
+  - _Requirements: 3.3, 5.5, 7.2_
+
+- [ ]\* 16. Add order timeline component
+  - Create components/admin/Orders/Timeline.vue with status history and timestamps
+  - Display status changes, notes, and key events in chronological order
+  - Show admin user who made each change
+  - _Requirements: 2.4_
+
+## Testing (Optional)
+
+- [ ]\* 17. Write comprehensive test suite
   - Create unit tests for AdminOrdersStore actions and getters
   - Write component tests for order listing, detail, and modification components
   - Add integration tests for API endpoints and database operations
   - Implement E2E tests for complete order management workflows
   - _Requirements: All requirements validation_
-
-- [ ] 14. Integrate with existing admin dashboard
-
-  - Add order management navigation links to admin layout
-  - Integrate order metrics into existing dashboard statistics
-  - Update admin dashboard with order-related quick actions and alerts
-  - Ensure consistent styling and UX patterns with existing admin pages
-  - _Requirements: 1.1, 6.1_
-
-- [ ] 15. Implement security and audit logging
-  - Add role-based access control for order management actions
-  - Create comprehensive audit logging for all administrative order actions
-  - Implement session management and timeout handling for admin users
-  - Add input validation and sanitization for all order modification endpoints
-  - _Requirements: 3.3, 5.5, 7.2_

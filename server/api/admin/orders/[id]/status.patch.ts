@@ -8,6 +8,15 @@ interface UpdateOrderStatusRequest {
   carrier?: string
 }
 
+// Valid status transitions
+const STATUS_TRANSITIONS: Record<string, string[]> = {
+  pending: ['processing', 'cancelled'],
+  processing: ['shipped', 'cancelled'],
+  shipped: ['delivered', 'cancelled'],
+  delivered: [], // Terminal state
+  cancelled: [] // Terminal state
+}
+
 export default defineEventHandler(async (event) => {
   try {
     const supabase = serverSupabaseServiceRole(event)
@@ -62,6 +71,51 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    // Fetch current order to validate status transition
+    const { data: currentOrder, error: fetchError } = await supabase
+      .from('orders')
+      .select('id, order_number, status')
+      .eq('id', orderId)
+      .single()
+
+    if (fetchError) {
+      if (fetchError.code === 'PGRST116') {
+        throw createError({
+          statusCode: 404,
+          statusMessage: 'Order not found'
+        })
+      }
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Failed to fetch order'
+      })
+    }
+
+    // Validate status transition
+    const allowedTransitions = STATUS_TRANSITIONS[currentOrder.status] || []
+    if (currentOrder.status !== body.status && !allowedTransitions.includes(body.status)) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: `Invalid status transition from ${currentOrder.status} to ${body.status}. Allowed transitions: ${allowedTransitions.join(', ') || 'none'}`
+      })
+    }
+
+    // Validate required fields for specific statuses
+    if (body.status === 'shipped') {
+      if (!body.trackingNumber) {
+        throw createError({
+          statusCode: 400,
+          statusMessage: 'Tracking number is required when marking order as shipped'
+        })
+      }
+      if (!body.carrier) {
+        throw createError({
+          statusCode: 400,
+          statusMessage: 'Carrier is required when marking order as shipped'
+        })
+      }
+    }
+
     // Prepare update data
     const updateData: any = {
       status: body.status,
@@ -98,16 +152,26 @@ export default defineEventHandler(async (event) => {
       .single()
 
     if (updateError) {
-      if (updateError.code === 'PGRST116') {
-        throw createError({
-          statusCode: 404,
-          statusMessage: 'Order not found'
-        })
-      }
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to update order'
       })
+    }
+
+    // Record status change in history if table exists
+    if (currentOrder.status !== body.status) {
+      await supabase
+        .from('order_status_history')
+        .insert({
+          order_id: parseInt(orderId),
+          from_status: currentOrder.status,
+          to_status: body.status,
+          changed_by: user.id,
+          changed_at: new Date().toISOString(),
+          notes: body.adminNotes || null,
+          automated: false
+        })
+        .select()
     }
 
     return {
@@ -119,7 +183,8 @@ export default defineEventHandler(async (event) => {
         trackingNumber: updatedOrder.tracking_number,
         carrier: updatedOrder.carrier,
         shippedAt: updatedOrder.shipped_at,
-        deliveredAt: updatedOrder.delivered_at
+        deliveredAt: updatedOrder.delivered_at,
+        previousStatus: currentOrder.status
       }
     }
   } catch (error: any) {

@@ -272,7 +272,7 @@ function validatePostalCode(postalCode: string, country: string): boolean {
 }
 
 /**
- * Format order address for display outside of email templates.
+ * Format address for display in order context
  */
 export function formatOrderAddress(address: any): string {
   const parts = [
