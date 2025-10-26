@@ -1535,7 +1535,13 @@
         "totalOrders": "Total Comenzi",
         "conversionRate": "{rate} conversie",
         "totalRevenue": "Venituri Totale",
-        "revenueToday": "{amount} astăzi"
+        "revenueToday": "{amount} astăzi",
+        "pendingOrders": "{count} în așteptare",
+        "processingOrders": "{count} în procesare",
+        "shippedOrders": "{count} expediate",
+        "deliveredOrders": "{count} livrate",
+        "ordersToday": "{count} comenzi astăzi",
+        "averageOrderValue": "Medie {amount}"
       },
       "recentActivity": {
         "title": "Activitate Recentă",

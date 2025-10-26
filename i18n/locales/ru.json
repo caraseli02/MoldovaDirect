@@ -1535,7 +1535,13 @@
         "totalOrders": "Всего заказов",
         "conversionRate": "{rate} конверсия",
         "totalRevenue": "Общий доход",
-        "revenueToday": "{amount} сегодня"
+        "revenueToday": "{amount} сегодня",
+        "pendingOrders": "{count} в ожидании",
+        "processingOrders": "{count} в обработке",
+        "shippedOrders": "{count} отправлено",
+        "deliveredOrders": "{count} доставлено",
+        "ordersToday": "{count} заказов сегодня",
+        "averageOrderValue": "Средний {amount}"
       },
       "recentActivity": {
         "title": "Недавняя активность",

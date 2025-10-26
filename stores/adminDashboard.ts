@@ -124,6 +124,47 @@ export const useAdminDashboardStore = defineStore('adminDashboard', {
       return state.recentActivity.filter(activity => 
         activity.type === 'low_stock'
       )
+    },
+
+    /**
+     * Get pending orders count
+     */
+    pendingOrdersCount: (state): number => {
+      return state.stats?.pendingOrders ?? 0
+    },
+
+    /**
+     * Get processing orders count
+     */
+    processingOrdersCount: (state): number => {
+      return state.stats?.processingOrders ?? 0
+    },
+
+    /**
+     * Get orders requiring attention (pending + processing)
+     */
+    ordersRequiringAttention: (state): number => {
+      const pending = state.stats?.pendingOrders ?? 0
+      const processing = state.stats?.processingOrders ?? 0
+      return pending + processing
+    },
+
+    /**
+     * Get formatted average order value
+     */
+    formattedAverageOrderValue: (state): string => {
+      if (!state.stats) return '€0.00'
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'EUR'
+      }).format(state.stats.averageOrderValue)
+    },
+
+    /**
+     * Get orders today count
+     */
+    ordersTodayCount: (state): number => {
+      return state.stats?.ordersToday ?? 0
     }
   },
 

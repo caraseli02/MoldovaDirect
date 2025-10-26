@@ -1518,7 +1518,13 @@
         "totalOrders": "Total Orders",
         "conversionRate": "{rate} conversion",
         "totalRevenue": "Total Revenue",
-        "revenueToday": "{amount} today"
+        "revenueToday": "{amount} today",
+        "pendingOrders": "{count} pending",
+        "processingOrders": "{count} processing",
+        "shippedOrders": "{count} shipped",
+        "deliveredOrders": "{count} delivered",
+        "ordersToday": "{count} orders today",
+        "averageOrderValue": "Avg. {amount}"
       },
       "quickActions": {
         "title": "Quick Actions",

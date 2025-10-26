@@ -360,6 +360,11 @@ const highlightCards = computed(() => {
     ? Math.min(100, Math.round((1 - (data.lowStockProducts / data.activeProducts)) * 100))
     : 0
 
+  const ordersRequiringAttention = data ? (data.pendingOrders + data.processingOrders) : 0
+  const fulfillmentProgress = data && data.totalOrders > 0
+    ? Math.min(100, Math.round(((data.shippedOrders + data.deliveredOrders) / data.totalOrders) * 100))
+    : 0
+
   return [
     {
       key: 'revenueToday',
@@ -378,46 +383,38 @@ const highlightCards = computed(() => {
       progressClass: 'bg-green-500'
     },
     {
-      key: 'newCustomers',
-      label: 'New Customers',
-      value: data ? formatNumber(data.newUsersToday) : '0',
-      subtext: 'Registrations captured today',
-      icon: 'lucide:user-plus',
-      trend: data && data.newUsersToday > 0 ? 'up' : 'flat',
-      variant: data && data.newUsersToday > 0 ? 'info' : 'neutral',
-      meta: data ? `${formatNumber(data.activeUsers)} active users` : 'Active data pending',
-      metaClass: 'text-blue-500',
-      footerLabel: 'Daily onboarding goal',
-      footerValue: data ? `${formatNumber(Math.max(Math.round(data.activeUsers / 30), 1))} target` : '—',
+      key: 'ordersToday',
+      label: 'Orders Today',
+      value: data ? formatNumber(data.ordersToday) : '0',
+      subtext: 'New orders received',
+      icon: 'lucide:shopping-bag',
+      trend: data && data.ordersToday > 0 ? 'up' : 'flat',
+      variant: data && data.ordersToday > 0 ? 'success' : 'neutral',
+      meta: data ? `${formatNumber(ordersRequiringAttention)} need attention` : 'No pending orders',
+      metaClass: ordersRequiringAttention > 0 ? 'text-yellow-500' : 'text-green-500',
+      footerLabel: 'Average order value',
+      footerValue: data ? formatCurrency(data.averageOrderValue) : '€0.00',
       footerClass: 'text-blue-500',
-      progress: data && data.activeUsers > 0
-        ? Math.min(100, Math.round((data.newUsersToday / data.activeUsers) * 100 * 4))
+      progress: data && data.totalOrders > 0
+        ? Math.min(100, Math.round((data.ordersToday / data.totalOrders) * 100 * 30))
         : 0,
-      progressClass: 'bg-blue-500'
+      progressClass: 'bg-green-500'
     },
     {
-      key: 'ordersPipeline',
-      label: 'Orders Pipeline',
-      value: data ? formatNumber(data.totalOrders) : '0',
-      subtext: 'Total orders processed',
-      icon: 'lucide:shopping-cart',
-      trend: data
-        ? (data.conversionRate >= 2 ? 'up' : data.conversionRate > 0 ? 'flat' : 'down')
-        : 'flat',
-      variant: data
-        ? (data.conversionRate >= 2 ? 'success' : data.conversionRate > 0 ? 'info' : 'warning')
-        : 'neutral',
-      meta: data ? `${formatPercent(data.conversionRate)} conversion` : 'Conversion tracking pending',
-      metaClass: data
-        ? (data.conversionRate >= 2 ? 'text-green-500' : data.conversionRate > 0 ? 'text-blue-500' : 'text-yellow-400')
-        : 'text-gray-400',
-      footerLabel: 'Checkout efficiency',
-      footerValue: data ? `${formatPercent(data.conversionRate)}` : '0%',
-      footerClass: data
-        ? (data.conversionRate >= 2 ? 'text-green-500' : data.conversionRate > 0 ? 'text-blue-500' : 'text-yellow-400')
-        : 'text-gray-400',
-      progress: data ? Math.min(100, Math.round(Math.min(data.conversionRate * 10, 100))) : 0,
-      progressClass: 'bg-green-500'
+      key: 'orderFulfillment',
+      label: 'Order Fulfillment',
+      value: data ? formatNumber(ordersRequiringAttention) : '0',
+      subtext: 'Orders awaiting action',
+      icon: 'lucide:package',
+      trend: ordersRequiringAttention > 0 ? 'flat' : 'up',
+      variant: ordersRequiringAttention > 5 ? 'warning' : ordersRequiringAttention > 0 ? 'info' : 'success',
+      meta: data ? `${formatNumber(data.shippedOrders)} shipped today` : 'No shipments',
+      metaClass: data && data.shippedOrders > 0 ? 'text-green-500' : 'text-gray-400',
+      footerLabel: 'Fulfillment rate',
+      footerValue: `${fulfillmentProgress}%`,
+      footerClass: fulfillmentProgress >= 80 ? 'text-green-500' : 'text-yellow-400',
+      progress: fulfillmentProgress,
+      progressClass: fulfillmentProgress >= 80 ? 'bg-green-500' : 'bg-yellow-400'
     },
     {
       key: 'inventoryHealth',
@@ -517,16 +514,17 @@ const customerSummary = computed(() => {
 const backlogItems = computed(() => {
   const data = stats.value
   const groups = activityGroups.value as Record<string, any[]>
+  const ordersRequiringAttention = data ? (data.pendingOrders + data.processingOrders) : 0
 
   return [
     {
       key: 'ordersAwaiting',
       label: 'Orders awaiting fulfillment',
       description: 'Queued shipments ready for picking and packing.',
-      count: groups?.order_processing?.length || 0,
+      count: ordersRequiringAttention,
       icon: 'lucide:package',
       to: '/admin/orders',
-      tone: (groups?.order_processing?.length || 0) > 0 ? 'warning' : 'neutral',
+      tone: ordersRequiringAttention > 0 ? 'warning' : 'neutral',
       cta: 'Open orders'
     },
     {
