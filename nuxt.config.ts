@@ -143,5 +143,8 @@ export default defineNuxtConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+    ssr: {
+      noExternal: ["vue", "@vue/*"],
+    },
   },
 });
