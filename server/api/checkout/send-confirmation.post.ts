@@ -1,6 +1,7 @@
 // POST /api/checkout/send-confirmation - Send order confirmation email
 import { serverSupabaseServiceRole } from '#supabase/server'
-import { sendOrderConfirmationEmail, transformOrderToEmailData } from '~/server/utils/orderEmails'
+import { sendOrderConfirmationEmail } from '~/server/utils/orderEmails'
+import { transformOrderToEmailData } from '~/server/utils/orderDataTransform'
 import type { DatabaseOrder } from '~/server/utils/emailTemplates/types'
 
 interface SendConfirmationRequest {

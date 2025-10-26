@@ -3,8 +3,10 @@
  * Requirements: 5.2
  */
 
-import { generateOrderConfirmationTemplate } from '~/server/utils/emailTemplates/orderConfirmation'
-import type { OrderEmailData } from '~/server/utils/emailTemplates/types'
+import {
+  orderConfirmation,
+  type OrderEmailData,
+} from '~/server/utils/emailTemplates'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
@@ -66,7 +68,7 @@ export default defineEventHandler(async (event) => {
   }
 
   // Generate HTML preview
-  const html = generateOrderConfirmationTemplate(sampleData)
+  const html = orderConfirmation.generateOrderConfirmationTemplate(sampleData)
 
   return {
     html,

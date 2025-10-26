@@ -1,9 +1,27 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import tailwindcss from "@tailwindcss/vite";
 
+const BASE_COMPONENT_DIRS = [
+  {
+    path: "~/components",
+    pathPrefix: true,
+    // Only register Vue SFCs from our components directory.
+    // Avoid picking up TypeScript barrels like `index.ts` inside shadcn-ui folders.
+    extensions: ["vue"],
+    // Also exclude the shadcn UI folder entirely, since those components are explicitly imported.
+    ignore: ["ui/**", "**/index.ts"],
+  },
+];
+
 export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
+  components: {
+    // Restrict auto-registered components to .vue files globally
+    // to prevent Nuxt from treating `index.ts` barrels as components.
+    extensions: ["vue"],
+    dirs: [...BASE_COMPONENT_DIRS],
+  },
   modules: [
     "@nuxtjs/supabase",
     "@nuxtjs/i18n",
@@ -11,6 +29,8 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "shadcn-nuxt",
     "@vite-pwa/nuxt",
+    // Keep this last to post-process the components registry
+    "~/modules/fix-components",
   ],
   image: {
     domains: ["images.unsplash.com"],
@@ -30,7 +50,7 @@ export default defineNuxtConfig({
     /**
      * Prefix for all the imported component
      */
-    prefix: "",
+    prefix: "Ui",
     /**
      * Directory that the component lives in.
      * @default "./components/ui"
@@ -145,6 +165,20 @@ export default defineNuxtConfig({
     plugins: [tailwindcss()],
     ssr: {
       noExternal: ["vue", "@vue/*"],
+    },
+  },
+  hooks: {
+    // Ensure the shadcn-nuxt injected components directory does not register TS barrels as Vue components
+    'components:dirs'(dirs) {
+      // Remove any auto-registered UI directory added by modules (e.g., shadcn-nuxt),
+      // since we import UI components explicitly in <script setup>.
+      for (let i = dirs.length - 1; i >= 0; i--) {
+        const entry = dirs[i]
+        if (typeof entry === 'string') continue
+        if (entry?.path && String(entry.path).includes('/components/ui')) {
+          dirs.splice(i, 1)
+        }
+      }
     },
   },
 });

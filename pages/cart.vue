@@ -3,7 +3,7 @@
     <div class="container px-4 md:px-6">
       <h1 class="text-2xl md:text-4xl font-bold mb-4 md:mb-8 text-gray-900 dark:text-white">{{ $t('common.cart') }}</h1>
 
-      <commonErrorBoundary :fallback-action="() => navigateTo(localePath('/products'))"
+      <CommonErrorBoundary :fallback-action="() => navigateTo(localePath('/products'))"
         fallback-action-text="Continuar comprando" @error="handleCartError">
         <!-- Loading State -->
         <div v-if="loading" class="text-center py-20">
@@ -122,7 +122,7 @@
             </div>
           </div>
         </div>
-      </commonErrorBoundary>
+      </CommonErrorBoundary>
     </div>
 
     <!-- Mobile Sticky Cart Summary -->

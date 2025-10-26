@@ -4,7 +4,14 @@
 // Functions to transform order database records into email template data
 // Requirements: 1.2, 1.3, 1.4, 1.5
 
-import type { OrderEmailData, OrderItemData, AddressData, DatabaseOrder, UserProfile, GuestCheckoutData } from './emailTemplates/types'
+import type {
+  OrderEmailData,
+  OrderItemData,
+  AddressData,
+  DatabaseOrder,
+  UserProfile,
+  GuestCheckoutData,
+} from './emailTemplates/types'
 
 /**
  * Transform database order to OrderEmailData format for email templates
@@ -51,7 +58,7 @@ export function transformOrderToEmailData(
     shippingCost: order.shipping_cost_eur,
     tax: order.tax_eur,
     total: order.total_eur,
-    paymentMethod: formatPaymentMethod(order.payment_method),
+    paymentMethod: order.payment_method,
     trackingNumber: order.tracking_number,
     trackingUrl,
     carrier: order.carrier,

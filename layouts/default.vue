@@ -6,11 +6,11 @@
     </main>
     <LayoutAppFooter />
     <ClientOnly>
-      <commonToastContainer />
+      <CommonToastContainer />
       <!-- PWA Components -->
-      <mobilePWAInstallPrompt />
-      <mobilePWAUpdatePrompt />
-      <mobileOfflineIndicator />
+      <MobilePWAInstallPrompt />
+      <MobilePWAUpdatePrompt />
+      <MobileOfflineIndicator />
     </ClientOnly>
   </div>
 </template>
