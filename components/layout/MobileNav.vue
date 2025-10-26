@@ -169,10 +169,6 @@ const { t } = useI18n()
 const { itemCount } = useCart()
 const cartItemsCount = computed(() => itemCount.value)
 
-defineEmits<{
-  close: []
-}>()
-
 // Accessibility: focus trap and ESC close
 const emit = defineEmits(['close'])
 const drawerRef = ref<HTMLElement | null>(null)
