@@ -39,6 +39,9 @@ export default defineNuxtConfig({
   },
   nitro: {
     preset: "vercel",
+    externals: {
+      inline: ["vue", "@vue/*"],
+    },
   },
   supabase: {
     redirectOptions: {
