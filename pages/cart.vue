@@ -93,7 +93,7 @@
 
                   <div class="flex justify-between text-sm">
                     <span class="text-gray-600 dark:text-gray-400">{{ $t('common.shipping') }}</span>
-                    <span class="font-medium text-gray-900 dark:text-white">{{ $t('common.checkout') }}</span>
+                    <span class="font-medium text-gray-900 dark:text-white">{{ $t('cart.shippingCalculatedAtCheckout') }}</span>
                   </div>
 
                   <div class="border-t border-gray-200 dark:border-gray-700 pt-3">
@@ -154,7 +154,7 @@
             </div>
             <div class="flex justify-between text-sm">
               <span class="text-gray-600 dark:text-gray-400">{{ $t('common.shipping') }}</span>
-              <span class="font-medium text-gray-900 dark:text-white">{{ $t('common.checkout') }}</span>
+              <span class="font-medium text-gray-900 dark:text-white">{{ $t('cart.shippingCalculatedAtCheckout') }}</span>
             </div>
           </div>
         </div>
