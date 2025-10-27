@@ -237,6 +237,12 @@ export interface Order {
   deliveredAt?: string
   createdAt: string
   updatedAt: string
+  // Admin-specific fields
+  priorityLevel?: number
+  estimatedShipDate?: string
+  trackingNumber?: string
+  shippingCarrier?: string
+  fulfillmentProgress?: number
 }
 
 export interface OrderItem {
@@ -363,4 +369,33 @@ export interface CartStoreState {
   cart: CartWithItems | null
   loading: boolean
   error: string | null
+}
+
+// =============================================
+// COMPOSABLE RETURN TYPES
+// =============================================
+export interface UseProductsReturn {
+  products: Ref<ProductWithRelations[]>
+  loading: Ref<boolean>
+  error: Ref<string | null>
+  pagination: Ref<Pagination>
+  fetchProducts: (filters?: ProductFilters) => Promise<void>
+  searchProducts: (query: string) => Promise<void>
+  clearProducts: () => void
+}
+
+export interface UseCategoriesReturn {
+  categories: Ref<CategoryWithChildren[]>
+  loading: Ref<boolean>
+  error: Ref<string | null>
+  fetchCategories: () => Promise<void>
+  getCategoryBySlug: (slug: string) => CategoryWithChildren | undefined
+}
+
+export interface UseProductReturn {
+  product: Ref<ProductWithRelations | null>
+  relatedProducts: Ref<ProductWithRelations[]>
+  loading: Ref<boolean>
+  error: Ref<string | null>
+  fetchProduct: (slug: string) => Promise<void>
 }

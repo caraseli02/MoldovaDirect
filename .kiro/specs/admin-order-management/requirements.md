@@ -4,6 +4,17 @@
 
 The Admin Order Management feature provides administrators with comprehensive tools to view, manage, and fulfill customer orders. This system enables efficient order processing, status tracking, and fulfillment workflow management from a centralized admin interface. The feature integrates with existing checkout and customer order history systems to provide a complete order lifecycle management solution.
 
+## Glossary
+
+- **Admin Order Management System**: The software system that provides administrative interfaces and workflows for managing customer orders
+- **Order**: A customer purchase transaction containing items, payment information, and shipping details
+- **Order Status**: The current state of an order in the fulfillment workflow (pending, processing, shipped, delivered, cancelled)
+- **Fulfillment**: The process of picking, packing, and shipping ordered items to customers
+- **Bulk Operation**: An administrative action performed on multiple orders simultaneously
+- **Order Timeline**: A chronological record of status changes and events for an order
+- **Tracking Number**: A unique identifier provided by shipping carriers to track package delivery
+- **Admin**: An authenticated user with administrative privileges to manage orders
+
 ## Requirements
 
 ### Requirement 1
@@ -12,11 +23,11 @@ The Admin Order Management feature provides administrators with comprehensive to
 
 #### Acceptance Criteria
 
-1. WHEN an admin accesses the orders dashboard THEN the system SHALL display a paginated list of all orders
-2. WHEN displaying orders THEN the system SHALL show order ID, customer name, order date, total amount, and current status
-3. WHEN an admin views the orders list THEN the system SHALL provide filtering options by status, date range, and customer
-4. WHEN an admin views the orders list THEN the system SHALL provide sorting options by date, amount, and status
-5. WHEN an admin clicks on an order THEN the system SHALL navigate to the detailed order view
+1. WHEN an admin accesses the orders dashboard, THE Admin Order Management System SHALL display a paginated list of all orders
+2. WHEN displaying orders, THE Admin Order Management System SHALL show order ID, customer name, order date, total amount, and current status
+3. WHEN an admin views the orders list, THE Admin Order Management System SHALL provide filtering options by status, date range, and customer
+4. WHEN an admin views the orders list, THE Admin Order Management System SHALL provide sorting options by date, amount, and status
+5. WHEN an admin clicks on an order, THE Admin Order Management System SHALL navigate to the detailed order view
 
 ### Requirement 2
 
@@ -24,11 +35,11 @@ The Admin Order Management feature provides administrators with comprehensive to
 
 #### Acceptance Criteria
 
-1. WHEN an admin views order details THEN the system SHALL display customer information, shipping address, and billing address
-2. WHEN an admin views order details THEN the system SHALL show all ordered items with quantities, prices, and product details
-3. WHEN an admin views order details THEN the system SHALL display payment information and transaction status
-4. WHEN an admin views order details THEN the system SHALL show order timeline with status changes and timestamps
-5. WHEN an admin views order details THEN the system SHALL display any special instructions or notes from the customer
+1. WHEN an admin views order details, THE Admin Order Management System SHALL display customer information, shipping address, and billing address
+2. WHEN an admin views order details, THE Admin Order Management System SHALL show all ordered items with quantities, prices, and product details
+3. WHEN an admin views order details, THE Admin Order Management System SHALL display payment information and transaction status
+4. WHEN an admin views order details, THE Admin Order Management System SHALL show order timeline with status changes and timestamps
+5. WHEN an admin views order details, THE Admin Order Management System SHALL display any special instructions or notes from the customer
 
 ### Requirement 3
 
@@ -36,12 +47,12 @@ The Admin Order Management feature provides administrators with comprehensive to
 
 #### Acceptance Criteria
 
-1. WHEN an admin updates order status THEN the system SHALL only allow valid status transitions (pending → processing → shipped → delivered)
-2. WHEN an admin changes order status THEN the system SHALL require confirmation for the status change
-3. WHEN an admin updates order status THEN the system SHALL automatically timestamp the status change
-4. WHEN an admin updates order status THEN the system SHALL send notification emails to customers for key status changes
-5. WHEN an admin updates to "shipped" status THEN the system SHALL require tracking number input
-6. IF an order is marked as "cancelled" THEN the system SHALL handle inventory restoration and refund processing
+1. WHEN an admin updates order status, THE Admin Order Management System SHALL only allow valid status transitions from pending to processing to shipped to delivered
+2. WHEN an admin changes order status, THE Admin Order Management System SHALL require confirmation for the status change
+3. WHEN an admin updates order status, THE Admin Order Management System SHALL automatically timestamp the status change
+4. WHEN an admin updates order status, THE Admin Order Management System SHALL send notification emails to customers for key status changes
+5. WHEN an admin updates to shipped status, THE Admin Order Management System SHALL require tracking number input
+6. IF an order is marked as cancelled, THEN THE Admin Order Management System SHALL handle inventory restoration and refund processing
 
 ### Requirement 4
 
@@ -49,11 +60,11 @@ The Admin Order Management feature provides administrators with comprehensive to
 
 #### Acceptance Criteria
 
-1. WHEN an admin processes an order THEN the system SHALL provide a fulfillment checklist with picking, packing, and shipping tasks
-2. WHEN an admin marks items as picked THEN the system SHALL update inventory levels accordingly
-3. WHEN an admin generates shipping labels THEN the system SHALL integrate with shipping providers for label creation
-4. WHEN an admin completes fulfillment tasks THEN the system SHALL track completion timestamps and responsible admin
-5. WHEN multiple admins work on orders THEN the system SHALL prevent conflicts through order locking mechanisms
+1. WHEN an admin processes an order, THE Admin Order Management System SHALL provide a fulfillment checklist with picking, packing, and shipping tasks
+2. WHEN an admin marks items as picked, THE Admin Order Management System SHALL update inventory levels accordingly
+3. WHEN an admin generates shipping labels, THE Admin Order Management System SHALL integrate with shipping providers for label creation
+4. WHEN an admin completes fulfillment tasks, THE Admin Order Management System SHALL track completion timestamps and responsible admin
+5. WHEN multiple admins work on orders, THE Admin Order Management System SHALL prevent conflicts through order locking mechanisms
 
 ### Requirement 5
 
@@ -61,11 +72,11 @@ The Admin Order Management feature provides administrators with comprehensive to
 
 #### Acceptance Criteria
 
-1. WHEN an admin modifies an order THEN the system SHALL allow quantity changes, item additions, and item removals
-2. WHEN an admin modifies an order THEN the system SHALL recalculate totals and update payment processing if needed
-3. WHEN an admin cancels an order THEN the system SHALL require cancellation reason selection
-4. WHEN an admin cancels an order THEN the system SHALL automatically process refunds and restore inventory
-5. WHEN an admin makes order changes THEN the system SHALL log all modifications with admin identity and timestamps
+1. WHEN an admin modifies an order, THE Admin Order Management System SHALL allow quantity changes, item additions, and item removals
+2. WHEN an admin modifies an order, THE Admin Order Management System SHALL recalculate totals and update payment processing if needed
+3. WHEN an admin cancels an order, THE Admin Order Management System SHALL require cancellation reason selection
+4. WHEN an admin cancels an order, THE Admin Order Management System SHALL automatically process refunds and restore inventory
+5. WHEN an admin makes order changes, THE Admin Order Management System SHALL log all modifications with admin identity and timestamps
 
 ### Requirement 6
 
@@ -73,11 +84,11 @@ The Admin Order Management feature provides administrators with comprehensive to
 
 #### Acceptance Criteria
 
-1. WHEN an admin accesses order analytics THEN the system SHALL display key metrics like total orders, revenue, and average order value
-2. WHEN an admin views order reports THEN the system SHALL provide filtering by date ranges, product categories, and order status
-3. WHEN an admin generates reports THEN the system SHALL allow export to CSV and PDF formats
-4. WHEN an admin views analytics THEN the system SHALL show fulfillment performance metrics like processing time and shipping delays
-5. WHEN an admin accesses reports THEN the system SHALL display visual charts for order trends and patterns
+1. WHEN an admin accesses order analytics, THE Admin Order Management System SHALL display key metrics including total orders, revenue, and average order value
+2. WHEN an admin views order reports, THE Admin Order Management System SHALL provide filtering by date ranges, product categories, and order status
+3. WHEN an admin generates reports, THE Admin Order Management System SHALL allow export to CSV and PDF formats
+4. WHEN an admin views analytics, THE Admin Order Management System SHALL show fulfillment performance metrics including processing time and shipping delays
+5. WHEN an admin accesses reports, THE Admin Order Management System SHALL display visual charts for order trends and patterns
 
 ### Requirement 7
 
@@ -85,11 +96,11 @@ The Admin Order Management feature provides administrators with comprehensive to
 
 #### Acceptance Criteria
 
-1. WHEN an admin needs to contact a customer THEN the system SHALL provide direct messaging functionality within the order interface
-2. WHEN an admin sends customer messages THEN the system SHALL log all communications in the order history
-3. WHEN an admin sends order updates THEN the system SHALL use predefined templates for common scenarios
-4. WHEN customers respond to admin messages THEN the system SHALL notify relevant admins and display responses in the order interface
-5. WHEN an admin handles customer inquiries THEN the system SHALL provide access to customer order history and previous communications
+1. WHEN an admin needs to contact a customer, THE Admin Order Management System SHALL provide direct messaging functionality within the order interface
+2. WHEN an admin sends customer messages, THE Admin Order Management System SHALL log all communications in the order history
+3. WHEN an admin sends order updates, THE Admin Order Management System SHALL use predefined templates for common scenarios
+4. WHEN customers respond to admin messages, THE Admin Order Management System SHALL notify relevant admins and display responses in the order interface
+5. WHEN an admin handles customer inquiries, THE Admin Order Management System SHALL provide access to customer order history and previous communications
 
 ### Requirement 8
 
@@ -97,8 +108,8 @@ The Admin Order Management feature provides administrators with comprehensive to
 
 #### Acceptance Criteria
 
-1. WHEN an admin selects multiple orders THEN the system SHALL provide bulk status update functionality
-2. WHEN an admin performs bulk operations THEN the system SHALL allow batch printing of shipping labels and packing slips
-3. WHEN an admin processes bulk updates THEN the system SHALL provide progress indicators and error handling
-4. WHEN an admin performs bulk operations THEN the system SHALL require confirmation before executing changes
-5. WHEN bulk operations complete THEN the system SHALL provide summary reports of successful and failed operations
+1. WHEN an admin selects multiple orders, THE Admin Order Management System SHALL provide bulk status update functionality
+2. WHEN an admin performs bulk operations, THE Admin Order Management System SHALL allow batch printing of shipping labels and packing slips
+3. WHEN an admin processes bulk updates, THE Admin Order Management System SHALL provide progress indicators and error handling
+4. WHEN an admin performs bulk operations, THE Admin Order Management System SHALL require confirmation before executing changes
+5. WHEN bulk operations complete, THE Admin Order Management System SHALL provide summary reports of successful and failed operations

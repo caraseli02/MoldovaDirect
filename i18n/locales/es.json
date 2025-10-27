@@ -1538,7 +1538,13 @@
         "totalOrders": "Total de Pedidos",
         "conversionRate": "{rate} conversión",
         "totalRevenue": "Ingresos Totales",
-        "revenueToday": "{amount} hoy"
+        "revenueToday": "{amount} hoy",
+        "pendingOrders": "{count} pendientes",
+        "processingOrders": "{count} en proceso",
+        "shippedOrders": "{count} enviados",
+        "deliveredOrders": "{count} entregados",
+        "ordersToday": "{count} pedidos hoy",
+        "averageOrderValue": "Promedio {amount}"
       },
       "recentActivity": {
         "title": "Actividad Reciente",
