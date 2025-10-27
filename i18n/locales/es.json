@@ -1529,6 +1529,8 @@
         "hoursAgo": "hace {hours} horas"
       },
       "stats": {
+        "sectionTitle": "Resumen Operativo",
+        "refreshHint": "Las métricas se actualizan automáticamente cada cinco minutos.",
         "totalProducts": "Total de Productos",
         "activeProducts": "{count} activos",
         "lowStockProducts": "{count} productos con stock bajo",

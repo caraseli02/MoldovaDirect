@@ -29,15 +29,5 @@ export const emailTemplates = {
   validator,
 }
 
-// Re-export types for convenience so consumers can import from a single entry point
-export type {
-  OrderEmailData,
-  OrderItemData,
-  AddressData,
-  DatabaseOrder,
-  DatabaseOrderItem,
-  UserProfile,
-  GuestCheckoutData,
-  ValidationResult,
-  EmailTemplateContext,
-} from './types'
+// Note: Types are auto-imported by Nuxt from ./types.ts
+// Do not re-export them here to avoid duplicate import warnings

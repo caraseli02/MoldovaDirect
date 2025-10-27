@@ -106,12 +106,12 @@
                 </div>
 
                 <div class="mt-6 space-y-3">
-                  <Button @click="goToCheckout"
+                  <UiButton @click="goToCheckout"
                     size="lg"
                     class="w-full bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium cursor-pointer"
                     :disabled="loading || isEmpty">
                     {{ $t('common.checkout') }}
-                  </Button>
+                  </UiButton>
 
                   <NuxtLink :to="localePath('/products')"
                     class="block w-full text-center py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-gray-900 dark:text-white">
@@ -131,7 +131,7 @@
       <div class="p-4">
         <!-- Expandable Summary -->
         <div class="mb-3">
-          <Button
+          <UiButton
             variant="ghost"
             @click="showMobileSummary = !showMobileSummary"
             class="w-full flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 p-2 h-auto"
@@ -144,7 +144,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
               </svg>
             </div>
-          </Button>
+          </UiButton>
 
           <!-- Expanded Summary -->
           <div v-show="showMobileSummary" class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 space-y-2">
@@ -161,11 +161,11 @@
 
         <!-- Action Buttons -->
         <div class="space-y-2">
-          <Button @click="goToCheckout"
+          <UiButton @click="goToCheckout"
             :class="cn('cursor-pointer')"
             :disabled="loading || isEmpty">
             {{ $t('common.checkout') }}
-          </Button>
+          </UiButton>
 
           <NuxtLink :to="localePath('/products')"
             class="block w-full text-center py-3 px-4 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-gray-900 dark:text-white">
