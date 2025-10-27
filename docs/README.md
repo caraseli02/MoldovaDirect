@@ -80,8 +80,7 @@ MoldovaDirect/
 
 ### Project History
 - [Changelog](./CHANGELOG.md) - Recent changes and updates
-- [Cleanup Report](../CODE_CLEANUP_REPORT.md) - Code cleanup tracking
-- [Cleanup Completed](../CLEANUP_COMPLETED_2025-10-12.md) - Latest cleanup details
+- [Archived Cleanup Reports](../.kiro/archive/cleanup/) - Historical cleanup documentation
 
 ### For Features
 - [User Authentication](./../.kiro/specs/user-authentication/) - Auth system specs

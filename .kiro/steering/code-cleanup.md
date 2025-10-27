@@ -7,7 +7,7 @@ inclusion: always
 
 ## Recent Cleanup (October 12, 2025)
 
-A major code cleanup was completed to remove unused code and improve maintainability. See [CLEANUP_COMPLETED_2025-10-12.md](../../CLEANUP_COMPLETED_2025-10-12.md) for full details.
+A major code cleanup was completed to remove unused code and improve maintainability. See `.kiro/archive/cleanup/CLEANUP_COMPLETED_2025-10-12.md` for full details.
 
 ### What Was Removed
 
@@ -62,7 +62,7 @@ The custom toast system should be migrated to `vue-sonner` (already installed):
 - Smaller bundle size
 - Better accessibility
 
-**Migration tracked in:** [TODO.md](../../TODO.md) under "Component Modernization"
+**Migration tracked in:** [.kiro/PROJECT_STATUS.md](../PROJECT_STATUS.md) under "Component Modernization"
 
 ## Guidelines for Future Development
 
@@ -120,13 +120,13 @@ git log --all --full-history -- "composables/usePayPal.ts"
 
 ## Maintenance Schedule
 
-- **Monthly:** Review TODO.md for completed tasks that need cleanup
+- **Monthly:** Review `.kiro/PROJECT_STATUS.md` for completed tasks that need cleanup
 - **Quarterly:** Run dependency audit and remove unused packages
 - **Before releases:** Review and clean up debug code, console.logs, and comments
 - **After major features:** Archive related documentation and remove temporary files
 
 ## References
 
-- [CODE_CLEANUP_REPORT.md](../../CODE_CLEANUP_REPORT.md) - Ongoing cleanup tracking
-- [CLEANUP_COMPLETED_2025-10-12.md](../../CLEANUP_COMPLETED_2025-10-12.md) - Latest cleanup details
-- [TODO.md](../../TODO.md) - Pending cleanup tasks
+- [.kiro/archive/cleanup/CODE_CLEANUP_REPORT.md](../archive/cleanup/CODE_CLEANUP_REPORT.md) - Archived cleanup tracking
+- [.kiro/archive/cleanup/CLEANUP_COMPLETED_2025-10-12.md](../archive/cleanup/CLEANUP_COMPLETED_2025-10-12.md) - Archived cleanup summary
+- [.kiro/PROJECT_STATUS.md](../PROJECT_STATUS.md) - Active cleanup tasks

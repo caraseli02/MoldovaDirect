@@ -8,7 +8,7 @@ This document tracks significant changes, updates, and improvements to the Moldo
 
 ### Code Cleanup & Optimization (October 12, 2025)
 
-**Major cleanup completed** to remove unused code and improve maintainability. See [CLEANUP_COMPLETED_2025-10-12.md](../CLEANUP_COMPLETED_2025-10-12.md) for full details.
+**Major cleanup completed** to remove unused code and improve maintainability. The archived report is available at `.kiro/archive/cleanup/CLEANUP_COMPLETED_2025-10-12.md`.
 
 #### Removed Features
 - ❌ **PayPal Integration** - Completely removed (composables, API endpoints, configuration)
@@ -116,9 +116,8 @@ This document tracks significant changes, updates, and improvements to the Moldo
 
 ## References
 
-- [CODE_CLEANUP_REPORT.md](../CODE_CLEANUP_REPORT.md) - Ongoing cleanup tracking
-- [CLEANUP_COMPLETED_2025-10-12.md](../CLEANUP_COMPLETED_2025-10-12.md) - Latest cleanup details
-- [TODO.md](../TODO.md) - Pending tasks
+- [.kiro/archive/cleanup/CODE_CLEANUP_REPORT.md](../.kiro/archive/cleanup/CODE_CLEANUP_REPORT.md) - Archived cleanup tracking
+- [.kiro/archive/cleanup/CLEANUP_COMPLETED_2025-10-12.md](../.kiro/archive/cleanup/CLEANUP_COMPLETED_2025-10-12.md) - Archived cleanup summary
 - [.kiro/ROADMAP.md](../.kiro/ROADMAP.md) - Development timeline
 - [.kiro/PROJECT_STATUS.md](../.kiro/PROJECT_STATUS.md) - Current project status
 
