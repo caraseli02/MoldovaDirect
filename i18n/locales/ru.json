@@ -1529,6 +1529,8 @@
         "hoursAgo": "{hours} часов назад"
       },
       "stats": {
+        "sectionTitle": "Операционная сводка",
+        "refreshHint": "Метрики обновляются автоматически каждые пять минут.",
         "totalProducts": "Всего товаров",
         "activeProducts": "{count} активных",
         "lowStockProducts": "{count} товаров с низким запасом",

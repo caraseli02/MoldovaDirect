@@ -1527,6 +1527,8 @@
         "hoursAgo": "acum {hours} ore"
       },
       "stats": {
+        "sectionTitle": "Rezumat Operațional",
+        "refreshHint": "Metricile se actualizează automat la fiecare cinci minute.",
         "totalProducts": "Total Produse",
         "activeProducts": "{count} active",
         "lowStockProducts": "{count} produse cu stoc scăzut",
