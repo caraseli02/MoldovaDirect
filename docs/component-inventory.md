@@ -34,12 +34,12 @@ This document provides a comprehensive inventory of current component usage and 
 
 | Surface / Flow | Status | Notes | Owner | Source of Truth |
 | -------------- | ------ | ----- | ----- | ---------------- |
-| Auth (login/register, alerts) | ✅ Completed | Adopted shadcn inputs/labels/alerts; legacy auth message components removed | Unassigned | `TODO.md` |
-| Checkout (shipping, payment, confirmation) | 🔄 In progress | Select/Input replacements staged; dialogs untouched | Unassigned | `TODO.md` |
-| Cart (drawer, quantity controls, bulk actions) | ⏳ Not started | Needs button/checkbox/sonner migrations | Unassigned | `TODO.md` |
-| Admin tables & filters | ⏳ Not started | Table/pagination/badge swaps outstanding | Unassigned | `TODO.md` |
-| Mobile navigation / sheets | ⏳ Not started | Dialog/sheet adoption pending; touch targets under review | Unassigned | `TODO.md` |
-| Toast / notification system | ⏳ Not started | Legacy `components/common/Toast*.vue` still active | Unassigned | `TODO.md` |
+| Auth (login/register, alerts) | ✅ Completed | Adopted shadcn inputs/labels/alerts; legacy auth message components removed | Unassigned | `.kiro/PROJECT_STATUS.md` |
+| Checkout (shipping, payment, confirmation) | 🔄 In progress | Select/Input replacements staged; dialogs untouched | Unassigned | `.kiro/PROJECT_STATUS.md` |
+| Cart (drawer, quantity controls, bulk actions) | ⏳ Not started | Needs button/checkbox/sonner migrations | Unassigned | `.kiro/PROJECT_STATUS.md` |
+| Admin tables & filters | ⏳ Not started | Table/pagination/badge swaps outstanding | Unassigned | `.kiro/PROJECT_STATUS.md` |
+| Mobile navigation / sheets | ⏳ Not started | Dialog/sheet adoption pending; touch targets under review | Unassigned | `.kiro/PROJECT_STATUS.md` |
+| Toast / notification system | ⏳ Not started | Legacy `components/common/Toast*.vue` still active | Unassigned | `.kiro/PROJECT_STATUS.md` |
 
 ## Custom Component Usage Analysis
 
@@ -229,7 +229,7 @@ Statuses below reflect the library scaffolding completed on 2025-10-05. Use the 
 
 - **CLI scaffolding completed**: 2025-10-05 (~2 hours total)
 - **Component coverage**: 19 libraries (77 files) now available under `components/ui/**`
-- **Next focus**: Replace legacy markup per the migration snapshot and track progress in `TODO.md`
+- **Next focus**: Replace legacy markup per the migration snapshot and track progress in `.kiro/PROJECT_STATUS.md`
 
 ## Component Usage Statistics
 
