@@ -89,19 +89,18 @@
 
     <!-- Products Table -->
     <div v-else class="overflow-x-auto">
-      <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-        <thead class="bg-gray-50 dark:bg-gray-900">
-          <tr>
-            <th class="px-6 py-3 text-left">
-              <input
-                type="checkbox"
-                :checked="allVisibleSelected"
-                :indeterminate="hasSelectedProducts && !allVisibleSelected"
-                @change="toggleAllVisible"
-                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead class="px-6">
+              <UiCheckbox
+                id="products-select-all"
+                :checked="allVisibleSelected ? true : (hasSelectedProducts && !allVisibleSelected ? 'indeterminate' : false)"
+                @update:checked="toggleAllVisible"
+                :aria-label="$t('admin.products.selectAll')"
               />
-            </th>
-            <th 
+            </TableHead>
+            <TableHead 
               class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
               @click="updateSort('name')"
             >
@@ -111,11 +110,11 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </div>
-            </th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+            </TableHead>
+            <TableHead class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
               Category
-            </th>
-            <th 
+            </TableHead>
+            <TableHead 
               class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
               @click="updateSort('price')"
             >
@@ -125,8 +124,8 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </div>
-            </th>
-            <th 
+            </TableHead>
+            <TableHead 
               class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
               @click="updateSort('stock')"
             >
@@ -136,11 +135,11 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </div>
-            </th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+            </TableHead>
+            <TableHead class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
               Status
-            </th>
-            <th 
+            </TableHead>
+            <TableHead 
               class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
               @click="updateSort('created_at')"
             >
@@ -150,13 +149,13 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </div>
-            </th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+            </TableHead>
+            <TableHead class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
               Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
           <tr 
             v-for="product in products" 
             :key="product.id" 
@@ -165,11 +164,10 @@
           >
             <!-- Selection Checkbox -->
             <td class="px-6 py-4 whitespace-nowrap">
-              <input
-                type="checkbox"
+              <UiCheckbox
                 :checked="product.isSelected"
-                @change="toggleProductSelection(product.id)"
-                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                @update:checked="() => toggleProductSelection(product.id)"
+                :aria-label="$t('admin.products.select')"
               />
             </td>
 
@@ -274,14 +272,16 @@
               </Button>
             </td>
           </tr>
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { Button } from '@/components/ui/button'
+import { Table, TableHeader, TableRow, TableHead, TableBody } from '@/components/ui/table'
+import { Checkbox as UiCheckbox } from '@/components/ui/checkbox'
 import type { ProductWithRelations } from '~/types/database'
 
 interface Props {
