@@ -1,163 +1,90 @@
 <template>
-  <div v-if="totalPages > 1" class="bg-white dark:bg-gray-800 px-4 py-3 border-t border-gray-200 dark:border-gray-700 sm:px-6">
+  <div v-if="internal.totalPages > 1" class="bg-white dark:bg-gray-800 px-4 py-3 border-t border-gray-200 dark:border-gray-700 sm:px-6">
     <div class="flex items-center justify-between">
-      <!-- Mobile Pagination -->
-      <div class="flex-1 flex justify-between sm:hidden">
-        <button
-          :disabled="!hasPrev"
-          @click="$emit('prev-page')"
-          class="relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          Previous
-        </button>
-        <button
-          :disabled="!hasNext"
-          @click="$emit('next-page')"
-          class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          Next
-        </button>
-      </div>
+      <!-- Results Info -->
+      <p class="hidden sm:block text-sm text-muted-foreground">
+        Showing {{ startItem }} to {{ endItem }} of {{ internal.total }} results
+      </p>
 
-      <!-- Desktop Pagination -->
-      <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-        <!-- Results Info -->
-        <div>
-          <p class="text-sm text-gray-700 dark:text-gray-300">
-            Showing {{ startItem }} to {{ endItem }} of {{ total }} results
-          </p>
-        </div>
+      <!-- Pagination -->
+      <UiPagination>
+        <UiPaginationContent>
+          <UiPaginationPrevious :disabled="!internal.hasPrev" @click="emitPrev()" />
 
-        <!-- Page Navigation -->
-        <div>
-          <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-            <!-- Previous Button -->
-            <button
-              :disabled="!hasPrev"
-              @click="$emit('prev-page')"
-              class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <span class="sr-only">Previous</span>
-              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-
-            <!-- Page Numbers -->
-            <template v-for="pageNum in visiblePages" :key="pageNum">
+          <template v-for="pageNum in visiblePages" :key="pageKey(pageNum)">
+            <UiPaginationItem v-if="pageNum !== '...'">
               <button
-                v-if="pageNum !== '...'"
-                @click="$emit('go-to-page', pageNum)"
-                :class="[
-                  'relative inline-flex items-center px-4 py-2 border text-sm font-medium',
-                  pageNum === page
-                    ? 'z-10 bg-blue-50 dark:bg-blue-900 border-blue-500 text-blue-600 dark:text-blue-200'
-                    : 'bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600'
-                ]"
+                :data-testid="pageNum === internal.page ? 'current-page' : undefined"
+                class="px-3 py-1 rounded-md"
+                :class="pageNum === internal.page ? 'bg-accent text-accent-foreground' : ''"
+                @click="emitGoTo(pageNum as number)"
               >
                 {{ pageNum }}
               </button>
-              <span
-                v-else
-                class="relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-300"
-              >
-                ...
-              </span>
-            </template>
+            </UiPaginationItem>
+            <UiPaginationEllipsis v-else />
+          </template>
 
-            <!-- Next Button -->
-            <button
-              :disabled="!hasNext"
-              @click="$emit('next-page')"
-              class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <span class="sr-only">Next</span>
-              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          </nav>
-        </div>
-      </div>
-    </div>
-
-    <!-- Page Size Selector -->
-    <div class="mt-3 flex items-center justify-between">
-      <div class="flex items-center space-x-2">
-        <label for="page-size" class="text-sm text-gray-700 dark:text-gray-300">
-          Items per page:
-        </label>
-        <select
-          id="page-size"
-          :value="limit"
-          @change="$emit('update-limit', Number($event.target.value))"
-          class="px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-        >
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="50">50</option>
-          <option value="100">100</option>
-        </select>
-      </div>
-
-      <!-- Quick Jump -->
-      <div class="flex items-center space-x-2">
-        <label for="page-jump" class="text-sm text-gray-700 dark:text-gray-300">
-          Go to page:
-        </label>
-        <input
-          id="page-jump"
-          type="number"
-          :min="1"
-          :max="totalPages"
-          :value="page"
-          @keyup.enter="jumpToPage($event.target.value)"
-          class="w-16 px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-        />
-        <button
-          @click="jumpToPage($refs.pageJump?.value)"
-          class="px-2 py-1 text-sm bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-200 dark:hover:bg-gray-500"
-        >
-          Go
-        </button>
-      </div>
+          <UiPaginationNext :disabled="!internal.hasNext" @click="emitNext()" />
+        </UiPaginationContent>
+      </UiPagination>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-interface Props {
-  page: number
-  limit: number
-  total: number
-  totalPages: number
-  hasNext: boolean
-  hasPrev: boolean
-}
+import {
+  Pagination as UiPagination,
+  PaginationContent as UiPaginationContent,
+  PaginationEllipsis as UiPaginationEllipsis,
+  PaginationNext as UiPaginationNext,
+  PaginationPrevious as UiPaginationPrevious,
+  PaginationItem as UiPaginationItem,
+} from '@/components/ui/pagination'
 
-interface Emits {
-  (e: 'go-to-page', page: number): void
-  (e: 'next-page'): void
-  (e: 'prev-page'): void
-  (e: 'update-limit', limit: number): void
+interface Props {
+  // Primary prop names
+  page?: number
+  limit?: number
+  total?: number
+  totalPages?: number
+  hasNext?: boolean
+  hasPrev?: boolean
+  // Alternate prop names used in some views
+  currentPage?: number
+  itemsPerPage?: number
+  totalItems?: number
 }
 
 const props = defineProps<Props>()
-const emit = defineEmits<Emits>()
+const emit = defineEmits([
+  'go-to-page',
+  'page-change',
+  'page-changed',
+  'next-page',
+  'prev-page',
+  'update-limit',
+])
+
+const internal = computed(() => {
+  const page = props.page ?? props.currentPage ?? 1
+  const limit = props.limit ?? props.itemsPerPage ?? 10
+  const total = props.total ?? props.totalItems ?? 0
+  const totalPages = props.totalPages ?? Math.max(1, Math.ceil(total / limit))
+  const hasPrev = page > 1
+  const hasNext = page < totalPages
+  return { page, limit, total, totalPages, hasPrev, hasNext }
+})
 
 // Computed properties
-const startItem = computed(() => {
-  return (props.page - 1) * props.limit + 1
-})
+const startItem = computed(() => (internal.value.page - 1) * internal.value.limit + 1)
 
-const endItem = computed(() => {
-  return Math.min(props.page * props.limit, props.total)
-})
+const endItem = computed(() => Math.min(internal.value.page * internal.value.limit, internal.value.total))
 
-const visiblePages = computed(() => {
+const visiblePages = computed<(number | string)[]>(() => {
   const pages: (number | string)[] = []
-  const current = props.page
-  const total = props.totalPages
+  const current = internal.value.page
+  const total = internal.value.totalPages
   
   // Always show first page
   if (total > 0) {
@@ -193,11 +120,14 @@ const visiblePages = computed(() => {
   return pages
 })
 
-// Methods
-const jumpToPage = (value: string | number) => {
-  const pageNum = Number(value)
-  if (pageNum >= 1 && pageNum <= props.totalPages && pageNum !== props.page) {
-    emit('go-to-page', pageNum)
-  }
+const pageKey = (p: number | string) => (p === '...' ? `dots-${Math.random()}` : `p-${p}`)
+
+const emitGoTo = (p: number) => {
+  emit('go-to-page', p)
+  emit('page-change', p)
+  emit('page-changed', p)
 }
+
+const emitPrev = () => emit('prev-page')
+const emitNext = () => emit('next-page')
 </script>
