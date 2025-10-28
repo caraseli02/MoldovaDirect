@@ -2,12 +2,11 @@
   <div class="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-4 p-4 border-b border-gray-200 dark:border-gray-700 last:border-b-0">
     <!-- Selection Checkbox -->
     <div class="flex items-center">
-      <input
-        type="checkbox"
+      <UiCheckbox
         :checked="isSelected"
-        @change="$emit('toggle-selection', item.id)"
-        class="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 bg-white dark:bg-gray-700"
-      >
+        @update:checked="$emit('toggle-selection', item.id)"
+        :aria-label="$t('common.select')"
+      />
     </div>
 
     <!-- Product Image -->
