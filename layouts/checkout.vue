@@ -20,9 +20,9 @@
       </div>
     </main>
     
-    <!-- Toast Container -->
+    <!-- Sonner toaster (shadcn-vue) -->
     <ClientOnly>
-      <CommonToastContainer />
+      <UiToaster position="top-right" :rich-colors="true" />
     </ClientOnly>
   </div>
 </template>

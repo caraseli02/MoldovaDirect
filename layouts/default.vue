@@ -6,7 +6,8 @@
     </main>
     <LayoutAppFooter />
     <ClientOnly>
-      <CommonToastContainer />
+      <!-- Sonner toaster (shadcn-vue) -->
+      <UiToaster position="top-right" :rich-colors="true" />
       <!-- PWA Components -->
       <MobilePWAInstallPrompt />
       <MobilePWAUpdatePrompt />

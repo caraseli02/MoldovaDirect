@@ -251,7 +251,8 @@ On 2025-10-05 the shadcn-vue CLI was used to generate all component libraries li
 - **shadcn-vue** - Component library (already partially implemented)
 - **class-variance-authority** - Variant management (already in use)
 - **reka-ui** - Headless UI primitives (already in use)
-- **@tailwindcss/forms** - Form styling utilities
+  
+Note: Tailwind CSS v4 is used via `@tailwindcss/vite` and `assets/css/tailwind.css`. No forms plugin is configured; form styles come from shadcn components and project CSS.
 
 ## Conclusion
 

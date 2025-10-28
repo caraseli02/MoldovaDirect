@@ -1,83 +1,83 @@
-import { useToastStore } from '~/stores/toast'
-import type { Toast } from '~/stores/toast'
+import { toast } from 'vue-sonner'
+import type { ToasterProps } from 'vue-sonner'
+
+type ToastKind = 'success' | 'error' | 'warning' | 'info'
+
+export interface LegacyToastOptions {
+  duration?: number
+  actionText?: string
+  actionHandler?: () => void
+}
+
+const show = (
+  kind: ToastKind,
+  title: string,
+  message?: string,
+  options?: LegacyToastOptions,
+) => {
+  const common = {
+    description: message,
+    duration: options?.duration,
+    action: options?.actionText && options?.actionHandler
+      ? { label: options.actionText, onClick: options.actionHandler }
+      : undefined,
+  } as ToasterProps & { description?: string; action?: { label: string; onClick: () => void } }
+
+  switch (kind) {
+    case 'success':
+      return toast.success(title, common)
+    case 'error':
+      return toast.error(title, common)
+    case 'warning':
+      return toast.warning(title, common)
+    case 'info':
+    default:
+      return toast.info(title, common)
+  }
+}
 
 export const useToast = () => {
-  // Try to access the store, fallback if not available
-  let toastStore: any = null
-
-  try {
-    if (process.client) {
-      toastStore = useToastStore()
-    }
-  } catch (error) {
-    // Pinia not ready yet, use fallback
-    console.warn('Pinia not ready, using toast fallback')
-  }
-
-  // If store is not available, return minimal interface
-  if (!toastStore) {
-    // Return minimal interface for SSR
-    return {
-      addToast: () => {},
-      removeToast: () => {},
-      clearAll: () => {},
-      success: () => {},
-      error: () => {},
-      warning: () => {},
-      info: () => {},
-      cartSuccess: () => {},
-      cartError: () => {},
-      cartWarning: () => {}
-    }
-  }
-
-  // toastStore is already defined from the try-catch above
-
   return {
-    // Direct access to store methods
-    addToast: (toast: Omit<Toast, 'id'>) => toastStore.addToast(toast),
-    removeToast: (id: string) => toastStore.removeToast(id),
-    clearAll: () => toastStore.clearAll(),
+    // Legacy API shims (no-ops, kept for compatibility)
+    addToast: () => {},
+    removeToast: () => {},
+    clearAll: () => {},
 
-    // Convenience methods
-    success: (title: string, message?: string, options?: Partial<Toast>) => 
-      toastStore.success(title, message, options),
-    
-    error: (title: string, message?: string, options?: Partial<Toast>) => 
-      toastStore.error(title, message, options),
-    
-    warning: (title: string, message?: string, options?: Partial<Toast>) => 
-      toastStore.warning(title, message, options),
-    
-    info: (title: string, message?: string, options?: Partial<Toast>) => 
-      toastStore.info(title, message, options),
+    // Convenience methods routed to vue-sonner
+    success: (title: string, message?: string, options?: LegacyToastOptions) =>
+      show('success', title, message, options),
+    error: (title: string, message?: string, options?: LegacyToastOptions) =>
+      show('error', title, message, options),
+    warning: (title: string, message?: string, options?: LegacyToastOptions) =>
+      show('warning', title, message, options),
+    info: (title: string, message?: string, options?: LegacyToastOptions) =>
+      show('info', title, message, options),
 
-    // Cart-specific toast methods with i18n support
+    // Cart-specific helpers with i18n
     cartSuccess: (key: string, productName?: string) => {
       const { t } = useI18n()
       const title = t(`cart.success.${key}`)
-      const message = productName ? t('cart.success.productAdded', { product: productName }) : undefined
-      return toastStore.success(title, message)
+      const message = productName
+        ? t('cart.success.productAdded', { product: productName })
+        : undefined
+      return show('success', title, message)
     },
-
     cartError: (key: string, details?: string, recoveryAction?: () => void) => {
       const { t } = useI18n()
       const title = t(`cart.error.${key}`)
       const message = details || t('cart.error.tryAgain')
       const actionText = recoveryAction ? t('common.retry') : undefined
-      
-      return toastStore.error(title, message, {
+      return show('error', title, message, {
         actionText,
         actionHandler: recoveryAction,
-        duration: 10000 // Longer duration for errors with actions
+        duration: 10000,
       })
     },
-
     cartWarning: (key: string, details?: string) => {
       const { t } = useI18n()
       const title = t(`cart.warning.${key}`)
       const message = details || undefined
-      return toastStore.warning(title, message)
-    }
+      return show('warning', title, message)
+    },
   }
 }
