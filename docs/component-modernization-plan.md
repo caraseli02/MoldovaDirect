@@ -39,15 +39,15 @@ This document outlines a comprehensive plan to modernize component usage across 
 | Authentication (login/register, error banners) | ✅ Completed | Migrated to shadcn inputs/labels/alerts; retired legacy auth message components | Unassigned | `.kiro/PROJECT_STATUS.md` |
 | Checkout (shipping, payment, confirmation) | 🔄 In progress | Swap selects, inputs, alerts; adopt Dialog for modals | Unassigned | `.kiro/PROJECT_STATUS.md` |
 | Cart (drawer, line items, bulk actions) | ⏳ Not started | Replace quantity buttons, checkboxes, toasts with shadcn-vue | Unassigned | `.kiro/PROJECT_STATUS.md` |
-| Admin tables & filters | ⏳ Not started | Adopt `components/ui/table`, pagination, badge variants | Unassigned | `.kiro/PROJECT_STATUS.md` |
+| Admin tables & filters | 🔄 In progress | Users/Products/Inventory tables wrapped; Email Logs migrated; Badges applied | Unassigned | `.kiro/PROJECT_STATUS.md` |
 | Mobile navigation & sheets | ⏳ Not started | Migrate menus to Dialog/Sheet patterns, fix touch targets | Unassigned | `.kiro/PROJECT_STATUS.md` |
 | Toast/Notification system | ⏳ Not started | Remove legacy `components/common/Toast*.vue`, consolidate on Sonner | Unassigned | `.kiro/PROJECT_STATUS.md` |
 
 ### Adoption Progress
 - ✅ Buttons and primary dialogs migrated to shadcn-vue
 - 🔄 Forms: replace custom `<input>`, `<select>`, `<textarea>` usage across checkout, auth, and admin screens
-- 🔄 Tables: migrate admin tables to shadcn table components with consistent pagination + sorting UI
-- 🔄 Alerts/Toasts: phase out legacy `components/common/Toast*.vue`
+- 🔄 Tables: migrate admin tables to shadcn table components with consistent pagination + sorting UI (Users, Products, Inventory, Email Logs completed)
+- ✅ Alerts/Toasts: phase out legacy `components/common/Toast*.vue` (Sonner wired; legacy store removal follow-up)
 - 🔄 Mobile patterns: adopt shadcn dialogs/sheets for mobile menu, cart, and profile flows
 - 📌 Capture migration status in `.kiro/PROJECT_STATUS.md` when blocking issues emerge
 
