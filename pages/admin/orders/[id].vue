@@ -68,49 +68,29 @@
           <!-- Order Items -->
           <AdminOrdersItemsList :items="order.order_items" />
 
-          <!-- Order Timeline (if status history exists) -->
-          <Card v-if="order.statusHistory && order.statusHistory.length > 0" class="rounded-2xl">
-            <CardHeader>
-              <CardTitle>Order Timeline</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div class="space-y-4">
-                <div
-                  v-for="(history, index) in order.statusHistory"
-                  :key="history.id"
-                  class="flex items-start space-x-3"
-                >
-                  <div class="flex-shrink-0">
-                    <div
-                      :class="[
-                        'w-8 h-8 rounded-full flex items-center justify-center',
-                        index === 0 ? 'bg-blue-100 dark:bg-blue-900' : 'bg-gray-100 dark:bg-gray-700'
-                      ]"
-                    >
-                      <commonIcon
-                        :name="getStatusIcon(history.toStatus)"
-                        :class="[
-                          'h-4 w-4',
-                          index === 0 ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400'
-                        ]"
-                      />
-                    </div>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <p class="text-sm font-medium text-gray-900 dark:text-white">
-                      Status changed to {{ getStatusLabel(history.toStatus) }}
-                    </p>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">
-                      {{ formatDate(history.changedAt) }}
-                    </p>
-                    <p v-if="history.notes" class="text-sm text-gray-600 dark:text-gray-300 mt-1">
-                      {{ history.notes }}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <!-- Fulfillment Checklist -->
+          <AdminOrdersFulfillmentChecklist
+            v-if="order.status === 'pending' || order.status === 'processing' || order.fulfillmentTasks && order.fulfillmentTasks.length > 0"
+            :order-id="order.id"
+            :current-status="order.status"
+            :fulfillment-tasks="order.fulfillmentTasks"
+            @updated="handleFulfillmentUpdated"
+          />
+
+          <!-- Order Notes -->
+          <AdminOrdersNotesSection
+            :order-id="order.id"
+            :notes="order.notes || []"
+            @updated="handleNotesUpdated"
+          />
+
+          <!-- Order Timeline -->
+          <AdminOrdersTimeline
+            :status-history="order.statusHistory"
+            :order-notes="order.notes"
+            :order-created-at="order.created_at"
+            :order-status="order.status"
+          />
         </div>
 
         <!-- Right Column - Customer & Shipping Info -->
@@ -313,8 +293,47 @@ const handleStatusUpdated = async (data: { status: string, trackingNumber?: stri
   await fetchOrder()
 }
 
+// Handle fulfillment task update
+const handleFulfillmentUpdated = async () => {
+  // Refresh order data to get updated fulfillment progress
+  await fetchOrder()
+}
+
+// Handle notes update
+const handleNotesUpdated = async () => {
+  // Refresh order data to get updated notes
+  await fetchOrder()
+}
+
+// Real-time updates
+const { subscribeToOrder, unsubscribe, isSubscribed } = useAdminOrderRealtime({
+  onOrderUpdated: async (update) => {
+    // Refresh order data when updated
+    await fetchOrder()
+  },
+  onOrderStatusChanged: async (update) => {
+    // Refresh order data when status changes
+    await fetchOrder()
+  },
+  onConflict: (orderId, message) => {
+    // Show warning when order was modified by another admin
+    const toast = useToastStore()
+    toast.warning(message)
+  }
+})
+
 onMounted(async () => {
   await fetchOrder()
+  
+  // Subscribe to real-time updates for this order
+  if (order.value) {
+    subscribeToOrder(order.value.id)
+  }
+})
+
+// Cleanup on unmount
+onUnmounted(() => {
+  unsubscribe()
 })
 
 // Utility functions
@@ -326,17 +345,6 @@ const formatDate = (dateString: string) => {
     hour: '2-digit',
     minute: '2-digit'
   })
-}
-
-const getStatusLabel = (status: string) => {
-  const labels: Record<string, string> = {
-    pending: 'Pending',
-    processing: 'Processing',
-    shipped: 'Shipped',
-    delivered: 'Delivered',
-    cancelled: 'Cancelled'
-  }
-  return labels[status] || status
 }
 
 const getPaymentStatusLabel = (status: string) => {
@@ -357,17 +365,6 @@ const getPaymentStatusVariant = (status: string) => {
     refunded: 'secondary'
   }
   return variants[status] || 'secondary'
-}
-
-const getStatusIcon = (status: string) => {
-  const icons: Record<string, string> = {
-    pending: 'lucide:clock',
-    processing: 'lucide:loader',
-    shipped: 'lucide:truck',
-    delivered: 'lucide:check-circle',
-    cancelled: 'lucide:x-circle'
-  }
-  return icons[status] || 'lucide:circle'
 }
 
 // SEO
