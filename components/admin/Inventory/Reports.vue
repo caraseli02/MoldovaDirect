@@ -174,32 +174,24 @@
             </h4>
           </div>
           <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-              <thead class="bg-gray-50 dark:bg-gray-900">
-                <tr>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Product
-                  </th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Type
-                  </th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Quantity
-                  </th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Date
-                  </th>
-                </tr>
-              </thead>
-              <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead class="px-6">Product</TableHead>
+                  <TableHead class="px-6">Type</TableHead>
+                  <TableHead class="px-6">Quantity</TableHead>
+                  <TableHead class="px-6">Date</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                 <tr v-for="movement in reportData.recentMovements" :key="movement.id">
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                     {{ getLocalizedText(movement.productName) }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
-                    <span :class="getMovementTypeClasses(movement.movementType)">
+                    <Badge :variant="movement.movementType === 'in' ? 'default' : movement.movementType === 'out' ? 'destructive' : 'secondary'">
                       {{ getMovementTypeLabel(movement.movementType) }}
-                    </span>
+                    </Badge>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                     {{ movement.quantity }}
@@ -208,8 +200,8 @@
                     {{ formatDate(movement.createdAt) }}
                   </td>
                 </tr>
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
           </div>
         </div>
       </div>
@@ -312,32 +304,22 @@
           </div>
           
           <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-              <thead class="bg-gray-50 dark:bg-gray-900">
-                <tr>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Priority
-                  </th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Product
-                  </th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Current Stock
-                  </th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Recommended Order
-                  </th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Estimated Cost
-                  </th>
-                </tr>
-              </thead>
-              <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead class="px-6">Priority</TableHead>
+                  <TableHead class="px-6">Product</TableHead>
+                  <TableHead class="px-6">Current Stock</TableHead>
+                  <TableHead class="px-6">Recommended Order</TableHead>
+                  <TableHead class="px-6">Estimated Cost</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                 <tr v-for="product in reportData.products" :key="product.productId">
                   <td class="px-6 py-4 whitespace-nowrap">
-                    <span :class="getPriorityClasses(product.priority)">
+                    <Badge :variant="product.priority === 'critical' ? 'destructive' : product.priority === 'high' ? 'secondary' : 'default'">
                       {{ product.priority.charAt(0).toUpperCase() + product.priority.slice(1) }}
-                    </span>
+                    </Badge>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
                     <div class="text-sm font-medium text-gray-900 dark:text-white">
@@ -361,8 +343,8 @@
                     €{{ formatCurrency(product.estimatedCost) }}
                   </td>
                 </tr>
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
           </div>
         </div>
       </div>
@@ -371,6 +353,8 @@
 </template>
 
 <script setup lang="ts">
+import { Table, TableHeader, TableRow, TableHead, TableBody } from '@/components/ui/table'
+import { Badge } from '@/components/ui/badge'
 // Composables
 const { getMovementTypeLabel } = useInventory()
 

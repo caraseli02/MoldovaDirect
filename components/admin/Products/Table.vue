@@ -224,12 +224,9 @@
 
             <!-- Status -->
             <td class="px-6 py-4 whitespace-nowrap">
-              <span :class="[
-                'inline-flex items-center px-2 py-1 rounded-full text-xs font-medium',
-                product.isActive ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
-              ]">
+              <Badge :variant="product.isActive ? 'default' : 'secondary'">
                 {{ product.isActive ? 'Active' : 'Inactive' }}
-              </span>
+              </Badge>
             </td>
 
             <!-- Created Date -->
@@ -282,6 +279,7 @@
 import { Button } from '@/components/ui/button'
 import { Table, TableHeader, TableRow, TableHead, TableBody } from '@/components/ui/table'
 import { Checkbox as UiCheckbox } from '@/components/ui/checkbox'
+import { Badge } from '@/components/ui/badge'
 import type { ProductWithRelations } from '~/types/database'
 
 interface Props {
