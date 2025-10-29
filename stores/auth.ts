@@ -259,7 +259,7 @@ export const useAuthStore = defineStore('auth', {
       const supabase = useSupabaseClient()
       const { createErrorMessage, translateAuthError } = useAuthMessages()
       const { validateLogin } = useAuthValidation()
-      const toastStore = useToastStore()
+      const toastStore = useToast()
 
       try {
         // Validate credentials
@@ -349,7 +349,7 @@ export const useAuthStore = defineStore('auth', {
       const supabase = useSupabaseClient()
       const { translateAuthError } = useAuthMessages()
       const { validateRegistration } = useAuthValidation()
-      const toastStore = useToastStore()
+      const toastStore = useToast()
 
       try {
         // Validate registration data
@@ -450,7 +450,7 @@ export const useAuthStore = defineStore('auth', {
           throw new Error(this.error)
         }
 
-        toastStore.success(
+          toastStore.success(
           'Email verificado',
           'Tu email ha sido verificado correctamente. Ya puedes iniciar sesión.'
         )
@@ -465,7 +465,7 @@ export const useAuthStore = defineStore('auth', {
         const errorMessage = error instanceof Error ? error.message : 'Email verification failed'
         this.error = errorMessage
         
-        toastStore.error(
+          toastStore.error(
           'Error de verificación',
           errorMessage,
           {
@@ -489,7 +489,7 @@ export const useAuthStore = defineStore('auth', {
       
       const supabase = useSupabaseClient()
       const { translateAuthError } = useAuthMessages()
-      const toastStore = useToastStore()
+      const toastStore = useToast()
 
       try {
         const emailToUse = email || this.user?.email
@@ -536,7 +536,7 @@ export const useAuthStore = defineStore('auth', {
       
       const supabase = useSupabaseClient()
       const { translateAuthError } = useAuthMessages()
-      const toastStore = useToastStore()
+      const toastStore = useToast()
 
       try {
         const redirectTo = process.client
@@ -586,7 +586,7 @@ export const useAuthStore = defineStore('auth', {
       
       const supabase = useSupabaseClient()
       const { translateAuthError } = useAuthMessages()
-      const toastStore = useToastStore()
+      const toastStore = useToast()
 
       try {
         const { error } = await supabase.auth.updateUser({
@@ -636,7 +636,7 @@ export const useAuthStore = defineStore('auth', {
       this.loading = true
       
       const supabase = useSupabaseClient()
-      const toastStore = useToastStore()
+      const toastStore = useToast()
 
       try {
         // Sign out from Supabase (invalidates session)
