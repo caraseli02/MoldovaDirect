@@ -112,34 +112,20 @@
 
       <!-- Email Logs Table -->
       <div v-else-if="logs.length > 0" class="overflow-x-auto">
-        <table class="w-full">
-          <thead class="bg-gray-50 dark:bg-gray-800">
-            <tr>
-              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                Order
-              </th>
-              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                Recipient
-              </th>
-              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                Type
-              </th>
-              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                Status
-              </th>
-              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                Attempts
-              </th>
-              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                Date
-              </th>
-              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody class="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
-            <tr v-for="log in logs" :key="log.id" class="hover:bg-gray-50 dark:hover:bg-gray-800">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead class="px-4">Order</TableHead>
+              <TableHead class="px-4">Recipient</TableHead>
+              <TableHead class="px-4">Type</TableHead>
+              <TableHead class="px-4">Status</TableHead>
+              <TableHead class="px-4">Attempts</TableHead>
+              <TableHead class="px-4">Date</TableHead>
+              <TableHead class="px-4">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow v-for="log in logs" :key="log.id">
               <td class="px-4 py-4 whitespace-nowrap">
                 <div class="text-sm font-medium text-gray-900 dark:text-white">
                   {{ log.order?.orderNumber || 'N/A' }}
@@ -151,14 +137,12 @@
                 </div>
               </td>
               <td class="px-4 py-4 whitespace-nowrap">
-                <span class="text-xs px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
-                  {{ formatEmailType(log.emailType) }}
-                </span>
+                <Badge variant="secondary">{{ formatEmailType(log.emailType) }}</Badge>
               </td>
               <td class="px-4 py-4 whitespace-nowrap">
-                <span :class="getStatusClass(log.status)">
+                <Badge :variant="log.status === 'delivered' ? 'default' : (log.status === 'failed' || log.status === 'bounced') ? 'destructive' : 'secondary'">
                   {{ formatStatus(log.status) }}
-                </span>
+                </Badge>
               </td>
               <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                 {{ log.attempts }}
@@ -167,17 +151,11 @@
                 {{ formatDate(log.createdAt) }}
               </td>
               <td class="px-4 py-4 whitespace-nowrap text-sm">
-                <Button
-                  @click="viewDetails(log)"
-                  variant="outline"
-                  size="sm"
-                >
-                  View
-                </Button>
+                <Button @click="viewDetails(log)" variant="outline" size="sm">View</Button>
               </td>
-            </tr>
-          </tbody>
-        </table>
+            </TableRow>
+          </TableBody>
+        </Table>
 
         <!-- Pagination -->
         <div class="mt-4 flex items-center justify-between">
@@ -187,22 +165,8 @@
             {{ pagination.total }} results
           </div>
           <div class="flex gap-2">
-            <Button
-              @click="previousPage"
-              :disabled="pagination.page === 1"
-              variant="outline"
-              size="sm"
-            >
-              Previous
-            </Button>
-            <Button
-              @click="nextPage"
-              :disabled="pagination.page >= pagination.totalPages"
-              variant="outline"
-              size="sm"
-            >
-              Next
-            </Button>
+            <Button @click="previousPage" :disabled="pagination.page === 1" variant="outline" size="sm">Previous</Button>
+            <Button @click="nextPage" :disabled="pagination.page >= pagination.totalPages" variant="outline" size="sm">Next</Button>
           </div>
         </div>
       </div>
@@ -291,6 +255,8 @@
 import { ref, onMounted } from 'vue'
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
 import { Button } from '~/components/ui/button'
+import { Table, TableHeader, TableRow, TableHead, TableBody } from '~/components/ui/table'
+import { Badge } from '~/components/ui/badge'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '~/components/ui/dialog'
 
 const logs = ref<any[]>([])
