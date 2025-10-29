@@ -437,7 +437,7 @@ export const useAuthStore = defineStore('auth', {
       
       const supabase = useSupabaseClient()
       const { translateAuthError } = useAuthMessages()
-      const toastStore = useToastStore()
+      const toastStore = useToast()
 
       try {
         const { error } = await supabase.auth.verifyOtp({
@@ -688,7 +688,7 @@ export const useAuthStore = defineStore('auth', {
       this.profileError = null
       
       const supabase = useSupabaseClient()
-      const toastStore = useToastStore()
+      const toastStore = useToast()
 
       try {
         const { error } = await supabase.auth.updateUser({

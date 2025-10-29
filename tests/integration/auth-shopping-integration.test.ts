@@ -13,7 +13,14 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { useAuthStore } from '~/stores/auth'
 import { useCartStore } from '~/stores/cart'
-import { useToastStore } from '~/stores/toast'
+vi.mock('~/composables/useToast', () => ({
+  useToast: () => ({
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+  })
+}))
 
 // Mock Supabase client
 const mockSupabaseClient = {
@@ -62,13 +69,11 @@ vi.mock('~/composables/useAuthValidation', () => ({
 describe('Authentication-Shopping Platform Integration', () => {
   let authStore: ReturnType<typeof useAuthStore>
   let cartStore: ReturnType<typeof useCartStore>
-  let toastStore: ReturnType<typeof useToastStore>
 
   beforeEach(() => {
     setActivePinia(createPinia())
     authStore = useAuthStore()
     cartStore = useCartStore()
-    toastStore = useToastStore()
     vi.clearAllMocks()
     
     // Reset mock implementations
