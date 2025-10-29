@@ -91,7 +91,7 @@
           </p>
           <p class="mb-4">
             Email: privacy@moldovadirect.com<br>
-            Phone: +34 XXX XXX XXX<br>
+            Phone: +34 910 000 000<br>
             Address: Moldova Direct S.L., Madrid, Spain
           </p>
         </div>
