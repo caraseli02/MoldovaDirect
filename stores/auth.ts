@@ -19,6 +19,7 @@ import type { WatchStopHandle } from 'vue'
 import { useAuthMessages } from '~/composables/useAuthMessages'
 import { useAuthValidation } from '~/composables/useAuthValidation'
 import { useToastStore } from './toast'
+import { testUserPersonas, type TestUserPersonaKey } from '~/lib/testing/testUserPersonas'
 
 type AuthSubscription = {
   unsubscribe: () => PromiseLike<unknown>
@@ -95,6 +96,8 @@ export interface AuthState {
   sessionInitialized: boolean
   profileLoading: boolean
   profileError: string | null
+  isTestUser: boolean
+  testPersonaKey: TestUserPersonaKey | null
 }
 
 export const useAuthStore = defineStore('auth', {
@@ -105,7 +108,9 @@ export const useAuthStore = defineStore('auth', {
     lockoutTime: readPersistedLockout(),
     sessionInitialized: false,
     profileLoading: false,
-    profileError: null
+    profileError: null,
+    isTestUser: false,
+    testPersonaKey: null
   }),
 
   getters: {
@@ -159,6 +164,20 @@ export const useAuthStore = defineStore('auth', {
      */
     isSessionInitialized: (state): boolean => {
       return state.sessionInitialized
+    },
+
+    /**
+     * Check if the current session is powered by the test persona simulator
+     */
+    isTestSession: (state): boolean => {
+      return state.isTestUser
+    },
+
+    /**
+     * Retrieve the active test persona key for dashboard tooling
+     */
+    activeTestPersona: (state): TestUserPersonaKey | null => {
+      return state.testPersonaKey
     }
   },
 
@@ -168,6 +187,11 @@ export const useAuthStore = defineStore('auth', {
      * Requirement 5.1: Session persistence across browser tabs
      */
     async initializeAuth() {
+      if (this.isTestUser) {
+        this.sessionInitialized = true
+        return
+      }
+
       if (this.sessionInitialized) return
 
       try {
@@ -212,6 +236,10 @@ export const useAuthStore = defineStore('auth', {
      * Requirement 5.3: Reactive authentication status
      */
     syncUserState(supabaseUser: User | null) {
+      if (this.isTestUser && !supabaseUser) {
+        return
+      }
+
       if (supabaseUser) {
         this.user = {
           id: supabaseUser.id,
@@ -224,6 +252,8 @@ export const useAuthStore = defineStore('auth', {
           createdAt: supabaseUser.created_at,
           updatedAt: supabaseUser.updated_at
         }
+        this.isTestUser = false
+        this.testPersonaKey = null
         this.error = null
         this.clearLockout()
       } else {
@@ -233,6 +263,54 @@ export const useAuthStore = defineStore('auth', {
           this.clearLockout()
         }
       }
+    },
+
+    simulateLogin(personaKey: TestUserPersonaKey) {
+      const config = useRuntimeConfig()
+      const isEnabled = config?.public?.enableTestUsers ?? false
+
+      if (!isEnabled) {
+        throw new Error('Test user simulation is disabled in this environment.')
+      }
+
+      const persona = testUserPersonas[personaKey]
+
+      if (!persona) {
+        throw new Error(`Unknown test user persona: ${personaKey}`)
+      }
+
+      const simulatedLockout = persona.lockoutMinutes
+        ? new Date(Date.now() + persona.lockoutMinutes * 60 * 1000)
+        : null
+
+      this.user = { ...persona.user }
+      this.isTestUser = true
+      this.testPersonaKey = personaKey
+      this.sessionInitialized = true
+      this.loading = false
+      this.error = null
+      this.profileLoading = false
+      this.profileError = null
+      this.lockoutTime = simulatedLockout
+
+      if (simulatedLockout) {
+        persistLockout(simulatedLockout)
+      } else {
+        persistLockout(null)
+      }
+    },
+
+    simulateLogout() {
+      persistLockout(null)
+      this.user = null
+      this.isTestUser = false
+      this.testPersonaKey = null
+      this.sessionInitialized = true
+      this.loading = false
+      this.error = null
+      this.profileLoading = false
+      this.profileError = null
+      this.lockoutTime = null
     },
 
     handleAuthStateChange(event: AuthChangeEvent, session: Session | null) {
@@ -253,9 +331,14 @@ export const useAuthStore = defineStore('auth', {
      * Requirement 9.1: Proper error handling and loading states
      */
     async login(credentials: LoginCredentials) {
+      if (this.isTestUser) {
+        this.isTestUser = false
+        this.testPersonaKey = null
+      }
+
       this.loading = true
       this.error = null
-      
+
       const supabase = useSupabaseClient()
       const { createErrorMessage, translateAuthError } = useAuthMessages()
       const { validateLogin } = useAuthValidation()
@@ -343,6 +426,11 @@ export const useAuthStore = defineStore('auth', {
      * Requirement 9.1: Proper error handling and loading states
      */
     async register(userData: RegisterData) {
+      if (this.isTestUser) {
+        this.isTestUser = false
+        this.testPersonaKey = null
+      }
+
       this.loading = true
       this.error = null
       
@@ -651,6 +739,8 @@ export const useAuthStore = defineStore('auth', {
         this.user = null
         this.error = null
         this.lockoutTime = null
+        this.isTestUser = false
+        this.testPersonaKey = null
         persistLockout(null)
 
         toastStore.success(
@@ -671,6 +761,8 @@ export const useAuthStore = defineStore('auth', {
         this.user = null
         this.error = null
         this.lockoutTime = null
+        this.isTestUser = false
+        this.testPersonaKey = null
         persistLockout(null)
         
         await navigateTo('/')
@@ -686,11 +778,28 @@ export const useAuthStore = defineStore('auth', {
     async updateProfile(profileData: Partial<AuthUser>) {
       this.profileLoading = true
       this.profileError = null
-      
-      const supabase = useSupabaseClient()
+
       const toastStore = useToastStore()
 
       try {
+        if (this.isTestUser) {
+          if (this.user) {
+            this.user = {
+              ...this.user,
+              ...profileData
+            }
+          }
+
+          toastStore.info(
+            'Modo demo',
+            'Los cambios de perfil se han aplicado solo para esta sesión simulada.'
+          )
+
+          return
+        }
+
+        const supabase = useSupabaseClient()
+
         const { error } = await supabase.auth.updateUser({
           data: {
             name: profileData.name,

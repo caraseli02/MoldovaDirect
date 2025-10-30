@@ -44,6 +44,8 @@ export default defineNuxtConfig({
     // Public keys (exposed to client-side)
     public: {
       stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+      enableTestUsers:
+        process.env.ENABLE_TEST_USERS === 'true' || process.env.NODE_ENV !== 'production'
     },
   },
   shadcn: {

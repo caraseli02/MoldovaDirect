@@ -13,6 +13,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { useAuthStore } from '~/stores/auth'
 import type { AuthUser, LoginCredentials, RegisterData } from '~/stores/auth'
+import { testUserPersonas } from '~/lib/testing/testUserPersonas'
 
 // Mock Supabase client
 const mockSupabaseClient = {
@@ -24,7 +25,9 @@ const mockSupabaseClient = {
     resend: vi.fn(),
     resetPasswordForEmail: vi.fn(),
     updateUser: vi.fn(),
-    refreshSession: vi.fn()
+    refreshSession: vi.fn(),
+    getSession: vi.fn(() => Promise.resolve({ data: { session: null }, error: null })),
+    onAuthStateChange: vi.fn(() => ({ data: { subscription: { unsubscribe: vi.fn() } } }))
   }
 }
 
@@ -68,6 +71,12 @@ global.watch = vi.fn((source, callback, options) => {
   }
   return vi.fn() // unwatch function
 })
+const runtimeConfigMock = {
+  public: {
+    enableTestUsers: true
+  }
+}
+;(global as any).useRuntimeConfig = vi.fn(() => runtimeConfigMock)
 
 describe('Authentication Store', () => {
   let authStore: ReturnType<typeof useAuthStore>
@@ -165,6 +174,11 @@ describe('Authentication Store', () => {
     it('should return default language when no user', () => {
       expect(authStore.userLanguage).toBe('es')
     })
+
+    it('should report simulation getters as null when inactive', () => {
+      expect(authStore.isTestSession).toBe(false)
+      expect(authStore.activeTestPersona).toBeNull()
+    })
   })
 
   describe('Authentication Initialization', () => {
@@ -234,6 +248,63 @@ describe('Authentication Store', () => {
       expect(authStore.user).toBeNull()
       expect(authStore.error).toBeNull()
       expect(authStore.lockoutTime).toBeNull()
+    })
+  })
+
+  describe('Test Persona Simulator', () => {
+    beforeEach(() => {
+      runtimeConfigMock.public.enableTestUsers = true
+    })
+
+    it('should activate persona when simulation is enabled', () => {
+      authStore.simulateLogin('first-order-explorer')
+
+      expect(authStore.isTestSession).toBe(true)
+      expect(authStore.activeTestPersona).toBe('first-order-explorer')
+      expect(authStore.user?.email).toBe(testUserPersonas['first-order-explorer'].user.email)
+    })
+
+    it('should apply lockout timer when persona defines it', () => {
+      authStore.simulateLogin('recovery-seeker')
+
+      expect(authStore.lockoutTime).toBeInstanceOf(Date)
+      expect(authStore.lockoutMinutesRemaining).toBeGreaterThan(0)
+    })
+
+    it('should prevent persona activation when feature is disabled', () => {
+      runtimeConfigMock.public.enableTestUsers = false
+
+      expect(() => authStore.simulateLogin('first-order-explorer')).toThrowError(/disabled/i)
+
+      runtimeConfigMock.public.enableTestUsers = true
+    })
+
+    it('should preserve simulated user when Supabase emits null event', () => {
+      authStore.simulateLogin('first-order-explorer')
+      const currentEmail = authStore.user?.email
+
+      authStore.syncUserState(null)
+
+      expect(authStore.user?.email).toBe(currentEmail)
+    })
+
+    it('should clear persona state on simulateLogout', () => {
+      authStore.simulateLogin('first-order-explorer')
+      authStore.simulateLogout()
+
+      expect(authStore.user).toBeNull()
+      expect(authStore.isTestSession).toBe(false)
+      expect(authStore.activeTestPersona).toBeNull()
+    })
+
+    it('should update profile locally while in simulation mode', async () => {
+      authStore.simulateLogin('first-order-explorer')
+      mockSupabaseClient.auth.updateUser.mockClear()
+
+      await authStore.updateProfile({ name: 'Persona Edited' })
+
+      expect(authStore.user?.name).toBe('Persona Edited')
+      expect(mockSupabaseClient.auth.updateUser).not.toHaveBeenCalled()
     })
   })
 
@@ -477,6 +548,9 @@ describe('Authentication Store', () => {
         writable: true
       })
 
+      const originalProcessClient = (process as any).client
+      ;(process as any).client = true
+
       mockSupabaseClient.auth.resetPasswordForEmail.mockResolvedValueOnce({
         data: {},
         error: null
@@ -488,6 +562,12 @@ describe('Authentication Store', () => {
         'test@example.com',
         { redirectTo: 'https://example.com/auth/reset-password' }
       )
+
+      if (originalProcessClient === undefined) {
+        delete (process as any).client
+      } else {
+        ;(process as any).client = originalProcessClient
+      }
     })
 
     it('should reset password successfully', async () => {
