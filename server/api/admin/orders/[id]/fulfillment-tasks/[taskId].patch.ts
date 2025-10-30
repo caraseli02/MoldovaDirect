@@ -9,20 +9,16 @@
  * - 4.4: Track completion timestamps and responsible admin
  */
 
-import { serverSupabaseServiceRole, serverSupabaseClient } from '#supabase/server'
+import { serverSupabaseServiceRole } from '#supabase/server'
+import { requireAdminAuth } from '~/server/utils/adminAuth'
 
 export default defineEventHandler(async (event) => {
   try {
-    // Get authenticated user
-    const supabaseClient = await serverSupabaseClient(event)
-    const { data: { user }, error: authError } = await supabaseClient.auth.getUser()
-
-    if (authError || !user) {
-      throw createError({
-        statusCode: 401,
-        statusMessage: 'Unauthorized'
-      })
-    }
+    // Verify admin authentication
+    const user = await requireAdminAuth(event)
+    
+    // Use service role for database operations
+    const supabase = serverSupabaseServiceRole(event)
 
     // Get order ID and task ID from params
     const orderId = parseInt(event.context.params?.id || '0')
@@ -45,9 +41,6 @@ export default defineEventHandler(async (event) => {
         statusMessage: 'Invalid request body. "completed" must be a boolean'
       })
     }
-
-    // Use service role for admin operations
-    const supabase = serverSupabaseServiceRole(event)
 
     // Fetch the task to verify it exists and belongs to this order
     const { data: existingTask, error: fetchError } = await supabase

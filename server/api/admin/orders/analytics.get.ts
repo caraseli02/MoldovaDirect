@@ -1,9 +1,14 @@
 // GET /api/admin/orders/analytics - Admin endpoint to get order analytics and metrics
 import { serverSupabaseServiceRole } from '#supabase/server'
+import { requireAdminAuth } from '~/server/utils/adminAuth'
 import { subDays, startOfDay, endOfDay, format } from 'date-fns'
 
 export default defineEventHandler(async (event) => {
   try {
+    // Verify admin authentication
+    await requireAdminAuth(event)
+    
+    // Use service role for database operations
     const supabase = serverSupabaseServiceRole(event)
 
     // Parse query parameters for date range

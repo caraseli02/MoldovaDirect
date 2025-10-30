@@ -14,6 +14,7 @@
  */
 
 import { serverSupabaseServiceRole } from '#supabase/server'
+import { requireAdminAuth } from '~/server/utils/adminAuth'
 
 interface BulkUpdateRequest {
   orderIds: number[]
@@ -38,16 +39,11 @@ const VALID_TRANSITIONS: Record<string, string[]> = {
 
 export default defineEventHandler(async (event) => {
   try {
-    // Get authenticated user
+    // Verify admin authentication
+    const user = await requireAdminAuth(event)
+    
+    // Use service role for database operations
     const supabase = serverSupabaseServiceRole(event)
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-
-    if (authError || !user) {
-      throw createError({
-        statusCode: 401,
-        statusMessage: 'Unauthorized'
-      })
-    }
 
     // Parse request body
     const body = await readBody<BulkUpdateRequest>(event)
