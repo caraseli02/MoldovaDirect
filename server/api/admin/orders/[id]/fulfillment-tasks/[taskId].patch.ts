@@ -79,9 +79,15 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // If this is a picking task being marked as completed, update inventory
-    if (completed && existingTask.task_type === 'picking') {
-      await updateInventoryForPickedItems(supabase, orderId, user.id)
+    // Handle inventory updates for picking tasks
+    if (existingTask.task_type === 'picking') {
+      if (completed && !existingTask.completed) {
+        // Task is being marked as completed (was incomplete before)
+        await updateInventoryForPickedItems(supabase, orderId, user.id)
+      } else if (!completed && existingTask.completed) {
+        // Task is being marked as incomplete (was completed before)
+        await rollbackInventoryForPickedItems(supabase, orderId, user.id)
+      }
     }
 
     // Recalculate fulfillment progress for the order
@@ -108,9 +114,29 @@ export default defineEventHandler(async (event) => {
 /**
  * Update inventory levels when picking tasks are completed
  * Requirement 4.2: Update inventory levels when items are picked
+ *
+ * Uses inventory_updated flag to prevent duplicate decrements when multiple picking tasks are completed
  */
 async function updateInventoryForPickedItems(supabase: any, orderId: number, userId: string) {
   try {
+    // Check if inventory has already been updated for this order
+    const { data: order, error: orderError } = await supabase
+      .from('orders')
+      .select('inventory_updated, status')
+      .eq('id', orderId)
+      .single()
+
+    if (orderError || !order) {
+      console.error('Error fetching order for inventory update:', orderError)
+      return
+    }
+
+    // Skip if inventory was already updated
+    if (order.inventory_updated) {
+      console.log(`Inventory already updated for order ${orderId}, skipping duplicate update`)
+      return
+    }
+
     // Get all order items
     const { data: orderItems, error: itemsError } = await supabase
       .from('order_items')
@@ -166,8 +192,124 @@ async function updateInventoryForPickedItems(supabase: any, orderId: number, use
         console.error(`Error logging inventory change for product ${item.product_id}:`, logError)
       }
     }
+
+    // Mark inventory as updated
+    const { error: flagError } = await supabase
+      .from('orders')
+      .update({ inventory_updated: true })
+      .eq('id', orderId)
+
+    if (flagError) {
+      console.error('Error setting inventory_updated flag:', flagError)
+    }
   } catch (error) {
     console.error('Error updating inventory for picked items:', error)
+  }
+}
+
+/**
+ * Rollback inventory changes when a picking task is unchecked
+ * Adds stock back to products and logs the reversal
+ *
+ * Only allows rollback if order hasn't been shipped yet
+ */
+async function rollbackInventoryForPickedItems(supabase: any, orderId: number, userId: string) {
+  try {
+    // Check if inventory was updated for this order and if order can be rolled back
+    const { data: order, error: orderError } = await supabase
+      .from('orders')
+      .select('inventory_updated, status')
+      .eq('id', orderId)
+      .single()
+
+    if (orderError || !order) {
+      console.error('Error fetching order for inventory rollback:', orderError)
+      return
+    }
+
+    // Only allow rollback if inventory was updated
+    if (!order.inventory_updated) {
+      console.log(`Inventory was not updated for order ${orderId}, skipping rollback`)
+      return
+    }
+
+    // Prevent rollback if order has been shipped
+    if (order.status === 'shipped' || order.status === 'delivered') {
+      console.error(`Cannot rollback inventory for order ${orderId}: order already ${order.status}`)
+      throw createError({
+        statusCode: 400,
+        statusMessage: `Cannot uncheck picking tasks for ${order.status} orders`
+      })
+    }
+
+    // Get all order items
+    const { data: orderItems, error: itemsError } = await supabase
+      .from('order_items')
+      .select('product_id, quantity')
+      .eq('order_id', orderId)
+
+    if (itemsError || !orderItems) {
+      console.error('Error fetching order items for inventory rollback:', itemsError)
+      return
+    }
+
+    // Rollback inventory for each product
+    for (const item of orderItems) {
+      // Get current product stock
+      const { data: product, error: productError } = await supabase
+        .from('products')
+        .select('stock_quantity')
+        .eq('id', item.product_id)
+        .single()
+
+      if (productError || !product) {
+        console.error(`Error fetching product ${item.product_id}:`, productError)
+        continue
+      }
+
+      // Add stock back
+      const newStockQuantity = product.stock_quantity + item.quantity
+
+      // Update product stock
+      const { error: updateError } = await supabase
+        .from('products')
+        .update({ stock_quantity: newStockQuantity })
+        .eq('id', item.product_id)
+
+      if (updateError) {
+        console.error(`Error rolling back product ${item.product_id} stock:`, updateError)
+        continue
+      }
+
+      // Log inventory reversal
+      const { error: logError } = await supabase
+        .from('inventory_logs')
+        .insert({
+          product_id: item.product_id,
+          quantity_change: item.quantity,
+          quantity_after: newStockQuantity,
+          reason: 'sale_reversal',
+          reference_id: orderId,
+          created_by: userId
+        })
+
+      if (logError) {
+        console.error(`Error logging inventory reversal for product ${item.product_id}:`, logError)
+      }
+    }
+
+    // Reset inventory_updated flag
+    const { error: flagError } = await supabase
+      .from('orders')
+      .update({ inventory_updated: false })
+      .eq('id', orderId)
+
+    if (flagError) {
+      console.error('Error resetting inventory_updated flag:', flagError)
+    }
+  } catch (error) {
+    console.error('Error rolling back inventory for picked items:', error)
+    throw error
   }
 }
 

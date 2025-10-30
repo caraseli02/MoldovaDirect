@@ -9,13 +9,11 @@ import { serverSupabaseClient } from '#supabase/server'
 
 /**
  * Verify that the request is from an authenticated admin user
- * 
+ *
  * @param event - H3 event object
- * @returns User object if authenticated
+ * @returns User object if authenticated and has admin role
  * @throws 401 error if not authenticated
- * 
- * TODO: Add proper role-based access control
- * Currently checks if user is authenticated. In production, should verify admin role.
+ * @throws 403 error if authenticated but not admin
  */
 export async function requireAdminAuth(event: H3Event) {
   const supabase = await serverSupabaseClient(event)
@@ -28,20 +26,26 @@ export async function requireAdminAuth(event: H3Event) {
     })
   }
 
-  // TODO: Add role verification
-  // Example:
-  // const { data: profile } = await supabase
-  //   .from('profiles')
-  //   .select('role')
-  //   .eq('id', user.id)
-  //   .single()
-  // 
-  // if (profile?.role !== 'admin') {
-  //   throw createError({
-  //     statusCode: 403,
-  //     statusMessage: 'Forbidden - Admin role required'
-  //   })
-  // }
+  // Verify admin role in profiles table
+  const { data: profile, error: profileError } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single()
+
+  if (profileError) {
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Error verifying user permissions'
+    })
+  }
+
+  if (!profile || (profile.role !== 'admin' && profile.role !== 'manager')) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: 'Forbidden - Admin or manager role required'
+    })
+  }
 
   return user
 }
