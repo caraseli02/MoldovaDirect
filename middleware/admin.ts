@@ -1,37 +1,38 @@
 /**
  * Admin Authorization Middleware
- * 
+ *
  * Requirements addressed:
  * - 5.1: Verify admin privileges for dashboard access
  * - 5.2: Redirect unauthorized users
- * 
- * Note: This is a placeholder implementation.
- * Full admin role verification will be implemented in auth tasks.
  */
 
-export default defineNuxtRouteMiddleware((to, from) => {
-  // TESTING MODE: Temporarily disabled for E2E testing
-  // TODO: Re-enable after testing is complete
-  console.log('Admin middleware: BYPASSED FOR TESTING')
-  return
-  
-  /* ORIGINAL CODE - RE-ENABLE AFTER TESTING
-  // TODO: Implement proper admin role verification
-  // For now, allow access to any authenticated user
-  // This will be enhanced in the admin authentication tasks
-  
+export default defineNuxtRouteMiddleware(async (to, from) => {
   const user = useSupabaseUser()
-  
+  const supabase = useSupabaseClient()
+
+  // Check if user is authenticated
   if (!user.value) {
+    return navigateTo('/auth/login')
+  }
+
+  // Check if user has admin role
+  const { data: profile, error } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user.value.id)
+    .single()
+
+  if (error || !profile) {
     throw createError({
-      statusCode: 401,
-      statusMessage: 'Authentication required'
+      statusCode: 403,
+      statusMessage: 'Unable to verify admin privileges'
     })
   }
-  
-  // TODO: Add admin role check here
-  // Example: if (!user.value.app_metadata?.role === 'admin') { ... }
-  
-  console.log('Admin middleware: Access granted (placeholder implementation)')
-  */
+
+  if (profile.role !== 'admin') {
+    throw createError({
+      statusCode: 403,
+      statusMessage: 'Admin access required'
+    })
+  }
 })

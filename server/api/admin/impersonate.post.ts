@@ -14,7 +14,8 @@
  * - Logs all impersonation actions
  */
 
-import { serverSupabaseServiceRole, serverSupabaseUser } from '#supabase/server'
+import { serverSupabaseServiceRole } from '#supabase/server'
+import { requireAdminRole, logAdminAction } from '~/server/utils/adminAuth'
 
 interface ImpersonateOptions {
   userId?: string
@@ -22,30 +23,10 @@ interface ImpersonateOptions {
 }
 
 export default defineEventHandler(async (event) => {
+  // Verify admin access (impersonation allowed in production for admin testing)
+  const adminId = await requireAdminRole(event)
+
   const supabase = serverSupabaseServiceRole(event)
-  const currentUser = await serverSupabaseUser(event)
-
-  // Check if user is authenticated
-  if (!currentUser) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: 'Authentication required'
-    })
-  }
-
-  // Check if user is admin
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('role')
-    .eq('id', currentUser.id)
-    .single()
-
-  if (profile?.role !== 'admin') {
-    throw createError({
-      statusCode: 403,
-      statusMessage: 'Admin access required for impersonation'
-    })
-  }
 
   const body = await readBody(event).catch(() => ({})) as ImpersonateOptions
   const { userId, action } = body
@@ -59,38 +40,52 @@ export default defineEventHandler(async (event) => {
         })
       }
 
-      // Verify target user exists
-      const { data: targetUser, error: userError } = await supabase
-        .from('profiles')
-        .select('id, name, email:id')
-        .eq('id', userId)
-        .single()
+      // Verify target user exists and get email from auth
+      const { data: authData, error: authError } = await supabase.auth.admin.getUserById(userId)
 
-      if (userError || !targetUser) {
+      if (authError || !authData.user) {
         throw createError({
           statusCode: 404,
           statusMessage: 'User not found'
         })
       }
 
-      // Get user email from auth
-      const { data: authData } = await supabase.auth.admin.getUserById(userId)
-      const targetEmail = authData.user?.email
+      const targetEmail = authData.user.email
+
+      // Get profile data
+      const { data: targetProfile, error: profileError } = await supabase
+        .from('profiles')
+        .select('id, name, role')
+        .eq('id', userId)
+        .single()
+
+      if (profileError || !targetProfile) {
+        throw createError({
+          statusCode: 404,
+          statusMessage: 'User profile not found'
+        })
+      }
 
       // Create impersonation session token
       // Note: In production, you might want to create a JWT or session token
       // For now, we'll return the user info and let the client handle it
 
-      // Log impersonation action (you might want to create an audit_logs table)
-      console.log(`Admin ${currentUser.id} started impersonating user ${userId} (${targetEmail})`)
+      // Log impersonation action
+      logAdminAction(adminId, 'impersonate-start', {
+        targetUserId: userId,
+        targetEmail,
+        targetName: targetProfile.name,
+        targetRole: targetProfile.role
+      })
 
       return {
         success: true,
         action: 'start',
         impersonating: {
           id: userId,
-          name: targetUser.name,
-          email: targetEmail
+          name: targetProfile.name,
+          email: targetEmail,
+          role: targetProfile.role
         },
         message: `Now impersonating ${targetEmail}`,
         warning: 'You are acting as another user. All actions will be performed as them.'
@@ -98,7 +93,7 @@ export default defineEventHandler(async (event) => {
 
     } else if (action === 'stop') {
       // Stop impersonation
-      console.log(`Admin ${currentUser.id} stopped impersonation`)
+      logAdminAction(adminId, 'impersonate-stop', {})
 
       return {
         success: true,

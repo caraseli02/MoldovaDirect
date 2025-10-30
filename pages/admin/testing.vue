@@ -374,7 +374,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 
 definePageMeta({
   layout: 'admin',
-  middleware: 'auth'
+  middleware: ['auth', 'admin']
 })
 
 const loading = ref(false)

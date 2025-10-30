@@ -8,6 +8,7 @@
  */
 
 import { serverSupabaseServiceRole } from '#supabase/server'
+import { requireAdminTestingAccess, logAdminAction } from '~/server/utils/adminAuth'
 
 interface CleanupOptions {
   action: 'clear-all' | 'clear-test-users' | 'clear-orders' | 'clear-products' | 'reset-database' | 'clear-old-carts'
@@ -16,6 +17,9 @@ interface CleanupOptions {
 }
 
 export default defineEventHandler(async (event) => {
+  // Verify admin access and non-production environment
+  const adminId = await requireAdminTestingAccess(event)
+
   const supabase = serverSupabaseServiceRole(event)
   const body = await readBody(event).catch(() => ({})) as CleanupOptions
 
@@ -70,6 +74,12 @@ export default defineEventHandler(async (event) => {
         }
     }
 
+    // Log admin action
+    logAdminAction(adminId, 'cleanup', {
+      action,
+      deletedCounts: results.deletedCounts
+    })
+
     return {
       success: true,
       message: `Successfully completed ${action}`,
@@ -78,6 +88,7 @@ export default defineEventHandler(async (event) => {
 
   } catch (error: any) {
     console.error('Cleanup error:', error)
+    logAdminAction(adminId, 'cleanup-failed', { action, error: error.message })
     return {
       success: false,
       message: 'Cleanup failed',

@@ -10,6 +10,7 @@
  */
 
 import { serverSupabaseServiceRole } from '#supabase/server'
+import { requireAdminTestingAccess, logAdminAction } from '~/server/utils/adminAuth'
 
 interface SeedUserOptions {
   count?: number
@@ -19,6 +20,9 @@ interface SeedUserOptions {
 }
 
 export default defineEventHandler(async (event) => {
+  // Verify admin access and non-production environment
+  const adminId = await requireAdminTestingAccess(event)
+
   const supabase = serverSupabaseServiceRole(event)
 
   // Get options from body
@@ -157,8 +161,8 @@ export default defineEventHandler(async (event) => {
         email,
         name,
         role,
-        phone,
-        password // Include for testing purposes
+        phone
+        // Password removed for security - not exposed in API response
       })
 
     } catch (error: any) {
@@ -246,6 +250,16 @@ export default defineEventHandler(async (event) => {
       }
     }
   }
+
+  // Log admin action
+  logAdminAction(adminId, 'seed-users', {
+    count,
+    created: createdUsers.length,
+    failed: errors.length,
+    withAddresses,
+    withOrders,
+    roles
+  })
 
   return {
     success: true,

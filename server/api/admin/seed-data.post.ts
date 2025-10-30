@@ -16,6 +16,7 @@
  */
 
 import { serverSupabaseServiceRole } from '#supabase/server'
+import { requireAdminTestingAccess, logAdminAction } from '~/server/utils/adminAuth'
 
 interface SeedOptions {
   preset?: 'empty' | 'minimal' | 'development' | 'demo' | 'stress' | 'low-stock' | 'holiday-rush' | 'new-store'
@@ -27,6 +28,9 @@ interface SeedOptions {
 }
 
 export default defineEventHandler(async (event) => {
+  // Verify admin access and non-production environment
+  const adminId = await requireAdminTestingAccess(event)
+
   const supabase = serverSupabaseServiceRole(event)
   const body = await readBody(event).catch(() => ({})) as SeedOptions
 
@@ -104,6 +108,13 @@ export default defineEventHandler(async (event) => {
       }
     }
 
+    // Log admin action
+    logAdminAction(adminId, 'seed-data', {
+      preset,
+      config,
+      results: results.steps.map(s => ({ step: s.step, count: s.count }))
+    })
+
     return {
       success: true,
       message: `Successfully seeded ${preset} dataset`,
@@ -114,6 +125,7 @@ export default defineEventHandler(async (event) => {
 
   } catch (error: any) {
     console.error('Seed data error:', error)
+    logAdminAction(adminId, 'seed-data-failed', { preset, error: error.message })
     return {
       success: false,
       message: 'Failed to seed data',
