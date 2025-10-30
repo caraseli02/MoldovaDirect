@@ -1,14 +1,7 @@
-export interface TestUserPersonaUser {
-  id: string
-  email: string
-  emailVerified: boolean
-  name?: string
-  phone?: string
-  preferredLanguage: string
-  lastLogin?: string
-  createdAt: string
-  updatedAt?: string
-}
+import type { AuthUser } from '~/stores/auth'
+
+// Reuse AuthUser type to maintain single source of truth
+export type TestUserPersonaUser = AuthUser
 
 export interface TestUserPersona {
   key: TestUserPersonaKey

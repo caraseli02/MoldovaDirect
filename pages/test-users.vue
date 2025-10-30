@@ -204,7 +204,8 @@ import { useToastStore } from '~/stores/toast'
 import { testUserPersonas, type TestUserPersonaKey } from '~/lib/testing/testUserPersonas'
 
 definePageMeta({
-  layout: false
+  layout: false,
+  middleware: ['test-users-guard']
 })
 
 useHead({

@@ -306,6 +306,24 @@ describe('Authentication Store', () => {
       expect(authStore.user?.name).toBe('Persona Edited')
       expect(mockSupabaseClient.auth.updateUser).not.toHaveBeenCalled()
     })
+
+    it('should throw error for unknown persona key', () => {
+      expect(() => authStore.simulateLogin('invalid-key' as TestUserPersonaKey))
+        .toThrowError(/Unknown test user persona/)
+    })
+
+    it('should not mutate original persona data', () => {
+      const originalEmail = testUserPersonas['first-order-explorer'].user.email
+      authStore.simulateLogin('first-order-explorer')
+
+      // Attempt to modify the user
+      if (authStore.user) {
+        authStore.user.email = 'modified@example.com'
+      }
+
+      // Original persona data should remain unchanged
+      expect(testUserPersonas['first-order-explorer'].user.email).toBe(originalEmail)
+    })
   })
 
   describe('Login', () => {
