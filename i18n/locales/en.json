@@ -363,6 +363,60 @@
         "required": "Verification token is required",
         "invalid": "Invalid verification token",
         "expired": "Verification token has expired"
+      },
+      "mfa": {
+        "required": "Verification code is required",
+        "length": "Code must be exactly 6 digits",
+        "format": "Code must contain only numbers",
+        "nameLength": "Device name must be between 2 and 50 characters"
+      }
+    },
+    "mfa": {
+      "verify": {
+        "title": "Two-Factor Authentication",
+        "description": "Enter the 6-digit code from your authenticator app",
+        "codeLabel": "Verification Code",
+        "codePlaceholder": "000000",
+        "submitButton": "Verify",
+        "verifying": "Verifying...",
+        "cancel": "Cancel and Sign Out",
+        "helpTitle": "Need Help?",
+        "helpItem1": "Open your authenticator app (Google Authenticator, Authy, etc.)",
+        "helpItem2": "Find the MoldovaDirect entry",
+        "helpItem3": "Enter the 6-digit code shown"
+      },
+      "settings": {
+        "title": "Two-Factor Authentication (MFA)",
+        "description": "Add an extra layer of security to your account by enabling two-factor authentication.",
+        "statusEnabled": "MFA Enabled",
+        "statusDisabled": "MFA Disabled",
+        "statusEnabledDescription": "Your account is protected with two-factor authentication",
+        "statusDisabledDescription": "Your account is not protected with two-factor authentication",
+        "enableButton": "Enable MFA",
+        "enrollmentStep1": "Step 1: Scan QR Code",
+        "enrollmentStep2": "Step 2: Verify Code",
+        "showManualEntry": "Can't scan? Enter code manually",
+        "hideManualEntry": "Hide manual entry",
+        "secretKey": "Secret Key",
+        "copy": "Copy",
+        "instructions": "How to set up:",
+        "instruction1": "Download an authenticator app (Google Authenticator, Authy, 1Password, etc.)",
+        "instruction2": "Scan the QR code with your app, or enter the secret key manually",
+        "instruction3": "Enter the 6-digit code from your app below to complete setup",
+        "verificationCodeLabel": "Verification Code",
+        "verifyButton": "Verify & Enable MFA",
+        "verifying": "Verifying...",
+        "cancelButton": "Cancel",
+        "activeFactors": "Active Authentication Methods",
+        "verified": "Verified",
+        "unverified": "Unverified",
+        "removeButton": "Remove",
+        "disableConfirmTitle": "Disable Two-Factor Authentication?",
+        "disableConfirmDescription": "This will make your account less secure. You'll only need your password to sign in.",
+        "disableConfirmButton": "Yes, Disable MFA",
+        "disableCancelButton": "Cancel",
+        "securityNoticeTitle": "Security Recommendation",
+        "securityNoticeDescription": "Two-factor authentication significantly increases your account security. We strongly recommend keeping it enabled, especially for admin accounts."
       }
     },
     "progress": {

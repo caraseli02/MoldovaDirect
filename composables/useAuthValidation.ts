@@ -125,6 +125,27 @@ export const useAuthValidation = () => {
   });
 
   /**
+   * MFA code validation schema
+   * TOTP codes are 6 digits
+   */
+  const mfaCodeSchema = z
+    .string()
+    .min(1, "auth.validation.mfa.required")
+    .length(6, "auth.validation.mfa.length")
+    .regex(/^[0-9]{6}$/, "auth.validation.mfa.format");
+
+  /**
+   * MFA enrollment friendly name schema
+   */
+  const mfaFriendlyNameSchema = z
+    .string()
+    .optional()
+    .refine(
+      (val) => !val || (val.length >= 2 && val.length <= 50),
+      "auth.validation.mfa.nameLength"
+    );
+
+  /**
    * Validates form data against a schema and returns translated errors
    */
   const validateForm = <T>(
@@ -306,6 +327,20 @@ export const useAuthValidation = () => {
     };
   };
 
+  /**
+   * Validate MFA code (6-digit TOTP code)
+   */
+  const validateMFACode = (code: string): AuthValidationResult => {
+    return validateForm(mfaCodeSchema, code);
+  };
+
+  /**
+   * Validate MFA friendly name
+   */
+  const validateMFAFriendlyName = (name: string): AuthValidationResult => {
+    return validateForm(mfaFriendlyNameSchema, name);
+  };
+
   return {
     // Validation functions
     validateForm,
@@ -318,6 +353,8 @@ export const useAuthValidation = () => {
     validateEmailVerification,
     validatePasswordMatch,
     validateTermsAcceptance,
+    validateMFACode,
+    validateMFAFriendlyName,
 
     // Password strength utilities
     calculatePasswordStrength,
@@ -334,5 +371,7 @@ export const useAuthValidation = () => {
     forgotPasswordSchema,
     resetPasswordSchema,
     verifyEmailSchema,
+    mfaCodeSchema,
+    mfaFriendlyNameSchema,
   };
 };

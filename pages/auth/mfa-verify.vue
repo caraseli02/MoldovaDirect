@@ -1,0 +1,163 @@
+<template>
+  <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+      <div>
+        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          {{ $t('auth.mfa.verify.title') }}
+        </h2>
+        <p class="mt-2 text-center text-sm text-gray-600">
+          {{ $t('auth.mfa.verify.description') }}
+        </p>
+      </div>
+
+      <form class="mt-8 space-y-6" @submit.prevent="handleVerify">
+        <div class="rounded-md shadow-sm -space-y-px">
+          <div>
+            <label for="mfa-code" class="sr-only">
+              {{ $t('auth.mfa.verify.codeLabel') }}
+            </label>
+            <input
+              id="mfa-code"
+              v-model="code"
+              type="text"
+              inputmode="numeric"
+              pattern="[0-9]*"
+              maxlength="6"
+              autocomplete="one-time-code"
+              required
+              class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm text-center text-2xl tracking-widest"
+              :class="{
+                'border-red-500': error,
+                'border-gray-300': !error
+              }"
+              :placeholder="$t('auth.mfa.verify.codePlaceholder')"
+              :disabled="authStore.mfaLoading"
+              @input="handleInput"
+            />
+          </div>
+        </div>
+
+        <div v-if="error" class="rounded-md bg-red-50 p-4">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div class="ml-3">
+              <p class="text-sm font-medium text-red-800">
+                {{ error }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <button
+            type="submit"
+            :disabled="authStore.mfaLoading || code.length !== 6"
+            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <span v-if="!authStore.mfaLoading">
+              {{ $t('auth.mfa.verify.submitButton') }}
+            </span>
+            <span v-else class="flex items-center">
+              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              {{ $t('auth.mfa.verify.verifying') }}
+            </span>
+          </button>
+        </div>
+
+        <div class="text-center">
+          <button
+            type="button"
+            class="text-sm text-indigo-600 hover:text-indigo-500"
+            @click="handleCancel"
+          >
+            {{ $t('auth.mfa.verify.cancel') }}
+          </button>
+        </div>
+      </form>
+
+      <div class="mt-6 border-t border-gray-200 pt-6">
+        <div class="text-sm text-gray-600 space-y-2">
+          <p class="font-medium">{{ $t('auth.mfa.verify.helpTitle') }}</p>
+          <ul class="list-disc list-inside space-y-1 text-xs">
+            <li>{{ $t('auth.mfa.verify.helpItem1') }}</li>
+            <li>{{ $t('auth.mfa.verify.helpItem2') }}</li>
+            <li>{{ $t('auth.mfa.verify.helpItem3') }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useAuthStore } from '~/stores/auth'
+import { useAuthValidation } from '~/composables/useAuthValidation'
+
+definePageMeta({
+  layout: 'auth',
+  middleware: []
+})
+
+const authStore = useAuthStore()
+const { validateMFACode } = useAuthValidation()
+const route = useRoute()
+
+const code = ref('')
+const error = ref('')
+
+// Handle input to only allow numbers and limit to 6 digits
+const handleInput = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  const value = target.value.replace(/[^0-9]/g, '').slice(0, 6)
+  code.value = value
+  error.value = ''
+}
+
+const handleVerify = async () => {
+  try {
+    error.value = ''
+
+    // Validate code format
+    const validation = validateMFACode(code.value)
+    if (!validation.isValid) {
+      error.value = validation.errors[0].message
+      return
+    }
+
+    // Verify MFA code
+    await authStore.verifyMFA(code.value)
+
+    // Redirect to original destination or account page
+    const redirect = route.query.redirect as string
+    if (redirect && redirect.startsWith('/')) {
+      await navigateTo(redirect)
+    } else {
+      await navigateTo('/account')
+    }
+  } catch (err) {
+    error.value = err instanceof Error ? err.message : 'Verification failed'
+  }
+}
+
+const handleCancel = async () => {
+  // Clear the challenge and logout
+  authStore.mfaChallenge = null
+  await authStore.logout()
+}
+
+// Auto-focus on the input
+onMounted(() => {
+  const input = document.getElementById('mfa-code') as HTMLInputElement
+  if (input) {
+    input.focus()
+  }
+})
+</script>
