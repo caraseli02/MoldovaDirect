@@ -59,15 +59,40 @@
 
 <script setup lang="ts">
 const localePath = useLocalePath()
+const { toAbsoluteUrl, siteUrl } = useSiteUrl()
 
-// SEO Meta
-useHead({
+const description =
+  'Learn about Moldova Direct, your trusted source for authentic Moldovan products in Spain. Direct from producers to your home.'
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'AboutPage',
+  name: 'About Moldova Direct',
+  url: toAbsoluteUrl('/about'),
+  description,
+  primaryImageOfPage: {
+    '@type': 'ImageObject',
+    url: toAbsoluteUrl('/icon.svg')
+  },
+  mainEntity: {
+    '@type': 'Organization',
+    name: 'Moldova Direct',
+    url: siteUrl,
+    logo: toAbsoluteUrl('/icon.svg')
+  }
+}
+
+useLandingSeo({
   title: 'About Us - Moldova Direct',
-  meta: [
-    {
-      name: 'description',
-      content: 'Learn about Moldova Direct, your trusted source for authentic Moldovan products in Spain. Direct from producers to your home.'
-    }
-  ]
+  description,
+  image: '/icon.svg',
+  imageAlt: 'Moldova Direct team presenting Moldovan delicacies',
+  pageType: 'webpage',
+  keywords: ['Moldova Direct mission', 'about Moldova Direct', 'Moldovan products company'],
+  breadcrumbs: [
+    { name: 'Home', path: '/' },
+    { name: 'About', path: '/about' }
+  ],
+  structuredData
 })
 </script>

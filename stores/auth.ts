@@ -18,7 +18,7 @@ import type { AuthChangeEvent, Session, User } from '@supabase/supabase-js'
 import type { WatchStopHandle } from 'vue'
 import { useAuthMessages } from '~/composables/useAuthMessages'
 import { useAuthValidation } from '~/composables/useAuthValidation'
-import { useToastStore } from './toast'
+import { useToast } from '~/composables/useToast'
 import { testUserPersonas, type TestUserPersonaKey } from '~/lib/testing/testUserPersonas'
 
 type AuthSubscription = {
@@ -71,6 +71,13 @@ export interface AuthUser {
   lastLogin?: string
   createdAt: string
   updatedAt?: string
+  mfaEnabled: boolean
+  mfaFactors: Array<{
+    id: string
+    type: 'totp'
+    status: 'verified' | 'unverified'
+    friendlyName?: string
+  }>
 }
 
 export interface LoginCredentials {
@@ -96,6 +103,18 @@ export interface AuthState {
   sessionInitialized: boolean
   profileLoading: boolean
   profileError: string | null
+  mfaEnrollment: {
+    id: string
+    qrCode: string
+    secret: string
+    uri: string
+  } | null
+  mfaChallenge: {
+    factorId: string
+    challengeId: string
+  } | null
+  mfaLoading: boolean
+  mfaError: string | null
   isTestUser: boolean
   testPersonaKey: TestUserPersonaKey | null
 }
@@ -109,6 +128,10 @@ export const useAuthStore = defineStore('auth', {
     sessionInitialized: false,
     profileLoading: false,
     profileError: null,
+    mfaEnrollment: null,
+    mfaChallenge: null,
+    mfaLoading: false,
+    mfaError: null,
     isTestUser: false,
     testPersonaKey: null
   }),
@@ -164,6 +187,34 @@ export const useAuthStore = defineStore('auth', {
      */
     isSessionInitialized: (state): boolean => {
       return state.sessionInitialized
+    },
+
+    /**
+     * Check if user has MFA enabled
+     */
+    hasMFAEnabled: (state): boolean => {
+      return state.user?.mfaEnabled ?? false
+    },
+
+    /**
+     * Get user's MFA factors
+     */
+    mfaFactors: (state) => {
+      return state.user?.mfaFactors ?? []
+    },
+
+    /**
+     * Check if MFA enrollment is in progress
+     */
+    isMFAEnrolling: (state): boolean => {
+      return !!state.mfaEnrollment
+    },
+
+    /**
+     * Check if user requires MFA verification (AAL2)
+     */
+    requiresMFAVerification: (state): boolean => {
+      return state.user?.mfaEnabled && !!state.mfaChallenge
     },
 
     /**
@@ -235,12 +286,35 @@ export const useAuthStore = defineStore('auth', {
      * Sync internal user state with Supabase user
      * Requirement 5.3: Reactive authentication status
      */
-    syncUserState(supabaseUser: User | null) {
+    async syncUserState(supabaseUser: User | null) {
       if (this.isTestUser && !supabaseUser) {
         return
       }
 
       if (supabaseUser) {
+        // Fetch MFA factors if user is authenticated
+        let mfaFactors: Array<{
+          id: string
+          type: 'totp'
+          status: 'verified' | 'unverified'
+          friendlyName?: string
+        }> = []
+
+        try {
+          const supabase = useSupabaseClient()
+          const { data, error } = await supabase.auth.mfa.listFactors()
+          if (!error && data) {
+            mfaFactors = data.totp?.map(factor => ({
+              id: factor.id,
+              type: 'totp' as const,
+              status: factor.status as 'verified' | 'unverified',
+              friendlyName: factor.friendly_name
+            })) || []
+          }
+        } catch (error) {
+          console.warn('Failed to fetch MFA factors:', error)
+        }
+
         this.user = {
           id: supabaseUser.id,
           email: supabaseUser.email!,
@@ -250,7 +324,9 @@ export const useAuthStore = defineStore('auth', {
           preferredLanguage: supabaseUser.user_metadata?.preferred_language || 'es',
           lastLogin: supabaseUser.last_sign_in_at,
           createdAt: supabaseUser.created_at,
-          updatedAt: supabaseUser.updated_at
+          updatedAt: supabaseUser.updated_at,
+          mfaEnabled: mfaFactors.some(f => f.status === 'verified'),
+          mfaFactors
         }
         this.isTestUser = false
         this.testPersonaKey = null
@@ -342,7 +418,7 @@ export const useAuthStore = defineStore('auth', {
       const supabase = useSupabaseClient()
       const { createErrorMessage, translateAuthError } = useAuthMessages()
       const { validateLogin } = useAuthValidation()
-      const toastStore = useToastStore()
+      const toastStore = useToast()
 
       try {
         // Validate credentials
@@ -386,7 +462,25 @@ export const useAuthStore = defineStore('auth', {
         if (data.user) {
           // Update last login timestamp in user metadata
           await this.updateLastLogin()
-          
+
+          // Check if user has MFA enabled
+          const { data: factors } = await supabase.auth.mfa.listFactors()
+          const verifiedFactors = factors?.totp?.filter(f => f.status === 'verified') || []
+
+          if (verifiedFactors.length > 0) {
+            // User has MFA enabled, redirect to MFA verification page
+            const firstFactor = verifiedFactors[0]
+            await this.challengeMFA(firstFactor.id)
+
+            const route = useRoute()
+            const redirect = route.query.redirect as string
+            await navigateTo({
+              path: '/auth/mfa-verify',
+              query: { redirect: redirect || '/account' }
+            })
+            return
+          }
+
           toastStore.success(
             'Inicio de sesión exitoso',
             `Bienvenido de vuelta, ${data.user.user_metadata?.name || data.user.email}`
@@ -437,7 +531,7 @@ export const useAuthStore = defineStore('auth', {
       const supabase = useSupabaseClient()
       const { translateAuthError } = useAuthMessages()
       const { validateRegistration } = useAuthValidation()
-      const toastStore = useToastStore()
+      const toastStore = useToast()
 
       try {
         // Validate registration data
@@ -525,7 +619,7 @@ export const useAuthStore = defineStore('auth', {
       
       const supabase = useSupabaseClient()
       const { translateAuthError } = useAuthMessages()
-      const toastStore = useToastStore()
+      const toastStore = useToast()
 
       try {
         const { error } = await supabase.auth.verifyOtp({
@@ -538,7 +632,7 @@ export const useAuthStore = defineStore('auth', {
           throw new Error(this.error)
         }
 
-        toastStore.success(
+          toastStore.success(
           'Email verificado',
           'Tu email ha sido verificado correctamente. Ya puedes iniciar sesión.'
         )
@@ -553,7 +647,7 @@ export const useAuthStore = defineStore('auth', {
         const errorMessage = error instanceof Error ? error.message : 'Email verification failed'
         this.error = errorMessage
         
-        toastStore.error(
+          toastStore.error(
           'Error de verificación',
           errorMessage,
           {
@@ -577,7 +671,7 @@ export const useAuthStore = defineStore('auth', {
       
       const supabase = useSupabaseClient()
       const { translateAuthError } = useAuthMessages()
-      const toastStore = useToastStore()
+      const toastStore = useToast()
 
       try {
         const emailToUse = email || this.user?.email
@@ -624,7 +718,7 @@ export const useAuthStore = defineStore('auth', {
       
       const supabase = useSupabaseClient()
       const { translateAuthError } = useAuthMessages()
-      const toastStore = useToastStore()
+      const toastStore = useToast()
 
       try {
         const redirectTo = process.client
@@ -674,7 +768,7 @@ export const useAuthStore = defineStore('auth', {
       
       const supabase = useSupabaseClient()
       const { translateAuthError } = useAuthMessages()
-      const toastStore = useToastStore()
+      const toastStore = useToast()
 
       try {
         const { error } = await supabase.auth.updateUser({
@@ -724,7 +818,7 @@ export const useAuthStore = defineStore('auth', {
       this.loading = true
       
       const supabase = useSupabaseClient()
-      const toastStore = useToastStore()
+      const toastStore = useToast()
 
       try {
         // Sign out from Supabase (invalidates session)
@@ -779,7 +873,7 @@ export const useAuthStore = defineStore('auth', {
       this.profileLoading = true
       this.profileError = null
 
-      const toastStore = useToastStore()
+      const toastStore = useToast()
 
       try {
         if (this.isTestUser) {
@@ -899,7 +993,7 @@ export const useAuthStore = defineStore('auth', {
       try {
         const supabase = useSupabaseClient()
         const { error } = await supabase.auth.refreshSession()
-        
+
         if (error) {
           console.warn('Session refresh failed:', error)
           // Let Supabase handle automatic logout if refresh fails
@@ -907,6 +1001,280 @@ export const useAuthStore = defineStore('auth', {
       } catch (error) {
         console.warn('Session refresh error:', error)
       }
+    },
+
+    // ============================================
+    // Multi-Factor Authentication (MFA) Methods
+    // ============================================
+
+    /**
+     * Start MFA enrollment - generates QR code and secret
+     */
+    async enrollMFA(friendlyName?: string) {
+      this.mfaLoading = true
+      this.mfaError = null
+
+      const supabase = useSupabaseClient()
+      const toastStore = useToastStore()
+
+      try {
+        const { data, error } = await supabase.auth.mfa.enroll({
+          factorType: 'totp',
+          friendlyName: friendlyName || 'Authenticator App'
+        })
+
+        if (error) {
+          this.mfaError = error.message
+          throw new Error(error.message)
+        }
+
+        if (data) {
+          this.mfaEnrollment = {
+            id: data.id,
+            qrCode: data.totp.qr_code,
+            secret: data.totp.secret,
+            uri: data.totp.uri
+          }
+
+          toastStore.success(
+            'MFA Enrollment Started',
+            'Scan the QR code with your authenticator app'
+          )
+
+          return data
+        }
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'MFA enrollment failed'
+        this.mfaError = errorMessage
+
+        toastStore.error(
+          'MFA Enrollment Error',
+          errorMessage
+        )
+
+        throw error
+      } finally {
+        this.mfaLoading = false
+      }
+    },
+
+    /**
+     * Verify and complete MFA enrollment with a code from authenticator app
+     */
+    async verifyMFAEnrollment(code: string) {
+      if (!this.mfaEnrollment) {
+        throw new Error('No MFA enrollment in progress')
+      }
+
+      this.mfaLoading = true
+      this.mfaError = null
+
+      const supabase = useSupabaseClient()
+      const toastStore = useToastStore()
+
+      try {
+        const { data, error } = await supabase.auth.mfa.challengeAndVerify({
+          factorId: this.mfaEnrollment.id,
+          code
+        })
+
+        if (error) {
+          this.mfaError = error.message
+          throw new Error(error.message)
+        }
+
+        // Refresh user state to update MFA factors
+        const supabaseUser = useSupabaseUser()
+        await this.syncUserState(supabaseUser.value)
+
+        // Clear enrollment data
+        this.mfaEnrollment = null
+
+        toastStore.success(
+          'MFA Enabled',
+          'Two-factor authentication has been enabled successfully'
+        )
+
+        return data
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'MFA verification failed'
+        this.mfaError = errorMessage
+
+        toastStore.error(
+          'Invalid Code',
+          'The code you entered is invalid or has expired. Please try again.'
+        )
+
+        throw error
+      } finally {
+        this.mfaLoading = false
+      }
+    },
+
+    /**
+     * Cancel MFA enrollment
+     */
+    cancelMFAEnrollment() {
+      this.mfaEnrollment = null
+      this.mfaError = null
+    },
+
+    /**
+     * Create MFA challenge for verification during login
+     */
+    async challengeMFA(factorId: string) {
+      this.mfaLoading = true
+      this.mfaError = null
+
+      const supabase = useSupabaseClient()
+
+      try {
+        const { data, error } = await supabase.auth.mfa.challenge({
+          factorId
+        })
+
+        if (error) {
+          this.mfaError = error.message
+          throw new Error(error.message)
+        }
+
+        if (data) {
+          this.mfaChallenge = {
+            factorId,
+            challengeId: data.id
+          }
+
+          return data
+        }
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'MFA challenge failed'
+        this.mfaError = errorMessage
+        throw error
+      } finally {
+        this.mfaLoading = false
+      }
+    },
+
+    /**
+     * Verify MFA code during login
+     */
+    async verifyMFA(code: string) {
+      if (!this.mfaChallenge) {
+        throw new Error('No MFA challenge in progress')
+      }
+
+      this.mfaLoading = true
+      this.mfaError = null
+
+      const supabase = useSupabaseClient()
+      const toastStore = useToastStore()
+
+      try {
+        const { data, error } = await supabase.auth.mfa.verify({
+          factorId: this.mfaChallenge.factorId,
+          challengeId: this.mfaChallenge.challengeId,
+          code
+        })
+
+        if (error) {
+          this.mfaError = error.message
+          throw new Error(error.message)
+        }
+
+        // Clear challenge
+        this.mfaChallenge = null
+
+        toastStore.success(
+          'Verified',
+          'MFA verification successful'
+        )
+
+        return data
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'MFA verification failed'
+        this.mfaError = errorMessage
+
+        toastStore.error(
+          'Invalid Code',
+          'The code you entered is invalid or has expired'
+        )
+
+        throw error
+      } finally {
+        this.mfaLoading = false
+      }
+    },
+
+    /**
+     * Unenroll/remove MFA factor
+     */
+    async unenrollMFA(factorId: string) {
+      this.mfaLoading = true
+      this.mfaError = null
+
+      const supabase = useSupabaseClient()
+      const toastStore = useToastStore()
+
+      try {
+        const { error } = await supabase.auth.mfa.unenroll({
+          factorId
+        })
+
+        if (error) {
+          this.mfaError = error.message
+          throw new Error(error.message)
+        }
+
+        // Refresh user state to update MFA factors
+        const supabaseUser = useSupabaseUser()
+        await this.syncUserState(supabaseUser.value)
+
+        toastStore.success(
+          'MFA Disabled',
+          'Two-factor authentication has been disabled'
+        )
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Failed to disable MFA'
+        this.mfaError = errorMessage
+
+        toastStore.error(
+          'Error',
+          errorMessage
+        )
+
+        throw error
+      } finally {
+        this.mfaLoading = false
+      }
+    },
+
+    /**
+     * Check Authenticator Assurance Level (AAL)
+     * AAL1 = password only, AAL2 = password + MFA
+     */
+    async checkAAL() {
+      const supabase = useSupabaseClient()
+
+      try {
+        const { data, error } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
+
+        if (error) {
+          console.warn('Failed to check AAL:', error)
+          return null
+        }
+
+        return data
+      } catch (error) {
+        console.warn('AAL check error:', error)
+        return null
+      }
+    },
+
+    /**
+     * Clear MFA errors
+     */
+    clearMFAError() {
+      this.mfaError = null
     }
   }
 })

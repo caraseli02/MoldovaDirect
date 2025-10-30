@@ -42,12 +42,11 @@
                   }})</h2>
 
                   <!-- Select All Toggle -->
-                  <div class="flex items-center space-x-2">
-                    <input type="checkbox" :checked="allItemsSelected" @change="toggleSelectAll"
-                      class="w-4 h-4 text-blue-600 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 bg-white dark:bg-gray-700">
-                    <label class="text-sm text-gray-600 dark:text-gray-400">
+                  <div class="flex items-center gap-2">
+                    <UiCheckbox id="select-all" :checked="allItemsSelected" @update:checked="() => toggleSelectAll()" />
+                    <UiLabel for="select-all" class="text-sm text-muted-foreground">
                       {{ $t(allItemsSelected ? 'common.deselectAll' : 'common.selectAll') }}
-                    </label>
+                    </UiLabel>
                   </div>
                 </div>
 

@@ -5,36 +5,35 @@
     </h3>
     <div class="space-y-4">
       <div>
-        <label for="guestEmail" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <UiLabel for="guestEmail" class="mb-2 inline-flex items-center gap-1">
           {{ $t('checkout.guestInfo.email') }}
           <span class="text-red-500">*</span>
-        </label>
-        <input 
-          id="guestEmail" 
-          :value="modelValue.email" 
+        </UiLabel>
+        <UiInput
+          id="guestEmail"
+          :value="modelValue.email"
           type="email"
           :placeholder="$t('checkout.guestInfo.emailPlaceholder')"
-          class="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors"
-          :class="getFieldClasses('email')" 
+          :aria-invalid="!!errors.email"
+          class="transition-colors"
+          :class="{ 'aria-invalid:border-destructive': !!errors.email }"
           @blur="$emit('validate', 'email')"
-          @input="handleEmailInput" 
+          @input="handleEmailInput"
         />
-        <p v-if="errors.email" class="mt-1 text-sm text-red-600 dark:text-red-400">
+        <p v-if="errors.email" class="mt-1 text-sm text-destructive">
           {{ errors.email }}
         </p>
       </div>
 
-      <div class="flex items-center space-x-2">
-        <input 
-          id="emailUpdates" 
-          :checked="modelValue.emailUpdates" 
-          type="checkbox"
-          class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded" 
-          @change="handleCheckboxChange"
+      <div class="flex items-center gap-2">
+        <UiCheckbox
+          id="emailUpdates"
+          :checked="modelValue.emailUpdates"
+          @update:checked="(val:boolean) => emit('update:modelValue', { ...modelValue, emailUpdates: val })"
         />
-        <label for="emailUpdates" class="text-sm text-gray-700 dark:text-gray-300">
+        <UiLabel for="emailUpdates" class="text-sm">
           {{ $t('checkout.guestInfo.emailUpdates') }}
-        </label>
+        </UiLabel>
       </div>
     </div>
   </div>
@@ -78,12 +77,5 @@ const handleCheckboxChange = (event: Event) => {
   })
 }
 
-const getFieldClasses = (fieldName: string) => {
-  const hasError = !!props.errors[fieldName]
-  return {
-    'border-red-300 dark:border-red-600 focus:ring-red-500 focus:border-red-500': hasError,
-    'border-gray-300 dark:border-gray-600': !hasError,
-    'bg-white dark:bg-gray-700 text-gray-900 dark:text-white': true
-  }
-}
+// Styling now handled by shadcn-vue Input variants and aria-invalid
 </script>
