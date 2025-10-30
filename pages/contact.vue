@@ -120,6 +120,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { CONTACT_INFO } from '~/constants/seo'
 
 interface ContactForm {
   name: string
@@ -168,8 +169,8 @@ const structuredData = {
       {
         '@type': 'ContactPoint',
         contactType: 'customer service',
-        email: 'support@moldovadirect.com',
-        telephone: '+34 910 000 000',
+        email: CONTACT_INFO.EMAIL.SUPPORT,
+        telephone: CONTACT_INFO.PHONE,
         areaServed: 'ES',
         availableLanguage: ['es', 'en', 'ro', 'ru']
       }
@@ -180,7 +181,6 @@ const structuredData = {
 useLandingSeo({
   title: 'Contact Us - Moldova Direct',
   description,
-  path: '/contact',
   image: '/icon.svg',
   imageAlt: 'Customer support team ready to assist Moldova Direct shoppers',
   pageType: 'webpage',

@@ -85,7 +85,6 @@ const structuredData = {
 useLandingSeo({
   title: 'About Us - Moldova Direct',
   description,
-  path: '/about',
   image: '/icon.svg',
   imageAlt: 'Moldova Direct team presenting Moldovan delicacies',
   pageType: 'webpage',

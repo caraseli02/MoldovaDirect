@@ -29,7 +29,6 @@ const structuredData = {
 useLandingSeo({
   title: 'Returns & Refunds - Moldova Direct',
   description,
-  path: '/returns',
   image: '/icon.svg',
   imageAlt: 'Customer rep assisting with Moldova Direct return request',
   pageType: 'webpage',

@@ -41,7 +41,6 @@ const structuredData = {
 useLandingSeo({
   title: 'Frequently Asked Questions - Moldova Direct',
   description,
-  path: '/faq',
   image: '/icon.svg',
   imageAlt: 'Illustration of customers finding answers to Moldova Direct questions',
   pageType: 'webpage',

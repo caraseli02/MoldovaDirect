@@ -24,6 +24,7 @@
 
 <script setup lang="ts">
 import type { ProductWithRelations } from '~/types'
+import { CONTACT_INFO } from '~/constants/seo'
 
 const { locale } = useI18n()
 const {
@@ -65,7 +66,7 @@ const structuredData = [
     contactPoint: [
       {
         '@type': 'ContactPoint',
-        telephone: '+34 910 000 000',
+        telephone: CONTACT_INFO.PHONE,
         contactType: 'customer service',
         areaServed: 'ES'
       }
@@ -88,7 +89,6 @@ useLandingSeo({
   title: 'Moldova Direct – Taste Moldova in Every Delivery',
   description:
     'Shop curated Moldovan wines, gourmet foods, and gift hampers with fast delivery across Spain. Discover artisan producers and authentic flavours.',
-  path: '/',
   image: '/icon.svg',
   imageAlt: 'Selection of Moldovan delicacies delivered across Spain',
   pageType: 'website',

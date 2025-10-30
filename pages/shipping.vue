@@ -29,7 +29,6 @@ const structuredData = {
 useLandingSeo({
   title: 'Shipping Information - Moldova Direct',
   description,
-  path: '/shipping',
   image: '/icon.svg',
   imageAlt: 'Courier delivering Moldova Direct orders across Spain',
   pageType: 'webpage',
