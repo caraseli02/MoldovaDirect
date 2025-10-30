@@ -193,7 +193,7 @@
               variant="outline"
               size="sm"
             >
-              Previous
+              {{ $t('common.previous') }}
             </Button>
             <Button
               @click="nextPage"
@@ -201,7 +201,7 @@
               variant="outline"
               size="sm"
             >
-              Next
+              {{ $t('common.next') }}
             </Button>
           </div>
         </div>

@@ -51,7 +51,12 @@
     "selectAll": "Select All",
     "deselectAll": "Deselect All",
     "cartError": "Cart Error",
-    "cartValidationError": "Validation Error"
+    "cartValidationError": "Validation Error",
+    "showing": "Showing",
+    "results": "results",
+    "itemsPerPage": "Items per page",
+    "goToPage": "Go to page",
+    "go": "Go"
   },
   "cart": {
     "shippingCalculatedAtCheckout": "Calculated at checkout"

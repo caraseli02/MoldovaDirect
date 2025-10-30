@@ -8,14 +8,14 @@
           @click="$emit('prev-page')"
           class="relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Previous
+          {{ $t('common.previous') }}
         </button>
         <button
           :disabled="!hasNext"
           @click="$emit('next-page')"
           class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Next
+          {{ $t('common.next') }}
         </button>
       </div>
 
@@ -24,7 +24,7 @@
         <!-- Results Info -->
         <div>
           <p class="text-sm text-gray-700 dark:text-gray-300">
-            Showing {{ startItem }} to {{ endItem }} of {{ total }} results
+            {{ $t('common.showing') }} {{ startItem }} {{ $t('common.to') }} {{ endItem }} {{ $t('common.of') }} {{ total }} {{ $t('common.results') }}
           </p>
         </div>
 
@@ -37,7 +37,7 @@
               @click="$emit('prev-page')"
               class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <span class="sr-only">Previous</span>
+              <span class="sr-only">{{ $t('common.previous') }}</span>
               <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
               </svg>
@@ -71,7 +71,7 @@
               @click="$emit('next-page')"
               class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <span class="sr-only">Next</span>
+              <span class="sr-only">{{ $t('common.next') }}</span>
               <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
               </svg>
@@ -85,7 +85,7 @@
     <div class="mt-3 flex items-center justify-between">
       <div class="flex items-center space-x-2">
         <label for="page-size" class="text-sm text-gray-700 dark:text-gray-300">
-          Items per page:
+          {{ $t('common.itemsPerPage') }}:
         </label>
         <select
           id="page-size"
@@ -103,7 +103,7 @@
       <!-- Quick Jump -->
       <div class="flex items-center space-x-2">
         <label for="page-jump" class="text-sm text-gray-700 dark:text-gray-300">
-          Go to page:
+          {{ $t('common.goToPage') }}:
         </label>
         <input
           id="page-jump"
@@ -118,7 +118,7 @@
           @click="jumpToPage($refs.pageJump?.value)"
           class="px-2 py-1 text-sm bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-200 dark:hover:bg-gray-500"
         >
-          Go
+          {{ $t('common.go') }}
         </button>
       </div>
     </div>

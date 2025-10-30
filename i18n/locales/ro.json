@@ -51,7 +51,12 @@
     "selectAll": "Selectează Tot",
     "deselectAll": "Deselectează Tot",
     "cartError": "Eroare Coș",
-    "cartValidationError": "Eroare de Validare"
+    "cartValidationError": "Eroare de Validare",
+    "showing": "Se afișează",
+    "results": "rezultate",
+    "itemsPerPage": "Elemente per pagină",
+    "goToPage": "Du-te la pagina",
+    "go": "Du-te"
   },
   "auth": {
     "signIn": "Autentificare",
