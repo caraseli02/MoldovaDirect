@@ -18,7 +18,7 @@ import type { AuthChangeEvent, Session, User } from '@supabase/supabase-js'
 import type { WatchStopHandle } from 'vue'
 import { useAuthMessages } from '~/composables/useAuthMessages'
 import { useAuthValidation } from '~/composables/useAuthValidation'
-import { useToastStore } from './toast'
+import { useToast } from '~/composables/useToast'
 
 type AuthSubscription = {
   unsubscribe: () => PromiseLike<unknown>
