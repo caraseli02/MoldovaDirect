@@ -22,7 +22,7 @@
     
     <!-- Sonner toaster (shadcn-vue) -->
     <ClientOnly>
-      <UiToaster position="top-right" :rich-colors="true" />
+      <UiSonner position="top-right" :rich-colors="true" />
     </ClientOnly>
   </div>
 </template>

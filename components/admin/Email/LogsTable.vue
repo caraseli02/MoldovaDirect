@@ -165,8 +165,8 @@
             {{ pagination.total }} results
           </div>
           <div class="flex gap-2">
-            <Button @click="previousPage" :disabled="pagination.page === 1" variant="outline" size="sm">Previous</Button>
-            <Button @click="nextPage" :disabled="pagination.page >= pagination.totalPages" variant="outline" size="sm">Next</Button>
+            <Button @click="previousPage" :disabled="pagination.page === 1" variant="outline" size="sm">{{ $t('common.previous') }}</Button>
+            <Button @click="nextPage" :disabled="pagination.page >= pagination.totalPages" variant="outline" size="sm">{{ $t('common.next') }}</Button>
           </div>
         </div>
       </div>

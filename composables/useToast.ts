@@ -38,10 +38,16 @@ const show = (
 
 export const useToast = () => {
   return {
-    // Legacy API shims (no-ops, kept for compatibility)
-    addToast: () => {},
-    removeToast: () => {},
-    clearAll: () => {},
+    // Legacy API shims (deprecated, kept for compatibility)
+    addToast: () => {
+      console.warn('[Deprecated] useToast().addToast is deprecated. Use success/error/warning/info instead.')
+    },
+    removeToast: () => {
+      console.warn('[Deprecated] useToast().removeToast is deprecated. Toast dismissal is now automatic.')
+    },
+    clearAll: () => {
+      console.warn('[Deprecated] useToast().clearAll is deprecated. Use toast.dismiss() from vue-sonner instead.')
+    },
 
     // Convenience methods routed to vue-sonner
     success: (title: string, message?: string, options?: LegacyToastOptions) =>

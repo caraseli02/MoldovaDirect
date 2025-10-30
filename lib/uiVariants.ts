@@ -25,12 +25,14 @@ export const movementVariant = (type: 'in' | 'out' | 'adjustment'): BadgeVariant
   }
 }
 
-export const priorityVariant = (priority: 'critical' | 'high' | 'medium' | string): BadgeVariant => {
+export const priorityVariant = (priority: 'critical' | 'high' | 'medium' | 'low'): BadgeVariant => {
   switch (priority) {
     case 'critical':
       return 'destructive'
     case 'high':
       return 'secondary'
+    case 'medium':
+    case 'low':
     default:
       return 'default'
   }
