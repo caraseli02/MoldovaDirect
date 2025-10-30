@@ -56,6 +56,8 @@ interface AdminOrdersState {
   actionLoading: boolean
   error: string | null
   lastRefresh: Date | null
+  selectedOrders: number[]
+  bulkOperationInProgress: boolean
 }
 
 export const useAdminOrdersStore = defineStore('adminOrders', {
@@ -88,7 +90,9 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
     orderDetailLoading: false,
     actionLoading: false,
     error: null,
-    lastRefresh: null
+    lastRefresh: null,
+    selectedOrders: [],
+    bulkOperationInProgress: false
   }),
 
   getters: {
@@ -217,6 +221,30 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
      */
     processingOrdersCount: (state): number => {
       return state.orders.filter(order => order.status === 'processing').length
+    },
+
+    /**
+     * Check if any orders are selected
+     */
+    hasSelectedOrders: (state): boolean => {
+      return state.selectedOrders.length > 0
+    },
+
+    /**
+     * Check if all visible orders are selected
+     */
+    allVisibleSelected: (state): boolean => {
+      if (state.orders.length === 0) return false
+      return state.orders.every(order => 
+        state.selectedOrders.includes(order.id)
+      )
+    },
+
+    /**
+     * Get count of selected orders
+     */
+    selectedCount: (state): number => {
+      return state.selectedOrders.length
     }
   },
 
@@ -430,6 +458,121 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
      */
     clearError() {
       this.error = null
+    },
+
+    /**
+     * Select/deselect an order
+     */
+    toggleOrderSelection(orderId: number) {
+      const index = this.selectedOrders.indexOf(orderId)
+      if (index > -1) {
+        this.selectedOrders.splice(index, 1)
+      } else {
+        this.selectedOrders.push(orderId)
+      }
+    },
+
+    /**
+     * Select all visible orders
+     */
+    selectAllVisible() {
+      const visibleIds = this.orders.map(o => o.id)
+      visibleIds.forEach(id => {
+        if (!this.selectedOrders.includes(id)) {
+          this.selectedOrders.push(id)
+        }
+      })
+    },
+
+    /**
+     * Deselect all visible orders
+     */
+    deselectAllVisible() {
+      const visibleIds = this.orders.map(o => o.id)
+      this.selectedOrders = this.selectedOrders.filter(id => 
+        !visibleIds.includes(id)
+      )
+    },
+
+    /**
+     * Toggle selection of all visible orders
+     */
+    toggleAllVisible() {
+      if (this.allVisibleSelected) {
+        this.deselectAllVisible()
+      } else {
+        this.selectAllVisible()
+      }
+    },
+
+    /**
+     * Clear all selections
+     */
+    clearSelection() {
+      this.selectedOrders = []
+    },
+
+    /**
+     * Bulk update status of selected orders
+     */
+    async bulkUpdateStatus(status: string, notes?: string) {
+      if (this.selectedOrders.length === 0) return
+
+      this.bulkOperationInProgress = true
+      this.error = null
+
+      try {
+        const response = await $fetch<{
+          success: boolean
+          data: {
+            updated: number
+            failed: number
+            errors: Array<{ orderId: number; error: string }>
+          }
+          message: string
+        }>('/api/admin/orders/bulk', {
+          method: 'POST',
+          body: { 
+            orderIds: this.selectedOrders,
+            status,
+            notes
+          }
+        })
+
+        if (response.success) {
+          // Update local state for successfully updated orders
+          this.orders.forEach(order => {
+            if (this.selectedOrders.includes(order.id)) {
+              order.status = status as any
+            }
+          })
+
+          this.clearSelection()
+
+          // Show success toast
+          const toast = useToastStore()
+          toast.success(response.message)
+
+          // Show warning if some failed
+          if (response.data.failed > 0) {
+            toast.warning(`${response.data.failed} orders failed to update`)
+          }
+
+          // Refresh orders to get latest data
+          await this.fetchOrders()
+
+          return response.data
+        } else {
+          throw new Error('Failed to update orders')
+        }
+      } catch (error) {
+        this.error = error instanceof Error ? error.message : 'Failed to update orders'
+        const toast = useToastStore()
+        toast.error(this.error)
+        throw error
+      } finally {
+        this.bulkOperationInProgress = false
+      }
     },
 
     /**

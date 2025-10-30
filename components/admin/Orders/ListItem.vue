@@ -1,5 +1,18 @@
 <template>
-  <TableRow class="hover:bg-gray-50 dark:hover:bg-gray-700">
+  <TableRow 
+    class="hover:bg-gray-50 dark:hover:bg-gray-700"
+    :class="{ 'bg-blue-50 dark:bg-blue-900/20': isSelected }"
+  >
+    <!-- Selection Checkbox -->
+    <TableCell class="w-12">
+      <input
+        type="checkbox"
+        :checked="isSelected"
+        @change="$emit('toggle-selection', order.id)"
+        class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer"
+      />
+    </TableCell>
+
     <!-- Order Number -->
     <TableCell class="font-medium">
       <nuxt-link
@@ -80,9 +93,15 @@ import type { OrderWithAdminDetails } from '~/types/database'
 
 interface Props {
   order: OrderWithAdminDetails
+  isSelected?: boolean
+}
+
+interface Emits {
+  (e: 'toggle-selection', orderId: number): void
 }
 
 const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
 
 // Computed properties
 const customerName = computed(() => {

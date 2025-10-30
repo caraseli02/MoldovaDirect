@@ -1,12 +1,14 @@
 // GET /api/admin/orders/[id] - Get detailed order information with items
 import { serverSupabaseServiceRole } from '#supabase/server'
+import { requireAdminAuth } from '~/server/utils/adminAuth'
 
 export default defineEventHandler(async (event) => {
   try {
+    // Verify admin authentication
+    await requireAdminAuth(event)
+    
+    // Use service role for database operations
     const supabase = serverSupabaseServiceRole(event)
-
-    // TODO: Add proper authentication and admin role checking
-    // For now, we'll allow access for development
 
     // Get order ID from route params
     const orderId = getRouterParam(event, 'id')

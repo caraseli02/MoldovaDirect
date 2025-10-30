@@ -1,5 +1,6 @@
 // PATCH /api/admin/orders/[id]/status - Update order status
 import { serverSupabaseServiceRole } from '#supabase/server'
+import { requireAdminAuth } from '~/server/utils/adminAuth'
 
 interface UpdateOrderStatusRequest {
   status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
@@ -19,29 +20,11 @@ const STATUS_TRANSITIONS: Record<string, string[]> = {
 
 export default defineEventHandler(async (event) => {
   try {
+    // Verify admin authentication
+    const user = await requireAdminAuth(event)
+    
+    // Use service role for database operations
     const supabase = serverSupabaseServiceRole(event)
-
-    // Get user from session and verify admin role
-    const authHeader = getHeader(event, 'authorization')
-    if (!authHeader) {
-      throw createError({
-        statusCode: 401,
-        statusMessage: 'Authentication required'
-      })
-    }
-
-    const { data: { user }, error: authError } = await supabase.auth.getUser(
-      authHeader.replace('Bearer ', '')
-    )
-
-    if (authError || !user) {
-      throw createError({
-        statusCode: 401,
-        statusMessage: 'Invalid authentication'
-      })
-    }
-
-    // TODO: Implement proper admin role checking
 
     // Get order ID from route params
     const orderId = getRouterParam(event, 'id')
