@@ -103,3 +103,44 @@ export interface RateLimitConfig {
   verificationResendAttemptsPerEmail: number
   windowMinutes: number
 }
+
+// Multi-Factor Authentication (MFA) types
+export interface MFAFactor {
+  id: string
+  type: 'totp'
+  friendly_name?: string
+  status: 'verified' | 'unverified'
+  created_at: string
+  updated_at: string
+}
+
+export interface MFAEnrollResponse {
+  id: string
+  type: 'totp'
+  totp: {
+    qr_code: string // Base64 encoded QR code image
+    secret: string // Secret key for manual entry
+    uri: string // OTPAuth URI for authenticator apps
+  }
+}
+
+export interface MFAChallengeResponse {
+  id: string
+  expires_at: number
+}
+
+export interface MFAVerifyRequest {
+  factorId: string
+  challengeId: string
+  code: string
+}
+
+export interface MFAUnenrollRequest {
+  factorId: string
+}
+
+export interface AuthenticatorAssuranceLevel {
+  currentLevel: 'aal1' | 'aal2' | null // aal1 = password only, aal2 = password + MFA
+  nextLevel: 'aal2' | null
+  currentAuthenticationMethods: string[]
+}

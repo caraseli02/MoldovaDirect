@@ -191,6 +191,60 @@
         "required": "El token de verificación es obligatorio",
         "invalid": "Token de verificación inválido",
         "expired": "El token de verificación ha expirado"
+      },
+      "mfa": {
+        "required": "El código de verificación es obligatorio",
+        "length": "El código debe tener exactamente 6 dígitos",
+        "format": "El código debe contener solo números",
+        "nameLength": "El nombre del dispositivo debe tener entre 2 y 50 caracteres"
+      }
+    },
+    "mfa": {
+      "verify": {
+        "title": "Autenticación de Dos Factores",
+        "description": "Ingresa el código de 6 dígitos de tu aplicación autenticadora",
+        "codeLabel": "Código de Verificación",
+        "codePlaceholder": "000000",
+        "submitButton": "Verificar",
+        "verifying": "Verificando...",
+        "cancel": "Cancelar y Cerrar Sesión",
+        "helpTitle": "¿Necesitas ayuda?",
+        "helpItem1": "Abre tu aplicación autenticadora (Google Authenticator, Authy, etc.)",
+        "helpItem2": "Encuentra la entrada de MoldovaDirect",
+        "helpItem3": "Ingresa el código de 6 dígitos mostrado"
+      },
+      "settings": {
+        "title": "Autenticación de Dos Factores (MFA)",
+        "description": "Añade una capa extra de seguridad a tu cuenta habilitando la autenticación de dos factores.",
+        "statusEnabled": "MFA Habilitado",
+        "statusDisabled": "MFA Deshabilitado",
+        "statusEnabledDescription": "Tu cuenta está protegida con autenticación de dos factores",
+        "statusDisabledDescription": "Tu cuenta no está protegida con autenticación de dos factores",
+        "enableButton": "Habilitar MFA",
+        "enrollmentStep1": "Paso 1: Escanear Código QR",
+        "enrollmentStep2": "Paso 2: Verificar Código",
+        "showManualEntry": "¿No puedes escanear? Ingresa el código manualmente",
+        "hideManualEntry": "Ocultar entrada manual",
+        "secretKey": "Clave Secreta",
+        "copy": "Copiar",
+        "instructions": "Cómo configurar:",
+        "instruction1": "Descarga una aplicación autenticadora (Google Authenticator, Authy, 1Password, etc.)",
+        "instruction2": "Escanea el código QR con tu aplicación, o ingresa la clave secreta manualmente",
+        "instruction3": "Ingresa el código de 6 dígitos de tu aplicación abajo para completar la configuración",
+        "verificationCodeLabel": "Código de Verificación",
+        "verifyButton": "Verificar y Habilitar MFA",
+        "verifying": "Verificando...",
+        "cancelButton": "Cancelar",
+        "activeFactors": "Métodos de Autenticación Activos",
+        "verified": "Verificado",
+        "unverified": "No Verificado",
+        "removeButton": "Eliminar",
+        "disableConfirmTitle": "¿Deshabilitar Autenticación de Dos Factores?",
+        "disableConfirmDescription": "Esto hará que tu cuenta sea menos segura. Solo necesitarás tu contraseña para iniciar sesión.",
+        "disableConfirmButton": "Sí, Deshabilitar MFA",
+        "disableCancelButton": "Cancelar",
+        "securityNoticeTitle": "Recomendación de Seguridad",
+        "securityNoticeDescription": "La autenticación de dos factores aumenta significativamente la seguridad de tu cuenta. Recomendamos encarecidamente mantenerla habilitada, especialmente para cuentas de administrador."
       }
     },
     "progress": {
