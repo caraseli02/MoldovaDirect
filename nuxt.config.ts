@@ -44,6 +44,7 @@ export default defineNuxtConfig({
     // Public keys (exposed to client-side)
     public: {
       stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://www.moldovadirect.com',
       enableTestUsers:
         process.env.ENABLE_TEST_USERS === 'true' || process.env.NODE_ENV !== 'production'
     },
