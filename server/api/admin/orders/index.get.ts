@@ -1,13 +1,14 @@
 // GET /api/admin/orders - Admin endpoint to get all orders with filtering and pagination
 import { serverSupabaseServiceRole } from '#supabase/server'
+import { requireAdminAuth } from '~/server/utils/adminAuth'
 
 export default defineEventHandler(async (event) => {
   try {
+    // Verify admin authentication
+    await requireAdminAuth(event)
+    
+    // Use service role for database operations
     const supabase = serverSupabaseServiceRole(event)
-
-    // TODO: Add proper authentication and admin role checking
-    // For now, we'll allow access for development
-    // In production, you should verify the user is authenticated and has admin role
 
     // Parse query parameters
     const query = getQuery(event)

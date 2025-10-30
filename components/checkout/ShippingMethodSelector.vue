@@ -28,20 +28,21 @@
 
     <!-- Shipping Methods -->
     <div v-else-if="availableMethods.length > 0" class="space-y-3">
-      <div v-for="method in availableMethods" :key="method.id" class="relative">
-        <label
-          class="flex items-start space-x-3 p-4 border rounded-lg cursor-pointer transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-700"
-          :class="selectedMethodId === method.id
-            ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 ring-1 ring-primary-500'
-            : 'border-gray-200 dark:border-gray-600'">
-          <input type="radio" :name="'shipping-method'" :value="method.id" v-model="selectedMethodId"
-            class="mt-1 text-primary-600 focus:ring-primary-500 border-gray-300" />
+      <RadioGroup v-model="selectedMethodId" :aria-label="$t('checkout.shippingMethod.title')">
+        <div v-for="method in availableMethods" :key="method.id" class="relative">
+          <label
+            class="flex items-start space-x-3 p-4 border rounded-lg cursor-pointer transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-700"
+            :for="`ship-${method.id}`"
+            :class="selectedMethodId === method.id
+              ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 ring-1 ring-primary-500'
+              : 'border-gray-200 dark:border-gray-600'">
+            <RadioGroupItem :id="`ship-${method.id}`" :value="method.id" class="mt-1" />
 
-          <div class="flex-1 min-w-0">
-            <div class="flex items-center justify-between">
-              <h4 class="text-sm font-medium text-gray-900 dark:text-white">
-                {{ method.name }}
-              </h4>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between">
+                <h4 class="text-sm font-medium text-gray-900 dark:text-white">
+                  {{ method.name }}
+                </h4>
               <div class="flex items-center space-x-2">
                 <!-- Free shipping badge -->
                 <span v-if="method.price === 0"
@@ -83,9 +84,10 @@
                 {{ getMethodConditions(method) }}
               </p>
             </div>
-          </div>
-        </label>
-      </div>
+            </div>
+          </label>
+        </div>
+      </RadioGroup>
     </div>
 
     <!-- No Methods Available -->
@@ -144,6 +146,7 @@
 <script setup lang="ts">
 import type { ShippingMethod } from '~/types/checkout'
 import { Button } from '@/components/ui/button'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 
 interface Props {
   modelValue: ShippingMethod | null
@@ -236,7 +239,7 @@ const getMethodConditions = (method: ShippingMethod): string => {
 }
 
 /* Selected state animation */
-.shipping-method-selector label:has(input:checked) {
+.shipping-method-selector label:has([data-state=checked]) {
   animation: selectPulse 0.3s ease-out;
 }
 

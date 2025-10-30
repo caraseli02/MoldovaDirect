@@ -1689,6 +1689,15 @@
         "deleteFailed": "Eroare la ștergerea produsului",
         "stockUpdateFailed": "Eroare la actualizarea stocului",
         "bulkOperationFailed": "Eroare la operațiunea în lot"
+      },
+      "headers": {
+        "product": "Product",
+        "category": "Category",
+        "price": "Price",
+        "stock": "Stock",
+        "status": "Status",
+        "created": "Created",
+        "actions": "Actions"
       }
     },
     "orders": {
@@ -1862,6 +1871,40 @@
       "disabled": "Reîmprospătare automată dezactivată",
       "interval": "Reîmprospătează la fiecare {minutes} minute",
       "lastRefresh": "Ultima reîmprospătare: {time}"
+    },
+    "emailLogs": {
+      "title": "Email Delivery Logs",
+      "headers": {
+        "order": "Order",
+        "recipient": "Recipient",
+        "type": "Type",
+        "status": "Status",
+        "attempts": "Attempts",
+        "date": "Date",
+        "actions": "Actions"
+      },
+      "buttons": {
+        "view": "View",
+        "retry": "Retry",
+        "retrying": "Retrying..."
+      }
+    },
+    "inventory": {
+      "reports": {
+        "recentMovements": "Recent Movements",
+        "headers": {
+          "product": "Product",
+          "type": "Type",
+          "quantity": "Quantity",
+          "date": "Date",
+          "currentStock": "Current Stock",
+          "threshold": "Threshold",
+          "stockValue": "Stock Value",
+          "priority": "Priority",
+          "recommendedOrder": "Recommended Order",
+          "estimatedCost": "Estimated Cost"
+        }
+      }
     }
   },
   "pwa": {

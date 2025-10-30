@@ -1,17 +1,25 @@
 # shadcn-vue Migration Documentation
-**Migration Date: August 31, 2025**
+**Started: August 31, 2025 — Status: Ongoing adoption**
 
 ## Overview
-Successfully migrated the entire UI component system from custom components to shadcn-vue, a modern component library built on Radix Vue primitives with Tailwind CSS v4.
+We scaffolded shadcn-vue component libraries and began migrating product surfaces. Adoption is in progress across checkout, cart, admin tables, and mobile navigation. The stack is based on Radix Vue primitives with Tailwind CSS v4.
 
 ## Migration Scope
 
-### Components Migrated
-- **Button**: Replaced custom button styles with shadcn-vue Button component
-- **Card**: Migrated from custom card components to shadcn-vue Card system
-- **Dialog**: Replaced custom modals with shadcn-vue Dialog
-- **Input**: Unified form inputs with shadcn-vue Input component
-- **Sonner**: Integrated toast notifications using Sonner component
+### Installed Component Libraries (via shadcn CLI)
+- Button, Card, Dialog, Input
+- Select, Label, Alert, Badge
+- Checkbox, Tooltip, Tabs, Switch, Textarea, RadioGroup
+- Table, Pagination, Skeleton, Avatar
+- Sonner (toast)
+
+### Adopted in Product Surfaces (as of Feb 2026)
+- Buttons: migrated in high-traffic flows (cart, language switcher)
+- Dialogs: primary modals migrated
+- Alerts: adopted in authentication flows
+- Forms (Input/Label/Select/RadioGroup/Textarea): migration in progress
+- Table/Pagination: pending in admin screens
+- Sonner: prepared, but legacy toast container still in layouts
 
 ### Custom Components Preserved
 Moved to `components/custom/` to differentiate from shadcn-vue components:
@@ -65,6 +73,8 @@ components/
 }
 ```
 
+Note: This project uses Tailwind CSS v4 via `@tailwindcss/vite` and `assets/css/tailwind.css`. A `tailwind.config.js` file is not required for v4; the `config` path above is retained for CLI compatibility and is effectively unused.
+
 #### CSS Variables (assets/css/tailwind.css)
 New CSS variables system for theming:
 - Light/dark mode support via CSS variables
@@ -97,9 +107,10 @@ New CSS variables system for theming:
 3. Set up component aliases and paths
 
 ### Phase 2: Component Migration
-1. Added shadcn-vue components one by one
-2. Updated imports in all pages and components
+1. Added shadcn-vue libraries via CLI
+2. Updated imports in targeted pages and components
 3. Adjusted styling to match new component APIs
+4. Incrementally replaced legacy markup (forms, tables, toasts)
 
 ### Phase 3: Cleanup
 1. Removed old component files
@@ -216,16 +227,14 @@ Components support multiple variants via props:
 
 ## Future Enhancements
 
-1. Add more shadcn-vue components as needed:
-   - Select/Dropdown
-   - Table
-   - Form components
-   - Navigation menu
-
-2. Create custom component library extending shadcn-vue
-
-3. Implement advanced theming system with multiple themes
+1. Adopt installed components across surfaces:
+   - Checkout: Inputs, Selects, RadioGroups, Textareas, Labels
+   - Admin: Table + Pagination + Badge for statuses
+   - Mobile: Dialog/Sheet patterns for navigation and cart
+2. Migrate toast system from `components/common/Toast*.vue` to `components/ui/sonner` and replace `CommonToastContainer` in layouts with Sonner
+3. Create thin wrappers for app-specific patterns (e.g., ConfirmDialog) extending shadcn primitives
+4. Implement advanced theming with multiple brand themes (optional)
 
 ## Conclusion
 
-The migration to shadcn-vue has significantly improved the codebase's maintainability, consistency, and developer experience. The component system is now modern, accessible, and ready for future growth.
+The migration is delivering consistency, accessibility, and developer velocity. Library scaffolding is complete; product-wide adoption is ongoing and tracked in `docs/component-modernization-plan.md` and `.kiro/PROJECT_STATUS.md`.

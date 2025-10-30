@@ -355,12 +355,12 @@ export const useAdminProductsStore = defineStore('adminProducts', {
         }
 
         // Show success toast with appropriate message
-        const toast = useToastStore()
+        const toast = useToast()
         toast.success(response.message)
 
         return response
       } catch (error) {
-        const toast = useToastStore()
+        const toast = useToast()
         toast.error('Failed to update inventory')
         throw error
       }
@@ -384,10 +384,10 @@ export const useAdminProductsStore = defineStore('adminProducts', {
           await this.goToPage(this.pagination.page - 1)
         }
 
-        const toast = useToastStore()
+        const toast = useToast()
         toast.success('Product deleted successfully')
       } catch (error) {
-        const toast = useToastStore()
+        const toast = useToast()
         toast.error('Failed to delete product')
         throw error
       }
@@ -419,10 +419,10 @@ export const useAdminProductsStore = defineStore('adminProducts', {
           await this.fetchProducts()
         }
 
-        const toast = useToastStore()
+        const toast = useToast()
         toast.success(`${this.selectedProducts.length} products deleted successfully`)
       } catch (error) {
-        const toast = useToastStore()
+        const toast = useToast()
         toast.error('Failed to delete products')
         throw error
       } finally {
@@ -455,11 +455,11 @@ export const useAdminProductsStore = defineStore('adminProducts', {
 
         this.clearSelection()
 
-        const toast = useToastStore()
+        const toast = useToast()
         const action = isActive ? 'activated' : 'deactivated'
         toast.success(`${this.selectedProducts.length} products ${action} successfully`)
       } catch (error) {
-        const toast = useToastStore()
+        const toast = useToast()
         toast.error('Failed to update products')
         throw error
       } finally {

@@ -260,6 +260,80 @@ export interface OrderWithItems extends Order {
 }
 
 // =============================================
+// ADMIN ORDER TYPES
+// =============================================
+export interface AdminOrderFilters {
+  search?: string
+  status?: Array<'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'>
+  paymentStatus?: Array<'pending' | 'paid' | 'failed' | 'refunded'>
+  dateRange?: {
+    start: string
+    end: string
+  }
+  amountRange?: {
+    min: number
+    max: number
+  }
+  priority?: number[]
+  shippingMethod?: string[]
+  sortBy?: 'created_at' | 'total_eur' | 'status' | 'priority_level'
+  sortOrder?: 'asc' | 'desc'
+  page?: number
+  limit?: number
+}
+
+export interface OrderStatusHistory {
+  id: number
+  orderId: number
+  fromStatus: string | null
+  toStatus: string
+  changedBy: string | null
+  changedAt: string
+  notes?: string
+  automated: boolean
+}
+
+export interface OrderNote {
+  id: number
+  orderId: number
+  noteType: 'internal' | 'customer'
+  content: string
+  createdBy: string | null
+  createdAt: string
+  updatedAt: string
+}
+
+export interface OrderFulfillmentTask {
+  id: number
+  orderId: number
+  taskType: 'picking' | 'packing' | 'shipping' | 'quality_check' | 'custom'
+  taskName: string
+  description?: string
+  required: boolean
+  completed: boolean
+  completedAt?: string
+  completedBy?: string
+  createdAt: string
+}
+
+export interface OrderWithAdminDetails extends Order {
+  order_items?: OrderItem[]
+  statusHistory?: OrderStatusHistory[]
+  notes?: OrderNote[]
+  fulfillmentTasks?: OrderFulfillmentTask[]
+  itemCount?: number
+  daysSinceOrder?: number
+  urgencyLevel?: 'low' | 'medium' | 'high'
+  customer?: {
+    name: string
+    email: string
+    phone?: string | null
+    preferredLanguage?: string
+  }
+  guestEmail?: string
+}
+
+// =============================================
 // INVENTORY TYPES
 // =============================================
 export interface InventoryLog {

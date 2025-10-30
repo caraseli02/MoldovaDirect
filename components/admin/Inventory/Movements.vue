@@ -115,33 +115,19 @@
 
     <!-- Movements Table -->
     <div v-else class="overflow-x-auto">
-      <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-        <thead class="bg-gray-50 dark:bg-gray-900">
-          <tr>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-              Date
-            </th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-              Product
-            </th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-              Type
-            </th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-              Quantity
-            </th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-              Before/After
-            </th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-              Reason
-            </th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-              Performed By
-            </th>
-          </tr>
-        </thead>
-        <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead class="px-6">Date</TableHead>
+            <TableHead class="px-6">Product</TableHead>
+            <TableHead class="px-6">Type</TableHead>
+            <TableHead class="px-6">Quantity</TableHead>
+            <TableHead class="px-6">Before/After</TableHead>
+            <TableHead class="px-6">Reason</TableHead>
+            <TableHead class="px-6">Performed By</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
           <tr 
             v-for="movement in movements" 
             :key="movement.id"
@@ -209,8 +195,8 @@
               {{ movement.performedBy?.name || 'System' }}
             </td>
           </tr>
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
 
     <!-- Pagination -->
@@ -227,6 +213,7 @@
 </template>
 
 <script setup lang="ts">
+import { Table, TableHeader, TableRow, TableHead, TableBody } from '@/components/ui/table'
 interface InventoryMovement {
   id: number
   productId: number

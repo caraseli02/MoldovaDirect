@@ -7,20 +7,30 @@
         <p class="text-gray-600 dark:text-gray-400">Manage and track customer orders</p>
       </div>
       
-      <!-- Quick Stats -->
-      <div v-if="adminOrdersStore.aggregates" class="flex items-center space-x-4">
-        <div class="text-right">
-          <div class="text-sm text-gray-600 dark:text-gray-400">Total Revenue</div>
-          <div class="text-xl font-bold text-gray-900 dark:text-white">
-            {{ adminOrdersStore.formattedAggregates?.formattedRevenue }}
+      <div class="flex items-center space-x-4">
+        <!-- Quick Stats -->
+        <div v-if="adminOrdersStore.aggregates" class="flex items-center space-x-4">
+          <div class="text-right">
+            <div class="text-sm text-gray-600 dark:text-gray-400">Total Revenue</div>
+            <div class="text-xl font-bold text-gray-900 dark:text-white">
+              {{ adminOrdersStore.formattedAggregates?.formattedRevenue }}
+            </div>
+          </div>
+          <div class="text-right">
+            <div class="text-sm text-gray-600 dark:text-gray-400">Avg Order Value</div>
+            <div class="text-xl font-bold text-gray-900 dark:text-white">
+              {{ adminOrdersStore.formattedAggregates?.formattedAverageOrderValue }}
+            </div>
           </div>
         </div>
-        <div class="text-right">
-          <div class="text-sm text-gray-600 dark:text-gray-400">Avg Order Value</div>
-          <div class="text-xl font-bold text-gray-900 dark:text-white">
-            {{ adminOrdersStore.formattedAggregates?.formattedAverageOrderValue }}
-          </div>
-        </div>
+        
+        <!-- Analytics Button -->
+        <Button as-child variant="outline">
+          <nuxt-link to="/admin/orders/analytics">
+            <commonIcon name="lucide:bar-chart-2" class="h-4 w-4 mr-2" />
+            Analytics
+          </nuxt-link>
+        </Button>
       </div>
     </div>
 
@@ -92,10 +102,29 @@
       </div>
 
       <!-- Orders Table -->
-      <div v-else class="overflow-x-auto">
+      <div v-else>
+        <!-- Bulk Actions Bar -->
+        <AdminOrdersBulkActions
+          :show="adminOrdersStore.hasSelectedOrders"
+          :selected-count="adminOrdersStore.selectedCount"
+          :disabled="adminOrdersStore.bulkOperationInProgress"
+          @clear-selection="adminOrdersStore.clearSelection"
+          @bulk-update-status="handleBulkUpdateStatus"
+        />
+
+        <div class="overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead class="w-12">
+                <input
+                  type="checkbox"
+                  :checked="adminOrdersStore.allVisibleSelected"
+                  :indeterminate="adminOrdersStore.hasSelectedOrders && !adminOrdersStore.allVisibleSelected"
+                  @change="adminOrdersStore.toggleAllVisible"
+                  class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer"
+                />
+              </TableHead>
               <TableHead 
                 class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
                 @click="updateSort('created_at')"
@@ -163,9 +192,12 @@
               v-for="order in adminOrdersStore.orders"
               :key="order.id"
               :order="order"
+              :is-selected="adminOrdersStore.selectedOrders.includes(order.id)"
+              @toggle-selection="adminOrdersStore.toggleOrderSelection"
             />
           </TableBody>
         </Table>
+        </div>
       </div>
     </Card>
 
@@ -182,6 +214,23 @@
       @next-page="adminOrdersStore.nextPage"
       @prev-page="adminOrdersStore.prevPage"
       @update-limit="handleUpdateLimit"
+    />
+
+    <!-- Bulk Operations Progress Bar -->
+    <AdminUtilsBulkOperationsBar
+      :show="bulkOperations.show"
+      :in-progress="bulkOperations.inProgress"
+      :completed="bulkOperations.completed"
+      :error="bulkOperations.error"
+      :success="bulkOperations.success"
+      :progress="bulkOperations.progress"
+      :operation-text="bulkOperations.operationText"
+      :progress-text="bulkOperations.progressText"
+      :result-message="bulkOperations.resultMessage"
+      :result-details="bulkOperations.resultDetails"
+      :error-message="bulkOperations.errorMessage"
+      @close="closeBulkOperations"
+      @retry="retryBulkOperation"
     />
   </div>
 </template>
@@ -254,12 +303,157 @@ const statusFilters = [
 // Active tab state
 const activeTab = ref('')
 
+// Bulk operations state
+const bulkOperations = ref({
+  show: false,
+  inProgress: false,
+  completed: false,
+  error: false,
+  success: false,
+  progress: 0,
+  operationText: '',
+  progressText: '',
+  resultMessage: '',
+  resultDetails: '',
+  errorMessage: '',
+  currentOperation: null as (() => Promise<void>) | null
+})
+
+// Real-time updates
+const { subscribeToAllOrders, unsubscribe, isSubscribed } = useAdminOrderRealtime({
+  onOrderUpdated: async () => {
+    // Refresh orders when an update is received
+    await adminOrdersStore.refresh()
+  },
+  onOrderStatusChanged: async () => {
+    // Refresh orders when status changes
+    await adminOrdersStore.refresh()
+  }
+})
+
 // Initialize the store on mount
 onMounted(async () => {
   await adminOrdersStore.initialize()
+  
+  // Subscribe to real-time updates
+  subscribeToAllOrders()
+})
+
+// Cleanup on unmount
+onUnmounted(() => {
+  unsubscribe()
 })
 
 // Event handlers
+const handleBulkUpdateStatus = async (status: string, notes?: string) => {
+  const count = adminOrdersStore.selectedCount
+  const statusName = status.charAt(0).toUpperCase() + status.slice(1)
+  
+  await performBulkOperation(
+    () => adminOrdersStore.bulkUpdateStatus(status, notes),
+    `Updating ${count} orders to ${statusName}...`,
+    `Successfully updated ${count} orders to ${statusName}`,
+    'update'
+  )
+}
+
+const performBulkOperation = async (
+  operation: () => Promise<any>,
+  operationText: string,
+  successMessage: string,
+  operationType: string
+) => {
+  bulkOperations.value = {
+    show: true,
+    inProgress: true,
+    completed: false,
+    error: false,
+    success: false,
+    progress: 0,
+    operationText,
+    progressText: 'Initializing...',
+    resultMessage: '',
+    resultDetails: '',
+    errorMessage: '',
+    currentOperation: operation
+  }
+
+  try {
+    // Simulate progress updates
+    const progressInterval = setInterval(() => {
+      if (bulkOperations.value.progress < 90) {
+        bulkOperations.value.progress += Math.random() * 20
+        bulkOperations.value.progressText = `Processing... ${Math.round(bulkOperations.value.progress)}%`
+      }
+    }, 200)
+
+    const result = await operation()
+
+    clearInterval(progressInterval)
+    
+    bulkOperations.value.progress = 100
+    bulkOperations.value.inProgress = false
+    bulkOperations.value.completed = true
+    bulkOperations.value.success = true
+    bulkOperations.value.resultMessage = successMessage
+    
+    if (result && result.failed > 0) {
+      bulkOperations.value.resultDetails = `${result.failed} orders failed to update`
+    }
+    
+    // Auto-close after 3 seconds
+    setTimeout(() => {
+      closeBulkOperations()
+    }, 3000)
+    
+  } catch (error) {
+    bulkOperations.value.inProgress = false
+    bulkOperations.value.error = true
+    bulkOperations.value.success = false
+    bulkOperations.value.errorMessage = error instanceof Error ? error.message : `Failed to ${operationType} orders`
+  }
+}
+
+const closeBulkOperations = () => {
+  bulkOperations.value = {
+    show: false,
+    inProgress: false,
+    completed: false,
+    error: false,
+    success: false,
+    progress: 0,
+    operationText: '',
+    progressText: '',
+    resultMessage: '',
+    resultDetails: '',
+    errorMessage: '',
+    currentOperation: null
+  }
+}
+
+const retryBulkOperation = async () => {
+  if (bulkOperations.value.currentOperation) {
+    const operation = bulkOperations.value.currentOperation
+    
+    bulkOperations.value.error = false
+    bulkOperations.value.inProgress = true
+    bulkOperations.value.progress = 0
+    bulkOperations.value.progressText = 'Retrying...'
+    
+    try {
+      await operation()
+      bulkOperations.value.inProgress = false
+      bulkOperations.value.completed = true
+      bulkOperations.value.success = true
+      bulkOperations.value.resultMessage = 'Operation completed successfully'
+    } catch (error) {
+      bulkOperations.value.inProgress = false
+      bulkOperations.value.error = true
+      bulkOperations.value.errorMessage = error instanceof Error ? error.message : 'Operation failed'
+    }
+  }
+}
+
 const handleTabChange = async (value: string) => {
   activeTab.value = value
   if (value === '') {

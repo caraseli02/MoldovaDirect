@@ -94,11 +94,10 @@ This document tracks significant changes, updates, and improvements to the Moldo
 ## Pending Work
 
 ### High Priority
-- [ ] **Toast System Migration** - Migrate from custom toast system to vue-sonner
-  - Current: `components/common/Toast.vue`, `ToastContainer.vue`, `composables/useToast.ts`, `stores/toast.ts`
-  - Target: Use `vue-sonner` (already installed)
-  - Benefits: Better maintained, more features, consistent with shadcn-vue
-  - Estimated effort: 2-3 hours
+- [x] **Toast System Migration** - Migrate from custom toast system to vue-sonner
+  - Replaced `CommonToastContainer` in layouts with `<UiToaster>`
+  - Routed `useToast()` composable to `vue-sonner` API with legacy shims
+  - Note: `stores/toast.ts` remains temporarily for backwards-compat helpers in some stores; will be removed after follow-up refactor
 
 ### Medium Priority
 - [ ] Complete Stripe payment webhook handling
