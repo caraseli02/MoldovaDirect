@@ -170,17 +170,17 @@
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
           <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
             <h4 class="text-lg font-medium text-gray-900 dark:text-white">
-              Recent Movements
+              {{ $t('admin.inventory.reports.recentMovements') }}
             </h4>
           </div>
           <div class="overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead class="px-6">Product</TableHead>
-                  <TableHead class="px-6">Type</TableHead>
-                  <TableHead class="px-6">Quantity</TableHead>
-                  <TableHead class="px-6">Date</TableHead>
+                  <TableHead class="px-6">{{ $t('admin.inventory.reports.headers.product') }}</TableHead>
+                  <TableHead class="px-6">{{ $t('admin.inventory.reports.headers.type') }}</TableHead>
+                  <TableHead class="px-6">{{ $t('admin.inventory.reports.headers.quantity') }}</TableHead>
+                  <TableHead class="px-6">{{ $t('admin.inventory.reports.headers.date') }}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -189,7 +189,7 @@
                     {{ getLocalizedText(movement.productName) }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
-                    <Badge :variant="movement.movementType === 'in' ? 'default' : movement.movementType === 'out' ? 'destructive' : 'secondary'">
+                    <Badge :variant="movementVariant(movement.movementType)">
                       {{ getMovementTypeLabel(movement.movementType) }}
                     </Badge>
                   </td>
@@ -219,23 +219,15 @@
           </div>
           
           <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-              <thead class="bg-gray-50 dark:bg-gray-900">
-                <tr>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Product
-                  </th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Current Stock
-                  </th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Threshold
-                  </th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Stock Value
-                  </th>
-                </tr>
-              </thead>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead class="px-6">{{ $t('admin.inventory.reports.headers.product') }}</TableHead>
+                  <TableHead class="px-6">{{ $t('admin.inventory.reports.headers.currentStock') }}</TableHead>
+                  <TableHead class="px-6">{{ $t('admin.inventory.reports.headers.threshold') }}</TableHead>
+                  <TableHead class="px-6">{{ $t('admin.inventory.reports.headers.stockValue') }}</TableHead>
+                </TableRow>
+              </TableHeader>
               <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                 <tr v-for="product in reportData.products" :key="product.productId">
                   <td class="px-6 py-4 whitespace-nowrap">
@@ -261,7 +253,7 @@
                   </td>
                 </tr>
               </tbody>
-            </table>
+            </Table>
           </div>
         </div>
       </div>
@@ -307,17 +299,17 @@
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead class="px-6">Priority</TableHead>
-                  <TableHead class="px-6">Product</TableHead>
-                  <TableHead class="px-6">Current Stock</TableHead>
-                  <TableHead class="px-6">Recommended Order</TableHead>
-                  <TableHead class="px-6">Estimated Cost</TableHead>
+                  <TableHead class="px-6">{{ $t('admin.inventory.reports.headers.priority') }}</TableHead>
+                  <TableHead class="px-6">{{ $t('admin.inventory.reports.headers.product') }}</TableHead>
+                  <TableHead class="px-6">{{ $t('admin.inventory.reports.headers.currentStock') }}</TableHead>
+                  <TableHead class="px-6">{{ $t('admin.inventory.reports.headers.recommendedOrder') }}</TableHead>
+                  <TableHead class="px-6">{{ $t('admin.inventory.reports.headers.estimatedCost') }}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                 <tr v-for="product in reportData.products" :key="product.productId">
                   <td class="px-6 py-4 whitespace-nowrap">
-                    <Badge :variant="product.priority === 'critical' ? 'destructive' : product.priority === 'high' ? 'secondary' : 'default'">
+                    <Badge :variant="priorityVariant(product.priority)">
                       {{ product.priority.charAt(0).toUpperCase() + product.priority.slice(1) }}
                     </Badge>
                   </td>
@@ -355,6 +347,7 @@
 <script setup lang="ts">
 import { Table, TableHeader, TableRow, TableHead, TableBody } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
+import { movementVariant, priorityVariant } from '@/lib/uiVariants'
 // Composables
 const { getMovementTypeLabel } = useInventory()
 
@@ -447,6 +440,8 @@ const formatDate = (dateString: string) => {
     day: 'numeric'
   })
 }
+
+// Badge variant mappings centralized in lib/uiVariants
 
 const getMovementTypeClasses = (type: string) => {
   const baseClasses = 'inline-flex items-center px-2 py-1 rounded-full text-xs font-medium'

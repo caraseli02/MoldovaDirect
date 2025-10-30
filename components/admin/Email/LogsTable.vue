@@ -9,7 +9,7 @@
 <template>
   <Card>
     <CardHeader>
-      <CardTitle>Email Delivery Logs</CardTitle>
+      <CardTitle>{{ $t('admin.emailLogs.title') }}</CardTitle>
     </CardHeader>
     <CardContent>
       <!-- Search Filters -->
@@ -115,13 +115,13 @@
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead class="px-4">Order</TableHead>
-              <TableHead class="px-4">Recipient</TableHead>
-              <TableHead class="px-4">Type</TableHead>
-              <TableHead class="px-4">Status</TableHead>
-              <TableHead class="px-4">Attempts</TableHead>
-              <TableHead class="px-4">Date</TableHead>
-              <TableHead class="px-4">Actions</TableHead>
+              <TableHead class="px-4">{{ $t('admin.emailLogs.headers.order') }}</TableHead>
+              <TableHead class="px-4">{{ $t('admin.emailLogs.headers.recipient') }}</TableHead>
+              <TableHead class="px-4">{{ $t('admin.emailLogs.headers.type') }}</TableHead>
+              <TableHead class="px-4">{{ $t('admin.emailLogs.headers.status') }}</TableHead>
+              <TableHead class="px-4">{{ $t('admin.emailLogs.headers.attempts') }}</TableHead>
+              <TableHead class="px-4">{{ $t('admin.emailLogs.headers.date') }}</TableHead>
+              <TableHead class="px-4">{{ $t('admin.emailLogs.headers.actions') }}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -140,7 +140,7 @@
                 <Badge variant="secondary">{{ formatEmailType(log.emailType) }}</Badge>
               </td>
               <td class="px-4 py-4 whitespace-nowrap">
-                <Badge :variant="log.status === 'delivered' ? 'default' : (log.status === 'failed' || log.status === 'bounced') ? 'destructive' : 'secondary'">
+                <Badge :variant="emailStatusVariant(log.status)">
                   {{ formatStatus(log.status) }}
                 </Badge>
               </td>
@@ -151,7 +151,7 @@
                 {{ formatDate(log.createdAt) }}
               </td>
               <td class="px-4 py-4 whitespace-nowrap text-sm">
-                <Button @click="viewDetails(log)" variant="outline" size="sm">View</Button>
+                <Button @click="viewDetails(log)" variant="outline" size="sm">{{ $t('admin.emailLogs.buttons.view') }}</Button>
               </td>
             </TableRow>
           </TableBody>
@@ -258,6 +258,7 @@ import { Button } from '~/components/ui/button'
 import { Table, TableHeader, TableRow, TableHead, TableBody } from '~/components/ui/table'
 import { Badge } from '~/components/ui/badge'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '~/components/ui/dialog'
+import { emailStatusVariant } from '@/lib/uiVariants'
 
 const logs = ref<any[]>([])
 const loading = ref(false)
@@ -375,4 +376,6 @@ function formatDate(dateString: string): string {
 onMounted(() => {
   searchLogs()
 })
+
+// Variant mapping centralized in lib/uiVariants
 </script>

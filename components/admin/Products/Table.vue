@@ -105,7 +105,7 @@
               @click="updateSort('name')"
             >
               <div class="flex items-center space-x-1">
-                <span>Product</span>
+                <span>{{ $t('admin.products.headers.product') }}</span>
                 <svg v-if="sortBy === 'name'" class="h-4 w-4" :class="sortOrder === 'asc' ? 'transform rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
@@ -119,7 +119,7 @@
               @click="updateSort('price')"
             >
               <div class="flex items-center space-x-1">
-                <span>Price</span>
+                <span>{{ $t('admin.products.headers.price') }}</span>
                 <svg v-if="sortBy === 'price'" class="h-4 w-4" :class="sortOrder === 'asc' ? 'transform rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
@@ -130,28 +130,28 @@
               @click="updateSort('stock')"
             >
               <div class="flex items-center space-x-1">
-                <span>Stock</span>
+                <span>{{ $t('admin.products.headers.stock') }}</span>
                 <svg v-if="sortBy === 'stock'" class="h-4 w-4" :class="sortOrder === 'asc' ? 'transform rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </div>
             </TableHead>
             <TableHead class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-              Status
+              {{ $t('admin.products.headers.status') }}
             </TableHead>
             <TableHead 
               class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
               @click="updateSort('created_at')"
             >
               <div class="flex items-center space-x-1">
-                <span>Created</span>
+                <span>{{ $t('admin.products.headers.created') }}</span>
                 <svg v-if="sortBy === 'created_at'" class="h-4 w-4" :class="sortOrder === 'asc' ? 'transform rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </div>
             </TableHead>
             <TableHead class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-              Actions
+              {{ $t('admin.products.headers.actions') }}
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -224,7 +224,7 @@
 
             <!-- Status -->
             <td class="px-6 py-4 whitespace-nowrap">
-              <Badge :variant="product.isActive ? 'default' : 'secondary'">
+              <Badge :variant="statusVariant(product.isActive)">
                 {{ product.isActive ? 'Active' : 'Inactive' }}
               </Badge>
             </td>
@@ -280,6 +280,7 @@ import { Button } from '@/components/ui/button'
 import { Table, TableHeader, TableRow, TableHead, TableBody } from '@/components/ui/table'
 import { Checkbox as UiCheckbox } from '@/components/ui/checkbox'
 import { Badge } from '@/components/ui/badge'
+import { productStatusVariant } from '@/lib/uiVariants'
 import type { ProductWithRelations } from '~/types/database'
 
 interface Props {
@@ -355,4 +356,7 @@ const handleInventoryUpdated = (data: { productId: number; newQuantity: number; 
 const handleInventoryError = (error: string) => {
   emit('inventory-error', error)
 }
+
+// Typesafe badge variant mapping
+const statusVariant = (active: boolean) => productStatusVariant(active)
 </script>
