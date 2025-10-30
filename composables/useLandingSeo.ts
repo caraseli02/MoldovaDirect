@@ -2,12 +2,12 @@ import { useHead, useI18n, useLocalePath, useRoute, useSiteUrl } from '#imports'
 import type { MetaObject } from 'nuxt/schema'
 import { SEO_DEFAULTS } from '~/constants/seo'
 
-interface BreadcrumbInput {
+export interface BreadcrumbInput {
   name: string
   path: string
 }
 
-interface LandingSeoInput {
+export interface LandingSeoInput {
   title: string
   description: string
   path?: string
@@ -93,7 +93,9 @@ export function useLandingSeo(input: LandingSeoInput): LandingSeoHelpers {
   // Optimize locale handling by iterating once for both og:locale:alternate and hreflang
   if (localeCodes.length > 1) {
     // Get the base path without locale prefix for generating alternate links
-    const basePath = input.path || route.path.replace(/^\/(en|ro|ru)/, '') || '/'
+    // Dynamically build locale pattern from available locales to avoid maintenance issues
+    const localePattern = new RegExp(`^/(${localeCodes.join('|')})`)
+    const basePath = input.path || route.path.replace(localePattern, '') || '/'
 
     for (const code of localeCodes) {
       if (code !== currentLocale) {

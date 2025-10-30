@@ -24,7 +24,7 @@ export function useSiteUrl(): SiteUrlHelpers {
   const runtimeConfig = useRuntimeConfig()
   const configured = runtimeConfig.public?.siteUrl
   const fallback = 'https://www.moldovadirect.com'
-  const base = (configured && configured.trim().length > 0 ? configured : fallback).replace(/\/+$/, '')
+  const base = (configured && typeof configured === 'string' && configured.trim().length > 0 ? configured : fallback).replace(/\/+$/, '')
 
   /**
    * Converts a relative path to an absolute URL, with validation to prevent SSRF.
