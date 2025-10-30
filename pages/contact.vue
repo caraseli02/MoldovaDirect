@@ -121,7 +121,16 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const form = ref({
+interface ContactForm {
+  name: string
+  email: string
+  subject: string
+  message: string
+}
+
+const { toAbsoluteUrl, siteUrl } = useSiteUrl()
+
+const form = ref<ContactForm>({
   name: '',
   email: '',
   subject: '',
@@ -141,14 +150,45 @@ const handleSubmit = () => {
   alert('Thank you for your message! We will get back to you soon.')
 }
 
-// SEO Meta
-useHead({
+const description =
+  'Contact Moldova Direct for questions about Moldovan products, orders, or partnerships. We are here to help!'
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'ContactPage',
+  name: 'Contact Moldova Direct',
+  url: toAbsoluteUrl('/contact'),
+  description,
+  mainEntity: {
+    '@type': 'Organization',
+    name: 'Moldova Direct',
+    url: siteUrl,
+    logo: toAbsoluteUrl('/icon.svg'),
+    contactPoint: [
+      {
+        '@type': 'ContactPoint',
+        contactType: 'customer service',
+        email: 'support@moldovadirect.com',
+        telephone: '+34 910 000 000',
+        areaServed: 'ES',
+        availableLanguage: ['es', 'en', 'ro', 'ru']
+      }
+    ]
+  }
+}
+
+useLandingSeo({
   title: 'Contact Us - Moldova Direct',
-  meta: [
-    {
-      name: 'description',
-      content: 'Contact Moldova Direct for questions about Moldovan products, orders, or partnerships. We are here to help!'
-    }
-  ]
+  description,
+  path: '/contact',
+  image: '/icon.svg',
+  imageAlt: 'Customer support team ready to assist Moldova Direct shoppers',
+  pageType: 'webpage',
+  keywords: ['contact Moldova Direct', 'Moldovan products support', 'Moldova Direct customer service'],
+  breadcrumbs: [
+    { name: 'Home', path: '/' },
+    { name: 'Contact', path: '/contact' }
+  ],
+  structuredData
 })
 </script>

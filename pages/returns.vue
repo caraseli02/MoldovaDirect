@@ -7,8 +7,37 @@
   </div>
 </template>
 
-<script setup>
-useHead({
-  title: 'Returns & Refunds'
+<script setup lang="ts">
+const { toAbsoluteUrl, siteUrl } = useSiteUrl()
+
+const description =
+  'Understand Moldova Direct return windows, refund eligibility, and how to request support for Moldovan food and wine orders.'
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Returns & Refunds',
+  url: toAbsoluteUrl('/returns'),
+  description,
+  isPartOf: {
+    '@type': 'WebSite',
+    name: 'Moldova Direct',
+    url: siteUrl
+  }
+}
+
+useLandingSeo({
+  title: 'Returns & Refunds - Moldova Direct',
+  description,
+  path: '/returns',
+  image: '/icon.svg',
+  imageAlt: 'Customer rep assisting with Moldova Direct return request',
+  pageType: 'webpage',
+  keywords: ['Moldova Direct returns', 'Moldova Direct refund policy', 'Moldovan products returns'],
+  breadcrumbs: [
+    { name: 'Home', path: '/' },
+    { name: 'Returns', path: '/returns' }
+  ],
+  structuredData
 })
 </script>
