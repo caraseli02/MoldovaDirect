@@ -5,7 +5,7 @@
 Moldova Direct is an e-commerce platform specializing in authentic Moldovan food and wine products with delivery to Spain. The project is currently in active development with significant progress across foundation, product catalog, authentication, and shopping cart features.
 
 **Current Phase**: Phase 5 - Payment & Notifications Integration (Checkout UI delivered)  
-**Previous Phase**: shadcn-vue UI Migration ✅ COMPLETED (Aug 31, 2025)
+**Previous Phase**: shadcn-vue UI Libraries Scaffolded ✅ (Aug 31, 2025); Adoption Ongoing
 
 ## 🏗️ Architecture Overview
 
@@ -95,11 +95,11 @@ feat: deliver checkout flow scaffolding and admin dashboards
 
 #### August 31, 2025 - shadcn-vue Migration
 ```
-feat: Migrate to shadcn-vue UI component system
-- Replaced custom UI components with shadcn-vue components
+feat: scaffold shadcn-vue UI libraries and start adoption
+- Generated component libraries via CLI and added aliases
 - Updated Tailwind CSS to v4 with CSS variables
-- Added proper TypeScript support and component aliases
-- Updated all pages and components to use new UI system
+- Migrated primary buttons and key dialogs
+- Planned phased adoption across forms, tables, toasts
 ```
 
 ### Recent Updates (October 2025)

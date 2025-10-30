@@ -19,4 +19,575 @@
         {{ $t('admin.products.sections.inventory') }}
       </h3>
       
-      <!-- Stock Status Badge -->\n      <div v-if="stockStatus" class="flex items-center">\n        <span \n          class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"\n          :class="stockStatusClasses"\n        >\n          <commonIcon :name="stockStatusIcon" class="w-3 h-3 mr-1" />\n          {{ stockStatusText }}\n        </span>\n      </div>\n    </div>\n    \n    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">\n      <!-- Stock Quantity -->\n      <div>\n        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">\n          {{ $t('admin.products.fields.stockQuantity') }} *\n        </label>\n        <div class="relative">\n          <input\n            ref="stockInput"\n            v-model.number="localForm.stockQuantity"\n            type="number"\n            min="0"\n            :placeholder="$t('admin.products.placeholders.stockQuantity')"\n            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white touch-manipulation"\n            :class="{ \n              'border-red-500': errors?.stockQuantity,\n              'min-h-[44px]': isMobile,\n              'pr-16': isLowStock || isOutOfStock\n            }"\n            @input="handleStockQuantityInput"\n            @focus="handleInputFocus"\n            @blur="handleInputBlur"\n          />\n          \n          <!-- Stock Level Indicator -->\n          <div \n            v-if="isLowStock || isOutOfStock"\n            class="absolute inset-y-0 right-0 pr-3 flex items-center"\n          >\n            <commonIcon \n              :name="stockWarningIcon" \n              :class="stockWarningClasses"\n              class="w-5 h-5" \n            />\n          </div>\n          \n          <!-- Quick Stock Actions -->\n          <div v-if="isMobile" class="flex mt-2 space-x-2">\n            <button\n              @click="adjustStock(-1)"\n              @touchstart="vibrate('tap')"\n              :disabled="localForm.stockQuantity <= 0"\n              class="flex-1 px-3 py-2 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-lg touch-manipulation active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"\n              type="button"\n            >\n              <commonIcon name="lucide:minus" class="w-4 h-4 mx-auto" />\n            </button>\n            <button\n              @click="adjustStock(1)"\n              @touchstart="vibrate('tap')"\n              class="flex-1 px-3 py-2 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-lg touch-manipulation active:scale-95"\n              type="button"\n            >\n              <commonIcon name="lucide:plus" class="w-4 h-4 mx-auto" />\n            </button>\n            <button\n              @click="showQuickStockModal = true"\n              @touchstart="vibrate('tap')"\n              class="flex-1 px-3 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-lg touch-manipulation active:scale-95"\n              type="button"\n            >\n              <commonIcon name="lucide:square-pen" class="w-4 h-4 mx-auto" />\n            </button>\n          </div>\n        </div>\n        \n        <p v-if="errors?.stockQuantity" class="mt-1 text-sm text-red-600">\n          {{ errors.stockQuantity }}\n        </p>\n        \n        <div v-if="stockMessage" class="mt-2 p-2 rounded-lg" :class="stockMessageClasses">\n          <div class="flex items-center text-sm">\n            <commonIcon :name="stockMessageIcon" class="w-4 h-4 mr-2 flex-shrink-0" />\n            <span>{{ stockMessage }}</span>\n          </div>\n        </div>\n      </div>\n\n      <!-- Low Stock Threshold -->\n      <div>\n        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">\n          {{ $t('admin.products.fields.lowStockThreshold') }}\n        </label>\n        <input\n          v-model.number="localForm.lowStockThreshold"\n          type="number"\n          min="0"\n          :placeholder="$t('admin.products.placeholders.lowStockThreshold')"\n          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white touch-manipulation"\n          :class="{ \n            'border-red-500': errors?.lowStockThreshold,\n            'min-h-[44px]': isMobile\n          }"\n          @input="handleLowStockThresholdInput"\n          @focus="handleInputFocus"\n          @blur="handleInputBlur"\n        />\n        <p v-if="errors?.lowStockThreshold" class="mt-1 text-sm text-red-600">\n          {{ errors.lowStockThreshold }}\n        </p>\n        <p v-if="localForm.lowStockThreshold" class="mt-1 text-xs text-gray-500 dark:text-gray-400">\n          {{ $t('admin.products.hints.lowStockThreshold', { threshold: localForm.lowStockThreshold }) }}\n        </p>\n      </div>\n    </div>\n\n    <!-- Inventory Insights -->\n    <div v-if="inventoryInsights" class="mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">\n      <h4 class="text-sm font-medium text-gray-900 dark:text-gray-100 mb-3">\n        {{ $t('admin.products.sections.inventoryInsights') }}\n      </h4>\n      \n      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">\n        <!-- Current Stock -->\n        <div class="text-center">\n          <div class="text-2xl font-bold" :class="stockQuantityColor">\n            {{ localForm.stockQuantity || 0 }}\n          </div>\n          <div class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">\n            {{ $t('admin.products.labels.currentStock') }}\n          </div>\n        </div>\n        \n        <!-- Days of Stock -->\n        <div v-if="daysOfStock" class="text-center">\n          <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">\n            {{ daysOfStock }}\n          </div>\n          <div class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">\n            {{ $t('admin.products.labels.daysOfStock') }}\n          </div>\n        </div>\n        \n        <!-- Reorder Point -->\n        <div class="text-center">\n          <div class="text-2xl font-bold text-orange-600 dark:text-orange-400">\n            {{ reorderPoint }}\n          </div>\n          <div class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">\n            {{ $t('admin.products.labels.reorderPoint') }}\n          </div>\n        </div>\n        \n        <!-- Stock Value -->\n        <div v-if="stockValue" class="text-center">\n          <div class="text-2xl font-bold text-green-600 dark:text-green-400">\n            {{ formattedStockValue }}\n          </div>\n          <div class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">\n            {{ $t('admin.products.labels.stockValue') }}\n          </div>\n        </div>\n      </div>\n    </div>\n\n    <!-- Mobile Inventory Tips -->\n    <div v-if="isMobile && showInventoryTips" class="mt-6 p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg">\n      <div class="flex items-start space-x-3">\n        <commonIcon name="lucide:box" class="w-5 h-5 text-indigo-600 dark:text-indigo-400 mt-0.5 flex-shrink-0" />\n        <div class="text-sm text-indigo-800 dark:text-indigo-200">\n          <p class="font-medium mb-1">{{ $t('admin.products.tips.inventoryTitle') }}</p>\n          <ul class="space-y-1 text-xs">\n            <li>{{ $t('admin.products.tips.inventory1') }}</li>\n            <li>{{ $t('admin.products.tips.inventory2') }}</li>\n            <li>{{ $t('admin.products.tips.inventory3') }}</li>\n          </ul>\n        </div>\n        <button\n          @click="showInventoryTips = false"\n          @touchstart="vibrate('tap')"\n          class="text-indigo-600 dark:text-indigo-400 touch-manipulation p-1"\n        >\n          <commonIcon name="lucide:x" class="w-4 h-4" />\n        </button>\n      </div>\n    </div>\n\n    <!-- Quick Stock Modal for Mobile -->\n    <div \n      v-if="showQuickStockModal" \n      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"\n      @click.self="showQuickStockModal = false"\n    >\n      <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-sm">\n        <div class="flex items-center justify-between mb-4">\n          <h3 class="text-lg font-medium text-gray-900 dark:text-white">\n            {{ $t('admin.products.modal.quickStock') }}\n          </h3>\n          <button\n            @click="showQuickStockModal = false"\n            @touchstart="vibrate('tap')"\n            class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 touch-manipulation p-2"\n          >\n            <commonIcon name="lucide:x" class="w-5 h-5" />\n          </button>\n        </div>\n        \n        <div class="space-y-4">\n          <!-- Quick Stock Input -->\n          <div>\n            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">\n              {{ $t('admin.products.fields.newStock') }}\n            </label>\n            <input\n              v-model.number="quickStockValue"\n              type="number"\n              min="0"\n              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white min-h-[44px]"\n              @focus="vibrate('tap')"\n            />\n          </div>\n          \n          <!-- Quick Actions -->\n          <div class="grid grid-cols-3 gap-2">\n            <button\n              @click="setQuickStock(10)"\n              @touchstart="vibrate('tap')"\n              class="px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg touch-manipulation active:scale-95 min-h-[44px]"\n            >\n              10\n            </button>\n            <button\n              @click="setQuickStock(50)"\n              @touchstart="vibrate('tap')"\n              class="px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg touch-manipulation active:scale-95 min-h-[44px]"\n            >\n              50\n            </button>\n            <button\n              @click="setQuickStock(100)"\n              @touchstart="vibrate('tap')"\n              class="px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg touch-manipulation active:scale-95 min-h-[44px]"\n            >\n              100\n            </button>\n          </div>\n          \n          <!-- Apply Button -->\n          <button\n            @click="applyQuickStock"\n            @touchstart="vibrate('tap')"\n            class="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg touch-manipulation active:scale-95 min-h-[44px]"\n          >\n            {{ $t('admin.products.actions.applyStock') }}\n          </button>\n        </div>\n      </div>\n    </div>\n  </div>\n</template>\n\n<script setup lang="ts">\ninterface Props {\n  modelValue: {\n    stockQuantity: number\n    lowStockThreshold: number\n  }\n  errors?: Record<string, any>\n  disabled?: boolean\n  productPrice?: number // For stock value calculation\n  averageDailySales?: number // For days of stock calculation\n}\n\ninterface Emits {\n  (e: 'update:modelValue', value: Props['modelValue']): void\n  (e: 'validate'): void\n  (e: 'stock-alert', data: { level: 'low' | 'out' | 'normal', quantity: number }): void\n}\n\nconst props = withDefaults(defineProps<Props>(), {\n  disabled: false\n})\n\nconst emit = defineEmits<Emits>()\n\n// Composables\nconst { isMobile } = useDevice()\nconst { vibrate } = useHapticFeedback()\nconst { t } = useI18n()\n\n// Template refs\nconst stockInput = ref<HTMLInputElement>()\n\n// Local state\nconst localForm = ref({ ...props.modelValue })\nconst showInventoryTips = ref(isMobile.value)\nconst showQuickStockModal = ref(false)\nconst quickStockValue = ref(localForm.value.stockQuantity)\nconst isFocused = ref(false)\n\n// Computed\nconst isOutOfStock = computed(() => {\n  return localForm.value.stockQuantity <= 0\n})\n\nconst isLowStock = computed(() => {\n  if (isOutOfStock.value) return false\n  return localForm.value.stockQuantity <= (localForm.value.lowStockThreshold || 5)\n})\n\nconst stockStatus = computed(() => {\n  return isOutOfStock.value || isLowStock.value || localForm.value.stockQuantity > 0\n})\n\nconst stockStatusClasses = computed(() => {\n  if (isOutOfStock.value) {\n    return 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300'\n  }\n  if (isLowStock.value) {\n    return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300'\n  }\n  return 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300'\n})\n\nconst stockStatusIcon = computed(() => {\n  if (isOutOfStock.value) return 'lucide:circle-x'\n  if (isLowStock.value) return 'lucide:alert-triangle'\n  return 'lucide:check-circle-2'\n})\n\nconst stockStatusText = computed(() => {\n  if (isOutOfStock.value) return t('admin.products.status.outOfStock')\n  if (isLowStock.value) return t('admin.products.status.lowStock')\n  return t('admin.products.status.inStock')\n})\n\nconst stockWarningIcon = computed(() => {\n  return isOutOfStock.value ? 'lucide:alert-circle' : 'lucide:alert-triangle'\n})\n\nconst stockWarningClasses = computed(() => {\n  return isOutOfStock.value ? 'text-red-500' : 'text-yellow-500'\n})\n\nconst stockQuantityColor = computed(() => {\n  if (isOutOfStock.value) return 'text-red-600 dark:text-red-400'\n  if (isLowStock.value) return 'text-yellow-600 dark:text-yellow-400'\n  return 'text-green-600 dark:text-green-400'\n})\n\nconst stockMessage = computed(() => {\n  if (isOutOfStock.value) {\n    return t('admin.products.messages.outOfStock')\n  }\n  if (isLowStock.value) {\n    return t('admin.products.messages.lowStock', { threshold: localForm.value.lowStockThreshold || 5 })\n  }\n  if (localForm.value.stockQuantity > 100) {\n    return t('admin.products.messages.highStock')\n  }\n  return ''\n})\n\nconst stockMessageClasses = computed(() => {\n  if (isOutOfStock.value) {\n    return 'bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-300'\n  }\n  if (isLowStock.value) {\n    return 'bg-yellow-50 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-300'\n  }\n  return 'bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300'\n})\n\nconst stockMessageIcon = computed(() => {\n  if (isOutOfStock.value) return 'lucide:alert-circle'\n  if (isLowStock.value) return 'lucide:alert-triangle'\n  return 'lucide:info'\n})\n\nconst daysOfStock = computed(() => {\n  if (!props.averageDailySales || props.averageDailySales <= 0 || localForm.value.stockQuantity <= 0) {\n    return null\n  }\n  return Math.ceil(localForm.value.stockQuantity / props.averageDailySales)\n})\n\nconst reorderPoint = computed(() => {\n  // Simple reorder point calculation: low stock threshold + lead time buffer\n  const leadTimeBuffer = 5 // days\n  const dailySales = props.averageDailySales || 1\n  return Math.max(localForm.value.lowStockThreshold || 5, leadTimeBuffer * dailySales)\n})\n\nconst stockValue = computed(() => {\n  if (!props.productPrice || localForm.value.stockQuantity <= 0) return null\n  return localForm.value.stockQuantity * props.productPrice\n})\n\nconst formattedStockValue = computed(() => {\n  if (!stockValue.value) return ''\n  return new Intl.NumberFormat('en-US', {\n    style: 'currency',\n    currency: 'EUR'\n  }).format(stockValue.value)\n})\n\nconst inventoryInsights = computed(() => {\n  return localForm.value.stockQuantity > 0 || localForm.value.lowStockThreshold > 0\n})\n\n// Event handlers\nconst handleInputFocus = () => {\n  isFocused.value = true\n  if (isMobile.value) {\n    vibrate('tap')\n  }\n}\n\nconst handleInputBlur = () => {\n  isFocused.value = false\n  emit('validate')\n}\n\nconst handleStockQuantityInput = () => {\n  // Ensure stock is not negative\n  if (localForm.value.stockQuantity < 0) {\n    localForm.value.stockQuantity = 0\n  }\n  \n  updateModel()\n  checkStockLevels()\n  \n  if (isMobile.value) {\n    vibrate('light')\n  }\n}\n\nconst handleLowStockThresholdInput = () => {\n  // Ensure threshold is not negative\n  if (localForm.value.lowStockThreshold < 0) {\n    localForm.value.lowStockThreshold = 0\n  }\n  \n  updateModel()\n  checkStockLevels()\n  \n  if (isMobile.value) {\n    vibrate('light')\n  }\n}\n\nconst adjustStock = (adjustment: number) => {\n  const newQuantity = Math.max(0, localForm.value.stockQuantity + adjustment)\n  localForm.value.stockQuantity = newQuantity\n  updateModel()\n  checkStockLevels()\n  \n  if (isMobile.value) {\n    vibrate(adjustment > 0 ? 'success' : 'medium')\n  }\n}\n\nconst setQuickStock = (value: number) => {\n  quickStockValue.value = value\n  vibrate('tap')\n}\n\nconst applyQuickStock = () => {\n  if (quickStockValue.value >= 0) {\n    localForm.value.stockQuantity = quickStockValue.value\n    updateModel()\n    checkStockLevels()\n    showQuickStockModal.value = false\n    \n    if (isMobile.value) {\n      vibrate('success')\n    }\n  }\n}\n\nconst updateModel = () => {\n  emit('update:modelValue', { ...localForm.value })\n}\n\nconst checkStockLevels = () => {\n  let alertLevel: 'low' | 'out' | 'normal' = 'normal'\n  \n  if (isOutOfStock.value) {\n    alertLevel = 'out'\n  } else if (isLowStock.value) {\n    alertLevel = 'low'\n  }\n  \n  emit('stock-alert', {\n    level: alertLevel,\n    quantity: localForm.value.stockQuantity\n  })\n}\n\n// Watch for prop changes\nwatch(() => props.modelValue, (newValue) => {\n  localForm.value = { ...newValue }\n  quickStockValue.value = newValue.stockQuantity\n}, { deep: true })\n\n// Watch for stock level changes and provide haptic feedback\nwatch([isOutOfStock, isLowStock], ([outOfStock, lowStock], [prevOutOfStock, prevLowStock]) => {\n  if (isMobile.value) {\n    if (outOfStock && !prevOutOfStock) {\n      vibrate('error')\n    } else if (lowStock && !prevLowStock && !outOfStock) {\n      vibrate('warning')\n    } else if (!outOfStock && !lowStock && (prevOutOfStock || prevLowStock)) {\n      vibrate('success')\n    }\n  }\n})\n\n// Auto-focus stock input on desktop\nonMounted(() => {\n  if (!isMobile.value && stockInput.value) {\n    nextTick(() => {\n      setTimeout(() => {\n        stockInput.value?.focus()\n      }, 100)\n    })\n  }\n})\n</script>\n\n<style scoped>\n.touch-manipulation {\n  touch-action: manipulation;\n  -webkit-tap-highlight-color: transparent;\n}\n\n.active\\:scale-95:active {\n  transform: scale(0.95);\n}\n\n/* Enhanced focus states for accessibility */\ninput:focus {\n  @apply ring-2 ring-blue-500 ring-offset-2 dark:ring-offset-gray-800;\n}\n\n/* Mobile number input optimization */\n@media (max-width: 640px) {\n  input[type="number"] {\n    font-size: 16px; /* Prevents zoom on iOS */\n  }\n}\n\n/* Number input styling */\ninput[type="number"]::-webkit-outer-spin-button,\ninput[type="number"]::-webkit-inner-spin-button {\n  -webkit-appearance: none;\n  margin: 0;\n}\n\ninput[type="number"] {\n  -moz-appearance: textfield;\n}\n\n/* Smooth transitions */\n.transition-colors {\n  transition-property: background-color, border-color, color;\n  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);\n  transition-duration: 200ms;\n}\n</style>"
+      <!-- Stock Status Badge -->
+      <div v-if="stockStatus" class="flex items-center">
+        <span 
+          class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
+          :class="stockStatusClasses"
+        >
+          <commonIcon :name="stockStatusIcon" class="w-3 h-3 mr-1" />
+          {{ stockStatusText }}
+        </span>
+      </div>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Stock Quantity -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          {{ $t('admin.products.fields.stockQuantity') }} *
+        </label>
+        <div class="relative">
+          <input
+            ref="stockInput"
+            v-model.number="localForm.stockQuantity"
+            type="number"
+            min="0"
+            :placeholder="$t('admin.products.placeholders.stockQuantity')"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white touch-manipulation"
+            :class="{ 
+              'border-red-500': errors?.stockQuantity,
+              'min-h-[44px]': isMobile,
+              'pr-16': isLowStock || isOutOfStock
+            }"
+            @input="handleStockQuantityInput"
+            @focus="handleInputFocus"
+            @blur="handleInputBlur"
+          />
+          
+          <!-- Stock Level Indicator -->
+          <div 
+            v-if="isLowStock || isOutOfStock"
+            class="absolute inset-y-0 right-0 pr-3 flex items-center"
+          >
+            <commonIcon 
+              :name="stockWarningIcon" 
+              :class="stockWarningClasses"
+              class="w-5 h-5" 
+            />
+          </div>
+          
+          <!-- Quick Stock Actions -->
+          <div v-if="isMobile" class="flex mt-2 space-x-2">
+            <button
+              @click="adjustStock(-1)"
+              @touchstart="vibrate('tap')"
+              :disabled="localForm.stockQuantity <= 0"
+              class="flex-1 px-3 py-2 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-lg touch-manipulation active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+              type="button"
+            >
+              <commonIcon name="lucide:minus" class="w-4 h-4 mx-auto" />
+            </button>
+            <button
+              @click="adjustStock(1)"
+              @touchstart="vibrate('tap')"
+              class="flex-1 px-3 py-2 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-lg touch-manipulation active:scale-95"
+              type="button"
+            >
+              <commonIcon name="lucide:plus" class="w-4 h-4 mx-auto" />
+            </button>
+            <button
+              @click="showQuickStockModal = true"
+              @touchstart="vibrate('tap')"
+              class="flex-1 px-3 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-lg touch-manipulation active:scale-95"
+              type="button"
+            >
+              <commonIcon name="lucide:square-pen" class="w-4 h-4 mx-auto" />
+            </button>
+          </div>
+        </div>
+        
+        <p v-if="errors?.stockQuantity" class="mt-1 text-sm text-red-600">
+          {{ errors.stockQuantity }}
+        </p>
+        
+        <div v-if="stockMessage" class="mt-2 p-2 rounded-lg" :class="stockMessageClasses">
+          <div class="flex items-center text-sm">
+            <commonIcon :name="stockMessageIcon" class="w-4 h-4 mr-2 flex-shrink-0" />
+            <span>{{ stockMessage }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Low Stock Threshold -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          {{ $t('admin.products.fields.lowStockThreshold') }}
+        </label>
+        <input
+          v-model.number="localForm.lowStockThreshold"
+          type="number"
+          min="0"
+          :placeholder="$t('admin.products.placeholders.lowStockThreshold')"
+          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white touch-manipulation"
+          :class="{ 
+            'border-red-500': errors?.lowStockThreshold,
+            'min-h-[44px]': isMobile
+          }"
+          @input="handleLowStockThresholdInput"
+          @focus="handleInputFocus"
+          @blur="handleInputBlur"
+        />
+        <p v-if="errors?.lowStockThreshold" class="mt-1 text-sm text-red-600">
+          {{ errors.lowStockThreshold }}
+        </p>
+        <p v-if="localForm.lowStockThreshold" class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+          {{ $t('admin.products.hints.lowStockThreshold', { threshold: localForm.lowStockThreshold }) }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Inventory Insights -->
+    <div v-if="inventoryInsights" class="mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+      <h4 class="text-sm font-medium text-gray-900 dark:text-gray-100 mb-3">
+        {{ $t('admin.products.sections.inventoryInsights') }}
+      </h4>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Current Stock -->
+        <div class="text-center">
+          <div class="text-2xl font-bold" :class="stockQuantityColor">
+            {{ localForm.stockQuantity || 0 }}
+          </div>
+          <div class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+            {{ $t('admin.products.labels.currentStock') }}
+          </div>
+        </div>
+        
+        <!-- Days of Stock -->
+        <div v-if="daysOfStock" class="text-center">
+          <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">
+            {{ daysOfStock }}
+          </div>
+          <div class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+            {{ $t('admin.products.labels.daysOfStock') }}
+          </div>
+        </div>
+        
+        <!-- Reorder Point -->
+        <div class="text-center">
+          <div class="text-2xl font-bold text-orange-600 dark:text-orange-400">
+            {{ reorderPoint }}
+          </div>
+          <div class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+            {{ $t('admin.products.labels.reorderPoint') }}
+          </div>
+        </div>
+        
+        <!-- Stock Value -->
+        <div v-if="stockValue" class="text-center">
+          <div class="text-2xl font-bold text-green-600 dark:text-green-400">
+            {{ formattedStockValue }}
+          </div>
+          <div class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+            {{ $t('admin.products.labels.stockValue') }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Inventory Tips -->
+    <div v-if="isMobile && showInventoryTips" class="mt-6 p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg">
+      <div class="flex items-start space-x-3">
+        <commonIcon name="lucide:box" class="w-5 h-5 text-indigo-600 dark:text-indigo-400 mt-0.5 flex-shrink-0" />
+        <div class="text-sm text-indigo-800 dark:text-indigo-200">
+          <p class="font-medium mb-1">{{ $t('admin.products.tips.inventoryTitle') }}</p>
+          <ul class="space-y-1 text-xs">
+            <li>{{ $t('admin.products.tips.inventory1') }}</li>
+            <li>{{ $t('admin.products.tips.inventory2') }}</li>
+            <li>{{ $t('admin.products.tips.inventory3') }}</li>
+          </ul>
+        </div>
+        <button
+          @click="showInventoryTips = false"
+          @touchstart="vibrate('tap')"
+          class="text-indigo-600 dark:text-indigo-400 touch-manipulation p-1"
+        >
+          <commonIcon name="lucide:x" class="w-4 h-4" />
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick Stock Modal for Mobile -->
+    <div 
+      v-if="showQuickStockModal" 
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+      @click.self="showQuickStockModal = false"
+    >
+      <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-sm">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-medium text-gray-900 dark:text-white">
+            {{ $t('admin.products.modal.quickStock') }}
+          </h3>
+          <button
+            @click="showQuickStockModal = false"
+            @touchstart="vibrate('tap')"
+            class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 touch-manipulation p-2"
+          >
+            <commonIcon name="lucide:x" class="w-5 h-5" />
+          </button>
+        </div>
+        
+        <div class="space-y-4">
+          <!-- Quick Stock Input -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              {{ $t('admin.products.fields.newStock') }}
+            </label>
+            <input
+              v-model.number="quickStockValue"
+              type="number"
+              min="0"
+              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white min-h-[44px]"
+              @focus="vibrate('tap')"
+            />
+          </div>
+          
+          <!-- Quick Actions -->
+          <div class="grid grid-cols-3 gap-2">
+            <button
+              @click="setQuickStock(10)"
+              @touchstart="vibrate('tap')"
+              class="px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg touch-manipulation active:scale-95 min-h-[44px]"
+            >
+              10
+            </button>
+            <button
+              @click="setQuickStock(50)"
+              @touchstart="vibrate('tap')"
+              class="px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg touch-manipulation active:scale-95 min-h-[44px]"
+            >
+              50
+            </button>
+            <button
+              @click="setQuickStock(100)"
+              @touchstart="vibrate('tap')"
+              class="px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg touch-manipulation active:scale-95 min-h-[44px]"
+            >
+              100
+            </button>
+          </div>
+          
+          <!-- Apply Button -->
+          <button
+            @click="applyQuickStock"
+            @touchstart="vibrate('tap')"
+            class="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg touch-manipulation active:scale-95 min-h-[44px]"
+          >
+            {{ $t('admin.products.actions.applyStock') }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+interface Props {
+  modelValue: {
+    stockQuantity: number
+    lowStockThreshold: number
+  }
+  errors?: Record<string, any>
+  disabled?: boolean
+  productPrice?: number // For stock value calculation
+  averageDailySales?: number // For days of stock calculation
+}
+
+interface Emits {
+  (e: 'update:modelValue', value: Props['modelValue']): void
+  (e: 'validate'): void
+  (e: 'stock-alert', data: { level: 'low' | 'out' | 'normal', quantity: number }): void
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  disabled: false
+})
+
+const emit = defineEmits<Emits>()
+
+// Composables
+const { isMobile } = useDevice()
+const { vibrate } = useHapticFeedback()
+const { t } = useI18n()
+
+// Template refs
+const stockInput = ref<HTMLInputElement>()
+
+// Local state
+const localForm = ref({ ...props.modelValue })
+const showInventoryTips = ref(isMobile.value)
+const showQuickStockModal = ref(false)
+const quickStockValue = ref(localForm.value.stockQuantity)
+const isFocused = ref(false)
+
+// Computed
+const isOutOfStock = computed(() => {
+  return localForm.value.stockQuantity <= 0
+})
+
+const isLowStock = computed(() => {
+  if (isOutOfStock.value) return false
+  return localForm.value.stockQuantity <= (localForm.value.lowStockThreshold || 5)
+})
+
+const stockStatus = computed(() => {
+  return isOutOfStock.value || isLowStock.value || localForm.value.stockQuantity > 0
+})
+
+const stockStatusClasses = computed(() => {
+  if (isOutOfStock.value) {
+    return 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300'
+  }
+  if (isLowStock.value) {
+    return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300'
+  }
+  return 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300'
+})
+
+const stockStatusIcon = computed(() => {
+  if (isOutOfStock.value) return 'lucide:circle-x'
+  if (isLowStock.value) return 'lucide:alert-triangle'
+  return 'lucide:check-circle-2'
+})
+
+const stockStatusText = computed(() => {
+  if (isOutOfStock.value) return t('admin.products.status.outOfStock')
+  if (isLowStock.value) return t('admin.products.status.lowStock')
+  return t('admin.products.status.inStock')
+})
+
+const stockWarningIcon = computed(() => {
+  return isOutOfStock.value ? 'lucide:alert-circle' : 'lucide:alert-triangle'
+})
+
+const stockWarningClasses = computed(() => {
+  return isOutOfStock.value ? 'text-red-500' : 'text-yellow-500'
+})
+
+const stockQuantityColor = computed(() => {
+  if (isOutOfStock.value) return 'text-red-600 dark:text-red-400'
+  if (isLowStock.value) return 'text-yellow-600 dark:text-yellow-400'
+  return 'text-green-600 dark:text-green-400'
+})
+
+const stockMessage = computed(() => {
+  if (isOutOfStock.value) {
+    return t('admin.products.messages.outOfStock')
+  }
+  if (isLowStock.value) {
+    return t('admin.products.messages.lowStock', { threshold: localForm.value.lowStockThreshold || 5 })
+  }
+  if (localForm.value.stockQuantity > 100) {
+    return t('admin.products.messages.highStock')
+  }
+  return ''
+})
+
+const stockMessageClasses = computed(() => {
+  if (isOutOfStock.value) {
+    return 'bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-300'
+  }
+  if (isLowStock.value) {
+    return 'bg-yellow-50 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-300'
+  }
+  return 'bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300'
+})
+
+const stockMessageIcon = computed(() => {
+  if (isOutOfStock.value) return 'lucide:alert-circle'
+  if (isLowStock.value) return 'lucide:alert-triangle'
+  return 'lucide:info'
+})
+
+const daysOfStock = computed(() => {
+  if (!props.averageDailySales || props.averageDailySales <= 0 || localForm.value.stockQuantity <= 0) {
+    return null
+  }
+  return Math.ceil(localForm.value.stockQuantity / props.averageDailySales)
+})
+
+const reorderPoint = computed(() => {
+  // Simple reorder point calculation: low stock threshold + lead time buffer
+  const leadTimeBuffer = 5 // days
+  const dailySales = props.averageDailySales || 1
+  return Math.max(localForm.value.lowStockThreshold || 5, leadTimeBuffer * dailySales)
+})
+
+const stockValue = computed(() => {
+  if (!props.productPrice || localForm.value.stockQuantity <= 0) return null
+  return localForm.value.stockQuantity * props.productPrice
+})
+
+const formattedStockValue = computed(() => {
+  if (!stockValue.value) return ''
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'EUR'
+  }).format(stockValue.value)
+})
+
+const inventoryInsights = computed(() => {
+  return localForm.value.stockQuantity > 0 || localForm.value.lowStockThreshold > 0
+})
+
+// Event handlers
+const handleInputFocus = () => {
+  isFocused.value = true
+  if (isMobile.value) {
+    vibrate('tap')
+  }
+}
+
+const handleInputBlur = () => {
+  isFocused.value = false
+  emit('validate')
+}
+
+const handleStockQuantityInput = () => {
+  // Ensure stock is not negative
+  if (localForm.value.stockQuantity < 0) {
+    localForm.value.stockQuantity = 0
+  }
+  
+  updateModel()
+  checkStockLevels()
+  
+  if (isMobile.value) {
+    vibrate('light')
+  }
+}
+
+const handleLowStockThresholdInput = () => {
+  // Ensure threshold is not negative
+  if (localForm.value.lowStockThreshold < 0) {
+    localForm.value.lowStockThreshold = 0
+  }
+  
+  updateModel()
+  checkStockLevels()
+  
+  if (isMobile.value) {
+    vibrate('light')
+  }
+}
+
+const adjustStock = (adjustment: number) => {
+  const newQuantity = Math.max(0, localForm.value.stockQuantity + adjustment)
+  localForm.value.stockQuantity = newQuantity
+  updateModel()
+  checkStockLevels()
+  
+  if (isMobile.value) {
+    vibrate(adjustment > 0 ? 'success' : 'medium')
+  }
+}
+
+const setQuickStock = (value: number) => {
+  quickStockValue.value = value
+  vibrate('tap')
+}
+
+const applyQuickStock = () => {
+  if (quickStockValue.value >= 0) {
+    localForm.value.stockQuantity = quickStockValue.value
+    updateModel()
+    checkStockLevels()
+    showQuickStockModal.value = false
+    
+    if (isMobile.value) {
+      vibrate('success')
+    }
+  }
+}
+
+const updateModel = () => {
+  emit('update:modelValue', { ...localForm.value })
+}
+
+const checkStockLevels = () => {
+  let alertLevel: 'low' | 'out' | 'normal' = 'normal'
+  
+  if (isOutOfStock.value) {
+    alertLevel = 'out'
+  } else if (isLowStock.value) {
+    alertLevel = 'low'
+  }
+  
+  emit('stock-alert', {
+    level: alertLevel,
+    quantity: localForm.value.stockQuantity
+  })
+}
+
+// Watch for prop changes
+watch(() => props.modelValue, (newValue) => {
+  localForm.value = { ...newValue }
+  quickStockValue.value = newValue.stockQuantity
+}, { deep: true })
+
+// Watch for stock level changes and provide haptic feedback
+watch([isOutOfStock, isLowStock], ([outOfStock, lowStock], [prevOutOfStock, prevLowStock]) => {
+  if (isMobile.value) {
+    if (outOfStock && !prevOutOfStock) {
+      vibrate('error')
+    } else if (lowStock && !prevLowStock && !outOfStock) {
+      vibrate('warning')
+    } else if (!outOfStock && !lowStock && (prevOutOfStock || prevLowStock)) {
+      vibrate('success')
+    }
+  }
+})
+
+// Auto-focus stock input on desktop
+onMounted(() => {
+  if (!isMobile.value && stockInput.value) {
+    nextTick(() => {
+      setTimeout(() => {
+        stockInput.value?.focus()
+      }, 100)
+    })
+  }
+})
+</script>
+
+<style scoped>
+.touch-manipulation {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.active\\:scale-95:active {
+  transform: scale(0.95);
+}
+
+/* Enhanced focus states for accessibility */
+input:focus {
+  @apply ring-2 ring-blue-500 ring-offset-2 dark:ring-offset-gray-800;
+}
+
+/* Mobile number input optimization */
+@media (max-width: 640px) {
+  input[type="number"] {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+}
+
+/* Number input styling */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Smooth transitions */
+.transition-colors {
+  transition-property: background-color, border-color, color;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
+</style>"

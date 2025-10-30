@@ -59,67 +59,79 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <!-- Card Number -->
         <div class="md:col-span-2">
-          <label for="card-number" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <UiLabel for="card-number" class="mb-1">
             {{ $t('checkout.payment.cardNumber') }}
-          </label>
+          </UiLabel>
           <div class="relative">
-            <input id="card-number" ref="cardNumberRef" type="text" v-model="creditCardData.number"
-              :placeholder="$t('checkout.payment.cardNumberPlaceholder')" :class="[
-                'block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm',
-                hasError('cardNumber')
-                  ? 'border-red-300 dark:border-red-600 text-red-900 dark:text-red-100 placeholder-red-300 focus:ring-red-500 focus:border-red-500'
-                  : 'border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white'
-              ]" maxlength="19" autocomplete="cc-number" @input="formatCardNumber" @blur="validateCardNumber" />
+            <UiInput
+              id="card-number"
+              ref="cardNumberRef"
+              type="text"
+              :value="creditCardData.number"
+              :placeholder="$t('checkout.payment.cardNumberPlaceholder')"
+              :aria-invalid="hasError('cardNumber')"
+              maxlength="19"
+              autocomplete="cc-number"
+              @input="formatCardNumber"
+              @blur="validateCardNumber"
+            />
             <div v-if="cardBrand" class="absolute inset-y-0 right-0 pr-3 flex items-center">
               <commonIcon :name="getCardBrandIcon(cardBrand)" class="h-6 w-6" />
             </div>
           </div>
-          <p v-if="hasError('cardNumber')" class="mt-1 text-sm text-red-600 dark:text-red-400">
+          <p v-if="hasError('cardNumber')" class="mt-1 text-sm text-destructive">
             {{ getError('cardNumber') }}
           </p>
         </div>
 
         <!-- Expiry Date -->
         <div>
-          <label for="expiry-date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <UiLabel for="expiry-date" class="mb-1">
             {{ $t('checkout.payment.expiryDate') }}
-          </label>
-          <input id="expiry-date" type="text" v-model="expiryDisplay"
-            :placeholder="$t('checkout.payment.expiryPlaceholder')" :class="[
-              'block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm',
-              hasError('expiry')
-                ? 'border-red-300 dark:border-red-600 text-red-900 dark:text-red-100 placeholder-red-300 focus:ring-red-500 focus:border-red-500'
-                : 'border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white'
-            ]" maxlength="5" autocomplete="cc-exp" @input="formatExpiry" @blur="validateExpiry" />
-          <p v-if="hasError('expiry')" class="mt-1 text-sm text-red-600 dark:text-red-400">
+          </UiLabel>
+          <UiInput
+            id="expiry-date"
+            type="text"
+            :value="expiryDisplay"
+            :placeholder="$t('checkout.payment.expiryPlaceholder')"
+            :aria-invalid="hasError('expiry')"
+            maxlength="5"
+            autocomplete="cc-exp"
+            @input="formatExpiry"
+            @blur="validateExpiry"
+          />
+          <p v-if="hasError('expiry')" class="mt-1 text-sm text-destructive">
             {{ getError('expiry') }}
           </p>
         </div>
 
         <!-- CVV -->
         <div>
-          <label for="cvv" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <UiLabel for="cvv" class="mb-1">
             {{ $t('checkout.payment.cvv') }}
-          </label>
+          </UiLabel>
           <div class="relative">
-            <input id="cvv" type="text" v-model="creditCardData.cvv"
-              :placeholder="$t('checkout.payment.cvvPlaceholder')" :class="[
-                'block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm',
-                hasError('cvv')
-                  ? 'border-red-300 dark:border-red-600 text-red-900 dark:text-red-100 placeholder-red-300 focus:ring-red-500 focus:border-red-500'
-                  : 'border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white'
-              ]" :maxlength="cardBrand === 'amex' ? 4 : 3" autocomplete="cc-csc" @input="formatCVV"
-              @blur="validateCVV" />
+            <UiInput
+              id="cvv"
+              type="text"
+              :value="creditCardData.cvv"
+              :placeholder="$t('checkout.payment.cvvPlaceholder')"
+              :aria-invalid="hasError('cvv')"
+              :maxlength="cardBrand === 'amex' ? 4 : 3"
+              autocomplete="cc-csc"
+              @input="formatCVV"
+              @blur="validateCVV"
+            />
             <Button type="button" variant="ghost" size="icon" class="absolute inset-y-0 right-0 pr-3"
               @click="showCVVHelp = !showCVVHelp">
               <commonIcon name="lucide:circle-help" class="h-5 w-5 text-gray-400 hover:text-gray-500" />
             </Button>
           </div>
-          <p v-if="hasError('cvv')" class="mt-1 text-sm text-red-600 dark:text-red-400">
+          <p v-if="hasError('cvv')" class="mt-1 text-sm text-destructive">
             {{ getError('cvv') }}
           </p>
           <div v-if="showCVVHelp" class="mt-2 p-3 bg-gray-50 dark:bg-gray-800 rounded-md">
-            <p class="text-sm text-gray-600 dark:text-gray-400">
+            <p class="text-sm text-muted-foreground">
               {{ $t('checkout.payment.cvvHelp') }}
             </p>
           </div>
@@ -127,17 +139,20 @@
 
         <!-- Cardholder Name -->
         <div class="md:col-span-2">
-          <label for="cardholder-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <UiLabel for="cardholder-name" class="mb-1">
             {{ $t('checkout.payment.cardholderName') }}
-          </label>
-          <input id="cardholder-name" type="text" v-model="creditCardData.holderName"
-            :placeholder="$t('checkout.payment.cardholderNamePlaceholder')" :class="[
-              'block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm',
-              hasError('holderName')
-                ? 'border-red-300 dark:border-red-600 text-red-900 dark:text-red-100 placeholder-red-300 focus:ring-red-500 focus:border-red-500'
-                : 'border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white'
-            ]" autocomplete="cc-name" @blur="validateHolderName" />
-          <p v-if="hasError('holderName')" class="mt-1 text-sm text-red-600 dark:text-red-400">
+          </UiLabel>
+          <UiInput
+            id="cardholder-name"
+            type="text"
+            :value="creditCardData.holderName"
+            :placeholder="$t('checkout.payment.cardholderNamePlaceholder')"
+            :aria-invalid="hasError('holderName')"
+            autocomplete="cc-name"
+            @blur="validateHolderName"
+            @input="(e:any) => { creditCardData.holderName = e.target.value; updatePaymentMethod() }"
+          />
+          <p v-if="hasError('holderName')" class="mt-1 text-sm text-destructive">
             {{ getError('holderName') }}
           </p>
         </div>
@@ -172,17 +187,20 @@
 
         <!-- PayPal Email (optional for display) -->
         <div class="max-w-md mx-auto">
-          <label for="paypal-email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <UiLabel for="paypal-email" class="mb-1">
             {{ $t('checkout.payment.paypalEmail') }}
-          </label>
-          <input id="paypal-email" type="email" v-model="paypalData.email"
-            :placeholder="$t('checkout.payment.paypalEmailPlaceholder')" :class="[
-              'block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm',
-              hasError('paypalEmail')
-                ? 'border-red-300 dark:border-red-600 text-red-900 dark:text-red-100 placeholder-red-300 focus:ring-red-500 focus:border-red-500'
-                : 'border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white'
-            ]" autocomplete="email" @blur="validatePayPalEmail" />
-          <p v-if="hasError('paypalEmail')" class="mt-1 text-sm text-red-600 dark:text-red-400">
+          </UiLabel>
+          <UiInput
+            id="paypal-email"
+            type="email"
+            :value="paypalData.email"
+            :placeholder="$t('checkout.payment.paypalEmailPlaceholder')"
+            :aria-invalid="hasError('paypalEmail')"
+            autocomplete="email"
+            @input="(e:any) => { paypalData.email = e.target.value; updatePaymentMethod() }"
+            @blur="validatePayPalEmail"
+          />
+          <p v-if="hasError('paypalEmail')" class="mt-1 text-sm text-destructive">
             {{ getError('paypalEmail') }}
           </p>
         </div>

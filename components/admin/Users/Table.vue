@@ -54,64 +54,40 @@
     <div v-else>
       <!-- Desktop Table -->
       <div v-if="!isMobile" class="overflow-x-auto">
-        <table class="w-full">
-          <thead class="bg-gray-50 dark:bg-gray-700">
-            <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                <Button
-                  @click="updateSort('name')"
-                  variant="ghost"
-                  class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-gray-300 touch-manipulation h-auto p-0 font-normal"
-                >
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead class="px-6">
+                <Button @click="updateSort('name')" variant="ghost" class="flex items-center gap-1 h-auto p-0 font-normal">
                   {{ $t('admin.users.columns.user') }}
                   <commonIcon :name="getSortIcon('name')" class="w-4 h-4" />
                 </Button>
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                <Button
-                  @click="updateSort('email')"
-                  variant="ghost"
-                  class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-gray-300 touch-manipulation h-auto p-0 font-normal"
-                >
+              </TableHead>
+              <TableHead class="px-6">
+                <Button @click="updateSort('email')" variant="ghost" class="flex items-center gap-1 h-auto p-0 font-normal">
                   {{ $t('admin.users.columns.email') }}
                   <commonIcon :name="getSortIcon('email')" class="w-4 h-4" />
                 </Button>
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                {{ $t('admin.users.columns.status') }}
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                {{ $t('admin.users.columns.orders') }}
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                {{ $t('admin.users.columns.totalSpent') }}
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                <Button
-                  @click="updateSort('created_at')"
-                  variant="ghost"
-                  class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-gray-300 touch-manipulation h-auto p-0 font-normal"
-                >
+              </TableHead>
+              <TableHead class="px-6">{{ $t('admin.users.columns.status') }}</TableHead>
+              <TableHead class="px-6">{{ $t('admin.users.columns.orders') }}</TableHead>
+              <TableHead class="px-6">{{ $t('admin.users.columns.totalSpent') }}</TableHead>
+              <TableHead class="px-6">
+                <Button @click="updateSort('created_at')" variant="ghost" class="flex items-center gap-1 h-auto p-0 font-normal">
                   {{ $t('admin.users.columns.registered') }}
                   <commonIcon :name="getSortIcon('created_at')" class="w-4 h-4" />
                 </Button>
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                <Button
-                  @click="updateSort('last_login')"
-                  variant="ghost"
-                  class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-gray-300 touch-manipulation h-auto p-0 font-normal"
-                >
+              </TableHead>
+              <TableHead class="px-6">
+                <Button @click="updateSort('last_login')" variant="ghost" class="flex items-center gap-1 h-auto p-0 font-normal">
                   {{ $t('admin.users.columns.lastLogin') }}
                   <commonIcon :name="getSortIcon('last_login')" class="w-4 h-4" />
                 </Button>
-              </th>
-              <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                {{ $t('admin.users.columns.actions') }}
-              </th>
-            </tr>
-          </thead>
-          <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+              </TableHead>
+              <TableHead class="px-6 text-right">{{ $t('admin.users.columns.actions') }}</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             <AdminUtilsUserTableRow
               v-for="user in usersWithDisplayData"
               :key="user.id"
@@ -122,8 +98,8 @@
               @action="handleUserAction"
               @select="handleSelectUser"
             />
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
 
       <!-- Mobile List -->
@@ -169,6 +145,7 @@
 
 <script setup lang="ts">
 import { Button } from '@/components/ui/button'
+import { Table, TableHeader, TableRow, TableHead, TableBody } from '@/components/ui/table'
 
 interface Props {
   showActions?: boolean

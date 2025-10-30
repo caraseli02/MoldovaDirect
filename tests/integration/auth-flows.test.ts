@@ -14,7 +14,14 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { useAuthStore } from '~/stores/auth'
-import { useToastStore } from '~/stores/toast'
+vi.mock('~/composables/useToast', () => ({
+  useToast: () => ({
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+  })
+}))
 
 // Mock Supabase client with comprehensive auth methods
 const mockSupabaseClient = {
@@ -77,12 +84,10 @@ vi.mock('~/composables/useAuthValidation', () => ({
 
 describe('Authentication Flow Integration Tests', () => {
   let authStore: ReturnType<typeof useAuthStore>
-  let toastStore: ReturnType<typeof useToastStore>
 
   beforeEach(() => {
     setActivePinia(createPinia())
     authStore = useAuthStore()
-    toastStore = useToastStore()
     vi.clearAllMocks()
     
     // Reset mock implementations

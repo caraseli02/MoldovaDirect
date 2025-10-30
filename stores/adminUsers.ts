@@ -410,7 +410,7 @@ export const useAdminUsersStore = defineStore('adminUsers', {
           }
 
           // Show success message
-          const toast = useToastStore()
+          const toast = useToast()
           toast.success(response.message)
 
           return response.data
@@ -418,7 +418,7 @@ export const useAdminUsersStore = defineStore('adminUsers', {
           throw new Error('Action failed')
         }
       } catch (error) {
-        const toast = useToastStore()
+        const toast = useToast()
         toast.error(error instanceof Error ? error.message : 'Failed to perform action')
         throw error
       } finally {
