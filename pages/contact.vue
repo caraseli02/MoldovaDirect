@@ -83,7 +83,7 @@
               
               <div>
                 <h3 class="font-semibold text-gray-900 mb-2">Phone</h3>
-                <p class="text-gray-600">+34 XXX XXX XXX</p>
+                <p class="text-gray-600">+34 910 000 000</p>
                 <p class="text-sm text-gray-500">Monday - Friday: 9:00 - 18:00</p>
               </div>
               
