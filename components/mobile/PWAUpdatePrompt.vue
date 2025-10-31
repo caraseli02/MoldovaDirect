@@ -58,8 +58,11 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button'
 
-const { updateAvailable, applyUpdate } = useCustomPWA()
+const pwa = usePWA()
 const { vibrate } = useHapticFeedback()
+
+// Map needRefresh to updateAvailable
+const updateAvailable = computed(() => pwa?.needRefresh ?? false)
 
 const updating = ref(false)
 
@@ -67,9 +70,9 @@ const updating = ref(false)
 const handleUpdate = async () => {
   updating.value = true
   vibrate('buttonPress')
-  
+
   try {
-    await applyUpdate()
+    await pwa?.updateServiceWorker(true) // true = reload page after update
     vibrate('success')
   } catch (error) {
     console.error('Update failed:', error)
