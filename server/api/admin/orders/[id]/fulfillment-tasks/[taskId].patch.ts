@@ -10,12 +10,12 @@
  */
 
 import { serverSupabaseServiceRole } from '#supabase/server'
-import { requireAdminAuth } from '~/server/utils/adminAuth'
+import { requireAdminRole } from '~/server/utils/adminAuth'
 
 export default defineEventHandler(async (event) => {
   try {
     // Verify admin authentication
-    const user = await requireAdminAuth(event)
+    const userId = await requireAdminRole(event)
     
     // Use service role for database operations
     const supabase = serverSupabaseServiceRole(event)
@@ -61,7 +61,7 @@ export default defineEventHandler(async (event) => {
     const updateData: any = {
       completed,
       completed_at: completed ? new Date().toISOString() : null,
-      completed_by: completed ? user.id : null
+      completed_by: completed ? userId : null
     }
 
     const { data: updatedTask, error: updateError } = await supabase
@@ -83,10 +83,10 @@ export default defineEventHandler(async (event) => {
     if (existingTask.task_type === 'picking') {
       if (completed && !existingTask.completed) {
         // Task is being marked as completed (was incomplete before)
-        await updateInventoryForPickedItems(supabase, orderId, user.id)
+        await updateInventoryForPickedItems(supabase, orderId, userId)
       } else if (!completed && existingTask.completed) {
         // Task is being marked as incomplete (was completed before)
-        await rollbackInventoryForPickedItems(supabase, orderId, user.id)
+        await rollbackInventoryForPickedItems(supabase, orderId, userId)
       }
     }
 

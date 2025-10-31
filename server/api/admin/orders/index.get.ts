@@ -1,11 +1,11 @@
 // GET /api/admin/orders - Admin endpoint to get all orders with filtering and pagination
 import { serverSupabaseServiceRole } from '#supabase/server'
-import { requireAdminAuth } from '~/server/utils/adminAuth'
+import { requireAdminRole } from '~/server/utils/adminAuth'
 
 export default defineEventHandler(async (event) => {
   try {
     // Verify admin authentication
-    await requireAdminAuth(event)
+    await requireAdminRole(event)
     
     // Use service role for database operations
     const supabase = serverSupabaseServiceRole(event)
