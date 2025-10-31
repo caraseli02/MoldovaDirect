@@ -40,5 +40,4 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   // Example: if (!user.value.app_metadata?.role === 'admin') { ... }
   
   console.log('Admin middleware: Access granted (placeholder implementation)')
-  */
 })
