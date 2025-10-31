@@ -184,11 +184,11 @@ test.describe('Visual Regression Tests', () => {
       await expect(page).toHaveScreenshot('register-page.png')
     })
 
-    test('should match user dashboard @visual', async ({ authenticatedPage }) => {
-      await authenticatedPage.goto('/dashboard')
+    test('should match user account page @visual', async ({ authenticatedPage }) => {
+      await authenticatedPage.goto('/account')
       await helpers.waitForPageLoad()
-      
-      await expect(authenticatedPage).toHaveScreenshot('user-dashboard.png', {
+
+      await expect(authenticatedPage).toHaveScreenshot('user-account.png', {
         mask: [
           authenticatedPage.locator('[data-testid="last-login"]'),
           authenticatedPage.locator('[data-testid="user-stats"]')

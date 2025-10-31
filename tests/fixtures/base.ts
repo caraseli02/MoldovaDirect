@@ -67,13 +67,14 @@ export const test = base.extend<TestFixtures>({
 
   authenticatedPage: async ({ page, testUser, baseURL }, use) => {
     await page.goto(`${baseURL}/login`)
-    
+
     await page.fill('[data-testid="email-input"]', testUser.email)
     await page.fill('[data-testid="password-input"]', testUser.password)
     await page.click('[data-testid="login-button"]')
-    
-    await page.waitForURL(`${baseURL}/dashboard`)
-    
+
+    // Wait for redirect after login (should go to /account or homepage)
+    await page.waitForURL(/\/(account|$)/)
+
     await use(page)
   },
 
