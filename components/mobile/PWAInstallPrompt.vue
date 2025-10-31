@@ -68,8 +68,11 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button'
 
-const { installPWA, isInstallable } = useCustomPWA()
+const pwa = usePWA()
 const { vibrate } = useHapticFeedback()
+
+// Map showInstallPrompt to isInstallable
+const isInstallable = computed(() => pwa?.showInstallPrompt ?? false)
 
 const showPrompt = ref(false)
 const installing = ref(false)
@@ -89,9 +92,11 @@ watch(isInstallable, (installable) => {
 const handleInstall = async () => {
   installing.value = true
   vibrate('buttonPress')
-  
+
   try {
-    const success = await installPWA()
+    const result = await pwa?.install()
+    const success = result?.outcome === 'accepted'
+
     if (success) {
       showPrompt.value = false
       vibrate('success')
@@ -111,7 +116,7 @@ const handleDismiss = () => {
   showPrompt.value = false
   dismissed.value = true
   vibrate('tap')
-  
+
   // Remember dismissal for this session
   if (process.client) {
     sessionStorage.setItem('pwa-install-dismissed', 'true')
