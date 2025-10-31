@@ -30,10 +30,28 @@
 </template>
 
 <script setup lang="ts">
-const { isOnline } = useCustomPWA()
-
+// Online/offline state detection (not provided by @vite-pwa/nuxt)
+const isOnline = ref(true)
 const showBackOnline = ref(false)
 const wasOffline = ref(false)
+
+// Set up online/offline listeners (client-side only)
+if (process.client) {
+  isOnline.value = navigator.onLine
+
+  const updateOnlineStatus = () => {
+    isOnline.value = navigator.onLine
+  }
+
+  window.addEventListener('online', updateOnlineStatus)
+  window.addEventListener('offline', updateOnlineStatus)
+
+  // Cleanup on unmount
+  onUnmounted(() => {
+    window.removeEventListener('online', updateOnlineStatus)
+    window.removeEventListener('offline', updateOnlineStatus)
+  })
+}
 
 // Watch for online status changes
 watch(isOnline, (online, wasOnlineBefore) => {
