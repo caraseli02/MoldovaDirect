@@ -15,9 +15,18 @@ export interface TestProduct {
   category: string
 }
 
+export interface AdminUser {
+  email: string
+  password: string
+  name: string
+  role: 'admin'
+}
+
 export interface TestFixtures {
   authenticatedPage: Page
+  adminPage: Page
   testUser: TestUser
+  adminUser: AdminUser
   testProducts: TestProduct[]
   locale: string
   resetDatabase: () => Promise<void>
@@ -39,6 +48,16 @@ export const test = base.extend<TestFixtures>({
       locale,
     }
     await use(user)
+  },
+
+  adminUser: async ({}, use) => {
+    const admin: AdminUser = {
+      email: 'admin@moldovadirect.com',
+      password: 'Admin123!@#',
+      name: 'Admin User',
+      role: 'admin',
+    }
+    await use(admin)
   },
 
   testProducts: async ({}, use) => {
@@ -74,6 +93,22 @@ export const test = base.extend<TestFixtures>({
 
     // Wait for redirect after login (should go to /account or homepage)
     await page.waitForURL(/\/(account|$)/)
+
+    await use(page)
+  },
+
+  adminPage: async ({ page, adminUser, baseURL }, use) => {
+    await page.goto(`${baseURL}/login`)
+
+    await page.fill('[data-testid="email-input"]', adminUser.email)
+    await page.fill('[data-testid="password-input"]', adminUser.password)
+    await page.click('[data-testid="login-button"]')
+
+    // Wait for redirect after login (admin should go to /admin or /account)
+    await page.waitForURL(/\/(admin|account|$)/)
+
+    // Handle MFA if required (skip for now, may need to be added based on actual implementation)
+    // TODO: Add MFA handling if admin routes require it
 
     await use(page)
   },

@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+import { TestHelpers } from '../fixtures/helpers'
 
 /**
  * Checkout Steps and Static Pages - Visual Regression Tests
@@ -8,16 +9,16 @@ import { test, expect } from '@playwright/test'
  */
 
 test.describe('Checkout Steps - Visual Tests', () => {
-  // Helper function to wait for page load
-  const waitForPageLoad = async (page) => {
-    await page.waitForLoadState('networkidle')
-    await page.waitForTimeout(1000)
-  }
+  let helpers: TestHelpers
+
+  test.beforeEach(async ({ page }) => {
+    helpers = new TestHelpers(page)
+  })
 
   // Helper to add item to cart for checkout tests
-  const addItemToCart = async (page) => {
+  const addItemToCart = async (page, helpers) => {
     await page.goto('/products')
-    await waitForPageLoad(page)
+    await helpers.waitForPageLoad()
 
     // Try to add first product to cart
     const addToCartButton = page.locator('[data-testid^="add-to-cart-"], button:has-text("Add to Cart")').first()
@@ -29,9 +30,9 @@ test.describe('Checkout Steps - Visual Tests', () => {
 
   test.describe('Checkout Flow Pages', () => {
     test('should match checkout main page layout @visual', async ({ page }) => {
-      await addItemToCart(page)
+      await addItemToCart(page, helpers)
       await page.goto('/checkout')
-      await waitForPageLoad(page)
+      await helpers.waitForPageLoad()
 
       await expect(page).toHaveScreenshot('checkout-main-full.png', {
         fullPage: true,
@@ -44,9 +45,9 @@ test.describe('Checkout Steps - Visual Tests', () => {
     })
 
     test('should match checkout payment step layout @visual', async ({ page }) => {
-      await addItemToCart(page)
+      await addItemToCart(page, helpers)
       await page.goto('/checkout/payment')
-      await waitForPageLoad(page)
+      await helpers.waitForPageLoad()
 
       await expect(page).toHaveScreenshot('checkout-payment-full.png', {
         fullPage: true,
@@ -55,9 +56,9 @@ test.describe('Checkout Steps - Visual Tests', () => {
     })
 
     test('should match checkout review step layout @visual', async ({ page }) => {
-      await addItemToCart(page)
+      await addItemToCart(page, helpers)
       await page.goto('/checkout/review')
-      await waitForPageLoad(page)
+      await helpers.waitForPageLoad()
 
       await expect(page).toHaveScreenshot('checkout-review-full.png', {
         fullPage: true,
@@ -71,7 +72,7 @@ test.describe('Checkout Steps - Visual Tests', () => {
 
     test('should match checkout confirmation page layout @visual', async ({ page }) => {
       await page.goto('/checkout/confirmation')
-      await waitForPageLoad(page)
+      await helpers.waitForPageLoad()
 
       await expect(page).toHaveScreenshot('checkout-confirmation-full.png', {
         fullPage: true,
@@ -87,9 +88,9 @@ test.describe('Checkout Steps - Visual Tests', () => {
   test.describe('Checkout Responsive Views', () => {
     test('should match checkout payment on mobile @visual', async ({ page }) => {
       await page.setViewportSize({ width: 375, height: 667 })
-      await addItemToCart(page)
+      await addItemToCart(page, helpers)
       await page.goto('/checkout/payment')
-      await waitForPageLoad(page)
+      await helpers.waitForPageLoad()
 
       await expect(page).toHaveScreenshot('checkout-payment-mobile.png', {
         fullPage: true,
@@ -99,9 +100,9 @@ test.describe('Checkout Steps - Visual Tests', () => {
 
     test('should match checkout review on mobile @visual', async ({ page }) => {
       await page.setViewportSize({ width: 375, height: 667 })
-      await addItemToCart(page)
+      await addItemToCart(page, helpers)
       await page.goto('/checkout/review')
-      await waitForPageLoad(page)
+      await helpers.waitForPageLoad()
 
       await expect(page).toHaveScreenshot('checkout-review-mobile.png', {
         fullPage: true,
@@ -112,14 +113,15 @@ test.describe('Checkout Steps - Visual Tests', () => {
 })
 
 test.describe('Order Tracking - Visual Tests', () => {
-  const waitForPageLoad = async (page) => {
-    await page.waitForLoadState('networkidle')
-    await page.waitForTimeout(1000)
-  }
+  let helpers: TestHelpers
+
+  test.beforeEach(async ({ page }) => {
+    helpers = new TestHelpers(page)
+  })
 
   test('should match order tracking page layout @visual', async ({ page }) => {
     await page.goto('/track-order')
-    await waitForPageLoad(page)
+    await helpers.waitForPageLoad()
 
     await expect(page).toHaveScreenshot('track-order-full.png', {
       fullPage: true,
@@ -129,7 +131,7 @@ test.describe('Order Tracking - Visual Tests', () => {
 
   test('should match order tracking form @visual', async ({ page }) => {
     await page.goto('/track-order')
-    await waitForPageLoad(page)
+    await helpers.waitForPageLoad()
 
     // Focus on the form area
     const trackingForm = page.locator('form, [data-testid="tracking-form"]').first()
@@ -141,7 +143,7 @@ test.describe('Order Tracking - Visual Tests', () => {
   test('should match order tracking on mobile @visual', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 })
     await page.goto('/track-order')
-    await waitForPageLoad(page)
+    await helpers.waitForPageLoad()
 
     await expect(page).toHaveScreenshot('track-order-mobile.png', {
       fullPage: true,
@@ -151,15 +153,16 @@ test.describe('Order Tracking - Visual Tests', () => {
 })
 
 test.describe('Static/Informational Pages - Visual Tests', () => {
-  const waitForPageLoad = async (page) => {
-    await page.waitForLoadState('networkidle')
-    await page.waitForTimeout(1000)
-  }
+  let helpers: TestHelpers
+
+  test.beforeEach(async ({ page }) => {
+    helpers = new TestHelpers(page)
+  })
 
   test.describe('Legal Pages', () => {
     test('should match privacy policy page layout @visual', async ({ page }) => {
       await page.goto('/privacy')
-      await waitForPageLoad(page)
+      await helpers.waitForPageLoad()
 
       await expect(page).toHaveScreenshot('privacy-policy-full.png', {
         fullPage: true,
@@ -169,7 +172,7 @@ test.describe('Static/Informational Pages - Visual Tests', () => {
 
     test('should match terms of service page layout @visual', async ({ page }) => {
       await page.goto('/terms')
-      await waitForPageLoad(page)
+      await helpers.waitForPageLoad()
 
       await expect(page).toHaveScreenshot('terms-of-service-full.png', {
         fullPage: true,
@@ -181,7 +184,7 @@ test.describe('Static/Informational Pages - Visual Tests', () => {
   test.describe('Customer Support Pages', () => {
     test('should match FAQ page layout @visual', async ({ page }) => {
       await page.goto('/faq')
-      await waitForPageLoad(page)
+      await helpers.waitForPageLoad()
 
       await expect(page).toHaveScreenshot('faq-page-full.png', {
         fullPage: true,
@@ -191,7 +194,7 @@ test.describe('Static/Informational Pages - Visual Tests', () => {
 
     test('should match returns page layout @visual', async ({ page }) => {
       await page.goto('/returns')
-      await waitForPageLoad(page)
+      await helpers.waitForPageLoad()
 
       await expect(page).toHaveScreenshot('returns-page-full.png', {
         fullPage: true,
@@ -201,7 +204,7 @@ test.describe('Static/Informational Pages - Visual Tests', () => {
 
     test('should match shipping info page layout @visual', async ({ page }) => {
       await page.goto('/shipping')
-      await waitForPageLoad(page)
+      await helpers.waitForPageLoad()
 
       await expect(page).toHaveScreenshot('shipping-page-full.png', {
         fullPage: true,
@@ -214,7 +217,7 @@ test.describe('Static/Informational Pages - Visual Tests', () => {
     test('should match privacy policy on mobile @visual', async ({ page }) => {
       await page.setViewportSize({ width: 375, height: 667 })
       await page.goto('/privacy')
-      await waitForPageLoad(page)
+      await helpers.waitForPageLoad()
 
       await expect(page).toHaveScreenshot('privacy-policy-mobile.png', {
         fullPage: true,
@@ -225,7 +228,7 @@ test.describe('Static/Informational Pages - Visual Tests', () => {
     test('should match FAQ on mobile @visual', async ({ page }) => {
       await page.setViewportSize({ width: 375, height: 667 })
       await page.goto('/faq')
-      await waitForPageLoad(page)
+      await helpers.waitForPageLoad()
 
       await expect(page).toHaveScreenshot('faq-page-mobile.png', {
         fullPage: true,
@@ -236,15 +239,16 @@ test.describe('Static/Informational Pages - Visual Tests', () => {
 })
 
 test.describe('Additional Auth Pages - Visual Tests', () => {
-  const waitForPageLoad = async (page) => {
-    await page.waitForLoadState('networkidle')
-    await page.waitForTimeout(1000)
-  }
+  let helpers: TestHelpers
+
+  test.beforeEach(async ({ page }) => {
+    helpers = new TestHelpers(page)
+  })
 
   test.describe('Auth Flow Pages', () => {
     test('should match forgot password page layout @visual', async ({ page }) => {
       await page.goto('/auth/forgot-password')
-      await waitForPageLoad(page)
+      await helpers.waitForPageLoad()
 
       await expect(page).toHaveScreenshot('auth-forgot-password-full.png', {
         fullPage: true,
@@ -254,7 +258,7 @@ test.describe('Additional Auth Pages - Visual Tests', () => {
 
     test('should match reset password page layout @visual', async ({ page }) => {
       await page.goto('/auth/reset-password?token=sample-token')
-      await waitForPageLoad(page)
+      await helpers.waitForPageLoad()
 
       await expect(page).toHaveScreenshot('auth-reset-password-full.png', {
         fullPage: true,
@@ -264,7 +268,7 @@ test.describe('Additional Auth Pages - Visual Tests', () => {
 
     test('should match verify email page layout @visual', async ({ page }) => {
       await page.goto('/auth/verify-email?token=sample-token')
-      await waitForPageLoad(page)
+      await helpers.waitForPageLoad()
 
       await expect(page).toHaveScreenshot('auth-verify-email-full.png', {
         fullPage: true,
@@ -274,7 +278,7 @@ test.describe('Additional Auth Pages - Visual Tests', () => {
 
     test('should match verification pending page layout @visual', async ({ page }) => {
       await page.goto('/auth/verification-pending?email=test@example.com')
-      await waitForPageLoad(page)
+      await helpers.waitForPageLoad()
 
       await expect(page).toHaveScreenshot('auth-verification-pending-full.png', {
         fullPage: true,
@@ -287,7 +291,7 @@ test.describe('Additional Auth Pages - Visual Tests', () => {
 
     test('should match MFA verify page layout @visual', async ({ page }) => {
       await page.goto('/auth/mfa-verify')
-      await waitForPageLoad(page)
+      await helpers.waitForPageLoad()
 
       await expect(page).toHaveScreenshot('auth-mfa-verify-full.png', {
         fullPage: true,
@@ -297,7 +301,7 @@ test.describe('Additional Auth Pages - Visual Tests', () => {
 
     test('should match confirm email page layout @visual', async ({ page }) => {
       await page.goto('/auth/confirm')
-      await waitForPageLoad(page)
+      await helpers.waitForPageLoad()
 
       await expect(page).toHaveScreenshot('auth-confirm-full.png', {
         fullPage: true,
@@ -310,7 +314,7 @@ test.describe('Additional Auth Pages - Visual Tests', () => {
     test('should match forgot password on mobile @visual', async ({ page }) => {
       await page.setViewportSize({ width: 375, height: 667 })
       await page.goto('/auth/forgot-password')
-      await waitForPageLoad(page)
+      await helpers.waitForPageLoad()
 
       await expect(page).toHaveScreenshot('auth-forgot-password-mobile.png', {
         fullPage: true,
@@ -321,7 +325,7 @@ test.describe('Additional Auth Pages - Visual Tests', () => {
     test('should match MFA verify on mobile @visual', async ({ page }) => {
       await page.setViewportSize({ width: 375, height: 667 })
       await page.goto('/auth/mfa-verify')
-      await waitForPageLoad(page)
+      await helpers.waitForPageLoad()
 
       await expect(page).toHaveScreenshot('auth-mfa-verify-mobile.png', {
         fullPage: true,
