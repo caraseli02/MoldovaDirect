@@ -1,16 +1,14 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { ref } from 'vue'
-import { useShippingAddress } from './useShippingAddress'
 import type { Address } from '~/types/checkout'
 
-// Mock Nuxt composables
+// Mock Nuxt composables BEFORE imports
 const mockUser = ref(null)
 const mockFetch = vi.fn()
 
-vi.mock('#app', () => ({
-  useSupabaseUser: () => mockUser,
-}))
+// Mock as global function (Nuxt auto-imports it)
+global.useSupabaseUser = vi.fn(() => mockUser)
 
 // Mock global $fetch
 global.$fetch = mockFetch as any
@@ -21,9 +19,11 @@ const mockCheckoutStore = {
   savedAddresses: [] as Address[],
 }
 
-vi.mock('~/stores/checkout', () => ({
-  useCheckoutStore: () => mockCheckoutStore,
-}))
+// Mock as global function (Nuxt auto-imports it)
+global.useCheckoutStore = vi.fn(() => mockCheckoutStore)
+
+// Import AFTER mocks are set up
+const { useShippingAddress } = await import('./useShippingAddress')
 
 describe('useShippingAddress', () => {
   beforeEach(() => {
@@ -810,41 +810,54 @@ describe('useShippingAddress', () => {
   })
 
   describe('Readonly Properties', () => {
-    it('exposes savedAddresses as readonly', () => {
+    it('exposes savedAddresses as readonly ref', () => {
       const { savedAddresses } = useShippingAddress()
 
-      // TypeScript would catch this, but we can test the runtime behavior
-      expect(() => {
-        // @ts-ignore - intentionally testing readonly
-        savedAddresses.value = []
-      }).toThrow()
+      // Verify it's a readonly ref by checking its properties
+      expect(savedAddresses).toBeDefined()
+      expect(Array.isArray(savedAddresses.value)).toBe(true)
+
+      // Attempting to modify will be prevented by Vue's readonly wrapper
+      const originalValue = savedAddresses.value
+      // @ts-ignore - intentionally testing readonly behavior
+      savedAddresses.value = []
+      // Value should remain unchanged due to readonly
+      expect(savedAddresses.value).toBe(originalValue)
     })
 
-    it('exposes loading as readonly', () => {
+    it('exposes loading as readonly ref', () => {
       const { loading } = useShippingAddress()
 
-      expect(() => {
-        // @ts-ignore - intentionally testing readonly
-        loading.value = true
-      }).toThrow()
+      expect(loading).toBeDefined()
+      expect(typeof loading.value).toBe('boolean')
+
+      const originalValue = loading.value
+      // @ts-ignore - intentionally testing readonly behavior
+      loading.value = true
+      expect(loading.value).toBe(originalValue)
     })
 
-    it('exposes error as readonly', () => {
+    it('exposes error as readonly ref', () => {
       const { error } = useShippingAddress()
 
-      expect(() => {
-        // @ts-ignore - intentionally testing readonly
-        error.value = 'test'
-      }).toThrow()
+      expect(error).toBeDefined()
+
+      const originalValue = error.value
+      // @ts-ignore - intentionally testing readonly behavior
+      error.value = 'test'
+      expect(error.value).toBe(originalValue)
     })
 
-    it('exposes isAddressValid as readonly', () => {
+    it('exposes isAddressValid as readonly computed', () => {
       const { isAddressValid } = useShippingAddress()
 
-      expect(() => {
-        // @ts-ignore - intentionally testing readonly
-        isAddressValid.value = true
-      }).toThrow()
+      expect(isAddressValid).toBeDefined()
+      expect(typeof isAddressValid.value).toBe('boolean')
+
+      const originalValue = isAddressValid.value
+      // @ts-ignore - intentionally testing readonly behavior
+      isAddressValid.value = true
+      expect(isAddressValid.value).toBe(originalValue)
     })
   })
 })

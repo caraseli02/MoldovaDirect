@@ -1,10 +1,9 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { ref, nextTick } from 'vue'
-import { useShippingMethods } from './useShippingMethods'
 import type { Address } from '~/types/checkout'
 
-// Mock dependencies
+// Mock dependencies BEFORE imports
 vi.mock('@vueuse/core', () => ({
   useDebounceFn: (fn: Function) => fn, // No debouncing in tests for speed
 }))
@@ -14,8 +13,11 @@ vi.mock('~/lib/checkout/api', () => ({
 }))
 
 const mockT = vi.fn((key: string, fallback?: string) => fallback || key)
-vi.mock('#app', () => ({
-  useI18n: () => ({ t: mockT }),
+
+// Override global mock with test-specific mock
+global.useI18n = vi.fn(() => ({
+  t: mockT,
+  locale: { value: 'en' }
 }))
 
 // Mock checkout store
@@ -23,9 +25,11 @@ const mockCheckoutStore = {
   orderData: { subtotal: 100 },
 }
 
-vi.mock('~/stores/checkout', () => ({
-  useCheckoutStore: () => mockCheckoutStore,
-}))
+// Mock as global function (Nuxt auto-imports it)
+global.useCheckoutStore = vi.fn(() => mockCheckoutStore)
+
+// Import AFTER mocks are set up
+const { useShippingMethods } = await import('./useShippingMethods')
 
 describe('useShippingMethods', () => {
   let address: ReturnType<typeof ref<Address>>
