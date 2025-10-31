@@ -40,7 +40,7 @@ export class TestHelpers {
     await this.page.fill('[data-testid="email-input"]', email)
     await this.page.fill('[data-testid="password-input"]', password)
     await this.page.click('[data-testid="login-button"]')
-    await this.page.waitForURL('**/dashboard')
+    await this.page.waitForURL(/\/(account|$)/)
   }
 
   async logout() {
