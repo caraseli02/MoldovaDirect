@@ -18,7 +18,30 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     globals: true,
-    setupFiles: ['./tests/setup/vitest.setup.ts']
+    setupFiles: ['./tests/setup/vitest.setup.ts'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html', 'lcov'],
+      reportsDirectory: './coverage',
+      exclude: [
+        'node_modules/',
+        'tests/',
+        '**/*.d.ts',
+        '**/*.config.*',
+        '**/mockData',
+        '**/.nuxt/**',
+        'dist/',
+        '.output/',
+        'playwright.config.ts',
+        'vitest.config.ts'
+      ],
+      thresholds: {
+        lines: 70,
+        functions: 70,
+        branches: 70,
+        statements: 70
+      }
+    }
   },
   resolve: {
     alias: (() => {
