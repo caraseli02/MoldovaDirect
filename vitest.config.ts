@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitest/config'
-import { resolve } from 'path'
+import { resolve, dirname } from 'path'
+import { createRequire } from 'module'
 
 const plugins = []
 
@@ -20,11 +21,33 @@ export default defineConfig({
     setupFiles: ['./tests/setup/vitest.setup.ts']
   },
   resolve: {
-    alias: {
-      '~': resolve(__dirname, '.'),
-      '@': resolve(__dirname, '.'),
-      '~~': resolve(__dirname, '.'),
-      '@@': resolve(__dirname, '.')
-    }
+    alias: (() => {
+      const require = createRequire(import.meta.url)
+      let piniaAlias: string | null = null
+
+      try {
+        piniaAlias = dirname(require.resolve('pinia/package.json'))
+      } catch {
+        try {
+          const nuxtPinia = dirname(require.resolve('@pinia/nuxt/package.json'))
+          piniaAlias = resolve(nuxtPinia, 'node_modules/pinia')
+        } catch {
+          console.warn('[vitest] Unable to resolve pinia package for unit tests.')
+        }
+      }
+
+      const baseAliases: Record<string, string> = {
+        '~': resolve(__dirname, '.'),
+        '@': resolve(__dirname, '.'),
+        '~~': resolve(__dirname, '.'),
+        '@@': resolve(__dirname, '.')
+      }
+
+      if (piniaAlias) {
+        baseAliases.pinia = piniaAlias
+      }
+
+      return baseAliases
+    })()
   }
 })

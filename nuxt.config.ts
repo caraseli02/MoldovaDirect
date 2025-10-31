@@ -45,6 +45,9 @@ export default defineNuxtConfig({
     public: {
       stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://www.moldovadirect.com',
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://www.moldovadirect.com',
+      enableTestUsers:
+        process.env.ENABLE_TEST_USERS === 'true' || process.env.NODE_ENV !== 'production'
     },
   },
   shadcn: {
