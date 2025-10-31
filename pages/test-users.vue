@@ -200,7 +200,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useAuthStore } from '~/stores/auth'
-import { useToastStore } from '~/stores/toast'
 import { testUserPersonas, type TestUserPersonaKey } from '~/lib/testing/testUserPersonas'
 
 definePageMeta({
@@ -216,7 +215,7 @@ useHead({
 })
 
 const authStore = useAuthStore()
-const toastStore = useToastStore()
+const toast = useToast()
 const runtimeConfig = useRuntimeConfig()
 const localePath = useLocalePath()
 
@@ -231,23 +230,23 @@ const handleActivatePersona = (key: TestUserPersonaKey) => {
   try {
     authStore.simulateLogin(key)
     const persona = testUserPersonas[key]
-    toastStore.success(
+    toast.success(
       'Simulación activada',
       `Ahora navegas como ${persona.user.name}. Sigue la lista de comprobación para validar el flujo.`
     )
   } catch (error) {
     const message = error instanceof Error ? error.message : 'No se pudo iniciar la simulación.'
-    toastStore.error('Error al activar la persona', message)
+    toast.error('Error al activar la persona', message)
   }
 }
 
 const handleEndSimulation = () => {
   authStore.simulateLogout()
-  toastStore.info('Simulación finalizada', 'El estado del usuario simulado se ha restablecido.')
+  toast.info('Simulación finalizada', 'El estado del usuario simulado se ha restablecido.')
 }
 
 const handleClearLockout = () => {
   authStore.clearLockout()
-  toastStore.success('Temporizador limpiado', 'El bloqueo temporal se ha eliminado para continuar las pruebas.')
+  toast.success('Temporizador limpiado', 'El bloqueo temporal se ha eliminado para continuar las pruebas.')
 }
 </script>
