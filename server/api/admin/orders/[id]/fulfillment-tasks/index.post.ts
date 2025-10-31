@@ -8,12 +8,12 @@
  */
 
 import { serverSupabaseServiceRole } from "#supabase/server";
-import { requireAdminAuth } from "~/server/utils/adminAuth";
+import { requireAdminRole } from "~/server/utils/adminAuth";
 
 export default defineEventHandler(async (event) => {
   try {
     // Verify admin authentication
-    await requireAdminAuth(event);
+    await requireAdminRole(event);
 
     // Use service role for database operations
     const supabase = serverSupabaseServiceRole(event);
