@@ -14,6 +14,7 @@ CREATE TABLE profiles (
   id UUID REFERENCES auth.users(id) PRIMARY KEY,
   name TEXT NOT NULL,
   phone TEXT,
+  role TEXT DEFAULT 'customer' CHECK (role IN ('customer', 'admin', 'manager')),
   preferred_language TEXT DEFAULT 'es' CHECK (preferred_language IN ('es', 'en', 'ro', 'ru')),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -31,6 +32,25 @@ CREATE POLICY "Users can update own profile" ON profiles
 
 CREATE POLICY "Users can insert own profile" ON profiles
   FOR INSERT WITH CHECK (auth.uid() = id);
+
+-- Admin policies: Allow admins to view and update all profiles
+CREATE POLICY "Admins can view all profiles" ON profiles
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM profiles
+      WHERE profiles.id = auth.uid()
+      AND profiles.role = 'admin'
+    )
+  );
+
+CREATE POLICY "Admins can update all profiles" ON profiles
+  FOR UPDATE USING (
+    EXISTS (
+      SELECT 1 FROM profiles
+      WHERE profiles.id = auth.uid()
+      AND profiles.role = 'admin'
+    )
+  );
 
 -- =============================================
 -- ADDRESSES
@@ -197,6 +217,26 @@ ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Users can view own orders" ON orders
   FOR SELECT USING (auth.uid() = user_id);
 
+-- Admins can view all orders
+CREATE POLICY "Admins can view all orders" ON orders
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM profiles
+      WHERE profiles.id = auth.uid()
+      AND profiles.role = 'admin'
+    )
+  );
+
+-- Admins can update all orders
+CREATE POLICY "Admins can update all orders" ON orders
+  FOR UPDATE USING (
+    EXISTS (
+      SELECT 1 FROM profiles
+      WHERE profiles.id = auth.uid()
+      AND profiles.role = 'admin'
+    )
+  );
+
 -- =============================================
 -- ORDER ITEMS
 -- =============================================
@@ -228,6 +268,7 @@ CREATE POLICY "Users can view own order items" ON order_items
 
 -- Profiles indexes
 CREATE INDEX profiles_name_idx ON profiles(name);
+CREATE INDEX profiles_role_idx ON profiles(role);
 
 -- Categories indexes
 CREATE INDEX categories_slug_idx ON categories(slug);

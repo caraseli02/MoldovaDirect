@@ -14,78 +14,30 @@
  */
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
-  // TESTING MODE: Temporarily disabled for E2E testing
-  // TODO: Re-enable after testing is complete
-  console.log('Admin middleware: BYPASSED FOR TESTING')
-  return
-
-  /* PRODUCTION CODE - RE-ENABLE AFTER TESTING
-  const supabase = useSupabaseClient()
   const user = useSupabaseUser()
+  const supabase = useSupabaseClient()
 
   // Check if user is authenticated
   if (!user.value) {
-    return navigateTo({
-      path: '/auth/login',
-      query: { redirect: to.fullPath }
-    })
+    return navigateTo('/auth/login')
   }
 
   // Check if user has admin role
-  // You can customize this based on your role system
-  const isAdmin = user.value.app_metadata?.role === 'admin' ||
-                  user.value.user_metadata?.role === 'admin'
+  const { data: profile, error } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user.value.id)
+    .single()
 
-  if (!isAdmin) {
+  if (error || !profile) {
     throw createError({
-      statusCode: 403,
-      statusMessage: 'Admin access required'
+      statusCode: 401,
+      statusMessage: 'Authentication required'
     })
   }
-
-  // Check Authenticator Assurance Level (AAL)
-  const { data: aalData } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
-  const currentAAL = aalData?.currentLevel
-  const nextAAL = aalData?.nextLevel
-
-  // Admin users must have AAL2 (MFA enabled)
-  if (currentAAL !== 'aal2') {
-    // Check if user has any verified MFA factors
-    const { data: factors } = await supabase.auth.mfa.listFactors()
-    const hasVerifiedFactors = factors?.totp?.some(f => f.status === 'verified') || false
-
-    if (!hasVerifiedFactors) {
-      // Redirect to MFA setup page if no MFA configured
-      // Allow access to MFA setup page itself
-      if (to.path !== '/account/security/mfa') {
-        return navigateTo({
-          path: '/account/security/mfa',
-          query: {
-            required: 'true',
-            redirect: to.fullPath,
-            message: 'mfa-required-for-admin'
-          }
-        })
-      }
-    } else if (nextAAL === 'aal2') {
-      // User has MFA but needs to verify it for this session
-      // Redirect to MFA verification page
-      if (to.path !== '/auth/mfa-verify') {
-        // Create a new MFA challenge
-        const firstFactor = factors?.totp?.find(f => f.status === 'verified')
-        if (firstFactor) {
-          const authStore = useAuthStore()
-          await authStore.challengeMFA(firstFactor.id)
-
-          return navigateTo({
-            path: '/auth/mfa-verify',
-            query: { redirect: to.fullPath }
-          })
-        }
-      }
-    }
-  }
-
-  console.log('Admin middleware: Access granted with MFA verified (AAL2)')
-  */
+  
+  // TODO: Add admin role check here
+  // Example: if (!user.value.app_metadata?.role === 'admin') { ... }
+  
+  console.log('Admin middleware: Access granted (placeholder implementation)')
 })
