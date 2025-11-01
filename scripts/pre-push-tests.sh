@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Pre-push hook to run comprehensive tests before pushing
-# This ensures code quality and coverage standards are met
+# Pre-push hook to run smart tests before pushing
+# Runs unit tests and relevant e2e tests based on changed files
 
 set -e
 
@@ -13,8 +13,62 @@ BRANCH=$(git rev-parse --abbrev-ref HEAD)
 echo "📍 Current branch: $BRANCH"
 echo ""
 
-# Run all unit tests with coverage
-echo "🧪 Running all unit tests with coverage..."
+# Get changed files compared to main/master
+MAIN_BRANCH="main"
+if ! git rev-parse --verify $MAIN_BRANCH >/dev/null 2>&1; then
+  MAIN_BRANCH="master"
+fi
+
+# Get list of changed files
+CHANGED_FILES=$(git diff --name-only $MAIN_BRANCH...HEAD 2>/dev/null || git diff --name-only --cached)
+
+echo "📝 Changed files:"
+echo "$CHANGED_FILES" | sed 's/^/   - /'
+echo ""
+
+# Determine which e2e tests to run based on changed files
+E2E_TESTS=()
+
+# Check for auth-related changes
+if echo "$CHANGED_FILES" | grep -qE "(auth|login|register|password|mfa|security|stores/auth)"; then
+  E2E_TESTS+=("tests/e2e/auth.spec.ts")
+fi
+
+# Check for product-related changes
+if echo "$CHANGED_FILES" | grep -qE "(products|categories|search|stores/products|pages/products)"; then
+  E2E_TESTS+=("tests/e2e/products.spec.ts")
+fi
+
+# Check for checkout/cart-related changes
+if echo "$CHANGED_FILES" | grep -qE "(checkout|cart|payment|stripe|shipping|stores/cart|stores/checkout|composables/useStripe|composables/useShipping|composables/useGuest)"; then
+  E2E_TESTS+=("tests/e2e/checkout.spec.ts")
+fi
+
+# Check for i18n-related changes
+if echo "$CHANGED_FILES" | grep -qE "(i18n|locales|translations)"; then
+  E2E_TESTS+=("tests/e2e/i18n.spec.ts")
+fi
+
+# Check for admin-related changes
+if echo "$CHANGED_FILES" | grep -qE "(admin|components/admin|pages/admin|stores/admin)"; then
+  E2E_TESTS+=("tests/visual/admin-visual.spec.ts")
+fi
+
+# Check for account-related changes
+if echo "$CHANGED_FILES" | grep -qE "(account|profile|orders|pages/account)"; then
+  E2E_TESTS+=("tests/visual/account-visual.spec.ts")
+fi
+
+# Check for visual changes (components, pages, styles)
+if echo "$CHANGED_FILES" | grep -qE "(components/|pages/|\.vue$|tailwind|\.css$)"; then
+  # Only add visual regression if not already added
+  if [[ ! " ${E2E_TESTS[@]} " =~ " tests/visual/ " ]]; then
+    E2E_TESTS+=("tests/visual/checkout-and-static-visual.spec.ts")
+  fi
+fi
+
+# Run unit tests with coverage
+echo "🧪 Running unit tests with coverage..."
 if ! pnpm run test:coverage:check; then
   echo ""
   echo "❌ Unit tests or coverage check failed!"
@@ -27,6 +81,39 @@ if ! pnpm run test:coverage:check; then
 fi
 
 echo ""
+echo "✅ Unit tests passed!"
+echo ""
+
+# Run relevant e2e tests if any were detected
+if [ ${#E2E_TESTS[@]} -gt 0 ]; then
+  echo "🎭 Running related e2e tests:"
+  for test in "${E2E_TESTS[@]}"; do
+    echo "   - $test"
+  done
+  echo ""
+
+  # Run e2e tests in chromium only (faster than all browsers)
+  for test in "${E2E_TESTS[@]}"; do
+    echo "Running: $test"
+    if ! pnpm exec playwright test "$test" --project=chromium --reporter=list; then
+      echo ""
+      echo "❌ E2E test failed: $test"
+      echo ""
+      echo "💡 Options:"
+      echo "   - Fix the failing test"
+      echo "   - Run 'pnpm test:debug' to debug the test"
+      echo "   - Use 'git push --no-verify' to skip checks (not recommended)"
+      exit 1
+    fi
+  done
+
+  echo ""
+  echo "✅ All related e2e tests passed!"
+else
+  echo "ℹ️  No related e2e tests detected for changed files"
+  echo "💡 To run e2e tests manually: pnpm test"
+fi
+
+echo ""
 echo "✅ All pre-push checks passed!"
 echo ""
-echo "💡 Optional: Run 'pnpm test' to verify e2e tests locally"
