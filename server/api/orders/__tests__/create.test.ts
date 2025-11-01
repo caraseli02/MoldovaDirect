@@ -41,72 +41,33 @@ describe('Order Creation with Email Integration', () => {
     vi.clearAllMocks()
   })
 
-  it('should create order and trigger email for guest checkout', async () => {
-    // This is a placeholder test structure
-    // You'll need to adapt it to your testing setup
-    
-    const orderData = {
-      cartId: 1,
-      guestEmail: 'guest@example.com',
-      shippingAddress: {
-        firstName: 'John',
-        lastName: 'Doe',
-        street: '123 Main St',
-        city: 'Madrid',
-        postalCode: '28001',
-        country: 'Spain'
-      },
-      paymentMethod: 'credit_card'
-    }
-
-    // Test that order creation succeeds
-    expect(orderData.guestEmail).toBe('guest@example.com')
-    
-    // Test that email would be triggered
-    // (actual implementation depends on your test setup)
-  })
-
-  it('should create order and trigger email for authenticated user', async () => {
-    const orderData = {
-      cartId: 2,
-      shippingAddress: {
-        firstName: 'Jane',
-        lastName: 'Smith',
-        street: '456 Oak Ave',
-        city: 'Barcelona',
-        postalCode: '08001',
-        country: 'Spain'
-      },
-      paymentMethod: 'paypal'
-    }
-
-    // Test authenticated user flow
-    expect(orderData.cartId).toBe(2)
-  })
-
-  it('should not block order creation if email fails', async () => {
-    // Mock email failure
+  it('should have email utilities properly mocked', async () => {
     const { sendOrderConfirmationEmail } = await import('~/server/utils/orderEmails')
-    vi.mocked(sendOrderConfirmationEmail).mockResolvedValueOnce({
-      success: false,
-      emailLogId: 1,
-      error: 'Email service unavailable'
-    })
+    const { extractCustomerInfoFromOrder, transformOrderToEmailData, validateOrderForEmail } = await import('~/server/utils/orderDataTransform')
 
-    // Order should still succeed
-    // (test implementation here)
+    // Verify mocks are set up correctly
+    expect(sendOrderConfirmationEmail).toBeDefined()
+    expect(extractCustomerInfoFromOrder).toBeDefined()
+    expect(transformOrderToEmailData).toBeDefined()
+    expect(validateOrderForEmail).toBeDefined()
+
+    // Verify mock responses
+    const emailResult = await sendOrderConfirmationEmail({} as any)
+    expect(emailResult.success).toBe(true)
+    expect(emailResult.emailLogId).toBe(1)
+
+    const customerInfo = await extractCustomerInfoFromOrder({} as any)
+    expect(customerInfo.email).toBe('test@example.com')
+
+    const validationResult = validateOrderForEmail({} as any)
+    expect(validationResult.isValid).toBe(true)
   })
 
-  it('should validate order data before sending email', async () => {
-    const { validateOrderForEmail } = await import('~/server/utils/orderDataTransform')
-    
-    // Mock invalid order
-    vi.mocked(validateOrderForEmail).mockReturnValueOnce({
-      isValid: false,
-      errors: ['Order number is missing']
-    })
-
-    // Email should not be sent for invalid orders
-    // (test implementation here)
-  })
+  // TODO: Implement actual order creation API tests
+  // These tests require setting up the Nuxt test environment with H3 event handling
+  // For now, we're testing that the email utilities are properly mocked
+  it.todo('should create order and trigger email for guest checkout')
+  it.todo('should create order and trigger email for authenticated user')
+  it.todo('should not block order creation if email fails')
+  it.todo('should validate order data before sending email')
 })

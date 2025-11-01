@@ -93,6 +93,13 @@ All project documentation follows Kiro's spec-driven development approach in the
 - **[Specifications](.kiro/specs/)** - Feature requirements and designs
  - **[Troubleshooting Components](docs/troubleshooting-components.md)** - Fix for duplicate component names, shadcn-vue auto-imports, and casing
 
+### QA & Simulation Utilities
+
+Use the built-in QA dashboards to simulate user activity without touching production data:
+
+- **[Test Users & Persona Simulator](docs/TEST_USER_SIMULATION.md)** – Walkthrough for the `/test-users` page, including persona catalog, auth store helpers, and environment flag requirements.
+- **[Admin Testing Dashboard](docs/ADMIN_TESTING.md)** – Guide to the `/admin/testing` workspace for seeding data presets, impersonating users, and cleaning up after manual QA sessions.
+
 ## 🎯 Current Status
 
 ✅ **Completed Features**
