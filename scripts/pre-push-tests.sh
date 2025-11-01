@@ -86,32 +86,23 @@ echo ""
 
 # Run relevant e2e tests if any were detected
 if [ ${#E2E_TESTS[@]} -gt 0 ]; then
-  echo "🎭 Running related e2e tests:"
+  echo "🎭 Related e2e tests detected:"
   for test in "${E2E_TESTS[@]}"; do
     echo "   - $test"
   done
   echo ""
-
-  # Run e2e tests in chromium only (faster than all browsers)
-  for test in "${E2E_TESTS[@]}"; do
-    echo "Running: $test"
-    if ! pnpm exec playwright test "$test" --project=chromium --reporter=list; then
-      echo ""
-      echo "❌ E2E test failed: $test"
-      echo ""
-      echo "💡 Options:"
-      echo "   - Fix the failing test"
-      echo "   - Run 'pnpm test:debug' to debug the test"
-      echo "   - Use 'git push --no-verify' to skip checks (not recommended)"
-      exit 1
-    fi
-  done
-
+  echo "⚠️  E2E tests require a dev server to be running."
+  echo "💡 Options:"
+  echo "   1. Skip e2e tests now and run manually later:"
+  echo "      - Continue push (tests will run in CI/CD)"
+  echo "   2. Run e2e tests manually after push:"
+  echo "      - npm run dev (in one terminal)"
+  echo "      - npm test (in another terminal)"
   echo ""
-  echo "✅ All related e2e tests passed!"
+  echo "ℹ️  Skipping e2e tests for faster push..."
+  echo "   CI/CD will run full e2e test suite automatically"
 else
   echo "ℹ️  No related e2e tests detected for changed files"
-  echo "💡 To run e2e tests manually: pnpm test"
 fi
 
 echo ""
