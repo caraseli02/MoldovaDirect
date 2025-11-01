@@ -71,6 +71,10 @@ MoldovaDirect/
 - [Remaining Work](./REMAINING_WORK_SUMMARY.md) - What needs to be done
 - [Code Conventions](./../.kiro/steering/code-conventions.md) - Coding standards
 
+### QA & Simulation
+- [Test Users & Persona Simulator](./TEST_USER_SIMULATION.md) - Activate personas on `/test-users` and understand auth store helpers
+- [Admin Testing Dashboard](./ADMIN_TESTING.md) - Seed data presets, impersonate users, and run cleanup actions from `/admin/testing`
+
 ### For Setup
 - [Supabase Setup](./SUPABASE_SETUP.md) - Database configuration
 - [i18n Configuration](./I18N_CONFIGURATION.md) - Internationalization setup
