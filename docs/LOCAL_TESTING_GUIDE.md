@@ -42,7 +42,7 @@ Runs automatically before pushing to remote to ensure comprehensive quality.
 
 **What it does:**
 - Runs all unit tests with coverage
-- Enforces coverage thresholds (70% for lines, functions, branches, statements)
+- Enforces coverage thresholds (70% branches, 75% functions, 80% lines/statements)
 - Generates coverage report
 
 **To skip (not recommended):**
@@ -53,12 +53,14 @@ git push --no-verify
 ## Coverage Thresholds
 
 Current thresholds (configured in `vitest.config.ts`):
-- **Lines:** 70%
-- **Functions:** 70%
+- **Lines:** 80%
+- **Functions:** 75%
 - **Branches:** 70%
-- **Statements:** 70%
+- **Statements:** 80%
 
 These thresholds are enforced on push to ensure code quality remains high.
+
+**Note:** Critical paths like checkout components and shipping composables have higher thresholds (85-90%) to ensure comprehensive testing of payment and shipping logic.
 
 ## Test Commands
 
@@ -284,7 +286,7 @@ Once these local checks are working well, you can:
 
 ## Questions?
 
-- **Why 70% threshold?** - It's a balanced starting point; adjust based on your needs
+- **Why these thresholds?** - The global thresholds (70-80%) provide a solid baseline, while critical paths have higher thresholds (85-90%) to ensure comprehensive testing of payment and shipping logic
 - **Why both pre-commit and pre-push?** - Pre-commit is fast (changed files only), pre-push is comprehensive
 - **Can I adjust thresholds?** - Yes, edit `vitest.config.ts` and update the coverage thresholds
 

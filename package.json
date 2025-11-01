@@ -7,13 +7,17 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
+    "prepare": "husky || echo 'Husky not installed'",
     "postinstall": "nuxt prepare",
     "deploy": "vercel --prod",
     "deploy:preview": "vercel",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "test:coverage:check": "vitest run --coverage",
+    "test:coverage:ui": "vitest --coverage --ui",
+    "test:quick": "vitest run --changed"
   },
   "dependencies": {
     "@nuxt/image": "^1.11.0",
