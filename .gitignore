@@ -133,3 +133,4 @@ screenshots/
 *.png
 *.jpg
 *.jpeg
+.worktrees
