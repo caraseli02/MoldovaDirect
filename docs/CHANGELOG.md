@@ -4,6 +4,60 @@ This document tracks significant changes, updates, and improvements to the Moldo
 
 ---
 
+## November 2025
+
+### Visual Test Coverage Implementation (November 1, 2025)
+
+**Major testing milestone achieved** with comprehensive visual regression test coverage.
+
+#### Visual Test Coverage Added
+- ✅ **Admin Pages:** 15 visual tests covering dashboard, orders, products, inventory, users, analytics, and email management
+- ✅ **Account Pages:** 10 visual tests covering profile, orders, security/MFA settings
+- ✅ **Checkout & Static Pages:** 22 visual tests covering checkout flow, order tracking, and all informational pages
+- ✅ **Total New Tests:** 47 visual regression tests added
+
+#### Coverage Improvement
+- **Before:** 9 pages with visual tests (19%)
+- **After:** 40 pages with visual tests (85%)
+- **Remaining:** 7 low-priority dev/test pages (15%)
+
+#### Bug Fixes
+- ✅ Fixed dashboard reference in visual-regression.spec.ts (changed `/dashboard` to `/account`)
+- ✅ Fixed authenticatedPage fixture to expect correct redirect
+- ✅ Added proper masking for dynamic content (timestamps, user data, charts)
+- ✅ Implemented consistent wait strategies for stable screenshots
+
+#### Test Features
+- Full-page screenshot coverage with animation disabling
+- Responsive testing (mobile, tablet, desktop)
+- Dynamic content masking to prevent false positives
+- Authentication helpers for protected pages
+- Empty state testing where applicable
+
+See [TEST_COVERAGE_IMPLEMENTATION.md](../TEST_COVERAGE_IMPLEMENTATION.md) for complete details.
+
+### Deep Code Review (October 30, 2025)
+
+**Comprehensive code review completed** identifying security issues, technical debt, and improvement opportunities.
+
+#### Key Findings
+- 🚨 **Critical:** Admin middleware temporarily disabled for testing (needs immediate re-enabling)
+- 🚨 **Critical:** Missing rate limiting on authentication endpoints
+- ⚠️ **High Priority:** Products page needs refactoring (915 lines)
+- ⚠️ **High Priority:** Auth store needs splitting (1,172 lines)
+- ⚠️ **Medium Priority:** Missing server-side price verification
+- ⚠️ **Medium Priority:** Cart data encryption needed
+
+#### Recommendations
+- Immediate: Re-enable authentication middleware and add rate limiting
+- Short-term: Refactor large components and implement security hardening
+- Medium-term: Improve test coverage and mobile UX consistency
+- Long-term: Add advanced features (PWA, personalization, advanced analytics)
+
+See [CODE_REVIEW_2025.md](../CODE_REVIEW_2025.md) for complete analysis.
+
+---
+
 ## October 2025
 
 ### Code Cleanup & Optimization (October 12, 2025)
