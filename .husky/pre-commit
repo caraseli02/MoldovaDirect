@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+# Run pre-commit tests
+./scripts/pre-commit-tests.sh

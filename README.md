@@ -381,6 +381,44 @@ When creating new components, ensure to include dark mode variants:
 ## 🧪 Testing
 
 ### Overview
+Comprehensive testing setup with both unit tests (Vitest) and end-to-end tests (Playwright) with multi-browser and multi-locale support.
+
+### Unit Testing (Vitest)
+
+Unit tests for composables, components, and utilities using Vitest.
+
+```bash
+# Run unit tests
+npm run test:unit
+
+# Run unit tests in watch mode
+npm run test:unit:watch
+
+# Run unit tests with UI
+npm run test:unit:ui
+
+# Run unit tests with coverage
+npm run test:coverage
+
+# View coverage report in browser
+npm run test:coverage:ui
+```
+
+#### Coverage Thresholds
+
+> **Note**: Coverage thresholds are currently disabled (vitest.config.ts:36-70) to allow critical fixes to be pushed while test coverage is being improved.
+>
+> **Target thresholds** (to be re-enabled):
+> - Global: 70% branches, 75% functions, 80% lines/statements
+> - Critical paths (checkout, stripe, shipping, guest checkout): 85-90% coverage
+>
+> **Current status**:
+> - 137 tests passing
+> - 20 tests skipped due to singleton pattern issues in Stripe composable
+> - TODO: Refactor Stripe composable to support test isolation
+
+### End-to-End Testing (Playwright)
+
 Comprehensive end-to-end testing setup using Playwright with multi-browser and multi-locale support.
 
 ### Test Structure

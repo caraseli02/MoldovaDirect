@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+# Run pre-push tests with coverage
+./scripts/pre-push-tests.sh
