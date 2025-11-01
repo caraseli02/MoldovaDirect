@@ -170,6 +170,25 @@ export default defineNuxtConfig({
     ssr: {
       noExternal: ["vue", "@vue/*"],
     },
+    server: {
+      watch: {
+        // Use polling on macOS to avoid "EMFILE: too many open files" error
+        // This is less efficient but more reliable with large codebases
+        // usePolling: true,
+        // interval: 100,
+        // binaryInterval: 300,
+        ignored: [
+        '**/node_modules/**',
+        '**/.git/**',
+        '**/coverage/**',           // Vitest coverage reports
+        '**/test-results/**',       // Playwright test results
+        '**/playwright-report/**',  // Playwright HTML reports
+        '**/.nuxt/**',             // Nuxt build artifacts
+        '**/.output/**',           // Nuxt output
+        '**/*.log',                // Log files
+      ]
+      }
+    }
   },
   hooks: {
     // Ensure the shadcn-nuxt injected components directory does not register TS barrels as Vue components
