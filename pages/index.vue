@@ -1,24 +1,46 @@
 <template>
   <div class="bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100">
+    <!-- Promotional announcement bar -->
+    <HomeAnnouncementBar :show-cta="true" />
+
+    <!-- Hero section with main value proposition -->
     <HomeHeroSection :highlights="heroHighlights" />
-    <HomeCollectionsShowcase />
+
+    <!-- Quick category navigation for immediate browsing -->
     <HomeCategoryGrid :categories="categoryCards" />
-    <HomeHowItWorksSection :steps="howItWorksSteps" />
-    <HomeSocialProofSection
-      :highlights="heroHighlights"
-      :logos="partnerLogos"
-      :testimonials="testimonials"
-    />
+
+    <!-- Featured products - primary conversion driver -->
     <HomeFeaturedProductsSection
       :products="featuredProducts"
       :pending="featuredPending"
       :error="featuredErrorState"
       @retry="refreshFeatured"
     />
-    <HomeStorySection :points="storyPoints" :timeline="storyTimeline" />
+
+    <!-- Premium collections showcase -->
+    <HomeCollectionsShowcase />
+
+    <!-- Social proof and trust signals -->
+    <HomeSocialProofSection
+      :highlights="heroHighlights"
+      :logos="partnerLogos"
+      :testimonials="testimonials"
+    />
+
+    <!-- Process explanation -->
+    <HomeHowItWorksSection :steps="howItWorksSteps" />
+
+    <!-- Service offerings -->
     <HomeServicesSection :services="services" />
+
+    <!-- Newsletter signup -->
     <HomeNewsletterSignup />
+
+    <!-- FAQ preview -->
     <HomeFaqPreviewSection :items="faqItems" />
+
+    <!-- Story section moved to About page -->
+    <!-- <HomeStorySection :points="storyPoints" :timeline="storyTimeline" /> -->
   </div>
 </template>
 
@@ -43,7 +65,7 @@ const { data: featuredData, pending: featuredPending, error: featuredError, refr
   '/api/products/featured',
   {
     query: {
-      limit: 4,
+      limit: 12,
       locale: locale.value
     },
     server: true,
