@@ -19,10 +19,10 @@
 **Estimated Effort: 1 week**
 
 ### Outstanding Tasks
-- Build localized email templates for order confirmations, shipping updates, and password recovery.
-- Integrate Resend (or Supabase functions) for delivery with retry logic and logging.
-- Capture email notification preferences within the account area and honour opt-outs.
-- Automate smoke tests to verify templates render correctly across locales.
+- Wire customer + internal notifications into the order support flow (`server/api/orders/[id]/support.post.ts`) using the shared utilities so tickets trigger the right follow-ups.
+- Capture and enforce email notification preferences across the account area (persisted in Supabase) before calling `sendOrderConfirmationEmail` / `sendOrderStatusEmail`.
+- Expand automated coverage for status templates and endpoints—unit tests for `sendOrderStatusEmail`/`retryEmailDelivery` plus integration tests for `/api/orders/[id]/send-status-email` and `/api/orders/[id]/update-status`.
+- Harden the retry pipeline by fixing the missing template imports inside `retryEmailDelivery` and validating the admin retry job handles mixed locales + issue descriptions gracefully.
 
 ## Priority 3: Admin Analytics & Reporting
 **Estimated Effort: 1-2 weeks**
