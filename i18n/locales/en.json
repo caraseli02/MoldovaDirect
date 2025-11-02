@@ -781,6 +781,11 @@
     }
   },
   "home": {
+    "announcement": {
+      "highlight": "🎉 Free shipping on orders over €50",
+      "description": "Next-day delivery available in Madrid and Barcelona",
+      "cta": "Shop Now"
+    },
     "hero": {
       "title": "Taste Moldova in Every Delivery",
       "subtitle": "Curated wines, artisan foods, and celebratory gifts shipped directly from Moldovan producers to your home in Spain.",
@@ -927,11 +932,17 @@
       ]
     },
     "featuredProducts": {
-      "title": "Editor’s Picks",
+      "title": "Editor's Picks",
       "subtitle": "Limited releases and best-sellers our team is loving this week.",
       "noProducts": "No featured products are available at the moment. Please explore our full catalogue.",
       "viewAll": "View all products",
-      "error": "There was a problem loading featured products."
+      "error": "There was a problem loading featured products.",
+      "filters": {
+        "all": "All",
+        "bestsellers": "Best Sellers",
+        "new": "New Arrivals",
+        "sale": "On Sale"
+      }
     },
     "story": {
       "title": "Why Moldova Direct?",

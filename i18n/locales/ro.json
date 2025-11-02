@@ -552,6 +552,11 @@
     }
   },
   "home": {
+    "announcement": {
+      "highlight": "🎉 Transport gratuit pentru comenzi peste 50€",
+      "description": "Livrare în 24 ore disponibilă în Madrid și Barcelona",
+      "cta": "Cumpără acum"
+    },
     "hero": {
       "title": "Gustă Moldova la fiecare livrare",
       "subtitle": "Vinuri atent alese, produse artizanale și cadouri festive trimise direct de la producători moldoveni la casa ta din Spania.",
@@ -702,7 +707,13 @@
       "subtitle": "Lansări limitate și best-seller-e care ne inspiră săptămâna aceasta.",
       "noProducts": "Momentan nu sunt produse recomandate. Explorează întregul catalog.",
       "viewAll": "Vezi toate produsele",
-      "error": "A apărut o problemă la încărcarea produselor recomandate."
+      "error": "A apărut o problemă la încărcarea produselor recomandate.",
+      "filters": {
+        "all": "Toate",
+        "bestsellers": "Cele mai vândute",
+        "new": "Noutăți",
+        "sale": "În ofertă"
+      }
     },
     "story": {
       "title": "De ce Moldova Direct?",

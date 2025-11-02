@@ -781,6 +781,11 @@
     }
   },
   "home": {
+    "announcement": {
+      "highlight": "🎉 Envío gratuito en pedidos de más de 50€",
+      "description": "Entrega al día siguiente disponible en Madrid y Barcelona",
+      "cta": "Comprar ahora"
+    },
     "hero": {
       "title": "Saborea Moldavia en cada entrega",
       "subtitle": "Vinos seleccionados, alimentos artesanales y regalos festivos enviados directamente desde productores moldavos a tu hogar en España.",
@@ -931,7 +936,13 @@
       "subtitle": "Lanzamientos limitados y superventas que nos inspiran esta semana.",
       "noProducts": "No hay productos destacados en este momento. Explora nuestro catálogo completo.",
       "viewAll": "Ver todos los productos",
-      "error": "Ha ocurrido un problema al cargar los productos destacados."
+      "error": "Ha ocurrido un problema al cargar los productos destacados.",
+      "filters": {
+        "all": "Todos",
+        "bestsellers": "Más vendidos",
+        "new": "Novedades",
+        "sale": "En oferta"
+      }
     },
     "story": {
       "title": "¿Por qué Moldova Direct?",
