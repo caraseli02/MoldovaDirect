@@ -3,6 +3,9 @@ import path from 'path'
 import fs from 'fs'
 import { fileURLToPath } from 'url'
 
+// Prevent vitest setup from being loaded in Playwright context
+process.env.PLAYWRIGHT_TEST = 'true'
+
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
