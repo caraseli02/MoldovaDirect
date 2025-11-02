@@ -34,6 +34,7 @@
     "test:visual:update": "PLAYWRIGHT_TEST=true playwright test tests/visual --update-snapshots",
     "test:report": "playwright show-report",
     "test:setup": "playwright install --with-deps",
+    "setup:project": "node scripts/setup-github-project.mjs",
     "docs:check-links": "markdown-link-check docs/**/*.md README.md DOCUMENTATION_INDEX.md QUICK_START_GUIDE.md",
     "docs:lint": "markdownlint docs/**/*.md *.md --ignore node_modules --ignore .nuxt --ignore .output",
     "docs:find-outdated": "find docs -name '*.md' -mtime +180 -type f",

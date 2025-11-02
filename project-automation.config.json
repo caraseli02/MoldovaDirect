@@ -1,0 +1,40 @@
+{
+  "projectId": "PVT_kwHOAqMOYs4BHDyV",
+  "stageFieldId": "PVTSSF_lAHOAqMOYs4BHDyVzg37F8c",
+  "stageOptionIds": {
+    "Backlog": "f75ad846",
+    "Todo": "f75ad846",
+    "In Progress": "47fc9ee4",
+    "Done": "98236657"
+  },
+  "stageLabelMappings": {
+    "blocked": "Todo",
+    "ready": "Todo",
+    "in-progress": "In Progress",
+    "review": "In Progress",
+    "done": "Done"
+  },
+  "priorityFieldId": "PVTSSF_lAHOAqMOYs4BHDyVzg37H_k",
+  "priorityOptionIds": {
+    "P0 - Critical": "8c426582",
+    "P1 - High": "352b6cec",
+    "P2 - Medium": "4244068e",
+    "P3 - Low": "e1826102"
+  },
+  "priorityLabelMappings": {
+    "critical": "P0 - Critical",
+    "p0": "P0 - Critical",
+    "urgent": "P0 - Critical",
+    "high": "P1 - High",
+    "p1": "P1 - High",
+    "medium": "P2 - Medium",
+    "p2": "P2 - Medium",
+    "low": "P3 - Low",
+    "p3": "P3 - Low"
+  },
+  "areaFieldId": null,
+  "areaOptionIds": null,
+  "areaLabelMappings": null,
+  "ownerFieldId": null,
+  "targetDateFieldId": "PVTF_lAHOAqMOYs4BHDyVzg37IAQ"
+}
