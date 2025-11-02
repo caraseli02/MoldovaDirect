@@ -6,6 +6,33 @@ This document tracks significant changes, updates, and improvements to the Moldo
 
 ## November 2025
 
+### Documentation Cleanup & Archival Strategy (November 2, 2025)
+
+**Established systematic documentation management** with archival policies and automated health checks.
+
+#### Archive Structure Created
+- ✅ **Archive Directories:** Created organized archive structure in `docs/archive/2025/`, `.kiro/archive/2025/`, and `todos/archive/`
+- ✅ **Archival Policy:** Documented comprehensive policy in `docs/ARCHIVAL_POLICY.md`
+- ✅ **Archive Index:** Created `docs/archive/README.md` for easy navigation
+
+#### Documentation Cleanup
+- ✅ **Removed Empty File:** Deleted empty `docs/CART_SECURITY.md` (0 bytes)
+- ✅ **Updated Index:** Updated `DOCUMENTATION_INDEX.md` with archive section and removed broken references
+- ✅ **Documentation Conventions:** Added comprehensive framework documentation guide
+
+#### Automated Tooling
+- ✅ **Link Checker:** Installed `markdown-link-check` for broken link detection
+- ✅ **Markdown Linter:** Installed `markdownlint-cli` with custom configuration
+- ✅ **npm Scripts:** Added `docs:check-links`, `docs:lint`, `docs:find-outdated`, and `docs:audit`
+- ✅ **Configuration:** Created `.markdownlint.json` with project-specific rules
+
+#### Documentation Health
+- **Total Markdown Files:** 28 in docs/ + 9 at root level
+- **Archive Strategy:** Clear criteria for when to archive vs. delete
+- **Maintenance Schedule:** Monthly, quarterly, and annual review processes documented
+
+See [GitHub Issue #138](https://github.com/caraseli02/MoldovaDirect/issues/138) for complete cleanup strategy.
+
 ### Visual Test Coverage Implementation (November 1, 2025)
 
 **Major testing milestone achieved** with comprehensive visual regression test coverage.

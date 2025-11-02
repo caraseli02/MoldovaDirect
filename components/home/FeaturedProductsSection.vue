@@ -6,8 +6,29 @@
         <p class="mt-3 text-lg text-gray-600 dark:text-gray-400">{{ t('home.featuredProducts.subtitle') }}</p>
       </div>
 
-      <div v-if="pending" class="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-        <div v-for="i in 4" :key="i" class="rounded-2xl bg-gray-100/80 p-6 animate-pulse dark:bg-gray-900">
+      <!-- Filter tabs -->
+      <div class="mt-8 flex flex-wrap justify-center gap-2" role="tablist" aria-label="Product filters">
+        <button
+          v-for="filter in filters"
+          :key="filter.value"
+          type="button"
+          role="tab"
+          :aria-selected="activeFilter === filter.value"
+          :aria-controls="'products-panel'"
+          @click="activeFilter = filter.value"
+          :class="[
+            'rounded-full px-6 py-2 text-sm font-semibold transition',
+            activeFilter === filter.value
+              ? 'bg-primary-600 text-white shadow-lg'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
+          ]"
+        >
+          {{ filter.label }}
+        </button>
+      </div>
+
+      <div v-if="pending" class="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div v-for="i in 12" :key="i" class="rounded-2xl bg-gray-100/80 p-6 animate-pulse dark:bg-gray-900">
           <div class="h-40 rounded-xl bg-gray-200 dark:bg-gray-800"></div>
           <div class="mt-4 space-y-3">
             <div class="h-4 rounded bg-gray-200 dark:bg-gray-800"></div>
@@ -17,9 +38,9 @@
         </div>
       </div>
 
-      <div v-else-if="products.length" class="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+      <div v-else-if="filteredProducts.length" id="products-panel" role="tabpanel" class="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         <ProductCard
-          v-for="product in products"
+          v-for="product in filteredProducts"
           :key="product.id"
           :product="product"
         />
@@ -54,7 +75,7 @@
 <script setup lang="ts">
 import type { ProductWithRelations } from '~/types'
 
-defineProps<{
+const props = defineProps<{
   products: ProductWithRelations[]
   pending: boolean
   error: Error | null
@@ -66,4 +87,48 @@ const emit = defineEmits<{
 
 const { t } = useI18n()
 const localePath = useLocalePath()
+
+// Filter state
+const activeFilter = ref('all')
+
+// Filter options
+const filters = computed(() => [
+  { value: 'all', label: t('home.featuredProducts.filters.all') },
+  { value: 'bestsellers', label: t('home.featuredProducts.filters.bestsellers') },
+  { value: 'new', label: t('home.featuredProducts.filters.new') },
+  { value: 'sale', label: t('home.featuredProducts.filters.sale') }
+])
+
+// Filtered products based on active filter
+const filteredProducts = computed(() => {
+  if (activeFilter.value === 'all') {
+    return props.products
+  }
+
+  if (activeFilter.value === 'bestsellers') {
+    // Sort by low stock as proxy for popularity (low stock = more sales)
+    // Products with isFeatured flag shown first, then sorted by stock depletion
+    return [...props.products].sort((a, b) => {
+      // Prioritize featured products
+      if (a.isFeatured && !b.isFeatured) return -1
+      if (!a.isFeatured && b.isFeatured) return 1
+      // Then sort by stock quantity (lower stock = more popular)
+      return (a.stockQuantity || 0) - (b.stockQuantity || 0)
+    })
+  }
+
+  if (activeFilter.value === 'new') {
+    // Sort by createdAt date (newest first)
+    return [...props.products].sort((a, b) =>
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    )
+  }
+
+  if (activeFilter.value === 'sale') {
+    // Filter products with sale prices (comparePrice > price)
+    return props.products.filter(p => p.comparePrice && p.comparePrice > p.price)
+  }
+
+  return props.products
+})
 </script>

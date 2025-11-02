@@ -1,6 +1,6 @@
 # Moldova Direct - Complete Documentation Index
 
-**Last Updated:** November 1, 2025
+**Last Updated:** November 2, 2025
 
 This is the master index for all Moldova Direct documentation. Use this as your starting point to find any information about the project.
 
@@ -57,7 +57,6 @@ This is the master index for all Moldova Direct documentation. Use this as your 
 | [docs/AUTHENTICATION_ARCHITECTURE.md](./docs/AUTHENTICATION_ARCHITECTURE.md) | Auth system architecture | Sep 8, 2025 |
 | [docs/CART_SYSTEM_ARCHITECTURE.md](./docs/CART_SYSTEM_ARCHITECTURE.md) | Cart system design | Sep 8, 2025 |
 | [docs/CART_ANALYTICS.md](./docs/CART_ANALYTICS.md) | Cart analytics system | Sep 8, 2025 |
-| [docs/CART_SECURITY.md](./docs/CART_SECURITY.md) | Cart security measures | - |
 | [docs/CHECKOUT_FLOW.md](./docs/CHECKOUT_FLOW.md) | Checkout process | Oct 12, 2025 |
 | [docs/SHADCN_MIGRATION.md](./docs/SHADCN_MIGRATION.md) | UI component migration | Aug 31, 2025 |
 
@@ -177,7 +176,6 @@ All feature specs are located in `.kiro/specs/[feature-name]/` with the followin
 **Shopping Cart:**
 - [docs/CART_SYSTEM_ARCHITECTURE.md](./docs/CART_SYSTEM_ARCHITECTURE.md)
 - [docs/CART_ANALYTICS.md](./docs/CART_ANALYTICS.md)
-- [docs/CART_SECURITY.md](./docs/CART_SECURITY.md)
 - [.kiro/specs/shopping-cart/](./.kiro/specs/shopping-cart/)
 
 **Checkout & Orders:**
@@ -254,6 +252,17 @@ All feature specs are located in `.kiro/specs/[feature-name]/` with the followin
 - Cross-reference related documents
 - Include code examples where relevant
 - Keep language clear and concise
+
+### Documentation Archival
+See [docs/ARCHIVAL_POLICY.md](./docs/ARCHIVAL_POLICY.md) for guidelines on when and how to archive documentation.
+
+## 📦 Archived Documentation
+
+For historical documentation that is no longer actively maintained, see:
+- **[docs/archive/README.md](./docs/archive/README.md)** - Archive index and access guide
+- **[docs/ARCHIVAL_POLICY.md](./docs/ARCHIVAL_POLICY.md)** - Archival guidelines and process
+
+Archived documents are preserved for reference but superseded by current documentation.
 
 ## 📞 Need Help?
 
