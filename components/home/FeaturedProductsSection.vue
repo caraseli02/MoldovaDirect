@@ -7,11 +7,14 @@
       </div>
 
       <!-- Filter tabs -->
-      <div class="mt-8 flex flex-wrap justify-center gap-2">
+      <div class="mt-8 flex flex-wrap justify-center gap-2" role="tablist" aria-label="Product filters">
         <button
           v-for="filter in filters"
           :key="filter.value"
           type="button"
+          role="tab"
+          :aria-selected="activeFilter === filter.value"
+          :aria-controls="'products-panel'"
           @click="activeFilter = filter.value"
           :class="[
             'rounded-full px-6 py-2 text-sm font-semibold transition',
@@ -35,7 +38,7 @@
         </div>
       </div>
 
-      <div v-else-if="filteredProducts.length" class="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div v-else-if="filteredProducts.length" id="products-panel" role="tabpanel" class="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         <ProductCard
           v-for="product in filteredProducts"
           :key="product.id"
@@ -103,14 +106,21 @@ const filteredProducts = computed(() => {
   }
 
   if (activeFilter.value === 'bestsellers') {
-    // Sort by stock as proxy for popularity
-    return [...props.products].sort((a, b) => (b.stock || 0) - (a.stock || 0))
+    // Sort by low stock as proxy for popularity (low stock = more sales)
+    // Products with isFeatured flag shown first, then sorted by stock depletion
+    return [...props.products].sort((a, b) => {
+      // Prioritize featured products
+      if (a.isFeatured && !b.isFeatured) return -1
+      if (!a.isFeatured && b.isFeatured) return 1
+      // Then sort by stock quantity (lower stock = more popular)
+      return (a.stockQuantity || 0) - (b.stockQuantity || 0)
+    })
   }
 
   if (activeFilter.value === 'new') {
-    // Sort by created_at date (newest first)
+    // Sort by createdAt date (newest first)
     return [...props.products].sort((a, b) =>
-      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     )
   }
 

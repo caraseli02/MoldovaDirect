@@ -36,8 +36,13 @@
         <div class="relative">
           <div class="absolute -top-24 -right-16 h-72 w-72 rounded-full bg-primary-400/20 blur-3xl"></div>
           <div class="relative overflow-hidden rounded-[36px] border border-white/10 bg-white/5 shadow-[0_40px_80px_-40px_rgba(15,23,42,0.6)]">
+            <!--
+              TODO: Replace placeholder with actual product photography
+              Expected path: /public/images/home/hero.jpg
+              Note: Image directory will be created when actual hero image is added
+            -->
             <NuxtImg
-              src="https://images.unsplash.com/photo-1545243424-0ce743321e11?auto=format&fit=crop&w=1400&q=80"
+              src="https://images.unsplash.com/photo-1499244571948-7ccddb3583f1?q=80&w=1200"
               :alt="t('home.hero.imageAlt')"
               densities="1x 2x"
               class="h-full w-full object-cover"

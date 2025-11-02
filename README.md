@@ -6,18 +6,20 @@
 
 ```bash
 # Install dependencies
-npm install
+pnpm install
 
 # Set up environment variables
 cp .env.example .env
 # Edit .env with your Supabase credentials
 
 # Start development server
-npm run dev
+pnpm dev
 
 # Open browser
 http://localhost:3000
 ```
+
+**New to the project?** See [QUICK_START_GUIDE.md](./QUICK_START_GUIDE.md) for a comprehensive getting started guide.
 
 ## 🔧 Development Setup
 
@@ -84,6 +86,12 @@ npm run deploy:preview
 
 ## 📚 Documentation
 
+**Quick Links:**
+- **[Documentation Index](./DOCUMENTATION_INDEX.md)** - Master index of all documentation
+- **[Quick Start Guide](./QUICK_START_GUIDE.md)** - Get started in 5 minutes
+- **[Documentation Summary](./DOCUMENTATION_SUMMARY.md)** - Overview of all documentation (Updated Nov 1, 2025)
+- **[Code Review 2025](./CODE_REVIEW_2025.md)** - Security and architecture analysis
+
 All project documentation follows Kiro's spec-driven development approach in the `.kiro/` folder:
 
 - **[Documentation Hub](.kiro/README.md)** - Complete documentation index
@@ -91,7 +99,7 @@ All project documentation follows Kiro's spec-driven development approach in the
 - **[Roadmap](.kiro/ROADMAP.md)** - Development timeline
 - **[Progress](.kiro/PROGRESS.md)** - Completed milestones
 - **[Specifications](.kiro/specs/)** - Feature requirements and designs
- - **[Troubleshooting Components](docs/troubleshooting-components.md)** - Fix for duplicate component names, shadcn-vue auto-imports, and casing
+- **[Troubleshooting Components](docs/troubleshooting-components.md)** - Fix for duplicate component names, shadcn-vue auto-imports, and casing
 
 ### QA & Simulation Utilities
 
@@ -115,12 +123,27 @@ Use the built-in QA dashboards to simulate user activity without touching produc
 - Email notification system with Resend
 
 🚧 **In Progress**
+- Security hardening (re-enabling auth middleware, rate limiting)
 - Production payment credentials and testing
 - Enhanced transactional email workflows (shipping updates, order tracking)
 - Admin analytics dashboards and advanced reporting
-- Toast system migration to vue-sonner
+- Code refactoring (products page, auth store split)
 
-📝 **Recent Changes (October 2025)**
+⚠️ **Known Issues (From Code Review)**
+- Admin middleware temporarily disabled for testing (CRITICAL - needs re-enabling)
+- Missing rate limiting on authentication endpoints
+- Products page needs refactoring (915 lines)
+- Auth store needs splitting (1,172 lines)
+
+📝 **Recent Changes (November 2025)**
+- Comprehensive visual test coverage added (85% of pages)
+- Deep code review completed with security recommendations
+- Test coverage analysis and implementation completed
+- Fixed authentication middleware and dashboard routing issues
+- Added visual regression tests for admin, account, and checkout pages
+- Improved test infrastructure with better fixtures and helpers
+
+**October 2025:**
 - Removed PayPal integration (unused feature)
 - Cleaned up unused composables and dependencies
 - Organized test scripts into `scripts/` directory
@@ -404,7 +427,7 @@ npm run test:coverage
 npm run test:coverage:ui
 ```
 
-#### Coverage Thresholds
+#### Unit Test Coverage Status
 
 > **Note**: Coverage thresholds are currently disabled (vitest.config.ts:36-70) to allow critical fixes to be pushed while test coverage is being improved.
 >
@@ -416,6 +439,24 @@ npm run test:coverage:ui
 > - 137 tests passing
 > - 20 tests skipped due to singleton pattern issues in Stripe composable
 > - TODO: Refactor Stripe composable to support test isolation
+
+### End-to-End Testing (Playwright)
+
+Comprehensive end-to-end testing setup using Playwright with multi-browser and multi-locale support.
+
+#### Visual Test Coverage (November 2025)
+- **Total Pages:** 47
+- **Visual Coverage:** 40 pages (85%)
+- **E2E Coverage:** 24 pages (51%)
+- **New Visual Tests Added:** 47 tests across admin, account, and checkout flows
+
+**Recent Additions:**
+- ✅ Admin pages visual tests (15 tests)
+- ✅ Account pages visual tests (10 tests)
+- ✅ Checkout & static pages visual tests (22 tests)
+- ✅ Fixed dashboard routing and authentication fixtures
+
+See [TEST_COVERAGE_ANALYSIS.md](./TEST_COVERAGE_ANALYSIS.md) and [TEST_COVERAGE_IMPLEMENTATION.md](./TEST_COVERAGE_IMPLEMENTATION.md) for detailed coverage reports.
 
 ### End-to-End Testing (Playwright)
 

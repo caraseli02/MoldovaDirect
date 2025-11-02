@@ -4,6 +4,87 @@ This document tracks significant changes, updates, and improvements to the Moldo
 
 ---
 
+## November 2025
+
+### Documentation Cleanup & Archival Strategy (November 2, 2025)
+
+**Established systematic documentation management** with archival policies and automated health checks.
+
+#### Archive Structure Created
+- ✅ **Archive Directories:** Created organized archive structure in `docs/archive/2025/`, `.kiro/archive/2025/`, and `todos/archive/`
+- ✅ **Archival Policy:** Documented comprehensive policy in `docs/ARCHIVAL_POLICY.md`
+- ✅ **Archive Index:** Created `docs/archive/README.md` for easy navigation
+
+#### Documentation Cleanup
+- ✅ **Removed Empty File:** Deleted empty `docs/CART_SECURITY.md` (0 bytes)
+- ✅ **Updated Index:** Updated `DOCUMENTATION_INDEX.md` with archive section and removed broken references
+- ✅ **Documentation Conventions:** Added comprehensive framework documentation guide
+
+#### Automated Tooling
+- ✅ **Link Checker:** Installed `markdown-link-check` for broken link detection
+- ✅ **Markdown Linter:** Installed `markdownlint-cli` with custom configuration
+- ✅ **npm Scripts:** Added `docs:check-links`, `docs:lint`, `docs:find-outdated`, and `docs:audit`
+- ✅ **Configuration:** Created `.markdownlint.json` with project-specific rules
+
+#### Documentation Health
+- **Total Markdown Files:** 28 in docs/ + 9 at root level
+- **Archive Strategy:** Clear criteria for when to archive vs. delete
+- **Maintenance Schedule:** Monthly, quarterly, and annual review processes documented
+
+See [GitHub Issue #138](https://github.com/caraseli02/MoldovaDirect/issues/138) for complete cleanup strategy.
+
+### Visual Test Coverage Implementation (November 1, 2025)
+
+**Major testing milestone achieved** with comprehensive visual regression test coverage.
+
+#### Visual Test Coverage Added
+- ✅ **Admin Pages:** 15 visual tests covering dashboard, orders, products, inventory, users, analytics, and email management
+- ✅ **Account Pages:** 10 visual tests covering profile, orders, security/MFA settings
+- ✅ **Checkout & Static Pages:** 22 visual tests covering checkout flow, order tracking, and all informational pages
+- ✅ **Total New Tests:** 47 visual regression tests added
+
+#### Coverage Improvement
+- **Before:** 9 pages with visual tests (19%)
+- **After:** 40 pages with visual tests (85%)
+- **Remaining:** 7 low-priority dev/test pages (15%)
+
+#### Bug Fixes
+- ✅ Fixed dashboard reference in visual-regression.spec.ts (changed `/dashboard` to `/account`)
+- ✅ Fixed authenticatedPage fixture to expect correct redirect
+- ✅ Added proper masking for dynamic content (timestamps, user data, charts)
+- ✅ Implemented consistent wait strategies for stable screenshots
+
+#### Test Features
+- Full-page screenshot coverage with animation disabling
+- Responsive testing (mobile, tablet, desktop)
+- Dynamic content masking to prevent false positives
+- Authentication helpers for protected pages
+- Empty state testing where applicable
+
+See [TEST_COVERAGE_IMPLEMENTATION.md](../TEST_COVERAGE_IMPLEMENTATION.md) for complete details.
+
+### Deep Code Review (October 30, 2025)
+
+**Comprehensive code review completed** identifying security issues, technical debt, and improvement opportunities.
+
+#### Key Findings
+- 🚨 **Critical:** Admin middleware temporarily disabled for testing (needs immediate re-enabling)
+- 🚨 **Critical:** Missing rate limiting on authentication endpoints
+- ⚠️ **High Priority:** Products page needs refactoring (915 lines)
+- ⚠️ **High Priority:** Auth store needs splitting (1,172 lines)
+- ⚠️ **Medium Priority:** Missing server-side price verification
+- ⚠️ **Medium Priority:** Cart data encryption needed
+
+#### Recommendations
+- Immediate: Re-enable authentication middleware and add rate limiting
+- Short-term: Refactor large components and implement security hardening
+- Medium-term: Improve test coverage and mobile UX consistency
+- Long-term: Add advanced features (PWA, personalization, advanced analytics)
+
+See [CODE_REVIEW_2025.md](../CODE_REVIEW_2025.md) for complete analysis.
+
+---
+
 ## October 2025
 
 ### Code Cleanup & Optimization (October 12, 2025)

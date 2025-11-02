@@ -102,7 +102,29 @@ feat: scaffold shadcn-vue UI libraries and start adoption
 - Planned phased adoption across forms, tables, toasts
 ```
 
-### Recent Updates (October 2025)
+### Recent Updates (November 2025)
+
+#### Visual Test Coverage Implementation (November 1, 2025)
+```
+test: comprehensive visual regression test coverage
+- Added 47 new visual tests covering 85% of pages
+- Created admin-visual.spec.ts (15 tests for admin pages)
+- Created account-visual.spec.ts (10 tests for account pages)
+- Created checkout-and-static-visual.spec.ts (22 tests)
+- Fixed dashboard routing bug in visual-regression.spec.ts
+- Fixed authenticatedPage fixture redirect expectations
+- Improved from 19% to 85% visual coverage
+```
+
+#### Deep Code Review (October 30, 2025)
+```
+docs: comprehensive code review with security analysis
+- Identified critical security issues (disabled middleware, missing rate limiting)
+- Documented technical debt (large components, code duplication)
+- Provided prioritized recommendations for improvements
+- Created CODE_REVIEW_2025.md with detailed findings
+- Split analysis into user-facing and admin-facing sections
+```
 
 #### Code Cleanup & Optimization (October 12, 2025)
 ```
@@ -116,11 +138,23 @@ chore: major code cleanup - remove unused features and dependencies
 ```
 
 ### Active Work Items
+
+#### Critical Security (Immediate)
+- **Re-enable authentication middleware**: Admin middleware temporarily disabled for testing (CRITICAL)
+- **Implement rate limiting**: Add rate limiting for auth endpoints to prevent brute force attacks
+- **Server-side price verification**: Implement checkout price validation server-side
+
+#### High Priority Development
 - **Stripe payment capture**: Finalize payment intent flow, webhooks, and production configuration
+- **Code refactoring**: Products page (915 lines) and auth store (1,172 lines) need splitting
 - **Transactional email pipeline**: Order confirmation, shipping updates, and password recovery emails with localized templates
 - **Admin analytics dashboards**: Product performance, sales trends, and user growth metrics
 - **Checkout hardening**: Complete guest checkout edge cases and inventory reservation
-- **Toast system migration**: Migrate from custom toast system to vue-sonner (HIGH PRIORITY)
+
+#### Testing & Quality
+- **Visual test coverage**: ✅ COMPLETED - 85% coverage achieved (40/47 pages)
+- **Unit test coverage**: Improve composable and component test coverage
+- **E2E test expansion**: Add tests for remaining critical flows
 
 ## 📋 Roadmap & Next Steps
 
@@ -301,8 +335,32 @@ NODE_ENV=production
 
 ---
 
-**Last Updated**: 2025-08-31
-**Status**: ✅ On Track
-**Health**: 🟢 Excellent - Major UI migration completed successfully
+## 🚨 Critical Action Items
+
+Based on the recent code review, the following items require immediate attention:
+
+### Security (CRITICAL - This Week)
+1. **Re-enable Admin Middleware** - Currently bypassed for testing (middleware/admin.ts)
+2. **Implement Rate Limiting** - Add rate limiting for authentication endpoints
+3. **Server-Side Price Verification** - Validate cart prices server-side before checkout
+
+### Code Quality (HIGH - Next 2 Weeks)
+1. **Refactor Products Page** - Split 915-line component into smaller modules
+2. **Split Auth Store** - Break 1,172-line store into focused modules
+3. **Add API Authorization** - Secondary authorization checks at API route level
+4. **Implement Cart Encryption** - Encrypt cart data in localStorage
+
+### Testing (MEDIUM - Next Month)
+1. **Expand Unit Test Coverage** - Target 80% coverage for composables
+2. **Add E2E Auth Tests** - Comprehensive authentication flow testing
+3. **Performance Testing** - Load testing for admin dashboard and checkout
+
+See [CODE_REVIEW_2025.md](../CODE_REVIEW_2025.md) for complete details.
+
+---
+
+**Last Updated**: 2025-11-01
+**Status**: ⚠️ Action Required - Critical security items need immediate attention
+**Health**: 🟡 Good - Strong foundation with identified improvements needed
 
 This document provides a comprehensive overview of the Moldova Direct project status. It should be updated regularly as development progresses.

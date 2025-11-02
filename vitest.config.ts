@@ -17,8 +17,19 @@ export default defineConfig({
   plugins,
   test: {
     environment: 'jsdom',
-    globals: true,
-    setupFiles: ['./tests/setup/vitest.setup.ts'],
+    globals: process.env.PLAYWRIGHT_TEST ? false : true,
+    setupFiles: process.env.PLAYWRIGHT_TEST ? [] : ['./tests/setup/vitest.setup.ts'],
+    exclude: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/e2e/**',
+      '**/tests/e2e/**',
+      '**/tests/visual/**',
+      '**/tests/fixtures/**',
+      '**/tests/templates/**',
+      '**/tests/utils/**',
+      '**/.{idea,git,cache,output,temp}/**',
+    ],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html', 'lcov'],

@@ -67,6 +67,8 @@ MoldovaDirect/
 
 ### For Developers
 - [Project Status](./../.kiro/PROJECT_STATUS.md) - Current development state
+- [Documentation Update Summary](./DOCUMENTATION_UPDATE_2025-11-01.md) - Latest documentation changes
+- [Code Review 2025](./../CODE_REVIEW_2025.md) - Comprehensive code review with security analysis
 - [Tech Stack & Migration](./SHADCN_MIGRATION.md) - Recent UI migration details
 - [Remaining Work](./REMAINING_WORK_SUMMARY.md) - What needs to be done
 - [Code Conventions](./../.kiro/steering/code-conventions.md) - Coding standards
@@ -81,6 +83,11 @@ MoldovaDirect/
 - [Authentication Architecture](./AUTHENTICATION_ARCHITECTURE.md) - Auth system technical details
 - [Deployment Guide](./../.kiro/docs/DEPLOYMENT_GUIDE.md) - Deploy to production
 - [Testing Guide](./../tests/AUTH_TESTING_GUIDE.md) - Run tests
+
+### For Testing & Quality
+- [Test Coverage Analysis](./../TEST_COVERAGE_ANALYSIS.md) - Detailed test coverage breakdown
+- [Test Coverage Implementation](./../TEST_COVERAGE_IMPLEMENTATION.md) - Visual test implementation summary
+- [Testing Strategy](./TESTING_STRATEGY.md) - Overall testing approach
 
 ### Project History
 - [Changelog](./CHANGELOG.md) - Recent changes and updates
@@ -149,6 +156,9 @@ When making changes:
 
 ## 🔄 Recent Updates
 
+- **Nov 1, 2025**: Comprehensive visual test coverage implementation (85% of pages)
+- **Oct 30, 2025**: Deep code review completed with security and architecture recommendations
+- **Oct 30, 2025**: Test coverage analysis identifying gaps and priorities
 - **Oct 12, 2025**: Major code cleanup - removed PayPal integration, unused composables, and dependencies
 - **Oct 12, 2025**: Organized test scripts into `scripts/` directory
 - **Oct 12, 2025**: Updated documentation to reflect Stripe-only payment processing
