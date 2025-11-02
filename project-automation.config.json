@@ -14,12 +14,27 @@
     "review": "In Progress",
     "done": "Done"
   },
-  "priorityFieldId": null,
-  "priorityOptionIds": null,
-  "priorityLabelMappings": null,
+  "priorityFieldId": "PVTSSF_lAHOAqMOYs4BHDyVzg37H_k",
+  "priorityOptionIds": {
+    "P0 - Critical": "8c426582",
+    "P1 - High": "352b6cec",
+    "P2 - Medium": "4244068e",
+    "P3 - Low": "e1826102"
+  },
+  "priorityLabelMappings": {
+    "critical": "P0 - Critical",
+    "p0": "P0 - Critical",
+    "urgent": "P0 - Critical",
+    "high": "P1 - High",
+    "p1": "P1 - High",
+    "medium": "P2 - Medium",
+    "p2": "P2 - Medium",
+    "low": "P3 - Low",
+    "p3": "P3 - Low"
+  },
   "areaFieldId": null,
   "areaOptionIds": null,
   "areaLabelMappings": null,
   "ownerFieldId": null,
-  "targetDateFieldId": null
+  "targetDateFieldId": "PVTF_lAHOAqMOYs4BHDyVzg37IAQ"
 }
