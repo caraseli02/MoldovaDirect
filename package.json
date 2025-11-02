@@ -33,7 +33,8 @@
     "test:visual": "playwright test tests/visual",
     "test:visual:update": "playwright test tests/visual --update-snapshots",
     "test:report": "playwright show-report",
-    "test:setup": "playwright install --with-deps"
+    "test:setup": "playwright install --with-deps",
+    "setup:project": "node scripts/setup-github-project.mjs"
   },
   "dependencies": {
     "@nuxt/image": "^1.11.0",
