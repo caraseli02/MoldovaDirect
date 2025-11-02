@@ -44,14 +44,8 @@
             <NuxtImg
               src="https://images.unsplash.com/photo-1499244571948-7ccddb3583f1?q=80&w=1200"
               :alt="t('home.hero.imageAlt')"
-              format="webp"
-              quality="85"
-              width="700"
-              height="700"
-              sizes="sm:100vw md:50vw lg:45vw"
+              densities="1x 2x"
               class="h-full w-full object-cover"
-              loading="eager"
-              :img-attrs="{ class: 'aspect-square' }"
             />
             <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
          

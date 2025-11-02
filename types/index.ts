@@ -1,6 +1,69 @@
 // Main types export file for Moldova Direct
 // This file re-exports all types for easy importing
 
+// CMS types
+export type {
+  // Section types
+  SectionType,
+  Locale,
+
+  // Translation types
+  BaseTranslation,
+  AnnouncementBarTranslation,
+  HeroSlideTranslation,
+  FeaturedProductsTranslation,
+  PromotionalBannerTranslation,
+  Translations as CMSTranslations,
+
+  // Configuration types
+  BaseConfig,
+  AnnouncementBarConfig,
+  HeroSlideConfig,
+  HeroCarouselConfig,
+  FeaturedProductsConfig,
+  CategoryGridConfig,
+  PromotionalBannerConfig,
+  FlashSaleConfig,
+  SectionConfig,
+
+  // Database models
+  LandingSectionRow,
+  LandingSection,
+  AnnouncementBarSection,
+  HeroSlideSection,
+  HeroCarouselSection,
+  FeaturedProductsSection as CMSFeaturedProductsSection,
+  CategoryGridSection,
+  PromotionalBannerSection,
+  FlashSaleSection,
+
+  // API types
+  CreateSectionRequest,
+  UpdateSectionRequest,
+  ReorderSectionsRequest,
+  GetSectionsQuery,
+  GetSectionsResponse,
+  GetSectionResponse,
+
+  // Admin UI types
+  SectionFormData,
+  SectionEditorProps,
+  SectionCardProps,
+
+  // Utility types
+  SectionTypeMeta,
+  SectionTemplate
+} from './cms'
+
+export {
+  // Type guards
+  isAnnouncementBarSection,
+  isHeroSlideSection,
+  isFeaturedProductsSection,
+  requiresProducts,
+  isSectionActive
+} from './cms'
+
 // Database types
 export type {
   // Core types

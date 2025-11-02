@@ -782,15 +782,15 @@
   },
   "home": {
     "announcement": {
-      "highlight": "🎉 Envío gratuito en pedidos de más de 50€",
-      "description": "Entrega al día siguiente disponible en Madrid y Barcelona",
-      "cta": "Comprar ahora"
+      "highlight": "Envío gratis desde 50€",
+      "description": "Llega mañana en Madrid y Barcelona",
+      "cta": "Ver productos"
     },
     "hero": {
-      "title": "Saborea Moldavia en cada entrega",
-      "subtitle": "Vinos seleccionados, alimentos artesanales y regalos festivos enviados directamente desde productores moldavos a tu hogar en España.",
-      "primaryCta": "Comprar colecciones destacadas",
-      "secondaryCta": "Conoce a nuestros productores",
+      "title": "Vinos moldavos que no encuentras en el súper",
+      "subtitle": "Bodegas familiares, ediciones limitadas y productos que solo se hacen allá. Los traemos directo a tu casa en España.",
+      "primaryCta": "Ver vinos y productos",
+      "secondaryCta": "Cómo funciona",
       "imageAlt": "Cesta gourmet con vino y productos moldavos",
       "trustBadge": "Más de 2.000 entregas en toda España",
       "highlights": {
@@ -827,79 +827,79 @@
       }
     },
     "categories": {
-      "title": "Comienza tu viaje",
-      "subtitle": "Explora nuestras selecciones más queridas y encuentra el maridaje ideal para cada ocasión.",
-      "viewAll": "Ver todos los productos",
+      "title": "Qué vendemos",
+      "subtitle": "Vinos, comida y regalos de Moldavia. Todo directo del productor.",
+      "viewAll": "Ver todo el catálogo",
       "items": {
         "wines": {
-          "title": "Vinos emblemáticos",
-          "description": "Pequeñas partidas y bodegas galardonadas.",
+          "title": "Vinos moldavos",
+          "description": "Tintos, blancos y espumosos que no encuentras en otras tiendas. Desde bodegas pequeñas, no de las grandes marcas.",
           "imageAlt": "Botellas de vino tinto sobre una mesa",
-          "cta": "Comprar vinos"
+          "cta": "Ver vinos"
         },
         "gourmet": {
-          "title": "Despensa gourmet",
-          "description": "Conservas artesanas, miel y dulces de autor.",
+          "title": "Comida moldava",
+          "description": "Mermeladas, mieles y conservas para tablas de quesos o regalos. Hechas por productores locales, no en fábricas.",
           "imageAlt": "Selección de productos gourmet artesanales moldavos",
-          "cta": "Descubrir despensa"
+          "cta": "Ver comida"
         },
         "gifts": {
-          "title": "Cestas regalo",
-          "description": "Sets listos para regalar en fiestas y celebraciones.",
+          "title": "Regalos ya listos",
+          "description": "Vino + productos gourmet en caja bonita. Perfecto si no sabes qué regalar o no tienes tiempo.",
           "imageAlt": "Cajas de regalo envueltas con lazos",
-          "cta": "Ver cestas"
+          "cta": "Ver regalos"
         },
         "subscriptions": {
-          "title": "Cajas mensuales",
-          "description": "Degustaciones de temporada con entregas programadas.",
+          "title": "Suscripción mensual",
+          "description": "Una caja cada mes con vinos y productos nuevos. Cancela cuando quieras.",
           "imageAlt": "Caja mensual de degustación con vino y delicias",
-          "cta": "Ver suscripciones"
+          "cta": "Ver suscripción"
         }
       }
     },
     "collections": {
-      "badge": "Destacados de temporada",
-      "title": "Compra nuestras colecciones más queridas",
-      "subtitle": "Descubre lanzamientos curados con vinos moldavos premium, alimentos gourmet e ideas para regalar.",
+      "badge": "Colecciones especiales",
+      "title": "Nuestras colecciones",
+      "subtitle": "Vinos y productos que armamos para ti. Listo para regalar o disfrutar.",
       "cards": {
         "reserve": {
-          "title": "Llegadas de bodega reserva",
-          "description": "Ediciones limitadas de bodegas boutique, listas para descorchar en celebraciones.",
-          "cta": "Explorar vinos reserva",
-          "tag": "Novedad",
+          "title": "Vinos reserva",
+          "description": "Botellas especiales para cumpleaños, aniversarios o cenas importantes. Edición limitada, se acaban rápido.",
+          "cta": "Ver vinos reserva",
+          "tag": "Nuevo",
           "imageAlt": "Sumiller presentando botellas de vino premium."
         },
         "artisan": {
-          "title": "Despensa artesanal",
-          "description": "Miel, conservas y charcutería perfectas para noches de maridaje sin esfuerzo.",
-          "cta": "Llenar la despensa",
-          "tag": "Selección del editor",
+          "title": "Pack gourmet",
+          "description": "Miel, conservas y embutidos para una tabla de quesos. Todo de Moldavia.",
+          "cta": "Ver pack gourmet",
+          "tag": "Popular",
           "imageAlt": "Tabla gourmet con quesos, pan y condimentos."
         },
         "experience": {
-          "title": "Experiencias de degustación de fin de semana",
-          "description": "Entregas con guías de maridaje, listas de reproducción y consejos de chefs para veladas memorables.",
-          "cta": "Reservar una caja de degustación",
-          "tag": "Edición limitada",
+          "title": "Caja degustación",
+          "description": "Vino + comida + guía de maridaje. Todo lo que necesitas para una noche especial en casa.",
+          "cta": "Ver caja degustación",
+          "tag": "Limitado",
           "imageAlt": "Amigos disfrutando una cata de vino y comida en casa."
         }
       }
     },
     "howItWorks": {
-      "title": "Así funciona Moldova Direct",
-      "subtitle": "Del viñedo a tu puerta, te acercamos Moldavia sin salir de casa.",
+      "title": "Cómo funciona",
+      "subtitle": "De Moldavia a tu casa en 3 pasos.",
       "steps": {
         "choose": {
-          "title": "Elige tus favoritos",
-          "description": "Selecciona colecciones curadas, lanzamientos limitados y hallazgos regionales."
+          "title": "Elige lo que quieras",
+          "description": "Vinos, comida, cajas regalo o suscripciones. Todo de Moldavia, imposible de encontrar aquí."
         },
         "prepare": {
-          "title": "Preparamos en Moldavia",
-          "description": "Los productores embalan cada pedido a mano con materiales protectores y sostenibles."
+          "title": "Lo preparamos allá",
+          "description": "Los productores empacan tu pedido a mano. Con cuidado, sin prisas."
         },
         "deliver": {
-          "title": "Entrega en toda España",
-          "description": "Mensajería rápida con seguimiento, transporte refrigerado y avisos proactivos."
+          "title": "Llega a tu casa",
+          "description": "Lo enviamos con frío para que llegue perfecto. Te avisamos cuando sale y cuando llega."
         }
       }
     },
@@ -910,17 +910,17 @@
       "testimonials": {
         "maria": {
           "name": "María, Barcelona",
-          "quote": "Los espumosos fueron una revelación y la entrega llegó a tiempo para nuestra cena especial.",
+          "quote": "Pedí espumosos para una cena y llegaron el mismo día. No esperaba que fueran tan buenos.",
           "location": "Propietaria de restaurante"
         },
         "carlos": {
           "name": "Carlos, Madrid",
-          "quote": "Sus cestas hicieron que los regalos corporativos fueran sencillos: premium, auténticos y con una presentación impecable.",
+          "quote": "Compro sus cestas para regalos de empresa. Siempre quedan bien y no tengo que pensar mucho.",
           "location": "Cliente corporativo"
         },
         "sofia": {
           "name": "Sofía, Valencia",
-          "quote": "Adoro las cajas de temporada; llegan refrigeradas e incluyen historias de cada productor.",
+          "quote": "Tengo la suscripción mensual. Cada caja trae productos diferentes y siempre llega bien fría.",
           "location": "Suscriptora"
         }
       },
@@ -932,11 +932,11 @@
       ]
     },
     "featuredProducts": {
-      "title": "Selección del equipo",
-      "subtitle": "Lanzamientos limitados y superventas que nos inspiran esta semana.",
-      "noProducts": "No hay productos destacados en este momento. Explora nuestro catálogo completo.",
-      "viewAll": "Ver todos los productos",
-      "error": "Ha ocurrido un problema al cargar los productos destacados.",
+      "title": "Lo que más se vende",
+      "subtitle": "Vinos y productos que otros clientes están comprando ahora.",
+      "noProducts": "No hay productos disponibles en este momento. Vuelve pronto.",
+      "viewAll": "Ver todo el catálogo",
+      "error": "No pudimos cargar los productos. Inténtalo de nuevo.",
       "filters": {
         "all": "Todos",
         "bestsellers": "Más vendidos",
