@@ -1,4 +1,5 @@
 import { serverSupabaseServiceRole } from "#supabase/server";
+import { requireAdminRole } from "~/server/utils/adminAuth";
 
 /**
  * Synchronize template structure across languages
@@ -6,6 +7,8 @@ import { serverSupabaseServiceRole } from "#supabase/server";
  */
 
 export default defineEventHandler(async (event) => {
+  await requireAdminRole(event);
+
   const body = await readBody(event);
   const { type, sourceLocale, targetLocales } = body;
 

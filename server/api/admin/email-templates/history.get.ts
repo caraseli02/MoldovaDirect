@@ -1,4 +1,5 @@
 import { serverSupabaseServiceRole } from '#supabase/server'
+import { requireAdminRole } from '~/server/utils/adminAuth'
 
 /**
  * Get email template version history
@@ -6,6 +7,8 @@ import { serverSupabaseServiceRole } from '#supabase/server'
  */
 
 export default defineEventHandler(async (event) => {
+  await requireAdminRole(event)
+
   const query = getQuery(event)
   const type = query.type as string
   const locale = query.locale as string

@@ -1,4 +1,5 @@
 import { serverSupabaseServiceRole } from '#supabase/server'
+import { requireAdminRole } from '~/server/utils/adminAuth'
 
 /**
  * Save email template
@@ -6,6 +7,8 @@ import { serverSupabaseServiceRole } from '#supabase/server'
  */
 
 export default defineEventHandler(async (event) => {
+  await requireAdminRole(event)
+
   const body = await readBody(event)
   const { type, locale, translations, subject, preheader } = body
 
