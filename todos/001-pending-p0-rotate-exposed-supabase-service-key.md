@@ -1,5 +1,5 @@
 ---
-status: pending
+status: in-progress
 priority: p0
 issue_id: "001"
 tags: [security, critical, credentials, code-review]

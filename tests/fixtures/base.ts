@@ -1,5 +1,6 @@
 import { test as base, expect } from '@playwright/test'
 import type { Page, BrowserContext } from '@playwright/test'
+import { generateSecurePassword } from '../utils/generateSecurePassword'
 
 export interface TestUser {
   email: string
@@ -42,8 +43,8 @@ export const test = base.extend<TestFixtures>({
 
   testUser: async ({ locale }, use) => {
     const user: TestUser = {
-      email: `test-${locale}@moldovadirect.com`,
-      password: 'Test123!@#',
+      email: process.env.TEST_USER_EMAIL || `test-${locale}@example.test`,
+      password: process.env.TEST_USER_PASSWORD || generateSecurePassword(),
       name: `Test User ${locale.toUpperCase()}`,
       locale,
     }
@@ -52,8 +53,8 @@ export const test = base.extend<TestFixtures>({
 
   adminUser: async ({}, use) => {
     const admin: AdminUser = {
-      email: 'admin@moldovadirect.com',
-      password: 'Admin123!@#',
+      email: process.env.TEST_ADMIN_EMAIL || 'admin@example.test',
+      password: process.env.TEST_ADMIN_PASSWORD || generateSecurePassword(),
       name: 'Admin User',
       role: 'admin',
     }
