@@ -1,4 +1,4 @@
-import { serverSupabaseClient, serverSupabaseUser } from '#supabase/server'
+import { serverSupabaseClient } from '#supabase/server'
 import type { CreateSectionRequest, GetSectionResponse, LandingSectionRow } from '~/types'
 
 /**
@@ -15,38 +15,38 @@ import type { CreateSectionRequest, GetSectionResponse, LandingSectionRow } from
 export default defineEventHandler(async (event): Promise<GetSectionResponse> => {
   try {
     const supabase = await serverSupabaseClient(event)
-    const user = await serverSupabaseUser(event)
-
-    // Check authentication
-    if (!user) {
-      throw createError({
-        statusCode: 401,
-        statusMessage: 'Unauthorized - Authentication required'
-      })
-    }
 
     // Check admin role
-    const { data: userData } = await supabase
-      .from('users')
-      .select('raw_user_meta_data')
-      .eq('id', user.id)
-      .single()
-
-    if (!userData || userData.raw_user_meta_data?.role !== 'admin') {
-      throw createError({
-        statusCode: 403,
-        statusMessage: 'Forbidden - Admin role required'
-      })
-    }
+    const { user } = await requireAdmin(event)
 
     // Parse request body
     const body = await readBody<CreateSectionRequest>(event)
 
     // Validate required fields
+    const VALID_SECTION_TYPES = [
+      'announcement_bar',
+      'hero_carousel',
+      'hero_slide',
+      'category_grid',
+      'featured_products',
+      'product_showcase',
+      'testimonials',
+      'cta_banner',
+      'newsletter_signup',
+      'trust_badges'
+    ] as const
+
     if (!body.section_type) {
       throw createError({
         statusCode: 400,
         statusMessage: 'Bad Request - section_type is required'
+      })
+    }
+
+    if (!VALID_SECTION_TYPES.includes(body.section_type as any)) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: `Bad Request - Invalid section_type. Must be one of: ${VALID_SECTION_TYPES.join(', ')}`
       })
     }
 

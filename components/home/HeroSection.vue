@@ -36,18 +36,11 @@
         <div class="relative">
           <div class="absolute -top-24 -right-16 h-72 w-72 rounded-full bg-primary-400/20 blur-3xl"></div>
           <div class="relative overflow-hidden rounded-[36px] border border-white/10 bg-white/5 shadow-[0_40px_80px_-40px_rgba(15,23,42,0.6)]">
-            <!-- TODO: Replace with actual product photography from /public/images/home/hero.jpg -->
             <NuxtImg
-              src="/images/home/hero.jpg"
+              src="https://images.unsplash.com/photo-1545243424-0ce743321e11?auto=format&fit=crop&w=1400&q=80"
               :alt="t('home.hero.imageAlt')"
-              format="webp"
-              quality="85"
-              width="700"
-              height="700"
-              sizes="sm:100vw md:50vw lg:45vw"
+              densities="1x 2x"
               class="h-full w-full object-cover"
-              loading="eager"
-              :img-attrs="{ class: 'aspect-square' }"
             />
             <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
          

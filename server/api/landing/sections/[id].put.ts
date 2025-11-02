@@ -1,4 +1,4 @@
-import { serverSupabaseClient, serverSupabaseUser } from '#supabase/server'
+import { serverSupabaseClient } from '#supabase/server'
 import type { UpdateSectionRequest, GetSectionResponse, LandingSectionRow } from '~/types'
 
 /**
@@ -15,30 +15,10 @@ import type { UpdateSectionRequest, GetSectionResponse, LandingSectionRow } from
 export default defineEventHandler(async (event): Promise<GetSectionResponse> => {
   try {
     const supabase = await serverSupabaseClient(event)
-    const user = await serverSupabaseUser(event)
     const id = getRouterParam(event, 'id')
 
-    // Check authentication
-    if (!user) {
-      throw createError({
-        statusCode: 401,
-        statusMessage: 'Unauthorized - Authentication required'
-      })
-    }
-
     // Check admin role
-    const { data: userData } = await supabase
-      .from('users')
-      .select('raw_user_meta_data')
-      .eq('id', user.id)
-      .single()
-
-    if (!userData || userData.raw_user_meta_data?.role !== 'admin') {
-      throw createError({
-        statusCode: 403,
-        statusMessage: 'Forbidden - Admin role required'
-      })
-    }
+    const { user } = await requireAdmin(event)
 
     if (!id) {
       throw createError({

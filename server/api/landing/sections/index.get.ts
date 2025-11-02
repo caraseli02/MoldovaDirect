@@ -43,11 +43,25 @@ export default defineEventHandler(async (event): Promise<GetSectionsResponse> =>
       if (!includeScheduled) {
         const now = new Date().toISOString()
 
-        // starts_at is null OR starts_at <= now
-        queryBuilder = queryBuilder.or(`starts_at.is.null,starts_at.lte.${now}`)
+        // Use the database function for correct schedule filtering
+        // This function properly handles: (starts_at IS NULL OR starts_at <= now) AND (ends_at IS NULL OR ends_at >= now)
+        const { data, error, count } = await supabase.rpc('get_active_landing_sections', {
+          p_locale: locale
+        })
 
-        // ends_at is null OR ends_at >= now
-        queryBuilder = queryBuilder.or(`ends_at.is.null,ends_at.gte.${now}`)
+        if (error) {
+          throw createError({
+            statusCode: 500,
+            statusMessage: 'Failed to fetch landing sections',
+            data: error
+          })
+        }
+
+        return {
+          sections: (data as LandingSectionRow[]) || [],
+          total: count || data?.length || 0,
+          locale
+        }
       }
     }
 
