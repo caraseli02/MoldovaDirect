@@ -48,18 +48,20 @@ export default defineConfig({
       },
       {
         name: `firefox-${locale}`,
-        use: { 
+        use: {
           ...devices['Desktop Firefox'],
           locale,
           timezoneId: 'Europe/Madrid',
+          storageState: `tests/fixtures/.auth/user-${locale}.json`,
         },
       },
       {
         name: `webkit-${locale}`,
-        use: { 
+        use: {
           ...devices['Desktop Safari'],
           locale,
           timezoneId: 'Europe/Madrid',
+          storageState: `tests/fixtures/.auth/user-${locale}.json`,
         },
       },
     ]),

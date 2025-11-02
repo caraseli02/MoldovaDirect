@@ -85,15 +85,18 @@ export const test = base.extend<TestFixtures>({
     await use(products)
   },
 
-  authenticatedPage: async ({ page, testUser, baseURL }, use) => {
-    await page.goto(`${baseURL}/login`)
+  authenticatedPage: async ({ page }, use) => {
+    // Storage state is automatically applied from playwright.config.ts
+    // The page should already be authenticated via the storage state
+    // Just navigate to the homepage to activate the session
+    await page.goto('/')
 
-    await page.fill('[data-testid="email-input"]', testUser.email)
-    await page.fill('[data-testid="password-input"]', testUser.password)
-    await page.click('[data-testid="login-button"]')
-
-    // Wait for redirect after login (should go to /account or homepage)
-    await page.waitForURL(/\/(account|$)/)
+    // Verify that we're actually authenticated
+    // Note: This verification is optional and depends on your UI
+    // If you have a user menu or other auth indicator, you can check it here
+    // For example:
+    // const userMenu = page.locator('[data-testid="user-menu"]')
+    // await expect(userMenu).toBeVisible({ timeout: 5000 })
 
     await use(page)
   },
