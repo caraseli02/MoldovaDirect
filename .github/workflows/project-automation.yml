@@ -1,0 +1,392 @@
+name: Project automation
+
+on:
+  issues:
+    types:
+      - opened
+      - edited
+      - reopened
+      - closed
+      - labeled
+      - unlabeled
+      - assigned
+      - unassigned
+  workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * *'
+
+jobs:
+  sync:
+    if: github.event_name != 'issues' || github.event.issue.pull_request == null
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      projects: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Sync issue to project
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.PROJECT_AUTOMATION_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            const workspace = process.env.GITHUB_WORKSPACE;
+            const configPath = path.join(workspace, 'project-automation.config.json');
+
+            if (!fs.existsSync(configPath)) {
+              core.warning('project-automation.config.json not found. Commit the generated config to enable automations.');
+              return;
+            }
+
+            const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+            const projectId = config.projectId;
+
+            if (!projectId) {
+              core.setFailed('projectId missing from project-automation.config.json.');
+              return;
+            }
+
+            const eventName = context.eventName;
+
+            function buildLabelSet(names) {
+              return new Set(names.map((name) => name.toLowerCase()));
+            }
+
+            function normalizeIssue(input) {
+              return {
+                contentId: input.contentId,
+                number: input.number,
+                state: (input.state || 'open').toLowerCase(),
+                labelNames: buildLabelSet(input.labels || []),
+                assigneeLogins: input.assignees || [],
+                milestoneDueOn: input.milestoneDueOn || null,
+                url: input.url
+              };
+            }
+
+            async function findProjectItem(contentId) {
+              const query = `
+                query($issueId: ID!) {
+                  node(id: $issueId) {
+                    ... on Issue {
+                      projectItems(first: 20) {
+                        nodes {
+                          id
+                          project { id }
+                        }
+                      }
+                    }
+                  }
+                }
+              `;
+              const data = await github.graphql(query, { issueId: contentId });
+              const nodes = data?.node?.projectItems?.nodes || [];
+              const match = nodes.find((node) => node.project?.id === projectId);
+              return match ? match.id : null;
+            }
+
+            async function addProjectItem(contentId) {
+              const mutation = `
+                mutation($projectId: ID!, $contentId: ID!) {
+                  addProjectV2ItemById(input: { projectId: $projectId, contentId: $contentId }) {
+                    item { id }
+                  }
+                }
+              `;
+              const data = await github.graphql(mutation, { projectId, contentId }).catch(async (error) => {
+                core.warning(`addProjectV2ItemById failed: ${error.message}`);
+                return null;
+              });
+              return data?.addProjectV2ItemById?.item?.id || null;
+            }
+
+            async function ensureProjectItem(contentId) {
+              const existing = await findProjectItem(contentId);
+              if (existing) {
+                return existing;
+              }
+              const created = await addProjectItem(contentId);
+              if (created) {
+                core.info('Issue added to project.');
+                return created;
+              }
+              const fallback = await findProjectItem(contentId);
+              if (fallback) {
+                return fallback;
+              }
+              throw new Error('Failed to determine project item for issue.');
+            }
+
+            function resolveMapping(labelSet, mappings, options) {
+              if (!mappings || !options) {
+                return null;
+              }
+              for (const [label, optionName] of Object.entries(mappings)) {
+                if (labelSet.has(label.toLowerCase()) && options[optionName]) {
+                  return optionName;
+                }
+              }
+              return null;
+            }
+
+            function selectStage(issue) {
+              if (issue.state === 'closed') {
+                return 'Done';
+              }
+              const mappedStage = resolveMapping(issue.labelNames, config.stageLabelMappings, config.stageOptionIds);
+              if (mappedStage) {
+                return mappedStage;
+              }
+              if (issue.labelNames.has('blocked') && config.stageOptionIds?.Blocked) {
+                return 'Blocked';
+              }
+              if (issue.labelNames.has('review') && config.stageOptionIds?.Review) {
+                return 'Review';
+              }
+              if (issue.labelNames.has('ready') && config.stageOptionIds?.Ready) {
+                return 'Ready';
+              }
+              if (issue.assigneeLogins.length > 0 && config.stageOptionIds?.['In Progress']) {
+                return 'In Progress';
+              }
+              return 'Backlog';
+            }
+
+            function selectPriority(issue) {
+              const mappedPriority = resolveMapping(issue.labelNames, config.priorityLabelMappings, config.priorityOptionIds);
+              if (mappedPriority) {
+                return mappedPriority;
+              }
+              if (config.priorityOptionIds?.Medium) {
+                return 'Medium';
+              }
+              return null;
+            }
+
+            function selectArea(issue) {
+              const areaFromMapping = resolveMapping(issue.labelNames, config.areaLabelMappings, config.areaOptionIds);
+              if (areaFromMapping) {
+                return areaFromMapping;
+              }
+              const prefixed = Array.from(issue.labelNames).find((name) => name.startsWith('area/'));
+              if (!prefixed) {
+                return null;
+              }
+              const optionName = prefixed.split('/')[1];
+              if (config.areaOptionIds?.[optionName]) {
+                return optionName;
+              }
+              const normalized = optionName.charAt(0).toUpperCase() + optionName.slice(1);
+              return config.areaOptionIds?.[normalized] ? normalized : null;
+            }
+
+            async function updateSingleSelect(itemId, fieldId, options, optionName) {
+              if (!fieldId || !optionName) {
+                return;
+              }
+              const optionId = options?.[optionName];
+              if (!optionId) {
+                core.warning(`Option '${optionName}' not configured for field ${fieldId}.`);
+                return;
+              }
+              const mutation = `
+                mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
+                  updateProjectV2ItemFieldValue(
+                    input: {
+                      projectId: $projectId,
+                      itemId: $itemId,
+                      fieldId: $fieldId,
+                      value: { singleSelectOptionId: $optionId }
+                    }
+                  ) {
+                    projectV2Item { id }
+                  }
+                }
+              `;
+              await github.graphql(mutation, {
+                projectId,
+                itemId,
+                fieldId,
+                optionId
+              });
+            }
+
+            async function updateTextField(itemId, fieldId, value) {
+              if (!fieldId) {
+                return;
+              }
+              const mutation = `
+                mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $value: String!) {
+                  updateProjectV2ItemFieldValue(
+                    input: {
+                      projectId: $projectId,
+                      itemId: $itemId,
+                      fieldId: $fieldId,
+                      value: { text: $value }
+                    }
+                  ) {
+                    projectV2Item { id }
+                  }
+                }
+              `;
+              await github.graphql(mutation, {
+                projectId,
+                itemId,
+                fieldId,
+                value: value || ''
+              });
+            }
+
+            async function updateDateField(itemId, fieldId, value) {
+              if (!fieldId || !value) {
+                return;
+              }
+              const mutation = `
+                mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $value: Date!) {
+                  updateProjectV2ItemFieldValue(
+                    input: {
+                      projectId: $projectId,
+                      itemId: $itemId,
+                      fieldId: $fieldId,
+                      value: { date: $value }
+                    }
+                  ) {
+                    projectV2Item { id }
+                  }
+                }
+              `;
+              await github.graphql(mutation, {
+                projectId,
+                itemId,
+                fieldId,
+                value
+              });
+            }
+
+            async function updateIssue(issue) {
+              const itemId = await ensureProjectItem(issue.contentId);
+
+              const stage = selectStage(issue);
+              await updateSingleSelect(itemId, config.stageFieldId, config.stageOptionIds, stage);
+
+              const priority = selectPriority(issue);
+              if (priority) {
+                await updateSingleSelect(itemId, config.priorityFieldId, config.priorityOptionIds, priority);
+              }
+
+              const area = selectArea(issue);
+              if (area) {
+                await updateSingleSelect(itemId, config.areaFieldId, config.areaOptionIds, area);
+              }
+
+              const ownerValue = issue.assigneeLogins.join(', ');
+              await updateTextField(itemId, config.ownerFieldId, ownerValue);
+
+              const targetDate = issue.milestoneDueOn ? issue.milestoneDueOn.split('T')[0] : null;
+              await updateDateField(itemId, config.targetDateFieldId, targetDate);
+
+              core.info(`Project fields updated for issue #${issue.number}.`);
+            }
+
+            function buildIssueFromEvent() {
+              const issue = context.payload.issue;
+              if (!issue) {
+                return null;
+              }
+              return normalizeIssue({
+                contentId: issue.node_id,
+                number: issue.number,
+                state: issue.state,
+                labels: issue.labels.map((label) => label.name || label),
+                assignees: (issue.assignees || []).map((assignee) => assignee.login),
+                milestoneDueOn: issue.milestone?.due_on || null,
+                url: issue.html_url
+              });
+            }
+
+            async function fetchIssuesForBackfill() {
+              const { owner, repo } = context.repo;
+              const issues = [];
+              let hasNextPage = true;
+              let cursor = null;
+
+              const query = `
+                query($owner: String!, $repo: String!, $after: String) {
+                  repository(owner: $owner, name: $repo) {
+                    issues(
+                      first: 50,
+                      after: $after,
+                      orderBy: { field: UPDATED_AT, direction: DESC },
+                      states: [OPEN, CLOSED]
+                    ) {
+                      pageInfo {
+                        hasNextPage
+                        endCursor
+                      }
+                      nodes {
+                        id
+                        number
+                        state
+                        url
+                        labels(first: 50) { nodes { name } }
+                        assignees(first: 20) { nodes { login } }
+                        milestone { dueOn }
+                      }
+                    }
+                  }
+                }
+              `;
+
+              while (hasNextPage) {
+                const data = await github.graphql(query, { owner, repo, after: cursor });
+                const connection = data?.repository?.issues;
+                if (!connection) {
+                  break;
+                }
+                for (const node of connection.nodes || []) {
+                  issues.push(
+                    normalizeIssue({
+                      contentId: node.id,
+                      number: node.number,
+                      state: node.state,
+                      labels: (node.labels?.nodes || []).map((label) => label.name || label),
+                      assignees: (node.assignees?.nodes || []).map((assignee) => assignee.login),
+                      milestoneDueOn: node.milestone?.dueOn || null,
+                      url: node.url
+                    })
+                  );
+                }
+                hasNextPage = connection.pageInfo?.hasNextPage;
+                cursor = connection.pageInfo?.endCursor;
+              }
+
+              return issues;
+            }
+
+            if (eventName === 'workflow_dispatch' || eventName === 'schedule') {
+              core.info('Bulk sync triggered. Fetching repository issues...');
+              const issues = await fetchIssuesForBackfill();
+              core.info(`Discovered ${issues.length} issues to sync.`);
+              for (const issue of issues) {
+                try {
+                  await updateIssue(issue);
+                } catch (error) {
+                  core.warning(`Failed to sync issue #${issue.number}: ${error.message}`);
+                }
+              }
+              core.info('Bulk sync complete.');
+              return;
+            }
+
+            const issue = buildIssueFromEvent();
+            if (!issue) {
+              core.warning('No issue payload found for sync.');
+              return;
+            }
+
+            await updateIssue(issue);
+
+            core.info('Project fields updated successfully.');
