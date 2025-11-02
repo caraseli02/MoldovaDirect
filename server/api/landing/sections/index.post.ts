@@ -23,17 +23,21 @@ export default defineEventHandler(async (event): Promise<GetSectionResponse> => 
     const body = await readBody<CreateSectionRequest>(event)
 
     // Validate required fields
+    // These types must match the SQL schema and TypeScript types
     const VALID_SECTION_TYPES = [
       'announcement_bar',
       'hero_carousel',
       'hero_slide',
       'category_grid',
       'featured_products',
-      'product_showcase',
-      'testimonials',
-      'cta_banner',
-      'newsletter_signup',
-      'trust_badges'
+      'collections_showcase',
+      'social_proof',
+      'how_it_works',
+      'services',
+      'newsletter',
+      'faq_preview',
+      'promotional_banner',
+      'flash_sale'
     ] as const
 
     if (!body.section_type) {

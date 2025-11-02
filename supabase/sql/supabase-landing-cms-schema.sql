@@ -114,9 +114,9 @@ CREATE POLICY "landing_sections_select_admin"
   FOR SELECT
   USING (
     EXISTS (
-      SELECT 1 FROM auth.users
-      WHERE auth.users.id = auth.uid()
-      AND auth.users.raw_user_meta_data->>'role' = 'admin'
+      SELECT 1 FROM profiles
+      WHERE profiles.id = auth.uid()
+      AND profiles.role = 'admin'
     )
   );
 
@@ -127,9 +127,9 @@ CREATE POLICY "landing_sections_insert_admin"
   FOR INSERT
   WITH CHECK (
     EXISTS (
-      SELECT 1 FROM auth.users
-      WHERE auth.users.id = auth.uid()
-      AND auth.users.raw_user_meta_data->>'role' = 'admin'
+      SELECT 1 FROM profiles
+      WHERE profiles.id = auth.uid()
+      AND profiles.role = 'admin'
     )
   );
 
@@ -140,16 +140,16 @@ CREATE POLICY "landing_sections_update_admin"
   FOR UPDATE
   USING (
     EXISTS (
-      SELECT 1 FROM auth.users
-      WHERE auth.users.id = auth.uid()
-      AND auth.users.raw_user_meta_data->>'role' = 'admin'
+      SELECT 1 FROM profiles
+      WHERE profiles.id = auth.uid()
+      AND profiles.role = 'admin'
     )
   )
   WITH CHECK (
     EXISTS (
-      SELECT 1 FROM auth.users
-      WHERE auth.users.id = auth.uid()
-      AND auth.users.raw_user_meta_data->>'role' = 'admin'
+      SELECT 1 FROM profiles
+      WHERE profiles.id = auth.uid()
+      AND profiles.role = 'admin'
     )
   );
 
@@ -160,9 +160,9 @@ CREATE POLICY "landing_sections_delete_admin"
   FOR DELETE
   USING (
     EXISTS (
-      SELECT 1 FROM auth.users
-      WHERE auth.users.id = auth.uid()
-      AND auth.users.raw_user_meta_data->>'role' = 'admin'
+      SELECT 1 FROM profiles
+      WHERE profiles.id = auth.uid()
+      AND profiles.role = 'admin'
     )
   );
 
