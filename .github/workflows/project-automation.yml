@@ -22,7 +22,6 @@ jobs:
     permissions:
       contents: read
       issues: write
-      projects: write
     steps:
       - uses: actions/checkout@v4
       - name: Sync issue to project
