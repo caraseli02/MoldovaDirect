@@ -92,11 +92,13 @@ export const test = base.extend<TestFixtures>({
     await page.goto('/')
 
     // Verify that we're actually authenticated
-    // Note: This verification is optional and depends on your UI
-    // If you have a user menu or other auth indicator, you can check it here
-    // For example:
-    // const userMenu = page.locator('[data-testid="user-menu"]')
-    // await expect(userMenu).toBeVisible({ timeout: 5000 })
+    // Check for an auth indicator in the UI (e.g., user menu, account link)
+    const isAuthenticated = await page.locator('[data-testid="user-menu"]').isVisible({ timeout: 5000 })
+      .catch(() => false)
+
+    if (!isAuthenticated) {
+      throw new Error('Authentication failed - storage state may be invalid or expired')
+    }
 
     await use(page)
   },

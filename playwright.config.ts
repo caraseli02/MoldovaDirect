@@ -68,16 +68,18 @@ export default defineConfig({
     
     {
       name: 'Mobile Chrome',
-      use: { 
+      use: {
         ...devices['Pixel 5'],
         locale: 'es',
+        storageState: `tests/fixtures/.auth/user-es.json`,
       },
     },
     {
       name: 'Mobile Safari',
-      use: { 
+      use: {
         ...devices['iPhone 12'],
         locale: 'es',
+        storageState: `tests/fixtures/.auth/user-es.json`,
       },
     },
     

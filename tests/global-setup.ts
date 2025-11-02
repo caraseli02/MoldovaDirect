@@ -55,8 +55,8 @@ async function globalSetup(config: FullConfig) {
       // Submit login form
       await page.click('[data-testid="login-button"]')
 
-      // Wait for successful login - should redirect to account or homepage
-      await page.waitForURL(/\/(account|dashboard|$)/, { timeout: 10000 })
+      // Wait for successful login - should redirect to account or dashboard
+      await page.waitForURL(/^\/(account|dashboard)/, { timeout: 10000 })
 
       // Save authenticated storage state
       const storageFile = path.join(authDir, `user-${locale}.json`)
