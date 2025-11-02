@@ -19,7 +19,18 @@ export default defineEventHandler(async (event): Promise<GetSectionsResponse> =>
     const supabase = await serverSupabaseClient(event)
     const query = getQuery(event) as Partial<GetSectionsQuery>
 
-    const locale = (query.locale || 'es') as 'es' | 'en' | 'ro' | 'ru'
+    // Validate and set locale
+    const VALID_LOCALES = ['es', 'en', 'ro', 'ru'] as const
+    const requestedLocale = query.locale || 'es'
+
+    if (!VALID_LOCALES.includes(requestedLocale as any)) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: `Bad Request - Invalid locale. Must be one of: ${VALID_LOCALES.join(', ')}`
+      })
+    }
+
+    const locale = requestedLocale as 'es' | 'en' | 'ro' | 'ru'
     const activeOnly = query.active_only !== 'false' // Default true
     const sectionType = query.section_type
     const includeScheduled = query.include_scheduled === 'true' // Default false

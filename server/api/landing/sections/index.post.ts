@@ -47,7 +47,7 @@ export default defineEventHandler(async (event): Promise<GetSectionResponse> => 
       })
     }
 
-    if (!VALID_SECTION_TYPES.includes(body.section_type as any)) {
+    if (!VALID_SECTION_TYPES.includes(body.section_type as typeof VALID_SECTION_TYPES[number])) {
       throw createError({
         statusCode: 400,
         statusMessage: `Bad Request - Invalid section_type. Must be one of: ${VALID_SECTION_TYPES.join(', ')}`
