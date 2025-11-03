@@ -7,8 +7,11 @@ import {
   orderConfirmation,
   type OrderEmailData,
 } from '~/server/utils/emailTemplates'
+import { requireAdminRole } from '~/server/utils/adminAuth'
 
 export default defineEventHandler(async (event) => {
+  await requireAdminRole(event)
+
   const body = await readBody(event)
   const { type, locale, translations, subject, preheader } = body
 
