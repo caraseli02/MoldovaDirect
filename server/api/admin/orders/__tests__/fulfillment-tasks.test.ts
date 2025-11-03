@@ -9,7 +9,7 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import { createSupabaseClient } from '~/server/utils/supabase'
+import { createSupabaseClient } from '~/server/utils/supabaseAdminClient'
 
 describe('Order Fulfillment Tasks - Race Conditions', () => {
   let supabase: any

@@ -10,7 +10,7 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
-import { createSupabaseClient } from '~/server/utils/supabase'
+import { createSupabaseClient } from '~/server/utils/supabaseAdminClient'
 
 describe('Bulk Product Operations - Error Handling', () => {
   let supabase: any

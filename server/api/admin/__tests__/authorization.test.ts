@@ -11,7 +11,7 @@
  */
 
 import { describe, it, expect, beforeAll, afterAll } from 'vitest'
-import { createSupabaseClient } from '~/server/utils/supabase'
+import { createSupabaseClient } from '~/server/utils/supabaseAdminClient'
 
 describe('Admin API - Authorization (RBAC)', () => {
   let supabase: any
