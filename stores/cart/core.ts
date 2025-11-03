@@ -24,7 +24,12 @@ const state = ref<CartCoreState>({
   sessionId: null,
   loading: false,
   error: null,
-  lastSyncAt: null
+  lastSyncAt: null,
+  // Cart locking state
+  isLocked: false,
+  lockedAt: null,
+  lockedUntil: null,
+  lockedByCheckoutSessionId: null
 })
 
 // Performance optimization caches
@@ -169,6 +174,47 @@ function validateQuantity(quantity: number): void {
   }
 }
 
+/**
+ * Check if cart is currently locked
+ */
+function isCartLocked(): boolean {
+  if (!state.value.isLocked || !state.value.lockedUntil) {
+    return false
+  }
+
+  // Check if lock has expired
+  const now = new Date()
+  if (state.value.lockedUntil < now) {
+    // Auto-unlock if expired
+    state.value.isLocked = false
+    state.value.lockedAt = null
+    state.value.lockedUntil = null
+    state.value.lockedByCheckoutSessionId = null
+    return false
+  }
+
+  return true
+}
+
+/**
+ * Ensure cart is not locked before modification
+ */
+function ensureCartNotLocked(): void {
+  if (isCartLocked()) {
+    throw createCartError(
+      'validation',
+      'CART_LOCKED',
+      'Cart is locked during checkout and cannot be modified',
+      false,
+      {
+        lockedAt: state.value.lockedAt,
+        lockedUntil: state.value.lockedUntil,
+        lockedBySession: state.value.lockedByCheckoutSessionId
+      }
+    )
+  }
+}
+
 // =============================================
 // CORE ACTIONS
 // =============================================
@@ -192,6 +238,9 @@ const actions: CartCoreActions = {
     state.value.error = null
 
     try {
+      // Check if cart is locked
+      ensureCartNotLocked()
+
       // Validate inputs
       validateProduct(product)
       validateQuantity(quantity)
@@ -269,6 +318,9 @@ const actions: CartCoreActions = {
     state.value.error = null
 
     try {
+      // Check if cart is locked
+      ensureCartNotLocked()
+
       if (!itemId) {
         throw createCartError('validation', 'INVALID_ITEM_ID', 'Item ID is required')
       }
@@ -305,6 +357,9 @@ const actions: CartCoreActions = {
     state.value.error = null
 
     try {
+      // Check if cart is locked
+      ensureCartNotLocked()
+
       if (!itemId) {
         throw createCartError('validation', 'INVALID_ITEM_ID', 'Item ID is required')
       }
@@ -364,6 +419,9 @@ const actions: CartCoreActions = {
     state.value.error = null
 
     try {
+      // Check if cart is locked
+      ensureCartNotLocked()
+
       state.value.items = []
       
       // Invalidate cache and update sync time
@@ -380,7 +438,89 @@ const actions: CartCoreActions = {
   },
 
   generateItemId,
-  generateSessionId
+  generateSessionId,
+
+  /**
+   * Lock the cart for checkout (client-side)
+   */
+  async lockCart(checkoutSessionId: string, lockDurationMinutes: number = 30): Promise<void> {
+    try {
+      const now = new Date()
+      const lockUntil = new Date(now.getTime() + lockDurationMinutes * 60 * 1000)
+
+      state.value.isLocked = true
+      state.value.lockedAt = now
+      state.value.lockedUntil = lockUntil
+      state.value.lockedByCheckoutSessionId = checkoutSessionId
+
+      console.log(`Cart locked for checkout session: ${checkoutSessionId} until ${lockUntil}`)
+    } catch (error: any) {
+      const message = error.message || 'Failed to lock cart'
+      state.value.error = message
+      throw createCartError('validation', 'LOCK_FAILED', message, true, { checkoutSessionId })
+    }
+  },
+
+  /**
+   * Unlock the cart (client-side)
+   */
+  async unlockCart(checkoutSessionId?: string): Promise<void> {
+    try {
+      // Verify session if provided
+      if (checkoutSessionId && state.value.lockedByCheckoutSessionId &&
+          state.value.lockedByCheckoutSessionId !== checkoutSessionId) {
+        // Check if lock has expired
+        if (state.value.lockedUntil && new Date() < state.value.lockedUntil) {
+          throw createCartError(
+            'validation',
+            'UNAUTHORIZED_UNLOCK',
+            'Cannot unlock cart locked by different session',
+            false,
+            {
+              providedSession: checkoutSessionId,
+              lockingSession: state.value.lockedByCheckoutSessionId
+            }
+          )
+        }
+      }
+
+      state.value.isLocked = false
+      state.value.lockedAt = null
+      state.value.lockedUntil = null
+      state.value.lockedByCheckoutSessionId = null
+
+      console.log('Cart unlocked')
+    } catch (error: any) {
+      const message = error.message || 'Failed to unlock cart'
+      state.value.error = message
+      throw createCartError('validation', 'UNLOCK_FAILED', message, true, { checkoutSessionId })
+    }
+  },
+
+  /**
+   * Check cart lock status (returns current state)
+   */
+  async checkLockStatus(): Promise<{
+    isLocked: boolean
+    lockedAt: Date | null
+    lockedUntil: Date | null
+    lockedBySession: string | null
+  }> {
+    // Auto-unlock if expired
+    isCartLocked()
+
+    return {
+      isLocked: state.value.isLocked,
+      lockedAt: state.value.lockedAt,
+      lockedUntil: state.value.lockedUntil,
+      lockedBySession: state.value.lockedByCheckoutSessionId
+    }
+  },
+
+  /**
+   * Check if cart is currently locked
+   */
+  isCartLocked
 }
 
 // =============================================
@@ -391,17 +531,23 @@ export function useCartCore() {
   return {
     // State
     state: readonly(state),
-    
+
     // Getters
     itemCount: computed(() => getters.itemCount),
     subtotal: computed(() => getters.subtotal),
     isEmpty: computed(() => getters.isEmpty),
     getItemByProductId: getters.getItemByProductId,
     isInCart: getters.isInCart,
-    
+
+    // Lock state
+    isLocked: computed(() => state.value.isLocked),
+    lockedAt: computed(() => state.value.lockedAt),
+    lockedUntil: computed(() => state.value.lockedUntil),
+    lockedByCheckoutSessionId: computed(() => state.value.lockedByCheckoutSessionId),
+
     // Actions
     ...actions,
-    
+
     // Utilities
     invalidateCalculationCache
   }
