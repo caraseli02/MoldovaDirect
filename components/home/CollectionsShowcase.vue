@@ -1,5 +1,5 @@
 <template>
-  <section class="bg-gray-50 py-16 dark:bg-gray-950 md:py-24">
+  <section class="bg-gray-50 py-20 dark:bg-gray-950 md:py-28">
     <div class="container">
       <div class="mx-auto max-w-3xl text-center">
         <span class="inline-flex items-center gap-2 rounded-full bg-primary-100 px-4 py-2 text-sm font-semibold text-primary-700 dark:bg-primary-500/20 dark:text-primary-200">

@@ -1,5 +1,5 @@
 <template>
-  <section class="bg-white py-16 dark:bg-gray-950 md:py-24">
+  <section class="bg-white py-20 dark:bg-gray-950 md:py-28">
     <div class="container">
       <div class="mx-auto max-w-3xl text-center">
         <h2 class="text-3xl font-bold md:text-4xl">{{ t('home.featuredProducts.title') }}</h2>
@@ -17,7 +17,7 @@
           :aria-controls="'products-panel'"
           @click="activeFilter = filter.value"
           :class="[
-            'rounded-full px-6 py-2 text-sm font-semibold transition',
+            'rounded-full px-6 py-2 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-950',
             activeFilter === filter.value
               ? 'bg-primary-600 text-white shadow-lg'
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
@@ -28,12 +28,12 @@
       </div>
 
       <div v-if="pending" class="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        <div v-for="i in 12" :key="i" class="rounded-2xl bg-gray-100/80 p-6 animate-pulse dark:bg-gray-900">
-          <div class="h-40 rounded-xl bg-gray-200 dark:bg-gray-800"></div>
+        <div v-for="i in 12" :key="i" class="rounded-3xl bg-gray-100/80 p-6 dark:bg-gray-900">
+          <div class="h-40 rounded-xl bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse dark:from-gray-800 dark:via-gray-750 dark:to-gray-800 bg-[length:200%_100%]"></div>
           <div class="mt-4 space-y-3">
-            <div class="h-4 rounded bg-gray-200 dark:bg-gray-800"></div>
-            <div class="h-4 w-2/3 rounded bg-gray-200 dark:bg-gray-800"></div>
-            <div class="h-10 rounded bg-gray-200 dark:bg-gray-800"></div>
+            <div class="h-4 rounded bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse dark:from-gray-800 dark:via-gray-750 dark:to-gray-800 bg-[length:200%_100%]"></div>
+            <div class="h-4 w-2/3 rounded bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse dark:from-gray-800 dark:via-gray-750 dark:to-gray-800 bg-[length:200%_100%]"></div>
+            <div class="h-10 rounded bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse dark:from-gray-800 dark:via-gray-750 dark:to-gray-800 bg-[length:200%_100%]"></div>
           </div>
         </div>
       </div>

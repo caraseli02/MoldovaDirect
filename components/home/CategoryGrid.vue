@@ -1,5 +1,5 @@
 <template>
-  <section class="py-16 md:py-24">
+  <section class="py-20 md:py-28">
     <div class="container">
       <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
         <div>
@@ -36,7 +36,7 @@
           ></div>
           <div class="relative flex h-full min-h-[22rem] flex-col justify-between p-8 text-white">
             <div class="space-y-4">
-              <span class="inline-flex items-center justify-center rounded-2xl bg-white/90 p-3 text-slate-900 shadow-lg shadow-slate-900/15 transition group-hover:bg-white">
+              <span class="inline-flex items-center justify-center rounded-xl bg-white/90 p-3 text-slate-900 shadow-lg shadow-slate-900/15 transition group-hover:bg-white">
                 <commonIcon :name="category.icon" class="h-6 w-6" />
               </span>
               <div class="space-y-3">

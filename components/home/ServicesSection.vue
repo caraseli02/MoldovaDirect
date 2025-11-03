@@ -1,5 +1,5 @@
 <template>
-  <section class="bg-white py-16 dark:bg-gray-950 md:py-24">
+  <section class="bg-white py-20 dark:bg-gray-950 md:py-28">
     <div class="container">
       <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
         <div>
@@ -22,7 +22,7 @@
         >
           <div class="absolute inset-0 bg-gradient-to-br from-primary-500/0 via-primary-500/0 to-primary-500/5 transition group-hover:from-primary-500/10 group-hover:to-primary-500/20"></div>
           <div class="relative">
-            <span class="inline-flex items-center justify-center rounded-2xl bg-primary-100 p-3 text-primary-600">
+            <span class="inline-flex items-center justify-center rounded-xl bg-primary-100 p-3 text-primary-600">
               <commonIcon :name="service.icon" class="h-6 w-6" />
             </span>
             <h3 class="mt-6 text-2xl font-semibold">{{ service.title }}</h3>
