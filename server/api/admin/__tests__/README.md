@@ -8,12 +8,50 @@
 
 ## Overview
 
-Comprehensive test suite for admin API endpoints covering critical functionality:
+Comprehensive integration test suite for admin API endpoints covering critical functionality:
 - Race condition scenarios
 - Duplicate deduction prevention
 - Bulk operation error handling
 - Status transition validation
 - Role-based access control (RBAC)
+
+**Note:** These are integration tests that require a live Supabase connection. They are excluded from regular unit test runs and the pre-push hook.
+
+---
+
+## Running Integration Tests
+
+### Prerequisites
+Ensure these environment variables are set in your `.env` file:
+```bash
+SUPABASE_URL=your_supabase_url
+SUPABASE_SERVICE_KEY=your_service_key
+```
+
+### Commands
+
+Run all integration tests:
+```bash
+npm run test:integration
+```
+
+Run integration tests in watch mode:
+```bash
+npm run test:integration:watch
+```
+
+Run specific test file:
+```bash
+npm run test:integration server/api/admin/__tests__/authorization.test.ts
+```
+
+### Why Separate Configuration?
+
+These tests are excluded from regular unit tests (`npm run test:unit`) because:
+1. They require a live Supabase database connection
+2. They may modify database state (test data cleanup is handled)
+3. They take longer to run than unit tests
+4. They should not block the pre-push hook
 
 ---
 
