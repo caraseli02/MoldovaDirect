@@ -13,6 +13,7 @@ import {
 } from './orderDataTransform'
 import { createEmailLog, recordEmailAttempt, getEmailLog } from './emailLogging'
 import { resolveSupabaseClient, type ResolvedSupabaseClient } from './supabaseAdminClient'
+import { shouldSendEmail } from './emailPreferences'
 
 /**
  * Email sending result
@@ -37,26 +38,44 @@ export async function sendOrderConfirmationEmail(
   options: EmailSendOptions = {}
 ): Promise<EmailSendResult> {
   const { customerName, customerEmail, orderNumber, locale } = data
-  
-  // Generate email subject based on locale
-  const subject = orderConfirmation.getOrderConfirmationSubject(orderNumber, locale)
-  
+
   // Get order ID from database if needed for logging
   const supabase = resolveSupabaseClient(options.supabaseClient)
   const { data: orderData } = await supabase
     .from('orders')
-    .select('id')
+    .select('id, user_id')
     .eq('order_number', orderNumber)
     .single()
-  
+
   const orderId = orderData?.id
-  
+  const userId = orderData?.user_id
+
   if (!orderId) {
     throw createError({
       statusCode: 404,
       statusMessage: `Order ${orderNumber} not found`
     })
   }
+
+  // Check if user has opted out of order confirmation emails
+  const shouldSend = await shouldSendEmail(
+    'order_confirmation',
+    userId || undefined,
+    userId ? undefined : customerEmail,
+    supabase
+  )
+
+  if (!shouldSend) {
+    console.log(`⏭️ Skipping order confirmation email for order ${orderNumber} - user opted out`)
+    return {
+      success: true,
+      emailLogId: -1,
+      error: 'User opted out of email notifications'
+    }
+  }
+
+  // Generate email subject based on locale
+  const subject = orderConfirmation.getOrderConfirmationSubject(orderNumber, locale)
   
   // Create email log entry
   const emailLog = await createEmailLog({
@@ -130,26 +149,44 @@ export async function sendOrderStatusEmail(
   options: EmailSendOptions = {}
 ): Promise<EmailSendResult> {
   const { customerName, customerEmail, orderNumber, locale } = data
-  
-  // Generate email subject based on type and locale
-  const subject = orderStatus.getOrderStatusSubject(emailType, orderNumber, locale)
-  
+
   // Get order ID from database
   const supabase = resolveSupabaseClient(options.supabaseClient)
   const { data: orderData } = await supabase
     .from('orders')
-    .select('id')
+    .select('id, user_id')
     .eq('order_number', orderNumber)
     .single()
-  
+
   const orderId = orderData?.id
-  
+  const userId = orderData?.user_id
+
   if (!orderId) {
     throw createError({
       statusCode: 404,
       statusMessage: `Order ${orderNumber} not found`
     })
   }
+
+  // Check if user has opted out of this email type
+  const shouldSend = await shouldSendEmail(
+    emailType,
+    userId || undefined,
+    userId ? undefined : customerEmail,
+    supabase
+  )
+
+  if (!shouldSend) {
+    console.log(`⏭️ Skipping ${emailType} email for order ${orderNumber} - user opted out`)
+    return {
+      success: true,
+      emailLogId: -1,
+      error: 'User opted out of email notifications'
+    }
+  }
+
+  // Generate email subject based on type and locale
+  const subject = orderStatus.getOrderStatusSubject(emailType, orderNumber, locale)
   
   // Create email log entry
   const emailLog = await createEmailLog({
@@ -305,30 +342,30 @@ export async function retryEmailDelivery(
     
     // Regenerate email HTML using original email type
     const issueDescription = emailLog.metadata.issueDescription
-    
+
     let html: string
-    
+
     switch (emailLog.emailType) {
       case 'order_confirmation':
-        html = generateOrderConfirmationTemplate(emailData)
+        html = orderConfirmation.generateOrderConfirmationTemplate(emailData)
         break
       case 'order_processing':
-        html = generateOrderProcessingTemplate(emailData)
+        html = orderStatus.generateOrderProcessingTemplate(emailData)
         break
       case 'order_shipped':
-        html = generateOrderShippedTemplate(emailData)
+        html = orderStatus.generateOrderShippedTemplate(emailData)
         break
       case 'order_delivered':
-        html = generateOrderDeliveredTemplate(emailData)
+        html = orderStatus.generateOrderDeliveredTemplate(emailData)
         break
       case 'order_cancelled':
-        html = generateOrderCancelledTemplate(emailData)
+        html = orderStatus.generateOrderCancelledTemplate(emailData)
         break
       case 'order_issue':
-        html = generateOrderIssueTemplate(emailData, issueDescription)
+        html = orderStatus.generateOrderIssueTemplate(emailData, issueDescription)
         break
       default:
-        html = generateOrderConfirmationTemplate(emailData)
+        html = orderConfirmation.generateOrderConfirmationTemplate(emailData)
     }
     
     // Resend email

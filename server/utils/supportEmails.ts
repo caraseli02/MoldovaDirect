@@ -1,0 +1,210 @@
+/**
+ * Support Ticket Email Utilities
+ * Utilities for sending support ticket-related emails
+ */
+
+import type { EmailType } from '~/types/email'
+import { sendEmail } from './email'
+import {
+  generateCustomerConfirmationTemplate,
+  generateStaffNotificationTemplate,
+  getSupportTicketSubject,
+  type SupportTicketData
+} from './emailTemplates/supportTicketTemplates'
+import { createEmailLog, recordEmailAttempt } from './emailLogging'
+import { resolveSupabaseClient, type ResolvedSupabaseClient } from './supabaseAdminClient'
+import { shouldSendEmail } from './emailPreferences'
+
+/**
+ * Email sending result
+ */
+export interface EmailSendResult {
+  success: boolean
+  emailLogId?: number
+  externalId?: string
+  error?: string
+}
+
+interface EmailSendOptions {
+  supabaseClient?: ResolvedSupabaseClient
+}
+
+/**
+ * Send support ticket customer confirmation email
+ */
+export async function sendSupportTicketCustomerEmail(
+  data: SupportTicketData,
+  ticketId: number,
+  orderId?: number,
+  options: EmailSendOptions = {}
+): Promise<EmailSendResult> {
+  const supabase = resolveSupabaseClient(options.supabaseClient)
+
+  // Determine userId if order is linked
+  let userId: string | undefined
+  if (orderId && orderId > 0) {
+    const { data: orderData } = await supabase
+      .from('orders')
+      .select('user_id')
+      .eq('id', orderId)
+      .single()
+    userId = orderData?.user_id || undefined
+  }
+
+  // Check if user has opted out of support ticket emails
+  const shouldSend = await shouldSendEmail(
+    'support_ticket_customer',
+    userId,
+    userId ? undefined : data.customerEmail,
+    supabase
+  )
+
+  if (!shouldSend) {
+    console.log(`⏭️ Skipping support ticket customer email for ticket ${data.ticketNumber} - user opted out`)
+    return {
+      success: true,
+      emailLogId: -1,
+      error: 'User opted out of email notifications'
+    }
+  }
+
+  const subject = getSupportTicketSubject('customer', data.ticketNumber, data.priority, data.locale)
+
+  // Create email log entry (use orderId if available, otherwise use -1 as placeholder)
+  const emailLog = await createEmailLog({
+    orderId: orderId || -1,
+    emailType: 'support_ticket_customer',
+    recipientEmail: data.customerEmail,
+    subject,
+    metadata: {
+      locale: data.locale,
+      ticketId,
+      ticketNumber: data.ticketNumber,
+      customerName: data.customerName,
+      templateVersion: '1.0'
+    }
+  }, supabase)
+
+  try {
+    // Generate email HTML
+    const html = generateCustomerConfirmationTemplate(data)
+
+    // Send email
+    const result = await sendEmail({
+      to: data.customerEmail,
+      subject,
+      html
+    })
+
+    // Record successful attempt
+    await recordEmailAttempt(
+      emailLog.id,
+      true,
+      result.id,
+      undefined,
+      supabase
+    )
+
+    console.log(`✅ Support ticket customer email sent for ticket ${data.ticketNumber}`)
+
+    return {
+      success: true,
+      emailLogId: emailLog.id,
+      externalId: result.id
+    }
+  } catch (error: any) {
+    console.error(`❌ Failed to send support ticket customer email for ticket ${data.ticketNumber}:`, error)
+
+    // Record failed attempt
+    await recordEmailAttempt(
+      emailLog.id,
+      false,
+      undefined,
+      error.message,
+      supabase
+    )
+
+    return {
+      success: false,
+      emailLogId: emailLog.id,
+      error: error.message
+    }
+  }
+}
+
+/**
+ * Send support ticket staff notification email
+ */
+export async function sendSupportTicketStaffEmail(
+  data: SupportTicketData,
+  ticketId: number,
+  staffEmail: string,
+  orderId?: number,
+  options: EmailSendOptions = {}
+): Promise<EmailSendResult> {
+  const supabase = resolveSupabaseClient(options.supabaseClient)
+
+  const subject = getSupportTicketSubject('staff', data.ticketNumber, data.priority, data.locale)
+
+  // Create email log entry (use orderId if available, otherwise use -1 as placeholder)
+  const emailLog = await createEmailLog({
+    orderId: orderId || -1,
+    emailType: 'support_ticket_staff',
+    recipientEmail: staffEmail,
+    subject,
+    metadata: {
+      locale: data.locale,
+      ticketId,
+      ticketNumber: data.ticketNumber,
+      customerName: data.customerName,
+      customerEmail: data.customerEmail,
+      templateVersion: '1.0'
+    }
+  }, supabase)
+
+  try {
+    // Generate email HTML
+    const html = generateStaffNotificationTemplate(data)
+
+    // Send email
+    const result = await sendEmail({
+      to: staffEmail,
+      subject,
+      html
+    })
+
+    // Record successful attempt
+    await recordEmailAttempt(
+      emailLog.id,
+      true,
+      result.id,
+      undefined,
+      supabase
+    )
+
+    console.log(`✅ Support ticket staff email sent for ticket ${data.ticketNumber}`)
+
+    return {
+      success: true,
+      emailLogId: emailLog.id,
+      externalId: result.id
+    }
+  } catch (error: any) {
+    console.error(`❌ Failed to send support ticket staff email for ticket ${data.ticketNumber}:`, error)
+
+    // Record failed attempt
+    await recordEmailAttempt(
+      emailLog.id,
+      false,
+      undefined,
+      error.message,
+      supabase
+    )
+
+    return {
+      success: false,
+      emailLogId: emailLog.id,
+      error: error.message
+    }
+  }
+}
