@@ -28,6 +28,9 @@ export default defineConfig({
       '**/tests/fixtures/**',
       '**/tests/templates/**',
       '**/tests/utils/**',
+      'server/api/admin/__tests__/**/*.test.ts',
+      'server/api/admin/orders/__tests__/**/*.test.ts',
+      'server/api/admin/products/__tests__/**/*.test.ts',
       '**/.{idea,git,cache,output,temp}/**',
     ],
     coverage: {

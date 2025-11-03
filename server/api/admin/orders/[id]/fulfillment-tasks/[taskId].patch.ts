@@ -83,10 +83,12 @@ export default defineEventHandler(async (event) => {
     if (existingTask.task_type === 'picking') {
       if (completed && !existingTask.completed) {
         // Task is being marked as completed (was incomplete before)
-        await updateInventoryForPickedItems(supabase, orderId, userId)
+        // Use atomic RPC function to prevent race conditions (Issue #89)
+        await updateInventoryForPickedItemsAtomic(supabase, orderId, userId)
       } else if (!completed && existingTask.completed) {
         // Task is being marked as incomplete (was completed before)
-        await rollbackInventoryForPickedItems(supabase, orderId, userId)
+        // Use atomic RPC function to prevent race conditions (Issue #89)
+        await rollbackInventoryForPickedItemsAtomic(supabase, orderId, userId)
       }
     }
 
@@ -112,12 +114,55 @@ export default defineEventHandler(async (event) => {
 })
 
 /**
- * Update inventory levels when picking tasks are completed
+ * Update inventory levels when picking tasks are completed (ATOMIC VERSION)
  * Requirement 4.2: Update inventory levels when items are picked
  *
- * Uses inventory_updated flag to prevent duplicate decrements when multiple picking tasks are completed
+ * Uses PostgreSQL RPC function with FOR UPDATE locking to prevent race conditions
+ * All operations happen in a single database transaction (atomic)
+ *
+ * Related: Issue #89 (transaction fix), Issue #82 (test coverage)
  */
-async function updateInventoryForPickedItems(supabase: any, orderId: number, userId: string) {
+async function updateInventoryForPickedItemsAtomic(supabase: any, orderId: number, userId: string) {
+  try {
+    // Call atomic RPC function
+    // This prevents race conditions by using FOR UPDATE row locking
+    const { data, error } = await supabase
+      .rpc('update_inventory_for_order_atomic', {
+        p_order_id: orderId,
+        p_user_id: userId
+      })
+
+    if (error) {
+      console.error('Error calling atomic inventory update:', error)
+      throw createError({
+        statusCode: 500,
+        statusMessage: `Failed to update inventory: ${error.message}`
+      })
+    }
+
+    if (data.skipped) {
+      console.log(data.message)
+    } else {
+      console.log(`Inventory updated for order ${orderId}: ${data.products_updated} products`)
+    }
+
+    return data
+  } catch (error) {
+    console.error('Error updating inventory atomically:', error)
+    throw error
+  }
+}
+
+/**
+ * LEGACY FUNCTION - DO NOT USE
+ * Kept for reference only. Use updateInventoryForPickedItemsAtomic instead.
+ *
+ * This function has race conditions:
+ * - Read-modify-write pattern without locking
+ * - Can lose updates with concurrent requests
+ * - See Issue #82 tests for demonstration
+ */
+async function updateInventoryForPickedItems_DEPRECATED(supabase: any, orderId: number, userId: string) {
   try {
     // Check if inventory has already been updated for this order
     const { data: order, error: orderError } = await supabase
@@ -208,12 +253,60 @@ async function updateInventoryForPickedItems(supabase: any, orderId: number, use
 }
 
 /**
- * Rollback inventory changes when a picking task is unchecked
+ * Rollback inventory changes when a picking task is unchecked (ATOMIC VERSION)
  * Adds stock back to products and logs the reversal
  *
+ * Uses PostgreSQL RPC function with FOR UPDATE locking to prevent race conditions
  * Only allows rollback if order hasn't been shipped yet
+ *
+ * Related: Issue #89 (transaction fix), Issue #82 (test coverage)
  */
-async function rollbackInventoryForPickedItems(supabase: any, orderId: number, userId: string) {
+async function rollbackInventoryForPickedItemsAtomic(supabase: any, orderId: number, userId: string) {
+  try {
+    // Call atomic RPC function
+    const { data, error } = await supabase
+      .rpc('rollback_inventory_for_order_atomic', {
+        p_order_id: orderId,
+        p_user_id: userId
+      })
+
+    if (error) {
+      console.error('Error calling atomic inventory rollback:', error)
+
+      // Check if error is about shipped orders
+      if (error.message && error.message.includes('Cannot rollback inventory for')) {
+        throw createError({
+          statusCode: 400,
+          statusMessage: error.message
+        })
+      }
+
+      throw createError({
+        statusCode: 500,
+        statusMessage: `Failed to rollback inventory: ${error.message}`
+      })
+    }
+
+    if (data.skipped) {
+      console.log(data.message)
+    } else {
+      console.log(`Inventory rolled back for order ${orderId}: ${data.products_updated} products`)
+    }
+
+    return data
+  } catch (error) {
+    console.error('Error rolling back inventory atomically:', error)
+    throw error
+  }
+}
+
+/**
+ * LEGACY FUNCTION - DO NOT USE
+ * Kept for reference only. Use rollbackInventoryForPickedItemsAtomic instead.
+ *
+ * This function has race conditions - see Issue #82 tests
+ */
+async function rollbackInventoryForPickedItems_DEPRECATED(supabase: any, orderId: number, userId: string) {
   try {
     // Check if inventory was updated for this order and if order can be rolled back
     const { data: order, error: orderError } = await supabase
