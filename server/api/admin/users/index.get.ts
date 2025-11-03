@@ -10,6 +10,7 @@
  */
 
 import { serverSupabaseServiceRole } from '#supabase/server'
+import { requireAdminRole } from '~/server/utils/adminAuth'
 
 interface UserFilters {
   search?: string
@@ -45,6 +46,7 @@ interface UserWithProfile {
 
 export default defineEventHandler(async (event) => {
   try {
+    await requireAdminRole(event)
     // Verify admin authentication
     const supabase = serverSupabaseServiceRole(event)
 

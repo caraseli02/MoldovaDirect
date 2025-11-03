@@ -1,4 +1,5 @@
 import { serverSupabaseClient } from '#supabase/server'
+import { requireAdminRole } from '~/server/utils/adminAuth'
 
 const createTablesSQL = `
 -- Enable necessary extensions
@@ -77,8 +78,9 @@ CREATE TRIGGER update_products_updated_at
 
 export default defineEventHandler(async (event) => {
   try {
+    await requireAdminRole(event)
     const supabase = await serverSupabaseClient(event)
-    
+
     // Check if this is a POST request
     if (getMethod(event) !== 'POST') {
       throw createError({

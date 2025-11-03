@@ -13,6 +13,7 @@
  */
 
 import { serverSupabaseClient } from '#supabase/server'
+import { requireAdminRole } from '~/server/utils/adminAuth'
 import { z } from 'zod'
 import { getMockInventoryReports } from '~/server/utils/mockData'
 
@@ -25,21 +26,13 @@ const reportsQuerySchema = z.object({
 
 export default defineEventHandler(async (event) => {
   try {
+    await requireAdminRole(event)
     const supabase = await serverSupabaseClient(event)
     const query = getQuery(event)
-    
+
     // Validate query parameters
     const validatedQuery = reportsQuerySchema.parse(query)
     const { reportType, startDate, endDate, categoryId } = validatedQuery
-
-    // Check authentication and admin permissions
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-    if (authError || !user) {
-      throw createError({
-        statusCode: 401,
-        statusMessage: 'Authentication required'
-      })
-    }
 
     let reportData: any = {}
 

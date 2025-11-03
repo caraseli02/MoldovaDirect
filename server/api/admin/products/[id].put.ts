@@ -1,11 +1,11 @@
 /**
  * Update Product API Endpoint
- * 
+ *
  * Requirements addressed:
  * - 1.4: Product editing with comprehensive form
  * - 1.5: Form submission with success/error feedback
  * - 5.5: Audit logging for admin actions
- * 
+ *
  * Features:
  * - Update existing product with all fields
  * - Validate input data
@@ -15,6 +15,7 @@
  */
 
 import { serverSupabaseClient } from '#supabase/server'
+import { requireAdminRole } from '~/server/utils/adminAuth'
 import { z } from 'zod'
 
 const updateProductSchema = z.object({
@@ -42,6 +43,8 @@ const updateProductSchema = z.object({
 })
 
 export default defineEventHandler(async (event) => {
+  await requireAdminRole(event)
+
   try {
     const supabase = await serverSupabaseClient(event)
     const productId = getRouterParam(event, 'id')

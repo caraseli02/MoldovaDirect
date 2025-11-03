@@ -3,14 +3,14 @@
  * Requirements: 4.2, 4.3
  */
 
+import { requireAdminRole } from '~/server/utils/adminAuth'
 import { serverSupabaseServiceRole } from '#supabase/server'
 import { getRetryStatistics } from '~/server/utils/emailRetryService'
 
 export default defineEventHandler(async (event) => {
   try {
-    // TODO: Add admin authentication check
-    // const user = await requireAdmin(event)
-    
+    await requireAdminRole(event)
+
     const supabase = serverSupabaseServiceRole(event)
     const query = getQuery(event)
     const dateFrom = query.dateFrom as string | undefined

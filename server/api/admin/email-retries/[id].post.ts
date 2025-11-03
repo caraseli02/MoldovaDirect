@@ -3,13 +3,13 @@
  * Requirements: 4.2
  */
 
+import { requireAdminRole } from '~/server/utils/adminAuth'
 import { retryEmailDelivery } from '~/server/utils/orderEmails'
 
 export default defineEventHandler(async (event) => {
   try {
-    // TODO: Add admin authentication check
-    // const user = await requireAdmin(event)
-    
+    await requireAdminRole(event)
+
     const emailLogId = parseInt(event.context.params?.id || '0')
     
     if (!emailLogId || isNaN(emailLogId)) {

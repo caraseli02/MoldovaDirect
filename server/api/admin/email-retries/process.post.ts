@@ -3,13 +3,13 @@
  * Requirements: 4.2, 4.3
  */
 
+import { requireAdminRole } from '~/server/utils/adminAuth'
 import { processEmailRetries } from '~/server/utils/emailRetryService'
 
 export default defineEventHandler(async (event) => {
   try {
-    // TODO: Add admin authentication check
-    // const user = await requireAdmin(event)
-    
+    await requireAdminRole(event)
+
     console.log('📧 Manual email retry processing triggered')
     
     const result = await processEmailRetries()

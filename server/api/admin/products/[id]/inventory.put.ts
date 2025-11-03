@@ -14,6 +14,7 @@
  */
 
 import { serverSupabaseClient } from '#supabase/server'
+import { requireAdminRole } from '~/server/utils/adminAuth'
 import { z } from 'zod'
 
 const updateInventorySchema = z.object({
@@ -24,6 +25,7 @@ const updateInventorySchema = z.object({
 
 export default defineEventHandler(async (event) => {
   try {
+    await requireAdminRole(event)
     const supabase = await serverSupabaseClient(event)
     const productId = getRouterParam(event, 'id')
     

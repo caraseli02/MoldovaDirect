@@ -1,12 +1,12 @@
 /**
  * Create Product API Endpoint
- * 
+ *
  * Requirements addressed:
  * - 1.2: Product creation with comprehensive form
  * - 1.3: Form validation using Zod schemas
  * - 1.4: Image upload support
  * - 1.5: Form submission with success/error feedback
- * 
+ *
  * Features:
  * - Create new product with all fields
  * - Validate input data
@@ -15,6 +15,7 @@
  */
 
 import { serverSupabaseClient } from '#supabase/server'
+import { requireAdminRole } from '~/server/utils/adminAuth'
 import { z } from 'zod'
 
 const createProductSchema = z.object({
@@ -41,6 +42,8 @@ const createProductSchema = z.object({
 })
 
 export default defineEventHandler(async (event) => {
+  await requireAdminRole(event)
+
   try {
     const supabase = await serverSupabaseClient(event)
     const body = await readBody(event)

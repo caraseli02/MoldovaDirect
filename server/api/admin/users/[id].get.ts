@@ -9,6 +9,7 @@
  */
 
 import { serverSupabaseServiceRole } from '#supabase/server'
+import { requireAdminRole } from '~/server/utils/adminAuth'
 
 interface UserDetail {
   id: string
@@ -65,8 +66,9 @@ interface UserDetail {
 
 export default defineEventHandler(async (event) => {
   try {
+    await requireAdminRole(event)
     const userId = getRouterParam(event, 'id')
-    
+
     if (!userId) {
       throw createError({
         statusCode: 400,

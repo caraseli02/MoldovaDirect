@@ -3,10 +3,12 @@
  * Requirements: 4.5, 4.6
  */
 
+import { requireAdminRole } from '~/server/utils/adminAuth'
 import { getEmailLogs } from '~/server/utils/emailLogging'
 import type { EmailLogFilters } from '~/types/email'
 
 export default defineEventHandler(async (event) => {
+  await requireAdminRole(event)
   const query = getQuery(event)
 
   const filters: EmailLogFilters = {

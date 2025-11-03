@@ -14,6 +14,7 @@
  */
 
 import { serverSupabaseClient } from '#supabase/server'
+import { requireAdminRole } from '~/server/utils/adminAuth'
 
 export interface AnalyticsOverview {
   dailyAnalytics: Array<{
@@ -49,16 +50,9 @@ export interface AnalyticsOverview {
 
 export default defineEventHandler(async (event) => {
   try {
+    await requireAdminRole(event)
     // Verify admin access
     const supabase = await serverSupabaseClient(event)
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-    
-    if (authError || !user) {
-      throw createError({
-        statusCode: 401,
-        statusMessage: 'Unauthorized'
-      })
-    }
 
     // Parse query parameters
     const query = getQuery(event)
