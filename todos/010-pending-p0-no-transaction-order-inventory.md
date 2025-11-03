@@ -326,6 +326,47 @@ export default defineEventHandler(async (event) => {
 
 ## Work Log
 
+### 2025-11-03 - Implementation Complete
+**By:** Claude Code Assistant
+**Actions:**
+- ✅ Created SQL migration with atomic RPC function (`create_order_with_inventory`)
+- ✅ Updated `/api/checkout/create-order` endpoint to use RPC function
+- ✅ Removed separate inventory update call from frontend checkout flow
+- ✅ Deprecated `/api/checkout/update-inventory` endpoint with warnings
+- ✅ Added migration documentation and instructions
+- ✅ Added JSDoc deprecation notices to API functions
+
+**Implementation Details:**
+- Location: `supabase/sql/migrations/20251103141318_create_order_with_inventory_function.sql`
+- RPC Function: `create_order_with_inventory(order_data JSONB, order_items_data JSONB[])`
+- Uses PostgreSQL row-level locking (`FOR UPDATE`) to prevent race conditions
+- Atomic transaction: all operations succeed or all are rolled back
+- Proper error handling for insufficient stock scenarios
+- Inventory logs automatically created for audit trail
+
+**Files Changed:**
+- `supabase/sql/migrations/20251103141318_create_order_with_inventory_function.sql` (new)
+- `supabase/sql/migrations/README.md` (new)
+- `server/api/checkout/create-order.post.ts` (updated to use RPC)
+- `server/api/checkout/update-inventory.post.ts` (deprecated)
+- `lib/checkout/api.ts` (deprecated updateInventory function)
+- `stores/checkout/payment.ts` (removed updateInventory call)
+
+**Testing Checklist:**
+- [ ] Apply migration to database
+- [ ] Test successful order creation with inventory deduction
+- [ ] Test insufficient stock error handling
+- [ ] Test concurrent order handling (no race conditions)
+- [ ] Test rollback on any failure
+- [ ] Verify inventory logs are created correctly
+- [ ] Performance test (< 500ms for typical order)
+
+**Next Steps:**
+1. Apply migration to staging/production database
+2. Monitor error logs for any issues
+3. Run integration tests
+4. After verification period, remove deprecated endpoint entirely
+
 ### 2025-11-02 - GitHub Issue Synced to Local Todo
 **By:** Claude Documentation Triage System
 **Actions:**
