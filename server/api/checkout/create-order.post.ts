@@ -1,11 +1,21 @@
 // POST /api/checkout/create-order - Create order from checkout session
 import { serverSupabaseServiceRole } from '#supabase/server'
 
+interface ProductSnapshot {
+  id: number
+  name: string
+  price: number
+  description?: string
+  image_url?: string
+  sku?: string
+  category?: string
+}
+
 interface CreateOrderFromCheckoutRequest {
   sessionId: string
   items: Array<{
     productId: number
-    productSnapshot: any
+    productSnapshot: ProductSnapshot
     quantity: number
     price: number
     total: number
@@ -141,7 +151,21 @@ export default defineEventHandler(async (event) => {
     }
 
     // Create order
-    const orderData: any = {
+    const orderData: {
+      order_number: string
+      user_id: string | null
+      status: string
+      payment_method: string
+      payment_status: string
+      payment_intent_id: string
+      subtotal_eur: number
+      shipping_cost_eur: number
+      tax_eur: number
+      total_eur: number
+      shipping_address: typeof body.shippingAddress
+      billing_address: typeof body.billingAddress
+      guest_email?: string
+    } = {
       order_number: orderNumber,
       user_id: user?.id || null,
       status: orderStatus,
@@ -195,10 +219,27 @@ export default defineEventHandler(async (event) => {
       })
 
       // Check if error is due to insufficient stock
+      // SECURITY: Sanitize error message to prevent exposing internal details
       if (rpcError.message?.includes('Insufficient stock')) {
         throw createError({
           statusCode: 409,
-          statusMessage: rpcError.message
+          statusMessage: 'One or more items in your cart are out of stock. Please review your cart and try again.'
+        })
+      }
+
+      // Check if error is due to product being locked/processed
+      if (rpcError.message?.includes('currently being processed')) {
+        throw createError({
+          statusCode: 409,
+          statusMessage: 'Some items are currently being processed by other orders. Please try again in a moment.'
+        })
+      }
+
+      // Check if error is due to product not found
+      if (rpcError.message?.includes('not found or inactive')) {
+        throw createError({
+          statusCode: 400,
+          statusMessage: 'One or more items in your cart are no longer available.'
         })
       }
 

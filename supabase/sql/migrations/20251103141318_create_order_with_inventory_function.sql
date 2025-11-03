@@ -81,10 +81,16 @@ BEGIN
     END IF;
 
     -- Check current stock with row-level lock (prevents race conditions)
-    SELECT stock_quantity INTO current_stock
-    FROM products
-    WHERE id = product_id AND is_active = true
-    FOR UPDATE;  -- Lock row until transaction completes
+    -- Using NOWAIT to fail fast if row is locked instead of waiting indefinitely
+    BEGIN
+      SELECT stock_quantity INTO current_stock
+      FROM products
+      WHERE id = product_id AND is_active = true
+      FOR UPDATE NOWAIT;  -- Fail immediately if row is locked
+    EXCEPTION
+      WHEN lock_not_available THEN
+        RAISE EXCEPTION 'Product % is currently being processed by another order. Please try again.', product_id;
+    END;
 
     -- Verify product exists
     IF current_stock IS NULL THEN
@@ -168,10 +174,9 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Add comment explaining the function
 COMMENT ON FUNCTION create_order_with_inventory(JSONB, JSONB[]) IS
-  'Atomically creates an order with all items and updates inventory. ' ||
-  'Uses row-level locking to prevent race conditions. ' ||
-  'All operations are in a single transaction - either all succeed or all are rolled back.';
+'Atomically creates an order with all items and updates inventory. Uses row-level locking to prevent race conditions. All operations are in a single transaction - either all succeed or all are rolled back.';
 
--- Grant execute permission to authenticated users (service role will use this)
-GRANT EXECUTE ON FUNCTION create_order_with_inventory(JSONB, JSONB[]) TO authenticated;
+-- Grant execute permission ONLY to service role (not authenticated users)
+-- This prevents direct client access and ensures all orders go through server-side validation
+-- SECURITY: authenticated users should NOT be able to call this directly - only server-side code
 GRANT EXECUTE ON FUNCTION create_order_with_inventory(JSONB, JSONB[]) TO service_role;
