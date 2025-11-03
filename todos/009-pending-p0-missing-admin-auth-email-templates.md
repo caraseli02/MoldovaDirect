@@ -1,10 +1,12 @@
 ---
-status: pending
+status: completed
 priority: p0
 issue_id: "009"
 tags: [security, critical, authorization, admin, email-templates]
 dependencies: []
 github_issue: 86
+completed_date: 2025-11-02
+completed_commit: 1c778b1
 ---
 
 # CRITICAL: Missing Admin Authorization on Email Template Endpoints
