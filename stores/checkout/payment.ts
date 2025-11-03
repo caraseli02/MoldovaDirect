@@ -305,7 +305,8 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
     try {
       await clearCart()
       await sendConfirmationEmail()
-      await updateInventory()
+      // NOTE: Inventory update is now handled atomically in create-order endpoint
+      // via the create_order_with_inventory RPC function (see issue #89)
       session.setCurrentStep('confirmation')
       session.persist({
         shippingInfo: shipping.shippingInfo.value,
