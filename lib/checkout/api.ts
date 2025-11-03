@@ -150,7 +150,14 @@ export async function sendConfirmationEmail(params: SendConfirmationParams): Pro
   })
 }
 
+/**
+ * @deprecated This function is deprecated as of 2025-11-03 (issue #89)
+ * Inventory updates are now handled atomically with order creation
+ * via the create_order_with_inventory RPC function.
+ * This function is kept for backward compatibility but should not be used.
+ */
 export async function updateInventory(items: OrderData['items'], orderId?: number): Promise<void> {
+  console.warn('[DEPRECATED] updateInventory() called - inventory is now updated atomically with order creation')
   await $fetch('/api/checkout/update-inventory', {
     method: 'POST',
     body: {
