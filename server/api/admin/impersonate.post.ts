@@ -42,6 +42,23 @@ export default defineEventHandler(async (event) => {
 
   try {
     if (action === 'start') {
+      // Rate limiting: Check for excessive impersonation attempts
+      const oneHourAgo = new Date(Date.now() - 3600000).toISOString()
+      const { data: recentSessions, error: rateLimitError } = await supabase
+        .from('impersonation_logs')
+        .select('id')
+        .eq('admin_id', adminId)
+        .gte('started_at', oneHourAgo)
+
+      if (rateLimitError) {
+        console.error('Rate limit check failed:', rateLimitError)
+      } else if (recentSessions && recentSessions.length >= 10) {
+        throw createError({
+          statusCode: 429,
+          statusMessage: 'Too many impersonation attempts. Maximum 10 sessions per hour. Please try again later.'
+        })
+      }
+
       // Validate required fields
       if (!userId) {
         throw createError({

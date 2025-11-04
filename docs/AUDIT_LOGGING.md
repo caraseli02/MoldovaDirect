@@ -106,7 +106,41 @@ export async function validateImpersonationSession(
 - Database session validation
 - Auto-expiration of expired sessions
 
-### 3. API Endpoints
+### 3. Server Middleware
+
+#### `server/middleware/impersonation.ts`
+
+Validates impersonation tokens and switches user context for authenticated requests.
+
+**How It Works:**
+- Intercepts all incoming requests
+- Checks for `X-Impersonation-Token` header
+- Validates token and database session
+- Sets `event.context.impersonation` with session details
+- Logs impersonation context for audit trail
+
+**Usage:**
+The middleware runs automatically for all requests. No additional configuration needed.
+
+**Context Object:**
+```typescript
+event.context.impersonation = {
+  isImpersonating: boolean
+  adminId: string
+  targetUserId: string
+  sessionId: number
+  reason: string
+  error?: string // Present if token validation failed
+}
+```
+
+**Security:**
+- Tokens must be valid JWT signed with `IMPERSONATION_JWT_SECRET`
+- Sessions must be active (not ended or expired)
+- IP address and user agent validation (optional)
+- Invalid tokens fail gracefully (request continues as original user)
+
+### 4. API Endpoints
 
 #### `POST /api/admin/impersonate`
 
@@ -170,6 +204,11 @@ Start or end an impersonation session.
 - Duration limited to 1-120 minutes
 - Admin role verification
 - User existence check
+
+**Rate Limiting:**
+- Maximum 10 impersonation sessions per admin per hour
+- Prevents abuse and excessive impersonation attempts
+- Returns HTTP 429 (Too Many Requests) when limit exceeded
 
 #### `GET /api/admin/audit-logs`
 
@@ -375,6 +414,47 @@ const response = await $fetch('/api/admin/impersonate', {
 // Store the token for subsequent requests
 const { token, logId, expiresAt } = response
 ```
+
+### Using the Impersonation Token
+
+Once you have an impersonation token, include it in the `X-Impersonation-Token` header for all requests you want to make as the impersonated user:
+
+```javascript
+// Make requests as the impersonated user
+const response = await $fetch('/api/user/profile', {
+  headers: {
+    'X-Impersonation-Token': token
+  }
+})
+```
+
+**How It Works:**
+
+1. The impersonation middleware (`server/middleware/impersonation.ts`) automatically intercepts all requests
+2. It checks for the `X-Impersonation-Token` header
+3. If present, it validates the token and session against the database
+4. If valid, the user context is switched to the impersonated user
+5. All subsequent operations are performed as that user
+6. The impersonation context is available in `event.context.impersonation`
+
+**Token Storage:**
+
+For security, store the token in a secure, httpOnly cookie or session storage:
+
+```javascript
+// Secure cookie (recommended)
+document.cookie = `impersonation_token=${token}; Secure; SameSite=Strict`
+
+// Or use session storage (less secure but easier)
+sessionStorage.setItem('impersonation_token', token)
+```
+
+**Security Features:**
+
+- Token must be valid JWT signed with `IMPERSONATION_JWT_SECRET`
+- Session must exist in database and be active (not ended or expired)
+- Middleware logs all impersonation context for audit trail
+- Invalid tokens are ignored (request continues as original user)
 
 ### Ending an Impersonation Session
 
