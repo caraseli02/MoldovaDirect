@@ -1,6 +1,22 @@
 -- Create Admin and Manager Test Users
 -- Date: 2025-10-30
+-- Updated: 2025-11-04 (Security Fix - Removed Hardcoded Credentials)
 -- Purpose: Create test users with admin and manager roles for testing the role-based access control
+
+-- =============================================
+-- SECURITY WARNING
+-- =============================================
+-- ⚠️ THIS SCRIPT IS DEPRECATED AND SHOULD NOT BE USED WITH HARDCODED CREDENTIALS
+-- ⚠️ This file is kept for reference only to show SQL structure
+--
+-- RECOMMENDED METHOD: Use the Node.js script with auto-generated passwords
+--   node scripts/create-admin-user.mjs
+--
+-- This ensures:
+-- - No hardcoded credentials in version control
+-- - Secure random password generation
+-- - Proper credential management
+-- =============================================
 
 -- =============================================
 -- IMPORTANT: CREATING USERS IN SUPABASE
@@ -20,6 +36,15 @@
 -- =============================================
 -- This approach uses Supabase's admin functions which work in the SQL editor
 
+-- ⚠️ DO NOT USE THIS SECTION WITH HARDCODED PASSWORDS
+-- Instead use: node scripts/create-admin-user.mjs
+--
+-- If you must use SQL, you need to:
+-- 1. Generate secure passwords using a password manager
+-- 2. Hash them using: crypt('YOUR_SECURE_PASSWORD', gen_salt('bf'))
+-- 3. Use this structure as a template only
+
+/*
 DO $$
 DECLARE
   admin_user_id uuid;
@@ -28,7 +53,7 @@ BEGIN
   -- Check if admin user already exists
   SELECT id INTO admin_user_id
   FROM auth.users
-  WHERE email = 'admin@moldovadirect.com';
+  WHERE email = 'your-admin@example.com'; -- ⚠️ Change this email
 
   IF admin_user_id IS NULL THEN
     -- Create admin user
@@ -56,8 +81,8 @@ BEGIN
       gen_random_uuid(),
       'authenticated',
       'authenticated',
-      'admin@moldovadirect.com',
-      crypt('Admin123!@#', gen_salt('bf')),
+      'your-admin@example.com', -- ⚠️ Change this email
+      crypt('YOUR_SECURE_PASSWORD_HERE', gen_salt('bf')), -- ⚠️ Use a secure generated password
       NOW(),
       NOW(),
       NOW(),
@@ -80,7 +105,7 @@ BEGIN
   -- Check if manager user already exists
   SELECT id INTO manager_user_id
   FROM auth.users
-  WHERE email = 'manager@moldovadirect.com';
+  WHERE email = 'your-manager@example.com'; -- ⚠️ Change this email
 
   IF manager_user_id IS NULL THEN
     -- Create manager user
@@ -108,8 +133,8 @@ BEGIN
       gen_random_uuid(),
       'authenticated',
       'authenticated',
-      'manager@moldovadirect.com',
-      crypt('Manager123!@#', gen_salt('bf')),
+      'your-manager@example.com', -- ⚠️ Change this email
+      crypt('YOUR_SECURE_PASSWORD_HERE', gen_salt('bf')), -- ⚠️ Use a secure generated password
       NOW(),
       NOW(),
       NOW(),
@@ -129,6 +154,7 @@ BEGIN
     RAISE NOTICE 'Manager user already exists with ID: %', manager_user_id;
   END IF;
 END $$;
+*/
 
 -- =============================================
 -- UPDATE PROFILES WITH ADMIN/MANAGER ROLES
@@ -138,23 +164,26 @@ END $$;
 -- But we'll ensure they exist and have the correct roles
 
 -- Update admin user profile
+-- ⚠️ Replace with your actual admin email
 UPDATE profiles
 SET role = 'admin'
 WHERE id = (
-  SELECT id FROM auth.users WHERE email = 'admin@moldovadirect.com'
+  SELECT id FROM auth.users WHERE email = 'your-admin@example.com'
 );
 
 -- Update manager user profile
+-- ⚠️ Replace with your actual manager email
 UPDATE profiles
 SET role = 'manager'
 WHERE id = (
-  SELECT id FROM auth.users WHERE email = 'manager@moldovadirect.com'
+  SELECT id FROM auth.users WHERE email = 'your-manager@example.com'
 );
 
 -- =============================================
 -- VERIFY USERS WERE CREATED
 -- =============================================
 
+-- ⚠️ Update email addresses to match your actual users
 SELECT
   u.email,
   p.name,
@@ -163,7 +192,7 @@ SELECT
   u.created_at
 FROM auth.users u
 LEFT JOIN profiles p ON u.id = p.id
-WHERE u.email IN ('admin@moldovadirect.com', 'manager@moldovadirect.com')
+WHERE u.email IN ('your-admin@example.com', 'your-manager@example.com')
 ORDER BY p.role DESC;
 
 -- =============================================
@@ -172,23 +201,30 @@ ORDER BY p.role DESC;
 
 /*
 IMPORTANT SECURITY NOTES:
-1. The passwords in this script are EXAMPLES ONLY
-2. Change these passwords immediately in production
-3. Consider using Supabase's built-in signup flow instead for production users
-4. This script is meant for development/testing purposes
+1. NEVER use hardcoded passwords in SQL scripts committed to version control
+2. ALWAYS use secure, randomly generated passwords
+3. Store credentials securely in a password manager
+4. This script is for REFERENCE ONLY - use the Node.js script instead
 
-TO CREATE USERS VIA SUPABASE DASHBOARD:
+RECOMMENDED METHOD - Use Node.js Script:
+  node scripts/create-admin-user.mjs
+
+  This script:
+  - Generates secure random passwords automatically
+  - Creates users via Supabase Admin API
+  - Assigns roles properly
+  - Shows credentials once for secure storage
+
+ALTERNATIVE METHOD - Supabase Dashboard:
 1. Go to Authentication > Users in your Supabase dashboard
 2. Click "Add User"
-3. Enter email and password
+3. Enter email and a SECURE randomly generated password
 4. After creation, run this SQL to update their role:
 
    UPDATE profiles
    SET role = 'admin'
    WHERE id = 'USER_ID_HERE';
 
-ALTERNATIVE: Create users via Supabase CLI
-supabase auth signup --email admin@moldovadirect.com --password Admin123!@#
-
-Then update the profile role as shown above.
+DO NOT use predictable passwords like "Admin123!@#" or similar patterns.
+Use a password generator to create secure credentials.
 */
