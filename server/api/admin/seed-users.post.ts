@@ -252,7 +252,7 @@ export default defineEventHandler(async (event) => {
   }
 
   // Log admin action
-  logAdminAction(adminId, 'seed-users', {
+  await logAdminAction(event, adminId, 'seed-users', {
     count,
     created: createdUsers.length,
     failed: errors.length,

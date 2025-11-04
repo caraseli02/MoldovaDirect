@@ -109,7 +109,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Log admin action
-    logAdminAction(adminId, 'seed-data', {
+    await logAdminAction(event, adminId, 'seed-data', {
       preset,
       config,
       results: results.steps.map(s => ({ step: s.step, count: s.count }))
@@ -125,7 +125,7 @@ export default defineEventHandler(async (event) => {
 
   } catch (error: any) {
     console.error('Seed data error:', error)
-    logAdminAction(adminId, 'seed-data-failed', { preset, error: error.message })
+    await logAdminAction(event, adminId, 'seed-data-failed', { preset, error: error.message })
     return {
       success: false,
       message: 'Failed to seed data',
