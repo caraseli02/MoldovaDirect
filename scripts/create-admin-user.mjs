@@ -86,7 +86,8 @@ async function createUser(email, password, name, role) {
     if (updateError) {
       console.error(`⚠️  Warning: User created but role update failed:`, updateError.message)
       console.error(`   You can manually update the role with this SQL:`)
-      console.error(`   UPDATE profiles SET role = '${role}' WHERE id = '${user.user.id}';`)
+      console.error(`   UPDATE profiles SET role = $1 WHERE id = $2;`)
+      console.error(`   -- Parameters: role='${role}', id='${user.user.id}'`)
       return
     }
 
@@ -113,7 +114,8 @@ async function createUser(email, password, name, role) {
     if (error.message?.includes('already registered')) {
       console.error(`⚠️  User ${email} already exists`)
       console.log(`   To update their role, run this SQL:`)
-      console.log(`   UPDATE profiles SET role = '${role}' WHERE id = (SELECT id FROM auth.users WHERE email = '${email}');`)
+      console.log(`   UPDATE profiles SET role = $1 WHERE id = (SELECT id FROM auth.users WHERE email = $2);`)
+      console.log(`   -- Parameters: role='${role}', email='${email}'`)
     } else {
       console.error(`❌ Error creating user:`, error.message)
     }
