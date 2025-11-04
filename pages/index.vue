@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100">
+  <div class="text-gray-900 dark:text-gray-100">
     <!-- Promotional announcement bar -->
     <HomeAnnouncementBar :show-cta="true" />
 

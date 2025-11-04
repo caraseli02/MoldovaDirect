@@ -579,7 +579,7 @@ export const useCartStore = defineStore('cart', () => {
   // =============================================
   // RETURN STORE INTERFACE
   // =============================================
-  
+
   return {
     // State
     items,
@@ -590,30 +590,42 @@ export const useCartStore = defineStore('cart', () => {
     storageType,
     lastSaveAt,
     saveInProgress,
-    
+
     // Getters
     itemCount,
     subtotal,
     isEmpty,
     getItemByProductId,
     isInCart,
-    
+
+    // Lock state
+    isLocked: core.isLocked,
+    lockedAt: core.lockedAt,
+    lockedUntil: core.lockedUntil,
+    lockedByCheckoutSessionId: core.lockedByCheckoutSessionId,
+
     // Core Actions
     addItem,
     removeItem,
     updateQuantity,
     clearCart,
-    
+
+    // Cart locking actions
+    lockCart: core.lockCart,
+    unlockCart: core.unlockCart,
+    checkLockStatus: core.checkLockStatus,
+    isCartLocked: core.isCartLocked,
+
     // Persistence Actions
     saveToStorage,
     loadFromStorage,
     clearStorage,
     saveAndCacheCartData,
-    
+
     // Initialization
     initializeCart,
     createDebouncedSave,
-    
+
     // Utilities
     generateItemId,
     generateSessionId,

@@ -1,5 +1,6 @@
 ---
 status: completed
+status: completed
 priority: p0
 issue_id: "009"
 tags: [security, critical, authorization, admin, email-templates]

@@ -1,5 +1,5 @@
 <template>
-  <section class="bg-gray-100 py-16 dark:bg-gray-900/80 md:py-24">
+  <section class="bg-gray-100 py-16 dark:bg-gray-900 md:py-24">
     <div class="container">
       <div class="grid gap-8 rounded-3xl bg-white p-10 shadow-xl dark:bg-gray-950">
         <div class="max-w-3xl">
