@@ -180,7 +180,7 @@ import type { CategoryWithChildren, ProductWithRelations } from '~/types/databas
 import { usePinia } from '#imports'
 definePageMeta({
   layout: 'admin',
-  middleware: 'auth'
+  middleware: ['auth', 'admin']
 })
 
 // Initialize stores - safely access with fallback

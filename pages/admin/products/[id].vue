@@ -118,7 +118,7 @@ import type { CategoryWithChildren } from '~/types/database'
 
 definePageMeta({
   layout: 'admin',
-  middleware: 'auth'
+  middleware: ['auth', 'admin']
 })
 
 // Get product ID from route

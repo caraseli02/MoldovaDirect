@@ -251,7 +251,7 @@ import type { OrderWithAdminDetails } from '~/types/database'
 
 definePageMeta({
   layout: 'admin',
-  middleware: 'auth'
+  middleware: ['auth', 'admin']
 })
 
 // Get order ID from route

@@ -255,7 +255,7 @@ import {
 
 definePageMeta({
   layout: 'admin',
-  middleware: 'auth'
+  middleware: ['auth', 'admin']
 })
 
 // Initialize store

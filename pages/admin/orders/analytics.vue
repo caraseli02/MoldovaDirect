@@ -316,7 +316,7 @@ import { subDays, format } from 'date-fns'
 
 definePageMeta({
   layout: 'admin',
-  middleware: 'auth'
+  middleware: ['auth', 'admin']
 })
 
 interface AnalyticsData {

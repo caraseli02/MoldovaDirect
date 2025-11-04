@@ -95,7 +95,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 
 definePageMeta({
   layout: 'admin',
-  middleware: 'auth'
+  middleware: ['auth', 'admin']
 })
 
 const loading = ref(false)
