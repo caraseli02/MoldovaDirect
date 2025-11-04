@@ -12,9 +12,18 @@
  * Environment variables required:
  *   SUPABASE_URL - Your Supabase project URL
  *   SUPABASE_SERVICE_ROLE_KEY - Your Supabase service role key (from dashboard)
+ *
+ * Optional environment variables (for custom credentials):
+ *   ADMIN_EMAIL - Email for admin user (default: admin@moldovadirect.com)
+ *   ADMIN_PASSWORD - Password for admin user (default: auto-generated)
+ *   MANAGER_EMAIL - Email for manager user (default: manager@moldovadirect.com)
+ *   MANAGER_PASSWORD - Password for manager user (default: auto-generated)
+ *   CUSTOMER_EMAIL - Email for test customer (default: customer@moldovadirect.com)
+ *   CUSTOMER_PASSWORD - Password for test customer (default: auto-generated)
  */
 
 import { createClient } from '@supabase/supabase-js'
+import { generateSecurePassword } from './generateSecurePassword.mjs'
 
 // Configuration
 const SUPABASE_URL = process.env.SUPABASE_URL || process.env.PUBLIC_SUPABASE_URL
@@ -77,7 +86,8 @@ async function createUser(email, password, name, role) {
     if (updateError) {
       console.error(`⚠️  Warning: User created but role update failed:`, updateError.message)
       console.error(`   You can manually update the role with this SQL:`)
-      console.error(`   UPDATE profiles SET role = '${role}' WHERE id = '${user.user.id}';`)
+      console.error(`   UPDATE profiles SET role = $1 WHERE id = $2;`)
+      console.error(`   -- Parameters: role='${role}', id='${user.user.id}'`)
       return
     }
 
@@ -104,7 +114,8 @@ async function createUser(email, password, name, role) {
     if (error.message?.includes('already registered')) {
       console.error(`⚠️  User ${email} already exists`)
       console.log(`   To update their role, run this SQL:`)
-      console.log(`   UPDATE profiles SET role = '${role}' WHERE id = (SELECT id FROM auth.users WHERE email = '${email}');`)
+      console.log(`   UPDATE profiles SET role = $1 WHERE id = (SELECT id FROM auth.users WHERE email = $2);`)
+      console.log(`   -- Parameters: role='${role}', email='${email}'`)
     } else {
       console.error(`❌ Error creating user:`, error.message)
     }
@@ -118,35 +129,36 @@ async function main() {
   console.log('🚀 Creating admin and manager users...')
   console.log(`📍 Supabase URL: ${SUPABASE_URL}`)
 
+  // Get credentials from environment or generate secure ones
+  const adminEmail = process.env.ADMIN_EMAIL || 'admin@moldovadirect.com'
+  const adminPassword = process.env.ADMIN_PASSWORD || generateSecurePassword(20)
+
+  const managerEmail = process.env.MANAGER_EMAIL || 'manager@moldovadirect.com'
+  const managerPassword = process.env.MANAGER_PASSWORD || generateSecurePassword(20)
+
+  const customerEmail = process.env.CUSTOMER_EMAIL || 'customer@moldovadirect.com'
+  const customerPassword = process.env.CUSTOMER_PASSWORD || generateSecurePassword(20)
+
+  console.log('\n⚠️  SECURITY NOTICE:')
+  console.log('   Using auto-generated secure passwords.')
+  console.log('   Save these credentials securely (e.g., in a password manager).\n')
+
   // Create admin user
-  await createUser(
-    'admin@moldovadirect.com',
-    'Admin123!@#',
-    'Admin User',
-    'admin'
-  )
+  await createUser(adminEmail, adminPassword, 'Admin User', 'admin')
 
   // Create manager user
-  await createUser(
-    'manager@moldovadirect.com',
-    'Manager123!@#',
-    'Manager User',
-    'manager'
-  )
+  await createUser(managerEmail, managerPassword, 'Manager User', 'manager')
 
   // Create a test customer user
-  await createUser(
-    'customer@moldovadirect.com',
-    'Customer123!@#',
-    'Test Customer',
-    'customer'
-  )
+  await createUser(customerEmail, customerPassword, 'Test Customer', 'customer')
 
-  console.log('\n✨ Done! Remember to change the passwords after first login.')
+  console.log('\n✨ Done! Remember to save these passwords securely.')
   console.log('\n📋 Summary of created users:')
-  console.log('   Admin:    admin@moldovadirect.com / Admin123!@#')
-  console.log('   Manager:  manager@moldovadirect.com / Manager123!@#')
-  console.log('   Customer: customer@moldovadirect.com / Customer123!@#')
+  console.log(`   Admin:    ${adminEmail} / ${adminPassword}`)
+  console.log(`   Manager:  ${managerEmail} / ${managerPassword}`)
+  console.log(`   Customer: ${customerEmail} / ${customerPassword}`)
+  console.log('\n🔐 IMPORTANT: Store these credentials in a secure password manager!')
+  console.log('   These passwords will not be shown again.')
 }
 
 // Run the script

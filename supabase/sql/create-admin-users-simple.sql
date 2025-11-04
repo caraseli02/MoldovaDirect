@@ -1,17 +1,23 @@
 -- Simple Admin User Creation for Supabase SQL Editor
 -- Date: 2025-10-30
+-- Updated: 2025-11-04 (Security Fix - Removed Hardcoded Credentials)
+--
+-- SECURITY WARNING:
+-- Never use hardcoded credentials in SQL scripts that are committed to version control.
+-- This script only handles role assignment after users are created.
 --
 -- INSTRUCTIONS:
--- 1. First, manually create users via Supabase Dashboard:
+-- 1. First, create users via Supabase Dashboard with SECURE passwords:
 --    - Go to Authentication > Users
 --    - Click "Add User"
---    - Create these users:
---      * admin@moldovadirect.com with password Admin123!@#
---      * manager@moldovadirect.com with password Manager123!@#
+--    - Create users with your desired email addresses
+--    - Use strong, randomly generated passwords (e.g., from a password manager)
 --
--- 2. Then run THIS script to assign them admin/manager roles
+-- 2. RECOMMENDED: Use the secure Node.js script instead:
+--    node scripts/create-admin-user.mjs
+--    (This script automatically generates secure passwords)
 --
--- Alternatively, you can use the Node.js script: node scripts/create-admin-user.mjs
+-- 3. Then run THIS script to assign roles (update emails as needed)
 
 -- =============================================
 -- STEP 1: View all existing users
@@ -28,11 +34,12 @@ ORDER BY u.created_at DESC;
 -- =============================================
 -- STEP 2: Assign admin role to specific user
 -- =============================================
+-- ⚠️ IMPORTANT: Replace 'your-admin@example.com' with your actual admin user's email
 -- Option A: By email (replace with your admin's email)
 UPDATE profiles
 SET role = 'admin'
 WHERE id = (
-  SELECT id FROM auth.users WHERE email = 'admin@moldovadirect.com'
+  SELECT id FROM auth.users WHERE email = 'your-admin@example.com'
 );
 
 -- Option B: By user ID (if you know the ID)
@@ -43,11 +50,12 @@ WHERE id = (
 -- =============================================
 -- STEP 3: Assign manager role to specific user
 -- =============================================
+-- ⚠️ IMPORTANT: Replace 'your-manager@example.com' with your actual manager user's email
 -- Option A: By email (replace with your manager's email)
 UPDATE profiles
 SET role = 'manager'
 WHERE id = (
-  SELECT id FROM auth.users WHERE email = 'manager@moldovadirect.com'
+  SELECT id FROM auth.users WHERE email = 'your-manager@example.com'
 );
 
 -- Option B: By user ID

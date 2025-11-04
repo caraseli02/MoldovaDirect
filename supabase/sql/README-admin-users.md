@@ -1,6 +1,12 @@
 # Creating Admin and Manager Users
 
+**Last Updated:** 2025-11-04 (Security Fix - Removed Hardcoded Credentials)
+
 This guide explains how to create users with admin and manager roles for testing the role-based access control system.
+
+## 🔒 Security Notice
+
+**CRITICAL:** Never use hardcoded credentials in scripts committed to version control. This guide has been updated to use secure password generation instead of hardcoded credentials.
 
 ## Prerequisites
 
@@ -16,9 +22,9 @@ Or run it through the Supabase Dashboard:
 2. Copy the contents of `add-admin-role-and-inventory-tracking.sql`
 3. Run the script
 
-## Method 1: Using the Node.js Script (Recommended)
+## Method 1: Using the Node.js Script (Recommended) ⭐
 
-This is the easiest and safest method.
+This is the **easiest and most secure** method. It automatically generates strong random passwords.
 
 ### Setup
 
@@ -41,43 +47,92 @@ You can find these values in your Supabase Dashboard:
 node scripts/create-admin-user.mjs
 ```
 
-This will create three test users:
-- **Admin**: admin@moldovadirect.com / Admin123!@#
-- **Manager**: manager@moldovadirect.com / Manager123!@#
-- **Customer**: customer@moldovadirect.com / Customer123!@#
+**What this script does:**
+- ✅ Generates **cryptographically secure random passwords** (20 characters)
+- ✅ Creates admin, manager, and customer users with proper roles
+- ✅ Shows generated credentials **once** for secure storage
+- ✅ No hardcoded credentials in source control
 
-⚠️ **IMPORTANT**: Change these passwords after first login!
+**Output example:**
+```
+🚀 Creating admin and manager users...
+📍 Supabase URL: https://your-project.supabase.co
+
+⚠️  SECURITY NOTICE:
+   Using auto-generated secure passwords.
+   Save these credentials securely (e.g., in a password manager).
+
+✅ Successfully created admin user:
+   Email: admin@moldovadirect.com
+   Password: xK9#mP2$vL5@wN8!qR4%
+
+[... more output ...]
+
+🔐 IMPORTANT: Store these credentials in a secure password manager!
+   These passwords will not be shown again.
+```
+
+### Optional: Use Custom Credentials
+
+If you need specific email addresses or want to provide your own secure passwords:
+
+```bash
+# Set custom credentials as environment variables
+export ADMIN_EMAIL="youradmin@company.com"
+export ADMIN_PASSWORD="$(node scripts/generateSecurePassword.mjs 24)"
+
+export MANAGER_EMAIL="yourmanager@company.com"
+export MANAGER_PASSWORD="$(node scripts/generateSecurePassword.mjs 24)"
+
+# Then run the script
+node scripts/create-admin-user.mjs
+```
+
+⚠️ **IMPORTANT**: Always store generated passwords in a password manager immediately!
 
 ## Method 2: Using Supabase Dashboard (Manual)
 
-### Step 1: Create User Account
+### Step 1: Generate a Secure Password
+
+**FIRST**, generate a secure random password:
+
+```bash
+# Generate a 24-character secure password
+node scripts/generateSecurePassword.mjs 24
+```
+
+Copy this password and store it in your password manager immediately!
+
+### Step 2: Create User Account
 
 1. Go to your Supabase Dashboard
 2. Navigate to **Authentication > Users**
 3. Click **Add User** (or **Invite User**)
 4. Enter:
-   - Email: `admin@moldovadirect.com`
-   - Password: Choose a secure password
+   - Email: Your desired admin email (e.g., `admin@yourcompany.com`)
+   - Password: **Paste the secure password you just generated**
    - Confirm email: ✓ (checked)
 
-### Step 2: Assign Admin Role
+### Step 3: Assign Admin Role
 
 1. Go to **SQL Editor** in the Supabase Dashboard
-2. Run this query (replace the email with your user's email):
+2. Run this query (**replace the email with your user's actual email**):
 
 ```sql
+-- ⚠️ IMPORTANT: Replace 'your-admin@example.com' with your actual admin user's email
 UPDATE profiles
 SET role = 'admin'
 WHERE id = (
-  SELECT id FROM auth.users WHERE email = 'admin@moldovadirect.com'
+  SELECT id FROM auth.users WHERE email = 'your-admin@example.com'
 );
 ```
 
-### Step 3: Verify
+### Step 4: Verify
 
-Run this query to verify the role was set:
+Run this query to verify the role was set (replace with your email):
 
 ```sql
+-- ⚠️ IMPORTANT: Replace with your actual email
 SELECT
   u.email,
   p.name,
@@ -89,41 +144,44 @@ SELECT
   END as access_level
 FROM auth.users u
 LEFT JOIN profiles p ON u.id = p.id
-WHERE u.email = 'admin@moldovadirect.com';
+WHERE u.email = 'your-admin@example.com';
 ```
 
 ## Method 3: Update Existing Users (SQL)
 
-If you already have users and want to promote them to admin/manager:
-
-```bash
-# Run through Supabase SQL Editor
-supabase/sql/update-existing-users-to-admin.sql
-```
-
-Or use this SQL directly:
+If you already have users and want to promote them to admin/manager, use this SQL:
 
 ```sql
 -- Promote specific user to admin by email
+-- ⚠️ IMPORTANT: Replace with the actual user's email
 UPDATE profiles
 SET role = 'admin'
 WHERE id = (
-  SELECT id FROM auth.users WHERE email = 'your-email@example.com'
+  SELECT id FROM auth.users WHERE email = 'existing-user@example.com'
 );
 
 -- Promote specific user to manager by ID
+-- ⚠️ IMPORTANT: Replace with the actual user's UUID
 UPDATE profiles
 SET role = 'manager'
-WHERE id = 'user-uuid-here';
+WHERE id = 'paste-actual-user-uuid-here';
 ```
 
-## Method 4: Direct SQL Insert (Advanced)
+**Note:** This method only changes the role - it doesn't create new users or change passwords.
 
-⚠️ Only use this if you have database admin access. See `create-admin-users.sql` for the complete script.
+## Method 4: Direct SQL Insert (Advanced) ⚠️ DEPRECATED
 
-```bash
-psql -h your-db.supabase.co -U postgres -d postgres -f supabase/sql/create-admin-users.sql
-```
+**⚠️ This method is DEPRECATED and should NOT be used.**
+
+The SQL script `create-admin-users.sql` previously contained hardcoded credentials. It has been updated to serve as a **reference only**.
+
+**Why deprecated:**
+- ❌ Risk of hardcoded credentials in version control
+- ❌ Requires direct database access
+- ❌ More complex than other methods
+- ❌ Easy to make security mistakes
+
+**Use Method 1 (Node.js script) instead** - it's safer and easier.
 
 ## Verifying Admin Access
 
@@ -160,10 +218,54 @@ The system supports three roles:
 
 ## Security Notes
 
-1. **Change Default Passwords**: The example passwords are for development only
-2. **Service Role Key**: Keep your service role key secret - never commit to git
-3. **Production Setup**: In production, use strong passwords and 2FA where possible
-4. **Regular Audits**: Periodically review who has admin/manager access
+### 🔒 Critical Security Requirements
+
+1. **Never Use Hardcoded Passwords**:
+   - ❌ NEVER hardcode credentials in SQL scripts
+   - ❌ NEVER use predictable passwords like "Admin123!@#"
+   - ✅ ALWAYS use secure randomly generated passwords
+   - ✅ ALWAYS use a password manager to store credentials
+
+2. **Service Role Key Protection**:
+   - Keep your service role key secret
+   - Never commit .env files to git
+   - Rotate keys if exposed
+   - Use environment variables for all secrets
+
+3. **Production Setup**:
+   - Use strong, unique passwords (20+ characters)
+   - Enable 2FA/MFA where possible
+   - Use different credentials for dev/staging/production
+   - Implement password rotation policies
+
+4. **Regular Audits**:
+   - Periodically review who has admin/manager access
+   - Remove unused admin accounts
+   - Monitor authentication logs
+   - Check for suspicious activity
+
+### Password Requirements
+
+All passwords created should meet these minimum requirements:
+- **Minimum length**: 16 characters (20+ recommended)
+- **Complexity**: Mix of uppercase, lowercase, numbers, and symbols
+- **Randomness**: Use cryptographic random generation
+- **Uniqueness**: Different password for each environment
+
+### What Changed (2025-11-04 Security Fix)
+
+**Before (INSECURE):**
+- ❌ Hardcoded passwords in SQL files: `Admin123!@#`
+- ❌ Predictable email patterns: `admin@moldovadirect.com`
+- ❌ Credentials committed to version control
+- ❌ Same passwords used across environments
+
+**After (SECURE):**
+- ✅ Auto-generated secure random passwords
+- ✅ Environment variable support
+- ✅ No credentials in source control
+- ✅ Password generator utility included
+- ✅ Clear warnings in all SQL files
 
 ## Troubleshooting
 
