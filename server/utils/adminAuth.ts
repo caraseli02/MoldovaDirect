@@ -92,13 +92,15 @@ export async function requireAdminTestingAccess(event: H3Event): Promise<string>
 
 /**
  * Logs admin actions to an audit trail
- * For now logs to console, but should be enhanced to log to database
+ * Stores logs in the database for permanent record and compliance
  *
+ * @param event - H3Event object (for database access)
  * @param adminId - ID of the admin performing the action
  * @param action - Description of the action
  * @param metadata - Additional metadata about the action
  */
-export function logAdminAction(
+export async function logAdminAction(
+  event: H3Event,
   adminId: string,
   action: string,
   metadata?: Record<string, any>
@@ -110,9 +112,26 @@ export function logAdminAction(
     metadata
   }
 
-  // Log to console (should be enhanced to log to database audit table)
+  // Log to console for development/debugging
   console.log('[ADMIN_AUDIT]', JSON.stringify(logEntry))
 
-  // TODO: Store in audit_logs table for permanent record
-  // await supabase.from('audit_logs').insert(logEntry)
+  try {
+    const supabase = serverSupabaseServiceRole(event)
+
+    // Store in audit_logs table for permanent record
+    await supabase.from('audit_logs').insert({
+      user_id: adminId,
+      action: action,
+      resource_type: metadata?.resource_type || 'admin_action',
+      resource_id: metadata?.resource_id || null,
+      old_values: metadata?.old_values || null,
+      new_values: metadata?.new_values || null,
+      ip_address: getRequestIP(event),
+      user_agent: getHeader(event, 'user-agent'),
+      created_at: new Date().toISOString()
+    })
+  } catch (error) {
+    // Don't fail the operation if audit logging fails, but log the error
+    console.error('[ADMIN_AUDIT] Failed to store audit log:', error)
+  }
 }

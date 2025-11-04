@@ -75,7 +75,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Log admin action
-    logAdminAction(adminId, 'cleanup', {
+    await logAdminAction(event, adminId, 'cleanup', {
       action,
       deletedCounts: results.deletedCounts
     })
@@ -88,7 +88,7 @@ export default defineEventHandler(async (event) => {
 
   } catch (error: any) {
     console.error('Cleanup error:', error)
-    logAdminAction(adminId, 'cleanup-failed', { action, error: error.message })
+    await logAdminAction(event, adminId, 'cleanup-failed', { action, error: error.message })
     return {
       success: false,
       message: 'Cleanup failed',
