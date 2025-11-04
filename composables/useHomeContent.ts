@@ -87,11 +87,13 @@ export const useHomeContent = () => {
     'bg-gradient-to-br from-sky-500/20 via-indigo-400/20 to-blue-300/20',
     'bg-gradient-to-br from-purple-500/20 via-fuchsia-400/20 to-pink-300/20'
   ]
+  // TODO: Replace with actual product photography when available
+  // These are temporary placeholder images from Unsplash
   const categoryImages: Record<(typeof categoryKeys)[number], string> = {
-    wines: '/images/home/categories/signature-wines.jpg',
-    gourmet: '/images/home/categories/gourmet-pantry.jpg',
-    gifts: '/images/home/categories/gift-hampers.jpg',
-    subscriptions: '/images/home/categories/monthly-boxes.jpg'
+    wines: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=1200',
+    gourmet: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?q=80&w=1200',
+    gifts: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?q=80&w=1200',
+    subscriptions: 'https://images.unsplash.com/photo-1606787365614-d990e8c69f0e?q=80&w=1200'
   }
 
   const categoryCards = computed<CategoryCard[]>(() => {

@@ -1,5 +1,5 @@
 <template>
-  <section class="relative overflow-hidden bg-gradient-to-br from-primary-950 via-primary-900 to-primary-700 py-16 text-white md:py-24">
+  <section class="relative overflow-hidden bg-gradient-to-br from-primary-950 via-primary-900 to-primary-700 py-20 text-white md:py-28">
     <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.12),_transparent_55%)]"></div>
     <div class="container relative">
       <div class="flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">
@@ -11,13 +11,13 @@
           <h2 class="mt-6 text-3xl font-bold md:text-4xl">{{ t('home.socialProof.title') }}</h2>
           <p class="mt-4 text-lg text-primary-100">{{ t('home.socialProof.subtitle') }}</p>
           <div class="mt-8 grid gap-6 sm:grid-cols-2">
-            <div v-for="stat in highlights" :key="stat.label" class="rounded-2xl bg-white/10 p-6">
+            <div v-for="stat in highlights" :key="stat.label" class="rounded-xl bg-white/10 p-6">
               <p class="text-3xl font-semibold">{{ stat.value }}</p>
               <p class="mt-2 text-sm text-primary-100">{{ stat.label }}</p>
             </div>
           </div>
           <div class="mt-10 grid gap-4 sm:grid-cols-2">
-            <div v-for="logo in logos" :key="logo" class="flex items-center gap-3 rounded-2xl bg-white/5 px-5 py-4 text-sm font-semibold">
+            <div v-for="logo in logos" :key="logo" class="flex items-center gap-3 rounded-xl bg-white/5 px-5 py-4 text-sm font-semibold">
               <commonIcon name="lucide:sparkles" class="h-5 w-5 text-primary-100" />
               <span>{{ logo }}</span>
             </div>

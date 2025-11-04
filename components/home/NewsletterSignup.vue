@@ -1,5 +1,5 @@
 <template>
-  <section class="bg-gray-100 py-16 dark:bg-gray-900 md:py-24">
+  <section class="bg-gray-100 py-20 dark:bg-gray-900/80 md:py-28">
     <div class="container">
       <div class="grid gap-8 rounded-3xl bg-white p-10 shadow-xl dark:bg-gray-950">
         <div class="max-w-3xl">
@@ -18,7 +18,7 @@
           />
           <button
             type="submit"
-            class="inline-flex items-center justify-center gap-2 rounded-full bg-primary-600 px-6 py-3 font-semibold text-white transition hover:bg-primary-700"
+            class="inline-flex items-center justify-center gap-2 rounded-full bg-primary-600 px-6 py-3 font-semibold text-white transition hover:bg-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-950"
           >
             <commonIcon name="lucide:send" class="h-5 w-5" />
             {{ t('home.newsletter.cta') }}

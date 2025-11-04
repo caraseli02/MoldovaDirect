@@ -1,5 +1,5 @@
 <template>
-  <section class="bg-gray-50 py-16 dark:bg-gray-950 md:py-24">
+  <section class="bg-gray-50 py-20 dark:bg-gray-950 md:py-28">
     <div class="container">
       <div class="mx-auto max-w-3xl text-center">
         <span class="inline-flex items-center gap-2 rounded-full bg-primary-100 px-4 py-2 text-sm font-semibold text-primary-700 dark:bg-primary-500/20 dark:text-primary-200">
@@ -69,6 +69,8 @@ type Card = {
   rowSpan: string
 }
 
+// TODO: Replace with actual product photography when available
+// These are temporary placeholder images from Unsplash
 const cards = computed<Card[]>(() => [
   {
     key: 'reserve',
@@ -76,7 +78,7 @@ const cards = computed<Card[]>(() => [
     description: t('home.collections.cards.reserve.description'),
     cta: t('home.collections.cards.reserve.cta'),
     href: localePath('/products?category=wine'),
-    image: '/images/home/collections/reserve-cellar.jpg',
+    image: 'https://images.unsplash.com/photo-1566754436750-9393f43f02b3?q=80&w=1200',
     imageAlt: t('home.collections.cards.reserve.imageAlt'),
     tag: t('home.collections.cards.reserve.tag'),
     colSpan: 'lg:col-span-7',
@@ -89,7 +91,7 @@ const cards = computed<Card[]>(() => [
     description: t('home.collections.cards.artisan.description'),
     cta: t('home.collections.cards.artisan.cta'),
     href: localePath('/products?category=gourmet'),
-    image: '/images/home/collections/artisan-pantry.jpg',
+    image: 'https://images.unsplash.com/photo-1452195100486-9cc805987862?q=80&w=1200',
     imageAlt: t('home.collections.cards.artisan.imageAlt'),
     tag: t('home.collections.cards.artisan.tag'),
     colSpan: 'lg:col-span-5',
@@ -102,7 +104,7 @@ const cards = computed<Card[]>(() => [
     description: t('home.collections.cards.experience.description'),
     cta: t('home.collections.cards.experience.cta'),
     href: localePath('/products?category=subscription'),
-    image: '/images/home/collections/weekend-tasting.jpg',
+    image: 'https://images.unsplash.com/photo-1554939437-ecc492c67b78?q=80&w=1200',
     imageAlt: t('home.collections.cards.experience.imageAlt'),
     tag: t('home.collections.cards.experience.tag'),
     colSpan: 'lg:col-span-5',

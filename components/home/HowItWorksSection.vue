@@ -1,5 +1,5 @@
 <template>
-  <section class="bg-gray-50 py-16 dark:bg-gray-950 md:py-24">
+  <section class="bg-gray-50 py-20 dark:bg-gray-900 md:py-28">
     <div class="container">
       <div class="mx-auto max-w-3xl text-center">
         <h2 class="text-3xl font-bold md:text-4xl">{{ t('home.howItWorks.title') }}</h2>
@@ -11,7 +11,7 @@
           :key="step.key"
           class="relative overflow-hidden rounded-3xl bg-white p-8 text-left shadow-lg transition hover:-translate-y-1 hover:shadow-xl dark:bg-gray-950"
         >
-          <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-100 text-primary-600">
+          <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-100 text-primary-600">
             <commonIcon :name="step.icon" class="h-6 w-6" />
           </div>
           <div class="mt-6">
