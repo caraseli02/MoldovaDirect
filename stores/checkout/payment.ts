@@ -307,6 +307,16 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
       await sendConfirmationEmail()
       // NOTE: Inventory update is now handled atomically in create-order endpoint
       // via the create_order_with_inventory RPC function (see issue #89)
+
+      // Unlock the cart after successful checkout
+      try {
+        await cartStore.unlockCart(sessionId.value as string)
+        console.log('Cart unlocked after successful checkout')
+      } catch (unlockError) {
+        console.warn('Failed to unlock cart after checkout:', unlockError)
+        // Continue even if unlock fails - cart will auto-unlock on timeout
+      }
+
       session.setCurrentStep('confirmation')
       session.persist({
         shippingInfo: shipping.shippingInfo.value,
@@ -362,6 +372,15 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
         sessionId: sessionId.value ?? undefined,
         step: 'processPayment'
       }, error)
+
+      // Unlock cart on payment failure so user can modify it
+      try {
+        await cartStore.unlockCart(sessionId.value as string)
+        console.log('Cart unlocked after payment failure')
+      } catch (unlockError) {
+        console.warn('Failed to unlock cart after payment failure:', unlockError)
+      }
+
       throw error
     } finally {
     session.setProcessing(false)

@@ -157,6 +157,15 @@ export const useCheckoutStore = defineStore('checkout', () => {
 
       session.setSessionExpiry(new Date(Date.now() + 30 * 60 * 1000))
 
+      // Lock the cart to prevent modifications during checkout
+      try {
+        await cartStore.lockCart(sessionRefs.sessionId.value as string, 30)
+        console.log('Cart locked for checkout session:', sessionRefs.sessionId.value)
+      } catch (lockError) {
+        console.warn('Failed to lock cart:', lockError)
+        // Continue with checkout even if locking fails
+      }
+
       const restored = session.restore()
       if (restored?.shippingInfo) {
         session.setShippingInfo(restored.shippingInfo)
@@ -240,6 +249,23 @@ export const useCheckoutStore = defineStore('checkout', () => {
     session.reset()
   }
 
+  const cancelCheckout = async (): Promise<void> => {
+    try {
+      // Unlock the cart when user cancels checkout
+      if (sessionRefs.sessionId.value) {
+        await cartStore.unlockCart(sessionRefs.sessionId.value as string)
+        console.log('Cart unlocked after checkout cancellation')
+      }
+
+      // Reset checkout session
+      session.reset()
+    } catch (error) {
+      console.error('Error canceling checkout:', error)
+      // Reset anyway
+      session.reset()
+    }
+  }
+
   const api: Record<string | symbol, any> = {
     canProceedToPayment,
     canProceedToReview,
@@ -287,7 +313,8 @@ export const useCheckoutStore = defineStore('checkout', () => {
     setTermsAccepted: session.setTermsAccepted,
     setPrivacyAccepted: session.setPrivacyAccepted,
     setMarketingConsent: session.setMarketingConsent,
-    resetCheckout
+    resetCheckout,
+    cancelCheckout
   }
 
   return new Proxy(api, {
