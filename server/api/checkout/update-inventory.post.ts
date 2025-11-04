@@ -1,4 +1,13 @@
 // POST /api/checkout/update-inventory - Update product inventory after order
+//
+// ⚠️ DEPRECATED - DO NOT USE
+// This endpoint is deprecated as of 2025-11-03 (issue #89)
+// Inventory updates are now handled atomically with order creation
+// via the create_order_with_inventory RPC function in create-order.post.ts
+//
+// This endpoint is kept for backward compatibility but should not be used
+// in new code. It will be removed in a future version.
+//
 import { serverSupabaseServiceRole } from '#supabase/server'
 
 interface UpdateInventoryRequest {
@@ -10,6 +19,10 @@ interface UpdateInventoryRequest {
 }
 
 export default defineEventHandler(async (event) => {
+  // Log deprecation warning
+  console.warn('[DEPRECATED] /api/checkout/update-inventory endpoint called - this endpoint is deprecated (issue #89)')
+  console.warn('Please use the atomic create-order endpoint which handles inventory updates automatically')
+
   try {
     const supabase = serverSupabaseServiceRole(event)
 

@@ -4,8 +4,11 @@
  */
 
 import { formatters, translations } from '~/server/utils/emailTemplates'
+import { requireAdminRole } from '~/server/utils/adminAuth'
 
 export default defineEventHandler(async (event) => {
+  await requireAdminRole(event)
+
   // Get query parameters
   const query = getQuery(event)
   const type = query.type as string

@@ -1,11 +1,21 @@
 // POST /api/checkout/create-order - Create order from checkout session
 import { serverSupabaseServiceRole } from '#supabase/server'
 
+interface ProductSnapshot {
+  id: number
+  name: string
+  price: number
+  description?: string
+  image_url?: string
+  sku?: string
+  category?: string
+}
+
 interface CreateOrderFromCheckoutRequest {
   sessionId: string
   items: Array<{
     productId: number
-    productSnapshot: any
+    productSnapshot: ProductSnapshot
     quantity: number
     price: number
     total: number
@@ -141,7 +151,21 @@ export default defineEventHandler(async (event) => {
     }
 
     // Create order
-    const orderData: any = {
+    const orderData: {
+      order_number: string
+      user_id: string | null
+      status: string
+      payment_method: string
+      payment_status: string
+      payment_intent_id: string
+      subtotal_eur: number
+      shipping_cost_eur: number
+      tax_eur: number
+      total_eur: number
+      shipping_address: typeof body.shippingAddress
+      billing_address: typeof body.billingAddress
+      guest_email?: string
+    } = {
       order_number: orderNumber,
       user_id: user?.id || null,
       status: orderStatus,
@@ -169,30 +193,8 @@ export default defineEventHandler(async (event) => {
       hasGuestEmail: !!orderData.guest_email
     })
 
-    const { data: order, error: orderError } = await supabase
-      .from('orders')
-      .insert(orderData)
-      .select()
-      .single()
-
-    if (orderError) {
-      console.error('Failed to create order:', orderError)
-      console.error('Order data:', {
-        order_number: orderNumber,
-        user_id: user?.id || null,
-        status: orderStatus,
-        payment_method: dbPaymentMethod,
-        payment_status: paymentStatus
-      })
-      throw createError({
-        statusCode: 500,
-        statusMessage: `Failed to create order: ${orderError.message || 'Unknown error'}`
-      })
-    }
-
-    // Create order items - ensure productId is a number
-    const orderItems = body.items.map(item => ({
-      order_id: order.id,
+    // Prepare order items for RPC function - ensure productId is a number
+    const orderItemsData = body.items.map(item => ({
       product_id: typeof item.productId === 'string' ? parseInt(item.productId, 10) : item.productId,
       product_snapshot: item.productSnapshot,
       quantity: item.quantity,
@@ -200,26 +202,68 @@ export default defineEventHandler(async (event) => {
       total_eur: item.total
     }))
 
-    const { error: itemsError } = await supabase
-      .from('order_items')
-      .insert(orderItems)
+    // Call atomic RPC function that creates order + updates inventory in a single transaction
+    const { data, error: rpcError } = await supabase.rpc('create_order_with_inventory', {
+      order_data: orderData,
+      order_items_data: orderItemsData
+    })
 
-    if (itemsError) {
-      console.error('Failed to create order items:', itemsError)
-      console.error('Order items data:', orderItems)
-      // Rollback order creation
-      await supabase.from('orders').delete().eq('id', order.id)
+    if (rpcError) {
+      console.error('Failed to create order with inventory:', rpcError)
+      console.error('Order data:', {
+        order_number: orderNumber,
+        user_id: user?.id || null,
+        status: orderStatus,
+        payment_method: dbPaymentMethod,
+        payment_status: paymentStatus
+      })
+
+      // Check if error is due to insufficient stock
+      // SECURITY: Sanitize error message to prevent exposing internal details
+      if (rpcError.message?.includes('Insufficient stock')) {
+        throw createError({
+          statusCode: 409,
+          statusMessage: 'One or more items in your cart are out of stock. Please review your cart and try again.'
+        })
+      }
+
+      // Check if error is due to product being locked/processed
+      if (rpcError.message?.includes('currently being processed')) {
+        throw createError({
+          statusCode: 409,
+          statusMessage: 'Some items are currently being processed by other orders. Please try again in a moment.'
+        })
+      }
+
+      // Check if error is due to product not found
+      if (rpcError.message?.includes('not found or inactive')) {
+        throw createError({
+          statusCode: 400,
+          statusMessage: 'One or more items in your cart are no longer available.'
+        })
+      }
+
       throw createError({
         statusCode: 500,
-        statusMessage: `Failed to create order items: ${itemsError.message || 'Unknown error'}`
+        statusMessage: `Failed to create order: ${rpcError.message || 'Unknown error'}`
       })
     }
 
-    console.log('[Checkout API] create-order success', {
+    // Extract order from RPC response
+    const order = data?.order
+
+    if (!order) {
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Order creation succeeded but no order data returned'
+      })
+    }
+
+    console.log('[Checkout API] create-order success (atomic with inventory update)', {
       orderId: order.id,
       orderNumber: order.order_number,
       guestEmail: orderData.guest_email,
-      userId: order.user_id
+      userId: user?.id
     })
 
     return {
@@ -227,7 +271,7 @@ export default defineEventHandler(async (event) => {
       order: {
         id: order.id,
         orderNumber: order.order_number,
-        total: order.total_eur,
+        total: order.total,
         status: order.status,
         paymentStatus: order.payment_status,
         createdAt: order.created_at

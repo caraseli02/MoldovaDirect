@@ -189,6 +189,11 @@ export interface CartCoreState {
   loading: boolean
   error: string | null
   lastSyncAt: Date | null
+  // Cart locking state
+  isLocked: boolean
+  lockedAt: Date | null
+  lockedUntil: Date | null
+  lockedByCheckoutSessionId: string | null
 }
 
 export interface CartValidationState {
@@ -242,6 +247,11 @@ export interface CartCoreActions {
   generateItemId(): string
   generateSessionId(): string
   initializeCart(): void
+  // Cart locking actions
+  lockCart(checkoutSessionId: string, lockDurationMinutes?: number): Promise<void>
+  unlockCart(checkoutSessionId?: string): Promise<void>
+  checkLockStatus(): Promise<{ isLocked: boolean; lockedAt: Date | null; lockedUntil: Date | null; lockedBySession: string | null }>
+  isCartLocked(): boolean
 }
 
 export interface CartValidationActions {

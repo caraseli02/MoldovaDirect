@@ -1,6 +1,6 @@
 <template>
   <header
-    class="bg-white dark:bg-slate-800 shadow-sm dark:shadow-slate-900/20 sticky top-0 z-50 transition-colors duration-300">
+    class="bg-white dark:bg-gray-950 shadow-sm dark:shadow-slate-900/20 sticky top-0 z-50 will-change-transform">
     <div class="container">
       <div class="flex items-center justify-between h-16">
         <!-- Logo -->

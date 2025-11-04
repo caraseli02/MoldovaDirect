@@ -85,15 +85,20 @@ export const test = base.extend<TestFixtures>({
     await use(products)
   },
 
-  authenticatedPage: async ({ page, testUser, baseURL }, use) => {
-    await page.goto(`${baseURL}/login`)
+  authenticatedPage: async ({ page }, use) => {
+    // Storage state is automatically applied from playwright.config.ts
+    // The page should already be authenticated via the storage state
+    // Just navigate to the homepage to activate the session
+    await page.goto('/')
 
-    await page.fill('[data-testid="email-input"]', testUser.email)
-    await page.fill('[data-testid="password-input"]', testUser.password)
-    await page.click('[data-testid="login-button"]')
+    // Verify that we're actually authenticated
+    // Check for an auth indicator in the UI (e.g., user menu, account link)
+    const isAuthenticated = await page.locator('[data-testid="user-menu"]').isVisible({ timeout: 5000 })
+      .catch(() => false)
 
-    // Wait for redirect after login (should go to /account or homepage)
-    await page.waitForURL(/\/(account|$)/)
+    if (!isAuthenticated) {
+      throw new Error('Authentication failed - storage state may be invalid or expired')
+    }
 
     await use(page)
   },
