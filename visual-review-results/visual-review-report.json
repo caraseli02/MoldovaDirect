@@ -1,0 +1,175 @@
+{
+  "timestamp": "2025-11-04T06:57:54.269Z",
+  "totalPages": 6,
+  "viewport": {
+    "width": 1920,
+    "height": 1080
+  },
+  "pages": [
+    {
+      "url": "/admin",
+      "name": "Dashboard",
+      "screenshot": "/Users/vladislavcaraseli/Documents/MoldovaDirect/visual-review-results/screenshots/dashboard.png",
+      "snapshot": "/Users/vladislavcaraseli/Documents/MoldovaDirect/visual-review-results/snapshots/dashboard.html",
+      "uiElements": [
+        "h2: \"Iniciar Sesión\" (30px, 700)",
+        "h3: \"Moldova Direct\" (18px, 600)",
+        "h3: \"Información\" (18px, 600)",
+        "h3: \"Ayuda\" (18px, 600)",
+        "h3: \"Newsletter\" (18px, 600)"
+      ],
+      "layoutIssues": [],
+      "typographyIssues": [],
+      "colorIssues": [],
+      "spacingIssues": [],
+      "navigationIssues": [
+        "No breadcrumb navigation found"
+      ],
+      "accessibilityIssues": [
+        "33 focusable elements without visible focus indicator"
+      ],
+      "responsiveIssues": []
+    },
+    {
+      "url": "/admin/orders",
+      "name": "Orders List",
+      "screenshot": "/Users/vladislavcaraseli/Documents/MoldovaDirect/visual-review-results/screenshots/orders-list.png",
+      "snapshot": "/Users/vladislavcaraseli/Documents/MoldovaDirect/visual-review-results/snapshots/orders-list.html",
+      "uiElements": [
+        "h2: \"Iniciar Sesión\" (30px, 700)",
+        "h3: \"Moldova Direct\" (18px, 600)",
+        "h3: \"Información\" (18px, 600)",
+        "h3: \"Ayuda\" (18px, 600)",
+        "h3: \"Newsletter\" (18px, 600)"
+      ],
+      "layoutIssues": [],
+      "typographyIssues": [],
+      "colorIssues": [],
+      "spacingIssues": [],
+      "navigationIssues": [
+        "No breadcrumb navigation found"
+      ],
+      "accessibilityIssues": [
+        "33 focusable elements without visible focus indicator"
+      ],
+      "responsiveIssues": []
+    },
+    {
+      "url": "/admin/products",
+      "name": "Products List",
+      "screenshot": "/Users/vladislavcaraseli/Documents/MoldovaDirect/visual-review-results/screenshots/products-list.png",
+      "snapshot": "/Users/vladislavcaraseli/Documents/MoldovaDirect/visual-review-results/snapshots/products-list.html",
+      "uiElements": [
+        "h2: \"Iniciar Sesión\" (30px, 700)",
+        "h3: \"Moldova Direct\" (18px, 600)",
+        "h3: \"Información\" (18px, 600)",
+        "h3: \"Ayuda\" (18px, 600)",
+        "h3: \"Newsletter\" (18px, 600)"
+      ],
+      "layoutIssues": [],
+      "typographyIssues": [],
+      "colorIssues": [],
+      "spacingIssues": [],
+      "navigationIssues": [
+        "No breadcrumb navigation found"
+      ],
+      "accessibilityIssues": [
+        "33 focusable elements without visible focus indicator"
+      ],
+      "responsiveIssues": []
+    },
+    {
+      "url": "/admin/analytics",
+      "name": "Analytics Dashboard",
+      "screenshot": "/Users/vladislavcaraseli/Documents/MoldovaDirect/visual-review-results/screenshots/analytics-dashboard.png",
+      "snapshot": "/Users/vladislavcaraseli/Documents/MoldovaDirect/visual-review-results/snapshots/analytics-dashboard.html",
+      "uiElements": [
+        "h2: \"Iniciar Sesión\" (30px, 700)",
+        "h3: \"Moldova Direct\" (18px, 600)",
+        "h3: \"Información\" (18px, 600)",
+        "h3: \"Ayuda\" (18px, 600)",
+        "h3: \"Newsletter\" (18px, 600)"
+      ],
+      "layoutIssues": [],
+      "typographyIssues": [],
+      "colorIssues": [],
+      "spacingIssues": [],
+      "navigationIssues": [
+        "No breadcrumb navigation found"
+      ],
+      "accessibilityIssues": [
+        "33 focusable elements without visible focus indicator"
+      ],
+      "responsiveIssues": []
+    },
+    {
+      "url": "/admin/email-logs",
+      "name": "Email Logs",
+      "screenshot": "/Users/vladislavcaraseli/Documents/MoldovaDirect/visual-review-results/screenshots/email-logs.png",
+      "snapshot": "/Users/vladislavcaraseli/Documents/MoldovaDirect/visual-review-results/snapshots/email-logs.html",
+      "uiElements": [
+        "h2: \"Iniciar Sesión\" (30px, 700)",
+        "h3: \"Moldova Direct\" (18px, 600)",
+        "h3: \"Información\" (18px, 600)",
+        "h3: \"Ayuda\" (18px, 600)",
+        "h3: \"Newsletter\" (18px, 600)"
+      ],
+      "layoutIssues": [],
+      "typographyIssues": [],
+      "colorIssues": [],
+      "spacingIssues": [],
+      "navigationIssues": [
+        "No breadcrumb navigation found"
+      ],
+      "accessibilityIssues": [
+        "33 focusable elements without visible focus indicator"
+      ],
+      "responsiveIssues": []
+    },
+    {
+      "url": "/admin/testing",
+      "name": "Testing Page",
+      "screenshot": "/Users/vladislavcaraseli/Documents/MoldovaDirect/visual-review-results/screenshots/testing-page.png",
+      "snapshot": "/Users/vladislavcaraseli/Documents/MoldovaDirect/visual-review-results/snapshots/testing-page.html",
+      "uiElements": [
+        "h2: \"Iniciar Sesión\" (30px, 700)",
+        "h3: \"Moldova Direct\" (18px, 600)",
+        "h3: \"Información\" (18px, 600)",
+        "h3: \"Ayuda\" (18px, 600)",
+        "h3: \"Newsletter\" (18px, 600)"
+      ],
+      "layoutIssues": [],
+      "typographyIssues": [],
+      "colorIssues": [],
+      "spacingIssues": [],
+      "navigationIssues": [
+        "No breadcrumb navigation found"
+      ],
+      "accessibilityIssues": [
+        "33 focusable elements without visible focus indicator"
+      ],
+      "responsiveIssues": []
+    }
+  ],
+  "summary": {
+    "criticalIssues": [
+      "33 focusable elements without visible focus indicator"
+    ],
+    "moderateIssues": [
+      "No breadcrumb navigation found"
+    ],
+    "minorIssues": [],
+    "recommendations": [
+      "Establish a consistent design system with standardized spacing, typography, and color tokens",
+      "Implement proper heading hierarchy (single h1, progressive h2-h6)",
+      "Add accessible labels to all form inputs and buttons",
+      "Ensure sufficient color contrast (WCAG AA: 4.5:1 for normal text)",
+      "Add breadcrumb navigation to all admin pages",
+      "Implement consistent focus indicators for keyboard navigation",
+      "Use a limited color palette (5-7 primary colors)",
+      "Standardize button styles and states",
+      "Ensure all images have descriptive alt text",
+      "Test responsive behavior at common breakpoints"
+    ]
+  }
+}

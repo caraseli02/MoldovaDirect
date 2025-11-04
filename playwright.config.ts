@@ -38,7 +38,7 @@ export default defineConfig({
     ...locales.flatMap(locale => [
       {
         name: `chromium-${locale}`,
-        use: { 
+        use: {
           ...devices['Desktop Chrome'],
           locale,
           timezoneId: 'Europe/Madrid',
@@ -65,7 +65,7 @@ export default defineConfig({
         },
       },
     ]),
-    
+
     {
       name: 'Mobile Chrome',
       use: {
@@ -82,7 +82,7 @@ export default defineConfig({
         storageState: `tests/fixtures/.auth/user-es.json`,
       },
     },
-    
+
     {
       name: 'setup',
       testDir: './tests/setup',

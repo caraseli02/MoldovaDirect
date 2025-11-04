@@ -1,14 +1,14 @@
 <template>
-  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+  <div class="min-h-screen bg-zinc-50 dark:bg-zinc-900">
     <!-- Header -->
-    <div class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+    <div class="bg-white dark:bg-zinc-800 border-b border-zinc-200 dark:border-zinc-700">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
           <div>
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
+            <h1 class="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
               Analytics Dashboard
             </h1>
-            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+            <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">
               Monitor user behavior and business performance
             </p>
           </div>
@@ -65,7 +65,7 @@
 
         <!-- Users Tab -->
         <div v-if="activeTab === 'users'" class="space-y-6">
-          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
+          <div class="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 p-4">
             <AdminUtilsDateRangePicker
               v-model="dateRange"
               @change="handleDateRangeChange"
@@ -90,17 +90,17 @@
             <div
               v-for="stat in userStats"
               :key="stat.label"
-              class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6"
+              class="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 p-6"
             >
               <div class="flex items-center">
-                <div class="flex-shrink-0">
-                  <component :is="stat.icon" :class="['w-8 h-8', stat.iconColor]" />
+                <div class="flex-shrink-0 p-3 rounded-lg bg-zinc-100 dark:bg-zinc-700">
+                  <component :is="stat.icon" class="w-6 h-6 text-zinc-600 dark:text-zinc-400" />
                 </div>
                 <div class="ml-4">
-                  <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <p class="text-sm font-medium text-zinc-600 dark:text-zinc-400">
                     {{ stat.label }}
                   </p>
-                  <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  <p class="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
                     {{ stat.value }}
                   </p>
                 </div>
@@ -111,7 +111,7 @@
 
         <!-- Products Tab -->
         <div v-if="activeTab === 'products'" class="space-y-6">
-          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
+          <div class="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 p-4">
             <AdminUtilsDateRangePicker
               v-model="dateRange"
               @change="handleDateRangeChange"
@@ -157,9 +157,9 @@
         v-if="loading && !analyticsOverview && !userAnalytics && !productAnalytics"
         class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
       >
-        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 flex items-center gap-4">
+        <div class="bg-white dark:bg-zinc-800 rounded-lg p-6 flex items-center gap-4">
           <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-          <span class="text-gray-900 dark:text-gray-100">Loading analytics...</span>
+          <span class="text-zinc-900 dark:text-zinc-100">Loading analytics...</span>
         </div>
       </div>
 
@@ -256,26 +256,22 @@ const userStats = computed(() => {
     {
       label: 'Total Users',
       value: summary.totalUsers.toLocaleString(),
-      icon: Users,
-      iconColor: 'text-blue-600 dark:text-blue-400'
+      icon: Users
     },
     {
       label: 'Active Users (30d)',
       value: summary.activeUsersLast30Days.toLocaleString(),
-      icon: Users,
-      iconColor: 'text-green-600 dark:text-green-400'
+      icon: Users
     },
     {
       label: 'New Users (30d)',
       value: summary.newUsersLast30Days.toLocaleString(),
-      icon: Users,
-      iconColor: 'text-purple-600 dark:text-purple-400'
+      icon: Users
     },
     {
       label: 'Retention Rate',
       value: `${summary.userRetentionRate}%`,
-      icon: BarChart2,
-      iconColor: 'text-amber-600 dark:text-amber-400'
+      icon: BarChart2
     }
   ]
 })

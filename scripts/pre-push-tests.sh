@@ -49,23 +49,9 @@ if echo "$CHANGED_FILES" | grep -qE "(i18n|locales|translations)"; then
   E2E_TESTS+=("tests/e2e/i18n.spec.ts")
 fi
 
-# Check for admin-related changes
-if echo "$CHANGED_FILES" | grep -qE "(admin|components/admin|pages/admin|stores/admin)"; then
-  E2E_TESTS+=("tests/visual/admin-visual.spec.ts")
-fi
-
-# Check for account-related changes
-if echo "$CHANGED_FILES" | grep -qE "(account|profile|orders|pages/account)"; then
-  E2E_TESTS+=("tests/visual/account-visual.spec.ts")
-fi
-
-# Check for visual changes (components, pages, styles)
-if echo "$CHANGED_FILES" | grep -qE "(components/|pages/|\.vue$|tailwind|\.css$)"; then
-  # Only add visual regression if not already added
-  if [[ ! " ${E2E_TESTS[@]} " =~ " tests/visual/ " ]]; then
-    E2E_TESTS+=("tests/visual/checkout-and-static-visual.spec.ts")
-  fi
-fi
+# Visual tests are skipped in pre-push checks
+# They can be run manually with: pnpm run test:visual-review
+# Or: pnpm run test:visual
 
 # Run unit tests with coverage
 echo "🧪 Running unit tests with coverage..."

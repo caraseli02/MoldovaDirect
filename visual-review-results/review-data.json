@@ -1,0 +1,101 @@
+[
+  {
+    "pageName": "Dashboard",
+    "route": "/admin",
+    "screenshot": "dashboard-1762241661922.png",
+    "issues": [
+      "Missing h1 tag - should have one main heading per page"
+    ],
+    "timestamp": "2025-11-04T07:34:21.920Z"
+  },
+  {
+    "pageName": "Users Management",
+    "route": "/admin/users",
+    "screenshot": "users-management-1762241665327.png",
+    "issues": [
+      "Missing h1 tag - should have one main heading per page"
+    ],
+    "timestamp": "2025-11-04T07:34:25.327Z"
+  },
+  {
+    "pageName": "Orders List",
+    "route": "/admin/orders",
+    "screenshot": "orders-list-1762241668678.png",
+    "issues": [
+      "Missing h1 tag - should have one main heading per page"
+    ],
+    "timestamp": "2025-11-04T07:34:28.678Z"
+  },
+  {
+    "pageName": "Order Analytics",
+    "route": "/admin/orders/analytics",
+    "screenshot": "order-analytics-1762241672126.png",
+    "issues": [
+      "Missing h1 tag - should have one main heading per page"
+    ],
+    "timestamp": "2025-11-04T07:34:32.126Z"
+  },
+  {
+    "pageName": "Products List",
+    "route": "/admin/products",
+    "screenshot": "products-list-1762241675474.png",
+    "issues": [
+      "Missing h1 tag - should have one main heading per page"
+    ],
+    "timestamp": "2025-11-04T07:34:35.474Z"
+  },
+  {
+    "pageName": "New Product",
+    "route": "/admin/products/new",
+    "screenshot": "new-product-1762241678878.png",
+    "issues": [
+      "Missing h1 tag - should have one main heading per page"
+    ],
+    "timestamp": "2025-11-04T07:34:38.878Z"
+  },
+  {
+    "pageName": "Analytics",
+    "route": "/admin/analytics",
+    "screenshot": "analytics-1762241682228.png",
+    "issues": [
+      "Missing h1 tag - should have one main heading per page"
+    ],
+    "timestamp": "2025-11-04T07:34:42.228Z"
+  },
+  {
+    "pageName": "Inventory",
+    "route": "/admin/inventory",
+    "screenshot": "inventory-1762241685633.png",
+    "issues": [
+      "Missing h1 tag - should have one main heading per page"
+    ],
+    "timestamp": "2025-11-04T07:34:45.633Z"
+  },
+  {
+    "pageName": "Email Templates",
+    "route": "/admin/email-templates",
+    "screenshot": "email-templates-1762241689027.png",
+    "issues": [
+      "Missing h1 tag - should have one main heading per page"
+    ],
+    "timestamp": "2025-11-04T07:34:49.027Z"
+  },
+  {
+    "pageName": "Email Logs",
+    "route": "/admin/email-logs",
+    "screenshot": "email-logs-1762241692374.png",
+    "issues": [
+      "Missing h1 tag - should have one main heading per page"
+    ],
+    "timestamp": "2025-11-04T07:34:52.374Z"
+  },
+  {
+    "pageName": "Email Testing Tool",
+    "route": "/admin/tools/email-testing",
+    "screenshot": "email-testing-tool-1762241695709.png",
+    "issues": [
+      "Missing h1 tag - should have one main heading per page"
+    ],
+    "timestamp": "2025-11-04T07:34:55.709Z"
+  }
+]

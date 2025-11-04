@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MoldovaDirect Admin UI/UX Review</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, sans-serif; background: #f5f5f5; color: #333; line-height: 1.6; }
+    .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+    header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 3rem 2rem; text-align: center; margin-bottom: 3rem; border-radius: 8px; }
+    h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+    .subtitle { opacity: 0.9; font-size: 1.1rem; }
+    .summary { background: white; padding: 2rem; border-radius: 8px; margin-bottom: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .summary-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+    .stat-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1.5rem; border-radius: 8px; text-align: center; }
+    .stat-number { font-size: 2.5rem; font-weight: bold; }
+    .stat-label { opacity: 0.9; font-size: 0.9rem; margin-top: 0.5rem; }
+    .page-section { background: white; padding: 2rem; margin-bottom: 2rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid #f0f0f0; }
+    .page-title { font-size: 1.5rem; color: #667eea; }
+    .page-route { background: #f0f0f0; padding: 0.5rem 1rem; border-radius: 4px; font-family: monospace; font-size: 0.9rem; }
+    .screenshot-container { margin: 1.5rem 0; border: 1px solid #e0e0e0; border-radius: 4px; overflow: hidden; }
+    .screenshot { width: 100%; height: auto; display: block; }
+    .issues-section { margin-top: 1.5rem; }
+    .issues-header { font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .issue-badge { background: #f44336; color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.8rem; font-weight: bold; }
+    .success-badge { background: #4caf50; color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.8rem; font-weight: bold; }
+    .issues-list { list-style: none; }
+    .issue-item { background: #fff3e0; border-left: 4px solid #ff9800; padding: 1rem; margin-bottom: 0.75rem; border-radius: 4px; }
+    .no-issues { background: #e8f5e9; border-left: 4px solid #4caf50; padding: 1rem; border-radius: 4px; color: #2e7d32; }
+    .timestamp { color: #999; font-size: 0.85rem; margin-top: 1rem; }
+    footer { text-align: center; padding: 2rem; color: #999; border-top: 1px solid #e0e0e0; margin-top: 3rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>MoldovaDirect Admin UI/UX Review</h1>
+      <p class="subtitle">Comprehensive Visual and Accessibility Audit</p>
+      <p class="subtitle">Generated on 11/4/2025, 8:34:55 AM</p>
+    </header>
+    <div class="summary">
+      <h2>Executive Summary</h2>
+      <div class="summary-stats">
+        <div class="stat-card"><div class="stat-number">11</div><div class="stat-label">Pages Reviewed</div></div>
+        <div class="stat-card"><div class="stat-number">11</div><div class="stat-label">Total Issues Found</div></div>
+        <div class="stat-card"><div class="stat-number">0</div><div class="stat-label">Pages Without Issues</div></div>
+        <div class="stat-card"><div class="stat-number">1.0</div><div class="stat-label">Avg Issues Per Page</div></div>
+      </div>
+    </div>
+    <div class="page-section">
+      <div class="page-header">
+        <h3 class="page-title">Dashboard</h3>
+        <code class="page-route">/admin</code>
+      </div>
+      <div class="screenshot-container">
+        <img src="screenshots/dashboard-1762241661922.png" alt="Dashboard Screenshot" class="screenshot" />
+      </div>
+      <div class="issues-section">
+        <div class="issues-header">
+          <span>Issues Found</span>
+          <span class="issue-badge">1</span>
+        </div>
+        <ul class="issues-list">
+          <li class="issue-item">Missing h1 tag - should have one main heading per page</li>
+        </ul>
+      </div>
+      <div class="timestamp">Captured at: 11/4/2025, 8:34:21 AM</div>
+    </div>
+    <div class="page-section">
+      <div class="page-header">
+        <h3 class="page-title">Users Management</h3>
+        <code class="page-route">/admin/users</code>
+      </div>
+      <div class="screenshot-container">
+        <img src="screenshots/users-management-1762241665327.png" alt="Users Management Screenshot" class="screenshot" />
+      </div>
+      <div class="issues-section">
+        <div class="issues-header">
+          <span>Issues Found</span>
+          <span class="issue-badge">1</span>
+        </div>
+        <ul class="issues-list">
+          <li class="issue-item">Missing h1 tag - should have one main heading per page</li>
+        </ul>
+      </div>
+      <div class="timestamp">Captured at: 11/4/2025, 8:34:25 AM</div>
+    </div>
+    <div class="page-section">
+      <div class="page-header">
+        <h3 class="page-title">Orders List</h3>
+        <code class="page-route">/admin/orders</code>
+      </div>
+      <div class="screenshot-container">
+        <img src="screenshots/orders-list-1762241668678.png" alt="Orders List Screenshot" class="screenshot" />
+      </div>
+      <div class="issues-section">
+        <div class="issues-header">
+          <span>Issues Found</span>
+          <span class="issue-badge">1</span>
+        </div>
+        <ul class="issues-list">
+          <li class="issue-item">Missing h1 tag - should have one main heading per page</li>
+        </ul>
+      </div>
+      <div class="timestamp">Captured at: 11/4/2025, 8:34:28 AM</div>
+    </div>
+    <div class="page-section">
+      <div class="page-header">
+        <h3 class="page-title">Order Analytics</h3>
+        <code class="page-route">/admin/orders/analytics</code>
+      </div>
+      <div class="screenshot-container">
+        <img src="screenshots/order-analytics-1762241672126.png" alt="Order Analytics Screenshot" class="screenshot" />
+      </div>
+      <div class="issues-section">
+        <div class="issues-header">
+          <span>Issues Found</span>
+          <span class="issue-badge">1</span>
+        </div>
+        <ul class="issues-list">
+          <li class="issue-item">Missing h1 tag - should have one main heading per page</li>
+        </ul>
+      </div>
+      <div class="timestamp">Captured at: 11/4/2025, 8:34:32 AM</div>
+    </div>
+    <div class="page-section">
+      <div class="page-header">
+        <h3 class="page-title">Products List</h3>
+        <code class="page-route">/admin/products</code>
+      </div>
+      <div class="screenshot-container">
+        <img src="screenshots/products-list-1762241675474.png" alt="Products List Screenshot" class="screenshot" />
+      </div>
+      <div class="issues-section">
+        <div class="issues-header">
+          <span>Issues Found</span>
+          <span class="issue-badge">1</span>
+        </div>
+        <ul class="issues-list">
+          <li class="issue-item">Missing h1 tag - should have one main heading per page</li>
+        </ul>
+      </div>
+      <div class="timestamp">Captured at: 11/4/2025, 8:34:35 AM</div>
+    </div>
+    <div class="page-section">
+      <div class="page-header">
+        <h3 class="page-title">New Product</h3>
+        <code class="page-route">/admin/products/new</code>
+      </div>
+      <div class="screenshot-container">
+        <img src="screenshots/new-product-1762241678878.png" alt="New Product Screenshot" class="screenshot" />
+      </div>
+      <div class="issues-section">
+        <div class="issues-header">
+          <span>Issues Found</span>
+          <span class="issue-badge">1</span>
+        </div>
+        <ul class="issues-list">
+          <li class="issue-item">Missing h1 tag - should have one main heading per page</li>
+        </ul>
+      </div>
+      <div class="timestamp">Captured at: 11/4/2025, 8:34:38 AM</div>
+    </div>
+    <div class="page-section">
+      <div class="page-header">
+        <h3 class="page-title">Analytics</h3>
+        <code class="page-route">/admin/analytics</code>
+      </div>
+      <div class="screenshot-container">
+        <img src="screenshots/analytics-1762241682228.png" alt="Analytics Screenshot" class="screenshot" />
+      </div>
+      <div class="issues-section">
+        <div class="issues-header">
+          <span>Issues Found</span>
+          <span class="issue-badge">1</span>
+        </div>
+        <ul class="issues-list">
+          <li class="issue-item">Missing h1 tag - should have one main heading per page</li>
+        </ul>
+      </div>
+      <div class="timestamp">Captured at: 11/4/2025, 8:34:42 AM</div>
+    </div>
+    <div class="page-section">
+      <div class="page-header">
+        <h3 class="page-title">Inventory</h3>
+        <code class="page-route">/admin/inventory</code>
+      </div>
+      <div class="screenshot-container">
+        <img src="screenshots/inventory-1762241685633.png" alt="Inventory Screenshot" class="screenshot" />
+      </div>
+      <div class="issues-section">
+        <div class="issues-header">
+          <span>Issues Found</span>
+          <span class="issue-badge">1</span>
+        </div>
+        <ul class="issues-list">
+          <li class="issue-item">Missing h1 tag - should have one main heading per page</li>
+        </ul>
+      </div>
+      <div class="timestamp">Captured at: 11/4/2025, 8:34:45 AM</div>
+    </div>
+    <div class="page-section">
+      <div class="page-header">
+        <h3 class="page-title">Email Templates</h3>
+        <code class="page-route">/admin/email-templates</code>
+      </div>
+      <div class="screenshot-container">
+        <img src="screenshots/email-templates-1762241689027.png" alt="Email Templates Screenshot" class="screenshot" />
+      </div>
+      <div class="issues-section">
+        <div class="issues-header">
+          <span>Issues Found</span>
+          <span class="issue-badge">1</span>
+        </div>
+        <ul class="issues-list">
+          <li class="issue-item">Missing h1 tag - should have one main heading per page</li>
+        </ul>
+      </div>
+      <div class="timestamp">Captured at: 11/4/2025, 8:34:49 AM</div>
+    </div>
+    <div class="page-section">
+      <div class="page-header">
+        <h3 class="page-title">Email Logs</h3>
+        <code class="page-route">/admin/email-logs</code>
+      </div>
+      <div class="screenshot-container">
+        <img src="screenshots/email-logs-1762241692374.png" alt="Email Logs Screenshot" class="screenshot" />
+      </div>
+      <div class="issues-section">
+        <div class="issues-header">
+          <span>Issues Found</span>
+          <span class="issue-badge">1</span>
+        </div>
+        <ul class="issues-list">
+          <li class="issue-item">Missing h1 tag - should have one main heading per page</li>
+        </ul>
+      </div>
+      <div class="timestamp">Captured at: 11/4/2025, 8:34:52 AM</div>
+    </div>
+    <div class="page-section">
+      <div class="page-header">
+        <h3 class="page-title">Email Testing Tool</h3>
+        <code class="page-route">/admin/tools/email-testing</code>
+      </div>
+      <div class="screenshot-container">
+        <img src="screenshots/email-testing-tool-1762241695709.png" alt="Email Testing Tool Screenshot" class="screenshot" />
+      </div>
+      <div class="issues-section">
+        <div class="issues-header">
+          <span>Issues Found</span>
+          <span class="issue-badge">1</span>
+        </div>
+        <ul class="issues-list">
+          <li class="issue-item">Missing h1 tag - should have one main heading per page</li>
+        </ul>
+      </div>
+      <div class="timestamp">Captured at: 11/4/2025, 8:34:55 AM</div>
+    </div>
+    <footer>
+      <p>Generated by Playwright Visual Review Tool</p>
+      <p>MoldovaDirect Admin Panel Audit</p>
+    </footer>
+  </div>
+</body>
+</html>

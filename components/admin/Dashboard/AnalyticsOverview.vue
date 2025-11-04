@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-6">
     <!-- Date Range Picker -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
+    <div class="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 p-4">
       <AdminUtilsDateRangePicker
         v-model="dateRange"
         @change="handleDateRangeChange"
@@ -13,19 +13,19 @@
       <div
         v-for="kpi in kpiCards"
         :key="kpi.key"
-        class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6"
+        class="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 p-6"
       >
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
+            <p class="text-sm font-medium text-zinc-600 dark:text-zinc-400">
               {{ kpi.label }}
             </p>
-            <p class="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1">
+            <p class="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mt-1">
               {{ kpi.value }}
             </p>
           </div>
           <div :class="[
-            'p-3 rounded-full',
+            'p-3 rounded-lg',
             kpi.bgColor
           ]">
             <component :is="kpi.icon" :class="['w-6 h-6', kpi.iconColor]" />
@@ -34,13 +34,13 @@
         <div class="mt-4 flex items-center">
           <div :class="[
             'flex items-center text-sm',
-            kpi.trend === 'up' ? 'text-green-600 dark:text-green-400' : 
-            kpi.trend === 'down' ? 'text-red-600 dark:text-red-400' : 
-            'text-gray-600 dark:text-gray-400'
+            kpi.trend === 'up' ? 'text-green-600 dark:text-green-400' :
+            kpi.trend === 'down' ? 'text-red-600 dark:text-red-400' :
+            'text-zinc-600 dark:text-zinc-400'
           ]">
-            <component 
-              :is="getTrendIcon(kpi.trend)" 
-              class="w-4 h-4 mr-1" 
+            <component
+              :is="getTrendIcon(kpi.trend)"
+              class="w-4 h-4 mr-1"
             />
             <span>{{ kpi.changeText }}</span>
           </div>
@@ -51,8 +51,8 @@
     <!-- Charts Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <!-- Revenue Trend Chart -->
-      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <div class="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 p-6">
+        <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100 mb-4">
           Revenue Trend
         </h3>
         <div class="h-80">
@@ -67,8 +67,8 @@
       </div>
 
       <!-- User Growth Chart -->
-      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <div class="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 p-6">
+        <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100 mb-4">
           User Growth
         </h3>
         <div class="h-80">
@@ -86,8 +86,8 @@
     <!-- Detailed Analytics -->
     <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
       <!-- Conversion Funnel -->
-      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <div class="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 p-6">
+        <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100 mb-4">
           Conversion Funnel
         </h3>
         <div class="space-y-4">
@@ -96,53 +96,53 @@
             :key="step.label"
             class="relative"
           >
-            <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+            <div class="flex items-center justify-between p-3 bg-zinc-50 dark:bg-zinc-700 rounded-lg">
               <div class="flex items-center gap-3">
                 <div :class="[
-                  'w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium',
+                  'w-8 h-8 rounded-lg flex items-center justify-center text-sm font-medium',
                   step.color
                 ]">
                   {{ index + 1 }}
                 </div>
-                <span class="font-medium text-gray-900 dark:text-gray-100">
+                <span class="font-medium text-zinc-900 dark:text-zinc-100">
                   {{ step.label }}
                 </span>
               </div>
               <div class="text-right">
-                <div class="font-bold text-gray-900 dark:text-gray-100">
+                <div class="font-bold text-zinc-900 dark:text-zinc-100">
                   {{ step.value.toLocaleString() }}
                 </div>
-                <div class="text-sm text-gray-600 dark:text-gray-400">
+                <div class="text-sm text-zinc-600 dark:text-zinc-400">
                   {{ step.percentage }}%
                 </div>
               </div>
             </div>
             <div
               v-if="index < conversionSteps.length - 1"
-              class="absolute left-4 top-full w-0.5 h-4 bg-gray-300 dark:bg-gray-600"
+              class="absolute left-4 top-full w-0.5 h-4 bg-zinc-300 dark:bg-zinc-600"
             />
           </div>
         </div>
       </div>
 
       <!-- Top Metrics -->
-      <div class="xl:col-span-2 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <div class="xl:col-span-2 bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 p-6">
+        <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100 mb-4">
           Key Performance Indicators
         </h3>
         <div class="grid grid-cols-2 gap-4">
           <div
             v-for="metric in detailedMetrics"
             :key="metric.label"
-            class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
+            class="p-4 bg-zinc-50 dark:bg-zinc-700 rounded-lg"
           >
-            <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">
+            <div class="text-sm text-zinc-600 dark:text-zinc-400 mb-1">
               {{ metric.label }}
             </div>
-            <div class="text-xl font-bold text-gray-900 dark:text-gray-100">
+            <div class="text-xl font-bold text-zinc-900 dark:text-zinc-100">
               {{ metric.value }}
             </div>
-            <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+            <div class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">
               {{ metric.description }}
             </div>
           </div>
@@ -217,8 +217,8 @@ const kpiCards = computed(() => {
       label: 'Total Users',
       value: kpis.totalUsers.toLocaleString(),
       icon: Users,
-      bgColor: 'bg-blue-100 dark:bg-blue-900',
-      iconColor: 'text-blue-600 dark:text-blue-400',
+      bgColor: 'bg-zinc-100 dark:bg-zinc-800',
+      iconColor: 'text-zinc-600 dark:text-zinc-400',
       trend: trends.userGrowth,
       changeText: `${Math.abs(kpis.userGrowthRate)}% vs last period`
     },
@@ -227,8 +227,8 @@ const kpiCards = computed(() => {
       label: 'Total Revenue',
       value: `€${kpis.totalRevenue.toLocaleString()}`,
       icon: Euro,
-      bgColor: 'bg-green-100 dark:bg-green-900',
-      iconColor: 'text-green-600 dark:text-green-400',
+      bgColor: 'bg-zinc-100 dark:bg-zinc-800',
+      iconColor: 'text-zinc-600 dark:text-zinc-400',
       trend: trends.revenueGrowth,
       changeText: `${Math.abs(kpis.revenueGrowthRate)}% vs last period`
     },
@@ -237,8 +237,8 @@ const kpiCards = computed(() => {
       label: 'Conversion Rate',
       value: `${kpis.conversionRate}%`,
       icon: ShoppingCart,
-      bgColor: 'bg-purple-100 dark:bg-purple-900',
-      iconColor: 'text-purple-600 dark:text-purple-400',
+      bgColor: 'bg-zinc-100 dark:bg-zinc-800',
+      iconColor: 'text-zinc-600 dark:text-zinc-400',
       trend: 'stable',
       changeText: 'Stable performance'
     },
@@ -247,8 +247,8 @@ const kpiCards = computed(() => {
       label: 'Avg Order Value',
       value: `€${kpis.avgOrderValue.toFixed(2)}`,
       icon: BarChart2,
-      bgColor: 'bg-amber-100 dark:bg-amber-900',
-      iconColor: 'text-amber-600 dark:text-amber-400',
+      bgColor: 'bg-zinc-100 dark:bg-zinc-800',
+      iconColor: 'text-zinc-600 dark:text-zinc-400',
       trend: 'stable',
       changeText: 'Per order average'
     }
@@ -357,19 +357,19 @@ const conversionSteps = computed(() => {
       label: 'Total Users',
       value: totalUsers,
       percentage: 100,
-      color: 'bg-blue-500 text-white'
+      color: 'bg-zinc-700 text-white dark:bg-zinc-600'
     },
     {
       label: 'Active Users',
       value: activeUsers,
       percentage: totalUsers > 0 ? Math.round((activeUsers / totalUsers) * 100) : 0,
-      color: 'bg-green-500 text-white'
+      color: 'bg-zinc-700 text-white dark:bg-zinc-600'
     },
     {
       label: 'Orders',
       value: orders,
       percentage: totalUsers > 0 ? Math.round((orders / totalUsers) * 100) : 0,
-      color: 'bg-purple-500 text-white'
+      color: 'bg-zinc-700 text-white dark:bg-zinc-600'
     }
   ]
 })
