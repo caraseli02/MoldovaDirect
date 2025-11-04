@@ -61,7 +61,9 @@ export default defineEventHandler(async (event) => {
 
     // Apply search filter using PostgreSQL JSONB operators
     // This searches across all language translations (es, en, ro, ru)
-    const searchPattern = `%${searchTerm}%`
+    // Escape commas to prevent malformed .or() filter (commas are condition separators)
+    const escapedSearch = searchTerm.replace(/,/g, '\\,')
+    const searchPattern = `%${escapedSearch}%`
     queryBuilder = queryBuilder.or(
       `name_translations->>es.ilike.${searchPattern},` +
       `name_translations->>en.ilike.${searchPattern},` +

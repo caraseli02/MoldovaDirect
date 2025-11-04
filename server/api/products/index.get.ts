@@ -90,7 +90,9 @@ export default defineEventHandler(async (event) => {
 
     // Apply search filter using PostgreSQL JSONB operators for better performance
     if (search) {
-      const searchPattern = `%${search}%`
+      // Escape commas to prevent malformed .or() filter (commas are condition separators)
+      const escapedSearch = search.replace(/,/g, '\\,')
+      const searchPattern = `%${escapedSearch}%`
       queryBuilder = queryBuilder.or(
         `name_translations->>es.ilike.${searchPattern},` +
         `name_translations->>en.ilike.${searchPattern},` +
@@ -145,7 +147,9 @@ export default defineEventHandler(async (event) => {
       countQueryBuilder = countQueryBuilder.gt('stock_quantity', 0)
     }
     if (search) {
-      const searchPattern = `%${search}%`
+      // Escape commas to prevent malformed .or() filter (commas are condition separators)
+      const escapedSearch = search.replace(/,/g, '\\,')
+      const searchPattern = `%${escapedSearch}%`
       countQueryBuilder = countQueryBuilder.or(
         `name_translations->>es.ilike.${searchPattern},` +
         `name_translations->>en.ilike.${searchPattern},` +
