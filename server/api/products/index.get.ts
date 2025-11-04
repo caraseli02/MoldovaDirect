@@ -88,102 +88,20 @@ export default defineEventHandler(async (event) => {
       queryBuilder = queryBuilder.gt('stock_quantity', 0)
     }
 
-    // Apply search filter - we'll use JavaScript filtering for JSONB fields
-    let allProductsForSearch = null
+    // Apply search filter using PostgreSQL JSONB operators for better performance
     if (search) {
-      // Get all products first to filter in JavaScript (better JSONB support)
-      const { data: searchProducts, error: searchError } = await queryBuilder
-      
-      if (searchError) {
-        throw createError({
-          statusCode: 500,
-          statusMessage: 'Failed to fetch products for search',
-          data: searchError
-        })
-      }
-      
-      const searchTermLower = search.toLowerCase().trim()
-      allProductsForSearch = (searchProducts || []).filter(product => {
-        // Search in all name translations
-        const nameMatches = Object.values(product.name_translations || {}).some(name => 
-          (name as string).toLowerCase().includes(searchTermLower)
-        )
-        
-        // Search in all description translations
-        const descriptionMatches = Object.values(product.description_translations || {}).some(desc => 
-          (desc as string).toLowerCase().includes(searchTermLower)
-        )
-        
-        // Search in SKU
-        const skuMatches = product.sku.toLowerCase().includes(searchTermLower)
-        
-        return nameMatches || descriptionMatches || skuMatches
-      })
-      
-      // Create a new query builder with filtered IDs
-      if (allProductsForSearch.length > 0) {
-        const filteredIds = allProductsForSearch.map((p: any) => p.id)
-        queryBuilder = supabase
-          .from('products')
-          .select(`
-            id,
-            sku,
-            name_translations,
-            description_translations,
-            price_eur,
-            compare_at_price_eur,
-            stock_quantity,
-            images,
-            attributes,
-            is_active,
-            created_at,
-            categories (
-              id,
-              slug,
-              name_translations
-            )
-          `)
-          .eq('is_active', true)
-          .in('id', filteredIds)
-      } else {
-        // No search results, return empty
-        queryBuilder = supabase
-          .from('products')
-          .select(`
-            id,
-            sku,
-            name_translations,
-            description_translations,
-            price_eur,
-            compare_at_price_eur,
-            stock_quantity,
-            images,
-            attributes,
-            is_active,
-            created_at,
-            categories (
-              id,
-              slug,
-              name_translations
-            )
-          `)
-          .eq('is_active', true)
-          .eq('id', -1) // This will return no results
-      }
-      
-      // Apply other filters to the search results
-      if (category && allProductsForSearch.length > 0) {
-        queryBuilder = queryBuilder.eq('categories.slug', category)
-      }
-      if (priceMin !== undefined && allProductsForSearch.length > 0) {
-        queryBuilder = queryBuilder.gte('price_eur', priceMin)
-      }
-      if (priceMax !== undefined && allProductsForSearch.length > 0) {
-        queryBuilder = queryBuilder.lte('price_eur', priceMax)
-      }
-      if (inStock === true && allProductsForSearch.length > 0) {
-        queryBuilder = queryBuilder.gt('stock_quantity', 0)
-      }
+      const searchPattern = `%${search}%`
+      queryBuilder = queryBuilder.or(
+        `name_translations->>es.ilike.${searchPattern},` +
+        `name_translations->>en.ilike.${searchPattern},` +
+        `name_translations->>ro.ilike.${searchPattern},` +
+        `name_translations->>ru.ilike.${searchPattern},` +
+        `description_translations->>es.ilike.${searchPattern},` +
+        `description_translations->>en.ilike.${searchPattern},` +
+        `description_translations->>ro.ilike.${searchPattern},` +
+        `description_translations->>ru.ilike.${searchPattern},` +
+        `sku.ilike.${searchPattern}`
+      )
     }
 
     // Apply sorting
@@ -226,15 +144,23 @@ export default defineEventHandler(async (event) => {
     if (inStock === true) {
       countQueryBuilder = countQueryBuilder.gt('stock_quantity', 0)
     }
-    
-    // For search results, use the filtered count
-    let totalCount = 0
-    if (search && allProductsForSearch) {
-      totalCount = allProductsForSearch.length
-    } else {
-      const { count } = await countQueryBuilder
-      totalCount = count || 0
+    if (search) {
+      const searchPattern = `%${search}%`
+      countQueryBuilder = countQueryBuilder.or(
+        `name_translations->>es.ilike.${searchPattern},` +
+        `name_translations->>en.ilike.${searchPattern},` +
+        `name_translations->>ro.ilike.${searchPattern},` +
+        `name_translations->>ru.ilike.${searchPattern},` +
+        `description_translations->>es.ilike.${searchPattern},` +
+        `description_translations->>en.ilike.${searchPattern},` +
+        `description_translations->>ro.ilike.${searchPattern},` +
+        `description_translations->>ru.ilike.${searchPattern},` +
+        `sku.ilike.${searchPattern}`
+      )
     }
+
+    const { count } = await countQueryBuilder
+    const totalCount = count || 0
 
     // Apply pagination
     const offset = (page - 1) * limit
