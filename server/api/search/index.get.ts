@@ -1,4 +1,5 @@
 import { serverSupabaseClient } from '#supabase/server'
+import { prepareSearchPattern, validateMinSearchLength, MAX_SEARCH_LENGTH } from '~/server/utils/searchSanitization'
 
 // Helper function to get localized content with fallback
 function getLocalizedContent(content: Record<string, string>, locale: string): string {
@@ -17,8 +18,9 @@ export default defineEventHandler(async (event) => {
     const locale = (query.locale as string) || 'es'
     const limit = parseInt((query.limit as string) || '20')
     const category = query.category as string
-    
-    if (!searchTerm || searchTerm.trim().length < 2) {
+
+    // Validate search term exists and meets minimum length
+    if (!searchTerm || !validateMinSearchLength(searchTerm)) {
       return {
         products: [],
         meta: {
@@ -29,6 +31,14 @@ export default defineEventHandler(async (event) => {
           message: 'Search term must be at least 2 characters'
         }
       }
+    }
+
+    // Validate maximum search term length (throws 400 error if too long)
+    if (searchTerm.length > MAX_SEARCH_LENGTH) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: `Search term too long. Maximum ${MAX_SEARCH_LENGTH} characters allowed.`
+      })
     }
 
     // Build query with PostgreSQL JSONB operators for better performance
@@ -61,9 +71,8 @@ export default defineEventHandler(async (event) => {
 
     // Apply search filter using PostgreSQL JSONB operators
     // This searches across all language translations (es, en, ro, ru)
-    // Escape commas to prevent malformed .or() filter (commas are condition separators)
-    const escapedSearch = searchTerm.replace(/,/g, '\\,')
-    const searchPattern = `%${escapedSearch}%`
+    // Sanitize search term to prevent SQL injection and escape special characters
+    const searchPattern = prepareSearchPattern(searchTerm, { validateLength: false })
     queryBuilder = queryBuilder.or(
       `name_translations->>es.ilike.${searchPattern},` +
       `name_translations->>en.ilike.${searchPattern},` +

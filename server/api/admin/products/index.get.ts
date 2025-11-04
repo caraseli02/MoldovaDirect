@@ -16,6 +16,7 @@
 import { serverSupabaseClient } from '#supabase/server'
 import { getMockProducts } from '~/server/utils/mockData'
 import { requireAdminRole } from '~/server/utils/adminAuth'
+import { prepareSearchPattern, MAX_SEARCH_LENGTH } from '~/server/utils/searchSanitization'
 
 interface AdminProductFilters {
   search?: string
@@ -51,6 +52,14 @@ export default defineEventHandler(async (event) => {
       page = 1,
       limit = 20
     } = query
+
+    // Validate search term length if provided
+    if (search && search.length > MAX_SEARCH_LENGTH) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: `Search term too long. Maximum ${MAX_SEARCH_LENGTH} characters allowed.`
+      })
+    }
 
     // Build the base query with admin-specific fields
     let queryBuilder = supabase
@@ -99,9 +108,8 @@ export default defineEventHandler(async (event) => {
 
     // Apply search filter using PostgreSQL JSONB operators for better performance
     if (search) {
-      // Escape commas to prevent malformed .or() filter (commas are condition separators)
-      const escapedSearch = search.replace(/,/g, '\\,')
-      const searchPattern = `%${escapedSearch}%`
+      // Sanitize search term to prevent SQL injection and escape special characters
+      const searchPattern = prepareSearchPattern(search, { validateLength: false })
       queryBuilder = queryBuilder.or(
         `name_translations->>es.ilike.${searchPattern},` +
         `name_translations->>en.ilike.${searchPattern},` +
@@ -151,9 +159,8 @@ export default defineEventHandler(async (event) => {
       countQueryBuilder = countQueryBuilder.or('stock_quantity.lte.5,and(stock_quantity.gt.0,stock_quantity.lte.low_stock_threshold)')
     }
     if (search) {
-      // Escape commas to prevent malformed .or() filter (commas are condition separators)
-      const escapedSearch = search.replace(/,/g, '\\,')
-      const searchPattern = `%${escapedSearch}%`
+      // Sanitize search term to prevent SQL injection and escape special characters
+      const searchPattern = prepareSearchPattern(search, { validateLength: false })
       countQueryBuilder = countQueryBuilder.or(
         `name_translations->>es.ilike.${searchPattern},` +
         `name_translations->>en.ilike.${searchPattern},` +
