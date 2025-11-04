@@ -1,4 +1,5 @@
 import { serverSupabaseClient } from '#supabase/server'
+import { prepareSearchPattern, validateMinSearchLength, MAX_SEARCH_LENGTH } from '~/server/utils/searchSanitization'
 
 // Helper function to get localized content with fallback
 function getLocalizedContent(content: Record<string, string>, locale: string): string {
@@ -17,8 +18,9 @@ export default defineEventHandler(async (event) => {
     const locale = (query.locale as string) || 'es'
     const limit = parseInt((query.limit as string) || '20')
     const category = query.category as string
-    
-    if (!searchTerm || searchTerm.trim().length < 2) {
+
+    // Validate search term exists and meets minimum length
+    if (!searchTerm || !validateMinSearchLength(searchTerm)) {
       return {
         products: [],
         meta: {
@@ -31,7 +33,15 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    // Get all products first, then filter in JavaScript for better JSONB handling
+    // Validate maximum search term length (throws 400 error if too long)
+    if (searchTerm.length > MAX_SEARCH_LENGTH) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: `Search term too long. Maximum ${MAX_SEARCH_LENGTH} characters allowed.`
+      })
+    }
+
+    // Build query with PostgreSQL JSONB operators for better performance
     let queryBuilder = supabase
       .from('products')
       .select(`
@@ -59,7 +69,23 @@ export default defineEventHandler(async (event) => {
       queryBuilder = queryBuilder.eq('categories.slug', category)
     }
 
-    const { data: allProducts, error } = await queryBuilder
+    // Apply search filter using PostgreSQL JSONB operators
+    // This searches across all language translations (es, en, ro, ru)
+    // Sanitize search term to prevent SQL injection and escape special characters
+    const searchPattern = prepareSearchPattern(searchTerm, { validateLength: false })
+    queryBuilder = queryBuilder.or(
+      `name_translations->>es.ilike.${searchPattern},` +
+      `name_translations->>en.ilike.${searchPattern},` +
+      `name_translations->>ro.ilike.${searchPattern},` +
+      `name_translations->>ru.ilike.${searchPattern},` +
+      `description_translations->>es.ilike.${searchPattern},` +
+      `description_translations->>en.ilike.${searchPattern},` +
+      `description_translations->>ro.ilike.${searchPattern},` +
+      `description_translations->>ru.ilike.${searchPattern},` +
+      `sku.ilike.${searchPattern}`
+    )
+
+    const { data: matchingProducts, error } = await queryBuilder
 
     if (error) {
       throw createError({
@@ -69,48 +95,25 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // Filter products by search term in JavaScript
-    const searchTermLower = searchTerm.toLowerCase().trim()
-    const matchingProducts = (allProducts || []).filter(product => {
-      // Search in all name translations
-      const nameMatches = Object.values(product.name_translations || {}).some(name => 
-        (name as string).toLowerCase().includes(searchTermLower)
-      )
-      
-      // Search in all description translations
-      const descriptionMatches = Object.values(product.description_translations || {}).some(desc => 
-        (desc as string).toLowerCase().includes(searchTermLower)
-      )
-      
-      // Search in SKU
-      const skuMatches = product.sku.toLowerCase().includes(searchTermLower)
-      
-      // Search in attributes
-      const attributeMatches = product.attributes && Object.values(product.attributes).some(attr => 
-        typeof attr === 'string' && attr.toLowerCase().includes(searchTermLower)
-      )
-      
-      return nameMatches || descriptionMatches || skuMatches || attributeMatches
-    })
-
     // Sort by relevance (exact matches first, then partial matches)
-    matchingProducts.sort((a, b) => {
+    const searchTermLower = searchTerm.toLowerCase().trim()
+    ;(matchingProducts || []).sort((a, b) => {
       const aName = getLocalizedContent(a.name_translations, locale).toLowerCase()
       const bName = getLocalizedContent(b.name_translations, locale).toLowerCase()
-      
+
       // Exact matches first
       if (aName === searchTermLower && bName !== searchTermLower) return -1
       if (bName === searchTermLower && aName !== searchTermLower) return 1
-      
+
       // Name starts with search term
       if (aName.startsWith(searchTermLower) && !bName.startsWith(searchTermLower)) return -1
       if (bName.startsWith(searchTermLower) && !aName.startsWith(searchTermLower)) return 1
-      
+
       // Shorter names first (more specific)
       if (aName.length !== bName.length) {
         return aName.length - bName.length
       }
-      
+
       // Finally by stock quantity (in stock first)
       return b.stock_quantity - a.stock_quantity
     })
@@ -159,7 +162,7 @@ export default defineEventHandler(async (event) => {
         locale,
         category: category || null
       },
-      suggestions: generateSearchSuggestions(searchTerm, allProducts || [], locale)
+      suggestions: generateSearchSuggestions(searchTerm, matchingProducts || [], locale)
     }
 
   } catch (error) {
