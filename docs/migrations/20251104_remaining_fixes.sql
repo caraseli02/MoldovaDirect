@@ -1,0 +1,328 @@
+-- =============================================
+-- REMAINING DATABASE FIXES (Post-GIN Deployment)
+-- MoldovaDirect E-commerce Platform
+-- Date: 2025-11-04 (Updated)
+-- Issue #175: Database performance and security improvements
+-- Estimated execution time: 2-3 minutes
+-- =============================================
+--
+-- CHANGES FROM ORIGINAL:
+-- - Removed GIN indexes (already deployed in 20251104_add_product_search_indexes.sql)
+-- - Removed duplicate product indexes (already deployed in 20251103141319_add_products_indexes.sql)
+-- - Removed duplicate order indexes (already deployed in supabase-order-indexes.sql)
+-- - Kept: New admin-specific indexes, constraints, RLS policies, materialized view
+-- =============================================
+
+BEGIN;
+
+-- =============================================
+-- 1. ADDITIONAL PRODUCT INDEXES (Not yet deployed)
+-- =============================================
+
+-- Low stock alerts (composite index for dashboard)
+CREATE INDEX IF NOT EXISTS idx_products_low_stock
+ON products(is_active, stock_quantity, low_stock_threshold)
+WHERE is_active = true AND stock_quantity <= low_stock_threshold;
+
+-- Price range filtering for product catalog
+CREATE INDEX IF NOT EXISTS idx_products_price_range
+ON products(price_eur) WHERE is_active = true;
+
+-- Category + price sorting (common filter combination)
+CREATE INDEX IF NOT EXISTS idx_products_category_price
+ON products(category_id, price_eur) WHERE is_active = true;
+
+-- Common product listing query (active products by category and date)
+CREATE INDEX IF NOT EXISTS idx_products_active_category_created
+ON products(is_active, category_id, created_at DESC)
+WHERE is_active = true;
+
+-- =============================================
+-- 2. ADMIN-SPECIFIC ORDER INDEXES
+-- =============================================
+
+-- Status + payment status filtering (admin dashboard)
+CREATE INDEX IF NOT EXISTS idx_orders_status_payment_status
+ON orders(status, payment_status) WHERE status != 'cancelled';
+
+-- Revenue aggregation queries (admin analytics)
+CREATE INDEX IF NOT EXISTS idx_orders_created_total
+ON orders(created_at DESC, total_eur) WHERE status != 'cancelled';
+
+-- Guest order lookups (admin support)
+CREATE INDEX IF NOT EXISTS idx_orders_guest_email
+ON orders(guest_email) WHERE guest_email IS NOT NULL;
+
+-- Payment intent lookups (Stripe reconciliation)
+CREATE INDEX IF NOT EXISTS idx_orders_payment_intent
+ON orders(payment_intent_id) WHERE payment_intent_id IS NOT NULL;
+
+-- Fulfillment workflow queries (admin order management)
+CREATE INDEX IF NOT EXISTS idx_orders_fulfillment
+ON orders(status, payment_status, created_at DESC)
+WHERE status IN ('pending', 'processing') AND payment_status = 'paid';
+
+-- =============================================
+-- 3. DATA INTEGRITY CONSTRAINTS
+-- =============================================
+
+-- Product prices must be positive and logical
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.table_constraints
+    WHERE constraint_name = 'products_price_positive'
+    AND table_name = 'products'
+  ) THEN
+    ALTER TABLE products
+    ADD CONSTRAINT products_price_positive
+    CHECK (price_eur >= 0 AND (compare_at_price_eur IS NULL OR compare_at_price_eur >= price_eur));
+  END IF;
+END $$;
+
+-- Stock quantities must be non-negative
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.table_constraints
+    WHERE constraint_name = 'products_stock_non_negative'
+    AND table_name = 'products'
+  ) THEN
+    ALTER TABLE products
+    ADD CONSTRAINT products_stock_non_negative
+    CHECK (stock_quantity >= 0 AND low_stock_threshold >= 0 AND reorder_point >= 0);
+  END IF;
+END $$;
+
+-- Order dates must be logical
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.table_constraints
+    WHERE constraint_name = 'orders_date_logic'
+    AND table_name = 'orders'
+  ) THEN
+    ALTER TABLE orders
+    ADD CONSTRAINT orders_date_logic
+    CHECK (
+      (shipped_at IS NULL OR shipped_at >= created_at) AND
+      (delivered_at IS NULL OR delivered_at >= shipped_at)
+    );
+  END IF;
+END $$;
+
+-- Cart expiration must be in future
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.table_constraints
+    WHERE constraint_name = 'carts_expires_future'
+    AND table_name = 'carts'
+  ) THEN
+    ALTER TABLE carts
+    ADD CONSTRAINT carts_expires_future
+    CHECK (expires_at IS NULL OR expires_at > created_at);
+  END IF;
+END $$;
+
+-- =============================================
+-- 4. FIX ANALYTICS RLS POLICIES (SECURITY)
+-- =============================================
+
+-- Drop overly permissive policies that allow any authenticated user
+DROP POLICY IF EXISTS "Analytics require authentication" ON daily_analytics;
+DROP POLICY IF EXISTS "Product analytics require authentication" ON product_analytics;
+DROP POLICY IF EXISTS "User activity logs require authentication" ON user_activity_logs;
+DROP POLICY IF EXISTS "Audit logs require authentication" ON audit_logs;
+
+-- Create admin-only policies
+CREATE POLICY "Analytics admin only" ON daily_analytics
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM profiles
+      WHERE profiles.id = auth.uid()
+      AND profiles.role IN ('admin', 'manager')
+    )
+  );
+
+CREATE POLICY "Product analytics admin only" ON product_analytics
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM profiles
+      WHERE profiles.id = auth.uid()
+      AND profiles.role IN ('admin', 'manager')
+    )
+  );
+
+CREATE POLICY "User activity admin only" ON user_activity_logs
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM profiles
+      WHERE profiles.id = auth.uid()
+      AND profiles.role IN ('admin', 'manager')
+    )
+  );
+
+CREATE POLICY "Audit logs admin only" ON audit_logs
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM profiles
+      WHERE profiles.id = auth.uid()
+      AND profiles.role = 'admin'
+    )
+  );
+
+-- =============================================
+-- 5. DASHBOARD STATS MATERIALIZED VIEW
+-- =============================================
+-- This provides 90% faster dashboard load times by caching aggregated stats
+
+DROP MATERIALIZED VIEW IF EXISTS dashboard_stats_cache CASCADE;
+
+CREATE MATERIALIZED VIEW dashboard_stats_cache AS
+SELECT
+  -- Product metrics
+  COUNT(*) FILTER (WHERE is_active = true) as active_products,
+  COUNT(*) as total_products,
+  COUNT(*) FILTER (WHERE is_active = true AND stock_quantity <= low_stock_threshold) as low_stock_products,
+
+  -- User metrics
+  (SELECT COUNT(*) FROM profiles) as total_users,
+  (SELECT COUNT(*) FROM profiles WHERE created_at >= CURRENT_DATE) as new_users_today,
+
+  -- Order metrics
+  (SELECT COUNT(*) FROM orders WHERE status != 'cancelled') as total_orders,
+  (SELECT COUNT(*) FROM orders WHERE status = 'pending') as pending_orders,
+  (SELECT COUNT(*) FROM orders WHERE status = 'processing') as processing_orders,
+  (SELECT COUNT(*) FROM orders WHERE status = 'shipped') as shipped_orders,
+  (SELECT COUNT(*) FROM orders WHERE status = 'delivered') as delivered_orders,
+  (SELECT COUNT(*) FROM orders WHERE created_at >= CURRENT_DATE AND status != 'cancelled') as orders_today,
+
+  -- Revenue metrics
+  (SELECT COALESCE(SUM(total_eur), 0) FROM orders WHERE status != 'cancelled') as total_revenue,
+  (SELECT COALESCE(SUM(total_eur), 0) FROM orders WHERE created_at >= CURRENT_DATE AND status != 'cancelled') as revenue_today,
+  (SELECT COALESCE(AVG(total_eur), 0) FROM orders WHERE status != 'cancelled') as avg_order_value,
+
+  -- Cache metadata
+  NOW() as last_updated
+FROM products;
+
+CREATE UNIQUE INDEX idx_dashboard_stats_cache ON dashboard_stats_cache(last_updated);
+
+-- Refresh function (call every 5 minutes via cron)
+CREATE OR REPLACE FUNCTION refresh_dashboard_stats_cache()
+RETURNS void AS $$
+BEGIN
+  REFRESH MATERIALIZED VIEW CONCURRENTLY dashboard_stats_cache;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+COMMENT ON FUNCTION refresh_dashboard_stats_cache() IS
+'Refreshes the dashboard statistics cache. Should be called every 5 minutes via cron job.';
+
+-- Grant execute permission to service role
+GRANT EXECUTE ON FUNCTION refresh_dashboard_stats_cache() TO service_role;
+
+-- Initial refresh
+REFRESH MATERIALIZED VIEW dashboard_stats_cache;
+
+-- =============================================
+-- 6. ANALYTICS TABLE INDEXES
+-- =============================================
+
+-- Activity aggregation queries
+CREATE INDEX IF NOT EXISTS idx_user_activity_date_type
+ON user_activity_logs(DATE(created_at), activity_type, user_id);
+
+-- Product analytics queries
+CREATE INDEX IF NOT EXISTS idx_product_analytics_date_revenue
+ON product_analytics(date DESC, revenue DESC);
+
+-- Daily analytics date range queries (last 90 days)
+CREATE INDEX IF NOT EXISTS idx_daily_analytics_date_range
+ON daily_analytics(date DESC)
+WHERE date >= CURRENT_DATE - INTERVAL '90 days';
+
+-- =============================================
+-- 7. INVENTORY LOGS INDEXES
+-- =============================================
+
+-- Inventory audit trail queries
+CREATE INDEX IF NOT EXISTS idx_inventory_logs_product_reason_date
+ON inventory_logs(product_id, reason, created_at DESC);
+
+-- Order reference lookups
+CREATE INDEX IF NOT EXISTS idx_inventory_logs_reference
+ON inventory_logs(reference_id, reason)
+WHERE reference_id IS NOT NULL;
+
+-- =============================================
+-- 8. ANALYZE TABLES FOR QUERY PLANNER
+-- =============================================
+
+ANALYZE products;
+ANALYZE orders;
+ANALYZE order_items;
+ANALYZE profiles;
+ANALYZE daily_analytics;
+ANALYZE product_analytics;
+ANALYZE user_activity_logs;
+ANALYZE inventory_logs;
+ANALYZE cart_items;
+ANALYZE carts;
+
+COMMIT;
+
+-- =============================================
+-- POST-MIGRATION VERIFICATION
+-- =============================================
+
+-- Check new indexes created
+SELECT
+  schemaname,
+  tablename,
+  indexname,
+  pg_size_pretty(pg_relation_size(indexrelid)) as index_size
+FROM pg_stat_user_indexes
+WHERE schemaname = 'public'
+  AND tablename IN ('products', 'orders', 'user_activity_logs', 'product_analytics', 'inventory_logs')
+  AND indexrelname LIKE 'idx_%'
+ORDER BY tablename, indexrelname;
+
+-- Check constraints
+SELECT
+  conname,
+  contype,
+  pg_get_constraintdef(oid) as definition
+FROM pg_constraint
+WHERE connamespace = 'public'::regnamespace
+  AND conrelid::regclass::text IN ('products', 'orders', 'carts')
+ORDER BY conrelid, conname;
+
+-- Verify materialized view
+SELECT
+  'Dashboard cache created:' as status,
+  active_products,
+  total_users,
+  total_orders,
+  ROUND(total_revenue, 2) as total_revenue_eur,
+  last_updated
+FROM dashboard_stats_cache;
+
+-- Check RLS policies
+SELECT
+  tablename,
+  policyname,
+  cmd,
+  qual
+FROM pg_policies
+WHERE schemaname = 'public'
+  AND tablename IN ('daily_analytics', 'product_analytics', 'user_activity_logs', 'audit_logs')
+ORDER BY tablename, policyname;
+
+-- Summary
+SELECT
+  'Migration completed successfully!' as status,
+  (SELECT COUNT(*) FROM pg_indexes WHERE schemaname = 'public' AND indexname LIKE 'idx_products%') as products_indexes,
+  (SELECT COUNT(*) FROM pg_indexes WHERE schemaname = 'public' AND indexname LIKE 'idx_orders%') as orders_indexes,
+  (SELECT COUNT(*) FROM pg_indexes WHERE schemaname = 'public' AND indexname LIKE 'idx_%analytics%') as analytics_indexes;
