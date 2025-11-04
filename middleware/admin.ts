@@ -27,7 +27,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     .from('profiles')
     .select('role')
     .eq('id', user.value.id)
-    .single()
+    .single<{ role: string | null }>()
 
   if (error || !profile) {
     throw createError({
@@ -35,9 +35,18 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       statusMessage: 'Authentication required'
     })
   }
-  
-  // TODO: Add admin role check here
-  // Example: if (!user.value.app_metadata?.role === 'admin') { ... }
-  
-  console.log('Admin middleware: Access granted (placeholder implementation)')
+
+  // Verify user has admin role
+  if (profile.role !== 'admin') {
+    throw createError({
+      statusCode: 403,
+      statusMessage: 'Admin access required. You do not have permission to access this area.'
+    })
+  }
+
+  // Optional: Check MFA status for additional security (commented out for now)
+  // const { data: mfaData } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
+  // if (mfaData?.currentLevel !== 'aal2') {
+  //   return navigateTo('/admin/mfa-setup')
+  // }
 })
