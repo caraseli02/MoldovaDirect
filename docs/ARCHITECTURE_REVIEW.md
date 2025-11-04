@@ -591,8 +591,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 **File:** `.env.example` (Lines 4-5)
 
 ```bash
-# 🔴 REAL SERVICE ROLE KEY EXPOSED IN REPOSITORY
-SUPABASE_SERVICE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3Mi...
+# 🔴 REAL SERVICE ROLE KEY EXPOSED IN REPOSITORY (NOW REDACTED)
+SUPABASE_SERVICE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.[REDACTED].[REDACTED]
 ```
 
 **Impact:**

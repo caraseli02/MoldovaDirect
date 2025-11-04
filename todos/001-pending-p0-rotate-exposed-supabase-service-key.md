@@ -25,7 +25,7 @@ A **real, valid Supabase service role key** is exposed in version control in the
 **Location:** `/Users/vladislavcaraseli/Documents/MoldovaDirect/.env.example:5`
 
 ```env
-SUPABASE_SERVICE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtodnpiamVteWRkZG5yeXJleXR1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NTc4NjQ1NCwiZXhwIjoyMDcxMzYyNDU0fQ.li8R9uS_JdRP4AgUjw31v5z-jRFhySa-GHC1Qu0AEXI
+SUPABASE_SERVICE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.[REDACTED].[REDACTED]
 ```
 
 **Decoded JWT:**
