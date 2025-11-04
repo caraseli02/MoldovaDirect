@@ -66,11 +66,13 @@ CREATE POLICY "Admins can view all impersonation logs"
 -- Policy: System can insert impersonation logs (for service role)
 CREATE POLICY "System can insert impersonation logs"
   ON impersonation_logs FOR INSERT
+  TO service_role
   WITH CHECK (true);
 
 -- Policy: System can update impersonation logs (for ending sessions)
 CREATE POLICY "System can update impersonation logs"
   ON impersonation_logs FOR UPDATE
+  TO service_role
   USING (true);
 
 -- =============================================

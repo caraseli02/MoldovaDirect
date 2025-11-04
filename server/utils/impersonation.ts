@@ -6,6 +6,7 @@
  */
 
 import jwt from 'jsonwebtoken'
+import { serverSupabaseServiceRole } from '#supabase/server'
 
 /**
  * Payload structure for impersonation JWT tokens
