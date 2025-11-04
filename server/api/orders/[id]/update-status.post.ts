@@ -3,6 +3,7 @@
  * Requirements: 6.1, 6.2, 6.3, 6.4, 6.5
  */
 
+import { serverSupabaseClient } from '#supabase/server'
 import { sendOrderStatusEmail } from '~/server/utils/orderEmails'
 import { transformOrderToEmailData } from '~/server/utils/orderDataTransform'
 import type { EmailType } from '~/types/email'

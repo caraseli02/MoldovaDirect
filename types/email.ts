@@ -14,6 +14,8 @@ export type EmailType =
   | 'order_delivered'
   | 'order_cancelled'
   | 'order_issue'
+  | 'support_ticket_customer'
+  | 'support_ticket_staff'
 
 /**
  * Email delivery status

@@ -1,5 +1,7 @@
 // POST /api/orders/[id]/support - Create support ticket for an order
 import { serverSupabaseServiceRole } from '#supabase/server'
+import { sendSupportTicketCustomerEmail, sendSupportTicketStaffEmail } from '~/server/utils/supportEmails'
+import type { SupportTicketData } from '~/server/utils/emailTemplates/supportTicketTemplates'
 
 interface SupportTicketRequest {
   subject: string
@@ -165,8 +167,54 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // TODO: Send notification email to support team
-    // TODO: Send confirmation email to customer
+    // Get user's preferred locale
+    let locale = 'en'
+    if (profile?.preferred_locale) {
+      locale = profile.preferred_locale
+    }
+
+    // Prepare support ticket email data
+    const ticketEmailData: SupportTicketData = {
+      ticketNumber: `TICKET-${ticket.id}`,
+      customerName: profile?.name || 'Customer',
+      customerEmail: profile?.email || user.email || '',
+      subject: ticket.subject,
+      category: ticket.category,
+      priority: ticket.priority,
+      message: ticket.message,
+      orderNumber: order.order_number,
+      orderStatus: order.status,
+      orderTotal: order.total_eur,
+      locale
+    }
+
+    // Send confirmation email to customer
+    const customerEmailResult = await sendSupportTicketCustomerEmail(
+      ticketEmailData,
+      ticket.id,
+      order.id,
+      { supabaseClient: supabase }
+    )
+
+    if (!customerEmailResult.success) {
+      console.error('Failed to send customer confirmation email:', customerEmailResult.error)
+    }
+
+    // Send notification email to support team
+    // Get support email from environment or use default
+    const supportEmail = process.env.SUPPORT_EMAIL || 'support@moldovadirect.com'
+
+    const staffEmailResult = await sendSupportTicketStaffEmail(
+      ticketEmailData,
+      ticket.id,
+      supportEmail,
+      order.id,
+      { supabaseClient: supabase }
+    )
+
+    if (!staffEmailResult.success) {
+      console.error('Failed to send staff notification email:', staffEmailResult.error)
+    }
 
     return {
       success: true,
