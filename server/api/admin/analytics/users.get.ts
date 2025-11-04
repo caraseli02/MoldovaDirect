@@ -13,6 +13,7 @@
  */
 
 import { serverSupabaseClient } from '#supabase/server'
+import { requireAdminRole } from '~/server/utils/adminAuth'
 
 export interface UserAnalyticsData {
   registrationTrends: Array<{
@@ -47,19 +48,9 @@ export interface UserAnalyticsData {
 
 export default defineEventHandler(async (event) => {
   try {
+    await requireAdminRole(event)
     // Verify admin access
     const supabase = await serverSupabaseClient(event)
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-    
-    if (authError || !user) {
-      throw createError({
-        statusCode: 401,
-        statusMessage: 'Unauthorized'
-      })
-    }
-
-    // TODO: Add proper admin role verification
-    // For now, any authenticated user can access (will be enhanced in auth tasks)
 
     // Parse query parameters for date filtering
     const query = getQuery(event)

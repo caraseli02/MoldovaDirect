@@ -10,9 +10,11 @@
  */
 
 import { serverSupabaseClient } from '#supabase/server'
+import { requireAdminRole } from '~/server/utils/adminAuth'
 
 export default defineEventHandler(async (event) => {
   try {
+    await requireAdminRole(event)
     const supabase = await serverSupabaseClient(event)
 
     // Create inventory_movements table

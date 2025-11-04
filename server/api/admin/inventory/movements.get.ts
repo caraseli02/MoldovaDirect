@@ -13,6 +13,7 @@
  */
 
 import { serverSupabaseClient } from '#supabase/server'
+import { requireAdminRole } from '~/server/utils/adminAuth'
 import { z } from 'zod'
 
 const movementsQuerySchema = z.object({
@@ -28,9 +29,10 @@ const movementsQuerySchema = z.object({
 
 export default defineEventHandler(async (event) => {
   try {
+    await requireAdminRole(event)
     const supabase = await serverSupabaseClient(event)
     const query = getQuery(event)
-    
+
     // Validate query parameters
     const validatedQuery = movementsQuerySchema.parse(query)
     const {
@@ -43,15 +45,6 @@ export default defineEventHandler(async (event) => {
       sortBy,
       sortOrder
     } = validatedQuery
-
-    // Check authentication and admin permissions
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-    if (authError || !user) {
-      throw createError({
-        statusCode: 401,
-        statusMessage: 'Authentication required'
-      })
-    }
 
     // Build the base query
     let queryBuilder = supabase

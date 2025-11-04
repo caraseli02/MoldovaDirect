@@ -1,10 +1,10 @@
 /**
  * Get Single Product API Endpoint (Admin)
- * 
+ *
  * Requirements addressed:
  * - 1.4: Get product details for editing
  * - Admin-specific product data retrieval
- * 
+ *
  * Features:
  * - Fetch complete product data including admin fields
  * - Include category and relationship data
@@ -12,8 +12,11 @@
  */
 
 import { serverSupabaseClient } from '#supabase/server'
+import { requireAdminRole} from '~/server/utils/adminAuth'
 
 export default defineEventHandler(async (event) => {
+  await requireAdminRole(event)
+
   try {
     const supabase = await serverSupabaseClient(event)
     const productId = getRouterParam(event, 'id')

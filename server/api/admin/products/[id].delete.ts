@@ -1,10 +1,10 @@
 /**
  * Delete Product API Endpoint
- * 
+ *
  * Requirements addressed:
  * - 1.6: Product deletion with confirmation
  * - 5.5: Audit logging for admin actions
- * 
+ *
  * Features:
  * - Delete a specific product
  * - Audit trail logging
@@ -12,8 +12,11 @@
  */
 
 import { serverSupabaseClient } from '#supabase/server'
+import { requireAdminRole } from '~/server/utils/adminAuth'
 
 export default defineEventHandler(async (event) => {
+  await requireAdminRole(event)
+
   try {
     const supabase = await serverSupabaseClient(event)
     const productId = getRouterParam(event, 'id')

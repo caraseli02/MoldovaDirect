@@ -1,13 +1,15 @@
 /**
  * API endpoint to seed mock orders
  * POST /api/admin/seed-orders
- * 
+ *
  * This is easier than running a script - just call this endpoint!
  */
 
 import { serverSupabaseServiceRole } from '#supabase/server'
+import { requireAdminRole } from '~/server/utils/adminAuth'
 
 export default defineEventHandler(async (event) => {
+  await requireAdminRole(event)
   const supabase = serverSupabaseServiceRole(event)
 
   // Mock data

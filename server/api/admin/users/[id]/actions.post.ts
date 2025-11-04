@@ -10,6 +10,7 @@
  */
 
 import { serverSupabaseServiceRole } from '#supabase/server'
+import { requireAdminRole } from '~/server/utils/adminAuth'
 
 interface UserActionRequest {
   action: 'suspend' | 'unsuspend' | 'ban' | 'unban' | 'verify_email' | 'reset_password' | 'update_role'
@@ -21,9 +22,10 @@ interface UserActionRequest {
 
 export default defineEventHandler(async (event) => {
   try {
+    await requireAdminRole(event)
     const userId = getRouterParam(event, 'id')
     const body = await readBody(event) as UserActionRequest
-    
+
     if (!userId) {
       throw createError({
         statusCode: 400,

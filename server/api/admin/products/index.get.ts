@@ -1,11 +1,11 @@
 /**
  * Admin Products API Endpoint
- * 
+ *
  * Requirements addressed:
  * - 1.1: Paginated product listing with admin-specific data
  * - 1.7: Search functionality by name, category, and SKU
  * - 6.2: Performance optimization with proper pagination
- * 
+ *
  * Features:
  * - Enhanced product data for admin interface
  * - Advanced filtering and sorting
@@ -15,6 +15,7 @@
 
 import { serverSupabaseClient } from '#supabase/server'
 import { getMockProducts } from '~/server/utils/mockData'
+import { requireAdminRole } from '~/server/utils/adminAuth'
 
 interface AdminProductFilters {
   search?: string
@@ -30,6 +31,8 @@ interface AdminProductFilters {
 }
 
 export default defineEventHandler(async (event) => {
+  await requireAdminRole(event)
+
   const query = getQuery(event) as AdminProductFilters
   
   try {

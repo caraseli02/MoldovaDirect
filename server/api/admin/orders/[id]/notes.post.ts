@@ -9,6 +9,7 @@
  */
 
 import { serverSupabaseServiceRole, serverSupabaseClient } from '#supabase/server'
+import { requireAdminRole } from '~/server/utils/adminAuth'
 
 interface CreateNoteRequest {
   noteType: 'internal' | 'customer'
@@ -17,16 +18,10 @@ interface CreateNoteRequest {
 
 export default defineEventHandler(async (event) => {
   try {
+    await requireAdminRole(event)
     // Get authenticated user from client session
     const supabaseClient = await serverSupabaseClient(event)
-    const { data: { user }, error: authError } = await supabaseClient.auth.getUser()
-
-    if (authError || !user) {
-      throw createError({
-        statusCode: 401,
-        statusMessage: 'Unauthorized'
-      })
-    }
+    const { data: { user } } = await supabaseClient.auth.getUser()
 
     // Use service role for database operations
     const supabase = serverSupabaseServiceRole(event)
