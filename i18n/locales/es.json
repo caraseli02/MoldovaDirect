@@ -825,6 +825,34 @@
           "highlight": "Frescura garantizada puerta a puerta",
           "description": "La logística a temperatura controlada asegura que cada botella y delicatessen llegue tal como salió de Moldavia."
         }
+      },
+      "carousel": {
+        "slides": {
+          "gifts": {
+            "title": "Guías de regalos navideños",
+            "alt": "Cajas de regalo envueltas"
+          },
+          "wines": {
+            "title": "Vinos premium moldavos",
+            "alt": "Colección de botellas de vino"
+          },
+          "clothing": {
+            "title": "Empieza a verte elegante",
+            "alt": "Perchero con ropa"
+          },
+          "kitchen": {
+            "title": "Imprescindibles de cocina",
+            "alt": "Electrodomésticos de cocina"
+          },
+          "foods": {
+            "title": "Delicias artesanales",
+            "alt": "Productos alimenticios artesanales"
+          },
+          "cheese": {
+            "title": "Quesos tradicionales",
+            "alt": "Selección de quesos tradicionales"
+          }
+        }
       }
     },
     "categories": {

@@ -595,6 +595,34 @@
           "highlight": "Prospețime garantată până la ușă",
           "description": "Logistica cu temperatură controlată garantează că fiecare sticlă și delicatese ajung exact ca în Moldova."
         }
+      },
+      "carousel": {
+        "slides": {
+          "gifts": {
+            "title": "Ghiduri de cadouri pentru sărbători",
+            "alt": "Cutii de cadouri împachetate"
+          },
+          "wines": {
+            "title": "Vinuri premium moldovenești",
+            "alt": "Colecție de sticle de vin"
+          },
+          "clothing": {
+            "title": "Îmbracă-te elegant",
+            "alt": "Umeraș cu haine"
+          },
+          "kitchen": {
+            "title": "Esențiale pentru bucătărie",
+            "alt": "Electrocasnice de bucătărie"
+          },
+          "foods": {
+            "title": "Delicatese artizanale",
+            "alt": "Produse alimentare artizanale"
+          },
+          "cheese": {
+            "title": "Brânzeturi tradiționale",
+            "alt": "Selecție de brânzeturi tradiționale"
+          }
+        }
       }
     },
     "categories": {

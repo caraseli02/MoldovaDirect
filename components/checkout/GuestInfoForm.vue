@@ -15,12 +15,13 @@
           type="email"
           :placeholder="$t('checkout.guestInfo.emailPlaceholder')"
           :aria-invalid="!!errors.email"
+          :aria-describedby="errors.email ? 'guestEmail-error' : undefined"
           class="transition-colors"
           :class="{ 'aria-invalid:border-destructive': !!errors.email }"
           @blur="$emit('validate', 'email')"
           @input="handleEmailInput"
         />
-        <p v-if="errors.email" class="mt-1 text-sm text-destructive">
+        <p v-if="errors.email" id="guestEmail-error" class="mt-1 text-sm text-destructive" role="alert">
           {{ errors.email }}
         </p>
       </div>

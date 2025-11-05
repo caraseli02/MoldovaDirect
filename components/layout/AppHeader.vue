@@ -44,11 +44,11 @@
               variant="ghost"
               size="icon"
               :aria-label="`${t('common.search')} (${searchShortcut})`"
-              class="group relative p-2 text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400"
+              class="group relative p-2.5 min-w-[44px] min-h-[44px] text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 flex items-center justify-center"
               @click="goToSearch"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
+                stroke="currentColor" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
@@ -62,10 +62,10 @@
             <NuxtLink
               :to="localePath('/account')"
               :aria-label="accountLabel"
-              class="p-2 text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+              class="p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors rounded-lg"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
+                stroke="currentColor" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
@@ -76,10 +76,10 @@
             <NuxtLink
               :to="localePath('/cart')"
               :aria-label="cartAriaLabel"
-              class="p-2 text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors relative"
+              class="p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors relative rounded-lg"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
+                stroke="currentColor" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
@@ -94,22 +94,22 @@
           </div>
 
           <!-- Simplified Mobile actions - Only essential elements -->
-          <div class="flex md:hidden items-center space-x-4">
+          <div class="flex md:hidden items-center space-x-2">
 
             <!-- Cart - Essential for e-commerce -->
             <NuxtLink
               :to="localePath('/cart')"
               :aria-label="cartAriaLabel"
-              class="p-2 text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors relative"
+              class="p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors relative rounded-lg"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
+                stroke="currentColor" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
               <!-- Cart count badge -->
               <span v-if="cartItemsCount > 0"
-                class="absolute -top-1 -right-1 bg-primary-600 dark:bg-primary-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold"
+                class="absolute top-0 right-0 bg-primary-600 dark:bg-primary-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold"
                 aria-hidden="true"
               >
                 {{ cartItemsCount }}
@@ -123,7 +123,7 @@
               @click="toggleMobileMenu"
               :aria-label="mobileMenuLabel"
               :aria-expanded="mobileMenuOpen"
-              class="relative p-2 text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-lg"
+              class="relative p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-lg"
               :class="{ 'bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400': mobileMenuOpen }"
             >
               <!-- Animated hamburger menu -->

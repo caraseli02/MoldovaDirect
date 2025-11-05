@@ -825,6 +825,34 @@
           "highlight": "Freshness guaranteed door to door",
           "description": "Temperature-controlled logistics ensure every bottle and delicacy arrives exactly as it left Moldova."
         }
+      },
+      "carousel": {
+        "slides": {
+          "gifts": {
+            "title": "Shop holiday gift guides",
+            "alt": "Wrapped gift boxes"
+          },
+          "wines": {
+            "title": "Premium Moldovan wines",
+            "alt": "Wine bottles collection"
+          },
+          "clothing": {
+            "title": "Start looking sharp",
+            "alt": "Clothing rack display"
+          },
+          "kitchen": {
+            "title": "Kitchen must-haves",
+            "alt": "Kitchen appliances"
+          },
+          "foods": {
+            "title": "Artisan delicacies",
+            "alt": "Artisan food products"
+          },
+          "cheese": {
+            "title": "Traditional cheeses",
+            "alt": "Traditional cheese selection"
+          }
+        }
       }
     },
     "categories": {
