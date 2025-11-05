@@ -11,13 +11,13 @@
       <div class="absolute inset-x-0 -bottom-32 h-64 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.35),transparent_60%)]"></div>
       <div class="relative z-10 px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
         <div class="mx-auto max-w-5xl text-white">
-          <div class="inline-flex items-center rounded-full bg-white/15 px-4 py-1 text-sm font-semibold uppercase tracking-wider backdrop-blur">
+          <div class="inline-flex items-center rounded-full bg-white/20 px-4 py-1 text-sm font-semibold uppercase tracking-wider backdrop-blur shadow-sm">
             {{ t('products.hero.seasonal') }}
           </div>
           <h1 class="mt-6 text-3xl font-bold sm:text-4xl lg:text-5xl">
             {{ t('products.hero.title') }}
           </h1>
-          <p class="mt-4 max-w-2xl text-lg text-white/90">
+          <p class="mt-4 max-w-2xl text-lg">
             {{ t('products.hero.subtitle') }}
           </p>
           <div class="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
@@ -118,6 +118,9 @@
                   <div class="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center">
                     <div class="relative flex-1">
                       <label for="product-search" class="sr-only">{{ t('products.searchLabel') }}</label>
+                      <label for="productSearch" class="sr-only">
+                        {{ t('products.searchLabel') || t('common.search') }}
+                      </label>
                       <commonIcon
                         v-if="!loading"
                         name="lucide:search"
@@ -132,12 +135,14 @@
                       </div>
                       <input
                         id="product-search"
+                        id="productSearch"
                         ref="searchInputRef"
                         v-model="searchQuery"
                         type="search"
                         :placeholder="t('products.searchPlaceholder')"
                         :disabled="loading"
                         :aria-label="t('products.searchLabel')"
+                        :aria-label="t('products.searchLabel') || t('common.search')"
                         class="w-full rounded-xl border border-gray-300 bg-white py-3 pl-11 pr-4 text-sm text-gray-900 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100 disabled:cursor-not-allowed disabled:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-400"
                         @input="handleSearchInput"
                       />
