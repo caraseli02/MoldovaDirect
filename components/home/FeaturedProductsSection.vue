@@ -1,13 +1,34 @@
 <template>
   <section class="bg-white py-20 dark:bg-gray-950 md:py-28">
     <div class="container">
-      <div class="mx-auto max-w-3xl text-center">
+      <!-- Header with fade-in animation -->
+      <div
+        v-motion
+        :initial="{ opacity: 0, y: 30 }"
+        :visible-once="{
+          opacity: 1,
+          y: 0,
+          transition: { duration: 600 },
+        }"
+        class="mx-auto max-w-3xl text-center"
+      >
         <h2 class="text-3xl font-bold md:text-4xl">{{ t('home.featuredProducts.title') }}</h2>
         <p class="mt-3 text-lg text-gray-600 dark:text-gray-400">{{ t('home.featuredProducts.subtitle') }}</p>
       </div>
 
-      <!-- Filter tabs -->
-      <div class="mt-8 flex flex-wrap justify-center gap-2" role="tablist" aria-label="Product filters">
+      <!-- Filter tabs with stagger animation -->
+      <div
+        v-motion
+        :initial="{ opacity: 0, y: 20 }"
+        :visible-once="{
+          opacity: 1,
+          y: 0,
+          transition: { duration: 500, delay: 100 },
+        }"
+        class="mt-8 flex flex-wrap justify-center gap-2"
+        role="tablist"
+        aria-label="Product filters"
+      >
         <button
           v-for="filter in filters"
           :key="filter.value"

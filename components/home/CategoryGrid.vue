@@ -1,25 +1,44 @@
 <template>
   <section class="py-20 md:py-28">
     <div class="container">
-      <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+      <!-- Header with fade-in animation -->
+      <div
+        v-motion
+        :initial="{ opacity: 0, y: 30 }"
+        :visible-once="{
+          opacity: 1,
+          y: 0,
+          transition: { duration: 600 },
+        }"
+        class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between"
+      >
         <div>
           <h2 class="text-3xl font-bold md:text-4xl">{{ t('home.categories.title') }}</h2>
           <p class="mt-3 max-w-2xl text-lg text-gray-600 dark:text-gray-400">{{ t('home.categories.subtitle') }}</p>
         </div>
         <NuxtLink
           :to="localePath('/products')"
-          class="inline-flex items-center gap-2 rounded-full border border-primary-200 px-5 py-2 text-sm font-semibold text-primary-700 transition hover:border-primary-400 hover:text-primary-800 dark:border-primary-700/40 dark:text-primary-200"
+          class="cta-button inline-flex items-center gap-2 rounded-full border border-primary-200 px-5 py-2 text-sm font-semibold text-primary-700 dark:border-primary-700/40 dark:text-primary-200"
         >
           {{ t('home.categories.viewAll') }}
           <commonIcon name="lucide:arrow-right" class="h-4 w-4" />
         </NuxtLink>
       </div>
+
+      <!-- Category cards with stagger animation -->
       <div class="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
         <NuxtLink
-          v-for="category in categories"
+          v-for="(category, index) in categories"
           :key="category.key"
+          v-motion
+          :initial="{ opacity: 0, y: 40 }"
+          :visible-once="{
+            opacity: 1,
+            y: 0,
+            transition: { duration: 500, delay: index * 100 },
+          }"
           :to="category.href"
-          class="group relative overflow-hidden rounded-3xl border border-gray-200 bg-gray-900/95 transition hover:-translate-y-1 hover:shadow-2xl dark:border-gray-800 dark:bg-gray-900"
+          class="hover-lift group relative overflow-hidden rounded-3xl border border-gray-200 bg-gray-900/95 dark:border-gray-800 dark:bg-gray-900"
         >
           <NuxtImg
             :src="category.image"
@@ -36,7 +55,7 @@
           ></div>
           <div class="relative flex h-full min-h-[22rem] flex-col justify-between p-8 text-white">
             <div class="space-y-4">
-              <span class="inline-flex items-center justify-center rounded-xl bg-white/90 p-3 text-slate-900 shadow-lg shadow-slate-900/15 transition group-hover:bg-white">
+              <span class="inline-flex items-center justify-center rounded-xl bg-white/90 p-3 text-slate-900 shadow-lg shadow-slate-900/15 transition group-hover:bg-white group-hover:scale-110">
                 <commonIcon :name="category.icon" class="h-6 w-6" />
               </span>
               <div class="space-y-3">
