@@ -47,16 +47,20 @@
 
     <div class="relative" ref="mainContainer">
       <Transition name="fade">
-        <div v-if="showFilterPanel" class="fixed inset-0 z-40 flex">
-          <div class="flex-1 bg-black/40 backdrop-blur-sm" @click="closeFilterPanel"></div>
-          <div class="relative ml-auto flex h-full w-full max-w-md flex-col bg-white dark:bg-gray-900 shadow-xl">
+        <div v-if="showFilterPanel" class="fixed inset-0 z-40 flex" role="dialog" aria-modal="true" aria-labelledby="filter-panel-title">
+          <div class="flex-1 bg-black/40 backdrop-blur-sm" @click="closeFilterPanel" aria-label="Close filters"></div>
+          <div id="filter-panel" class="relative ml-auto flex h-full w-full max-w-md flex-col bg-white dark:bg-gray-900 shadow-xl">
             <div class="flex items-center justify-between border-b border-gray-200 px-6 py-4 dark:border-gray-800">
-              <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+              <h2 id="filter-panel-title" class="text-lg font-semibold text-gray-900 dark:text-white">
                 {{ t('products.filters.title') }}
               </h2>
-              <button type="button" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" @click="closeFilterPanel">
-                <span class="sr-only">{{ t('common.close') }}</span>
-                ×
+              <button
+                type="button"
+                class="rounded-lg p-2 text-gray-500 transition hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+                @click="closeFilterPanel"
+                :aria-label="t('common.close')"
+              >
+                <commonIcon name="lucide:x" class="h-5 w-5" aria-hidden="true" />
               </button>
             </div>
             <div class="flex-1 overflow-y-auto px-4">
@@ -99,45 +103,61 @@
                 <div class="flex flex-wrap items-center gap-3">
                   <button
                     type="button"
-                    class="inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition hover:border-blue-500 hover:text-blue-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+                    :aria-label="t('products.filters.title')"
+                    :aria-expanded="showFilterPanel"
+                    aria-controls="filter-panel"
+                    class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition hover:border-blue-500 hover:text-blue-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
                     @click="openFilterPanel"
                   >
-                    {{ t('products.filters.title') }}
+                    <commonIcon name="lucide:filter" class="h-4 w-4" aria-hidden="true" />
+                    <span>{{ t('products.filters.title') }}</span>
+                    <span v-if="activeFilterChips.length" class="inline-flex items-center justify-center rounded-full bg-blue-100 px-2 py-0.5 text-xs font-semibold text-blue-700 dark:bg-blue-900/40 dark:text-blue-300" aria-label="Active filters count">
+                      {{ activeFilterChips.length }}
+                    </span>
                   </button>
                   <div class="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center">
                     <div class="relative flex-1">
+                      <label for="product-search" class="sr-only">{{ t('products.searchLabel') }}</label>
                       <commonIcon
                         v-if="!loading"
                         name="lucide:search"
                         class="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400"
+                        aria-hidden="true"
                       />
                       <div v-else class="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2">
-                        <svg class="h-5 w-5 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24">
+                        <svg class="h-5 w-5 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24" aria-hidden="true">
                           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
                       </div>
                       <input
+                        id="product-search"
                         ref="searchInputRef"
                         v-model="searchQuery"
-                        type="text"
+                        type="search"
                         :placeholder="t('products.searchPlaceholder')"
                         :disabled="loading"
+                        :aria-label="t('products.searchLabel')"
                         class="w-full rounded-xl border border-gray-300 bg-white py-3 pl-11 pr-4 text-sm text-gray-900 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100 disabled:cursor-not-allowed disabled:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-400"
                         @input="handleSearchInput"
                       />
                     </div>
-                    <select
-                      v-model="sortBy"
-                      class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:focus:border-blue-400 sm:w-48"
-                      @change="handleSortChange"
-                    >
-                      <option value="created">{{ t('products.sortNewest') }}</option>
-                      <option value="name">{{ t('products.sortName') }}</option>
-                      <option value="price_asc">{{ t('products.sortPriceLowHigh') }}</option>
-                      <option value="price_desc">{{ t('products.sortPriceHighLow') }}</option>
-                      <option value="featured">{{ t('products.sortFeatured') }}</option>
-                    </select>
+                    <div class="relative">
+                      <label for="product-sort" class="sr-only">{{ t('products.sortLabel') }}</label>
+                      <select
+                        id="product-sort"
+                        v-model="sortBy"
+                        :aria-label="t('products.sortLabel')"
+                        class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:focus:border-blue-400 sm:w-48"
+                        @change="handleSortChange"
+                      >
+                        <option value="created">{{ t('products.sortNewest') }}</option>
+                        <option value="name">{{ t('products.sortName') }}</option>
+                        <option value="price_asc">{{ t('products.sortPriceLowHigh') }}</option>
+                        <option value="price_desc">{{ t('products.sortPriceHighLow') }}</option>
+                        <option value="featured">{{ t('products.sortFeatured') }}</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -620,10 +640,21 @@ const scrollToResults = () => {
 
 const openFilterPanel = () => {
   showFilterPanel.value = true
+  // Prevent body scroll when panel is open
+  document.body.style.overflow = 'hidden'
 }
 
 const closeFilterPanel = () => {
   showFilterPanel.value = false
+  // Restore body scroll
+  document.body.style.overflow = ''
+}
+
+// Handle Escape key to close filter panel
+const handleKeyDown = (event: KeyboardEvent) => {
+  if (event.key === 'Escape' && showFilterPanel.value) {
+    closeFilterPanel()
+  }
 }
 
 const discoveryCollections = computed(() => {
@@ -875,10 +906,17 @@ onMounted(async () => {
     })
   }
   await refreshPriceRange()
+
+  // Set up keyboard listener for filter panel
+  document.addEventListener('keydown', handleKeyDown)
 })
 
 onUnmounted(() => {
   cleanupMobileInteractions()
+  // Clean up keyboard listener
+  document.removeEventListener('keydown', handleKeyDown)
+  // Restore body scroll if panel was open
+  document.body.style.overflow = ''
 })
 
 useHead({
