@@ -1,9 +1,10 @@
 <template>
-  <div class="w-full bg-white py-4 dark:bg-gray-900">
+  <div class="w-full bg-white py-4 dark:bg-gray-900" role="region" aria-label="Product carousel">
     <div class="container mx-auto px-4">
       <Carousel
+        ref="carouselRef"
         :items-to-show="1"
-        :autoplay="4000"
+        :autoplay="5000"
         :wrap-around="true"
         :transition="500"
         :breakpoints="{
@@ -13,12 +14,14 @@
         }"
         snap-align="start"
         class="amazon-carousel"
+        aria-live="polite"
+        @slide-start="handleSlideChange"
       >
-        <!-- Card 1: Shop Holiday Gift Guides (Red) -->
         <Slide v-for="(card, index) in cards" :key="index">
           <div class="px-2">
             <NuxtLink
               :to="localePath(card.link)"
+              :aria-label="`View ${card.title} category`"
               class="group relative block h-[400px] overflow-hidden rounded-3xl shadow-lg transition-all duration-300 hover:shadow-2xl sm:h-[450px] lg:h-[500px]"
               :style="{ backgroundColor: card.bgColor }"
             >
@@ -26,6 +29,9 @@
               <NuxtImg
                 :src="card.image"
                 :alt="card.alt"
+                width="600"
+                height="500"
+                densities="1x 2x"
                 class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                 loading="lazy"
               />
@@ -42,12 +48,16 @@
       </Carousel>
 
       <!-- Navigation Dots -->
-      <div class="mt-6 flex justify-center gap-2">
-        <div
-          v-for="n in cards.length"
-          :key="n"
-          class="h-2 w-2 rounded-full bg-gray-300 transition-all duration-300 dark:bg-gray-600"
-          :class="{ 'w-8 bg-gray-800 dark:bg-gray-400': false }"
+      <div class="mt-6 flex justify-center gap-2" role="tablist" aria-label="Carousel navigation">
+        <button
+          v-for="(card, idx) in cards"
+          :key="idx"
+          :aria-label="`Go to slide ${idx + 1}: ${card.title}`"
+          :aria-selected="currentSlide === idx"
+          role="tab"
+          class="h-2 w-2 rounded-full bg-gray-300 transition-all duration-300 dark:bg-gray-600 hover:bg-gray-500 dark:hover:bg-gray-500"
+          :class="{ 'w-8 bg-gray-800 dark:bg-gray-400': currentSlide === idx }"
+          @click="goToSlide(idx)"
         />
       </div>
     </div>
@@ -55,62 +65,90 @@
 </template>
 
 <script setup lang="ts">
+import { ref, computed } from 'vue'
 import { Carousel, Slide } from 'vue3-carousel'
 import 'vue3-carousel/dist/carousel.css'
 
+// Types
+interface CarouselCard {
+  title: string
+  bgColor: string
+  textColor: string
+  image: string
+  alt: string
+  link: string
+}
+
+// Composables
 const localePath = useLocalePath()
+const { t } = useI18n()
+
+// State
+const carouselRef = ref<InstanceType<typeof Carousel> | null>(null)
+const currentSlide = ref(0)
 
 // Amazon-style horizontal scrolling cards with vibrant backgrounds
-const cards = [
+const cards = computed<CarouselCard[]>(() => [
   {
-    title: 'Shop holiday gift guides',
+    title: t('home.hero.carousel.slides.gifts.title'),
     bgColor: '#C73341',
     textColor: 'text-white',
     image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=600',
-    alt: 'Wrapped gift boxes',
-    link: '/products?category=gifts'
+    alt: t('home.hero.carousel.slides.gifts.alt'),
+    link: '/products?category=gift'
   },
   {
-    title: 'Premium Moldovan wines',
+    title: t('home.hero.carousel.slides.wines.title'),
     bgColor: '#2C5F2D',
     textColor: 'text-white',
     image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=600',
-    alt: 'Wine bottles collection',
-    link: '/products?category=wines'
+    alt: t('home.hero.carousel.slides.wines.alt'),
+    link: '/products?category=wine'
   },
   {
-    title: 'Start looking sharp',
+    title: t('home.hero.carousel.slides.clothing.title'),
     bgColor: '#D4B896',
     textColor: 'text-gray-900',
     image: 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?q=80&w=600',
-    alt: 'Clothing rack display',
+    alt: t('home.hero.carousel.slides.clothing.alt'),
     link: '/products?category=clothing'
   },
   {
-    title: 'Kitchen must-haves',
+    title: t('home.hero.carousel.slides.kitchen.title'),
     bgColor: '#E8E8E8',
     textColor: 'text-gray-900',
     image: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=600',
-    alt: 'Kitchen appliances',
+    alt: t('home.hero.carousel.slides.kitchen.alt'),
     link: '/products?category=kitchen'
   },
   {
-    title: 'Artisan delicacies',
+    title: t('home.hero.carousel.slides.foods.title'),
     bgColor: '#FFA94D',
     textColor: 'text-gray-900',
     image: 'https://images.unsplash.com/photo-1599974579688-8dbdd243c6b0?q=80&w=600',
-    alt: 'Artisan food products',
-    link: '/products?category=foods'
+    alt: t('home.hero.carousel.slides.foods.alt'),
+    link: '/products?category=gourmet'
   },
   {
-    title: 'Traditional cheeses',
+    title: t('home.hero.carousel.slides.cheese.title'),
     bgColor: '#4A6FA5',
     textColor: 'text-white',
     image: 'https://images.unsplash.com/photo-1452251889946-8ff5ea7f27a3?q=80&w=600',
-    alt: 'Traditional cheese selection',
+    alt: t('home.hero.carousel.slides.cheese.alt'),
     link: '/products?category=cheese'
   }
-]
+])
+
+// Methods
+const handleSlideChange = ({ currentSlideIndex }: { currentSlideIndex: number }) => {
+  currentSlide.value = currentSlideIndex
+}
+
+const goToSlide = (slideIndex: number) => {
+  if (carouselRef.value) {
+    carouselRef.value.slideTo(slideIndex)
+  }
+}
 </script>
 
 <style scoped>
