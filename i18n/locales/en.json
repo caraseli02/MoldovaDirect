@@ -54,6 +54,7 @@
     "cartValidationError": "Validation Error"
   },
   "cart": {
+    "shippingCalculatedAtCheckout": "Calculated at checkout",
     "success": {
       "added": "Product added",
       "addedToCart": "Added to cart",
@@ -824,6 +825,34 @@
           "highlight": "Freshness guaranteed door to door",
           "description": "Temperature-controlled logistics ensure every bottle and delicacy arrives exactly as it left Moldova."
         }
+      },
+      "carousel": {
+        "slides": {
+          "gifts": {
+            "title": "Shop holiday gift guides",
+            "alt": "Wrapped gift boxes"
+          },
+          "wines": {
+            "title": "Premium Moldovan wines",
+            "alt": "Wine bottles collection"
+          },
+          "clothing": {
+            "title": "Start looking sharp",
+            "alt": "Clothing rack display"
+          },
+          "kitchen": {
+            "title": "Kitchen must-haves",
+            "alt": "Kitchen appliances"
+          },
+          "foods": {
+            "title": "Artisan delicacies",
+            "alt": "Artisan food products"
+          },
+          "cheese": {
+            "title": "Traditional cheeses",
+            "alt": "Traditional cheese selection"
+          }
+        }
       }
     },
     "categories": {
@@ -1299,7 +1328,20 @@
       "title": "Newsletter",
       "description": "Subscribe to receive special offers",
       "placeholder": "Your email",
-      "button": "Subscribe"
+      "button": "Subscribe",
+      "submitting": "Subscribing...",
+      "success": "Successfully subscribed!",
+      "successDescription": "Thank you for subscribing with {email}",
+      "error": "Subscription failed",
+      "errorDescription": "Please try again later"
+    },
+    "trust": {
+      "title": "Trust & Security",
+      "sslSecure": "SSL Secure",
+      "securePayment": "Secure Payment"
+    },
+    "payment": {
+      "title": "We Accept"
     },
     "copyright": "© 2024 Moldova Direct. All rights reserved."
   },

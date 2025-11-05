@@ -181,7 +181,10 @@ export type {
   // Webhook types
   WebhookEvent,
   WebhookPayload,
-  
+  StripeWebhookEventType,
+  StripeWebhookResponse,
+  StripeWebhookError,
+
   // Admin types
   AdminProductRequest,
   AdminCategoryRequest,

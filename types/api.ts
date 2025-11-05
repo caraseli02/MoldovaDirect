@@ -380,6 +380,30 @@ export interface WebhookPayload {
   timestamp: number
 }
 
+// Stripe Webhook Types
+export type StripeWebhookEventType =
+  | 'payment_intent.succeeded'
+  | 'payment_intent.payment_failed'
+  | 'payment_intent.canceled'
+  | 'payment_intent.created'
+  | 'charge.succeeded'
+  | 'charge.refunded'
+  | 'customer.created'
+  | 'customer.updated'
+  | 'customer.deleted'
+
+export interface StripeWebhookResponse {
+  received: boolean
+  eventId: string
+  eventType: StripeWebhookEventType
+}
+
+export interface StripeWebhookError {
+  statusCode: number
+  statusMessage: string
+  details?: string
+}
+
 // =============================================
 // ADMIN API TYPES
 // =============================================

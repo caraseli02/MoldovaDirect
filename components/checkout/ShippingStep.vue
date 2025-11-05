@@ -62,6 +62,7 @@ const localePath = useLocalePath()
 const user = useSupabaseUser()
 const checkoutStore = useCheckoutStore()
 const { t } = useI18n()
+const toast = useToast()
 
 // Component refs
 const addressFormRef = ref()
@@ -132,6 +133,10 @@ const proceedToPayment = async () => {
     // Validate guest info if needed
     if (!user.value && showGuestForm.value) {
       if (!validateGuestInfo()) {
+        toast.error(
+          t('checkout.validation.error') || 'Validation Error',
+          t('checkout.validation.guestInfoInvalid') || 'Please provide a valid email address'
+        )
         processing.value = false
         return
       }
@@ -139,6 +144,10 @@ const proceedToPayment = async () => {
 
     // Validate address form
     if (addressFormRef.value && !addressFormRef.value.validateForm()) {
+      toast.error(
+        t('checkout.validation.error') || 'Validation Error',
+        t('checkout.validation.addressInvalid') || 'Please complete all required shipping address fields'
+      )
       processing.value = false
       return
     }
