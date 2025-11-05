@@ -1055,7 +1055,18 @@
       "title": "Newsletter",
       "description": "Abonează-te pentru a primi oferte speciale",
       "placeholder": "Email-ul tău",
-      "button": "Abonează-te"
+      "button": "Abonează-te",
+      "submitting": "Se abonează...",
+      "success": "Abonare reușită!",
+      "successDescription": "Mulțumim că te-ai abonat cu {email}",
+      "error": "Abonarea a eșuat",
+      "errorDescription": "Te rugăm să încerci din nou mai târziu"
+    },
+    "trust": {
+      "title": "Încredere și Securitate"
+    },
+    "payment": {
+      "title": "Acceptăm"
     },
     "copyright": "© 2024 Moldova Direct. Toate drepturile rezervate."
   },

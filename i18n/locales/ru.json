@@ -54,6 +54,7 @@
     "cartValidationError": "Ошибка проверки"
   },
   "cart": {
+    "shippingCalculatedAtCheckout": "Рассчитывается при оформлении",
     "success": {
       "added": "Товар добавлен в корзину",
       "addedToCart": "Added to cart",
@@ -1230,7 +1231,18 @@
       "title": "Рассылка",
       "description": "Подпишитесь, чтобы получать специальные предложения",
       "placeholder": "Ваш email",
-      "button": "Подписаться"
+      "button": "Подписаться",
+      "submitting": "Подписка...",
+      "success": "Успешно подписаны!",
+      "successDescription": "Спасибо за подписку с {email}",
+      "error": "Ошибка подписки",
+      "errorDescription": "Пожалуйста, попробуйте позже"
+    },
+    "trust": {
+      "title": "Доверие и Безопасность"
+    },
+    "payment": {
+      "title": "Мы принимаем"
     },
     "copyright": "© 2024 Moldova Direct. Все права защищены."
   },
