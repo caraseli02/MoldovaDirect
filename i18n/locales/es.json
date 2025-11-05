@@ -54,6 +54,7 @@
     "cartValidationError": "Error de validación"
   },
   "cart": {
+    "shippingCalculatedAtCheckout": "Calculado al finalizar",
     "success": {
       "added": "Producto añadido",
       "addedToCart": "Añadido al carrito",
@@ -1312,7 +1313,20 @@
       "title": "Newsletter",
       "description": "Suscríbete para recibir ofertas especiales",
       "placeholder": "Tu correo electrónico",
-      "button": "Suscribirse"
+      "button": "Suscribirse",
+      "submitting": "Suscribiendo...",
+      "success": "¡Suscripción exitosa!",
+      "successDescription": "Gracias por suscribirte con {email}",
+      "error": "Suscripción fallida",
+      "errorDescription": "Por favor, inténtalo de nuevo más tarde"
+    },
+    "trust": {
+      "title": "Confianza y Seguridad",
+      "sslSecure": "SSL Seguro",
+      "securePayment": "Pago Seguro"
+    },
+    "payment": {
+      "title": "Aceptamos"
     },
     "copyright": "© 2024 Moldova Direct. Todos los derechos reservados."
   },
