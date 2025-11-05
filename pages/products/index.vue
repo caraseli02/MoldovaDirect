@@ -117,7 +117,6 @@
                   </button>
                   <div class="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center">
                     <div class="relative flex-1">
-                      <label for="product-search" class="sr-only">{{ t('products.searchLabel') }}</label>
                       <label for="productSearch" class="sr-only">
                         {{ t('products.searchLabel') || t('common.search') }}
                       </label>
@@ -134,14 +133,12 @@
                         </svg>
                       </div>
                       <input
-                        id="product-search"
                         id="productSearch"
                         ref="searchInputRef"
                         v-model="searchQuery"
                         type="search"
                         :placeholder="t('products.searchPlaceholder')"
                         :disabled="loading"
-                        :aria-label="t('products.searchLabel')"
                         :aria-label="t('products.searchLabel') || t('common.search')"
                         class="w-full rounded-xl border border-gray-300 bg-white py-3 pl-11 pr-4 text-sm text-gray-900 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100 disabled:cursor-not-allowed disabled:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-400"
                         @input="handleSearchInput"
