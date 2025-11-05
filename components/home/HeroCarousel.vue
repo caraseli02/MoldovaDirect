@@ -1,139 +1,157 @@
 <template>
-  <div class="relative w-full bg-white dark:bg-gray-900">
-    <Carousel
-      :items-to-show="1"
-      :autoplay="5000"
-      :wrap-around="true"
-      :transition="500"
-      class="relative"
-    >
-      <Slide v-for="(slide, index) in slides" :key="index">
-        <div class="relative w-full">
-          <!-- Full-width image like Amazon -->
-          <NuxtImg
-            :src="slide.image"
-            :alt="slide.alt"
-            densities="1x 2x"
-            class="h-[400px] w-full object-cover sm:h-[450px] md:h-[500px] lg:h-[600px]"
-            loading="eager"
-            :preload="index === 0"
-          />
-
-          <!-- Simple gradient overlay for text readability (Amazon style) -->
-          <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
-
-          <!-- Minimal content overlay - Amazon keeps it simple -->
-          <div class="absolute inset-0 flex items-end pb-12 lg:pb-16">
-            <div class="container mx-auto px-6 lg:px-8">
-              <div class="max-w-xl">
-                <h2 class="text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
-                  {{ slide.title }}
+  <div class="w-full bg-white py-4 dark:bg-gray-900">
+    <div class="container mx-auto px-4">
+      <Carousel
+        :items-to-show="1"
+        :autoplay="4000"
+        :wrap-around="true"
+        :transition="500"
+        :breakpoints="{
+          640: { itemsToShow: 1.5, snapAlign: 'start' },
+          768: { itemsToShow: 2.2, snapAlign: 'start' },
+          1024: { itemsToShow: 3, snapAlign: 'start' }
+        }"
+        snap-align="start"
+        class="amazon-carousel"
+      >
+        <!-- Card 1: Shop Holiday Gift Guides (Red) -->
+        <Slide v-for="(card, index) in cards" :key="index">
+          <div class="px-2">
+            <NuxtLink
+              :to="localePath(card.link)"
+              class="group block h-[400px] overflow-hidden rounded-3xl p-10 shadow-lg transition-all duration-300 hover:shadow-2xl sm:h-[450px] lg:h-[500px]"
+              :style="{ backgroundColor: card.bgColor }"
+            >
+              <div class="flex h-full flex-col">
+                <!-- Card Title -->
+                <h2 class="mb-6 text-4xl font-bold leading-tight sm:text-5xl" :class="card.textColor">
+                  {{ card.title }}
                 </h2>
-                <p class="mt-3 text-lg text-white sm:text-xl lg:text-2xl">
-                  {{ slide.description }}
-                </p>
-                <!-- Amazon-style simple button -->
-                <NuxtLink
-                  :to="localePath(slide.ctaLink)"
-                  class="mt-6 inline-block rounded bg-white px-8 py-3 text-sm font-medium text-gray-900 transition hover:bg-gray-100"
-                >
-                  {{ slide.ctaText }}
-                </NuxtLink>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Slide>
 
-      <!-- Amazon-style navigation arrows - always visible -->
-      <template #addons>
-        <Navigation>
-          <template #prev>
-            <!-- Amazon uses large, always-visible white rectangular buttons on the left edge -->
-            <button
-              class="absolute left-0 top-0 z-10 flex h-full w-16 items-center justify-center bg-gradient-to-r from-white/95 to-white/0 transition-colors hover:from-white dark:from-gray-900/95 dark:to-gray-900/0 dark:hover:from-gray-900"
-              aria-label="Previous slide"
-            >
-              <div class="flex h-12 w-12 items-center justify-center rounded-sm bg-white shadow-lg dark:bg-gray-800">
-                <commonIcon name="lucide:chevron-left" class="h-8 w-8 text-gray-800 dark:text-gray-200" />
+                <!-- Product Image -->
+                <div class="relative mt-auto flex flex-1 items-end justify-center">
+                  <NuxtImg
+                    :src="card.image"
+                    :alt="card.alt"
+                    class="max-h-full w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                </div>
               </div>
-            </button>
-          </template>
-          <template #next>
-            <!-- Amazon uses large, always-visible white rectangular buttons on the right edge -->
-            <button
-              class="absolute right-0 top-0 z-10 flex h-full w-16 items-center justify-center bg-gradient-to-l from-white/95 to-white/0 transition-colors hover:from-white dark:from-gray-900/95 dark:to-gray-900/0 dark:hover:from-gray-900"
-              aria-label="Next slide"
-            >
-              <div class="flex h-12 w-12 items-center justify-center rounded-sm bg-white shadow-lg dark:bg-gray-800">
-                <commonIcon name="lucide:chevron-right" class="h-8 w-8 text-gray-800 dark:text-gray-200" />
-              </div>
-            </button>
-          </template>
-        </Navigation>
-      </template>
-    </Carousel>
+            </NuxtLink>
+          </div>
+        </Slide>
+      </Carousel>
+
+      <!-- Navigation Dots -->
+      <div class="mt-6 flex justify-center gap-2">
+        <div
+          v-for="n in cards.length"
+          :key="n"
+          class="h-2 w-2 rounded-full bg-gray-300 transition-all duration-300 dark:bg-gray-600"
+          :class="{ 'w-8 bg-gray-800 dark:bg-gray-400': false }"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Carousel, Slide, Navigation } from 'vue3-carousel'
+import { Carousel, Slide } from 'vue3-carousel'
 import 'vue3-carousel/dist/carousel.css'
 
 const localePath = useLocalePath()
 
-// Amazon-style simple, product-focused slides
-const slides = [
+// Amazon-style horizontal scrolling cards with vibrant backgrounds
+const cards = [
   {
-    image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=1920',
-    alt: 'Premium Moldovan wines collection',
-    title: 'Premium Moldovan Wines',
-    description: 'Discover award-winning wines from the heart of Moldova',
-    ctaText: 'Shop now',
-    ctaLink: '/products?category=wines'
+    title: 'Shop holiday gift guides',
+    bgColor: '#C73341',
+    textColor: 'text-white',
+    image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=600',
+    alt: 'Wrapped gift boxes',
+    link: '/products?category=gifts'
   },
   {
-    image: 'https://images.unsplash.com/photo-1599974579688-8dbdd243c6b0?q=80&w=1920',
-    alt: 'Artisan Moldovan foods and delicacies',
-    title: 'Artisan Delicacies',
-    description: 'Authentic flavors from traditional producers',
-    ctaText: 'Shop now',
-    ctaLink: '/products?category=foods'
+    title: 'Premium Moldovan wines',
+    bgColor: '#2C5F2D',
+    textColor: 'text-white',
+    image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=600',
+    alt: 'Wine bottles collection',
+    link: '/products?category=wines'
   },
   {
-    image: 'https://images.unsplash.com/photo-1549388604-817d8e8310bb?q=80&w=1920',
-    alt: 'Curated gift hampers',
-    title: 'Gift Hampers',
-    description: 'Thoughtfully curated Moldovan collections',
-    ctaText: 'Shop now',
-    ctaLink: '/products?category=hampers'
+    title: 'Start looking sharp',
+    bgColor: '#D4B896',
+    textColor: 'text-gray-900',
+    image: 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?q=80&w=600',
+    alt: 'Clothing rack display',
+    link: '/products?category=clothing'
   },
   {
-    image: 'https://images.unsplash.com/photo-1452251889946-8ff5ea7f27a3?q=80&w=1920',
-    alt: 'Traditional cheeses',
-    title: 'Traditional Cheeses',
-    description: 'Handcrafted dairy from family farms',
-    ctaText: 'Shop now',
-    ctaLink: '/products'
+    title: 'Kitchen must-haves',
+    bgColor: '#E8E8E8',
+    textColor: 'text-gray-900',
+    image: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=600',
+    alt: 'Kitchen appliances',
+    link: '/products?category=kitchen'
+  },
+  {
+    title: 'Artisan delicacies',
+    bgColor: '#FFA94D',
+    textColor: 'text-gray-900',
+    image: 'https://images.unsplash.com/photo-1599974579688-8dbdd243c6b0?q=80&w=600',
+    alt: 'Artisan food products',
+    link: '/products?category=foods'
+  },
+  {
+    title: 'Traditional cheeses',
+    bgColor: '#4A6FA5',
+    textColor: 'text-white',
+    image: 'https://images.unsplash.com/photo-1452251889946-8ff5ea7f27a3?q=80&w=600',
+    alt: 'Traditional cheese selection',
+    link: '/products?category=cheese'
   }
 ]
 </script>
 
 <style scoped>
-/* Amazon-style clean carousel */
-:deep(.carousel__prev),
-:deep(.carousel__next) {
-  background: transparent;
-  border: none;
+/* Amazon-style horizontal scrolling carousel */
+:deep(.carousel__viewport) {
+  overflow: visible;
 }
 
 :deep(.carousel__track) {
-  /* Ensure smooth transitions */
-  transition-timing-function: ease-in-out;
+  display: flex;
+  gap: 0;
+  align-items: stretch;
 }
 
-/* Hide default pagination - Amazon doesn't use dots */
-:deep(.carousel__pagination) {
+:deep(.carousel__slide) {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* Hide default navigation - using swipe/drag only like Amazon */
+:deep(.carousel__prev),
+:deep(.carousel__next) {
   display: none;
+}
+
+/* Enable smooth scrolling */
+.amazon-carousel {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Custom scrollbar styling (optional) */
+:deep(.carousel__viewport)::-webkit-scrollbar {
+  display: none;
+}
+
+:deep(.carousel__viewport) {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 </style>
