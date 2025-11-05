@@ -1293,7 +1293,9 @@
       "errorDescription": "Please try again later"
     },
     "trust": {
-      "title": "Trust & Security"
+      "title": "Trust & Security",
+      "sslSecure": "SSL Secure",
+      "securePayment": "Secure Payment"
     },
     "payment": {
       "title": "We Accept"

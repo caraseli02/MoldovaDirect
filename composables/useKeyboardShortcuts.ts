@@ -10,11 +10,19 @@
  * }, { ctrlOrCmd: true })
  * ```
  */
+
+// Global registry shared across all instances
+const globalShortcuts = new Map<string, {
+  handler: (e: KeyboardEvent) => void
+  options: KeyboardShortcutOptions
+}>()
+
+// Track if global listener is attached
+let isGlobalListenerAttached = false
+
 export function useKeyboardShortcuts() {
-  const shortcuts = new Map<string, {
-    handler: (e: KeyboardEvent) => void
-    options: KeyboardShortcutOptions
-  }>()
+  // Track shortcuts registered by this instance for cleanup
+  const instanceShortcuts = new Set<string>()
 
   interface KeyboardShortcutOptions {
     /** Require Ctrl (Windows/Linux) or Cmd (Mac) */
@@ -84,7 +92,11 @@ export function useKeyboardShortcuts() {
     }
 
     // Check each registered shortcut
-    for (const [key, { handler, options }] of shortcuts.entries()) {
+    for (const [shortcutKey, { handler, options }] of globalShortcuts.entries()) {
+      // Extract the actual key from the shortcut key (e.g., "ctrl+k" -> "k")
+      const keyParts = shortcutKey.split('+')
+      const key = keyParts[keyParts.length - 1]
+
       if (matchesShortcut(event, key, options)) {
         if (options.preventDefault) {
           event.preventDefault()
@@ -107,7 +119,8 @@ export function useKeyboardShortcuts() {
     options: KeyboardShortcutOptions = {}
   ) => {
     const shortcutKey = getShortcutKey(key, options)
-    shortcuts.set(shortcutKey, { handler, options })
+    globalShortcuts.set(shortcutKey, { handler, options })
+    instanceShortcuts.add(shortcutKey)
   }
 
   /**
@@ -115,7 +128,8 @@ export function useKeyboardShortcuts() {
    */
   const unregisterShortcut = (key: string, options: KeyboardShortcutOptions = {}) => {
     const shortcutKey = getShortcutKey(key, options)
-    shortcuts.delete(shortcutKey)
+    globalShortcuts.delete(shortcutKey)
+    instanceShortcuts.delete(shortcutKey)
   }
 
   /**
@@ -155,16 +169,24 @@ export function useKeyboardShortcuts() {
    * Setup lifecycle hooks
    */
   onMounted(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && !isGlobalListenerAttached) {
       window.addEventListener('keydown', handleKeydown)
+      isGlobalListenerAttached = true
     }
   })
 
   onUnmounted(() => {
-    if (typeof window !== 'undefined') {
-      window.removeEventListener('keydown', handleKeydown)
+    // Clean up shortcuts registered by this instance
+    for (const shortcutKey of instanceShortcuts) {
+      globalShortcuts.delete(shortcutKey)
     }
-    shortcuts.clear()
+    instanceShortcuts.clear()
+
+    // Remove global listener if no more shortcuts are registered
+    if (typeof window !== 'undefined' && globalShortcuts.size === 0 && isGlobalListenerAttached) {
+      window.removeEventListener('keydown', handleKeydown)
+      isGlobalListenerAttached = false
+    }
   })
 
   return {

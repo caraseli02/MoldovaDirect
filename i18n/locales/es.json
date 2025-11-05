@@ -1293,7 +1293,9 @@
       "errorDescription": "Por favor, inténtalo de nuevo más tarde"
     },
     "trust": {
-      "title": "Confianza y Seguridad"
+      "title": "Confianza y Seguridad",
+      "sslSecure": "SSL Seguro",
+      "securePayment": "Pago Seguro"
     },
     "payment": {
       "title": "Aceptamos"

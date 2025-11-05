@@ -1063,7 +1063,9 @@
       "errorDescription": "Te rugăm să încerci din nou mai târziu"
     },
     "trust": {
-      "title": "Încredere și Securitate"
+      "title": "Încredere și Securitate",
+      "sslSecure": "SSL Securizat",
+      "securePayment": "Plată Securizată"
     },
     "payment": {
       "title": "Acceptăm"
