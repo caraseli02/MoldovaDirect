@@ -60,10 +60,66 @@
                   </ul>
                 </div>
                 <div>
-                  <h3 class="font-semibold text-slate-900 dark:text-white">Suggested checks</h3>
-                  <ol class="mt-2 list-decimal space-y-1 pl-5">
-                    <li v-for="step in activePersona.testScript" :key="step">{{ step }}</li>
-                  </ol>
+                  <div class="flex items-center justify-between">
+                    <h3 class="font-semibold text-slate-900 dark:text-white">Test Script Progress</h3>
+                    <span
+                      v-if="currentProgress"
+                      class="rounded-full px-2 py-1 text-xs font-medium"
+                      :class="currentProgress.completionPercentage === 100 ? 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300' : 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300'"
+                    >
+                      {{ currentProgress.completionPercentage }}% Complete
+                    </span>
+                  </div>
+                  <div class="mt-2 space-y-3">
+                    <div
+                      v-for="(step, index) in activePersona.testScript"
+                      :key="index"
+                      class="group rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-900"
+                    >
+                      <div class="flex items-start gap-3">
+                        <input
+                          type="checkbox"
+                          :id="`step-${index}`"
+                          :checked="isStepCompleted(index)"
+                          @change="handleToggleStep(index)"
+                          class="mt-0.5 h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500 dark:border-slate-600 dark:bg-slate-800"
+                        />
+                        <label
+                          :for="`step-${index}`"
+                          class="flex-1 cursor-pointer text-sm"
+                          :class="isStepCompleted(index) ? 'line-through text-slate-400 dark:text-slate-500' : 'text-slate-700 dark:text-slate-200'"
+                        >
+                          {{ step }}
+                        </label>
+                      </div>
+                      <div
+                        v-if="showNoteInput[index] || getStepNote(index)"
+                        class="mt-2 pl-7"
+                      >
+                        <textarea
+                          :value="getStepNote(index)"
+                          @input="(e) => handleUpdateNote(index, (e.target as HTMLTextAreaElement).value)"
+                          placeholder="Add notes (issues found, observations, etc.)"
+                          rows="2"
+                          class="w-full rounded border border-slate-300 bg-slate-50 px-2 py-1 text-xs text-slate-700 placeholder-slate-400 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:placeholder-slate-500"
+                        />
+                      </div>
+                      <button
+                        v-if="!showNoteInput[index] && !getStepNote(index)"
+                        @click="showNoteInput[index] = true"
+                        class="ml-7 mt-1 text-xs text-slate-400 opacity-0 transition group-hover:opacity-100 hover:text-primary-600 dark:text-slate-500 dark:hover:text-primary-400"
+                      >
+                        + Add note
+                      </button>
+                    </div>
+                  </div>
+                  <button
+                    v-if="currentProgress && currentProgress.completedSteps.length > 0"
+                    @click="handleClearProgress"
+                    class="mt-3 text-xs text-slate-500 hover:text-red-600 dark:text-slate-400 dark:hover:text-red-400"
+                  >
+                    Clear progress
+                  </button>
                 </div>
               </div>
             </div>
@@ -108,6 +164,26 @@
                   <Icon name="i-heroicons-rocket-launch" class="h-4 w-4" />
                   Open account dashboard
                 </NuxtLink>
+                <div class="flex gap-2">
+                  <button
+                    class="flex-1 inline-flex items-center justify-center gap-2 rounded-md border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
+                    type="button"
+                    @click="handleExportSession"
+                    title="Export current session state"
+                  >
+                    <Icon name="i-heroicons-arrow-down-tray" class="h-4 w-4" />
+                    Export
+                  </button>
+                  <button
+                    class="flex-1 inline-flex items-center justify-center gap-2 rounded-md border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
+                    type="button"
+                    @click="handleShowImport"
+                    title="Import session state"
+                  >
+                    <Icon name="i-heroicons-arrow-up-tray" class="h-4 w-4" />
+                    Import
+                  </button>
+                </div>
                 <button
                   v-if="authStore.lockoutTime"
                   class="inline-flex items-center justify-center gap-2 rounded-md border border-orange-500 px-4 py-2 text-sm font-medium text-orange-600 transition hover:bg-orange-50 dark:text-orange-300 dark:hover:bg-orange-500/10"
@@ -131,10 +207,38 @@
         </section>
 
         <section>
-          <h2 class="mb-4 text-2xl font-semibold text-slate-900 dark:text-white">Available personas</h2>
+          <div class="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <h2 class="text-2xl font-semibold text-slate-900 dark:text-white">Available personas</h2>
+            <div class="flex flex-col gap-3 md:flex-row md:items-center">
+              <input
+                v-model="searchQuery"
+                type="text"
+                placeholder="Search personas..."
+                class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500"
+              />
+              <select
+                v-model="filterFocusArea"
+                class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm text-slate-900 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
+              >
+                <option value="">All Focus Areas</option>
+                <option v-for="area in uniqueFocusAreas" :key="area" :value="area">
+                  {{ area }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div v-if="filteredPersonas.length === 0" class="col-span-2 rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 p-12 text-center dark:border-slate-700 dark:bg-slate-900">
+            <p class="text-slate-600 dark:text-slate-400">No personas match your search criteria</p>
+            <button
+              @click="searchQuery = ''; filterFocusArea = ''"
+              class="mt-4 text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400"
+            >
+              Clear filters
+            </button>
+          </div>
           <div class="grid gap-6 md:grid-cols-2">
             <article
-              v-for="persona in personaList"
+              v-for="persona in filteredPersonas"
               :key="persona.key"
               class="flex h-full flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg dark:border-slate-700 dark:bg-slate-800"
             >
@@ -193,12 +297,54 @@
           </div>
         </section>
       </div>
+
+      <!-- Import Session Modal -->
+      <div
+        v-if="showImportModal"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+        @click.self="showImportModal = false"
+      >
+        <div class="max-w-2xl w-full rounded-2xl bg-white p-6 shadow-2xl dark:bg-slate-800">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Import Session State</h3>
+            <button
+              @click="showImportModal = false"
+              class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+            >
+              <Icon name="i-heroicons-x-mark" class="h-6 w-6" />
+            </button>
+          </div>
+          <p class="mb-4 text-sm text-slate-600 dark:text-slate-300">
+            Paste the exported session JSON below to restore a previous test session.
+          </p>
+          <textarea
+            v-model="importJson"
+            placeholder="Paste exported session JSON here..."
+            rows="10"
+            class="w-full rounded-lg border border-slate-300 bg-slate-50 px-4 py-3 font-mono text-sm text-slate-900 placeholder-slate-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:border-slate-600 dark:bg-slate-900 dark:text-white dark:placeholder-slate-500"
+          />
+          <div class="mt-4 flex gap-3 justify-end">
+            <button
+              @click="showImportModal = false"
+              class="px-4 py-2 text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
+            >
+              Cancel
+            </button>
+            <button
+              @click="handleImportSession"
+              class="rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700"
+            >
+              Import Session
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, reactive, onMounted, onUnmounted } from 'vue'
 import { useAuthStore } from '~/stores/auth'
 import { testUserPersonas, type TestUserPersonaKey } from '~/lib/testing/testUserPersonas'
 
@@ -218,6 +364,14 @@ const authStore = useAuthStore()
 const toast = useToast()
 const runtimeConfig = useRuntimeConfig()
 const localePath = useLocalePath()
+const route = useRoute()
+const router = useRouter()
+
+const showNoteInput = reactive<Record<number, boolean>>({})
+const searchQuery = ref('')
+const filterFocusArea = ref('')
+const showImportModal = ref(false)
+const importJson = ref('')
 
 const isSimulationEnabled = computed(() => runtimeConfig.public.enableTestUsers)
 const personaList = computed(() => Object.values(testUserPersonas))
@@ -225,6 +379,92 @@ const activePersona = computed(() => {
   const key = authStore.activeTestPersona
   return key ? testUserPersonas[key] : null
 })
+
+const uniqueFocusAreas = computed(() => {
+  const areas = new Set<string>()
+  personaList.value.forEach((persona) => {
+    persona.focusAreas.forEach((area) => areas.add(area))
+  })
+  return Array.from(areas).sort()
+})
+
+const filteredPersonas = computed(() => {
+  let filtered = personaList.value
+
+  // Apply search filter
+  if (searchQuery.value.trim()) {
+    const query = searchQuery.value.toLowerCase()
+    filtered = filtered.filter((persona) => {
+      return (
+        persona.title.toLowerCase().includes(query) ||
+        persona.summary.toLowerCase().includes(query) ||
+        persona.user.email.toLowerCase().includes(query) ||
+        persona.focusAreas.some((area) => area.toLowerCase().includes(query))
+      )
+    })
+  }
+
+  // Apply focus area filter
+  if (filterFocusArea.value) {
+    filtered = filtered.filter((persona) =>
+      persona.focusAreas.includes(filterFocusArea.value)
+    )
+  }
+
+  return filtered
+})
+
+// Handle URL parameters for auto-activation
+onMounted(() => {
+  const { activate, autoStart } = route.query
+
+  if (activate && typeof activate === 'string') {
+    const personaKey = activate as TestUserPersonaKey
+
+    if (testUserPersonas[personaKey]) {
+      if (autoStart === 'true' || !authStore.activeTestPersona) {
+        handleActivatePersona(personaKey)
+      }
+    } else {
+      toast.error('Invalid persona', `Persona "${activate}" not found`)
+    }
+
+    // Clean up URL parameters
+    router.replace({ query: {} })
+  }
+})
+
+const currentProgress = computed(() => authStore.currentPersonaProgress)
+
+const isStepCompleted = (stepIndex: number): boolean => {
+  if (!currentProgress.value) return false
+  return currentProgress.value.completedSteps.includes(stepIndex)
+}
+
+const getStepNote = (stepIndex: number): string => {
+  if (!currentProgress.value) return ''
+  return currentProgress.value.notes[stepIndex] || ''
+}
+
+const handleToggleStep = (stepIndex: number) => {
+  if (!activePersona.value) return
+  authStore.toggleTestScriptStep(
+    activePersona.value.key,
+    stepIndex,
+    activePersona.value.testScript.length
+  )
+}
+
+const handleUpdateNote = (stepIndex: number, note: string) => {
+  if (!activePersona.value) return
+  authStore.updateTestScriptNote(activePersona.value.key, stepIndex, note)
+}
+
+const handleClearProgress = () => {
+  if (!activePersona.value) return
+  authStore.clearPersonaProgress(activePersona.value.key)
+  toast.info('Progress cleared', 'Test script progress has been reset.')
+}
 
 const handleActivatePersona = (key: TestUserPersonaKey) => {
   try {
@@ -249,4 +489,133 @@ const handleClearLockout = () => {
   authStore.clearLockout()
   toast.success('Temporizador limpiado', 'El bloqueo temporal se ha eliminado para continuar las pruebas.')
 }
+
+const handleExportSession = async () => {
+  if (!activePersona.value || !currentProgress.value) {
+    toast.error('Export failed', 'No active persona or progress to export')
+    return
+  }
+
+  try {
+    const { exportPersonaSession } = await import('~/lib/testing/simulationHelpers')
+
+    const sessionJson = exportPersonaSession(
+      activePersona.value.key,
+      authStore.simulationMode,
+      {
+        completedSteps: currentProgress.value.completedSteps,
+        notes: currentProgress.value.notes
+      }
+    )
+
+    // Copy to clipboard
+    if (navigator.clipboard) {
+      await navigator.clipboard.writeText(sessionJson)
+      toast.success('Session exported', 'Session data copied to clipboard')
+    } else {
+      // Fallback: show in alert
+      alert('Copy this session data:\n\n' + sessionJson)
+    }
+
+    // Also download as file
+    const blob = new Blob([sessionJson], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `test-session-${activePersona.value.key}-${Date.now()}.json`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Failed to export session'
+    toast.error('Export failed', message)
+  }
+}
+
+const handleShowImport = () => {
+  showImportModal.value = true
+  importJson.value = ''
+}
+
+const handleImportSession = async () => {
+  if (!importJson.value.trim()) {
+    toast.error('Import failed', 'Please paste session JSON')
+    return
+  }
+
+  try {
+    const { importPersonaSession } = await import('~/lib/testing/simulationHelpers')
+    const { validateSessionState } = await import('~/lib/testing/testUserValidation')
+
+    // Parse and validate
+    const sessionState = validateSessionState(JSON.parse(importJson.value))
+
+    // Activate the persona
+    authStore.simulateLogin(sessionState.personaKey)
+
+    // Set simulation mode
+    authStore.setSimulationMode(sessionState.simulationMode)
+
+    // Restore progress
+    const persona = testUserPersonas[sessionState.personaKey]
+    if (persona) {
+      // Clear existing progress
+      authStore.clearPersonaProgress(sessionState.personaKey)
+
+      // Restore each completed step
+      sessionState.testScriptProgress.completedSteps.forEach((stepIndex) => {
+        authStore.toggleTestScriptStep(sessionState.personaKey, stepIndex, persona.testScript.length)
+      })
+
+      // Restore notes
+      Object.entries(sessionState.testScriptProgress.notes).forEach(([index, note]) => {
+        authStore.updateTestScriptNote(sessionState.personaKey, parseInt(index), note)
+      })
+    }
+
+    showImportModal.value = false
+    toast.success('Session imported', `Restored session for ${persona?.title || sessionState.personaKey}`)
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Failed to import session'
+    toast.error('Import failed', message)
+  }
+}
+
+// Keyboard shortcuts
+const handleKeyPress = (event: KeyboardEvent) => {
+  // Ctrl/Cmd + Shift + E: End simulation
+  if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key === 'E') {
+    event.preventDefault()
+    if (activePersona.value) {
+      handleEndSimulation()
+    }
+  }
+
+  // Ctrl/Cmd + Shift + T: Toggle test users panel (navigate home if already here)
+  if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key === 'T') {
+    event.preventDefault()
+    router.push('/')
+  }
+
+  // Number keys 1-8: Quick activate personas (when no input focused)
+  if (!['INPUT', 'TEXTAREA'].includes((event.target as HTMLElement).tagName)) {
+    const num = parseInt(event.key)
+    if (num >= 1 && num <= 8) {
+      const personas = Object.values(testUserPersonas)
+      if (personas[num - 1]) {
+        event.preventDefault()
+        handleActivatePersona(personas[num - 1].key)
+      }
+    }
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('keydown', handleKeyPress)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('keydown', handleKeyPress)
+})
 </script>
