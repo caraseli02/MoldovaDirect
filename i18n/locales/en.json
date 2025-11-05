@@ -1086,6 +1086,8 @@
     "backToProducts": "Back to products",
     "browseDescription": "Discover our selection of authentic Moldovan products",
     "searchPlaceholder": "Search products...",
+    "searchLabel": "Search products",
+    "sortLabel": "Sort products by",
     "allCategories": "All categories",
     "sortNewest": "Newest",
     "sortName": "Name",

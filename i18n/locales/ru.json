@@ -1032,6 +1032,8 @@
     "backToProducts": "Вернуться к товарам",
     "browseDescription": "Откройте для себя наш выбор аутентичных молдавских продуктов",
     "searchPlaceholder": "Поиск товаров...",
+    "searchLabel": "Поиск товаров",
+    "sortLabel": "Сортировать товары по",
     "allCategories": "Все категории",
     "sortNewest": "Новинки",
     "sortName": "Название",
