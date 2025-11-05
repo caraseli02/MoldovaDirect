@@ -19,24 +19,22 @@
           <div class="px-2">
             <NuxtLink
               :to="localePath(card.link)"
-              class="group block h-[400px] overflow-hidden rounded-3xl p-10 shadow-lg transition-all duration-300 hover:shadow-2xl sm:h-[450px] lg:h-[500px]"
+              class="group relative block h-[400px] overflow-hidden rounded-3xl shadow-lg transition-all duration-300 hover:shadow-2xl sm:h-[450px] lg:h-[500px]"
               :style="{ backgroundColor: card.bgColor }"
             >
-              <div class="flex h-full flex-col">
-                <!-- Card Title -->
-                <h2 class="mb-6 text-4xl font-bold leading-tight sm:text-5xl" :class="card.textColor">
+              <!-- Large Product Image - fills entire card -->
+              <NuxtImg
+                :src="card.image"
+                :alt="card.alt"
+                class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                loading="lazy"
+              />
+
+              <!-- Title overlaid on top-left of image -->
+              <div class="absolute left-6 top-6 max-w-[70%] sm:left-8 sm:top-8 lg:left-10 lg:top-10">
+                <h2 class="text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl" :class="card.textColor">
                   {{ card.title }}
                 </h2>
-
-                <!-- Product Image -->
-                <div class="relative mt-auto flex flex-1 items-end justify-center">
-                  <NuxtImg
-                    :src="card.image"
-                    :alt="card.alt"
-                    class="max-h-full w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-                    loading="lazy"
-                  />
-                </div>
               </div>
             </NuxtLink>
           </div>
