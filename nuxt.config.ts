@@ -30,11 +30,29 @@ export default defineNuxtConfig({
     "shadcn-nuxt",
     "@vite-pwa/nuxt",
     "vue3-carousel-nuxt",
+    "@vueuse/motion/nuxt",
     // Keep this last to post-process the components registry
     "~/modules/fix-components",
   ],
   image: {
     domains: ["images.unsplash.com"],
+    formats: ["webp", "avif"],
+    quality: 80,
+    screens: {
+      xs: 320,
+      sm: 640,
+      md: 768,
+      lg: 1024,
+      xl: 1280,
+      xxl: 1536,
+    },
+  },
+  routeRules: {
+    // Landing page - will enable prerender after fixing server errors
+    // '/': { prerender: true },
+    // Product pages - ISR every hour
+    '/products': { swr: 3600 },
+    '/products/**': { swr: 3600 },
   },
   runtimeConfig: {
     // Private keys (only available on server-side)

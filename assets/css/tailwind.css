@@ -210,3 +210,95 @@
     max-width: var(--container-max-width-2xl);
   }
 }
+
+/* Animation Presets for Landing Page Modernization */
+@layer utilities {
+  /* CTA Button Micro-interactions */
+  .cta-button {
+    transition: transform 200ms ease-out, box-shadow 200ms ease-out;
+  }
+
+  .cta-button:active {
+    transform: scale(0.95);
+  }
+
+  .cta-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Cart Icon Bounce Animation */
+  .cart-icon-updated {
+    animation: cart-bounce 300ms ease-out;
+  }
+
+  @keyframes cart-bounce {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+  }
+
+  /* Smooth Scroll Reveal */
+  .scroll-reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+
+  .scroll-reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Stagger Animation Delays */
+  .stagger-1 { transition-delay: 100ms; }
+  .stagger-2 { transition-delay: 200ms; }
+  .stagger-3 { transition-delay: 300ms; }
+  .stagger-4 { transition-delay: 400ms; }
+
+  /* Hover Lift Effect for Cards */
+  .hover-lift {
+    transition: transform 200ms ease-out, box-shadow 200ms ease-out;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+  }
+}
+
+/* Reduced Motion Support for Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .scroll-reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Mobile Touch Optimization */
+@media (hover: none) and (pointer: coarse) {
+  /* Larger tap targets for mobile */
+  .touch-target {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 12px;
+  }
+
+  /* Disable hover effects on touch devices */
+  .hover-lift:hover,
+  .cta-button:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
