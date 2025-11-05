@@ -97,16 +97,14 @@
               :placeholder="$t('footer.newsletter.placeholder')"
               :disabled="isSubmitting"
               :aria-label="$t('footer.newsletter.placeholder')"
-              :disabled="isSubmitting"
-              class="px-4 py-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:opacity-50 disabled:cursor-not-allowed"
+              class="px-4 py-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
               required
               aria-label="Email address"
             >
             <Button
               type="submit"
               :disabled="isSubmitting"
-              :disabled="isSubmitting"
-              class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:opacity-50 disabled:cursor-not-allowed"
+              class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <span v-if="!isSubmitting">{{ isSubmitting ? $t('footer.newsletter.submitting') : $t('footer.newsletter.button') }}</span>
               <span v-else class="flex items-center justify-center gap-2">
@@ -171,8 +169,6 @@ import { toast } from 'vue-sonner'
 
 const { t } = useI18n()
 const localePath = useLocalePath()
-const { t } = useI18n()
-const toast = useToast()
 const email = ref('')
 const isSubmitting = ref(false)
 
