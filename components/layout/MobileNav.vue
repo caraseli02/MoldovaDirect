@@ -30,9 +30,10 @@
             size="icon"
             @click="$emit('close')"
             ref="closeBtnRef"
-            class="p-2 -mr-2 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+            :aria-label="$t('common.close')"
+            class="p-2 -mr-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-white hover:bg-white/10 rounded-lg transition-colors"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </Button>
