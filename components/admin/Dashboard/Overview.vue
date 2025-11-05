@@ -232,6 +232,22 @@
               </div>
               <commonIcon name="lucide:arrow-up-right" class="h-4 w-4 text-slate-500 transition-opacity group-hover:opacity-100" />
             </NuxtLink>
+
+            <NuxtLink
+              to="/admin/seed-products"
+              class="group flex items-center justify-between rounded-2xl border border-purple-200 bg-purple-50/50 p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-purple-500/40 hover:shadow-lg"
+            >
+              <div class="flex items-center gap-3">
+                <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-purple-100 text-purple-600">
+                  <commonIcon name="lucide:package-plus" class="h-5 w-5" />
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-900">Seed Products (MVP)</p>
+                  <p class="text-sm text-purple-600">Add 100+ products with images for testing</p>
+                </div>
+              </div>
+              <commonIcon name="lucide:arrow-up-right" class="h-4 w-4 text-purple-500 transition-opacity group-hover:opacity-100" />
+            </NuxtLink>
           </div>
 
           <div class="space-y-4 text-sm text-gray-400">
