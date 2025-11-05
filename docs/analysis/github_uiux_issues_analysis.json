@@ -1,0 +1,501 @@
+{
+  "metadata": {
+    "analysis_date": "2025-11-04",
+    "repository": "MoldovaDirect",
+    "total_issues_analyzed": 1000,
+    "ui_ux_issues_found": 17,
+    "analyzer": "Research Agent",
+    "scope": "UI/UX, Accessibility, Design, Frontend"
+  },
+  "summary": {
+    "total_ui_ux_issues": 17,
+    "open": 17,
+    "closed": 0,
+    "critical_priority": 2,
+    "high_priority": 8,
+    "medium_priority": 2,
+    "low_priority": 1,
+    "unassigned_priority": 4
+  },
+  "categorization": {
+    "accessibility": {
+      "count": 6,
+      "issues": [153, 148, 126, 123, 107, 106],
+      "severity": "high",
+      "description": "WCAG compliance, screen reader support, keyboard navigation"
+    },
+    "user_experience": {
+      "count": 11,
+      "issues": [154, 151, 149, 148, 130, 122, 116, 113, 110, 109, 102],
+      "severity": "medium-high",
+      "description": "Navigation, filtering, error handling, product interactions"
+    },
+    "visual_design": {
+      "count": 3,
+      "issues": [153, 135, 130],
+      "severity": "medium",
+      "description": "Dark/light mode, component consistency, error displays"
+    },
+    "performance": {
+      "count": 3,
+      "issues": [148, 109, 122],
+      "severity": "medium",
+      "description": "Perceived performance, loading states, caching"
+    }
+  },
+  "priority_breakdown": {
+    "P0_critical": [],
+    "P1_high": [
+      {
+        "number": 126,
+        "title": "Add Accessibility Features to Checkout Flow",
+        "labels": ["ux", "a11y", "P1-high", "checkout", "wcag"],
+        "area": "Checkout Accessibility",
+        "impact": "Legal compliance, prevents excluding customers with disabilities"
+      },
+      {
+        "number": 123,
+        "title": "Fix Cart Accessibility Issues",
+        "labels": ["ux", "cart", "a11y", "P1-high", "wcag"],
+        "area": "Cart Accessibility",
+        "impact": "WCAG compliance, affects ~15% of users with disabilities"
+      },
+      {
+        "number": 122,
+        "title": "Persist recently viewed products to localStorage",
+        "labels": ["P1", "products", "ux", "feature", "high"],
+        "area": "Product Discovery",
+        "impact": "Session persistence, improves user experience"
+      }
+    ],
+    "P2_medium": [
+      {
+        "number": 130,
+        "title": "Improve Checkout Error Display with Dedicated Component",
+        "labels": ["ux", "error-handling", "P2-medium", "checkout"],
+        "area": "Checkout UX",
+        "impact": "Reduces abandoned checkouts"
+      },
+      {
+        "number": 107,
+        "title": "Fix accessibility issues on product detail page",
+        "labels": ["critical", "P2", "products", "accessibility", "a11y"],
+        "area": "Product Pages Accessibility",
+        "impact": "Keyboard navigation, screen reader support"
+      },
+      {
+        "number": 106,
+        "title": "Fix accessibility issues on products listing page",
+        "labels": ["critical", "P2", "products", "accessibility", "a11y"],
+        "area": "Product Listing Accessibility",
+        "impact": "Filter accessibility, keyboard navigation"
+      },
+      {
+        "number": 102,
+        "title": "Fix silent add-to-cart failures on product detail page",
+        "labels": ["bug", "critical", "P2", "products", "ux"],
+        "area": "Product Interaction",
+        "impact": "Users don't see feedback when add-to-cart fails"
+      }
+    ],
+    "P3_low": [
+      {
+        "number": 135,
+        "title": "Standardize Button Components in Cart",
+        "labels": ["cart", "P3-low", "ui", "consistency"],
+        "area": "Component Consistency",
+        "impact": "Visual consistency and easier maintenance"
+      }
+    ],
+    "unassigned": [
+      {
+        "number": 154,
+        "title": "Separate journal/blog section from shop page",
+        "labels": ["enhancement", "ux", "backend"],
+        "area": "Content Organization",
+        "impact": "Better content strategy, clearer separation of concerns"
+      },
+      {
+        "number": 153,
+        "title": "Audit and fix dark/light mode contrast for accessibility",
+        "labels": ["a11y", "wcag", "ui"],
+        "area": "Accessibility & Theme",
+        "impact": "WCAG compliance, readability in both modes"
+      },
+      {
+        "number": 151,
+        "title": "Add address management page in user account area",
+        "labels": ["enhancement", "ux", "backend"],
+        "area": "User Account",
+        "impact": "Significantly improves checkout experience"
+      },
+      {
+        "number": 149,
+        "title": "Enhance shop filters with categories, price range, ratings, and sort options",
+        "labels": ["enhancement", "products", "ux"],
+        "area": "Product Discovery",
+        "impact": "Improves product discovery and user experience"
+      },
+      {
+        "number": 148,
+        "title": "Implement skeleton loaders for improved perceived performance",
+        "labels": ["enhancement", "performance", "ux", "a11y"],
+        "area": "Loading States",
+        "impact": "Perceived performance, reduces layout shift"
+      },
+      {
+        "number": 116,
+        "title": "Add product image zoom functionality",
+        "labels": ["products", "ux", "feature", "high"],
+        "area": "Product Images",
+        "impact": "Essential for viewing product details, especially wine labels"
+      },
+      {
+        "number": 113,
+        "title": "Improve error messages and add retry mechanisms",
+        "labels": ["products", "ux", "high", "error-handling"],
+        "area": "Error Handling",
+        "impact": "Better error recovery, user guidance"
+      },
+      {
+        "number": 110,
+        "title": "Add URL state management for filters",
+        "labels": ["products", "ux", "feature", "high", "seo"],
+        "area": "Filter Persistence",
+        "impact": "Shareable URLs, browser back/forward, SEO benefits"
+      },
+      {
+        "number": 109,
+        "title": "Add request cancellation for search queries",
+        "labels": ["performance", "products", "ux", "high"],
+        "area": "Search Performance",
+        "impact": "Prevents race conditions, reduces wasted resources"
+      }
+    ]
+  },
+  "themes_and_patterns": {
+    "accessibility_gaps": {
+      "description": "Multiple accessibility issues across product pages, cart, and checkout",
+      "affected_areas": [
+        "Product listing page",
+        "Product detail page",
+        "Cart page",
+        "Checkout flow"
+      ],
+      "common_issues": [
+        "Missing ARIA labels and live regions",
+        "No keyboard navigation for interactive elements",
+        "Screen reader announcements missing",
+        "Focus management gaps",
+        "Dark/light mode contrast issues"
+      ],
+      "wcag_compliance": "Multiple WCAG 2.1 AA violations",
+      "urgency": "HIGH - Legal compliance and inclusivity requirement"
+    },
+    "product_discovery": {
+      "description": "Product browsing and filtering needs enhancement",
+      "affected_features": [
+        "Shop filters (categories, price, ratings)",
+        "URL state management for filters",
+        "Product image zoom",
+        "Recently viewed products persistence",
+        "Search query optimization"
+      ],
+      "user_impact": "Difficult product discovery, limited filtering, no shareable filtered views"
+    },
+    "checkout_experience": {
+      "description": "Checkout flow needs UX and accessibility improvements",
+      "affected_areas": [
+        "Checkout accessibility (P1)",
+        "Error display and handling",
+        "Address management",
+        "Cart accessibility (P1)"
+      ],
+      "business_impact": "Potential checkout abandonment, accessibility lawsuits"
+    },
+    "performance_perception": {
+      "description": "Loading states and perceived performance need improvement",
+      "gaps": [
+        "No skeleton loaders",
+        "Multiple simultaneous search requests",
+        "No request cancellation",
+        "Layout shifts during loading"
+      ],
+      "metrics_impact": "Poor CLS (Cumulative Layout Shift), perceived slowness"
+    },
+    "component_consistency": {
+      "description": "Inconsistent component usage across the application",
+      "examples": [
+        "Multiple button implementations in cart",
+        "Inconsistent error displays",
+        "No standardized loading states"
+      ],
+      "maintenance_impact": "Harder to maintain, visual inconsistencies"
+    }
+  },
+  "areas_already_addressed": {
+    "authentication": {
+      "issues": [159, 172],
+      "status": "CLOSED",
+      "description": "Auth middleware re-enabled, admin authorization fixed"
+    },
+    "email_templates": {
+      "issues": [160, 163],
+      "status": "CLOSED",
+      "description": "Admin authorization added, order status emails implemented"
+    }
+  },
+  "gaps_in_issue_tracking": {
+    "missing_issues": [
+      {
+        "area": "Mobile Responsiveness",
+        "description": "No dedicated issues for mobile-specific UI/UX problems",
+        "suggested_actions": [
+          "Audit mobile navigation",
+          "Test touch interactions",
+          "Verify mobile checkout flow",
+          "Test mobile filter UX"
+        ]
+      },
+      {
+        "area": "Design System Documentation",
+        "description": "No issue for establishing design system or component library documentation",
+        "suggested_actions": [
+          "Document color tokens",
+          "Create component guidelines",
+          "Establish spacing system",
+          "Document typography scale"
+        ]
+      },
+      {
+        "area": "Internationalization UI",
+        "description": "Translation keys verified (#133) but no UI/UX issues for language switcher, RTL support",
+        "suggested_actions": [
+          "Design language switcher UI",
+          "Test RTL layout support",
+          "Verify date/time formatting",
+          "Check currency display in all locales"
+        ]
+      },
+      {
+        "area": "Loading States Standardization",
+        "description": "Skeleton loaders planned (#148) but no comprehensive loading state strategy",
+        "suggested_actions": [
+          "Audit all loading states",
+          "Create loading state component library",
+          "Document loading patterns",
+          "Add loading state tests"
+        ]
+      },
+      {
+        "area": "Form Validation UX",
+        "description": "No dedicated issue for form validation feedback and inline errors",
+        "suggested_actions": [
+          "Standardize validation messages",
+          "Implement inline error display",
+          "Add field-level success indicators",
+          "Create validation pattern library"
+        ]
+      },
+      {
+        "area": "Empty States",
+        "description": "No issue tracking empty state designs across the application",
+        "suggested_actions": [
+          "Design empty cart state",
+          "Create empty search results state",
+          "Add empty order history state",
+          "Document empty state patterns"
+        ]
+      },
+      {
+        "area": "Animation and Transitions",
+        "description": "No issue for page transitions, micro-interactions, or animation guidelines",
+        "suggested_actions": [
+          "Define transition timing",
+          "Create micro-interaction library",
+          "Respect prefers-reduced-motion",
+          "Document animation patterns"
+        ]
+      }
+    ]
+  },
+  "recommended_priorities": {
+    "immediate": [
+      {
+        "issue": 126,
+        "title": "Add Accessibility Features to Checkout Flow",
+        "reason": "Legal compliance, blocks purchases for disabled users"
+      },
+      {
+        "issue": 123,
+        "title": "Fix Cart Accessibility Issues",
+        "reason": "WCAG compliance, affects 15% of users"
+      },
+      {
+        "issue": 153,
+        "title": "Audit and fix dark/light mode contrast",
+        "reason": "WCAG compliance, readability issues"
+      }
+    ],
+    "week_1": [
+      {
+        "issue": 107,
+        "title": "Fix accessibility issues on product detail page",
+        "reason": "Product page accessibility critical for sales"
+      },
+      {
+        "issue": 106,
+        "title": "Fix accessibility issues on products listing page",
+        "reason": "Product discovery accessibility"
+      },
+      {
+        "issue": 102,
+        "title": "Fix silent add-to-cart failures",
+        "reason": "Direct impact on conversion"
+      }
+    ],
+    "week_2": [
+      {
+        "issue": 148,
+        "title": "Implement skeleton loaders",
+        "reason": "Perceived performance improvement"
+      },
+      {
+        "issue": 110,
+        "title": "Add URL state management for filters",
+        "reason": "SEO and shareability"
+      },
+      {
+        "issue": 109,
+        "title": "Add request cancellation for search",
+        "reason": "Performance optimization"
+      },
+      {
+        "issue": 122,
+        "title": "Persist recently viewed products",
+        "reason": "Session continuity"
+      },
+      {
+        "issue": 116,
+        "title": "Add product image zoom",
+        "reason": "Essential for product details"
+      }
+    ],
+    "week_3_4": [
+      {
+        "issue": 149,
+        "title": "Enhance shop filters",
+        "reason": "Product discovery improvement"
+      },
+      {
+        "issue": 151,
+        "title": "Add address management page",
+        "reason": "Checkout experience improvement"
+      },
+      {
+        "issue": 154,
+        "title": "Separate journal/blog section",
+        "reason": "Content strategy improvement"
+      },
+      {
+        "issue": 130,
+        "title": "Improve checkout error display",
+        "reason": "Reduces checkout abandonment"
+      }
+    ],
+    "backlog": [
+      {
+        "issue": 135,
+        "title": "Standardize button components",
+        "reason": "Component consistency, low urgency"
+      }
+    ]
+  },
+  "file_locations": {
+    "most_affected_files": [
+      {
+        "path": "pages/products/[slug].vue",
+        "issues": [107, 102],
+        "categories": ["accessibility", "error-handling"]
+      },
+      {
+        "path": "pages/products/index.vue",
+        "issues": [106, 149, 110, 109],
+        "categories": ["accessibility", "filtering", "search"]
+      },
+      {
+        "path": "pages/cart.vue",
+        "issues": [123, 135],
+        "categories": ["accessibility", "consistency"]
+      },
+      {
+        "path": "pages/checkout/*.vue",
+        "issues": [126, 130],
+        "categories": ["accessibility", "error-handling"]
+      },
+      {
+        "path": "components/cart/*.vue",
+        "issues": [123, 135],
+        "categories": ["accessibility", "consistency"]
+      }
+    ]
+  },
+  "related_dependencies": {
+    "accessibility": [
+      "Need to test with screen readers (NVDA/JAWS)",
+      "axe DevTools extension for automated testing",
+      "WebAIM contrast checker",
+      "ARIA patterns documentation"
+    ],
+    "performance": [
+      "Implement skeleton components",
+      "AbortController for request cancellation",
+      "localStorage API for persistence",
+      "URL state management utilities"
+    ],
+    "components": [
+      "Standardized button component (UiButton)",
+      "Dedicated error component",
+      "Skeleton loader components",
+      "Image zoom component library"
+    ]
+  },
+  "estimated_effort": {
+    "total_developer_days": 24.5,
+    "breakdown": {
+      "accessibility_fixes": 8,
+      "product_discovery": 6,
+      "checkout_improvements": 4,
+      "performance_loading": 3,
+      "component_consistency": 2.5,
+      "content_organization": 1
+    }
+  },
+  "business_impact": {
+    "high_risk": {
+      "accessibility_compliance": {
+        "legal_risk": "HIGH - Potential ADA/WCAG lawsuits",
+        "affected_users": "15% of users with disabilities",
+        "issues": [126, 123, 153, 107, 106]
+      },
+      "conversion_blockers": {
+        "business_risk": "MEDIUM-HIGH - Direct revenue impact",
+        "affected_flows": ["Product discovery", "Add to cart", "Checkout"],
+        "issues": [102, 126, 123, 130]
+      }
+    },
+    "medium_impact": {
+      "user_experience": {
+        "churn_risk": "MEDIUM - May cause user frustration",
+        "affected_features": ["Filtering", "Search", "Product viewing"],
+        "issues": [149, 110, 109, 116, 113]
+      }
+    },
+    "low_impact": {
+      "polish": {
+        "business_risk": "LOW - Quality of life improvements",
+        "issues": [135, 148, 122, 154, 151]
+      }
+    }
+  }
+}

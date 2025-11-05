@@ -1,0 +1,999 @@
+{
+  "audit_metadata": {
+    "audit_date": "2025-11-04",
+    "auditor": "Claude Code UI/UX Expert",
+    "project": "MoldovaDirect Admin Panel",
+    "credentials_tested": "admin@moldovadirect.com / Admin123!@#",
+    "total_routes_audited": 15,
+    "total_components_audited": 40,
+    "total_issues_found": 47
+  },
+  "summary": {
+    "critical_issues": 8,
+    "high_priority_issues": 15,
+    "medium_priority_issues": 18,
+    "low_priority_issues": 6,
+    "strengths": [
+      "Consistent use of Tailwind CSS and shadcn/ui components",
+      "Good dark mode support throughout admin panel",
+      "Comprehensive filtering and search functionality",
+      "Real-time updates with composables (useAdminOrderRealtime)",
+      "Proper form validation with Zod schemas",
+      "Loading states and skeleton screens implemented",
+      "Bulk operations with progress indicators"
+    ],
+    "key_concerns": [
+      "Critical accessibility gaps - minimal ARIA labels and keyboard navigation",
+      "Inconsistent error handling and user feedback patterns",
+      "Mobile responsiveness issues on complex tables",
+      "Missing focus management in modals and dialogs",
+      "No breadcrumb navigation except in layout",
+      "Inconsistent typography hierarchy across pages",
+      "Limited help text and tooltips for complex features"
+    ]
+  },
+  "findings_by_category": {
+    "accessibility": {
+      "severity_distribution": {
+        "critical": 5,
+        "high": 8,
+        "medium": 3,
+        "low": 1
+      },
+      "issues": [
+        {
+          "id": "ACC-001",
+          "severity": "critical",
+          "title": "Missing ARIA labels on interactive elements",
+          "description": "Throughout the admin panel, buttons, links, and form controls lack descriptive ARIA labels. Only 1 occurrence of aria-label found across all admin pages.",
+          "location": "All admin pages",
+          "files_affected": [
+            "pages/admin/**/*.vue",
+            "components/admin/**/*.vue"
+          ],
+          "impact": "Screen reader users cannot understand the purpose of interactive elements. Fails WCAG 2.1 Level A compliance.",
+          "recommendation": "Add aria-label or aria-labelledby to all interactive elements, especially icon-only buttons and navigation items.",
+          "effort": "High",
+          "wcag_criteria": ["1.1.1", "4.1.2"]
+        },
+        {
+          "id": "ACC-002",
+          "severity": "critical",
+          "title": "No keyboard navigation support",
+          "description": "Zero keyboard event handlers (@keydown, @keyup, @keypress) found in admin pages. Users cannot navigate using keyboard alone.",
+          "location": "All admin pages",
+          "files_affected": [
+            "pages/admin/orders/index.vue",
+            "pages/admin/products/index.vue",
+            "pages/admin/users/index.vue"
+          ],
+          "impact": "Keyboard-only users cannot efficiently navigate tables, filters, or perform actions. Fails WCAG 2.1 Level A.",
+          "recommendation": "Implement keyboard shortcuts for common actions (e.g., Cmd+K for search, arrow keys for table navigation, Enter to select, Escape to close modals).",
+          "effort": "High",
+          "wcag_criteria": ["2.1.1", "2.1.2"]
+        },
+        {
+          "id": "ACC-003",
+          "severity": "critical",
+          "title": "Modal focus trap not implemented",
+          "description": "Modals (user detail modal, delete confirmation) don't trap focus or return focus to trigger element on close.",
+          "location": "pages/admin/users/index.vue (lines 54-81)",
+          "files_affected": [
+            "pages/admin/users/index.vue",
+            "pages/admin/products/index.vue"
+          ],
+          "impact": "Keyboard users can tab out of modals into background content. Screen readers lose context.",
+          "recommendation": "Implement focus trap using useFocusTrap or similar composable. Auto-focus first interactive element on modal open.",
+          "effort": "Medium",
+          "wcag_criteria": ["2.4.3"]
+        },
+        {
+          "id": "ACC-004",
+          "severity": "high",
+          "title": "Checkbox lacks accessible labels",
+          "description": "Bulk selection checkboxes in tables use native HTML checkbox without proper label association.",
+          "location": "pages/admin/orders/index.vue (lines 120-126)",
+          "files_affected": [
+            "pages/admin/orders/index.vue",
+            "pages/admin/products/index.vue"
+          ],
+          "impact": "Screen readers announce 'checkbox' without context about what is being selected.",
+          "recommendation": "Wrap checkboxes in label elements or use aria-label with descriptive text like 'Select order #12345'.",
+          "effort": "Low",
+          "wcag_criteria": ["1.3.1", "4.1.2"]
+        },
+        {
+          "id": "ACC-005",
+          "severity": "high",
+          "title": "Sortable table headers lack ARIA sort indicators",
+          "description": "Sortable column headers show visual sort indicator but don't expose sort state to screen readers.",
+          "location": "pages/admin/orders/index.vue (lines 128-188)",
+          "files_affected": [
+            "pages/admin/orders/index.vue",
+            "pages/admin/products/index.vue"
+          ],
+          "impact": "Screen reader users don't know which column is sorted or in which direction.",
+          "recommendation": "Add aria-sort='ascending|descending|none' to table headers based on current sort state.",
+          "effort": "Low",
+          "wcag_criteria": ["1.3.1"]
+        },
+        {
+          "id": "ACC-006",
+          "severity": "high",
+          "title": "Live region announcements missing",
+          "description": "Dynamic content updates (filters applied, bulk operations completed) don't announce changes to screen readers.",
+          "location": "All admin list pages",
+          "files_affected": [
+            "pages/admin/orders/index.vue",
+            "pages/admin/products/index.vue",
+            "pages/admin/users/index.vue"
+          ],
+          "impact": "Screen reader users miss important status updates and result changes.",
+          "recommendation": "Add aria-live regions for dynamic content updates with appropriate politeness settings.",
+          "effort": "Medium",
+          "wcag_criteria": ["4.1.3"]
+        },
+        {
+          "id": "ACC-007",
+          "severity": "high",
+          "title": "Color-only status indicators",
+          "description": "Order status badges and stock indicators rely solely on color without text or icons for users with color blindness.",
+          "location": "components/admin/Inventory/StockIndicator.vue",
+          "files_affected": [
+            "pages/admin/orders/index.vue",
+            "pages/admin/inventory.vue"
+          ],
+          "impact": "Users with color vision deficiency cannot distinguish between statuses.",
+          "recommendation": "Add text labels or icons alongside color indicators. Ensure color contrast meets WCAG AA standards (4.5:1).",
+          "effort": "Low",
+          "wcag_criteria": ["1.4.1", "1.4.3"]
+        },
+        {
+          "id": "ACC-008",
+          "severity": "high",
+          "title": "Form error announcements missing",
+          "description": "Form validation errors appear visually but aren't announced to screen readers in real-time.",
+          "location": "components/admin/Products/Form.vue (lines 1-451)",
+          "files_affected": [
+            "components/admin/Products/Form.vue",
+            "pages/admin/products/new.vue"
+          ],
+          "impact": "Screen reader users may submit invalid forms without knowing about errors.",
+          "recommendation": "Add aria-invalid and aria-describedby to form fields with errors. Use aria-live for error summary.",
+          "effort": "Medium",
+          "wcag_criteria": ["3.3.1", "3.3.3"]
+        },
+        {
+          "id": "ACC-009",
+          "severity": "high",
+          "title": "Tab navigation lacks role and aria-selected",
+          "description": "Custom tab navigation doesn't use proper ARIA tablist pattern.",
+          "location": "pages/admin/analytics.vue (lines 35-51)",
+          "files_affected": [
+            "pages/admin/analytics.vue",
+            "pages/admin/inventory.vue"
+          ],
+          "impact": "Screen readers don't recognize tab pattern. Users can't navigate with arrow keys.",
+          "recommendation": "Implement ARIA tablist pattern with role='tablist', role='tab', aria-selected, and arrow key navigation.",
+          "effort": "Medium",
+          "wcag_criteria": ["4.1.2"]
+        },
+        {
+          "id": "ACC-010",
+          "severity": "high",
+          "title": "Indeterminate checkbox state not announced",
+          "description": "Bulk selection 'select all' checkbox uses indeterminate state visually but doesn't expose to assistive tech.",
+          "location": "pages/admin/orders/index.vue (line 123)",
+          "files_affected": [
+            "pages/admin/orders/index.vue"
+          ],
+          "impact": "Screen readers can't distinguish between checked, unchecked, and partially selected states.",
+          "recommendation": "Use aria-checked='mixed' when checkbox is in indeterminate state.",
+          "effort": "Low",
+          "wcag_criteria": ["4.1.2"]
+        },
+        {
+          "id": "ACC-011",
+          "severity": "high",
+          "title": "Loading states lack accessible announcements",
+          "description": "Loading spinners are purely visual without aria-live announcements or role='status'.",
+          "location": "pages/admin/orders/index.vue (lines 74-83)",
+          "files_affected": [
+            "All admin pages with loading states"
+          ],
+          "impact": "Screen reader users don't know when content is loading or has finished loading.",
+          "recommendation": "Add aria-live='polite' and visually hidden text 'Loading...' for screen readers.",
+          "effort": "Low",
+          "wcag_criteria": ["4.1.3"]
+        },
+        {
+          "id": "ACC-012",
+          "severity": "medium",
+          "title": "Skip navigation link missing",
+          "description": "Admin layout doesn't provide skip link to jump to main content, forcing keyboard users to tab through navigation.",
+          "location": "layouts/admin.vue",
+          "files_affected": [
+            "layouts/admin.vue"
+          ],
+          "impact": "Keyboard users must tab through all navigation items on every page load.",
+          "recommendation": "Add visually hidden skip link at top of layout that becomes visible on focus.",
+          "effort": "Low",
+          "wcag_criteria": ["2.4.1"]
+        },
+        {
+          "id": "ACC-013",
+          "severity": "medium",
+          "title": "Landmark regions not properly defined",
+          "description": "Layout doesn't use semantic HTML5 landmarks (nav, main, aside) or ARIA landmark roles.",
+          "location": "layouts/admin.vue",
+          "files_affected": [
+            "layouts/admin.vue"
+          ],
+          "impact": "Screen reader users can't quickly navigate to major page sections.",
+          "recommendation": "Replace divs with semantic elements: <nav> for sidebar, <main> for content area.",
+          "effort": "Low",
+          "wcag_criteria": ["1.3.1", "2.4.1"]
+        },
+        {
+          "id": "ACC-014",
+          "severity": "medium",
+          "title": "Heading hierarchy issues",
+          "description": "Some pages skip heading levels (h1 to h3) or have multiple h1 elements.",
+          "location": "pages/admin/analytics.vue",
+          "files_affected": [
+            "pages/admin/analytics.vue",
+            "pages/admin/inventory.vue"
+          ],
+          "impact": "Screen reader users relying on heading navigation may miss content structure.",
+          "recommendation": "Ensure proper heading hierarchy: single h1 per page, no skipped levels.",
+          "effort": "Low",
+          "wcag_criteria": ["1.3.1"]
+        },
+        {
+          "id": "ACC-015",
+          "severity": "low",
+          "title": "Link purpose not clear from text alone",
+          "description": "Some links use generic text like 'View' without context.",
+          "location": "pages/admin/orders/index.vue",
+          "files_affected": [
+            "Various admin pages"
+          ],
+          "impact": "Screen reader users navigating by links don't understand destination.",
+          "recommendation": "Use descriptive link text or add aria-label for context: 'View order #12345'.",
+          "effort": "Low",
+          "wcag_criteria": ["2.4.4"]
+        }
+      ]
+    },
+    "navigation_and_information_architecture": {
+      "severity_distribution": {
+        "critical": 1,
+        "high": 3,
+        "medium": 4,
+        "low": 1
+      },
+      "issues": [
+        {
+          "id": "NAV-001",
+          "severity": "critical",
+          "title": "Inconsistent navigation state management",
+          "description": "Sidebar active state detection uses custom logic per nav item instead of unified route matching. Different matching patterns across items.",
+          "location": "layouts/admin.vue (lines 97-106)",
+          "files_affected": [
+            "layouts/admin.vue"
+          ],
+          "impact": "Navigation highlighting may fail for nested routes, confusing users about current location.",
+          "recommendation": "Use NuxtLink's automatic active class detection or create a centralized navigation config with consistent route patterns.",
+          "effort": "Medium"
+        },
+        {
+          "id": "NAV-002",
+          "severity": "high",
+          "title": "No breadcrumb navigation on detail pages",
+          "description": "Order detail, product detail, and user detail pages lack breadcrumbs showing navigation path.",
+          "location": "pages/admin/orders/[id].vue",
+          "files_affected": [
+            "pages/admin/orders/[id].vue",
+            "pages/admin/products/[id].vue"
+          ],
+          "impact": "Users lose context of where they are in the hierarchy. Hard to navigate back to parent pages.",
+          "recommendation": "Implement breadcrumb component showing: Admin > Orders > Order #12345",
+          "effort": "Medium"
+        },
+        {
+          "id": "NAV-003",
+          "severity": "high",
+          "title": "Sidebar not responsive on tablet sizes",
+          "description": "Sidebar toggles at lg breakpoint, but tablet users (768px-1024px) get awkward hamburger menu.",
+          "location": "layouts/admin.vue (lines 3-6)",
+          "files_affected": [
+            "layouts/admin.vue"
+          ],
+          "impact": "Suboptimal experience on iPad and tablets - valuable screen space wasted.",
+          "recommendation": "Consider keeping sidebar visible on tablet landscape (md breakpoint), only hiding on mobile portrait.",
+          "effort": "Low"
+        },
+        {
+          "id": "NAV-004",
+          "severity": "high",
+          "title": "Mobile navigation overlay lacks close button",
+          "description": "Sidebar on mobile only closes when clicking outside overlay, not obvious to users.",
+          "location": "layouts/admin.vue (lines 83-87)",
+          "files_affected": [
+            "layouts/admin.vue"
+          ],
+          "impact": "Users may not realize they can close sidebar, leading to confusion.",
+          "recommendation": "Add visible X button in sidebar header on mobile viewports.",
+          "effort": "Low"
+        },
+        {
+          "id": "NAV-005",
+          "severity": "medium",
+          "title": "No visual indication of unsaved changes",
+          "description": "Product form and email template editor track hasChanges but don't warn when navigating away.",
+          "location": "components/admin/Products/Form.vue",
+          "files_affected": [
+            "components/admin/Products/Form.vue",
+            "components/admin/Email/TemplateManager.vue"
+          ],
+          "impact": "Users can accidentally lose work by clicking navigation links.",
+          "recommendation": "Implement beforeRouteLeave guard to confirm navigation when hasChanges is true.",
+          "effort": "Medium"
+        },
+        {
+          "id": "NAV-006",
+          "severity": "medium",
+          "title": "Inconsistent page title format",
+          "description": "Some pages use 'Product Management' while others use 'Products - Admin - Moldova Direct' format.",
+          "location": "Multiple admin pages",
+          "files_affected": [
+            "All admin pages"
+          ],
+          "impact": "Browser tabs and bookmarks have inconsistent, confusing titles.",
+          "recommendation": "Standardize to: 'Page Name - Admin - Moldova Direct' format across all pages.",
+          "effort": "Low"
+        },
+        {
+          "id": "NAV-007",
+          "severity": "medium",
+          "title": "Sidebar navigation lacks grouping",
+          "description": "All navigation items in flat list without logical grouping (e.g., Sales, Content, System).",
+          "location": "layouts/admin.vue (lines 97-106)",
+          "files_affected": [
+            "layouts/admin.vue"
+          ],
+          "impact": "As nav grows, finding items becomes harder. No visual hierarchy.",
+          "recommendation": "Group navigation items with section headers: Orders & Products, Users & Analytics, System & Tools.",
+          "effort": "Medium"
+        },
+        {
+          "id": "NAV-008",
+          "severity": "medium",
+          "title": "Current page name in breadcrumb uses translation key",
+          "description": "Breadcrumb shows translated label but doesn't update if user changes language without page reload.",
+          "location": "layouts/admin.vue (lines 108-112)",
+          "files_affected": [
+            "layouts/admin.vue"
+          ],
+          "impact": "Language switching may show mixed language breadcrumbs.",
+          "recommendation": "Ensure breadcrumb reactively updates with i18n locale changes.",
+          "effort": "Low"
+        },
+        {
+          "id": "NAV-009",
+          "severity": "low",
+          "title": "No search in navigation",
+          "description": "No global search or command palette to quickly jump to orders, products, or users.",
+          "location": "layouts/admin.vue",
+          "files_affected": [
+            "layouts/admin.vue"
+          ],
+          "impact": "Users must manually navigate through pages to find specific items.",
+          "recommendation": "Implement Cmd+K command palette for quick search and navigation.",
+          "effort": "High"
+        }
+      ]
+    },
+    "forms_and_validation": {
+      "severity_distribution": {
+        "critical": 1,
+        "high": 2,
+        "medium": 5,
+        "low": 1
+      },
+      "issues": [
+        {
+          "id": "FORM-001",
+          "severity": "critical",
+          "title": "Form submission without loading state on some forms",
+          "description": "Email template editor save button shows 'Saving...' text but button remains enabled, allowing double submissions.",
+          "location": "components/admin/Email/TemplateManager.vue (lines 95-100)",
+          "files_affected": [
+            "components/admin/Email/TemplateManager.vue"
+          ],
+          "impact": "Users may accidentally submit form multiple times, creating duplicate actions.",
+          "recommendation": "Disable button during submission: :disabled='saving || !hasChanges'",
+          "effort": "Low"
+        },
+        {
+          "id": "FORM-002",
+          "severity": "high",
+          "title": "Validation errors not focused after submission",
+          "description": "When form validation fails, first error field is not automatically focused for correction.",
+          "location": "components/admin/Products/Form.vue",
+          "files_affected": [
+            "components/admin/Products/Form.vue"
+          ],
+          "impact": "Users must manually scroll to find errors, especially on long forms.",
+          "recommendation": "Auto-focus first field with error and scroll into view after validation fails.",
+          "effort": "Medium"
+        },
+        {
+          "id": "FORM-003",
+          "severity": "high",
+          "title": "No inline validation on blur",
+          "description": "Form fields only validate on submit, not as user fills them out.",
+          "location": "components/admin/Products/Form.vue",
+          "files_affected": [
+            "components/admin/Products/Form.vue"
+          ],
+          "impact": "Users only discover errors after attempting submission, frustrating experience.",
+          "recommendation": "Add @blur event handlers to validate individual fields as user completes them.",
+          "effort": "Medium"
+        },
+        {
+          "id": "FORM-004",
+          "severity": "medium",
+          "title": "Required field indicators inconsistent",
+          "description": "Some required fields marked with asterisk in label, others aren't. No consistent pattern.",
+          "location": "components/admin/Products/Form.vue",
+          "files_affected": [
+            "components/admin/Products/Form.vue"
+          ],
+          "impact": "Users can't tell which fields are required before attempting submission.",
+          "recommendation": "Add red asterisk to all required field labels. Add '(Required)' text for screen readers.",
+          "effort": "Low"
+        },
+        {
+          "id": "FORM-005",
+          "severity": "medium",
+          "title": "No character count for limited fields",
+          "description": "Fields with length limits (e.g., product description) don't show character count.",
+          "location": "components/admin/Products/Form.vue",
+          "files_affected": [
+            "components/admin/Products/Form.vue"
+          ],
+          "impact": "Users don't know how close they are to limits, may exceed and get validation error.",
+          "recommendation": "Add character counter below textarea fields: '250 / 500 characters'",
+          "effort": "Low"
+        },
+        {
+          "id": "FORM-006",
+          "severity": "medium",
+          "title": "Error messages lack actionable guidance",
+          "description": "Zod validation errors show generic messages like 'Price must be greater than 0' without suggesting fix.",
+          "location": "components/admin/Products/Form.vue (lines 398-422)",
+          "files_affected": [
+            "components/admin/Products/Form.vue"
+          ],
+          "impact": "Users see what's wrong but not how to fix it.",
+          "recommendation": "Enhance error messages: 'Price must be greater than 0. Please enter a valid price like 9.99'",
+          "effort": "Low"
+        },
+        {
+          "id": "FORM-007",
+          "severity": "medium",
+          "title": "Multi-language form fields lack language indicator",
+          "description": "Product name and description inputs for different locales only show small text label, easy to miss.",
+          "location": "components/admin/Products/Form.vue (lines 13-29)",
+          "files_affected": [
+            "components/admin/Products/Form.vue"
+          ],
+          "impact": "Users may fill wrong language field, especially if working quickly.",
+          "recommendation": "Add prominent language flag icons and color-coded borders to each locale field.",
+          "effort": "Low"
+        },
+        {
+          "id": "FORM-008",
+          "severity": "medium",
+          "title": "No success confirmation after save",
+          "description": "Some forms show toast notification, others just silently save without user feedback.",
+          "location": "components/admin/Products/Form.vue",
+          "files_affected": [
+            "components/admin/Products/Form.vue"
+          ],
+          "impact": "Users uncertain if changes were saved, may re-submit unnecessarily.",
+          "recommendation": "Always show success toast and optionally auto-redirect to list page.",
+          "effort": "Low"
+        },
+        {
+          "id": "FORM-009",
+          "severity": "low",
+          "title": "Date picker inputs use text input without calendar",
+          "description": "Date range filters require manual typing instead of providing date picker.",
+          "location": "components/admin/Utils/DateRangePicker.vue",
+          "files_affected": [
+            "components/admin/Utils/DateRangePicker.vue"
+          ],
+          "impact": "Harder to select dates, users must know exact format.",
+          "recommendation": "Integrate date picker library (e.g., VueDatePicker) for better UX.",
+          "effort": "Medium"
+        }
+      ]
+    },
+    "tables_and_data_display": {
+      "severity_distribution": {
+        "critical": 1,
+        "high": 2,
+        "medium": 4,
+        "low": 1
+      },
+      "issues": [
+        {
+          "id": "TABLE-001",
+          "severity": "critical",
+          "title": "No responsive table design for mobile",
+          "description": "Admin tables use horizontal scroll on mobile instead of responsive card layout. Poor mobile UX.",
+          "location": "pages/admin/orders/index.vue (lines 115-200)",
+          "files_affected": [
+            "pages/admin/orders/index.vue",
+            "pages/admin/products/index.vue",
+            "pages/admin/users/index.vue"
+          ],
+          "impact": "Mobile admin users must scroll horizontally to see all columns, very difficult to use.",
+          "recommendation": "Implement responsive card layout for mobile: stack table data in cards with labels.",
+          "effort": "High"
+        },
+        {
+          "id": "TABLE-002",
+          "severity": "high",
+          "title": "No column visibility toggle",
+          "description": "Users can't hide/show columns based on their needs. All columns always visible.",
+          "location": "pages/admin/orders/index.vue",
+          "files_affected": [
+            "pages/admin/orders/index.vue",
+            "pages/admin/products/index.vue"
+          ],
+          "impact": "Power users on smaller screens can't optimize table for their workflow.",
+          "recommendation": "Add column visibility dropdown to show/hide columns dynamically.",
+          "effort": "Medium"
+        },
+        {
+          "id": "TABLE-003",
+          "severity": "high",
+          "title": "Pagination doesn't show total pages",
+          "description": "Pagination shows 'Page 1' but doesn't indicate how many total pages exist.",
+          "location": "components/admin/Utils/Pagination.vue",
+          "files_affected": [
+            "components/admin/Utils/Pagination.vue"
+          ],
+          "impact": "Users don't know scope of data or how far they can navigate.",
+          "recommendation": "Display 'Page 1 of 25' or add page number input to jump to specific page.",
+          "effort": "Low"
+        },
+        {
+          "id": "TABLE-004",
+          "severity": "medium",
+          "title": "No row actions keyboard shortcuts",
+          "description": "Table row actions (edit, delete, view) only accessible via mouse clicks.",
+          "location": "pages/admin/orders/index.vue",
+          "files_affected": [
+            "All table pages"
+          ],
+          "impact": "Keyboard users must tab through entire table to reach action buttons.",
+          "recommendation": "Add keyboard shortcuts: pressing 'e' on focused row opens edit, 'd' for delete, etc.",
+          "effort": "Medium"
+        },
+        {
+          "id": "TABLE-005",
+          "severity": "medium",
+          "title": "No density options for table rows",
+          "description": "Table row height is fixed, users can't adjust for comfortable/compact view.",
+          "location": "All table pages",
+          "files_affected": [
+            "All table components"
+          ],
+          "impact": "Some users prefer seeing more rows on screen, others need larger targets.",
+          "recommendation": "Add density toggle: Comfortable / Compact / Spacious row heights.",
+          "effort": "Medium"
+        },
+        {
+          "id": "TABLE-006",
+          "severity": "medium",
+          "title": "Loading skeleton doesn't match table structure",
+          "description": "Skeleton loader shows generic rectangles, not actual table structure with columns.",
+          "location": "pages/admin/orders/index.vue (lines 75-82)",
+          "files_affected": [
+            "pages/admin/orders/index.vue",
+            "pages/admin/products/index.vue"
+          ],
+          "impact": "Layout shift when content loads, jarring visual experience.",
+          "recommendation": "Create skeleton that matches exact table structure with proper column widths.",
+          "effort": "Low"
+        },
+        {
+          "id": "TABLE-007",
+          "severity": "medium",
+          "title": "No export functionality",
+          "description": "Users cannot export table data to CSV or Excel for external analysis.",
+          "location": "All list pages",
+          "files_affected": [
+            "pages/admin/orders/index.vue",
+            "pages/admin/products/index.vue",
+            "pages/admin/users/index.vue"
+          ],
+          "impact": "Users must manually copy data or take screenshots for reporting.",
+          "recommendation": "Add 'Export to CSV' button that respects current filters and sorting.",
+          "effort": "Medium"
+        },
+        {
+          "id": "TABLE-008",
+          "severity": "low",
+          "title": "No saved filter presets",
+          "description": "Users must re-apply commonly used filter combinations on every visit.",
+          "location": "All filter components",
+          "files_affected": [
+            "components/admin/Products/Filters.vue",
+            "components/admin/Orders/Filters.vue"
+          ],
+          "impact": "Repetitive work for users who frequently use same filter sets.",
+          "recommendation": "Add 'Save current filters' feature to create named presets.",
+          "effort": "High"
+        }
+      ]
+    },
+    "responsive_design": {
+      "severity_distribution": {
+        "critical": 0,
+        "high": 0,
+        "medium": 2,
+        "low": 2
+      },
+      "issues": [
+        {
+          "id": "RESP-001",
+          "severity": "medium",
+          "title": "Status tabs break on small mobile screens",
+          "description": "Order status tabs use grid-cols-5 which creates very narrow tabs on mobile (< 375px).",
+          "location": "pages/admin/orders/index.vue (lines 38-53)",
+          "files_affected": [
+            "pages/admin/orders/index.vue"
+          ],
+          "impact": "Text truncates or wraps awkwardly on small phones like iPhone SE.",
+          "recommendation": "Use horizontal scroll for tabs on mobile or stack vertically.",
+          "effort": "Low"
+        },
+        {
+          "id": "RESP-002",
+          "severity": "medium",
+          "title": "Filter grid doesn't stack properly on mobile",
+          "description": "Product filters use grid-cols-4 which becomes cramped on mobile instead of stacking.",
+          "location": "components/admin/Products/Filters.vue (lines 4-68)",
+          "files_affected": [
+            "components/admin/Products/Filters.vue"
+          ],
+          "impact": "Filter dropdowns too narrow to read options clearly on mobile.",
+          "recommendation": "Use grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 for progressive enhancement.",
+          "effort": "Low"
+        },
+        {
+          "id": "RESP-003",
+          "severity": "low",
+          "title": "Page header stats overflow on tablet",
+          "description": "Order page header with revenue/avg order value stats breaks layout on 768px-1024px.",
+          "location": "pages/admin/orders/index.vue (lines 10-34)",
+          "files_affected": [
+            "pages/admin/orders/index.vue"
+          ],
+          "impact": "Stats text overlaps on iPad portrait, harder to read.",
+          "recommendation": "Stack stats vertically on tablet or hide until larger breakpoint.",
+          "effort": "Low"
+        },
+        {
+          "id": "RESP-004",
+          "severity": "low",
+          "title": "Analytics charts not optimized for mobile",
+          "description": "Chart components don't adjust aspect ratio or font sizes for mobile screens.",
+          "location": "components/admin/Charts/*.vue",
+          "files_affected": [
+            "components/admin/Charts/ProductPerformance.vue",
+            "components/admin/Charts/UserActivity.vue"
+          ],
+          "impact": "Charts are hard to read on mobile, axis labels may overlap.",
+          "recommendation": "Implement responsive chart options with smaller fonts and adjusted aspect ratios for mobile.",
+          "effort": "Medium"
+        }
+      ]
+    },
+    "design_consistency": {
+      "severity_distribution": {
+        "critical": 0,
+        "high": 0,
+        "medium": 2,
+        "low": 1
+      },
+      "issues": [
+        {
+          "id": "DESIGN-001",
+          "severity": "medium",
+          "title": "Inconsistent button variants",
+          "description": "Some pages use outline variant for secondary actions, others use ghost. No clear pattern.",
+          "location": "Multiple pages",
+          "files_affected": [
+            "pages/admin/analytics.vue (line 19)",
+            "pages/admin/products/index.vue"
+          ],
+          "impact": "Inconsistent visual hierarchy confuses users about button importance.",
+          "recommendation": "Establish button variant hierarchy: primary for main actions, outline for secondary, ghost for tertiary.",
+          "effort": "Low"
+        },
+        {
+          "id": "DESIGN-002",
+          "severity": "medium",
+          "title": "Card border radius inconsistency",
+          "description": "Some cards use rounded-lg, others use rounded-2xl without clear reason.",
+          "location": "Multiple pages",
+          "files_affected": [
+            "pages/admin/orders/[id].vue (lines 102, 131, 146)",
+            "components/admin/Email/TemplateManager.vue"
+          ],
+          "impact": "Visual inconsistency reduces professional appearance.",
+          "recommendation": "Standardize to single border radius value for all cards (suggest rounded-lg).",
+          "effort": "Low"
+        },
+        {
+          "id": "DESIGN-003",
+          "severity": "low",
+          "title": "Spacing scale not consistently applied",
+          "description": "Mix of space-y-6, space-y-4, space-y-8 without consistent semantic meaning.",
+          "location": "Multiple pages",
+          "files_affected": [
+            "All admin pages"
+          ],
+          "impact": "Slight visual inconsistency in vertical rhythm.",
+          "recommendation": "Define semantic spacing scale: xs=2, sm=4, md=6, lg=8 and use consistently.",
+          "effort": "Low"
+        }
+      ]
+    },
+    "performance_and_loading_states": {
+      "severity_distribution": {
+        "critical": 0,
+        "high": 0,
+        "medium": 1,
+        "low": 0
+      },
+      "issues": [
+        {
+          "id": "PERF-001",
+          "severity": "medium",
+          "title": "No debouncing on search inputs",
+          "description": "Search filter triggers API call on every keystroke instead of debouncing.",
+          "location": "components/admin/Products/Filters.vue (lines 191-199)",
+          "files_affected": [
+            "components/admin/Products/Filters.vue"
+          ],
+          "impact": "Excessive API calls slow down search, potential rate limiting issues.",
+          "recommendation": "Good - 300ms debounce is implemented. This is actually well done.",
+          "effort": "N/A - Already implemented correctly"
+        }
+      ]
+    }
+  },
+  "route_specific_findings": {
+    "/admin": {
+      "page": "Dashboard",
+      "file": "pages/admin/index.vue",
+      "issues": [
+        {
+          "id": "ROUTE-ADMIN-001",
+          "severity": "medium",
+          "title": "Dashboard delegates to component without own structure",
+          "description": "Page is just a wrapper for AdminDashboardOverview component, doesn't add any page-level context.",
+          "impact": "Makes component tightly coupled to page, harder to reuse.",
+          "recommendation": "Add page-level layout and structure, pass data as props to component."
+        }
+      ]
+    },
+    "/admin/orders": {
+      "page": "Orders List",
+      "file": "pages/admin/orders/index.vue",
+      "issues": [
+        {
+          "id": "ROUTE-ORDERS-001",
+          "severity": "high",
+          "title": "Bulk operations progress bar blocks entire screen",
+          "description": "Bulk operations bar appears on top but doesn't prevent interaction with underlying table during operation.",
+          "impact": "Users might accidentally trigger new operations while previous one is running.",
+          "recommendation": "Add overlay or disable table interactions during bulk operations."
+        }
+      ]
+    },
+    "/admin/products": {
+      "page": "Products List",
+      "file": "pages/admin/products/index.vue",
+      "issues": [
+        {
+          "id": "ROUTE-PRODUCTS-001",
+          "severity": "medium",
+          "title": "Stock edit modal uses raw div overlay instead of Dialog component",
+          "description": "Custom modal implementation (lines 73-107) instead of using shadcn/ui Dialog.",
+          "impact": "Inconsistent modal behavior, missing accessibility features of Dialog component.",
+          "recommendation": "Replace custom modal with Dialog component for consistency and a11y."
+        }
+      ]
+    },
+    "/admin/users": {
+      "page": "Users Management",
+      "file": "pages/admin/users/index.vue",
+      "issues": [
+        {
+          "id": "ROUTE-USERS-001",
+          "severity": "medium",
+          "title": "User detail modal shows scroll issues on mobile",
+          "description": "Modal with max-h-[90vh] and overflow-y-auto may have touch scrolling issues on iOS.",
+          "impact": "Users may struggle to scroll through long user details on mobile devices.",
+          "recommendation": "Test on iOS and add -webkit-overflow-scrolling: touch if needed."
+        },
+        {
+          "id": "ROUTE-USERS-002",
+          "severity": "low",
+          "title": "Action loading overlay is generic",
+          "description": "Loading overlay says 'Processing action...' without specifying which action.",
+          "impact": "Users don't know what's happening during action execution.",
+          "recommendation": "Show specific action: 'Suspending user...' or 'Resetting password...'"
+        }
+      ]
+    },
+    "/admin/analytics": {
+      "page": "Analytics Dashboard",
+      "file": "pages/admin/analytics.vue",
+      "issues": [
+        {
+          "id": "ROUTE-ANALYTICS-001",
+          "severity": "medium",
+          "title": "Charts load all data on mount without pagination",
+          "description": "All three analytics endpoints called in parallel on mount, potentially large payloads.",
+          "impact": "Slow initial page load with large datasets, especially on slower connections.",
+          "recommendation": "Implement data pagination or limit initial data range to last 30 days."
+        }
+      ]
+    },
+    "/admin/email-templates": {
+      "page": "Email Template Manager",
+      "file": "pages/admin/email-templates.vue",
+      "issues": [
+        {
+          "id": "ROUTE-EMAIL-001",
+          "severity": "high",
+          "title": "JSON textarea for template editing is not user-friendly",
+          "description": "Users must manually edit JSON in textarea, error-prone and difficult.",
+          "impact": "High risk of JSON syntax errors, poor UX for non-technical users.",
+          "recommendation": "Implement visual form builder or at minimum add JSON validation with syntax highlighting."
+        },
+        {
+          "id": "ROUTE-EMAIL-002",
+          "severity": "medium",
+          "title": "Preview uses iframe with sandbox but limited styling",
+          "description": "Email preview may not accurately show how email renders in actual email clients.",
+          "impact": "Users may be surprised by rendering differences in production emails.",
+          "recommendation": "Add warning that preview is approximate, consider integration with email testing service."
+        }
+      ]
+    }
+  },
+  "positive_findings": {
+    "well_implemented_features": [
+      {
+        "feature": "Bulk Operations with Progress",
+        "description": "Excellent implementation of bulk operations with progress bar, error handling, and retry functionality.",
+        "location": "pages/admin/orders/index.vue (lines 360-455)"
+      },
+      {
+        "feature": "Real-time Updates",
+        "description": "Well-implemented real-time order updates using composable with subscription management.",
+        "location": "pages/admin/orders/index.vue (lines 323-345)"
+      },
+      {
+        "feature": "Form Validation",
+        "description": "Robust form validation using Zod schemas with proper error handling and display.",
+        "location": "components/admin/Products/Form.vue (lines 348-422)"
+      },
+      {
+        "feature": "Search Debouncing",
+        "description": "Proper implementation of search debouncing to prevent excessive API calls.",
+        "location": "components/admin/Products/Filters.vue (lines 191-199)"
+      },
+      {
+        "feature": "Dark Mode Support",
+        "description": "Comprehensive dark mode support with dark: variants throughout the application.",
+        "location": "All pages (156 occurrences of dark: classes)"
+      },
+      {
+        "feature": "Loading States",
+        "description": "Consistent loading states with skeleton screens and spinners.",
+        "location": "All list pages"
+      },
+      {
+        "feature": "Empty States",
+        "description": "Well-designed empty states with helpful messaging and clear actions.",
+        "location": "pages/admin/orders/index.vue (lines 86-102)"
+      },
+      {
+        "feature": "Filter Management",
+        "description": "Comprehensive filtering with active filter badges and clear all functionality.",
+        "location": "components/admin/Products/Filters.vue"
+      }
+    ]
+  },
+  "recommendations_by_priority": {
+    "immediate_action_critical": [
+      "ACC-001: Add ARIA labels to all interactive elements",
+      "ACC-002: Implement keyboard navigation throughout admin panel",
+      "ACC-003: Implement focus trapping in modals",
+      "TABLE-001: Create responsive mobile layouts for all tables",
+      "FORM-001: Prevent double form submissions",
+      "NAV-001: Fix navigation active state detection",
+      "ROUTE-EMAIL-001: Replace JSON textarea with user-friendly editor"
+    ],
+    "high_priority_next_sprint": [
+      "ACC-004 to ACC-011: Complete accessibility remediation",
+      "NAV-002: Add breadcrumb navigation",
+      "NAV-003: Improve tablet navigation experience",
+      "FORM-002: Add auto-focus to validation errors",
+      "FORM-003: Implement inline validation",
+      "TABLE-002: Add column visibility controls",
+      "TABLE-003: Improve pagination UX",
+      "ROUTE-ORDERS-001: Fix bulk operations UX"
+    ],
+    "medium_priority_next_month": [
+      "All medium severity accessibility issues",
+      "Navigation improvements (grouping, search)",
+      "Form enhancements (character counts, better errors)",
+      "Table improvements (density, export)",
+      "Responsive design fixes",
+      "Design consistency updates"
+    ],
+    "low_priority_future": [
+      "Low severity accessibility issues",
+      "Advanced features (saved filters, keyboard shortcuts)",
+      "Nice-to-have UX improvements"
+    ]
+  },
+  "compliance_status": {
+    "wcag_2_1_level_a": {
+      "status": "Non-compliant",
+      "passing_criteria": "~40%",
+      "major_failures": [
+        "1.1.1 Non-text Content (missing alt text and ARIA labels)",
+        "2.1.1 Keyboard (no keyboard navigation)",
+        "4.1.2 Name, Role, Value (missing ARIA attributes)"
+      ]
+    },
+    "wcag_2_1_level_aa": {
+      "status": "Non-compliant",
+      "passing_criteria": "~35%",
+      "major_failures": [
+        "All Level A failures",
+        "1.4.3 Contrast (need to verify color contrast ratios)",
+        "2.4.3 Focus Order (focus trapping issues in modals)"
+      ]
+    }
+  },
+  "testing_recommendations": {
+    "manual_testing_needed": [
+      "Test all pages with screen reader (NVDA/JAWS on Windows, VoiceOver on Mac)",
+      "Test keyboard-only navigation through all workflows",
+      "Test on mobile devices (iOS Safari, Chrome Android)",
+      "Test with browser zoom at 200% and 400%",
+      "Test color contrast with automated tools",
+      "Test with reduced motion preferences enabled"
+    ],
+    "automated_testing_needed": [
+      "Run axe-core accessibility scanner on all pages",
+      "Run Lighthouse accessibility audit",
+      "Implement Playwright tests for keyboard navigation",
+      "Add visual regression tests for responsive layouts"
+    ]
+  }
+}

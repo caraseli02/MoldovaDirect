@@ -1,0 +1,18 @@
+Issue Number,Title,State,Priority,Labels,Category,Estimated Days,Business Impact,Urgency,Files Affected,Sprint
+126,Add Accessibility Features to Checkout Flow,OPEN,P1-high,"ux,a11y,checkout,wcag",Accessibility,2,HIGH - Legal compliance,IMMEDIATE,pages/checkout/*.vue,Sprint 1
+123,Fix Cart Accessibility Issues,OPEN,P1-high,"ux,cart,a11y,wcag",Accessibility,1,HIGH - WCAG compliance,IMMEDIATE,pages/cart.vue,Sprint 1
+122,Persist recently viewed products to localStorage,OPEN,P1,"products,ux,feature,high",Performance,0.125,MEDIUM - Session persistence,HIGH,components/products/*,Sprint 3
+130,Improve Checkout Error Display with Dedicated Component,OPEN,P2-medium,"ux,error-handling,checkout",UX,1,MEDIUM - Reduces abandonment,MEDIUM,pages/checkout/*.vue,Sprint 4
+107,Fix accessibility issues on product detail page,OPEN,P2,"critical,products,accessibility,a11y",Accessibility,1,HIGH - Product page a11y,HIGH,pages/products/[slug].vue,Sprint 2
+106,Fix accessibility issues on products listing page,OPEN,P2,"critical,products,accessibility,a11y",Accessibility,1,HIGH - Product discovery a11y,HIGH,pages/products/index.vue,Sprint 2
+102,Fix silent add-to-cart failures on product detail page,OPEN,P2,"bug,critical,products,ux",UX,1,HIGH - Conversion impact,HIGH,pages/products/[slug].vue,Sprint 2
+154,Separate journal/blog section from shop page,OPEN,Unassigned,"enhancement,ux,backend",Content,1,LOW - Content strategy,LOW,pages/shop.vue,Sprint 4
+153,Audit and fix dark/light mode contrast for accessibility,OPEN,Unassigned,"a11y,wcag,ui",Accessibility,2,HIGH - WCAG compliance,IMMEDIATE,All pages,Sprint 1
+151,Add address management page in user account area,OPEN,Unassigned,"enhancement,ux,backend",UX,2,MEDIUM - Checkout UX,MEDIUM,pages/account/*,Sprint 4
+149,Enhance shop filters with categories price range ratings and sort options,OPEN,Unassigned,"enhancement,products,ux",Product Discovery,2,MEDIUM - Product discovery,MEDIUM,pages/products/index.vue,Sprint 3
+148,Implement skeleton loaders for improved perceived performance,OPEN,Unassigned,"enhancement,performance,ux,a11y",Performance,1.5,MEDIUM - Perceived performance,MEDIUM,Multiple pages,Sprint 2
+116,Add product image zoom functionality,OPEN,Unassigned,"products,ux,feature,high",Product Pages,0.5,MEDIUM - Product details,HIGH,pages/products/[slug].vue,Sprint 2
+113,Improve error messages and add retry mechanisms,OPEN,Unassigned,"products,ux,high,error-handling",UX,0.5,MEDIUM - Error recovery,MEDIUM,Multiple pages,Sprint 3
+110,Add URL state management for filters,OPEN,Unassigned,"products,ux,feature,high,seo",Product Discovery,1,HIGH - SEO and shareability,HIGH,pages/products/index.vue,Sprint 3
+109,Add request cancellation for search queries,OPEN,Unassigned,"performance,products,ux,high",Performance,0.5,MEDIUM - Search optimization,MEDIUM,pages/products/index.vue,Sprint 3
+135,Standardize Button Components in Cart,OPEN,P3-low,"cart,ui,consistency",Visual Design,0.5,LOW - Component consistency,LOW,components/cart/*,Sprint 4

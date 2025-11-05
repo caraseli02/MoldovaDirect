@@ -1,0 +1,510 @@
+{
+  "metadata": {
+    "analysis_date": "2025-11-04",
+    "audits_analyzed": [
+      "admin-ui-ux-audit-report.json",
+      "ux-audit-customer-routes-2025-11-04.json",
+      "github_uiux_issues_analysis.json"
+    ],
+    "existing_github_issues": 17,
+    "new_issues_recommended": 14,
+    "analyst": "Code Analyzer Agent"
+  },
+  "summary": {
+    "total_audit_findings": 89,
+    "already_tracked": 17,
+    "duplicates_identified": 5,
+    "gaps_found": 67,
+    "critical_new_issues": 3,
+    "high_priority_new_issues": 6,
+    "medium_priority_new_issues": 5,
+    "overlaps_between_audits": [
+      "Accessibility ARIA labels missing (both admin and customer)",
+      "Keyboard navigation gaps (both admin and customer)",
+      "Mobile responsiveness issues (both admin and customer)",
+      "Form validation feedback (both admin and customer)",
+      "Loading state announcements (both admin and customer)"
+    ]
+  },
+  "new_issues_to_create": [
+    {
+      "priority": 1,
+      "severity": "critical",
+      "title": "Implement comprehensive ARIA labels and keyboard navigation across admin panel",
+      "description": "## Problem\nAdmin panel has critical accessibility gaps that prevent keyboard and screen reader users from using the application:\n\n**Findings from Admin Audit:**\n- ACC-001: Only 1 ARIA label found across all admin pages\n- ACC-002: Zero keyboard event handlers in admin pages\n- ACC-003: Modals don't trap focus or return focus on close\n- ACC-004: Bulk selection checkboxes lack accessible labels\n- ACC-005: Sortable headers lack aria-sort indicators\n- ACC-006: No live region announcements for dynamic updates\n\n## Impact\n- Fails WCAG 2.1 Level A compliance (legal risk)\n- Screen reader users cannot understand interactive elements\n- Keyboard-only users cannot navigate tables, filters, or perform actions\n- Estimated ~15% of users affected\n\n## Affected Routes\n- `/admin/orders`\n- `/admin/products`\n- `/admin/users`\n- `/admin/analytics`\n- `/admin/inventory`\n\n## Affected Components\n- `layouts/admin.vue`\n- `pages/admin/**/*.vue`\n- `components/admin/**/*.vue`\n\n## Recommended Solution\n1. Add aria-label/aria-labelledby to all interactive elements\n2. Implement keyboard shortcuts (Cmd+K for search, arrow keys for tables, Enter/Escape)\n3. Add focus trap using useFocusTrap for modals\n4. Add aria-sort to sortable table headers\n5. Implement aria-live regions for status updates\n6. Add aria-label with context to checkboxes (\"Select order #12345\")\n\n## Acceptance Criteria\n- [ ] All interactive elements have descriptive ARIA labels\n- [ ] Keyboard navigation works for tables, filters, modals\n- [ ] Focus management in modals (trap and return)\n- [ ] Dynamic content announces to screen readers\n- [ ] Passes axe DevTools automated scan\n- [ ] Manual screen reader testing (NVDA/JAWS)\n\n## Estimated Effort\n**High** - 8-10 developer days\n\n## Related Issues\n- #126 (Checkout accessibility)\n- #123 (Cart accessibility)\n- #107 (Product detail accessibility)\n- #106 (Product listing accessibility)",
+      "labels": [
+        "accessibility",
+        "a11y",
+        "P0-critical",
+        "admin",
+        "wcag",
+        "keyboard-navigation",
+        "screen-reader",
+        "legal-compliance"
+      ],
+      "assignee": null,
+      "milestone": "Sprint 1 - Critical Accessibility",
+      "wcag_criteria": ["1.1.1", "2.1.1", "2.1.2", "4.1.2"],
+      "affected_files": [
+        "layouts/admin.vue",
+        "pages/admin/**/*.vue",
+        "components/admin/**/*.vue"
+      ]
+    },
+    {
+      "priority": 2,
+      "severity": "critical",
+      "title": "Create responsive mobile layouts for admin tables (orders, products, users)",
+      "description": "## Problem\nAdmin tables use horizontal scroll on mobile instead of responsive card layout, making them nearly unusable on mobile devices.\n\n**Findings:**\n- TABLE-001: Tables use horizontal scroll on mobile (< 768px)\n- Mobile admin users must scroll horizontally to see all columns\n- Very difficult to perform bulk operations on mobile\n- Poor touch target sizes for action buttons\n\n## Impact\n- Admin users on mobile (tablets/phones) cannot effectively manage orders/products\n- Horizontal scrolling is poor UX pattern for data-heavy tables\n- Action buttons too small for touch interaction\n\n## Affected Routes\n- `/admin/orders`\n- `/admin/products`\n- `/admin/users`\n\n## Affected Files\n- `pages/admin/orders/index.vue` (lines 115-200)\n- `pages/admin/products/index.vue`\n- `pages/admin/users/index.vue`\n\n## Recommended Solution\n1. Implement responsive card layout for mobile (< 768px)\n2. Stack table data in cards with labels for each field\n3. Make action buttons larger for touch targets (min 44px)\n4. Use slide-out panels for bulk operations on mobile\n5. Consider data table component with built-in responsive patterns\n\n## Acceptance Criteria\n- [ ] Tables display as cards on mobile (< 768px)\n- [ ] All data visible without horizontal scrolling\n- [ ] Touch targets meet minimum 44px size\n- [ ] Bulk operations accessible on mobile\n- [ ] Sorting and filtering work on mobile layout\n- [ ] Test on iPhone SE, standard iPhone, iPad\n\n## Estimated Effort\n**High** - 6-8 developer days\n\n## Design Reference\n- Look at Shopify Admin mobile patterns\n- Stripe Dashboard mobile table cards",
+      "labels": [
+        "mobile",
+        "responsive",
+        "P0-critical",
+        "admin",
+        "tables",
+        "ui/ux"
+      ],
+      "assignee": null,
+      "milestone": "Sprint 1 - Mobile Admin",
+      "wcag_criteria": [],
+      "affected_files": [
+        "pages/admin/orders/index.vue",
+        "pages/admin/products/index.vue",
+        "pages/admin/users/index.vue"
+      ]
+    },
+    {
+      "priority": 3,
+      "severity": "critical",
+      "title": "Add search autocomplete with product suggestions and search history",
+      "description": "## Problem\nProduct search shows only basic text input without autocomplete, making product discovery difficult and error-prone.\n\n**Findings from Customer Audit:**\n- PROD-001: No autocomplete dropdown\n- No recent search history\n- No suggested products during typing\n- Users struggle with misspellings\n- No category suggestions\n\n## Impact\n- **Very High** user impact on product discovery\n- Difficult to find products with misspellings\n- No quick access to previously searched items\n- Missing modern e-commerce expectation\n- Direct impact on conversion rate\n\n## Affected Routes\n- `/products` (main search)\n- Header search component\n\n## Affected Files\n- `pages/products/index.vue` (lines 109-129)\n- `components/layout/AppHeader.vue`\n\n## Recommended Solution\n1. Implement autocomplete dropdown component\n2. Show top 5 product suggestions as user types\n3. Display recent search history (localStorage)\n4. Add category suggestions\n5. Debounce search input (300ms)\n6. Highlight matching text in suggestions\n7. Keyboard navigation (arrow keys, enter to select)\n\n## Technical Requirements\n- Create `/api/search/suggest` endpoint\n- Create `/api/search/history` endpoint for logged-in users\n- Use Supabase full-text search\n- Store search history in localStorage (guest) and database (logged-in)\n\n## Acceptance Criteria\n- [ ] Autocomplete shows after 2 characters typed\n- [ ] Displays 5 product suggestions with images\n- [ ] Shows recent search history (max 10)\n- [ ] Category suggestions appear\n- [ ] Keyboard navigation works (arrows, enter, escape)\n- [ ] Click outside closes dropdown\n- [ ] Mobile-optimized bottom sheet on small screens\n- [ ] Loading state while fetching suggestions\n\n## Estimated Effort\n**High** - 5-7 developer days\n\n## Related Customer Audit Issues\n- PROD-002: Mobile filter UX\n- NAV-002: Search icon behavior",
+      "labels": [
+        "search",
+        "P0-critical",
+        "products",
+        "ui/ux",
+        "feature",
+        "customer-facing",
+        "conversion"
+      ],
+      "assignee": null,
+      "milestone": "Sprint 2 - Product Discovery",
+      "wcag_criteria": ["4.1.2"],
+      "affected_files": [
+        "pages/products/index.vue",
+        "components/layout/AppHeader.vue"
+      ]
+    },
+    {
+      "priority": 4,
+      "severity": "high",
+      "title": "Replace email template JSON textarea with visual form builder",
+      "description": "## Problem\nEmail template editor requires manual JSON editing in textarea, which is error-prone and not user-friendly.\n\n**Findings:**\n- ROUTE-EMAIL-001: JSON textarea for template editing\n- High risk of JSON syntax errors\n- Poor UX for non-technical users\n- No JSON validation or syntax highlighting\n\n## Impact\n- Admin users make JSON syntax errors frequently\n- Non-technical users cannot edit templates\n- Support burden for fixing broken templates\n\n## Affected Routes\n- `/admin/email-templates`\n\n## Affected Files\n- `components/admin/Email/TemplateManager.vue` (lines 95-100)\n- `pages/admin/email-templates.vue`\n\n## Recommended Solution\n**Option A (Recommended):** Visual form builder\n1. Replace textarea with structured form fields\n2. Add section-based editing (header, body, footer)\n3. Visual variable picker for dynamic content\n4. Live preview of rendered email\n\n**Option B (Minimum):** Enhanced JSON editor\n1. Add Monaco Editor with JSON validation\n2. Syntax highlighting\n3. Auto-formatting\n4. Error messages with line numbers\n\n## Acceptance Criteria\n- [ ] No raw JSON editing required\n- [ ] Visual preview of email template\n- [ ] Variable insertion via dropdown/picker\n- [ ] Validation before save\n- [ ] Mobile-friendly interface\n- [ ] Undo/redo functionality\n\n## Estimated Effort\n**Option A:** High - 8-10 developer days\n**Option B:** Medium - 4-5 developer days\n\n## Related Issues\n- #163 (Order status emails) - Already implemented",
+      "labels": [
+        "admin",
+        "P1-high",
+        "ui/ux",
+        "email",
+        "enhancement",
+        "editor"
+      ],
+      "assignee": null,
+      "milestone": "Sprint 3 - Admin Tools",
+      "wcag_criteria": [],
+      "affected_files": [
+        "components/admin/Email/TemplateManager.vue",
+        "pages/admin/email-templates.vue"
+      ]
+    },
+    {
+      "priority": 5,
+      "severity": "high",
+      "title": "Add breadcrumb navigation to admin detail pages",
+      "description": "## Problem\nOrder detail, product detail, and user detail pages lack breadcrumbs showing navigation path.\n\n**Findings:**\n- NAV-002: No breadcrumbs on detail pages\n- Users lose context of location in hierarchy\n- Hard to navigate back to parent pages\n- Inconsistent with layout breadcrumb implementation\n\n## Impact\n- Users confused about current location\n- Must use browser back button or sidebar navigation\n- Poor navigation UX on detail pages\n\n## Affected Routes\n- `/admin/orders/[id]`\n- `/admin/products/[id]`\n- `/admin/users/[id]` (if exists)\n\n## Affected Files\n- `pages/admin/orders/[id].vue`\n- `pages/admin/products/[id].vue`\n\n## Recommended Solution\n1. Create reusable Breadcrumb component\n2. Add breadcrumbs to all detail pages:\n   - Orders: `Admin > Orders > Order #12345`\n   - Products: `Admin > Products > [Product Name]`\n   - Users: `Admin > Users > [User Name]`\n3. Make breadcrumb items clickable links\n4. Style consistently with existing admin breadcrumb in layout\n5. Add ARIA navigation landmark\n\n## Acceptance Criteria\n- [ ] Breadcrumbs on all admin detail pages\n- [ ] Clickable links to parent pages\n- [ ] Current page not clickable\n- [ ] Mobile-friendly (truncate if needed)\n- [ ] Accessible with aria-label=\"Breadcrumb\"\n- [ ] Consistent styling across admin\n\n## Estimated Effort\n**Medium** - 2-3 developer days",
+      "labels": [
+        "admin",
+        "P1-high",
+        "navigation",
+        "ui/ux",
+        "enhancement"
+      ],
+      "assignee": null,
+      "milestone": "Sprint 2 - Admin Navigation",
+      "wcag_criteria": ["2.4.8"],
+      "affected_files": [
+        "pages/admin/orders/[id].vue",
+        "pages/admin/products/[id].vue"
+      ]
+    },
+    {
+      "priority": 6,
+      "severity": "high",
+      "title": "Implement product comparison feature with side-by-side view",
+      "description": "## Problem\nUsers cannot compare multiple products side-by-side to make informed purchasing decisions.\n\n**Findings from Customer Audit:**\n- PROD-003: No product comparison feature\n- Users must manually remember details or open multiple tabs\n- Leads to decision fatigue and abandoned carts\n- Missing key e-commerce feature\n\n## Impact\n- **Very High** user impact\n- Customers cannot easily compare wine varieties, prices, ratings\n- Reduced conversion on multi-product consideration\n- Competitive disadvantage (most wine shops have this)\n\n## Affected Routes\n- `/products` (comparison selection)\n- `/compare` (new route for comparison view)\n\n## Recommended Solution\n1. Add \"Compare\" checkbox on product cards\n2. Floating comparison bar showing selected products (max 4)\n3. Create `/compare` route with side-by-side table\n4. Compare attributes:\n   - Images\n   - Name & Description\n   - Price\n   - Rating & Reviews\n   - Alcohol %\n   - Origin/Region\n   - Volume\n   - Stock status\n5. Add to cart from comparison view\n6. Share comparison URL\n\n## Technical Requirements\n- Store comparison state in localStorage\n- Create comparison table component\n- Responsive stacked view on mobile\n- URL state management: `/compare?products=id1,id2,id3`\n\n## Acceptance Criteria\n- [ ] Compare checkbox on product cards\n- [ ] Floating comparison bar (max 4 products)\n- [ ] Side-by-side comparison table\n- [ ] Mobile-optimized stacked view\n- [ ] Shareable comparison URL\n- [ ] Add to cart from comparison\n- [ ] Clear all comparisons button\n- [ ] Persist comparison across sessions\n\n## Estimated Effort\n**High** - 5-6 developer days\n\n## Related Issues\n- #149 (Shop filters enhancement)\n- #116 (Product image zoom)",
+      "labels": [
+        "products",
+        "P1-high",
+        "feature",
+        "ui/ux",
+        "customer-facing",
+        "conversion"
+      ],
+      "assignee": null,
+      "milestone": "Sprint 2 - Product Discovery",
+      "wcag_criteria": [],
+      "affected_files": [
+        "pages/products/index.vue",
+        "pages/compare.vue (new)"
+      ]
+    },
+    {
+      "priority": 7,
+      "severity": "high",
+      "title": "Add quick view modal for products to improve browsing experience",
+      "description": "## Problem\nUsers must navigate to full product page to see basic details, interrupting browsing flow and losing context.\n\n**Findings from Customer Audit:**\n- PROD-004: No quick view/preview modal\n- Slower product discovery\n- Users lose browsing context when viewing details\n- Must use back button to return to browse\n\n## Impact\n- High user friction during product browsing\n- Interrupts shopping momentum\n- Standard feature on most e-commerce sites\n\n## Affected Routes\n- `/products` (product cards)\n\n## Recommended Solution\n1. Add eye icon button to product cards\n2. Modal displays:\n   - Product image gallery\n   - Name, price, rating\n   - Short description\n   - Key attributes (alcohol %, volume, origin)\n   - Add to cart button\n   - \"View Full Details\" link\n3. Accessible keyboard navigation (Escape to close)\n4. Mobile-optimized as slide-up sheet\n5. Lazy load modal component\n\n## Technical Requirements\n- Reuse existing product detail components\n- Focus trap in modal\n- ARIA modal pattern\n- Prevent body scroll when open\n\n## Acceptance Criteria\n- [ ] Eye icon triggers quick view modal\n- [ ] Modal shows key product info\n- [ ] Add to cart works from modal\n- [ ] Link to full product page\n- [ ] Keyboard accessible (Escape, Tab)\n- [ ] Mobile slide-up sheet variant\n- [ ] Loading state while fetching details\n- [ ] Accessible to screen readers\n\n## Estimated Effort\n**Medium** - 3-4 developer days\n\n## Related Issues\n- #107 (Product detail accessibility)\n- #116 (Product image zoom)",
+      "labels": [
+        "products",
+        "P1-high",
+        "feature",
+        "ui/ux",
+        "modal",
+        "customer-facing"
+      ],
+      "assignee": null,
+      "milestone": "Sprint 2 - Product Discovery",
+      "wcag_criteria": ["2.1.2", "4.1.2"],
+      "affected_files": [
+        "pages/products/index.vue",
+        "components/products/QuickViewModal.vue (new)"
+      ]
+    },
+    {
+      "priority": 8,
+      "severity": "high",
+      "title": "Implement persistent wishlist with dedicated page and cross-device sync",
+      "description": "## Problem\nProduct detail page has wishlist toggle but no persistent wishlist view or management features.\n\n**Findings from Customer Audit:**\n- PROD-008: Wishlist functionality not implemented\n- Users cannot save products for later\n- Missing key e-commerce feature\n- No cross-device synchronization\n\n## Impact\n- Users cannot save products for later consideration\n- Lost conversion opportunities\n- Standard feature expectation\n- Reduced customer engagement\n\n## Affected Routes\n- `/products/[slug]` (wishlist toggle exists)\n- `/account/wishlist` (new route needed)\n- Header wishlist icon\n\n## Affected Files\n- `pages/products/[slug].vue` (lines 337-345)\n- `pages/account/wishlist.vue` (new)\n- `components/layout/AppHeader.vue`\n\n## Recommended Solution\n1. Create dedicated wishlist page at `/account/wishlist`\n2. Persist wishlist in database for logged-in users\n3. Use localStorage for guest users (prompt to save on login)\n4. Add wishlist icon to header with item count badge\n5. Wishlist page features:\n   - Grid of saved products\n   - Remove from wishlist\n   - Add all to cart\n   - Sort by date added/price\n   - Empty state with CTA\n6. Share wishlist via link (public/private toggle)\n\n## Technical Requirements\n- Create `wishlists` table in Supabase\n- API endpoints: GET/POST/DELETE `/api/wishlist`\n- Sync localStorage to database on login\n- Real-time updates with Supabase subscriptions\n\n## Acceptance Criteria\n- [ ] Wishlist toggle works on product pages\n- [ ] Dedicated `/account/wishlist` page\n- [ ] Header icon shows wishlist count\n- [ ] Persist for logged-in users (database)\n- [ ] Guest wishlist in localStorage\n- [ ] Sync guest wishlist on login\n- [ ] Remove items from wishlist\n- [ ] Add multiple items to cart\n- [ ] Mobile-optimized layout\n- [ ] Empty state design\n\n## Estimated Effort\n**High** - 6-7 developer days\n\n## Related Issues\n- #151 (Address management) - Similar account page pattern",
+      "labels": [
+        "wishlist",
+        "P1-high",
+        "feature",
+        "products",
+        "customer-facing",
+        "database"
+      ],
+      "assignee": null,
+      "milestone": "Sprint 3 - User Features",
+      "wcag_criteria": [],
+      "affected_files": [
+        "pages/products/[slug].vue",
+        "pages/account/wishlist.vue (new)",
+        "components/layout/AppHeader.vue"
+      ]
+    },
+    {
+      "priority": 9,
+      "severity": "high",
+      "title": "Add checkout progress indicator showing current step and total steps",
+      "description": "## Problem\nUsers navigate through checkout steps but cannot see overall progress or jump between completed steps.\n\n**Findings from Customer Audit:**\n- CHECK-002: No progress indicator\n- Users feel lost in checkout\n- Uncertain how many steps remain\n- Cannot jump to previous steps\n\n## Impact\n- High user confusion during checkout\n- Perceived long checkout process\n- May increase abandonment\n- Missing standard checkout UX pattern\n\n## Affected Routes\n- `/checkout`\n- `/checkout/payment`\n- `/checkout/review`\n- `/checkout/confirmation`\n\n## Recommended Solution\n1. Create checkout stepper component showing:\n   - Shipping (1/4)\n   - Payment (2/4)\n   - Review (3/4)\n   - Complete (4/4)\n2. Visual indicators:\n   - Completed steps: green checkmark\n   - Current step: highlighted/active\n   - Upcoming steps: gray/inactive\n3. Allow clicking on completed steps to edit\n4. Mobile-optimized horizontal stepper\n5. Progress bar alternative for very small screens\n\n## Technical Requirements\n- Track checkout state in Pinia store\n- Validate before allowing step navigation\n- Persist checkout state in localStorage\n- Restore state on page refresh\n\n## Acceptance Criteria\n- [ ] Stepper shows on all checkout pages\n- [ ] Current step visually highlighted\n- [ ] Completed steps show checkmark\n- [ ] Click completed steps to edit\n- [ ] Prevent skipping ahead\n- [ ] Mobile horizontal stepper\n- [ ] Accessible with proper ARIA\n- [ ] Screen reader announces step changes\n\n## Estimated Effort\n**Medium** - 3-4 developer days\n\n## Related Issues\n- #126 (Checkout accessibility)\n- CHECK-001 (Address autofill)\n- CHECK-006 (Review step editing)",
+      "labels": [
+        "checkout",
+        "P1-high",
+        "ui/ux",
+        "navigation",
+        "customer-facing",
+        "conversion"
+      ],
+      "assignee": null,
+      "milestone": "Sprint 2 - Checkout Optimization",
+      "wcag_criteria": ["2.4.8", "4.1.3"],
+      "affected_files": [
+        "pages/checkout/*.vue",
+        "components/checkout/CheckoutStepper.vue (new)"
+      ]
+    },
+    {
+      "priority": 10,
+      "severity": "high",
+      "title": "Add trust badges and security indicators to payment page",
+      "description": "## Problem\nPayment page lacks SSL indicators, security badges, or payment icons to build user trust during checkout.\n\n**Findings from Customer Audit:**\n- CHECK-003: No trust badges or security indicators\n- Users may abandon due to security concerns\n- Especially impacts first-time buyers\n- **Very High** impact on conversion\n\n## Impact\n- Critical conversion blocker\n- First-time buyers abandon at payment\n- Missing trust signals standard on e-commerce\n- Legal/security perception issue\n\n## Affected Routes\n- `/checkout/payment`\n- `/checkout/review`\n\n## Affected Files\n- `pages/checkout/payment.vue`\n- `pages/checkout/review.vue`\n\n## Recommended Solution\n1. Add security indicators:\n   - SSL padlock icon with \"Secure Checkout\" badge\n   - \"Your data is encrypted\" message\n2. Payment method logos:\n   - Visa, Mastercard, Amex, PayPal, etc.\n   - Display near payment form\n3. Trust badges:\n   - Money-back guarantee\n   - Customer support availability\n   - \"Secure payment powered by [Stripe/PayPal]\"\n4. Position:\n   - Near payment form (high visibility)\n   - Below total amount\n   - Above submit button\n\n## Design Guidelines\n- Don't overdo badges (3-4 maximum)\n- Use recognizable, standard icons\n- Subtle, professional styling\n- Mobile-optimized size\n\n## Acceptance Criteria\n- [ ] SSL/security badge visible on payment page\n- [ ] Payment method logos displayed\n- [ ] Trust message near payment form\n- [ ] Money-back guarantee badge (if applicable)\n- [ ] Mobile-optimized layout\n- [ ] Don't clutter the UI\n- [ ] Professional, trustworthy appearance\n\n## Estimated Effort\n**Low** - 1-2 developer days\n\n## Assets Needed\n- Payment method logos (SVG)\n- Security badge icons\n- Trust badge graphics\n\n## Related Issues\n- #126 (Checkout accessibility)\n- CHECK-005 (Payment error handling)",
+      "labels": [
+        "checkout",
+        "P1-high",
+        "ui/ux",
+        "trust",
+        "security",
+        "conversion",
+        "customer-facing"
+      ],
+      "assignee": null,
+      "milestone": "Sprint 2 - Checkout Optimization",
+      "wcag_criteria": [],
+      "affected_files": [
+        "pages/checkout/payment.vue",
+        "components/checkout/TrustBadges.vue (new)"
+      ]
+    },
+    {
+      "priority": 11,
+      "severity": "medium",
+      "title": "Implement column visibility toggle for admin tables",
+      "description": "## Problem\nUsers cannot hide/show columns in admin tables based on their needs or screen size.\n\n**Findings:**\n- TABLE-002: No column visibility toggle\n- All columns always visible\n- Power users on smaller screens can't optimize table\n- Wastes screen space on less important columns\n\n## Impact\n- Suboptimal experience on laptops/small desktop monitors\n- Power users cannot customize their workflow\n- Table feels cluttered\n\n## Affected Routes\n- `/admin/orders`\n- `/admin/products`\n- `/admin/users`\n\n## Recommended Solution\n1. Add column visibility dropdown in table toolbar\n2. Checkboxes for each column (on/off)\n3. Persist column visibility preferences:\n   - localStorage per route\n   - Optionally sync to user profile\n4. Default visible columns for each table\n5. \"Reset to default\" option\n\n## Acceptance Criteria\n- [ ] Column visibility dropdown in table toolbar\n- [ ] Toggle individual columns on/off\n- [ ] Persist preferences in localStorage\n- [ ] Default column set defined\n- [ ] Reset to defaults option\n- [ ] Works on all admin tables\n- [ ] Mobile-friendly modal/sheet interface\n\n## Estimated Effort\n**Medium** - 3-4 developer days",
+      "labels": [
+        "admin",
+        "P2-medium",
+        "tables",
+        "ui/ux",
+        "enhancement"
+      ],
+      "assignee": null,
+      "milestone": "Sprint 4 - Admin Enhancements",
+      "wcag_criteria": [],
+      "affected_files": [
+        "pages/admin/orders/index.vue",
+        "pages/admin/products/index.vue",
+        "pages/admin/users/index.vue"
+      ]
+    },
+    {
+      "priority": 12,
+      "severity": "medium",
+      "title": "Add pagination total pages and jump-to-page functionality",
+      "description": "## Problem\nPagination shows \"Page 1\" but doesn't indicate total pages or allow jumping to specific page.\n\n**Findings:**\n- TABLE-003: Pagination doesn't show total pages\n- Users don't know scope of data\n- Can't jump ahead multiple pages\n- Must click through sequentially\n\n## Impact\n- Users don't know how far they can navigate\n- Inefficient for large datasets\n- Missing common pagination UX pattern\n\n## Affected Files\n- `components/admin/Utils/Pagination.vue`\n\n## Recommended Solution\n1. Display \"Page X of Y\" format\n2. Add page number input field for jumping\n3. Show total records count\n4. Add \"First\" and \"Last\" page buttons\n5. Keyboard support (Enter to jump to page)\n\n## Acceptance Criteria\n- [ ] Display \"Page 1 of 25\" format\n- [ ] Page jump input field\n- [ ] Enter key submits jump\n- [ ] Validation (can't exceed total pages)\n- [ ] First/Last page buttons\n- [ ] Total records count\n- [ ] Mobile-optimized layout\n\n## Estimated Effort\n**Low** - 1-2 developer days",
+      "labels": [
+        "admin",
+        "P2-medium",
+        "pagination",
+        "ui/ux",
+        "enhancement"
+      ],
+      "assignee": null,
+      "milestone": "Sprint 4 - Admin Enhancements",
+      "wcag_criteria": [],
+      "affected_files": [
+        "components/admin/Utils/Pagination.vue"
+      ]
+    },
+    {
+      "priority": 13,
+      "severity": "medium",
+      "title": "Add mobile filter bottom sheet with live results preview",
+      "description": "## Problem\nMobile filter panel hides products entirely during filtering, preventing users from seeing results while adjusting filters.\n\n**Findings from Customer Audit:**\n- PROD-002: Filter panel hidden on mobile\n- Users can't see results while filtering\n- Must close panel to view products\n- Poor mobile filtering UX\n\n## Impact\n- High mobile user frustration\n- Trial-and-error filtering\n- Slower product discovery on mobile\n\n## Affected Routes\n- `/products` (mobile view)\n\n## Affected Files\n- `pages/products/index.vue` (lines 49-74)\n- `components/products/Filters.vue`\n\n## Recommended Solution\n1. Convert to bottom sheet pattern (slides up from bottom)\n2. Draggable to adjust height\n3. Partial view shows products above sheet\n4. Apply filters in real-time or \"Apply\" button\n5. Show filter result count: \"152 products\"\n6. Collapse to sticky filter bar when scrolling\n\n## Acceptance Criteria\n- [ ] Bottom sheet slides up from bottom\n- [ ] Draggable handle to adjust height\n- [ ] Products visible above sheet\n- [ ] Live result count updates\n- [ ] Apply button or real-time filtering\n- [ ] Collapse to sticky bar on scroll\n- [ ] Smooth animations\n- [ ] Accessible touch targets\n\n## Estimated Effort\n**High** - 5-6 developer days\n\n## Related Issues\n- #149 (Shop filters enhancement)\n- A11Y-001 (Filter panel focus trap)",
+      "labels": [
+        "mobile",
+        "P2-medium",
+        "products",
+        "filtering",
+        "ui/ux",
+        "customer-facing"
+      ],
+      "assignee": null,
+      "milestone": "Sprint 3 - Mobile Optimization",
+      "wcag_criteria": [],
+      "affected_files": [
+        "pages/products/index.vue",
+        "components/products/MobileFilterSheet.vue (new)"
+      ]
+    },
+    {
+      "priority": 14,
+      "severity": "medium",
+      "title": "Add delivery date estimates to cart and checkout",
+      "description": "## Problem\nCart and checkout don't show when items will arrive, preventing informed decisions about urgency.\n\n**Findings from Customer Audit:**\n- CART-001: No estimated delivery date\n- Users can't make informed urgency decisions\n- May abandon if they need items by specific date\n\n## Impact\n- High - users need delivery info to commit\n- Especially important for gift purchases\n- Wine orders for events need timing certainty\n\n## Affected Routes\n- `/cart`\n- `/checkout`\n\n## Affected Files\n- `pages/cart.vue`\n- `pages/checkout/*.vue`\n\n## Recommended Solution\n1. Show delivery estimate for each item in cart:\n   - \"Estimated delivery: Dec 15-17\"\n   - Or \"Ships in 2-3 business days\"\n2. Display at checkout with shipping method:\n   - Standard: Dec 15-17 (free)\n   - Express: Dec 12-13 ($15)\n3. Calculate based on:\n   - Current date\n   - Warehouse location\n   - Shipping method\n   - Product availability\n4. Show overall order delivery estimate\n\n## Technical Requirements\n- Create delivery estimation logic\n- Consider business days (exclude weekends)\n- Handle holidays\n- Different estimates per shipping method\n\n## Acceptance Criteria\n- [ ] Delivery estimate shows in cart\n- [ ] Estimate per shipping method at checkout\n- [ ] Accurate business day calculations\n- [ ] Consider product availability\n- [ ] \"Express\" vs \"Standard\" timing clear\n- [ ] Mobile-friendly display\n\n## Estimated Effort\n**Medium** - 3-4 developer days",
+      "labels": [
+        "cart",
+        "checkout",
+        "P2-medium",
+        "ui/ux",
+        "shipping",
+        "customer-facing"
+      ],
+      "assignee": null,
+      "milestone": "Sprint 3 - Cart & Checkout",
+      "wcag_criteria": [],
+      "affected_files": [
+        "pages/cart.vue",
+        "pages/checkout/*.vue"
+      ]
+    }
+  ],
+  "issues_already_tracked": [
+    {
+      "issue_number": 126,
+      "title": "Add Accessibility Features to Checkout Flow",
+      "overlap_with_audits": [
+        "ACC-003 (Admin: Modal focus trap)",
+        "CHECK-001 (Customer: Address autofill)"
+      ]
+    },
+    {
+      "issue_number": 123,
+      "title": "Fix Cart Accessibility Issues",
+      "overlap_with_audits": [
+        "ACC-004 (Admin: Checkbox labels)",
+        "CART-003 (Customer: Quantity validation)"
+      ]
+    },
+    {
+      "issue_number": 153,
+      "title": "Audit and fix dark/light mode contrast",
+      "overlap_with_audits": [
+        "ACC-007 (Admin: Color-only status)",
+        "A11Y-002 (Customer: Color contrast)"
+      ]
+    },
+    {
+      "issue_number": 107,
+      "title": "Fix accessibility issues on product detail page",
+      "overlap_with_audits": [
+        "ACC-015 (Admin: Link purpose)",
+        "A11Y-001 (Customer: Filter panel focus)"
+      ]
+    },
+    {
+      "issue_number": 106,
+      "title": "Fix accessibility issues on products listing page",
+      "overlap_with_audits": [
+        "ACC-005 (Admin: Sortable headers)",
+        "A11Y-001 (Customer: Filter panel focus)"
+      ]
+    },
+    {
+      "issue_number": 148,
+      "title": "Implement skeleton loaders",
+      "overlap_with_audits": [
+        "TABLE-006 (Admin: Skeleton structure mismatch)",
+        "LOAD-001 (Customer: Optimistic updates)"
+      ]
+    },
+    {
+      "issue_number": 122,
+      "title": "Persist recently viewed products",
+      "overlap_with_audits": []
+    },
+    {
+      "issue_number": 116,
+      "title": "Add product image zoom functionality",
+      "overlap_with_audits": [
+        "PROD-005 (Customer: Product image zoom)"
+      ]
+    },
+    {
+      "issue_number": 149,
+      "title": "Enhance shop filters",
+      "overlap_with_audits": [
+        "PROD-007 (Customer: Filter chip grouping)",
+        "RESP-002 (Admin: Filter grid stacking)"
+      ]
+    },
+    {
+      "issue_number": 110,
+      "title": "Add URL state management for filters",
+      "overlap_with_audits": []
+    },
+    {
+      "issue_number": 109,
+      "title": "Add request cancellation for search queries",
+      "overlap_with_audits": []
+    },
+    {
+      "issue_number": 113,
+      "title": "Improve error messages and add retry mechanisms",
+      "overlap_with_audits": [
+        "FORM-006 (Admin: Error messages guidance)",
+        "ERR-001 (Customer: Generic error messages)"
+      ]
+    },
+    {
+      "issue_number": 102,
+      "title": "Fix silent add-to-cart failures",
+      "overlap_with_audits": [
+        "FORM-008 (Admin: Success confirmation)"
+      ]
+    },
+    {
+      "issue_number": 130,
+      "title": "Improve Checkout Error Display",
+      "overlap_with_audits": [
+        "CHECK-005 (Customer: Payment error handling)"
+      ]
+    },
+    {
+      "issue_number": 151,
+      "title": "Add address management page",
+      "overlap_with_audits": [
+        "ACCT-006 (Customer: Multiple default addresses)"
+      ]
+    },
+    {
+      "issue_number": 154,
+      "title": "Separate journal/blog section",
+      "overlap_with_audits": []
+    },
+    {
+      "issue_number": 135,
+      "title": "Standardize Button Components in Cart",
+      "overlap_with_audits": [
+        "DESIGN-001 (Admin: Button variants)",
+        "DESIGN-002 (Admin: Card border radius)"
+      ]
+    }
+  ],
+  "not_creating_issues_for": {
+    "reason": "Already tracked in existing issues or lower priority",
+    "audit_findings": [
+      "ACC-012 to ACC-015 (Admin low priority accessibility)",
+      "NAV-003 to NAV-009 (Admin navigation improvements)",
+      "FORM-004 to FORM-009 (Admin form enhancements)",
+      "TABLE-004 to TABLE-008 (Admin table features)",
+      "RESP-001 to RESP-004 (Admin responsive design)",
+      "DESIGN-001 to DESIGN-003 (Admin design consistency)",
+      "AUTH-001 to AUTH-004 (Customer auth improvements)",
+      "HOME-001 to HOME-002 (Customer homepage)",
+      "PROD-006 (Customer: Load more pagination)",
+      "PROD-007 (Customer: Filter chip grouping) - covered by #149",
+      "PROD-009 (Customer: Bundle feature)",
+      "CART-002 to CART-005 (Customer cart UX)",
+      "CHECK-004 to CHECK-006 (Customer checkout UX)",
+      "ACCT-001 to ACCT-006 (Customer account management)",
+      "NAV-001 to NAV-003 (Customer navigation)"
+    ]
+  },
+  "implementation_roadmap": {
+    "sprint_1_critical": {
+      "duration": "2 weeks",
+      "focus": "Critical accessibility and mobile issues",
+      "new_issues": [1, 2],
+      "existing_issues": [126, 123, 153],
+      "estimated_effort": "18-20 developer days"
+    },
+    "sprint_2_high_priority": {
+      "duration": "2 weeks",
+      "focus": "Product discovery and checkout optimization",
+      "new_issues": [3, 5, 6, 7, 9, 10],
+      "existing_issues": [107, 106, 116],
+      "estimated_effort": "24-28 developer days"
+    },
+    "sprint_3_medium_priority": {
+      "duration": "2 weeks",
+      "focus": "User features and mobile optimization",
+      "new_issues": [4, 8, 13, 14],
+      "existing_issues": [149, 151, 148],
+      "estimated_effort": "22-26 developer days"
+    },
+    "sprint_4_enhancements": {
+      "duration": "1 week",
+      "focus": "Admin tools and polish",
+      "new_issues": [11, 12],
+      "existing_issues": [135, 130],
+      "estimated_effort": "8-10 developer days"
+    }
+  },
+  "metrics": {
+    "total_estimated_effort": "72-84 developer days",
+    "critical_issues": 3,
+    "high_priority_issues": 7,
+    "medium_priority_issues": 4,
+    "expected_conversion_improvement": "15-25%",
+    "wcag_compliance_improvement": "From ~40% to ~85%",
+    "mobile_experience_score_improvement": "From 72/100 to 90/100"
+  }
+}
