@@ -27,13 +27,12 @@ vi.mock('stripe', () => ({
   })),
 }))
 
-// Mock Supabase client
-const mockSupabaseClient = {
+// Mock Supabase service role client
+const mockSupabaseServiceRole = {
   from: vi.fn(),
 }
 
 vi.mock('#imports', () => ({
-  serverSupabaseClient: vi.fn(() => Promise.resolve(mockSupabaseClient)),
   useRuntimeConfig: vi.fn(() => ({
     stripeSecretKey: 'sk_test_123',
     stripeWebhookSecret: 'whsec_test_123',
@@ -44,6 +43,10 @@ vi.mock('#imports', () => ({
   defineEventHandler: vi.fn((handler) => handler),
 }))
 
+vi.mock('#supabase/server', () => ({
+  serverSupabaseServiceRole: vi.fn(() => mockSupabaseServiceRole),
+}))
+
 describe('POST /api/webhooks/stripe', () => {
   let eventHandler: any
   let mockEvent: any
@@ -52,7 +55,7 @@ describe('POST /api/webhooks/stripe', () => {
     vi.clearAllMocks()
 
     // Reset mock implementations
-    mockSupabaseClient.from = vi.fn()
+    mockSupabaseServiceRole.from = vi.fn()
 
     // Mock H3 event
     mockEvent = {
@@ -186,7 +189,7 @@ describe('POST /api/webhooks/stripe', () => {
       })
       const updateMock = vi.fn().mockReturnThis()
 
-      mockSupabaseClient.from = vi.fn(() => ({
+      mockSupabaseServiceRole.from = vi.fn(() => ({
         select: selectMock,
         eq: eqMock,
         single: singleMock,
@@ -194,7 +197,7 @@ describe('POST /api/webhooks/stripe', () => {
       }))
 
       // Verify the query chain
-      expect(mockSupabaseClient.from).toBeDefined()
+      expect(mockSupabaseServiceRole.from).toBeDefined()
     })
 
     it('should handle idempotent requests (already paid)', async () => {
@@ -212,14 +215,14 @@ describe('POST /api/webhooks/stripe', () => {
         error: null,
       })
 
-      mockSupabaseClient.from = vi.fn(() => ({
+      mockSupabaseServiceRole.from = vi.fn(() => ({
         select: selectMock,
         eq: eqMock,
         single: singleMock,
       }))
 
       // Should not call update if already paid
-      expect(mockSupabaseClient.from).toBeDefined()
+      expect(mockSupabaseServiceRole.from).toBeDefined()
     })
 
     it('should handle race condition when order not yet created', async () => {
@@ -230,14 +233,14 @@ describe('POST /api/webhooks/stripe', () => {
         error: { code: 'PGRST116', message: 'Row not found' },
       })
 
-      mockSupabaseClient.from = vi.fn(() => ({
+      mockSupabaseServiceRole.from = vi.fn(() => ({
         select: selectMock,
         eq: eqMock,
         single: singleMock,
       }))
 
-      // Should not throw error when order doesn't exist yet
-      expect(mockSupabaseClient.from).toBeDefined()
+      // Should throw error when order doesn't exist yet (for Stripe retry)
+      expect(mockSupabaseServiceRole.from).toBeDefined()
     })
 
     it('should log warning on amount mismatch', async () => {
@@ -289,14 +292,14 @@ describe('POST /api/webhooks/stripe', () => {
       })
       const updateMock = vi.fn().mockReturnThis()
 
-      mockSupabaseClient.from = vi.fn(() => ({
+      mockSupabaseServiceRole.from = vi.fn(() => ({
         select: selectMock,
         eq: eqMock,
         single: singleMock,
         update: updateMock,
       }))
 
-      expect(mockSupabaseClient.from).toBeDefined()
+      expect(mockSupabaseServiceRole.from).toBeDefined()
     })
 
     it('should handle idempotent failed payment requests', async () => {
@@ -313,13 +316,13 @@ describe('POST /api/webhooks/stripe', () => {
         error: null,
       })
 
-      mockSupabaseClient.from = vi.fn(() => ({
+      mockSupabaseServiceRole.from = vi.fn(() => ({
         select: selectMock,
         eq: eqMock,
         single: singleMock,
       }))
 
-      expect(mockSupabaseClient.from).toBeDefined()
+      expect(mockSupabaseServiceRole.from).toBeDefined()
     })
   })
 
@@ -348,14 +351,14 @@ describe('POST /api/webhooks/stripe', () => {
       })
       const updateMock = vi.fn().mockReturnThis()
 
-      mockSupabaseClient.from = vi.fn(() => ({
+      mockSupabaseServiceRole.from = vi.fn(() => ({
         select: selectMock,
         eq: eqMock,
         single: singleMock,
         update: updateMock,
       }))
 
-      expect(mockSupabaseClient.from).toBeDefined()
+      expect(mockSupabaseServiceRole.from).toBeDefined()
     })
 
     it('should keep order as paid for partial refund', async () => {
@@ -375,7 +378,7 @@ describe('POST /api/webhooks/stripe', () => {
       }
 
       // Should update status to 'paid' (not 'refunded')
-      expect(mockSupabaseClient.from).toBeDefined()
+      expect(mockSupabaseServiceRole.from).toBeDefined()
     })
 
     it('should handle refund without payment_intent_id', async () => {
@@ -454,14 +457,14 @@ describe('POST /api/webhooks/stripe', () => {
         error: updateError,
       })
 
-      mockSupabaseClient.from = vi.fn(() => ({
+      mockSupabaseServiceRole.from = vi.fn(() => ({
         select: selectMock,
         eq: eqMock,
         single: singleMock,
         update: updateMock,
       }))
 
-      expect(mockSupabaseClient.from).toBeDefined()
+      expect(mockSupabaseServiceRole.from).toBeDefined()
     })
   })
 

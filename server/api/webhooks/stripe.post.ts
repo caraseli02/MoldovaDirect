@@ -1,5 +1,6 @@
 import Stripe from 'stripe'
 import type { H3Event } from 'h3'
+import { serverSupabaseServiceRole } from '#supabase/server'
 
 /**
  * Stripe Webhook Handler
@@ -68,11 +69,12 @@ export default defineEventHandler(async (event: H3Event) => {
       signature,
       webhookSecret
     )
-  } catch (err: any) {
-    console.error('[Stripe Webhook] Signature verification failed:', err.message)
+  } catch (err) {
+    const error = err as Error
+    console.error('[Stripe Webhook] Signature verification failed:', error.message)
     throw createError({
       statusCode: 400,
-      statusMessage: `Webhook signature verification failed: ${err.message}`,
+      statusMessage: `Webhook signature verification failed: ${error.message}`,
     })
   }
 
@@ -135,8 +137,8 @@ async function handlePaymentIntentSucceeded(
     `[Stripe Webhook] Payment succeeded: ${paymentIntentId} - ${amountReceived / 100} ${currency.toUpperCase()}`
   )
 
-  // Get Supabase client
-  const client = await serverSupabaseClient(event)
+  // Get Supabase service role client (bypasses RLS for webhook operations)
+  const client = serverSupabaseServiceRole(event)
 
   // Find order by payment_intent_id
   const { data: order, error: fetchError } = await client
@@ -150,9 +152,9 @@ async function handlePaymentIntentSucceeded(
       `[Stripe Webhook] Order not found for payment intent ${paymentIntentId}:`,
       fetchError
     )
-    // Don't throw error - order might not exist yet (race condition)
-    // Stripe may send webhook before order creation completes
-    return
+    // Throw error to trigger Stripe retry - order might not exist yet (race condition)
+    // Stripe will retry the webhook and eventually the order should exist
+    throw new Error(`Order not found for payment intent ${paymentIntentId}`)
   }
 
   // Check if already marked as paid (idempotency)
@@ -210,8 +212,8 @@ async function handlePaymentIntentFailed(
     `[Stripe Webhook] Payment failed: ${paymentIntentId} - ${failureMessage}`
   )
 
-  // Get Supabase client
-  const client = await serverSupabaseClient(event)
+  // Get Supabase service role client (bypasses RLS for webhook operations)
+  const client = serverSupabaseServiceRole(event)
 
   // Find order by payment_intent_id
   const { data: order, error: fetchError } = await client
@@ -225,7 +227,8 @@ async function handlePaymentIntentFailed(
       `[Stripe Webhook] Order not found for payment intent ${paymentIntentId}:`,
       fetchError
     )
-    return
+    // Throw error to trigger Stripe retry - order might not exist yet (race condition)
+    throw new Error(`Order not found for payment intent ${paymentIntentId}`)
   }
 
   // Check if already marked as failed (idempotency)
@@ -280,8 +283,8 @@ async function handleChargeRefunded(
     return
   }
 
-  // Get Supabase client
-  const client = await serverSupabaseClient(event)
+  // Get Supabase service role client (bypasses RLS for webhook operations)
+  const client = serverSupabaseServiceRole(event)
 
   // Find order by payment_intent_id
   const { data: order, error: fetchError } = await client
@@ -295,7 +298,8 @@ async function handleChargeRefunded(
       `[Stripe Webhook] Order not found for payment intent ${paymentIntentId}:`,
       fetchError
     )
-    return
+    // Throw error to trigger Stripe retry - order might not exist yet (race condition)
+    throw new Error(`Order not found for payment intent ${paymentIntentId}`)
   }
 
   // Check if already marked as refunded (idempotency)
