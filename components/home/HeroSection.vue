@@ -35,33 +35,8 @@
         </div>
         <div class="relative">
           <div class="absolute -top-24 -right-16 h-72 w-72 rounded-full bg-primary-400/20 blur-3xl"></div>
-          <div class="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-xl">
-            <!--
-              TODO: Replace placeholder with actual product photography
-              Expected path: /public/images/home/hero.jpg
-              Note: Image directory will be created when actual hero image is added
-            -->
-            <NuxtImg
-              src="https://images.unsplash.com/photo-1499244571948-7ccddb3583f1?q=80&w=1200"
-              :alt="t('home.hero.imageAlt')"
-              densities="1x 2x"
-              class="h-full w-full object-cover"
-            />
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
-         
-            <div class="absolute bottom-6 right-6 rounded-3xl border border-white/10 bg-slate-950/75 p-6 text-white shadow-lg shadow-slate-900/40 backdrop-blur">
-              <div class="flex items-center gap-3">
-                <div class="rounded-full bg-emerald-500/20 p-3 text-emerald-300">
-                  <commonIcon name="lucide:truck" class="h-6 w-6" />
-                </div>
-                <div>
-                  <p class="text-sm font-semibold">{{ t('home.hero.cards.delivery.title') }}</p>
-                  <p class="text-xs text-white/70">{{ t('home.hero.cards.delivery.highlight') }}</p>
-                </div>
-              </div>
-              <p class="mt-3 text-xs text-white/70">{{ t('home.hero.cards.delivery.description') }}</p>
-            </div>
-          </div>
+          <!-- Amazon-style carousel gallery -->
+          <HomeHeroCarousel />
         </div>
       </div>
     </div>
