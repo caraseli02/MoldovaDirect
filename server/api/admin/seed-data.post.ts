@@ -17,15 +17,18 @@
 
 import { serverSupabaseServiceRole } from '#supabase/server'
 import { requireAdminTestingAccess, logAdminAction } from '~/server/utils/adminAuth'
-
-interface SeedOptions {
-  preset?: 'empty' | 'minimal' | 'development' | 'demo' | 'stress' | 'low-stock' | 'holiday-rush' | 'new-store'
-  users?: number
-  products?: number
-  orders?: number
-  categories?: boolean
-  clearExisting?: boolean
-}
+import type { SeedOptions, SeedDataResponse, SeedStep } from '~/types/admin-testing'
+import {
+  generateMockUser,
+  generatePassword,
+  categoryData,
+  productTemplates,
+  randomItem,
+  orderStatuses,
+  paymentStatuses,
+  streets,
+  cities
+} from '~/server/data/mockData'
 
 export default defineEventHandler(async (event) => {
   // Verify admin access and non-production environment
@@ -233,42 +236,9 @@ async function clearTestData(supabase: any) {
 
 // Seed categories
 async function seedCategories(supabase: any): Promise<number> {
-  const categories = [
-    {
-      slug: 'wine-spirits',
-      name_translations: { en: 'Wine & Spirits', es: 'Vinos y Licores', ro: 'Vin și Spirtoase', ru: 'Вино и Спиртные напитки' },
-      description_translations: { en: 'Traditional Moldovan wines and spirits', es: 'Vinos y licores tradicionales de Moldavia', ro: 'Vinuri și băuturi spirtoase tradiționale moldovenești', ru: 'Традиционные молдавские вина и спиртные напитки' },
-      is_active: true
-    },
-    {
-      slug: 'handicrafts',
-      name_translations: { en: 'Handicrafts', es: 'Artesanías', ro: 'Artizanat', ru: 'Ремесла' },
-      description_translations: { en: 'Handmade traditional crafts', es: 'Artesanías tradicionales hechas a mano', ro: 'Meșteșuguri tradiționale făcute manual', ru: 'Традиционные ремесла ручной работы' },
-      is_active: true
-    },
-    {
-      slug: 'food',
-      name_translations: { en: 'Food & Delicacies', es: 'Alimentos y Delicias', ro: 'Alimente și Delicatese', ru: 'Еда и Деликатесы' },
-      description_translations: { en: 'Traditional Moldovan food products', es: 'Productos alimenticios tradicionales de Moldavia', ro: 'Produse alimentare tradiționale moldovenești', ru: 'Традиционные молдавские продукты питания' },
-      is_active: true
-    },
-    {
-      slug: 'textiles',
-      name_translations: { en: 'Textiles', es: 'Textiles', ro: 'Textile', ru: 'Текстиль' },
-      description_translations: { en: 'Traditional clothing and fabrics', es: 'Ropa y telas tradicionales', ro: 'Îmbrăcăminte și țesături tradiționale', ru: 'Традиционная одежда и ткани' },
-      is_active: true
-    },
-    {
-      slug: 'pottery',
-      name_translations: { en: 'Pottery & Ceramics', es: 'Cerámica', ro: 'Ceramică', ru: 'Керамика' },
-      description_translations: { en: 'Handcrafted pottery and ceramic items', es: 'Cerámica artesanal', ro: 'Ceramică artizanală', ru: 'Ручная керамика' },
-      is_active: true
-    }
-  ]
-
   const { data, error } = await supabase
     .from('categories')
-    .upsert(categories, { onConflict: 'slug' })
+    .upsert(categoryData, { onConflict: 'slug' })
     .select()
 
   if (error) {
@@ -488,21 +458,20 @@ async function seedProducts(supabase: any, count: number, lowStock: boolean): Pr
 // Seed users
 async function seedUsers(supabase: any, count: number): Promise<string[]> {
   const userIds: string[] = []
-  const firstNames = ['John', 'Jane', 'Michael', 'Sarah', 'David', 'Emily', 'Alexandru', 'Maria', 'Igor', 'Natalia']
-  const lastNames = ['Smith', 'Johnson', 'Brown', 'Popescu', 'Ionescu', 'Volkov', 'Petrov']
 
   for (let i = 0; i < count; i++) {
-    const firstName = firstNames[Math.floor(Math.random() * firstNames.length)]
-    const lastName = lastNames[Math.floor(Math.random() * lastNames.length)]
-    const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}.${Date.now()}.${i}@testuser.md`
-    const name = `${firstName} ${lastName}`
+    const mockUser = generateMockUser()
+    const password = generatePassword()
 
     try {
       const { data, error } = await supabase.auth.admin.createUser({
-        email,
-        password: `TestPass${i}!`,
+        email: mockUser.email,
+        password,
         email_confirm: true,
-        user_metadata: { name, preferred_language: 'es' }
+        user_metadata: {
+          name: mockUser.name,
+          preferred_language: mockUser.preferredLanguage
+        }
       })
 
       if (data?.user) {
@@ -511,13 +480,14 @@ async function seedUsers(supabase: any, count: number): Promise<string[]> {
         // Create profile
         await supabase.from('profiles').upsert({
           id: data.user.id,
-          name,
+          name: mockUser.name,
+          phone: mockUser.phone,
           role: 'customer',
-          preferred_language: 'es'
+          preferred_language: mockUser.preferredLanguage
         })
       }
     } catch (error) {
-      console.error(`Failed to create user ${email}:`, error)
+      console.error(`Failed to create user ${mockUser.email}:`, error)
     }
   }
 

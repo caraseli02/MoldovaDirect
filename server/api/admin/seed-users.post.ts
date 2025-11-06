@@ -11,13 +11,18 @@
 
 import { serverSupabaseServiceRole } from '#supabase/server'
 import { requireAdminTestingAccess, logAdminAction } from '~/server/utils/adminAuth'
-
-interface SeedUserOptions {
-  count?: number
-  withAddresses?: boolean
-  withOrders?: boolean
-  roles?: string[]
-}
+import type { SeedUserOptions, CreatedUser, SeedUsersResponse } from '~/types/admin-testing'
+import {
+  generateMockUser,
+  generatePassword,
+  generateAddress,
+  randomItem,
+  orderStatuses,
+  paymentStatuses,
+  streets,
+  cities,
+  productTemplates
+} from '~/server/data/mockData'
 
 export default defineEventHandler(async (event) => {
   // Verify admin access and non-production environment
@@ -32,92 +37,30 @@ export default defineEventHandler(async (event) => {
   const withOrders = body.withOrders === true
   const roles = body.roles || ['customer']
 
-  // Mock data generators
-  const firstNames = [
-    'John', 'Jane', 'Michael', 'Sarah', 'David', 'Emily', 'James', 'Lisa',
-    'Robert', 'Maria', 'William', 'Anna', 'Richard', 'Patricia', 'Thomas',
-    'Elena', 'Alexandru', 'Natalia', 'Igor', 'Olga', 'Dmitri', 'Svetlana'
-  ]
-
-  const lastNames = [
-    'Smith', 'Johnson', 'Brown', 'Wilson', 'Taylor', 'Anderson', 'Martinez',
-    'Garcia', 'Rodriguez', 'Popescu', 'Ionescu', 'Moraru', 'Popa', 'Rusu',
-    'Volkov', 'Ivanov', 'Petrov', 'Sidorov', 'Kozlov', 'Novak', 'Moldovan'
-  ]
-
-  const cities = [
-    'Chisinau', 'Balti', 'Tiraspol', 'Bender', 'Cahul', 'Soroca', 'Ungheni',
-    'Orhei', 'Comrat', 'Edinet', 'Causeni', 'Drochia', 'Hincesti', 'Straseni'
-  ]
-
-  const streets = [
-    'Stefan cel Mare', 'Mihai Eminescu', 'Alexandru cel Bun', 'Decebal',
-    'Columna', 'Puskin', 'Independentei', 'Bucuresti', '31 August', 'Izmail'
-  ]
-
-  const languages = ['es', 'en', 'ro', 'ru']
-
-  const phonePrefix = ['+373', '+40', '+34']
-
-  function randomItem<T>(array: T[]): T {
-    return array[Math.floor(Math.random() * array.length)]
-  }
-
-  function generateEmail(firstName: string, lastName: string): string {
-    const domains = ['example.com', 'test.com', 'demo.com', 'mail.md']
-    const timestamp = Date.now().toString().slice(-4)
-    return `${firstName.toLowerCase()}.${lastName.toLowerCase()}.${timestamp}@${randomItem(domains)}`
-  }
-
-  function generatePhone(): string {
-    const prefix = randomItem(phonePrefix)
-    const number = Math.floor(Math.random() * 90000000) + 10000000
-    return `${prefix}${number}`
-  }
-
-  function generateAddress(type: 'billing' | 'shipping') {
-    return {
-      type,
-      street: `${randomItem(streets)} ${Math.floor(Math.random() * 150) + 1}`,
-      city: randomItem(cities),
-      postal_code: `MD-${Math.floor(Math.random() * 9000) + 1000}`,
-      province: randomItem(cities),
-      country: 'MD',
-      is_default: type === 'shipping'
-    }
-  }
-
-  const createdUsers = []
-  const errors = []
+  const createdUsers: CreatedUser[] = []
+  const errors: Array<{ email: string; error: string }> = []
 
   for (let i = 0; i < count; i++) {
-    const firstName = randomItem(firstNames)
-    const lastName = randomItem(lastNames)
-    const email = generateEmail(firstName, lastName)
-    const name = `${firstName} ${lastName}`
-    const phone = generatePhone()
-    const preferredLanguage = randomItem(languages)
+    const mockUser = generateMockUser()
     const role = randomItem(roles)
-
-    // Generate a random password
-    const password = `TestPass${Math.floor(Math.random() * 10000)}!`
+    const password = generatePassword()
 
     try {
       // Create user via Supabase Auth
       const { data: authData, error: authError } = await supabase.auth.admin.createUser({
-        email,
+        email: mockUser.email,
         password,
         email_confirm: true, // Auto-confirm email
         user_metadata: {
-          name,
-          phone,
-          preferred_language: preferredLanguage
+          name: mockUser.name,
+          phone: mockUser.phone,
+          preferred_language: mockUser.preferredLanguage
         }
       })
 
       if (authError || !authData.user) {
-        console.error(`Failed to create auth user ${email}:`, authError)
-        errors.push({ email, error: authError?.message })
+        console.error(`Failed to create auth user ${mockUser.email}:`, authError)
+        errors.push({ email: mockUser.email, error: authError?.message || 'Unknown error' })
         continue
       }
 
@@ -128,15 +71,15 @@ export default defineEventHandler(async (event) => {
         .from('profiles')
         .upsert({
           id: userId,
-          name,
-          phone,
+          name: mockUser.name,
+          phone: mockUser.phone,
           role,
-          preferred_language: preferredLanguage
+          preferred_language: mockUser.preferredLanguage
         })
 
       if (profileError) {
-        console.error(`Failed to create profile for ${email}:`, profileError)
-        errors.push({ email, error: profileError.message })
+        console.error(`Failed to create profile for ${mockUser.email}:`, profileError)
+        errors.push({ email: mockUser.email, error: profileError.message })
         continue
       }
 
@@ -152,37 +95,31 @@ export default defineEventHandler(async (event) => {
           .insert(addresses)
 
         if (addressError) {
-          console.warn(`Failed to create addresses for ${email}:`, addressError)
+          console.warn(`Failed to create addresses for ${mockUser.email}:`, addressError)
         }
       }
 
       createdUsers.push({
         id: userId,
-        email,
-        name,
+        email: mockUser.email,
+        name: mockUser.name,
         role,
-        phone
-        // Password removed for security - not exposed in API response
+        phone: mockUser.phone
       })
 
     } catch (error: any) {
       console.error('Error creating user:', error)
-      errors.push({ email, error: error.message })
+      errors.push({ email: mockUser.email, error: error.message })
     }
   }
 
   // If orders are requested, create some sample orders for the users
   if (withOrders && createdUsers.length > 0) {
-    const mockProducts = [
-      { name: 'Traditional Moldovan Wine', price: 25.99, sku: 'WINE-001' },
-      { name: 'Handcrafted Pottery', price: 45.50, sku: 'POT-001' },
-      { name: 'Organic Honey', price: 15.99, sku: 'HONEY-001' },
-      { name: 'Wool Blanket', price: 89.99, sku: 'BLANKET-001' },
-      { name: 'Embroidered Shirt', price: 65.00, sku: 'SHIRT-001' }
-    ]
-
-    const statuses = ['pending', 'processing', 'shipped', 'delivered']
-    const paymentStatuses = ['paid', 'pending']
+    const mockProducts = productTemplates.map(t => ({
+      name: t.name,
+      price: (t.priceMin + t.priceMax) / 2,
+      sku: `${t.category.toUpperCase()}-001`
+    })).slice(0, 5)
 
     // Create 1-3 orders for each user
     for (const user of createdUsers) {
@@ -261,7 +198,7 @@ export default defineEventHandler(async (event) => {
     roles
   })
 
-  return {
+  const response: SeedUsersResponse = {
     success: true,
     message: `Created ${createdUsers.length} test users${withOrders ? ' with orders' : ''}`,
     users: createdUsers,
@@ -275,4 +212,6 @@ export default defineEventHandler(async (event) => {
       roles
     }
   }
+
+  return response
 })
