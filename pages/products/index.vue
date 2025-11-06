@@ -46,23 +46,22 @@
     </section>
 
     <div class="relative" ref="mainContainer">
+      <!-- Mobile/Tablet Filter Panel -->
       <Transition name="fade">
-        <div v-if="showFilterPanel" class="fixed inset-0 z-40 flex">
-          <div class="flex-1 bg-black/40 backdrop-blur-sm" @click="closeFilterPanel"></div>
-          <div class="relative ml-auto flex h-full w-full max-w-md flex-col bg-white dark:bg-gray-900 shadow-xl">
+        <div v-if="showFilterPanel" class="fixed inset-0 z-40 flex" role="dialog" aria-modal="true" aria-labelledby="filter-panel-title">
+          <div class="flex-1 bg-black/40 backdrop-blur-sm" @click="closeFilterPanel" aria-label="Close filters"></div>
+          <div id="filter-panel" class="relative ml-auto flex h-full w-full max-w-md flex-col bg-white dark:bg-gray-900 shadow-xl">
             <div class="flex items-center justify-between border-b border-gray-200 px-6 py-4 dark:border-gray-800">
-              <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+              <h2 id="filter-panel-title" class="text-lg font-semibold text-gray-900 dark:text-white">
                 {{ t('products.filters.title') }}
               </h2>
               <button
                 type="button"
-                :aria-label="t('common.close')"
-                class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                class="rounded-lg p-2 text-gray-500 transition hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200"
                 @click="closeFilterPanel"
+                :aria-label="t('common.close')"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
+                <commonIcon name="lucide:x" class="h-5 w-5" aria-hidden="true" />
               </button>
             </div>
             <div class="flex-1 overflow-y-auto px-4">
@@ -103,17 +102,25 @@
                   </p>
                 </div>
                 <div class="flex flex-wrap items-center gap-3">
+                  <!-- Filter button (mobile/tablet only) -->
                   <button
                     type="button"
-                    class="inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition hover:border-blue-500 hover:text-blue-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+                    :aria-label="t('products.filters.title')"
+                    :aria-expanded="showFilterPanel"
+                    aria-controls="filter-panel"
+                    class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition hover:border-blue-500 hover:text-blue-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
                     @click="openFilterPanel"
                   >
-                    {{ t('products.filters.title') }}
+                    <commonIcon name="lucide:filter" class="h-4 w-4" aria-hidden="true" />
+                    <span>{{ t('products.filters.title') }}</span>
+                    <span v-if="activeFilterChips.length" class="inline-flex items-center justify-center rounded-full bg-blue-100 px-2 py-0.5 text-xs font-semibold text-blue-700 dark:bg-blue-900/40 dark:text-blue-300" aria-label="Active filters count">
+                      {{ activeFilterChips.length }}
+                    </span>
                   </button>
                   <div class="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center">
                     <div class="relative flex-1">
-                      <label for="productSearch" class="sr-only">
-                        {{ t('products.searchLabel') || t('common.search') }}
+                      <label for="product-search" class="sr-only">
+                        {{ t('products.searchLabel') }}
                       </label>
                       <commonIcon
                         v-if="!loading"
@@ -128,28 +135,36 @@
                         </svg>
                       </div>
                       <input
-                        id="productSearch"
+                        id="product-search"
                         ref="searchInputRef"
                         v-model="searchQuery"
                         type="search"
+                        role="searchbox"
                         :placeholder="t('products.searchPlaceholder')"
                         :disabled="loading"
-                        :aria-label="t('products.searchLabel') || t('common.search')"
+                        :aria-label="t('products.searchLabel')"
                         class="w-full rounded-xl border border-gray-300 bg-white py-3 pl-11 pr-4 text-sm text-gray-900 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100 disabled:cursor-not-allowed disabled:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-400"
                         @input="handleSearchInput"
                       />
                     </div>
-                    <select
-                      v-model="sortBy"
-                      class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:focus:border-blue-400 sm:w-48"
-                      @change="handleSortChange"
-                    >
-                      <option value="created">{{ t('products.sortNewest') }}</option>
-                      <option value="name">{{ t('products.sortName') }}</option>
-                      <option value="price_asc">{{ t('products.sortPriceLowHigh') }}</option>
-                      <option value="price_desc">{{ t('products.sortPriceHighLow') }}</option>
-                      <option value="featured">{{ t('products.sortFeatured') }}</option>
-                    </select>
+                    <div class="relative">
+                      <label for="product-sort" class="sr-only">
+                        {{ t('products.sortLabel') }}
+                      </label>
+                      <select
+                        id="product-sort"
+                        v-model="sortBy"
+                        :aria-label="t('products.sortLabel')"
+                        class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:focus:border-blue-400 sm:w-48"
+                        @change="handleSortChange"
+                      >
+                        <option value="created">{{ t('products.sortNewest') }}</option>
+                        <option value="name">{{ t('products.sortName') }}</option>
+                        <option value="price_asc">{{ t('products.sortPriceLowHigh') }}</option>
+                        <option value="price_desc">{{ t('products.sortPriceHighLow') }}</option>
+                        <option value="featured">{{ t('products.sortFeatured') }}</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -170,32 +185,42 @@
                 </template>
               </div>
 
-              <div v-if="activeFilterChips.length" class="mt-4 flex flex-wrap gap-2">
+              <div v-if="activeFilterChips.length" class="mt-4 flex flex-wrap gap-2" role="list" :aria-label="t('products.filterSummary.activeFilters')">
                 <button
                   v-for="chip in activeFilterChips"
                   :key="chip.id"
                   type="button"
+                  role="listitem"
                   class="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1.5 text-sm font-medium text-blue-700 transition hover:bg-blue-100 dark:bg-blue-900/40 dark:text-blue-200"
+                  :aria-label="t('products.filterSummary.removeFilter', { filter: chip.label })"
                   @click="removeActiveChip(chip)"
                 >
                   <span>{{ chip.label }}</span>
                   <span aria-hidden="true">×</span>
                 </button>
-                <button type="button" class="rounded-full border border-blue-100 px-3 py-1.5 text-sm font-medium text-blue-600 transition hover:bg-blue-50 dark:border-blue-900/40 dark:text-blue-300" @click="clearAllFilters">
+                <button
+                  type="button"
+                  class="rounded-full border border-blue-100 px-3 py-1.5 text-sm font-medium text-blue-600 transition hover:bg-blue-50 dark:border-blue-900/40 dark:text-blue-300"
+                  :aria-label="t('products.filterSummary.clearAllFilters')"
+                  @click="clearAllFilters"
+                >
                   {{ t('products.filterSummary.clear') }}
                 </button>
               </div>
 
-              <div class="mt-6 flex flex-wrap items-center gap-3">
+              <div class="mt-6 flex flex-wrap items-center gap-3" role="group" :aria-label="t('products.quickFilters.label')">
                 <button
                   v-for="toggle in quickToggleOptions"
                   :key="toggle.id"
                   type="button"
+                  role="switch"
+                  :aria-checked="toggle.active"
+                  :aria-label="t('products.quickFilters.toggle', { filter: toggle.label })"
                   class="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition"
                   :class="toggle.active ? 'border-blue-500 bg-blue-50 text-blue-700 dark:border-blue-500/60 dark:bg-blue-900/40 dark:text-blue-200' : 'border-gray-300 bg-white text-gray-700 hover:border-blue-500 hover:text-blue-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200'"
                   @click="toggleQuickFilter(toggle)"
                 >
-                  <span class="inline-block h-2.5 w-2.5 rounded-full" :class="toggle.active ? 'bg-blue-500' : 'bg-gray-300 dark:bg-gray-600'"></span>
+                  <span class="inline-block h-2.5 w-2.5 rounded-full" :class="toggle.active ? 'bg-blue-500' : 'bg-gray-300 dark:bg-gray-600'" aria-hidden="true"></span>
                   {{ toggle.label }}
                 </button>
               </div>
@@ -237,14 +262,15 @@
               </div>
 
               <div v-if="pagination.totalPages > 1" class="space-y-4 text-center">
-                <p class="text-sm text-gray-600 dark:text-gray-400">
+                <p class="text-sm text-gray-600 dark:text-gray-400" aria-live="polite">
                   {{ t('products.pagination.pageOf', { page: pagination.page, total: pagination.totalPages }) }} ·
                   {{ t('products.pagination.showing', { count: pagination.total || products.length }) }}
                 </p>
-                <nav class="flex items-center justify-center gap-2">
+                <nav class="flex items-center justify-center gap-2" aria-label="Pagination">
                   <button
                     :disabled="pagination.page <= 1"
                     class="rounded-full border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:border-blue-500 hover:text-blue-600 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+                    :aria-label="t('products.pagination.previousPage')"
                     @click="goToPage(pagination.page - 1)"
                   >
                     {{ t('common.previous') }}
@@ -255,14 +281,17 @@
                     v-if="page !== '...'"
                     class="rounded-full px-4 py-2 text-sm font-semibold transition"
                     :class="page === pagination.page ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30' : 'bg-white text-gray-700 hover:bg-blue-50 dark:bg-gray-800 dark:text-gray-200'"
+                    :aria-label="t('products.pagination.goToPage', { page })"
+                    :aria-current="page === pagination.page ? 'page' : undefined"
                     @click="goToPage(page as number)"
                   >
                     {{ page }}
                   </button>
-                  <span v-else class="px-3 py-2 text-sm text-gray-500">…</span>
+                  <span v-else class="px-3 py-2 text-sm text-gray-500" aria-hidden="true">…</span>
                   <button
                     :disabled="pagination.page >= pagination.totalPages"
                     class="rounded-full border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:border-blue-500 hover:text-blue-600 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+                    :aria-label="t('products.pagination.nextPage')"
                     @click="goToPage(pagination.page + 1)"
                   >
                     {{ t('common.next') }}
@@ -632,10 +661,21 @@ const scrollToResults = () => {
 
 const openFilterPanel = () => {
   showFilterPanel.value = true
+  // Prevent body scroll when panel is open
+  document.body.style.overflow = 'hidden'
 }
 
 const closeFilterPanel = () => {
   showFilterPanel.value = false
+  // Restore body scroll
+  document.body.style.overflow = ''
+}
+
+// Handle Escape key to close filter panel
+const handleKeyDown = (event: KeyboardEvent) => {
+  if (event.key === 'Escape' && showFilterPanel.value) {
+    closeFilterPanel()
+  }
 }
 
 const discoveryCollections = computed(() => {
@@ -887,10 +927,17 @@ onMounted(async () => {
     })
   }
   await refreshPriceRange()
+
+  // Set up keyboard listener for filter panel
+  document.addEventListener('keydown', handleKeyDown)
 })
 
 onUnmounted(() => {
   cleanupMobileInteractions()
+  // Clean up keyboard listener
+  document.removeEventListener('keydown', handleKeyDown)
+  // Restore body scroll if panel was open
+  document.body.style.overflow = ''
 })
 
 useHead({
