@@ -177,7 +177,8 @@ describe('searchSanitization', () => {
       const malicious = "'; DROP TABLE products; --"
       const safe = sanitizeSearchTerm(malicious)
       expect(safe).toContain("''") // Quotes should be escaped
-      expect(safe).not.toContain("';")
+      expect(safe).toBe("''; DROP TABLE products; --") // Full expected result
+      // The single quote at the start is escaped to '', making it safe in SQL strings
     })
 
     it('should prevent wildcard-based denial of service', () => {
