@@ -43,8 +43,8 @@
               type="button"
               variant="ghost"
               size="icon"
-              :aria-label="t('common.search')"
-              class="p-2.5 min-w-[44px] min-h-[44px] text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 flex items-center justify-center"
+              :aria-label="`${t('common.search')} (${searchShortcut})`"
+              class="group relative p-2.5 min-w-[44px] min-h-[44px] text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 flex items-center justify-center"
               @click="goToSearch"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -52,6 +52,10 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
+              <!-- Keyboard shortcut hint -->
+              <span class="absolute -bottom-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap bg-gray-900 dark:bg-gray-700 text-white text-xs px-2 py-1 rounded pointer-events-none">
+                {{ searchShortcut }}
+              </span>
             </Button>
 
             <!-- Account -->
@@ -184,5 +188,9 @@ const mobileMenuLabel = computed(() => mobileMenuOpen.value ? t('common.close') 
 const goToSearch = () => {
   navigateTo(localePath({ path: '/products', query: { focus: 'search' } }))
 }
+
+// Get keyboard shortcut display
+const { getShortcutDisplay } = useKeyboardShortcuts()
+const searchShortcut = computed(() => getShortcutDisplay('k', { ctrlOrCmd: true }))
 
 </script>
