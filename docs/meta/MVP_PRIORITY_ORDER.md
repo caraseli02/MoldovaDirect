@@ -1,6 +1,8 @@
 # MVP Launch Priority Order
 
 **Created:** 2025-11-03
+**Last Updated:** 2025-11-06
+**Status Tracker:** [ISSUE_STATUS_TRACKER.md](./ISSUE_STATUS_TRACKER.md) ← **Single Source of Truth**
 **Milestone:** [MVP Launch Blockers](https://github.com/caraseli02/MoldovaDirect/milestone/1)
 **Target Launch:** 2 weeks (November 17, 2025)
 
@@ -16,104 +18,118 @@ Focus on:
 
 ---
 
-## 📊 Current Status
+## 📊 Current Status (Updated Nov 6, 2025)
 
-**Overall Completeness:** 70%
-**Can Ship Today:** ❌ NO - Critical security blockers
-**Time to MVP:** 2 weeks with focused effort
+**Overall Completeness:** 85-90% ✅
+**Can Ship Today:** ⚠️ NO - 3 P0 items remaining (3-5 hours work)
+**Time to MVP:** 5-7 days with focused effort
 
-### What Works
-- Product browsing and search
-- Shopping cart (feature-complete)
-- Multi-language support
-- Dark/light theme
-- Admin dashboard
-- Order management basics
+### ✅ What Works (Recently Fixed!)
+- Product browsing and search ✅
+- Shopping cart (feature-complete) ✅
+- **Authentication enabled** ✅ (Fixed Nov 3)
+- **Admin RBAC enforced** ✅ (Fixed Nov 3)
+- **Atomic transactions** ✅ (Fixed Nov 3)
+- **No hardcoded credentials** ✅ (Fixed Nov 4)
+- Multi-language support ✅
+- Dark/light theme ✅
+- Admin dashboard ✅
+- Order management basics ✅
 - Cash on delivery payments ✅
 
-### What Blocks Launch
-- Authentication disabled (P0)
-- Admin authorization missing (P0)
-- Payment webhooks missing (P0)
-- Transaction safety missing (P0)
-- Test credentials exposed (P0)
+### ⚠️ What Still Blocks Launch (3-5 hours)
+- #160 - Email template auth verification (30 min - likely already fixed)
+- #162 - Key rotation (2-3 hours - operational task)
+- #81 - Supabase client audit (1-2 hours - investigation)
 
 ---
 
-## 🚨 WEEK 1: Security & Data Integrity (P0 - BLOCKING)
+## ✅ RECENTLY COMPLETED (Nov 2-4, 2025)
 
-**Goal:** Make the app secure and prevent data corruption
+**Great progress! 6 out of 9 P0 issues fixed in 3 days:**
 
-### Day 1-2: Authentication & Authorization (4 issues)
+### ✅ Issue #159 - Re-enable Authentication Middleware
+- **Status:** FIXED (Nov 3, 2025)
+- **Commit:** `2bb7e2b`
+- **Verification:** docs/features/authentication/AUTH_MIDDLEWARE_TEST_RESULTS.md
+- **Impact:** All protected routes now require authentication ✅
 
-**Issue #159** - Re-enable Authentication Middleware
+### ✅ Issue #89 - Atomic Order + Inventory Transactions
+- **Status:** FIXED (Nov 3, 2025)
+- **Commits:** `951a558`, `50dea93`
+- **Verification:** docs/features/cart/ATOMIC_INVENTORY_FIX.md
+- **Impact:** Prevents race conditions and data corruption ✅
+
+### ✅ Issue #73 - Missing RBAC in Admin Endpoints
+- **Status:** FIXED (Nov 3, 2025)
+- **Commit:** `ba57e07`
+- **Verification:** docs/security/ISSUES_73_76_VERIFICATION.md
+- **Impact:** All 31 admin endpoints now require admin role ✅
+
+### ✅ Issue #76 - Hardcoded Credentials in Admin Script
+- **Status:** FIXED (Nov 4, 2025)
+- **Commit:** `95694d2`
+- **Verification:** docs/security/ISSUES_73_76_VERIFICATION.md
+- **Impact:** Auto-generated secure passwords (20 chars) ✅
+
+### ✅ Issue #86 - Email Template Authorization Missing
+- **Status:** FIXED (Nov 2, 2025)
+- **Commit:** `1c778b1`
+- **Impact:** All 7 email template endpoints protected ✅
+
+### ✅ Issue #59 - Hardcoded Test Credentials
+- **Status:** FIXED (Nov 2, 2025)
+- **Commit:** `ae7a026`
+- **Impact:** Test credentials secured ✅
+
+---
+
+## ⚠️ REMAINING WORK: Security & Verification (3-5 hours)
+
+**Goal:** Complete final security items and verification
+
+### Issue #160 - Admin Email Template Authorization
+- **Priority:** P0 - CRITICAL (needs verification)
+- **Effort:** 30 minutes
+- **Status:** ⚠️ NEEDS VERIFICATION (likely duplicate of #86)
+- **Action Required:**
+  1. Compare #160 and #86 issue descriptions
+  2. Test all 7 email template endpoints with non-admin user
+  3. Close #160 if confirmed as duplicate
+
+---
+
+### Issue #162 - Test Infrastructure Security Vulnerabilities
 - **Priority:** P0 - CRITICAL
-- **Effort:** 30 min - 1 hour
-- **Why:** Auth is currently completely disabled
-- **Impact:** ALL routes accessible without login
-- **File:** `middleware/auth.ts:16`
+- **Effort:** 2-3 hours (operational tasks)
+- **Status:** ⚠️ PARTIALLY FIXED (code done, ops pending)
+- **Completed:**
+  - ✅ Removed exposed keys from code (commit `9e475bf`)
+  - ✅ Replaced with placeholders
+- **Action Required:**
+  1. Access Supabase dashboard with admin credentials
+  2. Generate new service role key
+  3. Update Vercel environment variables
+  4. Update local .env files (all team members)
+  5. Revoke old exposed key
+  6. Audit Supabase access logs
+- **Dependencies:** Requires Supabase + Vercel admin access
 
-**Issue #160** - Admin Email Template Authorization
-- **Priority:** P0 - CRITICAL
-- **Effort:** 1-2 hours
-- **Why:** ANY user can modify system email templates
-- **Impact:** Security + brand reputation risk
-- **Files:** `server/api/admin/email-templates/*.ts` (4 files)
+---
 
-**Issue #73** - Missing RBAC in Admin Endpoints
-- **Priority:** P0 - CRITICAL
-- **Effort:** 1-2 hours
-- **Why:** Any authenticated user can access admin pages
-- **Impact:** Customers can view/modify all orders
-- **File:** `server/utils/adminAuth.ts:20-47`
-
-**Issue #81** - Auth Check Uses Wrong Supabase Client
+### Issue #81 - Auth Check Uses Wrong Supabase Client
 - **Priority:** P1 - HIGH
 - **Effort:** 1-2 hours
-- **Why:** Service role client has no user session
-- **Impact:** Auth checks don't work properly
-- **File:** `server/api/admin/orders/bulk.post.ts`
+- **Status:** ⚠️ NEEDS INVESTIGATION
+- **Files:** `server/api/admin/orders/bulk.post.ts`, possibly others
+- **Action Required:**
+  1. Audit all auth-related server endpoints
+  2. Search for `serverSupabaseServiceRole` usage in auth contexts
+  3. Verify proper client usage (service vs. anon key)
+  4. Ensure no Row Level Security bypasses
+  5. Document findings and fix any issues
 
-**Total Day 1-2:** ~6-8 hours
-
----
-
-### Day 3: Test Infrastructure Security (2 issues)
-
-**Issue #162** - Test Infrastructure Security Vulnerabilities
-- **Priority:** P0 - CRITICAL
-- **Effort:** 2-3 hours
-- **Why:** Exposed Supabase service key + hardcoded credentials
-- **Impact:** Full database access compromised
-- **Action:** Rotate keys, remove hardcoded passwords
-
-**Issue #76** - Hardcoded Credentials in Admin Script
-- **Priority:** P0 - CRITICAL
-- **Effort:** 30 min - 1 hour
-- **Why:** Weak passwords hardcoded in scripts
-- **Impact:** Known admin credentials in code
-- **File:** `scripts/create-admin-user.mjs:122-143`
-
-**Total Day 3:** ~3-4 hours
-
----
-
-### Day 4: Data Integrity (1 issue)
-
-**Issue #89** - No Transaction for Order + Inventory
-- **Priority:** P0 - CRITICAL
-- **Effort:** 3-4 hours
-- **Why:** Order and inventory are separate API calls
-- **Impact:** Data corruption, overselling risk
-- **Action:** Implement atomic database transaction
-- **Files:** `server/api/checkout/create-order.post.ts`, `server/api/checkout/update-inventory.post.ts`
-
-**Related Issues:**
-- #74 - Race Condition in Inventory Updates
-- #75 - Duplicate Inventory Deductions
-- #77 - Missing Transaction Wrapping
-
-**Total Day 4:** ~4 hours
+**Total Remaining Work:** ~3-5 hours + coordination time
 
 ---
 

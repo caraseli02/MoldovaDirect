@@ -1,6 +1,7 @@
 # MVP Quick Start Guide
 
 **Target:** 2 weeks to launch | **Due:** November 17, 2025
+**Status Tracker:** See [ISSUE_STATUS_TRACKER.md](../meta/ISSUE_STATUS_TRACKER.md) for current status
 
 ## 🎯 The Goal
 
@@ -8,25 +9,36 @@ Ship a secure, working e-commerce site where customers can buy products with cas
 
 ## 📋 What You Need to Do
 
-### Week 1: Security Fixes (MUST DO)
+### ✅ Recently Completed (Nov 2-4, 2025)
+
+**Great progress! 6 out of 9 P0 issues already fixed:**
+
+1. ✅ **#159** - Re-enable auth middleware (FIXED Nov 3)
+2. ✅ **#89** - Atomic order+inventory transaction (FIXED Nov 3)
+3. ✅ **#73** - Add admin RBAC (FIXED Nov 3)
+4. ✅ **#76** - Remove hardcoded passwords (FIXED Nov 4)
+5. ✅ **#86** - Email template authorization (FIXED Nov 2)
+6. ✅ **#59** - Test credentials secured (FIXED Nov 2)
+
+### ⚠️ Remaining Work (3-5 hours)
 
 Work on these issues **in this exact order**:
 
-1. **#159** - Re-enable auth middleware (30 min) 🚨
-2. **#160** - Fix email template auth (1-2 hours) 🚨
-3. **#73** - Add admin RBAC (1-2 hours) 🚨
-4. **#81** - Fix Supabase client usage (1-2 hours)
-5. **#162** - Rotate exposed keys (2-3 hours) 🚨
-6. **#76** - Remove hardcoded passwords (30 min) 🚨
-7. **#89** - Atomic order+inventory transaction (3-4 hours) 🚨
+1. **#160** - Verify email template auth (30 min) ⚠️ Likely duplicate of #86
+2. **#162** - Rotate exposed keys (2-3 hours) 🚨 Requires admin access
+3. **#81** - Audit Supabase client usage (1-2 hours) ⚠️ Needs investigation
 
-**Total: ~12-15 hours (2-3 days)**
+**Total: ~3-5 hours (0.5-1 day)**
 
-### Week 2: Polish & Ship
+### Week 2: Polish & Ship (Nov 7-17)
 
-8. **#121** - Cart locking during checkout (3-4 hours)
-9. Test everything thoroughly (1-2 days)
-10. Deploy to production (1 day)
+4. Test everything thoroughly (1-2 days)
+5. Deploy to production (1 day)
+
+**Optional (Can Defer):**
+- **#121** - Cart locking during checkout (3-4 hours) - P1, not blocking
+- **#161** - Stripe webhooks (2-3 days) - Ship COD-only for MVP
+- **#163** - Order status emails (2-3 days) - Manual updates for MVP
 
 ## 🚫 What NOT to Do
 
@@ -88,4 +100,14 @@ You're ready to launch when:
 
 ---
 
-Start with issue #159 right now! 🚀
+## 📊 Current Status
+
+**P0 Issues:** 6/9 complete (67%)
+**Time Remaining:** 3-5 hours + testing
+**Launch Readiness:** 🟡 IN PROGRESS
+
+**See full status:** [ISSUE_STATUS_TRACKER.md](../meta/ISSUE_STATUS_TRACKER.md)
+
+---
+
+Next up: Verify #160, then tackle #162 and #81! 🚀
