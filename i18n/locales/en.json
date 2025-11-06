@@ -1128,11 +1128,14 @@
       "featuredOnly": "Featured only",
       "active": "Active Filters",
       "clearAll": "Clear All",
+      "clearAllFilters": "Clear all active filters",
       "apply": "Apply Filters",
       "minPrice": "Min Price",
       "maxPrice": "Max Price",
       "removeFilter": "Remove {filter} filter",
-      "unknownCategory": "Unknown Category"
+      "unknownCategory": "Unknown Category",
+      "openFilters": "Open filters panel",
+      "activeCount": "{count} active filters"
     },
     "hero": {
       "seasonal": "Seasonal highlights",
@@ -1156,7 +1159,14 @@
     },
     "filterSummary": {
       "title": "Active filters",
-      "clear": "Reset filters"
+      "clear": "Reset filters",
+      "activeFilters": "Active filter list",
+      "removeFilter": "Remove {filter} filter",
+      "clearAllFilters": "Clear all filters"
+    },
+    "quickFilters": {
+      "label": "Quick filter options",
+      "toggle": "Toggle {filter} filter"
     },
     "chips": {
       "category": "Category: {value}",
@@ -1195,7 +1205,10 @@
     },
     "pagination": {
       "pageOf": "Page {page} of {total}",
-      "showing": "Total of {count} products"
+      "showing": "Total of {count} products",
+      "previousPage": "Go to previous page",
+      "nextPage": "Go to next page",
+      "goToPage": "Go to page {page}"
     },
     "story": {
       "title": "Tasting journey",
