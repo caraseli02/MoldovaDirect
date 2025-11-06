@@ -61,12 +61,12 @@
                 ></textarea>
               </div>
               
-              <button
+              <UiButton
                 type="submit"
-                class="w-full bg-primary-600 text-white py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors"
+                class="w-full"
               >
                 Send Message
-              </button>
+              </UiButton>
             </form>
           </div>
           
