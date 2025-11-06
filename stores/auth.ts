@@ -19,7 +19,7 @@ import type { WatchStopHandle } from 'vue'
 import { useAuthMessages } from '~/composables/useAuthMessages'
 import { useAuthValidation } from '~/composables/useAuthValidation'
 import { useToast } from '~/composables/useToast'
-import { testUserPersonas, type TestUserPersonaKey } from '~/lib/testing/testUserPersonas'
+import type { TestUserPersonaKey } from '~/lib/testing/testUserPersonas'
 
 type AuthSubscription = {
   unsubscribe: () => PromiseLike<unknown>
@@ -341,7 +341,7 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    simulateLogin(personaKey: TestUserPersonaKey) {
+    async simulateLogin(personaKey: TestUserPersonaKey) {
       const config = useRuntimeConfig()
       const isEnabled = config?.public?.enableTestUsers ?? false
 
@@ -349,6 +349,8 @@ export const useAuthStore = defineStore('auth', {
         throw new Error('Test user simulation is disabled in this environment.')
       }
 
+      // Dynamically import test utilities to avoid bundling in production
+      const { testUserPersonas } = await import('~/lib/testing/testUserPersonas')
       const persona = testUserPersonas[personaKey]
 
       if (!persona) {

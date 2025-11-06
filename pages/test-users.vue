@@ -226,9 +226,9 @@ const activePersona = computed(() => {
   return key ? testUserPersonas[key] : null
 })
 
-const handleActivatePersona = (key: TestUserPersonaKey) => {
+const handleActivatePersona = async (key: TestUserPersonaKey) => {
   try {
-    authStore.simulateLogin(key)
+    await authStore.simulateLogin(key)
     const persona = testUserPersonas[key]
     toast.success(
       'Simulación activada',
