@@ -126,23 +126,23 @@
         <div v-if="hasActiveFilters" class="flex items-center gap-2 pt-3 border-t">
           <Badge v-if="status && status.length > 0" variant="secondary" class="gap-1">
             Status: {{ getStatusLabel(status[0]) }}
-            <button @click="clearStatusFilter" class="ml-1 hover:bg-muted rounded-full p-0.5">
+            <UiButton @click="clearStatusFilter" variant="ghost" size="icon" class="ml-1 h-4 w-4 rounded-full hover:bg-muted">
               <commonIcon name="lucide:x" class="h-3 w-3" />
-            </button>
+            </UiButton>
           </Badge>
 
           <Badge v-if="paymentStatus && paymentStatus.length > 0" variant="secondary" class="gap-1">
             Payment: {{ getPaymentStatusLabel(paymentStatus[0]) }}
-            <button @click="clearPaymentStatusFilter" class="ml-1 hover:bg-muted rounded-full p-0.5">
+            <UiButton @click="clearPaymentStatusFilter" variant="ghost" size="icon" class="ml-1 h-4 w-4 rounded-full hover:bg-muted">
               <commonIcon name="lucide:x" class="h-3 w-3" />
-            </button>
+            </UiButton>
           </Badge>
 
           <Badge v-if="dateRange" variant="secondary" class="gap-1">
             {{ formatDateRange(dateRange) }}
-            <button @click="clearDateRange" class="ml-1 hover:bg-muted rounded-full p-0.5">
+            <UiButton @click="clearDateRange" variant="ghost" size="icon" class="ml-1 h-4 w-4 rounded-full hover:bg-muted">
               <commonIcon name="lucide:x" class="h-3 w-3" />
-            </button>
+            </UiButton>
           </Badge>
         </div>
 
