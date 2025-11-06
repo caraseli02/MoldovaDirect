@@ -64,6 +64,11 @@ export default defineNuxtConfig({
   },
   nitro: {
     preset: "vercel",
+    ignore: [
+      "**/*.test.ts",
+      "**/*.spec.ts",
+      "**/__tests__/**",
+    ],
     externals: {
       external: [],
       inline: ["vue", "@vue/*"],
