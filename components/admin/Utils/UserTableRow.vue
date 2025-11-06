@@ -117,22 +117,26 @@
       
       <!-- Mobile Quick Actions -->
       <div class="flex items-center space-x-2 ml-2">
-        <button
+        <UiButton
           @click.stop="handleView"
           @touchstart="vibrate('tap')"
-          class="p-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 touch-manipulation active:scale-90 transition-all"
-          :title="$t('admin.users.actions.view')"
+          variant="ghost"
+          size="icon"
+          class="h-9 w-9 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 touch-manipulation active:scale-90"
+          :aria-label="$t('admin.users.actions.view')"
         >
-          <commonIcon name="lucide:eye" class="w-5 h-5" />
-        </button>
-        <button
+          <commonIcon name="lucide:eye" class="h-5 w-5" />
+        </UiButton>
+        <UiButton
           @click.stop="handleEdit"
           @touchstart="vibrate('tap')"
-          class="p-2 text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 touch-manipulation active:scale-90 transition-all"
-          :title="$t('admin.users.actions.edit')"
+          variant="ghost"
+          size="icon"
+          class="h-9 w-9 touch-manipulation active:scale-90"
+          :aria-label="$t('admin.users.actions.edit')"
         >
-          <commonIcon name="lucide:pencil" class="w-5 h-5" />
-        </button>
+          <commonIcon name="lucide:pencil" class="h-5 w-5" />
+        </UiButton>
         <AdminUsersActionsDropdown
           :user="user"
           mobile

@@ -15,13 +15,15 @@
 <template>
   <div ref="dropdownRef" class="relative">
     <!-- Dropdown Trigger -->
-    <button
+    <UiButton
       @click="toggleDropdown"
-      class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 p-1 rounded"
-      title="User Actions"
+      variant="ghost"
+      size="icon"
+      class="h-8 w-8"
+      :aria-label="$t('admin.users.actions.menu')"
     >
-      <commonIcon name="lucide:more-vertical" class="w-4 h-4" />
-    </button>
+      <commonIcon name="lucide:more-vertical" class="h-4 w-4" />
+    </UiButton>
 
     <!-- Dropdown Menu -->
     <div
