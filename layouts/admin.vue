@@ -3,12 +3,16 @@
     <div
       class="fixed inset-y-0 left-0 z-50 w-64 transform bg-white shadow-lg transition-transform duration-300 ease-in-out dark:bg-gray-800 lg:translate-x-0"
       :class="{ '-translate-x-full': !sidebarOpen }"
+      :style="{ paddingBottom: 'env(safe-area-inset-bottom)' }"
     >
-      <div class="flex h-16 items-center justify-center bg-blue-600 px-4">
+      <div
+        class="flex h-16 items-center justify-center bg-blue-600 px-4"
+        :style="{ paddingTop: 'max(1rem, env(safe-area-inset-top))' }"
+      >
         <h1 class="text-xl font-bold text-white">Moldova Direct</h1>
       </div>
 
-      <nav class="mt-8 px-4">
+      <nav class="mt-8 px-4 pb-4 overflow-y-auto overscroll-contain" :style="{ maxHeight: 'calc(100vh - 4rem - env(safe-area-inset-top) - env(safe-area-inset-bottom))' }">
         <ul class="space-y-2">
           <li v-for="item in navItems" :key="item.to">
             <NuxtLink
@@ -80,11 +84,13 @@
       </main>
     </div>
 
-    <div
-      v-if="sidebarOpen"
-      @click="closeSidebar"
-      class="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
-    ></div>
+    <Transition name="admin-backdrop">
+      <div
+        v-if="sidebarOpen"
+        @click="closeSidebar"
+        class="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
+      ></div>
+    </Transition>
   </div>
 </template>
 
@@ -123,10 +129,46 @@ const isActiveRoute = (item: { match: (path: string) => boolean }) => {
   return item.match(route.path)
 }
 
+// Handle body scroll lock when sidebar is open on mobile
+watch(sidebarOpen, (isOpen) => {
+  if (typeof window !== 'undefined') {
+    if (isOpen && window.innerWidth < 1024) { // lg breakpoint
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+  }
+})
+
 watch(
   () => route.path,
   () => {
     sidebarOpen.value = false
   }
 )
+
+onUnmounted(() => {
+  if (typeof document !== 'undefined') {
+    document.body.style.overflow = ''
+  }
+})
 </script>
+
+<style scoped>
+/* Backdrop transition */
+.admin-backdrop-enter-active,
+.admin-backdrop-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.admin-backdrop-enter-from,
+.admin-backdrop-leave-to {
+  opacity: 0;
+}
+
+/* Ensure smooth scrolling on iOS */
+.overscroll-contain {
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+</style>

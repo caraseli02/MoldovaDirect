@@ -1,23 +1,32 @@
 <template>
   <Transition name="mobile-nav">
-    <div class="md:hidden fixed inset-0 z-50 flex">
+    <div v-if="true" class="md:hidden fixed inset-0 z-50 flex">
       <!-- Backdrop with blur effect -->
-      <div
-        @click="$emit('close')"
-        class="fixed inset-0 bg-black/60 backdrop-blur-sm"
-        :aria-label="$t('common.close')"
-      ></div>
-      
+      <Transition name="mobile-nav-backdrop">
+        <div
+          v-if="true"
+          @click="$emit('close')"
+          class="fixed inset-0 bg-black/60 backdrop-blur-sm"
+          :aria-label="$t('common.close')"
+        ></div>
+      </Transition>
+
       <!-- Modern sidebar -->
-      <div
-        ref="drawerRef"
-        class="relative flex w-full max-w-sm flex-col bg-white dark:bg-gray-800 shadow-2xl"
-        role="dialog"
-        aria-modal="true"
-        tabindex="-1"
-      >
+      <Transition name="mobile-nav-drawer">
+        <div
+          v-if="true"
+          ref="drawerRef"
+          class="relative flex w-full max-w-[min(85vw,400px)] flex-col bg-white dark:bg-gray-800 shadow-2xl"
+          :style="{ paddingBottom: 'env(safe-area-inset-bottom)' }"
+          role="dialog"
+          aria-modal="true"
+          tabindex="-1"
+        >
         <!-- Modern header with gradient -->
-        <div class="flex items-center justify-between px-6 py-5 bg-gradient-to-r from-primary-500 to-primary-600 dark:from-primary-600 dark:to-primary-700">
+        <div
+          class="flex items-center justify-between px-6 py-5 bg-gradient-to-r from-primary-500 to-primary-600 dark:from-primary-600 dark:to-primary-700"
+          :style="{ paddingTop: 'max(1.25rem, env(safe-area-inset-top))' }"
+        >
           <div class="flex items-center space-x-3">
             <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
               <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -41,7 +50,7 @@
         </div>
       
         <!-- Navigation Links with icons -->
-        <nav class="flex-1 overflow-y-auto px-6 py-6">
+        <nav class="flex-1 overflow-y-auto px-6 py-6 overscroll-contain">
           <div class="space-y-2">
             <NuxtLink
               :to="localePath('/')"
@@ -155,7 +164,8 @@
             </div>
           </div>
         </nav>
-      </div>
+        </div>
+      </Transition>
     </div>
   </Transition>
 </template>
@@ -238,3 +248,50 @@ const goToSearch = () => {
   emit('close')
 }
 </script>
+
+<style scoped>
+/* Main container transitions */
+.mobile-nav-enter-active,
+.mobile-nav-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.mobile-nav-enter-from,
+.mobile-nav-leave-to {
+  opacity: 0;
+}
+
+/* Backdrop transitions */
+.mobile-nav-backdrop-enter-active,
+.mobile-nav-backdrop-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.mobile-nav-backdrop-enter-from,
+.mobile-nav-backdrop-leave-to {
+  opacity: 0;
+}
+
+/* Drawer slide transitions */
+.mobile-nav-drawer-enter-active {
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.mobile-nav-drawer-leave-active {
+  transition: transform 0.25s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.mobile-nav-drawer-enter-from {
+  transform: translateX(-100%);
+}
+
+.mobile-nav-drawer-leave-to {
+  transform: translateX(-100%);
+}
+
+/* Ensure smooth scrolling on iOS */
+.overscroll-contain {
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+</style>

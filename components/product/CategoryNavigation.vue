@@ -90,18 +90,29 @@
 
       <!-- Mobile Category Modal -->
       <Teleport to="body">
-        <div
-          v-if="showMobileNav"
-          class="fixed inset-0 z-50 lg:hidden"
-          @click="showMobileNav = false"
-        >
-          <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" />
-          
+        <Transition name="category-modal">
           <div
-            class="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 rounded-t-xl max-h-[80vh] overflow-hidden transform transition-transform"
-            :class="showMobileNav ? 'translate-y-0' : 'translate-y-full'"
-            @click.stop
+            v-if="showMobileNav"
+            class="fixed inset-0 z-50 lg:hidden"
+            @click="showMobileNav = false"
           >
+            <Transition name="category-backdrop">
+              <div
+                v-if="showMobileNav"
+                class="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
+              />
+            </Transition>
+
+            <Transition name="category-sheet">
+              <div
+                v-if="showMobileNav"
+                class="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 rounded-t-xl overflow-hidden transform"
+                :style="{
+                  maxHeight: 'calc(90vh - env(safe-area-inset-top))',
+                  paddingBottom: 'env(safe-area-inset-bottom)'
+                }"
+                @click.stop
+              >
             <!-- Mobile Header -->
             <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
               <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
@@ -116,7 +127,10 @@
             </div>
 
             <!-- Mobile Category List -->
-            <div class="overflow-y-auto max-h-[calc(80vh-80px)]">
+            <div
+              class="overflow-y-auto overscroll-contain"
+              :style="{ maxHeight: 'calc(90vh - env(safe-area-inset-top) - 80px)' }"
+            >
               <div class="p-4 space-y-1">
                 <!-- All Products -->
                 <NuxtLink
@@ -146,8 +160,10 @@
                 />
               </div>
             </div>
+              </div>
+            </Transition>
           </div>
-        </div>
+        </Transition>
       </Teleport>
     </div>
 
@@ -294,16 +310,16 @@ const handleMobileCategorySelect = (category: CategoryWithChildren) => {
   showMobileNav.value = false
 }
 
-// Close mobile nav on escape key
+// Close mobile nav on escape key and handle body scroll
 const setupEscapeHandler = () => {
   const handleEscape = (e: KeyboardEvent) => {
     if (e.key === 'Escape' && showMobileNav.value) {
       showMobileNav.value = false
     }
   }
-  
+
   document.addEventListener('keydown', handleEscape)
-  
+
   onUnmounted(() => {
     document.removeEventListener('keydown', handleEscape)
     if (dropdownTimeout.value) {
@@ -312,6 +328,65 @@ const setupEscapeHandler = () => {
   })
 }
 
+// Handle body scroll lock when modal is open
+watch(showMobileNav, (isOpen) => {
+  if (isOpen) {
+    document.body.style.overflow = 'hidden'
+  } else {
+    document.body.style.overflow = ''
+  }
+})
+
 onMounted(setupEscapeHandler)
+
+onUnmounted(() => {
+  document.body.style.overflow = ''
+})
 </script>
 
+<style scoped>
+/* Category modal container transitions */
+.category-modal-enter-active,
+.category-modal-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.category-modal-enter-from,
+.category-modal-leave-to {
+  opacity: 0;
+}
+
+/* Backdrop transitions */
+.category-backdrop-enter-active,
+.category-backdrop-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.category-backdrop-enter-from,
+.category-backdrop-leave-to {
+  opacity: 0;
+}
+
+/* Bottom sheet slide up transitions */
+.category-sheet-enter-active {
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.category-sheet-leave-active {
+  transition: transform 0.25s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.category-sheet-enter-from {
+  transform: translateY(100%);
+}
+
+.category-sheet-leave-to {
+  transform: translateY(100%);
+}
+
+/* Ensure smooth scrolling on iOS */
+.overscroll-contain {
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+</style>
