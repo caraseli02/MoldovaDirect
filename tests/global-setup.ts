@@ -2,6 +2,10 @@ import { chromium, FullConfig } from '@playwright/test'
 import path from 'path'
 import fs from 'fs'
 import { fileURLToPath } from 'url'
+import dotenv from 'dotenv'
+
+// Load environment variables from .env file
+dotenv.config()
 
 // Prevent vitest setup from being loaded in Playwright context
 process.env.PLAYWRIGHT_TEST = 'true'
@@ -46,7 +50,7 @@ async function globalSetup(config: FullConfig) {
       console.log(`→ Authenticating user for locale: ${locale}`)
 
       // Navigate to login page
-      await page.goto('/login')
+      await page.goto('/auth/login')
 
       // Fill in credentials
       await page.fill('[data-testid="email-input"]', testEmail)

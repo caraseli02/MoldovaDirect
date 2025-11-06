@@ -20,6 +20,12 @@ const globalShortcuts = new Map<string, {
 // Track if global listener is attached
 let isGlobalListenerAttached = false
 
+// Helper function to reset global state (for testing)
+export function __resetKeyboardShortcutsState() {
+  globalShortcuts.clear()
+  isGlobalListenerAttached = false
+}
+
 export function useKeyboardShortcuts() {
   // Track shortcuts registered by this instance for cleanup
   const instanceShortcuts = new Set<string>()

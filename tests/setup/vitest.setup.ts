@@ -1,11 +1,23 @@
 import { vi } from 'vitest'
-import { computed, ref, readonly, watch } from 'vue'
+import { computed, ref, readonly, watch, onMounted, onUnmounted } from 'vue'
+
+// Mock h3 module
+vi.mock('h3', () => ({
+  createError: vi.fn((error: any) => {
+    const err = new Error(error.statusMessage)
+    ;(err as any).statusCode = error.statusCode
+    ;(err as any).statusMessage = error.statusMessage
+    throw err
+  })
+}))
 
 // Make Vue reactivity functions available globally
 global.computed = computed
 global.ref = ref
 global.readonly = readonly
 global.watch = watch
+global.onMounted = onMounted
+global.onUnmounted = onUnmounted
 
 // Mock Nuxt composables
 global.useI18n = vi.fn(() => ({
@@ -32,6 +44,11 @@ global.useLocalePath = vi.fn(() => (path: string) => path)
 global.navigateTo = vi.fn()
 
 // Mock other Nuxt utilities as needed
-global.defineNuxtRouteMiddleware = vi.fn()
+global.defineNuxtRouteMiddleware = vi.fn((middleware) => middleware)
 global.useSupabaseClient = vi.fn()
 global.useSupabaseUser = vi.fn()
+global.createError = vi.fn((error: any) => {
+  const err = new Error(error.statusMessage)
+  ;(err as any).statusCode = error.statusCode
+  throw err
+})
