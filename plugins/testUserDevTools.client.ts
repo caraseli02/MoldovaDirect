@@ -200,7 +200,7 @@ export default defineNuxtPlugin(() => {
       /**
        * Export current session
        */
-      export() {
+      async export() {
         const personaKey = authStore.activeTestPersona
         if (!personaKey) {
           console.log('No active persona to export')
