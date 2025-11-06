@@ -42,26 +42,30 @@
 
     <!-- Stock Filter -->
     <div class="filter-section">
-      <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-3">
+      <h3 id="availability-filter" class="text-sm font-medium text-gray-900 dark:text-white mb-3">
         {{ $t('products.filters.availability') }}
       </h3>
-      <div class="space-y-2">
-        <label class="flex items-center">
+      <div class="space-y-2" role="group" aria-labelledby="availability-filter">
+        <label class="flex items-center cursor-pointer">
           <input
+            id="filter-in-stock"
             v-model="localFilters.inStock"
             type="checkbox"
             class="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 bg-white dark:bg-gray-700"
+            :aria-label="$t('products.filters.inStockOnly')"
             @change="updateFilters({ inStock: localFilters.inStock })"
           >
           <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
             {{ $t('products.filters.inStockOnly') }}
           </span>
         </label>
-        <label class="flex items-center">
+        <label class="flex items-center cursor-pointer">
           <input
+            id="filter-featured"
             v-model="localFilters.featured"
             type="checkbox"
             class="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 bg-white dark:bg-gray-700"
+            :aria-label="$t('products.filters.featuredOnly')"
             @change="updateFilters({ featured: localFilters.featured })"
           >
           <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">

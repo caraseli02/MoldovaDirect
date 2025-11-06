@@ -17,4 +17,16 @@
 </template>
 
 <script setup lang="ts">
+const { registerShortcut, getShortcutDisplay } = useKeyboardShortcuts()
+const localePath = useLocalePath()
+const router = useRouter()
+
+// Register global search shortcut (Ctrl/Cmd + K)
+registerShortcut('k', () => {
+  router.push(localePath({ path: '/products', query: { focus: 'search' } }))
+}, {
+  ctrlOrCmd: true,
+  preventDefault: true,
+  description: 'Open search'
+})
 </script>

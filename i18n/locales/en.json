@@ -54,6 +54,7 @@
     "cartValidationError": "Validation Error"
   },
   "cart": {
+    "shippingCalculatedAtCheckout": "Calculated at checkout",
     "success": {
       "added": "Product added",
       "addedToCart": "Added to cart",
@@ -1085,6 +1086,8 @@
     "backToProducts": "Back to products",
     "browseDescription": "Discover our selection of authentic Moldovan products",
     "searchPlaceholder": "Search products...",
+    "searchLabel": "Search products",
+    "sortLabel": "Sort products by",
     "allCategories": "All categories",
     "sortNewest": "Newest",
     "sortName": "Name",
@@ -1125,11 +1128,14 @@
       "featuredOnly": "Featured only",
       "active": "Active Filters",
       "clearAll": "Clear All",
+      "clearAllFilters": "Clear all active filters",
       "apply": "Apply Filters",
       "minPrice": "Min Price",
       "maxPrice": "Max Price",
       "removeFilter": "Remove {filter} filter",
-      "unknownCategory": "Unknown Category"
+      "unknownCategory": "Unknown Category",
+      "openFilters": "Open filters panel",
+      "activeCount": "{count} active filters"
     },
     "hero": {
       "seasonal": "Seasonal highlights",
@@ -1153,7 +1159,14 @@
     },
     "filterSummary": {
       "title": "Active filters",
-      "clear": "Reset filters"
+      "clear": "Reset filters",
+      "activeFilters": "Active filter list",
+      "removeFilter": "Remove {filter} filter",
+      "clearAllFilters": "Clear all filters"
+    },
+    "quickFilters": {
+      "label": "Quick filter options",
+      "toggle": "Toggle {filter} filter"
     },
     "chips": {
       "category": "Category: {value}",
@@ -1192,7 +1205,10 @@
     },
     "pagination": {
       "pageOf": "Page {page} of {total}",
-      "showing": "Total of {count} products"
+      "showing": "Total of {count} products",
+      "previousPage": "Go to previous page",
+      "nextPage": "Go to next page",
+      "goToPage": "Go to page {page}"
     },
     "story": {
       "title": "Tasting journey",
@@ -1312,7 +1328,20 @@
       "title": "Newsletter",
       "description": "Subscribe to receive special offers",
       "placeholder": "Your email",
-      "button": "Subscribe"
+      "button": "Subscribe",
+      "submitting": "Subscribing...",
+      "success": "Successfully subscribed!",
+      "successDescription": "Thank you for subscribing with {email}",
+      "error": "Subscription failed",
+      "errorDescription": "Please try again later"
+    },
+    "trust": {
+      "title": "Trust & Security",
+      "sslSecure": "SSL Secure",
+      "securePayment": "Secure Payment"
+    },
+    "payment": {
+      "title": "We Accept"
     },
     "copyright": "© 2024 Moldova Direct. All rights reserved."
   },

@@ -66,26 +66,26 @@
 
       <!-- Action Buttons -->
       <div class="flex items-center space-x-1">
-        <button
+        <UiButton
           @click="saveChanges"
           :disabled="isUpdating || hasError"
-          class="p-1 text-green-600 hover:text-green-700 disabled:opacity-50"
-          title="Save changes"
+          variant="ghost"
+          size="icon"
+          class="h-6 w-6 text-green-600 hover:text-green-700"
+          :aria-label="$t('common.save')"
         >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg>
-        </button>
-        <button
+          <commonIcon name="lucide:check" class="h-4 w-4" />
+        </UiButton>
+        <UiButton
           @click="cancelEditing"
           :disabled="isUpdating"
-          class="p-1 text-gray-600 hover:text-gray-700 disabled:opacity-50"
-          title="Cancel changes"
+          variant="ghost"
+          size="icon"
+          class="h-6 w-6"
+          :aria-label="$t('common.cancel')"
         >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
+          <commonIcon name="lucide:x" class="h-4 w-4" />
+        </UiButton>
       </div>
     </div>
 

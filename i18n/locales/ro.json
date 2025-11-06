@@ -856,6 +856,8 @@
     "backToProducts": "Înapoi la produse",
     "browseDescription": "Descoperă selecția noastră de produse autentice moldovenești",
     "searchPlaceholder": "Caută produse...",
+    "searchLabel": "Caută produse",
+    "sortLabel": "Sortează produsele după",
     "allCategories": "Toate categoriile",
     "sortNewest": "Cele mai noi",
     "sortName": "Nume",
@@ -1083,7 +1085,20 @@
       "title": "Newsletter",
       "description": "Abonează-te pentru a primi oferte speciale",
       "placeholder": "Email-ul tău",
-      "button": "Abonează-te"
+      "button": "Abonează-te",
+      "submitting": "Se abonează...",
+      "success": "Abonare reușită!",
+      "successDescription": "Mulțumim că te-ai abonat cu {email}",
+      "error": "Abonarea a eșuat",
+      "errorDescription": "Te rugăm să încerci din nou mai târziu"
+    },
+    "trust": {
+      "title": "Încredere și Securitate",
+      "sslSecure": "SSL Securizat",
+      "securePayment": "Plată Securizată"
+    },
+    "payment": {
+      "title": "Acceptăm"
     },
     "copyright": "© 2024 Moldova Direct. Toate drepturile rezervate."
   },

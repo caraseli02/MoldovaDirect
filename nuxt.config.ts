@@ -57,13 +57,13 @@ export default defineNuxtConfig({
   runtimeConfig: {
     // Private keys (only available on server-side)
     stripeSecretKey: process.env.STRIPE_SECRET_KEY,
+    stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
     // Supabase credentials for fallback service client (email jobs, etc.)
     supabaseUrl: process.env.SUPABASE_URL,
     supabaseServiceKey: process.env.SUPABASE_SERVICE_KEY,
     // Public keys (exposed to client-side)
     public: {
       stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
-      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://www.moldovadirect.com',
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://www.moldovadirect.com',
       enableTestUsers:
         process.env.ENABLE_TEST_USERS === 'true' || process.env.NODE_ENV !== 'production'
@@ -82,6 +82,11 @@ export default defineNuxtConfig({
   },
   nitro: {
     preset: "vercel",
+    ignore: [
+      "**/*.test.ts",
+      "**/*.spec.ts",
+      "**/__tests__/**",
+    ],
     externals: {
       external: [],
       inline: ["vue", "@vue/*"],

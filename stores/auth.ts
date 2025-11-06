@@ -19,7 +19,7 @@ import type { WatchStopHandle } from 'vue'
 import { useAuthMessages } from '~/composables/useAuthMessages'
 import { useAuthValidation } from '~/composables/useAuthValidation'
 import { useToast } from '~/composables/useToast'
-import { testUserPersonas, type TestUserPersonaKey } from '~/lib/testing/testUserPersonas'
+import type { TestUserPersonaKey } from '~/lib/testing/testUserPersonas'
 
 type AuthSubscription = {
   unsubscribe: () => PromiseLike<unknown>
@@ -95,6 +95,13 @@ export interface RegisterData {
   language: 'es' | 'en' | 'ro' | 'ru'
 }
 
+export interface TestScriptProgress {
+  completedSteps: number[]
+  notes: Record<number, string>
+  lastTested: string
+  completionPercentage: number
+}
+
 export interface AuthState {
   user: AuthUser | null
   loading: boolean
@@ -117,6 +124,35 @@ export interface AuthState {
   mfaError: string | null
   isTestUser: boolean
   testPersonaKey: TestUserPersonaKey | null
+  testScriptProgress: Record<string, TestScriptProgress>
+  simulationMode: import('~/lib/testing/testUserPersonas').SimulationMode
+}
+
+const PROGRESS_STORAGE_KEY = 'md-test-script-progress'
+
+const readPersistedProgress = (): Record<string, TestScriptProgress> => {
+  if (!process.client) {
+    return {}
+  }
+
+  const storedValue = window.localStorage.getItem(PROGRESS_STORAGE_KEY)
+  if (!storedValue) {
+    return {}
+  }
+
+  try {
+    return JSON.parse(storedValue)
+  } catch {
+    return {}
+  }
+}
+
+const persistProgress = (progress: Record<string, TestScriptProgress>) => {
+  if (!process.client) {
+    return
+  }
+
+  window.localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(progress))
 }
 
 export const useAuthStore = defineStore('auth', {
@@ -133,7 +169,9 @@ export const useAuthStore = defineStore('auth', {
     mfaLoading: false,
     mfaError: null,
     isTestUser: false,
-    testPersonaKey: null
+    testPersonaKey: null,
+    testScriptProgress: readPersistedProgress(),
+    simulationMode: 'normal'
   }),
 
   getters: {
@@ -229,6 +267,21 @@ export const useAuthStore = defineStore('auth', {
      */
     activeTestPersona: (state): TestUserPersonaKey | null => {
       return state.testPersonaKey
+    },
+
+    /**
+     * Get test script progress for the current persona
+     */
+    currentPersonaProgress: (state): TestScriptProgress | null => {
+      if (!state.testPersonaKey) return null
+      return state.testScriptProgress[state.testPersonaKey] || null
+    },
+
+    /**
+     * Get test script progress for a specific persona
+     */
+    getPersonaProgress: (state) => (personaKey: TestUserPersonaKey): TestScriptProgress | null => {
+      return state.testScriptProgress[personaKey] || null
     }
   },
 
@@ -341,7 +394,7 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    simulateLogin(personaKey: TestUserPersonaKey) {
+    async simulateLogin(personaKey: TestUserPersonaKey) {
       const config = useRuntimeConfig()
       const isEnabled = config?.public?.enableTestUsers ?? false
 
@@ -349,6 +402,8 @@ export const useAuthStore = defineStore('auth', {
         throw new Error('Test user simulation is disabled in this environment.')
       }
 
+      // Dynamically import test utilities to avoid bundling in production
+      const { testUserPersonas } = await import('~/lib/testing/testUserPersonas')
       const persona = testUserPersonas[personaKey]
 
       if (!persona) {
@@ -1275,6 +1330,89 @@ export const useAuthStore = defineStore('auth', {
      */
     clearMFAError() {
       this.mfaError = null
+    },
+
+    // ============================================
+    // Test Script Progress Methods
+    // ============================================
+
+    /**
+     * Toggle completion status of a test script step
+     */
+    toggleTestScriptStep(personaKey: TestUserPersonaKey, stepIndex: number, totalSteps: number) {
+      if (!this.testScriptProgress[personaKey]) {
+        this.testScriptProgress[personaKey] = {
+          completedSteps: [],
+          notes: {},
+          lastTested: new Date().toISOString(),
+          completionPercentage: 0
+        }
+      }
+
+      const progress = this.testScriptProgress[personaKey]
+      const stepIdx = progress.completedSteps.indexOf(stepIndex)
+
+      if (stepIdx > -1) {
+        // Remove step
+        progress.completedSteps.splice(stepIdx, 1)
+      } else {
+        // Add step
+        progress.completedSteps.push(stepIndex)
+      }
+
+      // Update last tested and completion percentage
+      progress.lastTested = new Date().toISOString()
+      progress.completionPercentage = Math.round((progress.completedSteps.length / totalSteps) * 100)
+
+      persistProgress(this.testScriptProgress)
+    },
+
+    /**
+     * Add or update a note for a test script step
+     */
+    updateTestScriptNote(personaKey: TestUserPersonaKey, stepIndex: number, note: string) {
+      if (!this.testScriptProgress[personaKey]) {
+        this.testScriptProgress[personaKey] = {
+          completedSteps: [],
+          notes: {},
+          lastTested: new Date().toISOString(),
+          completionPercentage: 0
+        }
+      }
+
+      const progress = this.testScriptProgress[personaKey]
+
+      if (note.trim()) {
+        progress.notes[stepIndex] = note
+      } else {
+        delete progress.notes[stepIndex]
+      }
+
+      progress.lastTested = new Date().toISOString()
+      persistProgress(this.testScriptProgress)
+    },
+
+    /**
+     * Clear progress for a specific persona
+     */
+    clearPersonaProgress(personaKey: TestUserPersonaKey) {
+      delete this.testScriptProgress[personaKey]
+      persistProgress(this.testScriptProgress)
+    },
+
+    /**
+     * Clear all test script progress
+     */
+    clearAllProgress() {
+      this.testScriptProgress = {}
+      persistProgress({})
+    },
+
+    /**
+     * Set simulation mode for testing different network conditions
+     */
+    setSimulationMode(mode: import('~/lib/testing/testUserPersonas').SimulationMode) {
+      this.simulationMode = mode
     }
   }
 })

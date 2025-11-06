@@ -85,17 +85,18 @@
                 </div>
               </div>
               <div class="space-y-3">
-                <button
+                <UiButton
                   v-for="(image, index) in product.images"
                   :key="image.id || index"
                   type="button"
-                  class="flex items-center gap-3 rounded-2xl border px-3 py-2 text-left transition hover:border-blue-500 hover:bg-blue-50 dark:hover:border-blue-400 dark:hover:bg-blue-900/30"
-                  :class="selectedImageIndex === index ? 'border-blue-500 bg-blue-50 text-blue-700 dark:border-blue-400 dark:bg-blue-900/40 dark:text-blue-100' : 'border-gray-200 bg-white text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200'"
+                  variant="outline"
+                  class="flex w-full items-center justify-start gap-3 rounded-2xl px-3 py-2 text-left transition hover:border-blue-500 hover:bg-blue-50 dark:hover:border-blue-400 dark:hover:bg-blue-900/30"
+                  :class="selectedImageIndex === index ? 'border-blue-500 bg-blue-50 text-blue-700 dark:border-blue-400 dark:bg-blue-900/40 dark:text-blue-100' : ''"
                   @click="selectedImageIndex = index"
                 >
                   <img :src="image.url" :alt="getLocalizedText(image.altText)" class="h-14 w-14 rounded-xl object-cover" />
                   <span class="text-sm font-medium">{{ getLocalizedText(image.altText) || getLocalizedText(product.name) }}</span>
-                </button>
+                </UiButton>
               </div>
             </div>
           </section>
@@ -198,9 +199,9 @@
                 {{ $t('products.socialProof.rating', { rating: reviewSummary.rating, count: reviewSummary.count }) }}
               </div>
             </div>
-            <button type="button" class="mt-6 inline-flex items-center gap-2 rounded-full border border-gray-300 px-5 py-2.5 text-sm font-medium text-gray-700 transition hover:border-blue-500 hover:text-blue-600 dark:border-gray-700 dark:text-gray-200 dark:hover:border-blue-400 dark:hover:text-blue-200">
+            <UiButton type="button" variant="outline" size="sm" class="mt-6 rounded-full">
               {{ $t('products.socialProof.cta') }}
-            </button>
+            </UiButton>
           </section>
 
           <section class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
@@ -334,23 +335,27 @@
               </Button>
 
               <div class="flex flex-wrap gap-3">
-                <button
+                <UiButton
                   type="button"
-                  class="flex flex-1 items-center justify-center gap-2 rounded-xl border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:border-blue-500 hover:text-blue-600 dark:border-gray-700 dark:text-gray-200"
+                  variant="outline"
+                  size="sm"
+                  class="flex-1 rounded-xl"
                   :class="wishlistAdded ? 'border-blue-500 text-blue-600 dark:border-blue-400 dark:text-blue-200' : ''"
                   @click="toggleWishlist"
                 >
-                  <span aria-hidden="true">♥</span>
+                  <span class="mr-2" aria-hidden="true">♥</span>
                   <span>{{ wishlistAdded ? $t('products.actions.addedToWishlist') : $t('products.actions.addToWishlist') }}</span>
-                </button>
-                <button
+                </UiButton>
+                <UiButton
                   type="button"
-                  class="flex items-center justify-center gap-2 rounded-xl border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:border-blue-500 hover:text-blue-600 dark:border-gray-700 dark:text-gray-200"
+                  variant="outline"
+                  size="sm"
+                  class="rounded-xl"
                   @click="shareProduct"
                 >
-                  <span aria-hidden="true">⤴</span>
+                  <span class="mr-2" aria-hidden="true">⤴</span>
                   <span>{{ $t('products.actions.share') }}</span>
-                </button>
+                </UiButton>
               </div>
               <p v-if="shareFeedback" class="text-sm text-blue-600 dark:text-blue-300">{{ shareFeedback }}</p>
             </div>

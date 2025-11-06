@@ -71,17 +71,18 @@
             @blur="handleInputBlur"
           />
           <!-- Auto-generate SKU button -->
-          <button
+          <UiButton
             v-if="!localForm.sku && localForm.name.es"
             @click="generateSku"
             @touchstart="isMobile && vibrate('tap')"
             type="button"
-            class="absolute right-2 top-1/2 transform -translate-y-1/2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 touch-manipulation"
-            :class="{ 'p-1': isMobile }"
-            :title="$t('admin.products.actions.generateSku')"
+            variant="ghost"
+            size="icon"
+            class="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 touch-manipulation"
+            :aria-label="$t('admin.products.actions.generateSku')"
           >
-            <commonIcon name="lucide:sparkles" class="w-4 h-4" />
-          </button>
+            <commonIcon name="lucide:sparkles" class="h-4 w-4" />
+          </UiButton>
           <!-- Loading spinner for SKU generation -->
           <div
             v-if="isGeneratingSku"
