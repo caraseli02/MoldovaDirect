@@ -99,6 +99,7 @@
 <script setup lang="ts">
 import type { ProductWithRelations } from '~/types'
 import { CONTACT_INFO } from '~/constants/seo'
+import UiRealtimeNotification from '~/components/ui/RealtimeNotification.vue'
 
 const { t, locale } = useI18n()
 const localePath = useLocalePath()

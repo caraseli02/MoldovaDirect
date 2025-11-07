@@ -31,6 +31,7 @@ export default defineNuxtConfig({
     "@vite-pwa/nuxt",
     "vue3-carousel-nuxt",
     "@vueuse/motion/nuxt",
+    "nuxt-swiper",
     // Keep this last to post-process the components registry
     "~/modules/fix-components",
   ],

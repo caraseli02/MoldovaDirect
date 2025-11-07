@@ -151,6 +151,7 @@
 </template>
 
 <script setup lang="ts">
+import { useEventListener } from '@vueuse/core'
 import type { Producer } from '~/types'
 import type { Swiper as SwiperType } from 'swiper'
 
