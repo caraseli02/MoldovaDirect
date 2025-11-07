@@ -24,7 +24,7 @@
           </h3>
 
           <p class="text-luxury-brown/80 text-sm md:text-base leading-relaxed mb-3 md:mb-4">
-            {{ $t('promises.satisfaction.description') || 'Every product arrives in perfect condition or we'll make it right. Your satisfaction is our priority.' }}
+            {{ $t('promises.satisfaction.description') || 'Every product arrives in perfect condition or we will make it right. Your satisfaction is our priority.' }}
           </p>
 
           <NuxtLink to="/guarantee" class="promise-link">
