@@ -1,80 +1,30 @@
 <template>
-  <div class="text-gray-900 dark:text-gray-100">
-    <!-- Promotional announcement bar -->
-    <HomeAnnouncementBar :show-cta="true" />
+  <div class="luxury-body smooth-scroll">
+    <!-- Cinematic Video Hero -->
+    <HomeLuxuryVideoHero />
 
-    <!-- Hero section with main value proposition -->
-    <HomeHeroSection :highlights="heroHighlights" />
+    <!-- Press Mentions Bar (Brightland Pattern) -->
+    <HomeLuxuryMediaMentions />
 
-    <!-- Quick category navigation for immediate browsing -->
-    <HomeCategoryGrid :categories="categoryCards" />
+    <!-- Origin Story Section -->
+    <HomeLuxuryOriginStory />
 
-    <!-- Featured products - primary conversion driver -->
-    <HomeFeaturedProductsSection
-      :products="featuredProducts"
-      :pending="featuredPending"
-      :error="featuredErrorState"
-      @retry="refreshFeatured"
-    />
+    <!-- Luxury Product Showcase -->
+    <HomeLuxuryProductShowcase />
 
-    <!-- Premium collections showcase -->
-    <HomeCollectionsShowcase />
+    <!-- Artisan Spotlight -->
+    <HomeLuxuryArtisanSpotlight />
 
-    <!-- Social proof and trust signals -->
-    <HomeSocialProofSection
-      :highlights="heroHighlights"
-      :logos="partnerLogos"
-      :testimonials="testimonials"
-    />
+    <!-- Customer Testimonials -->
+    <HomeLuxuryTestimonials />
 
-    <!-- Process explanation -->
-    <HomeHowItWorksSection :steps="howItWorksSteps" />
-
-    <!-- Service offerings -->
-    <HomeServicesSection :services="services" />
-
-    <!-- Newsletter signup -->
+    <!-- Newsletter Signup (Keeping from original) -->
     <HomeNewsletterSignup />
-
-    <!-- FAQ preview -->
-    <HomeFaqPreviewSection :items="faqItems" />
-
-    <!-- Story section moved to About page -->
-    <!-- <HomeStorySection :points="storyPoints" :timeline="storyTimeline" /> -->
   </div>
 </template>
 
 <script setup lang="ts">
-import type { ProductWithRelations } from '~/types'
 import { CONTACT_INFO } from '~/constants/seo'
-
-const { locale } = useI18n()
-const {
-  heroHighlights,
-  categoryCards,
-  howItWorksSteps,
-  testimonials,
-  partnerLogos,
-  storyPoints,
-  storyTimeline,
-  services,
-  faqItems
-} = useHomeContent()
-
-const { data: featuredData, pending: featuredPending, error: featuredError, refresh: refreshFeatured } = await useFetch(
-  '/api/products/featured',
-  {
-    query: {
-      limit: 12,
-      locale: locale.value
-    },
-    server: true,
-    lazy: false
-  }
-)
-
-const featuredProducts = computed<ProductWithRelations[]>(() => featuredData.value?.products || [])
-const featuredErrorState = computed<Error | null>(() => (featuredError.value as Error | null) ?? null)
 
 const { siteUrl, toAbsoluteUrl } = useSiteUrl()
 
@@ -108,19 +58,23 @@ const structuredData = [
 ]
 
 useLandingSeo({
-  title: 'Moldova Direct – Taste Moldova in Every Delivery',
+  title: 'Moldova Direct – Artisan Moldovan Wines & Gourmet Delicacies',
   description:
-    'Shop curated Moldovan wines, gourmet foods, and gift hampers with fast delivery across Spain. Discover artisan producers and authentic flavours.',
+    'Experience the authentic taste of Moldova. Curated selection of premium wines, artisan cheeses, and luxury gift hampers. Delivered across Spain from family estates.',
   image: '/icon.svg',
-  imageAlt: 'Selection of Moldovan delicacies delivered across Spain',
+  imageAlt: 'Premium Moldovan wines and gourmet products',
   pageType: 'website',
   keywords: [
-    'Moldovan wine delivery',
-    'Moldovan gourmet food Spain',
-    'authentic Moldovan products',
-    'Moldova Direct store'
+    'Moldovan wine Spain',
+    'luxury wine delivery',
+    'artisan gourmet food',
+    'premium gift hampers',
+    'Moldova Direct'
   ],
   structuredData
 })
 </script>
 
+<style scoped>
+/* Page-specific luxury styles */
+</style>
