@@ -1056,6 +1056,9 @@
           "answer": "Our concierge team is available via WhatsApp and email to suggest pairings and build custom boxes."
         }
       }
+    },
+    "mediaMentions": {
+      "heading": "As Featured In"
     }
   },
   "products": {
@@ -2046,5 +2049,164 @@
     "enableNotifications": "Enable notifications",
     "notificationsEnabled": "Notifications enabled",
     "notificationsDisabled": "Notifications disabled"
+  },
+  "landing": {
+    "quiz": {
+      "badge": "Personalized Recommendations",
+      "heading": "Find Your Perfect Match",
+      "subheading": "Take our 2-minute quiz and discover wines handpicked for your taste",
+      "ctaButton": "Take the Quiz",
+      "duration": "2 minutes",
+      "completion": "10,000+ completed",
+      "privacy": "100% private"
+    },
+    "hero": {
+      "urgency": "Free Shipping on Orders Over $75",
+      "headline": "Authentic Moldova, Delivered to Your Door",
+      "subheadline": "Discover 5,000 years of winemaking tradition with our curated collection of premium Moldovan wines and gourmet delicacies.",
+      "primaryCta": "Explore Collection",
+      "secondaryCta": "Take Our Wine Quiz",
+      "trustBadge1": "Authentic & Certified",
+      "trustBadge2": "Free Shipping",
+      "trustBadge3": "4.9/5 Stars (2,400+ Reviews)",
+      "scrollHint": "Discover More"
+    },
+    "mediaMentions": {
+      "heading": "As Featured In"
+    },
+    "trustBadges": {
+      "ssl": {
+        "title": "Secure Checkout",
+        "subtitle": "SSL Encrypted"
+      },
+      "shipping": {
+        "title": "Free Shipping",
+        "subtitle": "Orders Over $75"
+      },
+      "guarantee": {
+        "title": "Authenticity",
+        "subtitle": "100% Certified"
+      },
+      "support": {
+        "title": "24/7 Support",
+        "subtitle": "We're Here to Help"
+      }
+    },
+    "stats": {
+      "customers": "Happy Customers",
+      "products": "Premium Products",
+      "rating": "Average Rating",
+      "countries": "Countries Served"
+    },
+    "products": {
+      "heading": "Curated Collection",
+      "subheading": "Discover our hand-picked selection of premium Moldovan wines and artisanal foods",
+      "viewAllCta": "View All Products",
+      "shopNow": "Shop Now"
+    },
+    "ugc": {
+      "heading": "Join Our Community",
+      "subheading": "See how our customers enjoy authentic Moldova delivered to their homes",
+      "hashtag": "Tag us on Instagram",
+      "shareCta": "Share Your Photo"
+    },
+    "quiz": {
+      "badge": "Personalized Recommendations",
+      "heading": "Find Your Perfect Match",
+      "subheading": "Take our 2-minute quiz and discover wines handpicked for your taste",
+      "ctaButton": "Take the Quiz",
+      "duration": "2 minutes",
+      "completion": "10,000+ completed",
+      "privacy": "100% private"
+    }
+  },
+  "quiz": {
+    "title": "Product Quiz",
+    "welcome": {
+      "title": "Let's Find Your Perfect Wine",
+      "description": "Answer 4 quick questions to get personalized recommendations",
+      "startButton": "Start Quiz"
+    },
+    "navigation": {
+      "back": "Back",
+      "next": "Next",
+      "finish": "See Results"
+    },
+    "confirmExit": "Are you sure you want to exit? Your progress will be lost.",
+    "questions": {
+      "q1": {
+        "question": "What type of products interest you most?",
+        "options": {
+          "wine": "Premium Wines",
+          "food": "Gourmet Foods",
+          "both": "Both Wine & Food",
+          "gifts": "Gift Collections"
+        }
+      },
+      "q2": {
+        "question": "What's your wine experience level?",
+        "options": {
+          "beginner": "New to Wine",
+          "casual": "Casual Drinker",
+          "enthusiast": "Wine Enthusiast",
+          "connoisseur": "Connoisseur"
+        }
+      },
+      "q3": {
+        "question": "What's your typical budget per bottle?",
+        "options": {
+          "under25": "Under €25",
+          "mid": "€25 - €50",
+          "high": "€50 - €100",
+          "premium": "€100+"
+        }
+      },
+      "q4": {
+        "question": "What occasion are you shopping for?",
+        "options": {
+          "personal": "Personal Enjoyment",
+          "gift": "Gift Giving",
+          "party": "Party/Event",
+          "collection": "Building Collection"
+        }
+      }
+    },
+    "results": {
+      "title": "Your Perfect Matches",
+      "subtitle": "Based on your answers, here are our recommendations",
+      "recommendations": "Recommended for You",
+      "viewProducts": "View Products",
+      "retake": "Retake Quiz",
+      "rec": {
+        "wine": {
+          "title": "Premium Wine Collection",
+          "desc": "Explore our curated selection of Moldovan wines"
+        },
+        "food": {
+          "title": "Gourmet Food Selection",
+          "desc": "Discover artisanal foods and delicacies"
+        },
+        "both": {
+          "title": "Wine & Food Pairings",
+          "desc": "Perfect combinations for your taste"
+        },
+        "gifts": {
+          "title": "Gift Collections",
+          "desc": "Thoughtfully curated gift sets"
+        },
+        "beginner": {
+          "title": "Beginner-Friendly Wines",
+          "desc": "Easy to enjoy wines with tasting notes"
+        },
+        "expert": {
+          "title": "Premium Reserve Selection",
+          "desc": "Complex wines for the discerning palate"
+        },
+        "premium": {
+          "title": "Luxury Collection",
+          "desc": "Our finest premium selections"
+        }
+      }
+    }
   }
 }

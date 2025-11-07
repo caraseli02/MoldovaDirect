@@ -14,19 +14,21 @@
         </p>
       </div>
 
-      <div class="mt-12 grid gap-6 lg:auto-rows-[minmax(260px,1fr)] lg:grid-cols-12">
+      <div ref="collectionsGridRef" class="mt-12 grid gap-6 lg:auto-rows-[minmax(260px,1fr)] lg:grid-cols-12">
         <NuxtLink
           v-for="card in cards"
           :key="card.key"
           :to="card.href"
-          class="group relative block overflow-hidden rounded-3xl border border-gray-200 bg-gray-900/95 shadow-xl transition hover:-translate-y-1 hover:shadow-2xl dark:border-gray-800 dark:bg-gray-900"
+          class="group relative block overflow-hidden rounded-3xl border border-gray-200 bg-gray-900/95 shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl dark:border-gray-800 dark:bg-gray-900"
           :class="[card.colSpan, card.rowSpan, card.colStart]"
+          style="will-change: transform"
         >
           <NuxtImg
             :src="card.image"
             :alt="card.imageAlt"
             densities="1x 2x"
-            class="absolute inset-0 h-full w-full object-cover brightness-105 transition duration-700 ease-out group-hover:scale-105"
+            loading="lazy"
+            class="absolute inset-0 h-full w-full object-cover brightness-105 transition-all duration-700 ease-out group-hover:scale-110"
           />
           <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-900/35 to-transparent"></div>
           <div class="absolute inset-0 bg-gradient-to-br from-slate-900/0 via-slate-900/30 to-slate-950/70 mix-blend-soft-light"></div>
@@ -40,7 +42,7 @@
                 <p class="text-sm text-white/85">{{ card.description }}</p>
               </div>
             </div>
-            <span class="inline-flex items-center gap-2 text-sm font-semibold text-white transition group-hover:translate-x-1">
+            <span class="inline-flex items-center gap-2 text-sm font-semibold text-white transition-transform duration-200 group-hover:translate-x-1">
               {{ card.cta }}
               <commonIcon name="lucide:arrow-right" class="h-4 w-4" />
             </span>
@@ -54,6 +56,10 @@
 <script setup lang="ts">
 const { t } = useI18n()
 const localePath = useLocalePath()
+
+// Scroll animations
+const collectionsGridRef = ref<HTMLElement | null>(null)
+const { staggerOnScroll } = useScrollAnimations()
 
 type Card = {
   key: string
@@ -112,4 +118,16 @@ const cards = computed<Card[]>(() => [
     rowSpan: ''
   }
 ])
+
+onMounted(() => {
+  if (collectionsGridRef.value) {
+    staggerOnScroll(collectionsGridRef, {
+      preset: 'fade-up',
+      duration: 700,
+      staggerDelay: 150,
+      threshold: 0.1,
+      once: true
+    })
+  }
+})
 </script>

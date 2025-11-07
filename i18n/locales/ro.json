@@ -1058,6 +1058,46 @@
     },
     "commonProduct": "acest produs"
   },
+  "landing": {
+    "hero": {
+      "urgency": "Transport Gratuit pentru Comenzi peste 75$",
+      "headline": "Moldova Autentică, Livrată la Ușa Ta",
+      "subheadline": "Descoperă 5.000 de ani de tradiție viticolă cu colecția noastră selectată de vinuri moldovenești premium și delicatese gourmet.",
+      "primaryCta": "Explorează Colecția",
+      "secondaryCta": "Testul Nostru de Vinuri",
+      "trustBadge1": "Autentic și Certificat",
+      "trustBadge2": "Transport Gratuit",
+      "trustBadge3": "4.9/5 Stele (2.400+ Recenzii)",
+      "scrollHint": "Descoperă Mai Mult"
+    },
+    "mediaMentions": {
+      "heading": "Prezentat În"
+    },
+    "trustBadges": {
+      "ssl": {
+        "title": "Plată Securizată",
+        "subtitle": "Criptare SSL"
+      },
+      "shipping": {
+        "title": "Transport Gratuit",
+        "subtitle": "Comenzi peste 75$"
+      },
+      "guarantee": {
+        "title": "Autenticitate",
+        "subtitle": "100% Certificat"
+      },
+      "support": {
+        "title": "Suport 24/7",
+        "subtitle": "Suntem Aici pentru Tine"
+      }
+    },
+    "stats": {
+      "customers": "Clienți Fericiți",
+      "products": "Produse Premium",
+      "rating": "Rating Mediu",
+      "countries": "Țări Deservite"
+    }
+  },
   "footer": {
     "terms": "Termeni și Condiții",
     "privacy": "Politica de Confidențialitate",

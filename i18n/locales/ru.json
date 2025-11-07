@@ -1002,6 +1002,9 @@
           "answer": "Команда concierge отвечает в WhatsApp и по email, подбирая сочетания и индивидуальные наборы."
         }
       }
+    },
+    "mediaMentions": {
+      "heading": "Представлено В"
     }
   },
   "products": {
@@ -1979,5 +1982,45 @@
     "enableNotifications": "Enable notifications",
     "notificationsEnabled": "Notifications enabled",
     "notificationsDisabled": "Notifications disabled"
+  },
+  "landing": {
+    "hero": {
+      "urgency": "Бесплатная доставка при заказе от $75",
+      "headline": "Аутентичная Молдова, доставленная к вашей двери",
+      "subheadline": "Откройте для себя 5000-летнюю традицию виноделия с нашей подобранной коллекцией премиальных молдавских вин и деликатесов.",
+      "primaryCta": "Изучить коллекцию",
+      "secondaryCta": "Пройти наш винный тест",
+      "trustBadge1": "Подлинный и сертифицированный",
+      "trustBadge2": "Бесплатная доставка",
+      "trustBadge3": "4.9/5 звезд (2400+ отзывов)",
+      "scrollHint": "Узнать больше"
+    },
+    "mediaMentions": {
+      "heading": "Представлены в"
+    },
+    "trustBadges": {
+      "ssl": {
+        "title": "Безопасная оплата",
+        "subtitle": "SSL-шифрование"
+      },
+      "shipping": {
+        "title": "Бесплатная доставка",
+        "subtitle": "При заказе от $75"
+      },
+      "guarantee": {
+        "title": "Подлинность",
+        "subtitle": "100% сертифицировано"
+      },
+      "support": {
+        "title": "Поддержка 24/7",
+        "subtitle": "Мы здесь, чтобы помочь"
+      }
+    },
+    "stats": {
+      "customers": "Довольных клиентов",
+      "products": "Премиальных продуктов",
+      "rating": "Средний рейтинг",
+      "countries": "Обслуживаемых стран"
+    }
   }
 }

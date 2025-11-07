@@ -30,11 +30,22 @@ export default defineNuxtConfig({
     "shadcn-nuxt",
     "@vite-pwa/nuxt",
     "vue3-carousel-nuxt",
+    "@vueuse/motion/nuxt",
     // Keep this last to post-process the components registry
     "~/modules/fix-components",
   ],
   image: {
     domains: ["images.unsplash.com"],
+    formats: ["webp", "avif"],
+    quality: 80,
+    screens: {
+      xs: 375,
+      sm: 640,
+      md: 768,
+      lg: 1024,
+      xl: 1280,
+      xxl: 1536,
+    },
   },
   runtimeConfig: {
     // Private keys (only available on server-side)
@@ -80,12 +91,16 @@ export default defineNuxtConfig({
       callback: "/auth/confirm",
       exclude: [
         "/",
+        "/new",
         "/products",
         "/products/*",
         "/cart",
         "/en",
+        "/en/new",
         "/ro",
+        "/ro/new",
         "/ru",
+        "/ru/new",
         "/en/*",
         "/ro/*",
         "/ru/*",
@@ -112,7 +127,7 @@ export default defineNuxtConfig({
       redirectOn: "root",
     },
   },
-  css: ["~/assets/css/tailwind.css"],
+  css: ["~/assets/css/tailwind.css", "~/assets/css/landing.css"],
   pwa: {
     registerType: "autoUpdate",
     workbox: {
@@ -195,6 +210,10 @@ export default defineNuxtConfig({
       ]
       }
     }
+  },
+  routeRules: {
+    '/': { prerender: true, swr: 3600 },
+    '/new': { prerender: true, swr: 3600 }, // New landing page
   },
   hooks: {
     // Ensure the shadcn-nuxt injected components directory does not register TS barrels as Vue components

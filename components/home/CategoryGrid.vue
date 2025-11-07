@@ -14,29 +14,31 @@
           <commonIcon name="lucide:arrow-right" class="h-4 w-4" />
         </NuxtLink>
       </div>
-      <div class="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+      <div ref="gridRef" class="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
         <NuxtLink
           v-for="category in categories"
           :key="category.key"
           :to="category.href"
-          class="group relative overflow-hidden rounded-3xl border border-gray-200 bg-gray-900/95 transition hover:-translate-y-1 hover:shadow-2xl dark:border-gray-800 dark:bg-gray-900"
+          class="group relative overflow-hidden rounded-3xl border border-gray-200 bg-gray-900/95 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl dark:border-gray-800 dark:bg-gray-900"
+          style="will-change: transform"
         >
           <NuxtImg
             :src="category.image"
             :alt="category.imageAlt"
             densities="1x 2x"
+            loading="lazy"
             class="absolute inset-0 h-full w-full object-cover brightness-[1.05] transition duration-700 ease-out group-hover:scale-105"
           />
           <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-900/35 to-transparent"></div>
           <div
             :class="[
-              'absolute inset-0 opacity-45 mix-blend-soft-light transition group-hover:opacity-65',
+              'absolute inset-0 opacity-45 mix-blend-soft-light transition-opacity duration-300 group-hover:opacity-65',
               category.accentBackground
             ]"
           ></div>
           <div class="relative flex h-full min-h-[22rem] flex-col justify-between p-8 text-white">
             <div class="space-y-4">
-              <span class="inline-flex items-center justify-center rounded-xl bg-white/90 p-3 text-slate-900 shadow-lg shadow-slate-900/15 transition group-hover:bg-white">
+              <span class="inline-flex items-center justify-center rounded-xl bg-white/90 p-3 text-slate-900 shadow-lg shadow-slate-900/15 transition-all duration-200 ease-out group-hover:scale-110 group-hover:bg-white">
                 <commonIcon :name="category.icon" class="h-6 w-6" />
               </span>
               <div class="space-y-3">
@@ -44,7 +46,7 @@
                 <p class="text-sm text-white/85">{{ category.description }}</p>
               </div>
             </div>
-            <span class="inline-flex items-center gap-2 text-sm font-semibold text-white transition group-hover:translate-x-1">
+            <span class="inline-flex items-center gap-2 text-sm font-semibold text-white transition-transform duration-200 group-hover:translate-x-1">
               {{ category.cta }}
               <commonIcon name="lucide:arrow-right" class="h-4 w-4" />
             </span>
@@ -72,4 +74,20 @@ defineProps<{
 
 const { t } = useI18n()
 const localePath = useLocalePath()
+
+// Scroll animations
+const gridRef = ref<HTMLElement | null>(null)
+const { staggerOnScroll } = useScrollAnimations()
+
+onMounted(() => {
+  if (gridRef.value) {
+    staggerOnScroll(gridRef, {
+      preset: 'fade-up',
+      duration: 600,
+      staggerDelay: 100,
+      threshold: 0.1,
+      once: true
+    })
+  }
+})
 </script>

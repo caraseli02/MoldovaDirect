@@ -38,7 +38,7 @@
         </div>
       </div>
 
-      <div v-else-if="filteredProducts.length" id="products-panel" role="tabpanel" class="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div v-else-if="filteredProducts.length" id="products-panel" role="tabpanel" ref="productsGridRef" class="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         <ProductCard
           v-for="product in filteredProducts"
           :key="product.id"
@@ -91,6 +91,10 @@ const localePath = useLocalePath()
 // Filter state
 const activeFilter = ref('all')
 
+// Scroll animations
+const productsGridRef = ref<HTMLElement | null>(null)
+const { staggerOnScroll } = useScrollAnimations()
+
 // Filter options
 const filters = computed(() => [
   { value: 'all', label: t('home.featuredProducts.filters.all') },
@@ -130,5 +134,35 @@ const filteredProducts = computed(() => {
   }
 
   return props.products
+})
+
+// Apply stagger animation when products load or filter changes
+watch([() => props.pending, activeFilter], ([isPending]) => {
+  if (!isPending && productsGridRef.value) {
+    // Small delay to ensure DOM is updated
+    nextTick(() => {
+      if (productsGridRef.value) {
+        staggerOnScroll(productsGridRef, {
+          preset: 'fade-up',
+          duration: 500,
+          staggerDelay: 100,
+          threshold: 0.05,
+          once: false // Re-trigger on filter change
+        })
+      }
+    })
+  }
+})
+
+onMounted(() => {
+  if (!props.pending && productsGridRef.value) {
+    staggerOnScroll(productsGridRef, {
+      preset: 'fade-up',
+      duration: 500,
+      staggerDelay: 100,
+      threshold: 0.05,
+      once: true
+    })
+  }
 })
 </script>

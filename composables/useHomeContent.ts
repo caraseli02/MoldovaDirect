@@ -25,9 +25,52 @@ type HowItWorksStep = {
 }
 
 type Testimonial = {
+  id: string
   name: string
-  quote: string
+  avatar?: string
   location: string
+  rating: number
+  verified: boolean
+  date: string
+  quote: string
+  productImage?: string
+}
+
+type MediaMention = {
+  name: string
+  logo: string
+  url?: string
+  quote?: string
+}
+
+type TrustBadge = {
+  id: string
+  label: string
+  icon: string
+  verified?: boolean
+}
+
+type VideoTestimonial = {
+  id: string
+  name: string
+  avatar?: string
+  location: string
+  rating: number
+  verified: boolean
+  quote: string
+  videoUrl: string
+  thumbnail: string
+  hasClosedCaptions?: boolean
+}
+
+type Stat = {
+  id: string
+  value: number
+  label: string
+  icon: string
+  prefix?: string
+  suffix?: string
+  duration?: number
 }
 
 type StoryPoint = {
@@ -55,9 +98,44 @@ type FaqItem = {
   answer: string
 }
 
+type HeroContent = {
+  videoUrl?: string
+  fallbackImage: string
+  fallbackAlt: string
+  urgencyMessage: string
+  trustIndicators: Array<{
+    icon: string
+    text: string
+  }>
+}
+
 export const useHomeContent = () => {
   const localePath = useLocalePath()
   const { t, tm, locale } = useI18n()
+
+  // Hero content with video and urgency elements
+  const heroContent = computed<HeroContent>(() => ({
+    // TODO: Replace with actual hero video when available
+    // Video should be WebM format, <5MB, 15-30 seconds loop
+    videoUrl: undefined, // '/videos/hero-background.webm'
+    fallbackImage: 'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?q=80&w=2000',
+    fallbackAlt: t('home.hero.fallbackAlt') || 'Moldovan wine and products',
+    urgencyMessage: t('home.hero.urgencyMessage') || 'Limited Time: Free Shipping on Orders Over €50',
+    trustIndicators: [
+      {
+        icon: 'lucide:shield-check',
+        text: t('home.hero.trustIndicators.secure') || 'Secure Checkout'
+      },
+      {
+        icon: 'lucide:truck',
+        text: t('home.hero.trustIndicators.shipping') || 'Fast Delivery'
+      },
+      {
+        icon: 'lucide:star',
+        text: t('home.hero.trustIndicators.rating') || '4.9/5 Rating'
+      }
+    ]
+  }))
 
   const heroHighlights = computed<Highlight[]>(() => [
     {
@@ -137,9 +215,64 @@ export const useHomeContent = () => {
   const testimonialKeys = ['maria', 'carlos', 'sofia'] as const
   const testimonials = computed<Testimonial[]>(() =>
     testimonialKeys.map((key) => ({
+      id: key,
       name: t(`home.socialProof.testimonials.${key}.name`),
+      avatar: t(`home.socialProof.testimonials.${key}.avatar`),
       quote: t(`home.socialProof.testimonials.${key}.quote`),
-      location: t(`home.socialProof.testimonials.${key}.location`)
+      location: t(`home.socialProof.testimonials.${key}.location`),
+      rating: Number(t(`home.socialProof.testimonials.${key}.rating`)) || 5,
+      verified: t(`home.socialProof.testimonials.${key}.verified`) === 'true',
+      date: t(`home.socialProof.testimonials.${key}.date`),
+      productImage: t(`home.socialProof.testimonials.${key}.productImage`)
+    }))
+  )
+
+  const mediaMentionKeys = ['nyt', 'wsj', 'forbes', 'techcrunch', 'bbc'] as const
+  const mediaMentions = computed<MediaMention[]>(() =>
+    mediaMentionKeys.map((key) => ({
+      name: t(`home.mediaMentions.items.${key}.name`),
+      logo: t(`home.mediaMentions.items.${key}.logo`),
+      url: t(`home.mediaMentions.items.${key}.url`),
+      quote: t(`home.mediaMentions.items.${key}.quote`)
+    }))
+  )
+
+  const trustBadgeKeys = ['ssl', 'authenticity', 'moneyBack', 'freeShipping', 'securePay'] as const
+  const trustBadges = computed<TrustBadge[]>(() =>
+    trustBadgeKeys.map((key) => ({
+      id: key,
+      label: t(`home.trustBadges.items.${key}.label`),
+      icon: t(`home.trustBadges.items.${key}.icon`),
+      verified: t(`home.trustBadges.items.${key}.verified`) === 'true'
+    }))
+  )
+
+  const videoTestimonialKeys = ['ana', 'ion', 'elena'] as const
+  const videoTestimonials = computed<VideoTestimonial[]>(() =>
+    videoTestimonialKeys.map((key) => ({
+      id: key,
+      name: t(`home.videoTestimonials.items.${key}.name`),
+      avatar: t(`home.videoTestimonials.items.${key}.avatar`),
+      location: t(`home.videoTestimonials.items.${key}.location`),
+      rating: Number(t(`home.videoTestimonials.items.${key}.rating`)) || 5,
+      verified: t(`home.videoTestimonials.items.${key}.verified`) === 'true',
+      quote: t(`home.videoTestimonials.items.${key}.quote`),
+      videoUrl: t(`home.videoTestimonials.items.${key}.videoUrl`),
+      thumbnail: t(`home.videoTestimonials.items.${key}.thumbnail`),
+      hasClosedCaptions: t(`home.videoTestimonials.items.${key}.hasClosedCaptions`) === 'true'
+    }))
+  )
+
+  const statKeys = ['customers', 'products', 'rating', 'countries'] as const
+  const stats = computed<Stat[]>(() =>
+    statKeys.map((key) => ({
+      id: key,
+      value: Number(t(`home.stats.items.${key}.value`)) || 0,
+      label: t(`home.stats.items.${key}.label`),
+      icon: t(`home.stats.items.${key}.icon`),
+      prefix: t(`home.stats.items.${key}.prefix`),
+      suffix: t(`home.stats.items.${key}.suffix`),
+      duration: Number(t(`home.stats.items.${key}.duration`)) || 2000
     }))
   )
 
@@ -210,6 +343,7 @@ export const useHomeContent = () => {
 
   return {
     locale,
+    heroContent,
     heroHighlights,
     categoryCards,
     howItWorksSteps,
@@ -218,6 +352,10 @@ export const useHomeContent = () => {
     storyPoints,
     storyTimeline,
     services,
-    faqItems
+    faqItems,
+    mediaMentions,
+    trustBadges,
+    videoTestimonials,
+    stats
   }
 }

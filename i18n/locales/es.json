@@ -1056,6 +1056,9 @@
           "answer": "Nuestro equipo de conserjería atiende por WhatsApp y correo para sugerir maridajes y cajas a medida."
         }
       }
+    },
+    "mediaMentions": {
+      "heading": "Destacado En"
     }
   },
   "products": {
@@ -2033,5 +2036,45 @@
     "enableNotifications": "Activar notificaciones",
     "notificationsEnabled": "Notificaciones activadas",
     "notificationsDisabled": "Notificaciones desactivadas"
+  },
+  "landing": {
+    "hero": {
+      "urgency": "Envío Gratis en Pedidos Superiores a $75",
+      "headline": "Moldavia Auténtica, Entregada a Tu Puerta",
+      "subheadline": "Descubre 5,000 años de tradición vitivinícola con nuestra colección curada de vinos moldavos premium y delicias gourmet.",
+      "primaryCta": "Explorar Colección",
+      "secondaryCta": "Tomar Nuestro Quiz de Vinos",
+      "trustBadge1": "Auténtico y Certificado",
+      "trustBadge2": "Envío Gratis",
+      "trustBadge3": "4.9/5 Estrellas (2,400+ Reseñas)",
+      "scrollHint": "Descubrir Más"
+    },
+    "mediaMentions": {
+      "heading": "Destacados En"
+    },
+    "trustBadges": {
+      "ssl": {
+        "title": "Pago Seguro",
+        "subtitle": "Cifrado SSL"
+      },
+      "shipping": {
+        "title": "Envío Gratis",
+        "subtitle": "Pedidos Superiores a $75"
+      },
+      "guarantee": {
+        "title": "Autenticidad",
+        "subtitle": "100% Certificado"
+      },
+      "support": {
+        "title": "Soporte 24/7",
+        "subtitle": "Estamos Para Ayudar"
+      }
+    },
+    "stats": {
+      "customers": "Clientes Satisfechos",
+      "products": "Productos Premium",
+      "rating": "Puntuación Media",
+      "countries": "Países Servidos"
+    }
   }
 }
