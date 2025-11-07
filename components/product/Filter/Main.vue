@@ -10,13 +10,14 @@
           <h2 v-if="showTitle" class="text-lg font-semibold text-gray-900 dark:text-white">
             {{ $t('products.filters.title') }}
           </h2>
-          <button
+          <UiButton
             v-if="hasActiveFilters"
             @click="clearAllFilters"
-            class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
+            variant="link"
+            size="sm"
           >
             {{ $t('products.filters.clearAll') }}
-          </button>
+          </UiButton>
         </div>
 
         <productFilterContent
@@ -28,25 +29,31 @@
     </aside>
 
     <!-- Mobile Filter Button -->
-    <button
+    <UiButton
       v-if="isMobile"
       @click="showMobileFilters = true"
-      class="lg:hidden fixed bottom-4 right-4 z-40 bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-colors"
+      size="icon"
+      class="lg:hidden fixed bottom-4 right-4 z-40 h-12 w-12 rounded-full shadow-lg"
+      :aria-label="$t('products.filters.openFilters')"
     >
-      <commonIcon name="lucide:filter" class="w-6 h-6" />
-      <span v-if="activeFilterCount > 0" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+      <commonIcon name="lucide:filter" class="h-6 w-6" aria-hidden="true" />
+      <span v-if="activeFilterCount > 0" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center" :aria-label="$t('products.filters.activeCount', { count: activeFilterCount })">
         {{ activeFilterCount }}
       </span>
-    </button>
+    </UiButton>
 
     <!-- Mobile Filter Modal -->
     <Teleport to="body">
       <div
         v-if="showMobileFilters"
         class="fixed inset-0 z-50 lg:hidden"
+        role="dialog"
+        aria-modal="true"
+        :aria-labelledby="showTitle ? 'mobile-filter-title' : undefined"
+        :aria-label="!showTitle ? $t('products.filters.title') : undefined"
         @click="showMobileFilters = false"
       >
-        <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" />
+        <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" aria-hidden="true" />
 
         <div
           class="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 rounded-t-xl max-h-[80vh] overflow-hidden transform transition-transform"
@@ -55,23 +62,27 @@
         >
           <!-- Mobile Header -->
           <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-            <h2 v-if="showTitle" class="text-lg font-semibold text-gray-900 dark:text-white">
+            <h2 v-if="showTitle" id="mobile-filter-title" class="text-lg font-semibold text-gray-900 dark:text-white">
               {{ $t('products.filters.title') }}
             </h2>
             <div class="flex items-center space-x-2">
-              <button
+              <UiButton
                 v-if="hasActiveFilters"
                 @click="clearAllFilters"
-                class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
+                variant="link"
+                size="sm"
+                :aria-label="$t('products.filters.clearAllFilters')"
               >
                 {{ $t('products.filters.clearAll') }}
-              </button>
-              <button
+              </UiButton>
+              <UiButton
                 @click="showMobileFilters = false"
-                class="p-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400"
+                variant="ghost"
+                size="icon"
+                :aria-label="$t('common.close')"
               >
-                <commonIcon name="lucide:x" class="w-5 h-5" />
-              </button>
+                <commonIcon name="lucide:x" class="h-5 w-5" aria-hidden="true" />
+              </UiButton>
             </div>
           </div>
 
@@ -87,18 +98,18 @@
           <!-- Mobile Actions -->
           <div class="p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
             <div class="flex space-x-3">
-              <button
+              <UiButton
                 @click="applyFilters"
-                class="flex-1 bg-blue-600 dark:bg-blue-700 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 dark:hover:bg-blue-800 transition-colors"
+                class="flex-1"
               >
                 {{ $t('products.filters.apply') }} ({{ filteredProductCount }})
-              </button>
-              <button
+              </UiButton>
+              <UiButton
                 @click="showMobileFilters = false"
-                class="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                variant="outline"
               >
                 {{ $t('common.cancel') }}
-              </button>
+              </UiButton>
             </div>
           </div>
         </div>

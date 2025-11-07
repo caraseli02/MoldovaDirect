@@ -4,16 +4,19 @@
       class="flex items-center py-1"
       :class="{ 'pl-4': level > 0 }"
     >
-      <button
+      <UiButton
         v-if="category.children && category.children.length > 0"
         @click="toggleExpanded"
-        class="mr-2 p-0.5 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400 transition-colors"
+        variant="ghost"
+        size="icon"
+        class="mr-2 h-6 w-6"
+        :aria-label="isExpanded ? $t('common.collapse') : $t('common.expand')"
       >
         <commonIcon
           :name="isExpanded ? 'lucide:chevron-down' : 'lucide:chevron-right'"
-          class="w-4 h-4"
+          class="h-4 w-4"
         />
-      </button>
+      </UiButton>
       <div v-else class="w-6" />
 
       <label class="flex items-center flex-1 cursor-pointer">

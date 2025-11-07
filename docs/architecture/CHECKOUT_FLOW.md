@@ -24,7 +24,8 @@ Shared helpers live in `composables/useCheckout.ts` and `components/checkout/Che
 | `POST /api/checkout/addresses` & `GET /api/checkout/addresses` | Persist and retrieve saved addresses | Reads/writes Supabase `addresses` table |
 | `GET /api/checkout/shipping-methods` | Fetch shipping options | Currently returns static config; extend for dynamic carriers |
 | `POST /api/checkout/create-payment-intent` | Create Stripe payment intent | Requires `SUPABASE_SERVICE_KEY` and `STRIPE_SECRET_KEY`; throws 503 if Stripe is not configured |
-| `POST /api/checkout/confirm-payment` | Placeholder for confirming card payments | Extend once Stripe webhooks are wired |
+| `POST /api/checkout/confirm-payment` | Confirm card payments | Validates payment intent status; production relies on webhooks for final status updates |
+| `POST /api/webhooks/stripe` | Handle Stripe payment events | **NEW**: Processes payment_intent.succeeded, payment_intent.payment_failed, and charge.refunded events. See [Webhook Setup Guide](./STRIPE_WEBHOOK_SETUP.md) |
 | `POST /api/checkout/create-order` | Write order records after review | Validates cart via Supabase RPC (`validate_cart_for_checkout`) and inserts into `orders` / `order_items` |
 | `POST /api/checkout/save-payment-method` / `GET /api/checkout/payment-methods` | Manage saved payment methods | Currently scaffolding for Stripe + future PayPal vault |
 | `POST /api/orders/create` / `GET /api/orders/*` | General order creation and queries | Used by admin and account order history |
@@ -48,10 +49,10 @@ When adding new columns or RPC functions for checkout, extend these scripts to k
 
 ## Payment Options
 
-### Current Implementation (October 2025)
+### Current Implementation (November 2025)
 
 - **Cash on Delivery**: ✅ Fully implemented in UI and order creation logic; confirmation step marks orders as `pending` with `cash` payment method.
-- **Card Payments (Stripe)**: ✅ Primary payment processor with API integration complete. Enable by supplying live keys and finalizing webhook handling in `server/api/checkout/confirm-payment.post.ts`.
+- **Card Payments (Stripe)**: ✅ Primary payment processor with full API integration and webhook handling. Webhooks automatically update order payment status for asynchronous events (succeeded, failed, refunded).
 
 ### Removed Features
 
@@ -65,7 +66,10 @@ Payment processing is configured through environment variables:
 # Stripe (Primary payment processor)
 STRIPE_PUBLISHABLE_KEY=pk_test_...
 STRIPE_SECRET_KEY=sk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...  # Required for webhook signature verification
 ```
+
+The webhook secret is obtained from Stripe Dashboard when setting up webhook endpoints. See the [Stripe Webhook Setup Guide](./STRIPE_WEBHOOK_SETUP.md) for detailed configuration instructions.
 
 No additional payment provider configuration is needed in `nuxt.config.ts`. All payment processing is handled through Stripe's API.
 
@@ -83,6 +87,7 @@ No additional payment provider configuration is needed in `nuxt.config.ts`. All 
 
 Short-term priorities for the checkout pipeline (tracked in `docs/REMAINING_WORK_SUMMARY.md`):
 
-1. Activate Stripe/PayPal flows and capture payment webhooks.
+1. ✅ **COMPLETED**: Stripe webhook handling for payment events (November 2025)
 2. Send localized transactional emails (order confirmation, shipping updates).
 3. Tighten inventory reservation and rollback logic in Supabase RPCs.
+4. Consider implementing customer notifications for payment status changes (via email or dashboard).

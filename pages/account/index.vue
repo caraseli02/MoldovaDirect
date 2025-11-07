@@ -63,12 +63,13 @@
                 >
                   {{ $t('account.profile') }}
                 </NuxtLink>
-                <button 
+                <UiButton
                   @click="handleLogout"
-                  class="w-full text-left px-4 py-2 rounded-md hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400"
+                  variant="ghost"
+                  class="w-full justify-start text-red-600 hover:bg-red-50 hover:text-red-600 dark:text-red-400 dark:hover:bg-red-900/20 dark:hover:text-red-400"
                 >
                   {{ $t('common.logout') }}
-                </button>
+                </UiButton>
               </nav>
             </div>
           </div>
