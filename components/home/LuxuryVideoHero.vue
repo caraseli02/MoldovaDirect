@@ -136,22 +136,11 @@ onMounted(() => {
   color: var(--luxury-black);
 }
 
-/* Mobile-optimized hero */
+/* Mobile viewport optimization */
 @media (max-width: 640px) {
   .luxury-video-hero {
     min-height: 100vh;
     min-height: 100dvh; /* Dynamic viewport height for mobile browsers */
-  }
-
-  .luxury-hero-content {
-    padding-top: 80px; /* Account for fixed header */
-  }
-}
-
-/* Tablet adjustments */
-@media (min-width: 641px) and (max-width: 1024px) {
-  .luxury-hero-content {
-    padding-top: 100px;
   }
 }
 </style>
