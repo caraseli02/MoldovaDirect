@@ -117,10 +117,19 @@
 
 <style scoped>
 .promise-card {
-  @apply bg-white p-6 rounded-sm shadow-md hover:shadow-xl transition-all duration-300;
-  @apply border border-luxury-black/10 hover:border-luxury-wine-red/30;
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.125rem;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  border: 1px solid rgba(139, 69, 19, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+}
+
+.promise-card:hover {
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  border-color: rgba(114, 47, 55, 0.3);
 }
 
 @media (min-width: 768px) {
@@ -146,9 +155,15 @@
 }
 
 .promise-icon {
-  @apply w-16 h-16 bg-luxury-cream rounded-full;
-  @apply flex items-center justify-center mb-4;
-  @apply transition-transform duration-300;
+  width: 4rem;
+  height: 4rem;
+  background-color: #FAF8F5;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @media (min-width: 768px) {
@@ -164,12 +179,23 @@
 }
 
 .promise-link {
-  @apply inline-flex items-center gap-2 text-sm font-semibold text-luxury-wine-red;
-  @apply uppercase tracking-wider hover:gap-3 transition-all duration-300;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--luxury-wine-red);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.promise-link:hover {
+  gap: 0.75rem;
 }
 
 .promise-link svg {
-  @apply transition-transform duration-300;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .promise-link:hover svg {
