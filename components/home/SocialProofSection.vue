@@ -4,35 +4,124 @@
     <div class="container relative">
       <div class="flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">
         <div class="max-w-xl">
-          <div class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-medium ring-1 ring-white/20">
+          <!-- Badge with animation -->
+          <div
+            v-motion
+            :initial="{ opacity: 0, x: -20 }"
+            :visible-once="{
+              opacity: 1,
+              x: 0,
+              transition: { duration: 500 },
+            }"
+            class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-medium ring-1 ring-white/20 backdrop-blur-sm"
+          >
             <commonIcon name="lucide:star" class="h-5 w-5" />
             <span>{{ t('home.socialProof.badge') }}</span>
           </div>
-          <h2 class="mt-6 text-3xl font-bold md:text-4xl">{{ t('home.socialProof.title') }}</h2>
-          <p class="mt-4 text-lg text-primary-100">{{ t('home.socialProof.subtitle') }}</p>
+
+          <!-- Title with animation -->
+          <h2
+            v-motion
+            :initial="{ opacity: 0, x: -20 }"
+            :visible-once="{
+              opacity: 1,
+              x: 0,
+              transition: { duration: 500, delay: 100 },
+            }"
+            class="mt-6 text-3xl font-bold md:text-4xl"
+          >
+            {{ t('home.socialProof.title') }}
+          </h2>
+
+          <!-- Subtitle with animation -->
+          <p
+            v-motion
+            :initial="{ opacity: 0, x: -20 }"
+            :visible-once="{
+              opacity: 1,
+              x: 0,
+              transition: { duration: 500, delay: 200 },
+            }"
+            class="mt-4 text-lg text-primary-100"
+          >
+            {{ t('home.socialProof.subtitle') }}
+          </p>
+
+          <!-- Animated stats with counter -->
           <div class="mt-8 grid gap-6 sm:grid-cols-2">
-            <div v-for="stat in highlights" :key="stat.label" class="rounded-xl bg-white/10 p-6">
-              <p class="text-3xl font-semibold">{{ stat.value }}</p>
+            <div
+              v-for="(stat, index) in animatedStats"
+              :key="stat.label"
+              v-motion
+              :initial="{ opacity: 0, scale: 0.9 }"
+              :visible-once="{
+                opacity: 1,
+                scale: 1,
+                transition: { duration: 400, delay: 300 + index * 100 },
+              }"
+              class="rounded-xl bg-white/10 p-6 backdrop-blur-sm ring-1 ring-white/10"
+            >
+              <p class="text-3xl font-bold">{{ stat.displayValue }}</p>
               <p class="mt-2 text-sm text-primary-100">{{ stat.label }}</p>
             </div>
           </div>
-          <div class="mt-10 grid gap-4 sm:grid-cols-2">
-            <div v-for="logo in logos" :key="logo" class="flex items-center gap-3 rounded-xl bg-white/5 px-5 py-4 text-sm font-semibold">
+
+          <!-- Partner logos with animation -->
+          <div
+            v-motion
+            :initial="{ opacity: 0, y: 20 }"
+            :visible-once="{
+              opacity: 1,
+              y: 0,
+              transition: { duration: 500, delay: 600 },
+            }"
+            class="mt-10 grid gap-4 sm:grid-cols-2"
+          >
+            <div
+              v-for="logo in logos"
+              :key="logo"
+              class="flex items-center gap-3 rounded-xl bg-white/5 px-5 py-4 text-sm font-semibold backdrop-blur-sm transition hover:bg-white/10"
+            >
               <commonIcon name="lucide:sparkles" class="h-5 w-5 text-primary-100" />
               <span>{{ logo }}</span>
             </div>
           </div>
         </div>
+
+        <!-- Testimonials with star ratings -->
         <div class="grid gap-6 lg:max-w-xl">
           <article
-            v-for="testimonial in testimonials"
+            v-for="(testimonial, index) in testimonials"
             :key="testimonial.name"
+            v-motion
+            :initial="{ opacity: 0, x: 40 }"
+            :visible-once="{
+              opacity: 1,
+              x: 0,
+              transition: { duration: 500, delay: 400 + index * 150 },
+            }"
             class="rounded-3xl bg-white/95 p-8 text-left text-gray-900 shadow-xl shadow-primary-950/20"
           >
-            <p class="text-lg font-medium leading-relaxed">“{{ testimonial.quote }}”</p>
-            <div class="mt-6 flex items-center justify-between text-sm font-semibold text-primary-600">
-              <span>{{ testimonial.name }}</span>
-              <span class="text-gray-500">{{ testimonial.location }}</span>
+            <!-- Star rating at top -->
+            <div class="mb-4 flex items-center justify-between">
+              <UiStarRating :rating="5" size="sm" />
+
+              <!-- Verified badge -->
+              <span class="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-700">
+                <commonIcon name="lucide:check-circle" class="h-3 w-3" />
+                {{ t('home.socialProof.verified') }}
+              </span>
+            </div>
+
+            <!-- Quote -->
+            <p class="text-lg font-medium leading-relaxed">"{{ testimonial.quote }}"</p>
+
+            <!-- Customer info -->
+            <div class="mt-6 flex items-center justify-between border-t border-gray-200 pt-4 text-sm">
+              <div>
+                <p class="font-semibold text-primary-600">{{ testimonial.name }}</p>
+                <p class="text-gray-500">{{ testimonial.location }}</p>
+              </div>
             </div>
           </article>
         </div>
@@ -42,7 +131,7 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
   highlights: Array<{
     value: string
     label: string
@@ -56,4 +145,51 @@ defineProps<{
 }>()
 
 const { t } = useI18n()
+
+// Parse numeric values from highlights and create animated counters
+const animatedStats = computed(() => {
+  return props.highlights.map((stat) => {
+    // Extract number from value (e.g., "2k+" -> 2000, "4.9/5" -> 4.9)
+    const numericMatch = stat.value.match(/(\d+(?:\.\d+)?)(k|K)?/)
+
+    if (numericMatch) {
+      let number = parseFloat(numericMatch[1])
+
+      // Convert k to thousands
+      if (numericMatch[2]?.toLowerCase() === 'k') {
+        number = number * 1000
+      }
+
+      // Create counter for whole numbers
+      const counter = useCountUp(number, {
+        duration: 2000,
+        useEasing: true
+      })
+
+      return {
+        label: stat.label,
+        displayValue: computed(() => {
+          // Format based on original value
+          if (stat.value.includes('k') || stat.value.includes('K')) {
+            return `${(counter.current.value / 1000).toFixed(1)}k+`
+          } else if (stat.value.includes('/')) {
+            // For ratings like "4.9/5"
+            return `${counter.current.value.toFixed(1)}/5`
+          } else if (stat.value.includes('h')) {
+            // For time like "48h"
+            return `${counter.current.value}h`
+          } else {
+            return counter.formatted.value
+          }
+        })
+      }
+    }
+
+    // Fallback for non-numeric values
+    return {
+      label: stat.label,
+      displayValue: computed(() => stat.value)
+    }
+  })
+})
 </script>

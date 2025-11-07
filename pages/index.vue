@@ -3,8 +3,30 @@
     <!-- Promotional announcement bar -->
     <HomeAnnouncementBar :show-cta="true" />
 
-    <!-- Hero section with main value proposition -->
-    <HomeHeroSection :highlights="heroHighlights" />
+    <!-- Hero section with video background (Rhode Skin/To'ak pattern) -->
+    <HomeVideoHero
+      :show-video="false"
+      video-webm="/videos/hero.webm"
+      video-mp4="/videos/hero.mp4"
+      poster-image="/images/hero-poster.jpg"
+      :badge="t('home.hero.trustBadge')"
+      badge-icon="lucide:shield-check"
+      :title="t('home.hero.title')"
+      :subtitle="t('home.hero.subtitle')"
+      :primary-cta="{
+        text: t('home.hero.primaryCta'),
+        link: localePath('/products'),
+        icon: 'lucide:arrow-right'
+      }"
+      :secondary-cta="{
+        text: t('home.hero.secondaryCta'),
+        link: localePath('/about')
+      }"
+      :highlights="heroHighlights"
+    />
+
+    <!-- Media mentions "brag bar" (Brightland pattern) -->
+    <HomeMediaMentions />
 
     <!-- Quick category navigation for immediate browsing -->
     <HomeCategoryGrid :categories="categoryCards" />
@@ -20,6 +42,9 @@
     <!-- Premium collections showcase -->
     <HomeCollectionsShowcase />
 
+    <!-- Product recommendation quiz (Jones Road/Beardbrand pattern) -->
+    <HomeProductQuiz />
+
     <!-- Social proof and trust signals -->
     <HomeSocialProofSection
       :highlights="heroHighlights"
@@ -27,11 +52,20 @@
       :testimonials="testimonials"
     />
 
+    <!-- User-generated content gallery (Rare Beauty pattern) -->
+    <HomeUgcGallery />
+
     <!-- Process explanation -->
     <HomeHowItWorksSection :steps="howItWorksSteps" />
 
     <!-- Service offerings -->
     <HomeServicesSection :services="services" />
+
+    <!-- Trust badges and payment security -->
+    <HomeTrustBadges />
+
+    <!-- Certification badges (Allbirds pattern) -->
+    <HomeCertificationBar />
 
     <!-- Newsletter signup -->
     <HomeNewsletterSignup />
@@ -41,6 +75,9 @@
 
     <!-- Story section moved to About page -->
     <!-- <HomeStorySection :points="storyPoints" :timeline="storyTimeline" /> -->
+
+    <!-- Real-time purchase notifications (Gymshark/Fomo pattern) -->
+    <UiRealtimeNotification />
   </div>
 </template>
 
@@ -48,7 +85,8 @@
 import type { ProductWithRelations } from '~/types'
 import { CONTACT_INFO } from '~/constants/seo'
 
-const { locale } = useI18n()
+const { t, locale } = useI18n()
+const localePath = useLocalePath()
 const {
   heroHighlights,
   categoryCards,

@@ -6,10 +6,10 @@
           <commonIcon name="lucide:sparkles" class="h-4 w-4" />
           {{ t('home.collections.badge') }}
         </span>
-        <h2 class="mt-4 text-3xl font-bold text-gray-900 dark:text-gray-50 md:text-4xl">
+        <h2 class="mt-4 text-4xl font-bold text-gray-900 dark:text-gray-50 md:text-5xl lg:text-6xl tracking-tight">
           {{ t('home.collections.title') }}
         </h2>
-        <p class="mt-4 text-lg text-gray-600 dark:text-gray-400">
+        <p class="mt-4 text-sm md:text-base text-gray-600 dark:text-gray-400">
           {{ t('home.collections.subtitle') }}
         </p>
       </div>

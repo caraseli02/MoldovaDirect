@@ -51,7 +51,7 @@
 
         <!-- Main Heading -->
         <h1
-          class="text-4xl md:text-5xl lg:text-7xl font-bold mb-6 leading-tight"
+          class="text-6xl md:text-8xl lg:text-9xl font-bold mb-6 leading-tight tracking-tight"
         >
           {{ title }}
         </h1>
@@ -59,7 +59,7 @@
         <!-- Subtitle -->
         <p
           v-if="subtitle"
-          class="text-xl md:text-2xl mb-8 text-white/90 max-w-2xl"
+          class="text-sm md:text-base mb-8 text-white/70 max-w-xl"
         >
           {{ subtitle }}
         </p>

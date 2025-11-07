@@ -3,8 +3,8 @@
     <div class="container">
       <div class="grid gap-8 rounded-3xl bg-white p-10 shadow-xl dark:bg-gray-950">
         <div class="max-w-3xl">
-          <h2 class="text-3xl font-bold md:text-4xl">{{ t('home.newsletter.title') }}</h2>
-          <p class="mt-3 text-lg text-gray-600 dark:text-gray-400">{{ t('home.newsletter.subtitle') }}</p>
+          <h2 class="text-4xl font-bold md:text-5xl lg:text-6xl tracking-tight">{{ t('home.newsletter.title') }}</h2>
+          <p class="mt-4 text-sm md:text-base text-gray-600 dark:text-gray-400">{{ t('home.newsletter.subtitle') }}</p>
         </div>
         <form class="flex flex-col gap-4 md:flex-row" @submit.prevent="submitNewsletter">
           <label for="newsletter-email" class="sr-only">{{ t('home.newsletter.placeholder') }}</label>

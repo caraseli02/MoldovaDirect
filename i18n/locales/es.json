@@ -960,6 +960,16 @@
         "Slow Food Alliance"
       ]
     },
+    "mediaMentions": {
+      "title": "Destacado en",
+      "featuredIn": "Destacado en publicaciones líderes"
+    },
+    "trustBadges": {
+      "paymentMethods": "Métodos de pago seguros",
+      "security": "Tu seguridad y privacidad",
+      "supportText": "¿Preguntas? Nuestro equipo de atención al cliente está aquí para ayudarte",
+      "contactUs": "Contáctanos"
+    },
     "featuredProducts": {
       "title": "Lo que más se vende",
       "subtitle": "Vinos y productos que otros clientes están comprando ahora.",

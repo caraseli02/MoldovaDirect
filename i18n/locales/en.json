@@ -51,7 +51,13 @@
     "selectAll": "Select All",
     "deselectAll": "Deselect All",
     "cartError": "Cart Error",
-    "cartValidationError": "Validation Error"
+    "cartValidationError": "Validation Error",
+    "time": {
+      "days": "d",
+      "hours": "h",
+      "minutes": "m",
+      "seconds": "s"
+    }
   },
   "cart": {
     "shippingCalculatedAtCheckout": "Calculated at checkout",
@@ -936,6 +942,7 @@
       "badge": "Authentic PDO & PGI partners",
       "title": "Trusted by food lovers across Spain",
       "subtitle": "Join a growing community of customers who celebrate Moldovan craftsmanship.",
+      "verified": "Verified Purchase",
       "testimonials": {
         "maria": {
           "name": "María, Barcelona",
@@ -959,6 +966,38 @@
         "Moldova Wine Guild",
         "Slow Food Alliance"
       ]
+    },
+    "mediaMentions": {
+      "title": "As Featured In",
+      "featuredIn": "Featured in leading publications"
+    },
+    "trustBadges": {
+      "paymentMethods": "Secure Payment Methods",
+      "security": "Your Security & Privacy",
+      "supportText": "Questions? Our customer service team is here to help",
+      "contactUs": "Contact Us"
+    },
+    "certifications": {
+      "authentic": {
+        "title": "100% Authentic",
+        "subtitle": "Direct from Moldova",
+        "description": "All products sourced directly from authentic Moldovan producers and artisans, ensuring genuine quality and heritage"
+      },
+      "quality": {
+        "title": "Award-Winning",
+        "subtitle": "Premium Selection",
+        "description": "Curated collection of award-winning wines and artisan products recognized by international competitions"
+      },
+      "sustainable": {
+        "title": "Sustainable",
+        "subtitle": "Eco-Friendly",
+        "description": "Supporting sustainable farming practices and eco-friendly packaging to protect Moldova's beautiful terroir"
+      },
+      "secure": {
+        "title": "Secure Payment",
+        "subtitle": "Safe & Protected",
+        "description": "Industry-leading encryption and secure payment processing to protect your personal information"
+      }
     },
     "featuredProducts": {
       "title": "Editor's Picks",
@@ -1056,11 +1095,81 @@
           "answer": "Our concierge team is available via WhatsApp and email to suggest pairings and build custom boxes."
         }
       }
+    },
+    "ugcGallery": {
+      "badge": "Customer Photos",
+      "title": "See What Our Customers Are Enjoying",
+      "subtitle": "Real customers sharing their Moldova Direct experience on Instagram",
+      "verified": "Verified Purchase",
+      "ctaText": "Want to be featured? Tag us on Instagram",
+      "ctaButton": "Follow Us on Instagram"
+    },
+    "productQuiz": {
+      "badge": "Find Your Perfect Match",
+      "title": "Not Sure What to Order?",
+      "subtitle": "Take our quick quiz to discover products perfectly matched to your taste",
+      "progress": "Progress",
+      "startText": "Answer 3 quick questions and we'll recommend the perfect Moldovan products for you. Takes less than 1 minute!",
+      "startButton": "Start Quiz",
+      "getResults": "Get My Recommendations",
+      "resultsTitle": "Perfect! Here Are Your Matches",
+      "resultsSubtitle": "Based on your answers, we've selected these products just for you",
+      "viewProducts": "View All Recommendations",
+      "restart": "Retake Quiz",
+      "questions": {
+        "occasion": {
+          "question": "What brings you to Moldova Direct?",
+          "description": "Help us understand your needs",
+          "options": {
+            "gift": {
+              "label": "Gift for someone special",
+              "description": "Curated gift hampers and sets"
+            },
+            "personal": {
+              "label": "Personal enjoyment",
+              "description": "Wines and foods for myself"
+            },
+            "event": {
+              "label": "Event or celebration",
+              "description": "Party, dinner, or gathering"
+            },
+            "subscription": {
+              "label": "Regular deliveries",
+              "description": "Monthly wine subscription"
+            }
+          }
+        },
+        "preference": {
+          "question": "What type of wine do you prefer?",
+          "options": {
+            "red": "Red wines",
+            "white": "White wines",
+            "sparkling": "Sparkling wines",
+            "mixed": "A mix of everything"
+          }
+        },
+        "budget": {
+          "question": "What's your budget per bottle?",
+          "options": {
+            "under30": "Under €30",
+            "mid": "€30-€60",
+            "premium": "€60+"
+          }
+        }
+      }
+    },
+    "realtimeNotification": {
+      "purchased": "just purchased",
+      "verified": "Verified Purchase"
     }
   },
   "products": {
     "featured": "Featured",
     "sale": "Sale",
+    "new": "New",
+    "bestSeller": "Best Seller",
+    "quickView": "Quick View",
+    "onlyLeft": "Only {count} left",
     "off": "off",
     "details": "Details",
     "origin": "Origin",
@@ -1072,6 +1181,16 @@
       "inStock": "In stock",
       "onlyLeft": "Only {count} left",
       "outOfStock": "Out of stock"
+    },
+    "benefits": {
+      "authentic": "Authentic Moldovan",
+      "authenticTooltip": "Sourced directly from authentic Moldovan producers and artisans",
+      "fastShipping": "Fast Delivery",
+      "fastShippingTooltip": "Orders shipped within 48 hours across Spain",
+      "qualityGuaranteed": "Quality Guaranteed",
+      "qualityGuaranteedTooltip": "Premium quality products with satisfaction guarantee",
+      "securePayment": "Secure Payment",
+      "securePaymentTooltip": "Safe and secure payment processing"
     },
     "addToCart": "Add to Cart",
     "outOfStock": "Out of Stock",

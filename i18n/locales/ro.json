@@ -730,6 +730,16 @@
         "Slow Food Alliance"
       ]
     },
+    "mediaMentions": {
+      "title": "Prezentat în",
+      "featuredIn": "Prezentat în publicații de top"
+    },
+    "trustBadges": {
+      "paymentMethods": "Metode de plată sigure",
+      "security": "Securitatea și confidențialitatea ta",
+      "supportText": "Întrebări? Echipa noastră de asistență clienți este aici să te ajute",
+      "contactUs": "Contactează-ne"
+    },
     "featuredProducts": {
       "title": "Alegerea editorului",
       "subtitle": "Lansări limitate și best-seller-e care ne inspiră săptămâna aceasta.",
