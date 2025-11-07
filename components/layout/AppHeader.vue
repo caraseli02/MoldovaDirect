@@ -1,10 +1,10 @@
 <template>
   <header
     :class="[
-      'fixed top-0 left-0 right-0 z-50 will-change-transform transition-all duration-500',
+      'fixed left-0 right-0 z-50 will-change-transform transition-all duration-500',
       scrolled
-        ? 'bg-white/95 dark:bg-gray-950/95 backdrop-blur-md shadow-lg dark:shadow-slate-900/30'
-        : 'bg-transparent'
+        ? 'top-0 bg-white/95 dark:bg-gray-950/95 backdrop-blur-md shadow-lg dark:shadow-slate-900/30'
+        : 'top-[44px] bg-transparent'
     ]">
     <div class="container">
       <div class="flex items-center justify-between h-20">

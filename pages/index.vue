@@ -21,7 +21,10 @@
     <!-- Customer Testimonials -->
     <HomeLuxuryTestimonials />
 
-    <!-- Newsletter Signup (Keeping from original) -->
+    <!-- Brand Promises -->
+    <HomeBrandPromises />
+
+    <!-- Newsletter Signup (Luxury redesign) -->
     <HomeNewsletterSignup />
   </div>
 </template>
