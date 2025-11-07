@@ -31,40 +31,47 @@
     <div class="luxury-video-overlay" />
 
     <!-- Hero Content -->
-    <div class="luxury-hero-content">
+    <div class="luxury-hero-content px-4 sm:px-6 lg:px-8">
       <div
         v-motion
         :initial="{ opacity: 0, y: 40 }"
         :enter="{ opacity: 1, y: 0, transition: { delay: 300, duration: 1000 } }"
+        class="max-w-4xl mx-auto"
       >
-        <p class="luxury-eyebrow text-white mb-6">
+        <p class="luxury-eyebrow text-white mb-4 md:mb-6 text-xs md:text-sm">
           {{ $t('luxury.hero.eyebrow') || 'Artisan Heritage Since 1950' }}
         </p>
 
-        <h1 class="luxury-headline text-white">
+        <h1 class="luxury-headline text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 md:mb-6 leading-tight">
           {{ $t('luxury.hero.title') || 'From Moldovan Soil to Spanish Tables' }}
         </h1>
 
-        <p class="luxury-subhead text-white/90">
+        <p class="luxury-subhead text-white/90 text-base sm:text-lg md:text-xl mb-8 md:mb-10 max-w-2xl mx-auto">
           {{ $t('luxury.hero.subtitle') || 'Curated wines and gourmet treasures from the heart of Moldova' }}
         </p>
 
-        <div class="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-          <NuxtLink to="/products" class="luxury-btn">
+        <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+          <NuxtLink
+            to="/products"
+            class="luxury-btn text-sm md:text-base px-6 py-3 md:px-8 md:py-4 w-full sm:w-auto text-center min-h-[48px] flex items-center justify-center"
+          >
             {{ $t('luxury.hero.cta_primary') || 'Discover Our Story' }}
           </NuxtLink>
-          <NuxtLink to="/products?filter=featured" class="luxury-btn luxury-btn-dark">
+          <NuxtLink
+            to="/products?filter=featured"
+            class="luxury-btn luxury-btn-dark text-sm md:text-base px-6 py-3 md:px-8 md:py-4 w-full sm:w-auto text-center min-h-[48px] flex items-center justify-center"
+          >
             {{ $t('luxury.hero.cta_secondary') || 'Shop Collection' }}
           </NuxtLink>
         </div>
       </div>
 
-      <!-- Scroll Indicator -->
+      <!-- Scroll Indicator - Hidden on mobile -->
       <div
         v-motion
         :initial="{ opacity: 0 }"
         :enter="{ opacity: 1, transition: { delay: 1500, duration: 800 } }"
-        class="absolute bottom-12 left-1/2 transform -translate-x-1/2"
+        class="absolute bottom-8 md:bottom-12 left-1/2 transform -translate-x-1/2 hidden sm:block"
       >
         <div class="animate-luxury-pulse">
           <svg
@@ -129,13 +136,22 @@ onMounted(() => {
   color: var(--luxury-black);
 }
 
-@media (max-width: 768px) {
-  .luxury-hero-content h1 {
-    font-size: 2.5rem;
+/* Mobile-optimized hero */
+@media (max-width: 640px) {
+  .luxury-video-hero {
+    min-height: 100vh;
+    min-height: 100dvh; /* Dynamic viewport height for mobile browsers */
   }
 
-  .luxury-hero-content p {
-    font-size: 1.1rem;
+  .luxury-hero-content {
+    padding-top: 80px; /* Account for fixed header */
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .luxury-hero-content {
+    padding-top: 100px;
   }
 }
 </style>

@@ -2,7 +2,7 @@
   <section class="luxury-section bg-luxury-cream">
     <div class="luxury-container">
       <!-- Section Header -->
-      <div class="text-center max-w-3xl mx-auto mb-16">
+      <div class="text-center max-w-3xl mx-auto mb-10 sm:mb-12 md:mb-16">
         <p
           v-motion
           :initial="{ opacity: 0, y: 20 }"
@@ -27,14 +27,14 @@
           v-motion
           :initial="{ opacity: 0, y: 20 }"
           :visible="{ opacity: 1, y: 0, transition: { delay: 200 } }"
-          class="luxury-description mx-auto"
+          class="luxury-description mx-auto px-4 sm:px-0"
         >
           {{ $t('luxury.showcase.description') || 'Discover our handpicked selection of premium wines, gourmet delicacies, and luxury gift hampers.' }}
         </p>
       </div>
 
-      <!-- Product Grid -->
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+      <!-- Product Grid - Mobile-optimized -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 mb-8 sm:mb-12">
         <div
           v-for="(product, index) in featuredProducts"
           :key="product.id"

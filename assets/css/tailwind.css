@@ -379,7 +379,38 @@
     position: relative;
   }
 
-  @media (max-width: 768px) {
+  /* Mobile-first luxury spacing */
+  @media (max-width: 640px) {
+    .luxury-section {
+      padding: 4rem 1rem;
+    }
+
+    .luxury-container {
+      padding: 0 1rem;
+    }
+
+    .luxury-title {
+      font-size: 2rem;
+      line-height: 1.3;
+      margin-bottom: 1rem;
+    }
+
+    .luxury-description {
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .luxury-card {
+      padding: 1.5rem;
+    }
+
+    /* Disable transform on mobile for better touch interaction */
+    .luxury-card:hover {
+      transform: translateY(-4px);
+    }
+  }
+
+  @media (min-width: 641px) and (max-width: 1024px) {
     .luxury-section {
       padding: 6rem 1.5rem;
     }
@@ -604,5 +635,133 @@
   .backdrop-blur-luxury {
     backdrop-filter: blur(10px);
     background: rgba(253, 251, 247, 0.8);
+  }
+
+  /* ===================================
+     MOBILE-OPTIMIZED LUXURY UX
+     =================================== */
+
+  /* Touch-friendly tap targets (minimum 48px) */
+  @media (max-width: 640px) {
+    .luxury-btn {
+      min-height: 48px;
+      min-width: 48px;
+      padding: 0.875rem 1.5rem;
+      font-size: 0.9375rem;
+    }
+
+    /* Reduce animations on mobile for performance */
+    @media (prefers-reduced-motion: no-preference) {
+      .animate-luxury-fade-in,
+      .animate-luxury-slide-in,
+      .animate-luxury-scale {
+        animation-duration: 0.4s;
+      }
+    }
+
+    /* Mobile typography adjustments */
+    h1, .luxury-headline {
+      font-size: clamp(2rem, 8vw, 3rem) !important;
+      letter-spacing: 0.01em;
+    }
+
+    h2 {
+      font-size: clamp(1.75rem, 6vw, 2.5rem);
+    }
+
+    h3 {
+      font-size: clamp(1.5rem, 5vw, 2rem);
+    }
+
+    /* Better touch feedback */
+    .luxury-card:active,
+    .luxury-btn:active {
+      transform: scale(0.98);
+    }
+
+    /* Mobile-optimized spacing */
+    .luxury-eyebrow {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      margin-bottom: 0.75rem;
+    }
+
+    /* Prevent text selection on touch targets */
+    .luxury-btn,
+    button,
+    a {
+      -webkit-tap-highlight-color: rgba(74, 28, 28, 0.1);
+      -webkit-touch-callout: none;
+      user-select: none;
+    }
+
+    /* Mobile-optimized image containers */
+    .luxury-image-wrapper {
+      border-radius: 0;
+    }
+
+    /* Full-width on mobile for better UX */
+    .luxury-btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+  }
+
+  /* Tablet optimizations */
+  @media (min-width: 641px) and (max-width: 1024px) {
+    .luxury-title {
+      font-size: 2.5rem;
+    }
+
+    .luxury-btn {
+      min-height: 48px;
+      padding: 0.875rem 2rem;
+    }
+  }
+
+  /* High-density displays (Retina) */
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .luxury-image-wrapper img {
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: crisp-edges;
+    }
+  }
+
+  /* Dark mode mobile adjustments */
+  @media (max-width: 640px) {
+    @media (prefers-color-scheme: dark) {
+      .luxury-body {
+        background-color: #1A1A1A;
+      }
+
+      .luxury-card {
+        background: var(--luxury-charcoal);
+        border-color: rgba(250, 248, 245, 0.1);
+      }
+    }
+  }
+
+  /* iOS-specific optimizations */
+  @supports (-webkit-touch-callout: none) {
+    .luxury-video-hero {
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+    }
+
+    .luxury-btn {
+      -webkit-appearance: none;
+      border-radius: 0;
+    }
+  }
+
+  /* Android-specific optimizations */
+  @media (max-width: 640px) {
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      font-size: 16px; /* Prevents zoom on focus */
+    }
   }
 }
