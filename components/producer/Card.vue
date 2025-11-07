@@ -1,0 +1,136 @@
+<template>
+  <article
+    v-motion
+    :initial="{ opacity: 0, y: 20 }"
+    :visible="{
+      opacity: 1,
+      y: 0,
+      transition: { duration: 500 },
+    }"
+    class="group relative overflow-hidden rounded-2xl bg-white shadow-lg transition-all duration-300 hover:shadow-2xl"
+    @click="$emit('click', producer)"
+  >
+    <!-- Portrait Image -->
+    <div class="relative aspect-square overflow-hidden bg-slate-100">
+      <NuxtImg
+        :src="producer.portraitImage"
+        :alt="producer.name"
+        class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+        loading="lazy"
+        sizes="sm:100vw md:50vw lg:33vw"
+      />
+
+      <!-- Region Badge -->
+      <div class="absolute bottom-3 left-3 rounded-full bg-black/70 px-3 py-1 text-xs font-medium text-white backdrop-blur">
+        {{ regionName }}
+      </div>
+
+      <!-- Hover Overlay -->
+      <div
+        class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+      >
+        <div class="absolute bottom-4 left-4 right-4">
+          <p class="text-sm font-medium text-white">
+            {{ t('wineStory.producers.viewStory') }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="p-6">
+      <!-- Name -->
+      <h3 class="text-xl font-bold text-slate-900">
+        {{ producer.name }}
+      </h3>
+
+      <!-- Specialty -->
+      <p class="mt-1 text-sm font-medium text-primary-600">
+        {{ getLocalizedText(producer.specialty) }}
+      </p>
+
+      <!-- Established Year -->
+      <div
+        v-if="producer.establishedYear"
+        class="mt-2 flex items-center gap-2 text-xs text-slate-500"
+      >
+        <commonIcon name="lucide:calendar" class="h-3.5 w-3.5" />
+        <span>{{ t('wineStory.producers.establishedYear', { year: producer.establishedYear }) }}</span>
+      </div>
+
+      <!-- Generations -->
+      <div
+        v-if="producer.generationsOfWinemaking"
+        class="mt-1 flex items-center gap-2 text-xs text-slate-500"
+      >
+        <commonIcon name="lucide:users" class="h-3.5 w-3.5" />
+        <span>{{ t('wineStory.producers.generations', { count: producer.generationsOfWinemaking }) }}</span>
+      </div>
+
+      <!-- Short Bio -->
+      <p class="mt-4 line-clamp-3 text-sm leading-relaxed text-slate-600">
+        {{ getLocalizedText(producer.shortBio) }}
+      </p>
+
+      <!-- Read More Button -->
+      <button
+        class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary-600 transition-colors hover:text-primary-700"
+        @click.stop="$emit('click', producer)"
+      >
+        {{ t('wineStory.producers.readMore') }}
+        <commonIcon name="lucide:arrow-right" class="h-4 w-4 transition-transform group-hover:translate-x-1" />
+      </button>
+    </div>
+
+    <!-- Certifications Badge (if organic/certified) -->
+    <div
+      v-if="producer.certifications && producer.certifications.length > 0"
+      class="absolute right-3 top-3 rounded-full bg-green-500 p-2 shadow-lg"
+      :title="producer.certifications.map(c => c.name).join(', ')"
+    >
+      <commonIcon name="lucide:leaf" class="h-4 w-4 text-white" />
+    </div>
+  </article>
+</template>
+
+<script setup lang="ts">
+import type { Producer } from '~/types'
+
+interface Props {
+  producer: Producer
+}
+
+const props = defineProps<Props>()
+defineEmits<{
+  click: [producer: Producer]
+}>()
+
+const { t, locale } = useI18n()
+
+// Get localized text from Translations object
+const getLocalizedText = (translations: any): string => {
+  if (!translations) return ''
+  return translations[locale.value] || translations.en || Object.values(translations)[0] || ''
+}
+
+// Get region name from translation keys
+const regionName = computed(() => {
+  const regionKey = props.producer.region
+  if (regionKey === 'codru') return t('wineStory.regions.codru.name')
+  if (regionKey === 'stefan-voda') return t('wineStory.regions.stefanVoda.name')
+  if (regionKey === 'valul-lui-traian') return t('wineStory.regions.valulLuiTraian.name')
+  return regionKey
+})
+</script>
+
+<style scoped>
+/* Additional hover effects */
+.group:hover .line-clamp-3 {
+  @apply text-slate-900;
+}
+
+/* Focus visible styles for accessibility */
+article:focus-visible {
+  @apply outline-none ring-2 ring-primary-500 ring-offset-2;
+}
+</style>

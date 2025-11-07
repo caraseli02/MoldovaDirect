@@ -2165,5 +2165,223 @@
     "enableNotifications": "Enable notifications",
     "notificationsEnabled": "Notifications enabled",
     "notificationsDisabled": "Notifications disabled"
+  },
+  "wineStory": {
+    "producers": {
+      "title": "Meet Our Winemakers",
+      "subtitle": "Stories from Moldova's Finest Producers",
+      "viewStory": "View Full Story",
+      "readMore": "Read More",
+      "establishedYear": "Established {year}",
+      "generations": "{count} generations of winemaking",
+      "specialty": "Specialty",
+      "region": "Region",
+      "vineyardSize": "Vineyard Size",
+      "annualProduction": "Annual Production",
+      "philosophy": "Philosophy",
+      "awards": "Awards & Recognition",
+      "certifications": "Certifications",
+      "contact": "Visit Website",
+      "featuredProducts": "Featured Wines",
+      "viewAllProducts": "View All Products",
+      "closeModal": "Close",
+      "swipeHint": "Swipe to explore more winemakers",
+      "keyboardHint": "Use arrow keys to navigate",
+      "loading": "Loading winemaker stories...",
+      "error": "Unable to load winemaker stories",
+      "noProducers": "No winemaker stories available yet"
+    },
+    "regions": {
+      "title": "Discover Moldova's Wine Regions",
+      "subtitle": "Three Distinct Terroirs, Countless Stories",
+      "viewRegion": "Explore Region",
+      "characteristics": "Characteristics",
+      "soilType": "Soil Type",
+      "elevation": "Elevation",
+      "climate": "Climate",
+      "rainfall": "Annual Rainfall",
+      "averageTemp": "Average Temperature",
+      "primaryGrapes": "Primary Grape Varieties",
+      "producerCount": "{count} producers",
+      "filterByRegion": "Filter wines by region",
+      "clearFilter": "Show all regions",
+      "mapTooltip": "Click to explore {region}",
+      "loading": "Loading wine regions...",
+      "error": "Unable to load wine regions map",
+      "noRegions": "No wine regions available",
+      "codru": {
+        "name": "Codru",
+        "description": "The heart of Moldovan winemaking"
+      },
+      "stefanVoda": {
+        "name": "Stefan Voda",
+        "description": "Bold reds and sweet wines"
+      },
+      "valulLuiTraian": {
+        "name": "Valul lui Traian",
+        "description": "Aromatic whites and rosés"
+      }
+    },
+    "pairings": {
+      "title": "Perfect Pairings",
+      "subtitle": "Discover the Art of Wine & Food Pairing",
+      "viewPairing": "View Full Pairing",
+      "wine": "Wine",
+      "dish": "Dish",
+      "whyItWorks": "Why This Works",
+      "servingSuggestions": "Serving Suggestions",
+      "temperature": "Temperature",
+      "glassType": "Glass Type",
+      "decanting": "Decanting",
+      "garnishes": "Garnishes",
+      "alternativeWines": "Alternative Wine Pairings",
+      "alternativeDishes": "Alternative Dishes",
+      "recipe": "View Recipe",
+      "servings": "{count} servings",
+      "cookingTime": "Cooking Time",
+      "difficulty": "Difficulty",
+      "ingredients": "Ingredients",
+      "instructions": "Instructions",
+      "chefNotes": "Chef's Notes",
+      "filters": {
+        "all": "All Pairings",
+        "wineType": "Wine Type",
+        "occasion": "Occasion",
+        "season": "Season",
+        "mealType": "Meal Type",
+        "cuisine": "Cuisine",
+        "intensity": "Intensity"
+      },
+      "wineTypes": {
+        "red": "Red Wines",
+        "white": "White Wines",
+        "rose": "Rosé Wines",
+        "sparkling": "Sparkling Wines",
+        "dessert": "Dessert Wines"
+      },
+      "occasions": {
+        "everyday": "Everyday",
+        "specialOccasion": "Special Occasion",
+        "celebration": "Celebration",
+        "romantic": "Romantic",
+        "holiday": "Holiday",
+        "casual": "Casual",
+        "formal": "Formal"
+      },
+      "seasons": {
+        "spring": "Spring",
+        "summer": "Summer",
+        "fall": "Fall",
+        "winter": "Winter",
+        "yearRound": "Year-Round"
+      },
+      "mealTypes": {
+        "appetizer": "Appetizer",
+        "mainCourse": "Main Course",
+        "dessert": "Dessert",
+        "snack": "Snack"
+      },
+      "intensity": {
+        "light": "Light & Delicate",
+        "medium": "Medium-Bodied",
+        "bold": "Bold & Full"
+      },
+      "loading": "Loading pairing guides...",
+      "error": "Unable to load pairing guides",
+      "noPairings": "No pairing guides available",
+      "noResults": "No pairings match your filters"
+    },
+    "giftPhilosophy": {
+      "title": "The Gift of Moldovan Heritage",
+      "subtitle": "More Than Wine, A Story to Share",
+      "description": "Every bottle from Moldova Direct carries centuries of winemaking tradition, the passion of family producers, and the unique character of our terroirs. When you gift Moldova Direct wine, you're sharing an authentic piece of Moldovan culture.",
+      "reasons": {
+        "title": "Why Moldova Direct Gifts Matter",
+        "authenticity": {
+          "title": "Authentic Stories",
+          "description": "Each bottle comes from real family producers with generations of expertise"
+        },
+        "quality": {
+          "title": "Premium Quality",
+          "description": "Hand-selected wines that represent the best of Moldovan winemaking"
+        },
+        "sustainability": {
+          "title": "Sustainable Choice",
+          "description": "Support small producers and sustainable farming practices"
+        },
+        "unique": {
+          "title": "Uniquely Moldovan",
+          "description": "Discover grape varieties and styles you won't find anywhere else"
+        }
+      },
+      "scenarios": {
+        "title": "Perfect Gift Occasions",
+        "corporate": {
+          "title": "Corporate Gifts",
+          "description": "Make a lasting impression with distinctive wines that tell a story"
+        },
+        "celebration": {
+          "title": "Celebrations",
+          "description": "Toast life's special moments with wines as memorable as the occasion"
+        },
+        "gratitude": {
+          "title": "Show Appreciation",
+          "description": "Express gratitude with a thoughtful gift that demonstrates care and taste"
+        },
+        "exploration": {
+          "title": "Wine Discovery",
+          "description": "Introduce friends to the hidden gem of European winemaking"
+        }
+      },
+      "cta": {
+        "title": "Create Your Perfect Gift",
+        "description": "Browse our curated gift sets or build your own custom selection",
+        "button": "Explore Gift Options"
+      }
+    },
+    "production": {
+      "title": "From Vineyard to Your Table",
+      "subtitle": "The Journey of Moldovan Wine",
+      "steps": {
+        "harvest": {
+          "title": "Harvest",
+          "description": "Grapes are hand-picked at optimal ripeness, typically in September-October",
+          "timing": "September - October"
+        },
+        "crushing": {
+          "title": "Crushing & Fermentation",
+          "description": "Traditional methods combined with modern temperature control",
+          "timing": "October - November"
+        },
+        "aging": {
+          "title": "Aging",
+          "description": "Wines rest in oak barrels or stainless steel, developing complexity",
+          "timing": "6 months - 2 years"
+        },
+        "bottling": {
+          "title": "Bottling",
+          "description": "Each bottle is carefully filled and labeled by hand",
+          "timing": "Year-round"
+        },
+        "selection": {
+          "title": "Quality Selection",
+          "description": "We taste and select only the finest bottles for Moldova Direct",
+          "timing": "Ongoing"
+        },
+        "delivery": {
+          "title": "Direct to You",
+          "description": "Fast, secure shipping brings Moldova's finest directly to your door",
+          "timing": "3-5 business days"
+        }
+      },
+      "traditions": {
+        "title": "Honoring Tradition",
+        "description": "Moldova's winemaking heritage spans over 5,000 years. Our producers blend time-honored techniques with modern innovations to create wines that honor the past while embracing the future."
+      },
+      "sustainability": {
+        "title": "Sustainable Practices",
+        "description": "Many of our producers are transitioning to organic and biodynamic farming, ensuring that Moldova's vineyards thrive for generations to come."
+      }
+    }
   }
 }
