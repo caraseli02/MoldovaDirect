@@ -39,11 +39,20 @@
       @retry="refreshFeatured"
     />
 
+    <!-- Producer Stories - Brightland-inspired storytelling -->
+    <HomeProducerStoriesSection />
+
     <!-- Premium collections showcase -->
     <HomeCollectionsShowcase />
 
+    <!-- Wine Regions Map - Interactive Moldova regions -->
+    <HomeWineRegionsMap />
+
     <!-- Product recommendation quiz (Jones Road/Beardbrand pattern) -->
     <HomeProductQuiz />
+
+    <!-- Wine & Food Pairings - Educational content -->
+    <HomePairingGuidesSection />
 
     <!-- Social proof and trust signals -->
     <HomeSocialProofSection
@@ -51,6 +60,9 @@
       :logos="partnerLogos"
       :testimonials="testimonials"
     />
+
+    <!-- Production Process Timeline - Quality & craft story -->
+    <HomeProductionProcessSection />
 
     <!-- User-generated content gallery (Rare Beauty pattern) -->
     <HomeUgcGallery />
@@ -66,6 +78,9 @@
 
     <!-- Certification badges (Allbirds pattern) -->
     <HomeCertificationBar />
+
+    <!-- Gift Philosophy - Premium gifting story -->
+    <HomeGiftPhilosophySection />
 
     <!-- Newsletter signup -->
     <HomeNewsletterSignup />
