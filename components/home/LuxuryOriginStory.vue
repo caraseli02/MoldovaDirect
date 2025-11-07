@@ -40,14 +40,14 @@
               </div>
             </div>
 
-            <div class="border-l border-luxury-gold/30 pl-6">
+            <div class="border-l border-luxury-black/30 pl-6">
               <div class="text-4xl font-serif text-luxury-wine-red font-bold">15+</div>
               <div class="text-sm text-luxury-brown/70 uppercase tracking-wider mt-1">
                 {{ $t('luxury.origin.stat2') || 'Artisan Partners' }}
               </div>
             </div>
 
-            <div class="border-l border-luxury-gold/30 pl-6">
+            <div class="border-l border-luxury-black/30 pl-6">
               <div class="text-4xl font-serif text-luxury-wine-red font-bold">100%</div>
               <div class="text-sm text-luxury-brown/70 uppercase tracking-wider mt-1">
                 {{ $t('luxury.origin.stat3') || 'Authentic' }}
@@ -56,7 +56,7 @@
           </div>
 
           <div class="mt-10">
-            <NuxtLink to="/about" class="luxury-btn luxury-btn-gold">
+            <NuxtLink to="/about" class="luxury-btn luxury-btn-dark">
               {{ $t('luxury.origin.cta') || 'Read Our Story' }}
             </NuxtLink>
           </div>
@@ -87,7 +87,7 @@
             class="absolute -bottom-8 -left-8 bg-white p-6 shadow-xl max-w-xs rounded-sm"
           >
             <div class="flex items-start gap-4">
-              <div class="w-12 h-12 bg-luxury-gold/20 rounded-full flex items-center justify-center flex-shrink-0">
+              <div class="w-12 h-12 bg-luxury-black/20 rounded-full flex items-center justify-center flex-shrink-0">
                 <svg class="w-6 h-6 text-luxury-wine-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>

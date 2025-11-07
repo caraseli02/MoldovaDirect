@@ -53,7 +53,7 @@
           <NuxtLink to="/products" class="luxury-btn">
             {{ $t('luxury.hero.cta_primary') || 'Discover Our Story' }}
           </NuxtLink>
-          <NuxtLink to="/products?filter=featured" class="luxury-btn luxury-btn-gold">
+          <NuxtLink to="/products?filter=featured" class="luxury-btn luxury-btn-dark">
             {{ $t('luxury.hero.cta_secondary') || 'Shop Collection' }}
           </NuxtLink>
         </div>
@@ -126,7 +126,7 @@ onMounted(() => {
   font-weight: 600;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--luxury-gold);
+  color: var(--luxury-black);
 }
 
 @media (max-width: 768px) {

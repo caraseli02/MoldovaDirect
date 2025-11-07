@@ -2033,5 +2033,49 @@
     "enableNotifications": "Activar notificaciones",
     "notificationsEnabled": "Notificaciones activadas",
     "notificationsDisabled": "Notificaciones desactivadas"
+  },
+  "luxury": {
+    "hero": {
+      "eyebrow": "Herencia Artesanal Desde 1950",
+      "title": "De la Tierra Moldava a las Mesas Españolas",
+      "subtitle": "Vinos curados y tesoros gourmet del corazón de Moldavia",
+      "cta_primary": "Descubre Nuestra Historia",
+      "cta_secondary": "Ver Colección"
+    },
+    "press": {
+      "title": "Destacados En"
+    },
+    "origin": {
+      "eyebrow": "Nuestra Herencia",
+      "title": "Un Legado de Artesanía",
+      "p1": "Durante siglos, los vinicultores moldavos han perfeccionado el arte de la viticultura en suelos bendecidos por la naturaleza. Cada botella cuenta una historia de tradición, pasión y calidad sin compromisos.",
+      "p2": "Colaboramos con fincas familiares que han transmitido su experiencia a través de generaciones, asegurando que cada producto refleje el auténtico sabor de Moldavia.",
+      "p3": "Desde las colinas de Codru hasta las cuevas de piedra caliza de Cricova, te traemos la mejor selección de vinos y delicias gourmet, cuidadosamente curada para el mercado español.",
+      "stat1": "Años de Herencia",
+      "stat2": "Socios Artesanos",
+      "stat3": "Auténtico",
+      "cta": "Leer Nuestra Historia",
+      "badge_title": "Certificado Auténtico",
+      "badge_text": "Directo de productores moldavos"
+    },
+    "artisans": {
+      "eyebrow": "Conoce a los Creadores",
+      "title": "Productores Artesanos",
+      "description": "Cada producto de nuestra colección proviene de una finca familiar cuidadosamente seleccionada, donde la tradición y la innovación se combinan para crear una calidad excepcional.",
+      "cta": "Conocer Todos los Productores"
+    },
+    "showcase": {
+      "eyebrow": "Selección Curada",
+      "title": "Colecciones Exclusivas",
+      "description": "Descubre nuestra selección cuidadosamente elegida de vinos premium, delicias gourmet y cestas de regalo de lujo.",
+      "quick_view": "Ver Detalles",
+      "add_to_cart": "Añadir al Carrito",
+      "cta": "Explorar Colección Completa"
+    },
+    "testimonials": {
+      "eyebrow": "Historias de Clientes",
+      "title": "Lo Que Dicen Nuestros Clientes",
+      "gallery_title": "Compartido por Nuestra Comunidad"
+    }
   }
 }

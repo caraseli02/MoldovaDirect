@@ -60,7 +60,7 @@
               {{ artisan.name }}
             </h3>
 
-            <p class="text-sm uppercase tracking-wider text-luxury-gold mb-4 font-semibold">
+            <p class="text-sm uppercase tracking-wider text-luxury-black mb-4 font-semibold">
               {{ artisan.specialty }}
             </p>
 
@@ -80,7 +80,7 @@
 
       <!-- CTA -->
       <div class="text-center mt-16">
-        <NuxtLink to="/producers" class="luxury-btn luxury-btn-gold">
+        <NuxtLink to="/producers" class="luxury-btn luxury-btn-dark">
           {{ $t('luxury.artisans.cta') || 'Meet All Producers' }}
         </NuxtLink>
       </div>
@@ -130,7 +130,7 @@ const artisans = [
 .luxury-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 20px 50px rgba(74, 28, 28, 0.15);
-  border-color: var(--luxury-gold);
+  border-color: var(--luxury-black);
 }
 
 .luxury-card::before {
@@ -140,7 +140,7 @@ const artisans = [
   left: 0;
   width: 100%;
   height: 3px;
-  background: linear-gradient(to right, var(--luxury-gold), var(--luxury-wine-red));
+  background: linear-gradient(to right, var(--luxury-black), var(--luxury-wine-red));
   transform: scaleX(0);
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }

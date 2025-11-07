@@ -1979,5 +1979,49 @@
     "enableNotifications": "Activează notificările",
     "notificationsEnabled": "Notificări activate",
     "notificationsDisabled": "Notificări dezactivate"
+  },
+  "luxury": {
+    "hero": {
+      "eyebrow": "Moștenire Artizanală din 1950",
+      "title": "De pe Pământul Moldovenesc pe Mesele Spaniole",
+      "subtitle": "Vinuri curate și comori gastronomice din inima Moldovei",
+      "cta_primary": "Descoperă Povestea Noastră",
+      "cta_secondary": "Vezi Colecția"
+    },
+    "press": {
+      "title": "Prezentat În"
+    },
+    "origin": {
+      "eyebrow": "Moștenirea Noastră",
+      "title": "O Moștenire de Meșteșug",
+      "p1": "De secole, vina rii moldoveni au perfecționat arta viticulturii pe sol binecuvântat de natură. Fiecare sticlă spune o poveste de tradiție, pasiune și calitate de necompromis.",
+      "p2": "Colaborăm cu moșii de familie care și-au transmis expertiza de-a lungul generațiilor, asigurând că fiecare produs reflectă gustul autentic al Moldovei.",
+      "p3": "De la colinele Codrului până la peșterile de calcar din Cricova, vă aducem cea mai bună selecție de vinuri și delicatese gastronomice, atent curate pentru piața spaniolă.",
+      "stat1": "Ani de Moștenire",
+      "stat2": "Parteneri Artizani",
+      "stat3": "Autentic",
+      "cta": "Citește Povestea Noastră",
+      "badge_title": "Certificat Autentic",
+      "badge_text": "Direct de la producătorii moldoveni"
+    },
+    "artisans": {
+      "eyebrow": "Cunoaște Creatorii",
+      "title": "Producători Artizani",
+      "description": "Fiecare produs din colecția noastră provine de la o moșie de familie atent selectată, unde tradiția și inovația se îmbină pentru a crea o calitate excepțională.",
+      "cta": "Cunoaște Toți Producătorii"
+    },
+    "showcase": {
+      "eyebrow": "Selecție Curată",
+      "title": "Colecții de Semnătură",
+      "description": "Descoperă selecția noastră atent aleasă de vinuri premium, delicatese gastronomice și coșuri cadou de lux.",
+      "quick_view": "Vezi Detalii",
+      "add_to_cart": "Adaugă în Coș",
+      "cta": "Explorează Colecția Completă"
+    },
+    "testimonials": {
+      "eyebrow": "Povești ale Clienților",
+      "title": "Ce Spun Clienții Noștri",
+      "gallery_title": "Distribuite de Comunitatea Noastră"
+    }
   }
 }

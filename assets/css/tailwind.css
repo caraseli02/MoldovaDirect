@@ -216,12 +216,13 @@
    =================================== */
 
 :root {
-  /* Luxury Color Palette - Moldova Wine Theme */
+  /* Luxury Color Palette - Black & Wine Theme */
   --luxury-wine-red: #4A1C1C;
-  --luxury-gold: #D4AF37;
+  --luxury-black: #1A1A1A;
+  --luxury-charcoal: #2D2D2D;
   --luxury-cream: #FDFBF7;
   --luxury-brown: #2C1810;
-  --luxury-terracotta: #8B4513;
+  --luxury-slate: #3A3A3A;
   --luxury-burgundy: #6B1F1F;
   --luxury-warm-white: #FAF8F5;
   --luxury-dark-chocolate: #3E1F1F;
@@ -353,7 +354,7 @@
     border: 2px solid white;
     color: white;
     background: transparent;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
     cursor: pointer;
     border-radius: 0;
   }
@@ -361,18 +362,18 @@
   .luxury-btn:hover {
     background: white;
     color: var(--luxury-wine-red);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
   }
 
-  .luxury-btn-gold {
-    border-color: var(--luxury-gold);
-    color: var(--luxury-gold);
+  .luxury-btn-dark {
+    border-color: var(--luxury-black);
+    color: var(--luxury-black);
   }
 
-  .luxury-btn-gold:hover {
-    background: var(--luxury-gold);
-    color: var(--luxury-dark-chocolate);
+  .luxury-btn-dark:hover {
+    background: var(--luxury-black);
+    color: white;
   }
 
   /* Luxury Section Spacing */
@@ -400,7 +401,7 @@
     font-weight: 600;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: var(--luxury-gold);
+    color: var(--luxury-black);
     margin-bottom: 1rem;
   }
 
@@ -425,7 +426,7 @@
   .luxury-divider {
     width: 60px;
     height: 2px;
-    background: linear-gradient(to right, var(--luxury-gold), var(--luxury-wine-red));
+    background: linear-gradient(to right, var(--luxury-black), var(--luxury-wine-red));
     margin: 2rem 0;
   }
 
@@ -434,15 +435,15 @@
     background: white;
     padding: 3rem;
     border: 1px solid rgba(139, 69, 19, 0.1);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
     position: relative;
     overflow: hidden;
   }
 
   .luxury-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 50px rgba(74, 28, 28, 0.15);
-    border-color: var(--luxury-gold);
+    transform: translateY(-12px);
+    box-shadow: 0 25px 60px rgba(26, 26, 26, 0.2);
+    border-color: var(--luxury-black);
   }
 
   .luxury-card::before {
@@ -452,9 +453,9 @@
     left: 0;
     width: 100%;
     height: 3px;
-    background: linear-gradient(to right, var(--luxury-gold), var(--luxury-wine-red));
+    background: linear-gradient(to right, var(--luxury-black), var(--luxury-wine-red));
     transform: scaleX(0);
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   .luxury-card:hover::before {
@@ -468,11 +469,11 @@
   }
 
   .luxury-image-wrapper img {
-    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   .luxury-image-wrapper:hover img {
-    transform: scale(1.05);
+    transform: scale(1.08);
   }
 
   .luxury-image-overlay {
@@ -484,11 +485,11 @@
     background: linear-gradient(
       to bottom,
       transparent 0%,
-      rgba(46, 28, 16, 0.3) 50%,
-      rgba(46, 28, 16, 0.7) 100%
+      rgba(26, 26, 26, 0.3) 50%,
+      rgba(26, 26, 26, 0.7) 100%
     );
     opacity: 0;
-    transition: opacity 0.4s ease;
+    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .luxury-image-wrapper:hover .luxury-image-overlay {
@@ -497,21 +498,22 @@
 
   /* Press Mentions Bar */
   .press-mentions-bar {
-    background: linear-gradient(to right, rgba(212, 175, 55, 0.05), rgba(212, 175, 55, 0.1));
-    border-top: 1px solid rgba(212, 175, 55, 0.2);
-    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+    background: linear-gradient(to right, rgba(26, 26, 26, 0.03), rgba(26, 26, 26, 0.06), rgba(26, 26, 26, 0.03));
+    border-top: 1px solid rgba(26, 26, 26, 0.1);
+    border-bottom: 1px solid rgba(26, 26, 26, 0.1);
     padding: 1.5rem 2rem;
   }
 
   .press-logo {
-    opacity: 0.6;
+    opacity: 0.5;
     filter: grayscale(100%);
-    transition: all 0.3s ease;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   .press-logo:hover {
     opacity: 1;
     filter: grayscale(0%);
+    transform: translateY(-3px);
   }
 }
 

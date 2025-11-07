@@ -2046,5 +2046,49 @@
     "enableNotifications": "Enable notifications",
     "notificationsEnabled": "Notifications enabled",
     "notificationsDisabled": "Notifications disabled"
+  },
+  "luxury": {
+    "hero": {
+      "eyebrow": "Artisan Heritage Since 1950",
+      "title": "From Moldovan Soil to Spanish Tables",
+      "subtitle": "Curated wines and gourmet treasures from the heart of Moldova",
+      "cta_primary": "Discover Our Story",
+      "cta_secondary": "Shop Collection"
+    },
+    "press": {
+      "title": "As Featured In"
+    },
+    "origin": {
+      "eyebrow": "Our Heritage",
+      "title": "A Legacy of Craftsmanship",
+      "p1": "For centuries, Moldovan winemakers have perfected the art of viticulture in soil blessed by nature. Each bottle tells a story of tradition, passion, and uncompromising quality.",
+      "p2": "We partner with family-owned estates that have passed down their expertise through generations, ensuring every product reflects the authentic taste of Moldova.",
+      "p3": "From the rolling hills of Codru to the limestone caves of Cricova, we bring you the finest selection of wines and gourmet delicacies, carefully curated for the Spanish market.",
+      "stat1": "Years Heritage",
+      "stat2": "Artisan Partners",
+      "stat3": "Authentic",
+      "cta": "Read Our Story",
+      "badge_title": "Certified Authentic",
+      "badge_text": "Direct from Moldovan producers"
+    },
+    "artisans": {
+      "eyebrow": "Meet The Makers",
+      "title": "Artisan Producers",
+      "description": "Each product in our collection comes from a carefully selected family estate, where tradition and innovation blend to create exceptional quality.",
+      "cta": "Meet All Producers"
+    },
+    "showcase": {
+      "eyebrow": "Curated Selection",
+      "title": "Signature Collections",
+      "description": "Discover our handpicked selection of premium wines, gourmet delicacies, and luxury gift hampers.",
+      "quick_view": "View Details",
+      "add_to_cart": "Add to Cart",
+      "cta": "Explore Full Collection"
+    },
+    "testimonials": {
+      "eyebrow": "Customer Stories",
+      "title": "What Our Customers Say",
+      "gallery_title": "Shared by Our Community"
+    }
   }
 }

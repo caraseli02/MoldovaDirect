@@ -57,19 +57,19 @@ const pressMentions = [
 
 <style scoped>
 .press-mentions-bar {
-  background: linear-gradient(to right, rgba(212, 175, 55, 0.05), rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.05));
-  border-top: 1px solid rgba(212, 175, 55, 0.2);
-  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+  background: linear-gradient(to right, rgba(26, 26, 26, 0.03), rgba(26, 26, 26, 0.06), rgba(26, 26, 26, 0.03));
+  border-top: 1px solid rgba(26, 26, 26, 0.1);
+  border-bottom: 1px solid rgba(26, 26, 26, 0.1);
   padding: 2rem 2rem;
 }
 
 .press-logo {
-  transition: all 0.3s ease;
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
   cursor: pointer;
 }
 
 .press-logo:hover {
   opacity: 1 !important;
-  transform: translateY(-2px);
+  transform: translateY(-3px);
 }
 </style>

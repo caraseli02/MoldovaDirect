@@ -55,7 +55,7 @@
             <!-- Badge -->
             <div
               v-if="product.badge"
-              class="absolute top-4 right-4 bg-luxury-gold text-luxury-dark-chocolate text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full"
+              class="absolute top-4 right-4 bg-luxury-black text-luxury-dark-chocolate text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full"
             >
               {{ product.badge }}
             </div>
@@ -75,7 +75,7 @@
 
           <!-- Product Info -->
           <div class="p-6">
-            <div class="text-xs uppercase tracking-wider text-luxury-gold mb-2 font-semibold">
+            <div class="text-xs uppercase tracking-wider text-luxury-black mb-2 font-semibold">
               {{ product.category }}
             </div>
 
@@ -110,7 +110,7 @@
 
       <!-- CTA Section -->
       <div class="text-center">
-        <NuxtLink to="/products" class="luxury-btn luxury-btn-gold">
+        <NuxtLink to="/products" class="luxury-btn luxury-btn-dark">
           {{ $t('luxury.showcase.cta') || 'Explore Full Collection' }}
         </NuxtLink>
       </div>
