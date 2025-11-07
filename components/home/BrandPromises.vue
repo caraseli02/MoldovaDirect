@@ -117,10 +117,16 @@
 
 <style scoped>
 .promise-card {
-  @apply bg-white p-6 md:p-8 rounded-sm shadow-md hover:shadow-xl transition-all duration-300;
+  @apply bg-white p-6 rounded-sm shadow-md hover:shadow-xl transition-all duration-300;
   @apply border border-luxury-black/10 hover:border-luxury-wine-red/30;
   position: relative;
   overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .promise-card {
+    padding: 2rem;
+  }
 }
 
 .promise-card::before {
@@ -140,9 +146,17 @@
 }
 
 .promise-icon {
-  @apply w-16 h-16 md:w-20 md:h-20 bg-luxury-cream rounded-full;
-  @apply flex items-center justify-center mb-4 md:mb-6;
+  @apply w-16 h-16 bg-luxury-cream rounded-full;
+  @apply flex items-center justify-center mb-4;
   @apply transition-transform duration-300;
+}
+
+@media (min-width: 768px) {
+  .promise-icon {
+    width: 5rem;
+    height: 5rem;
+    margin-bottom: 1.5rem;
+  }
 }
 
 .promise-card:hover .promise-icon {
