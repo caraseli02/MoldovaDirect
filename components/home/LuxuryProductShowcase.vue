@@ -44,11 +44,11 @@
           class="bg-white rounded-sm overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 group"
         >
           <!-- Product Image -->
-          <div class="luxury-image-wrapper relative">
+          <div class="luxury-image-wrapper relative overflow-hidden">
             <NuxtImg
               :src="product.image"
               :alt="product.name"
-              class="w-full h-80 object-cover"
+              class="w-full h-80 object-cover transform transition-transform duration-700 group-hover:scale-110"
               loading="lazy"
             />
 
@@ -86,6 +86,38 @@
             <p class="text-luxury-brown/70 text-sm mb-4 line-clamp-2">
               {{ product.description }}
             </p>
+
+            <!-- Provenance Details -->
+            <div v-if="product.provenance" class="flex items-center gap-4 mb-4 text-xs text-luxury-brown/60">
+              <div v-if="product.provenance.region" class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span class="uppercase tracking-wider">{{ product.provenance.region }}</span>
+              </div>
+              <div v-if="product.provenance.vintage" class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span class="uppercase tracking-wider">{{ product.provenance.vintage }}</span>
+              </div>
+            </div>
+
+            <!-- Scarcity Signal -->
+            <div v-if="product.stock" class="mb-4">
+              <div v-if="product.stock.limited" class="flex items-center gap-2 text-xs">
+                <div class="flex-1 bg-luxury-cream rounded-full h-1.5 overflow-hidden">
+                  <div
+                    class="h-full bg-luxury-wine-red transition-all duration-500"
+                    :style="{ width: `${(product.stock.remaining / product.stock.total) * 100}%` }"
+                  />
+                </div>
+                <span class="text-luxury-wine-red font-semibold whitespace-nowrap">
+                  {{ product.stock.remaining }} {{ $t('luxury.showcase.left') || 'left' }}
+                </span>
+              </div>
+            </div>
 
             <!-- Price -->
             <div class="flex items-baseline gap-2 mb-4">
@@ -130,6 +162,11 @@ const featuredProducts = [
     originalPrice: null,
     badge: 'Best Seller',
     image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=800',
+    provenance: {
+      region: 'Codru Region',
+      vintage: null,
+    },
+    stock: null,
   },
   {
     id: 2,
@@ -141,6 +178,12 @@ const featuredProducts = [
     originalPrice: '149.90',
     badge: 'Limited Edition',
     image: 'https://images.unsplash.com/photo-1549888834-3ec93abae044?q=80&w=800',
+    provenance: null,
+    stock: {
+      limited: true,
+      remaining: 8,
+      total: 50,
+    },
   },
   {
     id: 3,
@@ -152,6 +195,11 @@ const featuredProducts = [
     originalPrice: null,
     badge: 'Organic',
     image: 'https://images.unsplash.com/photo-1587049352846-4a222e784422?q=80&w=800',
+    provenance: {
+      region: 'Moldovan Highlands',
+      vintage: null,
+    },
+    stock: null,
   },
   {
     id: 4,
@@ -163,6 +211,11 @@ const featuredProducts = [
     originalPrice: null,
     badge: null,
     image: 'https://images.unsplash.com/photo-1452195100486-9cc805987862?q=80&w=800',
+    provenance: {
+      region: 'Orheiul Vechi',
+      vintage: null,
+    },
+    stock: null,
   },
   {
     id: 5,
@@ -174,6 +227,15 @@ const featuredProducts = [
     originalPrice: null,
     badge: 'Rare',
     image: 'https://images.unsplash.com/photo-1547595628-c61a29f496f0?q=80&w=800',
+    provenance: {
+      region: 'Cricova',
+      vintage: '2015',
+    },
+    stock: {
+      limited: true,
+      remaining: 3,
+      total: 12,
+    },
   },
   {
     id: 6,
@@ -185,6 +247,8 @@ const featuredProducts = [
     originalPrice: null,
     badge: null,
     image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?q=80&w=800',
+    provenance: null,
+    stock: null,
   },
 ]
 </script>

@@ -12,6 +12,9 @@
     <!-- Luxury Product Showcase -->
     <HomeLuxuryProductShowcase />
 
+    <!-- Luxury Packaging Experience -->
+    <HomeLuxuryPackagingExperience />
+
     <!-- Artisan Spotlight -->
     <HomeLuxuryArtisanSpotlight />
 

@@ -31,9 +31,23 @@ export default defineNuxtConfig({
     "@vite-pwa/nuxt",
     "vue3-carousel-nuxt",
     "@vueuse/motion/nuxt",
+    "@nuxtjs/google-fonts",
     // Keep this last to post-process the components registry
     "~/modules/fix-components",
   ],
+  googleFonts: {
+    families: {
+      'Playfair Display': [400, 500, 600, 700],
+      'Cormorant Garamond': [300, 400, 500, 600, 700],
+      Inter: [300, 400, 500, 600, 700],
+    },
+    display: 'swap',
+    prefetch: true,
+    preconnect: true,
+    preload: true,
+    download: true,
+    inject: true,
+  },
   image: {
     domains: ["images.unsplash.com"],
   },

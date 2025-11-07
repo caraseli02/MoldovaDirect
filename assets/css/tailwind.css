@@ -229,21 +229,18 @@
 }
 
 @layer base {
-  /* Luxury Typography */
-  @font-face {
-    font-family: 'Playfair Display';
-    font-style: normal;
-    font-weight: 400 700;
-    font-display: swap;
-    src: url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
+  /* Luxury Typography - Fonts loaded via @nuxtjs/google-fonts module */
+
+  /* Smooth Scroll Behavior */
+  html {
+    scroll-behavior: smooth;
   }
 
-  @font-face {
-    font-family: 'Cormorant Garamond';
-    font-style: normal;
-    font-weight: 300 700;
-    font-display: swap;
-    src: url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&display=swap');
+  /* Respect reduced motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
   }
 
   /* Luxury Body Styles */
@@ -376,15 +373,15 @@
     color: white;
   }
 
-  /* Luxury Section Spacing */
+  /* Luxury Section Spacing - Generous white space for premium feel */
   .luxury-section {
-    padding: 8rem 2rem;
+    padding: 10rem 2rem;
     position: relative;
   }
 
   @media (max-width: 768px) {
     .luxury-section {
-      padding: 4rem 1.5rem;
+      padding: 6rem 1.5rem;
     }
   }
 
