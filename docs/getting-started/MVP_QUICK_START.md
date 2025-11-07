@@ -1,28 +1,34 @@
 # MVP Quick Start Guide
 
 **Target:** 2 weeks to launch | **Due:** November 17, 2025
-**Status Tracker:** See [ISSUE_STATUS_TRACKER.md](../meta/ISSUE_STATUS_TRACKER.md) for current status
+**Status:** Check [GitHub Issues](https://github.com/caraseli02/MoldovaDirect/milestone/1) for real-time status
+
+> **💡 Tip:** GitHub Issues is the single source of truth. When you fix an issue, close it on GitHub with "Fixes #XXX" in your commit message.
 
 ## 🎯 The Goal
 
 Ship a secure, working e-commerce site where customers can buy products with cash on delivery.
 
-## 📋 What You Need to Do
+## 📊 Current Status (as of Nov 6, 2025)
 
-### ✅ Recently Completed (Nov 2-4, 2025)
+**Progress:** 6 out of 9 P0 issues fixed = **67% complete**
 
-**Great progress! 6 out of 9 P0 issues already fixed:**
+### ✅ Recently Fixed (Close these on GitHub!)
 
-1. ✅ **#159** - Re-enable auth middleware (FIXED Nov 3)
-2. ✅ **#89** - Atomic order+inventory transaction (FIXED Nov 3)
-3. ✅ **#73** - Add admin RBAC (FIXED Nov 3)
-4. ✅ **#76** - Remove hardcoded passwords (FIXED Nov 4)
-5. ✅ **#86** - Email template authorization (FIXED Nov 2)
-6. ✅ **#59** - Test credentials secured (FIXED Nov 2)
+These issues are **already fixed in code** but still **open on GitHub**:
+
+1. ✅ **#159** - Auth middleware re-enabled (Nov 3, commit `2bb7e2b`)
+2. ✅ **#89** - Atomic transactions (Nov 3, commits `951a558`, `50dea93`)
+3. ✅ **#73** - Admin RBAC (Nov 3, commit `ba57e07`)
+4. ✅ **#76** - Hardcoded credentials removed (Nov 4, commit `95694d2`)
+5. ✅ **#86** - Email template auth (Nov 2, commit `1c778b1`)
+6. ✅ **#59** - Test credentials secured (Nov 2, commit `ae7a026`)
+
+**Action:** Run commands in [CLOSE_FIXED_ISSUES.md](../meta/CLOSE_FIXED_ISSUES.md) to close them on GitHub.
 
 ### ⚠️ Remaining Work (3-5 hours)
 
-Work on these issues **in this exact order**:
+Check current status: `gh issue list --milestone "MVP Launch Blockers" --state open`
 
 1. **#160** - Verify email template auth (30 min) ⚠️ Likely duplicate of #86
 2. **#162** - Rotate exposed keys (2-3 hours) 🚨 Requires admin access
@@ -100,14 +106,52 @@ You're ready to launch when:
 
 ---
 
-## 📊 Current Status
+## 📊 Get Real-Time Status
 
-**P0 Issues:** 6/9 complete (67%)
-**Time Remaining:** 3-5 hours + testing
-**Launch Readiness:** 🟡 IN PROGRESS
+### Check GitHub Issues
+```bash
+# See all MVP milestone issues
+gh issue list --milestone "MVP Launch Blockers"
 
-**See full status:** [ISSUE_STATUS_TRACKER.md](../meta/ISSUE_STATUS_TRACKER.md)
+# See only open (remaining) issues
+gh issue list --milestone "MVP Launch Blockers" --state open
+
+# Generate status report
+./scripts/sync-from-github.sh
+```
+
+### Close Fixed Issues
+```bash
+# Close the 6 issues that are already fixed
+# See: docs/meta/CLOSE_FIXED_ISSUES.md for full commands
+
+gh issue close 159 --comment "Fixed in commit 2bb7e2b"
+gh issue close 89 --comment "Fixed in commits 951a558, 50dea93"
+gh issue close 73 --comment "Fixed in commit ba57e07"
+# ... etc
+```
+
+## 🔄 GitHub-First Workflow
+
+When you fix an issue:
+
+1. **Commit with "Fixes #XXX"**
+   ```bash
+   git commit -m "fix: implement feature
+
+   Fixes #160"
+   ```
+
+2. **GitHub auto-closes when merged to main**
+   - No manual closing needed!
+   - Commit is linked to issue automatically
+
+3. **Check updated status**
+   ```bash
+   ./scripts/sync-from-github.sh
+   ```
 
 ---
 
-Next up: Verify #160, then tackle #162 and #81! 🚀
+**Launch Readiness:** 🟡 67% complete (6/9 issues fixed)
+**Next:** Close fixed issues on GitHub, then tackle #160, #162, #81! 🚀
