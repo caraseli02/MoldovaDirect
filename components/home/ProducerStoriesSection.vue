@@ -106,17 +106,17 @@
 
         <!-- Custom Navigation Buttons -->
         <button
-          class="swiper-button-prev-custom absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white p-3 shadow-lg transition-all hover:scale-110 hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:opacity-50 md:-left-4 lg:-left-6"
+          class="swiper-button-prev-custom absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white p-3 shadow-lg transition-all hover:scale-110 hover:bg-gold-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:opacity-50 md:-left-4 lg:-left-6"
           :aria-label="t('common.previous')"
         >
-          <commonIcon name="lucide:chevron-left" class="h-6 w-6 text-slate-700" />
+          <commonIcon name="lucide:chevron-left" class="h-6 w-6 text-slate-700 transition-colors hover:text-gold-600" />
         </button>
 
         <button
-          class="swiper-button-next-custom absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white p-3 shadow-lg transition-all hover:scale-110 hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:opacity-50 md:-right-4 lg:-right-6"
+          class="swiper-button-next-custom absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white p-3 shadow-lg transition-all hover:scale-110 hover:bg-gold-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:opacity-50 md:-right-4 lg:-right-6"
           :aria-label="t('common.next')"
         >
-          <commonIcon name="lucide:chevron-right" class="h-6 w-6 text-slate-700" />
+          <commonIcon name="lucide:chevron-right" class="h-6 w-6 text-slate-700 transition-colors hover:text-gold-600" />
         </button>
 
         <!-- Custom Pagination -->

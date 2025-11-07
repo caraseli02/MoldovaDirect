@@ -188,6 +188,19 @@
   --color-olive-900: hsl(85 25% 16%);
   --color-olive-950: hsl(85 25% 10%);
 
+  /* Gold accent palette (Premium & luxury) - Brightland inspired */
+  --color-gold-50: hsl(45 80% 95%);
+  --color-gold-100: hsl(45 75% 88%);
+  --color-gold-200: hsl(45 70% 78%);
+  --color-gold-300: hsl(45 65% 68%);
+  --color-gold-400: hsl(45 60% 58%);
+  --color-gold-500: hsl(43 62% 48%);
+  --color-gold-600: hsl(42 65% 42%);
+  --color-gold-700: hsl(40 68% 35%);
+  --color-gold-800: hsl(38 70% 28%);
+  --color-gold-900: hsl(36 72% 22%);
+  --color-gold-950: hsl(34 75% 15%);
+
   /* Container configuration */
   --container-center: true;
   --container-padding: 1rem;

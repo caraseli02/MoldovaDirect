@@ -44,7 +44,7 @@
       <!-- Center Divider with Plus Icon -->
       <div class="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2">
         <div class="rounded-full bg-white p-3 shadow-lg">
-          <commonIcon name="lucide:plus" class="h-5 w-5 text-primary" />
+          <commonIcon name="lucide:plus" class="h-5 w-5 text-gold-500" />
         </div>
       </div>
 

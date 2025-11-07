@@ -49,7 +49,7 @@
           >
             <!-- Desktop: Left Content -->
             <div class="md:text-right text-left md:pr-12 md:pl-0 pl-16">
-              <div class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1 text-sm font-semibold text-primary">
+              <div class="inline-flex items-center gap-2 rounded-full bg-gold-50 px-4 py-1 text-sm font-semibold text-gold-700">
                 <commonIcon name="lucide:calendar" class="h-4 w-4" />
                 {{ t('wineStory.production.steps.harvest.timing') }}
               </div>
@@ -63,7 +63,7 @@
 
             <!-- Center Icon -->
             <div class="absolute left-8 md:left-1/2 top-0 -translate-x-1/2 md:-translate-x-1/2">
-              <div class="flex h-16 w-16 items-center justify-center rounded-full bg-primary shadow-lg ring-4 ring-white">
+              <div class="flex h-16 w-16 items-center justify-center rounded-full bg-gold-500 shadow-lg ring-4 ring-white">
                 <commonIcon name="lucide:grape" class="h-8 w-8 text-white" />
               </div>
             </div>
@@ -88,14 +88,14 @@
 
             <!-- Center Icon -->
             <div class="absolute left-8 md:left-1/2 top-0 -translate-x-1/2 md:-translate-x-1/2">
-              <div class="flex h-16 w-16 items-center justify-center rounded-full bg-primary shadow-lg ring-4 ring-white">
+              <div class="flex h-16 w-16 items-center justify-center rounded-full bg-gold-500 shadow-lg ring-4 ring-white">
                 <commonIcon name="lucide:droplet" class="h-8 w-8 text-white" />
               </div>
             </div>
 
             <!-- Desktop: Right Content / Mobile: Left Content with padding -->
             <div class="text-left md:pl-12 pl-16">
-              <div class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1 text-sm font-semibold text-primary">
+              <div class="inline-flex items-center gap-2 rounded-full bg-gold-50 px-4 py-1 text-sm font-semibold text-gold-700">
                 <commonIcon name="lucide:calendar" class="h-4 w-4" />
                 {{ t('wineStory.production.steps.crushing.timing') }}
               </div>
@@ -121,7 +121,7 @@
           >
             <!-- Desktop: Left Content -->
             <div class="md:text-right text-left md:pr-12 md:pl-0 pl-16">
-              <div class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1 text-sm font-semibold text-primary">
+              <div class="inline-flex items-center gap-2 rounded-full bg-gold-50 px-4 py-1 text-sm font-semibold text-gold-700">
                 <commonIcon name="lucide:calendar" class="h-4 w-4" />
                 {{ t('wineStory.production.steps.aging.timing') }}
               </div>
@@ -135,7 +135,7 @@
 
             <!-- Center Icon -->
             <div class="absolute left-8 md:left-1/2 top-0 -translate-x-1/2 md:-translate-x-1/2">
-              <div class="flex h-16 w-16 items-center justify-center rounded-full bg-primary shadow-lg ring-4 ring-white">
+              <div class="flex h-16 w-16 items-center justify-center rounded-full bg-gold-500 shadow-lg ring-4 ring-white">
                 <commonIcon name="lucide:clock" class="h-8 w-8 text-white" />
               </div>
             </div>
@@ -160,14 +160,14 @@
 
             <!-- Center Icon -->
             <div class="absolute left-8 md:left-1/2 top-0 -translate-x-1/2 md:-translate-x-1/2">
-              <div class="flex h-16 w-16 items-center justify-center rounded-full bg-primary shadow-lg ring-4 ring-white">
+              <div class="flex h-16 w-16 items-center justify-center rounded-full bg-gold-500 shadow-lg ring-4 ring-white">
                 <commonIcon name="lucide:wine" class="h-8 w-8 text-white" />
               </div>
             </div>
 
             <!-- Desktop: Right Content / Mobile: Left Content with padding -->
             <div class="text-left md:pl-12 pl-16">
-              <div class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1 text-sm font-semibold text-primary">
+              <div class="inline-flex items-center gap-2 rounded-full bg-gold-50 px-4 py-1 text-sm font-semibold text-gold-700">
                 <commonIcon name="lucide:calendar" class="h-4 w-4" />
                 {{ t('wineStory.production.steps.bottling.timing') }}
               </div>
@@ -193,7 +193,7 @@
           >
             <!-- Desktop: Left Content -->
             <div class="md:text-right text-left md:pr-12 md:pl-0 pl-16">
-              <div class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1 text-sm font-semibold text-primary">
+              <div class="inline-flex items-center gap-2 rounded-full bg-gold-50 px-4 py-1 text-sm font-semibold text-gold-700">
                 <commonIcon name="lucide:calendar" class="h-4 w-4" />
                 {{ t('wineStory.production.steps.selection.timing') }}
               </div>
@@ -207,7 +207,7 @@
 
             <!-- Center Icon -->
             <div class="absolute left-8 md:left-1/2 top-0 -translate-x-1/2 md:-translate-x-1/2">
-              <div class="flex h-16 w-16 items-center justify-center rounded-full bg-primary shadow-lg ring-4 ring-white">
+              <div class="flex h-16 w-16 items-center justify-center rounded-full bg-gold-500 shadow-lg ring-4 ring-white">
                 <commonIcon name="lucide:award" class="h-8 w-8 text-white" />
               </div>
             </div>
@@ -232,14 +232,14 @@
 
             <!-- Center Icon -->
             <div class="absolute left-8 md:left-1/2 top-0 -translate-x-1/2 md:-translate-x-1/2">
-              <div class="flex h-16 w-16 items-center justify-center rounded-full bg-primary shadow-lg ring-4 ring-white">
+              <div class="flex h-16 w-16 items-center justify-center rounded-full bg-gold-500 shadow-lg ring-4 ring-white">
                 <commonIcon name="lucide:truck" class="h-8 w-8 text-white" />
               </div>
             </div>
 
             <!-- Desktop: Right Content / Mobile: Left Content with padding -->
             <div class="text-left md:pl-12 pl-16">
-              <div class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1 text-sm font-semibold text-primary">
+              <div class="inline-flex items-center gap-2 rounded-full bg-gold-50 px-4 py-1 text-sm font-semibold text-gold-700">
                 <commonIcon name="lucide:calendar" class="h-4 w-4" />
                 {{ t('wineStory.production.steps.delivery.timing') }}
               </div>
