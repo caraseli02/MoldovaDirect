@@ -2,22 +2,12 @@
   <section class="luxury-section bg-white">
     <div class="luxury-container">
       <!-- Section Header -->
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <p
-          v-motion
-          :initial="{ opacity: 0, y: 20 }"
-          :visible="{ opacity: 1, y: 0 }"
-          class="luxury-eyebrow"
-        >
+      <div class="text-center max-w-3xl mx-auto mb-8 md:mb-12 lg:mb-16 px-4">
+        <p class="luxury-eyebrow text-sm md:text-base">
           {{ $t('luxury.testimonials.eyebrow') || 'Customer Stories' }}
         </p>
 
-        <h2
-          v-motion
-          :initial="{ opacity: 0, y: 20 }"
-          :visible="{ opacity: 1, y: 0, transition: { delay: 100 } }"
-          class="luxury-title"
-        >
+        <h2 class="luxury-title text-2xl md:text-3xl lg:text-4xl">
           {{ $t('luxury.testimonials.title') || 'What Our Customers Say' }}
         </h2>
 
@@ -25,21 +15,18 @@
       </div>
 
       <!-- Testimonials Grid -->
-      <div class="grid md:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8 px-4 lg:px-0">
         <div
           v-for="(testimonial, index) in testimonials"
           :key="testimonial.id"
-          v-motion
-          :initial="{ opacity: 0, y: 40 }"
-          :visible="{ opacity: 1, y: 0, transition: { delay: index * 150 + 300, duration: 600 } }"
-          class="bg-luxury-warm-white p-8 rounded-sm shadow-md hover:shadow-xl transition-shadow duration-300"
+          class="bg-luxury-warm-white p-5 sm:p-6 md:p-8 rounded-sm shadow-md hover:shadow-xl transition-shadow duration-300"
         >
           <!-- Stars -->
-          <div class="flex gap-1 mb-4">
+          <div class="flex gap-1 mb-3 md:mb-4">
             <svg
               v-for="star in 5"
               :key="star"
-              class="w-5 h-5 text-luxury-black fill-current"
+              class="w-4 h-4 md:w-5 md:h-5 text-luxury-black fill-current"
               viewBox="0 0 20 20"
             >
               <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
@@ -47,13 +34,13 @@
           </div>
 
           <!-- Quote -->
-          <p class="text-luxury-brown/80 leading-relaxed mb-6 italic">
+          <p class="text-luxury-brown/80 leading-relaxed mb-4 md:mb-6 italic text-sm md:text-base">
             "{{ testimonial.quote }}"
           </p>
 
           <!-- Customer Info -->
-          <div class="flex items-center gap-4">
-            <div class="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+          <div class="flex items-center gap-3 md:gap-4">
+            <div class="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden flex-shrink-0">
               <NuxtImg
                 :src="testimonial.avatar"
                 :alt="testimonial.name"
@@ -63,10 +50,10 @@
             </div>
 
             <div>
-              <div class="font-semibold text-luxury-wine-red">
+              <div class="font-semibold text-luxury-wine-red text-sm md:text-base">
                 {{ testimonial.name }}
               </div>
-              <div class="text-sm text-luxury-brown/60">
+              <div class="text-xs md:text-sm text-luxury-brown/60">
                 {{ testimonial.location }}
               </div>
             </div>
@@ -75,7 +62,7 @@
           <!-- Product Badge -->
           <div
             v-if="testimonial.product"
-            class="mt-4 pt-4 border-t border-luxury-black/20"
+            class="mt-3 md:mt-4 pt-3 md:pt-4 border-t border-luxury-black/20"
           >
             <div class="text-xs uppercase tracking-wider text-luxury-black">
               Purchased: {{ testimonial.product }}
@@ -85,17 +72,12 @@
       </div>
 
       <!-- Customer Gallery -->
-      <div
-        v-motion
-        :initial="{ opacity: 0, y: 40 }"
-        :visible="{ opacity: 1, y: 0, transition: { delay: 800 } }"
-        class="mt-16"
-      >
-        <h3 class="text-center font-serif text-2xl text-luxury-wine-red mb-8">
+      <div class="mt-8 md:mt-12 lg:mt-16 px-4 lg:px-0">
+        <h3 class="text-center font-serif text-xl md:text-2xl text-luxury-wine-red mb-6 md:mb-8">
           {{ $t('luxury.testimonials.gallery_title') || 'Shared by Our Community' }}
         </h3>
 
-        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 sm:gap-3 md:gap-4">
           <div
             v-for="photo in customerPhotos"
             :key="photo.id"

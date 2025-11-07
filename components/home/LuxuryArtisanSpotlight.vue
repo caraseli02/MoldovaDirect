@@ -2,53 +2,35 @@
   <section class="luxury-section bg-white">
     <div class="luxury-container">
       <!-- Section Header -->
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <p
-          v-motion
-          :initial="{ opacity: 0, y: 20 }"
-          :visible="{ opacity: 1, y: 0 }"
-          class="luxury-eyebrow"
-        >
+      <div class="text-center max-w-3xl mx-auto mb-8 md:mb-12 lg:mb-16 px-4">
+        <p class="luxury-eyebrow text-sm md:text-base">
           {{ $t('luxury.artisans.eyebrow') || 'Meet The Makers' }}
         </p>
 
-        <h2
-          v-motion
-          :initial="{ opacity: 0, y: 20 }"
-          :visible="{ opacity: 1, y: 0, transition: { delay: 100 } }"
-          class="luxury-title"
-        >
+        <h2 class="luxury-title text-2xl md:text-3xl lg:text-4xl">
           {{ $t('luxury.artisans.title') || 'Artisan Producers' }}
         </h2>
 
         <div class="luxury-divider mx-auto" />
 
-        <p
-          v-motion
-          :initial="{ opacity: 0, y: 20 }"
-          :visible="{ opacity: 1, y: 0, transition: { delay: 200 } }"
-          class="luxury-description mx-auto"
-        >
+        <p class="luxury-description mx-auto text-sm md:text-base">
           {{ $t('luxury.artisans.description') || 'Each product in our collection comes from a carefully selected family estate, where tradition and innovation blend to create exceptional quality.' }}
         </p>
       </div>
 
       <!-- Artisan Grid -->
-      <div class="grid md:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 px-4 lg:px-0">
         <div
           v-for="(artisan, index) in artisans"
           :key="artisan.id"
-          v-motion
-          :initial="{ opacity: 0, y: 40 }"
-          :visible="{ opacity: 1, y: 0, transition: { delay: index * 150 + 300, duration: 600 } }"
           class="luxury-card group"
         >
           <!-- Portrait -->
-          <div class="luxury-image-wrapper mb-6 rounded-sm overflow-hidden">
+          <div class="luxury-image-wrapper mb-4 md:mb-6 rounded-sm overflow-hidden">
             <NuxtImg
               :src="artisan.image"
               :alt="artisan.name"
-              class="w-full h-80 object-cover"
+              class="w-full h-56 sm:h-64 md:h-72 lg:h-80 object-cover"
               loading="lazy"
             />
             <div class="luxury-image-overlay" />
@@ -56,19 +38,19 @@
 
           <!-- Content -->
           <div>
-            <h3 class="font-serif text-2xl font-semibold text-luxury-wine-red mb-2">
+            <h3 class="font-serif text-xl md:text-2xl font-semibold text-luxury-wine-red mb-2">
               {{ artisan.name }}
             </h3>
 
-            <p class="text-sm uppercase tracking-wider text-luxury-black mb-4 font-semibold">
+            <p class="text-xs sm:text-sm uppercase tracking-wider text-luxury-black mb-3 md:mb-4 font-semibold">
               {{ artisan.specialty }}
             </p>
 
-            <p class="text-luxury-brown/80 leading-relaxed mb-6 italic">
+            <p class="text-luxury-brown/80 leading-relaxed mb-4 md:mb-6 italic text-sm md:text-base">
               "{{ artisan.quote }}"
             </p>
 
-            <div class="flex items-center gap-3 text-sm text-luxury-brown/60">
+            <div class="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-luxury-brown/60">
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
               </svg>
@@ -79,8 +61,8 @@
       </div>
 
       <!-- CTA -->
-      <div class="text-center mt-16">
-        <NuxtLink to="/producers" class="luxury-btn luxury-btn-dark">
+      <div class="text-center mt-8 md:mt-12 lg:mt-16 px-4">
+        <NuxtLink to="/producers" class="luxury-btn luxury-btn-dark w-full sm:w-auto min-h-[48px] inline-flex items-center justify-center text-sm md:text-base">
           {{ $t('luxury.artisans.cta') || 'Meet All Producers' }}
         </NuxtLink>
       </div>
