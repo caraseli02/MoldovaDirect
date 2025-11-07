@@ -44,7 +44,7 @@
       <!-- Center Divider with Plus Icon -->
       <div class="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2">
         <div class="rounded-full bg-white p-3 shadow-lg">
-          <commonIcon name="lucide:plus" class="h-5 w-5 text-primary-600" />
+          <commonIcon name="lucide:plus" class="h-5 w-5 text-primary" />
         </div>
       </div>
 
@@ -75,7 +75,7 @@
 
       <!-- Pairing Reason -->
       <div class="mt-3">
-        <div class="mb-1 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-primary-600">
+        <div class="mb-1 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-primary">
           <commonIcon name="lucide:lightbulb" class="h-3.5 w-3.5" />
           {{ t('wineStory.pairings.whyItWorks') }}
         </div>
@@ -89,7 +89,7 @@
         <span
           v-for="occasion in pairing.occasions.slice(0, 2)"
           :key="occasion"
-          class="inline-flex items-center gap-1 rounded-full bg-primary-50 px-2.5 py-1 text-xs font-medium text-primary-700"
+          class="inline-flex items-center gap-1 rounded-full bg-primary/5 px-2.5 py-1 text-xs font-medium text-primary"
         >
           <commonIcon name="lucide:calendar" class="h-3 w-3" />
           {{ t(`wineStory.pairings.occasions.${occasion}`) }}
@@ -106,7 +106,7 @@
 
       <!-- View Details Button -->
       <button
-        class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary-50 px-4 py-2.5 text-sm font-semibold text-primary-700 transition-colors hover:bg-primary-100"
+        class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary/5 px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-primary/10"
         @click.stop="$emit('click', pairing)"
       >
         {{ t('wineStory.pairings.viewPairing') }}
@@ -160,14 +160,16 @@ const getIntensityColor = (position: number, intensity: 'light' | 'medium' | 'bo
   }
 
   const level = intensityMap[intensity]
-  return position <= level ? 'bg-primary-600' : 'bg-slate-200'
+  return position <= level ? 'bg-primary' : 'bg-slate-200'
 }
 </script>
 
 <style scoped>
 /* Focus visible styles for accessibility */
 article:focus-visible {
-  @apply outline-none ring-2 ring-primary-500 ring-offset-2;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--color-primary), 0 0 0 4px white;
 }
 
 /* Smooth transitions */

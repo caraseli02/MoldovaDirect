@@ -2,7 +2,7 @@
   <section class="relative overflow-hidden bg-gradient-to-b from-slate-50 to-white py-16 md:py-24">
     <!-- Background Decoration -->
     <div class="absolute inset-0 opacity-5">
-      <div class="absolute right-0 top-0 h-96 w-96 rounded-full bg-primary-500 blur-3xl"></div>
+      <div class="absolute right-0 top-0 h-96 w-96 rounded-full bg-primary blur-3xl"></div>
     </div>
 
     <div class="container relative">
@@ -41,7 +41,7 @@
             class="rounded-full px-6 py-2.5 text-sm font-semibold transition-all"
             :class="[
               activeFilter === 'all'
-                ? 'bg-primary-600 text-white shadow-md'
+                ? 'bg-primary text-white shadow-md'
                 : 'text-slate-600 hover:bg-slate-100'
             ]"
             @click="setFilter('all')"
@@ -55,7 +55,7 @@
             class="rounded-full px-6 py-2.5 text-sm font-semibold transition-all"
             :class="[
               activeFilter === type
-                ? 'bg-primary-600 text-white shadow-md'
+                ? 'bg-primary text-white shadow-md'
                 : 'text-slate-600 hover:bg-slate-100'
             ]"
             @click="setFilter(type)"
@@ -102,7 +102,7 @@
         <commonIcon name="lucide:wine" class="mx-auto h-16 w-16 text-slate-400" />
         <p class="mt-4 text-lg font-medium text-slate-600">{{ t('wineStory.pairings.noResults') }}</p>
         <button
-          class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary-600 hover:text-primary-700"
+          class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary/90"
           @click="clearFilters"
         >
           {{ t('wineStory.pairings.filters.all') }}
@@ -117,7 +117,7 @@
       >
         <NuxtLink
           :to="localePath('/pairings')"
-          class="cta-button inline-flex items-center gap-2 rounded-full bg-primary-600 px-8 py-3 font-semibold text-white shadow-lg transition-all hover:bg-primary-700"
+          class="cta-button inline-flex items-center gap-2 rounded-full bg-primary px-8 py-3 font-semibold text-white shadow-lg transition-all hover:bg-primary/90"
         >
           {{ t('common.showMore') }}
           <commonIcon name="lucide:arrow-right" class="h-5 w-5" />
@@ -198,6 +198,8 @@ button {
 
 /* Focus styles for accessibility */
 button:focus-visible {
-  @apply outline-none ring-2 ring-primary-500 ring-offset-2;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--color-primary), 0 0 0 4px white;
 }
 </style>

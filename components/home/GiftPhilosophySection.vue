@@ -47,8 +47,8 @@
         <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           <!-- Authenticity -->
           <div class="group rounded-2xl bg-white/10 p-6 backdrop-blur transition-all hover:bg-white/15">
-            <div class="mb-4 inline-flex rounded-full bg-primary-500/20 p-3">
-              <commonIcon name="lucide:heart" class="h-6 w-6 text-primary-400" />
+            <div class="mb-4 inline-flex rounded-full bg-primary/20 p-3">
+              <commonIcon name="lucide:heart" class="h-6 w-6 text-primary/80" />
             </div>
             <h4 class="mb-2 text-lg font-bold">
               {{ t('wineStory.giftPhilosophy.reasons.authenticity.title') }}
@@ -60,8 +60,8 @@
 
           <!-- Quality -->
           <div class="group rounded-2xl bg-white/10 p-6 backdrop-blur transition-all hover:bg-white/15">
-            <div class="mb-4 inline-flex rounded-full bg-primary-500/20 p-3">
-              <commonIcon name="lucide:award" class="h-6 w-6 text-primary-400" />
+            <div class="mb-4 inline-flex rounded-full bg-primary/20 p-3">
+              <commonIcon name="lucide:award" class="h-6 w-6 text-primary/80" />
             </div>
             <h4 class="mb-2 text-lg font-bold">
               {{ t('wineStory.giftPhilosophy.reasons.quality.title') }}
@@ -73,8 +73,8 @@
 
           <!-- Sustainability -->
           <div class="group rounded-2xl bg-white/10 p-6 backdrop-blur transition-all hover:bg-white/15">
-            <div class="mb-4 inline-flex rounded-full bg-primary-500/20 p-3">
-              <commonIcon name="lucide:leaf" class="h-6 w-6 text-primary-400" />
+            <div class="mb-4 inline-flex rounded-full bg-primary/20 p-3">
+              <commonIcon name="lucide:leaf" class="h-6 w-6 text-primary/80" />
             </div>
             <h4 class="mb-2 text-lg font-bold">
               {{ t('wineStory.giftPhilosophy.reasons.sustainability.title') }}
@@ -86,8 +86,8 @@
 
           <!-- Unique -->
           <div class="group rounded-2xl bg-white/10 p-6 backdrop-blur transition-all hover:bg-white/15">
-            <div class="mb-4 inline-flex rounded-full bg-primary-500/20 p-3">
-              <commonIcon name="lucide:sparkles" class="h-6 w-6 text-primary-400" />
+            <div class="mb-4 inline-flex rounded-full bg-primary/20 p-3">
+              <commonIcon name="lucide:sparkles" class="h-6 w-6 text-primary/80" />
             </div>
             <h4 class="mb-2 text-lg font-bold">
               {{ t('wineStory.giftPhilosophy.reasons.unique.title') }}
@@ -118,8 +118,8 @@
           <!-- Corporate Gifts -->
           <div class="group rounded-2xl border border-white/20 bg-white/5 p-8 backdrop-blur transition-all hover:border-white/30 hover:bg-white/10">
             <div class="mb-4 flex items-center gap-3">
-              <div class="rounded-full bg-primary-500/20 p-2">
-                <commonIcon name="lucide:briefcase" class="h-5 w-5 text-primary-400" />
+              <div class="rounded-full bg-primary/20 p-2">
+                <commonIcon name="lucide:briefcase" class="h-5 w-5 text-primary/80" />
               </div>
               <h4 class="text-xl font-bold">
                 {{ t('wineStory.giftPhilosophy.scenarios.corporate.title') }}
@@ -133,8 +133,8 @@
           <!-- Celebrations -->
           <div class="group rounded-2xl border border-white/20 bg-white/5 p-8 backdrop-blur transition-all hover:border-white/30 hover:bg-white/10">
             <div class="mb-4 flex items-center gap-3">
-              <div class="rounded-full bg-primary-500/20 p-2">
-                <commonIcon name="lucide:party-popper" class="h-5 w-5 text-primary-400" />
+              <div class="rounded-full bg-primary/20 p-2">
+                <commonIcon name="lucide:party-popper" class="h-5 w-5 text-primary/80" />
               </div>
               <h4 class="text-xl font-bold">
                 {{ t('wineStory.giftPhilosophy.scenarios.celebration.title') }}
@@ -148,8 +148,8 @@
           <!-- Gratitude -->
           <div class="group rounded-2xl border border-white/20 bg-white/5 p-8 backdrop-blur transition-all hover:border-white/30 hover:bg-white/10">
             <div class="mb-4 flex items-center gap-3">
-              <div class="rounded-full bg-primary-500/20 p-2">
-                <commonIcon name="lucide:gift" class="h-5 w-5 text-primary-400" />
+              <div class="rounded-full bg-primary/20 p-2">
+                <commonIcon name="lucide:gift" class="h-5 w-5 text-primary/80" />
               </div>
               <h4 class="text-xl font-bold">
                 {{ t('wineStory.giftPhilosophy.scenarios.gratitude.title') }}
@@ -163,8 +163,8 @@
           <!-- Exploration -->
           <div class="group rounded-2xl border border-white/20 bg-white/5 p-8 backdrop-blur transition-all hover:border-white/30 hover:bg-white/10">
             <div class="mb-4 flex items-center gap-3">
-              <div class="rounded-full bg-primary-500/20 p-2">
-                <commonIcon name="lucide:compass" class="h-5 w-5 text-primary-400" />
+              <div class="rounded-full bg-primary/20 p-2">
+                <commonIcon name="lucide:compass" class="h-5 w-5 text-primary/80" />
               </div>
               <h4 class="text-xl font-bold">
                 {{ t('wineStory.giftPhilosophy.scenarios.exploration.title') }}
@@ -219,6 +219,8 @@ const localePath = useLocalePath()
 
 /* Focus styles for accessibility */
 a:focus-visible {
-  @apply outline-none ring-2 ring-white ring-offset-2 ring-offset-slate-900;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px white, 0 0 0 4px rgb(15 23 42);
 }
 </style>

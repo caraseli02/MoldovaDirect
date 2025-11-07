@@ -45,7 +45,7 @@
       </h3>
 
       <!-- Specialty -->
-      <p class="mt-1 text-sm font-medium text-primary-600">
+      <p class="mt-1 text-sm font-medium text-primary">
         {{ getLocalizedText(producer.specialty) }}
       </p>
 
@@ -74,7 +74,7 @@
 
       <!-- Read More Button -->
       <button
-        class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary-600 transition-colors hover:text-primary-700"
+        class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary/90"
         @click.stop="$emit('click', producer)"
       >
         {{ t('wineStory.producers.readMore') }}
@@ -126,11 +126,13 @@ const regionName = computed(() => {
 <style scoped>
 /* Additional hover effects */
 .group:hover .line-clamp-3 {
-  @apply text-slate-900;
+  color: rgb(15 23 42);
 }
 
 /* Focus visible styles for accessibility */
 article:focus-visible {
-  @apply outline-none ring-2 ring-primary-500 ring-offset-2;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--color-primary), 0 0 0 4px white;
 }
 </style>

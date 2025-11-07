@@ -62,8 +62,8 @@
         <!-- Content -->
         <div class="space-y-6">
           <!-- Philosophy Quote (if available) -->
-          <div v-if="producer.philosophy" class="rounded-lg bg-primary-50 p-6">
-            <commonIcon name="lucide:quote" class="h-8 w-8 text-primary-600" />
+          <div v-if="producer.philosophy" class="rounded-lg bg-primary/5 p-6">
+            <commonIcon name="lucide:quote" class="h-8 w-8 text-primary" />
             <p class="mt-2 text-lg italic leading-relaxed text-slate-700">
               "{{ getLocalizedText(producer.philosophy) }}"
             </p>
@@ -172,7 +172,7 @@
               :href="producer.website"
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center gap-2 rounded-lg bg-primary-600 px-6 py-3 font-semibold text-white shadow-lg transition-colors hover:bg-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+              class="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 font-semibold text-white shadow-lg transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
               <commonIcon name="lucide:external-link" class="h-5 w-5" />
               {{ t('wineStory.producers.contact') }}

@@ -2,8 +2,8 @@
   <section class="relative overflow-hidden bg-gradient-to-b from-white to-slate-50 py-16 md:py-24">
     <!-- Background Decoration -->
     <div class="absolute inset-0 opacity-5">
-      <div class="absolute left-0 top-0 h-96 w-96 rounded-full bg-primary-500 blur-3xl"></div>
-      <div class="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-primary-300 blur-3xl"></div>
+      <div class="absolute left-0 top-0 h-96 w-96 rounded-full bg-primary blur-3xl"></div>
+      <div class="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-primary/50 blur-3xl"></div>
     </div>
 
     <div class="container relative">
@@ -106,14 +106,14 @@
 
         <!-- Custom Navigation Buttons -->
         <button
-          class="swiper-button-prev-custom absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white p-3 shadow-lg transition-all hover:scale-110 hover:bg-primary-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 disabled:opacity-50 md:-left-4 lg:-left-6"
+          class="swiper-button-prev-custom absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white p-3 shadow-lg transition-all hover:scale-110 hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:opacity-50 md:-left-4 lg:-left-6"
           :aria-label="t('common.previous')"
         >
           <commonIcon name="lucide:chevron-left" class="h-6 w-6 text-slate-700" />
         </button>
 
         <button
-          class="swiper-button-next-custom absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white p-3 shadow-lg transition-all hover:scale-110 hover:bg-primary-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 disabled:opacity-50 md:-right-4 lg:-right-6"
+          class="swiper-button-next-custom absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white p-3 shadow-lg transition-all hover:scale-110 hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:opacity-50 md:-right-4 lg:-right-6"
           :aria-label="t('common.next')"
         >
           <commonIcon name="lucide:chevron-right" class="h-6 w-6 text-slate-700" />
@@ -211,25 +211,32 @@ useEventListener('keydown', (event: KeyboardEvent) => {
 
 /* Pagination Styles */
 .swiper-pagination-custom :deep(.swiper-pagination-bullet) {
-  @apply h-2 w-2 bg-slate-300 opacity-100 transition-all;
+  height: 0.5rem;
+  width: 0.5rem;
+  background-color: rgb(203 213 225);
+  opacity: 1;
+  transition: all 0.2s ease;
 }
 
 .swiper-pagination-custom :deep(.swiper-pagination-bullet-active) {
-  @apply w-8 bg-primary-600;
+  width: 2rem;
+  background-color: var(--color-primary);
 }
 
 .swiper-pagination-custom :deep(.swiper-pagination-bullet-active-main) {
-  @apply bg-primary-700;
+  background-color: var(--color-primary);
+  filter: brightness(0.9);
 }
 
 /* Ensure cards stretch full height */
 .producer-stories-swiper :deep(.swiper-slide > *) {
-  @apply h-full;
+  height: 100%;
 }
 
 /* Navigation button states */
 .swiper-button-prev-custom:disabled,
 .swiper-button-next-custom:disabled {
-  @apply cursor-not-allowed opacity-30;
+  cursor: not-allowed;
+  opacity: 0.3;
 }
 </style>
