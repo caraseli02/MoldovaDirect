@@ -1,133 +1,109 @@
 <template>
-  <section class="luxury-section bg-[#FCFAF2]">
-    <div class="luxury-container">
+  <section class="py-16 md:py-24 bg-[#FCFAF2]">
+    <div class="container mx-auto px-4 md:px-6">
       <!-- Section Header -->
-      <div class="text-center max-w-3xl mx-auto mb-10 sm:mb-12 md:mb-16">
-        <p
-          v-motion
-          :initial="{ opacity: 0, y: 20 }"
-          :visible="{ opacity: 1, y: 0 }"
-          class="luxury-eyebrow"
-        >
+      <div class="text-center max-w-2xl mx-auto mb-12 md:mb-16">
+        <p class="text-xs uppercase tracking-[0.2em] font-medium text-[#722F37] mb-4">
           {{ $t('luxury.showcase.eyebrow') || 'Curated Selection' }}
         </p>
 
-        <h2
-          v-motion
-          :initial="{ opacity: 0, y: 20 }"
-          :visible="{ opacity: 1, y: 0, transition: { delay: 100 } }"
-          class="luxury-title"
-        >
+        <h2 class="text-3xl md:text-4xl font-serif font-medium text-[#241405] mb-6">
           {{ $t('luxury.showcase.title') || 'Signature Collections' }}
         </h2>
 
-        <div class="luxury-divider mx-auto" />
-
-        <p
-          v-motion
-          :initial="{ opacity: 0, y: 20 }"
-          :visible="{ opacity: 1, y: 0, transition: { delay: 200 } }"
-          class="luxury-description mx-auto px-4 sm:px-0"
-        >
+        <p class="text-base text-[#241405]/70 leading-relaxed">
           {{ $t('luxury.showcase.description') || 'Discover our handpicked selection of premium wines, gourmet delicacies, and luxury gift hampers.' }}
         </p>
       </div>
 
-      <!-- Mobile: Horizontal Carousel with Navigation -->
-      <div class="md:hidden mb-8 relative">
+      <!-- Mobile: Horizontal Carousel -->
+      <div class="md:hidden relative">
         <div
           ref="productScrollContainer"
-          class="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory px-4 pb-4 -mx-4 scrollbar-hide"
+          class="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory px-4 pb-6 -mx-4 scrollbar-hide"
           @scroll="onProductScroll"
         >
           <div
             v-for="product in featuredProducts"
             :key="product.id"
-            class="flex-shrink-0 w-[85vw] max-w-[340px] snap-center"
+            class="flex-shrink-0 w-[280px] snap-center"
           >
-            <!-- To'ak Style Product Card -->
-            <div class="product-card bg-white overflow-hidden h-full flex flex-col">
-              <!-- Product Image with Circular Add Button (To'ak Style) -->
-              <figure class="product-figure relative">
-                <NuxtLink :to="`/products/${product.slug}`" class="block relative overflow-hidden">
+            <!-- To'ak Product Card -->
+            <article class="product-card">
+              <!-- Product Image -->
+              <figure class="product-figure relative mb-4">
+                <NuxtLink :to="`/products/${product.slug}`" class="block relative overflow-hidden aspect-[3/4]">
                   <NuxtImg
                     :src="product.image"
                     :alt="product.name"
-                    class="product-image w-full h-64 object-cover"
+                    class="product-image w-full h-full object-cover"
                     loading="lazy"
                     @error="handleImageError($event, 'product')"
                   />
 
-                  <!-- Badge (To'ak Style) -->
+                  <!-- Badge -->
                   <div
                     v-if="product.badge"
-                    class="absolute top-4 left-4 bg-[#241405] text-[#FCFAF2] text-xs font-medium uppercase tracking-wider px-3 py-1.5"
+                    class="absolute top-3 left-3 bg-[#241405] text-[#FCFAF2] text-[10px] font-medium uppercase tracking-wider px-2.5 py-1"
                   >
                     {{ product.badge }}
                   </div>
 
-                  <!-- Hover Overlay with Description -->
+                  <!-- Hover Overlay -->
                   <div class="product-hover-overlay">
-                    <p class="text-sm text-[#FCFAF2]">{{ product.description }}</p>
+                    <p class="text-sm text-[#FCFAF2] leading-relaxed">{{ product.description }}</p>
                   </div>
                 </NuxtLink>
 
-                <!-- Circular Add to Cart Button (To'ak Style) -->
+                <!-- Circular Add Button -->
                 <div class="link-btn">
                   <button
                     @click="addToCart(product)"
                     class="circle-btn"
                     :aria-label="`Add ${product.name} to cart`"
                   >
-                    <span class="icon">
-                      <svg width="19" height="19" viewBox="0 0 19 19" fill="none">
-                        <path d="M9.2627 0.765625V17.7656M17.7627 9.26562H0.762695"
-                              stroke="#A76C06" stroke-width="0.7"/>
-                      </svg>
-                    </span>
+                    <svg width="19" height="19" viewBox="0 0 19 19" fill="none">
+                      <path d="M9.2627 0.765625V17.7656M17.7627 9.26562H0.762695"
+                            stroke="#A76C06" stroke-width="0.7"/>
+                    </svg>
                   </button>
                 </div>
               </figure>
 
-              <!-- Product Info (To'ak Style) -->
-              <div class="p-5 flex-1 flex flex-col text-start">
-                <h3 class="product-title font-serif text-lg font-medium text-[#241405] mb-2">
+              <!-- Product Info -->
+              <div class="product-info">
+                <h3 class="product-title text-base font-serif font-normal text-[#241405] mb-2 leading-snug">
                   {{ product.name }}
                 </h3>
 
-                <p class="price-wrap text-[#241405] text-base font-medium mb-3">
-                  <span v-if="product.originalPrice" class="line-through text-[#241405]/50 text-sm mr-2">
+                <p class="price-wrap text-sm text-[#241405] mb-2">
+                  <span v-if="product.originalPrice" class="line-through text-[#241405]/40 mr-2">
                     €{{ product.originalPrice }}
                   </span>
-                  €{{ product.price }}
+                  <span class="font-medium">€{{ product.price }}</span>
                 </p>
 
-                <!-- Star Rating (To'ak Style) -->
-                <a v-if="product.rating" class="rating-wrap mb-2" :data-val="product.rating.value" :data-of="product.rating.max">
-                  <span class="rating">
+                <!-- Star Rating -->
+                <div v-if="product.rating" class="rating-wrap mb-2">
+                  <span class="rating inline-flex gap-0.5">
                     <span v-for="star in 5" :key="star" class="star">
                       <span class="fill" :style="{ width: getStarFillWidth(star, product.rating.value) }"></span>
                     </span>
                   </span>
-                  <span class="rating-label text-xs text-[#241405]/70 ml-1">({{ product.rating.count }})</span>
-                </a>
+                  <span class="rating-label text-[11px] text-[#241405]/60 ml-1">({{ product.rating.count }})</span>
+                </div>
 
-                <!-- Category Subtitle (To'ak Style - like "65% cacao") -->
-                <div v-if="product.subtitle" class="product-subtitle text-xs text-[#241405]/60 uppercase tracking-wide mb-2">
+                <!-- Subtitle -->
+                <div v-if="product.subtitle" class="product-subtitle text-[11px] text-[#241405]/50 uppercase tracking-wide mb-1">
                   {{ product.subtitle }}
                 </div>
 
-                <!-- Stock Status (To'ak Style) -->
-                <p v-if="product.stock" class="stock-status text-xs text-[#241405]/70">
-                  <span v-if="product.stock.limited && product.stock.remaining <= 5" class="text-[#722F37] font-medium">
-                    Last stock! {{ product.stock.remaining }} left
-                  </span>
-                  <span v-else-if="product.stock.limited">
-                    {{ product.stock.remaining }} in stock
-                  </span>
+                <!-- Stock Status -->
+                <p v-if="product.stock && product.stock.limited && product.stock.remaining <= 5" class="stock-status text-[11px] text-[#722F37] font-medium">
+                  Last stock! {{ product.stock.remaining }} left
                 </p>
               </div>
-            </div>
+            </article>
           </div>
         </div>
 
@@ -138,7 +114,7 @@
           class="carousel-arrow carousel-arrow-left"
           aria-label="Previous product"
         >
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
           </svg>
         </button>
@@ -148,7 +124,7 @@
           class="carousel-arrow carousel-arrow-right"
           aria-label="Next product"
         >
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
           </svg>
         </button>
@@ -166,102 +142,95 @@
         </div>
       </div>
 
-      <!-- Desktop: Product Grid (To'ak Style) -->
-      <div class="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-12">
-        <div
-          v-for="(product, index) in featuredProducts"
+      <!-- Desktop: Product Grid -->
+      <div class="hidden md:grid grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-12">
+        <article
+          v-for="product in featuredProducts"
           :key="product.id"
-          v-motion
-          :initial="{ opacity: 0, y: 40 }"
-          :visible="{ opacity: 1, y: 0, transition: { delay: index * 100 + 300, duration: 600 } }"
-          class="product-card bg-white overflow-hidden"
+          class="product-card"
         >
-          <!-- Product Image with Circular Add Button (To'ak Style) -->
-          <figure class="product-figure relative">
-            <NuxtLink :to="`/products/${product.slug}`" class="block relative overflow-hidden">
+          <!-- Product Image -->
+          <figure class="product-figure relative mb-4">
+            <NuxtLink :to="`/products/${product.slug}`" class="block relative overflow-hidden aspect-[3/4]">
               <NuxtImg
                 :src="product.image"
                 :alt="product.name"
-                class="product-image w-full h-80 object-cover"
+                class="product-image w-full h-full object-cover"
                 loading="lazy"
                 @error="handleImageError($event, 'product')"
               />
 
-              <!-- Badge (To'ak Style) -->
+              <!-- Badge -->
               <div
                 v-if="product.badge"
-                class="absolute top-4 left-4 bg-[#241405] text-[#FCFAF2] text-xs font-medium uppercase tracking-wider px-3 py-1.5"
+                class="absolute top-3 left-3 bg-[#241405] text-[#FCFAF2] text-[10px] font-medium uppercase tracking-wider px-2.5 py-1"
               >
                 {{ product.badge }}
               </div>
 
-              <!-- Hover Overlay with Description -->
+              <!-- Hover Overlay -->
               <div class="product-hover-overlay">
-                <p class="text-sm text-[#FCFAF2]">{{ product.description }}</p>
+                <p class="text-sm text-[#FCFAF2] leading-relaxed">{{ product.description }}</p>
               </div>
             </NuxtLink>
 
-            <!-- Circular Add to Cart Button (To'ak Style) -->
+            <!-- Circular Add Button -->
             <div class="link-btn">
               <button
                 @click="addToCart(product)"
                 class="circle-btn"
                 :aria-label="`Add ${product.name} to cart`"
               >
-                <span class="icon">
-                  <svg width="19" height="19" viewBox="0 0 19 19" fill="none">
-                    <path d="M9.2627 0.765625V17.7656M17.7627 9.26562H0.762695"
-                          stroke="#A76C06" stroke-width="0.7"/>
-                  </svg>
-                </span>
+                <svg width="19" height="19" viewBox="0 0 19 19" fill="none">
+                  <path d="M9.2627 0.765625V17.7656M17.7627 9.26562H0.762695"
+                        stroke="#A76C06" stroke-width="0.7"/>
+                </svg>
               </button>
             </div>
           </figure>
 
-          <!-- Product Info (To'ak Style) -->
-          <div class="p-6 text-start">
-            <h3 class="product-title font-serif text-xl font-medium text-[#241405] mb-2">
+          <!-- Product Info -->
+          <div class="product-info">
+            <h3 class="product-title text-base font-serif font-normal text-[#241405] mb-2 leading-snug">
               {{ product.name }}
             </h3>
 
-            <p class="price-wrap text-[#241405] text-lg font-medium mb-3">
-              <span v-if="product.originalPrice" class="line-through text-[#241405]/50 text-sm mr-2">
+            <p class="price-wrap text-sm text-[#241405] mb-2">
+              <span v-if="product.originalPrice" class="line-through text-[#241405]/40 mr-2">
                 €{{ product.originalPrice }}
               </span>
-              €{{ product.price }}
+              <span class="font-medium">€{{ product.price }}</span>
             </p>
 
-            <!-- Star Rating (To'ak Style) -->
-            <a v-if="product.rating" class="rating-wrap mb-2" :data-val="product.rating.value" :data-of="product.rating.max">
-              <span class="rating">
+            <!-- Star Rating -->
+            <div v-if="product.rating" class="rating-wrap mb-2">
+              <span class="rating inline-flex gap-0.5">
                 <span v-for="star in 5" :key="star" class="star">
                   <span class="fill" :style="{ width: getStarFillWidth(star, product.rating.value) }"></span>
                 </span>
               </span>
-              <span class="rating-label text-xs text-[#241405]/70 ml-1">({{ product.rating.count }})</span>
-            </a>
+              <span class="rating-label text-[11px] text-[#241405]/60 ml-1">({{ product.rating.count }})</span>
+            </div>
 
-            <!-- Category Subtitle (To'ak Style - like "65% cacao") -->
-            <div v-if="product.subtitle" class="product-subtitle text-xs text-[#241405]/60 uppercase tracking-wide mb-2">
+            <!-- Subtitle -->
+            <div v-if="product.subtitle" class="product-subtitle text-[11px] text-[#241405]/50 uppercase tracking-wide mb-1">
               {{ product.subtitle }}
             </div>
 
-            <!-- Stock Status (To'ak Style) -->
-            <p v-if="product.stock" class="stock-status text-xs text-[#241405]/70 mt-2">
-              <span v-if="product.stock.limited && product.stock.remaining <= 5" class="text-[#722F37] font-medium">
-                Last stock! {{ product.stock.remaining }} left
-              </span>
-              <span v-else-if="product.stock.limited">
-                {{ product.stock.remaining }} in stock
-              </span>
+            <!-- Stock Status -->
+            <p v-if="product.stock && product.stock.limited && product.stock.remaining <= 5" class="stock-status text-[11px] text-[#722F37] font-medium">
+              Last stock! {{ product.stock.remaining }} left
             </p>
           </div>
-        </div>
+        </article>
       </div>
 
       <!-- CTA Section -->
-      <div class="text-center">
-        <NuxtLink to="/products" class="luxury-btn luxury-btn-dark">
+      <div class="text-center mt-12 md:mt-16">
+        <NuxtLink
+          to="/products"
+          class="inline-block bg-[#241405] text-[#FCFAF2] px-8 py-3.5 text-sm font-medium uppercase tracking-wider hover:bg-[#722F37] transition-colors duration-300"
+        >
           {{ $t('luxury.showcase.cta') || 'Explore Full Collection' }}
         </NuxtLink>
       </div>
@@ -313,13 +282,12 @@ const scrollProductToIndex = (index: number) => {
   })
 }
 
-// Calculate star fill width based on rating (To'ak style)
+// Calculate star fill width (To'ak style)
 const getStarFillWidth = (starIndex: number, rating: number): string => {
   const starValue = starIndex
   if (rating >= starValue) {
     return '100%'
   } else if (rating >= starValue - 1 && rating < starValue) {
-    // Partial fill for fractional ratings
     const fraction = rating - (starValue - 1)
     return `${fraction * 100}%`
   } else {
@@ -329,9 +297,7 @@ const getStarFillWidth = (starIndex: number, rating: number): string => {
 
 // Add to cart handler
 const addToCart = (product: any) => {
-  // TODO: Implement cart functionality
   console.log('Add to cart:', product.name)
-  // You can implement cart logic here or emit an event
 }
 
 const featuredProducts = [
@@ -339,7 +305,6 @@ const featuredProducts = [
     id: 1,
     name: 'Premium Moldovan Wine Selection',
     slug: 'premium-wine-selection',
-    category: 'Wine Collection',
     subtitle: 'Codru Reserve',
     description: 'A curated selection of three award-winning Moldovan wines from the Codru region.',
     price: '89.90',
@@ -357,7 +322,6 @@ const featuredProducts = [
     id: 2,
     name: 'Luxury Gourmet Gift Hamper',
     slug: 'luxury-gourmet-hamper',
-    category: 'Gift Hampers',
     subtitle: 'seasonal selection',
     description: 'Artisan cheeses, honey, preserves, and wine - the perfect gift for any occasion.',
     price: '124.90',
@@ -379,7 +343,6 @@ const featuredProducts = [
     id: 3,
     name: 'Organic Wildflower Honey',
     slug: 'organic-wildflower-honey',
-    category: 'Gourmet Foods',
     subtitle: 'Moldovan Highlands',
     description: 'Raw, unfiltered honey from the wildflowers of Moldova. Pure and natural.',
     price: '18.90',
@@ -397,7 +360,6 @@ const featuredProducts = [
     id: 4,
     name: 'Artisan Cheese Collection',
     slug: 'artisan-cheese-collection',
-    category: 'Gourmet Foods',
     subtitle: 'traditional recipe',
     description: 'Three traditional Moldovan cheeses, aged to perfection by master cheesemakers.',
     price: '42.90',
@@ -415,7 +377,6 @@ const featuredProducts = [
     id: 5,
     name: 'Vintage Reserve 2015',
     slug: 'vintage-reserve-2015',
-    category: 'Premium Wines',
     subtitle: 'Cricova 2015',
     description: 'An exceptional vintage from the historic Cricova cellars. Limited availability.',
     price: '156.00',
@@ -437,7 +398,6 @@ const featuredProducts = [
     id: 6,
     name: 'Corporate Gift Collection',
     slug: 'corporate-gift-collection',
-    category: 'Gift Hampers',
     subtitle: 'executive selection',
     description: 'Impress clients and partners with this elegant selection of Moldovan specialties.',
     price: '199.90',
@@ -464,9 +424,9 @@ const featuredProducts = [
   display: none;
 }
 
-/* To'ak Style Product Card */
+/* Product Card (To'ak Style - Pixel Perfect) */
 .product-card {
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease;
 }
 
 .product-figure {
@@ -479,36 +439,36 @@ const featuredProducts = [
 }
 
 .product-card:hover .product-image {
-  transform: scale(1.05);
+  transform: scale(1.04);
 }
 
-/* Circular Add to Cart Button (To'ak Style) */
+/* Circular Add Button (To'ak Style) */
 .link-btn {
   position: absolute;
-  bottom: 16px;
-  right: 16px;
+  bottom: 12px;
+  right: 12px;
   z-index: 10;
 }
 
 .circle-btn {
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background: #FCFAF2;
-  border: 1px solid rgba(167, 108, 6, 0.2);
+  border: 1px solid rgba(167, 108, 6, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .circle-btn:hover {
   background: #A76C06;
   border-color: #A76C06;
-  box-shadow: 0 4px 16px rgba(167, 108, 6, 0.3);
-  transform: scale(1.08);
+  box-shadow: 0 4px 12px rgba(167, 108, 6, 0.25);
+  transform: scale(1.05);
 }
 
 .circle-btn:hover svg path {
@@ -516,20 +476,20 @@ const featuredProducts = [
 }
 
 .circle-btn:active {
-  transform: scale(0.96);
+  transform: scale(0.98);
 }
 
 /* Hover Overlay (To'ak Style) */
 .product-hover-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(36, 20, 5, 0.85);
+  background: rgba(36, 20, 5, 0.88);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: 20px;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.25s ease;
   pointer-events: none;
 }
 
@@ -541,19 +501,17 @@ const featuredProducts = [
 .rating-wrap {
   display: inline-flex;
   align-items: center;
-  text-decoration: none;
-  cursor: pointer;
+  line-height: 1;
 }
 
 .rating {
   display: inline-flex;
-  gap: 2px;
 }
 
 .star {
   position: relative;
-  width: 14px;
-  height: 14px;
+  width: 13px;
+  height: 13px;
   display: inline-block;
 }
 
@@ -561,7 +519,7 @@ const featuredProducts = [
   content: '★';
   position: absolute;
   color: #E5E7EB;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1;
 }
 
@@ -578,47 +536,32 @@ const featuredProducts = [
 .star .fill::before {
   content: '★';
   color: #A76C06;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1;
 }
 
 .rating-label {
   display: inline-block;
+  line-height: 1;
 }
 
 /* Product Title (To'ak Style) */
 .product-title {
-  line-height: 1.4;
   transition: color 0.2s ease;
+  font-family: 'Playfair Display', Georgia, serif;
 }
 
 .product-card:hover .product-title {
   color: #722F37;
 }
 
-/* Price Wrap (To'ak Style) */
-.price-wrap {
-  line-height: 1.4;
-}
-
-/* Product Subtitle (To'ak Style - like "65% cacao") */
-.product-subtitle {
-  font-weight: 500;
-  letter-spacing: 0.05em;
-}
-
-/* Stock Status (To'ak Style) */
-.stock-status {
-  font-weight: 500;
-}
-
 /* Carousel Navigation */
 .carousel-arrow {
   position: absolute;
-  top: 50%;
+  top: 40%;
   transform: translateY(-50%);
-  width: 48px;
-  height: 48px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(8px);
@@ -629,40 +572,27 @@ const featuredProducts = [
   justify-content: center;
   color: #722F37;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: all 0.2s ease;
   z-index: 10;
-  opacity: 0.9;
 }
 
 .carousel-arrow:hover {
-  background: rgba(114, 47, 55, 0.98);
+  background: rgba(114, 47, 55, 0.95);
   color: white;
-  box-shadow: 0 4px 12px rgba(114, 47, 55, 0.25);
-  opacity: 1;
+  box-shadow: 0 4px 12px rgba(114, 47, 55, 0.2);
   transform: translateY(-50%) scale(1.05);
 }
 
 .carousel-arrow:active {
-  transform: translateY(-50%) scale(0.98);
+  transform: translateY(-50%) scale(0.95);
 }
 
 .carousel-arrow-left {
-  left: -24px;
+  left: 8px;
 }
 
 .carousel-arrow-right {
-  right: -24px;
-}
-
-/* Show arrows inside on mobile */
-@media (max-width: 768px) {
-  .carousel-arrow-left {
-    left: 12px;
-  }
-
-  .carousel-arrow-right {
-    right: 12px;
-  }
+  right: 8px;
 }
 
 .carousel-dot {
@@ -673,18 +603,17 @@ const featuredProducts = [
   border: none;
   padding: 0;
   cursor: pointer;
-  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .carousel-dot.active {
   background-color: #722F37;
-  width: 28px;
+  width: 24px;
   border-radius: 3px;
-  transform: scale(1);
 }
 
 .carousel-dot:hover:not(.active) {
   background-color: rgba(114, 47, 55, 0.5);
-  transform: scale(1.3);
+  transform: scale(1.2);
 }
 </style>
