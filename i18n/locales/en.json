@@ -1075,6 +1075,7 @@
       "placeholder": "Enter your email address",
       "cta": "Join the list",
       "success": "Thank you! Look for our next dispatch in your inbox.",
+      "error": "Oops! Something went wrong. Please try again.",
       "disclaimer": "We send one or two emails per month and you can unsubscribe at any time."
     },
     "faqPreview": {

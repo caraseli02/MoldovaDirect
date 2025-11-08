@@ -94,21 +94,35 @@
           </div>
 
           <!-- Answer Options -->
-          <div
+          <fieldset
             class="mt-8 grid gap-4"
             :class="currentQuestion.layout === 'grid' ? 'sm:grid-cols-2' : ''"
+            role="radiogroup"
+            :aria-labelledby="`question-${currentQuestion.id}`"
           >
-            <button
+            <legend :id="`question-${currentQuestion.id}`" class="sr-only">
+              {{ currentQuestion.question }}
+            </legend>
+            <label
               v-for="option in currentQuestion.options"
               :key="option.value"
-              @click="selectAnswer(currentQuestion.id, option.value)"
               :class="[
-                'group relative overflow-hidden rounded-2xl border-2 p-6 text-left transition-all',
+                'group relative overflow-hidden rounded-2xl border-2 p-6 text-left transition-all cursor-pointer',
                 answers[currentQuestion.id] === option.value
                   ? 'border-primary-600 bg-primary-50 dark:border-primary-500 dark:bg-primary-950'
                   : 'border-gray-200 hover:border-primary-300 dark:border-gray-800 dark:hover:border-primary-700'
               ]"
             >
+              <!-- Native radio input (visually hidden but accessible) -->
+              <input
+                type="radio"
+                :name="`question-${currentQuestion.id}`"
+                :value="option.value"
+                :checked="answers[currentQuestion.id] === option.value"
+                @change="selectAnswer(currentQuestion.id, option.value)"
+                class="sr-only"
+              />
+
               <!-- Image (if provided) -->
               <NuxtImg
                 v-if="option.image"
@@ -120,7 +134,7 @@
               />
 
               <div class="flex items-start gap-4">
-                <!-- Radio Circle -->
+                <!-- Radio Circle (visual indicator) -->
                 <div
                   :class="[
                     'mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 transition',
@@ -128,6 +142,7 @@
                       ? 'border-primary-600 bg-primary-600'
                       : 'border-gray-300 group-hover:border-primary-400 dark:border-gray-600'
                   ]"
+                  aria-hidden="true"
                 >
                   <div
                     v-if="answers[currentQuestion.id] === option.value"
@@ -142,8 +157,8 @@
                   </p>
                 </div>
               </div>
-            </button>
-          </div>
+            </label>
+          </fieldset>
 
           <!-- Navigation Buttons -->
           <div class="mt-8 flex items-center justify-between">

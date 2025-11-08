@@ -255,4 +255,16 @@ useLandingSeo({
   ],
   structuredData
 })
+
+// Preload hero image for optimal LCP performance
+useHead({
+  link: [
+    {
+      rel: 'preload',
+      as: 'image',
+      href: '/images/hero-poster.jpg',
+      fetchpriority: 'high'
+    }
+  ]
+})
 </script>
