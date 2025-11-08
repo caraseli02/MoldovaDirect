@@ -1,6 +1,5 @@
 <template>
-  <header
-    class="fixed top-0 left-0 right-0 z-50 bg-[#FCFAF2] dark:bg-gray-950 transition-all duration-300">
+  <header class="fixed top-0 left-0 right-0 z-50 bg-[#FCFAF2] transition-all duration-300">
     <div class="container mx-auto px-4 md:px-6">
       <div class="flex items-center justify-between h-16 md:h-20">
 
@@ -11,7 +10,7 @@
           :aria-label="mobileMenuOpen ? 'Close menu' : 'Open menu'"
           :aria-expanded="mobileMenuOpen"
           aria-controls="nav-menu"
-          class="flex items-center justify-center w-11 h-11 text-[#241405] dark:text-[#FCFAF2] hover:opacity-70 transition-opacity focus:outline-none"
+          class="flex items-center justify-center w-11 h-11 text-[#241405] hover:opacity-70 transition-opacity focus:outline-none"
         >
           <svg width="23" height="11" viewBox="0 0 23 11" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M21.6922 9.51302H0.858887M21.6922 0.804688H0.858887" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
@@ -26,7 +25,7 @@
           :aria-label="'Moldova Direct'"
         >
           <span
-            class="text-2xl md:text-3xl font-serif font-semibold text-[#722F37] dark:text-[#FCFAF2] transition-colors duration-300"
+            class="text-2xl md:text-3xl font-serif font-semibold text-[#722F37]"
             style="font-family: 'Playfair Display', Georgia, serif; letter-spacing: 0.02em;">
             Moldova Direct
           </span>
@@ -40,7 +39,7 @@
             type="button"
             @click="goToSearch"
             :aria-label="'Search'"
-            class="flex items-center justify-center w-11 h-11 text-[#241405] dark:text-[#FCFAF2] hover:opacity-70 transition-opacity focus:outline-none"
+            class="flex items-center justify-center w-11 h-11 text-[#241405] hover:opacity-70 transition-opacity focus:outline-none"
           >
             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M12.3047 21.25C17.5514 21.25 21.8047 16.9967 21.8047 11.75C21.8047 6.50329 17.5514 2.25 12.3047 2.25C7.05798 2.25 2.80469 6.50329 2.80469 11.75C2.80469 16.9967 7.05798 21.25 12.3047 21.25Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -53,7 +52,7 @@
           <NuxtLink
             :to="localePath('/account')"
             :aria-label="'Account'"
-            class="flex items-center justify-center w-11 h-11 text-[#241405] dark:text-[#FCFAF2] hover:opacity-70 transition-opacity"
+            class="flex items-center justify-center w-11 h-11 text-[#241405] hover:opacity-70 transition-opacity"
           >
             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M12.8047 12.25C15.5661 12.25 17.8047 10.0114 17.8047 7.25C17.8047 4.48858 15.5661 2.25 12.8047 2.25C10.0433 2.25 7.80469 4.48858 7.80469 7.25C7.80469 10.0114 10.0433 12.25 12.8047 12.25Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -66,7 +65,7 @@
           <NuxtLink
             :to="localePath('/cart')"
             :aria-label="cartItemsCount > 0 ? `Cart (${cartItemsCount} items)` : 'Cart'"
-            class="relative flex items-center justify-center w-11 h-11 text-[#241405] dark:text-[#FCFAF2] hover:opacity-70 transition-opacity"
+            class="relative flex items-center justify-center w-11 h-11 text-[#241405] hover:opacity-70 transition-opacity"
           >
             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M8.30469 7.91952V6.94952C8.30469 4.69952 10.1147 2.48952 12.3647 2.27952C15.0447 2.01952 17.3047 4.12952 17.3047 6.75952V8.13952" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -101,7 +100,7 @@
       <div
         v-if="mobileMenuOpen"
         id="nav-menu"
-        class="fixed inset-0 bg-[#FCFAF2] dark:bg-gray-950 z-40 overflow-y-auto"
+        class="fixed inset-0 bg-[#FCFAF2] z-40 overflow-y-auto"
         @click.self="toggleMobileMenu"
       >
         <div class="container mx-auto px-4 md:px-6 py-24">
@@ -109,18 +108,18 @@
 
             <!-- Products Section -->
             <div class="mb-12">
-              <h2 class="text-xs uppercase tracking-[0.2em] font-medium text-[#722F37] dark:text-primary-400 mb-6">
-                Chocolate
+              <h2 class="text-xs uppercase tracking-[0.2em] font-medium text-[#722F37] mb-6">
+                Products
               </h2>
               <div class="grid md:grid-cols-3 gap-8">
                 <div>
-                  <h3 class="text-sm font-semibold text-[#241405] dark:text-[#FCFAF2] mb-4">Collections</h3>
+                  <h3 class="text-sm font-semibold text-[#241405] mb-4">Collections</h3>
                   <ul class="space-y-3">
                     <li>
                       <NuxtLink
                         :to="localePath('/products')"
                         @click="toggleMobileMenu"
-                        class="text-sm text-[#241405] dark:text-slate-300 hover:text-[#722F37] transition-colors"
+                        class="text-sm text-[#241405] hover:text-[#722F37] transition-colors"
                       >
                         All Products
                       </NuxtLink>
@@ -129,7 +128,7 @@
                       <NuxtLink
                         :to="localePath('/products?category=wine')"
                         @click="toggleMobileMenu"
-                        class="text-sm text-[#241405] dark:text-slate-300 hover:text-[#722F37] transition-colors"
+                        class="text-sm text-[#241405] hover:text-[#722F37] transition-colors"
                       >
                         Premium Wines
                       </NuxtLink>
@@ -138,7 +137,7 @@
                       <NuxtLink
                         to="/products?category=spirits"
                         @click="toggleMobileMenu"
-                        class="text-sm text-[#241405] dark:text-slate-300 hover:text-[#722F37] transition-colors"
+                        class="text-sm text-[#241405] hover:text-[#722F37] transition-colors"
                       >
                         Artisan Spirits
                       </NuxtLink>
@@ -147,7 +146,7 @@
                       <NuxtLink
                         to="/products?category=gourmet"
                         @click="toggleMobileMenu"
-                        class="text-sm text-[#241405] dark:text-slate-300 hover:text-[#722F37] transition-colors"
+                        class="text-sm text-[#241405] hover:text-[#722F37] transition-colors"
                       >
                         Gourmet Foods
                       </NuxtLink>
@@ -156,98 +155,92 @@
                 </div>
 
                 <div>
-                  <h3 class="text-sm font-semibold text-[#241405] dark:text-[#FCFAF2] mb-4">By Type</h3>
+                  <h3 class="text-sm font-semibold text-[#241405] mb-4">By Type</h3>
                   <ul class="space-y-3">
-                    <li><NuxtLink to="/products?type=red" @click="toggleMobileMenu" class="text-sm text-[#241405] dark:text-slate-300 hover:text-[#722F37] transition-colors">Red Wine</NuxtLink></li>
-                    <li><NuxtLink to="/products?type=white" @click="toggleMobileMenu" class="text-sm text-[#241405] dark:text-slate-300 hover:text-[#722F37] transition-colors">White Wine</NuxtLink></li>
-                    <li><NuxtLink to="/products?type=sparkling" @click="toggleMobileMenu" class="text-sm text-[#241405] dark:text-slate-300 hover:text-[#722F37] transition-colors">Sparkling Wine</NuxtLink></li>
-                    <li><NuxtLink to="/products?type=dessert" @click="toggleMobileMenu" class="text-sm text-[#241405] dark:text-slate-300 hover:text-[#722F37] transition-colors">Dessert Wine</NuxtLink></li>
+                    <li><NuxtLink to="/products?type=red" @click="toggleMobileMenu" class="text-sm text-[#241405] hover:text-[#722F37] transition-colors">Red Wine</NuxtLink></li>
+                    <li><NuxtLink to="/products?type=white" @click="toggleMobileMenu" class="text-sm text-[#241405] hover:text-[#722F37] transition-colors">White Wine</NuxtLink></li>
+                    <li><NuxtLink to="/products?type=sparkling" @click="toggleMobileMenu" class="text-sm text-[#241405] hover:text-[#722F37] transition-colors">Sparkling Wine</NuxtLink></li>
+                    <li><NuxtLink to="/products?type=dessert" @click="toggleMobileMenu" class="text-sm text-[#241405] hover:text-[#722F37] transition-colors">Dessert Wine</NuxtLink></li>
                   </ul>
                 </div>
 
                 <div>
-                  <h3 class="text-sm font-semibold text-[#241405] dark:text-[#FCFAF2] mb-4">Price Range</h3>
+                  <h3 class="text-sm font-semibold text-[#241405] mb-4">Price Range</h3>
                   <ul class="space-y-3">
-                    <li><NuxtLink to="/products?price=0-50" @click="toggleMobileMenu" class="text-sm text-[#241405] dark:text-slate-300 hover:text-[#722F37] transition-colors">Under $50</NuxtLink></li>
-                    <li><NuxtLink to="/products?price=50-100" @click="toggleMobileMenu" class="text-sm text-[#241405] dark:text-slate-300 hover:text-[#722F37] transition-colors">$50 - $100</NuxtLink></li>
-                    <li><NuxtLink to="/products?price=100-200" @click="toggleMobileMenu" class="text-sm text-[#241405] dark:text-slate-300 hover:text-[#722F37] transition-colors">$100 - $200</NuxtLink></li>
-                    <li><NuxtLink to="/products?price=200" @click="toggleMobileMenu" class="text-sm text-[#241405] dark:text-slate-300 hover:text-[#722F37] transition-colors">$200+</NuxtLink></li>
+                    <li><NuxtLink to="/products?price=0-50" @click="toggleMobileMenu" class="text-sm text-[#241405] hover:text-[#722F37] transition-colors">Under €50</NuxtLink></li>
+                    <li><NuxtLink to="/products?price=50-100" @click="toggleMobileMenu" class="text-sm text-[#241405] hover:text-[#722F37] transition-colors">€50 - €100</NuxtLink></li>
+                    <li><NuxtLink to="/products?price=100-200" @click="toggleMobileMenu" class="text-sm text-[#241405] hover:text-[#722F37] transition-colors">€100 - €200</NuxtLink></li>
+                    <li><NuxtLink to="/products?price=200" @click="toggleMobileMenu" class="text-sm text-[#241405] hover:text-[#722F37] transition-colors">€200+</NuxtLink></li>
                   </ul>
                 </div>
               </div>
             </div>
 
             <!-- Gifting Section -->
-            <div class="mb-12 border-t border-[#241405]/10 dark:border-[#FCFAF2]/10 pt-12">
-              <h2 class="text-xs uppercase tracking-[0.2em] font-medium text-[#722F37] dark:text-primary-400 mb-6">
+            <div class="mb-12 border-t border-[#241405]/10 pt-12">
+              <h2 class="text-xs uppercase tracking-[0.2em] font-medium text-[#722F37] mb-6">
                 Gifting
               </h2>
               <div class="grid md:grid-cols-3 gap-8">
                 <div>
-                  <h3 class="text-sm font-semibold text-[#241405] dark:text-[#FCFAF2] mb-4">Gift By Occasion</h3>
+                  <h3 class="text-sm font-semibold text-[#241405] mb-4">Gift By Occasion</h3>
                   <ul class="space-y-3">
-                    <li><NuxtLink to="/gifts/birthday" @click="toggleMobileMenu" class="text-sm text-[#241405] dark:text-slate-300 hover:text-[#722F37] transition-colors">Birthday Gifts</NuxtLink></li>
-                    <li><NuxtLink to="/gifts/wedding" @click="toggleMobileMenu" class="text-sm text-[#241405] dark:text-slate-300 hover:text-[#722F37] transition-colors">Wedding Gifts</NuxtLink></li>
-                    <li><NuxtLink to="/gifts/anniversary" @click="toggleMobileMenu" class="text-sm text-[#241405] dark:text-slate-300 hover:text-[#722F37] transition-colors">Anniversary Gifts</NuxtLink></li>
-                    <li><NuxtLink to="/gifts/corporate" @click="toggleMobileMenu" class="text-sm text-[#241405] dark:text-slate-300 hover:text-[#722F37] transition-colors">Corporate Gifts</NuxtLink></li>
+                    <li><NuxtLink to="/gifts/birthday" @click="toggleMobileMenu" class="text-sm text-[#241405] hover:text-[#722F37] transition-colors">Birthday Gifts</NuxtLink></li>
+                    <li><NuxtLink to="/gifts/wedding" @click="toggleMobileMenu" class="text-sm text-[#241405] hover:text-[#722F37] transition-colors">Wedding Gifts</NuxtLink></li>
+                    <li><NuxtLink to="/gifts/anniversary" @click="toggleMobileMenu" class="text-sm text-[#241405] hover:text-[#722F37] transition-colors">Anniversary Gifts</NuxtLink></li>
+                    <li><NuxtLink to="/gifts/corporate" @click="toggleMobileMenu" class="text-sm text-[#241405] hover:text-[#722F37] transition-colors">Corporate Gifts</NuxtLink></li>
                   </ul>
                 </div>
 
                 <div>
-                  <h3 class="text-sm font-semibold text-[#241405] dark:text-[#FCFAF2] mb-4">Gift Sets</h3>
+                  <h3 class="text-sm font-semibold text-[#241405] mb-4">Gift Sets</h3>
                   <ul class="space-y-3">
-                    <li><NuxtLink to="/gifts/wine-sets" @click="toggleMobileMenu" class="text-sm text-[#241405] dark:text-slate-300 hover:text-[#722F37] transition-colors">Wine Gift Sets</NuxtLink></li>
-                    <li><NuxtLink to="/gifts/tasting" @click="toggleMobileMenu" class="text-sm text-[#241405] dark:text-slate-300 hover:text-[#722F37] transition-colors">Tasting Collections</NuxtLink></li>
-                    <li><NuxtLink to="/gifts/luxury" @click="toggleMobileMenu" class="text-sm text-[#241405] dark:text-slate-300 hover:text-[#722F37] transition-colors">Luxury Gift Boxes</NuxtLink></li>
-                    <li><NuxtLink to="/gifts/gift-card" @click="toggleMobileMenu" class="text-sm text-[#241405] dark:text-slate-300 hover:text-[#722F37] transition-colors">Gift Cards</NuxtLink></li>
+                    <li><NuxtLink to="/gifts/wine-sets" @click="toggleMobileMenu" class="text-sm text-[#241405] hover:text-[#722F37] transition-colors">Wine Gift Sets</NuxtLink></li>
+                    <li><NuxtLink to="/gifts/tasting" @click="toggleMobileMenu" class="text-sm text-[#241405] hover:text-[#722F37] transition-colors">Tasting Collections</NuxtLink></li>
+                    <li><NuxtLink to="/gifts/luxury" @click="toggleMobileMenu" class="text-sm text-[#241405] hover:text-[#722F37] transition-colors">Luxury Gift Boxes</NuxtLink></li>
+                    <li><NuxtLink to="/gifts/gift-card" @click="toggleMobileMenu" class="text-sm text-[#241405] hover:text-[#722F37] transition-colors">Gift Cards</NuxtLink></li>
                   </ul>
                 </div>
               </div>
             </div>
 
             <!-- Learn Section -->
-            <div class="mb-12 border-t border-[#241405]/10 dark:border-[#FCFAF2]/10 pt-12">
-              <h2 class="text-xs uppercase tracking-[0.2em] font-medium text-[#722F37] dark:text-primary-400 mb-6">
+            <div class="mb-12 border-t border-[#241405]/10 pt-12">
+              <h2 class="text-xs uppercase tracking-[0.2em] font-medium text-[#722F37] mb-6">
                 Learn
               </h2>
               <div class="grid md:grid-cols-3 gap-8">
                 <div>
-                  <h3 class="text-sm font-semibold text-[#241405] dark:text-[#FCFAF2] mb-4">Our Story</h3>
+                  <h3 class="text-sm font-semibold text-[#241405] mb-4">Our Story</h3>
                   <ul class="space-y-3">
-                    <li><NuxtLink :to="localePath('/about')" @click="toggleMobileMenu" class="text-sm text-[#241405] dark:text-slate-300 hover:text-[#722F37] transition-colors">About Moldova Direct</NuxtLink></li>
-                    <li><NuxtLink to="/heritage" @click="toggleMobileMenu" class="text-sm text-[#241405] dark:text-slate-300 hover:text-[#722F37] transition-colors">Moldovan Heritage</NuxtLink></li>
-                    <li><NuxtLink to="/sustainability" @click="toggleMobileMenu" class="text-sm text-[#241405] dark:text-slate-300 hover:text-[#722F37] transition-colors">Sustainability</NuxtLink></li>
-                    <li><NuxtLink to="/blog" @click="toggleMobileMenu" class="text-sm text-[#241405] dark:text-slate-300 hover:text-[#722F37] transition-colors">Our Blog</NuxtLink></li>
+                    <li><NuxtLink :to="localePath('/about')" @click="toggleMobileMenu" class="text-sm text-[#241405] hover:text-[#722F37] transition-colors">About Moldova Direct</NuxtLink></li>
+                    <li><NuxtLink to="/heritage" @click="toggleMobileMenu" class="text-sm text-[#241405] hover:text-[#722F37] transition-colors">Moldovan Heritage</NuxtLink></li>
+                    <li><NuxtLink to="/sustainability" @click="toggleMobileMenu" class="text-sm text-[#241405] hover:text-[#722F37] transition-colors">Sustainability</NuxtLink></li>
+                    <li><NuxtLink to="/blog" @click="toggleMobileMenu" class="text-sm text-[#241405] hover:text-[#722F37] transition-colors">Our Blog</NuxtLink></li>
                   </ul>
                 </div>
 
                 <div>
-                  <h3 class="text-sm font-semibold text-[#241405] dark:text-[#FCFAF2] mb-4">Education</h3>
+                  <h3 class="text-sm font-semibold text-[#241405] mb-4">Education</h3>
                   <ul class="space-y-3">
-                    <li><NuxtLink to="/wine-guide" @click="toggleMobileMenu" class="text-sm text-[#241405] dark:text-slate-300 hover:text-[#722F37] transition-colors">Wine Tasting Guide</NuxtLink></li>
-                    <li><NuxtLink to="/food-pairing" @click="toggleMobileMenu" class="text-sm text-[#241405] dark:text-slate-300 hover:text-[#722F37] transition-colors">Food Pairing Guide</NuxtLink></li>
-                    <li><NuxtLink to="/regions" @click="toggleMobileMenu" class="text-sm text-[#241405] dark:text-slate-300 hover:text-[#722F37] transition-colors">Moldovan Wine Regions</NuxtLink></li>
-                    <li><NuxtLink to="/producers" @click="toggleMobileMenu" class="text-sm text-[#241405] dark:text-slate-300 hover:text-[#722F37] transition-colors">Meet the Producers</NuxtLink></li>
+                    <li><NuxtLink to="/wine-guide" @click="toggleMobileMenu" class="text-sm text-[#241405] hover:text-[#722F37] transition-colors">Wine Tasting Guide</NuxtLink></li>
+                    <li><NuxtLink to="/food-pairing" @click="toggleMobileMenu" class="text-sm text-[#241405] hover:text-[#722F37] transition-colors">Food Pairing Guide</NuxtLink></li>
+                    <li><NuxtLink to="/regions" @click="toggleMobileMenu" class="text-sm text-[#241405] hover:text-[#722F37] transition-colors">Moldovan Wine Regions</NuxtLink></li>
+                    <li><NuxtLink to="/producers" @click="toggleMobileMenu" class="text-sm text-[#241405] hover:text-[#722F37] transition-colors">Meet the Producers</NuxtLink></li>
                   </ul>
                 </div>
               </div>
             </div>
 
             <!-- Contact -->
-            <div class="border-t border-[#241405]/10 dark:border-[#FCFAF2]/10 pt-12">
+            <div class="border-t border-[#241405]/10 pt-12">
               <NuxtLink
                 :to="localePath('/contact')"
                 @click="toggleMobileMenu"
-                class="text-xs uppercase tracking-[0.2em] font-medium text-[#722F37] dark:text-primary-400 hover:opacity-70 transition-opacity"
+                class="text-xs uppercase tracking-[0.2em] font-medium text-[#722F37] hover:opacity-70 transition-opacity"
               >
                 Contact
               </NuxtLink>
-            </div>
-
-            <!-- Additional Actions -->
-            <div class="mt-16 pt-8 border-t border-[#241405]/10 dark:border-[#FCFAF2]/10 flex items-center space-x-6">
-              <LanguageSwitcher />
-              <ThemeToggle />
             </div>
 
           </nav>
@@ -259,8 +252,6 @@
 
 <script setup lang="ts">
 import { ref, onUnmounted, computed } from 'vue'
-import LanguageSwitcher from './LanguageSwitcher.vue'
-import ThemeToggle from './ThemeToggle.vue'
 
 const localePath = useLocalePath()
 const mobileMenuOpen = ref(false)
