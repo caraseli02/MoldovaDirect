@@ -1,29 +1,7 @@
 <template>
   <div class="luxury-video-hero">
-    <!-- Video Background - All Devices -->
-    <video
-      v-if="shouldShowVideo && !reducedMotion"
-      ref="videoRef"
-      autoplay
-      muted
-      loop
-      playsinline
-      :preload="isMobile ? 'none' : 'metadata'"
-      poster="https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?q=80&w=2070&auto=format&fit=crop"
-      class="hero-video"
-      :class="{ 'opacity-0': !videoLoaded, 'opacity-85': videoLoaded }"
-      @loadeddata="onVideoLoaded"
-      @error="onVideoError"
-      @canplay="onVideoCanPlay"
-    >
-      <source
-        src="https://assets.mixkit.co/videos/preview/mixkit-wine-bottles-in-a-vineyard-during-sunset-46664-large.mp4"
-        type="video/mp4"
-      >
-    </video>
-
-    <!-- Fallback Image - Reduced Motion or Video Error -->
-    <div v-if="showFallbackImage" class="fallback-image">
+    <!-- Background Image (Primary - Always Shown) -->
+    <div class="fallback-image">
       <NuxtImg
         src="https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?q=80&w=2070&auto=format&fit=crop"
         alt="Moldovan vineyard at golden hour"
@@ -33,6 +11,32 @@
         @error="handleImageError($event, 'landscape')"
       />
     </div>
+
+    <!-- Optional Video Background - Desktop Only -->
+    <video
+      v-if="shouldShowVideo && !reducedMotion && !isMobile"
+      ref="videoRef"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="none"
+      class="hero-video"
+      :class="{ 'opacity-0': !videoLoaded, 'opacity-70': videoLoaded }"
+      @loadeddata="onVideoLoaded"
+      @error="onVideoError"
+      @canplay="onVideoCanPlay"
+    >
+      <source
+        src="https://customer-ql4f2gmhm7b7owxe.cloudflarestream.com/5e3e02e038fbe9e71e23b4ac52fbf43b/downloads/default.mp4"
+        type="video/mp4"
+      >
+      <!-- Fallback to a simpler video source -->
+      <source
+        src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+        type="video/mp4"
+      >
+    </video>
 
     <!-- Dark Overlay -->
     <div class="luxury-video-overlay" />
@@ -124,12 +128,11 @@ onMounted(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
     reducedMotion.value = mediaQuery.matches
 
-    // Load video with delay (desktop: 100ms, mobile: 500ms for better performance)
-    if (!reducedMotion.value) {
-      const delay = isMobile.value ? 500 : 100
+    // Load video only on desktop after a delay for better performance
+    if (!reducedMotion.value && !isMobile.value) {
       setTimeout(() => {
         shouldShowVideo.value = true
-      }, delay)
+      }, 1000)
     }
 
     // Cleanup
@@ -137,11 +140,6 @@ onMounted(() => {
       window.removeEventListener('resize', checkMobile)
     }
   }
-})
-
-// Computed property to determine if fallback image should be shown
-const showFallbackImage = computed(() => {
-  return reducedMotion.value || videoError.value || !shouldShowVideo.value
 })
 
 // Video event handlers
@@ -192,8 +190,9 @@ const onVideoError = (event: Event) => {
   opacity: 0;
 }
 
-.opacity-85 {
-  opacity: 0.85;
+.opacity-70 {
+  opacity: 0.7;
+  z-index: 1;
 }
 
 .fallback-image {
