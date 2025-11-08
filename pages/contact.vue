@@ -140,7 +140,6 @@ const form = ref<ContactForm>({
 
 const handleSubmit = () => {
   // TODO: Implement form submission
-  console.log('Form submitted:', form.value)
   // Reset form
   form.value = {
     name: '',

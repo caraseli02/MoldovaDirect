@@ -461,7 +461,7 @@ const handleViewDetails = (order: OrderWithItems) => {
 
 const handleReorder = async (order: OrderWithItems) => {
   // TODO: Implement reorder functionality
-  console.log('Reorder:', order)
+  // Will add items from this order to cart
 }
 
 // Setup mobile features

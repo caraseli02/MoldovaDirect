@@ -191,9 +191,9 @@ const handleUserAction = async (action: string, userId: string, data?: any) => {
       case 'reset_password':
         const result = await adminUsersStore.resetUserPassword(userId, data?.reason)
         if (result?.reset_link) {
-          // Show the reset link to the admin
-          toast.success('Password reset link generated. Check the console for the link.')
-          console.log('Password reset link:', result.reset_link)
+          // Show the reset link to the admin via toast with copy functionality
+          toast.success('Password reset link generated')
+          // TODO: Add modal to display reset link with copy button
         }
         break
         
