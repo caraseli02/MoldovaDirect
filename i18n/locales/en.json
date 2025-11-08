@@ -2167,6 +2167,21 @@
     "notificationsDisabled": "Notifications disabled"
   },
   "wineStory": {
+    "hero": {
+      "badge": "Moldova's Wine Heritage",
+      "title": "Discover the Story Behind Every Bottle",
+      "subtitle": "Explore Moldova's ancient winemaking traditions, meet our passionate producers, and discover perfect wine pairings"
+    },
+    "seo": {
+      "title": "Moldova's Wine Story | Heritage & Tradition",
+      "description": "Discover Moldova's rich winemaking heritage, meet our passionate producers, explore regional terroirs, and find perfect wine pairings"
+    },
+    "cta": {
+      "title": "Ready to Experience Moldova's Finest Wines?",
+      "subtitle": "Explore our carefully curated selection of premium Moldovan wines",
+      "shopButton": "Shop Wines",
+      "aboutButton": "Learn More About Us"
+    },
     "producers": {
       "title": "Meet Our Winemakers",
       "subtitle": "Stories from Moldova's Finest Producers",

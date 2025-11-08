@@ -45,14 +45,38 @@
     <!-- Premium collections showcase -->
     <HomeCollectionsShowcase />
 
-    <!-- Wine Regions Map - Interactive Moldova regions -->
-    <HomeWineRegionsMap />
-
     <!-- Product recommendation quiz (Jones Road/Beardbrand pattern) -->
     <HomeProductQuiz />
 
     <!-- Wine & Food Pairings - Educational content -->
     <HomePairingGuidesSection />
+
+    <!-- Wine Story CTA - Link to full heritage page -->
+    <section class="bg-gradient-to-br from-primary/5 via-terracotta/5 to-gold-50 py-16 md:py-20">
+      <div class="container">
+        <div
+          class="mx-auto max-w-3xl text-center"
+        >
+          <div class="mb-4 inline-flex items-center gap-2 rounded-full bg-gold-500/10 px-4 py-2 text-sm font-semibold text-gold-700">
+            <commonIcon name="lucide:wine" class="h-4 w-4" />
+            Discover Our Heritage
+          </div>
+          <h2 class="text-3xl font-bold text-slate-900 sm:text-4xl">
+            The Story Behind Every Bottle
+          </h2>
+          <p class="mt-4 text-lg text-slate-600">
+            Explore Moldova's 7,000-year winemaking tradition, meet our passionate producers, and discover the regions that make our wines unique
+          </p>
+          <NuxtLink
+            :to="localePath('/wine-story')"
+            class="mt-8 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-primary to-primary/90 px-8 py-4 font-semibold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+          >
+            Explore Wine Heritage
+            <commonIcon name="lucide:arrow-right" class="h-5 w-5" />
+          </NuxtLink>
+        </div>
+      </div>
+    </section>
 
     <!-- Social proof and trust signals -->
     <HomeSocialProofSection
@@ -60,9 +84,6 @@
       :logos="partnerLogos"
       :testimonials="testimonials"
     />
-
-    <!-- Production Process Timeline - Quality & craft story -->
-    <HomeProductionProcessSection />
 
     <!-- User-generated content gallery (Rare Beauty pattern) -->
     <HomeUgcGallery />
@@ -78,9 +99,6 @@
 
     <!-- Certification badges (Allbirds pattern) -->
     <HomeCertificationBar />
-
-    <!-- Gift Philosophy - Premium gifting story -->
-    <HomeGiftPhilosophySection />
 
     <!-- Newsletter signup -->
     <HomeNewsletterSignup />
