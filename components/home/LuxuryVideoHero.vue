@@ -1,116 +1,93 @@
 <template>
-  <div class="luxury-video-hero">
-    <!-- Background Image (Primary - Always Shown) -->
-    <div class="fallback-image">
-      <NuxtImg
-        src="https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?q=80&w=2070&auto=format&fit=crop"
-        alt="Moldovan vineyard at golden hour"
-        class="w-full h-full object-cover"
-        loading="eager"
-        preload
-        @error="handleImageError($event, 'landscape')"
-      />
-    </div>
+  <div class="luxury-video-hero relative overflow-hidden">
+    <!-- Background Video/Image (To'ak Style) -->
+    <figure class="video-container">
+      <!-- Poster Image (Always Visible) -->
+      <picture>
+        <img
+          src="https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?q=80&w=2070&auto=format&fit=crop"
+          fetchpriority="high"
+          decoding="async"
+          alt="Moldovan vineyard at golden hour"
+          class="poster-image"
+        />
+      </picture>
 
-    <!-- Optional Video Background - Desktop Only -->
-    <video
-      v-if="shouldShowVideo && !reducedMotion && !isMobile"
-      ref="videoRef"
-      autoplay
-      muted
-      loop
-      playsinline
-      preload="none"
-      class="hero-video"
-      :class="{ 'opacity-0': !videoLoaded, 'opacity-70': videoLoaded }"
-      @loadeddata="onVideoLoaded"
-      @error="onVideoError"
-      @canplay="onVideoCanPlay"
-    >
-      <source
-        src="https://customer-ql4f2gmhm7b7owxe.cloudflarestream.com/5e3e02e038fbe9e71e23b4ac52fbf43b/downloads/default.mp4"
-        type="video/mp4"
+      <!-- Video (Desktop Only - To'ak Style) -->
+      <video
+        v-if="shouldShowVideo && !reducedMotion && !isMobile"
+        ref="videoRef"
+        preload="none"
+        autoplay
+        muted
+        loop
+        playsinline
+        :poster="'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?q=80&w=2070&auto=format&fit=crop'"
+        class="hero-video"
+        @loadeddata="onVideoLoaded"
+        @error="onVideoError"
+        @canplay="onVideoCanPlay"
       >
-      <!-- Fallback to a simpler video source -->
-      <source
-        src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
-        type="video/mp4"
-      >
-    </video>
+        <source
+          data-src="https://customer-ql4f2gmhm7b7owxe.cloudflarestream.com/5e3e02e038fbe9e71e23b4ac52fbf43b/downloads/default.mp4"
+          type="video/mp4"
+        />
+        <source
+          data-src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+          type="video/mp4"
+        />
+      </video>
+    </figure>
 
-    <!-- Dark Overlay -->
-    <div class="luxury-video-overlay" />
-
-    <!-- Hero Content -->
-    <div class="luxury-hero-content px-4 sm:px-6 lg:px-8">
-      <div
-        v-motion
-        :initial="{ opacity: 0, y: 40 }"
-        :enter="{ opacity: 1, y: 0, transition: { delay: 300, duration: 1000 } }"
-        class="max-w-4xl mx-auto"
-      >
-        <p class="luxury-eyebrow text-white mb-4 md:mb-6 text-xs md:text-sm">
-          {{ $t('luxury.hero.eyebrow') || 'Artisan Heritage Since 1950' }}
-        </p>
-
-        <h1 class="luxury-headline text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 md:mb-6 leading-tight">
-          {{ $t('luxury.hero.title') || 'From Moldovan Soil to Spanish Tables' }}
+    <!-- Hero Content (To'ak Style - Absolutely Positioned) -->
+    <div class="hero-content">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Main Heading (To'ak Style - Split) -->
+        <h1
+          class="hero-title-line1 text-white font-light mb-2"
+          style="opacity: 1.0;"
+        >
+          {{ $t('luxury.hero.title_line1') || 'From Moldovan Soil' }}
         </h1>
 
-        <p class="luxury-subhead text-white/90 text-base sm:text-lg md:text-xl mb-8 md:mb-10 max-w-2xl mx-auto">
-          {{ $t('luxury.hero.subtitle') || 'Curated wines and gourmet treasures from the heart of Moldova' }}
-        </p>
+        <div class="hero-subtitle-section">
+          <h1
+            class="hero-title-line2 text-white font-light mb-6"
+            style="opacity: 1.0;"
+          >
+            {{ $t('luxury.hero.title_line2') || 'to Spanish Tables' }}
+          </h1>
 
-        <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-          <NuxtLink
-            to="/products"
-            class="luxury-btn text-sm md:text-base px-6 py-3 md:px-8 md:py-4 w-full sm:w-auto text-center min-h-[48px] flex items-center justify-center"
+          <p
+            class="hero-description text-white/90 mb-8"
+            style="opacity: 1.0;"
           >
-            {{ $t('luxury.hero.cta_primary') || 'Discover Our Story' }}
-          </NuxtLink>
-          <NuxtLink
-            to="/products?filter=featured"
-            class="luxury-btn luxury-btn-dark text-sm md:text-base px-6 py-3 md:px-8 md:py-4 w-full sm:w-auto text-center min-h-[48px] flex items-center justify-center"
-          >
-            {{ $t('luxury.hero.cta_secondary') || 'Shop Collection' }}
-          </NuxtLink>
-        </div>
-      </div>
+            {{ $t('luxury.hero.description') || 'Experience premium Moldovan wines and artisan gourmet products in their finest form—from the heart of Moldova.' }}
+          </p>
 
-      <!-- Scroll Indicator - Hidden on mobile -->
-      <div
-        v-motion
-        :initial="{ opacity: 0 }"
-        :enter="{ opacity: 1, transition: { delay: 1500, duration: 800 } }"
-        class="absolute bottom-8 md:bottom-12 left-1/2 transform -translate-x-1/2 hidden sm:block"
-      >
-        <div class="animate-luxury-pulse">
-          <svg
-            class="w-6 h-6 text-white/60"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M19 14l-7 7m0 0l-7-7m7 7V3"
-            />
-          </svg>
+          <p class="hero-cta">
+            <NuxtLink
+              to="/products"
+              class="cta-button"
+            >
+              {{ $t('luxury.hero.cta') || 'Shop collection now' }}
+            </NuxtLink>
+          </p>
         </div>
       </div>
     </div>
+
+    <!-- Scroll Button (To'ak Style) -->
+    <a href="#next-section" class="scroll-button">
+      <span class="scroll-text">Scroll</span>
+    </a>
   </div>
 </template>
 
 <script setup lang="ts">
-const { handleImageError } = useImageFallback()
-
 const videoRef = ref<HTMLVideoElement | null>(null)
 const reducedMotion = ref(false)
 const videoLoaded = ref(false)
-const videoError = ref(false)
 const isMobile = ref(false)
 const shouldShowVideo = ref(false)
 
@@ -128,11 +105,23 @@ onMounted(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
     reducedMotion.value = mediaQuery.matches
 
-    // Load video only on desktop after a delay for better performance
+    // Load video only on desktop after a delay (To'ak style)
     if (!reducedMotion.value && !isMobile.value) {
       setTimeout(() => {
         shouldShowVideo.value = true
-      }, 1000)
+
+        // Load video source after mount (To'ak style lazy loading)
+        if (videoRef.value) {
+          const sources = videoRef.value.querySelectorAll('source')
+          sources.forEach((source) => {
+            const dataSrc = source.getAttribute('data-src')
+            if (dataSrc) {
+              source.setAttribute('src', dataSrc)
+            }
+          })
+          videoRef.value.load()
+        }
+      }, 500)
     }
 
     // Cleanup
@@ -145,77 +134,201 @@ onMounted(() => {
 // Video event handlers
 const onVideoLoaded = () => {
   videoLoaded.value = true
-  if (process.client) {
-    console.info('Hero video loaded successfully')
-  }
 }
 
 const onVideoCanPlay = () => {
-  // Ensure video plays on modern browsers
   if (videoRef.value) {
     videoRef.value.play().catch((err) => {
-      console.warn('Video autoplay failed:', err)
-      // Fallback to image if autoplay is blocked
-      videoError.value = true
+      console.warn('Video autoplay prevented:', err)
     })
   }
 }
 
-const onVideoError = (event: Event) => {
-  console.error('Hero video failed to load, using fallback image')
-  videoError.value = true
-
-  // Hide the broken video element
-  if (videoRef.value) {
-    videoRef.value.style.display = 'none'
-  }
+const onVideoError = () => {
+  console.warn('Video failed to load, showing poster image')
 }
 </script>
 
 <style scoped>
+/* Hero Container (To'ak Style) */
+.luxury-video-hero {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: #241405;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Video Container (To'ak Style) */
+.video-container {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* Poster Image (To'ak Style - Always Visible) */
+.poster-image {
+  position: absolute;
+  top: 50%;
+  left: 60%;
+  transform: translate(-60%, -50%);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+/* Video Element (To'ak Style) */
 .hero-video {
   position: absolute;
   top: 50%;
-  left: 50%;
-  min-width: 100%;
-  min-height: 100%;
-  width: auto;
-  height: auto;
-  transform: translate(-50%, -50%);
+  left: 60%;
+  transform: translate(-60%, -50%);
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  transition: opacity 0.6s ease-in-out;
-}
-
-.opacity-0 {
-  opacity: 0;
-}
-
-.opacity-70 {
-  opacity: 0.7;
   z-index: 1;
 }
 
-.fallback-image {
+/* Hero Content (To'ak Style - Absolutely Positioned) */
+.hero-content {
   position: absolute;
-  top: 0;
   left: 0;
+  top: 61%;
+  transform: translate(0, -61%);
+  z-index: 10;
   width: 100%;
-  height: 100%;
+  text-align: left;
 }
 
-.luxury-eyebrow {
+/* Typography (To'ak Style) */
+.hero-title-line1,
+.hero-title-line2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(2.5rem, 8vw, 6rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.hero-description {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: clamp(1rem, 2vw, 1.125rem);
+  line-height: 1.6;
+  max-width: 600px;
+}
+
+/* CTA Button (To'ak Style) */
+.hero-cta {
+  margin-top: 20px;
+}
+
+.cta-button {
+  display: inline-block;
+  padding: 14px 32px;
+  background-color: #FCFAF2;
+  color: #241405;
   font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: 0.15em;
+  font-weight: 500;
   text-transform: uppercase;
-  color: var(--luxury-black);
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 1px solid #FCFAF2;
 }
 
-/* Mobile viewport optimization */
-@media (max-width: 640px) {
-  .luxury-video-hero {
-    min-height: 100vh;
-    min-height: 100dvh; /* Dynamic viewport height for mobile browsers */
+.cta-button:hover {
+  background-color: transparent;
+  color: #FCFAF2;
+  border-color: #FCFAF2;
+}
+
+/* Scroll Button (To'ak Style) */
+.scroll-button {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  text-decoration: none;
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .scroll-button {
+    display: block;
+  }
+}
+
+.scroll-text {
+  display: block;
+  color: #FCFAF2;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+  position: relative;
+  padding-bottom: 24px;
+}
+
+.scroll-text::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: 16px;
+  background-color: #FCFAF2;
+  animation: scroll-indicator 2s ease-in-out infinite;
+}
+
+@keyframes scroll-indicator {
+  0%, 100% {
+    opacity: 0.4;
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(8px);
+  }
+}
+
+.scroll-button:hover .scroll-text {
+  opacity: 1;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 767px) {
+  .hero-content {
+    top: 50%;
+    transform: translate(0, -50%);
+    text-align: center;
+  }
+
+  .hero-description,
+  .hero-cta {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .poster-image,
+  .hero-video {
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* Tablet Adjustments */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hero-title-line1,
+  .hero-title-line2 {
+    font-size: clamp(3rem, 6vw, 4.5rem);
   }
 }
 </style>
