@@ -43,9 +43,12 @@
 
         <!-- Product showcase -->
         <div class="relative aspect-[4/3] rounded-[18px] overflow-hidden bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/20 dark:to-pink-900/20 mb-10">
-          <div class="absolute inset-0 flex items-center justify-center">
-            <div class="text-[120px]">🍷</div>
-          </div>
+          <NuxtImg
+            src="/placeholder-product.svg"
+            alt="Premium Moldovan Wines"
+            class="w-full h-full object-cover"
+            loading="lazy"
+          />
         </div>
 
         <div class="text-center">
@@ -75,9 +78,12 @@
         </div>
 
         <div class="relative aspect-[4/3] rounded-[18px] overflow-hidden bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-900/20 dark:to-orange-900/20 mb-10">
-          <div class="absolute inset-0 flex items-center justify-center">
-            <div class="text-[120px]">🧀</div>
-          </div>
+          <NuxtImg
+            src="/placeholder-product.svg"
+            alt="Artisan Moldovan Foods"
+            class="w-full h-full object-cover"
+            loading="lazy"
+          />
         </div>
 
         <div class="text-center">
@@ -107,9 +113,12 @@
         </div>
 
         <div class="relative aspect-[4/3] rounded-[18px] overflow-hidden bg-gradient-to-br from-rose-100 to-pink-100 dark:from-rose-900/20 dark:to-pink-900/20 mb-10">
-          <div class="absolute inset-0 flex items-center justify-center">
-            <div class="text-[120px]">🎁</div>
-          </div>
+          <NuxtImg
+            src="/placeholder-product.svg"
+            alt="Perfect Gift Hampers"
+            class="w-full h-full object-cover"
+            loading="lazy"
+          />
         </div>
 
         <div class="text-center">
