@@ -68,7 +68,7 @@
       </div>
 
       <!-- Short Bio -->
-      <p class="mt-4 line-clamp-3 text-sm leading-relaxed text-slate-600">
+      <p class="mt-4 line-clamp-3 text-base leading-relaxed text-slate-600">
         {{ getLocalizedText(producer.shortBio) }}
       </p>
 

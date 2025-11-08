@@ -1,5 +1,5 @@
 <template>
-  <section class="relative overflow-hidden bg-slate-900 py-16 text-white md:py-24">
+  <section class="relative overflow-hidden bg-slate-900 py-20 text-white md:py-32">
     <!-- Background Pattern -->
     <div class="absolute inset-0 opacity-10">
       <div class="absolute h-full w-full bg-[radial-gradient(circle_at_30%_50%,_rgba(255,255,255,0.15),_transparent_50%)]"></div>
@@ -18,13 +18,13 @@
         }"
         class="mx-auto max-w-3xl text-center"
       >
-        <h2 class="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
+        <h2 class="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
           {{ t('wineStory.giftPhilosophy.title') }}
         </h2>
-        <p class="mt-4 text-xl text-white/80">
+        <p class="mt-6 text-xl leading-relaxed text-white/80">
           {{ t('wineStory.giftPhilosophy.subtitle') }}
         </p>
-        <p class="mx-auto mt-6 max-w-2xl leading-relaxed text-white/70">
+        <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-white/70">
           {{ t('wineStory.giftPhilosophy.description') }}
         </p>
       </div>

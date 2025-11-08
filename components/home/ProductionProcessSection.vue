@@ -1,5 +1,5 @@
 <template>
-  <section class="relative overflow-hidden bg-white py-16 md:py-24">
+  <section class="relative overflow-hidden bg-white py-20 md:py-32">
     <div class="container">
       <!-- Section Header -->
       <div
@@ -12,10 +12,10 @@
         }"
         class="mx-auto max-w-3xl text-center"
       >
-        <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+        <h2 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl md:text-6xl">
           {{ t('wineStory.production.title') }}
         </h2>
-        <p class="mt-4 text-lg text-slate-600">
+        <p class="mt-6 text-xl leading-relaxed text-slate-600">
           {{ t('wineStory.production.subtitle') }}
         </p>
       </div>
@@ -56,7 +56,7 @@
               <h3 class="mt-4 text-2xl font-bold text-slate-900">
                 {{ t('wineStory.production.steps.harvest.title') }}
               </h3>
-              <p class="mt-2 leading-relaxed text-slate-600">
+              <p class="mt-2 text-lg leading-relaxed text-slate-600">
                 {{ t('wineStory.production.steps.harvest.description') }}
               </p>
             </div>
@@ -102,7 +102,7 @@
               <h3 class="mt-4 text-2xl font-bold text-slate-900">
                 {{ t('wineStory.production.steps.crushing.title') }}
               </h3>
-              <p class="mt-2 leading-relaxed text-slate-600">
+              <p class="mt-2 text-lg leading-relaxed text-slate-600">
                 {{ t('wineStory.production.steps.crushing.description') }}
               </p>
             </div>
@@ -128,7 +128,7 @@
               <h3 class="mt-4 text-2xl font-bold text-slate-900">
                 {{ t('wineStory.production.steps.aging.title') }}
               </h3>
-              <p class="mt-2 leading-relaxed text-slate-600">
+              <p class="mt-2 text-lg leading-relaxed text-slate-600">
                 {{ t('wineStory.production.steps.aging.description') }}
               </p>
             </div>
@@ -174,7 +174,7 @@
               <h3 class="mt-4 text-2xl font-bold text-slate-900">
                 {{ t('wineStory.production.steps.bottling.title') }}
               </h3>
-              <p class="mt-2 leading-relaxed text-slate-600">
+              <p class="mt-2 text-lg leading-relaxed text-slate-600">
                 {{ t('wineStory.production.steps.bottling.description') }}
               </p>
             </div>
@@ -200,7 +200,7 @@
               <h3 class="mt-4 text-2xl font-bold text-slate-900">
                 {{ t('wineStory.production.steps.selection.title') }}
               </h3>
-              <p class="mt-2 leading-relaxed text-slate-600">
+              <p class="mt-2 text-lg leading-relaxed text-slate-600">
                 {{ t('wineStory.production.steps.selection.description') }}
               </p>
             </div>
@@ -246,7 +246,7 @@
               <h3 class="mt-4 text-2xl font-bold text-slate-900">
                 {{ t('wineStory.production.steps.delivery.title') }}
               </h3>
-              <p class="mt-2 leading-relaxed text-slate-600">
+              <p class="mt-2 text-lg leading-relaxed text-slate-600">
                 {{ t('wineStory.production.steps.delivery.description') }}
               </p>
             </div>
@@ -273,7 +273,7 @@
           <h3 class="text-2xl font-bold text-slate-900">
             {{ t('wineStory.production.traditions.title') }}
           </h3>
-          <p class="mt-4 leading-relaxed text-slate-700">
+          <p class="mt-4 text-lg leading-relaxed text-slate-700">
             {{ t('wineStory.production.traditions.description') }}
           </p>
         </div>
@@ -295,7 +295,7 @@
           <h3 class="text-2xl font-bold text-slate-900">
             {{ t('wineStory.production.sustainability.title') }}
           </h3>
-          <p class="mt-4 leading-relaxed text-slate-700">
+          <p class="mt-4 text-lg leading-relaxed text-slate-700">
             {{ t('wineStory.production.sustainability.description') }}
           </p>
         </div>

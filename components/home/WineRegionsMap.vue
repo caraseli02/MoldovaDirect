@@ -1,5 +1,5 @@
 <template>
-  <section class="relative overflow-hidden bg-white py-16 md:py-24">
+  <section class="relative overflow-hidden bg-white py-20 md:py-32">
     <div class="container">
       <!-- Section Header -->
       <div
@@ -12,10 +12,10 @@
         }"
         class="mx-auto max-w-3xl text-center"
       >
-        <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+        <h2 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl md:text-6xl">
           {{ t('wineStory.regions.title') }}
         </h2>
-        <p class="mt-4 text-lg text-slate-600">
+        <p class="mt-6 text-xl leading-relaxed text-slate-600">
           {{ t('wineStory.regions.subtitle') }}
         </p>
       </div>

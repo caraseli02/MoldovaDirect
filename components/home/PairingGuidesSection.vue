@@ -1,5 +1,5 @@
 <template>
-  <section class="relative overflow-hidden bg-gradient-to-b from-slate-50 to-white py-16 md:py-24">
+  <section class="relative overflow-hidden bg-gradient-to-b from-slate-50 to-white py-20 md:py-32">
     <!-- Background Decoration -->
     <div class="absolute inset-0 opacity-5">
       <div class="absolute right-0 top-0 h-96 w-96 rounded-full bg-primary blur-3xl"></div>
@@ -17,10 +17,10 @@
         }"
         class="mx-auto max-w-3xl text-center"
       >
-        <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+        <h2 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl md:text-6xl">
           {{ t('wineStory.pairings.title') }}
         </h2>
-        <p class="mt-4 text-lg text-slate-600">
+        <p class="mt-6 text-xl leading-relaxed text-slate-600">
           {{ t('wineStory.pairings.subtitle') }}
         </p>
       </div>

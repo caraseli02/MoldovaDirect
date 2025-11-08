@@ -79,7 +79,7 @@
           <commonIcon name="lucide:lightbulb" class="h-3.5 w-3.5" />
           {{ t('wineStory.pairings.whyItWorks') }}
         </div>
-        <p class="line-clamp-2 text-sm leading-relaxed text-slate-600">
+        <p class="line-clamp-2 text-base leading-relaxed text-slate-600">
           {{ getLocalizedText(pairing.pairingReason) }}
         </p>
       </div>
