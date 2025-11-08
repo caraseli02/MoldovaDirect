@@ -480,14 +480,5 @@ input[type="radio"]:checked {
   border-color: rgb(37, 99, 235);
 }
 
-/* Loading animation */
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.animate-spin {
-  animation: spin 1s linear infinite;
-}
+/* Removed duplicate @keyframes spin - using Tailwind's built-in animate-spin */
 </style>

@@ -257,22 +257,7 @@ const getMethodConditions = (method: ShippingMethod): string => {
   }
 }
 
-/* Loading animation */
-.animate-pulse {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-@keyframes pulse {
-
-  0%,
-  100% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: .5;
-  }
-}
+/* Removed duplicate @keyframes pulse - using Tailwind's built-in animate-pulse */
 
 /* Error state styling */
 .shipping-method-selector .bg-red-50 {

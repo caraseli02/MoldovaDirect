@@ -112,16 +112,5 @@ const statusTextClass = computed(() => {
   transition: transform 0.2s ease-out;
 }
 
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.animate-spin {
-  animation: spin 1s linear infinite;
-}
+/* Removed duplicate @keyframes spin - using Tailwind's built-in animate-spin */
 </style>
