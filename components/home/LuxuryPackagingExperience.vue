@@ -283,57 +283,73 @@ const unboxingImages = [
   position: absolute;
   top: 45%;
   transform: translateY(-50%);
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  background: white;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  border: none;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(114, 47, 55, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #722F37;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
   z-index: 10;
+  opacity: 0.9;
 }
 
 .carousel-arrow:hover {
-  background: #722F37;
+  background: rgba(114, 47, 55, 0.98);
   color: white;
-  box-shadow: 0 6px 16px rgba(114, 47, 55, 0.3);
+  box-shadow: 0 4px 12px rgba(114, 47, 55, 0.25);
+  opacity: 1;
+  transform: translateY(-50%) scale(1.05);
 }
 
 .carousel-arrow:active {
-  transform: translateY(-50%) scale(0.95);
+  transform: translateY(-50%) scale(0.98);
 }
 
 .carousel-arrow-left {
-  left: 8px;
+  left: -24px;
 }
 
 .carousel-arrow-right {
-  right: 8px;
+  right: -24px;
+}
+
+/* Show arrows inside on mobile */
+@media (max-width: 768px) {
+  .carousel-arrow-left {
+    left: 12px;
+  }
+  .carousel-arrow-right {
+    right: 12px;
+  }
 }
 
 .carousel-dot {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background-color: rgba(114, 47, 55, 0.2);
+  background-color: rgba(114, 47, 55, 0.25);
   border: none;
   padding: 0;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .carousel-dot.active {
   background-color: #722F37;
-  width: 24px;
-  border-radius: 4px;
+  width: 28px;
+  border-radius: 3px;
+  transform: scale(1);
 }
 
 .carousel-dot:hover:not(.active) {
-  background-color: rgba(114, 47, 55, 0.4);
+  background-color: rgba(114, 47, 55, 0.5);
+  transform: scale(1.3);
 }
 </style>
