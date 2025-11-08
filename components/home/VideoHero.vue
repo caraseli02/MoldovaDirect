@@ -3,7 +3,7 @@
     <!-- Optimized min-height for mobile-first (60vh mobile, 75vh desktop) -->
     <div class="relative flex min-h-[60vh] w-full items-center md:min-h-[75vh]">
       <!-- Video Background (Optional - controlled by showVideo prop) -->
-      <div v-if="showVideo" class="absolute inset-0 z-0">
+      <div v-if="showVideo" class="absolute inset-0 z-0" aria-hidden="true">
         <video
           ref="videoRef"
           autoplay
@@ -12,6 +12,7 @@
           playsinline
           :poster="posterImage"
           class="h-full w-full object-cover"
+          aria-hidden="true"
           @loadeddata="videoLoaded = true"
         >
           <source v-if="videoWebM" :src="videoWebM" type="video/webm" />

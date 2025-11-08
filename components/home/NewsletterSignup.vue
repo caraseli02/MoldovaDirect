@@ -14,6 +14,8 @@
             type="email"
             required
             :disabled="loading"
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+            title="Please enter a valid email address"
             class="w-full rounded-full border border-gray-300 bg-white px-6 py-3 text-base text-gray-900 outline-none transition focus:border-primary-500 focus:ring-2 focus:ring-primary-200 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
             :placeholder="t('home.newsletter.placeholder')"
           />

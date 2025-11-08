@@ -29,10 +29,15 @@
         <div
           v-if="currentStep > 0 && currentStep <= questions.length"
           class="mt-8"
+          role="progressbar"
+          :aria-valuenow="currentStep"
+          :aria-valuemin="1"
+          :aria-valuemax="questions.length"
+          :aria-label="`Question ${currentStep} of ${questions.length}`"
         >
           <div class="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
             <span>{{ t('home.productQuiz.progress') }}</span>
-            <span class="font-semibold">{{ currentStep }}/{{ questions.length }}</span>
+            <span class="font-semibold" aria-live="polite">{{ currentStep }}/{{ questions.length }}</span>
           </div>
           <div class="mt-2 h-2 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-800">
             <div

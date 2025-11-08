@@ -5,8 +5,8 @@
         <h2 class="text-4xl font-bold md:text-5xl lg:text-6xl tracking-tight">{{ t('home.howItWorks.title') }}</h2>
         <p class="mt-4 text-sm md:text-base text-gray-600 dark:text-gray-400">{{ t('home.howItWorks.subtitle') }}</p>
       </div>
-      <div class="mt-12 grid gap-8 md:grid-cols-3 relative">
-        <div
+      <ol class="mt-12 grid gap-8 md:grid-cols-3 relative list-none">
+        <li
           v-for="(step, index) in steps"
           :key="step.key"
           class="step-card relative overflow-hidden rounded-3xl bg-white p-8 text-left shadow-lg transition hover:-translate-y-1 hover:shadow-xl dark:bg-gray-950"
@@ -20,8 +20,8 @@
             <h3 class="mt-2 text-xl font-semibold">{{ step.title }}</h3>
             <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">{{ step.description }}</p>
           </div>
-        </div>
-      </div>
+        </li>
+      </ol>
     </div>
   </section>
 </template>
