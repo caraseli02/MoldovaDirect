@@ -32,6 +32,7 @@
               :alt="artisan.name"
               class="w-full h-56 sm:h-64 md:h-72 lg:h-80 object-cover"
               loading="lazy"
+              @error="handleImageError($event, 'portrait')"
             />
             <div class="luxury-image-overlay" />
           </div>
@@ -71,6 +72,8 @@
 </template>
 
 <script setup lang="ts">
+const { handleImageError } = useImageFallback()
+
 const artisans = [
   {
     id: 1,

@@ -1,0 +1,20 @@
+<svg width="600" height="800" viewBox="0 0 600 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Luxury warm background -->
+  <rect width="600" height="800" fill="#FAF8F5"/>
+
+  <!-- Portrait placeholder icon -->
+  <circle cx="300" cy="280" r="80" fill="#722F37" opacity="0.15"/>
+  <circle cx="300" cy="280" r="80" stroke="#722F37" stroke-width="3" fill="none"/>
+  <circle cx="300" cy="260" r="30" fill="#722F37" opacity="0.2"/>
+  <path d="M240 320 Q240 280 260 280 Q280 280 280 260 Q280 280 300 280 Q320 280 320 260 Q320 280 340 280 Q360 280 360 320"
+        fill="#722F37" opacity="0.2"/>
+
+  <!-- Decorative elements -->
+  <line x1="250" y1="420" x2="350" y2="420" stroke="#722F37" stroke-width="2" opacity="0.3"/>
+  <line x1="270" y1="450" x2="330" y2="450" stroke="#722F37" stroke-width="2" opacity="0.3"/>
+
+  <!-- "Image unavailable" text -->
+  <text x="300" y="520" font-family="serif" font-size="16" fill="#8B4513" text-anchor="middle" opacity="0.6">
+    Portrait unavailable
+  </text>
+</svg>

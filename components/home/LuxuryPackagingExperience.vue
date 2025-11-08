@@ -28,6 +28,7 @@
               alt="Luxury gift hamper packaging"
               class="w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] object-cover"
               loading="lazy"
+              @error="handleImageError($event, 'product')"
             />
             <div class="absolute inset-0 bg-gradient-to-t from-luxury-dark-chocolate/20 to-transparent" />
           </div>
@@ -120,6 +121,7 @@
             :alt="image.alt"
             class="w-full h-48 sm:h-56 md:h-64 lg:h-72 object-cover"
             loading="lazy"
+            @error="handleImageError($event, 'product')"
           />
           <div class="absolute inset-0 bg-luxury-black/10 md:bg-luxury-black/0 md:group-hover:bg-luxury-black/20 transition-colors duration-300" />
           <div class="absolute bottom-0 left-0 right-0 p-3 sm:p-4 md:p-6 bg-gradient-to-t from-luxury-black/80 to-transparent">
@@ -134,6 +136,8 @@
 </template>
 
 <script setup lang="ts">
+const { handleImageError } = useImageFallback()
+
 // Mock unboxing gallery images
 const unboxingImages = [
   {

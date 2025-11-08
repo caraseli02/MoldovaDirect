@@ -9,6 +9,7 @@
       playsinline
       class="hero-video"
       @loadeddata="videoLoaded = true"
+      @error="handleVideoError($event, 'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?q=80&w=2070')"
     >
       <source
         src="https://assets.mixkit.co/videos/preview/mixkit-wine-bottles-in-a-vineyard-during-sunset-46664-large.mp4"
@@ -24,6 +25,7 @@
         class="w-full h-full object-cover"
         loading="eager"
         preload
+        @error="handleImageError($event, 'landscape')"
       />
     </div>
 
@@ -94,6 +96,8 @@
 </template>
 
 <script setup lang="ts">
+const { handleImageError, handleVideoError } = useImageFallback()
+
 const reducedMotion = ref(false)
 const videoLoaded = ref(false)
 

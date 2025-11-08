@@ -46,6 +46,7 @@
                 :alt="testimonial.name"
                 class="w-full h-full object-cover"
                 loading="lazy"
+                @error="handleImageError($event, 'avatar')"
               />
             </div>
 
@@ -88,6 +89,7 @@
               :alt="photo.alt"
               class="w-full h-full object-cover"
               loading="lazy"
+              @error="handleImageError($event, 'landscape')"
             />
             <div class="luxury-image-overlay" />
           </div>
@@ -98,6 +100,8 @@
 </template>
 
 <script setup lang="ts">
+const { handleImageError } = useImageFallback()
+
 const testimonials = [
   {
     id: 1,

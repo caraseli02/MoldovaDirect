@@ -1,0 +1,16 @@
+<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Luxury warm background -->
+  <rect width="400" height="400" fill="#FAF8F5"/>
+
+  <!-- Avatar placeholder icon -->
+  <circle cx="200" cy="200" r="150" fill="#722F37" opacity="0.08"/>
+  <circle cx="200" cy="200" r="150" stroke="#722F37" stroke-width="3" fill="none"/>
+
+  <!-- Simple user icon -->
+  <circle cx="200" cy="170" r="50" fill="#722F37" opacity="0.15"/>
+  <circle cx="200" cy="170" r="50" stroke="#722F37" stroke-width="3" fill="none"/>
+
+  <!-- Shoulders -->
+  <path d="M100 300 Q100 250 150 250 Q200 250 200 220 Q200 250 250 250 Q300 250 300 300"
+        fill="#722F37" opacity="0.15" stroke="#722F37" stroke-width="3"/>
+</svg>

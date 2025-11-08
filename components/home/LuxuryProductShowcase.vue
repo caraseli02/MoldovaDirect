@@ -50,6 +50,7 @@
               :alt="product.name"
               class="w-full h-80 object-cover transform transition-transform duration-700 group-hover:scale-110"
               loading="lazy"
+              @error="handleImageError($event, 'product')"
             />
 
             <!-- Badge -->
@@ -151,6 +152,8 @@
 </template>
 
 <script setup lang="ts">
+const { handleImageError } = useImageFallback()
+
 const featuredProducts = [
   {
     id: 1,

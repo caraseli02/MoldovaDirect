@@ -66,6 +66,7 @@
               alt="Moldovan vineyard landscape"
               class="w-full h-[250px] sm:h-[350px] md:h-[450px] lg:h-[600px] object-cover"
               loading="lazy"
+              @error="handleImageError($event, 'landscape')"
             />
             <div class="luxury-image-overlay" />
           </div>
@@ -95,7 +96,7 @@
 </template>
 
 <script setup lang="ts">
-// Origin story content
+const { handleImageError } = useImageFallback()
 </script>
 
 <style scoped>

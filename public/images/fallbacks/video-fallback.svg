@@ -1,0 +1,31 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Luxury warm background -->
+  <rect width="1920" height="1080" fill="#FAF8F5"/>
+
+  <!-- Vineyard silhouette -->
+  <path d="M0 700 Q480 600 960 700 Q1440 800 1920 700 L1920 1080 L0 1080 Z" fill="#722F37" opacity="0.08"/>
+  <path d="M0 800 Q640 700 1280 800 Q1600 850 1920 800 L1920 1080 L0 1080 Z" fill="#722F37" opacity="0.06"/>
+
+  <!-- Large play button -->
+  <circle cx="960" cy="540" r="120" fill="#722F37" opacity="0.15"/>
+  <circle cx="960" cy="540" r="120" stroke="#722F37" stroke-width="4" fill="none"/>
+  <path d="M920 490 L1020 540 L920 590 Z" fill="#722F37" opacity="0.3"/>
+
+  <!-- Decorative wine elements -->
+  <g opacity="0.2">
+    <!-- Left wine bottle -->
+    <rect x="400" y="400" width="60" height="250" rx="8" stroke="#722F37" stroke-width="2" fill="none"/>
+    <path d="M415 400 L415 370 C415 360 425 350 445 350 C465 350 475 360 475 370 L475 400"
+          stroke="#722F37" stroke-width="2" fill="none"/>
+
+    <!-- Right wine bottle -->
+    <rect x="1460" y="400" width="60" height="250" rx="8" stroke="#722F37" stroke-width="2" fill="none"/>
+    <path d="M1475 400 L1475 370 C1475 360 1485 350 1505 350 C1525 350 1535 360 1535 370 L1535 400"
+          stroke="#722F37" stroke-width="2" fill="none"/>
+  </g>
+
+  <!-- "Video unavailable" text -->
+  <text x="960" y="750" font-family="serif" font-size="24" fill="#8B4513" text-anchor="middle" opacity="0.6">
+    Video unavailable
+  </text>
+</svg>
