@@ -52,28 +52,89 @@
     <HomePairingGuidesSection />
 
     <!-- Wine Story CTA - Link to full heritage page -->
-    <section class="bg-gradient-to-br from-primary/5 via-terracotta/5 to-gold-50 py-16 md:py-20">
-      <div class="container">
+    <section class="relative overflow-hidden bg-gradient-to-br from-primary/8 via-gold-50/40 to-terracotta/8 py-20 md:py-28">
+      <!-- Decorative Background -->
+      <div class="absolute inset-0 overflow-hidden opacity-25">
+        <div class="absolute -right-40 top-0 h-96 w-96 rounded-full bg-gradient-to-bl from-gold-500/40 to-transparent blur-3xl" />
+        <div class="absolute -left-40 bottom-0 h-96 w-96 rounded-full bg-gradient-to-tr from-primary/40 to-transparent blur-3xl" />
+        <div class="absolute inset-0" style="background-image: radial-gradient(circle at 2px 2px, rgba(198, 141, 37, 0.06) 1px, transparent 0); background-size: 32px 32px;" />
+      </div>
+
+      <div class="container relative z-10">
         <div
-          class="mx-auto max-w-3xl text-center"
+          class="mx-auto max-w-4xl text-center"
         >
-          <div class="mb-4 inline-flex items-center gap-2 rounded-full bg-gold-500/10 px-4 py-2 text-sm font-semibold text-gold-700">
-            <commonIcon name="lucide:wine" class="h-4 w-4" />
+          <div
+            v-motion
+            :initial="{ opacity: 0, scale: 0.9 }"
+            :visible="{
+              opacity: 1,
+              scale: 1,
+              transition: { duration: 600 },
+            }"
+            class="mb-6 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-gold-500/20 to-gold-600/20 px-6 py-3 text-sm font-bold text-gold-700 shadow-lg backdrop-blur-sm ring-1 ring-gold-500/30"
+          >
+            <commonIcon name="lucide:wine" class="h-5 w-5" />
             Discover Our Heritage
           </div>
-          <h2 class="text-3xl font-bold text-slate-900 sm:text-4xl">
+          <h2
+            v-motion
+            :initial="{ opacity: 0, y: 20 }"
+            :visible="{
+              opacity: 1,
+              y: 0,
+              transition: { duration: 800, delay: 100 },
+            }"
+            class="bg-gradient-to-br from-primary via-slate-900 to-primary/80 bg-clip-text text-4xl font-extrabold tracking-tight text-transparent sm:text-5xl md:text-6xl"
+          >
             The Story Behind Every Bottle
           </h2>
-          <p class="mt-4 text-lg text-slate-600">
+          <p
+            v-motion
+            :initial="{ opacity: 0, y: 20 }"
+            :visible="{
+              opacity: 1,
+              y: 0,
+              transition: { duration: 800, delay: 200 },
+            }"
+            class="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-slate-700 sm:text-xl"
+          >
             Explore Moldova's 7,000-year winemaking tradition, meet our passionate producers, and discover the regions that make our wines unique
           </p>
-          <NuxtLink
-            :to="localePath('/wine-story')"
-            class="mt-8 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-primary to-primary/90 px-8 py-4 font-semibold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+          <div
+            v-motion
+            :initial="{ opacity: 0, y: 20 }"
+            :visible="{
+              opacity: 1,
+              y: 0,
+              transition: { duration: 800, delay: 300 },
+            }"
           >
-            Explore Wine Heritage
-            <commonIcon name="lucide:arrow-right" class="h-5 w-5" />
-          </NuxtLink>
+            <NuxtLink
+              :to="localePath('/wine-story')"
+              class="group mt-10 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-primary via-primary to-primary/90 px-10 py-5 font-bold text-white shadow-2xl transition-all hover:scale-105 hover:shadow-2xl hover:shadow-primary/30"
+            >
+              Explore Wine Heritage
+              <commonIcon name="lucide:arrow-right" class="h-5 w-5 transition-transform group-hover:translate-x-1" />
+            </NuxtLink>
+          </div>
+
+          <!-- Decorative Wine Icons -->
+          <div
+            v-motion
+            :initial="{ opacity: 0 }"
+            :visible="{
+              opacity: 1,
+              transition: { duration: 1000, delay: 500 },
+            }"
+            class="mt-12 flex items-center justify-center gap-4 text-gold-600/40"
+          >
+            <commonIcon name="lucide:wine" class="h-5 w-5" />
+            <div class="h-px w-16 bg-gradient-to-r from-transparent via-gold-500/50 to-transparent" />
+            <commonIcon name="lucide:grape" class="h-5 w-5" />
+            <div class="h-px w-16 bg-gradient-to-r from-transparent via-gold-500/50 to-transparent" />
+            <commonIcon name="lucide:wine" class="h-5 w-5" />
+          </div>
         </div>
       </div>
     </section>

@@ -2045,6 +2045,21 @@
     "notificationsDisabled": "Notificaciones desactivadas"
   },
   "wineStory": {
+    "hero": {
+      "badge": "Patrimonio Vinícola de Moldavia",
+      "title": "Descubre la Historia Detrás de Cada Botella",
+      "subtitle": "Explora las tradiciones vinícolas milenarias de Moldavia, conoce a nuestros apasionados productores y descubre maridajes perfectos"
+    },
+    "seo": {
+      "title": "Historia del Vino de Moldavia | Patrimonio y Tradición",
+      "description": "Descubre el rico patrimonio vinícola de Moldavia, conoce a nuestros apasionados productores, explora terroirs regionales y encuentra maridajes perfectos"
+    },
+    "cta": {
+      "title": "¿Listo para Experimentar los Mejores Vinos de Moldavia?",
+      "subtitle": "Explora nuestra selección cuidadosamente curada de vinos moldavos premium",
+      "shopButton": "Comprar Vinos",
+      "aboutButton": "Saber Más Sobre Nosotros"
+    },
     "producers": {
       "title": "Conoce a Nuestros Enólogos",
       "subtitle": "Historias de los Mejores Productores de Moldavia",
