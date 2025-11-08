@@ -111,9 +111,13 @@
 
       <!-- Bottom: Unboxing Gallery -->
 
-      <!-- Mobile: Horizontal Carousel -->
-      <div class="md:hidden">
-        <div class="flex gap-3 overflow-x-auto scroll-smooth snap-x snap-mandatory px-4 pb-4 -mx-4 scrollbar-hide">
+      <!-- Mobile: Horizontal Carousel with Navigation -->
+      <div class="md:hidden relative">
+        <div
+          ref="packagingScrollContainer"
+          class="flex gap-3 overflow-x-auto scroll-smooth snap-x snap-mandatory px-4 pb-4 -mx-4 scrollbar-hide"
+          @scroll="onPackagingScroll"
+        >
           <div
             v-for="(image, index) in unboxingImages"
             :key="index"
@@ -135,6 +139,40 @@
               </div>
             </div>
           </div>
+        </div>
+
+        <!-- Navigation Arrows -->
+        <button
+          v-if="packagingCurrentIndex > 0"
+          @click="scrollPackagingCarousel('prev')"
+          class="carousel-arrow carousel-arrow-left"
+          aria-label="Previous image"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <button
+          v-if="packagingCurrentIndex < unboxingImages.length - 1"
+          @click="scrollPackagingCarousel('next')"
+          class="carousel-arrow carousel-arrow-right"
+          aria-label="Next image"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+
+        <!-- Dot Indicators -->
+        <div class="flex justify-center gap-2 mt-6 mb-4">
+          <button
+            v-for="(image, index) in unboxingImages"
+            :key="`dot-${index}`"
+            @click="scrollPackagingToIndex(index)"
+            class="carousel-dot"
+            :class="{ active: packagingCurrentIndex === index }"
+            :aria-label="`Go to image ${index + 1}`"
+          />
         </div>
       </div>
 
@@ -167,6 +205,47 @@
 <script setup lang="ts">
 const { handleImageError } = useImageFallback()
 
+// Packaging carousel state
+const packagingScrollContainer = ref<HTMLElement | null>(null)
+const packagingCurrentIndex = ref(0)
+
+const onPackagingScroll = () => {
+  if (!packagingScrollContainer.value) return
+
+  const container = packagingScrollContainer.value
+  const scrollLeft = container.scrollLeft
+  const itemWidth = container.scrollWidth / unboxingImages.length
+
+  packagingCurrentIndex.value = Math.round(scrollLeft / itemWidth)
+}
+
+const scrollPackagingCarousel = (direction: 'prev' | 'next') => {
+  if (!packagingScrollContainer.value) return
+
+  const container = packagingScrollContainer.value
+  const itemWidth = container.scrollWidth / unboxingImages.length
+  const newIndex = direction === 'next'
+    ? Math.min(packagingCurrentIndex.value + 1, unboxingImages.length - 1)
+    : Math.max(packagingCurrentIndex.value - 1, 0)
+
+  container.scrollTo({
+    left: itemWidth * newIndex,
+    behavior: 'smooth'
+  })
+}
+
+const scrollPackagingToIndex = (index: number) => {
+  if (!packagingScrollContainer.value) return
+
+  const container = packagingScrollContainer.value
+  const itemWidth = container.scrollWidth / unboxingImages.length
+
+  container.scrollTo({
+    left: itemWidth * index,
+    behavior: 'smooth'
+  })
+}
+
 // Mock unboxing gallery images
 const unboxingImages = [
   {
@@ -197,5 +276,64 @@ const unboxingImages = [
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+/* Carousel Navigation */
+.carousel-arrow {
+  position: absolute;
+  top: 45%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #722F37;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.carousel-arrow:hover {
+  background: #722F37;
+  color: white;
+  box-shadow: 0 6px 16px rgba(114, 47, 55, 0.3);
+}
+
+.carousel-arrow:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.carousel-arrow-left {
+  left: 8px;
+}
+
+.carousel-arrow-right {
+  right: 8px;
+}
+
+.carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: rgba(114, 47, 55, 0.2);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.carousel-dot.active {
+  background-color: #722F37;
+  width: 24px;
+  border-radius: 4px;
+}
+
+.carousel-dot:hover:not(.active) {
+  background-color: rgba(114, 47, 55, 0.4);
 }
 </style>

@@ -18,9 +18,13 @@
         </p>
       </div>
 
-      <!-- Mobile: Horizontal Carousel -->
-      <div class="md:hidden mb-8">
-        <div class="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory px-4 pb-4 -mx-4 scrollbar-hide">
+      <!-- Mobile: Horizontal Carousel with Navigation -->
+      <div class="md:hidden mb-8 relative">
+        <div
+          ref="artisanScrollContainer"
+          class="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory px-4 pb-4 -mx-4 scrollbar-hide"
+          @scroll="onArtisanScroll"
+        >
           <div
             v-for="artisan in artisans"
             :key="artisan.id"
@@ -62,6 +66,40 @@
               </div>
             </div>
           </div>
+        </div>
+
+        <!-- Navigation Arrows -->
+        <button
+          v-if="artisanCurrentIndex > 0"
+          @click="scrollArtisanCarousel('prev')"
+          class="carousel-arrow carousel-arrow-left"
+          aria-label="Previous artisan"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <button
+          v-if="artisanCurrentIndex < artisans.length - 1"
+          @click="scrollArtisanCarousel('next')"
+          class="carousel-arrow carousel-arrow-right"
+          aria-label="Next artisan"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+
+        <!-- Dot Indicators -->
+        <div class="flex justify-center gap-2 mt-6">
+          <button
+            v-for="(artisan, index) in artisans"
+            :key="`dot-${artisan.id}`"
+            @click="scrollArtisanToIndex(index)"
+            class="carousel-dot"
+            :class="{ active: artisanCurrentIndex === index }"
+            :aria-label="`Go to artisan ${index + 1}`"
+          />
         </div>
       </div>
 
@@ -120,6 +158,47 @@
 
 <script setup lang="ts">
 const { handleImageError } = useImageFallback()
+
+// Artisan carousel state
+const artisanScrollContainer = ref<HTMLElement | null>(null)
+const artisanCurrentIndex = ref(0)
+
+const onArtisanScroll = () => {
+  if (!artisanScrollContainer.value) return
+
+  const container = artisanScrollContainer.value
+  const scrollLeft = container.scrollLeft
+  const itemWidth = container.scrollWidth / artisans.length
+
+  artisanCurrentIndex.value = Math.round(scrollLeft / itemWidth)
+}
+
+const scrollArtisanCarousel = (direction: 'prev' | 'next') => {
+  if (!artisanScrollContainer.value) return
+
+  const container = artisanScrollContainer.value
+  const itemWidth = container.scrollWidth / artisans.length
+  const newIndex = direction === 'next'
+    ? Math.min(artisanCurrentIndex.value + 1, artisans.length - 1)
+    : Math.max(artisanCurrentIndex.value - 1, 0)
+
+  container.scrollTo({
+    left: itemWidth * newIndex,
+    behavior: 'smooth'
+  })
+}
+
+const scrollArtisanToIndex = (index: number) => {
+  if (!artisanScrollContainer.value) return
+
+  const container = artisanScrollContainer.value
+  const itemWidth = container.scrollWidth / artisans.length
+
+  container.scrollTo({
+    left: itemWidth * index,
+    behavior: 'smooth'
+  })
+}
 
 const artisans = [
   {
@@ -188,5 +267,64 @@ const artisans = [
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+/* Carousel Navigation */
+.carousel-arrow {
+  position: absolute;
+  top: 35%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #722F37;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.carousel-arrow:hover {
+  background: #722F37;
+  color: white;
+  box-shadow: 0 6px 16px rgba(114, 47, 55, 0.3);
+}
+
+.carousel-arrow:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.carousel-arrow-left {
+  left: 8px;
+}
+
+.carousel-arrow-right {
+  right: 8px;
+}
+
+.carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: rgba(114, 47, 55, 0.2);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.carousel-dot.active {
+  background-color: #722F37;
+  width: 24px;
+  border-radius: 4px;
+}
+
+.carousel-dot:hover:not(.active) {
+  background-color: rgba(114, 47, 55, 0.4);
 }
 </style>

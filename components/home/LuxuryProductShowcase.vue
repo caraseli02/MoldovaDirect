@@ -33,9 +33,13 @@
         </p>
       </div>
 
-      <!-- Mobile: Horizontal Carousel -->
-      <div class="md:hidden mb-8">
-        <div class="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory px-4 pb-4 -mx-4 scrollbar-hide">
+      <!-- Mobile: Horizontal Carousel with Navigation -->
+      <div class="md:hidden mb-8 relative">
+        <div
+          ref="productScrollContainer"
+          class="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory px-4 pb-4 -mx-4 scrollbar-hide"
+          @scroll="onProductScroll"
+        >
           <div
             v-for="product in featuredProducts"
             :key="product.id"
@@ -97,6 +101,40 @@
               </div>
             </div>
           </div>
+        </div>
+
+        <!-- Navigation Arrows -->
+        <button
+          v-if="productCurrentIndex > 0"
+          @click="scrollProductCarousel('prev')"
+          class="carousel-arrow carousel-arrow-left"
+          aria-label="Previous product"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <button
+          v-if="productCurrentIndex < featuredProducts.length - 1"
+          @click="scrollProductCarousel('next')"
+          class="carousel-arrow carousel-arrow-right"
+          aria-label="Next product"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+
+        <!-- Dot Indicators -->
+        <div class="flex justify-center gap-2 mt-6">
+          <button
+            v-for="(product, index) in featuredProducts"
+            :key="`dot-${product.id}`"
+            @click="scrollProductToIndex(index)"
+            class="carousel-dot"
+            :class="{ active: productCurrentIndex === index }"
+            :aria-label="`Go to product ${index + 1}`"
+          />
         </div>
       </div>
 
@@ -221,6 +259,47 @@
 <script setup lang="ts">
 const { handleImageError } = useImageFallback()
 
+// Product carousel state
+const productScrollContainer = ref<HTMLElement | null>(null)
+const productCurrentIndex = ref(0)
+
+const onProductScroll = () => {
+  if (!productScrollContainer.value) return
+
+  const container = productScrollContainer.value
+  const scrollLeft = container.scrollLeft
+  const itemWidth = container.scrollWidth / featuredProducts.length
+
+  productCurrentIndex.value = Math.round(scrollLeft / itemWidth)
+}
+
+const scrollProductCarousel = (direction: 'prev' | 'next') => {
+  if (!productScrollContainer.value) return
+
+  const container = productScrollContainer.value
+  const itemWidth = container.scrollWidth / featuredProducts.length
+  const newIndex = direction === 'next'
+    ? Math.min(productCurrentIndex.value + 1, featuredProducts.length - 1)
+    : Math.max(productCurrentIndex.value - 1, 0)
+
+  container.scrollTo({
+    left: itemWidth * newIndex,
+    behavior: 'smooth'
+  })
+}
+
+const scrollProductToIndex = (index: number) => {
+  if (!productScrollContainer.value) return
+
+  const container = productScrollContainer.value
+  const itemWidth = container.scrollWidth / featuredProducts.length
+
+  container.scrollTo({
+    left: itemWidth * index,
+    behavior: 'smooth'
+  })
+}
+
 const featuredProducts = [
   {
     id: 1,
@@ -338,5 +417,64 @@ const featuredProducts = [
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+/* Carousel Navigation */
+.carousel-arrow {
+  position: absolute;
+  top: 40%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #722F37;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.carousel-arrow:hover {
+  background: #722F37;
+  color: white;
+  box-shadow: 0 6px 16px rgba(114, 47, 55, 0.3);
+}
+
+.carousel-arrow:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.carousel-arrow-left {
+  left: 8px;
+}
+
+.carousel-arrow-right {
+  right: 8px;
+}
+
+.carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: rgba(114, 47, 55, 0.2);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.carousel-dot.active {
+  background-color: #722F37;
+  width: 24px;
+  border-radius: 4px;
+}
+
+.carousel-dot:hover:not(.active) {
+  background-color: rgba(114, 47, 55, 0.4);
 }
 </style>
