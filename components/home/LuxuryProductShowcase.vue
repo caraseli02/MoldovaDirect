@@ -1,14 +1,14 @@
 <template>
-  <section class="py-16 md:py-24 bg-[#FCFAF2]">
+  <section class="py-16 md:py-24">
     <div class="container mx-auto px-4 md:px-6">
       <!-- Section Header -->
       <div class="text-center max-w-2xl mx-auto mb-12 md:mb-16">
         <p class="text-xs uppercase tracking-[0.2em] font-medium text-[#722F37] mb-4">
-          {{ $t('luxury.showcase.eyebrow') || 'Curated Selection' }}
+          {{ eyebrow }}
         </p>
 
         <h2 class="text-4xl md:text-5xl font-serif font-medium text-[#241405] mb-6">
-          {{ $t('luxury.showcase.title') || 'Signature Collections' }}
+          {{ title }}
         </h2>
 
         <p class="text-base text-[#241405]/70 leading-relaxed">
@@ -239,6 +239,22 @@
 </template>
 
 <script setup lang="ts">
+// Props for dynamic content
+const props = defineProps({
+  featured: {
+    type: Boolean,
+    default: true
+  },
+  title: {
+    type: String,
+    default: 'Signature Collections'
+  },
+  eyebrow: {
+    type: String,
+    default: 'Curated Selection'
+  }
+})
+
 const { handleImageError } = useImageFallback()
 
 // Product carousel state
@@ -300,7 +316,8 @@ const addToCart = (product: any) => {
   console.log('Add to cart:', product.name)
 }
 
-const featuredProducts = [
+// Signature Products (Featured)
+const signatureProducts = [
   {
     id: 1,
     name: 'Premium Moldovan Wine Selection',
@@ -311,11 +328,7 @@ const featuredProducts = [
     originalPrice: null,
     badge: 'Best Seller',
     image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=800',
-    rating: {
-      value: 4.8,
-      max: 5,
-      count: 47
-    },
+    rating: { value: 4.8, max: 5, count: 47 },
     stock: null,
   },
   {
@@ -328,53 +341,11 @@ const featuredProducts = [
     originalPrice: '149.90',
     badge: 'Limited Edition',
     image: 'https://images.unsplash.com/photo-1549888834-3ec93abae044?q=80&w=800',
-    rating: {
-      value: 4.9,
-      max: 5,
-      count: 32
-    },
-    stock: {
-      limited: true,
-      remaining: 3,
-      total: 50,
-    },
+    rating: { value: 4.9, max: 5, count: 32 },
+    stock: { limited: true, remaining: 3, total: 50 },
   },
   {
     id: 3,
-    name: 'Organic Wildflower Honey',
-    slug: 'organic-wildflower-honey',
-    subtitle: 'Moldovan Highlands',
-    description: 'Raw, unfiltered honey from the wildflowers of Moldova. Pure and natural.',
-    price: '18.90',
-    originalPrice: null,
-    badge: 'Organic',
-    image: 'https://images.unsplash.com/photo-1587049352846-4a222e784422?q=80&w=800',
-    rating: {
-      value: 5.0,
-      max: 5,
-      count: 89
-    },
-    stock: null,
-  },
-  {
-    id: 4,
-    name: 'Artisan Cheese Collection',
-    slug: 'artisan-cheese-collection',
-    subtitle: 'traditional recipe',
-    description: 'Three traditional Moldovan cheeses, aged to perfection by master cheesemakers.',
-    price: '42.90',
-    originalPrice: null,
-    badge: null,
-    image: 'https://images.unsplash.com/photo-1452195100486-9cc805987862?q=80&w=800',
-    rating: {
-      value: 4.6,
-      max: 5,
-      count: 28
-    },
-    stock: null,
-  },
-  {
-    id: 5,
     name: 'Vintage Reserve 2015',
     slug: 'vintage-reserve-2015',
     subtitle: 'Cricova 2015',
@@ -383,16 +354,38 @@ const featuredProducts = [
     originalPrice: null,
     badge: 'Rare',
     image: 'https://images.unsplash.com/photo-1547595628-c61a29f496f0?q=80&w=800',
-    rating: {
-      value: 4.7,
-      max: 5,
-      count: 15
-    },
-    stock: {
-      limited: true,
-      remaining: 3,
-      total: 12,
-    },
+    rating: { value: 4.7, max: 5, count: 15 },
+    stock: { limited: true, remaining: 3, total: 12 },
+  },
+]
+
+// Artisan Products (Not Featured)
+const artisanProducts = [
+  {
+    id: 4,
+    name: 'Organic Wildflower Honey',
+    slug: 'organic-wildflower-honey',
+    subtitle: 'Moldovan Highlands',
+    description: 'Raw, unfiltered honey from the wildflowers of Moldova. Pure and natural.',
+    price: '18.90',
+    originalPrice: null,
+    badge: 'Organic',
+    image: 'https://images.unsplash.com/photo-1587049352846-4a222e784422?q=80&w=800',
+    rating: { value: 5.0, max: 5, count: 89 },
+    stock: null,
+  },
+  {
+    id: 5,
+    name: 'Artisan Cheese Collection',
+    slug: 'artisan-cheese-collection',
+    subtitle: 'traditional recipe',
+    description: 'Three traditional Moldovan cheeses, aged to perfection by master cheesemakers.',
+    price: '42.90',
+    originalPrice: null,
+    badge: null,
+    image: 'https://images.unsplash.com/photo-1452195100486-9cc805987862?q=80&w=800',
+    rating: { value: 4.6, max: 5, count: 28 },
+    stock: null,
   },
   {
     id: 6,
@@ -404,14 +397,15 @@ const featuredProducts = [
     originalPrice: null,
     badge: null,
     image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?q=80&w=800',
-    rating: {
-      value: 4.9,
-      max: 5,
-      count: 21
-    },
+    rating: { value: 4.9, max: 5, count: 21 },
     stock: null,
   },
 ]
+
+// Select products based on featured prop
+const featuredProducts = computed(() => {
+  return props.featured ? signatureProducts : artisanProducts
+})
 </script>
 
 <style scoped>

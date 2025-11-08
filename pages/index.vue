@@ -1,31 +1,72 @@
 <template>
   <div class="luxury-body smooth-scroll">
-    <!-- Cinematic Video Hero -->
-    <HomeLuxuryVideoHero />
+    <!-- 1. Cinematic Video Hero -->
+    <section class="c-section c-section__video-hero">
+      <HomeLuxuryVideoHero />
+    </section>
 
-    <!-- Press Mentions Bar (Brightland Pattern) -->
-    <HomeLuxuryMediaMentions />
+    <!-- 2. Press Mentions Bar (Infinite Scroll) -->
+    <section class="c-section c-section__media-mentions" style="background-color: #FFFFFF;">
+      <HomeLuxuryMediaMentions />
+    </section>
 
-    <!-- Origin Story Section -->
-    <HomeLuxuryOriginStory />
+    <!-- 3. Origin Story Section -->
+    <section class="c-section c-section__origin-story" style="background-color: #FCFAF2;">
+      <HomeLuxuryOriginStory />
+    </section>
 
-    <!-- Luxury Product Showcase -->
-    <HomeLuxuryProductShowcase />
+    <!-- 4. First Product Carousel (Signature Collections) -->
+    <section class="c-section c-section__products-carousel" style="background-color: #FCFAF2;">
+      <HomeLuxuryProductShowcase
+        :featured="true"
+        title="Signature Collections"
+        eyebrow="Curated Selection"
+      />
+    </section>
 
-    <!-- Luxury Packaging Experience -->
-    <HomeLuxuryPackagingExperience />
+    <!-- 5. Packaging Experience (Video with Text) -->
+    <section class="c-section c-section__featured-text" style="background-color: #FFFFFF;">
+      <HomeLuxuryPackagingExperience />
+    </section>
 
-    <!-- Artisan Spotlight -->
-    <HomeLuxuryArtisanSpotlight />
+    <!-- 6. Collection Grid -->
+    <section class="c-section c-section__collections" style="background-color: #FCFAF2;">
+      <HomeLuxuryCollectionGrid />
+    </section>
 
-    <!-- Customer Testimonials -->
-    <HomeLuxuryTestimonials />
+    <!-- 7. Second Product Carousel (Artisan Selections) -->
+    <section class="c-section c-section__products-carousel" style="background-color: #FCFAF2;">
+      <HomeLuxuryProductShowcase
+        :featured="false"
+        title="Artisan Selections"
+        eyebrow="Handcrafted Excellence"
+      />
+    </section>
 
-    <!-- Brand Promises -->
-    <HomeBrandPromises />
+    <!-- 8. Artisan Spotlight (Split with Media) -->
+    <section class="c-section c-section__split-with-media" style="background-color: #FFFFFF;">
+      <HomeLuxuryArtisanSpotlight />
+    </section>
 
-    <!-- Newsletter Signup (Luxury redesign) -->
-    <HomeNewsletterSignup />
+    <!-- 9. Banner Columns (Brand Promises) -->
+    <section class="c-section c-section__banner-columns" style="background-color: #FCFAF2;">
+      <HomeBrandPromises />
+    </section>
+
+    <!-- 10. Customer Testimonials -->
+    <section class="c-section c-section__testimonials" style="background-color: #FFFFFF;">
+      <HomeLuxuryTestimonials />
+    </section>
+
+    <!-- 11. Featured Stories (Blog) -->
+    <section class="c-section c-section__blog-posts" style="background-color: #FCFAF2;">
+      <HomeFeaturedStories />
+    </section>
+
+    <!-- 12. Newsletter Signup -->
+    <section class="c-section c-section__newsletter" style="background-color: #FFFFFF;">
+      <HomeNewsletterSignup />
+    </section>
   </div>
 </template>
 
@@ -83,4 +124,16 @@ useLandingSeo({
 
 <style scoped>
 /* Page-specific luxury styles */
+
+/* To'ak Section System */
+.c-section {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Smooth transitions between sections */
+.c-section + .c-section {
+  transition: background-color 0.3s ease;
+}
 </style>
