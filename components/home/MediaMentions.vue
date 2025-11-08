@@ -40,34 +40,66 @@
           class="flex items-center justify-center"
         >
           <div class="group relative">
-            <!-- Logo/Name -->
-            <div
-              class="flex h-16 items-center justify-center rounded-lg px-6 transition-all duration-300 hover:bg-gray-50 dark:hover:bg-gray-900"
+            <!-- Logo/Name - Interactive button if quote exists -->
+            <button
+              v-if="mention.quote"
+              type="button"
+              :aria-label="`${mention.name}: ${mention.quote}`"
+              :title="mention.quote"
+              class="flex h-16 w-full items-center justify-center rounded-lg px-6 transition-all duration-300 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 dark:hover:bg-gray-900"
             >
-              <!-- If image URL provided, show image -->
+              <!-- If image URL provided, show image with aspect ratio -->
               <NuxtImg
                 v-if="mention.logo"
                 :src="mention.logo"
                 :alt="mention.name"
                 width="120"
                 height="40"
-                class="h-10 w-auto object-contain opacity-60 grayscale transition-all duration-300 group-hover:opacity-100 group-hover:grayscale-0 dark:opacity-50 dark:brightness-200"
+                :style="{ aspectRatio: '3 / 1' }"
+                class="h-10 w-auto object-contain opacity-60 grayscale transition-all duration-300 group-hover:opacity-100 group-hover:grayscale-0 group-focus-visible:opacity-100 group-focus-visible:grayscale-0 dark:opacity-50 dark:brightness-200"
                 loading="lazy"
               />
 
               <!-- If no image, show text -->
               <span
                 v-else
-                class="text-lg font-bold text-gray-400 transition-colors duration-300 group-hover:text-gray-600 dark:text-gray-600 dark:group-hover:text-gray-400"
+                class="text-lg font-bold text-gray-400 transition-colors duration-300 group-hover:text-gray-600 group-focus-visible:text-gray-600 dark:text-gray-600 dark:group-hover:text-gray-400 dark:group-focus-visible:text-gray-400"
+              >
+                {{ mention.name }}
+              </span>
+            </button>
+
+            <!-- Static display if no quote -->
+            <div
+              v-else
+              class="flex h-16 items-center justify-center rounded-lg px-6"
+            >
+              <!-- If image URL provided, show image with aspect ratio -->
+              <NuxtImg
+                v-if="mention.logo"
+                :src="mention.logo"
+                :alt="mention.name"
+                width="120"
+                height="40"
+                :style="{ aspectRatio: '3 / 1' }"
+                class="h-10 w-auto object-contain opacity-60 grayscale dark:opacity-50 dark:brightness-200"
+                loading="lazy"
+              />
+
+              <!-- If no image, show text -->
+              <span
+                v-else
+                class="text-lg font-bold text-gray-400 dark:text-gray-600"
               >
                 {{ mention.name }}
               </span>
             </div>
 
-            <!-- Quote on Hover (optional) -->
+            <!-- Quote Tooltip (accessible on hover and focus) -->
             <div
               v-if="mention.quote"
-              class="pointer-events-none absolute -bottom-2 left-1/2 z-10 w-64 -translate-x-1/2 translate-y-full rounded-lg bg-gray-900 p-4 text-sm text-white opacity-0 shadow-xl transition-opacity duration-300 group-hover:pointer-events-auto group-hover:opacity-100 dark:bg-white dark:text-gray-900"
+              class="pointer-events-none absolute -bottom-2 left-1/2 z-10 w-64 -translate-x-1/2 translate-y-full rounded-lg bg-gray-900 p-4 text-sm text-white opacity-0 shadow-xl transition-opacity duration-300 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100 dark:bg-white dark:text-gray-900"
+              role="tooltip"
             >
               <p class="italic">"{{ mention.quote }}"</p>
               <div class="absolute -top-2 left-1/2 h-4 w-4 -translate-x-1/2 rotate-45 bg-gray-900 dark:bg-white"></div>
@@ -93,14 +125,16 @@
           <span>{{ t('home.mediaMentions.featuredIn') }}</span>
         </div>
         <div class="flex flex-wrap items-center justify-center gap-4">
-          <div
+          <button
             v-for="platform in socialPlatforms"
             :key="platform.name"
-            class="flex items-center gap-2 rounded-full bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+            type="button"
+            :aria-label="`Follow us on ${platform.name}`"
+            class="flex min-h-[44px] items-center gap-2 rounded-full bg-gray-100 px-6 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
           >
             <commonIcon :name="platform.icon" class="h-4 w-4" />
             <span>{{ platform.name }}</span>
-          </div>
+          </button>
         </div>
       </div>
     </div>

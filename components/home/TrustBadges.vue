@@ -64,10 +64,17 @@
                   scale: 1,
                   transition: { duration: 300, delay: 600 + index * 50 },
                 }"
-                class="flex h-12 items-center justify-center rounded-lg bg-gray-50 px-4 transition hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-750"
+                class="flex h-12 min-w-[60px] items-center justify-center rounded-lg bg-white px-4 transition hover:scale-105 hover:shadow-sm dark:bg-gray-850"
                 :title="method.name"
+                :aria-label="`We accept ${method.name}`"
               >
-                <commonIcon :name="method.icon" class="h-8 w-8 text-gray-600 dark:text-gray-400" />
+                <!-- TODO: Replace with actual brand logos from /public/images/payment-logos/ -->
+                <!-- For now, using better icon representations with proper sizing -->
+                <commonIcon
+                  :name="method.icon"
+                  class="h-7 w-7 text-gray-700 dark:text-gray-300"
+                  :aria-label="method.name"
+                />
               </div>
             </div>
           </div>

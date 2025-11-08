@@ -28,12 +28,15 @@
         class="mt-8 flex flex-wrap justify-center gap-2"
         role="tablist"
         aria-label="Product filters"
+        @keydown="handleTabKeydown"
       >
         <button
-          v-for="filter in filters"
+          v-for="(filter, index) in filters"
           :key="filter.value"
+          :ref="el => { if (el) tabRefs[index] = el as HTMLButtonElement }"
           type="button"
           role="tab"
+          :tabindex="activeFilter === filter.value ? 0 : -1"
           :aria-selected="activeFilter === filter.value"
           :aria-controls="'products-panel'"
           @click="activeFilter = filter.value"
@@ -112,6 +115,9 @@ const localePath = useLocalePath()
 // Filter state
 const activeFilter = ref('all')
 
+// Tab refs for keyboard navigation
+const tabRefs: HTMLButtonElement[] = reactive([])
+
 // Filter options
 const filters = computed(() => [
   { value: 'all', label: t('home.featuredProducts.filters.all') },
@@ -119,6 +125,41 @@ const filters = computed(() => [
   { value: 'new', label: t('home.featuredProducts.filters.new') },
   { value: 'sale', label: t('home.featuredProducts.filters.sale') }
 ])
+
+// Keyboard navigation for tabs (ARIA best practices)
+const handleTabKeydown = (event: KeyboardEvent) => {
+  const currentIndex = filters.value.findIndex(f => f.value === activeFilter.value)
+  let nextIndex = currentIndex
+
+  switch (event.key) {
+    case 'ArrowLeft':
+    case 'ArrowUp':
+      event.preventDefault()
+      nextIndex = currentIndex > 0 ? currentIndex - 1 : filters.value.length - 1
+      break
+    case 'ArrowRight':
+    case 'ArrowDown':
+      event.preventDefault()
+      nextIndex = currentIndex < filters.value.length - 1 ? currentIndex + 1 : 0
+      break
+    case 'Home':
+      event.preventDefault()
+      nextIndex = 0
+      break
+    case 'End':
+      event.preventDefault()
+      nextIndex = filters.value.length - 1
+      break
+    default:
+      return
+  }
+
+  // Update active filter and focus the new tab
+  activeFilter.value = filters.value[nextIndex].value
+  nextTick(() => {
+    tabRefs[nextIndex]?.focus()
+  })
+}
 
 // Filtered products based on active filter
 const filteredProducts = computed(() => {

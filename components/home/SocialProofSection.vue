@@ -61,7 +61,7 @@
               }"
               class="rounded-xl bg-white/10 p-6 backdrop-blur-sm ring-1 ring-white/10"
             >
-              <p class="text-3xl font-bold">{{ stat.displayValue }}</p>
+              <p class="text-3xl font-bold" aria-live="polite" aria-atomic="true">{{ stat.displayValue }}</p>
               <p class="mt-2 text-sm text-primary-100">{{ stat.label }}</p>
             </div>
           </div>
@@ -145,6 +145,36 @@ const props = defineProps<{
 }>()
 
 const { t } = useI18n()
+
+// Add Review schema markup for SEO
+const reviewSchema = computed(() => {
+  return props.testimonials.map(testimonial => ({
+    "@context": "https://schema.org",
+    "@type": "Review",
+    "itemReviewed": {
+      "@type": "Organization",
+      "name": "Moldova Direct"
+    },
+    "reviewRating": {
+      "@type": "Rating",
+      "ratingValue": "5",
+      "bestRating": "5"
+    },
+    "author": {
+      "@type": "Person",
+      "name": testimonial.name
+    },
+    "reviewBody": testimonial.quote
+  }))
+})
+
+// Inject schema markup into page head
+useHead({
+  script: reviewSchema.value.map(schema => ({
+    type: 'application/ld+json',
+    children: JSON.stringify(schema)
+  }))
+})
 
 // Parse numeric values from highlights and create animated counters
 const animatedStats = computed(() => {

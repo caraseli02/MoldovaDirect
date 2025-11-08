@@ -206,13 +206,16 @@ useEventListener('keydown', (event: KeyboardEvent) => {
   display: flex;
 }
 
-/* Pagination Styles */
+/* Pagination Styles - WCAG 2.5.5 compliant touch targets (44x44px) */
 .swiper-pagination-custom :deep(.swiper-pagination-bullet) {
   height: 0.5rem;
   width: 0.5rem;
   background-color: rgb(203 213 225);
   opacity: 1;
   transition: all 0.2s ease;
+  /* Expand clickable area to meet WCAG 2.5.5 minimum touch target */
+  padding: 1.125rem; /* (44px - 8px) / 2 = 18px = 1.125rem */
+  cursor: pointer;
 }
 
 .swiper-pagination-custom :deep(.swiper-pagination-bullet-active) {
