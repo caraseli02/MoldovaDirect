@@ -24,17 +24,12 @@
       />
     </section>
 
-    <!-- 5. Packaging Experience (Video with Text) -->
-    <section class="c-section c-section__featured-text" style="background-color: #FFFFFF;">
-      <HomeLuxuryPackagingExperience />
-    </section>
-
-    <!-- 6. Collection Grid -->
-    <section class="c-section c-section__collections" style="background-color: #FCFAF2;">
+    <!-- 5. Collection Grid -->
+    <section class="c-section c-section__collections" style="background-color: #FFFFFF;">
       <HomeLuxuryCollectionGrid />
     </section>
 
-    <!-- 7. Second Product Carousel (Artisan Selections) -->
+    <!-- 6. Second Product Carousel (Artisan Selections) -->
     <section class="c-section c-section__products-carousel" style="background-color: #FCFAF2;">
       <HomeLuxuryProductShowcase
         :featured="false"
@@ -43,27 +38,27 @@
       />
     </section>
 
-    <!-- 8. Artisan Spotlight (Split with Media) -->
+    <!-- 7. Artisan Spotlight (Split with Media) -->
     <section class="c-section c-section__split-with-media" style="background-color: #FFFFFF;">
       <HomeLuxuryArtisanSpotlight />
     </section>
 
-    <!-- 9. Banner Columns (Brand Promises) -->
+    <!-- 8. Banner Columns (Brand Promises) -->
     <section class="c-section c-section__banner-columns" style="background-color: #FCFAF2;">
       <HomeBrandPromises />
     </section>
 
-    <!-- 10. Customer Testimonials -->
+    <!-- 9. Customer Testimonials -->
     <section class="c-section c-section__testimonials" style="background-color: #FFFFFF;">
       <HomeLuxuryTestimonials />
     </section>
 
-    <!-- 11. Featured Stories (Blog) -->
+    <!-- 10. Featured Stories (Blog) -->
     <section class="c-section c-section__blog-posts" style="background-color: #FCFAF2;">
       <HomeFeaturedStories />
     </section>
 
-    <!-- 12. Newsletter Signup -->
+    <!-- 11. Newsletter Signup -->
     <section class="c-section c-section__newsletter" style="background-color: #FFFFFF;">
       <HomeNewsletterSignup />
     </section>
