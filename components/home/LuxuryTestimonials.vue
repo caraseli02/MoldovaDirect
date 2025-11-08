@@ -1,17 +1,17 @@
 <template>
-  <section class="luxury-section bg-white">
-    <div class="luxury-container">
+  <section class="py-16 md:py-24 bg-white">
+    <div class="container mx-auto px-4 md:px-6">
       <!-- Section Header -->
       <div class="text-center max-w-3xl mx-auto mb-8 md:mb-12 lg:mb-16 px-4">
-        <p class="luxury-eyebrow text-sm md:text-base">
+        <p class="text-xs uppercase tracking-[0.2em] font-medium text-[#722F37] text-sm md:text-base">
           {{ $t('luxury.testimonials.eyebrow') || 'Customer Stories' }}
         </p>
 
-        <h2 class="luxury-title text-2xl md:text-3xl lg:text-4xl">
+        <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl font-medium text-[#241405] text-2xl md:text-3xl lg:text-4xl">
           {{ $t('luxury.testimonials.title') || 'What Our Customers Say' }}
         </h2>
 
-        <div class="luxury-divider mx-auto" />
+        <div class="w-16 h-px bg-[#722F37] mx-auto" />
       </div>
 
       <!-- Mobile: Horizontal Carousel with Navigation -->
@@ -26,13 +26,13 @@
             :key="testimonial.id"
             class="flex-shrink-0 w-[85vw] max-w-[340px] snap-center"
           >
-            <div class="bg-luxury-warm-white p-6 rounded-sm shadow-md h-full flex flex-col">
+            <div class="bg-[#FCFAF2] p-6 rounded-sm shadow-md h-full flex flex-col">
               <!-- Stars -->
               <div class="flex gap-1 mb-4">
                 <svg
                   v-for="star in 5"
                   :key="star"
-                  class="w-5 h-5 text-luxury-black fill-current"
+                  class="w-5 h-5 text-[#241405] fill-current"
                   viewBox="0 0 20 20"
                 >
                   <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
@@ -40,7 +40,7 @@
               </div>
 
               <!-- Quote -->
-              <p class="text-luxury-brown/80 leading-relaxed mb-6 italic text-base flex-1">
+              <p class="text-[#241405]/80 leading-relaxed mb-6 italic text-base flex-1">
                 "{{ testimonial.quote }}"
               </p>
 
@@ -57,10 +57,10 @@
                 </div>
 
                 <div>
-                  <div class="font-semibold text-luxury-wine-red text-base">
+                  <div class="font-semibold text-[#722F37] text-base">
                     {{ testimonial.name }}
                   </div>
-                  <div class="text-sm text-luxury-brown/60">
+                  <div class="text-sm text-[#241405]/60">
                     {{ testimonial.location }}
                   </div>
                 </div>
@@ -69,9 +69,9 @@
               <!-- Product Badge -->
               <div
                 v-if="testimonial.product"
-                class="mt-4 pt-4 border-t border-luxury-black/20"
+                class="mt-4 pt-4 border-t border-[#241405]/20"
               >
-                <div class="text-xs uppercase tracking-wider text-luxury-black">
+                <div class="text-xs uppercase tracking-wider text-[#241405]">
                   Purchased: {{ testimonial.product }}
                 </div>
               </div>
@@ -119,14 +119,14 @@
         <div
           v-for="(testimonial, index) in testimonials"
           :key="testimonial.id"
-          class="bg-luxury-warm-white p-5 sm:p-6 md:p-8 rounded-sm shadow-md hover:shadow-xl transition-shadow duration-300"
+          class="bg-[#FCFAF2] p-5 sm:p-6 md:p-8 rounded-sm shadow-md hover:shadow-xl transition-shadow duration-300"
         >
           <!-- Stars -->
           <div class="flex gap-1 mb-3 md:mb-4">
             <svg
               v-for="star in 5"
               :key="star"
-              class="w-4 h-4 md:w-5 md:h-5 text-luxury-black fill-current"
+              class="w-4 h-4 md:w-5 md:h-5 text-[#241405] fill-current"
               viewBox="0 0 20 20"
             >
               <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
@@ -134,7 +134,7 @@
           </div>
 
           <!-- Quote -->
-          <p class="text-luxury-brown/80 leading-relaxed mb-4 md:mb-6 italic text-sm md:text-base">
+          <p class="text-[#241405]/80 leading-relaxed mb-4 md:mb-6 italic text-sm md:text-base">
             "{{ testimonial.quote }}"
           </p>
 
@@ -151,10 +151,10 @@
             </div>
 
             <div>
-              <div class="font-semibold text-luxury-wine-red text-sm md:text-base">
+              <div class="font-semibold text-[#722F37] text-sm md:text-base">
                 {{ testimonial.name }}
               </div>
-              <div class="text-xs md:text-sm text-luxury-brown/60">
+              <div class="text-xs md:text-sm text-[#241405]/60">
                 {{ testimonial.location }}
               </div>
             </div>
@@ -163,9 +163,9 @@
           <!-- Product Badge -->
           <div
             v-if="testimonial.product"
-            class="mt-3 md:mt-4 pt-3 md:pt-4 border-t border-luxury-black/20"
+            class="mt-3 md:mt-4 pt-3 md:pt-4 border-t border-[#241405]/20"
           >
-            <div class="text-xs uppercase tracking-wider text-luxury-black">
+            <div class="text-xs uppercase tracking-wider text-[#241405]">
               Purchased: {{ testimonial.product }}
             </div>
           </div>
@@ -174,7 +174,7 @@
 
       <!-- Customer Gallery -->
       <div class="mt-8 md:mt-12 lg:mt-16 px-4 lg:px-0">
-        <h3 class="text-center font-serif text-xl md:text-2xl text-luxury-wine-red mb-6 md:mb-8">
+        <h3 class="text-center font-serif text-xl md:text-2xl text-[#722F37] mb-6 md:mb-8">
           {{ $t('luxury.testimonials.gallery_title') || 'Shared by Our Community' }}
         </h3>
 
@@ -182,7 +182,7 @@
           <div
             v-for="photo in customerPhotos"
             :key="photo.id"
-            class="luxury-image-wrapper aspect-square overflow-hidden rounded-sm"
+            class="relative overflow-hidden aspect-square overflow-hidden rounded-sm"
           >
             <NuxtImg
               :src="photo.image"
@@ -191,7 +191,7 @@
               loading="lazy"
               @error="handleImageError($event, 'landscape')"
             />
-            <div class="luxury-image-overlay" />
+            <div class="absolute inset-0 bg-[#241405]/20 opacity-0 hover:opacity-100 transition-opacity duration-300" />
           </div>
         </div>
       </div>

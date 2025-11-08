@@ -1,19 +1,19 @@
 <template>
-  <section class="luxury-section bg-white">
-    <div class="luxury-container">
+  <section class="py-16 md:py-24 bg-white">
+    <div class="container mx-auto px-4 md:px-6">
       <!-- Section Header -->
       <div class="text-center max-w-3xl mx-auto mb-8 md:mb-12 lg:mb-16 px-4">
-        <p class="luxury-eyebrow text-sm md:text-base">
+        <p class="text-xs uppercase tracking-[0.2em] font-medium text-[#722F37] text-sm md:text-base">
           {{ $t('luxury.artisans.eyebrow') || 'Meet The Makers' }}
         </p>
 
-        <h2 class="luxury-title text-2xl md:text-3xl lg:text-4xl">
+        <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl font-medium text-[#241405] text-2xl md:text-3xl lg:text-4xl">
           {{ $t('luxury.artisans.title') || 'Artisan Producers' }}
         </h2>
 
-        <div class="luxury-divider mx-auto" />
+        <div class="w-16 h-px bg-[#722F37] mx-auto" />
 
-        <p class="luxury-description mx-auto text-sm md:text-base">
+        <p class="text-base text-[#241405]/70 leading-relaxed mx-auto text-sm md:text-base">
           {{ $t('luxury.artisans.description') || 'Each product in our collection comes from a carefully selected family estate, where tradition and innovation blend to create exceptional quality.' }}
         </p>
       </div>
@@ -30,9 +30,9 @@
             :key="artisan.id"
             class="flex-shrink-0 w-[85vw] max-w-[340px] snap-center"
           >
-            <div class="luxury-card h-full">
+            <div class="border border-[#241405]/10 rounded-sm p-6 h-full">
               <!-- Portrait -->
-              <div class="luxury-image-wrapper mb-6 rounded-sm overflow-hidden">
+              <div class="relative overflow-hidden mb-6 rounded-sm overflow-hidden">
                 <NuxtImg
                   :src="artisan.image"
                   :alt="artisan.name"
@@ -40,24 +40,24 @@
                   loading="lazy"
                   @error="handleImageError($event, 'portrait')"
                 />
-                <div class="luxury-image-overlay" />
+                <div class="absolute inset-0 bg-[#241405]/20 opacity-0 hover:opacity-100 transition-opacity duration-300" />
               </div>
 
               <!-- Content -->
               <div>
-                <h3 class="font-serif text-xl font-semibold text-luxury-wine-red mb-2">
+                <h3 class="font-serif text-xl font-semibold text-[#722F37] mb-2">
                   {{ artisan.name }}
                 </h3>
 
-                <p class="text-sm uppercase tracking-wider text-luxury-black mb-4 font-semibold">
+                <p class="text-sm uppercase tracking-wider text-[#241405] mb-4 font-semibold">
                   {{ artisan.specialty }}
                 </p>
 
-                <p class="text-luxury-brown/80 leading-relaxed mb-6 italic text-base">
+                <p class="text-[#241405]/80 leading-relaxed mb-6 italic text-base">
                   "{{ artisan.quote }}"
                 </p>
 
-                <div class="flex items-center gap-3 text-sm text-luxury-brown/60">
+                <div class="flex items-center gap-3 text-sm text-[#241405]/60">
                   <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
                   </svg>
@@ -108,10 +108,10 @@
         <div
           v-for="(artisan, index) in artisans"
           :key="artisan.id"
-          class="luxury-card group"
+          class="border border-[#241405]/10 rounded-sm p-6 group"
         >
           <!-- Portrait -->
-          <div class="luxury-image-wrapper mb-4 md:mb-6 rounded-sm overflow-hidden">
+          <div class="relative overflow-hidden mb-4 md:mb-6 rounded-sm overflow-hidden">
             <NuxtImg
               :src="artisan.image"
               :alt="artisan.name"
@@ -119,24 +119,24 @@
               loading="lazy"
               @error="handleImageError($event, 'portrait')"
             />
-            <div class="luxury-image-overlay" />
+            <div class="absolute inset-0 bg-[#241405]/20 opacity-0 hover:opacity-100 transition-opacity duration-300" />
           </div>
 
           <!-- Content -->
           <div>
-            <h3 class="font-serif text-xl md:text-2xl font-semibold text-luxury-wine-red mb-2">
+            <h3 class="font-serif text-xl md:text-2xl font-semibold text-[#722F37] mb-2">
               {{ artisan.name }}
             </h3>
 
-            <p class="text-xs sm:text-sm uppercase tracking-wider text-luxury-black mb-3 md:mb-4 font-semibold">
+            <p class="text-xs sm:text-sm uppercase tracking-wider text-[#241405] mb-3 md:mb-4 font-semibold">
               {{ artisan.specialty }}
             </p>
 
-            <p class="text-luxury-brown/80 leading-relaxed mb-4 md:mb-6 italic text-sm md:text-base">
+            <p class="text-[#241405]/80 leading-relaxed mb-4 md:mb-6 italic text-sm md:text-base">
               "{{ artisan.quote }}"
             </p>
 
-            <div class="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-luxury-brown/60">
+            <div class="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-[#241405]/60">
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
               </svg>
@@ -148,7 +148,7 @@
 
       <!-- CTA -->
       <div class="text-center mt-8 md:mt-12 lg:mt-16 px-4">
-        <NuxtLink to="/producers" class="luxury-btn luxury-btn-dark w-full sm:w-auto min-h-[48px] inline-flex items-center justify-center text-sm md:text-base">
+        <NuxtLink to="/producers" class="bg-[#722F37] text-white px-8 py-3.5 text-sm font-medium uppercase tracking-wider hover:bg-[#8B3A47] transition-colors duration-300 bg-[#241405] text-[#FCFAF2] px-8 py-3.5 text-sm font-medium uppercase tracking-wider hover:bg-[#722F37] transition-colors duration-300 w-full sm:w-auto min-h-[48px] inline-flex items-center justify-center text-sm md:text-base">
           {{ $t('luxury.artisans.cta') || 'Meet All Producers' }}
         </NuxtLink>
       </div>
@@ -229,7 +229,7 @@ const artisans = [
 </script>
 
 <style scoped>
-.luxury-card {
+.border border-[#241405]/10 rounded-sm p-6 {
   background: white;
   padding: 2rem;
   border: 1px solid rgba(139, 69, 19, 0.1);
@@ -238,25 +238,25 @@ const artisans = [
   overflow: hidden;
 }
 
-.luxury-card:hover {
+.border border-[#241405]/10 rounded-sm p-6:hover {
   transform: translateY(-8px);
   box-shadow: 0 20px 50px rgba(74, 28, 28, 0.15);
-  border-color: var(--luxury-black);
+  border-color: #241405;
 }
 
-.luxury-card::before {
+.border border-[#241405]/10 rounded-sm p-6::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 3px;
-  background: linear-gradient(to right, var(--luxury-black), var(--luxury-wine-red));
+  background: linear-gradient(to right, #241405, #722F37);
   transform: scaleX(0);
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.luxury-card:hover::before {
+.border border-[#241405]/10 rounded-sm p-6:hover::before {
   transform: scaleX(1);
 }
 

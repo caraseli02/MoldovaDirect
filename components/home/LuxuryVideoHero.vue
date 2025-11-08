@@ -1,5 +1,5 @@
 <template>
-  <div class="luxury-video-hero relative overflow-hidden">
+  <div class="video-hero-section relative overflow-hidden">
     <!-- Background Video/Image (To'ak Style) -->
     <figure class="video-container">
       <!-- Poster Image (Always Visible) -->
@@ -142,7 +142,7 @@ const onVideoError = () => {
 
 <style scoped>
 /* Hero Container (To'ak Style) */
-.luxury-video-hero {
+.video-hero-section {
   position: relative;
   width: 100%;
   min-height: 100vh;

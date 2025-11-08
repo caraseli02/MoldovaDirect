@@ -1,19 +1,19 @@
 <template>
-  <section class="luxury-section bg-white">
-    <div class="luxury-container">
+  <section class="py-16 md:py-24 bg-white">
+    <div class="container mx-auto px-4 md:px-6">
       <!-- Section Header -->
       <div class="text-center max-w-3xl mx-auto mb-8 md:mb-12 lg:mb-20 px-4">
-        <p class="luxury-eyebrow text-sm md:text-base">
+        <p class="text-xs uppercase tracking-[0.2em] font-medium text-[#722F37] text-sm md:text-base">
           {{ $t('luxury.packaging.eyebrow') || 'The Complete Experience' }}
         </p>
 
-        <h2 class="luxury-title text-2xl md:text-3xl lg:text-4xl">
+        <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl font-medium text-[#241405] text-2xl md:text-3xl lg:text-4xl">
           {{ $t('luxury.packaging.title') || 'Presentation as Exquisite as the Products' }}
         </h2>
 
-        <div class="luxury-divider mx-auto" />
+        <div class="w-16 h-px bg-[#722F37] mx-auto" />
 
-        <p class="luxury-description mx-auto text-sm md:text-base">
+        <p class="text-base text-[#241405]/70 leading-relaxed mx-auto text-sm md:text-base">
           {{ $t('luxury.packaging.description') || 'Every hamper is a work of art, thoughtfully curated and beautifully presented to create an unforgettable gift experience.' }}
         </p>
       </div>
@@ -30,12 +30,12 @@
               loading="lazy"
               @error="handleImageError($event, 'product')"
             />
-            <div class="absolute inset-0 bg-gradient-to-t from-luxury-dark-chocolate/20 to-transparent" />
+            <div class="absolute inset-0 bg-gradient-to-t from-[#241405]/20 to-transparent" />
           </div>
 
           <!-- Floating Badge -->
           <div class="absolute top-3 right-3 sm:top-4 sm:right-4 md:top-8 md:right-8 bg-white/95 backdrop-blur-sm px-3 py-1.5 sm:px-4 sm:py-2 md:px-6 md:py-3 rounded-full shadow-lg">
-            <p class="text-xs md:text-sm font-semibold text-luxury-wine-red uppercase tracking-wider">
+            <p class="text-xs md:text-sm font-semibold text-[#722F37] uppercase tracking-wider">
               {{ $t('luxury.packaging.badge') || 'Hand Curated' }}
             </p>
           </div>
@@ -45,16 +45,16 @@
         <div class="space-y-4 md:space-y-6 lg:space-y-8 px-4 lg:px-0">
           <!-- Feature 1 -->
           <div class="flex items-start space-x-3 sm:space-x-4 md:space-x-6">
-            <div class="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 bg-luxury-cream rounded-full flex items-center justify-center">
-              <svg class="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-luxury-wine-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 bg-[#FCFAF2] rounded-full flex items-center justify-center">
+              <svg class="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-[#722F37]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
               </svg>
             </div>
             <div>
-              <h3 class="text-base sm:text-lg md:text-xl lg:text-2xl font-serif font-semibold text-luxury-wine-red mb-1 md:mb-2">
+              <h3 class="text-base sm:text-lg md:text-xl lg:text-2xl font-serif font-semibold text-[#722F37] mb-1 md:mb-2">
                 {{ $t('luxury.packaging.feature1_title') || 'Premium Wooden Boxes' }}
               </h3>
-              <p class="text-luxury-brown/80 leading-relaxed text-sm md:text-base">
+              <p class="text-[#241405]/80 leading-relaxed text-sm md:text-base">
                 {{ $t('luxury.packaging.feature1_desc') || 'Each hamper arrives in a handcrafted wooden box with custom engravings, perfect for keepsake storage.' }}
               </p>
             </div>
@@ -62,16 +62,16 @@
 
           <!-- Feature 2 -->
           <div class="flex items-start space-x-3 sm:space-x-4 md:space-x-6">
-            <div class="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 bg-luxury-cream rounded-full flex items-center justify-center">
-              <svg class="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-luxury-wine-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 bg-[#FCFAF2] rounded-full flex items-center justify-center">
+              <svg class="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-[#722F37]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
             <div>
-              <h3 class="text-base sm:text-lg md:text-xl lg:text-2xl font-serif font-semibold text-luxury-wine-red mb-1 md:mb-2">
+              <h3 class="text-base sm:text-lg md:text-xl lg:text-2xl font-serif font-semibold text-[#722F37] mb-1 md:mb-2">
                 {{ $t('luxury.packaging.feature2_title') || 'Tasting Notes & Story Cards' }}
               </h3>
-              <p class="text-luxury-brown/80 leading-relaxed text-sm md:text-base">
+              <p class="text-[#241405]/80 leading-relaxed text-sm md:text-base">
                 {{ $t('luxury.packaging.feature2_desc') || 'Discover the heritage behind each product with beautifully illustrated story cards and tasting guides.' }}
               </p>
             </div>
@@ -79,16 +79,16 @@
 
           <!-- Feature 3 -->
           <div class="flex items-start space-x-3 sm:space-x-4 md:space-x-6">
-            <div class="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 bg-luxury-cream rounded-full flex items-center justify-center">
-              <svg class="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-luxury-wine-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 bg-[#FCFAF2] rounded-full flex items-center justify-center">
+              <svg class="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-[#722F37]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
               </svg>
             </div>
             <div>
-              <h3 class="text-base sm:text-lg md:text-xl lg:text-2xl font-serif font-semibold text-luxury-wine-red mb-1 md:mb-2">
+              <h3 class="text-base sm:text-lg md:text-xl lg:text-2xl font-serif font-semibold text-[#722F37] mb-1 md:mb-2">
                 {{ $t('luxury.packaging.feature3_title') || 'Sustainable Elegance' }}
               </h3>
-              <p class="text-luxury-brown/80 leading-relaxed text-sm md:text-base">
+              <p class="text-[#241405]/80 leading-relaxed text-sm md:text-base">
                 {{ $t('luxury.packaging.feature3_desc') || 'Eco-friendly materials meet luxury design. All packaging is recyclable or reusable, with zero plastic.' }}
               </p>
             </div>
@@ -98,7 +98,7 @@
           <div class="pt-2 sm:pt-4 md:pt-6">
             <NuxtLink
               to="/products?filter=hampers"
-              class="luxury-btn luxury-btn-dark inline-flex items-center justify-center space-x-2 sm:space-x-3 w-full sm:w-auto min-h-[48px] text-sm md:text-base"
+              class="bg-[#722F37] text-white px-8 py-3.5 text-sm font-medium uppercase tracking-wider hover:bg-[#8B3A47] transition-colors duration-300 bg-[#241405] text-[#FCFAF2] px-8 py-3.5 text-sm font-medium uppercase tracking-wider hover:bg-[#722F37] transition-colors duration-300 inline-flex items-center justify-center space-x-2 sm:space-x-3 w-full sm:w-auto min-h-[48px] text-sm md:text-base"
             >
               <span>{{ $t('luxury.packaging.cta') || 'Explore Gift Hampers' }}</span>
               <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -131,8 +131,8 @@
                 loading="lazy"
                 @error="handleImageError($event, 'product')"
               />
-              <div class="absolute inset-0 bg-luxury-black/10" />
-              <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-luxury-black/80 to-transparent">
+              <div class="absolute inset-0 bg-[#241405]/10" />
+              <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#241405]/80 to-transparent">
                 <p class="text-white text-sm font-medium uppercase tracking-wider">
                   {{ image.label }}
                 </p>
@@ -190,8 +190,8 @@
             loading="lazy"
             @error="handleImageError($event, 'product')"
           />
-          <div class="absolute inset-0 bg-luxury-black/10 md:bg-luxury-black/0 md:group-hover:bg-luxury-black/20 transition-colors duration-300" />
-          <div class="absolute bottom-0 left-0 right-0 p-3 sm:p-4 md:p-6 bg-gradient-to-t from-luxury-black/80 to-transparent">
+          <div class="absolute inset-0 bg-[#241405]/10 md:bg-[#241405]/0 md:group-hover:bg-[#241405]/20 transition-colors duration-300" />
+          <div class="absolute bottom-0 left-0 right-0 p-3 sm:p-4 md:p-6 bg-gradient-to-t from-[#241405]/80 to-transparent">
             <p class="text-white text-xs sm:text-sm font-medium uppercase tracking-wider">
               {{ image.label }}
             </p>
