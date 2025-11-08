@@ -14,8 +14,70 @@
         <div class="luxury-divider mx-auto" />
       </div>
 
-      <!-- Testimonials Grid -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8 px-4 lg:px-0">
+      <!-- Mobile: Horizontal Carousel -->
+      <div class="md:hidden mb-8">
+        <div class="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory px-4 pb-4 -mx-4 scrollbar-hide">
+          <div
+            v-for="testimonial in testimonials"
+            :key="testimonial.id"
+            class="flex-shrink-0 w-[85vw] max-w-[340px] snap-center"
+          >
+            <div class="bg-luxury-warm-white p-6 rounded-sm shadow-md h-full flex flex-col">
+              <!-- Stars -->
+              <div class="flex gap-1 mb-4">
+                <svg
+                  v-for="star in 5"
+                  :key="star"
+                  class="w-5 h-5 text-luxury-black fill-current"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                </svg>
+              </div>
+
+              <!-- Quote -->
+              <p class="text-luxury-brown/80 leading-relaxed mb-6 italic text-base flex-1">
+                "{{ testimonial.quote }}"
+              </p>
+
+              <!-- Customer Info -->
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+                  <NuxtImg
+                    :src="testimonial.avatar"
+                    :alt="testimonial.name"
+                    class="w-full h-full object-cover"
+                    loading="lazy"
+                    @error="handleImageError($event, 'avatar')"
+                  />
+                </div>
+
+                <div>
+                  <div class="font-semibold text-luxury-wine-red text-base">
+                    {{ testimonial.name }}
+                  </div>
+                  <div class="text-sm text-luxury-brown/60">
+                    {{ testimonial.location }}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Product Badge -->
+              <div
+                v-if="testimonial.product"
+                class="mt-4 pt-4 border-t border-luxury-black/20"
+              >
+                <div class="text-xs uppercase tracking-wider text-luxury-black">
+                  Purchased: {{ testimonial.product }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desktop: Testimonials Grid -->
+      <div class="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8 px-4 lg:px-0">
         <div
           v-for="(testimonial, index) in testimonials"
           :key="testimonial.id"
@@ -166,5 +228,14 @@ const customerPhotos = [
 <style scoped>
 .aspect-square {
   aspect-ratio: 1 / 1;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
 </style>

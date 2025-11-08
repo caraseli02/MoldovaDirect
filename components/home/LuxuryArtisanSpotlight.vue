@@ -18,8 +18,55 @@
         </p>
       </div>
 
-      <!-- Artisan Grid -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 px-4 lg:px-0">
+      <!-- Mobile: Horizontal Carousel -->
+      <div class="md:hidden mb-8">
+        <div class="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory px-4 pb-4 -mx-4 scrollbar-hide">
+          <div
+            v-for="artisan in artisans"
+            :key="artisan.id"
+            class="flex-shrink-0 w-[85vw] max-w-[340px] snap-center"
+          >
+            <div class="luxury-card h-full">
+              <!-- Portrait -->
+              <div class="luxury-image-wrapper mb-6 rounded-sm overflow-hidden">
+                <NuxtImg
+                  :src="artisan.image"
+                  :alt="artisan.name"
+                  class="w-full h-72 object-cover"
+                  loading="lazy"
+                  @error="handleImageError($event, 'portrait')"
+                />
+                <div class="luxury-image-overlay" />
+              </div>
+
+              <!-- Content -->
+              <div>
+                <h3 class="font-serif text-xl font-semibold text-luxury-wine-red mb-2">
+                  {{ artisan.name }}
+                </h3>
+
+                <p class="text-sm uppercase tracking-wider text-luxury-black mb-4 font-semibold">
+                  {{ artisan.specialty }}
+                </p>
+
+                <p class="text-luxury-brown/80 leading-relaxed mb-6 italic text-base">
+                  "{{ artisan.quote }}"
+                </p>
+
+                <div class="flex items-center gap-3 text-sm text-luxury-brown/60">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                  </svg>
+                  <span>{{ artisan.location }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desktop: Artisan Grid -->
+      <div class="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 px-4 lg:px-0">
         <div
           v-for="(artisan, index) in artisans"
           :key="artisan.id"
@@ -132,5 +179,14 @@ const artisans = [
 
 .luxury-card:hover::before {
   transform: scaleX(1);
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
 </style>

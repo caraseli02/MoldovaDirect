@@ -33,8 +33,75 @@
         </p>
       </div>
 
-      <!-- Product Grid - Mobile-optimized -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 mb-8 sm:mb-12">
+      <!-- Mobile: Horizontal Carousel -->
+      <div class="md:hidden mb-8">
+        <div class="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory px-4 pb-4 -mx-4 scrollbar-hide">
+          <div
+            v-for="product in featuredProducts"
+            :key="product.id"
+            class="flex-shrink-0 w-[85vw] max-w-[340px] snap-center"
+          >
+            <div class="bg-white rounded-sm overflow-hidden shadow-lg h-full flex flex-col">
+              <!-- Product Image -->
+              <div class="luxury-image-wrapper relative overflow-hidden">
+                <NuxtImg
+                  :src="product.image"
+                  :alt="product.name"
+                  class="w-full h-64 object-cover"
+                  loading="lazy"
+                  @error="handleImageError($event, 'product')"
+                />
+
+                <!-- Badge -->
+                <div
+                  v-if="product.badge"
+                  class="absolute top-4 right-4 bg-luxury-black text-luxury-cream text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full"
+                >
+                  {{ product.badge }}
+                </div>
+
+                <div class="luxury-image-overlay" />
+              </div>
+
+              <!-- Product Info -->
+              <div class="p-5 flex-1 flex flex-col">
+                <div class="text-xs uppercase tracking-wider text-luxury-black mb-2 font-semibold">
+                  {{ product.category }}
+                </div>
+
+                <h3 class="font-serif text-lg font-semibold text-luxury-wine-red mb-2">
+                  {{ product.name }}
+                </h3>
+
+                <p class="text-luxury-brown/70 text-sm mb-4 line-clamp-2 flex-1">
+                  {{ product.description }}
+                </p>
+
+                <!-- Price -->
+                <div class="flex items-baseline gap-2 mb-4">
+                  <span class="text-2xl font-serif font-bold text-luxury-wine-red">
+                    €{{ product.price }}
+                  </span>
+                  <span v-if="product.originalPrice" class="text-luxury-brown/50 line-through text-sm">
+                    €{{ product.originalPrice }}
+                  </span>
+                </div>
+
+                <!-- CTA -->
+                <NuxtLink
+                  :to="`/products/${product.slug}`"
+                  class="w-full inline-block text-center py-3 border-2 border-luxury-wine-red text-luxury-wine-red font-semibold uppercase tracking-wider text-sm hover:bg-luxury-wine-red hover:text-white transition-all duration-300"
+                >
+                  {{ $t('luxury.showcase.view_details') || 'View Details' }}
+                </NuxtLink>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desktop: Product Grid -->
+      <div class="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 mb-8 sm:mb-12">
         <div
           v-for="(product, index) in featuredProducts"
           :key="product.id"
@@ -262,5 +329,14 @@ const featuredProducts = [
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
 </style>

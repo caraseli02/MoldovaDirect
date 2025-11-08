@@ -110,7 +110,36 @@
       </div>
 
       <!-- Bottom: Unboxing Gallery -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6 px-4 lg:px-0">
+
+      <!-- Mobile: Horizontal Carousel -->
+      <div class="md:hidden">
+        <div class="flex gap-3 overflow-x-auto scroll-smooth snap-x snap-mandatory px-4 pb-4 -mx-4 scrollbar-hide">
+          <div
+            v-for="(image, index) in unboxingImages"
+            :key="index"
+            class="flex-shrink-0 w-[75vw] max-w-[300px] snap-center"
+          >
+            <div class="relative overflow-hidden rounded-sm shadow-lg">
+              <NuxtImg
+                :src="image.src"
+                :alt="image.alt"
+                class="w-full h-64 object-cover"
+                loading="lazy"
+                @error="handleImageError($event, 'product')"
+              />
+              <div class="absolute inset-0 bg-luxury-black/10" />
+              <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-luxury-black/80 to-transparent">
+                <p class="text-white text-sm font-medium uppercase tracking-wider">
+                  {{ image.label }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desktop: Grid -->
+      <div class="hidden md:grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6 px-4 lg:px-0">
         <div
           v-for="(image, index) in unboxingImages"
           :key="index"
@@ -160,4 +189,13 @@ const unboxingImages = [
 
 <style scoped>
 /* Luxury button styles inherited from global CSS */
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
 </style>

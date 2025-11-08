@@ -1,18 +1,18 @@
 <template>
   <header
     :class="[
-      'fixed left-0 right-0 z-50 will-change-transform transition-all duration-500',
+      'fixed left-0 right-0 z-50 will-change-transform transition-all duration-300',
       scrolled
-        ? 'top-0 bg-white/95 dark:bg-gray-950/95 backdrop-blur-md shadow-lg dark:shadow-slate-900/30'
+        ? 'top-0 bg-white/98 dark:bg-gray-950/98 backdrop-blur-sm shadow-sm dark:shadow-slate-900/20'
         : 'top-[44px] bg-transparent'
     ]">
     <div class="container">
-      <div class="flex items-center justify-between h-20">
+      <div class="flex items-center justify-between h-16 md:h-20">
         <!-- Logo -->
         <NuxtLink :to="localePath('/')" class="flex items-center space-x-2 group">
           <span
             :class="[
-              'text-2xl font-serif tracking-wide transition-colors duration-300',
+              'text-xl md:text-2xl font-serif tracking-wide transition-colors duration-300',
               scrolled
                 ? 'text-luxury-wine-red dark:text-primary-400'
                 : 'text-white drop-shadow-lg'
@@ -23,10 +23,10 @@
         </NuxtLink>
 
         <!-- Desktop Navigation -->
-        <nav class="hidden md:flex items-center space-x-10">
+        <nav class="hidden md:flex items-center space-x-8 lg:space-x-10">
           <NuxtLink :to="localePath('/')"
             :class="[
-              'text-sm uppercase tracking-widest font-medium transition-all duration-300 hover:opacity-70',
+              'text-xs uppercase tracking-widest font-medium transition-all duration-200 hover:text-luxury-wine-red',
               scrolled
                 ? 'text-gray-700 dark:text-slate-300'
                 : 'text-white drop-shadow-md'
@@ -36,7 +36,7 @@
           </NuxtLink>
           <NuxtLink :to="localePath('/products')"
             :class="[
-              'text-sm uppercase tracking-widest font-medium transition-all duration-300 hover:opacity-70',
+              'text-xs uppercase tracking-widest font-medium transition-all duration-200 hover:text-luxury-wine-red',
               scrolled
                 ? 'text-gray-700 dark:text-slate-300'
                 : 'text-white drop-shadow-md'
@@ -46,7 +46,7 @@
           </NuxtLink>
           <NuxtLink :to="localePath('/about')"
             :class="[
-              'text-sm uppercase tracking-widest font-medium transition-all duration-300 hover:opacity-70',
+              'text-xs uppercase tracking-widest font-medium transition-all duration-200 hover:text-luxury-wine-red',
               scrolled
                 ? 'text-gray-700 dark:text-slate-300'
                 : 'text-white drop-shadow-md'
@@ -56,7 +56,7 @@
           </NuxtLink>
           <NuxtLink :to="localePath('/contact')"
             :class="[
-              'text-sm uppercase tracking-widest font-medium transition-all duration-300 hover:opacity-70',
+              'text-xs uppercase tracking-widest font-medium transition-all duration-200 hover:text-luxury-wine-red',
               scrolled
                 ? 'text-gray-700 dark:text-slate-300'
                 : 'text-white drop-shadow-md'

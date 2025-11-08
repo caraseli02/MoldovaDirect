@@ -1,14 +1,14 @@
 <template>
   <div class="luxury-video-hero">
-    <!-- Video Background - Desktop Only for Performance -->
+    <!-- Video Background - All Devices -->
     <video
-      v-if="shouldShowVideo && !reducedMotion && !isMobile"
+      v-if="shouldShowVideo && !reducedMotion"
       ref="videoRef"
       autoplay
       muted
       loop
       playsinline
-      preload="metadata"
+      :preload="isMobile ? 'none' : 'metadata'"
       poster="https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?q=80&w=2070&auto=format&fit=crop"
       class="hero-video"
       :class="{ 'opacity-0': !videoLoaded, 'opacity-85': videoLoaded }"
@@ -22,14 +22,14 @@
       >
     </video>
 
-    <!-- Fallback Image - Mobile, Reduced Motion, or Video Error -->
+    <!-- Fallback Image - Reduced Motion or Video Error -->
     <div v-if="showFallbackImage" class="fallback-image">
       <NuxtImg
         src="https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?q=80&w=2070&auto=format&fit=crop"
         alt="Moldovan vineyard at golden hour"
         class="w-full h-full object-cover"
-        :loading="isMobile ? 'eager' : 'lazy'"
-        :preload="isMobile"
+        loading="eager"
+        preload
         @error="handleImageError($event, 'landscape')"
       />
     </div>
@@ -124,11 +124,12 @@ onMounted(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
     reducedMotion.value = mediaQuery.matches
 
-    // Only load video on desktop after a short delay (improves LCP)
-    if (!isMobile.value && !reducedMotion.value) {
+    // Load video with delay (desktop: 100ms, mobile: 500ms for better performance)
+    if (!reducedMotion.value) {
+      const delay = isMobile.value ? 500 : 100
       setTimeout(() => {
         shouldShowVideo.value = true
-      }, 100)
+      }, delay)
     }
 
     // Cleanup
@@ -140,7 +141,7 @@ onMounted(() => {
 
 // Computed property to determine if fallback image should be shown
 const showFallbackImage = computed(() => {
-  return isMobile.value || reducedMotion.value || videoError.value || !shouldShowVideo.value
+  return reducedMotion.value || videoError.value || !shouldShowVideo.value
 })
 
 // Video event handlers
