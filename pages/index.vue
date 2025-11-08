@@ -51,8 +51,8 @@
     <!-- Wine & Food Pairings - Educational content -->
     <HomePairingGuidesSection />
 
-    <!-- Wine Story CTA - Link to full heritage page -->
-    <section class="relative overflow-hidden bg-gradient-to-br from-primary/8 via-gold-50/40 to-terracotta/8 py-20 md:py-28">
+    <!-- Wine Story CTA - Link to full heritage page - FIXED: Reduced padding for mobile -->
+    <section class="relative overflow-hidden bg-gradient-to-br from-primary/8 via-gold-50/40 to-terracotta/8 py-16 md:py-24">
       <!-- Decorative Background -->
       <div class="absolute inset-0 overflow-hidden opacity-25">
         <div class="absolute -right-40 top-0 h-96 w-96 rounded-full bg-gradient-to-bl from-gold-500/40 to-transparent blur-3xl" />
@@ -72,9 +72,9 @@
               scale: 1,
               transition: { duration: 600 },
             }"
-            class="mb-6 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-gold-500/20 to-gold-600/20 px-6 py-3 text-sm font-bold text-gold-700 shadow-lg backdrop-blur-sm ring-1 ring-gold-500/30"
+            class="mb-4 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-gold-500/20 to-gold-600/20 px-4 py-2 text-xs font-bold text-gold-700 shadow-lg backdrop-blur-sm ring-1 ring-gold-500/30 md:mb-6 md:px-6 md:py-3 md:text-sm"
           >
-            <commonIcon name="lucide:wine" class="h-5 w-5" />
+            <commonIcon name="lucide:wine" class="h-4 w-4 md:h-5 md:w-5" />
             Discover Our Heritage
           </div>
           <h2
@@ -85,7 +85,7 @@
               y: 0,
               transition: { duration: 800, delay: 100 },
             }"
-            class="bg-gradient-to-br from-primary via-slate-900 to-primary/80 bg-clip-text text-4xl font-extrabold tracking-tight text-transparent sm:text-5xl md:text-6xl"
+            class="bg-gradient-to-br from-primary via-slate-900 to-primary/80 bg-clip-text text-3xl font-extrabold tracking-tight text-transparent sm:text-4xl md:text-5xl lg:text-6xl"
           >
             The Story Behind Every Bottle
           </h2>
@@ -97,7 +97,7 @@
               y: 0,
               transition: { duration: 800, delay: 200 },
             }"
-            class="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-slate-700 sm:text-xl"
+            class="mx-auto mt-4 max-w-3xl text-base leading-relaxed text-slate-700 md:mt-6 md:text-lg lg:text-xl"
           >
             Explore Moldova's 7,000-year winemaking tradition, meet our passionate producers, and discover the regions that make our wines unique
           </p>
@@ -112,7 +112,7 @@
           >
             <NuxtLink
               :to="localePath('/wine-story')"
-              class="group mt-10 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-primary via-primary to-primary/90 px-10 py-5 font-bold text-white shadow-2xl transition-all hover:scale-105 hover:shadow-2xl hover:shadow-primary/30"
+              class="group mt-6 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-primary via-primary to-primary/90 px-6 py-3 font-bold text-white shadow-2xl transition-all hover:scale-105 hover:shadow-2xl hover:shadow-primary/30 md:mt-10 md:px-10 md:py-5"
             >
               Explore Wine Heritage
               <commonIcon name="lucide:arrow-right" class="h-5 w-5 transition-transform group-hover:translate-x-1" />
@@ -127,13 +127,13 @@
               opacity: 1,
               transition: { duration: 1000, delay: 500 },
             }"
-            class="mt-12 flex items-center justify-center gap-4 text-gold-600/40"
+            class="mt-8 flex items-center justify-center gap-3 text-gold-600/40 md:mt-12 md:gap-4"
           >
-            <commonIcon name="lucide:wine" class="h-5 w-5" />
-            <div class="h-px w-16 bg-gradient-to-r from-transparent via-gold-500/50 to-transparent" />
-            <commonIcon name="lucide:grape" class="h-5 w-5" />
-            <div class="h-px w-16 bg-gradient-to-r from-transparent via-gold-500/50 to-transparent" />
-            <commonIcon name="lucide:wine" class="h-5 w-5" />
+            <commonIcon name="lucide:wine" class="h-4 w-4 md:h-5 md:w-5" />
+            <div class="h-px w-12 bg-gradient-to-r from-transparent via-gold-500/50 to-transparent md:w-16" />
+            <commonIcon name="lucide:grape" class="h-4 w-4 md:h-5 md:w-5" />
+            <div class="h-px w-12 bg-gradient-to-r from-transparent via-gold-500/50 to-transparent md:w-16" />
+            <commonIcon name="lucide:wine" class="h-4 w-4 md:h-5 md:w-5" />
           </div>
         </div>
       </div>
@@ -256,4 +256,3 @@ useLandingSeo({
   structuredData
 })
 </script>
-

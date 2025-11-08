@@ -7,11 +7,11 @@
       y: 0,
       transition: { duration: 500 },
     }"
-    class="group relative overflow-hidden rounded-2xl bg-white shadow-lg transition-all duration-300 hover:shadow-2xl"
+    class="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl bg-white shadow-lg transition-all duration-300 hover:shadow-2xl"
     @click="$emit('click', producer)"
   >
-    <!-- Portrait Image -->
-    <div class="relative aspect-square overflow-hidden bg-slate-100">
+    <!-- Portrait Image - FIXED: Changed from aspect-square to 4:5 for better mobile fit -->
+    <div class="relative aspect-[4/5] overflow-hidden bg-slate-100">
       <NuxtImg
         :src="producer.portraitImage"
         :alt="producer.name"
@@ -21,7 +21,7 @@
       />
 
       <!-- Region Badge -->
-      <div class="absolute bottom-3 left-3 rounded-full bg-black/70 px-3 py-1 text-xs font-medium text-white backdrop-blur">
+      <div class="absolute bottom-3 left-3 rounded-full bg-black/70 px-3 py-1.5 text-xs font-medium text-white backdrop-blur">
         {{ regionName }}
       </div>
 
@@ -37,10 +37,10 @@
       </div>
     </div>
 
-    <!-- Content -->
-    <div class="p-6">
+    <!-- Content - FIXED: Better padding and spacing for mobile -->
+    <div class="flex flex-1 flex-col p-4 md:p-6">
       <!-- Name -->
-      <h3 class="text-xl font-bold text-slate-900">
+      <h3 class="text-lg font-bold text-slate-900 md:text-xl">
         {{ producer.name }}
       </h3>
 
@@ -49,26 +49,27 @@
         {{ getLocalizedText(producer.specialty) }}
       </p>
 
-      <!-- Established Year -->
-      <div
-        v-if="producer.establishedYear"
-        class="mt-2 flex items-center gap-2 text-xs text-slate-500"
-      >
-        <commonIcon name="lucide:calendar" class="h-3.5 w-3.5" />
-        <span>{{ t('wineStory.producers.establishedYear', { year: producer.establishedYear }) }}</span>
-      </div>
+      <!-- Meta Info - More compact on mobile -->
+      <div class="mt-2 space-y-1 text-xs text-slate-500">
+        <div
+          v-if="producer.establishedYear"
+          class="flex items-center gap-1.5"
+        >
+          <commonIcon name="lucide:calendar" class="h-3 w-3" />
+          <span>{{ t('wineStory.producers.establishedYear', { year: producer.establishedYear }) }}</span>
+        </div>
 
-      <!-- Generations -->
-      <div
-        v-if="producer.generationsOfWinemaking"
-        class="mt-1 flex items-center gap-2 text-xs text-slate-500"
-      >
-        <commonIcon name="lucide:users" class="h-3.5 w-3.5" />
-        <span>{{ t('wineStory.producers.generations', { count: producer.generationsOfWinemaking }) }}</span>
+        <div
+          v-if="producer.generationsOfWinemaking"
+          class="flex items-center gap-1.5"
+        >
+          <commonIcon name="lucide:users" class="h-3 w-3" />
+          <span>{{ t('wineStory.producers.generations', { count: producer.generationsOfWinemaking }) }}</span>
+        </div>
       </div>
 
       <!-- Short Bio -->
-      <p class="mt-4 line-clamp-3 text-base leading-relaxed text-slate-600">
+      <p class="mt-3 line-clamp-3 flex-1 text-sm leading-relaxed text-slate-600 md:text-base">
         {{ getLocalizedText(producer.shortBio) }}
       </p>
 
@@ -134,5 +135,13 @@ article:focus-visible {
   outline: 2px solid transparent;
   outline-offset: 2px;
   box-shadow: 0 0 0 2px var(--color-primary), 0 0 0 4px white;
+}
+
+/* Line clamp utility */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 </style>
