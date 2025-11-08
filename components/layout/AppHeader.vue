@@ -1,7 +1,7 @@
 <template>
-  <header class="fixed top-0 left-0 right-0 z-50 bg-[#FCFAF2] transition-all duration-300">
-    <div class="container mx-auto px-4 md:px-6">
-      <div class="flex items-center justify-between h-16 md:h-20">
+  <header class="fixed top-0 left-0 right-0 z-50 bg-[#FCFAF2] border-b border-[#241405]/10 transition-all duration-300">
+    <div class="max-w-[1920px] mx-auto px-4 md:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20 md:h-24">
 
         <!-- Left: Hamburger Menu Button (To'ak style - 3 lines) -->
         <button
@@ -32,7 +32,7 @@
         </NuxtLink>
 
         <!-- Right: User Actions (To'ak style) -->
-        <div class="flex items-center space-x-1 md:space-x-2">
+        <div class="flex items-center space-x-2 md:space-x-4">
 
           <!-- Search Icon (To'ak SVG) -->
           <button

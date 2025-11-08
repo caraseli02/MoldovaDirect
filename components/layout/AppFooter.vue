@@ -1,13 +1,13 @@
 <template>
-  <footer class="bg-luxury-dark-chocolate text-luxury-cream border-t border-luxury-brown/20">
-    <div class="container py-16 lg:py-20">
+  <footer class="bg-[#241405] text-[#FCFAF2] border-t border-[#FCFAF2]/10">
+    <div class="max-w-[1920px] mx-auto px-4 md:px-6 lg:px-8 py-16 lg:py-20">
       <!-- Brand Story Section -->
       <div class="text-center max-w-2xl mx-auto mb-16">
-        <h3 class="font-serif text-3xl font-semibold text-luxury-cream mb-4" style="font-family: 'Playfair Display', Georgia, serif;">
+        <h3 class="font-serif text-3xl font-semibold text-[#FCFAF2] mb-4" style="font-family: 'Playfair Display', Georgia, serif;">
           Moldova Direct
         </h3>
-        <div class="w-16 h-px bg-luxury-wine-red mx-auto mb-6" />
-        <p class="text-luxury-cream/70 text-sm leading-relaxed italic">
+        <div class="w-16 h-px bg-[#722F37] mx-auto mb-6" />
+        <p class="text-[#FCFAF2]/70 text-sm leading-relaxed italic">
           {{ $t('footer.tagline') || 'Curating the finest treasures from Moldovan soil to your table since 1950' }}
         </p>
       </div>
@@ -15,19 +15,19 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
         <!-- About Section -->
         <div>
-          <h4 class="text-sm font-semibold mb-6 uppercase tracking-widest text-luxury-cream">{{ $t('footer.info.title') || 'Information' }}</h4>
-          <p class="text-luxury-cream/60 text-sm leading-relaxed mb-4">
+          <h4 class="text-sm font-semibold mb-6 uppercase tracking-widest text-[#FCFAF2]">{{ $t('footer.info.title') || 'Information' }}</h4>
+          <p class="text-[#FCFAF2]/60 text-sm leading-relaxed mb-4">
             {{ $t('footer.info.about') }}
           </p>
           <!-- Sustainability Certifications -->
           <div class="mt-6 space-y-3">
-            <div class="flex items-center gap-2 text-xs text-luxury-cream/50">
+            <div class="flex items-center gap-2 text-xs text-[#FCFAF2]/50">
               <svg class="h-5 w-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
               </svg>
               <span class="uppercase tracking-wider">{{ $t('footer.certifications.organic') || 'Organic Certified' }}</span>
             </div>
-            <div class="flex items-center gap-2 text-xs text-luxury-cream/50">
+            <div class="flex items-center gap-2 text-xs text-[#FCFAF2]/50">
               <svg class="h-5 w-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
               </svg>
@@ -38,25 +38,25 @@
 
         <!-- Quick Links -->
         <div>
-          <h4 class="text-sm font-semibold mb-6 uppercase tracking-widest text-luxury-cream">{{ $t('footer.explore.title') || 'Explore' }}</h4>
+          <h4 class="text-sm font-semibold mb-6 uppercase tracking-widest text-[#FCFAF2]">{{ $t('footer.explore.title') || 'Explore' }}</h4>
           <ul class="space-y-3">
             <li>
-              <NuxtLink :to="localePath('/about')" class="text-luxury-cream/60 hover:text-luxury-cream transition-colors text-sm">
+              <NuxtLink :to="localePath('/about')" class="text-[#FCFAF2]/60 hover:text-[#FCFAF2] transition-colors text-sm">
                 {{ $t('common.about') }}
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink :to="localePath('/products')" class="text-luxury-cream/60 hover:text-luxury-cream transition-colors text-sm">
+              <NuxtLink :to="localePath('/products')" class="text-[#FCFAF2]/60 hover:text-[#FCFAF2] transition-colors text-sm">
                 {{ $t('common.shop') }}
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink :to="localePath('/terms')" class="text-luxury-cream/60 hover:text-luxury-cream transition-colors text-sm">
+              <NuxtLink :to="localePath('/terms')" class="text-[#FCFAF2]/60 hover:text-[#FCFAF2] transition-colors text-sm">
                 {{ $t('footer.info.terms') }}
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink :to="localePath('/privacy')" class="text-luxury-cream/60 hover:text-luxury-cream transition-colors text-sm">
+              <NuxtLink :to="localePath('/privacy')" class="text-[#FCFAF2]/60 hover:text-[#FCFAF2] transition-colors text-sm">
                 {{ $t('footer.info.privacy') }}
               </NuxtLink>
             </li>
@@ -65,25 +65,25 @@
 
         <!-- Customer Care -->
         <div>
-          <h4 class="text-sm font-semibold mb-6 uppercase tracking-widest text-luxury-cream">{{ $t('footer.help.title') }}</h4>
+          <h4 class="text-sm font-semibold mb-6 uppercase tracking-widest text-[#FCFAF2]">{{ $t('footer.help.title') }}</h4>
           <ul class="space-y-3">
             <li>
-              <NuxtLink :to="localePath('/contact')" class="text-luxury-cream/60 hover:text-luxury-cream transition-colors text-sm">
+              <NuxtLink :to="localePath('/contact')" class="text-[#FCFAF2]/60 hover:text-[#FCFAF2] transition-colors text-sm">
                 {{ $t('footer.help.contact') }}
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink :to="localePath('/faq')" class="text-luxury-cream/60 hover:text-luxury-cream transition-colors text-sm">
+              <NuxtLink :to="localePath('/faq')" class="text-[#FCFAF2]/60 hover:text-[#FCFAF2] transition-colors text-sm">
                 {{ $t('footer.help.faq') }}
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink :to="localePath('/shipping')" class="text-luxury-cream/60 hover:text-luxury-cream transition-colors text-sm">
+              <NuxtLink :to="localePath('/shipping')" class="text-[#FCFAF2]/60 hover:text-[#FCFAF2] transition-colors text-sm">
                 {{ $t('footer.info.shipping') }}
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink :to="localePath('/returns')" class="text-luxury-cream/60 hover:text-luxury-cream transition-colors text-sm">
+              <NuxtLink :to="localePath('/returns')" class="text-[#FCFAF2]/60 hover:text-[#FCFAF2] transition-colors text-sm">
                 {{ $t('footer.help.returns') }}
               </NuxtLink>
             </li>
@@ -92,8 +92,8 @@
 
         <!-- Newsletter -->
         <div>
-          <h4 class="text-sm font-semibold mb-6 uppercase tracking-widest text-luxury-cream">{{ $t('footer.newsletter.title') }}</h4>
-          <p class="text-luxury-cream/60 text-sm mb-6 leading-relaxed">
+          <h4 class="text-sm font-semibold mb-6 uppercase tracking-widest text-[#FCFAF2]">{{ $t('footer.newsletter.title') }}</h4>
+          <p class="text-[#FCFAF2]/60 text-sm mb-6 leading-relaxed">
             {{ $t('footer.newsletter.description') }}
           </p>
           <form @submit.prevent="subscribeNewsletter" class="flex flex-col space-y-3">
@@ -103,14 +103,14 @@
               :placeholder="$t('footer.newsletter.placeholder')"
               :disabled="isSubmitting"
               :aria-label="$t('footer.newsletter.placeholder')"
-              class="px-4 py-3 bg-luxury-brown/30 text-luxury-cream border border-luxury-cream/20 rounded-none focus:outline-none focus:border-luxury-wine-red disabled:opacity-50 disabled:cursor-not-allowed placeholder-luxury-cream/40 text-sm"
+              class="px-4 py-3 bg-[#241405]/30 text-[#FCFAF2] border border-luxury-cream/20 rounded-none focus:outline-none focus:border-luxury-wine-red disabled:opacity-50 disabled:cursor-not-allowed placeholder-luxury-cream/40 text-sm"
               required
               aria-label="Email address"
             >
             <Button
               type="submit"
               :disabled="isSubmitting"
-              class="px-6 py-3 bg-luxury-wine-red text-white rounded-none hover:bg-luxury-burgundy transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-semibold uppercase tracking-wider text-xs"
+              class="px-6 py-3 bg-[#722F37] text-white rounded-none hover:bg-[#8B3A47] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-semibold uppercase tracking-wider text-xs"
             >
               <span v-if="!isSubmitting">{{ $t('footer.newsletter.button') }}</span>
               <span v-else class="flex items-center justify-center gap-2">
@@ -129,7 +129,7 @@
       <div class="mt-16 pt-8 border-t border-luxury-cream/10">
         <div class="flex flex-col md:flex-row items-center justify-between gap-6">
           <div class="text-center md:text-left">
-            <p class="text-xs text-luxury-cream/40 mb-4 uppercase tracking-widest">{{ $t('footer.payment.title') }}</p>
+            <p class="text-xs text-[#FCFAF2]/40 mb-4 uppercase tracking-widest">{{ $t('footer.payment.title') }}</p>
             <div class="flex gap-2 items-center">
               <!-- Visa -->
               <div class="h-8 px-3 bg-white rounded flex items-center justify-center">
@@ -159,7 +159,7 @@
             </div>
           </div>
 
-          <div class="text-center text-luxury-cream/40 text-xs">
+          <div class="text-center text-[#FCFAF2]/40 text-xs">
             {{ $t('footer.copyright') }}
           </div>
         </div>
