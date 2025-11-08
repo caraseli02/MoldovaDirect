@@ -7,7 +7,7 @@
           {{ $t('luxury.showcase.eyebrow') || 'Curated Selection' }}
         </p>
 
-        <h2 class="text-3xl md:text-4xl font-serif font-medium text-[#241405] mb-6">
+        <h2 class="text-4xl md:text-5xl font-serif font-medium text-[#241405] mb-6">
           {{ $t('luxury.showcase.title') || 'Signature Collections' }}
         </h2>
 
@@ -26,7 +26,7 @@
           <div
             v-for="product in featuredProducts"
             :key="product.id"
-            class="flex-shrink-0 w-[280px] snap-center"
+            class="flex-shrink-0 w-[300px] snap-center"
           >
             <!-- To'ak Product Card -->
             <article class="product-card">
@@ -44,7 +44,7 @@
                   <!-- Badge -->
                   <div
                     v-if="product.badge"
-                    class="absolute top-3 left-3 bg-[#241405] text-[#FCFAF2] text-[10px] font-medium uppercase tracking-wider px-2.5 py-1"
+                    class="absolute top-4 left-4 bg-[#241405] text-[#FCFAF2] text-[10px] font-medium uppercase tracking-wider px-2.5 py-1"
                   >
                     {{ product.badge }}
                   </div>
@@ -72,7 +72,7 @@
 
               <!-- Product Info -->
               <div class="product-info">
-                <h3 class="product-title text-base font-serif font-normal text-[#241405] mb-2 leading-snug">
+                <h3 class="product-title text-lg font-serif font-normal text-[#241405] mb-2 leading-snug">
                   {{ product.name }}
                 </h3>
 
@@ -143,7 +143,7 @@
       </div>
 
       <!-- Desktop: Product Grid -->
-      <div class="hidden md:grid grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-12">
+      <div class="hidden md:grid grid-cols-3 gap-x-8 gap-y-12">
         <article
           v-for="product in featuredProducts"
           :key="product.id"
@@ -163,7 +163,7 @@
               <!-- Badge -->
               <div
                 v-if="product.badge"
-                class="absolute top-3 left-3 bg-[#241405] text-[#FCFAF2] text-[10px] font-medium uppercase tracking-wider px-2.5 py-1"
+                class="absolute top-4 left-4 bg-[#241405] text-[#FCFAF2] text-[10px] font-medium uppercase tracking-wider px-2.5 py-1"
               >
                 {{ product.badge }}
               </div>
@@ -191,7 +191,7 @@
 
           <!-- Product Info -->
           <div class="product-info">
-            <h3 class="product-title text-base font-serif font-normal text-[#241405] mb-2 leading-snug">
+            <h3 class="product-title text-lg font-serif font-normal text-[#241405] mb-2 leading-snug">
               {{ product.name }}
             </h3>
 

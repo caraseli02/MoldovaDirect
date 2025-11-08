@@ -3,17 +3,17 @@
     <div class="container mx-auto px-4 md:px-6">
       <div class="flex items-center justify-between h-16 md:h-20">
 
-        <!-- Left: Hamburger Menu Button (To'ak style) -->
+        <!-- Left: Hamburger Menu Button (To'ak style - 3 lines) -->
         <button
           type="button"
           @click="toggleMobileMenu"
           :aria-label="mobileMenuOpen ? 'Close menu' : 'Open menu'"
           :aria-expanded="mobileMenuOpen"
           aria-controls="nav-menu"
-          class="flex items-center justify-center w-11 h-11 text-[#241405] hover:opacity-70 transition-opacity focus:outline-none"
+          class="flex items-center justify-center w-11 h-11 text-[#241405] hover:opacity-60 transition-opacity focus:outline-none"
         >
-          <svg width="23" height="11" viewBox="0 0 23 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M21.6922 9.51302H0.858887M21.6922 0.804688H0.858887" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+          <svg width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 2H22M2 9H22M2 16H22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
           </svg>
           <span class="sr-only">Menu</span>
         </button>
@@ -39,7 +39,7 @@
             type="button"
             @click="goToSearch"
             :aria-label="'Search'"
-            class="flex items-center justify-center w-11 h-11 text-[#241405] hover:opacity-70 transition-opacity focus:outline-none"
+            class="flex items-center justify-center w-11 h-11 text-[#241405] hover:opacity-60 transition-opacity focus:outline-none"
           >
             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M12.3047 21.25C17.5514 21.25 21.8047 16.9967 21.8047 11.75C21.8047 6.50329 17.5514 2.25 12.3047 2.25C7.05798 2.25 2.80469 6.50329 2.80469 11.75C2.80469 16.9967 7.05798 21.25 12.3047 21.25Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -52,7 +52,7 @@
           <NuxtLink
             :to="localePath('/account')"
             :aria-label="'Account'"
-            class="flex items-center justify-center w-11 h-11 text-[#241405] hover:opacity-70 transition-opacity"
+            class="flex items-center justify-center w-11 h-11 text-[#241405] hover:opacity-60 transition-opacity"
           >
             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M12.8047 12.25C15.5661 12.25 17.8047 10.0114 17.8047 7.25C17.8047 4.48858 15.5661 2.25 12.8047 2.25C10.0433 2.25 7.80469 4.48858 7.80469 7.25C7.80469 10.0114 10.0433 12.25 12.8047 12.25Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -65,7 +65,7 @@
           <NuxtLink
             :to="localePath('/cart')"
             :aria-label="cartItemsCount > 0 ? `Cart (${cartItemsCount} items)` : 'Cart'"
-            class="relative flex items-center justify-center w-11 h-11 text-[#241405] hover:opacity-70 transition-opacity"
+            class="relative flex items-center justify-center w-11 h-11 text-[#241405] hover:opacity-60 transition-opacity"
           >
             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M8.30469 7.91952V6.94952C8.30469 4.69952 10.1147 2.48952 12.3647 2.27952C15.0447 2.01952 17.3047 4.12952 17.3047 6.75952V8.13952" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>

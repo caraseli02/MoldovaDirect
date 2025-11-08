@@ -43,25 +43,16 @@
     <div class="hero-content">
       <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Main Heading (To'ak Style - Split) -->
-        <h1
-          class="hero-title-line1 text-white font-light mb-2"
-          style="opacity: 1.0;"
-        >
+        <h1 class="hero-title-line1 text-white font-light mb-2">
           {{ $t('luxury.hero.title_line1') || 'From Moldovan Soil' }}
         </h1>
 
         <div class="hero-subtitle-section">
-          <h1
-            class="hero-title-line2 text-white font-light mb-6"
-            style="opacity: 1.0;"
-          >
+          <h1 class="hero-title-line2 text-white font-light mb-6">
             {{ $t('luxury.hero.title_line2') || 'to Spanish Tables' }}
           </h1>
 
-          <p
-            class="hero-description text-white/90 mb-8"
-            style="opacity: 1.0;"
-          >
+          <p class="hero-description text-white/90 mb-8">
             {{ $t('luxury.hero.description') || 'Experience premium Moldovan wines and artisan gourmet products in their finest form—from the heart of Moldova.' }}
           </p>
 
@@ -174,8 +165,8 @@ const onVideoError = () => {
 .poster-image {
   position: absolute;
   top: 50%;
-  left: 60%;
-  transform: translate(-60%, -50%);
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -186,8 +177,8 @@ const onVideoError = () => {
 .hero-video {
   position: absolute;
   top: 50%;
-  left: 60%;
-  transform: translate(-60%, -50%);
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -198,8 +189,8 @@ const onVideoError = () => {
 .hero-content {
   position: absolute;
   left: 0;
-  top: 61%;
-  transform: translate(0, -61%);
+  top: 50%;
+  transform: translate(0, -50%);
   z-index: 10;
   width: 100%;
   text-align: left;
@@ -210,7 +201,7 @@ const onVideoError = () => {
 .hero-title-line2 {
   font-family: 'Playfair Display', Georgia, serif;
   font-weight: 300;
-  font-size: clamp(2.5rem, 8vw, 6rem);
+  font-size: clamp(2.5rem, 7vw, 5rem);
   line-height: 1.1;
   letter-spacing: -0.02em;
 }
