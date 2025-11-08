@@ -1,178 +1,127 @@
 <template>
   <header
-    class="bg-white dark:bg-gray-950 shadow-sm dark:shadow-slate-900/20 sticky top-0 z-50 will-change-transform">
-    <div class="container">
-      <div class="flex items-center justify-between h-16">
+    class="fixed top-0 left-0 right-0 z-50 bg-white/72 dark:bg-black/72 backdrop-blur-xl backdrop-saturate-[180%] border-b border-gray-200/20 dark:border-gray-700/20"
+    style="-webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px);"
+  >
+    <div class="max-w-[980px] mx-auto px-4 sm:px-6">
+      <div class="flex items-center justify-between h-[44px]">
         <!-- Logo -->
-        <NuxtLink :to="localePath('/')" class="flex items-center space-x-2">
-          <span class="text-xl font-bold text-primary-600 dark:text-primary-400">Moldova Direct</span>
+        <NuxtLink :to="localePath('/')" class="flex items-center -ml-2">
+          <span class="text-[21px] font-semibold tracking-tight text-gray-900 dark:text-white">
+            Moldova
+          </span>
         </NuxtLink>
 
-        <!-- Desktop Navigation -->
-        <nav class="hidden md:flex items-center space-x-8">
-          <NuxtLink :to="localePath('/')"
-            class="text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
-            {{ $t('common.home') }}
-          </NuxtLink>
-          <NuxtLink :to="localePath('/products')"
-            class="text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+        <!-- Desktop Navigation - Apple exact center -->
+        <nav class="hidden md:flex items-center space-x-8 absolute left-1/2 transform -translate-x-1/2">
+          <NuxtLink
+            :to="localePath('/products')"
+            class="text-[12px] font-normal text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+          >
             {{ $t('common.shop') }}
           </NuxtLink>
-          <NuxtLink :to="localePath('/about')"
-            class="text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+          <NuxtLink
+            :to="localePath('/about')"
+            class="text-[12px] font-normal text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+          >
             {{ $t('common.about') }}
           </NuxtLink>
-          <NuxtLink :to="localePath('/contact')"
-            class="text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+          <NuxtLink
+            :to="localePath('/contact')"
+            class="text-[12px] font-normal text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+          >
             {{ $t('common.contact') }}
           </NuxtLink>
         </nav>
 
-        <!-- Right side actions -->
-        <div class="flex items-center">
-          <!-- Desktop actions -->
-          <div class="hidden md:flex items-center space-x-4">
-            <!-- Language Switcher -->
+        <!-- Right side icons - Apple minimal -->
+        <div class="flex items-center gap-4">
+          <div class="hidden md:flex items-center gap-4">
             <LanguageSwitcher />
-
-            <!-- Theme Toggle -->
             <ThemeToggle />
 
-            <!-- Search -->
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              :aria-label="`${t('common.search')} (${searchShortcut})`"
-              class="group relative p-2.5 min-w-[44px] min-h-[44px] text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 flex items-center justify-center"
+            <button
               @click="goToSearch"
+              :aria-label="t('common.search')"
+              class="w-[15px] h-[15px] p-0 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors bg-transparent border-0"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
-              <!-- Keyboard shortcut hint -->
-              <span class="absolute -bottom-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap bg-gray-900 dark:bg-gray-700 text-white text-xs px-2 py-1 rounded pointer-events-none">
-                {{ searchShortcut }}
-              </span>
-            </Button>
+            </button>
 
-            <!-- Account -->
-            <NuxtLink
-              :to="localePath('/account')"
-              :aria-label="accountLabel"
-              class="p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors rounded-lg"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
-              <span class="sr-only">{{ accountLabel }}</span>
-            </NuxtLink>
-
-            <!-- Cart -->
             <NuxtLink
               :to="localePath('/cart')"
               :aria-label="cartAriaLabel"
-              class="p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors relative rounded-lg"
+              class="relative w-[17px] h-[17px] p-0 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+              <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
               </svg>
-              <!-- Cart count badge -->
-              <span v-if="cartItemsCount > 0"
-                class="absolute -top-1 -right-1 bg-primary-600 dark:bg-primary-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
-                aria-hidden="true"
+              <span
+                v-if="cartItemsCount > 0"
+                class="absolute -top-1 -right-1 bg-blue-500 text-white text-[10px] font-semibold rounded-full h-4 w-4 flex items-center justify-center"
               >
                 {{ cartItemsCount }}
               </span>
             </NuxtLink>
           </div>
 
-          <!-- Simplified Mobile actions - Only essential elements -->
-          <div class="flex md:hidden items-center space-x-2">
-
-            <!-- Cart - Essential for e-commerce -->
+          <!-- Mobile -->
+          <div class="flex md:hidden items-center gap-3">
             <NuxtLink
               :to="localePath('/cart')"
               :aria-label="cartAriaLabel"
-              class="p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors relative rounded-lg"
+              class="relative w-[17px] h-[17px] text-gray-700 dark:text-gray-300"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+              <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
               </svg>
-              <!-- Cart count badge -->
-              <span v-if="cartItemsCount > 0"
-                class="absolute top-0 right-0 bg-primary-600 dark:bg-primary-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold"
-                aria-hidden="true"
+              <span
+                v-if="cartItemsCount > 0"
+                class="absolute -top-1 -right-1 bg-blue-500 text-white text-[10px] font-semibold rounded-full h-4 w-4 flex items-center justify-center"
               >
                 {{ cartItemsCount }}
               </span>
             </NuxtLink>
 
-            <!-- Mobile menu button -->
-            <Button
-              type="button"
-              variant="ghost"
+            <button
               @click="toggleMobileMenu"
               :aria-label="mobileMenuLabel"
-              :aria-expanded="mobileMenuOpen"
-              class="relative p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-lg"
-              :class="{ 'bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400': mobileMenuOpen }"
+              class="w-[17px] h-[11px] p-0 flex flex-col justify-between bg-transparent border-0 text-gray-700 dark:text-gray-300"
             >
-              <!-- Animated hamburger menu -->
-              <div class="w-6 h-6 flex flex-col justify-center items-center">
-                <span class="block w-6 h-0.5 bg-current transition-all duration-300 ease-in-out"
-                  :class="mobileMenuOpen ? 'rotate-45 translate-y-1' : '-translate-y-1'"></span>
-                <span class="block w-6 h-0.5 bg-current transition-all duration-300 ease-in-out"
-                  :class="mobileMenuOpen ? 'opacity-0' : 'opacity-100'"></span>
-                <span class="block w-6 h-0.5 bg-current transition-all duration-300 ease-in-out"
-                  :class="mobileMenuOpen ? '-rotate-45 -translate-y-1' : 'translate-y-1'"></span>
-              </div>
-            </Button>
+              <span class="block w-full h-[1px] bg-current transition-all duration-300" :class="mobileMenuOpen ? 'rotate-45 translate-y-[5px]' : ''" />
+              <span class="block w-full h-[1px] bg-current transition-all duration-300" :class="mobileMenuOpen ? 'opacity-0' : ''" />
+              <span class="block w-full h-[1px] bg-current transition-all duration-300" :class="mobileMenuOpen ? '-rotate-45 -translate-y-[5px]' : ''" />
+            </button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Mobile Navigation -->
     <MobileNav v-if="mobileMenuOpen" @close="mobileMenuOpen = false" />
   </header>
 </template>
 
 <script setup lang="ts">
 import { ref, onUnmounted } from 'vue'
-import { Button } from '@/components/ui/button'
 import LanguageSwitcher from './LanguageSwitcher.vue'
 import MobileNav from './MobileNav.vue'
 import ThemeToggle from './ThemeToggle.vue'
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const localePath = useLocalePath()
 const mobileMenuOpen = ref(false)
 
 const toggleMobileMenu = () => {
   mobileMenuOpen.value = !mobileMenuOpen.value
-  // Prevent body scroll when menu is open
-  if (mobileMenuOpen.value) {
-    document.body.style.overflow = 'hidden'
-  } else {
-    document.body.style.overflow = ''
-  }
+  document.body.style.overflow = mobileMenuOpen.value ? 'hidden' : ''
 }
 
-// Clean up body overflow on unmount
 onUnmounted(() => {
   document.body.style.overflow = ''
 })
 
-// Cart functionality
 const { itemCount } = useCart()
 const cartItemsCount = computed(() => itemCount.value)
 
@@ -181,16 +130,9 @@ const cartAriaLabel = computed(() => {
   return cartItemsCount.value > 0 ? `${base} (${cartItemsCount.value})` : base
 })
 
-const accountLabel = computed(() => t('common.account'))
-
 const mobileMenuLabel = computed(() => mobileMenuOpen.value ? t('common.close') : t('common.menu'))
 
 const goToSearch = () => {
   navigateTo(localePath({ path: '/products', query: { focus: 'search' } }))
 }
-
-// Get keyboard shortcut display
-const { getShortcutDisplay } = useKeyboardShortcuts()
-const searchShortcut = computed(() => getShortcutDisplay('k', { ctrlOrCmd: true }))
-
 </script>
