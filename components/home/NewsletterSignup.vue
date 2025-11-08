@@ -1,9 +1,9 @@
 <template>
-  <section class="luxury-section bg-luxury-dark-chocolate text-luxury-cream py-16 md:py-20 lg:py-24">
-    <div class="luxury-container">
-      <div class="max-w-3xl mx-auto text-center px-4">
+  <section class="bg-[#241405] text-[#FCFAF2] py-16 md:py-20 lg:py-24">
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="max-w-3xl mx-auto text-center">
         <!-- Decorative Element -->
-        <div class="w-16 h-px bg-luxury-wine-red mx-auto mb-6" />
+        <div class="w-16 h-px bg-[#722F37] mx-auto mb-6" />
 
         <!-- Headline -->
         <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 leading-tight">
@@ -11,7 +11,7 @@
         </h2>
 
         <!-- Description -->
-        <p class="text-base sm:text-lg md:text-xl text-luxury-cream/80 mb-8 md:mb-10 leading-relaxed">
+        <p class="text-base sm:text-lg md:text-xl text-[#FCFAF2]/80 mb-8 md:mb-10 leading-relaxed">
           {{ $t('newsletter.description') || 'Be the first to discover limited releases, exclusive pairings and insider stories from our artisan partners. Plus, enjoy special perks reserved for our community.' }}
         </p>
 
@@ -26,7 +26,7 @@
                 type="email"
                 required
                 :placeholder="$t('newsletter.placeholder') || 'Your email address'"
-                class="w-full px-5 py-4 bg-white text-luxury-black rounded-sm focus:outline-none focus:ring-2 focus:ring-luxury-wine-red transition-shadow text-base"
+                class="w-full px-5 py-4 bg-white text-[#241405] rounded-sm focus:outline-none focus:ring-2 focus:ring-[#722F37] transition-shadow text-base"
                 :class="{ 'ring-2 ring-red-500': error }"
                 :disabled="isSubmitting || isSuccess"
               />
@@ -35,7 +35,7 @@
             <button
               type="submit"
               :disabled="isSubmitting || isSuccess"
-              class="luxury-btn bg-luxury-wine-red hover:bg-luxury-wine-red/90 text-white px-8 py-4 rounded-sm font-semibold uppercase tracking-wider transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed min-h-[56px] flex items-center justify-center"
+              class="bg-[#722F37] hover:bg-[#8B3A47] text-white px-8 py-4 rounded-sm font-semibold uppercase tracking-wider transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed min-h-[56px] flex items-center justify-center"
             >
               <span v-if="!isSubmitting && !isSuccess">
                 {{ $t('newsletter.cta') || 'Join' }}
@@ -62,29 +62,29 @@
           </p>
 
           <!-- Success Message -->
-          <p v-if="isSuccess" class="mt-4 text-sm text-luxury-cream/80">
+          <p v-if="isSuccess" class="mt-4 text-sm text-[#FCFAF2]/80">
             {{ $t('newsletter.success_message') || 'Welcome to our community! Check your inbox for a special welcome gift.' }}
           </p>
         </form>
 
         <!-- Benefits -->
-        <div class="mt-8 md:mt-10 flex flex-wrap items-center justify-center gap-4 md:gap-8 text-xs sm:text-sm text-luxury-cream/60 uppercase tracking-wider">
+        <div class="mt-8 md:mt-10 flex flex-wrap items-center justify-center gap-4 md:gap-8 text-xs sm:text-sm text-[#FCFAF2]/60 uppercase tracking-wider">
           <div class="flex items-center gap-2">
-            <svg class="w-4 h-4 text-luxury-wine-red" fill="currentColor" viewBox="0 0 20 20">
+            <svg class="w-4 h-4 text-[#722F37]" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
             </svg>
             <span>{{ $t('newsletter.benefit1') || 'Exclusive Releases' }}</span>
           </div>
 
           <div class="flex items-center gap-2">
-            <svg class="w-4 h-4 text-luxury-wine-red" fill="currentColor" viewBox="0 0 20 20">
+            <svg class="w-4 h-4 text-[#722F37]" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
             </svg>
             <span>{{ $t('newsletter.benefit2') || 'Insider Stories' }}</span>
           </div>
 
           <div class="flex items-center gap-2">
-            <svg class="w-4 h-4 text-luxury-wine-red" fill="currentColor" viewBox="0 0 20 20">
+            <svg class="w-4 h-4 text-[#722F37]" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
             </svg>
             <span>{{ $t('newsletter.benefit3') || 'Special Perks' }}</span>
@@ -92,7 +92,7 @@
         </div>
 
         <!-- Privacy Note -->
-        <p class="mt-6 text-xs text-luxury-cream/40">
+        <p class="mt-6 text-xs text-[#FCFAF2]/40">
           {{ $t('newsletter.privacy') || 'We respect your privacy. Unsubscribe at any time.' }}
         </p>
       </div>
@@ -149,11 +149,11 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0 1000px white inset;
-  -webkit-text-fill-color: var(--luxury-black);
+  -webkit-text-fill-color: #241405;
 }
 
 input::placeholder {
-  color: rgba(139, 69, 19, 0.4);
+  color: rgba(36, 20, 5, 0.4);
 }
 
 /* Prevent zoom on mobile input focus */

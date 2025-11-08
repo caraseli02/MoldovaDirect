@@ -103,7 +103,7 @@
               :placeholder="$t('footer.newsletter.placeholder')"
               :disabled="isSubmitting"
               :aria-label="$t('footer.newsletter.placeholder')"
-              class="px-4 py-3 bg-[#241405]/30 text-[#FCFAF2] border border-luxury-cream/20 rounded-none focus:outline-none focus:border-luxury-wine-red disabled:opacity-50 disabled:cursor-not-allowed placeholder-luxury-cream/40 text-sm"
+              class="px-4 py-3 bg-[#241405]/30 text-[#FCFAF2] border border-[#FCFAF2]/20 rounded-none focus:outline-none focus:border-[#722F37] disabled:opacity-50 disabled:cursor-not-allowed placeholder-[#FCFAF2]/40 text-sm"
               required
               aria-label="Email address"
             >
@@ -126,7 +126,7 @@
       </div>
       
       <!-- Payment Methods & Copyright -->
-      <div class="mt-16 pt-8 border-t border-luxury-cream/10">
+      <div class="mt-16 pt-8 border-t border-[#FCFAF2]/10">
         <div class="flex flex-col md:flex-row items-center justify-between gap-6">
           <div class="text-center md:text-left">
             <p class="text-xs text-[#FCFAF2]/40 mb-4 uppercase tracking-widest">{{ $t('footer.payment.title') }}</p>
