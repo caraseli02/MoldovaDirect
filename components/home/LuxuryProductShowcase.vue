@@ -1,5 +1,5 @@
 <template>
-  <section class="luxury-section bg-luxury-cream">
+  <section class="luxury-section bg-[#FCFAF2]">
     <div class="luxury-container">
       <!-- Section Header -->
       <div class="text-center max-w-3xl mx-auto mb-10 sm:mb-12 md:mb-16">
@@ -45,59 +45,87 @@
             :key="product.id"
             class="flex-shrink-0 w-[85vw] max-w-[340px] snap-center"
           >
-            <div class="bg-white rounded-sm overflow-hidden shadow-lg h-full flex flex-col">
-              <!-- Product Image -->
-              <div class="luxury-image-wrapper relative overflow-hidden">
-                <NuxtImg
-                  :src="product.image"
-                  :alt="product.name"
-                  class="w-full h-64 object-cover"
-                  loading="lazy"
-                  @error="handleImageError($event, 'product')"
-                />
+            <!-- To'ak Style Product Card -->
+            <div class="product-card bg-white overflow-hidden h-full flex flex-col">
+              <!-- Product Image with Circular Add Button (To'ak Style) -->
+              <figure class="product-figure relative">
+                <NuxtLink :to="`/products/${product.slug}`" class="block relative overflow-hidden">
+                  <NuxtImg
+                    :src="product.image"
+                    :alt="product.name"
+                    class="product-image w-full h-64 object-cover"
+                    loading="lazy"
+                    @error="handleImageError($event, 'product')"
+                  />
 
-                <!-- Badge -->
-                <div
-                  v-if="product.badge"
-                  class="absolute top-4 right-4 bg-luxury-black text-luxury-cream text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full"
-                >
-                  {{ product.badge }}
+                  <!-- Badge (To'ak Style) -->
+                  <div
+                    v-if="product.badge"
+                    class="absolute top-4 left-4 bg-[#241405] text-[#FCFAF2] text-xs font-medium uppercase tracking-wider px-3 py-1.5"
+                  >
+                    {{ product.badge }}
+                  </div>
+
+                  <!-- Hover Overlay with Description -->
+                  <div class="product-hover-overlay">
+                    <p class="text-sm text-[#FCFAF2]">{{ product.description }}</p>
+                  </div>
+                </NuxtLink>
+
+                <!-- Circular Add to Cart Button (To'ak Style) -->
+                <div class="link-btn">
+                  <button
+                    @click="addToCart(product)"
+                    class="circle-btn"
+                    :aria-label="`Add ${product.name} to cart`"
+                  >
+                    <span class="icon">
+                      <svg width="19" height="19" viewBox="0 0 19 19" fill="none">
+                        <path d="M9.2627 0.765625V17.7656M17.7627 9.26562H0.762695"
+                              stroke="#A76C06" stroke-width="0.7"/>
+                      </svg>
+                    </span>
+                  </button>
                 </div>
+              </figure>
 
-                <div class="luxury-image-overlay" />
-              </div>
-
-              <!-- Product Info -->
-              <div class="p-5 flex-1 flex flex-col">
-                <div class="text-xs uppercase tracking-wider text-luxury-black mb-2 font-semibold">
-                  {{ product.category }}
-                </div>
-
-                <h3 class="font-serif text-lg font-semibold text-luxury-wine-red mb-2">
+              <!-- Product Info (To'ak Style) -->
+              <div class="p-5 flex-1 flex flex-col text-start">
+                <h3 class="product-title font-serif text-lg font-medium text-[#241405] mb-2">
                   {{ product.name }}
                 </h3>
 
-                <p class="text-luxury-brown/70 text-sm mb-4 line-clamp-2 flex-1">
-                  {{ product.description }}
-                </p>
-
-                <!-- Price -->
-                <div class="flex items-baseline gap-2 mb-4">
-                  <span class="text-2xl font-serif font-bold text-luxury-wine-red">
-                    €{{ product.price }}
-                  </span>
-                  <span v-if="product.originalPrice" class="text-luxury-brown/50 line-through text-sm">
+                <p class="price-wrap text-[#241405] text-base font-medium mb-3">
+                  <span v-if="product.originalPrice" class="line-through text-[#241405]/50 text-sm mr-2">
                     €{{ product.originalPrice }}
                   </span>
+                  €{{ product.price }}
+                </p>
+
+                <!-- Star Rating (To'ak Style) -->
+                <a v-if="product.rating" class="rating-wrap mb-2" :data-val="product.rating.value" :data-of="product.rating.max">
+                  <span class="rating">
+                    <span v-for="star in 5" :key="star" class="star">
+                      <span class="fill" :style="{ width: getStarFillWidth(star, product.rating.value) }"></span>
+                    </span>
+                  </span>
+                  <span class="rating-label text-xs text-[#241405]/70 ml-1">({{ product.rating.count }})</span>
+                </a>
+
+                <!-- Category Subtitle (To'ak Style - like "65% cacao") -->
+                <div v-if="product.subtitle" class="product-subtitle text-xs text-[#241405]/60 uppercase tracking-wide mb-2">
+                  {{ product.subtitle }}
                 </div>
 
-                <!-- CTA -->
-                <NuxtLink
-                  :to="`/products/${product.slug}`"
-                  class="w-full inline-block text-center py-3 border-2 border-luxury-wine-red text-luxury-wine-red font-semibold uppercase tracking-wider text-sm hover:bg-luxury-wine-red hover:text-white transition-all duration-300"
-                >
-                  {{ $t('luxury.showcase.view_details') || 'View Details' }}
-                </NuxtLink>
+                <!-- Stock Status (To'ak Style) -->
+                <p v-if="product.stock" class="stock-status text-xs text-[#241405]/70">
+                  <span v-if="product.stock.limited && product.stock.remaining <= 5" class="text-[#722F37] font-medium">
+                    Last stock! {{ product.stock.remaining }} left
+                  </span>
+                  <span v-else-if="product.stock.limited">
+                    {{ product.stock.remaining }} in stock
+                  </span>
+                </p>
               </div>
             </div>
           </div>
@@ -138,110 +166,95 @@
         </div>
       </div>
 
-      <!-- Desktop: Product Grid -->
-      <div class="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 mb-8 sm:mb-12">
+      <!-- Desktop: Product Grid (To'ak Style) -->
+      <div class="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-12">
         <div
           v-for="(product, index) in featuredProducts"
           :key="product.id"
           v-motion
           :initial="{ opacity: 0, y: 40 }"
           :visible="{ opacity: 1, y: 0, transition: { delay: index * 100 + 300, duration: 600 } }"
-          class="bg-white rounded-sm overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 group"
+          class="product-card bg-white overflow-hidden"
         >
-          <!-- Product Image -->
-          <div class="luxury-image-wrapper relative overflow-hidden">
-            <NuxtImg
-              :src="product.image"
-              :alt="product.name"
-              class="w-full h-80 object-cover transform transition-transform duration-700 group-hover:scale-110"
-              loading="lazy"
-              @error="handleImageError($event, 'product')"
-            />
+          <!-- Product Image with Circular Add Button (To'ak Style) -->
+          <figure class="product-figure relative">
+            <NuxtLink :to="`/products/${product.slug}`" class="block relative overflow-hidden">
+              <NuxtImg
+                :src="product.image"
+                :alt="product.name"
+                class="product-image w-full h-80 object-cover"
+                loading="lazy"
+                @error="handleImageError($event, 'product')"
+              />
 
-            <!-- Badge -->
-            <div
-              v-if="product.badge"
-              class="absolute top-4 right-4 bg-luxury-black text-luxury-dark-chocolate text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full"
-            >
-              {{ product.badge }}
-            </div>
-
-            <div class="luxury-image-overlay" />
-
-            <!-- Quick View on Hover -->
-            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
-              <NuxtLink
-                :to="`/products/${product.slug}`"
-                class="luxury-btn text-sm px-6 py-2"
+              <!-- Badge (To'ak Style) -->
+              <div
+                v-if="product.badge"
+                class="absolute top-4 left-4 bg-[#241405] text-[#FCFAF2] text-xs font-medium uppercase tracking-wider px-3 py-1.5"
               >
-                {{ $t('luxury.showcase.quick_view') || 'View Details' }}
-              </NuxtLink>
-            </div>
-          </div>
+                {{ product.badge }}
+              </div>
 
-          <!-- Product Info -->
-          <div class="p-6">
-            <div class="text-xs uppercase tracking-wider text-luxury-black mb-2 font-semibold">
-              {{ product.category }}
-            </div>
+              <!-- Hover Overlay with Description -->
+              <div class="product-hover-overlay">
+                <p class="text-sm text-[#FCFAF2]">{{ product.description }}</p>
+              </div>
+            </NuxtLink>
 
-            <h3 class="font-serif text-xl font-semibold text-luxury-wine-red mb-2">
+            <!-- Circular Add to Cart Button (To'ak Style) -->
+            <div class="link-btn">
+              <button
+                @click="addToCart(product)"
+                class="circle-btn"
+                :aria-label="`Add ${product.name} to cart`"
+              >
+                <span class="icon">
+                  <svg width="19" height="19" viewBox="0 0 19 19" fill="none">
+                    <path d="M9.2627 0.765625V17.7656M17.7627 9.26562H0.762695"
+                          stroke="#A76C06" stroke-width="0.7"/>
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </figure>
+
+          <!-- Product Info (To'ak Style) -->
+          <div class="p-6 text-start">
+            <h3 class="product-title font-serif text-xl font-medium text-[#241405] mb-2">
               {{ product.name }}
             </h3>
 
-            <p class="text-luxury-brown/70 text-sm mb-4 line-clamp-2">
-              {{ product.description }}
-            </p>
-
-            <!-- Provenance Details -->
-            <div v-if="product.provenance" class="flex items-center gap-4 mb-4 text-xs text-luxury-brown/60">
-              <div v-if="product.provenance.region" class="flex items-center gap-1">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                <span class="uppercase tracking-wider">{{ product.provenance.region }}</span>
-              </div>
-              <div v-if="product.provenance.vintage" class="flex items-center gap-1">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                <span class="uppercase tracking-wider">{{ product.provenance.vintage }}</span>
-              </div>
-            </div>
-
-            <!-- Scarcity Signal -->
-            <div v-if="product.stock" class="mb-4">
-              <div v-if="product.stock.limited" class="flex items-center gap-2 text-xs">
-                <div class="flex-1 bg-luxury-cream rounded-full h-1.5 overflow-hidden">
-                  <div
-                    class="h-full bg-luxury-wine-red transition-all duration-500"
-                    :style="{ width: `${(product.stock.remaining / product.stock.total) * 100}%` }"
-                  />
-                </div>
-                <span class="text-luxury-wine-red font-semibold whitespace-nowrap">
-                  {{ product.stock.remaining }} {{ $t('luxury.showcase.left') || 'left' }}
-                </span>
-              </div>
-            </div>
-
-            <!-- Price -->
-            <div class="flex items-baseline gap-2 mb-4">
-              <span class="text-2xl font-serif font-bold text-luxury-wine-red">
-                €{{ product.price }}
-              </span>
-              <span v-if="product.originalPrice" class="text-luxury-brown/50 line-through text-sm">
+            <p class="price-wrap text-[#241405] text-lg font-medium mb-3">
+              <span v-if="product.originalPrice" class="line-through text-[#241405]/50 text-sm mr-2">
                 €{{ product.originalPrice }}
               </span>
+              €{{ product.price }}
+            </p>
+
+            <!-- Star Rating (To'ak Style) -->
+            <a v-if="product.rating" class="rating-wrap mb-2" :data-val="product.rating.value" :data-of="product.rating.max">
+              <span class="rating">
+                <span v-for="star in 5" :key="star" class="star">
+                  <span class="fill" :style="{ width: getStarFillWidth(star, product.rating.value) }"></span>
+                </span>
+              </span>
+              <span class="rating-label text-xs text-[#241405]/70 ml-1">({{ product.rating.count }})</span>
+            </a>
+
+            <!-- Category Subtitle (To'ak Style - like "65% cacao") -->
+            <div v-if="product.subtitle" class="product-subtitle text-xs text-[#241405]/60 uppercase tracking-wide mb-2">
+              {{ product.subtitle }}
             </div>
 
-            <!-- CTA -->
-            <NuxtLink
-              :to="`/products/${product.slug}`"
-              class="w-full inline-block text-center py-3 border-2 border-luxury-wine-red text-luxury-wine-red font-semibold uppercase tracking-wider text-sm hover:bg-luxury-wine-red hover:text-white transition-all duration-300"
-            >
-              {{ $t('luxury.showcase.add_to_cart') || 'Add to Cart' }}
-            </NuxtLink>
+            <!-- Stock Status (To'ak Style) -->
+            <p v-if="product.stock" class="stock-status text-xs text-[#241405]/70 mt-2">
+              <span v-if="product.stock.limited && product.stock.remaining <= 5" class="text-[#722F37] font-medium">
+                Last stock! {{ product.stock.remaining }} left
+              </span>
+              <span v-else-if="product.stock.limited">
+                {{ product.stock.remaining }} in stock
+              </span>
+            </p>
           </div>
         </div>
       </div>
@@ -300,20 +313,43 @@ const scrollProductToIndex = (index: number) => {
   })
 }
 
+// Calculate star fill width based on rating (To'ak style)
+const getStarFillWidth = (starIndex: number, rating: number): string => {
+  const starValue = starIndex
+  if (rating >= starValue) {
+    return '100%'
+  } else if (rating >= starValue - 1 && rating < starValue) {
+    // Partial fill for fractional ratings
+    const fraction = rating - (starValue - 1)
+    return `${fraction * 100}%`
+  } else {
+    return '0%'
+  }
+}
+
+// Add to cart handler
+const addToCart = (product: any) => {
+  // TODO: Implement cart functionality
+  console.log('Add to cart:', product.name)
+  // You can implement cart logic here or emit an event
+}
+
 const featuredProducts = [
   {
     id: 1,
     name: 'Premium Moldovan Wine Selection',
     slug: 'premium-wine-selection',
     category: 'Wine Collection',
+    subtitle: 'Codru Reserve',
     description: 'A curated selection of three award-winning Moldovan wines from the Codru region.',
     price: '89.90',
     originalPrice: null,
     badge: 'Best Seller',
     image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=800',
-    provenance: {
-      region: 'Codru Region',
-      vintage: null,
+    rating: {
+      value: 4.8,
+      max: 5,
+      count: 47
     },
     stock: null,
   },
@@ -322,15 +358,20 @@ const featuredProducts = [
     name: 'Luxury Gourmet Gift Hamper',
     slug: 'luxury-gourmet-hamper',
     category: 'Gift Hampers',
+    subtitle: 'seasonal selection',
     description: 'Artisan cheeses, honey, preserves, and wine - the perfect gift for any occasion.',
     price: '124.90',
     originalPrice: '149.90',
     badge: 'Limited Edition',
     image: 'https://images.unsplash.com/photo-1549888834-3ec93abae044?q=80&w=800',
-    provenance: null,
+    rating: {
+      value: 4.9,
+      max: 5,
+      count: 32
+    },
     stock: {
       limited: true,
-      remaining: 8,
+      remaining: 3,
       total: 50,
     },
   },
@@ -339,14 +380,16 @@ const featuredProducts = [
     name: 'Organic Wildflower Honey',
     slug: 'organic-wildflower-honey',
     category: 'Gourmet Foods',
+    subtitle: 'Moldovan Highlands',
     description: 'Raw, unfiltered honey from the wildflowers of Moldova. Pure and natural.',
     price: '18.90',
     originalPrice: null,
     badge: 'Organic',
     image: 'https://images.unsplash.com/photo-1587049352846-4a222e784422?q=80&w=800',
-    provenance: {
-      region: 'Moldovan Highlands',
-      vintage: null,
+    rating: {
+      value: 5.0,
+      max: 5,
+      count: 89
     },
     stock: null,
   },
@@ -355,14 +398,16 @@ const featuredProducts = [
     name: 'Artisan Cheese Collection',
     slug: 'artisan-cheese-collection',
     category: 'Gourmet Foods',
+    subtitle: 'traditional recipe',
     description: 'Three traditional Moldovan cheeses, aged to perfection by master cheesemakers.',
     price: '42.90',
     originalPrice: null,
     badge: null,
     image: 'https://images.unsplash.com/photo-1452195100486-9cc805987862?q=80&w=800',
-    provenance: {
-      region: 'Orheiul Vechi',
-      vintage: null,
+    rating: {
+      value: 4.6,
+      max: 5,
+      count: 28
     },
     stock: null,
   },
@@ -371,14 +416,16 @@ const featuredProducts = [
     name: 'Vintage Reserve 2015',
     slug: 'vintage-reserve-2015',
     category: 'Premium Wines',
+    subtitle: 'Cricova 2015',
     description: 'An exceptional vintage from the historic Cricova cellars. Limited availability.',
     price: '156.00',
     originalPrice: null,
     badge: 'Rare',
     image: 'https://images.unsplash.com/photo-1547595628-c61a29f496f0?q=80&w=800',
-    provenance: {
-      region: 'Cricova',
-      vintage: '2015',
+    rating: {
+      value: 4.7,
+      max: 5,
+      count: 15
     },
     stock: {
       limited: true,
@@ -391,25 +438,23 @@ const featuredProducts = [
     name: 'Corporate Gift Collection',
     slug: 'corporate-gift-collection',
     category: 'Gift Hampers',
+    subtitle: 'executive selection',
     description: 'Impress clients and partners with this elegant selection of Moldovan specialties.',
     price: '199.90',
     originalPrice: null,
     badge: null,
     image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?q=80&w=800',
-    provenance: null,
+    rating: {
+      value: 4.9,
+      max: 5,
+      count: 21
+    },
     stock: null,
   },
 ]
 </script>
 
 <style scoped>
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -417,6 +462,154 @@ const featuredProducts = [
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+/* To'ak Style Product Card */
+.product-card {
+  transition: all 0.3s ease;
+}
+
+.product-figure {
+  position: relative;
+  overflow: hidden;
+}
+
+.product-image {
+  transition: transform 0.5s ease;
+}
+
+.product-card:hover .product-image {
+  transform: scale(1.05);
+}
+
+/* Circular Add to Cart Button (To'ak Style) */
+.link-btn {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  z-index: 10;
+}
+
+.circle-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #FCFAF2;
+  border: 1px solid rgba(167, 108, 6, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.circle-btn:hover {
+  background: #A76C06;
+  border-color: #A76C06;
+  box-shadow: 0 4px 16px rgba(167, 108, 6, 0.3);
+  transform: scale(1.08);
+}
+
+.circle-btn:hover svg path {
+  stroke: #FCFAF2;
+}
+
+.circle-btn:active {
+  transform: scale(0.96);
+}
+
+/* Hover Overlay (To'ak Style) */
+.product-hover-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(36, 20, 5, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.product-card:hover .product-hover-overlay {
+  opacity: 1;
+}
+
+/* Star Rating (To'ak Style) */
+.rating-wrap {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.rating {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.star {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+}
+
+.star::before {
+  content: '★';
+  position: absolute;
+  color: #E5E7EB;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.star .fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  display: block;
+}
+
+.star .fill::before {
+  content: '★';
+  color: #A76C06;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.rating-label {
+  display: inline-block;
+}
+
+/* Product Title (To'ak Style) */
+.product-title {
+  line-height: 1.4;
+  transition: color 0.2s ease;
+}
+
+.product-card:hover .product-title {
+  color: #722F37;
+}
+
+/* Price Wrap (To'ak Style) */
+.price-wrap {
+  line-height: 1.4;
+}
+
+/* Product Subtitle (To'ak Style - like "65% cacao") */
+.product-subtitle {
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+/* Stock Status (To'ak Style) */
+.stock-status {
+  font-weight: 500;
 }
 
 /* Carousel Navigation */
