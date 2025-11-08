@@ -1,15 +1,20 @@
 <template>
   <div class="luxury-video-hero">
-    <!-- Video Background -->
+    <!-- Video Background - Desktop Only for Performance -->
     <video
-      v-if="!reducedMotion"
+      v-if="shouldShowVideo && !reducedMotion && !isMobile"
+      ref="videoRef"
       autoplay
       muted
       loop
       playsinline
+      preload="metadata"
+      poster="https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?q=80&w=2070&auto=format&fit=crop"
       class="hero-video"
-      @loadeddata="videoLoaded = true"
-      @error="handleVideoError($event, 'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?q=80&w=2070')"
+      :class="{ 'opacity-0': !videoLoaded, 'opacity-85': videoLoaded }"
+      @loadeddata="onVideoLoaded"
+      @error="onVideoError"
+      @canplay="onVideoCanPlay"
     >
       <source
         src="https://assets.mixkit.co/videos/preview/mixkit-wine-bottles-in-a-vineyard-during-sunset-46664-large.mp4"
@@ -17,14 +22,14 @@
       >
     </video>
 
-    <!-- Fallback Image for Reduced Motion -->
-    <div v-else class="fallback-image">
+    <!-- Fallback Image - Mobile, Reduced Motion, or Video Error -->
+    <div v-if="showFallbackImage" class="fallback-image">
       <NuxtImg
-        src="https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?q=80&w=2070"
+        src="https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?q=80&w=2070&auto=format&fit=crop"
         alt="Moldovan vineyard at golden hour"
         class="w-full h-full object-cover"
-        loading="eager"
-        preload
+        :loading="isMobile ? 'eager' : 'lazy'"
+        :preload="isMobile"
         @error="handleImageError($event, 'landscape')"
       />
     </div>
@@ -96,18 +101,76 @@
 </template>
 
 <script setup lang="ts">
-const { handleImageError, handleVideoError } = useImageFallback()
+const { handleImageError } = useImageFallback()
 
+const videoRef = ref<HTMLVideoElement | null>(null)
 const reducedMotion = ref(false)
 const videoLoaded = ref(false)
+const videoError = ref(false)
+const isMobile = ref(false)
+const shouldShowVideo = ref(false)
 
-// Check for reduced motion preference
+// Check device type and reduced motion preference
 onMounted(() => {
   if (typeof window !== 'undefined') {
+    // Check for mobile device (< 768px)
+    const checkMobile = () => {
+      isMobile.value = window.innerWidth < 768
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+
+    // Check for reduced motion preference
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
     reducedMotion.value = mediaQuery.matches
+
+    // Only load video on desktop after a short delay (improves LCP)
+    if (!isMobile.value && !reducedMotion.value) {
+      setTimeout(() => {
+        shouldShowVideo.value = true
+      }, 100)
+    }
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('resize', checkMobile)
+    }
   }
 })
+
+// Computed property to determine if fallback image should be shown
+const showFallbackImage = computed(() => {
+  return isMobile.value || reducedMotion.value || videoError.value || !shouldShowVideo.value
+})
+
+// Video event handlers
+const onVideoLoaded = () => {
+  videoLoaded.value = true
+  if (process.client) {
+    console.info('Hero video loaded successfully')
+  }
+}
+
+const onVideoCanPlay = () => {
+  // Ensure video plays on modern browsers
+  if (videoRef.value) {
+    videoRef.value.play().catch((err) => {
+      console.warn('Video autoplay failed:', err)
+      // Fallback to image if autoplay is blocked
+      videoError.value = true
+    })
+  }
+}
+
+const onVideoError = (event: Event) => {
+  console.error('Hero video failed to load, using fallback image')
+  videoError.value = true
+
+  // Hide the broken video element
+  if (videoRef.value) {
+    videoRef.value.style.display = 'none'
+  }
+}
 </script>
 
 <style scoped>
@@ -121,6 +184,14 @@ onMounted(() => {
   height: auto;
   transform: translate(-50%, -50%);
   object-fit: cover;
+  transition: opacity 0.6s ease-in-out;
+}
+
+.opacity-0 {
+  opacity: 0;
+}
+
+.opacity-85 {
   opacity: 0.85;
 }
 
