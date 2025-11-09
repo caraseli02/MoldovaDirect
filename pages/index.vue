@@ -1,10 +1,11 @@
 <template>
   <div class="text-gray-900 dark:text-gray-100">
     <!-- Promotional announcement bar -->
-    <HomeAnnouncementBar :show-cta="true" />
+    <HomeAnnouncementBar v-if="isSectionEnabled('announcementBar')" :show-cta="true" />
 
     <!-- Hero section with video background (Rhode Skin/To'ak pattern) -->
     <HomeVideoHero
+      v-if="isSectionEnabled('videoHero')"
       :show-video="false"
       video-webm="/videos/hero.webm"
       video-mp4="/videos/hero.mp4"
@@ -26,33 +27,28 @@
     />
 
     <!-- Media mentions "brag bar" (Brightland pattern) -->
-    <HomeMediaMentions />
+    <LazyHomeMediaMentions v-if="isSectionEnabled('mediaMentions')" />
 
     <!-- Quick category navigation for immediate browsing -->
-    <HomeCategoryGrid :categories="categoryCards" />
+    <LazyHomeCategoryGrid v-if="isSectionEnabled('categoryGrid')" :categories="categoryCards" />
 
     <!-- Featured products - primary conversion driver -->
-    <HomeFeaturedProductsSection
+    <LazyHomeFeaturedProductsSection
+      v-if="isSectionEnabled('featuredProducts')"
       :products="featuredProducts"
       :pending="featuredPending"
       :error="featuredErrorState"
       @retry="refreshFeatured"
     />
 
-    <!-- Producer Stories - Brightland-inspired storytelling -->
-    <HomeProducerStoriesSection />
-
     <!-- Premium collections showcase -->
-    <HomeCollectionsShowcase />
+    <LazyHomeCollectionsShowcase v-if="isSectionEnabled('collectionsShowcase')" />
 
-    <!-- Product recommendation quiz (Jones Road/Beardbrand pattern) -->
-    <HomeProductQuiz />
-
-    <!-- Wine & Food Pairings - Educational content -->
-    <HomePairingGuidesSection />
+    <!-- Product recommendation quiz (Jones Road/Beardbrand pattern) - DISABLED: No backend -->
+    <LazyHomeProductQuiz v-if="isSectionEnabled('productQuiz')" />
 
     <!-- Wine Story CTA - Link to full heritage page - FIXED: Reduced padding for mobile -->
-    <section class="relative overflow-hidden bg-gradient-to-br from-primary/8 via-gold-50/40 to-terracotta/8 py-16 md:py-24">
+    <section v-if="isSectionEnabled('wineStoryCta')" class="relative overflow-hidden bg-gradient-to-br from-primary/8 via-gold-50/40 to-terracotta/8 py-16 md:py-24">
       <!-- Decorative Background -->
       <div class="absolute inset-0 overflow-hidden opacity-25">
         <div class="absolute -right-40 top-0 h-96 w-96 rounded-full bg-gradient-to-bl from-gold-500/40 to-transparent blur-3xl" />
@@ -140,48 +136,49 @@
     </section>
 
     <!-- Social proof and trust signals -->
-    <HomeSocialProofSection
+    <LazyHomeSocialProofSection
+      v-if="isSectionEnabled('socialProof')"
       :highlights="heroHighlights"
       :logos="partnerLogos"
       :testimonials="testimonials"
     />
 
-    <!-- User-generated content gallery (Rare Beauty pattern) -->
-    <HomeUgcGallery />
+    <!-- User-generated content gallery (Rare Beauty pattern) - DISABLED: 100% fabricated content -->
+    <LazyHomeUgcGallery v-if="isSectionEnabled('ugcGallery')" />
 
     <!-- Process explanation -->
-    <HomeHowItWorksSection :steps="howItWorksSteps" />
+    <LazyHomeHowItWorksSection v-if="isSectionEnabled('howItWorks')" :steps="howItWorksSteps" />
 
     <!-- Service offerings -->
-    <HomeServicesSection :services="services" />
+    <LazyHomeServicesSection v-if="isSectionEnabled('services')" :services="services" />
 
     <!-- Trust badges and payment security -->
-    <HomeTrustBadges />
+    <LazyHomeTrustBadges v-if="isSectionEnabled('trustBadges')" />
 
     <!-- Certification badges (Allbirds pattern) -->
-    <HomeCertificationBar />
+    <LazyHomeCertificationBar v-if="isSectionEnabled('certificationBar')" />
 
     <!-- Newsletter signup -->
-    <HomeNewsletterSignup />
+    <LazyHomeNewsletterSignup v-if="isSectionEnabled('newsletter')" />
 
     <!-- FAQ preview -->
-    <HomeFaqPreviewSection :items="faqItems" />
+    <LazyHomeFaqPreviewSection v-if="isSectionEnabled('faqPreview')" :items="faqItems" />
 
     <!-- Story section moved to About page -->
     <!-- <HomeStorySection :points="storyPoints" :timeline="storyTimeline" /> -->
 
-    <!-- Real-time purchase notifications (Gymshark/Fomo pattern) -->
-    <UiRealtimeNotification />
+    <!-- Real-time purchase notifications (Gymshark/Fomo pattern) - DISABLED: Fake purchase data -->
+    <LazyUiRealtimeNotification v-if="isSectionEnabled('realtimeNotification')" />
   </div>
 </template>
 
 <script setup lang="ts">
 import type { ProductWithRelations } from '~/types'
 import { CONTACT_INFO } from '~/constants/seo'
-import UiRealtimeNotification from '~/components/ui/RealtimeNotification.vue'
 
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
+const { isSectionEnabled } = useLandingConfig()
 const {
   heroHighlights,
   categoryCards,
