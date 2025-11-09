@@ -299,6 +299,53 @@ export {
   shouldRetryEmail
 } from './email'
 
+// Wine storytelling types
+export type {
+  // Product attribute types
+  WineRegion,
+  WineRegionInfo,
+  ProducerInfo,
+  TastingNotes,
+  PairingInfo,
+  WineProductAttributes
+} from './product-attributes'
+
+export {
+  // Product attribute type guards
+  isWineProduct,
+  hasProducerInfo,
+  hasRegionInfo
+} from './product-attributes'
+
+// Wine regions types
+export type {
+  WineRegionData,
+  MapDisplayOptions,
+  RegionFilter,
+  RegionGeoJSONFeature,
+  RegionGeoJSON,
+  UseWineRegionsReturn
+} from './wine-regions'
+
+// Producer types
+export type {
+  Producer,
+  ProducerCardData,
+  ProducerDetailData,
+  ProducerCarouselOptions,
+  UseProducersReturn
+} from './producers'
+
+// Pairing guides types
+export type {
+  PairingGuide,
+  PairingCardData,
+  PairingFilters,
+  PairingSectionOptions,
+  PairingEducation,
+  UsePairingGuidesReturn
+} from './pairing-guides'
+
 // =============================================
 // COMMONLY USED TYPE UNIONS (imported from guards to avoid circular imports)
 // =============================================

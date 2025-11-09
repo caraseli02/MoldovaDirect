@@ -30,11 +30,39 @@ export default defineNuxtConfig({
     "shadcn-nuxt",
     "@vite-pwa/nuxt",
     "vue3-carousel-nuxt",
+    "@vueuse/motion/nuxt",
+    "nuxt-swiper",
     // Keep this last to post-process the components registry
     "~/modules/fix-components",
   ],
   image: {
     domains: ["images.unsplash.com"],
+    formats: ["webp", "avif"],
+    quality: 80,
+    screens: {
+      xs: 320,
+      sm: 640,
+      md: 768,
+      lg: 1024,
+      xl: 1280,
+      xxl: 1536,
+    },
+    presets: {
+      hero: {
+        modifiers: {
+          format: 'webp',
+          quality: 85,
+          fit: 'cover',
+        }
+      }
+    }
+  },
+  routeRules: {
+    // Landing page - SWR caching (1 hour) + prerender
+    '/': { swr: 3600, prerender: true },
+    // Product pages - ISR every hour
+    '/products': { swr: 3600 },
+    '/products/**': { swr: 3600 },
   },
   runtimeConfig: {
     // Private keys (only available on server-side)

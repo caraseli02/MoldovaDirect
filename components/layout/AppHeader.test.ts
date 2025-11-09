@@ -12,6 +12,9 @@ const mockGetShortcutDisplay = vi.fn((key: string, options: any) => {
 })
 
 vi.mock('~/composables/useKeyboardShortcuts', () => ({
+  default: () => ({
+    getShortcutDisplay: mockGetShortcutDisplay,
+  }),
   useKeyboardShortcuts: () => ({
     getShortcutDisplay: mockGetShortcutDisplay,
   }),
@@ -22,6 +25,19 @@ const mockItemCount = ref(0)
 global.useCart = vi.fn(() => ({
   itemCount: mockItemCount,
 }))
+
+// Mock useKeyboardShortcuts as global (Nuxt auto-import)
+global.useKeyboardShortcuts = vi.fn(() => ({
+  getShortcutDisplay: mockGetShortcutDisplay,
+}))
+
+// Mock i18n composables
+global.useI18n = vi.fn(() => ({
+  t: (key: string) => key,
+  locale: ref('es'),
+}))
+
+global.useLocalePath = vi.fn(() => (path: string) => path)
 
 // Mock components
 vi.mock('./LanguageSwitcher.vue', () => ({
@@ -55,6 +71,19 @@ vi.mock('@/components/ui/button', () => ({
   },
 }))
 
+// Helper to create consistent global config for all tests
+const createGlobalConfig = () => ({
+  mocks: {
+    $t: (key: string) => key,
+  },
+  stubs: {
+    NuxtLink: {
+      template: '<a :to="to"><slot /></a>',
+      props: ['to'],
+    },
+  },
+})
+
 describe('AppHeader', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -63,14 +92,7 @@ describe('AppHeader', () => {
 
   it('renders logo with link to home', () => {
     const wrapper = mount(AppHeader, {
-      global: {
-        stubs: {
-          NuxtLink: {
-            template: '<a :to="to"><slot /></a>',
-            props: ['to'],
-          },
-        },
-      },
+      global: createGlobalConfig(),
     })
 
     expect(wrapper.text()).toContain('Moldova Direct')
@@ -80,14 +102,7 @@ describe('AppHeader', () => {
 
   it('renders desktop navigation links', () => {
     const wrapper = mount(AppHeader, {
-      global: {
-        stubs: {
-          NuxtLink: {
-            template: '<a :to="to"><slot /></a>',
-            props: ['to'],
-          },
-        },
-      },
+      global: createGlobalConfig(),
     })
 
     // Desktop nav should contain these links
@@ -98,7 +113,9 @@ describe('AppHeader', () => {
   })
 
   it('renders language switcher and theme toggle', () => {
-    const wrapper = mount(AppHeader)
+    const wrapper = mount(AppHeader, {
+      global: createGlobalConfig(),
+    })
 
     expect(wrapper.findComponent({ name: 'LanguageSwitcher' }).exists()).toBe(true)
     expect(wrapper.findComponent({ name: 'ThemeToggle' }).exists()).toBe(true)
@@ -107,14 +124,7 @@ describe('AppHeader', () => {
   describe('Search functionality', () => {
     it('renders search button with keyboard shortcut hint', () => {
       const wrapper = mount(AppHeader, {
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a><slot /></a>',
-              props: ['to'],
-            },
-          },
-        },
+        global: createGlobalConfig(),
       })
 
       // Check search button exists
@@ -129,14 +139,7 @@ describe('AppHeader', () => {
 
     it('navigates to products page with search focus on button click', async () => {
       const wrapper = mount(AppHeader, {
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a><slot /></a>',
-              props: ['to'],
-            },
-          },
-        },
+        global: createGlobalConfig(),
       })
 
       // Find and click search button
@@ -159,14 +162,7 @@ describe('AppHeader', () => {
 
     it('displays keyboard shortcut in aria-label', () => {
       const wrapper = mount(AppHeader, {
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a><slot /></a>',
-              props: ['to'],
-            },
-          },
-        },
+        global: createGlobalConfig(),
       })
 
       const searchButtons = wrapper.findAll('button').filter(btn =>
@@ -179,14 +175,7 @@ describe('AppHeader', () => {
   describe('Cart functionality', () => {
     it('renders cart link', () => {
       const wrapper = mount(AppHeader, {
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a :to="to" :aria-label="ariaLabel"><slot /></a>',
-              props: ['to', 'ariaLabel'],
-            },
-          },
-        },
+        global: createGlobalConfig(),
       })
 
       const cartLinks = wrapper.findAllComponents({ name: 'NuxtLink' })
@@ -200,14 +189,7 @@ describe('AppHeader', () => {
       mockItemCount.value = 0
 
       const wrapper = mount(AppHeader, {
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a><slot /></a>',
-              props: ['to', 'ariaLabel'],
-            },
-          },
-        },
+        global: createGlobalConfig(),
       })
 
       // Cart badge should not be visible
@@ -219,14 +201,7 @@ describe('AppHeader', () => {
       mockItemCount.value = 3
 
       const wrapper = mount(AppHeader, {
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a><slot /></a>',
-              props: ['to', 'ariaLabel'],
-            },
-          },
-        },
+        global: createGlobalConfig(),
       })
 
       // Cart badge should be visible with count
@@ -240,14 +215,7 @@ describe('AppHeader', () => {
       mockItemCount.value = 5
 
       const wrapper = mount(AppHeader, {
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a :aria-label="ariaLabel"><slot /></a>',
-              props: ['to', 'ariaLabel'],
-            },
-          },
-        },
+        global: createGlobalConfig(),
       })
 
       const cartLinks = wrapper.findAllComponents({ name: 'NuxtLink' })
@@ -260,21 +228,16 @@ describe('AppHeader', () => {
 
   describe('Mobile menu', () => {
     it('does not show mobile menu by default', () => {
-      const wrapper = mount(AppHeader)
+      const wrapper = mount(AppHeader, {
+        global: createGlobalConfig(),
+      })
 
       expect(wrapper.findComponent({ name: 'MobileNav' }).exists()).toBe(false)
     })
 
     it('shows mobile menu when toggled', async () => {
       const wrapper = mount(AppHeader, {
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a><slot /></a>',
-              props: ['to'],
-            },
-          },
-        },
+        global: createGlobalConfig(),
       })
 
       // Find mobile menu button
@@ -292,14 +255,7 @@ describe('AppHeader', () => {
 
     it('prevents body scroll when mobile menu is open', async () => {
       const wrapper = mount(AppHeader, {
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a><slot /></a>',
-              props: ['to'],
-            },
-          },
-        },
+        global: createGlobalConfig(),
       })
 
       const mobileMenuButtons = wrapper.findAll('button').filter(btn =>
@@ -316,14 +272,7 @@ describe('AppHeader', () => {
 
     it('restores body scroll when mobile menu is closed', async () => {
       const wrapper = mount(AppHeader, {
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a><slot /></a>',
-              props: ['to'],
-            },
-          },
-        },
+        global: createGlobalConfig(),
       })
 
       const mobileMenuButtons = wrapper.findAll('button').filter(btn =>
@@ -344,14 +293,7 @@ describe('AppHeader', () => {
 
     it('cleans up body overflow on unmount', async () => {
       const wrapper = mount(AppHeader, {
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a><slot /></a>',
-              props: ['to'],
-            },
-          },
-        },
+        global: createGlobalConfig(),
       })
 
       const mobileMenuButtons = wrapper.findAll('button').filter(btn =>
@@ -373,14 +315,7 @@ describe('AppHeader', () => {
       mockItemCount.value = 2
 
       const wrapper = mount(AppHeader, {
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a :aria-label="ariaLabel"><slot /></a>',
-              props: ['to', 'ariaLabel'],
-            },
-          },
-        },
+        global: createGlobalConfig(),
       })
 
       // Search button
@@ -400,14 +335,7 @@ describe('AppHeader', () => {
 
     it('has aria-expanded on mobile menu button', () => {
       const wrapper = mount(AppHeader, {
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a><slot /></a>',
-              props: ['to'],
-            },
-          },
-        },
+        global: createGlobalConfig(),
       })
 
       const mobileMenuButtons = wrapper.findAll('button').filter(btn =>
@@ -420,14 +348,7 @@ describe('AppHeader', () => {
   describe('Account link', () => {
     it('renders account link', () => {
       const wrapper = mount(AppHeader, {
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a :aria-label="ariaLabel"><slot /></a>',
-              props: ['to', 'ariaLabel'],
-            },
-          },
-        },
+        global: createGlobalConfig(),
       })
 
       const accountLinks = wrapper.findAllComponents({ name: 'NuxtLink' })

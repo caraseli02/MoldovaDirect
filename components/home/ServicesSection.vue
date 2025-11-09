@@ -3,8 +3,8 @@
     <div class="container">
       <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
         <div>
-          <h2 class="text-3xl font-bold md:text-4xl">{{ t('home.services.title') }}</h2>
-          <p class="mt-3 max-w-2xl text-lg text-gray-600 dark:text-gray-400">{{ t('home.services.subtitle') }}</p>
+          <h2 class="text-4xl font-bold md:text-5xl lg:text-6xl tracking-tight">{{ t('home.services.title') }}</h2>
+          <p class="mt-4 max-w-2xl text-sm md:text-base text-gray-600 dark:text-gray-400">{{ t('home.services.subtitle') }}</p>
         </div>
         <NuxtLink
           :to="localePath('/contact')"

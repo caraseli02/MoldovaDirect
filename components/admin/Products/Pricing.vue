@@ -386,7 +386,15 @@ onMounted(() => {
 
 /* Enhanced focus states for accessibility */
 input:focus {
-  @apply ring-2 ring-blue-500 ring-offset-2 dark:ring-offset-gray-800;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px white, 0 0 0 4px rgb(59 130 246);
+}
+
+@media (prefers-color-scheme: dark) {
+  input:focus {
+    box-shadow: 0 0 0 2px rgb(31 41 55), 0 0 0 4px rgb(59 130 246);
+  }
 }
 
 /* Mobile number input optimization */

@@ -97,6 +97,15 @@ const handleAction = (action: string, userId: string, data?: any) => {
 
 /* Enhanced focus states for accessibility */
 button:focus {
-  @apply outline-none ring-2 ring-blue-500 ring-offset-1 dark:ring-offset-gray-800 rounded-md;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  border-radius: 0.375rem;
+  box-shadow: 0 0 0 1px white, 0 0 0 3px rgb(59 130 246);
+}
+
+@media (prefers-color-scheme: dark) {
+  button:focus {
+    box-shadow: 0 0 0 1px rgb(31 41 55), 0 0 0 3px rgb(59 130 246);
+  }
 }
 </style>
