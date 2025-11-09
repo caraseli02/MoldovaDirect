@@ -39,6 +39,9 @@
       </video>
     </figure>
 
+    <!-- Dark Overlay for Better Text Visibility (To'ak Style) -->
+    <div class="video-overlay"></div>
+
     <!-- Hero Content (To'ak Style - Absolutely Positioned) -->
     <div class="hero-content">
       <div class="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -188,6 +191,21 @@ const onVideoError = () => {
   z-index: 1;
 }
 
+/* Dark Overlay for Text Visibility (To'ak Style) */
+.video-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: linear-gradient(
+    to top,
+    rgba(36, 20, 5, 0.85) 0%,
+    rgba(36, 20, 5, 0.4) 40%,
+    rgba(36, 20, 5, 0.1) 70%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
 /* Hero Content (To'ak Style - Absolutely Positioned) */
 .hero-content {
   position: absolute;
@@ -297,11 +315,12 @@ const onVideoError = () => {
   opacity: 1;
 }
 
-/* Mobile Adjustments */
+/* Mobile Adjustments (To'ak Style - Bottom Aligned) */
 @media (max-width: 767px) {
   .hero-content {
-    top: 50%;
-    transform: translate(0, -50%);
+    top: auto;
+    bottom: 60px;
+    transform: none;
     text-align: center;
   }
 
@@ -315,6 +334,17 @@ const onVideoError = () => {
   .hero-video {
     left: 50%;
     transform: translate(-50%, -50%);
+  }
+
+  /* Stronger overlay on mobile for better readability */
+  .video-overlay {
+    background: linear-gradient(
+      to top,
+      rgba(36, 20, 5, 0.9) 0%,
+      rgba(36, 20, 5, 0.6) 50%,
+      rgba(36, 20, 5, 0.2) 80%,
+      transparent 100%
+    );
   }
 }
 
