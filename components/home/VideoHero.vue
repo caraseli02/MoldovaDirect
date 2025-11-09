@@ -17,8 +17,8 @@
           <source v-if="videoWebM" :src="videoWebM" type="video/webm" />
           <source v-if="videoMp4" :src="videoMp4" type="video/mp4" />
         </video>
-        <!-- Luxury overlay for text readability with brand colors -->
-        <div class="absolute inset-0 bg-gradient-to-br from-brand-dark/80 via-brand-dark/60 to-brand-accent/40" />
+        <!-- Consolidated luxury overlay for optimal paint performance -->
+        <div class="absolute inset-0 bg-[linear-gradient(to_br,_rgba(36,20,5,0.85)_0%,_rgba(114,47,55,0.45)_100%)]" />
       </div>
 
       <!-- Fallback background: Image or Gradient -->
@@ -34,19 +34,12 @@
             sizes="sm:100vw md:100vw lg:100vw"
             class="h-full w-full object-cover object-center"
           />
-          <!-- Luxury gradient overlay with brand colors for text readability -->
-          <div class="absolute inset-0 bg-gradient-to-br from-brand-dark/85 via-brand-dark/70 to-brand-accent/50" />
+          <!-- Consolidated gradient overlay for optimal paint performance -->
+          <div class="absolute inset-0 bg-[linear-gradient(to_br,_rgba(36,20,5,0.88)_0%,_rgba(114,47,55,0.52)_100%)]" />
         </div>
 
-        <!-- Luxury gradient fallback with brand colors -->
-        <div v-else class="absolute inset-0">
-          <!-- Gradient base with brand colors -->
-          <div class="absolute inset-0 bg-gradient-to-br from-brand-dark via-[#1a0e03] to-brand-accent" />
-
-          <!-- Subtle luxury highlights - refined for To'ak aesthetic -->
-          <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(252,250,242,0.06),_transparent_50%)]" />
-          <div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,_rgba(198,141,37,0.08),_transparent_65%)]" />
-        </div>
+        <!-- Consolidated luxury gradient fallback for optimal paint performance -->
+        <div v-else class="absolute inset-0 bg-[linear-gradient(135deg,_#241405_0%,_#1a0e03_50%,_#722F37_100%),_radial-gradient(circle_at_10%_10%,_rgba(252,250,242,0.05),_transparent_45%)]" />
       </div>
 
       <!-- Content Container -->

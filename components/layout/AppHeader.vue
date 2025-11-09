@@ -161,6 +161,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { useThrottleFn } from '@vueuse/core'
 import { Button } from '@/components/ui/button'
 import LanguageSwitcher from './LanguageSwitcher.vue'
 import MobileNav from './MobileNav.vue'
@@ -172,10 +173,11 @@ const mobileMenuOpen = ref(false)
 
 // Scroll detection for luxury header transparency
 const scrolled = ref(false)
+const SCROLL_THRESHOLD = 20 // px - threshold for header transparency
 
-const handleScroll = () => {
-  scrolled.value = window.scrollY > 20
-}
+const handleScroll = useThrottleFn(() => {
+  scrolled.value = window.scrollY > SCROLL_THRESHOLD
+}, 50) // Throttle to 50ms (20 updates/second) for optimal performance
 
 onMounted(() => {
   if (typeof window !== 'undefined') {
