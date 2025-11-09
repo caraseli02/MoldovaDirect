@@ -58,8 +58,8 @@ export default defineNuxtConfig({
     }
   },
   routeRules: {
-    // Landing page - will enable prerender after fixing server errors
-    // '/': { prerender: true },
+    // Landing page - SWR caching (1 hour) + prerender
+    '/': { swr: 3600, prerender: true },
     // Product pages - ISR every hour
     '/products': { swr: 3600 },
     '/products/**': { swr: 3600 },

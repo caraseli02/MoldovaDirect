@@ -25,11 +25,13 @@
       <div v-else class="absolute inset-0 z-0">
         <!-- Background Image (if provided) -->
         <div v-if="backgroundImage" class="absolute inset-0">
-          <img
+          <NuxtImg
+            preset="hero"
             :src="backgroundImage"
             :alt="backgroundImageAlt"
             loading="eager"
             fetchpriority="high"
+            sizes="sm:100vw md:100vw lg:100vw"
             class="h-full w-full object-cover object-center"
           />
           <!-- Gradient Overlay for Text Readability -->
