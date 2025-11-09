@@ -18,10 +18,10 @@
           <span class="sr-only">Menu</span>
         </button>
 
-        <!-- Center: Logo (To'ak style - centered) -->
+        <!-- Center: Logo (To'ak style - centered, hidden on mobile) -->
         <NuxtLink
           :to="localePath('/')"
-          class="absolute left-1/2 -translate-x-1/2 flex items-center"
+          class="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center"
           :aria-label="'Moldova Direct'"
         >
           <span
