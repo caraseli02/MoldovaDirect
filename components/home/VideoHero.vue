@@ -26,21 +26,15 @@
       <div v-else class="absolute inset-0 z-0">
         <!-- Background Image (if provided) -->
         <div v-if="backgroundImage" class="absolute inset-0">
-          <NuxtImg
+          <img
             :src="backgroundImage"
             :alt="backgroundImageAlt"
-            width="1920"
-            height="1080"
-            format="webp"
-            quality="85"
             loading="eager"
             fetchpriority="high"
-            sizes="100vw"
-            preset="hero"
             class="h-full w-full object-cover object-center"
           />
           <!-- Gradient Overlay for Text Readability -->
-          <div class="absolute inset-0 bg-gradient-to-br from-wine-burgundy-950/50 via-wine-burgundy-900/40 to-slate-900/50" />
+          <div class="absolute inset-0 bg-gradient-to-br from-wine-burgundy-950/75 via-wine-burgundy-900/60 to-slate-900/70" />
         </div>
 
         <!-- Gradient Fallback (if no image) -->
@@ -90,6 +84,7 @@
               transition: { delay: 200 },
             }"
             class="mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs font-medium uppercase tracking-wider text-white/90 ring-1 ring-white/20 backdrop-blur-sm md:mb-6 md:text-sm"
+            style="text-shadow: 0 2px 6px rgba(0,0,0,0.5)"
           >
             <commonIcon v-if="badgeIcon" :name="badgeIcon" class="h-4 w-4" />
             <span>{{ badge }}</span>
@@ -104,7 +99,8 @@
               y: 0,
               transition: { delay: 300 },
             }"
-            class="mb-4 text-5xl font-extrabold leading-[1.1] tracking-tight md:mb-6 md:text-7xl lg:text-8xl"
+            class="mb-4 text-5xl font-extrabold leading-[1.1] tracking-tight text-white drop-shadow-2xl md:mb-6 md:text-7xl lg:text-8xl"
+            style="text-shadow: 0 4px 12px rgba(0,0,0,0.8), 0 2px 4px rgba(0,0,0,0.6)"
           >
             {{ title }}
           </h1>
@@ -119,7 +115,8 @@
               y: 0,
               transition: { delay: 400 },
             }"
-            class="mb-6 max-w-2xl text-base leading-relaxed text-white/80 md:mb-8 md:text-lg lg:text-xl"
+            class="mb-6 max-w-2xl text-base leading-relaxed text-white/90 md:mb-8 md:text-lg lg:text-xl"
+            style="text-shadow: 0 2px 8px rgba(0,0,0,0.7)"
           >
             {{ subtitle }}
           </p>
@@ -186,8 +183,8 @@
               }"
               class="text-center"
             >
-              <div class="mb-1 text-2xl font-bold md:mb-2 md:text-4xl">{{ highlight.value }}</div>
-              <div class="text-xs text-white/70 md:text-sm">{{ highlight.label }}</div>
+              <div class="mb-1 text-2xl font-bold md:mb-2 md:text-4xl" style="text-shadow: 0 2px 8px rgba(0,0,0,0.7)">{{ highlight.value }}</div>
+              <div class="text-xs text-white/80 md:text-sm" style="text-shadow: 0 2px 6px rgba(0,0,0,0.6)">{{ highlight.label }}</div>
             </div>
           </div>
         </div>

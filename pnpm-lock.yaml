@@ -154,8 +154,8 @@ importers:
         specifier: ^0.45.0
         version: 0.45.0
       nuxt-swiper:
-        specifier: ^2.0.1
-        version: 2.0.1(magicast@0.3.5)
+        specifier: 1.2.0
+        version: 1.2.0(magicast@0.3.5)
       playwright:
         specifier: ^1.55.0
         version: 1.55.1
@@ -4832,8 +4832,8 @@ packages:
   nuxt-define@1.0.0:
     resolution: {integrity: sha512-CYZ2WjU+KCyCDVzjYUM4eEpMF0rkPmkpiFrybTqqQCRpUbPt2h3snswWIpFPXTi+osRCY6Og0W/XLAQgDL4FfQ==}
 
-  nuxt-swiper@2.0.1:
-    resolution: {integrity: sha512-mUAzuGqQHcsqJa1p5y/Hafvurn62o6njHq8DcwQErourkpJpv7z/SnnT0ezXMr7YvDPNg22ayEKGdHkGXXOxMQ==}
+  nuxt-swiper@1.2.0:
+    resolution: {integrity: sha512-09j/2GzFo7/4fMFOpwODcBP6VeO4+7ux2T7EjZV9l1HNcsBDwXpmjYI/stKU9xENoKmNSlru0IknU6dx1UDtdg==}
 
   nuxt@3.19.2:
     resolution: {integrity: sha512-z4ouGRMOWqZ1xaZ+HdRBRVlZcKSoDBpRxQ30GJ2dllraZMC/gNpTGuY32H3xP5b4R29b8uYcK+B8LFQoRHpO8A==}
@@ -5801,8 +5801,8 @@ packages:
     engines: {node: '>=16'}
     hasBin: true
 
-  swiper@11.2.10:
-    resolution: {integrity: sha512-RMeVUUjTQH+6N3ckimK93oxz6Sn5la4aDlgPzB+rBrG/smPdCTicXyhxa+woIpopz+jewEloiEE3lKo1h9w2YQ==}
+  swiper@10.3.1:
+    resolution: {integrity: sha512-24Wk3YUdZHxjc9faID97GTu6xnLNia+adMt6qMTZG/HgdSUt4fS0REsGUXJOgpTED0Amh/j+gRGQxsLayJUlBQ==}
     engines: {node: '>= 4.7.0'}
 
   swiper@12.0.3:
@@ -11844,10 +11844,10 @@ snapshots:
 
   nuxt-define@1.0.0: {}
 
-  nuxt-swiper@2.0.1(magicast@0.3.5):
+  nuxt-swiper@1.2.0(magicast@0.3.5):
     dependencies:
       '@nuxt/kit': 3.19.2(magicast@0.3.5)
-      swiper: 11.2.10
+      swiper: 10.3.1
     transitivePeerDependencies:
       - magicast
 
@@ -13167,7 +13167,7 @@ snapshots:
       picocolors: 1.1.1
       sax: 1.4.1
 
-  swiper@11.2.10: {}
+  swiper@10.3.1: {}
 
   swiper@12.0.3: {}
 

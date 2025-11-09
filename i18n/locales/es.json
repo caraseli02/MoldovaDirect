@@ -936,6 +936,7 @@
       "badge": "Socios con sellos DOP e IGP auténticos",
       "title": "Clientes que confían en nosotros en toda España",
       "subtitle": "Únete a una comunidad que celebra la artesanía moldava.",
+      "verified": "Compra Verificada",
       "testimonials": {
         "maria": {
           "name": "María, Barcelona",
@@ -959,6 +960,28 @@
         "Moldova Wine Guild",
         "Slow Food Alliance"
       ]
+    },
+    "certifications": {
+      "authentic": {
+        "title": "100% Auténtico",
+        "subtitle": "Directo de Moldavia",
+        "description": "Todos los productos provienen directamente de productores y artesanos moldavos auténticos, garantizando calidad genuina y herencia"
+      },
+      "quality": {
+        "title": "Galardonado",
+        "subtitle": "Selección Premium",
+        "description": "Colección curada de vinos y productos artesanales premiados reconocidos por competencias internacionales"
+      },
+      "sustainable": {
+        "title": "Sostenible",
+        "subtitle": "Ecológico",
+        "description": "Apoyando prácticas agrícolas sostenibles y embalajes ecológicos para proteger el hermoso terruño de Moldavia"
+      },
+      "secure": {
+        "title": "Pago Seguro",
+        "subtitle": "Seguro y Protegido",
+        "description": "Cifrado líder en la industria y procesamiento de pagos seguro para proteger tu información personal"
+      }
     },
     "mediaMentions": {
       "title": "Destacado en",
@@ -1071,6 +1094,9 @@
   "products": {
     "featured": "Destacado",
     "sale": "Oferta",
+    "new": "Nuevo",
+    "bestSeller": "Más Vendido",
+    "quickView": "Vista Rápida",
     "off": "descuento",
     "details": "Detalles",
     "origin": "Origen",

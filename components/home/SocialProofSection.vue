@@ -172,6 +172,8 @@
 </template>
 
 <script setup lang="ts">
+import UiStarRating from '~/components/ui/StarRating.vue'
+
 const props = defineProps<{
   highlights: Array<{
     value: string

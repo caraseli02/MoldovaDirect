@@ -1,4 +1,4 @@
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, onUnmounted, watch, getCurrentInstance } from 'vue'
 
 interface CountUpOptions {
   start?: number
@@ -6,11 +6,13 @@ interface CountUpOptions {
   useEasing?: boolean
   separator?: string
   decimal?: string
+  autoStart?: boolean
 }
 
 /**
  * Animated counter hook for stats
  * Counts up from start value to target value with easing
+ * Can be used both inside and outside component contexts
  */
 export function useCountUp(target: number | Ref<number>, options: CountUpOptions = {}) {
   const {
@@ -18,11 +20,13 @@ export function useCountUp(target: number | Ref<number>, options: CountUpOptions
     duration = 2000,
     useEasing = true,
     separator = ',',
-    decimal = '.'
+    decimal = '.',
+    autoStart = true
   } = options
 
   const current = ref(start)
   const animationFrame = ref<number | null>(null)
+  const hasInstance = getCurrentInstance()
 
   // Easing function (ease-out)
   const easeOutQuad = (t: number): number => t * (2 - t)
@@ -83,18 +87,28 @@ export function useCountUp(target: number | Ref<number>, options: CountUpOptions
     restart()
   })
 
-  onMounted(() => {
-    startAnimation()
-  })
+  // Only use lifecycle hooks if called within a component context
+  if (hasInstance) {
+    if (autoStart) {
+      onMounted(() => {
+        startAnimation()
+      })
+    }
 
-  onUnmounted(() => {
-    stopAnimation()
-  })
+    onUnmounted(() => {
+      stopAnimation()
+    })
+  } else if (autoStart) {
+    // If not in component context but autoStart is true, start immediately
+    startAnimation()
+  }
 
   return {
     current,
     formatted,
     reset,
-    restart
+    restart,
+    start: startAnimation,
+    stop: stopAnimation
   }
 }

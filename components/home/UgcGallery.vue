@@ -120,6 +120,8 @@
 </template>
 
 <script setup lang="ts">
+import UiStarRating from '~/components/ui/StarRating.vue'
+
 interface CustomerPhoto {
   id: string
   image: string
