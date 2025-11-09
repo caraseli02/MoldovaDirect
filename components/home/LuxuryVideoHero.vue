@@ -98,8 +98,11 @@ onMounted(() => {
 
     // Load video only on desktop after a delay (To'ak style)
     if (!reducedMotion.value && !isMobile.value) {
-      setTimeout(() => {
+      setTimeout(async () => {
         shouldShowVideo.value = true
+
+        // Wait for DOM to update
+        await nextTick()
 
         // Load video source after mount (To'ak style lazy loading)
         if (videoRef.value) {

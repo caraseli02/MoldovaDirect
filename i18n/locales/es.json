@@ -2038,9 +2038,13 @@
     "hero": {
       "eyebrow": "Herencia Artesanal Desde 1950",
       "title": "De la Tierra Moldava a las Mesas Españolas",
+      "title_line1": "De la Tierra Moldava",
+      "title_line2": "a las Mesas Españolas",
       "subtitle": "Vinos curados y tesoros gourmet del corazón de Moldavia",
+      "description": "Experimenta vinos moldavos premium y productos gourmet artesanales en su mejor forma—desde el corazón de Moldavia.",
       "cta_primary": "Descubre Nuestra Historia",
-      "cta_secondary": "Ver Colección"
+      "cta_secondary": "Ver Colección",
+      "cta": "Ver Colección"
     },
     "press": {
       "title": "Destacados En"

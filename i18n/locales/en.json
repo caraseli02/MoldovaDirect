@@ -2051,9 +2051,13 @@
     "hero": {
       "eyebrow": "Artisan Heritage Since 1950",
       "title": "From Moldovan Soil to Spanish Tables",
+      "title_line1": "From Moldovan Soil",
+      "title_line2": "to Spanish Tables",
       "subtitle": "Curated wines and gourmet treasures from the heart of Moldova",
+      "description": "Experience premium Moldovan wines and artisan gourmet products in their finest form—from the heart of Moldova.",
       "cta_primary": "Discover Our Story",
-      "cta_secondary": "Shop Collection"
+      "cta_secondary": "Shop Collection",
+      "cta": "Shop Collection"
     },
     "press": {
       "title": "As Featured In"

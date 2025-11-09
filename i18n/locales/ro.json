@@ -1984,9 +1984,13 @@
     "hero": {
       "eyebrow": "Moștenire Artizanală din 1950",
       "title": "De pe Pământul Moldovenesc pe Mesele Spaniole",
+      "title_line1": "De pe Pământul Moldovenesc",
+      "title_line2": "pe Mesele Spaniole",
       "subtitle": "Vinuri curate și comori gastronomice din inima Moldovei",
+      "description": "Experimentează vinuri premium moldovenești și produse gastronomice artizanale în forma lor cea mai bună—din inima Moldovei.",
       "cta_primary": "Descoperă Povestea Noastră",
-      "cta_secondary": "Vezi Colecția"
+      "cta_secondary": "Vezi Colecția",
+      "cta": "Vezi Colecția"
     },
     "press": {
       "title": "Prezentat În"
