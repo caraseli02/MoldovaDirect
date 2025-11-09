@@ -47,9 +47,9 @@ describe('VideoHero', () => {
         },
       })
 
-      // Should have gradient background classes
+      // Should have gradient background with brand colors
       expect(wrapper.html()).toContain('bg-gradient-to-br')
-      expect(wrapper.html()).toContain('from-wine-burgundy-950')
+      expect(wrapper.html()).toContain('from-brand-dark')
     })
 
     it('renders video background when showVideo is true', () => {
@@ -241,8 +241,8 @@ describe('VideoHero', () => {
         },
       })
 
-      // Find badge container
-      const badge = wrapper.find('.rounded-full.bg-white\\/10')
+      // Find badge container with luxury brand styling
+      const badge = wrapper.find('.rounded-full.bg-brand-light\\/15')
       expect(badge.exists()).toBe(true)
       expect(badge.text()).toContain('New Products')
 
@@ -286,7 +286,7 @@ describe('VideoHero', () => {
 
       expect(primaryCta).toBeDefined()
       expect(primaryCta?.props('to')).toBe('/products')
-      expect(primaryCta?.classes()).toContain('bg-white')
+      expect(primaryCta?.classes()).toContain('bg-brand-light')
     })
 
     it('renders secondary CTA when provided', () => {
@@ -321,7 +321,7 @@ describe('VideoHero', () => {
 
       expect(secondaryCta).toBeDefined()
       expect(secondaryCta?.props('to')).toBe('/about')
-      expect(secondaryCta?.classes()).toContain('bg-white/10')
+      expect(secondaryCta?.classes()).toContain('bg-brand-light/10')
     })
 
     it('renders both CTAs when both are provided', () => {

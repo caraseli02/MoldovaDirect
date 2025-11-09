@@ -12,6 +12,9 @@ const mockGetShortcutDisplay = vi.fn((key: string, options: any) => {
 })
 
 vi.mock('~/composables/useKeyboardShortcuts', () => ({
+  default: () => ({
+    getShortcutDisplay: mockGetShortcutDisplay,
+  }),
   useKeyboardShortcuts: () => ({
     getShortcutDisplay: mockGetShortcutDisplay,
   }),
@@ -22,6 +25,19 @@ const mockItemCount = ref(0)
 global.useCart = vi.fn(() => ({
   itemCount: mockItemCount,
 }))
+
+// Mock useKeyboardShortcuts as global (Nuxt auto-import)
+global.useKeyboardShortcuts = vi.fn(() => ({
+  getShortcutDisplay: mockGetShortcutDisplay,
+}))
+
+// Mock i18n composables
+global.useI18n = vi.fn(() => ({
+  t: (key: string) => key,
+  locale: ref('es'),
+}))
+
+global.useLocalePath = vi.fn(() => (path: string) => path)
 
 // Mock components
 vi.mock('./LanguageSwitcher.vue', () => ({
