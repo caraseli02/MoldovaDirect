@@ -229,7 +229,7 @@ const artisans = [
 </script>
 
 <style scoped>
-.border border-[#241405]/10 rounded-sm p-6 {
+.artisan-card {
   background: white;
   padding: 2rem;
   border: 1px solid rgba(139, 69, 19, 0.1);
@@ -238,13 +238,13 @@ const artisans = [
   overflow: hidden;
 }
 
-.border border-[#241405]/10 rounded-sm p-6:hover {
+.artisan-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 20px 50px rgba(74, 28, 28, 0.15);
   border-color: #241405;
 }
 
-.border border-[#241405]/10 rounded-sm p-6::before {
+.artisan-card::before {
   content: '';
   position: absolute;
   top: 0;
@@ -256,7 +256,7 @@ const artisans = [
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.border border-[#241405]/10 rounded-sm p-6:hover::before {
+.artisan-card:hover::before {
   transform: scaleX(1);
 }
 
