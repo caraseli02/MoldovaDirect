@@ -43,23 +43,18 @@
       <HomeLuxuryArtisanSpotlight />
     </section>
 
-    <!-- 8. Banner Columns (Brand Promises) -->
-    <section class="c-section c-section__banner-columns" style="background-color: #FCFAF2;">
-      <HomeBrandPromises />
-    </section>
-
-    <!-- 9. Customer Testimonials -->
-    <section class="c-section c-section__testimonials" style="background-color: #FFFFFF;">
+    <!-- 8. Customer Testimonials -->
+    <section class="c-section c-section__testimonials" style="background-color: #FCFAF2;">
       <HomeLuxuryTestimonials />
     </section>
 
-    <!-- 10. Featured Stories (Blog) -->
-    <section class="c-section c-section__blog-posts" style="background-color: #FCFAF2;">
+    <!-- 9. Featured Stories (Blog) -->
+    <section class="c-section c-section__blog-posts" style="background-color: #FFFFFF;">
       <HomeFeaturedStories />
     </section>
 
-    <!-- 11. Newsletter Signup -->
-    <section class="c-section c-section__newsletter" style="background-color: #FFFFFF;">
+    <!-- 10. Newsletter Signup -->
+    <section class="c-section c-section__newsletter" style="background-color: #FCFAF2;">
       <HomeNewsletterSignup />
     </section>
   </div>
