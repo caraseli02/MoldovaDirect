@@ -1,37 +1,22 @@
 <template>
-  <header class="fixed top-0 left-0 right-0 z-50 bg-[#FCFAF2] border-b border-[#241405]/10 transition-all duration-300">
+  <header class="fixed top-0 left-0 right-0 z-50 bg-transparent backdrop-blur-sm transition-all duration-300">
     <div class="max-w-[1920px] mx-auto px-4 md:px-6 lg:px-8">
       <div class="flex items-center justify-between h-20 md:h-24">
 
-        <!-- Left: Hamburger Menu Button (To'ak style - 3 lines) -->
-        <button
-          type="button"
-          @click="toggleMobileMenu"
-          :aria-label="mobileMenuOpen ? 'Close menu' : 'Open menu'"
-          :aria-expanded="mobileMenuOpen"
-          aria-controls="nav-menu"
-          class="flex items-center justify-center w-11 h-11 text-[#241405] hover:opacity-60 transition-opacity focus:outline-none"
-        >
-          <svg width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M2 2H22M2 9H22M2 16H22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-          <span class="sr-only">Menu</span>
-        </button>
-
-        <!-- Center: Logo (To'ak style - centered, hidden on mobile) -->
+        <!-- Left: Small Logo (To'ak style) -->
         <NuxtLink
           :to="localePath('/')"
-          class="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center"
+          class="flex items-center"
           :aria-label="'Moldova Direct'"
         >
           <span
-            class="text-2xl md:text-3xl font-serif font-semibold text-[#722F37]"
+            class="text-lg md:text-xl font-serif font-semibold text-[#FCFAF2]"
             style="font-family: 'Playfair Display', Georgia, serif; letter-spacing: 0.02em;">
             Moldova Direct
           </span>
         </NuxtLink>
 
-        <!-- Right: User Actions (To'ak style) -->
+        <!-- Right: User Actions (To'ak style - menu button is last) -->
         <div class="flex items-center space-x-2 md:space-x-4">
 
           <!-- Search Icon (To'ak SVG) -->
@@ -39,7 +24,7 @@
             type="button"
             @click="goToSearch"
             :aria-label="'Search'"
-            class="flex items-center justify-center w-11 h-11 text-[#241405] hover:opacity-60 transition-opacity focus:outline-none"
+            class="flex items-center justify-center w-11 h-11 text-[#FCFAF2] hover:opacity-60 transition-opacity focus:outline-none"
           >
             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M12.3047 21.25C17.5514 21.25 21.8047 16.9967 21.8047 11.75C21.8047 6.50329 17.5514 2.25 12.3047 2.25C7.05798 2.25 2.80469 6.50329 2.80469 11.75C2.80469 16.9967 7.05798 21.25 12.3047 21.25Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -52,7 +37,7 @@
           <NuxtLink
             :to="localePath('/account')"
             :aria-label="'Account'"
-            class="flex items-center justify-center w-11 h-11 text-[#241405] hover:opacity-60 transition-opacity"
+            class="flex items-center justify-center w-11 h-11 text-[#FCFAF2] hover:opacity-60 transition-opacity"
           >
             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M12.8047 12.25C15.5661 12.25 17.8047 10.0114 17.8047 7.25C17.8047 4.48858 15.5661 2.25 12.8047 2.25C10.0433 2.25 7.80469 4.48858 7.80469 7.25C7.80469 10.0114 10.0433 12.25 12.8047 12.25Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -65,7 +50,7 @@
           <NuxtLink
             :to="localePath('/cart')"
             :aria-label="cartItemsCount > 0 ? `Cart (${cartItemsCount} items)` : 'Cart'"
-            class="relative flex items-center justify-center w-11 h-11 text-[#241405] hover:opacity-60 transition-opacity"
+            class="relative flex items-center justify-center w-11 h-11 text-[#FCFAF2] hover:opacity-60 transition-opacity"
           >
             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M8.30469 7.91952V6.94952C8.30469 4.69952 10.1147 2.48952 12.3647 2.27952C15.0447 2.01952 17.3047 4.12952 17.3047 6.75952V8.13952" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -83,6 +68,21 @@
             </span>
             <span class="sr-only">Cart</span>
           </NuxtLink>
+
+          <!-- Menu Button (Apple-style minimalist - last element) -->
+          <button
+            type="button"
+            @click="toggleMobileMenu"
+            :aria-label="mobileMenuOpen ? 'Close menu' : 'Open menu'"
+            :aria-expanded="mobileMenuOpen"
+            aria-controls="nav-menu"
+            class="flex items-center justify-center w-11 h-11 text-[#FCFAF2] hover:opacity-60 transition-opacity focus:outline-none"
+          >
+            <svg width="18" height="12" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1H17M1 6H17M1 11H17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <span class="sr-only">Menu</span>
+          </button>
 
         </div>
       </div>

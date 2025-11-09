@@ -122,6 +122,19 @@ useLandingSeo({
   overflow: hidden;
 }
 
+/* Video Hero - Full Screen Behind Transparent Header */
+.c-section__video-hero {
+  margin-top: -5rem; /* Negative margin to extend behind header (80px = 5rem) */
+  padding-top: 5rem; /* Add padding to compensate for content positioning */
+}
+
+@media (min-width: 768px) {
+  .c-section__video-hero {
+    margin-top: -6rem; /* -96px on desktop */
+    padding-top: 6rem;
+  }
+}
+
 /* Smooth transitions between sections */
 .c-section + .c-section {
   transition: background-color 0.3s ease;
