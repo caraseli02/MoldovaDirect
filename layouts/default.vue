@@ -1,8 +1,5 @@
 <template>
   <div class="min-h-screen flex flex-col">
-    <!-- Sticky Announcement Bar -->
-    <LayoutAnnouncementBar />
-
     <LayoutAppHeader />
     <main class="flex-1 bg-white dark:bg-gray-950 text-gray-900 dark:text-white">
       <slot />
