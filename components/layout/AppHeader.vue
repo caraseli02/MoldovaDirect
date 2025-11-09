@@ -10,7 +10,7 @@
         <NuxtLink
           :to="localePath('/')"
           class="flex items-center"
-          :aria-label="'Moldova Direct'"
+          aria-label="Moldova Direct"
         >
           <span
             class="text-lg md:text-xl font-serif font-semibold transition-colors duration-300"
@@ -27,7 +27,7 @@
           <button
             type="button"
             @click="goToSearch"
-            :aria-label="'Search'"
+            aria-label="Search"
             class="flex items-center justify-center w-11 h-11 hover:opacity-60 transition-all duration-300 focus:outline-none"
             :class="isScrolled ? 'text-[#241405]' : 'text-[#FCFAF2]'"
           >
@@ -41,7 +41,7 @@
           <!-- Account Icon (To'ak SVG) -->
           <NuxtLink
             :to="localePath('/account')"
-            :aria-label="'Account'"
+            aria-label="Account"
             class="flex items-center justify-center w-11 h-11 hover:opacity-60 transition-all duration-300"
             :class="isScrolled ? 'text-[#241405]' : 'text-[#FCFAF2]'"
           >
@@ -116,7 +116,7 @@
           <button
             type="button"
             @click="toggleMobileMenu"
-            :aria-label="'Close menu'"
+            aria-label="Close menu"
             class="flex items-center justify-center w-12 h-12 bg-[#241405] text-[#FCFAF2] rounded-full hover:bg-[#722F37] transition-all shadow-lg focus:outline-none focus:ring-2 focus:ring-[#722F37]"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -330,7 +330,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 
 const localePath = useLocalePath()
 const mobileMenuOpen = ref(false)
@@ -353,17 +353,13 @@ const handleScroll = () => {
 }
 
 onMounted(() => {
-  if (typeof window !== 'undefined') {
-    window.addEventListener('scroll', handleScroll)
-    handleScroll() // Check initial scroll position
-  }
+  window.addEventListener('scroll', handleScroll)
+  handleScroll() // Check initial scroll position
 })
 
 // Clean up on unmount
 onUnmounted(() => {
-  if (typeof window !== 'undefined') {
-    window.removeEventListener('scroll', handleScroll)
-  }
+  window.removeEventListener('scroll', handleScroll)
   document.body.style.overflow = ''
 })
 

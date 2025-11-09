@@ -102,10 +102,9 @@
               type="email"
               :placeholder="$t('footer.newsletter.placeholder')"
               :disabled="isSubmitting"
-              :aria-label="$t('footer.newsletter.placeholder')"
+              :aria-label="$t('footer.newsletter.placeholder') || 'Email address'"
               class="px-4 py-3 bg-[#241405]/30 text-[#FCFAF2] border border-[#FCFAF2]/20 rounded-none focus:outline-none focus:border-[#722F37] disabled:opacity-50 disabled:cursor-not-allowed placeholder-[#FCFAF2]/40 text-sm"
               required
-              aria-label="Email address"
             >
             <Button
               type="submit"
@@ -169,9 +168,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import { Button } from '@/components/ui/button'
 import { toast } from 'vue-sonner'
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const { t } = useI18n()
 const localePath = useLocalePath()
@@ -182,11 +182,12 @@ const subscribeNewsletter = async () => {
   if (!email.value || isSubmitting.value) return
 
   // Basic email validation
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  if (!emailRegex.test(email.value)) {
+  if (!EMAIL_REGEX.test(email.value)) {
     toast.error(
-      t('footer.newsletter.error.title') || 'Invalid email',
-      t('footer.newsletter.error.invalidEmail') || 'Please enter a valid email address'
+      t('footer.newsletter.error.invalidEmail') || 'Please enter a valid email address',
+      {
+        description: t('footer.newsletter.error.title') || 'Invalid email'
+      }
     )
     return
   }
@@ -200,13 +201,17 @@ const subscribeNewsletter = async () => {
 
     toast.success(
       t('footer.newsletter.success.title') || 'Subscribed!',
-      t('footer.newsletter.success.message') || `You've been subscribed to our newsletter at ${email.value}`
+      {
+        description: t('footer.newsletter.success.message', { email: email.value }) || `You've been subscribed to our newsletter`
+      }
     )
     email.value = ''
   } catch (error) {
     toast.error(
-      t('footer.newsletter.error.title') || 'Subscription failed',
-      t('footer.newsletter.error.message') || 'Something went wrong. Please try again later.'
+      t('footer.newsletter.error.message') || 'Something went wrong. Please try again later.',
+      {
+        description: t('footer.newsletter.error.title') || 'Subscription failed'
+      }
     )
   } finally {
     isSubmitting.value = false

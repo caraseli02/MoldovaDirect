@@ -86,46 +86,45 @@ const isMobile = ref(false)
 const shouldShowVideo = ref(false)
 
 // Check device type and reduced motion preference
+const checkMobile = () => {
+  isMobile.value = window.innerWidth < 768
+}
+
 onMounted(() => {
-  if (typeof window !== 'undefined') {
-    // Check for mobile device (< 768px)
-    const checkMobile = () => {
-      isMobile.value = window.innerWidth < 768
-    }
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
+  // Check for mobile device (< 768px)
+  checkMobile()
+  window.addEventListener('resize', checkMobile)
 
-    // Check for reduced motion preference
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    reducedMotion.value = mediaQuery.matches
+  // Check for reduced motion preference
+  const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+  reducedMotion.value = mediaQuery.matches
 
-    // Load video only on desktop after a delay (To'ak style)
-    if (!reducedMotion.value && !isMobile.value) {
-      setTimeout(async () => {
-        shouldShowVideo.value = true
+  // Load video only on desktop after a delay (To'ak style)
+  if (!reducedMotion.value && !isMobile.value) {
+    setTimeout(async () => {
+      shouldShowVideo.value = true
 
-        // Wait for DOM to update
-        await nextTick()
+      // Wait for DOM to update
+      await nextTick()
 
-        // Load video source after mount (To'ak style lazy loading)
-        if (videoRef.value) {
-          const sources = videoRef.value.querySelectorAll('source')
-          sources.forEach((source) => {
-            const dataSrc = source.getAttribute('data-src')
-            if (dataSrc) {
-              source.setAttribute('src', dataSrc)
-            }
-          })
-          videoRef.value.load()
-        }
-      }, 500)
-    }
-
-    // Cleanup
-    return () => {
-      window.removeEventListener('resize', checkMobile)
-    }
+      // Load video source after mount (To'ak style lazy loading)
+      if (videoRef.value) {
+        const sources = videoRef.value.querySelectorAll('source')
+        sources.forEach((source) => {
+          const dataSrc = source.getAttribute('data-src')
+          if (dataSrc) {
+            source.setAttribute('src', dataSrc)
+          }
+        })
+        videoRef.value.load()
+      }
+    }, 500)
   }
+})
+
+// Cleanup on unmount
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile)
 })
 
 // Video event handlers
