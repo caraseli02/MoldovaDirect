@@ -1,50 +1,23 @@
 <template>
   <div class="bg-gray-50 dark:bg-gray-950 min-h-screen">
     <ProductCategoryNavigation
+      v-if="isSectionEnabled('categoryNavigation')"
       :categories="categoriesTree"
-      :current-category="currentCategory"
+      :current-category="currentCategory?.slug"
       :show-product-count="true"
     />
 
-    <section class="relative overflow-hidden">
-      <div class="absolute inset-0 bg-gradient-to-br from-blue-600/80 via-blue-500/70 to-indigo-500/70 dark:from-blue-900/80 dark:via-blue-800/70 dark:to-indigo-900/70"></div>
-      <div class="absolute inset-x-0 -bottom-32 h-64 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.35),transparent_60%)]"></div>
-      <div class="relative z-10 px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-        <div class="mx-auto max-w-5xl text-white">
-          <div class="inline-flex items-center rounded-full bg-white/20 px-4 py-1 text-sm font-semibold uppercase tracking-wider backdrop-blur shadow-sm">
-            {{ t('products.hero.seasonal') }}
-          </div>
-          <h1 class="mt-6 text-3xl font-bold sm:text-4xl lg:text-5xl">
-            {{ t('products.hero.title') }}
-          </h1>
-          <p class="mt-4 max-w-2xl text-lg">
-            {{ t('products.hero.subtitle') }}
-          </p>
-          <div class="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
-            <UiButton
-              type="button"
-              class="rounded-full bg-white text-blue-600 shadow-lg shadow-blue-900/20 hover:bg-blue-50"
-              @click="scrollToResults"
-            >
-              {{ t('products.hero.cta') }}
-            </UiButton>
-            <div class="flex flex-wrap items-center gap-2">
-              <UiButton
-                v-for="collection in discoveryCollections"
-                :key="collection.id"
-                type="button"
-                variant="outline"
-                class="rounded-full border-white/40 bg-white/10 backdrop-blur hover:bg-white/20"
-                :class="{ 'bg-white text-blue-600 shadow-lg shadow-blue-900/10': activeCollectionId === collection.id }"
-                @click="applyDiscoveryCollection(collection)"
-              >
-                {{ collection.label }}
-              </UiButton>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <ProductHero
+      v-if="isSectionEnabled('heroSection')"
+      :seasonal-badge="t('products.hero.seasonal')"
+      :title="t('products.hero.title')"
+      :subtitle="t('products.hero.subtitle')"
+      :cta-text="t('products.hero.cta')"
+      :collections="isSectionEnabled('discoveryCollections') ? discoveryCollections : []"
+      :active-collection-id="activeCollectionId"
+      @scroll-to-results="scrollToResults"
+      @select-collection="applyDiscoveryCollection"
+    />
 
     <div class="relative" ref="mainContainer">
       <!-- Mobile/Tablet Filter Panel -->
@@ -83,7 +56,7 @@
       <div class="mx-auto flex w-full max-w-7xl flex-col gap-8 px-4 pb-20 pt-10 sm:px-6 lg:px-8" ref="contentContainer">
         <div class="flex-1" ref="scrollContainer">
           <MobilePullToRefreshIndicator
-            v-if="isMobile"
+            v-if="isSectionEnabled('pullToRefresh') && isMobile"
             :is-refreshing="pullToRefresh.isRefreshing.value"
             :is-pulling="pullToRefresh.isPulling.value"
             :can-refresh="pullToRefresh.canRefresh.value"
@@ -93,146 +66,42 @@
           />
 
           <div id="results" class="space-y-10">
-            <div class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900 sm:p-6">
-              <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                  <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">
-                    {{ t('products.discovery.title') }}
-                  </h2>
-                  <p class="text-sm text-gray-600 dark:text-gray-400">
-                    {{ t('products.discovery.description') }}
-                  </p>
-                </div>
-                <div class="flex flex-wrap items-center gap-3">
-                  <!-- Filter button (mobile/tablet only) -->
-                  <UiButton
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    :aria-label="t('products.filters.title')"
-                    :aria-expanded="showFilterPanel"
-                    aria-controls="filter-panel"
-                    @click="openFilterPanel"
-                  >
-                    <commonIcon name="lucide:filter" class="mr-2 h-4 w-4" aria-hidden="true" />
-                    <span>{{ t('products.filters.title') }}</span>
-                    <span v-if="activeFilterChips.length" class="ml-1 inline-flex items-center justify-center rounded-full bg-blue-100 px-2 py-0.5 text-xs font-semibold text-blue-700 dark:bg-blue-900/40 dark:text-blue-300" aria-label="Active filters count">
-                      {{ activeFilterChips.length }}
-                    </span>
-                  </UiButton>
-                  <div class="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center">
-                    <div class="relative flex-1">
-                      <label for="product-search" class="sr-only">
-                        {{ t('products.searchLabel') }}
-                      </label>
-                      <commonIcon
-                        v-if="!loading"
-                        name="lucide:search"
-                        class="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400"
-                        aria-hidden="true"
-                      />
-                      <div v-else class="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2">
-                        <svg class="h-5 w-5 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-                          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                      </div>
-                      <input
-                        id="product-search"
-                        ref="searchInputRef"
-                        v-model="searchQuery"
-                        type="search"
-                        role="searchbox"
-                        :placeholder="t('products.searchPlaceholder')"
-                        :disabled="loading"
-                        :aria-label="t('products.searchLabel')"
-                        class="w-full rounded-xl border border-gray-300 bg-white py-3 pl-11 pr-4 text-sm text-gray-900 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100 disabled:cursor-not-allowed disabled:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-400"
-                        @input="handleSearchInput"
-                      />
-                    </div>
-                    <div class="relative">
-                      <label for="product-sort" class="sr-only">
-                        {{ t('products.sortLabel') }}
-                      </label>
-                      <select
-                        id="product-sort"
-                        v-model="sortBy"
-                        :aria-label="t('products.sortLabel')"
-                        class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:focus:border-blue-400 sm:w-48"
-                        @change="handleSortChange"
-                      >
-                        <option value="created">{{ t('products.sortNewest') }}</option>
-                        <option value="name">{{ t('products.sortName') }}</option>
-                        <option value="price_asc">{{ t('products.sortPriceLowHigh') }}</option>
-                        <option value="price_desc">{{ t('products.sortPriceHighLow') }}</option>
-                        <option value="featured">{{ t('products.sortFeatured') }}</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div v-if="isSectionEnabled('searchAndFilters')" class="space-y-6">
+              <ProductSearchBar
+                :title="t('products.discovery.title')"
+                :description="t('products.discovery.description')"
+                :search-query="searchQuery"
+                :sort-by="sortBy"
+                :sort-options="sortOptions"
+                :active-filter-count="activeFilterChips.length"
+                :show-filter-panel="showFilterPanel"
+                :loading="loading"
+                :search-label="t('products.searchLabel')"
+                :search-placeholder="t('products.searchPlaceholder')"
+                :filter-button-label="t('products.filters.title')"
+                :sort-label="t('products.sortLabel')"
+                @update:search-query="handleSearchQueryUpdate"
+                @update:sort-by="handleSortByUpdate"
+                @open-filters="openFilterPanel"
+              />
 
-              <div class="mt-6 flex flex-wrap items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
-                <span>
-                  {{ t('products.showingResults', {
-                    start: ((pagination.page - 1) * pagination.limit) + 1,
-                    end: Math.min(pagination.page * pagination.limit, pagination.total || 0),
-                    total: pagination.total || 0
-                  }) }}
-                </span>
-                <template v-if="activeFilterChips.length">
-                  <span class="text-gray-400">•</span>
-                  <span class="font-medium text-gray-700 dark:text-gray-200">
-                    {{ t('products.filterSummary.title') }}
-                  </span>
-                </template>
-              </div>
-
-              <div v-if="activeFilterChips.length" class="mt-4 flex flex-wrap gap-2" role="list" :aria-label="t('products.filterSummary.activeFilters')">
-                <UiButton
-                  v-for="chip in activeFilterChips"
-                  :key="chip.id"
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  role="listitem"
-                  class="rounded-full bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-900/40 dark:text-blue-200"
-                  :aria-label="t('products.filterSummary.removeFilter', { filter: chip.label })"
-                  @click="removeActiveChip(chip)"
-                >
-                  <span>{{ chip.label }}</span>
-                  <span class="ml-1" aria-hidden="true">×</span>
-                </UiButton>
-                <UiButton
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  class="rounded-full"
-                  :aria-label="t('products.filterSummary.clearAllFilters')"
-                  @click="clearAllFilters"
-                >
-                  {{ t('products.filterSummary.clear') }}
-                </UiButton>
-              </div>
-
-              <div class="mt-6 flex flex-wrap items-center gap-3" role="group" :aria-label="t('products.quickFilters.label')">
-                <UiButton
-                  v-for="toggle in quickToggleOptions"
-                  :key="toggle.id"
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  role="switch"
-                  :aria-checked="toggle.active"
-                  :aria-label="t('products.quickFilters.toggle', { filter: toggle.label })"
-                  class="rounded-full"
-                  :class="toggle.active ? 'border-blue-500 bg-blue-50 text-blue-700 dark:border-blue-500/60 dark:bg-blue-900/40 dark:text-blue-200' : ''"
-                  @click="toggleQuickFilter(toggle)"
-                >
-                  <span class="mr-2 inline-block h-2.5 w-2.5 rounded-full" :class="toggle.active ? 'bg-blue-500' : 'bg-gray-300 dark:bg-gray-600'" aria-hidden="true"></span>
-                  {{ toggle.label }}
-                </UiButton>
-              </div>
+              <ProductActiveFilters
+                :chips="activeFilterChips"
+                :quick-toggles="isSectionEnabled('quickFilters') ? quickToggleOptions : []"
+                :results-text="t('products.showingResults', {
+                  start: ((pagination.page - 1) * pagination.limit) + 1,
+                  end: Math.min(pagination.page * pagination.limit, pagination.total || 0),
+                  total: pagination.total || 0
+                })"
+                :active-filters-title="t('products.filterSummary.title')"
+                :active-filters-label="t('products.filterSummary.activeFilters')"
+                :clear-all-text="t('products.filterSummary.clear')"
+                :clear-all-label="t('products.filterSummary.clearAllFilters')"
+                :quick-filters-label="t('products.quickFilters.label')"
+                @remove-chip="removeActiveChip"
+                @clear-all="clearAllFilters"
+                @toggle-filter="toggleQuickFilter"
+              />
             </div>
 
             <div v-if="error" class="rounded-2xl border border-red-100 bg-white p-10 text-center shadow-sm dark:border-red-900/40 dark:bg-gray-900">
@@ -251,7 +120,7 @@
             </div>
 
             <div v-else-if="loading" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              <div v-for="n in 8" :key="`skeleton-${n}`" class="animate-pulse rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
+              <div v-for="n in PRODUCTS.SKELETON_CARD_COUNT" :key="`skeleton-${n}`" class="animate-pulse rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
                 <div class="mb-4 aspect-square rounded-xl bg-gray-200 dark:bg-gray-700"></div>
                 <div class="mb-2 h-4 rounded bg-gray-200 dark:bg-gray-700"></div>
                 <div class="h-3 w-2/3 rounded bg-gray-200 dark:bg-gray-700"></div>
@@ -260,7 +129,7 @@
 
             <div v-else-if="products?.length" class="space-y-10">
               <MobileVirtualProductGrid
-                v-if="isMobile && products.length > 20"
+                v-if="isSectionEnabled('virtualScrolling') && isMobile && products.length > PRODUCTS.VIRTUAL_SCROLL_THRESHOLD"
                 :items="products"
                 :container-height="600"
                 :loading="loading"
@@ -330,7 +199,7 @@
               </UiButton>
             </div>
 
-            <section v-if="recentlyViewedProducts.length" class="space-y-6">
+            <section v-if="isSectionEnabled('recentlyViewed') && recentlyViewedProducts.length" class="space-y-6">
               <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                 <div>
                   <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
@@ -342,43 +211,17 @@
                 </div>
               </div>
               <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                <ProductCard v-for="item in recentlyViewedProducts" :key="`recent-${item.id}`" :product="item" />
+                <ProductCard v-for="item in recentlyViewedProducts.slice(0, PRODUCTS.RECENTLY_VIEWED_MAX)" :key="`recent-${item.id}`" :product="item" />
               </div>
             </section>
 
-            <section class="space-y-6 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-              <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                    {{ t('products.editorial.title') }}
-                  </h3>
-                  <p class="text-sm text-gray-600 dark:text-gray-400">
-                    {{ t('products.editorial.subtitle') }}
-                  </p>
-                </div>
-              </div>
-              <div class="grid gap-4 md:grid-cols-3">
-                <article
-                  v-for="story in editorialStories"
-                  :key="story.id"
-                  class="group relative overflow-hidden rounded-2xl border border-gray-200 bg-gradient-to-br from-gray-50 to-white p-6 transition hover:-translate-y-1 hover:shadow-lg dark:border-gray-800 dark:from-gray-900 dark:to-gray-800"
-                >
-                  <span class="inline-flex rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-blue-600 dark:bg-blue-900/60 dark:text-blue-300">
-                    {{ story.tag }}
-                  </span>
-                  <h4 class="mt-4 text-lg font-semibold text-gray-900 transition group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-300">
-                    {{ story.title }}
-                  </h4>
-                  <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                    {{ story.description }}
-                  </p>
-                  <button type="button" class="mt-4 inline-flex items-center gap-2 text-sm font-medium text-blue-600 transition hover:text-blue-700 dark:text-blue-300 dark:hover:text-blue-200">
-                    {{ t('products.editorial.cta') }}
-                    <span aria-hidden="true">→</span>
-                  </button>
-                </article>
-              </div>
-            </section>
+            <ProductEditorialStories
+              v-if="isSectionEnabled('editorialStories')"
+              :title="t('products.editorial.title')"
+              :subtitle="t('products.editorial.subtitle')"
+              :cta-text="t('products.editorial.cta')"
+              :stories="editorialStories"
+            />
           </div>
         </div>
       </div>
@@ -391,22 +234,35 @@ import type { ProductFilters, ProductWithRelations } from '~/types'
 import { ref, computed, onMounted, onUnmounted, nextTick, watch, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 
+// Components
 import ProductCategoryNavigation from '~/components/product/CategoryNavigation.vue'
+import ProductHero from '~/components/product/Hero.vue'
+import ProductSearchBar from '~/components/product/SearchBar.vue'
+import ProductActiveFilters from '~/components/product/ActiveFilters.vue'
+import ProductEditorialStories from '~/components/product/EditorialStories.vue'
 import productFilterMain from '~/components/product/Filter/Main.vue'
 import ProductCard from '~/components/product/Card.vue'
 import commonIcon from '~/components/common/Icon.vue'
 import MobileVirtualProductGrid from '~/components/mobile/VirtualProductGrid.vue'
 import MobilePullToRefreshIndicator from '~/components/mobile/PullToRefreshIndicator.vue'
 
+// Composables
 import { useProductCatalog } from '~/composables/useProductCatalog'
+import { useProductsConfig } from '~/composables/useProductsConfig'
 import { useDevice } from '~/composables/useDevice'
 import { useHapticFeedback } from '~/composables/useHapticFeedback'
 import { usePullToRefresh } from '~/composables/usePullToRefresh'
 import { useSwipeGestures } from '~/composables/useSwipeGestures'
 
+// Constants
+import { PRODUCTS, PRODUCT_SORT_OPTIONS } from '~/constants/products'
+
 import { useHead } from '#imports'
 
 const { t, locale } = useI18n()
+
+// Feature flags
+const { isSectionEnabled } = useProductsConfig()
 
 const {
   initialize,
@@ -426,10 +282,10 @@ const {
 
 const searchQuery = ref('')
 const searchInputRef = ref<HTMLInputElement | null>(null)
-const priceRange = ref<{ min: number; max: number }>({ min: 0, max: 200 })
+const priceRange = ref<{ min: number; max: number }>({ min: PRODUCTS.DEFAULT_PRICE_MIN, max: PRODUCTS.DEFAULT_PRICE_MAX })
 const route = useRoute()
 const router = useRouter()
-const sortBy = ref<string>('created')
+const sortBy = ref<string>(PRODUCT_SORT_OPTIONS.CREATED)
 const showFilterPanel = ref(false)
 const activeCollectionId = ref<string | null>(null)
 
@@ -440,12 +296,30 @@ const mainContainer = ref<HTMLElement>()
 const contentContainer = ref<HTMLElement>()
 const scrollContainer = ref<HTMLElement>()
 
-const pullToRefresh = usePullToRefresh(async () => {
+const pullToRefresh = isSectionEnabled('pullToRefresh') ? usePullToRefresh(async () => {
   vibrate('pullRefresh')
   await refreshProducts()
-})
+}) : {
+  isRefreshing: ref(false),
+  isPulling: ref(false),
+  canRefresh: ref(false),
+  pullDistance: ref(0),
+  pullStatusText: ref(''),
+  pullIndicatorStyle: ref({}),
+  setupPullToRefresh: () => {},
+  cleanupPullToRefresh: () => {}
+}
 
 const swipeGestures = useSwipeGestures()
+
+// Sort options for the search bar
+const sortOptions = computed(() => [
+  { value: PRODUCT_SORT_OPTIONS.CREATED, label: t('products.sortNewest') },
+  { value: PRODUCT_SORT_OPTIONS.NAME, label: t('products.sortName') },
+  { value: PRODUCT_SORT_OPTIONS.PRICE_ASC, label: t('products.sortPriceLowHigh') },
+  { value: PRODUCT_SORT_OPTIONS.PRICE_DESC, label: t('products.sortPriceHighLow') },
+  { value: PRODUCT_SORT_OPTIONS.FEATURED, label: t('products.sortFeatured') },
+])
 
 await initialize()
 
@@ -518,6 +392,17 @@ const visiblePages = computed(() => {
 
 let searchTimeout: NodeJS.Timeout
 
+// Event handlers for the new components
+const handleSearchQueryUpdate = (value: string) => {
+  searchQuery.value = value
+  handleSearchInput()
+}
+
+const handleSortByUpdate = (value: string) => {
+  sortBy.value = value
+  handleSortChange()
+}
+
 const handleSearchInput = () => {
   clearTimeout(searchTimeout)
   searchTimeout = setTimeout(() => {
@@ -534,7 +419,7 @@ const handleSearchInput = () => {
         sort: sortBy.value as any
       })
     }
-  }, 300)
+  }, PRODUCTS.SEARCH_DEBOUNCE_MS)
 }
 
 const handleSortChange = () => {
@@ -575,10 +460,10 @@ const handleApplyFilters = (closePanel = false) => {
 
 const clearAllFilters = () => {
   searchQuery.value = ''
-  sortBy.value = 'created'
+  sortBy.value = PRODUCT_SORT_OPTIONS.CREATED
   activeCollectionId.value = null
   clearFilters()
-  fetchProducts({ sort: 'created', page: 1, limit: 12 })
+  fetchProducts({ sort: PRODUCT_SORT_OPTIONS.CREATED, page: 1, limit: PRODUCTS.DEFAULT_PER_PAGE })
 }
 
 const goToPage = (page: number) => {
@@ -616,7 +501,7 @@ const refreshProducts = async () => {
 }
 
 const retryLoad = () => {
-  fetchProducts({ sort: 'created', page: 1, limit: 12 })
+  fetchProducts({ sort: PRODUCT_SORT_OPTIONS.CREATED, page: 1, limit: PRODUCTS.DEFAULT_PER_PAGE })
 }
 
 const setupMobileInteractions = () => {
@@ -758,9 +643,13 @@ const quickToggleOptions = computed(() => {
       label: t('products.toggles.inStock'),
       active: !!filters.value.inStock,
       apply: () => {
-        const next = { ...filters.value, inStock: !filters.value.inStock, page: 1 }
-        if (!next.inStock) delete next.inStock
-        fetchProducts({ ...next, sort: sortBy.value as any })
+        const next: ProductFilters = { ...filters.value, inStock: !filters.value.inStock, page: 1 }
+        if (!next.inStock) {
+          const { inStock, ...rest } = next
+          fetchProducts({ ...rest, sort: sortBy.value as any })
+        } else {
+          fetchProducts({ ...next, sort: sortBy.value as any })
+        }
       }
     },
     {
@@ -768,14 +657,14 @@ const quickToggleOptions = computed(() => {
       label: t('products.toggles.featured'),
       active: !!filters.value.featured,
       apply: () => {
-        const next = { ...filters.value, featured: !filters.value.featured, page: 1, sort: 'featured' as const }
-        if (!next.featured) {
-          delete next.featured
-          next.sort = sortBy.value as any
+        const nextFeatured = !filters.value.featured
+        if (!nextFeatured) {
+          const { featured, ...rest } = filters.value
+          fetchProducts({ ...rest, page: 1, sort: sortBy.value as any })
         } else {
-          sortBy.value = 'featured'
+          sortBy.value = PRODUCT_SORT_OPTIONS.FEATURED
+          fetchProducts({ ...filters.value, featured: true, page: 1, sort: PRODUCT_SORT_OPTIONS.FEATURED as any })
         }
-        fetchProducts(next)
       }
     }
   ]
@@ -928,7 +817,7 @@ watch(isMobile, value => {
 
 onMounted(async () => {
   searchQuery.value = storeSearchQuery.value || ''
-  await fetchProducts({ sort: 'created', page: 1, limit: 12 })
+  await fetchProducts({ sort: PRODUCT_SORT_OPTIONS.CREATED, page: 1, limit: PRODUCTS.DEFAULT_PER_PAGE })
 
   nextTick(() => {
     setupMobileInteractions()
@@ -974,7 +863,7 @@ const refreshPriceRange = async () => {
     if (filters.value.featured) params.append('featured', 'true')
     const res = await $fetch<{ success: boolean; min: number; max: number }>(`/api/products/price-range?${params.toString()}`)
     if (res.success) {
-      priceRange.value = { min: res.min ?? 0, max: res.max ?? 200 }
+      priceRange.value = { min: res.min ?? PRODUCTS.DEFAULT_PRICE_MIN, max: res.max ?? PRODUCTS.DEFAULT_PRICE_MAX }
     }
   } catch (e) {
     // keep existing range on error
