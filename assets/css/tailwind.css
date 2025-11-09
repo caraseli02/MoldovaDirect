@@ -123,6 +123,12 @@
 }
 
 @theme inline {
+  /* Brand Colors - Moldova Direct Design System */
+  --color-brand-dark: var(--brand-dark);
+  --color-brand-light: var(--brand-light);
+  --color-brand-accent: var(--brand-accent);
+
+  /* Shadcn UI Colors */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
@@ -216,7 +222,12 @@
    =================================== */
 
 :root {
-  /* Luxury Color Palette - Black & Wine Theme */
+  /* Brand Colors - Moldova Direct Design System */
+  --brand-dark: #241405;      /* Primary dark brown - backgrounds, text */
+  --brand-light: #FCFAF2;     /* Primary cream - backgrounds, text on dark */
+  --brand-accent: #722F37;    /* Wine red accent - CTAs, highlights */
+
+  /* Luxury Color Palette - Black & Wine Theme (Legacy - Consider deprecating) */
   --luxury-wine-red: #4A1C1C;
   --luxury-black: #1A1A1A;
   --luxury-charcoal: #2D2D2D;

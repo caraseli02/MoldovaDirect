@@ -3,15 +3,15 @@
     <div class="container mx-auto px-4 md:px-6">
       <!-- Section Header -->
       <div class="text-center max-w-2xl mx-auto mb-12 md:mb-16">
-        <p class="text-xs uppercase tracking-[0.2em] font-medium text-[#722F37] mb-4">
+        <p class="text-xs uppercase tracking-[0.2em] font-medium text-[var(--brand-accent)] mb-4">
           {{ eyebrow }}
         </p>
 
-        <h2 class="text-4xl md:text-5xl font-serif font-medium text-[#241405] mb-6">
+        <h2 class="text-4xl md:text-5xl font-serif font-medium text-[var(--brand-dark)] mb-6">
           {{ title }}
         </h2>
 
-        <p class="text-base text-[#241405]/70 leading-relaxed">
+        <p class="text-base text-[var(--brand-dark)]/70 leading-relaxed">
           {{ $t('luxury.showcase.description') || 'Discover our handpicked selection of premium wines, gourmet delicacies, and luxury gift hampers.' }}
         </p>
       </div>
@@ -44,14 +44,14 @@
                   <!-- Badge -->
                   <div
                     v-if="product.badge"
-                    class="absolute top-4 left-4 bg-[#241405] text-[#FCFAF2] text-[10px] font-medium uppercase tracking-wider px-2.5 py-1"
+                    class="absolute top-4 left-4 bg-[var(--brand-dark)] text-[var(--brand-light)] text-[10px] font-medium uppercase tracking-wider px-2.5 py-1"
                   >
                     {{ product.badge }}
                   </div>
 
                   <!-- Hover Overlay -->
                   <div class="product-hover-overlay">
-                    <p class="text-sm text-[#FCFAF2] leading-relaxed">{{ product.description }}</p>
+                    <p class="text-sm text-[var(--brand-light)] leading-relaxed">{{ product.description }}</p>
                   </div>
                 </NuxtLink>
 
@@ -72,12 +72,12 @@
 
               <!-- Product Info -->
               <div class="product-info">
-                <h3 class="product-title text-lg font-serif font-normal text-[#241405] mb-2 leading-snug">
+                <h3 class="product-title text-lg font-serif font-normal text-[var(--brand-dark)] mb-2 leading-snug">
                   {{ product.name }}
                 </h3>
 
-                <p class="price-wrap text-sm text-[#241405] mb-2">
-                  <span v-if="product.originalPrice" class="line-through text-[#241405]/40 mr-2">
+                <p class="price-wrap text-sm text-[var(--brand-dark)] mb-2">
+                  <span v-if="product.originalPrice" class="line-through text-[var(--brand-dark)]/40 mr-2">
                     €{{ product.originalPrice }}
                   </span>
                   <span class="font-medium">€{{ product.price }}</span>
@@ -90,16 +90,16 @@
                       <span class="fill" :style="{ width: getStarFillWidth(star, product.rating.value) }"></span>
                     </span>
                   </span>
-                  <span class="rating-label text-[11px] text-[#241405]/60 ml-1">({{ product.rating.count }})</span>
+                  <span class="rating-label text-[11px] text-[var(--brand-dark)]/60 ml-1">({{ product.rating.count }})</span>
                 </div>
 
                 <!-- Subtitle -->
-                <div v-if="product.subtitle" class="product-subtitle text-[11px] text-[#241405]/50 uppercase tracking-wide mb-1">
+                <div v-if="product.subtitle" class="product-subtitle text-[11px] text-[var(--brand-dark)]/50 uppercase tracking-wide mb-1">
                   {{ product.subtitle }}
                 </div>
 
                 <!-- Stock Status -->
-                <p v-if="product.stock && product.stock.limited && product.stock.remaining <= 5" class="stock-status text-[11px] text-[#722F37] font-medium">
+                <p v-if="product.stock && product.stock.limited && product.stock.remaining <= 5" class="stock-status text-[11px] text-[var(--brand-accent)] font-medium">
                   Last stock! {{ product.stock.remaining }} left
                 </p>
               </div>
@@ -163,14 +163,14 @@
               <!-- Badge -->
               <div
                 v-if="product.badge"
-                class="absolute top-4 left-4 bg-[#241405] text-[#FCFAF2] text-[10px] font-medium uppercase tracking-wider px-2.5 py-1"
+                class="absolute top-4 left-4 bg-[var(--brand-dark)] text-[var(--brand-light)] text-[10px] font-medium uppercase tracking-wider px-2.5 py-1"
               >
                 {{ product.badge }}
               </div>
 
               <!-- Hover Overlay -->
               <div class="product-hover-overlay">
-                <p class="text-sm text-[#FCFAF2] leading-relaxed">{{ product.description }}</p>
+                <p class="text-sm text-[var(--brand-light)] leading-relaxed">{{ product.description }}</p>
               </div>
             </NuxtLink>
 
@@ -191,12 +191,12 @@
 
           <!-- Product Info -->
           <div class="product-info">
-            <h3 class="product-title text-lg font-serif font-normal text-[#241405] mb-2 leading-snug">
+            <h3 class="product-title text-lg font-serif font-normal text-[var(--brand-dark)] mb-2 leading-snug">
               {{ product.name }}
             </h3>
 
-            <p class="price-wrap text-sm text-[#241405] mb-2">
-              <span v-if="product.originalPrice" class="line-through text-[#241405]/40 mr-2">
+            <p class="price-wrap text-sm text-[var(--brand-dark)] mb-2">
+              <span v-if="product.originalPrice" class="line-through text-[var(--brand-dark)]/40 mr-2">
                 €{{ product.originalPrice }}
               </span>
               <span class="font-medium">€{{ product.price }}</span>
@@ -209,16 +209,16 @@
                   <span class="fill" :style="{ width: getStarFillWidth(star, product.rating.value) }"></span>
                 </span>
               </span>
-              <span class="rating-label text-[11px] text-[#241405]/60 ml-1">({{ product.rating.count }})</span>
+              <span class="rating-label text-[11px] text-[var(--brand-dark)]/60 ml-1">({{ product.rating.count }})</span>
             </div>
 
             <!-- Subtitle -->
-            <div v-if="product.subtitle" class="product-subtitle text-[11px] text-[#241405]/50 uppercase tracking-wide mb-1">
+            <div v-if="product.subtitle" class="product-subtitle text-[11px] text-[var(--brand-dark)]/50 uppercase tracking-wide mb-1">
               {{ product.subtitle }}
             </div>
 
             <!-- Stock Status -->
-            <p v-if="product.stock && product.stock.limited && product.stock.remaining <= 5" class="stock-status text-[11px] text-[#722F37] font-medium">
+            <p v-if="product.stock && product.stock.limited && product.stock.remaining <= 5" class="stock-status text-[11px] text-[var(--brand-accent)] font-medium">
               Last stock! {{ product.stock.remaining }} left
             </p>
           </div>
@@ -229,7 +229,7 @@
       <div class="text-center mt-12 md:mt-16">
         <NuxtLink
           to="/products"
-          class="inline-block bg-[#241405] text-[#FCFAF2] px-8 py-3.5 text-sm font-medium uppercase tracking-wider hover:bg-[#722F37] transition-colors duration-300"
+          class="inline-block bg-[var(--brand-dark)] text-[var(--brand-light)] px-8 py-3.5 text-sm font-medium uppercase tracking-wider hover:bg-[var(--brand-accent)] transition-colors duration-300"
         >
           {{ $t('luxury.showcase.cta') || 'Explore Full Collection' }}
         </NuxtLink>
@@ -448,7 +448,7 @@ const featuredProducts = computed(() => {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: #FCFAF2;
+  background: var(--brand-light);
   border: 1px solid rgba(167, 108, 6, 0.15);
   display: flex;
   align-items: center;
@@ -466,7 +466,7 @@ const featuredProducts = computed(() => {
 }
 
 .circle-btn:hover svg path {
-  stroke: #FCFAF2;
+  stroke: var(--brand-light);
 }
 
 .circle-btn:active {
@@ -546,7 +546,7 @@ const featuredProducts = computed(() => {
 }
 
 .product-card:hover .product-title {
-  color: #722F37;
+  color: var(--brand-accent);
 }
 
 /* Carousel Navigation */
@@ -564,7 +564,7 @@ const featuredProducts = computed(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #722F37;
+  color: var(--brand-accent);
   cursor: pointer;
   transition: all 0.2s ease;
   z-index: 10;
@@ -601,7 +601,7 @@ const featuredProducts = computed(() => {
 }
 
 .carousel-dot.active {
-  background-color: #722F37;
+  background-color: var(--brand-accent);
   width: 24px;
   border-radius: 3px;
 }

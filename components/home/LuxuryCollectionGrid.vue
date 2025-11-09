@@ -3,15 +3,15 @@
     <div class="container mx-auto px-4 md:px-6">
       <!-- Section Header -->
       <div class="text-center max-w-2xl mx-auto mb-12 md:mb-16">
-        <p class="text-xs uppercase tracking-[0.2em] font-medium text-[#722F37] mb-4">
+        <p class="text-xs uppercase tracking-[0.2em] font-medium text-[var(--brand-accent)] mb-4">
           Explore by Category
         </p>
 
-        <h2 class="text-4xl md:text-5xl font-serif font-medium text-[#241405] mb-6">
+        <h2 class="text-4xl md:text-5xl font-serif font-medium text-[var(--brand-dark)] mb-6">
           Our Collections
         </h2>
 
-        <p class="text-base text-[#241405]/70 leading-relaxed">
+        <p class="text-base text-[var(--brand-dark)]/70 leading-relaxed">
           Discover curated collections of Moldova's finest products, carefully organized by category.
         </p>
       </div>
@@ -33,18 +33,18 @@
           />
 
           <!-- Overlay -->
-          <div class="absolute inset-0 bg-gradient-to-t from-[#241405]/90 via-[#241405]/40 to-transparent transition-opacity duration-300 group-hover:from-[#241405]/95">
+          <div class="absolute inset-0 bg-gradient-to-t from-[var(--brand-dark)]/90 via-[var(--brand-dark)]/40 to-transparent transition-opacity duration-300 group-hover:from-[var(--brand-dark)]/95">
           </div>
 
           <!-- Content -->
           <div class="absolute inset-0 flex flex-col justify-end p-6 md:p-8">
-            <h3 class="text-2xl md:text-3xl font-serif font-medium text-[#FCFAF2] mb-2">
+            <h3 class="text-2xl md:text-3xl font-serif font-medium text-[var(--brand-light)] mb-2">
               {{ collection.name }}
             </h3>
-            <p class="text-sm text-[#FCFAF2]/80 mb-4">
+            <p class="text-sm text-[var(--brand-light)]/80 mb-4">
               {{ collection.count }} products
             </p>
-            <div class="flex items-center text-[#FCFAF2] text-sm font-medium uppercase tracking-wider group-hover:translate-x-1 transition-transform duration-300">
+            <div class="flex items-center text-[var(--brand-light)] text-sm font-medium uppercase tracking-wider group-hover:translate-x-1 transition-transform duration-300">
               <span>Explore</span>
               <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />

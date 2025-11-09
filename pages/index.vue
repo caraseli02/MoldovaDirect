@@ -6,7 +6,7 @@
     </section>
 
     <!-- 2. First Product Carousel (Signature Collections) -->
-    <section class="c-section c-section__products-carousel" style="background-color: #FCFAF2;">
+    <section class="c-section c-section__products-carousel" style="background-color: var(--brand-light);">
       <HomeLuxuryProductShowcase
         :featured="true"
         title="Signature Collections"
@@ -20,7 +20,7 @@
     </section>
 
     <!-- 4. Press Mentions Bar (Infinite Scroll) -->
-    <section class="c-section c-section__media-mentions" style="background-color: #FCFAF2;">
+    <section class="c-section c-section__media-mentions" style="background-color: var(--brand-light);">
       <HomeLuxuryMediaMentions />
     </section>
 
@@ -30,7 +30,7 @@
     </section>
 
     <!-- 6. Second Product Carousel (Artisan Selections) -->
-    <section class="c-section c-section__products-carousel" style="background-color: #FCFAF2;">
+    <section class="c-section c-section__products-carousel" style="background-color: var(--brand-light);">
       <HomeLuxuryProductShowcase
         :featured="false"
         title="Artisan Selections"
@@ -44,7 +44,7 @@
     </section>
 
     <!-- 8. Customer Testimonials -->
-    <section class="c-section c-section__testimonials" style="background-color: #FCFAF2;">
+    <section class="c-section c-section__testimonials" style="background-color: var(--brand-light);">
       <HomeLuxuryTestimonials />
     </section>
 

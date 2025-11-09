@@ -1,21 +1,21 @@
 <template>
-  <section class="py-12 md:py-20 bg-[#FCFAF2]">
+  <section class="py-12 md:py-20 bg-[var(--brand-light)]">
     <div class="container mx-auto px-4 md:px-6">
       <div class="grid lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
 
         <!-- Text Content -->
         <div>
-          <p class="text-xs uppercase tracking-[0.2em] font-medium text-[#722F37] mb-3 md:mb-4">
+          <p class="text-xs uppercase tracking-[0.2em] font-medium text-[var(--brand-accent)] mb-3 md:mb-4">
             {{ $t('luxury.origin.eyebrow') || 'Our Heritage' }}
           </p>
 
-          <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl font-medium text-[#241405] mb-4 md:mb-6">
+          <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl font-medium text-[var(--brand-dark)] mb-4 md:mb-6">
             {{ $t('luxury.origin.title') || 'A Legacy of Craftsmanship' }}
           </h2>
 
-          <div class="w-16 h-px bg-[#722F37] mb-4 md:mb-6" />
+          <div class="w-16 h-px bg-[var(--brand-accent)] mb-4 md:mb-6" />
 
-          <div class="text-sm md:text-base text-[#241405]/70 leading-relaxed space-y-4">
+          <div class="text-sm md:text-base text-[var(--brand-dark)]/70 leading-relaxed space-y-4">
             <p>
               {{ $t('luxury.origin.p1') || 'For centuries, Moldovan winemakers have perfected the art of viticulture in soil blessed by nature. Each bottle tells a story of tradition, passion, and uncompromising quality.' }}
             </p>
@@ -28,26 +28,26 @@
           <!-- Stats -->
           <div class="mt-6 md:mt-8 flex items-center gap-6 md:gap-8">
             <div>
-              <div class="text-2xl md:text-3xl lg:text-4xl font-serif text-[#722F37] font-bold">75+</div>
-              <div class="text-xs text-[#241405]/70 uppercase tracking-wider mt-1">
+              <div class="text-2xl md:text-3xl lg:text-4xl font-serif text-[var(--brand-accent)] font-bold">75+</div>
+              <div class="text-xs text-[var(--brand-dark)]/70 uppercase tracking-wider mt-1">
                 {{ $t('luxury.origin.stat1') || 'Years Heritage' }}
               </div>
             </div>
 
-            <div class="w-px h-12 bg-[#241405]/20"></div>
+            <div class="w-px h-12 bg-[var(--brand-dark)]/20"></div>
 
             <div>
-              <div class="text-2xl md:text-3xl lg:text-4xl font-serif text-[#722F37] font-bold">15+</div>
-              <div class="text-xs text-[#241405]/70 uppercase tracking-wider mt-1">
+              <div class="text-2xl md:text-3xl lg:text-4xl font-serif text-[var(--brand-accent)] font-bold">15+</div>
+              <div class="text-xs text-[var(--brand-dark)]/70 uppercase tracking-wider mt-1">
                 {{ $t('luxury.origin.stat2') || 'Artisan Partners' }}
               </div>
             </div>
 
-            <div class="w-px h-12 bg-[#241405]/20"></div>
+            <div class="w-px h-12 bg-[var(--brand-dark)]/20"></div>
 
             <div>
-              <div class="text-2xl md:text-3xl lg:text-4xl font-serif text-[#722F37] font-bold">100%</div>
-              <div class="text-xs text-[#241405]/70 uppercase tracking-wider mt-1">
+              <div class="text-2xl md:text-3xl lg:text-4xl font-serif text-[var(--brand-accent)] font-bold">100%</div>
+              <div class="text-xs text-[var(--brand-dark)]/70 uppercase tracking-wider mt-1">
                 {{ $t('luxury.origin.stat3') || 'Authentic' }}
               </div>
             </div>
@@ -57,7 +57,7 @@
           <div class="mt-6 md:mt-8">
             <NuxtLink
               to="/about"
-              class="inline-flex items-center justify-center w-full sm:w-auto px-8 py-3.5 bg-[#241405] text-[#FCFAF2] text-sm font-medium uppercase tracking-wider hover:bg-[#722F37] transition-colors duration-300"
+              class="inline-flex items-center justify-center w-full sm:w-auto px-8 py-3.5 bg-[var(--brand-dark)] text-[var(--brand-light)] text-sm font-medium uppercase tracking-wider hover:bg-[var(--brand-accent)] transition-colors duration-300"
             >
               {{ $t('luxury.origin.cta') || 'Read Our Story' }}
             </NuxtLink>

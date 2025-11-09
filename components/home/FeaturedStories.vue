@@ -3,15 +3,15 @@
     <div class="container mx-auto px-4 md:px-6">
       <!-- Section Header -->
       <div class="text-center max-w-2xl mx-auto mb-12 md:mb-16">
-        <p class="text-xs uppercase tracking-[0.2em] font-medium text-[#722F37] mb-4">
+        <p class="text-xs uppercase tracking-[0.2em] font-medium text-[var(--brand-accent)] mb-4">
           Stories & Insights
         </p>
 
-        <h2 class="text-4xl md:text-5xl font-serif font-medium text-[#241405] mb-6">
+        <h2 class="text-4xl md:text-5xl font-serif font-medium text-[var(--brand-dark)] mb-6">
           From Our Journal
         </h2>
 
-        <p class="text-base text-[#241405]/70 leading-relaxed">
+        <p class="text-base text-[var(--brand-dark)]/70 leading-relaxed">
           Explore the rich heritage, traditions, and stories behind Moldova's finest products.
         </p>
       </div>
@@ -36,27 +36,27 @@
           <!-- Story Content -->
           <div>
             <div class="flex items-center gap-3 mb-3">
-              <span class="text-xs uppercase tracking-wider text-[#722F37] font-medium">
+              <span class="text-xs uppercase tracking-wider text-[var(--brand-accent)] font-medium">
                 {{ story.category }}
               </span>
-              <span class="text-xs text-[#241405]/50">
+              <span class="text-xs text-[var(--brand-dark)]/50">
                 {{ story.date }}
               </span>
             </div>
 
             <NuxtLink :to="story.link">
-              <h3 class="text-xl md:text-2xl font-serif font-medium text-[#241405] mb-3 group-hover:text-[#722F37] transition-colors duration-300 leading-snug">
+              <h3 class="text-xl md:text-2xl font-serif font-medium text-[var(--brand-dark)] mb-3 group-hover:text-[var(--brand-accent)] transition-colors duration-300 leading-snug">
                 {{ story.title }}
               </h3>
             </NuxtLink>
 
-            <p class="text-sm text-[#241405]/70 leading-relaxed mb-4">
+            <p class="text-sm text-[var(--brand-dark)]/70 leading-relaxed mb-4">
               {{ story.excerpt }}
             </p>
 
             <NuxtLink
               :to="story.link"
-              class="inline-flex items-center text-sm font-medium uppercase tracking-wider text-[#241405] group-hover:text-[#722F37] transition-colors duration-300"
+              class="inline-flex items-center text-sm font-medium uppercase tracking-wider text-[var(--brand-dark)] group-hover:text-[var(--brand-accent)] transition-colors duration-300"
             >
               <span>Read More</span>
               <svg class="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -71,7 +71,7 @@
       <div class="text-center mt-12 md:mt-16">
         <NuxtLink
           to="/blog"
-          class="inline-block bg-[#241405] text-[#FCFAF2] px-8 py-3.5 text-sm font-medium uppercase tracking-wider hover:bg-[#722F37] transition-colors duration-300"
+          class="inline-block bg-[var(--brand-dark)] text-[var(--brand-light)] px-8 py-3.5 text-sm font-medium uppercase tracking-wider hover:bg-[var(--brand-accent)] transition-colors duration-300"
         >
           View All Stories
         </NuxtLink>

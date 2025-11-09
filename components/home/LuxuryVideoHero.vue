@@ -152,7 +152,7 @@ const onVideoError = () => {
   width: 100%;
   min-height: 100vh;
   min-height: 100dvh;
-  background-color: #241405;
+  background-color: var(--brand-dark);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -241,21 +241,21 @@ const onVideoError = () => {
 .cta-button {
   display: inline-block;
   padding: 14px 32px;
-  background-color: #FCFAF2;
-  color: #241405;
+  background-color: var(--brand-light);
+  color: var(--brand-dark);
   font-size: 0.875rem;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   text-decoration: none;
   transition: all 0.3s ease;
-  border: 1px solid #FCFAF2;
+  border: 1px solid var(--brand-light);
 }
 
 .cta-button:hover {
   background-color: transparent;
-  color: #FCFAF2;
-  border-color: #FCFAF2;
+  color: var(--brand-light);
+  border-color: var(--brand-light);
 }
 
 /* Scroll Button (To'ak Style) */
@@ -277,7 +277,7 @@ const onVideoError = () => {
 
 .scroll-text {
   display: block;
-  color: #FCFAF2;
+  color: var(--brand-light);
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.15em;
@@ -295,7 +295,7 @@ const onVideoError = () => {
   transform: translateX(-50%);
   width: 1px;
   height: 16px;
-  background-color: #FCFAF2;
+  background-color: var(--brand-light);
   animation: scroll-indicator 2s ease-in-out infinite;
 }
 

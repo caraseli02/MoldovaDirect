@@ -111,7 +111,7 @@ const scrollToIndex = (index: number) => {
 }
 
 .indicator-dot.active {
-  background-color: #722F37;
+  background-color: var(--brand-accent);
   width: 24px;
   border-radius: 4px;
 }

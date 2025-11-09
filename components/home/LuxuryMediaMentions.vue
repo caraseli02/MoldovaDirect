@@ -1,7 +1,7 @@
 <template>
   <div class="press-mentions-bar py-12 md:py-16 overflow-hidden">
     <div class="container mx-auto px-4 md:px-6 mb-8">
-      <p class="text-xs uppercase tracking-[0.2em] text-[#241405]/60 font-medium text-center">
+      <p class="text-xs uppercase tracking-[0.2em] text-[var(--brand-dark)]/60 font-medium text-center">
         {{ $t('luxury.press.title') || 'As Featured In' }}
       </p>
     </div>
@@ -21,7 +21,7 @@
             :key="`first-${mention.id}`"
             class="press-logo"
           >
-            <span class="text-[#241405]/50 font-serif text-lg md:text-xl font-semibold whitespace-nowrap">
+            <span class="text-[var(--brand-dark)]/50 font-serif text-lg md:text-xl font-semibold whitespace-nowrap">
               {{ mention.name }}
             </span>
           </div>
@@ -34,7 +34,7 @@
             :key="`second-${mention.id}`"
             class="press-logo"
           >
-            <span class="text-[#241405]/50 font-serif text-lg md:text-xl font-semibold whitespace-nowrap">
+            <span class="text-[var(--brand-dark)]/50 font-serif text-lg md:text-xl font-semibold whitespace-nowrap">
               {{ mention.name }}
             </span>
           </div>
