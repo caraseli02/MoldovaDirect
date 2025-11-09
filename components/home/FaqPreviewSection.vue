@@ -2,8 +2,8 @@
   <section class="bg-white py-20 dark:bg-gray-950 md:py-28">
     <div class="container">
       <div class="mx-auto max-w-3xl text-center">
-        <h2 class="text-3xl font-bold md:text-4xl">{{ t('home.faqPreview.title') }}</h2>
-        <p class="mt-3 text-lg text-gray-600 dark:text-gray-400">{{ t('home.faqPreview.subtitle') }}</p>
+        <h2 class="text-4xl font-bold md:text-5xl lg:text-6xl tracking-tight">{{ t('home.faqPreview.title') }}</h2>
+        <p class="mt-4 text-sm md:text-base text-gray-600 dark:text-gray-400">{{ t('home.faqPreview.subtitle') }}</p>
       </div>
       <div class="mt-12 grid gap-6 md:grid-cols-2">
         <details

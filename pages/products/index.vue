@@ -21,24 +21,25 @@
             {{ t('products.hero.subtitle') }}
           </p>
           <div class="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
-            <button
+            <UiButton
               type="button"
-              class="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-base font-semibold text-blue-600 shadow-lg shadow-blue-900/20 transition hover:bg-blue-50"
+              class="rounded-full bg-white text-blue-600 shadow-lg shadow-blue-900/20 hover:bg-blue-50"
               @click="scrollToResults"
             >
               {{ t('products.hero.cta') }}
-            </button>
+            </UiButton>
             <div class="flex flex-wrap items-center gap-2">
-              <button
+              <UiButton
                 v-for="collection in discoveryCollections"
                 :key="collection.id"
                 type="button"
-                class="rounded-full border border-white/40 bg-white/10 px-4 py-2 text-sm font-medium backdrop-blur transition hover:bg-white/20"
+                variant="outline"
+                class="rounded-full border-white/40 bg-white/10 backdrop-blur hover:bg-white/20"
                 :class="{ 'bg-white text-blue-600 shadow-lg shadow-blue-900/10': activeCollectionId === collection.id }"
                 @click="applyDiscoveryCollection(collection)"
               >
                 {{ collection.label }}
-              </button>
+              </UiButton>
             </div>
           </div>
         </div>
@@ -55,14 +56,15 @@
               <h2 id="filter-panel-title" class="text-lg font-semibold text-gray-900 dark:text-white">
                 {{ t('products.filters.title') }}
               </h2>
-              <button
+              <UiButton
                 type="button"
-                class="rounded-lg p-2 text-gray-500 transition hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+                variant="ghost"
+                size="icon"
                 @click="closeFilterPanel"
                 :aria-label="t('common.close')"
               >
                 <commonIcon name="lucide:x" class="h-5 w-5" aria-hidden="true" />
-              </button>
+              </UiButton>
             </div>
             <div class="flex-1 overflow-y-auto px-4">
               <productFilterMain
@@ -103,20 +105,21 @@
                 </div>
                 <div class="flex flex-wrap items-center gap-3">
                   <!-- Filter button (mobile/tablet only) -->
-                  <button
+                  <UiButton
                     type="button"
+                    variant="outline"
+                    size="sm"
                     :aria-label="t('products.filters.title')"
                     :aria-expanded="showFilterPanel"
                     aria-controls="filter-panel"
-                    class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition hover:border-blue-500 hover:text-blue-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
                     @click="openFilterPanel"
                   >
-                    <commonIcon name="lucide:filter" class="h-4 w-4" aria-hidden="true" />
+                    <commonIcon name="lucide:filter" class="mr-2 h-4 w-4" aria-hidden="true" />
                     <span>{{ t('products.filters.title') }}</span>
-                    <span v-if="activeFilterChips.length" class="inline-flex items-center justify-center rounded-full bg-blue-100 px-2 py-0.5 text-xs font-semibold text-blue-700 dark:bg-blue-900/40 dark:text-blue-300" aria-label="Active filters count">
+                    <span v-if="activeFilterChips.length" class="ml-1 inline-flex items-center justify-center rounded-full bg-blue-100 px-2 py-0.5 text-xs font-semibold text-blue-700 dark:bg-blue-900/40 dark:text-blue-300" aria-label="Active filters count">
                       {{ activeFilterChips.length }}
                     </span>
-                  </button>
+                  </UiButton>
                   <div class="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center">
                     <div class="relative flex-1">
                       <label for="product-search" class="sr-only">
@@ -186,43 +189,49 @@
               </div>
 
               <div v-if="activeFilterChips.length" class="mt-4 flex flex-wrap gap-2" role="list" :aria-label="t('products.filterSummary.activeFilters')">
-                <button
+                <UiButton
                   v-for="chip in activeFilterChips"
                   :key="chip.id"
                   type="button"
+                  variant="ghost"
+                  size="sm"
                   role="listitem"
-                  class="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1.5 text-sm font-medium text-blue-700 transition hover:bg-blue-100 dark:bg-blue-900/40 dark:text-blue-200"
+                  class="rounded-full bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-900/40 dark:text-blue-200"
                   :aria-label="t('products.filterSummary.removeFilter', { filter: chip.label })"
                   @click="removeActiveChip(chip)"
                 >
                   <span>{{ chip.label }}</span>
-                  <span aria-hidden="true">×</span>
-                </button>
-                <button
+                  <span class="ml-1" aria-hidden="true">×</span>
+                </UiButton>
+                <UiButton
                   type="button"
-                  class="rounded-full border border-blue-100 px-3 py-1.5 text-sm font-medium text-blue-600 transition hover:bg-blue-50 dark:border-blue-900/40 dark:text-blue-300"
+                  variant="outline"
+                  size="sm"
+                  class="rounded-full"
                   :aria-label="t('products.filterSummary.clearAllFilters')"
                   @click="clearAllFilters"
                 >
                   {{ t('products.filterSummary.clear') }}
-                </button>
+                </UiButton>
               </div>
 
               <div class="mt-6 flex flex-wrap items-center gap-3" role="group" :aria-label="t('products.quickFilters.label')">
-                <button
+                <UiButton
                   v-for="toggle in quickToggleOptions"
                   :key="toggle.id"
                   type="button"
+                  variant="outline"
+                  size="sm"
                   role="switch"
                   :aria-checked="toggle.active"
                   :aria-label="t('products.quickFilters.toggle', { filter: toggle.label })"
-                  class="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition"
-                  :class="toggle.active ? 'border-blue-500 bg-blue-50 text-blue-700 dark:border-blue-500/60 dark:bg-blue-900/40 dark:text-blue-200' : 'border-gray-300 bg-white text-gray-700 hover:border-blue-500 hover:text-blue-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200'"
+                  class="rounded-full"
+                  :class="toggle.active ? 'border-blue-500 bg-blue-50 text-blue-700 dark:border-blue-500/60 dark:bg-blue-900/40 dark:text-blue-200' : ''"
                   @click="toggleQuickFilter(toggle)"
                 >
-                  <span class="inline-block h-2.5 w-2.5 rounded-full" :class="toggle.active ? 'bg-blue-500' : 'bg-gray-300 dark:bg-gray-600'" aria-hidden="true"></span>
+                  <span class="mr-2 inline-block h-2.5 w-2.5 rounded-full" :class="toggle.active ? 'bg-blue-500' : 'bg-gray-300 dark:bg-gray-600'" aria-hidden="true"></span>
                   {{ toggle.label }}
-                </button>
+                </UiButton>
               </div>
             </div>
 
@@ -236,9 +245,9 @@
               <p class="text-gray-600 dark:text-gray-400 mb-6">
                 {{ error || t('common.errorGeneric') }}
               </p>
-              <button type="button" class="inline-flex items-center rounded-full bg-blue-600 px-6 py-3 text-white transition hover:bg-blue-700" @click="retryLoad">
+              <UiButton type="button" class="rounded-full" @click="retryLoad">
                 {{ t('common.tryAgain') }}
-              </button>
+              </UiButton>
             </div>
 
             <div v-else-if="loading" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -267,35 +276,41 @@
                   {{ t('products.pagination.showing', { count: pagination.total || products.length }) }}
                 </p>
                 <nav class="flex items-center justify-center gap-2" aria-label="Pagination">
-                  <button
+                  <UiButton
                     :disabled="pagination.page <= 1"
-                    class="rounded-full border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:border-blue-500 hover:text-blue-600 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+                    variant="outline"
+                    size="sm"
+                    class="rounded-full"
                     :aria-label="t('products.pagination.previousPage')"
                     @click="goToPage(pagination.page - 1)"
                   >
                     {{ t('common.previous') }}
-                  </button>
-                  <button
+                  </UiButton>
+                  <UiButton
                     v-for="page in visiblePages"
                     :key="`page-${page}`"
                     v-if="page !== '...'"
-                    class="rounded-full px-4 py-2 text-sm font-semibold transition"
-                    :class="page === pagination.page ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30' : 'bg-white text-gray-700 hover:bg-blue-50 dark:bg-gray-800 dark:text-gray-200'"
+                    size="sm"
+                    :variant="page === pagination.page ? 'default' : 'ghost'"
+                    class="rounded-full"
+                    :class="page === pagination.page ? 'shadow-lg shadow-blue-500/30' : ''"
                     :aria-label="t('products.pagination.goToPage', { page })"
                     :aria-current="page === pagination.page ? 'page' : undefined"
                     @click="goToPage(page as number)"
                   >
                     {{ page }}
-                  </button>
+                  </UiButton>
                   <span v-else class="px-3 py-2 text-sm text-gray-500" aria-hidden="true">…</span>
-                  <button
+                  <UiButton
                     :disabled="pagination.page >= pagination.totalPages"
-                    class="rounded-full border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:border-blue-500 hover:text-blue-600 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+                    variant="outline"
+                    size="sm"
+                    class="rounded-full"
                     :aria-label="t('products.pagination.nextPage')"
                     @click="goToPage(pagination.page + 1)"
                   >
                     {{ t('common.next') }}
-                  </button>
+                  </UiButton>
                 </nav>
               </div>
             </div>
@@ -310,9 +325,9 @@
               <p class="text-gray-600 dark:text-gray-400">
                 {{ hasActiveFilters ? t('products.tryDifferentFilters') : t('products.comingSoon') }}
               </p>
-              <button v-if="hasActiveFilters" type="button" class="mt-6 inline-flex items-center rounded-full bg-blue-600 px-6 py-3 text-white transition hover:bg-blue-700" @click="clearAllFilters">
+              <UiButton v-if="hasActiveFilters" type="button" class="mt-6 rounded-full" @click="clearAllFilters">
                 {{ t('products.clearFilters') }}
-              </button>
+              </UiButton>
             </div>
 
             <section v-if="recentlyViewedProducts.length" class="space-y-6">

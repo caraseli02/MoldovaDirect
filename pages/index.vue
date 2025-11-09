@@ -1,16 +1,61 @@
 <template>
   <div class="text-gray-900 dark:text-gray-100">
     <!-- Promotional announcement bar -->
-    <HomeAnnouncementBar :show-cta="true" />
+    <HomeAnnouncementBar v-if="isSectionEnabled('announcementBar')" :show-cta="true" />
 
-    <!-- Hero section with main value proposition -->
-    <HomeHeroSection :highlights="heroHighlights" />
+    <!--
+      Hero Section - 3 Display Modes Available:
+
+      1. GRADIENT MODE (current fallback):
+         - Remove background-image prop
+         - Set :show-video="false"
+         - Uses wine-burgundy gradient with decorative elements
+
+      2. IMAGE MODE (currently active - DEMO):
+         - Set background-image to image URL
+         - Set :show-video="false"
+         - Demo: Unsplash vineyard image (replace with your own)
+         - Production: Use /public/images/hero/your-image.webp
+
+      3. VIDEO MODE:
+         - Set :show-video="true"
+         - Provide video-webm and video-mp4 sources
+         - Add poster-image for loading state
+         - Note: Ensure videos exist in /public/videos/
+    -->
+    <HomeVideoHero
+      v-if="isSectionEnabled('videoHero')"
+      :show-video="false"
+      video-webm="/videos/hero.webm"
+      video-mp4="/videos/hero.mp4"
+      poster-image="/images/hero-poster.jpg"
+      background-image="https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=1920&q=85&fit=crop&auto=format"
+      background-image-alt="Moldova vineyard landscape with rolling hills at golden hour"
+      :badge="t('home.hero.trustBadge')"
+      badge-icon="lucide:shield-check"
+      :title="t('home.hero.title')"
+      :subtitle="t('home.hero.subtitle')"
+      :primary-cta="{
+        text: t('home.hero.primaryCta'),
+        link: localePath('/products'),
+        icon: 'lucide:arrow-right'
+      }"
+      :secondary-cta="{
+        text: t('home.hero.secondaryCta'),
+        link: localePath('/about')
+      }"
+      :highlights="heroHighlights"
+    />
+
+    <!-- Media mentions "brag bar" (Brightland pattern) -->
+    <LazyHomeMediaMentions v-if="isSectionEnabled('mediaMentions')" />
 
     <!-- Quick category navigation for immediate browsing -->
-    <HomeCategoryGrid :categories="categoryCards" />
+    <LazyHomeCategoryGrid v-if="isSectionEnabled('categoryGrid')" :categories="categoryCards" />
 
     <!-- Featured products - primary conversion driver -->
-    <HomeFeaturedProductsSection
+    <LazyHomeFeaturedProductsSection
+      v-if="isSectionEnabled('featuredProducts')"
       :products="featuredProducts"
       :pending="featuredPending"
       :error="featuredErrorState"
@@ -18,29 +63,42 @@
     />
 
     <!-- Premium collections showcase -->
-    <HomeCollectionsShowcase />
+    <LazyHomeCollectionsShowcase v-if="isSectionEnabled('collectionsShowcase')" />
+
+    <!-- Product recommendation quiz (Jones Road/Beardbrand pattern) - DISABLED: No backend -->
+    <LazyHomeProductQuiz v-if="isSectionEnabled('productQuiz')" />
+
+    <!-- Wine Story CTA - Link to full heritage page -->
+    <LazyHomeWineStoryCta v-if="isSectionEnabled('wineStoryCta')" />
 
     <!-- Social proof and trust signals -->
-    <HomeSocialProofSection
+    <LazyHomeSocialProofSection
+      v-if="isSectionEnabled('socialProof')"
       :highlights="heroHighlights"
       :logos="partnerLogos"
       :testimonials="testimonials"
     />
 
+    <!-- User-generated content gallery (Rare Beauty pattern) - DISABLED: 100% fabricated content -->
+    <LazyHomeUgcGallery v-if="isSectionEnabled('ugcGallery')" />
+
     <!-- Process explanation -->
-    <HomeHowItWorksSection :steps="howItWorksSteps" />
+    <LazyHomeHowItWorksSection v-if="isSectionEnabled('howItWorks')" :steps="howItWorksSteps" />
 
     <!-- Service offerings -->
-    <HomeServicesSection :services="services" />
+    <LazyHomeServicesSection v-if="isSectionEnabled('services')" :services="services" />
+
+    <!-- Trust badges and payment security -->
+    <LazyHomeTrustBadges v-if="isSectionEnabled('trustBadges')" />
+
+    <!-- Certification badges (Allbirds pattern) -->
+    <LazyHomeCertificationBar v-if="isSectionEnabled('certificationBar')" />
 
     <!-- Newsletter signup -->
-    <HomeNewsletterSignup />
+    <LazyHomeNewsletterSignup v-if="isSectionEnabled('newsletter')" />
 
     <!-- FAQ preview -->
-    <HomeFaqPreviewSection :items="faqItems" />
-
-    <!-- Story section moved to About page -->
-    <!-- <HomeStorySection :points="storyPoints" :timeline="storyTimeline" /> -->
+    <LazyHomeFaqPreviewSection v-if="isSectionEnabled('faqPreview')" :items="faqItems" />
   </div>
 </template>
 
@@ -48,7 +106,9 @@
 import type { ProductWithRelations } from '~/types'
 import { CONTACT_INFO } from '~/constants/seo'
 
-const { locale } = useI18n()
+const { t, locale } = useI18n()
+const localePath = useLocalePath()
+const { isSectionEnabled } = useLandingConfig()
 const {
   heroHighlights,
   categoryCards,
@@ -69,7 +129,7 @@ const { data: featuredData, pending: featuredPending, error: featuredError, refr
       locale: locale.value
     },
     server: true,
-    lazy: false
+    lazy: true
   }
 )
 
@@ -122,5 +182,19 @@ useLandingSeo({
   ],
   structuredData
 })
-</script>
 
+// Preload hero image for optimal LCP performance
+// Demo placeholder: Using Unsplash vineyard image
+// Replace with your own image in /public/images/hero/ for production
+useHead({
+  link: [
+    {
+      rel: 'preload',
+      as: 'image',
+      href: 'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=1920&q=85&fit=crop&auto=format',
+      fetchpriority: 'high',
+      type: 'image/webp'
+    }
+  ]
+})
+</script>

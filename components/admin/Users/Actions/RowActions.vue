@@ -8,34 +8,36 @@
 <template>
   <div class="flex items-center justify-end gap-2">
     <!-- View Button -->
-    <button
+    <UiButton
       @click.stop="handleView"
       @touchstart="isMobile && vibrate('tap')"
-      class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 transition-colors touch-manipulation"
+      variant="ghost"
+      size="icon"
+      class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 touch-manipulation"
       :class="{
-        'p-2 active:scale-90': isMobile,
-        'p-1': !isMobile
+        'h-9 w-9 active:scale-90': isMobile,
+        'h-8 w-8': !isMobile
       }"
-      :title="$t('admin.users.actions.view')"
-      type="button"
+      :aria-label="$t('admin.users.actions.view')"
     >
       <commonIcon name="lucide:eye" :class="iconSizeClass" />
-    </button>
+    </UiButton>
 
     <!-- Edit Button -->
-    <button
+    <UiButton
       @click.stop="handleEdit"
       @touchstart="isMobile && vibrate('tap')"
-      class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 transition-colors touch-manipulation"
+      variant="ghost"
+      size="icon"
+      class="touch-manipulation"
       :class="{
-        'p-2 active:scale-90': isMobile,
-        'p-1': !isMobile
+        'h-9 w-9 active:scale-90': isMobile,
+        'h-8 w-8': !isMobile
       }"
-      :title="$t('admin.users.actions.edit')"
-      type="button"
+      :aria-label="$t('admin.users.actions.edit')"
     >
       <commonIcon name="lucide:pencil" :class="iconSizeClass" />
-    </button>
+    </UiButton>
 
     <!-- Actions Dropdown -->
     <AdminUsersActionsDropdown
@@ -95,6 +97,15 @@ const handleAction = (action: string, userId: string, data?: any) => {
 
 /* Enhanced focus states for accessibility */
 button:focus {
-  @apply outline-none ring-2 ring-blue-500 ring-offset-1 dark:ring-offset-gray-800 rounded-md;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  border-radius: 0.375rem;
+  box-shadow: 0 0 0 1px white, 0 0 0 3px rgb(59 130 246);
+}
+
+@media (prefers-color-scheme: dark) {
+  button:focus {
+    box-shadow: 0 0 0 1px rgb(31 41 55), 0 0 0 3px rgb(59 130 246);
+  }
 }
 </style>

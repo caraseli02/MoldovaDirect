@@ -31,12 +31,15 @@
     <div class="lg:ml-64">
       <header class="border-b border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
         <div class="flex items-center justify-between px-6 py-4">
-          <button
+          <UiButton
             @click="toggleSidebar"
-            class="rounded-md p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 lg:hidden"
+            variant="ghost"
+            size="icon"
+            class="lg:hidden"
+            :aria-label="$t('admin.navigation.toggleSidebar')"
           >
             <commonIcon name="lucide:menu" class="h-6 w-6" />
-          </button>
+          </UiButton>
 
           <div class="hidden lg:block">
             <nav class="flex" aria-label="Breadcrumb">
@@ -58,9 +61,13 @@
           </div>
 
           <div class="flex items-center space-x-4">
-            <button class="rounded-md p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900">
+            <UiButton
+              variant="ghost"
+              size="icon"
+              :aria-label="$t('admin.navigation.notifications')"
+            >
               <commonIcon name="lucide:bell" class="h-5 w-5" />
-            </button>
+            </UiButton>
 
             <div class="flex items-center space-x-3">
               <div class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600">

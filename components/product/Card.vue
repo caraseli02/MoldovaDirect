@@ -1,7 +1,7 @@
 <template>
   <div
     ref="cardRef"
-    class="relative bg-white dark:bg-slate-800 rounded-lg shadow-sm dark:shadow-slate-900/20 border border-gray-200 dark:border-slate-700 hover:shadow-md dark:hover:shadow-slate-900/30 transition-all duration-300"
+    class="group relative bg-white dark:bg-slate-800 rounded-2xl shadow-elevated-sm hover:shadow-elevated-lg border border-gray-200 dark:border-slate-700 transition-all duration-300 overflow-hidden"
     :class="{
       'active:scale-95': isMobile,
       'touch-manipulation': isMobile
@@ -9,13 +9,13 @@
     @touchstart="handleTouchStart"
   >
     <!-- Product Image -->
-    <div class="aspect-square overflow-hidden rounded-t-lg bg-gray-100 dark:bg-slate-700">
+    <div class="relative aspect-square overflow-hidden rounded-t-2xl bg-gray-100 dark:bg-slate-700">
       <nuxt-link :to="`/products/${product.slug}`">
         <img
           v-if="primaryImage"
           :src="primaryImage.url"
           :alt="getLocalizedText(primaryImage.altText) || getLocalizedText(product.name)"
-          class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+          class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
           loading="lazy"
         />
         <div v-else class="w-full h-full flex items-center justify-center text-gray-400 dark:text-slate-500">
@@ -24,6 +24,45 @@
           </svg>
         </div>
       </nuxt-link>
+
+      <!-- Quick View Overlay (Gymshark pattern) -->
+      <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+        <nuxt-link
+          :to="`/products/${product.slug}`"
+          class="px-6 py-3 bg-white text-gray-900 rounded-full font-semibold text-sm hover:bg-gray-100 transition-colors transform translate-y-4 group-hover:translate-y-0 duration-300"
+        >
+          {{ $t('products.quickView') }}
+        </nuxt-link>
+      </div>
+
+      <!-- Product Labels/Badges (top-left corner) -->
+      <div class="absolute top-3 left-3 flex flex-col gap-2">
+        <!-- New Badge -->
+        <span v-if="isNew" class="inline-flex items-center gap-1 bg-primary-600 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg">
+          <commonIcon name="lucide:sparkles" class="h-3 w-3" />
+          {{ $t('products.new') }}
+        </span>
+
+        <!-- Best Seller Badge -->
+        <span v-if="product.isFeatured" class="inline-flex items-center gap-1 bg-amber-500 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg">
+          <commonIcon name="lucide:trending-up" class="h-3 w-3" />
+          {{ $t('products.bestSeller') }}
+        </span>
+
+        <!-- Low Stock Badge (urgency) -->
+        <span v-if="product.stockQuantity > 0 && product.stockQuantity <= 5" class="inline-flex items-center gap-1 bg-red-600 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg animate-pulse">
+          <commonIcon name="lucide:alert-circle" class="h-3 w-3" />
+          {{ $t('products.onlyLeft', { count: product.stockQuantity }) }}
+        </span>
+      </div>
+
+      <!-- Sale Badge (top-right corner) -->
+      <div v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)" class="absolute top-3 right-3">
+        <span class="inline-flex items-center gap-1 bg-red-600 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg">
+          <commonIcon name="lucide:tag" class="h-3 w-3" />
+          -{{ calculateDiscount }}%
+        </span>
+      </div>
     </div>
 
     <!-- Product Info -->
@@ -104,11 +143,11 @@
       <!-- Add to Cart Button -->
       <Button
         :disabled="product.stockQuantity <= 0 || cartLoading"
-        class="w-full mt-4 transition-all duration-200 flex items-center justify-center space-x-2 touch-manipulation"
+        class="cta-button w-full mt-4 transition-all duration-200 flex items-center justify-center space-x-2 touch-manipulation rounded-full"
         :class="[
           isInCart(product.id)
             ? 'bg-green-600 dark:bg-green-500 text-white hover:bg-green-700 dark:hover:bg-green-600'
-            : 'bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-600',
+            : 'bg-primary-600 dark:bg-primary-500 text-white hover:bg-primary-700 dark:hover:bg-primary-600',
           isMobile ? 'min-h-[44px]' : '' // Ensure minimum touch target size
         ]"
         @click="addToCart"
@@ -140,19 +179,6 @@
         </span>
       </Button>
 
-      <!-- Featured Badge -->
-      <div v-if="product.isFeatured" class="absolute top-2 left-2">
-        <span class="bg-yellow-500 text-white px-2 py-1 rounded-full text-xs font-medium">
-          {{ $t('products.featured') }}
-        </span>
-      </div>
-
-      <!-- Sale Badge -->
-      <div v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)" class="absolute top-2 right-2">
-        <span class="bg-red-500 text-white px-2 py-1 rounded-full text-xs font-medium">
-          {{ $t('products.sale') }}
-        </span>
-      </div>
     </div>
   </div>
 </template>
@@ -201,6 +227,23 @@ const stockStatusText = computed(() => {
   if (stock > 10) return t('products.stockStatus.inStock')
   if (stock > 0) return t('products.stockStatus.onlyLeft', { count: stock })
   return t('products.stockStatus.outOfStock')
+})
+
+const isNew = computed(() => {
+  // Consider product "new" if created within last 30 days
+  if (!props.product.createdAt) return false
+  const createdDate = new Date(props.product.createdAt)
+  const now = new Date()
+  const daysSinceCreation = (now.getTime() - createdDate.getTime()) / (1000 * 60 * 60 * 24)
+  return daysSinceCreation <= 30
+})
+
+const calculateDiscount = computed(() => {
+  if (!props.product.comparePrice || Number(props.product.comparePrice) <= Number(props.product.price)) {
+    return 0
+  }
+  const discount = ((Number(props.product.comparePrice) - Number(props.product.price)) / Number(props.product.comparePrice)) * 100
+  return Math.round(discount)
 })
 
 // Utility functions

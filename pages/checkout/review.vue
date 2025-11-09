@@ -75,28 +75,24 @@
         />
 
         <footer class="flex flex-col sm:flex-row justify-between items-center pt-6 border-t border-gray-200 dark:border-gray-700 space-y-3 sm:space-y-0 mt-8">
-          <button
+          <UiButton
             @click="goBack"
             :disabled="processing"
-            class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            variant="outline"
           >
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-            </svg>
+            <commonIcon name="lucide:chevron-left" class="mr-2 h-4 w-4" />
             {{ $t('checkout.backToPayment') }}
-          </button>
+          </UiButton>
 
-          <button
+          <UiButton
             @click="handlePlaceOrder"
             :disabled="!canProceed || processing"
-            class="inline-flex items-center px-6 py-2 text-sm font-medium text-white bg-green-600 dark:bg-green-500 border border-transparent rounded-md hover:bg-green-700 dark:hover:bg-green-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            class="bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600"
           >
-            <span v-if="processing" class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+            <commonIcon v-if="processing" name="lucide:loader-2" class="mr-2 h-4 w-4 animate-spin" />
             {{ processing ? $t('checkout.processing') : $t('checkout.placeOrder') }}
-            <svg v-if="!processing" class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
+            <commonIcon v-if="!processing" name="lucide:chevron-right" class="ml-2 h-4 w-4" />
+          </UiButton>
         </footer>
       </div>
     </div>

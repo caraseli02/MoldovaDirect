@@ -32,39 +32,45 @@
       <div v-if="sortedNotes.length > 0" class="space-y-4">
         <!-- Filter Tabs -->
         <div class="flex items-center space-x-2 border-b border-gray-200 dark:border-gray-700">
-          <button
+          <UiButton
             @click="filterType = 'all'"
+            variant="ghost"
+            size="sm"
             :class="[
-              'px-3 py-2 text-sm font-medium border-b-2 transition-colors',
+              'border-b-2 rounded-none',
               filterType === 'all'
                 ? 'border-primary text-primary'
-                : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
+                : 'border-transparent'
             ]"
           >
             All ({{ notes.length }})
-          </button>
-          <button
+          </UiButton>
+          <UiButton
             @click="filterType = 'internal'"
+            variant="ghost"
+            size="sm"
             :class="[
-              'px-3 py-2 text-sm font-medium border-b-2 transition-colors',
+              'border-b-2 rounded-none',
               filterType === 'internal'
                 ? 'border-primary text-primary'
-                : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
+                : 'border-transparent'
             ]"
           >
             Internal ({{ internalNotesCount }})
-          </button>
-          <button
+          </UiButton>
+          <UiButton
             @click="filterType = 'customer'"
+            variant="ghost"
+            size="sm"
             :class="[
-              'px-3 py-2 text-sm font-medium border-b-2 transition-colors',
+              'border-b-2 rounded-none',
               filterType === 'customer'
                 ? 'border-primary text-primary'
-                : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
+                : 'border-transparent'
             ]"
           >
             Customer ({{ customerNotesCount }})
-          </button>
+          </UiButton>
         </div>
 
         <!-- Notes -->
