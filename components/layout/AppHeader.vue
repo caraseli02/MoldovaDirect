@@ -69,7 +69,7 @@
             <span class="sr-only">Cart</span>
           </NuxtLink>
 
-          <!-- Menu Button (Apple-style minimalist - last element) -->
+          <!-- Menu Button (Apple-style minimalist 2-bar - last element) -->
           <button
             type="button"
             @click="toggleMobileMenu"
@@ -78,8 +78,8 @@
             aria-controls="nav-menu"
             class="flex items-center justify-center w-11 h-11 text-[#FCFAF2] hover:opacity-60 transition-opacity focus:outline-none"
           >
-            <svg width="18" height="12" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M1 1H17M1 6H17M1 11H17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <svg width="18" height="10" viewBox="0 0 18 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1H17M1 9H17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
             </svg>
             <span class="sr-only">Menu</span>
           </button>
