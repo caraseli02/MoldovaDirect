@@ -40,7 +40,7 @@
             class="h-full w-full object-cover object-center"
           />
           <!-- Gradient Overlay for Text Readability -->
-          <div class="absolute inset-0 bg-gradient-to-br from-wine-burgundy-950/80 via-wine-burgundy-900/60 to-slate-900/80" />
+          <div class="absolute inset-0 bg-gradient-to-br from-wine-burgundy-950/50 via-wine-burgundy-900/40 to-slate-900/50" />
         </div>
 
         <!-- Gradient Fallback (if no image) -->
