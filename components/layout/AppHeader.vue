@@ -100,26 +100,95 @@
       <div
         v-if="mobileMenuOpen"
         id="nav-menu"
-        class="fixed inset-0 bg-[#FCFAF2] z-40 overflow-y-auto"
-        @click.self="toggleMobileMenu"
+        class="fixed inset-0 bg-[#FCFAF2]/95 backdrop-blur-sm z-50 overflow-y-auto"
       >
-        <div class="container mx-auto px-4 md:px-6 py-24">
+        <!-- Close Button (Fixed Top Right) -->
+        <div class="fixed top-4 right-4 z-10">
+          <button
+            type="button"
+            @click="toggleMobileMenu"
+            :aria-label="'Close menu'"
+            class="flex items-center justify-center w-12 h-12 bg-[#241405] text-[#FCFAF2] rounded-full hover:bg-[#722F37] transition-all shadow-lg focus:outline-none focus:ring-2 focus:ring-[#722F37]"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+            <span class="sr-only">Close menu</span>
+          </button>
+        </div>
+
+        <div class="container mx-auto px-4 md:px-6 py-16 md:py-20">
           <nav class="max-w-4xl mx-auto" aria-label="Main navigation">
 
-            <!-- Products Section -->
-            <div class="mb-12">
-              <h2 class="text-xs uppercase tracking-[0.2em] font-medium text-[#722F37] mb-6">
-                Products
-              </h2>
-              <div class="grid md:grid-cols-3 gap-8">
+            <!-- Mobile: Simplified Links -->
+            <div class="md:hidden space-y-1 mb-12">
+              <NuxtLink
+                :to="localePath('/')"
+                @click="toggleMobileMenu"
+                class="block py-4 text-2xl font-serif text-[#241405] hover:text-[#722F37] transition-colors border-b border-[#241405]/10"
+              >
+                Home
+              </NuxtLink>
+              <NuxtLink
+                :to="localePath('/products')"
+                @click="toggleMobileMenu"
+                class="block py-4 text-2xl font-serif text-[#241405] hover:text-[#722F37] transition-colors border-b border-[#241405]/10"
+              >
+                Shop All Products
+              </NuxtLink>
+              <NuxtLink
+                :to="localePath('/products?category=wine')"
+                @click="toggleMobileMenu"
+                class="block py-4 text-2xl font-serif text-[#241405] hover:text-[#722F37] transition-colors border-b border-[#241405]/10"
+              >
+                Wines
+              </NuxtLink>
+              <NuxtLink
+                to="/products?category=gourmet"
+                @click="toggleMobileMenu"
+                class="block py-4 text-2xl font-serif text-[#241405] hover:text-[#722F37] transition-colors border-b border-[#241405]/10"
+              >
+                Gourmet Foods
+              </NuxtLink>
+              <NuxtLink
+                to="/gifts"
+                @click="toggleMobileMenu"
+                class="block py-4 text-2xl font-serif text-[#241405] hover:text-[#722F37] transition-colors border-b border-[#241405]/10"
+              >
+                Gifts
+              </NuxtLink>
+              <NuxtLink
+                :to="localePath('/about')"
+                @click="toggleMobileMenu"
+                class="block py-4 text-2xl font-serif text-[#241405] hover:text-[#722F37] transition-colors border-b border-[#241405]/10"
+              >
+                About
+              </NuxtLink>
+              <NuxtLink
+                :to="localePath('/contact')"
+                @click="toggleMobileMenu"
+                class="block py-4 text-2xl font-serif text-[#241405] hover:text-[#722F37] transition-colors border-b border-[#241405]/10"
+              >
+                Contact
+              </NuxtLink>
+            </div>
+
+            <!-- Desktop: Full Navigation -->
+            <div class="hidden md:block">
+              <!-- Products Section -->
+              <div class="mb-8 md:mb-12">
+                <h2 class="text-xs uppercase tracking-[0.2em] font-medium text-[#722F37] mb-6">
+                  Products
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
                 <div>
                   <h3 class="text-sm font-semibold text-[#241405] mb-4">Collections</h3>
-                  <ul class="space-y-3">
+                  <ul class="space-y-2">
                     <li>
                       <NuxtLink
                         :to="localePath('/products')"
                         @click="toggleMobileMenu"
-                        class="text-sm text-[#241405] hover:text-[#722F37] transition-colors"
+                        class="block py-2 text-sm text-[#241405] hover:text-[#722F37] transition-colors"
                       >
                         All Products
                       </NuxtLink>
@@ -177,11 +246,11 @@
             </div>
 
             <!-- Gifting Section -->
-            <div class="mb-12 border-t border-[#241405]/10 pt-12">
+            <div class="mb-8 md:mb-12 border-t border-[#241405]/10 pt-8 md:pt-12">
               <h2 class="text-xs uppercase tracking-[0.2em] font-medium text-[#722F37] mb-6">
                 Gifting
               </h2>
-              <div class="grid md:grid-cols-3 gap-8">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
                 <div>
                   <h3 class="text-sm font-semibold text-[#241405] mb-4">Gift By Occasion</h3>
                   <ul class="space-y-3">
@@ -205,11 +274,11 @@
             </div>
 
             <!-- Learn Section -->
-            <div class="mb-12 border-t border-[#241405]/10 pt-12">
+            <div class="mb-8 md:mb-12 border-t border-[#241405]/10 pt-8 md:pt-12">
               <h2 class="text-xs uppercase tracking-[0.2em] font-medium text-[#722F37] mb-6">
                 Learn
               </h2>
-              <div class="grid md:grid-cols-3 gap-8">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
                 <div>
                   <h3 class="text-sm font-semibold text-[#241405] mb-4">Our Story</h3>
                   <ul class="space-y-3">
@@ -232,16 +301,18 @@
               </div>
             </div>
 
-            <!-- Contact -->
-            <div class="border-t border-[#241405]/10 pt-12">
-              <NuxtLink
-                :to="localePath('/contact')"
-                @click="toggleMobileMenu"
-                class="text-xs uppercase tracking-[0.2em] font-medium text-[#722F37] hover:opacity-70 transition-opacity"
-              >
-                Contact
-              </NuxtLink>
+              <!-- Contact -->
+              <div class="border-t border-[#241405]/10 pt-8 md:pt-12">
+                <NuxtLink
+                  :to="localePath('/contact')"
+                  @click="toggleMobileMenu"
+                  class="text-xs uppercase tracking-[0.2em] font-medium text-[#722F37] hover:opacity-70 transition-opacity inline-block"
+                >
+                  Contact
+                </NuxtLink>
+              </div>
             </div>
+            <!-- End Desktop Navigation -->
 
           </nav>
         </div>
@@ -279,3 +350,22 @@ const goToSearch = () => {
   navigateTo(localePath({ path: '/products', query: { focus: 'search' } }))
 }
 </script>
+
+<style scoped>
+/* Mobile Menu Optimizations */
+#nav-menu ul li a {
+  min-height: 44px; /* Apple's recommended minimum tap target size */
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 767px) {
+  #nav-menu ul {
+    margin-bottom: 1.5rem;
+  }
+
+  #nav-menu h3 {
+    margin-top: 1rem;
+  }
+}
+</style>
