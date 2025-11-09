@@ -1,5 +1,8 @@
 <template>
-  <header class="fixed top-0 left-0 right-0 z-50 bg-transparent backdrop-blur-sm transition-all duration-300">
+  <header
+    class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+    :class="isScrolled ? 'bg-[#FCFAF2]/95 backdrop-blur-md shadow-sm' : 'bg-transparent backdrop-blur-sm'"
+  >
     <div class="max-w-[1920px] mx-auto px-4 md:px-6 lg:px-8">
       <div class="flex items-center justify-between h-20 md:h-24">
 
@@ -10,7 +13,8 @@
           :aria-label="'Moldova Direct'"
         >
           <span
-            class="text-lg md:text-xl font-serif font-semibold text-[#FCFAF2]"
+            class="text-lg md:text-xl font-serif font-semibold transition-colors duration-300"
+            :class="isScrolled ? 'text-[#241405]' : 'text-[#FCFAF2]'"
             style="font-family: 'Playfair Display', Georgia, serif; letter-spacing: 0.02em;">
             Moldova Direct
           </span>
@@ -24,7 +28,8 @@
             type="button"
             @click="goToSearch"
             :aria-label="'Search'"
-            class="flex items-center justify-center w-11 h-11 text-[#FCFAF2] hover:opacity-60 transition-opacity focus:outline-none"
+            class="flex items-center justify-center w-11 h-11 hover:opacity-60 transition-all duration-300 focus:outline-none"
+            :class="isScrolled ? 'text-[#241405]' : 'text-[#FCFAF2]'"
           >
             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M12.3047 21.25C17.5514 21.25 21.8047 16.9967 21.8047 11.75C21.8047 6.50329 17.5514 2.25 12.3047 2.25C7.05798 2.25 2.80469 6.50329 2.80469 11.75C2.80469 16.9967 7.05798 21.25 12.3047 21.25Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -37,7 +42,8 @@
           <NuxtLink
             :to="localePath('/account')"
             :aria-label="'Account'"
-            class="flex items-center justify-center w-11 h-11 text-[#FCFAF2] hover:opacity-60 transition-opacity"
+            class="flex items-center justify-center w-11 h-11 hover:opacity-60 transition-all duration-300"
+            :class="isScrolled ? 'text-[#241405]' : 'text-[#FCFAF2]'"
           >
             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M12.8047 12.25C15.5661 12.25 17.8047 10.0114 17.8047 7.25C17.8047 4.48858 15.5661 2.25 12.8047 2.25C10.0433 2.25 7.80469 4.48858 7.80469 7.25C7.80469 10.0114 10.0433 12.25 12.8047 12.25Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -50,7 +56,8 @@
           <NuxtLink
             :to="localePath('/cart')"
             :aria-label="cartItemsCount > 0 ? `Cart (${cartItemsCount} items)` : 'Cart'"
-            class="relative flex items-center justify-center w-11 h-11 text-[#FCFAF2] hover:opacity-60 transition-opacity"
+            class="relative flex items-center justify-center w-11 h-11 hover:opacity-60 transition-all duration-300"
+            :class="isScrolled ? 'text-[#241405]' : 'text-[#FCFAF2]'"
           >
             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M8.30469 7.91952V6.94952C8.30469 4.69952 10.1147 2.48952 12.3647 2.27952C15.0447 2.01952 17.3047 4.12952 17.3047 6.75952V8.13952" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -76,7 +83,8 @@
             :aria-label="mobileMenuOpen ? 'Close menu' : 'Open menu'"
             :aria-expanded="mobileMenuOpen"
             aria-controls="nav-menu"
-            class="flex items-center justify-center w-11 h-11 text-[#FCFAF2] hover:opacity-60 transition-opacity focus:outline-none"
+            class="flex items-center justify-center w-11 h-11 hover:opacity-60 transition-all duration-300 focus:outline-none"
+            :class="isScrolled ? 'text-[#241405]' : 'text-[#FCFAF2]'"
           >
             <svg width="18" height="10" viewBox="0 0 18 10" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M1 1H17M1 9H17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
@@ -322,10 +330,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onUnmounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 
 const localePath = useLocalePath()
 const mobileMenuOpen = ref(false)
+const isScrolled = ref(false)
 
 const toggleMobileMenu = () => {
   mobileMenuOpen.value = !mobileMenuOpen.value
@@ -337,8 +346,24 @@ const toggleMobileMenu = () => {
   }
 }
 
+// Handle scroll to change header style
+const handleScroll = () => {
+  // Change header style after scrolling past hero section (approximately 100vh)
+  isScrolled.value = window.scrollY > window.innerHeight * 0.5
+}
+
+onMounted(() => {
+  if (typeof window !== 'undefined') {
+    window.addEventListener('scroll', handleScroll)
+    handleScroll() // Check initial scroll position
+  }
+})
+
 // Clean up on unmount
 onUnmounted(() => {
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('scroll', handleScroll)
+  }
   document.body.style.overflow = ''
 })
 
