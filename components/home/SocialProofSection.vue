@@ -88,8 +88,49 @@
           </div>
         </div>
 
-        <!-- Testimonials with star ratings -->
-        <div class="grid gap-6 lg:max-w-xl">
+        <!-- Testimonials - Carousel on mobile, Grid on desktop -->
+        <!-- Mobile: Horizontal carousel -->
+        <div class="lg:hidden">
+          <Swiper
+            :modules="[SwiperPagination]"
+            :slides-per-view="1"
+            :space-between="20"
+            :pagination="{ clickable: true, dynamicBullets: true }"
+            class="testimonials-carousel"
+          >
+            <SwiperSlide
+              v-for="testimonial in testimonials"
+              :key="testimonial.name"
+            >
+              <article class="rounded-3xl bg-white/95 p-8 text-left text-gray-900 shadow-xl shadow-primary-950/20">
+                <!-- Star rating at top -->
+                <div class="mb-4 flex items-center justify-between">
+                  <UiStarRating :rating="5" size="sm" />
+
+                  <!-- Verified badge -->
+                  <span class="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-700">
+                    <commonIcon name="lucide:check-circle" class="h-3 w-3" />
+                    {{ t('home.socialProof.verified') }}
+                  </span>
+                </div>
+
+                <!-- Quote -->
+                <p class="text-lg font-medium leading-relaxed">"{{ testimonial.quote }}"</p>
+
+                <!-- Customer info -->
+                <div class="mt-6 flex items-center justify-between border-t border-gray-200 pt-4 text-sm">
+                  <div>
+                    <p class="font-semibold text-primary-600">{{ testimonial.name }}</p>
+                    <p class="text-gray-500">{{ testimonial.location }}</p>
+                  </div>
+                </div>
+              </article>
+            </SwiperSlide>
+          </Swiper>
+        </div>
+
+        <!-- Desktop: Grid with animations -->
+        <div class="hidden gap-6 lg:grid lg:max-w-xl">
           <article
             v-for="(testimonial, index) in testimonials"
             :key="testimonial.name"
@@ -223,3 +264,19 @@ const animatedStats = computed(() => {
   })
 })
 </script>
+
+<style scoped>
+/* Swiper pagination dots styling for testimonials */
+:deep(.testimonials-carousel .swiper-pagination) {
+  bottom: -2.5rem;
+}
+
+:deep(.testimonials-carousel .swiper-pagination-bullet) {
+  background-color: rgb(255 255 255 / 0.5); /* white with 50% opacity */
+}
+
+:deep(.testimonials-carousel .swiper-pagination-bullet-active) {
+  background-color: rgb(255 255 255); /* white */
+  opacity: 1;
+}
+</style>

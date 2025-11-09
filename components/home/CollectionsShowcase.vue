@@ -14,7 +14,58 @@
         </p>
       </div>
 
-      <div class="mt-12 grid gap-6 lg:auto-rows-[minmax(260px,1fr)] lg:grid-cols-12">
+      <!-- Collections - Carousel on mobile, Bento grid on desktop -->
+      <!-- Mobile: Horizontal carousel -->
+      <div class="mt-12 lg:hidden">
+        <Swiper
+          :modules="[SwiperPagination]"
+          :slides-per-view="1.1"
+          :space-between="16"
+          :pagination="{ clickable: true, dynamicBullets: true }"
+          :breakpoints="{
+            480: { slidesPerView: 1.2, spaceBetween: 20 },
+            640: { slidesPerView: 1.3, spaceBetween: 24 }
+          }"
+          class="collections-carousel"
+        >
+          <SwiperSlide
+            v-for="card in cards"
+            :key="card.key"
+          >
+            <NuxtLink
+              :to="card.href"
+              class="group relative block overflow-hidden rounded-3xl border border-gray-200 bg-gray-900/95 shadow-xl transition hover:-translate-y-1 hover:shadow-2xl dark:border-gray-800 dark:bg-gray-900"
+            >
+              <NuxtImg
+                :src="card.image"
+                :alt="card.imageAlt"
+                densities="1x 2x"
+                class="absolute inset-0 h-full w-full object-cover brightness-105 transition duration-700 ease-out group-hover:scale-105"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/60 to-slate-900/20"></div>
+              <div class="absolute inset-0 bg-gradient-to-br from-slate-900/0 via-slate-900/30 to-slate-950/70 mix-blend-soft-light"></div>
+              <div class="relative flex h-full min-h-[20rem] flex-col justify-between p-8 text-white">
+                <div class="space-y-4">
+                  <span class="inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-900 shadow-lg shadow-slate-900/10">
+                    {{ card.tag }}
+                  </span>
+                  <div class="space-y-3">
+                    <h3 class="text-2xl font-semibold leading-tight">{{ card.title }}</h3>
+                    <p class="text-sm text-white/85">{{ card.description }}</p>
+                  </div>
+                </div>
+                <span class="inline-flex items-center gap-2 text-sm font-semibold text-white transition group-hover:translate-x-1">
+                  {{ card.cta }}
+                  <commonIcon name="lucide:arrow-right" class="h-4 w-4" />
+                </span>
+              </div>
+            </NuxtLink>
+          </SwiperSlide>
+        </Swiper>
+      </div>
+
+      <!-- Desktop: Bento grid layout -->
+      <div class="mt-12 hidden gap-6 lg:grid lg:auto-rows-[minmax(260px,1fr)] lg:grid-cols-12">
         <NuxtLink
           v-for="card in cards"
           :key="card.key"
@@ -113,3 +164,19 @@ const cards = computed<Card[]>(() => [
   }
 ])
 </script>
+
+<style scoped>
+/* Swiper pagination dots styling */
+:deep(.collections-carousel .swiper-pagination) {
+  bottom: -2rem;
+}
+
+:deep(.collections-carousel .swiper-pagination-bullet) {
+  background-color: rgb(156 163 175 / 0.5); /* gray-400 with 50% opacity */
+}
+
+:deep(.collections-carousel .swiper-pagination-bullet-active) {
+  background-color: hsl(var(--color-primary-600));
+  opacity: 1;
+}
+</style>
