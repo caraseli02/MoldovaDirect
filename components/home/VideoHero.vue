@@ -1,5 +1,5 @@
 <template>
-  <section class="relative flex items-center overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800">
+  <section class="relative flex items-center overflow-hidden bg-gradient-to-br from-wine-burgundy-950 via-wine-burgundy-900 to-slate-900">
     <!-- Optimized min-height for mobile-first (60vh mobile, 75vh desktop) -->
     <div class="relative flex min-h-[60vh] w-full items-center md:min-h-[75vh]">
       <!-- Video Background (Optional - controlled by showVideo prop) -->
@@ -22,27 +22,49 @@
         <div class="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50" />
       </div>
 
-      <!-- Fallback gradient background with decorative elements -->
+      <!-- Fallback background: Image or Gradient -->
       <div v-else class="absolute inset-0 z-0">
-        <!-- Gradient Base -->
-        <div class="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800" />
-        
-        <!-- Radial Highlights for Visual Interest -->
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.08),_transparent_50%)]" />
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,_rgba(198,141,37,0.12),_transparent_60%)]" />
-        
-        <!-- Decorative Wine Bottle Silhouettes (Subtle) -->
-        <div class="absolute bottom-0 right-0 h-[60%] w-[40%] opacity-[0.03]">
-          <div class="absolute bottom-0 right-[20%] h-[80%] w-16 rounded-t-full bg-white blur-sm" />
-          <div class="absolute bottom-0 right-[35%] h-[70%] w-14 rounded-t-full bg-white blur-sm" />
+        <!-- Background Image (if provided) -->
+        <div v-if="backgroundImage" class="absolute inset-0">
+          <NuxtImg
+            :src="backgroundImage"
+            :alt="backgroundImageAlt"
+            width="1920"
+            height="1080"
+            format="webp"
+            quality="85"
+            loading="eager"
+            fetchpriority="high"
+            sizes="100vw"
+            preset="hero"
+            class="h-full w-full object-cover object-center"
+          />
+          <!-- Gradient Overlay for Text Readability -->
+          <div class="absolute inset-0 bg-gradient-to-br from-wine-burgundy-950/80 via-wine-burgundy-900/60 to-slate-900/80" />
         </div>
 
-        <!-- Dot Pattern Overlay (Brightland inspired) -->
-        <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 40px 40px;" />
+        <!-- Gradient Fallback (if no image) -->
+        <div v-else class="absolute inset-0">
+          <!-- Gradient Base -->
+          <div class="absolute inset-0 bg-gradient-to-br from-wine-burgundy-950 via-wine-burgundy-900 to-slate-900" />
+
+          <!-- Radial Highlights for Visual Interest -->
+          <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.08),_transparent_50%)]" />
+          <div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,_rgba(198,141,37,0.12),_transparent_60%)]" />
+
+          <!-- Decorative Wine Bottle Silhouettes (Subtle) -->
+          <div class="absolute bottom-0 right-0 h-[60%] w-[40%] opacity-[0.03]">
+            <div class="absolute bottom-0 right-[20%] h-[80%] w-16 rounded-t-full bg-white blur-sm" />
+            <div class="absolute bottom-0 right-[35%] h-[70%] w-14 rounded-t-full bg-white blur-sm" />
+          </div>
+
+          <!-- Dot Pattern Overlay (Brightland inspired) -->
+          <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 40px 40px;" />
+        </div>
       </div>
 
       <!-- Content Container -->
-      <div class="container relative z-10 mx-auto px-4 py-12 md:py-16">
+      <div class="container relative z-10 mx-auto px-4 py-16 md:py-24 lg:py-32">
         <div
           v-motion
           :initial="{ opacity: 0, y: 30 }"
@@ -82,7 +104,7 @@
               y: 0,
               transition: { delay: 300 },
             }"
-            class="mb-4 text-4xl font-extrabold leading-[1.1] tracking-tight md:mb-6 md:text-6xl lg:text-7xl"
+            class="mb-4 text-5xl font-extrabold leading-[1.1] tracking-tight md:mb-6 md:text-7xl lg:text-8xl"
           >
             {{ title }}
           </h1>
@@ -208,6 +230,10 @@ const props = withDefaults(
     videoMp4?: string
     posterImage?: string
 
+    // Background image settings
+    backgroundImage?: string
+    backgroundImageAlt?: string
+
     // Content
     badge?: string
     badgeIcon?: string
@@ -224,6 +250,7 @@ const props = withDefaults(
   {
     showVideo: false,
     posterImage: '/hero-fallback.jpg',
+    backgroundImageAlt: 'Moldova vineyard landscape',
   }
 )
 

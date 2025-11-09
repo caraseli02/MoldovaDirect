@@ -47,6 +47,15 @@ export default defineNuxtConfig({
       xl: 1280,
       xxl: 1536,
     },
+    presets: {
+      hero: {
+        modifiers: {
+          format: 'webp',
+          quality: 85,
+          fit: 'cover',
+        }
+      }
+    }
   },
   routeRules: {
     // Landing page - will enable prerender after fixing server errors

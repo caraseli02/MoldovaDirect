@@ -201,6 +201,25 @@
   --color-gold-900: hsl(36 72% 22%);
   --color-gold-950: hsl(34 75% 15%);
 
+  /* Wine Color Palette (Hero Section Specific) */
+  --color-wine-burgundy-50: hsl(0 35% 97%);
+  --color-wine-burgundy-100: hsl(0 35% 92%);
+  --color-wine-burgundy-200: hsl(0 35% 82%);
+  --color-wine-burgundy-300: hsl(0 35% 72%);
+  --color-wine-burgundy-400: hsl(0 40% 58%);
+  --color-wine-burgundy-500: hsl(0 65% 45%);
+  --color-wine-burgundy-600: hsl(0 70% 38%);
+  --color-wine-burgundy-700: hsl(0 65% 28%);
+  --color-wine-burgundy-800: hsl(0 55% 18%);
+  --color-wine-burgundy-900: hsl(0 50% 12%);
+  --color-wine-burgundy-950: hsl(0 45% 8%);
+
+  --color-wine-gold-500: hsl(43 62% 48%);
+
+  --color-wine-green-50: hsl(145 30% 96%);
+  --color-wine-green-700: hsl(145 40% 35%);
+  --color-wine-green-900: hsl(145 45% 18%);
+
   /* Container configuration */
   --container-center: true;
   --container-padding: 1rem;
