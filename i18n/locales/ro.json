@@ -803,9 +803,17 @@
     "newsletter": {
       "title": "Rămâi la curent cu noutățile",
       "subtitle": "Află primul despre edițiile de sezon, ghidurile de pairing și invitațiile la degustări private.",
+      "headline": "Intră în Lumea Moldova Direct",
+      "description": "Fii primul care descoperă lansări limitate, perechi exclusive și povești din interior de la partenerii noștri artizani. Plus, bucură-te de avantaje speciale rezervate comunității noastre.",
       "placeholder": "Introdu adresa de email",
-      "cta": "Mă abonez",
-      "success": "Îți mulțumim! Vei primi următorul nostru newsletter în curând.",
+      "cta": "Alătură-te",
+      "submitting": "Te alăturăm...",
+      "success": "Abonat!",
+      "success_message": "Bine ai venit în comunitatea noastră! Verifică-ți căsuța de email pentru un cadou special de bun venit.",
+      "benefit1": "Lansări Exclusive",
+      "benefit2": "Povești Interne",
+      "benefit3": "Avantaje Speciale",
+      "privacy": "Respectăm confidențialitatea ta. Dezabonează-te oricând.",
       "disclaimer": "Trimitem unul sau două emailuri pe lună și te poți dezabona oricând."
     },
     "faqPreview": {
@@ -1059,8 +1067,16 @@
     "commonProduct": "acest produs"
   },
   "footer": {
+    "tagline": "Curând cele mai bune comori de pe solul moldovenesc la masa ta din 1950",
     "terms": "Termeni și Condiții",
     "privacy": "Politica de Confidențialitate",
+    "explore": {
+      "title": "Explorează"
+    },
+    "certifications": {
+      "organic": "Certificat Organic",
+      "sustainable": "Aprovizionare Sustenabilă"
+    },
     "info": {
       "title": "Informații",
       "about": "Despre Noi",
@@ -1087,10 +1103,15 @@
       "placeholder": "Email-ul tău",
       "button": "Abonează-te",
       "submitting": "Se abonează...",
-      "success": "Abonare reușită!",
-      "successDescription": "Mulțumim că te-ai abonat cu {email}",
-      "error": "Abonarea a eșuat",
-      "errorDescription": "Te rugăm să încerci din nou mai târziu"
+      "success": {
+        "title": "Abonare reușită!",
+        "message": "Mulțumim că te-ai abonat cu {email}"
+      },
+      "error": {
+        "title": "Abonarea a eșuat",
+        "message": "Te rugăm să încerci din nou mai târziu",
+        "invalidEmail": "Te rugăm să introduci o adresă de email validă"
+      }
     },
     "trust": {
       "title": "Încredere și Securitate",

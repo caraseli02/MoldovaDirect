@@ -1033,9 +1033,17 @@
     "newsletter": {
       "title": "No te pierdas las novedades",
       "subtitle": "Sé la primera persona en enterarte de lanzamientos de temporada, guías de maridaje e invitaciones a catas privadas.",
+      "headline": "Entra en el Mundo de Moldova Direct",
+      "description": "Sé el primero en descubrir lanzamientos limitados, maridajes exclusivos e historias de nuestros socios artesanos. Además, disfruta de ventajas especiales reservadas para nuestra comunidad.",
       "placeholder": "Introduce tu correo electrónico",
-      "cta": "Quiero recibir novedades",
-      "success": "¡Gracias! Recibirás nuestro próximo boletín en tu bandeja.",
+      "cta": "Unirme",
+      "submitting": "Uniéndote...",
+      "success": "¡Suscrito!",
+      "success_message": "¡Bienvenido a nuestra comunidad! Revisa tu bandeja de entrada para un regalo de bienvenida especial.",
+      "benefit1": "Lanzamientos Exclusivos",
+      "benefit2": "Historias Internas",
+      "benefit3": "Ventajas Especiales",
+      "privacy": "Respetamos tu privacidad. Date de baja en cualquier momento.",
       "disclaimer": "Enviamos uno o dos correos al mes y puedes darte de baja cuando quieras."
     },
     "faqPreview": {
@@ -1289,8 +1297,16 @@
     "commonProduct": "este producto"
   },
   "footer": {
+    "tagline": "Curando los mejores tesoros desde el suelo moldavo hasta tu mesa desde 1950",
     "terms": "Términos y Condiciones",
     "privacy": "Política de Privacidad",
+    "explore": {
+      "title": "Explorar"
+    },
+    "certifications": {
+      "organic": "Certificado Orgánico",
+      "sustainable": "Abastecimiento Sostenible"
+    },
     "info": {
       "title": "Información",
       "about": "Acerca de Nosotros",
@@ -1317,10 +1333,15 @@
       "placeholder": "Tu correo electrónico",
       "button": "Suscribirse",
       "submitting": "Suscribiendo...",
-      "success": "¡Suscripción exitosa!",
-      "successDescription": "Gracias por suscribirte con {email}",
-      "error": "Suscripción fallida",
-      "errorDescription": "Por favor, inténtalo de nuevo más tarde"
+      "success": {
+        "title": "¡Suscripción exitosa!",
+        "message": "Gracias por suscribirte con {email}"
+      },
+      "error": {
+        "title": "Suscripción fallida",
+        "message": "Por favor, inténtalo de nuevo más tarde",
+        "invalidEmail": "Por favor, introduce un correo electrónico válido"
+      }
     },
     "trust": {
       "title": "Confianza y Seguridad",

@@ -1031,11 +1031,19 @@
       }
     },
     "newsletter": {
+      "headline": "Enter the World of Moldova Direct",
       "title": "Stay on top of new drops",
       "subtitle": "Be the first to hear about seasonal releases, pairing guides, and invitations to private tastings.",
-      "placeholder": "Enter your email address",
-      "cta": "Join the list",
-      "success": "Thank you! Look for our next dispatch in your inbox.",
+      "description": "Be the first to discover limited releases, exclusive pairings and insider stories from our artisan partners. Plus, enjoy special perks reserved for our community.",
+      "placeholder": "Your email address",
+      "cta": "Join",
+      "submitting": "Joining...",
+      "success": "Subscribed!",
+      "success_message": "Welcome to our community! Check your inbox for a special welcome gift.",
+      "benefit1": "Exclusive Releases",
+      "benefit2": "Insider Stories",
+      "benefit3": "Special Perks",
+      "privacy": "We respect your privacy. Unsubscribe at any time.",
       "disclaimer": "We send one or two emails per month and you can unsubscribe at any time."
     },
     "faqPreview": {
@@ -1302,6 +1310,7 @@
     "commonProduct": "this product"
   },
   "footer": {
+    "tagline": "Curating the finest treasures from Moldovan soil to your table since 1950",
     "terms": "Terms and Conditions",
     "privacy": "Privacy Policy",
     "info": {
@@ -1318,6 +1327,13 @@
       "returns": "Returns",
       "track": "Track Order"
     },
+    "explore": {
+      "title": "Explore"
+    },
+    "certifications": {
+      "organic": "Organic Certified",
+      "sustainable": "Sustainable Sourcing"
+    },
     "social": {
       "title": "Follow Us",
       "facebook": "Facebook",
@@ -1330,10 +1346,15 @@
       "placeholder": "Your email",
       "button": "Subscribe",
       "submitting": "Subscribing...",
-      "success": "Successfully subscribed!",
-      "successDescription": "Thank you for subscribing with {email}",
-      "error": "Subscription failed",
-      "errorDescription": "Please try again later"
+      "success": {
+        "title": "Successfully subscribed!",
+        "message": "Thank you for subscribing with {email}"
+      },
+      "error": {
+        "title": "Subscription failed",
+        "message": "Please try again later",
+        "invalidEmail": "Please enter a valid email address"
+      }
     },
     "trust": {
       "title": "Trust & Security",
