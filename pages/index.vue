@@ -5,23 +5,23 @@
       <HomeLuxuryVideoHero />
     </section>
 
-    <!-- 2. Press Mentions Bar (Infinite Scroll) -->
-    <section class="c-section c-section__media-mentions" style="background-color: #FFFFFF;">
-      <HomeLuxuryMediaMentions />
-    </section>
-
-    <!-- 3. Origin Story Section -->
-    <section class="c-section c-section__origin-story" style="background-color: #FCFAF2;">
-      <HomeLuxuryOriginStory />
-    </section>
-
-    <!-- 4. First Product Carousel (Signature Collections) -->
+    <!-- 2. First Product Carousel (Signature Collections) -->
     <section class="c-section c-section__products-carousel" style="background-color: #FCFAF2;">
       <HomeLuxuryProductShowcase
         :featured="true"
         title="Signature Collections"
         eyebrow="Curated Selection"
       />
+    </section>
+
+    <!-- 3. Origin Story / Nuestra Herencia Section -->
+    <section class="c-section c-section__origin-story" style="background-color: #FFFFFF;">
+      <HomeLuxuryOriginStory />
+    </section>
+
+    <!-- 4. Press Mentions Bar (Infinite Scroll) -->
+    <section class="c-section c-section__media-mentions" style="background-color: #FCFAF2;">
+      <HomeLuxuryMediaMentions />
     </section>
 
     <!-- 5. Collection Grid -->
