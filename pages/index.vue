@@ -184,12 +184,6 @@
 
     <!-- FAQ preview -->
     <LazyHomeFaqPreviewSection v-if="isSectionEnabled('faqPreview')" :items="faqItems" />
-
-    <!-- Story section moved to About page -->
-    <!-- <HomeStorySection :points="storyPoints" :timeline="storyTimeline" /> -->
-
-    <!-- Real-time purchase notifications (Gymshark/Fomo pattern) - DISABLED: Fake purchase data -->
-    <LazyUiRealtimeNotification v-if="isSectionEnabled('realtimeNotification')" />
   </div>
 </template>
 
