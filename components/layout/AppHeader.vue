@@ -87,9 +87,10 @@
         </div>
       </div>
     </div>
+  </header>
 
-    <!-- Full-Screen Navigation Menu (To'ak style) -->
-    <Transition
+  <!-- Full-Screen Navigation Menu (To'ak style) - Outside header to prevent clipping -->
+  <Transition
       enter-active-class="transition ease-out duration-300"
       enter-from-class="opacity-0"
       enter-to-class="opacity-100"
@@ -318,7 +319,6 @@
         </div>
       </div>
     </Transition>
-  </header>
 </template>
 
 <script setup lang="ts">
