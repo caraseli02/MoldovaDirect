@@ -3,13 +3,34 @@
     <!-- Promotional announcement bar -->
     <HomeAnnouncementBar v-if="isSectionEnabled('announcementBar')" :show-cta="true" />
 
-    <!-- Hero section with video background (Rhode Skin/To'ak pattern) -->
+    <!--
+      Hero Section - 3 Display Modes Available:
+
+      1. GRADIENT MODE (current fallback):
+         - Remove background-image prop
+         - Set :show-video="false"
+         - Uses wine-burgundy gradient with decorative elements
+
+      2. IMAGE MODE (currently active - DEMO):
+         - Set background-image to image URL
+         - Set :show-video="false"
+         - Demo: Unsplash vineyard image (replace with your own)
+         - Production: Use /public/images/hero/your-image.webp
+
+      3. VIDEO MODE:
+         - Set :show-video="true"
+         - Provide video-webm and video-mp4 sources
+         - Add poster-image for loading state
+         - Note: Ensure videos exist in /public/videos/
+    -->
     <HomeVideoHero
       v-if="isSectionEnabled('videoHero')"
       :show-video="false"
       video-webm="/videos/hero.webm"
       video-mp4="/videos/hero.mp4"
       poster-image="/images/hero-poster.jpg"
+      background-image="https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=1920&q=85&fit=crop&auto=format"
+      background-image-alt="Moldova vineyard landscape with rolling hills at golden hour"
       :badge="t('home.hero.trustBadge')"
       badge-icon="lucide:shield-check"
       :title="t('home.hero.title')"
@@ -254,13 +275,16 @@ useLandingSeo({
 })
 
 // Preload hero image for optimal LCP performance
+// Demo placeholder: Using Unsplash vineyard image
+// Replace with your own image in /public/images/hero/ for production
 useHead({
   link: [
     {
       rel: 'preload',
       as: 'image',
-      href: '/images/hero-poster.jpg',
-      fetchpriority: 'high'
+      href: 'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=1920&q=85&fit=crop&auto=format',
+      fetchpriority: 'high',
+      type: 'image/webp'
     }
   ]
 })
