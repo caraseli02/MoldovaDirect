@@ -52,11 +52,6 @@
     <section class="c-section c-section__blog-posts" style="background-color: #FFFFFF;">
       <HomeFeaturedStories />
     </section>
-
-    <!-- 10. Newsletter Signup -->
-    <section class="c-section c-section__newsletter" style="background-color: #FCFAF2;">
-      <HomeNewsletterSignup />
-    </section>
   </div>
 </template>
 
