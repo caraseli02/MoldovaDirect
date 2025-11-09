@@ -100,10 +100,10 @@
       <div
         v-if="mobileMenuOpen"
         id="nav-menu"
-        class="fixed inset-0 bg-[#FCFAF2]/95 backdrop-blur-sm z-50 overflow-y-auto"
+        class="fixed inset-0 bg-[#FCFAF2]/95 backdrop-blur-sm z-[100] overflow-y-auto"
       >
         <!-- Close Button (Fixed Top Right) -->
-        <div class="fixed top-4 right-4 z-10">
+        <div class="fixed top-4 right-4 z-[110]">
           <button
             type="button"
             @click="toggleMobileMenu"
