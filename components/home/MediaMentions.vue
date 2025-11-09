@@ -1,5 +1,5 @@
 <template>
-  <section class="border-y border-gray-200 bg-white py-8 dark:border-gray-800 dark:bg-gray-950">
+  <section class="border-y border-brand-light/15 bg-brand-light/5 py-12 backdrop-blur-sm dark:border-brand-dark/30 dark:bg-brand-dark/20">
     <div class="container">
       <!-- Header -->
       <div
@@ -10,9 +10,9 @@
           y: 0,
           transition: { duration: 500 },
         }"
-        class="mb-8 text-center"
+        class="mb-10 text-center"
       >
-        <p class="text-sm font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-400">
+        <p class="text-sm font-medium uppercase tracking-[0.15em] text-brand-dark/70 dark:text-brand-light/70">
           {{ t('home.mediaMentions.title') }}
         </p>
       </div>
@@ -46,7 +46,7 @@
               type="button"
               :aria-label="`${mention.name}: ${mention.quote}`"
               :title="mention.quote"
-              class="flex h-16 w-full items-center justify-center rounded-lg px-6 transition-all duration-300 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 dark:hover:bg-gray-900"
+              class="flex h-16 w-full items-center justify-center rounded-lg px-6 transition-all duration-300 hover:bg-brand-light/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 dark:hover:bg-brand-dark/30"
             >
               <!-- If image URL provided, show image with aspect ratio -->
               <NuxtImg
@@ -60,10 +60,10 @@
                 loading="lazy"
               />
 
-              <!-- If no image, show text -->
+              <!-- If no image, show text with luxury styling -->
               <span
                 v-else
-                class="text-lg font-bold text-gray-400 transition-colors duration-300 group-hover:text-gray-600 group-focus-visible:text-gray-600 dark:text-gray-600 dark:group-hover:text-gray-400 dark:group-focus-visible:text-gray-400"
+                class="text-lg font-semibold tracking-tight text-brand-dark/50 transition-colors duration-300 group-hover:text-brand-dark group-focus-visible:text-brand-dark dark:text-brand-light/50 dark:group-hover:text-brand-light dark:group-focus-visible:text-brand-light"
               >
                 {{ mention.name }}
               </span>
@@ -86,23 +86,23 @@
                 loading="lazy"
               />
 
-              <!-- If no image, show text -->
+              <!-- If no image, show text with luxury styling -->
               <span
                 v-else
-                class="text-lg font-bold text-gray-400 dark:text-gray-600"
+                class="text-lg font-semibold tracking-tight text-brand-dark/50 dark:text-brand-light/50"
               >
                 {{ mention.name }}
               </span>
             </div>
 
-            <!-- Quote Tooltip (accessible on hover and focus) -->
+            <!-- Luxury quote tooltip with refined styling -->
             <div
               v-if="mention.quote"
-              class="pointer-events-none absolute -bottom-2 left-1/2 z-10 w-64 -translate-x-1/2 translate-y-full rounded-lg bg-gray-900 p-4 text-sm text-white opacity-0 shadow-xl transition-opacity duration-300 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100 dark:bg-white dark:text-gray-900"
+              class="pointer-events-none absolute -bottom-2 left-1/2 z-10 w-64 -translate-x-1/2 translate-y-full rounded-lg border border-brand-light/10 bg-brand-dark p-4 text-sm text-brand-light opacity-0 shadow-elevated-lg backdrop-blur-md transition-opacity duration-300 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100 dark:border-brand-dark/20 dark:bg-brand-light dark:text-brand-dark"
               role="tooltip"
             >
-              <p class="italic">"{{ mention.quote }}"</p>
-              <div class="absolute -top-2 left-1/2 h-4 w-4 -translate-x-1/2 rotate-45 bg-gray-900 dark:bg-white"></div>
+              <p class="italic leading-relaxed">"{{ mention.quote }}"</p>
+              <div class="absolute -top-2 left-1/2 h-4 w-4 -translate-x-1/2 rotate-45 border-l border-t border-brand-light/10 bg-brand-dark dark:border-brand-dark/20 dark:bg-brand-light"></div>
             </div>
           </div>
         </div>
@@ -120,7 +120,7 @@
         }"
         class="mt-12 flex flex-wrap items-center justify-center gap-6"
       >
-        <div class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+        <div class="flex items-center gap-2 text-sm font-medium text-brand-dark/70 dark:text-brand-light/70">
           <commonIcon name="lucide:sparkles" class="h-5 w-5" />
           <span>{{ t('home.mediaMentions.featuredIn') }}</span>
         </div>
@@ -130,7 +130,7 @@
             :key="platform.name"
             type="button"
             :aria-label="`Follow us on ${platform.name}`"
-            class="flex min-h-[44px] items-center gap-2 rounded-full bg-gray-100 px-6 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+            class="flex min-h-[44px] items-center gap-2 rounded-full border border-brand-light/20 bg-brand-light/10 px-6 py-3 text-sm font-medium tracking-wide text-brand-dark backdrop-blur-sm transition-all hover:border-brand-light/30 hover:bg-brand-light/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 dark:border-brand-dark/20 dark:bg-brand-dark/10 dark:text-brand-light dark:hover:border-brand-dark/30 dark:hover:bg-brand-dark/20"
           >
             <commonIcon :name="platform.icon" class="h-4 w-4" />
             <span>{{ platform.name }}</span>
