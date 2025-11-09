@@ -75,6 +75,8 @@ export function useCountUp(target: number | Ref<number>, options: CountUpOptions
   }
 
   // Format number with separators
+  // NOTE: This is a legacy/fallback formatter. Most consumers format the value themselves.
+  // Only used as a fallback when no custom formatting is needed.
   const formatted = computed(() => {
     const num = current.value.toString()
     const parts = num.split('.')

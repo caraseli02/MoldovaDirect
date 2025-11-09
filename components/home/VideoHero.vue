@@ -13,7 +13,6 @@
           :poster="posterImage"
           class="h-full w-full object-cover"
           aria-hidden="true"
-          @loadeddata="videoLoaded = true"
         >
           <source v-if="videoWebM" :src="videoWebM" type="video/webm" />
           <source v-if="videoMp4" :src="videoMp4" type="video/mp4" />
@@ -45,15 +44,6 @@
           <!-- Radial Highlights for Visual Interest -->
           <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.08),_transparent_50%)]" />
           <div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,_rgba(198,141,37,0.12),_transparent_60%)]" />
-
-          <!-- Decorative Wine Bottle Silhouettes (Subtle) -->
-          <div class="absolute bottom-0 right-0 h-[60%] w-[40%] opacity-[0.03]">
-            <div class="absolute bottom-0 right-[20%] h-[80%] w-16 rounded-t-full bg-white blur-sm" />
-            <div class="absolute bottom-0 right-[35%] h-[70%] w-14 rounded-t-full bg-white blur-sm" />
-          </div>
-
-          <!-- Dot Pattern Overlay (Brightland inspired) -->
-          <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 40px 40px;" />
         </div>
       </div>
 
@@ -252,7 +242,6 @@ const props = withDefaults(
 )
 
 const videoRef = ref<HTMLVideoElement | null>(null)
-const videoLoaded = ref(false)
 
 onMounted(() => {
   // Ensure video plays on mobile devices
@@ -265,12 +254,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* Ensure minimum touch target sizes on mobile */
-.cta-button {
-  min-height: 44px;
-  min-width: 44px;
-}
-
 /* Smooth fade-in for video */
 video {
   animation: videoFadeIn 0.8s ease-in;
