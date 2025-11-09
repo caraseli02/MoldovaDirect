@@ -39,6 +39,11 @@
 }
 
 :root {
+  /* Moldova Direct Luxury Brand Colors - To'ak Inspired */
+  --brand-dark: #241405;
+  --brand-light: #FCFAF2;
+  --brand-accent: #722F37;
+
   --background: hsl(0 0% 100%);
   --foreground: hsl(222.2 84% 4.9%);
 
@@ -123,6 +128,11 @@
 }
 
 @theme inline {
+  /* Luxury Brand Colors - To'ak Inspired */
+  --color-brand-dark: var(--brand-dark);
+  --color-brand-light: var(--brand-light);
+  --color-brand-accent: var(--brand-accent);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
