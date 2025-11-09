@@ -9,8 +9,8 @@ const mockToastError = vi.fn()
 
 vi.mock('vue-sonner', () => ({
   toast: {
-    success: mockToastSuccess,
-    error: mockToastError,
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }))
 
