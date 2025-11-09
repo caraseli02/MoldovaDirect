@@ -1,46 +1,38 @@
 <template>
-  <div class="text-gray-900 dark:text-gray-100">
-    <!-- Promotional announcement bar -->
-    <HomeAnnouncementBar :show-cta="true" />
+  <div class="landing-page">
+    <!-- Media Mentions Bar - Above fold -->
+    <LandingMediaMentionsBar />
 
-    <!-- Hero section with main value proposition -->
-    <HomeHeroSection :highlights="heroHighlights" />
+    <!-- Hero Section with Video Background -->
+    <LandingHeroSection @open-quiz="openQuiz" />
 
-    <!-- Quick category navigation for immediate browsing -->
-    <HomeCategoryGrid :categories="categoryCards" />
+    <!-- Trust Badges - Immediate social proof -->
+    <LandingTrustBadges />
 
-    <!-- Featured products - primary conversion driver -->
-    <HomeFeaturedProductsSection
-      :products="featuredProducts"
-      :pending="featuredPending"
-      :error="featuredErrorState"
-      @retry="refreshFeatured"
+    <!-- Stats Counter - Animated numbers -->
+    <LandingStatsCounter />
+
+    <!-- Product Carousel - Featured products -->
+    <LandingProductCarousel :products="featuredProducts" />
+
+    <!-- Quiz CTA - Mid-page conversion driver -->
+    <LandingQuizCTA @start-quiz="openQuiz" />
+
+    <!-- UGC Gallery - Customer photos -->
+    <LandingUGCGallery />
+
+    <!-- Featured Collections - Category showcase -->
+    <LandingFeaturedCollections />
+
+    <!-- Newsletter Signup - Email capture -->
+    <LandingNewsletterSignup />
+
+    <!-- Quiz Modal - Appears when triggered -->
+    <QuizModal
+      :is-open="isQuizOpen"
+      @close="closeQuiz"
+      @complete="handleQuizComplete"
     />
-
-    <!-- Premium collections showcase -->
-    <HomeCollectionsShowcase />
-
-    <!-- Social proof and trust signals -->
-    <HomeSocialProofSection
-      :highlights="heroHighlights"
-      :logos="partnerLogos"
-      :testimonials="testimonials"
-    />
-
-    <!-- Process explanation -->
-    <HomeHowItWorksSection :steps="howItWorksSteps" />
-
-    <!-- Service offerings -->
-    <HomeServicesSection :services="services" />
-
-    <!-- Newsletter signup -->
-    <HomeNewsletterSignup />
-
-    <!-- FAQ preview -->
-    <HomeFaqPreviewSection :items="faqItems" />
-
-    <!-- Story section moved to About page -->
-    <!-- <HomeStorySection :points="storyPoints" :timeline="storyTimeline" /> -->
   </div>
 </template>
 
@@ -48,24 +40,28 @@
 import type { ProductWithRelations } from '~/types'
 import { CONTACT_INFO } from '~/constants/seo'
 
-const { locale } = useI18n()
-const {
-  heroHighlights,
-  categoryCards,
-  howItWorksSteps,
-  testimonials,
-  partnerLogos,
-  storyPoints,
-  storyTimeline,
-  services,
-  faqItems
-} = useHomeContent()
+interface QuizAnswer {
+  categoryId: string | null
+  experienceLevel: string | null
+  budgetRange: string | null
+  occasion: string | null
+}
 
-const { data: featuredData, pending: featuredPending, error: featuredError, refresh: refreshFeatured } = await useFetch(
+// SEO Meta Tags - Public landing page, no auth required
+definePageMeta({
+  layout: 'default',
+  auth: false
+})
+
+const { locale } = useI18n()
+const { siteUrl, toAbsoluteUrl } = useSiteUrl()
+
+// Fetch featured products from API
+const { data: featuredData } = await useFetch(
   '/api/products/featured',
   {
     query: {
-      limit: 12,
+      limit: 8,
       locale: locale.value
     },
     server: true,
@@ -74,10 +70,8 @@ const { data: featuredData, pending: featuredPending, error: featuredError, refr
 )
 
 const featuredProducts = computed<ProductWithRelations[]>(() => featuredData.value?.products || [])
-const featuredErrorState = computed<Error | null>(() => (featuredError.value as Error | null) ?? null)
 
-const { siteUrl, toAbsoluteUrl } = useSiteUrl()
-
+// Structured data for SEO
 const structuredData = [
   {
     '@context': 'https://schema.org',
@@ -85,13 +79,27 @@ const structuredData = [
     name: 'Moldova Direct',
     url: siteUrl,
     logo: toAbsoluteUrl('/icon.svg'),
+    description: 'Premium Moldovan wines and gourmet foods delivered across Spain',
     contactPoint: [
       {
         '@type': 'ContactPoint',
         telephone: CONTACT_INFO.PHONE,
         contactType: 'customer service',
-        areaServed: 'ES'
+        areaServed: 'ES',
+        availableLanguage: ['Spanish', 'English']
       }
+    ],
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.9',
+      reviewCount: '2400',
+      bestRating: '5',
+      worstRating: '1'
+    },
+    sameAs: [
+      'https://www.facebook.com/moldovadirect',
+      'https://www.instagram.com/moldovadirect',
+      'https://twitter.com/moldovadirect'
     ]
   },
   {
@@ -107,20 +115,72 @@ const structuredData = [
   }
 ]
 
+// Use proper SEO composable
 useLandingSeo({
-  title: 'Moldova Direct – Taste Moldova in Every Delivery',
-  description:
-    'Shop curated Moldovan wines, gourmet foods, and gift hampers with fast delivery across Spain. Discover artisan producers and authentic flavours.',
+  title: 'Moldova Direct – Authentic Moldovan Wines & Gourmet Foods',
+  description: 'Discover 5,000 years of winemaking tradition with our curated collection of premium Moldovan wines and gourmet delicacies. Free shipping on orders over €75.',
   image: '/icon.svg',
-  imageAlt: 'Selection of Moldovan delicacies delivered across Spain',
+  imageAlt: 'Moldova Direct - Premium Moldovan wines and artisanal foods',
   pageType: 'website',
   keywords: [
-    'Moldovan wine delivery',
-    'Moldovan gourmet food Spain',
+    'Moldovan wine delivery Spain',
+    'Moldovan gourmet food',
     'authentic Moldovan products',
-    'Moldova Direct store'
+    'premium wines Spain',
+    'artisanal foods',
+    'Purcari wine',
+    'Cricova sparkling wine',
+    'Moldova Direct'
   ],
   structuredData
 })
+
+// Quiz modal state
+const isQuizOpen = ref(false)
+
+const openQuiz = () => {
+  isQuizOpen.value = true
+
+  // Track analytics
+  if (typeof window !== 'undefined' && (window as any).gtag) {
+    ;(window as any).gtag('event', 'quiz_opened', {
+      event_category: 'engagement',
+      event_label: 'product_quiz'
+    })
+  }
+}
+
+const closeQuiz = () => {
+  isQuizOpen.value = false
+}
+
+const handleQuizComplete = (answers: QuizAnswer) => {
+  // Track completion
+  if (typeof window !== 'undefined' && (window as any).gtag) {
+    ;(window as any).gtag('event', 'quiz_completed', {
+      event_category: 'conversion',
+      event_label: 'product_quiz',
+      value: 1
+    })
+  }
+
+  // Close the modal
+  closeQuiz()
+
+  // Redirect to products with quiz results
+  const params = new URLSearchParams()
+  if (answers.categoryId) params.append('category', answers.categoryId)
+  if (answers.experienceLevel) params.append('experience', answers.experienceLevel)
+  if (answers.budgetRange) params.append('budget', answers.budgetRange)
+  if (answers.occasion) params.append('occasion', answers.occasion)
+
+  navigateTo(`/products?${params.toString()}`)
+}
 </script>
 
+<style scoped>
+.landing-page {
+  /* Full width sections, no max-width constraint */
+  width: 100%;
+}
+</style>

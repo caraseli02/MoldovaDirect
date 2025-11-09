@@ -1,14 +1,14 @@
 <template>
-  <div class="media-mentions-bar bg-cream-50 py-4 border-b border-cream-200">
+  <div class="media-mentions-bar border-b border-cream-200 bg-cream-50 py-3 sm:py-4">
     <div class="container mx-auto px-4">
-      <p class="text-center text-sm text-gray-600 mb-3 uppercase tracking-wider">
+      <p class="mb-2 text-center text-xs uppercase tracking-wider text-gray-600 sm:mb-3 sm:text-sm">
         {{ t('landing.mediaMentions.heading') }}
       </p>
 
       <div class="mentions-carousel relative overflow-hidden">
         <div
           ref="carouselTrack"
-          class="flex gap-8 md:gap-12 animate-scroll"
+          class="animate-scroll flex gap-6 sm:gap-8 md:gap-12"
           :style="{ animationDuration: `${duration}s` }"
         >
           <!-- First set of logos -->
@@ -21,15 +21,15 @@
               :href="mention.url"
               target="_blank"
               rel="noopener noreferrer"
-              class="block grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100"
+              class="block opacity-60 grayscale transition-all duration-300 hover:opacity-100 hover:grayscale-0"
               :aria-label="`Read article on ${mention.name}`"
             >
               <NuxtImg
                 :src="mention.logo"
                 :alt="`${mention.name} logo`"
-                width="120"
-                height="40"
-                class="h-8 w-auto object-contain"
+                width="100"
+                height="32"
+                class="h-6 w-auto object-contain sm:h-7 md:h-8"
                 loading="lazy"
               />
             </a>
@@ -46,15 +46,15 @@
               :href="mention.url"
               target="_blank"
               rel="noopener noreferrer"
-              class="block grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100"
+              class="block opacity-60 grayscale transition-all duration-300 hover:opacity-100 hover:grayscale-0"
               tabindex="-1"
             >
               <NuxtImg
                 :src="mention.logo"
                 :alt="`${mention.name} logo`"
-                width="120"
-                height="40"
-                class="h-8 w-auto object-contain"
+                width="100"
+                height="32"
+                class="h-6 w-auto object-contain sm:h-7 md:h-8"
                 loading="lazy"
               />
             </a>

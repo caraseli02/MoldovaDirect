@@ -1,38 +1,40 @@
 <template>
-  <section class="newsletter-signup py-20 bg-gradient-to-br from-rose-600 to-purple-700 text-white">
-    <div class="container mx-auto px-4">
-      <div class="max-w-3xl mx-auto text-center">
-        <h2 class="text-3xl md:text-4xl font-bold mb-4">
+  <section class="newsletter-signup bg-gradient-to-br from-rose-600 to-purple-700 py-16 sm:py-20 md:py-24 text-white">
+    <div class="container mx-auto px-8 sm:px-10 md:px-12 lg:px-16">
+      <div class="mx-auto max-w-3xl text-center">
+        <h2 class="mb-8 text-3xl font-bold leading-tight tracking-wide sm:mb-10 sm:text-4xl md:mb-12 md:text-5xl">
           {{ t('landing.newsletter.heading') }}
         </h2>
-        <p class="text-lg text-rose-100 mb-8">
+        <p class="mb-10 text-base leading-relaxed text-rose-100 sm:mb-12 sm:text-lg md:mb-14 md:text-xl">
           {{ t('landing.newsletter.subheading') }}
         </p>
 
-        <form @submit.prevent="handleSubmit" class="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto">
+        <form @submit.prevent="handleSubmit" class="mx-auto flex max-w-xl flex-col gap-4 sm:flex-row sm:gap-4">
           <input
             v-model="email"
             type="email"
+            inputmode="email"
+            autocomplete="email"
             required
             :placeholder="t('landing.newsletter.placeholder')"
             :aria-label="t('landing.newsletter.placeholder')"
-            class="flex-1 px-6 py-4 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white"
+            class="min-h-[52px] flex-1 rounded-xl border border-white/30 bg-white/10 px-6 py-4 text-base text-white placeholder-white/70 backdrop-blur-md transition-all duration-200 focus:border-white focus:bg-white/15 focus:outline-none focus:ring-2 focus:ring-white/50"
           />
           <button
             type="submit"
             :disabled="isSubmitting"
-            class="px-8 py-4 bg-white text-purple-700 font-semibold rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-105 active:scale-95"
+            class="min-h-[52px] rounded-xl bg-white px-8 py-4 font-semibold text-purple-700 shadow-lg transition-all duration-200 active:scale-[0.98] hover:bg-gray-100 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50 sm:px-10"
           >
             {{ isSubmitting ? t('landing.newsletter.submitting') : t('landing.newsletter.submit') }}
           </button>
         </form>
 
-        <div v-if="successMessage || errorMessage" class="mt-4" role="alert" aria-live="polite">
-          <p v-if="successMessage" class="text-green-200 font-medium">{{ successMessage }}</p>
-          <p v-if="errorMessage" class="text-red-200 font-medium">{{ errorMessage }}</p>
+        <div v-if="successMessage || errorMessage" class="mt-6" role="alert" aria-live="polite">
+          <p v-if="successMessage" class="text-green-200 font-medium text-base">{{ successMessage }}</p>
+          <p v-if="errorMessage" class="text-red-200 font-medium text-base">{{ errorMessage }}</p>
         </div>
 
-        <p class="text-sm text-rose-200 mt-6">
+        <p class="mt-8 text-sm text-rose-200 sm:mt-10">
           {{ t('landing.newsletter.privacy') }}
         </p>
       </div>

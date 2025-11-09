@@ -2075,6 +2075,42 @@
       "products": "Productos Premium",
       "rating": "Puntuación Media",
       "countries": "Países Servidos"
+    },
+    "products": {
+      "heading": "Productos Destacados",
+      "subheading": "Descubre nuestra selección curada de vinos y productos moldavos premium",
+      "shopNow": "Comprar Ahora",
+      "viewAllCta": "Ver Todos los Productos"
+    },
+    "newsletter": {
+      "heading": "Suscríbete a Nuestra Newsletter",
+      "subheading": "Recibe ofertas exclusivas, consejos de vinos y novedades directamente en tu bandeja de entrada",
+      "placeholder": "Tu correo electrónico",
+      "submit": "Suscribirse",
+      "submitting": "Enviando...",
+      "privacy": "No spam, darse de baja en cualquier momento",
+      "success": "¡Gracias por suscribirte! Revisa tu correo para confirmar.",
+      "error": "Error al suscribirse. Por favor, inténtalo de nuevo."
+    },
+    "ugc": {
+      "heading": "Experiencias de Nuestros Clientes",
+      "subheading": "Mira cómo nuestros clientes disfrutan de los sabores auténticos de Moldavia",
+      "hashtag": "#MoldovaDirectExperience",
+      "shareCta": "Comparte Tu Experiencia"
+    },
+    "collections": {
+      "heading": "Explora Nuestras Colecciones",
+      "subheading": "Descubre colecciones curadas para cada ocasión",
+      "explore": "Explorar"
+    },
+    "quiz": {
+      "badge": "Encuentra Tu Vino Perfecto",
+      "heading": "¿No Estás Seguro Por Dónde Empezar?",
+      "subheading": "Responde nuestro quiz de 60 segundos y obtén recomendaciones personalizadas basadas en tus preferencias",
+      "ctaButton": "Iniciar Quiz",
+      "duration": "2 minutos",
+      "completion": "Recomendaciones personalizadas",
+      "privacy": "100% privado"
     }
   }
 }

@@ -2052,12 +2052,12 @@
   },
   "landing": {
     "quiz": {
-      "badge": "Personalized Recommendations",
-      "heading": "Find Your Perfect Match",
-      "subheading": "Take our 2-minute quiz and discover wines handpicked for your taste",
-      "ctaButton": "Take the Quiz",
+      "badge": "Find Your Perfect Wine",
+      "heading": "Not Sure Where to Start?",
+      "subheading": "Take our 60-second quiz and get personalized recommendations based on your preferences",
+      "ctaButton": "Start Quiz",
       "duration": "2 minutes",
-      "completion": "10,000+ completed",
+      "completion": "Personalized recommendations",
       "privacy": "100% private"
     },
     "hero": {
@@ -2099,25 +2099,31 @@
       "countries": "Countries Served"
     },
     "products": {
-      "heading": "Curated Collection",
-      "subheading": "Discover our hand-picked selection of premium Moldovan wines and artisanal foods",
-      "viewAllCta": "View All Products",
-      "shopNow": "Shop Now"
+      "heading": "Featured Products",
+      "subheading": "Discover our curated selection of premium Moldovan wines and products",
+      "shopNow": "Shop Now",
+      "viewAllCta": "View All Products"
     },
     "ugc": {
-      "heading": "Join Our Community",
-      "subheading": "See how our customers enjoy authentic Moldova delivered to their homes",
-      "hashtag": "Tag us on Instagram",
-      "shareCta": "Share Your Photo"
+      "heading": "Customer Experiences",
+      "subheading": "See how our customers enjoy authentic Moldovan flavors",
+      "hashtag": "#MoldovaDirectExperience",
+      "shareCta": "Share Your Experience"
     },
-    "quiz": {
-      "badge": "Personalized Recommendations",
-      "heading": "Find Your Perfect Match",
-      "subheading": "Take our 2-minute quiz and discover wines handpicked for your taste",
-      "ctaButton": "Take the Quiz",
-      "duration": "2 minutes",
-      "completion": "10,000+ completed",
-      "privacy": "100% private"
+    "newsletter": {
+      "heading": "Subscribe to Our Newsletter",
+      "subheading": "Receive exclusive offers, wine tips, and updates directly to your inbox",
+      "placeholder": "Your email address",
+      "submit": "Subscribe",
+      "submitting": "Submitting...",
+      "privacy": "No spam, unsubscribe anytime",
+      "success": "Thanks for subscribing! Check your email to confirm.",
+      "error": "Error subscribing. Please try again."
+    },
+    "collections": {
+      "heading": "Explore Our Collections",
+      "subheading": "Discover curated collections for every occasion",
+      "explore": "Explore"
     }
   },
   "quiz": {

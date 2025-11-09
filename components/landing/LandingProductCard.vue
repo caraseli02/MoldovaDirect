@@ -1,70 +1,73 @@
 <template>
-  <div class="product-card group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 h-full flex flex-col">
+  <div class="product-card group flex h-full flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:border-gray-900 hover:shadow-lg active:scale-[0.99]">
     <!-- Product Image -->
-    <NuxtLink :to="localePath(`/products/${product.slug}`)" class="block relative aspect-square overflow-hidden bg-gray-100">
+    <NuxtLink :to="localePath(`/products/${product.slug}`)" class="relative block aspect-square overflow-hidden bg-gray-100 active:opacity-95">
       <NuxtImg
         :src="product.image"
-        :alt="product.name"
-        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+        :alt="typeof product.name === 'string' ? product.name : product.name?.en || 'Product image'"
+        class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
         loading="lazy"
         :width="400"
         :height="400"
         format="webp"
         quality="80"
+        sizes="xs:340px sm:300px md:220px lg:280px xl:320px"
+        :style="{ aspectRatio: '1/1' }"
       />
 
-      <!-- Quick Add Badge (Desktop Hover) -->
-      <div class="absolute top-4 right-4">
+      <!-- Quick Add Badge (Desktop Hover, Mobile Always Visible) -->
+      <div class="absolute right-3 top-3 sm:right-4 sm:top-4">
         <button
+          type="button"
           @click.prevent="addToCart(product.id)"
-          class="w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg hover:bg-white hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-600 focus-visible:ring-offset-2"
+          class="flex h-11 w-11 items-center justify-center rounded-full bg-white/95 shadow-lg backdrop-blur-sm transition-all duration-150 active:scale-95 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-600 focus-visible:ring-offset-2 sm:opacity-0 sm:group-hover:opacity-100"
           :aria-label="`Add ${product.name} to cart`"
         >
-          <commonIcon name="lucide:shopping-cart" class="w-5 h-5 text-gray-900" />
+          <commonIcon name="lucide:shopping-cart" class="h-5 w-5 text-gray-900" />
         </button>
       </div>
     </NuxtLink>
 
     <!-- Product Info -->
-    <div class="p-6 flex flex-col flex-grow">
+    <div class="flex flex-grow flex-col bg-white p-4 sm:p-5 md:p-6">
       <!-- Benefits Pills -->
-      <div class="flex flex-wrap gap-2 mb-3">
+      <div v-if="product.benefits && product.benefits.length > 0" class="mb-2.5 flex flex-wrap gap-1.5 sm:mb-3 sm:gap-2">
         <span
           v-for="benefit in product.benefits.slice(0, 2)"
           :key="benefit"
-          class="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-medium rounded-full"
+          class="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800 sm:px-2.5 sm:py-1"
         >
           {{ benefit }}
         </span>
       </div>
 
       <!-- Product Name -->
-      <h3 class="text-lg font-semibold mb-2 line-clamp-2 flex-grow">
+      <h3 class="mb-2 flex-grow text-center text-base font-semibold leading-snug text-gray-900 line-clamp-2 sm:text-lg">
         <NuxtLink
           :to="localePath(`/products/${product.slug}`)"
-          class="hover:text-rose-600 transition-colors focus-visible:outline-none focus-visible:underline"
+          class="transition-colors hover:text-rose-600 focus-visible:underline focus-visible:outline-none"
         >
-          {{ product.name }}
+          {{ typeof product.name === 'string' ? product.name : product.name?.en || product.name }}
         </NuxtLink>
       </h3>
 
       <!-- Rating -->
-      <div class="flex items-center gap-2 mb-3">
+      <div class="mb-3 flex items-center gap-1.5 sm:gap-2">
         <div class="flex items-center">
-          <commonIcon name="lucide:star" class="w-4 h-4 text-amber-400 fill-amber-400" />
-          <span class="text-sm font-medium ml-1">{{ product.rating }}</span>
+          <commonIcon name="lucide:star" class="h-3.5 w-3.5 fill-amber-400 text-amber-400 sm:h-4 sm:w-4" />
+          <span class="ml-1 text-xs font-medium sm:text-sm">{{ product.rating }}</span>
         </div>
-        <span class="text-sm text-gray-500">({{ product.reviewCount }})</span>
+        <span class="text-xs text-gray-500 sm:text-sm">({{ product.reviewCount }})</span>
       </div>
 
       <!-- Price & CTA -->
-      <div class="flex items-center justify-between mt-auto">
-        <span class="text-2xl font-bold text-gray-900">
+      <div class="mt-auto flex items-center justify-between gap-2">
+        <span class="text-xl font-bold text-gray-900 sm:text-2xl">
           €{{ product.price.toFixed(2) }}
         </span>
         <NuxtLink
           :to="localePath(`/products/${product.slug}`)"
-          class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-sm font-semibold rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-600 focus-visible:ring-offset-2"
+          class="inline-flex min-h-[48px] items-center rounded-lg bg-rose-600 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-150 active:scale-95 hover:bg-rose-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-600 focus-visible:ring-offset-2 sm:px-5"
         >
           {{ t('landing.products.shopNow') }}
         </NuxtLink>
@@ -102,9 +105,21 @@ const addToCart = (productId: string) => {
 </script>
 
 <style scoped>
-/* Ensure consistent card heights in carousel */
+/* Ensure consistent card heights - mobile-first approach */
 .product-card {
-  min-height: 450px;
+  min-height: 380px;
+}
+
+@media (min-width: 640px) {
+  .product-card {
+    min-height: 420px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .product-card {
+    min-height: 450px;
+  }
 }
 
 /* Prevent text overflow */
@@ -115,9 +130,11 @@ const addToCart = (productId: string) => {
   overflow: hidden;
 }
 
-/* Hover lift effect */
-.product-card:hover {
-  transform: translateY(-8px);
+/* Hover lift effect - subtle like Olipop */
+@media (min-width: 768px) {
+  .product-card:hover {
+    transform: translateY(-4px);
+  }
 }
 
 /* Focus states for accessibility */
@@ -129,5 +146,12 @@ const addToCart = (productId: string) => {
 /* Smooth transitions */
 .product-card * {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Ensure touch targets are large enough on mobile */
+.product-card button,
+.product-card a {
+  min-height: 44px;
+  min-width: 44px;
 }
 </style>

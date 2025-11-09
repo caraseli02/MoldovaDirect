@@ -123,6 +123,11 @@
 }
 
 @theme inline {
+  /* Premium Typography */
+  --font-family-serif: 'Playfair Display', Georgia, serif;
+  --font-family-body: 'Lora', Georgia, serif;
+  --font-family-sans: ui-sans-serif, system-ui, sans-serif;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
@@ -148,6 +153,45 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+
+  /* Wine Color Palette - Primary Brand Color */
+  --color-wine-50: hsl(350 100% 98%);
+  --color-wine-100: hsl(350 100% 96%);
+  --color-wine-200: hsl(350 96% 90%);
+  --color-wine-300: hsl(350 91% 82%);
+  --color-wine-400: hsl(350 87% 70%);
+  --color-wine-500: hsl(350 82% 60%);
+  --color-wine-600: hsl(350 70% 50%);
+  --color-wine-700: hsl(350 75% 42%);
+  --color-wine-800: hsl(350 70% 35%);
+  --color-wine-900: hsl(350 65% 28%);
+  --color-wine-950: hsl(350 80% 15%);
+
+  /* Gold Color Palette - Accent Color */
+  --color-gold-50: hsl(45 100% 97%);
+  --color-gold-100: hsl(45 92% 90%);
+  --color-gold-200: hsl(45 94% 80%);
+  --color-gold-300: hsl(45 91% 69%);
+  --color-gold-400: hsl(45 86% 55%);
+  --color-gold-500: hsl(45 84% 48%);
+  --color-gold-600: hsl(38 90% 45%);
+  --color-gold-700: hsl(32 85% 38%);
+  --color-gold-800: hsl(28 78% 31%);
+  --color-gold-900: hsl(26 72% 26%);
+  --color-gold-950: hsl(24 80% 14%);
+
+  /* Cream Color Palette - Background Accents */
+  --color-cream-50: hsl(40 40% 98%);
+  --color-cream-100: hsl(40 35% 95%);
+  --color-cream-200: hsl(40 30% 90%);
+  --color-cream-300: hsl(40 25% 82%);
+  --color-cream-400: hsl(40 20% 70%);
+  --color-cream-500: hsl(40 15% 60%);
+  --color-cream-600: hsl(40 12% 50%);
+  --color-cream-700: hsl(40 10% 40%);
+  --color-cream-800: hsl(40 8% 30%);
+  --color-cream-900: hsl(40 6% 20%);
+  --color-cream-950: hsl(40 5% 10%);
 
   /* Primary color palette */
   --color-primary-50: hsl(210 100% 95%);

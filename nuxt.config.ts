@@ -16,6 +16,25 @@ const BASE_COMPONENT_DIRS = [
 export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
+  app: {
+    head: {
+      link: [
+        {
+          rel: 'preconnect',
+          href: 'https://fonts.googleapis.com'
+        },
+        {
+          rel: 'preconnect',
+          href: 'https://fonts.gstatic.com',
+          crossorigin: 'anonymous'
+        },
+        {
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Lora:wght@400;500;600;700&display=swap'
+        }
+      ]
+    }
+  },
   components: {
     // Restrict auto-registered components to .vue files globally
     // to prevent Nuxt from treating `index.ts` barrels as components.

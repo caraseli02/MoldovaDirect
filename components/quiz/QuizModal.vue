@@ -16,7 +16,7 @@
             class="absolute top-4 right-4 w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full transition-colors z-10"
             :aria-label="t('common.close')"
           >
-            <Icon name="lucide:x" class="w-5 h-5" />
+            <commonIcon name="lucide:x" class="w-5 h-5" />
           </button>
 
           <!-- Quiz Content -->
@@ -32,7 +32,7 @@
             <!-- Welcome Screen -->
             <div v-if="currentStep === 0" class="text-center">
               <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-purple-100 to-pink-100 rounded-full flex items-center justify-center">
-                <Icon name="lucide:sparkles" class="w-10 h-10 text-purple-600" />
+                <commonIcon name="lucide:sparkles" class="w-10 h-10 text-purple-600" />
               </div>
               <h2 class="text-3xl font-bold mb-4">{{ t('quiz.welcome.title') }}</h2>
               <p class="text-gray-600 mb-8">{{ t('quiz.welcome.description') }}</p>
@@ -70,7 +70,7 @@
                 @click="prevStep"
                 class="px-6 py-2 text-gray-600 hover:text-gray-900 font-medium transition-colors inline-flex items-center gap-2"
               >
-                <Icon name="lucide:arrow-left" class="w-4 h-4" />
+                <commonIcon name="lucide:arrow-left" class="w-4 h-4" />
                 {{ t('quiz.navigation.back') }}
               </button>
               <div v-else />
@@ -81,7 +81,7 @@
                 class="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all inline-flex items-center gap-2"
               >
                 {{ currentStep === questions.length ? t('quiz.navigation.finish') : t('quiz.navigation.next') }}
-                <Icon name="lucide:arrow-right" class="w-4 h-4" />
+                <commonIcon name="lucide:arrow-right" class="w-4 h-4" />
               </button>
             </div>
           </div>

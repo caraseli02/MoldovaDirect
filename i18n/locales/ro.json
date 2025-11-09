@@ -1096,6 +1096,42 @@
       "products": "Produse Premium",
       "rating": "Rating Mediu",
       "countries": "Țări Deservite"
+    },
+    "products": {
+      "heading": "Produse Recomandate",
+      "subheading": "Descoperă selecția noastră curată de vinuri și produse moldovenești premium",
+      "shopNow": "Cumpără Acum",
+      "viewAllCta": "Vezi Toate Produsele"
+    },
+    "newsletter": {
+      "heading": "Abonează-te la Newsletter",
+      "subheading": "Primește oferte exclusive, sfaturi despre vin și noutăți direct în inbox",
+      "placeholder": "Adresa ta de email",
+      "submit": "Abonează-te",
+      "submitting": "Se trimite...",
+      "privacy": "Fără spam, dezabonare oricând",
+      "success": "Mulțumim pentru abonare! Verifică emailul pentru confirmare.",
+      "error": "Eroare la abonare. Te rugăm să încerci din nou."
+    },
+    "ugc": {
+      "heading": "Experiențele Clienților",
+      "subheading": "Vezi cum clienții noștri se bucură de aromele autentice moldovenești",
+      "hashtag": "#MoldovaDirectExperience",
+      "shareCta": "Împărtășește Experiența Ta"
+    },
+    "collections": {
+      "heading": "Explorează Colecțiile Noastre",
+      "subheading": "Descoperă colecții curate pentru fiecare ocazie",
+      "explore": "Explorează"
+    },
+    "quiz": {
+      "badge": "Găsește Vinul Tău Perfect",
+      "heading": "Nu Ești Sigur De Unde Să Începi?",
+      "subheading": "Completează chestionarul nostru de 60 de secunde și primește recomandări personalizate bazate pe preferințele tale",
+      "ctaButton": "Începe Chestionarul",
+      "duration": "2 minute",
+      "completion": "Recomandări personalizate",
+      "privacy": "100% privat"
     }
   },
   "footer": {

@@ -1,6 +1,6 @@
 <template>
   <section
-    class="landing-hero relative flex min-h-[600px] items-center justify-center overflow-hidden md:h-screen"
+    class="landing-hero relative flex min-h-[calc(100vh-80px)] items-center justify-center overflow-hidden md:h-screen"
     :class="{ 'video-loaded': videoLoaded }"
   >
     <!-- Video Background (Desktop Only) -->
@@ -41,105 +41,61 @@
         :height="1080"
         format="webp"
         quality="80"
+        sizes="xs:375px sm:640px md:768px lg:1024px xl:1280px xxl:1920px"
+        preload
       />
       <div class="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/50" />
     </div>
 
     <!-- Hero Content -->
-    <div class="container relative z-10 px-4 text-center text-white">
-      <!-- Urgency Badge -->
-      <div
-        v-if="urgencyBadge"
-        v-motion
-        :initial="{ opacity: 0, scale: 0.8 }"
-        :visible="{ opacity: 1, scale: 1 }"
-        :delay="200"
-        class="mx-auto mb-6 inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-sm font-medium backdrop-blur-sm"
-      >
-        <commonIcon name="lucide:zap" class="h-4 w-4 text-amber-400" />
-        <span>{{ urgencyBadge }}</span>
-      </div>
-
+    <div class="container relative z-10 px-8 text-center text-white sm:px-10 md:px-12 lg:px-16 pb-20 sm:pb-28 md:pb-32 lg:pb-40">
       <!-- Main Headline -->
       <h1
-        v-motion
-        :initial="{ opacity: 0, y: 30 }"
-        :visible="{ opacity: 1, y: 0 }"
-        :delay="400"
-        class="landing-hero-text mb-6 text-4xl font-bold tracking-tight text-white drop-shadow-2xl md:text-5xl lg:text-6xl"
+        class="landing-hero-text mb-8 text-4xl font-bold leading-[1.15] tracking-wide text-white drop-shadow-2xl animate-fade-in-up sm:mb-10 sm:text-5xl md:mb-12 md:text-6xl lg:text-7xl"
       >
         {{ t('landing.hero.headline') }}
       </h1>
 
       <!-- Subheadline -->
       <p
-        v-motion
-        :initial="{ opacity: 0, y: 20 }"
-        :visible="{ opacity: 1, y: 0 }"
-        :delay="600"
-        class="mx-auto mb-10 max-w-3xl text-xl text-gray-100 drop-shadow-lg md:text-2xl"
+        class="mx-auto mb-12 max-w-2xl text-base leading-relaxed text-gray-100 drop-shadow-lg animate-fade-in-up animation-delay-100 sm:mb-14 sm:text-lg md:mb-16 md:text-xl"
       >
         {{ t('landing.hero.subheadline') }}
       </p>
 
-      <!-- CTAs -->
-      <div
-        v-motion
-        :initial="{ opacity: 0, y: 20 }"
-        :visible="{ opacity: 1, y: 0 }"
-        :delay="800"
-        class="flex flex-col items-center justify-center gap-4 sm:flex-row"
-      >
-        <!-- Primary CTA -->
+      <!-- Primary CTA -->
+      <div class="animate-fade-in-up animation-delay-200">
         <NuxtLink
           :to="localePath('/products')"
-          class="btn-primary inline-flex min-h-[48px] items-center gap-2 rounded-lg bg-rose-600 px-8 py-4 font-semibold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-rose-700 hover:shadow-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-rose-600"
+          class="btn-primary group inline-flex min-h-[52px] items-center justify-center gap-2 rounded-xl bg-rose-600 px-9 py-4 text-base font-semibold text-white shadow-lg transition-all duration-200 active:scale-[0.98] hover:bg-rose-700 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-rose-600 sm:px-11 sm:py-4.5"
         >
           {{ t('landing.hero.primaryCta') }}
-          <commonIcon name="lucide:arrow-right" class="h-5 w-5" />
+          <commonIcon name="lucide:arrow-right" class="h-5 w-5 transition-transform duration-200 group-hover:translate-x-1" />
         </NuxtLink>
-
-        <!-- Secondary CTA -->
-        <button
-          type="button"
-          class="btn-secondary inline-flex min-h-[48px] items-center gap-2 rounded-lg border-2 border-white/50 bg-white/10 px-8 py-4 font-semibold text-white backdrop-blur-md transition-all duration-300 hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
-          @click="openQuiz"
-        >
-          <commonIcon name="lucide:sparkles" class="h-5 w-5" />
-          {{ t('landing.hero.secondaryCta') }}
-        </button>
       </div>
 
-      <!-- Trust Indicators -->
+      <!-- Trust Indicators (Desktop Only, Subtle) -->
       <div
-        v-motion
-        :initial="{ opacity: 0 }"
-        :visible="{ opacity: 1 }"
-        :delay="1000"
-        class="mt-12 flex flex-wrap items-center justify-center gap-6 text-sm text-gray-200"
+        class="mt-12 hidden items-center justify-center gap-5 text-sm text-gray-300/80 animate-fade-in animation-delay-300 sm:mt-14 sm:gap-6 md:mt-16 lg:flex"
       >
         <div class="flex items-center gap-2">
-          <commonIcon name="lucide:shield-check" class="h-5 w-5 text-green-400" />
-          <span>{{ t('landing.hero.trustBadge1') }}</span>
+          <commonIcon name="lucide:shield-check" class="h-4 w-4 text-green-400/80" />
+          <span class="whitespace-nowrap">{{ t('landing.hero.trustBadge1') }}</span>
         </div>
         <div class="flex items-center gap-2">
-          <commonIcon name="lucide:truck" class="h-5 w-5 text-blue-400" />
-          <span>{{ t('landing.hero.trustBadge2') }}</span>
+          <commonIcon name="lucide:truck" class="h-4 w-4 text-blue-400/80" />
+          <span class="whitespace-nowrap">{{ t('landing.hero.trustBadge2') }}</span>
         </div>
         <div class="flex items-center gap-2">
-          <commonIcon name="lucide:star" class="h-5 w-5 text-amber-400" />
-          <span>{{ t('landing.hero.trustBadge3') }}</span>
+          <commonIcon name="lucide:star" class="h-4 w-4 text-amber-400/80" />
+          <span class="whitespace-nowrap">{{ t('landing.hero.trustBadge3') }}</span>
         </div>
       </div>
     </div>
 
     <!-- Scroll Indicator -->
     <div
-      v-motion
-      :initial="{ opacity: 0 }"
-      :visible="{ opacity: 1 }"
-      :delay="1200"
-      class="absolute bottom-8 left-1/2 z-10 -translate-x-1/2 transform"
+      class="absolute bottom-10 left-1/2 z-10 -translate-x-1/2 transform animate-fade-in animation-delay-400 sm:bottom-12"
     >
       <button
         type="button"
@@ -166,10 +122,12 @@ const emit = defineEmits<{
 // Video should be WebM format (<5MB), 15-30 seconds loop, 1920x1080
 const videoWebm = ref<string | undefined>(undefined) // '/videos/hero-vineyard.webm'
 const videoMp4 = ref<string | undefined>(undefined) // '/videos/hero-vineyard.mp4'
+// TODO: Replace with self-hosted optimized image in /public/images/hero/
+// Current: Using Unsplash (slow, external dependency)
+// Recommended: /images/hero/moldova-vineyard-hero.webp (optimized, <200KB)
 const posterImage = ref('https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?q=80&w=1920')
 
-// Urgency badge (optional)
-const urgencyBadge = computed(() => t('landing.hero.urgency'))
+// Urgency badge removed for cleaner hero (see Iteration 1)
 
 // Detect mobile
 const isMobile = ref(false)
@@ -224,8 +182,52 @@ const scrollToContent = () => {
 </script>
 
 <style scoped>
-.landing-hero {
-  position: relative;
+/* ===== Performance-optimized animations ===== */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fast, GPU-accelerated animations */
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out forwards;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: opacity, transform;
+}
+
+/* Stagger animation delays */
+.animation-delay-100 {
+  animation-delay: 0.1s;
+}
+
+.animation-delay-200 {
+  animation-delay: 0.2s;
+}
+
+.animation-delay-300 {
+  animation-delay: 0.3s;
+}
+
+.animation-delay-400 {
+  animation-delay: 0.4s;
 }
 
 /* Ensure video covers full area */
@@ -245,26 +247,36 @@ video {
   transition: opacity 0.8s ease-in;
 }
 
-/* Button hover effects */
+/* Enhanced button effects with better performance */
 .btn-primary {
   box-shadow: 0 4px 14px 0 rgba(244, 63, 94, 0.39);
+  will-change: transform;
 }
 
 .btn-primary:hover {
   box-shadow: 0 6px 20px rgba(244, 63, 94, 0.5);
 }
 
-/* Ensure text is readable on all backgrounds */
+.btn-primary:active,
+.btn-secondary:active {
+  transform: scale(0.98);
+}
+
+/* Improved text readability */
 .landing-hero-text {
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  line-height: 1.15;
 }
 
 /* Respect user motion preferences */
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 
   .animate-bounce {
@@ -272,14 +284,43 @@ video {
   }
 }
 
-/* Responsive adjustments */
-@media (max-width: 640px) {
+/* Mobile-first responsive adjustments */
+@media (max-width: 374px) {
+  /* iPhone SE and smaller - more breathing room */
   .landing-hero {
-    min-height: 500px;
+    min-height: 540px;
   }
 
   .landing-hero-text {
-    font-size: 2rem;
+    font-size: 1.75rem; /* Slightly smaller on tiny screens */
+  }
+}
+
+@media (min-width: 375px) and (max-width: 640px) {
+  /* Standard mobile phones */
+  .landing-hero {
+    min-height: 580px;
+  }
+}
+
+/* Prevent horizontal scroll */
+.landing-hero {
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Improve touch target feedback */
+button,
+a {
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
+  touch-action: manipulation;
+}
+
+/* Better spacing on mobile */
+@media (max-width: 640px) {
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
   }
 }
 </style>

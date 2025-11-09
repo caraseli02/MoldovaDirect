@@ -1,7 +1,7 @@
 <template>
-  <section class="trust-badges bg-cream-50 py-8 border-y border-cream-200">
+  <section class="trust-badges border-y border-cream-200 bg-cream-50 py-6 sm:py-8">
     <div class="container mx-auto px-4">
-      <div class="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+      <div class="flex flex-wrap items-center justify-center gap-6 sm:gap-8 md:gap-12">
         <div
           v-for="badge in trustBadges"
           :key="badge.id"
@@ -9,14 +9,14 @@
           :initial="{ opacity: 0, scale: 0.8 }"
           :visible="{ opacity: 1, scale: 1 }"
           :delay="badge.delay"
-          class="flex items-center gap-3 text-gray-700"
+          class="flex items-center gap-2 text-gray-700 sm:gap-3"
         >
-          <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm">
-            <Icon :name="badge.icon" class="w-6 h-6" :class="badge.iconColor" />
+          <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-white shadow-sm sm:h-10 sm:w-10">
+            <commonIcon :name="badge.icon" class="h-5 w-5 sm:h-6 sm:w-6" :class="badge.iconColor" />
           </div>
-          <div class="text-sm">
+          <div class="text-xs sm:text-sm">
             <div class="font-semibold">{{ t(badge.title) }}</div>
-            <div class="text-gray-500 text-xs">{{ t(badge.subtitle) }}</div>
+            <div class="text-[10px] text-gray-500 sm:text-xs">{{ t(badge.subtitle) }}</div>
           </div>
         </div>
       </div>
