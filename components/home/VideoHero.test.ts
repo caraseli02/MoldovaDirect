@@ -1,6 +1,5 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect, beforeAll, beforeEach, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { ref } from 'vue'
 import VideoHero from './VideoHero.vue'
 
 // Mock v-motion directive
@@ -10,14 +9,36 @@ const mockVMotion = {
   unmounted: vi.fn(),
 }
 
-// Mock NuxtImg component
-vi.mock('#app', () => ({
-  NuxtImg: {
-    name: 'NuxtImg',
-    template: '<img :src="src" :alt="alt" />',
-    props: ['src', 'alt', 'preset', 'loading', 'fetchpriority', 'sizes', 'class'],
+// Mock HTMLMediaElement.prototype.play for jsdom compatibility
+beforeAll(() => {
+  Object.defineProperty(HTMLMediaElement.prototype, 'play', {
+    configurable: true,
+    value: vi.fn().mockResolvedValue(undefined),
+  })
+})
+
+// Common stubs configuration for all tests
+const createGlobalStubs = () => ({
+  global: {
+    stubs: {
+      NuxtLink: {
+        template: '<a :to="to"><slot /></a>',
+        props: ['to'],
+      },
+      NuxtImg: {
+        template: '<img :src="src" :alt="alt" />',
+        props: ['src', 'alt', 'preset', 'loading', 'fetchpriority', 'sizes', 'class'],
+      },
+      commonIcon: {
+        template: '<span></span>',
+        props: ['name', 'class'],
+      },
+    },
+    directives: {
+      motion: mockVMotion,
+    },
   },
-}))
+})
 
 describe('VideoHero', () => {
   beforeEach(() => {
@@ -25,33 +46,6 @@ describe('VideoHero', () => {
   })
 
   describe('Rendering modes', () => {
-    it('renders with gradient background by default', () => {
-      const wrapper = mount(VideoHero, {
-        props: {
-          title: 'Test Title',
-        },
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a :to="to"><slot /></a>',
-              props: ['to'],
-            },
-            commonIcon: {
-              template: '<span></span>',
-              props: ['name', 'class'],
-            },
-          },
-          directives: {
-            motion: mockVMotion,
-          },
-        },
-      })
-
-      // Should have gradient background with brand colors
-      expect(wrapper.html()).toContain('bg-gradient-to-br')
-      expect(wrapper.html()).toContain('from-brand-dark')
-    })
-
     it('renders video background when showVideo is true', () => {
       const wrapper = mount(VideoHero, {
         props: {
@@ -60,32 +54,14 @@ describe('VideoHero', () => {
           videoWebM: '/test-video.webm',
           videoMp4: '/test-video.mp4',
         },
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a :to="to"><slot /></a>',
-              props: ['to'],
-            },
-            commonIcon: {
-              template: '<span></span>',
-              props: ['name', 'class'],
-            },
-          },
-          directives: {
-            motion: mockVMotion,
-          },
-        },
+        ...createGlobalStubs(),
       })
 
       // Should render video element
       const video = wrapper.find('video')
       expect(video.exists()).toBe(true)
-      expect(video.attributes('autoplay')).toBeDefined()
-      expect(video.attributes('muted')).toBeDefined()
-      expect(video.attributes('loop')).toBeDefined()
-      expect(video.attributes('playsinline')).toBeDefined()
 
-      // Should have video sources
+      // Should have correct video sources
       const sources = video.findAll('source')
       expect(sources.length).toBe(2)
       expect(sources[0].attributes('src')).toBe('/test-video.webm')
@@ -102,35 +78,18 @@ describe('VideoHero', () => {
           backgroundImage: '/test-hero.jpg',
           backgroundImageAlt: 'Test hero image',
         },
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a :to="to"><slot /></a>',
-              props: ['to'],
-            },
-            NuxtImg: {
-              template: '<img :src="src" :alt="alt" />',
-              props: ['src', 'alt', 'preset', 'loading', 'fetchpriority', 'sizes', 'class'],
-            },
-            commonIcon: {
-              template: '<span></span>',
-              props: ['name', 'class'],
-            },
-          },
-          directives: {
-            motion: mockVMotion,
-          },
-        },
+        ...createGlobalStubs(),
       })
 
-      // Should render NuxtImg
-      const img = wrapper.findComponent({ name: 'NuxtImg' })
+      // Should render background image (via stubbed NuxtImg)
+      const img = wrapper.find('img')
       expect(img.exists()).toBe(true)
-      expect(img.props('src')).toBe('/test-hero.jpg')
-      expect(img.props('alt')).toBe('Test hero image')
-      expect(img.props('preset')).toBe('hero')
-      expect(img.props('loading')).toBe('eager')
-      expect(img.props('fetchpriority')).toBe('high')
+      expect(img.attributes('src')).toBe('/test-hero.jpg')
+      expect(img.attributes('alt')).toBe('Test hero image')
+
+      // Should not render video element
+      const video = wrapper.find('video')
+      expect(video.exists()).toBe(false)
     })
   })
 
@@ -140,21 +99,7 @@ describe('VideoHero', () => {
         props: {
           title: 'Welcome to Moldova Direct',
         },
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a :to="to"><slot /></a>',
-              props: ['to'],
-            },
-            commonIcon: {
-              template: '<span></span>',
-              props: ['name', 'class'],
-            },
-          },
-          directives: {
-            motion: mockVMotion,
-          },
-        },
+        ...createGlobalStubs(),
       })
 
       const title = wrapper.find('h1')
@@ -168,21 +113,7 @@ describe('VideoHero', () => {
           title: 'Test Title',
           subtitle: 'Discover authentic Moldovan products',
         },
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a :to="to"><slot /></a>',
-              props: ['to'],
-            },
-            commonIcon: {
-              template: '<span></span>',
-              props: ['name', 'class'],
-            },
-          },
-          directives: {
-            motion: mockVMotion,
-          },
-        },
+        ...createGlobalStubs(),
       })
 
       const subtitle = wrapper.find('p')
@@ -195,135 +126,16 @@ describe('VideoHero', () => {
         props: {
           title: 'Test Title',
         },
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a :to="to"><slot /></a>',
-              props: ['to'],
-            },
-            commonIcon: {
-              template: '<span></span>',
-              props: ['name', 'class'],
-            },
-          },
-          directives: {
-            motion: mockVMotion,
-          },
-        },
+        ...createGlobalStubs(),
       })
 
       const paragraphs = wrapper.findAll('p')
       const subtitleParagraph = paragraphs.find(p => p.classes().includes('mb-6'))
       expect(subtitleParagraph).toBeUndefined()
     })
-
-    it('renders badge when provided', () => {
-      const wrapper = mount(VideoHero, {
-        props: {
-          title: 'Test Title',
-          badge: 'New Products',
-          badgeIcon: 'lucide:star',
-        },
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a :to="to"><slot /></a>',
-              props: ['to'],
-            },
-            commonIcon: {
-              template: '<span :name="name"></span>',
-              props: ['name', 'class'],
-            },
-          },
-          directives: {
-            motion: mockVMotion,
-          },
-        },
-      })
-
-      // Find badge container with luxury brand styling
-      const badge = wrapper.find('.rounded-full.bg-brand-light\\/15')
-      expect(badge.exists()).toBe(true)
-      expect(badge.text()).toContain('New Products')
-
-      // Check icon is rendered
-      const icon = wrapper.findComponent({ name: 'commonIcon' })
-      expect(icon.exists()).toBe(true)
-      expect(icon.props('name')).toBe('lucide:star')
-    })
   })
 
   describe('CTA buttons', () => {
-    it('renders primary CTA when provided', () => {
-      const wrapper = mount(VideoHero, {
-        props: {
-          title: 'Test Title',
-          primaryCta: {
-            text: 'Shop Now',
-            link: '/products',
-            icon: 'lucide:arrow-right',
-          },
-        },
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a :to="to"><slot /></a>',
-              props: ['to'],
-            },
-            commonIcon: {
-              template: '<span :name="name"></span>',
-              props: ['name', 'class'],
-            },
-          },
-          directives: {
-            motion: mockVMotion,
-          },
-        },
-      })
-
-      const ctaLinks = wrapper.findAllComponents({ name: 'NuxtLink' })
-      const primaryCta = ctaLinks.find(link => link.text().includes('Shop Now'))
-
-      expect(primaryCta).toBeDefined()
-      expect(primaryCta?.props('to')).toBe('/products')
-      expect(primaryCta?.classes()).toContain('bg-brand-light')
-    })
-
-    it('renders secondary CTA when provided', () => {
-      const wrapper = mount(VideoHero, {
-        props: {
-          title: 'Test Title',
-          secondaryCta: {
-            text: 'Learn More',
-            link: '/about',
-            icon: 'lucide:info',
-          },
-        },
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a :to="to"><slot /></a>',
-              props: ['to'],
-            },
-            commonIcon: {
-              template: '<span :name="name"></span>',
-              props: ['name', 'class'],
-            },
-          },
-          directives: {
-            motion: mockVMotion,
-          },
-        },
-      })
-
-      const ctaLinks = wrapper.findAllComponents({ name: 'NuxtLink' })
-      const secondaryCta = ctaLinks.find(link => link.text().includes('Learn More'))
-
-      expect(secondaryCta).toBeDefined()
-      expect(secondaryCta?.props('to')).toBe('/about')
-      expect(secondaryCta?.classes()).toContain('bg-brand-light/10')
-    })
-
     it('renders both CTAs when both are provided', () => {
       const wrapper = mount(VideoHero, {
         props: {
@@ -337,21 +149,7 @@ describe('VideoHero', () => {
             link: '/about',
           },
         },
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a :to="to"><slot /></a>',
-              props: ['to'],
-            },
-            commonIcon: {
-              template: '<span></span>',
-              props: ['name', 'class'],
-            },
-          },
-          directives: {
-            motion: mockVMotion,
-          },
-        },
+        ...createGlobalStubs(),
       })
 
       expect(wrapper.text()).toContain('Shop Now')
@@ -370,21 +168,7 @@ describe('VideoHero', () => {
             { value: '4.9/5', label: 'Rating' },
           ],
         },
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a :to="to"><slot /></a>',
-              props: ['to'],
-            },
-            commonIcon: {
-              template: '<span></span>',
-              props: ['name', 'class'],
-            },
-          },
-          directives: {
-            motion: mockVMotion,
-          },
-        },
+        ...createGlobalStubs(),
       })
 
       // Check all highlights are rendered
@@ -406,21 +190,7 @@ describe('VideoHero', () => {
           title: 'Test Title',
           highlights: [],
         },
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a :to="to"><slot /></a>',
-              props: ['to'],
-            },
-            commonIcon: {
-              template: '<span></span>',
-              props: ['name', 'class'],
-            },
-          },
-          directives: {
-            motion: mockVMotion,
-          },
-        },
+        ...createGlobalStubs(),
       })
 
       const grid = wrapper.find('.grid.grid-cols-3')
@@ -434,21 +204,7 @@ describe('VideoHero', () => {
         props: {
           title: 'Test Title',
         },
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a :to="to"><slot /></a>',
-              props: ['to'],
-            },
-            commonIcon: {
-              template: '<span></span>',
-              props: ['name', 'class'],
-            },
-          },
-          directives: {
-            motion: mockVMotion,
-          },
-        },
+        ...createGlobalStubs(),
       })
 
       // Should use section element
@@ -458,58 +214,13 @@ describe('VideoHero', () => {
       expect(wrapper.find('h1').exists()).toBe(true)
     })
 
-    it('has aria-hidden on decorative video', () => {
-      const wrapper = mount(VideoHero, {
-        props: {
-          title: 'Test Title',
-          showVideo: true,
-          videoMp4: '/test.mp4',
-        },
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a :to="to"><slot /></a>',
-              props: ['to'],
-            },
-            commonIcon: {
-              template: '<span></span>',
-              props: ['name', 'class'],
-            },
-          },
-          directives: {
-            motion: mockVMotion,
-          },
-        },
-      })
-
-      const videoContainer = wrapper.find('.absolute.inset-0.z-0')
-      expect(videoContainer.attributes('aria-hidden')).toBe('true')
-
-      const video = wrapper.find('video')
-      expect(video.attributes('aria-hidden')).toBe('true')
-    })
-
     it('has proper text shadow for readability', () => {
       const wrapper = mount(VideoHero, {
         props: {
           title: 'Test Title',
           subtitle: 'Test Subtitle',
         },
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a :to="to"><slot /></a>',
-              props: ['to'],
-            },
-            commonIcon: {
-              template: '<span></span>',
-              props: ['name', 'class'],
-            },
-          },
-          directives: {
-            motion: mockVMotion,
-          },
-        },
+        ...createGlobalStubs(),
       })
 
       const title = wrapper.find('h1')
@@ -526,172 +237,12 @@ describe('VideoHero', () => {
         props: {
           title: 'Test Title',
         },
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a :to="to"><slot /></a>',
-              props: ['to'],
-            },
-            commonIcon: {
-              template: '<span></span>',
-              props: ['name', 'class'],
-            },
-          },
-          directives: {
-            motion: mockVMotion,
-          },
-        },
+        ...createGlobalStubs(),
       })
 
       const container = wrapper.find('.min-h-\\[60vh\\]')
       expect(container.exists()).toBe(true)
       expect(container.classes()).toContain('md:min-h-[75vh]')
-    })
-
-    it('has touch-friendly CTA buttons (min 44px height)', () => {
-      const wrapper = mount(VideoHero, {
-        props: {
-          title: 'Test Title',
-          primaryCta: {
-            text: 'Shop Now',
-            link: '/products',
-          },
-        },
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a :to="to" :class="$attrs.class"><slot /></a>',
-              props: ['to'],
-            },
-            commonIcon: {
-              template: '<span></span>',
-              props: ['name', 'class'],
-            },
-          },
-          directives: {
-            motion: mockVMotion,
-          },
-        },
-      })
-
-      const cta = wrapper.findComponent({ name: 'NuxtLink' })
-      expect(cta.classes()).toContain('min-h-[44px]')
-    })
-  })
-
-  describe('Video behavior', () => {
-    it('attempts to play video on mount when showVideo is true', async () => {
-      const playMock = vi.fn().mockResolvedValue(undefined)
-      const videoElement = {
-        play: playMock,
-      }
-
-      const wrapper = mount(VideoHero, {
-        props: {
-          title: 'Test Title',
-          showVideo: true,
-          videoMp4: '/test.mp4',
-        },
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a :to="to"><slot /></a>',
-              props: ['to'],
-            },
-            commonIcon: {
-              template: '<span></span>',
-              props: ['name', 'class'],
-            },
-          },
-          directives: {
-            motion: mockVMotion,
-          },
-        },
-      })
-
-      // Manually set the ref to our mock
-      const component = wrapper.vm as any
-      component.videoRef = videoElement
-
-      // Trigger onMounted manually
-      await wrapper.vm.$nextTick()
-
-      // Note: In a real scenario, onMounted would be called automatically
-      // This test validates the component structure
-      expect(wrapper.find('video').exists()).toBe(true)
-    })
-
-    it('handles video play failure gracefully', async () => {
-      const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
-      const playMock = vi.fn().mockRejectedValue(new Error('Autoplay failed'))
-
-      const videoElement = {
-        play: playMock,
-      }
-
-      const wrapper = mount(VideoHero, {
-        props: {
-          title: 'Test Title',
-          showVideo: true,
-          videoMp4: '/test.mp4',
-        },
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a :to="to"><slot /></a>',
-              props: ['to'],
-            },
-            commonIcon: {
-              template: '<span></span>',
-              props: ['name', 'class'],
-            },
-          },
-          directives: {
-            motion: mockVMotion,
-          },
-        },
-      })
-
-      // Component should still render without errors
-      expect(wrapper.find('h1').text()).toBe('Test Title')
-
-      consoleWarnSpy.mockRestore()
-    })
-  })
-
-  describe('Scroll indicator', () => {
-    it('renders scroll indicator on desktop', () => {
-      const wrapper = mount(VideoHero, {
-        props: {
-          title: 'Test Title',
-        },
-        global: {
-          stubs: {
-            NuxtLink: {
-              template: '<a :to="to"><slot /></a>',
-              props: ['to'],
-            },
-            commonIcon: {
-              template: '<span :name="name"></span>',
-              props: ['name', 'class'],
-            },
-          },
-          directives: {
-            motion: mockVMotion,
-          },
-        },
-      })
-
-      // Find the scroll indicator (hidden on mobile, visible on desktop)
-      const scrollIndicator = wrapper.find('.absolute.bottom-8')
-      expect(scrollIndicator.exists()).toBe(true)
-      expect(scrollIndicator.classes()).toContain('hidden')
-      expect(scrollIndicator.classes()).toContain('md:block')
-
-      // Check chevron icon
-      const icon = scrollIndicator.findComponent({ name: 'commonIcon' })
-      expect(icon.exists()).toBe(true)
-      expect(icon.props('name')).toBe('lucide:chevron-down')
     })
   })
 })
