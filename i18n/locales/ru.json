@@ -47,6 +47,9 @@
     "errorGeneric": "Произошла ошибка. Пожалуйста, попробуйте снова.",
     "menu": "Меню",
     "close": "Закрыть",
+    "clear": "Очистить",
+    "navigate": "для навигации",
+    "select": "для выбора",
     "preferences": "Настройки",
     "selectAll": "Выбрать все",
     "deselectAll": "Снять выделение",
@@ -1072,33 +1075,52 @@
       "sweets": "Сладости"
     },
     "filters": {
-      "title": "Filters",
+      "title": "Фильтры",
       "sortBy": "Сортировать по",
       "priceRange": "Диапазон цен",
       "category": "Категория",
-      "categories": "Categories",
+      "categories": "Категории",
       "availability": "Наличие",
       "inStock": "В наличии",
-      "inStockOnly": "In stock only",
+      "inStockOnly": "Только в наличии",
       "outOfStock": "Нет в наличии",
-      "featuredOnly": "Featured only",
-      "active": "Active Filters",
-      "clearAll": "Clear All",
-      "apply": "Apply Filters",
-      "minPrice": "Min Price",
-      "maxPrice": "Max Price",
-      "removeFilter": "Remove {filter} filter",
-      "unknownCategory": "Unknown Category"
+      "featuredOnly": "Только рекомендуемые",
+      "active": "Активные фильтры",
+      "clearAll": "Очистить всё",
+      "clear": "Очистить фильтры",
+      "clearAllFilters": "Очистить все активные фильтры",
+      "swipeToClose": "Проведите вниз или нажмите кнопку закрыть, чтобы отменить",
+      "apply": "Показать {count} товаров | Показать {count} товар | Показать {count} товара",
+      "openFilters": "Открыть панель фильтров",
+      "activeCount": "{count} активных фильтров",
+      "minPrice": "Мин. цена",
+      "maxPrice": "Макс. цена",
+      "removeFilter": "Удалить фильтр {filter}",
+      "unknownCategory": "Неизвестная категория"
     },
     "hero": {
       "seasonal": "Сезонные рекомендации",
       "title": "Откройте фирменные вкусы Молдовы",
       "subtitle": "Выбирайте отборные вина, ремесленные продукты и гастрономию с доставкой по всей Испании.",
-      "cta": "Смотреть коллекцию"
+      "cta": "Смотреть коллекцию",
+      "ctaAria": "Просмотреть коллекцию продуктов",
+      "or": "или выберите:",
+      "stats": {
+        "products": "{count}+ товаров",
+        "freeShipping": "Бесплатная доставка от €50",
+        "quality": "100% подлинность"
+      }
     },
+    "breadcrumb": "Продукты",
+    "breadcrumbNav": {
+      "showAll": "Показать все категории",
+      "searchResults": "Результаты поиска для \"{query}\""
+    },
+    "searchSuggestions": "Поисковые подсказки",
     "discovery": {
       "title": "Подберите нужный опыт",
       "description": "Используйте умные фильтры или готовые подборки под ваши планы.",
+      "selectCollection": "Просмотреть коллекцию {collection}",
       "collections": {
         "celebration": "Вина для праздника",
         "weeknight": "Будничные фавориты",
@@ -1112,7 +1134,10 @@
     },
     "filterSummary": {
       "title": "Активные фильтры",
-      "clear": "Сбросить фильтры"
+      "clear": "Очистить всё",
+      "activeFilters": "Активные фильтры",
+      "removeFilter": "Удалить фильтр {filter}",
+      "clearAllFilters": "Очистить все активные фильтры"
     },
     "chips": {
       "category": "Категория: {value}",
