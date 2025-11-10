@@ -49,7 +49,7 @@
     <div class="relative" ref="mainContainer">
       <!-- Mobile/Tablet Filter Panel -->
       <Transition name="fade">
-        <div v-if="showFilterPanel" class="fixed inset-0 z-40 flex" role="dialog" aria-modal="true" aria-labelledby="filter-panel-title">
+        <div v-if="showFilterPanel" class="fixed inset-0 z-40 flex lg:hidden" role="dialog" aria-modal="true" aria-labelledby="filter-panel-title">
           <div class="flex-1 bg-black/40 backdrop-blur-sm" @click="closeFilterPanel" aria-label="Close filters"></div>
           <div id="filter-panel" class="relative ml-auto flex h-full w-full max-w-md flex-col bg-white dark:bg-gray-900 shadow-xl">
             <div class="flex items-center justify-between border-b border-gray-200 px-6 py-4 dark:border-gray-800">
@@ -80,7 +80,34 @@
         </div>
       </Transition>
 
-      <div class="mx-auto flex w-full max-w-7xl flex-col gap-8 px-4 pb-20 pt-10 sm:px-6 lg:px-8" ref="contentContainer">
+      <div class="mx-auto flex w-full max-w-7xl gap-8 px-4 pb-20 pt-10 sm:px-6 lg:px-8" ref="contentContainer">
+        <!-- Desktop Filter Sidebar -->
+        <aside class="hidden lg:block w-80 flex-shrink-0">
+          <div class="sticky top-24 space-y-6">
+            <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+              <div class="flex items-center justify-between mb-6">
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+                  {{ t('products.filters.title') }}
+                </h2>
+                <UiButton
+                  v-if="hasActiveFilters"
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  @click="clearAllFilters"
+                  class="text-blue-600 hover:text-blue-700 dark:text-blue-400"
+                >
+                  {{ t('products.filters.clearAll') }}
+                </UiButton>
+              </div>
+              <productFilterContent
+                :filters="filters"
+                :available-filters="availableFilters"
+                @update:filters="handleFiltersUpdate"
+              />
+            </div>
+          </div>
+        </aside>
         <div class="flex-1" ref="scrollContainer">
           <MobilePullToRefreshIndicator
             v-if="isMobile"
@@ -93,22 +120,59 @@
           />
 
           <div id="results" class="space-y-10">
-            <div class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900 sm:p-6">
-              <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                  <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">
-                    {{ t('products.discovery.title') }}
-                  </h2>
-                  <p class="text-sm text-gray-600 dark:text-gray-400">
-                    {{ t('products.discovery.description') }}
-                  </p>
+            <!-- Sticky Header Bar -->
+            <div
+              ref="headerBar"
+              class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900 sm:p-6 transition-all duration-300"
+              :class="isHeaderSticky ? 'lg:sticky lg:top-4 lg:z-30 lg:shadow-lg' : ''"
+            >
+              <div class="flex flex-col gap-4">
+                <!-- Title Section -->
+                <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">
+                      {{ t('products.discovery.title') }}
+                    </h2>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                      {{ t('products.discovery.description') }}
+                    </p>
+                  </div>
+                  <!-- View Toggle -->
+                  <div class="flex items-center gap-2">
+                    <span class="text-sm text-gray-600 dark:text-gray-400 hidden sm:inline">{{ t('products.view') }}:</span>
+                    <div class="inline-flex rounded-lg border border-gray-300 dark:border-gray-700 p-1" role="group" aria-label="View toggle">
+                      <button
+                        type="button"
+                        :class="viewMode === 'grid' ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'"
+                        class="rounded-md px-3 py-2 text-sm font-medium transition"
+                        @click="viewMode = 'grid'"
+                        :aria-label="t('products.gridView')"
+                        :aria-pressed="viewMode === 'grid'"
+                      >
+                        <commonIcon name="lucide:grid-3x3" class="h-4 w-4" aria-hidden="true" />
+                      </button>
+                      <button
+                        type="button"
+                        :class="viewMode === 'list' ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'"
+                        class="rounded-md px-3 py-2 text-sm font-medium transition"
+                        @click="viewMode = 'list'"
+                        :aria-label="t('products.listView')"
+                        :aria-pressed="viewMode === 'list'"
+                      >
+                        <commonIcon name="lucide:list" class="h-4 w-4" aria-hidden="true" />
+                      </button>
+                    </div>
+                  </div>
                 </div>
+
+                <!-- Controls Section -->
                 <div class="flex flex-wrap items-center gap-3">
                   <!-- Filter button (mobile/tablet only) -->
                   <UiButton
                     type="button"
                     variant="outline"
                     size="sm"
+                    class="lg:hidden"
                     :aria-label="t('products.filters.title')"
                     :aria-expanded="showFilterPanel"
                     aria-controls="filter-panel"
@@ -120,6 +184,7 @@
                       {{ activeFilterChips.length }}
                     </span>
                   </UiButton>
+
                   <div class="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center">
                     <div class="relative flex-1">
                       <label for="product-search" class="sr-only">
@@ -266,8 +331,67 @@
                 :loading="loading"
                 @load-more="loadMoreProducts"
               />
-              <div v-else class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              <!-- Grid View -->
+              <div v-else-if="viewMode === 'grid'" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
                 <ProductCard v-for="product in products" :key="product.id" :product="product" />
+              </div>
+              <!-- List View -->
+              <div v-else class="space-y-4">
+                <div
+                  v-for="product in products"
+                  :key="product.id"
+                  class="group flex flex-col sm:flex-row gap-4 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition hover:shadow-md dark:border-gray-800 dark:bg-gray-900"
+                >
+                  <NuxtLink :to="`/products/${product.slug}`" class="relative aspect-square w-full sm:w-48 flex-shrink-0 overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800">
+                    <img
+                      v-if="product.images?.[0]"
+                      :src="product.images[0]"
+                      :alt="product.name"
+                      class="h-full w-full object-cover transition group-hover:scale-105"
+                      loading="lazy"
+                    />
+                    <div v-else class="flex h-full w-full items-center justify-center">
+                      <commonIcon name="lucide:image" class="h-12 w-12 text-gray-300 dark:text-gray-600" aria-hidden="true" />
+                    </div>
+                  </NuxtLink>
+                  <div class="flex flex-1 flex-col justify-between">
+                    <div>
+                      <NuxtLink :to="`/products/${product.slug}`" class="group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white transition">
+                          {{ product.name }}
+                        </h3>
+                      </NuxtLink>
+                      <p v-if="product.description" class="mt-2 line-clamp-2 text-sm text-gray-600 dark:text-gray-400">
+                        {{ product.description }}
+                      </p>
+                      <div class="mt-3 flex flex-wrap items-center gap-2">
+                        <span v-if="product.featured" class="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-semibold text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300">
+                          <commonIcon name="lucide:star" class="mr-1 h-3 w-3" aria-hidden="true" />
+                          Featured
+                        </span>
+                        <span v-if="product.stock > 0" class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-semibold text-green-800 dark:bg-green-900/40 dark:text-green-300">
+                          In Stock
+                        </span>
+                        <span v-else class="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-semibold text-red-800 dark:bg-red-900/40 dark:text-red-300">
+                          Out of Stock
+                        </span>
+                      </div>
+                    </div>
+                    <div class="mt-4 flex items-center justify-between">
+                      <div>
+                        <p class="text-2xl font-bold text-gray-900 dark:text-white">
+                          €{{ product.price?.toFixed(2) }}
+                        </p>
+                      </div>
+                      <NuxtLink
+                        :to="`/products/${product.slug}`"
+                        class="inline-flex items-center justify-center rounded-full bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-blue-500 dark:hover:bg-blue-600"
+                      >
+                        View Details
+                      </NuxtLink>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div v-if="pagination.totalPages > 1" class="space-y-4 text-center">
@@ -432,6 +556,9 @@ const router = useRouter()
 const sortBy = ref<string>('created')
 const showFilterPanel = ref(false)
 const activeCollectionId = ref<string | null>(null)
+const viewMode = ref<'grid' | 'list'>('grid')
+const isHeaderSticky = ref(false)
+const headerBar = ref<HTMLElement>()
 
 const { isMobile } = useDevice()
 const { vibrate } = useHapticFeedback()
@@ -642,6 +769,13 @@ const setupMobileInteractions = () => {
 const cleanupMobileInteractions = () => {
   pullToRefresh.cleanupPullToRefresh()
   swipeGestures.cleanupSwipeListeners()
+}
+
+const handleScroll = () => {
+  if (headerBar.value) {
+    const scrollY = window.scrollY
+    isHeaderSticky.value = scrollY > 400
+  }
 }
 
 const loadMoreProducts = async () => {
@@ -945,12 +1079,17 @@ onMounted(async () => {
 
   // Set up keyboard listener for filter panel
   document.addEventListener('keydown', handleKeyDown)
+
+  // Set up scroll listener for sticky header
+  window.addEventListener('scroll', handleScroll, { passive: true })
 })
 
 onUnmounted(() => {
   cleanupMobileInteractions()
   // Clean up keyboard listener
   document.removeEventListener('keydown', handleKeyDown)
+  // Clean up scroll listener
+  window.removeEventListener('scroll', handleScroll)
   // Restore body scroll if panel was open
   document.body.style.overflow = ''
 })

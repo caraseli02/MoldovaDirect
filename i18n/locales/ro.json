@@ -887,6 +887,9 @@
     "clearFilters": "Șterge toate filtrele",
     "sortPriceLowHigh": "Preț: De la Mic la Mare",
     "sortPriceHighLow": "Preț: De la Mare la Mic",
+    "view": "Vizualizare",
+    "gridView": "Vizualizare grilă",
+    "listView": "Vizualizare listă",
     "categories": {
       "all": "Toate",
       "wine": "Vinuri",

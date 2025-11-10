@@ -1227,6 +1227,9 @@
     "clearFilters": "Clear all filters",
     "sortPriceLowHigh": "Price: Low to High",
     "sortPriceHighLow": "Price: High to Low",
+    "view": "View",
+    "gridView": "Grid view",
+    "listView": "List view",
     "categories": {
       "all": "All",
       "wine": "Wines",

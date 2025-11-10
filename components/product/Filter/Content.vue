@@ -1,10 +1,19 @@
 <template>
-  <div class="filter-content space-y-6">
+  <div class="filter-content space-y-4">
     <!-- Active Filters -->
-    <div v-if="hasActiveFilters" class="filter-section">
-      <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-3">
-        {{ $t('products.filters.active') }}
-      </h3>
+    <div v-if="hasActiveFilters" class="pb-4 border-b border-gray-200 dark:border-gray-700">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+          {{ $t('products.filters.active') }}
+        </h3>
+        <button
+          type="button"
+          class="text-xs font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition"
+          @click="removeFilter('all', 'all')"
+        >
+          Clear All
+        </button>
+      </div>
       <div class="flex flex-wrap gap-2">
         <productFilterTag
           v-for="filter in activeFilters"
@@ -16,85 +25,97 @@
     </div>
 
     <!-- Category Filter -->
-    <div v-if="availableFilters.categories.length > 0" class="filter-section">
-      <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-3">
+    <details v-if="availableFilters.categories.length > 0" class="group filter-section" open>
+      <summary class="flex cursor-pointer items-center justify-between py-3 text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide list-none hover:text-blue-600 dark:hover:text-blue-400 transition">
         {{ $t('products.filters.categories') }}
-      </h3>
-      <productCategoryTree
-        :categories="availableFilters.categories"
-        :selected="selectedCategories"
-        @update:selected="updateCategoryFilter"
-      />
-    </div>
+        <commonIcon name="lucide:chevron-down" class="h-4 w-4 transition-transform group-open:rotate-180" aria-hidden="true" />
+      </summary>
+      <div class="pt-3 pb-4 border-b border-gray-200 dark:border-gray-700">
+        <productCategoryTree
+          :categories="availableFilters.categories"
+          :selected="selectedCategories"
+          @update:selected="updateCategoryFilter"
+        />
+      </div>
+    </details>
 
     <!-- Price Range Filter -->
-    <div v-if="availableFilters.priceRange" class="filter-section">
-      <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-3">
+    <details v-if="availableFilters.priceRange" class="group filter-section" open>
+      <summary class="flex cursor-pointer items-center justify-between py-3 text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide list-none hover:text-blue-600 dark:hover:text-blue-400 transition">
         {{ $t('products.filters.priceRange') }}
-      </h3>
-      <productMobilePriceRangeSlider
-        :min="availableFilters.priceRange.min"
-        :max="availableFilters.priceRange.max"
-        :value="[localFilters.priceMin || availableFilters.priceRange.min, localFilters.priceMax || availableFilters.priceRange.max]"
-        @update:value="updatePriceRange"
-      />
-    </div>
+        <commonIcon name="lucide:chevron-down" class="h-4 w-4 transition-transform group-open:rotate-180" aria-hidden="true" />
+      </summary>
+      <div class="pt-3 pb-4 border-b border-gray-200 dark:border-gray-700">
+        <productMobilePriceRangeSlider
+          :min="availableFilters.priceRange.min"
+          :max="availableFilters.priceRange.max"
+          :value="[localFilters.priceMin || availableFilters.priceRange.min, localFilters.priceMax || availableFilters.priceRange.max]"
+          @update:value="updatePriceRange"
+        />
+      </div>
+    </details>
 
     <!-- Stock Filter -->
-    <div class="filter-section">
-      <h3 id="availability-filter" class="text-sm font-medium text-gray-900 dark:text-white mb-3">
+    <details class="group filter-section" open>
+      <summary class="flex cursor-pointer items-center justify-between py-3 text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide list-none hover:text-blue-600 dark:hover:text-blue-400 transition">
         {{ $t('products.filters.availability') }}
-      </h3>
-      <div class="space-y-2" role="group" aria-labelledby="availability-filter">
-        <label class="flex items-center cursor-pointer">
+        <commonIcon name="lucide:chevron-down" class="h-4 w-4 transition-transform group-open:rotate-180" aria-hidden="true" />
+      </summary>
+      <div class="space-y-3 pt-3 pb-4 border-b border-gray-200 dark:border-gray-700" role="group" aria-labelledby="availability-filter">
+        <label class="flex items-center cursor-pointer group/checkbox hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-lg transition">
           <input
             id="filter-in-stock"
             v-model="localFilters.inStock"
             type="checkbox"
-            class="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 bg-white dark:bg-gray-700"
+            class="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 focus:ring-offset-0 bg-white dark:bg-gray-700"
             :aria-label="$t('products.filters.inStockOnly')"
             @change="updateFilters({ inStock: localFilters.inStock })"
           >
-          <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
+          <span class="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300 group-hover/checkbox:text-gray-900 dark:group-hover/checkbox:text-white transition">
             {{ $t('products.filters.inStockOnly') }}
           </span>
         </label>
-        <label class="flex items-center cursor-pointer">
+        <label class="flex items-center cursor-pointer group/checkbox hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-lg transition">
           <input
             id="filter-featured"
             v-model="localFilters.featured"
             type="checkbox"
-            class="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 bg-white dark:bg-gray-700"
+            class="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 focus:ring-offset-0 bg-white dark:bg-gray-700"
             :aria-label="$t('products.filters.featuredOnly')"
             @change="updateFilters({ featured: localFilters.featured })"
           >
-          <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
+          <span class="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300 group-hover/checkbox:text-gray-900 dark:group-hover/checkbox:text-white transition">
             {{ $t('products.filters.featuredOnly') }}
           </span>
         </label>
       </div>
-    </div>
+    </details>
 
     <!-- Attribute Filters -->
-    <div
+    <details
       v-for="attribute in availableFilters.attributes"
       :key="attribute.name"
-      class="filter-section"
+      class="group filter-section"
+      open
     >
-      <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-3">
+      <summary class="flex cursor-pointer items-center justify-between py-3 text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide list-none hover:text-blue-600 dark:hover:text-blue-400 transition">
         {{ attribute.label }}
-      </h3>
-      <productAttributeCheckboxGroup
-        :options="attribute.values"
-        :selected="localFilters.attributes?.[attribute.name] || []"
-        @update:selected="updateAttributeFilter(attribute.name, $event)"
-      />
-    </div>
+        <commonIcon name="lucide:chevron-down" class="h-4 w-4 transition-transform group-open:rotate-180" aria-hidden="true" />
+      </summary>
+      <div class="pt-3 pb-4 border-b border-gray-200 dark:border-gray-700">
+        <productAttributeCheckboxGroup
+          :options="attribute.values"
+          :selected="localFilters.attributes?.[attribute.name] || []"
+          @update:selected="updateAttributeFilter(attribute.name, $event)"
+        />
+      </div>
+    </details>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { ProductFilters, CategoryFilter, AttributeFilter, PriceRange } from '~/types'
+import commonIcon from '~/components/common/Icon.vue'
 
 interface ActiveFilter {
   id: string
@@ -263,6 +284,13 @@ const updateAttributeFilter = (attributeName: string, values: string[]) => {
 }
 
 const removeFilter = (id: string, type: string, value?: any) => {
+  if (id === 'all' && type === 'all') {
+    // Clear all filters
+    localFilters.value = {}
+    emit('update:filters', {})
+    return
+  }
+
   switch (type) {
     case 'category':
       updateFilters({ category: undefined })

@@ -1063,6 +1063,9 @@
     "clearFilters": "Clear all filters",
     "sortPriceLowHigh": "Price: Low to High",
     "sortPriceHighLow": "Price: High to Low",
+    "view": "Вид",
+    "gridView": "Вид сеткой",
+    "listView": "Вид списком",
     "categories": {
       "all": "Все",
       "wine": "Вина",

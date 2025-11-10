@@ -1143,6 +1143,9 @@
     "clearFilters": "Limpiar todos los filtros",
     "sortPriceLowHigh": "Precio: Menor a Mayor",
     "sortPriceHighLow": "Precio: Mayor a Menor",
+    "view": "Vista",
+    "gridView": "Vista de cuadrícula",
+    "listView": "Vista de lista",
     "categories": {
       "all": "Todos",
       "wine": "Vinos",
