@@ -201,8 +201,16 @@ export default defineNuxtConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+    resolve: {
+      alias: {
+        'postcss-minify-gradients': '/.patches/postcss-minify-gradients-noop.js',
+      },
+    },
     ssr: {
       noExternal: ["vue", "@vue/*"],
+    },
+    build: {
+      cssMinify: 'lightningcss',
     },
     server: {
       watch: {
@@ -236,6 +244,19 @@ export default defineNuxtConfig({
           dirs.splice(i, 1)
         }
       }
+    },
+    // Disable cssnano to avoid Tailwind v4 gradient minification bug
+    'vite:extendConfig'(config) {
+      if (!config.css) config.css = {}
+      if (!config.css.postcss) config.css.postcss = {}
+      if (!config.css.postcss.plugins) config.css.postcss.plugins = []
+
+      // Remove cssnano if it exists
+      config.css.postcss.plugins = (config.css.postcss.plugins as any[]).filter((plugin: any) => {
+        if (!plugin) return true
+        const pluginName = plugin.postcssPlugin || plugin.name || ''
+        return !pluginName.includes('cssnano') && !pluginName.includes('minify-gradients')
+      })
     },
   },
 });
