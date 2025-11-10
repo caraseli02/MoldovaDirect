@@ -88,10 +88,12 @@
 </template>
 
 <script setup lang="ts">
+import type { ProductFilters } from '~/types'
+
 interface DiscoveryCollection {
   id: string
   label: string
-  filters: any
+  filters: ProductFilters
 }
 
 interface Props {

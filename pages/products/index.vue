@@ -1,19 +1,17 @@
 <template>
   <div class="bg-gray-50 dark:bg-gray-950 min-h-screen">
     <ProductCategoryNavigation
-      v-if="isSectionEnabled('categoryNavigation')"
       :categories="categoriesTree"
       :current-category="currentCategory?.slug"
       :show-product-count="true"
     />
 
     <ProductHero
-      v-if="isSectionEnabled('heroSection')"
       :seasonal-badge="t('products.hero.seasonal')"
       :title="t('products.hero.title')"
       :subtitle="t('products.hero.subtitle')"
       :cta-text="t('products.hero.cta')"
-      :collections="isSectionEnabled('discoveryCollections') ? discoveryCollections : []"
+      :collections="discoveryCollections"
       :active-collection-id="activeCollectionId"
       @scroll-to-results="scrollToResults"
       @select-collection="applyDiscoveryCollection"
@@ -56,7 +54,7 @@
       <div class="mx-auto flex w-full max-w-7xl flex-col gap-8 px-4 pb-20 pt-10 sm:px-6 lg:px-8" ref="contentContainer">
         <div class="flex-1" ref="scrollContainer">
           <MobilePullToRefreshIndicator
-            v-if="isSectionEnabled('pullToRefresh') && isMobile"
+            v-if="isMobile"
             :is-refreshing="pullToRefresh.isRefreshing.value"
             :is-pulling="pullToRefresh.isPulling.value"
             :can-refresh="pullToRefresh.canRefresh.value"
@@ -66,7 +64,7 @@
           />
 
           <div id="results" class="space-y-10">
-            <div v-if="isSectionEnabled('searchAndFilters')" class="space-y-6">
+            <div class="space-y-6">
               <ProductSearchBar
                 :title="t('products.discovery.title')"
                 :description="t('products.discovery.description')"
@@ -87,7 +85,7 @@
 
               <ProductActiveFilters
                 :chips="activeFilterChips"
-                :quick-toggles="isSectionEnabled('quickFilters') ? quickToggleOptions : []"
+                :quick-toggles="quickToggleOptions"
                 :results-text="t('products.showingResults', {
                   start: ((pagination.page - 1) * pagination.limit) + 1,
                   end: Math.min(pagination.page * pagination.limit, pagination.total || 0),
@@ -129,7 +127,7 @@
 
             <div v-else-if="products?.length" class="space-y-10">
               <MobileVirtualProductGrid
-                v-if="isSectionEnabled('virtualScrolling') && isMobile && products.length > PRODUCTS.VIRTUAL_SCROLL_THRESHOLD"
+                v-if="isMobile && products.length > PRODUCTS.VIRTUAL_SCROLL_THRESHOLD"
                 :items="products"
                 :container-height="600"
                 :loading="loading"
@@ -199,7 +197,7 @@
               </UiButton>
             </div>
 
-            <section v-if="isSectionEnabled('recentlyViewed') && recentlyViewedProducts.length" class="space-y-6">
+            <section v-if="recentlyViewedProducts.length" class="space-y-6">
               <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                 <div>
                   <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
@@ -216,7 +214,6 @@
             </section>
 
             <ProductEditorialStories
-              v-if="isSectionEnabled('editorialStories')"
               :title="t('products.editorial.title')"
               :subtitle="t('products.editorial.subtitle')"
               :cta-text="t('products.editorial.cta')"
@@ -248,7 +245,6 @@ import MobilePullToRefreshIndicator from '~/components/mobile/PullToRefreshIndic
 
 // Composables
 import { useProductCatalog } from '~/composables/useProductCatalog'
-import { useProductsConfig } from '~/composables/useProductsConfig'
 import { useDevice } from '~/composables/useDevice'
 import { useHapticFeedback } from '~/composables/useHapticFeedback'
 import { usePullToRefresh } from '~/composables/usePullToRefresh'
@@ -260,9 +256,6 @@ import { PRODUCTS, PRODUCT_SORT_OPTIONS } from '~/constants/products'
 import { useHead } from '#imports'
 
 const { t, locale } = useI18n()
-
-// Feature flags
-const { isSectionEnabled } = useProductsConfig()
 
 const {
   initialize,
@@ -285,7 +278,7 @@ const searchInputRef = ref<HTMLInputElement | null>(null)
 const priceRange = ref<{ min: number; max: number }>({ min: PRODUCTS.DEFAULT_PRICE_MIN, max: PRODUCTS.DEFAULT_PRICE_MAX })
 const route = useRoute()
 const router = useRouter()
-const sortBy = ref<string>(PRODUCT_SORT_OPTIONS.CREATED)
+const sortBy = ref<'name' | 'price_asc' | 'price_desc' | 'newest' | 'featured' | 'created'>(PRODUCT_SORT_OPTIONS.CREATED)
 const showFilterPanel = ref(false)
 const activeCollectionId = ref<string | null>(null)
 
@@ -296,19 +289,10 @@ const mainContainer = ref<HTMLElement>()
 const contentContainer = ref<HTMLElement>()
 const scrollContainer = ref<HTMLElement>()
 
-const pullToRefresh = isSectionEnabled('pullToRefresh') ? usePullToRefresh(async () => {
+const pullToRefresh = usePullToRefresh(async () => {
   vibrate('pullRefresh')
   await refreshProducts()
-}) : {
-  isRefreshing: ref(false),
-  isPulling: ref(false),
-  canRefresh: ref(false),
-  pullDistance: ref(0),
-  pullStatusText: ref(''),
-  pullIndicatorStyle: ref({}),
-  setupPullToRefresh: () => {},
-  cleanupPullToRefresh: () => {}
-}
+})
 
 const swipeGestures = useSwipeGestures()
 
@@ -399,7 +383,7 @@ const handleSearchQueryUpdate = (value: string) => {
 }
 
 const handleSortByUpdate = (value: string) => {
-  sortBy.value = value
+  sortBy.value = value as typeof sortBy.value
   handleSortChange()
 }
 
@@ -410,13 +394,13 @@ const handleSearchInput = () => {
       search(searchQuery.value.trim(), {
         ...filters.value,
         page: 1,
-        sort: sortBy.value as any
+        sort: sortBy.value
       })
     } else {
       fetchProducts({
         ...filters.value,
         page: 1,
-        sort: sortBy.value as any
+        sort: sortBy.value
       })
     }
   }, PRODUCTS.SEARCH_DEBOUNCE_MS)
@@ -425,7 +409,7 @@ const handleSearchInput = () => {
 const handleSortChange = () => {
   const currentFilters = {
     ...filters.value,
-    sort: sortBy.value as any,
+    sort: sortBy.value,
     page: 1
   }
 
@@ -443,7 +427,7 @@ const handleFiltersUpdate = (newFilters: Partial<ProductFilters>) => {
 const handleApplyFilters = (closePanel = false) => {
   const currentFilters = {
     ...filters.value,
-    sort: sortBy.value as any,
+    sort: sortBy.value,
     page: 1
   }
 
@@ -469,7 +453,7 @@ const clearAllFilters = () => {
 const goToPage = (page: number) => {
   const currentFilters = {
     ...filters.value,
-    sort: sortBy.value as any,
+    sort: sortBy.value,
     page
   }
 
@@ -486,7 +470,7 @@ const refreshProducts = async () => {
   try {
     const currentFilters = {
       ...filters.value,
-      sort: sortBy.value as any,
+      sort: sortBy.value,
       page: 1
     }
 
@@ -536,7 +520,7 @@ const loadMoreProducts = async () => {
     const nextPage = pagination.value.page + 1
     const currentFilters = {
       ...filters.value,
-      sort: sortBy.value as any,
+      sort: sortBy.value,
       page: nextPage
     }
 
@@ -624,7 +608,7 @@ const applyDiscoveryCollection = (collection: { id: string; filters: ProductFilt
     ...filters.value,
     ...collection.filters,
     page: 1,
-    sort: (collection.filters.sort as any) || 'created'
+    sort: collection.filters.sort || 'created'
   }
 
   if (!collection.filters.priceMin) delete nextFilters.priceMin
@@ -632,7 +616,7 @@ const applyDiscoveryCollection = (collection: { id: string; filters: ProductFilt
   if (!collection.filters.featured) delete nextFilters.featured
   if (!collection.filters.inStock) delete nextFilters.inStock
 
-  sortBy.value = (nextFilters.sort as string) || 'created'
+  sortBy.value = nextFilters.sort || 'created'
   fetchProducts(nextFilters)
 }
 
@@ -646,9 +630,9 @@ const quickToggleOptions = computed(() => {
         const next: ProductFilters = { ...filters.value, inStock: !filters.value.inStock, page: 1 }
         if (!next.inStock) {
           const { inStock, ...rest } = next
-          fetchProducts({ ...rest, sort: sortBy.value as any })
+          fetchProducts({ ...rest, sort: sortBy.value })
         } else {
-          fetchProducts({ ...next, sort: sortBy.value as any })
+          fetchProducts({ ...next, sort: sortBy.value })
         }
       }
     },
@@ -660,10 +644,10 @@ const quickToggleOptions = computed(() => {
         const nextFeatured = !filters.value.featured
         if (!nextFeatured) {
           const { featured, ...rest } = filters.value
-          fetchProducts({ ...rest, page: 1, sort: sortBy.value as any })
+          fetchProducts({ ...rest, page: 1, sort: sortBy.value })
         } else {
           sortBy.value = PRODUCT_SORT_OPTIONS.FEATURED
-          fetchProducts({ ...filters.value, featured: true, page: 1, sort: PRODUCT_SORT_OPTIONS.FEATURED as any })
+          fetchProducts({ ...filters.value, featured: true, page: 1, sort: PRODUCT_SORT_OPTIONS.FEATURED })
         }
       }
     }
@@ -771,7 +755,7 @@ const removeActiveChip = (chip: { type: string; attributeKey?: string; attribute
       break
   }
 
-  fetchProducts({ ...nextFilters, page: 1, sort: sortBy.value as any })
+  fetchProducts({ ...nextFilters, page: 1, sort: sortBy.value })
 }
 
 const editorialStories = computed(() => {
@@ -805,7 +789,7 @@ watchEffect(() => {
 
 watch(() => filters.value.sort, newValue => {
   if (newValue) {
-    sortBy.value = newValue as string
+    sortBy.value = newValue
   }
 })
 
