@@ -47,6 +47,9 @@
     "errorGeneric": "Ha ocurrido un error. Por favor, inténtalo de nuevo.",
     "menu": "Menú",
     "close": "Cerrar",
+    "clear": "Limpiar",
+    "navigate": "para navegar",
+    "select": "para seleccionar",
     "preferences": "Preferencias",
     "selectAll": "Seleccionar todo",
     "deselectAll": "Deseleccionar todo",
@@ -1163,22 +1166,41 @@
       "outOfStock": "Agotado",
       "featuredOnly": "Solo destacados",
       "active": "Filtros Activos",
+      "clear": "Limpiar filtros",
       "clearAll": "Limpiar Todo",
-      "apply": "Aplicar Filtros",
+      "clearAllFilters": "Limpiar todos los filtros activos",
+      "swipeToClose": "Desliza hacia abajo o toca el botón cerrar para descartar",
+      "apply": "Mostrar {count} productos | Mostrar {count} producto | Mostrar {count} productos",
       "minPrice": "Precio Mínimo",
       "maxPrice": "Precio Máximo",
       "removeFilter": "Eliminar filtro {filter}",
-      "unknownCategory": "Categoría Desconocida"
+      "unknownCategory": "Categoría Desconocida",
+      "openFilters": "Abrir panel de filtros",
+      "activeCount": "{count} filtros activos"
     },
     "hero": {
       "seasonal": "Destacados de temporada",
       "title": "Descubre los sabores emblemáticos de Moldavia",
       "subtitle": "Compra vinos seleccionados, despensa gourmet y artesanías con entrega en toda España.",
-      "cta": "Ver colección"
+      "cta": "Ver colección",
+      "ctaAria": "Ver colección de productos",
+      "or": "o explora:",
+      "stats": {
+        "products": "{count}+ productos",
+        "freeShipping": "Envío gratis desde €50",
+        "quality": "100% auténtico"
+      }
     },
+    "breadcrumb": "Productos",
+    "breadcrumbNav": {
+      "showAll": "Mostrar todas las categorías",
+      "searchResults": "Resultados de búsqueda para \"{query}\""
+    },
+    "searchSuggestions": "Sugerencias de búsqueda",
     "discovery": {
       "title": "Encuentra la experiencia perfecta",
       "description": "Aplica filtros inteligentes o entra en colecciones listas para tus planes de hoy.",
+      "selectCollection": "Explorar colección {collection}",
       "collections": {
         "celebration": "Vinos para celebrar",
         "weeknight": "Esenciales para diario",
@@ -1192,7 +1214,10 @@
     },
     "filterSummary": {
       "title": "Filtros activos",
-      "clear": "Restablecer filtros"
+      "clear": "Limpiar Todo",
+      "activeFilters": "Filtros activos",
+      "removeFilter": "Eliminar filtro {filter}",
+      "clearAllFilters": "Limpiar todos los filtros activos"
     },
     "chips": {
       "category": "Categoría: {value}",

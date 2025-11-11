@@ -1,87 +1,34 @@
 <template>
   <div class="bg-gray-50 dark:bg-gray-950 min-h-screen">
-    <ProductCategoryNavigation
-      :categories="categoriesTree"
+    <!-- Breadcrumb Navigation -->
+    <ProductBreadcrumbs
       :current-category="currentCategory"
-      :show-product-count="true"
+      :search-query="searchQuery"
     />
 
-    <section class="relative overflow-hidden">
-      <div class="absolute inset-0 bg-gradient-to-br from-blue-600/80 via-blue-500/70 to-indigo-500/70 dark:from-blue-900/80 dark:via-blue-800/70 dark:to-indigo-900/70"></div>
-      <div class="absolute inset-x-0 -bottom-32 h-64 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.35),transparent_60%)]"></div>
-      <div class="relative z-10 px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-        <div class="mx-auto max-w-5xl text-white">
-          <div class="inline-flex items-center rounded-full bg-white/20 px-4 py-1 text-sm font-semibold uppercase tracking-wider backdrop-blur shadow-sm">
-            {{ t('products.hero.seasonal') }}
-          </div>
-          <h1 class="mt-6 text-3xl font-bold sm:text-4xl lg:text-5xl">
-            {{ t('products.hero.title') }}
-          </h1>
-          <p class="mt-4 max-w-2xl text-lg">
-            {{ t('products.hero.subtitle') }}
-          </p>
-          <div class="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
-            <UiButton
-              type="button"
-              class="rounded-full bg-white text-blue-600 shadow-lg shadow-blue-900/20 hover:bg-blue-50"
-              @click="scrollToResults"
-            >
-              {{ t('products.hero.cta') }}
-            </UiButton>
-            <div class="flex flex-wrap items-center gap-2">
-              <UiButton
-                v-for="collection in discoveryCollections"
-                :key="collection.id"
-                type="button"
-                variant="outline"
-                class="rounded-full border-white/40 bg-white/10 backdrop-blur hover:bg-white/20"
-                :class="{ 'bg-white text-blue-600 shadow-lg shadow-blue-900/10': activeCollectionId === collection.id }"
-                @click="applyDiscoveryCollection(collection)"
-              >
-                {{ collection.label }}
-              </UiButton>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <div class="relative" ref="mainContainer">
-      <!-- Mobile/Tablet Filter Panel -->
-      <Transition name="fade">
-        <div v-if="showFilterPanel" class="fixed inset-0 z-40 flex" role="dialog" aria-modal="true" aria-labelledby="filter-panel-title">
-          <div class="flex-1 bg-black/40 backdrop-blur-sm" @click="closeFilterPanel" aria-label="Close filters"></div>
-          <div id="filter-panel" class="relative ml-auto flex h-full w-full max-w-md flex-col bg-white dark:bg-gray-900 shadow-xl">
-            <div class="flex items-center justify-between border-b border-gray-200 px-6 py-4 dark:border-gray-800">
-              <h2 id="filter-panel-title" class="text-lg font-semibold text-gray-900 dark:text-white">
-                {{ t('products.filters.title') }}
-              </h2>
-              <UiButton
-                type="button"
-                variant="ghost"
-                size="icon"
-                @click="closeFilterPanel"
-                :aria-label="t('common.close')"
-              >
-                <commonIcon name="lucide:x" class="h-5 w-5" aria-hidden="true" />
-              </UiButton>
-            </div>
-            <div class="flex-1 overflow-y-auto px-4">
-              <productFilterMain
-                :filters="filters"
-                :available-filters="availableFilters"
-                :filtered-product-count="products?.length || 0"
-                :show-title="false"
-                @update:filters="handleFiltersUpdate"
-                @apply-filters="handleApplyFilters(true)"
-              />
-            </div>
-          </div>
-        </div>
-      </Transition>
+      <!-- Mobile Filter Sheet -->
+      <ProductFilterSheet
+        v-model="showFilterPanel"
+        :title="t('products.filters.title')"
+        :active-filter-count="activeFilterChips.length"
+        :filtered-count="products?.length || 0"
+        :show-clear-button="hasActiveFilters"
+        @apply="handleApplyFilters(true)"
+        @clear="clearAllFilters"
+      >
+        <productFilterMain
+          :filters="filters"
+          :available-filters="availableFilters"
+          :filtered-product-count="products?.length || 0"
+          :show-title="false"
+          @update:filters="handleFiltersUpdate"
+          @apply-filters="handleApplyFilters(true)"
+        />
+      </ProductFilterSheet>
 
-      <div class="mx-auto flex w-full max-w-7xl flex-col gap-8 px-4 pb-20 pt-10 sm:px-6 lg:px-8" ref="contentContainer">
-        <div class="flex-1" ref="scrollContainer">
+      <div class="mx-auto w-full max-w-7xl px-4 pb-20 pt-10 sm:px-6 lg:px-8" ref="contentContainer">
+        <div class="w-full" ref="scrollContainer">
           <MobilePullToRefreshIndicator
             v-if="isMobile"
             :is-refreshing="pullToRefresh.isRefreshing.value"
@@ -92,148 +39,71 @@
             :indicator-style="pullToRefresh.pullIndicatorStyle.value"
           />
 
-          <div id="results" class="space-y-10">
-            <div class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900 sm:p-6">
-              <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                  <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">
-                    {{ t('products.discovery.title') }}
-                  </h2>
-                  <p class="text-sm text-gray-600 dark:text-gray-400">
-                    {{ t('products.discovery.description') }}
-                  </p>
-                </div>
-                <div class="flex flex-wrap items-center gap-3">
-                  <!-- Filter button (mobile/tablet only) -->
-                  <UiButton
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    :aria-label="t('products.filters.title')"
-                    :aria-expanded="showFilterPanel"
-                    aria-controls="filter-panel"
-                    @click="openFilterPanel"
-                  >
-                    <commonIcon name="lucide:filter" class="mr-2 h-4 w-4" aria-hidden="true" />
-                    <span>{{ t('products.filters.title') }}</span>
-                    <span v-if="activeFilterChips.length" class="ml-1 inline-flex items-center justify-center rounded-full bg-blue-100 px-2 py-0.5 text-xs font-semibold text-blue-700 dark:bg-blue-900/40 dark:text-blue-300" aria-label="Active filters count">
-                      {{ activeFilterChips.length }}
-                    </span>
-                  </UiButton>
-                  <div class="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center">
-                    <div class="relative flex-1">
-                      <label for="product-search" class="sr-only">
-                        {{ t('products.searchLabel') }}
-                      </label>
-                      <commonIcon
-                        v-if="!loading"
-                        name="lucide:search"
-                        class="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400"
-                        aria-hidden="true"
-                      />
-                      <div v-else class="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2">
-                        <svg class="h-5 w-5 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-                          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                      </div>
-                      <input
-                        id="product-search"
-                        ref="searchInputRef"
-                        v-model="searchQuery"
-                        type="search"
-                        role="searchbox"
-                        :placeholder="t('products.searchPlaceholder')"
-                        :disabled="loading"
-                        :aria-label="t('products.searchLabel')"
-                        class="w-full rounded-xl border border-gray-300 bg-white py-3 pl-11 pr-4 text-sm text-gray-900 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100 disabled:cursor-not-allowed disabled:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-blue-400"
-                        @input="handleSearchInput"
-                      />
-                    </div>
-                    <div class="relative">
-                      <label for="product-sort" class="sr-only">
-                        {{ t('products.sortLabel') }}
-                      </label>
-                      <select
-                        id="product-sort"
-                        v-model="sortBy"
-                        :aria-label="t('products.sortLabel')"
-                        class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:focus:border-blue-400 sm:w-48"
-                        @change="handleSortChange"
-                      >
-                        <option value="created">{{ t('products.sortNewest') }}</option>
-                        <option value="name">{{ t('products.sortName') }}</option>
-                        <option value="price_asc">{{ t('products.sortPriceLowHigh') }}</option>
-                        <option value="price_desc">{{ t('products.sortPriceHighLow') }}</option>
-                        <option value="featured">{{ t('products.sortFeatured') }}</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="mt-6 flex flex-wrap items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
-                <span>
+          <div id="results" class="space-y-12">
+            <!-- Clean Header Section -->
+            <div class="flex items-end justify-between border-b border-gray-200 pb-6 dark:border-gray-800">
+              <div class="flex-1">
+                <h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white lg:text-4xl">
+                  {{ t('products.discovery.title') }}
+                </h1>
+                <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
                   {{ t('products.showingResults', {
                     start: ((pagination.page - 1) * pagination.limit) + 1,
                     end: Math.min(pagination.page * pagination.limit, pagination.total || 0),
                     total: pagination.total || 0
                   }) }}
-                </span>
-                <template v-if="activeFilterChips.length">
-                  <span class="text-gray-400">•</span>
-                  <span class="font-medium text-gray-700 dark:text-gray-200">
-                    {{ t('products.filterSummary.title') }}
+                </p>
+              </div>
+
+              <!-- Right Side Controls -->
+              <div class="flex items-center gap-4">
+                <!-- Filter Button -->
+                <button
+                  type="button"
+                  :aria-label="t('products.filters.title')"
+                  :aria-expanded="showFilterPanel"
+                  aria-controls="filter-panel"
+                  class="relative inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-750"
+                  @click="openFilterPanel"
+                >
+                  <commonIcon name="lucide:sliders-horizontal" class="h-4 w-4" aria-hidden="true" />
+                  <span>{{ t('products.filters.title') }}</span>
+                  <span v-if="activeFilterChips.length" class="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-blue-600 text-xs font-semibold text-white ring-2 ring-white dark:ring-gray-900">
+                    {{ activeFilterChips.length }}
                   </span>
-                </template>
-              </div>
+                </button>
 
-              <div v-if="activeFilterChips.length" class="mt-4 flex flex-wrap gap-2" role="list" :aria-label="t('products.filterSummary.activeFilters')">
-                <UiButton
-                  v-for="chip in activeFilterChips"
-                  :key="chip.id"
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  role="listitem"
-                  class="rounded-full bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-900/40 dark:text-blue-200"
-                  :aria-label="t('products.filterSummary.removeFilter', { filter: chip.label })"
-                  @click="removeActiveChip(chip)"
-                >
-                  <span>{{ chip.label }}</span>
-                  <span class="ml-1" aria-hidden="true">×</span>
-                </UiButton>
-                <UiButton
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  class="rounded-full"
-                  :aria-label="t('products.filterSummary.clearAllFilters')"
-                  @click="clearAllFilters"
-                >
-                  {{ t('products.filterSummary.clear') }}
-                </UiButton>
-              </div>
-
-              <div class="mt-6 flex flex-wrap items-center gap-3" role="group" :aria-label="t('products.quickFilters.label')">
-                <UiButton
-                  v-for="toggle in quickToggleOptions"
-                  :key="toggle.id"
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  role="switch"
-                  :aria-checked="toggle.active"
-                  :aria-label="t('products.quickFilters.toggle', { filter: toggle.label })"
-                  class="rounded-full"
-                  :class="toggle.active ? 'border-blue-500 bg-blue-50 text-blue-700 dark:border-blue-500/60 dark:bg-blue-900/40 dark:text-blue-200' : ''"
-                  @click="toggleQuickFilter(toggle)"
-                >
-                  <span class="mr-2 inline-block h-2.5 w-2.5 rounded-full" :class="toggle.active ? 'bg-blue-500' : 'bg-gray-300 dark:bg-gray-600'" aria-hidden="true"></span>
-                  {{ toggle.label }}
-                </UiButton>
+                <!-- Sort Dropdown -->
+                <div class="relative">
+                  <label for="product-sort" class="sr-only">
+                    {{ t('products.sortLabel') }}
+                  </label>
+                  <select
+                    id="product-sort"
+                    v-model="sortBy"
+                    :aria-label="t('products.sortLabel')"
+                    class="h-10 appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-10 text-sm font-medium text-gray-700 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+                    @change="handleSortChange"
+                  >
+                    <option value="created">{{ t('products.sortNewest') }}</option>
+                    <option value="name">{{ t('products.sortName') }}</option>
+                    <option value="price_asc">{{ t('products.sortPriceLowHigh') }}</option>
+                    <option value="price_desc">{{ t('products.sortPriceHighLow') }}</option>
+                    <option value="featured">{{ t('products.sortFeatured') }}</option>
+                  </select>
+                  <commonIcon name="lucide:chevron-down" class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" aria-hidden="true" />
+                </div>
               </div>
             </div>
+
+            <!-- Active Filter Chips -->
+            <ProductActiveFilters
+              v-if="activeFilterChips.length"
+              :chips="activeFilterChips"
+              :show-clear-all="true"
+              @remove-chip="removeActiveChip"
+              @clear-all="clearAllFilters"
+            />
 
             <div v-if="error" class="rounded-2xl border border-red-100 bg-white p-10 text-center shadow-sm dark:border-red-900/40 dark:bg-gray-900">
               <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto mb-4 h-16 w-16 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -388,10 +258,9 @@
 
 <script setup lang="ts">
 import type { ProductFilters, ProductWithRelations } from '~/types'
-import { ref, computed, onMounted, onUnmounted, nextTick, watch, watchEffect } from 'vue'
+import { ref, computed, onMounted, onUnmounted, onBeforeUnmount, nextTick, watch, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 
-import ProductCategoryNavigation from '~/components/product/CategoryNavigation.vue'
 import productFilterMain from '~/components/product/Filter/Main.vue'
 import ProductCard from '~/components/product/Card.vue'
 import commonIcon from '~/components/common/Icon.vue'
@@ -403,6 +272,7 @@ import { useDevice } from '~/composables/useDevice'
 import { useHapticFeedback } from '~/composables/useHapticFeedback'
 import { usePullToRefresh } from '~/composables/usePullToRefresh'
 import { useSwipeGestures } from '~/composables/useSwipeGestures'
+import { useDebounceFn } from '@vueuse/core'
 
 import { useHead } from '#imports'
 
@@ -414,6 +284,9 @@ const {
   search,
   updateFilters,
   clearFilters,
+  openFilterPanel,
+  closeFilterPanel,
+  updateSort,
   products,
   categoriesTree,
   currentCategory,
@@ -421,17 +294,16 @@ const {
   filters,
   pagination,
   loading,
-  error
+  error,
+  sortBy,
+  showFilterPanel
 } = useProductCatalog()
 
 const searchQuery = ref('')
-const searchInputRef = ref<HTMLInputElement | null>(null)
 const priceRange = ref<{ min: number; max: number }>({ min: 0, max: 200 })
 const route = useRoute()
 const router = useRouter()
-const sortBy = ref<string>('created')
-const showFilterPanel = ref(false)
-const activeCollectionId = ref<string | null>(null)
+let searchAbortController: AbortController | null = null
 
 const { isMobile } = useDevice()
 const { vibrate } = useHapticFeedback()
@@ -462,6 +334,8 @@ const hasActiveFilters = computed(() => {
     filters.value.featured
   )
 })
+
+const totalProducts = computed(() => pagination.value?.total || products.value?.length || 0)
 
 const availableFilters = computed(() => {
   const convertCategories = (cats: any[]): any[] => {
@@ -516,26 +390,30 @@ const visiblePages = computed(() => {
   return pages
 })
 
-let searchTimeout: NodeJS.Timeout
+// Debounced search handler to prevent excessive API calls
+const handleSearchInput = useDebounceFn(() => {
+  // Cancel previous search request if it exists
+  if (searchAbortController) {
+    searchAbortController.abort()
+  }
 
-const handleSearchInput = () => {
-  clearTimeout(searchTimeout)
-  searchTimeout = setTimeout(() => {
-    if (searchQuery.value.trim()) {
-      search(searchQuery.value.trim(), {
-        ...filters.value,
-        page: 1,
-        sort: sortBy.value as any
-      })
-    } else {
-      fetchProducts({
-        ...filters.value,
-        page: 1,
-        sort: sortBy.value as any
-      })
-    }
-  }, 300)
-}
+  // Create new abort controller for this search
+  searchAbortController = new AbortController()
+
+  if (searchQuery.value.trim()) {
+    search(searchQuery.value.trim(), {
+      ...filters.value,
+      page: 1,
+      sort: sortBy.value as any
+    }, searchAbortController.signal)
+  } else {
+    fetchProducts({
+      ...filters.value,
+      page: 1,
+      sort: sortBy.value as any
+    }, searchAbortController.signal)
+  }
+}, 300)
 
 const handleSortChange = () => {
   const currentFilters = {
@@ -576,7 +454,6 @@ const handleApplyFilters = (closePanel = false) => {
 const clearAllFilters = () => {
   searchQuery.value = ''
   sortBy.value = 'created'
-  activeCollectionId.value = null
   clearFilters()
   fetchProducts({ sort: 'created', page: 1, limit: 12 })
 }
@@ -665,143 +542,34 @@ const loadMoreProducts = async () => {
   }
 }
 
-const scrollToResults = () => {
-  nextTick(() => {
-    const el = document.getElementById('results')
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }
-  })
-}
+// Build category lookup Map for O(1) access instead of O(n) tree traversal
+const categoriesLookup = computed(() => {
+  const map = new Map<string | number, string>()
 
-const openFilterPanel = () => {
-  showFilterPanel.value = true
-  // Prevent body scroll when panel is open
-  document.body.style.overflow = 'hidden'
-}
+  const buildMap = (nodes: any[]) => {
+    nodes.forEach(node => {
+      // Get localized name with fallback
+      const name = node.name?.[locale.value] || node.name?.es || Object.values(node.name || {})[0] || ''
 
-const closeFilterPanel = () => {
-  showFilterPanel.value = false
-  // Restore body scroll
-  document.body.style.overflow = ''
-}
+      // Store by both slug and ID for flexible lookup
+      if (node.slug) map.set(node.slug, name)
+      if (node.id) map.set(node.id, name)
 
-// Handle Escape key to close filter panel
-const handleKeyDown = (event: KeyboardEvent) => {
-  if (event.key === 'Escape' && showFilterPanel.value) {
-    closeFilterPanel()
-  }
-}
-
-const discoveryCollections = computed(() => {
-  return [
-    {
-      id: 'featured',
-      label: t('products.discovery.collections.celebration'),
-      filters: {
-        featured: true,
-        sort: 'featured'
-      }
-    },
-    {
-      id: 'weekday',
-      label: t('products.discovery.collections.weeknight'),
-      filters: {
-        priceMax: 25,
-        sort: 'price_asc'
-      }
-    },
-    {
-      id: 'gifts',
-      label: t('products.discovery.collections.gift'),
-      filters: {
-        priceMin: 25,
-        priceMax: 60,
-        sort: 'created'
-      }
-    },
-    {
-      id: 'cellar',
-      label: t('products.discovery.collections.cellar'),
-      filters: {
-        sort: 'created',
-        inStock: true
-      }
-    }
-  ]
-})
-
-const applyDiscoveryCollection = (collection: { id: string; filters: ProductFilters; label: string }) => {
-  activeCollectionId.value = collection.id
-  searchQuery.value = ''
-
-  const nextFilters: ProductFilters = {
-    ...filters.value,
-    ...collection.filters,
-    page: 1,
-    sort: (collection.filters.sort as any) || 'created'
-  }
-
-  if (!collection.filters.priceMin) delete nextFilters.priceMin
-  if (!collection.filters.priceMax) delete nextFilters.priceMax
-  if (!collection.filters.featured) delete nextFilters.featured
-  if (!collection.filters.inStock) delete nextFilters.inStock
-
-  sortBy.value = (nextFilters.sort as string) || 'created'
-  fetchProducts(nextFilters)
-}
-
-const quickToggleOptions = computed(() => {
-  return [
-    {
-      id: 'inStock',
-      label: t('products.toggles.inStock'),
-      active: !!filters.value.inStock,
-      apply: () => {
-        const next = { ...filters.value, inStock: !filters.value.inStock, page: 1 }
-        if (!next.inStock) delete next.inStock
-        fetchProducts({ ...next, sort: sortBy.value as any })
-      }
-    },
-    {
-      id: 'featured',
-      label: t('products.toggles.featured'),
-      active: !!filters.value.featured,
-      apply: () => {
-        const next = { ...filters.value, featured: !filters.value.featured, page: 1, sort: 'featured' as const }
-        if (!next.featured) {
-          delete next.featured
-          next.sort = sortBy.value as any
-        } else {
-          sortBy.value = 'featured'
-        }
-        fetchProducts(next)
-      }
-    }
-  ]
-})
-
-const toggleQuickFilter = (toggle: { apply: () => void }) => {
-  toggle.apply()
-}
-
-const findCategoryName = (slugOrId: string | number | undefined) => {
-  if (!slugOrId) return ''
-
-  const findInTree = (nodes: any[]): string | undefined => {
-    for (const node of nodes) {
-      if (node.slug === slugOrId || node.id === slugOrId) {
-        return node.name?.[locale.value] || node.name?.es || Object.values(node.name || {})[0]
-      }
+      // Recursively process children
       if (node.children?.length) {
-        const child = findInTree(node.children)
-        if (child) return child
+        buildMap(node.children)
       }
-    }
-    return undefined
+    })
   }
 
-  return findInTree(categoriesTree.value || []) || ''
+  buildMap(categoriesTree.value || [])
+  return map
+})
+
+// O(1) category name lookup
+const getCategoryName = (slugOrId: string | number | undefined): string => {
+  if (!slugOrId) return ''
+  return categoriesLookup.value.get(slugOrId) || ''
 }
 
 const activeFilterChips = computed(() => {
@@ -810,7 +578,7 @@ const activeFilterChips = computed(() => {
   if (filters.value.category) {
     chips.push({
       id: 'category',
-      label: t('products.chips.category', { value: findCategoryName(filters.value.category) || t('products.filters.unknownCategory') }),
+      label: t('products.chips.category', { value: getCategoryName(filters.value.category) || t('products.filters.unknownCategory') }),
       type: 'category'
     })
   }
@@ -908,18 +676,21 @@ const editorialStories = computed(() => {
   ]
 })
 
+// Sync store search query to local (read-only sync, no fetch trigger)
 watchEffect(() => {
   if (storeSearchQuery.value && storeSearchQuery.value !== searchQuery.value) {
     searchQuery.value = storeSearchQuery.value
   }
 })
 
+// Sync filters.sort to sortBy (read-only sync, no fetch trigger)
 watch(() => filters.value.sort, newValue => {
-  if (newValue) {
+  if (newValue && newValue !== sortBy.value) {
     sortBy.value = newValue as string
   }
-})
+}, { immediate: false })
 
+// Close filter panel when switching to desktop
 watch(isMobile, value => {
   if (!value) {
     closeFilterPanel()
@@ -933,26 +704,25 @@ onMounted(async () => {
   nextTick(() => {
     setupMobileInteractions()
   })
-  // Focus search if requested
-  if (route.query.focus === 'search') {
-    nextTick(() => {
-      searchInputRef.value?.focus()
-      const { focus, ...rest } = route.query
-      router.replace({ query: rest })
-    })
-  }
   await refreshPriceRange()
+})
 
-  // Set up keyboard listener for filter panel
-  document.addEventListener('keydown', handleKeyDown)
+// Cleanup session storage to prevent accumulation over multiple navigations
+onBeforeUnmount(() => {
+  if (process.client) {
+    try {
+      // Clean up any products-related session storage
+      sessionStorage.removeItem('products-scroll-position')
+      sessionStorage.removeItem('products-filter-state')
+    } catch (error) {
+      // Silently fail if session storage is unavailable
+      console.debug('Session storage cleanup failed:', error)
+    }
+  }
 })
 
 onUnmounted(() => {
   cleanupMobileInteractions()
-  // Clean up keyboard listener
-  document.removeEventListener('keydown', handleKeyDown)
-  // Restore body scroll if panel was open
-  document.body.style.overflow = ''
 })
 
 useHead({

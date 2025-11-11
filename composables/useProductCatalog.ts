@@ -18,6 +18,10 @@ export const useProductCatalog = () => {
   const loading = useState<boolean>('loading', () => false)
   const error = useState<string | null>('error', () => null)
 
+  // Filter UI state
+  const sortBy = useState<string>('sortBy', () => 'created')
+  const showFilterPanel = useState<boolean>('showFilterPanel', () => false)
+
   // Initialize the catalog
   const initialize = async () => {
     // Fetch categories if not already loaded
@@ -27,7 +31,7 @@ export const useProductCatalog = () => {
   }
 
   // Fetch products with filters
-  const fetchProducts = async (productFilters: ProductFilters = {}) => {
+  const fetchProducts = async (productFilters: ProductFilters = {}, signal?: AbortSignal) => {
     loading.value = true
     error.value = null
 
@@ -58,13 +62,19 @@ export const useProductCatalog = () => {
         products: ProductWithRelations[]
         pagination: { page: number; limit: number; total: number; totalPages: number }
         filters: any
-      }>(`/api/products?${params.toString()}`)
+      }>(`/api/products?${params.toString()}`, {
+        signal
+      })
 
       products.value = response.products
       pagination.value = response.pagination
       filters.value = { ...productFilters }
 
     } catch (err) {
+      // Ignore abort errors - they're expected when canceling requests
+      if (err instanceof Error && err.name === 'AbortError') {
+        return
+      }
       error.value = err instanceof Error ? err.message : 'Failed to fetch products'
       console.error('Error fetching products:', err)
     } finally {
@@ -118,7 +128,7 @@ export const useProductCatalog = () => {
   }
 
   // Search products
-  const search = async (query: string, searchFilters: ProductFilters = {}) => {
+  const search = async (query: string, searchFilters: ProductFilters = {}, signal?: AbortSignal) => {
     loading.value = true
     error.value = null
     searchQuery.value = query.trim()
@@ -136,7 +146,9 @@ export const useProductCatalog = () => {
         products: ProductWithRelations[]
         suggestions: string[]
         query: string
-      }>(`/api/search?${params.toString()}`)
+      }>(`/api/search?${params.toString()}`, {
+        signal
+      })
 
       searchResults.value = response.products
       products.value = response.products // Update main products array
@@ -153,6 +165,10 @@ export const useProductCatalog = () => {
       filters.value = { ...searchFilters }
 
     } catch (err) {
+      // Ignore abort errors - they're expected when canceling requests
+      if (err instanceof Error && err.name === 'AbortError') {
+        return
+      }
       error.value = err instanceof Error ? err.message : 'Search failed'
       searchResults.value = []
       console.error('Error searching products:', err)
@@ -243,6 +259,21 @@ export const useProductCatalog = () => {
     searchResults.value = []
   }
 
+  // Filter panel UI helpers
+  const openFilterPanel = () => {
+    showFilterPanel.value = true
+  }
+
+  const closeFilterPanel = () => {
+    showFilterPanel.value = false
+  }
+
+  // Sort helpers
+  const updateSort = (sort: string) => {
+    sortBy.value = sort
+    filters.value.sort = sort as any
+  }
+
   return {
     // Initialization
     initialize,
@@ -263,6 +294,9 @@ export const useProductCatalog = () => {
     // Filter operations
     updateFilters,
     clearFilters,
+    openFilterPanel,
+    closeFilterPanel,
+    updateSort,
 
     // Reactive state
     products,
@@ -274,6 +308,8 @@ export const useProductCatalog = () => {
     filters,
     pagination,
     loading,
-    error
+    error,
+    sortBy,
+    showFilterPanel
   }
 }
