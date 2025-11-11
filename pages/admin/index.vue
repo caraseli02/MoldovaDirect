@@ -21,7 +21,7 @@
       <Meta name="description" content="Admin dashboard for Moldova Direct e-commerce platform" />
     </Head>
 
-    <!-- Dashboard Content -->
+    <!-- Dashboard Content - Lazy Loaded -->
     <AdminDashboardOverview />
   </div>
 </template>
@@ -32,6 +32,9 @@ definePageMeta({
   layout: 'admin',
   middleware: ['auth', 'admin'] // Will be implemented in auth tasks
 })
+
+// Lazy load admin dashboard component to reduce main bundle size
+const AdminDashboardOverview = useAsyncAdminComponent('Dashboard/Overview')
 
 // SEO and meta
 useHead({

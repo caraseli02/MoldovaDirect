@@ -218,8 +218,6 @@
 </template>
 
 <script setup lang="ts">
-import { format } from 'date-fns'
-
 interface Props {
   user: any // Replace with proper User type
   isSelected?: boolean
@@ -259,19 +257,26 @@ const formattedTotalSpent = computed(() => {
   return formatCurrency(props.user.statistics?.totalSpent || 0)
 })
 
+// Native date formatter for better performance
+const dateFormatter = new Intl.DateTimeFormat('en-US', {
+  year: 'numeric',
+  month: 'short',
+  day: '2-digit'
+})
+
 const formattedRegistration = computed(() => {
   if (!props.user.created_at) return 'Unknown'
-  return format(new Date(props.user.created_at), 'MMM dd, yyyy')
+  return dateFormatter.format(new Date(props.user.created_at))
 })
 
 const formattedLastLogin = computed(() => {
   if (!props.user.last_sign_in_at) return 'Never'
-  return format(new Date(props.user.last_sign_in_at), 'MMM dd, yyyy')
+  return dateFormatter.format(new Date(props.user.last_sign_in_at))
 })
 
 const formattedLastOrder = computed(() => {
   if (!props.user.statistics?.lastOrderDate) return ''
-  return format(new Date(props.user.statistics.lastOrderDate), 'MMM dd, yyyy')
+  return dateFormatter.format(new Date(props.user.statistics.lastOrderDate))
 })
 
 const hasExpandableContent = computed(() => {

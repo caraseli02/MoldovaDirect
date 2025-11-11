@@ -274,7 +274,7 @@
 </template>
 
 <script setup lang="ts">
-import { format, subDays } from 'date-fns'
+import { subDays } from 'date-fns'
 import { useAdminDashboardStore } from '~/stores/adminDashboard'
 
 let dashboardStore: any = null
@@ -458,9 +458,12 @@ const comparisonDataset = computed(() => {
   const historicCustomers = Math.max(activeUsers - newUsersToday, 0)
   const customerAverage = days > 1 ? historicCustomers / (days - 1) : 0
 
+  // Native formatter for day of week (replaces date-fns format)
+  const dayFormatter = new Intl.DateTimeFormat('en-US', { weekday: 'short' })
+
   for (let index = days - 1; index >= 0; index--) {
     const date = subDays(today, index)
-    categories.push(format(date, 'EEE'))
+    categories.push(dayFormatter.format(date))
 
     if (index === 0) {
       revenueSeries.push(Math.round(revenueToday))
