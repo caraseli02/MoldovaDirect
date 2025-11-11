@@ -56,7 +56,7 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // Build the base query
+    // Build the base query with count in single query for better performance
     let queryBuilder = supabase
       .from('products')
       .select(`
@@ -76,7 +76,7 @@ export default defineEventHandler(async (event) => {
           slug,
           name_translations
         )
-      `)
+      `, { count: 'exact' })
       .eq('is_active', true)
 
     // Apply category filter
@@ -135,49 +135,13 @@ export default defineEventHandler(async (event) => {
         break
     }
 
-    // Get total count for pagination with same filters
-    let countQueryBuilder = supabase
-      .from('products')
-      .select('*', { count: 'exact', head: true })
-      .eq('is_active', true)
-
-    // Apply same filters for count
-    if (category) {
-      countQueryBuilder = countQueryBuilder.eq('categories.slug', category)
-    }
-    if (priceMin !== undefined) {
-      countQueryBuilder = countQueryBuilder.gte('price_eur', priceMin)
-    }
-    if (priceMax !== undefined) {
-      countQueryBuilder = countQueryBuilder.lte('price_eur', priceMax)
-    }
-    if (inStock === true) {
-      countQueryBuilder = countQueryBuilder.gt('stock_quantity', 0)
-    }
-    if (search) {
-      // Sanitize search term to prevent SQL injection and escape special characters
-      const searchPattern = prepareSearchPattern(search, { validateLength: false })
-      countQueryBuilder = countQueryBuilder.or(
-        `name_translations->>es.ilike.${searchPattern},` +
-        `name_translations->>en.ilike.${searchPattern},` +
-        `name_translations->>ro.ilike.${searchPattern},` +
-        `name_translations->>ru.ilike.${searchPattern},` +
-        `description_translations->>es.ilike.${searchPattern},` +
-        `description_translations->>en.ilike.${searchPattern},` +
-        `description_translations->>ro.ilike.${searchPattern},` +
-        `description_translations->>ru.ilike.${searchPattern},` +
-        `sku.ilike.${searchPattern}`
-      )
-    }
-
-    const { count } = await countQueryBuilder
-    const totalCount = count || 0
-
     // Apply pagination
     const offset = (page - 1) * limit
     queryBuilder = queryBuilder.range(offset, offset + limit - 1)
 
-    const { data: products, error } = await queryBuilder
+    // Single query gets both data and count
+    const { data: products, error, count } = await queryBuilder
+    const totalCount = count || 0
 
     if (error) {
       throw createError({

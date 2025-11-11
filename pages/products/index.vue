@@ -18,41 +18,28 @@
     />
 
     <div class="relative" ref="mainContainer">
-      <!-- Mobile/Tablet Filter Panel -->
-      <Transition name="fade">
-        <div v-if="showFilterPanel" class="fixed inset-0 z-40 flex" role="dialog" aria-modal="true" aria-labelledby="filter-panel-title">
-          <div class="flex-1 bg-black/40 backdrop-blur-sm" @click="closeFilterPanel" aria-label="Close filters"></div>
-          <div id="filter-panel" class="relative ml-auto flex h-full w-full max-w-md flex-col bg-white dark:bg-gray-900 shadow-xl">
-            <div class="flex items-center justify-between border-b border-gray-200 px-6 py-4 dark:border-gray-800">
-              <h2 id="filter-panel-title" class="text-lg font-semibold text-gray-900 dark:text-white">
-                {{ t('products.filters.title') }}
-              </h2>
-              <UiButton
-                type="button"
-                variant="ghost"
-                size="icon"
-                @click="closeFilterPanel"
-                :aria-label="t('common.close')"
-              >
-                <commonIcon name="lucide:x" class="h-5 w-5" aria-hidden="true" />
-              </UiButton>
-            </div>
-            <div class="flex-1 overflow-y-auto px-4">
-              <productFilterMain
-                :filters="filters"
-                :available-filters="availableFilters"
-                :filtered-product-count="products?.length || 0"
-                :show-title="false"
-                @update:filters="handleFiltersUpdate"
-                @apply-filters="handleApplyFilters(true)"
-              />
-            </div>
-          </div>
-        </div>
-      </Transition>
+      <!-- Mobile Filter Sheet -->
+      <ProductFilterSheet
+        v-model="showFilterPanel"
+        :title="t('products.filters.title')"
+        :active-filter-count="activeFilterChips.length"
+        :filtered-count="products?.length || 0"
+        :show-clear-button="hasActiveFilters"
+        @apply="handleApplyFilters(true)"
+        @clear="clearAllFilters"
+      >
+        <productFilterMain
+          :filters="filters"
+          :available-filters="availableFilters"
+          :filtered-product-count="products?.length || 0"
+          :show-title="false"
+          @update:filters="handleFiltersUpdate"
+          @apply-filters="handleApplyFilters(true)"
+        />
+      </ProductFilterSheet>
 
-      <div class="mx-auto flex w-full max-w-7xl flex-col gap-8 px-4 pb-20 pt-10 sm:px-6 lg:px-8" ref="contentContainer">
-        <div class="flex-1" ref="scrollContainer">
+      <div class="mx-auto w-full max-w-7xl px-4 pb-20 pt-10 sm:px-6 lg:px-8" ref="contentContainer">
+        <div class="w-full" ref="scrollContainer">
           <MobilePullToRefreshIndicator
             v-if="isMobile"
             :is-refreshing="pullToRefresh.isRefreshing.value"
@@ -228,7 +215,7 @@
 
 <script setup lang="ts">
 import type { ProductFilters, ProductWithRelations } from '~/types'
-import { ref, computed, onMounted, onUnmounted, nextTick, watch, watchEffect } from 'vue'
+import { ref, computed, onMounted, onUnmounted, onBeforeUnmount, nextTick, watch, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 // Components
@@ -249,6 +236,7 @@ import { useDevice } from '~/composables/useDevice'
 import { useHapticFeedback } from '~/composables/useHapticFeedback'
 import { usePullToRefresh } from '~/composables/usePullToRefresh'
 import { useSwipeGestures } from '~/composables/useSwipeGestures'
+import { useDebounceFn } from '@vueuse/core'
 
 // Constants
 import { PRODUCTS, PRODUCT_SORT_OPTIONS } from '~/constants/products'
@@ -263,6 +251,9 @@ const {
   search,
   updateFilters,
   clearFilters,
+  openFilterPanel,
+  closeFilterPanel,
+  updateSort,
   products,
   categoriesTree,
   currentCategory,
@@ -270,17 +261,18 @@ const {
   filters,
   pagination,
   loading,
-  error
+  error,
+  sortBy,
+  showFilterPanel
 } = useProductCatalog()
 
 const searchQuery = ref('')
-const searchInputRef = ref<HTMLInputElement | null>(null)
 const priceRange = ref<{ min: number; max: number }>({ min: PRODUCTS.DEFAULT_PRICE_MIN, max: PRODUCTS.DEFAULT_PRICE_MAX })
 const route = useRoute()
 const router = useRouter()
-const sortBy = ref<'name' | 'price_asc' | 'price_desc' | 'newest' | 'featured' | 'created'>(PRODUCT_SORT_OPTIONS.CREATED)
-const showFilterPanel = ref(false)
 const activeCollectionId = ref<string | null>(null)
+// AbortController for cancelling search requests (PERFORMANCE OPTIMIZATION from feat/enhanced-product-filters)
+let searchAbortController: AbortController | null = null
 
 const { isMobile } = useDevice()
 const { vibrate } = useHapticFeedback()
@@ -320,6 +312,8 @@ const hasActiveFilters = computed(() => {
     filters.value.featured
   )
 })
+
+const totalProducts = computed(() => pagination.value?.total || products.value?.length || 0)
 
 const availableFilters = computed(() => {
   const convertCategories = (cats: any[]): any[] => {
@@ -374,8 +368,6 @@ const visiblePages = computed(() => {
   return pages
 })
 
-let searchTimeout: NodeJS.Timeout
-
 // Event handlers for the new components
 const handleSearchQueryUpdate = (value: string) => {
   searchQuery.value = value
@@ -387,24 +379,30 @@ const handleSortByUpdate = (value: string) => {
   handleSortChange()
 }
 
-const handleSearchInput = () => {
-  clearTimeout(searchTimeout)
-  searchTimeout = setTimeout(() => {
-    if (searchQuery.value.trim()) {
-      search(searchQuery.value.trim(), {
-        ...filters.value,
-        page: 1,
-        sort: sortBy.value
-      })
-    } else {
-      fetchProducts({
-        ...filters.value,
-        page: 1,
-        sort: sortBy.value
-      })
-    }
-  }, PRODUCTS.SEARCH_DEBOUNCE_MS)
-}
+// Debounced search handler with AbortController (PERFORMANCE OPTIMIZATION from feat/enhanced-product-filters)
+const handleSearchInput = useDebounceFn(() => {
+  // Cancel previous search request if it exists
+  if (searchAbortController) {
+    searchAbortController.abort()
+  }
+
+  // Create new abort controller for this search
+  searchAbortController = new AbortController()
+
+  if (searchQuery.value.trim()) {
+    search(searchQuery.value.trim(), {
+      ...filters.value,
+      page: 1,
+      sort: sortBy.value as any
+    })
+  } else {
+    fetchProducts({
+      ...filters.value,
+      page: 1,
+      sort: sortBy.value as any
+    })
+  }
+}, PRODUCTS.SEARCH_DEBOUNCE_MS)
 
 const handleSortChange = () => {
   const currentFilters = {
@@ -534,32 +532,34 @@ const loadMoreProducts = async () => {
   }
 }
 
-const scrollToResults = () => {
-  nextTick(() => {
-    const el = document.getElementById('results')
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }
-  })
-}
+// Build category lookup Map for O(1) access (PERFORMANCE OPTIMIZATION from feat/enhanced-product-filters)
+const categoriesLookup = computed(() => {
+  const map = new Map<string | number, string>()
 
-const openFilterPanel = () => {
-  showFilterPanel.value = true
-  // Prevent body scroll when panel is open
-  document.body.style.overflow = 'hidden'
-}
+  const buildMap = (nodes: any[]) => {
+    nodes.forEach(node => {
+      // Get localized name with fallback
+      const name = node.name?.[locale.value] || node.name?.es || Object.values(node.name || {})[0] || ''
 
-const closeFilterPanel = () => {
-  showFilterPanel.value = false
-  // Restore body scroll
-  document.body.style.overflow = ''
-}
+      // Store by both slug and ID for flexible lookup
+      if (node.slug) map.set(node.slug, name)
+      if (node.id) map.set(node.id, name)
 
-// Handle Escape key to close filter panel
-const handleKeyDown = (event: KeyboardEvent) => {
-  if (event.key === 'Escape' && showFilterPanel.value) {
-    closeFilterPanel()
+      // Recursively process children
+      if (node.children?.length) {
+        buildMap(node.children)
+      }
+    })
   }
+
+  buildMap(categoriesTree.value || [])
+  return map
+})
+
+// O(1) category name lookup (PERFORMANCE OPTIMIZATION from feat/enhanced-product-filters)
+const getCategoryName = (slugOrId: string | number | undefined): string => {
+  if (!slugOrId) return ''
+  return categoriesLookup.value.get(slugOrId) || ''
 }
 
 const discoveryCollections = computed(() => {
@@ -658,23 +658,11 @@ const toggleQuickFilter = (toggle: { apply: () => void }) => {
   toggle.apply()
 }
 
-const findCategoryName = (slugOrId: string | number | undefined) => {
-  if (!slugOrId) return ''
-
-  const findInTree = (nodes: any[]): string | undefined => {
-    for (const node of nodes) {
-      if (node.slug === slugOrId || node.id === slugOrId) {
-        return node.name?.[locale.value] || node.name?.es || Object.values(node.name || {})[0]
-      }
-      if (node.children?.length) {
-        const child = findInTree(node.children)
-        if (child) return child
-      }
-    }
-    return undefined
+const scrollToResults = () => {
+  const resultsElement = document.getElementById('results')
+  if (resultsElement) {
+    resultsElement.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
-
-  return findInTree(categoriesTree.value || []) || ''
 }
 
 const activeFilterChips = computed(() => {
@@ -683,7 +671,7 @@ const activeFilterChips = computed(() => {
   if (filters.value.category) {
     chips.push({
       id: 'category',
-      label: t('products.chips.category', { value: findCategoryName(filters.value.category) || t('products.filters.unknownCategory') }),
+      label: t('products.chips.category', { value: getCategoryName(filters.value.category) || t('products.filters.unknownCategory') }),
       type: 'category'
     })
   }
@@ -781,18 +769,21 @@ const editorialStories = computed(() => {
   ]
 })
 
+// Sync store search query to local (read-only sync, no fetch trigger)
 watchEffect(() => {
   if (storeSearchQuery.value && storeSearchQuery.value !== searchQuery.value) {
     searchQuery.value = storeSearchQuery.value
   }
 })
 
+// Sync filters.sort to sortBy (read-only sync, no fetch trigger)
 watch(() => filters.value.sort, newValue => {
-  if (newValue) {
+  if (newValue && newValue !== sortBy.value) {
     sortBy.value = newValue
   }
-})
+}, { immediate: false })
 
+// Close filter panel when switching to desktop
 watch(isMobile, value => {
   if (!value) {
     closeFilterPanel()
@@ -806,26 +797,31 @@ onMounted(async () => {
   nextTick(() => {
     setupMobileInteractions()
   })
-  // Focus search if requested
-  if (route.query.focus === 'search') {
-    nextTick(() => {
-      searchInputRef.value?.focus()
-      const { focus, ...rest } = route.query
-      router.replace({ query: rest })
-    })
-  }
   await refreshPriceRange()
+})
 
-  // Set up keyboard listener for filter panel
-  document.addEventListener('keydown', handleKeyDown)
+// Cleanup session storage to prevent accumulation (PERFORMANCE OPTIMIZATION from feat/enhanced-product-filters)
+onBeforeUnmount(() => {
+  if (process.client) {
+    try {
+      // Clean up any products-related session storage
+      sessionStorage.removeItem('products-scroll-position')
+      sessionStorage.removeItem('products-filter-state')
+    } catch (error) {
+      // Silently fail if session storage is unavailable
+      console.debug('Session storage cleanup failed:', error)
+    }
+  }
+
+  // Cleanup AbortController on unmount (PERFORMANCE OPTIMIZATION from feat/enhanced-product-filters)
+  if (searchAbortController) {
+    searchAbortController.abort()
+    searchAbortController = null
+  }
 })
 
 onUnmounted(() => {
   cleanupMobileInteractions()
-  // Clean up keyboard listener
-  document.removeEventListener('keydown', handleKeyDown)
-  // Restore body scroll if panel was open
-  document.body.style.overflow = ''
 })
 
 useHead({
