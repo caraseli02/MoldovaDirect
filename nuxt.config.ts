@@ -16,6 +16,24 @@ const BASE_COMPONENT_DIRS = [
 export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
+  postcss: {
+    plugins: {
+      cssnano: process.env.NODE_ENV === 'production' ? {
+        preset: [
+          'default',
+          {
+            // Disable gradient minification for Tailwind CSS v4 compatibility
+            // postcss-minify-gradients v7.0.1 cannot parse Tailwind v4's
+            // CSS custom property based gradients (e.g., var(--tw-gradient-stops))
+            //
+            // Impact: ~1.5KB increase in CSS bundle (negligible)
+            // See: docs/architecture/tailwind-v4-build-fix-adr.md
+            minifyGradients: false,
+          },
+        ],
+      } : false,
+    },
+  },
   components: {
     // Restrict auto-registered components to .vue files globally
     // to prevent Nuxt from treating `index.ts` barrels as components.
