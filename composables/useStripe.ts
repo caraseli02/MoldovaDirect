@@ -1,5 +1,5 @@
-import { loadStripe, type Stripe, type StripeElements, type StripeCardElement } from '@stripe/stripe-js'
 import { ref, type Ref } from 'vue'
+import type { Stripe, StripeElements, StripeCardElement } from '@stripe/stripe-js'
 
 interface StripeComposable {
   stripe: Ref<Stripe | null>
@@ -14,6 +14,7 @@ interface StripeComposable {
 }
 
 let stripePromise: Promise<Stripe | null> | null = null
+let stripeLibraryPromise: Promise<any> | null = null
 
 export const useStripe = (): StripeComposable => {
   const stripe = ref<Stripe | null>(null)
@@ -35,6 +36,13 @@ export const useStripe = (): StripeComposable => {
       if (!publishableKey) {
         throw new Error('Stripe publishable key not configured')
       }
+
+      // Dynamically import Stripe.js library (singleton pattern)
+      if (!stripeLibraryPromise) {
+        stripeLibraryPromise = import('@stripe/stripe-js')
+      }
+
+      const { loadStripe } = await stripeLibraryPromise
 
       // Use singleton pattern to avoid loading Stripe multiple times
       if (!stripePromise) {

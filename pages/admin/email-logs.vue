@@ -41,6 +41,10 @@ definePageMeta({
   middleware: ['auth', 'admin']
 })
 
+// Lazy load admin email components to reduce main bundle size
+const AdminEmailDeliveryStats = useAsyncAdminComponent('Email/DeliveryStats')
+const AdminEmailLogsTable = useAsyncAdminComponent('Email/LogsTable')
+
 useHead({
   title: 'Email Logs - Admin - Moldova Direct',
   meta: [

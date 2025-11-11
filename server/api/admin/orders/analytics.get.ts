@@ -1,7 +1,7 @@
 // GET /api/admin/orders/analytics - Admin endpoint to get order analytics and metrics
 import { serverSupabaseServiceRole } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
-import { subDays, startOfDay, endOfDay, format } from 'date-fns'
+import { subDays, startOfDay, endOfDay } from 'date-fns'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -108,12 +108,20 @@ export default defineEventHandler(async (event) => {
       ? deliveryTimes.reduce((sum, time) => sum + time, 0) / deliveryTimes.length
       : 0
 
+    // Helper function to format date as yyyy-MM-dd (native alternative to date-fns format)
+    const formatDateISO = (date: Date): string => {
+      const year = date.getFullYear()
+      const month = String(date.getMonth() + 1).padStart(2, '0')
+      const day = String(date.getDate()).padStart(2, '0')
+      return `${year}-${month}-${day}`
+    }
+
     // Daily revenue trend
     const dailyRevenue: Record<string, number> = {}
     const dailyOrders: Record<string, number> = {}
-    
+
     orders?.forEach(order => {
-      const date = format(new Date(order.created_at), 'yyyy-MM-dd')
+      const date = formatDateISO(new Date(order.created_at))
       dailyRevenue[date] = (dailyRevenue[date] || 0) + Number(order.total_eur)
       dailyOrders[date] = (dailyOrders[date] || 0) + 1
     })

@@ -1,13 +1,26 @@
 <template>
   <div class="checkout-page">
     <div class="p-6 md:p-8">
-      <PaymentStep />
+      <Suspense>
+        <template #default>
+          <PaymentStep />
+        </template>
+        <template #fallback>
+          <div class="flex justify-center items-center py-12">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+            <span class="ml-3 text-gray-600 dark:text-gray-400">Loading payment form...</span>
+          </div>
+        </template>
+      </Suspense>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import PaymentStep from '~/components/checkout/PaymentStep.vue'
+// Lazy load the payment step component
+const PaymentStep = defineAsyncComponent(() =>
+  import('~/components/checkout/PaymentStep.vue')
+)
 
 // Layout
 definePageMeta({

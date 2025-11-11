@@ -13,49 +13,105 @@
         </div>
 
         <!-- Guest/Login Options (for non-authenticated users) -->
-        <GuestCheckoutPrompt :show="!user && !showGuestForm" @continue-as-guest="continueAsGuest" />
+        <Suspense>
+          <template #default>
+            <GuestCheckoutPrompt :show="!user && !showGuestForm" @continue-as-guest="continueAsGuest" />
+          </template>
+          <template #fallback>
+            <div class="h-24 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse mb-8"></div>
+          </template>
+        </Suspense>
 
         <!-- Guest Contact Information (for guest checkout) -->
         <div v-if="!user && showGuestForm" class="mb-8">
-          <GuestInfoForm v-model="guestInfo" :errors="guestErrors" @validate="validateGuestField"
-            @clear-error="clearGuestFieldError" />
+          <Suspense>
+            <template #default>
+              <GuestInfoForm v-model="guestInfo" :errors="guestErrors" @validate="validateGuestField"
+                @clear-error="clearGuestFieldError" />
+            </template>
+            <template #fallback>
+              <div class="h-32 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse"></div>
+            </template>
+          </Suspense>
         </div>
 
         <!-- Shipping Address Form -->
         <div v-if="user || showGuestForm" class="mb-8">
-          <AddressForm v-model="shippingAddress" type="shipping" :saved-addresses="savedAddresses"
-            :show-save-option="!!user" :available-countries="availableCountries" @save-address="handleSaveAddress"
-            @address-complete="loadShippingMethods" ref="addressFormRef" />
+          <Suspense>
+            <template #default>
+              <AddressForm v-model="shippingAddress" type="shipping" :saved-addresses="savedAddresses"
+                :show-save-option="!!user" :available-countries="availableCountries" @save-address="handleSaveAddress"
+                @address-complete="loadShippingMethods" ref="addressFormRef" />
+            </template>
+            <template #fallback>
+              <div class="h-64 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse"></div>
+            </template>
+          </Suspense>
         </div>
 
         <!-- Shipping Method Selection -->
         <div v-if="(user || showGuestForm) && isAddressValid" class="mb-8">
-          <ShippingMethodSelector v-model="selectedMethod" :available-methods="availableMethods"
-            :loading="loadingMethods" :error="methodsError" :validation-error="shippingMethodValidationError"
-            @retry="retryLoadingMethods" />
+          <Suspense>
+            <template #default>
+              <ShippingMethodSelector v-model="selectedMethod" :available-methods="availableMethods"
+                :loading="loadingMethods" :error="methodsError" :validation-error="shippingMethodValidationError"
+                @retry="retryLoadingMethods" />
+            </template>
+            <template #fallback>
+              <div class="h-40 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse"></div>
+            </template>
+          </Suspense>
         </div>
 
         <!-- Special Instructions (Optional) -->
         <div v-if="(user || showGuestForm) && isAddressValid" class="mb-8">
-          <ShippingInstructions v-model="shippingInstructions" />
+          <Suspense>
+            <template #default>
+              <ShippingInstructions v-model="shippingInstructions" />
+            </template>
+            <template #fallback>
+              <div class="h-24 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse"></div>
+            </template>
+          </Suspense>
         </div>
 
         <!-- Navigation Buttons -->
-        <CheckoutNavigation :can-proceed="canProceed" :processing="processing" back-to="/cart"
-          @proceed="proceedToPayment" />
+        <Suspense>
+          <template #default>
+            <CheckoutNavigation :can-proceed="canProceed" :processing="processing" back-to="/cart"
+              @proceed="proceedToPayment" />
+          </template>
+          <template #fallback>
+            <div class="h-12 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse"></div>
+          </template>
+        </Suspense>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import AddressForm from '~/components/checkout/AddressForm.vue'
-import ShippingMethodSelector from '~/components/checkout/ShippingMethodSelector.vue'
-import GuestCheckoutPrompt from '~/components/checkout/GuestCheckoutPrompt.vue'
-import GuestInfoForm from '~/components/checkout/GuestInfoForm.vue'
-import ShippingInstructions from '~/components/checkout/ShippingInstructions.vue'
-import CheckoutNavigation from '~/components/checkout/CheckoutNavigation.vue'
 import type { ShippingInformation } from '~/types/checkout'
+
+// Lazy load heavy sub-components
+const AddressForm = defineAsyncComponent(() =>
+  import('~/components/checkout/AddressForm.vue')
+)
+const ShippingMethodSelector = defineAsyncComponent(() =>
+  import('~/components/checkout/ShippingMethodSelector.vue')
+)
+const GuestCheckoutPrompt = defineAsyncComponent(() =>
+  import('~/components/checkout/GuestCheckoutPrompt.vue')
+)
+const GuestInfoForm = defineAsyncComponent(() =>
+  import('~/components/checkout/GuestInfoForm.vue')
+)
+const ShippingInstructions = defineAsyncComponent(() =>
+  import('~/components/checkout/ShippingInstructions.vue')
+)
+const CheckoutNavigation = defineAsyncComponent(() =>
+  import('~/components/checkout/CheckoutNavigation.vue')
+)
 
 // Composables
 const localePath = useLocalePath()

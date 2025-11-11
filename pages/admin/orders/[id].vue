@@ -254,6 +254,15 @@ definePageMeta({
   middleware: ['auth', 'admin']
 })
 
+// Lazy load admin order detail components to reduce main bundle size
+const AdminOrdersStatusBadge = useAsyncAdminComponent('Orders/StatusBadge')
+const AdminOrdersStatusUpdateDialog = useAsyncAdminComponent('Orders/StatusUpdateDialog')
+const AdminOrdersItemsList = useAsyncAdminComponent('Orders/ItemsList')
+const AdminOrdersFulfillmentChecklist = useAsyncAdminComponent('Orders/FulfillmentChecklist')
+const AdminOrdersNotesSection = useAsyncAdminComponent('Orders/NotesSection')
+const AdminOrdersTimeline = useAsyncAdminComponent('Orders/Timeline')
+const AdminOrdersDetailsCard = useAsyncAdminComponent('Orders/DetailsCard')
+
 // Get order ID from route
 const route = useRoute()
 const orderId = route.params.id as string
