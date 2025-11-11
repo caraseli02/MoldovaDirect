@@ -17,6 +17,7 @@
 import { serverSupabaseClient } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
 import { invalidateMultipleScopes } from '~/server/utils/adminCache'
+import { invalidatePublicCache } from '~/server/utils/publicCache'
 import { z } from 'zod'
 
 const updateProductSchema = z.object({
@@ -191,8 +192,11 @@ export default defineEventHandler(async (event) => {
         })
     }
 
-    // Invalidate related caches
-    await invalidateMultipleScopes(['products', 'stats'])
+    // Invalidate related caches (both admin and public)
+    await Promise.all([
+      invalidateMultipleScopes(['products', 'stats']),
+      invalidatePublicCache('products')
+    ])
 
     // Transform response to match expected format
     const transformedProduct = {

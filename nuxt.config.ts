@@ -81,6 +81,14 @@ export default defineNuxtConfig({
     // Product pages - ISR every hour
     '/products': { swr: 3600 },
     '/products/**': { swr: 3600 },
+    // Public API routes - Moderate SWR caching for customer-facing endpoints
+    '/api/products': { swr: 300, headers: { 'Cache-Control': 'public, max-age=300, stale-while-revalidate=60' } },
+    '/api/products/featured': { swr: 300, headers: { 'Cache-Control': 'public, max-age=300, stale-while-revalidate=60' } },
+    '/api/products/**': { swr: 600, headers: { 'Cache-Control': 'public, max-age=600, stale-while-revalidate=120' } },
+    '/api/categories': { swr: 600, headers: { 'Cache-Control': 'public, max-age=600, stale-while-revalidate=120' } },
+    '/api/categories/**': { swr: 600, headers: { 'Cache-Control': 'public, max-age=600, stale-while-revalidate=120' } },
+    '/api/search': { swr: 180, headers: { 'Cache-Control': 'public, max-age=180, stale-while-revalidate=60' } },
+    '/api/landing/sections': { swr: 600, headers: { 'Cache-Control': 'public, max-age=600, stale-while-revalidate=120' } },
     // Admin API routes - Short SWR caching with private cache control
     '/api/admin/dashboard/stats': { swr: 60, headers: { 'Cache-Control': 'private, max-age=60, stale-while-revalidate=30' } },
     '/api/admin/dashboard/activity': { swr: 30, headers: { 'Cache-Control': 'private, max-age=30, stale-while-revalidate=15' } },
