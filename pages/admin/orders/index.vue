@@ -258,6 +258,13 @@ definePageMeta({
   middleware: ['auth', 'admin']
 })
 
+// Lazy load admin order components to reduce main bundle size
+const AdminOrdersFilters = useAsyncAdminComponent('Orders/Filters')
+const AdminOrdersBulkActions = useAsyncAdminComponent('Orders/BulkActions')
+const AdminOrdersListItem = useAsyncAdminComponent('Orders/ListItem')
+const AdminUtilsPagination = useAsyncAdminComponent('Utils/Pagination')
+const AdminUtilsBulkOperationsBar = useAsyncAdminComponent('Utils/BulkOperationsBar')
+
 // Initialize store
 const adminOrdersStore = useAdminOrdersStore()
 

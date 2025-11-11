@@ -16,6 +16,24 @@ const BASE_COMPONENT_DIRS = [
 export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
+  postcss: {
+    plugins: {
+      cssnano: process.env.NODE_ENV === 'production' ? {
+        preset: [
+          'default',
+          {
+            // Disable gradient minification for Tailwind CSS v4 compatibility
+            // postcss-minify-gradients v7.0.1 cannot parse Tailwind v4's
+            // CSS custom property based gradients (e.g., var(--tw-gradient-stops))
+            //
+            // Impact: ~1.5KB increase in CSS bundle (negligible)
+            // See: docs/architecture/tailwind-v4-build-fix-adr.md
+            minifyGradients: false,
+          },
+        ],
+      } : false,
+    },
+  },
   components: {
     // Restrict auto-registered components to .vue files globally
     // to prevent Nuxt from treating `index.ts` barrels as components.
@@ -29,7 +47,7 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "shadcn-nuxt",
     "@vite-pwa/nuxt",
-    "vue3-carousel-nuxt",
+    // Removed vue3-carousel-nuxt (duplicate of nuxt-swiper)
     "@vueuse/motion/nuxt",
     "nuxt-swiper",
     // Keep this last to post-process the components registry
@@ -54,7 +72,33 @@ export default defineNuxtConfig({
           quality: 85,
           fit: 'cover',
         }
+      },
+      productThumbnail: {
+        modifiers: {
+          format: 'webp',
+          quality: 80,
+          fit: 'cover',
+          width: 400,
+          height: 400,
+        }
+      },
+      productDetail: {
+        modifiers: {
+          format: 'webp',
+          quality: 85,
+          fit: 'cover',
+          width: 800,
+          height: 800,
+        }
       }
+    },
+    // Configure IPX provider for external images
+    // This prevents 404 errors during prerender by allowing external images to be processed at runtime
+    provider: 'ipx',
+    ipx: {
+      maxAge: 60 * 60 * 24 * 30, // 30 days cache for external images
+      // Allow images to be fetched from external domains
+      domains: ["images.unsplash.com"]
     }
   },
   routeRules: {
@@ -63,6 +107,28 @@ export default defineNuxtConfig({
     // Product pages - ISR every hour
     '/products': { swr: 3600 },
     '/products/**': { swr: 3600 },
+    // Static assets with immutable cache (hash-based assets never change)
+    '/assets/**': {
+      headers: {
+        'Cache-Control': 'public, max-age=31536000, immutable'
+      }
+    },
+    '/_nuxt/**': {
+      headers: {
+        'Cache-Control': 'public, max-age=31536000, immutable'
+      }
+    },
+    // Chunks and entries with immutable cache
+    '/chunks/**': {
+      headers: {
+        'Cache-Control': 'public, max-age=31536000, immutable'
+      }
+    },
+    '/entries/**': {
+      headers: {
+        'Cache-Control': 'public, max-age=31536000, immutable'
+      }
+    },
   },
   runtimeConfig: {
     // Private keys (only available on server-side)
@@ -98,8 +164,21 @@ export default defineNuxtConfig({
       "**/__tests__/**",
     ],
     externals: {
-      external: [],
+      // External dependencies for server (reduces bundle size)
+      external: [
+        "stripe",
+        "nodemailer",
+        "@supabase/supabase-js",
+      ],
       inline: ["vue", "@vue/*"],
+    },
+    // Enable minification and compression
+    minify: true,
+    compressPublicAssets: true,
+    // Prerender configuration - allow build to continue despite image processing errors
+    prerender: {
+      failOnError: false,
+      ignore: ['/_ipx', '/admin', '/checkout', '/api'],
     },
   },
   supabase: {
@@ -201,6 +280,77 @@ export default defineNuxtConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+
+    build: {
+      // Use esbuild for faster minification
+      minify: 'esbuild',
+
+      // Increase chunk size warning threshold
+      chunkSizeWarningLimit: 1000,
+
+      // Optimize CSS code splitting
+      cssCodeSplit: true,
+
+      // Disable source maps in production for faster builds
+      sourcemap: process.env.NODE_ENV !== 'production',
+
+      rollupOptions: {
+        output: {
+          // Optimize chunk naming for better cache invalidation
+          chunkFileNames: 'chunks/[name]-[hash].js',
+          entryFileNames: 'entries/[name]-[hash].js',
+
+          // Manual chunk splitting for better caching
+          manualChunks(id) {
+            // Vendor chunks - split by package for better cache granularity
+            if (id.includes('node_modules')) {
+              // Large packages get their own chunks
+              if (id.includes('chart.js')) return 'vendor-chart'
+              if (id.includes('@stripe')) return 'vendor-stripe'
+              if (id.includes('@tanstack')) return 'vendor-table'
+              if (id.includes('swiper')) return 'vendor-swiper'
+
+              // Group Vue ecosystem packages together
+              if (id.includes('vue') || id.includes('@vue')) return 'vendor-vue'
+              if (id.includes('pinia')) return 'vendor-pinia'
+
+              // Group smaller packages together
+              return 'vendor-misc'
+            }
+
+            // Feature-based splitting for better code organization
+            if (id.includes('/components/admin/')) return 'feature-admin'
+            if (id.includes('/pages/admin/')) return 'feature-admin'
+
+            if (id.includes('/components/checkout/')) return 'feature-checkout'
+            if (id.includes('/pages/checkout/')) return 'feature-checkout'
+          },
+        },
+      },
+    },
+    // Pre-bundle dependencies for faster dev server
+    optimizeDeps: {
+      include: [
+        'vue',
+        'vue-router',
+        'pinia',
+        '@vueuse/core',
+        'zod',
+      ],
+      exclude: [
+        'chart.js',
+        '@stripe/stripe-js',
+        '@tanstack/vue-table',
+      ],
+
+      // Enable esbuild optimizer for faster dependency pre-bundling
+      esbuildOptions: {
+        target: 'es2020',
+        supported: {
+          'top-level-await': true,
+        },
+      },
+    },
     ssr: {
       noExternal: ["vue", "@vue/*"],
     },

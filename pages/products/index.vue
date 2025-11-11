@@ -1,50 +1,10 @@
 <template>
   <div class="bg-gray-50 dark:bg-gray-950 min-h-screen">
-    <ProductCategoryNavigation
-      :categories="categoriesTree"
+    <!-- Breadcrumb Navigation -->
+    <ProductBreadcrumbs
       :current-category="currentCategory"
-      :show-product-count="true"
+      :search-query="searchQuery"
     />
-
-    <section class="relative overflow-hidden">
-      <div class="absolute inset-0 bg-gradient-to-br from-blue-600/80 via-blue-500/70 to-indigo-500/70 dark:from-blue-900/80 dark:via-blue-800/70 dark:to-indigo-900/70"></div>
-      <div class="absolute inset-x-0 -bottom-32 h-64 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.35),transparent_60%)]"></div>
-      <div class="relative z-10 px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-        <div class="mx-auto max-w-5xl text-white">
-          <div class="inline-flex items-center rounded-full bg-white/20 px-4 py-1 text-sm font-semibold uppercase tracking-wider backdrop-blur shadow-sm">
-            {{ t('products.hero.seasonal') }}
-          </div>
-          <h1 class="mt-6 text-3xl font-bold sm:text-4xl lg:text-5xl">
-            {{ t('products.hero.title') }}
-          </h1>
-          <p class="mt-4 max-w-2xl text-lg">
-            {{ t('products.hero.subtitle') }}
-          </p>
-          <div class="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
-            <UiButton
-              type="button"
-              class="rounded-full bg-white text-blue-600 shadow-lg shadow-blue-900/20 hover:bg-blue-50"
-              @click="scrollToResults"
-            >
-              {{ t('products.hero.cta') }}
-            </UiButton>
-            <div class="flex flex-wrap items-center gap-2">
-              <UiButton
-                v-for="collection in discoveryCollections"
-                :key="collection.id"
-                type="button"
-                variant="outline"
-                class="rounded-full border-white/40 bg-white/10 backdrop-blur hover:bg-white/20"
-                :class="{ 'bg-white text-blue-600 shadow-lg shadow-blue-900/10': activeCollectionId === collection.id }"
-                @click="applyDiscoveryCollection(collection)"
-              >
-                {{ collection.label }}
-              </UiButton>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
 
     <div class="relative" ref="mainContainer">
       <!-- Mobile/Tablet Filter Panel -->

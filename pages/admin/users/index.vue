@@ -103,6 +103,10 @@ definePageMeta({
   middleware: ['auth', 'admin']
 })
 
+// Lazy load admin user components to reduce main bundle size
+const AdminUsersTable = useAsyncAdminComponent('Users/Table')
+const AdminUsersDetailView = useAsyncAdminComponent('Users/DetailView')
+
 // SEO and meta
 useHead({
   title: 'User Management - Admin Dashboard',
