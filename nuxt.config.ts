@@ -81,6 +81,16 @@ export default defineNuxtConfig({
     // Product pages - ISR every hour
     '/products': { swr: 3600 },
     '/products/**': { swr: 3600 },
+    // Admin API routes - Short SWR caching with private cache control
+    '/api/admin/dashboard/stats': { swr: 60, headers: { 'Cache-Control': 'private, max-age=60, stale-while-revalidate=30' } },
+    '/api/admin/dashboard/activity': { swr: 30, headers: { 'Cache-Control': 'private, max-age=30, stale-while-revalidate=15' } },
+    '/api/admin/analytics/**': { swr: 300, headers: { 'Cache-Control': 'private, max-age=300, stale-while-revalidate=60' } },
+    '/api/admin/products': { swr: 60, headers: { 'Cache-Control': 'private, max-age=60, stale-while-revalidate=30' } },
+    '/api/admin/orders': { swr: 30, headers: { 'Cache-Control': 'private, max-age=30, stale-while-revalidate=15' } },
+    '/api/admin/users': { swr: 60, headers: { 'Cache-Control': 'private, max-age=60, stale-while-revalidate=30' } },
+    '/api/admin/audit-logs': { swr: 120, headers: { 'Cache-Control': 'private, max-age=120, stale-while-revalidate=60' } },
+    '/api/admin/email-logs/**': { swr: 60, headers: { 'Cache-Control': 'private, max-age=60, stale-while-revalidate=30' } },
+    '/api/admin/inventory/**': { swr: 120, headers: { 'Cache-Control': 'private, max-age=120, stale-while-revalidate=60' } },
   },
   runtimeConfig: {
     // Private keys (only available on server-side)

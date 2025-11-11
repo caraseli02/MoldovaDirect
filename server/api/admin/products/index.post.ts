@@ -16,6 +16,7 @@
 
 import { serverSupabaseClient } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
+import { invalidateMultipleScopes } from '~/server/utils/adminCache'
 import { z } from 'zod'
 
 const createProductSchema = z.object({
@@ -156,6 +157,9 @@ export default defineEventHandler(async (event) => {
           performed_by: null // TODO: Get current admin user ID
         })
     }
+
+    // Invalidate related caches
+    await invalidateMultipleScopes(['products', 'stats'])
 
     // Transform response to match expected format
     const transformedProduct = {

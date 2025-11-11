@@ -13,6 +13,7 @@
 
 import { serverSupabaseClient } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
+import { invalidateMultipleScopes } from '~/server/utils/adminCache'
 
 export default defineEventHandler(async (event) => {
   await requireAdminRole(event)
@@ -73,6 +74,9 @@ export default defineEventHandler(async (event) => {
         ip_address: getClientIP(event),
         user_agent: getHeader(event, 'user-agent')
       })
+
+    // Invalidate related caches
+    await invalidateMultipleScopes(['products', 'stats'])
 
     return {
       success: true,
