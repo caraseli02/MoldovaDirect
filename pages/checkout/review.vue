@@ -39,40 +39,75 @@
 
         <div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div class="lg:col-span-2 space-y-6">
-            <ReviewCartSection
-              :items="orderData?.items ?? []"
-              :format-price="formatPrice"
-              @edit="editCart"
-            />
+            <Suspense>
+              <template #default>
+                <ReviewCartSection
+                  :items="orderData?.items ?? []"
+                  :format-price="formatPrice"
+                  @edit="editCart"
+                />
+              </template>
+              <template #fallback>
+                <div class="h-32 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse"></div>
+              </template>
+            </Suspense>
 
-            <ReviewShippingSection
-              :shipping-info="shippingInfo"
-              :format-price="formatPrice"
-              @edit="editShipping"
-            />
+            <Suspense>
+              <template #default>
+                <ReviewShippingSection
+                  :shipping-info="shippingInfo"
+                  :format-price="formatPrice"
+                  @edit="editShipping"
+                />
+              </template>
+              <template #fallback>
+                <div class="h-32 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse"></div>
+              </template>
+            </Suspense>
 
-            <ReviewPaymentSection
-              :payment-method="paymentMethod"
-              @edit="editPayment"
-            />
+            <Suspense>
+              <template #default>
+                <ReviewPaymentSection
+                  :payment-method="paymentMethod"
+                  @edit="editPayment"
+                />
+              </template>
+              <template #fallback>
+                <div class="h-32 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse"></div>
+              </template>
+            </Suspense>
           </div>
 
           <div class="lg:col-span-1">
-            <ReviewSummaryCard
-              :order-data="orderData"
-              :format-price="formatPrice"
-            />
+            <Suspense>
+              <template #default>
+                <ReviewSummaryCard
+                  :order-data="orderData"
+                  :format-price="formatPrice"
+                />
+              </template>
+              <template #fallback>
+                <div class="h-64 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse"></div>
+              </template>
+            </Suspense>
           </div>
         </div>
 
-        <ReviewTermsSection
-          v-model:termsAccepted="termsAccepted"
-          v-model:privacyAccepted="privacyAccepted"
-          v-model:marketingConsent="marketingConsent"
-          :show-terms-error="showTermsError"
-          :show-privacy-error="showPrivacyError"
-          class="mt-8"
-        />
+        <Suspense>
+          <template #default>
+            <ReviewTermsSection
+              v-model:termsAccepted="termsAccepted"
+              v-model:privacyAccepted="privacyAccepted"
+              v-model:marketingConsent="marketingConsent"
+              :show-terms-error="showTermsError"
+              :show-privacy-error="showPrivacyError"
+              class="mt-8"
+            />
+          </template>
+          <template #fallback>
+            <div class="h-24 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse mt-8"></div>
+          </template>
+        </Suspense>
 
         <footer class="flex flex-col sm:flex-row justify-between items-center pt-6 border-t border-gray-200 dark:border-gray-700 space-y-3 sm:space-y-0 mt-8">
           <UiButton
@@ -100,12 +135,24 @@
 </template>
 
 <script setup lang="ts">
-import ReviewCartSection from '~/components/checkout/review/ReviewCartSection.vue'
-import ReviewPaymentSection from '~/components/checkout/review/ReviewPaymentSection.vue'
-import ReviewShippingSection from '~/components/checkout/review/ReviewShippingSection.vue'
-import ReviewSummaryCard from '~/components/checkout/review/ReviewSummaryCard.vue'
-import ReviewTermsSection from '~/components/checkout/review/ReviewTermsSection.vue'
 import { useCheckoutReview } from '~/composables/checkout/useCheckoutReview'
+
+// Lazy load review section components
+const ReviewCartSection = defineAsyncComponent(() =>
+  import('~/components/checkout/review/ReviewCartSection.vue')
+)
+const ReviewPaymentSection = defineAsyncComponent(() =>
+  import('~/components/checkout/review/ReviewPaymentSection.vue')
+)
+const ReviewShippingSection = defineAsyncComponent(() =>
+  import('~/components/checkout/review/ReviewShippingSection.vue')
+)
+const ReviewSummaryCard = defineAsyncComponent(() =>
+  import('~/components/checkout/review/ReviewSummaryCard.vue')
+)
+const ReviewTermsSection = defineAsyncComponent(() =>
+  import('~/components/checkout/review/ReviewTermsSection.vue')
+)
 
 definePageMeta({
   layout: 'checkout',
