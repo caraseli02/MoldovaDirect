@@ -1,20 +1,9 @@
 <template>
   <div class="bg-gray-50 dark:bg-gray-950 min-h-screen">
-    <ProductCategoryNavigation
-      :categories="categoriesTree"
-      :current-category="currentCategory?.slug"
-      :show-product-count="true"
-    />
-
-    <ProductHero
-      :seasonal-badge="t('products.hero.seasonal')"
-      :title="t('products.hero.title')"
-      :subtitle="t('products.hero.subtitle')"
-      :cta-text="t('products.hero.cta')"
-      :collections="discoveryCollections"
-      :active-collection-id="activeCollectionId"
-      @scroll-to-results="scrollToResults"
-      @select-collection="applyDiscoveryCollection"
+    <!-- Breadcrumb Navigation -->
+    <ProductBreadcrumbs
+      :current-category="currentCategory"
+      :search-query="searchQuery"
     />
 
     <div class="relative" ref="mainContainer">
@@ -50,44 +39,71 @@
             :indicator-style="pullToRefresh.pullIndicatorStyle.value"
           />
 
-          <div id="results" class="space-y-10">
-            <div class="space-y-6">
-              <ProductSearchBar
-                :title="t('products.discovery.title')"
-                :description="t('products.discovery.description')"
-                :search-query="searchQuery"
-                :sort-by="sortBy"
-                :sort-options="sortOptions"
-                :active-filter-count="activeFilterChips.length"
-                :show-filter-panel="showFilterPanel"
-                :loading="loading"
-                :search-label="t('products.searchLabel')"
-                :search-placeholder="t('products.searchPlaceholder')"
-                :filter-button-label="t('products.filters.title')"
-                :sort-label="t('products.sortLabel')"
-                @update:search-query="handleSearchQueryUpdate"
-                @update:sort-by="handleSortByUpdate"
-                @open-filters="openFilterPanel"
-              />
+          <div id="results" class="space-y-12">
+            <!-- Clean Header Section -->
+            <div class="flex items-end justify-between border-b border-gray-200 pb-6 dark:border-gray-800">
+              <div class="flex-1">
+                <h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white lg:text-4xl">
+                  {{ t('products.discovery.title') }}
+                </h1>
+                <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                  {{ t('products.showingResults', {
+                    start: ((pagination.page - 1) * pagination.limit) + 1,
+                    end: Math.min(pagination.page * pagination.limit, pagination.total || 0),
+                    total: pagination.total || 0
+                  }) }}
+                </p>
+              </div>
 
-              <ProductActiveFilters
-                :chips="activeFilterChips"
-                :quick-toggles="quickToggleOptions"
-                :results-text="t('products.showingResults', {
-                  start: ((pagination.page - 1) * pagination.limit) + 1,
-                  end: Math.min(pagination.page * pagination.limit, pagination.total || 0),
-                  total: pagination.total || 0
-                })"
-                :active-filters-title="t('products.filterSummary.title')"
-                :active-filters-label="t('products.filterSummary.activeFilters')"
-                :clear-all-text="t('products.filterSummary.clear')"
-                :clear-all-label="t('products.filterSummary.clearAllFilters')"
-                :quick-filters-label="t('products.quickFilters.label')"
-                @remove-chip="removeActiveChip"
-                @clear-all="clearAllFilters"
-                @toggle-filter="toggleQuickFilter"
-              />
+              <!-- Right Side Controls -->
+              <div class="flex items-center gap-4">
+                <!-- Filter Button -->
+                <button
+                  type="button"
+                  :aria-label="t('products.filters.title')"
+                  :aria-expanded="showFilterPanel"
+                  aria-controls="filter-panel"
+                  class="relative inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-750"
+                  @click="openFilterPanel"
+                >
+                  <commonIcon name="lucide:sliders-horizontal" class="h-4 w-4" aria-hidden="true" />
+                  <span>{{ t('products.filters.title') }}</span>
+                  <span v-if="activeFilterChips.length" class="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-blue-600 text-xs font-semibold text-white ring-2 ring-white dark:ring-gray-900">
+                    {{ activeFilterChips.length }}
+                  </span>
+                </button>
+
+                <!-- Sort Dropdown -->
+                <div class="relative">
+                  <label for="product-sort" class="sr-only">
+                    {{ t('products.sortLabel') }}
+                  </label>
+                  <select
+                    id="product-sort"
+                    v-model="sortBy"
+                    :aria-label="t('products.sortLabel')"
+                    class="h-10 appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-10 text-sm font-medium text-gray-700 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+                    @change="handleSortChange"
+                  >
+                    <option value="created">{{ t('products.sortNewest') }}</option>
+                    <option value="name">{{ t('products.sortName') }}</option>
+                    <option value="price_asc">{{ t('products.sortPriceLowHigh') }}</option>
+                    <option value="price_desc">{{ t('products.sortPriceHighLow') }}</option>
+                    <option value="featured">{{ t('products.sortFeatured') }}</option>
+                  </select>
+                  <commonIcon name="lucide:chevron-down" class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" aria-hidden="true" />
+                </div>
+              </div>
             </div>
+
+            <!-- Active Filter Chips -->
+            <ProductActiveFilters
+              v-if="activeFilterChips.length"
+              :chips="activeFilterChips"
+              :show-clear-all="true"
+              @remove-chip="removeActiveChip"
+              @clear-all="clearAllFilters"
+            />
 
             <div v-if="error" class="rounded-2xl border border-red-100 bg-white p-10 text-center shadow-sm dark:border-red-900/40 dark:bg-gray-900">
               <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto mb-4 h-16 w-16 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -105,7 +121,7 @@
             </div>
 
             <div v-else-if="loading" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              <div v-for="n in PRODUCTS.SKELETON_CARD_COUNT" :key="`skeleton-${n}`" class="animate-pulse rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
+              <div v-for="n in 8" :key="`skeleton-${n}`" class="animate-pulse rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
                 <div class="mb-4 aspect-square rounded-xl bg-gray-200 dark:bg-gray-700"></div>
                 <div class="mb-2 h-4 rounded bg-gray-200 dark:bg-gray-700"></div>
                 <div class="h-3 w-2/3 rounded bg-gray-200 dark:bg-gray-700"></div>
@@ -114,7 +130,7 @@
 
             <div v-else-if="products?.length" class="space-y-10">
               <MobileVirtualProductGrid
-                v-if="isMobile && products.length > PRODUCTS.VIRTUAL_SCROLL_THRESHOLD"
+                v-if="isMobile && products.length > 20"
                 :items="products"
                 :container-height="600"
                 :loading="loading"
@@ -196,16 +212,43 @@
                 </div>
               </div>
               <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                <ProductCard v-for="item in recentlyViewedProducts.slice(0, PRODUCTS.RECENTLY_VIEWED_MAX)" :key="`recent-${item.id}`" :product="item" />
+                <ProductCard v-for="item in recentlyViewedProducts" :key="`recent-${item.id}`" :product="item" />
               </div>
             </section>
 
-            <ProductEditorialStories
-              :title="t('products.editorial.title')"
-              :subtitle="t('products.editorial.subtitle')"
-              :cta-text="t('products.editorial.cta')"
-              :stories="editorialStories"
-            />
+            <section class="space-y-6 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+              <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                    {{ t('products.editorial.title') }}
+                  </h3>
+                  <p class="text-sm text-gray-600 dark:text-gray-400">
+                    {{ t('products.editorial.subtitle') }}
+                  </p>
+                </div>
+              </div>
+              <div class="grid gap-4 md:grid-cols-3">
+                <article
+                  v-for="story in editorialStories"
+                  :key="story.id"
+                  class="group relative overflow-hidden rounded-2xl border border-gray-200 bg-gradient-to-br from-gray-50 to-white p-6 transition hover:-translate-y-1 hover:shadow-lg dark:border-gray-800 dark:from-gray-900 dark:to-gray-800"
+                >
+                  <span class="inline-flex rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-blue-600 dark:bg-blue-900/60 dark:text-blue-300">
+                    {{ story.tag }}
+                  </span>
+                  <h4 class="mt-4 text-lg font-semibold text-gray-900 transition group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-300">
+                    {{ story.title }}
+                  </h4>
+                  <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                    {{ story.description }}
+                  </p>
+                  <button type="button" class="mt-4 inline-flex items-center gap-2 text-sm font-medium text-blue-600 transition hover:text-blue-700 dark:text-blue-300 dark:hover:text-blue-200">
+                    {{ t('products.editorial.cta') }}
+                    <span aria-hidden="true">→</span>
+                  </button>
+                </article>
+              </div>
+            </section>
           </div>
         </div>
       </div>
@@ -218,28 +261,18 @@ import type { ProductFilters, ProductWithRelations } from '~/types'
 import { ref, computed, onMounted, onUnmounted, onBeforeUnmount, nextTick, watch, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 
-// Components
-import ProductCategoryNavigation from '~/components/product/CategoryNavigation.vue'
-import ProductHero from '~/components/product/Hero.vue'
-import ProductSearchBar from '~/components/product/SearchBar.vue'
-import ProductActiveFilters from '~/components/product/ActiveFilters.vue'
-import ProductEditorialStories from '~/components/product/EditorialStories.vue'
 import productFilterMain from '~/components/product/Filter/Main.vue'
 import ProductCard from '~/components/product/Card.vue'
 import commonIcon from '~/components/common/Icon.vue'
 import MobileVirtualProductGrid from '~/components/mobile/VirtualProductGrid.vue'
 import MobilePullToRefreshIndicator from '~/components/mobile/PullToRefreshIndicator.vue'
 
-// Composables
 import { useProductCatalog } from '~/composables/useProductCatalog'
 import { useDevice } from '~/composables/useDevice'
 import { useHapticFeedback } from '~/composables/useHapticFeedback'
 import { usePullToRefresh } from '~/composables/usePullToRefresh'
 import { useSwipeGestures } from '~/composables/useSwipeGestures'
 import { useDebounceFn } from '@vueuse/core'
-
-// Constants
-import { PRODUCTS, PRODUCT_SORT_OPTIONS } from '~/constants/products'
 
 import { useHead } from '#imports'
 
@@ -267,11 +300,9 @@ const {
 } = useProductCatalog()
 
 const searchQuery = ref('')
-const priceRange = ref<{ min: number; max: number }>({ min: PRODUCTS.DEFAULT_PRICE_MIN, max: PRODUCTS.DEFAULT_PRICE_MAX })
+const priceRange = ref<{ min: number; max: number }>({ min: 0, max: 200 })
 const route = useRoute()
 const router = useRouter()
-const activeCollectionId = ref<string | null>(null)
-// AbortController for cancelling search requests (PERFORMANCE OPTIMIZATION from feat/enhanced-product-filters)
 let searchAbortController: AbortController | null = null
 
 const { isMobile } = useDevice()
@@ -287,15 +318,6 @@ const pullToRefresh = usePullToRefresh(async () => {
 })
 
 const swipeGestures = useSwipeGestures()
-
-// Sort options for the search bar
-const sortOptions = computed(() => [
-  { value: PRODUCT_SORT_OPTIONS.CREATED, label: t('products.sortNewest') },
-  { value: PRODUCT_SORT_OPTIONS.NAME, label: t('products.sortName') },
-  { value: PRODUCT_SORT_OPTIONS.PRICE_ASC, label: t('products.sortPriceLowHigh') },
-  { value: PRODUCT_SORT_OPTIONS.PRICE_DESC, label: t('products.sortPriceHighLow') },
-  { value: PRODUCT_SORT_OPTIONS.FEATURED, label: t('products.sortFeatured') },
-])
 
 await initialize()
 
@@ -368,18 +390,7 @@ const visiblePages = computed(() => {
   return pages
 })
 
-// Event handlers for the new components
-const handleSearchQueryUpdate = (value: string) => {
-  searchQuery.value = value
-  handleSearchInput()
-}
-
-const handleSortByUpdate = (value: string) => {
-  sortBy.value = value as typeof sortBy.value
-  handleSortChange()
-}
-
-// Debounced search handler with AbortController (PERFORMANCE OPTIMIZATION from feat/enhanced-product-filters)
+// Debounced search handler to prevent excessive API calls
 const handleSearchInput = useDebounceFn(() => {
   // Cancel previous search request if it exists
   if (searchAbortController) {
@@ -394,20 +405,20 @@ const handleSearchInput = useDebounceFn(() => {
       ...filters.value,
       page: 1,
       sort: sortBy.value as any
-    })
+    }, searchAbortController.signal)
   } else {
     fetchProducts({
       ...filters.value,
       page: 1,
       sort: sortBy.value as any
-    })
+    }, searchAbortController.signal)
   }
-}, PRODUCTS.SEARCH_DEBOUNCE_MS)
+}, 300)
 
 const handleSortChange = () => {
   const currentFilters = {
     ...filters.value,
-    sort: sortBy.value,
+    sort: sortBy.value as any,
     page: 1
   }
 
@@ -425,7 +436,7 @@ const handleFiltersUpdate = (newFilters: Partial<ProductFilters>) => {
 const handleApplyFilters = (closePanel = false) => {
   const currentFilters = {
     ...filters.value,
-    sort: sortBy.value,
+    sort: sortBy.value as any,
     page: 1
   }
 
@@ -442,16 +453,15 @@ const handleApplyFilters = (closePanel = false) => {
 
 const clearAllFilters = () => {
   searchQuery.value = ''
-  sortBy.value = PRODUCT_SORT_OPTIONS.CREATED
-  activeCollectionId.value = null
+  sortBy.value = 'created'
   clearFilters()
-  fetchProducts({ sort: PRODUCT_SORT_OPTIONS.CREATED, page: 1, limit: PRODUCTS.DEFAULT_PER_PAGE })
+  fetchProducts({ sort: 'created', page: 1, limit: 12 })
 }
 
 const goToPage = (page: number) => {
   const currentFilters = {
     ...filters.value,
-    sort: sortBy.value,
+    sort: sortBy.value as any,
     page
   }
 
@@ -468,7 +478,7 @@ const refreshProducts = async () => {
   try {
     const currentFilters = {
       ...filters.value,
-      sort: sortBy.value,
+      sort: sortBy.value as any,
       page: 1
     }
 
@@ -483,7 +493,7 @@ const refreshProducts = async () => {
 }
 
 const retryLoad = () => {
-  fetchProducts({ sort: PRODUCT_SORT_OPTIONS.CREATED, page: 1, limit: PRODUCTS.DEFAULT_PER_PAGE })
+  fetchProducts({ sort: 'created', page: 1, limit: 12 })
 }
 
 const setupMobileInteractions = () => {
@@ -518,7 +528,7 @@ const loadMoreProducts = async () => {
     const nextPage = pagination.value.page + 1
     const currentFilters = {
       ...filters.value,
-      sort: sortBy.value,
+      sort: sortBy.value as any,
       page: nextPage
     }
 
@@ -532,7 +542,7 @@ const loadMoreProducts = async () => {
   }
 }
 
-// Build category lookup Map for O(1) access (PERFORMANCE OPTIMIZATION from feat/enhanced-product-filters)
+// Build category lookup Map for O(1) access instead of O(n) tree traversal
 const categoriesLookup = computed(() => {
   const map = new Map<string | number, string>()
 
@@ -556,113 +566,10 @@ const categoriesLookup = computed(() => {
   return map
 })
 
-// O(1) category name lookup (PERFORMANCE OPTIMIZATION from feat/enhanced-product-filters)
+// O(1) category name lookup
 const getCategoryName = (slugOrId: string | number | undefined): string => {
   if (!slugOrId) return ''
   return categoriesLookup.value.get(slugOrId) || ''
-}
-
-const discoveryCollections = computed(() => {
-  return [
-    {
-      id: 'featured',
-      label: t('products.discovery.collections.celebration'),
-      filters: {
-        featured: true,
-        sort: 'featured'
-      }
-    },
-    {
-      id: 'weekday',
-      label: t('products.discovery.collections.weeknight'),
-      filters: {
-        priceMax: 25,
-        sort: 'price_asc'
-      }
-    },
-    {
-      id: 'gifts',
-      label: t('products.discovery.collections.gift'),
-      filters: {
-        priceMin: 25,
-        priceMax: 60,
-        sort: 'created'
-      }
-    },
-    {
-      id: 'cellar',
-      label: t('products.discovery.collections.cellar'),
-      filters: {
-        sort: 'created',
-        inStock: true
-      }
-    }
-  ]
-})
-
-const applyDiscoveryCollection = (collection: { id: string; filters: ProductFilters; label: string }) => {
-  activeCollectionId.value = collection.id
-  searchQuery.value = ''
-
-  const nextFilters: ProductFilters = {
-    ...filters.value,
-    ...collection.filters,
-    page: 1,
-    sort: collection.filters.sort || 'created'
-  }
-
-  if (!collection.filters.priceMin) delete nextFilters.priceMin
-  if (!collection.filters.priceMax) delete nextFilters.priceMax
-  if (!collection.filters.featured) delete nextFilters.featured
-  if (!collection.filters.inStock) delete nextFilters.inStock
-
-  sortBy.value = nextFilters.sort || 'created'
-  fetchProducts(nextFilters)
-}
-
-const quickToggleOptions = computed(() => {
-  return [
-    {
-      id: 'inStock',
-      label: t('products.toggles.inStock'),
-      active: !!filters.value.inStock,
-      apply: () => {
-        const next: ProductFilters = { ...filters.value, inStock: !filters.value.inStock, page: 1 }
-        if (!next.inStock) {
-          const { inStock, ...rest } = next
-          fetchProducts({ ...rest, sort: sortBy.value })
-        } else {
-          fetchProducts({ ...next, sort: sortBy.value })
-        }
-      }
-    },
-    {
-      id: 'featured',
-      label: t('products.toggles.featured'),
-      active: !!filters.value.featured,
-      apply: () => {
-        const nextFeatured = !filters.value.featured
-        if (!nextFeatured) {
-          const { featured, ...rest } = filters.value
-          fetchProducts({ ...rest, page: 1, sort: sortBy.value })
-        } else {
-          sortBy.value = PRODUCT_SORT_OPTIONS.FEATURED
-          fetchProducts({ ...filters.value, featured: true, page: 1, sort: PRODUCT_SORT_OPTIONS.FEATURED })
-        }
-      }
-    }
-  ]
-})
-
-const toggleQuickFilter = (toggle: { apply: () => void }) => {
-  toggle.apply()
-}
-
-const scrollToResults = () => {
-  const resultsElement = document.getElementById('results')
-  if (resultsElement) {
-    resultsElement.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
 }
 
 const activeFilterChips = computed(() => {
@@ -743,7 +650,7 @@ const removeActiveChip = (chip: { type: string; attributeKey?: string; attribute
       break
   }
 
-  fetchProducts({ ...nextFilters, page: 1, sort: sortBy.value })
+  fetchProducts({ ...nextFilters, page: 1, sort: sortBy.value as any })
 }
 
 const editorialStories = computed(() => {
@@ -779,7 +686,7 @@ watchEffect(() => {
 // Sync filters.sort to sortBy (read-only sync, no fetch trigger)
 watch(() => filters.value.sort, newValue => {
   if (newValue && newValue !== sortBy.value) {
-    sortBy.value = newValue
+    sortBy.value = newValue as string
   }
 }, { immediate: false })
 
@@ -792,7 +699,7 @@ watch(isMobile, value => {
 
 onMounted(async () => {
   searchQuery.value = storeSearchQuery.value || ''
-  await fetchProducts({ sort: PRODUCT_SORT_OPTIONS.CREATED, page: 1, limit: PRODUCTS.DEFAULT_PER_PAGE })
+  await fetchProducts({ sort: 'created', page: 1, limit: 12 })
 
   nextTick(() => {
     setupMobileInteractions()
@@ -800,7 +707,7 @@ onMounted(async () => {
   await refreshPriceRange()
 })
 
-// Cleanup session storage to prevent accumulation (PERFORMANCE OPTIMIZATION from feat/enhanced-product-filters)
+// Cleanup session storage to prevent accumulation over multiple navigations
 onBeforeUnmount(() => {
   if (process.client) {
     try {
@@ -811,12 +718,6 @@ onBeforeUnmount(() => {
       // Silently fail if session storage is unavailable
       console.debug('Session storage cleanup failed:', error)
     }
-  }
-
-  // Cleanup AbortController on unmount (PERFORMANCE OPTIMIZATION from feat/enhanced-product-filters)
-  if (searchAbortController) {
-    searchAbortController.abort()
-    searchAbortController = null
   }
 })
 
@@ -843,7 +744,7 @@ const refreshPriceRange = async () => {
     if (filters.value.featured) params.append('featured', 'true')
     const res = await $fetch<{ success: boolean; min: number; max: number }>(`/api/products/price-range?${params.toString()}`)
     if (res.success) {
-      priceRange.value = { min: res.min ?? PRODUCTS.DEFAULT_PRICE_MIN, max: res.max ?? PRODUCTS.DEFAULT_PRICE_MAX }
+      priceRange.value = { min: res.min ?? 0, max: res.max ?? 200 }
     }
   } catch (e) {
     // keep existing range on error
