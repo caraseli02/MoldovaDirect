@@ -11,12 +11,15 @@
     <!-- Product Image -->
     <div class="relative aspect-square overflow-hidden rounded-t-2xl bg-gray-100 dark:bg-slate-700">
       <nuxt-link :to="`/products/${product.slug}`">
-        <img
+        <NuxtImg
           v-if="primaryImage"
+          preset="productThumbnail"
           :src="primaryImage.url"
           :alt="getLocalizedText(primaryImage.altText) || getLocalizedText(product.name)"
-          class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          sizes="100vw sm:50vw md:33vw lg:25vw"
+          densities="x1 x2"
           loading="lazy"
+          class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
         />
         <div v-else class="w-full h-full flex items-center justify-center text-gray-400 dark:text-slate-500">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -50,7 +53,7 @@
         </span>
 
         <!-- Low Stock Badge (urgency) -->
-        <span v-if="product.stockQuantity > 0 && product.stockQuantity <= 5" class="inline-flex items-center gap-1 bg-red-600 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg animate-pulse">
+        <span v-if="product.stockQuantity > 0 && product.stockQuantity <= PRODUCTS.LOW_STOCK_THRESHOLD" class="inline-flex items-center gap-1 bg-red-600 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg animate-pulse">
           <commonIcon name="lucide:alert-circle" class="h-3 w-3" />
           {{ $t('products.onlyLeft', { count: product.stockQuantity }) }}
         </span>
@@ -87,14 +90,14 @@
       <!-- Tags -->
       <div v-if="product.tags?.length" class="flex flex-wrap gap-1 mb-3">
         <span
-          v-for="tag in product.tags.slice(0, 2)"
+          v-for="tag in product.tags.slice(0, PRODUCTS.MAX_VISIBLE_TAGS)"
           :key="tag"
           class="inline-block bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 text-xs px-2 py-1 rounded-full"
         >
           {{ tag }}
         </span>
-        <span v-if="product.tags.length > 2" class="text-xs text-gray-500 dark:text-slate-400">
-          +{{ product.tags.length - 2 }}
+        <span v-if="product.tags.length > PRODUCTS.MAX_VISIBLE_TAGS" class="text-xs text-gray-500 dark:text-slate-400">
+          +{{ product.tags.length - PRODUCTS.MAX_VISIBLE_TAGS }}
         </span>
       </div>
 
@@ -148,7 +151,7 @@
           isInCart(product.id)
             ? 'bg-green-600 dark:bg-green-500 text-white hover:bg-green-700 dark:hover:bg-green-600'
             : 'bg-primary-600 dark:bg-primary-500 text-white hover:bg-primary-700 dark:hover:bg-primary-600',
-          isMobile ? 'min-h-[44px]' : '' // Ensure minimum touch target size
+          isMobile ? `min-h-[${PRODUCTS.MIN_TOUCH_TARGET_SIZE}px]` : '' // Ensure minimum touch target size
         ]"
         @click="addToCart"
         @touchstart="isMobile && !cartLoading && vibrate('tap')"
@@ -193,6 +196,7 @@ import { useHapticFeedback } from '~/composables/useHapticFeedback'
 import { useTouchEvents } from '~/composables/useTouchEvents'
 import { useRouter } from '#imports'
 import { useI18n } from '#imports'
+import { PRODUCTS } from '~/constants/products'
 
 interface Props {
   product: ProductWithRelations
@@ -230,12 +234,12 @@ const stockStatusText = computed(() => {
 })
 
 const isNew = computed(() => {
-  // Consider product "new" if created within last 30 days
+  // Consider product "new" if created within threshold days
   if (!props.product.createdAt) return false
   const createdDate = new Date(props.product.createdAt)
   const now = new Date()
   const daysSinceCreation = (now.getTime() - createdDate.getTime()) / (1000 * 60 * 60 * 24)
-  return daysSinceCreation <= 30
+  return daysSinceCreation <= PRODUCTS.NEW_PRODUCT_DAYS
 })
 
 const calculateDiscount = computed(() => {

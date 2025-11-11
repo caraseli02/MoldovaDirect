@@ -47,6 +47,9 @@
     "errorGeneric": "An error occurred. Please try again.",
     "menu": "Menu",
     "close": "Close",
+    "clear": "Clear",
+    "navigate": "to navigate",
+    "select": "to select",
     "preferences": "Preferences",
     "selectAll": "Select All",
     "deselectAll": "Deselect All",
@@ -1247,9 +1250,11 @@
       "outOfStock": "Out of Stock",
       "featuredOnly": "Featured only",
       "active": "Active Filters",
+      "clear": "Clear filters",
       "clearAll": "Clear All",
       "clearAllFilters": "Clear all active filters",
-      "apply": "Apply Filters",
+      "swipeToClose": "Swipe down or tap close button to dismiss",
+      "apply": "Show {count} products | Show {count} product | Show {count} products",
       "minPrice": "Min Price",
       "maxPrice": "Max Price",
       "removeFilter": "Remove {filter} filter",
@@ -1261,11 +1266,25 @@
       "seasonal": "Seasonal highlights",
       "title": "Discover Moldova's signature flavors",
       "subtitle": "Shop curated wines, pantry staples, and handmade treats delivered across Spain.",
-      "cta": "Browse the collection"
+      "cta": "Browse the collection",
+      "ctaAria": "Browse products collection",
+      "or": "or explore:",
+      "stats": {
+        "products": "{count}+ products",
+        "freeShipping": "Free shipping over €50",
+        "quality": "100% authentic"
+      }
     },
+    "breadcrumb": "Products",
+    "breadcrumbNav": {
+      "showAll": "Show all categories",
+      "searchResults": "Search results for \"{query}\""
+    },
+    "searchSuggestions": "Search suggestions",
     "discovery": {
       "title": "Find the right experience",
       "description": "Use smart filters or jump into ready-made collections for tonight's plans.",
+      "selectCollection": "Browse {collection} collection",
       "collections": {
         "celebration": "Celebration wines",
         "weeknight": "Weeknight essentials",

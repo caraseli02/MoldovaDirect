@@ -54,6 +54,24 @@ export default defineNuxtConfig({
           quality: 85,
           fit: 'cover',
         }
+      },
+      productThumbnail: {
+        modifiers: {
+          format: 'webp',
+          quality: 80,
+          fit: 'cover',
+          width: 400,
+          height: 400,
+        }
+      },
+      productDetail: {
+        modifiers: {
+          format: 'webp',
+          quality: 85,
+          fit: 'cover',
+          width: 800,
+          height: 800,
+        }
       }
     }
   },
