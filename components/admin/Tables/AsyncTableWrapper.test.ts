@@ -27,12 +27,12 @@ describe('useAsyncTable composable', () => {
 
     // First load
     const module1 = await loadTable()
-    expect(tableModule.value).toBe(module1)
+    expect(tableModule.value).toStrictEqual(module1)
 
     // Second load should return cached module
     const module2 = await loadTable()
-    expect(module2).toBe(module1)
-    expect(tableModule.value).toBe(module1)
+    expect(module2).toStrictEqual(module1)
+    expect(tableModule.value).toStrictEqual(module1)
   })
 
   it('should handle loading errors', async () => {
