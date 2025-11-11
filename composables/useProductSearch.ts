@@ -16,7 +16,7 @@
  * ```
  */
 
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onUnmounted } from 'vue'
 import { useDebounceFn } from '@vueuse/core'
 import { useSearchStore } from '~/stores/search'
 import type { ProductWithRelations } from '~/types'
@@ -200,11 +200,19 @@ export const useProductSearch = () => {
    * Clear search
    */
   const clearSearch = () => {
+    debouncedSearch.cancel() // Cancel pending debounced calls
     searchQuery.value = ''
     searchStore.clearSearch()
     showSuggestions.value = false
     selectedSuggestionIndex.value = -1
   }
+
+  /**
+   * Cleanup on unmount
+   */
+  onUnmounted(() => {
+    debouncedSearch.cancel() // Cancel any pending debounced searches
+  })
 
   /**
    * Remove item from search history

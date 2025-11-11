@@ -258,7 +258,7 @@
 
 <script setup lang="ts">
 import type { ProductFilters, ProductWithRelations } from '~/types'
-import { ref, computed, onMounted, onUnmounted, nextTick, watch, watchEffect } from 'vue'
+import { ref, computed, onMounted, onUnmounted, onBeforeUnmount, nextTick, watch, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 import productFilterMain from '~/components/product/Filter/Main.vue'
@@ -272,6 +272,7 @@ import { useDevice } from '~/composables/useDevice'
 import { useHapticFeedback } from '~/composables/useHapticFeedback'
 import { usePullToRefresh } from '~/composables/usePullToRefresh'
 import { useSwipeGestures } from '~/composables/useSwipeGestures'
+import { useDebounceFn } from '@vueuse/core'
 
 import { useHead } from '#imports'
 
@@ -283,6 +284,9 @@ const {
   search,
   updateFilters,
   clearFilters,
+  openFilterPanel,
+  closeFilterPanel,
+  updateSort,
   products,
   categoriesTree,
   currentCategory,
@@ -290,15 +294,16 @@ const {
   filters,
   pagination,
   loading,
-  error
+  error,
+  sortBy,
+  showFilterPanel
 } = useProductCatalog()
 
 const searchQuery = ref('')
 const priceRange = ref<{ min: number; max: number }>({ min: 0, max: 200 })
 const route = useRoute()
 const router = useRouter()
-const sortBy = ref<string>('created')
-const showFilterPanel = ref(false)
+let searchAbortController: AbortController | null = null
 
 const { isMobile } = useDevice()
 const { vibrate } = useHapticFeedback()
@@ -385,26 +390,30 @@ const visiblePages = computed(() => {
   return pages
 })
 
-let searchTimeout: NodeJS.Timeout
+// Debounced search handler to prevent excessive API calls
+const handleSearchInput = useDebounceFn(() => {
+  // Cancel previous search request if it exists
+  if (searchAbortController) {
+    searchAbortController.abort()
+  }
 
-const handleSearchInput = () => {
-  clearTimeout(searchTimeout)
-  searchTimeout = setTimeout(() => {
-    if (searchQuery.value.trim()) {
-      search(searchQuery.value.trim(), {
-        ...filters.value,
-        page: 1,
-        sort: sortBy.value as any
-      })
-    } else {
-      fetchProducts({
-        ...filters.value,
-        page: 1,
-        sort: sortBy.value as any
-      })
-    }
-  }, 300)
-}
+  // Create new abort controller for this search
+  searchAbortController = new AbortController()
+
+  if (searchQuery.value.trim()) {
+    search(searchQuery.value.trim(), {
+      ...filters.value,
+      page: 1,
+      sort: sortBy.value as any
+    }, searchAbortController.signal)
+  } else {
+    fetchProducts({
+      ...filters.value,
+      page: 1,
+      sort: sortBy.value as any
+    }, searchAbortController.signal)
+  }
+}, 300)
 
 const handleSortChange = () => {
   const currentFilters = {
@@ -533,31 +542,34 @@ const loadMoreProducts = async () => {
   }
 }
 
-const openFilterPanel = () => {
-  showFilterPanel.value = true
-}
+// Build category lookup Map for O(1) access instead of O(n) tree traversal
+const categoriesLookup = computed(() => {
+  const map = new Map<string | number, string>()
 
-const closeFilterPanel = () => {
-  showFilterPanel.value = false
-}
+  const buildMap = (nodes: any[]) => {
+    nodes.forEach(node => {
+      // Get localized name with fallback
+      const name = node.name?.[locale.value] || node.name?.es || Object.values(node.name || {})[0] || ''
 
-const findCategoryName = (slugOrId: string | number | undefined) => {
-  if (!slugOrId) return ''
+      // Store by both slug and ID for flexible lookup
+      if (node.slug) map.set(node.slug, name)
+      if (node.id) map.set(node.id, name)
 
-  const findInTree = (nodes: any[]): string | undefined => {
-    for (const node of nodes) {
-      if (node.slug === slugOrId || node.id === slugOrId) {
-        return node.name?.[locale.value] || node.name?.es || Object.values(node.name || {})[0]
-      }
+      // Recursively process children
       if (node.children?.length) {
-        const child = findInTree(node.children)
-        if (child) return child
+        buildMap(node.children)
       }
-    }
-    return undefined
+    })
   }
 
-  return findInTree(categoriesTree.value || []) || ''
+  buildMap(categoriesTree.value || [])
+  return map
+})
+
+// O(1) category name lookup
+const getCategoryName = (slugOrId: string | number | undefined): string => {
+  if (!slugOrId) return ''
+  return categoriesLookup.value.get(slugOrId) || ''
 }
 
 const activeFilterChips = computed(() => {
@@ -566,7 +578,7 @@ const activeFilterChips = computed(() => {
   if (filters.value.category) {
     chips.push({
       id: 'category',
-      label: t('products.chips.category', { value: findCategoryName(filters.value.category) || t('products.filters.unknownCategory') }),
+      label: t('products.chips.category', { value: getCategoryName(filters.value.category) || t('products.filters.unknownCategory') }),
       type: 'category'
     })
   }
@@ -664,18 +676,21 @@ const editorialStories = computed(() => {
   ]
 })
 
+// Sync store search query to local (read-only sync, no fetch trigger)
 watchEffect(() => {
   if (storeSearchQuery.value && storeSearchQuery.value !== searchQuery.value) {
     searchQuery.value = storeSearchQuery.value
   }
 })
 
+// Sync filters.sort to sortBy (read-only sync, no fetch trigger)
 watch(() => filters.value.sort, newValue => {
-  if (newValue) {
+  if (newValue && newValue !== sortBy.value) {
     sortBy.value = newValue as string
   }
-})
+}, { immediate: false })
 
+// Close filter panel when switching to desktop
 watch(isMobile, value => {
   if (!value) {
     closeFilterPanel()
@@ -690,6 +705,20 @@ onMounted(async () => {
     setupMobileInteractions()
   })
   await refreshPriceRange()
+})
+
+// Cleanup session storage to prevent accumulation over multiple navigations
+onBeforeUnmount(() => {
+  if (process.client) {
+    try {
+      // Clean up any products-related session storage
+      sessionStorage.removeItem('products-scroll-position')
+      sessionStorage.removeItem('products-filter-state')
+    } catch (error) {
+      // Silently fail if session storage is unavailable
+      console.debug('Session storage cleanup failed:', error)
+    }
+  }
 })
 
 onUnmounted(() => {
