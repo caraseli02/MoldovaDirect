@@ -38,6 +38,9 @@ definePageMeta({
   middleware: ['auth', 'admin']
 })
 
+// Lazy load admin email template component to reduce main bundle size
+const AdminEmailTemplateManager = useAsyncAdminComponent('Email/TemplateManager')
+
 useHead({
   title: 'Email Templates - Admin - Moldova Direct',
   meta: [

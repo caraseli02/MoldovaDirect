@@ -93,6 +93,9 @@ definePageMeta({
   middleware: ['auth', 'admin']
 })
 
+// Lazy load admin product form component to reduce main bundle size
+const AdminProductsForm = useAsyncAdminComponent('Products/Form')
+
 // State
 const successMessage = ref('')
 const errorMessage = ref('')

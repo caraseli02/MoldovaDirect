@@ -14,16 +14,7 @@ import {
 import { createEmailLog, recordEmailAttempt } from './emailLogging'
 import { resolveSupabaseClient, type ResolvedSupabaseClient } from './supabaseAdminClient'
 import { shouldSendEmail } from './emailPreferences'
-
-/**
- * Email sending result
- */
-export interface EmailSendResult {
-  success: boolean
-  emailLogId?: number
-  externalId?: string
-  error?: string
-}
+import type { EmailSendResult } from './types/email'
 
 interface EmailSendOptions {
   supabaseClient?: ResolvedSupabaseClient

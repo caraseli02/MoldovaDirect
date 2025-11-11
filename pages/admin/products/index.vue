@@ -178,10 +178,17 @@ import {
 } from '@/components/ui/dialog'
 import type { CategoryWithChildren, ProductWithRelations } from '~/types/database'
 import { usePinia } from '#imports'
+
 definePageMeta({
   layout: 'admin',
   middleware: ['auth', 'admin']
 })
+
+// Lazy load admin product components to reduce main bundle size
+const AdminProductsFilters = useAsyncAdminComponent('Products/Filters')
+const AdminProductsTable = useAsyncAdminComponent('Products/Table')
+const AdminUtilsPagination = useAsyncAdminComponent('Utils/Pagination')
+const AdminUtilsBulkOperationsBar = useAsyncAdminComponent('Utils/BulkOperationsBar')
 
 // Initialize stores - safely access with fallback
 const pinia = usePinia()
