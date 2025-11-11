@@ -121,6 +121,9 @@ definePageMeta({
   middleware: ['auth', 'admin']
 })
 
+// Lazy load admin product form component to reduce main bundle size
+const AdminProductsForm = useAsyncAdminComponent('Products/Form')
+
 // Get product ID from route
 const route = useRoute()
 const productId = route.params.id as string

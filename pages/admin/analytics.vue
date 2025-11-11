@@ -207,6 +207,15 @@ definePageMeta({
   middleware: 'admin'
 })
 
+// Lazy load all analytics components to reduce main bundle size
+const AdminDashboardAnalyticsOverview = useAsyncAdminComponent('Dashboard/AnalyticsOverview')
+const AdminUtilsDateRangePicker = useAsyncAdminComponent('Utils/DateRangePicker')
+const AdminChartsUserRegistration = useAsyncAdminComponent('Charts/UserRegistration')
+const AdminChartsUserActivity = useAsyncAdminComponent('Charts/UserActivity')
+const AdminChartsConversionFunnel = useAsyncAdminComponent('Charts/ConversionFunnel')
+const AdminChartsProductPerformance = useAsyncAdminComponent('Charts/ProductPerformance')
+const AdminUtilsTopProductsTable = useAsyncAdminComponent('Utils/TopProductsTable')
+
 // Composables
 const { 
   analyticsOverview,

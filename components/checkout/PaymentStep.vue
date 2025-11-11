@@ -202,12 +202,19 @@
         </div>
 
         <!-- Payment Form Component -->
-        <PaymentForm
-          v-model="paymentMethod"
-          :loading="loading"
-          :errors="errors"
-          @update:modelValue="updatePaymentMethod"
-        />
+        <Suspense>
+          <template #default>
+            <PaymentForm
+              v-model="paymentMethod"
+              :loading="loading"
+              :errors="errors"
+              @update:modelValue="updatePaymentMethod"
+            />
+          </template>
+          <template #fallback>
+            <div class="h-48 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse"></div>
+          </template>
+        </Suspense>
 
         <!-- Save Payment Method Option (for authenticated users) -->
         <div v-if="isAuthenticated && paymentMethod.type !== 'bank_transfer'" class="mt-4">
@@ -274,7 +281,11 @@ import { computed, ref, watch } from 'vue'
 import { useCheckoutStore } from '~/stores/checkout'
 import type { PaymentMethod, SavedPaymentMethod } from '~/types/checkout'
 import { useAuthStore } from '~/stores/auth'
-import PaymentForm from './PaymentForm.vue'
+
+// Lazy load payment form component
+const PaymentForm = defineAsyncComponent(() =>
+  import('./PaymentForm.vue')
+)
 
 // =============================================
 // COMPOSABLES & STORES

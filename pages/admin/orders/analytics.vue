@@ -312,7 +312,7 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card'
-import { subDays, format } from 'date-fns'
+import { subDays } from 'date-fns'
 
 definePageMeta({
   layout: 'admin',
@@ -355,9 +355,17 @@ const exporting = ref(false)
 const error = ref<string | null>(null)
 const analytics = ref<AnalyticsData | null>(null)
 
+// Helper function to format date as yyyy-MM-dd (native alternative to date-fns format)
+const formatDateISO = (date: Date): string => {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
 // Date range
-const today = format(new Date(), 'yyyy-MM-dd')
-const dateFrom = ref(format(subDays(new Date(), 30), 'yyyy-MM-dd'))
+const today = formatDateISO(new Date())
+const dateFrom = ref(formatDateISO(subDays(new Date(), 30)))
 const dateTo = ref(today)
 
 // Date presets
@@ -404,7 +412,7 @@ const fetchAnalytics = async () => {
 
 const applyDatePreset = (days: number) => {
   dateTo.value = today
-  dateFrom.value = format(subDays(new Date(), days), 'yyyy-MM-dd')
+  dateFrom.value = formatDateISO(subDays(new Date(), days))
   fetchAnalytics()
 }
 
