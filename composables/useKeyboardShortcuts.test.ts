@@ -13,7 +13,7 @@ const mockNavigator = (platform: string) => {
 }
 
 // Import AFTER mocks are set up
-const { useKeyboardShortcuts } = await import('./useKeyboardShortcuts')
+const { useKeyboardShortcuts, __resetKeyboardShortcutsState } = await import('./useKeyboardShortcuts')
 
 describe('useKeyboardShortcuts', () => {
   let eventListeners: Map<string, EventListener>
@@ -22,13 +22,16 @@ describe('useKeyboardShortcuts', () => {
     vi.clearAllMocks()
     eventListeners = new Map()
 
-    // Mock addEventListener and removeEventListener
-    global.window.addEventListener = vi.fn((event: string, handler: EventListener) => {
+    // Reset global state
+    __resetKeyboardShortcutsState()
+
+    // Mock addEventListener and removeEventListener on window
+    window.addEventListener = vi.fn((event: string, handler: any) => {
       eventListeners.set(event, handler)
-    })
-    global.window.removeEventListener = vi.fn((event: string) => {
+    }) as any
+    window.removeEventListener = vi.fn((event: string) => {
       eventListeners.delete(event)
-    })
+    }) as any
   })
 
   afterEach(() => {

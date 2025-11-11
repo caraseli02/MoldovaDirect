@@ -61,13 +61,15 @@
                 :placeholder="$t('auth.email')"
                 class="flex-1 px-3 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
               >
-              <button
+              <UiButton
                 @click="resendVerification"
                 :disabled="resendLoading || !email"
-                class="px-3 py-1 text-sm font-medium text-primary-600 hover:text-primary-500 disabled:opacity-50"
+                size="sm"
+                variant="outline"
               >
+                <commonIcon v-if="resendLoading" name="lucide:loader-2" class="mr-1 h-3 w-3 animate-spin" />
                 {{ resendLoading ? $t('common.loading') : $t('auth.resendVerification') }}
-              </button>
+              </UiButton>
             </div>
             <NuxtLink :to="localePath('/auth/login')" class="block text-sm font-medium text-gray-600 hover:text-gray-500">
               {{ $t('auth.backToLogin') }}

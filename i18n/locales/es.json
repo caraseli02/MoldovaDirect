@@ -47,6 +47,9 @@
     "errorGeneric": "Ha ocurrido un error. Por favor, inténtalo de nuevo.",
     "menu": "Menú",
     "close": "Cerrar",
+    "clear": "Limpiar",
+    "navigate": "para navegar",
+    "select": "para seleccionar",
     "preferences": "Preferencias",
     "selectAll": "Seleccionar todo",
     "deselectAll": "Deseleccionar todo",
@@ -788,12 +791,12 @@
       "cta": "Ver productos"
     },
     "hero": {
-      "title": "Vinos moldavos que no encuentras en el súper",
-      "subtitle": "Bodegas familiares, ediciones limitadas y productos que solo se hacen allá. Los traemos directo a tu casa en España.",
+      "title": "Descubre Moldova en Cada Entrega",
+      "subtitle": "Vinos premium, gastronomía auténtica, sabores únicos",
       "primaryCta": "Ver vinos y productos",
       "secondaryCta": "Cómo funciona",
       "imageAlt": "Cesta gourmet con vino y productos moldavos",
-      "trustBadge": "Más de 2.000 entregas en toda España",
+      "trustBadge": "Directo de los Mejores Productores de Moldova",
       "highlights": {
         "orders": {
           "value": "2k+",
@@ -936,6 +939,7 @@
       "badge": "Socios con sellos DOP e IGP auténticos",
       "title": "Clientes que confían en nosotros en toda España",
       "subtitle": "Únete a una comunidad que celebra la artesanía moldava.",
+      "verified": "Compra Verificada",
       "testimonials": {
         "maria": {
           "name": "María, Barcelona",
@@ -959,6 +963,38 @@
         "Moldova Wine Guild",
         "Slow Food Alliance"
       ]
+    },
+    "certifications": {
+      "authentic": {
+        "title": "100% Auténtico",
+        "subtitle": "Directo de Moldavia",
+        "description": "Todos los productos provienen directamente de productores y artesanos moldavos auténticos, garantizando calidad genuina y herencia"
+      },
+      "quality": {
+        "title": "Galardonado",
+        "subtitle": "Selección Premium",
+        "description": "Colección curada de vinos y productos artesanales premiados reconocidos por competencias internacionales"
+      },
+      "sustainable": {
+        "title": "Sostenible",
+        "subtitle": "Ecológico",
+        "description": "Apoyando prácticas agrícolas sostenibles y embalajes ecológicos para proteger el hermoso terruño de Moldavia"
+      },
+      "secure": {
+        "title": "Pago Seguro",
+        "subtitle": "Seguro y Protegido",
+        "description": "Cifrado líder en la industria y procesamiento de pagos seguro para proteger tu información personal"
+      }
+    },
+    "mediaMentions": {
+      "title": "Destacado en",
+      "featuredIn": "Destacado en publicaciones líderes"
+    },
+    "trustBadges": {
+      "paymentMethods": "Métodos de pago seguros",
+      "security": "Tu seguridad y privacidad",
+      "supportText": "¿Preguntas? Nuestro equipo de atención al cliente está aquí para ayudarte",
+      "contactUs": "Contáctanos"
     },
     "featuredProducts": {
       "title": "Lo que más se vende",
@@ -1061,6 +1097,9 @@
   "products": {
     "featured": "Destacado",
     "sale": "Oferta",
+    "new": "Nuevo",
+    "bestSeller": "Más Vendido",
+    "quickView": "Vista Rápida",
     "off": "descuento",
     "details": "Detalles",
     "origin": "Origen",
@@ -1127,22 +1166,41 @@
       "outOfStock": "Agotado",
       "featuredOnly": "Solo destacados",
       "active": "Filtros Activos",
+      "clear": "Limpiar filtros",
       "clearAll": "Limpiar Todo",
-      "apply": "Aplicar Filtros",
+      "clearAllFilters": "Limpiar todos los filtros activos",
+      "swipeToClose": "Desliza hacia abajo o toca el botón cerrar para descartar",
+      "apply": "Mostrar {count} productos | Mostrar {count} producto | Mostrar {count} productos",
       "minPrice": "Precio Mínimo",
       "maxPrice": "Precio Máximo",
       "removeFilter": "Eliminar filtro {filter}",
-      "unknownCategory": "Categoría Desconocida"
+      "unknownCategory": "Categoría Desconocida",
+      "openFilters": "Abrir panel de filtros",
+      "activeCount": "{count} filtros activos"
     },
     "hero": {
       "seasonal": "Destacados de temporada",
       "title": "Descubre los sabores emblemáticos de Moldavia",
       "subtitle": "Compra vinos seleccionados, despensa gourmet y artesanías con entrega en toda España.",
-      "cta": "Ver colección"
+      "cta": "Ver colección",
+      "ctaAria": "Ver colección de productos",
+      "or": "o explora:",
+      "stats": {
+        "products": "{count}+ productos",
+        "freeShipping": "Envío gratis desde €50",
+        "quality": "100% auténtico"
+      }
     },
+    "breadcrumb": "Productos",
+    "breadcrumbNav": {
+      "showAll": "Mostrar todas las categorías",
+      "searchResults": "Resultados de búsqueda para \"{query}\""
+    },
+    "searchSuggestions": "Sugerencias de búsqueda",
     "discovery": {
       "title": "Encuentra la experiencia perfecta",
       "description": "Aplica filtros inteligentes o entra en colecciones listas para tus planes de hoy.",
+      "selectCollection": "Explorar colección {collection}",
       "collections": {
         "celebration": "Vinos para celebrar",
         "weeknight": "Esenciales para diario",
@@ -1156,7 +1214,10 @@
     },
     "filterSummary": {
       "title": "Filtros activos",
-      "clear": "Restablecer filtros"
+      "clear": "Limpiar Todo",
+      "activeFilters": "Filtros activos",
+      "removeFilter": "Eliminar filtro {filter}",
+      "clearAllFilters": "Limpiar todos los filtros activos"
     },
     "chips": {
       "category": "Categoría: {value}",
@@ -2033,5 +2094,238 @@
     "enableNotifications": "Activar notificaciones",
     "notificationsEnabled": "Notificaciones activadas",
     "notificationsDisabled": "Notificaciones desactivadas"
+  },
+  "wineStory": {
+    "hero": {
+      "badge": "Patrimonio Vinícola de Moldavia",
+      "title": "Descubre la Historia Detrás de Cada Botella",
+      "subtitle": "Explora las tradiciones vinícolas milenarias de Moldavia, conoce a nuestros apasionados productores y descubre maridajes perfectos"
+    },
+    "seo": {
+      "title": "Historia del Vino de Moldavia | Patrimonio y Tradición",
+      "description": "Descubre el rico patrimonio vinícola de Moldavia, conoce a nuestros apasionados productores, explora terroirs regionales y encuentra maridajes perfectos"
+    },
+    "cta": {
+      "title": "¿Listo para Experimentar los Mejores Vinos de Moldavia?",
+      "subtitle": "Explora nuestra selección cuidadosamente curada de vinos moldavos premium",
+      "shopButton": "Comprar Vinos",
+      "aboutButton": "Saber Más Sobre Nosotros"
+    },
+    "producers": {
+      "title": "Conoce a Nuestros Enólogos",
+      "subtitle": "Historias de los Mejores Productores de Moldavia",
+      "viewStory": "Ver Historia Completa",
+      "readMore": "Leer Más",
+      "establishedYear": "Fundado en {year}",
+      "generations": "{count} generaciones de vinicultura",
+      "specialty": "Especialidad",
+      "region": "Región",
+      "vineyardSize": "Tamaño del Viñedo",
+      "annualProduction": "Producción Anual",
+      "philosophy": "Filosofía",
+      "awards": "Premios y Reconocimientos",
+      "certifications": "Certificaciones",
+      "contact": "Visitar Sitio Web",
+      "featuredProducts": "Vinos Destacados",
+      "viewAllProducts": "Ver Todos los Productos",
+      "closeModal": "Cerrar",
+      "swipeHint": "Desliza para explorar más enólogos",
+      "keyboardHint": "Usa las flechas del teclado para navegar",
+      "loading": "Cargando historias de enólogos...",
+      "error": "No se pudieron cargar las historias de los enólogos",
+      "noProducers": "Aún no hay historias de enólogos disponibles"
+    },
+    "regions": {
+      "title": "Descubre las Regiones Vinícolas de Moldavia",
+      "subtitle": "Tres Terroirs Distintos, Infinitas Historias",
+      "viewRegion": "Explorar Región",
+      "characteristics": "Características",
+      "soilType": "Tipo de Suelo",
+      "elevation": "Elevación",
+      "climate": "Clima",
+      "rainfall": "Precipitación Anual",
+      "averageTemp": "Temperatura Media",
+      "primaryGrapes": "Variedades de Uva Principales",
+      "producerCount": "{count} productores",
+      "filterByRegion": "Filtrar vinos por región",
+      "clearFilter": "Mostrar todas las regiones",
+      "mapTooltip": "Haz clic para explorar {region}",
+      "loading": "Cargando regiones vinícolas...",
+      "error": "No se pudo cargar el mapa de regiones vinícolas",
+      "noRegions": "No hay regiones vinícolas disponibles",
+      "codru": {
+        "name": "Codru",
+        "description": "El corazón de la vinicultura moldava"
+      },
+      "stefanVoda": {
+        "name": "Stefan Voda",
+        "description": "Tintos audaces y vinos dulces"
+      },
+      "valulLuiTraian": {
+        "name": "Valul lui Traian",
+        "description": "Blancos aromáticos y rosados"
+      }
+    },
+    "pairings": {
+      "title": "Maridajes Perfectos",
+      "subtitle": "Descubre el Arte del Maridaje de Vino y Comida",
+      "viewPairing": "Ver Maridaje Completo",
+      "wine": "Vino",
+      "dish": "Plato",
+      "whyItWorks": "Por Qué Funciona",
+      "servingSuggestions": "Sugerencias de Servicio",
+      "temperature": "Temperatura",
+      "glassType": "Tipo de Copa",
+      "decanting": "Decantación",
+      "garnishes": "Guarniciones",
+      "alternativeWines": "Maridajes Alternativos de Vino",
+      "alternativeDishes": "Platos Alternativos",
+      "recipe": "Ver Receta",
+      "servings": "{count} porciones",
+      "cookingTime": "Tiempo de Cocción",
+      "difficulty": "Dificultad",
+      "ingredients": "Ingredientes",
+      "instructions": "Instrucciones",
+      "chefNotes": "Notas del Chef",
+      "filters": {
+        "all": "Todos los Maridajes",
+        "wineType": "Tipo de Vino",
+        "occasion": "Ocasión",
+        "season": "Temporada",
+        "mealType": "Tipo de Comida",
+        "cuisine": "Cocina",
+        "intensity": "Intensidad"
+      },
+      "wineTypes": {
+        "red": "Vinos Tintos",
+        "white": "Vinos Blancos",
+        "rose": "Vinos Rosados",
+        "sparkling": "Vinos Espumosos",
+        "dessert": "Vinos de Postre"
+      },
+      "occasions": {
+        "everyday": "Diario",
+        "specialOccasion": "Ocasión Especial",
+        "celebration": "Celebración",
+        "romantic": "Romántico",
+        "holiday": "Festivo",
+        "casual": "Informal",
+        "formal": "Formal"
+      },
+      "seasons": {
+        "spring": "Primavera",
+        "summer": "Verano",
+        "fall": "Otoño",
+        "winter": "Invierno",
+        "yearRound": "Todo el Año"
+      },
+      "mealTypes": {
+        "appetizer": "Aperitivo",
+        "mainCourse": "Plato Principal",
+        "dessert": "Postre",
+        "snack": "Tentempié"
+      },
+      "intensity": {
+        "light": "Ligero y Delicado",
+        "medium": "Cuerpo Medio",
+        "bold": "Audaz y Completo"
+      },
+      "loading": "Cargando guías de maridaje...",
+      "error": "No se pudieron cargar las guías de maridaje",
+      "noPairings": "No hay guías de maridaje disponibles",
+      "noResults": "No hay maridajes que coincidan con tus filtros"
+    },
+    "giftPhilosophy": {
+      "title": "El Regalo del Patrimonio Moldavo",
+      "subtitle": "Más que Vino, una Historia para Compartir",
+      "description": "Cada botella de Moldova Direct lleva siglos de tradición vinícola, la pasión de productores familiares y el carácter único de nuestros terroirs. Cuando regalas vino de Moldova Direct, estás compartiendo una auténtica pieza de la cultura moldava.",
+      "reasons": {
+        "title": "Por Qué los Regalos de Moldova Direct Importan",
+        "authenticity": {
+          "title": "Historias Auténticas",
+          "description": "Cada botella proviene de verdaderos productores familiares con generaciones de experiencia"
+        },
+        "quality": {
+          "title": "Calidad Premium",
+          "description": "Vinos seleccionados a mano que representan lo mejor de la vinicultura moldava"
+        },
+        "sustainability": {
+          "title": "Elección Sostenible",
+          "description": "Apoya a pequeños productores y prácticas agrícolas sostenibles"
+        },
+        "unique": {
+          "title": "Únicamente Moldavo",
+          "description": "Descubre variedades de uva y estilos que no encontrarás en ningún otro lugar"
+        }
+      },
+      "scenarios": {
+        "title": "Ocasiones Perfectas para Regalar",
+        "corporate": {
+          "title": "Regalos Corporativos",
+          "description": "Causa una impresión duradera con vinos distintivos que cuentan una historia"
+        },
+        "celebration": {
+          "title": "Celebraciones",
+          "description": "Brinda por los momentos especiales de la vida con vinos tan memorables como la ocasión"
+        },
+        "gratitude": {
+          "title": "Muestra Aprecio",
+          "description": "Expresa gratitud con un regalo atento que demuestra cuidado y buen gusto"
+        },
+        "exploration": {
+          "title": "Descubrimiento Vinícola",
+          "description": "Presenta a tus amigos la joya escondida de la vinicultura europea"
+        }
+      },
+      "cta": {
+        "title": "Crea Tu Regalo Perfecto",
+        "description": "Explora nuestros sets de regalo seleccionados o crea tu propia selección personalizada",
+        "button": "Explorar Opciones de Regalo"
+      }
+    },
+    "production": {
+      "title": "Del Viñedo a Tu Mesa",
+      "subtitle": "El Viaje del Vino Moldavo",
+      "steps": {
+        "harvest": {
+          "title": "Vendimia",
+          "description": "Las uvas se recogen a mano en su punto óptimo de madurez, típicamente entre septiembre y octubre",
+          "timing": "Septiembre - Octubre"
+        },
+        "crushing": {
+          "title": "Prensado y Fermentación",
+          "description": "Métodos tradicionales combinados con control moderno de temperatura",
+          "timing": "Octubre - Noviembre"
+        },
+        "aging": {
+          "title": "Crianza",
+          "description": "Los vinos reposan en barricas de roble o acero inoxidable, desarrollando complejidad",
+          "timing": "6 meses - 2 años"
+        },
+        "bottling": {
+          "title": "Embotellado",
+          "description": "Cada botella se llena y etiqueta cuidadosamente a mano",
+          "timing": "Durante todo el año"
+        },
+        "selection": {
+          "title": "Selección de Calidad",
+          "description": "Catamos y seleccionamos solo las mejores botellas para Moldova Direct",
+          "timing": "Continuo"
+        },
+        "delivery": {
+          "title": "Directo a Ti",
+          "description": "Envío rápido y seguro que lleva lo mejor de Moldavia directamente a tu puerta",
+          "timing": "3-5 días hábiles"
+        }
+      },
+      "traditions": {
+        "title": "Honrando la Tradición",
+        "description": "El patrimonio vinícola de Moldavia abarca más de 5.000 años. Nuestros productores combinan técnicas consagradas con innovaciones modernas para crear vinos que honran el pasado mientras abrazan el futuro."
+      },
+      "sustainability": {
+        "title": "Prácticas Sostenibles",
+        "description": "Muchos de nuestros productores están haciendo la transición a la agricultura orgánica y biodinámica, asegurando que los viñedos de Moldavia prosperen durante generaciones venideras."
+      }
+    }
   }
 }

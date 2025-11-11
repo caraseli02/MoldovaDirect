@@ -47,6 +47,9 @@
     "errorGeneric": "A apărut o eroare. Te rugăm să încerci din nou.",
     "menu": "Meniu",
     "close": "Închide",
+    "clear": "Șterge",
+    "navigate": "pentru a naviga",
+    "select": "pentru a selecta",
     "preferences": "Preferințe",
     "selectAll": "Selectează Tot",
     "deselectAll": "Deselectează Tot",
@@ -559,11 +562,11 @@
     },
     "hero": {
       "title": "Gustă Moldova la fiecare livrare",
-      "subtitle": "Vinuri atent alese, produse artizanale și cadouri festive trimise direct de la producători moldoveni la casa ta din Spania.",
+      "subtitle": "Vinuri premium, gastronomie autentică, arome unice",
       "primaryCta": "Cumpără colecțiile recomandate",
       "secondaryCta": "Cunoaște producătorii noștri",
       "imageAlt": "Coș cadou cu vin și produse moldovenești",
-      "trustBadge": "Peste 2.000 de livrări în toată Spania",
+      "trustBadge": "Direct de la Cei Mai Buni Producători din Moldova",
       "highlights": {
         "orders": {
           "value": "2k+",
@@ -729,6 +732,16 @@
         "Moldova Wine Guild",
         "Slow Food Alliance"
       ]
+    },
+    "mediaMentions": {
+      "title": "Prezentat în",
+      "featuredIn": "Prezentat în publicații de top"
+    },
+    "trustBadges": {
+      "paymentMethods": "Metode de plată sigure",
+      "security": "Securitatea și confidențialitatea ta",
+      "supportText": "Întrebări? Echipa noastră de asistență clienți este aici să te ajute",
+      "contactUs": "Contactează-ne"
     },
     "featuredProducts": {
       "title": "Alegerea editorului",
@@ -898,7 +911,12 @@
       "featuredOnly": "Doar recomandate",
       "active": "Filtre Active",
       "clearAll": "Șterge Tot",
+      "clear": "Șterge filtrele",
+      "clearAllFilters": "Șterge toate filtrele active",
+      "swipeToClose": "Glisează în jos sau apasă butonul închide pentru a renunța",
       "apply": "Aplică Filtrele",
+      "openFilters": "Deschide panoul de filtre",
+      "activeCount": "{count} filtre active",
       "minPrice": "Preț Minim",
       "maxPrice": "Preț Maxim",
       "removeFilter": "Elimină filtrul {filter}",
@@ -908,11 +926,25 @@
       "seasonal": "Recomandări de sezon",
       "title": "Descoperă aromele emblematice ale Moldovei",
       "subtitle": "Alege vinuri curate, delicatese artizanale și produse de cămară livrate în toată Spania.",
-      "cta": "Vezi colecția"
+      "cta": "Vezi colecția",
+      "ctaAria": "Vezi colecția de produse",
+      "or": "sau explorează:",
+      "stats": {
+        "products": "{count}+ produse",
+        "freeShipping": "Livrare gratuită peste €50",
+        "quality": "100% autentic"
+      }
     },
+    "breadcrumb": "Produse",
+    "breadcrumbNav": {
+      "showAll": "Afișează toate categoriile",
+      "searchResults": "Rezultate căutare pentru \"{query}\""
+    },
+    "searchSuggestions": "Sugestii de căutare",
     "discovery": {
       "title": "Găsește experiența potrivită",
       "description": "Aplică filtre inteligente sau intră în colecții gata pregătite pentru planurile tale.",
+      "selectCollection": "Explorează colecția {collection}",
       "collections": {
         "celebration": "Vinuri de sărbătoare",
         "weeknight": "Preferate pentru timpul săptămânii",
@@ -926,7 +958,10 @@
     },
     "filterSummary": {
       "title": "Filtre active",
-      "clear": "Resetează filtrele"
+      "clear": "Șterge tot",
+      "activeFilters": "Filtre active",
+      "removeFilter": "Elimină filtrul {filter}",
+      "clearAllFilters": "Șterge toate filtrele active"
     },
     "chips": {
       "category": "Categorie: {value}",

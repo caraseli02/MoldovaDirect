@@ -86,6 +86,10 @@ definePageMeta({
   middleware: ['auth', 'admin']
 })
 
+// Lazy load admin inventory components to reduce main bundle size
+const AdminInventoryReports = useAsyncAdminComponent('Inventory/Reports')
+const AdminInventoryMovements = useAsyncAdminComponent('Inventory/Movements')
+
 // Reactive state
 const activeTab = ref('reports')
 const setupLoading = ref(false)

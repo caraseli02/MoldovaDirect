@@ -117,22 +117,26 @@
       
       <!-- Mobile Quick Actions -->
       <div class="flex items-center space-x-2 ml-2">
-        <button
+        <UiButton
           @click.stop="handleView"
           @touchstart="vibrate('tap')"
-          class="p-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 touch-manipulation active:scale-90 transition-all"
-          :title="$t('admin.users.actions.view')"
+          variant="ghost"
+          size="icon"
+          class="h-9 w-9 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 touch-manipulation active:scale-90"
+          :aria-label="$t('admin.users.actions.view')"
         >
-          <commonIcon name="lucide:eye" class="w-5 h-5" />
-        </button>
-        <button
+          <commonIcon name="lucide:eye" class="h-5 w-5" />
+        </UiButton>
+        <UiButton
           @click.stop="handleEdit"
           @touchstart="vibrate('tap')"
-          class="p-2 text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 touch-manipulation active:scale-90 transition-all"
-          :title="$t('admin.users.actions.edit')"
+          variant="ghost"
+          size="icon"
+          class="h-9 w-9 touch-manipulation active:scale-90"
+          :aria-label="$t('admin.users.actions.edit')"
         >
-          <commonIcon name="lucide:pencil" class="w-5 h-5" />
-        </button>
+          <commonIcon name="lucide:pencil" class="h-5 w-5" />
+        </UiButton>
         <AdminUsersActionsDropdown
           :user="user"
           mobile
@@ -214,8 +218,6 @@
 </template>
 
 <script setup lang="ts">
-import { format } from 'date-fns'
-
 interface Props {
   user: any // Replace with proper User type
   isSelected?: boolean
@@ -255,19 +257,26 @@ const formattedTotalSpent = computed(() => {
   return formatCurrency(props.user.statistics?.totalSpent || 0)
 })
 
+// Native date formatter for better performance
+const dateFormatter = new Intl.DateTimeFormat('en-US', {
+  year: 'numeric',
+  month: 'short',
+  day: '2-digit'
+})
+
 const formattedRegistration = computed(() => {
   if (!props.user.created_at) return 'Unknown'
-  return format(new Date(props.user.created_at), 'MMM dd, yyyy')
+  return dateFormatter.format(new Date(props.user.created_at))
 })
 
 const formattedLastLogin = computed(() => {
   if (!props.user.last_sign_in_at) return 'Never'
-  return format(new Date(props.user.last_sign_in_at), 'MMM dd, yyyy')
+  return dateFormatter.format(new Date(props.user.last_sign_in_at))
 })
 
 const formattedLastOrder = computed(() => {
   if (!props.user.statistics?.lastOrderDate) return ''
-  return format(new Date(props.user.statistics.lastOrderDate), 'MMM dd, yyyy')
+  return dateFormatter.format(new Date(props.user.statistics.lastOrderDate))
 })
 
 const hasExpandableContent = computed(() => {

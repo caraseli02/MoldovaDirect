@@ -64,13 +64,14 @@
         </div>
 
         <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
-          <button
+          <UiButton
             type="button"
             @click="showNewPaymentForm = true"
-            class="text-blue-600 hover:text-blue-500 font-medium text-sm"
+            variant="link"
+            class="px-0"
           >
             {{ $t('checkout.payment.useNewMethod') }}
-          </button>
+          </UiButton>
         </div>
       </div>
 
@@ -201,12 +202,19 @@
         </div>
 
         <!-- Payment Form Component -->
-        <PaymentForm
-          v-model="paymentMethod"
-          :loading="loading"
-          :errors="errors"
-          @update:modelValue="updatePaymentMethod"
-        />
+        <Suspense>
+          <template #default>
+            <PaymentForm
+              v-model="paymentMethod"
+              :loading="loading"
+              :errors="errors"
+              @update:modelValue="updatePaymentMethod"
+            />
+          </template>
+          <template #fallback>
+            <div class="h-48 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse"></div>
+          </template>
+        </Suspense>
 
         <!-- Save Payment Method Option (for authenticated users) -->
         <div v-if="isAuthenticated && paymentMethod.type !== 'bank_transfer'" class="mt-4">
@@ -240,30 +248,29 @@
 
       <!-- Navigation Buttons -->
       <div class="flex justify-between pt-6 border-t border-gray-200 dark:border-gray-700">
-        <button
+        <UiButton
           type="button"
           @click="goBack"
-          class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          variant="outline"
         >
           <commonIcon name="lucide:arrow-left" class="h-4 w-4 mr-2" />
           {{ $t('checkout.navigation.back') }}
-        </button>
+        </UiButton>
 
-        <button
+        <UiButton
           type="button"
           @click="proceedToReview"
           :disabled="!canProceed || loading"
-          class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <span v-if="loading" class="inline-flex items-center">
-            <commonIcon name="lucide:refresh-ccw" class="animate-spin h-4 w-4 mr-2" />
+          <template v-if="loading">
+            <commonIcon name="lucide:loader-2" class="animate-spin h-4 w-4 mr-2" />
             {{ $t('checkout.navigation.processing') }}
-          </span>
-          <span v-else class="inline-flex items-center">
+          </template>
+          <template v-else>
             {{ $t('checkout.navigation.reviewOrder') }}
             <commonIcon name="lucide:arrow-right" class="h-4 w-4 ml-2" />
-          </span>
-        </button>
+          </template>
+        </UiButton>
       </div>
     </div>
   </div>
@@ -274,7 +281,11 @@ import { computed, ref, watch } from 'vue'
 import { useCheckoutStore } from '~/stores/checkout'
 import type { PaymentMethod, SavedPaymentMethod } from '~/types/checkout'
 import { useAuthStore } from '~/stores/auth'
-import PaymentForm from './PaymentForm.vue'
+
+// Lazy load payment form component
+const PaymentForm = defineAsyncComponent(() =>
+  import('./PaymentForm.vue')
+)
 
 // =============================================
 // COMPOSABLES & STORES

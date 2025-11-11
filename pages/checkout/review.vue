@@ -39,64 +39,95 @@
 
         <div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div class="lg:col-span-2 space-y-6">
-            <ReviewCartSection
-              :items="orderData?.items ?? []"
-              :format-price="formatPrice"
-              @edit="editCart"
-            />
+            <Suspense>
+              <template #default>
+                <ReviewCartSection
+                  :items="orderData?.items ?? []"
+                  :format-price="formatPrice"
+                  @edit="editCart"
+                />
+              </template>
+              <template #fallback>
+                <div class="h-32 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse"></div>
+              </template>
+            </Suspense>
 
-            <ReviewShippingSection
-              :shipping-info="shippingInfo"
-              :format-price="formatPrice"
-              @edit="editShipping"
-            />
+            <Suspense>
+              <template #default>
+                <ReviewShippingSection
+                  :shipping-info="shippingInfo"
+                  :format-price="formatPrice"
+                  @edit="editShipping"
+                />
+              </template>
+              <template #fallback>
+                <div class="h-32 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse"></div>
+              </template>
+            </Suspense>
 
-            <ReviewPaymentSection
-              :payment-method="paymentMethod"
-              @edit="editPayment"
-            />
+            <Suspense>
+              <template #default>
+                <ReviewPaymentSection
+                  :payment-method="paymentMethod"
+                  @edit="editPayment"
+                />
+              </template>
+              <template #fallback>
+                <div class="h-32 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse"></div>
+              </template>
+            </Suspense>
           </div>
 
           <div class="lg:col-span-1">
-            <ReviewSummaryCard
-              :order-data="orderData"
-              :format-price="formatPrice"
-            />
+            <Suspense>
+              <template #default>
+                <ReviewSummaryCard
+                  :order-data="orderData"
+                  :format-price="formatPrice"
+                />
+              </template>
+              <template #fallback>
+                <div class="h-64 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse"></div>
+              </template>
+            </Suspense>
           </div>
         </div>
 
-        <ReviewTermsSection
-          v-model:termsAccepted="termsAccepted"
-          v-model:privacyAccepted="privacyAccepted"
-          v-model:marketingConsent="marketingConsent"
-          :show-terms-error="showTermsError"
-          :show-privacy-error="showPrivacyError"
-          class="mt-8"
-        />
+        <Suspense>
+          <template #default>
+            <ReviewTermsSection
+              v-model:termsAccepted="termsAccepted"
+              v-model:privacyAccepted="privacyAccepted"
+              v-model:marketingConsent="marketingConsent"
+              :show-terms-error="showTermsError"
+              :show-privacy-error="showPrivacyError"
+              class="mt-8"
+            />
+          </template>
+          <template #fallback>
+            <div class="h-24 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse mt-8"></div>
+          </template>
+        </Suspense>
 
         <footer class="flex flex-col sm:flex-row justify-between items-center pt-6 border-t border-gray-200 dark:border-gray-700 space-y-3 sm:space-y-0 mt-8">
-          <button
+          <UiButton
             @click="goBack"
             :disabled="processing"
-            class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            variant="outline"
           >
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-            </svg>
+            <commonIcon name="lucide:chevron-left" class="mr-2 h-4 w-4" />
             {{ $t('checkout.backToPayment') }}
-          </button>
+          </UiButton>
 
-          <button
+          <UiButton
             @click="handlePlaceOrder"
             :disabled="!canProceed || processing"
-            class="inline-flex items-center px-6 py-2 text-sm font-medium text-white bg-green-600 dark:bg-green-500 border border-transparent rounded-md hover:bg-green-700 dark:hover:bg-green-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            class="bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600"
           >
-            <span v-if="processing" class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+            <commonIcon v-if="processing" name="lucide:loader-2" class="mr-2 h-4 w-4 animate-spin" />
             {{ processing ? $t('checkout.processing') : $t('checkout.placeOrder') }}
-            <svg v-if="!processing" class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
+            <commonIcon v-if="!processing" name="lucide:chevron-right" class="ml-2 h-4 w-4" />
+          </UiButton>
         </footer>
       </div>
     </div>
@@ -104,12 +135,24 @@
 </template>
 
 <script setup lang="ts">
-import ReviewCartSection from '~/components/checkout/review/ReviewCartSection.vue'
-import ReviewPaymentSection from '~/components/checkout/review/ReviewPaymentSection.vue'
-import ReviewShippingSection from '~/components/checkout/review/ReviewShippingSection.vue'
-import ReviewSummaryCard from '~/components/checkout/review/ReviewSummaryCard.vue'
-import ReviewTermsSection from '~/components/checkout/review/ReviewTermsSection.vue'
 import { useCheckoutReview } from '~/composables/checkout/useCheckoutReview'
+
+// Lazy load review section components
+const ReviewCartSection = defineAsyncComponent(() =>
+  import('~/components/checkout/review/ReviewCartSection.vue')
+)
+const ReviewPaymentSection = defineAsyncComponent(() =>
+  import('~/components/checkout/review/ReviewPaymentSection.vue')
+)
+const ReviewShippingSection = defineAsyncComponent(() =>
+  import('~/components/checkout/review/ReviewShippingSection.vue')
+)
+const ReviewSummaryCard = defineAsyncComponent(() =>
+  import('~/components/checkout/review/ReviewSummaryCard.vue')
+)
+const ReviewTermsSection = defineAsyncComponent(() =>
+  import('~/components/checkout/review/ReviewTermsSection.vue')
+)
 
 definePageMeta({
   layout: 'checkout',

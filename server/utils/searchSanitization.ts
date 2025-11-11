@@ -11,6 +11,8 @@
  * - Validates input length to prevent abuse
  */
 
+import { createError } from 'h3'
+
 /**
  * Maximum allowed search term length to prevent abuse
  */

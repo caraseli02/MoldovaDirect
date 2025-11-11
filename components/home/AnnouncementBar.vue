@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative overflow-hidden bg-gradient-to-r from-primary-600 to-primary-700 text-white"
+    class="relative overflow-hidden bg-gradient-to-r from-brand-dark via-brand-accent to-brand-dark text-brand-light"
     role="banner"
     aria-label="Promotional announcement"
   >
@@ -15,7 +15,7 @@
         <NuxtLink
           v-if="showCta"
           :to="localePath('/products')"
-          class="ml-2 hidden whitespace-nowrap rounded-full bg-white/20 px-4 py-1 text-xs font-semibold transition hover:bg-white/30 md:inline-flex"
+          class="ml-2 hidden whitespace-nowrap rounded-full border border-brand-light/25 bg-brand-light/15 px-4 py-1 text-xs font-medium tracking-wide backdrop-blur-sm transition-all hover:border-brand-light/35 hover:bg-brand-light/25 md:inline-flex"
         >
           {{ t('home.announcement.cta') }}
           <commonIcon name="lucide:arrow-right" class="ml-1 h-3 w-3" />
@@ -23,8 +23,8 @@
       </div>
     </div>
 
-    <!-- Decorative gradient overlay -->
-    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-30 pointer-events-none"></div>
+    <!-- Refined luxury overlay -->
+    <div class="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-brand-light/5 to-transparent opacity-40"></div>
   </div>
 </template>
 

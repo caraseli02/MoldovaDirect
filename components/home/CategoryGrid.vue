@@ -1,55 +1,134 @@
 <template>
   <section class="py-20 md:py-28">
     <div class="container">
-      <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+      <!-- Header with fade-in animation -->
+      <div
+        v-motion
+        :initial="{ opacity: 0, y: 30 }"
+        :visible-once="{
+          opacity: 1,
+          y: 0,
+          transition: { duration: 600 },
+        }"
+        class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between"
+      >
         <div>
-          <h2 class="text-3xl font-bold md:text-4xl">{{ t('home.categories.title') }}</h2>
-          <p class="mt-3 max-w-2xl text-lg text-gray-600 dark:text-gray-400">{{ t('home.categories.subtitle') }}</p>
+          <h2 class="text-4xl font-bold md:text-5xl lg:text-6xl tracking-tight">{{ t('home.categories.title') }}</h2>
+          <p class="mt-4 max-w-2xl text-sm md:text-base text-gray-600 dark:text-gray-400">{{ t('home.categories.subtitle') }}</p>
         </div>
         <NuxtLink
           :to="localePath('/products')"
-          class="inline-flex items-center gap-2 rounded-full border border-primary-200 px-5 py-2 text-sm font-semibold text-primary-700 transition hover:border-primary-400 hover:text-primary-800 dark:border-primary-700/40 dark:text-primary-200"
+          class="cta-button inline-flex items-center gap-2 rounded-full border border-primary-200 px-5 py-2 text-sm font-semibold text-primary-700 dark:border-primary-700/40 dark:text-primary-200"
         >
           {{ t('home.categories.viewAll') }}
           <commonIcon name="lucide:arrow-right" class="h-4 w-4" />
         </NuxtLink>
       </div>
-      <div class="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-        <NuxtLink
-          v-for="category in categories"
-          :key="category.key"
-          :to="category.href"
-          class="group relative overflow-hidden rounded-3xl border border-gray-200 bg-gray-900/95 transition hover:-translate-y-1 hover:shadow-2xl dark:border-gray-800 dark:bg-gray-900"
+
+      <!-- Category cards - Carousel on mobile, Grid on desktop -->
+      <!-- Mobile: Horizontal carousel to reduce vertical scroll -->
+      <div class="mt-12 md:hidden">
+        <Swiper
+          :modules="[SwiperAutoplay, SwiperPagination]"
+          :slides-per-view="1.15"
+          :space-between="16"
+          :pagination="{ clickable: true, dynamicBullets: true }"
+          :breakpoints="{
+            480: { slidesPerView: 1.3, spaceBetween: 20 },
+            640: { slidesPerView: 1.5, spaceBetween: 24 }
+          }"
+          class="category-carousel"
         >
-          <NuxtImg
-            :src="category.image"
-            :alt="category.imageAlt"
-            densities="1x 2x"
-            class="absolute inset-0 h-full w-full object-cover brightness-[1.05] transition duration-700 ease-out group-hover:scale-105"
-          />
-          <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-900/35 to-transparent"></div>
-          <div
-            :class="[
-              'absolute inset-0 opacity-45 mix-blend-soft-light transition group-hover:opacity-65',
-              category.accentBackground
-            ]"
-          ></div>
-          <div class="relative flex h-full min-h-[22rem] flex-col justify-between p-8 text-white">
-            <div class="space-y-4">
-              <span class="inline-flex items-center justify-center rounded-xl bg-white/90 p-3 text-slate-900 shadow-lg shadow-slate-900/15 transition group-hover:bg-white">
-                <commonIcon :name="category.icon" class="h-6 w-6" />
-              </span>
-              <div class="space-y-3">
-                <h3 class="text-2xl font-semibold leading-tight">{{ category.title }}</h3>
-                <p class="text-sm text-white/85">{{ category.description }}</p>
+          <SwiperSlide
+            v-for="(category, index) in categories"
+            :key="category.key"
+          >
+            <article>
+              <NuxtLink
+                :to="category.href"
+                class="hover-lift group relative block overflow-hidden rounded-3xl border border-gray-200 bg-gray-900/95 dark:border-gray-800 dark:bg-gray-900"
+              >
+                <NuxtImg
+                  :src="category.image"
+                  :alt="category.imageAlt"
+                  densities="1x 2x"
+                  class="absolute inset-0 h-full w-full object-cover brightness-[1.05] transition duration-700 ease-out group-hover:scale-105"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/60 to-slate-900/20"></div>
+                <div
+                  :class="[
+                    'absolute inset-0 opacity-45 mix-blend-soft-light transition group-hover:opacity-65',
+                    category.accentBackground
+                  ]"
+                ></div>
+                <div class="relative flex h-full min-h-[22rem] flex-col justify-between p-8 text-white">
+                  <div class="space-y-4">
+                    <span class="inline-flex items-center justify-center rounded-xl bg-white/90 p-3 text-slate-900 shadow-lg shadow-slate-900/15 transition group-hover:bg-white group-hover:scale-110">
+                      <commonIcon :name="category.icon" class="h-6 w-6" />
+                    </span>
+                    <div class="space-y-3">
+                      <h3 class="text-2xl font-semibold leading-tight">{{ category.title }}</h3>
+                      <p class="text-sm text-white/85">{{ category.description }}</p>
+                    </div>
+                  </div>
+                  <span class="inline-flex items-center gap-2 text-sm font-semibold text-white transition group-hover:translate-x-1">
+                    {{ category.cta }}
+                    <commonIcon name="lucide:arrow-right" class="h-4 w-4" />
+                  </span>
+                </div>
+              </NuxtLink>
+            </article>
+          </SwiperSlide>
+        </Swiper>
+      </div>
+
+      <!-- Desktop: Grid layout with stagger animation -->
+      <div class="mt-12 hidden gap-6 md:grid md:grid-cols-2 xl:grid-cols-4">
+        <article
+          v-for="(category, index) in categories"
+          :key="category.key"
+          v-motion
+          :initial="{ opacity: 0, y: 40 }"
+          :visible-once="{
+            opacity: 1,
+            y: 0,
+            transition: { duration: 500, delay: index * 100 },
+          }"
+        >
+          <NuxtLink
+            :to="category.href"
+            class="hover-lift group relative block overflow-hidden rounded-3xl border border-gray-200 bg-gray-900/95 dark:border-gray-800 dark:bg-gray-900"
+          >
+            <NuxtImg
+              :src="category.image"
+              :alt="category.imageAlt"
+              densities="1x 2x"
+              class="absolute inset-0 h-full w-full object-cover brightness-[1.05] transition duration-700 ease-out group-hover:scale-105"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/60 to-slate-900/20"></div>
+            <div
+              :class="[
+                'absolute inset-0 opacity-45 mix-blend-soft-light transition group-hover:opacity-65',
+                category.accentBackground
+              ]"
+            ></div>
+            <div class="relative flex h-full min-h-[22rem] flex-col justify-between p-8 text-white">
+              <div class="space-y-4">
+                <span class="inline-flex items-center justify-center rounded-xl bg-white/90 p-3 text-slate-900 shadow-lg shadow-slate-900/15 transition group-hover:bg-white group-hover:scale-110">
+                  <commonIcon :name="category.icon" class="h-6 w-6" />
+                </span>
+                <div class="space-y-3">
+                  <h3 class="text-2xl font-semibold leading-tight">{{ category.title }}</h3>
+                  <p class="text-sm text-white/85">{{ category.description }}</p>
+                </div>
               </div>
+              <span class="inline-flex items-center gap-2 text-sm font-semibold text-white transition group-hover:translate-x-1">
+                {{ category.cta }}
+                <commonIcon name="lucide:arrow-right" class="h-4 w-4" />
+              </span>
             </div>
-            <span class="inline-flex items-center gap-2 text-sm font-semibold text-white transition group-hover:translate-x-1">
-              {{ category.cta }}
-              <commonIcon name="lucide:arrow-right" class="h-4 w-4" />
-            </span>
-          </div>
-        </NuxtLink>
+          </NuxtLink>
+        </article>
       </div>
     </div>
   </section>
@@ -73,3 +152,19 @@ defineProps<{
 const { t } = useI18n()
 const localePath = useLocalePath()
 </script>
+
+<style scoped>
+/* Swiper pagination dots styling */
+:deep(.category-carousel .swiper-pagination) {
+  bottom: -2rem;
+}
+
+:deep(.category-carousel .swiper-pagination-bullet) {
+  background-color: rgb(156 163 175 / 0.5); /* gray-400 with 50% opacity */
+}
+
+:deep(.category-carousel .swiper-pagination-bullet-active) {
+  background-color: hsl(var(--color-primary-600));
+  opacity: 1;
+}
+</style>

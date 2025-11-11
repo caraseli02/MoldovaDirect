@@ -1,29 +1,40 @@
 <template>
   <header
-    class="bg-white dark:bg-gray-950 shadow-sm dark:shadow-slate-900/20 sticky top-0 z-50 will-change-transform">
+    :class="[
+      'sticky top-0 z-50 transition-all duration-300 will-change-transform',
+      scrolled
+        ? 'bg-brand-light/95 backdrop-blur-md shadow-elevated-sm dark:bg-brand-dark/95 dark:shadow-brand-light/5'
+        : 'bg-transparent dark:bg-transparent'
+    ]"
+  >
     <div class="container">
       <div class="flex items-center justify-between h-16">
-        <!-- Logo -->
+        <!-- Logo with dynamic color based on scroll state -->
         <NuxtLink :to="localePath('/')" class="flex items-center space-x-2">
-          <span class="text-xl font-bold text-primary-600 dark:text-primary-400">Moldova Direct</span>
+          <span
+            :class="[
+              'text-xl font-bold tracking-tight transition-colors duration-300',
+              scrolled
+                ? 'text-brand-dark dark:text-brand-light'
+                : 'text-brand-light dark:text-brand-light drop-shadow-lg'
+            ]"
+          >
+            Moldova Direct
+          </span>
         </NuxtLink>
 
-        <!-- Desktop Navigation -->
+        <!-- Desktop Navigation with dynamic colors -->
         <nav class="hidden md:flex items-center space-x-8">
-          <NuxtLink :to="localePath('/')"
-            class="text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+          <NuxtLink :to="localePath('/')" :class="navLinkClass">
             {{ $t('common.home') }}
           </NuxtLink>
-          <NuxtLink :to="localePath('/products')"
-            class="text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+          <NuxtLink :to="localePath('/products')" :class="navLinkClass">
             {{ $t('common.shop') }}
           </NuxtLink>
-          <NuxtLink :to="localePath('/about')"
-            class="text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+          <NuxtLink :to="localePath('/about')" :class="navLinkClass">
             {{ $t('common.about') }}
           </NuxtLink>
-          <NuxtLink :to="localePath('/contact')"
-            class="text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+          <NuxtLink :to="localePath('/contact')" :class="navLinkClass">
             {{ $t('common.contact') }}
           </NuxtLink>
         </nav>
@@ -38,13 +49,13 @@
             <!-- Theme Toggle -->
             <ThemeToggle />
 
-            <!-- Search -->
+            <!-- Search with dynamic color -->
             <Button
               type="button"
               variant="ghost"
               size="icon"
               :aria-label="`${t('common.search')} (${searchShortcut})`"
-              class="group relative p-2.5 min-w-[44px] min-h-[44px] text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 flex items-center justify-center"
+              :class="iconButtonClass"
               @click="goToSearch"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -58,11 +69,11 @@
               </span>
             </Button>
 
-            <!-- Account -->
+            <!-- Account with dynamic color -->
             <NuxtLink
               :to="localePath('/account')"
               :aria-label="accountLabel"
-              class="p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors rounded-lg"
+              :class="iconButtonClass"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor" aria-hidden="true">
@@ -72,11 +83,11 @@
               <span class="sr-only">{{ accountLabel }}</span>
             </NuxtLink>
 
-            <!-- Cart -->
+            <!-- Cart with dynamic color -->
             <NuxtLink
               :to="localePath('/cart')"
               :aria-label="cartAriaLabel"
-              class="p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors relative rounded-lg"
+              :class="iconButtonClass"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor" aria-hidden="true">
@@ -96,11 +107,11 @@
           <!-- Simplified Mobile actions - Only essential elements -->
           <div class="flex md:hidden items-center space-x-2">
 
-            <!-- Cart - Essential for e-commerce -->
+            <!-- Mobile Cart with dynamic color -->
             <NuxtLink
               :to="localePath('/cart')"
               :aria-label="cartAriaLabel"
-              class="p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors relative rounded-lg"
+              :class="iconButtonClass"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor" aria-hidden="true">
@@ -116,15 +127,17 @@
               </span>
             </NuxtLink>
 
-            <!-- Mobile menu button -->
+            <!-- Mobile menu button with dynamic color -->
             <Button
               type="button"
               variant="ghost"
               @click="toggleMobileMenu"
               :aria-label="mobileMenuLabel"
               :aria-expanded="mobileMenuOpen"
-              class="relative p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-lg"
-              :class="{ 'bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400': mobileMenuOpen }"
+              :class="[
+                iconButtonClass,
+                mobileMenuOpen && 'bg-brand-accent/10 text-brand-accent dark:bg-brand-accent/20'
+              ]"
             >
               <!-- Animated hamburger menu -->
               <div class="w-6 h-6 flex flex-col justify-center items-center">
@@ -147,7 +160,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { useThrottleFn } from '@vueuse/core'
 import { Button } from '@/components/ui/button'
 import LanguageSwitcher from './LanguageSwitcher.vue'
 import MobileNav from './MobileNav.vue'
@@ -156,6 +170,36 @@ import ThemeToggle from './ThemeToggle.vue'
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
 const mobileMenuOpen = ref(false)
+
+// Scroll detection for luxury header transparency
+const scrolled = ref(false)
+const SCROLL_THRESHOLD = 20 // px - threshold for header transparency
+
+const handleScroll = useThrottleFn(() => {
+  scrolled.value = window.scrollY > SCROLL_THRESHOLD
+}, 50) // Throttle to 50ms (20 updates/second) for optimal performance
+
+onMounted(() => {
+  if (typeof window !== 'undefined') {
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll() // Initial check
+  }
+})
+
+// Dynamic classes based on scroll state
+const navLinkClass = computed(() => [
+  'font-medium tracking-wide transition-colors duration-300',
+  scrolled.value
+    ? 'text-brand-dark/80 hover:text-brand-accent dark:text-brand-light/80 dark:hover:text-brand-accent'
+    : 'text-brand-light/90 hover:text-brand-light drop-shadow-md dark:text-brand-light/90 dark:hover:text-brand-light'
+])
+
+const iconButtonClass = computed(() => [
+  'group relative p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center transition-all duration-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-accent focus:ring-offset-2',
+  scrolled.value
+    ? 'text-brand-dark/70 hover:text-brand-accent dark:text-brand-light/70 dark:hover:text-brand-accent'
+    : 'text-brand-light/80 hover:text-brand-light drop-shadow-lg dark:text-brand-light/80 dark:hover:text-brand-light'
+])
 
 const toggleMobileMenu = () => {
   mobileMenuOpen.value = !mobileMenuOpen.value
@@ -167,9 +211,12 @@ const toggleMobileMenu = () => {
   }
 }
 
-// Clean up body overflow on unmount
+// Clean up on unmount
 onUnmounted(() => {
   document.body.style.overflow = ''
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('scroll', handleScroll)
+  }
 })
 
 // Cart functionality
