@@ -105,8 +105,9 @@ export default defineNuxtConfig({
     }
   },
   routeRules: {
-    // Landing page - SWR caching (1 hour) + prerender
-    '/': { swr: 3600, prerender: true },
+    // Landing page - SWR caching (1 hour)
+    // Prerender disabled to avoid sharp binary issues with external images during build
+    '/': { swr: 3600 },
     // Product pages - ISR every hour
     '/products': { swr: 3600 },
     '/products/**': { swr: 3600 },
@@ -178,10 +179,12 @@ export default defineNuxtConfig({
     // Enable minification and compression
     minify: true,
     compressPublicAssets: true,
-    // Prerender configuration - allow build to continue despite image processing errors
+    // Prerender configuration - disable automatic crawling to prevent timeout
     prerender: {
       failOnError: false,
+      crawlLinks: false, // Disable automatic route discovery to prevent hanging
       ignore: ['/_ipx/**', '/admin', '/checkout', '/api'],
+      routes: [], // Only prerender explicitly listed routes (none)
     },
   },
   supabase: {
