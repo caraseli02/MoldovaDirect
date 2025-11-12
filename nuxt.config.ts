@@ -92,18 +92,22 @@ export default defineNuxtConfig({
         }
       }
     },
-    // Configure IPX provider for external images
-    // This prevents 404 errors during prerender by allowing external images to be processed at runtime
-    provider: 'ipx',
+    // Use Vercel's native image optimization in production (avoids sharp dependency issues)
+    // Falls back to IPX in development
+    provider: process.env.VERCEL ? 'vercel' : 'ipx',
+    vercel: {
+      // Vercel Image Optimization configuration
+      // External domains are automatically allowed via domains array above
+    },
     ipx: {
-      maxAge: 60 * 60 * 24 * 30, // 30 days cache for external images
-      // Allow images to be fetched from external domains
+      maxAge: 60 * 60 * 24 * 30, // 30 days cache for external images (dev only)
       domains: ["images.unsplash.com"]
     }
   },
   routeRules: {
-    // Landing page - SWR caching (1 hour) + prerender
-    '/': { swr: 3600, prerender: true },
+    // Landing page - SWR caching (1 hour)
+    // Prerender disabled to avoid sharp binary issues with external images during build
+    '/': { swr: 3600 },
     // Product pages - ISR every hour
     '/products': { swr: 3600 },
     '/products/**': { swr: 3600 },
@@ -193,10 +197,12 @@ export default defineNuxtConfig({
     // Enable minification and compression
     minify: true,
     compressPublicAssets: true,
-    // Prerender configuration - allow build to continue despite image processing errors
+    // Prerender configuration - disable automatic crawling to prevent timeout
     prerender: {
       failOnError: false,
-      ignore: ['/_ipx', '/admin', '/checkout', '/api'],
+      crawlLinks: false, // Disable automatic route discovery to prevent hanging
+      ignore: ['/_ipx/**', '/admin', '/checkout', '/api'],
+      routes: [], // Only prerender explicitly listed routes (none)
     },
   },
   supabase: {

@@ -129,33 +129,56 @@ export default defineCachedEventHandler(async (event) => {
       console.warn('Auth admin API not available:', error)
     }
 
+    // Get order statistics for all users in a single query (fix N+1 problem)
+    let orderStatsByUser: Record<string, { count: number, totalSpent: number, lastOrderDate?: string }> = {}
+
+    try {
+      const profileIds = profiles.map(p => p.id)
+      const { data: allOrders } = await supabase
+        .from('orders')
+        .select('user_id, id, total_eur, created_at')
+        .in('user_id', profileIds)
+
+      // Group orders by user_id
+      if (allOrders) {
+        const tempStats = allOrders.reduce((acc, order) => {
+          if (!acc[order.user_id]) {
+            acc[order.user_id] = { count: 0, totalSpent: 0, orders: [] as any[] }
+          }
+          acc[order.user_id].count++
+          acc[order.user_id].totalSpent += Number(order.total_eur)
+          acc[order.user_id].orders.push(order)
+          return acc
+        }, {} as Record<string, any>)
+
+        // Calculate lastOrderDate for each user and create final stats object
+        Object.keys(tempStats).forEach(userId => {
+          const userOrders = tempStats[userId].orders
+          const lastOrderDate = userOrders.length > 0
+            ? userOrders.sort((a: any, b: any) =>
+                new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+              )[0].created_at
+            : undefined
+
+          orderStatsByUser[userId] = {
+            count: tempStats[userId].count,
+            totalSpent: tempStats[userId].totalSpent,
+            lastOrderDate
+          }
+        })
+      }
+    } catch (error) {
+      console.warn('Failed to fetch order stats for users:', error)
+    }
+
     // Combine profile and auth data
     const users: UserWithProfile[] = []
-    
+
     for (const profile of profiles) {
       const authUser = authUsers.users.find((u: any) => u.id === profile.id)
-      
-      // Get user order statistics (with error handling)
-      let orderCount = 0
-      let totalSpent = 0
-      let lastOrderDate: string | undefined
 
-      try {
-        const { data: orderStats } = await supabase
-          .from('orders')
-          .select('id, total_eur, created_at')
-          .eq('user_id', profile.id)
-
-        if (orderStats) {
-          orderCount = orderStats.length
-          totalSpent = orderStats.reduce((sum, order) => sum + Number(order.total_eur), 0)
-          lastOrderDate = orderStats.length > 0 
-            ? orderStats.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0].created_at
-            : undefined
-        }
-      } catch (error) {
-        console.warn('Failed to fetch order stats for user:', profile.id)
-      }
+      // Get pre-fetched order statistics
+      const orderStats = orderStatsByUser[profile.id] || { count: 0, totalSpent: 0 }
 
       users.push({
         id: profile.id,
@@ -166,9 +189,9 @@ export default defineCachedEventHandler(async (event) => {
         updated_at: authUser?.updated_at || profile.updated_at,
         profile: profile,
         status: (authUser?.email_confirmed_at || true) ? 'active' : 'inactive',
-        orderCount,
-        lastOrderDate,
-        totalSpent
+        orderCount: orderStats.count,
+        lastOrderDate: orderStats.lastOrderDate,
+        totalSpent: orderStats.totalSpent
       })
     }
 
@@ -224,9 +247,13 @@ export default defineCachedEventHandler(async (event) => {
     return getMockUserData()
   }
 }, {
-  maxAge: ADMIN_CACHE_CONFIG.usersList.maxAge,
-  name: ADMIN_CACHE_CONFIG.usersList.name,
-  getKey: (event) => getAdminCacheKey(ADMIN_CACHE_CONFIG.usersList.name, event)
+  maxAge: 60 * 5, // Cache for 5 minutes
+  name: 'admin-users-list',
+  getKey: (event) => {
+    const query = getQuery(event) as UserFilters
+    return `page:${query.page || 1}:search:${query.search || ''}:status:${query.status || 'all'}:sort:${query.sortBy || 'created_at'}:${query.sortOrder || 'desc'}`
+  },
+  swr: true // Enable stale-while-revalidate
 })
 
 /**

@@ -46,7 +46,7 @@ export interface UserAnalyticsData {
   }>
 }
 
-export default defineEventHandler(async (event) => {
+export default defineCachedEventHandler(async (event) => {
   try {
     await requireAdminRole(event)
     // Verify admin access
@@ -211,4 +211,15 @@ export default defineEventHandler(async (event) => {
       statusMessage: 'Failed to fetch user analytics'
     })
   }
+}, {
+  maxAge: 60 * 10, // Cache for 10 minutes (analytics can tolerate staleness)
+  name: 'admin-analytics-users',
+  getKey: (event) => {
+    const query = getQuery(event)
+    const days = query.days || 30
+    const startDate = query.startDate || ''
+    const endDate = query.endDate || ''
+    return `days:${days}:start:${startDate}:end:${endDate}`
+  },
+  swr: true // Enable stale-while-revalidate for better UX
 })
