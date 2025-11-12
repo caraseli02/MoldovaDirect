@@ -208,6 +208,19 @@ export default defineNuxtConfig({
         "/auth/verify-email",
       ],
     },
+    // Enable anonymous access for public pages (required for Google crawlers)
+    cookieOptions: {
+      secure: process.env.NODE_ENV === 'production'
+    },
+    clientOptions: {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+        // Allow unauthenticated requests - critical for SEO and crawlers
+        flowType: 'pkce'
+      }
+    }
   },
   i18n: {
     locales: [
