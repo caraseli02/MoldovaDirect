@@ -680,6 +680,82 @@ watch(product, newProduct => {
 
 watch(product, newProduct => {
   if (newProduct) {
+    // Determine availability status
+    const stockQuantity = newProduct.stockQuantity || 0
+    const availabilityStatus = stockQuantity > 0
+      ? 'https://schema.org/InStock'
+      : 'https://schema.org/OutOfStock'
+
+    // Build image array for structured data
+    const productImages = newProduct.images?.map(img => img.url).filter(Boolean) || []
+
+    // Get brand from attributes or use category as fallback
+    const brand = productAttributes.value?.brand ||
+                  productAttributes.value?.producer ||
+                  categoryLabel.value ||
+                  'Moldova Direct'
+
+    // Build Product structured data
+    const productStructuredData: Record<string, any> = {
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      name: getLocalizedText(newProduct.name),
+      description: getLocalizedText(newProduct.description) || getLocalizedText(newProduct.shortDescription),
+      image: productImages,
+      sku: newProduct.sku,
+      brand: {
+        '@type': 'Brand',
+        name: brand
+      },
+      offers: {
+        '@type': 'Offer',
+        url: typeof window !== 'undefined' ? window.location.href : '',
+        priceCurrency: 'EUR',
+        price: Number(newProduct.price).toFixed(2),
+        priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
+        availability: availabilityStatus,
+        itemCondition: 'https://schema.org/NewCondition'
+      }
+    }
+
+    // Add compare price if available
+    if (newProduct.comparePrice && Number(newProduct.comparePrice) > Number(newProduct.price)) {
+      productStructuredData.offers.priceType = 'https://schema.org/SalePrice'
+    }
+
+    // Add aggregate rating if available
+    const rating = reviewSummary.value
+    if (rating && rating.count > 0) {
+      productStructuredData.aggregateRating = {
+        '@type': 'AggregateRating',
+        ratingValue: rating.rating.toString(),
+        reviewCount: rating.count.toString(),
+        bestRating: '5',
+        worstRating: '1'
+      }
+    }
+
+    // Add additional product details if available
+    if (newProduct.origin) {
+      productStructuredData.countryOfOrigin = {
+        '@type': 'Country',
+        name: newProduct.origin
+      }
+    }
+
+    if (newProduct.weight) {
+      productStructuredData.weight = {
+        '@type': 'QuantitativeValue',
+        value: newProduct.weight,
+        unitCode: 'KGM'
+      }
+    }
+
+    // Add category breadcrumb
+    if (newProduct.category) {
+      productStructuredData.category = categoryLabel.value
+    }
+
     useHead({
       title: `${getLocalizedText(newProduct.name)} - Moldova Direct`,
       meta: [
@@ -710,6 +786,12 @@ watch(product, newProduct => {
         {
           property: 'product:price:currency',
           content: 'EUR'
+        }
+      ],
+      script: [
+        {
+          type: 'application/ld+json',
+          children: JSON.stringify(productStructuredData)
         }
       ]
     })
