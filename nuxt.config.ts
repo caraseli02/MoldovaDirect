@@ -92,12 +92,15 @@ export default defineNuxtConfig({
         }
       }
     },
-    // Configure IPX provider for external images
-    // This prevents 404 errors during prerender by allowing external images to be processed at runtime
-    provider: 'ipx',
+    // Use Vercel's native image optimization in production (avoids sharp dependency issues)
+    // Falls back to IPX in development
+    provider: process.env.VERCEL ? 'vercel' : 'ipx',
+    vercel: {
+      // Vercel Image Optimization configuration
+      // External domains are automatically allowed via domains array above
+    },
     ipx: {
-      maxAge: 60 * 60 * 24 * 30, // 30 days cache for external images
-      // Allow images to be fetched from external domains
+      maxAge: 60 * 60 * 24 * 30, // 30 days cache for external images (dev only)
       domains: ["images.unsplash.com"]
     }
   },
