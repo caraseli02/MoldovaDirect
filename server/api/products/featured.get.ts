@@ -1,6 +1,7 @@
 import { serverSupabaseClient } from '#supabase/server'
+import { PUBLIC_CACHE_CONFIG, getPublicCacheKey } from '~/server/utils/publicCache'
 
-export default defineEventHandler(async (event) => {
+export default defineCachedEventHandler(async (event) => {
   try {
     const supabase = await serverSupabaseClient(event)
     const query = getQuery(event)
@@ -221,4 +222,8 @@ export default defineEventHandler(async (event) => {
       statusMessage: 'Internal server error'
     })
   }
+}, {
+  maxAge: PUBLIC_CACHE_CONFIG.featuredProducts.maxAge,
+  name: PUBLIC_CACHE_CONFIG.featuredProducts.name,
+  getKey: (event) => getPublicCacheKey(PUBLIC_CACHE_CONFIG.featuredProducts.name, event)
 })

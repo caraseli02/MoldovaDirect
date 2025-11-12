@@ -1,8 +1,13 @@
 // GET /api/admin/orders - Admin endpoint to get all orders with filtering and pagination
+//
+// Performance:
+// - Cached for 30 seconds per unique query combination
+// - Cache invalidated on order mutations
 import { serverSupabaseServiceRole } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
+import { ADMIN_CACHE_CONFIG, getAdminCacheKey } from '~/server/utils/adminCache'
 
-export default defineEventHandler(async (event) => {
+export default defineCachedEventHandler(async (event) => {
   try {
     // Verify admin authentication
     await requireAdminRole(event)
@@ -227,4 +232,8 @@ export default defineEventHandler(async (event) => {
       statusMessage: 'Internal server error'
     })
   }
+}, {
+  maxAge: ADMIN_CACHE_CONFIG.ordersList.maxAge,
+  name: ADMIN_CACHE_CONFIG.ordersList.name,
+  getKey: (event) => getAdminCacheKey(ADMIN_CACHE_CONFIG.ordersList.name, event)
 })

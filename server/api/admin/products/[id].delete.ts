@@ -13,6 +13,8 @@
 
 import { serverSupabaseClient } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
+import { invalidateMultipleScopes } from '~/server/utils/adminCache'
+import { invalidatePublicCache } from '~/server/utils/publicCache'
 
 export default defineEventHandler(async (event) => {
   await requireAdminRole(event)
@@ -73,6 +75,12 @@ export default defineEventHandler(async (event) => {
         ip_address: getClientIP(event),
         user_agent: getHeader(event, 'user-agent')
       })
+
+    // Invalidate related caches (both admin and public)
+    await Promise.all([
+      invalidateMultipleScopes(['products', 'stats']),
+      invalidatePublicCache('products')
+    ])
 
     return {
       success: true,

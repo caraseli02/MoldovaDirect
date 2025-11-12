@@ -1,4 +1,5 @@
 import { serverSupabaseClient } from '#supabase/server'
+import { PUBLIC_CACHE_CONFIG, getPublicCacheKey } from '~/server/utils/publicCache'
 
 // Helper function to get localized content with fallback
 function getLocalizedContent(content: Record<string, string>, locale: string): string {
@@ -19,7 +20,7 @@ function buildCategoryTree(categories: any[], parentId: number | null = null): a
     .sort((a, b) => a.sortOrder - b.sortOrder) // Use sortOrder instead of sort_order
 }
 
-export default defineEventHandler(async (event) => {
+export default defineCachedEventHandler(async (event) => {
   try {
     const supabase = await serverSupabaseClient(event)
     const query = getQuery(event)
@@ -135,4 +136,8 @@ export default defineEventHandler(async (event) => {
       statusMessage: 'Internal server error'
     })
   }
+}, {
+  maxAge: PUBLIC_CACHE_CONFIG.categoriesList.maxAge,
+  name: PUBLIC_CACHE_CONFIG.categoriesList.name,
+  getKey: (event) => getPublicCacheKey(PUBLIC_CACHE_CONFIG.categoriesList.name, event)
 })

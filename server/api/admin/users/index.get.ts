@@ -1,16 +1,21 @@
 /**
  * Admin Users API - List Users
- * 
+ *
  * Requirements addressed:
  * - 4.1: Display searchable list of all registered users with basic information
  * - 4.2: Filter results by name, email, or registration date
- * 
+ *
  * Provides paginated user listing with search and filtering capabilities
  * for admin user management interface.
+ *
+ * Performance:
+ * - Cached for 60 seconds per unique query combination
+ * - Cache invalidated on user mutations
  */
 
 import { serverSupabaseServiceRole } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
+import { ADMIN_CACHE_CONFIG, getAdminCacheKey } from '~/server/utils/adminCache'
 
 interface UserFilters {
   search?: string

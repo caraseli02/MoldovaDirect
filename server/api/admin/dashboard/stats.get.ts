@@ -1,19 +1,24 @@
 /**
  * Admin Dashboard Statistics API Endpoint
- * 
+ *
  * Requirements addressed:
  * - 3.1: Display key metrics including total users, active users, page views, and conversion rates
  * - 6.4: Real-time data refresh functionality for dashboard metrics
- * 
+ *
  * Returns aggregated statistics for the admin dashboard including:
  * - Product metrics (total, active, low stock)
  * - User metrics (total, active, new registrations)
  * - Order metrics (total orders, revenue)
  * - Performance metrics (conversion rate)
+ *
+ * Performance:
+ * - Cached for 60 seconds to reduce database load
+ * - Cache invalidated on product/order mutations
  */
 
 import { serverSupabaseClient } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
+import { ADMIN_CACHE_CONFIG } from '~/server/utils/adminCache'
 
 export interface DashboardStats {
   totalProducts: number
@@ -36,7 +41,7 @@ export interface DashboardStats {
   averageOrderValue: number
 }
 
-export default defineEventHandler(async (event) => {
+export default defineCachedEventHandler(async (event) => {
   try {
     await requireAdminRole(event)
     // Verify admin access
@@ -155,4 +160,8 @@ export default defineEventHandler(async (event) => {
       statusMessage: 'Internal server error'
     })
   }
+}, {
+  maxAge: ADMIN_CACHE_CONFIG.dashboardStats.maxAge,
+  name: ADMIN_CACHE_CONFIG.dashboardStats.name,
+  getKey: () => ADMIN_CACHE_CONFIG.dashboardStats.name
 })

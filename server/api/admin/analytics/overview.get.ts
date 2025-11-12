@@ -1,20 +1,26 @@
 /**
  * Admin Analytics Overview API Endpoint
- * 
+ *
  * Requirements addressed:
  * - 3.1: Display key metrics including total users, active users, page views, and conversion rates
  * - 3.2: Update analytics data based on selected date range
  * - 3.6: Display appropriate loading states or error messages when analytics data is unavailable
- * 
+ *
  * Returns comprehensive analytics overview including:
  * - Daily analytics aggregation
  * - Key performance indicators
  * - Trend analysis
  * - Conversion metrics
+ *
+ * Performance:
+ * - Cached for 5 minutes (complex aggregations)
+ * - Separate cache per date range selection
+ * - Cache invalidated on order/user mutations
  */
 
 import { serverSupabaseClient } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
+import { ADMIN_CACHE_CONFIG, getAdminCacheKey } from '~/server/utils/adminCache'
 
 export interface AnalyticsOverview {
   dailyAnalytics: Array<{
@@ -48,7 +54,7 @@ export interface AnalyticsOverview {
   }
 }
 
-export default defineEventHandler(async (event) => {
+export default defineCachedEventHandler(async (event) => {
   try {
     await requireAdminRole(event)
     // Verify admin access
@@ -239,4 +245,8 @@ export default defineEventHandler(async (event) => {
       statusMessage: 'Failed to fetch analytics overview'
     })
   }
+}, {
+  maxAge: ADMIN_CACHE_CONFIG.analyticsOverview.maxAge,
+  name: ADMIN_CACHE_CONFIG.analyticsOverview.name,
+  getKey: (event) => getAdminCacheKey(ADMIN_CACHE_CONFIG.analyticsOverview.name, event)
 })
