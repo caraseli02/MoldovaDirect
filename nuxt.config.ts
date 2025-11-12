@@ -178,7 +178,7 @@ export default defineNuxtConfig({
     // Prerender configuration - allow build to continue despite image processing errors
     prerender: {
       failOnError: false,
-      ignore: ['/_ipx', '/admin', '/checkout', '/api'],
+      ignore: ['/_ipx/**', '/admin', '/checkout', '/api'],
     },
   },
   supabase: {
