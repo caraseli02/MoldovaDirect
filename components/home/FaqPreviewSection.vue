@@ -6,17 +6,22 @@
         <p class="mt-4 text-sm md:text-base text-gray-600 dark:text-gray-400">{{ t('home.faqPreview.subtitle') }}</p>
       </div>
       <div class="mt-12 grid gap-6 md:grid-cols-2">
-        <details
-          v-for="item in items"
+        <Accordion
+          v-for="(item, index) in items"
           :key="item.question"
-          class="group rounded-3xl border border-gray-200 bg-white p-6 transition hover:-translate-y-1 hover:shadow-lg open:border-primary-300 open:bg-primary-50/30 dark:border-gray-800 dark:bg-gray-900"
+          type="single"
+          collapsible
+          class="rounded-3xl border border-gray-200 bg-white p-6 transition hover:-translate-y-1 hover:shadow-lg dark:border-gray-800 dark:bg-gray-900"
         >
-          <summary class="flex cursor-pointer items-center justify-between text-left text-lg font-semibold">
-            <span>{{ item.question }}</span>
-            <commonIcon name="lucide:chevron-down" class="h-5 w-5 transition group-open:rotate-180" />
-          </summary>
-          <p class="mt-4 text-sm text-gray-600 dark:text-gray-400">{{ item.answer }}</p>
-        </details>
+          <AccordionItem :value="`item-${index}`" class="border-none">
+            <AccordionTrigger class="text-left text-lg font-semibold hover:no-underline py-0">
+              {{ item.question }}
+            </AccordionTrigger>
+            <AccordionContent>
+              <p class="text-sm text-gray-600 dark:text-gray-400">{{ item.answer }}</p>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </div>
       <div class="mt-12 text-center">
         <NuxtLink
@@ -32,6 +37,8 @@
 </template>
 
 <script setup lang="ts">
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion'
+
 defineProps<{
   items: Array<{
     question: string
