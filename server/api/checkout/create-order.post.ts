@@ -1,5 +1,8 @@
 // POST /api/checkout/create-order - Create order from checkout session
 import { serverSupabaseServiceRole } from '#supabase/server'
+import { createLogger } from '~/server/utils/secureLogger'
+
+const logger = createLogger('checkout-create-order')
 
 interface ProductSnapshot {
   id: number
@@ -69,9 +72,10 @@ export default defineEventHandler(async (event) => {
     // Parse request body
     const body = await readBody(event) as CreateOrderFromCheckoutRequest
 
-    console.log('[Checkout API] create-order request received', {
+    logger.info('Order creation request received', {
       sessionId: body.sessionId,
       itemCount: body.items?.length || 0,
+      // PII fields will be automatically redacted by secure logger
       guestEmail: body.guestEmail,
       paymentMethod: body.paymentMethod,
       hasShippingAddress: !!body.shippingAddress,
@@ -108,8 +112,9 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    console.log('[Checkout API] create-order user resolution', {
+    logger.info('User resolution completed', {
       isAuthenticated: !!user,
+      // PII will be automatically redacted
       guestEmail
     })
 
@@ -185,7 +190,7 @@ export default defineEventHandler(async (event) => {
       orderData.guest_email = guestEmail
     }
 
-    console.log('[Checkout API] creating order record', {
+    logger.info('Creating order record', {
       orderNumber,
       userId: user?.id,
       paymentMethod: orderData.payment_method,
@@ -209,13 +214,13 @@ export default defineEventHandler(async (event) => {
     })
 
     if (rpcError) {
-      console.error('Failed to create order with inventory:', rpcError)
-      console.error('Order data:', {
-        order_number: orderNumber,
-        user_id: user?.id || null,
+      logger.error('Failed to create order with inventory', {
+        error: rpcError.message,
+        orderNumber,
+        userId: user?.id || null,
         status: orderStatus,
-        payment_method: dbPaymentMethod,
-        payment_status: paymentStatus
+        paymentMethod: dbPaymentMethod,
+        paymentStatus
       })
 
       // Check if error is due to insufficient stock
@@ -259,9 +264,10 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    console.log('[Checkout API] create-order success (atomic with inventory update)', {
+    logger.info('Order created successfully with inventory update', {
       orderId: order.id,
       orderNumber: order.order_number,
+      // PII will be automatically redacted
       guestEmail: orderData.guest_email,
       userId: user?.id
     })
@@ -282,7 +288,7 @@ export default defineEventHandler(async (event) => {
       throw error
     }
 
-    console.error('Order creation error:', error)
+    logger.error('Order creation failed', { error: error.message || 'Unknown error' })
     throw createError({
       statusCode: 500,
       statusMessage: 'Internal server error'

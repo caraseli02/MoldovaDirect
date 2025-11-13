@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
     // Ensure this is a DELETE request
     assertMethod(event, 'DELETE')
 
-    // Get the authenticated user
+    // Get the authenticated user (regular client for authentication)
     const supabase = serverSupabaseClient(event)
     const { data: { user }, error: authError } = await supabase.auth.getUser()
 
@@ -63,80 +63,40 @@ export default defineEventHandler(async (event) => {
       })
     })
 
-    // Start transaction-like cleanup process
-    const cleanupErrors: string[] = []
+    // Use atomic deletion function for GDPR compliance
+    // This ensures all-or-nothing deletion (no partial deletions)
+    const serviceRoleSupabase = serverSupabaseServiceRole(event)
 
     try {
-      // 1. Delete user addresses
-      const { error: addressError } = await supabase
-        .from('addresses')
-        .delete()
-        .eq('user_id', user.id)
-
-      if (addressError) {
-        cleanupErrors.push(`Failed to delete addresses: ${addressError.message}`)
-      }
-
-      // 2. Delete user carts and cart items (cascade should handle cart_items)
-      const { error: cartError } = await supabase
-        .from('carts')
-        .delete()
-        .eq('user_id', user.id)
-
-      if (cartError) {
-        cleanupErrors.push(`Failed to delete carts: ${cartError.message}`)
-      }
-
-      // 3. Anonymize orders (don't delete for business records)
-      // Instead of deleting orders, we'll anonymize them
-      const { error: orderError } = await supabase
-        .from('orders')
-        .update({
-          user_id: null,
-          customer_notes: '[Account Deleted]',
-          shipping_address: JSON.stringify({
-            street: '[Deleted]',
-            city: '[Deleted]',
-            postalCode: '[Deleted]',
-            country: '[Deleted]'
-          }),
-          billing_address: JSON.stringify({
-            street: '[Deleted]',
-            city: '[Deleted]',
-            postalCode: '[Deleted]',
-            country: '[Deleted]'
-          })
+      // Call the atomic deletion function
+      // All operations happen in a single database transaction
+      const { data: deletionResult, error: deletionError } = await serviceRoleSupabase
+        .rpc('delete_user_account_atomic', {
+          target_user_id: user.id,
+          deletion_reason: reason || 'not_specified'
         })
-        .eq('user_id', user.id)
 
-      if (orderError) {
-        cleanupErrors.push(`Failed to anonymize orders: ${orderError.message}`)
+      if (deletionError) {
+        throw createError({
+          statusCode: 500,
+          statusMessage: `Failed to delete account data: ${deletionError.message}`
+        })
       }
 
-      // 4. Delete profile picture from storage
+      // Delete profile picture from storage (non-critical, outside transaction)
       if (user.user_metadata?.avatar_url) {
         const fileName = `${user.id}/avatar.jpg`
-        const { error: storageError } = await supabase.storage
+        await serviceRoleSupabase.storage
           .from('avatars')
           .remove([fileName])
-
-        if (storageError) {
-          cleanupErrors.push(`Failed to delete profile picture: ${storageError.message}`)
-        }
+          .catch(err => {
+            // Log but don't fail - storage deletion is non-critical
+            console.warn('Failed to delete profile picture:', err)
+          })
       }
 
-      // 5. Delete user profile
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .delete()
-        .eq('id', user.id)
-
-      if (profileError) {
-        cleanupErrors.push(`Failed to delete profile: ${profileError.message}`)
-      }
-
-      // 6. Finally, delete the auth user
-      const { error: deleteUserError } = await supabase.auth.admin.deleteUser(user.id)
+      // Finally, delete the auth user (after data cleanup)
+      const { error: deleteUserError } = await serviceRoleSupabase.auth.admin.deleteUser(user.id)
 
       if (deleteUserError) {
         throw createError({
@@ -145,46 +105,31 @@ export default defineEventHandler(async (event) => {
         })
       }
 
-      // Log successful deletion
-      await supabase.from('auth_events').insert({
-        user_id: null, // User no longer exists
-        event_type: 'account_deleted',
-        ip_address: getClientIP(event),
-        user_agent: getHeader(event, 'user-agent'),
-        metadata: JSON.stringify({
-          deleted_user_id: user.id,
-          reason: reason || 'not_specified',
-          cleanup_errors: cleanupErrors,
-          timestamp: new Date().toISOString()
-        })
-      })
-
-      // Return success response
+      // Return success response with deletion summary
       return {
         success: true,
         message: 'Account deleted successfully',
-        cleanup_warnings: cleanupErrors.length > 0 ? cleanupErrors : undefined
+        details: {
+          addresses_deleted: deletionResult?.addresses_deleted || 0,
+          carts_deleted: deletionResult?.carts_deleted || 0,
+          orders_anonymized: deletionResult?.orders_anonymized || 0,
+          profile_deleted: deletionResult?.profile_deleted || false
+        }
       }
 
-    } catch (cleanupError) {
-      // If cleanup fails, log the error but don't fail the entire operation
-      console.error('Account deletion cleanup error:', cleanupError)
-      
-      // Still try to delete the user account
-      const { error: deleteUserError } = await supabase.auth.admin.deleteUser(user.id)
-      
-      if (deleteUserError) {
-        throw createError({
-          statusCode: 500,
-          statusMessage: `Failed to delete user account: ${deleteUserError.message}`
-        })
+    } catch (deletionError) {
+      // Log the error for debugging
+      console.error('Account deletion error:', deletionError)
+
+      // Re-throw with appropriate error message
+      if (deletionError.statusCode) {
+        throw deletionError
       }
 
-      return {
-        success: true,
-        message: 'Account deleted successfully with some cleanup warnings',
-        cleanup_errors: cleanupErrors
-      }
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Failed to delete account. Please try again or contact support.'
+      })
     }
 
   } catch (error) {
