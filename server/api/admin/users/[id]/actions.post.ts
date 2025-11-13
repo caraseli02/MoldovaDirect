@@ -252,6 +252,22 @@ export default defineEventHandler(async (event) => {
       // Don't fail the main operation if audit logging fails
     }
 
+    // Invalidate user-related caches after successful action
+    try {
+      const storage = useStorage('cache')
+      // Clear specific user detail cache
+      await storage.removeItem(`nitro:handlers:admin-user-detail:user:${userId}.json`)
+      // Clear user list cache (all pages and filters)
+      const listKeys = await storage.getKeys('nitro:handlers:admin-users-list:')
+      await Promise.all(listKeys.map(key => storage.removeItem(key)))
+      // Clear analytics cache as user actions affect analytics
+      const analyticsKeys = await storage.getKeys('nitro:handlers:admin-analytics-users:')
+      await Promise.all(analyticsKeys.map(key => storage.removeItem(key)))
+    } catch (cacheError) {
+      console.warn('Failed to invalidate user caches:', cacheError)
+      // Don't fail the main operation if cache invalidation fails
+    }
+
     return {
       success: true,
       data: {

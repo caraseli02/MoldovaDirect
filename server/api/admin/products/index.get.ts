@@ -11,12 +11,17 @@
  * - Advanced filtering and sorting
  * - Pagination with performance optimization
  * - Search across multiple fields
+ *
+ * Performance:
+ * - Cached for 60 seconds per unique query combination
+ * - Cache invalidated on product mutations
  */
 
 import { serverSupabaseClient } from '#supabase/server'
 import { getMockProducts } from '~/server/utils/mockData'
 import { requireAdminRole } from '~/server/utils/adminAuth'
 import { prepareSearchPattern, MAX_SEARCH_LENGTH } from '~/server/utils/searchSanitization'
+import { ADMIN_CACHE_CONFIG, getAdminCacheKey } from '~/server/utils/adminCache'
 
 interface AdminProductFilters {
   search?: string
@@ -31,11 +36,11 @@ interface AdminProductFilters {
   limit?: number
 }
 
-export default defineEventHandler(async (event) => {
+export default defineCachedEventHandler(async (event) => {
   await requireAdminRole(event)
 
   const query = getQuery(event) as AdminProductFilters
-  
+
   try {
     const supabase = await serverSupabaseClient(event)
 
@@ -286,7 +291,11 @@ export default defineEventHandler(async (event) => {
       sortBy,
       sortOrder
     })
-    
+
     return mockResult
   }
+}, {
+  maxAge: ADMIN_CACHE_CONFIG.productsList.maxAge,
+  name: ADMIN_CACHE_CONFIG.productsList.name,
+  getKey: (event) => getAdminCacheKey(ADMIN_CACHE_CONFIG.productsList.name, event)
 })

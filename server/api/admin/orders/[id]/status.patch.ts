@@ -1,6 +1,7 @@
 // PATCH /api/admin/orders/[id]/status - Update order status
 import { serverSupabaseServiceRole } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
+import { invalidateMultipleScopes } from '~/server/utils/adminCache'
 
 interface UpdateOrderStatusRequest {
   status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
@@ -156,6 +157,9 @@ export default defineEventHandler(async (event) => {
         })
         .select()
     }
+
+    // Invalidate related caches
+    await invalidateMultipleScopes(['orders', 'stats'])
 
     return {
       success: true,

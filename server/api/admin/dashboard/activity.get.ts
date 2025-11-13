@@ -1,19 +1,24 @@
 /**
  * Admin Dashboard Recent Activity API Endpoint
- * 
+ *
  * Requirements addressed:
  * - 3.1: Display recent system activities for dashboard overview
  * - 6.4: Real-time data refresh functionality
- * 
+ *
  * Returns recent activities including:
  * - New user registrations
  * - Recent orders
  * - Product updates
  * - Low stock alerts
+ *
+ * Performance:
+ * - Cached for 30 seconds to balance freshness and performance
+ * - Cache invalidated on user/order/product mutations
  */
 
 import { serverSupabaseClient } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
+import { ADMIN_CACHE_CONFIG } from '~/server/utils/adminCache'
 
 export interface ActivityItem {
   id: string
@@ -24,7 +29,7 @@ export interface ActivityItem {
   metadata?: Record<string, any>
 }
 
-export default defineEventHandler(async (event) => {
+export default defineCachedEventHandler(async (event) => {
   try {
     await requireAdminRole(event)
     // Verify admin access
@@ -156,4 +161,8 @@ export default defineEventHandler(async (event) => {
       statusMessage: 'Internal server error'
     })
   }
+}, {
+  maxAge: ADMIN_CACHE_CONFIG.dashboardActivity.maxAge,
+  name: ADMIN_CACHE_CONFIG.dashboardActivity.name,
+  getKey: () => ADMIN_CACHE_CONFIG.dashboardActivity.name
 })

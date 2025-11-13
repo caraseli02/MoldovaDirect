@@ -1,5 +1,6 @@
 import { serverSupabaseClient } from '#supabase/server'
 import { prepareSearchPattern, MAX_SEARCH_LENGTH } from '~/server/utils/searchSanitization'
+import { PUBLIC_CACHE_CONFIG, getPublicCacheKey } from '~/server/utils/publicCache'
 
 interface ProductFilters {
   category?: string
@@ -30,7 +31,7 @@ interface ProductResponse {
   created_at: string
 }
 
-export default defineEventHandler(async (event) => {
+export default defineCachedEventHandler(async (event) => {
   try {
     const supabase = await serverSupabaseClient(event)
     const query = getQuery(event) as ProductFilters
@@ -216,4 +217,8 @@ export default defineEventHandler(async (event) => {
       statusMessage: 'Internal server error'
     })
   }
+}, {
+  maxAge: PUBLIC_CACHE_CONFIG.productsList.maxAge,
+  name: PUBLIC_CACHE_CONFIG.productsList.name,
+  getKey: (event) => getPublicCacheKey(PUBLIC_CACHE_CONFIG.productsList.name, event)
 })
