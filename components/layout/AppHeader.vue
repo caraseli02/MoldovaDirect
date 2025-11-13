@@ -169,14 +169,25 @@ import ThemeToggle from './ThemeToggle.vue'
 
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
+const route = useRoute()
 const mobileMenuOpen = ref(false)
 
 // Scroll detection for luxury header transparency
-const scrolled = ref(false)
+// Start as scrolled (true) for better initial visibility on light backgrounds
+const scrolled = ref(true)
 const SCROLL_THRESHOLD = 20 // px - threshold for header transparency
 
+// Pages that have dark hero sections and support transparent header
+const pagesWithDarkHero = ['/']
+
 const handleScroll = useThrottleFn(() => {
-  scrolled.value = window.scrollY > SCROLL_THRESHOLD
+  const currentPath = route.path.replace(/\/(en|ro|ru)/, '') || '/'
+  const hasDarkHero = pagesWithDarkHero.includes(currentPath)
+
+  // Only allow transparent header on pages with dark hero sections
+  scrolled.value = hasDarkHero
+    ? window.scrollY > SCROLL_THRESHOLD
+    : true
 }, 50) // Throttle to 50ms (20 updates/second) for optimal performance
 
 onMounted(() => {
