@@ -15,7 +15,7 @@ export const useProductCatalog = () => {
   const searchQuery = useState<string>('searchQuery', () => '')
   const filters = useState<ProductFilters>('filters', () => ({}))
   const pagination = useState('pagination', () => ({ page: 1, limit: 12, total: 0, totalPages: 1 }))
-  const loading = useState<boolean>('loading', () => false)
+  const loading = useState<boolean>('loading', () => true)
   const error = useState<string | null>('error', () => null)
 
   // Filter UI state
