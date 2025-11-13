@@ -12,7 +12,7 @@
     <div class="relative aspect-square overflow-hidden rounded-t-2xl bg-gray-100 dark:bg-slate-700">
       <nuxt-link :to="`/products/${product.slug}`">
         <NuxtImg
-          v-if="primaryImage"
+          v-if="!shouldShowFallback"
           preset="productThumbnail"
           :src="primaryImage.url"
           :alt="getLocalizedText(primaryImage.altText) || getLocalizedText(product.name)"
@@ -20,6 +20,7 @@
           densities="x1 x2"
           loading="lazy"
           class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          @error="handleImageError"
         />
         <div v-else class="w-full h-full flex items-center justify-center text-gray-400 dark:text-slate-500">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -187,7 +188,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { Button } from '@/components/ui/button'
 import type { ProductWithRelations } from '~/types'
 import { useCart } from '~/composables/useCart'
@@ -214,9 +215,16 @@ const { addItem, loading: cartLoading, isInCart } = useCart()
 // Template refs
 const cardRef = ref<HTMLElement>()
 
+// State
+const imageError = ref(false)
+
 // Computed properties
 const primaryImage = computed(() => {
   return props.product.images?.find(img => img.isPrimary) || props.product.images?.[0]
+})
+
+const shouldShowFallback = computed(() => {
+  return !primaryImage.value || imageError.value
 })
 
 const stockStatusClass = computed(() => {
@@ -260,6 +268,16 @@ const formatPrice = (price: string | number) => {
   return Number(price).toFixed(2)
 }
 
+
+// Image error handler
+const handleImageError = () => {
+  imageError.value = true
+}
+
+// Reset image error when product changes
+watch(() => props.product.id, () => {
+  imageError.value = false
+})
 
 // Touch event handlers
 const handleTouchStart = (event: TouchEvent) => {
