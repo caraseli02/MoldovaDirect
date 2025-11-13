@@ -422,7 +422,6 @@ import { useCart } from '~/composables/useCart'
 
 const route = useRoute()
 const slug = route.params.slug as string
-const config = useRuntimeConfig()
 
 const { data: product, pending, error } = await useLazyFetch<ProductWithRelations & { relatedProducts?: ProductWithRelations[]; attributes?: Record<string, any> }>(`/api/products/${slug}`)
 
@@ -696,6 +695,10 @@ watch(product, newProduct => {
                   categoryLabel.value ||
                   'Moldova Direct'
 
+    // Build canonical URL for structured data (works in SSR)
+    const config = useRuntimeConfig()
+    const productUrl = `${config.public.siteUrl}${route.path}`
+
     // Build Product structured data
     const productStructuredData: Record<string, any> = {
       '@context': 'https://schema.org',
@@ -710,7 +713,7 @@ watch(product, newProduct => {
       },
       offers: {
         '@type': 'Offer',
-        url: `${config.public.siteUrl}${route.path}`,
+        url: productUrl,
         priceCurrency: 'EUR',
         price: Number(newProduct.price).toFixed(2),
         priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
