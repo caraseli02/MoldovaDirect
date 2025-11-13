@@ -60,11 +60,8 @@ export default defineCachedEventHandler(async (event) => {
     // Build the base query with count in single query for better performance
     // Use explicit LEFT JOIN (!left) to ensure products without categories are included
     // When filtering by category, use INNER JOIN (!inner) to only get products in that category
-    const categoryJoinType = category ? '!inner' : '!left'
-
-    let queryBuilder = supabase
-      .from('products')
-      .select(`
+    const selectFields = category
+      ? `
         id,
         sku,
         name_translations,
@@ -77,12 +74,35 @@ export default defineCachedEventHandler(async (event) => {
         is_active,
         created_at,
         category_id,
-        categories${categoryJoinType} (
+        categories!inner (
           id,
           slug,
           name_translations
         )
-      `, { count: 'exact' })
+      `
+      : `
+        id,
+        sku,
+        name_translations,
+        description_translations,
+        price_eur,
+        compare_at_price_eur,
+        stock_quantity,
+        images,
+        attributes,
+        is_active,
+        created_at,
+        category_id,
+        categories!left (
+          id,
+          slug,
+          name_translations
+        )
+      `
+
+    let queryBuilder = supabase
+      .from('products')
+      .select(selectFields, { count: 'exact' })
       .eq('is_active', true)
 
     // Apply category filter
@@ -149,7 +169,17 @@ export default defineCachedEventHandler(async (event) => {
     const { data: products, error, count } = await queryBuilder
     const totalCount = count || 0
 
+    // Debug logging
+    console.log('[Products API] Query params:', { category, search, priceMin, priceMax, inStock, sort, page, limit })
+    console.log('[Products API] Results:', {
+      productsCount: products?.length || 0,
+      totalCount,
+      hasError: !!error,
+      errorMessage: error?.message
+    })
+
     if (error) {
+      console.error('[Products API] Supabase error:', error)
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to fetch products',
@@ -194,7 +224,7 @@ export default defineCachedEventHandler(async (event) => {
     // Calculate pagination info
     const totalPages = Math.ceil(totalCount / limit)
 
-    return {
+    const response = {
       products: transformedProducts,
       pagination: {
         page,
@@ -214,6 +244,14 @@ export default defineCachedEventHandler(async (event) => {
         sort
       }
     }
+
+    console.log('[Products API] Returning:', {
+      productsCount: transformedProducts.length,
+      pagination: response.pagination,
+      firstProduct: transformedProducts[0]?.name
+    })
+
+    return response
 
   } catch (error) {
     console.error('Products API error:', error)
