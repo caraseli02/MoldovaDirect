@@ -58,6 +58,10 @@ export default defineCachedEventHandler(async (event) => {
     }
 
     // Build the base query with count in single query for better performance
+    // Use explicit LEFT JOIN (!left) to ensure products without categories are included
+    // When filtering by category, use INNER JOIN (!inner) to only get products in that category
+    const categoryJoinType = category ? '!inner' : '!left'
+
     let queryBuilder = supabase
       .from('products')
       .select(`
@@ -72,7 +76,8 @@ export default defineCachedEventHandler(async (event) => {
         attributes,
         is_active,
         created_at,
-        categories (
+        category_id,
+        categories${categoryJoinType} (
           id,
           slug,
           name_translations
