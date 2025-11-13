@@ -96,9 +96,25 @@ GET /api/admin/debug/products-count
    **Option C: Restart the application**
    - This will clear all in-memory caches
 
-3. **Verify the fix**:
+3. **Check server logs for debugging**:
+   - After deployment, the API now logs detailed information
+   - Look for `[Products API]` log entries showing:
+     - Query parameters being sent
+     - Number of products returned from database
+     - Any Supabase errors
+     - Transformed response data
+
+   Example logs you should see:
+   ```
+   [Products API] Query params: { category: undefined, search: undefined, ... }
+   [Products API] Results: { productsCount: 15, totalCount: 15, hasError: false }
+   [Products API] Returning: { productsCount: 15, pagination: {...}, firstProduct: {...} }
+   ```
+
+4. **Verify the fix**:
    - Visit the products page and confirm products are showing
    - Check the debug endpoint: `GET /api/admin/debug/products-count` to see database stats
+   - If still empty, check server logs for clues
 
 ### For Future Issues:
 
@@ -120,13 +136,57 @@ To test this locally:
 # 4. Visit /products?category=wine - should only see products in that category
 ```
 
+## Troubleshooting: Landing Page Works But Products Page Doesn't
+
+If you see products on the landing page but not on the products page, here's why:
+
+### Different API Endpoints
+
+1. **Landing Page** uses `/api/products/featured`:
+   - Always uses `categories!inner` (INNER JOIN)
+   - Only returns products that HAVE categories
+   - Includes additional filtering for featured products
+   - **This works because featured products are specifically curated**
+
+2. **Products Page** uses `/api/products` (index.get.ts):
+   - Should use `categories!left` (LEFT JOIN) to include ALL products
+   - Previously had an issue with join type syntax
+   - Cache may have old empty data
+
+### What to Check
+
+1. **Server Logs**: Look for `[Products API]` entries
+   ```bash
+   # If you see:
+   [Products API] Results: { productsCount: 0, totalCount: 0, hasError: false }
+
+   # This means no products in database OR all products are inactive OR query issue
+   ```
+
+2. **Debug Endpoint**: `GET /api/admin/debug/products-count`
+   ```bash
+   # If activeProducts > 0 but productsCount = 0, it's a query/cache issue
+   # If activeProducts = 0, you need to add/activate products in database
+   ```
+
+3. **Database Check**: Verify products exist and are active
+   ```sql
+   -- Run in Supabase SQL editor
+   SELECT COUNT(*) FROM products WHERE is_active = true;
+   SELECT COUNT(*) FROM products WHERE is_active = true AND category_id IS NULL;
+   ```
+
+4. **Clear Cache**: Use one of the three methods above to clear cached empty data
+
 ## Related Files Modified
-- `server/api/products/index.get.ts` - Fixed category join
+- `server/api/products/index.get.ts` - Fixed category join syntax and added logging
 - `server/api/admin/cache/invalidate.post.ts` - New cache invalidation endpoint
 - `server/api/admin/debug/products-count.get.ts` - New debug endpoint
 
 ## Prevention
 - Always use explicit join types (`!left`, `!inner`) when joining tables with RLS
+- Build query strings conditionally rather than using template literal interpolation
 - Consider products without foreign key relationships in your queries
 - Implement cache invalidation endpoints for critical data
 - Add debug/diagnostic endpoints for production troubleshooting
+- Add comprehensive logging for complex queries
