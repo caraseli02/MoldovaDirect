@@ -8,6 +8,11 @@ set -e
 echo "🔍 Running pre-commit checks..."
 echo ""
 
+# Check for misplaced .md files in root
+./scripts/check-md-files.sh
+
+echo ""
+
 # Check if there are any staged files
 STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(ts|vue|js)$' || true)
 
