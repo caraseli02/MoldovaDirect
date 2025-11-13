@@ -648,9 +648,13 @@ const addToCart = async () => {
   if (!product.value) return
   try {
     await addItem({
-      productId: product.value.id,
-      quantity: selectedQuantity.value
-    })
+      id: product.value.id,
+      slug: product.value.slug,
+      name: getLocalizedText(product.value.name),
+      price: Number(product.value.price),
+      images: product.value.images?.map(img => img.url) || [],
+      stock: product.value.stockQuantity
+    }, selectedQuantity.value)
   } catch (err) {
     console.error('Add to cart failed', err)
   }
