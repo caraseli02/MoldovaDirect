@@ -1,4 +1,5 @@
 import { serverSupabaseClient } from '#supabase/server'
+import { PUBLIC_CACHE_CONFIG } from '~/server/utils/publicCache'
 
 // Helper function to get localized content with fallback
 function getLocalizedContent(content: Record<string, string>, locale: string): string {
@@ -53,7 +54,7 @@ function calculateSimilarityScore(product1: any, product2: any): number {
   return score
 }
 
-export default defineEventHandler(async (event) => {
+export default defineCachedEventHandler(async (event) => {
   try {
     const supabase = await serverSupabaseClient(event)
     const productId = getRouterParam(event, 'id')
@@ -261,14 +262,21 @@ export default defineEventHandler(async (event) => {
 
   } catch (error) {
     console.error('Product recommendations API error:', error)
-    
+
     if (error.statusCode) {
       throw error
     }
-    
+
     throw createError({
       statusCode: 500,
       statusMessage: 'Internal server error'
     })
+  }
+}, {
+  maxAge: PUBLIC_CACHE_CONFIG.relatedProducts.maxAge,
+  name: PUBLIC_CACHE_CONFIG.relatedProducts.name,
+  getKey: (event) => {
+    const id = getRouterParam(event, 'id')
+    return `${PUBLIC_CACHE_CONFIG.relatedProducts.name}-${id}`
   }
 })

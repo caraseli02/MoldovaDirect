@@ -1,5 +1,6 @@
 import { serverSupabaseClient } from '#supabase/server'
 import type { GetSectionsQuery, GetSectionsResponse, LandingSectionRow } from '~/types'
+import { PUBLIC_CACHE_CONFIG } from '~/server/utils/publicCache'
 
 /**
  * GET /api/landing/sections
@@ -14,7 +15,7 @@ import type { GetSectionsQuery, GetSectionsResponse, LandingSectionRow } from '~
  *
  * Returns: GetSectionsResponse
  */
-export default defineEventHandler(async (event): Promise<GetSectionsResponse> => {
+export default defineCachedEventHandler(async (event): Promise<GetSectionsResponse> => {
   try {
     const supabase = await serverSupabaseClient(event)
     const query = getQuery(event) as Partial<GetSectionsQuery>
@@ -100,4 +101,8 @@ export default defineEventHandler(async (event): Promise<GetSectionsResponse> =>
       data: error.data || error
     })
   }
+}, {
+  maxAge: PUBLIC_CACHE_CONFIG.landingSections.maxAge,
+  name: PUBLIC_CACHE_CONFIG.landingSections.name,
+  getKey: () => PUBLIC_CACHE_CONFIG.landingSections.name
 })

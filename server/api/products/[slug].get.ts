@@ -1,21 +1,22 @@
 import { serverSupabaseClient } from '#supabase/server'
+import { PUBLIC_CACHE_CONFIG } from '~/server/utils/publicCache'
 
 // Helper function to get localized content with fallback
 function getLocalizedContent(content: Record<string, string>, locale: string): string {
   // 1. Try requested locale
   if (content[locale]) return content[locale]
-  
+
   // 2. Try default locale (Spanish)
   if (content.es) return content.es
-  
+
   // 3. Try English as fallback
   if (content.en) return content.en
-  
+
   // 4. Return first available translation
   return Object.values(content)[0] || ''
 }
 
-export default defineEventHandler(async (event) => {
+export default defineCachedEventHandler(async (event) => {
   try {
     const supabase = await serverSupabaseClient(event)
     const slugParam = getRouterParam(event, 'slug')
@@ -202,14 +203,23 @@ export default defineEventHandler(async (event) => {
 
   } catch (error) {
     console.error('Product detail API error:', error)
-    
+
     if (error.statusCode) {
       throw error
     }
-    
+
     throw createError({
       statusCode: 500,
       statusMessage: 'Internal server error'
     })
+  }
+}, {
+  maxAge: PUBLIC_CACHE_CONFIG.productDetail.maxAge,
+  name: PUBLIC_CACHE_CONFIG.productDetail.name,
+  getKey: (event) => {
+    const slug = getRouterParam(event, 'slug')
+    const query = getQuery(event)
+    const locale = query.locale || 'es'
+    return `${PUBLIC_CACHE_CONFIG.productDetail.name}-${slug}-${locale}`
   }
 })

@@ -1,6 +1,7 @@
 import { serverSupabaseClient } from '#supabase/server'
+import { PUBLIC_CACHE_CONFIG, getPublicCacheKey } from '~/server/utils/publicCache'
 
-export default defineEventHandler(async (event) => {
+export default defineCachedEventHandler(async (event) => {
   try {
     const supabase = await serverSupabaseClient(event)
     const query = getQuery(event) as {
@@ -61,5 +62,9 @@ export default defineEventHandler(async (event) => {
       max: 200
     }
   }
+}, {
+  maxAge: PUBLIC_CACHE_CONFIG.priceRange.maxAge,
+  name: PUBLIC_CACHE_CONFIG.priceRange.name,
+  getKey: (event) => getPublicCacheKey(PUBLIC_CACHE_CONFIG.priceRange.name, event)
 })
 
