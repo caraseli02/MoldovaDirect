@@ -321,7 +321,6 @@ export default defineNuxtConfig({
   },
   vite: {
     plugins: [tailwindcss()],
-
     build: {
       // Use esbuild for faster minification
       minify: 'esbuild',

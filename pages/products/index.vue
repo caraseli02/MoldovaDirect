@@ -319,9 +319,11 @@ const pullToRefresh = usePullToRefresh(async () => {
 
 const swipeGestures = useSwipeGestures()
 
-await initialize()
-
 const recentlyViewedProducts = useState<ProductWithRelations[]>('recentlyViewedProducts', () => [])
+
+// Initialize and fetch products during SSR
+await initialize()
+await fetchProducts({ sort: 'created', page: 1, limit: 12 })
 
 const hasActiveFilters = computed(() => {
   return !!(
@@ -699,7 +701,6 @@ watch(isMobile, value => {
 
 onMounted(async () => {
   searchQuery.value = storeSearchQuery.value || ''
-  await fetchProducts({ sort: 'created', page: 1, limit: 12 })
 
   nextTick(() => {
     setupMobileInteractions()
