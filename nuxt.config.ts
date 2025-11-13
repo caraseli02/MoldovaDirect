@@ -92,21 +92,43 @@ export default defineNuxtConfig({
         }
       }
     },
-    // Configure IPX provider for external images
-    // This prevents 404 errors during prerender by allowing external images to be processed at runtime
-    provider: 'ipx',
+    // Use Vercel's native image optimization in production (avoids sharp dependency issues)
+    // Falls back to IPX in development
+    provider: process.env.VERCEL ? 'vercel' : 'ipx',
+    vercel: {
+      // Vercel Image Optimization configuration
+      // External domains are automatically allowed via domains array above
+    },
     ipx: {
-      maxAge: 60 * 60 * 24 * 30, // 30 days cache for external images
-      // Allow images to be fetched from external domains
+      maxAge: 60 * 60 * 24 * 30, // 30 days cache for external images (dev only)
       domains: ["images.unsplash.com"]
     }
   },
   routeRules: {
-    // Landing page - SWR caching (1 hour) + prerender
-    '/': { swr: 3600, prerender: true },
+    // Landing page - SWR caching (1 hour)
+    // Prerender disabled to avoid sharp binary issues with external images during build
+    '/': { swr: 3600 },
     // Product pages - ISR every hour
     '/products': { swr: 3600 },
     '/products/**': { swr: 3600 },
+    // Public API routes - Moderate SWR caching for customer-facing endpoints
+    '/api/products': { swr: 300, headers: { 'Cache-Control': 'public, max-age=300, stale-while-revalidate=60' } },
+    '/api/products/featured': { swr: 300, headers: { 'Cache-Control': 'public, max-age=300, stale-while-revalidate=60' } },
+    '/api/products/**': { swr: 600, headers: { 'Cache-Control': 'public, max-age=600, stale-while-revalidate=120' } },
+    '/api/categories': { swr: 600, headers: { 'Cache-Control': 'public, max-age=600, stale-while-revalidate=120' } },
+    '/api/categories/**': { swr: 600, headers: { 'Cache-Control': 'public, max-age=600, stale-while-revalidate=120' } },
+    '/api/search': { swr: 180, headers: { 'Cache-Control': 'public, max-age=180, stale-while-revalidate=60' } },
+    '/api/landing/sections': { swr: 600, headers: { 'Cache-Control': 'public, max-age=600, stale-while-revalidate=120' } },
+    // Admin API routes - Short SWR caching with private cache control
+    '/api/admin/dashboard/stats': { swr: 60, headers: { 'Cache-Control': 'private, max-age=60, stale-while-revalidate=30' } },
+    '/api/admin/dashboard/activity': { swr: 30, headers: { 'Cache-Control': 'private, max-age=30, stale-while-revalidate=15' } },
+    '/api/admin/analytics/**': { swr: 300, headers: { 'Cache-Control': 'private, max-age=300, stale-while-revalidate=60' } },
+    '/api/admin/products': { swr: 60, headers: { 'Cache-Control': 'private, max-age=60, stale-while-revalidate=30' } },
+    '/api/admin/orders': { swr: 30, headers: { 'Cache-Control': 'private, max-age=30, stale-while-revalidate=15' } },
+    '/api/admin/users': { swr: 60, headers: { 'Cache-Control': 'private, max-age=60, stale-while-revalidate=30' } },
+    '/api/admin/audit-logs': { swr: 120, headers: { 'Cache-Control': 'private, max-age=120, stale-while-revalidate=60' } },
+    '/api/admin/email-logs/**': { swr: 60, headers: { 'Cache-Control': 'private, max-age=60, stale-while-revalidate=30' } },
+    '/api/admin/inventory/**': { swr: 120, headers: { 'Cache-Control': 'private, max-age=120, stale-while-revalidate=60' } },
     // Static assets with immutable cache (hash-based assets never change)
     '/assets/**': {
       headers: {
@@ -140,7 +162,11 @@ export default defineNuxtConfig({
     // Public keys (exposed to client-side)
     public: {
       stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
-      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://www.moldovadirect.com',
+      // Vercel automatically provides VERCEL_URL for all deployments (production & preview)
+      // Falls back to moldova-direct.vercel.app if VERCEL_URL is not set (local dev)
+      siteUrl: process.env.VERCEL_URL
+        ? `https://${process.env.VERCEL_URL}`
+        : process.env.NUXT_PUBLIC_SITE_URL || 'https://moldova-direct.vercel.app',
       enableTestUsers:
         process.env.ENABLE_TEST_USERS === 'true' || process.env.NODE_ENV !== 'production'
     },
@@ -175,10 +201,12 @@ export default defineNuxtConfig({
     // Enable minification and compression
     minify: true,
     compressPublicAssets: true,
-    // Prerender configuration - allow build to continue despite image processing errors
+    // Prerender configuration - disable automatic crawling to prevent timeout
     prerender: {
       failOnError: false,
-      ignore: ['/_ipx', '/admin', '/checkout', '/api'],
+      crawlLinks: false, // Disable automatic route discovery to prevent hanging
+      ignore: ['/_ipx/**', '/admin', '/checkout', '/api'],
+      routes: [], // Only prerender explicitly listed routes (none)
     },
   },
   supabase: {
@@ -202,6 +230,19 @@ export default defineNuxtConfig({
         "/auth/verify-email",
       ],
     },
+    // Enable anonymous access for public pages (required for Google crawlers)
+    cookieOptions: {
+      secure: process.env.NODE_ENV === 'production'
+    },
+    clientOptions: {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+        // Allow unauthenticated requests - critical for SEO and crawlers
+        flowType: 'pkce'
+      }
+    }
   },
   i18n: {
     locales: [
@@ -280,7 +321,6 @@ export default defineNuxtConfig({
   },
   vite: {
     plugins: [tailwindcss()],
-
     build: {
       // Use esbuild for faster minification
       minify: 'esbuild',

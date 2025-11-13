@@ -64,7 +64,7 @@ interface UserDetail {
   }
 }
 
-export default defineEventHandler(async (event) => {
+export default defineCachedEventHandler(async (event) => {
   try {
     await requireAdminRole(event)
     const userId = getRouterParam(event, 'id')
@@ -234,6 +234,14 @@ export default defineEventHandler(async (event) => {
       }
     }
   }
+}, {
+  maxAge: 60 * 2, // Cache for 2 minutes
+  name: 'admin-user-detail',
+  getKey: (event) => {
+    const userId = getRouterParam(event, 'id')
+    return `user:${userId}`
+  },
+  swr: true // Enable stale-while-revalidate
 })
 
 /**

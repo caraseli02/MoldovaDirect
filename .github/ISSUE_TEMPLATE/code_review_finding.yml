@@ -1,0 +1,143 @@
+name: Code Review Finding
+description: Issue identified during code review
+title: "[REVIEW]: "
+labels: ["code-quality"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This template is for issues identified during code reviews.
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How critical is this finding?
+      options:
+        - P0 - Critical (security, GDPR, data loss)
+        - P1 - High (performance, maintainability)
+        - P2 - Medium (code quality, best practices)
+        - P3 - Low (nice to have improvements)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: What type of issue is this?
+      options:
+        - Security Vulnerability
+        - Performance Issue
+        - Data Integrity
+        - Code Quality/Refactoring
+        - Technical Debt
+        - Missing Tests
+        - Documentation
+        - Accessibility
+        - Compliance (GDPR, etc.)
+      multiple: true
+    validations:
+      required: true
+
+  - type: input
+    id: reviewer
+    attributes:
+      label: Review Source
+      description: Which review identified this? (e.g., PR #221, Manual Review 2025-11-12)
+      placeholder: "PR #221 or Code Review 2025-11-12"
+    validations:
+      required: true
+
+  - type: textarea
+    id: finding
+    attributes:
+      label: Finding
+      description: Describe the issue found during review
+    validations:
+      required: true
+
+  - type: textarea
+    id: location
+    attributes:
+      label: Code Location
+      description: Where is this issue located?
+      placeholder: |
+        - File: `path/to/file.ts:123-145`
+        - Function: `functionName()`
+        - Component: `ComponentName.vue`
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact
+      description: What is the impact if not fixed?
+      placeholder: |
+        - Security risk: [describe]
+        - Performance impact: [describe]
+        - User experience: [describe]
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: How should this be fixed?
+      placeholder: |
+        1. Step 1
+        2. Step 2
+        3. Step 3
+    validations:
+      required: true
+
+  - type: textarea
+    id: code-example
+    attributes:
+      label: Code Example (Optional)
+      description: Provide before/after code examples if helpful
+      render: typescript
+    validations:
+      required: false
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+      description: How do we verify this is fixed?
+      placeholder: |
+        - [ ] Fix implemented
+        - [ ] Tests added
+        - [ ] Documentation updated
+        - [ ] Performance benchmarked
+    validations:
+      required: true
+
+  - type: input
+    id: effort
+    attributes:
+      label: Estimated Effort
+      description: How long will this take? (e.g., 2 hours, 3 days)
+      placeholder: "2 hours"
+    validations:
+      required: false
+
+  - type: textarea
+    id: related
+    attributes:
+      label: Related Issues
+      description: Link to related issues
+      placeholder: "#123, #456"
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: existing-issues
+    attributes:
+      label: Duplicate Check
+      description: Have you searched for existing issues?
+      options:
+        - label: I have searched existing issues and this is not a duplicate
+          required: true

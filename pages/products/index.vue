@@ -319,9 +319,11 @@ const pullToRefresh = usePullToRefresh(async () => {
 
 const swipeGestures = useSwipeGestures()
 
-await initialize()
-
 const recentlyViewedProducts = useState<ProductWithRelations[]>('recentlyViewedProducts', () => [])
+
+// Initialize and fetch products during SSR
+await initialize()
+await fetchProducts({ sort: 'created', page: 1, limit: 12 })
 
 const hasActiveFilters = computed(() => {
   return !!(
@@ -699,7 +701,6 @@ watch(isMobile, value => {
 
 onMounted(async () => {
   searchQuery.value = storeSearchQuery.value || ''
-  await fetchProducts({ sort: 'created', page: 1, limit: 12 })
 
   nextTick(() => {
     setupMobileInteractions()
@@ -725,15 +726,75 @@ onUnmounted(() => {
   cleanupMobileInteractions()
 })
 
-useHead({
-  title: 'Shop - Moldova Direct',
-  meta: [
-    {
-      name: 'description',
-      content: 'Browse authentic Moldovan food and wine products. Premium quality directly from Moldova to Spain.'
+// Build ItemList structured data for product listing
+const buildProductListStructuredData = () => {
+  if (!products.value || products.value.length === 0) return null
+
+  const itemListElements = products.value.map((product, index) => {
+    const productName = typeof product.name === 'string'
+      ? product.name
+      : product.name?.[locale.value] || product.name?.es || Object.values(product.name || {})[0] || 'Product'
+
+    const productImages = Array.isArray(product.images)
+      ? product.images.map(img => img.url).filter(Boolean)
+      : []
+
+    return {
+      '@type': 'ListItem',
+      position: (pagination.value.page - 1) * pagination.value.limit + index + 1,
+      item: {
+        '@type': 'Product',
+        name: productName,
+        image: productImages.length > 0 ? productImages[0] : undefined,
+        offers: {
+          '@type': 'Offer',
+          priceCurrency: 'EUR',
+          price: Number(product.price).toFixed(2),
+          availability: (product.stockQuantity || 0) > 0
+            ? 'https://schema.org/InStock'
+            : 'https://schema.org/OutOfStock'
+        }
+      }
     }
-  ]
-})
+  })
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: itemListElements,
+    numberOfItems: pagination.value.total || products.value.length
+  }
+}
+
+// Update head with structured data
+const updateHeadWithStructuredData = () => {
+  const structuredData = buildProductListStructuredData()
+  const scripts = structuredData ? [
+    {
+      type: 'application/ld+json',
+      children: JSON.stringify(structuredData)
+    }
+  ] : []
+
+  useHead({
+    title: 'Shop - Moldova Direct',
+    meta: [
+      {
+        name: 'description',
+        content: 'Browse authentic Moldovan food and wine products. Premium quality directly from Moldova to Spain.'
+      }
+    ],
+    script: scripts
+  })
+}
+
+// Initial head setup
+updateHeadWithStructuredData()
+
+// Update structured data when products change
+watch([products, () => pagination.value.page], () => {
+  updateHeadWithStructuredData()
+}, { deep: true })
 
 // Fetch dynamic price range (category/inStock/featured scope)
 const refreshPriceRange = async () => {

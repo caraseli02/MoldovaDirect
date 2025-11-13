@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Ask a Question
+    url: https://github.com/caraseli02/MoldovaDirect/discussions
+    about: Ask questions and discuss ideas with the community
+  - name: 📖 Documentation
+    url: https://github.com/caraseli02/MoldovaDirect/wiki
+    about: Check our documentation for answers to common questions

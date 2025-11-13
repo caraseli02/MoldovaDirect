@@ -1,5 +1,6 @@
 import { serverSupabaseClient } from '#supabase/server'
 import { prepareSearchPattern, validateMinSearchLength, MAX_SEARCH_LENGTH } from '~/server/utils/searchSanitization'
+import { PUBLIC_CACHE_CONFIG, getPublicCacheKey } from '~/server/utils/publicCache'
 
 // Helper function to get localized content with fallback
 function getLocalizedContent(content: Record<string, string>, locale: string): string {
@@ -9,7 +10,7 @@ function getLocalizedContent(content: Record<string, string>, locale: string): s
   return Object.values(content)[0] || ''
 }
 
-export default defineEventHandler(async (event) => {
+export default defineCachedEventHandler(async (event) => {
   try {
     const supabase = await serverSupabaseClient(event)
     const query = getQuery(event)
@@ -177,6 +178,10 @@ export default defineEventHandler(async (event) => {
       statusMessage: 'Internal server error'
     })
   }
+}, {
+  maxAge: PUBLIC_CACHE_CONFIG.search.maxAge,
+  name: PUBLIC_CACHE_CONFIG.search.name,
+  getKey: (event) => getPublicCacheKey(PUBLIC_CACHE_CONFIG.search.name, event)
 })
 
 // Calculate relevance score for search results

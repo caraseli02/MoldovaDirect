@@ -1,5 +1,6 @@
 import { serverSupabaseClient } from '#supabase/server'
 import type { GetSectionResponse, LandingSectionRow } from '~/types'
+import { PUBLIC_CACHE_CONFIG } from '~/server/utils/publicCache'
 
 /**
  * GET /api/landing/sections/[id]
@@ -8,7 +9,7 @@ import type { GetSectionResponse, LandingSectionRow } from '~/types'
  *
  * Returns: GetSectionResponse
  */
-export default defineEventHandler(async (event): Promise<GetSectionResponse> => {
+export default defineCachedEventHandler(async (event): Promise<GetSectionResponse> => {
   try {
     const supabase = await serverSupabaseClient(event)
     const id = getRouterParam(event, 'id')
@@ -52,5 +53,12 @@ export default defineEventHandler(async (event): Promise<GetSectionResponse> => 
       statusMessage: error.statusMessage || 'Failed to fetch landing section',
       data: error.data || error
     })
+  }
+}, {
+  maxAge: PUBLIC_CACHE_CONFIG.landingSections.maxAge,
+  name: `${PUBLIC_CACHE_CONFIG.landingSections.name}-detail`,
+  getKey: (event) => {
+    const id = getRouterParam(event, 'id')
+    return `${PUBLIC_CACHE_CONFIG.landingSections.name}-${id}`
   }
 })
