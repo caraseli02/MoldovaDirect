@@ -162,7 +162,11 @@ export default defineNuxtConfig({
     // Public keys (exposed to client-side)
     public: {
       stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
-      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://www.moldovadirect.com',
+      // Vercel automatically provides VERCEL_URL for all deployments (production & preview)
+      // Falls back to moldova-direct.vercel.app if VERCEL_URL is not set (local dev)
+      siteUrl: process.env.VERCEL_URL
+        ? `https://${process.env.VERCEL_URL}`
+        : process.env.NUXT_PUBLIC_SITE_URL || 'https://moldova-direct.vercel.app',
       enableTestUsers:
         process.env.ENABLE_TEST_USERS === 'true' || process.env.NODE_ENV !== 'production'
     },
@@ -226,6 +230,19 @@ export default defineNuxtConfig({
         "/auth/verify-email",
       ],
     },
+    // Enable anonymous access for public pages (required for Google crawlers)
+    cookieOptions: {
+      secure: process.env.NODE_ENV === 'production'
+    },
+    clientOptions: {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+        // Allow unauthenticated requests - critical for SEO and crawlers
+        flowType: 'pkce'
+      }
+    }
   },
   i18n: {
     locales: [
