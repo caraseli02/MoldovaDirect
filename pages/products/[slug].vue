@@ -422,6 +422,7 @@ import { useCart } from '~/composables/useCart'
 
 const route = useRoute()
 const slug = route.params.slug as string
+const config = useRuntimeConfig()
 
 const { data: product, pending, error } = await useLazyFetch<ProductWithRelations & { relatedProducts?: ProductWithRelations[]; attributes?: Record<string, any> }>(`/api/products/${slug}`)
 
@@ -709,7 +710,7 @@ watch(product, newProduct => {
       },
       offers: {
         '@type': 'Offer',
-        url: typeof window !== 'undefined' ? window.location.href : '',
+        url: `${config.public.siteUrl}${route.path}`,
         priceCurrency: 'EUR',
         price: Number(newProduct.price).toFixed(2),
         priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
