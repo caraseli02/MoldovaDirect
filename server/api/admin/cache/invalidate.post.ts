@@ -1,66 +1,73 @@
-import { serverSupabaseServiceRole } from '#supabase/server'
-import { invalidatePublicCache } from '~/server/utils/publicCache'
+import { z } from 'zod'
+import { invalidatePublicCache, type PublicCacheScope } from '~/server/utils/publicCache'
+import { requireAdminRole, logAdminAction } from '~/server/utils/adminAuth'
+
+// Request validation schema
+const InvalidateCacheSchema = z.object({
+  scope: z.enum(['products', 'categories', 'search', 'landing', 'all'], {
+    required_error: 'scope is required',
+    invalid_type_error: 'scope must be a valid cache scope'
+  })
+})
 
 /**
  * Admin endpoint to invalidate public cache
- * POST /api/admin/cache/invalidate
- * Body: { scope: 'products' | 'categories' | 'search' | 'landing' | 'all' }
+ *
+ * @endpoint POST /api/admin/cache/invalidate
+ * @auth Requires active admin session
+ *
+ * @param {Object} body - Request body
+ * @param {PublicCacheScope} body.scope - Cache scope to invalidate
+ *
+ * @returns Success response with timestamp
+ * @throws {401} Unauthorized - No valid session
+ * @throws {403} Forbidden - User is not admin
+ * @throws {400} Bad Request - Invalid scope provided
+ * @throws {500} Internal Server Error - Cache invalidation failed
  */
 export default defineEventHandler(async (event) => {
   try {
-    const supabase = await serverSupabaseServiceRole(event)
+    // Verify admin authentication (uses proper auth client)
+    const adminId = await requireAdminRole(event)
 
-    // Verify admin authentication
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-
-    if (authError || !user) {
-      throw createError({
-        statusCode: 401,
-        statusMessage: 'Unauthorized'
-      })
-    }
-
-    // Check if user is admin
-    const { data: profile, error: profileError } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', user.id)
-      .single()
-
-    if (profileError || !profile || profile.role !== 'admin') {
-      throw createError({
-        statusCode: 403,
-        statusMessage: 'Forbidden: Admin access required'
-      })
-    }
-
-    // Get scope from request body
+    // Validate and parse request body
     const body = await readBody(event)
-    const scope = body?.scope || 'all'
+    const validationResult = InvalidateCacheSchema.safeParse(body)
 
-    // Validate scope
-    const validScopes = ['products', 'categories', 'search', 'landing', 'all']
-    if (!validScopes.includes(scope)) {
+    if (!validationResult.success) {
       throw createError({
         statusCode: 400,
-        statusMessage: `Invalid scope. Must be one of: ${validScopes.join(', ')}`
+        statusMessage: 'Invalid request body',
+        data: validationResult.error.format()
       })
     }
 
-    // Invalidate cache
-    await invalidatePublicCache(scope as any)
+    const { scope } = validationResult.data
+
+    // Log admin action for audit trail
+    await logAdminAction(event, adminId, 'cache_invalidation', {
+      resource_type: 'cache',
+      scope,
+      ip_address: getRequestIP(event)
+    })
+
+    // Invalidate cache (type-safe now)
+    await invalidatePublicCache(scope)
 
     return {
       success: true,
       message: `Successfully invalidated ${scope} cache`,
-      scope,
-      timestamp: new Date().toISOString()
+      scope
     }
 
   } catch (error) {
-    console.error('Cache invalidation error:', error)
+    console.error('[Cache Invalidation Error]', {
+      error: error instanceof Error ? error.message : 'Unknown error',
+      timestamp: new Date().toISOString()
+    })
 
-    if (error.statusCode) {
+    // Preserve HTTP errors from validation or auth
+    if (error && typeof error === 'object' && 'statusCode' in error) {
       throw error
     }
 

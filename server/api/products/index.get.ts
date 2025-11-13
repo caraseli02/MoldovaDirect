@@ -2,6 +2,10 @@ import { serverSupabaseClient } from '#supabase/server'
 import { prepareSearchPattern, MAX_SEARCH_LENGTH } from '~/server/utils/searchSanitization'
 import { PUBLIC_CACHE_CONFIG, getPublicCacheKey } from '~/server/utils/publicCache'
 
+// Supported locales for multilingual search
+const SUPPORTED_LOCALES = ['es', 'en', 'ro', 'ru'] as const
+type SupportedLocale = typeof SUPPORTED_LOCALES[number]
+
 interface ProductFilters {
   category?: string
   search?: string
@@ -14,19 +18,40 @@ interface ProductFilters {
   limit?: number
 }
 
-interface ProductResponse {
+// Database product image types
+interface ProductImage {
+  url?: string
+  alt?: string
+  alt_text?: string
+  is_primary?: boolean
+}
+
+// Product attributes from database
+interface ProductAttributes {
+  origin?: string
+  volume?: string
+  alcohol_content?: string
+  tags?: string[]
+  featured?: boolean
+}
+
+// Database product shape from Supabase
+interface DatabaseProduct {
   id: number
   sku: string
-  name_translations: Record<string, string>
-  description_translations: Record<string, string>
+  name_translations: Record<SupportedLocale, string>
+  description_translations: Record<SupportedLocale, string>
   price_eur: number
+  compare_at_price_eur?: number
   stock_quantity: number
-  images: any[]
-  category: {
+  images: (ProductImage | string)[]
+  attributes?: ProductAttributes
+  category_id: number | null
+  categories?: {
     id: number
     slug: string
-    name_translations: Record<string, string>
-  }
+    name_translations: Record<SupportedLocale, string>
+  } | null
   is_active: boolean
   created_at: string
 }
@@ -127,16 +152,15 @@ export default defineCachedEventHandler(async (event) => {
     if (search) {
       // Sanitize search term to prevent SQL injection and escape special characters
       const searchPattern = prepareSearchPattern(search, { validateLength: false })
+
+      // Build multilingual search query dynamically
+      const translationFields = SUPPORTED_LOCALES.flatMap(locale => [
+        `name_translations->>${locale}.ilike.${searchPattern}`,
+        `description_translations->>${locale}.ilike.${searchPattern}`
+      ])
+
       queryBuilder = queryBuilder.or(
-        `name_translations->>es.ilike.${searchPattern},` +
-        `name_translations->>en.ilike.${searchPattern},` +
-        `name_translations->>ro.ilike.${searchPattern},` +
-        `name_translations->>ru.ilike.${searchPattern},` +
-        `description_translations->>es.ilike.${searchPattern},` +
-        `description_translations->>en.ilike.${searchPattern},` +
-        `description_translations->>ro.ilike.${searchPattern},` +
-        `description_translations->>ru.ilike.${searchPattern},` +
-        `sku.ilike.${searchPattern}`
+        [...translationFields, `sku.ilike.${searchPattern}`].join(',')
       )
     }
 
@@ -179,16 +203,26 @@ export default defineCachedEventHandler(async (event) => {
     })
 
     if (error) {
-      console.error('[Products API] Supabase error:', error)
+      console.error('[Products API] Supabase error:', {
+        message: error.message,
+        code: error.code,
+        timestamp: new Date().toISOString()
+      })
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to fetch products',
-        data: error
+        statusMessage: 'Failed to fetch products'
       })
     }
 
-    // Transform the data to match expected format
-    const transformedProducts = products?.map((product: any) => ({
+    // Helper function to determine stock status
+    const getStockStatus = (quantity: number): 'in_stock' | 'low_stock' | 'out_of_stock' => {
+      if (quantity > 5) return 'in_stock'
+      if (quantity > 0) return 'low_stock'
+      return 'out_of_stock'
+    }
+
+    // Transform the data to match expected format (type-safe now)
+    const transformedProducts = products?.map((product: DatabaseProduct) => ({
       id: product.id,
       sku: product.sku,
       slug: product.sku, // Use SKU as slug to match product detail lookup
@@ -198,14 +232,20 @@ export default defineCachedEventHandler(async (event) => {
       comparePrice: product.compare_at_price_eur,
       formattedPrice: `€${product.price_eur.toFixed(2)}`,
       stockQuantity: product.stock_quantity,
-      stockStatus: product.stock_quantity > 5 ? 'in_stock' : 
-                   product.stock_quantity > 0 ? 'low_stock' : 'out_of_stock',
-      images: Array.isArray(product.images) ? product.images.map((img: any, index: number) => ({
-        url: img.url || img,
-        altText: img.alt || img.alt_text || product.name_translations,
-        isPrimary: img.is_primary || index === 0
-      })) : [],
-      primaryImage: product.images?.[0]?.url || product.images?.[0] || '/placeholder-product.svg',
+      stockStatus: getStockStatus(product.stock_quantity),
+      images: product.images.map((img, index) => {
+        const imageUrl = typeof img === 'string' ? img : img.url
+        return {
+          url: imageUrl || '/placeholder-product.svg',
+          altText: typeof img === 'object' ? (img.alt || img.alt_text) : undefined,
+          isPrimary: typeof img === 'object' ? (img.is_primary || index === 0) : index === 0
+        }
+      }),
+      primaryImage: (() => {
+        const firstImage = product.images[0]
+        if (typeof firstImage === 'string') return firstImage
+        return firstImage?.url || '/placeholder-product.svg'
+      })(),
       category: product.categories ? {
         id: product.categories.id,
         slug: product.categories.slug,
@@ -254,7 +294,16 @@ export default defineCachedEventHandler(async (event) => {
     return response
 
   } catch (error) {
-    console.error('Products API error:', error)
+    console.error('[Products API] Error:', {
+      error: error instanceof Error ? error.message : 'Unknown error',
+      timestamp: new Date().toISOString()
+    })
+
+    // Preserve HTTP errors (like 400 from validation)
+    if (error && typeof error === 'object' && 'statusCode' in error) {
+      throw error
+    }
+
     throw createError({
       statusCode: 500,
       statusMessage: 'Internal server error'
