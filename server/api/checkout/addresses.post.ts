@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    const supabase = serverSupabaseClient(event)
+    const supabase = await serverSupabaseClient(event)
 
     // If this is set as default, unset other default addresses of the same type
     if (body.isDefault) {

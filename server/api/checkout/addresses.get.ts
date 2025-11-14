@@ -1,7 +1,7 @@
 export default defineEventHandler(async (event) => {
   try {
     const user = await requireAuthenticatedUser(event)
-    const supabase = serverSupabaseClient(event)
+    const supabase = await serverSupabaseClient(event)
     
     // Get user's saved addresses from database
     const { data: addresses, error } = await supabase
