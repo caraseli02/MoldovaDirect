@@ -3,14 +3,17 @@
  * Ensures language switching works properly without authentication interference
  */
 export default defineNuxtRouteMiddleware((to, from) => {
+  // Safety check for path property
+  if (!to.path) return
+
   // Skip for auth pages, API routes, and assets
   const skipPaths = ['/api/', '/auth/', '/_nuxt/', '/favicon.ico']
   if (skipPaths.some(path => to.path.startsWith(path))) return
-  
+
   // Get available locales from the configuration
   const availableLocales = ['es', 'en', 'ro', 'ru']
   const defaultLocale = 'es'
-  
+
   // Handle language switching - check if URL contains language prefix
   const pathSegments = to.path.split('/').filter(Boolean)
   const firstSegment = pathSegments[0]

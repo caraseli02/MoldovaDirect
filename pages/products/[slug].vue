@@ -697,7 +697,7 @@ watch(product, newProduct => {
 
     // Build canonical URL for structured data (works in SSR)
     const config = useRuntimeConfig()
-    const productUrl = `${config.public.siteUrl}${route.path}`
+    const productUrl = `${config.public.siteUrl}${route.path ?? ''}`
 
     // Build Product structured data
     const productStructuredData: Record<string, any> = {
