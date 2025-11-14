@@ -66,7 +66,7 @@ const submitNewsletter = async () => {
       method: 'POST',
       body: {
         email: email.value,
-        locale: locale.value,
+        locale: locale?.value || 'es',
         source: 'landing_page'
       }
     })
