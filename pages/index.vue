@@ -105,9 +105,13 @@ import type { ProductWithRelations } from '~/types'
 import { CONTACT_INFO } from '~/constants/seo'
 
 // ISR is disabled, so all composables should work normally
-const { t, locale } = useI18n()
+const { t, locale: i18nLocale } = useI18n()
 const localePath = useLocalePath()
 const { isSectionEnabled } = useLandingConfig()
+
+// Safe locale access with fallback
+const locale = computed(() => i18nLocale?.value || 'es')
+
 const {
   heroHighlights,
   categoryCards,
@@ -125,7 +129,7 @@ const { data: featuredData, pending: featuredPending, error: featuredError, refr
   {
     query: {
       limit: 12,
-      locale: locale?.value || 'es'
+      locale
     },
     server: true,
     lazy: true
