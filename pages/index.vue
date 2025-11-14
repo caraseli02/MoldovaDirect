@@ -129,7 +129,7 @@ const { data: featuredData, pending: featuredPending, error: featuredError, refr
   {
     query: {
       limit: 12,
-      locale
+      locale: locale.value
     },
     server: true,
     lazy: true
