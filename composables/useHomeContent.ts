@@ -56,8 +56,26 @@ type FaqItem = {
 }
 
 export const useHomeContent = () => {
-  const localePath = useLocalePath()
-  const { t, tm, locale } = useI18n()
+  // Safely access composables with fallback for ISR compatibility
+  let localePath: (path: string, locale?: string) => string
+  let t: any
+  let tm: any
+  let locale: any
+
+  try {
+    localePath = useLocalePath()
+    const i18n = useI18n()
+    t = i18n.t
+    tm = i18n.tm
+    locale = i18n.locale
+  } catch (error) {
+    console.warn('[useHomeContent] Error accessing composables during ISR, using fallbacks:', error)
+    // Fallback implementations for ISR context
+    localePath = (path: string) => path
+    t = (key: string) => key
+    tm = () => []
+    locale = { value: 'es' }
+  }
 
   const heroHighlights = computed<Highlight[]>(() => [
     {
