@@ -223,8 +223,18 @@ const primaryImage = computed(() => {
   return props.product.images?.find(img => img.isPrimary) || props.product.images?.[0]
 })
 
+const isValidImageUrl = computed(() => {
+  if (!primaryImage.value?.url) return false
+  const url = primaryImage.value.url.trim()
+  // Consider empty strings, placeholder paths, or very short URLs as invalid
+  if (!url || url.length < 4) return false
+  // Check if it's the placeholder (which might fail with NuxtImg)
+  if (url.includes('placeholder')) return false
+  return true
+})
+
 const shouldShowFallback = computed(() => {
-  return !primaryImage.value || imageError.value
+  return !primaryImage.value || !isValidImageUrl.value || imageError.value
 })
 
 const stockStatusClass = computed(() => {
