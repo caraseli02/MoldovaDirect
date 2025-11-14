@@ -104,26 +104,9 @@
 import type { ProductWithRelations } from '~/types'
 import { CONTACT_INFO } from '~/constants/seo'
 
-// Safely access composables with ISR fallbacks
-let t: any, locale: any, localePath: any, siteUrl: string, toAbsoluteUrl: any
-
-try {
-  const i18n = useI18n()
-  t = i18n.t
-  locale = i18n.locale
-  localePath = useLocalePath()
-  const siteUrlHelpers = useSiteUrl()
-  siteUrl = siteUrlHelpers.siteUrl
-  toAbsoluteUrl = siteUrlHelpers.toAbsoluteUrl
-} catch (error) {
-  console.warn('[pages/index] Error accessing composables during ISR, using fallbacks:', error)
-  t = (key: string) => key
-  locale = { value: 'es' }
-  localePath = (path: string) => path
-  siteUrl = 'https://moldova-direct.vercel.app'
-  toAbsoluteUrl = (path?: string) => path ? `https://moldova-direct.vercel.app${path}` : 'https://moldova-direct.vercel.app'
-}
-
+// ISR is disabled, so all composables should work normally
+const { t, locale } = useI18n()
+const localePath = useLocalePath()
 const { isSectionEnabled } = useLandingConfig()
 const {
   heroHighlights,
@@ -151,6 +134,8 @@ const { data: featuredData, pending: featuredPending, error: featuredError, refr
 
 const featuredProducts = computed<ProductWithRelations[]>(() => featuredData.value?.products || [])
 const featuredErrorState = computed<Error | null>(() => (featuredError.value as Error | null) ?? null)
+
+const { siteUrl, toAbsoluteUrl } = useSiteUrl()
 
 const structuredData = [
   {
