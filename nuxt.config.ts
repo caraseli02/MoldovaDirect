@@ -105,10 +105,10 @@ export default defineNuxtConfig({
     }
   },
   routeRules: {
-    // Landing page - SWR caching without ISR (ISR was causing FUNCTION_INVOCATION_FAILED)
-    // Prerender disabled due to sharp binary issues with external Unsplash images
+    // Landing page - Disable SSR temporarily to isolate the issue
+    // API endpoints work perfectly, so the issue is in page SSR rendering
     '/': {
-      swr: 3600
+      ssr: false
     },
     // Product pages - ISR every hour
     '/products': { swr: 3600 },
