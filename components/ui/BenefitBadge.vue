@@ -17,31 +17,30 @@
     <span>{{ text }}</span>
 
     <!-- Tooltip (optional) -->
-    <UiTooltip
-      v-if="tooltip"
-      :content="tooltip"
-      icon="lucide:info"
-      :aria-label="`More info about ${text}`"
-      placement="top"
-    >
-      <template #trigger>
+    <UiTooltip v-if="tooltip">
+      <UiTooltipTrigger as-child>
         <button
           type="button"
           class="inline-flex items-center justify-center rounded-full hover:bg-white/20 transition-colors"
           :class="size === 'sm' ? 'p-0.5' : 'p-1'"
+          :aria-label="`More info about ${text}`"
         >
           <commonIcon
             name="lucide:help-circle"
             :class="size === 'sm' ? 'h-3 w-3' : 'h-3.5 w-3.5'"
           />
         </button>
-      </template>
+      </UiTooltipTrigger>
+      <UiTooltipContent>
+        <p>{{ tooltip }}</p>
+      </UiTooltipContent>
     </UiTooltip>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { Tooltip as UiTooltip, TooltipTrigger as UiTooltipTrigger, TooltipContent as UiTooltipContent } from '@/components/ui/tooltip'
 
 interface Props {
   text: string

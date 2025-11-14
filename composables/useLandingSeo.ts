@@ -48,14 +48,34 @@ interface LandingSeoHelpers {
  * })
  */
 export function useLandingSeo(input: LandingSeoInput): LandingSeoHelpers {
-  const route = useRoute()
-  const { locale, locales } = useI18n()
-  const localePath = useLocalePath()
-  const { siteUrl, toAbsoluteUrl } = useSiteUrl()
+  // Safely access composables with try-catch for ISR compatibility
+  let route, locale, locales, localePath, siteUrl, toAbsoluteUrl
+
+  try {
+    route = useRoute()
+    const i18n = useI18n()
+    locale = i18n.locale
+    locales = i18n.locales
+    localePath = useLocalePath()
+    const siteUrlHelpers = useSiteUrl()
+    siteUrl = siteUrlHelpers.siteUrl
+    toAbsoluteUrl = siteUrlHelpers.toAbsoluteUrl
+  } catch (error) {
+    console.warn('[useLandingSeo] Error accessing composables during ISR, using fallbacks:', error)
+    // Fallback values for ISR context
+    const fallbackSiteUrl = 'https://moldova-direct.vercel.app'
+    return {
+      canonicalUrl: input.path ? `${fallbackSiteUrl}${input.path}` : fallbackSiteUrl,
+      siteUrl: fallbackSiteUrl,
+      toAbsoluteUrl: (path?: string) => path ? `${fallbackSiteUrl}${path}` : fallbackSiteUrl
+    }
+  }
 
   // Use current route path if no path is provided, ensuring locale-aware canonical URLs
   // If a path is provided, convert it to the current locale's path
-  const canonicalPath = input.path ? localePath(input.path) : route.path
+  // During ISR, route.path might be undefined, so fallback to '/'
+  const routePath = route?.path || '/'
+  const canonicalPath = input.path ? localePath(input.path) : routePath
   const canonicalUrl = toAbsoluteUrl(canonicalPath)
   const ogImage = toAbsoluteUrl(input.image ?? SEO_DEFAULTS.DEFAULT_IMAGE)
   const imageAlt = input.imageAlt ?? input.title
@@ -95,7 +115,7 @@ export function useLandingSeo(input: LandingSeoInput): LandingSeoHelpers {
     // Get the base path without locale prefix for generating alternate links
     // Dynamically build locale pattern from available locales to avoid maintenance issues
     const localePattern = new RegExp(`^/(${localeCodes.join('|')})`)
-    const basePath = input.path || route.path.replace(localePattern, '') || '/'
+    const basePath = input.path || routePath.replace(localePattern, '') || '/'
 
     for (const code of localeCodes) {
       if (code !== currentLocale) {

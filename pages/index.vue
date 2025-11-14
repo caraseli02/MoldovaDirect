@@ -29,8 +29,6 @@
       video-webm="/videos/hero.webm"
       video-mp4="/videos/hero.mp4"
       poster-image="/images/hero-poster.jpg"
-      background-image="https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=1920&q=85&fit=crop&auto=format"
-      background-image-alt="Moldova vineyard landscape with rolling hills at golden hour"
       :badge="t('home.hero.trustBadge')"
       badge-icon="lucide:shield-check"
       :title="t('home.hero.title')"
@@ -121,7 +119,7 @@ const {
   faqItems
 } = useHomeContent()
 
-const { data: featuredData, pending: featuredPending, error: featuredError, refresh: refreshFeatured } = await useFetch(
+const { data: featuredData, pending: featuredPending, error: featuredError, refresh: refreshFeatured } = useFetch(
   '/api/products/featured',
   {
     query: {
@@ -183,18 +181,5 @@ useLandingSeo({
   structuredData
 })
 
-// Preload hero image for optimal LCP performance
-// Demo placeholder: Using Unsplash vineyard image
-// Replace with your own image in /public/images/hero/ for production
-useHead({
-  link: [
-    {
-      rel: 'preload',
-      as: 'image',
-      href: 'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=1920&q=85&fit=crop&auto=format',
-      fetchpriority: 'high',
-      type: 'image/webp'
-    }
-  ]
-})
+// No external image preloading to prevent SSR issues on Vercel
 </script>

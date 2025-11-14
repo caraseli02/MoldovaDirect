@@ -253,7 +253,12 @@ export default defineCachedEventHandler(async (event) => {
   maxAge: PUBLIC_CACHE_CONFIG.categoryDetail.maxAge,
   name: PUBLIC_CACHE_CONFIG.categoryDetail.name,
   getKey: (event) => {
-    const slug = getRouterParam(event, 'slug')
-    return `${PUBLIC_CACHE_CONFIG.categoryDetail.name}-${slug}`
+    try {
+      const slug = getRouterParam(event, 'slug')
+      return slug ? `${PUBLIC_CACHE_CONFIG.categoryDetail.name}-${slug}` : PUBLIC_CACHE_CONFIG.categoryDetail.name
+    } catch (error) {
+      console.error('[Category Detail] Cache key generation failed:', error)
+      return PUBLIC_CACHE_CONFIG.categoryDetail.name
+    }
   }
 })

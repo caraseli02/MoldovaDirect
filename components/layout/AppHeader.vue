@@ -160,7 +160,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted, computed, nextTick } from 'vue'
 import { useThrottleFn } from '@vueuse/core'
 import { Button } from '@/components/ui/button'
 import LanguageSwitcher from './LanguageSwitcher.vue'
@@ -173,7 +173,8 @@ const route = useRoute()
 const mobileMenuOpen = ref(false)
 
 // Scroll detection for luxury header transparency
-// Start as scrolled (true) for better initial visibility on light backgrounds
+// Initialize as true to prevent hydration mismatch
+// We'll update it immediately on client side in onMounted
 const scrolled = ref(true)
 const SCROLL_THRESHOLD = 20 // px - threshold for header transparency
 
@@ -181,7 +182,7 @@ const SCROLL_THRESHOLD = 20 // px - threshold for header transparency
 const pagesWithDarkHero = ['/']
 
 const handleScroll = useThrottleFn(() => {
-  const currentPath = route.path.replace(/\/(en|ro|ru)/, '') || '/'
+  const currentPath = route.path?.replace(/\/(en|ro|ru)/, '') || '/'
   const hasDarkHero = pagesWithDarkHero.includes(currentPath)
 
   // Only allow transparent header on pages with dark hero sections
@@ -192,8 +193,11 @@ const handleScroll = useThrottleFn(() => {
 
 onMounted(() => {
   if (typeof window !== 'undefined') {
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    handleScroll() // Initial check
+    // Wait for next tick to avoid hydration mismatch
+    nextTick(() => {
+      window.addEventListener('scroll', handleScroll, { passive: true })
+      handleScroll() // Initial check after hydration
+    })
   }
 })
 
