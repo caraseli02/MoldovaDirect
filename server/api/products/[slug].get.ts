@@ -217,9 +217,14 @@ export default defineCachedEventHandler(async (event) => {
   maxAge: PUBLIC_CACHE_CONFIG.productDetail.maxAge,
   name: PUBLIC_CACHE_CONFIG.productDetail.name,
   getKey: (event) => {
-    const slug = getRouterParam(event, 'slug')
-    const query = getQuery(event)
-    const locale = query.locale || 'es'
-    return `${PUBLIC_CACHE_CONFIG.productDetail.name}-${slug}-${locale}`
+    try {
+      const slug = getRouterParam(event, 'slug')
+      const query = getQuery(event)
+      const locale = query.locale || 'es'
+      return slug ? `${PUBLIC_CACHE_CONFIG.productDetail.name}-${slug}-${locale}` : PUBLIC_CACHE_CONFIG.productDetail.name
+    } catch (error) {
+      console.error('[Product Detail] Cache key generation failed:', error)
+      return PUBLIC_CACHE_CONFIG.productDetail.name
+    }
   }
 })

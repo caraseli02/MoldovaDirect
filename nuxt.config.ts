@@ -105,9 +105,14 @@ export default defineNuxtConfig({
     }
   },
   routeRules: {
-    // Landing page - SWR caching (1 hour)
+    // Landing page - SWR caching (1 hour) with ISR configuration
     // Prerender disabled to avoid sharp binary issues with external images during build
-    '/': { swr: 3600 },
+    '/': {
+      swr: 3600,
+      isr: {
+        expiration: 3600, // Revalidate every hour
+      }
+    },
     // Product pages - ISR every hour
     '/products': { swr: 3600 },
     '/products/**': { swr: 3600 },
@@ -195,8 +200,19 @@ export default defineNuxtConfig({
         "stripe",
         "nodemailer",
         "@supabase/supabase-js",
+        "sharp", // Externalize sharp to prevent platform-specific binary issues
       ],
       inline: ["vue", "@vue/*"],
+    },
+    // Vercel-specific configuration
+    vercel: {
+      regions: ['cdg1'], // Paris region (closest to Spain for optimal latency)
+      functions: {
+        // Increase timeout for ISR and API routes to prevent FUNCTION_INVOCATION_FAILED
+        '/**': {
+          maxDuration: 10, // 10 seconds timeout for all routes
+        }
+      }
     },
     // Enable minification and compression
     minify: true,

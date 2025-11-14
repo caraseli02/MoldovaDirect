@@ -64,17 +64,63 @@ export async function invalidatePublicCache(scope: PublicCacheScope): Promise<vo
  * @returns Cache key string
  */
 export function getPublicCacheKey(baseName: string, event: any): string {
-  const query = getQuery(event)
+  try {
+    // Handle ISR context where event might be undefined or malformed
+    if (!event || !event.node || !event.node.req) {
+      console.warn('[Cache] Invalid event context for cache key, using base name')
+      return baseName
+    }
 
-  // Convert query params to a stable sorted string
-  const queryKeys = Object.keys(query).sort()
-  const queryString = queryKeys
-    .map(key => `${key}=${query[key]}`)
-    .join('&')
+    const query = getQuery(event)
 
-  return queryString
-    ? `${baseName}?${queryString}`
-    : baseName
+    // Validate query is an object
+    if (!query || typeof query !== 'object' || Array.isArray(query)) {
+      return baseName
+    }
+
+    const queryKeys = Object.keys(query).sort()
+
+    // Skip empty or invalid queries
+    if (queryKeys.length === 0) {
+      return baseName
+    }
+
+    const queryString = queryKeys
+      .map(key => {
+        const value = query[key]
+
+        // Skip undefined/null values
+        if (value === undefined || value === null) {
+          return null
+        }
+
+        // Handle different value types safely
+        let stringValue: string
+        try {
+          if (Array.isArray(value)) {
+            stringValue = value.join(',')
+          } else if (typeof value === 'object') {
+            stringValue = JSON.stringify(value)
+          } else {
+            stringValue = String(value)
+          }
+
+          // URL encode to handle special characters
+          return `${key}=${encodeURIComponent(stringValue)}`
+        } catch (e) {
+          console.warn(`[Cache] Failed to serialize query param ${key}:`, e)
+          return null
+        }
+      })
+      .filter(Boolean) // Remove null entries
+      .join('&')
+
+    return queryString ? `${baseName}?${queryString}` : baseName
+  } catch (error) {
+    console.error('[Cache] Error generating cache key:', error)
+    // Always return a valid key, even if it's just the base name
+    return baseName
+  }
 }
 
 /**

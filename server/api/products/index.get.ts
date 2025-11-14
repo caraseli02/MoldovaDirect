@@ -312,5 +312,12 @@ export default defineCachedEventHandler(async (event) => {
 }, {
   maxAge: PUBLIC_CACHE_CONFIG.productsList.maxAge,
   name: PUBLIC_CACHE_CONFIG.productsList.name,
-  getKey: (event) => getPublicCacheKey(PUBLIC_CACHE_CONFIG.productsList.name, event)
+  getKey: (event) => {
+    try {
+      return getPublicCacheKey(PUBLIC_CACHE_CONFIG.productsList.name, event)
+    } catch (error) {
+      console.error('[Products List] Cache key generation failed:', error)
+      return PUBLIC_CACHE_CONFIG.productsList.name
+    }
+  }
 })
