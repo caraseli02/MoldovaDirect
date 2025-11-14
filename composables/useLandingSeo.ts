@@ -49,7 +49,13 @@ interface LandingSeoHelpers {
  */
 export function useLandingSeo(input: LandingSeoInput): LandingSeoHelpers {
   // Safely access composables with try-catch for ISR compatibility
-  let route, locale, locales, localePath, siteUrl, toAbsoluteUrl
+  let route: any
+  let locale: any
+  let locales: any
+  let localePath: any
+  let siteUrl: string
+  let toAbsoluteUrl: (path?: string) => string
+  let composablesAvailable = true
 
   try {
     route = useRoute()
@@ -62,13 +68,15 @@ export function useLandingSeo(input: LandingSeoInput): LandingSeoHelpers {
     toAbsoluteUrl = siteUrlHelpers.toAbsoluteUrl
   } catch (error) {
     console.warn('[useLandingSeo] Error accessing composables during ISR, using fallbacks:', error)
+    composablesAvailable = false
     // Fallback values for ISR context
     const fallbackSiteUrl = 'https://moldova-direct.vercel.app'
-    return {
-      canonicalUrl: input.path ? `${fallbackSiteUrl}${input.path}` : fallbackSiteUrl,
-      siteUrl: fallbackSiteUrl,
-      toAbsoluteUrl: (path?: string) => path ? `${fallbackSiteUrl}${path}` : fallbackSiteUrl
-    }
+    siteUrl = fallbackSiteUrl
+    toAbsoluteUrl = (path?: string) => path ? `${fallbackSiteUrl}${path}` : fallbackSiteUrl
+    localePath = (path: string) => path
+    route = { path: '/' }
+    locale = { value: 'es' }
+    locales = { value: [] }
   }
 
   // Use current route path if no path is provided, ensuring locale-aware canonical URLs
@@ -84,10 +92,10 @@ export function useLandingSeo(input: LandingSeoInput): LandingSeoHelpers {
   const pageType = input.pageType ?? SEO_DEFAULTS.DEFAULT_PAGE_TYPE
 
   // Properly type locale codes from i18n
-  const localeCodes = (locales.value || []).map((loc) =>
+  const localeCodes = (locales?.value || []).map((loc: any) =>
     typeof loc === 'string' ? loc : loc.code
   )
-  const currentLocale = locale.value || 'es'
+  const currentLocale = locale?.value || 'es'
 
   const meta: MetaObject['meta'] = [
     { name: 'description', content: input.description },
