@@ -105,10 +105,10 @@ export default defineNuxtConfig({
     }
   },
   routeRules: {
-    // Landing page - Disable SSR temporarily to isolate the issue
-    // API endpoints work perfectly, so the issue is in page SSR rendering
+    // Landing page - SWR caching with ISR
+    // Fixed: Added route.path null check in useLandingSeo composable
     '/': {
-      ssr: false
+      swr: 3600
     },
     // Product pages - ISR every hour
     '/products': { swr: 3600 },
