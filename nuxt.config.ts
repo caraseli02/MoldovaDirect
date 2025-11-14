@@ -105,10 +105,10 @@ export default defineNuxtConfig({
     }
   },
   routeRules: {
-    // Landing page - Client-side rendering to avoid SSR complexity
-    // ISR was causing timeouts due to complex component tree and multiple composables
+    // Landing page - SWR caching without ISR (ISR was causing FUNCTION_INVOCATION_FAILED)
+    // Prerender disabled due to sharp binary issues with external Unsplash images
     '/': {
-      ssr: false
+      swr: 3600
     },
     // Product pages - ISR every hour
     '/products': { swr: 3600 },
