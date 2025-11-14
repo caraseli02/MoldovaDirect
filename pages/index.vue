@@ -107,17 +107,17 @@ import { CONTACT_INFO } from '~/constants/seo'
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
 const { isSectionEnabled } = useLandingConfig()
-
-// Temporarily disable useHomeContent to isolate SSR issue
-const heroHighlights = ref([])
-const categoryCards = ref([])
-const howItWorksSteps = ref([])
-const testimonials = ref([])
-const partnerLogos = ref([])
-const storyPoints = ref([])
-const storyTimeline = ref([])
-const services = ref([])
-const faqItems = ref([])
+const {
+  heroHighlights,
+  categoryCards,
+  howItWorksSteps,
+  testimonials,
+  partnerLogos,
+  storyPoints,
+  storyTimeline,
+  services,
+  faqItems
+} = useHomeContent()
 
 const { data: featuredData, pending: featuredPending, error: featuredError, refresh: refreshFeatured } = useFetch(
   '/api/products/featured',
@@ -134,9 +134,52 @@ const { data: featuredData, pending: featuredPending, error: featuredError, refr
 const featuredProducts = computed<ProductWithRelations[]>(() => featuredData.value?.products || [])
 const featuredErrorState = computed<Error | null>(() => (featuredError.value as Error | null) ?? null)
 
-// Temporarily disable useLandingSeo to isolate SSR crash
-// const { siteUrl, toAbsoluteUrl } = useSiteUrl()
-// useLandingSeo({ ... })
+const { siteUrl, toAbsoluteUrl } = useSiteUrl()
+
+const structuredData = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Moldova Direct',
+    url: siteUrl,
+    logo: toAbsoluteUrl('/icon.svg'),
+    contactPoint: [
+      {
+        '@type': 'ContactPoint',
+        telephone: CONTACT_INFO.PHONE,
+        contactType: 'customer service',
+        areaServed: 'ES'
+      }
+    ]
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Moldova Direct',
+    url: siteUrl,
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${siteUrl}/products?search={search_term_string}`,
+      'query-input': 'required name=search_term_string'
+    }
+  }
+]
+
+useLandingSeo({
+  title: 'Moldova Direct – Taste Moldova in Every Delivery',
+  description:
+    'Shop curated Moldovan wines, gourmet foods, and gift hampers with fast delivery across Spain. Discover artisan producers and authentic flavours.',
+  image: '/icon.svg',
+  imageAlt: 'Selection of Moldovan delicacies delivered across Spain',
+  pageType: 'website',
+  keywords: [
+    'Moldovan wine delivery',
+    'Moldovan gourmet food Spain',
+    'authentic Moldovan products',
+    'Moldova Direct store'
+  ],
+  structuredData
+})
 
 // No external image preloading to prevent SSR issues on Vercel
 </script>
