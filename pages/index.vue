@@ -107,17 +107,17 @@ import { CONTACT_INFO } from '~/constants/seo'
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
 const { isSectionEnabled } = useLandingConfig()
-const {
-  heroHighlights,
-  categoryCards,
-  howItWorksSteps,
-  testimonials,
-  partnerLogos,
-  storyPoints,
-  storyTimeline,
-  services,
-  faqItems
-} = useHomeContent()
+
+// Temporarily disable useHomeContent to isolate SSR issue
+const heroHighlights = ref([])
+const categoryCards = ref([])
+const howItWorksSteps = ref([])
+const testimonials = ref([])
+const partnerLogos = ref([])
+const storyPoints = ref([])
+const storyTimeline = ref([])
+const services = ref([])
+const faqItems = ref([])
 
 const { data: featuredData, pending: featuredPending, error: featuredError, refresh: refreshFeatured } = useFetch(
   '/api/products/featured',
