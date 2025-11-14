@@ -119,7 +119,7 @@ const {
   faqItems
 } = useHomeContent()
 
-const { data: featuredData, pending: featuredPending, error: featuredError, refresh: refreshFeatured } = await useFetch(
+const { data: featuredData, pending: featuredPending, error: featuredError, refresh: refreshFeatured } = useFetch(
   '/api/products/featured',
   {
     query: {
@@ -127,7 +127,7 @@ const { data: featuredData, pending: featuredPending, error: featuredError, refr
       locale: locale.value
     },
     server: true,
-    lazy: false
+    lazy: true
   }
 )
 
