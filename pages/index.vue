@@ -134,52 +134,9 @@ const { data: featuredData, pending: featuredPending, error: featuredError, refr
 const featuredProducts = computed<ProductWithRelations[]>(() => featuredData.value?.products || [])
 const featuredErrorState = computed<Error | null>(() => (featuredError.value as Error | null) ?? null)
 
-const { siteUrl, toAbsoluteUrl } = useSiteUrl()
-
-const structuredData = [
-  {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: 'Moldova Direct',
-    url: siteUrl,
-    logo: toAbsoluteUrl('/icon.svg'),
-    contactPoint: [
-      {
-        '@type': 'ContactPoint',
-        telephone: CONTACT_INFO.PHONE,
-        contactType: 'customer service',
-        areaServed: 'ES'
-      }
-    ]
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: 'Moldova Direct',
-    url: siteUrl,
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: `${siteUrl}/products?search={search_term_string}`,
-      'query-input': 'required name=search_term_string'
-    }
-  }
-]
-
-useLandingSeo({
-  title: 'Moldova Direct – Taste Moldova in Every Delivery',
-  description:
-    'Shop curated Moldovan wines, gourmet foods, and gift hampers with fast delivery across Spain. Discover artisan producers and authentic flavours.',
-  image: '/icon.svg',
-  imageAlt: 'Selection of Moldovan delicacies delivered across Spain',
-  pageType: 'website',
-  keywords: [
-    'Moldovan wine delivery',
-    'Moldovan gourmet food Spain',
-    'authentic Moldovan products',
-    'Moldova Direct store'
-  ],
-  structuredData
-})
+// Temporarily disable useLandingSeo to isolate SSR crash
+// const { siteUrl, toAbsoluteUrl } = useSiteUrl()
+// useLandingSeo({ ... })
 
 // No external image preloading to prevent SSR issues on Vercel
 </script>
