@@ -276,7 +276,12 @@ export default defineCachedEventHandler(async (event) => {
   maxAge: PUBLIC_CACHE_CONFIG.relatedProducts.maxAge,
   name: PUBLIC_CACHE_CONFIG.relatedProducts.name,
   getKey: (event) => {
-    const id = getRouterParam(event, 'id')
-    return `${PUBLIC_CACHE_CONFIG.relatedProducts.name}-${id}`
+    try {
+      const id = getRouterParam(event, 'id')
+      return id ? `${PUBLIC_CACHE_CONFIG.relatedProducts.name}-${id}` : PUBLIC_CACHE_CONFIG.relatedProducts.name
+    } catch (error) {
+      console.error('[Related Products] Cache key generation failed:', error)
+      return PUBLIC_CACHE_CONFIG.relatedProducts.name
+    }
   }
 })

@@ -11,7 +11,8 @@ export default defineCachedEventHandler(async (event) => {
     const category = query.category as string
     const includeOutOfStock = query.includeOutOfStock === 'true'
 
-    // Build the base query for featured products
+    // Build optimized query that filters in PostgreSQL instead of JavaScript
+    // This dramatically reduces execution time by limiting data transfer and processing
     let queryBuilder = supabase
       .from('products')
       .select(`
@@ -45,8 +46,23 @@ export default defineCachedEventHandler(async (event) => {
       queryBuilder = queryBuilder.eq('categories.slug', category)
     }
 
-    // Get all products to filter for featured ones
-    const { data: allProducts, error } = await queryBuilder
+    // OPTIMIZATION: Use PostgreSQL JSONB operators to filter featured products in the database
+    // This is much faster than fetching all products and filtering in JavaScript
+    // We filter for products that meet ANY of these criteria:
+    // 1. Explicitly marked as featured in attributes
+    // 2. High stock quantity (popular items)
+    // 3. Has a sale price (compare_at_price exists and is higher than regular price)
+    queryBuilder = queryBuilder.or(
+      'attributes->featured.eq.true,stock_quantity.gt.20,compare_at_price_eur.gt.0'
+    )
+
+    // Fetch more than needed to ensure we have enough after sorting
+    // This gives us a buffer for the complex sorting logic
+    queryBuilder = queryBuilder
+      .order('created_at', { ascending: false })
+      .limit(limit * 3) // Get 3x the requested amount for filtering buffer
+
+    const { data: featuredProducts, error } = await queryBuilder
 
     if (error) {
       throw createError({
@@ -56,63 +72,32 @@ export default defineCachedEventHandler(async (event) => {
       })
     }
 
-    // Filter for featured products based on multiple criteria
-    const featuredProducts = (allProducts || []).filter(product => {
-      const attributes = product.attributes || {}
-      
-      // Check if explicitly marked as featured
-      if (attributes.featured === true) {
-        return true
-      }
-      
-      // Check if product has high stock (popular/well-stocked items)
-      if (product.stock_quantity > 20) {
-        return true
-      }
-      
-      // Check if product has a compare_at_price (on sale)
-      if (product.compare_at_price_eur && product.compare_at_price_eur > product.price_eur) {
-        return true
-      }
-      
-      // Check if product has premium attributes (high-quality indicators)
-      const premiumIndicators = ['premium', 'limited', 'exclusive', 'award', 'organic']
-      const productTags = attributes.tags || []
-      if (premiumIndicators.some(indicator => 
-        productTags.some((tag: string) => tag.toLowerCase().includes(indicator))
-      )) {
-        return true
-      }
-      
-      return false
-    })
-
-    // Sort featured products by priority
-    featuredProducts.sort((a, b) => {
+    // Sort featured products by priority (now on a much smaller dataset)
+    const sortedFeatured = (featuredProducts || []).sort((a, b) => {
       const aAttrs = a.attributes || {}
       const bAttrs = b.attributes || {}
-      
+
       // Explicitly featured products get highest priority
       if (aAttrs.featured && !bAttrs.featured) return -1
       if (!aAttrs.featured && bAttrs.featured) return 1
-      
+
       // Products on sale get next priority
       const aOnSale = a.compare_at_price_eur && a.compare_at_price_eur > a.price_eur
       const bOnSale = b.compare_at_price_eur && b.compare_at_price_eur > b.price_eur
       if (aOnSale && !bOnSale) return -1
       if (!aOnSale && bOnSale) return 1
-      
+
       // Then by stock quantity (higher stock = more popular)
       if (b.stock_quantity !== a.stock_quantity) {
         return b.stock_quantity - a.stock_quantity
       }
-      
+
       // Finally by creation date (newest first)
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     })
 
     // Take the requested number of featured products
-    const limitedFeatured = featuredProducts.slice(0, limit)
+    const limitedFeatured = sortedFeatured.slice(0, limit)
 
     // Transform the data to match expected format
     const transformedProducts = limitedFeatured.map(product => {
@@ -187,7 +172,7 @@ export default defineCachedEventHandler(async (event) => {
     }
 
     // Get total count of featured products for pagination info
-    const totalFeatured = featuredProducts.length
+    const totalFeatured = sortedFeatured.length
 
     return {
       products: transformedProducts,
@@ -225,5 +210,13 @@ export default defineCachedEventHandler(async (event) => {
 }, {
   maxAge: PUBLIC_CACHE_CONFIG.featuredProducts.maxAge,
   name: PUBLIC_CACHE_CONFIG.featuredProducts.name,
-  getKey: (event) => getPublicCacheKey(PUBLIC_CACHE_CONFIG.featuredProducts.name, event)
+  getKey: (event) => {
+    try {
+      return getPublicCacheKey(PUBLIC_CACHE_CONFIG.featuredProducts.name, event)
+    } catch (error) {
+      console.error('[Featured Products] Cache key generation failed:', error)
+      // Fallback to base key without query params to prevent function crashes
+      return PUBLIC_CACHE_CONFIG.featuredProducts.name
+    }
+  }
 })

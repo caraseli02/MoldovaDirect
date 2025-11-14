@@ -65,6 +65,13 @@ export default defineCachedEventHandler(async (event) => {
 }, {
   maxAge: PUBLIC_CACHE_CONFIG.priceRange.maxAge,
   name: PUBLIC_CACHE_CONFIG.priceRange.name,
-  getKey: (event) => getPublicCacheKey(PUBLIC_CACHE_CONFIG.priceRange.name, event)
+  getKey: (event) => {
+    try {
+      return getPublicCacheKey(PUBLIC_CACHE_CONFIG.priceRange.name, event)
+    } catch (error) {
+      console.error('[Price Range] Cache key generation failed:', error)
+      return PUBLIC_CACHE_CONFIG.priceRange.name
+    }
+  }
 })
 

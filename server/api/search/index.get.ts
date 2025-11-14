@@ -181,7 +181,14 @@ export default defineCachedEventHandler(async (event) => {
 }, {
   maxAge: PUBLIC_CACHE_CONFIG.search.maxAge,
   name: PUBLIC_CACHE_CONFIG.search.name,
-  getKey: (event) => getPublicCacheKey(PUBLIC_CACHE_CONFIG.search.name, event)
+  getKey: (event) => {
+    try {
+      return getPublicCacheKey(PUBLIC_CACHE_CONFIG.search.name, event)
+    } catch (error) {
+      console.error('[Search] Cache key generation failed:', error)
+      return PUBLIC_CACHE_CONFIG.search.name
+    }
+  }
 })
 
 // Calculate relevance score for search results

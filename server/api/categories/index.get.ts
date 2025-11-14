@@ -139,5 +139,12 @@ export default defineCachedEventHandler(async (event) => {
 }, {
   maxAge: PUBLIC_CACHE_CONFIG.categoriesList.maxAge,
   name: PUBLIC_CACHE_CONFIG.categoriesList.name,
-  getKey: (event) => getPublicCacheKey(PUBLIC_CACHE_CONFIG.categoriesList.name, event)
+  getKey: (event) => {
+    try {
+      return getPublicCacheKey(PUBLIC_CACHE_CONFIG.categoriesList.name, event)
+    } catch (error) {
+      console.error('[Categories List] Cache key generation failed:', error)
+      return PUBLIC_CACHE_CONFIG.categoriesList.name
+    }
+  }
 })
