@@ -127,7 +127,7 @@ const closeSidebar = () => {
 }
 
 const isActiveRoute = (item: { match: (path: string) => boolean }) => {
-  return item.match(route.path)
+  return item.match(route.path ?? '')
 }
 
 watch(

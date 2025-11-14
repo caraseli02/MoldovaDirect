@@ -95,7 +95,7 @@ export function useLandingSeo(input: LandingSeoInput): LandingSeoHelpers {
     // Get the base path without locale prefix for generating alternate links
     // Dynamically build locale pattern from available locales to avoid maintenance issues
     const localePattern = new RegExp(`^/(${localeCodes.join('|')})`)
-    const basePath = input.path || route.path.replace(localePattern, '') || '/'
+    const basePath = input.path || route.path?.replace(localePattern, '') || '/'
 
     for (const code of localeCodes) {
       if (code !== currentLocale) {
