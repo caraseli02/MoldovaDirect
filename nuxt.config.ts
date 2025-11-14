@@ -105,13 +105,10 @@ export default defineNuxtConfig({
     }
   },
   routeRules: {
-    // Landing page - SWR caching (1 hour) with ISR configuration
+    // Landing page - SWR caching (1 hour)
     // Prerender disabled to avoid sharp binary issues with external images during build
     '/': {
-      swr: 3600,
-      isr: {
-        expiration: 3600, // Revalidate every hour
-      }
+      swr: 3600
     },
     // Product pages - ISR every hour
     '/products': { swr: 3600 },
