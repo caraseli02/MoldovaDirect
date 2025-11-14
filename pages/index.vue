@@ -129,7 +129,7 @@ const { data: featuredData, pending: featuredPending, error: featuredError, refr
       locale: locale.value
     },
     server: true,
-    lazy: true
+    lazy: false
   }
 )
 
