@@ -105,14 +105,13 @@ export default defineNuxtConfig({
     }
   },
   routeRules: {
-    // Landing page - SWR caching with ISR
-    // Fixed: Added route.path null check in useLandingSeo composable
+    // Landing page - Regular SSR (ISR disabled to avoid composable context issues)
     '/': {
-      swr: 3600
+      ssr: true
     },
-    // Product pages - ISR every hour
-    '/products': { swr: 3600 },
-    '/products/**': { swr: 3600 },
+    // Product pages - Regular SSR
+    '/products': { ssr: true },
+    '/products/**': { ssr: true },
     // Public API routes - Moderate SWR caching for customer-facing endpoints
     '/api/products': { swr: 300, headers: { 'Cache-Control': 'public, max-age=300, stale-while-revalidate=60' } },
     '/api/products/featured': { swr: 300, headers: { 'Cache-Control': 'public, max-age=300, stale-while-revalidate=60' } },
