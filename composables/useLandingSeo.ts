@@ -48,36 +48,13 @@ interface LandingSeoHelpers {
  * })
  */
 export function useLandingSeo(input: LandingSeoInput): LandingSeoHelpers {
-  // Safely access composables with try-catch for ISR compatibility
-  let route: any
-  let locale: any
-  let locales: any
-  let localePath: any
-  let siteUrl: string
-  let toAbsoluteUrl: (path?: string) => string
-  let composablesAvailable = true
-
-  try {
-    route = useRoute()
-    const i18n = useI18n()
-    locale = i18n.locale
-    locales = i18n.locales
-    localePath = useLocalePath()
-    const siteUrlHelpers = useSiteUrl()
-    siteUrl = siteUrlHelpers.siteUrl
-    toAbsoluteUrl = siteUrlHelpers.toAbsoluteUrl
-  } catch (error) {
-    console.warn('[useLandingSeo] Error accessing composables during ISR, using fallbacks:', error)
-    composablesAvailable = false
-    // Fallback values for ISR context
-    const fallbackSiteUrl = 'https://moldova-direct.vercel.app'
-    siteUrl = fallbackSiteUrl
-    toAbsoluteUrl = (path?: string) => path ? `${fallbackSiteUrl}${path}` : fallbackSiteUrl
-    localePath = (path: string) => path
-    route = { path: '/' }
-    locale = { value: 'es' }
-    locales = { value: [] }
-  }
+  // ISR is disabled, so all composables work normally
+  const route = useRoute()
+  const i18n = useI18n()
+  const locale = i18n.locale
+  const locales = i18n.locales
+  const localePath = useLocalePath()
+  const { siteUrl, toAbsoluteUrl } = useSiteUrl()
 
   // Use current route path if no path is provided, ensuring locale-aware canonical URLs
   // If a path is provided, convert it to the current locale's path
