@@ -29,11 +29,11 @@
               <Alert
                 v-if="displayError"
                 variant="destructive"
-                class="border-red-200 bg-red-50 dark:border-red-600 dark:bg-red-950/50"
+                class="border-red-200 bg-red-50 dark:border-red-600"
                 data-testid="auth-error"
               >
                 <AlertCircle class="h-5 w-5 text-red-500 dark:text-red-300" aria-hidden="true" />
-                <AlertDescription class="text-sm text-red-800 dark:text-red-100">
+                <AlertDescription :class="cn('text-sm text-red-800 dark:text-white')">
                   {{ displayError }}
                 </AlertDescription>
               </Alert>
@@ -240,6 +240,7 @@ import { Label } from '@/components/ui/label'
 import { AlertCircle, CheckCircle2 } from 'lucide-vue-next'
 import { useAuth } from '~/composables/useAuth'
 import { useAuthMessages } from '~/composables/useAuthMessages'
+import { cn } from '~/lib/utils'
 
 // Apply guest middleware - redirect authenticated users
 definePageMeta({
