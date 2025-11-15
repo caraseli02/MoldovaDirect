@@ -48,7 +48,8 @@ export default defineNuxtConfig({
     "shadcn-nuxt",
     "@vite-pwa/nuxt",
     // Removed vue3-carousel-nuxt (duplicate of nuxt-swiper)
-    "@vueuse/motion/nuxt",
+    // Disable SSR for @vueuse/motion to prevent hydration errors
+    ["@vueuse/motion/nuxt", { ssr: false }],
     "nuxt-swiper",
     // Keep this last to post-process the components registry
     "~/modules/fix-components",
