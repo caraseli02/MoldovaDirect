@@ -76,7 +76,7 @@
                   :aria-invalid="nameError ? 'true' : 'false'"
                   :aria-describedby="nameError ? 'name-error' : undefined"
                   :placeholder="$t('auth.fullName')"
-                  class="h-11 border-2 border-gray-200 bg-white text-gray-900 placeholder:text-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                  class="h-11 border-2 border-gray-200 bg-white text-gray-900 placeholder:text-gray-500 dark:border-gray-500 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-300"
                   :class="{ 'border-red-500 dark:border-red-400': nameError }"
                   @blur="validateNameField"
                 />
@@ -108,7 +108,7 @@
                   :aria-invalid="emailError ? 'true' : 'false'"
                   :aria-describedby="emailError ? 'email-error' : undefined"
                   :placeholder="$t('auth.email')"
-                  class="h-11 border-2 border-gray-200 bg-white text-gray-900 placeholder:text-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                  class="h-11 border-2 border-gray-200 bg-white text-gray-900 placeholder:text-gray-500 dark:border-gray-500 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-300"
                   :class="{ 'border-red-500 dark:border-red-400': emailError }"
                   @blur="validateEmailField"
                 />
@@ -124,7 +124,7 @@
                   :class="{ 'text-red-600 dark:text-red-400': phoneError }"
                 >
                   {{ $t('auth.phone') }}
-                  <span class="text-xs font-normal text-gray-500 dark:text-gray-400">
+                  <span class="text-xs font-normal text-gray-500 dark:text-gray-300">
                     ({{ $t('common.optional') }})
                   </span>
                 </Label>
@@ -142,7 +142,7 @@
                   :aria-invalid="phoneError ? 'true' : 'false'"
                   :aria-describedby="phoneError ? 'phone-error' : 'phone-desc'"
                   :placeholder="$t('auth.phone')"
-                  class="h-11 border-2 border-gray-200 bg-white text-gray-900 placeholder:text-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                  class="h-11 border-2 border-gray-200 bg-white text-gray-900 placeholder:text-gray-500 dark:border-gray-500 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-300"
                   :class="{ 'border-red-500 dark:border-red-400': phoneError }"
                   @blur="validatePhoneField"
                 />
@@ -223,7 +223,7 @@
                   class="text-sm font-medium text-gray-700 dark:text-gray-300"
                   :class="{
                     'text-red-600 dark:text-red-400': confirmPasswordError,
-                    'text-green-600 dark:text-green-400': form.confirmPassword && !confirmPasswordError && form.password === form.confirmPassword
+                    'text-green-600 dark:text-green-300': form.confirmPassword && !confirmPasswordError && form.password === form.confirmPassword
                   }"
                 >
                   {{ $t('auth.confirmPassword') }}
@@ -279,7 +279,7 @@
                 <p v-if="confirmPasswordError" id="confirm-password-error" class="text-sm text-red-600 dark:text-red-400" role="alert">
                   {{ confirmPasswordError }}
                 </p>
-                <p v-else-if="form.confirmPassword && form.password === form.confirmPassword" class="text-sm text-green-600 dark:text-green-400">
+                <p v-else-if="form.confirmPassword && form.password === form.confirmPassword" class="text-sm text-green-600 dark:text-green-300">
                   <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                   </svg>
