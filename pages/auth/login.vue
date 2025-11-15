@@ -30,6 +30,7 @@
                 v-if="displayError"
                 variant="destructive"
                 class="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20"
+                data-testid="auth-error"
               >
                 <AlertCircle class="h-5 w-5 text-red-500 dark:text-red-400" aria-hidden="true" />
                 <AlertDescription class="text-sm text-red-800 dark:text-red-300">
@@ -42,6 +43,7 @@
               <Alert
                 v-if="success"
                 class="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20"
+                data-testid="auth-success"
               >
                 <CheckCircle2 class="h-5 w-5 text-green-500 dark:text-green-400" aria-hidden="true" />
                 <AlertDescription class="text-sm text-green-800 dark:text-green-300">
@@ -71,6 +73,7 @@
                   spellcheck="false"
                   inputmode="email"
                   required
+                  data-testid="email-input"
                   :aria-invalid="emailError ? 'true' : 'false'"
                   :aria-describedby="emailError ? 'email-error' : undefined"
                   :placeholder="$t('auth.email')"
@@ -103,6 +106,7 @@
                     spellcheck="false"
                     required
                     minlength="8"
+                    data-testid="password-input"
                     :aria-invalid="passwordError ? 'true' : 'false'"
                     :aria-describedby="passwordError ? 'password-error' : 'password-toggle-desc'"
                     :placeholder="$t('auth.password')"
@@ -116,6 +120,7 @@
                     variant="ghost"
                     size="icon"
                     @click="togglePasswordVisibility"
+                    data-testid="password-toggle"
                     class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-300"
                     :aria-label="showPassword ? $t('auth.accessibility.hidePassword') : $t('auth.accessibility.showPassword')"
                     :aria-pressed="showPassword"
@@ -154,8 +159,9 @@
                   {{ $t('auth.accessibility.rememberMeDescription') }}
                 </div>
               </div>
-              <NuxtLink 
-                :to="localePath('/auth/forgot-password')" 
+              <NuxtLink
+                :to="localePath('/auth/forgot-password')"
+                data-testid="forgot-password"
                 class="inline-flex items-center justify-center min-h-[44px] px-3 py-2 text-sm font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded-md"
                 :aria-label="$t('auth.accessibility.forgotPasswordLink')"
               >
@@ -168,6 +174,7 @@
               type="submit"
               :disabled="isLoginDisabled"
               :aria-disabled="isLoginDisabled"
+              data-testid="login-button"
               class="relative w-full flex justify-center items-center py-4 px-4 min-h-[48px] text-base font-semibold rounded-xl shadow-lg transition-opacity"
               :class="{ 'opacity-60 cursor-not-allowed pointer-events-none': isLoginDisabled }"
               :aria-label="loading ? $t('auth.accessibility.signingIn') : $t('auth.accessibility.signInButton')"
@@ -200,6 +207,7 @@
               @click="handleMagicLink"
               :disabled="isMagicLinkDisabled"
               :aria-disabled="isMagicLinkDisabled"
+              data-testid="magic-link-button"
               class="relative w-full flex justify-center items-center py-4 px-4 min-h-[48px] text-base font-medium rounded-xl transition-opacity"
               :class="{ 'opacity-60 cursor-not-allowed pointer-events-none': isMagicLinkDisabled }"
               :aria-label="loadingMagic ? $t('auth.accessibility.sendingMagicLink') : $t('auth.accessibility.magicLinkButton')"
