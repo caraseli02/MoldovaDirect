@@ -127,44 +127,42 @@
               </span>
             </NuxtLink>
 
-            <!-- Mobile menu Sheet -->
-            <Sheet v-model:open="mobileMenuOpen">
-              <SheetTrigger as-child>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  :aria-label="mobileMenuLabel"
-                  :class="[
-                    mobileMenuOpen && 'bg-brand-accent/10 text-brand-accent dark:bg-brand-accent/20'
-                  ]"
-                >
-                  <!-- Animated hamburger menu -->
-                  <div class="w-6 h-6 flex flex-col justify-center items-center">
-                    <span class="block w-6 h-0.5 bg-current transition-all duration-300 ease-in-out"
-                      :class="mobileMenuOpen ? 'rotate-45 translate-y-1' : '-translate-y-1'"></span>
-                    <span class="block w-6 h-0.5 bg-current transition-all duration-300 ease-in-out"
-                      :class="mobileMenuOpen ? 'opacity-0' : 'opacity-100'"></span>
-                    <span class="block w-6 h-0.5 bg-current transition-all duration-300 ease-in-out"
-                      :class="mobileMenuOpen ? '-rotate-45 -translate-y-1' : 'translate-y-1'"></span>
-                  </div>
-                </Button>
-              </SheetTrigger>
-
-              <!-- Mobile Navigation Content -->
-              <MobileNav @close="mobileMenuOpen = false" />
-            </Sheet>
+            <!-- Mobile menu button with dynamic color -->
+            <Button
+              variant="ghost"
+              size="icon"
+              @click="toggleMobileMenu"
+              :aria-label="mobileMenuLabel"
+              :aria-expanded="mobileMenuOpen"
+              :class="[
+                mobileMenuOpen && 'bg-brand-accent/10 text-brand-accent dark:bg-brand-accent/20'
+              ]"
+              class="md:hidden"
+            >
+              <!-- Animated hamburger menu -->
+              <div class="w-6 h-6 flex flex-col justify-center items-center">
+                <span class="block w-6 h-0.5 bg-current transition-all duration-300 ease-in-out"
+                  :class="mobileMenuOpen ? 'rotate-45 translate-y-1' : '-translate-y-1'"></span>
+                <span class="block w-6 h-0.5 bg-current transition-all duration-300 ease-in-out"
+                  :class="mobileMenuOpen ? 'opacity-0' : 'opacity-100'"></span>
+                <span class="block w-6 h-0.5 bg-current transition-all duration-300 ease-in-out"
+                  :class="mobileMenuOpen ? '-rotate-45 -translate-y-1' : 'translate-y-1'"></span>
+              </div>
+            </Button>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Mobile Navigation -->
+    <MobileNav v-if="mobileMenuOpen" @close="mobileMenuOpen = false" />
   </header>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed, nextTick, watch } from 'vue'
+import { ref, onMounted, onUnmounted, computed, nextTick } from 'vue'
 import { useThrottleFn } from '@vueuse/core'
 import { Button } from '@/components/ui/button'
-import { Sheet, SheetTrigger } from '@/components/ui/sheet'
 import LanguageSwitcher from './LanguageSwitcher.vue'
 import MobileNav from './MobileNav.vue'
 import ThemeToggle from './ThemeToggle.vue'
@@ -218,18 +216,19 @@ const iconButtonClass = computed(() => [
     : 'text-brand-light/80 hover:text-brand-light drop-shadow-lg dark:text-brand-light/80 dark:hover:text-brand-light'
 ])
 
-// Watch for mobile menu changes to prevent body scroll
-watch(mobileMenuOpen, (isOpen) => {
-  if (typeof document !== 'undefined') {
-    document.body.style.overflow = isOpen ? 'hidden' : ''
+const toggleMobileMenu = () => {
+  mobileMenuOpen.value = !mobileMenuOpen.value
+  // Prevent body scroll when menu is open
+  if (mobileMenuOpen.value) {
+    document.body.style.overflow = 'hidden'
+  } else {
+    document.body.style.overflow = ''
   }
-})
+}
 
 // Clean up on unmount
 onUnmounted(() => {
-  if (typeof document !== 'undefined') {
-    document.body.style.overflow = ''
-  }
+  document.body.style.overflow = ''
   if (typeof window !== 'undefined') {
     window.removeEventListener('scroll', handleScroll)
   }
