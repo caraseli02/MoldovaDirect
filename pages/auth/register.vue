@@ -178,7 +178,7 @@
                     :aria-invalid="passwordError ? 'true' : 'false'"
                     :aria-describedby="passwordError ? 'password-error' : 'password-requirements'"
                     :placeholder="$t('auth.password')"
-                    class="h-11 border-2 border-gray-200 bg-white pr-12 text-gray-900 placeholder:text-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                    class="h-11 border-2 border-gray-200 bg-white pr-12 text-gray-900 placeholder:text-gray-500 dark:border-gray-500 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-300"
                     :class="{ 'border-red-500 dark:border-red-400': passwordError }"
                     @input="validatePasswordField"
                     @blur="validatePasswordField"
@@ -243,7 +243,7 @@
                     :aria-invalid="confirmPasswordError ? 'true' : 'false'"
                     :aria-describedby="confirmPasswordError ? 'confirm-password-error' : 'confirm-password-desc'"
                     :placeholder="$t('auth.confirmPassword')"
-                    class="h-11 border-2 border-gray-200 bg-white pr-12 text-gray-900 placeholder:text-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                    class="h-11 border-2 border-gray-200 bg-white pr-12 text-gray-900 placeholder:text-gray-500 dark:border-gray-500 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-300"
                     :class="[
                       confirmPasswordError ? 'border-red-500 dark:border-red-400' : '',
                       form.confirmPassword && !confirmPasswordError && form.password === form.confirmPassword
@@ -301,7 +301,7 @@
                 @update:checked="validateTermsField"
               />
               <div class="ml-3 space-y-2">
-                <Label for="terms" class="text-sm text-gray-700 dark:text-gray-200 leading-relaxed">
+                <Label for="terms" class="text-sm text-gray-700 dark:text-gray-100 leading-relaxed">
                   {{ $t('auth.acceptTerms') }}
                   <NuxtLink 
                     :to="localePath('/terms')" 

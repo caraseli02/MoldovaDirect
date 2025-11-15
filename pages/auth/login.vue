@@ -77,7 +77,7 @@
                   :aria-invalid="emailError ? 'true' : 'false'"
                   :aria-describedby="emailError ? 'email-error' : undefined"
                   :placeholder="$t('auth.email')"
-                  class="h-11 border-2 border-gray-200 bg-white text-gray-900 placeholder:text-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                  class="h-11 border-2 border-gray-200 bg-white text-gray-900 placeholder:text-gray-500 dark:border-gray-500 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-300"
                   :class="{ 'border-red-500 dark:border-red-400': emailError }"
                   @blur="validateEmailField"
                 />
@@ -110,7 +110,7 @@
                     :aria-invalid="passwordError ? 'true' : 'false'"
                     :aria-describedby="passwordError ? 'password-error' : 'password-toggle-desc'"
                     :placeholder="$t('auth.password')"
-                    class="h-11 border-2 border-gray-200 bg-white pr-12 text-gray-900 placeholder:text-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                    class="h-11 border-2 border-gray-200 bg-white pr-12 text-gray-900 placeholder:text-gray-500 dark:border-gray-500 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-300"
                     :class="{ 'border-red-500 dark:border-red-400': passwordError }"
                     @input="validatePasswordField"
                     @blur="validatePasswordField"
@@ -152,7 +152,7 @@
                   :aria-describedby="'remember-desc'"
                   class="h-5 w-5"
                 />
-                <Label for="remember" class="ml-3 text-sm text-gray-700 dark:text-gray-200 select-none">
+                <Label for="remember" class="ml-3 text-sm text-gray-700 dark:text-gray-100 select-none">
                   {{ $t('auth.rememberMe') }}
                 </Label>
                 <div id="remember-desc" class="sr-only">
@@ -196,7 +196,7 @@
                 <div class="w-full border-t border-gray-200 dark:border-gray-600" />
               </div>
               <div class="relative flex justify-center text-sm">
-                <span class="px-4 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">{{ $t('auth.orContinueWith') }}</span>
+                <span class="px-4 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-300">{{ $t('auth.orContinueWith') }}</span>
               </div>
             </div>
 

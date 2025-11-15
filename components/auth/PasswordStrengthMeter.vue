@@ -15,7 +15,7 @@
       <span :class="getLabelColor()">
         {{ strengthLabel }}
       </span>
-      <span class="text-gray-500 dark:text-gray-400">
+      <span class="text-gray-500 dark:text-gray-300">
         {{ $t('auth.passwordHint') }}
       </span>
     </div>
@@ -24,28 +24,28 @@
     <div v-if="showRequirements" class="space-y-1">
       <div class="flex items-center space-x-2 text-xs">
         <CheckIcon :passed="requirements.length" />
-        <span :class="requirements.length ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'">
+        <span :class="requirements.length ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-300'">
           {{ $t('auth.validation.password.minLength') }}
         </span>
       </div>
       
       <div class="flex items-center space-x-2 text-xs">
         <CheckIcon :passed="requirements.uppercase" />
-        <span :class="requirements.uppercase ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'">
+        <span :class="requirements.uppercase ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-300'">
           {{ $t('auth.validation.password.uppercase') }}
         </span>
       </div>
       
       <div class="flex items-center space-x-2 text-xs">
         <CheckIcon :passed="requirements.lowercase" />
-        <span :class="requirements.lowercase ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'">
+        <span :class="requirements.lowercase ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-300'">
           {{ $t('auth.validation.password.lowercase') }}
         </span>
       </div>
       
       <div class="flex items-center space-x-2 text-xs">
         <CheckIcon :passed="requirements.number" />
-        <span :class="requirements.number ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'">
+        <span :class="requirements.number ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-300'">
           {{ $t('auth.validation.password.number') }}
         </span>
       </div>
