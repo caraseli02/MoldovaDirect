@@ -44,7 +44,7 @@
 
       <!-- Email Actions -->
       <DropdownMenuItem
-        v-if="!user.email_confirmed_at"
+        v-if="!isEmailVerified"
         @select="handleAction('verify_email')"
       >
         <commonIcon name="lucide:badge-check" class="w-4 h-4" />
@@ -136,10 +136,17 @@ interface Props {
   }
 }
 
+type ActionData = {
+  role?: string
+  reason?: string
+  duration?: number
+  [key: string]: unknown
+}
+
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
-  action: [action: string, userId: string, data?: any]
+  action: [action: string, userId: string, data?: ActionData]
 }>()
 
 // State
@@ -147,6 +154,10 @@ const showActionModal = ref(false)
 const selectedAction = ref('')
 
 // Computed
+const isEmailVerified = computed(() => {
+  return !!props.user.email_confirmed_at
+})
+
 const isSuspended = computed(() => {
   return props.user.user_metadata?.suspended || false
 })
@@ -169,7 +180,7 @@ const handleAction = (action: string) => {
   }
 }
 
-const confirmAction = (data?: any) => {
+const confirmAction = (data?: ActionData) => {
   emit('action', selectedAction.value, props.user.id, data)
   showActionModal.value = false
   selectedAction.value = ''
