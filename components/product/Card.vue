@@ -6,7 +6,6 @@
       'active:scale-95': isMobile,
       'touch-manipulation': isMobile
     }"
-    @touchstart="handleTouchStart"
   >
     <!-- Product Image -->
     <div class="relative aspect-square overflow-hidden rounded-t-2xl bg-gray-100 dark:bg-slate-700">
@@ -28,11 +27,11 @@
         </div>
       </nuxt-link>
 
-      <!-- Quick View Overlay (Gymshark pattern) -->
-      <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+      <!-- Quick View Overlay (Gymshark pattern) - Hidden on mobile to prevent touch interference -->
+      <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 items-center justify-center hidden md:flex pointer-events-none">
         <nuxt-link
           :to="`/products/${product.slug}`"
-          class="px-6 py-3 bg-white text-gray-900 rounded-full font-semibold text-sm hover:bg-gray-100 transition-colors transform translate-y-4 group-hover:translate-y-0 duration-300"
+          class="px-6 py-3 bg-white text-gray-900 rounded-full font-semibold text-sm hover:bg-gray-100 transition-colors transform translate-y-4 group-hover:translate-y-0 duration-300 pointer-events-auto"
         >
           {{ $t('products.quickView') }}
         </nuxt-link>
@@ -153,8 +152,8 @@
             : 'bg-primary-600 dark:bg-primary-500 text-white hover:bg-primary-700 dark:hover:bg-primary-600',
           isMobile ? `min-h-[${PRODUCTS.MIN_TOUCH_TARGET_SIZE}px]` : '' // Ensure minimum touch target size
         ]"
-        @click="addToCart"
-        @touchstart="isMobile && !cartLoading && vibrate('tap')"
+        @click.stop="addToCart"
+        @touchstart.stop="isMobile && !cartLoading && vibrate('tap')"
       >
         <!-- Loading Spinner -->
         <svg v-if="cartLoading" class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -260,14 +259,6 @@ const formatPrice = (price: string | number) => {
   return Number(price).toFixed(2)
 }
 
-
-// Touch event handlers
-const handleTouchStart = (event: TouchEvent) => {
-  if (isMobile.value) {
-    vibrate('tap')
-  }
-}
-
 // Actions
 const addToCart = async () => {
   try {
@@ -303,26 +294,13 @@ const addToCart = async () => {
 }
 
 // Setup touch optimizations for mobile
+// Note: Removed card-level tap navigation to prevent interference with buttons
+// Users can still navigate by tapping the product image or name links
 const setupMobileTouch = () => {
   if (!isMobile.value || !cardRef.value) return
 
-  // Setup efficient touch event handling
-  touchEvents.setHandlers({
-    onTap: () => {
-      // Navigate to product detail on tap (if not button)
-      const router = useRouter()
-      const productPath = `/products/${props.product.slug}`
-      router.push(productPath)
-    }
-  })
-
-  const cleanup = touchEvents.setupTouchListeners(cardRef.value, {
-    passive: true
-  })
-
-  // Cleanup on unmount
+  // Only cleanup on unmount, no tap interception
   onUnmounted(() => {
-    cleanup()
     touchEvents.cleanup()
   })
 }
