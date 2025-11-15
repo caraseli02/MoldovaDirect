@@ -128,14 +128,14 @@
             </NuxtLink>
 
             <!-- Mobile menu button with dynamic color -->
-            <Button
+            <button
               type="button"
-              variant="ghost"
               @click="toggleMobileMenu"
               :aria-label="mobileMenuLabel"
               :aria-expanded="mobileMenuOpen"
               :class="[
                 iconButtonClass,
+                'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
                 mobileMenuOpen && 'bg-brand-accent/10 text-brand-accent dark:bg-brand-accent/20'
               ]"
             >
@@ -148,7 +148,7 @@
                 <span class="block w-6 h-0.5 bg-current transition-all duration-300 ease-in-out pointer-events-none"
                   :class="mobileMenuOpen ? '-rotate-45 -translate-y-1' : 'translate-y-1'"></span>
               </div>
-            </Button>
+            </button>
           </div>
         </div>
       </div>
@@ -162,7 +162,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed, nextTick } from 'vue'
 import { useThrottleFn } from '@vueuse/core'
-import { Button } from '@/components/ui/button'
 import LanguageSwitcher from './LanguageSwitcher.vue'
 import MobileNav from './MobileNav.vue'
 import ThemeToggle from './ThemeToggle.vue'
