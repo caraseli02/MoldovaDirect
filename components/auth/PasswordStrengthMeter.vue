@@ -1,5 +1,5 @@
 <template>
-  <div v-if="password" class="mt-2 space-y-2">
+  <div v-if="password" class="mt-2 space-y-2" data-testid="password-strength-meter">
     <!-- Strength bar -->
     <div class="flex space-x-1">
       <div

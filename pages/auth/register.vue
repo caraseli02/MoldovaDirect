@@ -138,6 +138,7 @@
                   autocorrect="off"
                   spellcheck="false"
                   inputmode="tel"
+                  data-testid="phone-input"
                   :aria-invalid="phoneError ? 'true' : 'false'"
                   :aria-describedby="phoneError ? 'phone-error' : 'phone-desc'"
                   :placeholder="$t('auth.phone')"
@@ -238,6 +239,7 @@
                     autocorrect="off"
                     spellcheck="false"
                     required
+                    data-testid="confirm-password-input"
                     :aria-invalid="confirmPasswordError ? 'true' : 'false'"
                     :aria-describedby="confirmPasswordError ? 'confirm-password-error' : 'confirm-password-desc'"
                     :placeholder="$t('auth.confirmPassword')"
@@ -256,6 +258,7 @@
                     variant="ghost"
                     size="icon"
                     @click="toggleConfirmPasswordVisibility"
+                    data-testid="confirm-password-toggle"
                     class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-300"
                     :aria-label="showConfirmPassword ? $t('auth.accessibility.hidePassword') : $t('auth.accessibility.showPassword')"
                     :aria-pressed="showConfirmPassword"
