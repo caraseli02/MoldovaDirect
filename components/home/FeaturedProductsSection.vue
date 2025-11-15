@@ -55,16 +55,8 @@
       <div v-if="pending">
         <!-- Mobile: Loading carousel -->
         <div class="mt-12 md:hidden">
-          <Swiper
-            :modules="[]"
-            :slides-per-view="1.15"
-            :space-between="16"
-            :breakpoints="{
-              480: { slidesPerView: 1.5, spaceBetween: 20 },
-              640: { slidesPerView: 2, spaceBetween: 24 }
-            }"
-          >
-            <SwiperSlide v-for="i in 8" :key="i">
+          <div class="flex gap-4 overflow-x-auto scroll-smooth pb-6 -mx-4 px-4 scrollbar-hide">
+            <div v-for="i in 8" :key="i" class="flex-shrink-0 w-[85%] sm:w-[60%]">
               <div class="rounded-3xl bg-gray-100/80 p-6 dark:bg-gray-900">
                 <div class="h-40 rounded-xl bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse dark:from-gray-800 dark:via-gray-750 dark:to-gray-800 bg-[length:200%_100%]"></div>
                 <div class="mt-4 space-y-3">
@@ -73,8 +65,8 @@
                   <div class="h-10 rounded bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse dark:from-gray-800 dark:via-gray-750 dark:to-gray-800 bg-[length:200%_100%]"></div>
                 </div>
               </div>
-            </SwiperSlide>
-          </Swiper>
+            </div>
+          </div>
         </div>
         <!-- Desktop: Loading grid -->
         <div class="mt-12 hidden gap-6 md:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -91,27 +83,55 @@
 
       <!-- Products - Carousel on mobile, Grid on desktop -->
       <div v-else-if="filteredProducts.length">
-        <!-- Mobile: Horizontal carousel -->
-        <div class="mt-12 md:hidden">
-          <Swiper
-            :modules="[SwiperPagination]"
-            :slides-per-view="1.15"
-            :space-between="16"
-            :pagination="{ clickable: true, dynamicBullets: true }"
-            :breakpoints="{
-              480: { slidesPerView: 1.5, spaceBetween: 20 },
-              640: { slidesPerView: 2, spaceBetween: 24 }
-            }"
-            class="products-carousel"
-            @swiper="onSwiper"
+        <!-- Mobile: Horizontal carousel with native scroll -->
+        <div class="mt-12 md:hidden relative">
+          <div
+            ref="scrollContainer"
+            class="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-6 -mx-4 px-4 scrollbar-hide"
+            @scroll="onScroll"
           >
-            <SwiperSlide
+            <div
               v-for="product in filteredProducts"
               :key="product.id"
+              class="flex-shrink-0 w-[85%] snap-center"
+              :class="{
+                'sm:w-[60%]': filteredProducts.length > 1,
+                'md:w-[45%]': filteredProducts.length > 2
+              }"
             >
               <ProductCard :product="product" />
-            </SwiperSlide>
-          </Swiper>
+            </div>
+          </div>
+
+          <!-- Navigation Arrows -->
+          <button
+            v-if="currentIndex > 0"
+            @click="scrollCarousel('prev')"
+            class="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm shadow-lg border border-gray-200 flex items-center justify-center text-gray-700 hover:bg-primary-600 hover:text-white hover:border-primary-600 transition-all duration-200"
+            aria-label="Previous products"
+          >
+            <commonIcon name="lucide:chevron-left" class="h-5 w-5" />
+          </button>
+          <button
+            v-if="currentIndex < filteredProducts.length - 1"
+            @click="scrollCarousel('next')"
+            class="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm shadow-lg border border-gray-200 flex items-center justify-center text-gray-700 hover:bg-primary-600 hover:text-white hover:border-primary-600 transition-all duration-200"
+            aria-label="Next products"
+          >
+            <commonIcon name="lucide:chevron-right" class="h-5 w-5" />
+          </button>
+
+          <!-- Dot Indicators -->
+          <div class="flex justify-center gap-2 mt-6">
+            <button
+              v-for="(product, index) in filteredProducts"
+              :key="`dot-${product.id}`"
+              @click="scrollToIndex(index)"
+              class="w-2 h-2 rounded-full transition-all duration-300"
+              :class="currentIndex === index ? 'bg-primary-600 w-6' : 'bg-gray-300 hover:bg-gray-400'"
+              :aria-label="`Go to product ${index + 1}`"
+            />
+          </div>
         </div>
 
         <!-- Desktop: Grid layout -->
@@ -152,7 +172,6 @@
 
 <script setup lang="ts">
 import type { ProductWithRelations } from '~/types'
-import type { Swiper as SwiperType } from 'swiper'
 
 const props = defineProps<{
   products: ProductWithRelations[]
@@ -173,11 +192,45 @@ const activeFilter = ref('all')
 // Tab refs for keyboard navigation
 const tabRefs: HTMLButtonElement[] = reactive([])
 
-// Swiper instance management
-const swiperInstance = ref<SwiperType | null>(null)
+// Native scroll carousel state
+const scrollContainer = ref<HTMLElement | null>(null)
+const currentIndex = ref(0)
 
-const onSwiper = (swiper: SwiperType) => {
-  swiperInstance.value = swiper
+const onScroll = () => {
+  if (!scrollContainer.value) return
+
+  const container = scrollContainer.value
+  const scrollLeft = container.scrollLeft
+  const itemWidth = container.scrollWidth / filteredProducts.value.length
+
+  currentIndex.value = Math.round(scrollLeft / itemWidth)
+}
+
+const scrollCarousel = (direction: 'prev' | 'next') => {
+  if (!scrollContainer.value) return
+
+  const container = scrollContainer.value
+  const itemWidth = container.scrollWidth / filteredProducts.value.length
+  const newIndex = direction === 'next'
+    ? Math.min(currentIndex.value + 1, filteredProducts.value.length - 1)
+    : Math.max(currentIndex.value - 1, 0)
+
+  container.scrollTo({
+    left: itemWidth * newIndex,
+    behavior: 'smooth'
+  })
+}
+
+const scrollToIndex = (index: number) => {
+  if (!scrollContainer.value) return
+
+  const container = scrollContainer.value
+  const itemWidth = container.scrollWidth / filteredProducts.value.length
+
+  container.scrollTo({
+    left: itemWidth * index,
+    behavior: 'smooth'
+  })
 }
 
 // Filter options
@@ -256,30 +309,24 @@ const filteredProducts = computed(() => {
   return props.products
 })
 
-// Watch for filter changes and update Swiper if needed
+// Watch for filter changes and reset scroll position
 watch(activeFilter, async () => {
+  currentIndex.value = 0
   await nextTick()
-  if (swiperInstance.value) {
-    // Reset to first slide when filter changes
-    swiperInstance.value.slideTo(0, 0)
-    // Update Swiper to recalculate slides
-    swiperInstance.value.update()
+  if (scrollContainer.value) {
+    scrollContainer.value.scrollTo({ left: 0, behavior: 'smooth' })
   }
 })
 </script>
 
 <style scoped>
-/* Swiper pagination dots styling */
-:deep(.products-carousel .swiper-pagination) {
-  bottom: -2rem;
+/* Hide scrollbar for native scroll carousel */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
-:deep(.products-carousel .swiper-pagination-bullet) {
-  background-color: rgb(156 163 175 / 0.5); /* gray-400 with 50% opacity */
-}
-
-:deep(.products-carousel .swiper-pagination-bullet-active) {
-  background-color: hsl(var(--color-primary-600));
-  opacity: 1;
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, Opera */
 }
 </style>
