@@ -1,10 +1,12 @@
 <template>
   <div class="min-h-screen flex flex-col">
     <LayoutAppHeader />
-    <main class="flex-1 bg-white dark:bg-gray-950 text-gray-900 dark:text-white">
+    <main class="flex-1 bg-white dark:bg-gray-950 text-gray-900 dark:text-white pb-16 md:pb-0">
       <slot />
     </main>
     <LayoutAppFooter />
+    <!-- Bottom Navigation for Mobile -->
+    <LayoutBottomNav />
     <ClientOnly>
       <!-- Sonner toaster (shadcn-vue) -->
       <UiSonner position="top-right" :rich-colors="true" />
