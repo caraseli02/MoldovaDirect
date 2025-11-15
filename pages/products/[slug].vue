@@ -314,12 +314,12 @@
               <Button
                 data-testid="add-to-cart-button"
                 :disabled="(product.stockQuantity || 0) <= 0 || cartLoading"
-                class="flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3 text-base font-semibold text-white transition disabled:cursor-not-allowed disabled:bg-gray-400 touch-manipulation"
+                class="flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3 text-base font-semibold text-white transition disabled:cursor-not-allowed disabled:bg-gray-400 touch-manipulation relative z-10 min-h-[48px]"
                 :class="[
                   isProductInCart ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700',
                   cartLoading ? 'cursor-progress' : ''
                 ]"
-                @click.stop="addToCart"
+                @click="addToCart"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m2.6 8L6 21h13M7 13v4a1 1 0 001 1h9a1 1 0 001-1v-4M7 13L6 9" />

@@ -143,17 +143,16 @@
       </div>
 
       <!-- Add to Cart Button -->
-      <Button
+      <button
+        type="button"
         :disabled="product.stockQuantity <= 0 || cartLoading"
-        class="cta-button w-full mt-4 transition-all duration-200 flex items-center justify-center space-x-2 touch-manipulation rounded-full"
+        class="cta-button w-full mt-4 transition-all duration-200 flex items-center justify-center space-x-2 touch-manipulation rounded-full relative z-10 min-h-[48px] px-4 py-3 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
         :class="[
           isInCart(product.id)
-            ? 'bg-green-600 dark:bg-green-500 text-white hover:bg-green-700 dark:hover:bg-green-600'
-            : 'bg-primary-600 dark:bg-primary-500 text-white hover:bg-primary-700 dark:hover:bg-primary-600',
-          isMobile ? `min-h-[${PRODUCTS.MIN_TOUCH_TARGET_SIZE}px]` : '' // Ensure minimum touch target size
+            ? 'bg-green-600 dark:bg-green-500 text-white hover:bg-green-700 dark:hover:bg-green-600 active:bg-green-800'
+            : 'bg-primary-600 dark:bg-primary-500 text-white hover:bg-primary-700 dark:hover:bg-primary-600 active:bg-primary-800'
         ]"
-        @click.stop="addToCart"
-        @touchstart.stop="isMobile && !cartLoading && vibrate('tap')"
+        @click="addToCart"
       >
         <!-- Loading Spinner -->
         <svg v-if="cartLoading" class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -179,7 +178,7 @@
             $t('products.addToCart')
           }}
         </span>
-      </Button>
+      </button>
 
     </div>
   </div>
@@ -187,7 +186,6 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { Button } from '@/components/ui/button'
 import type { ProductWithRelations } from '~/types'
 import { useCart } from '~/composables/useCart'
 import { useDevice } from '~/composables/useDevice'
