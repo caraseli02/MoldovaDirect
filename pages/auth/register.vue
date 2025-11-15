@@ -15,14 +15,14 @@
           </h2>
           <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
             {{ $t('auth.haveAccount') }}
-            <NuxtLink :to="localePath('/auth/login')" class="font-semibold text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 transition-colors">
+            <NuxtLink :to="localePath('/auth/login')" class="font-semibold text-primary-600 hover:text-primary-500 dark:text-primary-300 dark:hover:text-primary-200 transition-colors">
               {{ $t('auth.signIn') }}
             </NuxtLink>
           </p>
         </div>
       
         <!-- Card container -->
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 sm:p-8">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-none dark:border dark:border-gray-700 p-6 sm:p-8">
           <form class="space-y-5" @submit.prevent="handleRegister">
             <!-- Alert messages -->
             <Transition name="slide-fade">
@@ -188,7 +188,7 @@
                     variant="ghost"
                     size="icon"
                     @click="togglePasswordVisibility"
-                    class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-300"
+                    class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-600 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white"
                     :aria-label="showPassword ? $t('auth.accessibility.hidePassword') : $t('auth.accessibility.showPassword')"
                     :aria-pressed="showPassword"
                   >
@@ -259,7 +259,7 @@
                     size="icon"
                     @click="toggleConfirmPasswordVisibility"
                     data-testid="confirm-password-toggle"
-                    class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-300"
+                    class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-600 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white"
                     :aria-label="showConfirmPassword ? $t('auth.accessibility.hidePassword') : $t('auth.accessibility.showPassword')"
                     :aria-pressed="showConfirmPassword"
                   >
@@ -301,11 +301,11 @@
                 @update:checked="validateTermsField"
               />
               <div class="ml-3 space-y-2">
-                <Label for="terms" class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                <Label for="terms" class="text-sm text-gray-700 dark:text-gray-200 leading-relaxed">
                   {{ $t('auth.acceptTerms') }}
                   <NuxtLink 
                     :to="localePath('/terms')" 
-                    class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded"
+                    class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-300 dark:hover:text-primary-200 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded"
                     target="_blank"
                     :aria-label="$t('auth.accessibility.termsLink')"
                   >
@@ -314,7 +314,7 @@
                   {{ $t('common.and') }}
                   <NuxtLink 
                     :to="localePath('/privacy')" 
-                    class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded"
+                    class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-300 dark:hover:text-primary-200 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded"
                     target="_blank"
                     :aria-label="$t('auth.accessibility.privacyLink')"
                   >

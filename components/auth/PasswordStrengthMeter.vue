@@ -147,7 +147,7 @@ const CheckIcon = defineComponent({
     }
   },
   template: `
-    <svg class="w-3 h-3" :class="passed ? 'text-green-500' : 'text-gray-300 dark:text-gray-600'" fill="currentColor" viewBox="0 0 20 20">
+    <svg class="w-3 h-3" :class="passed ? 'text-green-500' : 'text-gray-400 dark:text-gray-500'" fill="currentColor" viewBox="0 0 20 20">
       <path v-if="passed" fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
       <circle v-else cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
     </svg>

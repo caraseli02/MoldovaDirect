@@ -15,14 +15,14 @@
           </h2>
           <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
             {{ $t('auth.noAccount') }}
-            <NuxtLink :to="localePath('/auth/register')" class="font-semibold text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 transition-colors">
+            <NuxtLink :to="localePath('/auth/register')" class="font-semibold text-primary-600 hover:text-primary-500 dark:text-primary-300 dark:hover:text-primary-200 transition-colors">
               {{ $t('auth.signUp') }}
             </NuxtLink>
           </p>
         </div>
       
         <!-- Card container for form -->
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 sm:p-8">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-none dark:border dark:border-gray-700 p-6 sm:p-8">
           <form class="space-y-5" @submit.prevent="handleLogin">
             <!-- Alert messages with improved mobile styling -->
             <Transition name="slide-fade">
@@ -121,7 +121,7 @@
                     size="icon"
                     @click="togglePasswordVisibility"
                     data-testid="password-toggle"
-                    class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-300"
+                    class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-600 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white"
                     :aria-label="showPassword ? $t('auth.accessibility.hidePassword') : $t('auth.accessibility.showPassword')"
                     :aria-pressed="showPassword"
                   >
@@ -152,7 +152,7 @@
                   :aria-describedby="'remember-desc'"
                   class="h-5 w-5"
                 />
-                <Label for="remember" class="ml-3 text-sm text-gray-700 dark:text-gray-300 select-none">
+                <Label for="remember" class="ml-3 text-sm text-gray-700 dark:text-gray-200 select-none">
                   {{ $t('auth.rememberMe') }}
                 </Label>
                 <div id="remember-desc" class="sr-only">
@@ -162,7 +162,7 @@
               <NuxtLink
                 :to="localePath('/auth/forgot-password')"
                 data-testid="forgot-password"
-                class="inline-flex items-center justify-center min-h-[44px] px-3 py-2 text-sm font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded-md"
+                class="inline-flex items-center justify-center min-h-[44px] px-3 py-2 text-sm font-medium text-primary-600 hover:text-primary-500 dark:text-primary-300 dark:hover:text-primary-200 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded-md"
                 :aria-label="$t('auth.accessibility.forgotPasswordLink')"
               >
                 {{ $t('auth.forgotPassword') }}
