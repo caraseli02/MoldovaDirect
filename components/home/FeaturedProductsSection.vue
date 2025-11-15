@@ -103,6 +103,7 @@
               640: { slidesPerView: 2, spaceBetween: 24 }
             }"
             class="products-carousel"
+            @swiper="onSwiper"
           >
             <SwiperSlide
               v-for="product in filteredProducts"
@@ -151,6 +152,7 @@
 
 <script setup lang="ts">
 import type { ProductWithRelations } from '~/types'
+import type { Swiper as SwiperType } from 'swiper'
 
 const props = defineProps<{
   products: ProductWithRelations[]
@@ -170,6 +172,13 @@ const activeFilter = ref('all')
 
 // Tab refs for keyboard navigation
 const tabRefs: HTMLButtonElement[] = reactive([])
+
+// Swiper instance management
+const swiperInstance = ref<SwiperType | null>(null)
+
+const onSwiper = (swiper: SwiperType) => {
+  swiperInstance.value = swiper
+}
 
 // Filter options
 const filters = computed(() => [
@@ -241,10 +250,21 @@ const filteredProducts = computed(() => {
 
   if (activeFilter.value === 'sale') {
     // Filter products with sale prices (comparePrice > price)
-    return props.products.filter(p => p.comparePrice && p.comparePrice > p.price)
+    return [...props.products].filter(p => p.comparePrice && p.comparePrice > p.price)
   }
 
   return props.products
+})
+
+// Watch for filter changes and update Swiper if needed
+watch(activeFilter, async () => {
+  await nextTick()
+  if (swiperInstance.value) {
+    // Reset to first slide when filter changes
+    swiperInstance.value.slideTo(0, 0)
+    // Update Swiper to recalculate slides
+    swiperInstance.value.update()
+  }
 })
 </script>
 
