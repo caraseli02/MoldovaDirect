@@ -55,16 +55,8 @@
       <div v-if="pending">
         <!-- Mobile: Loading carousel -->
         <div class="mt-12 md:hidden">
-          <Swiper
-            :modules="[]"
-            :slides-per-view="1.15"
-            :space-between="16"
-            :breakpoints="{
-              480: { slidesPerView: 1.5, spaceBetween: 20 },
-              640: { slidesPerView: 2, spaceBetween: 24 }
-            }"
-          >
-            <SwiperSlide v-for="i in 8" :key="i">
+          <div class="flex gap-4 overflow-x-auto scroll-smooth pb-6 -mx-4 px-4 scrollbar-hide">
+            <div v-for="i in 8" :key="i" class="flex-shrink-0 w-[85%] sm:w-[60%]">
               <div class="rounded-3xl bg-gray-100/80 p-6 dark:bg-gray-900">
                 <div class="h-40 rounded-xl bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse dark:from-gray-800 dark:via-gray-750 dark:to-gray-800 bg-[length:200%_100%]"></div>
                 <div class="mt-4 space-y-3">
@@ -73,8 +65,8 @@
                   <div class="h-10 rounded bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse dark:from-gray-800 dark:via-gray-750 dark:to-gray-800 bg-[length:200%_100%]"></div>
                 </div>
               </div>
-            </SwiperSlide>
-          </Swiper>
+            </div>
+          </div>
         </div>
         <!-- Desktop: Loading grid -->
         <div class="mt-12 hidden gap-6 md:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -91,26 +83,23 @@
 
       <!-- Products - Carousel on mobile, Grid on desktop -->
       <div v-else-if="filteredProducts.length">
-        <!-- Mobile: Horizontal carousel -->
+        <!-- Mobile: Horizontal carousel with native scroll -->
         <div class="mt-12 md:hidden">
-          <Swiper
-            :modules="[SwiperPagination]"
-            :slides-per-view="1.15"
-            :space-between="16"
-            :pagination="{ clickable: true, dynamicBullets: true }"
-            :breakpoints="{
-              480: { slidesPerView: 1.5, spaceBetween: 20 },
-              640: { slidesPerView: 2, spaceBetween: 24 }
-            }"
-            class="products-carousel"
+          <div
+            class="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-6 -mx-4 px-4 scrollbar-hide"
           >
-            <SwiperSlide
+            <div
               v-for="product in filteredProducts"
               :key="product.id"
+              class="flex-shrink-0 w-[85%] snap-center"
+              :class="{
+                'sm:w-[60%]': filteredProducts.length > 1,
+                'md:w-[45%]': filteredProducts.length > 2
+              }"
             >
               <ProductCard :product="product" />
-            </SwiperSlide>
-          </Swiper>
+            </div>
+          </div>
         </div>
 
         <!-- Desktop: Grid layout -->
@@ -241,7 +230,7 @@ const filteredProducts = computed(() => {
 
   if (activeFilter.value === 'sale') {
     // Filter products with sale prices (comparePrice > price)
-    return props.products.filter(p => p.comparePrice && p.comparePrice > p.price)
+    return [...props.products].filter(p => p.comparePrice && p.comparePrice > p.price)
   }
 
   return props.products
@@ -249,17 +238,13 @@ const filteredProducts = computed(() => {
 </script>
 
 <style scoped>
-/* Swiper pagination dots styling */
-:deep(.products-carousel .swiper-pagination) {
-  bottom: -2rem;
+/* Hide scrollbar for native scroll carousel */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
-:deep(.products-carousel .swiper-pagination-bullet) {
-  background-color: rgb(156 163 175 / 0.5); /* gray-400 with 50% opacity */
-}
-
-:deep(.products-carousel .swiper-pagination-bullet-active) {
-  background-color: hsl(var(--color-primary-600));
-  opacity: 1;
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, Opera */
 }
 </style>
