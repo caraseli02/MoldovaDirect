@@ -106,19 +106,21 @@
           <!-- Navigation Arrows -->
           <button
             v-show="currentIndex > 0"
-            @click="scrollCarousel('prev')"
-            class="absolute left-2 top-[40%] -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white shadow-xl border border-gray-300 dark:bg-gray-800 dark:border-gray-600 flex items-center justify-center text-gray-800 dark:text-gray-100 hover:bg-primary-600 hover:text-white hover:border-primary-600 dark:hover:bg-primary-500 transition-all duration-200 hover:scale-110 active:scale-95"
+            @click.prevent.stop="scrollCarousel('prev')"
+            type="button"
+            class="absolute left-2 top-[40%] -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white shadow-xl border border-gray-300 dark:bg-gray-800 dark:border-gray-600 flex items-center justify-center text-gray-800 dark:text-gray-100 hover:bg-primary-600 hover:text-white hover:border-primary-600 dark:hover:bg-primary-500 transition-all duration-200 hover:scale-110 active:scale-95 cursor-pointer"
             aria-label="Previous products"
           >
-            <commonIcon name="lucide:chevron-left" class="h-6 w-6" />
+            <commonIcon name="lucide:chevron-left" class="h-6 w-6 pointer-events-none" />
           </button>
           <button
             v-show="currentIndex < filteredProducts.length - 1"
-            @click="scrollCarousel('next')"
-            class="absolute right-2 top-[40%] -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white shadow-xl border border-gray-300 dark:bg-gray-800 dark:border-gray-600 flex items-center justify-center text-gray-800 dark:text-gray-100 hover:bg-primary-600 hover:text-white hover:border-primary-600 dark:hover:bg-primary-500 transition-all duration-200 hover:scale-110 active:scale-95"
+            @click.prevent.stop="scrollCarousel('next')"
+            type="button"
+            class="absolute right-2 top-[40%] -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white shadow-xl border border-gray-300 dark:bg-gray-800 dark:border-gray-600 flex items-center justify-center text-gray-800 dark:text-gray-100 hover:bg-primary-600 hover:text-white hover:border-primary-600 dark:hover:bg-primary-500 transition-all duration-200 hover:scale-110 active:scale-95 cursor-pointer"
             aria-label="Next products"
           >
-            <commonIcon name="lucide:chevron-right" class="h-6 w-6" />
+            <commonIcon name="lucide:chevron-right" class="h-6 w-6 pointer-events-none" />
           </button>
 
           <!-- Dot Indicators -->
@@ -126,8 +128,9 @@
             <button
               v-for="(product, index) in filteredProducts"
               :key="`dot-${product.id}`"
-              @click="scrollToIndex(index)"
-              class="transition-all duration-300 rounded-full"
+              @click.prevent.stop="scrollToIndex(index)"
+              type="button"
+              class="transition-all duration-300 rounded-full cursor-pointer"
               :class="currentIndex === index
                 ? 'bg-primary-600 dark:bg-primary-500 w-8 h-2.5'
                 : 'bg-gray-300 dark:bg-gray-600 w-2.5 h-2.5 hover:bg-gray-400 dark:hover:bg-gray-500 hover:scale-125'"
@@ -199,15 +202,15 @@ const tabRefs: HTMLButtonElement[] = reactive([])
 const scrollContainer = ref<HTMLElement | null>(null)
 const currentIndex = ref(0)
 
-// Throttle scroll event for better performance
-let scrollTimeout: ReturnType<typeof setTimeout> | null = null
+// Use requestAnimationFrame for smooth scroll tracking
+let rafId: number | null = null
 const onScroll = () => {
-  if (scrollTimeout) return
+  if (rafId) return
 
-  scrollTimeout = setTimeout(() => {
-    scrollTimeout = null
+  rafId = requestAnimationFrame(() => {
     updateCurrentIndex()
-  }, 50)
+    rafId = null
+  })
 }
 
 const updateCurrentIndex = () => {
@@ -215,15 +218,19 @@ const updateCurrentIndex = () => {
 
   const container = scrollContainer.value
   const scrollLeft = container.scrollLeft
+  const containerWidth = container.clientWidth
 
-  // Calculate which item is most visible in viewport
+  // Find which item is most in view (center of viewport)
   const children = Array.from(container.children) as HTMLElement[]
+  const centerPosition = scrollLeft + containerWidth / 2
+
   let closestIndex = 0
   let minDistance = Infinity
 
   children.forEach((child, index) => {
-    const childLeft = child.offsetLeft - container.offsetLeft
-    const distance = Math.abs(scrollLeft - childLeft)
+    const childCenter = child.offsetLeft + child.offsetWidth / 2
+    const distance = Math.abs(centerPosition - childCenter)
+
     if (distance < minDistance) {
       minDistance = distance
       closestIndex = index
@@ -248,12 +255,24 @@ const scrollToIndex = (index: number) => {
 
   const container = scrollContainer.value
   const children = Array.from(container.children) as HTMLElement[]
-  const targetChild = children[index]
+
+  // Validate index
+  if (index < 0 || index >= children.length) return
+
+  const targetChild = children[index] as HTMLElement
 
   if (targetChild) {
-    const targetLeft = targetChild.offsetLeft - container.offsetLeft
+    // Update index immediately for instant visual feedback
+    currentIndex.value = index
+
+    // Calculate scroll position manually for more reliable scrolling
+    const containerRect = container.getBoundingClientRect()
+    const childRect = targetChild.getBoundingClientRect()
+    const scrollLeft = targetChild.offsetLeft - container.offsetLeft
+
+    // Scroll to the calculated position
     container.scrollTo({
-      left: targetLeft,
+      left: scrollLeft,
       behavior: 'smooth'
     })
   }
@@ -337,12 +356,30 @@ const filteredProducts = computed(() => {
 
 // Watch for filter changes and reset scroll position
 watch(activeFilter, async () => {
+  // Reset index immediately
   currentIndex.value = 0
+
+  // Wait for DOM to update with new filtered products
   await nextTick()
+
   if (scrollContainer.value) {
-    scrollContainer.value.scrollTo({ left: 0, behavior: 'instant' })
-    // Update current index after a brief delay
-    setTimeout(updateCurrentIndex, 100)
+    // Scroll to start instantly (no animation)
+    scrollContainer.value.scrollTo({ left: 0, behavior: 'auto' })
+
+    // Update current index after DOM settles
+    await nextTick()
+    setTimeout(() => {
+      if (scrollContainer.value) {
+        updateCurrentIndex()
+      }
+    }, 150)
+  }
+})
+
+// Initialize current index when component mounts
+onMounted(() => {
+  if (scrollContainer.value) {
+    updateCurrentIndex()
   }
 })
 </script>
