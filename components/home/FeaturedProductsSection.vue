@@ -105,31 +105,34 @@
 
           <!-- Navigation Arrows -->
           <button
-            v-if="currentIndex > 0"
+            v-show="currentIndex > 0"
             @click="scrollCarousel('prev')"
-            class="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm shadow-lg border border-gray-200 flex items-center justify-center text-gray-700 hover:bg-primary-600 hover:text-white hover:border-primary-600 transition-all duration-200"
+            class="absolute left-2 top-[40%] -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white shadow-xl border border-gray-300 dark:bg-gray-800 dark:border-gray-600 flex items-center justify-center text-gray-800 dark:text-gray-100 hover:bg-primary-600 hover:text-white hover:border-primary-600 dark:hover:bg-primary-500 transition-all duration-200 hover:scale-110 active:scale-95"
             aria-label="Previous products"
           >
-            <commonIcon name="lucide:chevron-left" class="h-5 w-5" />
+            <commonIcon name="lucide:chevron-left" class="h-6 w-6" />
           </button>
           <button
-            v-if="currentIndex < filteredProducts.length - 1"
+            v-show="currentIndex < filteredProducts.length - 1"
             @click="scrollCarousel('next')"
-            class="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm shadow-lg border border-gray-200 flex items-center justify-center text-gray-700 hover:bg-primary-600 hover:text-white hover:border-primary-600 transition-all duration-200"
+            class="absolute right-2 top-[40%] -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white shadow-xl border border-gray-300 dark:bg-gray-800 dark:border-gray-600 flex items-center justify-center text-gray-800 dark:text-gray-100 hover:bg-primary-600 hover:text-white hover:border-primary-600 dark:hover:bg-primary-500 transition-all duration-200 hover:scale-110 active:scale-95"
             aria-label="Next products"
           >
-            <commonIcon name="lucide:chevron-right" class="h-5 w-5" />
+            <commonIcon name="lucide:chevron-right" class="h-6 w-6" />
           </button>
 
           <!-- Dot Indicators -->
-          <div class="flex justify-center gap-2 mt-6">
+          <div class="flex justify-center gap-2.5 mt-8">
             <button
               v-for="(product, index) in filteredProducts"
               :key="`dot-${product.id}`"
               @click="scrollToIndex(index)"
-              class="w-2 h-2 rounded-full transition-all duration-300"
-              :class="currentIndex === index ? 'bg-primary-600 w-6' : 'bg-gray-300 hover:bg-gray-400'"
+              class="transition-all duration-300 rounded-full"
+              :class="currentIndex === index
+                ? 'bg-primary-600 dark:bg-primary-500 w-8 h-2.5'
+                : 'bg-gray-300 dark:bg-gray-600 w-2.5 h-2.5 hover:bg-gray-400 dark:hover:bg-gray-500 hover:scale-125'"
               :aria-label="`Go to product ${index + 1}`"
+              :aria-current="currentIndex === index ? 'true' : 'false'"
             />
           </div>
         </div>
@@ -196,41 +199,64 @@ const tabRefs: HTMLButtonElement[] = reactive([])
 const scrollContainer = ref<HTMLElement | null>(null)
 const currentIndex = ref(0)
 
+// Throttle scroll event for better performance
+let scrollTimeout: ReturnType<typeof setTimeout> | null = null
 const onScroll = () => {
-  if (!scrollContainer.value) return
+  if (scrollTimeout) return
+
+  scrollTimeout = setTimeout(() => {
+    scrollTimeout = null
+    updateCurrentIndex()
+  }, 50)
+}
+
+const updateCurrentIndex = () => {
+  if (!scrollContainer.value || filteredProducts.value.length === 0) return
 
   const container = scrollContainer.value
   const scrollLeft = container.scrollLeft
-  const itemWidth = container.scrollWidth / filteredProducts.value.length
 
-  currentIndex.value = Math.round(scrollLeft / itemWidth)
+  // Calculate which item is most visible in viewport
+  const children = Array.from(container.children) as HTMLElement[]
+  let closestIndex = 0
+  let minDistance = Infinity
+
+  children.forEach((child, index) => {
+    const childLeft = child.offsetLeft - container.offsetLeft
+    const distance = Math.abs(scrollLeft - childLeft)
+    if (distance < minDistance) {
+      minDistance = distance
+      closestIndex = index
+    }
+  })
+
+  currentIndex.value = closestIndex
 }
 
 const scrollCarousel = (direction: 'prev' | 'next') => {
-  if (!scrollContainer.value) return
+  if (!scrollContainer.value || filteredProducts.value.length === 0) return
 
-  const container = scrollContainer.value
-  const itemWidth = container.scrollWidth / filteredProducts.value.length
   const newIndex = direction === 'next'
     ? Math.min(currentIndex.value + 1, filteredProducts.value.length - 1)
     : Math.max(currentIndex.value - 1, 0)
 
-  container.scrollTo({
-    left: itemWidth * newIndex,
-    behavior: 'smooth'
-  })
+  scrollToIndex(newIndex)
 }
 
 const scrollToIndex = (index: number) => {
-  if (!scrollContainer.value) return
+  if (!scrollContainer.value || filteredProducts.value.length === 0) return
 
   const container = scrollContainer.value
-  const itemWidth = container.scrollWidth / filteredProducts.value.length
+  const children = Array.from(container.children) as HTMLElement[]
+  const targetChild = children[index]
 
-  container.scrollTo({
-    left: itemWidth * index,
-    behavior: 'smooth'
-  })
+  if (targetChild) {
+    const targetLeft = targetChild.offsetLeft - container.offsetLeft
+    container.scrollTo({
+      left: targetLeft,
+      behavior: 'smooth'
+    })
+  }
 }
 
 // Filter options
@@ -314,7 +340,9 @@ watch(activeFilter, async () => {
   currentIndex.value = 0
   await nextTick()
   if (scrollContainer.value) {
-    scrollContainer.value.scrollTo({ left: 0, behavior: 'smooth' })
+    scrollContainer.value.scrollTo({ left: 0, behavior: 'instant' })
+    // Update current index after a brief delay
+    setTimeout(updateCurrentIndex, 100)
   }
 })
 </script>
