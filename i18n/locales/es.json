@@ -1101,6 +1101,8 @@
     "bestSeller": "Más Vendido",
     "quickView": "Vista Rápida",
     "off": "descuento",
+    "saveAmount": "Ahorra €{amount}",
+    "total": "Total",
     "details": "Detalles",
     "origin": "Origen",
     "volume": "Volumen",
@@ -1285,6 +1287,10 @@
       "authentic": "Autenticidad garantizada desde productores moldavos.",
       "payments": "Pagos seguros con tarjetas principales y Bizum.",
       "support": "Atención personalizada en ES/EN/RO/RU."
+    },
+    "delivery": {
+      "fastDelivery": "Entrega Rápida",
+      "freeShipping": "Envío gratis desde €50"
     },
     "stock": {
       "eta": "Haz tu pedido hoy y saldrá antes de {date}",

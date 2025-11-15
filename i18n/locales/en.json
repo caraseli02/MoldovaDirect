@@ -1175,6 +1175,8 @@
     "quickView": "Quick View",
     "onlyLeft": "Only {count} left",
     "off": "off",
+    "saveAmount": "Save €{amount}",
+    "total": "Total",
     "details": "Details",
     "origin": "Origin",
     "volume": "Volume",
@@ -1376,6 +1378,10 @@
       "authentic": "Authenticity guaranteed from Moldovan producers.",
       "payments": "Secure payments with major cards and Bizum.",
       "support": "Personalised concierge support in EN/ES/RO/RU."
+    },
+    "delivery": {
+      "fastDelivery": "Fast Delivery",
+      "freeShipping": "Free shipping over €50"
     },
     "stock": {
       "eta": "Order today for dispatch by {date}",

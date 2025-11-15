@@ -58,48 +58,183 @@
       <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_360px] xl:grid-cols-[minmax(0,1fr)_420px]">
         <div class="space-y-10">
           <section class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-            <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_220px]">
-              <div>
-                <div class="relative overflow-hidden rounded-3xl bg-gray-100 dark:bg-gray-800">
+            <div class="space-y-4">
+              <!-- Main Image/Video Display -->
+              <div class="relative">
+                <!-- Video Display -->
+                <div v-if="selectedMediaType === 'video' && productVideo" class="overflow-hidden rounded-3xl bg-gray-100 dark:bg-gray-800">
+                  <video
+                    :src="productVideo"
+                    controls
+                    class="h-full w-full"
+                    preload="metadata"
+                    autoplay
+                  >
+                    Your browser does not support the video tag.
+                  </video>
+
+                  <!-- Badges for Video -->
+                  <div class="absolute left-4 top-4 flex flex-col gap-2">
+                    <span v-if="product.isFeatured" class="rounded-full bg-yellow-500 px-3 py-1 text-sm font-semibold text-white shadow-lg">
+                      {{ $t('products.featured') }}
+                    </span>
+                    <span v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)" class="rounded-full bg-red-500 px-3 py-1 text-sm font-semibold text-white shadow-lg">
+                      {{ $t('products.sale') }}
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Image Display -->
+                <div
+                  v-else
+                  class="group relative overflow-hidden rounded-3xl bg-gray-100 dark:bg-gray-800 cursor-zoom-in"
+                  @click="openLightbox"
+                >
                   <img
                     v-if="selectedImage"
                     :src="selectedImage.url"
                     :alt="getLocalizedText(selectedImage.altText) || getLocalizedText(product.name)"
-                    class="h-full w-full object-cover"
+                    class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                   <div v-else class="flex h-full min-h-[360px] items-center justify-center text-gray-400">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
                   </div>
-                  <div v-if="product.isFeatured" class="absolute left-4 top-4">
-                    <span class="rounded-full bg-yellow-500 px-3 py-1 text-sm font-semibold text-white">
+
+                  <!-- Badges -->
+                  <div class="absolute left-4 top-4 flex flex-col gap-2">
+                    <span v-if="product.isFeatured" class="rounded-full bg-yellow-500 px-3 py-1 text-sm font-semibold text-white shadow-lg">
                       {{ $t('products.featured') }}
                     </span>
-                  </div>
-                  <div v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)" class="absolute right-4 top-4">
-                    <span class="rounded-full bg-red-500 px-3 py-1 text-sm font-semibold text-white">
+                    <span v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)" class="rounded-full bg-red-500 px-3 py-1 text-sm font-semibold text-white shadow-lg">
                       {{ $t('products.sale') }}
                     </span>
                   </div>
+
+                  <!-- Zoom Indicator -->
+                  <div class="absolute bottom-4 right-4 rounded-full bg-black/60 p-2 opacity-0 transition-opacity group-hover:opacity-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+                    </svg>
+                  </div>
                 </div>
               </div>
-              <div class="space-y-3">
-                <UiButton
+
+              <!-- Thumbnail Gallery -->
+              <div class="grid grid-cols-4 gap-3">
+                <!-- Video Thumbnail (if available) -->
+                <button
+                  v-if="productVideo"
+                  type="button"
+                  class="group relative aspect-square overflow-hidden rounded-xl border-2 transition-all"
+                  :class="selectedMediaType === 'video'
+                    ? 'border-blue-500 ring-2 ring-blue-200 dark:border-blue-400 dark:ring-blue-900/40'
+                    : 'border-gray-200 hover:border-blue-300 dark:border-gray-700 dark:hover:border-blue-600'"
+                  @click="selectedMediaType = 'video'; selectedImageIndex = 0"
+                >
+                  <div class="flex h-full w-full items-center justify-center bg-gray-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z"/>
+                    </svg>
+                  </div>
+                  <div class="absolute inset-0 flex items-center justify-center bg-black/40">
+                    <span class="text-xs font-semibold text-white">VIDEO</span>
+                  </div>
+                </button>
+
+                <!-- Image Thumbnails -->
+                <button
                   v-for="(image, index) in product.images"
                   :key="image.id || index"
                   type="button"
-                  variant="outline"
-                  class="flex w-full items-center justify-start gap-3 rounded-2xl px-3 py-2 text-left transition hover:border-blue-500 hover:bg-blue-50 dark:hover:border-blue-400 dark:hover:bg-blue-900/30"
-                  :class="selectedImageIndex === index ? 'border-blue-500 bg-blue-50 text-blue-700 dark:border-blue-400 dark:bg-blue-900/40 dark:text-blue-100' : ''"
-                  @click="selectedImageIndex = index"
+                  class="group relative aspect-square overflow-hidden rounded-xl border-2 transition-all"
+                  :class="selectedImageIndex === index && selectedMediaType === 'image'
+                    ? 'border-blue-500 ring-2 ring-blue-200 dark:border-blue-400 dark:ring-blue-900/40'
+                    : 'border-gray-200 hover:border-blue-300 dark:border-gray-700 dark:hover:border-blue-600'"
+                  @click="selectedMediaType = 'image'; selectedImageIndex = index"
                 >
-                  <img :src="image.url" :alt="getLocalizedText(image.altText)" class="h-14 w-14 rounded-xl object-cover" />
-                  <span class="text-sm font-medium">{{ getLocalizedText(image.altText) || getLocalizedText(product.name) }}</span>
-                </UiButton>
+                  <img
+                    :src="image.url"
+                    :alt="getLocalizedText(image.altText)"
+                    class="h-full w-full object-cover transition-transform group-hover:scale-110"
+                  />
+                  <div
+                    v-if="selectedImageIndex === index && selectedMediaType === 'image'"
+                    class="absolute inset-0 bg-blue-500/10"
+                  ></div>
+                </button>
+              </div>
+
+              <!-- Video Player (if video is selected) -->
+              <div v-if="selectedMediaType === 'video' && productVideo" class="mt-4 overflow-hidden rounded-3xl">
+                <video
+                  :src="productVideo"
+                  controls
+                  class="h-full w-full"
+                  preload="metadata"
+                >
+                  Your browser does not support the video tag.
+                </video>
               </div>
             </div>
           </section>
+
+          <!-- Lightbox Modal -->
+          <Teleport to="body">
+            <div
+              v-if="showLightbox"
+              class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
+              @click="closeLightbox"
+            >
+              <button
+                type="button"
+                class="absolute right-4 top-4 rounded-full bg-white/10 p-2 text-white transition hover:bg-white/20"
+                @click="closeLightbox"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+
+              <div class="relative max-h-[90vh] max-w-[90vw]" @click.stop>
+                <img
+                  v-if="selectedImage"
+                  :src="selectedImage.url"
+                  :alt="getLocalizedText(selectedImage.altText) || getLocalizedText(product.name)"
+                  class="max-h-[90vh] max-w-full object-contain"
+                />
+
+                <!-- Navigation Arrows -->
+                <button
+                  v-if="selectedImageIndex > 0"
+                  type="button"
+                  class="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white backdrop-blur-sm transition hover:bg-white/20"
+                  @click="selectedImageIndex--"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+
+                <button
+                  v-if="selectedImageIndex < (product.images?.length || 0) - 1"
+                  type="button"
+                  class="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white backdrop-blur-sm transition hover:bg-white/20"
+                  @click="selectedImageIndex++"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Image Counter -->
+              <div class="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-white/10 px-4 py-2 text-sm text-white backdrop-blur-sm">
+                {{ selectedImageIndex + 1 }} / {{ product.images?.length || 0 }}
+              </div>
+            </div>
+          </Teleport>
 
           <section class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
             <div class="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
@@ -121,9 +256,17 @@
                     €{{ formatPrice(product.comparePrice) }}
                   </span>
                 </div>
-                <span v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)" class="inline-flex items-center gap-2 rounded-full bg-red-100 px-3 py-1 text-sm font-semibold text-red-600 dark:bg-red-900/30 dark:text-red-200">
-                  {{ Math.round((1 - Number(product.price) / Number(product.comparePrice)) * 100) }}% {{ $t('products.off') }}
-                </span>
+                <div v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)" class="flex flex-wrap items-center gap-2">
+                  <span class="inline-flex items-center gap-2 rounded-full bg-red-100 px-3 py-1 text-sm font-semibold text-red-600 dark:bg-red-900/30 dark:text-red-200">
+                    {{ Math.round((1 - Number(product.price) / Number(product.comparePrice)) * 100) }}% {{ $t('products.off') }}
+                  </span>
+                  <span class="inline-flex items-center gap-1 rounded-full bg-green-100 px-3 py-1 text-sm font-semibold text-green-700 dark:bg-green-900/30 dark:text-green-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                    </svg>
+                    {{ $t('products.saveAmount', { amount: formatPrice(Number(product.comparePrice) - Number(product.price)) }) }}
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -299,17 +442,41 @@
               {{ stockUrgencyMessage }}
             </p>
 
+            <!-- Prominent Delivery Info -->
+            <div class="mt-4 rounded-2xl border border-green-200 bg-green-50 p-4 dark:border-green-900/40 dark:bg-green-900/20">
+              <div class="flex items-start gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex-shrink-0 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
+                </svg>
+                <div class="flex-1">
+                  <p class="font-semibold text-green-900 dark:text-green-100">{{ $t('products.delivery.fastDelivery') }}</p>
+                  <p class="text-sm text-green-700 dark:text-green-300">{{ estimatedDelivery }}</p>
+                </div>
+              </div>
+            </div>
+
             <div class="mt-4 space-y-4">
-              <label class="block text-sm font-medium text-gray-900 dark:text-white">{{ $t('common.quantity') }}</label>
-              <select
-                v-model="selectedQuantity"
-                :disabled="(product.stockQuantity || 0) <= 0"
-                class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100 disabled:cursor-not-allowed disabled:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:focus:border-blue-400"
-              >
-                <option v-for="n in Math.min(10, Math.max(1, product.stockQuantity || 1))" :key="n" :value="n">
-                  {{ n }}
-                </option>
-              </select>
+              <div>
+                <label class="block text-sm font-medium text-gray-900 dark:text-white">{{ $t('common.quantity') }}</label>
+                <select
+                  v-model="selectedQuantity"
+                  :disabled="(product.stockQuantity || 0) <= 0"
+                  class="mt-2 w-full rounded-xl border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100 disabled:cursor-not-allowed disabled:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:focus:border-blue-400"
+                >
+                  <option v-for="n in Math.min(10, Math.max(1, product.stockQuantity || 1))" :key="n" :value="n">
+                    {{ n }}
+                  </option>
+                </select>
+              </div>
+
+              <!-- Total Price Preview -->
+              <div v-if="selectedQuantity > 1" class="rounded-xl border border-blue-200 bg-blue-50 p-3 dark:border-blue-900/40 dark:bg-blue-900/20">
+                <div class="flex items-center justify-between text-sm">
+                  <span class="font-medium text-blue-900 dark:text-blue-100">{{ $t('products.total') }}</span>
+                  <span class="text-lg font-bold text-blue-900 dark:text-blue-100">€{{ formatPrice(Number(product.price) * selectedQuantity) }}</span>
+                </div>
+              </div>
 
               <Button
                 data-testid="add-to-cart-button"
@@ -408,11 +575,43 @@
         </div>
       </section>
     </div>
+
+    <!-- Sticky Mobile CTA -->
+    <Teleport to="body">
+      <div
+        v-if="product && showStickyBar"
+        class="fixed bottom-0 left-0 right-0 z-40 border-t border-gray-200 bg-white p-4 shadow-lg dark:border-gray-800 dark:bg-gray-900 lg:hidden"
+      >
+        <div class="flex items-center gap-3">
+          <div class="flex-1">
+            <p class="text-sm text-gray-600 dark:text-gray-400">{{ getLocalizedText(product.name) }}</p>
+            <p class="text-xl font-bold text-gray-900 dark:text-white">€{{ formatPrice(product.price) }}</p>
+          </div>
+          <Button
+            data-testid="sticky-add-to-cart-button"
+            :disabled="(product.stockQuantity || 0) <= 0 || cartLoading"
+            class="flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-base font-semibold text-white transition disabled:cursor-not-allowed disabled:bg-gray-400"
+            :class="[
+              isProductInCart ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700',
+              cartLoading ? 'cursor-progress' : ''
+            ]"
+            @click="addToCart"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m2.6 8L6 21h13M7 13v4a1 1 0 001 1h9a1 1 0 001-1v-4M7 13L6 9" />
+            </svg>
+            <span class="hidden sm:inline">
+              {{ isProductInCart ? $t('products.inCart') : $t('products.addToCart') }}
+            </span>
+          </Button>
+        </div>
+      </div>
+    </Teleport>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useHead } from '#imports'
 import { Button } from '@/components/ui/button'
@@ -431,10 +630,17 @@ const selectedImageIndex = ref(0)
 const selectedQuantity = ref(1)
 const wishlistAdded = ref(false)
 const shareFeedback = ref<string | null>(null)
+const showLightbox = ref(false)
+const showStickyBar = ref(false)
+const selectedMediaType = ref<'image' | 'video'>('image')
 
 const recentlyViewedProducts = useState<ProductWithRelations[]>('recentlyViewedProducts', () => [])
 
 const productAttributes = computed(() => product.value?.attributes || {})
+
+const productVideo = computed(() => {
+  return productAttributes.value?.video_url || productAttributes.value?.videoUrl || null
+})
 
 const { addItem, loading: cartLoading, isInCart } = useCart()
 
@@ -614,6 +820,16 @@ const stockUrgencyMessage = computed(() => {
   }
   return ''
 })
+
+const openLightbox = () => {
+  showLightbox.value = true
+  document.body.style.overflow = 'hidden'
+}
+
+const closeLightbox = () => {
+  showLightbox.value = false
+  document.body.style.overflow = ''
+}
 
 const toggleWishlist = () => {
   wishlistAdded.value = !wishlistAdded.value
@@ -801,6 +1017,22 @@ watch(product, newProduct => {
     })
   }
 }, { immediate: true })
+
+// Handle sticky bar visibility on scroll
+if (process.client) {
+  const handleScroll = () => {
+    const scrollPosition = window.scrollY
+    showStickyBar.value = scrollPosition > 600
+  }
+
+  onMounted(() => {
+    window.addEventListener('scroll', handleScroll)
+  })
+
+  onBeforeUnmount(() => {
+    window.removeEventListener('scroll', handleScroll)
+  })
+}
 
 if (error.value?.statusCode === 404) {
   throw createError({

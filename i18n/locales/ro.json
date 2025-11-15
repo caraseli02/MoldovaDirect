@@ -845,6 +845,8 @@
     "featured": "Recomandat",
     "sale": "Ofertă",
     "off": "reducere",
+    "saveAmount": "Economisești €{amount}",
+    "total": "Total",
     "details": "Detalii",
     "origin": "Origine",
     "volume": "Volum",
@@ -1029,6 +1031,10 @@
       "authentic": "Autenticitate garantată de producători moldoveni.",
       "payments": "Plăți sigure cu cardurile principale și Bizum.",
       "support": "Suport personalizat în RO/ES/EN/RU."
+    },
+    "delivery": {
+      "fastDelivery": "Livrare Rapidă",
+      "freeShipping": "Transport gratuit peste €50"
     },
     "stock": {
       "eta": "Comandă azi pentru expediere până la {date}",
