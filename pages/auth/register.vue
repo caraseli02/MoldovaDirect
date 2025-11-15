@@ -30,6 +30,7 @@
                 v-if="error"
                 variant="destructive"
                 class="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20"
+                data-testid="auth-error"
               >
                 <AlertCircle class="h-5 w-5 text-red-500 dark:text-red-400" aria-hidden="true" />
                 <AlertDescription class="text-sm text-red-800 dark:text-red-300">
@@ -42,6 +43,7 @@
               <Alert
                 v-if="success"
                 class="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20"
+                data-testid="auth-success"
               >
                 <CheckCircle2 class="h-5 w-5 text-green-500 dark:text-green-400" aria-hidden="true" />
                 <AlertDescription class="text-sm text-green-800 dark:text-green-300">
@@ -70,6 +72,7 @@
                   autocorrect="on"
                   spellcheck="true"
                   required
+                  data-testid="name-input"
                   :aria-invalid="nameError ? 'true' : 'false'"
                   :aria-describedby="nameError ? 'name-error' : undefined"
                   :placeholder="$t('auth.fullName')"
@@ -101,6 +104,7 @@
                   spellcheck="false"
                   inputmode="email"
                   required
+                  data-testid="email-input"
                   :aria-invalid="emailError ? 'true' : 'false'"
                   :aria-describedby="emailError ? 'email-error' : undefined"
                   :placeholder="$t('auth.email')"
@@ -169,6 +173,7 @@
                     spellcheck="false"
                     required
                     minlength="8"
+                    data-testid="password-input"
                     :aria-invalid="passwordError ? 'true' : 'false'"
                     :aria-describedby="passwordError ? 'password-error' : 'password-requirements'"
                     :placeholder="$t('auth.password')"
@@ -326,6 +331,7 @@
             <Button
               type="submit"
               :disabled="loading || !isFormValid"
+              data-testid="register-button"
               class="relative w-full flex justify-center items-center py-4 px-4 min-h-[48px] text-base font-semibold rounded-xl shadow-lg"
               :aria-label="loading ? $t('auth.accessibility.creatingAccount') : $t('auth.accessibility.createAccountButton')"
               :aria-describedby="loading ? 'register-status' : undefined"
