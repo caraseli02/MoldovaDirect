@@ -221,7 +221,8 @@ const hoveredRegion = ref<WineRegion | null>(null)
 // Get localized text
 const getLocalizedText = (translations: any): string => {
   if (!translations) return ''
-  return translations[locale.value] || translations.en || Object.values(translations)[0] || ''
+  const localeCode = locale?.value || 'es'
+  return translations[localeCode] || translations.en || Object.values(translations)[0] || ''
 }
 
 // Computed: displayed regions (filtered or all)
