@@ -140,12 +140,12 @@
               ]"
             >
               <!-- Animated hamburger menu -->
-              <div class="w-6 h-6 flex flex-col justify-center items-center">
-                <span class="block w-6 h-0.5 bg-current transition-all duration-300 ease-in-out"
+              <div class="w-6 h-6 flex flex-col justify-center items-center pointer-events-none">
+                <span class="block w-6 h-0.5 bg-current transition-all duration-300 ease-in-out pointer-events-none"
                   :class="mobileMenuOpen ? 'rotate-45 translate-y-1' : '-translate-y-1'"></span>
-                <span class="block w-6 h-0.5 bg-current transition-all duration-300 ease-in-out"
+                <span class="block w-6 h-0.5 bg-current transition-all duration-300 ease-in-out pointer-events-none"
                   :class="mobileMenuOpen ? 'opacity-0' : 'opacity-100'"></span>
-                <span class="block w-6 h-0.5 bg-current transition-all duration-300 ease-in-out"
+                <span class="block w-6 h-0.5 bg-current transition-all duration-300 ease-in-out pointer-events-none"
                   :class="mobileMenuOpen ? '-rotate-45 -translate-y-1' : 'translate-y-1'"></span>
               </div>
             </Button>
