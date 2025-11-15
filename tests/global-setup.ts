@@ -13,12 +13,38 @@ process.env.PLAYWRIGHT_TEST = 'true'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
+/**
+ * Wait for the dev server to be ready
+ */
+async function waitForServer(baseURL: string, timeout = 120000) {
+  const startTime = Date.now()
+  console.log(`⏳ Waiting for server at ${baseURL}...`)
+
+  while (Date.now() - startTime < timeout) {
+    try {
+      const response = await fetch(baseURL)
+      if (response.status < 500) {
+        console.log('✅ Server is ready!')
+        return
+      }
+    } catch (error) {
+      // Server not ready yet, continue waiting
+    }
+    await new Promise(resolve => setTimeout(resolve, 500))
+  }
+
+  throw new Error(`Server at ${baseURL} did not become ready within ${timeout}ms`)
+}
+
 async function globalSetup(config: FullConfig) {
   const { baseURL } = config.projects[0].use
 
   if (!baseURL) {
     throw new Error('baseURL not configured in playwright.config.ts')
   }
+
+  // Wait for the dev server to be ready
+  await waitForServer(baseURL)
 
   const browser = await chromium.launch()
 
@@ -49,18 +75,113 @@ async function globalSetup(config: FullConfig) {
 
       console.log(`→ Authenticating user for locale: ${locale}`)
 
-      // Navigate to login page
-      await page.goto('/auth/login')
+      // Navigate to login page (without locale prefix, app will handle it)
+      const loginUrl = `${baseURL}/auth/login`
+      console.log(`  Navigating to: ${loginUrl}`)
+      await page.goto(loginUrl, { waitUntil: 'networkidle' })
+
+      // Wait for client-side hydration
+      console.log(`  Waiting for hydration...`)
+      await page.waitForLoadState('networkidle')
+      await page.waitForTimeout(2000) // Give time for hydration
+
+      // Debug: Check what attributes the email input has
+      const inputs = await page.locator('input[type="email"]').all()
+      console.log(`  Found ${inputs.length} email input(s)`)
+      for (let i = 0; i < inputs.length; i++) {
+        const attrs = await inputs[i].evaluate(el => {
+          const attributes: Record<string, string> = {}
+          for (const attr of el.attributes) {
+            attributes[attr.name] = attr.value
+          }
+          return attributes
+        })
+        console.log(`  Email input #${i} attributes:`, JSON.stringify(attrs, null, 2))
+      }
+
+      // Try to find input by data-testid first, fallback to type=email
+      let emailInput = page.locator('[data-testid="email-input"]')
+      const hasTestId = await emailInput.count() > 0
+      console.log(`  Has data-testid="email-input": ${hasTestId}`)
+
+      if (!hasTestId) {
+        console.log(`  ⚠️  Falling back to input[type="email"]`)
+        emailInput = page.locator('input[type="email"]').first()
+      }
 
       // Fill in credentials
-      await page.fill('[data-testid="email-input"]', testEmail)
-      await page.fill('[data-testid="password-input"]', testPassword)
+      await emailInput.click()
+      await emailInput.fill(testEmail)
 
-      // Submit login form
-      await page.click('[data-testid="login-button"]')
+      // Verify email was filled correctly
+      const filledEmail = await emailInput.inputValue()
+      console.log(`  Filled email: "${filledEmail}"`)
+      await page.waitForTimeout(100)
+
+      // Password input - try data-testid first, fallback to type=password
+      let passwordInput = page.locator('[data-testid="password-input"]')
+      const hasPasswordTestId = await passwordInput.count() > 0
+      if (!hasPasswordTestId) {
+        console.log(`  ⚠️  Falling back to input[type="password"]`)
+        passwordInput = page.locator('input[type="password"]').first()
+      }
+
+      await passwordInput.click()
+      await passwordInput.fill(testPassword)
+
+      // Verify password was filled correctly (length check for security)
+      const filledPassword = await passwordInput.inputValue()
+      console.log(`  Password filled: ${filledPassword.length} characters (expected: ${testPassword.length})`)
+      console.log(`  Password matches: ${filledPassword === testPassword}`)
+
+      await page.waitForTimeout(500)
+
+      // Login button - try data-testid first, fallback to button text
+      let loginButton = page.locator('[data-testid="login-button"]')
+      const hasButtonTestId = await loginButton.count() > 0
+      if (!hasButtonTestId) {
+        console.log(`  ⚠️  Falling back to button with type=submit`)
+        loginButton = page.locator('button[type="submit"]').first()
+      }
+
+      await loginButton.waitFor({ state: 'visible' })
+
+      // Submit login form (force click to bypass validation for global setup)
+      console.log(`  Submitting login form...`)
+      await loginButton.click({ force: true })
+
+      // Wait a bit for navigation
+      await page.waitForTimeout(3000)
+
+      // Check current URL
+      const urlAfterSubmit = page.url()
+      console.log(`  URL after submit: ${urlAfterSubmit}`)
+
+      // Check for error messages
+      const errorAlert = page.locator('[data-testid="auth-error"]')
+      const hasError = await errorAlert.count() > 0
+      if (hasError) {
+        const errorText = await errorAlert.textContent()
+        console.log(`  ❌ Login error: ${errorText}`)
+        throw new Error(`Login failed: ${errorText}`)
+      }
+
+      // Take screenshot if still on login page
+      if (urlAfterSubmit.includes('/auth/login')) {
+        const screenshotPath = path.join(__dirname, `login-failed-${locale}.png`)
+        await page.screenshot({ path: screenshotPath, fullPage: true })
+        console.log(`  📸 Screenshot saved to: ${screenshotPath}`)
+      }
 
       // Wait for successful login - should redirect to account or dashboard
-      await page.waitForURL(/^\/(account|dashboard)/, { timeout: 10000 })
+      // Check if already redirected, otherwise wait
+      const currentUrl = page.url()
+      if (!currentUrl.match(/\/(account|dashboard)/)) {
+        await page.waitForURL(/\/(account|dashboard)/, { timeout: 10000 })
+      }
+
+      const finalUrl = page.url()
+      console.log(`  ✅ Login successful! Redirected to: ${finalUrl}`)
 
       // Save authenticated storage state
       const storageFile = path.join(authDir, `user-${locale}.json`)
