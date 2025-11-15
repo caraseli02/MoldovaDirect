@@ -29,11 +29,11 @@
               <Alert
                 v-if="displayError"
                 variant="destructive"
-                class="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20"
+                class="border-red-200 bg-red-50 dark:border-red-600 dark:bg-red-950/50"
                 data-testid="auth-error"
               >
-                <AlertCircle class="h-5 w-5 text-red-500 dark:text-red-400" aria-hidden="true" />
-                <AlertDescription class="text-sm text-red-800 dark:text-red-200">
+                <AlertCircle class="h-5 w-5 text-red-500 dark:text-red-300" aria-hidden="true" />
+                <AlertDescription class="text-sm text-red-800 dark:text-red-100">
                   {{ displayError }}
                 </AlertDescription>
               </Alert>
