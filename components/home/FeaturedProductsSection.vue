@@ -84,11 +84,9 @@
       <!-- Products - Carousel on mobile, Grid on desktop -->
       <div v-else-if="filteredProducts.length">
         <!-- Mobile: Horizontal carousel with native scroll -->
-        <div class="mt-12 md:hidden relative">
+        <div class="mt-12 md:hidden">
           <div
-            ref="scrollContainer"
             class="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-6 -mx-4 px-4 scrollbar-hide"
-            @scroll="onScroll"
           >
             <div
               v-for="product in filteredProducts"
@@ -101,42 +99,6 @@
             >
               <ProductCard :product="product" />
             </div>
-          </div>
-
-          <!-- Navigation Arrows -->
-          <button
-            v-show="currentIndex > 0"
-            @click.prevent.stop="scrollCarousel('prev')"
-            type="button"
-            class="absolute left-2 top-[40%] -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white shadow-xl border border-gray-300 dark:bg-gray-800 dark:border-gray-600 flex items-center justify-center text-gray-800 dark:text-gray-100 hover:bg-primary-600 hover:text-white hover:border-primary-600 dark:hover:bg-primary-500 transition-all duration-200 hover:scale-110 active:scale-95 cursor-pointer"
-            aria-label="Previous products"
-          >
-            <commonIcon name="lucide:chevron-left" class="h-6 w-6 pointer-events-none" />
-          </button>
-          <button
-            v-show="currentIndex < filteredProducts.length - 1"
-            @click.prevent.stop="scrollCarousel('next')"
-            type="button"
-            class="absolute right-2 top-[40%] -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white shadow-xl border border-gray-300 dark:bg-gray-800 dark:border-gray-600 flex items-center justify-center text-gray-800 dark:text-gray-100 hover:bg-primary-600 hover:text-white hover:border-primary-600 dark:hover:bg-primary-500 transition-all duration-200 hover:scale-110 active:scale-95 cursor-pointer"
-            aria-label="Next products"
-          >
-            <commonIcon name="lucide:chevron-right" class="h-6 w-6 pointer-events-none" />
-          </button>
-
-          <!-- Dot Indicators -->
-          <div class="flex justify-center gap-2.5 mt-8">
-            <button
-              v-for="(product, index) in filteredProducts"
-              :key="`dot-${product.id}`"
-              @click.prevent.stop="scrollToIndex(index)"
-              type="button"
-              class="transition-all duration-300 rounded-full cursor-pointer"
-              :class="currentIndex === index
-                ? 'bg-primary-600 dark:bg-primary-500 w-8 h-2.5'
-                : 'bg-gray-300 dark:bg-gray-600 w-2.5 h-2.5 hover:bg-gray-400 dark:hover:bg-gray-500 hover:scale-125'"
-              :aria-label="`Go to product ${index + 1}`"
-              :aria-current="currentIndex === index ? 'true' : 'false'"
-            />
           </div>
         </div>
 
@@ -197,86 +159,6 @@ const activeFilter = ref('all')
 
 // Tab refs for keyboard navigation
 const tabRefs: HTMLButtonElement[] = reactive([])
-
-// Native scroll carousel state
-const scrollContainer = ref<HTMLElement | null>(null)
-const currentIndex = ref(0)
-
-// Use requestAnimationFrame for smooth scroll tracking
-let rafId: number | null = null
-const onScroll = () => {
-  if (rafId) return
-
-  rafId = requestAnimationFrame(() => {
-    updateCurrentIndex()
-    rafId = null
-  })
-}
-
-const updateCurrentIndex = () => {
-  if (!scrollContainer.value || filteredProducts.value.length === 0) return
-
-  const container = scrollContainer.value
-  const scrollLeft = container.scrollLeft
-  const containerWidth = container.clientWidth
-
-  // Find which item is most in view (center of viewport)
-  const children = Array.from(container.children) as HTMLElement[]
-  const centerPosition = scrollLeft + containerWidth / 2
-
-  let closestIndex = 0
-  let minDistance = Infinity
-
-  children.forEach((child, index) => {
-    const childCenter = child.offsetLeft + child.offsetWidth / 2
-    const distance = Math.abs(centerPosition - childCenter)
-
-    if (distance < minDistance) {
-      minDistance = distance
-      closestIndex = index
-    }
-  })
-
-  currentIndex.value = closestIndex
-}
-
-const scrollCarousel = (direction: 'prev' | 'next') => {
-  if (!scrollContainer.value || filteredProducts.value.length === 0) return
-
-  const newIndex = direction === 'next'
-    ? Math.min(currentIndex.value + 1, filteredProducts.value.length - 1)
-    : Math.max(currentIndex.value - 1, 0)
-
-  scrollToIndex(newIndex)
-}
-
-const scrollToIndex = (index: number) => {
-  if (!scrollContainer.value || filteredProducts.value.length === 0) return
-
-  const container = scrollContainer.value
-  const children = Array.from(container.children) as HTMLElement[]
-
-  // Validate index
-  if (index < 0 || index >= children.length) return
-
-  const targetChild = children[index] as HTMLElement
-
-  if (targetChild) {
-    // Update index immediately for instant visual feedback
-    currentIndex.value = index
-
-    // Calculate scroll position manually for more reliable scrolling
-    const containerRect = container.getBoundingClientRect()
-    const childRect = targetChild.getBoundingClientRect()
-    const scrollLeft = targetChild.offsetLeft - container.offsetLeft
-
-    // Scroll to the calculated position
-    container.scrollTo({
-      left: scrollLeft,
-      behavior: 'smooth'
-    })
-  }
-}
 
 // Filter options
 const filters = computed(() => [
@@ -352,35 +234,6 @@ const filteredProducts = computed(() => {
   }
 
   return props.products
-})
-
-// Watch for filter changes and reset scroll position
-watch(activeFilter, async () => {
-  // Reset index immediately
-  currentIndex.value = 0
-
-  // Wait for DOM to update with new filtered products
-  await nextTick()
-
-  if (scrollContainer.value) {
-    // Scroll to start instantly (no animation)
-    scrollContainer.value.scrollTo({ left: 0, behavior: 'auto' })
-
-    // Update current index after DOM settles
-    await nextTick()
-    setTimeout(() => {
-      if (scrollContainer.value) {
-        updateCurrentIndex()
-      }
-    }, 150)
-  }
-})
-
-// Initialize current index when component mounts
-onMounted(() => {
-  if (scrollContainer.value) {
-    updateCurrentIndex()
-  }
 })
 </script>
 
