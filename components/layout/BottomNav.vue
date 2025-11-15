@@ -1,6 +1,5 @@
 <template>
   <nav
-    v-if="isMobile"
     class="fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 safe-area-bottom md:hidden"
     role="navigation"
     aria-label="Primary mobile navigation"
@@ -142,11 +141,9 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useCart } from '@/composables/useCart'
-import { useDevice } from '@/composables/useDevice'
 
 const route = useRoute()
 const { itemCount } = useCart()
-const { isMobile } = useDevice()
 
 // Check if current route matches
 const isActive = (path: string) => {
