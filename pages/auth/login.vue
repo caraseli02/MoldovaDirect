@@ -33,7 +33,7 @@
                 data-testid="auth-error"
               >
                 <AlertCircle class="h-5 w-5 text-red-500 dark:text-red-400" aria-hidden="true" />
-                <AlertDescription class="text-sm text-red-800 dark:text-red-300">
+                <AlertDescription class="text-sm text-red-800 dark:text-red-200">
                   {{ displayError }}
                 </AlertDescription>
               </Alert>
