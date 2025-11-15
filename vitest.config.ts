@@ -96,7 +96,7 @@ export default defineConfig({
       '~~': resolve(__dirname, '.'),
       '@@': resolve(__dirname, '.'),
       '#app': resolve(__dirname, './.nuxt'),
-      'pinia': resolve(__dirname, './node_modules/.pnpm/pinia@3.0.4_typescript@5.9.3_vue@3.5.22_typescript@5.9.3_/node_modules/pinia'),
+      'pinia': resolve(__dirname, './node_modules/.pnpm/pinia@3.0.4_typescript@5.9.3_vue@3.5.24_typescript@5.9.3_/node_modules/pinia'),
     },
     dedupe: ['vue', 'pinia', '@vue/runtime-core'],
   },
