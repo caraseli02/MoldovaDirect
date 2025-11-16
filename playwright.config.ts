@@ -26,7 +26,8 @@ export default defineConfig({
   ].filter(Boolean),
   
   use: {
-    baseURL: process.env.BASE_URL || 'http://localhost:3000',
+    // Support both BASE_URL and PLAYWRIGHT_TEST_BASE_URL for CI/CD flexibility
+    baseURL: process.env.PLAYWRIGHT_TEST_BASE_URL || process.env.BASE_URL || 'http://localhost:3000',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
@@ -90,7 +91,8 @@ export default defineConfig({
     },
   ],
 
-  webServer: {
+  // Only start web server if not testing against external URL (like Vercel preview)
+  webServer: process.env.PLAYWRIGHT_TEST_BASE_URL ? undefined : {
     command: 'npm run dev',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,

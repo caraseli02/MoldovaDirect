@@ -6,15 +6,15 @@
       <CommonErrorBoundary :fallback-action="() => navigateTo(localePath('/products'))"
         fallback-action-text="Continuar comprando" @error="handleCartError">
         <!-- Loading State -->
-        <div v-if="loading" class="text-center py-20">
-          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
+        <div v-if="loading" class="text-center py-20" role="status" :aria-label="$t('common.loading')">
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto" aria-hidden="true"></div>
           <p class="mt-4 text-gray-600 dark:text-gray-400">{{ $t('common.loading') }}</p>
         </div>
 
         <!-- Empty Cart -->
-        <div v-else-if="isEmpty" class="text-center py-20" data-testid="empty-cart-message">
+        <div v-else-if="isEmpty" class="text-center py-20" data-testid="empty-cart-message" role="status">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400 dark:text-gray-500 mx-auto mb-4"
-            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
           </svg>
@@ -22,7 +22,8 @@
           }}</h2>
           <p class="text-gray-600 dark:text-gray-400 mb-6 px-4">{{ $t('products.cartEmptyDescription') }}</p>
           <NuxtLink :to="localePath('/products')"
-            class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors">
+            :aria-label="$t('common.continueShopping')"
+            class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors min-h-[44px] inline-flex items-center justify-center focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2">
             {{ $t('common.continueShopping') }}
           </NuxtLink>
         </div>
@@ -105,15 +106,21 @@
                 </div>
 
                 <div class="mt-6 space-y-3">
-                  <UiButton @click="goToCheckout"
+                  <UiButton
+                    @click="goToCheckout"
                     size="lg"
-                    class="w-full bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium cursor-pointer"
-                    :disabled="loading || isEmpty">
+                    :aria-label="$t('common.proceedToCheckout')"
+                    class="w-full bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium cursor-pointer min-h-[44px] focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+                    :disabled="loading || isEmpty"
+                  >
                     {{ $t('common.checkout') }}
                   </UiButton>
 
-                  <NuxtLink :to="localePath('/products')"
-                    class="block w-full text-center py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-gray-900 dark:text-white">
+                  <NuxtLink
+                    :to="localePath('/products')"
+                    :aria-label="$t('common.continueShopping')"
+                    class="block w-full text-center py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-gray-900 dark:text-white min-h-[44px] inline-flex items-center justify-center focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2"
+                  >
                     {{ $t('common.continueShopping') }}
                   </NuxtLink>
                 </div>
@@ -132,14 +139,16 @@
         <div class="mb-3">
           <UiButton
             variant="ghost"
+            :aria-label="showMobileSummary ? $t('common.hideOrderSummary') : $t('common.showOrderSummary')"
+            :aria-expanded="showMobileSummary"
             @click="showMobileSummary = !showMobileSummary"
-            class="w-full flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 p-2 h-auto"
+            class="w-full flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 p-2 h-auto min-h-[44px]"
           >
             <span>{{ $t('common.orderSummary') }}</span>
             <div class="flex items-center space-x-2">
               <span class="font-semibold text-gray-900 dark:text-white">{{ formattedSubtotal }}</span>
               <svg :class="['w-4 h-4 transition-transform', showMobileSummary ? 'rotate-180' : '']" fill="none"
-                stroke="currentColor" viewBox="0 0 24 24">
+                stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
               </svg>
             </div>
@@ -160,14 +169,20 @@
 
         <!-- Action Buttons -->
         <div class="space-y-2">
-          <UiButton @click="goToCheckout"
-            :class="cn('cursor-pointer')"
-            :disabled="loading || isEmpty">
+          <UiButton
+            @click="goToCheckout"
+            :class="cn('cursor-pointer min-h-[44px] focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2')"
+            :aria-label="$t('common.proceedToCheckout')"
+            :disabled="loading || isEmpty"
+          >
             {{ $t('common.checkout') }}
           </UiButton>
 
-          <NuxtLink :to="localePath('/products')"
-            class="block w-full text-center py-3 px-4 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-gray-900 dark:text-white">
+          <NuxtLink
+            :to="localePath('/products')"
+            :aria-label="$t('common.continueShopping')"
+            class="block w-full text-center py-3 px-4 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-gray-900 dark:text-white min-h-[44px] inline-flex items-center justify-center focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2"
+          >
             {{ $t('common.continueShopping') }}
           </NuxtLink>
         </div>
