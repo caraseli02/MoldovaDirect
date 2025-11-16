@@ -31,7 +31,10 @@ for file in $STAGED_MD_FILES; do
   is_allowed=false
 
   for allowed in "${ALLOWED_FILES[@]}"; do
-    if [ "${filename,,}" = "${allowed,,}" ]; then
+    # Use tr for case-insensitive comparison (compatible with bash 3.2)
+    filename_lower=$(echo "$filename" | tr '[:upper:]' '[:lower:]')
+    allowed_lower=$(echo "$allowed" | tr '[:upper:]' '[:lower:]')
+    if [ "$filename_lower" = "$allowed_lower" ]; then
       is_allowed=true
       break
     fi
