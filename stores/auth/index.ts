@@ -421,7 +421,12 @@ export const useAuthStore = defineStore('auth', {
           const { data: factors } = await supabase.auth.mfa.listFactors()
           const verifiedFactors = factors?.totp?.filter(f => f.status === 'verified') || []
 
-          if (verifiedFactors.length > 0) {
+          // Skip MFA in development for test accounts
+          const isDev = process.env.NODE_ENV === 'development'
+          const isTestAccount = credentials.email.includes('@moldovadirect.com')
+          const shouldSkipMFA = isDev && isTestAccount
+
+          if (verifiedFactors.length > 0 && !shouldSkipMFA) {
             // User has MFA enabled, redirect to MFA verification page
             const firstFactor = verifiedFactors[0]
             await this.challengeMFA(firstFactor.id)
