@@ -36,7 +36,15 @@ describe('Admin Middleware', () => {
             }))
           }))
         }))
-      }))
+      })),
+      auth: {
+        mfa: {
+          getAuthenticatorAssuranceLevel: vi.fn(async () => ({
+            data: { currentLevel: 'aal2' },
+            error: null
+          }))
+        }
+      }
     }
 
     // Mock Nuxt composables
