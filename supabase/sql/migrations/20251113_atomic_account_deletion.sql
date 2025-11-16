@@ -104,7 +104,7 @@ BEGIN
   DELETE FROM profiles
   WHERE id = target_user_id;
 
-  GET DIAGNOSTICS profile_deleted = FOUND;
+  profile_deleted := FOUND;
 
   -- 11. Delete from auth.users (removes email, phone, password, metadata)
   -- Note: This must be done last as other queries may reference auth.users
