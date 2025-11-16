@@ -299,7 +299,8 @@
  * - Handle user interactions
  */
 
-import type { ProductFilters, ProductWithRelations } from '~/types'
+import type { ProductFilters, ProductWithRelations, ProductSortOption } from '~/types'
+import type { FilterChip } from '~/composables/useProductFilters'
 import { ref, computed, onMounted, onUnmounted, onBeforeUnmount, nextTick, watch, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useDebounceFn } from '@vueuse/core'
@@ -403,13 +404,13 @@ const handleSearchInput = useDebounceFn(() => {
     search(searchQuery.value.trim(), {
       ...filters.value,
       page: 1,
-      sort: sortBy.value as any
+      sort: sortBy.value
     }, searchAbortController.signal)
   } else {
     fetchProducts({
       ...filters.value,
       page: 1,
-      sort: sortBy.value as any
+      sort: sortBy.value
     }, searchAbortController.signal)
   }
 }, 300)
@@ -417,7 +418,7 @@ const handleSearchInput = useDebounceFn(() => {
 const handleSortChange = () => {
   const currentFilters = {
     ...filters.value,
-    sort: sortBy.value as any,
+    sort: sortBy.value,
     page: 1
   }
 
@@ -435,7 +436,7 @@ const handleFiltersUpdate = (newFilters: Partial<ProductFilters>) => {
 const handleApplyFilters = (closePanel = false) => {
   const currentFilters = {
     ...filters.value,
-    sort: sortBy.value as any,
+    sort: sortBy.value,
     page: 1
   }
 
@@ -460,12 +461,23 @@ const clearAllFilters = () => {
 /**
  * Navigate to a specific page
  * Handles both search and filter scenarios
+ * Validates page boundaries for security
  */
 const goToPage = (page: number) => {
+  // Validate page number to prevent attacks
+  const validPage = Math.max(1, Math.min(
+    Math.floor(page),
+    pagination.value.totalPages || 1
+  ))
+
+  if (validPage !== page) {
+    console.warn(`Invalid page ${page}, using ${validPage}`)
+  }
+
   const currentFilters = {
     ...filters.value,
-    sort: sortBy.value as any,
-    page
+    sort: sortBy.value,
+    page: validPage
   }
 
   if (searchQuery.value.trim()) {
@@ -485,7 +497,7 @@ const refreshProducts = async () => {
   try {
     const currentFilters = {
       ...filters.value,
-      sort: sortBy.value as any,
+      sort: sortBy.value,
       page: 1
     }
 
@@ -527,7 +539,7 @@ const loadMoreProducts = async () => {
     const nextPage = pagination.value.page + 1
     const currentFilters = {
       ...filters.value,
-      sort: sortBy.value as any,
+      sort: sortBy.value,
       page: nextPage
     }
 
@@ -544,9 +556,9 @@ const loadMoreProducts = async () => {
 /**
  * Handle filter chip removal
  */
-const removeActiveChip = (chip: { type: string; attributeKey?: string; attributeValue?: string }) => {
+const removeActiveChip = (chip: FilterChip) => {
   const nextFilters = removeFilterChip(chip)
-  fetchProducts({ ...nextFilters, page: 1, sort: sortBy.value as any })
+  fetchProducts({ ...nextFilters, page: 1, sort: sortBy.value })
 }
 
 const editorialStories = computed(() => {
@@ -637,6 +649,13 @@ onBeforeUnmount(() => {
 })
 
 onUnmounted(() => {
+  // Cancel any pending search requests to prevent memory leaks
+  if (searchAbortController) {
+    searchAbortController.abort()
+    searchAbortController = null
+  }
+
+  // Cleanup mobile interactions
   mobileInteractions.cleanup()
 })
 </script>

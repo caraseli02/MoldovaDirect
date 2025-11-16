@@ -21,7 +21,7 @@
 import { ref, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import type { ProductFilters } from '~/types'
+import type { ProductFilters, CategoryWithChildren } from '~/types'
 import type { Ref } from 'vue'
 
 export interface FilterState extends ProductFilters {
@@ -37,16 +37,51 @@ export interface FilterChip {
   attributeValue?: string
 }
 
-export const useProductFilters = (categoriesTree?: Ref<any[]>) => {
+interface CategoryNode {
+  id: number
+  slug: string
+  name: Record<string, string>
+  productCount?: number
+  children?: CategoryNode[]
+}
+
+interface AvailableCategory {
+  id: number
+  name: Record<string, string>
+  slug: string
+  productCount: number
+  children: AvailableCategory[]
+}
+
+export function useProductFilters(categoriesTree?: Ref<CategoryWithChildren[]>) {
   const router = useRouter()
   const route = useRoute()
   const { t, locale } = useI18n()
 
+  /**
+   * Parse and validate price parameter from URL query
+   * Prevents DoS attacks with invalid numbers (NaN, Infinity, negative, too large)
+   */
+  const parsePrice = (value: string | string[] | undefined): number | undefined => {
+    if (!value || Array.isArray(value)) return undefined
+
+    const num = Number(value)
+
+    // Validate: must be finite, positive, and within reasonable range
+    if (!Number.isFinite(num) || num < 0 || num > 999999) {
+      console.warn(`Invalid price value: ${value}`)
+      return undefined
+    }
+
+    // Round to 2 decimal places
+    return Math.round(num * 100) / 100
+  }
+
   // Initialize filters from URL query parameters
   const filters = ref<FilterState>({
     category: route.query.category as string | undefined,
-    priceMin: route.query.priceMin ? Number(route.query.priceMin) : undefined,
-    priceMax: route.query.priceMax ? Number(route.query.priceMax) : undefined,
+    priceMin: parsePrice(route.query.priceMin),
+    priceMax: parsePrice(route.query.priceMax),
     inStock: route.query.inStock === 'true',
     featured: route.query.featured === 'true',
     attributes: parseAttributesFromQuery(route.query.attributes as string | undefined)
@@ -81,14 +116,53 @@ export const useProductFilters = (categoriesTree?: Ref<any[]>) => {
   const hasActiveFilters = computed(() => activeFilterCount.value > 0)
 
   /**
-   * Parse attributes from URL query string
+   * Parse and validate attributes from URL query string
+   * Prevents prototype pollution and JSON injection attacks
    */
   function parseAttributesFromQuery(attributesQuery?: string): Record<string, string[]> | undefined {
     if (!attributesQuery) return undefined
 
     try {
-      return JSON.parse(attributesQuery)
-    } catch {
+      const parsed = JSON.parse(attributesQuery)
+
+      // Validate: must be an object
+      if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+        console.warn('Invalid attributes structure: must be an object')
+        return undefined
+      }
+
+      // Prevent prototype pollution attacks
+      const dangerousKeys = ['__proto__', 'constructor', 'prototype']
+      if (Object.keys(parsed).some(key => dangerousKeys.includes(key))) {
+        console.warn('Attempted prototype pollution detected in attributes')
+        return undefined
+      }
+
+      // Validate structure: all values must be string arrays
+      const validated: Record<string, string[]> = {}
+      for (const [key, value] of Object.entries(parsed)) {
+        // Skip dangerous keys again for safety
+        if (dangerousKeys.includes(key)) continue
+
+        // Validate value is array
+        if (!Array.isArray(value)) {
+          console.warn(`Invalid attribute value for ${key}: must be array`)
+          continue
+        }
+
+        // Validate all array elements are strings with max length
+        const validStrings = value.filter(v =>
+          typeof v === 'string' && v.length > 0 && v.length <= 100
+        )
+
+        if (validStrings.length > 0) {
+          validated[key] = validStrings
+        }
+      }
+
+      return Object.keys(validated).length > 0 ? validated : undefined
+    } catch (error) {
+      console.warn('Failed to parse attributes query:', error)
       return undefined
     }
   }
@@ -104,13 +178,14 @@ export const useProductFilters = (categoriesTree?: Ref<any[]>) => {
   /**
    * Build category lookup Map for O(1) access instead of O(n) tree traversal
    * Performance optimization for large category trees
+   * Memoized to prevent unnecessary rebuilds
    */
   const categoriesLookup = computed(() => {
     if (!categoriesTree) return new Map<string | number, string>()
 
     const map = new Map<string | number, string>()
 
-    const buildMap = (nodes: any[]) => {
+    const buildMap = (nodes: CategoryWithChildren[]): void => {
       nodes.forEach(node => {
         // Get localized name with fallback
         const name = node.name?.[locale.value] || node.name?.es || Object.values(node.name || {})[0] || ''
@@ -208,7 +283,7 @@ export const useProductFilters = (categoriesTree?: Ref<any[]>) => {
    * Generate available filters based on categories tree
    */
   const availableFilters = computed(() => {
-    const convertCategories = (cats: any[]): any[] => {
+    const convertCategories = (cats: CategoryWithChildren[]): AvailableCategory[] => {
       return cats.map(cat => ({
         id: cat.id,
         name: cat.name,
@@ -275,7 +350,7 @@ export const useProductFilters = (categoriesTree?: Ref<any[]>) => {
   }
 
   /**
-   * Remove a specific attribute filter
+   * Remove a specific attribute filter with null safety
    */
   const removeAttributeFilter = (attributeKey: string, value?: string) => {
     if (!filters.value.attributes) return
@@ -285,8 +360,9 @@ export const useProductFilters = (categoriesTree?: Ref<any[]>) => {
       const values = filters.value.attributes[attributeKey] || []
       filters.value.attributes[attributeKey] = values.filter(v => v !== value)
 
-      // Remove attribute key if no values left
-      if (filters.value.attributes[attributeKey].length === 0) {
+      // Safe null check: verify attribute still exists before checking length
+      const updatedValues = filters.value.attributes[attributeKey]
+      if (updatedValues && updatedValues.length === 0) {
         delete filters.value.attributes[attributeKey]
       }
     } else {
@@ -295,7 +371,7 @@ export const useProductFilters = (categoriesTree?: Ref<any[]>) => {
     }
 
     // Clean up if no attributes left
-    if (Object.keys(filters.value.attributes).length === 0) {
+    if (filters.value.attributes && Object.keys(filters.value.attributes).length === 0) {
       filters.value.attributes = undefined
     }
 
@@ -439,21 +515,28 @@ export const useProductFilters = (categoriesTree?: Ref<any[]>) => {
   }
 
   /**
-   * Watch for route changes to update filters
+   * Watch for filter-related route changes only (performance optimization)
+   * Avoids re-rendering on unrelated query param changes (utm_source, focus, etc.)
    */
   watch(
-    () => route.query,
+    () => ({
+      category: route.query.category,
+      priceMin: route.query.priceMin,
+      priceMax: route.query.priceMax,
+      inStock: route.query.inStock,
+      featured: route.query.featured,
+      attributes: route.query.attributes
+    }),
     (newQuery) => {
       filters.value = {
         category: newQuery.category as string | undefined,
-        priceMin: newQuery.priceMin ? Number(newQuery.priceMin) : undefined,
-        priceMax: newQuery.priceMax ? Number(newQuery.priceMax) : undefined,
+        priceMin: parsePrice(newQuery.priceMin),
+        priceMax: parsePrice(newQuery.priceMax),
         inStock: newQuery.inStock === 'true',
         featured: newQuery.featured === 'true',
         attributes: parseAttributesFromQuery(newQuery.attributes as string | undefined)
       }
-    },
-    { deep: true }
+    }
   )
 
   return {
