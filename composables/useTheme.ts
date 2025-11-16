@@ -1,51 +1,50 @@
+import { useDark, useToggle } from '@vueuse/core'
+
+/**
+ * Theme management composable using VueUse's useDark
+ *
+ * Features:
+ * - Automatic localStorage persistence
+ * - System preference detection (prefers-color-scheme)
+ * - Automatic dark class on <html> element
+ * - SSR-safe initialization
+ *
+ * @returns {Object} Theme state and controls
+ */
 export const useTheme = () => {
-  const theme = useState<'light' | 'dark'>('theme', () => 'light')
-  
+  // useDark automatically handles:
+  // 1. localStorage persistence (key: 'vueuse-color-scheme')
+  // 2. System preference detection
+  // 3. Adding/removing 'dark' class on document.documentElement
+  // 4. Watching system preference changes
+  const isDark = useDark({
+    selector: 'html',
+    attribute: 'class',
+    valueDark: 'dark',
+    valueLight: '',
+    storageKey: 'theme',
+    // Listen to system preference changes
+    onChanged: (dark: boolean) => {
+      // This is called whenever the theme changes
+      // You can add custom logic here if needed
+    },
+  })
+
+  // Create a toggle function
+  const toggleTheme = useToggle(isDark)
+
+  // Computed property for theme value ('light' | 'dark')
+  const theme = computed(() => isDark.value ? 'dark' : 'light')
+
+  // Set theme explicitly
   const setTheme = (newTheme: 'light' | 'dark') => {
-    theme.value = newTheme
-    
-    if (process.client) {
-      localStorage.setItem('theme', newTheme)
-      updateThemeClass(newTheme)
-    }
+    isDark.value = newTheme === 'dark'
   }
-  
-  const toggleTheme = () => {
-    const newTheme = theme.value === 'light' ? 'dark' : 'light'
-    setTheme(newTheme)
-  }
-  
-  const updateThemeClass = (newTheme: 'light' | 'dark') => {
-    if (newTheme === 'dark') {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-    }
-  }
-  
-  const initTheme = () => {
-    if (process.client) {
-      const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null
-      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-      
-      const initialTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light')
-      theme.value = initialTheme
-      updateThemeClass(initialTheme)
-      
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-        if (!localStorage.getItem('theme')) {
-          const newTheme = e.matches ? 'dark' : 'light'
-          theme.value = newTheme
-          updateThemeClass(newTheme)
-        }
-      })
-    }
-  }
-  
+
   return {
-    theme: readonly(theme),
-    setTheme,
+    isDark,
+    theme,
     toggleTheme,
-    initTheme
+    setTheme,
   }
 }
