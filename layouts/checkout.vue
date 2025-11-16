@@ -19,11 +19,6 @@
         </div>
       </div>
     </main>
-    
-    <!-- Sonner toaster (shadcn-vue) -->
-    <ClientOnly>
-      <UiSonner position="top-right" :rich-colors="true" />
-    </ClientOnly>
   </div>
 </template>
 

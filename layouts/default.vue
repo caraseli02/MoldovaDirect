@@ -8,8 +8,6 @@
     <!-- Bottom Navigation for Mobile -->
     <LayoutBottomNav />
     <ClientOnly>
-      <!-- Sonner toaster (shadcn-vue) -->
-      <UiSonner position="top-right" :rich-colors="true" />
       <!-- PWA Components -->
       <MobilePWAInstallPrompt />
       <MobilePWAUpdatePrompt />
@@ -19,16 +17,19 @@
 </template>
 
 <script setup lang="ts">
-const { registerShortcut, getShortcutDisplay } = useKeyboardShortcuts()
-const localePath = useLocalePath()
-const router = useRouter()
+// Wrap keyboard shortcuts in onMounted to avoid hydration issues
+onMounted(() => {
+  const { registerShortcut } = useKeyboardShortcuts()
+  const localePath = useLocalePath()
+  const router = useRouter()
 
-// Register global search shortcut (Ctrl/Cmd + K)
-registerShortcut('k', () => {
-  router.push(localePath({ path: '/products', query: { focus: 'search' } }))
-}, {
-  ctrlOrCmd: true,
-  preventDefault: true,
-  description: 'Open search'
+  // Register global search shortcut (Ctrl/Cmd + K)
+  registerShortcut('k', () => {
+    router.push(localePath({ path: '/products', query: { focus: 'search' } }))
+  }, {
+    ctrlOrCmd: true,
+    preventDefault: true,
+    description: 'Open search'
+  })
 })
 </script>
