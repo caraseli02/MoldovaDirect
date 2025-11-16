@@ -21,18 +21,23 @@
           loading="lazy"
           class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
         />
-        <div v-else class="w-full h-full flex items-center justify-center text-gray-400 dark:text-slate-500">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div v-else class="w-full h-full flex items-center justify-center text-gray-400 dark:text-slate-500" role="img" :aria-label="$t('products.noImageAvailable')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
         </div>
       </nuxt-link>
 
       <!-- Quick View Overlay (Gymshark pattern) -->
-      <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+      <div
+        class="absolute inset-0 bg-black/60 transition-opacity duration-300 flex items-center justify-center pointer-events-none"
+        :class="isMobile ? 'opacity-0' : 'opacity-0 group-hover:opacity-100'"
+      >
         <nuxt-link
+          v-if="!isMobile"
           :to="`/products/${product.slug}`"
-          class="px-6 py-3 bg-white text-gray-900 rounded-full font-semibold text-sm hover:bg-gray-100 transition-colors transform translate-y-4 group-hover:translate-y-0 duration-300"
+          :aria-label="$t('products.quickViewProduct', { name: getLocalizedText(product.name) })"
+          class="px-6 py-3 bg-white text-gray-900 rounded-full font-semibold text-sm hover:bg-gray-100 transition-colors transform translate-y-4 group-hover:translate-y-0 duration-300 pointer-events-auto focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
         >
           {{ $t('products.quickView') }}
         </nuxt-link>
@@ -146,29 +151,30 @@
       <!-- Add to Cart Button -->
       <Button
         :disabled="product.stockQuantity <= 0 || cartLoading"
-        class="cta-button w-full mt-4 transition-all duration-200 flex items-center justify-center space-x-2 touch-manipulation rounded-full"
+        :aria-label="getCartButtonAriaLabel()"
+        :aria-live="cartLoading ? 'polite' : undefined"
+        class="cta-button w-full mt-4 transition-all duration-200 flex items-center justify-center space-x-2 touch-manipulation rounded-full min-h-[44px] focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
         :class="[
           isInCart(product.id)
             ? 'bg-green-600 dark:bg-green-500 text-white hover:bg-green-700 dark:hover:bg-green-600'
-            : 'bg-primary-600 dark:bg-primary-500 text-white hover:bg-primary-700 dark:hover:bg-primary-600',
-          isMobile ? `min-h-[${PRODUCTS.MIN_TOUCH_TARGET_SIZE}px]` : '' // Ensure minimum touch target size
+            : 'bg-primary-600 dark:bg-primary-500 text-white hover:bg-primary-700 dark:hover:bg-primary-600'
         ]"
         @click="addToCart"
         @touchstart="isMobile && !cartLoading && vibrate('tap')"
       >
         <!-- Loading Spinner -->
-        <svg v-if="cartLoading" class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <svg v-if="cartLoading" class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true" role="status">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>
 
         <!-- Cart Icon -->
-        <svg v-else-if="!isInCart(product.id)" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg v-else-if="!isInCart(product.id)" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m2.6 8L6 21h13M7 13v4a1 1 0 001 1h9a1 1 0 001-1v-4M7 13L6 9" />
         </svg>
 
         <!-- Check Icon -->
-        <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
         </svg>
 
@@ -260,6 +266,19 @@ const formatPrice = (price: string | number) => {
   return Number(price).toFixed(2)
 }
 
+const getCartButtonAriaLabel = () => {
+  const productName = getLocalizedText(props.product.name)
+  if (cartLoading.value) {
+    return t('products.addingToCart', { name: productName })
+  }
+  if (props.product.stockQuantity <= 0) {
+    return t('products.productOutOfStock', { name: productName })
+  }
+  if (isInCart(props.product.id)) {
+    return t('products.productInCart', { name: productName })
+  }
+  return t('products.addProductToCart', { name: productName })
+}
 
 // Touch event handlers
 const handleTouchStart = (event: TouchEvent) => {
@@ -270,7 +289,25 @@ const handleTouchStart = (event: TouchEvent) => {
 
 // Actions
 const addToCart = async () => {
+  // Only run on client side (fix for Vercel SSR)
+  if (process.server || typeof window === 'undefined') {
+    console.warn('Add to Cart: Server-side render, skipping')
+    return
+  }
+
+  // Debug logging
+  console.log('🛒 ProductCard: Add to Cart', {
+    productId: props.product.id,
+    isClient: process.client,
+    hasAddItem: typeof addItem === 'function'
+  })
+
   try {
+    // Verify cart is available
+    if (typeof addItem !== 'function') {
+      throw new Error('addItem function not available')
+    }
+
     // Haptic feedback for mobile users
     if (isMobile.value) {
       vibrate('buttonPress')
@@ -286,14 +323,16 @@ const addToCart = async () => {
       stock: props.product.stockQuantity
     }
 
+    console.log('🛒 Calling addItem')
     await addItem(cartProduct, 1)
+    console.log('✅ Item added successfully')
 
     // Success haptic feedback
     if (isMobile.value) {
       vibrate('success')
     }
   } catch (error) {
-    console.error('Failed to add item to cart:', error)
+    console.error('❌ Failed to add item to cart:', error)
 
     // Error haptic feedback
     if (isMobile.value) {
