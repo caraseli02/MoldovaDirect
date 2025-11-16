@@ -654,17 +654,29 @@ const addToCart = async () => {
   }
 
   // Debug logging for Vercel
-  console.log('🛒 Add to Cart clicked', {
+  const debugInfo = {
     productId: product.value.id,
     quantity: selectedQuantity.value,
     isClient: process.client,
-    hasWindow: typeof window !== 'undefined'
-  })
+    hasWindow: typeof window !== 'undefined',
+    addItemType: typeof addItem,
+    addItemString: typeof addItem === 'function' ? 'real function' : addItem?.toString?.() || 'undefined'
+  }
+  console.log('🛒 Add to Cart clicked', debugInfo)
+
+  // MOBILE DEBUG: Show status on mobile
+  const showMobileDebug = false // Set to true to see alerts on mobile
+  if (showMobileDebug) {
+    alert(`Debug: ${JSON.stringify(debugInfo, null, 2)}`)
+  }
 
   try {
     // Verify cart is available
     if (typeof addItem !== 'function') {
-      throw new Error('addItem function not available')
+      const error = `addItem is not a function (type: ${typeof addItem})`
+      console.error('❌', error)
+      alert(`ERROR: ${error}\n\nThis means Pinia/cart store isn't initialized on Vercel`)
+      throw new Error(error)
     }
 
     // Construct the product object in the format expected by the cart store
@@ -680,10 +692,17 @@ const addToCart = async () => {
     console.log('🛒 Calling addItem with:', cartProduct)
     await addItem(cartProduct, selectedQuantity.value)
     console.log('✅ Add to cart succeeded!')
+
+    // Success feedback
+    if (showMobileDebug) {
+      alert('✅ Item added to cart successfully!')
+    }
   } catch (err) {
-    console.error('❌ Add to cart failed:', err)
-    // Show user-friendly error
-    alert(`Failed to add to cart: ${err instanceof Error ? err.message : 'Unknown error'}`)
+    const errorMsg = err instanceof Error ? err.message : String(err)
+    console.error('❌ Add to cart failed:', errorMsg, err)
+
+    // Detailed error for mobile debugging
+    alert(`❌ Add to Cart Failed\n\nError: ${errorMsg}\n\nCheck console for details`)
   }
 }
 
