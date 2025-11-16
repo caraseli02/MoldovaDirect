@@ -15,14 +15,14 @@
           </h2>
           <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
             {{ $t('auth.haveAccount') }}
-            <NuxtLink :to="localePath('/auth/login')" class="font-semibold text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 transition-colors">
+            <NuxtLink :to="localePath('/auth/login')" class="font-semibold text-primary-600 hover:text-primary-500 dark:text-primary-300 dark:hover:text-primary-200 transition-colors">
               {{ $t('auth.signIn') }}
             </NuxtLink>
           </p>
         </div>
       
         <!-- Card container -->
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 sm:p-8">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-none dark:border dark:border-gray-700 p-6 sm:p-8">
           <form class="space-y-5" @submit.prevent="handleRegister">
             <!-- Alert messages -->
             <Transition name="slide-fade">
@@ -30,6 +30,7 @@
                 v-if="error"
                 variant="destructive"
                 class="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20"
+                data-testid="auth-error"
               >
                 <AlertCircle class="h-5 w-5 text-red-500 dark:text-red-400" aria-hidden="true" />
                 <AlertDescription class="text-sm text-red-800 dark:text-red-300">
@@ -42,6 +43,7 @@
               <Alert
                 v-if="success"
                 class="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20"
+                data-testid="auth-success"
               >
                 <CheckCircle2 class="h-5 w-5 text-green-500 dark:text-green-400" aria-hidden="true" />
                 <AlertDescription class="text-sm text-green-800 dark:text-green-300">
@@ -70,10 +72,11 @@
                   autocorrect="on"
                   spellcheck="true"
                   required
+                  data-testid="name-input"
                   :aria-invalid="nameError ? 'true' : 'false'"
                   :aria-describedby="nameError ? 'name-error' : undefined"
                   :placeholder="$t('auth.fullName')"
-                  class="h-11 border-2 border-gray-200 bg-white text-gray-900 placeholder:text-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                  class="h-11 border-2 border-gray-200 bg-white text-gray-900 placeholder:text-gray-500 dark:border-gray-500 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-300"
                   :class="{ 'border-red-500 dark:border-red-400': nameError }"
                   @blur="validateNameField"
                 />
@@ -101,10 +104,11 @@
                   spellcheck="false"
                   inputmode="email"
                   required
+                  data-testid="email-input"
                   :aria-invalid="emailError ? 'true' : 'false'"
                   :aria-describedby="emailError ? 'email-error' : undefined"
                   :placeholder="$t('auth.email')"
-                  class="h-11 border-2 border-gray-200 bg-white text-gray-900 placeholder:text-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                  class="h-11 border-2 border-gray-200 bg-white text-gray-900 placeholder:text-gray-500 dark:border-gray-500 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-300"
                   :class="{ 'border-red-500 dark:border-red-400': emailError }"
                   @blur="validateEmailField"
                 />
@@ -120,7 +124,7 @@
                   :class="{ 'text-red-600 dark:text-red-400': phoneError }"
                 >
                   {{ $t('auth.phone') }}
-                  <span class="text-xs font-normal text-gray-500 dark:text-gray-400">
+                  <span class="text-xs font-normal text-gray-500 dark:text-gray-300">
                     ({{ $t('common.optional') }})
                   </span>
                 </Label>
@@ -134,10 +138,11 @@
                   autocorrect="off"
                   spellcheck="false"
                   inputmode="tel"
+                  data-testid="phone-input"
                   :aria-invalid="phoneError ? 'true' : 'false'"
                   :aria-describedby="phoneError ? 'phone-error' : 'phone-desc'"
                   :placeholder="$t('auth.phone')"
-                  class="h-11 border-2 border-gray-200 bg-white text-gray-900 placeholder:text-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                  class="h-11 border-2 border-gray-200 bg-white text-gray-900 placeholder:text-gray-500 dark:border-gray-500 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-300"
                   :class="{ 'border-red-500 dark:border-red-400': phoneError }"
                   @blur="validatePhoneField"
                 />
@@ -169,10 +174,11 @@
                     spellcheck="false"
                     required
                     minlength="8"
+                    data-testid="password-input"
                     :aria-invalid="passwordError ? 'true' : 'false'"
                     :aria-describedby="passwordError ? 'password-error' : 'password-requirements'"
                     :placeholder="$t('auth.password')"
-                    class="h-11 border-2 border-gray-200 bg-white pr-12 text-gray-900 placeholder:text-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                    class="h-11 border-2 border-gray-200 bg-white pr-12 text-gray-900 placeholder:text-gray-500 dark:border-gray-500 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-300"
                     :class="{ 'border-red-500 dark:border-red-400': passwordError }"
                     @input="validatePasswordField"
                     @blur="validatePasswordField"
@@ -182,7 +188,7 @@
                     variant="ghost"
                     size="icon"
                     @click="togglePasswordVisibility"
-                    class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-300"
+                    class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-600 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white"
                     :aria-label="showPassword ? $t('auth.accessibility.hidePassword') : $t('auth.accessibility.showPassword')"
                     :aria-pressed="showPassword"
                   >
@@ -217,7 +223,7 @@
                   class="text-sm font-medium text-gray-700 dark:text-gray-300"
                   :class="{
                     'text-red-600 dark:text-red-400': confirmPasswordError,
-                    'text-green-600 dark:text-green-400': form.confirmPassword && !confirmPasswordError && form.password === form.confirmPassword
+                    'text-green-600 dark:text-green-300': form.confirmPassword && !confirmPasswordError && form.password === form.confirmPassword
                   }"
                 >
                   {{ $t('auth.confirmPassword') }}
@@ -233,10 +239,11 @@
                     autocorrect="off"
                     spellcheck="false"
                     required
+                    data-testid="confirm-password-input"
                     :aria-invalid="confirmPasswordError ? 'true' : 'false'"
                     :aria-describedby="confirmPasswordError ? 'confirm-password-error' : 'confirm-password-desc'"
                     :placeholder="$t('auth.confirmPassword')"
-                    class="h-11 border-2 border-gray-200 bg-white pr-12 text-gray-900 placeholder:text-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                    class="h-11 border-2 border-gray-200 bg-white pr-12 text-gray-900 placeholder:text-gray-500 dark:border-gray-500 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-300"
                     :class="[
                       confirmPasswordError ? 'border-red-500 dark:border-red-400' : '',
                       form.confirmPassword && !confirmPasswordError && form.password === form.confirmPassword
@@ -251,7 +258,8 @@
                     variant="ghost"
                     size="icon"
                     @click="toggleConfirmPasswordVisibility"
-                    class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-300"
+                    data-testid="confirm-password-toggle"
+                    class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-600 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white"
                     :aria-label="showConfirmPassword ? $t('auth.accessibility.hidePassword') : $t('auth.accessibility.showPassword')"
                     :aria-pressed="showConfirmPassword"
                   >
@@ -271,7 +279,7 @@
                 <p v-if="confirmPasswordError" id="confirm-password-error" class="text-sm text-red-600 dark:text-red-400" role="alert">
                   {{ confirmPasswordError }}
                 </p>
-                <p v-else-if="form.confirmPassword && form.password === form.confirmPassword" class="text-sm text-green-600 dark:text-green-400">
+                <p v-else-if="form.confirmPassword && form.password === form.confirmPassword" class="text-sm text-green-600 dark:text-green-300">
                   <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                   </svg>
@@ -293,11 +301,11 @@
                 @update:checked="validateTermsField"
               />
               <div class="ml-3 space-y-2">
-                <Label for="terms" class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                <Label for="terms" class="text-sm text-gray-700 dark:text-gray-100 leading-relaxed">
                   {{ $t('auth.acceptTerms') }}
                   <NuxtLink 
                     :to="localePath('/terms')" 
-                    class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded"
+                    class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-300 dark:hover:text-primary-200 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded"
                     target="_blank"
                     :aria-label="$t('auth.accessibility.termsLink')"
                   >
@@ -306,7 +314,7 @@
                   {{ $t('common.and') }}
                   <NuxtLink 
                     :to="localePath('/privacy')" 
-                    class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded"
+                    class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-300 dark:hover:text-primary-200 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded"
                     target="_blank"
                     :aria-label="$t('auth.accessibility.privacyLink')"
                   >
@@ -326,6 +334,7 @@
             <Button
               type="submit"
               :disabled="loading || !isFormValid"
+              data-testid="register-button"
               class="relative w-full flex justify-center items-center py-4 px-4 min-h-[48px] text-base font-semibold rounded-xl shadow-lg"
               :aria-label="loading ? $t('auth.accessibility.creatingAccount') : $t('auth.accessibility.createAccountButton')"
               :aria-describedby="loading ? 'register-status' : undefined"

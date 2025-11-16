@@ -105,7 +105,7 @@
               <article class="rounded-3xl bg-white/95 p-8 text-left text-gray-900 shadow-xl shadow-primary-950/20">
                 <!-- Star rating at top -->
                 <div class="mb-4 flex items-center justify-between">
-                  <UiStarRating :rating="5" size="sm" />
+                  <CustomStarRating :rating="5" size="sm" />
 
                   <!-- Verified badge -->
                   <span class="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-700">
@@ -145,7 +145,7 @@
           >
             <!-- Star rating at top -->
             <div class="mb-4 flex items-center justify-between">
-              <UiStarRating :rating="5" size="sm" />
+              <CustomStarRating :rating="5" size="sm" />
 
               <!-- Verified badge -->
               <span class="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-700">
@@ -172,8 +172,6 @@
 </template>
 
 <script setup lang="ts">
-import UiStarRating from '~/components/ui/StarRating.vue'
-
 const props = defineProps<{
   highlights: Array<{
     value: string

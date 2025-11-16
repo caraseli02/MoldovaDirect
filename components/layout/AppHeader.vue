@@ -74,6 +74,7 @@
               :to="localePath('/account')"
               :aria-label="accountLabel"
               :class="iconButtonClass"
+              data-testid="user-menu"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor" aria-hidden="true">
@@ -104,76 +105,34 @@
             </NuxtLink>
           </div>
 
-          <!-- Simplified Mobile actions - Only essential elements -->
-          <div class="flex md:hidden items-center space-x-2">
+          <!-- Mobile actions - Language and Theme -->
+          <div class="flex md:hidden items-center space-x-1">
+            <!-- Language Switcher -->
+            <LanguageSwitcher />
 
-            <!-- Mobile Cart with dynamic color -->
-            <NuxtLink
-              :to="localePath('/cart')"
-              :aria-label="cartAriaLabel"
-              :class="iconButtonClass"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
-              <!-- Cart count badge -->
-              <span v-if="cartItemsCount > 0"
-                class="absolute top-0 right-0 bg-primary-600 dark:bg-primary-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold"
-                aria-hidden="true"
-              >
-                {{ cartItemsCount }}
-              </span>
-            </NuxtLink>
-
-            <!-- Mobile menu button with dynamic color -->
-            <Button
-              type="button"
-              variant="ghost"
-              @click="toggleMobileMenu"
-              :aria-label="mobileMenuLabel"
-              :aria-expanded="mobileMenuOpen"
-              :class="[
-                iconButtonClass,
-                mobileMenuOpen && 'bg-brand-accent/10 text-brand-accent dark:bg-brand-accent/20'
-              ]"
-            >
-              <!-- Animated hamburger menu -->
-              <div class="w-6 h-6 flex flex-col justify-center items-center">
-                <span class="block w-6 h-0.5 bg-current transition-all duration-300 ease-in-out"
-                  :class="mobileMenuOpen ? 'rotate-45 translate-y-1' : '-translate-y-1'"></span>
-                <span class="block w-6 h-0.5 bg-current transition-all duration-300 ease-in-out"
-                  :class="mobileMenuOpen ? 'opacity-0' : 'opacity-100'"></span>
-                <span class="block w-6 h-0.5 bg-current transition-all duration-300 ease-in-out"
-                  :class="mobileMenuOpen ? '-rotate-45 -translate-y-1' : 'translate-y-1'"></span>
-              </div>
-            </Button>
+            <!-- Theme Toggle -->
+            <ThemeToggle />
           </div>
         </div>
       </div>
     </div>
-
-    <!-- Mobile Navigation -->
-    <MobileNav v-if="mobileMenuOpen" @close="mobileMenuOpen = false" />
   </header>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted, computed, nextTick } from 'vue'
 import { useThrottleFn } from '@vueuse/core'
 import { Button } from '@/components/ui/button'
 import LanguageSwitcher from './LanguageSwitcher.vue'
-import MobileNav from './MobileNav.vue'
 import ThemeToggle from './ThemeToggle.vue'
 
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
 const route = useRoute()
-const mobileMenuOpen = ref(false)
 
 // Scroll detection for luxury header transparency
-// Start as scrolled (true) for better initial visibility on light backgrounds
+// Initialize as true to prevent hydration mismatch
+// We'll update it immediately on client side in onMounted
 const scrolled = ref(true)
 const SCROLL_THRESHOLD = 20 // px - threshold for header transparency
 
@@ -181,7 +140,7 @@ const SCROLL_THRESHOLD = 20 // px - threshold for header transparency
 const pagesWithDarkHero = ['/']
 
 const handleScroll = useThrottleFn(() => {
-  const currentPath = route.path.replace(/\/(en|ro|ru)/, '') || '/'
+  const currentPath = route.path?.replace(/\/(en|ro|ru)/, '') || '/'
   const hasDarkHero = pagesWithDarkHero.includes(currentPath)
 
   // Only allow transparent header on pages with dark hero sections
@@ -192,8 +151,11 @@ const handleScroll = useThrottleFn(() => {
 
 onMounted(() => {
   if (typeof window !== 'undefined') {
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    handleScroll() // Initial check
+    // Wait for next tick to avoid hydration mismatch
+    nextTick(() => {
+      window.addEventListener('scroll', handleScroll, { passive: true })
+      handleScroll() // Initial check after hydration
+    })
   }
 })
 
@@ -212,19 +174,8 @@ const iconButtonClass = computed(() => [
     : 'text-brand-light/80 hover:text-brand-light drop-shadow-lg dark:text-brand-light/80 dark:hover:text-brand-light'
 ])
 
-const toggleMobileMenu = () => {
-  mobileMenuOpen.value = !mobileMenuOpen.value
-  // Prevent body scroll when menu is open
-  if (mobileMenuOpen.value) {
-    document.body.style.overflow = 'hidden'
-  } else {
-    document.body.style.overflow = ''
-  }
-}
-
 // Clean up on unmount
 onUnmounted(() => {
-  document.body.style.overflow = ''
   if (typeof window !== 'undefined') {
     window.removeEventListener('scroll', handleScroll)
   }
@@ -240,8 +191,6 @@ const cartAriaLabel = computed(() => {
 })
 
 const accountLabel = computed(() => t('common.account'))
-
-const mobileMenuLabel = computed(() => mobileMenuOpen.value ? t('common.close') : t('common.menu'))
 
 const goToSearch = () => {
   navigateTo(localePath({ path: '/products', query: { focus: 'search' } }))

@@ -19,7 +19,7 @@
         </div>
       
         <!-- Card container -->
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 sm:p-8">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-none dark:border dark:border-gray-700 p-6 sm:p-8">
           <form v-if="!success" class="space-y-5" @submit.prevent="handleResetPassword">
             <!-- Alert messages -->
             <Transition name="slide-fade">
@@ -57,7 +57,7 @@
                 >
                 <label 
                   for="password" 
-                  class="absolute left-3 -top-2.5 bg-white dark:bg-gray-800 px-2 text-sm text-gray-600 dark:text-gray-400 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2.5 peer-focus:left-3 peer-focus:text-sm peer-focus:text-primary-600 dark:peer-focus:text-primary-400"
+                  class="absolute left-3 -top-2.5 bg-gray-50 dark:bg-gray-900 px-2 text-sm text-gray-600 dark:text-gray-300 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2.5 peer-focus:left-3 peer-focus:text-sm peer-focus:text-primary-600 dark:peer-focus:text-primary-400"
                   :class="{ 'text-red-600 dark:text-red-400': passwordError }"
                 >
                   {{ $t('auth.newPassword') }}
@@ -114,7 +114,7 @@
                 >
                 <label 
                   for="confirmPassword" 
-                  class="absolute left-3 -top-2.5 bg-white dark:bg-gray-800 px-2 text-sm text-gray-600 dark:text-gray-400 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2.5 peer-focus:left-3 peer-focus:text-sm peer-focus:text-primary-600 dark:peer-focus:text-primary-400"
+                  class="absolute left-3 -top-2.5 bg-gray-50 dark:bg-gray-900 px-2 text-sm text-gray-600 dark:text-gray-300 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2.5 peer-focus:left-3 peer-focus:text-sm peer-focus:text-primary-600 dark:peer-focus:text-primary-400"
                   :class="{ 
                     'text-red-600 dark:text-red-400': confirmPasswordError,
                     'text-green-600 dark:text-green-400': form.confirmPassword && !confirmPasswordError && form.password === form.confirmPassword
@@ -187,7 +187,7 @@
             <div class="text-center">
               <NuxtLink 
                 :to="localePath('/auth/login')" 
-                class="inline-flex items-center justify-center min-h-[44px] px-4 py-2 font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded-md"
+                class="inline-flex items-center justify-center min-h-[44px] px-4 py-2 font-medium text-primary-600 hover:text-primary-500 dark:text-primary-300 dark:hover:text-primary-200 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded-md"
               >
                 {{ $t('auth.signIn') }} →
               </NuxtLink>

@@ -13,12 +13,38 @@ process.env.PLAYWRIGHT_TEST = 'true'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
+/**
+ * Wait for the dev server to be ready
+ */
+async function waitForServer(baseURL: string, timeout = 120000) {
+  const startTime = Date.now()
+  console.log(`⏳ Waiting for server at ${baseURL}...`)
+
+  while (Date.now() - startTime < timeout) {
+    try {
+      const response = await fetch(baseURL)
+      if (response.status < 500) {
+        console.log('✅ Server is ready!')
+        return
+      }
+    } catch (error) {
+      // Server not ready yet, continue waiting
+    }
+    await new Promise(resolve => setTimeout(resolve, 500))
+  }
+
+  throw new Error(`Server at ${baseURL} did not become ready within ${timeout}ms`)
+}
+
 async function globalSetup(config: FullConfig) {
   const { baseURL } = config.projects[0].use
 
   if (!baseURL) {
     throw new Error('baseURL not configured in playwright.config.ts')
   }
+
+  // Wait for the dev server to be ready
+  await waitForServer(baseURL)
 
   const browser = await chromium.launch()
 

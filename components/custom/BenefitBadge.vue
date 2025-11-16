@@ -17,7 +17,7 @@
     <span>{{ text }}</span>
 
     <!-- Tooltip (optional) -->
-    <UiTooltip
+    <CustomTooltip
       v-if="tooltip"
       :content="tooltip"
       icon="lucide:info"
@@ -36,7 +36,7 @@
           />
         </button>
       </template>
-    </UiTooltip>
+    </CustomTooltip>
   </div>
 </template>
 

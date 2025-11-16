@@ -56,6 +56,7 @@ type FaqItem = {
 }
 
 export const useHomeContent = () => {
+  // ISR is disabled, so all composables work normally
   const localePath = useLocalePath()
   const { t, tm, locale } = useI18n()
 

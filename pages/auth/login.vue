@@ -15,24 +15,25 @@
           </h2>
           <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
             {{ $t('auth.noAccount') }}
-            <NuxtLink :to="localePath('/auth/register')" class="font-semibold text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 transition-colors">
+            <NuxtLink :to="localePath('/auth/register')" class="font-semibold text-primary-600 hover:text-primary-500 dark:text-primary-300 dark:hover:text-primary-200 transition-colors">
               {{ $t('auth.signUp') }}
             </NuxtLink>
           </p>
         </div>
       
         <!-- Card container for form -->
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 sm:p-8">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-none dark:border dark:border-gray-700 p-6 sm:p-8">
           <form class="space-y-5" @submit.prevent="handleLogin">
             <!-- Alert messages with improved mobile styling -->
             <Transition name="slide-fade">
               <Alert
                 v-if="displayError"
                 variant="destructive"
-                class="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20"
+                class="border-red-200 bg-red-50 dark:border-red-600"
+                data-testid="auth-error"
               >
-                <AlertCircle class="h-5 w-5 text-red-500 dark:text-red-400" aria-hidden="true" />
-                <AlertDescription class="text-sm text-red-800 dark:text-red-300">
+                <AlertCircle class="h-5 w-5 text-red-500 dark:text-red-300" aria-hidden="true" />
+                <AlertDescription :class="cn('text-sm text-red-800 dark:text-white')">
                   {{ displayError }}
                 </AlertDescription>
               </Alert>
@@ -42,6 +43,7 @@
               <Alert
                 v-if="success"
                 class="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20"
+                data-testid="auth-success"
               >
                 <CheckCircle2 class="h-5 w-5 text-green-500 dark:text-green-400" aria-hidden="true" />
                 <AlertDescription class="text-sm text-green-800 dark:text-green-300">
@@ -71,10 +73,11 @@
                   spellcheck="false"
                   inputmode="email"
                   required
+                  data-testid="email-input"
                   :aria-invalid="emailError ? 'true' : 'false'"
                   :aria-describedby="emailError ? 'email-error' : undefined"
                   :placeholder="$t('auth.email')"
-                  class="h-11 border-2 border-gray-200 bg-white text-gray-900 placeholder:text-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                  class="h-11 border-2 border-gray-200 bg-white text-gray-900 placeholder:text-gray-500 dark:border-gray-500 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-300"
                   :class="{ 'border-red-500 dark:border-red-400': emailError }"
                   @blur="validateEmailField"
                 />
@@ -103,10 +106,11 @@
                     spellcheck="false"
                     required
                     minlength="8"
+                    data-testid="password-input"
                     :aria-invalid="passwordError ? 'true' : 'false'"
                     :aria-describedby="passwordError ? 'password-error' : 'password-toggle-desc'"
                     :placeholder="$t('auth.password')"
-                    class="h-11 border-2 border-gray-200 bg-white pr-12 text-gray-900 placeholder:text-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                    class="h-11 border-2 border-gray-200 bg-white pr-12 text-gray-900 placeholder:text-gray-500 dark:border-gray-500 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-300"
                     :class="{ 'border-red-500 dark:border-red-400': passwordError }"
                     @input="validatePasswordField"
                     @blur="validatePasswordField"
@@ -116,7 +120,8 @@
                     variant="ghost"
                     size="icon"
                     @click="togglePasswordVisibility"
-                    class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-300"
+                    data-testid="password-toggle"
+                    class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-600 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white"
                     :aria-label="showPassword ? $t('auth.accessibility.hidePassword') : $t('auth.accessibility.showPassword')"
                     :aria-pressed="showPassword"
                   >
@@ -147,16 +152,17 @@
                   :aria-describedby="'remember-desc'"
                   class="h-5 w-5"
                 />
-                <Label for="remember" class="ml-3 text-sm text-gray-700 dark:text-gray-300 select-none">
+                <Label for="remember" class="ml-3 text-sm text-gray-700 dark:text-gray-100 select-none">
                   {{ $t('auth.rememberMe') }}
                 </Label>
                 <div id="remember-desc" class="sr-only">
                   {{ $t('auth.accessibility.rememberMeDescription') }}
                 </div>
               </div>
-              <NuxtLink 
-                :to="localePath('/auth/forgot-password')" 
-                class="inline-flex items-center justify-center min-h-[44px] px-3 py-2 text-sm font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded-md"
+              <NuxtLink
+                :to="localePath('/auth/forgot-password')"
+                data-testid="forgot-password"
+                class="inline-flex items-center justify-center min-h-[44px] px-3 py-2 text-sm font-medium text-primary-600 hover:text-primary-500 dark:text-primary-300 dark:hover:text-primary-200 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded-md"
                 :aria-label="$t('auth.accessibility.forgotPasswordLink')"
               >
                 {{ $t('auth.forgotPassword') }}
@@ -168,6 +174,7 @@
               type="submit"
               :disabled="isLoginDisabled"
               :aria-disabled="isLoginDisabled"
+              data-testid="login-button"
               class="relative w-full flex justify-center items-center py-4 px-4 min-h-[48px] text-base font-semibold rounded-xl shadow-lg transition-opacity"
               :class="{ 'opacity-60 cursor-not-allowed pointer-events-none': isLoginDisabled }"
               :aria-label="loading ? $t('auth.accessibility.signingIn') : $t('auth.accessibility.signInButton')"
@@ -189,7 +196,7 @@
                 <div class="w-full border-t border-gray-200 dark:border-gray-600" />
               </div>
               <div class="relative flex justify-center text-sm">
-                <span class="px-4 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">{{ $t('auth.orContinueWith') }}</span>
+                <span class="px-4 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-300">{{ $t('auth.orContinueWith') }}</span>
               </div>
             </div>
 
@@ -200,6 +207,7 @@
               @click="handleMagicLink"
               :disabled="isMagicLinkDisabled"
               :aria-disabled="isMagicLinkDisabled"
+              data-testid="magic-link-button"
               class="relative w-full flex justify-center items-center py-4 px-4 min-h-[48px] text-base font-medium rounded-xl transition-opacity"
               :class="{ 'opacity-60 cursor-not-allowed pointer-events-none': isMagicLinkDisabled }"
               :aria-label="loadingMagic ? $t('auth.accessibility.sendingMagicLink') : $t('auth.accessibility.magicLinkButton')"
@@ -232,6 +240,7 @@ import { Label } from '@/components/ui/label'
 import { AlertCircle, CheckCircle2 } from 'lucide-vue-next'
 import { useAuth } from '~/composables/useAuth'
 import { useAuthMessages } from '~/composables/useAuthMessages'
+import { cn } from '~/lib/utils'
 
 // Apply guest middleware - redirect authenticated users
 definePageMeta({

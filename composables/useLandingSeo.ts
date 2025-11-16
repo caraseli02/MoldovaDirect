@@ -48,14 +48,19 @@ interface LandingSeoHelpers {
  * })
  */
 export function useLandingSeo(input: LandingSeoInput): LandingSeoHelpers {
+  // ISR is disabled, so all composables work normally
   const route = useRoute()
-  const { locale, locales } = useI18n()
+  const i18n = useI18n()
+  const locale = i18n.locale
+  const locales = i18n.locales
   const localePath = useLocalePath()
   const { siteUrl, toAbsoluteUrl } = useSiteUrl()
 
   // Use current route path if no path is provided, ensuring locale-aware canonical URLs
   // If a path is provided, convert it to the current locale's path
-  const canonicalPath = input.path ? localePath(input.path) : route.path
+  // During ISR, route.path might be undefined, so fallback to '/'
+  const routePath = route?.path || '/'
+  const canonicalPath = input.path ? localePath(input.path) : routePath
   const canonicalUrl = toAbsoluteUrl(canonicalPath)
   const ogImage = toAbsoluteUrl(input.image ?? SEO_DEFAULTS.DEFAULT_IMAGE)
   const imageAlt = input.imageAlt ?? input.title
@@ -64,10 +69,10 @@ export function useLandingSeo(input: LandingSeoInput): LandingSeoHelpers {
   const pageType = input.pageType ?? SEO_DEFAULTS.DEFAULT_PAGE_TYPE
 
   // Properly type locale codes from i18n
-  const localeCodes = (locales.value || []).map((loc) =>
+  const localeCodes = (locales?.value || []).map((loc: any) =>
     typeof loc === 'string' ? loc : loc.code
   )
-  const currentLocale = locale.value || 'es'
+  const currentLocale = locale?.value || 'es'
 
   const meta: MetaObject['meta'] = [
     { name: 'description', content: input.description },
@@ -95,7 +100,7 @@ export function useLandingSeo(input: LandingSeoInput): LandingSeoHelpers {
     // Get the base path without locale prefix for generating alternate links
     // Dynamically build locale pattern from available locales to avoid maintenance issues
     const localePattern = new RegExp(`^/(${localeCodes.join('|')})`)
-    const basePath = input.path || route.path.replace(localePattern, '') || '/'
+    const basePath = input.path || routePath.replace(localePattern, '') || '/'
 
     for (const code of localeCodes) {
       if (code !== currentLocale) {
