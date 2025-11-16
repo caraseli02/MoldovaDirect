@@ -1,0 +1,157 @@
+name: E2E Cart Tests
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'components/product/**'
+      - 'pages/products/**'
+      - 'pages/cart/**'
+      - 'composables/useCart.ts'
+      - 'stores/cart/**'
+      - 'nuxt.config.ts'
+      - 'package.json'
+  push:
+    branches: [main]
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  test-cart-functionality:
+    name: Test Cart Functionality on Vercel Preview
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Wait for Vercel Preview Deployment
+        uses: patrickedqvist/wait-for-vercel-preview@v1.3.1
+        id: waitForDeployment
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          max_timeout: 300  # 5 minutes
+          check_interval: 10  # Check every 10 seconds
+
+      - name: Run E2E Cart Tests against Vercel Preview
+        env:
+          PLAYWRIGHT_TEST_BASE_URL: ${{ steps.waitForDeployment.outputs.url }}
+        run: npx playwright test --config=playwright.cart.config.ts --project=chromium
+        continue-on-error: false
+
+      - name: Upload Playwright Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-cart-test-report
+          path: playwright-report/
+          retention-days: 7
+
+      - name: Upload Test Screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-failure-screenshots
+          path: test-results/
+          retention-days: 7
+
+      - name: Comment Test Results on PR
+        if: failure() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const testResults = `
+            ❌ **Cart E2E Tests Failed**
+
+            The cart functionality tests failed on the Vercel preview deployment.
+
+            **Preview URL**: ${{ steps.waitForDeployment.outputs.url }}
+
+            **Common Issues**:
+            - JavaScript bundles not loading
+            - Pinia not initialized
+            - Add to Cart button not working
+            - Cart state not persisting
+
+            **Next Steps**:
+            1. Check the test report artifacts
+            2. Review screenshots of failures
+            3. Test manually on preview URL
+            4. Check browser console for errors
+
+            **Artifacts**:
+            - Playwright Report: Available in workflow artifacts
+            - Screenshots: Available in workflow artifacts
+            `;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: testResults
+            });
+
+      - name: Comment Success on PR
+        if: success() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '✅ **Cart E2E Tests Passed**\n\nAll cart functionality tests passed on Vercel preview deployment.\n\n**Preview URL**: ${{ steps.waitForDeployment.outputs.url }}'
+            });
+
+  test-cart-critical-smoke:
+    name: Critical Smoke Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Wait for Vercel Preview Deployment
+        uses: patrickedqvist/wait-for-vercel-preview@v1.3.1
+        id: waitForDeployment
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          max_timeout: 300
+          check_interval: 10
+
+      - name: Run Critical Smoke Tests
+        env:
+          PLAYWRIGHT_TEST_BASE_URL: ${{ steps.waitForDeployment.outputs.url }}
+        run: npx playwright test --config=playwright.cart.config.ts --grep "Critical Smoke Tests" --project=chromium
+
+      - name: Fail if critical tests fail
+        if: failure()
+        run: |
+          echo "::error::Critical smoke tests failed! This indicates a severe deployment issue."
+          exit 1
