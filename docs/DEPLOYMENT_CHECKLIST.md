@@ -136,33 +136,20 @@ Run E2E tests against Vercel preview:
 PREVIEW_URL="https://your-preview.vercel.app" npm run test:e2e
 ```
 
-## CI/CD Integration
+## Local Verification Only
 
-### GitHub Actions
+All verification runs locally to avoid CI/CD costs. Use these scripts before deploying:
 
-The repository includes automated build verification:
+```bash
+# Run verification after build
+npm run verify
 
-**File**: `.github/workflows/verify-build-output.yml`
+# Build and verify in one command
+npm run build:verify
 
-**Runs on**:
-- Every pull request
-- Every push to main
-
-**Checks**:
-- Client bundle generation (100+ files)
-- Cart code bundling
-- Pinia bundling
-- MIME type validation
-- Generates build report
-
-**If checks fail**:
-- PR gets a warning comment
-- Build artifact uploaded with details
-- Deployment blocked until fixed
-
-### Enabling the Workflow
-
-The workflow runs automatically once merged to main. No setup required.
+# Full pre-deployment check
+npm run deploy:check
+```
 
 ## Common Issues and Solutions
 
