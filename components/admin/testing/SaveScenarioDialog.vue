@@ -1,44 +1,70 @@
 <template>
-  <div
-    v-if="show"
-    class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-    @click.self="$emit('close')"
-  >
-    <Card class="w-full max-w-md">
-      <CardHeader>
-        <CardTitle>Save Scenario</CardTitle>
-      </CardHeader>
-      <CardContent class="space-y-4">
+  <Dialog :open="show" @update:open="(val) => !val && handleClose()">
+    <DialogContent class="sm:max-w-md">
+      <DialogHeader>
+        <DialogTitle>Save Scenario</DialogTitle>
+        <DialogDescription>
+          Save your current configuration as a reusable scenario template
+        </DialogDescription>
+      </DialogHeader>
+
+      <div class="space-y-4 py-4">
         <div class="space-y-2">
-          <label class="text-sm font-medium">Scenario Name</label>
-          <input
+          <Label for="scenario-name">Scenario Name</Label>
+          <Input
+            id="scenario-name"
             v-model="localName"
             type="text"
             placeholder="My Custom Scenario"
-            class="w-full px-3 py-2 border rounded-md"
+            maxlength="100"
+            :aria-invalid="!!nameError"
+            :aria-describedby="nameError ? 'name-error' : undefined"
           />
+          <p v-if="nameError" id="name-error" class="text-xs text-destructive" role="alert">
+            {{ nameError }}
+          </p>
         </div>
+
         <div class="space-y-2">
-          <label class="text-sm font-medium">Description</label>
-          <textarea
+          <Label for="scenario-description">Description</Label>
+          <Textarea
+            id="scenario-description"
             v-model="localDescription"
-            placeholder="Description..."
-            class="w-full px-3 py-2 border rounded-md resize-none"
-            rows="2"
-          ></textarea>
+            placeholder="Describe this scenario configuration..."
+            maxlength="500"
+            rows="3"
+          />
+          <p class="text-xs text-muted-foreground">
+            {{ localDescription.length }}/500 characters
+          </p>
         </div>
-        <div class="flex gap-2">
-          <Button @click="handleSave" class="flex-1">Save</Button>
-          <Button @click="$emit('close')" variant="outline" class="flex-1">Cancel</Button>
-        </div>
-      </CardContent>
-    </Card>
-  </div>
+      </div>
+
+      <DialogFooter>
+        <Button @click="handleClose" variant="outline" type="button">
+          Cancel
+        </Button>
+        <Button @click="handleSave" :disabled="!isFormValid" type="submit">
+          Save Scenario
+        </Button>
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
 </template>
 
 <script setup lang="ts">
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle
+} from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 
 const props = defineProps<{
   show: boolean
@@ -52,6 +78,22 @@ const emit = defineEmits<{
 const localName = ref('')
 const localDescription = ref('')
 
+// Validation
+const nameError = computed(() => {
+  if (!localName.value.trim() && localName.value.length > 0) {
+    return 'Name cannot be only whitespace'
+  }
+  if (localName.value.length > 100) {
+    return 'Name cannot exceed 100 characters'
+  }
+  return ''
+})
+
+const isFormValid = computed(() => {
+  return localName.value.trim().length > 0 && !nameError.value
+})
+
+// Reset form when dialog closes
 watch(() => props.show, (newValue) => {
   if (!newValue) {
     localName.value = ''
@@ -59,10 +101,22 @@ watch(() => props.show, (newValue) => {
   }
 })
 
+const handleClose = () => {
+  emit('close')
+}
+
 const handleSave = () => {
+  if (!isFormValid.value) {
+    return
+  }
+
   emit('save', {
-    name: localName.value,
-    description: localDescription.value
+    name: localName.value.trim(),
+    description: localDescription.value.trim()
   })
+
+  // Clear form after save
+  localName.value = ''
+  localDescription.value = ''
 }
 </script>

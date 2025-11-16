@@ -7,44 +7,47 @@
     <CardContent>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
         <div class="space-y-2">
-          <label class="text-sm font-medium">Products</label>
-          <input
+          <Label for="products-input">Products</Label>
+          <Input
+            id="products-input"
             v-model.number="localProducts"
             type="number"
             min="0"
-            class="w-full px-3 py-2 border rounded-md"
+            max="5000"
           />
         </div>
 
         <div class="space-y-2">
-          <label class="text-sm font-medium">Users</label>
-          <input
+          <Label for="users-input">Users</Label>
+          <Input
+            id="users-input"
             v-model.number="localUsers"
             type="number"
             min="0"
-            class="w-full px-3 py-2 border rounded-md"
+            max="1000"
           />
         </div>
 
         <div class="space-y-2">
-          <label class="text-sm font-medium">Orders</label>
-          <input
+          <Label for="orders-input">Orders</Label>
+          <Input
+            id="orders-input"
             v-model.number="localOrders"
             type="number"
             min="0"
-            class="w-full px-3 py-2 border rounded-md"
+            max="10000"
           />
         </div>
       </div>
 
       <div class="flex items-center space-x-2 mb-4">
-        <input
-          type="checkbox"
+        <Checkbox
           id="clear-existing"
-          v-model="localClearExisting"
-          class="rounded"
+          v-model:checked="localClearExisting"
         />
-        <label for="clear-existing" class="text-sm">Clear existing data first</label>
+        <Label for="clear-existing" class="text-sm cursor-pointer">
+          Clear existing data first
+        </Label>
       </div>
 
       <Button @click="handleGenerate" :disabled="loading" class="w-full">
@@ -59,6 +62,9 @@
 <script setup lang="ts">
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Checkbox } from '@/components/ui/checkbox'
 import type { CustomDataConfig } from '~/types/admin-testing'
 
 const props = defineProps<{
@@ -71,18 +77,24 @@ const emit = defineEmits<{
   generate: [config: CustomDataConfig]
 }>()
 
-const localProducts = ref(props.modelValue.products)
-const localUsers = ref(props.modelValue.users)
-const localOrders = ref(props.modelValue.orders)
-const localClearExisting = ref(props.modelValue.clearExisting)
+const localProducts = computed({
+  get: () => props.modelValue.products,
+  set: (value) => emit('update:modelValue', { ...props.modelValue, products: value })
+})
 
-watch([localProducts, localUsers, localOrders, localClearExisting], () => {
-  emit('update:modelValue', {
-    products: localProducts.value,
-    users: localUsers.value,
-    orders: localOrders.value,
-    clearExisting: localClearExisting.value
-  })
+const localUsers = computed({
+  get: () => props.modelValue.users,
+  set: (value) => emit('update:modelValue', { ...props.modelValue, users: value })
+})
+
+const localOrders = computed({
+  get: () => props.modelValue.orders,
+  set: (value) => emit('update:modelValue', { ...props.modelValue, orders: value })
+})
+
+const localClearExisting = computed({
+  get: () => props.modelValue.clearExisting,
+  set: (value) => emit('update:modelValue', { ...props.modelValue, clearExisting: value })
 })
 
 const handleGenerate = () => {

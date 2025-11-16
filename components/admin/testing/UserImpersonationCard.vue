@@ -9,35 +9,51 @@
     </CardHeader>
     <CardContent class="space-y-4">
       <div class="space-y-2">
-        <label class="text-sm font-medium">User Email</label>
-        <input
+        <Label for="user-email">User Email</Label>
+        <Input
+          id="user-email"
           v-model="localUserEmail"
           type="email"
           placeholder="user@example.com"
-          class="w-full px-3 py-2 border rounded-md"
           :disabled="isActive"
+          :aria-invalid="!!emailError"
+          :aria-describedby="emailError ? 'email-error' : undefined"
         />
+        <p v-if="emailError" id="email-error" class="text-xs text-destructive" role="alert">
+          {{ emailError }}
+        </p>
       </div>
 
       <div class="space-y-2">
-        <label class="text-sm font-medium">Reason (min 10 chars)</label>
-        <textarea
+        <div class="flex items-center justify-between">
+          <Label for="impersonate-reason">Reason (min 10 chars)</Label>
+          <span class="text-xs text-muted-foreground">
+            {{ localReason.length }}/500
+          </span>
+        </div>
+        <Textarea
+          id="impersonate-reason"
           v-model="localReason"
           placeholder="Testing checkout flow..."
-          class="w-full px-3 py-2 border rounded-md resize-none"
           rows="2"
+          maxlength="500"
           :disabled="isActive"
-        ></textarea>
+          :aria-invalid="!!reasonError"
+          :aria-describedby="reasonError ? 'reason-error' : undefined"
+        />
+        <p v-if="reasonError" id="reason-error" class="text-xs text-destructive" role="alert">
+          {{ reasonError }}
+        </p>
       </div>
 
       <div class="space-y-2" v-if="!isActive">
-        <label class="text-sm font-medium">Duration (minutes)</label>
-        <input
+        <Label for="duration">Duration (minutes)</Label>
+        <Input
+          id="duration"
           v-model.number="localDuration"
           type="number"
           min="1"
           max="120"
-          class="w-full px-3 py-2 border rounded-md"
         />
       </div>
 
@@ -81,6 +97,9 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 
 const props = defineProps<{
   loading: boolean
@@ -98,10 +117,27 @@ const localUserEmail = ref('')
 const localReason = ref('')
 const localDuration = ref(30)
 
+// Validation
+const emailError = computed(() => {
+  if (localUserEmail.value.length > 0 && !localUserEmail.value.includes('@')) {
+    return 'Please enter a valid email address'
+  }
+  return ''
+})
+
+const reasonError = computed(() => {
+  if (localReason.value.length > 0 && localReason.value.length < 10) {
+    return 'Reason must be at least 10 characters'
+  }
+  return ''
+})
+
 const isFormValid = computed(() => {
   return (
     localUserEmail.value.length > 0 &&
+    !emailError.value &&
     localReason.value.length >= 10 &&
+    !reasonError.value &&
     localDuration.value >= 1 &&
     localDuration.value <= 120
   )

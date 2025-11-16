@@ -219,9 +219,16 @@ const stopImpersonation = async () => {
 
 // Scenario management
 const loadSavedScenarios = () => {
-  const saved = localStorage.getItem('admin-test-scenarios')
-  if (saved) {
-    savedScenarios.value = JSON.parse(saved)
+  if (process.client) {
+    try {
+      const saved = localStorage.getItem('admin-test-scenarios')
+      if (saved) {
+        savedScenarios.value = JSON.parse(saved)
+      }
+    } catch (error) {
+      console.error('Failed to load saved scenarios:', error)
+      localStorage.removeItem('admin-test-scenarios')
+    }
   }
 }
 
@@ -235,7 +242,15 @@ const saveScenario = (data: { name: string; description: string }) => {
   }
 
   savedScenarios.value.push(scenario)
-  localStorage.setItem('admin-test-scenarios', JSON.stringify(savedScenarios.value))
+
+  if (process.client) {
+    try {
+      localStorage.setItem('admin-test-scenarios', JSON.stringify(savedScenarios.value))
+    } catch (error) {
+      console.error('Failed to save scenario:', error)
+    }
+  }
+
   showSaveScenarioDialog.value = false
 }
 
@@ -245,14 +260,28 @@ const loadScenario = (scenario: ScenarioTemplate) => {
 
 const deleteScenario = (id: string) => {
   savedScenarios.value = savedScenarios.value.filter(s => s.id !== id)
-  localStorage.setItem('admin-test-scenarios', JSON.stringify(savedScenarios.value))
+
+  if (process.client) {
+    try {
+      localStorage.setItem('admin-test-scenarios', JSON.stringify(savedScenarios.value))
+    } catch (error) {
+      console.error('Failed to delete scenario:', error)
+    }
+  }
 }
 
 // History management
 const loadGenerationHistory = () => {
-  const saved = localStorage.getItem('admin-test-history')
-  if (saved) {
-    generationHistory.value = JSON.parse(saved)
+  if (process.client) {
+    try {
+      const saved = localStorage.getItem('admin-test-history')
+      if (saved) {
+        generationHistory.value = JSON.parse(saved)
+      }
+    } catch (error) {
+      console.error('Failed to load generation history:', error)
+      localStorage.removeItem('admin-test-history')
+    }
   }
 }
 
@@ -272,7 +301,14 @@ const addToHistory = (preset: string, response: any) => {
 
   generationHistory.value.unshift(item)
   generationHistory.value = generationHistory.value.slice(0, 10)
-  localStorage.setItem('admin-test-history', JSON.stringify(generationHistory.value))
+
+  if (process.client) {
+    try {
+      localStorage.setItem('admin-test-history', JSON.stringify(generationHistory.value))
+    } catch (error) {
+      console.error('Failed to save generation history:', error)
+    }
+  }
 }
 
 // Export credentials

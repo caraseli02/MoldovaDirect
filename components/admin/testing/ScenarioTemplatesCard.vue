@@ -22,10 +22,20 @@
           <div class="text-xs text-muted-foreground">{{ scenario.description }}</div>
         </div>
         <div class="flex gap-2">
-          <Button @click="$emit('load', scenario)" size="sm" variant="outline">
+          <Button
+            @click="$emit('load', scenario)"
+            size="sm"
+            variant="outline"
+            :aria-label="`Load scenario: ${scenario.name}`"
+          >
             <commonIcon name="lucide:play" class="h-3 w-3" />
           </Button>
-          <Button @click="$emit('delete', scenario.id)" size="sm" variant="ghost">
+          <Button
+            @click="$emit('delete', scenario.id)"
+            size="sm"
+            variant="ghost"
+            :aria-label="`Delete scenario: ${scenario.name}`"
+          >
             <commonIcon name="lucide:trash-2" class="h-3 w-3" />
           </Button>
         </div>
