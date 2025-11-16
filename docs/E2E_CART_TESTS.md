@@ -2,7 +2,7 @@
 
 ## Overview
 
-Comprehensive end-to-end tests for cart functionality that run automatically on every pull request to prevent regressions.
+Comprehensive end-to-end tests for cart functionality available for local testing and manual verification.
 
 ## Test Coverage
 
@@ -105,17 +105,6 @@ npm run test:e2e:ci
 PLAYWRIGHT_TEST_BASE_URL=https://your-preview.vercel.app npm run test:e2e
 ```
 
-### In CI/CD
-
-Tests run automatically on every PR via GitHub Actions.
-
-**Workflow**: `.github/workflows/e2e-cart-tests.yml`
-
-**Triggers**:
-- Pull requests to main
-- Changes to cart-related files
-- Manual workflow dispatch
-
 ## Configuration
 
 ### Main Config: `playwright.cart.config.ts`
@@ -134,53 +123,20 @@ Optimized configuration for cart tests:
 | `CI` | Enables CI-specific settings | `false` |
 | `FULL_SUITE` | Run mobile tests too | `false` |
 
-## CI/CD Integration
+## Manual Testing Workflow
 
-### Workflow Jobs
+### Testing Against Vercel Preview
 
-1. **test-cart-functionality**
-   - Waits for Vercel preview deployment
-   - Runs full cart test suite
-   - Uploads test reports and screenshots
-   - Comments on PR with results
-
-2. **test-cart-critical-smoke**
-   - Runs critical smoke tests
-   - Must pass for deployment
-   - Fast feedback (< 5 minutes)
-
-### Workflow Artifacts
-
-- **playwright-cart-test-report**: HTML report
-- **test-failure-screenshots**: Screenshots if tests fail
-
-### PR Comments
-
-**On Success**:
-```
-✅ Cart E2E Tests Passed
-
-All cart functionality tests passed on Vercel preview deployment.
-
-Preview URL: https://...
-```
-
-**On Failure**:
-```
-❌ Cart E2E Tests Failed
-
-The cart functionality tests failed on the Vercel preview deployment.
-
-Preview URL: https://...
-
-Common Issues:
-- JavaScript bundles not loading
-- Pinia not initialized
-...
-
-Artifacts:
-- Playwright Report: Available in workflow artifacts
-```
+1. **Get Preview URL** from Vercel deployment
+2. **Run tests** against the preview:
+   ```bash
+   PLAYWRIGHT_TEST_BASE_URL=https://your-preview.vercel.app npm run test:e2e
+   ```
+3. **Review results** in the terminal or HTML report:
+   ```bash
+   # View HTML report
+   npm run test:report
+   ```
 
 ## Test Development
 
@@ -228,22 +184,17 @@ npm run test:e2e:headed
 npx playwright test --config=playwright.cart.config.ts -g "should add product to cart"
 ```
 
-### CI Debugging
+### Debugging Against Vercel
 
-1. **Download artifacts**:
-   - Playwright HTML report
-   - Screenshots of failures
-   - Test results JSON
-
-2. **Check logs**:
-   - GitHub Actions workflow logs
-   - Browser console output
-   - Network requests
-
-3. **Reproduce locally**:
+1. **Reproduce locally**:
    ```bash
    PLAYWRIGHT_TEST_BASE_URL=<preview-url> npm run test:e2e
    ```
+
+2. **Check browser logs**:
+   - Browser console output in test results
+   - Network requests
+   - Screenshots from test failures
 
 ### Common Issues
 
@@ -291,15 +242,15 @@ npx playwright test --config=playwright.cart.config.ts -g "should add product to
 
 ## Integration with Prevention Strategy
 
-E2E cart tests are **Layer 5** of the prevention strategy:
+E2E cart tests complement the prevention strategy:
 
 1. ✅ Local verification (`npm run verify`)
 2. ✅ GitHub Actions build check
 3. ✅ Configuration guidelines
 4. ✅ Post-deployment verification
-5. **✅ E2E Cart Tests** ← You are here
+5. **✅ E2E Cart Tests** ← Available for manual testing
 
-These tests ensure:
+These tests help verify:
 - Cart functionality works end-to-end
 - No regressions in user workflows
 - Deployment doesn't break existing features
@@ -345,5 +296,5 @@ Set up alerts for:
 
 **Last Updated**: 2025-11-16
 **Test Count**: 14 (10 functionality + 4 smoke tests)
-**CI Integration**: ✅ Active
+**CI Integration**: ⚪ Available for local/manual testing
 **Coverage**: Landing, Products, Product Detail, Cart pages
