@@ -106,9 +106,37 @@ export default defineEventHandler(async (event) => {
       // Get admin info for the audit log
       const { data: adminProfile } = await supabase
         .from('profiles')
-        .select('name, email')
+        .select('name, email, role')
         .eq('id', adminId)
         .single()
+
+      // Authorization hierarchy check: Prevent privilege escalation
+      const roleHierarchy: Record<string, number> = {
+        customer: 0,
+        manager: 1,
+        admin: 2,
+        super_admin: 3
+      }
+
+      const adminRoleLevel = roleHierarchy[adminProfile?.role as string] || 0
+      const targetRoleLevel = roleHierarchy[targetProfile.role] || 0
+
+      // Block impersonation of users with equal or higher privileges
+      if (targetRoleLevel >= adminRoleLevel) {
+        throw createError({
+          statusCode: 403,
+          statusMessage: 'Cannot impersonate users with equal or higher privileges'
+        })
+      }
+
+      // Additional check: In production, only allow impersonation of customers
+      const isProduction = process.env.NODE_ENV === 'production'
+      if (isProduction && targetProfile.role !== 'customer') {
+        throw createError({
+          statusCode: 403,
+          statusMessage: 'Production impersonation is restricted to customer accounts only'
+        })
+      }
 
       // Create database audit entry for impersonation session
       const expiresAt = new Date(Date.now() + sessionDuration * 60000)
