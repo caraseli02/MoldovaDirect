@@ -26,60 +26,53 @@
       </div>
 
       <!-- Category cards - Carousel on mobile, Grid on desktop -->
-      <!-- Mobile: Horizontal carousel to reduce vertical scroll -->
+      <!-- Mobile: Horizontal scroll with native CSS -->
       <div class="mt-12 md:hidden">
-        <Swiper
-          :modules="[SwiperAutoplay, SwiperPagination]"
-          :slides-per-view="1.15"
-          :space-between="16"
-          :pagination="{ clickable: true, dynamicBullets: true }"
-          :breakpoints="{
-            480: { slidesPerView: 1.3, spaceBetween: 20 },
-            640: { slidesPerView: 1.5, spaceBetween: 24 }
-          }"
-          class="category-carousel"
-        >
-          <SwiperSlide
+        <div class="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-6 -mx-4 px-4 scrollbar-hide">
+          <article
             v-for="(category, index) in categories"
             :key="category.key"
+            class="flex-shrink-0 w-[85%] snap-center"
+            :class="{
+              'sm:w-[60%]': categories.length > 1,
+              'md:w-[45%]': categories.length > 2
+            }"
           >
-            <article>
-              <NuxtLink
-                :to="category.href"
-                class="hover-lift group relative block overflow-hidden rounded-3xl border border-gray-200 bg-gray-900/95 dark:border-gray-800 dark:bg-gray-900"
-              >
-                <NuxtImg
-                  :src="category.image"
-                  :alt="category.imageAlt"
-                  densities="1x 2x"
-                  class="absolute inset-0 h-full w-full object-cover brightness-[1.05] transition duration-700 ease-out group-hover:scale-105"
-                />
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/60 to-slate-900/20"></div>
-                <div
-                  :class="[
-                    'absolute inset-0 opacity-45 mix-blend-soft-light transition group-hover:opacity-65',
-                    category.accentBackground
-                  ]"
-                ></div>
-                <div class="relative flex h-full min-h-[22rem] flex-col justify-between p-8 text-white">
-                  <div class="space-y-4">
-                    <span class="inline-flex items-center justify-center rounded-xl bg-white/90 p-3 text-slate-900 shadow-lg shadow-slate-900/15 transition group-hover:bg-white group-hover:scale-110">
-                      <commonIcon :name="category.icon" class="h-6 w-6" />
-                    </span>
-                    <div class="space-y-3">
-                      <h3 class="text-2xl font-semibold leading-tight">{{ category.title }}</h3>
-                      <p class="text-sm text-white/85">{{ category.description }}</p>
-                    </div>
-                  </div>
-                  <span class="inline-flex items-center gap-2 text-sm font-semibold text-white transition group-hover:translate-x-1">
-                    {{ category.cta }}
-                    <commonIcon name="lucide:arrow-right" class="h-4 w-4" />
+            <NuxtLink
+              :to="category.href"
+              class="hover-lift group relative block overflow-hidden rounded-3xl border border-gray-200 bg-gray-900/95 dark:border-gray-800 dark:bg-gray-900"
+            >
+              <NuxtImg
+                :src="category.image"
+                :alt="category.imageAlt"
+                densities="1x 2x"
+                class="absolute inset-0 h-full w-full object-cover brightness-[1.05] transition duration-700 ease-out group-hover:scale-105"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/60 to-slate-900/20"></div>
+              <div
+                :class="[
+                  'absolute inset-0 opacity-45 mix-blend-soft-light transition group-hover:opacity-65',
+                  category.accentBackground
+                ]"
+              ></div>
+              <div class="relative flex h-full min-h-[22rem] flex-col justify-between p-8 text-white">
+                <div class="space-y-4">
+                  <span class="inline-flex items-center justify-center rounded-xl bg-white/90 p-3 text-slate-900 shadow-lg shadow-slate-900/15 transition group-hover:bg-white group-hover:scale-110">
+                    <commonIcon :name="category.icon" class="h-6 w-6" />
                   </span>
+                  <div class="space-y-3">
+                    <h3 class="text-2xl font-semibold leading-tight">{{ category.title }}</h3>
+                    <p class="text-sm text-white/85">{{ category.description }}</p>
+                  </div>
                 </div>
-              </NuxtLink>
-            </article>
-          </SwiperSlide>
-        </Swiper>
+                <span class="inline-flex items-center gap-2 text-sm font-semibold text-white transition group-hover:translate-x-1">
+                  {{ category.cta }}
+                  <commonIcon name="lucide:arrow-right" class="h-4 w-4" />
+                </span>
+              </div>
+            </NuxtLink>
+          </article>
+        </div>
       </div>
 
       <!-- Desktop: Grid layout with stagger animation -->
@@ -154,17 +147,13 @@ const localePath = useLocalePath()
 </script>
 
 <style scoped>
-/* Swiper pagination dots styling */
-:deep(.category-carousel .swiper-pagination) {
-  bottom: -2rem;
+/* Hide scrollbar for native scroll carousel */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
-:deep(.category-carousel .swiper-pagination-bullet) {
-  background-color: rgb(156 163 175 / 0.5); /* gray-400 with 50% opacity */
-}
-
-:deep(.category-carousel .swiper-pagination-bullet-active) {
-  background-color: hsl(var(--color-primary-600));
-  opacity: 1;
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, Opera */
 }
 </style>
