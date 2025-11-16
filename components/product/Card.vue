@@ -290,12 +290,24 @@ const handleTouchStart = (event: TouchEvent) => {
 // Actions
 const addToCart = async () => {
   // Only run on client side (fix for Vercel SSR)
-  if (process.server) {
+  if (process.server || typeof window === 'undefined') {
     console.warn('Add to Cart: Server-side render, skipping')
     return
   }
 
+  // Debug logging
+  console.log('🛒 ProductCard: Add to Cart', {
+    productId: props.product.id,
+    isClient: process.client,
+    hasAddItem: typeof addItem === 'function'
+  })
+
   try {
+    // Verify cart is available
+    if (typeof addItem !== 'function') {
+      throw new Error('addItem function not available')
+    }
+
     // Haptic feedback for mobile users
     if (isMobile.value) {
       vibrate('buttonPress')
@@ -311,14 +323,16 @@ const addToCart = async () => {
       stock: props.product.stockQuantity
     }
 
+    console.log('🛒 Calling addItem')
     await addItem(cartProduct, 1)
+    console.log('✅ Item added successfully')
 
     // Success haptic feedback
     if (isMobile.value) {
       vibrate('success')
     }
   } catch (error) {
-    console.error('Failed to add item to cart:', error)
+    console.error('❌ Failed to add item to cart:', error)
 
     // Error haptic feedback
     if (isMobile.value) {

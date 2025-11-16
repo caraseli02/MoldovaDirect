@@ -648,12 +648,25 @@ const addToCart = async () => {
   if (!product.value) return
 
   // Only run on client side (fix for Vercel SSR)
-  if (process.server) {
+  if (process.server || typeof window === 'undefined') {
     console.warn('Add to Cart: Server-side render, skipping')
     return
   }
 
+  // Debug logging for Vercel
+  console.log('🛒 Add to Cart clicked', {
+    productId: product.value.id,
+    quantity: selectedQuantity.value,
+    isClient: process.client,
+    hasWindow: typeof window !== 'undefined'
+  })
+
   try {
+    // Verify cart is available
+    if (typeof addItem !== 'function') {
+      throw new Error('addItem function not available')
+    }
+
     // Construct the product object in the format expected by the cart store
     const cartProduct = {
       id: product.value.id,
@@ -664,9 +677,13 @@ const addToCart = async () => {
       stock: product.value.stockQuantity
     }
 
+    console.log('🛒 Calling addItem with:', cartProduct)
     await addItem(cartProduct, selectedQuantity.value)
+    console.log('✅ Add to cart succeeded!')
   } catch (err) {
-    console.error('Add to cart failed', err)
+    console.error('❌ Add to cart failed:', err)
+    // Show user-friendly error
+    alert(`Failed to add to cart: ${err instanceof Error ? err.message : 'Unknown error'}`)
   }
 }
 
