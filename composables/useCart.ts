@@ -1,91 +1,31 @@
 import { useCartStore } from "~/stores/cart";
-import { getActivePinia } from "pinia";
 import { ref, computed } from "vue";
 
 export const useCart = () => {
-  // access the store, fallback if not available
-  const pinia = getActivePinia()
+  // CRITICAL FIX: Always try to get the cart store directly
+  // Don't check for Pinia availability - let Nuxt handle it
+  // This ensures the store is properly initialized during hydration on Vercel
 
-  // If pinia is not available (SSR), return minimal interface
-  if (!pinia) {
-    // Return minimal interface for SSR
-    return {
-      items: ref([]),
-      itemCount: ref(0),
-      subtotal: ref(0),
-      isEmpty: ref(true),
-      loading: ref(false),
-      error: ref(null),
-      sessionId: ref(null),
-      isInCart: () => false,
-      getItemByProductId: () => undefined,
-      addItem: async () => {},
-      updateQuantity: async () => {},
-      removeItem: async () => {},
-      clearCart: async () => {},
-      validateCart: async () => {},
-      directAddItem: async () => {},
-      directUpdateQuantity: async () => {},
-      directRemoveItem: async () => {},
-      directClearCart: async () => {},
-      directValidateCart: async () => {},
-      recoverCart: async () => false,
-      forceSync: () => false,
-      storageType: ref("memory"),
-      lastSyncAt: ref(null),
-      validationInProgress: ref(false),
-      backgroundValidationEnabled: ref(false),
-      lastBackgroundValidation: ref(null),
-      toggleBackgroundValidation: () => {},
-      clearValidationCache: () => {},
-      validateCartWithRetry: async () => false,
-      selectedItems: ref(new Set()),
-      selectedItemsCount: ref(0),
-      selectedItemsSubtotal: ref(0),
-      allItemsSelected: ref(false),
-      hasSelectedItems: ref(false),
-      bulkOperationInProgress: ref(false),
-      isItemSelected: () => false,
-      getSelectedItems: ref([]),
-      toggleItemSelection: () => {},
-      toggleSelectAll: () => {},
-      removeSelectedItems: async () => {},
-      moveSelectedToSavedForLater: async () => {},
-      savedForLater: ref([]),
-      savedForLaterCount: ref(0),
-      addToSavedForLater: async () => {},
-      removeFromSavedForLater: async () => {},
-      moveToCartFromSavedForLater: async () => {},
-      recommendations: ref([]),
-      recommendationsLoading: ref(false),
-      loadRecommendations: async () => {},
-      performanceMetrics: ref({
-        lastOperationTime: 0,
-        averageOperationTime: 0,
-        operationCount: 0,
-        syncCount: 0,
-        errorCount: 0
-      }),
-      getPerformanceMetrics: () => ({
-        lastOperationTime: 0,
-        averageOperationTime: 0,
-        operationCount: 0,
-        syncCount: 0,
-        errorCount: 0
-      }),
-      resetPerformanceMetrics: () => {}
+  let cartStore: ReturnType<typeof useCartStore> | null = null
+
+  try {
+    // On client side, always get the store
+    if (process.client) {
+      cartStore = useCartStore()
+
+      // Initialize cart if not already initialized
+      if (cartStore && !cartStore.sessionId) {
+        cartStore.initializeCart()
+      }
     }
+  } catch (error) {
+    console.error('Failed to initialize cart store:', error)
+    cartStore = null
   }
 
-  const cartStore = useCartStore(pinia);
-
-  // Initialize cart if not already initialized
-  if (!cartStore.sessionId) {
-    cartStore.initializeCart()
-  }
-
-  // If store is not available, return minimal interface
+  // If store is not available (SSR or error), return minimal interface
   if (!cartStore) {
+    console.warn('Cart store not available, returning stub interface')
     // Return minimal interface for SSR
     return {
       items: ref([]),
@@ -97,7 +37,9 @@ export const useCart = () => {
       sessionId: ref(null),
       isInCart: () => false,
       getItemByProductId: () => undefined,
-      addItem: async () => {},
+      addItem: async () => {
+        console.warn('Cart not initialized - addItem stub called')
+      },
       updateQuantity: async () => {},
       removeItem: async () => {},
       clearCart: async () => {},

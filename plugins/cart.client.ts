@@ -1,17 +1,24 @@
 export default defineNuxtPlugin(() => {
-  // Ensure Pinia is properly initialized before cart operations
+  // CRITICAL: Ensure cart store is initialized immediately on client
+  // This fixes the Vercel hydration issue where addItem is undefined
   if (import.meta.client) {
-    // Initialize cart store to ensure Pinia is ready
-    const { $pinia } = useNuxtApp()
-    if ($pinia) {
-      try {
-        const cartStore = useCartStore()
-        if (!cartStore.sessionId) {
-          cartStore.initializeCart()
+    try {
+      // Wait for next tick to ensure Pinia is fully hydrated
+      nextTick(() => {
+        try {
+          const cartStore = useCartStore()
+          if (!cartStore.sessionId) {
+            console.log('🛒 Initializing cart store from plugin')
+            cartStore.initializeCart()
+          } else {
+            console.log('🛒 Cart store already initialized, sessionId:', cartStore.sessionId)
+          }
+        } catch (error) {
+          console.error('❌ Cart initialization failed in nextTick:', error)
         }
-      } catch (error) {
-        console.warn('Cart initialization deferred:', error)
-      }
+      })
+    } catch (error) {
+      console.error('❌ Cart plugin initialization failed:', error)
     }
   }
 })
