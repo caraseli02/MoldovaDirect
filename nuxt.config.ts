@@ -195,7 +195,6 @@ export default defineNuxtConfig({
       external: [
         "stripe",
         "nodemailer",
-        "@supabase/supabase-js",
       ],
       inline: ["vue", "@vue/*"],
     },

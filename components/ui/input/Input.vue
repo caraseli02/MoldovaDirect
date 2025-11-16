@@ -17,7 +17,12 @@ const emits = defineEmits<{
   (e: "update:modelValue", payload: string | number): void
 }>()
 
+// CUSTOMIZATION: Changed from passive: true to passive: false
+// Reason: shadcn-vue's default passive:true breaks v-model reactivity (see issue #771)
+// This is a known bug where form inputs don't emit updates properly
+// DO NOT regenerate this component from shadcn-vue without keeping this fix
 const modelValue = useVModel(props, "modelValue", emits, {
+  passive: false,
   defaultValue: props.defaultValue,
 })
 </script>
