@@ -231,15 +231,15 @@ describe('AppHeader', () => {
   })
 
   describe('Accessibility', () => {
-    it('has aria-expanded on mobile menu button', () => {
+    it('has proper aria-labels on action links', () => {
       const wrapper = mount(AppHeader, {
         global: createGlobalConfig(),
       })
 
-      const mobileMenuButtons = wrapper.findAll('button').filter(btn =>
-        btn.attributes('aria-expanded') !== undefined
-      )
-      expect(mobileMenuButtons.length).toBeGreaterThan(0)
+      // Check that user menu has proper accessibility
+      const accountLink = wrapper.find('[data-testid="user-menu"]')
+      expect(accountLink.exists()).toBe(true)
+      expect(accountLink.attributes('aria-label')).toBeDefined()
     })
   })
 })
