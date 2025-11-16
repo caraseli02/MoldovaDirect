@@ -647,6 +647,12 @@ const shareProduct = async () => {
 const addToCart = async () => {
   if (!product.value) return
 
+  // Only run on client side (fix for Vercel SSR)
+  if (process.server) {
+    console.warn('Add to Cart: Server-side render, skipping')
+    return
+  }
+
   try {
     // Construct the product object in the format expected by the cart store
     const cartProduct = {

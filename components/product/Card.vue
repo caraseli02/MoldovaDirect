@@ -289,6 +289,12 @@ const handleTouchStart = (event: TouchEvent) => {
 
 // Actions
 const addToCart = async () => {
+  // Only run on client side (fix for Vercel SSR)
+  if (process.server) {
+    console.warn('Add to Cart: Server-side render, skipping')
+    return
+  }
+
   try {
     // Haptic feedback for mobile users
     if (isMobile.value) {
