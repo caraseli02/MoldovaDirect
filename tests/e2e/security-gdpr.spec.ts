@@ -10,51 +10,50 @@
 import { test, expect, type Page } from '@playwright/test'
 import path from 'path'
 
-test.describe('GDPR Compliance - Account Deletion', () => {
-  // Note: These tests require a test user to exist in Supabase
-  // They will be skipped if authentication fails
+// Helper function to login via UI (triggers Vue reactivity correctly)
+async function loginUser(page: Page, email: string, password: string) {
+  await page.goto('/auth/login')
+  await page.waitForLoadState('networkidle')
 
-  test('should delete user account atomically with all data', async ({ page, request }) => {
-    // Login first with test credentials
-    const testEmail = process.env.TEST_USER_EMAIL || 'admin@moldovadirect.com'
-    const testPassword = process.env.TEST_USER_PASSWORD || 'Admin123!@#'
+  await page.evaluate(({ email, password }) => {
+    const emailInput = document.querySelector('#email') as HTMLInputElement | null
+    const passwordInput = document.querySelector('#password') as HTMLInputElement | null
 
-    await page.goto('/auth/login')
+    if (emailInput && passwordInput) {
+      emailInput.value = email
+      passwordInput.value = password
+      emailInput.dispatchEvent(new Event('input', { bubbles: true }))
+      passwordInput.dispatchEvent(new Event('input', { bubbles: true }))
 
-    await page.evaluate(({ email, password }) => {
-      const emailInput = document.querySelector('#email') as HTMLInputElement | null
-      const passwordInput = document.querySelector('#password') as HTMLInputElement | null
-
-      if (emailInput && passwordInput) {
-        emailInput.value = email
-        passwordInput.value = password
-        emailInput.dispatchEvent(new Event('input', { bubbles: true }))
-        passwordInput.dispatchEvent(new Event('input', { bubbles: true }))
-      }
-    }, { email: testEmail, password: testPassword })
-
-    await page.waitForTimeout(1000)
-
-    // Try to submit form
-    await page.evaluate(() => {
-      const form = document.querySelector('form')
+      // Submit the form
+      const form = emailInput.closest('form')
       if (form) {
         form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }))
       }
-    })
+    }
+  }, { email, password })
 
-    // Wait for either successful login or stay on login page
-    await page.waitForTimeout(3000)
+  // Wait for navigation
+  await page.waitForTimeout(3000)
+}
 
+test.describe('GDPR Compliance - Account Deletion', () => {
+  test('should delete user account atomically with all data', async ({ page, request }) => {
+    const testEmail = process.env.TEST_USER_EMAIL || 'teste2e@example.com'
+    const testPassword = process.env.TEST_USER_PASSWORD || 'N7jKAcu2FHbt7cj'
+
+    // Login with test credentials
+    await loginUser(page, testEmail, testPassword)
+
+    // Verify login succeeded
     const currentUrl = page.url()
-
-    // Skip test if login failed
     if (currentUrl.includes('/auth/login')) {
-      console.log('⚠ Skipping test - authentication failed (test user may not exist in database)')
+      console.log('⚠ Login failed - check credentials')
       test.skip()
       return
     }
-    // Navigate to account settings or deletion page
+
+    // Navigate to account settings
     await page.goto('/account/settings')
     await page.waitForLoadState('networkidle')
 
@@ -92,9 +91,24 @@ test.describe('GDPR Compliance - Account Deletion', () => {
     await expect(page).toHaveURL(/\/auth\/login/)
 
     // Verify cannot login with deleted account
-    await page.fill('#email', userData.user.email)
-    await page.fill('#password', process.env.TEST_USER_PASSWORD || 'Admin123!@#')
-    await page.click('button[type="submit"]')
+    await page.evaluate(({ email, password }) => {
+      const emailInput = document.querySelector('#email') as HTMLInputElement | null
+      const passwordInput = document.querySelector('#password') as HTMLInputElement | null
+
+      if (emailInput && passwordInput) {
+        emailInput.value = email
+        passwordInput.value = password
+        emailInput.dispatchEvent(new Event('input', { bubbles: true }))
+        passwordInput.dispatchEvent(new Event('input', { bubbles: true }))
+
+        const form = emailInput.closest('form')
+        if (form) {
+          form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }))
+        }
+      }
+    }, { email: userData.user.email, password: testPassword })
+
+    await page.waitForTimeout(2000)
 
     // Should show error (account no longer exists)
     await expect(page.locator(':text("Invalid")')).toBeVisible({ timeout: 5000 })
@@ -152,11 +166,11 @@ test.describe('GDPR Compliance - Account Deletion', () => {
 
 test.describe('Admin MFA Enforcement', () => {
   test('should redirect admin without MFA to setup page', async ({ page }) => {
-    // Login as admin
-    await page.goto('/auth/login')
-    await page.fill('#email', process.env.TEST_ADMIN_EMAIL || 'admin@moldovadirect.com')
-    await page.fill('#password', process.env.TEST_ADMIN_PASSWORD || 'Admin123!@#')
-    await page.click('button[type="submit"]')
+    const adminEmail = process.env.TEST_ADMIN_EMAIL || 'admin@moldovadirect.com'
+    const adminPassword = process.env.TEST_ADMIN_PASSWORD || 'Admin123!@#'
+
+    // Login as admin using helper
+    await loginUser(page, adminEmail, adminPassword)
 
     await page.waitForLoadState('networkidle')
 
@@ -185,11 +199,11 @@ test.describe('Admin MFA Enforcement', () => {
   })
 
   test('should not allow admin access without MFA verification', async ({ page, request }) => {
-    // Login as admin
-    await page.goto('/auth/login')
-    await page.fill('#email', process.env.TEST_ADMIN_EMAIL || 'admin@moldovadirect.com')
-    await page.fill('#password', process.env.TEST_ADMIN_PASSWORD || 'Admin123!@#')
-    await page.click('button[type="submit"]')
+    const adminEmail = process.env.TEST_ADMIN_EMAIL || 'admin@moldovadirect.com'
+    const adminPassword = process.env.TEST_ADMIN_PASSWORD || 'Admin123!@#'
+
+    // Login as admin using helper
+    await loginUser(page, adminEmail, adminPassword)
 
     await page.waitForLoadState('networkidle')
 
@@ -211,15 +225,16 @@ test.describe('Admin MFA Enforcement', () => {
   })
 
   test('should handle MFA verification errors gracefully', async ({ page }) => {
+    const adminEmail = process.env.TEST_ADMIN_EMAIL || 'admin@moldovadirect.com'
+    const adminPassword = process.env.TEST_ADMIN_PASSWORD || 'Admin123!@#'
+
     // Simulate network error during MFA check
     await page.route('**/auth/v1/factors**', route => {
       route.abort('failed')
     })
 
-    await page.goto('/auth/login')
-    await page.fill('#email', process.env.TEST_ADMIN_EMAIL || 'admin@moldovadirect.com')
-    await page.fill('#password', process.env.TEST_ADMIN_PASSWORD || 'Admin123!@#')
-    await page.click('button[type="submit"]')
+    // Login as admin using helper
+    await loginUser(page, adminEmail, adminPassword)
 
     await page.waitForLoadState('networkidle')
 
