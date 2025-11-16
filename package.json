@@ -40,7 +40,10 @@
     "docs:check-links": "markdown-link-check docs/**/*.md README.md DOCUMENTATION_INDEX.md QUICK_START_GUIDE.md",
     "docs:lint": "markdownlint docs/**/*.md *.md --ignore node_modules --ignore .nuxt --ignore .output",
     "docs:find-outdated": "find docs -name '*.md' -mtime +180 -type f",
-    "docs:audit": "pnpm docs:check-links && pnpm docs:lint"
+    "docs:audit": "pnpm docs:check-links && pnpm docs:lint",
+    "verify": "./scripts/verify-build.sh",
+    "build:verify": "npm run build && npm run verify",
+    "deploy:check": "npm run build:verify && echo \"✅ Ready to deploy to Vercel\""
   },
   "dependencies": {
     "@nuxt/image": "^1.11.0",
