@@ -86,17 +86,19 @@ BEGIN
     )
   WHERE user_id = target_user_id;
 
-  -- 7. Delete newsletter subscriptions
+  -- 7. Delete newsletter subscriptions (by email since there's no user_id column)
   DELETE FROM newsletter_subscriptions
-  WHERE user_id = target_user_id;
+  WHERE email IN (
+    SELECT email FROM auth.users WHERE id = target_user_id
+  );
 
   -- 8. Delete email preferences
   DELETE FROM email_preferences
   WHERE user_id = target_user_id;
 
-  -- 9. Delete impersonation logs (admin actions)
+  -- 9. Delete impersonation logs (where user was target or admin)
   DELETE FROM impersonation_logs
-  WHERE impersonated_user_id = target_user_id;
+  WHERE target_user_id = target_user_id OR admin_id = target_user_id;
 
   -- 10. Delete user profile
   DELETE FROM profiles
@@ -104,26 +106,9 @@ BEGIN
 
   GET DIAGNOSTICS profile_deleted = FOUND;
 
-  -- 11. Log the deletion event (before user is deleted from auth)
-  INSERT INTO auth_events (
-    user_id,
-    event_type,
-    metadata,
-    created_at
-  ) VALUES (
-    NULL, -- User will no longer exist
-    'account_deleted_atomic',
-    jsonb_build_object(
-      'deleted_user_id', target_user_id::TEXT,
-      'reason', deletion_reason,
-      'addresses_deleted', addresses_deleted,
-      'carts_deleted', carts_deleted,
-      'orders_anonymized', orders_anonymized,
-      'profile_deleted', profile_deleted,
-      'timestamp', NOW()::TEXT
-    ),
-    NOW()
-  );
+  -- 11. Delete from auth.users (removes email, phone, password, metadata)
+  -- Note: This must be done last as other queries may reference auth.users
+  -- The API endpoint will call auth.admin.deleteUser() separately for complete cleanup
 
   -- Return summary of deletions
   RETURN jsonb_build_object(

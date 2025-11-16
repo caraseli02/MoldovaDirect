@@ -174,10 +174,10 @@ export function clearFailedLoginAttempts(email: string): void {
 }
 
 /**
- * Cleanup expired rate limit entries
+ * Cleanup expired auth rate limit entries
  * Should be called periodically (e.g., every 5 minutes)
  */
-export function cleanupExpiredRateLimits(): void {
+export function cleanupExpiredAuthRateLimits(): void {
   const now = Date.now()
 
   // Cleanup rate limit store
@@ -224,6 +224,8 @@ export function requireAuthRateLimit(event: H3Event, operation: AuthOperation, e
 }
 
 // Start cleanup interval (run every 5 minutes)
-if (typeof setInterval !== 'undefined') {
-  setInterval(cleanupExpiredRateLimits, 5 * 60 * 1000)
-}
+// Note: This is disabled by default to prevent memory leaks in serverless environments
+// Enable this only in long-running server environments
+// if (typeof setInterval !== 'undefined') {
+//   setInterval(cleanupExpiredAuthRateLimits, 5 * 60 * 1000)
+// }

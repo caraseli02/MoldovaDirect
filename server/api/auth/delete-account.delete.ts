@@ -1,15 +1,19 @@
 /**
  * Account Deletion API Endpoint
- * 
+ *
  * Requirements addressed:
  * - 6.6: User profile management functionality
  * - 6.7: Account deletion functionality
  * - 10.1: Integration with shopping features
  * - 10.2: Proper cleanup of user data
- * 
+ *
  * This endpoint handles secure account deletion with proper data cleanup
  * and audit logging for compliance purposes.
  */
+
+import { createLogger } from '~/server/utils/secureLogger'
+
+const logger = createLogger('delete-account')
 
 export default defineEventHandler(async (event) => {
   try {
@@ -91,7 +95,7 @@ export default defineEventHandler(async (event) => {
           .remove([fileName])
           .catch(err => {
             // Log but don't fail - storage deletion is non-critical
-            console.warn('Failed to delete profile picture:', err)
+            logger.warn('Failed to delete profile picture', { error: err.message })
           })
       }
 
@@ -119,10 +123,13 @@ export default defineEventHandler(async (event) => {
 
     } catch (deletionError) {
       // Log the error for debugging
-      console.error('Account deletion error:', deletionError)
+      logger.error('Account deletion failed', {
+        error: deletionError instanceof Error ? deletionError.message : String(deletionError),
+        userId: user.id
+      })
 
       // Re-throw with appropriate error message
-      if (deletionError.statusCode) {
+      if (deletionError && typeof deletionError === 'object' && 'statusCode' in deletionError) {
         throw deletionError
       }
 
@@ -133,10 +140,12 @@ export default defineEventHandler(async (event) => {
     }
 
   } catch (error) {
-    console.error('Account deletion error:', error)
+    logger.error('Account deletion error', {
+      error: error instanceof Error ? error.message : String(error)
+    })
 
     // Return appropriate error response
-    if (error.statusCode) {
+    if (error && typeof error === 'object' && 'statusCode' in error) {
       throw error
     }
 

@@ -45,7 +45,15 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   }
 
   // Check MFA status for additional security (REQUIRED for admin users)
-  const { data: mfaData } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
+  const { data: mfaData, error: mfaError } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
+
+  if (mfaError) {
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Failed to verify MFA status. Please try again.'
+    })
+  }
+
   if (mfaData?.currentLevel !== 'aal2') {
     return navigateTo('/account/security/mfa')
   }
