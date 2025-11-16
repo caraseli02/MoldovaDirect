@@ -93,6 +93,15 @@ tmp/
 test-results/
 playwright-report/
 
+# Working test files and directories
+/tests/browser-automation/
+/tests/e2e/vercel/
+/tests/*REPORT*.md
+/tests/*SUMMARY*.md
+playwright.*.config.ts
+!playwright.config.ts
+!playwright.cart.config.ts
+
 # Theme and build artifacts
 .themes/
 .cache/

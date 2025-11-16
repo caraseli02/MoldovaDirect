@@ -246,6 +246,11 @@ describe('AppHeader', () => {
         btn.attributes('aria-label')?.includes('Search')
       )
       expect(searchButton).toBeDefined()
+
+      // Check that user menu has proper accessibility
+      const accountLink = wrapper.find('[data-testid="user-menu"]')
+      expect(accountLink.exists()).toBe(true)
+      expect(accountLink.attributes('aria-label')).toBeDefined()
     })
   })
 })
