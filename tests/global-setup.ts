@@ -65,87 +65,133 @@ async function globalSetup(config: FullConfig) {
     const page = await context.newPage()
 
     try {
-      // Try to authenticate - if it fails, create empty auth file
+      // ACTUALLY LOGIN - Get credentials from environment variables
       const testEmail = process.env.TEST_USER_EMAIL || `test-${locale}@example.test`
       const testPassword = process.env.TEST_USER_PASSWORD
 
-      console.log(`→ Attempting authentication for locale: ${locale}`)
+      if (!testPassword) {
+        throw new Error('TEST_USER_PASSWORD environment variable is required for global setup')
+      }
 
-      if (testPassword) {
-        try {
-          // Navigate to login page
-          await page.goto('/auth/login')
-          await page.waitForLoadState('networkidle')
+      console.log(`→ Authenticating user for locale: ${locale}`)
 
-          // Fill in credentials and submit the form programmatically
-          await page.evaluate(({ email, password }) => {
-            const emailInput = document.querySelector('#email') as HTMLInputElement
-            const passwordInput = document.querySelector('#password') as HTMLInputElement
+      // Navigate to login page (without locale prefix, app will handle it)
+      const loginUrl = `${baseURL}/auth/login`
+      console.log(`  Navigating to: ${loginUrl}`)
+      await page.goto(loginUrl, { waitUntil: 'networkidle' })
 
-            if (emailInput && passwordInput) {
-              emailInput.value = email
-              passwordInput.value = password
+      // Wait for client-side hydration
+      console.log(`  Waiting for hydration...`)
+      await page.waitForLoadState('networkidle')
+      await page.waitForTimeout(2000) // Give time for hydration
 
-              // Trigger Vue reactivity
-              emailInput.dispatchEvent(new Event('input', { bubbles: true }))
-              passwordInput.dispatchEvent(new Event('input', { bubbles: true }))
-
-              // Submit the form
-              const form = emailInput.closest('form')
-              if (form) {
-                // Call the submit handler directly
-                const submitEvent = new Event('submit', { bubbles: true, cancelable: true })
-                form.dispatchEvent(submitEvent)
-              }
-            }
-          }, { email: testEmail, password: testPassword })
-
-          // Wait for navigation away from login page or error
-          await Promise.race([
-            page.waitForFunction(
-              () => !window.location.pathname.includes('/auth/login'),
-              { timeout: 10000 }
-            ),
-            page.waitForSelector('[role="alert"]', { timeout: 10000 })
-          ]).catch(() => {
-            // Timeout - login might have failed
-          })
-
-          await page.waitForTimeout(1000)
-
-          const currentUrl = page.url()
-
-          if (currentUrl.includes('/auth/login')) {
-            console.log(`  ⚠ Authentication failed for ${locale} - tests will run unauthenticated`)
-            // Create empty auth state
-            const storageFile = path.join(authDir, `user-${locale}.json`)
-            await context.storageState({ path: storageFile })
-          } else {
-            console.log(`  ✓ Authenticated successfully for ${locale}`)
-            // Save authenticated storage state
-            const storageFile = path.join(authDir, `user-${locale}.json`)
-            await context.storageState({ path: storageFile })
+      // Debug: Check what attributes the email input has
+      const inputs = await page.locator('input[type="email"]').all()
+      console.log(`  Found ${inputs.length} email input(s)`)
+      for (let i = 0; i < inputs.length; i++) {
+        const attrs = await inputs[i].evaluate(el => {
+          const attributes: Record<string, string> = {}
+          for (const attr of el.attributes) {
+            attributes[attr.name] = attr.value
           }
-        } catch (authError) {
-          console.log(`  ⚠ Authentication error for ${locale}: ${authError instanceof Error ? authError.message : String(authError)}`)
-          // Create empty auth state for tests to handle
-          const storageFile = path.join(authDir, `user-${locale}.json`)
-          await context.storageState({ path: storageFile })
-        }
-      } else {
-        console.log(`  ⚠ No TEST_USER_PASSWORD - creating empty auth state for ${locale}`)
-        const storageFile = path.join(authDir, `user-${locale}.json`)
-        await context.storageState({ path: storageFile })
+          return attributes
+        })
+        console.log(`  Email input #${i} attributes:`, JSON.stringify(attrs, null, 2))
       }
-    } catch (error) {
-      console.error(`Error in global setup for ${locale}:`, error)
-      // Create empty auth state even on error
+
+      // Try to find input by data-testid first, fallback to type=email
+      let emailInput = page.locator('[data-testid="email-input"]')
+      const hasTestId = await emailInput.count() > 0
+      console.log(`  Has data-testid="email-input": ${hasTestId}`)
+
+      if (!hasTestId) {
+        console.log(`  ⚠️  Falling back to input[type="email"]`)
+        emailInput = page.locator('input[type="email"]').first()
+      }
+
+      // Fill in credentials
+      await emailInput.click()
+      await emailInput.fill(testEmail)
+
+      // Verify email was filled correctly
+      const filledEmail = await emailInput.inputValue()
+      console.log(`  Filled email: "${filledEmail}"`)
+      await page.waitForTimeout(100)
+
+      // Password input - try data-testid first, fallback to type=password
+      let passwordInput = page.locator('[data-testid="password-input"]')
+      const hasPasswordTestId = await passwordInput.count() > 0
+      if (!hasPasswordTestId) {
+        console.log(`  ⚠️  Falling back to input[type="password"]`)
+        passwordInput = page.locator('input[type="password"]').first()
+      }
+
+      await passwordInput.click()
+      await passwordInput.fill(testPassword)
+
+      // Verify password was filled correctly (length check for security)
+      const filledPassword = await passwordInput.inputValue()
+      console.log(`  Password filled: ${filledPassword.length} characters (expected: ${testPassword.length})`)
+      console.log(`  Password matches: ${filledPassword === testPassword}`)
+
+      await page.waitForTimeout(500)
+
+      // Login button - try data-testid first, fallback to button text
+      let loginButton = page.locator('[data-testid="login-button"]')
+      const hasButtonTestId = await loginButton.count() > 0
+      if (!hasButtonTestId) {
+        console.log(`  ⚠️  Falling back to button with type=submit`)
+        loginButton = page.locator('button[type="submit"]').first()
+      }
+
+      await loginButton.waitFor({ state: 'visible' })
+
+      // Submit login form (force click to bypass validation for global setup)
+      console.log(`  Submitting login form...`)
+      await loginButton.click({ force: true })
+
+      // Wait a bit for navigation
+      await page.waitForTimeout(3000)
+
+      // Check current URL
+      const urlAfterSubmit = page.url()
+      console.log(`  URL after submit: ${urlAfterSubmit}`)
+
+      // Check for error messages
+      const errorAlert = page.locator('[data-testid="auth-error"]')
+      const hasError = await errorAlert.count() > 0
+      if (hasError) {
+        const errorText = await errorAlert.textContent()
+        console.log(`  ❌ Login error: ${errorText}`)
+        throw new Error(`Login failed: ${errorText}`)
+      }
+
+      // Take screenshot if still on login page
+      if (urlAfterSubmit.includes('/auth/login')) {
+        const screenshotPath = path.join(__dirname, `login-failed-${locale}.png`)
+        await page.screenshot({ path: screenshotPath, fullPage: true })
+        console.log(`  📸 Screenshot saved to: ${screenshotPath}`)
+      }
+
+      // Wait for successful login - should redirect to account or dashboard
+      // Check if already redirected, otherwise wait
+      const currentUrl = page.url()
+      if (!currentUrl.match(/\/(account|dashboard)/)) {
+        await page.waitForURL(/\/(account|dashboard)/, { timeout: 10000 })
+      }
+
+      const finalUrl = page.url()
+      console.log(`  ✅ Login successful! Redirected to: ${finalUrl}`)
+
+      // Save authenticated storage state
       const storageFile = path.join(authDir, `user-${locale}.json`)
-      try {
-        await context.storageState({ path: storageFile })
-      } catch (e) {
-        // Ignore
-      }
+      await context.storageState({ path: storageFile })
+
+      console.log(`✓ Authenticated and saved storage state for locale: ${locale}`)
+    } catch (error) {
+      await context.close()
+      await browser.close()
+      throw new Error(`Global setup failed for locale ${locale}: ${error instanceof Error ? error.message : String(error)}`)
     } finally {
       await context.close()
     }
