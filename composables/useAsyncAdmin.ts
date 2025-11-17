@@ -1,3 +1,4 @@
+import { h, defineComponent, defineAsyncComponent } from 'vue'
 import type { Component, DefineComponent } from 'vue'
 
 /**
@@ -52,7 +53,34 @@ export const useAsyncAdminComponent = (
   } = options
 
   return defineAsyncComponent({
-    loader: () => import(`~/components/admin/${path}.vue`),
+    loader: async () => {
+      // Use dynamic import with explicit path pattern for Vite
+      const modules: Record<string, any> = {
+        'Email/TemplateManager': () => import('~/components/admin/Email/TemplateManager.vue'),
+        'Email/TemplateHistory': () => import('~/components/admin/Email/TemplateHistory.vue'),
+        'Email/TemplateSynchronizer': () => import('~/components/admin/Email/TemplateSynchronizer.vue'),
+        'Email/DeliveryStats': () => import('~/components/admin/Email/DeliveryStats.vue'),
+        'Email/LogsTable': () => import('~/components/admin/Email/LogsTable.vue'),
+        'Dashboard/Overview': () => import('~/components/admin/Dashboard/Overview.vue'),
+        'Dashboard/Stats': () => import('~/components/admin/Dashboard/Stats.vue'),
+        'Dashboard/AnalyticsOverview': () => import('~/components/admin/Dashboard/AnalyticsOverview.vue'),
+        'Inventory/Reports': () => import('~/components/admin/Inventory/Reports.vue'),
+        'Products/Form': () => import('~/components/admin/Products/Form.vue'),
+        'Orders/Filters': () => import('~/components/admin/Orders/Filters.vue'),
+        'Orders/BulkActions': () => import('~/components/admin/Orders/BulkActions.vue'),
+        'Orders/ListItem': () => import('~/components/admin/Orders/ListItem.vue'),
+        'Utils/Pagination': () => import('~/components/admin/Utils/Pagination.vue'),
+        'Utils/BulkOperationsBar': () => import('~/components/admin/Utils/BulkOperationsBar.vue'),
+        'Users/Table': () => import('~/components/admin/Users/Table.vue'),
+        'Users/DetailView': () => import('~/components/admin/Users/DetailView.vue'),
+      }
+
+      const loader = modules[path]
+      if (!loader) {
+        throw new Error(`Unknown admin component: ${path}`)
+      }
+      return loader()
+    },
 
     // Loading component - simple skeleton with pulse animation
     loadingComponent: showLoading
@@ -157,7 +185,31 @@ export const useAsyncAdminComponent = (
  */
 export const preloadAdminComponent = async (path: string): Promise<void> => {
   try {
-    await import(`~/components/admin/${path}.vue`)
+    // Use the same module mapping as useAsyncAdminComponent
+    const modules: Record<string, any> = {
+      'Email/TemplateManager': () => import('~/components/admin/Email/TemplateManager.vue'),
+      'Email/TemplateHistory': () => import('~/components/admin/Email/TemplateHistory.vue'),
+      'Email/TemplateSynchronizer': () => import('~/components/admin/Email/TemplateSynchronizer.vue'),
+      'Email/DeliveryStats': () => import('~/components/admin/Email/DeliveryStats.vue'),
+      'Email/LogsTable': () => import('~/components/admin/Email/LogsTable.vue'),
+      'Dashboard/Overview': () => import('~/components/admin/Dashboard/Overview.vue'),
+      'Dashboard/Stats': () => import('~/components/admin/Dashboard/Stats.vue'),
+      'Dashboard/AnalyticsOverview': () => import('~/components/admin/Dashboard/AnalyticsOverview.vue'),
+      'Inventory/Reports': () => import('~/components/admin/Inventory/Reports.vue'),
+      'Products/Form': () => import('~/components/admin/Products/Form.vue'),
+      'Users/Table': () => import('~/components/admin/Users/Table.vue'),
+      'Users/DetailView': () => import('~/components/admin/Users/DetailView.vue'),
+      'Orders/Filters': () => import('~/components/admin/Orders/Filters.vue'),
+      'Orders/BulkActions': () => import('~/components/admin/Orders/BulkActions.vue'),
+      'Orders/ListItem': () => import('~/components/admin/Orders/ListItem.vue'),
+      'Utils/Pagination': () => import('~/components/admin/Utils/Pagination.vue'),
+      'Utils/BulkOperationsBar': () => import('~/components/admin/Utils/BulkOperationsBar.vue'),
+    }
+
+    const loader = modules[path]
+    if (loader) {
+      await loader()
+    }
   } catch (error) {
     console.warn(`Failed to preload admin component: ${path}`, error)
   }
