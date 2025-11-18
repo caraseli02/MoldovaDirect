@@ -76,13 +76,16 @@
               d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
             />
           </svg>
-          <span
-            v-if="itemCount > 0"
-            class="absolute -top-1 -right-2 flex items-center justify-center min-w-[18px] h-[18px] px-1 text-[10px] font-bold text-white bg-primary-600 rounded-full"
-            aria-hidden="true"
-          >
-            {{ itemCount > 99 ? '99+' : itemCount }}
-          </span>
+          <!-- Cart count badge - client only to prevent hydration mismatch -->
+          <ClientOnly>
+            <span
+              v-if="itemCount > 0"
+              class="absolute -top-1 -right-2 flex items-center justify-center min-w-[18px] h-[18px] px-1 text-[10px] font-bold text-white bg-primary-600 rounded-full"
+              aria-hidden="true"
+            >
+              {{ itemCount > 99 ? '99+' : itemCount }}
+            </span>
+          </ClientOnly>
         </div>
         <span class="text-xs font-medium">{{ $t('common.cart') }}</span>
       </NuxtLink>

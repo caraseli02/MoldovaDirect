@@ -302,8 +302,8 @@ const handleViewUser = (userId: string) => {
 }
 
 const handleEditUser = (userId: string) => {
-  emit('userAction', 'lucide:square-pen', userId)
-  
+  emit('userAction', 'edit', userId)
+
   if (isMobile.value) {
     vibrate('medium')
   }

@@ -168,7 +168,7 @@ const handleUserAction = async (action: string, userId: string, data?: any) => {
         showUserDetail(userId)
         break
         
-      case 'lucide:square-pen':
+      case 'edit':
         handleUserEdit(userId)
         break
         
