@@ -41,12 +41,61 @@ export default defineEventHandler(async (event) => {
   const preset = body.preset || 'minimal'
   let config = getPresetConfig(preset)
 
-  // Allow override with specific values
-  if (body.users !== undefined) config.users = body.users
-  if (body.products !== undefined) config.products = body.products
-  if (body.orders !== undefined) config.orders = body.orders
-  if (body.categories !== undefined) config.categories = body.categories
-  if (body.clearExisting !== undefined) config.clearExisting = body.clearExisting
+  // Define maximum limits to prevent resource exhaustion
+  const MAX_USERS = 1000
+  const MAX_PRODUCTS = 5000
+  const MAX_ORDERS = 10000
+
+  // Validate and apply overrides with strict bounds checking
+  if (body.users !== undefined) {
+    if (typeof body.users !== 'number' || body.users < 0 || body.users > MAX_USERS || !Number.isInteger(body.users)) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: `Users must be an integer between 0 and ${MAX_USERS}`
+      })
+    }
+    config.users = body.users
+  }
+
+  if (body.products !== undefined) {
+    if (typeof body.products !== 'number' || body.products < 0 || body.products > MAX_PRODUCTS || !Number.isInteger(body.products)) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: `Products must be an integer between 0 and ${MAX_PRODUCTS}`
+      })
+    }
+    config.products = body.products
+  }
+
+  if (body.orders !== undefined) {
+    if (typeof body.orders !== 'number' || body.orders < 0 || body.orders > MAX_ORDERS || !Number.isInteger(body.orders)) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: `Orders must be an integer between 0 and ${MAX_ORDERS}`
+      })
+    }
+    config.orders = body.orders
+  }
+
+  if (body.categories !== undefined) {
+    if (typeof body.categories !== 'boolean') {
+      throw createError({
+        statusCode: 400,
+        statusMessage: 'Categories must be a boolean value'
+      })
+    }
+    config.categories = body.categories
+  }
+
+  if (body.clearExisting !== undefined) {
+    if (typeof body.clearExisting !== 'boolean') {
+      throw createError({
+        statusCode: 400,
+        statusMessage: 'ClearExisting must be a boolean value'
+      })
+    }
+    config.clearExisting = body.clearExisting
+  }
 
   const results = {
     preset,

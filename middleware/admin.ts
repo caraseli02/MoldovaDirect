@@ -54,7 +54,12 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     })
   }
 
-  if (mfaData?.currentLevel !== 'aal2') {
+  // Skip MFA requirement in development for test accounts
+  const isDev = process.env.NODE_ENV === 'development'
+  const isTestAccount = user.value.email?.includes('@moldovadirect.com') || false
+  const shouldSkipMFA = isDev && isTestAccount
+
+  if (mfaData?.currentLevel !== 'aal2' && !shouldSkipMFA) {
     return navigateTo('/account/security/mfa')
   }
 })

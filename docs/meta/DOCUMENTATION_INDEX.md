@@ -1,6 +1,6 @@
 # Moldova Direct - Complete Documentation Index
 
-**Last Updated:** November 2, 2025
+**Last Updated:** November 16, 2025
 
 This is the master index for all Moldova Direct documentation. Use this as your starting point to find any information about the project.
 
@@ -45,10 +45,10 @@ This is the master index for all Moldova Direct documentation. Use this as your 
 |----------|---------|--------------|
 | [TEST_COVERAGE_ANALYSIS.md](./TEST_COVERAGE_ANALYSIS.md) | Test coverage analysis | Oct 30, 2025 |
 | [TEST_COVERAGE_IMPLEMENTATION.md](./TEST_COVERAGE_IMPLEMENTATION.md) | Visual test implementation | Oct 31, 2025 |
-| [docs/TESTING_STRATEGY.md](./docs/TESTING_STRATEGY.md) | Overall testing approach | - |
-| [tests/AUTH_TESTING_GUIDE.md](./tests/AUTH_TESTING_GUIDE.md) | Authentication testing | - |
-| [docs/ADMIN_TESTING.md](./docs/ADMIN_TESTING.md) | Admin testing dashboard | - |
-| [docs/TEST_USER_SIMULATION.md](./docs/TEST_USER_SIMULATION.md) | Test user personas | - |
+| [guides/TESTING_STRATEGY.md](../guides/TESTING_STRATEGY.md) | Overall testing approach | - |
+| [tests/AUTH_TESTING_GUIDE.md](../../tests/AUTH_TESTING_GUIDE.md) | Authentication testing | - |
+| [guides/ADMIN_TESTING.md](../guides/ADMIN_TESTING.md) | Admin testing dashboard | - |
+| [guides/TEST_USER_SIMULATION.md](../guides/TEST_USER_SIMULATION.md) | Test user personas | - |
 
 ### 4. Architecture & Technical Design
 
@@ -104,8 +104,8 @@ All feature specs are located in `.kiro/specs/[feature-name]/` with the followin
 
 | Document | Purpose | Last Updated |
 |----------|---------|--------------|
-| [docs/ADMIN_TESTING.md](./docs/ADMIN_TESTING.md) | Admin testing dashboard | - |
-| [docs/TEST_USER_SIMULATION.md](./docs/TEST_USER_SIMULATION.md) | Test user personas | - |
+| [guides/ADMIN_TESTING.md](../guides/ADMIN_TESTING.md) | Admin testing dashboard | - |
+| [guides/TEST_USER_SIMULATION.md](../guides/TEST_USER_SIMULATION.md) | Test user personas | - |
 | [docs/MFA_IMPLEMENTATION.md](./docs/MFA_IMPLEMENTATION.md) | MFA setup guide | - |
 | [server/utils/emailLogging.README.md](./server/utils/emailLogging.README.md) | Email logging system | - |
 | [server/utils/emailRetryService.README.md](./server/utils/emailRetryService.README.md) | Email retry service | - |
@@ -146,10 +146,10 @@ All feature specs are located in `.kiro/specs/[feature-name]/` with the followin
 4. [docs/CHANGELOG.md](./docs/CHANGELOG.md)
 
 ### For QA/Testing
-1. [TEST_COVERAGE_ANALYSIS.md](./TEST_COVERAGE_ANALYSIS.md)
-2. [TEST_COVERAGE_IMPLEMENTATION.md](./TEST_COVERAGE_IMPLEMENTATION.md)
-3. [docs/TESTING_STRATEGY.md](./docs/TESTING_STRATEGY.md)
-4. [tests/AUTH_TESTING_GUIDE.md](./tests/AUTH_TESTING_GUIDE.md)
+1. [TEST_COVERAGE_ANALYSIS.md](../../TEST_COVERAGE_ANALYSIS.md)
+2. [TEST_COVERAGE_IMPLEMENTATION.md](../../TEST_COVERAGE_IMPLEMENTATION.md)
+3. [guides/TESTING_STRATEGY.md](../guides/TESTING_STRATEGY.md)
+4. [tests/AUTH_TESTING_GUIDE.md](../../tests/AUTH_TESTING_GUIDE.md)
 
 ### For DevOps
 1. [.kiro/docs/DEPLOYMENT_GUIDE.md](./.kiro/docs/DEPLOYMENT_GUIDE.md)
@@ -185,15 +185,15 @@ All feature specs are located in `.kiro/specs/[feature-name]/` with the followin
 - [.kiro/specs/order-status-updates/](./.kiro/specs/order-status-updates/)
 
 **Admin Dashboard:**
-- [.kiro/specs/admin-dashboard/](./.kiro/specs/admin-dashboard/)
-- [docs/ADMIN_TESTING.md](./docs/ADMIN_TESTING.md)
-- [CODE_REVIEW_2025.md](./CODE_REVIEW_2025.md) (Part 2)
+- [.kiro/specs/admin-dashboard/](../../.kiro/specs/admin-dashboard/)
+- [guides/ADMIN_TESTING.md](../guides/ADMIN_TESTING.md)
+- [CODE_REVIEW_2025.md](../../CODE_REVIEW_2025.md) (Part 2)
 
 **Testing:**
-- [TEST_COVERAGE_ANALYSIS.md](./TEST_COVERAGE_ANALYSIS.md)
-- [TEST_COVERAGE_IMPLEMENTATION.md](./TEST_COVERAGE_IMPLEMENTATION.md)
-- [docs/TESTING_STRATEGY.md](./docs/TESTING_STRATEGY.md)
-- [tests/AUTH_TESTING_GUIDE.md](./tests/AUTH_TESTING_GUIDE.md)
+- [TEST_COVERAGE_ANALYSIS.md](../../TEST_COVERAGE_ANALYSIS.md)
+- [TEST_COVERAGE_IMPLEMENTATION.md](../../TEST_COVERAGE_IMPLEMENTATION.md)
+- [guides/TESTING_STRATEGY.md](../guides/TESTING_STRATEGY.md)
+- [tests/AUTH_TESTING_GUIDE.md](../../tests/AUTH_TESTING_GUIDE.md)
 
 **Internationalization:**
 - [docs/I18N_CONFIGURATION.md](./docs/I18N_CONFIGURATION.md)
