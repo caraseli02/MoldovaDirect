@@ -16,7 +16,7 @@
  * - Cache invalidated on product/order mutations
  */
 
-import { serverSupabaseClient } from '#supabase/server'
+import { serverSupabaseClient, serverSupabaseUser } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
 import { ADMIN_CACHE_CONFIG } from '~/server/utils/adminCache'
 
@@ -163,5 +163,9 @@ export default defineCachedEventHandler(async (event) => {
 }, {
   maxAge: ADMIN_CACHE_CONFIG.dashboardStats.maxAge,
   name: ADMIN_CACHE_CONFIG.dashboardStats.name,
-  getKey: () => ADMIN_CACHE_CONFIG.dashboardStats.name
+  getKey: async (event) => {
+    // Include user ID in cache key to prevent caching auth errors for all users
+    const user = await serverSupabaseUser(event)
+    return user ? `${ADMIN_CACHE_CONFIG.dashboardStats.name}:${user.id}` : ADMIN_CACHE_CONFIG.dashboardStats.name
+  }
 })

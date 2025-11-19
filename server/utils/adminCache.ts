@@ -5,6 +5,8 @@
  * These utilities ensure data consistency when admin operations modify data.
  */
 
+import { serverSupabaseUser } from '#supabase/server'
+
 type CacheScope = 'stats' | 'products' | 'orders' | 'users' | 'analytics' | 'audit-logs' | 'email-logs' | 'inventory' | 'all'
 
 /**
@@ -83,14 +85,19 @@ export async function invalidateMultipleScopes(scopes: CacheScope[]): Promise<vo
 
 /**
  * Generate a cache key for admin endpoints
- * Includes query parameters to ensure different filters/pagination have separate caches
+ * Includes user ID and query parameters to ensure different filters/pagination have separate caches
+ * and to prevent caching auth errors across users
  *
  * @param baseName - Base name for the cache key
  * @param event - The H3 event object
- * @returns Cache key string
+ * @returns Cache key string or Promise<string>
  */
-export function getAdminCacheKey(baseName: string, event: any): string {
+export async function getAdminCacheKey(baseName: string, event: any): Promise<string> {
   const query = getQuery(event)
+
+  // Include user ID to prevent caching auth errors for all users
+  const user = await serverSupabaseUser(event)
+  const userPrefix = user ? `user:${user.id}` : 'anonymous'
 
   // Convert query params to a stable sorted string
   const queryKeys = Object.keys(query).sort()
@@ -98,9 +105,11 @@ export function getAdminCacheKey(baseName: string, event: any): string {
     .map(key => `${key}=${query[key]}`)
     .join('&')
 
-  return queryString
-    ? `${baseName}?${queryString}`
-    : baseName
+  const fullKey = queryString
+    ? `${baseName}:${userPrefix}?${queryString}`
+    : `${baseName}:${userPrefix}`
+
+  return fullKey
 }
 
 /**

@@ -12,7 +12,7 @@
  * - User engagement metrics
  */
 
-import { serverSupabaseClient } from '#supabase/server'
+import { serverSupabaseClient, serverSupabaseUser } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
 
 export interface UserAnalyticsData {
@@ -214,12 +214,16 @@ export default defineCachedEventHandler(async (event) => {
 }, {
   maxAge: 60 * 10, // Cache for 10 minutes (analytics can tolerate staleness)
   name: 'admin-analytics-users',
-  getKey: (event) => {
+  getKey: async (event) => {
+    // Include user ID to prevent caching auth errors for all users
+    const user = await serverSupabaseUser(event)
+    const userPrefix = user ? `user:${user.id}` : 'anonymous'
+
     const query = getQuery(event)
     const days = query.days || 30
     const startDate = query.startDate || ''
     const endDate = query.endDate || ''
-    return `days:${days}:start:${startDate}:end:${endDate}`
+    return `${userPrefix}:days:${days}:start:${startDate}:end:${endDate}`
   },
   swr: true // Enable stale-while-revalidate for better UX
 })
