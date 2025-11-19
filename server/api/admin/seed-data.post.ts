@@ -17,6 +17,7 @@
 
 import { serverSupabaseServiceRole } from '#supabase/server'
 import { requireAdminTestingAccess, logAdminAction } from '~/server/utils/adminAuth'
+import { invalidateAdminCache } from '~/server/utils/adminCache'
 import type { SeedOptions, SeedDataResponse, SeedStep } from '~/types/admin-testing'
 import {
   generateMockUser,
@@ -166,6 +167,9 @@ export default defineEventHandler(async (event) => {
       config,
       results: results.steps.map(s => ({ step: s.step, count: s.count }))
     })
+
+    // Invalidate all admin caches so the new data appears immediately
+    await invalidateAdminCache('all')
 
     return {
       success: true,

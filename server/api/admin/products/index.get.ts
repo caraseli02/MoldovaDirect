@@ -17,7 +17,7 @@
  * - Cache invalidated on product mutations
  */
 
-import { serverSupabaseClient } from '#supabase/server'
+import { serverSupabaseServiceRole } from '#supabase/server'
 import { getMockProducts } from '~/server/utils/mockData'
 import { requireAdminRole } from '~/server/utils/adminAuth'
 import { prepareSearchPattern, MAX_SEARCH_LENGTH } from '~/server/utils/searchSanitization'
@@ -42,7 +42,7 @@ export default defineCachedEventHandler(async (event) => {
   const query = getQuery(event) as AdminProductFilters
 
   try {
-    const supabase = await serverSupabaseClient(event)
+    const supabase = serverSupabaseServiceRole(event)
 
     // Parse query parameters with defaults
     const {
@@ -261,38 +261,53 @@ export default defineCachedEventHandler(async (event) => {
       }
     }
 
-  } catch (error) {
-    console.error('Admin Products API error, falling back to mock data:', error)
-    
-    // Parse query parameters with defaults for mock data
-    const {
-      search,
-      categoryId,
-      active,
-      inStock,
-      outOfStock,
-      lowStock,
-      sortBy = 'created_at',
-      sortOrder = 'desc',
-      page = 1,
-      limit = 20
-    } = query
-    
-    // Use mock data as fallback
-    const mockResult = getMockProducts({
-      page: Number(page),
-      limit: Number(limit),
-      search,
-      categoryId: categoryId ? Number(categoryId) : undefined,
-      active,
-      inStock,
-      outOfStock,
-      lowStock,
-      sortBy,
-      sortOrder
-    })
+  } catch (error: any) {
+    console.error('Admin Products API error:', error)
 
-    return mockResult
+    // Only use mock data in development mode
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('⚠️ Returning mock data - database query failed')
+
+      // Parse query parameters with defaults for mock data
+      const {
+        search,
+        categoryId,
+        active,
+        inStock,
+        outOfStock,
+        lowStock,
+        sortBy = 'created_at',
+        sortOrder = 'desc',
+        page = 1,
+        limit = 20
+      } = query
+
+      // Use mock data as fallback
+      const mockResult = getMockProducts({
+        page: Number(page),
+        limit: Number(limit),
+        search,
+        categoryId: categoryId ? Number(categoryId) : undefined,
+        active,
+        inStock,
+        outOfStock,
+        lowStock,
+        sortBy,
+        sortOrder
+      })
+
+      return mockResult
+    }
+
+    // In production, throw the error so admins know something is wrong
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Failed to fetch products',
+      data: {
+        error: error.message,
+        details: 'Database query failed. Check server logs for details.'
+      }
+    })
   }
 }, {
   maxAge: ADMIN_CACHE_CONFIG.productsList.maxAge,

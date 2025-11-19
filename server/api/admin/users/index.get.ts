@@ -106,14 +106,41 @@ export default defineCachedEventHandler(async (event) => {
     const { data: profiles, error: profilesError } = await usersQuery
 
     if (profilesError) {
-      console.warn('Failed to fetch profiles, returning mock data:', profilesError.message)
-      return getMockUserData()
+      console.error('Failed to fetch profiles:', profilesError.message)
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Failed to fetch user profiles',
+        data: {
+          error: profilesError.message,
+          details: 'Database query failed. Check server logs for details.'
+        }
+      })
     }
 
-    // If no profiles exist, return mock data for development
+    // If no profiles exist, return empty array instead of mock data
     if (!profiles || profiles.length === 0) {
-      console.warn('No profiles found, returning mock data')
-      return getMockUserData()
+      console.info('No user profiles found in database')
+      return {
+        success: true,
+        data: {
+          users: [],
+          pagination: {
+            page: Number(page),
+            limit: Number(limit),
+            total: 0,
+            totalPages: 0,
+            hasNext: false,
+            hasPrev: false
+          },
+          summary: {
+            totalUsers: 0,
+            activeUsers: 0,
+            inactiveUsers: 0,
+            totalOrders: 0,
+            totalRevenue: 0
+          }
+        }
+      }
     }
 
     // Try to get auth user data
@@ -239,12 +266,24 @@ export default defineCachedEventHandler(async (event) => {
       }
     }
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error in admin users API:', error)
-    
-    // Return mock data as fallback
-    console.warn('Returning mock data due to error')
-    return getMockUserData()
+
+    // Only use mock data in development mode
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('⚠️ Returning mock data - database query failed')
+      return getMockUserData()
+    }
+
+    // In production, throw the error so admins know something is wrong
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Failed to fetch users',
+      data: {
+        error: error.message,
+        details: 'Database query failed. Check server logs for details.'
+      }
+    })
   }
 }, {
   maxAge: 60 * 5, // Cache for 5 minutes

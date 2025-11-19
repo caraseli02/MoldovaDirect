@@ -9,6 +9,7 @@
 
 import { serverSupabaseServiceRole } from '#supabase/server'
 import { requireAdminTestingAccess, logAdminAction } from '~/server/utils/adminAuth'
+import { invalidateAdminCache } from '~/server/utils/adminCache'
 
 interface CleanupOptions {
   action: 'clear-all' | 'clear-test-users' | 'clear-orders' | 'clear-products' | 'reset-database' | 'clear-old-carts'
@@ -79,6 +80,9 @@ export default defineEventHandler(async (event) => {
       action,
       deletedCounts: results.deletedCounts
     })
+
+    // Invalidate all admin caches so the changes appear immediately
+    await invalidateAdminCache('all')
 
     return {
       success: true,
