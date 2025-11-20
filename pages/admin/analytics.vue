@@ -1,6 +1,22 @@
+<!-- DISABLED: Analytics features disabled until MVP release -->
+<template>
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+    <div class="text-center p-8">
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+        Analytics Dashboard
+      </h1>
+      <p class="text-gray-600 dark:text-gray-400">
+        Analytics features are currently disabled until MVP release.
+      </p>
+    </div>
+  </div>
+</template>
+
+<!-- ORIGINAL TEMPLATE - COMMENTED OUT
 <template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
     <!-- Header -->
+    <!--
     <div class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
@@ -27,10 +43,13 @@
         </div>
       </div>
     </div>
+    -->
 
     <!-- Main Content -->
+    <!--
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <!-- Tab Navigation -->
+      <!--
       <div class="mb-8">
         <nav class="flex space-x-8" aria-label="Tabs">
           <Button
@@ -190,7 +209,22 @@
     </div>
   </div>
 </template>
+END OF COMMENTED OUT TEMPLATE -->
 
+<script setup lang="ts">
+// DISABLED: Analytics features disabled until MVP release - Script commented out below
+
+definePageMeta({
+  layout: 'admin',
+  middleware: 'admin'
+})
+
+useHead({
+  title: 'Analytics Dashboard - Admin'
+})
+</script>
+
+<!-- ORIGINAL SCRIPT - COMMENTED OUT
 <script setup lang="ts">
 import { Button } from '@/components/ui/button'
 import {
@@ -323,3 +357,4 @@ useHead({
   title: 'Analytics Dashboard - Admin'
 })
 </script>
+END OF COMMENTED OUT SCRIPT -->

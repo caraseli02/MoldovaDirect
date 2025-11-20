@@ -3,11 +3,20 @@ import { serverSupabaseServiceRole } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
 import { subDays, startOfDay, endOfDay } from 'date-fns'
 
+// DISABLED: Analytics features disabled until MVP release
 export default defineEventHandler(async (event) => {
   try {
     // Verify admin authentication
     await requireAdminRole(event)
-    
+
+    // Return disabled message
+    throw createError({
+      statusCode: 503,
+      statusMessage: 'Analytics features are currently disabled until MVP release'
+    })
+
+    /* ORIGINAL CODE - COMMENTED OUT
+
     // Use service role for database operations
     const supabase = serverSupabaseServiceRole(event)
 
@@ -167,6 +176,7 @@ export default defineEventHandler(async (event) => {
         }
       }
     }
+    END OF COMMENTED OUT CODE */
   } catch (error: any) {
     if (error.statusCode) {
       throw error

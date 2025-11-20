@@ -153,13 +153,17 @@
       </div>
     </section>
 
-    <AdminDashboardStats />
+    <!-- DISABLED: Analytics features disabled until MVP release -->
+    <!-- <AdminDashboardStats /> -->
 
+    <!-- DISABLED: Analytics chart disabled until MVP release -->
+    <!--
     <AdminDashboardPerformanceComparisonChart
       :dataset="comparisonDataset"
       :revenue-summary="revenueSummary"
       :customer-summary="customerSummary"
     />
+    -->
 
     <div class="grid grid-cols-1 gap-6 xl:grid-cols-3">
       <div class="space-y-6 xl:col-span-2">
@@ -176,7 +180,8 @@
           :loading="isLoading"
         />
 
-        <AdminDashboardInsightHighlights :insights="insightHighlights" />
+        <!-- DISABLED: Analytics insights disabled until MVP release -->
+        <!-- <AdminDashboardInsightHighlights :insights="insightHighlights" /> -->
 
         <section class="space-y-6 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
           <div class="flex items-center justify-between">

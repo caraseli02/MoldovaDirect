@@ -1,20 +1,45 @@
 /**
  * Analytics Composable
- * 
+ *
+ * DISABLED: Analytics features disabled until MVP release
+ *
  * Requirements addressed:
  * - 3.1: Provide interface for analytics data collection and retrieval
  * - 3.3: Support user registration trends and activity analysis
- * 
+ *
  * Provides reactive analytics data and methods for tracking user activities.
  */
 
-import type { 
+import type {
   UserAnalyticsData,
   AnalyticsOverview,
   ProductAnalyticsData,
   ActivityTrackingRequest
 } from '~/types/analytics'
 
+// DISABLED: Analytics features disabled until MVP release
+export const useAnalytics = () => {
+  // Return stub implementation
+  return {
+    userAnalytics: ref<UserAnalyticsData | null>(null),
+    analyticsOverview: ref<AnalyticsOverview | null>(null),
+    productAnalytics: ref<ProductAnalyticsData | null>(null),
+    loading: ref(false),
+    error: ref<string | null>('Analytics features are currently disabled until MVP release'),
+    fetchUserAnalytics: async () => { throw new Error('Analytics disabled') },
+    fetchAnalyticsOverview: async () => { throw new Error('Analytics disabled') },
+    fetchProductAnalytics: async () => { throw new Error('Analytics disabled') },
+    refreshAllAnalytics: async () => { throw new Error('Analytics disabled') },
+    trackActivity: async () => { throw new Error('Analytics disabled') },
+    trackPageView: async () => { throw new Error('Analytics disabled') },
+    trackProductView: async () => { throw new Error('Analytics disabled') },
+    trackCartAddition: async () => { throw new Error('Analytics disabled') },
+    trackPurchase: async () => { throw new Error('Analytics disabled') },
+    aggregateAnalytics: async () => { throw new Error('Analytics disabled') }
+  }
+}
+
+/* ORIGINAL CODE - COMMENTED OUT
 export const useAnalytics = () => {
   // Reactive state
   const userAnalytics = ref<UserAnalyticsData | null>(null)
@@ -263,3 +288,4 @@ export const useAnalytics = () => {
     refreshAllAnalytics
   }
 }
+END OF COMMENTED OUT CODE */

@@ -54,9 +54,18 @@ export interface AnalyticsOverview {
   }
 }
 
+// DISABLED: Analytics features disabled until MVP release
 export default defineCachedEventHandler(async (event) => {
   try {
     await requireAdminRole(event)
+
+    // Return disabled message
+    throw createError({
+      statusCode: 503,
+      statusMessage: 'Analytics features are currently disabled until MVP release'
+    })
+
+    /* ORIGINAL CODE - COMMENTED OUT
     // Verify admin access
     const supabase = await serverSupabaseClient(event)
 
@@ -232,6 +241,7 @@ export default defineCachedEventHandler(async (event) => {
       success: true,
       data: overview
     }
+    END OF COMMENTED OUT CODE */
 
   } catch (error) {
     console.error('Analytics overview error:', error)

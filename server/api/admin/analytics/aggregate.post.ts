@@ -25,9 +25,18 @@ export interface AggregationResult {
   errors: string[]
 }
 
+// DISABLED: Analytics features disabled until MVP release
 export default defineEventHandler(async (event) => {
   try {
     await requireAdminRole(event)
+
+    // Return disabled message
+    throw createError({
+      statusCode: 503,
+      statusMessage: 'Analytics features are currently disabled until MVP release'
+    })
+
+    /* ORIGINAL CODE - COMMENTED OUT
     // Verify admin access
     const supabase = await serverSupabaseClient(event)
 
@@ -211,6 +220,7 @@ export default defineEventHandler(async (event) => {
       success: true,
       data: result
     }
+    END OF COMMENTED OUT CODE */
 
   } catch (error) {
     console.error('Analytics aggregation error:', error)

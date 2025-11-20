@@ -1,6 +1,22 @@
+<!-- DISABLED: Analytics features disabled until MVP release -->
+<template>
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+    <div class="text-center p-8">
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+        Order Analytics
+      </h1>
+      <p class="text-gray-600 dark:text-gray-400">
+        Analytics features are currently disabled until MVP release.
+      </p>
+    </div>
+  </div>
+</template>
+
+<!-- ORIGINAL TEMPLATE - COMMENTED OUT
 <template>
   <div class="space-y-6">
     <!-- Page Header -->
+    <!--
     <div class="flex items-center justify-between">
       <div>
         <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
@@ -22,8 +38,10 @@
         Export CSV
       </Button>
     </div>
+    -->
 
     <!-- Date Range Filter -->
+    <!--
     <Card class="rounded-2xl">
       <CardContent class="pt-6">
         <div class="flex items-center space-x-4">
@@ -301,7 +319,28 @@
     </div>
   </div>
 </template>
+END OF COMMENTED OUT TEMPLATE -->
 
+<script setup lang="ts">
+// DISABLED: Analytics features disabled until MVP release - Script commented out below
+
+definePageMeta({
+  layout: 'admin',
+  middleware: ['auth', 'admin']
+})
+
+useHead({
+  title: 'Order Analytics - Admin - Moldova Direct',
+  meta: [
+    {
+      name: 'robots',
+      content: 'noindex, nofollow'
+    }
+  ]
+})
+</script>
+
+<!-- ORIGINAL SCRIPT - COMMENTED OUT
 <script setup lang="ts">
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -478,3 +517,4 @@ useHead({
   ]
 })
 </script>
+END OF COMMENTED OUT SCRIPT -->
