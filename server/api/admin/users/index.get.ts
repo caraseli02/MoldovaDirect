@@ -50,8 +50,9 @@ interface UserWithProfile {
 }
 
 export default defineCachedEventHandler(async (event) => {
+  await requireAdminRole(event)
+
   try {
-    await requireAdminRole(event)
     // Verify admin authentication
     const supabase = serverSupabaseServiceRole(event)
 
@@ -247,12 +248,9 @@ export default defineCachedEventHandler(async (event) => {
     return getMockUserData()
   }
 }, {
-  maxAge: 60 * 5, // Cache for 5 minutes
-  name: 'admin-users-list',
-  getKey: (event) => {
-    const query = getQuery(event) as UserFilters
-    return `page:${query.page || 1}:search:${query.search || ''}:status:${query.status || 'all'}:sort:${query.sortBy || 'created_at'}:${query.sortOrder || 'desc'}`
-  },
+  maxAge: ADMIN_CACHE_CONFIG.usersList.maxAge,
+  name: ADMIN_CACHE_CONFIG.usersList.name,
+  getKey: (event) => getAdminCacheKey(ADMIN_CACHE_CONFIG.usersList.name, event),
   swr: true // Enable stale-while-revalidate
 })
 
