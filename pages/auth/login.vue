@@ -275,6 +275,25 @@ const handleRedirectAfterLogin = async () => {
     return
   }
 
+  // Check if user has admin role and redirect accordingly
+  try {
+    const user = useSupabaseUser()
+    if (user.value) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.value.id)
+        .single<{ role: string | null }>()
+
+      if (profile?.role === 'admin') {
+        await navigateTo(localePath('/admin'))
+        return
+      }
+    }
+  } catch (error) {
+    console.error('Error checking user role:', error)
+  }
+
   await navigateTo(localePath('/account'))
 }
 

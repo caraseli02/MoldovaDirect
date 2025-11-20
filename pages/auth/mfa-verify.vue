@@ -107,6 +107,8 @@ definePageMeta({
 const authStore = useAuthStore()
 const { validateMFACode } = useAuthValidation()
 const route = useRoute()
+const supabase = useSupabaseClient()
+const localePath = useLocalePath()
 
 const code = ref('')
 const error = ref('')
@@ -133,13 +135,33 @@ const handleVerify = async () => {
     // Verify MFA code
     await authStore.verifyMFA(code.value)
 
-    // Redirect to original destination or account page
+    // Redirect to original destination or role-appropriate page
     const redirect = route.query.redirect as string
     if (redirect && redirect.startsWith('/')) {
       await navigateTo(redirect)
-    } else {
-      await navigateTo('/account')
+      return
     }
+
+    // Check if user has admin role and redirect accordingly
+    try {
+      const user = useSupabaseUser()
+      if (user.value) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', user.value.id)
+          .single<{ role: string | null }>()
+
+        if (profile?.role === 'admin') {
+          await navigateTo(localePath('/admin'))
+          return
+        }
+      }
+    } catch (err) {
+      console.error('Error checking user role:', err)
+    }
+
+    await navigateTo(localePath('/account'))
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Verification failed'
   }
