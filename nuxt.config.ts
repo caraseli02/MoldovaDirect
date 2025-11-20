@@ -141,17 +141,6 @@ export default defineNuxtConfig({
         'Cache-Control': 'public, max-age=31536000, immutable'
       }
     },
-    // Chunks and entries with immutable cache
-    '/chunks/**': {
-      headers: {
-        'Cache-Control': 'public, max-age=31536000, immutable'
-      }
-    },
-    '/entries/**': {
-      headers: {
-        'Cache-Control': 'public, max-age=31536000, immutable'
-      }
-    },
   },
   runtimeConfig: {
     // Private keys (only available on server-side)
@@ -195,7 +184,6 @@ export default defineNuxtConfig({
       external: [
         "stripe",
         "nodemailer",
-        "@supabase/supabase-js",
       ],
       inline: ["vue", "@vue/*"],
     },
@@ -337,11 +325,9 @@ export default defineNuxtConfig({
 
       rollupOptions: {
         output: {
-          // Optimize chunk naming for better cache invalidation
-          chunkFileNames: 'chunks/[name]-[hash].js',
-          entryFileNames: 'entries/[name]-[hash].js',
-
           // Manual chunk splitting for better caching
+          // NOTE: Removed custom chunkFileNames/entryFileNames as they conflict with Nitro's Vercel preset
+          // Nitro handles chunk naming automatically for proper deployment
           manualChunks(id) {
             // Vendor chunks - split by package for better cache granularity
             if (id.includes('node_modules')) {

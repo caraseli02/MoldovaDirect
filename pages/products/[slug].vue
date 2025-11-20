@@ -862,13 +862,63 @@ const shareProduct = async () => {
 
 const addToCart = async () => {
   if (!product.value) return
+
+  // Only run on client side (fix for Vercel SSR)
+  if (process.server || typeof window === 'undefined') {
+    console.warn('Add to Cart: Server-side render, skipping')
+    return
+  }
+
+  // Debug logging for Vercel
+  const debugInfo = {
+    productId: product.value.id,
+    quantity: selectedQuantity.value,
+    isClient: process.client,
+    hasWindow: typeof window !== 'undefined',
+    addItemType: typeof addItem,
+    addItemString: typeof addItem === 'function' ? 'real function' : addItem?.toString?.() || 'undefined'
+  }
+  console.log('🛒 Add to Cart clicked', debugInfo)
+
+  // MOBILE DEBUG: Show status on mobile
+  const showMobileDebug = false // Set to true to see alerts on mobile
+  if (showMobileDebug) {
+    alert(`Debug: ${JSON.stringify(debugInfo, null, 2)}`)
+  }
+
   try {
-    await addItem({
-      productId: product.value.id,
-      quantity: selectedQuantity.value
-    })
+    // Verify cart is available
+    if (typeof addItem !== 'function') {
+      const error = `addItem is not a function (type: ${typeof addItem})`
+      console.error('❌', error)
+      alert(`ERROR: ${error}\n\nThis means Pinia/cart store isn't initialized on Vercel`)
+      throw new Error(error)
+    }
+
+    // Construct the product object in the format expected by the cart store
+    const cartProduct = {
+      id: product.value.id,
+      slug: product.value.slug,
+      name: getLocalizedText(product.value.name),
+      price: Number(product.value.price),
+      images: product.value.images?.map(img => img.url) || [],
+      stock: product.value.stockQuantity
+    }
+
+    console.log('🛒 Calling addItem with:', cartProduct)
+    await addItem(cartProduct, selectedQuantity.value)
+    console.log('✅ Add to cart succeeded!')
+
+    // Success feedback
+    if (showMobileDebug) {
+      alert('✅ Item added to cart successfully!')
+    }
   } catch (err) {
-    console.error('Add to cart failed', err)
+    const errorMsg = err instanceof Error ? err.message : String(err)
+    console.error('❌ Add to cart failed:', errorMsg, err)
+
+    // Detailed error for mobile debugging
+    alert(`❌ Add to Cart Failed\n\nError: ${errorMsg}\n\nCheck console for details`)
   }
 }
 

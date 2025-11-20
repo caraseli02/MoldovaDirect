@@ -32,10 +32,40 @@ export default defineEventHandler(async (event) => {
 
   // Get options from body
   const body = await readBody(event).catch(() => ({})) as SeedUserOptions
-  const count = body.count || 10
+
+  // Define maximum limit to prevent resource exhaustion
+  const MAX_USERS = 1000
+
+  // Validate count with strict bounds checking
+  let count = body.count || 10
+  if (typeof count !== 'number' || count < 1 || count > MAX_USERS || !Number.isInteger(count)) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: `Count must be an integer between 1 and ${MAX_USERS}`
+    })
+  }
+
   const withAddresses = body.withAddresses !== false
   const withOrders = body.withOrders === true
   const roles = body.roles || ['customer']
+
+  // Validate roles array
+  const validRoles = ['customer', 'admin', 'manager']
+  if (!Array.isArray(roles) || roles.length === 0) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Roles must be a non-empty array'
+    })
+  }
+
+  for (const role of roles) {
+    if (!validRoles.includes(role)) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: `Invalid role: ${role}. Must be one of: ${validRoles.join(', ')}`
+      })
+    }
+  }
 
   const createdUsers: CreatedUser[] = []
   const errors: Array<{ email: string; error: string }> = []

@@ -15,22 +15,15 @@
       </div>
 
       <!-- Collections - Carousel on mobile, Bento grid on desktop -->
-      <!-- Mobile: Horizontal carousel -->
+      <!-- Mobile: Horizontal carousel with native scroll -->
       <div class="mt-12 lg:hidden">
-        <Swiper
-          :modules="[SwiperPagination]"
-          :slides-per-view="1.1"
-          :space-between="16"
-          :pagination="{ clickable: true, dynamicBullets: true }"
-          :breakpoints="{
-            480: { slidesPerView: 1.2, spaceBetween: 20 },
-            640: { slidesPerView: 1.3, spaceBetween: 24 }
-          }"
-          class="collections-carousel"
+        <div
+          class="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-6 -mx-4 px-4 scrollbar-hide"
         >
-          <SwiperSlide
+          <div
             v-for="card in cards"
             :key="card.key"
+            class="flex-shrink-0 w-[85%] snap-center sm:w-[70%]"
           >
             <NuxtLink
               :to="card.href"
@@ -60,8 +53,8 @@
                 </span>
               </div>
             </NuxtLink>
-          </SwiperSlide>
-        </Swiper>
+          </div>
+        </div>
       </div>
 
       <!-- Desktop: Bento grid layout -->
@@ -166,17 +159,13 @@ const cards = computed<Card[]>(() => [
 </script>
 
 <style scoped>
-/* Swiper pagination dots styling */
-:deep(.collections-carousel .swiper-pagination) {
-  bottom: -2rem;
+/* Hide scrollbar for native scroll carousel */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
-:deep(.collections-carousel .swiper-pagination-bullet) {
-  background-color: rgb(156 163 175 / 0.5); /* gray-400 with 50% opacity */
-}
-
-:deep(.collections-carousel .swiper-pagination-bullet-active) {
-  background-color: hsl(var(--color-primary-600));
-  opacity: 1;
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, Opera */
 }
 </style>

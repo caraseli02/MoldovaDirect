@@ -44,9 +44,22 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     })
   }
 
-  // Optional: Check MFA status for additional security (commented out for now)
-  // const { data: mfaData } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
-  // if (mfaData?.currentLevel !== 'aal2') {
-  //   return navigateTo('/admin/mfa-setup')
-  // }
+  // Check MFA status for additional security (REQUIRED for admin users)
+  const { data: mfaData, error: mfaError } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
+
+  if (mfaError) {
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Failed to verify MFA status. Please try again.'
+    })
+  }
+
+  // Skip MFA requirement in development for test accounts
+  const isDev = process.env.NODE_ENV === 'development'
+  const isTestAccount = user.value.email?.includes('@moldovadirect.com') || false
+  const shouldSkipMFA = isDev && isTestAccount
+
+  if (mfaData?.currentLevel !== 'aal2' && !shouldSkipMFA) {
+    return navigateTo('/account/security/mfa')
+  }
 })

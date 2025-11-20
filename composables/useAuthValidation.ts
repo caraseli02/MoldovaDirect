@@ -52,6 +52,7 @@ export const useAuthValidation = () => {
     .string()
     .min(1, "auth.validation.name.required")
     .min(2, "auth.validation.name.minLength")
+    .max(100, "auth.validation.name.maxLength")
     .regex(
       /^[a-zA-ZÀ-ÿ\u0100-\u017F\u0400-\u04FF\s'-]+$/,
       "auth.validation.name.invalid"
