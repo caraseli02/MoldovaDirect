@@ -350,6 +350,24 @@ export const useAuthStore = defineStore('auth', {
 
       if (event === 'SIGNED_OUT') {
         this.syncUserState(null)
+
+        // Redirect to login page when session expires or user logs out
+        if (process.client) {
+          const router = useRouter()
+          const route = useRoute()
+          const localePath = useLocalePath()
+
+          // Only redirect if not already on auth pages
+          if (!route.path.startsWith('/auth')) {
+            navigateTo({
+              path: localePath('/auth/login'),
+              query: {
+                message: 'session-expired',
+                redirect: route.fullPath
+              }
+            })
+          }
+        }
         return
       }
 
