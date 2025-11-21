@@ -2418,5 +2418,44 @@
         "description": "Many of our producers are transitioning to organic and biodynamic farming, ensuring that Moldova's vineyards thrive for generations to come."
       }
     }
+  },
+  "admin": {
+    "navigation": {
+      "toggleSidebar": "Toggle sidebar",
+      "notifications": "Notifications",
+      "dashboard": "Dashboard",
+      "products": "Products",
+      "inventory": "Inventory",
+      "orders": "Orders",
+      "users": "Users",
+      "analytics": "Analytics",
+      "tools": "Tools",
+      "testing": "Testing"
+    },
+    "products": {
+      "select": "Select product"
+    },
+    "users": {
+      "loading": "Loading users...",
+      "retry": "Retry loading",
+      "columns": {
+        "user": "User",
+        "email": "Email",
+        "status": "Status",
+        "orders": "Orders",
+        "totalSpent": "Total Spent",
+        "registered": "Registered",
+        "lastLogin": "Last Login",
+        "actions": "Actions"
+      }
+    }
+  },
+  "account": {
+    "navigation": {
+      "logout": "Logout",
+      "profile": "My Profile",
+      "orders": "My Orders",
+      "settings": "Settings"
+    }
   }
 }

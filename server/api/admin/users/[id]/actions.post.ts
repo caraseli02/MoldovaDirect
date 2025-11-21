@@ -91,7 +91,10 @@ export default defineEventHandler(async (event) => {
         })
 
         if (suspendError) {
-          throw new Error(`Failed to suspend user: ${suspendError.message}`)
+          throw createError({
+            statusCode: 500,
+            statusMessage: `Failed to suspend user: ${suspendError.message}`
+          })
         }
 
         auditAction = 'user_suspended'
@@ -117,7 +120,10 @@ export default defineEventHandler(async (event) => {
         })
 
         if (unsuspendError) {
-          throw new Error(`Failed to unsuspend user: ${unsuspendError.message}`)
+          throw createError({
+            statusCode: 500,
+            statusMessage: `Failed to unsuspend user: ${unsuspendError.message}`
+          })
         }
 
         auditAction = 'user_unsuspended'
@@ -139,7 +145,10 @@ export default defineEventHandler(async (event) => {
         })
 
         if (banError) {
-          throw new Error(`Failed to ban user: ${banError.message}`)
+          throw createError({
+            statusCode: 500,
+            statusMessage: `Failed to ban user: ${banError.message}`
+          })
         }
 
         auditAction = 'user_banned'
@@ -161,7 +170,10 @@ export default defineEventHandler(async (event) => {
         })
 
         if (unbanError) {
-          throw new Error(`Failed to unban user: ${unbanError.message}`)
+          throw createError({
+            statusCode: 500,
+            statusMessage: `Failed to unban user: ${unbanError.message}`
+          })
         }
 
         auditAction = 'user_unbanned'
@@ -175,7 +187,10 @@ export default defineEventHandler(async (event) => {
         })
 
         if (verifyError) {
-          throw new Error(`Failed to verify email: ${verifyError.message}`)
+          throw createError({
+            statusCode: 500,
+            statusMessage: `Failed to verify email: ${verifyError.message}`
+          })
         }
 
         auditAction = 'email_verified_by_admin'
@@ -191,7 +206,10 @@ export default defineEventHandler(async (event) => {
         })
 
         if (resetError) {
-          throw new Error(`Failed to generate reset link: ${resetError.message}`)
+          throw createError({
+            statusCode: 500,
+            statusMessage: `Failed to generate reset link: ${resetError.message}`
+          })
         }
 
         auditAction = 'password_reset_initiated_by_admin'
@@ -214,7 +232,10 @@ export default defineEventHandler(async (event) => {
         })
 
         if (roleError) {
-          throw new Error(`Failed to update role: ${roleError.message}`)
+          throw createError({
+            statusCode: 500,
+            statusMessage: `Failed to update role: ${roleError.message}`
+          })
         }
 
         auditAction = 'user_role_updated'
@@ -281,18 +302,20 @@ export default defineEventHandler(async (event) => {
 
   } catch (error) {
     console.error('Error in admin user actions API:', error)
-    
+
+    // Always throw errors with proper HTTP status codes
+    // Don't return success: false - use HTTP semantics instead
     if (error.statusCode) {
       throw error
     }
-    
-    return {
-      success: false,
-      error: {
-        statusCode: 500,
-        statusMessage: error instanceof Error ? error.message : 'Failed to perform user action'
+
+    throw createError({
+      statusCode: 500,
+      statusMessage: error instanceof Error ? error.message : 'Failed to perform user action',
+      data: {
+        errorId: `action_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
       }
-    }
+    })
   }
 })
 

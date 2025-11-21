@@ -2342,5 +2342,44 @@
         "description": "Muchos de nuestros productores están haciendo la transición a la agricultura orgánica y biodinámica, asegurando que los viñedos de Moldavia prosperen durante generaciones venideras."
       }
     }
+  },
+  "admin": {
+    "navigation": {
+      "toggleSidebar": "Alternar menú lateral",
+      "notifications": "Notificaciones",
+      "dashboard": "Panel de Control",
+      "products": "Productos",
+      "inventory": "Inventario",
+      "orders": "Pedidos",
+      "users": "Usuarios",
+      "analytics": "Analíticas",
+      "tools": "Herramientas",
+      "testing": "Pruebas"
+    },
+    "products": {
+      "select": "Seleccionar producto"
+    },
+    "users": {
+      "loading": "Cargando usuarios...",
+      "retry": "Reintentar carga",
+      "columns": {
+        "user": "Usuario",
+        "email": "Email",
+        "status": "Estado",
+        "orders": "Pedidos",
+        "totalSpent": "Total Gastado",
+        "registered": "Registrado",
+        "lastLogin": "Último Acceso",
+        "actions": "Acciones"
+      }
+    }
+  },
+  "account": {
+    "navigation": {
+      "logout": "Cerrar Sesión",
+      "profile": "Mi Perfil",
+      "orders": "Mis Pedidos",
+      "settings": "Configuración"
+    }
   }
 }

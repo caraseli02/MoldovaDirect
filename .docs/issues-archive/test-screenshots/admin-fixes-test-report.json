@@ -1,0 +1,86 @@
+{
+  "timestamp": "2025-11-21T07:36:45.466Z",
+  "success": true,
+  "pages": [
+    {
+      "name": "Dashboard",
+      "url": "/admin",
+      "status": "failed",
+      "errors": [
+        "Failed to load resource: the server responded with a status of 500 (Server Error)"
+      ],
+      "warnings": [],
+      "loadTime": 3121,
+      "hasImportErrors": false,
+      "has500Error": true,
+      "componentsRendered": true,
+      "screenshot": "fixed-admin-dashboard.png",
+      "finalUrl": "http://localhost:3000/admin",
+      "httpStatus": 500
+    },
+    {
+      "name": "Users",
+      "url": "/admin/users",
+      "status": "failed",
+      "errors": [
+        "Failed to load resource: the server responded with a status of 500 (Server Error)"
+      ],
+      "warnings": [],
+      "loadTime": 1749,
+      "hasImportErrors": false,
+      "has500Error": true,
+      "componentsRendered": true,
+      "screenshot": "fixed-admin-users.png",
+      "finalUrl": "http://localhost:3000/admin/users",
+      "httpStatus": 500
+    },
+    {
+      "name": "Products",
+      "url": "/admin/products",
+      "status": "failed",
+      "errors": [
+        "Failed to load resource: the server responded with a status of 500 (Server Error)"
+      ],
+      "warnings": [],
+      "loadTime": 1974,
+      "hasImportErrors": false,
+      "has500Error": true,
+      "componentsRendered": true,
+      "screenshot": "fixed-admin-products.png",
+      "finalUrl": "http://localhost:3000/admin/products",
+      "httpStatus": 500
+    },
+    {
+      "name": "Orders",
+      "url": "/admin/orders",
+      "status": "failed",
+      "errors": [
+        "Failed to load resource: the server responded with a status of 500 (Server Error)"
+      ],
+      "warnings": [],
+      "loadTime": 1839,
+      "hasImportErrors": false,
+      "has500Error": true,
+      "componentsRendered": true,
+      "screenshot": "fixed-admin-orders.png",
+      "finalUrl": "http://localhost:3000/admin/orders",
+      "httpStatus": 500
+    },
+    {
+      "name": "Analytics",
+      "url": "/admin/analytics",
+      "status": "failed",
+      "errors": [
+        "Failed to load resource: the server responded with a status of 500 (Server Error)"
+      ],
+      "warnings": [],
+      "loadTime": 1921,
+      "hasImportErrors": false,
+      "has500Error": true,
+      "componentsRendered": true,
+      "screenshot": "fixed-admin-analytics.png",
+      "finalUrl": "http://localhost:3000/admin/analytics",
+      "httpStatus": 500
+    }
+  ]
+}

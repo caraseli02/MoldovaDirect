@@ -124,25 +124,25 @@
 
         <!-- Active Filter Badges -->
         <div v-if="hasActiveFilters" class="flex items-center gap-2 pt-3 border-t">
-          <Badge v-if="status && status.length > 0" variant="secondary" class="gap-1">
+          <Badge v-if="status && status.length > 0 && status[0]" variant="secondary" class="gap-1">
             Status: {{ getStatusLabel(status[0]) }}
-            <UiButton @click="clearStatusFilter" variant="ghost" size="icon" class="ml-1 h-4 w-4 rounded-full hover:bg-muted">
+            <Button @click="clearStatusFilter" variant="ghost" size="icon" class="ml-1 h-4 w-4 rounded-full hover:bg-muted">
               <commonIcon name="lucide:x" class="h-3 w-3" />
-            </UiButton>
+            </Button>
           </Badge>
 
-          <Badge v-if="paymentStatus && paymentStatus.length > 0" variant="secondary" class="gap-1">
+          <Badge v-if="paymentStatus && paymentStatus.length > 0 && paymentStatus[0]" variant="secondary" class="gap-1">
             Payment: {{ getPaymentStatusLabel(paymentStatus[0]) }}
-            <UiButton @click="clearPaymentStatusFilter" variant="ghost" size="icon" class="ml-1 h-4 w-4 rounded-full hover:bg-muted">
+            <Button @click="clearPaymentStatusFilter" variant="ghost" size="icon" class="ml-1 h-4 w-4 rounded-full hover:bg-muted">
               <commonIcon name="lucide:x" class="h-3 w-3" />
-            </UiButton>
+            </Button>
           </Badge>
 
           <Badge v-if="dateRange" variant="secondary" class="gap-1">
             {{ formatDateRange(dateRange) }}
-            <UiButton @click="clearDateRange" variant="ghost" size="icon" class="ml-1 h-4 w-4 rounded-full hover:bg-muted">
+            <Button @click="clearDateRange" variant="ghost" size="icon" class="ml-1 h-4 w-4 rounded-full hover:bg-muted">
               <commonIcon name="lucide:x" class="h-3 w-3" />
-            </UiButton>
+            </Button>
           </Badge>
         </div>
 
@@ -280,7 +280,7 @@ const clearSearch = () => {
   emit('update-search', '')
 }
 
-const updateStatusFilter = (value: string | undefined) => {
+const updateStatusFilter = (value: string | null | undefined) => {
   const status = value ? [value as 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'] : undefined
   emit('update-status', status)
 }
@@ -289,7 +289,7 @@ const clearStatusFilter = () => {
   emit('update-status', undefined)
 }
 
-const updatePaymentStatusFilter = (value: string | undefined) => {
+const updatePaymentStatusFilter = (value: string | null | undefined) => {
   const paymentStatus = value ? [value as 'pending' | 'paid' | 'failed' | 'refunded'] : undefined
   emit('update-payment-status', paymentStatus)
 }

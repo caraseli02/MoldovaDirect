@@ -5,16 +5,16 @@
       @drop="handleDrop"
       @dragover.prevent
       @dragenter.prevent
-      class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center hover:border-gray-400 dark:hover:border-gray-500 transition-colors"
+      class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 md:p-6 text-center hover:border-gray-400 dark:hover:border-gray-500 transition-colors touch-manipulation"
       :class="{ 'border-blue-500 bg-blue-50 dark:bg-blue-900/20': isDragging }"
     >
-      <div class="space-y-2">
-        <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+      <div class="space-y-2 md:space-y-2">
+        <svg class="mx-auto h-10 w-10 md:h-12 md:w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
           <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
-        <div class="text-sm text-gray-600 dark:text-gray-400">
-          <label for="file-upload" class="relative cursor-pointer bg-white dark:bg-gray-800 rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
-            <span>Upload images</span>
+        <div class="text-sm md:text-sm text-gray-600 dark:text-gray-400">
+          <label for="file-upload" class="relative cursor-pointer bg-white dark:bg-gray-800 rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500 px-2 py-1">
+            <span class="text-base md:text-sm">Upload images</span>
             <input
               id="file-upload"
               ref="fileInput"
@@ -25,7 +25,7 @@
               class="sr-only"
             />
           </label>
-          <span class="pl-1">or drag and drop</span>
+          <span class="pl-1 hidden md:inline">or drag and drop</span>
         </div>
         <p class="text-xs text-gray-500 dark:text-gray-400">
           PNG, JPG, GIF up to {{ formatFileSize(maxFileSize) }} each (max {{ maxFiles }} files)
@@ -48,11 +48,11 @@
     </div>
 
     <!-- Image Preview Grid -->
-    <div v-if="images.length > 0" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div v-if="images.length > 0" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
       <div
         v-for="(image, index) in images"
         :key="image.id || index"
-        class="relative group bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden aspect-square"
+        class="relative group bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden aspect-square touch-manipulation"
       >
         <!-- Image -->
         <img
@@ -64,22 +64,22 @@
         <!-- Primary Badge -->
         <div
           v-if="image.isPrimary"
-          class="absolute top-2 left-2 bg-blue-600 text-white text-xs px-2 py-1 rounded"
+          class="absolute top-2 left-2 bg-blue-600 text-white text-xs px-2 py-1 rounded z-10"
         >
           Primary
         </div>
 
-        <!-- Actions Overlay -->
-        <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center space-x-2">
+        <!-- Actions Overlay - Always visible on mobile, hover on desktop -->
+        <div class="absolute inset-0 bg-black bg-opacity-50 md:opacity-0 md:group-hover:opacity-100 transition-opacity flex items-center justify-center space-x-2 md:space-x-2">
           <!-- Set as Primary -->
           <Button
             v-if="!image.isPrimary"
             @click="setPrimary(index)"
             size="icon"
-            class="p-2 bg-white text-gray-700 rounded-full hover:bg-gray-100 transition-colors"
+            class="p-3 md:p-2 bg-white text-gray-700 rounded-full hover:bg-gray-100 transition-colors touch-manipulation"
             title="Set as primary image"
           >
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="h-5 w-5 md:h-4 md:w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
             </svg>
           </Button>
@@ -88,10 +88,10 @@
           <Button
             @click="editAltText(index)"
             size="icon"
-            class="p-2 bg-white text-gray-700 rounded-full hover:bg-gray-100 transition-colors"
+            class="p-3 md:p-2 bg-white text-gray-700 rounded-full hover:bg-gray-100 transition-colors touch-manipulation"
             title="Edit alt text"
           >
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="h-5 w-5 md:h-4 md:w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
             </svg>
           </Button>
@@ -100,10 +100,10 @@
           <Button
             @click="removeImage(index)"
             size="icon"
-            class="p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors"
+            class="p-3 md:p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors touch-manipulation"
             title="Remove image"
           >
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="h-5 w-5 md:h-4 md:w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
             </svg>
           </Button>
@@ -123,8 +123,8 @@
     </div>
 
     <!-- Alt Text Edit Modal -->
-    <div v-if="altTextModal.show" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-      <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-gray-800">
+    <div v-if="altTextModal.show" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex items-center justify-center p-4">
+      <div class="relative mx-auto p-5 md:p-5 border max-w-md w-full shadow-lg rounded-md bg-white dark:bg-gray-800">
         <div class="mt-3">
           <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">
             Edit Alt Text
@@ -142,18 +142,20 @@
               v-model="altTextModal.altText"
               type="text"
               placeholder="Describe this image..."
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              class="w-full px-4 py-3 md:px-3 md:py-2 text-base md:text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             />
           </div>
           <div class="flex justify-end space-x-3">
             <Button
               @click="closeAltTextModal"
               variant="outline"
+              class="px-4 py-2"
             >
               Cancel
             </Button>
             <Button
               @click="saveAltText"
+              class="px-4 py-2"
             >
               Save
             </Button>
