@@ -294,7 +294,7 @@ const formatDate = (date: Date): string => {
 
 // Initialize on mount
 onMounted(async () => {
-  // Restore checkout data from localStorage first
+  // Restore checkout data from cookies first
   await checkoutStore.restore()
 
   // Ensure we're on the confirmation step

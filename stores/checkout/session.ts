@@ -203,8 +203,6 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
   }
 
   const persist = (payload: PersistPayload): void => {
-    if (typeof window === 'undefined') return
-
     try {
       const snapshot = {
         sessionId: state.sessionId,
@@ -221,20 +219,30 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
         paymentMethod: sanitizePaymentMethodForStorage(payload.paymentMethod)
       }
 
-      localStorage.setItem('checkout_session', JSON.stringify(snapshot))
+      // Use Nuxt's useCookie for SSR-compatible storage
+      const checkoutCookie = useCookie('checkout_session', {
+        maxAge: 60 * 60 * 2, // 2 hours
+        sameSite: 'lax',
+        secure: process.env.NODE_ENV === 'production'
+      })
+
+      checkoutCookie.value = snapshot as any
     } catch (error) {
       console.error('Failed to persist checkout session:', error)
     }
   }
 
   const restore = (): RestoredPayload | null => {
-    if (typeof window === 'undefined') return null
-
     try {
-      const stored = localStorage.getItem('checkout_session')
-      if (!stored) return null
+      // Use Nuxt's useCookie for SSR-compatible storage
+      const checkoutCookie = useCookie<any>('checkout_session', {
+        maxAge: 60 * 60 * 2, // 2 hours
+        sameSite: 'lax',
+        secure: process.env.NODE_ENV === 'production'
+      })
 
-      const snapshot = JSON.parse(stored)
+      const snapshot = checkoutCookie.value
+      if (!snapshot) return null
 
       if (snapshot.sessionExpiresAt && new Date(snapshot.sessionExpiresAt) < new Date()) {
         clearStorage()
@@ -267,8 +275,8 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
   }
 
   const clearStorage = (): void => {
-    if (typeof window === 'undefined') return
-    localStorage.removeItem('checkout_session')
+    const checkoutCookie = useCookie('checkout_session')
+    checkoutCookie.value = null
   }
 
   const reset = (): void => {
