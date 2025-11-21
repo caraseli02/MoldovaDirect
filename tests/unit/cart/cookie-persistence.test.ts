@@ -20,22 +20,23 @@ const mockProduct: Product = {
   category: 'Test'
 }
 
-// Mock cookie data
-let mockCookieValue: any = null
+// Mock cookie storage
+let cookieStorage: Record<string, any> = {}
 
-// Mock useCookie
+// Mock useCookie with proper getter/setter
 vi.mock('#app', () => ({
-  useCookie: vi.fn((name: string, options?: any) => {
-    return {
-      value: mockCookieValue
-    }
-  })
+  useCookie: vi.fn((name: string, options?: any) => ({
+    get value() { return cookieStorage[name] },
+    set value(val) { cookieStorage[name] = val }
+  }))
 }))
 
 describe('Cart Cookie Persistence', () => {
   beforeEach(() => {
-    // Reset cookie mock
-    mockCookieValue = null
+    // Clear cookie storage (don't reassign, just clear keys)
+    for (const key in cookieStorage) {
+      delete cookieStorage[key]
+    }
 
     // Create fresh Pinia instance
     setActivePinia(createPinia())
@@ -60,14 +61,14 @@ describe('Cart Cookie Persistence', () => {
       expect(saveResult.success).toBe(true)
 
       // Verify cookie was written
-      expect(mockCookieValue).toBeDefined()
-      expect(mockCookieValue.items).toHaveLength(1)
-      expect(mockCookieValue.items[0].product.id).toBe(mockProduct.id)
+      expect(cookieStorage['moldova_direct_cart']).toBeDefined()
+      expect(cookieStorage['moldova_direct_cart'].items).toHaveLength(1)
+      expect(cookieStorage['moldova_direct_cart'].items[0].product.id).toBe(mockProduct.id)
     })
 
     it('should load cart from cookie on mount', async () => {
       // Set up cookie with cart data
-      mockCookieValue = {
+      cookieStorage['moldova_direct_cart'] = {
         items: [{
           id: 'cart-item-1',
           product: mockProduct,
@@ -95,7 +96,7 @@ describe('Cart Cookie Persistence', () => {
 
     it('should handle corrupted cookie data gracefully', async () => {
       // Set corrupted cookie data
-      mockCookieValue = {
+      cookieStorage['moldova_direct_cart'] = {
         items: 'not-an-array', // Invalid
         sessionId: 123 // Wrong type
       }
@@ -113,7 +114,7 @@ describe('Cart Cookie Persistence', () => {
     it('should convert date strings to Date objects on load', async () => {
       const isoDate = '2024-01-15T10:30:00.000Z'
 
-      mockCookieValue = {
+      cookieStorage['moldova_direct_cart'] = {
         items: [{
           id: 'cart-item-1',
           product: mockProduct,
@@ -146,7 +147,7 @@ describe('Cart Cookie Persistence', () => {
       const result = await cart.saveToStorage()
 
       expect(result.success).toBe(true)
-      expect(mockCookieValue).toMatchObject({
+      expect(cookieStorage['moldova_direct_cart']).toMatchObject({
         items: expect.any(Array),
         sessionId: expect.any(String),
         timestamp: expect.any(String),
@@ -155,7 +156,7 @@ describe('Cart Cookie Persistence', () => {
     })
 
     it('should clear cart storage', async () => {
-      mockCookieValue = {
+      cookieStorage['moldova_direct_cart'] = {
         items: [{ id: '1', product: mockProduct, quantity: 1, addedAt: new Date() }]
       }
 
@@ -163,7 +164,7 @@ describe('Cart Cookie Persistence', () => {
       const result = await cart.clearStorage()
 
       expect(result.success).toBe(true)
-      expect(mockCookieValue).toBeNull()
+      expect(cookieStorage['moldova_direct_cart']).toBeNull()
     })
 
     it('should handle save failures gracefully', async () => {
@@ -188,7 +189,7 @@ describe('Cart Cookie Persistence', () => {
       await cart.addItem(mockProduct, 1)
       await cart.saveToStorage()
 
-      expect(mockCookieValue.items[0]).toMatchObject({
+      expect(cookieStorage['moldova_direct_cart'].items[0]).toMatchObject({
         id: expect.any(String),
         product: expect.objectContaining({
           id: mockProduct.id,
@@ -203,7 +204,7 @@ describe('Cart Cookie Persistence', () => {
     it('should deserialize cart items correctly', async () => {
       const now = new Date()
 
-      mockCookieValue = {
+      cookieStorage['moldova_direct_cart'] = {
         items: [{
           id: 'test-item',
           product: mockProduct,
@@ -232,7 +233,7 @@ describe('Cart Cookie Persistence', () => {
 
   describe('Edge Cases', () => {
     it('should handle empty cookie gracefully', async () => {
-      mockCookieValue = null
+      cookieStorage['moldova_direct_cart'] = null
 
       const cart = useCartStore()
       const result = await cart.loadFromStorage()
@@ -243,7 +244,7 @@ describe('Cart Cookie Persistence', () => {
     })
 
     it('should handle cookie with no items array', async () => {
-      mockCookieValue = {
+      cookieStorage['moldova_direct_cart'] = {
         sessionId: 'test',
         // Missing items array
       }
@@ -270,7 +271,7 @@ describe('Cart Cookie Persistence', () => {
 
       // Should succeed even with large cart
       expect(result.success).toBe(true)
-      expect(mockCookieValue.items.length).toBe(50)
+      expect(cookieStorage['moldova_direct_cart'].items.length).toBe(50)
     })
   })
 })

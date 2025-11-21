@@ -53,6 +53,14 @@ global.createError = vi.fn((error: any) => {
   throw err
 })
 
+// Mock Nuxt app
+global.useNuxtApp = vi.fn(() => ({
+  $i18n: {
+    t: vi.fn((key: string) => key),
+    locale: { value: 'en' }
+  }
+}))
+
 // Mock useCookie for testing
 global.useCookie = vi.fn((name: string, options?: any) => {
   let value: any = null

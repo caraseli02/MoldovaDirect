@@ -5,7 +5,7 @@
 
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
-import { useCheckoutStore } from '~/stores/checkout'
+import { useCheckoutSessionStore as useCheckoutStore } from '~/stores/checkout/session'
 import { useCartStore } from '~/stores/cart'
 import type { Product } from '~/stores/cart/types'
 
@@ -28,12 +28,12 @@ const mockProduct: Product = {
 }
 
 // Mock cookie
-let mockCookieValue: any = null
+let cookieStorage: Record<string, any> = {}
 
 vi.mock('#app', () => ({
-  useCookie: vi.fn(() => ({
-    get value() { return mockCookieValue },
-    set value(val) { mockCookieValue = val }
+  useCookie: vi.fn((name: string) => ({
+    get value() { return cookieStorage[name] },
+    set value(val) { cookieStorage[name] = val }
   })),
   useLocalePath: vi.fn(() => mockLocalePath),
   navigateTo: mockNavigateTo
@@ -44,7 +44,10 @@ describe('Checkout Middleware - Confirmation Page Access', () => {
   let cartStore: ReturnType<typeof useCartStore>
 
   beforeEach(() => {
-    mockCookieValue = null
+    // Clear cookie storage (don't reassign, just clear keys)
+    for (const key in cookieStorage) {
+      delete cookieStorage[key]
+    }
     setActivePinia(createPinia())
     checkoutStore = useCheckoutStore()
     cartStore = useCartStore()
@@ -134,7 +137,7 @@ describe('Checkout Middleware - Confirmation Page Access', () => {
 
     it('should restore session and allow confirmation access', () => {
       // Simulate page refresh - restore from cookie
-      mockCookieValue = {
+      cookieStorage['checkout_session'] = {
         sessionId: 'session-123',
         currentStep: 'confirmation',
         orderData: {
@@ -310,7 +313,7 @@ describe('Checkout Middleware - Confirmation Page Access', () => {
     })
 
     it('should restore guest session from cookie', () => {
-      mockCookieValue = {
+      cookieStorage['checkout_session'] = {
         sessionId: 'guest-session',
         currentStep: 'confirmation',
         guestInfo: {
@@ -382,7 +385,7 @@ describe('Checkout Middleware - Confirmation Page Access', () => {
     })
 
     it('should handle corrupted session data', () => {
-      mockCookieValue = {
+      cookieStorage['checkout_session'] = {
         sessionId: 'corrupted',
         currentStep: 'invalid-step',
         orderData: null

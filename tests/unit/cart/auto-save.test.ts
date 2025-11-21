@@ -24,7 +24,7 @@ let mockCookieValue: any = null
 let saveCallCount = 0
 
 vi.mock('#app', () => ({
-  useCookie: vi.fn(() => ({
+  useCookie: vi.fn((name: string, options?: any) => ({
     get value() { return mockCookieValue },
     set value(val) {
       mockCookieValue = val
@@ -36,14 +36,17 @@ vi.mock('#app', () => ({
 describe('Cart Auto-Save Mechanism', () => {
   beforeEach(() => {
     vi.useFakeTimers()
-    mockCookieValue = null
+    // Clear cookie storage (don't reassign, just clear keys)
+    for (const key in cookieStorage) {
+      delete cookieStorage[key]
+    }
     saveCallCount = 0
     setActivePinia(createPinia())
     vi.clearAllMocks()
   })
 
   afterEach(() => {
-    vi.restoreAllTimers()
+    vi.useRealTimers()
   })
 
   describe('Debounced Save (CRITICAL)', () => {
