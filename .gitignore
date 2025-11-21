@@ -139,7 +139,13 @@ playwright.*.config.ts
 
 # Screenshots
 screenshots/
+visual-regression-screenshots/
 *.png
 *.jpg
 *.jpeg
+
+# Temporary scripts and utilities
+apply-rls-fix.sh
+visual-regression-*.mjs
+
 .worktrees
