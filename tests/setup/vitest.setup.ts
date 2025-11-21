@@ -52,3 +52,12 @@ global.createError = vi.fn((error: any) => {
   ;(err as any).statusCode = error.statusCode
   throw err
 })
+
+// Mock useCookie for testing
+global.useCookie = vi.fn((name: string, options?: any) => {
+  let value: any = null
+  return {
+    get value() { return value },
+    set value(val: any) { value = val }
+  }
+})
