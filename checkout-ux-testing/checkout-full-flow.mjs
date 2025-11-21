@@ -127,12 +127,17 @@ async function completeAllSteps() {
     await page.screenshot({ path: path.join(SCREENSHOT_DIR, '01-cart.png'), fullPage: true });
     console.log('✅ Screenshot: 01-cart.png');
 
-    // Verify cart has items
-    const cartItems = await page.locator('article, [data-testid="cart-item"]').count();
-    console.log(`  Cart contains ${cartItems} items`);
-    if (cartItems === 0) {
+    // Verify cart has items - check for checkout button or cart count
+    const checkoutBtnCount = await page.locator('button:has-text("Finalizar")').count();
+    const cartEmpty = await page.locator('text=/tu carrito está vacío|cart is empty/i').count();
+
+    console.log(`  Checkout button visible: ${checkoutBtnCount > 0}`);
+    console.log(`  Empty cart message: ${cartEmpty > 0}`);
+
+    if (cartEmpty > 0 || checkoutBtnCount === 0) {
       throw new Error('Cart is empty after adding products!');
     }
+    console.log(`  ✅ Cart has items and is ready for checkout`);
 
     // Click checkout
     console.log('\nSTEP 2: Clicking checkout button...');
