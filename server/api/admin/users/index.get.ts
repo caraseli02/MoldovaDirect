@@ -49,7 +49,8 @@ interface UserWithProfile {
   totalSpent?: number
 }
 
-export default defineCachedEventHandler(async (event) => {
+// NOTE: Caching disabled for admin endpoints to ensure proper header-based authentication
+export default defineEventHandler(async (event) => {
   await requireAdminRole(event)
 
   try {
@@ -247,11 +248,6 @@ export default defineCachedEventHandler(async (event) => {
     console.warn('Returning mock data due to error')
     return getMockUserData()
   }
-}, {
-  maxAge: ADMIN_CACHE_CONFIG.usersList.maxAge,
-  name: ADMIN_CACHE_CONFIG.usersList.name,
-  getKey: (event) => getAdminCacheKey(ADMIN_CACHE_CONFIG.usersList.name, event),
-  swr: true // Enable stale-while-revalidate
 })
 
 /**

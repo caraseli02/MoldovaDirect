@@ -252,18 +252,16 @@ import {
   TabsList,
   TabsTrigger
 } from '@/components/ui/tabs'
+import AdminOrdersFilters from '~/components/admin/Orders/Filters.vue'
+import AdminOrdersBulkActions from '~/components/admin/Orders/BulkActions.vue'
+import AdminOrdersListItem from '~/components/admin/Orders/ListItem.vue'
+import AdminUtilsPagination from '~/components/admin/Utils/Pagination.vue'
+import AdminUtilsBulkOperationsBar from '~/components/admin/Utils/BulkOperationsBar.vue'
 
 definePageMeta({
   layout: 'admin',
   middleware: ['auth', 'admin']
 })
-
-// Lazy load admin order components to reduce main bundle size
-const AdminOrdersFilters = useAsyncAdminComponent('Orders/Filters')
-const AdminOrdersBulkActions = useAsyncAdminComponent('Orders/BulkActions')
-const AdminOrdersListItem = useAsyncAdminComponent('Orders/ListItem')
-const AdminUtilsPagination = useAsyncAdminComponent('Utils/Pagination')
-const AdminUtilsBulkOperationsBar = useAsyncAdminComponent('Utils/BulkOperationsBar')
 
 // Initialize store
 const adminOrdersStore = useAdminOrdersStore()

@@ -54,7 +54,8 @@ export interface AnalyticsOverview {
   }
 }
 
-export default defineCachedEventHandler(async (event) => {
+// NOTE: Caching disabled for admin endpoints to ensure proper header-based authentication
+export default defineEventHandler(async (event) => {
   try {
     await requireAdminRole(event)
     // Verify admin access
@@ -245,8 +246,4 @@ export default defineCachedEventHandler(async (event) => {
       statusMessage: 'Failed to fetch analytics overview'
     })
   }
-}, {
-  maxAge: ADMIN_CACHE_CONFIG.analyticsOverview.maxAge,
-  name: ADMIN_CACHE_CONFIG.analyticsOverview.name,
-  getKey: (event) => getAdminCacheKey(ADMIN_CACHE_CONFIG.analyticsOverview.name, event)
 })

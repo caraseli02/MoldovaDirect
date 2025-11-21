@@ -36,7 +36,8 @@ interface AdminProductFilters {
   limit?: number
 }
 
-export default defineCachedEventHandler(async (event) => {
+// NOTE: Caching disabled for admin endpoints to ensure proper header-based authentication
+export default defineEventHandler(async (event) => {
   await requireAdminRole(event)
 
   const query = getQuery(event) as AdminProductFilters
@@ -294,8 +295,4 @@ export default defineCachedEventHandler(async (event) => {
 
     return mockResult
   }
-}, {
-  maxAge: ADMIN_CACHE_CONFIG.productsList.maxAge,
-  name: ADMIN_CACHE_CONFIG.productsList.name,
-  getKey: (event) => getAdminCacheKey(ADMIN_CACHE_CONFIG.productsList.name, event)
 })

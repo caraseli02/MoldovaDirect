@@ -200,21 +200,19 @@ import {
   ShoppingBag,
   Users
 } from 'lucide-vue-next'
+import AdminDashboardAnalyticsOverview from '~/components/admin/Dashboard/AnalyticsOverview.vue'
+import AdminUtilsDateRangePicker from '~/components/admin/Utils/DateRangePicker.vue'
+import AdminChartsUserRegistration from '~/components/admin/Charts/UserRegistration.vue'
+import AdminChartsUserActivity from '~/components/admin/Charts/UserActivity.vue'
+import AdminChartsConversionFunnel from '~/components/admin/Charts/ConversionFunnel.vue'
+import AdminChartsProductPerformance from '~/components/admin/Charts/ProductPerformance.vue'
+import AdminUtilsTopProductsTable from '~/components/admin/Utils/TopProductsTable.vue'
 
 // Page metadata
 definePageMeta({
   layout: 'admin',
   middleware: 'admin'
 })
-
-// Lazy load all analytics components to reduce main bundle size
-const AdminDashboardAnalyticsOverview = useAsyncAdminComponent('Dashboard/AnalyticsOverview')
-const AdminUtilsDateRangePicker = useAsyncAdminComponent('Utils/DateRangePicker')
-const AdminChartsUserRegistration = useAsyncAdminComponent('Charts/UserRegistration')
-const AdminChartsUserActivity = useAsyncAdminComponent('Charts/UserActivity')
-const AdminChartsConversionFunnel = useAsyncAdminComponent('Charts/ConversionFunnel')
-const AdminChartsProductPerformance = useAsyncAdminComponent('Charts/ProductPerformance')
-const AdminUtilsTopProductsTable = useAsyncAdminComponent('Utils/TopProductsTable')
 
 // Composables
 const { 

@@ -18,7 +18,7 @@
 
 import { serverSupabaseClient, serverSupabaseUser } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
-import { ADMIN_CACHE_CONFIG } from '~/server/utils/adminCache'
+import { ADMIN_CACHE_CONFIG, getAdminCacheKey } from '~/server/utils/adminCache'
 
 export interface DashboardStats {
   totalProducts: number
@@ -41,10 +41,12 @@ export interface DashboardStats {
   averageOrderValue: number
 }
 
-export default defineCachedEventHandler(async (event) => {
+// NOTE: Caching disabled for admin endpoints to ensure proper header-based authentication
+export default defineEventHandler(async (event) => {
   try {
+    // Require admin authentication
     await requireAdminRole(event)
-    // Verify admin access
+
     const supabase = await serverSupabaseClient(event)
     
     const now = new Date()
@@ -159,13 +161,5 @@ export default defineCachedEventHandler(async (event) => {
       statusCode: 500,
       statusMessage: 'Internal server error'
     })
-  }
-}, {
-  maxAge: ADMIN_CACHE_CONFIG.dashboardStats.maxAge,
-  name: ADMIN_CACHE_CONFIG.dashboardStats.name,
-  getKey: async (event) => {
-    // Include user ID in cache key to prevent caching auth errors for all users
-    const user = await serverSupabaseUser(event)
-    return user ? `${ADMIN_CACHE_CONFIG.dashboardStats.name}:${user.id}` : ADMIN_CACHE_CONFIG.dashboardStats.name
   }
 })

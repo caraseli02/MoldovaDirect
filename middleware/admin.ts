@@ -18,15 +18,25 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const supabase = useSupabaseClient()
 
   // Check if user is authenticated
+  // Wait for session to load if we're on the client
+  let userId: string | undefined
   if (!user.value) {
-    return navigateTo('/auth/login')
+    // Double-check with getSession to handle hydration timing
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session?.user) {
+      return navigateTo('/auth/login')
+    }
+    // Use session user if user.value hasn't hydrated yet
+    userId = session.user.id
+  } else {
+    userId = user.value.id
   }
 
   // Check if user has admin role
   const { data: profile, error } = await supabase
     .from('profiles')
     .select('role')
-    .eq('id', user.value.id)
+    .eq('id', userId)
     .single<{ role: string | null }>()
 
   if (error || !profile) {
@@ -47,7 +57,9 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   // Check MFA status for additional security (REQUIRED for admin users)
   // Skip MFA in development for test accounts (@moldovadirect.com emails)
   const isDev = process.env.NODE_ENV === 'development'
-  const isTestAccount = user.value.email?.includes('@moldovadirect.com')
+  const { data: { session } } = await supabase.auth.getSession()
+  const userEmail = user.value?.email || session?.user?.email
+  const isTestAccount = userEmail?.includes('@moldovadirect.com')
   const shouldSkipMFA = isDev && isTestAccount
 
   if (!shouldSkipMFA) {

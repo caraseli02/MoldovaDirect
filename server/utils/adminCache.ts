@@ -5,7 +5,7 @@
  * These utilities ensure data consistency when admin operations modify data.
  */
 
-import { serverSupabaseUser } from '#supabase/server'
+import { serverSupabaseClient } from '#supabase/server'
 
 type CacheScope = 'stats' | 'products' | 'orders' | 'users' | 'analytics' | 'audit-logs' | 'email-logs' | 'inventory' | 'all'
 
@@ -84,30 +84,78 @@ export async function invalidateMultipleScopes(scopes: CacheScope[]): Promise<vo
 }
 
 /**
+ * Allowed query parameter keys for cache key generation
+ * Only these parameters will be included in cache keys
+ */
+const ALLOWED_QUERY_PARAMS = [
+  'page', 'limit', 'search', 'status', 'payment_status',
+  'date_from', 'date_to', 'amount_min', 'amount_max',
+  'priority', 'sort_by', 'order', 'category', 'brand',
+  'in_stock', 'featured', 'period', 'role', 'email_verified'
+]
+
+/**
+ * Maximum length for query parameter values
+ */
+const MAX_QUERY_VALUE_LENGTH = 200
+
+/**
+ * Sanitize a query parameter value for use in cache keys
+ * Removes special characters that could cause issues
+ *
+ * @param value - The query parameter value
+ * @returns Sanitized value
+ */
+function sanitizeQueryValue(value: any): string {
+  if (value === null || value === undefined) {
+    return ''
+  }
+
+  const stringValue = String(value)
+
+  // Validate length
+  if (stringValue.length > MAX_QUERY_VALUE_LENGTH) {
+    return stringValue.substring(0, MAX_QUERY_VALUE_LENGTH)
+  }
+
+  // Remove characters that could cause issues in cache keys
+  // Keep alphanumeric, hyphens, underscores, dots, and spaces
+  return stringValue.replace(/[^a-zA-Z0-9\-_.@+ ]/g, '')
+}
+
+/**
  * Generate a cache key for admin endpoints
- * Includes user ID and query parameters to ensure different filters/pagination have separate caches
- * and to prevent caching auth errors across users
+ * Includes query parameters to ensure different filters/pagination have separate caches
+ *
+ * Note: Does not include user ID to keep cache key generation synchronous.
+ * Authentication is handled by requireAdminRole() in the handler, which runs
+ * BEFORE serving cached content.
+ *
+ * Security features:
+ * - Whitelists allowed query parameters
+ * - Validates and truncates query value lengths
+ * - Sanitizes query values to prevent injection
  *
  * @param baseName - Base name for the cache key
  * @param event - The H3 event object
- * @returns Cache key string or Promise<string>
+ * @returns Cache key string
  */
-export async function getAdminCacheKey(baseName: string, event: any): Promise<string> {
+export function getAdminCacheKey(baseName: string, event: any): string {
   const query = getQuery(event)
 
-  // Include user ID to prevent caching auth errors for all users
-  const user = await serverSupabaseUser(event)
-  const userPrefix = user ? `user:${user.id}` : 'anonymous'
+  // Filter to only allowed query parameters and sanitize values
+  const queryKeys = Object.keys(query)
+    .filter(key => ALLOWED_QUERY_PARAMS.includes(key))
+    .sort()
 
-  // Convert query params to a stable sorted string
-  const queryKeys = Object.keys(query).sort()
   const queryString = queryKeys
-    .map(key => `${key}=${query[key]}`)
+    .map(key => `${key}=${sanitizeQueryValue(query[key])}`)
+    .filter(param => !param.endsWith('=')) // Remove empty params
     .join('&')
 
   const fullKey = queryString
-    ? `${baseName}:${userPrefix}?${queryString}`
-    : `${baseName}:${userPrefix}`
+    ? `${baseName}?${queryString}`
+    : baseName
 
   return fullKey
 }

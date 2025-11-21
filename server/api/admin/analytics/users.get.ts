@@ -14,6 +14,7 @@
 
 import { serverSupabaseClient, serverSupabaseUser } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
+import { ADMIN_CACHE_CONFIG, getAdminCacheKey } from '~/server/utils/adminCache'
 
 export interface UserAnalyticsData {
   registrationTrends: Array<{
@@ -46,7 +47,8 @@ export interface UserAnalyticsData {
   }>
 }
 
-export default defineCachedEventHandler(async (event) => {
+// NOTE: Caching disabled for admin endpoints to ensure proper header-based authentication
+export default defineEventHandler(async (event) => {
   try {
     await requireAdminRole(event)
     // Verify admin access
@@ -211,19 +213,4 @@ export default defineCachedEventHandler(async (event) => {
       statusMessage: 'Failed to fetch user analytics'
     })
   }
-}, {
-  maxAge: 60 * 10, // Cache for 10 minutes (analytics can tolerate staleness)
-  name: 'admin-analytics-users',
-  getKey: async (event) => {
-    // Include user ID to prevent caching auth errors for all users
-    const user = await serverSupabaseUser(event)
-    const userPrefix = user ? `user:${user.id}` : 'anonymous'
-
-    const query = getQuery(event)
-    const days = query.days || 30
-    const startDate = query.startDate || ''
-    const endDate = query.endDate || ''
-    return `${userPrefix}:days:${days}:start:${startDate}:end:${endDate}`
-  },
-  swr: true // Enable stale-while-revalidate for better UX
 })

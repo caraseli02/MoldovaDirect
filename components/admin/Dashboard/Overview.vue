@@ -297,12 +297,16 @@ if (!dashboardStore) {
     criticalAlerts: [],
     activitiesByType: {},
     timeSinceRefresh: 'Never',
-    initialize: () => Promise.resolve(),
-    refresh: () => Promise.resolve(),
+    setStats: () => {},
+    setActivity: () => {},
+    setError: () => {},
+    setLoading: () => {},
+    setStatsLoading: () => {},
+    setActivityLoading: () => {},
     clearError: () => {},
-    startAutoRefresh: () => {},
-    stopAutoRefresh: () => {},
-    cleanup: () => {}
+    clearData: () => {},
+    updateStat: () => {},
+    addActivity: () => {}
   }
 }
 
@@ -636,22 +640,18 @@ const selectRange = async (value: 'today' | '7d' | '30d') => {
   if (selectedRange.value === value) return
   selectedRange.value = value
 
-  if (typeof dashboardStore.refresh === 'function') {
-    refreshing.value = true
-    try {
-      await dashboardStore.refresh()
-    } finally {
-      refreshing.value = false
-    }
+  refreshing.value = true
+  try {
+    await fetchDashboardData()
+  } finally {
+    refreshing.value = false
   }
 }
 
 const refreshAll = async () => {
-  if (typeof dashboardStore.refresh !== 'function') return
-
   refreshing.value = true
   try {
-    await dashboardStore.refresh()
+    await fetchDashboardData()
   } finally {
     refreshing.value = false
   }
@@ -661,29 +661,130 @@ const clearError = () => {
   dashboardStore.clearError()
 }
 
+// Auto-refresh interval reference
+let autoRefreshInterval: number | null = null
+
+// Get Supabase client in setup context (NOT in async function!)
+const supabase = useSupabaseClient()
+
 const toggleAutoRefresh = () => {
   autoRefreshEnabled.value = !autoRefreshEnabled.value
 
   if (autoRefreshEnabled.value) {
-    dashboardStore.startAutoRefresh(5)
+    startAutoRefresh()
   } else {
-    dashboardStore.stopAutoRefresh()
+    stopAutoRefresh()
+  }
+}
+
+// Fetch dashboard data using authenticated fetch
+const fetchDashboardData = async () => {
+  try {
+    dashboardStore.setLoading(true)
+
+    // Get session from supabase client (already obtained in setup context)
+    const { data: { session } } = await supabase.auth.getSession()
+
+    if (!session) {
+      console.error('[AdminFetch] No active session')
+      dashboardStore.setError('Session expired. Please log in again.')
+      await navigateTo('/auth/login')
+      return
+    }
+
+    // Prepare headers with Bearer token
+    const headers = {
+      'Authorization': `Bearer ${session.access_token}`
+    }
+
+    console.log('[AdminFetch] Fetching dashboard data with Bearer token')
+
+    // Fetch stats and activity in parallel with proper auth headers
+    const [statsResult, activityResult] = await Promise.all([
+      $fetch<{ success: boolean; data: any }>('/api/admin/dashboard/stats', { headers })
+        .catch(err => {
+          console.error('[AdminFetch] Error fetching /api/admin/dashboard/stats:', err)
+          return null
+        }),
+      $fetch<{ success: boolean; data: any[] }>('/api/admin/dashboard/activity', { headers })
+        .catch(err => {
+          console.error('[AdminFetch] Error fetching /api/admin/dashboard/activity:', err)
+          return null
+        })
+    ])
+
+    // Update store with fetched data
+    if (statsResult?.success) {
+      dashboardStore.setStats(statsResult.data)
+      console.log('[AdminFetch] Stats loaded successfully')
+    }
+
+    if (activityResult?.success) {
+      dashboardStore.setActivity(activityResult.data)
+      console.log('[AdminFetch] Activity loaded successfully')
+    }
+
+    // If both failed, set error
+    if (!statsResult && !activityResult) {
+      dashboardStore.setError('Failed to load dashboard data')
+    } else {
+      // Clear any previous errors on successful fetch
+      dashboardStore.clearError()
+    }
+  } catch (error: any) {
+    console.error('[AdminFetch] Error fetching dashboard data:', error)
+
+    // Handle authentication errors specially
+    if (error?.statusCode === 401) {
+      dashboardStore.setError('Session expired. Please log in again.')
+      // Redirect to login after a short delay
+      setTimeout(() => {
+        navigateTo('/auth/login')
+      }, 2000)
+    } else {
+      dashboardStore.setError(error?.message || 'Failed to load dashboard data')
+    }
+  } finally {
+    dashboardStore.setLoading(false)
+  }
+}
+
+const startAutoRefresh = () => {
+  stopAutoRefresh() // Clear any existing interval
+
+  const intervalMs = 5 * 60 * 1000 // 5 minutes
+  autoRefreshInterval = window.setInterval(() => {
+    fetchDashboardData()
+  }, intervalMs)
+}
+
+const stopAutoRefresh = () => {
+  if (autoRefreshInterval) {
+    clearInterval(autoRefreshInterval)
+    autoRefreshInterval = null
   }
 }
 
 onMounted(() => {
-  dashboardStore.initialize()
+  // Fetch data client-side after authentication is established
+  fetchDashboardData()
+
+  // Start auto-refresh
+  if (autoRefreshEnabled.value) {
+    startAutoRefresh()
+  }
 })
 
 onUnmounted(() => {
-  dashboardStore.cleanup()
+  // Cleanup auto-refresh
+  stopAutoRefresh()
 })
 
 watch(
   () => route.path,
   newPath => {
     if (newPath === '/admin' || newPath === '/admin/dashboard') {
-      dashboardStore.refresh()
+      fetchDashboardData()
     }
   }
 )

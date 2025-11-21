@@ -6,7 +6,8 @@
  */
 
 import type { H3Event } from 'h3'
-import { serverSupabaseServiceRole, serverSupabaseUser } from '#supabase/server'
+import { getCookie, getHeader, getRequestIP } from 'h3'
+import { serverSupabaseClient, serverSupabaseServiceRole, serverSupabaseUser } from '#supabase/server'
 
 /**
  * Checks if the application is running in a production environment
@@ -40,17 +41,62 @@ export function requireNonProductionEnvironment(event: H3Event) {
  * @throws Error if user is not authenticated or not an admin
  */
 export async function requireAdminRole(event: H3Event): Promise<string> {
-  const currentUser = await serverSupabaseUser(event)
+  const path = event.path || 'unknown'
+  const method = event.method || 'unknown'
+
+  // Check for Authorization header (Bearer token) first
+  // Access directly from Node.js request headers for reliability
+  const nodeHeaders = event.node.req.headers
+  const authHeader = nodeHeaders.authorization || nodeHeaders.Authorization ||
+                     getHeader(event, 'authorization') || getHeader(event, 'Authorization')
+
+  let currentUser: any = null
+  let userError: any = null
+  let authMethod = 'unknown'
+
+  if (authHeader?.startsWith('Bearer ')) {
+    authMethod = 'bearer'
+    // Extract token from Authorization header
+    const token = authHeader.substring(7)
+
+    // Use service role client to verify the token
+    const supabase = serverSupabaseServiceRole(event)
+    const { data, error } = await supabase.auth.getUser(token)
+
+    currentUser = data.user
+    userError = error
+
+    if (userError) {
+      console.error(`[AdminAuth] Bearer token validation failed for ${method} ${path}:`, {
+        error: userError.message,
+        tokenLength: token.length,
+        tokenPrefix: token.substring(0, 20) + '...'
+      })
+    }
+  } else {
+    authMethod = 'cookie'
+    // Fall back to cookie-based auth
+    const supabaseClient = await serverSupabaseClient(event)
+    const { data, error } = await supabaseClient.auth.getUser()
+
+    currentUser = data.user
+    userError = error
+
+    if (userError) {
+      console.error(`[AdminAuth] Cookie auth failed for ${method} ${path}:`, userError.message)
+    }
+  }
 
   // Check if user is authenticated
-  if (!currentUser) {
+  if (userError || !currentUser) {
+    console.warn(`[AdminAuth] 401 Unauthorized - ${method} ${path} - Auth method: ${authMethod}`)
     throw createError({
       statusCode: 401,
       statusMessage: 'Authentication required'
     })
   }
 
-  // Get user profile with role
+  // Get user profile with role using service role client
   const supabase = serverSupabaseServiceRole(event)
   const { data: profile, error } = await supabase
     .from('profiles')
@@ -59,6 +105,11 @@ export async function requireAdminRole(event: H3Event): Promise<string> {
     .single()
 
   if (error || !profile) {
+    console.error(`[AdminAuth] Profile lookup failed for user ${currentUser.id}:`, {
+      error: error?.message,
+      hasProfile: !!profile,
+      email: currentUser.email
+    })
     throw createError({
       statusCode: 403,
       statusMessage: 'Unable to verify admin privileges'
@@ -66,10 +117,16 @@ export async function requireAdminRole(event: H3Event): Promise<string> {
   }
 
   if (profile.role !== 'admin') {
+    console.warn(`[AdminAuth] 403 Forbidden - User ${currentUser.email} (role: ${profile.role}) attempted to access ${method} ${path}`)
     throw createError({
       statusCode: 403,
       statusMessage: 'Admin access required'
     })
+  }
+
+  // Log successful admin access in development
+  if (process.env.NODE_ENV === 'development') {
+    console.log(`[AdminAuth] ✓ Admin access granted - ${method} ${path} - User: ${currentUser.email} - Auth: ${authMethod}`)
   }
 
   return currentUser.id

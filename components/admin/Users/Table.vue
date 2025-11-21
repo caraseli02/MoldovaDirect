@@ -158,6 +158,7 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<{
   userSelected: [userId: string]
   userAction: [action: string, userId: string, data?: any]
+  refetch: []
 }>()
 
 // Import VueUse utilities
@@ -222,6 +223,7 @@ const {
 // Debounced search function
 const debouncedSearch = useDebounceFn((query: string) => {
   adminUsersStore.updateSearch(query)
+  emit('refetch')
 }, 300)
 
 // Methods
@@ -231,6 +233,8 @@ const handleSearch = (query: string) => {
 
 const handleStatusChange = (status: string) => {
   adminUsersStore.updateStatusFilter(status as any)
+  emit('refetch')
+
   if (isMobile.value) {
     vibrate('light')
   }
@@ -238,6 +242,8 @@ const handleStatusChange = (status: string) => {
 
 const handleDateRangeChange = (from?: string, to?: string) => {
   adminUsersStore.updateDateRange(from, to)
+  emit('refetch')
+
   if (isMobile.value) {
     vibrate('light')
   }
@@ -249,7 +255,8 @@ const handleClearFilters = () => {
   dateFrom.value = ''
   dateTo.value = ''
   adminUsersStore.clearFilters()
-  
+  emit('refetch')
+
   if (isMobile.value) {
     vibrate('success')
   }
@@ -258,38 +265,42 @@ const handleClearFilters = () => {
 const updateSort = (column: string) => {
   const currentSort = adminUsersStore.filters.sortBy
   const currentOrder = adminUsersStore.filters.sortOrder
-  
+
   let newOrder: 'asc' | 'desc' = 'asc'
   if (currentSort === column && currentOrder === 'asc') {
     newOrder = 'desc'
   }
-  
+
   adminUsersStore.updateSort(column, newOrder)
+  emit('refetch')
 }
 
 const getSortIcon = (column: string) => {
   const currentSort = adminUsersStore.filters.sortBy
   const currentOrder = adminUsersStore.filters.sortOrder
-  
+
   if (currentSort !== column) {
     return 'lucide:chevrons-up-down'
   }
-  
-  return currentOrder === 'asc' 
-    ? 'lucide:chevron-up' 
+
+  return currentOrder === 'asc'
+    ? 'lucide:chevron-up'
     : 'lucide:chevron-down'
 }
 
 const goToPage = (page: number) => {
   adminUsersStore.goToPage(page)
+  emit('refetch')
 }
 
 const nextPage = () => {
   adminUsersStore.nextPage()
+  emit('refetch')
 }
 
 const prevPage = () => {
   adminUsersStore.prevPage()
+  emit('refetch')
 }
 
 const handleViewUser = (userId: string) => {
@@ -326,17 +337,18 @@ const handleUserAction = (action: string, userId: string, data?: any) => {
 }
 
 const retry = () => {
-  adminUsersStore.fetchUsers()
-  
+  emit('refetch')
+
   if (isMobile.value) {
     vibrate('medium')
   }
 }
 
 // Initialize
-onMounted(() => {
-  if (users.value.length === 0) {
-    adminUsersStore.initialize()
-  }
-})
+// NOTE: Initialization now happens in parent page component with proper Bearer token auth
+// onMounted(() => {
+//   if (users.value.length === 0) {
+//     adminUsersStore.initialize()
+//   }
+// })
 </script>

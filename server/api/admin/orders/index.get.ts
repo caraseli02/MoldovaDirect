@@ -6,8 +6,10 @@
 import { serverSupabaseServiceRole } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
 import { ADMIN_CACHE_CONFIG, getAdminCacheKey } from '~/server/utils/adminCache'
+import { prepareSearchPattern } from '~/server/utils/searchSanitization'
 
-export default defineCachedEventHandler(async (event) => {
+// NOTE: Caching disabled for admin endpoints to ensure proper header-based authentication
+export default defineEventHandler(async (event) => {
   try {
     // Verify admin authentication
     await requireAdminRole(event)
@@ -86,8 +88,9 @@ export default defineCachedEventHandler(async (event) => {
     }
 
     if (search) {
-      // Search: order number and guest email
-      ordersQuery = ordersQuery.or(`order_number.ilike.%${search}%,guest_email.ilike.%${search}%`)
+      // Search: order number and guest email (sanitized to prevent SQL injection)
+      const sanitizedSearch = prepareSearchPattern(search, { validateLength: true })
+      ordersQuery = ordersQuery.or(`order_number.ilike.${sanitizedSearch},guest_email.ilike.${sanitizedSearch}`)
     }
 
     if (dateFrom) {
@@ -232,8 +235,4 @@ export default defineCachedEventHandler(async (event) => {
       statusMessage: 'Internal server error'
     })
   }
-}, {
-  maxAge: ADMIN_CACHE_CONFIG.ordersList.maxAge,
-  name: ADMIN_CACHE_CONFIG.ordersList.name,
-  getKey: (event) => getAdminCacheKey(ADMIN_CACHE_CONFIG.ordersList.name, event)
 })
