@@ -68,6 +68,7 @@ export const useCartStore = defineStore('cart', () => {
   // Validation state
   const validationInProgress = computed(() => validation.state.value.validationInProgress)
   const backgroundValidationEnabled = computed(() => validation.state.value.backgroundValidationEnabled)
+  const lastBackgroundValidation = computed(() => validation.state.value.lastBackgroundValidation)
 
   // Analytics state
   const analyticsSessionStartTime = computed(() => analytics.state.value.sessionStartTime)
@@ -651,6 +652,7 @@ export const useCartStore = defineStore('cart', () => {
     // Additional state
     validationInProgress,
     backgroundValidationEnabled,
+    lastBackgroundValidation,
     analyticsSessionStartTime,
     analyticsLastActivity,
     securityEnabled,
