@@ -303,7 +303,10 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
 
   const completeCheckout = async (): Promise<void> => {
     try {
-      await clearCart()
+      // Clear cart (non-blocking - CSRF token issue doesn't block checkout completion)
+      clearCart().catch(error => {
+        console.error('Failed to clear cart (non-blocking):', error)
+      })
 
       // Send confirmation email in background (non-blocking)
       sendConfirmationEmail().catch(error => {
@@ -325,7 +328,8 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
       session.setCurrentStep('confirmation')
       session.persist({
         shippingInfo: shipping.shippingInfo.value,
-        paymentMethod: paymentMethod.value
+        paymentMethod: paymentMethod.value,
+        orderData: orderData.value // Persist order data so confirmation page can access it
       })
       try {
         toast.success(
