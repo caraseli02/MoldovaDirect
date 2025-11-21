@@ -171,37 +171,6 @@ export const useCartStore = defineStore('cart', () => {
       })
     }
 
-    // Add mock data for development if cart is empty
-    if (process.client && items.value.length === 0 && process.env.NODE_ENV === 'development') {
-      const mockProducts: Product[] = [
-        {
-          id: '1',
-          slug: 'moldovan-wine-cabernet',
-          name: 'Moldovan Wine - Cabernet Sauvignon',
-          price: 25.99,
-          images: ['/placeholder-product.jpg'],
-          stock: 10,
-          category: 'Wine'
-        },
-        {
-          id: '2',
-          slug: 'traditional-honey',
-          name: 'Traditional Moldovan Honey',
-          price: 15.50,
-          images: ['/placeholder-product.jpg'],
-          stock: 5,
-          category: 'Food'
-        }
-      ]
-
-      // Add mock products to cart
-      mockProducts.forEach(product => {
-        core.addItem(product, product.id === '1' ? 2 : 1).catch(error => {
-          console.warn('Failed to add mock product:', error)
-        })
-      })
-    }
-    
     // Initialize analytics
     if (process.client && sessionId.value) {
       analytics.initializeCartSession(sessionId.value)
