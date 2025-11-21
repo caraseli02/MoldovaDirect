@@ -243,8 +243,11 @@
 </template>
 
 <script setup lang="ts">
+import { nextTick } from 'vue'
 import { useCheckoutStore } from '~/stores/checkout'
+import { useCheckoutSessionStore } from '~/stores/checkout/session'
 import { useAuthStore } from '~/stores/auth'
+import { useCartStore } from '~/stores/cart'
 
 // Layout
 definePageMeta({
@@ -254,15 +257,19 @@ definePageMeta({
 
 // Stores
 const checkoutStore = useCheckoutStore()
+const sessionStore = useCheckoutSessionStore()
 const authStore = useAuthStore()
+const cartStore = useCartStore()
 
 // Composables
 const localePath = useLocalePath()
 const { t } = useI18n()
 
 // Computed properties
-const orderData = computed(() => checkoutStore.orderData)
-const shippingInfo = computed(() => checkoutStore.shippingInfo)
+// Access data directly from session store to bypass the checkout store proxy
+// The proxy can return stale refs after restore(), so we use the source directly
+const orderData = computed(() => sessionStore.orderData)
+const shippingInfo = computed(() => sessionStore.shippingInfo)
 const isAuthenticated = computed(() => authStore.isAuthenticated)
 
 const estimatedDeliveryDate = computed(() => {
@@ -294,16 +301,34 @@ const formatDate = (date: Date): string => {
 
 // Initialize on mount
 onMounted(async () => {
-  // Restore checkout data from cookies
-  await checkoutStore.restore()
+  // Restore checkout data from cookies ONLY if we don't already have it
+  // This handles both fresh navigation (data in memory) and page refresh (need to restore)
+  if (!orderData.value) {
+    await checkoutStore.restore()
+    // Wait for Vue's reactivity system to propagate the state changes
+    await nextTick()
+  }
 
   // Ensure we're on the confirmation step
   checkoutStore.currentStep = 'confirmation'
 
-  // If no order data after restore, redirect to cart
-  if (!orderData.value) {
-    console.warn('No order data found, redirecting to cart')
+  // Access orderData directly from session store to bypass the checkout store proxy
+  // The proxy can return stale refs, so we need to access the source directly
+  const currentOrderData = sessionStore.orderData
+
+  // If still no order data after restore attempt, redirect to cart
+  if (!currentOrderData || !currentOrderData.orderId || !currentOrderData.orderNumber) {
     navigateTo(localePath('/cart'))
+    return
+  }
+
+  // Clear cart after successfully landing on confirmation page
+  // This prevents race condition where cart is cleared before navigation completes
+  try {
+    await cartStore.clearCart()
+  } catch (error) {
+    console.error('Failed to clear cart on confirmation page:', error)
+    // Non-blocking - user already completed checkout successfully
   }
 })
 

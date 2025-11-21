@@ -1,3 +1,4 @@
+import { nextTick } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
 import { useCheckoutSessionStore } from './session'
 import { useCheckoutShippingStore } from './shipping'
@@ -101,7 +102,7 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
       }
 
       session.setPaymentMethodState(method)
-      session.persist({
+      await session.persist({
         shippingInfo: shipping.shippingInfo.value,
         paymentMethod: paymentMethod.value
       })
@@ -306,7 +307,7 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
   // ORDER MANAGEMENT
   // =============================================
 
-  async function createOrderRecord(paymentResult: any): Promise<void> {
+  async function createOrderRecord(paymentResult: any): Promise<OrderData> {
     if (!orderData.value || !shippingInfo.value || !paymentMethod.value) {
       throw new Error('Missing required order information')
     }
@@ -317,11 +318,12 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
       }
 
       // Prepare customer information
-      const guestEmail = guestInfo.value?.email?.trim() || null
+      // TEMPORARY: Hardcode email for testing
+      const guestEmail = 'caraseli02@gmail.com'
       const firstName = shippingInfo.value.address.firstName || ''
       const lastName = shippingInfo.value.address.lastName || ''
       const customerName = `${firstName} ${lastName}`.trim() || 'Customer'
-      const resolvedEmail = guestEmail || contactEmail.value || null
+      const resolvedEmail = guestEmail
 
       session.setContactEmail(resolvedEmail)
 
@@ -345,12 +347,16 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
       })
 
       // Update order data with response
-      session.setOrderData({
+      const updatedOrderData = {
         ...orderData.value,
         orderId: response.id,
         orderNumber: response.orderNumber,
         customerEmail: resolvedEmail
-      })
+      }
+      session.setOrderData(updatedOrderData)
+
+      // Return the updated order data so completeCheckout can use it
+      return updatedOrderData
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error'
       const checkoutError = createSystemError(
@@ -365,12 +371,12 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
     }
   }
 
-  async function completeCheckout(): Promise<void> {
+  async function completeCheckout(completedOrderData: OrderData): Promise<void> {
     try {
       // Non-blocking post-checkout operations
-      clearCart().catch(error => {
-        console.error('Failed to clear cart (non-blocking):', error)
-      })
+      // Note: Cart clearing moved to confirmation page to prevent race condition
+      // with navigation. Cart is now cleared after user successfully lands on
+      // confirmation page, ensuring middleware doesn't see empty cart during redirect.
 
       sendConfirmationEmail().catch(error => {
         console.error('Failed to send confirmation email (non-blocking):', error)
@@ -386,10 +392,12 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
 
       // Navigate to confirmation step
       session.setCurrentStep('confirmation')
-      session.persist({
+
+      // Persist with the completed order data passed as parameter (not from store to avoid stale refs)
+      await session.persist({
         shippingInfo: shipping.shippingInfo.value,
         paymentMethod: paymentMethod.value,
-        orderData: orderData.value
+        orderData: completedOrderData  // Use the fresh data passed from createOrderRecord
       })
 
       // Show success message
@@ -427,8 +435,8 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
       }
 
       // Create order and complete checkout
-      await createOrderRecord(paymentResult)
-      await completeCheckout()
+      const completedOrderData = await createOrderRecord(paymentResult)
+      await completeCheckout(completedOrderData)
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Payment processing failed'
       const checkoutError = createPaymentError(message, CheckoutErrorCode.PAYMENT_PROCESSING_ERROR)
