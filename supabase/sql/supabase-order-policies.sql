@@ -41,7 +41,14 @@ CREATE POLICY "Users can view own order items" ON order_items
     )
   );
 
--- Allow inserting order items (will be restricted by order ownership)
+-- Allow inserting order items (restricted by order ownership)
+-- Only allow inserting items for orders that belong to the current user or are guest orders
 CREATE POLICY "Allow order items insert" ON order_items
-  FOR INSERT 
-  WITH CHECK (true);
+  FOR INSERT
+  WITH CHECK (
+    EXISTS (
+      SELECT 1 FROM orders
+      WHERE orders.id = order_items.order_id
+      AND (orders.user_id = auth.uid() OR orders.user_id IS NULL)
+    )
+  );
