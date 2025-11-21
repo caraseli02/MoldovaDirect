@@ -16,6 +16,7 @@
 import { serverSupabaseServiceRole } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
 import { ADMIN_CACHE_CONFIG, getAdminCacheKey } from '~/server/utils/adminCache'
+import { prepareSearchPattern } from '~/server/utils/searchSanitization'
 
 interface UserFilters {
   search?: string
@@ -51,29 +52,30 @@ interface UserWithProfile {
 
 // NOTE: Caching disabled for admin endpoints to ensure proper header-based authentication
 export default defineEventHandler(async (event) => {
+  // Authentication MUST happen first, never caught
   await requireAdminRole(event)
 
+  // Use service role for database operations
+  const supabase = serverSupabaseServiceRole(event)
+
+  // Parse query parameters
+  const query = getQuery(event) as UserFilters
+  const {
+    search = '',
+    registrationDateFrom,
+    registrationDateTo,
+    status,
+    sortBy = 'created_at',
+    sortOrder = 'desc',
+    page = 1,
+    limit = 20
+  } = query
+
+  // Calculate pagination
+  const offset = (Number(page) - 1) * Number(limit)
+
   try {
-    // Verify admin authentication
-    const supabase = serverSupabaseServiceRole(event)
-
-    // Parse query parameters
-    const query = getQuery(event) as UserFilters
-    const {
-      search = '',
-      registrationDateFrom,
-      registrationDateTo,
-      status,
-      sortBy = 'created_at',
-      sortOrder = 'desc',
-      page = 1,
-      limit = 20
-    } = query
-
-    // Calculate pagination
-    const offset = (Number(page) - 1) * Number(limit)
-
-    // Try to get profiles first
+    // Fetch profiles
     let usersQuery = supabase
       .from('profiles')
       .select(`
@@ -85,9 +87,10 @@ export default defineEventHandler(async (event) => {
         updated_at
       `)
 
-    // Apply search filter
+    // Apply search filter with sanitization to prevent SQL injection
     if (search) {
-      usersQuery = usersQuery.ilike('name', `%${search}%`)
+      const sanitizedSearch = prepareSearchPattern(search, { validateLength: true })
+      usersQuery = usersQuery.ilike('name', sanitizedSearch)
     }
 
     // Apply date filters
@@ -108,27 +111,64 @@ export default defineEventHandler(async (event) => {
     const { data: profiles, error: profilesError } = await usersQuery
 
     if (profilesError) {
-      console.warn('Failed to fetch profiles, returning mock data:', profilesError.message)
-      return getMockUserData()
+      console.error('[Admin Users] Failed to fetch profiles:', {
+        error: profilesError.message,
+        code: profilesError.code,
+        timestamp: new Date().toISOString(),
+        errorId: 'ADMIN_USERS_PROFILES_FETCH_FAILED'
+      })
+
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Failed to fetch user profiles',
+        data: { canRetry: true }
+      })
     }
 
-    // If no profiles exist, return mock data for development
+    // If no profiles exist, return empty result (not mock data)
     if (!profiles || profiles.length === 0) {
-      console.warn('No profiles found, returning mock data')
-      return getMockUserData()
+      return {
+        success: true,
+        data: {
+          users: [],
+          pagination: {
+            page: Number(page),
+            limit: Number(limit),
+            total: 0,
+            totalPages: 0,
+            hasNext: false,
+            hasPrev: false
+          },
+          summary: {
+            totalUsers: 0,
+            activeUsers: 0,
+            inactiveUsers: 0,
+            totalOrders: 0,
+            totalRevenue: 0
+          }
+        }
+      }
     }
 
-    // Try to get auth user data
+    // Fetch auth user data
     let authUsers: any = { users: [] }
     try {
       const { data, error: authError } = await supabase.auth.admin.listUsers()
       if (authError) {
-        console.warn('Failed to fetch auth users:', authError.message)
+        console.error('[Admin Users] Failed to fetch auth users:', {
+          error: authError.message,
+          timestamp: new Date().toISOString(),
+          errorId: 'ADMIN_USERS_AUTH_FETCH_WARNING'
+        })
       } else {
         authUsers = data
       }
-    } catch (error) {
-      console.warn('Auth admin API not available:', error)
+    } catch (error: any) {
+      console.error('[Admin Users] Auth admin API error:', {
+        error: error.message || String(error),
+        timestamp: new Date().toISOString(),
+        errorId: 'ADMIN_USERS_AUTH_API_ERROR'
+      })
     }
 
     // Get order statistics for all users in a single query (fix N+1 problem)
@@ -136,13 +176,20 @@ export default defineEventHandler(async (event) => {
 
     try {
       const profileIds = profiles.map(p => p.id)
-      const { data: allOrders } = await supabase
+      const { data: allOrders, error: ordersError } = await supabase
         .from('orders')
         .select('user_id, id, total_eur, created_at')
         .in('user_id', profileIds)
 
-      // Group orders by user_id
-      if (allOrders) {
+      if (ordersError) {
+        console.error('[Admin Users] Failed to fetch order stats:', {
+          error: ordersError.message,
+          code: ordersError.code,
+          timestamp: new Date().toISOString(),
+          errorId: 'ADMIN_USERS_ORDERS_FETCH_WARNING'
+        })
+      } else if (allOrders) {
+        // Group orders by user_id
         const tempStats = allOrders.reduce((acc, order) => {
           if (!acc[order.user_id]) {
             acc[order.user_id] = { count: 0, totalSpent: 0, orders: [] as any[] }
@@ -169,8 +216,12 @@ export default defineEventHandler(async (event) => {
           }
         })
       }
-    } catch (error) {
-      console.warn('Failed to fetch order stats for users:', error)
+    } catch (error: any) {
+      console.error('[Admin Users] Unexpected error fetching orders:', {
+        error: error.message || String(error),
+        timestamp: new Date().toISOString(),
+        errorId: 'ADMIN_USERS_ORDERS_ERROR'
+      })
     }
 
     // Combine profile and auth data
@@ -205,18 +256,26 @@ export default defineEventHandler(async (event) => {
 
     // Get total count for pagination
     let total = users.length
-    try {
-      const { count, error: countError } = await supabase
-        .from('profiles')
-        .select('id', { count: 'exact', head: true })
+    const { count, error: countError } = await supabase
+      .from('profiles')
+      .select('id', { count: 'exact', head: true })
 
-      if (!countError && count !== null) {
-        total = count
-      }
-    } catch (error) {
-      console.warn('Failed to get user count, using current results length')
+    if (countError) {
+      console.error('[Admin Users] Failed to get user count:', {
+        error: countError.message,
+        code: countError.code,
+        timestamp: new Date().toISOString(),
+        errorId: 'ADMIN_USERS_COUNT_FAILED'
+      })
+
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Failed to count users',
+        data: { canRetry: true }
+      })
     }
 
+    total = count || 0
     const totalPages = Math.ceil(total / Number(limit))
 
     return {
@@ -241,114 +300,25 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-  } catch (error) {
-    console.error('Error in admin users API:', error)
-    
-    // Return mock data as fallback
-    console.warn('Returning mock data due to error')
-    return getMockUserData()
+  } catch (error: any) {
+    // Re-throw HTTP errors (including auth errors)
+    if (error.statusCode) {
+      throw error
+    }
+
+    // Log unexpected errors
+    console.error('[Admin Users] Unexpected error:', {
+      error: error.message || String(error),
+      stack: error.stack,
+      timestamp: new Date().toISOString(),
+      errorId: 'ADMIN_USERS_UNEXPECTED_ERROR'
+    })
+
+    // Throw generic 500 error for unexpected failures
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'An unexpected error occurred while fetching users',
+      data: { canRetry: true }
+    })
   }
 })
-
-/**
- * Mock data for development/testing when Supabase is not available
- */
-function getMockUserData() {
-  const mockUsers: UserWithProfile[] = [
-    {
-      id: 'user-1',
-      email: 'john.doe@example.com',
-      email_confirmed_at: new Date().toISOString(),
-      last_sign_in_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-      created_at: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
-      updated_at: new Date().toISOString(),
-      profile: {
-        name: 'John Doe',
-        phone: '+1234567890',
-        preferred_language: 'en',
-        created_at: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
-        updated_at: new Date().toISOString()
-      },
-      status: 'active',
-      orderCount: 5,
-      lastOrderDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-      totalSpent: 299.99
-    },
-    {
-      id: 'user-2',
-      email: 'jane.smith@example.com',
-      email_confirmed_at: null,
-      last_sign_in_at: null,
-      created_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-      updated_at: new Date().toISOString(),
-      profile: {
-        name: 'Jane Smith',
-        phone: null,
-        preferred_language: 'es',
-        created_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-        updated_at: new Date().toISOString()
-      },
-      status: 'inactive',
-      orderCount: 0,
-      lastOrderDate: undefined,
-      totalSpent: 0
-    },
-    {
-      id: 'user-3',
-      email: 'admin@example.com',
-      email_confirmed_at: new Date().toISOString(),
-      last_sign_in_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-      created_at: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString(),
-      updated_at: new Date().toISOString(),
-      profile: {
-        name: 'Admin User',
-        phone: '+1987654321',
-        preferred_language: 'en',
-        created_at: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString(),
-        updated_at: new Date().toISOString()
-      },
-      status: 'active',
-      orderCount: 12,
-      lastOrderDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-      totalSpent: 1299.97
-    }
-  ]
-
-  return {
-    success: true,
-    data: {
-      users: mockUsers,
-      pagination: {
-        page: 1,
-        limit: 20,
-        total: mockUsers.length,
-        totalPages: 1,
-        hasNext: false,
-        hasPrev: false
-      },
-      summary: {
-        totalUsers: mockUsers.length,
-        activeUsers: mockUsers.filter(u => u.status === 'active').length,
-        inactiveUsers: mockUsers.filter(u => u.status === 'inactive').length,
-        totalOrders: mockUsers.reduce((sum, u) => sum + (u.orderCount || 0), 0),
-        totalRevenue: mockUsers.reduce((sum, u) => sum + (u.totalSpent || 0), 0)
-      }
-    }
-  }
-}
-
-/**
- * Helper function to get user IDs by email search
- */
-async function getUserIdsByEmail(supabase: any, emailSearch: string): Promise<string> {
-  try {
-    const { data: authUsers } = await supabase.auth.admin.listUsers()
-    const matchingIds = authUsers?.users
-      ?.filter((user: any) => user.email?.toLowerCase().includes(emailSearch.toLowerCase()))
-      ?.map((user: any) => user.id) || []
-    
-    return matchingIds.length > 0 ? matchingIds.join(',') : 'none'
-  } catch (error) {
-    return 'none'
-  }
-}

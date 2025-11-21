@@ -169,7 +169,7 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
       { name: 'Charts/Graphs', selectors: ['[class*="chart"]', '[class*="graph"]', 'canvas', 'svg[class*="chart"]'] },
       { name: 'Tables', selectors: ['table', '[role="table"]', '[class*="table"]'] },
       { name: 'Buttons', selectors: ['button', '[role="button"]'] },
-      { name: 'Forms/Inputs', selectors: ['form', 'input[type!="hidden"]', 'textarea', 'select'] },
+      { name: 'Forms/Inputs', selectors: ['form', 'input:not([type="hidden"])', 'textarea', 'select'] },
       { name: 'Navigation Links', selectors: ['nav a', '[class*="nav"] a', '[class*="sidebar"] a', 'aside a'] }
     ]
 
@@ -447,7 +447,7 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
         buttons: document.querySelectorAll('button').length,
         links: document.querySelectorAll('a').length,
         formElements: {
-          inputs: document.querySelectorAll('input[type!="hidden"]').length,
+          inputs: document.querySelectorAll('input:not([type="hidden"])').length,
           textareas: document.querySelectorAll('textarea').length,
           selects: document.querySelectorAll('select').length,
           forms: document.querySelectorAll('form').length

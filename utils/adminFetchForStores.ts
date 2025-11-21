@@ -66,7 +66,8 @@ async function getAdminAuthHeaders(): Promise<Record<string, string>> {
       'Authorization': `Bearer ${accessToken}`
     }
   } catch (error) {
-    console.error('[AdminFetch] Error parsing auth data:', error)
+    // Don't log the error object as it may contain sensitive data
+    console.error('[AdminFetch] Error parsing auth data - AUTH_DECODE_FAILED')
     throw createError({
       statusCode: 401,
       statusMessage: 'Invalid session format. Please log in again.'

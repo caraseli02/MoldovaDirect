@@ -120,26 +120,49 @@ export async function useAdminFetchWithRetry<T = any>(
 }
 
 /**
+ * Result type for batch fetch operations with structured error handling
+ */
+export type BatchResult<T> =
+  | { success: true; data: T }
+  | { success: false; error: string; url: string }
+
+/**
  * Batch multiple admin API requests in parallel
  *
  * This is useful for fetching multiple datasets at once (e.g., stats + activity).
  * All requests will include proper authentication headers.
  *
+ * Returns structured results so callers can handle individual request failures.
+ *
  * @param requests - Array of request configurations
- * @returns Promise that resolves to an array of responses
+ * @returns Promise that resolves to an array of batch results
  *
  * @example
  * ```typescript
- * const [stats, activity, users] = await useAdminFetchBatch([
+ * const results = await useAdminFetchBatch([
  *   { url: '/api/admin/dashboard/stats' },
  *   { url: '/api/admin/dashboard/activity' },
  *   { url: '/api/admin/users', options: { query: { limit: 10 } } }
  * ])
+ *
+ * // Handle results
+ * results.forEach((result, index) => {
+ *   if (result.success) {
+ *     console.log('Data:', result.data)
+ *   } else {
+ *     console.error('Failed to fetch', result.url, result.error)
+ *   }
+ * })
+ *
+ * // Extract successful results only
+ * const successfulData = results
+ *   .filter((r): r is { success: true; data: any } => r.success)
+ *   .map(r => r.data)
  * ```
  */
-export async function useAdminFetchBatch<T extends any[] = any[]>(
+export async function useAdminFetchBatch<T = any>(
   requests: Array<{ url: string; options?: FetchOptions }>
-): Promise<T> {
+): Promise<BatchResult<T>[]> {
   const supabase = useSupabaseClient()
 
   // Get session once for all requests
@@ -157,19 +180,27 @@ export async function useAdminFetchBatch<T extends any[] = any[]>(
     'Authorization': `Bearer ${session.access_token}`
   }
 
-  // Execute all requests in parallel
-  const promises = requests.map(({ url, options = {} }) =>
-    $fetch(url, {
-      ...options,
-      headers: {
-        ...options.headers,
-        ...authHeaders
+  // Execute all requests in parallel with structured error handling
+  const promises = requests.map(async ({ url, options = {} }): Promise<BatchResult<T>> => {
+    try {
+      const data = await $fetch<T>(url, {
+        ...options,
+        headers: {
+          ...options.headers,
+          ...authHeaders
+        }
+      })
+      return { success: true, data }
+    } catch (error: any) {
+      // Don't log error object that may contain sensitive data
+      console.error(`[AdminFetch] Error fetching ${url} - ADMIN_BATCH_FETCH_FAILED`)
+      return {
+        success: false,
+        url,
+        error: error?.message || error?.statusMessage || 'Unknown error occurred'
       }
-    }).catch(error => {
-      console.error(`[AdminFetch] Error fetching ${url}:`, error)
-      return null // Return null on error instead of throwing
-    })
-  )
+    }
+  })
 
-  return await Promise.all(promises) as T
+  return await Promise.all(promises)
 }

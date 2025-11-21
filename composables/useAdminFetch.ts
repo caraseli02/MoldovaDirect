@@ -20,13 +20,14 @@ import type { FetchOptions } from 'ofetch'
  * @example
  * ```vue
  * <script setup>
- * const { data, error } = await useAdminFetch('/api/admin/users', {
+ * // Explicit type required for type safety
+ * const { data, error } = await useAdminFetch<User[]>('/api/admin/users', {
  *   query: { page: 1, limit: 20 }
  * })
  * </script>
  * ```
  */
-export async function useAdminFetch<T = any>(
+export async function useAdminFetch<T = unknown>(
   url: string,
   options: FetchOptions = {}
 ): Promise<T> {
