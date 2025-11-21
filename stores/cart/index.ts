@@ -6,7 +6,7 @@
  */
 
 import { defineStore } from 'pinia'
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import { useCartCore } from './core'
 import { useCartPersistence } from './persistence'
 import { useCartValidation } from './validation'
@@ -543,6 +543,32 @@ export const useCartStore = defineStore('cart', () => {
   const getPerformanceMetrics = () => performanceMetrics.value
   const resetPerformanceMetrics = () => {
     // Mock implementation
+  }
+
+  // =============================================
+  // AUTO-SAVE FUNCTIONALITY
+  // =============================================
+
+  // Watch for cart changes and automatically save to cookies
+  if (process.client) {
+    let saveTimeout: NodeJS.Timeout | null = null
+
+    watch(
+      () => items.value,
+      () => {
+        // Debounce saves to avoid excessive cookie writes
+        if (saveTimeout) {
+          clearTimeout(saveTimeout)
+        }
+
+        saveTimeout = setTimeout(() => {
+          saveToStorage().catch(error => {
+            console.warn('Failed to auto-save cart:', error)
+          })
+        }, 500) // 500ms debounce
+      },
+      { deep: true }
+    )
   }
 
   // =============================================
