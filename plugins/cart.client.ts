@@ -1,3 +1,6 @@
+import { nextTick } from 'vue'
+import { useCartStore } from '~/stores/cart'
+
 export default defineNuxtPlugin(() => {
   // CRITICAL: Ensure cart store is initialized immediately on client
   // This fixes the Vercel hydration issue where addItem is undefined

@@ -1,18 +1,18 @@
 /**
  * Cart Persistence Module
- * 
- * Handles cart data storage and retrieval with multiple storage backends
- * Provides fallback mechanisms and error handling for storage operations
+ *
+ * Handles cart data storage and retrieval using Nuxt's useCookie for SSR compatibility
+ * Provides error handling and automatic serialization for storage operations
  */
 
 import { ref } from 'vue'
-import type { 
-  CartPersistenceState, 
-  CartPersistenceActions, 
-  StorageType, 
-  StorageOptions, 
+import type {
+  CartPersistenceState,
+  CartPersistenceActions,
+  StorageType,
+  StorageOptions,
   StorageResult,
-  CartItem 
+  CartItem
 } from './types'
 
 // =============================================
@@ -20,7 +20,7 @@ import type {
 // =============================================
 
 const state = ref<CartPersistenceState>({
-  storageType: 'localStorage',
+  storageType: 'cookie', // Changed from localStorage to cookie for SSR compatibility
   lastSaveAt: null,
   saveInProgress: false,
   autoSaveEnabled: true
@@ -334,13 +334,13 @@ function createDebouncedSave(delay: number = 1000) {
 const debouncedSaveToStorage = createDebouncedSave()
 
 // =============================================
-// CART-SPECIFIC PERSISTENCE
+// CART-SPECIFIC PERSISTENCE USING COOKIES
 // =============================================
 
 const CART_STORAGE_KEY = 'moldova_direct_cart'
 
 /**
- * Save cart data to storage
+ * Save cart data to cookie storage (SSR compatible)
  */
 async function saveCartData(cartData: {
   items: CartItem[]
@@ -350,32 +350,40 @@ async function saveCartData(cartData: {
   if (state.value.saveInProgress) {
     return { success: false, error: 'Save already in progress' }
   }
-  
+
   state.value.saveInProgress = true
-  
+
   try {
     const dataToSave = {
       ...cartData,
       timestamp: new Date().toISOString(),
       version: '1.0'
     }
-    
-    const result = state.value.autoSaveEnabled 
-      ? await debouncedSaveToStorage(CART_STORAGE_KEY, dataToSave)
-      : await saveToStorage(CART_STORAGE_KEY, dataToSave)
-    
-    if (result.success) {
-      state.value.lastSaveAt = new Date()
+
+    // Use Nuxt's useCookie for SSR-compatible storage
+    const cartCookie = useCookie(CART_STORAGE_KEY, {
+      maxAge: 60 * 60 * 24 * 30, // 30 days
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+      watch: true
+    })
+
+    cartCookie.value = dataToSave as any
+    state.value.lastSaveAt = new Date()
+
+    return { success: true }
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to save cart data'
     }
-    
-    return result
   } finally {
     state.value.saveInProgress = false
   }
 }
 
 /**
- * Load cart data from storage
+ * Load cart data from cookie storage
  */
 async function loadCartData(): Promise<StorageResult<{
   items: CartItem[]
@@ -383,58 +391,61 @@ async function loadCartData(): Promise<StorageResult<{
   lastSyncAt: Date | null
 }>> {
   try {
-    const result = await loadFromStorage(CART_STORAGE_KEY)
-    
-    if (result.success && result.data) {
-      // Validate and transform loaded data
-      const loadedData = result.data
-      
-      // Convert date strings back to Date objects
-      if (loadedData.lastSyncAt) {
-        loadedData.lastSyncAt = new Date(loadedData.lastSyncAt)
-      }
-      
-      // Validate cart items
-      if (Array.isArray(loadedData.items)) {
-        loadedData.items = loadedData.items.map((item: any) => ({
-          ...item,
-          addedAt: new Date(item.addedAt),
-          lastModified: item.lastModified ? new Date(item.lastModified) : undefined
-        }))
-      } else {
-        loadedData.items = []
-      }
-      
-      return { 
-        success: true, 
-        data: loadedData,
-        fallbackUsed: result.fallbackUsed 
-      }
+    // Use Nuxt's useCookie for SSR-compatible storage
+    const cartCookie = useCookie<any>(CART_STORAGE_KEY, {
+      maxAge: 60 * 60 * 24 * 30, // 30 days
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production'
+    })
+
+    const loadedData = cartCookie.value
+
+    if (!loadedData) {
+      return { success: true, data: null }
     }
-    
-    return { success: true, data: null }
+
+    // Convert date strings back to Date objects
+    if (loadedData.lastSyncAt) {
+      loadedData.lastSyncAt = new Date(loadedData.lastSyncAt)
+    }
+
+    // Validate cart items
+    if (Array.isArray(loadedData.items)) {
+      loadedData.items = loadedData.items.map((item: any) => ({
+        ...item,
+        addedAt: new Date(item.addedAt),
+        lastModified: item.lastModified ? new Date(item.lastModified) : undefined
+      }))
+    } else {
+      loadedData.items = []
+    }
+
+    return {
+      success: true,
+      data: loadedData
+    }
   } catch (error) {
-    return { 
-      success: false, 
-      error: error instanceof Error ? error.message : 'Failed to load cart data' 
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to load cart data'
     }
   }
 }
 
 /**
- * Clear cart data from storage
+ * Clear cart data from cookie storage
  */
 async function clearCartData(): Promise<StorageResult> {
   try {
-    const result = await removeFromStorage(CART_STORAGE_KEY)
-    if (result.success) {
-      state.value.lastSaveAt = null
-    }
-    return result
+    const cartCookie = useCookie(CART_STORAGE_KEY)
+    cartCookie.value = null
+    state.value.lastSaveAt = null
+
+    return { success: true }
   } catch (error) {
-    return { 
-      success: false, 
-      error: error instanceof Error ? error.message : 'Failed to clear cart data' 
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to clear cart data'
     }
   }
 }
