@@ -153,6 +153,10 @@ async function completeAllSteps() {
 
     console.log('✅ Test data prepared - cart has 2 different products\n');
 
+    // Wait for cart to be saved to cookies (auto-save has 500ms debounce)
+    console.log('  Waiting for cart to persist to cookies...');
+    await sleep(1000);
+
     // STEP 1: Go to cart
     console.log('STEP 1: Going to cart...');
     await page.goto(`${BASE_URL}/cart`, { waitUntil: 'networkidle' });

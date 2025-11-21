@@ -100,56 +100,86 @@ export const useCartStore = defineStore('cart', () => {
   // =============================================
   
   /**
-   * Save cart data to storage
+   * Save cart data to storage using cookies
    */
   async function saveToStorage() {
     try {
       const cartData = {
         items: items.value,
         sessionId: sessionId.value,
-        lastSyncAt: lastSyncAt.value
+        lastSyncAt: lastSyncAt.value,
+        timestamp: new Date().toISOString(),
+        version: '1.0'
       }
-      
-      return await persistence.saveCartData(cartData)
+
+      // Use Nuxt's useCookie directly in Pinia store (auto-imported)
+      const cartCookie = useCookie('moldova_direct_cart', {
+        maxAge: 60 * 60 * 24 * 30, // 30 days
+        sameSite: 'lax',
+        secure: process.env.NODE_ENV === 'production',
+        watch: true
+      })
+
+      cartCookie.value = cartData as any
+
+      return { success: true }
     } catch (error) {
       console.error('Failed to save cart to storage:', error)
-      throw error
+      return { success: false, error: error instanceof Error ? error.message : 'Save failed' }
     }
   }
   
   /**
-   * Load cart data from storage
+   * Load cart data from storage using cookies
    */
   async function loadFromStorage() {
     try {
-      const result = await persistence.loadCartData()
-      
-      if (result.success && result.data) {
+      // Use Nuxt's useCookie directly in Pinia store (auto-imported)
+      const cartCookie = useCookie<any>('moldova_direct_cart', {
+        maxAge: 60 * 60 * 24 * 30, // 30 days
+        sameSite: 'lax',
+        secure: process.env.NODE_ENV === 'production'
+      })
+
+      const loadedData = cartCookie.value
+
+      if (loadedData && loadedData.items) {
+        // Convert date strings back to Date objects
+        const items = loadedData.items.map((item: any) => ({
+          ...item,
+          addedAt: new Date(item.addedAt),
+          lastModified: item.lastModified ? new Date(item.lastModified) : undefined
+        }))
+
         // Update core state with loaded data
-        core.state.value.items = result.data.items || []
-        core.state.value.sessionId = result.data.sessionId
-        core.state.value.lastSyncAt = result.data.lastSyncAt
-        
+        core.state.value.items = items
+        core.state.value.sessionId = loadedData.sessionId
+        core.state.value.lastSyncAt = loadedData.lastSyncAt ? new Date(loadedData.lastSyncAt) : null
+
         // Invalidate calculation cache
         core.invalidateCalculationCache()
+
+        return { success: true, data: loadedData }
       }
-      
-      return result
+
+      return { success: true, data: null }
     } catch (error) {
       console.error('Failed to load cart from storage:', error)
-      throw error
+      return { success: false, error: error instanceof Error ? error.message : 'Load failed' }
     }
   }
   
   /**
-   * Clear cart data from storage
+   * Clear cart data from storage using cookies
    */
   async function clearStorage() {
     try {
-      return await persistence.clearCartData()
+      const cartCookie = useCookie('moldova_direct_cart')
+      cartCookie.value = null
+      return { success: true }
     } catch (error) {
       console.error('Failed to clear cart storage:', error)
-      throw error
+      return { success: false, error: error instanceof Error ? error.message : 'Clear failed' }
     }
   }
 
