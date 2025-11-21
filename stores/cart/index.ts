@@ -32,13 +32,26 @@ export const useCartStore = defineStore('cart', () => {
   // =============================================
   // MODULE INITIALIZATION
   // =============================================
-  
+
   const core = useCartCore()
   const persistence = useCartPersistence()
   const validation = useCartValidation()
   const analytics = useCartAnalytics()
   const security = useCartSecurity()
   const advanced = useCartAdvanced()
+
+  // =============================================
+  // SINGLE COOKIE INSTANCE (CRITICAL FOR SYNC)
+  // =============================================
+
+  // IMPORTANT: Create ONE cookie ref and reuse it everywhere
+  // Multiple useCookie() calls are NOT synced in Nuxt 3
+  const cartCookie = useCookie<any>('moldova_direct_cart', {
+    maxAge: 60 * 60 * 24 * 30, // 30 days
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+    watch: true
+  })
 
   // =============================================
   // UNIFIED STATE
@@ -112,15 +125,8 @@ export const useCartStore = defineStore('cart', () => {
         version: '1.0'
       }
 
-      // Use Nuxt's useCookie directly in Pinia store (auto-imported)
-      const cartCookie = useCookie('moldova_direct_cart', {
-        maxAge: 60 * 60 * 24 * 30, // 30 days
-        sameSite: 'lax',
-        secure: process.env.NODE_ENV === 'production',
-        watch: true
-      })
-
-      cartCookie.value = cartData as any
+      // Use the single cookie ref (created at store initialization)
+      cartCookie.value = cartData
 
       return { success: true }
     } catch (error) {
@@ -134,13 +140,7 @@ export const useCartStore = defineStore('cart', () => {
    */
   async function loadFromStorage() {
     try {
-      // Use Nuxt's useCookie directly in Pinia store (auto-imported)
-      const cartCookie = useCookie<any>('moldova_direct_cart', {
-        maxAge: 60 * 60 * 24 * 30, // 30 days
-        sameSite: 'lax',
-        secure: process.env.NODE_ENV === 'production'
-      })
-
+      // Use the single cookie ref (created at store initialization)
       const loadedData = cartCookie.value
 
       if (loadedData && loadedData.items) {
@@ -174,7 +174,7 @@ export const useCartStore = defineStore('cart', () => {
    */
   async function clearStorage() {
     try {
-      const cartCookie = useCookie('moldova_direct_cart')
+      // Use the single cookie ref (created at store initialization)
       cartCookie.value = null
       return { success: true }
     } catch (error) {
