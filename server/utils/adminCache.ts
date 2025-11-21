@@ -7,6 +7,7 @@
 
 import type { H3Event } from 'h3'
 import { getQuery } from 'h3'
+import { useStorage } from '#nitro'
 import { serverSupabaseClient } from '#supabase/server'
 
 type CacheScope = 'stats' | 'products' | 'orders' | 'users' | 'analytics' | 'audit-logs' | 'email-logs' | 'inventory' | 'all'
