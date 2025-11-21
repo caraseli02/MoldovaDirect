@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, reactive, toRefs } from 'vue'
+import { CHECKOUT_SESSION_COOKIE_CONFIG, COOKIE_NAMES } from '~/config/cookies'
 import type {
   CheckoutState,
   CheckoutStep,
@@ -202,6 +203,9 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
     state.marketingConsent = value
   }
 
+  // Single cookie instance for consistent access
+  const checkoutCookie = useCookie<any>(COOKIE_NAMES.CHECKOUT_SESSION, CHECKOUT_SESSION_COOKIE_CONFIG)
+
   const persist = (payload: PersistPayload): void => {
     try {
       const snapshot = {
@@ -219,14 +223,7 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
         paymentMethod: sanitizePaymentMethodForStorage(payload.paymentMethod)
       }
 
-      // Use Nuxt's useCookie for SSR-compatible storage
-      const checkoutCookie = useCookie('checkout_session', {
-        maxAge: 60 * 60 * 2, // 2 hours
-        sameSite: 'lax',
-        secure: process.env.NODE_ENV === 'production'
-      })
-
-      checkoutCookie.value = snapshot as any
+      checkoutCookie.value = snapshot
     } catch (error) {
       console.error('Failed to persist checkout session:', error)
     }
@@ -234,21 +231,16 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
 
   const restore = (): RestoredPayload | null => {
     try {
-      // Use Nuxt's useCookie for SSR-compatible storage
-      const checkoutCookie = useCookie<any>('checkout_session', {
-        maxAge: 60 * 60 * 2, // 2 hours
-        sameSite: 'lax',
-        secure: process.env.NODE_ENV === 'production'
-      })
-
       const snapshot = checkoutCookie.value
       if (!snapshot) return null
 
+      // Check if session has expired
       if (snapshot.sessionExpiresAt && new Date(snapshot.sessionExpiresAt) < new Date()) {
         clearStorage()
         return null
       }
 
+      // Restore state from snapshot
       state.sessionId = snapshot.sessionId
       state.currentStep = snapshot.currentStep || 'shipping'
       state.guestInfo = snapshot.guestInfo || null
@@ -275,7 +267,6 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
   }
 
   const clearStorage = (): void => {
-    const checkoutCookie = useCookie('checkout_session')
     checkoutCookie.value = null
   }
 

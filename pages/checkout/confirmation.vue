@@ -294,7 +294,7 @@ const formatDate = (date: Date): string => {
 
 // Initialize on mount
 onMounted(async () => {
-  // Restore checkout data from cookies first
+  // Restore checkout data from cookies
   await checkoutStore.restore()
 
   // Ensure we're on the confirmation step
@@ -302,6 +302,7 @@ onMounted(async () => {
 
   // If no order data after restore, redirect to cart
   if (!orderData.value) {
+    console.warn('No order data found, redirecting to cart')
     navigateTo(localePath('/cart'))
   }
 })

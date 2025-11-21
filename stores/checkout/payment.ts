@@ -25,6 +25,14 @@ import {
 } from '~/utils/checkout-errors'
 import type { PaymentMethod, SavedPaymentMethod } from '~/types/checkout'
 
+// Payment method type constants
+const PAYMENT_METHODS = {
+  CASH: 'cash',
+  CREDIT_CARD: 'credit_card',
+  PAYPAL: 'paypal',
+  BANK_TRANSFER: 'bank_transfer'
+} as const
+
 export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
   const session = useCheckoutSessionStore()
   const shipping = useCheckoutShippingStore()
@@ -45,7 +53,11 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
     guestInfo
   } = storeToRefs(session)
 
-  const loadSavedPaymentMethods = async (): Promise<void> => {
+  // =============================================
+  // PAYMENT METHOD MANAGEMENT
+  // =============================================
+
+  async function loadSavedPaymentMethods(): Promise<void> {
     try {
       if (!authStore.isAuthenticated) {
         session.setSavedPaymentMethods([])
@@ -60,10 +72,11 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
     }
   }
 
-  const savePaymentMethodData = async (method: SavedPaymentMethod): Promise<void> => {
+  async function savePaymentMethodData(method: SavedPaymentMethod): Promise<void> {
     try {
       const savedMethod = await savePaymentMethod(method)
       const existingIndex = savedPaymentMethods.value.findIndex(m => m.id === savedMethod.id)
+
       if (existingIndex >= 0) {
         savedPaymentMethods.value.splice(existingIndex, 1, savedMethod)
       } else {
@@ -75,15 +88,16 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
     }
   }
 
-  const updatePaymentMethod = async (method: PaymentMethod): Promise<void> => {
+  async function updatePaymentMethod(method: PaymentMethod): Promise<void> {
     session.setLoading(true)
     session.clearFieldErrors('payment')
 
     try {
       const validation = validatePaymentMethod(method)
       if (!validation.isValid) {
+        const errorMessage = validation.errors.map(err => err.message).join(', ')
         session.setValidationErrors('payment', validation.errors.map(err => err.message))
-        throw new Error(validation.errors.map(err => err.message).join(', '))
+        throw new Error(errorMessage)
       }
 
       session.setPaymentMethodState(method)
@@ -101,16 +115,22 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
     }
   }
 
-  const preparePayment = async (): Promise<void> => {
+  // =============================================
+  // PAYMENT PREPARATION
+  // =============================================
+
+  async function preparePayment(): Promise<void> {
     if (!paymentMethod.value || !orderData.value) return
 
     try {
       session.setProcessing(true)
+
       if (!sessionId.value) {
         session.setSessionId(session.generateSessionId())
       }
 
-      if (paymentMethod.value.type === 'credit_card') {
+      // Only create payment intent for credit card payments
+      if (paymentMethod.value.type === PAYMENT_METHODS.CREDIT_CARD) {
         const intent = await createPaymentIntent({
           amount: Math.round(orderData.value.total * 100),
           currency: orderData.value.currency.toLowerCase(),
@@ -120,7 +140,6 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
         session.setPaymentIntent(intent.id)
         session.setPaymentClientSecret(intent.clientSecret)
       }
-
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to prepare payment'
       const checkoutError = createPaymentError(message, CheckoutErrorCode.PAYMENT_PROCESSING_ERROR)
@@ -135,14 +154,48 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
     }
   }
 
-  const processCashPayment = async () => ({
-    success: true,
-    transactionId: `cash_${Date.now()}`,
-    paymentMethod: 'cash',
-    status: 'pending_delivery'
-  })
+  // =============================================
+  // PAYMENT PROCESSING
+  // =============================================
 
-  const processCreditCardPayment = async () => {
+  /**
+   * Process payment based on the selected payment method
+   */
+  async function processPaymentByType(type: string): Promise<any> {
+    switch (type) {
+      case PAYMENT_METHODS.CASH:
+        return {
+          success: true,
+          transactionId: `cash_${Date.now()}`,
+          paymentMethod: PAYMENT_METHODS.CASH,
+          status: 'pending_delivery'
+        }
+
+      case PAYMENT_METHODS.CREDIT_CARD:
+        return processCreditCardPayment()
+
+      case PAYMENT_METHODS.PAYPAL:
+        return {
+          success: true,
+          transactionId: `pp_${Date.now()}`,
+          paymentMethod: PAYMENT_METHODS.PAYPAL,
+          status: 'completed'
+        }
+
+      case PAYMENT_METHODS.BANK_TRANSFER:
+        return {
+          success: true,
+          transactionId: `bt_${Date.now()}`,
+          paymentMethod: PAYMENT_METHODS.BANK_TRANSFER,
+          pending: true
+        }
+
+      default:
+        throw new Error(`Invalid payment method: ${type}`)
+    }
+  }
+
+  async function processCreditCardPayment(): Promise<any> {
     try {
       if (!paymentIntent.value || !paymentClientSecret.value) {
         throw new Error('Payment intent not initialized')
@@ -161,7 +214,7 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
         return {
           success: true,
           transactionId: response.paymentIntent.id,
-          paymentMethod: 'credit_card',
+          paymentMethod: PAYMENT_METHODS.CREDIT_CARD,
           status: 'completed',
           charges: response.paymentIntent.charges
         }
@@ -177,79 +230,83 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Payment processing failed',
-        paymentMethod: 'credit_card'
+        paymentMethod: PAYMENT_METHODS.CREDIT_CARD
       }
     }
   }
 
-  const processPayPalPayment = async () => {
+  // =============================================
+  // POST-PAYMENT OPERATIONS
+  // =============================================
+
+  async function clearCart(): Promise<void> {
     try {
-      return {
-        success: true,
-        transactionId: `pp_${Date.now()}`,
-        paymentMethod: 'paypal',
-        status: 'completed'
-      }
-    } catch (error) {
-      console.error('PayPal payment failed:', error)
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'PayPal payment failed',
-        paymentMethod: 'paypal'
-      }
-    }
-  }
+      const activeSession = cartStore.sessionId || sessionId.value
 
-  const processBankTransferPayment = async () => ({
-    success: true,
-    transactionId: `bt_${Date.now()}`,
-    paymentMethod: 'bank_transfer',
-    pending: true
-  })
-
-  const clearCart = async (): Promise<void> => {
-    try {
-      const activeSession = cartStore.sessionId?.value || sessionId.value
-
+      // Try to clear remote cart if session exists
       if (activeSession) {
-        await clearRemoteCart(activeSession).catch(error => {
-          console.warn('Failed to clear remote cart:', error)
-        })
+        try {
+          await clearRemoteCart(activeSession)
+        } catch (error) {
+          // Log CSRF errors for monitoring but don't block operation
+          const errorMessage = error instanceof Error ? error.message : String(error)
+          if (errorMessage.includes('CSRF') || errorMessage.includes('csrf')) {
+            console.error('CSRF error when clearing cart - this may indicate a security issue:', error)
+          } else {
+            console.warn('Failed to clear remote cart:', error)
+          }
+        }
       }
 
+      // Always clear local cart
       await cartStore.clearCart()
     } catch (error) {
       console.error('Failed to clear cart:', error)
+      // Don't throw - this is a non-critical operation
     }
   }
 
-  const sendConfirmationEmail = async (): Promise<void> => {
+  async function sendConfirmationEmail(): Promise<void> {
     if (!orderData.value) return
 
     try {
-      const candidateEmail = orderData.value.customerEmail || contactEmail.value || guestInfo.value?.email || null
-      const trimmedEmail = candidateEmail ? candidateEmail.trim() : undefined
-      await apiSendConfirmationEmail({
-        orderId: orderData.value.orderId,
-        sessionId: sessionId.value,
-        email: trimmedEmail
-      })
+      // Determine the email to use
+      const email = (
+        orderData.value.customerEmail ||
+        contactEmail.value ||
+        guestInfo.value?.email ||
+        ''
+      ).trim()
+
+      if (email) {
+        await apiSendConfirmationEmail({
+          orderId: orderData.value.orderId,
+          sessionId: sessionId.value,
+          email
+        })
+      }
     } catch (error) {
       console.error('Failed to send confirmation email:', error)
+      // Don't throw - this is a non-critical operation
     }
   }
 
-  const updateInventory = async (): Promise<void> => {
+  async function updateInventory(): Promise<void> {
     if (!orderData.value) return
 
     try {
       await apiUpdateInventory(orderData.value.items, orderData.value.orderId)
     } catch (error) {
       console.error('Failed to update inventory:', error)
+      // Don't throw - this is handled atomically in the order creation
     }
   }
 
-  const createOrderRecord = async (paymentResult: any): Promise<void> => {
+  // =============================================
+  // ORDER MANAGEMENT
+  // =============================================
+
+  async function createOrderRecord(paymentResult: any): Promise<void> {
     if (!orderData.value || !shippingInfo.value || !paymentMethod.value) {
       throw new Error('Missing required order information')
     }
@@ -259,12 +316,16 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
         session.setSessionId(session.generateSessionId())
       }
 
+      // Prepare customer information
       const guestEmail = guestInfo.value?.email?.trim() || null
-      const customerName = `${shippingInfo.value.address.firstName || ''} ${shippingInfo.value.address.lastName || ''}`.trim() || 'Customer'
-      const authenticatedEmail = contactEmail.value || null
-      const resolvedEmail = guestEmail || authenticatedEmail || contactEmail.value || null
+      const firstName = shippingInfo.value.address.firstName || ''
+      const lastName = shippingInfo.value.address.lastName || ''
+      const customerName = `${firstName} ${lastName}`.trim() || 'Customer'
+      const resolvedEmail = guestEmail || contactEmail.value || null
+
       session.setContactEmail(resolvedEmail)
 
+      // Create the order
       const response = await apiCreateOrder({
         sessionId: sessionId.value as string,
         items: orderData.value.items,
@@ -283,68 +344,74 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
         marketingConsent: guestInfo.value?.emailUpdates ?? false
       })
 
+      // Update order data with response
       session.setOrderData({
         ...orderData.value,
         orderId: response.id,
         orderNumber: response.orderNumber,
         customerEmail: resolvedEmail
       })
-
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error'
-      const checkoutError = createSystemError(`Failed to create order: ${message}`, CheckoutErrorCode.ORDER_CREATION_FAILED)
+      const checkoutError = createSystemError(
+        `Failed to create order: ${message}`,
+        CheckoutErrorCode.ORDER_CREATION_FAILED
+      )
       logCheckoutError(checkoutError, {
         sessionId: sessionId.value ?? undefined,
         step: 'createOrder'
       }, error)
-      throw new Error('Failed to create order: ' + message)
+      throw new Error(`Failed to create order: ${message}`)
     }
   }
 
-  const completeCheckout = async (): Promise<void> => {
+  async function completeCheckout(): Promise<void> {
     try {
-      // Clear cart (non-blocking - CSRF token issue doesn't block checkout completion)
+      // Non-blocking post-checkout operations
       clearCart().catch(error => {
         console.error('Failed to clear cart (non-blocking):', error)
       })
 
-      // Send confirmation email in background (non-blocking)
       sendConfirmationEmail().catch(error => {
         console.error('Failed to send confirmation email (non-blocking):', error)
       })
 
-      // NOTE: Inventory update is now handled atomically in create-order endpoint
-      // via the create_order_with_inventory RPC function (see issue #89)
-
       // Unlock the cart after successful checkout
-      try {
-        await cartStore.unlockCart(sessionId.value as string)
-        console.log('Cart unlocked after successful checkout')
-      } catch (unlockError) {
-        console.warn('Failed to unlock cart after checkout:', unlockError)
-        // Continue even if unlock fails - cart will auto-unlock on timeout
+      if (sessionId.value) {
+        cartStore.unlockCart(sessionId.value).catch(error => {
+          console.warn('Failed to unlock cart after checkout:', error)
+          // Continue even if unlock fails - cart will auto-unlock on timeout
+        })
       }
 
+      // Navigate to confirmation step
       session.setCurrentStep('confirmation')
       session.persist({
         shippingInfo: shipping.shippingInfo.value,
         paymentMethod: paymentMethod.value,
-        orderData: orderData.value // Persist order data so confirmation page can access it
+        orderData: orderData.value
       })
+
+      // Show success message
       try {
         toast.success(
           t('checkout.success.orderCompleted'),
           t('checkout.success.orderConfirmation')
         )
       } catch {
-        // noop
+        // Ignore toast errors
       }
     } catch (error) {
       console.error('Failed to complete checkout:', error)
     }
   }
 
-  const processPayment = async (): Promise<void> => {
+  // =============================================
+  // MAIN PAYMENT FLOW
+  // =============================================
+
+  async function processPayment(): Promise<void> {
+    // Validate prerequisites
     if (!paymentMethod.value || !orderData.value || !shippingInfo.value) {
       throw new Error('Missing required checkout information')
     }
@@ -352,27 +419,16 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
     session.setProcessing(true)
 
     try {
-      let paymentResult
-
-      if (paymentMethod.value.type === 'cash') {
-        paymentResult = await processCashPayment()
-      } else if (paymentMethod.value.type === 'credit_card') {
-        paymentResult = await processCreditCardPayment()
-      } else if (paymentMethod.value.type === 'paypal') {
-        paymentResult = await processPayPalPayment()
-      } else if (paymentMethod.value.type === 'bank_transfer') {
-        paymentResult = await processBankTransferPayment()
-      } else {
-        throw new Error('Invalid payment method')
-      }
+      // Process payment based on selected method
+      const paymentResult = await processPaymentByType(paymentMethod.value.type)
 
       if (!paymentResult?.success) {
         throw new Error(paymentResult?.error || 'Payment processing failed')
       }
 
+      // Create order and complete checkout
       await createOrderRecord(paymentResult)
       await completeCheckout()
-
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Payment processing failed'
       const checkoutError = createPaymentError(message, CheckoutErrorCode.PAYMENT_PROCESSING_ERROR)
@@ -382,39 +438,47 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
         step: 'processPayment'
       }, error)
 
-      // Unlock cart on payment failure so user can modify it
-      try {
-        await cartStore.unlockCart(sessionId.value as string)
-        console.log('Cart unlocked after payment failure')
-      } catch (unlockError) {
-        console.warn('Failed to unlock cart after payment failure:', unlockError)
+      // Unlock cart on payment failure
+      if (sessionId.value) {
+        cartStore.unlockCart(sessionId.value).catch(error => {
+          console.warn('Failed to unlock cart after payment failure:', error)
+        })
       }
 
       throw error
     } finally {
-    session.setProcessing(false)
+      session.setProcessing(false)
     }
   }
 
+  // =============================================
+  // STORE EXPORTS
+  // =============================================
+
   return {
+    // State
     paymentMethod,
     savedPaymentMethods,
     paymentIntent,
     paymentClientSecret,
+
+    // Methods
     loadSavedPaymentMethods,
     savePaymentMethodData,
     updatePaymentMethod,
     preparePayment,
     processPayment,
-    processCashPayment,
-    processCreditCardPayment,
-    processPayPalPayment,
-    processBankTransferPayment,
     createOrderRecord,
     completeCheckout,
     clearCart,
     sendConfirmationEmail,
-    updateInventory
+    updateInventory,
+
+    // Legacy exports for backward compatibility
+    processCashPayment: () => processPaymentByType(PAYMENT_METHODS.CASH),
+    processCreditCardPayment,
+    processPayPalPayment: () => processPaymentByType(PAYMENT_METHODS.PAYPAL),
+    processBankTransferPayment: () => processPaymentByType(PAYMENT_METHODS.BANK_TRANSFER)
   }
 })
 
