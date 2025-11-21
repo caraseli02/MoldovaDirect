@@ -130,7 +130,7 @@ export const useCheckoutShippingStore = defineStore('checkout-shipping', () => {
       await updateShippingCosts()
       await loadShippingMethods()
 
-      session.persist({
+      await session.persist({
         shippingInfo: shippingInfo.value,
         paymentMethod: paymentMethod.value
       })
