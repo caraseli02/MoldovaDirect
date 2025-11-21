@@ -207,6 +207,9 @@ export default defineNuxtConfig({
         "/products",
         "/products/*",
         "/cart",
+        "/checkout", // Enable guest checkout - users can complete purchase without account
+        "/checkout/*", // Enable guest checkout for all checkout steps (payment, review, confirmation)
+        "/api/**", // Public API endpoints should not require authentication
         "/en",
         "/ro",
         "/ru",

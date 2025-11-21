@@ -304,7 +304,12 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
   const completeCheckout = async (): Promise<void> => {
     try {
       await clearCart()
-      await sendConfirmationEmail()
+
+      // Send confirmation email in background (non-blocking)
+      sendConfirmationEmail().catch(error => {
+        console.error('Failed to send confirmation email (non-blocking):', error)
+      })
+
       // NOTE: Inventory update is now handled atomically in create-order endpoint
       // via the create_order_with_inventory RPC function (see issue #89)
 
