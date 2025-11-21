@@ -50,8 +50,34 @@ export const useCartStore = defineStore('cart', () => {
     maxAge: 60 * 60 * 24 * 30, // 30 days
     sameSite: 'lax',
     secure: process.env.NODE_ENV === 'production',
-    watch: true
+    watch: 'shallow', // Watch for cookie changes from other contexts
+    default: () => null
   })
+
+  // Load cart data from cookie immediately on store creation
+  if (process.client && cartCookie.value) {
+    try {
+      const loadedData = cartCookie.value
+      if (loadedData && loadedData.items && Array.isArray(loadedData.items)) {
+        // Convert date strings back to Date objects
+        const items = loadedData.items.map((item: any) => ({
+          ...item,
+          addedAt: new Date(item.addedAt),
+          lastModified: item.lastModified ? new Date(item.lastModified) : undefined
+        }))
+
+        // Update core state immediately
+        core.state.value.items = items
+        core.state.value.sessionId = loadedData.sessionId
+        core.state.value.lastSyncAt = loadedData.lastSyncAt ? new Date(loadedData.lastSyncAt) : null
+        core.invalidateCalculationCache()
+
+        console.log(`🛒 Loaded ${items.length} items from cookie on store creation`)
+      }
+    } catch (error) {
+      console.error('Failed to load cart from cookie on creation:', error)
+    }
+  }
 
   // =============================================
   // UNIFIED STATE
