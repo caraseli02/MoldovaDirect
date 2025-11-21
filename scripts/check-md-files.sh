@@ -14,6 +14,7 @@ ALLOWED_FILES=(
   "LICENSE.md"
   "CONTRIBUTING.md"
   "CODE_OF_CONDUCT.md"
+  "CLAUDE.md"
 )
 
 # Get all .md files being committed in the root directory

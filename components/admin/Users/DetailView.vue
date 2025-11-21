@@ -371,7 +371,7 @@ const getPaymentStatusClass = (status: string) => {
 }
 
 const editUser = () => {
-  emit('lucide:square-pen', props.userId)
+  emit('edit', props.userId)
 }
 
 const handleUserAction = (action: string, userId: string, data?: any) => {

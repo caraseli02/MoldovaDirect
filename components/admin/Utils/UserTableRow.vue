@@ -225,7 +225,7 @@ interface Props {
 
 interface Emits {
   (e: 'view', userId: string): void
-  (e: 'lucide:square-pen', userId: string): void
+  (e: 'edit', userId: string): void
   (e: 'action', action: string, userId: string, data?: any): void
   (e: 'select', userId: string): void
 }
@@ -334,7 +334,7 @@ const handleView = () => {
 
 const handleEdit = () => {
   isActionInProgress.value = true
-  emit('lucide:square-pen', props.user.id)
+  emit('edit', props.user.id)
   
   if (isMobile.value) {
     vibrate('medium')

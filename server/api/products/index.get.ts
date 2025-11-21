@@ -13,7 +13,7 @@ interface ProductFilters {
   priceMax?: number
   inStock?: boolean
   featured?: boolean
-  sort?: 'name' | 'price_asc' | 'price_desc' | 'newest' | 'featured'
+  sort?: 'name' | 'price_asc' | 'price_desc' | 'newest' | 'created' | 'featured'
   page?: number
   limit?: number
 }
@@ -179,6 +179,7 @@ export default defineCachedEventHandler(async (event) => {
         // For now, we'll sort by created_at desc. In production, you'd have a featured field
         queryBuilder = queryBuilder.order('created_at', { ascending: false })
         break
+      case 'created':
       case 'newest':
       default:
         queryBuilder = queryBuilder.order('created_at', { ascending: false })
@@ -233,7 +234,7 @@ export default defineCachedEventHandler(async (event) => {
       formattedPrice: `€${product.price_eur.toFixed(2)}`,
       stockQuantity: product.stock_quantity,
       stockStatus: getStockStatus(product.stock_quantity),
-      images: product.images.map((img, index) => {
+      images: (product.images || []).map((img, index) => {
         const imageUrl = typeof img === 'string' ? img : img.url
         return {
           url: imageUrl || '/placeholder-product.svg',
@@ -242,6 +243,7 @@ export default defineCachedEventHandler(async (event) => {
         }
       }),
       primaryImage: (() => {
+        if (!product.images || product.images.length === 0) return '/placeholder-product.svg'
         const firstImage = product.images[0]
         if (typeof firstImage === 'string') return firstImage
         return firstImage?.url || '/placeholder-product.svg'
@@ -296,6 +298,8 @@ export default defineCachedEventHandler(async (event) => {
   } catch (error) {
     console.error('[Products API] Error:', {
       error: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      fullError: error,
       timestamp: new Date().toISOString()
     })
 
@@ -304,9 +308,11 @@ export default defineCachedEventHandler(async (event) => {
       throw error
     }
 
+    // Enhanced error message with details for debugging
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
+      message: error instanceof Error ? error.message : 'Unknown error'
     })
   }
 }, {

@@ -14,6 +14,14 @@ export default defineNuxtRouteMiddleware((to) => {
   const checkoutStore = useCheckoutStore()
 
   // Check if cart has items (Requirement 1.1, 1.2)
+  // Skip cart validation for confirmation page (order already completed and cart cleared)
+  const stepFromPath = extractStepFromPath(to.path)
+
+  // Skip ALL validation for confirmation page - order is done, cart is cleared
+  if (stepFromPath === 'confirmation') {
+    return // Allow confirmation page access without any checks
+  }
+
   if (itemCount.value === 0) {
     // Redirect to cart page with message about empty cart
     return navigateTo({
@@ -57,7 +65,6 @@ export default defineNuxtRouteMiddleware((to) => {
 
   // Step-specific validations
   const currentPath = to.path
-  const stepFromPath = extractStepFromPath(currentPath)
   
   if (stepFromPath) {
     // Validate that user can access the requested step
@@ -65,7 +72,7 @@ export default defineNuxtRouteMiddleware((to) => {
       // Redirect to the appropriate step
       const allowedStep = getHighestAllowedStep(checkoutStore)
       const redirectPath = getStepPath(allowedStep, localePath)
-      
+
       return navigateTo({
         path: redirectPath,
         query: {
@@ -100,16 +107,21 @@ function canAccessStep(step: CheckoutStep, store: any): boolean {
   switch (step) {
     case 'shipping':
       return true // Always accessible
-      
+
     case 'payment':
       return store.canProceedToPayment
-      
+
     case 'review':
       return store.canProceedToReview
-      
+
     case 'confirmation':
-      return store.canCompleteOrder && store.orderData?.orderId
-      
+      // Allow if already on confirmation page (order completed)
+      // OR if coming from review page (order just placed - navigation happens before store updates)
+      // OR if we have orderId set (order was created)
+      return store.currentStep === 'confirmation' ||
+             store.currentStep === 'review' ||
+             Boolean(store.orderData?.orderId)
+
     default:
       return false
   }

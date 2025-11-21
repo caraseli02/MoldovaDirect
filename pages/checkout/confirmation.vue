@@ -293,12 +293,16 @@ const formatDate = (date: Date): string => {
 }
 
 // Initialize on mount
-onMounted(() => {
+onMounted(async () => {
+  // Restore checkout data from cookies
+  await checkoutStore.restore()
+
   // Ensure we're on the confirmation step
   checkoutStore.currentStep = 'confirmation'
-  
-  // If no order data, redirect to cart
+
+  // If no order data after restore, redirect to cart
   if (!orderData.value) {
+    console.warn('No order data found, redirecting to cart')
     navigateTo(localePath('/cart'))
   }
 })

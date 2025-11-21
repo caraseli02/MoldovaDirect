@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, reactive, toRefs } from 'vue'
+import { CHECKOUT_SESSION_COOKIE_CONFIG, COOKIE_NAMES } from '~/config/cookies'
 import type {
   CheckoutState,
   CheckoutStep,
@@ -202,9 +203,10 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
     state.marketingConsent = value
   }
 
-  const persist = (payload: PersistPayload): void => {
-    if (typeof window === 'undefined') return
+  // Single cookie instance for consistent access
+  const checkoutCookie = useCookie<any>(COOKIE_NAMES.CHECKOUT_SESSION, CHECKOUT_SESSION_COOKIE_CONFIG)
 
+  const persist = (payload: PersistPayload): void => {
     try {
       const snapshot = {
         sessionId: state.sessionId,
@@ -221,26 +223,24 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
         paymentMethod: sanitizePaymentMethodForStorage(payload.paymentMethod)
       }
 
-      localStorage.setItem('checkout_session', JSON.stringify(snapshot))
+      checkoutCookie.value = snapshot
     } catch (error) {
       console.error('Failed to persist checkout session:', error)
     }
   }
 
   const restore = (): RestoredPayload | null => {
-    if (typeof window === 'undefined') return null
-
     try {
-      const stored = localStorage.getItem('checkout_session')
-      if (!stored) return null
+      const snapshot = checkoutCookie.value
+      if (!snapshot) return null
 
-      const snapshot = JSON.parse(stored)
-
+      // Check if session has expired
       if (snapshot.sessionExpiresAt && new Date(snapshot.sessionExpiresAt) < new Date()) {
         clearStorage()
         return null
       }
 
+      // Restore state from snapshot
       state.sessionId = snapshot.sessionId
       state.currentStep = snapshot.currentStep || 'shipping'
       state.guestInfo = snapshot.guestInfo || null
@@ -267,8 +267,7 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
   }
 
   const clearStorage = (): void => {
-    if (typeof window === 'undefined') return
-    localStorage.removeItem('checkout_session')
+    checkoutCookie.value = null
   }
 
   const reset = (): void => {
