@@ -44,17 +44,50 @@ async function completeAllSteps() {
     await page.goto(`${BASE_URL}/cart`, { waitUntil: 'networkidle' });
     await sleep(2000);
 
-    // Clear cart if it has items
-    const clearButton = await page.locator('button:has-text("Seleccionar todo"), button:has-text("Clear")').count();
-    if (clearButton > 0) {
-      console.log('  Clearing existing cart items...');
-      await page.locator('button:has-text("Seleccionar todo")').first().click().catch(() => {});
-      await sleep(500);
-      const deleteButton = await page.locator('button:has-text("Eliminar"), button[aria-label*="Eliminar"]').first();
-      if (await deleteButton.count() > 0) {
-        await deleteButton.click();
-        await sleep(1000);
+    // Clear cart if it has items - try multiple approaches for robustness
+    const hasCheckoutButton = await page.locator('button:has-text("Finalizar")').count() > 0;
+    const hasEmptyMessage = await page.locator('text=/tu carrito está vacío|cart is empty/i').count() > 0;
+
+    if (hasCheckoutButton && !hasEmptyMessage) {
+      console.log('  Cart has items - clearing...');
+
+      // Try approach 1: Select all + Delete
+      const selectAllBtn = await page.locator('button:has-text("Seleccionar todo")').first();
+      if (await selectAllBtn.count() > 0) {
+        console.log('    Using "Select All + Delete" method');
+        await selectAllBtn.click();
+        await sleep(500);
+        const deleteButton = await page.locator('button:has-text("Eliminar"), button[aria-label*="Eliminar"]').first();
+        if (await deleteButton.count() > 0) {
+          await deleteButton.click();
+          await sleep(1500);
+        }
+      } else {
+        // Try approach 2: Delete items one by one
+        console.log('    Deleting items individually');
+        let attempts = 0;
+        while (attempts < 10) { // Max 10 items
+          const deleteButtons = await page.locator('button[aria-label*="Eliminar"], button:has-text("Eliminar")');
+          const count = await deleteButtons.count();
+
+          if (count === 0) break;
+
+          await deleteButtons.first().click();
+          await sleep(1000);
+          attempts++;
+        }
       }
+
+      // Verify cart is now empty
+      await sleep(1000);
+      const stillHasItems = await page.locator('button:has-text("Finalizar")').count() > 0;
+      if (stillHasItems) {
+        console.log('  ⚠️  Warning: Cart may still have items after clearing attempt');
+      } else {
+        console.log('  ✅ Cart successfully cleared');
+      }
+    } else {
+      console.log('  Cart is already empty');
     }
 
     // Go to products page
