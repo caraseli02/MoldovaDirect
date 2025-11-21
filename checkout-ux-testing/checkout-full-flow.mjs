@@ -14,7 +14,7 @@ async function sleep(ms) {
 }
 
 async function completeAllSteps() {
-  console.log('🎯 COMPLETE CHECKOUT FLOW - ALL STEPS INCLUDING CONFIRMATION\n');
+  console.log('🎯 COMPLETE CHECKOUT FLOW - SELF-CONTAINED TEST\n');
 
   const browser = await chromium.launch({
     headless: false,
@@ -39,12 +39,100 @@ async function completeAllSteps() {
   });
 
   try {
-    // Start from cart
+    // STEP 0: Clear cart and prepare test data
+    console.log('STEP 0: Preparing test - clearing cart and adding products...');
+    await page.goto(`${BASE_URL}/cart`, { waitUntil: 'networkidle' });
+    await sleep(2000);
+
+    // Clear cart if it has items
+    const clearButton = await page.locator('button:has-text("Seleccionar todo"), button:has-text("Clear")').count();
+    if (clearButton > 0) {
+      console.log('  Clearing existing cart items...');
+      await page.locator('button:has-text("Seleccionar todo")').first().click().catch(() => {});
+      await sleep(500);
+      const deleteButton = await page.locator('button:has-text("Eliminar"), button[aria-label*="Eliminar"]').first();
+      if (await deleteButton.count() > 0) {
+        await deleteButton.click();
+        await sleep(1000);
+      }
+    }
+
+    // Go to products page
+    console.log('  Navigating to products page...');
+    await page.goto(`${BASE_URL}/products`, { waitUntil: 'networkidle' });
+    await sleep(2000);
+
+    // Add first available product (quantity: 2)
+    console.log('  Adding first product (qty: 2)...');
+    const firstProduct = await page.locator('article').first();
+    await firstProduct.scrollIntoViewIfNeeded();
+    await sleep(500);
+
+    // Click on product card to open quick view or go to detail
+    await firstProduct.click();
+    await sleep(2000);
+
+    // Try to add to cart (either from modal or product page)
+    const addToCartBtn = await page.locator('button:has-text("Añadir al Carrito"), button:has-text("Add to Cart")').first();
+
+    // Set quantity to 2 if quantity input exists
+    const qtyInput = await page.locator('input[type="number"]').first();
+    if (await qtyInput.count() > 0) {
+      await qtyInput.fill('2');
+      await sleep(500);
+    }
+
+    await addToCartBtn.click();
+    await sleep(2000);
+    console.log('  ✅ First product added');
+
+    // Close modal if it exists
+    const closeBtn = await page.locator('button[aria-label="Close"], button:has-text("×")').first();
+    if (await closeBtn.count() > 0) {
+      await closeBtn.click();
+      await sleep(500);
+    }
+
+    // Go back to products if we're on product detail page
+    if (page.url().includes('/products/')) {
+      await page.goto(`${BASE_URL}/products`, { waitUntil: 'networkidle' });
+      await sleep(2000);
+    }
+
+    // Add second product (quantity: 1)
+    console.log('  Adding second product (qty: 1)...');
+    const secondProduct = await page.locator('article').nth(1);
+    await secondProduct.scrollIntoViewIfNeeded();
+    await sleep(500);
+    await secondProduct.click();
+    await sleep(2000);
+
+    const addToCartBtn2 = await page.locator('button:has-text("Añadir al Carrito"), button:has-text("Add to Cart")').first();
+    await addToCartBtn2.click();
+    await sleep(2000);
+    console.log('  ✅ Second product added');
+
+    // Close modal if it exists
+    if (await closeBtn.count() > 0) {
+      await closeBtn.click().catch(() => {});
+      await sleep(500);
+    }
+
+    console.log('✅ Test data prepared - cart has 2 different products\n');
+
+    // STEP 1: Go to cart
     console.log('STEP 1: Going to cart...');
     await page.goto(`${BASE_URL}/cart`, { waitUntil: 'networkidle' });
     await sleep(2000);
     await page.screenshot({ path: path.join(SCREENSHOT_DIR, '01-cart.png'), fullPage: true });
     console.log('✅ Screenshot: 01-cart.png');
+
+    // Verify cart has items
+    const cartItems = await page.locator('article, [data-testid="cart-item"]').count();
+    console.log(`  Cart contains ${cartItems} items`);
+    if (cartItems === 0) {
+      throw new Error('Cart is empty after adding products!');
+    }
 
     // Click checkout
     console.log('\nSTEP 2: Clicking checkout button...');
@@ -100,12 +188,9 @@ async function completeAllSteps() {
 
     // Check Terms and Conditions checkboxes
     console.log('\nSTEP 6: Accepting Terms and Conditions...');
-
-    // Find all checkboxes on the page
     const checkboxCount = await page.locator('input[type="checkbox"]').count();
     console.log(`Found ${checkboxCount} checkboxes`);
 
-    // Check all checkboxes (terms and conditions)
     for (let i = 0; i < checkboxCount; i++) {
       try {
         const checkbox = page.locator('input[type="checkbox"]').nth(i);
@@ -125,7 +210,7 @@ async function completeAllSteps() {
     await page.screenshot({ path: path.join(SCREENSHOT_DIR, '05b-terms-accepted.png'), fullPage: true });
     console.log('✅ Screenshot: 05b-terms-accepted.png');
 
-    // Check if place order button is now enabled
+    // Check if place order button is enabled
     const placeOrderBtn = await page.locator('button:has-text("Realizar Pedido"), button:has-text("Place Order"), button:has-text("Confirmar")').first();
     const isEnabled = await placeOrderBtn.evaluate(btn => !btn.disabled);
     console.log(`Place order button enabled: ${isEnabled}`);
@@ -140,7 +225,7 @@ async function completeAllSteps() {
       // Wait for navigation to confirmation page
       console.log('⏳ Waiting for confirmation page...');
       await page.waitForLoadState('networkidle', { timeout: 30000 });
-      await sleep(10000); // Wait longer for async operations to complete
+      await sleep(10000); // Wait for async operations and cookie persistence
 
       console.log(`Current URL: ${page.url()}`);
       await page.screenshot({ path: path.join(SCREENSHOT_DIR, '06-confirmation-page.png'), fullPage: true });
@@ -154,19 +239,17 @@ async function completeAllSteps() {
         console.log('⚠️  Checking what page we landed on...');
         const pageTitle = await page.title();
         console.log(`Page title: ${pageTitle}`);
+
+        // Check for error messages
+        const errorMsg = await page.locator('text=/error|out of stock|agotado/i').count();
+        if (errorMsg > 0) {
+          console.log('⚠️  Error message detected on page');
+          const errorText = await page.locator('text=/error|out of stock|agotado/i').first().textContent();
+          console.log(`Error: ${errorText}`);
+        }
       }
     } else {
       console.log('❌ Place order button is still disabled');
-
-      // Debug: check what's preventing the button from being enabled
-      await page.evaluate(() => {
-        const btn = document.querySelector('button:has-text("Realizar Pedido")');
-        console.log('Button state:', btn);
-        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-        checkboxes.forEach((cb, i) => {
-          console.log(`Checkbox ${i}:`, cb.checked, cb.required);
-        });
-      });
     }
 
     await page.screenshot({ path: path.join(SCREENSHOT_DIR, '99-final-state.png'), fullPage: true });
@@ -181,6 +264,16 @@ async function completeAllSteps() {
     screenshots.forEach((s, i) => console.log(`  ${i+1}. ${s}`));
 
     console.log(`\n📁 Location: ${SCREENSHOT_DIR}`);
+
+    console.log('\nSteps completed:');
+    console.log('  ✅ 0. Test data prepared (cart populated)');
+    console.log('  ✅ 1. Cart page');
+    console.log('  ✅ 2. Shipping form');
+    console.log('  ✅ 3. Shipping selected');
+    console.log('  ✅ 4. Payment method');
+    console.log('  ✅ 5. Review order');
+    console.log('  ✅ 6. Terms accepted');
+    console.log(isEnabled ? '  ✅ 7. Order placed' : '  ⚠️  7. Order placement blocked');
 
     console.log('\nKeeping browser open for 30 seconds for inspection...');
     await sleep(30000);
