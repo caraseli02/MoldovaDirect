@@ -302,11 +302,30 @@ const formatDate = (date: Date): string => {
 // Initialize on mount
 onMounted(async () => {
   // Restore checkout data from cookies ONLY if we don't already have it
-  // This handles both fresh navigation (data in memory) and page refresh (need to restore)
+  // This handles fresh navigation (data in memory) after successful checkout.
+  // NOTE: Page refresh after cart clearing will redirect to /cart via middleware
+  // because cart validation runs before this code executes.
   if (!orderData.value) {
-    await checkoutStore.restore()
-    // Wait for Vue's reactivity system to propagate the state changes
-    await nextTick()
+    try {
+      await checkoutStore.restore()
+      // Wait for Vue's reactivity system to propagate the state changes
+      await nextTick()
+
+      // Verify restore succeeded
+      if (!sessionStore.orderData) {
+        console.error('[ERROR] Session restore completed but orderData is still empty')
+        toast.error(
+          t('checkout.confirmation.sessionRestoreFailed'),
+          t('checkout.confirmation.checkEmailForOrder')
+        )
+      }
+    } catch (error) {
+      console.error('[CRITICAL] Exception during session restore:', error)
+      toast.error(
+        t('checkout.confirmation.errorLoadingOrder'),
+        t('checkout.confirmation.contactSupport')
+      )
+    }
   }
 
   // Ensure we're on the confirmation step
@@ -316,9 +335,25 @@ onMounted(async () => {
   // The proxy can return stale refs, so we need to access the source directly
   const currentOrderData = sessionStore.orderData
 
-  // If still no order data after restore attempt, redirect to cart
+  // If still no order data after restore attempt, show error and redirect
   if (!currentOrderData || !currentOrderData.orderId || !currentOrderData.orderNumber) {
-    navigateTo(localePath('/cart'))
+    console.error('[ERROR] Missing order data on confirmation page', {
+      hasOrderData: !!currentOrderData,
+      hasOrderId: !!currentOrderData?.orderId,
+      hasOrderNumber: !!currentOrderData?.orderNumber
+    })
+
+    // Show error message BEFORE redirecting
+    toast.error(
+      t('checkout.confirmation.orderDataMissing'),
+      t('checkout.confirmation.checkYourEmail')
+    )
+
+    // Delay redirect so user sees the message
+    setTimeout(() => {
+      navigateTo(localePath('/cart'))
+    }, 2000)
+
     return
   }
 
@@ -327,8 +362,18 @@ onMounted(async () => {
   try {
     await cartStore.clearCart()
   } catch (error) {
-    console.error('Failed to clear cart on confirmation page:', error)
-    // Non-blocking - user already completed checkout successfully
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    console.error('[ERROR] Failed to clear cart on confirmation page:', {
+      error: errorMessage,
+      orderId: currentOrderData.orderId,
+      orderNumber: currentOrderData.orderNumber
+    })
+
+    // Show user-friendly warning (non-blocking since order succeeded)
+    toast.warning(
+      t('checkout.confirmation.cartClearFailed'),
+      t('checkout.confirmation.cartClearFailedDetails')
+    )
   }
 })
 

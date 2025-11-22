@@ -1670,7 +1670,15 @@
       "deliveryNote": "Los tiempos de entrega son estimados y pueden variar",
       "trackOrder": "Rastrear Tu Pedido",
       "trackingAvailable": "La información de rastreo estará disponible una vez que tu pedido sea enviado",
-      "printReceipt": "Imprimir Recibo"
+      "printReceipt": "Imprimir Recibo",
+      "sessionRestoreFailed": "No se pudo cargar los datos del pedido",
+      "checkEmailForOrder": "Por favor, revisa tu correo electrónico para ver la confirmación del pedido",
+      "errorLoadingOrder": "Error al cargar los detalles del pedido",
+      "contactSupport": "Si el problema persiste, contacta con soporte",
+      "orderDataMissing": "Datos del pedido no disponibles",
+      "checkYourEmail": "Tu pedido se completó correctamente. Revisa tu correo para más detalles",
+      "cartClearFailed": "No se pudo vaciar el carrito",
+      "cartClearFailedDetails": "Tu pedido se completó correctamente, pero el carrito no se vació automáticamente"
     }
   },
   "admin": {

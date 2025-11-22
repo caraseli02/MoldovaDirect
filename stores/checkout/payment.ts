@@ -318,12 +318,11 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
       }
 
       // Prepare customer information
-      // TEMPORARY: Hardcode email for testing
-      const guestEmail = 'caraseli02@gmail.com'
+      const guestEmail = guestInfo.value?.email?.trim() || null
       const firstName = shippingInfo.value.address.firstName || ''
       const lastName = shippingInfo.value.address.lastName || ''
       const customerName = `${firstName} ${lastName}`.trim() || 'Customer'
-      const resolvedEmail = guestEmail
+      const resolvedEmail = guestEmail || contactEmail.value || null
 
       session.setContactEmail(resolvedEmail)
 

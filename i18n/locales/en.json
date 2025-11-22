@@ -1748,7 +1748,15 @@
       "deliveryNote": "Delivery times are estimates and may vary",
       "trackOrder": "Track Your Order",
       "trackingAvailable": "Tracking information will be available once your order ships",
-      "printReceipt": "Print Receipt"
+      "printReceipt": "Print Receipt",
+      "sessionRestoreFailed": "Could not load order data",
+      "checkEmailForOrder": "Please check your email for order confirmation",
+      "errorLoadingOrder": "Error loading order details",
+      "contactSupport": "If the problem persists, please contact support",
+      "orderDataMissing": "Order data not available",
+      "checkYourEmail": "Your order completed successfully. Check your email for details",
+      "cartClearFailed": "Could not clear cart",
+      "cartClearFailedDetails": "Your order completed successfully, but the cart was not cleared automatically"
     }
   },
   "admin": {
