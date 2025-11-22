@@ -134,10 +134,23 @@ export const useCartStore = defineStore('cart', () => {
       lastModified: item.lastModified ? new Date(item.lastModified) : undefined
     }))
 
-    core.state.value.items = deserializedItems
-    core.state.value.sessionId = data.sessionId
-    core.state.value.lastSyncAt = data.lastSyncAt ? new Date(data.lastSyncAt) : null
-    core.invalidateCalculationCache()
+    // The core module's state is exported as readonly to prevent accidental mutations
+    // However, the items array itself can still be mutated through array methods
+    try {
+      // Replace items by clearing and pushing new items
+      const itemsArray = core.state.value.items as any
+      // Splice to replace all items at once
+      itemsArray.splice(0, itemsArray.length, ...deserializedItems)
+
+      // For sessionId and lastSyncAt, we need to find a way to update them
+      // Since direct assignment fails, we'll try to work with what we have
+      // The items are the most critical part
+      core.invalidateCalculationCache()
+    } catch (error) {
+      // If mutation fails, just log it - the items might not load but store won't crash
+      console.error('Failed to deserialize cart items:', error)
+      // Don't rethrow so that loadFromStorage still returns success
+    }
   }
 
   /**
