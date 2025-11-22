@@ -39,17 +39,14 @@
         <nuxt-link to="/" class="transition hover:text-gray-900 dark:hover:text-gray-200">{{ $t('common.home') }}</nuxt-link>
         <span class="mx-2">/</span>
         <nuxt-link to="/products" class="transition hover:text-gray-900 dark:hover:text-gray-200">{{ $t('common.shop') }}</nuxt-link>
-        <template v-if="product.category?.breadcrumb?.length">
+        <template v-if="product.category">
           <span class="mx-2">/</span>
-          <template v-for="(crumb, index) in product.category.breadcrumb" :key="`crumb-${crumb.id}`">
-            <nuxt-link
-              :to="`/products?category=${crumb.slug}`"
-              class="transition hover:text-gray-900 dark:hover:text-gray-200"
-            >
-              {{ crumb.name }}
-            </nuxt-link>
-            <span v-if="index < product.category.breadcrumb.length - 1" class="mx-2">/</span>
-          </template>
+          <nuxt-link
+            :to="`/products?category=${product.category.slug}`"
+            class="transition hover:text-gray-900 dark:hover:text-gray-200"
+          >
+            {{ categoryLabel }}
+          </nuxt-link>
         </template>
         <span class="mx-2">/</span>
         <span class="text-gray-900 dark:text-white">{{ getLocalizedText(product.name) }}</span>
@@ -219,9 +216,9 @@
                 <dt class="font-medium text-gray-900 dark:text-white">{{ $t('products.alcoholContent') }}</dt>
                 <dd class="text-gray-600 dark:text-gray-400">{{ product.alcoholContent }}%</dd>
               </div>
-              <div v-if="product.weight">
+              <div v-if="product.weightKg">
                 <dt class="font-medium text-gray-900 dark:text-white">{{ $t('products.weight') }}</dt>
-                <dd class="text-gray-600 dark:text-gray-400">{{ product.weight }}kg</dd>
+                <dd class="text-gray-600 dark:text-gray-400">{{ product.weightKg }}kg</dd>
               </div>
               <div v-if="product.sku">
                 <dt class="font-medium text-gray-900 dark:text-white">SKU</dt>
@@ -440,7 +437,7 @@ const { addItem, loading: cartLoading, isInCart } = useCart()
 
 const isProductInCart = computed(() => {
   if (!product.value) return false
-  return isInCart(product.value.id)
+  return isInCart(String(product.value.id))
 })
 
 const selectedImage = computed(() => {
@@ -648,7 +645,7 @@ const addToCart = async () => {
   if (!product.value) return
 
   // Only run on client side (fix for Vercel SSR)
-  if (process.server || typeof window === 'undefined') {
+  if (import.meta.server || typeof window === 'undefined') {
     console.warn('Add to Cart: Server-side render, skipping')
     return
   }
@@ -658,7 +655,7 @@ const addToCart = async () => {
     const debugInfo = {
       productId: product.value.id,
       quantity: selectedQuantity.value,
-      isClient: process.client,
+      isClient: import.meta.client,
       hasWindow: typeof window !== 'undefined',
       addItemType: typeof addItem
     }
@@ -686,11 +683,6 @@ const addToCart = async () => {
     console.log('🛒 Calling addItem with:', cartProduct)
     await addItem(cartProduct, selectedQuantity.value)
     console.log('✅ Add to cart succeeded!')
-
-    // Success feedback
-    if (showMobileDebug) {
-      alert('✅ Item added to cart successfully!')
-    }
   } catch (err) {
     const errorMsg = err instanceof Error ? err.message : String(err)
     console.error('❌ Add to cart failed:', errorMsg, err)
@@ -700,9 +692,9 @@ const addToCart = async () => {
   }
 }
 
-const getLocalizedText = (text: Record<string, string> | null | undefined) => {
+const getLocalizedText = (text: { [key: string]: string | undefined } | null | undefined) => {
   if (!text) return ''
-  return text[locale.value] || text.es || Object.values(text)[0] || ''
+  return text[locale.value] || text.es || Object.values(text).find(v => v) || ''
 }
 
 const formatPrice = (price: string | number) => {
@@ -791,10 +783,10 @@ watch(product, newProduct => {
       }
     }
 
-    if (newProduct.weight) {
+    if (newProduct.weightKg) {
       productStructuredData.weight = {
         '@type': 'QuantitativeValue',
-        value: newProduct.weight,
+        value: newProduct.weightKg,
         unitCode: 'KGM'
       }
     }
@@ -809,7 +801,7 @@ watch(product, newProduct => {
       meta: [
         {
           name: 'description',
-          content: getLocalizedText(newProduct.metaDescription) || getLocalizedText(newProduct.shortDescription) || getLocalizedText(newProduct.description) || `${getLocalizedText(newProduct.name)} - Authentic Moldovan product`
+          content: getLocalizedText(newProduct.shortDescription) || getLocalizedText(newProduct.description) || `${getLocalizedText(newProduct.name)} - Authentic Moldovan product`
         },
         {
           property: 'og:title',
@@ -839,7 +831,7 @@ watch(product, newProduct => {
       script: [
         {
           type: 'application/ld+json',
-          children: JSON.stringify(productStructuredData)
+          innerHTML: JSON.stringify(productStructuredData)
         }
       ]
     })
