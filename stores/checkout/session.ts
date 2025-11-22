@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { computed, reactive, toRefs } from 'vue'
+import { computed, reactive, toRefs, nextTick } from 'vue'
 import { CHECKOUT_SESSION_COOKIE_CONFIG, COOKIE_NAMES } from '~/config/cookies'
 import type {
   CheckoutState,
@@ -17,6 +17,7 @@ import type {
 interface PersistPayload {
   shippingInfo: ShippingInformation | null
   paymentMethod: PaymentMethod | null
+  orderData?: OrderData | null
 }
 
 interface RestoredPayload extends PersistPayload {}
@@ -206,14 +207,14 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
   // Single cookie instance for consistent access
   const checkoutCookie = useCookie<any>(COOKIE_NAMES.CHECKOUT_SESSION, CHECKOUT_SESSION_COOKIE_CONFIG)
 
-  const persist = (payload: PersistPayload): void => {
+  const persist = async (payload: PersistPayload): Promise<void> => {
     try {
       const snapshot = {
         sessionId: state.sessionId,
         currentStep: state.currentStep,
         guestInfo: state.guestInfo,
         contactEmail: state.contactEmail,
-        orderData: state.orderData,
+        orderData: payload.orderData ?? state.orderData,
         sessionExpiresAt: state.sessionExpiresAt,
         lastSyncAt: new Date(),
         termsAccepted: state.termsAccepted,
@@ -224,6 +225,7 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
       }
 
       checkoutCookie.value = snapshot
+      await nextTick() // Wait for cookie write to complete
     } catch (error) {
       console.error('Failed to persist checkout session:', error)
     }
@@ -232,7 +234,9 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
   const restore = (): RestoredPayload | null => {
     try {
       const snapshot = checkoutCookie.value
-      if (!snapshot) return null
+      if (!snapshot) {
+        return null
+      }
 
       // Check if session has expired
       if (snapshot.sessionExpiresAt && new Date(snapshot.sessionExpiresAt) < new Date()) {

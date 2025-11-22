@@ -653,21 +653,16 @@ const addToCart = async () => {
     return
   }
 
-  // Debug logging for Vercel
-  const debugInfo = {
-    productId: product.value.id,
-    quantity: selectedQuantity.value,
-    isClient: process.client,
-    hasWindow: typeof window !== 'undefined',
-    addItemType: typeof addItem,
-    addItemString: typeof addItem === 'function' ? 'real function' : addItem?.toString?.() || 'undefined'
-  }
-  console.log('🛒 Add to Cart clicked', debugInfo)
-
-  // MOBILE DEBUG: Show status on mobile
-  const showMobileDebug = false // Set to true to see alerts on mobile
-  if (showMobileDebug) {
-    alert(`Debug: ${JSON.stringify(debugInfo, null, 2)}`)
+  // Debug logging in development only
+  if (process.env.NODE_ENV === 'development') {
+    const debugInfo = {
+      productId: product.value.id,
+      quantity: selectedQuantity.value,
+      isClient: process.client,
+      hasWindow: typeof window !== 'undefined',
+      addItemType: typeof addItem
+    }
+    console.log('🛒 Add to Cart clicked', debugInfo)
   }
 
   try {
@@ -675,7 +670,6 @@ const addToCart = async () => {
     if (typeof addItem !== 'function') {
       const error = `addItem is not a function (type: ${typeof addItem})`
       console.error('❌', error)
-      alert(`ERROR: ${error}\n\nThis means Pinia/cart store isn't initialized on Vercel`)
       throw new Error(error)
     }
 
