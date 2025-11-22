@@ -49,6 +49,7 @@
       <AdminUsersTable
         @user-selected="showUserDetail"
         @user-action="handleUserAction"
+        @refetch="fetchUsersData"
       />
 
       <!-- User Detail Modal -->
@@ -97,15 +98,14 @@
 </template>
 
 <script setup lang="ts">
+import AdminUsersTable from '~/components/admin/Users/Table.vue'
+import AdminUsersDetailView from '~/components/admin/Users/DetailView.vue'
+
 // Define page meta for admin layout and authentication
 definePageMeta({
   layout: 'admin',
   middleware: ['auth', 'admin']
 })
-
-// Lazy load admin user components to reduce main bundle size
-const AdminUsersTable = useAsyncAdminComponent('Users/Table')
-const AdminUsersDetailView = useAsyncAdminComponent('Users/DetailView')
 
 // SEO and meta
 useHead({
@@ -116,28 +116,11 @@ useHead({
   ]
 })
 
-// Store - safely access with fallback
-let adminUsersStore: any = null
-
-try {
-  adminUsersStore = useAdminUsersStore()
-} catch (error) {
-  console.warn('Admin users store not available during SSR/hydration')
-}
-
-if (!adminUsersStore) {
-  adminUsersStore = {
-    users: [],
-    isLoading: false,
-    loadUsers: () => Promise.resolve(),
-    initialize: () => Promise.resolve(),
-    clearCurrentUser: () => {},
-    summary: {},
-    actionLoading: false
-  }
-}
-
 const toast = useToast()
+const supabase = useSupabaseClient()
+
+// Store
+const adminUsersStore = useAdminUsersStore()
 
 // State
 const selectedUserId = ref<string | null>(null)
@@ -147,8 +130,9 @@ const summary = computed(() => adminUsersStore.summary)
 const actionLoading = computed(() => adminUsersStore.actionLoading)
 
 // Methods
-const showUserDetail = (userId: string) => {
+const showUserDetail = async (userId: string) => {
   selectedUserId.value = userId
+  await fetchUserDetail(userId)
 }
 
 const closeUserDetail = () => {
@@ -167,56 +151,114 @@ const handleUserAction = async (action: string, userId: string, data?: any) => {
       case 'view':
         showUserDetail(userId)
         break
-        
-      case 'lucide:square-pen':
+
+      case 'edit':
         handleUserEdit(userId)
         break
-        
-      case 'suspend':
-        await adminUsersStore.suspendUser(userId, data?.reason, data?.duration)
-        break
-        
-      case 'unsuspend':
-        await adminUsersStore.unsuspendUser(userId, data?.reason)
-        break
-        
-      case 'ban':
-        await adminUsersStore.banUser(userId, data?.reason)
-        break
-        
-      case 'unban':
-        await adminUsersStore.unbanUser(userId, data?.reason)
-        break
-        
-      case 'verify_email':
-        await adminUsersStore.verifyUserEmail(userId, data?.reason)
-        break
-        
-      case 'reset_password':
-        const result = await adminUsersStore.resetUserPassword(userId, data?.reason)
-        if (result?.reset_link) {
-          // Show the reset link to the admin via toast with copy functionality
-          toast.success('Password reset link generated')
-          // TODO: Add modal to display reset link with copy button
-        }
-        break
-        
-      case 'update_role':
-        await adminUsersStore.updateUserRole(userId, data?.role, data?.reason)
-        break
-        
+
       default:
-        console.warn('Unknown user action:', action)
+        // For now, other actions will be implemented in a future update
+        console.warn('User action not yet implemented:', action)
+        toast.info('This action will be implemented in a future update')
     }
   } catch (error) {
     console.error('Error performing user action:', error)
-    // Error is already handled by the store and toast
+    toast.error(error instanceof Error ? error.message : 'Failed to perform action')
   }
 }
 
-// Initialize store on mount
+// Fetch users data with proper authentication
+const fetchUsersData = async () => {
+  try {
+    adminUsersStore.setLoading(true)
+
+    // Get session
+    const { data: { session } } = await supabase.auth.getSession()
+
+    if (!session) {
+      adminUsersStore.setError('Session expired. Please log in again.')
+      await navigateTo('/auth/login')
+      return
+    }
+
+    // Prepare headers with Bearer token
+    const headers = {
+      'Authorization': `Bearer ${session.access_token}`
+    }
+
+    console.log('[AdminUsers] Fetching users data with Bearer token')
+
+    // Use $fetch with Bearer token headers (same as dashboard)
+    const response = await $fetch<{
+      success: boolean
+      data: {
+        users: any[]
+        pagination: any
+        summary: any
+      }
+    }>('/api/admin/users', {
+      headers,
+      query: adminUsersStore.queryParams
+    })
+
+    if (response.success) {
+      // Update store with the fetched data using setter methods
+      adminUsersStore.setUsers(response.data.users)
+      adminUsersStore.setPagination(response.data.pagination)
+      adminUsersStore.setSummary(response.data.summary)
+    }
+  } catch (err) {
+    console.error('[AdminUsers] Error fetching users:', err)
+    adminUsersStore.setError(err instanceof Error ? err.message : 'Failed to fetch users')
+  } finally {
+    adminUsersStore.setLoading(false)
+  }
+}
+
+// Fetch user detail with proper authentication
+const fetchUserDetail = async (userId: string) => {
+  try {
+    adminUsersStore.setUserDetailLoading(true)
+
+    // Get session
+    const { data: { session } } = await supabase.auth.getSession()
+
+    if (!session) {
+      adminUsersStore.setError('Session expired. Please log in again.')
+      await navigateTo('/auth/login')
+      return
+    }
+
+    // Prepare headers with Bearer token
+    const headers = {
+      'Authorization': `Bearer ${session.access_token}`
+    }
+
+    console.log('[AdminUsers] Fetching user detail with Bearer token')
+
+    // Fetch user detail
+    const response = await $fetch<{
+      success: boolean
+      data: any
+    }>(`/api/admin/users/${userId}`, {
+      headers
+    })
+
+    if (response.success) {
+      adminUsersStore.setCurrentUser(response.data)
+    }
+  } catch (err) {
+    console.error('[AdminUsers] Error fetching user detail:', err)
+    adminUsersStore.setError(err instanceof Error ? err.message : 'Failed to fetch user detail')
+  } finally {
+    adminUsersStore.setUserDetailLoading(false)
+  }
+}
+
+// Initialize on mount
 onMounted(() => {
-  adminUsersStore.initialize()
+  // Fetch initial data with proper Bearer token authentication
+  fetchUsersData()
 })
 
 // Cleanup on unmount

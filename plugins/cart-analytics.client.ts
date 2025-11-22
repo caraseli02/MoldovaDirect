@@ -21,9 +21,20 @@ export default defineNuxtPlugin(() => {
   if (!import.meta.client) return;
 
   const { $router } = useNuxtApp();
+  const route = useRoute();
+
+  // Skip cart analytics for admin pages
+  if (route.path.startsWith('/admin')) {
+    return;
+  }
 
   // Initialize cart analytics when navigating to cart page
   $router.afterEach((to) => {
+    // Skip analytics for admin pages
+    if (to.path.startsWith('/admin')) {
+      return;
+    }
+
     if (to.path === "/cart") {
       // Use setTimeout to ensure Pinia is ready
       setTimeout(() => {

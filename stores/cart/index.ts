@@ -1,21 +1,22 @@
 /**
  * Main Cart Store - Modular Coordinator
- * 
+ *
  * This is the main cart store that coordinates all cart modules
  * while maintaining backward compatibility with the existing API
  */
 
 import { defineStore } from 'pinia'
-import { computed } from 'vue'
+import { computed, watch, onMounted, onUnmounted, nextTick } from 'vue'
 import { useCartCore } from './core'
 import { useCartPersistence } from './persistence'
 import { useCartValidation } from './validation'
 import { useCartAnalytics } from './analytics'
 import { useCartSecurity } from './security'
 import { useCartAdvanced } from './advanced'
-import type { 
-  Product, 
-  CartItem, 
+import { CART_COOKIE_CONFIG, COOKIE_NAMES } from '~/config/cookies'
+import type {
+  Product,
+  CartItem,
   CartCoreState,
   CartPersistenceState,
   CartValidationState,
@@ -32,7 +33,7 @@ export const useCartStore = defineStore('cart', () => {
   // =============================================
   // MODULE INITIALIZATION
   // =============================================
-  
+
   const core = useCartCore()
   const persistence = useCartPersistence()
   const validation = useCartValidation()
@@ -41,33 +42,42 @@ export const useCartStore = defineStore('cart', () => {
   const advanced = useCartAdvanced()
 
   // =============================================
+  // SINGLE COOKIE INSTANCE (CRITICAL FOR SYNC)
+  // =============================================
+
+  // IMPORTANT: Create ONE cookie ref and reuse it everywhere
+  // Multiple useCookie() calls are NOT synced in Nuxt 3
+  const cartCookie = useCookie<any>(COOKIE_NAMES.CART, CART_COOKIE_CONFIG)
+
+  // =============================================
   // UNIFIED STATE
   // =============================================
-  
+
   // Core state
   const items = computed(() => core.state.value.items)
   const sessionId = computed(() => core.state.value.sessionId)
   const loading = computed(() => core.state.value.loading)
   const error = computed(() => core.state.value.error)
   const lastSyncAt = computed(() => core.state.value.lastSyncAt)
-  
+
   // Persistence state
   const storageType = computed(() => persistence.state.value.storageType)
   const lastSaveAt = computed(() => persistence.state.value.lastSaveAt)
   const saveInProgress = computed(() => persistence.state.value.saveInProgress)
-  
+
   // Validation state
   const validationInProgress = computed(() => validation.state.value.validationInProgress)
   const backgroundValidationEnabled = computed(() => validation.state.value.backgroundValidationEnabled)
-  
+  const lastBackgroundValidation = computed(() => validation.state.value.lastBackgroundValidation)
+
   // Analytics state
   const analyticsSessionStartTime = computed(() => analytics.state.value.sessionStartTime)
   const analyticsLastActivity = computed(() => analytics.state.value.lastActivity)
-  
+
   // Security state
   const securityEnabled = computed(() => security.state.value.securityEnabled)
   const riskLevel = computed(() => security.state.value.riskLevel)
-  
+
   // Advanced features state
   const selectedItems = computed(() => advanced.state.value.selectedItems)
   const selectedItemsCount = computed(() => advanced.selectedItemsCount.value)
@@ -77,7 +87,7 @@ export const useCartStore = defineStore('cart', () => {
       .reduce((total, item) => total + item.product.price * item.quantity, 0)
   })
   const allItemsSelected = computed(() => {
-    return items.value.length > 0 && 
+    return items.value.length > 0 &&
            items.value.every(item => advanced.state.value.selectedItems.has(item.id))
   })
   const hasSelectedItems = computed(() => advanced.hasSelectedItems.value)
@@ -86,84 +96,115 @@ export const useCartStore = defineStore('cart', () => {
   const savedForLaterCount = computed(() => advanced.savedForLaterCount.value)
   const recommendations = computed(() => advanced.state.value.recommendations)
   const recommendationsLoading = computed(() => advanced.state.value.recommendationsLoading)
-  
+
   // =============================================
   // UNIFIED GETTERS
   // =============================================
-  
+
   const itemCount = computed(() => core.itemCount.value)
   const subtotal = computed(() => core.subtotal.value)
   const isEmpty = computed(() => core.isEmpty.value)
-  
+
   // =============================================
-  // ENHANCED PERSISTENCE ACTIONS
+  // CART DATA PERSISTENCE
   // =============================================
-  
+
   /**
-   * Save cart data to storage
+   * Convert items to serializable format
    */
-  async function saveToStorage() {
+  function serializeCartData(): any {
+    return {
+      items: items.value,
+      sessionId: sessionId.value,
+      lastSyncAt: lastSyncAt.value,
+      timestamp: new Date().toISOString(),
+      version: '1.0'
+    }
+  }
+
+  /**
+   * Convert serialized data back to cart items
+   */
+  function deserializeCartData(data: any): void {
+    if (!data?.items) return
+
+    const deserializedItems = data.items.map((item: any) => ({
+      ...item,
+      addedAt: new Date(item.addedAt),
+      lastModified: item.lastModified ? new Date(item.lastModified) : undefined
+    }))
+
+    core.state.value.items = deserializedItems
+    core.state.value.sessionId = data.sessionId
+    core.state.value.lastSyncAt = data.lastSyncAt ? new Date(data.lastSyncAt) : null
+    core.invalidateCalculationCache()
+  }
+
+  /**
+   * Save cart data to storage using cookies
+   */
+  async function saveToStorage(): Promise<{ success: boolean; error?: string }> {
     try {
-      const cartData = {
-        items: items.value,
-        sessionId: sessionId.value,
-        lastSyncAt: lastSyncAt.value
-      }
-      
-      return await persistence.saveCartData(cartData)
+      cartCookie.value = serializeCartData()
+      return { success: true }
     } catch (error) {
       console.error('Failed to save cart to storage:', error)
-      throw error
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Save failed'
+      }
     }
   }
-  
+
   /**
-   * Load cart data from storage
+   * Load cart data from storage using cookies
    */
-  async function loadFromStorage() {
+  async function loadFromStorage(): Promise<{ success: boolean; data?: any; error?: string }> {
     try {
-      const result = await persistence.loadCartData()
-      
-      if (result.success && result.data) {
-        // Update core state with loaded data
-        core.state.value.items = result.data.items || []
-        core.state.value.sessionId = result.data.sessionId
-        core.state.value.lastSyncAt = result.data.lastSyncAt
-        
-        // Invalidate calculation cache
-        core.invalidateCalculationCache()
+      const loadedData = cartCookie.value
+
+      if (loadedData?.items) {
+        deserializeCartData(loadedData)
+        return { success: true, data: loadedData }
       }
-      
-      return result
+
+      return { success: true, data: null }
     } catch (error) {
       console.error('Failed to load cart from storage:', error)
-      throw error
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Load failed'
+      }
     }
   }
-  
+
   /**
-   * Clear cart data from storage
+   * Clear cart data from storage using cookies
    */
-  async function clearStorage() {
+  async function clearStorage(): Promise<{ success: boolean; error?: string }> {
     try {
-      return await persistence.clearCartData()
+      cartCookie.value = null
+      return { success: true }
     } catch (error) {
       console.error('Failed to clear cart storage:', error)
-      throw error
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Clear failed'
+      }
     }
   }
 
   // =============================================
   // INITIALIZATION
   // =============================================
-  
+
   /**
    * Initialize cart with all modules
    */
-  function initializeCart() {
+  function initializeCart(): void {
     // Initialize core
     core.initializeCart()
-    
+
     // Load from storage
     if (process.client) {
       loadFromStorage().catch(error => {
@@ -171,113 +212,57 @@ export const useCartStore = defineStore('cart', () => {
       })
     }
 
-    // Add mock data for development if cart is empty
-    if (process.client && items.value.length === 0 && process.env.NODE_ENV === 'development') {
-      const mockProducts: Product[] = [
-        {
-          id: '1',
-          slug: 'moldovan-wine-cabernet',
-          name: 'Moldovan Wine - Cabernet Sauvignon',
-          price: 25.99,
-          images: ['/placeholder-product.jpg'],
-          stock: 10,
-          category: 'Wine'
-        },
-        {
-          id: '2',
-          slug: 'traditional-honey',
-          name: 'Traditional Moldovan Honey',
-          price: 15.50,
-          images: ['/placeholder-product.jpg'],
-          stock: 5,
-          category: 'Food'
-        }
-      ]
-
-      // Add mock products to cart
-      mockProducts.forEach(product => {
-        core.addItem(product, product.id === '1' ? 2 : 1).catch(error => {
-          console.warn('Failed to add mock product:', error)
-        })
-      })
-    }
-    
     // Initialize analytics
     if (process.client && sessionId.value) {
       analytics.initializeCartSession(sessionId.value)
     }
-    
-    // Start background validation
+
+    // Start background validation if enabled
     if (backgroundValidationEnabled.value && process.client) {
       validation.startBackgroundValidation()
     }
-    
-    // Initialize advanced features
-    if (process.client) {
-      // Load recommendations if cart has items
-      if (items.value.length > 0) {
-        advanced.loadRecommendations(items.value).catch(error => {
-          console.warn('Failed to load recommendations:', error)
-        })
-      }
+
+    // Load recommendations if cart has items
+    if (process.client && items.value.length > 0) {
+      advanced.loadRecommendations(items.value).catch(error => {
+        console.warn('Failed to load recommendations:', error)
+      })
     }
   }
 
   // =============================================
   // DEBOUNCED SAVE FUNCTIONALITY
   // =============================================
-  
-  let debouncedSaveToStorage: (() => Promise<void>) | null = null
-  
+
+  let saveTimeoutId: NodeJS.Timeout | null = null
+
   /**
-   * Create debounced save function
+   * Save cart data with debouncing to avoid excessive writes
    */
-  function createDebouncedSave() {
-    let timeoutId: NodeJS.Timeout | null = null
-    
-    debouncedSaveToStorage = function() {
-      return new Promise((resolve, reject) => {
-        if (timeoutId) {
-          clearTimeout(timeoutId)
-        }
-        
-        timeoutId = setTimeout(async () => {
-          try {
-            await saveToStorage()
-            resolve()
-          } catch (error) {
-            reject(error)
-          }
-        }, 1000) // 1 second debounce
-      })
+  async function saveAndCacheCartData(): Promise<void> {
+    // Clear any existing timeout
+    if (saveTimeoutId) {
+      clearTimeout(saveTimeoutId)
     }
-  }
-  
-  /**
-   * Save and cache cart data (with debouncing)
-   */
-  async function saveAndCacheCartData() {
-    if (!debouncedSaveToStorage) {
-      createDebouncedSave()
-    }
-    
-    if (debouncedSaveToStorage) {
+
+    // Set a new timeout for saving
+    saveTimeoutId = setTimeout(async () => {
       try {
-        await debouncedSaveToStorage()
+        await saveToStorage()
       } catch (error) {
         console.warn('Debounced save failed:', error)
       }
-    }
+    }, 1000) // 1 second debounce
   }
 
   // =============================================
   // ENHANCED CORE ACTIONS
   // =============================================
-  
+
   /**
    * Add item to cart with all enhancements
    */
-  async function addItem(product: Product, quantity: number = 1) {
+  async function addItem(product: Product, quantity: number = 1): Promise<void> {
     try {
       // Use secure add if security is enabled
       if (securityEnabled.value && sessionId.value) {
@@ -287,40 +272,40 @@ export const useCartStore = defineStore('cart', () => {
           console.warn('Secure add failed, falling back to regular add:', securityError)
         }
       }
-      
+
       // Add item via core module
       await core.addItem(product, quantity)
-      
+
       // Track analytics
       if (process.client && sessionId.value) {
         analytics.trackAddToCart(
-          product, 
-          quantity, 
-          subtotal.value, 
-          itemCount.value, 
+          product,
+          quantity,
+          subtotal.value,
+          itemCount.value,
           sessionId.value
         )
       }
-      
+
       // Add to validation queue for background validation
       validation.addToValidationQueue(product.id, 'high')
-      
+
       // Save to storage
       await saveAndCacheCartData()
     } catch (error) {
       throw error
     }
   }
-  
+
   /**
    * Remove item from cart with all enhancements
    */
-  async function removeItem(itemId: string) {
+  async function removeItem(itemId: string): Promise<void> {
     try {
       // Get item for analytics before removal
-      const item = core.getItemByProductId(itemId) || 
+      const item = core.getItemByProductId(itemId) ||
                    items.value.find(i => i.id === itemId)
-      
+
       // Use secure remove if security is enabled
       if (securityEnabled.value && sessionId.value) {
         try {
@@ -329,37 +314,37 @@ export const useCartStore = defineStore('cart', () => {
           console.warn('Secure remove failed, falling back to regular remove:', securityError)
         }
       }
-      
+
       // Remove item via core module
       await core.removeItem(itemId)
-      
+
       // Track analytics
       if (process.client && sessionId.value && item) {
         analytics.trackRemoveFromCart(
-          item.product, 
-          item.quantity, 
-          subtotal.value, 
-          itemCount.value, 
+          item.product,
+          item.quantity,
+          subtotal.value,
+          itemCount.value,
           sessionId.value
         )
       }
-      
+
       // Save to storage
       await saveAndCacheCartData()
     } catch (error) {
       throw error
     }
   }
-  
+
   /**
    * Update item quantity with all enhancements
    */
-  async function updateQuantity(itemId: string, quantity: number) {
+  async function updateQuantity(itemId: string, quantity: number): Promise<void> {
     try {
       // Get item for analytics before update
       const item = items.value.find(i => i.id === itemId)
       const oldQuantity = item?.quantity || 0
-      
+
       // Use secure update if security is enabled
       if (securityEnabled.value && sessionId.value) {
         try {
@@ -368,33 +353,33 @@ export const useCartStore = defineStore('cart', () => {
           console.warn('Secure update failed, falling back to regular update:', securityError)
         }
       }
-      
+
       // Update quantity via core module
       await core.updateQuantity(itemId, quantity)
-      
+
       // Track analytics
       if (process.client && sessionId.value && item) {
         analytics.trackQuantityUpdate(
-          item.product, 
-          oldQuantity, 
-          quantity, 
-          subtotal.value, 
-          itemCount.value, 
+          item.product,
+          oldQuantity,
+          quantity,
+          subtotal.value,
+          itemCount.value,
           sessionId.value
         )
       }
-      
+
       // Save to storage
       await saveAndCacheCartData()
     } catch (error) {
       throw error
     }
   }
-  
+
   /**
    * Clear cart with persistence
    */
-  async function clearCart() {
+  async function clearCart(): Promise<void> {
     try {
       await core.clearCart()
       await saveAndCacheCartData()
@@ -406,7 +391,7 @@ export const useCartStore = defineStore('cart', () => {
   // =============================================
   // UTILITY FUNCTIONS
   // =============================================
-  
+
   const getItemByProductId = (productId: string) => core.getItemByProductId(productId)
   const isInCart = (productId: string) => core.isInCart(productId)
   const generateItemId = () => core.generateItemId()
@@ -415,40 +400,41 @@ export const useCartStore = defineStore('cart', () => {
   // =============================================
   // ADVANCED FEATURES METHODS
   // =============================================
-  
+
   const isItemSelected = (itemId: string) => advanced.isItemSelected(itemId)
   const getSelectedItems = () => items.value.filter(item => advanced.state.value.selectedItems.has(item.id))
-  const toggleItemSelection = (itemId: string) => advanced.toggleItemSelection(itemId)
-  const toggleSelectAll = () => {
-    const allSelected = items.value.length > 0 && 
-      items.value.every(item => advanced.state.value.selectedItems.has(item.id))
-    
-    if (allSelected) {
+
+  function toggleItemSelection(itemId: string): void {
+    advanced.toggleItemSelection(itemId)
+  }
+
+  function toggleSelectAll(): void {
+    if (allItemsSelected.value) {
       advanced.deselectAllItems()
     } else {
       items.value.forEach(item => advanced.selectItem(item.id))
     }
   }
-  
-  const removeSelectedItems = async () => {
+
+  async function removeSelectedItems(): Promise<void> {
     const selectedItemIds = Array.from(advanced.state.value.selectedItems)
     const removePromises = selectedItemIds.map(itemId => removeItem(itemId))
     await Promise.allSettled(removePromises)
     advanced.deselectAllItems()
   }
-  
-  const moveSelectedToSavedForLater = async () => {
+
+  async function moveSelectedToSavedForLater(): Promise<void> {
     const selectedItemIds = Array.from(advanced.state.value.selectedItems)
     const itemsToSave = items.value.filter(item => selectedItemIds.includes(item.id))
-    
+
     for (const item of itemsToSave) {
       await advanced.saveItemForLater(item, 'bulk_move', removeItem)
     }
-    
+
     advanced.deselectAllItems()
   }
-  
-  const addToSavedForLater = async (product: Product, quantity: number = 1) => {
+
+  async function addToSavedForLater(product: Product, quantity: number = 1): Promise<void> {
     const savedItem = {
       id: 'saved_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
       product,
@@ -457,44 +443,44 @@ export const useCartStore = defineStore('cart', () => {
     }
     advanced.state.value.savedForLater.push(savedItem)
   }
-  
-  const removeFromSavedForLater = async (itemId: string) => {
+
+  async function removeFromSavedForLater(itemId: string): Promise<void> {
     await advanced.removeFromSavedForLater(itemId)
   }
-  
-  const moveToCartFromSavedForLater = async (itemId: string) => {
+
+  async function moveToCartFromSavedForLater(itemId: string): Promise<void> {
     const savedItem = advanced.getSavedForLaterItem(itemId)
     if (savedItem) {
       await addItem(savedItem.product, savedItem.quantity)
       await advanced.removeFromSavedForLater(itemId)
     }
   }
-  
-  const loadRecommendations = async () => {
+
+  async function loadRecommendations(): Promise<void> {
     await advanced.loadRecommendations(items.value)
   }
 
   // =============================================
-  // VALIDATION AND UTILITY METHODS
+  // VALIDATION METHODS
   // =============================================
-  
-  const validateCart = async () => {
+
+  async function validateCart(): Promise<boolean> {
     try {
       const result = await validation.validateAllCartItems(items.value)
-      
+
       // Update cart with validated items
       core.state.value.items = result.validItems
-      
+
       // Handle invalid items
       if (result.invalidItems.length > 0) {
         console.warn('Some cart items were invalid and removed:', result.invalidItems)
       }
-      
+
       // Handle changes
       if (result.changes.length > 0) {
         console.info('Cart items were updated:', result.changes)
       }
-      
+
       await saveAndCacheCartData()
       return true
     } catch (error) {
@@ -502,8 +488,8 @@ export const useCartStore = defineStore('cart', () => {
       return false
     }
   }
-  
-  const validateCartWithRetry = async (maxRetries: number = 3) => {
+
+  async function validateCartWithRetry(maxRetries: number = 3): Promise<boolean> {
     for (let i = 0; i < maxRetries; i++) {
       try {
         const success = await validateCart()
@@ -515,28 +501,15 @@ export const useCartStore = defineStore('cart', () => {
     }
     return false
   }
-  
-  const directAddItem = async (product: Product, quantity: number = 1) => {
-    return core.addItem(product, quantity)
-  }
-  
-  const directUpdateQuantity = async (itemId: string, quantity: number) => {
-    return core.updateQuantity(itemId, quantity)
-  }
-  
-  const directRemoveItem = async (itemId: string) => {
-    return core.removeItem(itemId)
-  }
-  
-  const directClearCart = async () => {
-    return core.clearCart()
-  }
-  
-  const directValidateCart = async () => {
-    return validateCart()
-  }
-  
-  const recoverCart = async () => {
+
+  // Direct access methods (bypassing enhancements)
+  const directAddItem = (product: Product, quantity: number = 1) => core.addItem(product, quantity)
+  const directUpdateQuantity = (itemId: string, quantity: number) => core.updateQuantity(itemId, quantity)
+  const directRemoveItem = (itemId: string) => core.removeItem(itemId)
+  const directClearCart = () => core.clearCart()
+  const directValidateCart = () => validateCart()
+
+  async function recoverCart(): Promise<boolean> {
     try {
       const result = await loadFromStorage()
       return result.success
@@ -545,23 +518,23 @@ export const useCartStore = defineStore('cart', () => {
       return false
     }
   }
-  
-  const forceSync = () => {
+
+  function forceSync(): Promise<{ success: boolean; error?: string }> {
     return saveToStorage()
   }
-  
-  const toggleBackgroundValidation = () => {
+
+  function toggleBackgroundValidation(): void {
     if (validation.state.value.backgroundValidationEnabled) {
       validation.stopBackgroundValidation()
     } else {
       validation.startBackgroundValidation()
     }
   }
-  
-  const clearValidationCache = (productId?: string) => {
+
+  function clearValidationCache(productId?: string): void {
     validation.clearValidationCache(productId)
   }
-  
+
   // Performance metrics (mock implementation)
   const performanceMetrics = computed(() => ({
     lastOperationTime: 0,
@@ -570,10 +543,57 @@ export const useCartStore = defineStore('cart', () => {
     syncCount: 0,
     errorCount: 0
   }))
-  
+
   const getPerformanceMetrics = () => performanceMetrics.value
   const resetPerformanceMetrics = () => {
     // Mock implementation
+  }
+
+  // =============================================
+  // AUTO-SAVE FUNCTIONALITY
+  // =============================================
+
+  // Watch for cart changes and automatically save to cookies
+  let stopWatcher: (() => void) | null = null
+
+  if (process.client) {
+    stopWatcher = watch(
+      () => items.value,
+      () => {
+        saveAndCacheCartData()
+      },
+      { deep: true }
+    )
+  }
+
+  // =============================================
+  // LIFECYCLE HOOKS
+  // =============================================
+
+  // Load cart from cookie after Vue reactivity is fully initialized
+  if (process.client) {
+    onMounted(async () => {
+      await nextTick()
+
+      if (cartCookie.value) {
+        try {
+          deserializeCartData(cartCookie.value)
+          console.log(`🛒 Loaded ${items.value.length} items from cookie`)
+        } catch (error) {
+          console.error('Failed to load cart from cookie:', error)
+        }
+      }
+    })
+
+    // Cleanup on unmount
+    onUnmounted(() => {
+      if (stopWatcher) {
+        stopWatcher()
+      }
+      if (saveTimeoutId) {
+        clearTimeout(saveTimeoutId)
+      }
+    })
   }
 
   // =============================================
@@ -624,20 +644,20 @@ export const useCartStore = defineStore('cart', () => {
 
     // Initialization
     initializeCart,
-    createDebouncedSave,
 
     // Utilities
     generateItemId,
     generateSessionId,
-    
+
     // Additional state
     validationInProgress,
     backgroundValidationEnabled,
+    lastBackgroundValidation,
     analyticsSessionStartTime,
     analyticsLastActivity,
     securityEnabled,
     riskLevel,
-    
+
     // Advanced features state
     selectedItems,
     selectedItemsCount,
@@ -649,7 +669,7 @@ export const useCartStore = defineStore('cart', () => {
     savedForLaterCount,
     recommendations,
     recommendationsLoading,
-    
+
     // Advanced features methods
     isItemSelected,
     getSelectedItems,
@@ -661,7 +681,7 @@ export const useCartStore = defineStore('cart', () => {
     removeFromSavedForLater,
     moveToCartFromSavedForLater,
     loadRecommendations,
-    
+
     // Validation and utility methods
     validateCart,
     validateCartWithRetry,
@@ -677,7 +697,7 @@ export const useCartStore = defineStore('cart', () => {
     performanceMetrics,
     getPerformanceMetrics,
     resetPerformanceMetrics,
-    
+
     // Module Access (for advanced usage)
     _modules: {
       core,

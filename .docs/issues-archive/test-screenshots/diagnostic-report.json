@@ -1,0 +1,73 @@
+{
+  "timestamp": "2025-11-21T07:26:04.826Z",
+  "overallStatus": "all_pages_loaded",
+  "pages": [
+    {
+      "pageName": "Dashboard",
+      "url": "http://localhost:3000/auth/login",
+      "title": "Iniciar Sesión",
+      "translationKeys": [],
+      "visibleErrors": [],
+      "loadedSuccessfully": true,
+      "screenshotPath": "/Users/vladislavcaraseli/Documents/MoldovaDirect.worktrees/products-improvments/test-screenshots/current-admin-dashboard.png"
+    },
+    {
+      "pageName": "Users",
+      "url": "http://localhost:3000/auth/login",
+      "title": "Iniciar Sesión",
+      "translationKeys": [],
+      "visibleErrors": [],
+      "loadedSuccessfully": true,
+      "screenshotPath": "/Users/vladislavcaraseli/Documents/MoldovaDirect.worktrees/products-improvments/test-screenshots/current-admin-users.png"
+    },
+    {
+      "pageName": "Products",
+      "url": "http://localhost:3000/auth/login",
+      "title": "Iniciar Sesión",
+      "translationKeys": [],
+      "visibleErrors": [],
+      "loadedSuccessfully": true,
+      "screenshotPath": "/Users/vladislavcaraseli/Documents/MoldovaDirect.worktrees/products-improvments/test-screenshots/current-admin-products.png"
+    },
+    {
+      "pageName": "Orders",
+      "url": "http://localhost:3000/auth/login",
+      "title": "Iniciar Sesión",
+      "translationKeys": [],
+      "visibleErrors": [],
+      "loadedSuccessfully": true,
+      "screenshotPath": "/Users/vladislavcaraseli/Documents/MoldovaDirect.worktrees/products-improvments/test-screenshots/current-admin-orders.png"
+    },
+    {
+      "pageName": "Analytics",
+      "url": "http://localhost:3000/auth/login",
+      "title": "Iniciar Sesión",
+      "translationKeys": [],
+      "visibleErrors": [],
+      "loadedSuccessfully": true,
+      "screenshotPath": "/Users/vladislavcaraseli/Documents/MoldovaDirect.worktrees/products-improvments/test-screenshots/current-admin-analytics.png"
+    }
+  ],
+  "consoleErrors": [
+    "❌ Cart initialization failed in nextTick: ReferenceError: useCartStore is not defined\n    at http://localhost:3000/_nuxt/plugins/cart.client.ts:8:29",
+    "Hydration completed but contains mismatches.",
+    "Failed to load resource: the server responded with a status of 400 ()",
+    "❌ Cart initialization failed in nextTick: ReferenceError: useCartStore is not defined\n    at http://localhost:3000/_nuxt/plugins/cart.client.ts:8:29",
+    "Hydration completed but contains mismatches.",
+    "❌ Cart initialization failed in nextTick: ReferenceError: useCartStore is not defined\n    at http://localhost:3000/_nuxt/plugins/cart.client.ts:8:29",
+    "Hydration completed but contains mismatches.",
+    "❌ Cart initialization failed in nextTick: ReferenceError: useCartStore is not defined\n    at http://localhost:3000/_nuxt/plugins/cart.client.ts:8:29",
+    "Hydration completed but contains mismatches.",
+    "❌ Cart initialization failed in nextTick: ReferenceError: useCartStore is not defined\n    at http://localhost:3000/_nuxt/plugins/cart.client.ts:8:29",
+    "Hydration completed but contains mismatches.",
+    "❌ Cart initialization failed in nextTick: ReferenceError: useCartStore is not defined\n    at http://localhost:3000/_nuxt/plugins/cart.client.ts:8:29",
+    "Hydration completed but contains mismatches."
+  ],
+  "networkErrors": [
+    {
+      "url": "https://khvzbjemydddnryreytu.supabase.co/auth/v1/token?grant_type=password",
+      "status": 400,
+      "statusText": ""
+    }
+  ]
+}

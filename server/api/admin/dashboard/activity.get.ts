@@ -16,9 +16,9 @@
  * - Cache invalidated on user/order/product mutations
  */
 
-import { serverSupabaseClient } from '#supabase/server'
+import { serverSupabaseClient, serverSupabaseUser } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
-import { ADMIN_CACHE_CONFIG } from '~/server/utils/adminCache'
+import { ADMIN_CACHE_CONFIG, getAdminCacheKey } from '~/server/utils/adminCache'
 
 export interface ActivityItem {
   id: string
@@ -29,10 +29,12 @@ export interface ActivityItem {
   metadata?: Record<string, any>
 }
 
-export default defineCachedEventHandler(async (event) => {
+// NOTE: Caching disabled for admin endpoints to ensure proper header-based authentication
+export default defineEventHandler(async (event) => {
   try {
+    // Require admin authentication
     await requireAdminRole(event)
-    // Verify admin access
+
     const supabase = await serverSupabaseClient(event)
 
     const activities: ActivityItem[] = []
@@ -155,14 +157,10 @@ export default defineCachedEventHandler(async (event) => {
     if (error.statusCode) {
       throw error
     }
-    
+
     throw createError({
       statusCode: 500,
       statusMessage: 'Internal server error'
     })
   }
-}, {
-  maxAge: ADMIN_CACHE_CONFIG.dashboardActivity.maxAge,
-  name: ADMIN_CACHE_CONFIG.dashboardActivity.name,
-  getKey: () => ADMIN_CACHE_CONFIG.dashboardActivity.name
 })

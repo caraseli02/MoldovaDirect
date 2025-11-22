@@ -9,7 +9,7 @@
     <LayoutBottomNav />
     <ClientOnly>
       <!-- Sonner toaster (shadcn-vue) -->
-      <UiSonner position="top-right" :rich-colors="true" />
+      <Sonner position="top-right" :rich-colors="true" />
       <!-- PWA Components -->
       <MobilePWAInstallPrompt />
       <MobilePWAUpdatePrompt />
@@ -19,6 +19,8 @@
 </template>
 
 <script setup lang="ts">
+import { Sonner } from '@/components/ui/sonner'
+
 const { registerShortcut, getShortcutDisplay } = useKeyboardShortcuts()
 const localePath = useLocalePath()
 const router = useRouter()

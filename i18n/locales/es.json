@@ -54,7 +54,9 @@
     "selectAll": "Seleccionar todo",
     "deselectAll": "Deseleccionar todo",
     "cartError": "Error en el carrito",
-    "cartValidationError": "Error de validación"
+    "cartValidationError": "Error de validación",
+    "proceedToCheckout": "Proceder al Pago",
+    "showOrderSummary": "Mostrar resumen del pedido"
   },
   "cart": {
     "shippingCalculatedAtCheckout": "Calculado al finalizar",
@@ -230,7 +232,10 @@
     "each": "cada uno",
     "addToCart": "Añadir al carrito",
     "inCart": "En el carrito",
-    "recommendedProducts": "Productos recomendados"
+    "recommendedProducts": "Productos recomendados",
+    "decreaseQuantity": "Disminuir cantidad",
+    "increaseQuantity": "Aumentar cantidad",
+    "removeItem": "Eliminar artículo"
   },
   "auth": {
     "signIn": "Iniciar Sesión",
@@ -1072,7 +1077,8 @@
       "placeholder": "Introduce tu correo electrónico",
       "cta": "Quiero recibir novedades",
       "success": "¡Gracias! Recibirás nuestro próximo boletín en tu bandeja.",
-      "disclaimer": "Enviamos uno o dos correos al mes y puedes darte de baja cuando quieras."
+      "disclaimer": "Enviamos uno o dos correos al mes y puedes darte de baja cuando quieras.",
+      "subscribeButton": "Suscribirse"
     },
     "faqPreview": {
       "title": "¿Dudas antes de pedir?",
@@ -1118,6 +1124,9 @@
     "outOfStock": "Agotado",
     "inCart": "En el Carrito",
     "adding": "Añadiendo...",
+    "quickViewProduct": "Vista Rápida",
+    "addProductToCart": "Añadir al Carrito",
+    "noImageAvailable": "Sin imagen disponible",
     "cartEmpty": "Tu carrito está vacío",
     "cartEmptyDescription": "Comienza a comprar para añadir artículos a tu carrito",
     "itemsInCart": "artículos en el carrito",
@@ -1258,7 +1267,10 @@
     },
     "pagination": {
       "pageOf": "Página {page} de {total}",
-      "showing": "Total de {count} productos"
+      "showing": "Total de {count} productos",
+      "previousPage": "Página anterior",
+      "nextPage": "Página siguiente",
+      "goToPage": "Ir a la página {page}"
     },
     "story": {
       "title": "Experiencia de cata",
@@ -1309,6 +1321,7 @@
     },
     "faq": {
       "title": "Preguntas frecuentes",
+      "subtitle": "Respuestas a las preguntas más comunes sobre nuestros productos",
       "items": {
         "delivery": {
           "question": "¿Cuánto tarda el envío?",
@@ -1675,7 +1688,9 @@
       "analytics": "Analíticas",
       "inventory": "Inventario",
       "testing": "Pruebas",
-      "tools": "Herramientas"
+      "tools": "Herramientas",
+      "toggleSidebar": "Alternar barra lateral",
+      "notifications": "Notificaciones"
     },
     "dashboard": {
       "title": "Panel de Control",
@@ -2332,6 +2347,45 @@
         "title": "Prácticas Sostenibles",
         "description": "Muchos de nuestros productores están haciendo la transición a la agricultura orgánica y biodinámica, asegurando que los viñedos de Moldavia prosperen durante generaciones venideras."
       }
+    }
+  },
+  "admin": {
+    "navigation": {
+      "toggleSidebar": "Alternar menú lateral",
+      "notifications": "Notificaciones",
+      "dashboard": "Panel de Control",
+      "products": "Productos",
+      "inventory": "Inventario",
+      "orders": "Pedidos",
+      "users": "Usuarios",
+      "analytics": "Analíticas",
+      "tools": "Herramientas",
+      "testing": "Pruebas"
+    },
+    "products": {
+      "select": "Seleccionar producto"
+    },
+    "users": {
+      "loading": "Cargando usuarios...",
+      "retry": "Reintentar carga",
+      "columns": {
+        "user": "Usuario",
+        "email": "Email",
+        "status": "Estado",
+        "orders": "Pedidos",
+        "totalSpent": "Total Gastado",
+        "registered": "Registrado",
+        "lastLogin": "Último Acceso",
+        "actions": "Acciones"
+      }
+    }
+  },
+  "account": {
+    "navigation": {
+      "logout": "Cerrar Sesión",
+      "profile": "Mi Perfil",
+      "orders": "Mis Pedidos",
+      "settings": "Configuración"
     }
   }
 }

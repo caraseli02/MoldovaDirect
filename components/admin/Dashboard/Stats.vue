@@ -86,11 +86,12 @@ if (!dashboardStore) {
     formattedRevenue: '€0.00',
     formattedRevenueToday: '€0.00',
     formattedConversionRate: '0%',
-    timeSinceRefresh: 'Never',
-    refresh: () => Promise.resolve(),
-    fetchStats: () => Promise.resolve()
+    timeSinceRefresh: 'Never'
   }
 }
+
+// Emit event to parent to trigger refresh
+const emit = defineEmits(['refresh'])
 
 const stats = computed(() => dashboardStore.stats)
 const isLoading = computed(() => dashboardStore.isLoading)
@@ -185,14 +186,8 @@ const cards = computed<MetricCardViewModel[]>(() => {
 })
 
 const refresh = () => {
-  dashboardStore.refresh()
+  emit('refresh')
 }
-
-onMounted(() => {
-  if (!stats.value) {
-    dashboardStore.fetchStats()
-  }
-})
 
 function formatNumber(value?: number | null) {
   if (!value && value !== 0) {

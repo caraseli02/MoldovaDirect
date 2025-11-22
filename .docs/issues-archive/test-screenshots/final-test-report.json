@@ -1,0 +1,121 @@
+{
+  "timestamp": "2025-11-21T07:42:18.218Z",
+  "success": false,
+  "pages": [
+    {
+      "name": "Dashboard",
+      "path": "/admin",
+      "status": "failed",
+      "checks": [
+        {
+          "check": "Page heading",
+          "result": "passed"
+        },
+        {
+          "check": "Dashboard content",
+          "result": "passed"
+        }
+      ],
+      "errors": [
+        "500 Server Error",
+        "Error message found in page content"
+      ],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 500 (Server Error)"
+      ]
+    },
+    {
+      "name": "Users",
+      "path": "/admin/users",
+      "status": "failed",
+      "checks": [
+        {
+          "check": "Users table",
+          "result": "warning"
+        },
+        {
+          "check": "Users content",
+          "result": "passed"
+        }
+      ],
+      "errors": [
+        "500 Server Error",
+        "Error message found in page content"
+      ],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 500 (Server Error)"
+      ]
+    },
+    {
+      "name": "Products",
+      "path": "/admin/products",
+      "status": "failed",
+      "checks": [
+        {
+          "check": "Products list",
+          "result": "warning"
+        },
+        {
+          "check": "Products content",
+          "result": "passed"
+        }
+      ],
+      "errors": [
+        "500 Server Error",
+        "Error message found in page content"
+      ],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 500 (Server Error)"
+      ]
+    },
+    {
+      "name": "Orders",
+      "path": "/admin/orders",
+      "status": "failed",
+      "checks": [
+        {
+          "check": "Orders list",
+          "result": "warning"
+        },
+        {
+          "check": "Orders content",
+          "result": "passed"
+        }
+      ],
+      "errors": [
+        "500 Server Error",
+        "Error message found in page content"
+      ],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 500 (Server Error)"
+      ]
+    },
+    {
+      "name": "Analytics",
+      "path": "/admin/analytics",
+      "status": "failed",
+      "checks": [
+        {
+          "check": "Analytics charts",
+          "result": "passed"
+        },
+        {
+          "check": "Analytics content",
+          "result": "passed"
+        }
+      ],
+      "errors": [
+        "500 Server Error",
+        "Error message found in page content"
+      ],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 500 (Server Error)"
+      ]
+    }
+  ],
+  "summary": {
+    "total": 5,
+    "passed": 0,
+    "failed": 5
+  }
+}

@@ -74,10 +74,20 @@
                 <commonIcon name="lucide:user" class="h-5 w-5 text-white" />
               </div>
               <div class="hidden md:block">
-                <p class="text-sm font-medium text-gray-900">{{ $t('account.sections.adminUser') }}</p>
+                <p class="text-sm font-medium text-gray-900 dark:text-white">{{ $t('account.sections.adminUser') }}</p>
                 <p class="text-xs text-gray-500">{{ $t('account.sections.administrator') }}</p>
               </div>
             </div>
+
+            <UiButton
+              variant="destructive"
+              size="sm"
+              @click="handleLogout"
+              :aria-label="$t('account.navigation.logout')"
+            >
+              <commonIcon name="lucide:log-out" class="h-4 w-4 mr-2" />
+              <span class="hidden md:inline">Logout</span>
+            </UiButton>
           </div>
         </div>
       </header>
@@ -98,8 +108,13 @@
 <script setup lang="ts">
 const { t } = useI18n()
 const route = useRoute()
+const authStore = useAuthStore()
 
 const sidebarOpen = ref(false)
+
+const handleLogout = async () => {
+  await authStore.logout()
+}
 
 const navItems = [
   { to: '/admin', icon: 'lucide:layout-dashboard', labelKey: 'admin.navigation.dashboard', match: (path: string) => path === '/admin' || path === '/admin/' || path.startsWith('/admin/dashboard') },

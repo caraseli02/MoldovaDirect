@@ -170,97 +170,41 @@ export const useAdminDashboardStore = defineStore('adminDashboard', {
 
   actions: {
     /**
-     * Fetch dashboard statistics
+     * Set dashboard statistics (called by component after fetching)
      */
-    async fetchStats() {
-      this.statsLoading = true
+    setStats(data: DashboardStats) {
+      this.stats = data
+      this.lastRefresh = new Date()
       this.error = null
-      
-      try {
-        const response = await $fetch<{ success: boolean; data: DashboardStats }>('/api/admin/dashboard/stats')
-        
-        if (response.success) {
-          this.stats = response.data
-          this.lastRefresh = new Date()
-        } else {
-          throw new Error('Failed to fetch dashboard statistics')
-        }
-      } catch (error) {
-        this.error = error instanceof Error ? error.message : 'Failed to fetch statistics'
-        console.error('Error fetching dashboard stats:', error)
-      } finally {
-        this.statsLoading = false
-      }
     },
 
     /**
-     * Fetch recent activity
+     * Set recent activity (called by component after fetching)
      */
-    async fetchActivity() {
-      this.activityLoading = true
-      
-      try {
-        const response = await $fetch<{ success: boolean; data: ActivityItem[] }>('/api/admin/dashboard/activity')
-        
-        if (response.success) {
-          this.recentActivity = response.data
-        } else {
-          throw new Error('Failed to fetch recent activity')
-        }
-      } catch (error) {
-        console.error('Error fetching dashboard activity:', error)
-        // Don't set error for activity as it's not critical
-      } finally {
-        this.activityLoading = false
-      }
+    setActivity(data: ActivityItem[]) {
+      this.recentActivity = data
     },
 
     /**
-     * Fetch all dashboard data
+     * Set error state
      */
-    async fetchDashboardData() {
-      this.loading = true
-      this.error = null
-      
-      try {
-        await Promise.all([
-          this.fetchStats(),
-          this.fetchActivity()
-        ])
-      } catch (error) {
-        this.error = error instanceof Error ? error.message : 'Failed to fetch dashboard data'
-      } finally {
-        this.loading = false
-      }
+    setError(error: string) {
+      this.error = error
     },
 
     /**
-     * Refresh dashboard data
+     * Set loading states
      */
-    async refresh() {
-      await this.fetchDashboardData()
+    setLoading(loading: boolean) {
+      this.loading = loading
     },
 
-    /**
-     * Start auto-refresh interval
-     */
-    startAutoRefresh(intervalMinutes: number = 5) {
-      this.stopAutoRefresh() // Clear any existing interval
-      
-      const intervalMs = intervalMinutes * 60 * 1000
-      this.autoRefreshInterval = window.setInterval(() => {
-        this.fetchDashboardData()
-      }, intervalMs)
+    setStatsLoading(loading: boolean) {
+      this.statsLoading = loading
     },
 
-    /**
-     * Stop auto-refresh interval
-     */
-    stopAutoRefresh() {
-      if (this.autoRefreshInterval) {
-        clearInterval(this.autoRefreshInterval)
-        this.autoRefreshInterval = null
-      }
+    setActivityLoading(loading: boolean) {
+      this.activityLoading = loading
     },
 
     /**
@@ -295,26 +239,11 @@ export const useAdminDashboardStore = defineStore('adminDashboard', {
      */
     addActivity(activity: ActivityItem) {
       this.recentActivity.unshift(activity)
-      
+
       // Keep only the 10 most recent activities
       if (this.recentActivity.length > 10) {
         this.recentActivity = this.recentActivity.slice(0, 10)
       }
-    },
-
-    /**
-     * Initialize dashboard (fetch data and start auto-refresh)
-     */
-    async initialize() {
-      await this.fetchDashboardData()
-      this.startAutoRefresh(5) // Refresh every 5 minutes
-    },
-
-    /**
-     * Cleanup (stop auto-refresh)
-     */
-    cleanup() {
-      this.stopAutoRefresh()
     }
   }
 })

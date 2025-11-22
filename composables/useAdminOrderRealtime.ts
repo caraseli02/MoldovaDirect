@@ -26,7 +26,7 @@ interface UseAdminOrderRealtimeOptions {
 
 export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}) => {
   const supabase = useSupabaseClient()
-  const toast = useToastStore()
+  const toast = useToast()
   
   let channel: RealtimeChannel | null = null
   const isSubscribed = ref(false)

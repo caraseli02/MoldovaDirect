@@ -120,16 +120,8 @@ export default defineNuxtConfig({
     '/api/categories/**': { swr: 600, headers: { 'Cache-Control': 'public, max-age=600, stale-while-revalidate=120' } },
     '/api/search': { swr: 180, headers: { 'Cache-Control': 'public, max-age=180, stale-while-revalidate=60' } },
     '/api/landing/sections': { swr: 600, headers: { 'Cache-Control': 'public, max-age=600, stale-while-revalidate=120' } },
-    // Admin API routes - Short SWR caching with private cache control
-    '/api/admin/dashboard/stats': { swr: 60, headers: { 'Cache-Control': 'private, max-age=60, stale-while-revalidate=30' } },
-    '/api/admin/dashboard/activity': { swr: 30, headers: { 'Cache-Control': 'private, max-age=30, stale-while-revalidate=15' } },
-    '/api/admin/analytics/**': { swr: 300, headers: { 'Cache-Control': 'private, max-age=300, stale-while-revalidate=60' } },
-    '/api/admin/products': { swr: 60, headers: { 'Cache-Control': 'private, max-age=60, stale-while-revalidate=30' } },
-    '/api/admin/orders': { swr: 30, headers: { 'Cache-Control': 'private, max-age=30, stale-while-revalidate=15' } },
-    '/api/admin/users': { swr: 60, headers: { 'Cache-Control': 'private, max-age=60, stale-while-revalidate=30' } },
-    '/api/admin/audit-logs': { swr: 120, headers: { 'Cache-Control': 'private, max-age=120, stale-while-revalidate=60' } },
-    '/api/admin/email-logs/**': { swr: 60, headers: { 'Cache-Control': 'private, max-age=60, stale-while-revalidate=30' } },
-    '/api/admin/inventory/**': { swr: 120, headers: { 'Cache-Control': 'private, max-age=120, stale-while-revalidate=60' } },
+    // Admin API routes - NO caching to preserve Authorization headers
+    // SWR/cache layers strip request headers, breaking Bearer token authentication
     // Static assets with immutable cache (hash-based assets never change)
     '/assets/**': {
       headers: {
@@ -207,6 +199,9 @@ export default defineNuxtConfig({
         "/products",
         "/products/*",
         "/cart",
+        "/checkout", // Enable guest checkout - users can complete purchase without account
+        "/checkout/*", // Enable guest checkout for all checkout steps (payment, review, confirmation)
+        "/api/**", // Public API endpoints should not require authentication
         "/en",
         "/ro",
         "/ru",

@@ -18,7 +18,6 @@
  */
 
 import { serverSupabaseClient } from '#supabase/server'
-import { getMockProducts } from '~/server/utils/mockData'
 import { requireAdminRole } from '~/server/utils/adminAuth'
 import { prepareSearchPattern, MAX_SEARCH_LENGTH } from '~/server/utils/searchSanitization'
 import { ADMIN_CACHE_CONFIG, getAdminCacheKey } from '~/server/utils/adminCache'
@@ -36,35 +35,37 @@ interface AdminProductFilters {
   limit?: number
 }
 
-export default defineCachedEventHandler(async (event) => {
+// NOTE: Caching disabled for admin endpoints to ensure proper header-based authentication
+export default defineEventHandler(async (event) => {
+  // Authentication MUST happen first, never caught
   await requireAdminRole(event)
 
   const query = getQuery(event) as AdminProductFilters
 
+  // Parse query parameters with defaults
+  const {
+    search,
+    categoryId,
+    active,
+    inStock,
+    outOfStock,
+    lowStock,
+    sortBy = 'created_at',
+    sortOrder = 'desc',
+    page = 1,
+    limit = 20
+  } = query
+
+  // Validate search term length if provided
+  if (search && search.length > MAX_SEARCH_LENGTH) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: `Search term too long. Maximum ${MAX_SEARCH_LENGTH} characters allowed.`
+    })
+  }
+
   try {
     const supabase = await serverSupabaseClient(event)
-
-    // Parse query parameters with defaults
-    const {
-      search,
-      categoryId,
-      active,
-      inStock,
-      outOfStock,
-      lowStock,
-      sortBy = 'created_at',
-      sortOrder = 'desc',
-      page = 1,
-      limit = 20
-    } = query
-
-    // Validate search term length if provided
-    if (search && search.length > MAX_SEARCH_LENGTH) {
-      throw createError({
-        statusCode: 400,
-        statusMessage: `Search term too long. Maximum ${MAX_SEARCH_LENGTH} characters allowed.`
-      })
-    }
 
     // Build the base query with admin-specific fields
     let queryBuilder = supabase
@@ -179,7 +180,23 @@ export default defineCachedEventHandler(async (event) => {
       )
     }
 
-    const { count } = await countQueryBuilder
+    const { count, error: countError } = await countQueryBuilder
+
+    if (countError) {
+      console.error('[Admin Products] Count query failed:', {
+        error: countError.message,
+        code: countError.code,
+        timestamp: new Date().toISOString(),
+        errorId: 'ADMIN_PRODUCTS_COUNT_FAILED'
+      })
+
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Failed to count products',
+        data: { canRetry: true }
+      })
+    }
+
     const totalCount = count || 0
 
     // Apply pagination
@@ -189,10 +206,17 @@ export default defineCachedEventHandler(async (event) => {
     const { data: products, error } = await queryBuilder
 
     if (error) {
+      console.error('[Admin Products] Query failed:', {
+        error: error.message,
+        code: error.code,
+        timestamp: new Date().toISOString(),
+        errorId: 'ADMIN_PRODUCTS_FETCH_FAILED'
+      })
+
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to fetch products',
-        data: error
+        data: { canRetry: true }
       })
     }
 
@@ -208,7 +232,7 @@ export default defineCachedEventHandler(async (event) => {
       stockQuantity: product.stock_quantity,
       lowStockThreshold: product.low_stock_threshold || 5,
       reorderPoint: product.reorder_point || 10,
-      stockStatus: product.stock_quantity > (product.low_stock_threshold || 5) ? 'high' : 
+      stockStatus: product.stock_quantity > (product.low_stock_threshold || 5) ? 'high' :
                    product.stock_quantity > 0 ? 'low' : 'out',
       images: Array.isArray(product.images) ? product.images.map((img: any, index: number) => ({
         url: img.url || img,
@@ -261,41 +285,25 @@ export default defineCachedEventHandler(async (event) => {
       }
     }
 
-  } catch (error) {
-    console.error('Admin Products API error, falling back to mock data:', error)
-    
-    // Parse query parameters with defaults for mock data
-    const {
-      search,
-      categoryId,
-      active,
-      inStock,
-      outOfStock,
-      lowStock,
-      sortBy = 'created_at',
-      sortOrder = 'desc',
-      page = 1,
-      limit = 20
-    } = query
-    
-    // Use mock data as fallback
-    const mockResult = getMockProducts({
-      page: Number(page),
-      limit: Number(limit),
-      search,
-      categoryId: categoryId ? Number(categoryId) : undefined,
-      active,
-      inStock,
-      outOfStock,
-      lowStock,
-      sortBy,
-      sortOrder
+  } catch (error: any) {
+    // Re-throw HTTP errors (including auth errors)
+    if (error.statusCode) {
+      throw error
+    }
+
+    // Log unexpected errors
+    console.error('[Admin Products] Unexpected error:', {
+      error: error.message || String(error),
+      stack: error.stack,
+      timestamp: new Date().toISOString(),
+      errorId: 'ADMIN_PRODUCTS_UNEXPECTED_ERROR'
     })
 
-    return mockResult
+    // Throw generic 500 error for unexpected failures
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'An unexpected error occurred while fetching products',
+      data: { canRetry: true }
+    })
   }
-}, {
-  maxAge: ADMIN_CACHE_CONFIG.productsList.maxAge,
-  name: ADMIN_CACHE_CONFIG.productsList.name,
-  getKey: (event) => getAdminCacheKey(ADMIN_CACHE_CONFIG.productsList.name, event)
 })

@@ -231,15 +231,16 @@ describe('AppHeader', () => {
   })
 
   describe('Accessibility', () => {
-    it('has proper aria-labels on action links', () => {
+    it('has proper aria-labels on icon buttons', () => {
       const wrapper = mount(AppHeader, {
         global: createGlobalConfig(),
       })
 
-      // Check that user menu has proper accessibility
-      const accountLink = wrapper.find('[data-testid="user-menu"]')
-      expect(accountLink.exists()).toBe(true)
-      expect(accountLink.attributes('aria-label')).toBeDefined()
+      // Check that search button has aria-label
+      const searchButtons = wrapper.findAll('button').filter(btn =>
+        btn.attributes('aria-label')?.includes('common.search')
+      )
+      expect(searchButtons.length).toBeGreaterThan(0)
     })
   })
 })
