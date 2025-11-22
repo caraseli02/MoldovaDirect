@@ -1,24 +1,29 @@
-export default defineNuxtPlugin(() => {
-  // CRITICAL: Ensure cart store is initialized immediately on client
-  // This fixes the Vercel hydration issue where addItem is undefined
+import { nextTick } from 'vue'
+import { useCartStore } from '~/stores/cart'
+
+export default defineNuxtPlugin((nuxtApp) => {
+  // Only initialize cart on client-side and for non-admin pages
   if (import.meta.client) {
-    try {
-      // Wait for next tick to ensure Pinia is fully hydrated
-      nextTick(() => {
-        try {
-          const cartStore = useCartStore()
-          if (!cartStore.sessionId) {
-            console.log('🛒 Initializing cart store from plugin')
-            cartStore.initializeCart()
-          } else {
-            console.log('🛒 Cart store already initialized, sessionId:', cartStore.sessionId)
-          }
-        } catch (error) {
-          console.error('❌ Cart initialization failed in nextTick:', error)
-        }
-      })
-    } catch (error) {
-      console.error('❌ Cart plugin initialization failed:', error)
+    const route = useRoute()
+
+    // Skip cart initialization for admin pages
+    if (route.path.startsWith('/admin')) {
+      return
     }
+
+    // Defer initialization to allow Pinia to be ready
+    nextTick(() => {
+      try {
+        const cartStore = useCartStore()
+        if (!cartStore.sessionId) {
+          console.log('🛒 Initializing cart store from plugin')
+          cartStore.initializeCart()
+        } else {
+          console.log('🛒 Cart store already initialized, sessionId:', cartStore.sessionId)
+        }
+      } catch (error) {
+        console.warn('Cart initialization deferred:', error)
+      }
+    })
   }
 })

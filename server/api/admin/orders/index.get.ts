@@ -6,37 +6,40 @@
 import { serverSupabaseServiceRole } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
 import { ADMIN_CACHE_CONFIG, getAdminCacheKey } from '~/server/utils/adminCache'
+import { prepareSearchPattern } from '~/server/utils/searchSanitization'
 
-export default defineCachedEventHandler(async (event) => {
+// NOTE: Caching disabled for admin endpoints to ensure proper header-based authentication
+export default defineEventHandler(async (event) => {
+  // Authentication MUST happen first, never caught
+  await requireAdminRole(event)
+
+  // Use service role for database operations
+  const supabase = serverSupabaseServiceRole(event)
+
+  // Parse query parameters
+  const query = getQuery(event)
+  const page = parseInt(query.page as string) || 1
+  const limit = Math.min(parseInt(query.limit as string) || 20, 100)
+  const status = query.status as string
+  const paymentStatus = query.payment_status as string
+  const search = query.search as string
+  const dateFrom = query.date_from as string
+  const dateTo = query.date_to as string
+  const amountMin = query.amount_min ? parseFloat(query.amount_min as string) : undefined
+  const amountMax = query.amount_max ? parseFloat(query.amount_max as string) : undefined
+  const priority = query.priority ? parseInt(query.priority as string) : undefined
+  const shippingMethod = query.shipping_method as string
+  const sortBy = (query.sort_by as string) || 'created_at'
+  const sortOrder = (query.sort_order as string) || 'desc'
+  const offset = (page - 1) * limit
+
+  // Validate sort parameters
+  const validSortFields = ['created_at', 'total_eur', 'status', 'priority_level']
+  const validSortOrders = ['asc', 'desc']
+  const finalSortBy = validSortFields.includes(sortBy) ? sortBy : 'created_at'
+  const finalSortOrder = validSortOrders.includes(sortOrder) ? sortOrder : 'desc'
+
   try {
-    // Verify admin authentication
-    await requireAdminRole(event)
-    
-    // Use service role for database operations
-    const supabase = serverSupabaseServiceRole(event)
-
-    // Parse query parameters
-    const query = getQuery(event)
-    const page = parseInt(query.page as string) || 1
-    const limit = Math.min(parseInt(query.limit as string) || 20, 100)
-    const status = query.status as string
-    const paymentStatus = query.payment_status as string
-    const search = query.search as string
-    const dateFrom = query.date_from as string
-    const dateTo = query.date_to as string
-    const amountMin = query.amount_min ? parseFloat(query.amount_min as string) : undefined
-    const amountMax = query.amount_max ? parseFloat(query.amount_max as string) : undefined
-    const priority = query.priority ? parseInt(query.priority as string) : undefined
-    const shippingMethod = query.shipping_method as string
-    const sortBy = (query.sort_by as string) || 'created_at'
-    const sortOrder = (query.sort_order as string) || 'desc'
-    const offset = (page - 1) * limit
-
-    // Validate sort parameters
-    const validSortFields = ['created_at', 'total_eur', 'status', 'priority_level']
-    const validSortOrders = ['asc', 'desc']
-    const finalSortBy = validSortFields.includes(sortBy) ? sortBy : 'created_at'
-    const finalSortOrder = validSortOrders.includes(sortOrder) ? sortOrder : 'desc'
 
     // Build query - simplified without profiles join since orders are guest orders
     let ordersQuery = supabase
@@ -86,8 +89,9 @@ export default defineCachedEventHandler(async (event) => {
     }
 
     if (search) {
-      // Search: order number and guest email
-      ordersQuery = ordersQuery.or(`order_number.ilike.%${search}%,guest_email.ilike.%${search}%`)
+      // Search: order number and guest email (sanitized to prevent SQL injection)
+      const sanitizedSearch = prepareSearchPattern(search, { validateLength: true })
+      ordersQuery = ordersQuery.or(`order_number.ilike.${sanitizedSearch},guest_email.ilike.${sanitizedSearch}`)
     }
 
     if (dateFrom) {
@@ -117,15 +121,19 @@ export default defineCachedEventHandler(async (event) => {
     const { data: orders, error: ordersError } = await ordersQuery
 
     if (ordersError) {
-      console.error('Orders query error:', ordersError)
+      console.error('[Admin Orders] Query failed:', {
+        error: ordersError.message,
+        code: ordersError.code,
+        timestamp: new Date().toISOString(),
+        errorId: 'ADMIN_ORDERS_FETCH_FAILED'
+      })
+
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to fetch orders',
-        data: ordersError
+        data: { canRetry: true }
       })
     }
-
-    console.log('Orders fetched:', orders?.length || 0)
 
     // Get total count for pagination
     let countQuery = supabase
@@ -140,7 +148,9 @@ export default defineCachedEventHandler(async (event) => {
       countQuery = countQuery.eq('payment_status', paymentStatus)
     }
     if (search) {
-      countQuery = countQuery.or(`order_number.ilike.%${search}%,guest_email.ilike.%${search}%`)
+      // Apply same sanitization as main query to prevent SQL injection
+      const sanitizedSearch = prepareSearchPattern(search, { validateLength: true })
+      countQuery = countQuery.or(`order_number.ilike.${sanitizedSearch},guest_email.ilike.${sanitizedSearch}`)
     }
     if (dateFrom) {
       countQuery = countQuery.gte('created_at', dateFrom)
@@ -164,16 +174,39 @@ export default defineCachedEventHandler(async (event) => {
     const { count, error: countError } = await countQuery
 
     if (countError) {
+      console.error('[Admin Orders] Count query failed:', {
+        error: countError.message,
+        code: countError.code,
+        timestamp: new Date().toISOString(),
+        errorId: 'ADMIN_ORDERS_COUNT_FAILED'
+      })
+
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to get orders count'
+        statusMessage: 'Failed to count orders',
+        data: { canRetry: true }
       })
     }
 
     // Calculate aggregates
-    const { data: aggregateData } = await supabase
+    const { data: aggregateData, error: aggregateError } = await supabase
       .from('orders')
       .select('total_eur, status')
+
+    if (aggregateError) {
+      console.error('[Admin Orders] Aggregate query failed:', {
+        error: aggregateError.message,
+        code: aggregateError.code,
+        timestamp: new Date().toISOString(),
+        errorId: 'ADMIN_ORDERS_AGGREGATE_FAILED'
+      })
+
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Failed to calculate order statistics',
+        data: { canRetry: true }
+      })
+    }
 
     const totalRevenue = aggregateData?.reduce((sum, order) => sum + Number(order.total_eur), 0) || 0
     const averageOrderValue = aggregateData && aggregateData.length > 0 
@@ -222,18 +255,24 @@ export default defineCachedEventHandler(async (event) => {
       }
     }
   } catch (error: any) {
+    // Re-throw HTTP errors (including auth errors)
     if (error.statusCode) {
       throw error
     }
 
-    console.error('Admin orders fetch error:', error)
+    // Log unexpected errors
+    console.error('[Admin Orders] Unexpected error:', {
+      error: error.message || String(error),
+      stack: error.stack,
+      timestamp: new Date().toISOString(),
+      errorId: 'ADMIN_ORDERS_UNEXPECTED_ERROR'
+    })
+
+    // Throw generic 500 error for unexpected failures
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'An unexpected error occurred while fetching orders',
+      data: { canRetry: true }
     })
   }
-}, {
-  maxAge: ADMIN_CACHE_CONFIG.ordersList.maxAge,
-  name: ADMIN_CACHE_CONFIG.ordersList.name,
-  getKey: (event) => getAdminCacheKey(ADMIN_CACHE_CONFIG.ordersList.name, event)
 })

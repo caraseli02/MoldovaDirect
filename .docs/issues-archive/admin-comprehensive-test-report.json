@@ -1,0 +1,41 @@
+{
+  "timestamp": "2025-11-21T07:13:55.218Z",
+  "authentication": {
+    "success": false,
+    "finalUrl": "http://localhost:3000/auth/login",
+    "hasCookies": true,
+    "cookieCount": 1,
+    "consoleErrors": [
+      {
+        "type": "error",
+        "text": "❌ Cart initialization failed in nextTick: ReferenceError: useCartStore is not defined\n    at http://localhost:3000/_nuxt/plugins/cart.client.ts:8:29",
+        "timestamp": "2025-11-21T07:13:55.983Z"
+      },
+      {
+        "type": "error",
+        "text": "Hydration completed but contains mismatches.",
+        "timestamp": "2025-11-21T07:13:56.033Z"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 400 ()",
+        "timestamp": "2025-11-21T07:13:57.976Z"
+      }
+    ],
+    "networkErrors": [
+      {
+        "url": "https://khvzbjemydddnryreytu.supabase.co/auth/v1/token?grant_type=password",
+        "status": 400,
+        "statusText": "",
+        "timestamp": "2025-11-21T07:13:57.976Z"
+      }
+    ]
+  },
+  "pages": [],
+  "summary": {
+    "total": 5,
+    "passed": 0,
+    "failed": 5,
+    "warnings": 0
+  }
+}

@@ -4,6 +4,7 @@ import { useCheckoutSessionStore } from './checkout/session'
 import { useCheckoutShippingStore } from './checkout/shipping'
 import { useCheckoutPaymentStore } from './checkout/payment'
 import { useAuthStore } from '~/stores/auth'
+import { useCartStore } from '~/stores/cart'
 import type { CheckoutStep, ShippingInformation, PaymentMethod, SavedPaymentMethod, Address, GuestInfo } from '~/types/checkout'
 import type { CartItem } from '~/stores/cart/types'
 import { validateShippingInformation, validatePaymentMethod } from '~/utils/checkout-validation'
@@ -14,6 +15,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
   const shipping = useCheckoutShippingStore()
   const payment = useCheckoutPaymentStore()
   const authStore = useAuthStore()
+  const cartStore = useCartStore()
 
   const sessionRefs = storeToRefs(session)
 

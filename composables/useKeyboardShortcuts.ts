@@ -154,7 +154,9 @@ export function useKeyboardShortcuts() {
    * Get the display name for a shortcut (e.g., "Ctrl+K" or "⌘K")
    */
   const getShortcutDisplay = (key: string, options: KeyboardShortcutOptions = {}): string => {
-    const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad|iPod/.test(navigator.platform)
+    // Only detect platform on client side to avoid hydration mismatch
+    // During SSR, default to non-Mac display
+    const isMac = import.meta.client && typeof navigator !== 'undefined' && /Mac|iPhone|iPad|iPod/.test(navigator.platform)
     const parts: string[] = []
 
     if (options.ctrlOrCmd) {

@@ -32,7 +32,7 @@
       <div v-if="sortedNotes.length > 0" class="space-y-4">
         <!-- Filter Tabs -->
         <div class="flex items-center space-x-2 border-b border-gray-200 dark:border-gray-700">
-          <UiButton
+          <Button
             @click="filterType = 'all'"
             variant="ghost"
             size="sm"
@@ -44,8 +44,8 @@
             ]"
           >
             All ({{ notes.length }})
-          </UiButton>
-          <UiButton
+          </Button>
+          <Button
             @click="filterType = 'internal'"
             variant="ghost"
             size="sm"
@@ -57,8 +57,8 @@
             ]"
           >
             Internal ({{ internalNotesCount }})
-          </UiButton>
-          <UiButton
+          </Button>
+          <Button
             @click="filterType = 'customer'"
             variant="ghost"
             size="sm"
@@ -70,7 +70,7 @@
             ]"
           >
             Customer ({{ customerNotesCount }})
-          </UiButton>
+          </Button>
         </div>
 
         <!-- Notes -->

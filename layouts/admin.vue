@@ -154,7 +154,7 @@
 const { t } = useI18n()
 const route = useRoute()
 const localePath = useLocalePath()
-const supabase = useSupabaseClient()
+const authStore = useAuthStore()
 
 const sidebarOpen = ref(false)
 const userMenuOpen = ref(false)
@@ -200,10 +200,7 @@ const closeUserMenu = () => {
 const handleLogout = async () => {
   try {
     closeUserMenu()
-    const { error } = await supabase.auth.signOut()
-    if (error) throw error
-
-    await navigateTo(localePath('/'))
+    await authStore.logout()
   } catch (error) {
     console.error('Logout error:', error)
   }

@@ -22,12 +22,20 @@ export default defineConfig({
       'server/api/admin/__tests__/**/*.test.ts',
       'server/api/admin/orders/__tests__/**/*.test.ts',
       'server/api/admin/products/__tests__/**/*.test.ts',
+      'tests/integration/admin/**/*.test.ts',
     ],
     testTimeout: 30000, // Integration tests may take longer
     hookTimeout: 30000,
     server: {
       deps: {
-        inline: ['@supabase/supabase-js'],
+        inline: [
+          '@supabase/supabase-js',
+          '@supabase/auth-js',
+          '@supabase/realtime-js',
+          '@supabase/postgrest-js',
+          '@supabase/storage-js',
+          '@supabase/functions-js',
+        ],
       },
     },
   },
