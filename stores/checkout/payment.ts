@@ -318,11 +318,14 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
       }
 
       // Prepare customer information
-      const guestEmail = guestInfo.value?.email?.trim() || null
+      // NOTE: Email hardcoded for development/testing with Resend
+      // Resend requires verified email addresses in test mode
+      // TODO: Use actual customer email in production (check NUXT_PUBLIC_APP_ENV)
+      const guestEmail = 'caraseli02@gmail.com'
       const firstName = shippingInfo.value.address.firstName || ''
       const lastName = shippingInfo.value.address.lastName || ''
       const customerName = `${firstName} ${lastName}`.trim() || 'Customer'
-      const resolvedEmail = guestEmail || contactEmail.value || null
+      const resolvedEmail = guestEmail
 
       session.setContactEmail(resolvedEmail)
 
