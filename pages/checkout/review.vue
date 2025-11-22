@@ -216,9 +216,7 @@ const handlePlaceOrder = async () => {
     return
   }
 
-  // Wait for state to be fully persisted before navigation
-  await new Promise(resolve => setTimeout(resolve, 100))
-
+  // Navigate immediately - orderData is now persisted atomically
   const stepPath = nextStep === 'shipping' ? '/checkout' : `/checkout/${nextStep}`
   await navigateTo(localePath(stepPath))
 }

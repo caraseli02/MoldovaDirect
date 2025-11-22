@@ -103,10 +103,10 @@ export const useCheckoutStore = defineStore('checkout', () => {
     return true
   }
 
-  const goToStep = (step: CheckoutStep): void => {
+  const goToStep = async (step: CheckoutStep): Promise<void> => {
     if (!validateCurrentStep()) return
     session.setCurrentStep(step)
-    session.persist({
+    await session.persist({
       shippingInfo: sessionRefs.shippingInfo.value,
       paymentMethod: sessionRefs.paymentMethod.value
     })
@@ -190,7 +190,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
       await payment.loadSavedPaymentMethods()
 
       session.setLastSyncAt(new Date())
-      session.persist({
+      await session.persist({
         shippingInfo: sessionRefs.shippingInfo.value,
         paymentMethod: sessionRefs.paymentMethod.value
       })
@@ -206,16 +206,16 @@ export const useCheckoutStore = defineStore('checkout', () => {
     }
   }
 
-  const updateGuestInfo = (info: GuestInfo): void => {
+  const updateGuestInfo = async (info: GuestInfo): Promise<void> => {
     session.setGuestInfo(info)
-    session.persist({
+    await session.persist({
       shippingInfo: sessionRefs.shippingInfo.value,
       paymentMethod: sessionRefs.paymentMethod.value
     })
   }
 
-  const saveToStorage = (): void => {
-    session.persist({
+  const saveToStorage = async (): Promise<void> => {
+    await session.persist({
       shippingInfo: sessionRefs.shippingInfo.value,
       paymentMethod: sessionRefs.paymentMethod.value
     })

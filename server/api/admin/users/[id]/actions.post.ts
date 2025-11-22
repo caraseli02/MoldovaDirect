@@ -22,7 +22,8 @@ interface UserActionRequest {
 
 export default defineEventHandler(async (event) => {
   try {
-    await requireAdminRole(event)
+    // Capture admin user ID for audit logging
+    const adminId = await requireAdminRole(event)
     const userId = getRouterParam(event, 'id')
     const body = await readBody(event) as UserActionRequest
 
@@ -86,7 +87,7 @@ export default defineEventHandler(async (event) => {
             suspend_reason: body.reason || 'No reason provided',
             suspended_at: new Date().toISOString(),
             suspend_until: suspendUntil,
-            suspended_by: 'admin' // TODO: Get actual admin user ID
+            suspended_by: adminId
           }
         })
 
@@ -115,7 +116,7 @@ export default defineEventHandler(async (event) => {
             suspended_at: null,
             suspend_until: null,
             unsuspended_at: new Date().toISOString(),
-            unsuspended_by: 'admin' // TODO: Get actual admin user ID
+            unsuspended_by: adminId
           }
         })
 
@@ -140,7 +141,7 @@ export default defineEventHandler(async (event) => {
             banned: true,
             ban_reason: body.reason || 'No reason provided',
             banned_at: new Date().toISOString(),
-            banned_by: 'admin' // TODO: Get actual admin user ID
+            banned_by: adminId
           }
         })
 
@@ -165,7 +166,7 @@ export default defineEventHandler(async (event) => {
             ban_reason: null,
             banned_at: null,
             unbanned_at: new Date().toISOString(),
-            unbanned_by: 'admin' // TODO: Get actual admin user ID
+            unbanned_by: adminId
           }
         })
 
@@ -227,7 +228,7 @@ export default defineEventHandler(async (event) => {
             ...currentUser.user.user_metadata,
             role: body.role,
             role_updated_at: new Date().toISOString(),
-            role_updated_by: 'admin' // TODO: Get actual admin user ID
+            role_updated_by: adminId
           }
         })
 
