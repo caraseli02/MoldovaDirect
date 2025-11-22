@@ -65,11 +65,22 @@ global.useNuxtApp = vi.fn(() => ({
   }
 }))
 
-// Mock useCookie for testing
+// Mock useCookie for testing with shared storage
+// This ensures all calls to useCookie with the same name get the same ref
+// Export this so tests can access and manipulate cookie data
+export const cookieStorage = new Map<string, any>()
+
 global.useCookie = vi.fn((name: string, options?: any) => {
-  let value: any = null
   return {
-    get value() { return value },
-    set value(val: any) { value = val }
+    get value() {
+      return cookieStorage.get(name)
+    },
+    set value(val: any) {
+      if (val === null || val === undefined) {
+        cookieStorage.delete(name)
+      } else {
+        cookieStorage.set(name, val)
+      }
+    }
   }
 })
