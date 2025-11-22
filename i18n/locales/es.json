@@ -1700,6 +1700,10 @@
       "toggleSidebar": "Alternar barra lateral",
       "notifications": "Notificaciones"
     },
+    "errors": {
+      "logoutFailed": "Error al cerrar sesión",
+      "unknownError": "Ocurrió un error desconocido"
+    },
     "dashboard": {
       "title": "Panel de Control",
       "welcome": "¡Bienvenido de vuelta! Aquí tienes lo que está pasando en tu tienda.",

@@ -451,6 +451,21 @@
     }
   },
   "account": {
+    "dashboard": "Панель управления",
+    "orders": "Заказы",
+    "profile": "Профиль",
+    "addresses": "Адреса",
+    "settings": "Настройки",
+    "welcomeBack": "С возвращением",
+    "totalOrders": "Всего заказов",
+    "wishlistItems": "Товары в избранном",
+    "recentOrders": "Последние заказы",
+    "noOrdersYet": "У вас еще нет заказов",
+    "sections": {
+      "admin": "Администратор",
+      "adminUser": "Пользователь-администратор",
+      "administrator": "Администратор"
+    },
     "navigation": {
       "logout": "Выйти",
       "profile": "Мой профиль",
@@ -1591,6 +1606,10 @@
       "analytics": "Аналитика",
       "tools": "Инструменты",
       "testing": "Тестирование"
+    },
+    "errors": {
+      "logoutFailed": "Не удалось выйти",
+      "unknownError": "Произошла неизвестная ошибка"
     },
     "products": {
       "select": "Выбрать товар"

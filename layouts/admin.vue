@@ -155,6 +155,7 @@ const { t } = useI18n()
 const route = useRoute()
 const localePath = useLocalePath()
 const authStore = useAuthStore()
+const toast = useToast()
 
 const sidebarOpen = ref(false)
 const userMenuOpen = ref(false)
@@ -195,8 +196,22 @@ function isActiveRoute(item: { match: (path: string) => boolean }): boolean {
 }
 
 async function handleLogout(): Promise<void> {
-  closeAllMenus()
-  await authStore.logout()
+  try {
+    closeAllMenus()
+    await authStore.logout()
+  } catch (error) {
+    console.error('[Admin] Logout failed:', error)
+
+    // Re-open menu so user can try again
+    userMenuOpen.value = true
+
+    // Show error toast
+    toast.toast({
+      title: t('admin.errors.logoutFailed'),
+      description: error instanceof Error ? error.message : t('admin.errors.unknownError'),
+      variant: 'destructive'
+    })
+  }
 }
 
 // Close menu when clicking outside

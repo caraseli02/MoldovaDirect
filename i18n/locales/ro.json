@@ -275,6 +275,21 @@
     }
   },
   "account": {
+    "dashboard": "Panou de Control",
+    "orders": "Comenzi",
+    "profile": "Profil",
+    "addresses": "Adrese",
+    "settings": "Setări",
+    "welcomeBack": "Bine ai revenit",
+    "totalOrders": "Total Comenzi",
+    "wishlistItems": "Articole din Lista de Dorințe",
+    "recentOrders": "Comenzi Recente",
+    "noOrdersYet": "Nu ai încă comenzi",
+    "sections": {
+      "admin": "Administrator",
+      "adminUser": "Utilizator Administrator",
+      "administrator": "Administrator"
+    },
     "navigation": {
       "logout": "Deconectare",
       "profile": "Profilul Meu",
@@ -1591,6 +1606,10 @@
       "analytics": "Analize",
       "tools": "Instrumente",
       "testing": "Testare"
+    },
+    "errors": {
+      "logoutFailed": "Deconectarea a eșuat",
+      "unknownError": "A apărut o eroare necunoscută"
     },
     "products": {
       "select": "Selectează produs"

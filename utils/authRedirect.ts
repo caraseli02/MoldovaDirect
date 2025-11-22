@@ -12,18 +12,22 @@ export async function getUserRoleRedirectPath(
 ): Promise<string | null> {
   if (!user) return null
 
-  try {
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', user.id)
-      .single<{ role: string | null }>()
+  const { data: profile, error: roleError } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single<{ role: string | null }>()
 
-    if (profile?.role === 'admin') {
-      return localePath('/admin')
-    }
-  } catch (error) {
-    console.error('Error checking user role:', error)
+  if (roleError) {
+    console.error('[Auth] Failed to check user role:', roleError.message, {
+      code: roleError.code,
+      userId: user.id
+    })
+    return null
+  }
+
+  if (profile?.role === 'admin') {
+    return localePath('/admin')
   }
 
   return null
