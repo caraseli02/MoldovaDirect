@@ -70,12 +70,19 @@ global.useNuxtApp = vi.fn(() => ({
 // Export this so tests can access and manipulate cookie data
 export const cookieStorage = new Map<string, any>()
 
+// Track cookie saves for testing
+let _cookieSaveCount = 0
+
+export const getCookieSaveCount = () => _cookieSaveCount
+export const resetCookieSaveCount = () => { _cookieSaveCount = 0 }
+
 global.useCookie = vi.fn((name: string, options?: any) => {
   return {
     get value() {
       return cookieStorage.get(name)
     },
     set value(val: any) {
+      _cookieSaveCount++
       if (val === null || val === undefined) {
         cookieStorage.delete(name)
       } else {
