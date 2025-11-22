@@ -114,61 +114,38 @@ const code = ref('')
 const error = ref('')
 
 // Handle input to only allow numbers and limit to 6 digits
-const handleInput = (event: Event) => {
+function handleInput(event: Event): void {
   const target = event.target as HTMLInputElement
-  const value = target.value.replace(/[^0-9]/g, '').slice(0, 6)
-  code.value = value
+  code.value = target.value.replace(/[^0-9]/g, '').slice(0, 6)
   error.value = ''
 }
 
-const handleVerify = async () => {
+async function handleVerify(): Promise<void> {
+  error.value = ''
+
+  // Validate code format
+  const validation = validateMFACode(code.value)
+  if (!validation.isValid) {
+    error.value = validation.errors[0].message
+    return
+  }
+
   try {
-    error.value = ''
-
-    // Validate code format
-    const validation = validateMFACode(code.value)
-    if (!validation.isValid) {
-      error.value = validation.errors[0].message
-      return
-    }
-
     // Verify MFA code
     await authStore.verifyMFA(code.value)
 
-    // Redirect to original destination or role-appropriate page
+    // Handle redirect with role-based logic
+    const { handleAuthRedirect } = await import('~/utils/authRedirect')
     const redirect = route.query.redirect as string
-    if (redirect && redirect.startsWith('/')) {
-      await navigateTo(redirect)
-      return
-    }
+    const user = useSupabaseUser()
 
-    // Check if user has admin role and redirect accordingly
-    try {
-      const user = useSupabaseUser()
-      if (user.value) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('role')
-          .eq('id', user.value.id)
-          .single<{ role: string | null }>()
-
-        if (profile?.role === 'admin') {
-          await navigateTo(localePath('/admin'))
-          return
-        }
-      }
-    } catch (err) {
-      console.error('Error checking user role:', err)
-    }
-
-    await navigateTo(localePath('/account'))
+    await handleAuthRedirect(redirect, user.value, supabase, localePath, navigateTo)
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Verification failed'
   }
 }
 
-const handleCancel = async () => {
-  // Clear the challenge and logout
+async function handleCancel(): Promise<void> {
   authStore.mfaChallenge = null
   await authStore.logout()
 }

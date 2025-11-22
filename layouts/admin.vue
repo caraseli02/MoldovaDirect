@@ -108,7 +108,7 @@
                     <NuxtLink
                       :to="localePath('/account')"
                       class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
-                      @click="closeUserMenu"
+                      @click="userMenuOpen = false"
                     >
                       <commonIcon name="lucide:user" class="h-4 w-4" />
                       <span>{{ $t('common.account') }}</span>
@@ -116,7 +116,7 @@
                     <NuxtLink
                       :to="localePath('/account/profile')"
                       class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
-                      @click="closeUserMenu"
+                      @click="userMenuOpen = false"
                     >
                       <commonIcon name="lucide:settings" class="h-4 w-4" />
                       <span>{{ $t('account.profile') }}</span>
@@ -144,7 +144,7 @@
 
     <div
       v-if="sidebarOpen"
-      @click="closeSidebar"
+      @click="sidebarOpen = false"
       class="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
     ></div>
   </div>
@@ -177,50 +177,37 @@ const currentPageName = computed(() => {
   return active ? t(active.labelKey) : null
 })
 
-const toggleSidebar = () => {
+function toggleSidebar(): void {
   sidebarOpen.value = !sidebarOpen.value
 }
 
-const closeSidebar = () => {
-  sidebarOpen.value = false
-}
-
-const isActiveRoute = (item: { match: (path: string) => boolean }) => {
-  return item.match(route.path)
-}
-
-const toggleUserMenu = () => {
+function toggleUserMenu(): void {
   userMenuOpen.value = !userMenuOpen.value
 }
 
-const closeUserMenu = () => {
+function closeAllMenus(): void {
+  sidebarOpen.value = false
   userMenuOpen.value = false
 }
 
-const handleLogout = async () => {
-  try {
-    closeUserMenu()
-    await authStore.logout()
-  } catch (error) {
-    console.error('Logout error:', error)
-  }
+function isActiveRoute(item: { match: (path: string) => boolean }): boolean {
+  return item.match(route.path)
+}
+
+async function handleLogout(): Promise<void> {
+  closeAllMenus()
+  await authStore.logout()
 }
 
 // Close menu when clicking outside
-const handleClickOutside = (event: MouseEvent) => {
+function handleClickOutside(event: MouseEvent): void {
   if (userMenuRef.value && !userMenuRef.value.contains(event.target as Node)) {
-    closeUserMenu()
+    userMenuOpen.value = false
   }
 }
 
-// Close sidebar when route changes
-watch(
-  () => route.path,
-  () => {
-    sidebarOpen.value = false
-    closeUserMenu()
-  }
-)
+// Close all menus when route changes
+watch(() => route.path, closeAllMenus)
 
 // Add/remove click outside listener
 onMounted(() => {
