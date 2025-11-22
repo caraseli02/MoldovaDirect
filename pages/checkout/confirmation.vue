@@ -264,6 +264,7 @@ const cartStore = useCartStore()
 // Composables
 const localePath = useLocalePath()
 const { t } = useI18n()
+const toast = useToast()
 
 // Computed properties
 // Access data directly from session store to bypass the checkout store proxy
