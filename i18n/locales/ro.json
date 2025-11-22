@@ -275,6 +275,21 @@
     }
   },
   "account": {
+    "dashboard": "Panou de Control",
+    "orders": "Comenzi",
+    "profile": "Profil",
+    "addresses": "Adrese",
+    "settings": "Setări",
+    "welcomeBack": "Bine ai revenit",
+    "totalOrders": "Total Comenzi",
+    "wishlistItems": "Articole din Lista de Dorințe",
+    "recentOrders": "Comenzi Recente",
+    "noOrdersYet": "Nu ai încă comenzi",
+    "sections": {
+      "admin": "Administrator",
+      "adminUser": "Utilizator Administrator",
+      "administrator": "Administrator"
+    },
     "navigation": {
       "logout": "Deconectare",
       "profile": "Profilul Meu",
@@ -1568,7 +1583,15 @@
       "deliveryNote": "Timpii de livrare sunt estimări și pot varia",
       "trackOrder": "Urmărește Comanda",
       "trackingAvailable": "Informațiile de urmărire vor fi disponibile odată ce comanda este expediată",
-      "printReceipt": "Imprimă Chitanța"
+      "printReceipt": "Imprimă Chitanța",
+      "sessionRestoreFailed": "Nu s-au putut încărca datele comenzii",
+      "checkEmailForOrder": "Vă rugăm să verificați emailul pentru confirmarea comenzii",
+      "errorLoadingOrder": "Eroare la încărcarea detaliilor comenzii",
+      "contactSupport": "Dacă problema persistă, vă rugăm să contactați suportul",
+      "orderDataMissing": "Datele comenzii nu sunt disponibile",
+      "checkYourEmail": "Comanda dvs. a fost finalizată cu succes. Verificați emailul pentru detalii",
+      "cartClearFailed": "Nu s-a putut goli coșul",
+      "cartClearFailedDetails": "Comanda dvs. a fost finalizată cu succes, dar coșul nu a fost golit automat"
     }
   },
   "admin": {
@@ -1583,6 +1606,10 @@
       "analytics": "Analize",
       "tools": "Instrumente",
       "testing": "Testare"
+    },
+    "errors": {
+      "logoutFailed": "Deconectarea a eșuat",
+      "unknownError": "A apărut o eroare necunoscută"
     },
     "products": {
       "select": "Selectează produs"

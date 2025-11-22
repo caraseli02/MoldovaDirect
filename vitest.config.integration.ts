@@ -26,18 +26,6 @@ export default defineConfig({
     ],
     testTimeout: 30000, // Integration tests may take longer
     hookTimeout: 30000,
-    server: {
-      deps: {
-        inline: [
-          '@supabase/supabase-js',
-          '@supabase/auth-js',
-          '@supabase/realtime-js',
-          '@supabase/postgrest-js',
-          '@supabase/storage-js',
-          '@supabase/functions-js',
-        ],
-      },
-    },
   },
   resolve: {
     alias: {
@@ -45,6 +33,9 @@ export default defineConfig({
       '@': resolve(__dirname, '.'),
       '~~': resolve(__dirname, '.'),
       '@@': resolve(__dirname, '.'),
+      '@supabase/supabase-js': resolve(__dirname, './node_modules/.pnpm/@supabase+supabase-js@2.58.0/node_modules/@supabase/supabase-js'),
+      '@supabase/auth-js': resolve(__dirname, './node_modules/.pnpm/@supabase+auth-js@2.72.0/node_modules/@supabase/auth-js'),
+      '@supabase/ssr': resolve(__dirname, './node_modules/.pnpm/@supabase+ssr@0.7.0_@supabase+supabase-js@2.58.0/node_modules/@supabase/ssr'),
     },
   },
 })

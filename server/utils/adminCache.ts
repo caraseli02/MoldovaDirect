@@ -157,8 +157,12 @@ function sanitizeQueryValue(value: any): string {
   }
 
   // Remove characters that could cause issues in cache keys
-  // Keep alphanumeric, hyphens, underscores, dots, and spaces
-  return stringValue.replace(/[^a-zA-Z0-9\-_.@+ ]/g, '')
+  // Security: Remove special chars while preserving legitimate search terms
+  return stringValue
+    .replace(/[^a-zA-Z0-9\-_. +]/g, '') // Remove special chars, keep hyphen, underscore, dot, space, plus
+    .replace(/\.{2,}/g, '') // Remove multiple consecutive dots (path traversal: ../)
+    .replace(/^\.*|\.*$/g, '') // Remove leading/trailing dots
+    .trim() // Remove leading/trailing whitespace
 }
 
 /**

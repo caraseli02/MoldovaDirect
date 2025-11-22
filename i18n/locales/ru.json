@@ -451,6 +451,21 @@
     }
   },
   "account": {
+    "dashboard": "Панель управления",
+    "orders": "Заказы",
+    "profile": "Профиль",
+    "addresses": "Адреса",
+    "settings": "Настройки",
+    "welcomeBack": "С возвращением",
+    "totalOrders": "Всего заказов",
+    "wishlistItems": "Товары в избранном",
+    "recentOrders": "Последние заказы",
+    "noOrdersYet": "У вас еще нет заказов",
+    "sections": {
+      "admin": "Администратор",
+      "adminUser": "Пользователь-администратор",
+      "administrator": "Администратор"
+    },
     "navigation": {
       "logout": "Выйти",
       "profile": "Мой профиль",
@@ -1568,7 +1583,15 @@
       "deliveryNote": "Delivery times are estimates and may vary",
       "trackOrder": "Track Your Order",
       "trackingAvailable": "Tracking information will be available once your order ships",
-      "printReceipt": "Print Receipt"
+      "printReceipt": "Print Receipt",
+      "sessionRestoreFailed": "Не удалось загрузить данные заказа",
+      "checkEmailForOrder": "Пожалуйста, проверьте вашу электронную почту для подтверждения заказа",
+      "errorLoadingOrder": "Ошибка загрузки деталей заказа",
+      "contactSupport": "Если проблема сохраняется, обратитесь в службу поддержки",
+      "orderDataMissing": "Данные заказа недоступны",
+      "checkYourEmail": "Ваш заказ успешно выполнен. Проверьте почту для получения подробностей",
+      "cartClearFailed": "Не удалось очистить корзину",
+      "cartClearFailedDetails": "Ваш заказ успешно выполнен, но корзина не была очищена автоматически"
     }
   },
   "admin": {
@@ -1583,6 +1606,10 @@
       "analytics": "Аналитика",
       "tools": "Инструменты",
       "testing": "Тестирование"
+    },
+    "errors": {
+      "logoutFailed": "Не удалось выйти",
+      "unknownError": "Произошла неизвестная ошибка"
     },
     "products": {
       "select": "Выбрать товар"

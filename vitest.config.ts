@@ -35,6 +35,7 @@ export default defineConfig({
       'tests/server/utils/__tests__/impersonation.test.ts',
       'tests/server/utils/__tests__/orderEmails.test.ts',
       'tests/server/utils/__tests__/searchSanitization.test.ts',
+      'tests/integration/**/*.test.ts',
       'components/layout/AppFooter.test.ts',
       '**/.{idea,git,cache,output,temp}/**',
     ],
@@ -87,6 +88,19 @@ export default defineConfig({
       //     statements: 90,
       //   },
       // },
+    },
+    server: {
+      deps: {
+        inline: [
+          '@supabase/supabase-js',
+          '@supabase/auth-js',
+          '@supabase/realtime-js',
+          '@supabase/postgrest-js',
+          '@supabase/storage-js',
+          '@supabase/functions-js',
+          '@supabase/ssr',
+        ],
+      },
     },
   },
   resolve: {

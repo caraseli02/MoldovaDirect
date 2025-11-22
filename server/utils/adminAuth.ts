@@ -6,7 +6,7 @@
  */
 
 import type { H3Event } from 'h3'
-import { getCookie, getHeader, getRequestIP } from 'h3'
+import { createError, getCookie, getHeader, getRequestIP } from 'h3'
 import { serverSupabaseClient, serverSupabaseServiceRole, serverSupabaseUser } from '#supabase/server'
 
 /**
