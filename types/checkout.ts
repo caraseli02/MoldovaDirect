@@ -12,6 +12,21 @@ export interface ShippingMethod {
 }
 
 export interface Address {
+  id?: string
+  user_id?: string
+  full_name: string
+  address: string
+  city: string
+  postal_code: string
+  country: string
+  phone?: string
+  is_default?: boolean
+  created_at?: string
+  updated_at?: string
+}
+
+// Legacy address format for backward compatibility
+export interface LegacyAddress {
   id?: number
   type: 'shipping' | 'billing'
   firstName: string
@@ -112,6 +127,12 @@ export interface CheckoutValidationState {
   isValid: boolean
 }
 
+export interface CheckoutPreferences {
+  user_id: string
+  preferred_shipping_method?: string
+  updated_at?: string
+}
+
 export interface CheckoutState {
   currentStep: CheckoutStep
   sessionId: string | null
@@ -137,4 +158,6 @@ export interface CheckoutState {
   termsAccepted: boolean
   privacyAccepted: boolean
   marketingConsent: boolean
+  dataPrefetched?: boolean
+  preferences?: CheckoutPreferences | null
 }

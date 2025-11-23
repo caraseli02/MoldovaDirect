@@ -41,7 +41,7 @@ export default defineNuxtRouteMiddleware((to) => {
       checkoutStore.initializeCheckout(items.value)
     } catch (error) {
       console.error('Failed to initialize checkout:', error)
-      
+
       // Redirect to cart with error message
       return navigateTo({
         path: localePath('/cart'),
@@ -49,6 +49,19 @@ export default defineNuxtRouteMiddleware((to) => {
           message: 'checkout-initialization-failed'
         }
       })
+    }
+  }
+
+  // Prefetch all checkout data in parallel (only once per session)
+  // This improves performance by loading addresses, shipping methods,
+  // and preferences in a single batch request
+  if (!checkoutStore.dataPrefetched) {
+    try {
+      await checkoutStore.prefetchCheckoutData()
+    } catch (error) {
+      // Non-critical - log but don't block checkout
+      // User can still checkout even if prefetch fails
+      console.error('Failed to prefetch checkout data:', error)
     }
   }
 
