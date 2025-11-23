@@ -8,7 +8,7 @@
  * - 6.5: Clear progress indicators and navigation protection
  */
 
-export default defineNuxtRouteMiddleware((to) => {
+export default defineNuxtRouteMiddleware(async (to) => {
   const localePath = useLocalePath()
   const { items, itemCount } = useCart()
   const checkoutStore = useCheckoutStore()

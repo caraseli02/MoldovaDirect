@@ -50,6 +50,30 @@ export function useShippingAddress() {
   })
 
   /**
+   * Get default address from saved addresses or checkout store
+   */
+  const defaultAddress = computed(() => {
+    // Check local saved addresses first
+    const localDefault = savedAddresses.value.find(addr => addr.isDefault || addr.is_default)
+    if (localDefault) return localDefault
+
+    // Fallback to checkout store addresses
+    const storeAddresses = checkoutStore.savedAddresses || []
+    const storeDefault = storeAddresses.find((addr: any) => addr.isDefault || addr.is_default)
+    if (storeDefault) return storeDefault
+
+    // Return first address if no default
+    return savedAddresses.value[0] || storeAddresses[0] || null
+  })
+
+  /**
+   * Check if user has any saved addresses
+   */
+  const hasAddresses = computed(() => {
+    return savedAddresses.value.length > 0 || (checkoutStore.savedAddresses && checkoutStore.savedAddresses.length > 0)
+  })
+
+  /**
    * Map address from API format to internal format
    */
   const mapAddressFromApi = (apiAddress: any): Address => {
@@ -183,6 +207,8 @@ export function useShippingAddress() {
   return {
     shippingAddress,
     savedAddresses: readonly(savedAddresses),
+    defaultAddress: readonly(defaultAddress),
+    hasAddresses: readonly(hasAddresses),
     loading: readonly(loading),
     error: readonly(error),
     isAddressValid: readonly(isAddressValid),
