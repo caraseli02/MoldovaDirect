@@ -144,6 +144,12 @@ visual-regression-screenshots/
 *.jpg
 *.jpeg
 
+# Video files (too large for git - host on CDN or server)
+*.webm
+*.mp4
+*.mov
+*.avi
+
 # Temporary scripts and utilities
 apply-rls-fix.sh
 visual-regression-*.mjs
