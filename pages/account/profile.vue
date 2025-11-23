@@ -222,8 +222,8 @@
               >
                 <div class="flex justify-between items-start mb-2">
                   <div class="flex items-center space-x-2">
-                    <span class="text-sm font-medium text-gray-900 dark:text-white capitalize">
-                      {{ $t(`profile.addressType.${address.type}`) }}
+                    <span class="text-sm font-medium text-gray-900 dark:text-white">
+                      {{ address.fullName }}
                     </span>
                     <span
                       v-if="address.isDefault"
@@ -243,7 +243,7 @@
                       <commonIcon name="lucide:square-pen" class="h-4 w-4" />
                     </Button>
                     <Button
-                      @click="deleteAddress(address.id)"
+                      @click="deleteAddress(address.id!)"
                       variant="ghost"
                       size="icon"
                       class="p-1 text-gray-400 hover:text-red-600 dark:hover:text-red-400"
@@ -254,10 +254,10 @@
                   </div>
                 </div>
                 <div class="text-sm text-gray-600 dark:text-gray-400">
-                  <p>{{ address.street }}</p>
+                  <p>{{ address.address }}</p>
                   <p>{{ address.city }}, {{ address.postalCode }}</p>
-                  <p v-if="address.province">{{ address.province }}</p>
                   <p>{{ address.country }}</p>
+                  <p v-if="address.phone" class="mt-1">{{ address.phone }}</p>
                 </div>
               </div>
             </div>
@@ -315,13 +315,13 @@ interface ProfileForm {
 }
 
 interface Address {
-  id?: number
-  type: 'billing' | 'shipping'
-  street: string
+  id?: string  // UUID instead of number
+  fullName: string
+  address: string
   city: string
   postalCode: string
-  province?: string
   country: string
+  phone?: string
   isDefault: boolean
 }
 
@@ -391,13 +391,24 @@ const loadAddresses = async () => {
 
   try {
     const { data, error } = await supabase
-      .from('addresses')
+      .from('user_addresses')
       .select('*')
       .eq('user_id', user.value.id)
       .order('is_default', { ascending: false })
 
     if (error) throw error
-    addresses.value = data || []
+
+    // Map database fields to camelCase
+    addresses.value = (data || []).map(addr => ({
+      id: addr.id,
+      fullName: addr.full_name,
+      address: addr.address,
+      city: addr.city,
+      postalCode: addr.postal_code,
+      country: addr.country,
+      phone: addr.phone,
+      isDefault: addr.is_default
+    }))
   } catch (error) {
     console.error('Error loading addresses:', error)
     $toast.error(t('profile.errors.loadAddressesFailed'))
@@ -573,20 +584,31 @@ const editAddress = (address: Address) => {
 
 const handleAddressSave = async (addressData: Address) => {
   try {
+    // Map camelCase to snake_case for database
+    const dbAddress = {
+      full_name: addressData.fullName,
+      address: addressData.address,
+      city: addressData.city,
+      postal_code: addressData.postalCode,
+      country: addressData.country,
+      phone: addressData.phone || '',
+      is_default: addressData.isDefault
+    }
+
     if (addressData.id) {
       // Update existing address
       const { error } = await supabase
-        .from('addresses')
-        .update(addressData)
+        .from('user_addresses')
+        .update(dbAddress)
         .eq('id', addressData.id)
 
       if (error) throw error
     } else {
       // Create new address
       const { error } = await supabase
-        .from('addresses')
+        .from('user_addresses')
         .insert({
-          ...addressData,
+          ...dbAddress,
           user_id: user.value?.id
         })
 
@@ -602,12 +624,12 @@ const handleAddressSave = async (addressData: Address) => {
   }
 }
 
-const deleteAddress = async (addressId: number) => {
+const deleteAddress = async (addressId: string) => {
   if (!confirm(t('profile.confirmDeleteAddress'))) return
 
   try {
     const { error } = await supabase
-      .from('addresses')
+      .from('user_addresses')
       .delete()
       .eq('id', addressId)
 

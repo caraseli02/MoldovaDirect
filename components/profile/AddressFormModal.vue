@@ -24,53 +24,59 @@
         </div>
 
         <form @submit.prevent="handleSubmit" class="space-y-4">
-          <!-- Address Type -->
+          <!-- Full Name -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              {{ $t('profile.addressType.label') }} *
-            </label>
-            <div class="flex space-x-4">
-              <label class="flex items-center">
-                <input
-                  v-model="form.type"
-                  type="radio"
-                  value="shipping"
-                  class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300"
-                >
-                <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                  {{ $t('profile.addressType.shipping') }}
-                </span>
-              </label>
-              <label class="flex items-center">
-                <input
-                  v-model="form.type"
-                  type="radio"
-                  value="billing"
-                  class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300"
-                >
-                <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                  {{ $t('profile.addressType.billing') }}
-                </span>
-              </label>
-            </div>
-          </div>
-
-          <!-- Street Address -->
-          <div>
-            <label for="street" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              {{ $t('profile.street') }} *
+            <label for="fullName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              {{ $t('profile.fullName') }} *
             </label>
             <input
-              id="street"
-              v-model="form.street"
+              id="fullName"
+              v-model="form.fullName"
               type="text"
               required
               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
-              :class="{ 'border-red-500': errors.street }"
-              :placeholder="$t('profile.streetPlaceholder')"
+              :class="{ 'border-red-500': errors.fullName }"
+              :placeholder="$t('profile.fullNamePlaceholder')"
             >
-            <p v-if="errors.street" class="mt-1 text-sm text-red-600 dark:text-red-400">
-              {{ errors.street }}
+            <p v-if="errors.fullName" class="mt-1 text-sm text-red-600 dark:text-red-400">
+              {{ errors.fullName }}
+            </p>
+          </div>
+
+          <!-- Phone -->
+          <div>
+            <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              {{ $t('profile.phone') }}
+            </label>
+            <input
+              id="phone"
+              v-model="form.phone"
+              type="tel"
+              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
+              :class="{ 'border-red-500': errors.phone }"
+              :placeholder="$t('profile.phonePlaceholder')"
+            >
+            <p v-if="errors.phone" class="mt-1 text-sm text-red-600 dark:text-red-400">
+              {{ errors.phone }}
+            </p>
+          </div>
+
+          <!-- Address -->
+          <div>
+            <label for="address" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              {{ $t('profile.address') }} *
+            </label>
+            <input
+              id="address"
+              v-model="form.address"
+              type="text"
+              required
+              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
+              :class="{ 'border-red-500': errors.address }"
+              :placeholder="$t('profile.addressPlaceholder')"
+            >
+            <p v-if="errors.address" class="mt-1 text-sm text-red-600 dark:text-red-400">
+              {{ errors.address }}
             </p>
           </div>
 
@@ -111,20 +117,6 @@
                 {{ errors.postalCode }}
               </p>
             </div>
-          </div>
-
-          <!-- Province -->
-          <div>
-            <label for="province" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              {{ $t('profile.province') }}
-            </label>
-            <input
-              id="province"
-              v-model="form.province"
-              type="text"
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
-              :placeholder="$t('profile.provincePlaceholder')"
-            >
           </div>
 
           <!-- Country -->
@@ -196,13 +188,13 @@
 import { Button } from '@/components/ui/button'
 
 interface Address {
-  id?: number
-  type: 'billing' | 'shipping'
-  street: string
+  id?: string  // Changed from number to string (UUID)
+  fullName: string
+  address: string
   city: string
   postalCode: string
-  province?: string
   country: string
+  phone?: string
   isDefault: boolean
 }
 
@@ -219,26 +211,29 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const { t } = useI18n()
+const user = useSupabaseUser()
 
 // Reactive state
 const isLoading = ref(false)
 
-// Form data
+// Form data - Initialize with user data
 const form = reactive<Address>({
-  type: 'shipping',
-  street: '',
+  fullName: user.value?.user_metadata?.full_name || user.value?.user_metadata?.name || '',
+  address: '',
   city: '',
   postalCode: '',
-  province: '',
   country: 'ES',
+  phone: user.value?.user_metadata?.phone || '',
   isDefault: false
 })
 
 // Form validation
 const errors = reactive({
-  street: '',
+  fullName: '',
+  address: '',
   city: '',
-  postalCode: ''
+  postalCode: '',
+  phone: ''
 })
 
 // Initialize form with address data if editing
@@ -250,12 +245,19 @@ const initializeForm = () => {
 
 // Form validation
 const validateForm = (): boolean => {
-  errors.street = ''
+  errors.fullName = ''
+  errors.address = ''
   errors.city = ''
   errors.postalCode = ''
+  errors.phone = ''
 
-  if (!form.street.trim()) {
-    errors.street = t('profile.validation.streetRequired')
+  if (!form.fullName.trim()) {
+    errors.fullName = t('profile.validation.fullNameRequired')
+    return false
+  }
+
+  if (!form.address.trim()) {
+    errors.address = t('profile.validation.addressRequired')
     return false
   }
 
@@ -272,6 +274,12 @@ const validateForm = (): boolean => {
   // Validate postal code format based on country
   if (form.country === 'ES' && !/^\d{5}$/.test(form.postalCode)) {
     errors.postalCode = t('profile.validation.invalidSpanishPostalCode')
+    return false
+  }
+
+  // Validate phone if provided
+  if (form.phone && !/^[\+]?[0-9\s\-\(\)]{9,}$/.test(form.phone)) {
+    errors.phone = t('profile.validation.phoneInvalid')
     return false
   }
 
