@@ -213,10 +213,18 @@
               :aria-label="loadingMagic ? $t('auth.accessibility.sendingMagicLink') : $t('auth.accessibility.magicLinkButton')"
               :aria-describedby="loadingMagic ? 'magic-link-status' : 'magic-link-desc'"
             >
-              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <svg v-if="!magicLinkCooldown" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
               </svg>
-              {{ loadingMagic ? $t('common.loading') : $t('auth.sendMagicLink') }}
+              <svg v-else class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              <template v-if="magicLinkCooldown > 0">
+                {{ $t('auth.resendIn') }} {{ magicLinkCooldown }}s
+              </template>
+              <template v-else>
+                {{ loadingMagic ? $t('common.loading') : $t('auth.sendMagicLink') }}
+              </template>
             </Button>
             <div id="magic-link-desc" class="sr-only">
               {{ $t('auth.accessibility.magicLinkDescription') }}
@@ -287,6 +295,10 @@ const loading = ref(false)
 const emailError = ref('')
 const passwordError = ref('')
 
+// Magic link rate limiting
+const magicLinkCooldown = ref(0)
+const magicLinkCooldownInterval = ref<NodeJS.Timeout | null>(null)
+
 // Validation composable
 const { validateEmail, validatePassword } = useAuthValidation()
 
@@ -303,7 +315,7 @@ const isLoginDisabled = computed(() => {
 })
 
 const isMagicLinkDisabled = computed(() => {
-  return loadingMagic.value || !form.value.email || isAccountLocked.value
+  return loadingMagic.value || !form.value.email || isAccountLocked.value || magicLinkCooldown.value > 0
 })
 
 // Field validation methods
@@ -388,9 +400,88 @@ async function handleLogin(): Promise<void> {
   }
 }
 
+/**
+ * Start magic link cooldown timer (60 seconds as per Supabase rate limit)
+ */
+function startMagicLinkCooldown(): void {
+  const COOLDOWN_SECONDS = 60
+  const expiryTime = Date.now() + (COOLDOWN_SECONDS * 1000)
+
+  // Store in localStorage to persist across page refreshes
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('magicLinkCooldown', expiryTime.toString())
+  }
+
+  magicLinkCooldown.value = COOLDOWN_SECONDS
+
+  // Clear existing interval if any
+  if (magicLinkCooldownInterval.value) {
+    clearInterval(magicLinkCooldownInterval.value)
+  }
+
+  // Update countdown every second
+  magicLinkCooldownInterval.value = setInterval(() => {
+    const remaining = Math.ceil((expiryTime - Date.now()) / 1000)
+
+    if (remaining <= 0) {
+      magicLinkCooldown.value = 0
+      if (magicLinkCooldownInterval.value) {
+        clearInterval(magicLinkCooldownInterval.value)
+        magicLinkCooldownInterval.value = null
+      }
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('magicLinkCooldown')
+      }
+    } else {
+      magicLinkCooldown.value = remaining
+    }
+  }, 1000)
+}
+
+/**
+ * Check for existing cooldown on mount
+ */
+function checkExistingCooldown(): void {
+  if (typeof window === 'undefined') return
+
+  const storedExpiry = localStorage.getItem('magicLinkCooldown')
+  if (storedExpiry) {
+    const expiryTime = parseInt(storedExpiry, 10)
+    const remaining = Math.ceil((expiryTime - Date.now()) / 1000)
+
+    if (remaining > 0) {
+      magicLinkCooldown.value = remaining
+
+      // Restart the interval
+      magicLinkCooldownInterval.value = setInterval(() => {
+        const currentRemaining = Math.ceil((expiryTime - Date.now()) / 1000)
+
+        if (currentRemaining <= 0) {
+          magicLinkCooldown.value = 0
+          if (magicLinkCooldownInterval.value) {
+            clearInterval(magicLinkCooldownInterval.value)
+            magicLinkCooldownInterval.value = null
+          }
+          localStorage.removeItem('magicLinkCooldown')
+        } else {
+          magicLinkCooldown.value = currentRemaining
+        }
+      }, 1000)
+    } else {
+      // Expired, remove from storage
+      localStorage.removeItem('magicLinkCooldown')
+    }
+  }
+}
+
 async function handleMagicLink(): Promise<void> {
   if (!form.value.email) {
     localError.value = t('auth.emailRequired')
+    return
+  }
+
+  if (magicLinkCooldown.value > 0) {
+    localError.value = t('auth.errors.rateLimitExceeded', { minutes: Math.ceil(magicLinkCooldown.value / 60) })
     return
   }
 
@@ -411,6 +502,9 @@ async function handleMagicLink(): Promise<void> {
     }
 
     success.value = t('auth.magicLinkSent')
+
+    // Start cooldown timer
+    startMagicLinkCooldown()
   } catch (err: any) {
     localError.value = err.message || t('auth.magicLinkError')
   } finally {
@@ -443,6 +537,15 @@ const displayError = computed(() => {
 
 onMounted(async () => {
   await ensureInitialized()
+  checkExistingCooldown()
+})
+
+onBeforeUnmount(() => {
+  // Clean up cooldown interval
+  if (magicLinkCooldownInterval.value) {
+    clearInterval(magicLinkCooldownInterval.value)
+    magicLinkCooldownInterval.value = null
+  }
 })
 
 useHead({

@@ -268,6 +268,7 @@
     "sendMagicLink": "Send Magic Link",
     "magicLinkSent": "Magic link sent! Check your email to sign in.",
     "magicLinkError": "Failed to send magic link. Please try again.",
+    "resendIn": "Resend in",
     "emailRequired": "Please enter your email address",
     "emailVerification": "Email Verification",
     "verifying": "Verifying your email",
@@ -280,10 +281,13 @@
     "backToLogin": "Back to Login",
     "confirmingAccount": "Confirming Account",
     "processing": "Processing",
+    "pleaseWait": "Please wait while we verify your authentication...",
     "accountConfirmed": "Account Confirmed!",
     "redirectingToAccount": "Redirecting to your account...",
     "confirmationFailed": "Account confirmation failed",
     "confirmationError": "Confirmation error. Please try again.",
+    "magicLinkSuccess": "Successfully authenticated! Welcome back.",
+    "retry": "Retry",
     "forgotPasswordInstructions": "Enter your email address and we'll send you a link to reset your password.",
     "sendResetEmail": "Send Reset Email",
     "passwordResetSent": "Password reset email sent! Please check your inbox.",
@@ -338,8 +342,15 @@
       "emailInvalid": "Please enter a valid email address",
       "passwordWeak": "Password is too weak",
       "networkError": "Network error. Please check your connection",
+      "networkErrorMessage": "Unable to connect. Please check your internet connection and try again.",
       "serverError": "Server error. Please try again later",
-      "unknownError": "An unexpected error occurred"
+      "unknownError": "An unexpected error occurred",
+      "linkExpired": "Magic Link Expired",
+      "linkExpiredMessage": "This magic link has expired. Please request a new one from the login page.",
+      "linkAlreadyUsed": "Magic Link Already Used",
+      "linkAlreadyUsedMessage": "This magic link has already been used. If you need to sign in again, please request a new link.",
+      "invalidLink": "Invalid Magic Link",
+      "invalidLinkMessage": "This magic link is invalid or malformed. Please request a new one from the login page."
     },
     "validation": {
       "email": {

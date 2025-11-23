@@ -86,6 +86,7 @@
     "sendMagicLink": "Trimite Link Magic",
     "magicLinkSent": "Link magic trimis! Verifică emailul pentru a te autentifica.",
     "magicLinkError": "Eroare la trimiterea link-ului magic. Te rugăm să încerci din nou.",
+    "resendIn": "Retrimite în",
     "emailRequired": "Te rugăm să introduci adresa de email",
     "emailVerification": "Verificare Email",
     "verifying": "Verificăm emailul tău",
@@ -98,10 +99,13 @@
     "backToLogin": "Înapoi la Autentificare",
     "confirmingAccount": "Confirmare Cont",
     "processing": "Procesare",
+    "pleaseWait": "Te rugăm să aștepți în timp ce verificăm autentificarea...",
     "accountConfirmed": "Cont Confirmat!",
     "redirectingToAccount": "Redirecționare către contul tău...",
     "confirmationFailed": "Confirmarea contului a eșuat",
     "confirmationError": "Eroare de confirmare. Te rugăm să încerci din nou.",
+    "magicLinkSuccess": "Autentificare reușită! Bine ai revenit.",
+    "retry": "Reîncearcă",
     "forgotPasswordInstructions": "Introdu adresa ta de email și îți vom trimite un link pentru a reseta parola.",
     "sendResetEmail": "Trimite Email de Resetare",
     "passwordResetSent": "Email de resetare trimis! Te rugăm să verifici inbox-ul.",
@@ -156,8 +160,15 @@
       "emailInvalid": "Te rugăm să introduci un email valid",
       "passwordWeak": "Parola este prea slabă",
       "networkError": "Eroare de rețea. Verifică conexiunea la internet",
+      "networkErrorMessage": "Nu se poate conecta. Te rugăm să verifici conexiunea la internet și să încerci din nou.",
       "serverError": "Eroare de server. Încearcă mai târziu",
-      "unknownError": "A apărut o eroare neașteptată"
+      "unknownError": "A apărut o eroare neașteptată",
+      "linkExpired": "Link Magic Expirat",
+      "linkExpiredMessage": "Acest link magic a expirat. Te rugăm să soliciți unul nou de pe pagina de autentificare.",
+      "linkAlreadyUsed": "Link Magic Deja Folosit",
+      "linkAlreadyUsedMessage": "Acest link magic a fost deja folosit. Dacă trebuie să te autentifici din nou, te rugăm să soliciți un link nou.",
+      "invalidLink": "Link Magic Invalid",
+      "invalidLinkMessage": "Acest link magic este invalid sau malformat. Te rugăm să soliciți unul nou de pe pagina de autentificare."
     },
     "validation": {
       "email": {
