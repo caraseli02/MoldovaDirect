@@ -168,6 +168,7 @@ const navItems = [
   { to: '/admin/orders', icon: 'lucide:shopping-cart', labelKey: 'admin.navigation.orders', match: (path: string) => path.startsWith('/admin/orders') },
   { to: '/admin/users', icon: 'lucide:users', labelKey: 'admin.navigation.users', match: (path: string) => path.startsWith('/admin/users') },
   { to: '/admin/analytics', icon: 'lucide:bar-chart-2', labelKey: 'admin.navigation.analytics', match: (path: string) => path.startsWith('/admin/analytics') },
+  { to: '/admin/ai-images', icon: 'lucide:sparkles', labelKey: 'admin.navigation.aiImages', match: (path: string) => path.startsWith('/admin/ai-images') },
   { to: '/admin/testing', icon: 'lucide:flask-conical', labelKey: 'admin.navigation.testing', match: (path: string) => path.startsWith('/admin/testing') },
   { to: '/admin/tools/email-testing', icon: 'lucide:wrench', labelKey: 'admin.navigation.tools', match: (path: string) => path.startsWith('/admin/tools') }
 ]
