@@ -223,7 +223,7 @@
                 <div class="flex justify-between items-start mb-2">
                   <div class="flex items-center space-x-2">
                     <span class="text-sm font-medium text-gray-900 dark:text-white">
-                      {{ address.fullName }}
+                      {{ address.firstName }} {{ address.lastName }}
                     </span>
                     <span
                       v-if="address.isDefault"
@@ -254,8 +254,9 @@
                   </div>
                 </div>
                 <div class="text-sm text-gray-600 dark:text-gray-400">
-                  <p>{{ address.address }}</p>
+                  <p>{{ address.street }}</p>
                   <p>{{ address.city }}, {{ address.postalCode }}</p>
+                  <p v-if="address.province">{{ address.province }}</p>
                   <p>{{ address.country }}</p>
                   <p v-if="address.phone" class="mt-1">{{ address.phone }}</p>
                 </div>
@@ -315,11 +316,15 @@ interface ProfileForm {
 }
 
 interface Address {
-  id?: string  // UUID instead of number
-  fullName: string
-  address: string
+  id?: number  // SERIAL from database
+  type: 'shipping' | 'billing'
+  firstName: string
+  lastName: string
+  company?: string
+  street: string
   city: string
   postalCode: string
+  province?: string
   country: string
   phone?: string
   isDefault: boolean
@@ -401,10 +406,14 @@ const loadAddresses = async () => {
     // Map database fields to camelCase
     addresses.value = (data || []).map(addr => ({
       id: addr.id,
-      fullName: addr.full_name,
-      address: addr.address,
+      type: addr.type,
+      firstName: addr.first_name,
+      lastName: addr.last_name,
+      company: addr.company,
+      street: addr.street,
       city: addr.city,
       postalCode: addr.postal_code,
+      province: addr.province,
       country: addr.country,
       phone: addr.phone,
       isDefault: addr.is_default
@@ -586,10 +595,14 @@ const handleAddressSave = async (addressData: Address) => {
   try {
     // Map camelCase to snake_case for database
     const dbAddress = {
-      full_name: addressData.fullName,
-      address: addressData.address,
+      type: addressData.type,
+      first_name: addressData.firstName,
+      last_name: addressData.lastName,
+      company: addressData.company || '',
+      street: addressData.street,
       city: addressData.city,
       postal_code: addressData.postalCode,
+      province: addressData.province || '',
       country: addressData.country,
       phone: addressData.phone || '',
       is_default: addressData.isDefault
@@ -624,7 +637,7 @@ const handleAddressSave = async (addressData: Address) => {
   }
 }
 
-const deleteAddress = async (addressId: string) => {
+const deleteAddress = async (addressId: number) => {
   if (!confirm(t('profile.confirmDeleteAddress'))) return
 
   try {
