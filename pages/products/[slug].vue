@@ -618,6 +618,10 @@ import { Button } from '@/components/ui/button'
 import ProductCard from '~/components/product/Card.vue'
 import type { ProductWithRelations } from '~/types/database'
 import { useCart } from '~/composables/useCart'
+import { useProductUtils } from '~/composables/useProductUtils'
+import { useProductStory } from '~/composables/useProductStory'
+import { useProductDetailSEO } from '~/composables/useProductDetailSEO'
+import { useProductStockStatus } from '~/composables/useProductStockStatus'
 
 const route = useRoute()
 const slug = route.params.slug as string
@@ -626,6 +630,7 @@ const { data: product, pending, error } = await useLazyFetch<ProductWithRelation
 
 const { t, locale } = useI18n()
 
+// UI state
 const selectedImageIndex = ref(0)
 const selectedQuantity = ref(1)
 const wishlistAdded = ref(false)
@@ -636,14 +641,50 @@ const selectedMediaType = ref<'image' | 'video'>('image')
 
 const recentlyViewedProducts = useState<ProductWithRelations[]>('recentlyViewedProducts', () => [])
 
-const productAttributes = computed(() => product.value?.attributes || {})
+// Use composables
+const { getLocalizedText, formatPrice, getCategoryLabel } = useProductUtils()
+const { addItem, loading: cartLoading, isInCart } = useCart()
 
+// Computed values
+const productAttributes = computed(() => product.value?.attributes || {})
+const stockQuantity = computed(() => product.value?.stockQuantity || 0)
+const categoryLabel = computed(() => getCategoryLabel(product.value?.category))
+
+// Video support for UX enhancement
 const productVideo = computed(() => {
   return productAttributes.value?.video_url || productAttributes.value?.videoUrl || null
 })
 
-const { addItem, loading: cartLoading, isInCart } = useCart()
+// Stock status composable
+const {
+  stockStatusClass,
+  stockStatusText,
+  estimatedDelivery,
+  stockUrgencyMessage
+} = useProductStockStatus(stockQuantity)
 
+// Product story composable
+const {
+  storytelling,
+  tastingNotes,
+  pairingIdeas,
+  awards,
+  originStory,
+  reviewSummary,
+  sustainabilityBadges
+} = useProductStory(product)
+
+// SEO composable
+const config = useRuntimeConfig()
+const seoOptions = computed(() => ({
+  productUrl: `${config.public.siteUrl}${route.path}`,
+  rating: reviewSummary.value,
+  brand: productAttributes.value?.brand || productAttributes.value?.producer || categoryLabel.value
+}))
+
+const { structuredData, metaTags, pageTitle } = useProductDetailSEO(product, seoOptions)
+
+// Cart functionality
 const isProductInCart = computed(() => {
   if (!product.value) return false
   return isInCart(product.value.id)
@@ -653,111 +694,7 @@ const selectedImage = computed(() => {
   return product.value?.images?.[selectedImageIndex.value]
 })
 
-const stockStatusClass = computed(() => {
-  if (!product.value) return ''
-  const stock = product.value.stockQuantity
-  if (stock > 10) return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-200'
-  if (stock > 0) return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-200'
-  return 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-200'
-})
-
-const stockStatusText = computed(() => {
-  if (!product.value) return ''
-  const stock = product.value.stockQuantity
-  if (stock > 10) return t('products.stockStatus.inStock')
-  if (stock > 0) return t('products.stockStatus.onlyLeft', { count: stock })
-  return t('products.stockStatus.outOfStock')
-})
-
-const categoryLabel = computed(() => {
-  if (!product.value?.category) return ''
-  const category: any = product.value.category
-  if (category.nameTranslations) {
-    return getLocalizedText(category.nameTranslations)
-  }
-  if (category.name) {
-    return typeof category.name === 'string' ? category.name : getLocalizedText(category.name)
-  }
-  return ''
-})
-
-const storytelling = computed(() => {
-  const producerStory = productAttributes.value?.producer_story || productAttributes.value?.producerStory
-  const categoryName = categoryLabel.value
-  return {
-    producer: producerStory || t('products.story.producerFallback', { category: categoryName || t('products.commonProduct') })
-  }
-})
-
-const tastingNotes = computed(() => {
-  const notes = productAttributes.value?.tasting_notes || productAttributes.value?.tastingNotes
-  if (Array.isArray(notes)) return notes
-  if (typeof notes === 'string') {
-    return notes.split(',').map(note => note.trim()).filter(Boolean)
-  }
-  return t('products.story.defaultNotes').split('|').map(entry => entry.trim())
-})
-
-const pairingIdeas = computed(() => {
-  const pairings = productAttributes.value?.pairings
-  if (Array.isArray(pairings)) return pairings
-  if (typeof pairings === 'string') {
-    return pairings.split(',').map(pairing => pairing.trim()).filter(Boolean)
-  }
-  return t('products.story.defaultPairings').split('|').map(entry => entry.trim())
-})
-
-const awards = computed(() => {
-  const awardList = productAttributes.value?.awards
-  if (Array.isArray(awardList)) return awardList
-  if (typeof awardList === 'string') {
-    return awardList.split(',').map(award => award.trim()).filter(Boolean)
-  }
-  return []
-})
-
-const originStory = computed(() => {
-  if (productAttributes.value?.terroir) {
-    return productAttributes.value.terroir
-  }
-  if (product.value?.origin) {
-    return t('products.story.originFallback', { origin: product.value.origin })
-  }
-  const categoryTranslations = product.value?.category?.nameTranslations || {}
-  const categoryName = getLocalizedText(categoryTranslations)
-  return t('products.story.originCategoryFallback', { category: categoryName || t('products.commonProduct') })
-})
-
-const reviewSummary = computed(() => {
-  const rating = Number(productAttributes.value?.rating || 4.8)
-  const count = Number(productAttributes.value?.review_count || productAttributes.value?.reviewCount || 126)
-  const highlightsRaw = productAttributes.value?.review_highlights || productAttributes.value?.reviewHighlights
-  let highlights: string[] = []
-  if (Array.isArray(highlightsRaw)) {
-    highlights = highlightsRaw
-  } else if (typeof highlightsRaw === 'string') {
-    highlights = highlightsRaw.split('|').map((item: string) => item.trim())
-  } else {
-    highlights = t('products.socialProof.highlights').split('|').map(entry => entry.trim())
-  }
-  return { rating: Number(rating.toFixed(1)), count, highlights }
-})
-
-const sustainabilityBadges = computed(() => {
-  const badges: string[] = []
-  const attrs = productAttributes.value || {}
-  const truthy = (value: any) => value === true || value === 'true' || value === 1
-  if (truthy(attrs.organic) || truthy(attrs.organicCertified)) badges.push('organic')
-  if (truthy(attrs.handcrafted) || truthy(attrs.smallBatch)) badges.push('handcrafted')
-  if (truthy(attrs.familyOwned)) badges.push('familyOwned')
-  if (truthy(attrs.limitedRelease) || truthy(attrs.limitedEdition)) badges.push('limited')
-  if (truthy(attrs.protectedOrigin) || truthy(attrs.geographicIndication)) badges.push('heritage')
-  if (!badges.length) {
-    badges.push('handcrafted', 'familyOwned')
-  }
-  return Array.from(new Set(badges)).slice(0, 5)
-})
-
+// FAQ and trust promises
 const faqItems = computed(() => [
   {
     id: 'delivery',
@@ -801,26 +738,7 @@ const bundleItems = computed(() => {
   }))
 })
 
-const estimatedDelivery = computed(() => {
-  const baseDate = new Date()
-  baseDate.setDate(baseDate.getDate() + 1)
-  const formatted = new Intl.DateTimeFormat(locale.value, { weekday: 'short', month: 'short', day: 'numeric' }).format(baseDate)
-  return t('products.stock.eta', { date: formatted })
-})
-
-const stockUrgencyMessage = computed(() => {
-  if (!product.value) return ''
-  const stock = product.value.stockQuantity || 0
-  if (stock === 0) return ''
-  if (stock <= 3) {
-    return t('products.stock.urgencyLow', { count: stock })
-  }
-  if (stock <= 8) {
-    return t('products.stock.urgencyMedium', { count: stock })
-  }
-  return ''
-})
-
+// UX Enhancement: Lightbox functions
 const openLightbox = () => {
   showLightbox.value = true
   document.body.style.overflow = 'hidden'
@@ -831,6 +749,7 @@ const closeLightbox = () => {
   document.body.style.overflow = ''
 }
 
+// User interactions
 const toggleWishlist = () => {
   wishlistAdded.value = !wishlistAdded.value
 }
@@ -864,34 +783,27 @@ const addToCart = async () => {
   if (!product.value) return
 
   // Only run on client side (fix for Vercel SSR)
-  if (process.server || typeof window === 'undefined') {
+  if (import.meta.server || typeof window === 'undefined') {
     console.warn('Add to Cart: Server-side render, skipping')
     return
   }
 
-  // Debug logging for Vercel
-  const debugInfo = {
-    productId: product.value.id,
-    quantity: selectedQuantity.value,
-    isClient: process.client,
-    hasWindow: typeof window !== 'undefined',
-    addItemType: typeof addItem,
-    addItemString: typeof addItem === 'function' ? 'real function' : addItem?.toString?.() || 'undefined'
-  }
-  console.log('🛒 Add to Cart clicked', debugInfo)
-
-  // MOBILE DEBUG: Show status on mobile
-  const showMobileDebug = false // Set to true to see alerts on mobile
-  if (showMobileDebug) {
-    alert(`Debug: ${JSON.stringify(debugInfo, null, 2)}`)
+  // Debug logging in development only
+  if (import.meta.dev) {
+    const debugInfo = {
+      productId: product.value.id,
+      quantity: selectedQuantity.value,
+      isClient: import.meta.client,
+      hasWindow: typeof window !== 'undefined',
+      addItemType: typeof addItem
+    }
+    console.log('🛒 Add to Cart clicked', debugInfo)
   }
 
   try {
-    // Verify cart is available
     if (typeof addItem !== 'function') {
       const error = `addItem is not a function (type: ${typeof addItem})`
       console.error('❌', error)
-      alert(`ERROR: ${error}\n\nThis means Pinia/cart store isn't initialized on Vercel`)
       throw new Error(error)
     }
 
@@ -905,32 +817,18 @@ const addToCart = async () => {
       stock: product.value.stockQuantity
     }
 
-    console.log('🛒 Calling addItem with:', cartProduct)
     await addItem(cartProduct, selectedQuantity.value)
-    console.log('✅ Add to cart succeeded!')
 
-    // Success feedback
-    if (showMobileDebug) {
-      alert('✅ Item added to cart successfully!')
+    if (import.meta.dev) {
+      console.log('✅ Add to cart succeeded!')
     }
   } catch (err) {
     const errorMsg = err instanceof Error ? err.message : String(err)
-    console.error('❌ Add to cart failed:', errorMsg, err)
-
-    // Detailed error for mobile debugging
-    alert(`❌ Add to Cart Failed\n\nError: ${errorMsg}\n\nCheck console for details`)
+    console.error('Add to cart failed:', errorMsg, err)
   }
 }
 
-const getLocalizedText = (text: Record<string, string> | null | undefined) => {
-  if (!text) return ''
-  return text[locale.value] || text.es || Object.values(text)[0] || ''
-}
-
-const formatPrice = (price: string | number) => {
-  return Number(price).toFixed(2)
-}
-
+// Watch for product changes
 watch(product, newProduct => {
   if (newProduct) {
     selectedImageIndex.value = 0
@@ -944,131 +842,23 @@ watch(product, newProduct => {
   }
 }, { immediate: true })
 
+// Update page metadata
 watch(product, newProduct => {
-  if (newProduct) {
-    // Determine availability status
-    const stockQuantity = newProduct.stockQuantity || 0
-    const availabilityStatus = stockQuantity > 0
-      ? 'https://schema.org/InStock'
-      : 'https://schema.org/OutOfStock'
-
-    // Build image array for structured data
-    const productImages = newProduct.images?.map(img => img.url).filter(Boolean) || []
-
-    // Get brand from attributes or use category as fallback
-    const brand = productAttributes.value?.brand ||
-                  productAttributes.value?.producer ||
-                  categoryLabel.value ||
-                  'Moldova Direct'
-
-    // Build canonical URL for structured data (works in SSR)
-    const config = useRuntimeConfig()
-    const productUrl = `${config.public.siteUrl}${route.path}`
-
-    // Build Product structured data
-    const productStructuredData: Record<string, any> = {
-      '@context': 'https://schema.org',
-      '@type': 'Product',
-      name: getLocalizedText(newProduct.name),
-      description: getLocalizedText(newProduct.description) || getLocalizedText(newProduct.shortDescription),
-      image: productImages,
-      sku: newProduct.sku,
-      brand: {
-        '@type': 'Brand',
-        name: brand
-      },
-      offers: {
-        '@type': 'Offer',
-        url: productUrl,
-        priceCurrency: 'EUR',
-        price: Number(newProduct.price).toFixed(2),
-        priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
-        availability: availabilityStatus,
-        itemCondition: 'https://schema.org/NewCondition'
-      }
-    }
-
-    // Add compare price if available
-    if (newProduct.comparePrice && Number(newProduct.comparePrice) > Number(newProduct.price)) {
-      productStructuredData.offers.priceType = 'https://schema.org/SalePrice'
-    }
-
-    // Add aggregate rating if available
-    const rating = reviewSummary.value
-    if (rating && rating.count > 0) {
-      productStructuredData.aggregateRating = {
-        '@type': 'AggregateRating',
-        ratingValue: rating.rating.toString(),
-        reviewCount: rating.count.toString(),
-        bestRating: '5',
-        worstRating: '1'
-      }
-    }
-
-    // Add additional product details if available
-    if (newProduct.origin) {
-      productStructuredData.countryOfOrigin = {
-        '@type': 'Country',
-        name: newProduct.origin
-      }
-    }
-
-    if (newProduct.weight) {
-      productStructuredData.weight = {
-        '@type': 'QuantitativeValue',
-        value: newProduct.weight,
-        unitCode: 'KGM'
-      }
-    }
-
-    // Add category breadcrumb
-    if (newProduct.category) {
-      productStructuredData.category = categoryLabel.value
-    }
-
+  if (newProduct && structuredData.value) {
     useHead({
-      title: `${getLocalizedText(newProduct.name)} - Moldova Direct`,
-      meta: [
-        {
-          name: 'description',
-          content: getLocalizedText(newProduct.metaDescription) || getLocalizedText(newProduct.shortDescription) || getLocalizedText(newProduct.description) || `${getLocalizedText(newProduct.name)} - Authentic Moldovan product`
-        },
-        {
-          property: 'og:title',
-          content: getLocalizedText(newProduct.name)
-        },
-        {
-          property: 'og:description',
-          content: getLocalizedText(newProduct.shortDescription) || getLocalizedText(newProduct.description)
-        },
-        {
-          property: 'og:image',
-          content: newProduct.images?.[0]?.url
-        },
-        {
-          property: 'og:type',
-          content: 'product'
-        },
-        {
-          property: 'product:price:amount',
-          content: newProduct.price
-        },
-        {
-          property: 'product:price:currency',
-          content: 'EUR'
-        }
-      ],
+      title: pageTitle.value,
+      meta: metaTags.value,
       script: [
         {
           type: 'application/ld+json',
-          children: JSON.stringify(productStructuredData)
+          children: JSON.stringify(structuredData.value)
         }
       ]
     })
   }
 }, { immediate: true })
 
-// Handle sticky bar visibility on scroll
+// UX Enhancement: Sticky mobile CTA on scroll
 if (process.client) {
   const handleScroll = () => {
     const scrollPosition = window.scrollY
@@ -1084,6 +874,7 @@ if (process.client) {
   })
 }
 
+// Handle 404 errors
 if (error.value?.statusCode === 404) {
   throw createError({
     statusCode: 404,

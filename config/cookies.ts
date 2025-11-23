@@ -9,6 +9,7 @@ export interface CookieConfig {
   maxAge: number
   sameSite: 'strict' | 'lax' | 'none'
   secure: boolean
+  path?: string
   watch?: 'shallow' | 'deep' | boolean
   default?: () => any
 }
@@ -34,7 +35,8 @@ export const CART_COOKIE_CONFIG: CookieConfig = {
 export const CHECKOUT_SESSION_COOKIE_CONFIG: CookieConfig = {
   maxAge: 60 * 60 * 2, // 2 hours
   sameSite: 'lax',
-  secure: process.env.NODE_ENV === 'production'
+  secure: process.env.NODE_ENV === 'production',
+  path: '/' // Ensure cookie is accessible from all routes (fixes scoping issue)
 }
 
 /**

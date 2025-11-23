@@ -268,14 +268,12 @@ const form = ref({
 })
 
 // Handle redirect after successful login
-const handleRedirectAfterLogin = async () => {
+async function handleRedirectAfterLogin(): Promise<void> {
+  const { handleAuthRedirect } = await import('~/utils/authRedirect')
   const redirect = route.query.redirect as string
-  if (redirect && redirect.startsWith('/')) {
-    await navigateTo(redirect)
-    return
-  }
+  const user = useSupabaseUser()
 
-  await navigateTo(localePath('/account'))
+  await handleAuthRedirect(redirect, user.value, supabase, localePath, navigateTo)
 }
 
 const success = ref('')
@@ -309,35 +307,35 @@ const isMagicLinkDisabled = computed(() => {
 })
 
 // Field validation methods
-const validateEmailField = () => {
+function validateEmailField(): void {
   if (!form.value.email) {
     emailError.value = ''
     return
   }
-  
+
   const result = validateEmail(form.value.email)
   emailError.value = result.isValid ? '' : result.errors[0]?.message || ''
 }
 
-const validatePasswordField = () => {
+function validatePasswordField(): void {
   if (!form.value.password) {
     passwordError.value = ''
     return
   }
-  
+
   const result = validatePassword(form.value.password)
   passwordError.value = result.isValid ? '' : result.errors[0]?.message || ''
 }
 
 // Password visibility toggle with accessibility
-const togglePasswordVisibility = () => {
+function togglePasswordVisibility(): void {
   showPassword.value = !showPassword.value
-  
+
   // Announce to screen readers
-  const message = showPassword.value 
+  const message = showPassword.value
     ? t('auth.accessibility.passwordVisible')
     : t('auth.accessibility.passwordHidden')
-  
+
   // Create temporary announcement element
   const announcement = document.createElement('div')
   announcement.setAttribute('aria-live', 'polite')
@@ -345,27 +343,22 @@ const togglePasswordVisibility = () => {
   announcement.className = 'sr-only'
   announcement.textContent = message
   document.body.appendChild(announcement)
-  
+
   setTimeout(() => {
     document.body.removeChild(announcement)
   }, 1000)
 }
 
-const handleLogin = async () => {
-  if (loading.value) {
+async function handleLogin(): Promise<void> {
+  if (loading.value || isAccountLocked.value) {
     return
   }
 
   localError.value = ''
   success.value = ''
   clearError()
-
-  if (isAccountLocked.value) {
-    return
-  }
-
   loading.value = true
-  
+
   try {
     const { data, error: authErr } = await supabase.auth.signInWithPassword({
       email: form.value.email,
@@ -395,7 +388,7 @@ const handleLogin = async () => {
   }
 }
 
-const handleMagicLink = async () => {
+async function handleMagicLink(): Promise<void> {
   if (!form.value.email) {
     localError.value = t('auth.emailRequired')
     return

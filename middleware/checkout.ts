@@ -13,15 +13,17 @@ export default defineNuxtRouteMiddleware((to) => {
   const { items, itemCount } = useCart()
   const checkoutStore = useCheckoutStore()
 
-  // Check if cart has items (Requirement 1.1, 1.2)
-  // Skip cart validation for confirmation page (order already completed and cart cleared)
+  // Extract the checkout step from path first
   const stepFromPath = extractStepFromPath(to.path)
 
   // Skip ALL validation for confirmation page - order is done, cart is cleared
+  // This allows users to reload the confirmation page after completing checkout
+  // even though the cart has been cleared and session might be reset
   if (stepFromPath === 'confirmation') {
     return // Allow confirmation page access without any checks
   }
 
+  // Check if cart has items (Requirement 1.1, 1.2)
   if (itemCount.value === 0) {
     // Redirect to cart page with message about empty cart
     return navigateTo({
