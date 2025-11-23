@@ -14,8 +14,8 @@ import { test, expect } from '@playwright/test'
 
 // Test configuration
 const BASE_URL = process.env.BASE_URL || 'http://localhost:3000'
-const TEST_USER_EMAIL = process.env.TEST_USER_EMAIL || 'test@example.com'
-const TEST_USER_PASSWORD = process.env.TEST_USER_PASSWORD || 'TestPassword123!'
+const TEST_USER_EMAIL = process.env.TEST_USER_EMAIL || 'customer@moldovadirect.com'
+const TEST_USER_PASSWORD = process.env.TEST_USER_PASSWORD || 'Customer123!@#'
 
 test.describe('Checkout Smart Pre-population', () => {
   test.beforeEach(async ({ page }) => {
