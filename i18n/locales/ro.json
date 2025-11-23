@@ -1592,6 +1592,26 @@
       "checkYourEmail": "Comanda dvs. a fost finalizată cu succes. Verificați emailul pentru detalii",
       "cartClearFailed": "Nu s-a putut goli coșul",
       "cartClearFailedDetails": "Comanda dvs. a fost finalizată cu succes, dar coșul nu a fost golit automat"
+    },
+    "errors": {
+      "failedToLoadAddresses": "Nu s-au putut încărca adresele salvate",
+      "failedToSaveAddress": "Nu s-a putut salva adresa",
+      "failedToUpdateAddress": "Nu s-a putut actualiza adresa",
+      "failedToSetDefaultAddress": "Nu s-a putut seta adresa implicită",
+      "failedToDeleteAddress": "Nu s-a putut șterge adresa",
+      "expressCheckoutFailed": "Plată express eșuată",
+      "pleaseTryAgain": "Vă rugăm să încercați din nou sau să editați manual detaliile"
+    },
+    "expressCheckout": {
+      "title": "Plată Express Disponibilă",
+      "description": "Folosiți adresa și preferințele salvate pentru o experiență de plată mai rapidă.",
+      "preferredShipping": "Livrare preferată",
+      "useButton": "Folosește Plata Express",
+      "editButton": "Editează Detalii",
+      "success": "Plată express activată",
+      "successDetails": "Detaliile salvate au fost încărcate",
+      "addressLoaded": "Adresă încărcată",
+      "selectShipping": "Vă rugăm să selectați o metodă de livrare"
     }
   },
   "admin": {

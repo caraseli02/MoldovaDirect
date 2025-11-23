@@ -12,6 +12,15 @@
           </p>
         </div>
 
+        <!-- Express Checkout Banner (for authenticated users with saved data) -->
+        <ExpressCheckoutBanner
+          v-if="user && defaultAddress && !expressCheckoutDismissed"
+          :default-address="defaultAddress"
+          :preferred-shipping-method="checkoutStore.preferences?.preferred_shipping_method"
+          @use-express="handleExpressCheckout"
+          @dismiss="handleExpressCheckoutDismiss"
+        />
+
         <!-- Guest/Login Options (for non-authenticated users) -->
         <Suspense>
           <template #default>
@@ -94,6 +103,9 @@
 import type { ShippingInformation } from '~/types/checkout'
 
 // Lazy load heavy sub-components
+const ExpressCheckoutBanner = defineAsyncComponent(() =>
+  import('~/components/checkout/ExpressCheckoutBanner.vue')
+)
 const AddressForm = defineAsyncComponent(() =>
   import('~/components/checkout/AddressForm.vue')
 )
@@ -138,6 +150,8 @@ const {
 const {
   shippingAddress,
   savedAddresses,
+  defaultAddress,
+  hasAddresses,
   isAddressValid,
   loadSavedAddresses,
   handleSaveAddress,
@@ -155,6 +169,7 @@ const {
 
 // Local state
 const processing = ref(false)
+const expressCheckoutDismissed = ref(false)
 const shippingInstructions = ref('')
 const availableCountries = ref([
   { code: 'ES', name: 'Spain' },
@@ -180,6 +195,16 @@ const shippingMethodValidationError = computed(() => {
 })
 
 // Methods
+const handleExpressCheckout = () => {
+  // Banner component handles the navigation
+  // Just dismiss the banner
+  expressCheckoutDismissed.value = true
+}
+
+const handleExpressCheckoutDismiss = () => {
+  expressCheckoutDismissed.value = true
+}
+
 const proceedToPayment = async () => {
   if (!canProceed.value) return
 

@@ -1763,6 +1763,26 @@
       "checkYourEmail": "Your order completed successfully. Check your email for details",
       "cartClearFailed": "Could not clear cart",
       "cartClearFailedDetails": "Your order completed successfully, but the cart was not cleared automatically"
+    },
+    "errors": {
+      "failedToLoadAddresses": "Failed to load saved addresses",
+      "failedToSaveAddress": "Failed to save address",
+      "failedToUpdateAddress": "Failed to update address",
+      "failedToSetDefaultAddress": "Failed to set default address",
+      "failedToDeleteAddress": "Failed to delete address",
+      "expressCheckoutFailed": "Express checkout failed",
+      "pleaseTryAgain": "Please try again or edit your details manually"
+    },
+    "expressCheckout": {
+      "title": "Express Checkout Available",
+      "description": "Use your saved address and preferences for a faster checkout experience.",
+      "preferredShipping": "Preferred shipping",
+      "useButton": "Use Express Checkout",
+      "editButton": "Edit Details",
+      "success": "Express checkout activated",
+      "successDetails": "Your saved details have been loaded",
+      "addressLoaded": "Address loaded",
+      "selectShipping": "Please select a shipping method"
     }
   },
   "admin": {

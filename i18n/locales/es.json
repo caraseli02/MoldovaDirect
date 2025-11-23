@@ -1685,6 +1685,26 @@
       "checkYourEmail": "Tu pedido se completó correctamente. Revisa tu correo para más detalles",
       "cartClearFailed": "No se pudo vaciar el carrito",
       "cartClearFailedDetails": "Tu pedido se completó correctamente, pero el carrito no se vació automáticamente"
+    },
+    "errors": {
+      "failedToLoadAddresses": "No se pudieron cargar las direcciones guardadas",
+      "failedToSaveAddress": "No se pudo guardar la dirección",
+      "failedToUpdateAddress": "No se pudo actualizar la dirección",
+      "failedToSetDefaultAddress": "No se pudo establecer la dirección predeterminada",
+      "failedToDeleteAddress": "No se pudo eliminar la dirección",
+      "expressCheckoutFailed": "Falló el pago express",
+      "pleaseTryAgain": "Por favor, inténtalo de nuevo o edita tus datos manualmente"
+    },
+    "expressCheckout": {
+      "title": "Pago Express Disponible",
+      "description": "Usa tu dirección y preferencias guardadas para una experiencia de pago más rápida.",
+      "preferredShipping": "Envío preferido",
+      "useButton": "Usar Pago Express",
+      "editButton": "Editar Detalles",
+      "success": "Pago express activado",
+      "successDetails": "Tus datos guardados han sido cargados",
+      "addressLoaded": "Dirección cargada",
+      "selectShipping": "Por favor selecciona un método de envío"
     }
   },
   "admin": {
