@@ -8,7 +8,7 @@
       ></div>
 
       <!-- Modal panel -->
-      <div class="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-gray-800 shadow-xl rounded-lg">
+      <div class="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-gray-800 shadow-xl rounded-lg relative z-10">
         <div class="flex justify-between items-center mb-6">
           <h3 class="text-lg font-medium text-gray-900 dark:text-white">
             {{ address?.id ? $t('profile.editAddress') : $t('profile.addAddress') }}
