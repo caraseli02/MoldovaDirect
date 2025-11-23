@@ -31,6 +31,7 @@
     "test:auth": "PLAYWRIGHT_TEST=true playwright test tests/e2e/auth.spec.ts",
     "test:products": "PLAYWRIGHT_TEST=true playwright test tests/e2e/products.spec.ts",
     "test:checkout": "PLAYWRIGHT_TEST=true playwright test tests/e2e/checkout.spec.ts",
+    "test:checkout:smart-prepopulation": "PLAYWRIGHT_TEST=true playwright test tests/e2e/checkout-smart-prepopulation.spec.ts",
     "test:i18n": "PLAYWRIGHT_TEST=true playwright test tests/e2e/i18n.spec.ts",
     "test:visual": "PLAYWRIGHT_TEST=true playwright test tests/visual",
     "test:visual:update": "PLAYWRIGHT_TEST=true playwright test tests/visual --update-snapshots",
