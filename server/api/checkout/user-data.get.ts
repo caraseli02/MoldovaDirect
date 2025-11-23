@@ -13,6 +13,8 @@
  * Response: { addresses: Address[], preferences: CheckoutPreferences | null }
  */
 
+import { serverSupabaseUser, serverSupabaseClient } from '#supabase/server'
+
 export default defineEventHandler(async (event) => {
   // Verify user authentication
   const user = await serverSupabaseUser(event)

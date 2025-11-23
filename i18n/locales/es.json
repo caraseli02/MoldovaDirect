@@ -729,6 +729,12 @@
     "noAddresses": "Aún no tienes direcciones guardadas",
     "default": "Predeterminada",
     "setAsDefault": "Establecer como dirección predeterminada",
+    "firstName": "Nombre",
+    "firstNamePlaceholder": "Introduce tu nombre",
+    "lastName": "Apellido",
+    "lastNamePlaceholder": "Introduce tu apellido",
+    "company": "Empresa",
+    "companyPlaceholder": "Nombre de la empresa (opcional)",
     "street": "Dirección",
     "streetPlaceholder": "Introduce tu dirección",
     "city": "Ciudad",
@@ -738,6 +744,8 @@
     "province": "Provincia/Estado",
     "provincePlaceholder": "Introduce provincia o estado (opcional)",
     "country": "País",
+    "phone": "Teléfono",
+    "phonePlaceholder": "Número de teléfono (opcional)",
     "deleteAccount": "Eliminar Cuenta",
     "deleteAccountWarning": "Esta acción no se puede deshacer",
     "deleteAccountConsequences": {
@@ -768,10 +776,13 @@
       "billing": "Dirección de Facturación"
     },
     "validation": {
+      "firstNameRequired": "El nombre es obligatorio",
+      "lastNameRequired": "El apellido es obligatorio",
       "streetRequired": "La dirección es obligatoria",
       "cityRequired": "La ciudad es obligatoria",
       "postalCodeRequired": "El código postal es obligatorio",
       "invalidSpanishPostalCode": "Por favor introduce un código postal español válido (5 dígitos)",
+      "phoneInvalid": "Por favor introduce un número de teléfono válido",
       "confirmationRequired": "Por favor escribe 'DELETE' para confirmar",
       "passwordRequired": "La contraseña es obligatoria para eliminar la cuenta"
     },

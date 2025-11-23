@@ -1,3 +1,5 @@
+import { serverSupabaseClient, serverSupabaseUser } from '#supabase/server'
+
 export default defineEventHandler(async (event) => {
   try {
     const user = await requireAuthenticatedUser(event)

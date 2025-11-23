@@ -281,7 +281,7 @@
     </div>
 
     <!-- Address Form Modal -->
-    <ProfileAddressFormModal
+    <AddressFormModal
       v-if="showAddressForm"
       :address="editingAddress"
       @save="handleAddressSave"
@@ -289,7 +289,7 @@
     />
 
     <!-- Delete Account Confirmation Modal -->
-    <ProfileDeleteAccountModal
+    <DeleteAccountModal
       v-if="showDeleteConfirmation"
       @confirm="handleDeleteAccount"
       @close="showDeleteConfirmation = false"

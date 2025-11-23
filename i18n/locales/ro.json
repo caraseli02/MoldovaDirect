@@ -494,6 +494,12 @@
     "noAddresses": "Nu ai încă adrese salvate",
     "default": "Implicită",
     "setAsDefault": "Setează ca adresă implicită",
+    "firstName": "Prenume",
+    "firstNamePlaceholder": "Introdu prenumele tău",
+    "lastName": "Nume",
+    "lastNamePlaceholder": "Introdu numele tău",
+    "company": "Companie",
+    "companyPlaceholder": "Numele companiei (opțional)",
     "street": "Adresa Stradală",
     "streetPlaceholder": "Introdu adresa ta stradală",
     "city": "Oraș",
@@ -503,6 +509,8 @@
     "province": "Provincie/Județ",
     "provincePlaceholder": "Introdu provincia sau județul (opțional)",
     "country": "Țară",
+    "phone": "Telefon",
+    "phonePlaceholder": "Număr de telefon (opțional)",
     "deleteAccount": "Șterge Contul",
     "deleteAccountWarning": "Această acțiune nu poate fi anulată",
     "deleteAccountConsequences": {
@@ -533,10 +541,13 @@
       "billing": "Adresă de Facturare"
     },
     "validation": {
+      "firstNameRequired": "Prenumele este obligatoriu",
+      "lastNameRequired": "Numele este obligatoriu",
       "streetRequired": "Adresa stradală este obligatorie",
       "cityRequired": "Orașul este obligatoriu",
       "postalCodeRequired": "Codul poștal este obligatoriu",
       "invalidSpanishPostalCode": "Te rugăm să introduci un cod poștal spaniol valid (5 cifre)",
+      "phoneInvalid": "Te rugăm să introduci un număr de telefon valid",
       "confirmationRequired": "Te rugăm să scrii 'DELETE' pentru a confirma",
       "passwordRequired": "Parola este obligatorie pentru ștergerea contului"
     },

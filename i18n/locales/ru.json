@@ -670,6 +670,12 @@
     "noAddresses": "You don't have any addresses saved yet",
     "default": "Default",
     "setAsDefault": "Set as default address",
+    "firstName": "First Name",
+    "firstNamePlaceholder": "Enter your first name",
+    "lastName": "Last Name",
+    "lastNamePlaceholder": "Enter your last name",
+    "company": "Company",
+    "companyPlaceholder": "Company name (optional)",
     "street": "Street Address",
     "streetPlaceholder": "Enter your street address",
     "city": "City",
@@ -679,6 +685,8 @@
     "province": "Province/State",
     "provincePlaceholder": "Enter province or state (optional)",
     "country": "Country",
+    "phone": "Phone",
+    "phonePlaceholder": "Phone number (optional)",
     "deleteAccount": "Delete Account",
     "deleteAccountWarning": "This action cannot be undone",
     "deleteAccountConsequences": {
@@ -709,10 +717,13 @@
       "billing": "Billing Address"
     },
     "validation": {
+      "firstNameRequired": "First name is required",
+      "lastNameRequired": "Last name is required",
       "streetRequired": "Street address is required",
       "cityRequired": "City is required",
       "postalCodeRequired": "Postal code is required",
       "invalidSpanishPostalCode": "Please enter a valid Spanish postal code (5 digits)",
+      "phoneInvalid": "Please enter a valid phone number",
       "confirmationRequired": "Please type 'DELETE' to confirm",
       "passwordRequired": "Password is required for account deletion"
     },
