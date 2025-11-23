@@ -20,29 +20,32 @@ COMMENT ON TABLE public.user_addresses IS 'Stores multiple shipping addresses fo
 COMMENT ON COLUMN public.user_addresses.user_id IS 'References the authenticated user who owns this address';
 COMMENT ON COLUMN public.user_addresses.is_default IS 'Marks the default address for auto-population in checkout';
 
--- Create indexes for performance
-CREATE INDEX idx_user_addresses_user_id ON public.user_addresses(user_id);
-CREATE INDEX idx_user_addresses_default ON public.user_addresses(user_id, is_default) WHERE is_default = true;
-CREATE INDEX idx_user_addresses_created_at ON public.user_addresses(created_at DESC);
+-- Create indexes for performance (idempotent)
+CREATE INDEX IF NOT EXISTS idx_user_addresses_user_id ON public.user_addresses(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_addresses_default ON public.user_addresses(user_id, is_default) WHERE is_default = true;
+CREATE INDEX IF NOT EXISTS idx_user_addresses_created_at ON public.user_addresses(created_at DESC);
 
 -- Enable Row Level Security
 ALTER TABLE public.user_addresses ENABLE ROW LEVEL SECURITY;
 
--- RLS Policy: Users can view their own addresses
+-- RLS Policy: Users can view their own addresses (idempotent)
+DROP POLICY IF EXISTS "Users can view their own addresses" ON public.user_addresses;
 CREATE POLICY "Users can view their own addresses"
   ON public.user_addresses
   FOR SELECT
   TO authenticated
   USING (auth.uid() = user_id);
 
--- RLS Policy: Users can insert their own addresses
+-- RLS Policy: Users can insert their own addresses (idempotent)
+DROP POLICY IF EXISTS "Users can insert their own addresses" ON public.user_addresses;
 CREATE POLICY "Users can insert their own addresses"
   ON public.user_addresses
   FOR INSERT
   TO authenticated
   WITH CHECK (auth.uid() = user_id);
 
--- RLS Policy: Users can update their own addresses
+-- RLS Policy: Users can update their own addresses (idempotent)
+DROP POLICY IF EXISTS "Users can update their own addresses" ON public.user_addresses;
 CREATE POLICY "Users can update their own addresses"
   ON public.user_addresses
   FOR UPDATE
@@ -50,14 +53,15 @@ CREATE POLICY "Users can update their own addresses"
   USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
 
--- RLS Policy: Users can delete their own addresses
+-- RLS Policy: Users can delete their own addresses (idempotent)
+DROP POLICY IF EXISTS "Users can delete their own addresses" ON public.user_addresses;
 CREATE POLICY "Users can delete their own addresses"
   ON public.user_addresses
   FOR DELETE
   TO authenticated
   USING (auth.uid() = user_id);
 
--- Function to update updated_at timestamp
+-- Function to update updated_at timestamp (idempotent with CREATE OR REPLACE)
 CREATE OR REPLACE FUNCTION public.update_user_addresses_updated_at()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -66,13 +70,14 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Trigger to automatically update updated_at
+-- Trigger to automatically update updated_at (idempotent)
+DROP TRIGGER IF EXISTS user_addresses_updated_at ON public.user_addresses;
 CREATE TRIGGER user_addresses_updated_at
   BEFORE UPDATE ON public.user_addresses
   FOR EACH ROW
   EXECUTE FUNCTION public.update_user_addresses_updated_at();
 
--- Function to ensure only one default address per user
+-- Function to ensure only one default address per user (idempotent with CREATE OR REPLACE)
 CREATE OR REPLACE FUNCTION public.ensure_single_default_address()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -89,7 +94,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Trigger to enforce single default address
+-- Trigger to enforce single default address (idempotent)
+DROP TRIGGER IF EXISTS ensure_single_default_address ON public.user_addresses;
 CREATE TRIGGER ensure_single_default_address
   BEFORE INSERT OR UPDATE ON public.user_addresses
   FOR EACH ROW

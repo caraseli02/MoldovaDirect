@@ -14,21 +14,24 @@ COMMENT ON COLUMN public.user_checkout_preferences.preferred_shipping_method IS 
 -- Enable Row Level Security
 ALTER TABLE public.user_checkout_preferences ENABLE ROW LEVEL SECURITY;
 
--- RLS Policy: Users can view their own preferences
+-- RLS Policy: Users can view their own preferences (idempotent)
+DROP POLICY IF EXISTS "Users can view their own preferences" ON public.user_checkout_preferences;
 CREATE POLICY "Users can view their own preferences"
   ON public.user_checkout_preferences
   FOR SELECT
   TO authenticated
   USING (auth.uid() = user_id);
 
--- RLS Policy: Users can insert their own preferences
+-- RLS Policy: Users can insert their own preferences (idempotent)
+DROP POLICY IF EXISTS "Users can insert their own preferences" ON public.user_checkout_preferences;
 CREATE POLICY "Users can insert their own preferences"
   ON public.user_checkout_preferences
   FOR INSERT
   TO authenticated
   WITH CHECK (auth.uid() = user_id);
 
--- RLS Policy: Users can update their own preferences
+-- RLS Policy: Users can update their own preferences (idempotent)
+DROP POLICY IF EXISTS "Users can update their own preferences" ON public.user_checkout_preferences;
 CREATE POLICY "Users can update their own preferences"
   ON public.user_checkout_preferences
   FOR UPDATE
@@ -36,7 +39,7 @@ CREATE POLICY "Users can update their own preferences"
   USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
 
--- Function to update updated_at timestamp
+-- Function to update updated_at timestamp (idempotent with CREATE OR REPLACE)
 CREATE OR REPLACE FUNCTION public.update_checkout_preferences_updated_at()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -45,7 +48,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Trigger to automatically update updated_at
+-- Trigger to automatically update updated_at (idempotent)
+DROP TRIGGER IF EXISTS checkout_preferences_updated_at ON public.user_checkout_preferences;
 CREATE TRIGGER checkout_preferences_updated_at
   BEFORE UPDATE ON public.user_checkout_preferences
   FOR EACH ROW
