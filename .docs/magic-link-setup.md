@@ -44,11 +44,33 @@ This document provides step-by-step instructions for configuring and using Magic
 
 Navigate to: **Authentication > Providers > Email**
 
+**Basic Settings:**
 ```
 ✅ Enable email provider
 ✅ Enable email confirmations
 ✅ Enable magic links (Email OTP)
 ```
+
+**⚠️ IMPORTANT - OTP Expiry Configuration:**
+
+Scroll down to **Email OTP Settings** and configure:
+
+```
+OTP Expiry: 3600 seconds (1 hour) ⚠️ RECOMMENDED
+```
+
+**Security Note:**
+- Supabase warns if OTP expiry > 1 hour
+- Default may be set to 86400 seconds (24 hours) - this is TOO LONG
+- **Recommended:** 3600 seconds (1 hour)
+- Shorter expiry = better security
+- Longer expiry = more time for potential attacks
+
+**Why 1 hour is recommended:**
+- Reduces window for token interception
+- Follows industry best practices
+- Balances security with user convenience
+- Prevents tokens from being valid indefinitely
 
 #### 2. Configure Redirect URLs
 
@@ -123,7 +145,7 @@ Navigate to: **Authentication > Email Templates > Magic Link**
       {{ .ConfirmationURL }}
     </p>
 
-    <p><strong>This link will expire in 24 hours.</strong></p>
+    <p><strong>This link will expire in 1 hour.</strong></p>
 
     <p>If you didn't request this email, you can safely ignore it.</p>
 
@@ -172,7 +194,7 @@ Navigate to: **Authentication > Email Templates > Magic Link**
 
 3. **User checks email**
    - Receives email with magic link
-   - Link is valid for 24 hours
+   - Link is valid for 1 hour (recommended setting)
    - Single-use only
 
 4. **User clicks magic link**
@@ -223,7 +245,10 @@ Action: Retry button available
 
 ### Token Security
 
-- **Expiration:** 24 hours (Supabase default)
+- **Expiration:** 1 hour (recommended - configurable in Supabase)
+  - ⚠️ Default may be 24 hours - **change this to 3600 seconds**
+  - Longer expiry increases security risk
+  - Supabase warns if set > 1 hour
 - **Single-use:** Tokens invalidated after use
 - **Verification:** Tokens verified server-side via Supabase
 - **PKCE Flow:** Enhanced security for server-side rendering
@@ -353,7 +378,7 @@ const { data, error } = await supabase.auth.verifyOtp({
 ### Magic Link Not Working
 
 **Possible Causes:**
-1. Link expired (24+ hours old)
+1. Link expired (1+ hours old with recommended settings)
 2. Link already used
 3. Email tracking modified the URL
 4. Incorrect redirect URL configuration
@@ -363,6 +388,33 @@ const { data, error } = await supabase.auth.verifyOtp({
 - Disable email tracking
 - Verify redirect URLs in Supabase dashboard
 - Check browser console for errors
+- Verify OTP expiry is set correctly (3600 seconds)
+
+### Supabase OTP Expiry Warning
+
+**Warning Message:**
+```
+⚠️ We have detected that you have enabled the email provider with the
+OTP expiry set to more than an hour. It is recommended to set this
+value to less than an hour.
+```
+
+**Cause:**
+- OTP expiry is configured to more than 3600 seconds (1 hour)
+- Default Supabase setting may be 86400 seconds (24 hours)
+
+**Solution:**
+1. Go to Supabase Dashboard
+2. Navigate to: **Authentication > Providers > Email**
+3. Scroll down to **Email OTP Settings**
+4. Change **OTP Expiry** to: `3600` (1 hour)
+5. Click **Save**
+
+**Why This Matters:**
+- Longer expiry times increase security risk
+- Tokens valid for 24 hours can be intercepted and used later
+- 1 hour balances security with user convenience
+- Industry best practice for magic links
 
 ### Rate Limit Issues
 
@@ -388,6 +440,13 @@ const { data, error } = await supabase.auth.verifyOtp({
 
 ## 🔄 Changelog
 
+**2025-11-24:** Security configuration update
+- ⚠️ Updated recommended OTP expiry from 24 hours to 1 hour (3600 seconds)
+- Added prominent warning about Supabase OTP expiry configuration
+- Updated all documentation references to reflect 1-hour expiry
+- Added dedicated troubleshooting section for OTP expiry warning
+- Clarified security implications of longer expiry times
+
 **2025-11-23:** Initial implementation
 - Created magic link button in login page
 - Implemented confirm page with proper token verification
@@ -398,6 +457,6 @@ const { data, error } = await supabase.auth.verifyOtp({
 
 ---
 
-**Last Updated:** 2025-11-23
-**Status:** ✅ Production Ready
+**Last Updated:** 2025-11-24
+**Status:** ✅ Production Ready (requires OTP expiry configuration)
 **Maintainer:** Development Team
