@@ -43,6 +43,7 @@ import {
   Hand,
   Heart,
   Home,
+  Image,
   Info,
   Key,
   LayoutDashboard,
@@ -84,6 +85,7 @@ import {
   UserPlus,
   Users,
   Wallet,
+  Wine,
   Wrench,
   X
 } from 'lucide-vue-next'
@@ -200,9 +202,13 @@ const ICONS: Record<string, Component> = {
   'user-plus': UserPlus,
   'users': Users,
   'wallet': Wallet,
+  'wine': Wine,
+  'wine-glass': Wine,
   'wrench': Wrench,
   'x': X,
   'x-mark': X,
+  'image': Image,
+  'photo': Image,
   'alert-octagon': AlertTriangle,
   'alert': AlertTriangle
 }

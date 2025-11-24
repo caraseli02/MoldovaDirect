@@ -1,5 +1,21 @@
 <template>
   <div class="bg-gray-50 dark:bg-gray-950 min-h-screen">
+    <!-- Skip Links for Accessibility -->
+    <div class="sr-only focus-within:not-sr-only">
+      <a
+        href="#main-content"
+        class="absolute top-0 left-0 z-50 bg-primary-600 text-white px-4 py-2 rounded-br-lg focus:outline-none focus:ring-2 focus:ring-white"
+      >
+        Skip to main content
+      </a>
+      <a
+        href="#product-filters"
+        class="absolute top-0 left-28 z-50 bg-primary-600 text-white px-4 py-2 rounded-br-lg focus:outline-none focus:ring-2 focus:ring-white"
+      >
+        Skip to filters
+      </a>
+    </div>
+
     <!-- Breadcrumb Navigation -->
     <ProductBreadcrumbs
       :current-category="currentCategory"
@@ -48,7 +64,7 @@
                   v-model="searchQuery"
                   type="search"
                   :placeholder="t('common.search') + '...'"
-                  class="w-full rounded-lg border border-gray-300 bg-white pl-10 pr-4 py-3 text-sm text-gray-900 placeholder-gray-500 transition focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-400 dark:focus:ring-primary-400"
+                  class="w-full rounded-lg border border-gray-300 bg-white pl-10 pr-4 py-3 text-sm text-gray-900 placeholder-gray-600 transition focus:border-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-400 dark:focus:ring-primary-400"
                   @input="handleSearchInput"
                 />
                 <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -121,7 +137,7 @@
                     <option value="price_desc">{{ t('products.sortPriceHighLow') }}</option>
                     <option value="featured">{{ t('products.sortFeatured') }}</option>
                   </select>
-                  <commonIcon name="lucide:chevron-down" class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" aria-hidden="true" />
+                  <commonIcon name="lucide:chevron-down" class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-600" aria-hidden="true" />
                 </div>
               </div>
             </div>
@@ -129,6 +145,7 @@
             <!-- Active Filter Chips -->
             <ProductActiveFilters
               v-if="activeFilterChips.length"
+              id="product-filters"
               :chips="activeFilterChips"
               :show-clear-all="true"
               @remove-chip="removeActiveChip"
@@ -151,14 +168,16 @@
             </div>
 
             <div v-else-if="loading" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              <div v-for="n in 8" :key="`skeleton-${n}`" class="animate-pulse rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
-                <div class="mb-4 aspect-square rounded-xl bg-gray-200 dark:bg-gray-700"></div>
-                <div class="mb-2 h-4 rounded bg-gray-200 dark:bg-gray-700"></div>
-                <div class="h-3 w-2/3 rounded bg-gray-200 dark:bg-gray-700"></div>
-              </div>
+              <UiCard v-for="n in 8" :key="`skeleton-${n}`">
+                <UiCardContent class="p-4">
+                  <UiSkeleton class="mb-4 aspect-square rounded-xl" />
+                  <UiSkeleton class="mb-2 h-4 w-full" />
+                  <UiSkeleton class="h-3 w-2/3" />
+                </UiCardContent>
+              </UiCard>
             </div>
 
-            <div v-else-if="products?.length" class="space-y-10">
+            <div v-else-if="products?.length" id="main-content" class="space-y-10" role="main">
               <MobileVirtualProductGrid
                 v-if="mobileInteractions.isMobile.value && products.length > 20"
                 :items="products"
@@ -166,6 +185,7 @@
                 :loading="loading"
                 @load-more="loadMoreProducts"
               />
+              <!-- Standard Grid: Clean, predictable layout -->
               <div v-else class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 <ProductCard v-for="product in products" :key="product.id" :product="product" />
               </div>
@@ -200,7 +220,7 @@
                   >
                     {{ page }}
                   </UiButton>
-                  <span v-else class="px-3 py-2 text-sm text-gray-500" aria-hidden="true">…</span>
+                  <span v-else class="px-3 py-2 text-sm text-gray-600" aria-hidden="true">…</span>
                   <UiButton
                     :disabled="pagination.page >= pagination.totalPages"
                     variant="outline"
@@ -263,16 +283,16 @@
                   :key="story.id"
                   class="group relative overflow-hidden rounded-2xl border border-gray-200 bg-gradient-to-br from-gray-50 to-white p-6 transition hover:-translate-y-1 hover:shadow-lg dark:border-gray-800 dark:from-gray-900 dark:to-gray-800"
                 >
-                  <span class="inline-flex rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-blue-600 dark:bg-blue-900/60 dark:text-blue-300">
+                  <span class="inline-flex rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-blue-800 dark:bg-blue-900/60 dark:text-blue-200">
                     {{ story.tag }}
                   </span>
-                  <h4 class="mt-4 text-lg font-semibold text-gray-900 transition group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-300">
+                  <h4 class="mt-4 text-lg font-semibold text-gray-900 transition group-hover:text-blue-700 dark:text-white dark:group-hover:text-blue-200">
                     {{ story.title }}
                   </h4>
                   <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
                     {{ story.description }}
                   </p>
-                  <button type="button" class="mt-4 inline-flex items-center gap-2 text-sm font-medium text-blue-600 transition hover:text-blue-700 dark:text-blue-300 dark:hover:text-blue-200">
+                  <button type="button" class="mt-4 inline-flex items-center gap-2 text-sm font-medium text-blue-700 transition hover:text-blue-800 dark:text-blue-200 dark:hover:text-blue-100">
                     {{ t('products.editorial.cta') }}
                     <span aria-hidden="true">→</span>
                   </button>

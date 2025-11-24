@@ -1,9 +1,9 @@
 <template>
   <div class="mobile-category-item">
-    <div 
+    <div
       class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors"
-      :class="{ 
-        'bg-blue-50 text-blue-600': isCurrentCategory,
+      :class="{
+        'bg-blue-50 text-blue-800': isCurrentCategory,
         'pl-6': level === 1,
         'pl-9': level === 2,
         'pl-12': level >= 3
@@ -33,10 +33,10 @@
         <span v-if="showProductCount" class="text-sm text-gray-500">
           {{ category.productCount }}
         </span>
-        <commonIcon 
+        <commonIcon
           v-if="isCurrentCategory"
-          name="lucide:check" 
-          class="w-5 h-5 text-blue-600" 
+          name="lucide:check"
+          class="w-5 h-5 text-blue-800"
         />
       </div>
     </div>

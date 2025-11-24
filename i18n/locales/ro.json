@@ -1021,6 +1021,16 @@
       "originCategoryFallback": "O creație emblematică din colecția noastră de {category}.",
       "noAwards": "Fii primul care celebrează acest produs."
     },
+    "imageFallback": {
+      "title": "Imaginea produsului va fi adăugată în curând",
+      "subtitle": "Produs autentic moldovenesc garantat",
+      "description": "Imagini de înaltă calitate vor fi disponibile în curând"
+    },
+    "noImageAvailable": "Nu există imagine disponibilă",
+    "imageGallery": "Galerie de Imagini",
+    "imageZoom": {
+      "keyboardHints": "Folosește săgețile pentru navigare, ESC pentru închidere"
+    },
     "socialProof": {
       "title": "Îndrăgit de clienți",
       "subtitle": "Feedback real din degustări, cine și cadouri.",
