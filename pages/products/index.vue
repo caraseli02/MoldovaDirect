@@ -323,7 +323,6 @@ import type { ProductFilters, ProductWithRelations, ProductSortOption } from '~/
 import type { FilterChip } from '~/composables/useProductFilters'
 import { ref, computed, onMounted, onUnmounted, onBeforeUnmount, nextTick, watch, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useDebounceFn } from '@vueuse/core'
 
 // Components
 import productFilterMain from '~/components/product/Filter/Main.vue'
@@ -340,6 +339,21 @@ import { useMobileProductInteractions } from '~/composables/useMobileProductInte
 import { useProductStructuredData } from '~/composables/useProductStructuredData'
 
 const { t } = useI18n()
+
+// Simple debounce utility (SSR-safe)
+function debounce<T extends (...args: any[]) => any>(fn: T, delay: number) {
+  let timeoutId: ReturnType<typeof setTimeout> | null = null
+
+  return function(this: any, ...args: Parameters<T>) {
+    if (timeoutId) {
+      clearTimeout(timeoutId)
+    }
+
+    timeoutId = setTimeout(() => {
+      fn.apply(this, args)
+    }, delay)
+  }
+}
 
 // Product Catalog Store
 const {
@@ -411,7 +425,7 @@ const hasActiveFilters = computed(() => {
 const totalProducts = computed(() => pagination.value?.total || products.value?.length || 0)
 
 // Debounced search handler to prevent excessive API calls
-const handleSearchInput = useDebounceFn(() => {
+const handleSearchInput = debounce(() => {
   // Cancel previous search request if it exists
   if (searchAbortController) {
     searchAbortController.abort()
