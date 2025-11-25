@@ -1024,6 +1024,8 @@
     }
   },
   "products": {
+    "commonProduct": "Товар",
+    "viewDetails": "Подробнее",
     "featured": "Рекомендуемые",
     "sale": "Распродажа",
     "off": "скидка",
@@ -1040,8 +1042,8 @@
     },
     "addToCart": "В корзину",
     "outOfStock": "Нет в наличии",
-    "inCart": "In Cart",
-    "adding": "Adding...",
+    "inCart": "В корзине",
+    "adding": "Добавление...",
     "cartEmpty": "Your cart is empty",
     "cartEmptyDescription": "Start shopping to add items to your cart",
     "itemsInCart": "items in cart",

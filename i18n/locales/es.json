@@ -1107,6 +1107,8 @@
     }
   },
   "products": {
+    "commonProduct": "Producto",
+    "viewDetails": "Ver Detalles",
     "featured": "Destacado",
     "sale": "Oferta",
     "new": "Nuevo",

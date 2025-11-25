@@ -699,13 +699,30 @@ const handleNextImage = () => {
 const addToCart = async () => {
   if (!product.value) return
 
-  // Only run on client side (fix for Vercel SSR)
+  // CRITICAL SSR Guard: Cart operations require browser APIs
+  //
+  // Context: This guard prevents SSR hydration mismatches on Vercel deployment
+  // Root causes:
+  // - Cart store uses localStorage which is undefined during SSR
+  // - Haptic feedback APIs (vibrate) only exist in browser context
+  // - User session state unavailable during server render
+  //
+  // Behavior: Server-rendered buttons appear but don't execute cart logic
+  // until hydration completes. This is intentional and prevents 500 errors.
   if (import.meta.server || typeof window === 'undefined') {
     console.warn('Add to Cart: Server-side render, skipping')
     return
   }
 
-  // Debug logging in development only
+  // Development-only debug logging (tree-shaken in production)
+  //
+  // Added to diagnose SSR-related cart failures (commit ffbe86a)
+  // Logs only appear in dev mode; completely removed from production bundles
+  //
+  // Key diagnostics:
+  // - isClient: Should be true for cart operations
+  // - hasWindow: Verifies browser context availability
+  // - addItemType: Confirms cart composable loaded correctly
   if (import.meta.dev) {
     const debugInfo = {
       productId: product.value.id,

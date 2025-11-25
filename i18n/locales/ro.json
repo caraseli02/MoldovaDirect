@@ -848,6 +848,8 @@
     }
   },
   "products": {
+    "commonProduct": "Produs",
+    "viewDetails": "Vezi Detalii",
     "featured": "Recomandat",
     "sale": "Ofertă",
     "off": "reducere",

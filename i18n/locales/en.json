@@ -1174,6 +1174,8 @@
     }
   },
   "products": {
+    "commonProduct": "Product",
+    "viewDetails": "View Details",
     "featured": "Featured",
     "sale": "Sale",
     "new": "New",

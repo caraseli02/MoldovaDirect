@@ -331,7 +331,16 @@ const handleTouchStart = (event: TouchEvent) => {
 
 // Actions
 const addToCart = async () => {
-  // Only run on client side (fix for Vercel SSR)
+  // CRITICAL SSR Guard: Cart operations require browser APIs
+  //
+  // Context: This guard prevents SSR hydration mismatches on Vercel deployment
+  // Root causes:
+  // - Cart store uses localStorage which is undefined during SSR
+  // - Haptic feedback APIs (vibrate) only exist in browser context
+  // - User session state unavailable during server render
+  //
+  // Behavior: Server-rendered buttons appear but don't execute cart logic
+  // until hydration completes. This is intentional and prevents 500 errors.
   if (process.server || typeof window === 'undefined') {
     console.warn('Add to Cart: Server-side render, skipping')
     return
@@ -374,7 +383,14 @@ const addToCart = async () => {
       vibrate('success')
     }
   } catch (error) {
-    console.error('❌ Failed to add item to cart:', error)
+    const errorMsg = error instanceof Error ? error.message : String(error)
+    console.error('❌ Failed to add item to cart:', errorMsg, error)
+
+    // Show error toast to user
+    toast.error(
+      t('cart.error.addFailed'),
+      t('cart.error.addFailedDetails')
+    )
 
     // Error haptic feedback
     if (isMobile.value) {

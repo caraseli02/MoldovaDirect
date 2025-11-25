@@ -340,7 +340,17 @@ import { useProductStructuredData } from '~/composables/useProductStructuredData
 
 const { t } = useI18n()
 
-// Simple debounce utility (SSR-safe)
+// CRITICAL: Custom debounce implementation (DO NOT replace with VueUse)
+//
+// Context: useDebounceFn from @vueuse/core caused 500 errors on mobile production (commit ffbe86a)
+// Root cause: VueUse's debounce is not SSR-safe and fails during server-side rendering
+//
+// This implementation:
+// - Works correctly in both SSR and client contexts
+// - Uses standard setTimeout which is available in all environments
+// - Properly cleans up timeouts to prevent memory leaks
+//
+// Performance: 300ms delay prevents excessive API calls during rapid typing
 function debounce<T extends (...args: any[]) => any>(fn: T, delay: number) {
   let timeoutId: ReturnType<typeof setTimeout> | null = null
 
