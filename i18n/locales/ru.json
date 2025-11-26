@@ -1024,6 +1024,8 @@
     }
   },
   "products": {
+    "commonProduct": "Товар",
+    "viewDetails": "Подробнее",
     "featured": "Рекомендуемые",
     "sale": "Распродажа",
     "off": "скидка",
@@ -1040,8 +1042,8 @@
     },
     "addToCart": "В корзину",
     "outOfStock": "Нет в наличии",
-    "inCart": "In Cart",
-    "adding": "Adding...",
+    "inCart": "В корзине",
+    "adding": "Добавление...",
     "cartEmpty": "Your cart is empty",
     "cartEmptyDescription": "Start shopping to add items to your cart",
     "itemsInCart": "items in cart",
@@ -1196,6 +1198,16 @@
       "originFallback": "Собрано возле {origin} по традиционным методам.",
       "originCategoryFallback": "Фирменный продукт нашей коллекции {category}.",
       "noAwards": "Станьте первым, кто оценит эту новинку."
+    },
+    "imageFallback": {
+      "title": "Изображение товара скоро появится",
+      "subtitle": "Подлинный молдавский товар гарантирован",
+      "description": "Высококачественные изображения будут доступны в ближайшее время"
+    },
+    "noImageAvailable": "Изображение недоступно",
+    "imageGallery": "Галерея изображений",
+    "imageZoom": {
+      "keyboardHints": "Используйте стрелки для навигации, ESC для закрытия"
     },
     "socialProof": {
       "title": "Любимый клиентами",

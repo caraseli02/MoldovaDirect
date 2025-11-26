@@ -68,24 +68,33 @@ export default defineNuxtConfig({
     presets: {
       hero: {
         modifiers: {
-          format: 'webp',
-          quality: 85,
+          format: 'avif',
+          quality: 80,
           fit: 'cover',
         }
       },
       productThumbnail: {
         modifiers: {
-          format: 'webp',
-          quality: 80,
+          format: 'avif',
+          quality: 75,
           fit: 'cover',
           width: 400,
           height: 400,
         }
       },
+      productThumbnailSmall: {
+        modifiers: {
+          format: 'avif',
+          quality: 75,
+          fit: 'cover',
+          width: 112,
+          height: 112,
+        }
+      },
       productDetail: {
         modifiers: {
-          format: 'webp',
-          quality: 85,
+          format: 'avif',
+          quality: 80,
           fit: 'cover',
           width: 800,
           height: 800,

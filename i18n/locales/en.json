@@ -1174,6 +1174,8 @@
     }
   },
   "products": {
+    "commonProduct": "Product",
+    "viewDetails": "View Details",
     "featured": "Featured",
     "sale": "Sale",
     "new": "New",
@@ -1368,6 +1370,12 @@
       "originCategoryFallback": "A signature creation from our {category} collection.",
       "noAwards": "Be the first to celebrate this release."
     },
+    "imageFallback": {
+      "title": "Product image coming soon",
+      "subtitle": "Authentic Moldovan product guaranteed",
+      "description": "High-quality product images will be available shortly"
+    },
+    "noImageAvailable": "No image available",
     "socialProof": {
       "title": "Loved by customers",
       "subtitle": "Real feedback from tastings, supper clubs, and gift orders.",
