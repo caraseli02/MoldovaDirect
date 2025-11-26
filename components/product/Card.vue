@@ -226,6 +226,7 @@ import { useCart } from '~/composables/useCart'
 import { useDevice } from '~/composables/useDevice'
 import { useHapticFeedback } from '~/composables/useHapticFeedback'
 import { useTouchEvents } from '~/composables/useTouchEvents'
+import { useToast } from '~/composables/useToast'
 import { useRouter } from '#imports'
 import { useI18n } from '#imports'
 import { PRODUCTS } from '~/constants/products'
@@ -244,6 +245,7 @@ const { locale, t } = useI18n()
 const { isMobile } = useDevice()
 const { vibrate } = useHapticFeedback()
 const touchEvents = useTouchEvents()
+const toast = useToast()
 const { addItem, loading: cartLoading, isInCart } = useCart()
 
 // Template refs
@@ -341,17 +343,19 @@ const addToCart = async () => {
   //
   // Behavior: Server-rendered buttons appear but don't execute cart logic
   // until hydration completes. This is intentional and prevents 500 errors.
-  if (process.server || typeof window === 'undefined') {
+  if (import.meta.server || typeof window === 'undefined') {
     console.warn('Add to Cart: Server-side render, skipping')
     return
   }
 
-  // Debug logging
-  console.log('🛒 ProductCard: Add to Cart', {
-    productId: props.product.id,
-    isClient: process.client,
-    hasAddItem: typeof addItem === 'function'
-  })
+  // Debug logging (development only)
+  if (import.meta.dev) {
+    console.log('🛒 ProductCard: Add to Cart', {
+      productId: props.product.id,
+      isClient: process.client,
+      hasAddItem: typeof addItem === 'function'
+    })
+  }
 
   try {
     // Verify cart is available
@@ -374,9 +378,13 @@ const addToCart = async () => {
       stock: props.product.stockQuantity
     }
 
-    console.log('🛒 Calling addItem')
+    if (import.meta.dev) {
+      console.log('🛒 Calling addItem')
+    }
     await addItem(cartProduct, 1)
-    console.log('✅ Item added successfully')
+    if (import.meta.dev) {
+      console.log('✅ Item added successfully')
+    }
 
     // Success haptic feedback
     if (isMobile.value) {
