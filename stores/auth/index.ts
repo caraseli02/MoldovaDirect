@@ -697,10 +697,12 @@ export const useAuthStore = defineStore('auth', {
       const supabase = useSupabaseClient()
       const { translateAuthError } = useAuthMessages()
       const toastStore = useToast()
+      const runtimeConfig = useRuntimeConfig()
 
       try {
-        const redirectTo = process.client
-          ? new URL('/auth/reset-password', window.location.origin).toString()
+        const siteUrl = runtimeConfig.public.siteUrl || (process.client ? window.location.origin : undefined)
+        const redirectTo = siteUrl
+          ? new URL('/auth/reset-password', siteUrl).toString()
           : undefined
 
         const { error } = await supabase.auth.resetPasswordForEmail(
