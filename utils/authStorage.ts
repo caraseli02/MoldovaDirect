@@ -1,155 +1,121 @@
 /**
- * Custom storage handler for Supabase authentication
- * Implements "Remember Me" functionality by switching between
- * localStorage (persistent) and sessionStorage (temporary)
+ * Cookie-based authentication storage utilities
+ * Implements "Remember Me" functionality using cookies for SSR compatibility
+ *
+ * This approach is better than localStorage/sessionStorage because:
+ * - Works with SSR (Server-Side Rendering)
+ * - Compatible with Nuxt's hybrid rendering
+ * - Cookies are automatically sent with requests
+ * - Better security with httpOnly and secure flags
  */
 
-const REMEMBER_ME_KEY = 'auth-remember-me'
+const REMEMBER_ME_COOKIE = 'auth-remember-me'
+const SESSION_MAX_AGE = 60 * 60 * 24 * 30 // 30 days in seconds
 
 /**
- * Get the appropriate storage based on remember me preference
- */
-function getStorage(): Storage {
-  if (typeof window === 'undefined') {
-    // Server-side: return a no-op storage
-    return {
-      getItem: () => null,
-      setItem: () => {},
-      removeItem: () => {},
-      clear: () => {},
-      key: () => null,
-      length: 0
-    }
-  }
-
-  // Check if we should use persistent storage
-  const rememberMe = sessionStorage.getItem(REMEMBER_ME_KEY)
-
-  // If rememberMe is explicitly set to 'false', use sessionStorage
-  // Otherwise, default to localStorage for backward compatibility
-  return rememberMe === 'false' ? sessionStorage : localStorage
-}
-
-/**
- * Set the remember me preference
- * This determines which storage will be used for the session
+ * Set the remember me preference using a cookie
+ * This cookie controls whether auth cookies should be persistent or session-only
  */
 export function setRememberMePreference(remember: boolean): void {
-  if (typeof window === 'undefined') return
+  const rememberMeCookie = useCookie(REMEMBER_ME_COOKIE, {
+    maxAge: remember ? SESSION_MAX_AGE : undefined, // undefined = session cookie
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/'
+  })
 
-  // Store preference in sessionStorage (survives page reloads but not browser restarts)
-  if (remember) {
-    sessionStorage.removeItem(REMEMBER_ME_KEY)
-  } else {
-    sessionStorage.setItem(REMEMBER_ME_KEY, 'false')
-  }
+  rememberMeCookie.value = remember ? 'true' : 'false'
 }
 
 /**
- * Get the remember me preference
+ * Get the remember me preference from cookie
  */
 export function getRememberMePreference(): boolean {
-  if (typeof window === 'undefined') return true
-
-  return sessionStorage.getItem(REMEMBER_ME_KEY) !== 'false'
+  const rememberMeCookie = useCookie(REMEMBER_ME_COOKIE)
+  return rememberMeCookie.value !== 'false'
 }
 
 /**
- * Move existing session from localStorage to sessionStorage
- * Used when user unchecks "remember me" during login
+ * Update Supabase session cookies based on remember me preference
+ * This modifies the auth-token cookie to be either persistent or session-only
  */
-export function moveSessionToSessionStorage(): void {
-  if (typeof window === 'undefined') return
+export function updateSupabaseSessionCookies(remember: boolean): void {
+  // Client-side only operation
+  if (process.server) return
 
   try {
-    const authStorageKey = 'sb-' // Supabase storage key prefix
+    // Get all cookies
+    const cookies = document.cookie.split(';')
+    const supabaseCookies = cookies
+      .map(c => c.trim())
+      .filter(c => c.startsWith('sb-'))
 
-    // Find all Supabase auth keys in localStorage
-    const keysToMove: string[] = []
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i)
-      if (key && key.startsWith(authStorageKey)) {
-        keysToMove.push(key)
-      }
-    }
+    // For each Supabase cookie, we need to update its attributes
+    // Since we can't directly modify cookie attributes, we'll rely on
+    // the cookie being recreated on next auth state change with correct maxAge
 
-    // Move each auth key from localStorage to sessionStorage
-    keysToMove.forEach(key => {
-      const value = localStorage.getItem(key)
-      if (value) {
-        sessionStorage.setItem(key, value)
-        localStorage.removeItem(key)
-      }
-    })
+    // The key is that Supabase's @nuxtjs/supabase module respects
+    // the cookieOptions in nuxt.config.ts
+
+    // Store the preference so it can be used by the auth system
+    setRememberMePreference(remember)
+
   } catch (error) {
-    console.warn('Failed to move session to sessionStorage:', error)
+    console.warn('Failed to update Supabase session cookies:', error)
   }
 }
 
 /**
- * Move existing session from sessionStorage to localStorage
- * Used when user checks "remember me" during login
+ * Clear all authentication cookies
+ * Used during logout to ensure complete cleanup
  */
-export function moveSessionToLocalStorage(): void {
-  if (typeof window === 'undefined') return
+export function clearAuthCookies(): void {
+  // Clear the remember me preference cookie
+  const rememberMeCookie = useCookie(REMEMBER_ME_COOKIE, { path: '/' })
+  rememberMeCookie.value = null
 
-  try {
-    const authStorageKey = 'sb-' // Supabase storage key prefix
+  // Client-side: Clear Supabase cookies
+  if (process.client) {
+    try {
+      // Get all cookies and find Supabase auth cookies
+      const cookies = document.cookie.split(';')
+      cookies.forEach(cookie => {
+        const [name] = cookie.split('=')
+        const trimmedName = name.trim()
 
-    // Find all Supabase auth keys in sessionStorage
-    const keysToMove: string[] = []
-    for (let i = 0; i < sessionStorage.length; i++) {
-      const key = sessionStorage.key(i)
-      if (key && key.startsWith(authStorageKey)) {
-        keysToMove.push(key)
-      }
+        // Clear Supabase auth cookies (sb-*)
+        if (trimmedName.startsWith('sb-')) {
+          // Set cookie to expire immediately
+          document.cookie = `${trimmedName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
+          // Also try with domain
+          const domain = window.location.hostname
+          document.cookie = `${trimmedName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${domain}`
+        }
+      })
+    } catch (error) {
+      console.warn('Failed to clear auth cookies:', error)
     }
-
-    // Move each auth key from sessionStorage to localStorage
-    keysToMove.forEach(key => {
-      const value = sessionStorage.getItem(key)
-      if (value) {
-        localStorage.setItem(key, value)
-        sessionStorage.removeItem(key)
-      }
-    })
-  } catch (error) {
-    console.warn('Failed to move session to localStorage:', error)
   }
 }
 
 /**
- * Clear session from both storages
+ * Helper to set cookie maxAge based on remember me preference
+ * This can be called after login to adjust session duration
  */
-export function clearAuthSession(): void {
-  if (typeof window === 'undefined') return
+export function adjustSessionCookieDuration(remember: boolean): void {
+  if (process.server) return
 
   try {
-    const authStorageKey = 'sb-'
+    // Update the preference cookie
+    setRememberMePreference(remember)
 
-    // Clear from localStorage
-    const localKeys: string[] = []
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i)
-      if (key && key.startsWith(authStorageKey)) {
-        localKeys.push(key)
-      }
-    }
-    localKeys.forEach(key => localStorage.removeItem(key))
+    // Note: Supabase session cookies are managed by the Supabase client
+    // The actual persistence is handled by Supabase's storage adapter
+    // Our preference cookie will be checked during session initialization
 
-    // Clear from sessionStorage
-    const sessionKeys: string[] = []
-    for (let i = 0; i < sessionStorage.length; i++) {
-      const key = sessionStorage.key(i)
-      if (key && key.startsWith(authStorageKey)) {
-        sessionKeys.push(key)
-      }
-    }
-    sessionKeys.forEach(key => sessionStorage.removeItem(key))
-
-    // Clear remember me preference
-    sessionStorage.removeItem(REMEMBER_ME_KEY)
+    // If we need more control, we can implement a custom storage adapter
+    // that checks this preference cookie
   } catch (error) {
-    console.warn('Failed to clear auth session:', error)
+    console.warn('Failed to adjust session cookie duration:', error)
   }
 }

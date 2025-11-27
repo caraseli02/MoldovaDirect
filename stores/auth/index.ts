@@ -36,7 +36,7 @@ import {
   clearLockout as clearAccountLockout
 } from './lockout'
 
-import { clearAuthSession } from '~/utils/authStorage'
+import { clearAuthCookies } from '~/utils/authStorage'
 
 import {
   enrollMFA as enrollMFAService,
@@ -817,9 +817,9 @@ export const useAuthStore = defineStore('auth', {
         this.testPersonaKey = null
         persistLockout(null)
 
-        // Clear auth session from both localStorage and sessionStorage
-        // This also clears the "remember me" preference
-        clearAuthSession()
+        // Clear all auth cookies including the "remember me" preference
+        // This is SSR-friendly and works across the entire app
+        clearAuthCookies()
 
         toastStore.success(
           'Sesión cerrada',
@@ -843,8 +843,8 @@ export const useAuthStore = defineStore('auth', {
         this.testPersonaKey = null
         persistLockout(null)
 
-        // Clear auth session even on error
-        clearAuthSession()
+        // Clear auth cookies even on error
+        clearAuthCookies()
 
         await navigateTo('/')
       } finally {
