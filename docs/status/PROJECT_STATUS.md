@@ -202,7 +202,7 @@ chore: major code cleanup - remove unused features and dependencies
 
 ### Project Documentation (.kiro folder)
 ```
-.kiro/
+docs/
 ├── PROJECT_STATUS.md (this file)
 ├── specs/
 │   └── shopping-cart/

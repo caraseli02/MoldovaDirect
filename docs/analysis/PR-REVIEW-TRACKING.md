@@ -224,9 +224,9 @@ All 6 are test expectation issues for Unicode sanitization:
 
 ## 📁 Related Documentation
 
-- **Admin Fixes Overview:** `.docs/admin-fixes/ISSUES-AND-SOLUTIONS.md`
-- **Code Review:** `.docs/admin-fixes/CLEAN-CODE-REVIEW.md`
-- **Project README:** `.docs/README.md`
+- **Admin Fixes Overview:** `docs/fixes/admin-fixes/ISSUES-AND-SOLUTIONS.md`
+- **Code Review:** `docs/fixes/admin-fixes/CLEAN-CODE-REVIEW.md`
+- **Project README:** `docs/archive/DOTDOCS_README.md`
 - **Integration Tests:** `tests/integration/admin/README.md`
 
 ---

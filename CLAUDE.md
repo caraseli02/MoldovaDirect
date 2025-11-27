@@ -172,12 +172,18 @@ npx supabase status      # Check Supabase connection
 ## 📚 Detailed Documentation
 
 **Admin Panel Issues & Solutions:**
-- Full details: `.docs/admin-fixes/ISSUES-AND-SOLUTIONS.md`
-- Code review: `.docs/admin-fixes/CLEAN-CODE-REVIEW.md`
+- Full details: `docs/fixes/admin-fixes/ISSUES-AND-SOLUTIONS.md`
+- Code review: `docs/fixes/admin-fixes/CLEAN-CODE-REVIEW.md`
 
 **Project Documentation:**
-- Doc index: `.docs/README.md`
+- Doc index: `docs/README.md`
+- Documentation index: `docs/meta/DOCUMENTATION_INDEX.md`
 - Main README: `README.md`
+
+**Project Status:**
+- Current status: `docs/status/PROJECT_STATUS.md`
+- Roadmap: `docs/status/ROADMAP.md`
+- Feature specs: `docs/specs/`
 
 ---
 
@@ -191,6 +197,5 @@ npx supabase status      # Check Supabase connection
 
 ---
 
-**Last Updated:** 2025-11-21
+**Last Updated:** 2025-11-27
 **Admin Status:** All 5 pages working ✅
-**Branch:** feat/admin-pages

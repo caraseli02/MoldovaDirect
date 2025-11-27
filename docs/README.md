@@ -137,9 +137,9 @@ See [CHANGELOG.md](./CHANGELOG.md) for detailed recent changes.
 
 **For other project resources:**
 - [Main Project README](../README.md) - Project overview
-- [Kiro Documentation](../.kiro/README.md) - Project specs and status
-- [Tech Stack](../.kiro/steering/tech.md) - Technology decisions
-- [Code Conventions](../.kiro/steering/code-conventions.md) - Coding standards
+- [Kiro Documentation](../docs/README.md) - Project specs and status
+- [Tech Stack](../docs/development/tech.md) - Technology decisions
+- [Code Conventions](../docs/development/code-conventions.md) - Coding standards
 
 ## 🤝 Contributing to Documentation
 

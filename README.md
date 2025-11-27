@@ -92,13 +92,11 @@ npm run deploy:preview
 - **[Documentation Summary](./docs/meta/DOCUMENTATION_SUMMARY.md)** - Overview of all documentation (Updated Nov 1, 2025)
 - **[Code Review 2025](./docs/analysis/CODE_REVIEW_2025.md)** - Security and architecture analysis
 
-All project documentation follows Kiro's spec-driven development approach in the `.kiro/` folder:
-
-- **[Documentation Hub](.kiro/README.md)** - Complete documentation index
-- **[Project Status](.kiro/PROJECT_STATUS.md)** - Current state and health
-- **[Roadmap](.kiro/ROADMAP.md)** - Development timeline
-- **[Progress](.kiro/PROGRESS.md)** - Completed milestones
-- **[Specifications](.kiro/specs/)** - Feature requirements and designs
+**Project Status & Planning:**
+- **[Project Status](docs/status/PROJECT_STATUS.md)** - Current state and health
+- **[Roadmap](docs/status/ROADMAP.md)** - Development timeline
+- **[Progress](docs/status/PROGRESS.md)** - Completed milestones
+- **[Feature Specifications](docs/specs/)** - Feature requirements and designs
 - **[Troubleshooting Components](docs/development/troubleshooting-components.md)** - Fix for duplicate component names, shadcn-vue auto-imports, and casing
 
 ### QA & Simulation Utilities

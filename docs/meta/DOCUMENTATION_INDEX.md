@@ -12,9 +12,9 @@ This is the master index for all Moldova Direct documentation. Use this as your 
 3. **[Documentation Summary](./DOCUMENTATION_SUMMARY.md)** - What's new and what changed
 
 ### Essential Reading
-- [Project Status](../../.kiro/PROJECT_STATUS.md) - Current state, priorities, and health
+- [Project Status](../status/PROJECT_STATUS.md) - Current state, priorities, and health
 - [Code Review 2025](../analysis/CODE_REVIEW_2025.md) - Security analysis and recommendations
-- [Roadmap](../../.kiro/ROADMAP.md) - Development timeline and milestones
+- [Roadmap](../status/ROADMAP.md) - Development timeline and milestones
 
 ## 📋 Documentation by Category
 
@@ -25,19 +25,19 @@ This is the master index for all Moldova Direct documentation. Use this as your 
 | [README.md](../../README.md) | Main project documentation | Nov 2025 |
 | [Quick Start Guide](../getting-started/QUICK_START_GUIDE.md) | Quick start for developers | Nov 2025 |
 | [Documentation Summary](./DOCUMENTATION_SUMMARY.md) | Documentation overview | Nov 2025 |
-| [Project Status](../../.kiro/PROJECT_STATUS.md) | Current project status | Nov 2025 |
-| [Roadmap](../../.kiro/ROADMAP.md) | Development timeline | Aug 2025 |
-| [Progress](../../.kiro/PROGRESS.md) | Completed milestones | Aug 2025 |
+| [Project Status](../status/PROJECT_STATUS.md) | Current project status | Nov 2025 |
+| [Roadmap](../status/ROADMAP.md) | Development timeline | Aug 2025 |
+| [Progress](../status/PROGRESS.md) | Completed milestones | Aug 2025 |
 
 ### 2. Code Quality & Review
 
 | Document | Purpose | Last Updated |
 |----------|---------|--------------|
 | [Code Review 2025](../analysis/CODE_REVIEW_2025.md) | Comprehensive code review | Oct 2025 |
-| [Code Conventions](../../.kiro/steering/code-conventions.md) | Coding standards | - |
-| [Code Cleanup](../../.kiro/steering/code-cleanup.md) | Cleanup guidelines | Oct 2025 |
-| [Tech Stack](../../.kiro/steering/tech.md) | Technology decisions | - |
-| [Structure](../../.kiro/steering/structure.md) | Code organization | - |
+| [Code Conventions](../development/code-conventions.md) | Coding standards | - |
+| [Code Cleanup](../development/code-cleanup.md) | Cleanup guidelines | Oct 2025 |
+| [Tech Stack](../development/tech.md) | Technology decisions | - |
+| [Structure](../development/structure.md) | Code organization | - |
 
 ### 3. Testing & Quality Assurance
 
@@ -66,39 +66,39 @@ This is the master index for all Moldova Direct documentation. Use this as your 
 |----------|---------|--------------|
 | [Supabase Setup](../getting-started/SUPABASE_SETUP.md) | Database setup guide | - |
 | [i18n Configuration](../features/I18N_CONFIGURATION.md) | Internationalization | Sep 2025 |
-| [Supabase Best Practices](../../.kiro/steering/supabase-best-practices.md) | Supabase patterns | Oct 2025 |
+| [Supabase Best Practices](../development/supabase-best-practices.md) | Supabase patterns | Oct 2025 |
 | [Local Testing Guide](../getting-started/LOCAL_TESTING_GUIDE.md) | Local testing setup | - |
-| [Deployment Guide](../../.kiro/docs/DEPLOYMENT_GUIDE.md) | Deployment instructions | - |
+| [Deployment Guide](../guides/DEPLOYMENT_GUIDE.md) | Deployment instructions | - |
 
 ### 6. Feature Specifications
 
-All feature specs are located in `.kiro/specs/[feature-name]/` with the following structure:
+All feature specs are located in `docs/specs/[feature-name]/` with the following structure:
 - `requirements.md` - What needs to be built
 - `design.md` - How it should be built
 - `tasks.md` - Implementation checklist
 
 | Feature | Location | Status |
 |---------|----------|--------|
-| User Authentication | [specs/user-authentication/](../../.kiro/specs/user-authentication/) | ✅ Complete |
-| Shopping Cart | [specs/shopping-cart/](../../.kiro/specs/shopping-cart/) | ✅ Complete |
-| Product Catalog | [specs/product-catalog/](../../.kiro/specs/product-catalog/) | ✅ Complete |
-| Checkout | [specs/checkout/](../../.kiro/specs/checkout/) | 🚧 In Progress |
-| Admin Dashboard | [specs/admin-dashboard/](../../.kiro/specs/admin-dashboard/) | 🚧 In Progress |
-| Admin Order Management | [specs/admin-order-management/](../../.kiro/specs/admin-order-management/) | 🚧 In Progress |
-| Order Status Updates | [specs/order-status-updates/](../../.kiro/specs/order-status-updates/) | 🚧 In Progress |
-| Order Confirmation Emails | [specs/order-confirmation-emails/](../../.kiro/specs/order-confirmation-emails/) | 📋 Planned |
-| Customer Order History | [specs/customer-order-history/](../../.kiro/specs/customer-order-history/) | 📋 Planned |
-| Product Recommendations | [specs/product-recommendations/](../../.kiro/specs/product-recommendations/) | 📋 Planned |
-| Wishlist | [specs/wishlist/](../../.kiro/specs/wishlist/) | 📋 Planned |
+| User Authentication | [specs/user-authentication/](../specs/user-authentication/) | ✅ Complete |
+| Shopping Cart | [specs/shopping-cart/](../specs/shopping-cart/) | ✅ Complete |
+| Product Catalog | [specs/product-catalog/](../specs/product-catalog/) | ✅ Complete |
+| Checkout | [specs/checkout/](../specs/checkout/) | 🚧 In Progress |
+| Admin Dashboard | [specs/admin-dashboard/](../specs/admin-dashboard/) | 🚧 In Progress |
+| Admin Order Management | [specs/admin-order-management/](../specs/admin-order-management/) | 🚧 In Progress |
+| Order Status Updates | [specs/order-status-updates/](../specs/order-status-updates/) | 🚧 In Progress |
+| Order Confirmation Emails | [specs/order-confirmation-emails/](../specs/order-confirmation-emails/) | 📋 Planned |
+| Customer Order History | [specs/customer-order-history/](../specs/customer-order-history/) | 📋 Planned |
+| Product Recommendations | [specs/product-recommendations/](../specs/product-recommendations/) | 📋 Planned |
+| Wishlist | [specs/wishlist/](../specs/wishlist/) | 📋 Planned |
 
 ### 7. Change History
 
 | Document | Purpose | Last Updated |
 |----------|---------|--------------|
 | [Changelog](../CHANGELOG.md) | Project change log | Nov 2025 |
-| [Documentation Updates Log](../../.kiro/DOCUMENTATION_UPDATES_LOG.md) | Documentation changes | Nov 2025 |
+| [Documentation Updates Log](./DOCUMENTATION_UPDATES_LOG.md) | Documentation changes | Nov 2025 |
 | [Documentation Update 2025-11-01](./DOCUMENTATION_UPDATE_2025-11-01.md) | Latest update details | Nov 2025 |
-| [Remaining Work Summary](./REMAINING_WORK_SUMMARY.md) | Pending work | - |
+| [Remaining Work Summary](./REMAINING_WORK_SUMMARY.md) | Pending work | Nov 2025 |
 
 ### 8. Operational Guides
 
@@ -140,17 +140,23 @@ All feature specs are located in `.kiro/specs/[feature-name]/` with the followin
 | [Secure Logger](../security/SECURE_LOGGER.md) | PII protection | Nov 2025 |
 | [Security README](../security/README.md) | Security overview | Nov 2025 |
 
+### 12. API Documentation
+
+| Document | Purpose | Last Updated |
+|----------|---------|--------------|
+| [API Overview](../api/README.md) | API endpoint documentation | Nov 2025 |
+
 ## 🎯 Documentation by Role
 
 ### For New Developers
 1. [Quick Start Guide](../getting-started/QUICK_START_GUIDE.md)
 2. [README.md](../../README.md)
-3. [Code Conventions](../../.kiro/steering/code-conventions.md)
-4. [Tech Stack](../../.kiro/steering/tech.md)
+3. [Code Conventions](../development/code-conventions.md)
+4. [Tech Stack](../development/tech.md)
 
 ### For Project Managers
-1. [Project Status](../../.kiro/PROJECT_STATUS.md)
-2. [Roadmap](../../.kiro/ROADMAP.md)
+1. [Project Status](../status/PROJECT_STATUS.md)
+2. [Roadmap](../status/ROADMAP.md)
 3. [Code Review 2025](../analysis/CODE_REVIEW_2025.md)
 4. [Changelog](../CHANGELOG.md)
 
@@ -161,7 +167,7 @@ All feature specs are located in `.kiro/specs/[feature-name]/` with the followin
 4. [Auth Testing Guide](../../tests/AUTH_TESTING_GUIDE.md)
 
 ### For DevOps
-1. [Deployment Guide](../../.kiro/docs/DEPLOYMENT_GUIDE.md)
+1. [Deployment Guide](../guides/DEPLOYMENT_GUIDE.md)
 2. [Supabase Setup](../getting-started/SUPABASE_SETUP.md)
 3. [Local Testing Guide](../getting-started/LOCAL_TESTING_GUIDE.md)
 4. [Code Review 2025](../analysis/CODE_REVIEW_2025.md) (Security section)
@@ -178,23 +184,23 @@ All feature specs are located in `.kiro/specs/[feature-name]/` with the followin
 
 **Authentication:**
 - [Authentication Architecture](../architecture/AUTHENTICATION_ARCHITECTURE.md)
-- [User Authentication Specs](../../.kiro/specs/user-authentication/)
+- [User Authentication Specs](../specs/user-authentication/)
 - [MFA Implementation](../features/authentication/MFA_IMPLEMENTATION.md)
 - [Auth Testing Guide](../../tests/AUTH_TESTING_GUIDE.md)
 
 **Shopping Cart:**
 - [Cart System Architecture](../architecture/CART_SYSTEM_ARCHITECTURE.md)
 - [Cart Analytics](../features/cart/CART_ANALYTICS.md)
-- [Shopping Cart Specs](../../.kiro/specs/shopping-cart/)
+- [Shopping Cart Specs](../specs/shopping-cart/)
 
 **Checkout & Orders:**
 - [Checkout Flow](../architecture/CHECKOUT_FLOW.md)
-- [Checkout Specs](../../.kiro/specs/checkout/)
-- [Admin Order Management Specs](../../.kiro/specs/admin-order-management/)
-- [Order Status Updates Specs](../../.kiro/specs/order-status-updates/)
+- [Checkout Specs](../specs/checkout/)
+- [Admin Order Management Specs](../specs/admin-order-management/)
+- [Order Status Updates Specs](../specs/order-status-updates/)
 
 **Admin Dashboard:**
-- [Admin Dashboard Specs](../../.kiro/specs/admin-dashboard/)
+- [Admin Dashboard Specs](../specs/admin-dashboard/)
 - [Admin Testing](../guides/ADMIN_TESTING.md)
 - [Code Review 2025](../analysis/CODE_REVIEW_2025.md) (Part 2)
 
@@ -213,7 +219,7 @@ All feature specs are located in `.kiro/specs/[feature-name]/` with the followin
 - [Email Logging](../../server/utils/emailLogging.README.md)
 - [Email Retry Service](../../server/utils/emailRetryService.README.md)
 - [Order Emails](../../server/utils/orderEmails.README.md)
-- [Order Confirmation Emails Specs](../../.kiro/specs/order-confirmation-emails/)
+- [Order Confirmation Emails Specs](../specs/order-confirmation-emails/)
 
 ## 📊 Documentation Statistics
 
@@ -225,10 +231,10 @@ All feature specs are located in `.kiro/specs/[feature-name]/` with the followin
 - **Total:** 400+ documentation files
 
 ### Recent Updates (November 2025)
-- **Documentation Review:** Complete analysis added
-- **Broken Links Fixed:** 9 links corrected in README.md
+- **Documentation Consolidation:** Merged .kiro/ and .docs/ into docs/
+- **Broken Links Fixed:** All cross-references updated
 - **Security Docs:** GDPR, Secure Logger documentation
-- **Test Coverage:** 85% visual test coverage
+- **API Docs:** New API endpoint documentation
 
 ### Documentation Coverage
 - ✅ **Getting Started:** Complete
@@ -236,7 +242,7 @@ All feature specs are located in `.kiro/specs/[feature-name]/` with the followin
 - ✅ **Testing:** Complete
 - ✅ **Setup & Config:** Complete
 - ✅ **Security:** Complete
-- 🚧 **API Documentation:** In Progress
+- ✅ **API Documentation:** Complete
 
 ## 🔄 Keeping Documentation Updated
 
@@ -251,8 +257,7 @@ All feature specs are located in `.kiro/specs/[feature-name]/` with the followin
 1. Edit relevant markdown files
 2. Update last modified date
 3. Add entry to [Changelog](../CHANGELOG.md)
-4. Update [Documentation Updates Log](../../.kiro/DOCUMENTATION_UPDATES_LOG.md)
-5. Cross-reference related documents
+4. Cross-reference related documents
 
 ### Documentation Standards
 - Use Markdown for all documentation
@@ -278,8 +283,7 @@ Archived documents are preserved for reference but superseded by current documen
 ### Can't Find What You're Looking For?
 1. Check this index first
 2. Search in [docs/README.md](../README.md)
-3. Review [.kiro/README.md](../../.kiro/README.md)
-4. Check feature specs in `.kiro/specs/`
+3. Check feature specs in `docs/specs/`
 
 ### Documentation Issues?
 - File an issue describing what's missing
@@ -296,4 +300,4 @@ Archived documents are preserved for reference but superseded by current documen
 **Maintained by:** Development Team
 **Last Updated:** November 27, 2025
 **Next Review:** December 2025
-**Version:** 1.1
+**Version:** 2.0 (Post-consolidation)
