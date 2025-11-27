@@ -36,6 +36,8 @@ import {
   clearLockout as clearAccountLockout
 } from './lockout'
 
+import { clearAuthSession } from '~/utils/authStorage'
+
 import {
   enrollMFA as enrollMFAService,
   verifyMFAEnrollment as verifyMFAEnrollmentService,
@@ -815,6 +817,10 @@ export const useAuthStore = defineStore('auth', {
         this.testPersonaKey = null
         persistLockout(null)
 
+        // Clear auth session from both localStorage and sessionStorage
+        // This also clears the "remember me" preference
+        clearAuthSession()
+
         toastStore.success(
           'Sesión cerrada',
           'Has cerrado sesión correctamente.'
@@ -836,6 +842,9 @@ export const useAuthStore = defineStore('auth', {
         this.isTestUser = false
         this.testPersonaKey = null
         persistLockout(null)
+
+        // Clear auth session even on error
+        clearAuthSession()
 
         await navigateTo('/')
       } finally {

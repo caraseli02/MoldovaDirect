@@ -241,6 +241,7 @@ import { AlertCircle, CheckCircle2 } from 'lucide-vue-next'
 import { useAuth } from '~/composables/useAuth'
 import { useAuthMessages } from '~/composables/useAuthMessages'
 import { cn } from '~/lib/utils'
+import { setRememberMePreference, moveSessionToSessionStorage } from '~/utils/authStorage'
 
 // Apply guest middleware - redirect authenticated users
 definePageMeta({
@@ -375,7 +376,17 @@ async function handleLogin(): Promise<void> {
       throw authErr
     }
 
-    if (data?.user) {
+    if (data?.user && data?.session) {
+      // Handle "Remember Me" functionality
+      // Set preference first, then move session if needed
+      setRememberMePreference(rememberMe.value)
+
+      // If unchecked, move session to sessionStorage (cleared on browser close)
+      // If checked, keep in localStorage (persists across browser restarts)
+      if (!rememberMe.value) {
+        moveSessionToSessionStorage()
+      }
+
       success.value = t('auth.loginSuccess')
       await handleRedirectAfterLogin()
     }
