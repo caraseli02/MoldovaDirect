@@ -11,6 +11,7 @@
  * and audit logging for compliance purposes.
  */
 
+import { getRequestIP } from 'h3'
 import { createLogger } from '~/server/utils/secureLogger'
 
 const logger = createLogger('delete-account')
@@ -59,7 +60,7 @@ export default defineEventHandler(async (event) => {
     await supabase.from('auth_events').insert({
       user_id: user.id,
       event_type: 'account_deletion_requested',
-      ip_address: getClientIP(event),
+      ip_address: getRequestIP(event),
       user_agent: getHeader(event, 'user-agent'),
       metadata: JSON.stringify({
         reason: reason || 'not_specified',
@@ -69,7 +70,7 @@ export default defineEventHandler(async (event) => {
 
     // Use atomic deletion function for GDPR compliance
     // This ensures all-or-nothing deletion (no partial deletions)
-    const serviceRoleSupabase = serverSupabaseServiceRole(event)
+    const serviceRoleSupabase = await serverSupabaseServiceRole(event)
 
     try {
       // Call the atomic deletion function
