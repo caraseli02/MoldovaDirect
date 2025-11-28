@@ -1118,6 +1118,8 @@
     }
   },
   "products": {
+    "commonProduct": "Producto",
+    "viewDetails": "Ver Detalles",
     "featured": "Destacado",
     "sale": "Oferta",
     "new": "Nuevo",
@@ -1142,6 +1144,10 @@
     "quickViewProduct": "Vista Rápida",
     "addProductToCart": "Añadir al Carrito",
     "noImageAvailable": "Sin imagen disponible",
+    "imageGallery": "Galería de Imágenes",
+    "imageZoom": {
+      "keyboardHints": "Usa las flechas para navegar, ESC para cerrar"
+    },
     "cartEmpty": "Tu carrito está vacío",
     "cartEmptyDescription": "Comienza a comprar para añadir artículos a tu carrito",
     "itemsInCart": "artículos en el carrito",
@@ -1300,6 +1306,12 @@
       "originCategoryFallback": "Una creación emblemática de nuestra colección de {category}.",
       "noAwards": "Sé la primera persona en celebrar este lanzamiento."
     },
+    "imageFallback": {
+      "title": "Imagen del producto próximamente",
+      "subtitle": "Producto auténtico moldavo garantizado",
+      "description": "Imágenes de alta calidad estarán disponibles en breve"
+    },
+    "noImageAvailable": "No hay imagen disponible",
     "socialProof": {
       "title": "Amado por nuestros clientes",
       "subtitle": "Opiniones reales de catas, cenas y pedidos para regalar.",

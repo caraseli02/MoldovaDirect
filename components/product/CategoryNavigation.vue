@@ -9,8 +9,8 @@
             <div class="flex space-x-8">
               <NuxtLink
                 to="/products"
-                class="text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 text-sm font-medium transition-colors"
-                :class="{ 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400': !currentCategory }"
+                class="text-gray-900 dark:text-white hover:text-blue-700 dark:hover:text-blue-300 px-3 py-2 text-sm font-medium transition-colors"
+                :class="{ 'text-blue-700 dark:text-blue-300 border-b-2 border-blue-700 dark:border-blue-300': !currentCategory }"
               >
                 {{ $t('products.categories.all') }}
                 <span v-if="showProductCount && totalProductCount" class="ml-1 text-gray-500 dark:text-gray-400 text-xs">
@@ -24,8 +24,8 @@
                 class="relative group"
               >
                 <button
-                  class="flex items-center text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 text-sm font-medium transition-colors"
-                  :class="{ 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400': isCurrentCategory(category) }"
+                  class="flex items-center text-gray-900 dark:text-white hover:text-blue-700 dark:hover:text-blue-300 px-3 py-2 text-sm font-medium transition-colors"
+                  :class="{ 'text-blue-700 dark:text-blue-300 border-b-2 border-blue-700 dark:border-blue-300': isCurrentCategory(category) }"
                   @click="navigateToCategory(category)"
                   @mouseenter="showDropdown(category.id)"
                   @mouseleave="hideDropdown"
@@ -54,8 +54,8 @@
                       v-for="child in category.children"
                       :key="child.id"
                       :to="`/products?category=${child.slug || child.id}`"
-                      class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                      :class="{ 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400': isCurrentCategory(child) }"
+                      class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
+                      :class="{ 'bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300': isCurrentCategory(child) }"
                     >
                       <commonIcon v-if="child.icon" :name="child.icon" class="w-4 h-4 mr-3" />
                       {{ child.name }}
@@ -122,7 +122,7 @@
                 <NuxtLink
                   to="/products"
                   class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                  :class="{ 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400': !currentCategory }"
+                  :class="{ 'bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300': !currentCategory }"
                   @click="showMobileNav = false"
                 >
                   <div class="flex items-center">
