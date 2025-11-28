@@ -529,6 +529,7 @@ const goToPage = async (page: number) => {
   }
 
   // Update URL with new page parameter
+  // The URL watcher will handle fetching products automatically
   const router = useRouter()
   await router.push({
     query: {
@@ -538,18 +539,8 @@ const goToPage = async (page: number) => {
     }
   })
 
-  const currentFilters = {
-    ...filters.value,
-    sort: sortBy.value,
-    page: validPage
-  }
-
-  if (searchQuery.value.trim()) {
-    search(searchQuery.value.trim(), currentFilters)
-  } else {
-    fetchProducts(currentFilters)
-  }
-
+  // Scroll to top for better UX
+  // Note: Product fetching is handled by the route.query.page watcher
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
@@ -684,9 +675,6 @@ watch(() => route.query.page, async (newPage, oldPage) => {
   // Parse and validate page number
   const pageNum = parseInt((newPage as string) || '1')
   if (isNaN(pageNum)) return
-
-  // Don't refetch if we're already on this page
-  if (pageNum === pagination.value.page) return
 
   // Validate page boundaries
   const validPage = Math.max(1, Math.min(pageNum, pagination.value.totalPages || 1))
