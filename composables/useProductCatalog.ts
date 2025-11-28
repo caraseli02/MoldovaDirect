@@ -13,8 +13,9 @@ export const useProductCatalog = () => {
   const initialPageFromUrl = parseInt(route.query.page as string) || 1
   const initialLimitFromUrl = parseInt(route.query.limit as string) || 12
 
-  // Debug logging for hydration tracking
-  if (process.dev) {
+  // Debug logging for hydration tracking (works in preview/dev, not production)
+  const isDebugMode = process.env.NODE_ENV !== 'production' || process.dev
+  if (isDebugMode) {
     console.log('[useProductCatalog] Initializing', {
       side: process.server ? 'SERVER' : 'CLIENT',
       url: route.fullPath,
@@ -33,7 +34,7 @@ export const useProductCatalog = () => {
   const searchQuery = useState<string>('searchQuery', () => '')
   const filters = useState<ProductFilters>('filters', () => ({}))
   const pagination = useState('pagination', () => {
-    if (process.dev) {
+    if (isDebugMode) {
       console.log('[useProductCatalog] useState pagination initializer called', {
         side: process.server ? 'SERVER' : 'CLIENT',
         page: initialPageFromUrl,
@@ -55,7 +56,7 @@ export const useProductCatalog = () => {
   const showFilterPanel = useState<boolean>('showFilterPanel', () => false)
 
   // Debug: Log pagination state after initialization
-  if (process.dev) {
+  if (isDebugMode) {
     console.log('[useProductCatalog] State initialized', {
       side: process.server ? 'SERVER' : 'CLIENT',
       paginationValue: pagination.value
@@ -75,7 +76,7 @@ export const useProductCatalog = () => {
     loading.value = true
     error.value = null
 
-    if (process.dev) {
+    if (isDebugMode) {
       console.log('[fetchProducts] Called with', {
         side: process.server ? 'SERVER' : 'CLIENT',
         filters: productFilters,
@@ -114,7 +115,7 @@ export const useProductCatalog = () => {
         signal
       })
 
-      if (process.dev) {
+      if (isDebugMode) {
         console.log('[fetchProducts] Response received', {
           side: process.server ? 'SERVER' : 'CLIENT',
           productCount: response.products.length,
@@ -126,7 +127,7 @@ export const useProductCatalog = () => {
       pagination.value = response.pagination
       filters.value = { ...productFilters }
 
-      if (process.dev) {
+      if (isDebugMode) {
         console.log('[fetchProducts] State updated', {
           side: process.server ? 'SERVER' : 'CLIENT',
           paginationValue: pagination.value
