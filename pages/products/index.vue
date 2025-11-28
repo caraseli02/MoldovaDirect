@@ -397,6 +397,7 @@ const {
 } = useProductCatalog()
 
 // Initialize and fetch products during SSR (using URL params)
+// During client hydration, state is restored from SSR payload
 await initialize()
 await fetchProducts({ sort: 'created', page: initialPage, limit: initialLimit })
 

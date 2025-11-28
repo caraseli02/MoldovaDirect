@@ -6,7 +6,25 @@ import type { ProductFilters, ProductWithRelations, CategoryWithChildren } from 
  * Uses direct API calls for SSR compatibility
  */
 export const useProductCatalog = () => {
+  // Get route to read URL params during initialization (SSR-safe)
+  const route = useRoute()
+
+  // Parse URL params for initial pagination state (prevents hydration mismatch)
+  const initialPageFromUrl = parseInt(route.query.page as string) || 1
+  const initialLimitFromUrl = parseInt(route.query.limit as string) || 12
+
+  // Debug logging for hydration tracking
+  if (process.dev) {
+    console.log('[useProductCatalog] Initializing', {
+      side: process.server ? 'SERVER' : 'CLIENT',
+      url: route.fullPath,
+      pageFromUrl: initialPageFromUrl,
+      limitFromUrl: initialLimitFromUrl
+    })
+  }
+
   // Use Nuxt's useState for SSR-compatible reactive state
+  // CRITICAL: Initialize pagination with URL params to prevent hydration mismatch
   const products = useState<ProductWithRelations[]>('products', () => [])
   const categories = useState<CategoryWithChildren[]>('categories', () => [])
   const categoriesTree = useState<CategoryWithChildren[]>('categoriesTree', () => [])
@@ -14,13 +32,35 @@ export const useProductCatalog = () => {
   const searchResults = useState<ProductWithRelations[]>('searchResults', () => [])
   const searchQuery = useState<string>('searchQuery', () => '')
   const filters = useState<ProductFilters>('filters', () => ({}))
-  const pagination = useState('pagination', () => ({ page: 1, limit: 12, total: 0, totalPages: 1 }))
+  const pagination = useState('pagination', () => {
+    if (process.dev) {
+      console.log('[useProductCatalog] useState pagination initializer called', {
+        side: process.server ? 'SERVER' : 'CLIENT',
+        page: initialPageFromUrl,
+        limit: initialLimitFromUrl
+      })
+    }
+    return {
+      page: initialPageFromUrl,
+      limit: initialLimitFromUrl,
+      total: 0,
+      totalPages: 1
+    }
+  })
   const loading = useState<boolean>('loading', () => true)
   const error = useState<string | null>('error', () => null)
 
   // Filter UI state
   const sortBy = useState<string>('sortBy', () => 'created')
   const showFilterPanel = useState<boolean>('showFilterPanel', () => false)
+
+  // Debug: Log pagination state after initialization
+  if (process.dev) {
+    console.log('[useProductCatalog] State initialized', {
+      side: process.server ? 'SERVER' : 'CLIENT',
+      paginationValue: pagination.value
+    })
+  }
 
   // Initialize the catalog
   const initialize = async () => {
@@ -34,6 +74,14 @@ export const useProductCatalog = () => {
   const fetchProducts = async (productFilters: ProductFilters = {}, signal?: AbortSignal) => {
     loading.value = true
     error.value = null
+
+    if (process.dev) {
+      console.log('[fetchProducts] Called with', {
+        side: process.server ? 'SERVER' : 'CLIENT',
+        filters: productFilters,
+        currentPagination: pagination.value
+      })
+    }
 
     try {
       // Build query parameters
@@ -66,9 +114,24 @@ export const useProductCatalog = () => {
         signal
       })
 
+      if (process.dev) {
+        console.log('[fetchProducts] Response received', {
+          side: process.server ? 'SERVER' : 'CLIENT',
+          productCount: response.products.length,
+          responsePagination: response.pagination
+        })
+      }
+
       products.value = response.products
       pagination.value = response.pagination
       filters.value = { ...productFilters }
+
+      if (process.dev) {
+        console.log('[fetchProducts] State updated', {
+          side: process.server ? 'SERVER' : 'CLIENT',
+          paginationValue: pagination.value
+        })
+      }
 
     } catch (err) {
       // Ignore abort errors - they're expected when canceling requests
