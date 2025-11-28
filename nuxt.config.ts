@@ -141,6 +141,11 @@ export default defineNuxtConfig({
     // Supabase credentials for fallback service client (email jobs, etc.)
     supabaseUrl: process.env.SUPABASE_URL,
     supabaseServiceKey: process.env.SUPABASE_SERVICE_KEY,
+    // WhatsApp Business API credentials (server-side only)
+    whatsappAccountSid: process.env.WHATSAPP_ACCOUNT_SID, // Twilio Account SID or Phone Number ID (Cloud API)
+    whatsappAuthToken: process.env.WHATSAPP_AUTH_TOKEN,   // Twilio Auth Token or Access Token
+    whatsappNumber: process.env.WHATSAPP_NUMBER,          // WhatsApp number (e.g., +1234567890)
+    whatsappProvider: process.env.WHATSAPP_PROVIDER || 'twilio', // 'twilio' | 'whatsapp_cloud' | 'messagebird' | '360dialog'
     // Public keys (exposed to client-side)
     public: {
       stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
@@ -150,7 +155,9 @@ export default defineNuxtConfig({
         ? `https://${process.env.VERCEL_URL}`
         : process.env.NUXT_PUBLIC_SITE_URL || 'https://moldova-direct.vercel.app',
       enableTestUsers:
-        process.env.ENABLE_TEST_USERS === 'true' || process.env.NODE_ENV !== 'production'
+        process.env.ENABLE_TEST_USERS === 'true' || process.env.NODE_ENV !== 'production',
+      // Feature flags
+      whatsappEnabled: process.env.WHATSAPP_ENABLED === 'true', // Enable WhatsApp notifications UI
     },
   },
   shadcn: {

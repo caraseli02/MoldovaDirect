@@ -1,0 +1,479 @@
+{
+  "_comment": "WhatsApp & Multi-Channel Notification Translations",
+  "_instructions": "Merge these translations into the main locale files (es.json, en.json, ro.json, ru.json)",
+  "_created": "2025-11-28",
+
+  "locales": {
+    "es": {
+      "notifications": {
+        "channels": {
+          "email": "Correo Electrónico",
+          "whatsapp": "WhatsApp",
+          "sms": "SMS"
+        },
+        "preferences": {
+          "title": "Preferencias de Notificaciones",
+          "subtitle": "Gestiona cómo quieres recibir actualizaciones",
+          "emailSection": "Notificaciones por Correo",
+          "whatsappSection": "Notificaciones por WhatsApp",
+          "smsSection": "Notificaciones por SMS",
+
+          "emailEnabled": "Activar notificaciones por correo",
+          "whatsappEnabled": "Activar notificaciones por WhatsApp",
+          "smsEnabled": "Activar notificaciones por SMS",
+
+          "phoneNumber": "Número de teléfono",
+          "phoneNumberPlaceholder": "+40123456789",
+          "phoneNumberHint": "Formato internacional (Ej: +40712345678)",
+          "verifyPhone": "Verificar teléfono",
+          "phoneVerified": "Teléfono verificado",
+          "phoneNotVerified": "Teléfono no verificado",
+
+          "orderConfirmation": "Confirmaciones de pedido",
+          "orderUpdates": "Actualizaciones de estado",
+          "shipping": "Notificaciones de envío",
+          "delivery": "Confirmaciones de entrega",
+          "marketing": "Ofertas y promociones",
+          "support": "Tickets de soporte",
+
+          "saveChanges": "Guardar cambios",
+          "changesSaved": "Preferencias guardadas",
+          "changesError": "Error al guardar preferencias",
+
+          "whatsappBenefits": {
+            "title": "Beneficios de WhatsApp",
+            "instant": "Notificaciones instantáneas",
+            "secure": "Cifrado de extremo a extremo",
+            "convenient": "Recibe actualizaciones donde ya chateas",
+            "reliable": "98% de tasa de apertura"
+          },
+
+          "requiresPhone": "Requiere número de teléfono verificado",
+          "addPhone": "Agregar número de teléfono"
+        },
+
+        "whatsapp": {
+          "verification": {
+            "title": "Verificar número de WhatsApp",
+            "description": "Te enviaremos un código de verificación por WhatsApp",
+            "sendCode": "Enviar código",
+            "codeSent": "Código enviado a {phone}",
+            "enterCode": "Ingresa el código de 6 dígitos",
+            "verifying": "Verificando...",
+            "verified": "¡Número verificado!",
+            "failed": "Verificación fallida",
+            "resend": "Reenviar código",
+            "resendIn": "Reenviar en {seconds}s",
+            "invalidCode": "Código inválido",
+            "expiredCode": "Código expirado",
+            "tooManyAttempts": "Demasiados intentos. Intenta de nuevo más tarde."
+          },
+
+          "errors": {
+            "notConfigured": "WhatsApp no está configurado",
+            "invalidPhone": "Número de teléfono inválido",
+            "sendFailed": "Error al enviar mensaje",
+            "notEnabled": "WhatsApp no está habilitado para tu cuenta"
+          },
+
+          "status": {
+            "pending": "Pendiente",
+            "sent": "Enviado",
+            "delivered": "Entregado",
+            "read": "Leído",
+            "failed": "Fallido"
+          }
+        },
+
+        "history": {
+          "title": "Historial de Notificaciones",
+          "filter": {
+            "all": "Todas",
+            "email": "Solo correos",
+            "whatsapp": "Solo WhatsApp",
+            "sms": "Solo SMS"
+          },
+          "empty": "No hay notificaciones",
+          "sentVia": "Enviado por {channel}",
+          "viewDetails": "Ver detalles"
+        }
+      },
+
+      "account": {
+        "settings": {
+          "notifications": "Notificaciones",
+          "notificationPreferences": "Preferencias de Notificación",
+          "manageChannels": "Gestionar canales de comunicación"
+        }
+      },
+
+      "auth": {
+        "whatsappLogin": {
+          "title": "Iniciar sesión con WhatsApp",
+          "subtitle": "Recibe un código de verificación por WhatsApp",
+          "phoneLabel": "Número de teléfono",
+          "sendCode": "Enviar código",
+          "enterCode": "Ingresa el código",
+          "codeSentTo": "Código enviado a",
+          "verifyCode": "Verificar código",
+          "switchToEmail": "Usar correo en su lugar",
+          "codeExpires": "El código expira en {minutes} minutos"
+        }
+      }
+    },
+
+    "en": {
+      "notifications": {
+        "channels": {
+          "email": "Email",
+          "whatsapp": "WhatsApp",
+          "sms": "SMS"
+        },
+        "preferences": {
+          "title": "Notification Preferences",
+          "subtitle": "Manage how you want to receive updates",
+          "emailSection": "Email Notifications",
+          "whatsappSection": "WhatsApp Notifications",
+          "smsSection": "SMS Notifications",
+
+          "emailEnabled": "Enable email notifications",
+          "whatsappEnabled": "Enable WhatsApp notifications",
+          "smsEnabled": "Enable SMS notifications",
+
+          "phoneNumber": "Phone number",
+          "phoneNumberPlaceholder": "+40123456789",
+          "phoneNumberHint": "International format (e.g., +40712345678)",
+          "verifyPhone": "Verify phone",
+          "phoneVerified": "Phone verified",
+          "phoneNotVerified": "Phone not verified",
+
+          "orderConfirmation": "Order confirmations",
+          "orderUpdates": "Status updates",
+          "shipping": "Shipping notifications",
+          "delivery": "Delivery confirmations",
+          "marketing": "Offers and promotions",
+          "support": "Support tickets",
+
+          "saveChanges": "Save changes",
+          "changesSaved": "Preferences saved",
+          "changesError": "Error saving preferences",
+
+          "whatsappBenefits": {
+            "title": "WhatsApp Benefits",
+            "instant": "Instant notifications",
+            "secure": "End-to-end encryption",
+            "convenient": "Get updates where you already chat",
+            "reliable": "98% open rate"
+          },
+
+          "requiresPhone": "Requires verified phone number",
+          "addPhone": "Add phone number"
+        },
+
+        "whatsapp": {
+          "verification": {
+            "title": "Verify WhatsApp number",
+            "description": "We'll send you a verification code via WhatsApp",
+            "sendCode": "Send code",
+            "codeSent": "Code sent to {phone}",
+            "enterCode": "Enter 6-digit code",
+            "verifying": "Verifying...",
+            "verified": "Number verified!",
+            "failed": "Verification failed",
+            "resend": "Resend code",
+            "resendIn": "Resend in {seconds}s",
+            "invalidCode": "Invalid code",
+            "expiredCode": "Code expired",
+            "tooManyAttempts": "Too many attempts. Try again later."
+          },
+
+          "errors": {
+            "notConfigured": "WhatsApp is not configured",
+            "invalidPhone": "Invalid phone number",
+            "sendFailed": "Failed to send message",
+            "notEnabled": "WhatsApp is not enabled for your account"
+          },
+
+          "status": {
+            "pending": "Pending",
+            "sent": "Sent",
+            "delivered": "Delivered",
+            "read": "Read",
+            "failed": "Failed"
+          }
+        },
+
+        "history": {
+          "title": "Notification History",
+          "filter": {
+            "all": "All",
+            "email": "Email only",
+            "whatsapp": "WhatsApp only",
+            "sms": "SMS only"
+          },
+          "empty": "No notifications",
+          "sentVia": "Sent via {channel}",
+          "viewDetails": "View details"
+        }
+      },
+
+      "account": {
+        "settings": {
+          "notifications": "Notifications",
+          "notificationPreferences": "Notification Preferences",
+          "manageChannels": "Manage communication channels"
+        }
+      },
+
+      "auth": {
+        "whatsappLogin": {
+          "title": "Sign in with WhatsApp",
+          "subtitle": "Receive a verification code via WhatsApp",
+          "phoneLabel": "Phone number",
+          "sendCode": "Send code",
+          "enterCode": "Enter code",
+          "codeSentTo": "Code sent to",
+          "verifyCode": "Verify code",
+          "switchToEmail": "Use email instead",
+          "codeExpires": "Code expires in {minutes} minutes"
+        }
+      }
+    },
+
+    "ro": {
+      "notifications": {
+        "channels": {
+          "email": "Email",
+          "whatsapp": "WhatsApp",
+          "sms": "SMS"
+        },
+        "preferences": {
+          "title": "Preferințe Notificări",
+          "subtitle": "Gestionează cum vrei să primești actualizări",
+          "emailSection": "Notificări Email",
+          "whatsappSection": "Notificări WhatsApp",
+          "smsSection": "Notificări SMS",
+
+          "emailEnabled": "Activează notificări email",
+          "whatsappEnabled": "Activează notificări WhatsApp",
+          "smsEnabled": "Activează notificări SMS",
+
+          "phoneNumber": "Număr de telefon",
+          "phoneNumberPlaceholder": "+40123456789",
+          "phoneNumberHint": "Format internațional (ex: +40712345678)",
+          "verifyPhone": "Verifică telefonul",
+          "phoneVerified": "Telefon verificat",
+          "phoneNotVerified": "Telefon neverificat",
+
+          "orderConfirmation": "Confirmări comenzi",
+          "orderUpdates": "Actualizări status",
+          "shipping": "Notificări expediere",
+          "delivery": "Confirmări livrare",
+          "marketing": "Oferte și promoții",
+          "support": "Tichete suport",
+
+          "saveChanges": "Salvează modificările",
+          "changesSaved": "Preferințe salvate",
+          "changesError": "Eroare la salvarea preferințelor",
+
+          "whatsappBenefits": {
+            "title": "Beneficii WhatsApp",
+            "instant": "Notificări instantanee",
+            "secure": "Criptare end-to-end",
+            "convenient": "Primești actualizări unde deja conversezi",
+            "reliable": "98% rată de deschidere"
+          },
+
+          "requiresPhone": "Necesită număr de telefon verificat",
+          "addPhone": "Adaugă număr de telefon"
+        },
+
+        "whatsapp": {
+          "verification": {
+            "title": "Verifică numărul WhatsApp",
+            "description": "Îți vom trimite un cod de verificare prin WhatsApp",
+            "sendCode": "Trimite cod",
+            "codeSent": "Cod trimis la {phone}",
+            "enterCode": "Introdu codul de 6 cifre",
+            "verifying": "Se verifică...",
+            "verified": "Număr verificat!",
+            "failed": "Verificare eșuată",
+            "resend": "Retrimite cod",
+            "resendIn": "Retrimite în {seconds}s",
+            "invalidCode": "Cod invalid",
+            "expiredCode": "Cod expirat",
+            "tooManyAttempts": "Prea multe încercări. Încearcă din nou mai târziu."
+          },
+
+          "errors": {
+            "notConfigured": "WhatsApp nu este configurat",
+            "invalidPhone": "Număr de telefon invalid",
+            "sendFailed": "Eroare la trimiterea mesajului",
+            "notEnabled": "WhatsApp nu este activat pentru contul tău"
+          },
+
+          "status": {
+            "pending": "În așteptare",
+            "sent": "Trimis",
+            "delivered": "Livrat",
+            "read": "Citit",
+            "failed": "Eșuat"
+          }
+        },
+
+        "history": {
+          "title": "Istoric Notificări",
+          "filter": {
+            "all": "Toate",
+            "email": "Doar email",
+            "whatsapp": "Doar WhatsApp",
+            "sms": "Doar SMS"
+          },
+          "empty": "Fără notificări",
+          "sentVia": "Trimis prin {channel}",
+          "viewDetails": "Vezi detalii"
+        }
+      },
+
+      "account": {
+        "settings": {
+          "notifications": "Notificări",
+          "notificationPreferences": "Preferințe Notificări",
+          "manageChannels": "Gestionează canale de comunicare"
+        }
+      },
+
+      "auth": {
+        "whatsappLogin": {
+          "title": "Autentificare cu WhatsApp",
+          "subtitle": "Primește un cod de verificare prin WhatsApp",
+          "phoneLabel": "Număr de telefon",
+          "sendCode": "Trimite cod",
+          "enterCode": "Introdu codul",
+          "codeSentTo": "Cod trimis la",
+          "verifyCode": "Verifică cod",
+          "switchToEmail": "Folosește email în schimb",
+          "codeExpires": "Codul expiră în {minutes} minute"
+        }
+      }
+    },
+
+    "ru": {
+      "notifications": {
+        "channels": {
+          "email": "Электронная почта",
+          "whatsapp": "WhatsApp",
+          "sms": "SMS"
+        },
+        "preferences": {
+          "title": "Настройки уведомлений",
+          "subtitle": "Управляйте способами получения обновлений",
+          "emailSection": "Email уведомления",
+          "whatsappSection": "WhatsApp уведомления",
+          "smsSection": "SMS уведомления",
+
+          "emailEnabled": "Включить email уведомления",
+          "whatsappEnabled": "Включить WhatsApp уведомления",
+          "smsEnabled": "Включить SMS уведомления",
+
+          "phoneNumber": "Номер телефона",
+          "phoneNumberPlaceholder": "+40123456789",
+          "phoneNumberHint": "Международный формат (например: +40712345678)",
+          "verifyPhone": "Подтвердить телефон",
+          "phoneVerified": "Телефон подтвержден",
+          "phoneNotVerified": "Телефон не подтвержден",
+
+          "orderConfirmation": "Подтверждения заказов",
+          "orderUpdates": "Обновления статуса",
+          "shipping": "Уведомления об отправке",
+          "delivery": "Подтверждения доставки",
+          "marketing": "Предложения и акции",
+          "support": "Заявки в поддержку",
+
+          "saveChanges": "Сохранить изменения",
+          "changesSaved": "Настройки сохранены",
+          "changesError": "Ошибка сохранения настроек",
+
+          "whatsappBenefits": {
+            "title": "Преимущества WhatsApp",
+            "instant": "Мгновенные уведомления",
+            "secure": "Сквозное шифрование",
+            "convenient": "Получайте обновления там, где уже общаетесь",
+            "reliable": "98% процент открытия"
+          },
+
+          "requiresPhone": "Требуется подтвержденный номер телефона",
+          "addPhone": "Добавить номер телефона"
+        },
+
+        "whatsapp": {
+          "verification": {
+            "title": "Подтвердить номер WhatsApp",
+            "description": "Мы отправим вам код подтверждения через WhatsApp",
+            "sendCode": "Отправить код",
+            "codeSent": "Код отправлен на {phone}",
+            "enterCode": "Введите 6-значный код",
+            "verifying": "Проверка...",
+            "verified": "Номер подтвержден!",
+            "failed": "Проверка не удалась",
+            "resend": "Отправить код повторно",
+            "resendIn": "Повторная отправка через {seconds}с",
+            "invalidCode": "Неверный код",
+            "expiredCode": "Код истек",
+            "tooManyAttempts": "Слишком много попыток. Попробуйте позже."
+          },
+
+          "errors": {
+            "notConfigured": "WhatsApp не настроен",
+            "invalidPhone": "Неверный номер телефона",
+            "sendFailed": "Не удалось отправить сообщение",
+            "notEnabled": "WhatsApp не включен для вашей учетной записи"
+          },
+
+          "status": {
+            "pending": "Ожидание",
+            "sent": "Отправлено",
+            "delivered": "Доставлено",
+            "read": "Прочитано",
+            "failed": "Не удалось"
+          }
+        },
+
+        "history": {
+          "title": "История уведомлений",
+          "filter": {
+            "all": "Все",
+            "email": "Только email",
+            "whatsapp": "Только WhatsApp",
+            "sms": "Только SMS"
+          },
+          "empty": "Нет уведомлений",
+          "sentVia": "Отправлено через {channel}",
+          "viewDetails": "Подробности"
+        }
+      },
+
+      "account": {
+        "settings": {
+          "notifications": "Уведомления",
+          "notificationPreferences": "Настройки уведомлений",
+          "manageChannels": "Управление каналами связи"
+        }
+      },
+
+      "auth": {
+        "whatsappLogin": {
+          "title": "Вход через WhatsApp",
+          "subtitle": "Получите код подтверждения через WhatsApp",
+          "phoneLabel": "Номер телефона",
+          "sendCode": "Отправить код",
+          "enterCode": "Введите код",
+          "codeSentTo": "Код отправлен на",
+          "verifyCode": "Подтвердить код",
+          "switchToEmail": "Использовать email вместо этого",
+          "codeExpires": "Код истекает через {minutes} минут"
+        }
+      }
+    }
+  }
+}
