@@ -3,7 +3,7 @@ import { serverSupabaseClient, serverSupabaseUser } from '#supabase/server'
 export default defineEventHandler(async (event) => {
   try {
     const user = await requireAuthenticatedUser(event)
-    const supabase = serverSupabaseClient(event)
+    const supabase = await serverSupabaseClient(event)
     
     // Get user's saved addresses from database
     const { data: addresses, error } = await supabase
@@ -14,12 +14,17 @@ export default defineEventHandler(async (event) => {
       .order('created_at', { ascending: false })
 
     if (error) {
-      // If table doesn't exist or other DB error, return empty array instead of failing
-      console.warn('Failed to fetch addresses:', error.message)
-      return {
-        success: true,
-        addresses: []
-      }
+      console.error('Failed to fetch addresses:', {
+        userId: user.id,
+        error: error.message,
+        code: error.code,
+        details: error.details
+      })
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Unable to load your saved addresses. Please refresh the page.',
+        data: { error: error.message }
+      })
     }
 
     return {
@@ -27,17 +32,32 @@ export default defineEventHandler(async (event) => {
       addresses: addresses || []
     }
   } catch (error) {
-    // For authentication errors, still throw them
+    // Re-throw authentication errors
     if (error.statusCode === 401) {
       throw error
     }
-    
-    // For other errors, return empty addresses instead of failing
-    console.warn('Error in addresses API:', error)
-    return {
-      success: true,
-      addresses: []
+
+    // Re-throw known errors
+    if (error.statusCode) {
+      throw error
     }
+
+    // Log unexpected errors with full context
+    console.error('Unexpected error fetching addresses:', {
+      error,
+      errorType: error?.constructor?.name,
+      message: error?.message,
+      stack: error?.stack
+    })
+
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'An unexpected error occurred while loading addresses',
+      data: {
+        errorType: error?.constructor?.name,
+        message: String(error)
+      }
+    })
   }
 })
 

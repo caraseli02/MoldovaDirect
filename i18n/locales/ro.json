@@ -1622,7 +1622,12 @@
       "success": "Plată express activată",
       "successDetails": "Detaliile salvate au fost încărcate",
       "addressLoaded": "Adresă încărcată",
-      "selectShipping": "Vă rugăm să selectați o metodă de livrare"
+      "selectShipping": "Vă rugăm să selectați o metodă de livrare",
+      "countdownTitle": "Plată express activată!",
+      "countdownMessage": "Redirecționare către plată în {seconds} secunde...",
+      "cancelButton": "Așteaptă, vreau să revizuiesc",
+      "countdownCancelled": "Numărătoare inversă anulată",
+      "countdownCancelledDetails": "Ia-ți timp să revizuiești comanda"
     }
   },
   "admin": {

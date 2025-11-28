@@ -1715,7 +1715,12 @@
       "success": "Pago express activado",
       "successDetails": "Tus datos guardados han sido cargados",
       "addressLoaded": "Dirección cargada",
-      "selectShipping": "Por favor selecciona un método de envío"
+      "selectShipping": "Por favor selecciona un método de envío",
+      "countdownTitle": "Pago express activado",
+      "countdownMessage": "Redirigiendo al pago en {seconds} segundos...",
+      "cancelButton": "Espera, déjame revisar",
+      "countdownCancelled": "Cuenta regresiva cancelada",
+      "countdownCancelledDetails": "Tómate tu tiempo para revisar tu pedido"
     }
   },
   "admin": {

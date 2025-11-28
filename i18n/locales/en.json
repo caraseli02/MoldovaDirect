@@ -1793,7 +1793,12 @@
       "success": "Express checkout activated",
       "successDetails": "Your saved details have been loaded",
       "addressLoaded": "Address loaded",
-      "selectShipping": "Please select a shipping method"
+      "selectShipping": "Please select a shipping method",
+      "countdownTitle": "Express checkout activated!",
+      "countdownMessage": "Redirecting to payment in {seconds} seconds...",
+      "cancelButton": "Wait, let me review",
+      "countdownCancelled": "Countdown cancelled",
+      "countdownCancelledDetails": "Take your time to review your order"
     }
   },
   "admin": {

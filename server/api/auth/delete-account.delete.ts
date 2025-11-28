@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
     assertMethod(event, 'DELETE')
 
     // Get the authenticated user (regular client for authentication)
-    const supabase = serverSupabaseClient(event)
+    const supabase = await serverSupabaseClient(event)
     const { data: { user }, error: authError } = await supabase.auth.getUser()
 
     if (authError || !user) {

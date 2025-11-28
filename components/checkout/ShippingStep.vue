@@ -273,6 +273,15 @@ onMounted(async () => {
   // Load saved addresses for authenticated users
   if (user.value) {
     await loadSavedAddresses()
+
+    // Auto-select default address if no address is currently set
+    if (defaultAddress.value && !shippingAddress.value.street) {
+      shippingAddress.value = { ...defaultAddress.value }
+      // Load shipping methods since we have a valid address
+      if (shippingAddress.value.country && shippingAddress.value.postalCode) {
+        loadShippingMethods()
+      }
+    }
   }
 
   if (!user.value && checkoutStore.guestInfo) {

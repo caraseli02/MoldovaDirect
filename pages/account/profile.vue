@@ -609,11 +609,12 @@ const handleAddressSave = async (addressData: Address) => {
     }
 
     if (addressData.id) {
-      // Update existing address
+      // Update existing address - verify user owns it
       const { error } = await supabase
         .from('user_addresses')
         .update(dbAddress)
         .eq('id', addressData.id)
+        .eq('user_id', user.value?.id)
 
       if (error) throw error
     } else {
@@ -641,10 +642,12 @@ const deleteAddress = async (addressId: number) => {
   if (!confirm(t('profile.confirmDeleteAddress'))) return
 
   try {
+    // Verify user owns the address before deleting
     const { error } = await supabase
       .from('user_addresses')
       .delete()
       .eq('id', addressId)
+      .eq('user_id', user.value?.id)
 
     if (error) throw error
 

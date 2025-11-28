@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const supabase = serverSupabaseClient(event)
+  const supabase = await serverSupabaseClient(event)
 
   try {
     // Fetch addresses and preferences in parallel for performance

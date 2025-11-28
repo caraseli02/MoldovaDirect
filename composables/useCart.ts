@@ -2,14 +2,82 @@ import { useCartStore } from "~/stores/cart";
 import { ref, computed } from "vue";
 
 export const useCart = () => {
-  // CRITICAL FIX v2: Let Pinia handle SSR/client differences
-  // Don't use process.client - just get the store directly
-  // Pinia is SSR-compatible and will initialize properly on both server and client
+  // CRITICAL FIX v3: Cart store is client-only, check before accessing
+  // The cart uses cookies which are only available on the client
+  // Attempting to access the store during SSR will fail
+
+  if (!process.client) {
+    // Return empty cart interface for SSR
+    return {
+      items: computed(() => []),
+      itemCount: computed(() => 0),
+      subtotal: computed(() => 0),
+      isEmpty: computed(() => true),
+      loading: computed(() => false),
+      error: computed(() => null),
+      sessionId: computed(() => null),
+      storageType: computed(() => 'cookie' as const),
+      lastSyncAt: computed(() => null),
+      validationInProgress: computed(() => false),
+      backgroundValidationEnabled: computed(() => false),
+      lastBackgroundValidation: computed(() => null),
+      selectedItems: computed(() => []),
+      selectedItemsCount: computed(() => 0),
+      selectedItemsSubtotal: computed(() => 0),
+      allItemsSelected: computed(() => false),
+      hasSelectedItems: computed(() => false),
+      bulkOperationInProgress: computed(() => false),
+      savedForLater: computed(() => []),
+      savedForLaterCount: computed(() => 0),
+      recommendations: computed(() => []),
+      recommendationsLoading: computed(() => false),
+      performanceMetrics: computed(() => ({
+        totalOperations: 0,
+        averageOperationTime: 0,
+        slowestOperation: null,
+        fastestOperation: null
+      })),
+      isInCart: () => false,
+      getItemByProductId: () => undefined,
+      addItem: async () => {},
+      updateQuantity: async () => {},
+      removeItem: async () => {},
+      clearCart: async () => {},
+      validateCart: async () => {},
+      directAddItem: async () => {},
+      directUpdateQuantity: async () => {},
+      directRemoveItem: async () => {},
+      directClearCart: async () => {},
+      directValidateCart: async () => {},
+      recoverCart: async () => {},
+      forceSync: () => {},
+      toggleBackgroundValidation: () => {},
+      clearValidationCache: () => {},
+      validateCartWithRetry: async () => {},
+      isItemSelected: () => false,
+      getSelectedItems: () => [],
+      toggleItemSelection: () => {},
+      toggleSelectAll: () => {},
+      removeSelectedItems: async () => {},
+      moveSelectedToSavedForLater: async () => {},
+      addToSavedForLater: async () => {},
+      removeFromSavedForLater: async () => {},
+      moveToCartFromSavedForLater: async () => {},
+      loadRecommendations: async () => {},
+      getPerformanceMetrics: () => ({
+        totalOperations: 0,
+        averageOperationTime: 0,
+        slowestOperation: null,
+        fastestOperation: null
+      }),
+      resetPerformanceMetrics: () => {}
+    }
+  }
 
   const cartStore = useCartStore()
 
   // Initialize cart on client side only
-  if (process.client && cartStore && !cartStore.sessionId) {
+  if (cartStore && !cartStore.sessionId) {
     cartStore.initializeCart()
   }
 

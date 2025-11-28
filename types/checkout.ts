@@ -11,7 +11,20 @@ export interface ShippingMethod {
   estimatedDays: number
 }
 
-export interface Address {
+/**
+ * @deprecated Use Address from '~/types/address' instead
+ * This type definition is INCORRECT and does not match the database schema.
+ * It will be removed in a future version.
+ *
+ * Issues with this type:
+ * - Uses string ID instead of number
+ * - Has full_name instead of firstName/lastName
+ * - Has address instead of street
+ * - Missing required type field
+ *
+ * Migration: Import { Address } from '~/types/address'
+ */
+export interface OldAddress {
   id?: string
   user_id?: string
   full_name: string
@@ -25,21 +38,8 @@ export interface Address {
   updated_at?: string
 }
 
-// Legacy address format for backward compatibility
-export interface LegacyAddress {
-  id?: number
-  type: 'shipping' | 'billing'
-  firstName: string
-  lastName: string
-  company?: string
-  street: string
-  city: string
-  postalCode: string
-  province?: string
-  country: string
-  phone?: string
-  isDefault?: boolean
-}
+// Re-export correct Address type from unified source
+export type { Address, AddressEntity, AddressFormData } from '~/types/address'
 
 export interface PaymentMethod {
   type: 'cash' | 'credit_card' | 'paypal' | 'bank_transfer'

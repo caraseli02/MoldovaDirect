@@ -1,4 +1,5 @@
 import { serverSupabaseClient, serverSupabaseUser } from '#supabase/server'
+import { addressFromEntity } from '~/types/address'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -16,15 +17,28 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    const supabase = serverSupabaseClient(event)
+    const supabase = await serverSupabaseClient(event)
 
     // If this is set as default, unset other default addresses of the same type
     if (body.isDefault) {
-      await supabase
+      const { error: unsetError } = await supabase
         .from('user_addresses')
         .update({ is_default: false })
         .eq('user_id', user.id)
         .eq('type', body.type)
+
+      if (unsetError) {
+        console.error('Failed to unset previous default address:', {
+          userId: user.id,
+          type: body.type,
+          error: unsetError
+        })
+        throw createError({
+          statusCode: 500,
+          statusMessage: 'Failed to update default address settings',
+          data: { error: unsetError.message }
+        })
+      }
     }
 
     // Insert new address
@@ -48,52 +62,42 @@ export default defineEventHandler(async (event) => {
       .single()
 
     if (error) {
-      // If table doesn't exist, return a mock success response
-      console.warn('Failed to save address (table may not exist):', error.message)
-      return {
-        success: true,
-        address: {
-          id: Date.now(), // Mock ID
-          type: body.type,
-          firstName: body.firstName,
-          lastName: body.lastName,
-          company: body.company,
-          street: body.street,
-          city: body.city,
-          postalCode: body.postalCode,
-          province: body.province,
-          country: body.country,
-          phone: body.phone,
-          isDefault: body.isDefault || false
-        }
-      }
+      console.error('Failed to save address:', {
+        userId: user.id,
+        error: error.message,
+        code: error.code,
+        details: error.details
+      })
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Failed to save address. Please try again or contact support.',
+        data: { error: error.message }
+      })
     }
 
     return {
       success: true,
-      address: {
-        id: address.id,
-        type: address.type,
-        firstName: address.first_name,
-        lastName: address.last_name,
-        company: address.company,
-        street: address.street,
-        city: address.city,
-        postalCode: address.postal_code,
-        province: address.province,
-        country: address.country,
-        phone: address.phone,
-        isDefault: address.is_default
-      }
+      address: addressFromEntity(address)
     }
   } catch (error) {
     if (error.statusCode) {
       throw error
     }
-    
+
+    console.error('Unexpected error saving address:', {
+      error,
+      errorType: error?.constructor?.name,
+      message: error?.message,
+      stack: error?.stack
+    })
+
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Failed to save address due to an unexpected error. Please try again.',
+      data: {
+        errorType: error?.constructor?.name,
+        message: error?.message
+      }
     })
   }
 })

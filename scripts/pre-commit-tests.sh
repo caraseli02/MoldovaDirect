@@ -38,6 +38,25 @@ fi
 
 echo ""
 
+# Run fast smoke tests (< 30 seconds)
+# Temporarily disabled - smoke tests need to be refactored
+# echo "🚀 Running pre-commit smoke tests..."
+# echo ""
+# echo "⚠️  Note: These tests require:"
+# echo "   - Dev server running on port 3000 or 3001"
+# echo ""
+#
+# if pnpm run test:pre-commit; then
+#   echo "✅ Pre-commit smoke tests passed!"
+# else
+#   echo "❌ Pre-commit smoke tests failed!"
+#   echo ""
+#   echo "💡 Tip: Fix the failing tests or use 'git commit --no-verify' to skip checks"
+#   exit 1
+# fi
+
+echo ""
+
 # Run E2E checkout tests if enabled (opt-in via environment variable)
 if [ "$RUN_E2E_CHECKOUT_TESTS" = "true" ]; then
   echo "🎭 Running E2E checkout smart pre-population tests..."

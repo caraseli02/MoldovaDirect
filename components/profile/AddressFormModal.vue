@@ -7,9 +7,10 @@
         @click="$emit('close')"
       ></div>
 
-      <!-- Modal panel -->
-      <div class="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-gray-800 shadow-xl rounded-lg relative z-10">
-        <div class="flex justify-between items-center mb-6">
+      <!-- Modal panel - scrollable with max height -->
+      <div class="inline-block w-full max-w-md my-4 text-left align-middle transition-all transform bg-white dark:bg-gray-800 shadow-xl rounded-lg relative z-10 max-h-[95vh] flex flex-col">
+        <!-- Fixed header -->
+        <div class="flex justify-between items-center p-6 pb-4 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
           <h3 class="text-lg font-medium text-gray-900 dark:text-white">
             {{ address?.id ? $t('profile.editAddress') : $t('profile.addAddress') }}
           </h3>
@@ -23,7 +24,9 @@
           </Button>
         </div>
 
-        <form @submit.prevent="handleSubmit" class="space-y-4">
+        <!-- Scrollable form content -->
+        <div class="overflow-y-auto flex-1 px-6 py-4">
+          <form @submit.prevent="handleSubmit" class="space-y-4" id="addressForm">
           <!-- Address Type -->
           <div>
             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -232,33 +235,35 @@
               {{ $t('profile.setAsDefault') }}
             </label>
           </div>
+          </form>
+        </div>
 
-          <!-- Action Buttons -->
-          <div class="flex justify-end space-x-3 pt-6 border-t border-gray-200 dark:border-gray-700">
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              @click="$emit('close')"
-              class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors"
-            >
-              {{ $t('common.cancel') }}
-            </Button>
-            <Button
-              type="submit"
-              :disabled="isLoading"
-              class="px-6 py-2 bg-primary-600 text-white text-sm font-medium rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              <span v-if="isLoading" class="flex items-center">
-                <commonIcon name="lucide:loader-2" class="animate-spin h-4 w-4 mr-2" />
-                {{ $t('common.loading') }}
-              </span>
-              <span v-else>
-                {{ address?.id ? $t('profile.updateAddress') : $t('profile.saveAddress') }}
-              </span>
-            </Button>
-          </div>
-        </form>
+        <!-- Fixed footer with action buttons -->
+        <div class="flex justify-end space-x-3 p-6 pt-4 border-t border-gray-200 dark:border-gray-700 flex-shrink-0">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            @click="$emit('close')"
+            class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors"
+          >
+            {{ $t('common.cancel') }}
+          </Button>
+          <Button
+            type="submit"
+            form="addressForm"
+            :disabled="isLoading"
+            class="px-6 py-2 bg-primary-600 text-white text-sm font-medium rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            <span v-if="isLoading" class="flex items-center">
+              <commonIcon name="lucide:loader-2" class="animate-spin h-4 w-4 mr-2" />
+              {{ $t('common.loading') }}
+            </span>
+            <span v-else>
+              {{ address?.id ? $t('profile.updateAddress') : $t('profile.saveAddress') }}
+            </span>
+          </Button>
+        </div>
       </div>
     </div>
   </div>
