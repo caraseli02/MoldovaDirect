@@ -23,7 +23,7 @@ export default defineCachedEventHandler(async (event) => {
     const MAX_LIMIT = 100
     const MAX_PAGE = 10000
     const parsedPage = parseInt(query.page as string) || 1
-    const parsedLimit = parseInt(query.limit as string) || 20
+    const parsedLimit = parseInt(query.limit as string) || 12
     const page = Math.min(Math.max(1, parsedPage), MAX_PAGE)
     const limit = Math.min(Math.max(1, parsedLimit), MAX_LIMIT)
 
