@@ -194,7 +194,7 @@ const showMobileFilters = ref(false)
 const isSearchFocused = ref(false)
 
 // Debounced search
-const { debouncedFn: debouncedSearch } = useDebounceFn((query: string) => {
+const debouncedSearch = useDebounceFn((query: string) => {
   emit('search', query)
   emit('update:searchQuery', query)
 }, 300)

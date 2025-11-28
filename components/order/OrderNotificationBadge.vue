@@ -45,6 +45,7 @@
     >
       <div
         v-if="isOpen"
+        ref="dropdownRef"
         class="absolute right-0 mt-2 w-80 sm:w-96 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 z-50"
       >
         <!-- Header -->
@@ -183,6 +184,7 @@
 </template>
 
 <script setup lang="ts">
+import { onClickOutside } from '@vueuse/core'
 import { Button } from '@/components/ui/button'
 import type { OrderStatusUpdate } from '~/composables/useOrderTracking'
 import type { OrderStatus } from '~/types'
@@ -203,6 +205,7 @@ const {
 // Local state
 const isOpen = ref(false)
 const viewedUpdates = ref<Set<number>>(new Set())
+const dropdownRef = ref<HTMLElement>()
 
 // Load viewed updates from localStorage
 onMounted(() => {
@@ -296,12 +299,9 @@ const formatTimestamp = (timestamp: string): string => {
 }
 
 // Close dropdown when clicking outside
-onClickOutside = (event: MouseEvent) => {
+onClickOutside(dropdownRef, () => {
   if (isOpen.value) {
-    const target = event.target as HTMLElement
-    if (!target.closest('.relative')) {
-      closeDropdown()
-    }
+    closeDropdown()
   }
-}
+})
 </script>
