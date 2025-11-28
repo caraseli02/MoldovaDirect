@@ -17,7 +17,7 @@ setup.describe('Express Checkout Test Setup', () => {
     const user = ExpressCheckoutFixtures.returningUserWithPreferences()
 
     // Sign in
-    await page.goto('/auth/signin')
+    await page.goto('/auth/login')
     await page.fill('input[type="email"]', user.email)
     await page.fill('input[type="password"]', user.password)
     await page.click('button[type="submit"]')
@@ -38,7 +38,7 @@ setup.describe('Express Checkout Test Setup', () => {
     const user = ExpressCheckoutFixtures.userWithAddressOnly()
 
     // Sign in
-    await page.goto('/auth/signin')
+    await page.goto('/auth/login')
     await page.fill('input[type="email"]', user.email)
     await page.fill('input[type="password"]', user.password)
     await page.click('button[type="submit"]')
@@ -56,7 +56,7 @@ setup.describe('Express Checkout Test Setup', () => {
     const user = ExpressCheckoutFixtures.userWithoutAddress()
 
     // Sign in
-    await page.goto('/auth/signin')
+    await page.goto('/auth/login')
     await page.fill('input[type="email"]', user.email)
     await page.fill('input[type="password"]', user.password)
     await page.click('button[type="submit"]')

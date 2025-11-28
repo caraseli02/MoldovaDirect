@@ -72,7 +72,7 @@ async function manualCheckoutTest() {
     
     console.log('\n📸 STEP 3: Navigating to Sign In page');
     console.log('-'.repeat(70));
-    await page.goto(BASE_URL + '/auth/signin', { waitUntil: 'networkidle', timeout: 15000 });
+    await page.goto(BASE_URL + '/auth/login', { waitUntil: 'networkidle', timeout: 15000 });
     await sleep(2000);
     await captureScreenshot(page, 'step-03-signin-page');
     console.log('✓ Sign in page loaded');

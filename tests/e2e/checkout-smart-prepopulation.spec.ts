@@ -28,7 +28,7 @@ test.describe('Checkout Smart Pre-population', () => {
     // We'll check by attempting to fetch user data (which requires the tables to exist)
 
     // Sign in first
-    await page.goto(`${BASE_URL}/auth/signin`)
+    await page.goto(`${BASE_URL}/auth/login`)
     await page.fill('input[type="email"]', TEST_USER_EMAIL)
     await page.fill('input[type="password"]', TEST_USER_PASSWORD)
     await page.click('button[type="submit"]')
@@ -66,7 +66,7 @@ test.describe('Checkout Smart Pre-population', () => {
 
   test('Phase 3: Authenticated user - first checkout (save address)', async ({ page }) => {
     // Sign in
-    await page.goto(`${BASE_URL}/auth/signin`)
+    await page.goto(`${BASE_URL}/auth/login`)
     await page.fill('input[type="email"]', TEST_USER_EMAIL)
     await page.fill('input[type="password"]', TEST_USER_PASSWORD)
     await page.click('button[type="submit"]')
@@ -107,7 +107,7 @@ test.describe('Checkout Smart Pre-population', () => {
     // In a real scenario, you'd need to set up test data first
 
     // Sign in
-    await page.goto(`${BASE_URL}/auth/signin`)
+    await page.goto(`${BASE_URL}/auth/login`)
     await page.fill('input[type="email"]', TEST_USER_EMAIL)
     await page.fill('input[type="password"]', TEST_USER_PASSWORD)
     await page.click('button[type="submit"]')
@@ -162,7 +162,7 @@ test.describe('Checkout Smart Pre-population', () => {
     })
 
     // Sign in
-    await page.goto(`${BASE_URL}/auth/signin`)
+    await page.goto(`${BASE_URL}/auth/login`)
     await page.fill('input[type="email"]', TEST_USER_EMAIL)
     await page.fill('input[type="password"]', TEST_USER_PASSWORD)
     await page.click('button[type="submit"]')
@@ -181,7 +181,7 @@ test.describe('Checkout Smart Pre-population', () => {
 
   test('Phase 6: Data prefetch API endpoint responds correctly', async ({ page, context }) => {
     // Sign in
-    await page.goto(`${BASE_URL}/auth/signin`)
+    await page.goto(`${BASE_URL}/auth/login`)
     await page.fill('input[type="email"]', TEST_USER_EMAIL)
     await page.fill('input[type="password"]', TEST_USER_PASSWORD)
     await page.click('button[type="submit"]')
@@ -219,7 +219,7 @@ test.describe('Checkout Smart Pre-population', () => {
     // This test verifies the composable is working by checking if addresses load
 
     // Sign in
-    await page.goto(`${BASE_URL}/auth/signin`)
+    await page.goto(`${BASE_URL}/auth/login`)
     await page.fill('input[type="email"]', TEST_USER_EMAIL)
     await page.fill('input[type="password"]', TEST_USER_PASSWORD)
     await page.click('button[type="submit"]')
@@ -250,7 +250,7 @@ test.describe('Checkout Smart Pre-population', () => {
     })
 
     // Sign in
-    await page.goto(`${BASE_URL}/auth/signin`)
+    await page.goto(`${BASE_URL}/auth/login`)
     await page.fill('input[type="email"]', TEST_USER_EMAIL)
     await page.fill('input[type="password"]', TEST_USER_PASSWORD)
     await page.click('button[type="submit"]')

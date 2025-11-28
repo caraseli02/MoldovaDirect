@@ -53,7 +53,7 @@ export class AuthPage {
    * Navigate to sign in page
    */
   async navigateToSignIn() {
-    await this.page.goto('/auth/signin')
+    await this.page.goto('/auth/login')
     await this.page.waitForLoadState('networkidle')
   }
 
@@ -61,7 +61,7 @@ export class AuthPage {
    * Navigate to sign up page
    */
   async navigateToSignUp() {
-    await this.page.goto('/auth/signup')
+    await this.page.goto('/auth/register')
     await this.page.waitForLoadState('networkidle')
   }
 
