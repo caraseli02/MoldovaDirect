@@ -365,8 +365,9 @@ function debounce<T extends (...args: any[]) => any>(fn: T, delay: number) {
   }
 }
 
-// Get route early to access query parameters
+// Get route and router early to access query parameters
 const route = useRoute()
+const router = useRouter()
 
 // Parse initial page/limit from URL query parameters with bounds validation
 const MAX_LIMIT = 100
@@ -519,6 +520,12 @@ const clearAllFilters = () => {
  * Updates URL to keep state in sync
  */
 const goToPage = async (page: number) => {
+  console.log('[goToPage] Called with page:', page, {
+    currentPage: pagination.value.page,
+    totalPages: pagination.value.totalPages,
+    currentURL: route.fullPath
+  })
+
   // Validate page number to prevent attacks
   const validPage = Math.max(1, Math.min(
     Math.floor(page),
@@ -529,16 +536,26 @@ const goToPage = async (page: number) => {
     console.warn(`Invalid page ${page}, using ${validPage}`)
   }
 
+  console.log('[goToPage] Attempting router.push with query:', {
+    page: validPage.toString(),
+    limit: (route.query.limit || '12').toString(),
+    otherParams: route.query
+  })
+
   // Update URL with new page parameter
   // The URL watcher will handle fetching products automatically
-  const router = useRouter()
-  await router.push({
-    query: {
-      ...route.query,
-      page: validPage.toString(),
-      limit: (route.query.limit || '12').toString()
-    }
-  })
+  try {
+    await router.push({
+      query: {
+        ...route.query,
+        page: validPage.toString(),
+        limit: (route.query.limit || '12').toString()
+      }
+    })
+    console.log('[goToPage] Router push completed, new URL:', route.fullPath)
+  } catch (error) {
+    console.error('[goToPage] Router push failed:', error)
+  }
 
   // Scroll to top for better UX
   // Note: Product fetching is handled by the route.query.page watcher
