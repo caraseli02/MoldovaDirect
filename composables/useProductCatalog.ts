@@ -144,8 +144,21 @@ export const useProductCatalog = () => {
 
       const response = await $fetch<{
         products: ProductWithRelations[]
+        pagination: {
+          page: number
+          limit: number
+          total: number
+          totalPages: number
+          hasNextPage: boolean
+          hasPreviousPage: boolean
+        }
         suggestions: string[]
-        query: string
+        meta: {
+          query: string
+          returned: number
+          locale: string
+          category: string | null
+        }
       }>(`/api/search?${params.toString()}`, {
         signal
       })
@@ -153,14 +166,8 @@ export const useProductCatalog = () => {
       searchResults.value = response.products
       products.value = response.products // Update main products array
 
-      // Update pagination
-      pagination.value = {
-        ...pagination.value,
-        page: searchFilters.page || 1,
-        limit: searchFilters.limit || 24,
-        total: response.products.length,
-        totalPages: Math.ceil(response.products.length / (searchFilters.limit || 24))
-      }
+      // Update pagination using API response (not recalculating!)
+      pagination.value = response.pagination
 
       filters.value = { ...searchFilters }
 
