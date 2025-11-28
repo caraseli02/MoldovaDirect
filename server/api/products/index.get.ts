@@ -69,10 +69,17 @@ export default defineCachedEventHandler(async (event) => {
       priceMax,
       inStock,
       featured,
-      sort = 'newest',
-      page = 1,
-      limit = 24
+      sort = 'newest'
     } = query
+
+    // Parse pagination params as integers to prevent type coercion bugs
+    // Add bounds validation to prevent DoS attacks
+    const MAX_LIMIT = 100
+    const MAX_PAGE = 10000
+    const parsedPage = parseInt(query.page as string) || 1
+    const parsedLimit = parseInt(query.limit as string) || 24
+    const page = Math.min(Math.max(1, parsedPage), MAX_PAGE)
+    const limit = Math.min(Math.max(1, parsedLimit), MAX_LIMIT)
 
     // Validate search term length if provided
     if (search && search.length > MAX_SEARCH_LENGTH) {

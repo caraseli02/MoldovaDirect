@@ -365,6 +365,16 @@ function debounce<T extends (...args: any[]) => any>(fn: T, delay: number) {
   }
 }
 
+// Get route early to access query parameters
+const route = useRoute()
+
+// Parse initial page/limit from URL query parameters with bounds validation
+const MAX_LIMIT = 100
+const parsedPage = parseInt(route.query.page as string) || 1
+const parsedLimit = parseInt(route.query.limit as string) || 12
+const initialPage = Math.max(1, parsedPage)
+const initialLimit = Math.min(MAX_LIMIT, Math.max(1, parsedLimit))
+
 // Product Catalog Store
 const {
   initialize,
@@ -386,9 +396,9 @@ const {
   showFilterPanel
 } = useProductCatalog()
 
-// Initialize and fetch products during SSR
+// Initialize and fetch products during SSR (using URL params)
 await initialize()
-await fetchProducts({ sort: 'created', page: 1, limit: 12 })
+await fetchProducts({ sort: 'created', page: initialPage, limit: initialLimit })
 
 // Filter Management
 const {
@@ -408,7 +418,6 @@ const { visiblePages } = useProductPagination(pagination)
 const { setupWatchers: setupStructuredDataWatchers } = useProductStructuredData(products, pagination)
 
 // Local state
-const route = useRoute()
 const searchQuery = ref('')
 const searchInput = ref<HTMLInputElement>()
 let searchAbortController: AbortController | null = null
