@@ -12,6 +12,15 @@
           </p>
         </div>
 
+        <!-- Express Checkout Banner (for authenticated users with saved data) -->
+        <ExpressCheckoutBanner
+          v-if="user && defaultAddress && !expressCheckoutDismissed"
+          :default-address="defaultAddress"
+          :preferred-shipping-method="checkoutStore.preferences?.preferred_shipping_method"
+          @use-express="handleExpressCheckout"
+          @dismiss="handleExpressCheckoutDismiss"
+        />
+
         <!-- Guest/Login Options (for non-authenticated users) -->
         <Suspense>
           <template #default>
@@ -94,6 +103,9 @@
 import type { ShippingInformation } from '~/types/checkout'
 
 // Lazy load heavy sub-components
+const ExpressCheckoutBanner = defineAsyncComponent(() =>
+  import('~/components/checkout/ExpressCheckoutBanner.vue')
+)
 const AddressForm = defineAsyncComponent(() =>
   import('~/components/checkout/AddressForm.vue')
 )
@@ -138,6 +150,8 @@ const {
 const {
   shippingAddress,
   savedAddresses,
+  defaultAddress,
+  hasAddresses,
   isAddressValid,
   loadSavedAddresses,
   handleSaveAddress,
@@ -155,6 +169,7 @@ const {
 
 // Local state
 const processing = ref(false)
+const expressCheckoutDismissed = ref(false)
 const shippingInstructions = ref('')
 const availableCountries = ref([
   { code: 'ES', name: 'Spain' },
@@ -167,7 +182,10 @@ const availableCountries = ref([
 
 // Computed properties
 const canProceed = computed(() => {
-  return isGuestInfoValid.value &&
+  // For authenticated users, skip guest validation
+  const guestCheckPassed = user.value ? true : isGuestInfoValid.value
+
+  return guestCheckPassed &&
     isAddressValid.value &&
     selectedMethod.value !== null
 })
@@ -180,6 +198,16 @@ const shippingMethodValidationError = computed(() => {
 })
 
 // Methods
+const handleExpressCheckout = () => {
+  // Banner component handles the navigation
+  // Just dismiss the banner
+  expressCheckoutDismissed.value = true
+}
+
+const handleExpressCheckoutDismiss = () => {
+  expressCheckoutDismissed.value = true
+}
+
 const proceedToPayment = async () => {
   if (!canProceed.value) return
 
@@ -248,6 +276,15 @@ onMounted(async () => {
   // Load saved addresses for authenticated users
   if (user.value) {
     await loadSavedAddresses()
+
+    // Auto-select default address if no address is currently set
+    if (defaultAddress.value && !shippingAddress.value.street) {
+      shippingAddress.value = { ...defaultAddress.value }
+      // Load shipping methods since we have a valid address
+      if (shippingAddress.value.country && shippingAddress.value.postalCode) {
+        loadShippingMethods()
+      }
+    }
   }
 
   if (!user.value && checkoutStore.guestInfo) {

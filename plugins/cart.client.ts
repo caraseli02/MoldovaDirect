@@ -1,9 +1,12 @@
 import { nextTick } from 'vue'
 import { useCartStore } from '~/stores/cart'
 
-export default defineNuxtPlugin((nuxtApp) => {
-  // Only initialize cart on client-side and for non-admin pages
-  if (import.meta.client) {
+export default defineNuxtPlugin({
+  name: 'cart',
+
+  setup(nuxtApp) {
+    // Only initialize cart on client-side and for non-admin pages
+    if (import.meta.client) {
     const route = useRoute()
 
     // Skip cart initialization for admin pages
@@ -25,5 +28,6 @@ export default defineNuxtPlugin((nuxtApp) => {
         console.warn('Cart initialization deferred:', error)
       }
     })
+    }
   }
 })

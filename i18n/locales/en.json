@@ -730,6 +730,12 @@
     "noAddresses": "You don't have any addresses saved yet",
     "default": "Default",
     "setAsDefault": "Set as default address",
+    "firstName": "First Name",
+    "firstNamePlaceholder": "Enter your first name",
+    "lastName": "Last Name",
+    "lastNamePlaceholder": "Enter your last name",
+    "company": "Company",
+    "companyPlaceholder": "Company name (optional)",
     "street": "Street Address",
     "streetPlaceholder": "Enter your street address",
     "city": "City",
@@ -739,6 +745,8 @@
     "province": "Province/State",
     "provincePlaceholder": "Enter province or state (optional)",
     "country": "Country",
+    "phone": "Phone",
+    "phonePlaceholder": "Phone number (optional)",
     "deleteAccount": "Delete Account",
     "deleteAccountWarning": "This action cannot be undone",
     "deleteAccountConsequences": {
@@ -769,10 +777,13 @@
       "billing": "Billing Address"
     },
     "validation": {
+      "firstNameRequired": "First name is required",
+      "lastNameRequired": "Last name is required",
       "streetRequired": "Street address is required",
       "cityRequired": "City is required",
       "postalCodeRequired": "Postal code is required",
       "invalidSpanishPostalCode": "Please enter a valid Spanish postal code (5 digits)",
+      "phoneInvalid": "Please enter a valid phone number",
       "confirmationRequired": "Please type 'DELETE' to confirm",
       "passwordRequired": "Password is required for account deletion"
     },
@@ -1771,6 +1782,31 @@
       "checkYourEmail": "Your order completed successfully. Check your email for details",
       "cartClearFailed": "Could not clear cart",
       "cartClearFailedDetails": "Your order completed successfully, but the cart was not cleared automatically"
+    },
+    "errors": {
+      "failedToLoadAddresses": "Failed to load saved addresses",
+      "failedToSaveAddress": "Failed to save address",
+      "failedToUpdateAddress": "Failed to update address",
+      "failedToSetDefaultAddress": "Failed to set default address",
+      "failedToDeleteAddress": "Failed to delete address",
+      "expressCheckoutFailed": "Express checkout failed",
+      "pleaseTryAgain": "Please try again or edit your details manually"
+    },
+    "expressCheckout": {
+      "title": "Express Checkout Available",
+      "description": "Use your saved address and preferences for a faster checkout experience.",
+      "preferredShipping": "Preferred shipping",
+      "useButton": "Use Express Checkout",
+      "editButton": "Edit Details",
+      "success": "Express checkout activated",
+      "successDetails": "Your saved details have been loaded",
+      "addressLoaded": "Address loaded",
+      "selectShipping": "Please select a shipping method",
+      "countdownTitle": "Express checkout activated!",
+      "countdownMessage": "Redirecting to payment in {seconds} seconds...",
+      "cancelButton": "Wait, let me review",
+      "countdownCancelled": "Countdown cancelled",
+      "countdownCancelledDetails": "Take your time to review your order"
     }
   },
   "admin": {

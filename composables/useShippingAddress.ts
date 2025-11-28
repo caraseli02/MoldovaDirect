@@ -1,9 +1,9 @@
 /**
  * Shipping Address Composable
- * 
+ *
  * Manages address state, validation, and saved addresses.
  * Handles address loading, saving, and validation logic.
- * 
+ *
  * Requirements addressed:
  * - 5.1: Dedicated composable for address validation
  * - 5.2: Computed property for address validity
@@ -11,25 +11,44 @@
  * - 5.4: Address form submission validation
  */
 
-import type { Address } from '~/types/checkout'
+import type { Address } from '~/types/address'
+import { addressFromEntity } from '~/types/address'
 
 export function useShippingAddress() {
   const user = useSupabaseUser()
   const checkoutStore = useCheckoutStore()
 
-  // State
-  const shippingAddress = ref<Address>({
+  // Development defaults for easier testing
+  const isDevelopment = process.env.NODE_ENV === 'development'
+
+  const initialAddress: Address = isDevelopment ? {
     type: 'shipping',
-    firstName: process.env.NODE_ENV === 'development' ? 'John' : '',
-    lastName: process.env.NODE_ENV === 'development' ? 'Doe' : '',
-    company: process.env.NODE_ENV === 'development' ? 'Test Company' : '',
-    street: process.env.NODE_ENV === 'development' ? '123 Main Street' : '',
-    city: process.env.NODE_ENV === 'development' ? 'Madrid' : '',
-    postalCode: process.env.NODE_ENV === 'development' ? '28001' : '',
-    province: process.env.NODE_ENV === 'development' ? 'Madrid' : '',
-    country: process.env.NODE_ENV === 'development' ? 'ES' : '',
-    phone: process.env.NODE_ENV === 'development' ? '+34 600 123 456' : ''
-  })
+    firstName: 'John',
+    lastName: 'Doe',
+    company: 'Test Company',
+    street: '123 Main Street',
+    city: 'Madrid',
+    postalCode: '28001',
+    province: 'Madrid',
+    country: 'ES',
+    phone: '+34 600 123 456',
+    isDefault: false
+  } : {
+    type: 'shipping',
+    firstName: '',
+    lastName: '',
+    company: '',
+    street: '',
+    city: '',
+    postalCode: '',
+    province: '',
+    country: '',
+    phone: '',
+    isDefault: false
+  }
+
+  // State
+  const shippingAddress = ref<Address>({ ...initialAddress })
 
   const savedAddresses = ref<Address[]>([])
   const loading = ref(false)
@@ -50,31 +69,28 @@ export function useShippingAddress() {
   })
 
   /**
-   * Map address from API format to internal format
+   * Get default address from saved addresses or checkout store
    */
-  const mapAddressFromApi = (apiAddress: any): Address => {
-    return {
-      id: apiAddress.id,
-      type: apiAddress.type,
-      firstName: apiAddress.first_name,
-      lastName: apiAddress.last_name,
-      company: apiAddress.company,
-      street: apiAddress.street,
-      city: apiAddress.city,
-      postalCode: apiAddress.postal_code,
-      province: apiAddress.province,
-      country: apiAddress.country,
-      phone: apiAddress.phone,
-      isDefault: apiAddress.is_default
-    }
-  }
+  const defaultAddress = computed(() => {
+    // Check local saved addresses first
+    const localDefault = savedAddresses.value.find(addr => addr.isDefault || addr.is_default)
+    if (localDefault) return localDefault
+
+    // Fallback to checkout store addresses
+    const storeAddresses = checkoutStore.savedAddresses || []
+    const storeDefault = storeAddresses.find((addr: any) => addr.isDefault || addr.is_default)
+    if (storeDefault) return storeDefault
+
+    // Return first address if no default
+    return savedAddresses.value[0] || storeAddresses[0] || null
+  })
 
   /**
-   * Map multiple addresses from API format
+   * Check if user has any saved addresses
    */
-  const mapAddressesFromApi = (apiAddresses: any[]): Address[] => {
-    return apiAddresses.map(mapAddressFromApi)
-  }
+  const hasAddresses = computed(() => {
+    return savedAddresses.value.length > 0 || (checkoutStore.savedAddresses && checkoutStore.savedAddresses.length > 0)
+  })
 
   /**
    * Load saved addresses for authenticated users
@@ -90,9 +106,9 @@ export function useShippingAddress() {
 
     try {
       const response = await $fetch('/api/checkout/addresses')
-      
+
       if (response.success && response.addresses) {
-        savedAddresses.value = mapAddressesFromApi(response.addresses)
+        savedAddresses.value = response.addresses.map(addressFromEntity)
       }
     } catch (e) {
       error.value = e instanceof Error ? e.message : 'Failed to load saved addresses'
@@ -123,7 +139,7 @@ export function useShippingAddress() {
       })
 
       if (response.success && response.address) {
-        const newAddress = mapAddressFromApi(response.address)
+        const newAddress = addressFromEntity(response.address)
         savedAddresses.value.push(newAddress)
       }
     } catch (e) {
@@ -145,47 +161,43 @@ export function useShippingAddress() {
   }
 
   /**
-   * Format address as a single line string
+   * Format address as a single-line string
    */
   const formatAddress = (address: Address): string => {
     const parts = [
       address.street,
       address.city,
-      address.province,
+      address.province, // Optional
       address.postalCode,
       address.country
-    ].filter(Boolean)
-    
+    ].filter(part => part && part.trim() !== '') // Filter out empty/undefined values
+
     return parts.join(', ')
   }
 
   /**
-   * Reset address state
+   * Reset all state to initial values
    */
   const reset = () => {
-    shippingAddress.value = {
-      type: 'shipping',
-      firstName: '',
-      lastName: '',
-      company: '',
-      street: '',
-      city: '',
-      postalCode: '',
-      province: '',
-      country: '',
-      phone: ''
-    }
+    shippingAddress.value = { ...initialAddress }
     savedAddresses.value = []
     loading.value = false
     error.value = null
   }
 
   return {
+    // Mutable: Components can update shipping address
     shippingAddress,
+
+    // Readonly: Managed internally by composable
     savedAddresses: readonly(savedAddresses),
+    defaultAddress,  // Already computed, naturally readonly
+    hasAddresses,     // Already computed, naturally readonly
     loading: readonly(loading),
     error: readonly(error),
-    isAddressValid: readonly(isAddressValid),
+    isAddressValid,   // Already computed, naturally readonly
+
+    // Methods
     loadSavedAddresses,
     handleSaveAddress,
     loadFromStore,
