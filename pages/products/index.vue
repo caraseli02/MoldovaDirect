@@ -515,8 +515,9 @@ const clearAllFilters = () => {
  * Navigate to a specific page
  * Handles both search and filter scenarios
  * Validates page boundaries for security
+ * Updates URL to keep state in sync
  */
-const goToPage = (page: number) => {
+const goToPage = async (page: number) => {
   // Validate page number to prevent attacks
   const validPage = Math.max(1, Math.min(
     Math.floor(page),
@@ -526,6 +527,16 @@ const goToPage = (page: number) => {
   if (validPage !== page) {
     console.warn(`Invalid page ${page}, using ${validPage}`)
   }
+
+  // Update URL with new page parameter
+  const router = useRouter()
+  await router.push({
+    query: {
+      ...route.query,
+      page: validPage.toString(),
+      limit: (route.query.limit || '12').toString()
+    }
+  })
 
   const currentFilters = {
     ...filters.value,
