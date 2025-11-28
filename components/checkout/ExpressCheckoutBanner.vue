@@ -149,6 +149,9 @@ let countdownInterval: NodeJS.Timeout | null = null
 const useExpressCheckout = async () => {
   if (!props.defaultAddress) return
 
+  // Stop countdown immediately before navigation to prevent memory leak
+  stopCountdown()
+
   loading.value = true
 
   try {
@@ -214,8 +217,8 @@ const startCountdown = () => {
     countdown.value--
 
     if (countdown.value <= 0) {
-      stopCountdown()
       // Trigger express checkout navigation
+      // Note: useExpressCheckout() calls stopCountdown() internally to prevent memory leak
       emit('navigate-to-payment')
       useExpressCheckout()
     }
