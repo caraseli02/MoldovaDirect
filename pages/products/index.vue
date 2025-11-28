@@ -675,6 +675,40 @@ watch(() => [filters.value.category, filters.value.inStock, filters.value.featur
   await refreshPriceRange()
 })
 
+// Watch URL query parameter changes (critical for Vercel production)
+// Handles browser back/forward, direct links, and external URL changes
+watch(() => route.query.page, async (newPage, oldPage) => {
+  // Skip if page hasn't actually changed
+  if (newPage === oldPage) return
+
+  // Parse and validate page number
+  const pageNum = parseInt((newPage as string) || '1')
+  if (isNaN(pageNum)) return
+
+  // Don't refetch if we're already on this page
+  if (pageNum === pagination.value.page) return
+
+  // Validate page boundaries
+  const validPage = Math.max(1, Math.min(pageNum, pagination.value.totalPages || 1))
+
+  // Build filters for fetch
+  const currentFilters = {
+    ...filters.value,
+    sort: sortBy.value,
+    page: validPage
+  }
+
+  // Fetch products based on current context
+  if (searchQuery.value.trim()) {
+    await search(searchQuery.value.trim(), currentFilters)
+  } else {
+    await fetchProducts(currentFilters)
+  }
+
+  // Scroll to top for better UX
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}, { immediate: false })
+
 // Lifecycle Hooks
 onMounted(async () => {
   searchQuery.value = storeSearchQuery.value || ''
