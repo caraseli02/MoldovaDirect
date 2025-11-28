@@ -13,16 +13,13 @@ export const useProductCatalog = () => {
   const initialPageFromUrl = parseInt(route.query.page as string) || 1
   const initialLimitFromUrl = parseInt(route.query.limit as string) || 12
 
-  // Debug logging for hydration tracking (works in preview/dev, not production)
-  const isDebugMode = process.env.NODE_ENV !== 'production' || process.dev
-  if (isDebugMode) {
-    console.log('[useProductCatalog] Initializing', {
-      side: process.server ? 'SERVER' : 'CLIENT',
-      url: route.fullPath,
-      pageFromUrl: initialPageFromUrl,
-      limitFromUrl: initialLimitFromUrl
-    })
-  }
+  // Debug logging for hydration tracking
+  console.log('[useProductCatalog] Initializing', {
+    side: process.server ? 'SERVER' : 'CLIENT',
+    url: route.fullPath,
+    pageFromUrl: initialPageFromUrl,
+    limitFromUrl: initialLimitFromUrl
+  })
 
   // Use Nuxt's useState for SSR-compatible reactive state
   // CRITICAL: Initialize pagination with URL params to prevent hydration mismatch
@@ -34,13 +31,11 @@ export const useProductCatalog = () => {
   const searchQuery = useState<string>('searchQuery', () => '')
   const filters = useState<ProductFilters>('filters', () => ({}))
   const pagination = useState('pagination', () => {
-    if (isDebugMode) {
-      console.log('[useProductCatalog] useState pagination initializer called', {
-        side: process.server ? 'SERVER' : 'CLIENT',
-        page: initialPageFromUrl,
-        limit: initialLimitFromUrl
-      })
-    }
+    console.log('[useProductCatalog] useState pagination initializer called', {
+      side: process.server ? 'SERVER' : 'CLIENT',
+      page: initialPageFromUrl,
+      limit: initialLimitFromUrl
+    })
     return {
       page: initialPageFromUrl,
       limit: initialLimitFromUrl,
@@ -56,12 +51,10 @@ export const useProductCatalog = () => {
   const showFilterPanel = useState<boolean>('showFilterPanel', () => false)
 
   // Debug: Log pagination state after initialization
-  if (isDebugMode) {
-    console.log('[useProductCatalog] State initialized', {
-      side: process.server ? 'SERVER' : 'CLIENT',
-      paginationValue: pagination.value
-    })
-  }
+  console.log('[useProductCatalog] State initialized', {
+    side: process.server ? 'SERVER' : 'CLIENT',
+    paginationValue: pagination.value
+  })
 
   // Initialize the catalog
   const initialize = async () => {
@@ -76,13 +69,11 @@ export const useProductCatalog = () => {
     loading.value = true
     error.value = null
 
-    if (isDebugMode) {
-      console.log('[fetchProducts] Called with', {
-        side: process.server ? 'SERVER' : 'CLIENT',
-        filters: productFilters,
-        currentPagination: pagination.value
-      })
-    }
+    console.log('[fetchProducts] Called with', {
+      side: process.server ? 'SERVER' : 'CLIENT',
+      filters: productFilters,
+      currentPagination: pagination.value
+    })
 
     try {
       // Build query parameters
@@ -115,24 +106,20 @@ export const useProductCatalog = () => {
         signal
       })
 
-      if (isDebugMode) {
-        console.log('[fetchProducts] Response received', {
-          side: process.server ? 'SERVER' : 'CLIENT',
-          productCount: response.products.length,
-          responsePagination: response.pagination
-        })
-      }
+      console.log('[fetchProducts] Response received', {
+        side: process.server ? 'SERVER' : 'CLIENT',
+        productCount: response.products.length,
+        responsePagination: response.pagination
+      })
 
       products.value = response.products
       pagination.value = response.pagination
       filters.value = { ...productFilters }
 
-      if (isDebugMode) {
-        console.log('[fetchProducts] State updated', {
-          side: process.server ? 'SERVER' : 'CLIENT',
-          paginationValue: pagination.value
-        })
-      }
+      console.log('[fetchProducts] State updated', {
+        side: process.server ? 'SERVER' : 'CLIENT',
+        paginationValue: pagination.value
+      })
 
     } catch (err) {
       // Ignore abort errors - they're expected when canceling requests
