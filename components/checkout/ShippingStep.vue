@@ -182,7 +182,10 @@ const availableCountries = ref([
 
 // Computed properties
 const canProceed = computed(() => {
-  return isGuestInfoValid.value &&
+  // For authenticated users, skip guest validation
+  const guestCheckPassed = user.value ? true : isGuestInfoValid.value
+
+  return guestCheckPassed &&
     isAddressValid.value &&
     selectedMethod.value !== null
 })
