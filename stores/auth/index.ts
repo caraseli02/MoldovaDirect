@@ -350,12 +350,18 @@ export const useAuthStore = defineStore('auth', {
         this.error = null
       }
 
+      // Handle password recovery - user clicked reset link in email
+      // Don't redirect, let them stay on reset-password page to enter new password
+      if (event === 'PASSWORD_RECOVERY') {
+        this.syncUserState(session?.user ?? null)
+        return
+      }
+
       if (event === 'SIGNED_OUT') {
         this.syncUserState(null)
 
         // Redirect to login page when session expires or user logs out
         if (process.client) {
-          const router = useRouter()
           const route = useRoute()
           const localePath = useLocalePath()
 
@@ -699,10 +705,12 @@ export const useAuthStore = defineStore('auth', {
       const supabase = useSupabaseClient()
       const { translateAuthError } = useAuthMessages()
       const toastStore = useToast()
+      const runtimeConfig = useRuntimeConfig()
 
       try {
-        const redirectTo = process.client
-          ? new URL('/auth/reset-password', window.location.origin).toString()
+        const siteUrl = runtimeConfig.public.siteUrl || (process.client ? window.location.origin : undefined)
+        const redirectTo = siteUrl
+          ? new URL('/auth/reset-password', siteUrl).toString()
           : undefined
 
         const { error } = await supabase.auth.resetPasswordForEmail(
