@@ -365,6 +365,17 @@ function debounce<T extends (...args: any[]) => any>(fn: T, delay: number) {
   }
 }
 
+// Get route and router early to access query parameters
+const route = useRoute()
+const router = useRouter()
+
+// Parse initial page/limit from URL query parameters with bounds validation
+const MAX_LIMIT = 100
+const parsedPage = parseInt(route.query.page as string) || 1
+const parsedLimit = parseInt(route.query.limit as string) || 12
+const initialPage = Math.max(1, parsedPage)
+const initialLimit = Math.min(MAX_LIMIT, Math.max(1, parsedLimit))
+
 // Product Catalog Store
 const {
   initialize,
@@ -386,9 +397,10 @@ const {
   showFilterPanel
 } = useProductCatalog()
 
-// Initialize and fetch products during SSR
+// Initialize and fetch products during SSR (using URL params)
+// During client hydration, state is restored from SSR payload
 await initialize()
-await fetchProducts({ sort: 'created', page: 1, limit: 12 })
+await fetchProducts({ sort: 'created', page: initialPage, limit: initialLimit })
 
 // Filter Management
 const {
@@ -408,10 +420,9 @@ const { visiblePages } = useProductPagination(pagination)
 const { setupWatchers: setupStructuredDataWatchers } = useProductStructuredData(products, pagination)
 
 // Local state
-const route = useRoute()
 const searchQuery = ref('')
 const searchInput = ref<HTMLInputElement>()
-let searchAbortController: AbortController | null = null
+const searchAbortController = ref<AbortController | null>(null)
 
 // DOM refs
 const scrollContainer = ref<HTMLElement>()
@@ -437,25 +448,25 @@ const totalProducts = computed(() => pagination.value?.total || products.value?.
 // Debounced search handler to prevent excessive API calls
 const handleSearchInput = debounce(() => {
   // Cancel previous search request if it exists
-  if (searchAbortController) {
-    searchAbortController.abort()
+  if (searchAbortController.value) {
+    searchAbortController.value.abort()
   }
 
   // Create new abort controller for this search
-  searchAbortController = new AbortController()
+  searchAbortController.value = new AbortController()
 
   if (searchQuery.value.trim()) {
     search(searchQuery.value.trim(), {
       ...filters.value,
       page: 1,
       sort: sortBy.value
-    }, searchAbortController.signal)
+    }, searchAbortController.value.signal)
   } else {
     fetchProducts({
       ...filters.value,
       page: 1,
       sort: sortBy.value
-    }, searchAbortController.signal)
+    }, searchAbortController.value.signal)
   }
 }, 300)
 
@@ -506,8 +517,9 @@ const clearAllFilters = () => {
  * Navigate to a specific page
  * Handles both search and filter scenarios
  * Validates page boundaries for security
+ * Updates URL to keep state in sync
  */
-const goToPage = (page: number) => {
+const goToPage = async (page: number) => {
   // Validate page number to prevent attacks
   const validPage = Math.max(1, Math.min(
     Math.floor(page),
@@ -518,19 +530,17 @@ const goToPage = (page: number) => {
     console.warn(`Invalid page ${page}, using ${validPage}`)
   }
 
-  const currentFilters = {
-    ...filters.value,
-    sort: sortBy.value,
-    page: validPage
-  }
+  // Update URL with new page parameter
+  // The URL watcher will handle fetching products automatically
+  await router.push({
+    query: {
+      ...route.query,
+      page: validPage.toString(),
+      limit: (route.query.limit || '12').toString()
+    }
+  })
 
-  if (searchQuery.value.trim()) {
-    search(searchQuery.value.trim(), currentFilters)
-  } else {
-    fetchProducts(currentFilters)
-  }
-
-  window.scrollTo({ top: 0, behavior: 'smooth' })
+  // Note: Scroll is handled by the URL watcher after products load
 }
 
 /**
@@ -655,6 +665,37 @@ watch(() => [filters.value.category, filters.value.inStock, filters.value.featur
   await refreshPriceRange()
 })
 
+// Watch URL query parameter changes (critical for Vercel production)
+// Handles browser back/forward, direct links, and external URL changes
+watch(() => route.query.page, async (newPage, oldPage) => {
+  // Skip if page hasn't actually changed
+  if (newPage === oldPage) return
+
+  // Parse and validate page number
+  const pageNum = parseInt((newPage as string) || '1')
+  if (isNaN(pageNum)) return
+
+  // Validate page boundaries
+  const validPage = Math.max(1, Math.min(pageNum, pagination.value.totalPages || 1))
+
+  // Build filters for fetch
+  const currentFilters = {
+    ...filters.value,
+    sort: sortBy.value,
+    page: validPage
+  }
+
+  // Fetch products based on current context
+  if (searchQuery.value.trim()) {
+    await search(searchQuery.value.trim(), currentFilters)
+  } else {
+    await fetchProducts(currentFilters)
+  }
+
+  // Scroll to top for better UX
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}, { immediate: false })
+
 // Lifecycle Hooks
 onMounted(async () => {
   searchQuery.value = storeSearchQuery.value || ''
@@ -686,8 +727,12 @@ onBeforeUnmount(() => {
       sessionStorage.removeItem('products-scroll-position')
       sessionStorage.removeItem('products-filter-state')
     } catch (error) {
-      // Silently fail if session storage is unavailable
-      console.debug('Session storage cleanup failed:', error)
+      console.error('[Product Catalog] Session storage cleanup failed:', error)
+
+      // Only ignore SecurityError (private browsing), rethrow others
+      if (error instanceof Error && error.name !== 'SecurityError') {
+        throw error
+      }
     }
   }
 })
