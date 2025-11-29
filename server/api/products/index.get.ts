@@ -81,6 +81,15 @@ export default defineCachedEventHandler(async (event) => {
     const page = Math.min(Math.max(1, parsedPage), MAX_PAGE)
     const limit = Math.min(Math.max(1, parsedLimit), MAX_LIMIT)
 
+    console.log('[API /products] Request pagination:', {
+      queryPage: query.page,
+      queryLimit: query.limit,
+      parsedPage,
+      parsedLimit,
+      finalPage: page,
+      finalLimit: limit
+    })
+
     // Validate search term length if provided
     if (search && search.length > MAX_SEARCH_LENGTH) {
       throw createError({
@@ -299,6 +308,8 @@ export default defineCachedEventHandler(async (event) => {
       pagination: response.pagination,
       firstProduct: transformedProducts[0]?.name
     })
+
+    console.log('[API /products] Response pagination:', response.pagination)
 
     return response
 

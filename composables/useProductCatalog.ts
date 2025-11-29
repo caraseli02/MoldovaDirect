@@ -98,11 +98,18 @@ export const useProductCatalog = () => {
         })
       }
 
+      const apiUrl = `/api/products?${params.toString()}`
+      console.log('[fetchProducts] Requesting API:', {
+        side: process.server ? 'SERVER' : 'CLIENT',
+        url: apiUrl,
+        params: Object.fromEntries(params.entries())
+      })
+
       const response = await $fetch<{
         products: ProductWithRelations[]
         pagination: { page: number; limit: number; total: number; totalPages: number }
         filters: any
-      }>(`/api/products?${params.toString()}`, {
+      }>(apiUrl, {
         signal
       })
 
