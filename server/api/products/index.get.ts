@@ -207,8 +207,25 @@ export default defineCachedEventHandler(async (event) => {
         code: error.code,
         timestamp: new Date().toISOString()
       })
+
+      // Map Supabase error codes to appropriate HTTP status codes
+      const getStatusCode = (code?: string): number => {
+        if (!code) return 500
+
+        // PostgreSQL error codes
+        if (code === 'PGRST116') return 404 // Row not found
+        if (code === '22P02') return 400 // Invalid text representation
+        if (code === '23503') return 409 // Foreign key violation
+        if (code === '42501') return 403 // Insufficient privilege
+        if (code.startsWith('22')) return 400 // Data exception
+        if (code.startsWith('23')) return 409 // Integrity constraint violation
+        if (code.startsWith('42')) return 403 // Syntax/access error
+
+        return 500 // Internal server error
+      }
+
       throw createError({
-        statusCode: 500,
+        statusCode: getStatusCode(error.code),
         statusMessage: 'Failed to fetch products'
       })
     }

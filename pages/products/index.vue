@@ -422,7 +422,7 @@ const { setupWatchers: setupStructuredDataWatchers } = useProductStructuredData(
 // Local state
 const searchQuery = ref('')
 const searchInput = ref<HTMLInputElement>()
-let searchAbortController: AbortController | null = null
+const searchAbortController = ref<AbortController | null>(null)
 
 // DOM refs
 const scrollContainer = ref<HTMLElement>()
@@ -448,25 +448,25 @@ const totalProducts = computed(() => pagination.value?.total || products.value?.
 // Debounced search handler to prevent excessive API calls
 const handleSearchInput = debounce(() => {
   // Cancel previous search request if it exists
-  if (searchAbortController) {
-    searchAbortController.abort()
+  if (searchAbortController.value) {
+    searchAbortController.value.abort()
   }
 
   // Create new abort controller for this search
-  searchAbortController = new AbortController()
+  searchAbortController.value = new AbortController()
 
   if (searchQuery.value.trim()) {
     search(searchQuery.value.trim(), {
       ...filters.value,
       page: 1,
       sort: sortBy.value
-    }, searchAbortController.signal)
+    }, searchAbortController.value.signal)
   } else {
     fetchProducts({
       ...filters.value,
       page: 1,
       sort: sortBy.value
-    }, searchAbortController.signal)
+    }, searchAbortController.value.signal)
   }
 }, 300)
 

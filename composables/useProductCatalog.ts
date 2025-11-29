@@ -1,6 +1,34 @@
 import type { ProductFilters, ProductWithRelations, CategoryWithChildren } from '~/types'
 
 /**
+ * Classify network errors for better user feedback
+ */
+const classifyNetworkError = (err: unknown): string => {
+  // Abort errors are intentional and should be silent
+  if (err instanceof DOMException && err.name === 'AbortError') {
+    return ''
+  }
+
+  // Network errors
+  if (err instanceof TypeError && err.message.includes('fetch')) {
+    return 'Network connection error. Please check your internet connection.'
+  }
+
+  // HTTP errors with status codes
+  if (typeof err === 'object' && err !== null && 'statusCode' in err) {
+    const statusCode = (err as any).statusCode
+    if (statusCode === 404) return 'Resource not found'
+    if (statusCode === 403) return 'Access denied'
+    if (statusCode === 401) return 'Authentication required'
+    if (statusCode === 400) return 'Invalid request'
+    if (statusCode >= 500) return 'Server error. Please try again later.'
+  }
+
+  // Generic error
+  return err instanceof Error ? err.message : 'An unexpected error occurred'
+}
+
+/**
  * Product Catalog Composable
  * Provides integrated access to products, categories, and search functionality
  * Uses direct API calls for SSR compatibility
@@ -89,8 +117,13 @@ export const useProductCatalog = () => {
       if (isAbortError) {
         return
       }
-      error.value = err instanceof Error ? err.message : 'Failed to fetch products'
-      console.error('Error fetching products:', err)
+
+      // Classify error for better user feedback
+      const errorMessage = classifyNetworkError(err)
+      if (errorMessage) {
+        error.value = errorMessage
+        console.error('[Product Catalog] Error fetching products:', err)
+      }
     } finally {
       loading.value = false
     }
@@ -117,8 +150,11 @@ export const useProductCatalog = () => {
       return response.product
 
     } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Failed to fetch product'
-      console.error('Error fetching product:', err)
+      const errorMessage = classifyNetworkError(err)
+      if (errorMessage) {
+        error.value = errorMessage
+        console.error('[Product Catalog] Error fetching product:', err)
+      }
       return null
     } finally {
       loading.value = false
@@ -191,9 +227,14 @@ export const useProductCatalog = () => {
       if (isAbortError) {
         return
       }
-      error.value = err instanceof Error ? err.message : 'Search failed'
+
+      // Classify error for better user feedback
+      const errorMessage = classifyNetworkError(err)
+      if (errorMessage) {
+        error.value = errorMessage
+        console.error('[Product Catalog] Error searching products:', err)
+      }
       searchResults.value = []
-      console.error('Error searching products:', err)
     } finally {
       loading.value = false
     }
