@@ -520,10 +520,12 @@ const clearAllFilters = () => {
  * Updates URL to keep state in sync
  */
 const goToPage = async (page: number) => {
+  // Add stack trace to debug multiple calls
   console.log('[goToPage] Called with page:', page, {
     currentPage: pagination.value.page,
     totalPages: pagination.value.totalPages,
-    currentURL: route.fullPath
+    currentURL: route.fullPath,
+    stackTrace: new Error().stack?.split('\n').slice(1, 4).join('\n')
   })
 
   // Validate page number to prevent attacks

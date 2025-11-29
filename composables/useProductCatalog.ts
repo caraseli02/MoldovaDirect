@@ -118,7 +118,10 @@ export const useProductCatalog = () => {
 
       console.log('[fetchProducts] State updated', {
         side: process.server ? 'SERVER' : 'CLIENT',
-        paginationValue: pagination.value
+        paginationValue: pagination.value,
+        actualPage: pagination.value.page,
+        actualTotal: pagination.value.total,
+        actualTotalPages: pagination.value.totalPages
       })
 
     } catch (err) {
