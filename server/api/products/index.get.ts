@@ -56,7 +56,9 @@ interface DatabaseProduct {
   created_at: string
 }
 
-export default defineCachedEventHandler(async (event) => {
+// TEMPORARILY DISABLED CACHE FOR DEBUGGING
+export default defineEventHandler(async (event) => {
+// export default defineCachedEventHandler(async (event) => {
   try {
     const supabase = await serverSupabaseClient(event)
     const query = getQuery(event) as ProductFilters
@@ -347,8 +349,10 @@ export default defineCachedEventHandler(async (event) => {
       message: error instanceof Error ? error.message : 'Unknown error'
     })
   }
-}, {
-  maxAge: PUBLIC_CACHE_CONFIG.productsList.maxAge,
-  name: PUBLIC_CACHE_CONFIG.productsList.name,
-  getKey: (event) => getPublicCacheKey(PUBLIC_CACHE_CONFIG.productsList.name, event)
 })
+// TEMPORARILY DISABLED CACHE CONFIG FOR DEBUGGING
+// }, {
+//   maxAge: PUBLIC_CACHE_CONFIG.productsList.maxAge,
+//   name: PUBLIC_CACHE_CONFIG.productsList.name,
+//   getKey: (event) => getPublicCacheKey(PUBLIC_CACHE_CONFIG.productsList.name, event)
+// })
