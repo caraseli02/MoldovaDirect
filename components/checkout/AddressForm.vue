@@ -281,8 +281,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import type { Address } from '~/types/checkout'
+import type { Address } from '~/types/address'
 
 interface Props {
   modelValue: Address
@@ -296,6 +295,7 @@ interface Props {
 interface Emits {
   (e: 'update:modelValue', value: Address): void
   (e: 'save-address', address: Address): void
+  (e: 'address-complete'): void
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -339,6 +339,7 @@ const showForm = computed(() => {
 const selectSavedAddress = (address: Address) => {
   emit('update:modelValue', { ...address })
   clearAllErrors()
+  emit('address-complete')
 }
 
 const useNewAddress = () => {
@@ -443,17 +444,49 @@ const validateForm = (): boolean => {
   return isValid
 }
 
+// Initialize selectedSavedAddressId when component mounts or saved addresses change
+watch(
+  () => [props.savedAddresses, props.modelValue],
+  ([addresses, currentAddress]) => {
+    if (!addresses || addresses.length === 0) return
+
+    // If current address has an ID that matches a saved address, select it
+    if (currentAddress.id && addresses.some(addr => addr.id === currentAddress.id)) {
+      selectedSavedAddressId.value = currentAddress.id
+      return
+    }
+
+    // If current address matches a saved address by content (for addresses set by parent)
+    const matchingAddress = addresses.find(addr =>
+      addr.street === currentAddress.street &&
+      addr.city === currentAddress.city &&
+      addr.postalCode === currentAddress.postalCode
+    )
+
+    if (matchingAddress) {
+      selectedSavedAddressId.value = matchingAddress.id || null
+      return
+    }
+
+    // If current address is empty and we have saved addresses, auto-select the default one
+    // This handles the case where the parent hasn't initialized the address yet
+    if (!currentAddress.street && !currentAddress.city) {
+      const defaultAddr = addresses.find(addr => addr.isDefault || addr.is_default) || addresses[0]
+      if (defaultAddr) {
+        selectedSavedAddressId.value = defaultAddr.id || null
+        // Emit the address data to populate the parent's form
+        emit('update:modelValue', { ...defaultAddr })
+        emit('address-complete')
+      }
+    }
+  },
+  { immediate: true }
+)
+
 // Expose validation method for parent components
 defineExpose({
   validateForm,
   clearAllErrors
-})
-
-// Initialize form if no saved addresses
-onMounted(() => {
-  if (!props.savedAddresses?.length) {
-    selectedSavedAddressId.value = null
-  }
 })
 </script>
 

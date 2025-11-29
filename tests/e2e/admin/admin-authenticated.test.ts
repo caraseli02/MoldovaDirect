@@ -68,7 +68,7 @@ test.describe('Admin Dashboard - With Authentication', () => {
 
     // Step 1: Navigate to login page
     console.log('Step 1: Navigating to login page...')
-    const loginResponse = await page.goto('http://localhost:3000/auth/signin', {
+    const loginResponse = await page.goto('http://localhost:3000/auth/login', {
       waitUntil: 'networkidle'
     })
 
@@ -608,7 +608,7 @@ async function authenticateAdmin(page: Page) {
   console.log('Authenticating as admin...')
 
   // Navigate to login
-  await page.goto('http://localhost:3000/auth/signin', { waitUntil: 'networkidle' })
+  await page.goto('http://localhost:3000/auth/login', { waitUntil: 'networkidle' })
 
   // Fill in credentials
   const emailInput = page.locator('[data-testid="email-input"], input[type="email"]').first()

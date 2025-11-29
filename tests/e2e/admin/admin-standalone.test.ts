@@ -161,7 +161,7 @@ test.describe('Admin Page - Standalone Testing (No Auth Required)', () => {
     console.log('\n========== TEST 4: Login Page Check ==========')
 
     // Navigate to login page
-    const response = await page.goto('http://localhost:3000/auth/signin', {
+    const response = await page.goto('http://localhost:3000/auth/login', {
       waitUntil: 'domcontentloaded'
     })
 
