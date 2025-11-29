@@ -76,6 +76,14 @@ export default defineCachedEventHandler(async (event) => {
     // Add bounds validation to prevent DoS attacks
     const MAX_LIMIT = 100
     const MAX_PAGE = 10000
+
+    console.log('[API /products] RAW QUERY:', {
+      fullQuery: query,
+      pageBefore: query.page,
+      pageType: typeof query.page,
+      pageValue: JSON.stringify(query.page)
+    })
+
     const parsedPage = parseInt(query.page as string) || 1
     const parsedLimit = parseInt(query.limit as string) || 12
     const page = Math.min(Math.max(1, parsedPage), MAX_PAGE)
