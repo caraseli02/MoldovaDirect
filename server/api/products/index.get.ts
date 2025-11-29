@@ -292,6 +292,12 @@ export default defineCachedEventHandler(async (event) => {
         hasNext: page < totalPages,
         hasPrev: page > 1
       },
+      _debug: {
+        receivedQueryPage: query.page,
+        parsedPage,
+        finalPage: page,
+        offset: (page - 1) * limit
+      },
       filters: {
         category,
         search,
