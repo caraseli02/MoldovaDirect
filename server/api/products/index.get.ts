@@ -56,9 +56,7 @@ interface DatabaseProduct {
   created_at: string
 }
 
-// TEMPORARILY DISABLED CACHE FOR DEBUGGING
-export default defineEventHandler(async (event) => {
-// export default defineCachedEventHandler(async (event) => {
+export default defineCachedEventHandler(async (event) => {
   try {
     const supabase = await serverSupabaseClient(event)
     const query = getQuery(event) as ProductFilters
@@ -78,27 +76,10 @@ export default defineEventHandler(async (event) => {
     // Add bounds validation to prevent DoS attacks
     const MAX_LIMIT = 100
     const MAX_PAGE = 10000
-
-    console.log('[API /products] RAW QUERY:', {
-      fullQuery: query,
-      pageBefore: query.page,
-      pageType: typeof query.page,
-      pageValue: JSON.stringify(query.page)
-    })
-
     const parsedPage = parseInt(query.page as string) || 1
     const parsedLimit = parseInt(query.limit as string) || 12
     const page = Math.min(Math.max(1, parsedPage), MAX_PAGE)
     const limit = Math.min(Math.max(1, parsedLimit), MAX_LIMIT)
-
-    console.log('[API /products] Request pagination:', {
-      queryPage: query.page,
-      queryLimit: query.limit,
-      parsedPage,
-      parsedLimit,
-      finalPage: page,
-      finalLimit: limit
-    })
 
     // Validate search term length if provided
     if (search && search.length > MAX_SEARCH_LENGTH) {
@@ -302,12 +283,6 @@ export default defineEventHandler(async (event) => {
         hasNext: page < totalPages,
         hasPrev: page > 1
       },
-      _debug: {
-        receivedQueryPage: query.page,
-        parsedPage,
-        finalPage: page,
-        offset: (page - 1) * limit
-      },
       filters: {
         category,
         search,
@@ -324,8 +299,6 @@ export default defineEventHandler(async (event) => {
       pagination: response.pagination,
       firstProduct: transformedProducts[0]?.name
     })
-
-    console.log('[API /products] Response pagination:', response.pagination)
 
     return response
 
@@ -349,10 +322,8 @@ export default defineEventHandler(async (event) => {
       message: error instanceof Error ? error.message : 'Unknown error'
     })
   }
+}, {
+  maxAge: PUBLIC_CACHE_CONFIG.productsList.maxAge,
+  name: PUBLIC_CACHE_CONFIG.productsList.name,
+  getKey: (event) => getPublicCacheKey(PUBLIC_CACHE_CONFIG.productsList.name, event)
 })
-// TEMPORARILY DISABLED CACHE CONFIG FOR DEBUGGING
-// }, {
-//   maxAge: PUBLIC_CACHE_CONFIG.productsList.maxAge,
-//   name: PUBLIC_CACHE_CONFIG.productsList.name,
-//   getKey: (event) => getPublicCacheKey(PUBLIC_CACHE_CONFIG.productsList.name, event)
-// })

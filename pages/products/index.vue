@@ -520,14 +520,6 @@ const clearAllFilters = () => {
  * Updates URL to keep state in sync
  */
 const goToPage = async (page: number) => {
-  // Add stack trace to debug multiple calls
-  console.log('[goToPage] Called with page:', page, {
-    currentPage: pagination.value.page,
-    totalPages: pagination.value.totalPages,
-    currentURL: route.fullPath,
-    stackTrace: new Error().stack?.split('\n').slice(1, 4).join('\n')
-  })
-
   // Validate page number to prevent attacks
   const validPage = Math.max(1, Math.min(
     Math.floor(page),
@@ -538,26 +530,15 @@ const goToPage = async (page: number) => {
     console.warn(`Invalid page ${page}, using ${validPage}`)
   }
 
-  console.log('[goToPage] Attempting router.push with query:', {
-    page: validPage.toString(),
-    limit: (route.query.limit || '12').toString(),
-    otherParams: route.query
-  })
-
   // Update URL with new page parameter
   // The URL watcher will handle fetching products automatically
-  try {
-    await router.push({
-      query: {
-        ...route.query,
-        page: validPage.toString(),
-        limit: (route.query.limit || '12').toString()
-      }
-    })
-    console.log('[goToPage] Router push completed, new URL:', route.fullPath)
-  } catch (error) {
-    console.error('[goToPage] Router push failed:', error)
-  }
+  await router.push({
+    query: {
+      ...route.query,
+      page: validPage.toString(),
+      limit: (route.query.limit || '12').toString()
+    }
+  })
 
   // Scroll to top for better UX
   // Note: Product fetching is handled by the route.query.page watcher
