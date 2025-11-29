@@ -201,15 +201,6 @@ export default defineCachedEventHandler(async (event) => {
     const { data: products, error, count } = await queryBuilder
     const totalCount = count || 0
 
-    // Debug logging
-    console.log('[Products API] Query params:', { category, search, priceMin, priceMax, inStock, sort, page, limit })
-    console.log('[Products API] Results:', {
-      productsCount: products?.length || 0,
-      totalCount,
-      hasError: !!error,
-      errorMessage: error?.message
-    })
-
     if (error) {
       console.error('[Products API] Supabase error:', {
         message: error.message,
@@ -293,12 +284,6 @@ export default defineCachedEventHandler(async (event) => {
         sort
       }
     }
-
-    console.log('[Products API] Returning:', {
-      productsCount: transformedProducts.length,
-      pagination: response.pagination,
-      firstProduct: transformedProducts[0]?.name
-    })
 
     return response
 

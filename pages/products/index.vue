@@ -540,9 +540,7 @@ const goToPage = async (page: number) => {
     }
   })
 
-  // Scroll to top for better UX
-  // Note: Product fetching is handled by the route.query.page watcher
-  window.scrollTo({ top: 0, behavior: 'smooth' })
+  // Note: Scroll is handled by the URL watcher after products load
 }
 
 /**
@@ -729,8 +727,12 @@ onBeforeUnmount(() => {
       sessionStorage.removeItem('products-scroll-position')
       sessionStorage.removeItem('products-filter-state')
     } catch (error) {
-      // Silently fail if session storage is unavailable
-      console.debug('Session storage cleanup failed:', error)
+      console.error('[Product Catalog] Session storage cleanup failed:', error)
+
+      // Only ignore SecurityError (private browsing), rethrow others
+      if (error instanceof Error && error.name !== 'SecurityError') {
+        throw error
+      }
     }
   }
 })

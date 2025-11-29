@@ -84,8 +84,9 @@ export const useProductCatalog = () => {
       filters.value = { ...productFilters }
 
     } catch (err) {
-      // Ignore abort errors - they're expected when canceling requests
-      if (err instanceof Error && err.name === 'AbortError') {
+      // Check if this is an intentional cancellation (DOMException with name 'AbortError')
+      const isAbortError = err instanceof DOMException && err.name === 'AbortError'
+      if (isAbortError) {
         return
       }
       error.value = err instanceof Error ? err.message : 'Failed to fetch products'
@@ -153,7 +154,7 @@ export const useProductCatalog = () => {
       if (searchFilters.category) params.append('category', searchFilters.category.toString())
       if (searchFilters.sort) params.append('sort', searchFilters.sort)
       if (searchFilters.page) params.append('page', searchFilters.page?.toString() || '1')
-      if (searchFilters.limit) params.append('limit', searchFilters.limit?.toString() || '24')
+      if (searchFilters.limit) params.append('limit', searchFilters.limit?.toString() || '12')
 
       const response = await $fetch<{
         products: ProductWithRelations[]
@@ -185,8 +186,9 @@ export const useProductCatalog = () => {
       filters.value = { ...searchFilters }
 
     } catch (err) {
-      // Ignore abort errors - they're expected when canceling requests
-      if (err instanceof Error && err.name === 'AbortError') {
+      // Check if this is an intentional cancellation (DOMException with name 'AbortError')
+      const isAbortError = err instanceof DOMException && err.name === 'AbortError'
+      if (isAbortError) {
         return
       }
       error.value = err instanceof Error ? err.message : 'Search failed'
