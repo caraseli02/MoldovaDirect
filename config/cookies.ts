@@ -23,7 +23,8 @@ export const CART_COOKIE_CONFIG: CookieConfig = {
   maxAge: 60 * 60 * 24 * 30, // 30 days
   sameSite: 'lax',
   secure: process.env.NODE_ENV === 'production',
-  watch: 'shallow',
+  path: '/', // Ensure cookie is accessible from all routes
+  // watch removed - let Nuxt handle reactivity
   default: () => null
 }
 

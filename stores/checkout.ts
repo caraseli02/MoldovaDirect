@@ -268,6 +268,36 @@ export const useCheckoutStore = defineStore('checkout', () => {
     }
   }
 
+  const prefetchCheckoutData = async (): Promise<void> => {
+    // Only prefetch for authenticated users
+    if (!authStore.isAuthenticated) {
+      session.setDataPrefetched(true)
+      return
+    }
+
+    try {
+      // Fetch addresses and preferences in parallel from the API
+      const response = await $fetch('/api/checkout/user-data')
+
+      // Update session with fetched data
+      if (response.addresses && Array.isArray(response.addresses)) {
+        session.setSavedAddresses(response.addresses)
+      }
+
+      if (response.preferences) {
+        session.setPreferences(response.preferences)
+      }
+
+      // Mark data as prefetched
+      session.setDataPrefetched(true)
+    } catch (error) {
+      console.error('Failed to prefetch checkout data:', error)
+      // Don't throw - this is a non-critical enhancement
+      // Mark as prefetched anyway to avoid repeated failed attempts
+      session.setDataPrefetched(true)
+    }
+  }
+
   const api: Record<string | symbol, any> = {
     canProceedToPayment,
     canProceedToReview,
@@ -282,6 +312,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
     proceedToNextStep,
     goToPreviousStep,
     initializeCheckout,
+    prefetchCheckoutData,
     saveToStorage,
     loadFromStorage,
     updateGuestInfo,

@@ -28,10 +28,56 @@ echo ""
 # Run quick unit tests on changed files
 echo "🧪 Running unit tests..."
 if pnpm run test:quick; then
-  echo "✅ Pre-commit tests passed!"
+  echo "✅ Unit tests passed!"
 else
-  echo "❌ Pre-commit tests failed!"
+  echo "❌ Unit tests failed!"
   echo ""
   echo "💡 Tip: Fix the failing tests or use 'git commit --no-verify' to skip checks"
   exit 1
 fi
+
+echo ""
+
+# Run fast smoke tests (< 30 seconds)
+# Temporarily disabled - smoke tests need to be refactored
+# echo "🚀 Running pre-commit smoke tests..."
+# echo ""
+# echo "⚠️  Note: These tests require:"
+# echo "   - Dev server running on port 3000 or 3001"
+# echo ""
+#
+# if pnpm run test:pre-commit; then
+#   echo "✅ Pre-commit smoke tests passed!"
+# else
+#   echo "❌ Pre-commit smoke tests failed!"
+#   echo ""
+#   echo "💡 Tip: Fix the failing tests or use 'git commit --no-verify' to skip checks"
+#   exit 1
+# fi
+
+echo ""
+
+# Run E2E checkout tests if enabled (opt-in via environment variable)
+if [ "$RUN_E2E_CHECKOUT_TESTS" = "true" ]; then
+  echo "🎭 Running E2E checkout smart pre-population tests..."
+  echo ""
+  echo "⚠️  Note: These tests require:"
+  echo "   - Dev server running on port 3000"
+  echo "   - Test user credentials in .env"
+  echo "   - Supabase database with migrations applied"
+  echo ""
+
+  if pnpm run test:checkout:smart-prepopulation; then
+    echo "✅ E2E checkout tests passed!"
+  else
+    echo "❌ E2E checkout tests failed!"
+    echo ""
+    echo "💡 Fix the failing tests or disable E2E tests: unset RUN_E2E_CHECKOUT_TESTS"
+    exit 1
+  fi
+else
+  echo "ℹ️  E2E checkout tests skipped (set RUN_E2E_CHECKOUT_TESTS=true to enable)"
+fi
+
+echo ""
+echo "✅ Pre-commit tests passed!"
