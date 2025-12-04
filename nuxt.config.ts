@@ -109,6 +109,7 @@ export default defineNuxtConfig({
   },
 
   nitro: {
+    preset: "vercel",
     ignore: ["**/*.test.ts", "**/*.spec.ts", "**/__tests__/**"],
     prerender: {
       failOnError: false,
