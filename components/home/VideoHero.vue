@@ -3,7 +3,7 @@
     <!-- Optimized min-height for mobile-first (60vh mobile, 75vh desktop) -->
     <div class="relative flex min-h-[60vh] w-full items-center md:min-h-[75vh]">
       <!-- Video Background (Optional - controlled by showVideo prop) -->
-      <div v-if="showVideo" class="absolute inset-0 z-0" aria-hidden="true">
+      <div v-if="showVideo && !videoLoadError" class="absolute inset-0 z-0" aria-hidden="true">
         <video
           ref="videoRef"
           autoplay
@@ -13,11 +13,12 @@
           :poster="posterImage"
           class="h-full w-full object-cover"
           aria-hidden="true"
+          @error="handleVideoError"
         >
-          <source v-if="videoWebM" :src="videoWebM" type="video/webm" />
-          <source v-if="videoMp4" :src="videoMp4" type="video/mp4" />
+          <source v-if="videoWebm" :src="videoWebm" type="video/webm" @error="handleSourceError('webm', $event)" />
+          <source v-if="videoMp4" :src="videoMp4" type="video/mp4" @error="handleSourceError('mp4', $event)" />
         </video>
-        <!-- Consolidated luxury overlay for optimal paint performance -->
+        <!-- Gradient overlay for visual contrast -->
         <div class="absolute inset-0 bg-[linear-gradient(to_br,_rgba(36,20,5,0.85)_0%,_rgba(114,47,55,0.45)_100%)]" />
       </div>
 
@@ -34,11 +35,25 @@
             sizes="sm:100vw md:100vw lg:100vw"
             class="h-full w-full object-cover object-center"
           />
-          <!-- Consolidated gradient overlay for optimal paint performance -->
+          <!-- Gradient overlay for visual contrast -->
           <div class="absolute inset-0 bg-[linear-gradient(to_br,_rgba(36,20,5,0.88)_0%,_rgba(114,47,55,0.52)_100%)]" />
         </div>
 
-        <!-- Consolidated luxury gradient fallback for optimal paint performance -->
+        <!-- Poster fallback (mobile or error state) -->
+        <div v-else-if="posterImage" class="absolute inset-0">
+          <NuxtImg
+            preset="hero"
+            :src="posterImage"
+            :alt="backgroundImageAlt || 'Hero poster'"
+            loading="eager"
+            fetchpriority="high"
+            sizes="sm:100vw md:100vw lg:100vw"
+            class="h-full w-full object-cover object-center"
+          />
+          <div class="absolute inset-0 bg-[linear-gradient(to_br,_rgba(36,20,5,0.88)_0%,_rgba(114,47,55,0.52)_100%)]" />
+        </div>
+
+        <!-- Luxury gradient fallback background -->
         <div v-else class="absolute inset-0 bg-[linear-gradient(135deg,_#241405_0%,_#1a0e03_50%,_#722F37_100%),_radial-gradient(circle_at_10%_10%,_rgba(252,250,242,0.05),_transparent_45%)]" />
       </div>
 
@@ -208,7 +223,7 @@ const props = withDefaults(
   defineProps<{
     // Video settings
     showVideo?: boolean
-    videoWebM?: string
+    videoWebm?: string
     videoMp4?: string
     posterImage?: string
 
@@ -237,12 +252,37 @@ const props = withDefaults(
 )
 
 const videoRef = ref<HTMLVideoElement | null>(null)
+const videoLoadError = ref(false)
+const videoPlaybackFailed = ref(false)
+
+// Handle video loading errors
+const handleVideoError = (event: Event) => {
+  console.error('[VideoHero] Video loading error:', {
+    error: event,
+    webmSrc: props.videoWebm,
+    mp4Src: props.videoMp4
+  })
+  videoLoadError.value = true
+}
+
+// Handle individual source errors
+const handleSourceError = (type: string, event: Event) => {
+  console.warn(`[VideoHero] ${type.toUpperCase()} source failed to load`, event)
+  // If both sources fail, the video's error handler will fire
+}
 
 onMounted(() => {
-  // Ensure video plays on mobile devices
+  // Programmatically start playback as fallback for browsers that don't
+  // respect the autoplay attribute. Gracefully handles autoplay policy rejections.
   if (videoRef.value && props.showVideo) {
     videoRef.value.play().catch((error) => {
-      console.warn('Video autoplay failed:', error)
+      console.error('[VideoHero] Video autoplay failed (likely browser policy):', {
+        error: error.message,
+        errorType: error.name,
+        videoSrc: props.videoMp4
+      })
+      videoPlaybackFailed.value = true
+      // Fallback: poster image will remain visible
     })
   }
 })
