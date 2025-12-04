@@ -4,31 +4,27 @@
     <HomeAnnouncementBar v-if="isSectionEnabled('announcementBar')" :show-cta="true" />
 
     <!--
-      Hero Section - 3 Display Modes Available:
+      Hero Section - Random Video Background
 
-      1. GRADIENT MODE (current fallback):
-         - Remove background-image prop
-         - Set :show-video="false"
-         - Uses wine-burgundy gradient with decorative elements
+      Videos are randomly selected on each page load from the hero video library.
+      Configuration: composables/useHeroVideos.ts
+      Video assets: public/videos/hero/
 
-      2. IMAGE MODE (currently active - DEMO):
-         - Set background-image to image URL
-         - Set :show-video="false"
-         - Demo: Unsplash vineyard image (replace with your own)
-         - Production: Use /public/images/hero/your-image.webp
+      Features:
+      - Random video selection per session
+      - Automatic mobile detection (shows poster on mobile)
+      - Multiple format support (WebM + MP4)
+      - Seamless loop for background ambiance
 
-      3. VIDEO MODE:
-         - Set :show-video="true"
-         - Provide video-webm and video-mp4 sources
-         - Add poster-image for loading state
-         - Note: Ensure videos exist in /public/videos/
+      To add videos: See public/videos/hero/README.md
     -->
     <HomeVideoHero
       v-if="isSectionEnabled('videoHero')"
-      :show-video="false"
-      video-webm="/videos/hero.webm"
-      video-mp4="/videos/hero.mp4"
-      poster-image="/images/hero-poster.jpg"
+      :show-video="heroVideoConfig.showVideo.value"
+      :video-webm="heroVideoConfig.currentVideo.value.webm"
+      :video-mp4="heroVideoConfig.currentVideo.value.mp4"
+      :poster-image="heroVideoConfig.currentVideo.value.poster"
+      :background-image-alt="heroVideoConfig.currentVideo.value.alt"
       :badge="t('home.hero.trustBadge')"
       badge-icon="lucide:shield-check"
       :title="t('home.hero.title')"
@@ -111,6 +107,9 @@ const { isSectionEnabled } = useLandingConfig()
 
 // Safe locale access with fallback
 const locale = computed(() => i18nLocale?.value || 'es')
+
+// Hero video configuration with random selection
+const heroVideoConfig = useHeroVideos()
 
 const {
   heroHighlights,
