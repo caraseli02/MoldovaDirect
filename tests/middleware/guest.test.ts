@@ -262,7 +262,7 @@ describe('Guest Middleware', () => {
     it('should handle user with undefined email_confirmed_at', async () => {
       mockUser = {
         id: 'user-123',
-        email: 'user@example.com'
+        email: 'user@example.com',
         // email_confirmed_at is undefined
       }
 
