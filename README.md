@@ -58,12 +58,12 @@ NUXT_SECRET_KEY=your_secret_key_for_sessions
 3. Run the SQL schema from `supabase/sql/supabase-schema.sql` in your Supabase SQL editor
 4. Enable authentication in your Supabase dashboard
 
-For detailed setup instructions, see [SUPABASE_SETUP.md](./docs/SUPABASE_SETUP.md).
+For detailed setup instructions, see [SUPABASE_SETUP.md](./docs/getting-started/SUPABASE_SETUP.md).
 
 ### Internationalization Setup
 The application uses lazy-loaded translations for optimal performance. Translation files are automatically loaded when users switch languages, reducing initial bundle size by ~75%.
 
-For detailed i18n configuration, see [I18N_CONFIGURATION.md](./docs/I18N_CONFIGURATION.md).
+For detailed i18n configuration, see [I18N_CONFIGURATION.md](./docs/features/I18N_CONFIGURATION.md).
 
 ### Database Management
 With Supabase, database management is handled through the Supabase dashboard:
@@ -87,26 +87,24 @@ npm run deploy:preview
 ## 📚 Documentation
 
 **Quick Links:**
-- **[Documentation Index](./DOCUMENTATION_INDEX.md)** - Master index of all documentation
-- **[Quick Start Guide](./QUICK_START_GUIDE.md)** - Get started in 5 minutes
-- **[Documentation Summary](./DOCUMENTATION_SUMMARY.md)** - Overview of all documentation (Updated Nov 1, 2025)
-- **[Code Review 2025](./CODE_REVIEW_2025.md)** - Security and architecture analysis
+- **[Documentation Index](./docs/meta/DOCUMENTATION_INDEX.md)** - Master index of all documentation
+- **[Quick Start Guide](./docs/getting-started/QUICK_START_GUIDE.md)** - Get started in 5 minutes
+- **[Documentation Summary](./docs/meta/DOCUMENTATION_SUMMARY.md)** - Overview of all documentation (Updated Nov 1, 2025)
+- **[Code Review 2025](./docs/analysis/CODE_REVIEW_2025.md)** - Security and architecture analysis
 
-All project documentation follows Kiro's spec-driven development approach in the `.kiro/` folder:
-
-- **[Documentation Hub](.kiro/README.md)** - Complete documentation index
-- **[Project Status](.kiro/PROJECT_STATUS.md)** - Current state and health
-- **[Roadmap](.kiro/ROADMAP.md)** - Development timeline
-- **[Progress](.kiro/PROGRESS.md)** - Completed milestones
-- **[Specifications](.kiro/specs/)** - Feature requirements and designs
-- **[Troubleshooting Components](docs/troubleshooting-components.md)** - Fix for duplicate component names, shadcn-vue auto-imports, and casing
+**Project Status & Planning:**
+- **[Project Status](docs/status/PROJECT_STATUS.md)** - Current state and health
+- **[Roadmap](docs/status/ROADMAP.md)** - Development timeline
+- **[Progress](docs/status/PROGRESS.md)** - Completed milestones
+- **[Feature Specifications](docs/specs/)** - Feature requirements and designs
+- **[Troubleshooting Components](docs/development/troubleshooting-components.md)** - Fix for duplicate component names, shadcn-vue auto-imports, and casing
 
 ### QA & Simulation Utilities
 
 Use the built-in QA dashboards to simulate user activity without touching production data:
 
-- **[Test Users & Persona Simulator](docs/TEST_USER_SIMULATION.md)** – Walkthrough for the `/test-users` page, including persona catalog, auth store helpers, and environment flag requirements.
-- **[Admin Testing Dashboard](docs/ADMIN_TESTING.md)** – Guide to the `/admin/testing` workspace for seeding data presets, impersonating users, and cleaning up after manual QA sessions.
+- **[Test Users & Persona Simulator](docs/guides/TEST_USER_SIMULATION.md)** – Walkthrough for the `/test-users` page, including persona catalog, auth store helpers, and environment flag requirements.
+- **[Admin Testing Dashboard](docs/guides/ADMIN_TESTING.md)** – Guide to the `/admin/testing` workspace for seeding data presets, impersonating users, and cleaning up after manual QA sessions.
 
 ## 🎯 Current Status
 

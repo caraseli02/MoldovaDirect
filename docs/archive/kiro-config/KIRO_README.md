@@ -139,5 +139,5 @@ AND update the cart count in the header
 ---
 
 **Documentation Standard**: Kiro Spec-Driven Development
-**Last Updated**: 2025-01-19
+**Last Updated**: 2025-11-27
 **Maintained By**: Development Team
