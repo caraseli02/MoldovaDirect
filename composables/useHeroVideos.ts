@@ -74,28 +74,45 @@ export const useHeroVideos = () => {
       mp4: '/videos/hero/hero-4.mp4',
       poster: '/videos/hero/hero-4-poster.jpg',
       alt: 'Aerial view of Moldovan vineyards at golden hour'
-    },
-    {
-      id: 'table-service',
-      webm: '/videos/hero/hero-5.webm',
-      mp4: '/videos/hero/hero-5.mp4',
-      poster: '/videos/hero/hero-5-poster.jpg',
-      alt: 'Serving Moldovan wine and delicacies on a table'
     }
+    // Temporarily disabled until webm file is generated
+    // Run: bash scripts/generate-hero-assets.sh after installing ffmpeg
+    // {
+    //   id: 'table-service',
+    //   webm: '/videos/hero/hero-5.webm',
+    //   mp4: '/videos/hero/hero-5.mp4',
+    //   poster: '/videos/hero/hero-5-poster.jpg',
+    //   alt: 'Serving Moldovan wine and delicacies on a table'
+    // }
     // Add more videos here as needed
   ]
 
-  // Device detection for performance optimization
+  // Detect mobile devices to show poster image instead of video (bandwidth savings)
   const { isMobile } = useDevice()
-  const isClient = typeof process !== 'undefined' && !!process.client
+  const isClient = process.client
 
   /**
-   * Randomly select a video on component mount
-   * Uses cryptographically weak random (sufficient for UX)
+   * Randomly select a video from the library
+   * Selection persists for the page session via useState
    */
   const getRandomVideo = (): HeroVideo => {
+    // Validate videos array is not empty
+    if (videos.length === 0) {
+      console.error('[useHeroVideos] No videos configured in video library')
+      throw new Error('Hero video library is empty. Add videos to the array.')
+    }
+
     const randomIndex = Math.floor(Math.random() * videos.length)
-    return videos[randomIndex]
+    const selectedVideo = videos[randomIndex]
+
+    // Validate video object structure
+    if (!selectedVideo || !selectedVideo.id) {
+      console.error('[useHeroVideos] Invalid video object selected:', selectedVideo)
+      // Fallback to first video if available
+      return videos[0]
+    }
+
+    return selectedVideo
   }
 
   // Select video once per page load
@@ -107,7 +124,8 @@ export const useHeroVideos = () => {
    * Falls back to poster image on small screens
    */
   const showVideo = computed(() => {
-    // Only render video after client-side mount to avoid SSR hydration downloading on mobile
+    // Show video only on desktop devices to save mobile bandwidth
+    // Client-side check ensures consistent hydration
     return isClient && !isMobile.value
   })
 
