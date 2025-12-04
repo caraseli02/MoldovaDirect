@@ -1197,7 +1197,14 @@
     },
     "filterSummary": {
       "title": "Filtros activos",
-      "clear": "Restablecer filtros"
+      "clear": "Restablecer filtros",
+      "activeFilters": "Lista de filtros activos",
+      "removeFilter": "Eliminar filtro {filter}",
+      "clearAllFilters": "Borrar todos los filtros"
+    },
+    "quickFilters": {
+      "label": "Opciones de filtrado rápido",
+      "toggle": "Alternar filtro {filter}"
     },
     "chips": {
       "category": "Categoría: {value}",

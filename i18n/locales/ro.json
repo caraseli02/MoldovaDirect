@@ -941,7 +941,14 @@
     },
     "filterSummary": {
       "title": "Filtre active",
-      "clear": "Resetează filtrele"
+      "clear": "Resetează filtrele",
+      "activeFilters": "Lista filtrelor active",
+      "removeFilter": "Elimină filtrul {filter}",
+      "clearAllFilters": "Șterge toate filtrele"
+    },
+    "quickFilters": {
+      "label": "Opțiuni de filtrare rapidă",
+      "toggle": "Comută filtrul {filter}"
     },
     "chips": {
       "category": "Categorie: {value}",

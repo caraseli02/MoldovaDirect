@@ -18,7 +18,9 @@
           <source v-if="videoMp4" :src="videoMp4" type="video/mp4" />
         </video>
         <!-- Consolidated luxury overlay for optimal paint performance -->
-        <div class="absolute inset-0 bg-[linear-gradient(to_br,_rgba(36,20,5,0.85)_0%,_rgba(114,47,55,0.45)_100%)]" />
+        <div
+          class="absolute inset-0 bg-[linear-gradient(to_bottom_right,_rgba(36,20,5,0.85)_0%,_rgba(114,47,55,0.45)_100%)]"
+        />
       </div>
 
       <!-- Fallback background: Image or Gradient -->
@@ -35,7 +37,9 @@
             class="h-full w-full object-cover object-center"
           />
           <!-- Consolidated gradient overlay for optimal paint performance -->
-          <div class="absolute inset-0 bg-[linear-gradient(to_br,_rgba(36,20,5,0.88)_0%,_rgba(114,47,55,0.52)_100%)]" />
+          <div
+            class="absolute inset-0 bg-[linear-gradient(to_bottom_right,_rgba(36,20,5,0.88)_0%,_rgba(114,47,55,0.52)_100%)]"
+          />
         </div>
 
         <!-- Consolidated luxury gradient fallback for optimal paint performance -->

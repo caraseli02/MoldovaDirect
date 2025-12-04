@@ -1117,7 +1117,14 @@
     },
     "filterSummary": {
       "title": "Активные фильтры",
-      "clear": "Сбросить фильтры"
+      "clear": "Сбросить фильтры",
+      "activeFilters": "Список активных фильтров",
+      "removeFilter": "Удалить фильтр {filter}",
+      "clearAllFilters": "Очистить все фильтры"
+    },
+    "quickFilters": {
+      "label": "Быстрые параметры фильтров",
+      "toggle": "Переключить фильтр {filter}"
     },
     "chips": {
       "category": "Категория: {value}",

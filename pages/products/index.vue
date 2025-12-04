@@ -7,9 +7,19 @@
     />
 
     <section class="relative overflow-hidden">
-      <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.1),transparent_55%)]"></div>
+      <div
+        class="absolute inset-0"
+        :style="{
+          background: 'radial-gradient(circle at top, rgba(255, 255, 255, 0.1), transparent 55%)',
+        }"
+      ></div>
       <div class="absolute inset-0 bg-gradient-to-br from-blue-600/90 via-indigo-600/80 to-blue-900/80 dark:from-blue-950/95 dark:via-blue-900/90 dark:to-indigo-950/90"></div>
-      <div class="absolute inset-x-0 top-0 h-40 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.35),transparent_70%)]"></div>
+      <div
+        class="absolute inset-x-0 top-0 h-40"
+        :style="{
+          background: 'radial-gradient(circle at top left, rgba(255, 255, 255, 0.35), transparent 70%)',
+        }"
+      ></div>
       <div class="relative z-10 px-4 py-12 sm:px-6 lg:px-8 lg:py-20">
         <div class="mx-auto max-w-6xl text-white">
           <div class="grid gap-12 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:items-center">
