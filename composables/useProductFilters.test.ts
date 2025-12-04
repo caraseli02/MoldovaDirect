@@ -790,7 +790,6 @@ describe('useProductFilters', () => {
     })
 
     it('keeps existing range on API error', async () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
       mockFetch.mockRejectedValue(new Error('Network error'))
 
       const { refreshPriceRange, priceRange } = useProductFilters()
@@ -799,7 +798,6 @@ describe('useProductFilters', () => {
       await refreshPriceRange()
 
       expect(priceRange.value).toEqual(originalRange)
-      consoleSpy.mockRestore()
     })
 
     it('handles null min/max in API response', async () => {
