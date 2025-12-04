@@ -5,10 +5,8 @@ const BASE_COMPONENT_DIRS = [
   {
     path: "~/components",
     pathPrefix: true,
-    // Only register Vue SFCs from our components directory.
-    // Avoid picking up TypeScript barrels like `index.ts` inside shadcn-ui folders.
     extensions: ["vue"],
-    // Also exclude the shadcn UI folder entirely, since those components are explicitly imported.
+    // Exclude shadcn UI folder - those components are explicitly imported
     ignore: ["ui/**", "**/index.ts"],
   },
 ];
@@ -16,30 +14,22 @@ const BASE_COMPONENT_DIRS = [
 export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
+
   postcss: {
     plugins: {
+      // Disable gradient minification for Tailwind CSS v4 compatibility
+      // See: docs/architecture/tailwind-v4-build-fix-adr.md
       cssnano: process.env.NODE_ENV === 'production' ? {
-        preset: [
-          'default',
-          {
-            // Disable gradient minification for Tailwind CSS v4 compatibility
-            // postcss-minify-gradients v7.0.1 cannot parse Tailwind v4's
-            // CSS custom property based gradients (e.g., var(--tw-gradient-stops))
-            //
-            // Impact: ~1.5KB increase in CSS bundle (negligible)
-            // See: docs/architecture/tailwind-v4-build-fix-adr.md
-            minifyGradients: false,
-          },
-        ],
+        preset: ['default', { minifyGradients: false }],
       } : false,
     },
   },
+
   components: {
-    // Restrict auto-registered components to .vue files globally
-    // to prevent Nuxt from treating `index.ts` barrels as components.
     extensions: ["vue"],
     dirs: [...BASE_COMPONENT_DIRS],
   },
+
   modules: [
     "@nuxtjs/supabase",
     "@nuxtjs/i18n",
@@ -47,12 +37,11 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "shadcn-nuxt",
     "@vite-pwa/nuxt",
-    // Removed vue3-carousel-nuxt (duplicate of nuxt-swiper)
     "@vueuse/motion/nuxt",
     "nuxt-swiper",
-    // Keep this last to post-process the components registry
-    "~/modules/fix-components",
+    "~/modules/fix-components", // Keep last to post-process components registry
   ],
+
   image: {
     domains: ["images.unsplash.com"],
     formats: ["webp", "avif"],
@@ -67,154 +56,83 @@ export default defineNuxtConfig({
     },
     presets: {
       hero: {
-        modifiers: {
-          format: 'webp',
-          quality: 85,
-          fit: 'cover',
-        }
+        modifiers: { format: 'avif', quality: 80, fit: 'cover' }
       },
       productThumbnail: {
-        modifiers: {
-          format: 'webp',
-          quality: 80,
-          fit: 'cover',
-          width: 400,
-          height: 400,
-        }
+        modifiers: { format: 'avif', quality: 75, fit: 'cover', width: 400, height: 400 }
+      },
+      productThumbnailSmall: {
+        modifiers: { format: 'avif', quality: 75, fit: 'cover', width: 112, height: 112 }
       },
       productDetail: {
-        modifiers: {
-          format: 'webp',
-          quality: 85,
-          fit: 'cover',
-          width: 800,
-          height: 800,
-        }
+        modifiers: { format: 'avif', quality: 80, fit: 'cover', width: 800, height: 800 }
       }
     },
-    // Use Vercel's native image optimization in production (avoids sharp dependency issues)
-    // Falls back to IPX in development
+    // Vercel's native image optimization in production, IPX in development
     provider: process.env.VERCEL ? 'vercel' : 'ipx',
-    vercel: {
-      // Vercel Image Optimization configuration
-      // External domains are automatically allowed via domains array above
-    },
-    ipx: {
-      maxAge: 60 * 60 * 24 * 30, // 30 days cache for external images (dev only)
-      domains: ["images.unsplash.com"]
-    }
   },
+
   routeRules: {
-    // Landing page - Regular SSR (ISR disabled to avoid composable context issues)
-    '/': {
-      ssr: true
-    },
-    // Product pages - Regular SSR
+    '/': { ssr: true },
     '/products': { ssr: true },
     '/products/**': { ssr: true },
-    // Public API routes - Moderate SWR caching for customer-facing endpoints
-    '/api/products': { swr: 300, headers: { 'Cache-Control': 'public, max-age=300, stale-while-revalidate=60' } },
+    // Public API caching (TEMPORARILY DISABLED for /api/products: SWR ignores query params causing pagination bug)
+    // '/api/products': { swr: 300, headers: { 'Cache-Control': 'public, max-age=300, stale-while-revalidate=60' } },
     '/api/products/featured': { swr: 300, headers: { 'Cache-Control': 'public, max-age=300, stale-while-revalidate=60' } },
     '/api/products/**': { swr: 600, headers: { 'Cache-Control': 'public, max-age=600, stale-while-revalidate=120' } },
     '/api/categories': { swr: 600, headers: { 'Cache-Control': 'public, max-age=600, stale-while-revalidate=120' } },
     '/api/categories/**': { swr: 600, headers: { 'Cache-Control': 'public, max-age=600, stale-while-revalidate=120' } },
     '/api/search': { swr: 180, headers: { 'Cache-Control': 'public, max-age=180, stale-while-revalidate=60' } },
     '/api/landing/sections': { swr: 600, headers: { 'Cache-Control': 'public, max-age=600, stale-while-revalidate=120' } },
-    // Admin API routes - NO caching to preserve Authorization headers
-    // SWR/cache layers strip request headers, breaking Bearer token authentication
-    // Static assets with immutable cache (hash-based assets never change)
-    '/assets/**': {
-      headers: {
-        'Cache-Control': 'public, max-age=31536000, immutable'
-      }
-    },
-    '/_nuxt/**': {
-      headers: {
-        'Cache-Control': 'public, max-age=31536000, immutable'
-      }
-    },
+    // Static assets - immutable cache
+    '/assets/**': { headers: { 'Cache-Control': 'public, max-age=31536000, immutable' } },
+    '/_nuxt/**': { headers: { 'Cache-Control': 'public, max-age=31536000, immutable' } },
   },
+
   runtimeConfig: {
-    // Private keys (only available on server-side)
     stripeSecretKey: process.env.STRIPE_SECRET_KEY,
     stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
-    // Supabase credentials for fallback service client (email jobs, etc.)
     supabaseUrl: process.env.SUPABASE_URL,
     supabaseServiceKey: process.env.SUPABASE_SERVICE_KEY,
-    // Public keys (exposed to client-side)
     public: {
       stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
-      // Vercel automatically provides VERCEL_URL for all deployments (production & preview)
-      // Falls back to moldova-direct.vercel.app if VERCEL_URL is not set (local dev)
       siteUrl: process.env.VERCEL_URL
         ? `https://${process.env.VERCEL_URL}`
         : process.env.NUXT_PUBLIC_SITE_URL || 'https://moldova-direct.vercel.app',
-      enableTestUsers:
-        process.env.ENABLE_TEST_USERS === 'true' || process.env.NODE_ENV !== 'production'
+      enableTestUsers: process.env.ENABLE_TEST_USERS === 'true' || process.env.NODE_ENV !== 'production'
     },
   },
+
   shadcn: {
-    /**
-     * Prefix for all the imported component
-     */
     prefix: "Ui",
-    /**
-     * Directory that the component lives in.
-     * @default "./components/ui"
-     */
     componentDir: "./components/ui",
   },
+
   nitro: {
     preset: "vercel",
-    ignore: [
-      "**/*.test.ts",
-      "**/*.spec.ts",
-      "**/__tests__/**",
-    ],
-    externals: {
-      // External dependencies for server (reduces bundle size)
-      external: [
-        "stripe",
-        "nodemailer",
-      ],
-      inline: ["vue", "@vue/*"],
-    },
-    // Enable minification and compression
     minify: true,
     compressPublicAssets: true,
-    // Prerender configuration - disable automatic crawling to prevent timeout
+    ignore: ["**/*.test.ts", "**/*.spec.ts", "**/__tests__/**"],
     prerender: {
       failOnError: false,
-      crawlLinks: false, // Disable automatic route discovery to prevent hanging
+      crawlLinks: false,
       ignore: ['/_ipx/**', '/admin', '/checkout', '/api'],
-      routes: [], // Only prerender explicitly listed routes (none)
+      routes: [],
     },
   },
+
   supabase: {
     redirectOptions: {
       login: "/auth/login",
       callback: "/auth/confirm",
       exclude: [
-        "/",
-        "/products",
-        "/products/*",
-        "/cart",
-        "/checkout", // Enable guest checkout - users can complete purchase without account
-        "/checkout/*", // Enable guest checkout for all checkout steps (payment, review, confirmation)
-        "/api/**", // Public API endpoints should not require authentication
-        "/en",
-        "/ro",
-        "/ru",
-        "/en/*",
-        "/ro/*",
-        "/ru/*",
-        "/auth/register",
-        "/auth/forgot-password",
-        "/auth/reset-password",
-        "/auth/verify-email",
+        "/", "/products", "/products/*", "/cart",
+        "/checkout", "/checkout/*", // Guest checkout
+        "/api/**",
+        "/en", "/ro", "/ru", "/en/*", "/ro/*", "/ru/*",
+        "/auth/register", "/auth/forgot-password", "/auth/reset-password", "/auth/verify-email",
       ],
     },
-    // Enable anonymous access for public pages (required for Google crawlers)
     cookieOptions: {
       secure: process.env.NODE_ENV === 'production'
     },
@@ -223,11 +141,11 @@ export default defineNuxtConfig({
         persistSession: true,
         autoRefreshToken: true,
         detectSessionInUrl: true,
-        // Allow unauthenticated requests - critical for SEO and crawlers
         flowType: 'pkce'
       }
     }
   },
+
   i18n: {
     locales: [
       { code: "es", name: "Español", file: "es.json" },
@@ -244,7 +162,9 @@ export default defineNuxtConfig({
       redirectOn: "root",
     },
   },
+
   css: ["~/assets/css/tailwind.css"],
+
   pwa: {
     registerType: "autoUpdate",
     workbox: {
@@ -258,8 +178,7 @@ export default defineNuxtConfig({
     manifest: {
       name: "Moldova Direct",
       short_name: "Moldova Direct",
-      description:
-        "Authentic Moldovan food and wine products delivered to Spain",
+      description: "Authentic Moldovan food and wine products delivered to Spain",
       theme_color: "#1e40af",
       background_color: "#ffffff",
       display: "standalone",
@@ -267,140 +186,47 @@ export default defineNuxtConfig({
       scope: "/",
       start_url: "/",
       icons: [
-        {
-          src: "/icon.svg",
-          sizes: "192x192",
-          type: "image/svg+xml",
-        },
-        {
-          src: "/icon.svg",
-          sizes: "512x512",
-          type: "image/svg+xml",
-        },
-        {
-          src: "/icon.svg",
-          sizes: "512x512",
-          type: "image/svg+xml",
-          purpose: "any maskable",
-        },
+        { src: "/icon.svg", sizes: "192x192", type: "image/svg+xml" },
+        { src: "/icon.svg", sizes: "512x512", type: "image/svg+xml" },
+        { src: "/icon.svg", sizes: "512x512", type: "image/svg+xml", purpose: "any maskable" },
       ],
       categories: ["shopping", "food"],
       shortcuts: [
-        {
-          name: "Products",
-          short_name: "Products",
-          description: "Browse all products",
-          url: "/products",
-          icons: [{ src: "/icon.svg", sizes: "192x192" }],
-        },
-        {
-          name: "Cart",
-          short_name: "Cart",
-          description: "View shopping cart",
-          url: "/cart",
-          icons: [{ src: "/icon.svg", sizes: "192x192" }],
-        },
+        { name: "Products", short_name: "Products", description: "Browse all products", url: "/products", icons: [{ src: "/icon.svg", sizes: "192x192" }] },
+        { name: "Cart", short_name: "Cart", description: "View shopping cart", url: "/cart", icons: [{ src: "/icon.svg", sizes: "192x192" }] },
       ],
     },
   },
+
   vite: {
     plugins: [tailwindcss()],
     build: {
-      // Use esbuild for faster minification
-      minify: 'esbuild',
-
-      // Increase chunk size warning threshold
       chunkSizeWarningLimit: 1000,
-
-      // Optimize CSS code splitting
-      cssCodeSplit: true,
-
-      // Disable source maps in production for faster builds
       sourcemap: process.env.NODE_ENV !== 'production',
-
-      rollupOptions: {
-        output: {
-          // Manual chunk splitting for better caching
-          // NOTE: Removed custom chunkFileNames/entryFileNames as they conflict with Nitro's Vercel preset
-          // Nitro handles chunk naming automatically for proper deployment
-          manualChunks(id) {
-            // Vendor chunks - split by package for better cache granularity
-            if (id.includes('node_modules')) {
-              // Large packages get their own chunks
-              if (id.includes('chart.js')) return 'vendor-chart'
-              if (id.includes('@stripe')) return 'vendor-stripe'
-              if (id.includes('@tanstack')) return 'vendor-table'
-              if (id.includes('swiper')) return 'vendor-swiper'
-
-              // Group Vue ecosystem packages together
-              if (id.includes('vue') || id.includes('@vue')) return 'vendor-vue'
-              if (id.includes('pinia')) return 'vendor-pinia'
-
-              // Group smaller packages together
-              return 'vendor-misc'
-            }
-
-            // Feature-based splitting for better code organization
-            if (id.includes('/components/admin/')) return 'feature-admin'
-            if (id.includes('/pages/admin/')) return 'feature-admin'
-
-            if (id.includes('/components/checkout/')) return 'feature-checkout'
-            if (id.includes('/pages/checkout/')) return 'feature-checkout'
-          },
-        },
-      },
     },
-    // Pre-bundle dependencies for faster dev server
     optimizeDeps: {
-      include: [
-        'vue',
-        'vue-router',
-        'pinia',
-        '@vueuse/core',
-        'zod',
-      ],
-      exclude: [
-        'chart.js',
-        '@stripe/stripe-js',
-        '@tanstack/vue-table',
-      ],
-
-      // Enable esbuild optimizer for faster dependency pre-bundling
-      esbuildOptions: {
-        target: 'es2020',
-        supported: {
-          'top-level-await': true,
-        },
-      },
-    },
-    ssr: {
-      noExternal: ["vue", "@vue/*"],
+      include: ['vue', 'vue-router', 'pinia', '@vueuse/core', 'zod'],
+      exclude: ['chart.js', '@stripe/stripe-js', '@tanstack/vue-table'],
     },
     server: {
       watch: {
-        // Use polling on macOS to avoid "EMFILE: too many open files" error
-        // This is less efficient but more reliable with large codebases
-        // usePolling: true,
-        // interval: 100,
-        // binaryInterval: 300,
         ignored: [
-        '**/node_modules/**',
-        '**/.git/**',
-        '**/coverage/**',           // Vitest coverage reports
-        '**/test-results/**',       // Playwright test results
-        '**/playwright-report/**',  // Playwright HTML reports
-        '**/.nuxt/**',             // Nuxt build artifacts
-        '**/.output/**',           // Nuxt output
-        '**/*.log',                // Log files
-      ]
+          '**/node_modules/**',
+          '**/.git/**',
+          '**/coverage/**',
+          '**/test-results/**',
+          '**/playwright-report/**',
+          '**/.nuxt/**',
+          '**/.output/**',
+          '**/*.log',
+        ]
       }
     }
   },
+
   hooks: {
-    // Ensure the shadcn-nuxt injected components directory does not register TS barrels as Vue components
+    // Remove shadcn-nuxt auto-registered UI directory (we import explicitly)
     'components:dirs'(dirs) {
-      // Remove any auto-registered UI directory added by modules (e.g., shadcn-nuxt),
-      // since we import UI components explicitly in <script setup>.
       for (let i = dirs.length - 1; i >= 0; i--) {
         const entry = dirs[i]
         if (typeof entry === 'string') continue

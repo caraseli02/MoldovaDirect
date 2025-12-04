@@ -158,3 +158,18 @@ apply-rls-fix.sh
 visual-regression-*.mjs
 
 .worktrees
+
+# Debug files
+debug-*.txt
+debug-*.json
+debug-*.png
+debug-*.log
+*.debug.log
+/test-*.ts
+
+# Documentation - keep in .docs/ only
+/*.md
+!README.md
+!CLAUDE.md
+!CONTRIBUTING.md
+!LICENSE.md

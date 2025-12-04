@@ -244,6 +244,9 @@
     "email": "Correo Electrónico",
     "emailPlaceholder": "Introduce tu correo",
     "password": "Contraseña",
+    "withPassword": "Contraseña",
+    "withMagicLink": "Enlace Mágico",
+    "magicLinkInfo": "Inicia sesión sin contraseña",
     "newPassword": "Nueva Contraseña",
     "confirmPassword": "Confirmar Contraseña",
     "fullName": "Nombre Completo",
@@ -267,6 +270,7 @@
     "sendMagicLink": "Enviar Enlace Mágico",
     "magicLinkSent": "¡Enlace mágico enviado! Revisa tu correo para iniciar sesión.",
     "magicLinkError": "Error al enviar el enlace mágico. Por favor, inténtalo de nuevo.",
+    "resendIn": "Reenviar en",
     "emailRequired": "Por favor, introduce tu dirección de correo",
     "emailVerification": "Verificación de Correo",
     "verifying": "Verificando tu correo",
@@ -279,10 +283,13 @@
     "backToLogin": "Volver al Inicio de Sesión",
     "confirmingAccount": "Confirmando Cuenta",
     "processing": "Procesando",
+    "pleaseWait": "Por favor espera mientras verificamos tu autenticación...",
     "accountConfirmed": "¡Cuenta Confirmada!",
     "redirectingToAccount": "Redirigiendo a tu cuenta...",
     "confirmationFailed": "La confirmación de la cuenta falló",
     "confirmationError": "Error de confirmación. Por favor, inténtalo de nuevo.",
+    "magicLinkSuccess": "¡Autenticación exitosa! Bienvenido de nuevo.",
+    "retry": "Reintentar",
     "forgotPasswordInstructions": "Introduce tu dirección de correo y te enviaremos un enlace para restablecer tu contraseña.",
     "sendResetEmail": "Enviar Correo de Restablecimiento",
     "passwordResetSent": "¡Correo de restablecimiento enviado! Por favor, revisa tu bandeja de entrada.",
@@ -337,8 +344,15 @@
       "emailInvalid": "Por favor ingresa un correo válido",
       "passwordWeak": "La contraseña es muy débil",
       "networkError": "Error de conexión. Verifica tu conexión a internet",
+      "networkErrorMessage": "No se pudo conectar. Por favor verifica tu conexión a internet e inténtalo de nuevo.",
       "serverError": "Error del servidor. Inténtalo más tarde",
-      "unknownError": "Ha ocurrido un error inesperado"
+      "unknownError": "Ha ocurrido un error inesperado",
+      "linkExpired": "Enlace Mágico Expirado",
+      "linkExpiredMessage": "Este enlace mágico ha expirado. Por favor solicita uno nuevo desde la página de inicio de sesión.",
+      "linkAlreadyUsed": "Enlace Mágico Ya Usado",
+      "linkAlreadyUsedMessage": "Este enlace mágico ya ha sido usado. Si necesitas iniciar sesión nuevamente, por favor solicita un nuevo enlace.",
+      "invalidLink": "Enlace Mágico Inválido",
+      "invalidLinkMessage": "Este enlace mágico es inválido o está mal formado. Por favor solicita uno nuevo desde la página de inicio de sesión."
     },
     "validation": {
       "email": {
@@ -729,6 +743,12 @@
     "noAddresses": "Aún no tienes direcciones guardadas",
     "default": "Predeterminada",
     "setAsDefault": "Establecer como dirección predeterminada",
+    "firstName": "Nombre",
+    "firstNamePlaceholder": "Introduce tu nombre",
+    "lastName": "Apellido",
+    "lastNamePlaceholder": "Introduce tu apellido",
+    "company": "Empresa",
+    "companyPlaceholder": "Nombre de la empresa (opcional)",
     "street": "Dirección",
     "streetPlaceholder": "Introduce tu dirección",
     "city": "Ciudad",
@@ -738,6 +758,8 @@
     "province": "Provincia/Estado",
     "provincePlaceholder": "Introduce provincia o estado (opcional)",
     "country": "País",
+    "phone": "Teléfono",
+    "phonePlaceholder": "Número de teléfono (opcional)",
     "deleteAccount": "Eliminar Cuenta",
     "deleteAccountWarning": "Esta acción no se puede deshacer",
     "deleteAccountConsequences": {
@@ -768,10 +790,13 @@
       "billing": "Dirección de Facturación"
     },
     "validation": {
+      "firstNameRequired": "El nombre es obligatorio",
+      "lastNameRequired": "El apellido es obligatorio",
       "streetRequired": "La dirección es obligatoria",
       "cityRequired": "La ciudad es obligatoria",
       "postalCodeRequired": "El código postal es obligatorio",
       "invalidSpanishPostalCode": "Por favor introduce un código postal español válido (5 dígitos)",
+      "phoneInvalid": "Por favor introduce un número de teléfono válido",
       "confirmationRequired": "Por favor escribe 'DELETE' para confirmar",
       "passwordRequired": "La contraseña es obligatoria para eliminar la cuenta"
     },
@@ -1107,6 +1132,8 @@
     }
   },
   "products": {
+    "commonProduct": "Producto",
+    "viewDetails": "Ver Detalles",
     "featured": "Destacado",
     "sale": "Oferta",
     "new": "Nuevo",
@@ -1131,6 +1158,10 @@
     "quickViewProduct": "Vista Rápida",
     "addProductToCart": "Añadir al Carrito",
     "noImageAvailable": "Sin imagen disponible",
+    "imageGallery": "Galería de Imágenes",
+    "imageZoom": {
+      "keyboardHints": "Usa las flechas para navegar, ESC para cerrar"
+    },
     "cartEmpty": "Tu carrito está vacío",
     "cartEmptyDescription": "Comienza a comprar para añadir artículos a tu carrito",
     "itemsInCart": "artículos en el carrito",
@@ -1289,6 +1320,12 @@
       "originCategoryFallback": "Una creación emblemática de nuestra colección de {category}.",
       "noAwards": "Sé la primera persona en celebrar este lanzamiento."
     },
+    "imageFallback": {
+      "title": "Imagen del producto próximamente",
+      "subtitle": "Producto auténtico moldavo garantizado",
+      "description": "Imágenes de alta calidad estarán disponibles en breve"
+    },
+    "noImageAvailable": "No hay imagen disponible",
     "socialProof": {
       "title": "Amado por nuestros clientes",
       "subtitle": "Opiniones reales de catas, cenas y pedidos para regalar.",
@@ -1685,6 +1722,31 @@
       "checkYourEmail": "Tu pedido se completó correctamente. Revisa tu correo para más detalles",
       "cartClearFailed": "No se pudo vaciar el carrito",
       "cartClearFailedDetails": "Tu pedido se completó correctamente, pero el carrito no se vació automáticamente"
+    },
+    "errors": {
+      "failedToLoadAddresses": "No se pudieron cargar las direcciones guardadas",
+      "failedToSaveAddress": "No se pudo guardar la dirección",
+      "failedToUpdateAddress": "No se pudo actualizar la dirección",
+      "failedToSetDefaultAddress": "No se pudo establecer la dirección predeterminada",
+      "failedToDeleteAddress": "No se pudo eliminar la dirección",
+      "expressCheckoutFailed": "Falló el pago express",
+      "pleaseTryAgain": "Por favor, inténtalo de nuevo o edita tus datos manualmente"
+    },
+    "expressCheckout": {
+      "title": "Pago Express Disponible",
+      "description": "Usa tu dirección y preferencias guardadas para una experiencia de pago más rápida.",
+      "preferredShipping": "Envío preferido",
+      "useButton": "Usar Pago Express",
+      "editButton": "Editar Detalles",
+      "success": "Pago express activado",
+      "successDetails": "Tus datos guardados han sido cargados",
+      "addressLoaded": "Dirección cargada",
+      "selectShipping": "Por favor selecciona un método de envío",
+      "countdownTitle": "Pago express activado",
+      "countdownMessage": "Redirigiendo al pago en {seconds} segundos...",
+      "cancelButton": "Espera, déjame revisar",
+      "countdownCancelled": "Cuenta regresiva cancelada",
+      "countdownCancelledDetails": "Tómate tu tiempo para revisar tu pedido"
     }
   },
   "admin": {

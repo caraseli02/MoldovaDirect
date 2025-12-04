@@ -1,8 +1,20 @@
+/**
+ * useStripe Composable Tests
+ *
+ * Tests for the Stripe payment integration composable.
+ * Uses vi.resetModules() to handle the module-level singleton pattern.
+ */
+
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
 import { nextTick } from 'vue'
-import { createMockStripe, createMockStripeCardElement, mockStripePaymentSuccess, mockStripePaymentError } from '~/tests/utils/mockStripe'
+import {
+  createMockStripe,
+  createMockStripeCardElement,
+  mockStripePaymentSuccess,
+  mockStripePaymentError
+} from '~/tests/utils/mockStripe'
 
-// Mock @stripe/stripe-js
+// Mock @stripe/stripe-js at module level
 const mockLoadStripe = vi.fn()
 vi.mock('@stripe/stripe-js', () => ({
   loadStripe: mockLoadStripe,
@@ -15,31 +27,32 @@ const mockRuntimeConfig = {
   },
 }
 
-global.useRuntimeConfig = vi.fn(() => mockRuntimeConfig)
-
-// Import composable AFTER mocks are set up
-const { useStripe, formatStripeError } = await import('./useStripe')
-
 describe('useStripe', () => {
   let mockStripe: ReturnType<typeof createMockStripe>
   let mockCardElement: ReturnType<typeof createMockStripeCardElement>
-  let mockElements: ReturnType<typeof vi.fn> & { create: ReturnType<typeof vi.fn>, getElement: ReturnType<typeof vi.fn>, update: ReturnType<typeof vi.fn> }
+  let mockElements: any
 
-  beforeEach(() => {
-    // Clear only the loadStripe mock
+  beforeEach(async () => {
+    // CRITICAL: Reset modules to clear the singleton state
+    vi.resetModules()
+
+    // Re-mock after reset
+    vi.doMock('@stripe/stripe-js', () => ({
+      loadStripe: mockLoadStripe,
+    }))
+
+    // Clear mocks
     mockLoadStripe.mockClear()
 
     // Create fresh mocks for each test
     mockCardElement = createMockStripeCardElement()
 
-    // Create mock elements with our card element
     mockElements = {
       create: vi.fn(() => mockCardElement),
       getElement: vi.fn(() => mockCardElement),
       update: vi.fn(),
     }
 
-    // Create mock Stripe with our elements
     mockStripe = {
       elements: vi.fn(() => mockElements),
       confirmCardPayment: vi.fn().mockResolvedValue(mockStripePaymentSuccess(29.99)),
@@ -65,6 +78,7 @@ describe('useStripe', () => {
 
     // Reset runtime config
     mockRuntimeConfig.public.stripePublishableKey = 'pk_test_123456789'
+    vi.stubGlobal('useRuntimeConfig', vi.fn(() => mockRuntimeConfig))
   })
 
   afterEach(() => {
@@ -72,7 +86,8 @@ describe('useStripe', () => {
   })
 
   describe('Initialization', () => {
-    it('initializes with null state', () => {
+    it('initializes with null state', async () => {
+      const { useStripe } = await import('./useStripe')
       const { stripe, elements, cardElement, loading, error } = useStripe()
 
       expect(stripe.value).toBeNull()
@@ -83,11 +98,10 @@ describe('useStripe', () => {
     })
 
     it('initializes Stripe successfully', async () => {
+      const { useStripe } = await import('./useStripe')
       const { stripe, elements, loading, error, initializeStripe } = useStripe()
 
       const promise = initializeStripe()
-
-      // Should be loading during initialization
       expect(loading.value).toBe(true)
 
       await promise
@@ -100,25 +114,22 @@ describe('useStripe', () => {
     })
 
     it('does not reinitialize if already initialized', async () => {
+      const { useStripe } = await import('./useStripe')
       const { initializeStripe } = useStripe()
 
       await initializeStripe()
-      mockLoadStripe.mockClear()
+      const callCount = mockLoadStripe.mock.calls.length
 
       await initializeStripe()
 
-      expect(mockLoadStripe).not.toHaveBeenCalled()
+      // Should not call loadStripe again (singleton)
+      expect(mockLoadStripe.mock.calls.length).toBe(callCount)
     })
 
-    // Note: The following tests are skipped due to module-level singleton pattern
-    // The useStripe composable uses `let stripePromise` at module level which persists
-    // across tests. After the first successful initialization, subsequent tests cannot
-    // test error scenarios because the singleton is already set.
-    // TODO: Refactor composable to support test isolation or use vi.resetModules()
-
-    it.skip('handles missing publishable key', async () => {
+    it('handles missing publishable key', async () => {
       mockRuntimeConfig.public.stripePublishableKey = ''
 
+      const { useStripe } = await import('./useStripe')
       const { error, initializeStripe } = useStripe()
 
       await initializeStripe()
@@ -126,9 +137,10 @@ describe('useStripe', () => {
       expect(error.value).toBe('Stripe publishable key not configured')
     })
 
-    it.skip('handles Stripe loading failure', async () => {
+    it('handles Stripe loading failure (null return)', async () => {
       mockLoadStripe.mockResolvedValue(null)
 
+      const { useStripe } = await import('./useStripe')
       const { error, initializeStripe } = useStripe()
 
       await initializeStripe()
@@ -136,9 +148,10 @@ describe('useStripe', () => {
       expect(error.value).toBe('Failed to load Stripe')
     })
 
-    it.skip('handles Stripe loading error', async () => {
+    it('handles Stripe loading error (rejection)', async () => {
       mockLoadStripe.mockRejectedValue(new Error('Network error'))
 
+      const { useStripe } = await import('./useStripe')
       const { error, initializeStripe } = useStripe()
 
       await initializeStripe()
@@ -146,23 +159,21 @@ describe('useStripe', () => {
       expect(error.value).toBe('Network error')
     })
 
-    it.skip('clears previous errors on successful initialization', async () => {
-      mockLoadStripe.mockRejectedValueOnce(new Error('First error'))
+    it('sets loading to false after error', async () => {
+      mockLoadStripe.mockRejectedValue(new Error('Network error'))
 
-      const { error, initializeStripe } = useStripe()
+      const { useStripe } = await import('./useStripe')
+      const { loading, initializeStripe } = useStripe()
 
       await initializeStripe()
-      expect(error.value).toBe('First error')
 
-      mockLoadStripe.mockResolvedValueOnce(mockStripe)
-      await initializeStripe()
-
-      expect(error.value).toBeNull()
+      expect(loading.value).toBe(false)
     })
   })
 
   describe('Card Element Creation', () => {
     it('creates card element successfully', async () => {
+      const { useStripe } = await import('./useStripe')
       const { initializeStripe, createCardElement, cardElement } = useStripe()
       await initializeStripe()
 
@@ -173,9 +184,8 @@ describe('useStripe', () => {
       expect(mockCardElement.mount).toHaveBeenCalledWith(mockContainer)
     })
 
-    // Note: Skipped due to module-level singleton pattern
-    // After first test initializes Stripe, this test uses the cached instance
-    it.skip('initializes Stripe if not already initialized', async () => {
+    it('initializes Stripe if not already initialized', async () => {
+      const { useStripe } = await import('./useStripe')
       const { createCardElement, stripe } = useStripe()
 
       expect(stripe.value).toBeNull()
@@ -187,12 +197,10 @@ describe('useStripe', () => {
       expect(mockLoadStripe).toHaveBeenCalled()
     })
 
-    // Note: Skipped due to module-level singleton pattern
-    // Once Stripe is initialized in any test, subsequent tests cannot test null/error scenarios
-    // TODO: Refactor composable to support test isolation or use vi.resetModules()
-    it.skip('throws error if Stripe elements not initialized', async () => {
+    it('throws error if Stripe elements not initialized', async () => {
       mockLoadStripe.mockResolvedValue(null)
 
+      const { useStripe } = await import('./useStripe')
       const { createCardElement } = useStripe()
       const mockContainer = document.createElement('div')
 
@@ -200,6 +208,7 @@ describe('useStripe', () => {
     })
 
     it('applies custom card element styling', async () => {
+      const { useStripe } = await import('./useStripe')
       const { initializeStripe, createCardElement } = useStripe()
       await initializeStripe()
 
@@ -221,6 +230,7 @@ describe('useStripe', () => {
     })
 
     it('sets up change event listener', async () => {
+      const { useStripe } = await import('./useStripe')
       const { initializeStripe, createCardElement } = useStripe()
       await initializeStripe()
 
@@ -239,6 +249,7 @@ describe('useStripe', () => {
         }
       })
 
+      const { useStripe } = await import('./useStripe')
       const { initializeStripe, createCardElement, error } = useStripe()
       await initializeStripe()
 
@@ -257,40 +268,19 @@ describe('useStripe', () => {
 
       expect(error.value).toBeNull()
     })
-
-    // Note: Skipped due to singleton - mockElements.create is from a different instance
-    it.skip('handles card element creation error', async () => {
-      const mockElements = mockStripe.elements()
-      mockElements.create.mockImplementation(() => {
-        throw new Error('Element creation failed')
-      })
-
-      const { initializeStripe, createCardElement, error } = useStripe()
-      await initializeStripe()
-
-      const mockContainer = document.createElement('div')
-      await createCardElement(mockContainer)
-
-      expect(error.value).toBe('Element creation failed')
-    })
   })
 
   describe('Payment Confirmation', () => {
-    // Note: These tests are skipped due to module-level singleton pattern
-    // The stripePromise is cached at module level, so after the first test initializes Stripe,
-    // subsequent tests cannot properly mock new Stripe instances
-    // TODO: Refactor composable to support test isolation
-    it.skip('confirms payment successfully', async () => {
-      const mockClientSecret = 'pi_test_secret_123'
-      const mockPaymentIntent = mockStripePaymentSuccess(29.99)
-
-      mockStripe.confirmCardPayment.mockResolvedValue(mockPaymentIntent)
-
+    it('confirms payment successfully', async () => {
+      const { useStripe } = await import('./useStripe')
       const { initializeStripe, createCardElement, confirmPayment } = useStripe()
       await initializeStripe()
 
       const mockContainer = document.createElement('div')
       await createCardElement(mockContainer)
+
+      const mockClientSecret = 'pi_test_secret_123'
+      mockStripe.confirmCardPayment.mockResolvedValue(mockStripePaymentSuccess(29.99))
 
       const result = await confirmPayment(mockClientSecret)
 
@@ -304,7 +294,11 @@ describe('useStripe', () => {
       )
     })
 
-    it.skip('handles payment confirmation with custom payment data', async () => {
+    it('handles payment confirmation with custom payment data', async () => {
+      const { useStripe } = await import('./useStripe')
+      const { initializeStripe, confirmPayment } = useStripe()
+      await initializeStripe()
+
       const mockClientSecret = 'pi_test_secret_123'
       const mockPaymentData = {
         payment_method: 'pm_custom_123',
@@ -316,9 +310,6 @@ describe('useStripe', () => {
 
       mockStripe.confirmCardPayment.mockResolvedValue(mockStripePaymentSuccess(29.99))
 
-      const { initializeStripe, confirmPayment } = useStripe()
-      await initializeStripe()
-
       await confirmPayment(mockClientSecret, mockPaymentData)
 
       expect(mockStripe.confirmCardPayment).toHaveBeenCalledWith(
@@ -329,14 +320,15 @@ describe('useStripe', () => {
       )
     })
 
-    it.skip('handles payment confirmation failure', async () => {
-      const mockClientSecret = 'pi_test_secret_123'
-      const mockError = mockStripePaymentError('Your card was declined', 'card_declined')
-
-      mockStripe.confirmCardPayment.mockResolvedValue(mockError)
-
+    it('handles payment confirmation failure', async () => {
+      const { useStripe } = await import('./useStripe')
       const { initializeStripe, confirmPayment, error } = useStripe()
       await initializeStripe()
+
+      const mockClientSecret = 'pi_test_secret_123'
+      mockStripe.confirmCardPayment.mockResolvedValue(
+        mockStripePaymentError('Your card was declined', 'card_declined')
+      )
 
       const result = await confirmPayment(mockClientSecret)
 
@@ -345,11 +337,12 @@ describe('useStripe', () => {
       expect(error.value).toBe('Your card was declined')
     })
 
-    it.skip('handles payment confirmation exception', async () => {
-      mockStripe.confirmCardPayment.mockRejectedValue(new Error('Network error'))
-
+    it('handles payment confirmation exception', async () => {
+      const { useStripe } = await import('./useStripe')
       const { initializeStripe, confirmPayment, error } = useStripe()
       await initializeStripe()
+
+      mockStripe.confirmCardPayment.mockRejectedValue(new Error('Network error'))
 
       const result = await confirmPayment('pi_test_secret_123')
 
@@ -358,17 +351,19 @@ describe('useStripe', () => {
     })
 
     it('throws error if Stripe not initialized', async () => {
+      const { useStripe } = await import('./useStripe')
       const { confirmPayment } = useStripe()
 
       await expect(confirmPayment('pi_test_secret_123')).rejects.toThrow('Stripe not initialized')
     })
 
-    it.skip('sets loading state during payment confirmation', async () => {
+    it('sets loading state during payment confirmation', async () => {
       let resolveConfirm: Function
       mockStripe.confirmCardPayment.mockReturnValue(new Promise((resolve) => {
         resolveConfirm = resolve
       }))
 
+      const { useStripe } = await import('./useStripe')
       const { initializeStripe, confirmPayment, loading } = useStripe()
       await initializeStripe()
 
@@ -385,9 +380,14 @@ describe('useStripe', () => {
   })
 
   describe('Payment Method Creation', () => {
-    // Note: These tests are skipped due to module-level singleton pattern
-    // TODO: Refactor composable to support test isolation
-    it.skip('creates payment method successfully', async () => {
+    it('creates payment method successfully', async () => {
+      const { useStripe } = await import('./useStripe')
+      const { initializeStripe, createCardElement, createPaymentMethod } = useStripe()
+      await initializeStripe()
+
+      const mockContainer = document.createElement('div')
+      await createCardElement(mockContainer)
+
       const mockBillingDetails = {
         name: 'John Doe',
         email: 'john@example.com',
@@ -398,12 +398,6 @@ describe('useStripe', () => {
           country: 'ES',
         },
       }
-
-      const { initializeStripe, createCardElement, createPaymentMethod } = useStripe()
-      await initializeStripe()
-
-      const mockContainer = document.createElement('div')
-      await createCardElement(mockContainer)
 
       const result = await createPaymentMethod(mockCardElement, mockBillingDetails)
 
@@ -416,7 +410,8 @@ describe('useStripe', () => {
       })
     })
 
-    it.skip('creates payment method without billing details', async () => {
+    it('creates payment method without billing details', async () => {
+      const { useStripe } = await import('./useStripe')
       const { initializeStripe, createPaymentMethod } = useStripe()
       await initializeStripe()
 
@@ -430,7 +425,11 @@ describe('useStripe', () => {
       })
     })
 
-    it.skip('handles payment method creation failure', async () => {
+    it('handles payment method creation failure', async () => {
+      const { useStripe } = await import('./useStripe')
+      const { initializeStripe, createPaymentMethod, error } = useStripe()
+      await initializeStripe()
+
       mockStripe.createPaymentMethod.mockResolvedValue({
         error: {
           type: 'card_error',
@@ -440,9 +439,6 @@ describe('useStripe', () => {
         paymentMethod: undefined,
       })
 
-      const { initializeStripe, createPaymentMethod, error } = useStripe()
-      await initializeStripe()
-
       const result = await createPaymentMethod(mockCardElement)
 
       expect(result.success).toBe(false)
@@ -450,11 +446,12 @@ describe('useStripe', () => {
       expect(error.value).toBe('Your card number is invalid')
     })
 
-    it.skip('handles payment method creation exception', async () => {
-      mockStripe.createPaymentMethod.mockRejectedValue(new Error('Network error'))
-
+    it('handles payment method creation exception', async () => {
+      const { useStripe } = await import('./useStripe')
       const { initializeStripe, createPaymentMethod, error } = useStripe()
       await initializeStripe()
+
+      mockStripe.createPaymentMethod.mockRejectedValue(new Error('Network error'))
 
       const result = await createPaymentMethod(mockCardElement)
 
@@ -463,17 +460,19 @@ describe('useStripe', () => {
     })
 
     it('throws error if Stripe not initialized', async () => {
+      const { useStripe } = await import('./useStripe')
       const { createPaymentMethod } = useStripe()
 
       await expect(createPaymentMethod(mockCardElement)).rejects.toThrow('Stripe not initialized')
     })
 
-    it.skip('sets loading state during payment method creation', async () => {
+    it('sets loading state during payment method creation', async () => {
       let resolveCreate: Function
       mockStripe.createPaymentMethod.mockReturnValue(new Promise((resolve) => {
         resolveCreate = resolve
       }))
 
+      const { useStripe } = await import('./useStripe')
       const { initializeStripe, createPaymentMethod, loading } = useStripe()
       await initializeStripe()
 
@@ -492,38 +491,10 @@ describe('useStripe', () => {
     })
   })
 
-  describe('Error Handling', () => {
-    // Note: These tests are skipped due to module-level singleton pattern
-    // TODO: Refactor composable to support test isolation
-    it.skip('clears errors on successful operations', async () => {
-      mockLoadStripe.mockRejectedValueOnce(new Error('First error'))
-
-      const { initializeStripe, error } = useStripe()
-
-      await initializeStripe()
-      expect(error.value).toBe('First error')
-
-      // Restore key for second attempt
-      mockRuntimeConfig.public.stripePublishableKey = 'pk_test_123456789'
-      mockLoadStripe.mockResolvedValueOnce(mockStripe)
-
-      await initializeStripe()
-      expect(error.value).toBeNull()
-    })
-
-    it.skip('handles non-Error objects gracefully', async () => {
-      mockLoadStripe.mockRejectedValue('String error')
-
-      const { initializeStripe, error } = useStripe()
-
-      await initializeStripe()
-
-      expect(error.value).toBe('Failed to initialize Stripe')
-    })
-  })
-
   describe('Singleton Pattern', () => {
     it('reuses Stripe instance across multiple composable calls', async () => {
+      const { useStripe } = await import('./useStripe')
+
       const { initializeStripe: init1 } = useStripe()
       await init1()
 
@@ -541,6 +512,14 @@ describe('useStripe', () => {
 })
 
 describe('formatStripeError', () => {
+  // Import once for these pure function tests
+  let formatStripeError: any
+
+  beforeEach(async () => {
+    const module = await import('./useStripe')
+    formatStripeError = module.formatStripeError
+  })
+
   it('formats card_declined error', () => {
     const error = { code: 'card_declined', message: 'Card declined' }
     expect(formatStripeError(error)).toBe('Your card was declined. Please try a different payment method.')

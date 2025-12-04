@@ -67,7 +67,9 @@ const INITIAL_STATE: CheckoutState = {
   availableCountries: ['ES', 'RO', 'MD', 'FR', 'DE', 'IT'],
   termsAccepted: false,
   privacyAccepted: false,
-  marketingConsent: false
+  marketingConsent: false,
+  dataPrefetched: false,
+  preferences: null
 }
 
 export const useCheckoutSessionStore = defineStore('checkout-session', () => {
@@ -120,6 +122,14 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
 
   const setSavedAddresses = (addresses: Address[]): void => {
     state.savedAddresses = addresses
+  }
+
+  const setDataPrefetched = (value: boolean): void => {
+    state.dataPrefetched = value
+  }
+
+  const setPreferences = (preferences: any): void => {
+    state.preferences = preferences
   }
 
   const setPaymentIntent = (id: string | null): void => {
@@ -291,6 +301,8 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
     setAvailableShippingMethods,
     setSavedPaymentMethods,
     setSavedAddresses,
+    setDataPrefetched,
+    setPreferences,
     setPaymentIntent,
     setPaymentClientSecret,
     setLoading,

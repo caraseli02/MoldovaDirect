@@ -6,7 +6,7 @@
  */
 
 import { defineStore } from 'pinia'
-import { computed, watch, onMounted, onUnmounted, nextTick } from 'vue'
+import { computed, watch } from 'vue'
 import { useCartCore } from './core'
 import { useCartPersistence } from './persistence'
 import { useCartValidation } from './validation'
@@ -88,7 +88,7 @@ export const useCartStore = defineStore('cart', () => {
   })
   const allItemsSelected = computed(() => {
     return items.value.length > 0 &&
-           items.value.every(item => advanced.state.value.selectedItems.has(item.id))
+      items.value.every(item => advanced.state.value.selectedItems.has(item.id))
   })
   const hasSelectedItems = computed(() => advanced.hasSelectedItems.value)
   const bulkOperationInProgress = computed(() => advanced.state.value.bulkOperationInProgress)
@@ -126,30 +126,68 @@ export const useCartStore = defineStore('cart', () => {
    * Convert serialized data back to cart items
    */
   function deserializeCartData(data: any): void {
-    if (!data?.items) return
+    if (!data?.items) {
+      console.log('   No items to deserialize')
+      return
+    }
 
-    const deserializedItems = data.items.map((item: any) => ({
-      ...item,
-      addedAt: new Date(item.addedAt),
-      lastModified: item.lastModified ? new Date(item.lastModified) : undefined
-    }))
+    // Validate that items is actually an array
+    if (!Array.isArray(data.items)) {
+      throw new Error('Invalid cart data: items must be an array')
+    }
 
-    // The core module's state is exported as readonly to prevent accidental mutations
-    // However, the items array itself can still be mutated through array methods
+    console.log(`🔄 Deserializing ${data.items.length} items...`)
+
     try {
-      // Replace items by clearing and pushing new items
-      const itemsArray = core.state.value.items as any
-      // Splice to replace all items at once
-      itemsArray.splice(0, itemsArray.length, ...deserializedItems)
+      // Pause the auto-save watch temporarily to avoid saving during deserialization
+      if (stopWatcher) {
+        stopWatcher()
+        console.log('   Paused auto-save watch')
+      }
 
-      // For sessionId and lastSyncAt, we need to find a way to update them
-      // Since direct assignment fails, we'll try to work with what we have
-      // The items are the most critical part
-      core.invalidateCalculationCache()
+      // Clear existing items using proper API
+      core.clearCart()
+      console.log('   Cleared existing items')
+
+      // Restore each item using the proper addItem API
+      for (const item of data.items) {
+        const product = {
+          id: item.product.id,
+          slug: item.product.slug,
+          name: item.product.name,
+          price: item.product.price,
+          images: item.product.images || [],
+          stock: item.product.stock
+        }
+        core.addItem(product, item.quantity)
+      }
+      console.log(`   Restored ${data.items.length} items`)
+
+      // Note: sessionId and lastSyncAt are managed by core module
+      // They will be automatically regenerated/updated as needed
+
+      // Resume the auto-save watch
+      stopWatcher = watch(
+        () => items.value,
+        () => {
+          saveAndCacheCartData()
+        },
+        { deep: true }
+      )
+      console.log('   Resumed auto-save watch')
+      console.log('✅ Deserialization complete')
     } catch (error) {
-      // If mutation fails, just log it - the items might not load but store won't crash
-      console.error('Failed to deserialize cart items:', error)
-      // Don't rethrow so that loadFromStorage still returns success
+      console.error('❌ Failed to deserialize cart items:', error)
+      // Ensure watch is resumed even if deserialization fails
+      if (!stopWatcher) {
+        stopWatcher = watch(
+          () => items.value,
+          () => {
+            saveAndCacheCartData()
+          },
+          { deep: true }
+        )
+      }
     }
   }
 
@@ -158,10 +196,17 @@ export const useCartStore = defineStore('cart', () => {
    */
   async function saveToStorage(): Promise<{ success: boolean; error?: string }> {
     try {
-      cartCookie.value = serializeCartData()
+      const data = serializeCartData()
+      console.log('💾 Saving cart to cookie:', {
+        itemsCount: data.items?.length || 0,
+        sessionId: data.sessionId,
+        timestamp: data.timestamp
+      })
+      cartCookie.value = data
+      console.log('✅ Cart cookie value set')
       return { success: true }
     } catch (error) {
-      console.error('Failed to save cart to storage:', error)
+      console.error('❌ Failed to save cart to storage:', error)
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Save failed'
@@ -174,16 +219,21 @@ export const useCartStore = defineStore('cart', () => {
    */
   async function loadFromStorage(): Promise<{ success: boolean; data?: any; error?: string }> {
     try {
+      console.log('📥 Loading cart from cookie...')
       const loadedData = cartCookie.value
+      console.log('   Cookie data:', loadedData ? `${JSON.stringify(loadedData).length} bytes` : 'null')
 
       if (loadedData?.items) {
+        console.log(`   Found ${loadedData.items.length} items in cookie`)
         deserializeCartData(loadedData)
+        console.log('✅ Cart loaded successfully')
         return { success: true, data: loadedData }
       }
 
+      console.log('   No items in cookie (empty cart)')
       return { success: true, data: null }
     } catch (error) {
-      console.error('Failed to load cart from storage:', error)
+      console.error('❌ Failed to load cart from storage:', error)
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Load failed'
@@ -253,17 +303,21 @@ export const useCartStore = defineStore('cart', () => {
    * Save cart data with debouncing to avoid excessive writes
    */
   async function saveAndCacheCartData(): Promise<void> {
+    console.log('⏱️  saveAndCacheCartData called - scheduling save in 1 second')
+
     // Clear any existing timeout
     if (saveTimeoutId) {
       clearTimeout(saveTimeoutId)
+      console.log('   Cleared previous save timeout')
     }
 
     // Set a new timeout for saving
     saveTimeoutId = setTimeout(async () => {
+      console.log('🔔 Save timeout fired - calling saveToStorage()')
       try {
         await saveToStorage()
       } catch (error) {
-        console.warn('Debounced save failed:', error)
+        console.warn('❌ Debounced save failed:', error)
       }
     }, 1000) // 1 second debounce
   }
@@ -317,7 +371,7 @@ export const useCartStore = defineStore('cart', () => {
     try {
       // Get item for analytics before removal
       const item = core.getItemByProductId(itemId) ||
-                   items.value.find(i => i.id === itemId)
+        items.value.find(i => i.id === itemId)
 
       // Use secure remove if security is enabled
       if (securityEnabled.value && sessionId.value) {
@@ -583,31 +637,9 @@ export const useCartStore = defineStore('cart', () => {
   // LIFECYCLE HOOKS
   // =============================================
 
-  // Load cart from cookie after Vue reactivity is fully initialized
-  if (process.client) {
-    onMounted(async () => {
-      await nextTick()
-
-      if (cartCookie.value) {
-        try {
-          deserializeCartData(cartCookie.value)
-          console.log(`🛒 Loaded ${items.value.length} items from cookie`)
-        } catch (error) {
-          console.error('Failed to load cart from cookie:', error)
-        }
-      }
-    })
-
-    // Cleanup on unmount
-    onUnmounted(() => {
-      if (stopWatcher) {
-        stopWatcher()
-      }
-      if (saveTimeoutId) {
-        clearTimeout(saveTimeoutId)
-      }
-    })
-  }
+  // NOTE: onMounted/onUnmounted don't work in Pinia stores outside components
+  // Cart loading is handled by initializeCart() called from plugin
+  // Auto-save watch will be cleaned up when store instance is disposed
 
   // =============================================
   // RETURN STORE INTERFACE
