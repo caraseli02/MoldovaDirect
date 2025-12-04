@@ -88,7 +88,7 @@ export const useCartStore = defineStore('cart', () => {
   })
   const allItemsSelected = computed(() => {
     return items.value.length > 0 &&
-           items.value.every(item => advanced.state.value.selectedItems.has(item.id))
+      items.value.every(item => advanced.state.value.selectedItems.has(item.id))
   })
   const hasSelectedItems = computed(() => advanced.hasSelectedItems.value)
   const bulkOperationInProgress = computed(() => advanced.state.value.bulkOperationInProgress)
@@ -371,7 +371,7 @@ export const useCartStore = defineStore('cart', () => {
     try {
       // Get item for analytics before removal
       const item = core.getItemByProductId(itemId) ||
-                   items.value.find(i => i.id === itemId)
+        items.value.find(i => i.id === itemId)
 
       // Use secure remove if security is enabled
       if (securityEnabled.value && sessionId.value) {
