@@ -222,8 +222,8 @@
               >
                 <div class="flex justify-between items-start mb-2">
                   <div class="flex items-center space-x-2">
-                    <span class="text-sm font-medium text-gray-900 dark:text-white capitalize">
-                      {{ $t(`profile.addressType.${address.type}`) }}
+                    <span class="text-sm font-medium text-gray-900 dark:text-white">
+                      {{ address.firstName }} {{ address.lastName }}
                     </span>
                     <span
                       v-if="address.isDefault"
@@ -243,7 +243,7 @@
                       <commonIcon name="lucide:square-pen" class="h-4 w-4" />
                     </Button>
                     <Button
-                      @click="deleteAddress(address.id)"
+                      @click="deleteAddress(address.id!)"
                       variant="ghost"
                       size="icon"
                       class="p-1 text-gray-400 hover:text-red-600 dark:hover:text-red-400"
@@ -258,6 +258,7 @@
                   <p>{{ address.city }}, {{ address.postalCode }}</p>
                   <p v-if="address.province">{{ address.province }}</p>
                   <p>{{ address.country }}</p>
+                  <p v-if="address.phone" class="mt-1">{{ address.phone }}</p>
                 </div>
               </div>
             </div>
@@ -280,7 +281,7 @@
     </div>
 
     <!-- Address Form Modal -->
-    <ProfileAddressFormModal
+    <AddressFormModal
       v-if="showAddressForm"
       :address="editingAddress"
       @save="handleAddressSave"
@@ -288,7 +289,7 @@
     />
 
     <!-- Delete Account Confirmation Modal -->
-    <ProfileDeleteAccountModal
+    <DeleteAccountModal
       v-if="showDeleteConfirmation"
       @confirm="handleDeleteAccount"
       @close="showDeleteConfirmation = false"
@@ -315,13 +316,17 @@ interface ProfileForm {
 }
 
 interface Address {
-  id?: number
-  type: 'billing' | 'shipping'
+  id?: number  // SERIAL from database
+  type: 'shipping' | 'billing'
+  firstName: string
+  lastName: string
+  company?: string
   street: string
   city: string
   postalCode: string
   province?: string
   country: string
+  phone?: string
   isDefault: boolean
 }
 
@@ -391,13 +396,28 @@ const loadAddresses = async () => {
 
   try {
     const { data, error } = await supabase
-      .from('addresses')
+      .from('user_addresses')
       .select('*')
       .eq('user_id', user.value.id)
       .order('is_default', { ascending: false })
 
     if (error) throw error
-    addresses.value = data || []
+
+    // Map database fields to camelCase
+    addresses.value = (data || []).map(addr => ({
+      id: addr.id,
+      type: addr.type,
+      firstName: addr.first_name,
+      lastName: addr.last_name,
+      company: addr.company,
+      street: addr.street,
+      city: addr.city,
+      postalCode: addr.postal_code,
+      province: addr.province,
+      country: addr.country,
+      phone: addr.phone,
+      isDefault: addr.is_default
+    }))
   } catch (error) {
     console.error('Error loading addresses:', error)
     $toast.error(t('profile.errors.loadAddressesFailed'))
@@ -573,20 +593,36 @@ const editAddress = (address: Address) => {
 
 const handleAddressSave = async (addressData: Address) => {
   try {
+    // Map camelCase to snake_case for database
+    const dbAddress = {
+      type: addressData.type,
+      first_name: addressData.firstName,
+      last_name: addressData.lastName,
+      company: addressData.company || '',
+      street: addressData.street,
+      city: addressData.city,
+      postal_code: addressData.postalCode,
+      province: addressData.province || '',
+      country: addressData.country,
+      phone: addressData.phone || '',
+      is_default: addressData.isDefault
+    }
+
     if (addressData.id) {
-      // Update existing address
+      // Update existing address - verify user owns it
       const { error } = await supabase
-        .from('addresses')
-        .update(addressData)
+        .from('user_addresses')
+        .update(dbAddress)
         .eq('id', addressData.id)
+        .eq('user_id', user.value?.id)
 
       if (error) throw error
     } else {
       // Create new address
       const { error } = await supabase
-        .from('addresses')
+        .from('user_addresses')
         .insert({
-          ...addressData,
+          ...dbAddress,
           user_id: user.value?.id
         })
 
@@ -606,10 +642,12 @@ const deleteAddress = async (addressId: number) => {
   if (!confirm(t('profile.confirmDeleteAddress'))) return
 
   try {
+    // Verify user owns the address before deleting
     const { error } = await supabase
-      .from('addresses')
+      .from('user_addresses')
       .delete()
       .eq('id', addressId)
+      .eq('user_id', user.value?.id)
 
     if (error) throw error
 

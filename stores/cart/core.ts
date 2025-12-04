@@ -32,6 +32,13 @@ const state = ref<CartCoreState>({
   lockedByCheckoutSessionId: null
 })
 
+// Operation-level locking to prevent race conditions
+// Tracks pending operations to ensure serialization
+const operationLock = ref({
+  isOperating: false,
+  pendingOperations: [] as Array<() => Promise<void>>
+})
+
 // Performance optimization caches
 const _cachedItemCount = ref<number | undefined>(undefined)
 const _cachedSubtotal = ref<number | undefined>(undefined)
@@ -215,6 +222,68 @@ function ensureCartNotLocked(): void {
   }
 }
 
+/**
+ * Execute cart operation with operation-level locking
+ * Prevents race conditions from concurrent operations (rapid clicks)
+ *
+ * Context: Without this lock, rapidly clicking "Add to Cart" 5 times would:
+ * 1. Execute 5 concurrent addItem calls
+ * 2. Each sees the same cart state (e.g., stock = 10)
+ * 3. All 5 succeed even if user only intended 1 item
+ * 4. Worse: if stock = 3, cart could have 5 items when only 3 exist
+ *
+ * Solution: Serialize all cart operations using a lock queue
+ * - First operation executes immediately
+ * - Subsequent operations queue and execute after previous completes
+ * - Guarantees consistent state across rapid interactions
+ */
+async function withOperationLock<T>(operation: () => Promise<T>): Promise<T> {
+  // If another operation is in progress, queue this one
+  if (operationLock.value.isOperating) {
+    // Debounce: if multiple rapid clicks, only keep the latest
+    // This prevents queue buildup from spam clicking
+    if (operationLock.value.pendingOperations.length > 0) {
+      // Keep only the most recent operation
+      operationLock.value.pendingOperations = []
+    }
+
+    return new Promise<T>((resolve, reject) => {
+      const wrappedOperation = async () => {
+        try {
+          const result = await operation()
+          resolve(result)
+        } catch (error) {
+          reject(error)
+        }
+      }
+      operationLock.value.pendingOperations.push(wrappedOperation as () => Promise<void>)
+    })
+  }
+
+  // Mark as operating
+  operationLock.value.isOperating = true
+
+  try {
+    // Execute the operation
+    const result = await operation()
+    return result
+  } finally {
+    // Process next queued operation if any
+    const nextOperation = operationLock.value.pendingOperations.shift()
+    if (nextOperation) {
+      // Don't await - let it run asynchronously
+      nextOperation().finally(() => {
+        // After this operation completes, check for more
+        if (operationLock.value.pendingOperations.length === 0) {
+          operationLock.value.isOperating = false
+        }
+      })
+    } else {
+      operationLock.value.isOperating = false
+    }
+  }
+}
+
 // =============================================
 // CORE ACTIONS
 // =============================================
@@ -231,184 +300,190 @@ const actions: CartCoreActions = {
   },
 
   /**
-   * Add item to cart
+   * Add item to cart (with operation-level locking)
    */
   async addItem(product: Product, quantity: number = 1): Promise<void> {
-    state.value.loading = true
-    state.value.error = null
+    return withOperationLock(async () => {
+      state.value.loading = true
+      state.value.error = null
 
-    try {
-      // Check if cart is locked
-      ensureCartNotLocked()
+      try {
+        // Check if cart is locked
+        ensureCartNotLocked()
 
-      // Validate inputs
-      validateProduct(product)
-      validateQuantity(quantity)
+        // Validate inputs
+        validateProduct(product)
+        validateQuantity(quantity)
 
-      // Check stock availability
-      if (quantity > product.stock) {
-        throw createCartError(
-          'inventory',
-          'INSUFFICIENT_STOCK',
-          `Only ${product.stock} items available`,
-          false,
-          { productId: product.id, requestedQuantity: quantity, availableStock: product.stock }
-        )
-      }
-
-      const existingItem = getters.getItemByProductId(product.id)
-
-      if (existingItem) {
-        // Update quantity if item already exists
-        const newQuantity = existingItem.quantity + quantity
-
-        if (newQuantity > product.stock) {
-          const available = product.stock - existingItem.quantity
+        // Check stock availability
+        if (quantity > product.stock) {
           throw createCartError(
             'inventory',
-            'INSUFFICIENT_STOCK_UPDATE',
-            `Can only add ${available} more items`,
+            'INSUFFICIENT_STOCK',
+            `Only ${product.stock} items available`,
             false,
-            { 
-              productId: product.id, 
-              currentQuantity: existingItem.quantity,
-              requestedAddition: quantity,
-              availableStock: product.stock 
+            { productId: product.id, requestedQuantity: quantity, availableStock: product.stock }
+          )
+        }
+
+        const existingItem = getters.getItemByProductId(product.id)
+
+        if (existingItem) {
+          // Update quantity if item already exists
+          const newQuantity = existingItem.quantity + quantity
+
+          if (newQuantity > product.stock) {
+            const available = product.stock - existingItem.quantity
+            throw createCartError(
+              'inventory',
+              'INSUFFICIENT_STOCK_UPDATE',
+              `Can only add ${available} more items`,
+              false,
+              {
+                productId: product.id,
+                currentQuantity: existingItem.quantity,
+                requestedAddition: quantity,
+                availableStock: product.stock
+              }
+            )
+          }
+
+          existingItem.quantity = newQuantity
+          existingItem.lastModified = new Date()
+          // Update product data with latest information
+          existingItem.product = { ...existingItem.product, ...product }
+        } else {
+          // Add new item to cart
+          const cartItem: CartItem = {
+            id: generateItemId(),
+            product,
+            quantity,
+            addedAt: new Date(),
+            source: 'manual'
+          }
+          state.value.items.push(cartItem)
+        }
+
+        // Invalidate cache and update sync time
+        invalidateCalculationCache()
+        state.value.lastSyncAt = new Date()
+
+      } catch (error) {
+        const cartError = error instanceof Error && 'type' in error
+          ? error as CartError
+          : createCartError('validation', 'ADD_ITEM_FAILED', error instanceof Error ? error.message : 'Failed to add item to cart')
+
+        state.value.error = cartError.message
+        throw cartError
+      } finally {
+        state.value.loading = false
+      }
+    })
+  },
+
+  /**
+   * Remove item from cart (with operation-level locking)
+   */
+  async removeItem(itemId: string): Promise<void> {
+    return withOperationLock(async () => {
+      state.value.loading = true
+      state.value.error = null
+
+      try {
+        // Check if cart is locked
+        ensureCartNotLocked()
+
+        if (!itemId) {
+          throw createCartError('validation', 'INVALID_ITEM_ID', 'Item ID is required')
+        }
+
+        const index = state.value.items.findIndex((item) => item.id === itemId)
+        if (index === -1) {
+          throw createCartError('validation', 'ITEM_NOT_FOUND', 'Item not found in cart', false, { itemId })
+        }
+
+        // Remove item from cart
+        state.value.items.splice(index, 1)
+
+        // Invalidate cache and update sync time
+        invalidateCalculationCache()
+        state.value.lastSyncAt = new Date()
+
+      } catch (error) {
+        const cartError = error instanceof Error && 'type' in error
+          ? error as CartError
+          : createCartError('validation', 'REMOVE_ITEM_FAILED', error instanceof Error ? error.message : 'Failed to remove item from cart')
+
+        state.value.error = cartError.message
+        throw cartError
+      } finally {
+        state.value.loading = false
+      }
+    })
+  },
+
+  /**
+   * Update item quantity (with operation-level locking)
+   */
+  async updateQuantity(itemId: string, quantity: number): Promise<void> {
+    return withOperationLock(async () => {
+      state.value.loading = true
+      state.value.error = null
+
+      try {
+        // Check if cart is locked
+        ensureCartNotLocked()
+
+        if (!itemId) {
+          throw createCartError('validation', 'INVALID_ITEM_ID', 'Item ID is required')
+        }
+
+        // Handle removal if quantity is 0
+        if (quantity === 0) {
+          return actions.removeItem(itemId)
+        }
+
+        validateQuantity(quantity)
+
+        const item = state.value.items.find((item) => item.id === itemId)
+        if (!item) {
+          throw createCartError('validation', 'ITEM_NOT_FOUND', 'Item not found in cart', false, { itemId })
+        }
+
+        // Check stock availability
+        if (quantity > item.product.stock) {
+          throw createCartError(
+            'inventory',
+            'INSUFFICIENT_STOCK',
+            `Only ${item.product.stock} items available`,
+            false,
+            {
+              productId: item.product.id,
+              requestedQuantity: quantity,
+              availableStock: item.product.stock
             }
           )
         }
 
-        existingItem.quantity = newQuantity
-        existingItem.lastModified = new Date()
-        // Update product data with latest information
-        existingItem.product = { ...existingItem.product, ...product }
-      } else {
-        // Add new item to cart
-        const cartItem: CartItem = {
-          id: generateItemId(),
-          product,
-          quantity,
-          addedAt: new Date(),
-          source: 'manual'
-        }
-        state.value.items.push(cartItem)
+        // Update quantity
+        item.quantity = quantity
+        item.lastModified = new Date()
+
+        // Invalidate cache and update sync time
+        invalidateCalculationCache()
+        state.value.lastSyncAt = new Date()
+
+      } catch (error) {
+        const cartError = error instanceof Error && 'type' in error
+          ? error as CartError
+          : createCartError('validation', 'UPDATE_QUANTITY_FAILED', error instanceof Error ? error.message : 'Failed to update item quantity')
+
+        state.value.error = cartError.message
+        throw cartError
+      } finally {
+        state.value.loading = false
       }
-
-      // Invalidate cache and update sync time
-      invalidateCalculationCache()
-      state.value.lastSyncAt = new Date()
-
-    } catch (error) {
-      const cartError = error instanceof Error && 'type' in error 
-        ? error as CartError
-        : createCartError('validation', 'ADD_ITEM_FAILED', error instanceof Error ? error.message : 'Failed to add item to cart')
-      
-      state.value.error = cartError.message
-      throw cartError
-    } finally {
-      state.value.loading = false
-    }
-  },
-
-  /**
-   * Remove item from cart
-   */
-  async removeItem(itemId: string): Promise<void> {
-    state.value.loading = true
-    state.value.error = null
-
-    try {
-      // Check if cart is locked
-      ensureCartNotLocked()
-
-      if (!itemId) {
-        throw createCartError('validation', 'INVALID_ITEM_ID', 'Item ID is required')
-      }
-
-      const index = state.value.items.findIndex((item) => item.id === itemId)
-      if (index === -1) {
-        throw createCartError('validation', 'ITEM_NOT_FOUND', 'Item not found in cart', false, { itemId })
-      }
-
-      // Remove item from cart
-      state.value.items.splice(index, 1)
-
-      // Invalidate cache and update sync time
-      invalidateCalculationCache()
-      state.value.lastSyncAt = new Date()
-
-    } catch (error) {
-      const cartError = error instanceof Error && 'type' in error 
-        ? error as CartError
-        : createCartError('validation', 'REMOVE_ITEM_FAILED', error instanceof Error ? error.message : 'Failed to remove item from cart')
-      
-      state.value.error = cartError.message
-      throw cartError
-    } finally {
-      state.value.loading = false
-    }
-  },
-
-  /**
-   * Update item quantity
-   */
-  async updateQuantity(itemId: string, quantity: number): Promise<void> {
-    state.value.loading = true
-    state.value.error = null
-
-    try {
-      // Check if cart is locked
-      ensureCartNotLocked()
-
-      if (!itemId) {
-        throw createCartError('validation', 'INVALID_ITEM_ID', 'Item ID is required')
-      }
-
-      // Handle removal if quantity is 0
-      if (quantity === 0) {
-        return actions.removeItem(itemId)
-      }
-
-      validateQuantity(quantity)
-
-      const item = state.value.items.find((item) => item.id === itemId)
-      if (!item) {
-        throw createCartError('validation', 'ITEM_NOT_FOUND', 'Item not found in cart', false, { itemId })
-      }
-
-      // Check stock availability
-      if (quantity > item.product.stock) {
-        throw createCartError(
-          'inventory',
-          'INSUFFICIENT_STOCK',
-          `Only ${item.product.stock} items available`,
-          false,
-          { 
-            productId: item.product.id, 
-            requestedQuantity: quantity, 
-            availableStock: item.product.stock 
-          }
-        )
-      }
-
-      // Update quantity
-      item.quantity = quantity
-      item.lastModified = new Date()
-
-      // Invalidate cache and update sync time
-      invalidateCalculationCache()
-      state.value.lastSyncAt = new Date()
-
-    } catch (error) {
-      const cartError = error instanceof Error && 'type' in error 
-        ? error as CartError
-        : createCartError('validation', 'UPDATE_QUANTITY_FAILED', error instanceof Error ? error.message : 'Failed to update item quantity')
-      
-      state.value.error = cartError.message
-      throw cartError
-    } finally {
-      state.value.loading = false
-    }
+    })
   },
 
   /**

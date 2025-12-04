@@ -115,7 +115,7 @@ importers:
         specifier: ^1.0.2
         version: 1.0.2(pinia@3.0.4(typescript@5.9.3)(vue@3.5.24(typescript@5.9.3)))
       '@playwright/test':
-        specifier: ^1.54.2
+        specifier: ^1.55.1
         version: 1.55.1
       '@tailwindcss/vite':
         specifier: ^4.1.17
@@ -163,7 +163,7 @@ importers:
         specifier: 1.2.0
         version: 1.2.0(magicast@0.5.1)
       playwright:
-        specifier: ^1.55.0
+        specifier: ^1.55.1
         version: 1.55.1
       vitest:
         specifier: ^3.2.4
