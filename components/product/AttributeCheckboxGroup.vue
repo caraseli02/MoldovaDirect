@@ -25,7 +25,7 @@
     <div v-if="options.length > showLimit" class="mt-3">
       <button
         @click="showAll = !showAll"
-        class="text-sm text-blue-600 hover:text-blue-800 font-medium"
+        class="text-sm text-blue-700 hover:text-blue-800 font-medium"
       >
         {{ showAll ? $t('common.showLess') : $t('common.showMore') }}
         <commonIcon 

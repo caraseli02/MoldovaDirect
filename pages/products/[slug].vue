@@ -33,9 +33,9 @@
     </div>
   </div>
 
-  <div v-else-if="product" class="py-8 lg:py-12">
+  <div v-else-if="product" class="py-8 lg:py-12 pb-32 lg:pb-12">
     <div class="container space-y-12">
-      <nav class="flex flex-wrap items-center text-sm text-gray-500 dark:text-gray-400">
+      <nav class="flex flex-wrap items-center text-sm text-gray-600 dark:text-gray-400">
         <nuxt-link to="/" class="transition hover:text-gray-900 dark:hover:text-gray-200">{{ $t('common.home') }}</nuxt-link>
         <span class="mx-2">/</span>
         <nuxt-link to="/products" class="transition hover:text-gray-900 dark:hover:text-gray-200">{{ $t('common.shop') }}</nuxt-link>
@@ -57,225 +57,127 @@
 
       <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_360px] xl:grid-cols-[minmax(0,1fr)_420px]">
         <div class="space-y-10">
-          <section class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-            <div class="space-y-4">
-              <!-- Main Image/Video Display -->
-              <div class="relative">
-                <!-- Video Display -->
-                <div v-if="selectedMediaType === 'video' && productVideo" class="overflow-hidden rounded-3xl bg-gray-100 dark:bg-gray-800">
-                  <video
-                    :src="productVideo"
-                    controls
-                    class="h-full w-full"
-                    preload="metadata"
-                    autoplay
+          <section class="space-y-6">
+            <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_220px]">
+              <div>
+                <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800" :class="selectedImage ? 'aspect-square' : ''">
+                  <template v-if="selectedImage">
+                    <NuxtImg
+                      preset="productDetail"
+                      :src="selectedImage.url"
+                      :alt="getLocalizedText(selectedImage.altText) || getLocalizedText(product.name)"
+                      sizes="100vw lg:800px"
+                      densities="x1 x2"
+                      loading="eager"
+                      fetchpriority="high"
+                      placeholder
+                      :placeholder-class="'blur-xl'"
+                      class="h-full w-full object-cover cursor-pointer transition-transform hover:scale-105"
+                      @click="openZoomModal"
+                    />
+                  </template>
+
+                  <!-- COMPACT BRANDED FALLBACK -->
+                  <div v-else class="flex items-center justify-center py-16">
+                    <div class="text-center space-y-4 px-6 max-w-sm">
+                      <!-- Brand Identity with subtle glow -->
+                      <div class="relative inline-block">
+                        <div class="absolute inset-0 bg-blue-500/20 blur-3xl rounded-full scale-150"></div>
+                        <commonIcon name="wine" class="relative h-20 w-20 text-blue-500 dark:text-blue-400 mx-auto" />
+                      </div>
+
+                      <!-- Message -->
+                      <div class="space-y-2">
+                        <h3 class="text-base font-semibold text-gray-900 dark:text-white">
+                          {{ $t('products.imageFallback.title') }}
+                        </h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                          {{ $t('products.imageFallback.subtitle') }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Badges (only if image exists) -->
+                  <template v-if="selectedImage">
+                    <div v-if="product.isFeatured" class="absolute left-4 top-4">
+                      <span class="rounded-full bg-yellow-500 px-3 py-1 text-sm font-semibold text-white shadow-lg">
+                        {{ $t('products.featured') }}
+                      </span>
+                    </div>
+                    <div v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)" class="absolute right-4 top-4">
+                      <span class="rounded-full bg-red-500 px-3 py-1 text-sm font-semibold text-white shadow-lg">
+                        {{ $t('products.sale') }}
+                      </span>
+                    </div>
+                  </template>
+                </div>
+              </div>
+
+              <!-- Gallery Thumbnails -->
+              <div
+                v-if="product.images?.length"
+                class="overflow-x-auto pb-2 -mx-6 px-6 scrollbar-hide lg:mx-0 lg:px-0 lg:overflow-visible lg:pb-0"
+              >
+                <div class="flex gap-2 lg:flex-col lg:space-y-2 lg:gap-0">
+                  <button
+                    v-for="(image, index) in product.images"
+                    :key="image.id || index"
+                    type="button"
+                    class="flex-shrink-0 w-20 h-20 lg:w-full lg:aspect-square rounded-xl overflow-hidden border-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
+                    :class="selectedImageIndex === index ? 'border-blue-500 ring-2 ring-blue-500 ring-offset-1' : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'"
+                    @click="selectedImageIndex = index"
+                    :aria-label="`View image ${index + 1}`"
                   >
-                    Your browser does not support the video tag.
-                  </video>
-
-                  <!-- Badges for Video -->
-                  <div class="absolute left-4 top-4 flex flex-col gap-2">
-                    <span v-if="product.isFeatured" class="rounded-full bg-yellow-500 px-3 py-1 text-sm font-semibold text-white shadow-lg">
-                      {{ $t('products.featured') }}
-                    </span>
-                    <span v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)" class="rounded-full bg-red-500 px-3 py-1 text-sm font-semibold text-white shadow-lg">
-                      {{ $t('products.sale') }}
-                    </span>
-                  </div>
+                    <NuxtImg
+                      preset="productThumbnailSmall"
+                      :src="image.url"
+                      :alt="getLocalizedText(image.altText)"
+                      width="80"
+                      height="80"
+                      loading="lazy"
+                      class="w-full h-full object-cover"
+                    />
+                  </button>
                 </div>
-
-                <!-- Image Display -->
-                <div
-                  v-else
-                  class="group relative overflow-hidden rounded-3xl bg-gray-100 dark:bg-gray-800 cursor-zoom-in"
-                  @click="openLightbox"
-                >
-                  <img
-                    v-if="selectedImage"
-                    :src="selectedImage.url"
-                    :alt="getLocalizedText(selectedImage.altText) || getLocalizedText(product.name)"
-                    class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
-                  <div v-else class="flex h-full min-h-[360px] items-center justify-center text-gray-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-
-                  <!-- Badges -->
-                  <div class="absolute left-4 top-4 flex flex-col gap-2">
-                    <span v-if="product.isFeatured" class="rounded-full bg-yellow-500 px-3 py-1 text-sm font-semibold text-white shadow-lg">
-                      {{ $t('products.featured') }}
-                    </span>
-                    <span v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)" class="rounded-full bg-red-500 px-3 py-1 text-sm font-semibold text-white shadow-lg">
-                      {{ $t('products.sale') }}
-                    </span>
-                  </div>
-
-                  <!-- Zoom Indicator -->
-                  <div class="absolute bottom-4 right-4 rounded-full bg-black/60 p-2 opacity-0 transition-opacity group-hover:opacity-100">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Thumbnail Gallery -->
-              <div class="grid grid-cols-4 gap-3">
-                <!-- Video Thumbnail (if available) -->
-                <button
-                  v-if="productVideo"
-                  type="button"
-                  class="group relative aspect-square overflow-hidden rounded-xl border-2 transition-all"
-                  :class="selectedMediaType === 'video'
-                    ? 'border-blue-500 ring-2 ring-blue-200 dark:border-blue-400 dark:ring-blue-900/40'
-                    : 'border-gray-200 hover:border-blue-300 dark:border-gray-700 dark:hover:border-blue-600'"
-                  @click="selectedMediaType = 'video'; selectedImageIndex = 0"
-                >
-                  <div class="flex h-full w-full items-center justify-center bg-gray-900">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M8 5v14l11-7z"/>
-                    </svg>
-                  </div>
-                  <div class="absolute inset-0 flex items-center justify-center bg-black/40">
-                    <span class="text-xs font-semibold text-white">VIDEO</span>
-                  </div>
-                </button>
-
-                <!-- Image Thumbnails -->
-                <button
-                  v-for="(image, index) in product.images"
-                  :key="image.id || index"
-                  type="button"
-                  class="group relative aspect-square overflow-hidden rounded-xl border-2 transition-all"
-                  :class="selectedImageIndex === index && selectedMediaType === 'image'
-                    ? 'border-blue-500 ring-2 ring-blue-200 dark:border-blue-400 dark:ring-blue-900/40'
-                    : 'border-gray-200 hover:border-blue-300 dark:border-gray-700 dark:hover:border-blue-600'"
-                  @click="selectedMediaType = 'image'; selectedImageIndex = index"
-                >
-                  <img
-                    :src="image.url"
-                    :alt="getLocalizedText(image.altText)"
-                    class="h-full w-full object-cover transition-transform group-hover:scale-110"
-                  />
-                  <div
-                    v-if="selectedImageIndex === index && selectedMediaType === 'image'"
-                    class="absolute inset-0 bg-blue-500/10"
-                  ></div>
-                </button>
-              </div>
-
-              <!-- Video Player (if video is selected) -->
-              <div v-if="selectedMediaType === 'video' && productVideo" class="mt-4 overflow-hidden rounded-3xl">
-                <video
-                  :src="productVideo"
-                  controls
-                  class="h-full w-full"
-                  preload="metadata"
-                >
-                  Your browser does not support the video tag.
-                </video>
               </div>
             </div>
           </section>
 
-          <!-- Lightbox Modal -->
-          <Teleport to="body">
-            <div
-              v-if="showLightbox"
-              class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
-              @click="closeLightbox"
-            >
-              <button
-                type="button"
-                class="absolute right-4 top-4 rounded-full bg-white/10 p-2 text-white transition hover:bg-white/20"
-                @click="closeLightbox"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-
-              <div class="relative max-h-[90vh] max-w-[90vw]" @click.stop>
-                <img
-                  v-if="selectedImage"
-                  :src="selectedImage.url"
-                  :alt="getLocalizedText(selectedImage.altText) || getLocalizedText(product.name)"
-                  class="max-h-[90vh] max-w-full object-contain"
-                />
-
-                <!-- Navigation Arrows -->
-                <button
-                  v-if="selectedImageIndex > 0"
-                  type="button"
-                  class="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white backdrop-blur-sm transition hover:bg-white/20"
-                  @click="selectedImageIndex--"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                  </svg>
-                </button>
-
-                <button
-                  v-if="selectedImageIndex < (product.images?.length || 0) - 1"
-                  type="button"
-                  class="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white backdrop-blur-sm transition hover:bg-white/20"
-                  @click="selectedImageIndex++"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-              </div>
-
-              <!-- Image Counter -->
-              <div class="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-white/10 px-4 py-2 text-sm text-white backdrop-blur-sm">
-                {{ selectedImageIndex + 1 }} / {{ product.images?.length || 0 }}
-              </div>
-            </div>
-          </Teleport>
-
-          <section class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-            <div class="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
-              <div>
-                <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
-                  {{ getLocalizedText(product.name) }}
-                </h1>
-                <p v-if="product.shortDescription" class="mt-3 text-lg text-gray-600 dark:text-gray-400">
-                  {{ getLocalizedText(product.shortDescription) }}
-                </p>
-              </div>
+          <UiCard>
+            <UiCardHeader>
+              <div class="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+                <div>
+                  <UiCardTitle class="text-3xl">
+                    {{ getLocalizedText(product.name) }}
+                  </UiCardTitle>
+                  <UiCardDescription v-if="product.shortDescription" class="mt-3 text-lg">
+                    {{ getLocalizedText(product.shortDescription) }}
+                  </UiCardDescription>
+                </div>
               <div class="flex flex-col items-start gap-2 text-right">
                 <div class="flex items-center gap-3">
                   <span class="text-3xl font-bold text-gray-900 dark:text-white">€{{ formatPrice(product.price) }}</span>
                   <span
                     v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)"
-                    class="text-lg text-gray-500 line-through"
+                    class="text-lg text-gray-600 line-through"
                   >
                     €{{ formatPrice(product.comparePrice) }}
                   </span>
                 </div>
-                <div v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)" class="flex flex-wrap items-center gap-2">
-                  <span class="inline-flex items-center gap-2 rounded-full bg-red-100 px-3 py-1 text-sm font-semibold text-red-600 dark:bg-red-900/30 dark:text-red-200">
-                    {{ Math.round((1 - Number(product.price) / Number(product.comparePrice)) * 100) }}% {{ $t('products.off') }}
-                  </span>
-                  <span class="inline-flex items-center gap-1 rounded-full bg-green-100 px-3 py-1 text-sm font-semibold text-green-700 dark:bg-green-900/30 dark:text-green-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                    </svg>
-                    {{ $t('products.saveAmount', { amount: formatPrice(Number(product.comparePrice) - Number(product.price)) }) }}
-                  </span>
-                </div>
+                <span v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)" class="inline-flex items-center gap-2 rounded-full bg-red-100 px-3 py-1 text-sm font-semibold text-red-600 dark:bg-red-900/30 dark:text-red-200">
+                  {{ Math.round((1 - Number(product.price) / Number(product.comparePrice)) * 100) }}% {{ $t('products.off') }}
+                </span>
               </div>
-            </div>
+              </div>
+            </UiCardHeader>
 
-            <div class="mt-6 grid gap-6 lg:grid-cols-2">
+            <UiCardContent class="grid gap-6 lg:grid-cols-2">
               <div class="space-y-4">
                 <h2 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $t('products.story.title') }}</h2>
                 <p class="text-sm text-gray-600 dark:text-gray-400">{{ storytelling.producer }}</p>
                 <div>
-                  <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                  <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400">
                     {{ $t('products.story.tastingNotes') }}
                   </h3>
                   <ul class="mt-2 flex flex-wrap gap-2">
@@ -289,7 +191,7 @@
                   </ul>
                 </div>
                 <div>
-                  <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                  <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400">
                     {{ $t('products.story.pairings') }}
                   </h3>
                   <ul class="mt-2 list-inside list-disc text-sm text-gray-600 dark:text-gray-400">
@@ -297,34 +199,35 @@
                   </ul>
                 </div>
               </div>
-              <div class="space-y-4">
-                <div class="rounded-2xl border border-gray-200 bg-gray-50 p-5 dark:border-gray-800 dark:bg-gray-800/60">
-                  <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+              <div class="space-y-6">
+                <div class="space-y-2">
+                  <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400">
                     {{ $t('products.story.awards') }}
                   </h3>
-                  <ul class="mt-3 space-y-2 text-sm text-gray-600 dark:text-gray-300">
-                    <li v-for="award in awards" :key="`award-${award}`">{{ award }}</li>
+                  <ul class="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                    <li v-for="award in awards" :key="`award-${award}`">• {{ award }}</li>
                     <li v-if="!awards.length">{{ $t('products.story.noAwards') }}</li>
                   </ul>
                 </div>
-                <div class="rounded-2xl border border-gray-200 bg-gray-50 p-5 dark:border-gray-800 dark:bg-gray-800/60">
-                  <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                <div class="space-y-2">
+                  <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400">
                     {{ $t('products.story.origin') }}
                   </h3>
-                  <p class="mt-3 text-sm text-gray-600 dark:text-gray-300">
+                  <p class="text-sm text-gray-700 dark:text-gray-300">
                     {{ originStory }}
                   </p>
                 </div>
               </div>
-            </div>
-          </section>
+            </UiCardContent>
+          </UiCard>
 
-          <section class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-            <div class="flex flex-wrap items-center justify-between gap-4">
-              <div>
-                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $t('products.socialProof.title') }}</h2>
-                <p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('products.socialProof.subtitle') }}</p>
-              </div>
+          <UiCard>
+            <UiCardHeader>
+              <div class="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                  <UiCardTitle>{{ $t('products.socialProof.title') }}</UiCardTitle>
+                  <UiCardDescription>{{ $t('products.socialProof.subtitle') }}</UiCardDescription>
+                </div>
               <div class="flex items-center gap-2 rounded-full bg-yellow-100 px-4 py-2 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-200">
                 <span class="text-lg font-semibold">{{ reviewSummary.rating }}</span>
                 <div class="flex items-center">
@@ -333,22 +236,28 @@
                   </svg>
                 </div>
               </div>
-            </div>
-            <div class="mt-6 grid gap-4 sm:grid-cols-3">
-              <div v-for="highlight in reviewSummary.highlights" :key="highlight" class="rounded-2xl border border-gray-200 bg-gray-50 p-4 text-sm text-gray-600 dark:border-gray-800 dark:bg-gray-800/60 dark:text-gray-300">
+              </div>
+            </UiCardHeader>
+            <UiCardContent class="grid gap-4 sm:grid-cols-3">
+              <div v-for="highlight in reviewSummary.highlights" :key="highlight" class="p-4 text-sm text-gray-700 dark:text-gray-300">
                 {{ highlight }}
               </div>
-              <div class="rounded-2xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-700 dark:border-blue-900/60 dark:bg-blue-900/20 dark:text-blue-200">
+              <div class="p-4 text-sm font-medium text-blue-700 dark:text-blue-300">
                 {{ $t('products.socialProof.rating', { rating: reviewSummary.rating, count: reviewSummary.count }) }}
               </div>
-            </div>
-            <UiButton type="button" variant="outline" size="sm" class="mt-6 rounded-full">
-              {{ $t('products.socialProof.cta') }}
-            </UiButton>
-          </section>
+            </UiCardContent>
+            <UiCardFooter>
+              <UiButton type="button" variant="outline" size="sm" class="rounded-full">
+                {{ $t('products.socialProof.cta') }}
+              </UiButton>
+            </UiCardFooter>
+          </UiCard>
 
-          <section class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $t('products.details') }}</h2>
+          <UiCard>
+            <UiCardHeader>
+              <UiCardTitle>{{ $t('products.details') }}</UiCardTitle>
+            </UiCardHeader>
+            <UiCardContent>
             <dl class="mt-4 grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
               <div v-if="product.origin">
                 <dt class="font-medium text-gray-900 dark:text-white">{{ $t('products.origin') }}</dt>
@@ -381,11 +290,15 @@
                 {{ tag }}
               </span>
             </div>
-          </section>
+            </UiCardContent>
+          </UiCard>
 
-          <section class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $t('products.sustainability.title') }}</h2>
-            <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">{{ $t('products.sustainability.subtitle') }}</p>
+          <UiCard>
+            <UiCardHeader>
+              <UiCardTitle>{{ $t('products.sustainability.title') }}</UiCardTitle>
+              <UiCardDescription>{{ $t('products.sustainability.subtitle') }}</UiCardDescription>
+            </UiCardHeader>
+            <UiCardContent>
             <div class="mt-4 flex flex-wrap gap-2">
               <span
                 v-for="badge in sustainabilityBadges"
@@ -396,94 +309,77 @@
                 {{ $t(`products.sustainability.badges.${badge}`) }}
               </span>
             </div>
-          </section>
+            </UiCardContent>
+          </UiCard>
 
-          <section class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $t('products.faq.title') }}</h2>
-            <p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('products.faq.subtitle') }}</p>
-            <div class="mt-4 space-y-3">
+          <UiCard>
+            <UiCardHeader>
+              <UiCardTitle>{{ $t('products.faq.title') }}</UiCardTitle>
+              <UiCardDescription>{{ $t('products.faq.subtitle') }}</UiCardDescription>
+            </UiCardHeader>
+            <UiCardContent>
+            <div class="mt-4 space-y-4">
               <details
                 v-for="item in faqItems"
                 :key="item.id"
-                class="group rounded-2xl border border-gray-200 bg-gray-50 p-4 dark:border-gray-800 dark:bg-gray-800/60"
+                class="group pb-4 border-b border-gray-200 dark:border-gray-800 last:border-0 last:pb-0"
                 :open="item.defaultOpen"
               >
                 <summary class="flex cursor-pointer items-center justify-between text-sm font-semibold text-gray-900 transition dark:text-white">
                   {{ item.question }}
                   <span class="text-xl leading-none transition group-open:rotate-45">+</span>
                 </summary>
-                <p class="mt-3 text-sm text-gray-600 dark:text-gray-300">{{ item.answer }}</p>
+                <p class="mt-3 text-sm text-gray-700 dark:text-gray-300">{{ item.answer }}</p>
               </details>
             </div>
-          </section>
+            </UiCardContent>
+          </UiCard>
         </div>
 
         <aside class="space-y-6 lg:sticky lg:top-24">
-          <div class="rounded-3xl border border-gray-200 bg-white p-6 shadow-lg dark:border-gray-800 dark:bg-gray-900">
-            <div v-if="product.category" class="text-sm font-medium text-blue-600 dark:text-blue-300">
-              {{ categoryLabel }}
-            </div>
-            <h2 class="mt-2 text-2xl font-semibold text-gray-900 dark:text-white">{{ getLocalizedText(product.name) }}</h2>
-            <div class="mt-4 flex items-center gap-3">
-              <span class="text-3xl font-bold text-gray-900 dark:text-white">€{{ formatPrice(product.price) }}</span>
-              <span v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)" class="text-lg text-gray-500 line-through">
-                €{{ formatPrice(product.comparePrice) }}
+          <UiCard>
+            <UiCardHeader>
+              <div v-if="product.category" class="text-sm font-medium text-blue-700 dark:text-blue-200">
+                {{ categoryLabel }}
+              </div>
+              <UiCardTitle class="mt-2">{{ getLocalizedText(product.name) }}</UiCardTitle>
+              <div class="mt-4 flex items-center gap-3">
+                <span class="text-3xl font-bold text-gray-900 dark:text-white">€{{ formatPrice(product.price) }}</span>
+                <span v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)" class="text-lg text-gray-600 line-through">
+                  €{{ formatPrice(product.comparePrice) }}
+                </span>
+              </div>
+              <span
+                class="mt-3 inline-flex items-center gap-2 rounded-full px-4 py-1 text-sm font-medium"
+                :class="stockStatusClass"
+              >
+                <span class="inline-block h-2 w-2 rounded-full bg-current"></span>
+                {{ stockStatusText }}
               </span>
-            </div>
-            <span
-              class="mt-3 inline-flex items-center gap-2 rounded-full px-4 py-1 text-sm font-medium"
-              :class="stockStatusClass"
-            >
-              <span class="inline-block h-2 w-2 rounded-full bg-current"></span>
-              {{ stockStatusText }}
-            </span>
-            <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">{{ estimatedDelivery }}</p>
-            <p v-if="stockUrgencyMessage" class="mt-1 text-sm font-semibold text-red-600 dark:text-red-300">
-              {{ stockUrgencyMessage }}
-            </p>
+              <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">{{ estimatedDelivery }}</p>
+              <p v-if="stockUrgencyMessage" class="mt-1 text-sm font-semibold text-red-600 dark:text-red-300">
+                {{ stockUrgencyMessage }}
+              </p>
+            </UiCardHeader>
 
-            <!-- Prominent Delivery Info -->
-            <div class="mt-4 rounded-2xl border border-green-200 bg-green-50 p-4 dark:border-green-900/40 dark:bg-green-900/20">
-              <div class="flex items-start gap-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex-shrink-0 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
-                </svg>
-                <div class="flex-1">
-                  <p class="font-semibold text-green-900 dark:text-green-100">{{ $t('products.delivery.fastDelivery') }}</p>
-                  <p class="text-sm text-green-700 dark:text-green-300">{{ estimatedDelivery }}</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="mt-4 space-y-4">
-              <div>
-                <label class="block text-sm font-medium text-gray-900 dark:text-white">{{ $t('common.quantity') }}</label>
-                <select
-                  v-model="selectedQuantity"
-                  :disabled="(product.stockQuantity || 0) <= 0"
-                  class="mt-2 w-full rounded-xl border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100 disabled:cursor-not-allowed disabled:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:focus:border-blue-400"
-                >
-                  <option v-for="n in Math.min(10, Math.max(1, product.stockQuantity || 1))" :key="n" :value="n">
-                    {{ n }}
-                  </option>
-                </select>
-              </div>
-
-              <!-- Total Price Preview -->
-              <div v-if="selectedQuantity > 1" class="rounded-xl border border-blue-200 bg-blue-50 p-3 dark:border-blue-900/40 dark:bg-blue-900/20">
-                <div class="flex items-center justify-between text-sm">
-                  <span class="font-medium text-blue-900 dark:text-blue-100">{{ $t('products.total') }}</span>
-                  <span class="text-lg font-bold text-blue-900 dark:text-blue-100">€{{ formatPrice(Number(product.price) * selectedQuantity) }}</span>
-                </div>
-              </div>
+            <UiCardContent class="space-y-4">
+              <label class="block text-sm font-medium text-gray-900 dark:text-white">{{ $t('common.quantity') }}</label>
+              <select
+                v-model="selectedQuantity"
+                :disabled="(product.stockQuantity || 0) <= 0"
+                class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100 disabled:cursor-not-allowed disabled:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:focus:border-blue-400"
+              >
+                <option v-for="n in Math.min(10, Math.max(1, product.stockQuantity || 1))" :key="n" :value="n">
+                  {{ n }}
+                </option>
+              </select>
 
               <Button
                 data-testid="add-to-cart-button"
                 :disabled="(product.stockQuantity || 0) <= 0 || cartLoading"
-                class="flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3 text-base font-semibold text-white transition disabled:cursor-not-allowed disabled:bg-gray-400"
+                class="flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3 text-base font-semibold text-white transition disabled:cursor-not-allowed disabled:bg-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
                 :class="[
-                  isProductInCart ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700',
+                  isProductInCart ? 'bg-green-600 hover:bg-green-700 focus-visible:ring-green-600' : 'bg-blue-600 hover:bg-blue-700 focus-visible:ring-blue-600',
                   cartLoading ? 'cursor-progress' : ''
                 ]"
                 @click="addToCart"
@@ -501,56 +397,51 @@
                 </span>
               </Button>
 
-              <div class="flex flex-wrap gap-3">
-                <UiButton
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  class="flex-1 rounded-xl"
-                  :class="wishlistAdded ? 'border-blue-500 text-blue-600 dark:border-blue-400 dark:text-blue-200' : ''"
-                  @click="toggleWishlist"
-                >
-                  <span class="mr-2" aria-hidden="true">♥</span>
-                  <span>{{ wishlistAdded ? $t('products.actions.addedToWishlist') : $t('products.actions.addToWishlist') }}</span>
-                </UiButton>
-                <UiButton
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  class="rounded-xl"
-                  @click="shareProduct"
-                >
-                  <span class="mr-2" aria-hidden="true">⤴</span>
-                  <span>{{ $t('products.actions.share') }}</span>
-                </UiButton>
-              </div>
-              <p v-if="shareFeedback" class="text-sm text-blue-600 dark:text-blue-300">{{ shareFeedback }}</p>
-            </div>
-          </div>
+              <UiButton
+                type="button"
+                variant="outline"
+                size="sm"
+                class="rounded-xl w-full"
+                @click="shareProduct"
+              >
+                <span class="mr-2" aria-hidden="true">⤴</span>
+                <span>{{ $t('products.actions.share') }}</span>
+              </UiButton>
+              <p v-if="shareFeedback" class="text-sm text-blue-700 dark:text-blue-200">{{ shareFeedback }}</p>
+            </UiCardContent>
+          </UiCard>
 
-          <div class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $t('products.trust.title') }}</h3>
-            <ul class="mt-4 space-y-3 text-sm text-gray-600 dark:text-gray-300">
+          <UiCard>
+            <UiCardHeader>
+              <UiCardTitle class="text-lg">{{ $t('products.trust.title') }}</UiCardTitle>
+            </UiCardHeader>
+            <UiCardContent>
+              <ul class="space-y-3 text-sm text-gray-600 dark:text-gray-300">
               <li v-for="promise in trustPromises" :key="promise" class="flex items-start gap-3">
                 <span class="mt-1 inline-block h-2 w-2 rounded-full bg-blue-500"></span>
                 <span>{{ promise }}</span>
               </li>
-            </ul>
-          </div>
+              </ul>
+            </UiCardContent>
+          </UiCard>
 
-          <div class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $t('products.bundle.title') }}</h3>
-            <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">{{ $t('products.bundle.description') }}</p>
-            <div class="mt-4 space-y-3">
-              <div v-for="item in bundleItems" :key="`bundle-${item.id}`" class="flex items-center justify-between rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm dark:border-gray-800 dark:bg-gray-800/60">
+          <UiCard>
+            <UiCardHeader>
+              <UiCardTitle class="text-lg">{{ $t('products.bundle.title') }}</UiCardTitle>
+              <UiCardDescription>{{ $t('products.bundle.description') }}</UiCardDescription>
+            </UiCardHeader>
+            <UiCardContent class="space-y-3">
+              <div v-for="item in bundleItems" :key="`bundle-${item.id}`" class="flex items-center justify-between py-2 text-sm border-b border-gray-200 dark:border-gray-800 last:border-0">
                 <span class="font-medium text-gray-800 dark:text-gray-200">{{ item.title }}</span>
-                <span class="text-gray-500 dark:text-gray-400">€{{ formatPrice(item.price) }}</span>
+                <span class="text-gray-600 dark:text-gray-400">€{{ formatPrice(item.price) }}</span>
               </div>
-            </div>
-            <Button class="mt-4 w-full justify-center rounded-xl border border-blue-200 bg-blue-50 px-5 py-2.5 text-sm font-semibold text-blue-700 hover:bg-blue-100 dark:border-blue-900/40 dark:bg-blue-900/20 dark:text-blue-200">
-              {{ $t('products.bundle.cta') }}
-            </Button>
-          </div>
+            </UiCardContent>
+            <UiCardFooter>
+              <Button class="w-full justify-center rounded-xl border border-blue-200 bg-blue-50 px-5 py-2.5 text-sm font-semibold text-blue-700 hover:bg-blue-100 dark:border-blue-900/40 dark:bg-blue-900/20 dark:text-blue-200">
+                {{ $t('products.bundle.cta') }}
+              </Button>
+            </UiCardFooter>
+          </UiCard>
         </aside>
       </div>
 
@@ -574,44 +465,68 @@
           </p>
         </div>
       </section>
-    </div>
 
-    <!-- Sticky Mobile CTA -->
-    <Teleport to="body">
-      <div
-        v-if="product && showStickyBar"
-        class="fixed bottom-0 left-0 right-0 z-40 border-t border-gray-200 bg-white p-4 shadow-lg dark:border-gray-800 dark:bg-gray-900 lg:hidden"
-      >
-        <div class="flex items-center gap-3">
-          <div class="flex-1">
-            <p class="text-sm text-gray-600 dark:text-gray-400">{{ getLocalizedText(product.name) }}</p>
-            <p class="text-xl font-bold text-gray-900 dark:text-white">€{{ formatPrice(product.price) }}</p>
+      <!-- Mobile Sticky Bottom Bar (Above Bottom Navigation) -->
+      <Teleport to="body">
+        <div
+          class="fixed left-0 right-0 z-50 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 shadow-2xl lg:hidden"
+          style="bottom: 64px"
+        >
+          <div class="container mx-auto px-4 py-3">
+            <div class="flex items-center gap-3">
+              <!-- Product Info (Compact) -->
+              <div class="flex-1 min-w-0">
+                <p class="text-xs text-gray-600 dark:text-gray-400 truncate">{{ getLocalizedText(product.name) }}</p>
+                <p class="text-lg font-bold text-gray-900 dark:text-white">
+                  €{{ formatPrice(product.price) }}
+                </p>
+              </div>
+
+              <!-- Add to Cart Button (Thumb-Friendly) -->
+              <Button
+                :disabled="(product.stockQuantity || 0) <= 0 || cartLoading"
+                class="flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-base font-semibold text-white transition min-h-[48px] min-w-[140px]"
+                :class="[
+                  isProductInCart ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700',
+                  cartLoading ? 'cursor-progress' : ''
+                ]"
+                @click="addToCart"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m2.6 8L6 21h13M7 13v4a1 1 0 001 1h9a1 1 0 001-1v-4M7 13L6 9" />
+                </svg>
+                <span>
+                  <template v-if="(product.stockQuantity || 0) > 0">
+                    {{ isProductInCart ? $t('products.inCart') : $t('products.addToCart') }}
+                  </template>
+                  <template v-else>
+                    {{ $t('products.outOfStock') }}
+                  </template>
+                </span>
+              </Button>
+            </div>
           </div>
-          <Button
-            data-testid="sticky-add-to-cart-button"
-            :disabled="(product.stockQuantity || 0) <= 0 || cartLoading"
-            class="flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-base font-semibold text-white transition disabled:cursor-not-allowed disabled:bg-gray-400"
-            :class="[
-              isProductInCart ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700',
-              cartLoading ? 'cursor-progress' : ''
-            ]"
-            @click="addToCart"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m2.6 8L6 21h13M7 13v4a1 1 0 001 1h9a1 1 0 001-1v-4M7 13L6 9" />
-            </svg>
-            <span class="hidden sm:inline">
-              {{ isProductInCart ? $t('products.inCart') : $t('products.addToCart') }}
-            </span>
-          </Button>
         </div>
-      </div>
-    </Teleport>
+      </Teleport>
+
+      <!-- Image Zoom Modal -->
+      <ProductImageZoomModal
+        v-if="product?.images?.length"
+        :is-open="showZoomModal"
+        :image-url="selectedImage?.url || ''"
+        :image-name="getLocalizedText(selectedImage?.altText) || getLocalizedText(product?.name)"
+        :current-index="selectedImageIndex"
+        :total-images="product.images.length"
+        @update:is-open="showZoomModal = $event"
+        @previous="handlePreviousImage"
+        @next="handleNextImage"
+      />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch, onMounted, onBeforeUnmount } from 'vue'
+import { computed, ref, watch, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useHead } from '#imports'
 import { Button } from '@/components/ui/button'
@@ -622,6 +537,7 @@ import { useProductUtils } from '~/composables/useProductUtils'
 import { useProductStory } from '~/composables/useProductStory'
 import { useProductDetailSEO } from '~/composables/useProductDetailSEO'
 import { useProductStockStatus } from '~/composables/useProductStockStatus'
+import { useToast } from '~/composables/useToast'
 
 const route = useRoute()
 const slug = route.params.slug as string
@@ -633,27 +549,26 @@ const { t, locale } = useI18n()
 // UI state
 const selectedImageIndex = ref(0)
 const selectedQuantity = ref(1)
-const wishlistAdded = ref(false)
 const shareFeedback = ref<string | null>(null)
-const showLightbox = ref(false)
-const showStickyBar = ref(false)
-const selectedMediaType = ref<'image' | 'video'>('image')
+const showZoomModal = ref(false)
+
+// Detect mobile device
+const isMobile = computed(() => {
+  if (typeof window === 'undefined') return false
+  return window.innerWidth < 1024 // lg breakpoint
+})
 
 const recentlyViewedProducts = useState<ProductWithRelations[]>('recentlyViewedProducts', () => [])
 
 // Use composables
 const { getLocalizedText, formatPrice, getCategoryLabel } = useProductUtils()
 const { addItem, loading: cartLoading, isInCart } = useCart()
+const toast = useToast()
 
 // Computed values
 const productAttributes = computed(() => product.value?.attributes || {})
 const stockQuantity = computed(() => product.value?.stockQuantity || 0)
 const categoryLabel = computed(() => getCategoryLabel(product.value?.category))
-
-// Video support for UX enhancement
-const productVideo = computed(() => {
-  return productAttributes.value?.video_url || productAttributes.value?.videoUrl || null
-})
 
 // Stock status composable
 const {
@@ -738,22 +653,7 @@ const bundleItems = computed(() => {
   }))
 })
 
-// UX Enhancement: Lightbox functions
-const openLightbox = () => {
-  showLightbox.value = true
-  document.body.style.overflow = 'hidden'
-}
-
-const closeLightbox = () => {
-  showLightbox.value = false
-  document.body.style.overflow = ''
-}
-
 // User interactions
-const toggleWishlist = () => {
-  wishlistAdded.value = !wishlistAdded.value
-}
-
 const shareProduct = async () => {
   try {
     const shareData = {
@@ -779,16 +679,50 @@ const shareProduct = async () => {
   }
 }
 
+// Image zoom modal handlers
+const openZoomModal = () => {
+  showZoomModal.value = true
+}
+
+const handlePreviousImage = () => {
+  if (selectedImageIndex.value > 0) {
+    selectedImageIndex.value--
+  }
+}
+
+const handleNextImage = () => {
+  if (product.value?.images && selectedImageIndex.value < product.value.images.length - 1) {
+    selectedImageIndex.value++
+  }
+}
+
 const addToCart = async () => {
   if (!product.value) return
 
-  // Only run on client side (fix for Vercel SSR)
+  // CRITICAL SSR Guard: Cart operations require browser APIs
+  //
+  // Context: This guard prevents SSR hydration mismatches on Vercel deployment
+  // Root causes:
+  // - Cart store uses localStorage which is undefined during SSR
+  // - Haptic feedback APIs (vibrate) only exist in browser context
+  // - User session state unavailable during server render
+  //
+  // Behavior: Server-rendered buttons appear but don't execute cart logic
+  // until hydration completes. This is intentional and prevents 500 errors.
   if (import.meta.server || typeof window === 'undefined') {
     console.warn('Add to Cart: Server-side render, skipping')
     return
   }
 
-  // Debug logging in development only
+  // Development-only debug logging (tree-shaken in production)
+  //
+  // Added to diagnose SSR-related cart failures (commit ffbe86a)
+  // Logs only appear in dev mode; completely removed from production bundles
+  //
+  // Key diagnostics:
+  // - isClient: Should be true for cart operations
+  // - hasWindow: Verifies browser context availability
+  // - addItemType: Confirms cart composable loaded correctly
   if (import.meta.dev) {
     const debugInfo = {
       productId: product.value.id,
@@ -819,12 +753,25 @@ const addToCart = async () => {
 
     await addItem(cartProduct, selectedQuantity.value)
 
+    // Show success toast
+    const productName = getLocalizedText(product.value.name)
+    toast.success(
+      t('cart.success.added'),
+      t('cart.success.productAdded', { product: productName })
+    )
+
     if (import.meta.dev) {
       console.log('✅ Add to cart succeeded!')
     }
   } catch (err) {
     const errorMsg = err instanceof Error ? err.message : String(err)
     console.error('Add to cart failed:', errorMsg, err)
+
+    // Show error toast
+    toast.error(
+      t('cart.error.addFailed'),
+      t('cart.error.addFailedDetails')
+    )
   }
 }
 
@@ -857,22 +804,6 @@ watch(product, newProduct => {
     })
   }
 }, { immediate: true })
-
-// UX Enhancement: Sticky mobile CTA on scroll
-if (process.client) {
-  const handleScroll = () => {
-    const scrollPosition = window.scrollY
-    showStickyBar.value = scrollPosition > 600
-  }
-
-  onMounted(() => {
-    window.addEventListener('scroll', handleScroll)
-  })
-
-  onBeforeUnmount(() => {
-    window.removeEventListener('scroll', handleScroll)
-  })
-}
 
 // Handle 404 errors
 if (error.value?.statusCode === 404) {

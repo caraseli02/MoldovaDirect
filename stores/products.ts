@@ -64,7 +64,7 @@ export const useProductsStore = defineStore('products', {
     // Pagination
     pagination: {
       page: 1,
-      limit: 24,
+      limit: 12,
       total: 0,
       totalPages: 0
     },
@@ -355,7 +355,7 @@ export const useProductsStore = defineStore('products', {
         if (filters.category) params.append('category', filters.category.toString())
         if (filters.sort) params.append('sort', filters.sort)
         if (filters.page) params.append('page', filters.page?.toString() || '1')
-        if (filters.limit) params.append('limit', filters.limit?.toString() || '24')
+        if (filters.limit) params.append('limit', filters.limit?.toString() || '12')
         
         const response = await $fetch<SearchResponse>(`/api/search?${params.toString()}`)
         
@@ -484,7 +484,7 @@ export const useProductsStore = defineStore('products', {
       this.products = []
       this.pagination = {
         page: 1,
-        limit: 24,
+        limit: 12,
         total: 0,
         totalPages: 0
       }

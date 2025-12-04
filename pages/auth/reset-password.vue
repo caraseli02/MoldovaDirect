@@ -200,6 +200,12 @@
 </template>
 
 <script setup lang="ts">
+// No middleware - user must stay on this page to reset password
+// even though they're technically authenticated via the recovery token
+definePageMeta({
+  middleware: []
+})
+
 const supabase = useSupabaseClient()
 const route = useRoute()
 const { t } = useI18n()

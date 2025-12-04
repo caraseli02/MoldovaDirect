@@ -68,24 +68,33 @@ export default defineNuxtConfig({
     presets: {
       hero: {
         modifiers: {
-          format: 'webp',
-          quality: 85,
+          format: 'avif',
+          quality: 80,
           fit: 'cover',
         }
       },
       productThumbnail: {
         modifiers: {
-          format: 'webp',
-          quality: 80,
+          format: 'avif',
+          quality: 75,
           fit: 'cover',
           width: 400,
           height: 400,
         }
       },
+      productThumbnailSmall: {
+        modifiers: {
+          format: 'avif',
+          quality: 75,
+          fit: 'cover',
+          width: 112,
+          height: 112,
+        }
+      },
       productDetail: {
         modifiers: {
-          format: 'webp',
-          quality: 85,
+          format: 'avif',
+          quality: 80,
           fit: 'cover',
           width: 800,
           height: 800,
@@ -113,7 +122,8 @@ export default defineNuxtConfig({
     '/products': { ssr: true },
     '/products/**': { ssr: true },
     // Public API routes - Moderate SWR caching for customer-facing endpoints
-    '/api/products': { swr: 300, headers: { 'Cache-Control': 'public, max-age=300, stale-while-revalidate=60' } },
+    // TEMPORARILY DISABLED: SWR was ignoring query parameters causing pagination bug
+    // '/api/products': { swr: 300, headers: { 'Cache-Control': 'public, max-age=300, stale-while-revalidate=60' } },
     '/api/products/featured': { swr: 300, headers: { 'Cache-Control': 'public, max-age=300, stale-while-revalidate=60' } },
     '/api/products/**': { swr: 600, headers: { 'Cache-Control': 'public, max-age=600, stale-while-revalidate=120' } },
     '/api/categories': { swr: 600, headers: { 'Cache-Control': 'public, max-age=600, stale-while-revalidate=120' } },

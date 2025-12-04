@@ -1,5 +1,21 @@
 <template>
   <div class="bg-gray-50 dark:bg-gray-950 min-h-screen">
+    <!-- Skip Links for Accessibility -->
+    <div class="sr-only focus-within:not-sr-only">
+      <a
+        href="#main-content"
+        class="absolute top-0 left-0 z-50 bg-primary-600 text-white px-4 py-2 rounded-br-lg focus:outline-none focus:ring-2 focus:ring-white"
+      >
+        Skip to main content
+      </a>
+      <a
+        href="#product-filters"
+        class="absolute top-0 left-28 z-50 bg-primary-600 text-white px-4 py-2 rounded-br-lg focus:outline-none focus:ring-2 focus:ring-white"
+      >
+        Skip to filters
+      </a>
+    </div>
+
     <!-- Breadcrumb Navigation -->
     <ProductBreadcrumbs
       :current-category="currentCategory"
@@ -48,7 +64,7 @@
                   v-model="searchQuery"
                   type="search"
                   :placeholder="t('common.search') + '...'"
-                  class="w-full rounded-lg border border-gray-300 bg-white pl-10 pr-4 py-3 text-sm text-gray-900 placeholder-gray-500 transition focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-400 dark:focus:ring-primary-400"
+                  class="w-full rounded-lg border border-gray-300 bg-white pl-10 pr-4 py-3 text-sm text-gray-900 placeholder-gray-600 transition focus:border-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-400 dark:focus:ring-primary-400"
                   @input="handleSearchInput"
                 />
                 <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -121,7 +137,7 @@
                     <option value="price_desc">{{ t('products.sortPriceHighLow') }}</option>
                     <option value="featured">{{ t('products.sortFeatured') }}</option>
                   </select>
-                  <commonIcon name="lucide:chevron-down" class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" aria-hidden="true" />
+                  <commonIcon name="lucide:chevron-down" class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-600" aria-hidden="true" />
                 </div>
               </div>
             </div>
@@ -129,6 +145,7 @@
             <!-- Active Filter Chips -->
             <ProductActiveFilters
               v-if="activeFilterChips.length"
+              id="product-filters"
               :chips="activeFilterChips"
               :show-clear-all="true"
               @remove-chip="removeActiveChip"
@@ -151,14 +168,16 @@
             </div>
 
             <div v-else-if="loading" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              <div v-for="n in 8" :key="`skeleton-${n}`" class="animate-pulse rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
-                <div class="mb-4 aspect-square rounded-xl bg-gray-200 dark:bg-gray-700"></div>
-                <div class="mb-2 h-4 rounded bg-gray-200 dark:bg-gray-700"></div>
-                <div class="h-3 w-2/3 rounded bg-gray-200 dark:bg-gray-700"></div>
-              </div>
+              <UiCard v-for="n in 8" :key="`skeleton-${n}`">
+                <UiCardContent class="p-4">
+                  <UiSkeleton class="mb-4 aspect-square rounded-xl" />
+                  <UiSkeleton class="mb-2 h-4 w-full" />
+                  <UiSkeleton class="h-3 w-2/3" />
+                </UiCardContent>
+              </UiCard>
             </div>
 
-            <div v-else-if="products?.length" class="space-y-10">
+            <div v-else-if="products?.length" id="main-content" class="space-y-10" role="main">
               <MobileVirtualProductGrid
                 v-if="mobileInteractions.isMobile.value && products.length > 20"
                 :items="products"
@@ -166,6 +185,7 @@
                 :loading="loading"
                 @load-more="loadMoreProducts"
               />
+              <!-- Standard Grid: Clean, predictable layout -->
               <div v-else class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 <ProductCard v-for="product in products" :key="product.id" :product="product" />
               </div>
@@ -200,7 +220,7 @@
                   >
                     {{ page }}
                   </UiButton>
-                  <span v-else class="px-3 py-2 text-sm text-gray-500" aria-hidden="true">…</span>
+                  <span v-else class="px-3 py-2 text-sm text-gray-600" aria-hidden="true">…</span>
                   <UiButton
                     :disabled="pagination.page >= pagination.totalPages"
                     variant="outline"
@@ -263,16 +283,16 @@
                   :key="story.id"
                   class="group relative overflow-hidden rounded-2xl border border-gray-200 bg-gradient-to-br from-gray-50 to-white p-6 transition hover:-translate-y-1 hover:shadow-lg dark:border-gray-800 dark:from-gray-900 dark:to-gray-800"
                 >
-                  <span class="inline-flex rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-blue-600 dark:bg-blue-900/60 dark:text-blue-300">
+                  <span class="inline-flex rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-blue-800 dark:bg-blue-900/60 dark:text-blue-200">
                     {{ story.tag }}
                   </span>
-                  <h4 class="mt-4 text-lg font-semibold text-gray-900 transition group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-300">
+                  <h4 class="mt-4 text-lg font-semibold text-gray-900 transition group-hover:text-blue-700 dark:text-white dark:group-hover:text-blue-200">
                     {{ story.title }}
                   </h4>
                   <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
                     {{ story.description }}
                   </p>
-                  <button type="button" class="mt-4 inline-flex items-center gap-2 text-sm font-medium text-blue-600 transition hover:text-blue-700 dark:text-blue-300 dark:hover:text-blue-200">
+                  <button type="button" class="mt-4 inline-flex items-center gap-2 text-sm font-medium text-blue-700 transition hover:text-blue-800 dark:text-blue-200 dark:hover:text-blue-100">
                     {{ t('products.editorial.cta') }}
                     <span aria-hidden="true">→</span>
                   </button>
@@ -303,7 +323,6 @@ import type { ProductFilters, ProductWithRelations, ProductSortOption } from '~/
 import type { FilterChip } from '~/composables/useProductFilters'
 import { ref, computed, onMounted, onUnmounted, onBeforeUnmount, nextTick, watch, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useDebounceFn } from '@vueuse/core'
 
 // Components
 import productFilterMain from '~/components/product/Filter/Main.vue'
@@ -320,6 +339,42 @@ import { useMobileProductInteractions } from '~/composables/useMobileProductInte
 import { useProductStructuredData } from '~/composables/useProductStructuredData'
 
 const { t } = useI18n()
+
+// CRITICAL: Custom debounce implementation (DO NOT replace with VueUse)
+//
+// Context: useDebounceFn from @vueuse/core caused 500 errors on mobile production (commit ffbe86a)
+// Root cause: VueUse's debounce is not SSR-safe and fails during server-side rendering
+//
+// This implementation:
+// - Works correctly in both SSR and client contexts
+// - Uses standard setTimeout which is available in all environments
+// - Properly cleans up timeouts to prevent memory leaks
+//
+// Performance: 300ms delay prevents excessive API calls during rapid typing
+function debounce<T extends (...args: any[]) => any>(fn: T, delay: number) {
+  let timeoutId: ReturnType<typeof setTimeout> | null = null
+
+  return function(this: any, ...args: Parameters<T>) {
+    if (timeoutId) {
+      clearTimeout(timeoutId)
+    }
+
+    timeoutId = setTimeout(() => {
+      fn.apply(this, args)
+    }, delay)
+  }
+}
+
+// Get route and router early to access query parameters
+const route = useRoute()
+const router = useRouter()
+
+// Parse initial page/limit from URL query parameters with bounds validation
+const MAX_LIMIT = 100
+const parsedPage = parseInt(route.query.page as string) || 1
+const parsedLimit = parseInt(route.query.limit as string) || 12
+const initialPage = Math.max(1, parsedPage)
+const initialLimit = Math.min(MAX_LIMIT, Math.max(1, parsedLimit))
 
 // Product Catalog Store
 const {
@@ -342,9 +397,10 @@ const {
   showFilterPanel
 } = useProductCatalog()
 
-// Initialize and fetch products during SSR
+// Initialize and fetch products during SSR (using URL params)
+// During client hydration, state is restored from SSR payload
 await initialize()
-await fetchProducts({ sort: 'created', page: 1, limit: 12 })
+await fetchProducts({ sort: 'created', page: initialPage, limit: initialLimit })
 
 // Filter Management
 const {
@@ -364,10 +420,9 @@ const { visiblePages } = useProductPagination(pagination)
 const { setupWatchers: setupStructuredDataWatchers } = useProductStructuredData(products, pagination)
 
 // Local state
-const route = useRoute()
 const searchQuery = ref('')
 const searchInput = ref<HTMLInputElement>()
-let searchAbortController: AbortController | null = null
+const searchAbortController = ref<AbortController | null>(null)
 
 // DOM refs
 const scrollContainer = ref<HTMLElement>()
@@ -391,27 +446,27 @@ const hasActiveFilters = computed(() => {
 const totalProducts = computed(() => pagination.value?.total || products.value?.length || 0)
 
 // Debounced search handler to prevent excessive API calls
-const handleSearchInput = useDebounceFn(() => {
+const handleSearchInput = debounce(() => {
   // Cancel previous search request if it exists
-  if (searchAbortController) {
-    searchAbortController.abort()
+  if (searchAbortController.value) {
+    searchAbortController.value.abort()
   }
 
   // Create new abort controller for this search
-  searchAbortController = new AbortController()
+  searchAbortController.value = new AbortController()
 
   if (searchQuery.value.trim()) {
     search(searchQuery.value.trim(), {
       ...filters.value,
       page: 1,
       sort: sortBy.value
-    }, searchAbortController.signal)
+    }, searchAbortController.value.signal)
   } else {
     fetchProducts({
       ...filters.value,
       page: 1,
       sort: sortBy.value
-    }, searchAbortController.signal)
+    }, searchAbortController.value.signal)
   }
 }, 300)
 
@@ -462,8 +517,9 @@ const clearAllFilters = () => {
  * Navigate to a specific page
  * Handles both search and filter scenarios
  * Validates page boundaries for security
+ * Updates URL to keep state in sync
  */
-const goToPage = (page: number) => {
+const goToPage = async (page: number) => {
   // Validate page number to prevent attacks
   const validPage = Math.max(1, Math.min(
     Math.floor(page),
@@ -474,19 +530,17 @@ const goToPage = (page: number) => {
     console.warn(`Invalid page ${page}, using ${validPage}`)
   }
 
-  const currentFilters = {
-    ...filters.value,
-    sort: sortBy.value,
-    page: validPage
-  }
+  // Update URL with new page parameter
+  // The URL watcher will handle fetching products automatically
+  await router.push({
+    query: {
+      ...route.query,
+      page: validPage.toString(),
+      limit: (route.query.limit || '12').toString()
+    }
+  })
 
-  if (searchQuery.value.trim()) {
-    search(searchQuery.value.trim(), currentFilters)
-  } else {
-    fetchProducts(currentFilters)
-  }
-
-  window.scrollTo({ top: 0, behavior: 'smooth' })
+  // Note: Scroll is handled by the URL watcher after products load
 }
 
 /**
@@ -611,6 +665,37 @@ watch(() => [filters.value.category, filters.value.inStock, filters.value.featur
   await refreshPriceRange()
 })
 
+// Watch URL query parameter changes (critical for Vercel production)
+// Handles browser back/forward, direct links, and external URL changes
+watch(() => route.query.page, async (newPage, oldPage) => {
+  // Skip if page hasn't actually changed
+  if (newPage === oldPage) return
+
+  // Parse and validate page number
+  const pageNum = parseInt((newPage as string) || '1')
+  if (isNaN(pageNum)) return
+
+  // Validate page boundaries
+  const validPage = Math.max(1, Math.min(pageNum, pagination.value.totalPages || 1))
+
+  // Build filters for fetch
+  const currentFilters = {
+    ...filters.value,
+    sort: sortBy.value,
+    page: validPage
+  }
+
+  // Fetch products based on current context
+  if (searchQuery.value.trim()) {
+    await search(searchQuery.value.trim(), currentFilters)
+  } else {
+    await fetchProducts(currentFilters)
+  }
+
+  // Scroll to top for better UX
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}, { immediate: false })
+
 // Lifecycle Hooks
 onMounted(async () => {
   searchQuery.value = storeSearchQuery.value || ''
@@ -642,8 +727,12 @@ onBeforeUnmount(() => {
       sessionStorage.removeItem('products-scroll-position')
       sessionStorage.removeItem('products-filter-state')
     } catch (error) {
-      // Silently fail if session storage is unavailable
-      console.debug('Session storage cleanup failed:', error)
+      console.error('[Product Catalog] Session storage cleanup failed:', error)
+
+      // Only ignore SecurityError (private browsing), rethrow others
+      if (error instanceof Error && error.name !== 'SecurityError') {
+        throw error
+      }
     }
   }
 })

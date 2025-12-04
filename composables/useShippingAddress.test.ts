@@ -56,6 +56,7 @@ describe('useShippingAddress', () => {
         province: '',
         country: '',
         phone: '',
+        isDefault: false,
       })
       expect(savedAddresses.value).toEqual([])
       expect(loading.value).toBe(false)
@@ -749,6 +750,7 @@ describe('useShippingAddress', () => {
         province: '',
         country: '',
         phone: '',
+        isDefault: false,
       })
       expect(savedAddresses.value).toEqual([])
       expect(loading.value).toBe(false)

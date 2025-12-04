@@ -5,7 +5,7 @@ const locales = ['es', 'en', 'ro', 'ru']
 
 export default defineConfig({
   testDir: './tests',
-  testMatch: '**/e2e/**/*.spec.ts',
+  testMatch: ['**/e2e/**/*.spec.ts', '**/pre-commit/**/*.spec.ts'],
   testIgnore: [
     '**/node_modules/**',
     '**/*.test.ts',
@@ -36,6 +36,21 @@ export default defineConfig({
   },
 
   projects: [
+    // Pre-commit: Fast smoke tests (< 60 seconds)
+    {
+      name: 'pre-commit',
+      testDir: './tests/pre-commit',
+      testMatch: '**/*.spec.ts',
+      use: {
+        ...devices['Desktop Chrome'],
+        locale: 'es', // Spanish only for pre-commit
+        timezoneId: 'Europe/Madrid',
+      },
+      retries: 0, // No retries for fast feedback
+      timeout: 60000, // 60s per test
+    },
+
+    // CI/CD: Comprehensive E2E tests (all browsers, all locales)
     ...locales.flatMap(locale => [
       {
         name: `chromium-${locale}`,
