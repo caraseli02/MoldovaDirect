@@ -544,12 +544,16 @@ describe('adminCache', () => {
         expect(result.success).toBe(true)
         expect(result.keysInvalidated).toBe(0)
       })
+  })
+
+  describe('Error handling', () => {
+    beforeEach(() => {
+      vi.spyOn(console, 'error').mockImplementation(() => {})
     })
 
-    describe('Error handling', () => {
-      it('should handle storage.getKeys failure gracefully', async () => {
-        const error = new Error('Storage unavailable')
-        mockStorage.getKeys.mockRejectedValue(error)
+    it('should handle storage.getKeys failure gracefully', async () => {
+      const error = new Error('Storage unavailable')
+      mockStorage.getKeys.mockRejectedValue(error)
 
         const result = await invalidateAdminCache('products')
 
