@@ -918,7 +918,12 @@
       "seasonal": "Recomandări de sezon",
       "title": "Descoperă aromele emblematice ale Moldovei",
       "subtitle": "Alege vinuri curate, delicatese artizanale și produse de cămară livrate în toată Spania.",
-      "cta": "Vezi colecția"
+      "cta": "Vezi colecția",
+      "stats": {
+        "products": "{count} produse gata de descoperit",
+        "categories": "{count} categorii curatoriate",
+        "collections": "{count} colecții curatoriate"
+      }
     },
     "discovery": {
       "title": "Găsește experiența potrivită",

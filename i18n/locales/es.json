@@ -1174,7 +1174,12 @@
       "seasonal": "Destacados de temporada",
       "title": "Descubre los sabores emblemáticos de Moldavia",
       "subtitle": "Compra vinos seleccionados, despensa gourmet y artesanías con entrega en toda España.",
-      "cta": "Ver colección"
+      "cta": "Ver colección",
+      "stats": {
+        "products": "{count} productos listos para descubrir",
+        "categories": "{count} categorías seleccionadas",
+        "collections": "{count} colecciones curadas"
+      }
     },
     "discovery": {
       "title": "Encuentra la experiencia perfecta",

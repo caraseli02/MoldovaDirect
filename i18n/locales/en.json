@@ -1261,7 +1261,12 @@
       "seasonal": "Seasonal highlights",
       "title": "Discover Moldova's signature flavors",
       "subtitle": "Shop curated wines, pantry staples, and handmade treats delivered across Spain.",
-      "cta": "Browse the collection"
+      "cta": "Browse the collection",
+      "stats": {
+        "products": "{count} products ready to explore",
+        "categories": "{count} categories curated",
+        "collections": "{count} curated edits"
+      }
     },
     "discovery": {
       "title": "Find the right experience",
