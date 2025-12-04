@@ -99,6 +99,12 @@ const videos: HeroVideo[] = [
 pkill -9 node && rm -rf .nuxt node_modules/.vite && npm run dev
 ```
 
+### Generate assets from MP4s
+
+- Requires `ffmpeg`
+- From repo root run: `bash scripts/generate-hero-assets.sh`
+- Creates any missing `hero-*.webm` and `hero-*-poster.jpg` files alongside the source MP4s
+
 ## 📊 Current Videos
 
 - `hero-1.*` - Vineyard sunset scene

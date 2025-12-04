@@ -51,7 +51,7 @@ describe('VideoHero', () => {
         props: {
           title: 'Test Title',
           showVideo: true,
-          videoWebM: '/test-video.webm',
+          videoWebm: '/test-video.webm',
           videoMp4: '/test-video.mp4',
         },
         ...createGlobalStubs(),

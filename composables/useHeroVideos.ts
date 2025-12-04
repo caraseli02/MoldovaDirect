@@ -67,6 +67,20 @@ export const useHeroVideos = () => {
       mp4: '/videos/hero/hero-3.mp4',
       poster: '/videos/hero/hero-3-poster.jpg',
       alt: 'Traditional wine cellar with oak barrels'
+    },
+    {
+      id: 'vineyard-aerial',
+      webm: '/videos/hero/hero-4.webm',
+      mp4: '/videos/hero/hero-4.mp4',
+      poster: '/videos/hero/hero-4-poster.jpg',
+      alt: 'Aerial view of Moldovan vineyards at golden hour'
+    },
+    {
+      id: 'table-service',
+      webm: '/videos/hero/hero-5.webm',
+      mp4: '/videos/hero/hero-5.mp4',
+      poster: '/videos/hero/hero-5-poster.jpg',
+      alt: 'Serving Moldovan wine and delicacies on a table'
     }
     // Add more videos here as needed
   ]

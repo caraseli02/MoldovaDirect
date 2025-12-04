@@ -14,7 +14,7 @@
           class="h-full w-full object-cover"
           aria-hidden="true"
         >
-          <source v-if="videoWebM" :src="videoWebM" type="video/webm" />
+          <source v-if="videoWebm" :src="videoWebm" type="video/webm" />
           <source v-if="videoMp4" :src="videoMp4" type="video/mp4" />
         </video>
         <!-- Consolidated luxury overlay for optimal paint performance -->
@@ -208,7 +208,7 @@ const props = withDefaults(
   defineProps<{
     // Video settings
     showVideo?: boolean
-    videoWebM?: string
+    videoWebm?: string
     videoMp4?: string
     posterImage?: string
 
