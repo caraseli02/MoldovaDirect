@@ -88,7 +88,8 @@ export const useHeroVideos = () => {
   ]
 
   // Detect mobile devices to show poster image instead of video (bandwidth savings)
-  const { isMobile } = useDevice()
+  const { isMobile, updateDimensions } = useDevice()
+  const deviceReady = ref(false)
   const isClient = process.client
 
   /**
@@ -118,6 +119,20 @@ export const useHeroVideos = () => {
   // Select video once per page load
   const currentVideo = useState<HeroVideo>('hero-video', getRandomVideo)
 
+  const setDeviceReady = () => {
+    updateDimensions()
+    deviceReady.value = true
+  }
+
+  // Guard onMounted so calling this composable outside setup (e.g., unit tests) doesn't warn
+  if (isClient) {
+    if (getCurrentInstance()) {
+      onMounted(setDeviceReady)
+    } else {
+      setDeviceReady()
+    }
+  }
+
   /**
    * Determine if video should play
    * Best practice: Disable on mobile to save bandwidth
@@ -125,8 +140,8 @@ export const useHeroVideos = () => {
    */
   const showVideo = computed(() => {
     // Show video only on desktop devices to save mobile bandwidth
-    // Client-side check ensures consistent hydration
-    return isClient && !isMobile.value
+    // Client-side check ensures consistent hydration and waits for device measure
+    return isClient && deviceReady.value && !isMobile.value
   })
 
   return {
