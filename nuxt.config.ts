@@ -110,6 +110,8 @@ export default defineNuxtConfig({
 
   nitro: {
     preset: "vercel",
+    minify: true,
+    compressPublicAssets: true,
     ignore: ["**/*.test.ts", "**/*.spec.ts", "**/__tests__/**"],
     prerender: {
       failOnError: false,
