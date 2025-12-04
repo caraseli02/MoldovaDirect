@@ -306,7 +306,7 @@ When migrating localStorage to cookies:
 ### Internal Documentation
 - `docs/features/GUEST_CHECKOUT_IMPLEMENTATION.md`
 - `checkout-ux-testing/docs/FINDINGS_VS_BEST_PRACTICES_COMPARISON.md`
-- `.docs/admin-fixes/CLEAN-CODE-REVIEW.md`
+- `docs/fixes/admin-fixes/CLEAN-CODE-REVIEW.md`
 
 ---
 

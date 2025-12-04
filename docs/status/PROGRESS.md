@@ -335,7 +335,7 @@ tests/
 - **UI Components**: Toast notifications, ErrorBoundary
 - **Composables**: useCart, useToast for reusable logic
 - **Testing**: cart-error-handling.spec.ts, cart-error-handling-basic.spec.ts
-- **Documentation**: Requirements, design, and task tracking in .kiro/specs/
+- **Documentation**: Requirements, design, and task tracking in docs/specs/
 
 ---
 

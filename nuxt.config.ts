@@ -76,8 +76,8 @@ export default defineNuxtConfig({
     '/': { ssr: true },
     '/products': { ssr: true },
     '/products/**': { ssr: true },
-    // Public API caching
-    '/api/products': { swr: 300, headers: { 'Cache-Control': 'public, max-age=300, stale-while-revalidate=60' } },
+    // Public API caching (TEMPORARILY DISABLED for /api/products: SWR ignores query params causing pagination bug)
+    // '/api/products': { swr: 300, headers: { 'Cache-Control': 'public, max-age=300, stale-while-revalidate=60' } },
     '/api/products/featured': { swr: 300, headers: { 'Cache-Control': 'public, max-age=300, stale-while-revalidate=60' } },
     '/api/products/**': { swr: 600, headers: { 'Cache-Control': 'public, max-age=600, stale-while-revalidate=120' } },
     '/api/categories': { swr: 600, headers: { 'Cache-Control': 'public, max-age=600, stale-while-revalidate=120' } },
