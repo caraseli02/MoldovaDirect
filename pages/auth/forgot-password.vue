@@ -99,6 +99,7 @@ const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 const { t } = useI18n()
 const localePath = useLocalePath()
+const runtimeConfig = useRuntimeConfig()
 
 const form = ref({
   email: ''
@@ -115,8 +116,9 @@ const handleForgotPassword = async () => {
   loading.value = true
   
   try {
+    const siteUrl = runtimeConfig.public.siteUrl || window.location.origin
     const { error: authError } = await supabase.auth.resetPasswordForEmail(form.value.email, {
-      redirectTo: `${window.location.origin}${localePath('/auth/reset-password')}`
+      redirectTo: `${siteUrl}${localePath('/auth/reset-password')}`
     })
     
     if (authError) {

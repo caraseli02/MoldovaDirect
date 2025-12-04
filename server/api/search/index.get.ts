@@ -17,8 +17,15 @@ export default defineCachedEventHandler(async (event) => {
     
     const searchTerm = query.q as string
     const locale = (query.locale as string) || 'es'
-    const limit = parseInt((query.limit as string) || '20')
     const category = query.category as string
+
+    // Parse and validate pagination parameters
+    const MAX_LIMIT = 100
+    const MAX_PAGE = 10000
+    const parsedPage = parseInt(query.page as string) || 1
+    const parsedLimit = parseInt(query.limit as string) || 12
+    const page = Math.min(Math.max(1, parsedPage), MAX_PAGE)
+    const limit = Math.min(Math.max(1, parsedLimit), MAX_LIMIT)
 
     // Validate search term exists and meets minimum length
     if (!searchTerm || !validateMinSearchLength(searchTerm)) {
@@ -119,8 +126,12 @@ export default defineCachedEventHandler(async (event) => {
       return b.stock_quantity - a.stock_quantity
     })
 
-    // Limit results
-    const limitedResults = matchingProducts.slice(0, limit)
+    // Calculate pagination offset
+    const offset = (page - 1) * limit
+    const total = matchingProducts?.length || 0
+
+    // Slice results for current page
+    const limitedResults = matchingProducts.slice(offset, offset + limit)
 
     // Transform products to match expected format
     const transformedProducts = limitedResults.map(product => ({
@@ -153,13 +164,22 @@ export default defineCachedEventHandler(async (event) => {
       relevanceScore: calculateRelevance(product, searchTermLower, locale)
     }))
 
+    // Calculate pagination metadata
+    const totalPages = Math.ceil(total / limit)
+
     return {
       products: transformedProducts,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages,
+        hasNextPage: page < totalPages,
+        hasPreviousPage: page > 1
+      },
       meta: {
         query: searchTerm,
-        total: matchingProducts.length,
         returned: transformedProducts.length,
-        limit,
         locale,
         category: category || null
       },

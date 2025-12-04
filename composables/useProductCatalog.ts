@@ -1,12 +1,48 @@
 import type { ProductFilters, ProductWithRelations, CategoryWithChildren } from '~/types'
 
 /**
+ * Classify network errors for better user feedback
+ */
+const classifyNetworkError = (err: unknown): string => {
+  // Abort errors are intentional and should be silent
+  if (err instanceof DOMException && err.name === 'AbortError') {
+    return ''
+  }
+
+  // Network errors
+  if (err instanceof TypeError && err.message.includes('fetch')) {
+    return 'Network connection error. Please check your internet connection.'
+  }
+
+  // HTTP errors with status codes
+  if (typeof err === 'object' && err !== null && 'statusCode' in err) {
+    const statusCode = (err as any).statusCode
+    if (statusCode === 404) return 'Resource not found'
+    if (statusCode === 403) return 'Access denied'
+    if (statusCode === 401) return 'Authentication required'
+    if (statusCode === 400) return 'Invalid request'
+    if (statusCode >= 500) return 'Server error. Please try again later.'
+  }
+
+  // Generic error
+  return err instanceof Error ? err.message : 'An unexpected error occurred'
+}
+
+/**
  * Product Catalog Composable
  * Provides integrated access to products, categories, and search functionality
  * Uses direct API calls for SSR compatibility
  */
 export const useProductCatalog = () => {
+  // Get route to read URL params during initialization (SSR-safe)
+  const route = useRoute()
+
+  // Parse URL params for initial pagination state (prevents hydration mismatch)
+  const initialPageFromUrl = parseInt(route.query.page as string) || 1
+  const initialLimitFromUrl = parseInt(route.query.limit as string) || 12
+
   // Use Nuxt's useState for SSR-compatible reactive state
+  // CRITICAL: Initialize pagination with URL params to prevent hydration mismatch
   const products = useState<ProductWithRelations[]>('products', () => [])
   const categories = useState<CategoryWithChildren[]>('categories', () => [])
   const categoriesTree = useState<CategoryWithChildren[]>('categoriesTree', () => [])
@@ -14,7 +50,12 @@ export const useProductCatalog = () => {
   const searchResults = useState<ProductWithRelations[]>('searchResults', () => [])
   const searchQuery = useState<string>('searchQuery', () => '')
   const filters = useState<ProductFilters>('filters', () => ({}))
-  const pagination = useState('pagination', () => ({ page: 1, limit: 12, total: 0, totalPages: 1 }))
+  const pagination = useState('pagination', () => ({
+    page: initialPageFromUrl,
+    limit: initialLimitFromUrl,
+    total: 0,
+    totalPages: 1
+  }))
   const loading = useState<boolean>('loading', () => true)
   const error = useState<string | null>('error', () => null)
 
@@ -71,12 +112,18 @@ export const useProductCatalog = () => {
       filters.value = { ...productFilters }
 
     } catch (err) {
-      // Ignore abort errors - they're expected when canceling requests
-      if (err instanceof Error && err.name === 'AbortError') {
+      // Check if this is an intentional cancellation (DOMException with name 'AbortError')
+      const isAbortError = err instanceof DOMException && err.name === 'AbortError'
+      if (isAbortError) {
         return
       }
-      error.value = err instanceof Error ? err.message : 'Failed to fetch products'
-      console.error('Error fetching products:', err)
+
+      // Classify error for better user feedback
+      const errorMessage = classifyNetworkError(err)
+      if (errorMessage) {
+        error.value = errorMessage
+        console.error('[Product Catalog] Error fetching products:', err)
+      }
     } finally {
       loading.value = false
     }
@@ -103,8 +150,11 @@ export const useProductCatalog = () => {
       return response.product
 
     } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Failed to fetch product'
-      console.error('Error fetching product:', err)
+      const errorMessage = classifyNetworkError(err)
+      if (errorMessage) {
+        error.value = errorMessage
+        console.error('[Product Catalog] Error fetching product:', err)
+      }
       return null
     } finally {
       loading.value = false
@@ -140,12 +190,25 @@ export const useProductCatalog = () => {
       if (searchFilters.category) params.append('category', searchFilters.category.toString())
       if (searchFilters.sort) params.append('sort', searchFilters.sort)
       if (searchFilters.page) params.append('page', searchFilters.page?.toString() || '1')
-      if (searchFilters.limit) params.append('limit', searchFilters.limit?.toString() || '24')
+      if (searchFilters.limit) params.append('limit', searchFilters.limit?.toString() || '12')
 
       const response = await $fetch<{
         products: ProductWithRelations[]
+        pagination: {
+          page: number
+          limit: number
+          total: number
+          totalPages: number
+          hasNextPage: boolean
+          hasPreviousPage: boolean
+        }
         suggestions: string[]
-        query: string
+        meta: {
+          query: string
+          returned: number
+          locale: string
+          category: string | null
+        }
       }>(`/api/search?${params.toString()}`, {
         signal
       })
@@ -153,25 +216,25 @@ export const useProductCatalog = () => {
       searchResults.value = response.products
       products.value = response.products // Update main products array
 
-      // Update pagination
-      pagination.value = {
-        ...pagination.value,
-        page: searchFilters.page || 1,
-        limit: searchFilters.limit || 24,
-        total: response.products.length,
-        totalPages: Math.ceil(response.products.length / (searchFilters.limit || 24))
-      }
+      // Update pagination using API response (not recalculating!)
+      pagination.value = response.pagination
 
       filters.value = { ...searchFilters }
 
     } catch (err) {
-      // Ignore abort errors - they're expected when canceling requests
-      if (err instanceof Error && err.name === 'AbortError') {
+      // Check if this is an intentional cancellation (DOMException with name 'AbortError')
+      const isAbortError = err instanceof DOMException && err.name === 'AbortError'
+      if (isAbortError) {
         return
       }
-      error.value = err instanceof Error ? err.message : 'Search failed'
+
+      // Classify error for better user feedback
+      const errorMessage = classifyNetworkError(err)
+      if (errorMessage) {
+        error.value = errorMessage
+        console.error('[Product Catalog] Error searching products:', err)
+      }
       searchResults.value = []
-      console.error('Error searching products:', err)
     } finally {
       loading.value = false
     }

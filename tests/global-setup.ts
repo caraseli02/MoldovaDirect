@@ -174,11 +174,11 @@ async function globalSetup(config: FullConfig) {
         console.log(`  📸 Screenshot saved to: ${screenshotPath}`)
       }
 
-      // Wait for successful login - should redirect to account or dashboard
+      // Wait for successful login - should redirect to account, dashboard, or admin
       // Check if already redirected, otherwise wait
       const currentUrl = page.url()
-      if (!currentUrl.match(/\/(account|dashboard)/)) {
-        await page.waitForURL(/\/(account|dashboard)/, { timeout: 10000 })
+      if (!currentUrl.match(/\/(account|dashboard|admin)/)) {
+        await page.waitForURL(/\/(account|dashboard|admin)/, { timeout: 10000 })
       }
 
       const finalUrl = page.url()

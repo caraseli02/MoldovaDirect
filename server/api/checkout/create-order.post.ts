@@ -272,6 +272,45 @@ export default defineEventHandler(async (event) => {
       userId: user?.id
     })
 
+    // Save user preferences for authenticated users
+    if (user?.id && body.shippingAddress) {
+      try {
+        // Extract shipping method from the request
+        // The shipping method might be in different formats, we need to extract the ID/name
+        const shippingMethodId = body.shippingAddress?.method || body.shippingCost > 0 ? 'standard' : 'free'
+
+        // Upsert user checkout preferences
+        const { error: prefError } = await supabase
+          .from('user_checkout_preferences')
+          .upsert({
+            user_id: user.id,
+            preferred_shipping_method: shippingMethodId,
+            updated_at: new Date().toISOString()
+          }, {
+            onConflict: 'user_id'
+          })
+
+        if (prefError) {
+          // Log error but don't fail the order
+          logger.warn('Failed to save user preferences', {
+            userId: user.id,
+            error: prefError.message
+          })
+        } else {
+          logger.info('User preferences saved', {
+            userId: user.id,
+            shippingMethod: shippingMethodId
+          })
+        }
+      } catch (prefError: any) {
+        // Don't fail the order if preference saving fails
+        logger.warn('Error saving user preferences', {
+          userId: user.id,
+          error: prefError.message || 'Unknown error'
+        })
+      }
+    }
+
     return {
       success: true,
       order: {

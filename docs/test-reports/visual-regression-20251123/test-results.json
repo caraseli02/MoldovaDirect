@@ -1,0 +1,39 @@
+{
+  "timestamp": "2025-11-23T14:34:26.770853",
+  "base_url": "http://localhost:3000",
+  "test_user": "customer@moldovadirect.com",
+  "steps": [
+    {
+      "step": 1,
+      "name": "Authentication",
+      "status": "success",
+      "url": "http://localhost:3000/account"
+    },
+    {
+      "step": 2,
+      "name": "Add Product to Cart",
+      "status": "success"
+    },
+    {
+      "step": 3,
+      "name": "Navigate to Checkout",
+      "status": "success",
+      "url": "http://localhost:3000/cart?message=empty-cart-checkout"
+    },
+    {
+      "step": 4,
+      "name": "Verify Express Checkout Banner",
+      "status": "not_found",
+      "banner_info": {
+        "detection_methods": []
+      }
+    }
+  ],
+  "errors": [
+    "Page.query_selector_all: Execution context was destroyed, most likely because of a navigation"
+  ],
+  "warnings": [
+    "Express Checkout Banner not detected - check if user has saved addresses"
+  ],
+  "success": false
+}
