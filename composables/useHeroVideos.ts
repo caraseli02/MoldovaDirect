@@ -87,6 +87,7 @@ export const useHeroVideos = () => {
 
   // Device detection for performance optimization
   const { isMobile } = useDevice()
+  const isClient = typeof process !== 'undefined' && !!process.client
 
   /**
    * Randomly select a video on component mount
@@ -106,9 +107,8 @@ export const useHeroVideos = () => {
    * Falls back to poster image on small screens
    */
   const showVideo = computed(() => {
-    // Only show video on desktop/tablet (>= 768px)
-    // Mobile users see poster image for better performance
-    return !isMobile.value
+    // Only render video after client-side mount to avoid SSR hydration downloading on mobile
+    return isClient && !isMobile.value
   })
 
   return {

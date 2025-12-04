@@ -145,10 +145,8 @@ visual-regression-screenshots/
 *.jpeg
 
 # Video files (too large for git - host on CDN or server)
-*.webm
-*.mp4
-*.mov
-*.avi
+# Hero assets are required for builds; keep them tracked
+# (If you need to ignore other large media, scope it outside public/videos/hero)
 
 # Temporary scripts and utilities
 apply-rls-fix.sh
