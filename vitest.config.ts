@@ -24,6 +24,7 @@ export default defineConfig({
       '**/dist/**',
       '**/e2e/**',
       '**/tests/e2e/**',
+      '**/tests/pre-commit/**',
       '**/tests/visual/**',
       '**/tests/fixtures/**',
       '**/tests/templates/**',

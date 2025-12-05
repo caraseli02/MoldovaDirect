@@ -91,6 +91,8 @@ tmp/
 **/*.spec.ts-snapshots/
 test-results/
 playwright-report/
+test-run-output.txt
+test-screenshots/
 
 # Working test files and directories
 /tests/browser-automation/

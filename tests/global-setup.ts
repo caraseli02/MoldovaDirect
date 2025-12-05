@@ -46,6 +46,15 @@ async function globalSetup(config: FullConfig) {
   // Wait for the dev server to be ready
   await waitForServer(baseURL)
 
+  // Check if we're only running pre-commit tests (which don't need authentication)
+  const isPreCommitOnly = process.argv.includes('--project=pre-commit') ||
+                          process.env.PLAYWRIGHT_PROJECT === 'pre-commit'
+
+  if (isPreCommitOnly) {
+    console.log('⏭️  Skipping authentication for pre-commit smoke tests (no auth required)')
+    return
+  }
+
   const browser = await chromium.launch()
 
   const authDir = path.join(__dirname, 'fixtures', '.auth')

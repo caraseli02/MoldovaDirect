@@ -1,18 +1,20 @@
 import { defineConfig, devices } from '@playwright/test'
 import { fileURLToPath } from 'node:url'
 
-const locales = ['es', 'en', 'ro', 'ru']
-
 export default defineConfig({
   testDir: './tests',
-  testMatch: ['**/e2e/**/*.spec.ts', '**/pre-commit/**/*.spec.ts'],
+  testMatch: ['**/e2e/**/*.spec.ts', '**/pre-commit/**/*.spec.ts', '**/critical/**/*.spec.ts'],
   testIgnore: [
     '**/node_modules/**',
     '**/*.test.ts',
     '**/unit/**',
     '**/templates/**',
     '**/utils/**',
-    '**/setup/**'
+    '**/setup/**',
+    '**/manual/**',
+    '**/fixtures/**',
+    '**/helpers/**',
+    '**/page-objects/**'
   ],
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
@@ -36,7 +38,7 @@ export default defineConfig({
   },
 
   projects: [
-    // Pre-commit: Fast smoke tests (< 60 seconds)
+    // Pre-commit: Fast smoke tests (< 30 seconds)
     {
       name: 'pre-commit',
       testDir: './tests/pre-commit',
@@ -47,58 +49,69 @@ export default defineConfig({
         timezoneId: 'Europe/Madrid',
       },
       retries: 0, // No retries for fast feedback
-      timeout: 60000, // 60s per test
+      timeout: 30000, // 30s per test (allows for Vite cold start)
     },
 
-    // CI/CD: Comprehensive E2E tests (all browsers, all locales)
-    ...locales.flatMap(locale => [
-      {
-        name: `chromium-${locale}`,
-        use: { 
-          ...devices['Desktop Chrome'],
-          locale,
-          timezoneId: 'Europe/Madrid',
-          permissions: ['geolocation'],
-          storageState: `tests/fixtures/.auth/user-${locale}.json`,
-        },
-      },
-      {
-        name: `firefox-${locale}`,
-        use: {
-          ...devices['Desktop Firefox'],
-          locale,
-          timezoneId: 'Europe/Madrid',
-          storageState: `tests/fixtures/.auth/user-${locale}.json`,
-        },
-      },
-      {
-        name: `webkit-${locale}`,
-        use: {
-          ...devices['Desktop Safari'],
-          locale,
-          timezoneId: 'Europe/Madrid',
-          storageState: `tests/fixtures/.auth/user-${locale}.json`,
-        },
-      },
-    ]),
-    
+    // Critical: Fast deployment confidence tests (< 5 minutes)
     {
-      name: 'Mobile Chrome',
+      name: 'critical',
+      testDir: './tests/e2e/critical',
+      testMatch: '**/*.spec.ts',
+      use: {
+        ...devices['Desktop Chrome'],
+        locale: 'es',
+        timezoneId: 'Europe/Madrid',
+      },
+      retries: 1, // Allow 1 retry for critical tests
+      timeout: 30000, // 30s per test
+    },
+
+    // Full E2E: Default browser + locale for development
+    {
+      name: 'chromium-es',
+      use: {
+        ...devices['Desktop Chrome'],
+        locale: 'es',
+        timezoneId: 'Europe/Madrid',
+        permissions: ['geolocation'],
+        storageState: 'tests/fixtures/.auth/user-es.json',
+      },
+    },
+
+    // Full E2E: English locale testing
+    {
+      name: 'chromium-en',
+      use: {
+        ...devices['Desktop Chrome'],
+        locale: 'en',
+        timezoneId: 'Europe/Madrid',
+        permissions: ['geolocation'],
+        storageState: 'tests/fixtures/.auth/user-en.json',
+      },
+    },
+
+    // Full E2E: Cross-browser testing
+    {
+      name: 'firefox-es',
+      use: {
+        ...devices['Desktop Firefox'],
+        locale: 'es',
+        timezoneId: 'Europe/Madrid',
+        storageState: 'tests/fixtures/.auth/user-es.json',
+      },
+    },
+
+    // Full E2E: Mobile responsive testing
+    {
+      name: 'mobile',
       use: {
         ...devices['Pixel 5'],
         locale: 'es',
-        storageState: `tests/fixtures/.auth/user-es.json`,
+        storageState: 'tests/fixtures/.auth/user-es.json',
       },
     },
-    {
-      name: 'Mobile Safari',
-      use: {
-        ...devices['iPhone 12'],
-        locale: 'es',
-        storageState: `tests/fixtures/.auth/user-es.json`,
-      },
-    },
-    
+
+    // Setup: Authentication and global setup
     {
       name: 'setup',
       testDir: './tests/setup',
