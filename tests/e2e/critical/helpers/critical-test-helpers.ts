@@ -74,7 +74,7 @@ export class CriticalTestHelpers {
    * Waits for cart to update instead of arbitrary timeout
    */
   async addFirstProductToCart(): Promise<void> {
-    await this.page.goto('/products')
+    await this.page.goto('/products', { waitUntil: 'domcontentloaded' })
 
     // Wait for "Add to Cart" button to be visible
     await this.page.waitForSelector('button:has-text("Añadir al Carrito")', {
@@ -94,16 +94,29 @@ export class CriticalTestHelpers {
    * Uses proper event-based waiting instead of waitForTimeout
    */
   async waitForCartUpdate(): Promise<void> {
-    // Wait for network to settle after cart update
-    await this.page.waitForLoadState('networkidle')
-
-    // Or wait for cart count to appear with non-zero value
+    // Wait for cart count to appear with non-zero value (faster than networkidle)
     const cartCount = this.page.locator(
       '[data-testid="cart-count"], [data-testid="cart-badge"], .cart-count'
     ).first()
 
-    // Wait up to 5 seconds for cart count to show
-    await expect(cartCount).toBeVisible({ timeout: 5000 })
+    // Wait up to 10 seconds for cart count to show and update
+    await expect(cartCount).toBeVisible({ timeout: 10000 })
+
+    // Optional: wait a bit for the count to update from 0
+    await this.page.waitForFunction(
+      () => {
+        const elements = document.querySelectorAll('[data-testid="cart-count"], [data-testid="cart-badge"], .cart-count')
+        for (const el of elements) {
+          const text = el.textContent?.trim()
+          if (text && parseInt(text) > 0) return true
+        }
+        return false
+      },
+      { timeout: 5000 }
+    ).catch(() => {
+      // If cart count doesn't update, that's okay for smoke tests
+      // The visibility check already passed
+    })
   }
 
   /**

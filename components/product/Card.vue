@@ -1,6 +1,7 @@
 <template>
   <article
     ref="cardRef"
+    data-testid="product-card"
     class="group relative bg-white dark:bg-slate-800 rounded-2xl shadow-elevated-sm hover:shadow-elevated-lg border border-gray-200 dark:border-slate-700 transition-all duration-300 overflow-hidden"
     :class="{
       'active:scale-95': isMobile,

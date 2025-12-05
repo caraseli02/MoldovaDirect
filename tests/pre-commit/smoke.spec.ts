@@ -19,20 +19,14 @@ import { SELECTORS, TIMEOUTS, ERROR_MESSAGES } from '../e2e/critical/constants'
 
 test.describe('Smoke Tests - Critical Paths', () => {
   test('homepage loads without errors', async ({ page }) => {
-    await page.goto('/')
+    await page.goto('/', { waitUntil: 'domcontentloaded' })
 
-    // Check page loaded
-    await expect(page).toHaveTitle(/Moldova Direct/i)
-
-    // Wait for page to fully load
-    await page.waitForLoadState('networkidle')
+    // Check page loaded with title
+    await expect(page).toHaveTitle(/Moldova Direct/i, { timeout: TIMEOUTS.LONG })
   })
 
   test('can navigate to products page', async ({ page }) => {
-    await page.goto('/products')
-
-    // Wait for products to load
-    await page.waitForLoadState('networkidle')
+    await page.goto('/products', { waitUntil: 'domcontentloaded' })
 
     // Check at least one product card exists
     const productCards = page.locator(SELECTORS.PRODUCT_CARD)

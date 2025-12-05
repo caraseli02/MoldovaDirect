@@ -100,6 +100,7 @@
               <!-- Cart count badge - client only to prevent hydration mismatch -->
               <ClientOnly>
                 <span v-if="cartItemsCount > 0"
+                  data-testid="cart-count"
                   class="absolute -top-1 -right-1 bg-primary-600 dark:bg-primary-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
                   aria-hidden="true"
                 >

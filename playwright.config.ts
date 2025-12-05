@@ -51,7 +51,7 @@ export default defineConfig({
         timezoneId: 'Europe/Madrid',
       },
       retries: 0, // No retries for fast feedback
-      timeout: 10000, // 10s per test
+      timeout: 30000, // 30s per test (allows for Vite cold start)
     },
 
     // Critical: Fast deployment confidence tests (< 5 minutes)
