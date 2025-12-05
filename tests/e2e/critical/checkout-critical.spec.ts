@@ -7,61 +7,56 @@
  */
 
 import { test, expect } from '@playwright/test'
+import { CriticalTestHelpers } from './helpers/critical-test-helpers'
+import { SELECTORS, TIMEOUTS, URL_PATTERNS, ERROR_MESSAGES } from './constants'
 
 test.describe('Critical Checkout Flows', () => {
   test('guest can access checkout page with items in cart', async ({ page }) => {
+    const helpers = new CriticalTestHelpers(page)
+
     // Add product to cart
-    await page.goto('/products')
-    await page.waitForSelector('button:has-text("Añadir al Carrito")', {
-      state: 'visible',
-      timeout: 10000
-    })
-    await page.locator('button:has-text("Añadir al Carrito")').first().click()
-    await page.waitForTimeout(1000)
+    await helpers.addFirstProductToCart()
 
     // Go to checkout
-    await page.goto('/checkout')
+    await helpers.goToCheckout()
 
-    // Should see checkout form (not be redirected away)
-    await expect(page).toHaveURL(/\/checkout/, { timeout: 5000 })
+    // Verify on checkout page
+    await expect(page, ERROR_MESSAGES.CHECKOUT_NOT_ACCESSIBLE).toHaveURL(
+      URL_PATTERNS.CHECKOUT,
+      { timeout: TIMEOUTS.STANDARD }
+    )
 
     // Checkout form should be visible
-    const checkoutForm = page.locator('form, [data-testid="checkout-form"]')
-    await expect(checkoutForm).toBeVisible({ timeout: 5000 })
+    const checkoutForm = page.locator(SELECTORS.CHECKOUT_FORM)
+    await expect(checkoutForm).toBeVisible({ timeout: TIMEOUTS.STANDARD })
   })
 
   test('authenticated user can access checkout', async ({ page }) => {
-    const testEmail = process.env.TEST_USER_EMAIL || 'teste2e@example.com'
-    const testPassword = process.env.TEST_USER_PASSWORD
+    test.skip(
+      !CriticalTestHelpers.hasTestUserCredentials(),
+      'TEST_USER_PASSWORD environment variable not set'
+    )
 
-    if (!testPassword) {
-      test.skip()
-    }
+    const helpers = new CriticalTestHelpers(page)
 
     // Login
-    await page.goto('/auth/login')
-    await page.locator('input[type="email"]').first().fill(testEmail)
-    await page.locator('input[type="password"]').first().fill(testPassword)
-    await page.locator('button[type="submit"]').click()
-    await page.waitForURL(/\/account/, { timeout: 10000 })
+    await helpers.loginAsTestUser()
+    await expect(page).toHaveURL(URL_PATTERNS.ACCOUNT, { timeout: TIMEOUTS.LONG })
 
     // Add product to cart
-    await page.goto('/products')
-    await page.waitForSelector('button:has-text("Añadir al Carrito")', {
-      state: 'visible',
-      timeout: 10000
-    })
-    await page.locator('button:has-text("Añadir al Carrito")').first().click()
-    await page.waitForTimeout(1000)
+    await helpers.addFirstProductToCart()
 
     // Go to checkout
-    await page.goto('/checkout')
+    await helpers.goToCheckout()
 
-    // Should see checkout page
-    await expect(page).toHaveURL(/\/checkout/, { timeout: 5000 })
+    // Verify on checkout page
+    await expect(page, ERROR_MESSAGES.CHECKOUT_NOT_ACCESSIBLE).toHaveURL(
+      URL_PATTERNS.CHECKOUT,
+      { timeout: TIMEOUTS.STANDARD }
+    )
 
     // Checkout form should be visible
-    const checkoutForm = page.locator('form, [data-testid="checkout-form"]')
-    await expect(checkoutForm).toBeVisible({ timeout: 5000 })
+    const checkoutForm = page.locator(SELECTORS.CHECKOUT_FORM)
+    await expect(checkoutForm).toBeVisible({ timeout: TIMEOUTS.STANDARD })
   })
 })

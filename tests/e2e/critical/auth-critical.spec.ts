@@ -8,6 +8,8 @@
  */
 
 import { test, expect } from '@playwright/test'
+import { CriticalTestHelpers } from './helpers/critical-test-helpers'
+import { TIMEOUTS, URL_PATTERNS } from './constants'
 
 test.describe('Critical Auth Flows', () => {
   test('user can register new account', async ({ page }) => {
@@ -24,49 +26,38 @@ test.describe('Critical Auth Flows', () => {
     await page.locator('button[type="submit"]').click()
 
     // Should redirect to account or show success
-    await page.waitForURL(/\/(account|auth\/login)/, { timeout: 10000 })
+    await page.waitForURL(/\/(account|auth\/login)/, { timeout: TIMEOUTS.LONG })
   })
 
   test('user can login with valid credentials', async ({ page }) => {
-    await page.goto('/auth/login')
+    test.skip(
+      !CriticalTestHelpers.hasTestUserCredentials(),
+      'TEST_USER_PASSWORD environment variable not set'
+    )
 
-    const testEmail = process.env.TEST_USER_EMAIL || 'teste2e@example.com'
-    const testPassword = process.env.TEST_USER_PASSWORD
+    const helpers = new CriticalTestHelpers(page)
+    await helpers.loginAsTestUser()
 
-    if (!testPassword) {
-      test.skip()
-    }
-
-    // Fill login form
-    await page.locator('input[type="email"]').first().fill(testEmail)
-    await page.locator('input[type="password"]').first().fill(testPassword)
-
-    // Submit
-    await page.locator('button[type="submit"]').click()
-
-    // Should redirect to account
-    await page.waitForURL(/\/account/, { timeout: 10000 })
+    // Verify redirected to account page
+    await expect(page).toHaveURL(URL_PATTERNS.ACCOUNT, { timeout: TIMEOUTS.LONG })
   })
 
   test('logged in user can logout', async ({ page }) => {
-    const testEmail = process.env.TEST_USER_EMAIL || 'teste2e@example.com'
-    const testPassword = process.env.TEST_USER_PASSWORD
+    test.skip(
+      !CriticalTestHelpers.hasTestUserCredentials(),
+      'TEST_USER_PASSWORD environment variable not set'
+    )
 
-    if (!testPassword) {
-      test.skip()
-    }
+    const helpers = new CriticalTestHelpers(page)
 
     // Login first
-    await page.goto('/auth/login')
-    await page.locator('input[type="email"]').first().fill(testEmail)
-    await page.locator('input[type="password"]').first().fill(testPassword)
-    await page.locator('button[type="submit"]').click()
-    await page.waitForURL(/\/account/, { timeout: 10000 })
+    await helpers.loginAsTestUser()
+    await expect(page).toHaveURL(URL_PATTERNS.ACCOUNT, { timeout: TIMEOUTS.LONG })
 
     // Logout
-    await page.locator('button:has-text("Cerrar sesión"), button:has-text("Logout"), a:has-text("Cerrar sesión")').first().click()
+    await helpers.logout()
 
-    // Should redirect to home or login
-    await page.waitForURL(/\/(|auth\/login)$/, { timeout: 10000 })
+    // Verify redirected to home or login
+    await expect(page).toHaveURL(/\/(|auth\/login)$/, { timeout: TIMEOUTS.LONG })
   })
 })

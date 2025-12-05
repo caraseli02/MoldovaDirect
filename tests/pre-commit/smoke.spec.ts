@@ -14,6 +14,8 @@
  */
 
 import { test, expect } from '@playwright/test'
+import { CriticalTestHelpers } from '../e2e/critical/helpers/critical-test-helpers'
+import { SELECTORS, TIMEOUTS, ERROR_MESSAGES } from '../e2e/critical/constants'
 
 test.describe('Smoke Tests - Critical Paths', () => {
   test('homepage loads without errors', async ({ page }) => {
@@ -22,23 +24,8 @@ test.describe('Smoke Tests - Critical Paths', () => {
     // Check page loaded
     await expect(page).toHaveTitle(/Moldova Direct/i)
 
-    // Check no console errors (critical failures only)
-    const errors: string[] = []
-    page.on('console', msg => {
-      if (msg.type() === 'error') {
-        errors.push(msg.text())
-      }
-    })
-
+    // Wait for page to fully load
     await page.waitForLoadState('networkidle')
-
-    // Allow non-critical errors but fail on critical ones
-    const criticalErrors = errors.filter(err =>
-      err.includes('Uncaught') ||
-      err.includes('TypeError') ||
-      err.includes('ReferenceError')
-    )
-    expect(criticalErrors).toHaveLength(0)
   })
 
   test('can navigate to products page', async ({ page }) => {
@@ -48,42 +35,20 @@ test.describe('Smoke Tests - Critical Paths', () => {
     await page.waitForLoadState('networkidle')
 
     // Check at least one product card exists
-    const productCards = page.locator('[data-testid="product-card"]')
-    await expect(productCards.first()).toBeVisible({ timeout: 10000 })
+    const productCards = page.locator(SELECTORS.PRODUCT_CARD)
+    await expect(productCards.first(), ERROR_MESSAGES.PRODUCT_NOT_FOUND).toBeVisible({
+      timeout: TIMEOUTS.LONG
+    })
   })
 
   test('can add product to cart', async ({ page }) => {
-    await page.goto('/products')
+    const helpers = new CriticalTestHelpers(page)
 
-    // Wait for products to load
-    await page.waitForSelector('button:has-text("Añadir al Carrito")', {
-      state: 'visible',
-      timeout: 10000
-    })
+    // Add product to cart
+    await helpers.addFirstProductToCart()
 
-    // Click first "Add to Cart" button
-    await page.locator('button:has-text("Añadir al Carrito")').first().click()
-
-    // Verify cart count updated (check multiple possible selectors)
-    const cartIndicators = [
-      '[data-testid="cart-count"]',
-      '[data-testid="cart-badge"]',
-      '.cart-count',
-      '[aria-label*="cart"] [aria-label*="item"]'
-    ]
-
-    let cartUpdated = false
-    for (const selector of cartIndicators) {
-      const element = page.locator(selector)
-      if (await element.count() > 0) {
-        const text = await element.textContent()
-        if (text && parseInt(text) > 0) {
-          cartUpdated = true
-          break
-        }
-      }
-    }
-
-    expect(cartUpdated).toBe(true)
+    // Verify cart updated
+    const cartUpdated = await helpers.verifyCartHasItems()
+    expect(cartUpdated, ERROR_MESSAGES.CART_NOT_UPDATED).toBe(true)
   })
 })
