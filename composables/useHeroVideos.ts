@@ -110,7 +110,7 @@ export const useHeroVideos = () => {
     if (!selectedVideo || !selectedVideo.id) {
       console.error('[useHeroVideos] Invalid video object selected:', selectedVideo)
       // Fallback to first video if available
-      return videos[0]
+      return videos[0] as HeroVideo
     }
 
     return selectedVideo

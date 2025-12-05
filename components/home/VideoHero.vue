@@ -8,18 +8,19 @@
           ref="videoRef"
           autoplay
           muted
-          loop
           playsinline
           :poster="posterImage"
           class="h-full w-full object-cover"
           aria-hidden="true"
+          @ended="handleVideoEnded"
           @error="handleVideoError"
         >
           <source v-if="videoWebm" :src="videoWebm" type="video/webm" @error="handleSourceError('webm', $event)" />
           <source v-if="videoMp4" :src="videoMp4" type="video/mp4" @error="handleSourceError('mp4', $event)" />
         </video>
         <!-- Gradient overlay for visual contrast -->
-        <div class="absolute inset-0 bg-[linear-gradient(to_br,_rgba(36,20,5,0.85)_0%,_rgba(114,47,55,0.45)_100%)]" />
+        <!-- Black mask overlay for text contrast -->
+        <div class="absolute inset-0 bg-black/40" />
       </div>
 
       <!-- Fallback background: Image or Gradient -->
@@ -263,6 +264,17 @@ const handleVideoError = (event: Event) => {
     mp4Src: props.videoMp4
   })
   videoLoadError.value = true
+}
+
+const handleVideoEnded = () => {
+  setTimeout(() => {
+    if (videoRef.value) {
+      videoRef.value.play().catch(() => {
+        // Prepare for next user interaction if autoplay fails
+        videoPlaybackFailed.value = true
+      })
+    }
+  }, 15000)
 }
 
 // Handle individual source errors
