@@ -8,7 +8,7 @@ test.describe('Landing hero video', () => {
     await expect(video).toBeVisible()
     await expect(video).toHaveJSProperty('muted', true)
     await expect(video).toHaveJSProperty('autoplay', true)
-    await expect(video).toHaveJSProperty('loop', true)
+    await expect(video).toHaveJSProperty('loop', false)
 
     const webmSource = video.locator('source[type="video/webm"]')
     const mp4Source = video.locator('source[type="video/mp4"]')
@@ -37,10 +37,27 @@ test.describe('Landing hero video', () => {
       viewport: { width: 430, height: 900 },
     })
 
+    test('visual: desktop hero matches snapshot', async ({ page }) => {
+      await page.goto('/')
+      const hero = page.locator('section.relative.flex').first()
+      await expect(hero).toBeVisible()
+
+      // Mask video to avoid flakiness
+      await expect(hero).toHaveScreenshot('desktop-hero.png', {
+        mask: [page.locator('video')],
+        maxDiffPixelRatio: 0.05
+      })
+    })
+
     test('falls back to poster/gradient (no video) on mobile', async ({ page }) => {
       await page.goto('/')
+      const hero = page.locator('section.relative.flex').first()
       await expect(page.locator('video')).toHaveCount(0)
       await expect(page.locator('img[src*=\"hero-\"][src*=\"-poster\"]')).toHaveCount(1)
+
+      await expect(hero).toHaveScreenshot('mobile-hero.png', {
+        maxDiffPixelRatio: 0.05
+      })
     })
   })
 })
