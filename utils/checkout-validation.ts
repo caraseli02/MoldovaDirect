@@ -224,7 +224,7 @@ export function validatePaymentMethod(paymentMethod: Partial<PaymentMethod>): Ch
     case 'cash':
       return { isValid: true, errors, warnings }
     case 'credit_card':
-      return validateCreditCard(paymentMethod.creditCard)
+      return validateCreditCard(paymentMethod.creditCard, paymentMethod.savedPaymentMethodId)
     case 'paypal':
       return validatePayPal(paymentMethod.paypal)
     case 'bank_transfer':
@@ -245,7 +245,10 @@ export function validatePaymentMethod(paymentMethod: Partial<PaymentMethod>): Ch
   }
 }
 
-function validateCreditCard(creditCard?: PaymentMethod['creditCard']): CheckoutValidationResult {
+function validateCreditCard(
+  creditCard?: PaymentMethod['creditCard'],
+  savedPaymentMethodId?: string
+): CheckoutValidationResult {
   const errors: CheckoutValidationError[] = []
   const warnings: ValidationWarning[] = []
 
@@ -259,30 +262,32 @@ function validateCreditCard(creditCard?: PaymentMethod['creditCard']): CheckoutV
     return { isValid: false, errors, warnings }
   }
 
-  // Card number validation
-  if (!creditCard.number?.trim()) {
-    errors.push({
-      field: 'number',
-      code: 'REQUIRED',
-      message: 'Card number is required',
-      severity: 'error'
-    })
-  } else {
-    const cardNumber = creditCard.number.replace(/\s/g, '')
-    if (!isValidCardNumber(cardNumber)) {
+  // Card number validation (skip when using a saved payment method that already has card details)
+  if (!savedPaymentMethodId) {
+    if (!creditCard.number?.trim()) {
       errors.push({
         field: 'number',
-        code: 'INVALID_FORMAT',
-        message: 'Invalid card number format',
+        code: 'REQUIRED',
+        message: 'Card number is required',
         severity: 'error'
       })
-    } else if (!isValidLuhn(cardNumber)) {
-      errors.push({
-        field: 'number',
-        code: 'INVALID_CHECKSUM',
-        message: 'Invalid card number',
-        severity: 'error'
-      })
+    } else {
+      const cardNumber = creditCard.number.replace(/\s/g, '')
+      if (!isValidCardNumber(cardNumber)) {
+        errors.push({
+          field: 'number',
+          code: 'INVALID_FORMAT',
+          message: 'Invalid card number format',
+          severity: 'error'
+        })
+      } else if (!isValidLuhn(cardNumber)) {
+        errors.push({
+          field: 'number',
+          code: 'INVALID_CHECKSUM',
+          message: 'Invalid card number',
+          severity: 'error'
+        })
+      }
     }
   }
 

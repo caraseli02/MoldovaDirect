@@ -1544,6 +1544,9 @@
       "useNewMethod": "Folosește o metodă de plată nouă",
       "newMethod": "Metodă de Plată Nouă",
       "default": "Implicită",
+      "savedMethodValidationError": "Confirmă detaliile metodei salvate pentru a continua.",
+      "savedCardConfirmationTitle": "Verifică cardul salvat",
+      "savedCardConfirmationCopy": "Din motive de securitate, confirmă CVV-ul și numele titularului pentru acest card salvat.",
       "creditCard": {
         "label": "Card de Credit",
         "summary": "Plătește cu Visa, Mastercard sau alte carduri",

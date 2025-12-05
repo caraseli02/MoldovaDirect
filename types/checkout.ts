@@ -43,6 +43,7 @@ export type { Address, AddressEntity, AddressFormData } from '~/types/address'
 
 export interface PaymentMethod {
   type: 'cash' | 'credit_card' | 'paypal' | 'bank_transfer'
+  savedPaymentMethodId?: string
   creditCard?: {
     number: string
     expiryMonth: string

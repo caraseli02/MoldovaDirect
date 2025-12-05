@@ -1544,6 +1544,9 @@
       "useNewMethod": "Use a new payment method",
       "newMethod": "New Payment Method",
       "default": "Default",
+      "savedMethodValidationError": "Please confirm your saved payment details to continue.",
+      "savedCardConfirmationTitle": "Verify saved card",
+      "savedCardConfirmationCopy": "For security, confirm your CVV and cardholder name for this saved card.",
       "creditCard": {
         "label": "Credit Card",
         "summary": "Pay with Visa, Mastercard, or other cards",

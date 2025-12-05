@@ -1637,6 +1637,9 @@
       "useNewMethod": "Usar un nuevo método de pago",
       "newMethod": "Nuevo Método de Pago",
       "default": "Predeterminado",
+      "savedMethodValidationError": "Confirma los datos de tu método guardado para continuar.",
+      "savedCardConfirmationTitle": "Verifica la tarjeta guardada",
+      "savedCardConfirmationCopy": "Por seguridad, confirma el CVV y el nombre del titular de esta tarjeta guardada.",
       "creditCard": {
         "label": "Tarjeta de Crédito",
         "summary": "Paga con Visa, Mastercard u otras tarjetas",

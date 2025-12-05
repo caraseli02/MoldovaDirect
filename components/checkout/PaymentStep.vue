@@ -17,7 +17,7 @@
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
           {{ $t('checkout.payment.savedMethods') }}
         </h3>
-        
+
         <div class="space-y-3">
           <div
             v-for="savedMethod in savedPaymentMethods"
@@ -59,6 +59,68 @@
               >
                 {{ $t('checkout.payment.default') }}
               </span>
+            </div>
+          </div>
+        </div>
+
+        <div
+          v-if="selectedSavedMethod && savedMethodValidationErrors.length"
+          class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3"
+        >
+          <p class="text-sm text-red-700 dark:text-red-200 font-medium">
+            {{ $t('checkout.payment.savedMethodValidationError') }}
+          </p>
+          <ul class="mt-2 list-disc list-inside space-y-1">
+            <li
+              v-for="(error, index) in savedMethodValidationErrors"
+              :key="`saved-payment-error-${index}`"
+              class="text-sm text-red-700 dark:text-red-300"
+            >
+              {{ error }}
+            </li>
+          </ul>
+        </div>
+
+        <div
+          v-if="selectedSavedMethodDetails?.type === 'credit_card'"
+          class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 dark:bg-gray-900/30 space-y-4"
+        >
+          <div class="flex items-start space-x-2">
+            <commonIcon name="lucide:shield" class="h-5 w-5 text-gray-500 mt-0.5" />
+            <div>
+              <p class="text-sm font-medium text-gray-900 dark:text-white">
+                {{ $t('checkout.payment.savedCardConfirmationTitle') }}
+              </p>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                {{ $t('checkout.payment.savedCardConfirmationCopy') }}
+              </p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <UiLabel for="saved-card-cvv" class="mb-1">
+                {{ $t('checkout.payment.cvv') }}
+              </UiLabel>
+              <UiInput
+                id="saved-card-cvv"
+                v-model="paymentMethod.creditCard!.cvv"
+                type="text"
+                inputmode="numeric"
+                :placeholder="$t('checkout.payment.cvvPlaceholder')"
+                maxlength="4"
+              />
+            </div>
+            <div>
+              <UiLabel for="saved-card-holder" class="mb-1">
+                {{ $t('checkout.payment.cardholderName') }}
+              </UiLabel>
+              <UiInput
+                id="saved-card-holder"
+                v-model="paymentMethod.creditCard!.holderName"
+                type="text"
+                :placeholder="$t('checkout.payment.cardholderNamePlaceholder')"
+              />
             </div>
           </div>
         </div>
@@ -316,9 +378,20 @@ const isAuthenticated = computed(() => authStore.isAuthenticated)
 const savedPaymentMethods = computed(() => checkoutStore.savedPaymentMethods ?? [])
 const loading = computed(() => checkoutStore.loading)
 const errors = computed(() => checkoutStore.errors ?? {})
+const savedMethodValidationErrors = computed(() => checkoutStore.getFieldErrors('payment'))
+const selectedSavedMethodDetails = computed(() =>
+  savedPaymentMethods.value.find(method => method.id === selectedSavedMethod.value) || null
+)
 
 const canProceed = computed(() => {
-  if (selectedSavedMethod.value) {
+  if (selectedSavedMethodDetails.value) {
+    if (selectedSavedMethodDetails.value.type === 'credit_card') {
+      return !!(
+        paymentMethod.value.creditCard?.cvv?.trim() &&
+        paymentMethod.value.creditCard?.holderName?.trim()
+      )
+    }
+
     return true
   }
   
@@ -362,11 +435,12 @@ const selectPaymentType = (type: PaymentMethod['type']) => {
 const selectSavedMethod = (savedMethod: SavedPaymentMethod) => {
   selectedSavedMethod.value = savedMethod.id
   showNewPaymentForm.value = false
-  
+
   // Convert saved method to payment method format
   if (savedMethod.type === 'credit_card') {
     paymentMethod.value = {
       type: 'credit_card',
+      savedPaymentMethodId: savedMethod.id,
       creditCard: {
         number: '', // Will be handled by payment processor
         expiryMonth: savedMethod.expiryMonth?.toString() || '',
@@ -379,6 +453,7 @@ const selectSavedMethod = (savedMethod: SavedPaymentMethod) => {
   } else if (savedMethod.type === 'paypal') {
     paymentMethod.value = {
       type: 'paypal',
+      savedPaymentMethodId: savedMethod.id,
       paypal: {
         email: '' // Will be handled by PayPal
       },
