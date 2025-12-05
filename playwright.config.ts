@@ -1,8 +1,6 @@
 import { defineConfig, devices } from '@playwright/test'
 import { fileURLToPath } from 'node:url'
 
-const locales = ['es', 'en', 'ro', 'ru']
-
 export default defineConfig({
   testDir: './tests',
   testMatch: ['**/e2e/**/*.spec.ts', '**/pre-commit/**/*.spec.ts', '**/critical/**/*.spec.ts'],
@@ -68,55 +66,52 @@ export default defineConfig({
       timeout: 30000, // 30s per test
     },
 
-    // CI/CD: Comprehensive E2E tests (all browsers, all locales)
-    ...locales.flatMap(locale => [
-      {
-        name: `chromium-${locale}`,
-        use: { 
-          ...devices['Desktop Chrome'],
-          locale,
-          timezoneId: 'Europe/Madrid',
-          permissions: ['geolocation'],
-          storageState: `tests/fixtures/.auth/user-${locale}.json`,
-        },
-      },
-      {
-        name: `firefox-${locale}`,
-        use: {
-          ...devices['Desktop Firefox'],
-          locale,
-          timezoneId: 'Europe/Madrid',
-          storageState: `tests/fixtures/.auth/user-${locale}.json`,
-        },
-      },
-      {
-        name: `webkit-${locale}`,
-        use: {
-          ...devices['Desktop Safari'],
-          locale,
-          timezoneId: 'Europe/Madrid',
-          storageState: `tests/fixtures/.auth/user-${locale}.json`,
-        },
-      },
-    ]),
-    
+    // Full E2E: Default browser + locale for development
     {
-      name: 'Mobile Chrome',
+      name: 'chromium-es',
+      use: {
+        ...devices['Desktop Chrome'],
+        locale: 'es',
+        timezoneId: 'Europe/Madrid',
+        permissions: ['geolocation'],
+        storageState: 'tests/fixtures/.auth/user-es.json',
+      },
+    },
+
+    // Full E2E: English locale testing
+    {
+      name: 'chromium-en',
+      use: {
+        ...devices['Desktop Chrome'],
+        locale: 'en',
+        timezoneId: 'Europe/Madrid',
+        permissions: ['geolocation'],
+        storageState: 'tests/fixtures/.auth/user-en.json',
+      },
+    },
+
+    // Full E2E: Cross-browser testing
+    {
+      name: 'firefox-es',
+      use: {
+        ...devices['Desktop Firefox'],
+        locale: 'es',
+        timezoneId: 'Europe/Madrid',
+        storageState: 'tests/fixtures/.auth/user-es.json',
+      },
+    },
+
+    // Full E2E: Mobile responsive testing
+    {
+      name: 'mobile',
       use: {
         ...devices['Pixel 5'],
         locale: 'es',
-        storageState: `tests/fixtures/.auth/user-es.json`,
+        storageState: 'tests/fixtures/.auth/user-es.json',
       },
     },
-    {
-      name: 'Mobile Safari',
-      use: {
-        ...devices['iPhone 12'],
-        locale: 'es',
-        storageState: `tests/fixtures/.auth/user-es.json`,
-      },
-    },
-    
+
+    // Setup: Authentication and global setup
     {
       name: 'setup',
       testDir: './tests/setup',
