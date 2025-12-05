@@ -210,12 +210,12 @@ const reviewSchema = computed(() => {
 })
 
 // Inject schema markup into page head
-useHead({
+useHead(() => ({
   script: reviewSchema.value.map(schema => ({
     type: 'application/ld+json',
     children: JSON.stringify(schema)
   }))
-})
+}))
 
 // Parse numeric values from highlights and create animated counters
 const animatedStats = computed(() => {
