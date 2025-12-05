@@ -26,9 +26,22 @@
         <div class="grid grid-cols-1 gap-4 md:gap-6">
           <!-- Product Name -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Product Name *
-            </label>
+            <div class="flex items-center gap-2 mb-2">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Product Name *
+              </label>
+              <CommonHelpTooltip
+                title="Product Name Tips"
+                content="Use a clear, descriptive name that customers will search for. Include key details like brand, type, and vintage for wine products."
+              >
+                <ul class="list-disc list-inside space-y-1 text-xs">
+                  <li>Be specific and descriptive</li>
+                  <li>Include brand if applicable</li>
+                  <li>Mention key features (vintage, region, etc.)</li>
+                  <li>Keep it under 60 characters for best display</li>
+                </ul>
+              </CommonHelpTooltip>
+            </div>
             <div class="space-y-3">
               <div v-for="locale in locales" :key="locale.code">
                 <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">
@@ -37,7 +50,7 @@
                 <input
                   v-model="form.name[locale.code]"
                   type="text"
-                  :placeholder="`Product name in ${locale.name}`"
+                  :placeholder="getNamePlaceholder(locale.code)"
                   class="w-full px-4 py-3 md:px-3 md:py-2 text-base md:text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   :class="{ 'border-red-500': errors.name?.[locale.code] }"
                 />
@@ -46,21 +59,40 @@
                 </p>
               </div>
             </div>
+            <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">
+              💡 Example: "Premium Moldovan Cabernet Sauvignon 2021" or "Cricova Sparkling Wine Brut"
+            </p>
           </div>
 
           <!-- SKU -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              SKU *
-            </label>
+            <div class="flex items-center gap-2 mb-2">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                SKU (Stock Keeping Unit) *
+              </label>
+              <CommonHelpTooltip
+                title="SKU Best Practices"
+                content="SKU is a unique identifier for inventory tracking. Create a system that makes sense for your business."
+              >
+                <ul class="list-disc list-inside space-y-1 text-xs">
+                  <li>Must be unique across all products</li>
+                  <li>Use letters, numbers, and dashes</li>
+                  <li>Keep it short but meaningful</li>
+                  <li>Consider: BRAND-TYPE-YEAR format</li>
+                </ul>
+              </CommonHelpTooltip>
+            </div>
             <input
               v-model="form.sku"
               type="text"
-              placeholder="Product SKU"
+              placeholder="e.g., CRIC-CAB-2021 or MOL-WINE-001"
               class="w-full px-4 py-3 md:px-3 md:py-2 text-base md:text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               :class="{ 'border-red-500': errors.sku }"
             />
             <p v-if="errors.sku" class="mt-1 text-sm text-red-600">{{ errors.sku }}</p>
+            <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">
+              📦 Tip: Use a consistent naming pattern for easier inventory management
+            </p>
           </div>
 
           <!-- Category -->
@@ -583,6 +615,16 @@ onMounted(() => {
 const getLocalizedText = (text: Record<string, string> | null) => {
   if (!text) return ''
   return text.es || Object.values(text)[0] || ''
+}
+
+// Placeholder helpers
+const getNamePlaceholder = (locale: string) => {
+  const placeholders = {
+    es: 'Ej: Vino Tinto Premium Moldavo 2021',
+    en: 'e.g., Premium Moldovan Red Wine 2021',
+    ro: 'Ex: Vin Roșu Premium Moldovenesc 2021'
+  }
+  return placeholders[locale as keyof typeof placeholders] || placeholders.en
 }
 
 // Validation function

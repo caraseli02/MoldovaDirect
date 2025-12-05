@@ -33,8 +33,15 @@
       @clear-filters="adminProductsStore.clearFilters"
     />
 
+    <!-- Empty State -->
+    <AdminProductsEmptyState
+      v-if="!adminProductsStore.loading && adminProductsStore.products.length === 0 && !adminProductsStore.hasActiveFilters"
+      :show-import-option="false"
+    />
+
     <!-- Products Table -->
     <AdminProductsTable
+      v-else
       :products="adminProductsStore.productsWithAdminData"
       :loading="adminProductsStore.loading"
       :has-active-filters="adminProductsStore.hasActiveFilters"
@@ -180,6 +187,7 @@ import type { CategoryWithChildren, ProductWithRelations } from '~/types/databas
 import { usePinia } from '#imports'
 import AdminProductsFilters from '~/components/admin/Products/Filters.vue'
 import AdminProductsTable from '~/components/admin/Products/Table.vue'
+import AdminProductsEmptyState from '~/components/admin/Products/EmptyState.vue'
 import AdminUtilsPagination from '~/components/admin/Utils/Pagination.vue'
 import AdminUtilsBulkOperationsBar from '~/components/admin/Utils/BulkOperationsBar.vue'
 
