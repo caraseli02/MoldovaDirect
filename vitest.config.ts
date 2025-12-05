@@ -35,6 +35,7 @@ export default defineConfig({
       'tests/server/utils/__tests__/impersonation.test.ts',
       'tests/server/utils/__tests__/orderEmails.test.ts',
       'tests/server/utils/__tests__/searchSanitization.test.ts',
+      'tests/integration/**/*.test.ts',
       'components/layout/AppFooter.test.ts',
       '**/.{idea,git,cache,output,temp}/**',
     ],
@@ -88,6 +89,19 @@ export default defineConfig({
       //   },
       // },
     },
+    server: {
+      deps: {
+        inline: [
+          '@supabase/supabase-js',
+          '@supabase/auth-js',
+          '@supabase/realtime-js',
+          '@supabase/postgrest-js',
+          '@supabase/storage-js',
+          '@supabase/functions-js',
+          '@supabase/ssr',
+        ],
+      },
+    },
   },
   resolve: {
     alias: {
@@ -96,7 +110,12 @@ export default defineConfig({
       '~~': resolve(__dirname, '.'),
       '@@': resolve(__dirname, '.'),
       '#app': resolve(__dirname, './.nuxt'),
+      '#imports': resolve(__dirname, './tests/setup/nuxt-imports-mock.ts'),
+      'vue-i18n': resolve(__dirname, './tests/setup/vue-i18n-mock.ts'),
       'pinia': resolve(__dirname, './node_modules/.pnpm/pinia@3.0.4_typescript@5.9.3_vue@3.5.24_typescript@5.9.3_/node_modules/pinia'),
+      '#supabase/server': resolve(__dirname, './tests/server/utils/mocks/supabase-server.mock.ts'),
+      '#nitro': resolve(__dirname, './tests/server/utils/mocks/nitro.mock.ts'),
+      'h3': resolve(__dirname, './tests/server/utils/mocks/h3.mock.ts'),
     },
     dedupe: ['vue', 'pinia', '@vue/runtime-core'],
   },

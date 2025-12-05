@@ -216,6 +216,7 @@ const handlePlaceOrder = async () => {
     return
   }
 
+  // Navigate immediately - orderData is now persisted atomically
   const stepPath = nextStep === 'shipping' ? '/checkout' : `/checkout/${nextStep}`
   await navigateTo(localePath(stepPath))
 }

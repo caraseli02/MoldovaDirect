@@ -14,6 +14,7 @@ ALLOWED_FILES=(
   "LICENSE.md"
   "CONTRIBUTING.md"
   "CODE_OF_CONDUCT.md"
+  "CLAUDE.md"
 )
 
 # Get all .md files being committed in the root directory
@@ -31,7 +32,10 @@ for file in $STAGED_MD_FILES; do
   is_allowed=false
 
   for allowed in "${ALLOWED_FILES[@]}"; do
-    if [ "${filename,,}" = "${allowed,,}" ]; then
+    # Use tr for case-insensitive comparison (compatible with bash 3.2)
+    filename_lower=$(echo "$filename" | tr '[:upper:]' '[:lower:]')
+    allowed_lower=$(echo "$allowed" | tr '[:upper:]' '[:lower:]')
+    if [ "$filename_lower" = "$allowed_lower" ]; then
       is_allowed=true
       break
     fi

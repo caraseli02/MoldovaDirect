@@ -22,7 +22,8 @@ interface UserActionRequest {
 
 export default defineEventHandler(async (event) => {
   try {
-    await requireAdminRole(event)
+    // Capture admin user ID for audit logging
+    const adminId = await requireAdminRole(event)
     const userId = getRouterParam(event, 'id')
     const body = await readBody(event) as UserActionRequest
 
@@ -86,12 +87,15 @@ export default defineEventHandler(async (event) => {
             suspend_reason: body.reason || 'No reason provided',
             suspended_at: new Date().toISOString(),
             suspend_until: suspendUntil,
-            suspended_by: 'admin' // TODO: Get actual admin user ID
+            suspended_by: adminId
           }
         })
 
         if (suspendError) {
-          throw new Error(`Failed to suspend user: ${suspendError.message}`)
+          throw createError({
+            statusCode: 500,
+            statusMessage: `Failed to suspend user: ${suspendError.message}`
+          })
         }
 
         auditAction = 'user_suspended'
@@ -112,12 +116,15 @@ export default defineEventHandler(async (event) => {
             suspended_at: null,
             suspend_until: null,
             unsuspended_at: new Date().toISOString(),
-            unsuspended_by: 'admin' // TODO: Get actual admin user ID
+            unsuspended_by: adminId
           }
         })
 
         if (unsuspendError) {
-          throw new Error(`Failed to unsuspend user: ${unsuspendError.message}`)
+          throw createError({
+            statusCode: 500,
+            statusMessage: `Failed to unsuspend user: ${unsuspendError.message}`
+          })
         }
 
         auditAction = 'user_unsuspended'
@@ -134,12 +141,15 @@ export default defineEventHandler(async (event) => {
             banned: true,
             ban_reason: body.reason || 'No reason provided',
             banned_at: new Date().toISOString(),
-            banned_by: 'admin' // TODO: Get actual admin user ID
+            banned_by: adminId
           }
         })
 
         if (banError) {
-          throw new Error(`Failed to ban user: ${banError.message}`)
+          throw createError({
+            statusCode: 500,
+            statusMessage: `Failed to ban user: ${banError.message}`
+          })
         }
 
         auditAction = 'user_banned'
@@ -156,12 +166,15 @@ export default defineEventHandler(async (event) => {
             ban_reason: null,
             banned_at: null,
             unbanned_at: new Date().toISOString(),
-            unbanned_by: 'admin' // TODO: Get actual admin user ID
+            unbanned_by: adminId
           }
         })
 
         if (unbanError) {
-          throw new Error(`Failed to unban user: ${unbanError.message}`)
+          throw createError({
+            statusCode: 500,
+            statusMessage: `Failed to unban user: ${unbanError.message}`
+          })
         }
 
         auditAction = 'user_unbanned'
@@ -175,7 +188,10 @@ export default defineEventHandler(async (event) => {
         })
 
         if (verifyError) {
-          throw new Error(`Failed to verify email: ${verifyError.message}`)
+          throw createError({
+            statusCode: 500,
+            statusMessage: `Failed to verify email: ${verifyError.message}`
+          })
         }
 
         auditAction = 'email_verified_by_admin'
@@ -191,7 +207,10 @@ export default defineEventHandler(async (event) => {
         })
 
         if (resetError) {
-          throw new Error(`Failed to generate reset link: ${resetError.message}`)
+          throw createError({
+            statusCode: 500,
+            statusMessage: `Failed to generate reset link: ${resetError.message}`
+          })
         }
 
         auditAction = 'password_reset_initiated_by_admin'
@@ -209,12 +228,15 @@ export default defineEventHandler(async (event) => {
             ...currentUser.user.user_metadata,
             role: body.role,
             role_updated_at: new Date().toISOString(),
-            role_updated_by: 'admin' // TODO: Get actual admin user ID
+            role_updated_by: adminId
           }
         })
 
         if (roleError) {
-          throw new Error(`Failed to update role: ${roleError.message}`)
+          throw createError({
+            statusCode: 500,
+            statusMessage: `Failed to update role: ${roleError.message}`
+          })
         }
 
         auditAction = 'user_role_updated'
@@ -281,18 +303,20 @@ export default defineEventHandler(async (event) => {
 
   } catch (error) {
     console.error('Error in admin user actions API:', error)
-    
+
+    // Always throw errors with proper HTTP status codes
+    // Don't return success: false - use HTTP semantics instead
     if (error.statusCode) {
       throw error
     }
-    
-    return {
-      success: false,
-      error: {
-        statusCode: 500,
-        statusMessage: error instanceof Error ? error.message : 'Failed to perform user action'
+
+    throw createError({
+      statusCode: 500,
+      statusMessage: error instanceof Error ? error.message : 'Failed to perform user action',
+      data: {
+        errorId: `action_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
       }
-    }
+    })
   }
 })
 

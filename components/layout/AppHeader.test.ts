@@ -231,15 +231,16 @@ describe('AppHeader', () => {
   })
 
   describe('Accessibility', () => {
-    it('has aria-expanded on mobile menu button', () => {
+    it('has proper aria-labels on icon buttons', () => {
       const wrapper = mount(AppHeader, {
         global: createGlobalConfig(),
       })
 
-      const mobileMenuButtons = wrapper.findAll('button').filter(btn =>
-        btn.attributes('aria-expanded') !== undefined
+      // Check that search button has aria-label
+      const searchButtons = wrapper.findAll('button').filter(btn =>
+        btn.attributes('aria-label')?.includes('common.search')
       )
-      expect(mobileMenuButtons.length).toBeGreaterThan(0)
+      expect(searchButtons.length).toBeGreaterThan(0)
     })
   })
 })

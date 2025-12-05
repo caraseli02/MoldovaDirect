@@ -227,134 +227,121 @@ export const useAdminUsersStore = defineStore('adminUsers', {
 
   actions: {
     /**
-     * Fetch users with current filters and pagination
+     * Set users data (called by component after fetching)
      */
-    async fetchUsers() {
-      this.loading = true
+    setUsers(users: UserWithProfile[]) {
+      this.users = users
       this.error = null
-
-      try {
-        const response = await $fetch<{
-          success: boolean
-          data: {
-            users: UserWithProfile[]
-            pagination: PaginationState
-            summary: UsersSummary
-          }
-        }>('/api/admin/users', {
-          query: this.queryParams
-        })
-
-        if (response.success) {
-          this.users = response.data.users
-          this.pagination = response.data.pagination
-          this.summary = response.data.summary
-        } else {
-          throw new Error('Failed to fetch users')
-        }
-      } catch (error) {
-        this.error = error instanceof Error ? error.message : 'Failed to fetch users'
-        console.error('Error fetching admin users:', error)
-      } finally {
-        this.loading = false
-      }
     },
 
     /**
-     * Fetch detailed user information
+     * Set pagination data (called by component after fetching)
      */
-    async fetchUserDetail(userId: string) {
-      this.userDetailLoading = true
-      this.error = null
-
-      try {
-        const response = await $fetch<{
-          success: boolean
-          data: UserDetail
-        }>(`/api/admin/users/${userId}`)
-
-        if (response.success) {
-          this.currentUser = response.data
-        } else {
-          throw new Error('Failed to fetch user details')
-        }
-      } catch (error) {
-        this.error = error instanceof Error ? error.message : 'Failed to fetch user details'
-        console.error('Error fetching user detail:', error)
-      } finally {
-        this.userDetailLoading = false
-      }
+    setPagination(pagination: PaginationState) {
+      this.pagination = pagination
     },
 
     /**
-     * Update search filter and refresh
+     * Set summary data (called by component after fetching)
      */
-    async updateSearch(search: string) {
+    setSummary(summary: UsersSummary) {
+      this.summary = summary
+    },
+
+    /**
+     * Set current user detail (called by component after fetching)
+     */
+    setCurrentUser(user: UserDetail) {
+      this.currentUser = user
+      this.error = null
+    },
+
+    /**
+     * Set loading states
+     */
+    setLoading(loading: boolean) {
+      this.loading = loading
+    },
+
+    setUserDetailLoading(loading: boolean) {
+      this.userDetailLoading = loading
+    },
+
+    setActionLoading(loading: boolean) {
+      this.actionLoading = loading
+    },
+
+    /**
+     * Set error state
+     */
+    setError(error: string) {
+      this.error = error
+    },
+
+    /**
+     * Update search filter (component will handle refetch)
+     */
+    updateSearch(search: string) {
       this.filters.search = search
       this.pagination.page = 1
-      await this.fetchUsers()
     },
 
     /**
-     * Update date range filter and refresh
+     * Update date range filter (component will handle refetch)
      */
-    async updateDateRange(from?: string, to?: string) {
+    updateDateRange(from?: string, to?: string) {
       this.filters.registrationDateFrom = from
       this.filters.registrationDateTo = to
       this.pagination.page = 1
-      await this.fetchUsers()
     },
 
     /**
-     * Update status filter and refresh
+     * Update status filter (component will handle refetch)
      */
-    async updateStatusFilter(status: 'active' | 'inactive' | '') {
+    updateStatusFilter(status: 'active' | 'inactive' | '') {
       this.filters.status = status
       this.pagination.page = 1
-      await this.fetchUsers()
     },
 
     /**
-     * Update sorting and refresh
+     * Update sorting (component will handle refetch)
      */
-    async updateSort(sortBy: string, sortOrder: 'asc' | 'desc' = 'asc') {
+    updateSort(sortBy: string, sortOrder: 'asc' | 'desc' = 'asc') {
       this.filters.sortBy = sortBy as any
       this.filters.sortOrder = sortOrder
-      await this.fetchUsers()
     },
 
     /**
-     * Go to specific page
+     * Go to specific page (component will handle refetch)
      */
-    async goToPage(page: number) {
+    goToPage(page: number) {
       if (page >= 1 && page <= this.pagination.totalPages) {
         this.pagination.page = page
-        await this.fetchUsers()
       }
     },
 
     /**
-     * Go to next page
+     * Go to next page (component will handle refetch)
      */
-    async nextPage() {
+    nextPage() {
       if (this.pagination.hasNext) {
-        await this.goToPage(this.pagination.page + 1)
+        this.goToPage(this.pagination.page + 1)
       }
     },
 
     /**
-     * Go to previous page
+     * Go to previous page (component will handle refetch)
      */
-    async prevPage() {
+    prevPage() {
       if (this.pagination.hasPrev) {
-        await this.goToPage(this.pagination.page - 1)
+        this.goToPage(this.pagination.page - 1)
       }
     },
 
     /**
-     * Clear all filters
+     * Clear all filters (component will handle refetch)
      */
-    async clearFilters() {
+    clearFilters() {
       this.filters = {
         search: '',
         registrationDateFrom: undefined,
@@ -364,123 +351,8 @@ export const useAdminUsersStore = defineStore('adminUsers', {
         sortOrder: 'desc'
       }
       this.pagination.page = 1
-      await this.fetchUsers()
     },
 
-    /**
-     * Perform user account action
-     */
-    async performUserAction(
-      userId: string, 
-      action: 'suspend' | 'unsuspend' | 'ban' | 'unban' | 'verify_email' | 'reset_password' | 'update_role',
-      options: {
-        reason?: string
-        duration?: number
-        role?: string
-        notes?: string
-      } = {}
-    ) {
-      this.actionLoading = true
-
-      try {
-        const response = await $fetch<{
-          success: boolean
-          data: any
-          message: string
-        }>(`/api/admin/users/${userId}/actions`, {
-          method: 'POST',
-          body: {
-            action,
-            ...options
-          }
-        })
-
-        if (response.success) {
-          // Update local state if current user is affected
-          if (this.currentUser && this.currentUser.id === userId) {
-            // Refresh user detail to get updated data
-            await this.fetchUserDetail(userId)
-          }
-
-          // Update user in the list if present
-          const userIndex = this.users.findIndex(u => u.id === userId)
-          if (userIndex !== -1) {
-            // Refresh the list to get updated data
-            await this.fetchUsers()
-          }
-
-          // Show success message
-          const toast = useToast()
-          toast.success(response.message)
-
-          return response.data
-        } else {
-          throw new Error('Action failed')
-        }
-      } catch (error) {
-        const toast = useToast()
-        toast.error(error instanceof Error ? error.message : 'Failed to perform action')
-        throw error
-      } finally {
-        this.actionLoading = false
-      }
-    },
-
-    /**
-     * Suspend user account
-     */
-    async suspendUser(userId: string, reason: string, duration?: number) {
-      return this.performUserAction(userId, 'suspend', { reason, duration })
-    },
-
-    /**
-     * Unsuspend user account
-     */
-    async unsuspendUser(userId: string, reason?: string) {
-      return this.performUserAction(userId, 'unsuspend', { reason })
-    },
-
-    /**
-     * Ban user account
-     */
-    async banUser(userId: string, reason: string) {
-      return this.performUserAction(userId, 'ban', { reason })
-    },
-
-    /**
-     * Unban user account
-     */
-    async unbanUser(userId: string, reason?: string) {
-      return this.performUserAction(userId, 'unban', { reason })
-    },
-
-    /**
-     * Verify user email
-     */
-    async verifyUserEmail(userId: string, reason?: string) {
-      return this.performUserAction(userId, 'verify_email', { reason })
-    },
-
-    /**
-     * Reset user password
-     */
-    async resetUserPassword(userId: string, reason?: string) {
-      return this.performUserAction(userId, 'reset_password', { reason })
-    },
-
-    /**
-     * Update user role
-     */
-    async updateUserRole(userId: string, role: string, reason?: string) {
-      return this.performUserAction(userId, 'update_role', { role, reason })
-    },
-
-    /**
-     * Initialize store (fetch initial data)
-     */
-    async initialize() {
-      await this.fetchUsers()
-    },
 
     /**
      * Clear current user detail

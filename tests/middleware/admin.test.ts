@@ -38,6 +38,15 @@ describe('Admin Middleware', () => {
         }))
       })),
       auth: {
+        getSession: vi.fn(async () => ({
+          data: {
+            session: mockUser ? {
+              user: mockUser,
+              access_token: 'mock-token'
+            } : null
+          },
+          error: null
+        })),
         mfa: {
           getAuthenticatorAssuranceLevel: vi.fn(async () => ({
             data: { currentLevel: 'aal2' },

@@ -22,12 +22,13 @@
     
     <!-- Sonner toaster (shadcn-vue) -->
     <ClientOnly>
-      <UiSonner position="top-right" :rich-colors="true" />
+      <Sonner position="top-right" :rich-colors="true" />
     </ClientOnly>
   </div>
 </template>
 
 <script setup lang="ts">
+import { Sonner } from '@/components/ui/sonner'
 import type { CheckoutStep } from '~/types/checkout'
 
 // Define checkout steps for progress indicator

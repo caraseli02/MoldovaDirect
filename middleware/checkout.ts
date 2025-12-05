@@ -8,14 +8,46 @@
  * - 6.5: Clear progress indicators and navigation protection
  */
 
-export default defineNuxtRouteMiddleware((to) => {
-  const localePath = useLocalePath()
-  const { items, itemCount } = useCart()
-  const checkoutStore = useCheckoutStore()
+import { useCartStore } from '~/stores/cart'
+import { useCheckoutStore } from '~/stores/checkout'
+import { useCart } from '~/composables/useCart'
 
-  // Check if cart has items (Requirement 1.1, 1.2)
+export default defineNuxtRouteMiddleware(async (to) => {
+  const localePath = useLocalePath()
+
+  // Extract the checkout step from path first
+  const stepFromPath = extractStepFromPath(to.path)
+
+  // Skip ALL validation for confirmation page - order is done, cart is cleared
+  // This allows users to reload the confirmation page after completing checkout
+  // even though the cart has been cleared and session might be reset
+  if (stepFromPath === 'confirmation') {
+    return // Allow confirmation page access without any checks
+  }
+
+  // CRITICAL FIX v2: ALL store access must be client-side only
+  // During SSR, stores are not initialized yet, so we allow the navigation
+  // and perform all validations on the client side after hydration
+  if (!import.meta.client) {
+    return // Allow SSR to continue, validations happen on client
+  }
+
+  // === CLIENT-SIDE ONLY FROM HERE ===
+
+  // 1. Initialize cart first to fix race condition
+  // Ensure cart is loaded from cookie before checking item count
+  const cartStore = useCartStore()
+  if (!cartStore.sessionId) {
+    console.log('🛒 [Checkout Middleware] Initializing cart before validation')
+    await cartStore.initializeCart()
+  }
+
+  // 2. Now safely get cart data after ensuring it's initialized
+  const { items, itemCount } = useCart()
+
+  // 3. Check if cart has items (Requirement 1.1, 1.2)
   if (itemCount.value === 0) {
-    // Redirect to cart page with message about empty cart
+    console.log('🛒 [Checkout Middleware] Cart is empty, redirecting to cart')
     return navigateTo({
       path: localePath('/cart'),
       query: {
@@ -24,15 +56,16 @@ export default defineNuxtRouteMiddleware((to) => {
     })
   }
 
-  // Initialize checkout if not already initialized
+  // 4. Now it's safe to access checkout store (cart is initialized)
+  const checkoutStore = useCheckoutStore()
+
+  // 5. Initialize checkout if not already initialized
   if (!checkoutStore.sessionId) {
     try {
-      // Initialize checkout with current cart items
-      checkoutStore.initializeCheckout(items.value)
+      console.log('🛒 [Checkout Middleware] Initializing checkout session')
+      await checkoutStore.initializeCheckout(items.value)
     } catch (error) {
       console.error('Failed to initialize checkout:', error)
-      
-      // Redirect to cart with error message
       return navigateTo({
         path: localePath('/cart'),
         query: {
@@ -42,11 +75,45 @@ export default defineNuxtRouteMiddleware((to) => {
     }
   }
 
-  // Validate checkout session hasn't expired
+  // 6. Prefetch all checkout data in parallel (only once per session)
+  if (!checkoutStore.dataPrefetched) {
+    try {
+      console.log('📥 [Checkout Middleware] Prefetching user data (addresses, preferences)...')
+      await checkoutStore.prefetchCheckoutData()
+      console.log('✅ [Checkout Middleware] Prefetch complete')
+    } catch (error) {
+      console.error('❌ [Checkout Middleware] Failed to prefetch checkout data:', error)
+    }
+  }
+
+  // 6.5. Auto-routing for express checkout (Hybrid approach)
+  // Only auto-route if:
+  // - Data is prefetched (user preferences loaded)
+  // - User has complete shipping info (address + method)
+  // - User has a saved preferred shipping method
+  // - User is landing on base /checkout path (not already on a specific step)
+  if (checkoutStore.dataPrefetched) {
+    const hasCompleteShipping = checkoutStore.canProceedToPayment
+    const preferredMethod = checkoutStore.preferences?.preferred_shipping_method
+
+    // Auto-route to payment if all conditions met
+    if (hasCompleteShipping && preferredMethod && to.path === localePath('/checkout')) {
+      console.log('🚀 [Checkout Middleware] Express checkout: Auto-routing to payment step')
+      console.log('   - Complete shipping info: ✓')
+      console.log('   - Preferred method saved: ✓')
+      console.log('   - Landing on base checkout: ✓')
+
+      return navigateTo({
+        path: localePath('/checkout/payment'),
+        query: { express: '1' } // Flag for showing countdown banner
+      })
+    }
+  }
+
+  // 7. Validate checkout session hasn't expired
   if (checkoutStore.isSessionExpired) {
-    // Clear expired session and redirect to cart
+    console.log('🛒 [Checkout Middleware] Session expired, redirecting to cart')
     checkoutStore.resetCheckout()
-    
     return navigateTo({
       path: localePath('/cart'),
       query: {
@@ -55,17 +122,14 @@ export default defineNuxtRouteMiddleware((to) => {
     })
   }
 
-  // Step-specific validations
-  const currentPath = to.path
-  const stepFromPath = extractStepFromPath(currentPath)
-  
+  // 8. Step-specific validations
   if (stepFromPath) {
     // Validate that user can access the requested step
     if (!canAccessStep(stepFromPath, checkoutStore)) {
-      // Redirect to the appropriate step
       const allowedStep = getHighestAllowedStep(checkoutStore)
       const redirectPath = getStepPath(allowedStep, localePath)
-      
+      console.log(`🛒 [Checkout Middleware] Access denied to ${stepFromPath}, redirecting to ${allowedStep}`)
+
       return navigateTo({
         path: redirectPath,
         query: {
@@ -73,7 +137,7 @@ export default defineNuxtRouteMiddleware((to) => {
         }
       })
     }
-    
+
     // Update checkout store with current step
     if (checkoutStore.currentStep !== stepFromPath) {
       checkoutStore.goToStep(stepFromPath)
@@ -100,16 +164,21 @@ function canAccessStep(step: CheckoutStep, store: any): boolean {
   switch (step) {
     case 'shipping':
       return true // Always accessible
-      
+
     case 'payment':
       return store.canProceedToPayment
-      
+
     case 'review':
       return store.canProceedToReview
-      
+
     case 'confirmation':
-      return store.canCompleteOrder && store.orderData?.orderId
-      
+      // Allow if already on confirmation page (order completed)
+      // OR if coming from review page (order just placed - navigation happens before store updates)
+      // OR if we have orderId set (order was created)
+      return store.currentStep === 'confirmation' ||
+             store.currentStep === 'review' ||
+             Boolean(store.orderData?.orderId)
+
     default:
       return false
   }

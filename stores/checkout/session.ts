@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import { computed, reactive, toRefs } from 'vue'
+import { computed, reactive, toRefs, nextTick } from 'vue'
+import { CHECKOUT_SESSION_COOKIE_CONFIG, COOKIE_NAMES } from '~/config/cookies'
 import type {
   CheckoutState,
   CheckoutStep,
@@ -16,6 +17,7 @@ import type {
 interface PersistPayload {
   shippingInfo: ShippingInformation | null
   paymentMethod: PaymentMethod | null
+  orderData?: OrderData | null
 }
 
 interface RestoredPayload extends PersistPayload {}
@@ -65,7 +67,9 @@ const INITIAL_STATE: CheckoutState = {
   availableCountries: ['ES', 'RO', 'MD', 'FR', 'DE', 'IT'],
   termsAccepted: false,
   privacyAccepted: false,
-  marketingConsent: false
+  marketingConsent: false,
+  dataPrefetched: false,
+  preferences: null
 }
 
 export const useCheckoutSessionStore = defineStore('checkout-session', () => {
@@ -118,6 +122,14 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
 
   const setSavedAddresses = (addresses: Address[]): void => {
     state.savedAddresses = addresses
+  }
+
+  const setDataPrefetched = (value: boolean): void => {
+    state.dataPrefetched = value
+  }
+
+  const setPreferences = (preferences: any): void => {
+    state.preferences = preferences
   }
 
   const setPaymentIntent = (id: string | null): void => {
@@ -202,16 +214,17 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
     state.marketingConsent = value
   }
 
-  const persist = (payload: PersistPayload): void => {
-    if (typeof window === 'undefined') return
+  // Single cookie instance for consistent access
+  const checkoutCookie = useCookie<any>(COOKIE_NAMES.CHECKOUT_SESSION, CHECKOUT_SESSION_COOKIE_CONFIG)
 
+  const persist = async (payload: PersistPayload): Promise<void> => {
     try {
       const snapshot = {
         sessionId: state.sessionId,
         currentStep: state.currentStep,
         guestInfo: state.guestInfo,
         contactEmail: state.contactEmail,
-        orderData: state.orderData,
+        orderData: payload.orderData ?? state.orderData,
         sessionExpiresAt: state.sessionExpiresAt,
         lastSyncAt: new Date(),
         termsAccepted: state.termsAccepted,
@@ -221,26 +234,27 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
         paymentMethod: sanitizePaymentMethodForStorage(payload.paymentMethod)
       }
 
-      localStorage.setItem('checkout_session', JSON.stringify(snapshot))
+      checkoutCookie.value = snapshot
+      await nextTick() // Wait for cookie write to complete
     } catch (error) {
       console.error('Failed to persist checkout session:', error)
     }
   }
 
   const restore = (): RestoredPayload | null => {
-    if (typeof window === 'undefined') return null
-
     try {
-      const stored = localStorage.getItem('checkout_session')
-      if (!stored) return null
+      const snapshot = checkoutCookie.value
+      if (!snapshot) {
+        return null
+      }
 
-      const snapshot = JSON.parse(stored)
-
+      // Check if session has expired
       if (snapshot.sessionExpiresAt && new Date(snapshot.sessionExpiresAt) < new Date()) {
         clearStorage()
         return null
       }
 
+      // Restore state from snapshot
       state.sessionId = snapshot.sessionId
       state.currentStep = snapshot.currentStep || 'shipping'
       state.guestInfo = snapshot.guestInfo || null
@@ -267,8 +281,7 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
   }
 
   const clearStorage = (): void => {
-    if (typeof window === 'undefined') return
-    localStorage.removeItem('checkout_session')
+    checkoutCookie.value = null
   }
 
   const reset = (): void => {
@@ -288,6 +301,8 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
     setAvailableShippingMethods,
     setSavedPaymentMethods,
     setSavedAddresses,
+    setDataPrefetched,
+    setPreferences,
     setPaymentIntent,
     setPaymentClientSecret,
     setLoading,

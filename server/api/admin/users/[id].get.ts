@@ -64,7 +64,8 @@ interface UserDetail {
   }
 }
 
-export default defineCachedEventHandler(async (event) => {
+// NOTE: Caching disabled for admin endpoints to ensure proper header-based authentication
+export default defineEventHandler(async (event) => {
   try {
     await requireAdminRole(event)
     const userId = getRouterParam(event, 'id')
@@ -234,14 +235,6 @@ export default defineCachedEventHandler(async (event) => {
       }
     }
   }
-}, {
-  maxAge: 60 * 2, // Cache for 2 minutes
-  name: 'admin-user-detail',
-  getKey: (event) => {
-    const userId = getRouterParam(event, 'id')
-    return `user:${userId}`
-  },
-  swr: true // Enable stale-while-revalidate
 })
 
 /**

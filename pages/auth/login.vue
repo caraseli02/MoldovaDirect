@@ -23,34 +23,54 @@
       
         <!-- Card container for form -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-none dark:border dark:border-gray-700 p-6 sm:p-8">
-          <form class="space-y-5" @submit.prevent="handleLogin">
-            <!-- Alert messages with improved mobile styling -->
-            <Transition name="slide-fade">
-              <Alert
-                v-if="displayError"
-                variant="destructive"
-                class="border-red-200 bg-red-50 dark:border-red-600"
-                data-testid="auth-error"
-              >
-                <AlertCircle class="h-5 w-5 text-red-500 dark:text-red-300" aria-hidden="true" />
-                <AlertDescription :class="cn('text-sm text-red-800 dark:text-white')">
-                  {{ displayError }}
-                </AlertDescription>
-              </Alert>
-            </Transition>
+          <!-- Alert messages with improved mobile styling -->
+          <Transition name="slide-fade">
+            <Alert
+              v-if="displayError"
+              variant="destructive"
+              class="mb-5 border-red-200 bg-red-50 dark:border-red-600"
+              data-testid="auth-error"
+            >
+              <AlertCircle class="h-5 w-5 text-red-500 dark:text-red-300" aria-hidden="true" />
+              <AlertDescription :class="cn('text-sm text-red-800 dark:text-white')">
+                {{ displayError }}
+              </AlertDescription>
+            </Alert>
+          </Transition>
 
-            <Transition name="slide-fade">
-              <Alert
-                v-if="success"
-                class="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20"
-                data-testid="auth-success"
-              >
-                <CheckCircle2 class="h-5 w-5 text-green-500 dark:text-green-400" aria-hidden="true" />
-                <AlertDescription class="text-sm text-green-800 dark:text-green-300">
-                  {{ success }}
-                </AlertDescription>
-              </Alert>
-            </Transition>
+          <Transition name="slide-fade">
+            <Alert
+              v-if="success"
+              class="mb-5 border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20"
+              data-testid="auth-success"
+            >
+              <CheckCircle2 class="h-5 w-5 text-green-500 dark:text-green-400" aria-hidden="true" />
+              <AlertDescription class="text-sm text-green-800 dark:text-green-300">
+                {{ success }}
+              </AlertDescription>
+            </Alert>
+          </Transition>
+
+          <!-- Tabbed Interface for Auth Methods -->
+          <Tabs v-model="activeTab" class="w-full">
+            <TabsList class="grid w-full grid-cols-2 mb-6">
+              <TabsTrigger value="password" class="text-base">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                {{ $t('auth.withPassword') }}
+              </TabsTrigger>
+              <TabsTrigger value="magiclink" class="text-base">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                </svg>
+                {{ $t('auth.withMagicLink') }}
+              </TabsTrigger>
+            </TabsList>
+
+            <!-- Password Tab Content -->
+            <TabsContent value="password">
+              <form class="space-y-5" @submit.prevent="handleLogin">
         
             <!-- Modern input fields with mobile optimization and accessibility -->
             <div class="space-y-4">
@@ -189,42 +209,95 @@
             <div v-if="loading" id="login-status" class="sr-only" aria-live="polite">
               {{ $t('auth.accessibility.processingLogin') }}
             </div>
+              </form>
+            </TabsContent>
 
-            <!-- Modern divider -->
-            <div class="relative my-6">
-              <div class="absolute inset-0 flex items-center">
-                <div class="w-full border-t border-gray-200 dark:border-gray-600" />
-              </div>
-              <div class="relative flex justify-center text-sm">
-                <span class="px-4 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-300">{{ $t('auth.orContinueWith') }}</span>
-              </div>
-            </div>
+            <!-- Magic Link Tab Content -->
+            <TabsContent value="magiclink">
+              <form class="space-y-5" @submit.prevent="handleMagicLink">
+                <!-- Email field only -->
+                <div class="space-y-2">
+                  <Label
+                    for="email-magic"
+                    class="text-sm font-medium text-gray-700 dark:text-gray-300"
+                    :class="{ 'text-red-600 dark:text-red-400': emailError }"
+                  >
+                    {{ $t('auth.email') }}
+                  </Label>
+                  <Input
+                    id="email-magic"
+                    v-model="form.email"
+                    name="email"
+                    type="email"
+                    autocomplete="email"
+                    autocapitalize="none"
+                    autocorrect="off"
+                    spellcheck="false"
+                    inputmode="email"
+                    required
+                    data-testid="email-magic-input"
+                    :aria-invalid="emailError ? 'true' : 'false'"
+                    :aria-describedby="emailError ? 'email-magic-error' : undefined"
+                    :placeholder="$t('auth.emailPlaceholder')"
+                    class="h-11 border-2 border-gray-200 bg-white text-gray-900 placeholder:text-gray-500 dark:border-gray-500 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-300"
+                    :class="{ 'border-red-500 dark:border-red-400': emailError }"
+                    @blur="validateEmailField"
+                  />
+                  <p v-if="emailError" id="email-magic-error" class="text-sm text-red-600 dark:text-red-400" role="alert">
+                    {{ emailError }}
+                  </p>
+                </div>
 
-            <!-- Secondary action buttons with mobile optimization -->
-            <Button
-              type="button"
-              variant="outline"
-              @click="handleMagicLink"
-              :disabled="isMagicLinkDisabled"
-              :aria-disabled="isMagicLinkDisabled"
-              data-testid="magic-link-button"
-              class="relative w-full flex justify-center items-center py-4 px-4 min-h-[48px] text-base font-medium rounded-xl transition-opacity"
-              :class="{ 'opacity-60 cursor-not-allowed pointer-events-none': isMagicLinkDisabled }"
-              :aria-label="loadingMagic ? $t('auth.accessibility.sendingMagicLink') : $t('auth.accessibility.magicLinkButton')"
-              :aria-describedby="loadingMagic ? 'magic-link-status' : 'magic-link-desc'"
-            >
-              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-              </svg>
-              {{ loadingMagic ? $t('common.loading') : $t('auth.sendMagicLink') }}
-            </Button>
-            <div id="magic-link-desc" class="sr-only">
-              {{ $t('auth.accessibility.magicLinkDescription') }}
-            </div>
-            <div v-if="loadingMagic" id="magic-link-status" class="sr-only" aria-live="polite">
-              {{ $t('auth.accessibility.sendingMagicLink') }}
-            </div>
-          </form>
+                <!-- Info message -->
+                <div class="rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 p-4">
+                  <div class="flex items-start">
+                    <svg class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <div class="text-sm text-blue-800 dark:text-blue-300">
+                      <p class="font-medium">{{ $t('auth.magicLinkInfo') }}</p>
+                      <p class="mt-1 text-xs text-blue-700 dark:text-blue-400">{{ $t('auth.magicLinkDescription') }}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Send Magic Link button -->
+                <Button
+                  type="submit"
+                  :disabled="isMagicLinkDisabled"
+                  :aria-disabled="isMagicLinkDisabled"
+                  data-testid="magic-link-button"
+                  class="relative w-full flex justify-center items-center py-4 px-4 min-h-[48px] text-base font-semibold rounded-xl shadow-lg transition-opacity"
+                  :class="{ 'opacity-60 cursor-not-allowed pointer-events-none': isMagicLinkDisabled }"
+                  :aria-label="loadingMagic ? $t('auth.accessibility.sendingMagicLink') : $t('auth.accessibility.magicLinkButton')"
+                  :aria-describedby="loadingMagic ? 'magic-link-status' : 'magic-link-desc'"
+                >
+                  <svg v-if="loadingMagic" class="animate-spin -ml-1 mr-3 h-5 w-5" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+                  </svg>
+                  <svg v-else-if="magicLinkCooldown > 0" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  <svg v-else class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                  </svg>
+                  <template v-if="magicLinkCooldown > 0">
+                    {{ $t('auth.resendIn') }} {{ magicLinkCooldown }}s
+                  </template>
+                  <template v-else>
+                    {{ loadingMagic ? $t('common.loading') : $t('auth.sendMagicLink') }}
+                  </template>
+                </Button>
+                <div id="magic-link-desc" class="sr-only">
+                  {{ $t('auth.accessibility.magicLinkDescription') }}
+                </div>
+                <div v-if="loadingMagic" id="magic-link-status" class="sr-only" aria-live="polite">
+                  {{ $t('auth.accessibility.sendingMagicLink') }}
+                </div>
+              </form>
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </div>
@@ -237,10 +310,12 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { AlertCircle, CheckCircle2 } from 'lucide-vue-next'
 import { useAuth } from '~/composables/useAuth'
 import { useAuthMessages } from '~/composables/useAuthMessages'
 import { cn } from '~/lib/utils'
+import { setRememberMePreference, adjustSessionCookieDuration } from '~/utils/authStorage'
 
 // Apply guest middleware - redirect authenticated users
 definePageMeta({
@@ -268,14 +343,12 @@ const form = ref({
 })
 
 // Handle redirect after successful login
-const handleRedirectAfterLogin = async () => {
+async function handleRedirectAfterLogin(): Promise<void> {
+  const { handleAuthRedirect } = await import('~/utils/authRedirect')
   const redirect = route.query.redirect as string
-  if (redirect && redirect.startsWith('/')) {
-    await navigateTo(redirect)
-    return
-  }
+  const user = useSupabaseUser()
 
-  await navigateTo(localePath('/account'))
+  await handleAuthRedirect(redirect, user.value, supabase, localePath, navigateTo)
 }
 
 const success = ref('')
@@ -284,10 +357,15 @@ const showPassword = ref(false)
 const rememberMe = ref(false)
 const localError = ref('')
 const loading = ref(false)
+const activeTab = ref('password')
 
 // Field-level validation errors
 const emailError = ref('')
 const passwordError = ref('')
+
+// Magic link rate limiting
+const magicLinkCooldown = ref(0)
+const magicLinkCooldownInterval = ref<NodeJS.Timeout | null>(null)
 
 // Validation composable
 const { validateEmail, validatePassword } = useAuthValidation()
@@ -305,39 +383,39 @@ const isLoginDisabled = computed(() => {
 })
 
 const isMagicLinkDisabled = computed(() => {
-  return loadingMagic.value || !form.value.email || isAccountLocked.value
+  return loadingMagic.value || !form.value.email || isAccountLocked.value || magicLinkCooldown.value > 0
 })
 
 // Field validation methods
-const validateEmailField = () => {
+function validateEmailField(): void {
   if (!form.value.email) {
     emailError.value = ''
     return
   }
-  
+
   const result = validateEmail(form.value.email)
   emailError.value = result.isValid ? '' : result.errors[0]?.message || ''
 }
 
-const validatePasswordField = () => {
+function validatePasswordField(): void {
   if (!form.value.password) {
     passwordError.value = ''
     return
   }
-  
+
   const result = validatePassword(form.value.password)
   passwordError.value = result.isValid ? '' : result.errors[0]?.message || ''
 }
 
 // Password visibility toggle with accessibility
-const togglePasswordVisibility = () => {
+function togglePasswordVisibility(): void {
   showPassword.value = !showPassword.value
-  
+
   // Announce to screen readers
-  const message = showPassword.value 
+  const message = showPassword.value
     ? t('auth.accessibility.passwordVisible')
     : t('auth.accessibility.passwordHidden')
-  
+
   // Create temporary announcement element
   const announcement = document.createElement('div')
   announcement.setAttribute('aria-live', 'polite')
@@ -345,27 +423,22 @@ const togglePasswordVisibility = () => {
   announcement.className = 'sr-only'
   announcement.textContent = message
   document.body.appendChild(announcement)
-  
+
   setTimeout(() => {
     document.body.removeChild(announcement)
   }, 1000)
 }
 
-const handleLogin = async () => {
-  if (loading.value) {
+async function handleLogin(): Promise<void> {
+  if (loading.value || isAccountLocked.value) {
     return
   }
 
   localError.value = ''
   success.value = ''
   clearError()
-
-  if (isAccountLocked.value) {
-    return
-  }
-
   loading.value = true
-  
+
   try {
     const { data, error: authErr } = await supabase.auth.signInWithPassword({
       email: form.value.email,
@@ -382,7 +455,16 @@ const handleLogin = async () => {
       throw authErr
     }
 
-    if (data?.user) {
+    if (data?.user && data?.session) {
+      // Handle "Remember Me" functionality using cookies (SSR-friendly)
+      // Store preference in a cookie that controls session persistence
+      setRememberMePreference(rememberMe.value)
+
+      // Adjust session cookie duration based on preference
+      // - When checked: Persistent cookie (30 days)
+      // - When unchecked: Session cookie (cleared when browser closes)
+      adjustSessionCookieDuration(rememberMe.value)
+
       success.value = t('auth.loginSuccess')
       await handleRedirectAfterLogin()
     }
@@ -395,9 +477,88 @@ const handleLogin = async () => {
   }
 }
 
-const handleMagicLink = async () => {
+/**
+ * Start magic link cooldown timer (60 seconds as per Supabase rate limit)
+ */
+function startMagicLinkCooldown(): void {
+  const COOLDOWN_SECONDS = 60
+  const expiryTime = Date.now() + (COOLDOWN_SECONDS * 1000)
+
+  // Store in localStorage to persist across page refreshes
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('magicLinkCooldown', expiryTime.toString())
+  }
+
+  magicLinkCooldown.value = COOLDOWN_SECONDS
+
+  // Clear existing interval if any
+  if (magicLinkCooldownInterval.value) {
+    clearInterval(magicLinkCooldownInterval.value)
+  }
+
+  // Update countdown every second
+  magicLinkCooldownInterval.value = setInterval(() => {
+    const remaining = Math.ceil((expiryTime - Date.now()) / 1000)
+
+    if (remaining <= 0) {
+      magicLinkCooldown.value = 0
+      if (magicLinkCooldownInterval.value) {
+        clearInterval(magicLinkCooldownInterval.value)
+        magicLinkCooldownInterval.value = null
+      }
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('magicLinkCooldown')
+      }
+    } else {
+      magicLinkCooldown.value = remaining
+    }
+  }, 1000)
+}
+
+/**
+ * Check for existing cooldown on mount
+ */
+function checkExistingCooldown(): void {
+  if (typeof window === 'undefined') return
+
+  const storedExpiry = localStorage.getItem('magicLinkCooldown')
+  if (storedExpiry) {
+    const expiryTime = parseInt(storedExpiry, 10)
+    const remaining = Math.ceil((expiryTime - Date.now()) / 1000)
+
+    if (remaining > 0) {
+      magicLinkCooldown.value = remaining
+
+      // Restart the interval
+      magicLinkCooldownInterval.value = setInterval(() => {
+        const currentRemaining = Math.ceil((expiryTime - Date.now()) / 1000)
+
+        if (currentRemaining <= 0) {
+          magicLinkCooldown.value = 0
+          if (magicLinkCooldownInterval.value) {
+            clearInterval(magicLinkCooldownInterval.value)
+            magicLinkCooldownInterval.value = null
+          }
+          localStorage.removeItem('magicLinkCooldown')
+        } else {
+          magicLinkCooldown.value = currentRemaining
+        }
+      }, 1000)
+    } else {
+      // Expired, remove from storage
+      localStorage.removeItem('magicLinkCooldown')
+    }
+  }
+}
+
+async function handleMagicLink(): Promise<void> {
   if (!form.value.email) {
     localError.value = t('auth.emailRequired')
+    return
+  }
+
+  if (magicLinkCooldown.value > 0) {
+    localError.value = t('auth.errors.rateLimitExceeded', { minutes: Math.ceil(magicLinkCooldown.value / 60) })
     return
   }
 
@@ -418,6 +579,9 @@ const handleMagicLink = async () => {
     }
 
     success.value = t('auth.magicLinkSent')
+
+    // Start cooldown timer
+    startMagicLinkCooldown()
   } catch (err: any) {
     localError.value = err.message || t('auth.magicLinkError')
   } finally {
@@ -450,6 +614,15 @@ const displayError = computed(() => {
 
 onMounted(async () => {
   await ensureInitialized()
+  checkExistingCooldown()
+})
+
+onBeforeUnmount(() => {
+  // Clean up cooldown interval
+  if (magicLinkCooldownInterval.value) {
+    clearInterval(magicLinkCooldownInterval.value)
+    magicLinkCooldownInterval.value = null
+  }
 })
 
 useHead({

@@ -1,6 +1,6 @@
 ---
 name: launch-planner
-description: Helps transform app ideas into shippable MVPs using a ship-fast, validate-first philosophy. Use when the user wants to plan an MVP, scope features, generate PRDs, get product advice, create Claude Code starter prompts, or needs help staying focused on shipping rather than over-engineering. Tech stack is Next.js, Supabase, and Vercel.
+description: Helps transform app ideas into shippable MVPs using a ship-fast, validate-first philosophy. Use when the user wants to plan an MVP, scope features, generate PRDs, get product advice, create Claude Code starter prompts, or needs help staying focused on shipping rather than over-engineering. Tech stack is Nuxt 3 or 4, Supabase, and Vercel.
 ---
 
 # Launch Planner
@@ -16,7 +16,7 @@ Every decision should optimize for getting something in front of users as quickl
 ## Tech Stack Defaults
 
 Unless specified otherwise, use:
-- **Frontend**: Next.js with React
+- **Frontend**: Nuxt 3 or 4 with Vue
 - **Database**: Supabase
 - **Deployment**: Vercel
 - **Styling**: Tailwind CSS (if frontend engineering context is known)
@@ -138,7 +138,7 @@ When the user shares an app idea:
    - **Core User Flow**: Step-by-step what the user does
    - **MVP Features**: Minimum required features with effort estimates
    - **Explicitly Out of Scope**: What we're NOT building yet
-   - **Tech Stack**: Next.js, Supabase, Vercel (unless otherwise specified)
+   - **Tech Stack**: Nuxt 3 or 4, Supabase, Vercel (unless otherwise specified)
    - **Launch Checklist**: Validation steps after shipping
 
 ### Create Claude Code Starter Prompts
@@ -148,10 +148,10 @@ When the user is ready to build:
 Consult `references/claude_code_prompts.md` for templates, then generate a comprehensive starter prompt that includes:
 
 1. **Project brief**: Problem, user, and core flow
-2. **Tech stack specifics**: Next.js version, Supabase setup, Vercel config
+2. **Tech stack specifics**: Nuxt 3 or 4 version, Supabase setup, Vercel config
 3. **MVP feature list**: Clear, ordered by priority
 4. **What NOT to build**: Explicit list of deferred features
-5. **File structure**: Suggested Next.js project organization
+5. **File structure**: Suggested Nuxt 3 or 4 project organization
 6. **First milestone**: Smallest deployable version
 7. **Validation criteria**: How to know if the MVP is working
 

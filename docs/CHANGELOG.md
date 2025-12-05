@@ -6,6 +6,230 @@ This document tracks significant changes, updates, and improvements to the Moldo
 
 ## November 2025
 
+### Security & GDPR Compliance (November 16, 2025)
+
+**Major security and compliance milestone achieved** with comprehensive GDPR implementation and authentication hardening.
+
+#### GDPR Compliance (Article 17 - Right to Erasure)
+- ✅ **Atomic Account Deletion:** Implemented all-or-nothing deletion via database stored procedure
+  - Prevents partial data deletion (GDPR compliance)
+  - Order anonymization (preserves for legal/business requirements)
+  - Profile picture deletion from storage
+  - Comprehensive audit logging
+- ✅ **Data Deletion Coverage:**
+  - User profiles, addresses, shopping carts
+  - Activity logs, email preferences, newsletter subscriptions
+  - Orders anonymized (not deleted) per legal requirements
+
+#### PII Protection (Article 5)
+- ✅ **Secure Logger:** Created `server/utils/secureLogger.ts` with automatic PII redaction
+  - Auto-redacts 8+ PII types (emails, phones, cards, IPs, SSNs, tokens)
+  - Field name-based redaction (30+ sensitive field names)
+  - Safe for production log aggregation
+  - Prevents accidental PII exposure in application logs
+- ✅ **Applied to Production:** Checkout order creation endpoint uses secure logger
+
+#### Authentication Security (Article 32)
+- ✅ **Rate Limiting:** Implemented `server/utils/authRateLimit.ts`
+  - Login: 5 attempts per 15 minutes
+  - Register: 3 attempts per hour
+  - Password reset: 3 attempts per hour
+  - Account lockout after 10 failed attempts (30 min duration)
+  - Protects against brute force, credential stuffing, account enumeration
+- ✅ **Admin MFA Enforcement:** Enabled previously commented-out MFA requirement
+  - All admin users must complete MFA setup
+  - Development bypass for @moldovadirect.com emails
+
+#### Data Retention Policies (Planned)
+- ⚠️ **Database migrations pending** for automated data retention:
+  - User activity logs: 90 days
+  - Auth events: 1 year
+  - Email logs: 2 years
+  - Audit logs: 7 years
+  - Automated cleanup jobs via pg_cron
+
+**Related PRs:** #255, #263
+**Documentation:** `docs/security/GDPR_COMPLIANCE.md`, `docs/security/SECURE_LOGGER.md`
+
+### Accessibility Improvements - WCAG 2.1 AA Compliance (November 16, 2025)
+
+**Achieved WCAG 2.1 AA compliance** across 7 critical components with comprehensive accessibility enhancements.
+
+#### Touch Accessibility
+- ✅ **Touch Targets:** Increased from 32px to 44px minimum (WCAG AAA standard)
+- ✅ **Applied to:** All buttons, form controls, interactive elements
+- ✅ **Mobile Optimization:** Enhanced mobile touch interactions for product cards
+
+#### ARIA Enhancements
+- ✅ **Decorative Icons:** Added `aria-hidden="true"` to 50+ decorative SVG icons
+- ✅ **Form Errors:** Added `aria-describedby` linking error messages to inputs
+- ✅ **Loading States:** Added `aria-busy` and `aria-live` for dynamic content
+- ✅ **Dialogs & Modals:** Proper `role="dialog"`, `aria-modal`, `aria-labelledby`
+- ✅ **Interactive Elements:** Added `aria-label` to all icon-only buttons
+
+#### Keyboard Navigation
+- ✅ **Focus Indicators:** Added `focus-visible` styles to all interactive elements
+- ✅ **Focus Management:** Proper focus trap implementation in modals
+- ✅ **Tab Order:** Ensured logical tab order across all forms
+
+#### Component Coverage
+- ✅ **Cart Components:** Item quantity controls, remove buttons, loading states
+- ✅ **Checkout Forms:** Payment form, shipping form, error associations
+- ✅ **Product Components:** Product cards, quick view, add-to-cart states
+- ✅ **Modals & Dialogs:** Delete confirmation, CVV help, quick view
+- ✅ **Search & Filter:** Search input loading states, filter buttons
+- ✅ **Newsletter:** Form validation, success/error announcements
+
+**Impact:** Screen reader compatible, keyboard-only navigation supported, mobile-friendly touch targets
+
+**Related PRs:** #258, #265
+**Documentation:** `docs/architecture/PR_258_ACCESSIBILITY_ARCHITECTURE_REVIEW.md`
+
+### Mobile Navigation UX Improvements (November 15-16, 2025)
+
+**Modernized mobile navigation** following 2025 UX best practices for e-commerce mobile apps.
+
+#### Bottom Navigation Bar
+- ✅ **Replaced hamburger menu** with modern bottom navigation
+- ✅ **Always-visible navigation:** Home, Shop, Cart, Search, Account
+- ✅ **Cart badge:** Real-time item count indicator
+- ✅ **32.8% faster task completion** (based on UX research)
+- ✅ **Thumb-friendly:** Matches natural phone grip patterns
+
+#### Language Selector Fixes
+- ✅ **Fixed broken functionality:** Repaired click-outside detection
+- ✅ **Keyboard navigation:** Full Arrow/Enter/Escape support
+- ✅ **Accessibility:** Enhanced ARIA attributes and focus management
+- ✅ **Visual improvements:** Globe icon, checkmark for selected language, smooth animations
+- ✅ **Touch targets:** 44px minimum for mobile usability
+
+**Related PRs:** #253, #265
+
+### Authentication E2E Test Coverage (November 15, 2025)
+
+**Comprehensive E2E test suite** for authentication flows with 2,100+ lines of coverage.
+
+#### Test Coverage Added
+- ✅ **Login Flow:** 392 lines covering all locales, error states, redirects
+- ✅ **Registration Flow:** 460 lines covering validation, success, error handling
+- ✅ **Password Reset:** 284 lines covering request, validation, completion
+- ✅ **Logout Flow:** 310 lines covering session cleanup, redirects
+- ✅ **MFA Verification:** Full multi-factor authentication testing
+- ✅ **Mobile Responsive:** 318 lines testing mobile layouts
+- ✅ **Accessibility:** 458 lines testing WCAG 2.2 AA compliance
+- ✅ **i18n:** 383 lines testing all 4 locales (ES, EN, RO, RU)
+
+#### Test Features
+- Test data setup via `scripts/create-e2e-test-user.mjs`
+- Mobile viewport testing (375x667)
+- Keyboard navigation validation
+- Screen reader compatibility checks
+- Form validation testing across locales
+
+**Total:** 2,100+ lines of new E2E test coverage
+
+**Related PR:** #256
+
+### Code Refactoring - Component Modularity (November 16, 2025)
+
+**Major refactoring effort** to improve code maintainability and reduce component complexity.
+
+#### Admin Testing Page (PR #271)
+- ✅ **Reduced from 1,102 to 302 lines** (73% reduction)
+- ✅ **Extracted 11 focused components:**
+  - DatabaseStatsCard, QuickActionsCard, ProgressIndicator
+  - UserSimulationCard, UserImpersonationCard, DataCleanupCard
+  - ScenarioTemplatesCard, AdvancedDataGenerationCard
+  - TestResultsCard, GenerationHistoryCard, SaveScenarioDialog
+- ✅ **Created composable:** Dedicated composable for shared state and business logic
+- ✅ **Benefits:** Improved testability, reusability, maintainability
+
+#### Products Page (PR #270)
+- ✅ **Reduced from 857 to 642 lines** (25% reduction)
+- ✅ **Extracted composables:**
+  - `useProductFilters` - Filter chips and category lookup
+  - `useProductPagination` - Pagination UI logic
+  - `useMobileProductInteractions` - Mobile gesture handling
+  - `useProductStructuredData` - SEO metadata generation
+- ✅ **Benefits:** Better separation of concerns, easier testing
+
+#### Auth Store Modularization (PR #269)
+- ✅ **Split monolithic 1,418-line store** into focused modules
+- ✅ **Created `stores/auth/` directory:**
+  - `auth/mfa.ts` (224 lines) - Multi-factor authentication
+  - `auth/lockout.ts` (81 lines) - Account lockout management
+  - `auth/test-users.ts` (196 lines) - Test user simulation
+  - `auth/types.ts` (37 lines) - Shared types
+  - `auth/index.ts` (1,162 lines) - Main store (18% reduction)
+- ✅ **100% backward compatible** via symlink
+- ✅ **Benefits:** Single Responsibility Principle, improved testability, easier maintenance
+
+**Total Impact:** ~2,000 lines reorganized, 15+ new focused modules created
+
+**Related PRs:** #269, #270, #271
+
+### Performance Optimizations (November 13-14, 2025)
+
+**Significant performance improvements** through API caching and ISR optimization.
+
+#### API Endpoint Caching (PR #240)
+- ✅ **Implemented `defineCachedEventHandler`** for 6 critical endpoints:
+  - Product detail: 10 min cache (locale-aware)
+  - Price range: 5 min cache (query-aware)
+  - Related products: 10 min cache
+  - Category detail: 10 min cache
+  - Landing sections: 10 min cache (2 endpoints)
+- ✅ **Performance Impact:**
+  - 40-60% reduction in database queries
+  - 20-30% faster page loads
+  - Better scalability under high traffic
+
+#### ISR Rendering Fixes (PR #249)
+- ✅ **Fixed homepage ISR errors:** Resolved FUNCTION_INVOCATION_FAILED issues
+- ✅ **Database query optimization:**
+  - Featured products: 4.12s → 500ms (8x faster)
+  - Filtered in PostgreSQL vs JavaScript
+  - 97% reduction in data transfer (1000+ → 36 rows)
+- ✅ **Sharp binary fix:** Externalized to prevent platform-specific issues
+- ✅ **ISR configuration:**
+  - maxDuration: 10s (increased from 5s)
+  - Regions: Paris (cdg1) - closest to Spain
+- ✅ **Performance indexes added** (pending migration):
+  - idx_products_featured_attribute
+  - idx_products_stock_price_active
+  - idx_products_category_active
+
+**Combined Performance Improvement:** 8-10x faster on high-traffic endpoints
+
+**Related PRs:** #240, #249
+**Documentation:** `docs/performance/CACHING_STRATEGY.md` (planned)
+
+### Bug Fixes & UX Polish (November 13-16, 2025)
+
+#### Products Page Fixes (PR #242)
+- ✅ **Fixed empty products page** issue in production
+- ✅ **Explicit JOIN types:** Use `!left` when no category filter, `!inner` for category filtering
+- ✅ **Admin cache invalidation:** POST endpoint to clear cached data by scope
+- ✅ **Debug endpoint:** GET endpoint to check database state and product counts
+
+#### Mobile Carousel Fixes (PR #247, #267, #268)
+- ✅ **Fixed products slider** on home page (filter tab switching)
+- ✅ **Fixed "Start Your Journey" section** scroll on mobile
+- ✅ **Fixed collections section** scrolling
+- ✅ **Replaced Swiper with native CSS scroll** for better mobile compatibility
+
+#### Header Visibility (PR #244)
+- ✅ **Fixed header on white backgrounds:** Intelligent page type detection
+- ✅ **Pages with dark hero** maintain transparent header (home)
+- ✅ **Other pages** always show solid header for visibility
+
+#### Admin Login UX (PR #264)
+- ✅ **Fixed MFA popup for admin users** in development
+- ✅ **Development bypass:** @moldovadirect.com emails skip MFA in dev mode
+- ✅ **Production unchanged:** MFA still enforced for security
+
+**Related PRs:** #242, #244, #247, #264, #267, #268
+
 ### Documentation Cleanup & Archival Strategy (November 2, 2025)
 
 **Established systematic documentation management** with archival policies and automated health checks.
@@ -203,5 +427,5 @@ See [CODE_REVIEW_2025.md](../CODE_REVIEW_2025.md) for complete analysis.
 
 ---
 
-**Maintained by:** Development Team  
-**Last Updated:** October 12, 2025
+**Maintained by:** Development Team
+**Last Updated:** November 16, 2025

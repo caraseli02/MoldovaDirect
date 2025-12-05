@@ -239,6 +239,9 @@
     "email": "Адрес электронной почты",
     "emailPlaceholder": "Введите ваш email",
     "password": "Пароль",
+    "withPassword": "Пароль",
+    "withMagicLink": "Волшебная Ссылка",
+    "magicLinkInfo": "Войти без пароля",
     "newPassword": "Новый пароль",
     "confirmPassword": "Подтвердить пароль",
     "fullName": "Полное имя",
@@ -262,6 +265,7 @@
     "sendMagicLink": "Отправить волшебную ссылку",
     "magicLinkSent": "Волшебная ссылка отправлена! Проверьте вашу почту для входа.",
     "magicLinkError": "Ошибка отправки волшебной ссылки. Попробуйте снова.",
+    "resendIn": "Отправить повторно через",
     "emailRequired": "Пожалуйста, введите ваш адрес электронной почты",
     "emailVerification": "Подтверждение Email",
     "verifying": "Проверяем ваш email",
@@ -274,10 +278,13 @@
     "backToLogin": "Вернуться к входу",
     "confirmingAccount": "Подтверждение аккаунта",
     "processing": "Обработка",
+    "pleaseWait": "Пожалуйста, подождите, пока мы проверяем аутентификацию...",
     "accountConfirmed": "Аккаунт подтвержден!",
     "redirectingToAccount": "Перенаправление в ваш аккаунт...",
     "confirmationFailed": "Подтверждение аккаунта не удалось",
     "confirmationError": "Ошибка подтверждения. Попробуйте снова.",
+    "magicLinkSuccess": "Аутентификация успешна! Добро пожаловать.",
+    "retry": "Повторить",
     "forgotPasswordInstructions": "Введите ваш адрес электронной почты, и мы отправим вам ссылку для сброса пароля.",
     "sendResetEmail": "Отправить письмо для сброса",
     "passwordResetSent": "Письмо для сброса пароля отправлено! Проверьте вашу почту.",
@@ -332,8 +339,15 @@
       "emailInvalid": "Пожалуйста, введите действительный email",
       "passwordWeak": "Пароль слишком слабый",
       "networkError": "Ошибка сети. Проверьте подключение к интернету",
+      "networkErrorMessage": "Не удается подключиться. Пожалуйста, проверьте подключение к интернету и попробуйте снова.",
       "serverError": "Ошибка сервера. Попробуйте позже",
-      "unknownError": "Произошла неожиданная ошибка"
+      "unknownError": "Произошла неожиданная ошибка",
+      "linkExpired": "Волшебная Ссылка Истекла",
+      "linkExpiredMessage": "Эта волшебная ссылка истекла. Пожалуйста, запросите новую на странице входа.",
+      "linkAlreadyUsed": "Волшебная Ссылка Уже Использована",
+      "linkAlreadyUsedMessage": "Эта волшебная ссылка уже была использована. Если вам нужно войти снова, пожалуйста, запросите новую ссылку.",
+      "invalidLink": "Недействительная Волшебная Ссылка",
+      "invalidLinkMessage": "Эта волшебная ссылка недействительна или неверно сформирована. Пожалуйста, запросите новую на странице входа."
     },
     "validation": {
       "email": {
@@ -451,20 +465,26 @@
     }
   },
   "account": {
-    "dashboard": "Панель",
+    "dashboard": "Панель управления",
     "orders": "Заказы",
     "profile": "Профиль",
     "addresses": "Адреса",
     "settings": "Настройки",
-    "welcomeBack": "Добро пожаловать",
+    "welcomeBack": "С возвращением",
     "totalOrders": "Всего заказов",
-    "wishlistItems": "Товары в списке желаний",
-    "recentOrders": "Недавние заказы",
-    "noOrdersYet": "У вас пока нет заказов",
+    "wishlistItems": "Товары в избранном",
+    "recentOrders": "Последние заказы",
+    "noOrdersYet": "У вас еще нет заказов",
     "sections": {
-      "admin": "Админ",
-      "adminUser": "Пользователь-админ",
+      "admin": "Администратор",
+      "adminUser": "Пользователь-администратор",
       "administrator": "Администратор"
+    },
+    "navigation": {
+      "logout": "Выйти",
+      "profile": "Мой профиль",
+      "orders": "Мои заказы",
+      "settings": "Настройки"
     }
   },
   "orders": {
@@ -654,8 +674,8 @@
     "saveChanges": "Save Changes",
     "addresses": "Addresses",
     "addressesDescription": "Manage your shipping and billing addresses",
-    "addAddress": "Add Address",
-    "addFirstAddress": "Add Your First Address",
+    "addAddress": "Добавить Адрес",
+    "addFirstAddress": "Добавьте Ваш Первый Адрес",
     "editAddress": "Edit Address",
     "updateAddress": "Update Address",
     "saveAddress": "Save Address",
@@ -664,6 +684,12 @@
     "noAddresses": "You don't have any addresses saved yet",
     "default": "Default",
     "setAsDefault": "Set as default address",
+    "firstName": "Имя",
+    "firstNamePlaceholder": "Введите ваше имя",
+    "lastName": "Фамилия",
+    "lastNamePlaceholder": "Введите вашу фамилию",
+    "company": "Компания",
+    "companyPlaceholder": "Название компании (необязательно)",
     "street": "Street Address",
     "streetPlaceholder": "Enter your street address",
     "city": "City",
@@ -673,6 +699,8 @@
     "province": "Province/State",
     "provincePlaceholder": "Enter province or state (optional)",
     "country": "Country",
+    "phone": "Телефон",
+    "phonePlaceholder": "Номер телефона (необязательно)",
     "deleteAccount": "Delete Account",
     "deleteAccountWarning": "This action cannot be undone",
     "deleteAccountConsequences": {
@@ -698,15 +726,18 @@
     },
     "confirmDelete": "Delete My Account",
     "addressType": {
-      "label": "Address Type",
-      "shipping": "Shipping Address",
-      "billing": "Billing Address"
+      "label": "Тип адреса",
+      "shipping": "Адрес доставки",
+      "billing": "Адрес для выставления счета"
     },
     "validation": {
-      "streetRequired": "Street address is required",
-      "cityRequired": "City is required",
-      "postalCodeRequired": "Postal code is required",
-      "invalidSpanishPostalCode": "Please enter a valid Spanish postal code (5 digits)",
+      "firstNameRequired": "Имя обязательно",
+      "lastNameRequired": "Фамилия обязательна",
+      "streetRequired": "Адрес обязателен",
+      "cityRequired": "Город обязателен",
+      "postalCodeRequired": "Почтовый индекс обязателен",
+      "invalidSpanishPostalCode": "Пожалуйста, введите действительный испанский почтовый индекс (5 цифр)",
+      "phoneInvalid": "Пожалуйста, введите действительный номер телефона",
       "confirmationRequired": "Please type 'DELETE' to confirm",
       "passwordRequired": "Password is required for account deletion"
     },
@@ -1018,6 +1049,8 @@
     }
   },
   "products": {
+    "commonProduct": "Товар",
+    "viewDetails": "Подробнее",
     "featured": "Рекомендуемые",
     "sale": "Распродажа",
     "off": "скидка",
@@ -1034,8 +1067,8 @@
     },
     "addToCart": "В корзину",
     "outOfStock": "Нет в наличии",
-    "inCart": "In Cart",
-    "adding": "Adding...",
+    "inCart": "В корзине",
+    "adding": "Добавление...",
     "cartEmpty": "Your cart is empty",
     "cartEmptyDescription": "Start shopping to add items to your cart",
     "itemsInCart": "items in cart",
@@ -1190,6 +1223,16 @@
       "originFallback": "Собрано возле {origin} по традиционным методам.",
       "originCategoryFallback": "Фирменный продукт нашей коллекции {category}.",
       "noAwards": "Станьте первым, кто оценит эту новинку."
+    },
+    "imageFallback": {
+      "title": "Изображение товара скоро появится",
+      "subtitle": "Подлинный молдавский товар гарантирован",
+      "description": "Высококачественные изображения будут доступны в ближайшее время"
+    },
+    "noImageAvailable": "Изображение недоступно",
+    "imageGallery": "Галерея изображений",
+    "imageZoom": {
+      "keyboardHints": "Используйте стрелки для навигации, ESC для закрытия"
     },
     "socialProof": {
       "title": "Любимый клиентами",
@@ -1577,422 +1620,74 @@
       "deliveryNote": "Delivery times are estimates and may vary",
       "trackOrder": "Track Your Order",
       "trackingAvailable": "Tracking information will be available once your order ships",
-      "printReceipt": "Print Receipt"
+      "printReceipt": "Print Receipt",
+      "sessionRestoreFailed": "Не удалось загрузить данные заказа",
+      "checkEmailForOrder": "Пожалуйста, проверьте вашу электронную почту для подтверждения заказа",
+      "errorLoadingOrder": "Ошибка загрузки деталей заказа",
+      "contactSupport": "Если проблема сохраняется, обратитесь в службу поддержки",
+      "orderDataMissing": "Данные заказа недоступны",
+      "checkYourEmail": "Ваш заказ успешно выполнен. Проверьте почту для получения подробностей",
+      "cartClearFailed": "Не удалось очистить корзину",
+      "cartClearFailedDetails": "Ваш заказ успешно выполнен, но корзина не была очищена автоматически"
+    },
+    "errors": {
+      "failedToLoadAddresses": "Не удалось загрузить сохраненные адреса",
+      "failedToSaveAddress": "Не удалось сохранить адрес",
+      "failedToUpdateAddress": "Не удалось обновить адрес",
+      "failedToSetDefaultAddress": "Не удалось установить адрес по умолчанию",
+      "failedToDeleteAddress": "Не удалось удалить адрес",
+      "expressCheckoutFailed": "Экспресс-оплата не удалась",
+      "pleaseTryAgain": "Пожалуйста, попробуйте снова или отредактируйте данные вручную"
+    },
+    "expressCheckout": {
+      "title": "Доступна Экспресс-Оплата",
+      "description": "Используйте сохраненный адрес и настройки для более быстрого оформления заказа.",
+      "preferredShipping": "Предпочитаемая доставка",
+      "useButton": "Использовать Экспресс-Оплату",
+      "editButton": "Редактировать Данные",
+      "success": "Экспресс-оплата активирована",
+      "successDetails": "Ваши сохраненные данные загружены",
+      "addressLoaded": "Адрес загружен",
+      "selectShipping": "Пожалуйста, выберите способ доставки",
+      "countdownTitle": "Экспресс-оплата активирована!",
+      "countdownMessage": "Перенаправление к оплате через {seconds} секунд...",
+      "cancelButton": "Подождите, я хочу проверить",
+      "countdownCancelled": "Обратный отсчет отменен",
+      "countdownCancelledDetails": "Не спешите, проверьте свой заказ"
     }
   },
   "admin": {
     "navigation": {
+      "toggleSidebar": "Переключить боковую панель",
+      "notifications": "Уведомления",
       "dashboard": "Панель управления",
       "products": "Товары",
+      "inventory": "Инвентарь",
       "orders": "Заказы",
       "users": "Пользователи",
       "analytics": "Аналитика",
-      "inventory": "Инвентарь",
-      "testing": "Тестирование",
-      "tools": "Инструменты"
+      "tools": "Инструменты",
+      "testing": "Тестирование"
     },
-    "dashboard": {
-      "title": "Панель управления",
-      "welcome": "Добро пожаловать обратно! Вот что происходит с вашим магазином.",
-      "autoRefresh": "Автообновление",
-      "refreshAll": "Обновить все",
-      "lastUpdated": "Последнее обновление: {time}",
-      "refresh": "Обновить",
-      "quickActions": {
-        "title": "Быстрые действия",
-        "addNewProduct": "Добавить новый товар",
-        "viewOrders": "Посмотреть заказы",
-        "manageUsers": "Управлять пользователями"
-      },
-      "criticalAlerts": "Критические оповещения",
-      "systemStatus": {
-        "title": "Состояние системы",
-        "database": "База данных",
-        "api": "API",
-        "lastBackup": "Последняя резервная копия",
-        "online": "Онлайн",
-        "operational": "Работает",
-        "offline": "Не в сети",
-        "error": "Ошибка",
-        "hoursAgo": "{hours} часов назад"
-      },
-      "stats": {
-        "sectionTitle": "Операционная сводка",
-        "refreshHint": "Метрики обновляются автоматически каждые пять минут.",
-        "totalProducts": "Всего товаров",
-        "activeProducts": "{count} активных",
-        "lowStockProducts": "{count} товаров с низким запасом",
-        "totalUsers": "Всего пользователей",
-        "activeUsers": "{count} активных",
-        "newUsersToday": "{count} новых сегодня",
-        "totalOrders": "Всего заказов",
-        "conversionRate": "{rate} конверсия",
-        "totalRevenue": "Общий доход",
-        "revenueToday": "{amount} сегодня",
-        "pendingOrders": "{count} в ожидании",
-        "processingOrders": "{count} в обработке",
-        "shippedOrders": "{count} отправлено",
-        "deliveredOrders": "{count} доставлено",
-        "ordersToday": "{count} заказов сегодня",
-        "averageOrderValue": "Средний {amount}"
-      },
-      "recentActivity": {
-        "title": "Недавняя активность",
-        "noActivity": "Нет недавней активности",
-        "activityDescription": "Активность будет появляться здесь, когда пользователи взаимодействуют с вашим магазином",
-        "justNow": "Только что",
-        "minutesAgo": "{minutes}м назад",
-        "hoursAgo": "{hours}ч назад",
-        "daysAgo": "{days}д назад",
-        "types": {
-          "userRegistration": "Пользователь",
-          "newOrder": "Заказ",
-          "lowStock": "Уведомление о запасах",
-          "productUpdate": "Товар"
-        }
-      },
-      "errors": {
-        "loadingData": "Ошибка загрузки данных панели",
-        "tryAgain": "Пожалуйста, попробуйте снова"
-      }
+    "errors": {
+      "logoutFailed": "Не удалось выйти",
+      "unknownError": "Произошла неизвестная ошибка"
     },
     "products": {
-      "title": "Товары",
-      "subtitle": "Управляйте каталогом товаров",
-      "addProduct": "Добавить товар",
-      "editProduct": "Редактировать товар",
-      "deleteProduct": "Удалить товар",
-      "bulkActions": "Массовые действия",
-      "selectAll": "Выбрать все",
-      "deselectAll": "Отменить выбор",
-      "selectedCount": "{count} выбрано",
-      "clearSelection": "Очистить выбор",
-      "filters": {
-        "search": "Поиск товаров...",
-        "category": "Категория",
-        "allCategories": "Все категории",
-        "status": "Статус",
-        "allStatuses": "Все статусы",
-        "active": "Активный",
-        "inactive": "Неактивный",
-        "stockLevel": "Уровень запасов",
-        "allStock": "Все запасы",
-        "inStock": "В наличии",
-        "lowStock": "Низкий запас",
-        "outOfStock": "Нет в наличии",
-        "clearFilters": "Очистить фильтры",
-        "resultsCount": "Найдено {count} результатов"
-      },
-      "table": {
-        "name": "Название",
-        "sku": "Артикул",
-        "category": "Категория",
-        "price": "Цена",
-        "stock": "Запас",
-        "status": "Статус",
-        "actions": "Действия",
-        "edit": "Редактировать",
-        "delete": "Удалить",
-        "editStock": "Редактировать запас",
-        "noProducts": "Товары не найдены",
-        "noProductsMessage": "Создайте свой первый товар, чтобы начать"
-      },
-      "form": {
-        "basicInformation": "Основная информация",
-        "productName": "Название товара",
-        "productNameRequired": "Название товара обязательно",
-        "sku": "Артикул",
-        "skuRequired": "Артикул обязателен",
-        "category": "Категория",
-        "categoryRequired": "Категория обязательна",
-        "selectCategory": "Выберите категорию",
-        "description": "Описание",
-        "pricing": "Цены",
-        "price": "Цена (EUR)",
-        "priceRequired": "Цена обязательна",
-        "salePrice": "Цена со скидкой (EUR)",
-        "inventory": "Инвентарь",
-        "stockQuantity": "Количество на складе",
-        "stockRequired": "Количество на складе обязательно",
-        "lowStockThreshold": "Порог низкого запаса",
-        "trackInventory": "Отслеживать инвентарь",
-        "allowBackorders": "Разрешить предзаказы",
-        "media": "Медиа",
-        "productImages": "Изображения товара",
-        "dragImages": "Перетащите изображения сюда или нажмите для загрузки",
-        "maxImages": "Максимум 5 изображений",
-        "supportedFormats": "Поддерживаемые форматы: JPG, PNG, WebP",
-        "maxFileSize": "Максимальный размер файла: 5МБ",
-        "settings": "Настройки",
-        "featured": "Рекомендуемый товар",
-        "status": "Статус",
-        "active": "Активный",
-        "inactive": "Неактивный",
-        "metaData": "SEO и мета-данные",
-        "metaTitle": "Мета-заголовок",
-        "metaDescription": "Мета-описание",
-        "save": "Сохранить товар",
-        "saving": "Сохранение...",
-        "cancel": "Отменить",
-        "errors": {
-          "saveFailed": "Не удалось сохранить товар",
-          "invalidData": "Пожалуйста, проверьте данные формы",
-          "networkError": "Произошла ошибка сети"
-        }
-      },
-      "stockModal": {
-        "title": "Редактировать запас для {product}",
-        "stockQuantity": "Количество на складе",
-        "cancel": "Отменить",
-        "save": "Сохранить запас",
-        "saving": "Сохранение..."
-      },
-      "bulkOperations": {
-        "activate": "Активировать выбранные",
-        "deactivate": "Деактивировать выбранные",
-        "delete": "Удалить выбранные",
-        "confirmDelete": "Вы уверены, что хотите удалить {count} товаров?",
-        "confirmDeleteSingle": "Вы уверены, что хотите удалить этот товар?",
-        "deleteWarning": "Это действие нельзя отменить.",
-        "operationInProgress": "Операция выполняется..."
-      },
-      "pagination": {
-        "showing": "Показано с {start} по {end} из {total} товаров",
-        "previous": "Предыдущая",
-        "next": "Следующая",
-        "page": "Страница {page}",
-        "perPage": "На странице",
-        "goToPage": "Перейти на страницу {page}"
-      },
-      "success": {
-        "productSaved": "Товар сохранен успешно",
-        "productDeleted": "Товар удален успешно",
-        "stockUpdated": "Запас обновлен успешно",
-        "bulkActivated": "{count} товаров активировано",
-        "bulkDeactivated": "{count} товаров деактивировано",
-        "bulkDeleted": "{count} товаров удалено"
-      },
-      "errors": {
-        "loadFailed": "Не удалось загрузить товары",
-        "saveFailed": "Не удалось сохранить товар",
-        "deleteFailed": "Не удалось удалить товар",
-        "stockUpdateFailed": "Не удалось обновить запас",
-        "bulkOperationFailed": "Массовая операция не удалась"
-      },
-      "headers": {
-        "product": "Product",
-        "category": "Category",
-        "price": "Price",
-        "stock": "Stock",
-        "status": "Status",
-        "created": "Created",
-        "actions": "Actions"
-      }
-    },
-    "orders": {
-      "title": "Заказы",
-      "subtitle": "Управление заказами клиентов",
-      "viewOrder": "Посмотреть заказ",
-      "editOrder": "Редактировать заказ",
-      "deleteOrder": "Удалить заказ",
-      "orderNumber": "Заказ #{number}",
-      "customer": "Клиент",
-      "total": "Итого",
-      "status": "Статус",
-      "date": "Дата",
-      "actions": "Действия",
-      "statuses": {
-        "pending": "В ожидании",
-        "processing": "Обрабатывается",
-        "shipped": "Отправлено",
-        "delivered": "Доставлено",
-        "cancelled": "Отменено",
-        "refunded": "Возвращено"
-      }
+      "select": "Выбрать товар"
     },
     "users": {
-      "title": "Пользователи",
-      "subtitle": "Управление учетными записями пользователей",
-      "viewUser": "Посмотреть пользователя",
-      "editUser": "Редактировать пользователя",
-      "deleteUser": "Удалить пользователя",
-      "userId": "ID пользователя",
-      "name": "Имя",
-      "email": "Email",
-      "role": "Роль",
-      "status": "Статус",
-      "registered": "Зарегистрирован",
-      "lastLogin": "Последний вход",
-      "lastOrder": "Последний заказ",
-      "orders": "Заказы",
-      "totalSpent": "Потрачено всего",
-      "language": "Язык",
-      "avgOrderValue": "Средняя стоимость заказа",
-      "actions": {
-        "view": "Посмотреть детали пользователя",
-        "edit": "Редактировать пользователя",
-        "clearFilters": "Очистить фильтры",
-        "refresh": "Обновить",
-        "invite": "Пригласить пользователя"
-      },
       "loading": "Загрузка пользователей...",
-      "retry": "Повторить",
-      "searchPlaceholder": "Поиск пользователей по имени, email или ID...",
-      "roles": {
-        "admin": "Администратор",
-        "user": "Клиент",
-        "manager": "Менеджер"
-      },
-      "statuses": {
-        "active": "Активный",
-        "inactive": "Неактивный",
-        "banned": "Заблокированный",
-        "unverified": "Неподтвержденный",
-        "locked": "Заблокированный"
-      },
+      "retry": "Повторить загрузку",
       "columns": {
         "user": "Пользователь",
-        "email": "Email",
+        "email": "Электронная почта",
         "status": "Статус",
         "orders": "Заказы",
-        "totalSpent": "Потрачено всего",
+        "totalSpent": "Всего потрачено",
         "registered": "Зарегистрирован",
         "lastLogin": "Последний вход",
         "actions": "Действия"
-      },
-      "filters": {
-        "allStatus": "Все статусы",
-        "active": "Активный",
-        "inactive": "Неактивный",
-        "clear": "Очистить фильтры",
-        "toggle": "Фильтры",
-        "activeFilters": "Активные фильтры",
-        "from": "С",
-        "to": "По"
-      },
-      "empty": {
-        "noResults": "Пользователи не найдены",
-        "noUsers": "Пользователей пока нет",
-        "noData": "Данные недоступны",
-        "noResultsForQuery": "Не найдено пользователей для '{query}'",
-        "tryDifferentFilters": "Попробуйте другие фильтры или поисковые запросы",
-        "noUsersDescription": "Пользователи еще не зарегистрировались. Пользователи появятся здесь после создания аккаунтов.",
-        "checkConnection": "Проверьте подключение и попробуйте снова",
-        "helpTitle": "Советы по управлению пользователями:",
-        "helpTip1": "Используйте поиск для быстрого поиска конкретных пользователей",
-        "helpTip2": "Фильтруйте по статусу, чтобы сосредоточиться на определенных группах пользователей",
-        "helpTip3": "Нажмите на любого пользователя, чтобы увидеть подробную информацию",
-        "swipeHint": "Проведите влево на мобильном устройстве для быстрых действий"
-      }
-    },
-    "analytics": {
-      "title": "Аналитика",
-      "subtitle": "Просмотр производительности магазина",
-      "revenue": "Доход",
-      "orders": "Заказы",
-      "customers": "Клиенты",
-      "products": "Товары",
-      "conversionRate": "Коэффициент конверсии",
-      "averageOrderValue": "Средняя стоимость заказа",
-      "topProducts": "Топ товары",
-      "topCategories": "Топ категории",
-      "recentSales": "Недавние продажи",
-      "performanceMetrics": "Показатели производительности"
-    },
-    "common": {
-      "save": "Сохранить",
-      "cancel": "Отменить",
-      "delete": "Удалить",
-      "edit": "Редактировать",
-      "view": "Посмотреть",
-      "create": "Создать",
-      "update": "Обновить",
-      "search": "Поиск",
-      "filter": "Фильтр",
-      "sort": "Сортировка",
-      "export": "Экспорт",
-      "import": "Импорт",
-      "loading": "Загрузка...",
-      "saving": "Сохранение...",
-      "deleting": "Удаление...",
-      "noData": "Нет доступных данных",
-      "error": "Произошла ошибка",
-      "success": "Операция завершена успешно",
-      "confirm": "Вы уверены?",
-      "yes": "Да",
-      "no": "Нет",
-      "close": "Закрыть",
-      "back": "Назад",
-      "next": "Далее",
-      "previous": "Предыдущий",
-      "showMore": "Показать больше",
-      "showLess": "Показать меньше",
-      "selectAll": "Выбрать все",
-      "deselectAll": "Отменить выбор",
-      "required": "Обязательно",
-      "optional": "Необязательно"
-    },
-    "breadcrumbs": {
-      "admin": "Админ",
-      "dashboard": "Панель",
-      "products": "Товары",
-      "newProduct": "Новый товар",
-      "editProduct": "Редактировать товар",
-      "orders": "Заказы",
-      "users": "Пользователи",
-      "analytics": "Аналитика",
-      "inventory": "Инвентарь"
-    },
-    "userMenu": {
-      "profile": "Профиль",
-      "settings": "Настройки",
-      "logout": "Выйти",
-      "adminUser": "Пользователь-админ",
-      "administrator": "Администратор"
-    },
-    "notifications": {
-      "title": "Уведомления",
-      "noNotifications": "Нет новых уведомлений",
-      "markAllRead": "Отметить все как прочитанные"
-    },
-    "autoRefresh": {
-      "enabled": "Автообновление включено",
-      "disabled": "Автообновление отключено",
-      "interval": "Обновлять каждые {minutes} минут",
-      "lastRefresh": "Последнее обновление: {time}"
-    },
-    "emailLogs": {
-      "title": "Email Delivery Logs",
-      "headers": {
-        "order": "Order",
-        "recipient": "Recipient",
-        "type": "Type",
-        "status": "Status",
-        "attempts": "Attempts",
-        "date": "Date",
-        "actions": "Actions"
-      },
-      "buttons": {
-        "view": "View",
-        "retry": "Retry",
-        "retrying": "Retrying..."
-      }
-    },
-    "inventory": {
-      "reports": {
-        "recentMovements": "Recent Movements",
-        "headers": {
-          "product": "Product",
-          "type": "Type",
-          "quantity": "Quantity",
-          "date": "Date",
-          "currentStock": "Current Stock",
-          "threshold": "Threshold",
-          "stockValue": "Stock Value",
-          "priority": "Priority",
-          "recommendedOrder": "Recommended Order",
-          "estimatedCost": "Estimated Cost"
-        }
       }
     }
   },

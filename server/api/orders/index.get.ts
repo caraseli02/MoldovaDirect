@@ -1,5 +1,6 @@
 // GET /api/orders - Get user's orders with pagination and advanced filtering
 import { serverSupabaseServiceRole } from '#supabase/server'
+import { prepareSearchPattern } from '~/server/utils/searchSanitization'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -187,7 +188,9 @@ export default defineEventHandler(async (event) => {
       }
 
       if (search) {
-        ordersQuery = ordersQuery.ilike('order_number', `%${search}%`)
+        // Sanitize search input to prevent SQL injection
+        const sanitizedSearch = prepareSearchPattern(search, { validateLength: true })
+        ordersQuery = ordersQuery.ilike('order_number', sanitizedSearch)
       }
 
       if (dateFrom) {
@@ -235,7 +238,9 @@ export default defineEventHandler(async (event) => {
         countQuery = countQuery.eq('status', status)
       }
       if (search) {
-        countQuery = countQuery.ilike('order_number', `%${search}%`)
+        // Apply same sanitization as main query to prevent SQL injection
+        const sanitizedSearch = prepareSearchPattern(search, { validateLength: true })
+        countQuery = countQuery.ilike('order_number', sanitizedSearch)
       }
       if (dateFrom) {
         countQuery = countQuery.gte('created_at', dateFrom)

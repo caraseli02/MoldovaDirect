@@ -4,6 +4,7 @@ import { useCheckoutSessionStore } from './checkout/session'
 import { useCheckoutShippingStore } from './checkout/shipping'
 import { useCheckoutPaymentStore } from './checkout/payment'
 import { useAuthStore } from '~/stores/auth'
+import { useCartStore } from '~/stores/cart'
 import type { CheckoutStep, ShippingInformation, PaymentMethod, SavedPaymentMethod, Address, GuestInfo } from '~/types/checkout'
 import type { CartItem } from '~/stores/cart/types'
 import { validateShippingInformation, validatePaymentMethod } from '~/utils/checkout-validation'
@@ -14,6 +15,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
   const shipping = useCheckoutShippingStore()
   const payment = useCheckoutPaymentStore()
   const authStore = useAuthStore()
+  const cartStore = useCartStore()
 
   const sessionRefs = storeToRefs(session)
 
@@ -101,10 +103,10 @@ export const useCheckoutStore = defineStore('checkout', () => {
     return true
   }
 
-  const goToStep = (step: CheckoutStep): void => {
+  const goToStep = async (step: CheckoutStep): Promise<void> => {
     if (!validateCurrentStep()) return
     session.setCurrentStep(step)
-    session.persist({
+    await session.persist({
       shippingInfo: sessionRefs.shippingInfo.value,
       paymentMethod: sessionRefs.paymentMethod.value
     })
@@ -188,7 +190,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
       await payment.loadSavedPaymentMethods()
 
       session.setLastSyncAt(new Date())
-      session.persist({
+      await session.persist({
         shippingInfo: sessionRefs.shippingInfo.value,
         paymentMethod: sessionRefs.paymentMethod.value
       })
@@ -204,16 +206,16 @@ export const useCheckoutStore = defineStore('checkout', () => {
     }
   }
 
-  const updateGuestInfo = (info: GuestInfo): void => {
+  const updateGuestInfo = async (info: GuestInfo): Promise<void> => {
     session.setGuestInfo(info)
-    session.persist({
+    await session.persist({
       shippingInfo: sessionRefs.shippingInfo.value,
       paymentMethod: sessionRefs.paymentMethod.value
     })
   }
 
-  const saveToStorage = (): void => {
-    session.persist({
+  const saveToStorage = async (): Promise<void> => {
+    await session.persist({
       shippingInfo: sessionRefs.shippingInfo.value,
       paymentMethod: sessionRefs.paymentMethod.value
     })
@@ -266,6 +268,36 @@ export const useCheckoutStore = defineStore('checkout', () => {
     }
   }
 
+  const prefetchCheckoutData = async (): Promise<void> => {
+    // Only prefetch for authenticated users
+    if (!authStore.isAuthenticated) {
+      session.setDataPrefetched(true)
+      return
+    }
+
+    try {
+      // Fetch addresses and preferences in parallel from the API
+      const response = await $fetch('/api/checkout/user-data')
+
+      // Update session with fetched data
+      if (response.addresses && Array.isArray(response.addresses)) {
+        session.setSavedAddresses(response.addresses)
+      }
+
+      if (response.preferences) {
+        session.setPreferences(response.preferences)
+      }
+
+      // Mark data as prefetched
+      session.setDataPrefetched(true)
+    } catch (error) {
+      console.error('Failed to prefetch checkout data:', error)
+      // Don't throw - this is a non-critical enhancement
+      // Mark as prefetched anyway to avoid repeated failed attempts
+      session.setDataPrefetched(true)
+    }
+  }
+
   const api: Record<string | symbol, any> = {
     canProceedToPayment,
     canProceedToReview,
@@ -280,6 +312,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
     proceedToNextStep,
     goToPreviousStep,
     initializeCheckout,
+    prefetchCheckoutData,
     saveToStorage,
     loadFromStorage,
     updateGuestInfo,

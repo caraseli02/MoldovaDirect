@@ -27,14 +27,13 @@
 </template>
 
 <script setup lang="ts">
+import AdminDashboardOverview from '~/components/admin/Dashboard/Overview.vue'
+
 // Define page meta for admin layout and authentication
 definePageMeta({
   layout: 'admin',
-  middleware: ['auth', 'admin'] // Will be implemented in auth tasks
+  middleware: ['auth', 'admin'] // Auth middleware runs and validates before page loads
 })
-
-// Lazy load admin dashboard component to reduce main bundle size
-const AdminDashboardOverview = useAsyncAdminComponent('Dashboard/Overview')
 
 // SEO and meta
 useHead({

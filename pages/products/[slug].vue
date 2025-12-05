@@ -33,9 +33,9 @@
     </div>
   </div>
 
-  <div v-else-if="product" class="py-8 lg:py-12">
+  <div v-else-if="product" class="py-8 lg:py-12 pb-32 lg:pb-12">
     <div class="container space-y-12">
-      <nav class="flex flex-wrap items-center text-sm text-gray-500 dark:text-gray-400">
+      <nav class="flex flex-wrap items-center text-sm text-gray-600 dark:text-gray-400">
         <nuxt-link to="/" class="transition hover:text-gray-900 dark:hover:text-gray-200">{{ $t('common.home') }}</nuxt-link>
         <span class="mx-2">/</span>
         <nuxt-link to="/products" class="transition hover:text-gray-900 dark:hover:text-gray-200">{{ $t('common.shop') }}</nuxt-link>
@@ -57,66 +57,110 @@
 
       <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_360px] xl:grid-cols-[minmax(0,1fr)_420px]">
         <div class="space-y-10">
-          <section class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+          <section class="space-y-6">
             <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_220px]">
               <div>
-                <div class="relative overflow-hidden rounded-3xl bg-gray-100 dark:bg-gray-800">
-                  <img
-                    v-if="selectedImage"
-                    :src="selectedImage.url"
-                    :alt="getLocalizedText(selectedImage.altText) || getLocalizedText(product.name)"
-                    class="h-full w-full object-cover"
-                  />
-                  <div v-else class="flex h-full min-h-[360px] items-center justify-center text-gray-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
+                <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800" :class="selectedImage ? 'aspect-square' : ''">
+                  <template v-if="selectedImage">
+                    <NuxtImg
+                      preset="productDetail"
+                      :src="selectedImage.url"
+                      :alt="getLocalizedText(selectedImage.altText) || getLocalizedText(product.name)"
+                      sizes="100vw lg:800px"
+                      densities="x1 x2"
+                      loading="eager"
+                      fetchpriority="high"
+                      placeholder
+                      :placeholder-class="'blur-xl'"
+                      class="h-full w-full object-cover cursor-pointer transition-transform hover:scale-105"
+                      @click="openZoomModal"
+                    />
+                  </template>
+
+                  <!-- COMPACT BRANDED FALLBACK -->
+                  <div v-else class="flex items-center justify-center py-16">
+                    <div class="text-center space-y-4 px-6 max-w-sm">
+                      <!-- Brand Identity with subtle glow -->
+                      <div class="relative inline-block">
+                        <div class="absolute inset-0 bg-blue-500/20 blur-3xl rounded-full scale-150"></div>
+                        <commonIcon name="wine" class="relative h-20 w-20 text-blue-500 dark:text-blue-400 mx-auto" />
+                      </div>
+
+                      <!-- Message -->
+                      <div class="space-y-2">
+                        <h3 class="text-base font-semibold text-gray-900 dark:text-white">
+                          {{ $t('products.imageFallback.title') }}
+                        </h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                          {{ $t('products.imageFallback.subtitle') }}
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                  <div v-if="product.isFeatured" class="absolute left-4 top-4">
-                    <span class="rounded-full bg-yellow-500 px-3 py-1 text-sm font-semibold text-white">
-                      {{ $t('products.featured') }}
-                    </span>
-                  </div>
-                  <div v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)" class="absolute right-4 top-4">
-                    <span class="rounded-full bg-red-500 px-3 py-1 text-sm font-semibold text-white">
-                      {{ $t('products.sale') }}
-                    </span>
-                  </div>
+
+                  <!-- Badges (only if image exists) -->
+                  <template v-if="selectedImage">
+                    <div v-if="product.isFeatured" class="absolute left-4 top-4">
+                      <span class="rounded-full bg-yellow-500 px-3 py-1 text-sm font-semibold text-white shadow-lg">
+                        {{ $t('products.featured') }}
+                      </span>
+                    </div>
+                    <div v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)" class="absolute right-4 top-4">
+                      <span class="rounded-full bg-red-500 px-3 py-1 text-sm font-semibold text-white shadow-lg">
+                        {{ $t('products.sale') }}
+                      </span>
+                    </div>
+                  </template>
                 </div>
               </div>
-              <div class="space-y-3">
-                <UiButton
-                  v-for="(image, index) in product.images"
-                  :key="image.id || index"
-                  type="button"
-                  variant="outline"
-                  class="flex w-full items-center justify-start gap-3 rounded-2xl px-3 py-2 text-left transition hover:border-blue-500 hover:bg-blue-50 dark:hover:border-blue-400 dark:hover:bg-blue-900/30"
-                  :class="selectedImageIndex === index ? 'border-blue-500 bg-blue-50 text-blue-700 dark:border-blue-400 dark:bg-blue-900/40 dark:text-blue-100' : ''"
-                  @click="selectedImageIndex = index"
-                >
-                  <img :src="image.url" :alt="getLocalizedText(image.altText)" class="h-14 w-14 rounded-xl object-cover" />
-                  <span class="text-sm font-medium">{{ getLocalizedText(image.altText) || getLocalizedText(product.name) }}</span>
-                </UiButton>
+
+              <!-- Gallery Thumbnails -->
+              <div
+                v-if="product.images?.length"
+                class="overflow-x-auto pb-2 -mx-6 px-6 scrollbar-hide lg:mx-0 lg:px-0 lg:overflow-visible lg:pb-0"
+              >
+                <div class="flex gap-2 lg:flex-col lg:space-y-2 lg:gap-0">
+                  <button
+                    v-for="(image, index) in product.images"
+                    :key="image.id || index"
+                    type="button"
+                    class="flex-shrink-0 w-20 h-20 lg:w-full lg:aspect-square rounded-xl overflow-hidden border-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
+                    :class="selectedImageIndex === index ? 'border-blue-500 ring-2 ring-blue-500 ring-offset-1' : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'"
+                    @click="selectedImageIndex = index"
+                    :aria-label="`View image ${index + 1}`"
+                  >
+                    <NuxtImg
+                      preset="productThumbnailSmall"
+                      :src="image.url"
+                      :alt="getLocalizedText(image.altText)"
+                      width="80"
+                      height="80"
+                      loading="lazy"
+                      class="w-full h-full object-cover"
+                    />
+                  </button>
+                </div>
               </div>
             </div>
           </section>
 
-          <section class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-            <div class="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
-              <div>
-                <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
-                  {{ getLocalizedText(product.name) }}
-                </h1>
-                <p v-if="product.shortDescription" class="mt-3 text-lg text-gray-600 dark:text-gray-400">
-                  {{ getLocalizedText(product.shortDescription) }}
-                </p>
-              </div>
+          <UiCard>
+            <UiCardHeader>
+              <div class="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+                <div>
+                  <UiCardTitle class="text-3xl">
+                    {{ getLocalizedText(product.name) }}
+                  </UiCardTitle>
+                  <UiCardDescription v-if="product.shortDescription" class="mt-3 text-lg">
+                    {{ getLocalizedText(product.shortDescription) }}
+                  </UiCardDescription>
+                </div>
               <div class="flex flex-col items-start gap-2 text-right">
                 <div class="flex items-center gap-3">
                   <span class="text-3xl font-bold text-gray-900 dark:text-white">€{{ formatPrice(product.price) }}</span>
                   <span
                     v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)"
-                    class="text-lg text-gray-500 line-through"
+                    class="text-lg text-gray-600 line-through"
                   >
                     €{{ formatPrice(product.comparePrice) }}
                   </span>
@@ -125,14 +169,15 @@
                   {{ Math.round((1 - Number(product.price) / Number(product.comparePrice)) * 100) }}% {{ $t('products.off') }}
                 </span>
               </div>
-            </div>
+              </div>
+            </UiCardHeader>
 
-            <div class="mt-6 grid gap-6 lg:grid-cols-2">
+            <UiCardContent class="grid gap-6 lg:grid-cols-2">
               <div class="space-y-4">
                 <h2 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $t('products.story.title') }}</h2>
                 <p class="text-sm text-gray-600 dark:text-gray-400">{{ storytelling.producer }}</p>
                 <div>
-                  <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                  <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400">
                     {{ $t('products.story.tastingNotes') }}
                   </h3>
                   <ul class="mt-2 flex flex-wrap gap-2">
@@ -146,7 +191,7 @@
                   </ul>
                 </div>
                 <div>
-                  <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                  <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400">
                     {{ $t('products.story.pairings') }}
                   </h3>
                   <ul class="mt-2 list-inside list-disc text-sm text-gray-600 dark:text-gray-400">
@@ -154,34 +199,35 @@
                   </ul>
                 </div>
               </div>
-              <div class="space-y-4">
-                <div class="rounded-2xl border border-gray-200 bg-gray-50 p-5 dark:border-gray-800 dark:bg-gray-800/60">
-                  <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+              <div class="space-y-6">
+                <div class="space-y-2">
+                  <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400">
                     {{ $t('products.story.awards') }}
                   </h3>
-                  <ul class="mt-3 space-y-2 text-sm text-gray-600 dark:text-gray-300">
-                    <li v-for="award in awards" :key="`award-${award}`">{{ award }}</li>
+                  <ul class="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                    <li v-for="award in awards" :key="`award-${award}`">• {{ award }}</li>
                     <li v-if="!awards.length">{{ $t('products.story.noAwards') }}</li>
                   </ul>
                 </div>
-                <div class="rounded-2xl border border-gray-200 bg-gray-50 p-5 dark:border-gray-800 dark:bg-gray-800/60">
-                  <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                <div class="space-y-2">
+                  <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400">
                     {{ $t('products.story.origin') }}
                   </h3>
-                  <p class="mt-3 text-sm text-gray-600 dark:text-gray-300">
+                  <p class="text-sm text-gray-700 dark:text-gray-300">
                     {{ originStory }}
                   </p>
                 </div>
               </div>
-            </div>
-          </section>
+            </UiCardContent>
+          </UiCard>
 
-          <section class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-            <div class="flex flex-wrap items-center justify-between gap-4">
-              <div>
-                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $t('products.socialProof.title') }}</h2>
-                <p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('products.socialProof.subtitle') }}</p>
-              </div>
+          <UiCard>
+            <UiCardHeader>
+              <div class="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                  <UiCardTitle>{{ $t('products.socialProof.title') }}</UiCardTitle>
+                  <UiCardDescription>{{ $t('products.socialProof.subtitle') }}</UiCardDescription>
+                </div>
               <div class="flex items-center gap-2 rounded-full bg-yellow-100 px-4 py-2 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-200">
                 <span class="text-lg font-semibold">{{ reviewSummary.rating }}</span>
                 <div class="flex items-center">
@@ -190,22 +236,28 @@
                   </svg>
                 </div>
               </div>
-            </div>
-            <div class="mt-6 grid gap-4 sm:grid-cols-3">
-              <div v-for="highlight in reviewSummary.highlights" :key="highlight" class="rounded-2xl border border-gray-200 bg-gray-50 p-4 text-sm text-gray-600 dark:border-gray-800 dark:bg-gray-800/60 dark:text-gray-300">
+              </div>
+            </UiCardHeader>
+            <UiCardContent class="grid gap-4 sm:grid-cols-3">
+              <div v-for="highlight in reviewSummary.highlights" :key="highlight" class="p-4 text-sm text-gray-700 dark:text-gray-300">
                 {{ highlight }}
               </div>
-              <div class="rounded-2xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-700 dark:border-blue-900/60 dark:bg-blue-900/20 dark:text-blue-200">
+              <div class="p-4 text-sm font-medium text-blue-700 dark:text-blue-300">
                 {{ $t('products.socialProof.rating', { rating: reviewSummary.rating, count: reviewSummary.count }) }}
               </div>
-            </div>
-            <UiButton type="button" variant="outline" size="sm" class="mt-6 rounded-full">
-              {{ $t('products.socialProof.cta') }}
-            </UiButton>
-          </section>
+            </UiCardContent>
+            <UiCardFooter>
+              <UiButton type="button" variant="outline" size="sm" class="rounded-full">
+                {{ $t('products.socialProof.cta') }}
+              </UiButton>
+            </UiCardFooter>
+          </UiCard>
 
-          <section class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $t('products.details') }}</h2>
+          <UiCard>
+            <UiCardHeader>
+              <UiCardTitle>{{ $t('products.details') }}</UiCardTitle>
+            </UiCardHeader>
+            <UiCardContent>
             <dl class="mt-4 grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
               <div v-if="product.origin">
                 <dt class="font-medium text-gray-900 dark:text-white">{{ $t('products.origin') }}</dt>
@@ -238,11 +290,15 @@
                 {{ tag }}
               </span>
             </div>
-          </section>
+            </UiCardContent>
+          </UiCard>
 
-          <section class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $t('products.sustainability.title') }}</h2>
-            <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">{{ $t('products.sustainability.subtitle') }}</p>
+          <UiCard>
+            <UiCardHeader>
+              <UiCardTitle>{{ $t('products.sustainability.title') }}</UiCardTitle>
+              <UiCardDescription>{{ $t('products.sustainability.subtitle') }}</UiCardDescription>
+            </UiCardHeader>
+            <UiCardContent>
             <div class="mt-4 flex flex-wrap gap-2">
               <span
                 v-for="badge in sustainabilityBadges"
@@ -253,53 +309,60 @@
                 {{ $t(`products.sustainability.badges.${badge}`) }}
               </span>
             </div>
-          </section>
+            </UiCardContent>
+          </UiCard>
 
-          <section class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $t('products.faq.title') }}</h2>
-            <p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('products.faq.subtitle') }}</p>
-            <div class="mt-4 space-y-3">
+          <UiCard>
+            <UiCardHeader>
+              <UiCardTitle>{{ $t('products.faq.title') }}</UiCardTitle>
+              <UiCardDescription>{{ $t('products.faq.subtitle') }}</UiCardDescription>
+            </UiCardHeader>
+            <UiCardContent>
+            <div class="mt-4 space-y-4">
               <details
                 v-for="item in faqItems"
                 :key="item.id"
-                class="group rounded-2xl border border-gray-200 bg-gray-50 p-4 dark:border-gray-800 dark:bg-gray-800/60"
+                class="group pb-4 border-b border-gray-200 dark:border-gray-800 last:border-0 last:pb-0"
                 :open="item.defaultOpen"
               >
                 <summary class="flex cursor-pointer items-center justify-between text-sm font-semibold text-gray-900 transition dark:text-white">
                   {{ item.question }}
                   <span class="text-xl leading-none transition group-open:rotate-45">+</span>
                 </summary>
-                <p class="mt-3 text-sm text-gray-600 dark:text-gray-300">{{ item.answer }}</p>
+                <p class="mt-3 text-sm text-gray-700 dark:text-gray-300">{{ item.answer }}</p>
               </details>
             </div>
-          </section>
+            </UiCardContent>
+          </UiCard>
         </div>
 
         <aside class="space-y-6 lg:sticky lg:top-24">
-          <div class="rounded-3xl border border-gray-200 bg-white p-6 shadow-lg dark:border-gray-800 dark:bg-gray-900">
-            <div v-if="product.category" class="text-sm font-medium text-blue-600 dark:text-blue-300">
-              {{ categoryLabel }}
-            </div>
-            <h2 class="mt-2 text-2xl font-semibold text-gray-900 dark:text-white">{{ getLocalizedText(product.name) }}</h2>
-            <div class="mt-4 flex items-center gap-3">
-              <span class="text-3xl font-bold text-gray-900 dark:text-white">€{{ formatPrice(product.price) }}</span>
-              <span v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)" class="text-lg text-gray-500 line-through">
-                €{{ formatPrice(product.comparePrice) }}
+          <UiCard>
+            <UiCardHeader>
+              <div v-if="product.category" class="text-sm font-medium text-blue-700 dark:text-blue-200">
+                {{ categoryLabel }}
+              </div>
+              <UiCardTitle class="mt-2">{{ getLocalizedText(product.name) }}</UiCardTitle>
+              <div class="mt-4 flex items-center gap-3">
+                <span class="text-3xl font-bold text-gray-900 dark:text-white">€{{ formatPrice(product.price) }}</span>
+                <span v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)" class="text-lg text-gray-600 line-through">
+                  €{{ formatPrice(product.comparePrice) }}
+                </span>
+              </div>
+              <span
+                class="mt-3 inline-flex items-center gap-2 rounded-full px-4 py-1 text-sm font-medium"
+                :class="stockStatusClass"
+              >
+                <span class="inline-block h-2 w-2 rounded-full bg-current"></span>
+                {{ stockStatusText }}
               </span>
-            </div>
-            <span
-              class="mt-3 inline-flex items-center gap-2 rounded-full px-4 py-1 text-sm font-medium"
-              :class="stockStatusClass"
-            >
-              <span class="inline-block h-2 w-2 rounded-full bg-current"></span>
-              {{ stockStatusText }}
-            </span>
-            <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">{{ estimatedDelivery }}</p>
-            <p v-if="stockUrgencyMessage" class="mt-1 text-sm font-semibold text-red-600 dark:text-red-300">
-              {{ stockUrgencyMessage }}
-            </p>
+              <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">{{ estimatedDelivery }}</p>
+              <p v-if="stockUrgencyMessage" class="mt-1 text-sm font-semibold text-red-600 dark:text-red-300">
+                {{ stockUrgencyMessage }}
+              </p>
+            </UiCardHeader>
 
-            <div class="mt-4 space-y-4">
+            <UiCardContent class="space-y-4">
               <label class="block text-sm font-medium text-gray-900 dark:text-white">{{ $t('common.quantity') }}</label>
               <select
                 v-model="selectedQuantity"
@@ -314,9 +377,9 @@
               <Button
                 data-testid="add-to-cart-button"
                 :disabled="(product.stockQuantity || 0) <= 0 || cartLoading"
-                class="flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3 text-base font-semibold text-white transition disabled:cursor-not-allowed disabled:bg-gray-400"
+                class="flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3 text-base font-semibold text-white transition disabled:cursor-not-allowed disabled:bg-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
                 :class="[
-                  isProductInCart ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700',
+                  isProductInCart ? 'bg-green-600 hover:bg-green-700 focus-visible:ring-green-600' : 'bg-blue-600 hover:bg-blue-700 focus-visible:ring-blue-600',
                   cartLoading ? 'cursor-progress' : ''
                 ]"
                 @click="addToCart"
@@ -334,56 +397,51 @@
                 </span>
               </Button>
 
-              <div class="flex flex-wrap gap-3">
-                <UiButton
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  class="flex-1 rounded-xl"
-                  :class="wishlistAdded ? 'border-blue-500 text-blue-600 dark:border-blue-400 dark:text-blue-200' : ''"
-                  @click="toggleWishlist"
-                >
-                  <span class="mr-2" aria-hidden="true">♥</span>
-                  <span>{{ wishlistAdded ? $t('products.actions.addedToWishlist') : $t('products.actions.addToWishlist') }}</span>
-                </UiButton>
-                <UiButton
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  class="rounded-xl"
-                  @click="shareProduct"
-                >
-                  <span class="mr-2" aria-hidden="true">⤴</span>
-                  <span>{{ $t('products.actions.share') }}</span>
-                </UiButton>
-              </div>
-              <p v-if="shareFeedback" class="text-sm text-blue-600 dark:text-blue-300">{{ shareFeedback }}</p>
-            </div>
-          </div>
+              <UiButton
+                type="button"
+                variant="outline"
+                size="sm"
+                class="rounded-xl w-full"
+                @click="shareProduct"
+              >
+                <span class="mr-2" aria-hidden="true">⤴</span>
+                <span>{{ $t('products.actions.share') }}</span>
+              </UiButton>
+              <p v-if="shareFeedback" class="text-sm text-blue-700 dark:text-blue-200">{{ shareFeedback }}</p>
+            </UiCardContent>
+          </UiCard>
 
-          <div class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $t('products.trust.title') }}</h3>
-            <ul class="mt-4 space-y-3 text-sm text-gray-600 dark:text-gray-300">
+          <UiCard>
+            <UiCardHeader>
+              <UiCardTitle class="text-lg">{{ $t('products.trust.title') }}</UiCardTitle>
+            </UiCardHeader>
+            <UiCardContent>
+              <ul class="space-y-3 text-sm text-gray-600 dark:text-gray-300">
               <li v-for="promise in trustPromises" :key="promise" class="flex items-start gap-3">
                 <span class="mt-1 inline-block h-2 w-2 rounded-full bg-blue-500"></span>
                 <span>{{ promise }}</span>
               </li>
-            </ul>
-          </div>
+              </ul>
+            </UiCardContent>
+          </UiCard>
 
-          <div class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $t('products.bundle.title') }}</h3>
-            <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">{{ $t('products.bundle.description') }}</p>
-            <div class="mt-4 space-y-3">
-              <div v-for="item in bundleItems" :key="`bundle-${item.id}`" class="flex items-center justify-between rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm dark:border-gray-800 dark:bg-gray-800/60">
+          <UiCard>
+            <UiCardHeader>
+              <UiCardTitle class="text-lg">{{ $t('products.bundle.title') }}</UiCardTitle>
+              <UiCardDescription>{{ $t('products.bundle.description') }}</UiCardDescription>
+            </UiCardHeader>
+            <UiCardContent class="space-y-3">
+              <div v-for="item in bundleItems" :key="`bundle-${item.id}`" class="flex items-center justify-between py-2 text-sm border-b border-gray-200 dark:border-gray-800 last:border-0">
                 <span class="font-medium text-gray-800 dark:text-gray-200">{{ item.title }}</span>
-                <span class="text-gray-500 dark:text-gray-400">€{{ formatPrice(item.price) }}</span>
+                <span class="text-gray-600 dark:text-gray-400">€{{ formatPrice(item.price) }}</span>
               </div>
-            </div>
-            <Button class="mt-4 w-full justify-center rounded-xl border border-blue-200 bg-blue-50 px-5 py-2.5 text-sm font-semibold text-blue-700 hover:bg-blue-100 dark:border-blue-900/40 dark:bg-blue-900/20 dark:text-blue-200">
-              {{ $t('products.bundle.cta') }}
-            </Button>
-          </div>
+            </UiCardContent>
+            <UiCardFooter>
+              <Button class="w-full justify-center rounded-xl border border-blue-200 bg-blue-50 px-5 py-2.5 text-sm font-semibold text-blue-700 hover:bg-blue-100 dark:border-blue-900/40 dark:bg-blue-900/20 dark:text-blue-200">
+                {{ $t('products.bundle.cta') }}
+              </Button>
+            </UiCardFooter>
+          </UiCard>
         </aside>
       </div>
 
@@ -407,18 +465,79 @@
           </p>
         </div>
       </section>
+
+      <!-- Mobile Sticky Bottom Bar (Above Bottom Navigation) -->
+      <Teleport to="body">
+        <div
+          class="fixed left-0 right-0 z-50 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 shadow-2xl lg:hidden"
+          style="bottom: 64px"
+        >
+          <div class="container mx-auto px-4 py-3">
+            <div class="flex items-center gap-3">
+              <!-- Product Info (Compact) -->
+              <div class="flex-1 min-w-0">
+                <p class="text-xs text-gray-600 dark:text-gray-400 truncate">{{ getLocalizedText(product.name) }}</p>
+                <p class="text-lg font-bold text-gray-900 dark:text-white">
+                  €{{ formatPrice(product.price) }}
+                </p>
+              </div>
+
+              <!-- Add to Cart Button (Thumb-Friendly) -->
+              <Button
+                :disabled="(product.stockQuantity || 0) <= 0 || cartLoading"
+                class="flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-base font-semibold text-white transition min-h-[48px] min-w-[140px]"
+                :class="[
+                  isProductInCart ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700',
+                  cartLoading ? 'cursor-progress' : ''
+                ]"
+                @click="addToCart"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m2.6 8L6 21h13M7 13v4a1 1 0 001 1h9a1 1 0 001-1v-4M7 13L6 9" />
+                </svg>
+                <span>
+                  <template v-if="(product.stockQuantity || 0) > 0">
+                    {{ isProductInCart ? $t('products.inCart') : $t('products.addToCart') }}
+                  </template>
+                  <template v-else>
+                    {{ $t('products.outOfStock') }}
+                  </template>
+                </span>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </Teleport>
+
+      <!-- Image Zoom Modal -->
+      <ProductImageZoomModal
+        v-if="product?.images?.length"
+        :is-open="showZoomModal"
+        :image-url="selectedImage?.url || ''"
+        :image-name="getLocalizedText(selectedImage?.altText) || getLocalizedText(product?.name)"
+        :current-index="selectedImageIndex"
+        :total-images="product.images.length"
+        @update:is-open="showZoomModal = $event"
+        @previous="handlePreviousImage"
+        @next="handleNextImage"
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useHead } from '#imports'
 import { Button } from '@/components/ui/button'
 import ProductCard from '~/components/product/Card.vue'
 import type { ProductWithRelations } from '~/types/database'
 import { useCart } from '~/composables/useCart'
+import { useProductUtils } from '~/composables/useProductUtils'
+import { useProductStory } from '~/composables/useProductStory'
+import { useProductDetailSEO } from '~/composables/useProductDetailSEO'
+import { useProductStockStatus } from '~/composables/useProductStockStatus'
+import { useToast } from '~/composables/useToast'
 
 const route = useRoute()
 const slug = route.params.slug as string
@@ -427,17 +546,60 @@ const { data: product, pending, error } = await useLazyFetch<ProductWithRelation
 
 const { t, locale } = useI18n()
 
+// UI state
 const selectedImageIndex = ref(0)
 const selectedQuantity = ref(1)
-const wishlistAdded = ref(false)
 const shareFeedback = ref<string | null>(null)
+const showZoomModal = ref(false)
+
+// Detect mobile device
+const isMobile = computed(() => {
+  if (typeof window === 'undefined') return false
+  return window.innerWidth < 1024 // lg breakpoint
+})
 
 const recentlyViewedProducts = useState<ProductWithRelations[]>('recentlyViewedProducts', () => [])
 
-const productAttributes = computed(() => product.value?.attributes || {})
-
+// Use composables
+const { getLocalizedText, formatPrice, getCategoryLabel } = useProductUtils()
 const { addItem, loading: cartLoading, isInCart } = useCart()
+const toast = useToast()
 
+// Computed values
+const productAttributes = computed(() => product.value?.attributes || {})
+const stockQuantity = computed(() => product.value?.stockQuantity || 0)
+const categoryLabel = computed(() => getCategoryLabel(product.value?.category))
+
+// Stock status composable
+const {
+  stockStatusClass,
+  stockStatusText,
+  estimatedDelivery,
+  stockUrgencyMessage
+} = useProductStockStatus(stockQuantity)
+
+// Product story composable
+const {
+  storytelling,
+  tastingNotes,
+  pairingIdeas,
+  awards,
+  originStory,
+  reviewSummary,
+  sustainabilityBadges
+} = useProductStory(product)
+
+// SEO composable
+const config = useRuntimeConfig()
+const seoOptions = computed(() => ({
+  productUrl: `${config.public.siteUrl}${route.path}`,
+  rating: reviewSummary.value,
+  brand: productAttributes.value?.brand || productAttributes.value?.producer || categoryLabel.value
+}))
+
+const { structuredData, metaTags, pageTitle } = useProductDetailSEO(product, seoOptions)
+
+// Cart functionality
 const isProductInCart = computed(() => {
   if (!product.value) return false
   return isInCart(product.value.id)
@@ -447,111 +609,7 @@ const selectedImage = computed(() => {
   return product.value?.images?.[selectedImageIndex.value]
 })
 
-const stockStatusClass = computed(() => {
-  if (!product.value) return ''
-  const stock = product.value.stockQuantity
-  if (stock > 10) return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-200'
-  if (stock > 0) return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-200'
-  return 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-200'
-})
-
-const stockStatusText = computed(() => {
-  if (!product.value) return ''
-  const stock = product.value.stockQuantity
-  if (stock > 10) return t('products.stockStatus.inStock')
-  if (stock > 0) return t('products.stockStatus.onlyLeft', { count: stock })
-  return t('products.stockStatus.outOfStock')
-})
-
-const categoryLabel = computed(() => {
-  if (!product.value?.category) return ''
-  const category: any = product.value.category
-  if (category.nameTranslations) {
-    return getLocalizedText(category.nameTranslations)
-  }
-  if (category.name) {
-    return typeof category.name === 'string' ? category.name : getLocalizedText(category.name)
-  }
-  return ''
-})
-
-const storytelling = computed(() => {
-  const producerStory = productAttributes.value?.producer_story || productAttributes.value?.producerStory
-  const categoryName = categoryLabel.value
-  return {
-    producer: producerStory || t('products.story.producerFallback', { category: categoryName || t('products.commonProduct') })
-  }
-})
-
-const tastingNotes = computed(() => {
-  const notes = productAttributes.value?.tasting_notes || productAttributes.value?.tastingNotes
-  if (Array.isArray(notes)) return notes
-  if (typeof notes === 'string') {
-    return notes.split(',').map(note => note.trim()).filter(Boolean)
-  }
-  return t('products.story.defaultNotes').split('|').map(entry => entry.trim())
-})
-
-const pairingIdeas = computed(() => {
-  const pairings = productAttributes.value?.pairings
-  if (Array.isArray(pairings)) return pairings
-  if (typeof pairings === 'string') {
-    return pairings.split(',').map(pairing => pairing.trim()).filter(Boolean)
-  }
-  return t('products.story.defaultPairings').split('|').map(entry => entry.trim())
-})
-
-const awards = computed(() => {
-  const awardList = productAttributes.value?.awards
-  if (Array.isArray(awardList)) return awardList
-  if (typeof awardList === 'string') {
-    return awardList.split(',').map(award => award.trim()).filter(Boolean)
-  }
-  return []
-})
-
-const originStory = computed(() => {
-  if (productAttributes.value?.terroir) {
-    return productAttributes.value.terroir
-  }
-  if (product.value?.origin) {
-    return t('products.story.originFallback', { origin: product.value.origin })
-  }
-  const categoryTranslations = product.value?.category?.nameTranslations || {}
-  const categoryName = getLocalizedText(categoryTranslations)
-  return t('products.story.originCategoryFallback', { category: categoryName || t('products.commonProduct') })
-})
-
-const reviewSummary = computed(() => {
-  const rating = Number(productAttributes.value?.rating || 4.8)
-  const count = Number(productAttributes.value?.review_count || productAttributes.value?.reviewCount || 126)
-  const highlightsRaw = productAttributes.value?.review_highlights || productAttributes.value?.reviewHighlights
-  let highlights: string[] = []
-  if (Array.isArray(highlightsRaw)) {
-    highlights = highlightsRaw
-  } else if (typeof highlightsRaw === 'string') {
-    highlights = highlightsRaw.split('|').map((item: string) => item.trim())
-  } else {
-    highlights = t('products.socialProof.highlights').split('|').map(entry => entry.trim())
-  }
-  return { rating: Number(rating.toFixed(1)), count, highlights }
-})
-
-const sustainabilityBadges = computed(() => {
-  const badges: string[] = []
-  const attrs = productAttributes.value || {}
-  const truthy = (value: any) => value === true || value === 'true' || value === 1
-  if (truthy(attrs.organic) || truthy(attrs.organicCertified)) badges.push('organic')
-  if (truthy(attrs.handcrafted) || truthy(attrs.smallBatch)) badges.push('handcrafted')
-  if (truthy(attrs.familyOwned)) badges.push('familyOwned')
-  if (truthy(attrs.limitedRelease) || truthy(attrs.limitedEdition)) badges.push('limited')
-  if (truthy(attrs.protectedOrigin) || truthy(attrs.geographicIndication)) badges.push('heritage')
-  if (!badges.length) {
-    badges.push('handcrafted', 'familyOwned')
-  }
-  return Array.from(new Set(badges)).slice(0, 5)
-})
-
+// FAQ and trust promises
 const faqItems = computed(() => [
   {
     id: 'delivery',
@@ -595,30 +653,7 @@ const bundleItems = computed(() => {
   }))
 })
 
-const estimatedDelivery = computed(() => {
-  const baseDate = new Date()
-  baseDate.setDate(baseDate.getDate() + 1)
-  const formatted = new Intl.DateTimeFormat(locale.value, { weekday: 'short', month: 'short', day: 'numeric' }).format(baseDate)
-  return t('products.stock.eta', { date: formatted })
-})
-
-const stockUrgencyMessage = computed(() => {
-  if (!product.value) return ''
-  const stock = product.value.stockQuantity || 0
-  if (stock === 0) return ''
-  if (stock <= 3) {
-    return t('products.stock.urgencyLow', { count: stock })
-  }
-  if (stock <= 8) {
-    return t('products.stock.urgencyMedium', { count: stock })
-  }
-  return ''
-})
-
-const toggleWishlist = () => {
-  wishlistAdded.value = !wishlistAdded.value
-}
-
+// User interactions
 const shareProduct = async () => {
   try {
     const shareData = {
@@ -644,27 +679,103 @@ const shareProduct = async () => {
   }
 }
 
-const addToCart = async () => {
-  if (!product.value) return
-  try {
-    await addItem({
-      productId: product.value.id,
-      quantity: selectedQuantity.value
-    })
-  } catch (err) {
-    console.error('Add to cart failed', err)
+// Image zoom modal handlers
+const openZoomModal = () => {
+  showZoomModal.value = true
+}
+
+const handlePreviousImage = () => {
+  if (selectedImageIndex.value > 0) {
+    selectedImageIndex.value--
   }
 }
 
-const getLocalizedText = (text: Record<string, string> | null | undefined) => {
-  if (!text) return ''
-  return text[locale.value] || text.es || Object.values(text)[0] || ''
+const handleNextImage = () => {
+  if (product.value?.images && selectedImageIndex.value < product.value.images.length - 1) {
+    selectedImageIndex.value++
+  }
 }
 
-const formatPrice = (price: string | number) => {
-  return Number(price).toFixed(2)
+const addToCart = async () => {
+  if (!product.value) return
+
+  // CRITICAL SSR Guard: Cart operations require browser APIs
+  //
+  // Context: This guard prevents SSR hydration mismatches on Vercel deployment
+  // Root causes:
+  // - Cart store uses localStorage which is undefined during SSR
+  // - Haptic feedback APIs (vibrate) only exist in browser context
+  // - User session state unavailable during server render
+  //
+  // Behavior: Server-rendered buttons appear but don't execute cart logic
+  // until hydration completes. This is intentional and prevents 500 errors.
+  if (import.meta.server || typeof window === 'undefined') {
+    console.warn('Add to Cart: Server-side render, skipping')
+    return
+  }
+
+  // Development-only debug logging (tree-shaken in production)
+  //
+  // Added to diagnose SSR-related cart failures (commit ffbe86a)
+  // Logs only appear in dev mode; completely removed from production bundles
+  //
+  // Key diagnostics:
+  // - isClient: Should be true for cart operations
+  // - hasWindow: Verifies browser context availability
+  // - addItemType: Confirms cart composable loaded correctly
+  if (import.meta.dev) {
+    const debugInfo = {
+      productId: product.value.id,
+      quantity: selectedQuantity.value,
+      isClient: import.meta.client,
+      hasWindow: typeof window !== 'undefined',
+      addItemType: typeof addItem
+    }
+    console.log('🛒 Add to Cart clicked', debugInfo)
+  }
+
+  try {
+    if (typeof addItem !== 'function') {
+      const error = `addItem is not a function (type: ${typeof addItem})`
+      console.error('❌', error)
+      throw new Error(error)
+    }
+
+    // Construct the product object in the format expected by the cart store
+    const cartProduct = {
+      id: product.value.id,
+      slug: product.value.slug,
+      name: getLocalizedText(product.value.name),
+      price: Number(product.value.price),
+      images: product.value.images?.map(img => img.url) || [],
+      stock: product.value.stockQuantity
+    }
+
+    await addItem(cartProduct, selectedQuantity.value)
+
+    // Show success toast
+    const productName = getLocalizedText(product.value.name)
+    toast.success(
+      t('cart.success.added'),
+      t('cart.success.productAdded', { product: productName })
+    )
+
+    if (import.meta.dev) {
+      console.log('✅ Add to cart succeeded!')
+    }
+  } catch (err) {
+    const errorMsg = err instanceof Error ? err.message : String(err)
+    console.error('Add to cart failed:', errorMsg, err)
+
+    // Show error toast
+    toast.error(
+      t('cart.error.addFailed'),
+      t('cart.error.addFailedDetails')
+    )
+  }
 }
 
+// Watch for product changes
 watch(product, newProduct => {
   if (newProduct) {
     selectedImageIndex.value = 0
@@ -678,130 +789,23 @@ watch(product, newProduct => {
   }
 }, { immediate: true })
 
+// Update page metadata
 watch(product, newProduct => {
-  if (newProduct) {
-    // Determine availability status
-    const stockQuantity = newProduct.stockQuantity || 0
-    const availabilityStatus = stockQuantity > 0
-      ? 'https://schema.org/InStock'
-      : 'https://schema.org/OutOfStock'
-
-    // Build image array for structured data
-    const productImages = newProduct.images?.map(img => img.url).filter(Boolean) || []
-
-    // Get brand from attributes or use category as fallback
-    const brand = productAttributes.value?.brand ||
-                  productAttributes.value?.producer ||
-                  categoryLabel.value ||
-                  'Moldova Direct'
-
-    // Build canonical URL for structured data (works in SSR)
-    const config = useRuntimeConfig()
-    const productUrl = `${config.public.siteUrl}${route.path}`
-
-    // Build Product structured data
-    const productStructuredData: Record<string, any> = {
-      '@context': 'https://schema.org',
-      '@type': 'Product',
-      name: getLocalizedText(newProduct.name),
-      description: getLocalizedText(newProduct.description) || getLocalizedText(newProduct.shortDescription),
-      image: productImages,
-      sku: newProduct.sku,
-      brand: {
-        '@type': 'Brand',
-        name: brand
-      },
-      offers: {
-        '@type': 'Offer',
-        url: productUrl,
-        priceCurrency: 'EUR',
-        price: Number(newProduct.price).toFixed(2),
-        priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
-        availability: availabilityStatus,
-        itemCondition: 'https://schema.org/NewCondition'
-      }
-    }
-
-    // Add compare price if available
-    if (newProduct.comparePrice && Number(newProduct.comparePrice) > Number(newProduct.price)) {
-      productStructuredData.offers.priceType = 'https://schema.org/SalePrice'
-    }
-
-    // Add aggregate rating if available
-    const rating = reviewSummary.value
-    if (rating && rating.count > 0) {
-      productStructuredData.aggregateRating = {
-        '@type': 'AggregateRating',
-        ratingValue: rating.rating.toString(),
-        reviewCount: rating.count.toString(),
-        bestRating: '5',
-        worstRating: '1'
-      }
-    }
-
-    // Add additional product details if available
-    if (newProduct.origin) {
-      productStructuredData.countryOfOrigin = {
-        '@type': 'Country',
-        name: newProduct.origin
-      }
-    }
-
-    if (newProduct.weight) {
-      productStructuredData.weight = {
-        '@type': 'QuantitativeValue',
-        value: newProduct.weight,
-        unitCode: 'KGM'
-      }
-    }
-
-    // Add category breadcrumb
-    if (newProduct.category) {
-      productStructuredData.category = categoryLabel.value
-    }
-
+  if (newProduct && structuredData.value) {
     useHead({
-      title: `${getLocalizedText(newProduct.name)} - Moldova Direct`,
-      meta: [
-        {
-          name: 'description',
-          content: getLocalizedText(newProduct.metaDescription) || getLocalizedText(newProduct.shortDescription) || getLocalizedText(newProduct.description) || `${getLocalizedText(newProduct.name)} - Authentic Moldovan product`
-        },
-        {
-          property: 'og:title',
-          content: getLocalizedText(newProduct.name)
-        },
-        {
-          property: 'og:description',
-          content: getLocalizedText(newProduct.shortDescription) || getLocalizedText(newProduct.description)
-        },
-        {
-          property: 'og:image',
-          content: newProduct.images?.[0]?.url
-        },
-        {
-          property: 'og:type',
-          content: 'product'
-        },
-        {
-          property: 'product:price:amount',
-          content: newProduct.price
-        },
-        {
-          property: 'product:price:currency',
-          content: 'EUR'
-        }
-      ],
+      title: pageTitle.value,
+      meta: metaTags.value,
       script: [
         {
           type: 'application/ld+json',
-          children: JSON.stringify(productStructuredData)
+          children: JSON.stringify(structuredData.value)
         }
       ]
     })
   }
 }, { immediate: true })
 
+// Handle 404 errors
 if (error.value?.statusCode === 404) {
   throw createError({
     statusCode: 404,

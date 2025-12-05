@@ -21,25 +21,43 @@ export default defineNuxtPlugin(() => {
   if (!import.meta.client) return;
 
   const { $router } = useNuxtApp();
+  const route = useRoute();
+
+  // Skip cart analytics for admin pages
+  if (route.path.startsWith('/admin')) {
+    return;
+  }
 
   // Initialize cart analytics when navigating to cart page
   $router.afterEach((to) => {
+    // Skip analytics for admin pages
+    if (to.path.startsWith('/admin')) {
+      return;
+    }
+
     if (to.path === "/cart") {
-      // Use setTimeout to ensure Pinia is ready
+      // Use setTimeout to ensure Pinia and cart store are ready
       setTimeout(() => {
         try {
           const cartAnalytics = useCartAnalytics();
-          const cartStore = useCartStore();
-          
-          if (cartAnalytics.trackCartView && cartStore) {
-            const cartValue = cartStore.totalPrice || 0;
-            const itemCount = cartStore.totalItems || 0;
-            cartAnalytics.trackCartView(cartValue, itemCount);
+
+          // Try to get cart store - skip tracking if not available
+          try {
+            const cartStore = useCartStore();
+
+            if (cartAnalytics.trackCartView && cartStore) {
+              const cartValue = cartStore.subtotal || 0;
+              const itemCount = cartStore.itemCount || 0;
+              cartAnalytics.trackCartView(cartValue, itemCount);
+            }
+          } catch (storeError) {
+            // Cart store not ready yet - skip tracking (not critical)
+            return;
           }
         } catch (error) {
           console.warn("Failed to track cart view:", error);
         }
-      }, 100);
+      }, 500); // Increased delay to ensure cart plugin has initialized
     }
   });
 

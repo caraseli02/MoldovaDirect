@@ -1,22 +1,42 @@
 import { useCartStore } from "~/stores/cart";
-import { getActivePinia } from "pinia";
 import { ref, computed } from "vue";
 
 export const useCart = () => {
-  // access the store, fallback if not available
-  const pinia = getActivePinia()
+  // CRITICAL FIX v3: Cart store is client-only, check before accessing
+  // The cart uses cookies which are only available on the client
+  // Attempting to access the store during SSR will fail
 
-  // If pinia is not available (SSR), return minimal interface
-  if (!pinia) {
-    // Return minimal interface for SSR
+  if (!process.client) {
+    // Return empty cart interface for SSR
     return {
-      items: ref([]),
-      itemCount: ref(0),
-      subtotal: ref(0),
-      isEmpty: ref(true),
-      loading: ref(false),
-      error: ref(null),
-      sessionId: ref(null),
+      items: computed(() => []),
+      itemCount: computed(() => 0),
+      subtotal: computed(() => 0),
+      isEmpty: computed(() => true),
+      loading: computed(() => false),
+      error: computed(() => null),
+      sessionId: computed(() => null),
+      storageType: computed(() => 'cookie' as const),
+      lastSyncAt: computed(() => null),
+      validationInProgress: computed(() => false),
+      backgroundValidationEnabled: computed(() => false),
+      lastBackgroundValidation: computed(() => null),
+      selectedItems: computed(() => []),
+      selectedItemsCount: computed(() => 0),
+      selectedItemsSubtotal: computed(() => 0),
+      allItemsSelected: computed(() => false),
+      hasSelectedItems: computed(() => false),
+      bulkOperationInProgress: computed(() => false),
+      savedForLater: computed(() => []),
+      savedForLaterCount: computed(() => 0),
+      recommendations: computed(() => []),
+      recommendationsLoading: computed(() => false),
+      performanceMetrics: computed(() => ({
+        totalOperations: 0,
+        averageOperationTime: 0,
+        slowestOperation: null,
+        fastestOperation: null
+      })),
       isInCart: () => false,
       getItemByProductId: () => undefined,
       addItem: async () => {},
@@ -29,130 +49,36 @@ export const useCart = () => {
       directRemoveItem: async () => {},
       directClearCart: async () => {},
       directValidateCart: async () => {},
-      recoverCart: async () => false,
-      forceSync: () => false,
-      storageType: ref("memory"),
-      lastSyncAt: ref(null),
-      validationInProgress: ref(false),
-      backgroundValidationEnabled: ref(false),
-      lastBackgroundValidation: ref(null),
+      recoverCart: async () => {},
+      forceSync: () => {},
       toggleBackgroundValidation: () => {},
       clearValidationCache: () => {},
-      validateCartWithRetry: async () => false,
-      selectedItems: ref(new Set()),
-      selectedItemsCount: ref(0),
-      selectedItemsSubtotal: ref(0),
-      allItemsSelected: ref(false),
-      hasSelectedItems: ref(false),
-      bulkOperationInProgress: ref(false),
+      validateCartWithRetry: async () => {},
       isItemSelected: () => false,
-      getSelectedItems: ref([]),
+      getSelectedItems: () => [],
       toggleItemSelection: () => {},
       toggleSelectAll: () => {},
       removeSelectedItems: async () => {},
       moveSelectedToSavedForLater: async () => {},
-      savedForLater: ref([]),
-      savedForLaterCount: ref(0),
       addToSavedForLater: async () => {},
       removeFromSavedForLater: async () => {},
       moveToCartFromSavedForLater: async () => {},
-      recommendations: ref([]),
-      recommendationsLoading: ref(false),
       loadRecommendations: async () => {},
-      performanceMetrics: ref({
-        lastOperationTime: 0,
-        averageOperationTime: 0,
-        operationCount: 0,
-        syncCount: 0,
-        errorCount: 0
-      }),
       getPerformanceMetrics: () => ({
-        lastOperationTime: 0,
+        totalOperations: 0,
         averageOperationTime: 0,
-        operationCount: 0,
-        syncCount: 0,
-        errorCount: 0
+        slowestOperation: null,
+        fastestOperation: null
       }),
       resetPerformanceMetrics: () => {}
     }
   }
 
-  const cartStore = useCartStore(pinia);
+  const cartStore = useCartStore()
 
-  // Initialize cart if not already initialized
-  if (!cartStore.sessionId) {
+  // Initialize cart on client side only
+  if (cartStore && !cartStore.sessionId) {
     cartStore.initializeCart()
-  }
-
-  // If store is not available, return minimal interface
-  if (!cartStore) {
-    // Return minimal interface for SSR
-    return {
-      items: ref([]),
-      itemCount: ref(0),
-      subtotal: ref(0),
-      isEmpty: ref(true),
-      loading: ref(false),
-      error: ref(null),
-      sessionId: ref(null),
-      isInCart: () => false,
-      getItemByProductId: () => undefined,
-      addItem: async () => {},
-      updateQuantity: async () => {},
-      removeItem: async () => {},
-      clearCart: async () => {},
-      validateCart: async () => {},
-      directAddItem: async () => {},
-      directUpdateQuantity: async () => {},
-      directRemoveItem: async () => {},
-      directClearCart: async () => {},
-      directValidateCart: async () => {},
-      recoverCart: async () => false,
-      forceSync: () => false,
-      storageType: ref("memory"),
-      lastSyncAt: ref(null),
-      validationInProgress: ref(false),
-      backgroundValidationEnabled: ref(false),
-      lastBackgroundValidation: ref(null),
-      toggleBackgroundValidation: () => {},
-      clearValidationCache: () => {},
-      validateCartWithRetry: async () => false,
-      selectedItems: ref(new Set()),
-      selectedItemsCount: ref(0),
-      selectedItemsSubtotal: ref(0),
-      allItemsSelected: ref(false),
-      hasSelectedItems: ref(false),
-      bulkOperationInProgress: ref(false),
-      isItemSelected: () => false,
-      getSelectedItems: ref([]),
-      toggleItemSelection: () => {},
-      toggleSelectAll: () => {},
-      removeSelectedItems: async () => {},
-      moveSelectedToSavedForLater: async () => {},
-      savedForLater: ref([]),
-      savedForLaterCount: ref(0),
-      addToSavedForLater: async () => {},
-      removeFromSavedForLater: async () => {},
-      moveToCartFromSavedForLater: async () => {},
-      recommendations: ref([]),
-      recommendationsLoading: ref(false),
-      loadRecommendations: async () => {},
-      performanceMetrics: ref({
-        lastOperationTime: 0,
-        averageOperationTime: 0,
-        operationCount: 0,
-        syncCount: 0,
-        errorCount: 0
-      }),
-      getPerformanceMetrics: () => ({
-        lastOperationTime: 0,
-        averageOperationTime: 0,
-        operationCount: 0,
-        syncCount: 0,
-        errorCount: 0
-      }),
-      resetPerformanceMetrics: () => {}
-    }
   }
 
   // Store-based reactive properties
@@ -180,39 +106,14 @@ export const useCart = () => {
   const recommendationsLoading = computed(() => cartStore.recommendationsLoading)
   const performanceMetrics = computed(() => cartStore.performanceMetrics)
 
-  // Store methods with defensive checks
-  const isInCart = (productId: string) => cartStore?.isInCart ? cartStore.isInCart(productId) : false
-  const getItemByProductId = (productId: string) => cartStore?.getItemByProductId ? cartStore.getItemByProductId(productId) : undefined
-  const addItem = async (product: any, quantity?: number) => {
-    if (cartStore?.addItem) {
-      return cartStore.addItem(product, quantity)
-    }
-    throw new Error('Cart store not available')
-  }
-  const updateQuantity = async (itemId: string, quantity: number) => {
-    if (cartStore?.updateQuantity) {
-      return cartStore.updateQuantity(itemId, quantity)
-    }
-    throw new Error('Cart store not available')
-  }
-  const removeItem = async (itemId: string) => {
-    if (cartStore?.removeItem) {
-      return cartStore.removeItem(itemId)
-    }
-    throw new Error('Cart store not available')
-  }
-  const clearCart = async () => {
-    if (cartStore?.clearCart) {
-      return cartStore.clearCart()
-    }
-    throw new Error('Cart store not available')
-  }
-  const validateCart = async () => {
-    if (cartStore?.validateCart) {
-      return cartStore.validateCart()
-    }
-    throw new Error('Cart store not available')
-  }
+  // Store methods - direct passthrough to store
+  const isInCart = (productId: string) => cartStore.isInCart(productId)
+  const getItemByProductId = (productId: string) => cartStore.getItemByProductId(productId)
+  const addItem = async (product: any, quantity?: number) => cartStore.addItem(product, quantity)
+  const updateQuantity = async (itemId: string, quantity: number) => cartStore.updateQuantity(itemId, quantity)
+  const removeItem = async (itemId: string) => cartStore.removeItem(itemId)
+  const clearCart = async () => cartStore.clearCart()
+  const validateCart = async () => cartStore.validateCart()
   const directAddItem = async (product: any, quantity?: number) => cartStore.directAddItem(product, quantity)
   const directUpdateQuantity = async (itemId: string, quantity: number) => cartStore.directUpdateQuantity(itemId, quantity)
   const directRemoveItem = async (itemId: string) => cartStore.directRemoveItem(itemId)

@@ -118,10 +118,12 @@ try {
 if (!dashboardStore) {
   dashboardStore = {
     recentActivity: ref([]),
-    activityLoading: ref(false),
-    fetchActivity: () => Promise.resolve(),
+    activityLoading: ref(false)
   }
 }
+
+// Emit event to parent to trigger refresh
+const emit = defineEmits(['refresh'])
 
 // Computed properties
 const recentActivity = computed(() => dashboardStore.recentActivity)
@@ -129,7 +131,7 @@ const isLoading = computed(() => dashboardStore.activityLoading)
 
 // Methods
 const refresh = () => {
-  dashboardStore.fetchActivity()
+  emit('refresh')
 }
 
 const getActivityIcon = (type: ActivityItem['type']): string => {
@@ -188,10 +190,5 @@ const formatTime = (timestamp: string): string => {
   return date.toLocaleDateString()
 }
 
-// Initialize on mount
-onMounted(() => {
-  if (!recentActivity.value.length) {
-    dashboardStore.fetchActivity()
-  }
-})
+// Data will be fetched by parent component
 </script>

@@ -13,7 +13,7 @@ interface ProductFilters {
   priceMax?: number
   inStock?: boolean
   featured?: boolean
-  sort?: 'name' | 'price_asc' | 'price_desc' | 'newest' | 'featured'
+  sort?: 'name' | 'price_asc' | 'price_desc' | 'newest' | 'created' | 'featured'
   page?: number
   limit?: number
 }
@@ -69,10 +69,17 @@ export default defineCachedEventHandler(async (event) => {
       priceMax,
       inStock,
       featured,
-      sort = 'newest',
-      page = 1,
-      limit = 24
+      sort = 'newest'
     } = query
+
+    // Parse pagination params as integers to prevent type coercion bugs
+    // Add bounds validation to prevent DoS attacks
+    const MAX_LIMIT = 100
+    const MAX_PAGE = 10000
+    const parsedPage = parseInt(query.page as string) || 1
+    const parsedLimit = parseInt(query.limit as string) || 12
+    const page = Math.min(Math.max(1, parsedPage), MAX_PAGE)
+    const limit = Math.min(Math.max(1, parsedLimit), MAX_LIMIT)
 
     // Validate search term length if provided
     if (search && search.length > MAX_SEARCH_LENGTH) {
@@ -179,6 +186,7 @@ export default defineCachedEventHandler(async (event) => {
         // For now, we'll sort by created_at desc. In production, you'd have a featured field
         queryBuilder = queryBuilder.order('created_at', { ascending: false })
         break
+      case 'created':
       case 'newest':
       default:
         queryBuilder = queryBuilder.order('created_at', { ascending: false })
@@ -193,23 +201,31 @@ export default defineCachedEventHandler(async (event) => {
     const { data: products, error, count } = await queryBuilder
     const totalCount = count || 0
 
-    // Debug logging
-    console.log('[Products API] Query params:', { category, search, priceMin, priceMax, inStock, sort, page, limit })
-    console.log('[Products API] Results:', {
-      productsCount: products?.length || 0,
-      totalCount,
-      hasError: !!error,
-      errorMessage: error?.message
-    })
-
     if (error) {
       console.error('[Products API] Supabase error:', {
         message: error.message,
         code: error.code,
         timestamp: new Date().toISOString()
       })
+
+      // Map Supabase error codes to appropriate HTTP status codes
+      const getStatusCode = (code?: string): number => {
+        if (!code) return 500
+
+        // PostgreSQL error codes
+        if (code === 'PGRST116') return 404 // Row not found
+        if (code === '22P02') return 400 // Invalid text representation
+        if (code === '23503') return 409 // Foreign key violation
+        if (code === '42501') return 403 // Insufficient privilege
+        if (code.startsWith('22')) return 400 // Data exception
+        if (code.startsWith('23')) return 409 // Integrity constraint violation
+        if (code.startsWith('42')) return 403 // Syntax/access error
+
+        return 500 // Internal server error
+      }
+
       throw createError({
-        statusCode: 500,
+        statusCode: getStatusCode(error.code),
         statusMessage: 'Failed to fetch products'
       })
     }
@@ -233,7 +249,7 @@ export default defineCachedEventHandler(async (event) => {
       formattedPrice: `€${product.price_eur.toFixed(2)}`,
       stockQuantity: product.stock_quantity,
       stockStatus: getStockStatus(product.stock_quantity),
-      images: product.images.map((img, index) => {
+      images: (product.images || []).map((img, index) => {
         const imageUrl = typeof img === 'string' ? img : img.url
         return {
           url: imageUrl || '/placeholder-product.svg',
@@ -242,6 +258,7 @@ export default defineCachedEventHandler(async (event) => {
         }
       }),
       primaryImage: (() => {
+        if (!product.images || product.images.length === 0) return '/placeholder-product.svg'
         const firstImage = product.images[0]
         if (typeof firstImage === 'string') return firstImage
         return firstImage?.url || '/placeholder-product.svg'
@@ -285,17 +302,13 @@ export default defineCachedEventHandler(async (event) => {
       }
     }
 
-    console.log('[Products API] Returning:', {
-      productsCount: transformedProducts.length,
-      pagination: response.pagination,
-      firstProduct: transformedProducts[0]?.name
-    })
-
     return response
 
   } catch (error) {
     console.error('[Products API] Error:', {
       error: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      fullError: error,
       timestamp: new Date().toISOString()
     })
 
@@ -304,9 +317,11 @@ export default defineCachedEventHandler(async (event) => {
       throw error
     }
 
+    // Enhanced error message with details for debugging
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
+      message: error instanceof Error ? error.message : 'Unknown error'
     })
   }
 }, {

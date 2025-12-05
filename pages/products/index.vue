@@ -1,5 +1,21 @@
 <template>
   <div class="bg-gray-50 dark:bg-gray-950 min-h-screen">
+    <!-- Skip Links for Accessibility -->
+    <div class="sr-only focus-within:not-sr-only">
+      <a
+        href="#main-content"
+        class="absolute top-0 left-0 z-50 bg-primary-600 text-white px-4 py-2 rounded-br-lg focus:outline-none focus:ring-2 focus:ring-white"
+      >
+        Skip to main content
+      </a>
+      <a
+        href="#product-filters"
+        class="absolute top-0 left-28 z-50 bg-primary-600 text-white px-4 py-2 rounded-br-lg focus:outline-none focus:ring-2 focus:ring-white"
+      >
+        Skip to filters
+      </a>
+    </div>
+
     <!-- Breadcrumb Navigation -->
     <ProductBreadcrumbs
       :current-category="currentCategory"
@@ -30,13 +46,13 @@
       <div class="mx-auto w-full max-w-7xl px-4 pb-20 pt-10 sm:px-6 lg:px-8" ref="contentContainer">
         <div class="w-full" ref="scrollContainer">
           <MobilePullToRefreshIndicator
-            v-if="isMobile"
-            :is-refreshing="pullToRefresh.isRefreshing.value"
-            :is-pulling="pullToRefresh.isPulling.value"
-            :can-refresh="pullToRefresh.canRefresh.value"
-            :pull-distance="pullToRefresh.pullDistance.value"
-            :status-text="pullToRefresh.pullStatusText.value"
-            :indicator-style="pullToRefresh.pullIndicatorStyle.value"
+            v-if="mobileInteractions.isMobile.value"
+            :is-refreshing="mobileInteractions.pullToRefresh.isRefreshing.value"
+            :is-pulling="mobileInteractions.pullToRefresh.isPulling.value"
+            :can-refresh="mobileInteractions.pullToRefresh.canRefresh.value"
+            :pull-distance="mobileInteractions.pullToRefresh.pullDistance.value"
+            :status-text="mobileInteractions.pullToRefresh.pullStatusText.value"
+            :indicator-style="mobileInteractions.pullToRefresh.pullIndicatorStyle.value"
           />
 
           <div id="results" class="space-y-12">
@@ -48,7 +64,7 @@
                   v-model="searchQuery"
                   type="search"
                   :placeholder="t('common.search') + '...'"
-                  class="w-full rounded-lg border border-gray-300 bg-white pl-10 pr-4 py-3 text-sm text-gray-900 placeholder-gray-500 transition focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-400 dark:focus:ring-primary-400"
+                  class="w-full rounded-lg border border-gray-300 bg-white pl-10 pr-4 py-3 text-sm text-gray-900 placeholder-gray-600 transition focus:border-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-400 dark:focus:ring-primary-400"
                   @input="handleSearchInput"
                 />
                 <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -121,7 +137,7 @@
                     <option value="price_desc">{{ t('products.sortPriceHighLow') }}</option>
                     <option value="featured">{{ t('products.sortFeatured') }}</option>
                   </select>
-                  <commonIcon name="lucide:chevron-down" class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" aria-hidden="true" />
+                  <commonIcon name="lucide:chevron-down" class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-600" aria-hidden="true" />
                 </div>
               </div>
             </div>
@@ -129,6 +145,7 @@
             <!-- Active Filter Chips -->
             <ProductActiveFilters
               v-if="activeFilterChips.length"
+              id="product-filters"
               :chips="activeFilterChips"
               :show-clear-all="true"
               @remove-chip="removeActiveChip"
@@ -151,21 +168,24 @@
             </div>
 
             <div v-else-if="loading" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              <div v-for="n in 8" :key="`skeleton-${n}`" class="animate-pulse rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
-                <div class="mb-4 aspect-square rounded-xl bg-gray-200 dark:bg-gray-700"></div>
-                <div class="mb-2 h-4 rounded bg-gray-200 dark:bg-gray-700"></div>
-                <div class="h-3 w-2/3 rounded bg-gray-200 dark:bg-gray-700"></div>
-              </div>
+              <UiCard v-for="n in 8" :key="`skeleton-${n}`">
+                <UiCardContent class="p-4">
+                  <UiSkeleton class="mb-4 aspect-square rounded-xl" />
+                  <UiSkeleton class="mb-2 h-4 w-full" />
+                  <UiSkeleton class="h-3 w-2/3" />
+                </UiCardContent>
+              </UiCard>
             </div>
 
-            <div v-else-if="products?.length" class="space-y-10">
+            <div v-else-if="products?.length" id="main-content" class="space-y-10" role="main">
               <MobileVirtualProductGrid
-                v-if="isMobile && products.length > 20"
+                v-if="mobileInteractions.isMobile.value && products.length > 20"
                 :items="products"
                 :container-height="600"
                 :loading="loading"
                 @load-more="loadMoreProducts"
               />
+              <!-- Standard Grid: Clean, predictable layout -->
               <div v-else class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 <ProductCard v-for="product in products" :key="product.id" :product="product" />
               </div>
@@ -200,7 +220,7 @@
                   >
                     {{ page }}
                   </UiButton>
-                  <span v-else class="px-3 py-2 text-sm text-gray-500" aria-hidden="true">…</span>
+                  <span v-else class="px-3 py-2 text-sm text-gray-600" aria-hidden="true">…</span>
                   <UiButton
                     :disabled="pagination.page >= pagination.totalPages"
                     variant="outline"
@@ -263,16 +283,16 @@
                   :key="story.id"
                   class="group relative overflow-hidden rounded-2xl border border-gray-200 bg-gradient-to-br from-gray-50 to-white p-6 transition hover:-translate-y-1 hover:shadow-lg dark:border-gray-800 dark:from-gray-900 dark:to-gray-800"
                 >
-                  <span class="inline-flex rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-blue-600 dark:bg-blue-900/60 dark:text-blue-300">
+                  <span class="inline-flex rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-blue-800 dark:bg-blue-900/60 dark:text-blue-200">
                     {{ story.tag }}
                   </span>
-                  <h4 class="mt-4 text-lg font-semibold text-gray-900 transition group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-300">
+                  <h4 class="mt-4 text-lg font-semibold text-gray-900 transition group-hover:text-blue-700 dark:text-white dark:group-hover:text-blue-200">
                     {{ story.title }}
                   </h4>
                   <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
                     {{ story.description }}
                   </p>
-                  <button type="button" class="mt-4 inline-flex items-center gap-2 text-sm font-medium text-blue-600 transition hover:text-blue-700 dark:text-blue-300 dark:hover:text-blue-200">
+                  <button type="button" class="mt-4 inline-flex items-center gap-2 text-sm font-medium text-blue-700 transition hover:text-blue-800 dark:text-blue-200 dark:hover:text-blue-100">
                     {{ t('products.editorial.cta') }}
                     <span aria-hidden="true">→</span>
                   </button>
@@ -287,27 +307,76 @@
 </template>
 
 <script setup lang="ts">
-import type { ProductFilters, ProductWithRelations } from '~/types'
+/**
+ * Product Catalog Page
+ *
+ * Main product listing page with search, filters, pagination, and mobile interactions.
+ * Refactored to follow clean code principles and Single Responsibility Principle.
+ *
+ * Responsibilities:
+ * - Render product catalog UI
+ * - Coordinate between composables
+ * - Handle user interactions
+ */
+
+import type { ProductFilters, ProductWithRelations, ProductSortOption } from '~/types'
+import type { FilterChip } from '~/composables/useProductFilters'
 import { ref, computed, onMounted, onUnmounted, onBeforeUnmount, nextTick, watch, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 
+// Components
 import productFilterMain from '~/components/product/Filter/Main.vue'
 import ProductCard from '~/components/product/Card.vue'
 import commonIcon from '~/components/common/Icon.vue'
 import MobileVirtualProductGrid from '~/components/mobile/VirtualProductGrid.vue'
 import MobilePullToRefreshIndicator from '~/components/mobile/PullToRefreshIndicator.vue'
 
+// Composables
 import { useProductCatalog } from '~/composables/useProductCatalog'
-import { useDevice } from '~/composables/useDevice'
-import { useHapticFeedback } from '~/composables/useHapticFeedback'
-import { usePullToRefresh } from '~/composables/usePullToRefresh'
-import { useSwipeGestures } from '~/composables/useSwipeGestures'
-import { useDebounceFn } from '@vueuse/core'
+import { useProductFilters } from '~/composables/useProductFilters'
+import { useProductPagination } from '~/composables/useProductPagination'
+import { useMobileProductInteractions } from '~/composables/useMobileProductInteractions'
+import { useProductStructuredData } from '~/composables/useProductStructuredData'
 
-import { useHead } from '#imports'
+const { t } = useI18n()
 
-const { t, locale } = useI18n()
+// CRITICAL: Custom debounce implementation (DO NOT replace with VueUse)
+//
+// Context: useDebounceFn from @vueuse/core caused 500 errors on mobile production (commit ffbe86a)
+// Root cause: VueUse's debounce is not SSR-safe and fails during server-side rendering
+//
+// This implementation:
+// - Works correctly in both SSR and client contexts
+// - Uses standard setTimeout which is available in all environments
+// - Properly cleans up timeouts to prevent memory leaks
+//
+// Performance: 300ms delay prevents excessive API calls during rapid typing
+function debounce<T extends (...args: any[]) => any>(fn: T, delay: number) {
+  let timeoutId: ReturnType<typeof setTimeout> | null = null
 
+  return function(this: any, ...args: Parameters<T>) {
+    if (timeoutId) {
+      clearTimeout(timeoutId)
+    }
+
+    timeoutId = setTimeout(() => {
+      fn.apply(this, args)
+    }, delay)
+  }
+}
+
+// Get route and router early to access query parameters
+const route = useRoute()
+const router = useRouter()
+
+// Parse initial page/limit from URL query parameters with bounds validation
+const MAX_LIMIT = 100
+const parsedPage = parseInt(route.query.page as string) || 1
+const parsedLimit = parseInt(route.query.limit as string) || 12
+const initialPage = Math.max(1, parsedPage)
+const initialLimit = Math.min(MAX_LIMIT, Math.max(1, parsedLimit))
+
+// Product Catalog Store
 const {
   initialize,
   fetchProducts,
@@ -316,7 +385,6 @@ const {
   clearFilters,
   openFilterPanel,
   closeFilterPanel,
-  updateSort,
   products,
   categoriesTree,
   currentCategory,
@@ -329,33 +397,40 @@ const {
   showFilterPanel
 } = useProductCatalog()
 
+// Initialize and fetch products during SSR (using URL params)
+// During client hydration, state is restored from SSR payload
+await initialize()
+await fetchProducts({ sort: 'created', page: initialPage, limit: initialLimit })
+
+// Filter Management
+const {
+  priceRange,
+  hasActiveFilters: hasActiveFiltersComputed,
+  activeFilterChips,
+  availableFilters,
+  getCategoryName,
+  removeFilterChip,
+  refreshPriceRange
+} = useProductFilters(categoriesTree)
+
+// Pagination UI
+const { visiblePages } = useProductPagination(pagination)
+
+// Structured Data (SEO)
+const { setupWatchers: setupStructuredDataWatchers } = useProductStructuredData(products, pagination)
+
+// Local state
 const searchQuery = ref('')
-const priceRange = ref<{ min: number; max: number }>({ min: 0, max: 200 })
-const route = useRoute()
-const router = useRouter()
-let searchAbortController: AbortController | null = null
-
-const { isMobile } = useDevice()
-const { vibrate } = useHapticFeedback()
-
-const mainContainer = ref<HTMLElement>()
-const contentContainer = ref<HTMLElement>()
-const scrollContainer = ref<HTMLElement>()
 const searchInput = ref<HTMLInputElement>()
+const searchAbortController = ref<AbortController | null>(null)
 
-const pullToRefresh = usePullToRefresh(async () => {
-  vibrate('pullRefresh')
-  await refreshProducts()
-})
+// DOM refs
+const scrollContainer = ref<HTMLElement>()
 
-const swipeGestures = useSwipeGestures()
-
+// State
 const recentlyViewedProducts = useState<ProductWithRelations[]>('recentlyViewedProducts', () => [])
 
-// Initialize and fetch products during SSR
-await initialize()
-await fetchProducts({ sort: 'created', page: 1, limit: 12 })
-
+// Computed
 const hasActiveFilters = computed(() => {
   return !!(
     searchQuery.value ||
@@ -370,88 +445,35 @@ const hasActiveFilters = computed(() => {
 
 const totalProducts = computed(() => pagination.value?.total || products.value?.length || 0)
 
-const availableFilters = computed(() => {
-  const convertCategories = (cats: any[]): any[] => {
-    return cats.map(cat => ({
-      id: cat.id,
-      name: cat.name,
-      slug: cat.slug,
-      productCount: cat.productCount || 0,
-      children: cat.children ? convertCategories(cat.children) : []
-    }))
-  }
-
-  return {
-    categories: convertCategories(categoriesTree.value || []),
-    priceRange: priceRange.value,
-    attributes: []
-  }
-})
-
-const visiblePages = computed(() => {
-  const pages: (number | string)[] = []
-  const total = pagination.value.totalPages
-  const current = pagination.value.page
-
-  if (total <= 7) {
-    for (let i = 1; i <= total; i++) {
-      pages.push(i)
-    }
-  } else {
-    pages.push(1)
-
-    if (current > 4) {
-      pages.push('...')
-    }
-
-    const start = Math.max(2, current - 1)
-    const end = Math.min(total - 1, current + 1)
-
-    for (let i = start; i <= end; i++) {
-      pages.push(i)
-    }
-
-    if (current < total - 3) {
-      pages.push('...')
-    }
-
-    if (total > 1) {
-      pages.push(total)
-    }
-  }
-
-  return pages
-})
-
 // Debounced search handler to prevent excessive API calls
-const handleSearchInput = useDebounceFn(() => {
+const handleSearchInput = debounce(() => {
   // Cancel previous search request if it exists
-  if (searchAbortController) {
-    searchAbortController.abort()
+  if (searchAbortController.value) {
+    searchAbortController.value.abort()
   }
 
   // Create new abort controller for this search
-  searchAbortController = new AbortController()
+  searchAbortController.value = new AbortController()
 
   if (searchQuery.value.trim()) {
     search(searchQuery.value.trim(), {
       ...filters.value,
       page: 1,
-      sort: sortBy.value as any
-    }, searchAbortController.signal)
+      sort: sortBy.value
+    }, searchAbortController.value.signal)
   } else {
     fetchProducts({
       ...filters.value,
       page: 1,
-      sort: sortBy.value as any
-    }, searchAbortController.signal)
+      sort: sortBy.value
+    }, searchAbortController.value.signal)
   }
 }, 300)
 
 const handleSortChange = () => {
   const currentFilters = {
     ...filters.value,
-    sort: sortBy.value as any,
+    sort: sortBy.value,
     page: 1
   }
 
@@ -469,7 +491,7 @@ const handleFiltersUpdate = (newFilters: Partial<ProductFilters>) => {
 const handleApplyFilters = (closePanel = false) => {
   const currentFilters = {
     ...filters.value,
-    sort: sortBy.value as any,
+    sort: sortBy.value,
     page: 1
   }
 
@@ -491,27 +513,45 @@ const clearAllFilters = () => {
   fetchProducts({ sort: 'created', page: 1, limit: 12 })
 }
 
-const goToPage = (page: number) => {
-  const currentFilters = {
-    ...filters.value,
-    sort: sortBy.value as any,
-    page
+/**
+ * Navigate to a specific page
+ * Handles both search and filter scenarios
+ * Validates page boundaries for security
+ * Updates URL to keep state in sync
+ */
+const goToPage = async (page: number) => {
+  // Validate page number to prevent attacks
+  const validPage = Math.max(1, Math.min(
+    Math.floor(page),
+    pagination.value.totalPages || 1
+  ))
+
+  if (validPage !== page) {
+    console.warn(`Invalid page ${page}, using ${validPage}`)
   }
 
-  if (searchQuery.value.trim()) {
-    search(searchQuery.value.trim(), currentFilters)
-  } else {
-    fetchProducts(currentFilters)
-  }
+  // Update URL with new page parameter
+  // The URL watcher will handle fetching products automatically
+  await router.push({
+    query: {
+      ...route.query,
+      page: validPage.toString(),
+      limit: (route.query.limit || '12').toString()
+    }
+  })
 
-  window.scrollTo({ top: 0, behavior: 'smooth' })
+  // Note: Scroll is handled by the URL watcher after products load
 }
 
+/**
+ * Refresh product list
+ * Used by pull-to-refresh and retry actions
+ */
 const refreshProducts = async () => {
   try {
     const currentFilters = {
       ...filters.value,
-      sort: sortBy.value as any,
+      sort: sortBy.value,
       page: 1
     }
 
@@ -525,35 +565,27 @@ const refreshProducts = async () => {
   }
 }
 
+/**
+ * Retry loading products after error
+ */
 const retryLoad = () => {
   fetchProducts({ sort: 'created', page: 1, limit: 12 })
 }
 
-const setupMobileInteractions = () => {
-  if (!isMobile.value || !scrollContainer.value) return
+// Mobile Interactions Setup
+const mobileInteractions = useMobileProductInteractions(
+  scrollContainer,
+  refreshProducts,
+  {
+    currentPage: computed(() => pagination.value.page),
+    totalPages: computed(() => pagination.value.totalPages),
+    goToPage
+  }
+)
 
-  pullToRefresh.setupPullToRefresh(scrollContainer.value)
-
-  swipeGestures.setupSwipeListeners(scrollContainer.value)
-  swipeGestures.setSwipeHandlers({
-    onLeft: () => {
-      if (pagination.value.page < pagination.value.totalPages) {
-        goToPage(pagination.value.page + 1)
-      }
-    },
-    onRight: () => {
-      if (pagination.value.page > 1) {
-        goToPage(pagination.value.page - 1)
-      }
-    }
-  })
-}
-
-const cleanupMobileInteractions = () => {
-  pullToRefresh.cleanupPullToRefresh()
-  swipeGestures.cleanupSwipeListeners()
-}
-
+/**
+ * Load more products for infinite scroll
+ */
 const loadMoreProducts = async () => {
   if (loading.value || pagination.value.page >= pagination.value.totalPages) return
 
@@ -561,7 +593,7 @@ const loadMoreProducts = async () => {
     const nextPage = pagination.value.page + 1
     const currentFilters = {
       ...filters.value,
-      sort: sortBy.value as any,
+      sort: sortBy.value,
       page: nextPage
     }
 
@@ -575,115 +607,12 @@ const loadMoreProducts = async () => {
   }
 }
 
-// Build category lookup Map for O(1) access instead of O(n) tree traversal
-const categoriesLookup = computed(() => {
-  const map = new Map<string | number, string>()
-
-  const buildMap = (nodes: any[]) => {
-    nodes.forEach(node => {
-      // Get localized name with fallback
-      const name = node.name?.[locale.value] || node.name?.es || Object.values(node.name || {})[0] || ''
-
-      // Store by both slug and ID for flexible lookup
-      if (node.slug) map.set(node.slug, name)
-      if (node.id) map.set(node.id, name)
-
-      // Recursively process children
-      if (node.children?.length) {
-        buildMap(node.children)
-      }
-    })
-  }
-
-  buildMap(categoriesTree.value || [])
-  return map
-})
-
-// O(1) category name lookup
-const getCategoryName = (slugOrId: string | number | undefined): string => {
-  if (!slugOrId) return ''
-  return categoriesLookup.value.get(slugOrId) || ''
-}
-
-const activeFilterChips = computed(() => {
-  const chips: Array<{ id: string; label: string; type: string; attributeKey?: string; attributeValue?: string }> = []
-
-  if (filters.value.category) {
-    chips.push({
-      id: 'category',
-      label: t('products.chips.category', { value: getCategoryName(filters.value.category) || t('products.filters.unknownCategory') }),
-      type: 'category'
-    })
-  }
-
-  if (filters.value.priceMin) {
-    chips.push({ id: 'priceMin', label: t('products.chips.priceMin', { value: filters.value.priceMin }), type: 'priceMin' })
-  }
-
-  if (filters.value.priceMax) {
-    chips.push({ id: 'priceMax', label: t('products.chips.priceMax', { value: filters.value.priceMax }), type: 'priceMax' })
-  }
-
-  if (filters.value.inStock) {
-    chips.push({ id: 'inStock', label: t('products.chips.inStock'), type: 'inStock' })
-  }
-
-  if (filters.value.featured) {
-    chips.push({ id: 'featured', label: t('products.chips.featured'), type: 'featured' })
-  }
-
-  if (filters.value.attributes) {
-    Object.entries(filters.value.attributes).forEach(([key, values]) => {
-      values.forEach(value => {
-        chips.push({
-          id: `attr-${key}-${value}`,
-          label: t('products.chips.attribute', { label: key, value }),
-          type: 'attribute',
-          attributeKey: key,
-          attributeValue: value
-        })
-      })
-    })
-  }
-
-  return chips
-})
-
-const removeActiveChip = (chip: { type: string; attributeKey?: string; attributeValue?: string }) => {
-  const nextFilters: ProductFilters = { ...filters.value }
-
-  switch (chip.type) {
-    case 'category':
-      delete nextFilters.category
-      break
-    case 'priceMin':
-      delete nextFilters.priceMin
-      break
-    case 'priceMax':
-      delete nextFilters.priceMax
-      break
-    case 'inStock':
-      delete nextFilters.inStock
-      break
-    case 'featured':
-      delete nextFilters.featured
-      break
-    case 'attribute':
-      if (chip.attributeKey && chip.attributeValue && nextFilters.attributes?.[chip.attributeKey]) {
-        const filtered = nextFilters.attributes[chip.attributeKey].filter(value => value !== chip.attributeValue)
-        if (filtered.length) {
-          nextFilters.attributes![chip.attributeKey] = filtered
-        } else {
-          delete nextFilters.attributes![chip.attributeKey]
-        }
-        if (Object.keys(nextFilters.attributes || {}).length === 0) {
-          delete nextFilters.attributes
-        }
-      }
-      break
-  }
-
-  fetchProducts({ ...nextFilters, page: 1, sort: sortBy.value as any })
+/**
+ * Handle filter chip removal
+ */
+const removeActiveChip = (chip: FilterChip) => {
+  const nextFilters = removeFilterChip(chip)
+  fetchProducts({ ...nextFilters, page: 1, sort: sortBy.value })
 }
 
 const editorialStories = computed(() => {
@@ -709,27 +638,65 @@ const editorialStories = computed(() => {
   ]
 })
 
-// Sync store search query to local (read-only sync, no fetch trigger)
+// Watchers
 watchEffect(() => {
+  // Sync store search query to local (read-only sync, no fetch trigger)
   if (storeSearchQuery.value && storeSearchQuery.value !== searchQuery.value) {
     searchQuery.value = storeSearchQuery.value
   }
 })
 
-// Sync filters.sort to sortBy (read-only sync, no fetch trigger)
 watch(() => filters.value.sort, newValue => {
+  // Sync filters.sort to sortBy (read-only sync, no fetch trigger)
   if (newValue && newValue !== sortBy.value) {
     sortBy.value = newValue as string
   }
 }, { immediate: false })
 
-// Close filter panel when switching to desktop
-watch(isMobile, value => {
+watch(mobileInteractions.isMobile, value => {
+  // Close filter panel when switching to desktop
   if (!value) {
     closeFilterPanel()
   }
 })
 
+watch(() => [filters.value.category, filters.value.inStock, filters.value.featured], async () => {
+  // Refresh price range when filters change
+  await refreshPriceRange()
+})
+
+// Watch URL query parameter changes (critical for Vercel production)
+// Handles browser back/forward, direct links, and external URL changes
+watch(() => route.query.page, async (newPage, oldPage) => {
+  // Skip if page hasn't actually changed
+  if (newPage === oldPage) return
+
+  // Parse and validate page number
+  const pageNum = parseInt((newPage as string) || '1')
+  if (isNaN(pageNum)) return
+
+  // Validate page boundaries
+  const validPage = Math.max(1, Math.min(pageNum, pagination.value.totalPages || 1))
+
+  // Build filters for fetch
+  const currentFilters = {
+    ...filters.value,
+    sort: sortBy.value,
+    page: validPage
+  }
+
+  // Fetch products based on current context
+  if (searchQuery.value.trim()) {
+    await search(searchQuery.value.trim(), currentFilters)
+  } else {
+    await fetchProducts(currentFilters)
+  }
+
+  // Scroll to top for better UX
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}, { immediate: false })
+
+// Lifecycle Hooks
 onMounted(async () => {
   searchQuery.value = storeSearchQuery.value || ''
 
@@ -740,10 +707,16 @@ onMounted(async () => {
     })
   }
 
+  // Setup mobile interactions
   nextTick(() => {
-    setupMobileInteractions()
+    mobileInteractions.setup()
   })
+
+  // Fetch dynamic price range
   await refreshPriceRange()
+
+  // Setup structured data watchers for SEO
+  setupStructuredDataWatchers()
 })
 
 // Cleanup session storage to prevent accumulation over multiple navigations
@@ -754,104 +727,24 @@ onBeforeUnmount(() => {
       sessionStorage.removeItem('products-scroll-position')
       sessionStorage.removeItem('products-filter-state')
     } catch (error) {
-      // Silently fail if session storage is unavailable
-      console.debug('Session storage cleanup failed:', error)
+      console.error('[Product Catalog] Session storage cleanup failed:', error)
+
+      // Only ignore SecurityError (private browsing), rethrow others
+      if (error instanceof Error && error.name !== 'SecurityError') {
+        throw error
+      }
     }
   }
 })
 
 onUnmounted(() => {
-  cleanupMobileInteractions()
-})
-
-// Build ItemList structured data for product listing
-const buildProductListStructuredData = () => {
-  if (!products.value || products.value.length === 0) return null
-
-  const itemListElements = products.value.map((product, index) => {
-    const productName = typeof product.name === 'string'
-      ? product.name
-      : product.name?.[locale.value] || product.name?.es || Object.values(product.name || {})[0] || 'Product'
-
-    const productImages = Array.isArray(product.images)
-      ? product.images.map(img => img.url).filter(Boolean)
-      : []
-
-    return {
-      '@type': 'ListItem',
-      position: (pagination.value.page - 1) * pagination.value.limit + index + 1,
-      item: {
-        '@type': 'Product',
-        name: productName,
-        image: productImages.length > 0 ? productImages[0] : undefined,
-        offers: {
-          '@type': 'Offer',
-          priceCurrency: 'EUR',
-          price: Number(product.price).toFixed(2),
-          availability: (product.stockQuantity || 0) > 0
-            ? 'https://schema.org/InStock'
-            : 'https://schema.org/OutOfStock'
-        }
-      }
-    }
-  })
-
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'ItemList',
-    itemListElement: itemListElements,
-    numberOfItems: pagination.value.total || products.value.length
+  // Cancel any pending search requests to prevent memory leaks
+  if (searchAbortController) {
+    searchAbortController.abort()
+    searchAbortController = null
   }
-}
 
-// Update head with structured data
-const updateHeadWithStructuredData = () => {
-  const structuredData = buildProductListStructuredData()
-  const scripts = structuredData ? [
-    {
-      type: 'application/ld+json',
-      children: JSON.stringify(structuredData)
-    }
-  ] : []
-
-  useHead({
-    title: 'Shop - Moldova Direct',
-    meta: [
-      {
-        name: 'description',
-        content: 'Browse authentic Moldovan food and wine products. Premium quality directly from Moldova to Spain.'
-      }
-    ],
-    script: scripts
-  })
-}
-
-// Initial head setup
-updateHeadWithStructuredData()
-
-// Update structured data when products change
-watch([products, () => pagination.value.page], () => {
-  updateHeadWithStructuredData()
-}, { deep: true })
-
-// Fetch dynamic price range (category/inStock/featured scope)
-const refreshPriceRange = async () => {
-  try {
-    const params = new URLSearchParams()
-    if (filters.value.category) params.append('category', String(filters.value.category))
-    if (filters.value.inStock) params.append('inStock', 'true')
-    if (filters.value.featured) params.append('featured', 'true')
-    const res = await $fetch<{ success: boolean; min: number; max: number }>(`/api/products/price-range?${params.toString()}`)
-    if (res.success) {
-      priceRange.value = { min: res.min ?? 0, max: res.max ?? 200 }
-    }
-  } catch (e) {
-    // keep existing range on error
-    console.error('Failed to load price range', e)
-  }
-}
-
-watch(() => [filters.value.category, filters.value.inStock, filters.value.featured], async () => {
-  await refreshPriceRange()
+  // Cleanup mobile interactions
+  mobileInteractions.cleanup()
 })
 </script>

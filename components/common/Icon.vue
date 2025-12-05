@@ -43,6 +43,7 @@ import {
   Hand,
   Heart,
   Home,
+  Image,
   Info,
   Key,
   LayoutDashboard,
@@ -84,6 +85,7 @@ import {
   UserPlus,
   Users,
   Wallet,
+  Wine,
   Wrench,
   X
 } from 'lucide-vue-next'
@@ -200,9 +202,13 @@ const ICONS: Record<string, Component> = {
   'user-plus': UserPlus,
   'users': Users,
   'wallet': Wallet,
+  'wine': Wine,
+  'wine-glass': Wine,
   'wrench': Wrench,
   'x': X,
   'x-mark': X,
+  'image': Image,
+  'photo': Image,
   'alert-octagon': AlertTriangle,
   'alert': AlertTriangle
 }
@@ -212,19 +218,34 @@ const fallbackIcon = CircleHelp
 const resolvedIcon = computed<Component>(() => {
   const raw = props.name?.trim()
   if (!raw) {
+    console.warn('[Icon] Empty icon name provided')
     return fallbackIcon
   }
 
   let key = raw.replace(/\s+/g, '-').replace(/_/g, '-').toLowerCase()
 
   if (key.startsWith('simple-icons:')) {
-    return ICONS[key] ?? fallbackIcon
+    const icon = ICONS[key]
+    if (!icon) {
+      console.error(`[Icon] Icon not found: "${props.name}" (resolved key: "${key}")`)
+      if (import.meta.dev) {
+        console.warn('[Icon] Available simple-icons:', Object.keys(ICONS).filter(k => k.startsWith('simple-icons:')).join(', '))
+      }
+    }
+    return icon ?? fallbackIcon
   }
 
   key = key
     .replace(/^lucide:/, '')
     .replace(/^heroicons:/, '')
 
-  return ICONS[key] ?? fallbackIcon
+  const icon = ICONS[key]
+  if (!icon) {
+    console.error(`[Icon] Icon not found: "${props.name}" (resolved key: "${key}")`)
+    if (import.meta.dev) {
+      console.warn('[Icon] Did you mean one of these?', Object.keys(ICONS).filter(k => k.includes(key.slice(0, 3))).slice(0, 5))
+    }
+  }
+  return icon ?? fallbackIcon
 })
 </script>
