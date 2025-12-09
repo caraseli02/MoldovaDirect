@@ -49,16 +49,16 @@ export const SELECTORS = {
   /** Product card */
   PRODUCT_CARD: '[data-testid="product-card"]',
 
-  /** Cart quantity controls */
-  INCREASE_QUANTITY: '[data-testid="increase-quantity"], button:has-text("+")',
-  DECREASE_QUANTITY: '[data-testid="decrease-quantity"], button:has-text("-")',
-  ITEM_QUANTITY: '[data-testid="item-quantity"], input[type="number"]',
+  /** Cart quantity controls - use aria-label for Spanish locale */
+  INCREASE_QUANTITY: 'button[aria-label="Aumentar cantidad"], button[aria-label*="increase"], [data-testid="increase-quantity"]',
+  DECREASE_QUANTITY: 'button[aria-label="Disminuir cantidad"], button[aria-label*="decrease"], [data-testid="decrease-quantity"]',
+  ITEM_QUANTITY: '[aria-label*="cantidad"] span, [data-testid="item-quantity"], .min-w-\\[2rem\\]',
 
-  /** Remove item button */
-  REMOVE_ITEM: '[data-testid="remove-item"], button:has-text("Eliminar"), button[aria-label*="emove"]',
+  /** Remove item button - use aria-label for Spanish locale */
+  REMOVE_ITEM: 'button[aria-label="Eliminar artículo"], button[aria-label*="remove"], [data-testid="remove-item"]',
 
   /** Empty cart message */
-  EMPTY_CART: ':has-text("carrito está vacío"), :has-text("No items"), :has-text("empty")',
+  EMPTY_CART: '[data-testid="empty-cart-message"], :has-text("carrito está vacío"), :has-text("empty")',
 
   /** Admin dashboard */
   ADMIN_DASHBOARD: '[data-testid="admin-dashboard"], h1:has-text("Panel"), h1:has-text("Dashboard")',
