@@ -26,6 +26,7 @@ export default defineConfig({
       '**/tests/e2e/**',
       '**/tests/pre-commit/**',
       '**/tests/visual/**',
+      '**/tests/visual-regression/**',
       '**/tests/fixtures/**',
       '**/tests/templates/**',
       '**/tests/utils/**',

@@ -89,6 +89,7 @@ tmp/
 /tests/visual/screenshots/
 /tests-examples/
 **/*.spec.ts-snapshots/
+!tests/visual-regression/*.spec.ts-snapshots/
 test-results/
 playwright-report/
 test-run-output.txt
