@@ -67,6 +67,12 @@ export const SELECTORS = {
   EMAIL_INPUT: 'input[type="email"]',
   PASSWORD_INPUT: 'input[type="password"]',
   SUBMIT_BUTTON: 'button[type="submit"]',
+
+  /** Search elements */
+  SEARCH_INPUT: '[data-testid="search-input"], input[type="search"], input[placeholder*="Buscar"], input[aria-label*="search"]',
+  SEARCH_BUTTON: '[data-testid="search-button"], button[aria-label*="search"], button[type="submit"]:has(svg)',
+  SEARCH_RESULTS: '[data-testid="search-results"], .search-results',
+  SEARCH_SUGGESTION: '[data-testid="search-suggestion"], .search-suggestion',
 } as const
 
 /**
@@ -83,6 +89,7 @@ export const URL_PATTERNS = {
   CHECKOUT: /\/checkout/,
   ADMIN: /\/admin/,
   ADMIN_DASHBOARD: /\/admin\/(dashboard)?$/,
+  SEARCH: /\/products\?.*q=/,
 } as const
 
 /**
@@ -111,4 +118,6 @@ export const ERROR_MESSAGES = {
   PRODUCT_NOT_FOUND: 'Expected at least one product card to be visible',
   CHECKOUT_NOT_ACCESSIBLE: 'Checkout page should be accessible with items in cart',
   ADMIN_NOT_ACCESSIBLE: 'Admin dashboard should be accessible to admin users',
+  SEARCH_NO_RESULTS: 'Expected search to return results',
+  SEARCH_INPUT_NOT_FOUND: 'Search input not found on page',
 } as const
