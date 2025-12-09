@@ -128,7 +128,57 @@ export default defineEventHandler(async (event) => {
 
 ---
 
+## 🔄 Feature Implementation Workflow
+
+### **CRITICAL:** Must Follow Instructions
+
+After implementing any feature, you MUST follow this workflow:
+
+1. **Testing Phase**
+   - Test the feature using **Chrome DevTools MCP** (browser automation)
+   - Verify all functionality works as expected
+   - Test across different browsers and screen sizes
+   - Ensure no console errors or warnings
+
+2. **Commit Phase**
+   - After testing is complete, commit the current state to git
+   - Use descriptive commit messages
+   - Ensure all changes are included
+
+3. **Ready-to-Merge State**
+   - Leave the project in a complete, ready-to-be-merged state
+   - Feature must be fully working
+   - All tests must pass
+   - No broken functionality
+
+4. **Feature List Management**
+   - **Strictly do not remove or modify anything in `feature_list.json`**
+   - **ONLY update the `implemented` and `tested` fields to `true`**
+   - Do not change feature descriptions, IDs, or structure
+   - Update `claude-progress.md` to reflect progress
+
+### Example Workflow
+```bash
+# 1. Implement the feature
+# 2. Test using Chrome DevTools MCP
+# 3. Update feature_list.json (mark as implemented and tested)
+# 4. Commit to git
+git add .
+git commit -m "feat: implement [feature name] - tested and verified"
+# 5. Verify project is ready to merge
+npm run build && npm run test
+```
+
+---
+
 ## 📋 Before Committing Checklist
+
+### Feature Implementation
+- [ ] Feature fully implemented and working
+- [ ] Tested using Chrome DevTools MCP
+- [ ] `feature_list.json` updated (implemented: true, tested: true)
+- [ ] `claude-progress.md` updated with progress
+- [ ] Project left in ready-to-merge state
 
 ### Admin Changes
 - [ ] Static imports only (no dynamic imports)
@@ -171,6 +221,11 @@ npx supabase status      # Check Supabase connection
 
 ## 📚 Detailed Documentation
 
+**Progress Tracking:**
+- Feature list: `feature_list.json` - Comprehensive feature tracking with testing status
+- Progress tracking: `claude-progress.md` - Overall project completeness and metrics
+- Initialization script: `init.sh` - Automated setup and testing guide
+
 **Admin Panel Issues & Solutions:**
 - Full details: `docs/fixes/admin-fixes/ISSUES-AND-SOLUTIONS.md`
 - Code review: `docs/fixes/admin-fixes/CLEAN-CODE-REVIEW.md`
@@ -197,5 +252,6 @@ npx supabase status      # Check Supabase connection
 
 ---
 
-**Last Updated:** 2025-11-27
+**Last Updated:** 2025-12-08
 **Admin Status:** All 5 pages working ✅
+**New Files:** `feature_list.json`, `claude-progress.md`, `init.sh`

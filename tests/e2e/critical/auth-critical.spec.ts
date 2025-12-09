@@ -15,18 +15,40 @@ test.describe('Critical Auth Flows', () => {
   test('user can register new account', async ({ page }) => {
     const timestamp = Date.now()
     const testEmail = `test-${timestamp}@example.com`
+    const testPassword = 'TestPassword123!'
 
     await page.goto('/auth/register')
 
-    // Fill registration form
+    // Wait for form to be visible
+    await page.waitForSelector('input[type="email"]', { state: 'visible', timeout: TIMEOUTS.STANDARD })
+
+    // Fill registration form - all required fields
+    // Full Name field (first text input)
+    const nameInput = page.locator('input[type="text"]').first()
+    if (await nameInput.isVisible()) {
+      await nameInput.fill('Test User')
+    }
+
+    // Email
     await page.locator('input[type="email"]').first().fill(testEmail)
-    await page.locator('input[type="password"]').first().fill('TestPassword123!')
 
-    // Submit form
-    await page.locator('button[type="submit"]').click()
+    // Password (first password field)
+    await page.locator('input[type="password"]').first().fill(testPassword)
 
-    // Should redirect to account or show success
-    await page.waitForURL(/\/(account|auth\/login)/, { timeout: TIMEOUTS.LONG })
+    // Confirm Password (second password field, if exists)
+    const passwordInputs = page.locator('input[type="password"]')
+    if (await passwordInputs.count() > 1) {
+      await passwordInputs.nth(1).fill(testPassword)
+    }
+
+    // Submit form - try multiple selectors for the register button
+    const submitButton = page.locator(
+      'button[type="submit"], button:has-text("Crear Cuenta"), button:has-text("Registrarse"), button:has-text("Register"), button:has-text("Sign up")'
+    ).first()
+    await submitButton.click()
+
+    // Should redirect to account, verify email page, or show success
+    await page.waitForURL(/\/(account|auth\/(login|verify-email))/, { timeout: TIMEOUTS.LONG })
   })
 
   test('user can login with valid credentials', async ({ page }) => {

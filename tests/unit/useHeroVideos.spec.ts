@@ -11,11 +11,15 @@ describe('useHeroVideos', () => {
     vi.stubGlobal('useState', (_key: string, init: () => any) => {
       return ref(init())
     })
+    // Mock Vue lifecycle hooks used in composable
+    vi.stubGlobal('getCurrentInstance', () => null)
+    vi.stubGlobal('onMounted', () => {})
   })
 
   const mockDevice = (isMobileValue: boolean) => {
     vi.stubGlobal('useDevice', () => ({
       isMobile: ref(isMobileValue),
+      updateDimensions: () => {}, // Required by composable
     }))
   }
 

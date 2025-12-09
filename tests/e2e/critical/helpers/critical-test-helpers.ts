@@ -27,14 +27,14 @@ export class CriticalTestHelpers {
 
   /**
    * Login as admin user
-   * Uses ADMIN_EMAIL/ADMIN_PASSWORD or falls back to TEST_USER credentials
+   * Uses TEST_ADMIN_EMAIL/TEST_ADMIN_PASSWORD or falls back to TEST_USER credentials
    */
   async loginAsAdmin(): Promise<void> {
-    const adminEmail = process.env.ADMIN_EMAIL || process.env.TEST_USER_EMAIL || 'admin@example.com'
-    const adminPassword = process.env.ADMIN_PASSWORD || process.env.TEST_USER_PASSWORD
+    const adminEmail = process.env.TEST_ADMIN_EMAIL || process.env.ADMIN_EMAIL || process.env.TEST_USER_EMAIL || 'admin@example.com'
+    const adminPassword = process.env.TEST_ADMIN_PASSWORD || process.env.ADMIN_PASSWORD || process.env.TEST_USER_PASSWORD
 
     if (!adminPassword) {
-      throw new Error('ADMIN_PASSWORD or TEST_USER_PASSWORD environment variable is required for admin tests')
+      throw new Error('TEST_ADMIN_PASSWORD or TEST_USER_PASSWORD environment variable is required for admin tests')
     }
 
     await this.login(adminEmail, adminPassword)
@@ -47,12 +47,24 @@ export class CriticalTestHelpers {
   private async login(email: string, password: string): Promise<void> {
     await this.page.goto('/auth/login')
 
-    // Fill login form
-    await this.page.locator('input[type="email"]').first().fill(email)
-    await this.page.locator('input[type="password"]').first().fill(password)
+    // Wait for login form to be visible
+    await this.page.waitForSelector('[data-testid="email-input"], input[type="email"]', { state: 'visible', timeout: 10000 })
 
-    // Submit and wait for navigation
-    await this.page.locator('button[type="submit"]').click()
+    // Fill login form using data-testid (more reliable) or fallback to type selectors
+    const emailInput = this.page.locator('[data-testid="email-input"]').or(this.page.locator('input[type="email"]').first())
+    const passwordInput = this.page.locator('[data-testid="password-input"]').or(this.page.locator('input[type="password"]').first())
+
+    await emailInput.fill(email)
+    await passwordInput.fill(password)
+
+    // Wait a moment for form validation to complete
+    await this.page.waitForTimeout(500)
+
+    // Submit - try multiple selectors for the login button
+    const submitButton = this.page.locator(
+      'button[type="submit"]:not([disabled]), button:has-text("Iniciar Sesión"):not([disabled]), button:has-text("Login"):not([disabled])'
+    ).first()
+    await submitButton.click()
     await this.page.waitForLoadState('networkidle')
   }
 
@@ -170,7 +182,7 @@ export class CriticalTestHelpers {
    * Check if admin credentials are available
    */
   static hasAdminCredentials(): boolean {
-    return !!(process.env.ADMIN_PASSWORD || process.env.TEST_USER_PASSWORD)
+    return !!(process.env.TEST_ADMIN_PASSWORD || process.env.ADMIN_PASSWORD || process.env.TEST_USER_PASSWORD)
   }
 
   /**
@@ -188,8 +200,8 @@ export class CriticalTestHelpers {
    */
   static getAdminCredentials() {
     return {
-      email: process.env.ADMIN_EMAIL || process.env.TEST_USER_EMAIL || 'admin@example.com',
-      password: process.env.ADMIN_PASSWORD || process.env.TEST_USER_PASSWORD
+      email: process.env.TEST_ADMIN_EMAIL || process.env.ADMIN_EMAIL || process.env.TEST_USER_EMAIL || 'admin@example.com',
+      password: process.env.TEST_ADMIN_PASSWORD || process.env.ADMIN_PASSWORD || process.env.TEST_USER_PASSWORD
     }
   }
 }

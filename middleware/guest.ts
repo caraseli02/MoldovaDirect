@@ -17,7 +17,8 @@ export default defineNuxtRouteMiddleware((to) => {
     // Check if there's a redirect parameter to honor post-login navigation
     const redirect = to.query.redirect as string
     
-    if (redirect && redirect.startsWith('/')) {
+    // Security: Only allow internal redirects (single leading slash, not protocol-relative)
+    if (redirect && redirect.startsWith('/') && !redirect.startsWith('//')) {
       // Redirect to the originally intended page
       return navigateTo(redirect)
     }
