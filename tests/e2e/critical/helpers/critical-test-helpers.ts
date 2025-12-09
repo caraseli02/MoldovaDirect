@@ -28,6 +28,7 @@ export class CriticalTestHelpers {
   /**
    * Login as admin user
    * Uses TEST_ADMIN_EMAIL/TEST_ADMIN_PASSWORD or falls back to TEST_USER credentials
+   * Clears existing session before login to avoid conflicts with global setup
    */
   async loginAsAdmin(): Promise<void> {
     const adminEmail = process.env.TEST_ADMIN_EMAIL || process.env.ADMIN_EMAIL || process.env.TEST_USER_EMAIL || 'admin@example.com'
@@ -37,6 +38,10 @@ export class CriticalTestHelpers {
       throw new Error('TEST_ADMIN_PASSWORD or TEST_USER_PASSWORD environment variable is required for admin tests')
     }
 
+    console.log(`  🔐 Admin login: ${adminEmail}`)
+
+    // Simply login as admin - critical project doesn't use storageState
+    // so tests start with a clean browser context
     await this.login(adminEmail, adminPassword)
   }
 
@@ -70,7 +75,21 @@ export class CriticalTestHelpers {
     // Submit using the login button with data-testid
     const submitButton = this.page.locator('[data-testid="login-button"]')
     await submitButton.click()
+
+    // Wait for navigation with longer timeout
     await this.page.waitForLoadState('networkidle')
+    await this.page.waitForTimeout(2000)
+
+    // Debug: log where we ended up
+    const finalUrl = this.page.url()
+    console.log(`  📍 Login completed - URL: ${finalUrl}`)
+
+    // Check for error message on page
+    const errorVisible = await this.page.locator('[data-testid="auth-error"]').isVisible().catch(() => false)
+    if (errorVisible) {
+      const errorText = await this.page.locator('[data-testid="auth-error"]').textContent()
+      console.log(`  ❌ Auth error: ${errorText}`)
+    }
   }
 
   /**
