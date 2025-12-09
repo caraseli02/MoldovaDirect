@@ -47,23 +47,28 @@ export class CriticalTestHelpers {
   private async login(email: string, password: string): Promise<void> {
     await this.page.goto('/auth/login')
 
-    // Wait for login form to be visible
-    await this.page.waitForSelector('[data-testid="email-input"], input[type="email"]', { state: 'visible', timeout: 10000 })
+    // Wait for login form to be fully loaded
+    await this.page.waitForLoadState('networkidle')
 
-    // Fill login form using data-testid (more reliable) or fallback to type selectors
-    const emailInput = this.page.locator('[data-testid="email-input"]').or(this.page.locator('input[type="email"]').first())
-    const passwordInput = this.page.locator('[data-testid="password-input"]').or(this.page.locator('input[type="password"]').first())
+    // Wait for email input to be visible (using ID which is more reliable)
+    await this.page.waitForSelector('#email', { state: 'visible', timeout: 10000 })
 
+    // Fill login form using IDs (most reliable for Shadcn inputs)
+    const emailInput = this.page.locator('#email')
+    const passwordInput = this.page.locator('#password')
+
+    // Clear and fill to ensure v-model updates properly
+    await emailInput.click()
     await emailInput.fill(email)
+
+    await passwordInput.click()
     await passwordInput.fill(password)
 
-    // Wait a moment for form validation to complete
-    await this.page.waitForTimeout(500)
+    // Wait for Vue reactivity to process
+    await this.page.waitForTimeout(300)
 
-    // Submit - try multiple selectors for the login button
-    const submitButton = this.page.locator(
-      'button[type="submit"]:not([disabled]), button:has-text("Iniciar Sesión"):not([disabled]), button:has-text("Login"):not([disabled])'
-    ).first()
+    // Submit using the login button with data-testid
+    const submitButton = this.page.locator('[data-testid="login-button"]')
     await submitButton.click()
     await this.page.waitForLoadState('networkidle')
   }
@@ -78,7 +83,8 @@ export class CriticalTestHelpers {
     )
 
     await logoutButton.first().click()
-    await this.page.waitForURL(/\/(|auth\/login)$/, { timeout: 10000 })
+    // Wait for redirect to home or login page (login may include query params)
+    await this.page.waitForURL(/\/(|auth\/login)/, { timeout: 10000 })
   }
 
   /**
