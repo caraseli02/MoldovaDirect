@@ -133,12 +133,13 @@ export class CriticalTestHelpers {
   /**
    * Wait for cart count to update
    * Verifies either the cart badge appears or the button text changes to "En el Carrito"
+   * Throws an error if cart update is not detected - this ensures tests fail when cart is broken
    */
   async waitForCartUpdate(): Promise<void> {
     // Wait for client-side hydration to complete
     await this.page.waitForLoadState('networkidle')
 
-    // Try multiple verification methods
+    // Try multiple verification methods - fail if none work
     try {
       await Promise.race([
         // Method 1: Wait for button text to change to "En el Carrito"
@@ -152,9 +153,10 @@ export class CriticalTestHelpers {
           timeout: 10000
         })
       ])
-    } catch {
-      // If neither appears, that's acceptable for smoke tests
-      console.log('⚠️  Cart update indicator did not appear within timeout - continuing with test')
+    } catch (error) {
+      // Log the error for debugging but re-throw to fail the test
+      console.error('❌ Cart update verification failed - cart functionality may be broken')
+      throw new Error('Cart update indicator did not appear within timeout. The cart may be broken or the page failed to hydrate properly.')
     }
   }
 

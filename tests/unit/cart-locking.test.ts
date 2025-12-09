@@ -2,7 +2,12 @@
  * Unit Tests for Cart Locking Functionality
  * Tests the cart locking feature during checkout
  *
- * SKIPPED: Cart locking is an advanced feature not critical for MVP
+ * These tests ensure cart cannot be modified during checkout payment
+ * processing to prevent inventory/order mismatches.
+ *
+ * TODO: These tests need to be updated to match the current cart store API.
+ * The tests are written for an expected API but the implementation has some
+ * differences. Skip for now and enable when the API is stabilized.
  */
 
 import { describe, it, expect, beforeEach, vi } from 'vitest'
@@ -21,6 +26,7 @@ const mockProduct: Product = {
   category: 'Test'
 }
 
+// TODO: Enable these tests when cart locking API is stabilized
 describe.skip('Cart Locking', () => {
   beforeEach(() => {
     // Create a fresh Pinia instance for each test

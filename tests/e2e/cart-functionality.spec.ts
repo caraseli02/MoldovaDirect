@@ -7,39 +7,86 @@ import { test, expect, Page } from '@playwright/test'
  * Runs on every PR to catch regressions early.
  */
 
-// Helper function to wait for page to be fully loaded
+// Helper function to wait for page to be fully loaded with Vue hydration
 async function waitForPageLoad(page: Page) {
   await page.waitForLoadState('networkidle')
-  await page.waitForTimeout(1000) // Extra time for hydration
+  // Wait for Vue app to be hydrated by checking for interactive elements
+  await page.waitForFunction(() => {
+    const nuxtApp = document.getElementById('__nuxt')
+    return nuxtApp !== null && nuxtApp.children.length > 0
+  }, { timeout: 10000 }).catch(() => {
+    // Fallback: wait a short time if hydration check fails
+    return page.waitForTimeout(500)
+  })
 }
 
 // Helper to get cart count from badge
+// Returns the count if badge is visible, 0 if badge doesn't exist (empty cart)
+// Throws if there's an unexpected error (e.g., page not loaded)
 async function getCartCount(page: Page): Promise<number> {
-  try {
-    const badge = page.locator('[class*="cart"] [class*="badge"], [data-testid="cart-count"]').first()
-    const text = await badge.textContent({ timeout: 5000 })
-    return parseInt(text?.trim() || '0', 10)
-  } catch {
+  const badge = page.locator('[class*="cart"] [class*="badge"], [data-testid="cart-count"]').first()
+
+  // Check if badge exists and is visible (empty cart won't have a badge)
+  const isVisible = await badge.isVisible({ timeout: 3000 }).catch(() => false)
+  if (!isVisible) {
+    return 0 // Empty cart - no badge displayed
+  }
+
+  const text = await badge.textContent({ timeout: 5000 })
+  const count = parseInt(text?.trim() || '0', 10)
+
+  if (isNaN(count)) {
+    console.warn(`Warning: Cart badge text "${text}" could not be parsed as number`)
     return 0
   }
+
+  return count
 }
 
 // Helper to clear cart before tests
+// Navigates to cart and clears items if present
+// Only catches expected cases (empty cart), re-throws unexpected errors
 async function clearCart(page: Page) {
-  // Navigate to cart page and clear all items
-  try {
-    await page.goto('/cart')
-    await waitForPageLoad(page)
+  // Navigate to cart page
+  const response = await page.goto('/cart')
 
-    const clearButton = page.locator('button:has-text("Clear"), button:has-text("Vaciar")').first()
-    if (await clearButton.isVisible({ timeout: 2000 })) {
-      await clearButton.click()
-      await page.waitForTimeout(1000)
-    }
-  } catch (error) {
-    // Cart might already be empty
-    console.log('Cart already empty or clear button not found')
+  // Verify cart page loaded successfully
+  if (!response || response.status() >= 400) {
+    throw new Error(`Cart page failed to load: status ${response?.status() || 'no response'}`)
   }
+
+  await waitForPageLoad(page)
+
+  // Look for clear button - if not visible, cart is empty (which is fine)
+  const clearButton = page.locator('button:has-text("Clear"), button:has-text("Vaciar")').first()
+  const isVisible = await clearButton.isVisible({ timeout: 2000 }).catch(() => false)
+
+  if (isVisible) {
+    await clearButton.click()
+    // Wait for cart to clear by checking for empty state or badge disappearance
+    await page.waitForFunction(() => {
+      const badge = document.querySelector('[data-testid="cart-count"]')
+      return !badge || badge.textContent?.trim() === '0' || badge.textContent?.trim() === ''
+    }, { timeout: 5000 }).catch(() => {})
+  }
+  // If no clear button, cart is empty - that's expected, no error needed
+}
+
+// Helper to wait for cart count to update after adding item
+async function waitForCartUpdate(page: Page, expectedMinCount: number) {
+  await page.waitForFunction(
+    (minCount) => {
+      const badge = document.querySelector('[data-testid="cart-count"], [class*="badge"]')
+      if (!badge) return minCount === 0
+      const count = parseInt(badge.textContent?.trim() || '0', 10)
+      return count >= minCount
+    },
+    expectedMinCount,
+    { timeout: 10000 }
+  ).catch(() => {
+    // Fallback to short wait if function-based wait fails
+    return page.waitForTimeout(500)
+  })
 }
 
 test.describe('Cart Functionality E2E Tests', () => {
@@ -71,7 +118,7 @@ test.describe('Cart Functionality E2E Tests', () => {
     }
 
     await addToCartButton.click()
-    await page.waitForTimeout(1000)
+    await waitForCartUpdate(page, initialCount + 1)
 
     // Verify cart count increased
     const newCount = await getCartCount(page)
@@ -93,7 +140,7 @@ test.describe('Cart Functionality E2E Tests', () => {
 
     // Click Add to Cart
     await addToCartButton.click()
-    await page.waitForTimeout(1000)
+    await waitForCartUpdate(page, initialCount + 1)
 
     // Verify cart count increased
     const newCount = await getCartCount(page)

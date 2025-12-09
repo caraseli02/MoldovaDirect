@@ -3,28 +3,39 @@
  *
  * These tests make actual HTTP requests to verify API endpoints work correctly.
  * They test the full stack from HTTP request to response.
+ *
+ * Note: These tests require a running dev server. They will be properly skipped
+ * (not silently passed) when the server is unavailable.
  */
 
-import { describe, it, expect, beforeAll, afterAll } from 'vitest'
+import { describe, it, expect, beforeAll } from 'vitest'
 
 const API_BASE = process.env.TEST_API_URL || 'http://localhost:3000'
 
+// Track server availability at suite level
+let isServerAvailable = false
+
 describe('Products API', () => {
-  // Skip if no server running (for CI that doesn't have server)
-  const serverAvailable = async () => {
+  // Check server availability once before all tests
+  beforeAll(async () => {
     try {
-      const response = await fetch(`${API_BASE}/api/products`)
-      return response.ok || response.status === 401
-    } catch {
-      return false
+      const response = await fetch(`${API_BASE}/api/products`, {
+        signal: AbortSignal.timeout(5000)
+      })
+      isServerAvailable = response.ok
+      if (!isServerAvailable) {
+        console.log(`⚠️ Server returned status ${response.status} - API tests will be skipped`)
+      }
+    } catch (error) {
+      isServerAvailable = false
+      console.log('⚠️ Server not available at', API_BASE, '- API tests will be skipped')
     }
-  }
+  })
 
   describe('GET /api/products', () => {
-    it('should return products list with correct structure', async () => {
-      const isAvailable = await serverAvailable()
-      if (!isAvailable) {
-        console.log('⚠️ Server not available, skipping API test')
+    it('should return products list with correct structure', async ({ skip }) => {
+      if (!isServerAvailable) {
+        skip()
         return
       }
 
@@ -45,9 +56,11 @@ describe('Products API', () => {
       expect(data.pagination).toHaveProperty('total')
     })
 
-    it('should return products with correct price format', async () => {
-      const isAvailable = await serverAvailable()
-      if (!isAvailable) return
+    it('should return products with correct price format', async ({ skip }) => {
+      if (!isServerAvailable) {
+        skip()
+        return
+      }
 
       const response = await fetch(`${API_BASE}/api/products`)
       const data = await response.json()
@@ -61,9 +74,11 @@ describe('Products API', () => {
       }
     })
 
-    it('should support pagination parameters', async () => {
-      const isAvailable = await serverAvailable()
-      if (!isAvailable) return
+    it('should support pagination parameters', async ({ skip }) => {
+      if (!isServerAvailable) {
+        skip()
+        return
+      }
 
       const response = await fetch(`${API_BASE}/api/products?page=1&limit=5`)
       const data = await response.json()
@@ -73,9 +88,11 @@ describe('Products API', () => {
       expect(data.products.length).toBeLessThanOrEqual(5)
     })
 
-    it('should support sorting by price', async () => {
-      const isAvailable = await serverAvailable()
-      if (!isAvailable) return
+    it('should support sorting by price', async ({ skip }) => {
+      if (!isServerAvailable) {
+        skip()
+        return
+      }
 
       const responseAsc = await fetch(`${API_BASE}/api/products?sort=price_asc`)
       const dataAsc = await responseAsc.json()
@@ -90,9 +107,11 @@ describe('Products API', () => {
   })
 
   describe('GET /api/products/:slug', () => {
-    it('should return 404 for non-existent product', async () => {
-      const isAvailable = await serverAvailable()
-      if (!isAvailable) return
+    it('should return 404 for non-existent product', async ({ skip }) => {
+      if (!isServerAvailable) {
+        skip()
+        return
+      }
 
       const response = await fetch(`${API_BASE}/api/products/non-existent-product-xyz-123`)
 
@@ -101,9 +120,11 @@ describe('Products API', () => {
   })
 
   describe('Product Stock Status Validation', () => {
-    it('should correctly calculate stock status based on quantity', async () => {
-      const isAvailable = await serverAvailable()
-      if (!isAvailable) return
+    it('should correctly calculate stock status based on quantity', async ({ skip }) => {
+      if (!isServerAvailable) {
+        skip()
+        return
+      }
 
       const response = await fetch(`${API_BASE}/api/products?limit=50`)
       const data = await response.json()
