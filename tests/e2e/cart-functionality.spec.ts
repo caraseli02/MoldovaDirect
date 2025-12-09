@@ -56,8 +56,12 @@ test.describe('Cart Functionality E2E Tests', () => {
     // Get initial cart count
     const initialCount = await getCartCount(page)
 
-    // Find first available "Add to Cart" button
-    const addToCartButton = page.locator('button:has-text("Add to Cart"), button:has-text("Añadir al Carrito")').first()
+    // Scroll down to find product section (products are below the hero)
+    await page.evaluate(() => window.scrollTo(0, 800))
+    await page.waitForTimeout(500)
+
+    // Find first available "Add to Cart" button (case insensitive for different locales)
+    const addToCartButton = page.locator('button:has-text("Añadir al Carrito"), button:has-text("Añadir al carrito"), button:has-text("Add to Cart")').first()
 
     // Wait for button to be visible and enabled
     await expect(addToCartButton).toBeVisible({ timeout: 10000 })
@@ -67,14 +71,14 @@ test.describe('Cart Functionality E2E Tests', () => {
     await addToCartButton.click()
 
     // Wait for cart to update
-    await page.waitForTimeout(2000)
+    await page.waitForTimeout(1000)
 
     // Verify cart count increased
     const newCount = await getCartCount(page)
     expect(newCount).toBe(initialCount + 1)
 
-    // Verify button state changed
-    await expect(addToCartButton).toContainText(/In Cart|En el Carrito/i, { timeout: 5000 })
+    // Verify button state changed (check for "En el carrito" or "In Cart")
+    await expect(addToCartButton).toContainText(/En el carrito|In Cart/i, { timeout: 5000 })
   })
 
   test('should add product to cart from products listing page', async ({ page }) => {
@@ -85,18 +89,14 @@ test.describe('Cart Functionality E2E Tests', () => {
     // Get initial cart count
     const initialCount = await getCartCount(page)
 
-    // Find first available product card
-    const productCard = page.locator('[class*="ProductCard"], .product-card').first()
-    await expect(productCard).toBeVisible({ timeout: 10000 })
-
-    // Find Add to Cart button within the card
-    const addToCartButton = productCard.locator('button:has-text("Add to Cart"), button:has-text("Añadir al Carrito")').first()
-    await expect(addToCartButton).toBeVisible()
+    // Find first Add to Cart button on the page
+    const addToCartButton = page.locator('button:has-text("Añadir al Carrito"), button:has-text("Añadir al carrito"), button:has-text("Add to Cart")').first()
+    await expect(addToCartButton).toBeVisible({ timeout: 10000 })
     await expect(addToCartButton).toBeEnabled()
 
     // Click Add to Cart
     await addToCartButton.click()
-    await page.waitForTimeout(2000)
+    await page.waitForTimeout(1000)
 
     // Verify cart count increased
     const newCount = await getCartCount(page)
@@ -118,20 +118,20 @@ test.describe('Cart Functionality E2E Tests', () => {
     const initialCount = await getCartCount(page)
 
     // Find Add to Cart button on detail page
-    const addToCartButton = page.locator('button:has-text("Add to Cart"), button:has-text("Añadir al Carrito")').first()
+    const addToCartButton = page.locator('button:has-text("Añadir al Carrito"), button:has-text("Añadir al carrito"), button:has-text("Add to Cart")').first()
     await expect(addToCartButton).toBeVisible({ timeout: 10000 })
     await expect(addToCartButton).toBeEnabled()
 
     // Click Add to Cart
     await addToCartButton.click()
-    await page.waitForTimeout(2000)
+    await page.waitForTimeout(1000)
 
     // Verify cart count increased
     const newCount = await getCartCount(page)
     expect(newCount).toBe(initialCount + 1)
 
     // Verify button state changed
-    await expect(addToCartButton).toContainText(/In Cart|En el Carrito/i, { timeout: 5000 })
+    await expect(addToCartButton).toContainText(/En el carrito|In Cart/i, { timeout: 5000 })
   })
 
   test('should update quantity in cart', async ({ page }) => {
@@ -141,28 +141,36 @@ test.describe('Cart Functionality E2E Tests', () => {
 
     const addButton = page.locator('button:has-text("Add to Cart"), button:has-text("Añadir al Carrito")').first()
     await addButton.click()
-    await page.waitForTimeout(2000)
+    await page.waitForTimeout(1000)
 
     // Navigate to cart page
     await page.goto('/cart')
     await waitForPageLoad(page)
 
-    // Find quantity input
-    const quantityInput = page.locator('input[type="number"], [data-testid="quantity-input"]').first()
-    await expect(quantityInput).toBeVisible({ timeout: 5000 })
+    // Cart uses +/- buttons for quantity control
+    // The quantity is displayed between two buttons: [-] [qty] [+]
+    // Find the cart item container first
+    const cartItem = page.locator('.border-b, [class*="cart-item"]').first()
 
-    // Get current value
-    const currentValue = await quantityInput.inputValue()
-    const currentQuantity = parseInt(currentValue, 10)
+    // Find the quantity display - it's a span with min-w-[2rem] class showing the number
+    const quantityDisplay = cartItem.locator('span.min-w-\\[2rem\\], span.text-center.font-medium').first()
+    await expect(quantityDisplay).toBeVisible({ timeout: 5000 })
 
-    // Increase quantity
-    await quantityInput.fill((currentQuantity + 1).toString())
-    await quantityInput.blur()
-    await page.waitForTimeout(1000)
+    // Get current quantity
+    const currentQuantityText = await quantityDisplay.textContent()
+    const currentQuantity = parseInt(currentQuantityText?.trim() || '1', 10)
+
+    // Find and click the increase button (+) - it's the second button in the quantity controls
+    // Look for the button with the + icon (path with "M12 6v6m0 0v6")
+    const increaseButton = cartItem.locator('button:has(svg path[d*="M12 6v"])').first()
+    await expect(increaseButton).toBeVisible({ timeout: 3000 })
+    await increaseButton.click()
+    await page.waitForTimeout(500)
 
     // Verify quantity updated
-    const newValue = await quantityInput.inputValue()
-    expect(parseInt(newValue, 10)).toBe(currentQuantity + 1)
+    const newQuantityText = await quantityDisplay.textContent()
+    const newQuantity = parseInt(newQuantityText?.trim() || '1', 10)
+    expect(newQuantity).toBe(currentQuantity + 1)
   })
 
   test('should remove item from cart', async ({ page }) => {
@@ -172,7 +180,7 @@ test.describe('Cart Functionality E2E Tests', () => {
 
     const addButton = page.locator('button:has-text("Add to Cart"), button:has-text("Añadir al Carrito")').first()
     await addButton.click()
-    await page.waitForTimeout(2000)
+    await page.waitForTimeout(1000)
 
     // Get cart count
     const cartCountBefore = await getCartCount(page)
@@ -200,7 +208,7 @@ test.describe('Cart Functionality E2E Tests', () => {
 
     const addButton = page.locator('button:has-text("Add to Cart"), button:has-text("Añadir al Carrito")').first()
     await addButton.click()
-    await page.waitForTimeout(2000)
+    await page.waitForTimeout(1000)
 
     const cartCountAfterAdd = await getCartCount(page)
     expect(cartCountAfterAdd).toBeGreaterThan(0)
@@ -238,7 +246,7 @@ test.describe('Cart Functionality E2E Tests', () => {
 
     const addButton1 = page.locator('button:has-text("Add to Cart"), button:has-text("Añadir al Carrito")').first()
     await addButton1.click()
-    await page.waitForTimeout(2000)
+    await page.waitForTimeout(1000)
 
     cartCount = await getCartCount(page)
     expect(cartCount).toBe(1)
@@ -246,7 +254,7 @@ test.describe('Cart Functionality E2E Tests', () => {
     // Add second item
     const addButton2 = page.locator('button:has-text("Add to Cart"), button:has-text("Añadir al Carrito")').nth(1)
     await addButton2.click()
-    await page.waitForTimeout(2000)
+    await page.waitForTimeout(1000)
 
     cartCount = await getCartCount(page)
     expect(cartCount).toBe(2)
@@ -287,7 +295,7 @@ test.describe('Cart Functionality E2E Tests', () => {
     // Add first item
     const addButton = page.locator('button:has-text("Add to Cart"), button:has-text("Añadir al Carrito")').first()
     await addButton.click()
-    await page.waitForTimeout(2000)
+    await page.waitForTimeout(1000)
 
     // Navigate to cart
     await page.goto('/cart')
