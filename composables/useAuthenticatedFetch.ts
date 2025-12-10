@@ -6,7 +6,7 @@
  * composables are available.
  */
 
-export async function useAuthenticatedFetch<T>(url: string, options: any = {}) {
+export async function useAuthenticatedFetch<T>(url: string, options: Record<string, unknown> = {}) {
   const supabase = useSupabaseClient()
 
   // Get the current session

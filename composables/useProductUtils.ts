@@ -29,7 +29,7 @@ export function useProductUtils() {
   /**
    * Get category label with proper localization
    */
-  const getCategoryLabel = (category: any): string => {
+  const getCategoryLabel = (category: unknown): string => {
     if (!category) return ''
 
     if (category.nameTranslations) {

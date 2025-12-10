@@ -65,7 +65,7 @@
 import { AlertTriangle, BarChart2 } from 'lucide-vue-next'
 
 interface Props {
-  data?: any
+  data?: unknown
   loading?: boolean
   error?: string | null
 }

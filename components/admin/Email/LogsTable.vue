@@ -362,7 +362,7 @@ import { Badge } from '~/components/ui/badge'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '~/components/ui/dialog'
 import { emailStatusVariant } from '@/lib/uiVariants'
 
-const logs = ref<any[]>([])
+const logs = ref<Record<string, unknown>[]>([])
 const loading = ref(false)
 const filters = ref({
   orderNumber: '',
@@ -379,7 +379,7 @@ const pagination = ref({
   totalPages: 0,
 })
 const showDetailsModal = ref(false)
-const selectedLog = ref<any>(null)
+const selectedLog = ref<Record<string, unknown> | null>(null)
 const retrying = ref(false)
 
 let searchTimeout: NodeJS.Timeout
@@ -430,7 +430,7 @@ function nextPage() {
   }
 }
 
-function viewDetails(log: any) {
+function viewDetails(log: Record<string, unknown>) {
   selectedLog.value = log
   showDetailsModal.value = true
 }

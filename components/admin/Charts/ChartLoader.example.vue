@@ -147,7 +147,7 @@ const pieChartOptions: ChartOptions<'pie'> = {
 }
 
 // Event handlers
-const handleChartCreated = (_chart: any) => {
+const handleChartCreated = (_chart: unknown) => {
   // Chart created
 }
 

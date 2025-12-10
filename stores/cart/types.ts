@@ -18,7 +18,7 @@ export interface Product {
   category?: string
   weight?: number
   dimensions?: ProductDimensions
-  attributes?: Record<string, any>
+  attributes?: Record<string, unknown>
 }
 
 export interface ProductDimensions {
@@ -43,7 +43,7 @@ export interface CartSession {
   createdAt: Date
   lastActivity: Date
   expiresAt: Date
-  metadata?: Record<string, any>
+  metadata?: Record<string, unknown>
 }
 
 // =============================================
@@ -87,7 +87,7 @@ export interface AnalyticsEvent {
   productId?: string
   quantity?: number
   value?: number
-  metadata?: Record<string, any>
+  metadata?: Record<string, unknown>
 }
 
 export interface AnalyticsSession {
@@ -131,7 +131,7 @@ export interface StorageOptions {
   compress?: boolean
 }
 
-export interface StorageResult<T = any> {
+export interface StorageResult<T = unknown> {
   success: boolean
   data?: T
   error?: string
@@ -162,7 +162,7 @@ export interface CartRecommendation {
   product: Product
   reason: 'frequently_bought_together' | 'similar_products' | 'price_drop' | 'back_in_stock'
   confidence: number
-  metadata?: Record<string, any>
+  metadata?: Record<string, unknown>
 }
 
 // =============================================
@@ -176,7 +176,7 @@ export interface CartError {
   field?: string
   retryable: boolean
   timestamp: Date
-  context?: Record<string, any>
+  context?: Record<string, unknown>
 }
 
 // =============================================
@@ -275,13 +275,13 @@ export interface CartAnalyticsActions {
 }
 
 export interface CartSecurityActions {
-  validateCartData(operation: string, data: any): SecurityValidation
+  validateCartData(operation: string, data: unknown): SecurityValidation
   isValidSessionId(sessionId: string): boolean
   isValidProductId(productId: string): boolean
   generateSecureSessionId(): string
-  secureAddItem(productId: string, quantity: number, sessionId: string): Promise<any>
-  secureUpdateQuantity(itemId: string, quantity: number, sessionId: string): Promise<any>
-  secureRemoveItem(itemId: string, sessionId: string): Promise<any>
+  secureAddItem(productId: string, quantity: number, sessionId: string): Promise<void>
+  secureUpdateQuantity(itemId: string, quantity: number, sessionId: string): Promise<void>
+  secureRemoveItem(itemId: string, sessionId: string): Promise<void>
 }
 
 export interface CartPersistenceActions {
@@ -335,7 +335,7 @@ export type CartEventType = 'item_added' | 'item_removed' | 'item_updated' | 'ca
 
 export interface CartEvent {
   type: CartEventType
-  payload: any
+  payload: unknown
   timestamp: Date
 }
 
@@ -479,7 +479,7 @@ export interface LegacyCartStore {
 
   // Utility methods
   recoverCart: () => Promise<boolean>
-  forceSync: () => Promise<any>
+  forceSync: () => Promise<{ success: boolean, error?: string }>
   toggleBackgroundValidation: () => void
   clearValidationCache: (productId?: string) => void
 
@@ -491,6 +491,12 @@ export interface LegacyCartStore {
     syncCount: number
     errorCount: number
   }
-  getPerformanceMetrics: () => any
+  getPerformanceMetrics: () => {
+    lastOperationTime: number
+    averageOperationTime: number
+    operationCount: number
+    syncCount: number
+    errorCount: number
+  }
   resetPerformanceMetrics: () => void
 }

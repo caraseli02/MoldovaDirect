@@ -47,9 +47,11 @@ const initializeTasks = async () => {
       emit('initialized')
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Error initializing fulfillment tasks:', error)
-    toast.error('Error', error.data?.statusMessage || 'Failed to create fulfillment tasks')
+    const errorData = error as Record<string, unknown>
+    const errorMessage = (errorData.data as Record<string, unknown>)?.statusMessage as string
+    toast.error('Error', errorMessage || 'Failed to create fulfillment tasks')
   }
   finally {
     loading.value = false

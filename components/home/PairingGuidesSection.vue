@@ -236,7 +236,7 @@ const setFilter = (filter: string) => {
   }
   else {
     applyFilters({
-      wineType: [filter as any],
+      wineType: [filter as unknown],
     })
   }
 }

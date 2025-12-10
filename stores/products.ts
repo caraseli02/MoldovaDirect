@@ -40,7 +40,7 @@ interface ProductsState {
   searchError: string | null
 
   // Cache
-  cache: Map<string, { data: any, timestamp: number, ttl: number }>
+  cache: Map<string, { data: unknown, timestamp: number, ttl: number }>
 }
 
 export const useProductsStore = defineStore('products', {
@@ -167,7 +167,7 @@ export const useProductsStore = defineStore('products', {
 
   actions: {
     // Cache management
-    setCache(key: string, data: any, ttl: number = 5 * 60 * 1000) {
+    setCache(key: string, data: unknown, ttl: number = 5 * 60 * 1000) {
       this.cache.set(key, {
         data,
         timestamp: Date.now(),
@@ -175,7 +175,7 @@ export const useProductsStore = defineStore('products', {
       })
     },
 
-    getCache(key: string): any | null {
+    getCache(key: string): unknown {
       const cached = this.cache.get(key)
       if (!cached) return null
 

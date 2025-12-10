@@ -63,7 +63,7 @@ const _props = defineProps({
 })
 
 const emit = defineEmits<{
-  'chart-created': [chart: any]
+  'chart-created': [chart: unknown]
   'chart-destroyed': []
   'error': [error: Error]
 }>()
@@ -291,7 +291,7 @@ const ChartComponent = defineAsyncComponent({
 /**
  * Handle chart creation event
  */
-const handleChartCreated = (chart: any) => {
+const handleChartCreated = (chart: unknown) => {
   emit('chart-created', chart)
 }
 

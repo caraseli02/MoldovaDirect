@@ -56,13 +56,13 @@
 
 <script setup lang="ts">
 interface Props {
-  user: any // Replace with proper User type
+  user: Record<string, unknown> // Replace with proper User type
 }
 
 interface Emits {
   (e: 'view', userId: string): void
   (e: 'edit', userId: string): void
-  (e: 'action', action: string, userId: string, data?: any): void
+  (e: 'action', action: string, userId: string, data?: Record<string, unknown>): void
 }
 
 const props = defineProps<Props>()
@@ -86,7 +86,7 @@ const handleEdit = () => {
   emit('edit', props.user.id)
 }
 
-const handleAction = (action: string, userId: string, data?: any) => {
+const handleAction = (action: string, userId: string, data?: Record<string, unknown>) => {
   emit('action', action, userId, data)
 }
 </script>

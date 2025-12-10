@@ -42,10 +42,18 @@ export const useCartStore = defineStore('cart', () => {
 
   // IMPORTANT: Create ONE cookie ref and reuse it everywhere
   // Multiple useCookie() calls are NOT synced in Nuxt 3
-  const cartCookie = useCookie<any>(COOKIE_NAMES.CART, {
+  interface CartCookieData {
+    items: CartItem[]
+    sessionId: string | null
+    lastSyncAt: Date | null
+    timestamp: string
+    version: string
+  }
+
+  const cartCookie = useCookie<CartCookieData | null>(COOKIE_NAMES.CART, {
     ...CART_COOKIE_CONFIG,
     watch: CART_COOKIE_CONFIG.watch === 'deep' ? false : CART_COOKIE_CONFIG.watch,
-  } as any)
+  })
 
   // =============================================
   // UNIFIED STATE
@@ -110,7 +118,7 @@ export const useCartStore = defineStore('cart', () => {
   /**
    * Convert items to serializable format
    */
-  function serializeCartData(): any {
+  function serializeCartData(): CartCookieData {
     return {
       items: items.value,
       sessionId: sessionId.value,
@@ -123,7 +131,7 @@ export const useCartStore = defineStore('cart', () => {
   /**
    * Convert serialized data back to cart items
    */
-  function deserializeCartData(data: any): void {
+  function deserializeCartData(data: CartCookieData): void {
     if (!data?.items) {
       console.log('   No items to deserialize')
       return
@@ -217,7 +225,7 @@ export const useCartStore = defineStore('cart', () => {
   /**
    * Load cart data from storage using cookies
    */
-  async function loadFromStorage(): Promise<{ success: boolean, data?: any, error?: string }> {
+  async function loadFromStorage(): Promise<{ success: boolean, data?: CartCookieData | null, error?: string }> {
     try {
       console.log('📥 Loading cart from cookie...')
       const loadedData = cartCookie.value

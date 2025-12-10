@@ -51,7 +51,7 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
           filter: `id=eq.${orderId}`,
         },
         (payload) => {
-          handleOrderUpdate(payload.new as any)
+          handleOrderUpdate(payload.new as unknown as Record<string, unknown>)
         },
       )
       .on(
@@ -63,7 +63,7 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
           filter: `order_id=eq.${orderId}`,
         },
         (payload) => {
-          handleStatusChange(payload.new as any)
+          handleStatusChange(payload.new as unknown as Record<string, unknown>)
         },
       )
       .subscribe((status) => {
@@ -95,7 +95,7 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
           table: 'orders',
         },
         (payload) => {
-          handleOrderUpdate(payload.new as any)
+          handleOrderUpdate(payload.new as unknown as Record<string, unknown>)
         },
       )
       .on(
@@ -106,7 +106,7 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
           table: 'orders',
         },
         (payload) => {
-          handleNewOrder(payload.new as any)
+          handleNewOrder(payload.new as unknown as Record<string, unknown>)
         },
       )
       .subscribe((status) => {
@@ -123,22 +123,22 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
   /**
    * Handle order update event
    */
-  const handleOrderUpdate = (order: any) => {
+  const handleOrderUpdate = (order: Record<string, unknown>) => {
     lastUpdate.value = new Date()
 
     const update: OrderUpdate = {
-      id: order.id,
-      orderNumber: order.order_number,
-      status: order.status,
-      updatedAt: order.updated_at,
-      updatedBy: order.updated_by,
+      id: order.id as number,
+      orderNumber: order.order_number as string,
+      status: order.status as string,
+      updatedAt: order.updated_at as string,
+      updatedBy: order.updated_by as string | undefined,
     }
 
     // Check for conflicts (order was updated by another admin)
-    const timeSinceUpdate = Date.now() - new Date(order.updated_at).getTime()
+    const timeSinceUpdate = Date.now() - new Date(order.updated_at as string).getTime()
     if (timeSinceUpdate < 5000 && options.onConflict) {
       // Order was updated very recently, might be a conflict
-      options.onConflict(order.id, 'This order was just updated by another admin')
+      options.onConflict(order.id as number, 'This order was just updated by another admin')
     }
 
     // Call callback
@@ -147,19 +147,19 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
     }
 
     // Show toast notification
-    toast.info(`Order #${order.order_number} was updated`)
+    toast.info(`Order #${order.order_number as string} was updated`)
   }
 
   /**
    * Handle status change event
    */
-  const handleStatusChange = (statusHistory: any) => {
+  const handleStatusChange = (statusHistory: Record<string, unknown>) => {
     const update: OrderUpdate = {
-      id: statusHistory.order_id,
+      id: statusHistory.order_id as number,
       orderNumber: '', // Will be filled by callback
-      status: statusHistory.to_status,
-      updatedAt: statusHistory.changed_at,
-      updatedBy: statusHistory.changed_by,
+      status: statusHistory.to_status as string,
+      updatedAt: statusHistory.changed_at as string,
+      updatedBy: statusHistory.changed_by as string | undefined,
     }
 
     // Call callback
@@ -168,26 +168,26 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
     }
 
     // Show toast notification
-    const statusLabel = getStatusLabel(statusHistory.to_status)
+    const statusLabel = getStatusLabel(statusHistory.to_status as string)
     toast.success(`Order status changed to ${statusLabel}`)
   }
 
   /**
    * Handle new order event
    */
-  const handleNewOrder = (order: any) => {
+  const handleNewOrder = (order: Record<string, unknown>) => {
     lastUpdate.value = new Date()
 
     // Show toast notification
-    toast.info(`New order #${order.order_number} received`)
+    toast.info(`New order #${order.order_number as string} received`)
 
     // Call callback
     if (options.onOrderUpdated) {
       options.onOrderUpdated({
-        id: order.id,
-        orderNumber: order.order_number,
-        status: order.status,
-        updatedAt: order.created_at,
+        id: order.id as number,
+        orderNumber: order.order_number as string,
+        status: order.status as string,
+        updatedAt: order.created_at as string,
       })
     }
   }

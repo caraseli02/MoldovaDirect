@@ -303,7 +303,7 @@ export const usePairingGuides = () => {
 
   // Get pairings by occasion
   const getPairingsByOccasion = (occasion: string): PairingGuide[] => {
-    return pairings.value.filter(p => p.occasions.includes(occasion as any) && p.isActive)
+    return pairings.value.filter(p => p.occasions.includes(occasion as unknown as never) && p.isActive)
   }
 
   return {

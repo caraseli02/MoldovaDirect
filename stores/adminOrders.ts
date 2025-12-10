@@ -116,7 +116,7 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
      * Uses snake_case to match server expectations
      */
     queryParams: (state) => {
-      const params: any = {
+      const params: Record<string, unknown> = {
         page: state.pagination.page,
         limit: state.pagination.limit,
       }
@@ -549,7 +549,7 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
           // Update local state for successfully updated orders
           this.orders.forEach((order) => {
             if (this.selectedOrders.includes(order.id)) {
-              order.status = status as any
+              order.status = status as string
             }
           })
 

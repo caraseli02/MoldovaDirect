@@ -95,10 +95,11 @@ export const useOrderTracking = (): UseOrderTrackingReturn => {
   /**
    * Handle order status update from real-time subscription
    */
-  const handleOrderUpdate = (payload: any) => {
+  const handleOrderUpdate = (payload: unknown) => {
     try {
-      const newOrder = payload.new as Order
-      const oldOrder = payload.old as Order
+      const payloadTyped = payload as { new: Order, old: Order }
+      const newOrder = payloadTyped.new
+      const oldOrder = payloadTyped.old
 
       // Only process if status actually changed
       if (!oldOrder || newOrder.status === oldOrder.status) {
@@ -270,9 +271,10 @@ export const useOrderTracking = (): UseOrderTrackingReturn => {
           }
         })
     }
-    catch (err: any) {
+    catch (err: unknown) {
       console.error('Error subscribing to order updates:', err)
-      connectionError.value = err.message || 'Failed to connect'
+      const error = err as { message?: string }
+      connectionError.value = error.message || 'Failed to connect'
       isConnected.value = false
     }
   }

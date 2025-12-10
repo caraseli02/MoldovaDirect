@@ -39,10 +39,10 @@ export function useCheckoutReview() {
     if (Array.isArray(items)) {
       return items as CartItem[]
     }
-    return Array.isArray((items as any)?.value) ? (items as any).value : []
+    return Array.isArray((items as unknown as { value?: unknown })?.value) ? (items as unknown as { value: CartItem[] }).value : []
   })
 
-  const baseCanProceed = computed(() => (checkoutStore as any).canCompleteOrder && Boolean(orderData.value) && Boolean(shippingInfo.value) && Boolean(paymentMethod.value))
+  const baseCanProceed = computed(() => (checkoutStore as unknown as { canCompleteOrder: boolean }).canCompleteOrder && Boolean(orderData.value) && Boolean(shippingInfo.value) && Boolean(paymentMethod.value))
 
   const buildCartSignature = (items: CartItem[]): string => {
     return JSON.stringify(
@@ -93,15 +93,15 @@ export function useCheckoutReview() {
       return
     }
 
-    await (checkoutStore as any).initializeCheckout(cartItems.value.slice())
+    await (checkoutStore as unknown as { initializeCheckout: (items: CartItem[]) => Promise<void> }).initializeCheckout(cartItems.value.slice())
 
-    if (!(checkoutStore as any).canProceedToReview) {
+    if (!(checkoutStore as unknown as { canProceedToReview: boolean }).canProceedToReview) {
       if (await redirectToMissingStep()) {
         return
       }
     }
 
-    ;(checkoutStore as any).currentStep = 'review'
+    ;(checkoutStore as unknown as { currentStep: string }).currentStep = 'review'
     lastCartSignature.value = buildCartSignature(cartItems.value)
     hasInitialized.value = true
   }
@@ -121,8 +121,8 @@ export function useCheckoutReview() {
       }
 
       try {
-        await (checkoutStore as any).calculateOrderData(items)
-        await (checkoutStore as any).updateShippingCosts()
+        await (checkoutStore as unknown as { calculateOrderData: (items: CartItem[]) => Promise<void> }).calculateOrderData(items)
+        await (checkoutStore as unknown as { updateShippingCosts: () => Promise<void> }).updateShippingCosts()
         lastCartSignature.value = signature
       }
       catch (error) {
@@ -169,7 +169,7 @@ export function useCheckoutReview() {
   }
 
   const goBack = async () => {
-    const previousStep = (checkoutStore as any).goToPreviousStep()
+    const previousStep = (checkoutStore as unknown as { goToPreviousStep: () => string | null }).goToPreviousStep()
     if (!previousStep) return
 
     const stepPath = previousStep === 'shipping' ? '/checkout' : `/checkout/${previousStep}`
@@ -181,12 +181,12 @@ export function useCheckoutReview() {
   }
 
   const editShipping = async () => {
-    ;(checkoutStore as any).goToStep('shipping')
+    ;(checkoutStore as unknown as { goToStep: (step: string) => void }).goToStep('shipping')
     await navigateTo(localePath('/checkout'))
   }
 
   const editPayment = async () => {
-    ;(checkoutStore as any).goToStep('payment')
+    ;(checkoutStore as unknown as { goToStep: (step: string) => void }).goToStep('payment')
     await navigateTo(localePath('/checkout/payment'))
   }
 
@@ -195,12 +195,12 @@ export function useCheckoutReview() {
       return { nextStep: null, success: false }
     }
 
-    ;(checkoutStore as any).termsAccepted = options.termsAccepted
-    ;(checkoutStore as any).privacyAccepted = options.privacyAccepted
-    ;(checkoutStore as any).marketingConsent = options.marketingConsent
+    ;(checkoutStore as unknown as { termsAccepted: boolean, privacyAccepted: boolean, marketingConsent: boolean }).termsAccepted = options.termsAccepted
+    ;(checkoutStore as unknown as { termsAccepted: boolean, privacyAccepted: boolean, marketingConsent: boolean }).privacyAccepted = options.privacyAccepted
+    ;(checkoutStore as unknown as { termsAccepted: boolean, privacyAccepted: boolean, marketingConsent: boolean }).marketingConsent = options.marketingConsent
 
     try {
-      const nextStep = await (checkoutStore as any).proceedToNextStep()
+      const nextStep = await (checkoutStore as unknown as { proceedToNextStep: () => Promise<CheckoutStep | null> }).proceedToNextStep()
       return {
         nextStep,
         success: Boolean(nextStep),

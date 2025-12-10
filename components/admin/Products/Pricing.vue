@@ -272,7 +272,7 @@ interface Props {
     price: number
     comparePrice: number | null
   }
-  errors?: Record<string, any>
+  errors?: Record<string, unknown>
   disabled?: boolean
   costPrice?: number // Optional cost price for profit margin calculation
 }

@@ -116,7 +116,7 @@ interface ActiveFilter {
   id: string
   label: string
   type: 'category' | 'price' | 'stock' | 'featured' | 'attribute'
-  value?: any
+  value?: unknown
 }
 
 interface Props {
@@ -281,7 +281,7 @@ const updateAttributeFilter = (attributeName: string, values: string[]) => {
   updateFilters({ attributes })
 }
 
-const removeFilter = (id: string, type: string, value?: any) => {
+const removeFilter = (id: string, type: string, value?: unknown) => {
   switch (type) {
     case 'category':
       updateFilters({ category: undefined })

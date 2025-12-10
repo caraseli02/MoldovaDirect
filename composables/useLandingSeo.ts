@@ -69,7 +69,7 @@ export function useLandingSeo(input: LandingSeoInput): LandingSeoHelpers {
   const pageType = input.pageType ?? SEO_DEFAULTS.DEFAULT_PAGE_TYPE
 
   // Properly type locale codes from i18n
-  const localeCodes = (locales?.value || []).map((loc: any) =>
+  const localeCodes = (locales?.value || []).map((loc: { code: string }) =>
     typeof loc === 'string' ? loc : loc.code,
   )
   const currentLocale = locale?.value || 'es'

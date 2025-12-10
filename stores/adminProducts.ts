@@ -95,7 +95,7 @@ export const useAdminProductsStore = defineStore('adminProducts', {
      * Get current query parameters for API calls
      */
     queryParams: (state) => {
-      const params: any = {
+      const params: Record<string, unknown> = {
         page: state.pagination.page,
         limit: state.pagination.limit,
         admin: true, // Flag for admin-specific data
@@ -235,7 +235,7 @@ export const useAdminProductsStore = defineStore('adminProducts', {
      * Update sorting and refresh
      */
     async updateSort(sortBy: string, sortOrder: 'asc' | 'desc' = 'asc') {
-      this.filters.sortBy = sortBy as any
+      this.filters.sortBy = sortBy as string
       this.filters.sortOrder = sortOrder
       await this.fetchProducts()
     },
@@ -345,8 +345,8 @@ export const useAdminProductsStore = defineStore('adminProducts', {
       try {
         const response = await $fetch<{
           success: boolean
-          product: any
-          movement: any
+          product: Record<string, unknown>
+          movement: Record<string, unknown>
           statusChanged: boolean
           message: string
         }>(`/api/admin/products/${productId}/inventory`, {

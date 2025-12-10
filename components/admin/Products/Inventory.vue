@@ -348,7 +348,7 @@ interface Props {
     stockQuantity: number
     lowStockThreshold: number
   }
-  errors?: Record<string, any>
+  errors?: Record<string, unknown>
   disabled?: boolean
   productPrice?: number // For stock value calculation
   averageDailySales?: number // For days of stock calculation

@@ -83,8 +83,8 @@ interface TrendSummary {
 const props = defineProps<{ dataset: PerformanceDataset, revenueSummary: TrendSummary, customerSummary: TrendSummary }>()
 
 const chartRef = ref<HTMLElement | null>(null)
-let chartInstance: any = null
-let apexPromise: Promise<any> | null = null
+let chartInstance: unknown = null
+let apexPromise: Promise<unknown> | null = null
 
 const renderChart = async () => {
   if (typeof window === 'undefined' || !chartRef.value) {
@@ -177,8 +177,8 @@ const loadApexCharts = async () => {
     return null
   }
 
-  if ((window as any).ApexCharts) {
-    return (window as any).ApexCharts
+  if ((window as unknown as Record<string, unknown>).ApexCharts) {
+    return (window as unknown as Record<string, unknown>).ApexCharts
   }
 
   if (apexPromise) {
@@ -189,7 +189,7 @@ const loadApexCharts = async () => {
     const script = document.createElement('script')
     script.src = 'https://cdn.jsdelivr.net/npm/apexcharts'
     script.async = true
-    script.onload = () => resolve((window as any).ApexCharts)
+    script.onload = () => resolve((window as unknown as Record<string, unknown>).ApexCharts)
     script.onerror = () => reject(new Error('Unable to load ApexCharts script'))
     document.head.appendChild(script)
   })

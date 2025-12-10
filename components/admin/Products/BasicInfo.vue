@@ -203,7 +203,7 @@ interface Props {
     categoryId: number | null
   }
   categories: CategoryWithChildren[]
-  errors?: Record<string, any>
+  errors?: Record<string, unknown>
   disabled?: boolean
 }
 
@@ -249,7 +249,9 @@ const selectedCategoryInfo = computed(() => {
   const category = props.categories.find(c => c.id === localForm.value.categoryId)
   if (!category) return ''
 
-  const productCount = (category as any).products?.length || 0
+  const categoryData = category as unknown as Record<string, unknown>
+  const products = categoryData.products as unknown[] | undefined
+  const productCount = products?.length || 0
   return t('admin.products.hints.categoryInfo', { count: productCount })
 })
 

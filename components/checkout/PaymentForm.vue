@@ -247,7 +247,7 @@
             :aria-describedby="hasError('holderName') ? 'holder-name-error' : undefined"
             autocomplete="cc-name"
             @blur="validateHolderName"
-            @input="(e:any) => { creditCardData.holderName = e.target.value; updatePaymentMethod() }"
+            @input="(e:Event) => { creditCardData.holderName = (e.target as HTMLInputElement).value; updatePaymentMethod() }"
           />
           <p
             v-if="hasError('holderName')"
@@ -317,7 +317,7 @@
             :aria-invalid="hasError('paypalEmail')"
             :aria-describedby="hasError('paypalEmail') ? 'paypal-email-error' : undefined"
             autocomplete="email"
-            @input="(e:any) => { paypalData.email = e.target.value; updatePaymentMethod() }"
+            @input="(e:Event) => { paypalData.email = (e.target as HTMLInputElement).value; updatePaymentMethod() }"
             @blur="validatePayPalEmail"
           />
           <p

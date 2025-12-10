@@ -55,7 +55,7 @@ export const useAsyncAdminComponent = (
   return defineAsyncComponent({
     loader: async () => {
       // Use dynamic import with explicit path pattern for Vite
-      const modules: Record<string, any> = {
+      const modules: Record<string, () => Promise<unknown>> = {
         'Email/TemplateManager': () => import('~/components/admin/Email/TemplateManager.vue'),
         'Email/TemplateHistory': () => import('~/components/admin/Email/TemplateHistory.vue'),
         'Email/TemplateSynchronizer': () => import('~/components/admin/Email/TemplateSynchronizer.vue'),
@@ -189,7 +189,7 @@ export const useAsyncAdminComponent = (
 export const preloadAdminComponent = async (path: string): Promise<void> => {
   try {
     // Use the same module mapping as useAsyncAdminComponent
-    const modules: Record<string, any> = {
+    const modules: Record<string, () => Promise<unknown>> = {
       'Email/TemplateManager': () => import('~/components/admin/Email/TemplateManager.vue'),
       'Email/TemplateHistory': () => import('~/components/admin/Email/TemplateHistory.vue'),
       'Email/TemplateSynchronizer': () => import('~/components/admin/Email/TemplateSynchronizer.vue'),

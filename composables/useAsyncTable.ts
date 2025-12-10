@@ -30,21 +30,21 @@ import type {
 export interface TanStackTableModule {
   // Core table functions
   useVueTable: <TData extends RowData>(options: TableOptions<TData>) => Table<TData>
-  createColumnHelper: <_TData extends RowData>() => any
+  createColumnHelper: <_TData extends RowData>() => unknown
 
   // Row model functions
-  getCoreRowModel: () => any
-  getFilteredRowModel: () => any
-  getPaginationRowModel: () => any
-  getSortedRowModel: () => any
-  getExpandedRowModel: () => any
-  getGroupedRowModel: () => any
-  getFacetedRowModel: () => any
-  getFacetedUniqueValues: () => any
-  getFacetedMinMaxValues: () => any
+  getCoreRowModel: () => unknown
+  getFilteredRowModel: () => unknown
+  getPaginationRowModel: () => unknown
+  getSortedRowModel: () => unknown
+  getExpandedRowModel: () => unknown
+  getGroupedRowModel: () => unknown
+  getFacetedRowModel: () => unknown
+  getFacetedUniqueValues: () => unknown
+  getFacetedMinMaxValues: () => unknown
 
   // Rendering helper
-  flexRender: (component: any, props: any) => any
+  flexRender: (component: unknown, props: unknown) => unknown
 
   // Utility functions
   isFunction: (value: unknown) => boolean

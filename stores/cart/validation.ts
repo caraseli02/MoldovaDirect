@@ -173,7 +173,7 @@ async function validateSingleProduct(productId: string, cartItem?: CartItem): Pr
       warnings: [],
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.warn(`Failed to validate product ${productId}:`, error)
 
     // Handle different error scenarios

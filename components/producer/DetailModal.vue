@@ -294,7 +294,7 @@ const isOpen = computed({
 })
 
 // Get localized text from Translations object
-const getLocalizedText = (translations: any): string => {
+const getLocalizedText = (translations: Record<string, unknown>): string => {
   if (!translations) return ''
   return translations[locale.value] || translations.en || Object.values(translations)[0] || ''
 }

@@ -59,7 +59,7 @@ export async function useAdminFetch<T = unknown>(
   return $fetch<T>(url, {
     ...options,
     headers,
-  } as any) as Promise<T>
+  } as unknown) as Promise<T>
 }
 
 /**
@@ -111,7 +111,7 @@ export async function useAdminFetchWithRetry<T = unknown>(
       return $fetch<T>(url, {
         ...options,
         headers,
-      } as any) as Promise<T>
+      } as unknown) as Promise<T>
     }
 
     // Re-throw other errors
@@ -188,16 +188,18 @@ export async function useAdminFetchBatch<T = unknown>(
           ...(options.headers as Record<string, string> || {}),
           ...authHeaders,
         },
-      } as any)
+      } as unknown)
       return { success: true, data } as BatchResult<T>
     }
-    catch (error: any) {
+    catch (error: unknown) {
       // Don't log error object that may contain sensitive data
       console.error(`[AdminFetch] Error fetching ${url} - ADMIN_BATCH_FETCH_FAILED`)
       return {
         success: false,
         url,
-        error: error?.message || error?.statusMessage || 'Unknown error occurred',
+        error: (error as { message?: string, statusMessage?: string })?.message
+          || (error as { message?: string, statusMessage?: string })?.statusMessage
+          || 'Unknown error occurred',
       }
     }
   })

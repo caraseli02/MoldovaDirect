@@ -579,13 +579,13 @@ import { z } from 'zod'
 import type { CategoryWithChildren } from '~/types/database'
 
 interface Props {
-  product?: any
+  product?: Record<string, unknown>
   categories: CategoryWithChildren[]
   isEditing?: boolean
 }
 
 interface Emits {
-  (e: 'submit', data: any): void
+  (e: 'submit', data: Record<string, unknown>): void
   (e: 'cancel'): void
 }
 
@@ -612,7 +612,7 @@ const form = ref({
   comparePrice: null as number | null,
   stockQuantity: 0,
   lowStockThreshold: 5,
-  images: [] as any[],
+  images: [] as unknown[],
   attributes: {
     origin: '',
     volume: null as number | null,
@@ -622,7 +622,7 @@ const form = ref({
   isActive: true,
 })
 
-const errors = ref({} as Record<string, any>)
+const errors = ref({} as Record<string, unknown>)
 const submitting = ref(false)
 
 // Collapsible sections state - on mobile, start with only basic section expanded
@@ -652,7 +652,7 @@ const productSchema = z.object({
   comparePrice: z.number().min(0).optional().nullable(),
   stockQuantity: z.number().min(0, 'Stock quantity must be 0 or greater'),
   lowStockThreshold: z.number().min(0, 'Low stock threshold must be 0 or greater').optional(),
-  images: z.array(z.any()).optional(),
+  images: z.array(z.unknown()).optional(),
   attributes: z.object({
     origin: z.string().optional(),
     volume: z.number().positive().optional().nullable(),
@@ -712,7 +712,7 @@ const validateForm = () => {
   }
   catch (error) {
     if (error instanceof z.ZodError) {
-      const newErrors: Record<string, any> = {}
+      const newErrors: Record<string, unknown> = {}
       error.issues.forEach((err: z.ZodIssue) => {
         const path = err.path.join('.')
         if (err.path[0] === 'name' && err.path[1]) {

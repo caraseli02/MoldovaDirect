@@ -55,7 +55,7 @@ function createAnalyticsEvent(
   productId?: string,
   quantity?: number,
   value?: number,
-  metadata?: Record<string, any>,
+  metadata?: Record<string, unknown>,
 ): AnalyticsEvent {
   return {
     id: generateEventId(),

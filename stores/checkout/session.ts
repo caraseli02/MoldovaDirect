@@ -128,7 +128,7 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
     state.dataPrefetched = value
   }
 
-  const setPreferences = (preferences: any): void => {
+  const setPreferences = (preferences: Record<string, unknown>): void => {
     state.preferences = preferences
   }
 
@@ -218,7 +218,22 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
   }
 
   // Single cookie instance for consistent access
-  const checkoutCookie = useCookie<any>(COOKIE_NAMES.CHECKOUT_SESSION, CHECKOUT_SESSION_COOKIE_CONFIG)
+  interface CheckoutCookieData {
+    sessionId: string | null
+    currentStep: string
+    guestInfo: Record<string, unknown> | null
+    contactEmail: string | null
+    orderData: Record<string, unknown> | null
+    sessionExpiresAt: Date | null
+    lastSyncAt: Date
+    termsAccepted: boolean
+    privacyAccepted: boolean
+    marketingConsent: boolean
+    shippingInfo?: Record<string, unknown>
+    paymentMethod?: Record<string, unknown>
+  }
+
+  const checkoutCookie = useCookie<CheckoutCookieData | null>(COOKIE_NAMES.CHECKOUT_SESSION, CHECKOUT_SESSION_COOKIE_CONFIG)
 
   const persist = async (payload: PersistPayload): Promise<void> => {
     try {

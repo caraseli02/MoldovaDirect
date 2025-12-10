@@ -307,7 +307,7 @@ interface Activity {
   created_at: string
   ip_address?: string
   user_agent?: string
-  metadata?: any
+  metadata?: Record<string, unknown>
 }
 
 interface ActivitySummary {

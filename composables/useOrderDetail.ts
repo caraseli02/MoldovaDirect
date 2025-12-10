@@ -141,14 +141,15 @@ export const useOrderDetail = (): UseOrderDetailReturn => {
         throw new Error('Failed to fetch order')
       }
     }
-    catch (err: any) {
+    catch (err: unknown) {
       console.error('Error fetching order:', err)
 
-      if (err.statusCode === 404) {
+      const error_obj = err as { statusCode?: number, message?: string }
+      if (error_obj.statusCode === 404) {
         error.value = 'Order not found'
       }
       else {
-        error.value = err.message || 'Failed to load order details'
+        error.value = error_obj.message || 'Failed to load order details'
       }
 
       order.value = null
@@ -208,7 +209,7 @@ export const useOrderDetail = (): UseOrderDetailReturn => {
 
       // Add each item to cart
       for (const item of order.value.items || []) {
-        const product = item.productSnapshot as any
+        const product = item.productSnapshot as unknown as { id: string, name: string, price: number }
         if (product) {
           await addItem(product, item.quantity)
         }
@@ -222,7 +223,7 @@ export const useOrderDetail = (): UseOrderDetailReturn => {
       // Navigate to cart
       router.push('/cart')
     }
-    catch (err: any) {
+    catch (err: unknown) {
       console.error('Error reordering:', err)
       toast.error(
         'Reorder failed',

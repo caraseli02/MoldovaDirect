@@ -142,7 +142,7 @@ function createCartError(
   code: string,
   message: string,
   retryable: boolean = false,
-  context?: Record<string, any>,
+  context?: Record<string, unknown>,
 ): CartError {
   return {
     type,
@@ -538,7 +538,7 @@ const actions: CartCoreActions = {
 
       console.log(`Cart locked for checkout session: ${checkoutSessionId} until ${lockUntil}`)
     }
-    catch (error: any) {
+    catch (error: unknown) {
       const message = error.message || 'Failed to lock cart'
       state.value.error = message
       throw createCartError('validation', 'LOCK_FAILED', message, true, { checkoutSessionId })
@@ -575,7 +575,7 @@ const actions: CartCoreActions = {
 
       console.log('Cart unlocked')
     }
-    catch (error: any) {
+    catch (error: unknown) {
       const message = error.message || 'Failed to unlock cart'
       state.value.error = message
       throw createCartError('validation', 'UNLOCK_FAILED', message, true, { checkoutSessionId })

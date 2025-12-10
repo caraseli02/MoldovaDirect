@@ -99,9 +99,9 @@ export const useUserAddresses = () => {
 
       const { data, error: insertError } = await supabase
         .from('user_addresses')
-        .insert(dbAddress as any)
+        .insert(dbAddress as unknown as Record<string, unknown>)
         .select()
-        .single<any>()
+        .single<Record<string, unknown>>()
 
       if (insertError) throw insertError
       if (!data) throw new Error('No data returned from insert')
@@ -151,7 +151,7 @@ export const useUserAddresses = () => {
       error.value = null
 
       // Convert camelCase updates to snake_case for database
-      const dbUpdates: Record<string, any> = {}
+      const dbUpdates: Record<string, unknown> = {}
       if (updates.firstName !== undefined) dbUpdates.first_name = updates.firstName
       if (updates.lastName !== undefined) dbUpdates.last_name = updates.lastName
       if (updates.company !== undefined) dbUpdates.company = updates.company || null
@@ -164,13 +164,13 @@ export const useUserAddresses = () => {
       if (updates.isDefault !== undefined) dbUpdates.is_default = updates.isDefault
       if (updates.type !== undefined) dbUpdates.type = updates.type
 
-      const { data, error: updateError } = await (supabase
-        .from('user_addresses') as any)
-        .update(dbUpdates)
+      const { data, error: updateError } = await supabase
+        .from('user_addresses')
+        .update(dbUpdates as Record<string, unknown>)
         .eq('id', addressId)
         .eq('user_id', user.value.id)
         .select()
-        .single()
+        .single<Record<string, unknown>>()
 
       if (updateError) throw updateError
       if (!data) throw new Error('No data returned from update')

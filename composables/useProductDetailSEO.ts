@@ -47,7 +47,7 @@ export function useProductDetailSEO(
         || 'Moldova Direct'
 
     // Build Product structured data
-    const data: Record<string, any> = {
+    const data: Record<string, unknown> = {
       '@context': 'https://schema.org',
       '@type': 'Product',
       'name': getLocalizedText(product.value.name),

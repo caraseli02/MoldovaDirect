@@ -72,14 +72,14 @@ const memoryStorage = new Map<string, string>()
 /**
  * Compress data for storage (simple JSON stringification for now)
  */
-function compressData(data: any): string {
+function compressData(data: unknown): string {
   return JSON.stringify(data)
 }
 
 /**
  * Decompress data from storage
  */
-function decompressData(data: string): any {
+function decompressData(data: string): unknown {
   try {
     return JSON.parse(data)
   }
@@ -106,7 +106,7 @@ function getBestStorageType(): StorageType {
  */
 async function saveToStorage(
   key: string,
-  data: any,
+  data: unknown,
   options: Partial<StorageOptions> = {},
 ): Promise<StorageResult> {
   const storageType = options.type || state.value.storageType
@@ -293,7 +293,7 @@ async function _removeFromStorage(
 // =============================================
 
 let debouncedSaveTimeout: NodeJS.Timeout | null = null
-let pendingSaveData: { key: string, data: any, options?: Partial<StorageOptions> } | null = null
+let pendingSaveData: { key: string, data: unknown, options?: Partial<StorageOptions> } | null = null
 
 /**
  * Create debounced save function
@@ -301,7 +301,7 @@ let pendingSaveData: { key: string, data: any, options?: Partial<StorageOptions>
 function createDebouncedSave(delay: number = 1000) {
   return function debouncedSave(
     key: string,
-    data: any,
+    data: unknown,
     options: Partial<StorageOptions> = {},
   ): Promise<StorageResult> {
     return new Promise((resolve, reject) => {
@@ -369,14 +369,22 @@ async function saveCartData(cartData: {
     }
 
     // Use Nuxt's useCookie for SSR-compatible storage
-    const cartCookie = useCookie(CART_STORAGE_KEY, {
+    interface CartCookieData {
+      items: CartItem[]
+      sessionId: string | null
+      lastSyncAt: Date | null
+      timestamp: string
+      version: string
+    }
+
+    const cartCookie = useCookie<CartCookieData>(CART_STORAGE_KEY, {
       maxAge: 60 * 60 * 24 * 30, // 30 days
       sameSite: 'lax',
       secure: process.env.NODE_ENV === 'production',
       watch: true,
     })
 
-    cartCookie.value = dataToSave as any
+    cartCookie.value = dataToSave as CartCookieData
     state.value.lastSaveAt = new Date()
 
     return { success: true }
@@ -402,7 +410,15 @@ async function loadCartData(): Promise<StorageResult<{
 }>> {
   try {
     // Use Nuxt's useCookie for SSR-compatible storage
-    const cartCookie = useCookie<any>(CART_STORAGE_KEY, {
+    interface CartCookieData {
+      items: CartItem[]
+      sessionId: string | null
+      lastSyncAt: Date | null | string
+      timestamp?: string
+      version?: string
+    }
+
+    const cartCookie = useCookie<CartCookieData | null>(CART_STORAGE_KEY, {
       maxAge: 60 * 60 * 24 * 30, // 30 days
       sameSite: 'lax',
       secure: process.env.NODE_ENV === 'production',
@@ -411,17 +427,17 @@ async function loadCartData(): Promise<StorageResult<{
     const loadedData = cartCookie.value
 
     if (!loadedData) {
-      return { success: true, data: null }
+      return { success: true, data: undefined }
     }
 
     // Convert date strings back to Date objects
-    if (loadedData.lastSyncAt) {
+    if (loadedData.lastSyncAt && typeof loadedData.lastSyncAt === 'string') {
       loadedData.lastSyncAt = new Date(loadedData.lastSyncAt)
     }
 
     // Validate cart items
     if (Array.isArray(loadedData.items)) {
-      loadedData.items = loadedData.items.map((item: any) => ({
+      loadedData.items = loadedData.items.map(item => ({
         ...item,
         addedAt: new Date(item.addedAt),
         lastModified: item.lastModified ? new Date(item.lastModified) : undefined,

@@ -128,7 +128,7 @@ import type { ActivityItem } from '~/server/api/admin/dashboard/activity.get'
 const { t } = useI18n()
 
 // Store - safely access with fallback
-let dashboardStore: any = null
+let dashboardStore: Record<string, unknown> = {}
 
 try {
   if (import.meta.client) {

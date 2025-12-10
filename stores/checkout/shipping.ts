@@ -14,8 +14,8 @@ function normalizeCartItems(cartItems?: CartItem[] | { value: CartItem[] }): Car
     return [...cartItems]
   }
 
-  if (cartItems && Array.isArray((cartItems as any).value)) {
-    return [...(cartItems as any).value]
+  if (cartItems && typeof cartItems === 'object' && 'value' in cartItems && Array.isArray(cartItems.value)) {
+    return [...cartItems.value]
   }
 
   return []

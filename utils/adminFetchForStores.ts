@@ -98,7 +98,7 @@ async function getAdminAuthHeaders(): Promise<Record<string, string>> {
  * }
  * ```
  */
-export async function adminFetchForStores<T = any>(
+export async function adminFetchForStores<T = unknown>(
   url: string,
   options: FetchOptions = {},
 ): Promise<T> {
@@ -116,6 +116,6 @@ export async function adminFetchForStores<T = any>(
   const response = await $fetch(url, {
     ...options,
     headers,
-  } as any)
+  } as unknown)
   return response as T
 }

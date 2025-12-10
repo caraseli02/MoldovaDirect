@@ -132,13 +132,13 @@ export function useShippingAddress() {
     error.value = null
 
     try {
-      const response = await $fetch<{ success: boolean, address?: any }>('/api/checkout/addresses', {
+      const response = await $fetch<{ success: boolean, address?: unknown }>('/api/checkout/addresses', {
         method: 'POST',
         body: address,
       })
 
       if (response.success && response.address) {
-        const newAddress = addressFromEntity(response.address as any)
+        const newAddress = addressFromEntity(response.address as unknown as Record<string, unknown>)
         savedAddresses.value.push(newAddress)
       }
     }

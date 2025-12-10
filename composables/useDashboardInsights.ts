@@ -28,7 +28,7 @@ export interface InsightHighlight {
  */
 export function useDashboardInsights(
   stats: Ref<DashboardStats | null>,
-  activityGroups: Ref<Record<string, any[]>>,
+  activityGroups: Ref<Record<string, unknown[]>>,
 ) {
   /**
    * Count of orders requiring attention (pending + processing)

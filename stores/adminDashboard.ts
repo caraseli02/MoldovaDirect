@@ -227,9 +227,10 @@ export const useAdminDashboardStore = defineStore('adminDashboard', {
     /**
      * Update a specific stat (for real-time updates)
      */
-    updateStat(key: keyof DashboardStats, value: any) {
+    updateStat(key: keyof DashboardStats, value: number | string) {
       if (this.stats) {
-        this.stats[key] = value
+        // Type assertion needed since we're dynamically setting a key
+        (this.stats[key] as number | string) = value
         this.stats.lastUpdated = new Date().toISOString()
       }
     },

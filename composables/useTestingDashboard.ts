@@ -25,7 +25,7 @@ export const useTestingDashboard = () => {
       const response = await $fetch('/api/admin/stats')
       stats.value = response.stats
     }
-    catch (err: any) {
+    catch (err: unknown) {
       console.error('Failed to fetch stats:', err)
     }
     finally {
@@ -34,7 +34,7 @@ export const useTestingDashboard = () => {
   }
 
   // Quick Actions
-  const runQuickAction = async (preset: string, onComplete?: (response: any) => void) => {
+  const runQuickAction = async (preset: string, onComplete?: (response: unknown) => void) => {
     loading.value = true
     result.value = null
     progress.value = {
@@ -67,10 +67,11 @@ export const useTestingDashboard = () => {
 
       await refreshStats()
     }
-    catch (err: any) {
+    catch (err: unknown) {
+      const error = err as { data?: { message?: string }, message?: string }
       result.value = {
         success: false,
-        message: err.data?.message || err.message || 'Failed to run quick action',
+        message: error.data?.message || error.message || 'Failed to run quick action',
         error: err,
         suggestion: getErrorSuggestion(err),
       }
@@ -111,10 +112,11 @@ export const useTestingDashboard = () => {
       }
       await refreshStats()
     }
-    catch (err: any) {
+    catch (err: unknown) {
+      const error = err as { data?: { message?: string }, message?: string }
       result.value = {
         success: false,
-        message: err.data?.message || err.message || 'Failed to cleanup data',
+        message: error.data?.message || error.message || 'Failed to cleanup data',
         error: err,
       }
     }
@@ -145,10 +147,11 @@ export const useTestingDashboard = () => {
       }
       await refreshStats()
     }
-    catch (err: any) {
+    catch (err: unknown) {
+      const error = err as { data?: { message?: string }, message?: string }
       result.value = {
         success: false,
-        message: err.data?.message || err.message || 'Failed to delete data',
+        message: error.data?.message || error.message || 'Failed to delete data',
         error: err,
       }
     }
@@ -190,10 +193,11 @@ export const useTestingDashboard = () => {
       }
       await refreshStats()
     }
-    catch (err: any) {
+    catch (err: unknown) {
+      const error = err as { data?: { message?: string }, message?: string }
       result.value = {
         success: false,
-        message: err.data?.message || err.message || 'Failed to create users',
+        message: error.data?.message || error.message || 'Failed to create users',
         error: err,
         suggestion: getErrorSuggestion(err),
       }
@@ -237,10 +241,11 @@ export const useTestingDashboard = () => {
       }
       await refreshStats()
     }
-    catch (err: any) {
+    catch (err: unknown) {
+      const error = err as { data?: { message?: string }, message?: string }
       result.value = {
         success: false,
-        message: err.data?.message || err.message || 'Failed to generate data',
+        message: error.data?.message || error.message || 'Failed to generate data',
         error: err,
       }
     }
@@ -253,8 +258,9 @@ export const useTestingDashboard = () => {
   }
 
   // Error Handling
-  const getErrorSuggestion = (error: any): string | undefined => {
-    const message = error.data?.message || error.message || ''
+  const getErrorSuggestion = (error: unknown): string | undefined => {
+    const err = error as { data?: { message?: string }, message?: string }
+    const message = err.data?.message || err.message || ''
 
     if (message.includes('rate limit') || message.includes('429')) {
       return 'Wait a minute before trying again, or reduce the number of items.'
@@ -279,7 +285,7 @@ export const useTestingDashboard = () => {
       .replace(/^./, str => str.toUpperCase())
   }
 
-  const formatValue = (value: any): string => {
+  const formatValue = (value: unknown): string => {
     if (Array.isArray(value)) return value.join(', ')
     if (typeof value === 'boolean') return value ? 'Yes' : 'No'
     return String(value)

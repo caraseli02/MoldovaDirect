@@ -171,7 +171,7 @@ function validateSecurityContext(context: SecurityContext): SecurityValidation {
 /**
  * Validate cart operation data
  */
-function validateCartData(operation: string, data: any): SecurityValidation {
+function validateCartData(operation: string, data: Record<string, unknown>): SecurityValidation {
   const errors: string[] = []
   const warnings: string[] = []
   let riskLevel: 'low' | 'medium' | 'high' = 'low'
@@ -279,7 +279,7 @@ function validateProductData(product: Product): SecurityValidation {
  */
 function detectSuspiciousBehavior(
   operation: string,
-  data: any,
+  data: Record<string, unknown>,
   context: SecurityContext,
 ): SecurityValidation {
   const errors: string[] = []
@@ -318,7 +318,7 @@ function detectSuspiciousBehavior(
 /**
  * Get recent operations for session (simplified implementation)
  */
-function getRecentOperations(_sessionId: string): any[] {
+function getRecentOperations(_sessionId: string): Array<Record<string, unknown>> {
   // In a real implementation, this would check a cache or database
   // For now, return empty array
   return []
@@ -335,7 +335,7 @@ async function secureAddItem(
   productId: string,
   quantity: number,
   sessionId: string,
-): Promise<any> {
+): Promise<void> {
   const context = createSecurityContext(sessionId)
 
   // Validate security context
@@ -364,14 +364,7 @@ async function secureAddItem(
   ))
 
   // In a real implementation, this would make a secure API call
-  // For now, return mock success response
-  return {
-    success: true,
-    product: {
-      id: productId,
-      // ... other product data would be fetched securely
-    },
-  }
+  // Operation completed successfully (void return)
 }
 
 /**
@@ -381,7 +374,7 @@ async function secureUpdateQuantity(
   itemId: string,
   quantity: number,
   sessionId: string,
-): Promise<any> {
+): Promise<void> {
   const context = createSecurityContext(sessionId)
 
   // Validate security context
@@ -415,7 +408,7 @@ async function secureUpdateQuantity(
 async function secureRemoveItem(
   itemId: string,
   sessionId: string,
-): Promise<any> {
+): Promise<void> {
   const context = createSecurityContext(sessionId)
 
   // Validate security context
@@ -430,10 +423,7 @@ async function secureRemoveItem(
     throw new Error(`Data validation failed: ${dataValidation.errors.join(', ')}`)
   }
 
-  return {
-    success: true,
-    itemId,
-  }
+  // Operation completed successfully (void return)
 }
 
 // =============================================

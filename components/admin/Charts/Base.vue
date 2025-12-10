@@ -221,7 +221,7 @@ onUnmounted(() => {
 
 // Handle theme changes
 const { $colorMode } = useNuxtApp()
-watch(() => ($colorMode as any)?.value, (newMode) => {
+watch(() => ($colorMode as unknown)?.value, (newMode) => {
   if (chartInstance && newMode) {
     // Update colors based on theme
     const isDark = newMode === 'dark'

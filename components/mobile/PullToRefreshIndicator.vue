@@ -70,7 +70,7 @@ interface Props {
   canRefresh: boolean
   pullDistance: number
   statusText: string
-  indicatorStyle: Record<string, any>
+  indicatorStyle: Record<string, unknown>
 }
 
 const props = defineProps<Props>()

@@ -348,7 +348,7 @@ export const useAuthStore = defineStore('auth', {
     /**
      * Handle auth state changes from Supabase
      */
-    handleAuthStateChange(event: any, session: Session | null) {
+    handleAuthStateChange(event: string, session: Session | null) {
       if (event === 'TOKEN_REFRESHED') {
         this.error = null
       }

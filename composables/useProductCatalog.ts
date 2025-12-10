@@ -16,7 +16,7 @@ const classifyNetworkError = (err: unknown): string => {
 
   // HTTP errors with status codes
   if (typeof err === 'object' && err !== null && 'statusCode' in err) {
-    const statusCode = (err as any).statusCode
+    const statusCode = (err as { statusCode?: number }).statusCode
     if (statusCode === 404) return 'Resource not found'
     if (statusCode === 403) return 'Access denied'
     if (statusCode === 401) return 'Authentication required'
@@ -102,7 +102,7 @@ export const useProductCatalog = () => {
       const response = await $fetch<{
         products: ProductWithRelations[]
         pagination: { page: number, limit: number, total: number, totalPages: number }
-        filters: any
+        filters: unknown
       }>(`/api/products?${params.toString()}`, {
         signal,
       })
@@ -339,7 +339,7 @@ export const useProductCatalog = () => {
   // Sort helpers
   const updateSort = (sort: string) => {
     sortBy.value = sort
-    filters.value.sort = sort as any
+    filters.value.sort = sort as unknown as 'price' | 'name' | 'created'
   }
 
   return {

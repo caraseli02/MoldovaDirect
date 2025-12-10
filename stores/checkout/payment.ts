@@ -165,10 +165,20 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
   // PAYMENT PROCESSING
   // =============================================
 
+  interface PaymentResult {
+    success: boolean
+    transactionId?: string
+    paymentMethod: string
+    status?: string
+    pending?: boolean
+    charges?: unknown
+    error?: string
+  }
+
   /**
    * Process payment based on the selected payment method
    */
-  async function processPaymentByType(type: string): Promise<any> {
+  async function processPaymentByType(type: string): Promise<PaymentResult> {
     switch (type) {
       case PAYMENT_METHODS.CASH:
         return {
@@ -202,7 +212,7 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
     }
   }
 
-  async function processCreditCardPayment(): Promise<any> {
+  async function processCreditCardPayment(): Promise<PaymentResult> {
     try {
       if (!paymentIntent.value || !paymentClientSecret.value) {
         throw new Error('Payment intent not initialized')
@@ -319,7 +329,7 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
   // ORDER MANAGEMENT
   // =============================================
 
-  async function createOrderRecord(paymentResult: any): Promise<OrderData> {
+  async function createOrderRecord(paymentResult: PaymentResult): Promise<OrderData> {
     if (!orderData.value || !shippingInfo.value || !paymentMethod.value) {
       throw new Error('Missing required order information')
     }

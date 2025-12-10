@@ -305,7 +305,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
     }
   }
 
-  const api: Record<string | symbol, any> = {
+  const api: Record<string | symbol, unknown> = {
     canProceedToPayment,
     canProceedToReview,
     canCompleteOrder,
@@ -368,7 +368,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
           return (refCandidate as { value: unknown }).value
         }
       }
-      return (session as any)[prop as keyof typeof session]
+      return Reflect.get(session, prop as keyof typeof session)
     },
     set(target, prop, value) {
       if (Reflect.has(target, prop)) {
@@ -381,10 +381,9 @@ export const useCheckoutStore = defineStore('checkout', () => {
           return true
         }
       }
-      (session as any)[prop as keyof typeof session] = value
-      return true
+      return Reflect.set(session, prop as keyof typeof session, value)
     },
-  }) as any
+  })
 })
 
 export type CheckoutStore = ReturnType<typeof useCheckoutStore>

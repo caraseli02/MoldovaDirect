@@ -150,18 +150,18 @@ const emit = defineEmits<Emits>()
 // Composables
 const { validateStockQuantity } = useInventory()
 // Store - safely access with fallback
-let adminProductsStore: any = null
+let adminProductsStore: Record<string, unknown> = {}
 
 try {
   if (import.meta.client) {
-    adminProductsStore = useAdminProductsStore()
+    adminProductsStore = useAdminProductsStore() as Record<string, unknown>
   }
 }
 catch {
   console.warn('Admin products store not available during SSR/hydration')
 }
 
-if (!adminProductsStore) {
+if (!adminProductsStore || Object.keys(adminProductsStore).length === 0) {
   adminProductsStore = {
     // Add fallback properties as needed
     products: ref([]),

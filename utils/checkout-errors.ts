@@ -58,7 +58,7 @@ export interface CheckoutErrorDetails {
   field?: string
   retryable: boolean
   userAction?: string
-  technicalDetails?: any
+  technicalDetails?: unknown
   timestamp: Date
 }
 
@@ -153,7 +153,7 @@ export function createSystemError(
 // ERROR PARSING AND HANDLING
 // =============================================
 
-export function parseApiError(error: any): CheckoutError {
+export function parseApiError(error: unknown): CheckoutError {
   // Handle different error formats from API responses
   if (error?.response?.data) {
     const apiError = error.response.data
@@ -331,13 +331,13 @@ export interface ErrorLogEntry {
     url?: string
   }
   stackTrace?: string
-  additionalData?: any
+  additionalData?: unknown
 }
 
 export function logCheckoutError(
   error: CheckoutError,
   context: Partial<ErrorLogEntry['context']>,
-  additionalData?: any,
+  additionalData?: unknown,
 ): void {
   const logEntry: ErrorLogEntry = {
     error,

@@ -2,8 +2,8 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 
 interface DashboardStore {
   setLoading: (value: boolean) => void
-  setStats: (data: any) => void
-  setActivity: (data: any[]) => void
+  setStats: (data: unknown) => void
+  setActivity: (data: unknown[]) => void
   setError: (message: string) => void
   clearError: () => void
 }
@@ -45,12 +45,12 @@ export function useDashboardRefresh(
 
       // Fetch stats and activity in parallel with proper auth headers
       const [statsResult, activityResult] = await Promise.all([
-        $fetch<{ success: boolean, data: any }>('/api/admin/dashboard/stats', { headers })
+        $fetch<{ success: boolean, data: unknown }>('/api/admin/dashboard/stats', { headers })
           .catch((err) => {
             console.error('[AdminFetch] Error fetching /api/admin/dashboard/stats:', err)
             return null
           }),
-        $fetch<{ success: boolean, data: any[] }>('/api/admin/dashboard/activity', { headers })
+        $fetch<{ success: boolean, data: unknown[] }>('/api/admin/dashboard/activity', { headers })
           .catch((err) => {
             console.error('[AdminFetch] Error fetching /api/admin/dashboard/activity:', err)
             return null
@@ -75,11 +75,12 @@ export function useDashboardRefresh(
         store.clearError()
       }
     }
-    catch (error: any) {
+    catch (error: unknown) {
       console.error('[AdminFetch] Error fetching dashboard data:', error)
 
+      const err = error as { statusCode?: number, message?: string }
       // Handle authentication errors specially
-      if (error?.statusCode === 401) {
+      if (err?.statusCode === 401) {
         store.setError('Session expired. Please log in again.')
         // Redirect to login after a short delay
         setTimeout(() => {
@@ -87,7 +88,7 @@ export function useDashboardRefresh(
         }, 2000)
       }
       else {
-        store.setError(error?.message || 'Failed to load dashboard data')
+        store.setError(err?.message || 'Failed to load dashboard data')
       }
     }
     finally {

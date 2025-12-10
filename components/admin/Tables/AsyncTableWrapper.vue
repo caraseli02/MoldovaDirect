@@ -71,7 +71,7 @@
                   <TableHead
                     v-for="header in headerGroup.headers"
                     :key="header.id"
-                    :class="(header.column.columnDef.meta as any)?.headerClass"
+                    :class="(header.column.columnDef.meta as Record<string, unknown>)?.headerClass"
                   >
                     <component
                       :is="tableModule?.flexRender(
@@ -93,7 +93,7 @@
                     <TableCell
                       v-for="cell in row.getVisibleCells()"
                       :key="cell.id"
-                      :class="(cell.column.columnDef.meta as any)?.cellClass"
+                      :class="(cell.column.columnDef.meta as Record<string, unknown>)?.cellClass"
                     >
                       <component
                         :is="tableModule?.flexRender(
@@ -125,7 +125,7 @@
   </div>
 </template>
 
-<script setup lang="ts" generic="TData extends Record<string, any>">
+<script setup lang="ts" generic="TData extends Record<string, unknown>">
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/components/ui/table'
 import type { ColumnDef, TableOptions, Table as TanStackTable } from '@tanstack/vue-table'
 
@@ -138,7 +138,7 @@ interface Props {
   /**
    * Column definitions for TanStack Table
    */
-  columns: ColumnDef<TData, any>[]
+  columns: ColumnDef<TData, unknown>[]
 
   /**
    * External loading state (e.g., data fetching)
