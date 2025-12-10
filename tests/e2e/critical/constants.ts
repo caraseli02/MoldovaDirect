@@ -49,16 +49,16 @@ export const SELECTORS = {
   /** Product card */
   PRODUCT_CARD: '[data-testid="product-card"]',
 
-  /** Cart quantity controls */
-  INCREASE_QUANTITY: '[data-testid="increase-quantity"], button:has-text("+")',
-  DECREASE_QUANTITY: '[data-testid="decrease-quantity"], button:has-text("-")',
-  ITEM_QUANTITY: '[data-testid="item-quantity"], input[type="number"]',
+  /** Cart quantity controls - use aria-label for Spanish locale */
+  INCREASE_QUANTITY: 'button[aria-label="Aumentar cantidad"], button[aria-label*="increase"], [data-testid="increase-quantity"]',
+  DECREASE_QUANTITY: 'button[aria-label="Disminuir cantidad"], button[aria-label*="decrease"], [data-testid="decrease-quantity"]',
+  ITEM_QUANTITY: '[aria-label*="cantidad"] span, [data-testid="item-quantity"], .min-w-\\[2rem\\]',
 
-  /** Remove item button */
-  REMOVE_ITEM: '[data-testid="remove-item"], button:has-text("Eliminar"), button[aria-label*="emove"]',
+  /** Remove item button - use aria-label for Spanish locale */
+  REMOVE_ITEM: 'button[aria-label="Eliminar artículo"], button[aria-label*="remove"], [data-testid="remove-item"]',
 
   /** Empty cart message */
-  EMPTY_CART: ':has-text("carrito está vacío"), :has-text("No items"), :has-text("empty")',
+  EMPTY_CART: '[data-testid="empty-cart-message"], :has-text("carrito está vacío"), :has-text("empty")',
 
   /** Admin dashboard */
   ADMIN_DASHBOARD: '[data-testid="admin-dashboard"], h1:has-text("Panel"), h1:has-text("Dashboard")',
@@ -67,6 +67,12 @@ export const SELECTORS = {
   EMAIL_INPUT: 'input[type="email"]',
   PASSWORD_INPUT: 'input[type="password"]',
   SUBMIT_BUTTON: 'button[type="submit"]',
+
+  /** Search elements */
+  SEARCH_INPUT: '[data-testid="search-input"], input[type="search"], input[placeholder*="Buscar"], input[aria-label*="search"]',
+  SEARCH_BUTTON: '[data-testid="search-button"], button[aria-label*="search"], button[type="submit"]:has(svg)',
+  SEARCH_RESULTS: '[data-testid="search-results"], .search-results',
+  SEARCH_SUGGESTION: '[data-testid="search-suggestion"], .search-suggestion',
 } as const
 
 /**
@@ -83,6 +89,7 @@ export const URL_PATTERNS = {
   CHECKOUT: /\/checkout/,
   ADMIN: /\/admin/,
   ADMIN_DASHBOARD: /\/admin\/(dashboard)?$/,
+  SEARCH: /\/products\?.*q=/,
 } as const
 
 /**
@@ -111,4 +118,6 @@ export const ERROR_MESSAGES = {
   PRODUCT_NOT_FOUND: 'Expected at least one product card to be visible',
   CHECKOUT_NOT_ACCESSIBLE: 'Checkout page should be accessible with items in cart',
   ADMIN_NOT_ACCESSIBLE: 'Admin dashboard should be accessible to admin users',
+  SEARCH_NO_RESULTS: 'Expected search to return results',
+  SEARCH_INPUT_NOT_FOUND: 'Search input not found on page',
 } as const

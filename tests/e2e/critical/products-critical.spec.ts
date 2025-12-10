@@ -44,8 +44,8 @@ test.describe('Critical Product Flows', () => {
     // Should navigate to product detail
     await expect(page).toHaveURL(URL_PATTERNS.PRODUCT_DETAIL, { timeout: TIMEOUTS.STANDARD })
 
-    // Product details should be visible (title or product-title testid)
-    const productTitle = page.locator('h1, [data-testid="product-title"]')
+    // Product details should be visible (title uses h3 on product detail page)
+    const productTitle = page.locator('h1, h2, h3, [data-testid="product-title"]').first()
     await expect(productTitle).toBeVisible({ timeout: TIMEOUTS.STANDARD })
   })
 })
