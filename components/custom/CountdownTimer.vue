@@ -1,12 +1,19 @@
 <template>
   <div class="inline-flex items-center gap-2">
     <!-- Icon -->
-    <commonIcon v-if="showIcon" name="lucide:clock" :class="iconClass" />
+    <commonIcon
+      v-if="showIcon"
+      name="lucide:clock"
+      :class="iconClass"
+    />
 
     <!-- Countdown Display -->
     <div class="flex items-center gap-1">
       <!-- Days -->
-      <div v-if="timeLeft.days > 0" class="flex items-center gap-1">
+      <div
+        v-if="timeLeft.days > 0"
+        class="flex items-center gap-1"
+      >
         <span :class="numberClass">{{ timeLeft.days }}</span>
         <span :class="labelClass">{{ t('common.time.days') }}</span>
         <span :class="separatorClass">:</span>
@@ -16,18 +23,30 @@
       <div class="flex items-center gap-1">
         <span :class="numberClass">{{ padZero(timeLeft.hours) }}</span>
         <span :class="labelClass">{{ t('common.time.hours') }}</span>
-        <span v-if="!compact" :class="separatorClass">:</span>
+        <span
+          v-if="!compact"
+          :class="separatorClass"
+        >:</span>
       </div>
 
       <!-- Minutes -->
-      <div v-if="!compact || timeLeft.days === 0" class="flex items-center gap-1">
+      <div
+        v-if="!compact || timeLeft.days === 0"
+        class="flex items-center gap-1"
+      >
         <span :class="numberClass">{{ padZero(timeLeft.minutes) }}</span>
         <span :class="labelClass">{{ t('common.time.minutes') }}</span>
-        <span v-if="showSeconds" :class="separatorClass">:</span>
+        <span
+          v-if="showSeconds"
+          :class="separatorClass"
+        >:</span>
       </div>
 
       <!-- Seconds -->
-      <div v-if="showSeconds && (compact ? timeLeft.hours === 0 : true)" class="flex items-center gap-1">
+      <div
+        v-if="showSeconds && (compact ? timeLeft.hours === 0 : true)"
+        class="flex items-center gap-1"
+      >
         <span :class="numberClass">{{ padZero(timeLeft.seconds) }}</span>
         <span :class="labelClass">{{ t('common.time.seconds') }}</span>
       </div>
@@ -52,7 +71,7 @@ const props = withDefaults(defineProps<Props>(), {
   showSeconds: true,
   compact: false,
   urgent: false,
-  urgentThreshold: 60 // 1 hour
+  urgentThreshold: 60, // 1 hour
 })
 
 const emit = defineEmits<{
@@ -67,7 +86,7 @@ const timeLeft = ref({
   hours: 0,
   minutes: 0,
   seconds: 0,
-  total: 0
+  total: 0,
 })
 
 const isUrgent = ref(false)
@@ -116,7 +135,7 @@ const iconClass = computed(() => {
   const sizes = {
     sm: 'h-4 w-4',
     md: 'h-5 w-5',
-    lg: 'h-6 w-6'
+    lg: 'h-6 w-6',
   }
   const color = isUrgent.value ? 'text-red-500' : 'text-current'
   return `${sizes[props.size]} ${color}`
@@ -126,7 +145,7 @@ const numberClass = computed(() => {
   const sizes = {
     sm: 'text-sm',
     md: 'text-base',
-    lg: 'text-lg'
+    lg: 'text-lg',
   }
   const color = isUrgent.value
     ? 'text-red-600 dark:text-red-400'
@@ -138,7 +157,7 @@ const labelClass = computed(() => {
   const sizes = {
     sm: 'text-xs',
     md: 'text-sm',
-    lg: 'text-base'
+    lg: 'text-base',
   }
   return `text-gray-600 dark:text-gray-400 ${sizes[props.size]}`
 })

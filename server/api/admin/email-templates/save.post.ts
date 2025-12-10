@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
   if (!type || !locale || !translations) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Template type, locale, and translations are required'
+      statusMessage: 'Template type, locale, and translations are required',
     })
   }
 
@@ -41,7 +41,7 @@ export default defineEventHandler(async (event) => {
         translations,
         subject,
         preheader,
-        archived_at: new Date().toISOString()
+        archived_at: new Date().toISOString(),
       })
 
     // Update template with new version
@@ -52,7 +52,7 @@ export default defineEventHandler(async (event) => {
         subject,
         preheader,
         version: existing.version + 1,
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       })
       .eq('id', existing.id)
 
@@ -60,10 +60,11 @@ export default defineEventHandler(async (event) => {
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to update template',
-        data: error
+        data: error,
       })
     }
-  } else {
+  }
+  else {
     // Create new template
     const { error } = await supabase
       .from('email_templates')
@@ -73,20 +74,20 @@ export default defineEventHandler(async (event) => {
         translations,
         subject,
         preheader,
-        version: 1
+        version: 1,
       })
 
     if (error) {
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to create template',
-        data: error
+        data: error,
       })
     }
   }
 
   return {
     success: true,
-    message: 'Template saved successfully'
+    message: 'Template saved successfully',
   }
 })

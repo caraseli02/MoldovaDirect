@@ -4,11 +4,11 @@ import type { Page } from '@playwright/test'
 test.describe('Admin Products New Page - Comprehensive Testing', () => {
   test.beforeEach(async ({ page }) => {
     // Set up console and error logging
-    page.on('console', msg => {
+    page.on('console', (msg) => {
       console.log(`[CONSOLE ${msg.type().toUpperCase()}] ${msg.text()}`)
     })
 
-    page.on('pageerror', error => {
+    page.on('pageerror', (error) => {
       console.log(`[PAGE ERROR] ${error.message}`)
       console.log(`[PAGE ERROR STACK] ${error.stack}`)
     })
@@ -53,7 +53,7 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
     const consoleWarnings: string[] = []
     const pageErrors: string[] = []
 
-    page.on('console', msg => {
+    page.on('console', (msg) => {
       if (msg.type() === 'error') {
         consoleErrors.push(msg.text())
         console.log(`[CONSOLE ERROR] ${msg.text()}`)
@@ -64,7 +64,7 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
       }
     })
 
-    page.on('pageerror', error => {
+    page.on('pageerror', (error) => {
       pageErrors.push(error.toString())
       console.log(`[PAGE ERROR] ${error.toString()}`)
     })
@@ -85,7 +85,8 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
       console.log('Critical errors found:')
       criticalErrors.forEach(err => console.log(`  - ${err}`))
       expect(criticalErrors).toHaveLength(0)
-    } else {
+    }
+    else {
       console.log('✓ No critical errors found')
     }
   })
@@ -125,8 +126,8 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
       // Try finding by class
       const sectionByClass = page.locator(`[class*="${sectionName.toLowerCase()}"]`)
       if (
-        await sectionByClass.count() > 0 &&
-        !foundSections.includes(sectionName)
+        await sectionByClass.count() > 0
+        && !foundSections.includes(sectionName)
       ) {
         foundSections.push(sectionName)
         console.log(`✓ Found section: ${sectionName} (via class)`)
@@ -175,7 +176,8 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
       const value = await nameInput.inputValue()
       expect(value).toBe(testText)
       console.log(`✓ Verified text input: "${value}"`)
-    } else {
+    }
+    else {
       console.log('⚠ Name input field not found - checking for alternative selectors')
 
       // List all inputs found for debugging
@@ -217,7 +219,8 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
       // Verify
       const value = await priceInput.inputValue()
       console.log(`✓ Current price value: ${value}`)
-    } else {
+    }
+    else {
       console.log('⚠ Price input field not found - checking available number inputs')
 
       const allNumberInputs = await page.locator('input[type="number"]').all()
@@ -248,7 +251,8 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
       const uploadArea = page.locator('[class*="upload"], [class*="dropzone"], [class*="drag"]').first()
       const isUploadAreaVisible = await uploadArea.isVisible().catch(() => false)
       console.log(`Upload area visible: ${isUploadAreaVisible}`)
-    } else {
+    }
+    else {
       console.log('⚠ File input not found')
     }
 

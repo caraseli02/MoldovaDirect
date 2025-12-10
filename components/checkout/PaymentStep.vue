@@ -13,11 +13,14 @@
     <!-- Payment Method Selection -->
     <div class="space-y-6">
       <!-- Saved Payment Methods (for authenticated users) -->
-      <div v-if="savedPaymentMethods.length > 0" class="space-y-4">
+      <div
+        v-if="savedPaymentMethods.length > 0"
+        class="space-y-4"
+      >
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
           {{ $t('checkout.payment.savedMethods') }}
         </h3>
-        
+
         <div class="space-y-3">
           <div
             v-for="savedMethod in savedPaymentMethods"
@@ -25,7 +28,7 @@
             class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 cursor-pointer transition-colors"
             :class="{
               'border-blue-500 bg-blue-50 dark:bg-blue-900/20': selectedSavedMethod === savedMethod.id,
-              'hover:border-gray-300 dark:hover:border-gray-600': selectedSavedMethod !== savedMethod.id
+              'hover:border-gray-300 dark:hover:border-gray-600': selectedSavedMethod !== savedMethod.id,
             }"
             @click="selectSavedMethod(savedMethod)"
           >
@@ -33,9 +36,9 @@
               <div class="flex items-center space-x-3">
                 <input
                   :id="`saved-${savedMethod.id}`"
+                  v-model="selectedSavedMethod"
                   type="radio"
                   :value="savedMethod.id"
-                  v-model="selectedSavedMethod"
                   class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
                 />
                 <div>
@@ -66,9 +69,9 @@
         <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
           <UiButton
             type="button"
-            @click="showNewPaymentForm = true"
             variant="link"
             class="px-0"
+            @click="showNewPaymentForm = true"
           >
             {{ $t('checkout.payment.useNewMethod') }}
           </UiButton>
@@ -77,7 +80,10 @@
 
       <!-- New Payment Method Form -->
       <div v-if="savedPaymentMethods.length === 0 || showNewPaymentForm">
-        <h3 v-if="savedPaymentMethods.length > 0" class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+        <h3
+          v-if="savedPaymentMethods.length > 0"
+          class="text-lg font-semibold text-gray-900 dark:text-white mb-4"
+        >
           {{ $t('checkout.payment.newMethod') }}
         </h3>
 
@@ -91,15 +97,18 @@
               <div class="flex items-center space-x-3">
                 <input
                   id="cash"
+                  v-model="paymentMethod.type"
                   type="radio"
                   value="cash"
-                  v-model="paymentMethod.type"
                   class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300"
                   checked
                 />
                 <div>
                   <div class="flex items-center space-x-2">
-                    <commonIcon name="lucide:banknote" class="h-6 w-6 text-green-600 dark:text-green-400" />
+                    <commonIcon
+                      name="lucide:banknote"
+                      class="h-6 w-6 text-green-600 dark:text-green-400"
+                    />
                     <span class="font-medium text-gray-900 dark:text-white">
                       {{ $t('checkout.payment.cash.label') }}
                     </span>
@@ -116,7 +125,7 @@
               <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400">
                 {{ $t('checkout.payment.comingSoon') }}
               </h4>
-              
+
               <!-- Credit Card (Disabled) -->
               <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 opacity-50 cursor-not-allowed bg-gray-50 dark:bg-gray-800/50">
                 <div class="flex items-center justify-between">
@@ -128,7 +137,10 @@
                     />
                     <div>
                       <div class="flex items-center space-x-2">
-                        <commonIcon name="lucide:credit-card" class="h-6 w-6 text-gray-400" />
+                        <commonIcon
+                          name="lucide:credit-card"
+                          class="h-6 w-6 text-gray-400"
+                        />
                         <span class="font-medium text-gray-500 dark:text-gray-400">
                           {{ $t('checkout.payment.creditCard.label') }}
                         </span>
@@ -155,7 +167,10 @@
                     />
                     <div>
                       <div class="flex items-center space-x-2">
-                        <commonIcon name="lucide:badge-dollar-sign" class="h-6 w-6 text-gray-400" />
+                        <commonIcon
+                          name="lucide:badge-dollar-sign"
+                          class="h-6 w-6 text-gray-400"
+                        />
                         <span class="font-medium text-gray-500 dark:text-gray-400">
                           {{ $t('checkout.payment.paypal.label') }}
                         </span>
@@ -182,7 +197,10 @@
                     />
                     <div>
                       <div class="flex items-center space-x-2">
-                        <commonIcon name="lucide:building-2" class="h-6 w-6 text-gray-400" />
+                        <commonIcon
+                          name="lucide:building-2"
+                          class="h-6 w-6 text-gray-400"
+                        />
                         <span class="font-medium text-gray-500 dark:text-gray-400">
                           {{ $t('checkout.payment.bankTransfer.label') }}
                         </span>
@@ -208,7 +226,7 @@
               v-model="paymentMethod"
               :loading="loading"
               :errors="errors"
-              @update:modelValue="updatePaymentMethod"
+              @update:model-value="updatePaymentMethod"
             />
           </template>
           <template #fallback>
@@ -217,11 +235,14 @@
         </Suspense>
 
         <!-- Save Payment Method Option (for authenticated users) -->
-        <div v-if="isAuthenticated && paymentMethod.type !== 'bank_transfer'" class="mt-4">
+        <div
+          v-if="isAuthenticated && paymentMethod.type !== 'bank_transfer'"
+          class="mt-4"
+        >
           <label class="flex items-center space-x-2">
             <input
-              type="checkbox"
               v-model="paymentMethod.saveForFuture"
+              type="checkbox"
               class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
             />
             <span class="text-sm text-gray-700 dark:text-gray-300">
@@ -232,9 +253,15 @@
       </div>
 
       <!-- Error Messages -->
-      <div v-if="errors.payment" class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+      <div
+        v-if="errors.payment"
+        class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4"
+      >
         <div class="flex">
-          <commonIcon name="lucide:alert-triangle" class="h-5 w-5 text-red-400 mr-2 mt-0.5" />
+          <commonIcon
+            name="lucide:alert-triangle"
+            class="h-5 w-5 text-red-400 mr-2 mt-0.5"
+          />
           <div>
             <h3 class="text-sm font-medium text-red-800 dark:text-red-200">
               {{ $t('checkout.payment.error') }}
@@ -250,25 +277,34 @@
       <div class="flex justify-between pt-6 border-t border-gray-200 dark:border-gray-700">
         <UiButton
           type="button"
-          @click="goBack"
           variant="outline"
+          @click="goBack"
         >
-          <commonIcon name="lucide:arrow-left" class="h-4 w-4 mr-2" />
+          <commonIcon
+            name="lucide:arrow-left"
+            class="h-4 w-4 mr-2"
+          />
           {{ $t('checkout.navigation.back') }}
         </UiButton>
 
         <UiButton
           type="button"
-          @click="proceedToReview"
           :disabled="!canProceed || loading"
+          @click="proceedToReview"
         >
           <template v-if="loading">
-            <commonIcon name="lucide:loader-2" class="animate-spin h-4 w-4 mr-2" />
+            <commonIcon
+              name="lucide:loader-2"
+              class="animate-spin h-4 w-4 mr-2"
+            />
             {{ $t('checkout.navigation.processing') }}
           </template>
           <template v-else>
             {{ $t('checkout.navigation.reviewOrder') }}
-            <commonIcon name="lucide:arrow-right" class="h-4 w-4 ml-2" />
+            <commonIcon
+              name="lucide:arrow-right"
+              class="h-4 w-4 ml-2"
+            />
           </template>
         </UiButton>
       </div>
@@ -284,7 +320,7 @@ import { useAuthStore } from '~/stores/auth'
 
 // Lazy load payment form component
 const PaymentForm = defineAsyncComponent(() =>
-  import('./PaymentForm.vue')
+  import('./PaymentForm.vue'),
 )
 
 // =============================================
@@ -305,7 +341,7 @@ const selectedSavedMethod = ref<string | null>(null)
 // Initialize payment method if not set
 const paymentMethod = ref<PaymentMethod>({
   type: 'cash',
-  saveForFuture: false
+  saveForFuture: false,
 })
 
 // =============================================
@@ -313,31 +349,34 @@ const paymentMethod = ref<PaymentMethod>({
 // =============================================
 
 const isAuthenticated = computed(() => authStore.isAuthenticated)
-const savedPaymentMethods = computed(() => checkoutStore.savedPaymentMethods ?? [])
-const loading = computed(() => checkoutStore.loading)
-const errors = computed(() => checkoutStore.errors ?? {})
+const savedPaymentMethods = computed(() => (checkoutStore as any).savedPaymentMethods ?? [])
+const loading = computed(() => (checkoutStore as any).loading ?? false)
+const errors = computed(() => (checkoutStore as any).errors ?? {})
 
 const canProceed = computed(() => {
   if (selectedSavedMethod.value) {
     return true
   }
-  
+
   if (paymentMethod.value.type === 'cash') {
     return true // Cash payment is always valid
-  } else if (paymentMethod.value.type === 'credit_card') {
+  }
+  else if (paymentMethod.value.type === 'credit_card') {
     return !!(
-      paymentMethod.value.creditCard?.number &&
-      paymentMethod.value.creditCard?.expiryMonth &&
-      paymentMethod.value.creditCard?.expiryYear &&
-      paymentMethod.value.creditCard?.cvv &&
-      paymentMethod.value.creditCard?.holderName
+      paymentMethod.value.creditCard?.number
+      && paymentMethod.value.creditCard?.expiryMonth
+      && paymentMethod.value.creditCard?.expiryYear
+      && paymentMethod.value.creditCard?.cvv
+      && paymentMethod.value.creditCard?.holderName
     )
-  } else if (paymentMethod.value.type === 'paypal') {
+  }
+  else if (paymentMethod.value.type === 'paypal') {
     return !!paymentMethod.value.paypal?.email
-  } else if (paymentMethod.value.type === 'bank_transfer') {
+  }
+  else if (paymentMethod.value.type === 'bank_transfer') {
     return true // Bank transfer doesn't require additional validation
   }
-  
+
   return false
 })
 
@@ -350,10 +389,10 @@ const selectPaymentType = (type: PaymentMethod['type']) => {
   if (type !== 'cash') {
     return
   }
-  
+
   paymentMethod.value = {
     type,
-    saveForFuture: false
+    saveForFuture: false,
   }
   selectedSavedMethod.value = null
   showNewPaymentForm.value = true
@@ -362,7 +401,7 @@ const selectPaymentType = (type: PaymentMethod['type']) => {
 const selectSavedMethod = (savedMethod: SavedPaymentMethod) => {
   selectedSavedMethod.value = savedMethod.id
   showNewPaymentForm.value = false
-  
+
   // Convert saved method to payment method format
   if (savedMethod.type === 'credit_card') {
     paymentMethod.value = {
@@ -372,17 +411,18 @@ const selectSavedMethod = (savedMethod: SavedPaymentMethod) => {
         expiryMonth: savedMethod.expiryMonth?.toString() || '',
         expiryYear: savedMethod.expiryYear?.toString() || '',
         cvv: '', // Always required for security
-        holderName: '' // Will be populated from saved data
+        holderName: '', // Will be populated from saved data
       },
-      saveForFuture: false
+      saveForFuture: false,
     }
-  } else if (savedMethod.type === 'paypal') {
+  }
+  else if (savedMethod.type === 'paypal') {
     paymentMethod.value = {
       type: 'paypal',
       paypal: {
-        email: '' // Will be handled by PayPal
+        email: '', // Will be handled by PayPal
       },
-      saveForFuture: false
+      saveForFuture: false,
     }
   }
 }
@@ -405,7 +445,8 @@ const getPaymentMethodLabel = (savedMethod: SavedPaymentMethod) => {
   if (savedMethod.type === 'credit_card') {
     const brand = savedMethod.brand ? savedMethod.brand.charAt(0).toUpperCase() + savedMethod.brand.slice(1) : 'Card'
     return `${brand} •••• ${savedMethod.lastFour}`
-  } else if (savedMethod.type === 'paypal') {
+  }
+  else if (savedMethod.type === 'paypal') {
     return 'PayPal'
   }
   return 'Payment Method'
@@ -414,14 +455,15 @@ const getPaymentMethodLabel = (savedMethod: SavedPaymentMethod) => {
 const getPaymentMethodDescription = (savedMethod: SavedPaymentMethod) => {
   if (savedMethod.type === 'credit_card' && savedMethod.expiryMonth && savedMethod.expiryYear) {
     return `Expires ${savedMethod.expiryMonth.toString().padStart(2, '0')}/${savedMethod.expiryYear}`
-  } else if (savedMethod.type === 'paypal') {
+  }
+  else if (savedMethod.type === 'paypal') {
     return 'PayPal account'
   }
   return ''
 }
 
 const goBack = async () => {
-  const previousStep = checkoutStore.goToPreviousStep()
+  const previousStep = (checkoutStore as any).goToPreviousStep?.()
   if (previousStep) {
     const localePath = useLocalePath()
     const stepPath = previousStep === 'shipping' ? '/checkout' : `/checkout/${previousStep}`
@@ -435,28 +477,30 @@ const proceedToReview = async () => {
 
     if (selectedSavedMethod.value) {
       // Use saved payment method
-      const savedMethod = savedPaymentMethods.value.find(m => m.id === selectedSavedMethod.value)
+      const savedMethod = savedPaymentMethods.value.find((m: SavedPaymentMethod) => m.id === selectedSavedMethod.value)
       if (!savedMethod) {
         throw new Error('Selected payment method not found')
       }
-      
+
       // For saved methods, we still need some information (like CVV for credit cards)
       methodToSave = paymentMethod.value
-    } else {
+    }
+    else {
       // Use new payment method
       methodToSave = paymentMethod.value
     }
 
-    await checkoutStore.updatePaymentMethod(methodToSave)
-    
+    await (checkoutStore as any).updatePaymentMethod?.(methodToSave)
+
     // Get the next step and navigate to it
-    const nextStep = await checkoutStore.proceedToNextStep()
+    const nextStep = await (checkoutStore as any).proceedToNextStep?.()
     if (nextStep) {
       const localePath = useLocalePath()
       const stepPath = nextStep === 'shipping' ? '/checkout' : `/checkout/${nextStep}`
       await navigateTo(localePath(stepPath))
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Failed to proceed to review:', error)
   }
 }
@@ -466,8 +510,8 @@ const proceedToReview = async () => {
 // =============================================
 
 // Initialize with existing payment method if available
-if (checkoutStore.paymentMethod) {
-  paymentMethod.value = { ...checkoutStore.paymentMethod }
+if ((checkoutStore as any).paymentMethod) {
+  paymentMethod.value = { ...(checkoutStore as any).paymentMethod }
 }
 
 // Watch for changes in saved payment methods

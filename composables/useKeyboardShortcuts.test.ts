@@ -448,8 +448,8 @@ describe('useKeyboardShortcuts', () => {
       // Mock import.meta.client to be true for this test
       vi.stubGlobal('import', {
         meta: {
-          client: true
-        }
+          client: true,
+        },
       })
 
       const TestComponent = defineComponent({

@@ -24,7 +24,7 @@ import type {
   Header,
   Column,
   RowData,
-  Updater
+  Updater,
 } from '@tanstack/vue-table'
 
 export interface TanStackTableModule {
@@ -88,11 +88,13 @@ export function useAsyncTable() {
       }
 
       return tableModule.value
-    } catch (err) {
+    }
+    catch (err) {
       error.value = err instanceof Error ? err : new Error('Failed to load table module')
       console.error('Failed to load TanStack Table:', err)
       return null
-    } finally {
+    }
+    finally {
       isLoading.value = false
     }
   }
@@ -112,7 +114,8 @@ export function useAsyncTable() {
 export function valueUpdater<T>(updaterOrValue: Updater<T>, ref: Ref<T>): void {
   if (typeof updaterOrValue === 'function') {
     ref.value = (updaterOrValue as (old: T) => T)(ref.value)
-  } else {
+  }
+  else {
     ref.value = updaterOrValue
   }
 }

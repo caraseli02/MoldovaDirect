@@ -17,7 +17,7 @@ export default defineNuxtPlugin(() => {
   const rememberMeCookie = useCookie('auth-remember-me')
 
   // Only run on client-side
-  if (process.server) return
+  if (import.meta.server) return
 
   // Listen to auth state changes
   supabase.auth.onAuthStateChange((event, session) => {
@@ -52,7 +52,8 @@ export default defineNuxtPlugin(() => {
         console.log('[Remember Me] Preference:', rememberMe ? 'persistent' : 'session')
         console.log('[Remember Me] Supabase cookies found:', supabaseCookies.length)
       }
-    } catch (error) {
+    }
+    catch (error) {
       console.warn('[Remember Me] Failed to process cookies:', error)
     }
   })

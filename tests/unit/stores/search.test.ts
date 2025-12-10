@@ -6,6 +6,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 
+import { useSearchStore } from '~/stores/search'
+
 // Mock $fetch
 const mockFetch = vi.fn()
 vi.stubGlobal('$fetch', mockFetch)
@@ -16,14 +18,12 @@ const mockLocalStorage = {
   getItem: vi.fn((key: string) => mockLocalStorage.store[key] || null),
   setItem: vi.fn((key: string, value: string) => { mockLocalStorage.store[key] = value }),
   removeItem: vi.fn((key: string) => { delete mockLocalStorage.store[key] }),
-  clear: vi.fn(() => { mockLocalStorage.store = {} })
+  clear: vi.fn(() => { mockLocalStorage.store = {} }),
 }
 vi.stubGlobal('localStorage', mockLocalStorage)
 
 // Mock process with NODE_ENV
 vi.stubGlobal('process', { client: true, env: { NODE_ENV: 'test' } })
-
-import { useSearchStore } from '~/stores/search'
 
 describe('Search Store', () => {
   beforeEach(() => {
@@ -56,7 +56,7 @@ describe('Search Store', () => {
       store.history = [
         { query: 'old', timestamp: 1000, resultsCount: 5 },
         { query: 'new', timestamp: 3000, resultsCount: 10 },
-        { query: 'middle', timestamp: 2000, resultsCount: 7 }
+        { query: 'middle', timestamp: 2000, resultsCount: 7 },
       ]
 
       const recent = store.recentSearches
@@ -70,7 +70,7 @@ describe('Search Store', () => {
       store.history = Array.from({ length: 15 }, (_, i) => ({
         query: `search-${i}`,
         timestamp: i * 1000,
-        resultsCount: i
+        resultsCount: i,
       }))
 
       expect(store.recentSearches.length).toBe(10)
@@ -81,7 +81,7 @@ describe('Search Store', () => {
       store.history = [
         { query: 'wine', timestamp: 1000, resultsCount: 5 },
         { query: 'cheese', timestamp: 2000, resultsCount: 3 },
-        { query: 'wine', timestamp: 3000, resultsCount: 5 }
+        { query: 'wine', timestamp: 3000, resultsCount: 5 },
       ]
 
       const unique = store.uniqueSearches
@@ -144,7 +144,7 @@ describe('Search Store', () => {
       mockFetch.mockResolvedValueOnce({
         products: [{ id: '1', name: 'Wine' }],
         suggestions: ['wine red', 'wine white'],
-        query: 'wine'
+        query: 'wine',
       })
 
       await store.search('wine')
@@ -162,7 +162,7 @@ describe('Search Store', () => {
       mockFetch.mockResolvedValueOnce({
         products: [{ id: '1' }],
         suggestions: [],
-        query: 'wine'
+        query: 'wine',
       })
       await store.search('wine')
 
@@ -191,7 +191,7 @@ describe('Search Store', () => {
       mockFetch.mockResolvedValueOnce({
         products: [{ id: '1' }, { id: '2' }],
         suggestions: [],
-        query: 'wine'
+        query: 'wine',
       })
 
       await store.search('wine')
@@ -215,7 +215,7 @@ describe('Search Store', () => {
     it('should fetch suggestions', async () => {
       const store = useSearchStore()
       mockFetch.mockResolvedValueOnce({
-        suggestions: ['wine', 'wine red']
+        suggestions: ['wine', 'wine red'],
       })
 
       await store.getSuggestions('wi')
@@ -330,7 +330,7 @@ describe('Search Store', () => {
       mockFetch.mockResolvedValueOnce({
         products: [],
         suggestions: [],
-        query: 'wine'
+        query: 'wine',
       })
 
       store.updateFilters({ sort: 'price' })
@@ -346,7 +346,7 @@ describe('Search Store', () => {
     it('should load popular searches', async () => {
       const store = useSearchStore()
       mockFetch.mockResolvedValueOnce({
-        searches: ['wine', 'cheese', 'honey']
+        searches: ['wine', 'cheese', 'honey'],
       })
 
       await store.loadPopularSearches()
@@ -372,7 +372,7 @@ describe('Search Store', () => {
 
       expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
         'moldova-direct-search-history',
-        expect.any(String)
+        expect.any(String),
       )
     })
 
@@ -391,7 +391,7 @@ describe('Search Store', () => {
       const thirtyOneDaysAgo = Date.now() - 31 * 24 * 60 * 60 * 1000
       const history = [
         { query: 'old', timestamp: thirtyOneDaysAgo, resultsCount: 5 },
-        { query: 'recent', timestamp: Date.now(), resultsCount: 10 }
+        { query: 'recent', timestamp: Date.now(), resultsCount: 10 },
       ]
       mockLocalStorage.store['moldova-direct-search-history'] = JSON.stringify(history)
 

@@ -39,8 +39,8 @@ vi.mock('#imports', () => ({
   })),
   readRawBody: vi.fn(),
   getHeader: vi.fn(),
-  createError: vi.fn((error) => error),
-  defineEventHandler: vi.fn((handler) => handler),
+  createError: vi.fn(error => error),
+  defineEventHandler: vi.fn(handler => handler),
 }))
 
 vi.mock('#supabase/server', () => ({
@@ -495,7 +495,7 @@ describe('POST /api/webhooks/stripe', () => {
  */
 export function generateTestWebhookPayload(
   type: string,
-  data: any
+  data: any,
 ): Stripe.Event {
   return {
     id: `evt_test_${Date.now()}`,
@@ -515,7 +515,7 @@ export function generateTestWebhookPayload(
  */
 export function generateTestPaymentIntent(
   status: Stripe.PaymentIntent.Status = 'succeeded',
-  amount = 10000
+  amount = 10000,
 ): Partial<Stripe.PaymentIntent> {
   return {
     id: `pi_test_${Date.now()}`,
@@ -534,7 +534,7 @@ export function generateTestPaymentIntent(
  */
 export function generateTestCharge(
   refunded = false,
-  amountRefunded = 0
+  amountRefunded = 0,
 ): Partial<Stripe.Charge> {
   return {
     id: `ch_test_${Date.now()}`,

@@ -10,7 +10,7 @@ describe('generateSecurePassword', () => {
 
     it('should generate password of specified length', () => {
       const lengths = [8, 12, 16, 20, 24, 32, 64]
-      lengths.forEach(length => {
+      lengths.forEach((length) => {
         const password = generateSecurePassword(length)
         expect(password.length).toBe(length)
       })
@@ -137,7 +137,7 @@ describe('generateSecurePassword', () => {
       for (let i = 0; i < 100; i++) {
         const password = generateSecurePassword(20, true)
         expect(password).not.toContain('"')
-        expect(password).not.toContain("'")
+        expect(password).not.toContain('\'')
         expect(password).not.toContain('\\')
       }
     })

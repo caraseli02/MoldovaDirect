@@ -42,13 +42,13 @@ export interface MFAState {
  */
 export async function enrollMFA(
   supabase: SupabaseClient,
-  friendlyName?: string
+  friendlyName?: string,
 ): Promise<MFAEnrollment> {
   const toastStore = useToast()
 
   const { data, error } = await supabase.auth.mfa.enroll({
     factorType: 'totp',
-    friendlyName: friendlyName || 'Authenticator App'
+    friendlyName: friendlyName || 'Authenticator App',
   })
 
   if (error) {
@@ -62,14 +62,14 @@ export async function enrollMFA(
 
   toastStore.success(
     'MFA Enrollment Started',
-    'Scan the QR code with your authenticator app'
+    'Scan the QR code with your authenticator app',
   )
 
   return {
     id: data.id,
     qrCode: data.totp.qr_code,
     secret: data.totp.secret,
-    uri: data.totp.uri
+    uri: data.totp.uri,
   }
 }
 
@@ -79,26 +79,26 @@ export async function enrollMFA(
 export async function verifyMFAEnrollment(
   supabase: SupabaseClient,
   factorId: string,
-  code: string
+  code: string,
 ): Promise<void> {
   const toastStore = useToast()
 
   const { data, error } = await supabase.auth.mfa.challengeAndVerify({
     factorId,
-    code
+    code,
   })
 
   if (error) {
     toastStore.error(
       'Invalid Code',
-      'The code you entered is invalid or has expired. Please try again.'
+      'The code you entered is invalid or has expired. Please try again.',
     )
     throw new Error(error.message)
   }
 
   toastStore.success(
     'MFA Enabled',
-    'Two-factor authentication has been enabled successfully'
+    'Two-factor authentication has been enabled successfully',
   )
 }
 
@@ -107,10 +107,10 @@ export async function verifyMFAEnrollment(
  */
 export async function challengeMFA(
   supabase: SupabaseClient,
-  factorId: string
+  factorId: string,
 ): Promise<MFAChallenge> {
   const { data, error } = await supabase.auth.mfa.challenge({
-    factorId
+    factorId,
   })
 
   if (error) {
@@ -123,7 +123,7 @@ export async function challengeMFA(
 
   return {
     factorId,
-    challengeId: data.id
+    challengeId: data.id,
   }
 }
 
@@ -133,20 +133,20 @@ export async function challengeMFA(
 export async function verifyMFA(
   supabase: SupabaseClient,
   challenge: MFAChallenge,
-  code: string
+  code: string,
 ): Promise<void> {
   const toastStore = useToast()
 
   const { error } = await supabase.auth.mfa.verify({
     factorId: challenge.factorId,
     challengeId: challenge.challengeId,
-    code
+    code,
   })
 
   if (error) {
     toastStore.error(
       'Invalid Code',
-      'The code you entered is invalid or has expired'
+      'The code you entered is invalid or has expired',
     )
     throw new Error(error.message)
   }
@@ -159,12 +159,12 @@ export async function verifyMFA(
  */
 export async function unenrollMFA(
   supabase: SupabaseClient,
-  factorId: string
+  factorId: string,
 ): Promise<void> {
   const toastStore = useToast()
 
   const { error } = await supabase.auth.mfa.unenroll({
-    factorId
+    factorId,
   })
 
   if (error) {
@@ -174,7 +174,7 @@ export async function unenrollMFA(
 
   toastStore.success(
     'MFA Disabled',
-    'Two-factor authentication has been disabled'
+    'Two-factor authentication has been disabled',
   )
 }
 
@@ -182,7 +182,7 @@ export async function unenrollMFA(
  * Fetch user's MFA factors
  */
 export async function fetchMFAFactors(
-  supabase: SupabaseClient
+  supabase: SupabaseClient,
 ): Promise<MFAFactor[]> {
   try {
     const { data, error } = await supabase.auth.mfa.listFactors()
@@ -195,9 +195,10 @@ export async function fetchMFAFactors(
       id: factor.id,
       type: 'totp' as const,
       status: factor.status as 'verified' | 'unverified',
-      friendlyName: factor.friendly_name
+      friendlyName: factor.friendly_name,
     })) || []
-  } catch (error) {
+  }
+  catch (error) {
     console.warn('Failed to fetch MFA factors:', error)
     return []
   }
@@ -217,7 +218,8 @@ export async function checkAAL(supabase: SupabaseClient) {
     }
 
     return data
-  } catch (error) {
+  }
+  catch (error) {
     console.warn('AAL check error:', error)
     return null
   }

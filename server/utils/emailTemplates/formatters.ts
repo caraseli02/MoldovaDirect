@@ -21,7 +21,7 @@ const localeMap: Record<SupportedLocale, string> = {
  */
 export function formatCurrency(amount: number, locale: SupportedLocale | string): string {
   const intlLocale = localeMap[locale as SupportedLocale] || localeMap.es
-  
+
   try {
     return new Intl.NumberFormat(intlLocale, {
       style: 'currency',
@@ -29,7 +29,8 @@ export function formatCurrency(amount: number, locale: SupportedLocale | string)
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }).format(amount)
-  } catch (error) {
+  }
+  catch (error) {
     // Fallback to simple formatting
     return `€${amount.toFixed(2)}`
   }
@@ -40,21 +41,22 @@ export function formatCurrency(amount: number, locale: SupportedLocale | string)
  */
 export function formatDate(dateString: string, locale: SupportedLocale | string): string {
   const intlLocale = localeMap[locale as SupportedLocale] || localeMap.es
-  
+
   try {
     const date = new Date(dateString)
-    
+
     // Check if date is valid
     if (isNaN(date.getTime())) {
       return dateString
     }
-    
+
     return date.toLocaleDateString(intlLocale, {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
     })
-  } catch (error) {
+  }
+  catch (error) {
     return dateString
   }
 }
@@ -64,15 +66,15 @@ export function formatDate(dateString: string, locale: SupportedLocale | string)
  */
 export function formatDateTime(dateString: string, locale: SupportedLocale | string): string {
   const intlLocale = localeMap[locale as SupportedLocale] || localeMap.es
-  
+
   try {
     const date = new Date(dateString)
-    
+
     // Check if date is valid
     if (isNaN(date.getTime())) {
       return dateString
     }
-    
+
     return date.toLocaleString(intlLocale, {
       year: 'numeric',
       month: 'long',
@@ -80,7 +82,8 @@ export function formatDateTime(dateString: string, locale: SupportedLocale | str
       hour: '2-digit',
       minute: '2-digit',
     })
-  } catch (error) {
+  }
+  catch (error) {
     return dateString
   }
 }
@@ -90,10 +93,11 @@ export function formatDateTime(dateString: string, locale: SupportedLocale | str
  */
 export function formatNumber(value: number, locale: SupportedLocale | string): string {
   const intlLocale = localeMap[locale as SupportedLocale] || localeMap.es
-  
+
   try {
     return new Intl.NumberFormat(intlLocale).format(value)
-  } catch (error) {
+  }
+  catch (error) {
     return value.toString()
   }
 }
@@ -103,14 +107,15 @@ export function formatNumber(value: number, locale: SupportedLocale | string): s
  */
 export function formatPercentage(value: number, locale: SupportedLocale | string): string {
   const intlLocale = localeMap[locale as SupportedLocale] || localeMap.es
-  
+
   try {
     return new Intl.NumberFormat(intlLocale, {
       style: 'percent',
       minimumFractionDigits: 0,
       maximumFractionDigits: 2,
     }).format(value / 100)
-  } catch (error) {
+  }
+  catch (error) {
     return `${value}%`
   }
 }
@@ -151,7 +156,7 @@ export function getOrderStatusLabel(status: string, locale: SupportedLocale | st
       ru: 'Отменено',
     },
   }
-  
+
   const localeKey = locale as SupportedLocale
   return statusTranslations[status]?.[localeKey] || status
 }
@@ -161,13 +166,13 @@ export function getOrderStatusLabel(status: string, locale: SupportedLocale | st
  */
 export function normalizeLocale(locale: string | undefined): SupportedLocale {
   if (!locale) return 'es'
-  
+
   const normalized = locale.toLowerCase().split('-')[0] as SupportedLocale
-  
+
   if (['es', 'en', 'ro', 'ru'].includes(normalized)) {
     return normalized
   }
-  
+
   return 'es'
 }
 
@@ -193,12 +198,12 @@ export function formatAddress(address: {
     address.street,
     `${address.city}, ${address.postalCode}`,
   ]
-  
+
   if (address.province) {
     parts.push(address.province)
   }
-  
+
   parts.push(address.country)
-  
+
   return parts.join('<br>')
 }

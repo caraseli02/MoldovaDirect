@@ -17,18 +17,18 @@ export default defineEventHandler(async (event) => {
     if (!authHeader) {
       throw createError({
         statusCode: 401,
-        statusMessage: 'Authentication required'
+        statusMessage: 'Authentication required',
       })
     }
 
     const { data: { user }, error: authError } = await supabase.auth.getUser(
-      authHeader.replace('Bearer ', '')
+      authHeader.replace('Bearer ', ''),
     )
 
     if (authError || !user) {
       throw createError({
         statusCode: 401,
-        statusMessage: 'Invalid authentication'
+        statusMessage: 'Invalid authentication',
       })
     }
 
@@ -42,7 +42,7 @@ export default defineEventHandler(async (event) => {
     if (profileError || profile?.role !== 'admin') {
       throw createError({
         statusCode: 403,
-        statusMessage: 'Admin access required'
+        statusMessage: 'Admin access required',
       })
     }
 
@@ -51,7 +51,7 @@ export default defineEventHandler(async (event) => {
     if (!orderId) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Order ID is required'
+        statusMessage: 'Order ID is required',
       })
     }
 
@@ -60,7 +60,7 @@ export default defineEventHandler(async (event) => {
 
     // Build update object
     const updateData: any = {}
-    
+
     if (body.trackingNumber !== undefined) {
       updateData.tracking_number = body.trackingNumber
     }
@@ -72,12 +72,12 @@ export default defineEventHandler(async (event) => {
     }
     if (body.status !== undefined) {
       updateData.status = body.status
-      
+
       // Update shipped_at when status changes to shipped
       if (body.status === 'shipped' && !updateData.shipped_at) {
         updateData.shipped_at = new Date().toISOString()
       }
-      
+
       // Update delivered_at when status changes to delivered
       if (body.status === 'delivered' && !updateData.delivered_at) {
         updateData.delivered_at = new Date().toISOString()
@@ -87,7 +87,7 @@ export default defineEventHandler(async (event) => {
     if (Object.keys(updateData).length === 0) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'No valid fields to update'
+        statusMessage: 'No valid fields to update',
       })
     }
 
@@ -103,12 +103,12 @@ export default defineEventHandler(async (event) => {
       if (orderError.code === 'PGRST116') {
         throw createError({
           statusCode: 404,
-          statusMessage: 'Order not found'
+          statusMessage: 'Order not found',
         })
       }
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to update order tracking'
+        statusMessage: 'Failed to update order tracking',
       })
     }
 
@@ -119,7 +119,7 @@ export default defineEventHandler(async (event) => {
         processing: 'Order is being processed',
         shipped: 'Order has been shipped',
         delivered: 'Order has been delivered',
-        cancelled: 'Order has been cancelled'
+        cancelled: 'Order has been cancelled',
       }
 
       await supabase
@@ -128,15 +128,16 @@ export default defineEventHandler(async (event) => {
           order_id: parseInt(orderId),
           status: body.status,
           description: statusDescriptions[body.status] || `Order status updated to ${body.status}`,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         })
     }
 
     return {
       success: true,
-      data: order
+      data: order,
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     if (error.statusCode) {
       throw error
     }
@@ -144,7 +145,7 @@ export default defineEventHandler(async (event) => {
     console.error('Tracking update error:', error)
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 })

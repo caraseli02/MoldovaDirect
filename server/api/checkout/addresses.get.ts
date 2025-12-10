@@ -1,10 +1,11 @@
 import { serverSupabaseClient, serverSupabaseUser } from '#supabase/server'
+import type { H3Event } from 'h3'
 
 export default defineEventHandler(async (event) => {
   try {
     const user = await requireAuthenticatedUser(event)
     const supabase = await serverSupabaseClient(event)
-    
+
     // Get user's saved addresses from database
     const { data: addresses, error } = await supabase
       .from('user_addresses')
@@ -18,36 +19,40 @@ export default defineEventHandler(async (event) => {
         userId: user.id,
         error: error.message,
         code: error.code,
-        details: error.details
+        details: error.details,
       })
       throw createError({
         statusCode: 500,
         statusMessage: 'Unable to load your saved addresses. Please refresh the page.',
-        data: { error: error.message }
+        data: { error: error.message },
       })
     }
 
     return {
       success: true,
-      addresses: addresses || []
+      addresses: addresses || [],
     }
-  } catch (error) {
+  }
+  catch (error: unknown) {
     // Re-throw authentication errors
-    if (error.statusCode === 401) {
+    if (error && typeof error === 'object' && 'statusCode' in error && error.statusCode === 401) {
       throw error
     }
 
     // Re-throw known errors
-    if (error.statusCode) {
+    if (error && typeof error === 'object' && 'statusCode' in error) {
       throw error
     }
+
+    const errorMessage = error instanceof Error ? error.message : String(error)
+    const errorStack = error instanceof Error ? error.stack : undefined
 
     // Log unexpected errors with full context
     console.error('Unexpected error fetching addresses:', {
       error,
       errorType: error?.constructor?.name,
-      message: error?.message,
-      stack: error?.stack
+      message: errorMessage,
+      stack: errorStack,
     })
 
     throw createError({
@@ -55,21 +60,21 @@ export default defineEventHandler(async (event) => {
       statusMessage: 'An unexpected error occurred while loading addresses',
       data: {
         errorType: error?.constructor?.name,
-        message: String(error)
-      }
+        message: errorMessage,
+      },
     })
   }
 })
 
-async function requireAuthenticatedUser(event: any) {
+async function requireAuthenticatedUser(event: H3Event) {
   const user = await serverSupabaseUser(event)
-  
+
   if (!user) {
     throw createError({
       statusCode: 401,
-      statusMessage: 'Authentication required'
+      statusMessage: 'Authentication required',
     })
   }
-  
+
   return user
 }

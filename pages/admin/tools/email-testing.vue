@@ -10,9 +10,15 @@
         </p>
       </div>
 
-      <form class="space-y-6" @submit.prevent="handleSubmit">
+      <form
+        class="space-y-6"
+        @submit.prevent="handleSubmit"
+      >
         <div>
-          <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label
+            for="email"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+          >
             Recipient Email
           </label>
           <input
@@ -22,11 +28,14 @@
             placeholder="qa@example.com"
             class="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
             required
-          >
+          />
         </div>
 
         <div>
-          <label for="emailType" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label
+            for="emailType"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+          >
             Email Type
           </label>
           <select
@@ -45,7 +54,10 @@
         </div>
 
         <div v-if="selectedType === 'order_issue'">
-          <label for="issueDescription" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label
+            for="issueDescription"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+          >
             Issue Description
           </label>
           <textarea
@@ -54,11 +66,14 @@
             rows="3"
             class="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
             placeholder="Optional context for the issue email"
-          />
+          ></textarea>
         </div>
 
         <div>
-          <label for="locale" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label
+            for="locale"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+          >
             Locale
           </label>
           <select
@@ -66,7 +81,11 @@
             v-model="locale"
             class="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
           >
-            <option v-for="option in localeOptions" :key="option.value" :value="option.value">
+            <option
+              v-for="option in localeOptions"
+              :key="option.value"
+              :value="option.value"
+            >
               {{ option.label }}
             </option>
           </select>
@@ -79,8 +98,11 @@
             :disabled="loading"
           >
             <span v-if="!loading">Send Test Email</span>
-            <span v-else class="flex items-center space-x-2">
-              <span class="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            <span
+              v-else
+              class="flex items-center space-x-2"
+            >
+              <span class="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
               <span>Sending…</span>
             </span>
           </button>
@@ -90,11 +112,17 @@
         </div>
       </form>
 
-      <div v-if="successMessage" class="mt-6 rounded-lg border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20 px-4 py-3 text-sm text-green-700 dark:text-green-300">
+      <div
+        v-if="successMessage"
+        class="mt-6 rounded-lg border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20 px-4 py-3 text-sm text-green-700 dark:text-green-300"
+      >
         {{ successMessage }}
       </div>
 
-      <div v-if="errorMessage" class="mt-6 rounded-lg border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 px-4 py-3 text-sm text-red-700 dark:text-red-300">
+      <div
+        v-if="errorMessage"
+        class="mt-6 rounded-lg border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 px-4 py-3 text-sm text-red-700 dark:text-red-300"
+      >
         {{ errorMessage }}
       </div>
     </div>
@@ -107,7 +135,7 @@ import type { EmailType } from '~/types/email'
 
 definePageMeta({
   layout: 'admin',
-  middleware: 'admin'
+  middleware: 'admin',
 })
 
 const email = ref('')
@@ -118,20 +146,20 @@ const loading = ref(false)
 const successMessage = ref('')
 const errorMessage = ref('')
 
-const emailTypeOptions: Array<{ value: EmailType; label: string }> = [
+const emailTypeOptions: Array<{ value: EmailType, label: string }> = [
   { value: 'order_confirmation', label: 'Order Confirmation' },
   { value: 'order_processing', label: 'Order Processing' },
   { value: 'order_shipped', label: 'Order Shipped' },
   { value: 'order_delivered', label: 'Order Delivered' },
   { value: 'order_cancelled', label: 'Order Cancelled' },
-  { value: 'order_issue', label: 'Order Issue' }
+  { value: 'order_issue', label: 'Order Issue' },
 ]
 
 const localeOptions = [
   { value: 'en', label: 'English' },
   { value: 'es', label: 'Español' },
   { value: 'ro', label: 'Română' },
-  { value: 'ru', label: 'Русский' }
+  { value: 'ru', label: 'Русский' },
 ]
 
 function validateEmail(target: string) {
@@ -156,14 +184,16 @@ async function handleSubmit() {
         email: email.value.trim(),
         type: selectedType.value,
         locale: locale.value,
-        issueDescription: selectedType.value === 'order_issue' ? issueDescription.value : undefined
-      }
+        issueDescription: selectedType.value === 'order_issue' ? issueDescription.value : undefined,
+      },
     })
 
     successMessage.value = `✔ Test email queued successfully. Check ${email.value} for “${response.subject}”.`
-  } catch (error: any) {
+  }
+  catch (error: any) {
     errorMessage.value = error?.data?.statusMessage || error.message || 'Failed to send test email.'
-  } finally {
+  }
+  finally {
     loading.value = false
   }
 }

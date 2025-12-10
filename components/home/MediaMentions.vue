@@ -101,7 +101,9 @@
               class="pointer-events-none absolute -bottom-2 left-1/2 z-10 w-64 -translate-x-1/2 translate-y-full rounded-lg border border-brand-light/10 bg-brand-dark p-4 text-sm text-brand-light opacity-0 shadow-elevated-lg backdrop-blur-md transition-opacity duration-300 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100 dark:border-brand-dark/20 dark:bg-brand-light dark:text-brand-dark"
               role="tooltip"
             >
-              <p class="italic leading-relaxed">"{{ mention.quote }}"</p>
+              <p class="italic leading-relaxed">
+                "{{ mention.quote }}"
+              </p>
               <div class="absolute -top-2 left-1/2 h-4 w-4 -translate-x-1/2 rotate-45 border-l border-t border-brand-light/10 bg-brand-dark dark:border-brand-dark/20 dark:bg-brand-light"></div>
             </div>
           </div>
@@ -121,7 +123,10 @@
         class="mt-12 flex flex-wrap items-center justify-center gap-6"
       >
         <div class="flex items-center gap-2 text-sm font-medium text-brand-dark/70 dark:text-brand-light/70">
-          <commonIcon name="lucide:sparkles" class="h-5 w-5" />
+          <commonIcon
+            name="lucide:sparkles"
+            class="h-5 w-5"
+          />
           <span>{{ t('home.mediaMentions.featuredIn') }}</span>
         </div>
         <div class="flex flex-wrap items-center justify-center gap-4">
@@ -132,7 +137,10 @@
             :aria-label="`Follow us on ${platform.name}`"
             class="flex min-h-[44px] items-center gap-2 rounded-full border border-brand-light/20 bg-brand-light/10 px-6 py-3 text-sm font-medium tracking-wide text-brand-dark backdrop-blur-sm transition-all hover:border-brand-light/30 hover:bg-brand-light/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 dark:border-brand-dark/20 dark:bg-brand-dark/10 dark:text-brand-light dark:hover:border-brand-dark/30 dark:hover:bg-brand-dark/20"
           >
-            <commonIcon :name="platform.icon" class="h-4 w-4" />
+            <commonIcon
+              :name="platform.icon"
+              class="h-4 w-4"
+            />
             <span>{{ platform.name }}</span>
           </button>
         </div>
@@ -165,35 +173,35 @@ withDefaults(
     mentions: () => [
       {
         name: 'Forbes',
-        quote: 'Bringing authentic Moldovan flavors to Europe'
+        quote: 'Bringing authentic Moldovan flavors to Europe',
       },
       {
         name: 'El País',
-        quote: 'The best way to discover Moldovan wine'
+        quote: 'The best way to discover Moldovan wine',
       },
       {
         name: 'Wine Spectator',
-        quote: 'Outstanding selection of Eastern European wines'
+        quote: 'Outstanding selection of Eastern European wines',
       },
       {
         name: 'The Guardian',
-        quote: 'A hidden gem for food enthusiasts'
+        quote: 'A hidden gem for food enthusiasts',
       },
       {
         name: 'La Vanguardia',
-        quote: 'Exceptional quality and authenticity'
+        quote: 'Exceptional quality and authenticity',
       },
       {
         name: 'Decanter',
-        quote: 'Moldova\'s finest exports, delivered'
-      }
+        quote: 'Moldova\'s finest exports, delivered',
+      },
     ],
     socialPlatforms: () => [
       { name: 'Instagram', icon: 'lucide:instagram' },
       { name: 'Facebook', icon: 'lucide:facebook' },
-      { name: 'LinkedIn', icon: 'lucide:linkedin' }
-    ]
-  }
+      { name: 'LinkedIn', icon: 'lucide:linkedin' },
+    ],
+  },
 )
 
 const { t } = useI18n()

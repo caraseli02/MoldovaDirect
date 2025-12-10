@@ -1,4 +1,5 @@
-import { test, expect, Page } from '@playwright/test'
+import type { Page } from '@playwright/test'
+import { test, expect } from '@playwright/test'
 
 /**
  * E2E Tests for Cart Functionality
@@ -82,7 +83,7 @@ async function waitForCartUpdate(page: Page, expectedMinCount: number) {
       return count >= minCount
     },
     expectedMinCount,
-    { timeout: 10000 }
+    { timeout: 10000 },
   ).catch(() => {
     // Fallback to short wait if function-based wait fails
     return page.waitForTimeout(500)
@@ -334,7 +335,8 @@ test.describe('Cart Functionality E2E Tests', () => {
 
       const finalCount = await getCartCount(page)
       expect(finalCount).toBe(initialCount)
-    } else {
+    }
+    else {
       // No out of stock items available, skip this test
       test.skip()
     }
@@ -360,7 +362,7 @@ test.describe('Cart Functionality E2E Tests', () => {
     await expect(subtotal).toBeVisible({ timeout: 5000 })
 
     const subtotalText = await subtotal.textContent()
-    expect(subtotalText).toMatch(/\d+\.\d{2}/)  // Should contain price like 25.99
+    expect(subtotalText).toMatch(/\d+\.\d{2}/) // Should contain price like 25.99
   })
 
   test('should handle rapid add to cart clicks gracefully', async ({ page }) => {
@@ -399,7 +401,7 @@ test.describe('Cart Critical Smoke Tests', () => {
 
   test('cart page should load without errors', async ({ page }) => {
     const errors: string[] = []
-    page.on('console', msg => {
+    page.on('console', (msg) => {
       if (msg.type() === 'error') {
         errors.push(msg.text())
       }
@@ -410,9 +412,9 @@ test.describe('Cart Critical Smoke Tests', () => {
 
     // Should not have critical errors
     const criticalErrors = errors.filter(err =>
-      err.includes('Failed to load module') ||
-      err.includes('Pinia') ||
-      err.includes('useCart')
+      err.includes('Failed to load module')
+      || err.includes('Pinia')
+      || err.includes('useCart'),
     )
 
     expect(criticalErrors.length).toBe(0)
@@ -421,7 +423,7 @@ test.describe('Cart Critical Smoke Tests', () => {
   test('JavaScript bundles should load successfully', async ({ page }) => {
     const failedResources: string[] = []
 
-    page.on('response', response => {
+    page.on('response', (response) => {
       if (response.url().includes('/_nuxt/') && response.url().endsWith('.js')) {
         if (response.status() !== 200) {
           failedResources.push(`${response.url()} - ${response.status()}`)

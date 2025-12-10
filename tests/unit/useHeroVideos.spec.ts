@@ -56,7 +56,8 @@ describe('useHeroVideos', () => {
     vi.stubGlobal('useState', (_key: string, init: () => any) => {
       try {
         return ref(init())
-      } catch (e) {
+      }
+      catch (e) {
         throw e
       }
     })
@@ -91,7 +92,7 @@ describe('useHeroVideos', () => {
       webm: '/videos/hero/hero-1.webm',
       mp4: '/videos/hero/hero-1.mp4',
       poster: '/videos/hero/hero-1-poster.jpg',
-      alt: 'Only one'
+      alt: 'Only one',
     }
 
     const useStateSpy = vi.fn((_key: string, init: () => any) => ref(init()))

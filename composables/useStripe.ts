@@ -56,11 +56,12 @@ export const useStripe = (): StripeComposable => {
 
       stripe.value = stripeInstance
       elements.value = stripeInstance.elements()
-
-    } catch (err) {
+    }
+    catch (err) {
       error.value = err instanceof Error ? err.message : 'Failed to initialize Stripe'
       console.error('Stripe initialization error:', err)
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -82,12 +83,12 @@ export const useStripe = (): StripeComposable => {
       const cardElementInstance = elements.value.create('card', {
         style: {
           base: {
-            fontSize: '16px',
-            color: '#424770',
+            'fontSize': '16px',
+            'color': '#424770',
             '::placeholder': {
               color: '#aab7c4',
             },
-            fontFamily: 'system-ui, -apple-system, sans-serif',
+            'fontFamily': 'system-ui, -apple-system, sans-serif',
           },
           invalid: {
             color: '#9e2146',
@@ -104,15 +105,17 @@ export const useStripe = (): StripeComposable => {
       cardElementInstance.on('change', (event) => {
         if (event.error) {
           error.value = event.error.message
-        } else {
+        }
+        else {
           error.value = null
         }
       })
-
-    } catch (err) {
+    }
+    catch (err) {
       error.value = err instanceof Error ? err.message : 'Failed to create card element'
       console.error('Card element creation error:', err)
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -129,8 +132,8 @@ export const useStripe = (): StripeComposable => {
       const result = await stripe.value.confirmCardPayment(clientSecret, {
         payment_method: paymentData?.payment_method || {
           card: cardElement.value!,
-          billing_details: paymentData?.billing_details || {}
-        }
+          billing_details: paymentData?.billing_details || {},
+        },
       })
 
       if (result.error) {
@@ -139,12 +142,13 @@ export const useStripe = (): StripeComposable => {
       }
 
       return { success: true, paymentIntent: result.paymentIntent }
-
-    } catch (err) {
+    }
+    catch (err) {
       error.value = err instanceof Error ? err.message : 'Payment confirmation failed'
       console.error('Payment confirmation error:', err)
       return { success: false, error: err }
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -161,7 +165,7 @@ export const useStripe = (): StripeComposable => {
       const result = await stripe.value.createPaymentMethod({
         type: 'card',
         card: cardElement,
-        billing_details: billingDetails || {}
+        billing_details: billingDetails || {},
       })
 
       if (result.error) {
@@ -170,12 +174,13 @@ export const useStripe = (): StripeComposable => {
       }
 
       return { success: true, paymentMethod: result.paymentMethod }
-
-    } catch (err) {
+    }
+    catch (err) {
       error.value = err instanceof Error ? err.message : 'Failed to create payment method'
       console.error('Payment method creation error:', err)
       return { success: false, error: err }
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -189,7 +194,7 @@ export const useStripe = (): StripeComposable => {
     initializeStripe,
     createCardElement,
     confirmPayment,
-    createPaymentMethod
+    createPaymentMethod,
   }
 }
 

@@ -39,7 +39,7 @@ export interface ShippingMethod {
 export function calculateOrderTotals(
   cartItems: CartItem[],
   shippingMethod?: ShippingMethod,
-  shippingAddress?: any
+  shippingAddress?: any,
 ): OrderCalculation {
   // Calculate subtotal
   const subtotal = cartItems.reduce((sum, item) => {
@@ -63,7 +63,7 @@ export function calculateOrderTotals(
     shippingCost,
     tax,
     total,
-    items: cartItems
+    items: cartItems,
   }
 }
 
@@ -112,7 +112,7 @@ export function validateCartItems(cartItems: CartItem[]): {
       errors.push({
         productId: product.id,
         error: 'product_inactive',
-        message: 'Product is no longer available'
+        message: 'Product is no longer available',
       })
     }
 
@@ -123,7 +123,7 @@ export function validateCartItems(cartItems: CartItem[]): {
         error: 'insufficient_stock',
         message: 'Not enough stock available',
         availableQuantity: product.stock_quantity,
-        requestedQuantity: item.quantity
+        requestedQuantity: item.quantity,
       })
     }
 
@@ -132,14 +132,14 @@ export function validateCartItems(cartItems: CartItem[]): {
       errors.push({
         productId: product.id,
         error: 'invalid_quantity',
-        message: 'Quantity must be greater than 0'
+        message: 'Quantity must be greater than 0',
       })
     }
   }
 
   return {
     valid: errors.length === 0,
-    errors
+    errors,
   }
 }
 
@@ -158,7 +158,7 @@ export function generateOrderNumber(): string {
  */
 export function getAvailableShippingMethods(
   cartItems: CartItem[],
-  shippingAddress?: any
+  shippingAddress?: any,
 ): ShippingMethod[] {
   // Calculate total weight
   const totalWeight = cartItems.reduce((sum, item) => {
@@ -171,19 +171,19 @@ export function getAvailableShippingMethods(
       id: 'standard',
       name: 'Standard Shipping',
       price: 5.99,
-      estimatedDays: 5
+      estimatedDays: 5,
     },
     {
       id: 'express',
       name: 'Express Shipping',
       price: 12.99,
-      estimatedDays: 2
-    }
+      estimatedDays: 2,
+    },
   ]
 
   // Adjust pricing based on weight
   if (totalWeight > 5) {
-    methods.forEach(method => {
+    methods.forEach((method) => {
       method.price += Math.ceil((totalWeight - 5) / 2) * 2.50
     })
   }
@@ -198,7 +198,7 @@ export function getAvailableShippingMethods(
       id: 'free',
       name: 'Free Standard Shipping',
       price: 0,
-      estimatedDays: 7
+      estimatedDays: 7,
     })
   }
 
@@ -248,7 +248,7 @@ export function validateShippingAddress(address: any): {
 
   return {
     valid: Object.keys(errors).length === 0,
-    errors
+    errors,
   }
 }
 
@@ -257,14 +257,14 @@ export function validateShippingAddress(address: any): {
  */
 function validatePostalCode(postalCode: string, country: string): boolean {
   const patterns: Record<string, RegExp> = {
-    'ES': /^\d{5}$/,
-    'US': /^\d{5}(-\d{4})?$/,
-    'CA': /^[A-Z]\d[A-Z] \d[A-Z]\d$/,
-    'GB': /^[A-Z]{1,2}\d[A-Z\d]? \d[A-Z]{2}$/,
-    'DE': /^\d{5}$/,
-    'FR': /^\d{5}$/,
-    'IT': /^\d{5}$/,
-    'RO': /^\d{6}$/
+    ES: /^\d{5}$/,
+    US: /^\d{5}(-\d{4})?$/,
+    CA: /^[A-Z]\d[A-Z] \d[A-Z]\d$/,
+    GB: /^[A-Z]{1,2}\d[A-Z\d]? \d[A-Z]{2}$/,
+    DE: /^\d{5}$/,
+    FR: /^\d{5}$/,
+    IT: /^\d{5}$/,
+    RO: /^\d{6}$/,
   }
 
   const pattern = patterns[country.toUpperCase()]
@@ -281,7 +281,7 @@ export function formatOrderAddress(address: any): string {
     address.street || '',
     [address.city, address.province].filter(Boolean).join(', '),
     address.postalCode || '',
-    address.country || ''
+    address.country || '',
   ].filter(Boolean)
 
   return parts.join('\n')

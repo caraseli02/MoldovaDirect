@@ -6,7 +6,7 @@
 
 import { computed, type ComputedRef } from 'vue'
 import { useProductUtils } from './useProductUtils'
-import type { ProductWithRelations } from '~/types/database'
+import type { ProductWithRelations, Translations } from '~/types/database'
 
 interface StructuredDataOptions {
   productUrl: string
@@ -19,7 +19,7 @@ interface StructuredDataOptions {
 
 export function useProductDetailSEO(
   product: ComputedRef<(ProductWithRelations & { attributes?: Record<string, any> }) | null>,
-  options: ComputedRef<StructuredDataOptions>
+  options: ComputedRef<StructuredDataOptions>,
 ) {
   const { getLocalizedText, getCategoryLabel } = useProductUtils()
 
@@ -30,8 +30,8 @@ export function useProductDetailSEO(
     if (!product.value) return null
 
     const stockQuantity = product.value.stockQuantity || 0
-    const availabilityStatus =
-      stockQuantity > 0
+    const availabilityStatus
+      = stockQuantity > 0
         ? 'https://schema.org/InStock'
         : 'https://schema.org/OutOfStock'
 
@@ -39,44 +39,44 @@ export function useProductDetailSEO(
     const productImages = product.value.images?.map(img => img.url).filter(Boolean) || []
 
     // Get brand from attributes or use category as fallback
-    const brand =
-      options.value.brand ||
-      product.value.attributes?.brand ||
-      product.value.attributes?.producer ||
-      getCategoryLabel(product.value.category) ||
-      'Moldova Direct'
+    const brand
+      = options.value.brand
+        || product.value.attributes?.brand
+        || product.value.attributes?.producer
+        || getCategoryLabel(product.value.category)
+        || 'Moldova Direct'
 
     // Build Product structured data
     const data: Record<string, any> = {
       '@context': 'https://schema.org',
       '@type': 'Product',
-      name: getLocalizedText(product.value.name),
-      description:
-        getLocalizedText(product.value.description) ||
-        getLocalizedText(product.value.shortDescription),
-      image: productImages,
-      sku: product.value.sku,
-      brand: {
+      'name': getLocalizedText(product.value.name),
+      'description':
+        getLocalizedText(product.value.description)
+        || getLocalizedText(product.value.shortDescription),
+      'image': productImages,
+      'sku': product.value.sku,
+      'brand': {
         '@type': 'Brand',
-        name: brand
+        'name': brand,
       },
-      offers: {
+      'offers': {
         '@type': 'Offer',
-        url: options.value.productUrl,
-        priceCurrency: 'EUR',
-        price: Number(product.value.price).toFixed(2),
-        priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1))
+        'url': options.value.productUrl,
+        'priceCurrency': 'EUR',
+        'price': Number(product.value.price).toFixed(2),
+        'priceValidUntil': new Date(new Date().setFullYear(new Date().getFullYear() + 1))
           .toISOString()
           .split('T')[0],
-        availability: availabilityStatus,
-        itemCondition: 'https://schema.org/NewCondition'
-      }
+        'availability': availabilityStatus,
+        'itemCondition': 'https://schema.org/NewCondition',
+      },
     }
 
     // Add compare price if available
     if (
-      product.value.comparePrice &&
-      Number(product.value.comparePrice) > Number(product.value.price)
+      product.value.comparePrice
+      && Number(product.value.comparePrice) > Number(product.value.price)
     ) {
       data.offers.priceType = 'https://schema.org/SalePrice'
     }
@@ -86,10 +86,10 @@ export function useProductDetailSEO(
     if (rating && rating.count > 0) {
       data.aggregateRating = {
         '@type': 'AggregateRating',
-        ratingValue: rating.rating.toString(),
-        reviewCount: rating.count.toString(),
-        bestRating: '5',
-        worstRating: '1'
+        'ratingValue': rating.rating.toString(),
+        'reviewCount': rating.count.toString(),
+        'bestRating': '5',
+        'worstRating': '1',
       }
     }
 
@@ -97,15 +97,15 @@ export function useProductDetailSEO(
     if (product.value.origin) {
       data.countryOfOrigin = {
         '@type': 'Country',
-        name: product.value.origin
+        'name': product.value.origin,
       }
     }
 
-    if (product.value.weight) {
+    if (product.value.weightKg) {
       data.weight = {
         '@type': 'QuantitativeValue',
-        value: product.value.weight,
-        unitCode: 'KGM'
+        'value': product.value.weightKg,
+        'unitCode': 'KGM',
       }
     }
 
@@ -127,37 +127,36 @@ export function useProductDetailSEO(
       {
         name: 'description',
         content:
-          getLocalizedText(product.value.metaDescription) ||
-          getLocalizedText(product.value.shortDescription) ||
-          getLocalizedText(product.value.description) ||
-          `${getLocalizedText(product.value.name)} - Authentic Moldovan product`
+          getLocalizedText(product.value.description)
+          || getLocalizedText(product.value.shortDescription)
+          || `${getLocalizedText(product.value.name)} - Authentic Moldovan product`,
       },
       {
         property: 'og:title',
-        content: getLocalizedText(product.value.name)
+        content: getLocalizedText(product.value.name),
       },
       {
         property: 'og:description',
         content:
-          getLocalizedText(product.value.shortDescription) ||
-          getLocalizedText(product.value.description)
+          getLocalizedText(product.value.shortDescription)
+          || getLocalizedText(product.value.description),
       },
       {
         property: 'og:image',
-        content: product.value.images?.[0]?.url
+        content: product.value.images?.[0]?.url,
       },
       {
         property: 'og:type',
-        content: 'product'
+        content: 'product',
       },
       {
         property: 'product:price:amount',
-        content: product.value.price
+        content: product.value.price,
       },
       {
         property: 'product:price:currency',
-        content: 'EUR'
-      }
+        content: 'EUR',
+      },
     ]
   })
 
@@ -172,6 +171,6 @@ export function useProductDetailSEO(
   return {
     structuredData,
     metaTags,
-    pageTitle
+    pageTitle,
   }
 }

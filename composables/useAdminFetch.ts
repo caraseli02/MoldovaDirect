@@ -29,7 +29,7 @@ import type { FetchOptions } from 'ofetch'
  */
 export async function useAdminFetch<T = unknown>(
   url: string,
-  options: FetchOptions = {}
+  options: FetchOptions<'json'> = {},
 ): Promise<T> {
   // Get Supabase client from composable context
   const supabase = useSupabaseClient()
@@ -41,14 +41,14 @@ export async function useAdminFetch<T = unknown>(
     console.error('[useAdminFetch] No active session')
     throw createError({
       statusCode: 401,
-      statusMessage: 'Session expired. Please log in again.'
+      statusMessage: 'Session expired. Please log in again.',
     })
   }
 
   // Prepare headers with Bearer token
   const headers = {
     ...options.headers,
-    'Authorization': `Bearer ${session.access_token}`
+    Authorization: `Bearer ${session.access_token}`,
   }
 
   console.log('[useAdminFetch] Making request to:', url, 'with Bearer token')
@@ -57,6 +57,6 @@ export async function useAdminFetch<T = unknown>(
   // Note: We use $fetch here which works in component context
   return await $fetch<T>(url, {
     ...options,
-    headers
-  })
+    headers,
+  } as any) as T
 }

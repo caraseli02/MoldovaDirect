@@ -28,11 +28,18 @@
             <div
               class="flex h-12 w-12 items-center justify-center rounded-full bg-primary-100 text-primary-600 dark:bg-primary-500/20 dark:text-primary-400"
             >
-              <commonIcon :name="badge.icon" class="h-6 w-6" />
+              <commonIcon
+                :name="badge.icon"
+                class="h-6 w-6"
+              />
             </div>
             <div>
-              <h3 class="font-semibold text-gray-900 dark:text-white">{{ badge.title }}</h3>
-              <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{{ badge.description }}</p>
+              <h3 class="font-semibold text-gray-900 dark:text-white">
+                {{ badge.title }}
+              </h3>
+              <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                {{ badge.description }}
+              </p>
             </div>
           </div>
         </div>
@@ -97,7 +104,10 @@
                 }"
                 class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300"
               >
-                <commonIcon :name="security.icon" class="h-5 w-5 text-green-600 dark:text-green-500" />
+                <commonIcon
+                  :name="security.icon"
+                  class="h-5 w-5 text-green-600 dark:text-green-500"
+                />
                 <span class="font-medium">{{ security.name }}</span>
               </div>
             </div>
@@ -124,7 +134,10 @@
             class="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
           >
             {{ t('home.trustBadges.contactUs') }}
-            <commonIcon name="lucide:arrow-right" class="h-4 w-4" />
+            <commonIcon
+              name="lucide:arrow-right"
+              class="h-4 w-4"
+            />
           </NuxtLink>
         </div>
       </div>
@@ -162,23 +175,23 @@ withDefaults(
       {
         title: 'Free Shipping',
         description: 'On orders over €50',
-        icon: 'lucide:truck'
+        icon: 'lucide:truck',
       },
       {
         title: '30-Day Returns',
         description: 'Money-back guarantee',
-        icon: 'lucide:rotate-ccw'
+        icon: 'lucide:rotate-ccw',
       },
       {
         title: 'Secure Payment',
         description: 'SSL encrypted checkout',
-        icon: 'lucide:shield-check'
+        icon: 'lucide:shield-check',
       },
       {
         title: '24/7 Support',
         description: 'We\'re here to help',
-        icon: 'lucide:headphones'
-      }
+        icon: 'lucide:headphones',
+      },
     ],
     paymentMethods: () => [
       { name: 'Visa', icon: 'lucide:credit-card' },
@@ -186,14 +199,14 @@ withDefaults(
       { name: 'PayPal', icon: 'lucide:wallet' },
       { name: 'Apple Pay', icon: 'lucide:apple' },
       { name: 'Google Pay', icon: 'lucide:smartphone' },
-      { name: 'Bank Transfer', icon: 'lucide:landmark' }
+      { name: 'Bank Transfer', icon: 'lucide:landmark' },
     ],
     securityBadges: () => [
       { name: 'SSL Secure', icon: 'lucide:lock' },
       { name: 'PCI Compliant', icon: 'lucide:shield' },
-      { name: 'GDPR Protected', icon: 'lucide:shield-check' }
-    ]
-  }
+      { name: 'GDPR Protected', icon: 'lucide:shield-check' },
+    ],
+  },
 )
 
 const { t } = useI18n()

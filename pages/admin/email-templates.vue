@@ -1,11 +1,11 @@
 <!--
   Email Template Management Page
-  
+
   Requirements addressed:
   - 5.1: Edit email template HTML and styling
   - 5.2: Preview function to test email appearance
   - 5.4: Validate HTML structure and warn about rendering issues
-  
+
   Admin page for managing email templates across all locales
 -->
 
@@ -35,7 +35,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: 'admin',
-  middleware: ['auth', 'admin']
+  middleware: ['auth', 'admin'],
 })
 
 // Lazy load admin email template component to reduce main bundle size
@@ -45,7 +45,7 @@ useHead({
   title: 'Email Templates - Admin - Moldova Direct',
   meta: [
     { name: 'description', content: 'Manage email templates for order notifications' },
-    { name: 'robots', content: 'noindex, nofollow' }
-  ]
+    { name: 'robots', content: 'noindex, nofollow' },
+  ],
 })
 </script>

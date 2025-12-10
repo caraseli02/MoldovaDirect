@@ -49,7 +49,7 @@ test.describe('Login Flow', () => {
       // Verify remember me preference is set in storage
       const cookies = await page.context().cookies()
       const hasAuthCookie = cookies.some(cookie =>
-        cookie.name.includes('auth') && cookie.expires && cookie.expires > Date.now() / 1000
+        cookie.name.includes('auth') && cookie.expires && cookie.expires > Date.now() / 1000,
       )
       expect(hasAuthCookie).toBeTruthy()
     })
@@ -331,7 +331,7 @@ test.describe('Login Flow', () => {
     test('should not expose password in network requests', async ({ page, testUser }) => {
       const requests: string[] = []
 
-      page.on('request', request => {
+      page.on('request', (request) => {
         requests.push(request.url())
       })
 
@@ -343,7 +343,7 @@ test.describe('Login Flow', () => {
       await page.waitForTimeout(2000)
 
       // Verify password is not in URL
-      requests.forEach(url => {
+      requests.forEach((url) => {
         expect(url.toLowerCase()).not.toContain(testUser.password.toLowerCase())
       })
     })

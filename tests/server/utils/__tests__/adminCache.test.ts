@@ -12,6 +12,17 @@
 
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
 
+// Import mocked modules
+import { getQuery } from 'h3'
+import { useStorage } from '#nitro'
+
+// Import the module under test
+import {
+  getAdminCacheKey,
+  invalidateAdminCache,
+  invalidateMultipleScopes,
+} from '../../../../server/utils/adminCache'
+
 // Mock h3 before importing modules that use it
 vi.mock('h3', async () => {
   return {
@@ -24,7 +35,7 @@ vi.mock('h3', async () => {
       err.statusCode = error.statusCode
       err.statusMessage = error.statusMessage
       return err
-    })
+    }),
   }
 })
 
@@ -35,21 +46,10 @@ vi.mock('#nitro', async () => {
       getKeys: vi.fn().mockResolvedValue([]),
       removeItem: vi.fn().mockResolvedValue(undefined),
       getItem: vi.fn().mockResolvedValue(null),
-      setItem: vi.fn().mockResolvedValue(undefined)
-    }))
+      setItem: vi.fn().mockResolvedValue(undefined),
+    })),
   }
 })
-
-// Import mocked modules
-import { getQuery } from 'h3'
-import { useStorage } from '#nitro'
-
-// Import the module under test
-import {
-  getAdminCacheKey,
-  invalidateAdminCache,
-  invalidateMultipleScopes
-} from '../../../../server/utils/adminCache'
 
 // Get the mock function for manipulation in tests
 const mockGetQuery = getQuery as ReturnType<typeof vi.fn>
@@ -71,7 +71,7 @@ describe('adminCache', () => {
       getKeys: vi.fn(),
       removeItem: vi.fn(),
       getItem: vi.fn(),
-      setItem: vi.fn()
+      setItem: vi.fn(),
     }
 
     // Setup useStorage mock
@@ -107,7 +107,7 @@ describe('adminCache', () => {
         mockGetQuery.mockReturnValue({
           page: '1',
           limit: '10',
-          search: 'wine'
+          search: 'wine',
         })
 
         const key = getAdminCacheKey('admin-products-list', mockEvent as H3Event)
@@ -136,7 +136,7 @@ describe('adminCache', () => {
           status: 'active',
           category: 'wine',
           brand: 'test',
-          page: '1'
+          page: '1',
         })
 
         const key = getAdminCacheKey('admin-products-list', mockEvent as H3Event)
@@ -152,7 +152,7 @@ describe('adminCache', () => {
           limit: '10',
           malicious_param: 'hack',
           unknown_param: 'value',
-          search: 'wine'
+          search: 'wine',
         })
 
         const key = getAdminCacheKey('admin-products-list', mockEvent as H3Event)
@@ -171,7 +171,7 @@ describe('adminCache', () => {
           date_from: '2024-01-01',
           date_to: '2024-12-31',
           amount_min: '10',
-          amount_max: '100'
+          amount_max: '100',
         })
 
         const key = getAdminCacheKey('admin-orders-list', mockEvent as H3Event)
@@ -190,7 +190,7 @@ describe('adminCache', () => {
           order: 'desc',
           category: 'wine',
           brand: 'test-brand',
-          priority: 'high'
+          priority: 'high',
         })
 
         const key = getAdminCacheKey('admin-products-list', mockEvent as H3Event)
@@ -206,7 +206,7 @@ describe('adminCache', () => {
         mockGetQuery.mockReturnValue({
           in_stock: 'true',
           featured: 'false',
-          email_verified: 'true'
+          email_verified: 'true',
         })
 
         const key = getAdminCacheKey('admin-products-list', mockEvent as H3Event)
@@ -220,7 +220,7 @@ describe('adminCache', () => {
     describe('Query parameter sanitization', () => {
       it('should remove special characters from query values', () => {
         mockGetQuery.mockReturnValue({
-          search: 'wine<script>alert("xss")</script>'
+          search: 'wine<script>alert("xss")</script>',
         })
 
         const key = getAdminCacheKey('admin-products-list', mockEvent as H3Event)
@@ -232,7 +232,7 @@ describe('adminCache', () => {
 
       it('should preserve alphanumeric characters', () => {
         mockGetQuery.mockReturnValue({
-          search: 'Wine123Test'
+          search: 'Wine123Test',
         })
 
         const key = getAdminCacheKey('admin-products-list', mockEvent as H3Event)
@@ -242,7 +242,7 @@ describe('adminCache', () => {
 
       it('should preserve allowed special characters', () => {
         mockGetQuery.mockReturnValue({
-          search: 'test-name_value.com@email+tag'
+          search: 'test-name_value.com@email+tag',
         })
 
         const key = getAdminCacheKey('admin-products-list', mockEvent as H3Event)
@@ -252,7 +252,7 @@ describe('adminCache', () => {
 
       it('should preserve spaces in query values', () => {
         mockGetQuery.mockReturnValue({
-          search: 'red wine vintage'
+          search: 'red wine vintage',
         })
 
         const key = getAdminCacheKey('admin-products-list', mockEvent as H3Event)
@@ -263,7 +263,7 @@ describe('adminCache', () => {
       it('should truncate excessively long query values', () => {
         const longValue = 'a'.repeat(250) // Exceeds MAX_QUERY_VALUE_LENGTH (200)
         mockGetQuery.mockReturnValue({
-          search: longValue
+          search: longValue,
         })
 
         const key = getAdminCacheKey('admin-products-list', mockEvent as H3Event)
@@ -277,7 +277,7 @@ describe('adminCache', () => {
         mockGetQuery.mockReturnValue({
           page: '1',
           search: null,
-          limit: undefined
+          limit: undefined,
         })
 
         const key = getAdminCacheKey('admin-products-list', mockEvent as H3Event)
@@ -291,7 +291,7 @@ describe('adminCache', () => {
         mockGetQuery.mockReturnValue({
           page: '1',
           search: '',
-          status: 'active'
+          status: 'active',
         })
 
         const key = getAdminCacheKey('admin-products-list', mockEvent as H3Event)
@@ -305,7 +305,7 @@ describe('adminCache', () => {
     describe('Security - Cache key injection prevention', () => {
       it('should prevent SQL injection attempts in query params', () => {
         mockGetQuery.mockReturnValue({
-          search: "'; DROP TABLE products; --"
+          search: '\'; DROP TABLE products; --',
         })
 
         const key = getAdminCacheKey('admin-products-list', mockEvent as H3Event)
@@ -319,7 +319,7 @@ describe('adminCache', () => {
 
       it('should prevent cache key collision with special characters', () => {
         mockGetQuery.mockReturnValue({
-          search: '?page=99&admin=true'
+          search: '?page=99&admin=true',
         })
 
         const key = getAdminCacheKey('admin-products-list', mockEvent as H3Event)
@@ -332,7 +332,7 @@ describe('adminCache', () => {
 
       it('should prevent path traversal attempts', () => {
         mockGetQuery.mockReturnValue({
-          search: '../../../etc/passwd'
+          search: '../../../etc/passwd',
         })
 
         const key = getAdminCacheKey('admin-products-list', mockEvent as H3Event)
@@ -343,7 +343,7 @@ describe('adminCache', () => {
 
       it('should prevent XSS attempts in cache keys', () => {
         mockGetQuery.mockReturnValue({
-          search: '<img src=x onerror=alert(1)>'
+          search: '<img src=x onerror=alert(1)>',
         })
 
         const key = getAdminCacheKey('admin-products-list', mockEvent as H3Event)
@@ -359,7 +359,7 @@ describe('adminCache', () => {
 
       it('should prevent command injection attempts', () => {
         mockGetQuery.mockReturnValue({
-          search: '$(rm -rf /)'
+          search: '$(rm -rf /)',
         })
 
         const key = getAdminCacheKey('admin-products-list', mockEvent as H3Event)
@@ -380,7 +380,7 @@ describe('adminCache', () => {
         mockStorage.getKeys.mockResolvedValue([
           'admin-products-list',
           'admin-product-123',
-          'admin-orders-list'
+          'admin-orders-list',
         ])
         mockStorage.removeItem.mockResolvedValue(undefined)
 
@@ -397,7 +397,7 @@ describe('adminCache', () => {
         mockStorage.getKeys.mockResolvedValue([
           'admin-dashboard-stats',
           'admin-stats',
-          'admin-orders-list'
+          'admin-orders-list',
         ])
         mockStorage.removeItem.mockResolvedValue(undefined)
 
@@ -415,7 +415,7 @@ describe('adminCache', () => {
           'admin-orders-list',
           'admin-order-123',
           'admin-order-456',
-          'admin-products-list'
+          'admin-products-list',
         ])
         mockStorage.removeItem.mockResolvedValue(undefined)
 
@@ -433,7 +433,7 @@ describe('adminCache', () => {
         mockStorage.getKeys.mockResolvedValue([
           'admin-users-list',
           'admin-user-abc',
-          'admin-products-list'
+          'admin-products-list',
         ])
         mockStorage.removeItem.mockResolvedValue(undefined)
 
@@ -448,7 +448,7 @@ describe('adminCache', () => {
           'admin-analytics-overview',
           'admin-analytics-users',
           'admin-analytics-products',
-          'admin-products-list'
+          'admin-products-list',
         ])
         mockStorage.removeItem.mockResolvedValue(undefined)
 
@@ -464,7 +464,7 @@ describe('adminCache', () => {
       it('should invalidate audit-logs scope', async () => {
         mockStorage.getKeys.mockResolvedValue([
           'admin-audit-logs',
-          'admin-email-logs'
+          'admin-email-logs',
         ])
         mockStorage.removeItem.mockResolvedValue(undefined)
 
@@ -479,7 +479,7 @@ describe('adminCache', () => {
       it('should invalidate email-logs scope', async () => {
         mockStorage.getKeys.mockResolvedValue([
           'admin-email-logs',
-          'admin-audit-logs'
+          'admin-audit-logs',
         ])
         mockStorage.removeItem.mockResolvedValue(undefined)
 
@@ -494,7 +494,7 @@ describe('adminCache', () => {
         mockStorage.getKeys.mockResolvedValue([
           'admin-inventory-reports',
           'admin-inventory-movements',
-          'admin-products-list'
+          'admin-products-list',
         ])
         mockStorage.removeItem.mockResolvedValue(undefined)
 
@@ -513,7 +513,7 @@ describe('adminCache', () => {
           'admin-orders-list',
           'admin-dashboard-stats',
           'admin-users-list',
-          'public-cache-key' // Should not be removed
+          'public-cache-key', // Should not be removed
         ])
         mockStorage.removeItem.mockResolvedValue(undefined)
 
@@ -582,7 +582,7 @@ describe('adminCache', () => {
         mockStorage.getKeys.mockResolvedValue([
           'admin-product-1',
           'admin-product-2',
-          'admin-product-3'
+          'admin-product-3',
         ])
 
         // First two calls succeed, third fails
@@ -608,7 +608,7 @@ describe('adminCache', () => {
         expect(result).toMatchObject({
           success: true,
           scope: 'products',
-          keysInvalidated: expect.any(Number)
+          keysInvalidated: expect.any(Number),
         })
         expect(result.error).toBeUndefined()
       })
@@ -621,7 +621,7 @@ describe('adminCache', () => {
         expect(result).toMatchObject({
           success: false,
           scope: 'products',
-          error: 'Test error'
+          error: 'Test error',
         })
         expect(result.keysInvalidated).toBeUndefined()
       })
@@ -634,7 +634,7 @@ describe('adminCache', () => {
         mockStorage.getKeys.mockResolvedValue([
           'admin-products-list',
           'admin-orders-list',
-          'admin-dashboard-stats'
+          'admin-dashboard-stats',
         ])
         mockStorage.removeItem.mockResolvedValue(undefined)
 
@@ -651,7 +651,7 @@ describe('adminCache', () => {
         mockStorage.getKeys.mockResolvedValue([
           'admin-orders-list',
           'admin-dashboard-stats',
-          'admin-stats'
+          'admin-stats',
         ])
         mockStorage.removeItem.mockResolvedValue(undefined)
 
@@ -686,7 +686,7 @@ describe('adminCache', () => {
           'admin-analytics-overview',
           'admin-audit-logs',
           'admin-email-logs',
-          'admin-inventory-reports'
+          'admin-inventory-reports',
         ])
         mockStorage.removeItem.mockResolvedValue(undefined)
 
@@ -697,7 +697,7 @@ describe('adminCache', () => {
           'analytics',
           'audit-logs',
           'email-logs',
-          'inventory'
+          'inventory',
         ])
 
         expect(results).toHaveLength(7)
@@ -744,7 +744,7 @@ describe('adminCache', () => {
         const startTime = Date.now()
 
         mockStorage.getKeys.mockImplementation(() =>
-          new Promise(resolve => setTimeout(() => resolve([]), 50))
+          new Promise(resolve => setTimeout(() => resolve([]), 50)),
         )
 
         await invalidateMultipleScopes(['products', 'orders', 'users'])
@@ -784,7 +784,7 @@ describe('adminCache', () => {
         const long2 = 'y'.repeat(200)
         mockGetQuery.mockReturnValue({
           search: long1,
-          category: long2
+          category: long2,
         })
 
         const key = getAdminCacheKey('admin-products-list', mockEvent as H3Event)
@@ -797,7 +797,7 @@ describe('adminCache', () => {
     describe('Unicode and special characters', () => {
       it('should sanitize unicode characters for security', () => {
         mockGetQuery.mockReturnValue({
-          search: 'café résumé naïve'
+          search: 'café résumé naïve',
         })
 
         const key = getAdminCacheKey('admin-products-list', mockEvent as H3Event)
@@ -811,7 +811,7 @@ describe('adminCache', () => {
 
       it('should sanitize emoji for security', () => {
         mockGetQuery.mockReturnValue({
-          search: 'wine 🍷 product'
+          search: 'wine 🍷 product',
         })
 
         const key = getAdminCacheKey('admin-products-list', mockEvent as H3Event)
@@ -826,7 +826,7 @@ describe('adminCache', () => {
 
       it('should sanitize non-Latin characters for security', () => {
         mockGetQuery.mockReturnValue({
-          search: 'Вино 日本酒 와인'
+          search: 'Вино 日本酒 와인',
         })
 
         const key = getAdminCacheKey('admin-products-list', mockEvent as H3Event)
@@ -856,7 +856,7 @@ describe('adminCache', () => {
           sort_by: 'price',
           order: 'desc',
           amount_min: '10',
-          amount_max: '100'
+          amount_max: '100',
         })
 
         const key = getAdminCacheKey('admin-products-list', mockEvent as H3Event)
@@ -874,7 +874,7 @@ describe('adminCache', () => {
         mockGetQuery.mockReturnValue({
           date_from: '2024-01-01T00:00:00Z',
           date_to: '2024-12-31T23:59:59Z',
-          page: '1'
+          page: '1',
         })
 
         const key = getAdminCacheKey('admin-orders-list', mockEvent as H3Event)

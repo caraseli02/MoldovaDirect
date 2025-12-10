@@ -56,7 +56,8 @@ export function useDashboardCharts(stats: Ref<DashboardStats | null>) {
       if (index === 0) {
         revenueSeries.push(Math.round(revenueToday))
         customerSeries.push(Math.round(newUsersToday))
-      } else {
+      }
+      else {
         const weight = 0.7 + ((CHART_DAYS - 1 - index) / (CHART_DAYS - 1)) * 0.2
         revenueSeries.push(Math.round(revenueAverage * weight))
         customerSeries.push(Math.round(customerAverage * weight))
@@ -70,7 +71,7 @@ export function useDashboardCharts(stats: Ref<DashboardStats | null>) {
       revenueAverage,
       customerAverage,
       revenueToday,
-      newUsersToday
+      newUsersToday,
     }
   })
 
@@ -87,7 +88,7 @@ export function useDashboardCharts(stats: Ref<DashboardStats | null>) {
       value: formatCurrency(todayValue),
       delta: formatDelta(delta),
       caption: average ? `Average daily revenue ${formatCurrency(average)}` : 'Awaiting sales data',
-      direction: resolveDirection(delta)
+      direction: resolveDirection(delta),
     }
   })
 
@@ -104,13 +105,13 @@ export function useDashboardCharts(stats: Ref<DashboardStats | null>) {
       value: `${formatNumber(todayValue)} new customers`,
       delta: formatDelta(delta),
       caption: average ? `Average daily sign-ups ${formatNumber(Math.round(average))}` : 'Awaiting sign-up data',
-      direction: resolveDirection(delta)
+      direction: resolveDirection(delta),
     }
   })
 
   return {
     comparisonDataset,
     revenueSummary,
-    customerSummary
+    customerSummary,
   }
 }

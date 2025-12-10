@@ -56,7 +56,7 @@ async function createAuthTestUser(
   supabase: SupabaseClient,
   email: string,
   role: 'admin' | 'user' = 'user',
-  password = 'TestPassword123!'
+  password = 'TestPassword123!',
 ): Promise<TestAuthUser> {
   const { data, error } = await supabase.auth.admin.createUser({
     email,
@@ -93,7 +93,7 @@ async function createAuthTestUser(
  */
 async function cleanupAuthTestUser(
   supabase: SupabaseClient,
-  userId: string
+  userId: string,
 ): Promise<void> {
   await supabase.from('profiles').delete().eq('id', userId)
   await supabase.auth.admin.deleteUser(userId)
@@ -124,7 +124,8 @@ describe('Admin Authentication Integration Tests', () => {
     for (const user of testUsers) {
       try {
         await cleanupAuthTestUser(supabase, user.id)
-      } catch (error) {
+      }
+      catch (error) {
         console.warn(`Failed to cleanup user ${user.id}:`, error)
       }
     }
@@ -136,7 +137,7 @@ describe('Admin Authentication Integration Tests', () => {
 
       const response = await fetch('http://localhost:3000/api/admin/dashboard/stats', {
         headers: {
-          'Authorization': `Bearer ${expiredToken}`,
+          Authorization: `Bearer ${expiredToken}`,
         },
       })
 
@@ -153,7 +154,7 @@ describe('Admin Authentication Integration Tests', () => {
       const adminUser = await createAuthTestUser(
         supabase,
         `admin-session-${Date.now()}@test.example`,
-        'admin'
+        'admin',
       )
       testUsers.push(adminUser)
 
@@ -162,7 +163,7 @@ describe('Admin Authentication Integration Tests', () => {
 
       const response = await fetch('http://localhost:3000/api/admin/orders', {
         headers: {
-          'Authorization': `Bearer ${expiredToken}`,
+          Authorization: `Bearer ${expiredToken}`,
         },
         redirect: 'manual',
       })
@@ -176,7 +177,7 @@ describe('Admin Authentication Integration Tests', () => {
 
       const response = await fetch('http://localhost:3000/api/admin/users', {
         headers: {
-          'Authorization': `Bearer ${expiredToken}`,
+          Authorization: `Bearer ${expiredToken}`,
         },
       })
 
@@ -193,14 +194,14 @@ describe('Admin Authentication Integration Tests', () => {
       const adminUser = await createAuthTestUser(
         supabase,
         `admin-refresh-${Date.now()}@test.example`,
-        'admin'
+        'admin',
       )
       testUsers.push(adminUser)
 
       // Use fresh token
       const response = await fetch('http://localhost:3000/api/admin/dashboard/stats', {
         headers: {
-          'Authorization': `Bearer ${adminUser.access_token}`,
+          Authorization: `Bearer ${adminUser.access_token}`,
         },
       })
 
@@ -213,7 +214,7 @@ describe('Admin Authentication Integration Tests', () => {
       const adminUser = await createAuthTestUser(
         supabase,
         `admin-long-session-${Date.now()}@test.example`,
-        'admin'
+        'admin',
       )
       testUsers.push(adminUser)
 
@@ -230,7 +231,7 @@ describe('Admin Authentication Integration Tests', () => {
         // New token should work
         const response = await fetch('http://localhost:3000/api/admin/users', {
           headers: {
-            'Authorization': `Bearer ${data.session?.access_token}`,
+            Authorization: `Bearer ${data.session?.access_token}`,
           },
         })
 
@@ -255,14 +256,14 @@ describe('Admin Authentication Integration Tests', () => {
       const adminUser = await createAuthTestUser(
         supabase,
         `admin-no-mfa-${Date.now()}@moldovadirect.com`,
-        'admin'
+        'admin',
       )
       testUsers.push(adminUser)
 
       // In development, @moldovadirect.com emails bypass MFA (per middleware/admin.ts:62)
       const response = await fetch('http://localhost:3000/api/admin/dashboard/stats', {
         headers: {
-          'Authorization': `Bearer ${adminUser.access_token}`,
+          Authorization: `Bearer ${adminUser.access_token}`,
         },
       })
 
@@ -275,7 +276,7 @@ describe('Admin Authentication Integration Tests', () => {
       const adminUser = await createAuthTestUser(
         supabase,
         `admin-mfa-check-${Date.now()}@test.example`,
-        'admin'
+        'admin',
       )
       testUsers.push(adminUser)
 
@@ -299,14 +300,14 @@ describe('Admin Authentication Integration Tests', () => {
       const adminUser = await createAuthTestUser(
         supabase,
         `admin-mfa-verify-${Date.now()}@external.com`,
-        'admin'
+        'admin',
       )
       testUsers.push(adminUser)
 
       // Make request to admin endpoint
       const response = await fetch('http://localhost:3000/api/admin/users', {
         headers: {
-          'Authorization': `Bearer ${adminUser.access_token}`,
+          Authorization: `Bearer ${adminUser.access_token}`,
         },
       })
 
@@ -320,7 +321,7 @@ describe('Admin Authentication Integration Tests', () => {
       const regularUser = await createAuthTestUser(
         supabase,
         `user-escalation-${Date.now()}@test.example`,
-        'user'
+        'user',
       )
       testUsers.push(regularUser)
 
@@ -328,7 +329,7 @@ describe('Admin Authentication Integration Tests', () => {
       // Even if client claims to be admin, server should check DB
       const response = await fetch('http://localhost:3000/api/admin/orders', {
         headers: {
-          'Authorization': `Bearer ${regularUser.access_token}`,
+          Authorization: `Bearer ${regularUser.access_token}`,
         },
       })
 
@@ -343,7 +344,7 @@ describe('Admin Authentication Integration Tests', () => {
       const regularUser = await createAuthTestUser(
         supabase,
         `user-localstorage-${Date.now()}@test.example`,
-        'user'
+        'user',
       )
       testUsers.push(regularUser)
 
@@ -365,14 +366,14 @@ describe('Admin Authentication Integration Tests', () => {
       const adminUser = await createAuthTestUser(
         supabase,
         `admin-role-verify-${Date.now()}@test.example`,
-        'admin'
+        'admin',
       )
       testUsers.push(adminUser)
 
       // First request succeeds (admin role)
       const response1 = await fetch('http://localhost:3000/api/admin/users', {
         headers: {
-          'Authorization': `Bearer ${adminUser.access_token}`,
+          Authorization: `Bearer ${adminUser.access_token}`,
         },
       })
       expect(response1.status).not.toBe(403)
@@ -386,7 +387,7 @@ describe('Admin Authentication Integration Tests', () => {
       // Second request should fail (role changed)
       const response2 = await fetch('http://localhost:3000/api/admin/users', {
         headers: {
-          'Authorization': `Bearer ${adminUser.access_token}`,
+          Authorization: `Bearer ${adminUser.access_token}`,
         },
       })
       expect(response2.status).toBe(403)
@@ -396,7 +397,7 @@ describe('Admin Authentication Integration Tests', () => {
       const orphanUser = await createAuthTestUser(
         supabase,
         `orphan-${Date.now()}@test.example`,
-        'admin'
+        'admin',
       )
       testUsers.push(orphanUser)
 
@@ -406,7 +407,7 @@ describe('Admin Authentication Integration Tests', () => {
       // Should be rejected (no profile)
       const response = await fetch('http://localhost:3000/api/admin/orders', {
         headers: {
-          'Authorization': `Bearer ${orphanUser.access_token}`,
+          Authorization: `Bearer ${orphanUser.access_token}`,
         },
       })
 
@@ -421,20 +422,20 @@ describe('Admin Authentication Integration Tests', () => {
       const adminUser = await createAuthTestUser(
         supabase,
         `admin-concurrent-${Date.now()}@test.example`,
-        'admin'
+        'admin',
       )
       testUsers.push(adminUser)
 
       // Simulate concurrent requests from different tabs
       const requests = [
         fetch('http://localhost:3000/api/admin/users', {
-          headers: { 'Authorization': `Bearer ${adminUser.access_token}` },
+          headers: { Authorization: `Bearer ${adminUser.access_token}` },
         }),
         fetch('http://localhost:3000/api/admin/products', {
-          headers: { 'Authorization': `Bearer ${adminUser.access_token}` },
+          headers: { Authorization: `Bearer ${adminUser.access_token}` },
         }),
         fetch('http://localhost:3000/api/admin/orders', {
-          headers: { 'Authorization': `Bearer ${adminUser.access_token}` },
+          headers: { Authorization: `Bearer ${adminUser.access_token}` },
         }),
       ]
 
@@ -451,18 +452,18 @@ describe('Admin Authentication Integration Tests', () => {
       const adminUser = await createAuthTestUser(
         supabase,
         `admin-session-validity-${Date.now()}@test.example`,
-        'admin'
+        'admin',
       )
       testUsers.push(adminUser)
 
       // First operation
       const response1 = await fetch('http://localhost:3000/api/admin/dashboard/stats', {
-        headers: { 'Authorization': `Bearer ${adminUser.access_token}` },
+        headers: { Authorization: `Bearer ${adminUser.access_token}` },
       })
 
       // Second operation (should still work)
       const response2 = await fetch('http://localhost:3000/api/admin/dashboard/stats', {
-        headers: { 'Authorization': `Bearer ${adminUser.access_token}` },
+        headers: { Authorization: `Bearer ${adminUser.access_token}` },
       })
 
       expect(response1.status).toBe(response2.status)
@@ -473,13 +474,13 @@ describe('Admin Authentication Integration Tests', () => {
       const adminUser = await createAuthTestUser(
         supabase,
         `admin-logout-${Date.now()}@test.example`,
-        'admin'
+        'admin',
       )
       testUsers.push(adminUser)
 
       // Verify session works
       const response1 = await fetch('http://localhost:3000/api/admin/users', {
-        headers: { 'Authorization': `Bearer ${adminUser.access_token}` },
+        headers: { Authorization: `Bearer ${adminUser.access_token}` },
       })
       expect(response1.status).not.toBe(401)
 
@@ -488,7 +489,7 @@ describe('Admin Authentication Integration Tests', () => {
 
       // Token should no longer work
       const response2 = await fetch('http://localhost:3000/api/admin/users', {
-        headers: { 'Authorization': `Bearer ${adminUser.access_token}` },
+        headers: { Authorization: `Bearer ${adminUser.access_token}` },
       })
       expect(response2.status).toBe(401)
     })
@@ -499,14 +500,14 @@ describe('Admin Authentication Integration Tests', () => {
       const adminUser = await createAuthTestUser(
         supabase,
         `admin-precedence-${Date.now()}@test.example`,
-        'admin'
+        'admin',
       )
       testUsers.push(adminUser)
 
       const regularUser = await createAuthTestUser(
         supabase,
         `user-precedence-${Date.now()}@test.example`,
-        'user'
+        'user',
       )
       testUsers.push(regularUser)
 
@@ -516,9 +517,9 @@ describe('Admin Authentication Integration Tests', () => {
 
       const response = await fetch('http://localhost:3000/api/admin/orders', {
         headers: {
-          'Authorization': `Bearer ${adminUser.access_token}`,
+          Authorization: `Bearer ${adminUser.access_token}`,
           // Simulate cookie auth for different user
-          'Cookie': `sb-access-token=${regularUser.access_token}`,
+          Cookie: `sb-access-token=${regularUser.access_token}`,
         },
       })
 
@@ -530,14 +531,14 @@ describe('Admin Authentication Integration Tests', () => {
       const regularUser = await createAuthTestUser(
         supabase,
         `user-cookie-${Date.now()}@test.example`,
-        'user'
+        'user',
       )
       testUsers.push(regularUser)
 
       // No Bearer token, only cookie
       const response = await fetch('http://localhost:3000/api/admin/products', {
         headers: {
-          'Cookie': `sb-access-token=${regularUser.access_token}`,
+          Cookie: `sb-access-token=${regularUser.access_token}`,
         },
       })
 
@@ -549,16 +550,16 @@ describe('Admin Authentication Integration Tests', () => {
       const adminUser = await createAuthTestUser(
         supabase,
         `admin-auth-header-${Date.now()}@test.example`,
-        'admin'
+        'admin',
       )
       testUsers.push(adminUser)
 
       // Authorization header should take precedence
       const response = await fetch('http://localhost:3000/api/admin/dashboard/stats', {
         headers: {
-          'Authorization': `Bearer ${adminUser.access_token}`,
+          Authorization: `Bearer ${adminUser.access_token}`,
           // Even with random cookies, Bearer should win
-          'Cookie': 'random-cookie=value',
+          Cookie: 'random-cookie=value',
         },
       })
 
@@ -571,15 +572,15 @@ describe('Admin Authentication Integration Tests', () => {
       const adminUser = await createAuthTestUser(
         supabase,
         `admin-invalid-bearer-${Date.now()}@test.example`,
-        'admin'
+        'admin',
       )
       testUsers.push(adminUser)
 
       // Invalid Bearer token
       const response = await fetch('http://localhost:3000/api/admin/users', {
         headers: {
-          'Authorization': 'Bearer invalid-token',
-          'Cookie': `sb-access-token=${adminUser.access_token}`,
+          Authorization: 'Bearer invalid-token',
+          Cookie: `sb-access-token=${adminUser.access_token}`,
         },
       })
 
@@ -592,7 +593,7 @@ describe('Admin Authentication Integration Tests', () => {
     it('should handle malformed Authorization header', async () => {
       const response = await fetch('http://localhost:3000/api/admin/orders', {
         headers: {
-          'Authorization': 'NotBearer invalid-format',
+          Authorization: 'NotBearer invalid-format',
         },
       })
 
@@ -602,7 +603,7 @@ describe('Admin Authentication Integration Tests', () => {
     it('should handle missing Bearer prefix', async () => {
       const response = await fetch('http://localhost:3000/api/admin/products', {
         headers: {
-          'Authorization': 'some-token-without-bearer',
+          Authorization: 'some-token-without-bearer',
         },
       })
 
@@ -612,7 +613,7 @@ describe('Admin Authentication Integration Tests', () => {
     it('should handle empty Authorization header', async () => {
       const response = await fetch('http://localhost:3000/api/admin/users', {
         headers: {
-          'Authorization': '',
+          Authorization: '',
         },
       })
 
@@ -632,7 +633,7 @@ describe('Admin Authentication Integration Tests', () => {
           expectedMessage: /auth/i,
         },
         {
-          headers: { 'Authorization': 'Bearer invalid' },
+          headers: { Authorization: 'Bearer invalid' },
           expectedMessage: /auth|token/i,
         },
       ]
@@ -654,7 +655,7 @@ describe('Admin Authentication Integration Tests', () => {
       const adminUser = await createAuthTestUser(
         supabase,
         `admin-rapid-${Date.now()}@test.example`,
-        'admin'
+        'admin',
       )
       testUsers.push(adminUser)
 
@@ -664,8 +665,8 @@ describe('Admin Authentication Integration Tests', () => {
       for (let i = 0; i < 10; i++) {
         requests.push(
           fetch('http://localhost:3000/api/admin/dashboard/stats', {
-            headers: { 'Authorization': `Bearer ${adminUser.access_token}` },
-          })
+            headers: { Authorization: `Bearer ${adminUser.access_token}` },
+          }),
         )
       }
 
@@ -686,7 +687,7 @@ describe('Admin Authentication Integration Tests', () => {
       const adminUser = await createAuthTestUser(
         supabase,
         `admin-concurrent-load-${Date.now()}@test.example`,
-        'admin'
+        'admin',
       )
       testUsers.push(adminUser)
 
@@ -701,9 +702,9 @@ describe('Admin Authentication Integration Tests', () => {
       const requests = endpoints.flatMap(endpoint =>
         Array(3).fill(null).map(() =>
           fetch(`http://localhost:3000${endpoint}`, {
-            headers: { 'Authorization': `Bearer ${adminUser.access_token}` },
-          })
-        )
+            headers: { Authorization: `Bearer ${adminUser.access_token}` },
+          }),
+        ),
       )
 
       const responses = await Promise.all(requests)
@@ -721,7 +722,7 @@ describe('Admin Authentication Integration Tests', () => {
       const adminUser = await createAuthTestUser(
         supabase,
         `admin-db-query-${Date.now()}@test.example`,
-        'admin'
+        'admin',
       )
       testUsers.push(adminUser)
 
@@ -743,12 +744,12 @@ describe('Admin Authentication Integration Tests', () => {
       const adminUser = await createAuthTestUser(
         supabase,
         `admin-db-resilient-${Date.now()}@test.example`,
-        'admin'
+        'admin',
       )
       testUsers.push(adminUser)
 
       const response = await fetch('http://localhost:3000/api/admin/users', {
-        headers: { 'Authorization': `Bearer ${adminUser.access_token}` },
+        headers: { Authorization: `Bearer ${adminUser.access_token}` },
       })
 
       // Should return valid HTTP status (not crash)

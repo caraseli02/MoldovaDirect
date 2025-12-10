@@ -47,12 +47,12 @@ const translations = {
     customerNextSteps: [
       'Our support team will review your request',
       'You will receive updates via email',
-      'Expected response time: 24 hours'
+      'Expected response time: 24 hours',
     ],
     staffNextSteps: [
       'Review ticket details and customer information',
       'Respond to customer via support system',
-      'Update ticket status when resolved'
+      'Update ticket status when resolved',
     ],
     viewTicket: 'View Ticket',
     categories: {
@@ -61,8 +61,8 @@ const translations = {
       product_issue: 'Product Issue',
       payment: 'Payment',
       return: 'Return',
-      other: 'Other'
-    }
+      other: 'Other',
+    },
   },
   es: {
     customerSubject: 'Ticket de Soporte Creado - #{ticketNumber}',
@@ -88,12 +88,12 @@ const translations = {
     customerNextSteps: [
       'Nuestro equipo revisará su solicitud',
       'Recibirá actualizaciones por correo electrónico',
-      'Tiempo de respuesta esperado: 24 horas'
+      'Tiempo de respuesta esperado: 24 horas',
     ],
     staffNextSteps: [
       'Revisar detalles del ticket e información del cliente',
       'Responder al cliente a través del sistema de soporte',
-      'Actualizar el estado del ticket cuando se resuelva'
+      'Actualizar el estado del ticket cuando se resuelva',
     ],
     viewTicket: 'Ver Ticket',
     categories: {
@@ -102,8 +102,8 @@ const translations = {
       product_issue: 'Problema con Producto',
       payment: 'Pago',
       return: 'Devolución',
-      other: 'Otro'
-    }
+      other: 'Otro',
+    },
   },
   ro: {
     customerSubject: 'Tichet de Asistență Creat - #{ticketNumber}',
@@ -129,12 +129,12 @@ const translations = {
     customerNextSteps: [
       'Echipa noastră va revizui cererea dvs.',
       'Veți primi actualizări prin email',
-      'Timp de răspuns așteptat: 24 ore'
+      'Timp de răspuns așteptat: 24 ore',
     ],
     staffNextSteps: [
       'Revizuiți detaliile tichetului și informațiile clientului',
       'Răspundeți clientului prin sistemul de asistență',
-      'Actualizați starea tichetului când este rezolvat'
+      'Actualizați starea tichetului când este rezolvat',
     ],
     viewTicket: 'Vezi Tichet',
     categories: {
@@ -143,8 +143,8 @@ const translations = {
       product_issue: 'Problemă Produs',
       payment: 'Plată',
       return: 'Retur',
-      other: 'Altele'
-    }
+      other: 'Altele',
+    },
   },
   ru: {
     customerSubject: 'Тикет поддержки создан - #{ticketNumber}',
@@ -170,12 +170,12 @@ const translations = {
     customerNextSteps: [
       'Наша команда рассмотрит ваш запрос',
       'Вы получите обновления по электронной почте',
-      'Ожидаемое время ответа: 24 часа'
+      'Ожидаемое время ответа: 24 часа',
     ],
     staffNextSteps: [
       'Просмотрите детали тикета и информацию о клиенте',
       'Ответьте клиенту через систему поддержки',
-      'Обновите статус тикета при решении'
+      'Обновите статус тикета при решении',
     ],
     viewTicket: 'Просмотреть тикет',
     categories: {
@@ -184,9 +184,9 @@ const translations = {
       product_issue: 'Проблема с товаром',
       payment: 'Оплата',
       return: 'Возврат',
-      other: 'Другое'
-    }
-  }
+      other: 'Другое',
+    },
+  },
 }
 
 /**
@@ -250,7 +250,8 @@ export function generateCustomerConfirmationTemplate(data: SupportTicketData): s
                 </table>
               </div>
 
-              ${data.orderNumber ? `
+              ${data.orderNumber
+                ? `
               <!-- Order Details -->
               <div style="background-color: #eff6ff; border-radius: 6px; padding: 24px; margin: 24px 0;">
                 <h2 style="margin: 0 0 16px; color: #1f2937; font-size: 18px; font-weight: 600;">${t.orderDetails}</h2>
@@ -260,21 +261,26 @@ export function generateCustomerConfirmationTemplate(data: SupportTicketData): s
                     <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">${t.orderNumber}:</td>
                     <td style="padding: 8px 0; color: #1f2937; font-size: 14px; font-weight: 600; text-align: right;">${data.orderNumber}</td>
                   </tr>
-                  ${data.orderStatus ? `
+                  ${data.orderStatus
+                    ? `
                   <tr>
                     <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">${t.orderStatus}:</td>
                     <td style="padding: 8px 0; color: #1f2937; font-size: 14px; text-align: right;">${data.orderStatus}</td>
                   </tr>
-                  ` : ''}
-                  ${data.orderTotal ? `
+                  `
+                    : ''}
+                  ${data.orderTotal
+                    ? `
                   <tr>
                     <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">${t.orderTotal}:</td>
                     <td style="padding: 8px 0; color: #1f2937; font-size: 14px; font-weight: 600; text-align: right;">${formatCurrency(data.orderTotal, data.locale)}</td>
                   </tr>
-                  ` : ''}
+                  `
+                    : ''}
                 </table>
               </div>
-              ` : ''}
+              `
+                : ''}
 
               <!-- Next Steps -->
               <div style="margin: 24px 0;">
@@ -390,7 +396,8 @@ export function generateStaffNotificationTemplate(data: SupportTicketData): stri
                 </table>
               </div>
 
-              ${data.orderNumber ? `
+              ${data.orderNumber
+                ? `
               <!-- Order Details -->
               <div style="background-color: #eff6ff; border-radius: 6px; padding: 24px; margin: 24px 0;">
                 <h2 style="margin: 0 0 16px; color: #1f2937; font-size: 18px; font-weight: 600;">${t.orderDetails}</h2>
@@ -400,21 +407,26 @@ export function generateStaffNotificationTemplate(data: SupportTicketData): stri
                     <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">${t.orderNumber}:</td>
                     <td style="padding: 8px 0; color: #1f2937; font-size: 14px; font-weight: 600; text-align: right;">${data.orderNumber}</td>
                   </tr>
-                  ${data.orderStatus ? `
+                  ${data.orderStatus
+                    ? `
                   <tr>
                     <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">${t.orderStatus}:</td>
                     <td style="padding: 8px 0; color: #1f2937; font-size: 14px; text-align: right;">${data.orderStatus}</td>
                   </tr>
-                  ` : ''}
-                  ${data.orderTotal ? `
+                  `
+                    : ''}
+                  ${data.orderTotal
+                    ? `
                   <tr>
                     <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">${t.orderTotal}:</td>
                     <td style="padding: 8px 0; color: #1f2937; font-size: 14px; font-weight: 600; text-align: right;">${formatCurrency(data.orderTotal, data.locale)}</td>
                   </tr>
-                  ` : ''}
+                  `
+                    : ''}
                 </table>
               </div>
-              ` : ''}
+              `
+                : ''}
 
               <!-- Next Steps -->
               <div style="margin: 24px 0;">
@@ -451,7 +463,8 @@ export function getSupportTicketSubject(emailType: 'customer' | 'staff', ticketN
 
   if (emailType === 'customer') {
     return t.customerSubject.replace('{ticketNumber}', ticketNumber)
-  } else {
+  }
+  else {
     return t.staffSubject
       .replace('{ticketNumber}', ticketNumber)
       .replace('{priority}', priority.toUpperCase())

@@ -74,7 +74,7 @@ test.describe('Authentication Accessibility (WCAG 2.1 Level AA)', () => {
         .analyze()
 
       const contrastViolations = accessibilityScanResults.violations.filter(
-        v => v.id === 'color-contrast'
+        v => v.id === 'color-contrast',
       )
 
       expect(contrastViolations).toEqual([])
@@ -294,10 +294,10 @@ test.describe('Authentication Accessibility (WCAG 2.1 Level AA)', () => {
       })
 
       // Should have visible focus indicator
-      const hasFocusIndicator =
-        focusStyle.outline !== 'none' ||
-        parseInt(focusStyle.outlineWidth) > 0 ||
-        focusStyle.boxShadow !== 'none'
+      const hasFocusIndicator
+        = focusStyle.outline !== 'none'
+          || parseInt(focusStyle.outlineWidth) > 0
+          || focusStyle.boxShadow !== 'none'
 
       expect(hasFocusIndicator).toBeTruthy()
     })
@@ -363,7 +363,7 @@ test.describe('Authentication Accessibility (WCAG 2.1 Level AA)', () => {
 
       // Should not have form-related violations
       const formViolations = accessibilityScanResults.violations.filter(
-        v => v.id.includes('form') || v.id.includes('label')
+        v => v.id.includes('form') || v.id.includes('label'),
       )
 
       expect(formViolations).toEqual([])
@@ -424,7 +424,7 @@ test.describe('Authentication Accessibility (WCAG 2.1 Level AA)', () => {
       // Error alert should be announced
       // Check for alert role or aria-live
       const hasAlertRole = await errorAlert.evaluate(el =>
-        el.getAttribute('role') === 'alert' || el.closest('[role="alert"]') !== null
+        el.getAttribute('role') === 'alert' || el.closest('[role="alert"]') !== null,
       )
 
       expect(hasAlertRole).toBeTruthy()

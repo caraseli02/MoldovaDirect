@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
     if (!orderId) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Order ID is required'
+        statusMessage: 'Order ID is required',
       })
     }
 
@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
     if (!body.paymentStatus) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Payment status is required'
+        statusMessage: 'Payment status is required',
       })
     }
 
@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
 
     if (authHeader) {
       const { data: { user: authUser }, error: authError } = await supabase.auth.getUser(
-        authHeader.replace('Bearer ', '')
+        authHeader.replace('Bearer ', ''),
       )
       if (!authError && authUser) {
         user = authUser
@@ -53,7 +53,7 @@ export default defineEventHandler(async (event) => {
     if (orderError) {
       throw createError({
         statusCode: 404,
-        statusMessage: 'Order not found'
+        statusMessage: 'Order not found',
       })
     }
 
@@ -61,14 +61,14 @@ export default defineEventHandler(async (event) => {
     if (user && order.user_id !== user.id) {
       throw createError({
         statusCode: 403,
-        statusMessage: 'Access denied'
+        statusMessage: 'Access denied',
       })
     }
 
     // Update order status based on payment result
     const updateData: any = {
       payment_status: body.paymentStatus,
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     }
 
     if (body.paymentIntentId) {
@@ -77,7 +77,8 @@ export default defineEventHandler(async (event) => {
 
     if (body.paymentStatus === 'paid') {
       updateData.status = 'processing'
-    } else if (body.paymentStatus === 'failed') {
+    }
+    else if (body.paymentStatus === 'failed') {
       updateData.status = 'cancelled'
     }
 
@@ -91,7 +92,7 @@ export default defineEventHandler(async (event) => {
     if (updateError) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to update order'
+        statusMessage: 'Failed to update order',
       })
     }
 
@@ -129,10 +130,11 @@ export default defineEventHandler(async (event) => {
         orderId: updatedOrder.id,
         orderNumber: updatedOrder.order_number,
         status: updatedOrder.status,
-        paymentStatus: updatedOrder.payment_status
-      }
+        paymentStatus: updatedOrder.payment_status,
+      },
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     if (error.statusCode) {
       throw error
     }
@@ -140,7 +142,7 @@ export default defineEventHandler(async (event) => {
     console.error('Order completion error:', error)
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 })

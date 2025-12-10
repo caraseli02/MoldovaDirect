@@ -25,7 +25,7 @@ const colors = {
   red: '\x1b[31m',
   yellow: '\x1b[33m',
   blue: '\x1b[36m',
-  gray: '\x1b[90m'
+  gray: '\x1b[90m',
 }
 
 function log(message, color = 'reset') {
@@ -72,7 +72,7 @@ async function testAdminAuth() {
     logStep('2', 'Logging in as admin user')
     const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
       email: ADMIN_EMAIL,
-      password: ADMIN_PASSWORD
+      password: ADMIN_PASSWORD,
     })
 
     if (authError) {
@@ -107,14 +107,17 @@ async function testAdminAuth() {
       logError(`Failed to fetch profile: ${profileError.message}`)
       logWarning('User may not have a profile in the profiles table')
       testsFailed++
-    } else if (!profile) {
+    }
+    else if (!profile) {
       logError('Profile not found')
       testsFailed++
-    } else if (profile.role !== 'admin') {
+    }
+    else if (profile.role !== 'admin') {
       logError(`User has role '${profile.role}' but needs 'admin'`)
       logWarning('Run the SQL fix script to update the user role')
       testsFailed++
-    } else {
+    }
+    else {
       logSuccess('User has admin role')
       logInfo(`Name: ${profile.name || 'Not set'}`)
       logInfo(`Role: ${profile.role}`)
@@ -126,7 +129,7 @@ async function testAdminAuth() {
 
     const endpoints = [
       { url: '/api/admin/dashboard/stats', name: 'Dashboard Stats' },
-      { url: '/api/admin/dashboard/activity', name: 'Dashboard Activity' }
+      { url: '/api/admin/dashboard/activity', name: 'Dashboard Activity' },
     ]
 
     for (const endpoint of endpoints) {
@@ -134,8 +137,8 @@ async function testAdminAuth() {
         const response = await fetch(`${API_BASE_URL}${endpoint.url}`, {
           headers: {
             'Authorization': `Bearer ${session.access_token}`,
-            'Content-Type': 'application/json'
-          }
+            'Content-Type': 'application/json',
+          },
         })
 
         if (!response.ok) {
@@ -143,14 +146,17 @@ async function testAdminAuth() {
             logError(`${endpoint.name}: 401 Unauthorized - Bearer token not accepted`)
             logInfo(`This means the server-side auth is not working correctly`)
             testsFailed++
-          } else if (response.status === 403) {
+          }
+          else if (response.status === 403) {
             logError(`${endpoint.name}: 403 Forbidden - User doesn't have admin role`)
             testsFailed++
-          } else {
+          }
+          else {
             logError(`${endpoint.name}: ${response.status} ${response.statusText}`)
             testsFailed++
           }
-        } else {
+        }
+        else {
           const data = await response.json()
           if (data.success) {
             logSuccess(`${endpoint.name}: ✓ Request successful`)
@@ -162,19 +168,22 @@ async function testAdminAuth() {
                 logInfo(`  Total Orders: ${data.data.totalOrders || 0}`)
                 logInfo(`  Revenue: €${data.data.revenue || 0}`)
               }
-            } else if (endpoint.url.includes('activity')) {
+            }
+            else if (endpoint.url.includes('activity')) {
               if (Array.isArray(data.data)) {
                 logInfo(`  Activities: ${data.data.length} items`)
               }
             }
 
             testsPassed++
-          } else {
+          }
+          else {
             logWarning(`${endpoint.name}: Response has success: false`)
             testsFailed++
           }
         }
-      } catch (error) {
+      }
+      catch (error) {
         logError(`${endpoint.name}: Network error - ${error.message}`)
         logInfo('Make sure the dev server is running on http://localhost:3000')
         testsFailed++
@@ -188,10 +197,12 @@ async function testAdminAuth() {
     if (refreshError) {
       logError(`Session refresh failed: ${refreshError.message}`)
       testsFailed++
-    } else if (!refreshData.session) {
+    }
+    else if (!refreshData.session) {
       logError('Session refresh succeeded but no session returned')
       testsFailed++
-    } else {
+    }
+    else {
       logSuccess('Session refresh successful')
       logInfo(`New token expires: ${new Date(refreshData.session.expires_at * 1000).toLocaleString()}`)
       testsPassed++
@@ -204,12 +215,13 @@ async function testAdminAuth() {
     if (signOutError) {
       logError(`Logout failed: ${signOutError.message}`)
       testsFailed++
-    } else {
+    }
+    else {
       logSuccess('Logout successful')
       testsPassed++
     }
-
-  } catch (error) {
+  }
+  catch (error) {
     logError(`Unexpected error: ${error.message}`)
     console.error(error)
     testsFailed++
@@ -230,7 +242,8 @@ async function testAdminAuth() {
 
   if (testsFailed === 0) {
     log('🎉 All tests passed! Admin authentication is working correctly.\n', 'green')
-  } else {
+  }
+  else {
     log('⚠️  Some tests failed. Please review the errors above.\n', 'yellow')
   }
 
@@ -240,7 +253,7 @@ async function testAdminAuth() {
 }
 
 // Run tests
-testAdminAuth().catch(error => {
+testAdminAuth().catch((error) => {
   logError(`Fatal error: ${error.message}`)
   console.error(error)
   process.exit(1)

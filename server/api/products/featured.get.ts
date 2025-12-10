@@ -5,7 +5,7 @@ export default defineCachedEventHandler(async (event) => {
   try {
     const supabase = await serverSupabaseClient(event)
     const query = getQuery(event)
-    
+
     const locale = (query.locale as string) || 'es'
     const limit = parseInt((query.limit as string) || '12')
     const category = query.category as string
@@ -52,38 +52,38 @@ export default defineCachedEventHandler(async (event) => {
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to fetch products',
-        data: error
+        data: error,
       })
     }
 
     // Filter for featured products based on multiple criteria
-    const featuredProducts = (allProducts || []).filter(product => {
+    const featuredProducts = (allProducts || []).filter((product) => {
       const attributes = product.attributes || {}
-      
+
       // Check if explicitly marked as featured
       if (attributes.featured === true) {
         return true
       }
-      
+
       // Check if product has high stock (popular/well-stocked items)
       if (product.stock_quantity > 20) {
         return true
       }
-      
+
       // Check if product has a compare_at_price (on sale)
       if (product.compare_at_price_eur && product.compare_at_price_eur > product.price_eur) {
         return true
       }
-      
+
       // Check if product has premium attributes (high-quality indicators)
       const premiumIndicators = ['premium', 'limited', 'exclusive', 'award', 'organic']
       const productTags = attributes.tags || []
-      if (premiumIndicators.some(indicator => 
-        productTags.some((tag: string) => tag.toLowerCase().includes(indicator))
+      if (premiumIndicators.some(indicator =>
+        productTags.some((tag: string) => tag.toLowerCase().includes(indicator)),
       )) {
         return true
       }
-      
+
       return false
     })
 
@@ -91,22 +91,22 @@ export default defineCachedEventHandler(async (event) => {
     featuredProducts.sort((a, b) => {
       const aAttrs = a.attributes || {}
       const bAttrs = b.attributes || {}
-      
+
       // Explicitly featured products get highest priority
       if (aAttrs.featured && !bAttrs.featured) return -1
       if (!aAttrs.featured && bAttrs.featured) return 1
-      
+
       // Products on sale get next priority
       const aOnSale = a.compare_at_price_eur && a.compare_at_price_eur > a.price_eur
       const bOnSale = b.compare_at_price_eur && b.compare_at_price_eur > b.price_eur
       if (aOnSale && !bOnSale) return -1
       if (!aOnSale && bOnSale) return 1
-      
+
       // Then by stock quantity (higher stock = more popular)
       if (b.stock_quantity !== a.stock_quantity) {
         return b.stock_quantity - a.stock_quantity
       }
-      
+
       // Finally by creation date (newest first)
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     })
@@ -115,10 +115,10 @@ export default defineCachedEventHandler(async (event) => {
     const limitedFeatured = featuredProducts.slice(0, limit)
 
     // Transform the data to match expected format
-    const transformedProducts = limitedFeatured.map(product => {
+    const transformedProducts = limitedFeatured.map((product) => {
       const attributes = product.attributes || {}
       const isOnSale = product.compare_at_price_eur && product.compare_at_price_eur > product.price_eur
-      const discountPercentage = isOnSale 
+      const discountPercentage = isOnSale
         ? Math.round(((product.compare_at_price_eur - product.price_eur) / product.compare_at_price_eur) * 100)
         : 0
 
@@ -133,36 +133,43 @@ export default defineCachedEventHandler(async (event) => {
         formattedPrice: `€${product.price_eur.toFixed(2)}`,
         comparePrice: product.compare_at_price_eur,
         compareAtPrice: product.compare_at_price_eur,
-        formattedCompareAtPrice: product.compare_at_price_eur 
-          ? `€${product.compare_at_price_eur.toFixed(2)}` 
+        formattedCompareAtPrice: product.compare_at_price_eur
+          ? `€${product.compare_at_price_eur.toFixed(2)}`
           : null,
         discountPercentage,
         stockQuantity: product.stock_quantity,
-        stockStatus: product.stock_quantity > (product.low_stock_threshold || 5) ? 'in_stock' : 
-                     product.stock_quantity > 0 ? 'low_stock' : 'out_of_stock',
-        images: Array.isArray(product.images) ? product.images.map((img: any, index: number) => ({
-          url: img.url || img,
-          altText: img.alt || img.alt_text || product.name_translations,
-          isPrimary: img.is_primary || index === 0
-        })) : [],
-        primaryImage: product.images?.[0] ? {
-          url: product.images[0].url || product.images[0],
-          altText: product.images[0].alt || product.images[0].alt_text || product.name_translations,
-          isPrimary: true
-        } : null,
+        stockStatus: product.stock_quantity > (product.low_stock_threshold || 5)
+          ? 'in_stock'
+          : product.stock_quantity > 0 ? 'low_stock' : 'out_of_stock',
+        images: Array.isArray(product.images)
+          ? product.images.map((img: any, index: number) => ({
+              url: img.url || img,
+              altText: img.alt || img.alt_text || product.name_translations,
+              isPrimary: img.is_primary || index === 0,
+            }))
+          : [],
+        primaryImage: product.images?.[0]
+          ? {
+              url: product.images[0].url || product.images[0],
+              altText: product.images[0].alt || product.images[0].alt_text || product.name_translations,
+              isPrimary: true,
+            }
+          : null,
         category: {
           id: product.categories.id,
           slug: product.categories.slug,
-          name: product.categories.name_translations
+          name: product.categories.name_translations,
         },
         attributes: attributes,
-        featuredReason: attributes.featured ? 'explicitly_featured' :
-                       isOnSale ? 'on_sale' :
-                       product.stock_quantity > 20 ? 'popular' : 'premium',
+        featuredReason: attributes.featured
+          ? 'explicitly_featured'
+          : isOnSale
+            ? 'on_sale'
+            : product.stock_quantity > 20 ? 'popular' : 'premium',
         tags: attributes.tags || [],
         isFeatured: true,
         isOnSale,
-        createdAt: product.created_at
+        createdAt: product.created_at,
       }
     })
 
@@ -181,7 +188,7 @@ export default defineCachedEventHandler(async (event) => {
           id: categoryData.id,
           slug: categoryData.slug,
           name: categoryData.name_translations,
-          description: categoryData.description_translations || {}
+          description: categoryData.description_translations || {},
         }
       }
     }
@@ -199,31 +206,31 @@ export default defineCachedEventHandler(async (event) => {
         category: categoryInfo,
         filters: {
           category,
-          includeOutOfStock
-        }
+          includeOutOfStock,
+        },
       },
       featuredCriteria: {
         explicitlyFeatured: transformedProducts.filter(p => p.featuredReason === 'explicitly_featured').length,
         onSale: transformedProducts.filter(p => p.featuredReason === 'on_sale').length,
         popular: transformedProducts.filter(p => p.featuredReason === 'popular').length,
-        premium: transformedProducts.filter(p => p.featuredReason === 'premium').length
-      }
+        premium: transformedProducts.filter(p => p.featuredReason === 'premium').length,
+      },
     }
-
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Featured products API error:', error)
-    
+
     if (error.statusCode) {
       throw error
     }
-    
+
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 }, {
   maxAge: PUBLIC_CACHE_CONFIG.featuredProducts.maxAge,
   name: PUBLIC_CACHE_CONFIG.featuredProducts.name,
-  getKey: (event) => getPublicCacheKey(PUBLIC_CACHE_CONFIG.featuredProducts.name, event)
+  getKey: event => getPublicCacheKey(PUBLIC_CACHE_CONFIG.featuredProducts.name, event),
 })

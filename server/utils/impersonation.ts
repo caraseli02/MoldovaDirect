@@ -38,14 +38,14 @@ export interface GenerateImpersonationTokenOptions {
  * @throws Error if IMPERSONATION_JWT_SECRET is not configured
  */
 export async function generateImpersonationToken(
-  options: GenerateImpersonationTokenOptions
+  options: GenerateImpersonationTokenOptions,
 ): Promise<string> {
   const secret = process.env.IMPERSONATION_JWT_SECRET
 
   if (!secret) {
     throw createError({
       statusCode: 500,
-      statusMessage: 'IMPERSONATION_JWT_SECRET environment variable is not configured'
+      statusMessage: 'IMPERSONATION_JWT_SECRET environment variable is not configured',
     })
   }
 
@@ -53,13 +53,13 @@ export async function generateImpersonationToken(
     type: 'impersonation',
     admin_id: options.adminId,
     user_id: options.userId,
-    log_id: options.logId
+    log_id: options.logId,
   }
 
   return jwt.sign(payload, secret, {
     expiresIn: options.expiresIn,
     issuer: 'moldovadirect-admin',
-    audience: 'moldovadirect-impersonation'
+    audience: 'moldovadirect-impersonation',
   })
 }
 
@@ -71,45 +71,46 @@ export async function generateImpersonationToken(
  * @throws Error if token is invalid or expired
  */
 export async function verifyImpersonationToken(
-  token: string
+  token: string,
 ): Promise<ImpersonationTokenPayload> {
   const secret = process.env.IMPERSONATION_JWT_SECRET
 
   if (!secret) {
     throw createError({
       statusCode: 500,
-      statusMessage: 'IMPERSONATION_JWT_SECRET environment variable is not configured'
+      statusMessage: 'IMPERSONATION_JWT_SECRET environment variable is not configured',
     })
   }
 
   try {
     const decoded = jwt.verify(token, secret, {
       issuer: 'moldovadirect-admin',
-      audience: 'moldovadirect-impersonation'
+      audience: 'moldovadirect-impersonation',
     }) as ImpersonationTokenPayload
 
     // Verify token type
     if (decoded.type !== 'impersonation') {
       throw createError({
         statusCode: 401,
-        statusMessage: 'Invalid token type'
+        statusMessage: 'Invalid token type',
       })
     }
 
     return decoded
-  } catch (error: any) {
+  }
+  catch (error: any) {
     // Handle JWT-specific errors
     if (error.name === 'TokenExpiredError') {
       throw createError({
         statusCode: 401,
-        statusMessage: 'Impersonation token has expired'
+        statusMessage: 'Impersonation token has expired',
       })
     }
 
     if (error.name === 'JsonWebTokenError') {
       throw createError({
         statusCode: 401,
-        statusMessage: 'Invalid impersonation token'
+        statusMessage: 'Invalid impersonation token',
       })
     }
 
@@ -121,7 +122,7 @@ export async function verifyImpersonationToken(
     // Generic error
     throw createError({
       statusCode: 401,
-      statusMessage: 'Failed to verify impersonation token'
+      statusMessage: 'Failed to verify impersonation token',
     })
   }
 }
@@ -136,7 +137,7 @@ export async function verifyImpersonationToken(
  */
 export async function validateImpersonationSession(
   event: any,
-  token: string
+  token: string,
 ) {
   const decoded = await verifyImpersonationToken(token)
 
@@ -154,7 +155,7 @@ export async function validateImpersonationSession(
   if (error || !session) {
     throw createError({
       statusCode: 401,
-      statusMessage: 'Impersonation session not found'
+      statusMessage: 'Impersonation session not found',
     })
   }
 
@@ -162,7 +163,7 @@ export async function validateImpersonationSession(
   if (session.ended_at) {
     throw createError({
       statusCode: 401,
-      statusMessage: 'Impersonation session has been ended'
+      statusMessage: 'Impersonation session has been ended',
     })
   }
 
@@ -176,7 +177,7 @@ export async function validateImpersonationSession(
 
     throw createError({
       statusCode: 401,
-      statusMessage: 'Impersonation session has expired'
+      statusMessage: 'Impersonation session has expired',
     })
   }
 

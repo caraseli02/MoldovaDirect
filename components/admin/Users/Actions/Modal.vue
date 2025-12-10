@@ -1,11 +1,11 @@
 <!--
   Admin User Action Modal Component
-  
+
   Requirements addressed:
   - 4.4: User account suspension and ban functionality with confirmation
   - 4.5: User permission management interface
   - 5.5: Audit logging with reason tracking
-  
+
   Features:
   - Confirmation dialogs for user actions
   - Reason input for audit trail
@@ -49,11 +49,21 @@
               v-model="formData.duration"
               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
-              <option :value="undefined">Indefinite</option>
-              <option :value="1">1 day</option>
-              <option :value="3">3 days</option>
-              <option :value="7">1 week</option>
-              <option :value="30">1 month</option>
+              <option :value="undefined">
+                Indefinite
+              </option>
+              <option :value="1">
+                1 day
+              </option>
+              <option :value="3">
+                3 days
+              </option>
+              <option :value="7">
+                1 week
+              </option>
+              <option :value="30">
+                1 month
+              </option>
             </select>
           </div>
 
@@ -67,10 +77,18 @@
               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               required
             >
-              <option value="">Select a role</option>
-              <option value="user">User</option>
-              <option value="moderator">Moderator</option>
-              <option value="admin">Admin</option>
+              <option value="">
+                Select a role
+              </option>
+              <option value="user">
+                User
+              </option>
+              <option value="moderator">
+                Moderator
+              </option>
+              <option value="admin">
+                Admin
+              </option>
             </select>
           </div>
 
@@ -102,9 +120,15 @@
           </div>
 
           <!-- Warning Messages -->
-          <div v-if="getWarningMessage()" class="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <div
+            v-if="getWarningMessage()"
+            class="p-3 bg-yellow-50 border border-yellow-200 rounded-lg"
+          >
             <div class="flex">
-              <commonIcon name="lucide:alert-triangle" class="w-5 h-5 text-yellow-400 mr-2 mt-0.5" />
+              <commonIcon
+                name="lucide:alert-triangle"
+                class="w-5 h-5 text-yellow-400 mr-2 mt-0.5"
+              />
               <div class="text-sm text-yellow-800">
                 {{ getWarningMessage() }}
               </div>
@@ -112,9 +136,15 @@
           </div>
 
           <!-- Danger Messages -->
-          <div v-if="getDangerMessage()" class="p-3 bg-red-50 border border-red-200 rounded-lg">
+          <div
+            v-if="getDangerMessage()"
+            class="p-3 bg-red-50 border border-red-200 rounded-lg"
+          >
             <div class="flex">
-              <commonIcon name="lucide:alert-triangle" class="w-5 h-5 text-red-400 mr-2 mt-0.5" />
+              <commonIcon
+                name="lucide:alert-triangle"
+                class="w-5 h-5 text-red-400 mr-2 mt-0.5"
+              />
               <div class="text-sm text-red-800">
                 {{ getDangerMessage() }}
               </div>
@@ -126,15 +156,15 @@
       <!-- Footer -->
       <div class="px-6 py-4 border-t border-gray-200 flex justify-end gap-3">
         <UiButton
-          @click="$emit('cancel')"
           variant="outline"
+          @click="$emit('cancel')"
         >
           Cancel
         </UiButton>
         <UiButton
-          @click="confirm"
           :disabled="!isFormValid()"
           :class="getActionButtonClass()"
+          @click="confirm"
         >
           {{ getActionButtonText() }}
         </UiButton>
@@ -167,7 +197,7 @@ const formData = reactive({
   reason: '',
   duration: undefined as number | undefined,
   role: '',
-  notes: ''
+  notes: '',
 })
 
 // Methods
@@ -287,35 +317,35 @@ const isFormValid = () => {
   if (isReasonRequired() && !formData.reason.trim()) {
     return false
   }
-  
+
   if (props.action === 'update_role' && !formData.role) {
     return false
   }
-  
+
   return true
 }
 
 const confirm = () => {
   if (!isFormValid()) return
-  
+
   const data: any = {}
-  
+
   if (formData.reason.trim()) {
     data.reason = formData.reason.trim()
   }
-  
+
   if (formData.duration !== undefined) {
     data.duration = formData.duration
   }
-  
+
   if (formData.role) {
     data.role = formData.role
   }
-  
+
   if (formData.notes.trim()) {
     data.notes = formData.notes.trim()
   }
-  
+
   emit('confirm', Object.keys(data).length > 0 ? data : undefined)
 }
 

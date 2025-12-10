@@ -17,14 +17,14 @@ vi.mock('~/server/utils/secureLogger', () => ({
   createLogger: vi.fn(() => ({
     info: vi.fn(),
     warn: vi.fn(),
-    error: vi.fn()
-  }))
+    error: vi.fn(),
+  })),
 }))
 
 // Mock Supabase
 const mockSupabaseAuth = {
   getUser: vi.fn(),
-  signInWithPassword: vi.fn()
+  signInWithPassword: vi.fn(),
 }
 const mockSupabaseFrom = vi.fn()
 const mockSupabaseRpc = vi.fn()
@@ -34,21 +34,21 @@ const mockSupabaseStorageRemove = vi.fn()
 vi.mock('#supabase/server', () => ({
   serverSupabaseClient: vi.fn(() => ({
     auth: mockSupabaseAuth,
-    from: mockSupabaseFrom
+    from: mockSupabaseFrom,
   })),
   serverSupabaseServiceRole: vi.fn(() => ({
     rpc: mockSupabaseRpc,
     auth: {
       admin: {
-        deleteUser: mockSupabaseAdminDeleteUser
-      }
+        deleteUser: mockSupabaseAdminDeleteUser,
+      },
     },
     storage: {
       from: vi.fn(() => ({
-        remove: mockSupabaseStorageRemove
-      }))
-    }
-  }))
+        remove: mockSupabaseStorageRemove,
+      })),
+    },
+  })),
 }))
 
 // Mock h3
@@ -56,7 +56,7 @@ vi.mock('h3', async () => {
   const actual = await vi.importActual('h3')
   return {
     ...actual,
-    defineEventHandler: vi.fn((handler) => handler),
+    defineEventHandler: vi.fn(handler => handler),
     assertMethod: vi.fn(),
     readBody: vi.fn(),
     getHeader: vi.fn(),
@@ -65,7 +65,7 @@ vi.mock('h3', async () => {
       const error = new Error(options.statusMessage) as Error & { statusCode: number }
       error.statusCode = options.statusCode
       return error
-    })
+    }),
   }
 })
 
@@ -97,7 +97,7 @@ describe('Account Deletion API', () => {
       if (!body.password) {
         const error = vi.mocked(createError)({
           statusCode: 400,
-          statusMessage: 'Password confirmation required'
+          statusMessage: 'Password confirmation required',
         })
         expect(error.statusCode).toBe(400)
       }
@@ -108,7 +108,7 @@ describe('Account Deletion API', () => {
 
       vi.mocked(readBody).mockResolvedValue({
         password: 'test123',
-        reason: 'Moving to another service'
+        reason: 'Moving to another service',
       })
 
       const body = await readBody({} as any)
@@ -121,7 +121,7 @@ describe('Account Deletion API', () => {
     it('requires authenticated user', async () => {
       mockSupabaseAuth.getUser.mockResolvedValue({
         data: { user: null },
-        error: { message: 'Not authenticated' }
+        error: { message: 'Not authenticated' },
       })
 
       const result = await mockSupabaseAuth.getUser()
@@ -135,10 +135,10 @@ describe('Account Deletion API', () => {
           user: {
             id: 'user-123',
             email: 'test@example.com',
-            user_metadata: { avatar_url: '/avatar.jpg' }
-          }
+            user_metadata: { avatar_url: '/avatar.jpg' },
+          },
         },
-        error: null
+        error: null,
       })
 
       const result = await mockSupabaseAuth.getUser()
@@ -151,12 +151,12 @@ describe('Account Deletion API', () => {
   describe('Password Verification', () => {
     it('verifies password before deletion', async () => {
       mockSupabaseAuth.signInWithPassword.mockResolvedValue({
-        error: null
+        error: null,
       })
 
       const result = await mockSupabaseAuth.signInWithPassword({
         email: 'test@example.com',
-        password: 'correct-password'
+        password: 'correct-password',
       })
 
       expect(result.error).toBeNull()
@@ -164,12 +164,12 @@ describe('Account Deletion API', () => {
 
     it('rejects invalid password', async () => {
       mockSupabaseAuth.signInWithPassword.mockResolvedValue({
-        error: { message: 'Invalid credentials' }
+        error: { message: 'Invalid credentials' },
       })
 
       const result = await mockSupabaseAuth.signInWithPassword({
         email: 'test@example.com',
-        password: 'wrong-password'
+        password: 'wrong-password',
       })
 
       expect(result.error).toBeTruthy()
@@ -188,8 +188,8 @@ describe('Account Deletion API', () => {
         user_agent: 'Mozilla/5.0',
         metadata: JSON.stringify({
           reason: 'moving_away',
-          timestamp: new Date().toISOString()
-        })
+          timestamp: new Date().toISOString(),
+        }),
       })
 
       expect(mockInsert).toHaveBeenCalled()
@@ -203,14 +203,14 @@ describe('Account Deletion API', () => {
           addresses_deleted: 2,
           carts_deleted: 1,
           orders_anonymized: 5,
-          profile_deleted: true
+          profile_deleted: true,
         },
-        error: null
+        error: null,
       })
 
       const result = await mockSupabaseRpc('delete_user_account_atomic', {
         target_user_id: 'user-123',
-        deletion_reason: 'user_request'
+        deletion_reason: 'user_request',
       })
 
       expect(result.data.addresses_deleted).toBe(2)
@@ -220,12 +220,12 @@ describe('Account Deletion API', () => {
     it('handles deletion failure', async () => {
       mockSupabaseRpc.mockResolvedValue({
         data: null,
-        error: { message: 'Transaction failed' }
+        error: { message: 'Transaction failed' },
       })
 
       const result = await mockSupabaseRpc('delete_user_account_atomic', {
         target_user_id: 'user-123',
-        deletion_reason: 'user_request'
+        deletion_reason: 'user_request',
       })
 
       expect(result.error).toBeTruthy()
@@ -264,7 +264,7 @@ describe('Account Deletion API', () => {
 
     it('handles auth user deletion failure', async () => {
       mockSupabaseAdminDeleteUser.mockResolvedValue({
-        error: { message: 'Failed to delete user' }
+        error: { message: 'Failed to delete user' },
       })
 
       const result = await mockSupabaseAdminDeleteUser('user-123')
@@ -282,8 +282,8 @@ describe('Account Deletion API', () => {
           addresses_deleted: 2,
           carts_deleted: 1,
           orders_anonymized: 5,
-          profile_deleted: true
-        }
+          profile_deleted: true,
+        },
       }
 
       expect(response.success).toBe(true)
@@ -301,8 +301,8 @@ describe('Account Deletion API', () => {
           addresses_deleted: deletionResult?.addresses_deleted || 0,
           carts_deleted: deletionResult?.carts_deleted || 0,
           orders_anonymized: deletionResult?.orders_anonymized || 0,
-          profile_deleted: deletionResult?.profile_deleted || false
-        }
+          profile_deleted: deletionResult?.profile_deleted || false,
+        },
       }
 
       expect(response.details.addresses_deleted).toBe(0)
@@ -316,7 +316,7 @@ describe('Account Deletion API', () => {
 
       const error = vi.mocked(createError)({
         statusCode: 401,
-        statusMessage: 'Authentication required'
+        statusMessage: 'Authentication required',
       })
 
       expect(error.statusCode).toBe(401)
@@ -327,7 +327,7 @@ describe('Account Deletion API', () => {
 
       const error = vi.mocked(createError)({
         statusCode: 400,
-        statusMessage: 'Invalid password'
+        statusMessage: 'Invalid password',
       })
 
       expect(error.statusCode).toBe(400)
@@ -338,7 +338,7 @@ describe('Account Deletion API', () => {
 
       const error = vi.mocked(createError)({
         statusCode: 500,
-        statusMessage: 'Failed to delete account data'
+        statusMessage: 'Failed to delete account data',
       })
 
       expect(error.statusCode).toBe(500)
@@ -351,7 +351,7 @@ describe('Account Deletion API', () => {
 
       logger.error('Account deletion failed', {
         error: 'Test error',
-        userId: 'user-123'
+        userId: 'user-123',
       })
 
       expect(logger.error).toHaveBeenCalled()

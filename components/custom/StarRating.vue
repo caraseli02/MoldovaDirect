@@ -1,7 +1,10 @@
 <template>
   <div class="inline-flex items-center gap-1">
     <!-- Stars -->
-    <div class="flex items-center" :aria-label="`Rating: ${rating} out of ${max}`">
+    <div
+      class="flex items-center"
+      :aria-label="`Rating: ${rating} out of ${max}`"
+    >
       <span
         v-for="star in max"
         :key="star"
@@ -14,7 +17,7 @@
           :class="[
             'absolute inset-0',
             size === 'sm' ? 'h-4 w-4' : size === 'md' ? 'h-5 w-5' : 'h-6 w-6',
-            emptyColor
+            emptyColor,
           ]"
         />
 
@@ -28,7 +31,7 @@
             :class="[
               'absolute left-0 top-0',
               size === 'sm' ? 'h-4 w-4' : size === 'md' ? 'h-5 w-5' : 'h-6 w-6',
-              fillColor
+              fillColor,
             ]"
             :style="{ fill: 'currentColor' }"
           />
@@ -42,7 +45,7 @@
       :class="[
         'font-semibold',
         size === 'sm' ? 'text-xs' : size === 'md' ? 'text-sm' : 'text-base',
-        valueColor
+        valueColor,
       ]"
     >
       {{ rating.toFixed(1) }}
@@ -53,7 +56,7 @@
       v-if="reviewCount !== undefined"
       :class="[
         size === 'sm' ? 'text-xs' : size === 'md' ? 'text-sm' : 'text-base',
-        'text-gray-600 dark:text-gray-400'
+        'text-gray-600 dark:text-gray-400',
       ]"
     >
       ({{ formatCount(reviewCount) }})
@@ -79,7 +82,7 @@ const props = withDefaults(defineProps<Props>(), {
   showValue: false,
   fillColor: 'text-yellow-400 dark:text-yellow-500',
   emptyColor: 'text-gray-300 dark:text-gray-600',
-  valueColor: 'text-gray-900 dark:text-white'
+  valueColor: 'text-gray-900 dark:text-white',
 })
 
 // Calculate width for each star (supports partial fills)

@@ -14,7 +14,7 @@ test.describe('Critical Admin Flows', () => {
   test('admin can access admin dashboard', async ({ page }) => {
     test.skip(
       !CriticalTestHelpers.hasAdminCredentials(),
-      'ADMIN_PASSWORD or TEST_USER_PASSWORD environment variable not set'
+      'ADMIN_PASSWORD or TEST_USER_PASSWORD environment variable not set',
     )
 
     const helpers = new CriticalTestHelpers(page)
@@ -28,7 +28,7 @@ test.describe('Critical Admin Flows', () => {
     // Verify on admin page
     await expect(page, ERROR_MESSAGES.ADMIN_NOT_ACCESSIBLE).toHaveURL(
       URL_PATTERNS.ADMIN,
-      { timeout: TIMEOUTS.STANDARD }
+      { timeout: TIMEOUTS.STANDARD },
     )
 
     // Dashboard content should be visible
@@ -39,14 +39,14 @@ test.describe('Critical Admin Flows', () => {
   test('admin dashboard loads without critical errors', async ({ page }) => {
     test.skip(
       !CriticalTestHelpers.hasAdminCredentials(),
-      'ADMIN_PASSWORD or TEST_USER_PASSWORD environment variable not set'
+      'ADMIN_PASSWORD or TEST_USER_PASSWORD environment variable not set',
     )
 
     const helpers = new CriticalTestHelpers(page)
 
     // Track critical console errors
     const criticalErrors: string[] = []
-    page.on('console', msg => {
+    page.on('console', (msg) => {
       if (msg.type() === 'error') {
         const text = msg.text()
         // Only track truly critical errors

@@ -1,5 +1,8 @@
 <template>
-  <Dialog :open="show" @update:open="(val) => !val && handleClose()">
+  <Dialog
+    :open="show"
+    @update:open="(val) => !val && handleClose()"
+  >
     <DialogContent class="sm:max-w-md">
       <DialogHeader>
         <DialogTitle>Save Scenario</DialogTitle>
@@ -20,7 +23,12 @@
             :aria-invalid="!!nameError"
             :aria-describedby="nameError ? 'name-error' : undefined"
           />
-          <p v-if="nameError" id="name-error" class="text-xs text-destructive" role="alert">
+          <p
+            v-if="nameError"
+            id="name-error"
+            class="text-xs text-destructive"
+            role="alert"
+          >
             {{ nameError }}
           </p>
         </div>
@@ -41,10 +49,18 @@
       </div>
 
       <DialogFooter>
-        <Button @click="handleClose" variant="outline" type="button">
+        <Button
+          variant="outline"
+          type="button"
+          @click="handleClose"
+        >
           Cancel
         </Button>
-        <Button @click="handleSave" :disabled="!isFormValid" type="submit">
+        <Button
+          :disabled="!isFormValid"
+          type="submit"
+          @click="handleSave"
+        >
           Save Scenario
         </Button>
       </DialogFooter>
@@ -59,7 +75,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle
+  DialogTitle,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -72,7 +88,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   close: []
-  save: [data: { name: string; description: string }]
+  save: [data: { name: string, description: string }]
 }>()
 
 const localName = ref('')
@@ -112,7 +128,7 @@ const handleSave = () => {
 
   emit('save', {
     name: localName.value.trim(),
-    description: localDescription.value.trim()
+    description: localDescription.value.trim(),
   })
 
   // Clear form after save

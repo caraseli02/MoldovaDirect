@@ -72,7 +72,7 @@ const certifications: Certification[] = [
     iconColor: 'text-primary-600 dark:text-primary-400',
     title: 'home.certifications.authentic.title',
     subtitle: 'home.certifications.authentic.subtitle',
-    description: 'home.certifications.authentic.description'
+    description: 'home.certifications.authentic.description',
   },
   {
     key: 'quality',
@@ -81,7 +81,7 @@ const certifications: Certification[] = [
     iconColor: 'text-amber-600 dark:text-amber-400',
     title: 'home.certifications.quality.title',
     subtitle: 'home.certifications.quality.subtitle',
-    description: 'home.certifications.quality.description'
+    description: 'home.certifications.quality.description',
   },
   {
     key: 'sustainable',
@@ -90,7 +90,7 @@ const certifications: Certification[] = [
     iconColor: 'text-green-600 dark:text-green-400',
     title: 'home.certifications.sustainable.title',
     subtitle: 'home.certifications.sustainable.subtitle',
-    description: 'home.certifications.sustainable.description'
+    description: 'home.certifications.sustainable.description',
   },
   {
     key: 'secure',
@@ -99,7 +99,7 @@ const certifications: Certification[] = [
     iconColor: 'text-blue-600 dark:text-blue-400',
     title: 'home.certifications.secure.title',
     subtitle: 'home.certifications.secure.subtitle',
-    description: 'home.certifications.secure.description'
-  }
+    description: 'home.certifications.secure.description',
+  },
 ]
 </script>

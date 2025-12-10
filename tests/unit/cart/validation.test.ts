@@ -5,15 +5,6 @@
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 
-// Mock $fetch before importing the module
-vi.mock('#app', () => ({
-  useCookie: vi.fn(() => ({ value: null })),
-  useRuntimeConfig: vi.fn(() => ({ public: {} }))
-}))
-
-const mockFetch = vi.fn()
-vi.stubGlobal('$fetch', mockFetch)
-
 import {
   cartValidationState,
   getCachedValidation,
@@ -26,9 +17,18 @@ import {
   validateAllCartItems,
   startBackgroundValidation,
   stopBackgroundValidation,
-  createDebouncedValidation
+  createDebouncedValidation,
 } from '~/stores/cart/validation'
 import type { CartItem, Product, ValidationResult } from '~/stores/cart/types'
+
+// Mock $fetch before importing the module
+vi.mock('#app', () => ({
+  useCookie: vi.fn(() => ({ value: null })),
+  useRuntimeConfig: vi.fn(() => ({ public: {} })),
+}))
+
+const mockFetch = vi.fn()
+vi.stubGlobal('$fetch', mockFetch)
 
 // Mock product data
 const mockProduct: Product = {
@@ -38,7 +38,7 @@ const mockProduct: Product = {
   price: 25.99,
   images: ['/images/wine.jpg'],
   stock: 10,
-  category: 'Wines'
+  category: 'Wines',
 }
 
 const mockCartItem: CartItem = {
@@ -46,7 +46,7 @@ const mockCartItem: CartItem = {
   product: mockProduct,
   quantity: 2,
   addedAt: new Date(),
-  source: 'manual'
+  source: 'manual',
 }
 
 // Helper to reset validation state
@@ -56,7 +56,7 @@ function resetValidationState() {
     validationQueue: {},
     backgroundValidationEnabled: true,
     lastBackgroundValidation: null,
-    validationInProgress: false
+    validationInProgress: false,
   }
 }
 
@@ -82,7 +82,7 @@ describe('Cart Validation Module', () => {
     it('should set and get cached validation', () => {
       const validationResult: ValidationResult = {
         isValid: true,
-        product: mockProduct
+        product: mockProduct,
       }
 
       setCachedValidation('prod-1', validationResult, 300000)
@@ -96,7 +96,7 @@ describe('Cart Validation Module', () => {
     it('should return null for expired cache entry', () => {
       const validationResult: ValidationResult = {
         isValid: true,
-        product: mockProduct
+        product: mockProduct,
       }
 
       // Set with 1ms TTL
@@ -187,8 +187,8 @@ describe('Cart Validation Module', () => {
         product: {
           ...mockProduct,
           is_active: true,
-          stock: 10
-        }
+          stock: 10,
+        },
       })
 
       const result = await validateSingleProduct('prod-1', mockCartItem)
@@ -202,8 +202,8 @@ describe('Cart Validation Module', () => {
       mockFetch.mockResolvedValueOnce({
         product: {
           ...mockProduct,
-          is_active: false
-        }
+          is_active: false,
+        },
       })
 
       const result = await validateSingleProduct('prod-1', mockCartItem)
@@ -216,8 +216,8 @@ describe('Cart Validation Module', () => {
       mockFetch.mockResolvedValueOnce({
         product: {
           ...mockProduct,
-          stock: 0
-        }
+          stock: 0,
+        },
       })
 
       const result = await validateSingleProduct('prod-1', mockCartItem)
@@ -229,7 +229,7 @@ describe('Cart Validation Module', () => {
     it('should return invalid when product is out of stock (stock = 0)', async () => {
       // Test explicit out of stock condition
       mockFetch.mockResolvedValueOnce({
-        product: { ...mockProduct, stock: 0 }
+        product: { ...mockProduct, stock: 0 },
       })
 
       const result = await validateSingleProduct('prod-1')
@@ -240,7 +240,7 @@ describe('Cart Validation Module', () => {
 
     it('should handle null product response with cartItem in dev mode', async () => {
       mockFetch.mockResolvedValueOnce({
-        product: null
+        product: null,
       })
 
       // With cartItem provided, behavior depends on dev mode
@@ -271,7 +271,7 @@ describe('Cart Validation Module', () => {
 
     it('should use product slug for API call when cartItem provided', async () => {
       mockFetch.mockResolvedValueOnce({
-        product: mockProduct
+        product: mockProduct,
       })
 
       await validateSingleProduct('prod-1', mockCartItem)
@@ -294,10 +294,10 @@ describe('Cart Validation Module', () => {
     it('should reduce quantity when stock is lower than cart quantity', async () => {
       const itemWithHighQuantity: CartItem = {
         ...mockCartItem,
-        quantity: 15
+        quantity: 15,
       }
       mockFetch.mockResolvedValueOnce({
-        product: { ...mockProduct, stock: 5 }
+        product: { ...mockProduct, stock: 5 },
       })
 
       const result = await validateCartItem(itemWithHighQuantity)
@@ -309,7 +309,7 @@ describe('Cart Validation Module', () => {
 
     it('should return invalid when product is out of stock', async () => {
       mockFetch.mockResolvedValueOnce({
-        product: { ...mockProduct, stock: 0 }
+        product: { ...mockProduct, stock: 0 },
       })
 
       const result = await validateCartItem(mockCartItem)
@@ -345,7 +345,7 @@ describe('Cart Validation Module', () => {
     it('should validate all cart items', async () => {
       const cartItems: CartItem[] = [
         mockCartItem,
-        { ...mockCartItem, id: 'item-2', product: { ...mockProduct, id: 'prod-2', slug: 'wine-2' } }
+        { ...mockCartItem, id: 'item-2', product: { ...mockProduct, id: 'prod-2', slug: 'wine-2' } },
       ]
 
       mockFetch
@@ -361,7 +361,7 @@ describe('Cart Validation Module', () => {
     it('should separate valid and invalid items', async () => {
       const cartItems: CartItem[] = [
         mockCartItem,
-        { ...mockCartItem, id: 'item-2', product: { ...mockProduct, id: 'prod-2', slug: 'wine-2' } }
+        { ...mockCartItem, id: 'item-2', product: { ...mockProduct, id: 'prod-2', slug: 'wine-2' } },
       ]
 
       mockFetch
@@ -377,7 +377,7 @@ describe('Cart Validation Module', () => {
     it('should collect changes from all items', async () => {
       const cartItems: CartItem[] = [
         mockCartItem,
-        { ...mockCartItem, id: 'item-2', product: { ...mockProduct, id: 'prod-2', slug: 'wine-2' } }
+        { ...mockCartItem, id: 'item-2', product: { ...mockProduct, id: 'prod-2', slug: 'wine-2' } },
       ]
 
       mockFetch
@@ -393,7 +393,7 @@ describe('Cart Validation Module', () => {
     it('should collect errors from invalid items', async () => {
       const cartItems: CartItem[] = [
         mockCartItem,
-        { ...mockCartItem, id: 'item-2', product: { ...mockProduct, id: 'prod-2', slug: 'wine-2' } }
+        { ...mockCartItem, id: 'item-2', product: { ...mockProduct, id: 'prod-2', slug: 'wine-2' } },
       ]
 
       // Both items return out of stock products (more reliable than null response)

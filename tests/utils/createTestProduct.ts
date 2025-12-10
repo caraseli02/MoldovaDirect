@@ -79,6 +79,6 @@ export function createTestProducts(count: number, overrides: Partial<TestProduct
       ...overrides,
       id: overrides.id ? `${overrides.id}-${index}` : index + 1,
       name: overrides.name ? `${overrides.name} ${index + 1}` : `Test Product ${index + 1}`,
-    })
+    }),
   )
 }

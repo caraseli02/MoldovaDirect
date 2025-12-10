@@ -32,9 +32,9 @@ import type { FetchOptions } from 'ofetch'
  * })
  * ```
  */
-export async function useAdminFetch<T = any>(
+export async function useAdminFetch<T = unknown>(
   url: string,
-  options: FetchOptions = {}
+  options: FetchOptions = {},
 ): Promise<T> {
   // Get Supabase client (must be called in composable context)
   const supabase = useSupabaseClient()
@@ -45,21 +45,21 @@ export async function useAdminFetch<T = any>(
   if (!session) {
     throw createError({
       statusCode: 401,
-      statusMessage: 'No active session. Please log in again.'
+      statusMessage: 'No active session. Please log in again.',
     })
   }
 
   // Prepare headers with Bearer token
-  const headers = {
-    ...options.headers,
-    'Authorization': `Bearer ${session.access_token}`
+  const headers: Record<string, string> = {
+    ...(options.headers as Record<string, string> || {}),
+    Authorization: `Bearer ${session.access_token}`,
   }
 
   // Make the authenticated request
-  return await $fetch<T>(url, {
+  return $fetch<T>(url, {
     ...options,
-    headers
-  })
+    headers,
+  } as any) as Promise<T>
 }
 
 /**
@@ -78,17 +78,19 @@ export async function useAdminFetch<T = any>(
  * const data = await useAdminFetchWithRetry('/api/admin/analytics/users')
  * ```
  */
-export async function useAdminFetchWithRetry<T = any>(
+export async function useAdminFetchWithRetry<T = unknown>(
   url: string,
-  options: FetchOptions = {}
+  options: FetchOptions = {},
 ): Promise<T> {
   const supabase = useSupabaseClient()
 
   try {
     return await useAdminFetch<T>(url, options)
-  } catch (error: any) {
+  }
+  catch (error: unknown) {
     // If we get a 401, try to refresh the session and retry once
-    if (error?.statusCode === 401) {
+    const isUnauthorized = error && typeof error === 'object' && 'statusCode' in error && (error as { statusCode: number }).statusCode === 401
+    if (isUnauthorized) {
       console.log('[AdminFetch] Session expired, attempting to refresh...')
 
       const { data: { session } } = await supabase.auth.refreshSession()
@@ -98,20 +100,20 @@ export async function useAdminFetchWithRetry<T = any>(
         await navigateTo('/auth/login')
         throw createError({
           statusCode: 401,
-          statusMessage: 'Session expired. Please log in again.'
+          statusMessage: 'Session expired. Please log in again.',
         })
       }
 
       // Retry the request with the new session
-      const headers = {
-        ...options.headers,
-        'Authorization': `Bearer ${session.access_token}`
+      const headers: Record<string, string> = {
+        ...(options.headers as Record<string, string> || {}),
+        Authorization: `Bearer ${session.access_token}`,
       }
 
-      return await $fetch<T>(url, {
+      return $fetch<T>(url, {
         ...options,
-        headers
-      })
+        headers,
+      } as any) as Promise<T>
     }
 
     // Re-throw other errors
@@ -122,9 +124,9 @@ export async function useAdminFetchWithRetry<T = any>(
 /**
  * Result type for batch fetch operations with structured error handling
  */
-export type BatchResult<T> =
-  | { success: true; data: T }
-  | { success: false; error: string; url: string }
+export type BatchResult<T>
+  = | { success: true, data: T }
+    | { success: false, error: string, url: string }
 
 /**
  * Batch multiple admin API requests in parallel
@@ -160,8 +162,8 @@ export type BatchResult<T> =
  *   .map(r => r.data)
  * ```
  */
-export async function useAdminFetchBatch<T = any>(
-  requests: Array<{ url: string; options?: FetchOptions }>
+export async function useAdminFetchBatch<T = unknown>(
+  requests: Array<{ url: string, options?: FetchOptions }>,
 ): Promise<BatchResult<T>[]> {
   const supabase = useSupabaseClient()
 
@@ -171,13 +173,13 @@ export async function useAdminFetchBatch<T = any>(
   if (!session) {
     throw createError({
       statusCode: 401,
-      statusMessage: 'No active session. Please log in again.'
+      statusMessage: 'No active session. Please log in again.',
     })
   }
 
   // Prepare headers with Bearer token
-  const authHeaders = {
-    'Authorization': `Bearer ${session.access_token}`
+  const authHeaders: Record<string, string> = {
+    Authorization: `Bearer ${session.access_token}`,
   }
 
   // Execute all requests in parallel with structured error handling
@@ -186,18 +188,19 @@ export async function useAdminFetchBatch<T = any>(
       const data = await $fetch<T>(url, {
         ...options,
         headers: {
-          ...options.headers,
-          ...authHeaders
-        }
-      })
-      return { success: true, data }
-    } catch (error: any) {
+          ...(options.headers as Record<string, string> || {}),
+          ...authHeaders,
+        },
+      } as any)
+      return { success: true, data } as BatchResult<T>
+    }
+    catch (error: any) {
       // Don't log error object that may contain sensitive data
       console.error(`[AdminFetch] Error fetching ${url} - ADMIN_BATCH_FETCH_FAILED`)
       return {
         success: false,
         url,
-        error: error?.message || error?.statusMessage || 'Unknown error occurred'
+        error: error?.message || error?.statusMessage || 'Unknown error occurred',
       }
     }
   })

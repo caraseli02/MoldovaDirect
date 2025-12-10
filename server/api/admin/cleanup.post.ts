@@ -28,7 +28,7 @@ export default defineEventHandler(async (event) => {
     return {
       success: false,
       message: 'Confirmation required. Set confirm: true to proceed.',
-      warning: 'This operation will delete data permanently!'
+      warning: 'This operation will delete data permanently!',
     }
   }
 
@@ -37,7 +37,7 @@ export default defineEventHandler(async (event) => {
     action,
     timestamp: new Date().toISOString(),
     deletedCounts: {} as Record<string, number>,
-    errors: [] as string[]
+    errors: [] as string[],
   }
 
   try {
@@ -70,30 +70,30 @@ export default defineEventHandler(async (event) => {
         return {
           success: false,
           message: 'Invalid action specified',
-          validActions: ['clear-all', 'clear-test-users', 'clear-orders', 'clear-products', 'reset-database', 'clear-old-carts']
+          validActions: ['clear-all', 'clear-test-users', 'clear-orders', 'clear-products', 'reset-database', 'clear-old-carts'],
         }
     }
 
     // Log admin action
     await logAdminAction(event, adminId, 'cleanup', {
       action,
-      deletedCounts: results.deletedCounts
+      deletedCounts: results.deletedCounts,
     })
 
     return {
       success: true,
       message: `Successfully completed ${action}`,
-      results
+      results,
     }
-
-  } catch (error: any) {
+  }
+  catch (error: any) {
     console.error('Cleanup error:', error)
     await logAdminAction(event, adminId, 'cleanup-failed', { action, error: error.message })
     return {
       success: false,
       message: 'Cleanup failed',
       error: error.message,
-      results
+      results,
     }
   }
 })
@@ -119,10 +119,10 @@ async function clearTestUsers(supabase: any, results: any) {
 
     const testUserIds = authUsers.users
       .filter((u: any) =>
-        u.email.includes('test') ||
-        u.email.includes('demo') ||
-        u.email.includes('example') ||
-        u.email.includes('@testuser.md')
+        u.email.includes('test')
+        || u.email.includes('demo')
+        || u.email.includes('example')
+        || u.email.includes('@testuser.md'),
       )
       .map((u: any) => u.id)
 
@@ -160,11 +160,12 @@ async function clearTestUsers(supabase: any, results: any) {
       }
 
       results.deletedCounts.testUsers = deletedCount
-    } else {
+    }
+    else {
       results.deletedCounts.testUsers = 0
     }
-
-  } catch (error: any) {
+  }
+  catch (error: any) {
     results.errors.push(`Error clearing test users: ${error.message}`)
   }
 }
@@ -185,11 +186,12 @@ async function clearOrders(supabase: any, results: any) {
 
     if (error) {
       results.errors.push(`Failed to delete orders: ${error.message}`)
-    } else {
+    }
+    else {
       results.deletedCounts.orders = orderCount || 0
     }
-
-  } catch (error: any) {
+  }
+  catch (error: any) {
     results.errors.push(`Error clearing orders: ${error.message}`)
   }
 }
@@ -211,11 +213,12 @@ async function clearProducts(supabase: any, results: any) {
 
     if (error) {
       results.errors.push(`Failed to delete products: ${error.message}`)
-    } else {
+    }
+    else {
       results.deletedCounts.products = productCount || 0
     }
-
-  } catch (error: any) {
+  }
+  catch (error: any) {
     results.errors.push(`Error clearing products: ${error.message}`)
   }
 }
@@ -254,8 +257,8 @@ async function clearOldCarts(supabase: any, results: any, daysOld: number) {
     }
 
     results.deletedCounts.carts = count || 0
-
-  } catch (error: any) {
+  }
+  catch (error: any) {
     results.errors.push(`Error clearing old carts: ${error.message}`)
   }
 }
@@ -271,7 +274,7 @@ async function resetDatabase(supabase: any, results: any) {
       'addresses',
       'inventory_logs',
       'products',
-      'categories'
+      'categories',
     ]
 
     for (const table of tables) {
@@ -288,8 +291,8 @@ async function resetDatabase(supabase: any, results: any) {
     await clearTestUsers(supabase, results)
 
     results.message = 'Database reset to empty state'
-
-  } catch (error: any) {
+  }
+  catch (error: any) {
     results.errors.push(`Error resetting database: ${error.message}`)
   }
 }

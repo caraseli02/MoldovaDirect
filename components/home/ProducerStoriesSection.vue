@@ -27,15 +27,32 @@
       </div>
 
       <!-- Loading State -->
-      <div v-if="loading" class="mt-8 grid gap-4 md:mt-12 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
-        <div v-for="i in 3" :key="i" class="h-[420px] animate-pulse rounded-2xl bg-slate-200 md:h-[480px]"></div>
+      <div
+        v-if="loading"
+        class="mt-8 grid gap-4 md:mt-12 md:grid-cols-2 md:gap-6 lg:grid-cols-3"
+      >
+        <div
+          v-for="i in 3"
+          :key="i"
+          class="h-[420px] animate-pulse rounded-2xl bg-slate-200 md:h-[480px]"
+        ></div>
       </div>
 
       <!-- Error State -->
-      <div v-else-if="error" class="mt-8 rounded-lg bg-red-50 p-6 text-center md:mt-12">
-        <commonIcon name="lucide:alert-circle" class="mx-auto h-12 w-12 text-red-500" />
-        <p class="mt-2 text-lg font-medium text-red-900">{{ t('wineStory.producers.error') }}</p>
-        <p class="mt-1 text-sm text-red-700">{{ error }}</p>
+      <div
+        v-else-if="error"
+        class="mt-8 rounded-lg bg-red-50 p-6 text-center md:mt-12"
+      >
+        <commonIcon
+          name="lucide:alert-circle"
+          class="mx-auto h-12 w-12 text-red-500"
+        />
+        <p class="mt-2 text-lg font-medium text-red-900">
+          {{ t('wineStory.producers.error') }}
+        </p>
+        <p class="mt-1 text-sm text-red-700">
+          {{ error }}
+        </p>
       </div>
 
       <!-- Producer Carousel -->
@@ -86,7 +103,7 @@
           }"
           class="producer-stories-swiper"
           @swiper="onSwiper"
-          @slideChange="onSlideChange"
+          @slide-change="onSlideChange"
         >
           <SwiperSlide
             v-for="producer in featuredProducers"
@@ -105,14 +122,20 @@
           class="swiper-button-prev-custom absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white p-2.5 shadow-lg transition-all hover:scale-110 hover:bg-gold-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:opacity-50 md:-left-4 md:p-3 lg:-left-6"
           :aria-label="t('common.previous')"
         >
-          <commonIcon name="lucide:chevron-left" class="h-5 w-5 text-slate-700 transition-colors hover:text-gold-600 md:h-6 md:w-6" />
+          <commonIcon
+            name="lucide:chevron-left"
+            class="h-5 w-5 text-slate-700 transition-colors hover:text-gold-600 md:h-6 md:w-6"
+          />
         </button>
 
         <button
           class="swiper-button-next-custom absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white p-2.5 shadow-lg transition-all hover:scale-110 hover:bg-gold-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:opacity-50 md:-right-4 md:p-3 lg:-right-6"
           :aria-label="t('common.next')"
         >
-          <commonIcon name="lucide:chevron-right" class="h-5 w-5 text-slate-700 transition-colors hover:text-gold-600 md:h-6 md:w-6" />
+          <commonIcon
+            name="lucide:chevron-right"
+            class="h-5 w-5 text-slate-700 transition-colors hover:text-gold-600 md:h-6 md:w-6"
+          />
         </button>
 
         <!-- Custom Pagination -->
@@ -121,20 +144,34 @@
         <!-- Keyboard/Touch Hints - Smaller on mobile -->
         <div class="mt-6 flex flex-wrap justify-center gap-3 text-xs text-slate-500 md:gap-4 md:text-sm">
           <span class="inline-flex items-center gap-1.5 md:gap-2">
-            <commonIcon name="lucide:mouse-pointer-2" class="h-3.5 w-3.5 md:h-4 md:w-4" />
+            <commonIcon
+              name="lucide:mouse-pointer-2"
+              class="h-3.5 w-3.5 md:h-4 md:w-4"
+            />
             {{ t('wineStory.producers.swipeHint') }}
           </span>
           <span class="hidden items-center gap-2 md:inline-flex">
-            <commonIcon name="lucide:keyboard" class="h-4 w-4" />
+            <commonIcon
+              name="lucide:keyboard"
+              class="h-4 w-4"
+            />
             {{ t('wineStory.producers.keyboardHint') }}
           </span>
         </div>
       </div>
 
       <!-- Empty State -->
-      <div v-else class="mt-8 rounded-lg bg-slate-100 p-12 text-center md:mt-12">
-        <commonIcon name="lucide:wine" class="mx-auto h-16 w-16 text-slate-400" />
-        <p class="mt-4 text-lg font-medium text-slate-600">{{ t('wineStory.producers.noProducers') }}</p>
+      <div
+        v-else
+        class="mt-8 rounded-lg bg-slate-100 p-12 text-center md:mt-12"
+      >
+        <commonIcon
+          name="lucide:wine"
+          class="mx-auto h-16 w-16 text-slate-400"
+        />
+        <p class="mt-4 text-lg font-medium text-slate-600">
+          {{ t('wineStory.producers.noProducers') }}
+        </p>
       </div>
     </div>
 
@@ -192,7 +229,8 @@ useEventListener('keydown', (event: KeyboardEvent) => {
   if (event.key === 'ArrowLeft') {
     event.preventDefault()
     swiperInstance.value.slidePrev()
-  } else if (event.key === 'ArrowRight') {
+  }
+  else if (event.key === 'ArrowRight') {
     event.preventDefault()
     swiperInstance.value.slideNext()
   }

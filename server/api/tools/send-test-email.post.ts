@@ -17,7 +17,7 @@ const EMAIL_TYPE_LABELS: Record<EmailType, string> = {
   order_shipped: 'Order Shipped',
   order_delivered: 'Order Delivered',
   order_cancelled: 'Order Cancelled',
-  order_issue: 'Order Issue'
+  order_issue: 'Order Issue',
 }
 
 const STATUS_BY_EMAIL_TYPE: Partial<Record<EmailType, string>> = {
@@ -26,7 +26,7 @@ const STATUS_BY_EMAIL_TYPE: Partial<Record<EmailType, string>> = {
   order_shipped: 'shipped',
   order_delivered: 'delivered',
   order_cancelled: 'cancelled',
-  order_issue: 'processing'
+  order_issue: 'processing',
 }
 
 export default defineEventHandler(async (event) => {
@@ -35,7 +35,7 @@ export default defineEventHandler(async (event) => {
   if (!body?.email || !body.type) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Email address and type are required'
+      statusMessage: 'Email address and type are required',
     })
   }
 
@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Invalid email address'
+      statusMessage: 'Invalid email address',
     })
   }
 
@@ -66,7 +66,7 @@ export default defineEventHandler(async (event) => {
       postalCode: 'MD-2001',
       province: 'Chișinău Municipality',
       country: 'Moldova',
-      phone: '+373 60 123 456'
+      phone: '+373 60 123 456',
     }
 
     const billingAddress = {
@@ -77,7 +77,7 @@ export default defineEventHandler(async (event) => {
       postalCode: '28014',
       province: 'Madrid',
       country: 'Spain',
-      phone: '+34 600 123 456'
+      phone: '+34 600 123 456',
     }
 
     const subtotal = 64.5
@@ -100,7 +100,7 @@ export default defineEventHandler(async (event) => {
         shipping_address: shippingAddress,
         billing_address: billingAddress,
         guest_email: trimmedEmail,
-        customer_notes: 'Generated via email testing playground.'
+        customer_notes: 'Generated via email testing playground.',
       })
       .select()
       .single()
@@ -109,7 +109,7 @@ export default defineEventHandler(async (event) => {
       console.error('Failed to create test order:', orderError)
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to create test order'
+        statusMessage: 'Failed to create test order',
       })
     }
 
@@ -126,21 +126,21 @@ export default defineEventHandler(async (event) => {
             en: 'Purcari Cabernet Sauvignon (Test)',
             es: 'Purcari Cabernet Sauvignon (Prueba)',
             ro: 'Purcari Cabernet Sauvignon (Test)',
-            ru: 'Пуркари Каберне Совиньон (Тест)'
+            ru: 'Пуркари Каберне Совиньон (Тест)',
           },
           images: [
             {
-              url: 'https://images.moldovadirect.test/products/wine-cabernet.png'
-            }
+              url: 'https://images.moldovadirect.test/products/wine-cabernet.png',
+            },
           ],
           attributes: {
             volume: '750 ml',
-            vintage: '2021'
-          }
+            vintage: '2021',
+          },
         },
         quantity: 2,
         price_eur: 21.5,
-        total_eur: 43.0
+        total_eur: 43.0,
       },
       {
         order_id: order.id,
@@ -152,22 +152,22 @@ export default defineEventHandler(async (event) => {
             en: 'Moldovan Forest Honey (Test)',
             es: 'Miel de Bosque Moldava (Prueba)',
             ro: 'Miere de Pădure din Moldova (Test)',
-            ru: 'Молдавский лесной мед (Тест)'
+            ru: 'Молдавский лесной мед (Тест)',
           },
           images: [
             {
-              url: 'https://images.moldovadirect.test/products/honey-forest.png'
-            }
+              url: 'https://images.moldovadirect.test/products/honey-forest.png',
+            },
           ],
           attributes: {
             weight: '500 g',
-            source: 'Codru Forest'
-          }
+            source: 'Codru Forest',
+          },
         },
         quantity: 1,
         price_eur: 21.5,
-        total_eur: 21.5
-      }
+        total_eur: 21.5,
+      },
     ]
 
     const { error: itemsError } = await supabase
@@ -178,7 +178,7 @@ export default defineEventHandler(async (event) => {
       console.error('Failed to create test order items:', itemsError)
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to create test order items'
+        statusMessage: 'Failed to create test order items',
       })
     }
 
@@ -202,7 +202,7 @@ export default defineEventHandler(async (event) => {
       console.error('Failed to fetch test order with items:', fetchError)
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to load test order data'
+        statusMessage: 'Failed to load test order data',
       })
     }
 
@@ -216,28 +216,29 @@ export default defineEventHandler(async (event) => {
       status: derivedStatus,
       estimated_delivery: orderWithItems.estimated_delivery || new Date(now + 4 * 24 * 60 * 60 * 1000).toISOString(),
       tracking_number: shouldIncludeTracking ? (orderWithItems.tracking_number || 'MDX-TEST-TRACK-001') : null,
-      carrier: shouldIncludeTracking ? (orderWithItems.carrier || 'Moldova Direct Courier') : null
+      carrier: shouldIncludeTracking ? (orderWithItems.carrier || 'Moldova Direct Courier') : null,
     } as DatabaseOrder
 
     const emailData = transformOrderToEmailData(
       enrichedOrder,
       `${shippingAddress.firstName} ${shippingAddress.lastName}`,
       trimmedEmail,
-      locale
+      locale,
     )
 
     let result
 
     if (body.type === 'order_confirmation') {
       result = await sendOrderConfirmationEmail(emailData, { supabaseClient: supabase })
-    } else {
+    }
+    else {
       result = await sendOrderStatusEmail(emailData, body.type, issueDescription, { supabaseClient: supabase })
     }
 
     if (!result.success) {
       throw createError({
         statusCode: 500,
-        statusMessage: result.error || 'Failed to send test email'
+        statusMessage: result.error || 'Failed to send test email',
       })
     }
 
@@ -246,9 +247,10 @@ export default defineEventHandler(async (event) => {
       subject: EMAIL_TYPE_LABELS[body.type],
       orderNumber,
       emailLogId: result.emailLogId,
-      externalId: result.externalId
+      externalId: result.externalId,
     }
-  } finally {
+  }
+  finally {
     if (createdOrderId) {
       const { error: cleanupError } = await supabase
         .from('orders')

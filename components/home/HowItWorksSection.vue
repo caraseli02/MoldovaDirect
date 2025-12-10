@@ -2,8 +2,12 @@
   <section class="bg-gray-50 py-20 dark:bg-gray-900 md:py-28">
     <div class="container">
       <div class="mx-auto max-w-3xl text-center">
-        <h2 class="text-4xl font-bold md:text-5xl lg:text-6xl tracking-tight">{{ t('home.howItWorks.title') }}</h2>
-        <p class="mt-4 text-sm md:text-base text-gray-600 dark:text-gray-400">{{ t('home.howItWorks.subtitle') }}</p>
+        <h2 class="text-4xl font-bold md:text-5xl lg:text-6xl tracking-tight">
+          {{ t('home.howItWorks.title') }}
+        </h2>
+        <p class="mt-4 text-sm md:text-base text-gray-600 dark:text-gray-400">
+          {{ t('home.howItWorks.subtitle') }}
+        </p>
       </div>
       <ol class="mt-12 grid gap-8 md:grid-cols-3 relative list-none">
         <li
@@ -13,12 +17,21 @@
           :class="{ 'has-connector': index < steps.length - 1 }"
         >
           <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-100 text-primary-600">
-            <commonIcon :name="step.icon" class="h-6 w-6" />
+            <commonIcon
+              :name="step.icon"
+              class="h-6 w-6"
+            />
           </div>
           <div class="mt-6">
-            <p class="text-sm font-semibold text-primary-600">{{ formatStep(index + 1) }}</p>
-            <h3 class="mt-2 text-xl font-semibold">{{ step.title }}</h3>
-            <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">{{ step.description }}</p>
+            <p class="text-sm font-semibold text-primary-600">
+              {{ formatStep(index + 1) }}
+            </p>
+            <h3 class="mt-2 text-xl font-semibold">
+              {{ step.title }}
+            </h3>
+            <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">
+              {{ step.description }}
+            </p>
           </div>
         </li>
       </ol>

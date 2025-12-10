@@ -1,5 +1,5 @@
 import { storeToRefs } from 'pinia'
-import { useCheckoutStore } from '~/stores/checkout'
+import { useCheckoutStore, type CheckoutStore } from '~/stores/checkout'
 import { useCheckoutSessionStore } from '~/stores/checkout/session'
 import { useCartStore } from '~/stores/cart'
 import type { CartItem } from '~/stores/cart/types'
@@ -17,7 +17,7 @@ interface ProcessOrderResult {
 }
 
 export function useCheckoutReview() {
-  const checkoutStore = useCheckoutStore()
+  const checkoutStore = useCheckoutStore() as CheckoutStore
   const checkoutSession = useCheckoutSessionStore()
   const cartStore = useCartStore()
   const localePath = useLocalePath()
@@ -28,7 +28,7 @@ export function useCheckoutReview() {
     paymentMethod,
     loading,
     processing,
-    lastError
+    lastError,
   } = storeToRefs(checkoutSession)
 
   const hasInitialized = ref(false)
@@ -42,15 +42,15 @@ export function useCheckoutReview() {
     return Array.isArray((items as any)?.value) ? (items as any).value : []
   })
 
-  const baseCanProceed = computed(() => checkoutStore.canCompleteOrder && Boolean(orderData.value) && Boolean(shippingInfo.value) && Boolean(paymentMethod.value))
+  const baseCanProceed = computed(() => (checkoutStore as any).canCompleteOrder && Boolean(orderData.value) && Boolean(shippingInfo.value) && Boolean(paymentMethod.value))
 
   const buildCartSignature = (items: CartItem[]): string => {
     return JSON.stringify(
       items.map(item => ({
         id: item.id,
         quantity: item.quantity,
-        price: item.product.price
-      }))
+        price: item.product.price,
+      })),
     )
   }
 
@@ -58,7 +58,8 @@ export function useCheckoutReview() {
     if (cartItems.value.length === 0 && typeof cartStore.loadFromStorage === 'function') {
       try {
         await cartStore.loadFromStorage()
-      } catch (error) {
+      }
+      catch (error) {
         console.error('Failed to load cart from storage for checkout review:', error)
       }
     }
@@ -92,15 +93,15 @@ export function useCheckoutReview() {
       return
     }
 
-    await checkoutStore.initializeCheckout(cartItems.value.slice())
+    await (checkoutStore as any).initializeCheckout(cartItems.value.slice())
 
-    if (!checkoutStore.canProceedToReview) {
+    if (!(checkoutStore as any).canProceedToReview) {
       if (await redirectToMissingStep()) {
         return
       }
     }
 
-    checkoutStore.currentStep = 'review'
+    ;(checkoutStore as any).currentStep = 'review'
     lastCartSignature.value = buildCartSignature(cartItems.value)
     hasInitialized.value = true
   }
@@ -120,20 +121,21 @@ export function useCheckoutReview() {
       }
 
       try {
-        await checkoutStore.calculateOrderData(items)
-        await checkoutStore.updateShippingCosts()
+        await (checkoutStore as any).calculateOrderData(items)
+        await (checkoutStore as any).updateShippingCosts()
         lastCartSignature.value = signature
-      } catch (error) {
+      }
+      catch (error) {
         console.error('Failed to refresh checkout totals on review page:', error)
       }
     },
-    { deep: true }
+    { deep: true },
   )
 
   const formatPrice = (price: number): string => {
     return new Intl.NumberFormat('es-ES', {
       style: 'currency',
-      currency: 'EUR'
+      currency: 'EUR',
     }).format(price)
   }
 
@@ -167,7 +169,7 @@ export function useCheckoutReview() {
   }
 
   const goBack = async () => {
-    const previousStep = checkoutStore.goToPreviousStep()
+    const previousStep = (checkoutStore as any).goToPreviousStep()
     if (!previousStep) return
 
     const stepPath = previousStep === 'shipping' ? '/checkout' : `/checkout/${previousStep}`
@@ -179,12 +181,12 @@ export function useCheckoutReview() {
   }
 
   const editShipping = async () => {
-    checkoutStore.goToStep('shipping')
+    ;(checkoutStore as any).goToStep('shipping')
     await navigateTo(localePath('/checkout'))
   }
 
   const editPayment = async () => {
-    checkoutStore.goToStep('payment')
+    ;(checkoutStore as any).goToStep('payment')
     await navigateTo(localePath('/checkout/payment'))
   }
 
@@ -193,17 +195,18 @@ export function useCheckoutReview() {
       return { nextStep: null, success: false }
     }
 
-    checkoutStore.termsAccepted = options.termsAccepted
-    checkoutStore.privacyAccepted = options.privacyAccepted
-    checkoutStore.marketingConsent = options.marketingConsent
+    ;(checkoutStore as any).termsAccepted = options.termsAccepted
+    ;(checkoutStore as any).privacyAccepted = options.privacyAccepted
+    ;(checkoutStore as any).marketingConsent = options.marketingConsent
 
     try {
-      const nextStep = await checkoutStore.proceedToNextStep()
+      const nextStep = await (checkoutStore as any).proceedToNextStep()
       return {
         nextStep,
-        success: Boolean(nextStep)
+        success: Boolean(nextStep),
       }
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Failed to process order:', error)
       return { nextStep: null, success: false }
     }
@@ -224,6 +227,6 @@ export function useCheckoutReview() {
     editCart,
     editShipping,
     editPayment,
-    processOrder
+    processOrder,
   }
 }

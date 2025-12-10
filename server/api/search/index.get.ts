@@ -14,7 +14,7 @@ export default defineCachedEventHandler(async (event) => {
   try {
     const supabase = await serverSupabaseClient(event)
     const query = getQuery(event)
-    
+
     const searchTerm = query.q as string
     const locale = (query.locale as string) || 'es'
     const category = query.category as string
@@ -36,8 +36,8 @@ export default defineCachedEventHandler(async (event) => {
           total: 0,
           limit,
           locale,
-          message: 'Search term must be at least 2 characters'
-        }
+          message: 'Search term must be at least 2 characters',
+        },
       }
     }
 
@@ -45,7 +45,7 @@ export default defineCachedEventHandler(async (event) => {
     if (searchTerm.length > MAX_SEARCH_LENGTH) {
       throw createError({
         statusCode: 400,
-        statusMessage: `Search term too long. Maximum ${MAX_SEARCH_LENGTH} characters allowed.`
+        statusMessage: `Search term too long. Maximum ${MAX_SEARCH_LENGTH} characters allowed.`,
       })
     }
 
@@ -82,15 +82,15 @@ export default defineCachedEventHandler(async (event) => {
     // Sanitize search term to prevent SQL injection and escape special characters
     const searchPattern = prepareSearchPattern(searchTerm, { validateLength: false })
     queryBuilder = queryBuilder.or(
-      `name_translations->>es.ilike.${searchPattern},` +
-      `name_translations->>en.ilike.${searchPattern},` +
-      `name_translations->>ro.ilike.${searchPattern},` +
-      `name_translations->>ru.ilike.${searchPattern},` +
-      `description_translations->>es.ilike.${searchPattern},` +
-      `description_translations->>en.ilike.${searchPattern},` +
-      `description_translations->>ro.ilike.${searchPattern},` +
-      `description_translations->>ru.ilike.${searchPattern},` +
-      `sku.ilike.${searchPattern}`
+      `name_translations->>es.ilike.${searchPattern},`
+      + `name_translations->>en.ilike.${searchPattern},`
+      + `name_translations->>ro.ilike.${searchPattern},`
+      + `name_translations->>ru.ilike.${searchPattern},`
+      + `description_translations->>es.ilike.${searchPattern},`
+      + `description_translations->>en.ilike.${searchPattern},`
+      + `description_translations->>ro.ilike.${searchPattern},`
+      + `description_translations->>ru.ilike.${searchPattern},`
+      + `sku.ilike.${searchPattern}`,
     )
 
     const { data: matchingProducts, error } = await queryBuilder
@@ -99,7 +99,7 @@ export default defineCachedEventHandler(async (event) => {
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to fetch products for search',
-        data: error
+        data: error,
       })
     }
 
@@ -144,24 +144,27 @@ export default defineCachedEventHandler(async (event) => {
       comparePrice: product.compare_at_price_eur,
       formattedPrice: `€${product.price_eur.toFixed(2)}`,
       stockQuantity: product.stock_quantity,
-      stockStatus: product.stock_quantity > 5 ? 'in_stock' : 
-                   product.stock_quantity > 0 ? 'low_stock' : 'out_of_stock',
-      images: Array.isArray(product.images) ? product.images.map((img: any, index: number) => ({
-        url: img.url || img,
-        altText: img.alt || img.alt_text || product.name_translations,
-        isPrimary: img.is_primary || index === 0
-      })) : [],
+      stockStatus: product.stock_quantity > 5
+        ? 'in_stock'
+        : product.stock_quantity > 0 ? 'low_stock' : 'out_of_stock',
+      images: Array.isArray(product.images)
+        ? product.images.map((img: any, index: number) => ({
+            url: img.url || img,
+            altText: img.alt || img.alt_text || product.name_translations,
+            isPrimary: img.is_primary || index === 0,
+          }))
+        : [],
       primaryImage: product.images?.[0]?.url || product.images?.[0] || '/placeholder-product.svg',
       category: {
         id: product.categories.id,
         slug: product.categories.slug,
-        name: product.categories.name_translations
+        name: product.categories.name_translations,
       },
       attributes: product.attributes || {},
       is_active: product.is_active,
       created_at: product.created_at,
       // Add search relevance info
-      relevanceScore: calculateRelevance(product, searchTermLower, locale)
+      relevanceScore: calculateRelevance(product, searchTermLower, locale),
     }))
 
     // Calculate pagination metadata
@@ -175,62 +178,62 @@ export default defineCachedEventHandler(async (event) => {
         total,
         totalPages,
         hasNextPage: page < totalPages,
-        hasPreviousPage: page > 1
+        hasPreviousPage: page > 1,
       },
       meta: {
         query: searchTerm,
         returned: transformedProducts.length,
         locale,
-        category: category || null
+        category: category || null,
       },
-      suggestions: generateSearchSuggestions(searchTerm, matchingProducts || [], locale)
+      suggestions: generateSearchSuggestions(searchTerm, matchingProducts || [], locale),
     }
-
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Search API error:', error)
-    
+
     if (error.statusCode) {
       throw error
     }
-    
+
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 }, {
   maxAge: PUBLIC_CACHE_CONFIG.search.maxAge,
   name: PUBLIC_CACHE_CONFIG.search.name,
-  getKey: (event) => getPublicCacheKey(PUBLIC_CACHE_CONFIG.search.name, event)
+  getKey: event => getPublicCacheKey(PUBLIC_CACHE_CONFIG.search.name, event),
 })
 
 // Calculate relevance score for search results
 function calculateRelevance(product: any, searchTerm: string, locale: string): number {
   let score = 0
   const name = getLocalizedContent(product.name_translations, locale).toLowerCase()
-  
+
   // Exact name match
   if (name === searchTerm) score += 100
-  
+
   // Name starts with search term
   if (name.startsWith(searchTerm)) score += 80
-  
+
   // Name contains search term
   if (name.includes(searchTerm)) score += 60
-  
+
   // Description contains search term
   const description = getLocalizedContent(product.description_translations || {}, locale).toLowerCase()
   if (description.includes(searchTerm)) score += 40
-  
+
   // SKU contains search term
   if (product.sku.toLowerCase().includes(searchTerm)) score += 30
-  
+
   // In stock bonus
   if (product.stock_quantity > 0) score += 20
-  
+
   // High stock bonus
   if (product.stock_quantity > 10) score += 10
-  
+
   return score
 }
 
@@ -238,22 +241,22 @@ function calculateRelevance(product: any, searchTerm: string, locale: string): n
 function generateSearchSuggestions(searchTerm: string, products: any[], locale: string, limit: number = 5): string[] {
   const suggestions = new Set<string>()
   const searchLower = searchTerm.toLowerCase()
-  
-  products.forEach(product => {
+
+  products.forEach((product) => {
     const name = getLocalizedContent(product.name_translations, locale)
     const words = name.toLowerCase().split(/\s+/)
-    
-    words.forEach(word => {
+
+    words.forEach((word) => {
       if (word.length > 2 && word.includes(searchLower) && word !== searchLower) {
         suggestions.add(word)
       }
     })
-    
+
     // Add full product names that partially match
     if (name.toLowerCase().includes(searchLower) && name.toLowerCase() !== searchLower) {
       suggestions.add(name)
     }
   })
-  
+
   return Array.from(suggestions).slice(0, limit)
 }

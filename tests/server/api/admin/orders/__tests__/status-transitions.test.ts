@@ -23,7 +23,7 @@ describe('Order Status Transitions - Valid Transitions', () => {
     // Create test admin user
     const { data: admin } = await supabase.auth.signUp({
       email: `test-admin-${Date.now()}@example.test`,
-      password: 'TestPassword123!'
+      password: 'TestPassword123!',
     })
     testAdmin = admin.user
 
@@ -53,7 +53,7 @@ describe('Order Status Transitions - Valid Transitions', () => {
       .insert({
         user_id: testAdmin.id,
         total_amount: 100,
-        status: 'pending'
+        status: 'pending',
       })
       .select()
       .single()
@@ -64,11 +64,11 @@ describe('Order Status Transitions - Valid Transitions', () => {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
       body: JSON.stringify({
-        status: 'processing'
-      })
+        status: 'processing',
+      }),
     })
 
     expect(response.status).toBe(200)
@@ -96,7 +96,7 @@ describe('Order Status Transitions - Valid Transitions', () => {
       .insert({
         user_id: testAdmin.id,
         total_amount: 100,
-        status: 'pending'
+        status: 'pending',
       })
       .select()
       .single()
@@ -108,9 +108,9 @@ describe('Order Status Transitions - Valid Transitions', () => {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
-      body: JSON.stringify({ status: 'processing' })
+      body: JSON.stringify({ status: 'processing' }),
     })
 
     // 2. processing -> shipped (with tracking)
@@ -118,13 +118,13 @@ describe('Order Status Transitions - Valid Transitions', () => {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
       body: JSON.stringify({
         status: 'shipped',
         trackingNumber: 'TRACK123',
-        carrier: 'DHL'
-      })
+        carrier: 'DHL',
+      }),
     })
 
     // 3. shipped -> delivered
@@ -132,9 +132,9 @@ describe('Order Status Transitions - Valid Transitions', () => {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
-      body: JSON.stringify({ status: 'delivered' })
+      body: JSON.stringify({ status: 'delivered' }),
     })
 
     expect(response.status).toBe(200)
@@ -170,7 +170,7 @@ describe('Order Status Transitions - Valid Transitions', () => {
       .insert({
         user_id: testAdmin.id,
         total_amount: 100,
-        status: 'pending'
+        status: 'pending',
       })
       .select()
       .single()
@@ -179,12 +179,12 @@ describe('Order Status Transitions - Valid Transitions', () => {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
       body: JSON.stringify({
         status: 'cancelled',
-        adminNotes: 'Customer requested cancellation'
-      })
+        adminNotes: 'Customer requested cancellation',
+      }),
     })
 
     expect(response1.status).toBe(200)
@@ -199,7 +199,7 @@ describe('Order Status Transitions - Valid Transitions', () => {
       .insert({
         user_id: testAdmin.id,
         total_amount: 100,
-        status: 'processing'
+        status: 'processing',
       })
       .select()
       .single()
@@ -210,9 +210,9 @@ describe('Order Status Transitions - Valid Transitions', () => {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
-      body: JSON.stringify({ status: 'cancelled' })
+      body: JSON.stringify({ status: 'cancelled' }),
     })
 
     expect(response2.status).toBe(200)
@@ -229,7 +229,7 @@ describe('Order Status Transitions - Invalid Transitions', () => {
 
     const { data: admin } = await supabase.auth.signUp({
       email: `test-admin-${Date.now()}@example.test`,
-      password: 'TestPassword123!'
+      password: 'TestPassword123!',
     })
     testAdmin = admin.user
 
@@ -257,7 +257,7 @@ describe('Order Status Transitions - Invalid Transitions', () => {
       .insert({
         user_id: testAdmin.id,
         total_amount: 100,
-        status: 'shipped'
+        status: 'shipped',
       })
       .select()
       .single()
@@ -268,9 +268,9 @@ describe('Order Status Transitions - Invalid Transitions', () => {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
-      body: JSON.stringify({ status: 'pending' })
+      body: JSON.stringify({ status: 'pending' }),
     })
 
     expect(response.status).toBe(400)
@@ -287,7 +287,7 @@ describe('Order Status Transitions - Invalid Transitions', () => {
       .insert({
         user_id: testAdmin.id,
         total_amount: 100,
-        status: 'pending'
+        status: 'pending',
       })
       .select()
       .single()
@@ -298,13 +298,13 @@ describe('Order Status Transitions - Invalid Transitions', () => {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
       body: JSON.stringify({
         status: 'shipped',
         trackingNumber: 'TRACK123',
-        carrier: 'DHL'
-      })
+        carrier: 'DHL',
+      }),
     })
 
     expect(response.status).toBe(400)
@@ -319,7 +319,7 @@ describe('Order Status Transitions - Invalid Transitions', () => {
       .insert({
         user_id: testAdmin.id,
         total_amount: 100,
-        status: 'delivered'
+        status: 'delivered',
       })
       .select()
       .single()
@@ -331,9 +331,9 @@ describe('Order Status Transitions - Invalid Transitions', () => {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
-      body: JSON.stringify({ status: 'processing' })
+      body: JSON.stringify({ status: 'processing' }),
     })
 
     expect(response.status).toBe(400)
@@ -349,7 +349,7 @@ describe('Order Status Transitions - Invalid Transitions', () => {
       .insert({
         user_id: testAdmin.id,
         total_amount: 100,
-        status: 'cancelled'
+        status: 'cancelled',
       })
       .select()
       .single()
@@ -361,9 +361,9 @@ describe('Order Status Transitions - Invalid Transitions', () => {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
-      body: JSON.stringify({ status: 'pending' })
+      body: JSON.stringify({ status: 'pending' }),
     })
 
     expect(response.status).toBe(400)
@@ -380,7 +380,7 @@ describe('Order Status Transitions - Required Fields', () => {
 
     const { data: admin } = await supabase.auth.signUp({
       email: `test-admin-${Date.now()}@example.test`,
-      password: 'TestPassword123!'
+      password: 'TestPassword123!',
     })
     testAdmin = admin.user
 
@@ -407,7 +407,7 @@ describe('Order Status Transitions - Required Fields', () => {
       .insert({
         user_id: testAdmin.id,
         total_amount: 100,
-        status: 'processing'
+        status: 'processing',
       })
       .select()
       .single()
@@ -419,12 +419,12 @@ describe('Order Status Transitions - Required Fields', () => {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
       body: JSON.stringify({
         status: 'shipped',
-        carrier: 'DHL'
-      })
+        carrier: 'DHL',
+      }),
     })
 
     expect(response.status).toBe(400)
@@ -439,7 +439,7 @@ describe('Order Status Transitions - Required Fields', () => {
       .insert({
         user_id: testAdmin.id,
         total_amount: 100,
-        status: 'processing'
+        status: 'processing',
       })
       .select()
       .single()
@@ -451,12 +451,12 @@ describe('Order Status Transitions - Required Fields', () => {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
       body: JSON.stringify({
         status: 'shipped',
-        trackingNumber: 'TRACK123'
-      })
+        trackingNumber: 'TRACK123',
+      }),
     })
 
     expect(response.status).toBe(400)
@@ -471,7 +471,7 @@ describe('Order Status Transitions - Required Fields', () => {
       .insert({
         user_id: testAdmin.id,
         total_amount: 100,
-        status: 'processing'
+        status: 'processing',
       })
       .select()
       .single()
@@ -482,13 +482,13 @@ describe('Order Status Transitions - Required Fields', () => {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
       body: JSON.stringify({
         status: 'shipped',
         trackingNumber: 'TRACK123',
-        carrier: 'DHL'
-      })
+        carrier: 'DHL',
+      }),
     })
 
     expect(response.status).toBe(200)
@@ -512,7 +512,7 @@ describe('Order Status Transitions - Required Fields', () => {
       .insert({
         user_id: testAdmin.id,
         total_amount: 100,
-        status: 'shipped'
+        status: 'shipped',
       })
       .select()
       .single()
@@ -523,9 +523,9 @@ describe('Order Status Transitions - Required Fields', () => {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
-      body: JSON.stringify({ status: 'delivered' })
+      body: JSON.stringify({ status: 'delivered' }),
     })
 
     expect(response.status).toBe(200)
@@ -540,7 +540,7 @@ describe('Order Status Transitions - Required Fields', () => {
       .insert({
         user_id: testAdmin.id,
         total_amount: 100,
-        status: 'pending'
+        status: 'pending',
       })
       .select()
       .single()
@@ -551,12 +551,12 @@ describe('Order Status Transitions - Required Fields', () => {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
       body: JSON.stringify({
         status: 'cancelled',
-        adminNotes: 'Customer requested cancellation due to delayed shipping'
-      })
+        adminNotes: 'Customer requested cancellation due to delayed shipping',
+      }),
     })
 
     // Verify notes in status history
@@ -579,7 +579,7 @@ describe('Order Status Transitions - Validation', () => {
 
     const { data: admin } = await supabase.auth.signUp({
       email: `test-admin-${Date.now()}@example.test`,
-      password: 'TestPassword123!'
+      password: 'TestPassword123!',
     })
     testAdmin = admin.user
 
@@ -601,9 +601,9 @@ describe('Order Status Transitions - Validation', () => {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
-      body: JSON.stringify({ status: 'processing' })
+      body: JSON.stringify({ status: 'processing' }),
     })
 
     expect(response.status).toBe(404)
@@ -614,9 +614,9 @@ describe('Order Status Transitions - Validation', () => {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
-      body: JSON.stringify({ status: 'invalid_status' })
+      body: JSON.stringify({ status: 'invalid_status' }),
     })
 
     expect(response.status).toBe(400)
@@ -627,9 +627,9 @@ describe('Order Status Transitions - Validation', () => {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
-      body: JSON.stringify({})
+      body: JSON.stringify({}),
     })
 
     expect(response.status).toBe(400)

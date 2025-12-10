@@ -7,7 +7,7 @@
  * For basic table utilities that don't require TanStack Table, use these helper functions.
  */
 
-import type { Ref } from "vue"
+import type { Ref } from 'vue'
 
 /**
  * Type definition for value updaters (from TanStack Table)

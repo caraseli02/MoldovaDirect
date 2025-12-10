@@ -2,18 +2,31 @@
   <div class="space-y-4">
     <!-- Upload Area -->
     <div
+      class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 md:p-6 text-center hover:border-gray-400 dark:hover:border-gray-500 transition-colors touch-manipulation"
+      :class="{ 'border-blue-500 bg-blue-50 dark:bg-blue-900/20': isDragging }"
       @drop="handleDrop"
       @dragover.prevent
       @dragenter.prevent
-      class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 md:p-6 text-center hover:border-gray-400 dark:hover:border-gray-500 transition-colors touch-manipulation"
-      :class="{ 'border-blue-500 bg-blue-50 dark:bg-blue-900/20': isDragging }"
     >
       <div class="space-y-2 md:space-y-2">
-        <svg class="mx-auto h-10 w-10 md:h-12 md:w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-          <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        <svg
+          class="mx-auto h-10 w-10 md:h-12 md:w-12 text-gray-400"
+          stroke="currentColor"
+          fill="none"
+          viewBox="0 0 48 48"
+        >
+          <path
+            d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
         </svg>
         <div class="text-sm md:text-sm text-gray-600 dark:text-gray-400">
-          <label for="file-upload" class="relative cursor-pointer bg-white dark:bg-gray-800 rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500 px-2 py-1">
+          <label
+            for="file-upload"
+            class="relative cursor-pointer bg-white dark:bg-gray-800 rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500 px-2 py-1"
+          >
             <span class="text-base md:text-sm">Upload images</span>
             <input
               id="file-upload"
@@ -21,8 +34,8 @@
               type="file"
               multiple
               :accept="accept"
-              @change="handleFileSelect"
               class="sr-only"
+              @change="handleFileSelect"
             />
           </label>
           <span class="pl-1 hidden md:inline">or drag and drop</span>
@@ -34,7 +47,10 @@
     </div>
 
     <!-- Upload Progress -->
-    <div v-if="uploading" class="space-y-2">
+    <div
+      v-if="uploading"
+      class="space-y-2"
+    >
       <div class="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
         <span>Uploading {{ uploadQueue.length }} {{ uploadQueue.length === 1 ? 'image' : 'images' }}...</span>
         <span>{{ Math.round(uploadProgress) }}%</span>
@@ -43,12 +59,15 @@
         <div
           class="bg-blue-600 h-2 rounded-full transition-all duration-300"
           :style="{ width: `${uploadProgress}%` }"
-        />
+        ></div>
       </div>
     </div>
 
     <!-- Image Preview Grid -->
-    <div v-if="images.length > 0" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+    <div
+      v-if="images.length > 0"
+      class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4"
+    >
       <div
         v-for="(image, index) in images"
         :key="image.id || index"
@@ -74,37 +93,67 @@
           <!-- Set as Primary -->
           <Button
             v-if="!image.isPrimary"
-            @click="setPrimary(index)"
             size="icon"
             class="p-3 md:p-2 bg-white text-gray-700 rounded-full hover:bg-gray-100 transition-colors touch-manipulation"
             title="Set as primary image"
+            @click="setPrimary(index)"
           >
-            <svg class="h-5 w-5 md:h-4 md:w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+            <svg
+              class="h-5 w-5 md:h-4 md:w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+              />
             </svg>
           </Button>
 
           <!-- Edit Alt Text -->
           <Button
-            @click="editAltText(index)"
             size="icon"
             class="p-3 md:p-2 bg-white text-gray-700 rounded-full hover:bg-gray-100 transition-colors touch-manipulation"
             title="Edit alt text"
+            @click="editAltText(index)"
           >
-            <svg class="h-5 w-5 md:h-4 md:w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            <svg
+              class="h-5 w-5 md:h-4 md:w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+              />
             </svg>
           </Button>
 
           <!-- Remove -->
           <Button
-            @click="removeImage(index)"
             size="icon"
             class="p-3 md:p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors touch-manipulation"
             title="Remove image"
+            @click="removeImage(index)"
           >
-            <svg class="h-5 w-5 md:h-4 md:w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            <svg
+              class="h-5 w-5 md:h-4 md:w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+              />
             </svg>
           </Button>
         </div>
@@ -116,14 +165,19 @@
         >
           <div class="text-white text-center">
             <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-2"></div>
-            <div class="text-sm">{{ Math.round(image.progress || 0) }}%</div>
+            <div class="text-sm">
+              {{ Math.round(image.progress || 0) }}%
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Alt Text Edit Modal -->
-    <div v-if="altTextModal.show" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex items-center justify-center p-4">
+    <div
+      v-if="altTextModal.show"
+      class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex items-center justify-center p-4"
+    >
       <div class="relative mx-auto p-5 md:p-5 border max-w-md w-full shadow-lg rounded-md bg-white dark:bg-gray-800">
         <div class="mt-3">
           <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">
@@ -147,15 +201,15 @@
           </div>
           <div class="flex justify-end space-x-3">
             <Button
-              @click="closeAltTextModal"
               variant="outline"
               class="px-4 py-2"
+              @click="closeAltTextModal"
             >
               Cancel
             </Button>
             <Button
-              @click="saveAltText"
               class="px-4 py-2"
+              @click="saveAltText"
             >
               Save
             </Button>
@@ -195,7 +249,7 @@ interface Emits {
 const props = withDefaults(defineProps<Props>(), {
   maxFiles: 5,
   maxFileSize: 5 * 1024 * 1024, // 5MB
-  accept: 'image/*'
+  accept: 'image/*',
 })
 
 const emit = defineEmits<Emits>()
@@ -213,7 +267,7 @@ const altTextModal = ref({
   show: false,
   index: -1,
   image: null as ImageFile | null,
-  altText: ''
+  altText: '',
 })
 
 // Watch for external changes
@@ -248,7 +302,7 @@ const validateFile = (file: File): string | null => {
 const createPreview = (file: File): Promise<string> => {
   return new Promise((resolve) => {
     const reader = new FileReader()
-    reader.onload = (e) => resolve(e.target?.result as string)
+    reader.onload = e => resolve(e.target?.result as string)
     reader.readAsDataURL(file)
   })
 }
@@ -256,7 +310,7 @@ const createPreview = (file: File): Promise<string> => {
 // File handling
 const processFiles = async (files: FileList | File[]) => {
   const fileArray = Array.from(files)
-  
+
   // Check total file count
   if (images.value.length + fileArray.length > props.maxFiles) {
     emit('error', `Maximum ${props.maxFiles} images allowed`)
@@ -287,12 +341,12 @@ const processFiles = async (files: FileList | File[]) => {
       altText: '',
       isPrimary: images.value.length === 0 && newImages.length === 0, // First image is primary
       uploading: true,
-      progress: 0
+      progress: 0,
     })
   }
 
   images.value.push(...newImages)
-  
+
   // Start upload process
   await uploadImages(newImages)
 }
@@ -300,11 +354,11 @@ const processFiles = async (files: FileList | File[]) => {
 const uploadImages = async (imagesToUpload: ImageFile[]) => {
   uploading.value = true
   uploadQueue.value = imagesToUpload.map(img => img.file!).filter(Boolean)
-  
+
   try {
     for (let i = 0; i < imagesToUpload.length; i++) {
       const imageData = imagesToUpload[i]
-      if (!imageData.file) continue
+      if (!imageData?.file) continue
 
       // Simulate upload progress
       const formData = new FormData()
@@ -313,39 +367,46 @@ const uploadImages = async (imagesToUpload: ImageFile[]) => {
 
       // Update progress
       for (let progress = 0; progress <= 100; progress += 10) {
-        imageData.progress = progress
-        uploadProgress.value = ((i * 100) + progress) / imagesToUpload.length
+        if (imageData) {
+          imageData.progress = progress
+          uploadProgress.value = ((i * 100) + progress) / imagesToUpload.length
+        }
         await new Promise(resolve => setTimeout(resolve, 100))
       }
 
       try {
         // Upload to server
-        const response = await $fetch<{ success: boolean; data: { url: string } }>('/api/upload', {
+        const response = await $fetch<{ success: boolean, data: { url: string } }>('/api/upload', {
           method: 'POST',
-          body: formData
+          body: formData,
         })
 
-        if (response.success) {
+        if (response.success && imageData) {
           // Update image with server URL
           imageData.url = response.data.url
           imageData.uploading = false
           delete imageData.file
           delete imageData.preview
           delete imageData.progress
-        } else {
+        }
+        else {
           throw new Error('Upload failed')
         }
-      } catch (error) {
+      }
+      catch (error) {
         console.error('Upload error:', error)
         // Remove failed upload
-        const index = images.value.findIndex(img => img.id === imageData.id)
-        if (index > -1) {
-          images.value.splice(index, 1)
+        if (imageData?.id) {
+          const index = images.value.findIndex(img => img.id === imageData.id)
+          if (index > -1) {
+            images.value.splice(index, 1)
+          }
         }
-        emit('error', `Failed to upload ${imageData.file?.name || 'image'}`)
+        emit('error', `Failed to upload ${imageData?.file?.name || 'image'}`)
       }
     }
-  } finally {
+  }
+  finally {
     uploading.value = false
     uploadProgress.value = 0
     uploadQueue.value = []
@@ -364,7 +425,7 @@ const handleFileSelect = (event: Event) => {
 const handleDrop = (event: DragEvent) => {
   event.preventDefault()
   isDragging.value = false
-  
+
   if (event.dataTransfer?.files) {
     processFiles(event.dataTransfer.files)
   }
@@ -374,25 +435,34 @@ const setPrimary = (index: number) => {
   // Remove primary from all images
   images.value.forEach(img => img.isPrimary = false)
   // Set new primary
-  images.value[index].isPrimary = true
+  const targetImage = images.value[index]
+  if (targetImage) {
+    targetImage.isPrimary = true
+  }
 }
 
 const removeImage = (index: number) => {
   const removedImage = images.value[index]
   images.value.splice(index, 1)
-  
+
   // If removed image was primary, set first image as primary
-  if (removedImage.isPrimary && images.value.length > 0) {
-    images.value[0].isPrimary = true
+  if (removedImage?.isPrimary && images.value.length > 0) {
+    const firstImage = images.value[0]
+    if (firstImage) {
+      firstImage.isPrimary = true
+    }
   }
 }
 
 const editAltText = (index: number) => {
-  altTextModal.value = {
-    show: true,
-    index,
-    image: images.value[index],
-    altText: images.value[index].altText || ''
+  const targetImage = images.value[index]
+  if (targetImage) {
+    altTextModal.value = {
+      show: true,
+      index,
+      image: targetImage,
+      altText: targetImage.altText || '',
+    }
   }
 }
 
@@ -401,13 +471,16 @@ const closeAltTextModal = () => {
     show: false,
     index: -1,
     image: null,
-    altText: ''
+    altText: '',
   }
 }
 
 const saveAltText = () => {
   if (altTextModal.value.index >= 0) {
-    images.value[altTextModal.value.index].altText = altTextModal.value.altText
+    const targetImage = images.value[altTextModal.value.index]
+    if (targetImage) {
+      targetImage.altText = altTextModal.value.altText
+    }
   }
   closeAltTextModal()
 }

@@ -68,7 +68,7 @@ export default defineEventHandler(async (event) => {
     sortBy = 'created_at',
     sortOrder = 'desc',
     page = 1,
-    limit = 20
+    limit = 20,
   } = query
 
   // Calculate pagination
@@ -115,13 +115,13 @@ export default defineEventHandler(async (event) => {
         error: profilesError.message,
         code: profilesError.code,
         timestamp: new Date().toISOString(),
-        errorId: 'ADMIN_USERS_PROFILES_FETCH_FAILED'
+        errorId: 'ADMIN_USERS_PROFILES_FETCH_FAILED',
       })
 
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to fetch user profiles',
-        data: { canRetry: true }
+        data: { canRetry: true },
       })
     }
 
@@ -137,16 +137,16 @@ export default defineEventHandler(async (event) => {
             total: 0,
             totalPages: 0,
             hasNext: false,
-            hasPrev: false
+            hasPrev: false,
           },
           summary: {
             totalUsers: 0,
             activeUsers: 0,
             inactiveUsers: 0,
             totalOrders: 0,
-            totalRevenue: 0
-          }
-        }
+            totalRevenue: 0,
+          },
+        },
       }
     }
 
@@ -158,21 +158,23 @@ export default defineEventHandler(async (event) => {
         console.error('[Admin Users] Failed to fetch auth users:', {
           error: authError.message,
           timestamp: new Date().toISOString(),
-          errorId: 'ADMIN_USERS_AUTH_FETCH_WARNING'
+          errorId: 'ADMIN_USERS_AUTH_FETCH_WARNING',
         })
-      } else {
+      }
+      else {
         authUsers = data
       }
-    } catch (error: any) {
+    }
+    catch (error: any) {
       console.error('[Admin Users] Auth admin API error:', {
         error: error.message || String(error),
         timestamp: new Date().toISOString(),
-        errorId: 'ADMIN_USERS_AUTH_API_ERROR'
+        errorId: 'ADMIN_USERS_AUTH_API_ERROR',
       })
     }
 
     // Get order statistics for all users in a single query (fix N+1 problem)
-    let orderStatsByUser: Record<string, { count: number, totalSpent: number, lastOrderDate?: string }> = {}
+    const orderStatsByUser: Record<string, { count: number, totalSpent: number, lastOrderDate?: string }> = {}
 
     try {
       const profileIds = profiles.map(p => p.id)
@@ -186,9 +188,10 @@ export default defineEventHandler(async (event) => {
           error: ordersError.message,
           code: ordersError.code,
           timestamp: new Date().toISOString(),
-          errorId: 'ADMIN_USERS_ORDERS_FETCH_WARNING'
+          errorId: 'ADMIN_USERS_ORDERS_FETCH_WARNING',
         })
-      } else if (allOrders) {
+      }
+      else if (allOrders) {
         // Group orders by user_id
         const tempStats = allOrders.reduce((acc, order) => {
           if (!acc[order.user_id]) {
@@ -201,26 +204,27 @@ export default defineEventHandler(async (event) => {
         }, {} as Record<string, any>)
 
         // Calculate lastOrderDate for each user and create final stats object
-        Object.keys(tempStats).forEach(userId => {
+        Object.keys(tempStats).forEach((userId) => {
           const userOrders = tempStats[userId].orders
           const lastOrderDate = userOrders.length > 0
             ? userOrders.sort((a: any, b: any) =>
-                new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-              )[0].created_at
+              new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+            )[0].created_at
             : undefined
 
           orderStatsByUser[userId] = {
             count: tempStats[userId].count,
             totalSpent: tempStats[userId].totalSpent,
-            lastOrderDate
+            lastOrderDate,
           }
         })
       }
-    } catch (error: any) {
+    }
+    catch (error: any) {
       console.error('[Admin Users] Unexpected error fetching orders:', {
         error: error.message || String(error),
         timestamp: new Date().toISOString(),
-        errorId: 'ADMIN_USERS_ORDERS_ERROR'
+        errorId: 'ADMIN_USERS_ORDERS_ERROR',
       })
     }
 
@@ -244,7 +248,7 @@ export default defineEventHandler(async (event) => {
         status: (authUser?.email_confirmed_at || true) ? 'active' : 'inactive',
         orderCount: orderStats.count,
         lastOrderDate: orderStats.lastOrderDate,
-        totalSpent: orderStats.totalSpent
+        totalSpent: orderStats.totalSpent,
       })
     }
 
@@ -265,13 +269,13 @@ export default defineEventHandler(async (event) => {
         error: countError.message,
         code: countError.code,
         timestamp: new Date().toISOString(),
-        errorId: 'ADMIN_USERS_COUNT_FAILED'
+        errorId: 'ADMIN_USERS_COUNT_FAILED',
       })
 
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to count users',
-        data: { canRetry: true }
+        data: { canRetry: true },
       })
     }
 
@@ -288,19 +292,19 @@ export default defineEventHandler(async (event) => {
           total,
           totalPages,
           hasNext: Number(page) < totalPages,
-          hasPrev: Number(page) > 1
+          hasPrev: Number(page) > 1,
         },
         summary: {
           totalUsers: total,
           activeUsers: users.filter(u => u.status === 'active').length,
           inactiveUsers: users.filter(u => u.status === 'inactive').length,
           totalOrders: users.reduce((sum, u) => sum + (u.orderCount || 0), 0),
-          totalRevenue: users.reduce((sum, u) => sum + (u.totalSpent || 0), 0)
-        }
-      }
+          totalRevenue: users.reduce((sum, u) => sum + (u.totalSpent || 0), 0),
+        },
+      },
     }
-
-  } catch (error: any) {
+  }
+  catch (error: any) {
     // Re-throw HTTP errors (including auth errors)
     if (error.statusCode) {
       throw error
@@ -311,14 +315,14 @@ export default defineEventHandler(async (event) => {
       error: error.message || String(error),
       stack: error.stack,
       timestamp: new Date().toISOString(),
-      errorId: 'ADMIN_USERS_UNEXPECTED_ERROR'
+      errorId: 'ADMIN_USERS_UNEXPECTED_ERROR',
     })
 
     // Throw generic 500 error for unexpected failures
     throw createError({
       statusCode: 500,
       statusMessage: 'An unexpected error occurred while fetching users',
-      data: { canRetry: true }
+      data: { canRetry: true },
     })
   }
 })

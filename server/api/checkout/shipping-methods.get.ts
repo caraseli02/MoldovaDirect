@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
       name: 'Standard Shipping',
       description: 'Delivery in 3-5 business days',
       price: 5.99,
-      estimatedDays: 4
+      estimatedDays: 4,
     })
 
     // Express shipping - available in EU countries
@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
         name: 'Express Shipping',
         description: 'Delivery in 1-2 business days',
         price: 12.99,
-        estimatedDays: 1
+        estimatedDays: 1,
       })
     }
 
@@ -35,18 +35,19 @@ export default defineEventHandler(async (event) => {
         name: 'Free Shipping',
         description: 'Delivery in 5-7 business days (orders over €50)',
         price: 0,
-        estimatedDays: 6
+        estimatedDays: 6,
       })
     }
 
     return {
       success: true,
-      methods: shippingMethods
+      methods: shippingMethods,
     }
-  } catch (error) {
+  }
+  catch (error) {
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to calculate shipping methods'
+      statusMessage: 'Failed to calculate shipping methods',
     })
   }
 })

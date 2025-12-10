@@ -8,31 +8,31 @@
  * @see docs/architecture/build-configuration-review.md
  */
 
-import tailwindcss from "@tailwindcss/vite";
+import tailwindcss from '@tailwindcss/vite'
 
 const BASE_COMPONENT_DIRS = [
   {
-    path: "~/components",
+    path: '~/components',
     pathPrefix: true,
     // ONLY register Vue SFCs, never TypeScript files
-    extensions: ["vue"],
+    extensions: ['vue'],
     // ✅ FIX: Add explicit pattern to prevent ENOTDIR errors
-    pattern: "**/*.vue",
+    pattern: '**/*.vue',
     // Exclude shadcn UI, barrel exports, test files
     ignore: [
-      "ui/**",
-      "**/index.ts",
-      "**/*.test.vue",
-      "**/*.stories.vue",
-      "**/*.spec.vue"
+      'ui/**',
+      '**/index.ts',
+      '**/*.test.vue',
+      '**/*.stories.vue',
+      '**/*.spec.vue',
     ],
     watch: true,
-    transpile: false
-  }
-];
+    transpile: false,
+  },
+]
 
 export default defineNuxtConfig({
-  compatibilityDate: "2024-11-01",
+  compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
 
   // ===================================
@@ -52,59 +52,59 @@ export default defineNuxtConfig({
             normalizeWhitespace: true,
             // Preserve CSS custom properties
             reduceIdents: false,
-            zindex: false
-          }
-        ]
+            zindex: false,
+          },
+        ],
       } : false,
       // ✅ NEW: Add autoprefixer for browser support
       autoprefixer: {
         overrideBrowserslist: [
           'last 2 versions',
           'not dead',
-          '> 0.2%'
-        ]
-      }
-    }
+          '> 0.2%',
+        ],
+      },
+    },
   },
 
   // ===================================
   // Component Auto-Registration
   // ===================================
   components: {
-    extensions: ["vue"],
+    extensions: ['vue'],
     dirs: [...BASE_COMPONENT_DIRS],
     // ✅ NEW: Explicit global registration
     global: true,
     // ✅ NEW: Target specification
-    target: 'client'
+    target: 'client',
   },
 
   // ===================================
   // Modules Configuration
   // ===================================
   modules: [
-    "@nuxtjs/supabase",
-    "@nuxtjs/i18n",
-    "@pinia/nuxt",
-    "@nuxt/image",
-    "shadcn-nuxt",
+    '@nuxtjs/supabase',
+    '@nuxtjs/i18n',
+    '@pinia/nuxt',
+    '@nuxt/image',
+    'shadcn-nuxt',
     // ⚠️ REVIEW: Consider removing if PWA features not used
-    "@vite-pwa/nuxt",
+    '@vite-pwa/nuxt',
     // ⚠️ REVIEW: Consider removing - Swiper might be sufficient
-    "vue3-carousel-nuxt",
+    'vue3-carousel-nuxt',
     // ⚠️ REVIEW: Check usage vs bundle size impact
-    "@vueuse/motion/nuxt",
-    "nuxt-swiper",
+    '@vueuse/motion/nuxt',
+    'nuxt-swiper',
     // Keep this last to post-process components registry
-    "~/modules/fix-components"
+    '~/modules/fix-components',
   ],
 
   // ===================================
   // Image Optimization
   // ===================================
   image: {
-    domains: ["images.unsplash.com"],
-    formats: ["webp", "avif"],
+    domains: ['images.unsplash.com'],
+    formats: ['webp', 'avif'],
     quality: 80,
     // ✅ NEW: Retina support
     densities: [1, 2],
@@ -114,24 +114,24 @@ export default defineNuxtConfig({
       md: 768,
       lg: 1024,
       xl: 1280,
-      xxl: 1536
+      xxl: 1536,
     },
     presets: {
       hero: {
         modifiers: {
           format: 'webp',
           quality: 85,
-          fit: 'cover'
-        }
-      }
+          fit: 'cover',
+        },
+      },
     },
     // ✅ NEW: IPX caching
     ipx: {
-      maxAge: 60 * 60 * 24 * 365 // 1 year
+      maxAge: 60 * 60 * 24 * 365, // 1 year
     },
     // ✅ NEW: Default loading behavior
     loading: 'lazy',
-    placeholder: 'blur'
+    placeholder: 'blur',
   },
 
   // ===================================
@@ -147,7 +147,7 @@ export default defineNuxtConfig({
     '/products': { swr: 3600, prerender: true },
     '/products/**': {
       swr: 3600,
-      isr: 3600 // ✅ NEW: Incremental Static Regeneration
+      isr: 3600, // ✅ NEW: Incremental Static Regeneration
     },
 
     // ✅ NEW: Cart & checkout - always fresh
@@ -167,9 +167,9 @@ export default defineNuxtConfig({
     // ✅ NEW: Static assets - aggressive caching
     '/_nuxt/**': {
       headers: {
-        'cache-control': 'public, max-age=31536000, immutable'
-      }
-    }
+        'cache-control': 'public, max-age=31536000, immutable',
+      },
+    },
   },
 
   // ===================================
@@ -186,41 +186,41 @@ export default defineNuxtConfig({
     public: {
       stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://www.moldovadirect.com',
-      enableTestUsers: process.env.ENABLE_TEST_USERS === 'true' || process.env.NODE_ENV !== 'production'
-    }
+      enableTestUsers: process.env.ENABLE_TEST_USERS === 'true' || process.env.NODE_ENV !== 'production',
+    },
   },
 
   // ===================================
   // Shadcn Configuration
   // ===================================
   shadcn: {
-    prefix: "Ui",
-    componentDir: "./components/ui"
+    prefix: 'Ui',
+    componentDir: './components/ui',
   },
 
   // ===================================
   // Nitro Server Configuration
   // ===================================
   nitro: {
-    preset: "vercel",
+    preset: 'vercel',
     // ✅ NEW: Enable minification
     minify: true,
     // ✅ NEW: Disable sourcemaps in production
     sourceMap: process.env.NODE_ENV !== 'production',
     ignore: [
-      "**/*.test.ts",
-      "**/*.spec.ts",
-      "**/__tests__/**"
+      '**/*.test.ts',
+      '**/*.spec.ts',
+      '**/__tests__/**',
     ],
     externals: {
-      inline: ["vue", "@vue/*"]
+      inline: ['vue', '@vue/*'],
     },
     // ✅ NEW: Enable compression
     compressPublicAssets: true,
     // ✅ NEW: Experimental features
     experimental: {
-      asyncContext: true
-    }
+      asyncContext: true,
+    },
   },
 
   // ===================================
@@ -228,25 +228,25 @@ export default defineNuxtConfig({
   // ===================================
   supabase: {
     redirectOptions: {
-      login: "/auth/login",
-      callback: "/auth/confirm",
+      login: '/auth/login',
+      callback: '/auth/confirm',
       exclude: [
-        "/",
-        "/products",
-        "/products/*",
-        "/cart",
-        "/en",
-        "/ro",
-        "/ru",
-        "/en/*",
-        "/ro/*",
-        "/ru/*",
-        "/auth/register",
-        "/auth/forgot-password",
-        "/auth/reset-password",
-        "/auth/verify-email"
-      ]
-    }
+        '/',
+        '/products',
+        '/products/*',
+        '/cart',
+        '/en',
+        '/ro',
+        '/ru',
+        '/en/*',
+        '/ro/*',
+        '/ru/*',
+        '/auth/register',
+        '/auth/forgot-password',
+        '/auth/reset-password',
+        '/auth/verify-email',
+      ],
+    },
   },
 
   // ===================================
@@ -254,35 +254,35 @@ export default defineNuxtConfig({
   // ===================================
   i18n: {
     locales: [
-      { code: "es", name: "Español", file: "es.json" },
-      { code: "en", name: "English", file: "en.json" },
-      { code: "ro", name: "Română", file: "ro.json" },
-      { code: "ru", name: "Русский", file: "ru.json" }
+      { code: 'es', name: 'Español', file: 'es.json' },
+      { code: 'en', name: 'English', file: 'en.json' },
+      { code: 'ro', name: 'Română', file: 'ro.json' },
+      { code: 'ru', name: 'Русский', file: 'ru.json' },
     ],
-    langDir: "locales",
-    defaultLocale: "es",
-    strategy: "prefix_except_default",
+    langDir: 'locales',
+    defaultLocale: 'es',
+    strategy: 'prefix_except_default',
     detectBrowserLanguage: {
       useCookie: true,
-      cookieKey: "i18n_redirected",
-      redirectOn: "root"
-    }
+      cookieKey: 'i18n_redirected',
+      redirectOn: 'root',
+    },
   },
 
   // ===================================
   // Global CSS
   // ===================================
-  css: ["~/assets/css/tailwind.css"],
+  css: ['~/assets/css/tailwind.css'],
 
   // ===================================
   // PWA Configuration
   // ===================================
   pwa: {
-    registerType: "autoUpdate",
+    registerType: 'autoUpdate',
     workbox: {
-      navigateFallback: "/",
+      navigateFallback: '/',
       // ✅ NEW: Include webp/avif formats
-      globPatterns: ["**/*.{js,css,html,png,svg,ico,webp,avif}"],
+      globPatterns: ['**/*.{js,css,html,png,svg,ico,webp,avif}'],
       // ✅ NEW: Runtime caching strategies
       runtimeCaching: [
         {
@@ -292,70 +292,70 @@ export default defineNuxtConfig({
             cacheName: 'unsplash-images',
             expiration: {
               maxEntries: 50,
-              maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
-            }
-          }
+              maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+            },
+          },
         },
         {
           urlPattern: /^https:\/\/.*\.supabase\.co\/.*/i,
           handler: 'NetworkFirst',
           options: {
             cacheName: 'supabase-api',
-            networkTimeoutSeconds: 10
-          }
-        }
-      ]
+            networkTimeoutSeconds: 10,
+          },
+        },
+      ],
     },
     client: {
       installPrompt: true,
-      periodicSyncForUpdates: 20
+      periodicSyncForUpdates: 20,
     },
     manifest: {
-      name: "Moldova Direct",
-      short_name: "Moldova Direct",
-      description: "Authentic Moldovan food and wine products delivered to Spain",
-      theme_color: "#1e40af",
-      background_color: "#ffffff",
-      display: "standalone",
-      orientation: "portrait",
-      scope: "/",
-      start_url: "/",
+      name: 'Moldova Direct',
+      short_name: 'Moldova Direct',
+      description: 'Authentic Moldovan food and wine products delivered to Spain',
+      theme_color: '#1e40af',
+      background_color: '#ffffff',
+      display: 'standalone',
+      orientation: 'portrait',
+      scope: '/',
+      start_url: '/',
       icons: [
         {
-          src: "/icon.svg",
-          sizes: "192x192",
-          type: "image/svg+xml"
+          src: '/icon.svg',
+          sizes: '192x192',
+          type: 'image/svg+xml',
         },
         {
-          src: "/icon.svg",
-          sizes: "512x512",
-          type: "image/svg+xml"
+          src: '/icon.svg',
+          sizes: '512x512',
+          type: 'image/svg+xml',
         },
         {
-          src: "/icon.svg",
-          sizes: "512x512",
-          type: "image/svg+xml",
-          purpose: "any maskable"
-        }
+          src: '/icon.svg',
+          sizes: '512x512',
+          type: 'image/svg+xml',
+          purpose: 'any maskable',
+        },
       ],
-      categories: ["shopping", "food"],
+      categories: ['shopping', 'food'],
       shortcuts: [
         {
-          name: "Products",
-          short_name: "Products",
-          description: "Browse all products",
-          url: "/products",
-          icons: [{ src: "/icon.svg", sizes: "192x192" }]
+          name: 'Products',
+          short_name: 'Products',
+          description: 'Browse all products',
+          url: '/products',
+          icons: [{ src: '/icon.svg', sizes: '192x192' }],
         },
         {
-          name: "Cart",
-          short_name: "Cart",
-          description: "View shopping cart",
-          url: "/cart",
-          icons: [{ src: "/icon.svg", sizes: "192x192" }]
-        }
-      ]
-    }
+          name: 'Cart',
+          short_name: 'Cart',
+          description: 'View shopping cart',
+          url: '/cart',
+          icons: [{ src: '/icon.svg', sizes: '192x192' }],
+        },
+      ],
+    },
   },
 
   // ===================================
@@ -377,20 +377,20 @@ export default defineNuxtConfig({
             'ui-table': ['@tanstack/vue-table'],
             'stripe': ['@stripe/stripe-js'],
             // Group shadcn-ui primitives
-            'ui-primitives': ['reka-ui', 'class-variance-authority']
-          }
-        }
+            'ui-primitives': ['reka-ui', 'class-variance-authority'],
+          },
+        },
       },
       // ✅ NEW: Lower chunk size warning threshold
       chunkSizeWarningLimit: 400, // 400KB (down from 500KB)
       // ✅ NEW: Report compressed sizes
       reportCompressedSize: true,
       // ✅ NEW: Environment-aware sourcemaps
-      sourcemap: process.env.NODE_ENV !== 'production'
+      sourcemap: process.env.NODE_ENV !== 'production',
     },
 
     ssr: {
-      noExternal: ["vue", "@vue/*"]
+      noExternal: ['vue', '@vue/*'],
     },
 
     server: {
@@ -404,10 +404,10 @@ export default defineNuxtConfig({
           '**/playwright-report/**',
           '**/.nuxt/**',
           '**/.output/**',
-          '**/*.log'
-        ]
-      }
-    }
+          '**/*.log',
+        ],
+      },
+    },
   },
 
   // ===================================
@@ -424,6 +424,6 @@ export default defineNuxtConfig({
           dirs.splice(i, 1)
         }
       }
-    }
-  }
-});
+    },
+  },
+})

@@ -1,11 +1,11 @@
 /**
  * Admin Products Store using Pinia
- * 
+ *
  * Requirements addressed:
  * - 1.1: Paginated product listing with search and filters
  * - 1.7: Real-time search functionality
  * - 6.2: Performance optimization with pagination
- * 
+ *
  * Manages:
  * - Product listing with admin-specific data
  * - Search and filtering functionality
@@ -54,7 +54,7 @@ export const useAdminProductsStore = defineStore('adminProducts', {
       status: '',
       stockLevel: '',
       sortBy: 'created_at',
-      sortOrder: 'desc'
+      sortOrder: 'desc',
     },
     pagination: {
       page: 1,
@@ -62,12 +62,12 @@ export const useAdminProductsStore = defineStore('adminProducts', {
       total: 0,
       totalPages: 0,
       hasNext: false,
-      hasPrev: false
+      hasPrev: false,
     },
     loading: false,
     error: null,
     selectedProducts: [],
-    bulkOperationInProgress: false
+    bulkOperationInProgress: false,
   }),
 
   getters: {
@@ -77,13 +77,17 @@ export const useAdminProductsStore = defineStore('adminProducts', {
     productsWithAdminData: (state) => {
       return state.products.map(product => ({
         ...product,
-        stockStatus: product.stockQuantity > 10 ? 'high' : 
-                    product.stockQuantity > 5 ? 'medium' :
-                    product.stockQuantity > 0 ? 'low' : 'out',
-        stockStatusColor: product.stockQuantity > 10 ? 'green' : 
-                         product.stockQuantity > 5 ? 'yellow' :
-                         product.stockQuantity > 0 ? 'orange' : 'red',
-        isSelected: state.selectedProducts.includes(product.id)
+        stockStatus: product.stockQuantity > 10
+          ? 'high'
+          : product.stockQuantity > 5
+            ? 'medium'
+            : product.stockQuantity > 0 ? 'low' : 'out',
+        stockStatusColor: product.stockQuantity > 10
+          ? 'green'
+          : product.stockQuantity > 5
+            ? 'yellow'
+            : product.stockQuantity > 0 ? 'orange' : 'red',
+        isSelected: state.selectedProducts.includes(product.id),
       }))
     },
 
@@ -94,7 +98,7 @@ export const useAdminProductsStore = defineStore('adminProducts', {
       const params: any = {
         page: state.pagination.page,
         limit: state.pagination.limit,
-        admin: true // Flag for admin-specific data
+        admin: true, // Flag for admin-specific data
       }
 
       if (state.filters.search) {
@@ -105,14 +109,17 @@ export const useAdminProductsStore = defineStore('adminProducts', {
       }
       if (state.filters.status === 'active') {
         params.active = true
-      } else if (state.filters.status === 'inactive') {
+      }
+      else if (state.filters.status === 'inactive') {
         params.active = false
       }
       if (state.filters.stockLevel === 'in-stock') {
         params.inStock = true
-      } else if (state.filters.stockLevel === 'out-of-stock') {
+      }
+      else if (state.filters.stockLevel === 'out-of-stock') {
         params.outOfStock = true
-      } else if (state.filters.stockLevel === 'low-stock') {
+      }
+      else if (state.filters.stockLevel === 'low-stock') {
         params.lowStock = true
       }
       if (state.filters.sortBy) {
@@ -135,8 +142,8 @@ export const useAdminProductsStore = defineStore('adminProducts', {
      */
     allVisibleSelected: (state): boolean => {
       if (state.products.length === 0) return false
-      return state.products.every(product => 
-        state.selectedProducts.includes(product.id)
+      return state.products.every(product =>
+        state.selectedProducts.includes(product.id),
       )
     },
 
@@ -152,12 +159,12 @@ export const useAdminProductsStore = defineStore('adminProducts', {
      */
     hasActiveFilters: (state): boolean => {
       return !!(
-        state.filters.search ||
-        state.filters.categoryId ||
-        state.filters.status ||
-        state.filters.stockLevel
+        state.filters.search
+        || state.filters.categoryId
+        || state.filters.status
+        || state.filters.stockLevel
       )
-    }
+    },
   },
 
   actions: {
@@ -173,15 +180,17 @@ export const useAdminProductsStore = defineStore('adminProducts', {
           products: ProductWithRelations[]
           pagination: PaginationState
         }>('/api/admin/products', {
-          query: this.queryParams
+          query: this.queryParams,
         })
 
         this.products = response.products
         this.pagination = response.pagination
-      } catch (error) {
+      }
+      catch (error) {
         this.error = error instanceof Error ? error.message : 'Failed to fetch products'
         console.error('Error fetching admin products:', error)
-      } finally {
+      }
+      finally {
         this.loading = false
       }
     },
@@ -269,7 +278,7 @@ export const useAdminProductsStore = defineStore('adminProducts', {
         status: '',
         stockLevel: '',
         sortBy: 'created_at',
-        sortOrder: 'desc'
+        sortOrder: 'desc',
       }
       this.pagination.page = 1
       await this.fetchProducts()
@@ -282,7 +291,8 @@ export const useAdminProductsStore = defineStore('adminProducts', {
       const index = this.selectedProducts.indexOf(productId)
       if (index > -1) {
         this.selectedProducts.splice(index, 1)
-      } else {
+      }
+      else {
         this.selectedProducts.push(productId)
       }
     },
@@ -292,7 +302,7 @@ export const useAdminProductsStore = defineStore('adminProducts', {
      */
     selectAllVisible() {
       const visibleIds = this.products.map(p => p.id)
-      visibleIds.forEach(id => {
+      visibleIds.forEach((id) => {
         if (!this.selectedProducts.includes(id)) {
           this.selectedProducts.push(id)
         }
@@ -304,8 +314,8 @@ export const useAdminProductsStore = defineStore('adminProducts', {
      */
     deselectAllVisible() {
       const visibleIds = this.products.map(p => p.id)
-      this.selectedProducts = this.selectedProducts.filter(id => 
-        !visibleIds.includes(id)
+      this.selectedProducts = this.selectedProducts.filter(id =>
+        !visibleIds.includes(id),
       )
     },
 
@@ -315,7 +325,8 @@ export const useAdminProductsStore = defineStore('adminProducts', {
     toggleAllVisible() {
       if (this.allVisibleSelected) {
         this.deselectAllVisible()
-      } else {
+      }
+      else {
         this.selectAllVisible()
       }
     },
@@ -340,7 +351,7 @@ export const useAdminProductsStore = defineStore('adminProducts', {
           message: string
         }>(`/api/admin/products/${productId}/inventory`, {
           method: 'PUT',
-          body: { quantity, reason, notes }
+          body: { quantity, reason, notes },
         })
 
         // Update local state with the response data
@@ -359,7 +370,8 @@ export const useAdminProductsStore = defineStore('adminProducts', {
         toast.success(response.message)
 
         return response
-      } catch (error) {
+      }
+      catch (error) {
         const toast = useToast()
         toast.error('Failed to update inventory')
         throw error
@@ -372,7 +384,7 @@ export const useAdminProductsStore = defineStore('adminProducts', {
     async deleteProduct(productId: number) {
       try {
         await $fetch(`/api/admin/products/${productId}`, {
-          method: 'DELETE'
+          method: 'DELETE',
         })
 
         // Remove from local state
@@ -386,7 +398,8 @@ export const useAdminProductsStore = defineStore('adminProducts', {
 
         const toast = useToast()
         toast.success('Product deleted successfully')
-      } catch (error) {
+      }
+      catch (error) {
         const toast = useToast()
         toast.error('Failed to delete product')
         throw error
@@ -403,29 +416,32 @@ export const useAdminProductsStore = defineStore('adminProducts', {
       try {
         await $fetch('/api/admin/products/bulk', {
           method: 'DELETE',
-          body: { productIds: this.selectedProducts }
+          body: { productIds: this.selectedProducts },
         })
 
         // Remove from local state
-        this.products = this.products.filter(p => 
-          !this.selectedProducts.includes(p.id)
+        this.products = this.products.filter(p =>
+          !this.selectedProducts.includes(p.id),
         )
         this.clearSelection()
 
         // Refresh if current page is empty
         if (this.products.length === 0 && this.pagination.page > 1) {
           await this.goToPage(this.pagination.page - 1)
-        } else {
+        }
+        else {
           await this.fetchProducts()
         }
 
         const toast = useToast()
         toast.success(`${this.selectedProducts.length} products deleted successfully`)
-      } catch (error) {
+      }
+      catch (error) {
         const toast = useToast()
         toast.error('Failed to delete products')
         throw error
-      } finally {
+      }
+      finally {
         this.bulkOperationInProgress = false
       }
     },
@@ -440,14 +456,14 @@ export const useAdminProductsStore = defineStore('adminProducts', {
       try {
         await $fetch('/api/admin/products/bulk', {
           method: 'PUT',
-          body: { 
+          body: {
             productIds: this.selectedProducts,
-            updates: { isActive }
-          }
+            updates: { isActive },
+          },
         })
 
         // Update local state
-        this.products.forEach(product => {
+        this.products.forEach((product) => {
           if (this.selectedProducts.includes(product.id)) {
             product.isActive = isActive
           }
@@ -458,11 +474,13 @@ export const useAdminProductsStore = defineStore('adminProducts', {
         const toast = useToast()
         const action = isActive ? 'activated' : 'deactivated'
         toast.success(`${this.selectedProducts.length} products ${action} successfully`)
-      } catch (error) {
+      }
+      catch (error) {
         const toast = useToast()
         toast.error('Failed to update products')
         throw error
-      } finally {
+      }
+      finally {
         this.bulkOperationInProgress = false
       }
     },
@@ -479,6 +497,6 @@ export const useAdminProductsStore = defineStore('adminProducts', {
      */
     reset() {
       this.$reset()
-    }
-  }
+    },
+  },
 })

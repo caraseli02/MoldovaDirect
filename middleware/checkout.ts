@@ -51,26 +51,27 @@ export default defineNuxtRouteMiddleware(async (to) => {
     return navigateTo({
       path: localePath('/cart'),
       query: {
-        message: 'empty-cart-checkout'
-      }
+        message: 'empty-cart-checkout',
+      },
     })
   }
 
   // 4. Now it's safe to access checkout store (cart is initialized)
-  const checkoutStore = useCheckoutStore()
+  const checkoutStore = useCheckoutStore() as ReturnType<typeof useCheckoutStore> & Record<string, any>
 
   // 5. Initialize checkout if not already initialized
   if (!checkoutStore.sessionId) {
     try {
       console.log('🛒 [Checkout Middleware] Initializing checkout session')
       await checkoutStore.initializeCheckout(items.value)
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Failed to initialize checkout:', error)
       return navigateTo({
         path: localePath('/cart'),
         query: {
-          message: 'checkout-initialization-failed'
-        }
+          message: 'checkout-initialization-failed',
+        },
       })
     }
   }
@@ -81,7 +82,8 @@ export default defineNuxtRouteMiddleware(async (to) => {
       console.log('📥 [Checkout Middleware] Prefetching user data (addresses, preferences)...')
       await checkoutStore.prefetchCheckoutData()
       console.log('✅ [Checkout Middleware] Prefetch complete')
-    } catch (error) {
+    }
+    catch (error) {
       console.error('❌ [Checkout Middleware] Failed to prefetch checkout data:', error)
     }
   }
@@ -105,7 +107,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
       return navigateTo({
         path: localePath('/checkout/payment'),
-        query: { express: '1' } // Flag for showing countdown banner
+        query: { express: '1' }, // Flag for showing countdown banner
       })
     }
   }
@@ -117,8 +119,8 @@ export default defineNuxtRouteMiddleware(async (to) => {
     return navigateTo({
       path: localePath('/cart'),
       query: {
-        message: 'checkout-session-expired'
-      }
+        message: 'checkout-session-expired',
+      },
     })
   }
 
@@ -133,8 +135,8 @@ export default defineNuxtRouteMiddleware(async (to) => {
       return navigateTo({
         path: redirectPath,
         query: {
-          message: 'step-access-denied'
-        }
+          message: 'step-access-denied',
+        },
       })
     }
 
@@ -160,7 +162,7 @@ function extractStepFromPath(path: string): CheckoutStep | null {
 /**
  * Check if user can access a specific checkout step
  */
-function canAccessStep(step: CheckoutStep, store: any): boolean {
+function canAccessStep(step: CheckoutStep, store: ReturnType<typeof useCheckoutStore> & Record<string, any>): boolean {
   switch (step) {
     case 'shipping':
       return true // Always accessible
@@ -175,9 +177,9 @@ function canAccessStep(step: CheckoutStep, store: any): boolean {
       // Allow if already on confirmation page (order completed)
       // OR if coming from review page (order just placed - navigation happens before store updates)
       // OR if we have orderId set (order was created)
-      return store.currentStep === 'confirmation' ||
-             store.currentStep === 'review' ||
-             Boolean(store.orderData?.orderId)
+      return store.currentStep === 'confirmation'
+        || store.currentStep === 'review'
+        || Boolean(store.orderData?.orderId)
 
     default:
       return false
@@ -187,14 +189,17 @@ function canAccessStep(step: CheckoutStep, store: any): boolean {
 /**
  * Get the highest step the user can currently access
  */
-function getHighestAllowedStep(store: any): CheckoutStep {
+function getHighestAllowedStep(store: ReturnType<typeof useCheckoutStore> & Record<string, any>): CheckoutStep {
   if (store.canCompleteOrder && store.orderData?.orderId) {
     return 'confirmation'
-  } else if (store.canProceedToReview) {
+  }
+  else if (store.canProceedToReview) {
     return 'review'
-  } else if (store.canProceedToPayment) {
+  }
+  else if (store.canProceedToPayment) {
     return 'payment'
-  } else {
+  }
+  else {
     return 'shipping'
   }
 }

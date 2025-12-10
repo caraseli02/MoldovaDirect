@@ -7,102 +7,178 @@
     <CardContent>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <Button
+          :disabled="loading"
+          variant="outline"
+          class="h-auto py-4 flex flex-col items-start gap-2"
           @click="$emit('run-action', 'minimal')"
-          :disabled="loading"
-          variant="outline"
-          class="h-auto py-4 flex flex-col items-start gap-2"
         >
-          <commonIcon name="lucide:zap" class="h-5 w-5" />
+          <commonIcon
+            name="lucide:zap"
+            class="h-5 w-5"
+          />
           <div class="text-left">
-            <div class="font-semibold">Quick Start</div>
-            <div class="text-xs text-muted-foreground">5 users, 10 products, 5 orders</div>
+            <div class="font-semibold">
+              Quick Start
+            </div>
+            <div class="text-xs text-muted-foreground">
+              5 users, 10 products, 5 orders
+            </div>
           </div>
         </Button>
 
         <Button
+          :disabled="loading"
+          variant="outline"
+          class="h-auto py-4 flex flex-col items-start gap-2"
           @click="$emit('run-action', 'development')"
-          :disabled="loading"
-          variant="outline"
-          class="h-auto py-4 flex flex-col items-start gap-2"
         >
-          <commonIcon name="lucide:code" class="h-5 w-5" />
+          <commonIcon
+            name="lucide:code"
+            class="h-5 w-5"
+          />
           <div class="text-left">
-            <div class="font-semibold">Development</div>
-            <div class="text-xs text-muted-foreground">20 users, 50 products, 100 orders</div>
+            <div class="font-semibold">
+              Development
+            </div>
+            <div class="text-xs text-muted-foreground">
+              20 users, 50 products, 100 orders
+            </div>
           </div>
         </Button>
 
         <Button
+          :disabled="loading"
+          variant="outline"
+          class="h-auto py-4 flex flex-col items-start gap-2"
           @click="$emit('run-action', 'demo')"
-          :disabled="loading"
-          variant="outline"
-          class="h-auto py-4 flex flex-col items-start gap-2"
         >
-          <commonIcon name="lucide:presentation" class="h-5 w-5" />
+          <commonIcon
+            name="lucide:presentation"
+            class="h-5 w-5"
+          />
           <div class="text-left">
-            <div class="font-semibold">Demo Store</div>
-            <div class="text-xs text-muted-foreground">50 users, 100 products, 300 orders</div>
+            <div class="font-semibold">
+              Demo Store
+            </div>
+            <div class="text-xs text-muted-foreground">
+              50 users, 100 products, 300 orders
+            </div>
           </div>
         </Button>
 
         <Button
+          :disabled="loading"
+          variant="outline"
+          class="h-auto py-4 flex flex-col items-start gap-2"
           @click="$emit('run-action', 'low-stock')"
-          :disabled="loading"
-          variant="outline"
-          class="h-auto py-4 flex flex-col items-start gap-2"
         >
-          <commonIcon name="lucide:package-x" class="h-5 w-5 text-orange-500" />
+          <commonIcon
+            name="lucide:package-x"
+            class="h-5 w-5 text-orange-500"
+          />
           <div class="text-left">
-            <div class="font-semibold">Low Stock Alert</div>
-            <div class="text-xs text-muted-foreground">Products with low inventory</div>
+            <div class="font-semibold">
+              Low Stock Alert
+            </div>
+            <div class="text-xs text-muted-foreground">
+              Products with low inventory
+            </div>
           </div>
         </Button>
 
         <Button
+          :disabled="loading"
+          variant="outline"
+          class="h-auto py-4 flex flex-col items-start gap-2"
           @click="$emit('run-action', 'holiday-rush')"
-          :disabled="loading"
-          variant="outline"
-          class="h-auto py-4 flex flex-col items-start gap-2"
         >
-          <commonIcon name="lucide:trending-up" class="h-5 w-5 text-green-500" />
+          <commonIcon
+            name="lucide:trending-up"
+            class="h-5 w-5 text-green-500"
+          />
           <div class="text-left">
-            <div class="font-semibold">Holiday Rush</div>
-            <div class="text-xs text-muted-foreground">High volume orders scenario</div>
+            <div class="font-semibold">
+              Holiday Rush
+            </div>
+            <div class="text-xs text-muted-foreground">
+              High volume orders scenario
+            </div>
           </div>
         </Button>
 
         <Button
-          @click="$emit('run-action', 'new-store')"
           :disabled="loading"
           variant="outline"
           class="h-auto py-4 flex flex-col items-start gap-2"
+          @click="$emit('run-action', 'new-store')"
         >
-          <commonIcon name="lucide:store" class="h-5 w-5 text-blue-500" />
+          <commonIcon
+            name="lucide:store"
+            class="h-5 w-5 text-blue-500"
+          />
           <div class="text-left">
-            <div class="font-semibold">New Store</div>
-            <div class="text-xs text-muted-foreground">Many products, few orders</div>
+            <div class="font-semibold">
+              New Store
+            </div>
+            <div class="text-xs text-muted-foreground">
+              Many products, few orders
+            </div>
           </div>
         </Button>
       </div>
 
       <!-- Quick Delete Actions -->
       <div class="mt-4 pt-4 border-t">
-        <h4 class="text-sm font-medium mb-3 text-muted-foreground">Quick Delete</h4>
+        <h4 class="text-sm font-medium mb-3 text-muted-foreground">
+          Quick Delete
+        </h4>
         <div class="flex flex-wrap gap-2">
-          <Button @click="$emit('quick-delete', 'clear-test-users')" variant="outline" size="sm" :disabled="loading">
-            <commonIcon name="lucide:users-2" class="h-3 w-3 mr-1" />
+          <Button
+            variant="outline"
+            size="sm"
+            :disabled="loading"
+            @click="$emit('quick-delete', 'clear-test-users')"
+          >
+            <commonIcon
+              name="lucide:users-2"
+              class="h-3 w-3 mr-1"
+            />
             Test Users
           </Button>
-          <Button @click="$emit('quick-delete', 'clear-orders')" variant="outline" size="sm" :disabled="loading">
-            <commonIcon name="lucide:shopping-cart" class="h-3 w-3 mr-1" />
+          <Button
+            variant="outline"
+            size="sm"
+            :disabled="loading"
+            @click="$emit('quick-delete', 'clear-orders')"
+          >
+            <commonIcon
+              name="lucide:shopping-cart"
+              class="h-3 w-3 mr-1"
+            />
             All Orders
           </Button>
-          <Button @click="$emit('quick-delete', 'clear-products')" variant="outline" size="sm" :disabled="loading">
-            <commonIcon name="lucide:package" class="h-3 w-3 mr-1" />
+          <Button
+            variant="outline"
+            size="sm"
+            :disabled="loading"
+            @click="$emit('quick-delete', 'clear-products')"
+          >
+            <commonIcon
+              name="lucide:package"
+              class="h-3 w-3 mr-1"
+            />
             All Products
           </Button>
-          <Button @click="$emit('quick-delete', 'clear-old-carts')" variant="outline" size="sm" :disabled="loading">
-            <commonIcon name="lucide:shopping-basket" class="h-3 w-3 mr-1" />
+          <Button
+            variant="outline"
+            size="sm"
+            :disabled="loading"
+            @click="$emit('quick-delete', 'clear-old-carts')"
+          >
+            <commonIcon
+              name="lucide:shopping-basket"
+              class="h-3 w-3 mr-1"
+            />
             Old Carts
           </Button>
         </div>

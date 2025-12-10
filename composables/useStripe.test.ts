@@ -7,11 +7,12 @@
 
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
 import { nextTick } from 'vue'
+import type {
+  createMockStripe } from '~/tests/utils/mockStripe'
 import {
-  createMockStripe,
   createMockStripeCardElement,
   mockStripePaymentSuccess,
-  mockStripePaymentError
+  mockStripePaymentError,
 } from '~/tests/utils/mockStripe'
 
 // Mock @stripe/stripe-js at module level
@@ -290,7 +291,7 @@ describe('useStripe', () => {
         mockClientSecret,
         expect.objectContaining({
           payment_method: expect.any(Object),
-        })
+        }),
       )
     })
 
@@ -316,7 +317,7 @@ describe('useStripe', () => {
         mockClientSecret,
         expect.objectContaining({
           payment_method: 'pm_custom_123',
-        })
+        }),
       )
     })
 
@@ -327,7 +328,7 @@ describe('useStripe', () => {
 
       const mockClientSecret = 'pi_test_secret_123'
       mockStripe.confirmCardPayment.mockResolvedValue(
-        mockStripePaymentError('Your card was declined', 'card_declined')
+        mockStripePaymentError('Your card was declined', 'card_declined'),
       )
 
       const result = await confirmPayment(mockClientSecret)

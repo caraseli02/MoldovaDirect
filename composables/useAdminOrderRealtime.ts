@@ -1,10 +1,10 @@
 /**
  * Admin Order Realtime Composable
- * 
+ *
  * Requirements addressed:
  * - 3.4: Real-time order status updates
  * - 4.5: Prevent conflicts through order locking mechanisms
- * 
+ *
  * Provides real-time updates for admin order management using Supabase Realtime
  */
 
@@ -27,7 +27,7 @@ interface UseAdminOrderRealtimeOptions {
 export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}) => {
   const supabase = useSupabaseClient()
   const toast = useToast()
-  
+
   let channel: RealtimeChannel | null = null
   const isSubscribed = ref(false)
   const lastUpdate = ref<Date | null>(null)
@@ -48,11 +48,11 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
           event: 'UPDATE',
           schema: 'public',
           table: 'orders',
-          filter: `id=eq.${orderId}`
+          filter: `id=eq.${orderId}`,
         },
         (payload) => {
           handleOrderUpdate(payload.new as any)
-        }
+        },
       )
       .on(
         'postgres_changes',
@@ -60,17 +60,18 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
           event: 'INSERT',
           schema: 'public',
           table: 'order_status_history',
-          filter: `order_id=eq.${orderId}`
+          filter: `order_id=eq.${orderId}`,
         },
         (payload) => {
           handleStatusChange(payload.new as any)
-        }
+        },
       )
       .subscribe((status) => {
         if (status === 'SUBSCRIBED') {
           isSubscribed.value = true
           console.log(`Subscribed to order ${orderId} updates`)
-        } else if (status === 'CHANNEL_ERROR') {
+        }
+        else if (status === 'CHANNEL_ERROR') {
           console.error(`Error subscribing to order ${orderId}`)
           toast.error('Failed to connect to real-time updates')
         }
@@ -92,28 +93,29 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
         {
           event: 'UPDATE',
           schema: 'public',
-          table: 'orders'
+          table: 'orders',
         },
         (payload) => {
           handleOrderUpdate(payload.new as any)
-        }
+        },
       )
       .on(
         'postgres_changes',
         {
           event: 'INSERT',
           schema: 'public',
-          table: 'orders'
+          table: 'orders',
         },
         (payload) => {
           handleNewOrder(payload.new as any)
-        }
+        },
       )
       .subscribe((status) => {
         if (status === 'SUBSCRIBED') {
           isSubscribed.value = true
           console.log('Subscribed to all order updates')
-        } else if (status === 'CHANNEL_ERROR') {
+        }
+        else if (status === 'CHANNEL_ERROR') {
           console.error('Error subscribing to orders')
           toast.error('Failed to connect to real-time updates')
         }
@@ -131,7 +133,7 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
       orderNumber: order.order_number,
       status: order.status,
       updatedAt: order.updated_at,
-      updatedBy: order.updated_by
+      updatedBy: order.updated_by,
     }
 
     // Check for conflicts (order was updated by another admin)
@@ -159,7 +161,7 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
       orderNumber: '', // Will be filled by callback
       status: statusHistory.to_status,
       updatedAt: statusHistory.changed_at,
-      updatedBy: statusHistory.changed_by
+      updatedBy: statusHistory.changed_by,
     }
 
     // Call callback
@@ -187,7 +189,7 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
         id: order.id,
         orderNumber: order.order_number,
         status: order.status,
-        updatedAt: order.created_at
+        updatedAt: order.created_at,
       })
     }
   }
@@ -222,7 +224,7 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
       processing: 'Processing',
       shipped: 'Shipped',
       delivered: 'Delivered',
-      cancelled: 'Cancelled'
+      cancelled: 'Cancelled',
     }
     return labels[status] || status
   }
@@ -238,6 +240,6 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
     unsubscribe,
     checkForConflict,
     isSubscribed: readonly(isSubscribed),
-    lastUpdate: readonly(lastUpdate)
+    lastUpdate: readonly(lastUpdate),
   }
 }

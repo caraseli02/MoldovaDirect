@@ -45,14 +45,29 @@
           id="clear-existing"
           v-model:checked="localClearExisting"
         />
-        <Label for="clear-existing" class="text-sm cursor-pointer">
+        <Label
+          for="clear-existing"
+          class="text-sm cursor-pointer"
+        >
           Clear existing data first
         </Label>
       </div>
 
-      <Button @click="handleGenerate" :disabled="loading" class="w-full">
-        <commonIcon v-if="!loading" name="lucide:play" class="h-4 w-4 mr-2" />
-        <commonIcon v-else name="lucide:loader-2" class="h-4 w-4 mr-2 animate-spin" />
+      <Button
+        :disabled="loading"
+        class="w-full"
+        @click="handleGenerate"
+      >
+        <commonIcon
+          v-if="!loading"
+          name="lucide:play"
+          class="h-4 w-4 mr-2"
+        />
+        <commonIcon
+          v-else
+          name="lucide:loader-2"
+          class="h-4 w-4 mr-2 animate-spin"
+        />
         Generate Custom Data
       </Button>
     </CardContent>
@@ -74,27 +89,27 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   'update:modelValue': [value: CustomDataConfig]
-  generate: [config: CustomDataConfig]
+  'generate': [config: CustomDataConfig]
 }>()
 
 const localProducts = computed({
   get: () => props.modelValue.products,
-  set: (value) => emit('update:modelValue', { ...props.modelValue, products: value })
+  set: value => emit('update:modelValue', { ...props.modelValue, products: value }),
 })
 
 const localUsers = computed({
   get: () => props.modelValue.users,
-  set: (value) => emit('update:modelValue', { ...props.modelValue, users: value })
+  set: value => emit('update:modelValue', { ...props.modelValue, users: value }),
 })
 
 const localOrders = computed({
   get: () => props.modelValue.orders,
-  set: (value) => emit('update:modelValue', { ...props.modelValue, orders: value })
+  set: value => emit('update:modelValue', { ...props.modelValue, orders: value }),
 })
 
 const localClearExisting = computed({
   get: () => props.modelValue.clearExisting,
-  set: (value) => emit('update:modelValue', { ...props.modelValue, clearExisting: value })
+  set: value => emit('update:modelValue', { ...props.modelValue, clearExisting: value }),
 })
 
 const handleGenerate = () => {
@@ -102,7 +117,7 @@ const handleGenerate = () => {
     products: localProducts.value,
     users: localUsers.value,
     orders: localOrders.value,
-    clearExisting: localClearExisting.value
+    clearExisting: localClearExisting.value,
   })
 }
 </script>

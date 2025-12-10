@@ -23,7 +23,7 @@ interface CarrierTrackingResponse {
  */
 export async function fetchCarrierTracking(
   trackingNumber: string,
-  carrier: string
+  carrier: string,
 ): Promise<CarrierTrackingResponse | null> {
   try {
     // Normalize carrier name
@@ -46,7 +46,8 @@ export async function fetchCarrierTracking(
         console.warn(`Unsupported carrier: ${carrier}`)
         return null
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error(`Error fetching tracking for ${carrier}:`, error)
     return null
   }
@@ -60,9 +61,9 @@ async function fetchDHLTracking(trackingNumber: string): Promise<CarrierTracking
   // Placeholder implementation
   // In production, this would call the DHL API
   console.log(`Fetching DHL tracking for: ${trackingNumber}`)
-  
+
   // Example: const response = await fetch(`https://api.dhl.com/track/${trackingNumber}`, { ... })
-  
+
   return null
 }
 
@@ -110,12 +111,12 @@ export async function syncCarrierTracking(
   orderId: number,
   trackingNumber: string,
   carrier: string,
-  supabase: any
+  supabase: any,
 ): Promise<boolean> {
   try {
     // Fetch tracking from carrier
     const carrierData = await fetchCarrierTracking(trackingNumber, carrier)
-    
+
     if (!carrierData) {
       return false
     }
@@ -127,7 +128,7 @@ export async function syncCarrierTracking(
       .eq('order_id', orderId)
 
     const existingTimestamps = new Set(
-      (existingEvents || []).map((e: any) => e.timestamp)
+      (existingEvents || []).map((e: any) => e.timestamp),
     )
 
     // Insert new events that don't exist yet
@@ -138,7 +139,7 @@ export async function syncCarrierTracking(
         status: event.status,
         location: event.location,
         description: event.description,
-        timestamp: event.timestamp
+        timestamp: event.timestamp,
       }))
 
     if (newEvents.length > 0) {
@@ -149,15 +150,16 @@ export async function syncCarrierTracking(
 
     // Update order with latest carrier data
     const updateData: any = {}
-    
+
     if (carrierData.estimatedDelivery) {
       updateData.estimated_delivery = carrierData.estimatedDelivery
     }
-    
+
     if (carrierData.status === 'delivered') {
       updateData.status = 'delivered'
       updateData.delivered_at = carrierData.lastUpdate
-    } else if (carrierData.status === 'in_transit' || carrierData.status === 'out_for_delivery') {
+    }
+    else if (carrierData.status === 'in_transit' || carrierData.status === 'out_for_delivery') {
       updateData.status = 'shipped'
     }
 
@@ -169,7 +171,8 @@ export async function syncCarrierTracking(
     }
 
     return true
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Error syncing carrier tracking:', error)
     return false
   }
@@ -180,7 +183,7 @@ export async function syncCarrierTracking(
  */
 export function validateTrackingNumber(trackingNumber: string, carrier: string): boolean {
   const normalizedCarrier = carrier.toLowerCase().trim()
-  
+
   // Basic validation patterns for common carriers
   const patterns: Record<string, RegExp> = {
     dhl: /^[0-9]{10,11}$/,
@@ -188,7 +191,7 @@ export function validateTrackingNumber(trackingNumber: string, carrier: string):
     ups: /^1Z[A-Z0-9]{16}$/,
     usps: /^[0-9]{20,22}$/,
     posta_moldovei: /^[A-Z]{2}[0-9]{9}[A-Z]{2}$/,
-    moldova_post: /^[A-Z]{2}[0-9]{9}[A-Z]{2}$/
+    moldova_post: /^[A-Z]{2}[0-9]{9}[A-Z]{2}$/,
   }
 
   const pattern = patterns[normalizedCarrier]

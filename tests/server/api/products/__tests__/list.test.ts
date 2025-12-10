@@ -13,8 +13,8 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
 // Mock search sanitization
 vi.mock('~/server/utils/searchSanitization', () => ({
-  prepareSearchPattern: vi.fn((search) => `%${search}%`),
-  MAX_SEARCH_LENGTH: 100
+  prepareSearchPattern: vi.fn(search => `%${search}%`),
+  MAX_SEARCH_LENGTH: 100,
 }))
 
 // Mock public cache
@@ -22,10 +22,10 @@ vi.mock('~/server/utils/publicCache', () => ({
   PUBLIC_CACHE_CONFIG: {
     productsList: {
       maxAge: 60,
-      name: 'products-list'
-    }
+      name: 'products-list',
+    },
   },
-  getPublicCacheKey: vi.fn(() => 'test-cache-key')
+  getPublicCacheKey: vi.fn(() => 'test-cache-key'),
 }))
 
 // Mock Supabase query builder
@@ -41,9 +41,9 @@ const mockSupabaseRange = vi.fn()
 vi.mock('#supabase/server', () => ({
   serverSupabaseClient: vi.fn(() => ({
     from: vi.fn(() => ({
-      select: mockSupabaseSelect
-    }))
-  }))
+      select: mockSupabaseSelect,
+    })),
+  })),
 }))
 
 // Mock h3
@@ -51,13 +51,13 @@ vi.mock('h3', async () => {
   const actual = await vi.importActual('h3')
   return {
     ...actual,
-    defineCachedEventHandler: vi.fn((handler) => handler),
+    defineCachedEventHandler: vi.fn(handler => handler),
     getQuery: vi.fn(),
     createError: vi.fn((options) => {
       const error = new Error(options.statusMessage) as Error & { statusCode: number }
       error.statusCode = options.statusCode
       return error
-    })
+    }),
   }
 })
 
@@ -73,7 +73,7 @@ describe('Products List API', () => {
       gt: mockSupabaseGt,
       or: mockSupabaseOr,
       order: mockSupabaseOrder,
-      range: mockSupabaseRange
+      range: mockSupabaseRange,
     }
 
     mockSupabaseSelect.mockReturnValue(chainable)
@@ -86,7 +86,7 @@ describe('Products List API', () => {
     mockSupabaseRange.mockResolvedValue({
       data: [],
       error: null,
-      count: 0
+      count: 0,
     })
   })
 
@@ -104,7 +104,7 @@ describe('Products List API', () => {
 
         return {
           page: Math.min(Math.max(1, parsedPage), MAX_PAGE),
-          limit: Math.min(Math.max(1, parsedLimit), MAX_LIMIT)
+          limit: Math.min(Math.max(1, parsedLimit), MAX_LIMIT),
         }
       }
 
@@ -121,7 +121,7 @@ describe('Products List API', () => {
 
         return {
           page: Math.max(1, parsedPage),
-          limit: Math.max(1, parsedLimit)
+          limit: Math.max(1, parsedLimit),
         }
       }
 
@@ -140,7 +140,7 @@ describe('Products List API', () => {
       if (longSearch.length > MAX_SEARCH_LENGTH) {
         const error = vi.mocked(createError)({
           statusCode: 400,
-          statusMessage: `Search term too long. Maximum ${MAX_SEARCH_LENGTH} characters allowed.`
+          statusMessage: `Search term too long. Maximum ${MAX_SEARCH_LENGTH} characters allowed.`,
         })
         expect(error.statusCode).toBe(400)
       }
@@ -159,7 +159,7 @@ describe('Products List API', () => {
     it('filters by category slug', async () => {
       mockSupabaseEq.mockReturnValue({
         ...mockSupabaseSelect(),
-        gte: mockSupabaseGte
+        gte: mockSupabaseGte,
       })
 
       await mockSupabaseEq('categories.slug', 'vino-tinto')
@@ -243,7 +243,7 @@ describe('Products List API', () => {
         attributes: { origin: 'Spain', volume: '750', alcohol_content: '13.5' },
         categories: { id: 1, slug: 'vinos', name_translations: { es: 'Vinos', en: 'Wines' } },
         is_active: true,
-        created_at: '2024-01-01'
+        created_at: '2024-01-01',
       }
 
       const getStockStatus = (quantity: number) => {
@@ -266,11 +266,11 @@ describe('Products List API', () => {
         category: {
           id: dbProduct.categories.id,
           slug: dbProduct.categories.slug,
-          name: dbProduct.categories.name_translations
+          name: dbProduct.categories.name_translations,
         },
         origin: dbProduct.attributes?.origin,
         volume: parseInt(dbProduct.attributes?.volume || '0'),
-        alcoholContent: parseFloat(dbProduct.attributes?.alcohol_content || '0')
+        alcoholContent: parseFloat(dbProduct.attributes?.alcohol_content || '0'),
       }
 
       expect(transformed.slug).toBe('WINE-001')
@@ -296,13 +296,15 @@ describe('Products List API', () => {
       const dbProduct = {
         id: 1,
         sku: 'ITEM-001',
-        categories: null
+        categories: null,
       }
 
-      const category = dbProduct.categories ? {
-        id: dbProduct.categories.id,
-        slug: dbProduct.categories.slug
-      } : null
+      const category = dbProduct.categories
+        ? {
+            id: dbProduct.categories.id,
+            slug: dbProduct.categories.slug,
+          }
+        : null
 
       expect(category).toBeNull()
     })
@@ -312,7 +314,7 @@ describe('Products List API', () => {
 
       const transformed = images.map((img, index) => ({
         url: typeof img === 'string' ? img : (img as any).url,
-        isPrimary: index === 0
+        isPrimary: index === 0,
       }))
 
       expect(transformed[0].url).toBe('/image1.jpg')
@@ -323,13 +325,13 @@ describe('Products List API', () => {
     it('handles products with object images', () => {
       const images = [
         { url: '/wine.jpg', alt: 'Wine bottle', is_primary: true },
-        { url: '/wine-label.jpg', alt: 'Label' }
+        { url: '/wine-label.jpg', alt: 'Label' },
       ]
 
       const transformed = images.map((img, index) => ({
         url: typeof img === 'string' ? img : img.url,
         altText: typeof img === 'object' ? (img.alt || img.alt_text) : undefined,
-        isPrimary: typeof img === 'object' ? (img.is_primary || index === 0) : index === 0
+        isPrimary: typeof img === 'object' ? (img.is_primary || index === 0) : index === 0,
       }))
 
       expect(transformed[0].altText).toBe('Wine bottle')
@@ -351,7 +353,7 @@ describe('Products List API', () => {
         total: totalCount,
         totalPages,
         hasNext: page < totalPages,
-        hasPrev: page > 1
+        hasPrev: page > 1,
       }
 
       expect(pagination.totalPages).toBe(9)
@@ -423,7 +425,7 @@ describe('Products List API', () => {
           total: 0,
           totalPages: 0,
           hasNext: false,
-          hasPrev: false
+          hasPrev: false,
         },
         filters: {
           category: undefined,
@@ -432,8 +434,8 @@ describe('Products List API', () => {
           priceMax: undefined,
           inStock: undefined,
           featured: undefined,
-          sort: 'newest'
-        }
+          sort: 'newest',
+        },
       }
 
       expect(response).toHaveProperty('products')

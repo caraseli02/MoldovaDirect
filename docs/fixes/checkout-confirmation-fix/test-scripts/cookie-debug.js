@@ -8,7 +8,7 @@ function analyzeCookie() {
   const cookies = document.cookie.split(';').map(c => c.trim())
 
   console.log('All cookies:', cookies.length)
-  cookies.forEach(cookie => {
+  cookies.forEach((cookie) => {
     const [name] = cookie.split('=')
     console.log(`  - ${name}`)
   })
@@ -53,11 +53,12 @@ function analyzeCookie() {
     if (jsonString.length > limit) {
       console.log('⚠️  WARNING: Cookie exceeds 4KB limit!')
       console.log('Overage:', jsonString.length - limit, 'bytes')
-    } else {
+    }
+    else {
       console.log('✅ Cookie size OK:', ((jsonString.length / limit) * 100).toFixed(1) + '% of 4KB limit')
     }
-
-  } catch (error) {
+  }
+  catch (error) {
     console.error('❌ Failed to parse cookie:', error.message)
   }
 }

@@ -1,6 +1,6 @@
 <!--
   Email Logs Table Component
-  
+
   Requirements addressed:
   - 4.5: Search by order number, customer email, and date range
   - 4.6: Display delivery status and bounce reasons
@@ -49,13 +49,27 @@
             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
             @change="searchLogs"
           >
-            <option value="">All Types</option>
-            <option value="order_confirmation">Order Confirmation</option>
-            <option value="order_processing">Order Processing</option>
-            <option value="order_shipped">Order Shipped</option>
-            <option value="order_delivered">Order Delivered</option>
-            <option value="order_cancelled">Order Cancelled</option>
-            <option value="order_issue">Order Issue</option>
+            <option value="">
+              All Types
+            </option>
+            <option value="order_confirmation">
+              Order Confirmation
+            </option>
+            <option value="order_processing">
+              Order Processing
+            </option>
+            <option value="order_shipped">
+              Order Shipped
+            </option>
+            <option value="order_delivered">
+              Order Delivered
+            </option>
+            <option value="order_cancelled">
+              Order Cancelled
+            </option>
+            <option value="order_issue">
+              Order Issue
+            </option>
           </select>
         </div>
 
@@ -68,12 +82,24 @@
             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
             @change="searchLogs"
           >
-            <option value="">All Statuses</option>
-            <option value="pending">Pending</option>
-            <option value="sent">Sent</option>
-            <option value="delivered">Delivered</option>
-            <option value="failed">Failed</option>
-            <option value="bounced">Bounced</option>
+            <option value="">
+              All Statuses
+            </option>
+            <option value="pending">
+              Pending
+            </option>
+            <option value="sent">
+              Sent
+            </option>
+            <option value="delivered">
+              Delivered
+            </option>
+            <option value="failed">
+              Failed
+            </option>
+            <option value="bounced">
+              Bounced
+            </option>
           </select>
         </div>
       </div>
@@ -105,27 +131,52 @@
       </div>
 
       <!-- Loading State -->
-      <div v-if="loading" class="text-center py-8">
+      <div
+        v-if="loading"
+        class="text-center py-8"
+      >
         <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-red-500"></div>
-        <p class="mt-2 text-gray-600 dark:text-gray-400">Loading email logs...</p>
+        <p class="mt-2 text-gray-600 dark:text-gray-400">
+          Loading email logs...
+        </p>
       </div>
 
       <!-- Email Logs Table -->
-      <div v-else-if="logs.length > 0" class="overflow-x-auto">
+      <div
+        v-else-if="logs.length > 0"
+        class="overflow-x-auto"
+      >
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead class="px-4">{{ $t('admin.emailLogs.headers.order') }}</TableHead>
-              <TableHead class="px-4">{{ $t('admin.emailLogs.headers.recipient') }}</TableHead>
-              <TableHead class="px-4">{{ $t('admin.emailLogs.headers.type') }}</TableHead>
-              <TableHead class="px-4">{{ $t('admin.emailLogs.headers.status') }}</TableHead>
-              <TableHead class="px-4">{{ $t('admin.emailLogs.headers.attempts') }}</TableHead>
-              <TableHead class="px-4">{{ $t('admin.emailLogs.headers.date') }}</TableHead>
-              <TableHead class="px-4">{{ $t('admin.emailLogs.headers.actions') }}</TableHead>
+              <TableHead class="px-4">
+                {{ $t('admin.emailLogs.headers.order') }}
+              </TableHead>
+              <TableHead class="px-4">
+                {{ $t('admin.emailLogs.headers.recipient') }}
+              </TableHead>
+              <TableHead class="px-4">
+                {{ $t('admin.emailLogs.headers.type') }}
+              </TableHead>
+              <TableHead class="px-4">
+                {{ $t('admin.emailLogs.headers.status') }}
+              </TableHead>
+              <TableHead class="px-4">
+                {{ $t('admin.emailLogs.headers.attempts') }}
+              </TableHead>
+              <TableHead class="px-4">
+                {{ $t('admin.emailLogs.headers.date') }}
+              </TableHead>
+              <TableHead class="px-4">
+                {{ $t('admin.emailLogs.headers.actions') }}
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow v-for="log in logs" :key="log.id">
+            <TableRow
+              v-for="log in logs"
+              :key="log.id"
+            >
               <td class="px-4 py-4 whitespace-nowrap">
                 <div class="text-sm font-medium text-gray-900 dark:text-white">
                   {{ log.order?.orderNumber || 'N/A' }}
@@ -137,7 +188,9 @@
                 </div>
               </td>
               <td class="px-4 py-4 whitespace-nowrap">
-                <Badge variant="secondary">{{ formatEmailType(log.emailType) }}</Badge>
+                <Badge variant="secondary">
+                  {{ formatEmailType(log.emailType) }}
+                </Badge>
               </td>
               <td class="px-4 py-4 whitespace-nowrap">
                 <Badge :variant="emailStatusVariant(log.status)">
@@ -151,7 +204,13 @@
                 {{ formatDate(log.createdAt) }}
               </td>
               <td class="px-4 py-4 whitespace-nowrap text-sm">
-                <Button @click="viewDetails(log)" variant="outline" size="sm">{{ $t('admin.emailLogs.buttons.view') }}</Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  @click="viewDetails(log)"
+                >
+                  {{ $t('admin.emailLogs.buttons.view') }}
+                </Button>
               </td>
             </TableRow>
           </TableBody>
@@ -160,20 +219,39 @@
         <!-- Pagination -->
         <div class="mt-4 flex items-center justify-between">
           <div class="text-sm text-gray-600 dark:text-gray-400">
-            Showing {{ (pagination.page - 1) * pagination.limit + 1 }} to 
-            {{ Math.min(pagination.page * pagination.limit, pagination.total) }} of 
+            Showing {{ (pagination.page - 1) * pagination.limit + 1 }} to
+            {{ Math.min(pagination.page * pagination.limit, pagination.total) }} of
             {{ pagination.total }} results
           </div>
           <div class="flex gap-2">
-            <Button @click="previousPage" :disabled="pagination.page === 1" variant="outline" size="sm">{{ $t('common.previous') }}</Button>
-            <Button @click="nextPage" :disabled="pagination.page >= pagination.totalPages" variant="outline" size="sm">{{ $t('common.next') }}</Button>
+            <Button
+              :disabled="pagination.page === 1"
+              variant="outline"
+              size="sm"
+              @click="previousPage"
+            >
+              {{ $t('common.previous') }}
+            </Button>
+            <Button
+              :disabled="pagination.page >= pagination.totalPages"
+              variant="outline"
+              size="sm"
+              @click="nextPage"
+            >
+              {{ $t('common.next') }}
+            </Button>
           </div>
         </div>
       </div>
 
       <!-- Empty State -->
-      <div v-else class="text-center py-8">
-        <p class="text-gray-600 dark:text-gray-400">No email logs found</p>
+      <div
+        v-else
+        class="text-center py-8"
+      >
+        <p class="text-gray-600 dark:text-gray-400">
+          No email logs found
+        </p>
       </div>
     </CardContent>
   </Card>
@@ -184,11 +262,16 @@
       <DialogHeader>
         <DialogTitle>Email Log Details</DialogTitle>
       </DialogHeader>
-      <div v-if="selectedLog" class="space-y-4">
+      <div
+        v-if="selectedLog"
+        class="space-y-4"
+      >
         <div class="grid grid-cols-2 gap-4">
           <div>
             <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Order Number</label>
-            <p class="text-sm text-gray-900 dark:text-white mt-1">{{ selectedLog.order?.orderNumber || 'N/A' }}</p>
+            <p class="text-sm text-gray-900 dark:text-white mt-1">
+              {{ selectedLog.order?.orderNumber || 'N/A' }}
+            </p>
           </div>
           <div>
             <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Status</label>
@@ -200,48 +283,67 @@
           </div>
           <div>
             <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Recipient</label>
-            <p class="text-sm text-gray-900 dark:text-white mt-1">{{ selectedLog.recipientEmail }}</p>
+            <p class="text-sm text-gray-900 dark:text-white mt-1">
+              {{ selectedLog.recipientEmail }}
+            </p>
           </div>
           <div>
             <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Email Type</label>
-            <p class="text-sm text-gray-900 dark:text-white mt-1">{{ formatEmailType(selectedLog.emailType) }}</p>
+            <p class="text-sm text-gray-900 dark:text-white mt-1">
+              {{ formatEmailType(selectedLog.emailType) }}
+            </p>
           </div>
           <div>
             <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Attempts</label>
-            <p class="text-sm text-gray-900 dark:text-white mt-1">{{ selectedLog.attempts }}</p>
+            <p class="text-sm text-gray-900 dark:text-white mt-1">
+              {{ selectedLog.attempts }}
+            </p>
           </div>
           <div>
             <label class="text-sm font-medium text-gray-700 dark:text-gray-300">External ID</label>
-            <p class="text-sm text-gray-900 dark:text-white mt-1">{{ selectedLog.externalId || 'N/A' }}</p>
+            <p class="text-sm text-gray-900 dark:text-white mt-1">
+              {{ selectedLog.externalId || 'N/A' }}
+            </p>
           </div>
         </div>
 
         <div>
           <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Subject</label>
-          <p class="text-sm text-gray-900 dark:text-white mt-1">{{ selectedLog.subject }}</p>
+          <p class="text-sm text-gray-900 dark:text-white mt-1">
+            {{ selectedLog.subject }}
+          </p>
         </div>
 
         <div v-if="selectedLog.bounceReason">
           <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Bounce Reason</label>
-          <p class="text-sm text-red-600 dark:text-red-400 mt-1">{{ selectedLog.bounceReason }}</p>
+          <p class="text-sm text-red-600 dark:text-red-400 mt-1">
+            {{ selectedLog.bounceReason }}
+          </p>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
           <div>
             <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Created At</label>
-            <p class="text-sm text-gray-900 dark:text-white mt-1">{{ formatDate(selectedLog.createdAt) }}</p>
+            <p class="text-sm text-gray-900 dark:text-white mt-1">
+              {{ formatDate(selectedLog.createdAt) }}
+            </p>
           </div>
           <div v-if="selectedLog.deliveredAt">
             <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Delivered At</label>
-            <p class="text-sm text-gray-900 dark:text-white mt-1">{{ formatDate(selectedLog.deliveredAt) }}</p>
+            <p class="text-sm text-gray-900 dark:text-white mt-1">
+              {{ formatDate(selectedLog.deliveredAt) }}
+            </p>
           </div>
         </div>
 
-        <div v-if="selectedLog.status === 'failed' && selectedLog.attempts < 3" class="pt-4">
+        <div
+          v-if="selectedLog.status === 'failed' && selectedLog.attempts < 3"
+          class="pt-4"
+        >
           <Button
-            @click="retryEmail(selectedLog.id)"
             :disabled="retrying"
             class="w-full"
+            @click="retryEmail(selectedLog.id)"
           >
             {{ retrying ? 'Retrying...' : 'Retry Email' }}
           </Button>
@@ -268,13 +370,13 @@ const filters = ref({
   emailType: '',
   status: '',
   dateFrom: '',
-  dateTo: ''
+  dateTo: '',
 })
 const pagination = ref({
   page: 1,
   limit: 20,
   total: 0,
-  totalPages: 0
+  totalPages: 0,
 })
 const showDetailsModal = ref(false)
 const selectedLog = ref<any>(null)
@@ -296,18 +398,20 @@ async function searchLogs() {
       params: {
         ...filters.value,
         page: pagination.value.page,
-        limit: pagination.value.limit
-      }
+        limit: pagination.value.limit,
+      },
     })
 
     if (data.value) {
       logs.value = data.value.logs
       pagination.value = data.value.pagination
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Failed to search email logs:', error)
     useToast().error('Failed to load email logs')
-  } finally {
+  }
+  finally {
     loading.value = false
   }
 }
@@ -335,22 +439,24 @@ async function retryEmail(logId: number) {
   retrying.value = true
   try {
     await $fetch(`/api/admin/email-logs/${logId}/retry`, {
-      method: 'POST'
+      method: 'POST',
     })
     useToast().success('Email retry initiated')
     showDetailsModal.value = false
     await searchLogs()
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Failed to retry email:', error)
     useToast().error('Failed to retry email')
-  } finally {
+  }
+  finally {
     retrying.value = false
   }
 }
 
 function formatEmailType(type: string): string {
-  return type.split('_').map(word => 
-    word.charAt(0).toUpperCase() + word.slice(1)
+  return type.split('_').map(word =>
+    word.charAt(0).toUpperCase() + word.slice(1),
   ).join(' ')
 }
 
@@ -364,7 +470,7 @@ function getStatusClass(status: string): string {
     sent: 'text-xs px-2 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200',
     delivered: 'text-xs px-2 py-1 rounded-full bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200',
     failed: 'text-xs px-2 py-1 rounded-full bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200',
-    bounced: 'text-xs px-2 py-1 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-200'
+    bounced: 'text-xs px-2 py-1 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-200',
   }
   return classes[status as keyof typeof classes] || classes.pending
 }

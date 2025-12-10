@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
   if (!type || !locale) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Template type and locale are required'
+      statusMessage: 'Template type and locale are required',
     })
   }
 
@@ -45,7 +45,7 @@ export default defineEventHandler(async (event) => {
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to fetch template history',
-      data: error
+      data: error,
     })
   }
 

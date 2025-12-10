@@ -21,7 +21,7 @@ import {
   paymentStatuses,
   streets,
   cities,
-  productTemplates
+  productTemplates,
 } from '~/server/data/mockData'
 
 export default defineEventHandler(async (event) => {
@@ -37,11 +37,11 @@ export default defineEventHandler(async (event) => {
   const MAX_USERS = 1000
 
   // Validate count with strict bounds checking
-  let count = body.count || 10
+  const count = body.count || 10
   if (typeof count !== 'number' || count < 1 || count > MAX_USERS || !Number.isInteger(count)) {
     throw createError({
       statusCode: 400,
-      statusMessage: `Count must be an integer between 1 and ${MAX_USERS}`
+      statusMessage: `Count must be an integer between 1 and ${MAX_USERS}`,
     })
   }
 
@@ -54,7 +54,7 @@ export default defineEventHandler(async (event) => {
   if (!Array.isArray(roles) || roles.length === 0) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Roles must be a non-empty array'
+      statusMessage: 'Roles must be a non-empty array',
     })
   }
 
@@ -62,13 +62,13 @@ export default defineEventHandler(async (event) => {
     if (!validRoles.includes(role)) {
       throw createError({
         statusCode: 400,
-        statusMessage: `Invalid role: ${role}. Must be one of: ${validRoles.join(', ')}`
+        statusMessage: `Invalid role: ${role}. Must be one of: ${validRoles.join(', ')}`,
       })
     }
   }
 
   const createdUsers: CreatedUser[] = []
-  const errors: Array<{ email: string; error: string }> = []
+  const errors: Array<{ email: string, error: string }> = []
 
   for (let i = 0; i < count; i++) {
     const mockUser = generateMockUser()
@@ -84,8 +84,8 @@ export default defineEventHandler(async (event) => {
         user_metadata: {
           name: mockUser.name,
           phone: mockUser.phone,
-          preferred_language: mockUser.preferredLanguage
-        }
+          preferred_language: mockUser.preferredLanguage,
+        },
       })
 
       if (authError || !authData.user) {
@@ -104,7 +104,7 @@ export default defineEventHandler(async (event) => {
           name: mockUser.name,
           phone: mockUser.phone,
           role,
-          preferred_language: mockUser.preferredLanguage
+          preferred_language: mockUser.preferredLanguage,
         })
 
       if (profileError) {
@@ -117,7 +117,7 @@ export default defineEventHandler(async (event) => {
       if (withAddresses) {
         const addresses = [
           { ...generateAddress('shipping'), user_id: userId },
-          { ...generateAddress('billing'), user_id: userId }
+          { ...generateAddress('billing'), user_id: userId },
         ]
 
         const { error: addressError } = await supabase
@@ -134,10 +134,10 @@ export default defineEventHandler(async (event) => {
         email: mockUser.email,
         name: mockUser.name,
         role,
-        phone: mockUser.phone
+        phone: mockUser.phone,
       })
-
-    } catch (error: any) {
+    }
+    catch (error: any) {
       console.error('Error creating user:', error)
       errors.push({ email: mockUser.email, error: error.message })
     }
@@ -148,7 +148,7 @@ export default defineEventHandler(async (event) => {
     const mockProducts = productTemplates.map(t => ({
       name: t.name,
       price: (t.priceMin + t.priceMax) / 2,
-      sku: `${t.category.toUpperCase()}-001`
+      sku: `${t.category.toUpperCase()}-001`,
     })).slice(0, 5)
 
     // Create 1-3 orders for each user
@@ -180,15 +180,15 @@ export default defineEventHandler(async (event) => {
             street: `${randomItem(streets)} ${Math.floor(Math.random() * 150) + 1}`,
             city: randomItem(cities),
             postalCode: `MD-${Math.floor(Math.random() * 9000) + 1000}`,
-            country: 'Moldova'
+            country: 'Moldova',
           },
           billing_address: {
             street: `${randomItem(streets)} ${Math.floor(Math.random() * 150) + 1}`,
             city: randomItem(cities),
             postalCode: `MD-${Math.floor(Math.random() * 9000) + 1000}`,
-            country: 'Moldova'
+            country: 'Moldova',
           },
-          created_at: createdAt.toISOString()
+          created_at: createdAt.toISOString(),
         }
 
         const { data: insertedOrder, error: orderError } = await supabase
@@ -208,11 +208,11 @@ export default defineEventHandler(async (event) => {
           product_snapshot: {
             name: product.name,
             sku: product.sku,
-            nameTranslations: { en: product.name, es: product.name }
+            nameTranslations: { en: product.name, es: product.name },
           },
           quantity,
           price_eur: product.price,
-          total_eur: product.price * quantity
+          total_eur: product.price * quantity,
         })
       }
     }
@@ -225,7 +225,7 @@ export default defineEventHandler(async (event) => {
     failed: errors.length,
     withAddresses,
     withOrders,
-    roles
+    roles,
   })
 
   const response: SeedUsersResponse = {
@@ -239,8 +239,8 @@ export default defineEventHandler(async (event) => {
       failed: errors.length,
       withAddresses,
       withOrders,
-      roles
-    }
+      roles,
+    },
   }
 
   return response

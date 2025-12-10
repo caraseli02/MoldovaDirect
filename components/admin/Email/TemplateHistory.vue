@@ -1,6 +1,6 @@
 <!--
   Email Template Version History Component
-  
+
   Requirements addressed:
   - 5.6: Template version history and rollback functionality
 -->
@@ -11,20 +11,26 @@
       <div class="flex items-center justify-between">
         <CardTitle>Version History</CardTitle>
         <Button
-          @click="loadHistory"
           variant="outline"
           size="sm"
+          @click="loadHistory"
         >
           Refresh
         </Button>
       </div>
     </CardHeader>
     <CardContent>
-      <div v-if="loading" class="text-center py-8">
+      <div
+        v-if="loading"
+        class="text-center py-8"
+      >
         <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-red-500"></div>
       </div>
 
-      <div v-else-if="history.length > 0" class="space-y-4">
+      <div
+        v-else-if="history.length > 0"
+        class="space-y-4"
+      >
         <div
           v-for="version in history"
           :key="version.id"
@@ -55,17 +61,17 @@
 
             <div class="flex gap-2">
               <Button
-                @click="viewVersion(version)"
                 variant="outline"
                 size="sm"
+                @click="viewVersion(version)"
               >
                 View
               </Button>
               <Button
-                @click="rollbackToVersion(version)"
                 variant="outline"
                 size="sm"
                 :disabled="rollingBack"
+                @click="rollbackToVersion(version)"
               >
                 Rollback
               </Button>
@@ -74,7 +80,10 @@
         </div>
       </div>
 
-      <div v-else class="text-center py-8 text-gray-600 dark:text-gray-400">
+      <div
+        v-else
+        class="text-center py-8 text-gray-600 dark:text-gray-400"
+      >
         No version history available
       </div>
     </CardContent>
@@ -86,15 +95,22 @@
       <DialogHeader>
         <DialogTitle>Version {{ selectedVersion?.version }} Details</DialogTitle>
       </DialogHeader>
-      <div v-if="selectedVersion" class="space-y-4">
+      <div
+        v-if="selectedVersion"
+        class="space-y-4"
+      >
         <div>
           <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Subject</label>
-          <p class="text-sm text-gray-900 dark:text-white mt-1">{{ selectedVersion.subject }}</p>
+          <p class="text-sm text-gray-900 dark:text-white mt-1">
+            {{ selectedVersion.subject }}
+          </p>
         </div>
 
         <div v-if="selectedVersion.preheader">
           <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Preheader</label>
-          <p class="text-sm text-gray-900 dark:text-white mt-1">{{ selectedVersion.preheader }}</p>
+          <p class="text-sm text-gray-900 dark:text-white mt-1">
+            {{ selectedVersion.preheader }}
+          </p>
         </div>
 
         <div>
@@ -104,16 +120,16 @@
 
         <div class="flex gap-2 pt-4">
           <Button
-            @click="rollbackToVersion(selectedVersion)"
             :disabled="rollingBack"
             class="flex-1"
+            @click="rollbackToVersion(selectedVersion)"
           >
             {{ rollingBack ? 'Rolling back...' : 'Rollback to This Version' }}
           </Button>
           <Button
-            @click="showVersionModal = false"
             variant="outline"
             class="flex-1"
+            @click="showVersionModal = false"
           >
             Close
           </Button>
@@ -166,16 +182,18 @@ async function loadHistory(): Promise<void> {
     const { data } = await useFetch<TemplateHistoryEntry[]>('/api/admin/email-templates/history', {
       params: {
         type: props.templateType,
-        locale: props.locale
-      }
+        locale: props.locale,
+      },
     })
 
     if (data.value) {
       history.value = data.value
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Failed to load version history:', error)
-  } finally {
+  }
+  finally {
     loading.value = false
   }
 }
@@ -197,25 +215,27 @@ async function rollbackToVersion(version: TemplateHistoryEntry): Promise<void> {
       body: {
         historyId: version.id,
         type: version.templateType,
-        locale: version.locale
-      }
+        locale: version.locale,
+      },
     })
 
     toast.success('Template rolled back successfully')
     showVersionModal.value = false
     emit('rollback')
     await loadHistory()
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Failed to rollback template:', error)
     toast.error('Failed to rollback template')
-  } finally {
+  }
+  finally {
     rollingBack.value = false
   }
 }
 
 function formatEmailType(type: string): string {
-  return type.split('_').map(word => 
-    word.charAt(0).toUpperCase() + word.slice(1)
+  return type.split('_').map(word =>
+    word.charAt(0).toUpperCase() + word.slice(1),
   ).join(' ')
 }
 

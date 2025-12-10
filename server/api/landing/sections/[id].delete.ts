@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
     if (!id) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Bad Request - Section ID is required'
+        statusMessage: 'Bad Request - Section ID is required',
       })
     }
 
@@ -34,21 +34,22 @@ export default defineEventHandler(async (event) => {
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to delete landing section',
-        data: error
+        data: error,
       })
     }
 
     return {
       success: true,
-      message: 'Landing section deleted successfully'
+      message: 'Landing section deleted successfully',
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     console.error('Error deleting landing section:', error)
 
     throw createError({
       statusCode: error.statusCode || 500,
       statusMessage: error.statusMessage || 'Failed to delete landing section',
-      data: error.data || error
+      data: error.data || error,
     })
   }
 })

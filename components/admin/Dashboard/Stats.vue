@@ -5,9 +5,9 @@
         {{ statsSectionTitle }}
       </h2>
       <button
-        @click="refresh"
         :disabled="isLoading"
         class="inline-flex items-center gap-2 rounded-full border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:border-gray-300 hover:text-gray-900 disabled:opacity-50"
+        @click="refresh"
       >
         <commonIcon
           name="lucide:refresh-ccw"
@@ -43,7 +43,10 @@
 
     <footer class="flex flex-col gap-2 text-sm text-gray-400 md:flex-row md:items-center md:justify-between">
       <div class="flex items-center gap-2">
-        <commonIcon name="lucide:clock" class="h-4 w-4 text-blue-500" />
+        <commonIcon
+          name="lucide:clock"
+          class="h-4 w-4 text-blue-500"
+        />
         <span>{{ t('admin.dashboard.lastUpdated', { time: timeSinceRefresh }) }}</span>
       </div>
       <p class="text-xs text-gray-400">
@@ -75,7 +78,8 @@ let dashboardStore: any = null
 
 try {
   dashboardStore = useAdminDashboardStore()
-} catch (error) {
+}
+catch (error) {
   console.warn('Admin dashboard store not available during SSR/hydration')
 }
 
@@ -86,7 +90,7 @@ if (!dashboardStore) {
     formattedRevenue: '€0.00',
     formattedRevenueToday: '€0.00',
     formattedConversionRate: '0%',
-    timeSinceRefresh: 'Never'
+    timeSinceRefresh: 'Never',
   }
 }
 
@@ -134,7 +138,7 @@ const cards = computed<MetricCardViewModel[]>(() => {
       metaClass: lowStockProducts > 0 ? 'text-yellow-400' : 'text-green-500',
       footer: lowStockProducts > 0
         ? 'Prioritize replenishment for flagged items.'
-        : 'All stocked items above safety thresholds.'
+        : 'All stocked items above safety thresholds.',
     },
     {
       key: 'customers',
@@ -150,7 +154,7 @@ const cards = computed<MetricCardViewModel[]>(() => {
       metaClass: newUsersToday > 0 ? 'text-blue-500' : 'text-gray-400',
       footer: newUsersToday > 0
         ? 'Keep momentum with onboarding journeys.'
-        : 'Run a campaign to spark acquisition.'
+        : 'Run a campaign to spark acquisition.',
     },
     {
       key: 'orders',
@@ -164,7 +168,7 @@ const cards = computed<MetricCardViewModel[]>(() => {
         ? `${formatPercent(conversionRate)} store conversion`
         : 'Conversion data pending',
       metaClass: conversionRate >= 2 ? 'text-green-500' : conversionRate > 0 ? 'text-blue-500' : 'text-yellow-400',
-      footer: 'Review checkout steps to lift conversion.'
+      footer: 'Review checkout steps to lift conversion.',
     },
     {
       key: 'revenue',
@@ -180,8 +184,8 @@ const cards = computed<MetricCardViewModel[]>(() => {
       metaClass: revenueToday > 0 ? 'text-green-500' : 'text-gray-400',
       footer: revenueToday > 0
         ? 'Momentum is trending positive today.'
-        : 'No sales logged yet — promote campaigns.'
-    }
+        : 'No sales logged yet — promote campaigns.',
+    },
   ]
 })
 
@@ -195,7 +199,7 @@ function formatNumber(value?: number | null) {
   }
 
   return new Intl.NumberFormat('en-US', {
-    maximumFractionDigits: 0
+    maximumFractionDigits: 0,
   }).format(value)
 }
 
@@ -206,7 +210,7 @@ function formatCurrency(value?: number | null) {
 
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'EUR'
+    currency: 'EUR',
   }).format(value)
 }
 

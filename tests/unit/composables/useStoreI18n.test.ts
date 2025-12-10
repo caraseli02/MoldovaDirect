@@ -6,17 +6,17 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { ref } from 'vue'
 
+import { useStoreI18n } from '~/composables/useStoreI18n'
+
 // Mock useNuxtApp with i18n available
 const mockNuxtApp = {
   $i18n: {
     t: vi.fn((key: string) => `translated:${key}`),
-    locale: ref('es')
-  }
+    locale: ref('es'),
+  },
 }
 
 vi.stubGlobal('useNuxtApp', vi.fn(() => mockNuxtApp))
-
-import { useStoreI18n } from '~/composables/useStoreI18n'
 
 describe('useStoreI18n', () => {
   beforeEach(() => {

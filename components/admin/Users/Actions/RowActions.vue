@@ -1,6 +1,6 @@
 <!--
   User Row Actions Component
-  
+
   Action buttons for user table rows with mobile optimizations
   Provides consistent action interface across desktop and mobile
 -->
@@ -9,34 +9,40 @@
   <div class="flex items-center justify-end gap-2">
     <!-- View Button -->
     <UiButton
-      @click.stop="handleView"
-      @touchstart="isMobile && vibrate('tap')"
       variant="ghost"
       size="icon"
       class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 touch-manipulation"
       :class="{
         'h-9 w-9 active:scale-90': isMobile,
-        'h-8 w-8': !isMobile
+        'h-8 w-8': !isMobile,
       }"
       :aria-label="$t('admin.users.actions.view')"
+      @click.stop="handleView"
+      @touchstart="isMobile && vibrate('tap')"
     >
-      <commonIcon name="lucide:eye" :class="iconSizeClass" />
+      <commonIcon
+        name="lucide:eye"
+        :class="iconSizeClass"
+      />
     </UiButton>
 
     <!-- Edit Button -->
     <UiButton
-      @click.stop="handleEdit"
-      @touchstart="isMobile && vibrate('tap')"
       variant="ghost"
       size="icon"
       class="touch-manipulation"
       :class="{
         'h-9 w-9 active:scale-90': isMobile,
-        'h-8 w-8': !isMobile
+        'h-8 w-8': !isMobile,
       }"
       :aria-label="$t('admin.users.actions.edit')"
+      @click.stop="handleEdit"
+      @touchstart="isMobile && vibrate('tap')"
     >
-      <commonIcon name="lucide:pencil" :class="iconSizeClass" />
+      <commonIcon
+        name="lucide:pencil"
+        :class="iconSizeClass"
+      />
     </UiButton>
 
     <!-- Actions Dropdown -->

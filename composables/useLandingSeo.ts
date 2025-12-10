@@ -70,7 +70,7 @@ export function useLandingSeo(input: LandingSeoInput): LandingSeoHelpers {
 
   // Properly type locale codes from i18n
   const localeCodes = (locales?.value || []).map((loc: any) =>
-    typeof loc === 'string' ? loc : loc.code
+    typeof loc === 'string' ? loc : loc.code,
   )
   const currentLocale = locale?.value || 'es'
 
@@ -90,7 +90,7 @@ export function useLandingSeo(input: LandingSeoInput): LandingSeoHelpers {
     { name: 'twitter:title', content: input.title },
     { name: 'twitter:description', content: input.description },
     { name: 'twitter:image', content: ogImage },
-    { name: 'twitter:image:alt', content: imageAlt }
+    { name: 'twitter:image:alt', content: imageAlt },
   ].filter(Boolean) as MetaObject['meta']
 
   const links: MetaObject['link'] = [{ rel: 'canonical', href: canonicalUrl }]
@@ -119,7 +119,7 @@ export function useLandingSeo(input: LandingSeoInput): LandingSeoHelpers {
     for (const payload of payloads) {
       scripts.push({
         type: 'application/ld+json',
-        children: JSON.stringify(payload)
+        children: JSON.stringify(payload),
       })
     }
   }
@@ -128,16 +128,16 @@ export function useLandingSeo(input: LandingSeoInput): LandingSeoHelpers {
     const breadcrumbList = {
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',
-      itemListElement: input.breadcrumbs.map((crumb, index) => ({
+      'itemListElement': input.breadcrumbs.map((crumb, index) => ({
         '@type': 'ListItem',
-        position: index + 1,
-        name: crumb.name,
-        item: toAbsoluteUrl(crumb.path)
-      }))
+        'position': index + 1,
+        'name': crumb.name,
+        'item': toAbsoluteUrl(crumb.path),
+      })),
     }
     scripts.push({
       type: 'application/ld+json',
-      children: JSON.stringify(breadcrumbList)
+      children: JSON.stringify(breadcrumbList),
     })
   }
 
@@ -145,12 +145,12 @@ export function useLandingSeo(input: LandingSeoInput): LandingSeoHelpers {
     title: input.title,
     meta,
     link: links,
-    script: scripts
+    script: scripts,
   })
 
   return {
     canonicalUrl,
     siteUrl,
-    toAbsoluteUrl
+    toAbsoluteUrl,
   }
 }

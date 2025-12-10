@@ -28,7 +28,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     }
     // Use session user if user.value hasn't hydrated yet
     userId = session.user.id
-  } else {
+  }
+  else {
     userId = user.value.id
   }
 
@@ -42,7 +43,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   if (error || !profile) {
     throw createError({
       statusCode: 401,
-      statusMessage: 'Authentication required'
+      statusMessage: 'Authentication required',
     })
   }
 
@@ -50,7 +51,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   if (profile.role !== 'admin') {
     throw createError({
       statusCode: 403,
-      statusMessage: 'Admin access required. You do not have permission to access this area.'
+      statusMessage: 'Admin access required. You do not have permission to access this area.',
     })
   }
 
@@ -68,7 +69,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     if (mfaError) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to verify MFA status. Please try again.'
+        statusMessage: 'Failed to verify MFA status. Please try again.',
       })
     }
 

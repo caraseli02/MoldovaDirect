@@ -48,7 +48,7 @@ export default defineEventHandler(async (event) => {
     await requireAdminRole(event)
 
     const supabase = await serverSupabaseClient(event)
-    
+
     const now = new Date()
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
     const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
@@ -61,14 +61,14 @@ export default defineEventHandler(async (event) => {
     if (productError) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to fetch product statistics'
+        statusMessage: 'Failed to fetch product statistics',
       })
     }
 
     const totalProducts = productStats.length
     const activeProducts = productStats.filter(p => p.is_active).length
-    const lowStockProducts = productStats.filter(p => 
-      p.is_active && p.stock_quantity <= p.low_stock_threshold
+    const lowStockProducts = productStats.filter(p =>
+      p.is_active && p.stock_quantity <= p.low_stock_threshold,
     ).length
 
     // Get user statistics
@@ -79,13 +79,13 @@ export default defineEventHandler(async (event) => {
     if (userError) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to fetch user statistics'
+        statusMessage: 'Failed to fetch user statistics',
       })
     }
 
     const totalUsers = userStats.length
-    const newUsersToday = userStats.filter(u => 
-      new Date(u.created_at) >= today
+    const newUsersToday = userStats.filter(u =>
+      new Date(u.created_at) >= today,
     ).length
 
     // Calculate active users (users who have logged in within 30 days)
@@ -101,13 +101,13 @@ export default defineEventHandler(async (event) => {
     if (orderError) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to fetch order statistics'
+        statusMessage: 'Failed to fetch order statistics',
       })
     }
 
     const totalOrders = orderStats.length
     const revenue = orderStats.reduce((sum, order) => sum + parseFloat(order.total_eur.toString()), 0)
-    
+
     const todaysOrders = orderStats.filter(order => new Date(order.created_at) >= today)
     const revenueToday = todaysOrders.reduce((sum, order) => sum + parseFloat(order.total_eur.toString()), 0)
 
@@ -142,24 +142,24 @@ export default defineEventHandler(async (event) => {
       shippedOrders,
       deliveredOrders,
       ordersToday,
-      averageOrderValue: Math.round(averageOrderValue * 100) / 100
+      averageOrderValue: Math.round(averageOrderValue * 100) / 100,
     }
 
     return {
       success: true,
-      data: stats
+      data: stats,
     }
-
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Dashboard stats error:', error)
-    
+
     if (error.statusCode) {
       throw error
     }
-    
+
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 })

@@ -1,10 +1,10 @@
 /**
  * Admin Product Analytics API Endpoint
- * 
+ *
  * Requirements addressed:
  * - 3.4: Show most viewed products, best-selling items, and products with high cart abandonment
  * - 3.5: Display funnel analysis from product view to purchase completion
- * 
+ *
  * Returns product analytics data including:
  * - Most viewed products
  * - Best-selling products
@@ -81,7 +81,8 @@ export default defineEventHandler(async (event) => {
       actualStartDate = new Date(startDate)
       actualEndDate = new Date(endDate)
       dateFilter = `AND pa.date BETWEEN '${startDate}' AND '${endDate}'`
-    } else {
+    }
+    else {
       actualEndDate = new Date()
       actualStartDate = new Date()
       actualStartDate.setDate(actualStartDate.getDate() - days)
@@ -101,7 +102,7 @@ export default defineEventHandler(async (event) => {
 
     // If view doesn't exist, fall back to manual calculation
     let processedPerformance = productPerformance || []
-    
+
     if (!productPerformance || productPerformance.length === 0) {
       // Manual calculation from product_analytics table
       const { data: analyticsData, error: analyticsError } = await supabase
@@ -130,12 +131,12 @@ export default defineEventHandler(async (event) => {
           total_cart_additions: item.total_cart_additions || 0,
           total_purchases: item.total_purchases || 0,
           total_revenue: item.total_revenue || 0,
-          view_to_cart_rate: item.total_views > 0 
+          view_to_cart_rate: item.total_views > 0
             ? Math.round((item.total_cart_additions / item.total_views) * 100 * 100) / 100
             : 0,
-          cart_to_purchase_rate: item.total_cart_additions > 0 
+          cart_to_purchase_rate: item.total_cart_additions > 0
             ? Math.round((item.total_purchases / item.total_cart_additions) * 100 * 100) / 100
-            : 0
+            : 0,
         }))
       }
     }
@@ -149,7 +150,7 @@ export default defineEventHandler(async (event) => {
         productName: product.name_translations?.es || product.name_translations?.en || 'Unknown Product',
         price: parseFloat(product.price_eur?.toString() || '0'),
         totalViews: product.total_views || 0,
-        viewsGrowth: 0 // TODO: Calculate growth rate
+        viewsGrowth: 0, // TODO: Calculate growth rate
       }))
 
     // Process best selling products
@@ -162,7 +163,7 @@ export default defineEventHandler(async (event) => {
         price: parseFloat(product.price_eur?.toString() || '0'),
         totalSales: product.total_purchases || 0,
         totalRevenue: product.total_revenue || 0,
-        salesGrowth: 0 // TODO: Calculate growth rate
+        salesGrowth: 0, // TODO: Calculate growth rate
       }))
 
     // Calculate conversion funnel
@@ -180,7 +181,7 @@ export default defineEventHandler(async (event) => {
       totalPurchases,
       viewToCartRate: Math.round(viewToCartRate * 100) / 100,
       cartToPurchaseRate: Math.round(cartToPurchaseRate * 100) / 100,
-      overallConversionRate: Math.round(overallConversionRate * 100) / 100
+      overallConversionRate: Math.round(overallConversionRate * 100) / 100,
     }
 
     // Process detailed product performance
@@ -196,19 +197,19 @@ export default defineEventHandler(async (event) => {
         revenue: product.total_revenue || 0,
         viewToCartRate: product.view_to_cart_rate || 0,
         cartToPurchaseRate: product.cart_to_purchase_rate || 0,
-        conversionRate: product.total_views > 0 
+        conversionRate: product.total_views > 0
           ? Math.round(((product.total_purchases || 0) / product.total_views) * 100 * 100) / 100
-          : 0
+          : 0,
       }))
 
     // Calculate abandonment analysis
     const abandonmentAnalysis = processedPerformance
       .filter(p => (p.total_cart_additions || 0) > 0)
-      .map(product => {
+      .map((product) => {
         const cartAdditions = product.total_cart_additions || 0
         const purchases = product.total_purchases || 0
-        const abandonmentRate = cartAdditions > 0 
-          ? ((cartAdditions - purchases) / cartAdditions) * 100 
+        const abandonmentRate = cartAdditions > 0
+          ? ((cartAdditions - purchases) / cartAdditions) * 100
           : 0
 
         return {
@@ -216,7 +217,7 @@ export default defineEventHandler(async (event) => {
           productName: product.name_translations?.es || product.name_translations?.en || 'Unknown Product',
           cartAdditions,
           purchases,
-          abandonmentRate: Math.round(abandonmentRate * 100) / 100
+          abandonmentRate: Math.round(abandonmentRate * 100) / 100,
         }
       })
       .sort((a, b) => b.abandonmentRate - a.abandonmentRate)
@@ -227,24 +228,24 @@ export default defineEventHandler(async (event) => {
       bestSellingProducts,
       conversionFunnel,
       productPerformance: detailedProductPerformance,
-      abandonmentAnalysis
+      abandonmentAnalysis,
     }
 
     return {
       success: true,
-      data: analyticsData
+      data: analyticsData,
     }
-
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Product analytics error:', error)
-    
+
     if (error.statusCode) {
       throw error
     }
-    
+
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to fetch product analytics'
+      statusMessage: 'Failed to fetch product analytics',
     })
   }
 })

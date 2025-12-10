@@ -53,14 +53,14 @@ export default defineEventHandler(async (event) => {
     sortBy = 'created_at',
     sortOrder = 'desc',
     page = 1,
-    limit = 20
+    limit = 20,
   } = query
 
   // Validate search term length if provided
   if (search && search.length > MAX_SEARCH_LENGTH) {
     throw createError({
       statusCode: 400,
-      statusMessage: `Search term too long. Maximum ${MAX_SEARCH_LENGTH} characters allowed.`
+      statusMessage: `Search term too long. Maximum ${MAX_SEARCH_LENGTH} characters allowed.`,
     })
   }
 
@@ -105,9 +105,11 @@ export default defineEventHandler(async (event) => {
     // Apply stock filters
     if (inStock === true) {
       queryBuilder = queryBuilder.gt('stock_quantity', 0)
-    } else if (outOfStock === true) {
+    }
+    else if (outOfStock === true) {
       queryBuilder = queryBuilder.eq('stock_quantity', 0)
-    } else if (lowStock === true) {
+    }
+    else if (lowStock === true) {
       // Low stock is defined as stock <= low_stock_threshold (default 5)
       queryBuilder = queryBuilder.or('stock_quantity.lte.5,and(stock_quantity.gt.0,stock_quantity.lte.low_stock_threshold)')
     }
@@ -117,15 +119,15 @@ export default defineEventHandler(async (event) => {
       // Sanitize search term to prevent SQL injection and escape special characters
       const searchPattern = prepareSearchPattern(search, { validateLength: false })
       queryBuilder = queryBuilder.or(
-        `name_translations->>es.ilike.${searchPattern},` +
-        `name_translations->>en.ilike.${searchPattern},` +
-        `name_translations->>ro.ilike.${searchPattern},` +
-        `name_translations->>ru.ilike.${searchPattern},` +
-        `description_translations->>es.ilike.${searchPattern},` +
-        `description_translations->>en.ilike.${searchPattern},` +
-        `description_translations->>ro.ilike.${searchPattern},` +
-        `description_translations->>ru.ilike.${searchPattern},` +
-        `sku.ilike.${searchPattern}`
+        `name_translations->>es.ilike.${searchPattern},`
+        + `name_translations->>en.ilike.${searchPattern},`
+        + `name_translations->>ro.ilike.${searchPattern},`
+        + `name_translations->>ru.ilike.${searchPattern},`
+        + `description_translations->>es.ilike.${searchPattern},`
+        + `description_translations->>en.ilike.${searchPattern},`
+        + `description_translations->>ro.ilike.${searchPattern},`
+        + `description_translations->>ru.ilike.${searchPattern},`
+        + `sku.ilike.${searchPattern}`,
       )
     }
 
@@ -159,24 +161,26 @@ export default defineEventHandler(async (event) => {
     }
     if (inStock === true) {
       countQueryBuilder = countQueryBuilder.gt('stock_quantity', 0)
-    } else if (outOfStock === true) {
+    }
+    else if (outOfStock === true) {
       countQueryBuilder = countQueryBuilder.eq('stock_quantity', 0)
-    } else if (lowStock === true) {
+    }
+    else if (lowStock === true) {
       countQueryBuilder = countQueryBuilder.or('stock_quantity.lte.5,and(stock_quantity.gt.0,stock_quantity.lte.low_stock_threshold)')
     }
     if (search) {
       // Sanitize search term to prevent SQL injection and escape special characters
       const searchPattern = prepareSearchPattern(search, { validateLength: false })
       countQueryBuilder = countQueryBuilder.or(
-        `name_translations->>es.ilike.${searchPattern},` +
-        `name_translations->>en.ilike.${searchPattern},` +
-        `name_translations->>ro.ilike.${searchPattern},` +
-        `name_translations->>ru.ilike.${searchPattern},` +
-        `description_translations->>es.ilike.${searchPattern},` +
-        `description_translations->>en.ilike.${searchPattern},` +
-        `description_translations->>ro.ilike.${searchPattern},` +
-        `description_translations->>ru.ilike.${searchPattern},` +
-        `sku.ilike.${searchPattern}`
+        `name_translations->>es.ilike.${searchPattern},`
+        + `name_translations->>en.ilike.${searchPattern},`
+        + `name_translations->>ro.ilike.${searchPattern},`
+        + `name_translations->>ru.ilike.${searchPattern},`
+        + `description_translations->>es.ilike.${searchPattern},`
+        + `description_translations->>en.ilike.${searchPattern},`
+        + `description_translations->>ro.ilike.${searchPattern},`
+        + `description_translations->>ru.ilike.${searchPattern},`
+        + `sku.ilike.${searchPattern}`,
       )
     }
 
@@ -187,13 +191,13 @@ export default defineEventHandler(async (event) => {
         error: countError.message,
         code: countError.code,
         timestamp: new Date().toISOString(),
-        errorId: 'ADMIN_PRODUCTS_COUNT_FAILED'
+        errorId: 'ADMIN_PRODUCTS_COUNT_FAILED',
       })
 
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to count products',
-        data: { canRetry: true }
+        data: { canRetry: true },
       })
     }
 
@@ -210,18 +214,18 @@ export default defineEventHandler(async (event) => {
         error: error.message,
         code: error.code,
         timestamp: new Date().toISOString(),
-        errorId: 'ADMIN_PRODUCTS_FETCH_FAILED'
+        errorId: 'ADMIN_PRODUCTS_FETCH_FAILED',
       })
 
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to fetch products',
-        data: { canRetry: true }
+        data: { canRetry: true },
       })
     }
 
     // Transform and sort products
-    let transformedProducts = (products || []).map((product: any) => ({
+    const transformedProducts = (products || []).map((product: any) => ({
       id: product.id,
       sku: product.sku,
       slug: product.sku?.toLowerCase() || `product-${product.id}`,
@@ -232,22 +236,27 @@ export default defineEventHandler(async (event) => {
       stockQuantity: product.stock_quantity,
       lowStockThreshold: product.low_stock_threshold || 5,
       reorderPoint: product.reorder_point || 10,
-      stockStatus: product.stock_quantity > (product.low_stock_threshold || 5) ? 'high' :
-                   product.stock_quantity > 0 ? 'low' : 'out',
-      images: Array.isArray(product.images) ? product.images.map((img: any, index: number) => ({
-        url: img.url || img,
-        altText: img.alt || img.alt_text || product.name_translations,
-        isPrimary: img.is_primary || index === 0
-      })) : [],
-      category: product.categories ? {
-        id: product.categories.id,
-        slug: product.categories.slug,
-        name: product.categories.name_translations
-      } : null,
+      stockStatus: product.stock_quantity > (product.low_stock_threshold || 5)
+        ? 'high'
+        : product.stock_quantity > 0 ? 'low' : 'out',
+      images: Array.isArray(product.images)
+        ? product.images.map((img: any, index: number) => ({
+            url: img.url || img,
+            altText: img.alt || img.alt_text || product.name_translations,
+            isPrimary: img.is_primary || index === 0,
+          }))
+        : [],
+      category: product.categories
+        ? {
+            id: product.categories.id,
+            slug: product.categories.slug,
+            name: product.categories.name_translations,
+          }
+        : null,
       attributes: product.attributes || {},
       isActive: product.is_active,
       createdAt: product.created_at,
-      updatedAt: product.updated_at
+      updatedAt: product.updated_at,
     }))
 
     // Sort by name if requested (since we can't sort JSONB in SQL easily)
@@ -271,7 +280,7 @@ export default defineEventHandler(async (event) => {
         total: totalCount,
         totalPages,
         hasNext: page < totalPages,
-        hasPrev: page > 1
+        hasPrev: page > 1,
       },
       filters: {
         search,
@@ -281,11 +290,11 @@ export default defineEventHandler(async (event) => {
         outOfStock,
         lowStock,
         sortBy,
-        sortOrder
-      }
+        sortOrder,
+      },
     }
-
-  } catch (error: any) {
+  }
+  catch (error: any) {
     // Re-throw HTTP errors (including auth errors)
     if (error.statusCode) {
       throw error
@@ -296,14 +305,14 @@ export default defineEventHandler(async (event) => {
       error: error.message || String(error),
       stack: error.stack,
       timestamp: new Date().toISOString(),
-      errorId: 'ADMIN_PRODUCTS_UNEXPECTED_ERROR'
+      errorId: 'ADMIN_PRODUCTS_UNEXPECTED_ERROR',
     })
 
     // Throw generic 500 error for unexpected failures
     throw createError({
       statusCode: 500,
       statusMessage: 'An unexpected error occurred while fetching products',
-      data: { canRetry: true }
+      data: { canRetry: true },
     })
   }
 })

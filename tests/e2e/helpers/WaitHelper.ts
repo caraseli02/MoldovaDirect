@@ -88,7 +88,7 @@ export class WaitHelper {
   async waitWithBackoff(
     condition: () => Promise<boolean>,
     maxAttempts: number = 5,
-    initialDelay: number = 100
+    initialDelay: number = 100,
   ): Promise<boolean> {
     let delay = initialDelay
 
@@ -110,7 +110,7 @@ export class WaitHelper {
   async pollFor(
     condition: () => Promise<boolean>,
     interval: number = 100,
-    timeout: number = 5000
+    timeout: number = 5000,
   ): Promise<boolean> {
     const startTime = Date.now()
 

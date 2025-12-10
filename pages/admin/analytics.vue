@@ -14,9 +14,9 @@
           </div>
           <div class="flex items-center gap-4">
             <Button
-              @click="refreshData"
               :disabled="loading"
               variant="outline"
+              @click="refreshData"
             >
               <RefreshCcw
                 :class="['w-4 h-4 mr-2', loading ? 'animate-spin' : '']"
@@ -32,20 +32,26 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <!-- Tab Navigation -->
       <div class="mb-8">
-        <nav class="flex space-x-8" aria-label="Tabs">
+        <nav
+          class="flex space-x-8"
+          aria-label="Tabs"
+        >
           <Button
             v-for="tab in tabs"
             :key="tab.id"
-            @click="activeTab = tab.id"
             :class="[
               'whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm border-0 rounded-none',
               activeTab === tab.id
                 ? 'border-blue-500 text-blue-600 dark:text-blue-400 bg-transparent shadow-none'
-                : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600 bg-transparent shadow-none'
+                : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600 bg-transparent shadow-none',
             ]"
             variant="ghost"
+            @click="activeTab = tab.id"
           >
-            <component :is="tab.icon" class="w-5 h-5 mr-2 inline" />
+            <component
+              :is="tab.icon"
+              class="w-5 h-5 mr-2 inline"
+            />
             {{ tab.name }}
           </Button>
         </nav>
@@ -56,7 +62,7 @@
         <!-- Overview Tab -->
         <div v-if="activeTab === 'overview'">
           <AdminDashboardAnalyticsOverview
-            :data="analyticsOverview"
+            :data="analyticsOverview as any"
             :loading="loading"
             :error="error"
             @date-range-change="handleDateRangeChange"
@@ -64,7 +70,10 @@
         </div>
 
         <!-- Users Tab -->
-        <div v-if="activeTab === 'users'" class="space-y-6">
+        <div
+          v-if="activeTab === 'users'"
+          class="space-y-6"
+        >
           <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
             <AdminUtilsDateRangePicker
               v-model="dateRange"
@@ -74,12 +83,12 @@
 
           <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
             <AdminChartsUserRegistration
-              :data="userAnalytics"
+              :data="userAnalytics as any"
               :loading="loading"
               :error="error"
             />
             <AdminChartsUserActivity
-              :data="userAnalytics"
+              :data="userAnalytics as any"
               :loading="loading"
               :error="error"
             />
@@ -94,7 +103,10 @@
             >
               <div class="flex items-center">
                 <div class="flex-shrink-0">
-                  <component :is="stat.icon" :class="['w-8 h-8', stat.iconColor]" />
+                  <component
+                    :is="stat.icon"
+                    :class="['w-8 h-8', stat.iconColor]"
+                  />
                 </div>
                 <div class="ml-4">
                   <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
@@ -110,7 +122,10 @@
         </div>
 
         <!-- Products Tab -->
-        <div v-if="activeTab === 'products'" class="space-y-6">
+        <div
+          v-if="activeTab === 'products'"
+          class="space-y-6"
+        >
           <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
             <AdminUtilsDateRangePicker
               v-model="dateRange"
@@ -120,7 +135,7 @@
 
           <!-- Conversion Funnel -->
           <AdminChartsConversionFunnel
-            :data="productAnalytics"
+            :data="productAnalytics as any"
             :loading="loading"
             :error="error"
           />
@@ -128,12 +143,12 @@
           <!-- Product Performance Chart and Top Products -->
           <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
             <AdminChartsProductPerformance
-              :data="productAnalytics"
+              :data="productAnalytics as any"
               :loading="loading"
               :error="error"
             />
             <AdminUtilsTopProductsTable
-              :data="productAnalytics"
+              :data="productAnalytics as any"
               :loading="loading"
               :error="error"
               title="Top Performing Products"
@@ -143,7 +158,7 @@
 
           <!-- Detailed Product Table -->
           <AdminUtilsTopProductsTable
-            :data="productAnalytics"
+            :data="productAnalytics as any"
             :loading="loading"
             :error="error"
             title="All Products Performance"
@@ -178,9 +193,9 @@
               {{ error }}
             </p>
             <Button
-              @click="refreshData"
               variant="link"
               class="mt-2 text-sm text-red-600 dark:text-red-400 hover:text-red-500 dark:hover:text-red-300"
+              @click="refreshData"
             >
               Try again
             </Button>
@@ -198,7 +213,7 @@ import {
   BarChart2,
   RefreshCcw,
   ShoppingBag,
-  Users
+  Users,
 } from 'lucide-vue-next'
 import AdminDashboardAnalyticsOverview from '~/components/admin/Dashboard/AnalyticsOverview.vue'
 import AdminUtilsDateRangePicker from '~/components/admin/Utils/DateRangePicker.vue'
@@ -211,11 +226,11 @@ import AdminUtilsTopProductsTable from '~/components/admin/Utils/TopProductsTabl
 // Page metadata
 definePageMeta({
   layout: 'admin',
-  middleware: 'admin'
+  middleware: 'admin',
 })
 
 // Composables
-const { 
+const {
   analyticsOverview,
   userAnalytics,
   productAnalytics,
@@ -224,14 +239,14 @@ const {
   fetchAnalyticsOverview,
   fetchUserAnalytics,
   fetchProductAnalytics,
-  refreshAllAnalytics
+  refreshAllAnalytics,
 } = useAnalytics()
 
 // State
 const activeTab = ref('overview')
 const dateRange = ref({
   startDate: '',
-  endDate: ''
+  endDate: '',
 })
 
 // Tab configuration
@@ -239,18 +254,18 @@ const tabs = [
   {
     id: 'overview',
     name: 'Overview',
-    icon: BarChart2
+    icon: BarChart2,
   },
   {
     id: 'users',
     name: 'Users',
-    icon: Users
+    icon: Users,
   },
   {
     id: 'products',
     name: 'Products',
-    icon: ShoppingBag
-  }
+    icon: ShoppingBag,
+  },
 ]
 
 // User stats
@@ -259,49 +274,53 @@ const userStats = computed(() => {
 
   const { summary } = userAnalytics.value
 
+  // Type guard for summary properties
+  if (!summary || typeof summary !== 'object') return []
+
   return [
     {
       label: 'Total Users',
-      value: summary.totalUsers.toLocaleString(),
+      value: (summary.totalUsers ?? 0).toLocaleString(),
       icon: Users,
-      iconColor: 'text-blue-600 dark:text-blue-400'
+      iconColor: 'text-blue-600 dark:text-blue-400',
     },
     {
       label: 'Active Users (30d)',
-      value: summary.activeUsersLast30Days.toLocaleString(),
+      value: (summary.activeUsersLast30Days ?? 0).toLocaleString(),
       icon: Users,
-      iconColor: 'text-green-600 dark:text-green-400'
+      iconColor: 'text-green-600 dark:text-green-400',
     },
     {
       label: 'New Users (30d)',
-      value: summary.newUsersLast30Days.toLocaleString(),
+      value: (summary.newUsersLast30Days ?? 0).toLocaleString(),
       icon: Users,
-      iconColor: 'text-purple-600 dark:text-purple-400'
+      iconColor: 'text-purple-600 dark:text-purple-400',
     },
     {
       label: 'Retention Rate',
-      value: `${summary.userRetentionRate}%`,
+      value: `${summary.userRetentionRate ?? 0}%`,
       icon: BarChart2,
-      iconColor: 'text-amber-600 dark:text-amber-400'
-    }
+      iconColor: 'text-amber-600 dark:text-amber-400',
+    },
   ]
 })
 
 // Handle date range changes
-const handleDateRangeChange = async (newRange: { startDate: string; endDate: string }) => {
+const handleDateRangeChange = async (newRange: { startDate: string, endDate: string }) => {
   dateRange.value = newRange
   await loadAnalyticsData(newRange)
 }
 
 // Load analytics data
-const loadAnalyticsData = async (params?: { startDate?: string; endDate?: string }) => {
+const loadAnalyticsData = async (params?: { startDate?: string, endDate?: string }) => {
   try {
     await Promise.all([
       fetchAnalyticsOverview(params),
       fetchUserAnalytics(params),
-      fetchProductAnalytics(params)
+      fetchProductAnalytics(params),
     ])
-  } catch (err) {
+  }
+  catch (err) {
     console.error('Failed to load analytics:', err)
   }
 }
@@ -318,6 +337,6 @@ onMounted(async () => {
 
 // Set page title
 useHead({
-  title: 'Analytics Dashboard - Admin'
+  title: 'Analytics Dashboard - Admin',
 })
 </script>

@@ -96,15 +96,15 @@ export interface TestUserPersona {
   }>
 }
 
-export type TestUserPersonaKey =
-  | 'first-order-explorer'
-  | 'loyal-subscriber'
-  | 'recovery-seeker'
-  | 'cart-abandoner'
-  | 'vip-customer'
-  | 'international-shopper'
-  | 'mobile-only-user'
-  | 'bulk-buyer'
+export type TestUserPersonaKey
+  = | 'first-order-explorer'
+    | 'loyal-subscriber'
+    | 'recovery-seeker'
+    | 'cart-abandoner'
+    | 'vip-customer'
+    | 'international-shopper'
+    | 'mobile-only-user'
+    | 'bulk-buyer'
 
 const baseDate = new Date('2024-01-15T08:30:00Z')
 
@@ -117,32 +117,32 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
     goals: [
       'Validate account dashboard layout and empty states',
       'Ensure profile editing UX is approachable for new customers',
-      'Confirm checkout copy clearly guides an inexperienced shopper'
+      'Confirm checkout copy clearly guides an inexperienced shopper',
     ],
     focusAreas: ['Profile Basics', 'Cart Creation', 'Checkout Validation'],
     quickLinks: [
       {
         label: 'Account overview',
         description: 'Confirm empty dashboard cards render helpful guidance',
-        route: '/account'
+        route: '/account',
       },
       {
         label: 'Complete profile',
         description: 'Update contact information and language preferences',
-        route: '/account/profile'
+        route: '/account/profile',
       },
       {
         label: 'Start checkout',
         description: 'Add a product to cart and walk through guest checkout copy',
-        route: '/checkout'
-      }
+        route: '/checkout',
+      },
     ],
     testScript: [
       'Open the account dashboard and verify the “recent orders” empty state call-to-action.',
       'Navigate to Profile → edit the phone number and preferred language, then cancel the change to ensure buttons reset.',
       'Browse the featured products, add one to cart, and confirm the cart badge updates instantly.',
       'Proceed to checkout as guest and confirm form validations for required shipping fields.',
-      'Return to the dashboard and ensure guidance still points the user to finish checkout.'
+      'Return to the dashboard and ensure guidance still points the user to finish checkout.',
     ],
     user: {
       id: 'test-user-onboarding',
@@ -155,8 +155,8 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
       createdAt: baseDate.toISOString(),
       updatedAt: baseDate.toISOString(),
       mfaEnabled: false,
-      mfaFactors: []
-    }
+      mfaFactors: [],
+    },
   },
   'loyal-subscriber': {
     key: 'loyal-subscriber',
@@ -166,32 +166,32 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
     goals: [
       'Verify dashboard statistics render realistic totals',
       'Test order detail pages and reorder shortcuts',
-      'Validate that saved addresses pre-fill checkout forms'
+      'Validate that saved addresses pre-fill checkout forms',
     ],
     focusAreas: ['Order History', 'Reorder CTA', 'Saved Addresses'],
     quickLinks: [
       {
         label: 'Recent orders',
         description: 'Spot-check status chips, totals, and navigation to order detail',
-        route: '/account/orders'
+        route: '/account/orders',
       },
       {
         label: 'Order detail',
         description: 'Ensure timeline, totals, and contact options are visible',
-        route: '/account/orders/demo-loyal-order'
+        route: '/account/orders/demo-loyal-order',
       },
       {
         label: 'Checkout with saved data',
         description: 'Confirm the shipping step offers stored address suggestions',
-        route: '/checkout'
-      }
+        route: '/checkout',
+      },
     ],
     testScript: [
       'Review the dashboard metrics to confirm total order count, lifetime spend, and loyalty badges render.',
       'Open the most recent order and validate the shipment timeline, status pill, and download invoice link.',
       'Trigger the “reorder” shortcut (if available) and ensure cart contents refresh correctly.',
       'Begin checkout to verify address auto-complete and payment method persistence.',
-      'Logout and log back in to confirm persisted personalization (language, name).'
+      'Logout and log back in to confirm persisted personalization (language, name).',
     ],
     user: {
       id: 'test-user-loyal',
@@ -204,8 +204,8 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
       createdAt: new Date('2023-09-12T10:00:00Z').toISOString(),
       updatedAt: baseDate.toISOString(),
       mfaEnabled: false,
-      mfaFactors: []
-    }
+      mfaFactors: [],
+    },
   },
   'recovery-seeker': {
     key: 'recovery-seeker',
@@ -215,32 +215,32 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
     goals: [
       'Exercise password reset from login and account screens',
       'Verify verification-pending messaging and resend flows',
-      'Confirm account lockout messaging and timers display properly'
+      'Confirm account lockout messaging and timers display properly',
     ],
     focusAreas: ['Auth Messaging', 'Password Recovery', 'Lockout Timer'],
     quickLinks: [
       {
         label: 'Trigger lockout',
         description: 'Attempt failed logins and confirm lockout banner text',
-        route: '/auth/login'
+        route: '/auth/login',
       },
       {
         label: 'Reset password',
         description: 'Start password recovery from login and verify confirmation screens',
-        route: '/auth/forgot-password'
+        route: '/auth/forgot-password',
       },
       {
         label: 'Verification pending',
         description: 'Use the verification pending screen with persona email to test copy',
-        route: '/auth/verification-pending?email=test-recovery@moldovadirect.com'
-      }
+        route: '/auth/verification-pending?email=test-recovery@moldovadirect.com',
+      },
     ],
     testScript: [
       'Open the login page and intentionally fail to log in three times to surface lockout messaging.',
       'Request a password reset using the persona email and verify confirmation copy and translated strings.',
       'Navigate to the verification pending page to confirm support actions (resend, contact links) appear.',
       'Simulate unlocking by clearing the timer within the Test Users dashboard and retry login messaging.',
-      'Document any copy inconsistencies or missing accessibility attributes encountered.'
+      'Document any copy inconsistencies or missing accessibility attributes encountered.',
     ],
     lockoutMinutes: 12,
     user: {
@@ -254,8 +254,8 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
       createdAt: new Date('2023-05-01T09:12:00Z').toISOString(),
       updatedAt: baseDate.toISOString(),
       mfaEnabled: false,
-      mfaFactors: []
-    }
+      mfaFactors: [],
+    },
   },
   'cart-abandoner': {
     key: 'cart-abandoner',
@@ -265,32 +265,32 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
     goals: [
       'Validate cart persistence across sessions',
       'Test cart recovery email triggers and messaging',
-      'Verify abandoned cart banner and recovery CTAs'
+      'Verify abandoned cart banner and recovery CTAs',
     ],
     focusAreas: ['Cart Persistence', 'Recovery Flows', 'Checkout Friction'],
     quickLinks: [
       {
         label: 'View cart',
         description: 'Check that abandoned items are still visible',
-        route: '/cart'
+        route: '/cart',
       },
       {
         label: 'Continue checkout',
         description: 'Resume the checkout process and identify friction points',
-        route: '/checkout'
+        route: '/checkout',
       },
       {
         label: 'Product page',
         description: 'Test adding more items to existing cart',
-        route: '/products'
-      }
+        route: '/products',
+      },
     ],
     testScript: [
       'Navigate to the cart and verify all abandoned items are displayed with correct prices.',
       'Check for any cart recovery messaging or incentives (discounts, free shipping thresholds).',
       'Start checkout and stop at shipping step to simulate another abandonment.',
       'Return to homepage and verify any "complete your order" prompts or banners.',
-      'Test cart expiration behavior if items have been in cart for extended period.'
+      'Test cart expiration behavior if items have been in cart for extended period.',
     ],
     user: {
       id: 'test-user-abandoner',
@@ -303,7 +303,7 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
       createdAt: new Date('2023-11-20T14:20:00Z').toISOString(),
       updatedAt: new Date(baseDate.getTime() - 1000 * 60 * 60 * 48).toISOString(),
       mfaEnabled: false,
-      mfaFactors: []
+      mfaFactors: [],
     },
     cart: [
       {
@@ -311,22 +311,22 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
         name: 'Moldovan Red Wine Premium',
         quantity: 2,
         price: 24.99,
-        image: '/images/products/wine-red.jpg'
+        image: '/images/products/wine-red.jpg',
       },
       {
         productId: 'prod-honey-003',
         name: 'Organic Honey 500g',
         quantity: 1,
         price: 12.50,
-        image: '/images/products/honey.jpg'
+        image: '/images/products/honey.jpg',
       },
       {
         productId: 'prod-cheese-005',
         name: 'Traditional Moldovan Cheese',
         quantity: 1,
         price: 18.75,
-        image: '/images/products/cheese.jpg'
-      }
+        image: '/images/products/cheese.jpg',
+      },
     ],
     addresses: [
       {
@@ -339,25 +339,25 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
         state: 'Madrid',
         postalCode: '28013',
         country: 'ES',
-        phone: '+34666000222'
-      }
+        phone: '+34666000222',
+      },
     ],
     preferences: {
       notifications: {
         email: true,
         sms: false,
         orderUpdates: true,
-        promotions: true
+        promotions: true,
       },
       marketing: {
         newsletter: true,
-        recommendations: true
+        recommendations: true,
       },
       display: {
         theme: 'auto',
-        currency: 'EUR'
-      }
-    }
+        currency: 'EUR',
+      },
+    },
   },
   'vip-customer': {
     key: 'vip-customer',
@@ -367,32 +367,32 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
     goals: [
       'Validate VIP badge and special status indicators',
       'Test loyalty points calculation and redemption',
-      'Verify priority support and exclusive offers display'
+      'Verify priority support and exclusive offers display',
     ],
     focusAreas: ['Loyalty Program', 'VIP Benefits', 'Order Volume'],
     quickLinks: [
       {
         label: 'Account dashboard',
         description: 'View VIP status and loyalty rewards',
-        route: '/account'
+        route: '/account',
       },
       {
         label: 'Order history',
         description: 'Review extensive purchase history',
-        route: '/account/orders'
+        route: '/account/orders',
       },
       {
         label: 'Loyalty rewards',
         description: 'Check points balance and available rewards',
-        route: '/account/rewards'
-      }
+        route: '/account/rewards',
+      },
     ],
     testScript: [
       'Verify VIP badge appears on dashboard and profile sections.',
       'Check loyalty points balance and ensure calculations match order history.',
       'Test redeeming loyalty points for discounts during checkout.',
       'Verify exclusive VIP offers and early access to sales are displayed.',
-      'Contact support via chat/email and confirm VIP priority queuing.'
+      'Contact support via chat/email and confirm VIP priority queuing.',
     ],
     user: {
       id: 'test-user-vip',
@@ -405,7 +405,7 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
       createdAt: new Date('2022-03-10T09:00:00Z').toISOString(),
       updatedAt: baseDate.toISOString(),
       mfaEnabled: false,
-      mfaFactors: []
+      mfaFactors: [],
     },
     orders: [
       {
@@ -418,8 +418,8 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
         deliveredAt: new Date('2024-01-15T14:30:00Z').toISOString(),
         items: [
           { productId: 'prod-wine-001', name: 'Premium Red Wine', quantity: 6, price: 24.99 },
-          { productId: 'prod-cheese-002', name: 'Artisan Cheese', quantity: 2, price: 35.95 }
-        ]
+          { productId: 'prod-cheese-002', name: 'Artisan Cheese', quantity: 2, price: 35.95 },
+        ],
       },
       {
         id: 'ord-vip-002',
@@ -430,8 +430,8 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
         createdAt: new Date('2023-12-15T16:45:00Z').toISOString(),
         deliveredAt: new Date('2023-12-20T10:15:00Z').toISOString(),
         items: [
-          { productId: 'prod-honey-001', name: 'Organic Honey', quantity: 5, price: 12.50 }
-        ]
+          { productId: 'prod-honey-001', name: 'Organic Honey', quantity: 5, price: 12.50 },
+        ],
       },
       {
         id: 'ord-vip-003',
@@ -441,9 +441,9 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
         itemCount: 12,
         createdAt: new Date('2024-01-14T09:10:00Z').toISOString(),
         items: [
-          { productId: 'prod-wine-003', name: 'Vintage Collection', quantity: 12, price: 45.00 }
-        ]
-      }
+          { productId: 'prod-wine-003', name: 'Vintage Collection', quantity: 12, price: 45.00 },
+        ],
+      },
     ],
     addresses: [
       {
@@ -456,7 +456,7 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
         state: 'Chișinău',
         postalCode: 'MD-2012',
         country: 'MD',
-        phone: '+40744123456'
+        phone: '+40744123456',
       },
       {
         id: 'addr-vip-office',
@@ -468,8 +468,8 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
         state: 'Chișinău',
         postalCode: 'MD-2001',
         country: 'MD',
-        phone: '+40744123456'
-      }
+        phone: '+40744123456',
+      },
     ],
     paymentMethods: [
       {
@@ -479,25 +479,25 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
         last4: '4242',
         brand: 'Visa',
         expiryMonth: 12,
-        expiryYear: 2026
-      }
+        expiryYear: 2026,
+      },
     ],
     preferences: {
       notifications: {
         email: true,
         sms: true,
         orderUpdates: true,
-        promotions: true
+        promotions: true,
       },
       marketing: {
         newsletter: true,
-        recommendations: true
+        recommendations: true,
       },
       display: {
         theme: 'light',
-        currency: 'EUR'
-      }
-    }
+        currency: 'EUR',
+      },
+    },
   },
   'international-shopper': {
     key: 'international-shopper',
@@ -507,32 +507,32 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
     goals: [
       'Validate multi-currency display and conversion',
       'Test international shipping calculation and restrictions',
-      'Verify timezone-aware order tracking and communication'
+      'Verify timezone-aware order tracking and communication',
     ],
     focusAreas: ['Currency Conversion', 'International Shipping', 'Localization'],
     quickLinks: [
       {
         label: 'Product catalog',
         description: 'Verify prices display in preferred currency',
-        route: '/products'
+        route: '/products',
       },
       {
         label: 'Checkout',
         description: 'Test international shipping options',
-        route: '/checkout'
+        route: '/checkout',
       },
       {
         label: 'Order tracking',
         description: 'Check timezone-aware delivery estimates',
-        route: '/account/orders'
-      }
+        route: '/account/orders',
+      },
     ],
     testScript: [
       'Verify product prices are displayed in USD and conversion rate is accurate.',
       'Add items to cart and check that totals reflect correct currency.',
       'Start checkout and verify international shipping options (DHL, FedEx) are available.',
       'Test address validation for US format (ZIP code, state selection).',
-      'Check that delivery estimates account for international transit times and timezone differences.'
+      'Check that delivery estimates account for international transit times and timezone differences.',
     ],
     user: {
       id: 'test-user-intl',
@@ -545,7 +545,7 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
       createdAt: new Date('2023-08-15T18:30:00Z').toISOString(),
       updatedAt: baseDate.toISOString(),
       mfaEnabled: false,
-      mfaFactors: []
+      mfaFactors: [],
     },
     addresses: [
       {
@@ -558,8 +558,8 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
         state: 'IL',
         postalCode: '62704',
         country: 'US',
-        phone: '+1-555-0199'
-      }
+        phone: '+1-555-0199',
+      },
     ],
     orders: [
       {
@@ -571,9 +571,9 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
         createdAt: new Date('2024-01-08T21:15:00Z').toISOString(),
         items: [
           { productId: 'prod-wine-001', name: 'Moldovan Red Wine', quantity: 2, price: 28.99 },
-          { productId: 'prod-honey-003', name: 'Organic Honey', quantity: 1, price: 15.80 }
-        ]
-      }
+          { productId: 'prod-honey-003', name: 'Organic Honey', quantity: 1, price: 15.80 },
+        ],
+      },
     ],
     paymentMethods: [
       {
@@ -583,25 +583,25 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
         last4: '1234',
         brand: 'Mastercard',
         expiryMonth: 8,
-        expiryYear: 2027
-      }
+        expiryYear: 2027,
+      },
     ],
     preferences: {
       notifications: {
         email: true,
         sms: false,
         orderUpdates: true,
-        promotions: false
+        promotions: false,
       },
       marketing: {
         newsletter: false,
-        recommendations: true
+        recommendations: true,
       },
       display: {
         theme: 'light',
-        currency: 'USD'
-      }
-    }
+        currency: 'USD',
+      },
+    },
   },
   'mobile-only-user': {
     key: 'mobile-only-user',
@@ -611,32 +611,32 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
     goals: [
       'Validate mobile responsive design and touch interactions',
       'Test mobile payment methods (Apple Pay, Google Pay)',
-      'Verify mobile-optimized checkout flow'
+      'Verify mobile-optimized checkout flow',
     ],
     focusAreas: ['Mobile UX', 'Touch Interactions', 'Mobile Payments'],
     quickLinks: [
       {
         label: 'Mobile home',
         description: 'Test mobile homepage layout and navigation',
-        route: '/'
+        route: '/',
       },
       {
         label: 'Product browsing',
         description: 'Verify mobile product cards and filters',
-        route: '/products'
+        route: '/products',
       },
       {
         label: 'Mobile checkout',
         description: 'Test mobile-optimized checkout flow',
-        route: '/checkout'
-      }
+        route: '/checkout',
+      },
     ],
     testScript: [
       'Verify hamburger menu opens smoothly and all navigation is accessible.',
       'Test product image galleries with swipe gestures.',
       'Add items to cart using mobile interface and verify cart drawer animation.',
       'Start checkout and test form input on mobile (autocomplete, keyboard types).',
-      'Verify mobile payment options (Apple Pay, Google Pay) are available and functional.'
+      'Verify mobile payment options (Apple Pay, Google Pay) are available and functional.',
     ],
     simulationMode: 'normal',
     user: {
@@ -650,7 +650,7 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
       createdAt: new Date('2023-10-05T12:45:00Z').toISOString(),
       updatedAt: baseDate.toISOString(),
       mfaEnabled: false,
-      mfaFactors: []
+      mfaFactors: [],
     },
     orders: [
       {
@@ -663,9 +663,9 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
         deliveredAt: new Date('2024-01-09T11:20:00Z').toISOString(),
         items: [
           { productId: 'prod-wine-002', name: 'White Wine Selection', quantity: 1, price: 29.99 },
-          { productId: 'prod-honey-001', name: 'Honey Jar', quantity: 1, price: 16.00 }
-        ]
-      }
+          { productId: 'prod-honey-001', name: 'Honey Jar', quantity: 1, price: 16.00 },
+        ],
+      },
     ],
     addresses: [
       {
@@ -678,8 +678,8 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
         state: 'Cataluña',
         postalCode: '08019',
         country: 'ES',
-        phone: '+34622555777'
-      }
+        phone: '+34622555777',
+      },
     ],
     paymentMethods: [
       {
@@ -689,25 +689,25 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
         last4: '5678',
         brand: 'Visa',
         expiryMonth: 3,
-        expiryYear: 2028
-      }
+        expiryYear: 2028,
+      },
     ],
     preferences: {
       notifications: {
         email: true,
         sms: true,
         orderUpdates: true,
-        promotions: true
+        promotions: true,
       },
       marketing: {
         newsletter: true,
-        recommendations: true
+        recommendations: true,
       },
       display: {
         theme: 'auto',
-        currency: 'EUR'
-      }
-    }
+        currency: 'EUR',
+      },
+    },
   },
   'bulk-buyer': {
     key: 'bulk-buyer',
@@ -717,32 +717,32 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
     goals: [
       'Validate bulk pricing and volume discounts',
       'Test business invoicing and tax documentation',
-      'Verify large order handling and split shipments'
+      'Verify large order handling and split shipments',
     ],
     focusAreas: ['Bulk Pricing', 'Business Invoicing', 'Large Orders'],
     quickLinks: [
       {
         label: 'Bulk catalog',
         description: 'View products with bulk pricing tiers',
-        route: '/products?view=bulk'
+        route: '/products?view=bulk',
       },
       {
         label: 'Quote requests',
         description: 'Test custom quote request form',
-        route: '/account/quotes'
+        route: '/account/quotes',
       },
       {
         label: 'Business account',
         description: 'Manage business profile and tax information',
-        route: '/account/business'
-      }
+        route: '/account/business',
+      },
     ],
     testScript: [
       'Browse products and verify bulk pricing tiers are displayed (10+, 50+, 100+ units).',
       'Add large quantities to cart and confirm volume discounts apply automatically.',
       'Start checkout and verify business tax fields (VAT, company registration).',
       'Request a custom quote for very large orders and verify quote flow.',
-      'Check order history and verify invoice download includes proper business documentation.'
+      'Check order history and verify invoice download includes proper business documentation.',
     ],
     user: {
       id: 'test-user-bulk',
@@ -755,7 +755,7 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
       createdAt: new Date('2022-06-20T08:00:00Z').toISOString(),
       updatedAt: baseDate.toISOString(),
       mfaEnabled: false,
-      mfaFactors: []
+      mfaFactors: [],
     },
     orders: [
       {
@@ -768,8 +768,8 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
         deliveredAt: new Date('2024-01-05T15:45:00Z').toISOString(),
         items: [
           { productId: 'prod-wine-001', name: 'Premium Red Wine (Bulk)', quantity: 100, price: 19.99 },
-          { productId: 'prod-wine-002', name: 'White Wine (Bulk)', quantity: 20, price: 22.50 }
-        ]
+          { productId: 'prod-wine-002', name: 'White Wine (Bulk)', quantity: 20, price: 22.50 },
+        ],
       },
       {
         id: 'ord-bulk-002',
@@ -779,9 +779,9 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
         itemCount: 150,
         createdAt: new Date('2024-01-12T14:20:00Z').toISOString(),
         items: [
-          { productId: 'prod-honey-001', name: 'Organic Honey (Bulk 1kg)', quantity: 150, price: 12.60 }
-        ]
-      }
+          { productId: 'prod-honey-001', name: 'Organic Honey (Bulk 1kg)', quantity: 150, price: 12.60 },
+        ],
+      },
     ],
     addresses: [
       {
@@ -794,7 +794,7 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
         state: 'Chișinău',
         postalCode: 'MD-2023',
         country: 'MD',
-        phone: '+40212345678'
+        phone: '+40212345678',
       },
       {
         id: 'addr-bulk-billing',
@@ -806,31 +806,31 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
         state: 'Chișinău',
         postalCode: 'MD-2038',
         country: 'MD',
-        phone: '+40212345678'
-      }
+        phone: '+40212345678',
+      },
     ],
     paymentMethods: [
       {
         id: 'pm-bulk-1',
         type: 'bank_transfer',
-        isDefault: true
-      }
+        isDefault: true,
+      },
     ],
     preferences: {
       notifications: {
         email: true,
         sms: false,
         orderUpdates: true,
-        promotions: false
+        promotions: false,
       },
       marketing: {
         newsletter: false,
-        recommendations: false
+        recommendations: false,
       },
       display: {
         theme: 'light',
-        currency: 'EUR'
-      }
-    }
-  }
+        currency: 'EUR',
+      },
+    },
+  },
 }

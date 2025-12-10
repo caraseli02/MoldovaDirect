@@ -1,20 +1,20 @@
 /**
  * Cart Advanced Features Module
- * 
+ *
  * Handles advanced cart functionality like save for later, bulk operations,
  * recommendations, and item selection
  */
 
 import { ref, computed } from 'vue'
-import type { 
-  CartAdvancedState, 
-  CartAdvancedActions, 
+import type {
+  CartAdvancedState,
+  CartAdvancedActions,
   CartAdvancedGetters,
   SavedForLaterItem,
   CartRecommendation,
   BulkOperation,
   Product,
-  CartItem
+  CartItem,
 } from './types'
 
 // =============================================
@@ -26,7 +26,7 @@ const state = ref<CartAdvancedState>({
   bulkOperationInProgress: false,
   savedForLater: [],
   recommendations: [],
-  recommendationsLoading: false
+  recommendationsLoading: false,
 })
 
 // =============================================
@@ -71,7 +71,8 @@ function deselectItem(itemId: string): void {
 function toggleItemSelection(itemId: string): void {
   if (state.value.selectedItems.has(itemId)) {
     deselectItem(itemId)
-  } else {
+  }
+  else {
     selectItem(itemId)
   }
 }
@@ -80,7 +81,7 @@ function toggleItemSelection(itemId: string): void {
  * Select all items
  */
 function selectAllItems(cartItems: CartItem[]): void {
-  cartItems.forEach(item => {
+  cartItems.forEach((item) => {
     state.value.selectedItems.add(item.id)
   })
 }
@@ -96,12 +97,13 @@ function deselectAllItems(): void {
  * Toggle select all
  */
 function toggleSelectAll(cartItems: CartItem[]): void {
-  const allSelected = cartItems.length > 0 && 
-    cartItems.every(item => state.value.selectedItems.has(item.id))
-  
+  const allSelected = cartItems.length > 0
+    && cartItems.every(item => state.value.selectedItems.has(item.id))
+
   if (allSelected) {
     deselectAllItems()
-  } else {
+  }
+  else {
     selectAllItems(cartItems)
   }
 }
@@ -115,28 +117,28 @@ function toggleSelectAll(cartItems: CartItem[]): void {
  */
 async function bulkRemoveSelected(
   cartItems: CartItem[],
-  removeItemFn: (itemId: string) => Promise<void>
+  removeItemFn: (itemId: string) => Promise<void>,
 ): Promise<void> {
   if (state.value.bulkOperationInProgress) {
     throw new Error('Bulk operation already in progress')
   }
-  
+
   state.value.bulkOperationInProgress = true
-  
+
   try {
     const selectedItemIds = Array.from(state.value.selectedItems)
-    const itemsToRemove = cartItems.filter(item => 
-      selectedItemIds.includes(item.id)
+    const itemsToRemove = cartItems.filter(item =>
+      selectedItemIds.includes(item.id),
     )
-    
+
     // Remove items in parallel
     const removePromises = itemsToRemove.map(item => removeItemFn(item.id))
     await Promise.allSettled(removePromises)
-    
+
     // Clear selection
     deselectAllItems()
-    
-  } finally {
+  }
+  finally {
     state.value.bulkOperationInProgress = false
   }
 }
@@ -151,7 +153,7 @@ async function bulkRemoveSelected(
 async function saveItemForLater(
   cartItem: CartItem,
   reason?: string,
-  removeItemFn?: (itemId: string) => Promise<void>
+  removeItemFn?: (itemId: string) => Promise<void>,
 ): Promise<void> {
   const savedItem: SavedForLaterItem = {
     id: generateSavedItemId(),
@@ -159,11 +161,11 @@ async function saveItemForLater(
     quantity: cartItem.quantity,
     savedAt: new Date(),
     originalCartItemId: cartItem.id,
-    reason
+    reason,
   }
-  
+
   state.value.savedForLater.push(savedItem)
-  
+
   // Remove from cart if remove function provided
   if (removeItemFn) {
     await removeItemFn(cartItem.id)
@@ -175,21 +177,25 @@ async function saveItemForLater(
  */
 async function restoreFromSaved(
   savedItemId: string,
-  addItemFn: (product: Product, quantity: number) => Promise<void>
+  addItemFn: (product: Product, quantity: number) => Promise<void>,
 ): Promise<void> {
   const savedItemIndex = state.value.savedForLater.findIndex(
-    item => item.id === savedItemId
+    item => item.id === savedItemId,
   )
-  
+
   if (savedItemIndex === -1) {
     throw new Error('Saved item not found')
   }
-  
+
   const savedItem = state.value.savedForLater[savedItemIndex]
-  
+
+  if (!savedItem) {
+    throw new Error('Saved item not found after index check')
+  }
+
   // Add back to cart
   await addItemFn(savedItem.product, savedItem.quantity)
-  
+
   // Remove from saved for later
   state.value.savedForLater.splice(savedItemIndex, 1)
 }
@@ -199,13 +205,13 @@ async function restoreFromSaved(
  */
 async function removeFromSavedForLater(savedItemId: string): Promise<void> {
   const savedItemIndex = state.value.savedForLater.findIndex(
-    item => item.id === savedItemId
+    item => item.id === savedItemId,
   )
-  
+
   if (savedItemIndex === -1) {
     throw new Error('Saved item not found')
   }
-  
+
   state.value.savedForLater.splice(savedItemIndex, 1)
 }
 
@@ -214,30 +220,30 @@ async function removeFromSavedForLater(savedItemId: string): Promise<void> {
  */
 async function moveSelectedToSavedForLater(
   cartItems: CartItem[],
-  removeItemFn: (itemId: string) => Promise<void>
+  removeItemFn: (itemId: string) => Promise<void>,
 ): Promise<void> {
   if (state.value.bulkOperationInProgress) {
     throw new Error('Bulk operation already in progress')
   }
-  
+
   state.value.bulkOperationInProgress = true
-  
+
   try {
     const selectedItemIds = Array.from(state.value.selectedItems)
-    const itemsToSave = cartItems.filter(item => 
-      selectedItemIds.includes(item.id)
+    const itemsToSave = cartItems.filter(item =>
+      selectedItemIds.includes(item.id),
     )
-    
+
     // Save items for later
-    const savePromises = itemsToSave.map(item => 
-      saveItemForLater(item, 'bulk_move', removeItemFn)
+    const savePromises = itemsToSave.map(item =>
+      saveItemForLater(item, 'bulk_move', removeItemFn),
     )
     await Promise.allSettled(savePromises)
-    
+
     // Clear selection
     deselectAllItems()
-    
-  } finally {
+  }
+  finally {
     state.value.bulkOperationInProgress = false
   }
 }
@@ -253,24 +259,24 @@ async function loadRecommendations(cartItems: CartItem[]): Promise<void> {
   if (state.value.recommendationsLoading) {
     return
   }
-  
+
   state.value.recommendationsLoading = true
-  
+
   try {
     // Extract product IDs and categories from cart
     const productIds = cartItems.map(item => item.product.id)
     const categories = [...new Set(cartItems.map(item => item.product.category).filter(Boolean))]
-    
+
     // Fetch recommendations from API
     const response = await $fetch('/api/recommendations/cart', {
       method: 'POST',
       body: {
         productIds,
         categories,
-        limit: 5
-      }
+        limit: 5,
+      },
     })
-    
+
     if (response.success && response.recommendations) {
       state.value.recommendations = response.recommendations.map((product: Product) => ({
         id: generateRecommendationId(),
@@ -279,27 +285,32 @@ async function loadRecommendations(cartItems: CartItem[]): Promise<void> {
         confidence: 0.8,
         metadata: {
           source: 'cart_analysis',
-          algorithm: response.metadata?.algorithm || 'unknown'
-        }
+          algorithm: response.metadata?.algorithm || 'unknown',
+        },
       }))
-    } else {
+    }
+    else {
       // API returned unsuccessful response
       state.value.recommendations = []
     }
-    
-  } catch (error) {
+  }
+  catch (error: unknown) {
     // Handle different types of errors gracefully
-    if (error.statusCode === 404) {
+    const err = error as { statusCode?: number, statusMessage?: string, message?: string }
+    if (err.statusCode === 404) {
       console.info('Recommendations API not available - feature disabled')
-    } else if (error.statusCode >= 500) {
-      console.warn('Recommendations API server error:', error.statusMessage)
-    } else {
-      console.warn('Failed to load recommendations:', error.message || error)
     }
-    
+    else if (err.statusCode && err.statusCode >= 500) {
+      console.warn('Recommendations API server error:', err.statusMessage || 'Unknown server error')
+    }
+    else {
+      console.warn('Failed to load recommendations:', err.message || String(error))
+    }
+
     // Set empty recommendations on error
     state.value.recommendations = []
-  } finally {
+  }
+  finally {
     state.value.recommendationsLoading = false
   }
 }
@@ -353,7 +364,7 @@ const getters: CartAdvancedGetters = {
 
   isProductSavedForLater(productId: string): boolean {
     return state.value.savedForLater.some(item => item.product.id === productId)
-  }
+  },
 }
 
 // =============================================
@@ -383,7 +394,7 @@ const actions: CartAdvancedActions = {
   loadRecommendations: async () => {
     // This will be implemented by the main store with access to cart items
     console.warn('loadRecommendations called without cart context')
-  }
+  },
 }
 
 // =============================================
@@ -394,7 +405,7 @@ export function useCartAdvanced() {
   return {
     // State
     state: readonly(state),
-    
+
     // Getters
     selectedItemsCount: computed(() => getters.selectedItemsCount),
     selectedItemsSubtotal: computed(() => getters.selectedItemsSubtotal),
@@ -405,10 +416,10 @@ export function useCartAdvanced() {
     getSelectedItems: computed(() => getters.getSelectedItems),
     getSavedForLaterItem: getters.getSavedForLaterItem,
     isProductSavedForLater: getters.isProductSavedForLater,
-    
+
     // Actions
     ...actions,
-    
+
     // Utilities
     toggleItemSelection,
     toggleSelectAll: () => {
@@ -420,7 +431,7 @@ export function useCartAdvanced() {
     removeFromSavedForLater,
     moveSelectedToSavedForLater,
     loadRecommendations,
-    clearRecommendations
+    clearRecommendations,
   }
 }
 
@@ -444,5 +455,5 @@ export {
   removeFromSavedForLater,
   moveSelectedToSavedForLater,
   loadRecommendations,
-  clearRecommendations
+  clearRecommendations,
 }

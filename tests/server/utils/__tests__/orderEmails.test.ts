@@ -26,7 +26,7 @@ describe('Order Email Utilities', () => {
           street: '123 Main St',
           city: 'Madrid',
           postalCode: '28001',
-          country: 'Spain'
+          country: 'Spain',
         },
         created_at: '2024-01-15T10:00:00Z',
         order_items: [
@@ -40,20 +40,20 @@ describe('Order Email Utilities', () => {
             product_snapshot: {
               name_translations: {
                 en: 'Test Product',
-                es: 'Producto de Prueba'
+                es: 'Producto de Prueba',
               },
               sku: 'TEST-001',
-              images: [{ url: 'https://example.com/image.jpg' }]
-            }
-          }
-        ]
+              images: [{ url: 'https://example.com/image.jpg' }],
+            },
+          },
+        ],
       }
 
       const result = transformOrderToEmailData(
         mockOrder,
         'John Doe',
         'john@example.com',
-        'en'
+        'en',
       )
 
       expect(result).toMatchObject({
@@ -65,7 +65,7 @@ describe('Order Email Utilities', () => {
         shippingCost: 5.00,
         tax: 11.55,
         total: 66.55,
-        paymentMethod: 'credit_card'
+        paymentMethod: 'credit_card',
       })
 
       expect(result.orderItems).toHaveLength(1)
@@ -74,7 +74,7 @@ describe('Order Email Utilities', () => {
         sku: 'TEST-001',
         quantity: 2,
         price: 25.00,
-        total: 50.00
+        total: 50.00,
       })
 
       expect(result.shippingAddress).toMatchObject({
@@ -83,7 +83,7 @@ describe('Order Email Utilities', () => {
         street: '123 Main St',
         city: 'Madrid',
         postalCode: '28001',
-        country: 'Spain'
+        country: 'Spain',
       })
     })
 
@@ -103,7 +103,7 @@ describe('Order Email Utilities', () => {
           street: 'Calle Principal 456',
           city: 'Barcelona',
           postalCode: '08001',
-          country: 'España'
+          country: 'España',
         },
         created_at: '2024-01-15T11:00:00Z',
         order_items: [
@@ -118,19 +118,19 @@ describe('Order Email Utilities', () => {
               name_translations: {
                 en: 'Wine Bottle',
                 es: 'Botella de Vino',
-                ro: 'Sticlă de Vin'
+                ro: 'Sticlă de Vin',
               },
-              sku: 'WINE-001'
-            }
-          }
-        ]
+              sku: 'WINE-001',
+            },
+          },
+        ],
       }
 
       const resultES = transformOrderToEmailData(
         mockOrder,
         'Maria Garcia',
         'maria@example.com',
-        'es'
+        'es',
       )
 
       expect(resultES.orderItems[0].name).toBe('Botella de Vino')
@@ -139,7 +139,7 @@ describe('Order Email Utilities', () => {
         mockOrder,
         'Maria Garcia',
         'maria@example.com',
-        'ro'
+        'ro',
       )
 
       expect(resultRO.orderItems[0].name).toBe('Sticlă de Vin')
@@ -159,17 +159,17 @@ describe('Order Email Utilities', () => {
           street: 'Test St',
           city: 'Test City',
           postalCode: '12345',
-          country: 'Test Country'
+          country: 'Test Country',
         },
         created_at: '2024-01-15T12:00:00Z',
-        order_items: []
+        order_items: [],
       }
 
       const result = transformOrderToEmailData(
         minimalOrder,
         'Test User',
         'test@example.com',
-        'en'
+        'en',
       )
 
       expect(result.orderItems).toHaveLength(0)

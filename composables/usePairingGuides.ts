@@ -14,7 +14,7 @@ export const usePairingGuides = () => {
 
   // Computed: Featured pairings
   const featuredPairings = computed(() =>
-    pairings.value.filter(p => p.isFeatured && p.isActive)
+    pairings.value.filter(p => p.isFeatured && p.isActive),
   )
 
   // Computed: Filtered pairings
@@ -29,35 +29,35 @@ export const usePairingGuides = () => {
     // Apply occasion filter
     if (filters.value.occasion && filters.value.occasion.length > 0) {
       result = result.filter(p =>
-        p.occasions.some(o => filters.value.occasion?.includes(o))
+        p.occasions.some(o => filters.value.occasion?.includes(o)),
       )
     }
 
     // Apply season filter
     if (filters.value.season && filters.value.season.length > 0) {
       result = result.filter(p =>
-        p.seasons.some(s => filters.value.season?.includes(s))
+        p.seasons.some(s => filters.value.season?.includes(s)),
       )
     }
 
     // Apply meal type filter
     if (filters.value.mealType && filters.value.mealType.length > 0) {
       result = result.filter(p =>
-        p.mealTypes.some(m => filters.value.mealType?.includes(m))
+        p.mealTypes.some(m => filters.value.mealType?.includes(m)),
       )
     }
 
     // Apply cuisine filter
     if (filters.value.cuisine && filters.value.cuisine.length > 0) {
       result = result.filter(p =>
-        filters.value.cuisine?.includes(p.cuisine || '')
+        filters.value.cuisine?.includes(p.cuisine || ''),
       )
     }
 
     // Apply intensity filter
     if (filters.value.intensity && filters.value.intensity.length > 0) {
       result = result.filter(p =>
-        filters.value.intensity?.includes(p.characteristics.intensity)
+        filters.value.intensity?.includes(p.characteristics.intensity),
       )
     }
 
@@ -65,9 +65,9 @@ export const usePairingGuides = () => {
     if (filters.value.search) {
       const searchLower = filters.value.search.toLowerCase()
       result = result.filter(p =>
-        p.wineName.en.toLowerCase().includes(searchLower) ||
-        p.dishName.en.toLowerCase().includes(searchLower) ||
-        p.cuisine?.toLowerCase().includes(searchLower)
+        p.wineName.en.toLowerCase().includes(searchLower)
+        || p.dishName.en.toLowerCase().includes(searchLower)
+        || p.cuisine?.toLowerCase().includes(searchLower),
       )
     }
 
@@ -95,32 +95,32 @@ export const usePairingGuides = () => {
             en: 'Fetească Albă',
             es: 'Fetească Albă',
             ro: 'Fetească Albă',
-            ru: 'Фетяска Албэ'
+            ru: 'Фетяска Албэ',
           },
           wineType: 'white',
           dishName: {
             en: 'Grilled Sea Bass',
             es: 'Lubina a la Parrilla',
             ro: 'Biban de Mare la Grătar',
-            ru: 'Морской Окунь на Гриле'
+            ru: 'Морской Окунь на Гриле',
           },
           dishDescription: {
             en: 'Fresh sea bass with lemon and herbs, simply grilled to perfection',
             es: 'Lubina fresca con limón y hierbas, simplemente asada a la perfección',
             ro: 'Biban de mare proaspăt cu lămâie și ierburi, simplu fript la perfecțiune',
-            ru: 'Свежий морской окунь с лимоном и травами, просто приготовленный на гриле до совершенства'
+            ru: 'Свежий морской окунь с лимоном и травами, просто приготовленный на гриле до совершенства',
           },
           cuisine: 'Mediterranean',
           pairingReason: {
             en: 'The wine\'s crisp acidity and citrus notes complement the delicate fish without overpowering its natural flavors',
             es: 'La acidez fresca del vino y las notas cítricas complementan el pescado delicado sin dominar sus sabores naturales',
             ro: 'Aciditatea proaspătă a vinului și notele citrice completează peștele delicat fără a-i domina aromele naturale',
-            ru: 'Свежая кислотность вина и цитрусовые ноты дополняют нежную рыбу, не подавляя её натуральные вкусы'
+            ru: 'Свежая кислотность вина и цитрусовые ноты дополняют нежную рыбу, не подавляя её натуральные вкусы',
           },
           characteristics: {
             intensity: 'light',
             primaryFlavors: ['citrus', 'apple', 'white flowers'],
-            wineBodyMatch: 'complement'
+            wineBodyMatch: 'complement',
           },
           wineImage: '/images/pairings/feteasca-alba.jpg',
           foodImage: '/images/pairings/grilled-fish.jpg',
@@ -130,11 +130,11 @@ export const usePairingGuides = () => {
           servingSuggestions: {
             temperature: '8-10°C',
             glassType: 'White wine glass',
-            garnishes: ['lemon', 'fresh dill', 'capers']
+            garnishes: ['lemon', 'fresh dill', 'capers'],
           },
           sortOrder: 1,
           isFeatured: true,
-          isActive: true
+          isActive: true,
         },
         {
           id: 'pairing-2',
@@ -143,32 +143,32 @@ export const usePairingGuides = () => {
             en: 'Cabernet Sauvignon',
             es: 'Cabernet Sauvignon',
             ro: 'Cabernet Sauvignon',
-            ru: 'Каберне Совиньон'
+            ru: 'Каберне Совиньон',
           },
           wineType: 'red',
           dishName: {
             en: 'Moldovan Beef Stew',
             es: 'Guiso de Carne Moldavo',
             ro: 'Tocană Moldovenească',
-            ru: 'Молдавское Тушёное Мясо'
+            ru: 'Молдавское Тушёное Мясо',
           },
           dishDescription: {
             en: 'Hearty beef stew with root vegetables and traditional Moldovan spices',
             es: 'Abundante guiso de carne con verduras de raíz y especias moldavas tradicionales',
             ro: 'Tocană abundentă de carne cu legume și condimente moldovenești tradiționale',
-            ru: 'Сытное тушёное мясо с корнеплодами и традиционными молдавскими специями'
+            ru: 'Сытное тушёное мясо с корнеплодами и традиционными молдавскими специями',
           },
           cuisine: 'Moldovan',
           pairingReason: {
             en: 'The wine\'s bold tannins and dark fruit flavors stand up to the rich, savory stew, creating a harmonious balance',
             es: 'Los taninos audaces del vino y los sabores de frutas oscuras resisten el guiso rico y sabroso, creando un equilibrio armonioso',
             ro: 'Taninurile puternice ale vinului și aromele de fructe închise rezistă tocanei bogate și gustoase, creând un echilibru armonios',
-            ru: 'Насыщенные танины вина и вкусы тёмных фруктов выдерживают богатое, пикантное тушёное мясо, создавая гармоничный баланс'
+            ru: 'Насыщенные танины вина и вкусы тёмных фруктов выдерживают богатое, пикантное тушёное мясо, создавая гармоничный баланс',
           },
           characteristics: {
             intensity: 'bold',
             primaryFlavors: ['blackcurrant', 'cedar', 'tobacco'],
-            wineBodyMatch: 'complement'
+            wineBodyMatch: 'complement',
           },
           wineImage: '/images/pairings/cabernet-sauvignon.jpg',
           foodImage: '/images/pairings/beef-stew.jpg',
@@ -179,11 +179,11 @@ export const usePairingGuides = () => {
             temperature: '16-18°C',
             glassType: 'Bordeaux glass',
             decanting: '30-60 minutes recommended',
-            garnishes: ['fresh parsley', 'crusty bread']
+            garnishes: ['fresh parsley', 'crusty bread'],
           },
           sortOrder: 2,
           isFeatured: true,
-          isActive: true
+          isActive: true,
         },
         {
           id: 'pairing-3',
@@ -192,32 +192,32 @@ export const usePairingGuides = () => {
             en: 'Traminer',
             es: 'Traminer',
             ro: 'Traminer',
-            ru: 'Траминер'
+            ru: 'Траминер',
           },
           wineType: 'white',
           dishName: {
             en: 'Blue Cheese & Honey',
             es: 'Queso Azul y Miel',
             ro: 'Brânză cu Mucegai și Miere',
-            ru: 'Голубой Сыр с Мёдом'
+            ru: 'Голубой Сыр с Мёдом',
           },
           dishDescription: {
             en: 'Creamy blue cheese drizzled with local honey and walnuts',
             es: 'Queso azul cremoso rociado con miel local y nueces',
             ro: 'Brânză cu mucegai cremoasă cu miere locală și nuci',
-            ru: 'Сливочный голубой сыр, политый местным мёдом с грецкими орехами'
+            ru: 'Сливочный голубой сыр, политый местным мёдом с грецкими орехами',
           },
           cuisine: 'International',
           pairingReason: {
             en: 'The wine\'s aromatic sweetness and floral notes create a beautiful contrast with the salty, pungent cheese',
             es: 'La dulzura aromática del vino y las notas florales crean un hermoso contraste con el queso salado y picante',
             ro: 'Dulceața aromatică a vinului și notele florale creează un contrast frumos cu brânza sărată și pătrunzătoare',
-            ru: 'Ароматная сладость вина и цветочные ноты создают прекрасный контраст с солёным, острым сыром'
+            ru: 'Ароматная сладость вина и цветочные ноты создают прекрасный контраст с солёным, острым сыром',
           },
           characteristics: {
             intensity: 'medium',
             primaryFlavors: ['rose', 'lychee', 'honey'],
-            wineBodyMatch: 'contrast'
+            wineBodyMatch: 'contrast',
           },
           wineImage: '/images/pairings/traminer.jpg',
           foodImage: '/images/pairings/blue-cheese.jpg',
@@ -227,19 +227,21 @@ export const usePairingGuides = () => {
           servingSuggestions: {
             temperature: '10-12°C',
             glassType: 'White wine glass',
-            garnishes: ['walnuts', 'fresh figs', 'crackers']
+            garnishes: ['walnuts', 'fresh figs', 'crackers'],
           },
           sortOrder: 3,
           isFeatured: true,
-          isActive: true
-        }
+          isActive: true,
+        },
       ]
 
       pairings.value = staticPairings
-    } catch (err) {
+    }
+    catch (err) {
       error.value = err instanceof Error ? err.message : 'Failed to fetch pairing guides'
       console.error('Error fetching pairing guides:', err)
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -267,11 +269,13 @@ export const usePairingGuides = () => {
 
       error.value = 'Pairing guide not found'
       return null
-    } catch (err) {
+    }
+    catch (err) {
       error.value = err instanceof Error ? err.message : 'Failed to fetch pairing guide'
       console.error('Error fetching pairing guide:', err)
       return null
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -315,6 +319,6 @@ export const usePairingGuides = () => {
     clearFilters,
     getFeaturedPairings,
     getPairingsByWineType,
-    getPairingsByOccasion
+    getPairingsByOccasion,
   }
 }

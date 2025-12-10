@@ -17,7 +17,7 @@ test.describe('Critical Search Flows', () => {
     // Find search input on products page
     const searchInput = page.locator('input[type="search"]').first()
     await expect(searchInput, ERROR_MESSAGES.SEARCH_INPUT_NOT_FOUND).toBeVisible({
-      timeout: TIMEOUTS.STANDARD
+      timeout: TIMEOUTS.STANDARD,
     })
   })
 
@@ -81,7 +81,8 @@ test.describe('Critical Search Flows', () => {
 
       // Verify we're on products page
       expect(page.url()).toContain('/products')
-    } else {
+    }
+    else {
       // If no header search button, skip this test
       test.skip()
     }
@@ -94,7 +95,7 @@ test.describe('Critical Search Flows', () => {
     // Wait for initial products to load
     await page.waitForSelector('[data-testid="product-card"], .product-card, article', {
       state: 'visible',
-      timeout: TIMEOUTS.LONG
+      timeout: TIMEOUTS.LONG,
     })
 
     // Count initial products

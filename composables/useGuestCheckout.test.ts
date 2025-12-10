@@ -13,7 +13,7 @@ const mockT = vi.fn((key: string) => {
 // Override global mock with test-specific mock
 global.useI18n = vi.fn(() => ({
   t: mockT,
-  locale: { value: 'en' }
+  locale: { value: 'en' },
 }))
 
 // Import composable AFTER mock is set up

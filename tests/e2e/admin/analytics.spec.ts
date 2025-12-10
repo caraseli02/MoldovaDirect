@@ -119,14 +119,14 @@ test.describe('Admin Analytics Page', () => {
     const pageErrors: string[] = []
 
     // Listen for console messages
-    authenticatedPage.on('console', msg => {
+    authenticatedPage.on('console', (msg) => {
       if (msg.type() === 'error') {
         consoleErrors.push(msg.text())
       }
     })
 
     // Listen for page errors
-    authenticatedPage.on('pageerror', err => {
+    authenticatedPage.on('pageerror', (err) => {
       pageErrors.push(err.toString())
     })
 
@@ -147,9 +147,9 @@ test.describe('Admin Analytics Page', () => {
 
     // We should not have critical console errors (excluding network warnings)
     const criticalErrors = consoleErrors.filter(e =>
-      !e.includes('404') &&
-      !e.includes('Failed to fetch') &&
-      !e.toLowerCase().includes('network')
+      !e.includes('404')
+      && !e.includes('Failed to fetch')
+      && !e.toLowerCase().includes('network'),
     )
 
     expect(criticalErrors.length).toBe(0)
@@ -158,7 +158,7 @@ test.describe('Admin Analytics Page', () => {
   test('should handle missing or loading data gracefully', async ({ authenticatedPage }) => {
     // Listen for errors
     const errors: string[] = []
-    authenticatedPage.on('console', msg => {
+    authenticatedPage.on('console', (msg) => {
       if (msg.type() === 'error') {
         errors.push(msg.text())
       }
@@ -212,7 +212,7 @@ test.describe('Admin Analytics Page', () => {
 
     await authenticatedPage.screenshot({
       path: 'tests/screenshots/analytics-overview.png',
-      fullPage: true
+      fullPage: true,
     })
 
     // Take screenshot of Users tab
@@ -222,7 +222,7 @@ test.describe('Admin Analytics Page', () => {
 
     await authenticatedPage.screenshot({
       path: 'tests/screenshots/analytics-users.png',
-      fullPage: true
+      fullPage: true,
     })
 
     // Take screenshot of Products tab
@@ -232,7 +232,7 @@ test.describe('Admin Analytics Page', () => {
 
     await authenticatedPage.screenshot({
       path: 'tests/screenshots/analytics-products.png',
-      fullPage: true
+      fullPage: true,
     })
   })
 
@@ -256,7 +256,7 @@ test.describe('Admin Analytics Page', () => {
     const componentErrors: string[] = []
 
     // Monitor for component-level errors
-    authenticatedPage.on('console', msg => {
+    authenticatedPage.on('console', (msg) => {
       if (msg.type() === 'error' && msg.text().includes('Chart')) {
         componentErrors.push(msg.text())
       }
@@ -283,8 +283,8 @@ test.describe('Admin Analytics Page', () => {
 
     // Check for chart render errors (but be lenient as charts may load data)
     const criticalChartErrors = componentErrors.filter(e =>
-      !e.includes('undefined') &&
-      !e.includes('null')
+      !e.includes('undefined')
+      && !e.includes('null'),
     )
     expect(criticalChartErrors.length).toBe(0)
   })

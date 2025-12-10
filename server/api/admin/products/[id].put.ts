@@ -18,12 +18,13 @@ import { serverSupabaseClient } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
 import { invalidateMultipleScopes } from '~/server/utils/adminCache'
 import { invalidatePublicCache } from '~/server/utils/publicCache'
+import { getRequestIP, getHeader } from 'h3'
 import { z } from 'zod'
 
 const updateProductSchema = z.object({
   sku: z.string().min(1, 'SKU is required'),
-  name_translations: z.record(z.string().min(1, 'Product name is required')),
-  description_translations: z.record(z.string().optional()).optional(),
+  name_translations: z.record(z.string(), z.string().min(1, 'Product name is required')),
+  description_translations: z.record(z.string(), z.string().optional()).optional(),
   price_eur: z.number().min(0.01, 'Price must be greater than 0'),
   compare_at_price_eur: z.number().min(0).optional().nullable(),
   stock_quantity: z.number().min(0, 'Stock quantity must be 0 or greater'),
@@ -33,15 +34,15 @@ const updateProductSchema = z.object({
     id: z.string().optional(),
     url: z.string().url(),
     altText: z.string().optional(),
-    isPrimary: z.boolean().optional()
+    isPrimary: z.boolean().optional(),
   })).optional(),
   attributes: z.object({
     origin: z.string().optional(),
     volume: z.string().optional(),
     alcohol_content: z.string().optional(),
-    featured: z.boolean().optional()
+    featured: z.boolean().optional(),
   }).optional(),
-  is_active: z.boolean().default(true)
+  is_active: z.boolean().default(true),
 })
 
 export default defineEventHandler(async (event) => {
@@ -55,7 +56,7 @@ export default defineEventHandler(async (event) => {
     if (!productId || isNaN(Number(productId))) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Invalid product ID'
+        statusMessage: 'Invalid product ID',
       })
     }
 
@@ -72,7 +73,7 @@ export default defineEventHandler(async (event) => {
     if (fetchError || !currentProduct) {
       throw createError({
         statusCode: 404,
-        statusMessage: 'Product not found'
+        statusMessage: 'Product not found',
       })
     }
 
@@ -88,7 +89,7 @@ export default defineEventHandler(async (event) => {
       if (existingProduct) {
         throw createError({
           statusCode: 400,
-          statusMessage: 'A product with this SKU already exists'
+          statusMessage: 'A product with this SKU already exists',
         })
       }
     }
@@ -103,7 +104,7 @@ export default defineEventHandler(async (event) => {
     if (categoryError || !category) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Invalid category selected'
+        statusMessage: 'Invalid category selected',
       })
     }
 
@@ -120,7 +121,7 @@ export default defineEventHandler(async (event) => {
       images: validatedData.images || [],
       attributes: validatedData.attributes || {},
       is_active: validatedData.is_active,
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     }
 
     // Update the product
@@ -153,7 +154,7 @@ export default defineEventHandler(async (event) => {
     if (updateError) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to update product'
+        statusMessage: 'Failed to update product',
       })
     }
 
@@ -167,8 +168,8 @@ export default defineEventHandler(async (event) => {
         old_values: currentProduct,
         new_values: updateData,
         performed_by: null, // TODO: Get current admin user ID
-        ip_address: getClientIP(event),
-        user_agent: getHeader(event, 'user-agent')
+        ip_address: getRequestIP(event),
+        user_agent: getHeader(event, 'user-agent'),
       })
 
     // Record inventory movement if stock quantity changed
@@ -188,14 +189,14 @@ export default defineEventHandler(async (event) => {
           quantity: movementQuantity,
           reason: 'Admin update',
           reference_id: `update-${productId}-${Date.now()}`,
-          performed_by: null // TODO: Get current admin user ID
+          performed_by: null, // TODO: Get current admin user ID
         })
     }
 
     // Invalidate related caches (both admin and public)
     await Promise.all([
       invalidateMultipleScopes(['products', 'stats']),
-      invalidatePublicCache('products')
+      invalidatePublicCache('products'),
     ])
 
     // Transform response to match expected format
@@ -210,33 +211,35 @@ export default defineEventHandler(async (event) => {
       stockQuantity: updatedProduct.stock_quantity,
       lowStockThreshold: updatedProduct.low_stock_threshold,
       images: updatedProduct.images || [],
-      category: updatedProduct.categories ? {
-        id: updatedProduct.categories.id,
-        slug: updatedProduct.categories.slug,
-        name: updatedProduct.categories.name_translations
-      } : null,
+      category: updatedProduct.categories
+        ? {
+            id: updatedProduct.categories.id,
+            slug: updatedProduct.categories.slug,
+            name: updatedProduct.categories.name_translations,
+          }
+        : null,
       attributes: updatedProduct.attributes || {},
       isActive: updatedProduct.is_active,
       createdAt: updatedProduct.created_at,
-      updatedAt: updatedProduct.updated_at
+      updatedAt: updatedProduct.updated_at,
     }
 
     return {
       success: true,
       data: transformedProduct,
-      message: 'Product updated successfully'
+      message: 'Product updated successfully',
     }
-
-  } catch (error) {
+  }
+  catch (error: unknown) {
     console.error('Update product error:', error)
-    
-    if (error.statusCode) {
+
+    if (error && typeof error === 'object' && 'statusCode' in error) {
       throw error
     }
 
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 })

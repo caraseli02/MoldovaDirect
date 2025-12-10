@@ -1,6 +1,6 @@
 /**
  * Cart Type Definitions
- * 
+ *
  * Comprehensive TypeScript interfaces for the modular cart system
  */
 
@@ -250,7 +250,7 @@ export interface CartCoreActions {
   // Cart locking actions
   lockCart(checkoutSessionId: string, lockDurationMinutes?: number): Promise<void>
   unlockCart(checkoutSessionId?: string): Promise<void>
-  checkLockStatus(): Promise<{ isLocked: boolean; lockedAt: Date | null; lockedUntil: Date | null; lockedBySession: string | null }>
+  checkLockStatus(): Promise<{ isLocked: boolean, lockedAt: Date | null, lockedUntil: Date | null, lockedBySession: string | null }>
   isCartLocked(): boolean
 }
 
@@ -383,32 +383,32 @@ export const DEFAULT_CART_CONFIG: CartConfig = {
     enabled: true,
     backgroundValidation: true,
     cacheTimeout: 300000, // 5 minutes
-    maxRetries: 3
+    maxRetries: 3,
   },
   analytics: {
     enabled: true,
     abandonmentTimeout: 1800000, // 30 minutes
     syncInterval: 300000, // 5 minutes
-    offlineStorage: true
+    offlineStorage: true,
   },
   security: {
     enabled: true,
     validateSessionId: true,
     validateProductId: true,
-    maxSecurityErrors: 5
+    maxSecurityErrors: 5,
   },
   persistence: {
     storageType: 'localStorage',
     autoSave: true,
     saveDebounceTime: 1000,
-    compression: false
+    compression: false,
   },
   advanced: {
     saveForLater: true,
     bulkOperations: true,
     recommendations: true,
-    maxRecommendations: 5
-  }
+    maxRecommendations: 5,
+  },
 }
 
 // =============================================
@@ -425,7 +425,7 @@ export interface LegacyCartStore {
   itemCount: number
   subtotal: number
   isEmpty: boolean
-  
+
   // Advanced features
   selectedItems: Set<string>
   selectedItemsCount: number
@@ -437,15 +437,15 @@ export interface LegacyCartStore {
   savedForLaterCount: number
   recommendations: CartRecommendation[]
   recommendationsLoading: boolean
-  
+
   // Validation
   validationInProgress: boolean
   backgroundValidationEnabled: boolean
-  
+
   // Storage
   storageType: StorageType
   lastSyncAt: Date | null
-  
+
   // Methods
   addItem: (product: Product, quantity?: number) => Promise<void>
   removeItem: (itemId: string) => Promise<void>
@@ -453,7 +453,7 @@ export interface LegacyCartStore {
   clearCart: () => Promise<void>
   getItemByProductId: (productId: string) => CartItem | undefined
   isInCart: (productId: string) => boolean
-  
+
   // Advanced methods
   isItemSelected: (itemId: string) => boolean
   getSelectedItems: () => CartItem[]
@@ -465,24 +465,24 @@ export interface LegacyCartStore {
   removeFromSavedForLater: (itemId: string) => Promise<void>
   moveToCartFromSavedForLater: (itemId: string) => Promise<void>
   loadRecommendations: () => Promise<void>
-  
+
   // Validation methods
   validateCart: () => Promise<boolean>
   validateCartWithRetry: (maxRetries?: number) => Promise<boolean>
-  
+
   // Direct methods
   directAddItem: (product: Product, quantity?: number) => Promise<void>
   directUpdateQuantity: (itemId: string, quantity: number) => Promise<void>
   directRemoveItem: (itemId: string) => Promise<void>
   directClearCart: () => Promise<void>
   directValidateCart: () => Promise<boolean>
-  
+
   // Utility methods
   recoverCart: () => Promise<boolean>
   forceSync: () => Promise<any>
   toggleBackgroundValidation: () => void
   clearValidationCache: (productId?: string) => void
-  
+
   // Performance
   performanceMetrics: {
     lastOperationTime: number

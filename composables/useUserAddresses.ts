@@ -30,7 +30,7 @@ export const useUserAddresses = () => {
 
   // Computed
   const defaultAddress = computed(() =>
-    addresses.value.find(addr => addr.is_default) || null
+    addresses.value.find(addr => addr.isDefault) || null,
   )
 
   const hasAddresses = computed(() => addresses.value.length > 0)
@@ -58,11 +58,13 @@ export const useUserAddresses = () => {
       if (fetchError) throw fetchError
 
       addresses.value = data || []
-    } catch (err) {
+    }
+    catch (err) {
       console.error('Failed to load addresses:', err)
       error.value = t('checkout.errors.failedToLoadAddresses')
       addresses.value = []
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -70,7 +72,7 @@ export const useUserAddresses = () => {
   /**
    * Save a new address for the current user
    */
-  const saveAddress = async (address: Omit<Address, 'id' | 'user_id' | 'created_at' | 'updated_at'>) => {
+  const saveAddress = async (address: Omit<Address, 'id'>) => {
     if (!user.value) {
       throw new Error('User must be authenticated to save address')
     }
@@ -79,26 +81,59 @@ export const useUserAddresses = () => {
       loading.value = true
       error.value = null
 
+      // Convert camelCase to snake_case for database
+      const dbAddress = {
+        user_id: user.value.id,
+        type: address.type,
+        first_name: address.firstName,
+        last_name: address.lastName,
+        company: address.company || null,
+        street: address.street,
+        city: address.city,
+        postal_code: address.postalCode,
+        province: address.province || null,
+        country: address.country,
+        phone: address.phone || null,
+        is_default: address.isDefault,
+      }
+
       const { data, error: insertError } = await supabase
         .from('user_addresses')
-        .insert({
-          ...address,
-          user_id: user.value.id
-        })
+        .insert(dbAddress as any)
         .select()
-        .single()
+        .single<any>()
 
       if (insertError) throw insertError
+      if (!data) throw new Error('No data returned from insert')
+
+      // Convert snake_case response back to camelCase
+      const dbData = data
+      const newAddress: Address = {
+        id: dbData.id,
+        type: dbData.type,
+        firstName: dbData.first_name,
+        lastName: dbData.last_name,
+        company: dbData.company || undefined,
+        street: dbData.street,
+        city: dbData.city,
+        postalCode: dbData.postal_code,
+        province: dbData.province || undefined,
+        country: dbData.country,
+        phone: dbData.phone || undefined,
+        isDefault: dbData.is_default,
+      }
 
       // Optimistically update local state
-      addresses.value.push(data)
+      addresses.value.push(newAddress)
 
-      return data
-    } catch (err) {
+      return newAddress
+    }
+    catch (err) {
       console.error('Failed to save address:', err)
       error.value = t('checkout.errors.failedToSaveAddress')
       throw err
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -106,7 +141,7 @@ export const useUserAddresses = () => {
   /**
    * Update an existing address
    */
-  const updateAddress = async (addressId: string, updates: Partial<Address>) => {
+  const updateAddress = async (addressId: number, updates: Partial<Address>) => {
     if (!user.value) {
       throw new Error('User must be authenticated to update address')
     }
@@ -115,28 +150,62 @@ export const useUserAddresses = () => {
       loading.value = true
       error.value = null
 
-      const { data, error: updateError } = await supabase
-        .from('user_addresses')
-        .update(updates)
+      // Convert camelCase updates to snake_case for database
+      const dbUpdates: Record<string, any> = {}
+      if (updates.firstName !== undefined) dbUpdates.first_name = updates.firstName
+      if (updates.lastName !== undefined) dbUpdates.last_name = updates.lastName
+      if (updates.company !== undefined) dbUpdates.company = updates.company || null
+      if (updates.street !== undefined) dbUpdates.street = updates.street
+      if (updates.city !== undefined) dbUpdates.city = updates.city
+      if (updates.postalCode !== undefined) dbUpdates.postal_code = updates.postalCode
+      if (updates.province !== undefined) dbUpdates.province = updates.province || null
+      if (updates.country !== undefined) dbUpdates.country = updates.country
+      if (updates.phone !== undefined) dbUpdates.phone = updates.phone || null
+      if (updates.isDefault !== undefined) dbUpdates.is_default = updates.isDefault
+      if (updates.type !== undefined) dbUpdates.type = updates.type
+
+      const { data, error: updateError } = await (supabase
+        .from('user_addresses') as any)
+        .update(dbUpdates)
         .eq('id', addressId)
         .eq('user_id', user.value.id)
         .select()
         .single()
 
       if (updateError) throw updateError
+      if (!data) throw new Error('No data returned from update')
+
+      // Convert snake_case response back to camelCase
+      const dbData = data
+      const updatedAddress: Address = {
+        id: dbData.id,
+        type: dbData.type,
+        firstName: dbData.first_name,
+        lastName: dbData.last_name,
+        company: dbData.company || undefined,
+        street: dbData.street,
+        city: dbData.city,
+        postalCode: dbData.postal_code,
+        province: dbData.province || undefined,
+        country: dbData.country,
+        phone: dbData.phone || undefined,
+        isDefault: dbData.is_default,
+      }
 
       // Optimistically update local state
       const index = addresses.value.findIndex(addr => addr.id === addressId)
       if (index !== -1) {
-        addresses.value[index] = data
+        addresses.value[index] = updatedAddress
       }
 
-      return data
-    } catch (err) {
+      return updatedAddress
+    }
+    catch (err) {
       console.error('Failed to update address:', err)
       error.value = t('checkout.errors.failedToUpdateAddress')
       throw err
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -145,7 +214,7 @@ export const useUserAddresses = () => {
    * Set an address as the default
    * This will automatically unset other default addresses via database trigger
    */
-  const setDefaultAddress = async (addressId: string) => {
+  const setDefaultAddress = async (addressId: number) => {
     if (!user.value) {
       throw new Error('User must be authenticated to set default address')
     }
@@ -154,17 +223,19 @@ export const useUserAddresses = () => {
       loading.value = true
       error.value = null
 
-      // Update the address to set is_default = true
+      // Update the address to set isDefault = true
       // The database trigger will automatically clear other defaults
-      await updateAddress(addressId, { is_default: true })
+      await updateAddress(addressId, { isDefault: true })
 
       // Reload to get updated state from database
       await loadAddresses()
-    } catch (err) {
+    }
+    catch (err) {
       console.error('Failed to set default address:', err)
       error.value = t('checkout.errors.failedToSetDefaultAddress')
       throw err
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -172,7 +243,7 @@ export const useUserAddresses = () => {
   /**
    * Delete an address
    */
-  const deleteAddress = async (addressId: string) => {
+  const deleteAddress = async (addressId: number) => {
     if (!user.value) {
       throw new Error('User must be authenticated to delete address')
     }
@@ -191,11 +262,13 @@ export const useUserAddresses = () => {
 
       // Optimistically update local state
       addresses.value = addresses.value.filter(addr => addr.id !== addressId)
-    } catch (err) {
+    }
+    catch (err) {
       console.error('Failed to delete address:', err)
       error.value = t('checkout.errors.failedToDeleteAddress')
       throw err
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -203,7 +276,7 @@ export const useUserAddresses = () => {
   /**
    * Get address by ID
    */
-  const getAddressById = (addressId: string) => {
+  const getAddressById = (addressId: number) => {
     return addresses.value.find(addr => addr.id === addressId) || null
   }
 
@@ -231,6 +304,6 @@ export const useUserAddresses = () => {
     setDefaultAddress,
     deleteAddress,
     getAddressById,
-    clearError
+    clearError,
   }
 }

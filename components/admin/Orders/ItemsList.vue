@@ -9,13 +9,22 @@
           <TableHeader>
             <TableRow>
               <TableHead>Product</TableHead>
-              <TableHead class="text-right">Price</TableHead>
-              <TableHead class="text-center">Quantity</TableHead>
-              <TableHead class="text-right">Total</TableHead>
+              <TableHead class="text-right">
+                Price
+              </TableHead>
+              <TableHead class="text-center">
+                Quantity
+              </TableHead>
+              <TableHead class="text-right">
+                Total
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow v-for="item in items" :key="item.id">
+            <TableRow
+              v-for="item in items"
+              :key="item.id"
+            >
               <!-- Product Info -->
               <TableCell>
                 <div class="flex items-center space-x-3">
@@ -27,17 +36,26 @@
                       :alt="getProductName(item)"
                       class="w-full h-full object-cover"
                     />
-                    <div v-else class="w-full h-full flex items-center justify-center">
-                      <commonIcon name="lucide:package" class="h-6 w-6 text-gray-400" />
+                    <div
+                      v-else
+                      class="w-full h-full flex items-center justify-center"
+                    >
+                      <commonIcon
+                        name="lucide:package"
+                        class="h-6 w-6 text-gray-400"
+                      />
                     </div>
                   </div>
-                  
+
                   <!-- Product Details -->
                   <div class="flex-1 min-w-0">
                     <p class="text-sm font-medium text-gray-900 dark:text-white truncate">
                       {{ getProductName(item) }}
                     </p>
-                    <p v-if="getProductSku(item)" class="text-xs text-gray-500 dark:text-gray-400">
+                    <p
+                      v-if="getProductSku(item)"
+                      class="text-xs text-gray-500 dark:text-gray-400"
+                    >
                       SKU: {{ getProductSku(item) }}
                     </p>
                   </div>
@@ -70,9 +88,17 @@
       </div>
 
       <!-- Empty State -->
-      <div v-if="!items || items.length === 0" class="text-center py-8">
-        <commonIcon name="lucide:package" class="h-12 w-12 text-gray-400 mx-auto mb-3" />
-        <p class="text-sm text-gray-500 dark:text-gray-400">No items in this order</p>
+      <div
+        v-if="!items || items.length === 0"
+        class="text-center py-8"
+      >
+        <commonIcon
+          name="lucide:package"
+          class="h-12 w-12 text-gray-400 mx-auto mb-3"
+        />
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+          No items in this order
+        </p>
       </div>
     </CardContent>
   </Card>
@@ -83,7 +109,7 @@ import {
   Card,
   CardContent,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from '@/components/ui/card'
 import {
   Table,
@@ -91,12 +117,12 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow
+  TableRow,
 } from '@/components/ui/table'
-import type { OrderItem } from '~/types/database'
+import type { OrderItemRaw } from '~/types/database'
 
 interface Props {
-  items: OrderItem[]
+  items: OrderItemRaw[]
 }
 
 const props = defineProps<Props>()
@@ -133,7 +159,7 @@ const getProductSku = (item: any) => {
 const getProductImage = (item: any) => {
   if (item.product_snapshot) {
     const snapshot = item.product_snapshot as any
-    
+
     // Check for images array
     if (snapshot.images && Array.isArray(snapshot.images) && snapshot.images.length > 0) {
       const primaryImage = snapshot.images.find((img: any) => img.isPrimary)
@@ -142,18 +168,18 @@ const getProductImage = (item: any) => {
       }
       return snapshot.images[0].url
     }
-    
+
     // Check for single image URL
     if (snapshot.imageUrl) {
       return snapshot.imageUrl
     }
-    
+
     // Check for primaryImage
     if (snapshot.primaryImage && snapshot.primaryImage.url) {
       return snapshot.primaryImage.url
     }
   }
-  
+
   return null
 }
 </script>

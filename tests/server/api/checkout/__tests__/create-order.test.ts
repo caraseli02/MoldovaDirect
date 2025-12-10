@@ -16,15 +16,15 @@ vi.mock('h3', async () => {
   const actual = await vi.importActual('h3')
   return {
     ...actual,
-    defineEventHandler: vi.fn((handler) => handler),
+    defineEventHandler: vi.fn(handler => handler),
     readBody: vi.fn(),
     createError: vi.fn((options) => {
-      const error = new Error(options.statusMessage) as Error & { statusCode: number; statusMessage: string }
+      const error = new Error(options.statusMessage) as Error & { statusCode: number, statusMessage: string }
       error.statusCode = options.statusCode
       error.statusMessage = options.statusMessage
       return error
     }),
-    getHeader: vi.fn()
+    getHeader: vi.fn(),
   }
 })
 
@@ -32,15 +32,15 @@ vi.mock('h3', async () => {
 const mockSupabaseRpc = vi.fn()
 const mockSupabaseFrom = vi.fn()
 const mockSupabaseAuth = {
-  getUser: vi.fn()
+  getUser: vi.fn(),
 }
 
 vi.mock('#supabase/server', () => ({
   serverSupabaseServiceRole: vi.fn(() => ({
     rpc: mockSupabaseRpc,
     from: mockSupabaseFrom,
-    auth: mockSupabaseAuth
-  }))
+    auth: mockSupabaseAuth,
+  })),
 }))
 
 // Mock secure logger
@@ -48,8 +48,8 @@ vi.mock('~/server/utils/secureLogger', () => ({
   createLogger: vi.fn(() => ({
     info: vi.fn(),
     warn: vi.fn(),
-    error: vi.fn()
-  }))
+    error: vi.fn(),
+  })),
 }))
 
 describe('Checkout Create Order API', () => {
@@ -68,7 +68,7 @@ describe('Checkout Create Order API', () => {
         items: [{ productId: 1, quantity: 1 }],
         shippingAddress: { street: '123 Main' },
         paymentMethod: 'cash',
-        paymentResult: { success: true, transactionId: 'tx123' }
+        paymentResult: { success: true, transactionId: 'tx123' },
       })
 
       // The handler should throw an error for missing sessionId
@@ -82,7 +82,7 @@ describe('Checkout Create Order API', () => {
         items: [],
         shippingAddress: { street: '123 Main' },
         paymentMethod: 'cash',
-        paymentResult: { success: true, transactionId: 'tx123' }
+        paymentResult: { success: true, transactionId: 'tx123' },
       })
 
       expect(createError).toBeDefined()
@@ -94,7 +94,7 @@ describe('Checkout Create Order API', () => {
         sessionId: 'session123',
         items: [{ productId: 1, quantity: 1 }],
         paymentMethod: 'cash',
-        paymentResult: { success: true, transactionId: 'tx123' }
+        paymentResult: { success: true, transactionId: 'tx123' },
       })
 
       expect(createError).toBeDefined()
@@ -107,7 +107,7 @@ describe('Checkout Create Order API', () => {
         items: [{ productId: 1, quantity: 1, price: 10, total: 10 }],
         shippingAddress: { street: '123 Main', city: 'Test', country: 'ES' },
         paymentMethod: 'cash',
-        paymentResult: { success: false, transactionId: '' }
+        paymentResult: { success: false, transactionId: '' },
       })
 
       expect(createError).toBeDefined()
@@ -118,10 +118,10 @@ describe('Checkout Create Order API', () => {
     it('maps credit_card to stripe for database', async () => {
       // Test that credit_card payment method gets properly mapped
       const paymentMethodMapping = {
-        'credit_card': 'stripe',
-        'paypal': 'paypal',
-        'cash': 'cod',
-        'bank_transfer': 'cod'
+        credit_card: 'stripe',
+        paypal: 'paypal',
+        cash: 'cod',
+        bank_transfer: 'cod',
       }
 
       expect(paymentMethodMapping['credit_card']).toBe('stripe')
@@ -134,7 +134,7 @@ describe('Checkout Create Order API', () => {
       // Cash = pending (paid on delivery)
       // Bank transfer with pending flag = pending
       // Credit card/PayPal with success = paid
-      const getPaymentStatus = (method: string, result: { success: boolean; pending?: boolean }) => {
+      const getPaymentStatus = (method: string, result: { success: boolean, pending?: boolean }) => {
         if (method === 'cash') return 'pending'
         if (result.pending) return 'pending'
         if (result.success) return 'paid'
@@ -176,17 +176,17 @@ describe('Checkout Create Order API', () => {
         total: 110,
         status: 'processing',
         payment_status: 'paid',
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
       }
 
       mockSupabaseRpc.mockResolvedValue({
         data: { order: mockOrder },
-        error: null
+        error: null,
       })
 
       const result = await mockSupabaseRpc('create_order_with_inventory', {
         order_data: {},
-        order_items_data: []
+        order_items_data: [],
       })
 
       expect(result.data.order).toEqual(mockOrder)
@@ -198,7 +198,7 @@ describe('Checkout Create Order API', () => {
     it('returns 409 for insufficient stock', async () => {
       mockSupabaseRpc.mockResolvedValue({
         data: null,
-        error: { message: 'Insufficient stock for product X' }
+        error: { message: 'Insufficient stock for product X' },
       })
 
       const result = await mockSupabaseRpc('create_order_with_inventory', {})
@@ -209,7 +209,7 @@ describe('Checkout Create Order API', () => {
     it('returns 409 when items are being processed', async () => {
       mockSupabaseRpc.mockResolvedValue({
         data: null,
-        error: { message: 'Product is currently being processed' }
+        error: { message: 'Product is currently being processed' },
       })
 
       const result = await mockSupabaseRpc('create_order_with_inventory', {})
@@ -220,7 +220,7 @@ describe('Checkout Create Order API', () => {
     it('returns 400 for inactive products', async () => {
       mockSupabaseRpc.mockResolvedValue({
         data: null,
-        error: { message: 'Product not found or inactive' }
+        error: { message: 'Product not found or inactive' },
       })
 
       const result = await mockSupabaseRpc('create_order_with_inventory', {})
@@ -235,7 +235,7 @@ describe('Checkout Create Order API', () => {
 
       mockSupabaseAuth.getUser.mockResolvedValue({
         data: { user: { id: mockUserId } },
-        error: null
+        error: null,
       })
 
       const result = await mockSupabaseAuth.getUser('valid-token')
@@ -246,7 +246,7 @@ describe('Checkout Create Order API', () => {
     it('creates order with guest_email for unauthenticated users', async () => {
       mockSupabaseAuth.getUser.mockResolvedValue({
         data: { user: null },
-        error: { message: 'Invalid token' }
+        error: { message: 'Invalid token' },
       })
 
       const result = await mockSupabaseAuth.getUser('invalid-token')
@@ -257,12 +257,12 @@ describe('Checkout Create Order API', () => {
     it('saves user preferences after order for authenticated users', async () => {
       const mockUpsert = vi.fn().mockResolvedValue({ error: null })
       mockSupabaseFrom.mockReturnValue({
-        upsert: mockUpsert
+        upsert: mockUpsert,
       })
 
       await mockSupabaseFrom('user_checkout_preferences').upsert({
         user_id: 'user-123',
-        preferred_shipping_method: 'standard'
+        preferred_shipping_method: 'standard',
       })
 
       expect(mockUpsert).toHaveBeenCalled()
@@ -277,7 +277,7 @@ describe('Checkout Create Order API', () => {
         total_eur: 110,
         status: 'processing',
         payment_status: 'paid',
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
       }
 
       const response = {
@@ -288,8 +288,8 @@ describe('Checkout Create Order API', () => {
           total: mockOrder.total_eur,
           status: mockOrder.status,
           paymentStatus: mockOrder.payment_status,
-          createdAt: mockOrder.created_at
-        }
+          createdAt: mockOrder.created_at,
+        },
       }
 
       expect(response.success).toBe(true)
@@ -306,15 +306,15 @@ describe('Checkout Create Order API', () => {
           productSnapshot: { id: 1, name: 'Wine', price: 25 },
           quantity: 2,
           price: 25,
-          total: 50
+          total: 50,
         },
         {
           productId: 2, // Number
           productSnapshot: { id: 2, name: 'Cheese', price: 15 },
           quantity: 1,
           price: 15,
-          total: 15
-        }
+          total: 15,
+        },
       ]
 
       const orderItemsData = cartItems.map(item => ({
@@ -322,7 +322,7 @@ describe('Checkout Create Order API', () => {
         product_snapshot: item.productSnapshot,
         quantity: item.quantity,
         price_eur: item.price,
-        total_eur: item.total
+        total_eur: item.total,
       }))
 
       expect(orderItemsData[0].product_id).toBe(1) // Parsed from string

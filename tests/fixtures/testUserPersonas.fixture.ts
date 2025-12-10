@@ -193,7 +193,7 @@ export const test = base.extend<TestUserFixtures>({
   testUserPage: async ({ page }, use) => {
     const testUserPage = new TestUserPage(page)
     await use(testUserPage)
-  }
+  },
 })
 
 export { expect } from '@playwright/test'

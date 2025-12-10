@@ -5,7 +5,7 @@ export const SEO_DEFAULTS = {
   SITE_NAME: 'Moldova Direct',
   DEFAULT_IMAGE: '/icon.svg',
   DEFAULT_ROBOTS: 'index,follow',
-  DEFAULT_PAGE_TYPE: 'website'
+  DEFAULT_PAGE_TYPE: 'website',
 } as const
 
 /**
@@ -22,9 +22,9 @@ export const SEO_DEFAULTS = {
 export const CONTACT_INFO = {
   EMAIL: {
     INFO: 'info@moldovadirect.com',
-    SUPPORT: 'support@moldovadirect.com'
+    SUPPORT: 'support@moldovadirect.com',
   },
   PHONE: '+34 910 000 000', // PLACEHOLDER - Replace with real phone number
   COMPANY_NAME: 'Moldova Direct S.L.',
-  LOCATION: 'Madrid, Spain'
+  LOCATION: 'Madrid, Spain',
 } as const

@@ -9,7 +9,7 @@ export interface Translations {
   en: string
   ro?: string
   ru?: string
-  [key: string]: string | undefined  // Allow index signature for compatibility
+  [key: string]: string | undefined // Allow index signature for compatibility
 }
 
 // =============================================
@@ -30,11 +30,10 @@ export interface Category {
 export interface CategoryWithChildren extends Category {
   children?: CategoryWithChildren[]
   productCount: number
-  // Convenience properties for templates  
+  // Convenience properties for templates
   name: Translations
   icon?: string
 }
-
 
 // =============================================
 // PRODUCT TYPES
@@ -331,6 +330,95 @@ export interface OrderWithAdminDetails extends Order {
     preferredLanguage?: string
   }
   guestEmail?: string
+}
+
+/**
+ * Raw order type matching Supabase snake_case response
+ * Used by admin components that consume API data directly
+ */
+export interface OrderWithAdminDetailsRaw {
+  id: number
+  order_number: string
+  user_id?: string
+  guest_email?: string
+  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
+  payment_method: 'stripe' | 'paypal' | 'cod'
+  payment_status: 'pending' | 'paid' | 'failed' | 'refunded'
+  payment_intent_id?: string
+  subtotal_eur: number
+  shipping_cost_eur: number
+  tax_eur: number
+  total_eur: number
+  shipping_address: Address
+  billing_address: Address
+  customer_notes?: string
+  admin_notes?: string
+  tracking_number?: string
+  carrier?: string
+  priority_level?: number
+  estimated_ship_date?: string
+  fulfillment_progress?: number
+  created_at: string
+  updated_at: string
+  shipped_at?: string
+  delivered_at?: string
+  order_items?: OrderItemRaw[]
+  statusHistory?: OrderStatusHistoryRaw[]
+  notes?: OrderNoteRaw[]
+  fulfillmentTasks?: OrderFulfillmentTaskRaw[]
+  itemCount?: number
+  daysSinceOrder?: number
+  urgencyLevel?: 'low' | 'medium' | 'high'
+  customer?: {
+    name: string
+    email: string
+    phone?: string | null
+    preferredLanguage?: string
+  }
+}
+
+export interface OrderItemRaw {
+  id: number
+  order_id: number
+  product_id: number
+  product_snapshot: ProductWithRelations
+  quantity: number
+  price_eur: number
+  total_eur: number
+}
+
+export interface OrderStatusHistoryRaw {
+  id: number
+  order_id: number
+  from_status: string | null
+  to_status: string
+  changed_by: string | null
+  changed_at: string
+  notes?: string
+  automated: boolean
+}
+
+export interface OrderNoteRaw {
+  id: number
+  order_id: number
+  note_type: 'internal' | 'customer'
+  content: string
+  created_by: string | null
+  created_at: string
+  updated_at: string
+}
+
+export interface OrderFulfillmentTaskRaw {
+  id: number
+  order_id: number
+  task_type: 'picking' | 'packing' | 'shipping' | 'quality_check' | 'custom'
+  task_name: string
+  description?: string
+  required: boolean
+  completed: boolean
+  completed_at?: string
+  completed_by?: string
+  created_at: string
 }
 
 // =============================================

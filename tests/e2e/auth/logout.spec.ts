@@ -36,7 +36,7 @@ test.describe('Logout Flow', () => {
       const authCookies = cookies.filter(cookie => cookie.name.includes('auth'))
 
       // Auth cookies should either be gone or have expired values
-      authCookies.forEach(cookie => {
+      authCookies.forEach((cookie) => {
         if (cookie.expires) {
           expect(cookie.expires).toBeLessThan(Date.now() / 1000)
         }
@@ -174,11 +174,11 @@ test.describe('Logout Flow', () => {
       // Logout request should include CSRF token or use POST method
       const requests: any[] = []
 
-      authenticatedPage.on('request', request => {
+      authenticatedPage.on('request', (request) => {
         if (request.url().includes('logout') || request.url().includes('signout')) {
           requests.push({
             method: request.method(),
-            headers: request.headers()
+            headers: request.headers(),
           })
         }
       })

@@ -94,7 +94,7 @@ export function useDashboardMetrics(stats: Ref<DashboardStats | null>) {
         footerValue: data ? formatCurrency(data.revenue) : '€0.00',
         footerClass: 'text-blue-500',
         progress: revenueShare.value,
-        progressClass: 'bg-green-500'
+        progressClass: 'bg-green-500',
       },
       {
         key: 'ordersToday',
@@ -112,7 +112,7 @@ export function useDashboardMetrics(stats: Ref<DashboardStats | null>) {
         progress: data && data.totalOrders > 0
           ? Math.min(100, Math.round((data.ordersToday / data.totalOrders) * 100 * 30))
           : 0,
-        progressClass: 'bg-green-500'
+        progressClass: 'bg-green-500',
       },
       {
         key: 'orderFulfillment',
@@ -128,7 +128,7 @@ export function useDashboardMetrics(stats: Ref<DashboardStats | null>) {
         footerValue: `${fulfillmentProgress.value}%`,
         footerClass: fulfillmentProgress.value >= 80 ? 'text-green-500' : 'text-yellow-400',
         progress: fulfillmentProgress.value,
-        progressClass: fulfillmentProgress.value >= 80 ? 'bg-green-500' : 'bg-yellow-400'
+        progressClass: fulfillmentProgress.value >= 80 ? 'bg-green-500' : 'bg-yellow-400',
       },
       {
         key: 'inventoryHealth',
@@ -148,8 +148,8 @@ export function useDashboardMetrics(stats: Ref<DashboardStats | null>) {
         footerValue: `${inventoryHealth.value}%`,
         footerClass: inventoryHealth.value >= 80 ? 'text-green-500' : 'text-yellow-400',
         progress: inventoryHealth.value,
-        progressClass: inventoryHealth.value >= 80 ? 'bg-green-500' : 'bg-yellow-400'
-      }
+        progressClass: inventoryHealth.value >= 80 ? 'bg-green-500' : 'bg-yellow-400',
+      },
     ]
   })
 
@@ -158,6 +158,6 @@ export function useDashboardMetrics(stats: Ref<DashboardStats | null>) {
     inventoryHealth,
     ordersRequiringAttention,
     fulfillmentProgress,
-    highlightCards
+    highlightCards,
   }
 }

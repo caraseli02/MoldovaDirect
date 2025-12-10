@@ -156,7 +156,7 @@ function redactObject(obj: any, depth: number = 0): any {
       return {
         name: obj.name,
         message: redactString(obj.message),
-        stack: '[STACK_TRACE_REDACTED]'
+        stack: '[STACK_TRACE_REDACTED]',
       }
     }
 
@@ -170,17 +170,22 @@ function redactObject(obj: any, depth: number = 0): any {
         // Preserve structure but redact value
         if (typeof value === 'string') {
           redacted[key] = '[PII_REDACTED]'
-        } else if (typeof value === 'object' && value !== null) {
+        }
+        else if (typeof value === 'object' && value !== null) {
           // For address objects, show structure but redact values
           redacted[key] = '[PII_OBJECT_REDACTED]'
-        } else {
+        }
+        else {
           redacted[key] = '[REDACTED]'
         }
-      } else if (typeof value === 'string') {
+      }
+      else if (typeof value === 'string') {
         redacted[key] = redactString(value)
-      } else if (typeof value === 'object') {
+      }
+      else if (typeof value === 'object') {
         redacted[key] = redactObject(value, depth + 1)
-      } else {
+      }
+      else {
         redacted[key] = value
       }
     }
@@ -205,7 +210,8 @@ function formatLogData(data: any): any {
     // Deep clone and redact
     const cloned = JSON.parse(JSON.stringify(data))
     return redactObject(cloned)
-  } catch (error) {
+  }
+  catch (error) {
     // If serialization fails, return safe error message
     return { error: 'Failed to serialize log data' }
   }
@@ -247,7 +253,8 @@ function writeLog(level: LogLevel, message: string, data?: any, context?: string
         console.error(prefix, message, entry.data || '')
         break
     }
-  } else {
+  }
+  else {
     // In production, output structured JSON logs
     // These can be ingested by logging systems like CloudWatch, Datadog, etc.
     console.log(JSON.stringify(entry))

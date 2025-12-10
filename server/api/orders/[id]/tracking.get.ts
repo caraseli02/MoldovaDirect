@@ -10,18 +10,18 @@ export default defineEventHandler(async (event) => {
     if (!authHeader) {
       throw createError({
         statusCode: 401,
-        statusMessage: 'Authentication required'
+        statusMessage: 'Authentication required',
       })
     }
 
     const { data: { user }, error: authError } = await supabase.auth.getUser(
-      authHeader.replace('Bearer ', '')
+      authHeader.replace('Bearer ', ''),
     )
 
     if (authError || !user) {
       throw createError({
         statusCode: 401,
-        statusMessage: 'Invalid authentication'
+        statusMessage: 'Invalid authentication',
       })
     }
 
@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
     if (!orderId) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Order ID is required'
+        statusMessage: 'Order ID is required',
       })
     }
 
@@ -46,12 +46,12 @@ export default defineEventHandler(async (event) => {
       if (orderError.code === 'PGRST116') {
         throw createError({
           statusCode: 404,
-          statusMessage: 'Order not found'
+          statusMessage: 'Order not found',
         })
       }
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to fetch order'
+        statusMessage: 'Failed to fetch order',
       })
     }
 
@@ -65,7 +65,7 @@ export default defineEventHandler(async (event) => {
     if (trackingError) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to fetch tracking events'
+        statusMessage: 'Failed to fetch tracking events',
       })
     }
 
@@ -79,16 +79,17 @@ export default defineEventHandler(async (event) => {
       estimatedDelivery: order.estimated_delivery,
       shippedAt: order.shipped_at,
       events: trackingEvents || [],
-      lastUpdate: trackingEvents && trackingEvents.length > 0 
-        ? trackingEvents[0].timestamp 
-        : order.shipped_at || null
+      lastUpdate: trackingEvents && trackingEvents.length > 0
+        ? trackingEvents[0].timestamp
+        : order.shipped_at || null,
     }
 
     return {
       success: true,
-      data: trackingInfo
+      data: trackingInfo,
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     if (error.statusCode) {
       throw error
     }
@@ -96,7 +97,7 @@ export default defineEventHandler(async (event) => {
     console.error('Tracking fetch error:', error)
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 })

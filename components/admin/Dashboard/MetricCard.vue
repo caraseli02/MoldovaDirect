@@ -11,10 +11,16 @@
           <p class="text-2xl font-semibold text-gray-900">
             {{ value }}
           </p>
-          <div v-if="$slots.meta" class="flex items-center gap-1 text-sm">
-            <slot name="meta" />
+          <div
+            v-if="$slots.meta"
+            class="flex items-center gap-1 text-sm"
+          >
+            <slot name="meta"></slot>
           </div>
-          <div v-else-if="trend" :class="['flex items-center gap-1 text-sm font-medium', trendColor]">
+          <div
+            v-else-if="trend"
+            :class="['flex items-center gap-1 text-sm font-medium', trendColor]"
+          >
             <span class="text-base">{{ trendEmoji }}</span>
             <span class="text-xs uppercase tracking-wide">{{ trendLabel }}</span>
           </div>
@@ -24,19 +30,31 @@
         v-if="icon"
         :class="['flex h-12 w-12 items-center justify-center rounded-xl text-white', variantStyles.iconBg]"
       >
-        <commonIcon :name="icon" class="h-5 w-5" />
+        <commonIcon
+          :name="icon"
+          class="h-5 w-5"
+        />
       </div>
     </div>
 
     <div class="mt-6 flex flex-col gap-3">
       <div class="flex items-center gap-2">
-        <span v-if="trend && $slots.meta" :class="['text-base', trendColor]">{{ trendEmoji }}</span>
-        <p v-if="subtext" class="text-sm text-gray-400">
+        <span
+          v-if="trend && $slots.meta"
+          :class="['text-base', trendColor]"
+        >{{ trendEmoji }}</span>
+        <p
+          v-if="subtext"
+          class="text-sm text-gray-400"
+        >
           {{ subtext }}
         </p>
-        <slot v-else name="subtext" />
+        <slot
+          v-else
+          name="subtext"
+        ></slot>
       </div>
-      <slot name="footer" />
+      <slot name="footer"></slot>
     </div>
   </div>
 </template>
@@ -55,7 +73,7 @@ const props = withDefaults(defineProps<MetricCardProps>(), {
   subtext: undefined,
   icon: undefined,
   trend: undefined,
-  variant: 'neutral'
+  variant: 'neutral',
 })
 
 const variantStyles = computed(() => {
@@ -64,7 +82,7 @@ const variantStyles = computed(() => {
     warning: { iconBg: 'bg-yellow-400 text-gray-900' },
     error: { iconBg: 'bg-red-500' },
     neutral: { iconBg: 'bg-gray-400' },
-    info: { iconBg: 'bg-blue-500' }
+    info: { iconBg: 'bg-blue-500' },
   }
 
   return map[props.variant]

@@ -1,63 +1,63 @@
 <template>
-  <div 
+  <div
     class="pull-to-refresh-indicator"
     :style="indicatorStyle"
   >
     <div class="flex flex-col items-center justify-center p-4">
       <!-- Refresh Icon -->
-      <div 
+      <div
         class="refresh-icon mb-2"
         :class="{ 'animate-spin': isRefreshing }"
       >
-        <svg 
+        <svg
           v-if="!isRefreshing"
           class="w-6 h-6 text-gray-600 dark:text-gray-400 transition-transform duration-200"
           :style="{ transform: `rotate(${Math.min(pullDistance * 2, 180)}deg)` }"
-          fill="none" 
-          viewBox="0 0 24 24" 
+          fill="none"
+          viewBox="0 0 24 24"
           stroke="currentColor"
         >
-          <path 
-            stroke-linecap="round" 
-            stroke-linejoin="round" 
-            stroke-width="2" 
-            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" 
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
           />
         </svg>
-        
-        <svg 
+
+        <svg
           v-else
           class="w-6 h-6 text-blue-600 dark:text-blue-400"
-          fill="none" 
-          viewBox="0 0 24 24" 
+          fill="none"
+          viewBox="0 0 24 24"
           stroke="currentColor"
         >
-          <path 
-            stroke-linecap="round" 
-            stroke-linejoin="round" 
-            stroke-width="2" 
-            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" 
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
           />
         </svg>
       </div>
-      
+
       <!-- Status Text -->
-      <p 
+      <p
         class="text-sm font-medium transition-colors duration-200"
         :class="statusTextClass"
       >
         {{ statusText }}
       </p>
-      
+
       <!-- Progress Indicator -->
-      <div 
+      <div
         v-if="!isRefreshing && isPulling"
         class="w-16 h-1 bg-gray-200 dark:bg-gray-700 rounded-full mt-2 overflow-hidden"
       >
-        <div 
+        <div
           class="h-full bg-blue-600 dark:bg-blue-400 rounded-full transition-all duration-100"
           :style="{ width: `${Math.min((pullDistance / 80) * 100, 100)}%` }"
-        />
+        ></div>
       </div>
     </div>
   </div>

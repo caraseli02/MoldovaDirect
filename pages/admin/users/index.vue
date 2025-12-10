@@ -1,12 +1,12 @@
 <!--
   Admin Users Management Page
-  
+
   Requirements addressed:
   - 4.1: Display searchable list of all registered users with basic information
   - 4.2: Implement user search by name, email, and registration date
   - 4.3: Create user detail view with order history and account information
   - 4.4, 4.5, 4.6: User account management actions
-  
+
   Main admin page for user management with listing, search, and actions.
 -->
 
@@ -15,32 +15,52 @@
     <!-- Page Title -->
     <Head>
       <Title>User Management - Admin Dashboard</Title>
-      <Meta name="description" content="Manage users, view profiles, and perform account actions" />
+      <Meta
+        name="description"
+        content="Manage users, view profiles, and perform account actions"
+      />
     </Head>
 
     <div class="space-y-6">
       <!-- Page Header -->
       <div class="flex items-center justify-between">
         <div>
-          <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">User Management</h1>
+          <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
+            User Management
+          </h1>
           <p class="text-gray-600 dark:text-gray-400 mt-1">
             Manage user accounts, view profiles, and perform administrative actions
           </p>
         </div>
-        
+
         <!-- Summary Stats -->
-        <div v-if="summary" class="flex items-center gap-4">
+        <div
+          v-if="summary"
+          class="flex items-center gap-4"
+        >
           <div class="text-center">
-            <div class="text-2xl font-bold text-gray-900 dark:text-gray-100">{{ summary.totalUsers }}</div>
-            <div class="text-sm text-gray-500 dark:text-gray-400">Total Users</div>
+            <div class="text-2xl font-bold text-gray-900 dark:text-gray-100">
+              {{ summary.totalUsers }}
+            </div>
+            <div class="text-sm text-gray-500 dark:text-gray-400">
+              Total Users
+            </div>
           </div>
           <div class="text-center">
-            <div class="text-2xl font-bold text-green-600 dark:text-green-400">{{ summary.activeUsers }}</div>
-            <div class="text-sm text-gray-500 dark:text-gray-400">Active</div>
+            <div class="text-2xl font-bold text-green-600 dark:text-green-400">
+              {{ summary.activeUsers }}
+            </div>
+            <div class="text-sm text-gray-500 dark:text-gray-400">
+              Active
+            </div>
           </div>
           <div class="text-center">
-            <div class="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{{ summary.inactiveUsers }}</div>
-            <div class="text-sm text-gray-500 dark:text-gray-400">Inactive</div>
+            <div class="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
+              {{ summary.inactiveUsers }}
+            </div>
+            <div class="text-sm text-gray-500 dark:text-gray-400">
+              Inactive
+            </div>
           </div>
         </div>
       </div>
@@ -61,15 +81,20 @@
         <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
           <!-- Modal Header -->
           <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-            <h2 class="text-lg font-medium text-gray-900">User Details</h2>
+            <h2 class="text-lg font-medium text-gray-900">
+              User Details
+            </h2>
             <button
-              @click="closeUserDetail"
               class="text-gray-400 hover:text-gray-600"
+              @click="closeUserDetail"
             >
-              <commonIcon name="lucide:x" class="w-6 h-6" />
+              <commonIcon
+                name="lucide:x"
+                class="w-6 h-6"
+              />
             </button>
           </div>
-          
+
           <!-- Modal Content -->
           <div class="overflow-y-auto max-h-[calc(90vh-80px)]">
             <AdminUsersDetailView
@@ -88,7 +113,10 @@
       >
         <div class="bg-white rounded-lg p-6 shadow-xl">
           <div class="flex items-center gap-3">
-            <commonIcon name="lucide:refresh-ccw" class="w-6 h-6 animate-spin text-blue-600" />
+            <commonIcon
+              name="lucide:refresh-ccw"
+              class="w-6 h-6 animate-spin text-blue-600"
+            />
             <span class="text-gray-900">Processing action...</span>
           </div>
         </div>
@@ -104,7 +132,7 @@ import AdminUsersDetailView from '~/components/admin/Users/DetailView.vue'
 // Define page meta for admin layout and authentication
 definePageMeta({
   layout: 'admin',
-  middleware: ['auth', 'admin']
+  middleware: ['auth', 'admin'],
 })
 
 // SEO and meta
@@ -112,8 +140,8 @@ useHead({
   title: 'User Management - Admin Dashboard',
   meta: [
     { name: 'description', content: 'Manage users, view profiles, and perform account actions' },
-    { name: 'robots', content: 'noindex, nofollow' }
-  ]
+    { name: 'robots', content: 'noindex, nofollow' },
+  ],
 })
 
 const toast = useToast()
@@ -161,7 +189,8 @@ const handleUserAction = async (action: string, userId: string, data?: any) => {
         console.warn('User action not yet implemented:', action)
         toast.info('This action will be implemented in a future update')
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Error performing user action:', error)
     toast.error(error instanceof Error ? error.message : 'Failed to perform action')
   }
@@ -183,7 +212,7 @@ const fetchUsersData = async () => {
 
     // Prepare headers with Bearer token
     const headers = {
-      'Authorization': `Bearer ${session.access_token}`
+      Authorization: `Bearer ${session.access_token}`,
     }
 
     console.log('[AdminUsers] Fetching users data with Bearer token')
@@ -198,7 +227,7 @@ const fetchUsersData = async () => {
       }
     }>('/api/admin/users', {
       headers,
-      query: adminUsersStore.queryParams
+      query: adminUsersStore.queryParams,
     })
 
     if (response.success) {
@@ -207,10 +236,12 @@ const fetchUsersData = async () => {
       adminUsersStore.setPagination(response.data.pagination)
       adminUsersStore.setSummary(response.data.summary)
     }
-  } catch (err) {
+  }
+  catch (err) {
     console.error('[AdminUsers] Error fetching users:', err)
     adminUsersStore.setError(err instanceof Error ? err.message : 'Failed to fetch users')
-  } finally {
+  }
+  finally {
     adminUsersStore.setLoading(false)
   }
 }
@@ -231,7 +262,7 @@ const fetchUserDetail = async (userId: string) => {
 
     // Prepare headers with Bearer token
     const headers = {
-      'Authorization': `Bearer ${session.access_token}`
+      Authorization: `Bearer ${session.access_token}`,
     }
 
     console.log('[AdminUsers] Fetching user detail with Bearer token')
@@ -241,16 +272,18 @@ const fetchUserDetail = async (userId: string) => {
       success: boolean
       data: any
     }>(`/api/admin/users/${userId}`, {
-      headers
+      headers,
     })
 
     if (response.success) {
       adminUsersStore.setCurrentUser(response.data)
     }
-  } catch (err) {
+  }
+  catch (err) {
     console.error('[AdminUsers] Error fetching user detail:', err)
     adminUsersStore.setError(err instanceof Error ? err.message : 'Failed to fetch user detail')
-  } finally {
+  }
+  finally {
     adminUsersStore.setUserDetailLoading(false)
   }
 }

@@ -18,12 +18,13 @@ import { serverSupabaseClient } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
 import { invalidateMultipleScopes } from '~/server/utils/adminCache'
 import { invalidatePublicCache } from '~/server/utils/publicCache'
+import { getRequestIP, getHeader } from 'h3'
 import { z } from 'zod'
 
 const createProductSchema = z.object({
   sku: z.string().min(1, 'SKU is required'),
-  name_translations: z.record(z.string().min(1, 'Product name is required')),
-  description_translations: z.record(z.string().optional()).optional(),
+  name_translations: z.record(z.string(), z.string().min(1, 'Product name is required')),
+  description_translations: z.record(z.string(), z.string().optional()).optional(),
   price_eur: z.number().min(0.01, 'Price must be greater than 0'),
   compare_at_price_eur: z.number().min(0).optional().nullable(),
   stock_quantity: z.number().min(0, 'Stock quantity must be 0 or greater'),
@@ -32,15 +33,15 @@ const createProductSchema = z.object({
   images: z.array(z.object({
     url: z.string().url(),
     altText: z.string().optional(),
-    isPrimary: z.boolean().optional()
+    isPrimary: z.boolean().optional(),
   })).optional(),
   attributes: z.object({
     origin: z.string().optional(),
     volume: z.string().optional(),
     alcohol_content: z.string().optional(),
-    featured: z.boolean().optional()
+    featured: z.boolean().optional(),
   }).optional(),
-  is_active: z.boolean().default(true)
+  is_active: z.boolean().default(true),
 })
 
 export default defineEventHandler(async (event) => {
@@ -63,7 +64,7 @@ export default defineEventHandler(async (event) => {
     if (existingProduct) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'A product with this SKU already exists'
+        statusMessage: 'A product with this SKU already exists',
       })
     }
 
@@ -77,7 +78,7 @@ export default defineEventHandler(async (event) => {
     if (categoryError || !category) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Invalid category selected'
+        statusMessage: 'Invalid category selected',
       })
     }
 
@@ -95,11 +96,11 @@ export default defineEventHandler(async (event) => {
       attributes: validatedData.attributes || {},
       is_active: validatedData.is_active,
       created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     }
 
     // Create the product
-    const { data: newProduct, error: createError } = await supabase
+    const { data: newProduct, error: dbError } = await supabase
       .from('products')
       .insert(productData)
       .select(`
@@ -124,10 +125,17 @@ export default defineEventHandler(async (event) => {
       `)
       .single()
 
-    if (createError) {
+    if (dbError) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to create product'
+        statusMessage: 'Failed to create product',
+      })
+    }
+
+    if (!newProduct) {
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Product created but no data returned',
       })
     }
 
@@ -141,8 +149,8 @@ export default defineEventHandler(async (event) => {
         old_values: null,
         new_values: productData,
         performed_by: null, // TODO: Get current admin user ID
-        ip_address: getClientIP(event),
-        user_agent: getHeader(event, 'user-agent')
+        ip_address: getRequestIP(event),
+        user_agent: getHeader(event, 'user-agent'),
       })
 
     // Record initial inventory movement if stock > 0
@@ -155,14 +163,14 @@ export default defineEventHandler(async (event) => {
           quantity: validatedData.stock_quantity,
           reason: 'Initial stock',
           reference_id: `create-${newProduct.id}`,
-          performed_by: null // TODO: Get current admin user ID
+          performed_by: null, // TODO: Get current admin user ID
         })
     }
 
     // Invalidate related caches (both admin and public)
     await Promise.all([
       invalidateMultipleScopes(['products', 'stats']),
-      invalidatePublicCache('products')
+      invalidatePublicCache('products'),
     ])
 
     // Transform response to match expected format
@@ -177,33 +185,35 @@ export default defineEventHandler(async (event) => {
       stockQuantity: newProduct.stock_quantity,
       lowStockThreshold: newProduct.low_stock_threshold,
       images: newProduct.images || [],
-      category: newProduct.categories ? {
-        id: newProduct.categories.id,
-        slug: newProduct.categories.slug,
-        name: newProduct.categories.name_translations
-      } : null,
+      category: newProduct.categories
+        ? {
+            id: newProduct.categories.id,
+            slug: newProduct.categories.slug,
+            name: newProduct.categories.name_translations,
+          }
+        : null,
       attributes: newProduct.attributes || {},
       isActive: newProduct.is_active,
       createdAt: newProduct.created_at,
-      updatedAt: newProduct.updated_at
+      updatedAt: newProduct.updated_at,
     }
 
     return {
       success: true,
       data: transformedProduct,
-      message: 'Product created successfully'
+      message: 'Product created successfully',
     }
-
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Create product error:', error)
-    
+
     if (error.statusCode) {
       throw error
     }
 
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 })

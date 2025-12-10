@@ -7,23 +7,50 @@
           to="/admin/products"
           class="p-2 md:p-2 text-gray-600 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 touch-manipulation"
         >
-          <svg class="h-6 w-6 md:h-5 md:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          <svg
+            class="h-6 w-6 md:h-5 md:w-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"
+            />
           </svg>
         </nuxt-link>
         <div>
-          <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Create New Product</h1>
-          <p class="text-sm md:text-base text-gray-600 dark:text-gray-400">Add a new product to your catalog</p>
+          <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+            Create New Product
+          </h1>
+          <p class="text-sm md:text-base text-gray-600 dark:text-gray-400">
+            Add a new product to your catalog
+          </p>
         </div>
       </div>
     </div>
 
     <!-- Success Message -->
-    <div v-if="successMessage" class="mb-6 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-md p-4">
+    <div
+      v-if="successMessage"
+      class="mb-6 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-md p-4"
+    >
       <div class="flex">
         <div class="flex-shrink-0">
-          <svg class="h-5 w-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <svg
+            class="h-5 w-5 text-green-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
           </svg>
         </div>
         <div class="ml-3">
@@ -33,13 +60,23 @@
         </div>
         <div class="ml-auto pl-3">
           <Button
-            @click="successMessage = ''"
             variant="ghost"
             size="icon"
             class="text-green-400 hover:text-green-600"
+            @click="successMessage = ''"
           >
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            <svg
+              class="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </Button>
         </div>
@@ -47,11 +84,24 @@
     </div>
 
     <!-- Error Message -->
-    <div v-if="errorMessage" class="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md p-4">
+    <div
+      v-if="errorMessage"
+      class="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md p-4"
+    >
       <div class="flex">
         <div class="flex-shrink-0">
-          <svg class="h-5 w-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <svg
+            class="h-5 w-5 text-red-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
           </svg>
         </div>
         <div class="ml-3">
@@ -61,13 +111,23 @@
         </div>
         <div class="ml-auto pl-3">
           <Button
-            @click="errorMessage = ''"
             variant="ghost"
             size="icon"
             class="text-red-400 hover:text-red-600"
+            @click="errorMessage = ''"
           >
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            <svg
+              class="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </Button>
         </div>
@@ -90,7 +150,7 @@ import type { CategoryWithChildren } from '~/types/database'
 
 definePageMeta({
   layout: 'admin',
-  middleware: ['auth', 'admin']
+  middleware: ['auth', 'admin'],
 })
 
 // Lazy load admin product form component to reduce main bundle size
@@ -108,7 +168,7 @@ const categories = computed(() => categoriesData.value?.categories || [])
 const handleSubmit = async (formData: any) => {
   try {
     errorMessage.value = ''
-    
+
     // Transform form data to API format
     const productData = {
       sku: formData.sku,
@@ -124,27 +184,29 @@ const handleSubmit = async (formData: any) => {
         origin: formData.attributes.origin,
         volume: formData.attributes.volume?.toString(),
         alcohol_content: formData.attributes.alcoholContent?.toString(),
-        featured: formData.attributes.featured
+        featured: formData.attributes.featured,
       },
-      is_active: formData.isActive
+      is_active: formData.isActive,
     }
 
-    const response = await $fetch<{ success: boolean; data: any }>('/api/admin/products', {
+    const response = await $fetch<{ success: boolean, data: any }>('/api/admin/products', {
       method: 'POST',
-      body: productData
+      body: productData,
     })
 
     if (response.success) {
       successMessage.value = 'Product created successfully!'
-      
+
       // Redirect to product list after a short delay
       setTimeout(() => {
         navigateTo('/admin/products')
       }, 2000)
-    } else {
+    }
+    else {
       throw new Error('Failed to create product')
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Create product error:', error)
     errorMessage.value = error instanceof Error ? error.message : 'Failed to create product'
   }
@@ -160,8 +222,8 @@ useHead({
   meta: [
     {
       name: 'robots',
-      content: 'noindex, nofollow'
-    }
-  ]
+      content: 'noindex, nofollow',
+    },
+  ],
 })
 </script>

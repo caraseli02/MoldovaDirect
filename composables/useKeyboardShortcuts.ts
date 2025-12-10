@@ -51,7 +51,7 @@ export function useKeyboardShortcuts() {
   const matchesShortcut = (
     event: KeyboardEvent,
     key: string,
-    options: KeyboardShortcutOptions
+    options: KeyboardShortcutOptions,
   ): boolean => {
     // Check if the key matches (case-insensitive)
     if (event.key.toLowerCase() !== key.toLowerCase()) {
@@ -86,9 +86,9 @@ export function useKeyboardShortcuts() {
   const handleKeydown = (event: KeyboardEvent) => {
     // Don't trigger shortcuts when user is typing in an input field
     const target = event.target as HTMLElement
-    const isInput = target.tagName === 'INPUT' ||
-                    target.tagName === 'TEXTAREA' ||
-                    target.isContentEditable
+    const isInput = target.tagName === 'INPUT'
+      || target.tagName === 'TEXTAREA'
+      || target.isContentEditable
 
     // Allow Ctrl/Cmd+K even in input fields for search
     const isSearchShortcut = (event.key.toLowerCase() === 'k' && (event.ctrlKey || event.metaKey))
@@ -122,7 +122,7 @@ export function useKeyboardShortcuts() {
   const registerShortcut = (
     key: string,
     handler: (e: KeyboardEvent) => void,
-    options: KeyboardShortcutOptions = {}
+    options: KeyboardShortcutOptions = {},
   ) => {
     const shortcutKey = getShortcutKey(key, options)
     globalShortcuts.set(shortcutKey, { handler, options })
@@ -200,6 +200,6 @@ export function useKeyboardShortcuts() {
   return {
     registerShortcut,
     unregisterShortcut,
-    getShortcutDisplay
+    getShortcutDisplay,
   }
 }

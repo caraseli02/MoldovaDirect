@@ -32,7 +32,8 @@ async function getAdminAuthHeaders(): Promise<Record<string, string>> {
 
   for (const cookie of cookies) {
     const [key, value] = cookie.trim().split('=')
-    if (key.startsWith('sb-') && key.endsWith('-auth-token')) {
+    // Ensure key and value are defined before checking
+    if (key && value && key.startsWith('sb-') && key.endsWith('-auth-token')) {
       authData = decodeURIComponent(value)
       break
     }
@@ -42,7 +43,7 @@ async function getAdminAuthHeaders(): Promise<Record<string, string>> {
     console.warn('[AdminFetch] No Supabase auth token found in cookies')
     throw createError({
       statusCode: 401,
-      statusMessage: 'No active session. Please log in again.'
+      statusMessage: 'No active session. Please log in again.',
     })
   }
 
@@ -58,19 +59,20 @@ async function getAdminAuthHeaders(): Promise<Record<string, string>> {
       console.warn('[AdminFetch] No access token in auth data')
       throw createError({
         statusCode: 401,
-        statusMessage: 'Invalid session. Please log in again.'
+        statusMessage: 'Invalid session. Please log in again.',
       })
     }
 
     return {
-      'Authorization': `Bearer ${accessToken}`
+      Authorization: `Bearer ${accessToken}`,
     }
-  } catch (error) {
+  }
+  catch (error) {
     // Don't log the error object as it may contain sensitive data
     console.error('[AdminFetch] Error parsing auth data - AUTH_DECODE_FAILED')
     throw createError({
       statusCode: 401,
-      statusMessage: 'Invalid session format. Please log in again.'
+      statusMessage: 'Invalid session format. Please log in again.',
     })
   }
 }
@@ -98,7 +100,7 @@ async function getAdminAuthHeaders(): Promise<Record<string, string>> {
  */
 export async function adminFetchForStores<T = any>(
   url: string,
-  options: FetchOptions = {}
+  options: FetchOptions = {},
 ): Promise<T> {
   console.log('[AdminFetchForStores] Making request to:', url)
 
@@ -109,14 +111,16 @@ export async function adminFetchForStores<T = any>(
   // Merge with any existing headers
   const headers = {
     ...options.headers,
-    ...authHeaders
+    ...authHeaders,
   }
 
   console.log('[AdminFetchForStores] Final headers:', Object.keys(headers))
 
   // Make the authenticated request
-  return await $fetch<T>(url, {
+  // Explicitly type the return to avoid excessive stack depth errors
+  const response = await $fetch(url, {
     ...options,
-    headers
-  })
+    headers,
+  } as any)
+  return response as T
 }

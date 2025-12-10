@@ -11,7 +11,7 @@ import type {
   PaymentMethod,
   ShippingMethod,
   SavedPaymentMethod,
-  Address
+  Address,
 } from '~/types/checkout'
 
 interface PersistPayload {
@@ -27,7 +27,7 @@ function sanitizePaymentMethodForStorage(method: PaymentMethod | null): PaymentM
   if (!method) return null
 
   const sanitized: PaymentMethod = {
-    type: method.type
+    type: method.type,
   }
 
   if (typeof method.saveForFuture !== 'undefined') {
@@ -36,7 +36,7 @@ function sanitizePaymentMethodForStorage(method: PaymentMethod | null): PaymentM
 
   if (method.type === 'cash' && method.cash) {
     sanitized.cash = {
-      confirmed: method.cash.confirmed
+      confirmed: method.cash.confirmed,
     }
   }
 
@@ -69,7 +69,7 @@ const INITIAL_STATE: CheckoutState = {
   privacyAccepted: false,
   marketingConsent: false,
   dataPrefetched: false,
-  preferences: null
+  preferences: null,
 }
 
 export const useCheckoutSessionStore = defineStore('checkout-session', () => {
@@ -88,7 +88,7 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
   const setGuestInfo = (info: GuestInfo): void => {
     state.guestInfo = {
       email: info.email.trim(),
-      emailUpdates: info.emailUpdates
+      emailUpdates: info.emailUpdates,
     }
     setContactEmail(state.guestInfo.email)
   }
@@ -190,7 +190,8 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
   const clearError = (field?: string): void => {
     if (field) {
       delete state.errors[field]
-    } else {
+    }
+    else {
       state.errors = {}
     }
     state.lastError = null
@@ -231,12 +232,13 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
         privacyAccepted: state.privacyAccepted,
         marketingConsent: state.marketingConsent,
         shippingInfo: payload.shippingInfo,
-        paymentMethod: sanitizePaymentMethodForStorage(payload.paymentMethod)
+        paymentMethod: sanitizePaymentMethodForStorage(payload.paymentMethod),
       }
 
       checkoutCookie.value = snapshot
       await nextTick() // Wait for cookie write to complete
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Failed to persist checkout session:', error)
     }
   }
@@ -271,9 +273,10 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
 
       return {
         shippingInfo: snapshot.shippingInfo || null,
-        paymentMethod: sanitizedPaymentMethod
+        paymentMethod: sanitizedPaymentMethod,
       }
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Failed to restore checkout session:', error)
       clearStorage()
       return null
@@ -324,7 +327,7 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
     persist,
     restore,
     clearStorage,
-    reset
+    reset,
   }
 })
 

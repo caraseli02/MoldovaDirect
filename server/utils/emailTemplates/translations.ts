@@ -210,7 +210,7 @@ export function getEmailTranslations(locale: string): EmailTranslations {
  */
 export function replaceTranslationPlaceholders(
   text: string,
-  replacements: Record<string, string>
+  replacements: Record<string, string>,
 ): string {
   let result = text
   for (const [key, value] of Object.entries(replacements)) {

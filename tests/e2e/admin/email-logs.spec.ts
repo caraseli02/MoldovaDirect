@@ -39,7 +39,7 @@ test.describe('Admin Email Logs Page', () => {
 
     // Verify no fatal errors in console
     const consoleErrors: string[] = []
-    page.on('console', msg => {
+    page.on('console', (msg) => {
       if (msg.type() === 'error') {
         consoleErrors.push(msg.text())
       }
@@ -50,9 +50,9 @@ test.describe('Admin Email Logs Page', () => {
 
     // Check for critical errors (filter out warnings)
     const criticalErrors = consoleErrors.filter(err =>
-      !err.includes('deprecated') &&
-      !err.includes('warning') &&
-      !err.includes('warn')
+      !err.includes('deprecated')
+      && !err.includes('warning')
+      && !err.includes('warn'),
     )
 
     if (criticalErrors.length > 0) {
@@ -258,7 +258,8 @@ test.describe('Admin Email Logs Page', () => {
       // Previous button should now be enabled
       const isPrevEnabledAfter = await prevButton.isDisabled()
       expect(isPrevEnabledAfter).toBe(false)
-    } else {
+    }
+    else {
       console.log('Only one page of results available')
     }
   })
@@ -275,7 +276,8 @@ test.describe('Admin Email Logs Page', () => {
       const text = await paginationText.textContent()
       console.log('Pagination info:', text)
       expect(text).toMatch(/Showing \d+ to \d+ of \d+ results/)
-    } else {
+    }
+    else {
       // May not be visible if no results
       console.log('Pagination info not visible (no results)')
     }
@@ -317,7 +319,8 @@ test.describe('Admin Email Logs Page', () => {
       // Modal should be closed
       const isModalVisible = await modal.isVisible().catch(() => false)
       expect(isModalVisible).toBe(false)
-    } else {
+    }
+    else {
       console.log('No email logs in table, skipping modal test')
     }
   })
@@ -389,12 +392,12 @@ test.describe('Admin Email Logs Page', () => {
   })
 
   test('should check for console warnings and errors', async ({ page }) => {
-    const messages: { type: string; text: string }[] = []
+    const messages: { type: string, text: string }[] = []
 
-    page.on('console', msg => {
+    page.on('console', (msg) => {
       messages.push({
         type: msg.type(),
-        text: msg.text()
+        text: msg.text(),
       })
     })
 

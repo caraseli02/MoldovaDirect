@@ -16,15 +16,15 @@ type CacheScope = 'stats' | 'products' | 'orders' | 'users' | 'analytics' | 'aud
  * Cache key patterns for different admin scopes
  */
 const CACHE_KEY_PATTERNS = {
-  stats: ['admin-dashboard-stats', 'admin-stats'],
-  products: ['admin-products-list', 'admin-product-'],
-  orders: ['admin-orders-list', 'admin-order-'],
-  users: ['admin-users-list', 'admin-user-'],
-  analytics: ['admin-analytics-overview', 'admin-analytics-users', 'admin-analytics-products'],
+  'stats': ['admin-dashboard-stats', 'admin-stats'],
+  'products': ['admin-products-list', 'admin-product-'],
+  'orders': ['admin-orders-list', 'admin-order-'],
+  'users': ['admin-users-list', 'admin-user-'],
+  'analytics': ['admin-analytics-overview', 'admin-analytics-users', 'admin-analytics-products'],
   'audit-logs': ['admin-audit-logs'],
   'email-logs': ['admin-email-logs'],
-  inventory: ['admin-inventory-reports', 'admin-inventory-movements'],
-  all: ['admin-']
+  'inventory': ['admin-inventory-reports', 'admin-inventory-movements'],
+  'all': ['admin-'],
 } as const
 
 /**
@@ -77,7 +77,8 @@ export async function invalidateAdminCache(scope: CacheScope): Promise<CacheInva
           await storage.removeItem(key)
           keysInvalidated++
         }
-      } else {
+      }
+      else {
         // Direct key removal
         await storage.removeItem(keyPattern)
         keysInvalidated++
@@ -88,15 +89,16 @@ export async function invalidateAdminCache(scope: CacheScope): Promise<CacheInva
     return {
       success: true,
       scope,
-      keysInvalidated
+      keysInvalidated,
     }
-  } catch (error) {
+  }
+  catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error)
     console.error(`[Cache] Failed to invalidate cache for scope ${scope}:`, error)
     return {
       success: false,
       scope,
-      error: errorMessage
+      error: errorMessage,
     }
   }
 }
@@ -129,7 +131,7 @@ const ALLOWED_QUERY_PARAMS = [
   'page', 'limit', 'search', 'status', 'payment_status',
   'date_from', 'date_to', 'amount_min', 'amount_max',
   'priority', 'sort_by', 'order', 'category', 'brand',
-  'in_stock', 'featured', 'period', 'role', 'email_verified'
+  'in_stock', 'featured', 'period', 'role', 'email_verified',
 ]
 
 /**
@@ -209,64 +211,64 @@ export const ADMIN_CACHE_CONFIG = {
   // Dashboard endpoints - moderate caching (users expect relatively fresh data)
   dashboardStats: {
     maxAge: 60, // 60 seconds
-    name: 'admin-dashboard-stats'
+    name: 'admin-dashboard-stats',
   },
   dashboardActivity: {
     maxAge: 30, // 30 seconds (activity should be fresher)
-    name: 'admin-dashboard-activity'
+    name: 'admin-dashboard-activity',
   },
 
   // Analytics endpoints - longer caching (complex queries, less frequent changes)
   analyticsOverview: {
     maxAge: 300, // 5 minutes
-    name: 'admin-analytics-overview'
+    name: 'admin-analytics-overview',
   },
   analyticsUsers: {
     maxAge: 300, // 5 minutes
-    name: 'admin-analytics-users'
+    name: 'admin-analytics-users',
   },
   analyticsProducts: {
     maxAge: 300, // 5 minutes
-    name: 'admin-analytics-products'
+    name: 'admin-analytics-products',
   },
 
   // Listing endpoints - short caching (data changes frequently)
   productsList: {
     maxAge: 60, // 60 seconds
-    name: 'admin-products-list'
+    name: 'admin-products-list',
   },
   ordersList: {
     maxAge: 30, // 30 seconds (orders change frequently)
-    name: 'admin-orders-list'
+    name: 'admin-orders-list',
   },
   usersList: {
     maxAge: 60, // 60 seconds
-    name: 'admin-users-list'
+    name: 'admin-users-list',
   },
 
   // Audit/logs endpoints - longer caching (historical data, append-only)
   auditLogs: {
     maxAge: 120, // 2 minutes
-    name: 'admin-audit-logs'
+    name: 'admin-audit-logs',
   },
   emailLogs: {
     maxAge: 120, // 2 minutes
-    name: 'admin-email-logs'
+    name: 'admin-email-logs',
   },
 
   // Inventory endpoints - moderate caching
   inventoryReports: {
     maxAge: 120, // 2 minutes
-    name: 'admin-inventory-reports'
+    name: 'admin-inventory-reports',
   },
   inventoryMovements: {
     maxAge: 60, // 60 seconds
-    name: 'admin-inventory-movements'
+    name: 'admin-inventory-movements',
   },
 
   // General stats endpoint
   stats: {
     maxAge: 60, // 60 seconds
-    name: 'admin-stats'
-  }
+    name: 'admin-stats',
+  },
 } as const

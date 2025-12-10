@@ -77,12 +77,14 @@ export default defineConfig({
     },
 
     // Only test mobile on main branch or manual trigger
-    ...(process.env.CI && !process.env.FULL_SUITE ? [] : [
-      {
-        name: 'mobile-chrome',
-        use: { ...devices['Pixel 5'] },
-      },
-    ]),
+    ...(process.env.CI && !process.env.FULL_SUITE
+      ? []
+      : [
+          {
+            name: 'mobile-chrome',
+            use: { ...devices['Pixel 5'] },
+          },
+        ]),
   ],
 
   // Only start local dev server if not testing against Vercel preview

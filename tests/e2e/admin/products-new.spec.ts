@@ -35,17 +35,17 @@ test.describe('Admin Products - New Product Page', () => {
   })
 
   test('should not have rendering errors on page load', async ({ page }) => {
-    const consoleLogs: { type: string; text: string }[] = []
+    const consoleLogs: { type: string, text: string }[] = []
     const pageErrors: string[] = []
 
-    page.on('console', msg => {
+    page.on('console', (msg) => {
       consoleLogs.push({
         type: msg.type(),
         text: msg.text(),
       })
     })
 
-    page.on('pageerror', error => {
+    page.on('pageerror', (error) => {
       pageErrors.push(error.toString())
     })
 
@@ -59,7 +59,7 @@ test.describe('Admin Products - New Product Page', () => {
 
     // Log any hydration issues for awareness
     const hydrationErrors = consoleLogs.filter(
-      log => log.type === 'error' && log.text.includes('Hydration')
+      log => log.type === 'error' && log.text.includes('Hydration'),
     )
 
     if (hydrationErrors.length > 0) {
@@ -94,7 +94,8 @@ test.describe('Admin Products - New Product Page', () => {
     if (buttonExists) {
       await expect(cancelButton).toBeVisible()
       console.log('Cancel button found and visible')
-    } else {
+    }
+    else {
       console.log('Note: Cancel button not found in expected selectors')
     }
   })

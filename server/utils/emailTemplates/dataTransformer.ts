@@ -19,7 +19,7 @@ import { normalizeLocale } from './formatters'
  */
 export function buildOrderEmailData(
   order: DatabaseOrder,
-  customerInfo: UserProfile | GuestCheckoutData
+  customerInfo: UserProfile | GuestCheckoutData,
 ): OrderEmailData {
   const customerName = getCustomerName(customerInfo)
   const customerEmail = 'email' in customerInfo ? customerInfo.email : ''
@@ -27,8 +27,8 @@ export function buildOrderEmailData(
   const orderItems = transformOrderItems(order.order_items || [])
   const shippingAddress = transformAddress(order.shipping_address)
   const billingAddress = order.billing_address ? transformAddress(order.billing_address) : undefined
-  const trackingUrl =
-    order.tracking_number && order.carrier
+  const trackingUrl
+    = order.tracking_number && order.carrier
       ? buildTrackingUrl(order.tracking_number, order.carrier)
       : undefined
 
@@ -59,15 +59,15 @@ export function buildOrderEmailData(
  * Transform database order items to email format
  */
 function transformOrderItems(items: DatabaseOrderItem[]): OrderItemData[] {
-  return items.map(item => {
+  return items.map((item) => {
     const snapshot = item.product_snapshot || {}
-    
+
     // Get product name from snapshot (with locale fallback)
     const name = snapshot.name_translations?.en || snapshot.name || 'Product'
-    
+
     // Get product image
     const image = snapshot.image_url || snapshot.images?.[0]
-    
+
     return {
       productId: item.product_id.toString(),
       name,
@@ -88,7 +88,7 @@ function transformAddress(addressData: any): AddressData {
   if (!addressData) {
     throw new Error('Address data is required')
   }
-  
+
   return {
     firstName: addressData.firstName || addressData.first_name || '',
     lastName: addressData.lastName || addressData.last_name || '',
@@ -108,11 +108,11 @@ function getCustomerName(customerInfo: UserProfile | GuestCheckoutData): string 
   if ('full_name' in customerInfo && customerInfo.full_name) {
     return customerInfo.full_name
   }
-  
+
   if ('firstName' in customerInfo && 'lastName' in customerInfo) {
     return `${customerInfo.firstName} ${customerInfo.lastName}`.trim()
   }
-  
+
   return 'Customer'
 }
 
@@ -123,11 +123,11 @@ function getCustomerLocale(customerInfo: UserProfile | GuestCheckoutData): strin
   if ('preferred_locale' in customerInfo && customerInfo.preferred_locale) {
     return normalizeLocale(customerInfo.preferred_locale)
   }
-  
+
   if ('locale' in customerInfo && customerInfo.locale) {
     return normalizeLocale(customerInfo.locale)
   }
-  
+
   return 'es' // Default to Spanish
 }
 
@@ -143,7 +143,7 @@ function buildTrackingUrl(trackingNumber: string, carrier: string): string {
     fedex: `https://www.fedex.com/fedextrack/?tracknumbers=${trackingNumber}`,
     mrw: `https://www.mrw.es/seguimiento_envios/MRW_resultados_consultas.asp?modo=nacional&envio=${trackingNumber}`,
   }
-  
+
   const normalizedCarrier = carrier.toLowerCase()
   return carrierUrls[normalizedCarrier] || `#tracking-${trackingNumber}`
 }
@@ -153,28 +153,28 @@ function buildTrackingUrl(trackingNumber: string, carrier: string): string {
  */
 export function getLocalizedProductName(
   productSnapshot: any,
-  locale: string
+  locale: string,
 ): string {
   if (!productSnapshot) return 'Product'
-  
+
   const nameTranslations = productSnapshot.name_translations || {}
-  
+
   // Try to get name in requested locale
   if (nameTranslations[locale]) {
     return nameTranslations[locale]
   }
-  
+
   // Fallback to English
   if (nameTranslations.en) {
     return nameTranslations.en
   }
-  
+
   // Fallback to any available translation
   const availableNames = Object.values(nameTranslations)
   if (availableNames.length > 0) {
     return availableNames[0] as string
   }
-  
+
   // Final fallback to name field
   return productSnapshot.name || 'Product'
 }
@@ -184,17 +184,17 @@ export function getLocalizedProductName(
  */
 export function transformOrderItemsWithLocale(
   items: DatabaseOrderItem[],
-  locale: string
+  locale: string,
 ): OrderItemData[] {
-  return items.map(item => {
+  return items.map((item) => {
     const snapshot = item.product_snapshot || {}
-    
+
     // Get localized product name
     const name = getLocalizedProductName(snapshot, locale)
-    
+
     // Get product image
     const image = snapshot.image_url || snapshot.images?.[0]
-    
+
     return {
       productId: item.product_id.toString(),
       name,
@@ -214,13 +214,13 @@ export function transformOrderItemsWithLocale(
 export function transformOrderToEmailDataWithLocale(
   order: DatabaseOrder,
   customerInfo: UserProfile | GuestCheckoutData,
-  locale?: string
+  locale?: string,
 ): OrderEmailData {
   const baseData = buildOrderEmailData(order, customerInfo)
 
   const finalLocale = locale || getCustomerLocale(customerInfo)
   const orderItems = transformOrderItemsWithLocale(order.order_items || [], finalLocale)
-  
+
   return {
     ...baseData,
     orderItems,

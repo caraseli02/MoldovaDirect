@@ -1,9 +1,9 @@
 <!--
   Admin User Activity Tracker Component
-  
+
   Requirements addressed:
   - 4.6: Build user activity tracking display with login history
-  
+
   Features:
   - Display user login history
   - Show account modifications
@@ -17,12 +17,14 @@
     <div class="px-6 py-4 border-b border-gray-200">
       <div class="flex items-center justify-between">
         <div>
-          <h3 class="text-lg font-medium text-gray-900">User Activity</h3>
+          <h3 class="text-lg font-medium text-gray-900">
+            User Activity
+          </h3>
           <p class="text-sm text-gray-500 mt-1">
             Login history and account modifications for {{ userName }}
           </p>
         </div>
-        
+
         <!-- Activity Filter -->
         <div class="flex items-center gap-3">
           <select
@@ -30,92 +32,153 @@
             class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
             @change="filterActivities"
           >
-            <option value="">All Activities</option>
-            <option value="login">Logins</option>
-            <option value="logout">Logouts</option>
-            <option value="password_change">Password Changes</option>
-            <option value="profile_update">Profile Updates</option>
-            <option value="order_create">Orders</option>
-            <option value="cart_add">Cart Actions</option>
+            <option value="">
+              All Activities
+            </option>
+            <option value="login">
+              Logins
+            </option>
+            <option value="logout">
+              Logouts
+            </option>
+            <option value="password_change">
+              Password Changes
+            </option>
+            <option value="profile_update">
+              Profile Updates
+            </option>
+            <option value="order_create">
+              Orders
+            </option>
+            <option value="cart_add">
+              Cart Actions
+            </option>
           </select>
-          
+
           <select
             v-model="timeFilter"
             class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
             @change="filterActivities"
           >
-            <option value="all">All Time</option>
-            <option value="today">Today</option>
-            <option value="week">This Week</option>
-            <option value="month">This Month</option>
-            <option value="quarter">Last 3 Months</option>
+            <option value="all">
+              All Time
+            </option>
+            <option value="today">
+              Today
+            </option>
+            <option value="week">
+              This Week
+            </option>
+            <option value="month">
+              This Month
+            </option>
+            <option value="quarter">
+              Last 3 Months
+            </option>
           </select>
         </div>
       </div>
     </div>
 
     <!-- Loading State -->
-    <div v-if="loading" class="p-8 text-center">
+    <div
+      v-if="loading"
+      class="p-8 text-center"
+    >
       <div class="inline-flex items-center gap-2 text-gray-600">
-        <commonIcon name="lucide:refresh-ccw" class="w-5 h-5 animate-spin" />
+        <commonIcon
+          name="lucide:refresh-ccw"
+          class="w-5 h-5 animate-spin"
+        />
         Loading activity...
       </div>
     </div>
 
     <!-- Error State -->
-    <div v-else-if="error" class="p-8 text-center">
+    <div
+      v-else-if="error"
+      class="p-8 text-center"
+    >
       <div class="text-red-600 mb-4">
-        <commonIcon name="lucide:alert-triangle" class="w-8 h-8 mx-auto mb-2" />
+        <commonIcon
+          name="lucide:alert-triangle"
+          class="w-8 h-8 mx-auto mb-2"
+        />
         {{ error }}
       </div>
       <button
-        @click="fetchActivity"
         class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+        @click="fetchActivity"
       >
         Retry
       </button>
     </div>
 
     <!-- Activity Timeline -->
-    <div v-else class="p-6">
+    <div
+      v-else
+      class="p-6"
+    >
       <!-- Summary Stats -->
-      <div v-if="activitySummary" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <div
+        v-if="activitySummary"
+        class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6"
+      >
         <div class="bg-blue-50 p-4 rounded-lg">
           <div class="text-2xl font-bold text-blue-600">
             {{ activitySummary.totalLogins }}
           </div>
-          <div class="text-sm text-blue-800">Total Logins</div>
+          <div class="text-sm text-blue-800">
+            Total Logins
+          </div>
         </div>
         <div class="bg-green-50 p-4 rounded-lg">
           <div class="text-2xl font-bold text-green-600">
             {{ activitySummary.uniqueIPs }}
           </div>
-          <div class="text-sm text-green-800">Unique IPs</div>
+          <div class="text-sm text-green-800">
+            Unique IPs
+          </div>
         </div>
         <div class="bg-purple-50 p-4 rounded-lg">
           <div class="text-2xl font-bold text-purple-600">
             {{ activitySummary.activeDays }}
           </div>
-          <div class="text-sm text-purple-800">Active Days</div>
+          <div class="text-sm text-purple-800">
+            Active Days
+          </div>
         </div>
         <div class="bg-orange-50 p-4 rounded-lg">
           <div class="text-2xl font-bold text-orange-600">
             {{ activitySummary.lastSeenDays }}
           </div>
-          <div class="text-sm text-orange-800">Days Since Last Seen</div>
+          <div class="text-sm text-orange-800">
+            Days Since Last Seen
+          </div>
         </div>
       </div>
 
       <!-- Activity List -->
-      <div v-if="filteredActivities.length === 0" class="text-center py-8">
-        <commonIcon name="lucide:clock" class="w-12 h-12 text-gray-400 mx-auto mb-4" />
-        <h3 class="text-lg font-medium text-gray-900 mb-2">No activity found</h3>
+      <div
+        v-if="filteredActivities.length === 0"
+        class="text-center py-8"
+      >
+        <commonIcon
+          name="lucide:clock"
+          class="w-12 h-12 text-gray-400 mx-auto mb-4"
+        />
+        <h3 class="text-lg font-medium text-gray-900 mb-2">
+          No activity found
+        </h3>
         <p class="text-gray-500">
           {{ activityFilter ? 'No activities match the selected filter' : 'No activity recorded for this user' }}
         </p>
       </div>
 
-      <div v-else class="space-y-4">
+      <div
+        v-else
+        class="space-y-4"
+      >
         <div
           v-for="activity in paginatedActivities"
           :key="activity.id"
@@ -126,10 +189,13 @@
             <div
               :class="[
                 'w-10 h-10 rounded-full flex items-center justify-center',
-                getActivityIconClass(activity.event_type)
+                getActivityIconClass(activity.event_type),
               ]"
             >
-              <commonIcon :name="getActivityIcon(activity.event_type)" class="w-5 h-5" />
+              <commonIcon
+                :name="getActivityIcon(activity.event_type)"
+                class="w-5 h-5"
+              />
             </div>
           </div>
 
@@ -143,58 +209,80 @@
                 <p class="text-sm text-gray-600 mt-1">
                   {{ formatActivityDescription(activity) }}
                 </p>
-                
+
                 <!-- Technical Details -->
                 <div class="mt-2 space-y-1">
-                  <div v-if="activity.ip_address" class="text-xs text-gray-500">
-                    <commonIcon name="lucide:globe-2" class="w-3 h-3 inline mr-1" />
+                  <div
+                    v-if="activity.ip_address"
+                    class="text-xs text-gray-500"
+                  >
+                    <commonIcon
+                      name="lucide:globe-2"
+                      class="w-3 h-3 inline mr-1"
+                    />
                     IP: {{ activity.ip_address }}
                   </div>
-                  <div v-if="activity.user_agent" class="text-xs text-gray-500 truncate">
-                    <commonIcon name="lucide:monitor" class="w-3 h-3 inline mr-1" />
+                  <div
+                    v-if="activity.user_agent"
+                    class="text-xs text-gray-500 truncate"
+                  >
+                    <commonIcon
+                      name="lucide:monitor"
+                      class="w-3 h-3 inline mr-1"
+                    />
                     {{ formatUserAgent(activity.user_agent) }}
                   </div>
-                  <div v-if="activity.metadata" class="text-xs text-gray-500">
+                  <div
+                    v-if="activity.metadata"
+                    class="text-xs text-gray-500"
+                  >
                     <details class="cursor-pointer">
-                      <summary class="hover:text-gray-700">Additional Details</summary>
+                      <summary class="hover:text-gray-700">
+                        Additional Details
+                      </summary>
                       <pre class="mt-1 text-xs bg-gray-100 p-2 rounded whitespace-pre-wrap">{{ JSON.stringify(activity.metadata, null, 2) }}</pre>
                     </details>
                   </div>
                 </div>
               </div>
-              
+
               <!-- Timestamp -->
               <div class="text-xs text-gray-500 text-right">
                 <div>{{ formatDate(activity.created_at) }}</div>
-                <div class="mt-1">{{ formatTime(activity.created_at) }}</div>
+                <div class="mt-1">
+                  {{ formatTime(activity.created_at) }}
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         <!-- Pagination -->
-        <div v-if="totalPages > 1" class="flex items-center justify-between pt-4 border-t border-gray-200">
+        <div
+          v-if="totalPages > 1"
+          class="flex items-center justify-between pt-4 border-t border-gray-200"
+        >
           <div class="text-sm text-gray-500">
             Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ Math.min(currentPage * pageSize, filteredActivities.length) }} of {{ filteredActivities.length }} activities
           </div>
-          
+
           <div class="flex items-center gap-2">
             <button
-              @click="currentPage--"
               :disabled="currentPage === 1"
               class="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              @click="currentPage--"
             >
               Previous
             </button>
-            
+
             <span class="text-sm text-gray-600">
               Page {{ currentPage }} of {{ totalPages }}
             </span>
-            
+
             <button
-              @click="currentPage++"
               :disabled="currentPage === totalPages"
               class="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              @click="currentPage++"
             >
               Next
             </button>
@@ -289,8 +377,8 @@ const activitySummary = computed((): ActivitySummary | null => {
   const logins = activities.value.filter(a => a.event_type === 'login')
   const uniqueIPs = new Set(activities.value.map(a => a.ip_address).filter(Boolean)).size
   const uniqueDays = new Set(activities.value.map(a => new Date(a.created_at).toDateString())).size
-  
-  const lastActivity = activities.value.length > 0 
+
+  const lastActivity = activities.value.length > 0
     ? new Date(activities.value[0].created_at)
     : new Date()
   const daysSinceLastSeen = Math.floor((new Date().getTime() - lastActivity.getTime()) / (1000 * 60 * 60 * 24))
@@ -299,7 +387,7 @@ const activitySummary = computed((): ActivitySummary | null => {
     totalLogins: logins.length,
     uniqueIPs,
     activeDays: uniqueDays,
-    lastSeenDays: daysSinceLastSeen
+    lastSeenDays: daysSinceLastSeen,
   }
 })
 
@@ -318,13 +406,16 @@ const fetchActivity = async () => {
 
     if (response.success) {
       activities.value = response.data
-    } else {
+    }
+    else {
       throw new Error('Failed to fetch activity')
     }
-  } catch (err) {
+  }
+  catch (err) {
     error.value = err instanceof Error ? err.message : 'Failed to fetch activity'
     console.error('Error fetching user activity:', err)
-  } finally {
+  }
+  finally {
     loading.value = false
   }
 }

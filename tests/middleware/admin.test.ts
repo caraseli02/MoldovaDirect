@@ -32,28 +32,30 @@ describe('Admin Middleware', () => {
           eq: vi.fn(() => ({
             single: vi.fn(async () => ({
               data: mockProfile,
-              error: null
-            }))
-          }))
-        }))
+              error: null,
+            })),
+          })),
+        })),
       })),
       auth: {
         getSession: vi.fn(async () => ({
           data: {
-            session: mockUser ? {
-              user: mockUser,
-              access_token: 'mock-token'
-            } : null
+            session: mockUser
+              ? {
+                  user: mockUser,
+                  access_token: 'mock-token',
+                }
+              : null,
           },
-          error: null
+          error: null,
         })),
         mfa: {
           getAuthenticatorAssuranceLevel: vi.fn(async () => ({
             data: { currentLevel: 'aal2' },
-            error: null
-          }))
-        }
-      }
+            error: null,
+          })),
+        },
+      },
     }
 
     // Mock Nuxt composables
@@ -101,7 +103,7 @@ describe('Admin Middleware', () => {
 
       // Should throw 403 error
       await expect(adminMiddleware(mockTo, mockFrom)).rejects.toThrow(
-        'Admin access required'
+        'Admin access required',
       )
     })
 
@@ -111,7 +113,7 @@ describe('Admin Middleware', () => {
       const { default: adminMiddleware } = await import('../../middleware/admin')
 
       await expect(adminMiddleware(mockTo, mockFrom)).rejects.toThrow(
-        'Admin access required'
+        'Admin access required',
       )
     })
 
@@ -121,7 +123,7 @@ describe('Admin Middleware', () => {
       const { default: adminMiddleware } = await import('../../middleware/admin')
 
       await expect(adminMiddleware(mockTo, mockFrom)).rejects.toThrow(
-        'Admin access required'
+        'Admin access required',
       )
     })
 
@@ -140,16 +142,16 @@ describe('Admin Middleware', () => {
           eq: vi.fn(() => ({
             single: vi.fn(async () => ({
               data: null,
-              error: new Error('Database error')
-            }))
-          }))
-        }))
+              error: new Error('Database error'),
+            })),
+          })),
+        })),
       }))
 
       const { default: adminMiddleware } = await import('../../middleware/admin')
 
       await expect(adminMiddleware(mockTo, mockFrom)).rejects.toThrow(
-        'Authentication required'
+        'Authentication required',
       )
     })
   })
@@ -166,10 +168,10 @@ describe('Admin Middleware', () => {
             expect(column).toBe('id')
             expect(value).toBe(userId)
             return {
-              single: vi.fn(async () => ({ data: mockProfile, error: null }))
+              single: vi.fn(async () => ({ data: mockProfile, error: null })),
             }
-          })
-        }))
+          }),
+        })),
       }))
 
       mockSupabase.from = fromMock
@@ -186,12 +188,12 @@ describe('Admin Middleware', () => {
 
       const selectMock = vi.fn(() => ({
         eq: vi.fn(() => ({
-          single: vi.fn(async () => ({ data: mockProfile, error: null }))
-        }))
+          single: vi.fn(async () => ({ data: mockProfile, error: null })),
+        })),
       }))
 
       mockSupabase.from = vi.fn(() => ({
-        select: selectMock
+        select: selectMock,
       }))
 
       const { default: adminMiddleware } = await import('../../middleware/admin')
@@ -214,7 +216,7 @@ describe('Admin Middleware', () => {
 
       // MUST throw 403 error
       await expect(adminMiddleware(mockTo, mockFrom)).rejects.toThrow(
-        'Admin access required'
+        'Admin access required',
       )
     })
 

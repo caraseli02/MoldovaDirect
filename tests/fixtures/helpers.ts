@@ -1,4 +1,5 @@
-import { Page, expect } from '@playwright/test'
+import type { Page } from '@playwright/test'
+import { expect } from '@playwright/test'
 import { CartTestHelpers } from './cart-helpers'
 
 export class TestHelpers {
@@ -120,9 +121,9 @@ export class TestHelpers {
   }
 
   async takeScreenshot(name: string) {
-    await this.page.screenshot({ 
+    await this.page.screenshot({
       path: `tests/visual/screenshots/${name}.png`,
-      fullPage: true 
+      fullPage: true,
     })
   }
 

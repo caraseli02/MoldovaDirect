@@ -12,7 +12,7 @@ export function formatCurrency(value?: number | null): string {
 
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'EUR'
+    currency: 'EUR',
   }).format(value)
 }
 
@@ -44,7 +44,7 @@ export function formatNumber(value?: number | null): string {
   }
 
   return new Intl.NumberFormat('en-US', {
-    maximumFractionDigits: 0
+    maximumFractionDigits: 0,
   }).format(value)
 }
 

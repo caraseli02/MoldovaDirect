@@ -16,7 +16,9 @@
 <template>
   <div class="space-y-6">
     <div>
-      <h2 class="text-2xl font-bold mb-2">Products Table (with TanStack Table)</h2>
+      <h2 class="text-2xl font-bold mb-2">
+        Products Table (with TanStack Table)
+      </h2>
       <p class="text-gray-600 dark:text-gray-400 mb-4">
         This table uses lazy-loaded TanStack Table - the library is only loaded when needed.
       </p>
@@ -34,9 +36,15 @@
         v-model="statusFilter"
         class="px-4 py-2 border rounded-lg"
       >
-        <option value="">All Status</option>
-        <option value="active">Active</option>
-        <option value="inactive">Inactive</option>
+        <option value="">
+          All Status
+        </option>
+        <option value="active">
+          Active
+        </option>
+        <option value="inactive">
+          Inactive
+        </option>
       </select>
     </div>
 
@@ -64,9 +72,24 @@
                 {{ table.getSelectedRowModel().rows.length }} selected
               </span>
               <div class="flex gap-2">
-                <Button size="sm" variant="outline">Activate</Button>
-                <Button size="sm" variant="outline">Deactivate</Button>
-                <Button size="sm" variant="destructive">Delete</Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                >
+                  Activate
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                >
+                  Deactivate
+                </Button>
+                <Button
+                  size="sm"
+                  variant="destructive"
+                >
+                  Delete
+                </Button>
               </div>
             </div>
           </div>
@@ -89,7 +112,7 @@
                       <component
                         :is="module?.flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )"
                       />
                       <template v-if="header.column.getIsSorted()">
@@ -123,14 +146,17 @@
                       <component
                         :is="module?.flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext()
+                          cell.getContext(),
                         )"
                       />
                     </TableCell>
                   </TableRow>
                 </template>
                 <TableRow v-else>
-                  <TableCell :colspan="columns.length" class="h-24 text-center">
+                  <TableCell
+                    :colspan="columns.length"
+                    class="h-24 text-center"
+                  >
                     <div class="text-gray-500 dark:text-gray-400">
                       No products found
                     </div>
@@ -233,14 +259,14 @@ const columns: ColumnDef<Product>[] = [
   {
     id: 'select',
     header: ({ table }) => h(Checkbox, {
-      checked: table.getIsAllPageRowsSelected(),
+      'checked': table.getIsAllPageRowsSelected(),
       'onUpdate:checked': (value: boolean) => table.toggleAllPageRowsSelected(!!value),
-      ariaLabel: 'Select all',
+      'ariaLabel': 'Select all',
     }),
     cell: ({ row }) => h(Checkbox, {
-      checked: row.getIsSelected(),
+      'checked': row.getIsSelected(),
       'onUpdate:checked': (value: boolean) => row.toggleSelected(!!value),
-      ariaLabel: 'Select row',
+      'ariaLabel': 'Select row',
     }),
     enableSorting: false,
   },
@@ -307,10 +333,10 @@ const columns: ColumnDef<Product>[] = [
 
 // Filtered products based on search and status
 const filteredProducts = computed(() => {
-  return products.value.filter(product => {
-    const matchesSearch = !searchQuery.value ||
-      product.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      product.sku.toLowerCase().includes(searchQuery.value.toLowerCase())
+  return products.value.filter((product) => {
+    const matchesSearch = !searchQuery.value
+      || product.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+      || product.sku.toLowerCase().includes(searchQuery.value.toLowerCase())
 
     const matchesStatus = !statusFilter.value || product.status === statusFilter.value
 

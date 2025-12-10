@@ -2,7 +2,10 @@
   <Card>
     <CardHeader>
       <CardTitle class="flex items-center gap-2">
-        <commonIcon name="lucide:user-check" class="h-5 w-5" />
+        <commonIcon
+          name="lucide:user-check"
+          class="h-5 w-5"
+        />
         User Impersonation
       </CardTitle>
       <CardDescription>Test user experience as another user</CardDescription>
@@ -19,7 +22,12 @@
           :aria-invalid="!!emailError"
           :aria-describedby="emailError ? 'email-error' : undefined"
         />
-        <p v-if="emailError" id="email-error" class="text-xs text-destructive" role="alert">
+        <p
+          v-if="emailError"
+          id="email-error"
+          class="text-xs text-destructive"
+          role="alert"
+        >
           {{ emailError }}
         </p>
       </div>
@@ -41,12 +49,20 @@
           :aria-invalid="!!reasonError"
           :aria-describedby="reasonError ? 'reason-error' : undefined"
         />
-        <p v-if="reasonError" id="reason-error" class="text-xs text-destructive" role="alert">
+        <p
+          v-if="reasonError"
+          id="reason-error"
+          class="text-xs text-destructive"
+          role="alert"
+        >
           {{ reasonError }}
         </p>
       </div>
 
-      <div class="space-y-2" v-if="!isActive">
+      <div
+        v-if="!isActive"
+        class="space-y-2"
+      >
         <Label for="duration">Duration (minutes)</Label>
         <Input
           id="duration"
@@ -57,36 +73,58 @@
         />
       </div>
 
-      <Alert v-if="isActive" variant="warning">
-        <commonIcon name="lucide:user-check" class="h-4 w-4" />
+      <Alert
+        v-if="isActive"
+        variant="destructive"
+      >
+        <commonIcon
+          name="lucide:user-check"
+          class="h-4 w-4"
+        />
         <AlertTitle>Active Impersonation</AlertTitle>
         <AlertDescription>
           Acting as: {{ targetName }}
           <br />
-          Expires: {{ new Date(expiresAt).toLocaleTimeString() }}
+          Expires: {{ expiresAt ? new Date(expiresAt).toLocaleTimeString() : 'N/A' }}
         </AlertDescription>
       </Alert>
 
       <Button
         v-if="!isActive"
-        @click="handleStart"
         :disabled="loading || !isFormValid"
         class="w-full"
+        @click="handleStart"
       >
-        <commonIcon v-if="!loading" name="lucide:user-check" class="h-4 w-4 mr-2" />
-        <commonIcon v-else name="lucide:loader-2" class="h-4 w-4 mr-2 animate-spin" />
+        <commonIcon
+          v-if="!loading"
+          name="lucide:user-check"
+          class="h-4 w-4 mr-2"
+        />
+        <commonIcon
+          v-else
+          name="lucide:loader-2"
+          class="h-4 w-4 mr-2 animate-spin"
+        />
         Start Impersonation
       </Button>
 
       <Button
         v-else
-        @click="handleStop"
         :disabled="loading"
         variant="destructive"
         class="w-full"
+        @click="handleStop"
       >
-        <commonIcon v-if="!loading" name="lucide:user-x" class="h-4 w-4 mr-2" />
-        <commonIcon v-else name="lucide:loader-2" class="h-4 w-4 mr-2 animate-spin" />
+        <commonIcon
+          v-if="!loading"
+          name="lucide:user-x"
+          class="h-4 w-4 mr-2"
+        />
+        <commonIcon
+          v-else
+          name="lucide:loader-2"
+          class="h-4 w-4 mr-2 animate-spin"
+        />
         Stop Impersonation
       </Button>
     </CardContent>
@@ -109,7 +147,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  start: [config: { userEmail: string; reason: string; duration: number }]
+  start: [config: { userEmail: string, reason: string, duration: number }]
   stop: []
 }>()
 
@@ -134,12 +172,12 @@ const reasonError = computed(() => {
 
 const isFormValid = computed(() => {
   return (
-    localUserEmail.value.length > 0 &&
-    !emailError.value &&
-    localReason.value.length >= 10 &&
-    !reasonError.value &&
-    localDuration.value >= 1 &&
-    localDuration.value <= 120
+    localUserEmail.value.length > 0
+    && !emailError.value
+    && localReason.value.length >= 10
+    && !reasonError.value
+    && localDuration.value >= 1
+    && localDuration.value <= 120
   )
 })
 
@@ -149,7 +187,7 @@ const handleStart = () => {
   emit('start', {
     userEmail: localUserEmail.value,
     reason: localReason.value,
-    duration: localDuration.value
+    duration: localDuration.value,
   })
 }
 

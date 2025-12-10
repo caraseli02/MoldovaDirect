@@ -5,14 +5,17 @@
         {{ $t('checkout.review.shippingInfo') }}
       </h3>
       <button
-        @click="$emit('lucide:square-pen')"
         class="text-sm text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 font-medium"
+        @click="$emit('lucide:square-pen')"
       >
         {{ $t('checkout.review.editShipping') }}
       </button>
     </header>
 
-    <div v-if="shippingInfo" class="space-y-3">
+    <div
+      v-if="shippingInfo"
+      class="space-y-3"
+    >
       <section>
         <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-2">
           {{ $t('checkout.review.shippingAddress') }}

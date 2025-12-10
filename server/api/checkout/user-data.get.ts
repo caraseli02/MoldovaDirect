@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
   if (!user) {
     throw createError({
       statusCode: 401,
-      statusMessage: 'Unauthorized - User must be authenticated'
+      statusMessage: 'Unauthorized - User must be authenticated',
     })
   }
 
@@ -44,7 +44,7 @@ export default defineEventHandler(async (event) => {
         .from('user_checkout_preferences')
         .select('*')
         .eq('user_id', user.id)
-        .maybeSingle() // Use maybeSingle() to avoid error if no preferences exist
+        .maybeSingle(), // Use maybeSingle() to avoid error if no preferences exist
     ])
 
     // Handle addresses query errors
@@ -53,7 +53,7 @@ export default defineEventHandler(async (event) => {
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to fetch user addresses',
-        data: addressesResult.error
+        data: addressesResult.error,
       })
     }
 
@@ -66,9 +66,10 @@ export default defineEventHandler(async (event) => {
     // Return the data
     return {
       addresses: addressesResult.data || [],
-      preferences: preferencesResult.data || null
+      preferences: preferencesResult.data || null,
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Failed to fetch user checkout data:', error)
 
     // Re-throw if already a createError
@@ -79,7 +80,7 @@ export default defineEventHandler(async (event) => {
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to fetch user checkout data',
-      data: error
+      data: error,
     })
   }
 })

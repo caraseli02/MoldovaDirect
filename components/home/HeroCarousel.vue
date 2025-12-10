@@ -1,5 +1,9 @@
 <template>
-  <div class="w-full bg-white py-4 dark:bg-gray-900" role="region" aria-label="Product carousel">
+  <div
+    class="w-full bg-white py-4 dark:bg-gray-900"
+    role="region"
+    aria-label="Product carousel"
+  >
     <div class="container mx-auto px-4">
       <Carousel
         ref="carouselRef"
@@ -10,14 +14,17 @@
         :breakpoints="{
           640: { itemsToShow: 1.5, snapAlign: 'start' },
           768: { itemsToShow: 2.2, snapAlign: 'start' },
-          1024: { itemsToShow: 3, snapAlign: 'start' }
+          1024: { itemsToShow: 3, snapAlign: 'start' },
         }"
         snap-align="start"
         class="amazon-carousel"
         aria-live="polite"
         @slide-start="handleSlideChange"
       >
-        <Slide v-for="(card, index) in cards" :key="index">
+        <Slide
+          v-for="(card, index) in cards"
+          :key="index"
+        >
           <div class="px-2">
             <NuxtLink
               :to="localePath(card.link)"
@@ -38,7 +45,10 @@
 
               <!-- Title overlaid on top-left of image -->
               <div class="absolute left-6 top-6 max-w-[70%] sm:left-8 sm:top-8 lg:left-10 lg:top-10">
-                <h2 class="text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl" :class="card.textColor">
+                <h2
+                  class="text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl"
+                  :class="card.textColor"
+                >
                   {{ card.title }}
                 </h2>
               </div>
@@ -48,7 +58,11 @@
       </Carousel>
 
       <!-- Navigation Dots -->
-      <div class="mt-6 flex justify-center gap-2" role="tablist" aria-label="Carousel navigation">
+      <div
+        class="mt-6 flex justify-center gap-2"
+        role="tablist"
+        aria-label="Carousel navigation"
+      >
         <button
           v-for="(card, idx) in cards"
           :key="idx"
@@ -58,7 +72,7 @@
           class="h-2 w-2 rounded-full bg-gray-300 transition-all duration-300 dark:bg-gray-600 hover:bg-gray-500 dark:hover:bg-gray-500"
           :class="{ 'w-8 bg-gray-800 dark:bg-gray-400': currentSlide === idx }"
           @click="goToSlide(idx)"
-        />
+        ></button>
       </div>
     </div>
   </div>
@@ -95,7 +109,7 @@ const cards = computed<CarouselCard[]>(() => [
     textColor: 'text-white',
     image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=600',
     alt: t('home.hero.carousel.slides.gifts.alt'),
-    link: '/products?category=gift'
+    link: '/products?category=gift',
   },
   {
     title: t('home.hero.carousel.slides.wines.title'),
@@ -103,7 +117,7 @@ const cards = computed<CarouselCard[]>(() => [
     textColor: 'text-white',
     image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=600',
     alt: t('home.hero.carousel.slides.wines.alt'),
-    link: '/products?category=wine'
+    link: '/products?category=wine',
   },
   {
     title: t('home.hero.carousel.slides.clothing.title'),
@@ -111,7 +125,7 @@ const cards = computed<CarouselCard[]>(() => [
     textColor: 'text-gray-900',
     image: 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?q=80&w=600',
     alt: t('home.hero.carousel.slides.clothing.alt'),
-    link: '/products?category=clothing'
+    link: '/products?category=clothing',
   },
   {
     title: t('home.hero.carousel.slides.kitchen.title'),
@@ -119,7 +133,7 @@ const cards = computed<CarouselCard[]>(() => [
     textColor: 'text-gray-900',
     image: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=600',
     alt: t('home.hero.carousel.slides.kitchen.alt'),
-    link: '/products?category=kitchen'
+    link: '/products?category=kitchen',
   },
   {
     title: t('home.hero.carousel.slides.foods.title'),
@@ -127,7 +141,7 @@ const cards = computed<CarouselCard[]>(() => [
     textColor: 'text-gray-900',
     image: 'https://images.unsplash.com/photo-1599974579688-8dbdd243c6b0?q=80&w=600',
     alt: t('home.hero.carousel.slides.foods.alt'),
-    link: '/products?category=gourmet'
+    link: '/products?category=gourmet',
   },
   {
     title: t('home.hero.carousel.slides.cheese.title'),
@@ -135,8 +149,8 @@ const cards = computed<CarouselCard[]>(() => [
     textColor: 'text-white',
     image: 'https://images.unsplash.com/photo-1452251889946-8ff5ea7f27a3?q=80&w=600',
     alt: t('home.hero.carousel.slides.cheese.alt'),
-    link: '/products?category=cheese'
-  }
+    link: '/products?category=cheese',
+  },
 ])
 
 // Methods

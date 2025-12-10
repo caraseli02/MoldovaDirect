@@ -197,7 +197,7 @@ describe('AppFooter', () => {
         'footer.newsletter.success',
         expect.objectContaining({
           description: expect.stringContaining(testEmail),
-        })
+        }),
       )
     })
 

@@ -2,7 +2,10 @@
   <Card>
     <CardHeader>
       <CardTitle class="flex items-center gap-2">
-        <commonIcon name="lucide:users" class="h-5 w-5" />
+        <commonIcon
+          name="lucide:users"
+          class="h-5 w-5"
+        />
         User Simulation
       </CardTitle>
       <CardDescription>Create test users with realistic profiles</CardDescription>
@@ -18,41 +21,73 @@
           class="w-full px-3 py-2 border rounded-md"
           :class="validationError ? 'border-red-500' : ''"
         />
-        <p v-if="validationError" class="text-xs text-red-500">{{ validationError }}</p>
+        <p
+          v-if="validationError"
+          class="text-xs text-red-500"
+        >
+          {{ validationError }}
+        </p>
       </div>
 
       <div class="space-y-2">
         <label class="text-sm font-medium">User Role</label>
-        <select v-model="localUserRole" class="w-full px-3 py-2 border rounded-md">
-          <option value="customer">Customer</option>
-          <option value="admin">Admin</option>
-          <option value="manager">Manager</option>
+        <select
+          v-model="localUserRole"
+          class="w-full px-3 py-2 border rounded-md"
+        >
+          <option value="customer">
+            Customer
+          </option>
+          <option value="admin">
+            Admin
+          </option>
+          <option value="manager">
+            Manager
+          </option>
         </select>
       </div>
 
       <div class="flex items-center space-x-2">
         <input
-          type="checkbox"
           id="with-addresses"
           v-model="localWithAddresses"
+          type="checkbox"
           class="rounded"
         />
-        <label for="with-addresses" class="text-sm">Include addresses</label>
+        <label
+          for="with-addresses"
+          class="text-sm"
+        >Include addresses</label>
       </div>
 
       <div class="flex items-center space-x-2">
         <input
-          type="checkbox"
           id="with-orders"
           v-model="localWithOrders"
+          type="checkbox"
           class="rounded"
         />
-        <label for="with-orders" class="text-sm">Create order history</label>
+        <label
+          for="with-orders"
+          class="text-sm"
+        >Create order history</label>
       </div>
 
-      <Button @click="handleCreateUsers" :disabled="loading || !isFormValid" class="w-full">
-        <commonIcon v-if="!loading" name="lucide:user-plus" class="h-4 w-4 mr-2" />
-        <commonIcon v-else name="lucide:loader-2" class="h-4 w-4 mr-2 animate-spin" />
+      <Button
+        :disabled="loading || !isFormValid"
+        class="w-full"
+        @click="handleCreateUsers"
+      >
+        <commonIcon
+          v-if="!loading"
+          name="lucide:user-plus"
+          class="h-4 w-4 mr-2"
+        />
+        <commonIcon
+          v-else
+          name="lucide:loader-2"
+          class="h-4 w-4 mr-2 animate-spin"
+        />
         Create Users
       </Button>
     </CardContent>
@@ -99,7 +134,7 @@ const handleCreateUsers = () => {
     count: localUserCount.value,
     roles: [localUserRole.value],
     withAddresses: localWithAddresses.value,
-    withOrders: localWithOrders.value
+    withOrders: localWithOrders.value,
   })
 }
 </script>

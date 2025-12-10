@@ -8,15 +8,15 @@ vi.mock('~/server/utils/orderEmails', () => ({
   sendOrderConfirmationEmail: vi.fn().mockResolvedValue({
     success: true,
     emailLogId: 1,
-    externalId: 'test-email-id'
-  })
+    externalId: 'test-email-id',
+  }),
 }))
 
 vi.mock('~/server/utils/orderDataTransform', () => ({
   extractCustomerInfoFromOrder: vi.fn().mockResolvedValue({
     name: 'Test User',
     email: 'test@example.com',
-    locale: 'en'
+    locale: 'en',
   }),
   transformOrderToEmailData: vi.fn().mockReturnValue({
     customerName: 'Test User',
@@ -30,12 +30,12 @@ vi.mock('~/server/utils/orderDataTransform', () => ({
     tax: 0,
     total: 110,
     paymentMethod: 'credit_card',
-    locale: 'en'
+    locale: 'en',
   }),
   validateOrderForEmail: vi.fn().mockReturnValue({
     isValid: true,
-    errors: []
-  })
+    errors: [],
+  }),
 }))
 
 // TODO: Fix Supabase import issue before re-enabling these tests

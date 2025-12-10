@@ -23,11 +23,11 @@ function normalizeCartItems(cartItems?: CartItem[] | { value: CartItem[] }): Car
 
 function resolveCartItems(
   cartStoreItems: CartItem[] | { value: CartItem[] },
-  provided?: CartItem[] | { value: CartItem[] }
+  provided?: CartItem[] | { value: CartItem[] },
 ): CartItem[] {
   const prioritized = [
     provided !== undefined ? normalizeCartItems(provided) : [],
-    normalizeCartItems(cartStoreItems)
+    normalizeCartItems(cartStoreItems),
   ]
 
   for (const items of prioritized) {
@@ -49,28 +49,29 @@ export const useCheckoutShippingStore = defineStore('checkout-shipping', () => {
   const calculateOrderData = async (cartItems?: CartItem[] | { value: CartItem[] }): Promise<void> => {
     const items = resolveCartItems(cartStore.items, cartItems)
 
-    if (process.dev) {
+    if (import.meta.dev) {
       console.info('[Checkout][Shipping] calculateOrderData', {
         itemCount: items.length,
-        subtotal: items.reduce((sum, item) => sum + item.product.price * item.quantity, 0)
+        subtotal: items.reduce((sum, item) => sum + item.product.price * item.quantity, 0),
       })
     }
 
     const order = buildOrderData(items, {
       shippingCost: shippingInfo.value?.method.price ?? orderData.value?.shippingCost ?? 0,
-      currency: orderData.value?.currency ?? 'EUR'
+      currency: orderData.value?.currency ?? 'EUR',
     })
 
     if (shippingInfo.value?.method) {
       session.setOrderData(applyShippingMethod(order, shippingInfo.value.method))
-    } else {
+    }
+    else {
       session.setOrderData(order)
     }
 
     if (contactEmail.value && session.orderData.value) {
       session.setOrderData({
         ...session.orderData.value,
-        customerEmail: contactEmail.value
+        customerEmail: contactEmail.value,
       })
     }
   }
@@ -80,7 +81,8 @@ export const useCheckoutShippingStore = defineStore('checkout-shipping', () => {
 
     try {
       session.setOrderData(applyShippingMethod(orderData.value, shippingInfo.value.method))
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Failed to update shipping costs:', error)
     }
   }
@@ -95,10 +97,11 @@ export const useCheckoutShippingStore = defineStore('checkout-shipping', () => {
       const methods = await fetchShippingMethods({
         country: shippingInfo.value.address.country,
         postalCode: shippingInfo.value.address.postalCode,
-        orderTotal: orderData.value.subtotal
+        orderTotal: orderData.value.subtotal,
       })
       session.setAvailableShippingMethods(methods)
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Failed to load shipping methods:', error)
       session.setAvailableShippingMethods([
         {
@@ -106,8 +109,8 @@ export const useCheckoutShippingStore = defineStore('checkout-shipping', () => {
           name: t('checkout.shippingMethod.standard.name'),
           description: t('checkout.shippingMethod.standard.description'),
           price: 5.99,
-          estimatedDays: 4
-        }
+          estimatedDays: 4,
+        },
       ])
     }
   }
@@ -132,14 +135,16 @@ export const useCheckoutShippingStore = defineStore('checkout-shipping', () => {
 
       await session.persist({
         shippingInfo: shippingInfo.value,
-        paymentMethod: paymentMethod.value
+        paymentMethod: paymentMethod.value,
       })
-    } catch (error) {
+    }
+    catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to update shipping information'
       const checkoutError = createValidationError('shipping', message, CheckoutErrorCode.SHIPPING_ADDRESS_INVALID)
       session.handleError(checkoutError)
       throw error
-    } finally {
+    }
+    finally {
       session.setLoading(false)
     }
   }
@@ -152,7 +157,7 @@ export const useCheckoutShippingStore = defineStore('checkout-shipping', () => {
     updateShippingInfo,
     calculateOrderData,
     updateShippingCosts,
-    loadShippingMethods
+    loadShippingMethods,
   }
 })
 

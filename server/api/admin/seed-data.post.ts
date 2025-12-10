@@ -27,7 +27,7 @@ import {
   orderStatuses,
   paymentStatuses,
   streets,
-  cities
+  cities,
 } from '~/server/data/mockData'
 
 export default defineEventHandler(async (event) => {
@@ -39,7 +39,7 @@ export default defineEventHandler(async (event) => {
 
   // Get preset configuration
   const preset = body.preset || 'minimal'
-  let config = getPresetConfig(preset)
+  const config = getPresetConfig(preset)
 
   // Define maximum limits to prevent resource exhaustion
   const MAX_USERS = 1000
@@ -51,7 +51,7 @@ export default defineEventHandler(async (event) => {
     if (typeof body.users !== 'number' || body.users < 0 || body.users > MAX_USERS || !Number.isInteger(body.users)) {
       throw createError({
         statusCode: 400,
-        statusMessage: `Users must be an integer between 0 and ${MAX_USERS}`
+        statusMessage: `Users must be an integer between 0 and ${MAX_USERS}`,
       })
     }
     config.users = body.users
@@ -61,7 +61,7 @@ export default defineEventHandler(async (event) => {
     if (typeof body.products !== 'number' || body.products < 0 || body.products > MAX_PRODUCTS || !Number.isInteger(body.products)) {
       throw createError({
         statusCode: 400,
-        statusMessage: `Products must be an integer between 0 and ${MAX_PRODUCTS}`
+        statusMessage: `Products must be an integer between 0 and ${MAX_PRODUCTS}`,
       })
     }
     config.products = body.products
@@ -71,7 +71,7 @@ export default defineEventHandler(async (event) => {
     if (typeof body.orders !== 'number' || body.orders < 0 || body.orders > MAX_ORDERS || !Number.isInteger(body.orders)) {
       throw createError({
         statusCode: 400,
-        statusMessage: `Orders must be an integer between 0 and ${MAX_ORDERS}`
+        statusMessage: `Orders must be an integer between 0 and ${MAX_ORDERS}`,
       })
     }
     config.orders = body.orders
@@ -81,7 +81,7 @@ export default defineEventHandler(async (event) => {
     if (typeof body.categories !== 'boolean') {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Categories must be a boolean value'
+        statusMessage: 'Categories must be a boolean value',
       })
     }
     config.categories = body.categories
@@ -91,7 +91,7 @@ export default defineEventHandler(async (event) => {
     if (typeof body.clearExisting !== 'boolean') {
       throw createError({
         statusCode: 400,
-        statusMessage: 'ClearExisting must be a boolean value'
+        statusMessage: 'ClearExisting must be a boolean value',
       })
     }
     config.clearExisting = body.clearExisting
@@ -100,8 +100,8 @@ export default defineEventHandler(async (event) => {
   const results = {
     preset,
     startTime: new Date().toISOString(),
-    steps: [] as Array<{ step: string; duration: number; count: number }>,
-    errors: [] as Array<{ step: string; error: string }>
+    steps: [] as Array<{ step: string, duration: number, count: number }>,
+    errors: [] as Array<{ step: string, error: string }>,
   }
 
   try {
@@ -112,7 +112,7 @@ export default defineEventHandler(async (event) => {
       results.steps.push({
         step: 'Clear existing data',
         duration: Date.now() - stepStart,
-        count: 0
+        count: 0,
       })
     }
 
@@ -123,7 +123,7 @@ export default defineEventHandler(async (event) => {
       results.steps.push({
         step: 'Create categories',
         duration: Date.now() - stepStart,
-        count
+        count,
       })
     }
 
@@ -134,7 +134,7 @@ export default defineEventHandler(async (event) => {
       results.steps.push({
         step: 'Create products',
         duration: Date.now() - stepStart,
-        count
+        count,
       })
     }
 
@@ -145,7 +145,7 @@ export default defineEventHandler(async (event) => {
       results.steps.push({
         step: 'Create users',
         duration: Date.now() - stepStart,
-        count: userIds.length
+        count: userIds.length,
       })
 
       // Step 5: Create orders
@@ -155,7 +155,7 @@ export default defineEventHandler(async (event) => {
         results.steps.push({
           step: 'Create orders',
           duration: Date.now() - stepStart,
-          count
+          count,
         })
       }
     }
@@ -164,7 +164,7 @@ export default defineEventHandler(async (event) => {
     await logAdminAction(event, adminId, 'seed-data', {
       preset,
       config,
-      results: results.steps.map(s => ({ step: s.step, count: s.count }))
+      results: results.steps.map(s => ({ step: s.step, count: s.count })),
     })
 
     return {
@@ -172,17 +172,17 @@ export default defineEventHandler(async (event) => {
       message: `Successfully seeded ${preset} dataset`,
       results,
       endTime: new Date().toISOString(),
-      totalDuration: results.steps.reduce((sum, step) => sum + step.duration, 0)
+      totalDuration: results.steps.reduce((sum, step) => sum + step.duration, 0),
     }
-
-  } catch (error: any) {
+  }
+  catch (error: any) {
     console.error('Seed data error:', error)
     await logAdminAction(event, adminId, 'seed-data-failed', { preset, error: error.message })
     return {
       success: false,
       message: 'Failed to seed data',
       error: error.message,
-      results
+      results,
     }
   }
 })
@@ -190,50 +190,50 @@ export default defineEventHandler(async (event) => {
 // Preset configurations
 function getPresetConfig(preset: string) {
   const configs = {
-    empty: {
+    'empty': {
       users: 0,
       products: 0,
       orders: 0,
       categories: false,
       clearExisting: true,
       lowStock: false,
-      orderPattern: 'normal'
+      orderPattern: 'normal',
     },
-    minimal: {
+    'minimal': {
       users: 5,
       products: 10,
       orders: 5,
       categories: true,
       clearExisting: false,
       lowStock: false,
-      orderPattern: 'normal'
+      orderPattern: 'normal',
     },
-    development: {
+    'development': {
       users: 20,
       products: 50,
       orders: 100,
       categories: true,
       clearExisting: false,
       lowStock: false,
-      orderPattern: 'normal'
+      orderPattern: 'normal',
     },
-    demo: {
+    'demo': {
       users: 50,
       products: 100,
       orders: 300,
       categories: true,
       clearExisting: false,
       lowStock: false,
-      orderPattern: 'realistic'
+      orderPattern: 'realistic',
     },
-    stress: {
+    'stress': {
       users: 200,
       products: 500,
       orders: 2000,
       categories: true,
       clearExisting: false,
       lowStock: false,
-      orderPattern: 'random'
+      orderPattern: 'random',
     },
     'low-stock': {
       users: 15,
@@ -242,7 +242,7 @@ function getPresetConfig(preset: string) {
       categories: true,
       clearExisting: false,
       lowStock: true,
-      orderPattern: 'normal'
+      orderPattern: 'normal',
     },
     'holiday-rush': {
       users: 100,
@@ -251,7 +251,7 @@ function getPresetConfig(preset: string) {
       categories: true,
       clearExisting: false,
       lowStock: false,
-      orderPattern: 'rush'
+      orderPattern: 'rush',
     },
     'new-store': {
       users: 10,
@@ -260,15 +260,15 @@ function getPresetConfig(preset: string) {
       categories: true,
       clearExisting: false,
       lowStock: false,
-      orderPattern: 'sparse'
-    }
+      orderPattern: 'sparse',
+    },
   }
 
   return configs[preset as keyof typeof configs] || configs.minimal
 }
 
 // Clear test data (keeps structure)
-async function clearTestData(supabase: any) {
+async function clearTestData(supabase: any): Promise<void> {
   // Delete in order to respect foreign key constraints
   await supabase.from('order_items').delete().neq('id', 0)
   await supabase.from('orders').delete().neq('id', 0)
@@ -308,6 +308,8 @@ async function seedProducts(supabase: any, count: number, lowStock: boolean): Pr
 
   for (let i = 0; i < count; i++) {
     const template = productTemplates[i % productTemplates.length]
+    if (!template) continue // Skip if template is undefined
+
     const price = Math.random() * (template.priceMax - template.priceMin) + template.priceMin
     const stockQty = lowStock
       ? Math.floor(Math.random() * 5) // 0-4 for low stock
@@ -320,14 +322,14 @@ async function seedProducts(supabase: any, count: number, lowStock: boolean): Pr
         en: `${template.name} #${i + 1}`,
         es: `${template.name} #${i + 1}`,
         ro: `${template.name} #${i + 1}`,
-        ru: `${template.name} #${i + 1}`
+        ru: `${template.name} #${i + 1}`,
       },
       description_translations: template.descriptions,
       price_eur: Math.round(price * 100) / 100,
       stock_quantity: stockQty,
       low_stock_threshold: 5,
       reorder_point: 10,
-      is_active: true
+      is_active: true,
     })
   }
 
@@ -359,8 +361,8 @@ async function seedUsers(supabase: any, count: number): Promise<string[]> {
         email_confirm: true,
         user_metadata: {
           name: mockUser.name,
-          preferred_language: mockUser.preferredLanguage
-        }
+          preferred_language: mockUser.preferredLanguage,
+        },
       })
 
       if (data?.user) {
@@ -372,10 +374,11 @@ async function seedUsers(supabase: any, count: number): Promise<string[]> {
           name: mockUser.name,
           phone: mockUser.phone,
           role: 'customer',
-          preferred_language: mockUser.preferredLanguage
+          preferred_language: mockUser.preferredLanguage,
         })
       }
-    } catch (error) {
+    }
+    catch (error) {
       console.error(`Failed to create user ${mockUser.email}:`, error)
     }
   }
@@ -388,9 +391,16 @@ async function seedOrders(
   supabase: any,
   count: number,
   userIds: string[],
-  pattern: string
+  pattern: string,
 ): Promise<number> {
   const { data: products } = await supabase.from('products').select('id, sku, name_translations, price_eur').limit(50)
+
+  type Product = {
+    id: string
+    sku: string
+    name_translations: Record<string, string>
+    price_eur: number
+  }
 
   if (!products || products.length === 0) {
     console.warn('No products available for order creation')
@@ -403,7 +413,11 @@ async function seedOrders(
 
   for (let i = 0; i < count; i++) {
     const userId = userIds[Math.floor(Math.random() * userIds.length)]
-    const product = products[Math.floor(Math.random() * products.length)]
+    if (!userId) continue
+
+    const product = products[Math.floor(Math.random() * products.length)] as Product | undefined
+    if (!product) continue
+
     const quantity = Math.floor(Math.random() * 3) + 1
     const subtotal = product.price_eur * quantity
     const shippingCost = 5.99
@@ -414,8 +428,8 @@ async function seedOrders(
     const daysAgo = pattern === 'rush'
       ? Math.floor(Math.random() * 7) // Last week for rush
       : pattern === 'sparse'
-      ? Math.floor(Math.random() * 180) // Last 6 months for sparse
-      : Math.floor(Math.random() * 30) // Last month for normal
+        ? Math.floor(Math.random() * 180) // Last 6 months for sparse
+        : Math.floor(Math.random() * 30) // Last month for normal
 
     const createdAt = new Date()
     createdAt.setDate(createdAt.getDate() - daysAgo)
@@ -434,15 +448,15 @@ async function seedOrders(
         street: 'Test Street 123',
         city: 'Chisinau',
         postalCode: 'MD-2001',
-        country: 'Moldova'
+        country: 'Moldova',
       },
       billing_address: {
         street: 'Test Street 123',
         city: 'Chisinau',
         postalCode: 'MD-2001',
-        country: 'Moldova'
+        country: 'Moldova',
       },
-      created_at: createdAt.toISOString()
+      created_at: createdAt.toISOString(),
     }
 
     const { data: insertedOrder, error } = await supabase
@@ -451,18 +465,18 @@ async function seedOrders(
       .select()
       .single()
 
-    if (insertedOrder) {
+    if (insertedOrder && product) {
       await supabase.from('order_items').insert({
         order_id: insertedOrder.id,
         product_id: product.id,
         product_snapshot: {
-          name: product.name_translations.en,
+          name: product.name_translations?.en || 'Unknown',
           sku: product.sku,
-          nameTranslations: product.name_translations
+          nameTranslations: product.name_translations,
         },
         quantity,
         price_eur: product.price_eur,
-        total_eur: product.price_eur * quantity
+        total_eur: product.price_eur * quantity,
       })
 
       createdCount++

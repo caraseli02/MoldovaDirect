@@ -6,7 +6,7 @@
         'bg-blue-50 text-blue-800': isCurrentCategory,
         'pl-6': level === 1,
         'pl-9': level === 2,
-        'pl-12': level >= 3
+        'pl-12': level >= 3,
       }"
     >
       <button
@@ -15,22 +15,32 @@
       >
         <button
           v-if="category.children && category.children.length > 0"
-          @click.stop="toggleExpanded"
           class="mr-2 p-1 text-gray-400 hover:text-gray-600 transition-colors"
+          @click.stop="toggleExpanded"
         >
-          <commonIcon 
-            :name="isExpanded ? 'lucide:chevron-down' : 'lucide:chevron-right'" 
-            class="w-4 h-4" 
+          <commonIcon
+            :name="isExpanded ? 'lucide:chevron-down' : 'lucide:chevron-right'"
+            class="w-4 h-4"
           />
         </button>
-        <div v-else class="w-6" />
-        
-        <commonIcon v-if="category.icon" :name="category.icon" class="w-5 h-5 mr-3" />
+        <div
+          v-else
+          class="w-6"
+        ></div>
+
+        <commonIcon
+          v-if="category.icon"
+          :name="category.icon"
+          class="w-5 h-5 mr-3"
+        />
         <span class="font-medium">{{ category.name }}</span>
       </button>
-      
+
       <div class="flex items-center space-x-2">
-        <span v-if="showProductCount" class="text-sm text-gray-500">
+        <span
+          v-if="showProductCount"
+          class="text-sm text-gray-500"
+        >
           {{ category.productCount }}
         </span>
         <commonIcon
@@ -40,7 +50,7 @@
         />
       </div>
     </div>
-    
+
     <!-- Children -->
     <div
       v-if="category.children && category.children.length > 0 && isExpanded"
@@ -74,7 +84,7 @@ interface Emits {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  showProductCount: true
+  showProductCount: true,
 })
 
 const emit = defineEmits<Emits>()
@@ -84,8 +94,8 @@ const isExpanded = ref(false)
 
 // Computed properties
 const isCurrentCategory = computed(() => {
-  return props.category.id.toString() === props.currentCategory || 
-         props.category.slug === props.currentCategory
+  return props.category.id.toString() === props.currentCategory
+    || props.category.slug === props.currentCategory
 })
 
 // Methods
@@ -101,13 +111,13 @@ const handleCategoryClick = () => {
 watch(() => props.currentCategory, (newCategory) => {
   if (newCategory && props.category.children) {
     const hasSelectedChild = (categories: CategoryWithChildren[]): boolean => {
-      return categories.some(child => 
-        child.id.toString() === newCategory || 
-        child.slug === newCategory ||
-        (child.children && hasSelectedChild(child.children))
+      return categories.some(child =>
+        child.id.toString() === newCategory
+        || child.slug === newCategory
+        || (child.children && hasSelectedChild(child.children)),
       )
     }
-    
+
     if (hasSelectedChild(props.category.children)) {
       isExpanded.value = true
     }

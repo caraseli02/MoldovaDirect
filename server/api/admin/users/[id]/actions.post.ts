@@ -1,16 +1,17 @@
 /**
  * Admin Users API - User Account Actions
- * 
+ *
  * Requirements addressed:
  * - 4.4: Implement user account suspension and ban functionality
  * - 4.5: Create user permission management interface
  * - 5.5: Log all administrative activities for audit purposes
- * 
+ *
  * Provides user account management actions for admin interface.
  */
 
 import { serverSupabaseServiceRole } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
+import { getRequestIP, getHeader } from 'h3'
 
 interface UserActionRequest {
   action: 'suspend' | 'unsuspend' | 'ban' | 'unban' | 'verify_email' | 'reset_password' | 'update_role'
@@ -30,14 +31,14 @@ export default defineEventHandler(async (event) => {
     if (!userId) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'User ID is required'
+        statusMessage: 'User ID is required',
       })
     }
 
     if (!body.action) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Action is required'
+        statusMessage: 'Action is required',
       })
     }
 
@@ -50,10 +51,12 @@ export default defineEventHandler(async (event) => {
       const { data, error: userError } = await supabase.auth.admin.getUserById(userId)
       if (userError) {
         console.warn('Failed to fetch user for action:', userError.message)
-      } else {
+      }
+      else {
         currentUser = data
       }
-    } catch (error) {
+    }
+    catch (error) {
       console.warn('Auth admin API not available:', error)
     }
 
@@ -61,11 +64,11 @@ export default defineEventHandler(async (event) => {
     if (!currentUser && userId.startsWith('user-')) {
       return simulateUserAction(body.action, userId)
     }
-    
+
     if (!currentUser?.user) {
       throw createError({
         statusCode: 404,
-        statusMessage: 'User not found'
+        statusMessage: 'User not found',
       })
     }
 
@@ -76,7 +79,7 @@ export default defineEventHandler(async (event) => {
     switch (body.action) {
       case 'suspend':
         // Update user metadata to mark as suspended
-        const suspendUntil = body.duration 
+        const suspendUntil = body.duration
           ? new Date(Date.now() + body.duration * 24 * 60 * 60 * 1000).toISOString()
           : null
 
@@ -87,14 +90,14 @@ export default defineEventHandler(async (event) => {
             suspend_reason: body.reason || 'No reason provided',
             suspended_at: new Date().toISOString(),
             suspend_until: suspendUntil,
-            suspended_by: adminId
-          }
+            suspended_by: adminId,
+          },
         })
 
         if (suspendError) {
           throw createError({
             statusCode: 500,
-            statusMessage: `Failed to suspend user: ${suspendError.message}`
+            statusMessage: `Failed to suspend user: ${suspendError.message}`,
           })
         }
 
@@ -102,7 +105,7 @@ export default defineEventHandler(async (event) => {
         auditDetails = {
           reason: body.reason,
           duration: body.duration,
-          suspend_until: suspendUntil
+          suspend_until: suspendUntil,
         }
         result = { suspended: true, suspend_until: suspendUntil }
         break
@@ -116,14 +119,14 @@ export default defineEventHandler(async (event) => {
             suspended_at: null,
             suspend_until: null,
             unsuspended_at: new Date().toISOString(),
-            unsuspended_by: adminId
-          }
+            unsuspended_by: adminId,
+          },
         })
 
         if (unsuspendError) {
           throw createError({
             statusCode: 500,
-            statusMessage: `Failed to unsuspend user: ${unsuspendError.message}`
+            statusMessage: `Failed to unsuspend user: ${unsuspendError.message}`,
           })
         }
 
@@ -133,22 +136,22 @@ export default defineEventHandler(async (event) => {
         break
 
       case 'ban':
-        // For banning, we'll disable the user account
+        // For banning, we'll disable the user account via metadata
         const { error: banError } = await supabase.auth.admin.updateUserById(userId, {
-          banned_until: '2099-12-31T23:59:59Z', // Effectively permanent
           user_metadata: {
             ...currentUser.user.user_metadata,
             banned: true,
+            banned_until: '2099-12-31T23:59:59Z', // Effectively permanent
             ban_reason: body.reason || 'No reason provided',
             banned_at: new Date().toISOString(),
-            banned_by: adminId
-          }
+            banned_by: adminId,
+          },
         })
 
         if (banError) {
           throw createError({
             statusCode: 500,
-            statusMessage: `Failed to ban user: ${banError.message}`
+            statusMessage: `Failed to ban user: ${banError.message}`,
           })
         }
 
@@ -159,21 +162,21 @@ export default defineEventHandler(async (event) => {
 
       case 'unban':
         const { error: unbanError } = await supabase.auth.admin.updateUserById(userId, {
-          banned_until: null,
           user_metadata: {
             ...currentUser.user.user_metadata,
             banned: false,
+            banned_until: null,
             ban_reason: null,
             banned_at: null,
             unbanned_at: new Date().toISOString(),
-            unbanned_by: adminId
-          }
+            unbanned_by: adminId,
+          },
         })
 
         if (unbanError) {
           throw createError({
             statusCode: 500,
-            statusMessage: `Failed to unban user: ${unbanError.message}`
+            statusMessage: `Failed to unban user: ${unbanError.message}`,
           })
         }
 
@@ -184,13 +187,13 @@ export default defineEventHandler(async (event) => {
 
       case 'verify_email':
         const { error: verifyError } = await supabase.auth.admin.updateUserById(userId, {
-          email_confirm: true
+          email_confirm: true,
         })
 
         if (verifyError) {
           throw createError({
             statusCode: 500,
-            statusMessage: `Failed to verify email: ${verifyError.message}`
+            statusMessage: `Failed to verify email: ${verifyError.message}`,
           })
         }
 
@@ -203,21 +206,21 @@ export default defineEventHandler(async (event) => {
         // Generate password reset link
         const { data: resetData, error: resetError } = await supabase.auth.admin.generateLink({
           type: 'recovery',
-          email: currentUser.user.email!
+          email: currentUser.user.email!,
         })
 
         if (resetError) {
           throw createError({
             statusCode: 500,
-            statusMessage: `Failed to generate reset link: ${resetError.message}`
+            statusMessage: `Failed to generate reset link: ${resetError.message}`,
           })
         }
 
         auditAction = 'password_reset_initiated_by_admin'
         auditDetails = { reason: body.reason }
-        result = { 
+        result = {
           reset_link_generated: true,
-          reset_link: resetData.properties?.action_link 
+          reset_link: resetData.properties?.action_link,
         }
         break
 
@@ -228,22 +231,22 @@ export default defineEventHandler(async (event) => {
             ...currentUser.user.user_metadata,
             role: body.role,
             role_updated_at: new Date().toISOString(),
-            role_updated_by: adminId
-          }
+            role_updated_by: adminId,
+          },
         })
 
         if (roleError) {
           throw createError({
             statusCode: 500,
-            statusMessage: `Failed to update role: ${roleError.message}`
+            statusMessage: `Failed to update role: ${roleError.message}`,
           })
         }
 
         auditAction = 'user_role_updated'
-        auditDetails = { 
+        auditDetails = {
           old_role: currentUser.user.user_metadata?.role || 'user',
           new_role: body.role,
-          reason: body.reason 
+          reason: body.reason,
         }
         result = { role: body.role }
         break
@@ -251,7 +254,7 @@ export default defineEventHandler(async (event) => {
       default:
         throw createError({
           statusCode: 400,
-          statusMessage: `Invalid action: ${body.action}`
+          statusMessage: `Invalid action: ${body.action}`,
         })
     }
 
@@ -266,10 +269,11 @@ export default defineEventHandler(async (event) => {
           resource_id: userId,
           old_values: {},
           new_values: auditDetails,
-          ip_address: getClientIP(event),
-          user_agent: getHeader(event, 'user-agent')
+          ip_address: getRequestIP(event),
+          user_agent: getHeader(event, 'user-agent'),
         })
-    } catch (auditError) {
+    }
+    catch (auditError) {
       console.warn('Failed to log audit trail:', auditError)
       // Don't fail the main operation if audit logging fails
     }
@@ -285,7 +289,8 @@ export default defineEventHandler(async (event) => {
       // Clear analytics cache as user actions affect analytics
       const analyticsKeys = await storage.getKeys('nitro:handlers:admin-analytics-users:')
       await Promise.all(analyticsKeys.map(key => storage.removeItem(key)))
-    } catch (cacheError) {
+    }
+    catch (cacheError) {
       console.warn('Failed to invalidate user caches:', cacheError)
       // Don't fail the main operation if cache invalidation fails
     }
@@ -296,17 +301,17 @@ export default defineEventHandler(async (event) => {
         action: body.action,
         userId,
         result,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       },
-      message: getActionSuccessMessage(body.action)
+      message: getActionSuccessMessage(body.action),
     }
-
-  } catch (error) {
+  }
+  catch (error: unknown) {
     console.error('Error in admin user actions API:', error)
 
     // Always throw errors with proper HTTP status codes
     // Don't return success: false - use HTTP semantics instead
-    if (error.statusCode) {
+    if (error && typeof error === 'object' && 'statusCode' in error) {
       throw error
     }
 
@@ -314,8 +319,8 @@ export default defineEventHandler(async (event) => {
       statusCode: 500,
       statusMessage: error instanceof Error ? error.message : 'Failed to perform user action',
       data: {
-        errorId: `action_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-      }
+        errorId: `action_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      },
     })
   }
 })
@@ -349,9 +354,9 @@ function getActionSuccessMessage(action: string): string {
  */
 function simulateUserAction(action: string, userId: string) {
   console.log(`Simulating action "${action}" for user ${userId}`)
-  
+
   const result: any = {}
-  
+
   switch (action) {
     case 'suspend':
       result.suspended = true
@@ -383,8 +388,8 @@ function simulateUserAction(action: string, userId: string) {
       action,
       userId,
       result,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     },
-    message: getActionSuccessMessage(action)
+    message: getActionSuccessMessage(action),
   }
 }

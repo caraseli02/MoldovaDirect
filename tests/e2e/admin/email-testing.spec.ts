@@ -127,7 +127,7 @@ test.describe('Admin Email Testing Tool', () => {
     await emailInput.fill('test@example.com')
 
     // Intercept the API call to simulate loading
-    await authenticatedPage.route('/api/tools/send-test-email', route => {
+    await authenticatedPage.route('/api/tools/send-test-email', (route) => {
       // Delay the response
       setTimeout(() => {
         route.continue()
@@ -182,7 +182,7 @@ test.describe('Admin Email Testing Tool', () => {
     await emailInput.fill('qa@example.com')
 
     // Mock successful API response
-    await authenticatedPage.route('/api/tools/send-test-email', async route => {
+    await authenticatedPage.route('/api/tools/send-test-email', async (route) => {
       await route.abort('blockedbyclient')
     })
 
@@ -196,7 +196,7 @@ test.describe('Admin Email Testing Tool', () => {
 
     const hasSuccessOrError = await Promise.race([
       successMessage.isVisible().catch(() => false),
-      errorMessage.isVisible().catch(() => false)
+      errorMessage.isVisible().catch(() => false),
     ])
 
     expect(hasSuccessOrError).toBeDefined()
@@ -223,14 +223,14 @@ test.describe('Admin Email Testing Tool', () => {
     const pageErrors: string[] = []
 
     // Listen for console messages
-    authenticatedPage.on('console', msg => {
+    authenticatedPage.on('console', (msg) => {
       if (msg.type() === 'error') {
         consoleErrors.push(msg.text())
       }
     })
 
     // Listen for page errors
-    authenticatedPage.on('pageerror', err => {
+    authenticatedPage.on('pageerror', (err) => {
       pageErrors.push(err.toString())
     })
 
@@ -251,10 +251,10 @@ test.describe('Admin Email Testing Tool', () => {
 
     // Filter out non-critical errors
     const criticalErrors = consoleErrors.filter(e =>
-      !e.includes('404') &&
-      !e.includes('Failed to fetch') &&
-      !e.toLowerCase().includes('network') &&
-      !e.includes('blockedbyclient')
+      !e.includes('404')
+      && !e.includes('Failed to fetch')
+      && !e.toLowerCase().includes('network')
+      && !e.includes('blockedbyclient'),
     )
 
     expect(criticalErrors.length).toBe(0)
@@ -356,7 +356,7 @@ test.describe('Admin Email Testing Tool', () => {
     // Take screenshot of page with all form fields
     await authenticatedPage.screenshot({
       path: 'tests/screenshots/email-testing-page.png',
-      fullPage: true
+      fullPage: true,
     })
   })
 
@@ -372,7 +372,7 @@ test.describe('Admin Email Testing Tool', () => {
     // Take screenshot with issue description field visible
     await authenticatedPage.screenshot({
       path: 'tests/screenshots/email-testing-order-issue.png',
-      fullPage: true
+      fullPage: true,
     })
   })
 
@@ -387,7 +387,7 @@ test.describe('Admin Email Testing Tool', () => {
     await emailInput.fill('test@example.com')
 
     // Mock API timeout
-    await authenticatedPage.route('/api/tools/send-test-email', route => {
+    await authenticatedPage.route('/api/tools/send-test-email', (route) => {
       route.abort('timedout')
     })
 

@@ -21,31 +21,33 @@ export function useShippingAddress() {
   // Development defaults for easier testing
   const isDevelopment = process.env.NODE_ENV === 'development'
 
-  const initialAddress: Address = isDevelopment ? {
-    type: 'shipping',
-    firstName: 'John',
-    lastName: 'Doe',
-    company: 'Test Company',
-    street: '123 Main Street',
-    city: 'Madrid',
-    postalCode: '28001',
-    province: 'Madrid',
-    country: 'ES',
-    phone: '+34 600 123 456',
-    isDefault: false
-  } : {
-    type: 'shipping',
-    firstName: '',
-    lastName: '',
-    company: '',
-    street: '',
-    city: '',
-    postalCode: '',
-    province: '',
-    country: '',
-    phone: '',
-    isDefault: false
-  }
+  const initialAddress: Address = isDevelopment
+    ? {
+        type: 'shipping',
+        firstName: 'John',
+        lastName: 'Doe',
+        company: 'Test Company',
+        street: '123 Main Street',
+        city: 'Madrid',
+        postalCode: '28001',
+        province: 'Madrid',
+        country: 'ES',
+        phone: '+34 600 123 456',
+        isDefault: false,
+      }
+    : {
+        type: 'shipping',
+        firstName: '',
+        lastName: '',
+        company: '',
+        street: '',
+        city: '',
+        postalCode: '',
+        province: '',
+        country: '',
+        phone: '',
+        isDefault: false,
+      }
 
   // State
   const shippingAddress = ref<Address>({ ...initialAddress })
@@ -59,12 +61,12 @@ export function useShippingAddress() {
    */
   const isAddressValid = computed(() => {
     return !!(
-      shippingAddress.value.firstName &&
-      shippingAddress.value.lastName &&
-      shippingAddress.value.street &&
-      shippingAddress.value.city &&
-      shippingAddress.value.postalCode &&
-      shippingAddress.value.country
+      shippingAddress.value.firstName
+      && shippingAddress.value.lastName
+      && shippingAddress.value.street
+      && shippingAddress.value.city
+      && shippingAddress.value.postalCode
+      && shippingAddress.value.country
     )
   })
 
@@ -73,23 +75,18 @@ export function useShippingAddress() {
    */
   const defaultAddress = computed(() => {
     // Check local saved addresses first
-    const localDefault = savedAddresses.value.find(addr => addr.isDefault || addr.is_default)
+    const localDefault = savedAddresses.value.find(addr => addr.isDefault)
     if (localDefault) return localDefault
 
-    // Fallback to checkout store addresses
-    const storeAddresses = checkoutStore.savedAddresses || []
-    const storeDefault = storeAddresses.find((addr: any) => addr.isDefault || addr.is_default)
-    if (storeDefault) return storeDefault
-
     // Return first address if no default
-    return savedAddresses.value[0] || storeAddresses[0] || null
+    return savedAddresses.value[0] || null
   })
 
   /**
    * Check if user has any saved addresses
    */
   const hasAddresses = computed(() => {
-    return savedAddresses.value.length > 0 || (checkoutStore.savedAddresses && checkoutStore.savedAddresses.length > 0)
+    return savedAddresses.value.length > 0
   })
 
   /**
@@ -110,13 +107,15 @@ export function useShippingAddress() {
       if (response.success && response.addresses) {
         savedAddresses.value = response.addresses.map(addressFromEntity)
       }
-    } catch (e) {
+    }
+    catch (e) {
       error.value = e instanceof Error ? e.message : 'Failed to load saved addresses'
       console.error('Failed to load saved addresses:', e)
-      
-      // Fallback to store data or empty array
-      savedAddresses.value = checkoutStore.savedAddresses || []
-    } finally {
+
+      // Fallback to empty array
+      savedAddresses.value = []
+    }
+    finally {
       loading.value = false
     }
   }
@@ -133,20 +132,22 @@ export function useShippingAddress() {
     error.value = null
 
     try {
-      const response = await $fetch('/api/checkout/addresses', {
+      const response = await $fetch<{ success: boolean, address?: any }>('/api/checkout/addresses', {
         method: 'POST',
-        body: address
+        body: address,
       })
 
       if (response.success && response.address) {
-        const newAddress = addressFromEntity(response.address)
+        const newAddress = addressFromEntity(response.address as any)
         savedAddresses.value.push(newAddress)
       }
-    } catch (e) {
+    }
+    catch (e) {
       error.value = e instanceof Error ? e.message : 'Failed to save address'
       console.error('Failed to save address:', e)
       throw e
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -155,9 +156,8 @@ export function useShippingAddress() {
    * Load address from checkout store if available
    */
   const loadFromStore = () => {
-    if (checkoutStore.shippingInfo?.address) {
-      shippingAddress.value = { ...checkoutStore.shippingInfo.address }
-    }
+    // This method is kept for backwards compatibility but no longer uses store
+    // Address should be loaded via loadSavedAddresses instead
   }
 
   /**
@@ -169,7 +169,7 @@ export function useShippingAddress() {
       address.city,
       address.province, // Optional
       address.postalCode,
-      address.country
+      address.country,
     ].filter(part => part && part.trim() !== '') // Filter out empty/undefined values
 
     return parts.join(', ')
@@ -191,17 +191,17 @@ export function useShippingAddress() {
 
     // Readonly: Managed internally by composable
     savedAddresses: readonly(savedAddresses),
-    defaultAddress,  // Already computed, naturally readonly
-    hasAddresses,     // Already computed, naturally readonly
+    defaultAddress, // Already computed, naturally readonly
+    hasAddresses, // Already computed, naturally readonly
     loading: readonly(loading),
     error: readonly(error),
-    isAddressValid,   // Already computed, naturally readonly
+    isAddressValid, // Already computed, naturally readonly
 
     // Methods
     loadSavedAddresses,
     handleSaveAddress,
     loadFromStore,
     formatAddress,
-    reset
+    reset,
   }
 }

@@ -12,7 +12,7 @@ import type {
   StorageType,
   StorageOptions,
   StorageResult,
-  CartItem
+  CartItem,
 } from './types'
 
 // =============================================
@@ -23,7 +23,7 @@ const state = ref<CartPersistenceState>({
   storageType: 'cookie', // Changed from localStorage to cookie for SSR compatibility
   lastSaveAt: null,
   saveInProgress: false,
-  autoSaveEnabled: true
+  autoSaveEnabled: true,
 })
 
 // =============================================
@@ -35,14 +35,15 @@ const state = ref<CartPersistenceState>({
  */
 function isStorageAvailable(type: StorageType): boolean {
   if (typeof window === 'undefined') return false
-  
+
   try {
     const storage = type === 'localStorage' ? window.localStorage : window.sessionStorage
     const testKey = '__storage_test__'
     storage.setItem(testKey, 'test')
     storage.removeItem(testKey)
     return true
-  } catch {
+  }
+  catch {
     return false
   }
 }
@@ -52,7 +53,7 @@ function isStorageAvailable(type: StorageType): boolean {
  */
 function getStorage(type: StorageType): Storage | null {
   if (typeof window === 'undefined') return null
-  
+
   switch (type) {
     case 'localStorage':
       return isStorageAvailable('localStorage') ? window.localStorage : null
@@ -81,7 +82,8 @@ function compressData(data: any): string {
 function decompressData(data: string): any {
   try {
     return JSON.parse(data)
-  } catch {
+  }
+  catch {
     return null
   }
 }
@@ -103,65 +105,67 @@ function getBestStorageType(): StorageType {
  * Save data to storage
  */
 async function saveToStorage(
-  key: string, 
-  data: any, 
-  options: Partial<StorageOptions> = {}
+  key: string,
+  data: any,
+  options: Partial<StorageOptions> = {},
 ): Promise<StorageResult> {
   const storageType = options.type || state.value.storageType
   const compress = options.compress || false
-  
+
   try {
     const serializedData = compress ? compressData(data) : JSON.stringify(data)
-    
+
     // Try primary storage
     const storage = getStorage(storageType)
     if (storage) {
       storage.setItem(key, serializedData)
       return { success: true, data }
     }
-    
+
     // Fallback to memory storage
     memoryStorage.set(key, serializedData)
-    return { 
-      success: true, 
-      data, 
-      fallbackUsed: true 
+    return {
+      success: true,
+      data,
+      fallbackUsed: true,
     }
-    
-  } catch (error) {
+  }
+  catch (error) {
     // Try fallback storage types
     const fallbackTypes: StorageType[] = ['sessionStorage', 'memory']
-    
+
     for (const fallbackType of fallbackTypes) {
       if (fallbackType === storageType) continue
-      
+
       try {
         const fallbackStorage = getStorage(fallbackType)
         if (fallbackStorage) {
           const serializedData = compress ? compressData(data) : JSON.stringify(data)
           fallbackStorage.setItem(key, serializedData)
-          return { 
-            success: true, 
-            data, 
-            fallbackUsed: true 
-          }
-        } else if (fallbackType === 'memory') {
-          const serializedData = compress ? compressData(data) : JSON.stringify(data)
-          memoryStorage.set(key, serializedData)
-          return { 
-            success: true, 
-            data, 
-            fallbackUsed: true 
+          return {
+            success: true,
+            data,
+            fallbackUsed: true,
           }
         }
-      } catch {
+        else if (fallbackType === 'memory') {
+          const serializedData = compress ? compressData(data) : JSON.stringify(data)
+          memoryStorage.set(key, serializedData)
+          return {
+            success: true,
+            data,
+            fallbackUsed: true,
+          }
+        }
+      }
+      catch {
         continue
       }
     }
-    
-    return { 
-      success: false, 
-      error: error instanceof Error ? error.message : 'Storage operation failed' 
+
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Storage operation failed',
     }
   }
 }
@@ -170,12 +174,12 @@ async function saveToStorage(
  * Load data from storage
  */
 async function loadFromStorage(
-  key: string, 
-  options: Partial<StorageOptions> = {}
+  key: string,
+  options: Partial<StorageOptions> = {},
 ): Promise<StorageResult> {
   const storageType = options.type || state.value.storageType
   const compress = options.compress || false
-  
+
   try {
     // Try primary storage
     const storage = getStorage(storageType)
@@ -186,58 +190,60 @@ async function loadFromStorage(
         return { success: true, data }
       }
     }
-    
+
     // Try memory storage
     const memoryData = memoryStorage.get(key)
     if (memoryData) {
       const data = compress ? decompressData(memoryData) : JSON.parse(memoryData)
-      return { 
-        success: true, 
-        data, 
-        fallbackUsed: true 
+      return {
+        success: true,
+        data,
+        fallbackUsed: true,
       }
     }
-    
+
     return { success: true, data: null }
-    
-  } catch (error) {
+  }
+  catch (error) {
     // Try fallback storage types
     const fallbackTypes: StorageType[] = ['localStorage', 'sessionStorage', 'memory']
-    
+
     for (const fallbackType of fallbackTypes) {
       if (fallbackType === storageType) continue
-      
+
       try {
         const fallbackStorage = getStorage(fallbackType)
         if (fallbackStorage) {
           const serializedData = fallbackStorage.getItem(key)
           if (serializedData) {
             const data = compress ? decompressData(serializedData) : JSON.parse(serializedData)
-            return { 
-              success: true, 
-              data, 
-              fallbackUsed: true 
-            }
-          }
-        } else if (fallbackType === 'memory') {
-          const memoryData = memoryStorage.get(key)
-          if (memoryData) {
-            const data = compress ? decompressData(memoryData) : JSON.parse(memoryData)
-            return { 
-              success: true, 
-              data, 
-              fallbackUsed: true 
+            return {
+              success: true,
+              data,
+              fallbackUsed: true,
             }
           }
         }
-      } catch {
+        else if (fallbackType === 'memory') {
+          const memoryData = memoryStorage.get(key)
+          if (memoryData) {
+            const data = compress ? decompressData(memoryData) : JSON.parse(memoryData)
+            return {
+              success: true,
+              data,
+              fallbackUsed: true,
+            }
+          }
+        }
+      }
+      catch {
         continue
       }
     }
-    
-    return { 
-      success: false, 
-      error: error instanceof Error ? error.message : 'Storage load failed' 
+
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Storage load failed',
     }
   }
 }
@@ -246,21 +252,21 @@ async function loadFromStorage(
  * Remove data from storage
  */
 async function removeFromStorage(
-  key: string, 
-  options: Partial<StorageOptions> = {}
+  key: string,
+  options: Partial<StorageOptions> = {},
 ): Promise<StorageResult> {
   const storageType = options.type || state.value.storageType
-  
+
   try {
     // Remove from primary storage
     const storage = getStorage(storageType)
     if (storage) {
       storage.removeItem(key)
     }
-    
+
     // Remove from memory storage
     memoryStorage.delete(key)
-    
+
     // Remove from all fallback storages
     const allTypes: StorageType[] = ['localStorage', 'sessionStorage']
     for (const type of allTypes) {
@@ -271,13 +277,13 @@ async function removeFromStorage(
         }
       }
     }
-    
+
     return { success: true }
-    
-  } catch (error) {
-    return { 
-      success: false, 
-      error: error instanceof Error ? error.message : 'Storage removal failed' 
+  }
+  catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Storage removal failed',
     }
   }
 }
@@ -287,40 +293,42 @@ async function removeFromStorage(
 // =============================================
 
 let debouncedSaveTimeout: NodeJS.Timeout | null = null
-let pendingSaveData: { key: string; data: any; options?: Partial<StorageOptions> } | null = null
+let pendingSaveData: { key: string, data: any, options?: Partial<StorageOptions> } | null = null
 
 /**
  * Create debounced save function
  */
 function createDebouncedSave(delay: number = 1000) {
   return function debouncedSave(
-    key: string, 
-    data: any, 
-    options: Partial<StorageOptions> = {}
+    key: string,
+    data: any,
+    options: Partial<StorageOptions> = {},
   ): Promise<StorageResult> {
     return new Promise((resolve, reject) => {
       // Clear existing timeout
       if (debouncedSaveTimeout) {
         clearTimeout(debouncedSaveTimeout)
       }
-      
+
       // Store pending data
       pendingSaveData = { key, data, options }
-      
+
       // Set new timeout
       debouncedSaveTimeout = setTimeout(async () => {
         if (pendingSaveData) {
           try {
             const result = await saveToStorage(
-              pendingSaveData.key, 
-              pendingSaveData.data, 
-              pendingSaveData.options
+              pendingSaveData.key,
+              pendingSaveData.data,
+              pendingSaveData.options,
             )
             state.value.lastSaveAt = new Date()
             resolve(result)
-          } catch (error) {
+          }
+          catch (error) {
             reject(error)
-          } finally {
+          }
+          finally {
             pendingSaveData = null
             debouncedSaveTimeout = null
           }
@@ -357,7 +365,7 @@ async function saveCartData(cartData: {
     const dataToSave = {
       ...cartData,
       timestamp: new Date().toISOString(),
-      version: '1.0'
+      version: '1.0',
     }
 
     // Use Nuxt's useCookie for SSR-compatible storage
@@ -365,19 +373,21 @@ async function saveCartData(cartData: {
       maxAge: 60 * 60 * 24 * 30, // 30 days
       sameSite: 'lax',
       secure: process.env.NODE_ENV === 'production',
-      watch: true
+      watch: true,
     })
 
     cartCookie.value = dataToSave as any
     state.value.lastSaveAt = new Date()
 
     return { success: true }
-  } catch (error) {
+  }
+  catch (error) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to save cart data'
+      error: error instanceof Error ? error.message : 'Failed to save cart data',
     }
-  } finally {
+  }
+  finally {
     state.value.saveInProgress = false
   }
 }
@@ -395,7 +405,7 @@ async function loadCartData(): Promise<StorageResult<{
     const cartCookie = useCookie<any>(CART_STORAGE_KEY, {
       maxAge: 60 * 60 * 24 * 30, // 30 days
       sameSite: 'lax',
-      secure: process.env.NODE_ENV === 'production'
+      secure: process.env.NODE_ENV === 'production',
     })
 
     const loadedData = cartCookie.value
@@ -414,20 +424,22 @@ async function loadCartData(): Promise<StorageResult<{
       loadedData.items = loadedData.items.map((item: any) => ({
         ...item,
         addedAt: new Date(item.addedAt),
-        lastModified: item.lastModified ? new Date(item.lastModified) : undefined
+        lastModified: item.lastModified ? new Date(item.lastModified) : undefined,
       }))
-    } else {
+    }
+    else {
       loadedData.items = []
     }
 
     return {
       success: true,
-      data: loadedData
+      data: loadedData,
     }
-  } catch (error) {
+  }
+  catch (error) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to load cart data'
+      error: error instanceof Error ? error.message : 'Failed to load cart data',
     }
   }
 }
@@ -442,10 +454,11 @@ async function clearCartData(): Promise<StorageResult> {
     state.value.lastSaveAt = null
 
     return { success: true }
-  } catch (error) {
+  }
+  catch (error) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to clear cart data'
+      error: error instanceof Error ? error.message : 'Failed to clear cart data',
     }
   }
 }
@@ -476,7 +489,7 @@ const actions: CartPersistenceActions = {
   createDebouncedSave(): void {
     // Debounced save is already created
     // This method exists for compatibility
-  }
+  },
 }
 
 // =============================================
@@ -487,17 +500,17 @@ export function useCartPersistence() {
   return {
     // State
     state: readonly(state),
-    
+
     // Actions
     ...actions,
-    
+
     // Utilities
     saveCartData,
     loadCartData,
     clearCartData,
     isStorageAvailable,
     getBestStorageType,
-    createDebouncedSave
+    createDebouncedSave,
   }
 }
 
@@ -513,5 +526,5 @@ export {
   clearCartData,
   isStorageAvailable,
   getBestStorageType,
-  createDebouncedSave
+  createDebouncedSave,
 }

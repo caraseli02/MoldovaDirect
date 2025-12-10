@@ -1,6 +1,6 @@
 /**
  * Cart Recommendations API Endpoint
- * 
+ *
  * Provides product recommendations based on cart contents
  */
 
@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
         stock: 15,
         category: 'wines',
         description: 'Premium Moldovan red wine with rich flavor',
-        is_active: true
+        is_active: true,
       },
       {
         id: 'rec-2',
@@ -37,7 +37,7 @@ export default defineEventHandler(async (event) => {
         stock: 8,
         category: 'dairy',
         description: 'Authentic Moldovan cheese made with traditional methods',
-        is_active: true
+        is_active: true,
       },
       {
         id: 'rec-3',
@@ -48,22 +48,22 @@ export default defineEventHandler(async (event) => {
         stock: 12,
         category: 'pantry',
         description: 'Pure natural honey from Moldovan beekeepers',
-        is_active: true
-      }
+        is_active: true,
+      },
     ]
 
     // Filter recommendations based on categories if provided
     let filteredRecommendations = mockRecommendations
     if (categories.length > 0) {
-      filteredRecommendations = mockRecommendations.filter(product => 
-        categories.includes(product.category)
+      filteredRecommendations = mockRecommendations.filter(product =>
+        categories.includes(product.category),
       )
     }
 
     // Exclude products already in cart
     if (productIds.length > 0) {
-      filteredRecommendations = filteredRecommendations.filter(product => 
-        !productIds.includes(product.id)
+      filteredRecommendations = filteredRecommendations.filter(product =>
+        !productIds.includes(product.id),
       )
     }
 
@@ -77,13 +77,13 @@ export default defineEventHandler(async (event) => {
         total: filteredRecommendations.length,
         limit,
         algorithm: 'mock',
-        timestamp: new Date().toISOString()
-      }
+        timestamp: new Date().toISOString(),
+      },
     }
-
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Recommendations API error:', error)
-    
+
     return {
       success: false,
       error: 'Failed to load recommendations',
@@ -92,8 +92,8 @@ export default defineEventHandler(async (event) => {
         total: 0,
         limit: 0,
         algorithm: 'error',
-        timestamp: new Date().toISOString()
-      }
+        timestamp: new Date().toISOString(),
+      },
     }
   }
 })

@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
     if (!user) {
       throw createError({
         statusCode: 401,
-        statusMessage: 'Authentication required'
+        statusMessage: 'Authentication required',
       })
     }
 
@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
       console.error('Failed to load payment methods:', error)
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to load payment methods'
+        statusMessage: 'Failed to load payment methods',
       })
     }
 
@@ -36,24 +36,24 @@ export default defineEventHandler(async (event) => {
       brand: method.brand,
       expiryMonth: method.expires_month,
       expiryYear: method.expires_year,
-      isDefault: method.is_default
+      isDefault: method.is_default,
     }))
 
     return {
       success: true,
-      paymentMethods
+      paymentMethods,
     }
-
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Load payment methods error:', error)
-    
+
     if (error.statusCode) {
       throw error
     }
 
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to load payment methods'
+      statusMessage: 'Failed to load payment methods',
     })
   }
 })

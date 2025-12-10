@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
     if (!user) {
       throw createError({
         statusCode: 401,
-        statusMessage: 'Authentication required'
+        statusMessage: 'Authentication required',
       })
     }
 
@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
     if (!paymentMethodId || !type) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Missing required fields: paymentMethodId, type'
+        statusMessage: 'Missing required fields: paymentMethodId, type',
       })
     }
 
@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
         brand,
         expires_month: expiryMonth,
         expires_year: expiryYear,
-        is_default: isDefault || false
+        is_default: isDefault || false,
       })
       .select()
       .single()
@@ -52,7 +52,7 @@ export default defineEventHandler(async (event) => {
       console.error('Failed to save payment method:', error)
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to save payment method'
+        statusMessage: 'Failed to save payment method',
       })
     }
 
@@ -65,20 +65,20 @@ export default defineEventHandler(async (event) => {
         brand: data.brand,
         expiryMonth: data.expires_month,
         expiryYear: data.expires_year,
-        isDefault: data.is_default
-      }
+        isDefault: data.is_default,
+      },
     }
-
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Save payment method error:', error)
-    
+
     if (error.statusCode) {
       throw error
     }
 
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to save payment method'
+      statusMessage: 'Failed to save payment method',
     })
   }
 })

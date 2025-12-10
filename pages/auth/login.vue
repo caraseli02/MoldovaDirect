@@ -6,8 +6,18 @@
         <!-- Logo/Brand area with better mobile spacing -->
         <div class="text-center space-y-2">
           <div class="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-primary-100 dark:bg-primary-900/30 rounded-2xl mb-4">
-            <svg class="w-10 h-10 sm:w-12 sm:h-12 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            <svg
+              class="w-10 h-10 sm:w-12 sm:h-12 text-primary-600 dark:text-primary-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+              />
             </svg>
           </div>
           <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
@@ -15,12 +25,15 @@
           </h2>
           <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
             {{ $t('auth.noAccount') }}
-            <NuxtLink :to="localePath('/auth/register')" class="font-semibold text-primary-600 hover:text-primary-500 dark:text-primary-300 dark:hover:text-primary-200 transition-colors">
+            <NuxtLink
+              :to="localePath('/auth/register')"
+              class="font-semibold text-primary-600 hover:text-primary-500 dark:text-primary-300 dark:hover:text-primary-200 transition-colors"
+            >
               {{ $t('auth.signUp') }}
             </NuxtLink>
           </p>
         </div>
-      
+
         <!-- Card container for form -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-none dark:border dark:border-gray-700 p-6 sm:p-8">
           <!-- Alert messages with improved mobile styling -->
@@ -31,7 +44,10 @@
               class="mb-5 border-red-200 bg-red-50 dark:border-red-600"
               data-testid="auth-error"
             >
-              <AlertCircle class="h-5 w-5 text-red-500 dark:text-red-300" aria-hidden="true" />
+              <AlertCircle
+                class="h-5 w-5 text-red-500 dark:text-red-300"
+                aria-hidden="true"
+              />
               <AlertDescription :class="cn('text-sm text-red-800 dark:text-white')">
                 {{ displayError }}
               </AlertDescription>
@@ -44,7 +60,10 @@
               class="mb-5 border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20"
               data-testid="auth-success"
             >
-              <CheckCircle2 class="h-5 w-5 text-green-500 dark:text-green-400" aria-hidden="true" />
+              <CheckCircle2
+                class="h-5 w-5 text-green-500 dark:text-green-400"
+                aria-hidden="true"
+              />
               <AlertDescription class="text-sm text-green-800 dark:text-green-300">
                 {{ success }}
               </AlertDescription>
@@ -52,17 +71,46 @@
           </Transition>
 
           <!-- Tabbed Interface for Auth Methods -->
-          <Tabs v-model="activeTab" class="w-full">
+          <Tabs
+            v-model="activeTab"
+            class="w-full"
+          >
             <TabsList class="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger value="password" class="text-base">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              <TabsTrigger
+                value="password"
+                class="text-base"
+              >
+                <svg
+                  class="w-4 h-4 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                  />
                 </svg>
                 {{ $t('auth.withPassword') }}
               </TabsTrigger>
-              <TabsTrigger value="magiclink" class="text-base">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+              <TabsTrigger
+                value="magiclink"
+                class="text-base"
+              >
+                <svg
+                  class="w-4 h-4 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  />
                 </svg>
                 {{ $t('auth.withMagicLink') }}
               </TabsTrigger>
@@ -70,151 +118,226 @@
 
             <!-- Password Tab Content -->
             <TabsContent value="password">
-              <form class="space-y-5" @submit.prevent="handleLogin">
-        
-            <!-- Modern input fields with mobile optimization and accessibility -->
-            <div class="space-y-4">
-              <div class="space-y-2">
-                <Label
-                  for="email"
-                  class="text-sm font-medium text-gray-700 dark:text-gray-300"
-                  :class="{ 'text-red-600 dark:text-red-400': emailError }"
-                >
-                  {{ $t('auth.email') }}
-                </Label>
-                <Input
-                  id="email"
-                  v-model="form.email"
-                  name="email"
-                  type="email"
-                  autocomplete="email"
-                  autocapitalize="none"
-                  autocorrect="off"
-                  spellcheck="false"
-                  inputmode="email"
-                  required
-                  data-testid="email-input"
-                  :aria-invalid="emailError ? 'true' : 'false'"
-                  :aria-describedby="emailError ? 'email-error' : undefined"
-                  :placeholder="$t('auth.email')"
-                  class="h-11 border-2 border-gray-200 bg-white text-gray-900 placeholder:text-gray-500 dark:border-gray-500 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-300"
-                  :class="{ 'border-red-500 dark:border-red-400': emailError }"
-                  @blur="validateEmailField"
-                />
-                <p v-if="emailError" id="email-error" class="text-sm text-red-600 dark:text-red-400" role="alert">
-                  {{ emailError }}
-                </p>
-              </div>
-
-              <div class="space-y-2">
-                <Label
-                  for="password"
-                  class="text-sm font-medium text-gray-700 dark:text-gray-300"
-                  :class="{ 'text-red-600 dark:text-red-400': passwordError }"
-                >
-                  {{ $t('auth.password') }}
-                </Label>
-                <div class="relative">
-                  <Input
-                    id="password"
-                    v-model="form.password"
-                    name="password"
-                    :type="showPassword ? 'text' : 'password'"
-                    autocomplete="current-password"
-                    autocapitalize="none"
-                    autocorrect="off"
-                    spellcheck="false"
-                    required
-                    minlength="8"
-                    data-testid="password-input"
-                    :aria-invalid="passwordError ? 'true' : 'false'"
-                    :aria-describedby="passwordError ? 'password-error' : 'password-toggle-desc'"
-                    :placeholder="$t('auth.password')"
-                    class="h-11 border-2 border-gray-200 bg-white pr-12 text-gray-900 placeholder:text-gray-500 dark:border-gray-500 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-300"
-                    :class="{ 'border-red-500 dark:border-red-400': passwordError }"
-                    @input="validatePasswordField"
-                    @blur="validatePasswordField"
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    @click="togglePasswordVisibility"
-                    data-testid="password-toggle"
-                    class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-600 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white"
-                    :aria-label="showPassword ? $t('auth.accessibility.hidePassword') : $t('auth.accessibility.showPassword')"
-                    :aria-pressed="showPassword"
-                  >
-                    <svg v-if="!showPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                    </svg>
-                    <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>
-                    </svg>
-                  </Button>
-                </div>
-                <div id="password-toggle-desc" class="sr-only">
-                  {{ $t('auth.accessibility.passwordToggleDescription') }}
-                </div>
-                <p v-if="passwordError" id="password-error" class="text-sm text-red-600 dark:text-red-400" role="alert">
-                  {{ passwordError }}
-                </p>
-              </div>
-            </div>
-
-            <!-- Remember me and forgot password with mobile-optimized layout -->
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
-              <div class="flex items-center">
-                <Checkbox
-                  id="remember"
-                  v-model:checked="rememberMe"
-                  :aria-describedby="'remember-desc'"
-                  class="h-5 w-5"
-                />
-                <Label for="remember" class="ml-3 text-sm text-gray-700 dark:text-gray-100 select-none">
-                  {{ $t('auth.rememberMe') }}
-                </Label>
-                <div id="remember-desc" class="sr-only">
-                  {{ $t('auth.accessibility.rememberMeDescription') }}
-                </div>
-              </div>
-              <NuxtLink
-                :to="localePath('/auth/forgot-password')"
-                data-testid="forgot-password"
-                class="inline-flex items-center justify-center min-h-[44px] px-3 py-2 text-sm font-medium text-primary-600 hover:text-primary-500 dark:text-primary-300 dark:hover:text-primary-200 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded-md"
-                :aria-label="$t('auth.accessibility.forgotPasswordLink')"
+              <form
+                class="space-y-5"
+                @submit.prevent="handleLogin"
               >
-                {{ $t('auth.forgotPassword') }}
-              </NuxtLink>
-            </div>
+                <!-- Modern input fields with mobile optimization and accessibility -->
+                <div class="space-y-4">
+                  <div class="space-y-2">
+                    <Label
+                      for="email"
+                      class="text-sm font-medium text-gray-700 dark:text-gray-300"
+                      :class="{ 'text-red-600 dark:text-red-400': emailError }"
+                    >
+                      {{ $t('auth.email') }}
+                    </Label>
+                    <Input
+                      id="email"
+                      v-model="form.email"
+                      name="email"
+                      type="email"
+                      autocomplete="email"
+                      autocapitalize="none"
+                      autocorrect="off"
+                      spellcheck="false"
+                      inputmode="email"
+                      required
+                      data-testid="email-input"
+                      :aria-invalid="emailError ? 'true' : 'false'"
+                      :aria-describedby="emailError ? 'email-error' : undefined"
+                      :placeholder="$t('auth.email')"
+                      class="h-11 border-2 border-gray-200 bg-white text-gray-900 placeholder:text-gray-500 dark:border-gray-500 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-300"
+                      :class="{ 'border-red-500 dark:border-red-400': emailError }"
+                      @blur="validateEmailField"
+                    />
+                    <p
+                      v-if="emailError"
+                      id="email-error"
+                      class="text-sm text-red-600 dark:text-red-400"
+                      role="alert"
+                    >
+                      {{ emailError }}
+                    </p>
+                  </div>
 
-            <!-- Primary action button with mobile optimization and accessibility -->
-            <Button
-              type="submit"
-              :disabled="isLoginDisabled"
-              :aria-disabled="isLoginDisabled"
-              data-testid="login-button"
-              class="relative w-full flex justify-center items-center py-4 px-4 min-h-[48px] text-base font-semibold rounded-xl shadow-lg transition-opacity"
-              :class="{ 'opacity-60 cursor-not-allowed pointer-events-none': isLoginDisabled }"
-              :aria-label="loading ? $t('auth.accessibility.signingIn') : $t('auth.accessibility.signInButton')"
-              :aria-describedby="loading ? 'login-status' : undefined"
-            >
-              <svg v-if="loading" class="animate-spin -ml-1 mr-3 h-5 w-5" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
-              </svg>
-              {{ loading ? $t('common.loading') : $t('auth.signIn') }}
-            </Button>
-            <div v-if="loading" id="login-status" class="sr-only" aria-live="polite">
-              {{ $t('auth.accessibility.processingLogin') }}
-            </div>
+                  <div class="space-y-2">
+                    <Label
+                      for="password"
+                      class="text-sm font-medium text-gray-700 dark:text-gray-300"
+                      :class="{ 'text-red-600 dark:text-red-400': passwordError }"
+                    >
+                      {{ $t('auth.password') }}
+                    </Label>
+                    <div class="relative">
+                      <Input
+                        id="password"
+                        v-model="form.password"
+                        name="password"
+                        :type="showPassword ? 'text' : 'password'"
+                        autocomplete="current-password"
+                        autocapitalize="none"
+                        autocorrect="off"
+                        spellcheck="false"
+                        required
+                        minlength="8"
+                        data-testid="password-input"
+                        :aria-invalid="passwordError ? 'true' : 'false'"
+                        :aria-describedby="passwordError ? 'password-error' : 'password-toggle-desc'"
+                        :placeholder="$t('auth.password')"
+                        class="h-11 border-2 border-gray-200 bg-white pr-12 text-gray-900 placeholder:text-gray-500 dark:border-gray-500 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-300"
+                        :class="{ 'border-red-500 dark:border-red-400': passwordError }"
+                        @input="validatePasswordField"
+                        @blur="validatePasswordField"
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        data-testid="password-toggle"
+                        class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-600 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white"
+                        :aria-label="showPassword ? $t('auth.accessibility.hidePassword') : $t('auth.accessibility.showPassword')"
+                        :aria-pressed="showPassword"
+                        @click="togglePasswordVisibility"
+                      >
+                        <svg
+                          v-if="!showPassword"
+                          class="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          aria-hidden="true"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                          />
+                        </svg>
+                        <svg
+                          v-else
+                          class="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          aria-hidden="true"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
+                          />
+                        </svg>
+                      </Button>
+                    </div>
+                    <div
+                      id="password-toggle-desc"
+                      class="sr-only"
+                    >
+                      {{ $t('auth.accessibility.passwordToggleDescription') }}
+                    </div>
+                    <p
+                      v-if="passwordError"
+                      id="password-error"
+                      class="text-sm text-red-600 dark:text-red-400"
+                      role="alert"
+                    >
+                      {{ passwordError }}
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Remember me and forgot password with mobile-optimized layout -->
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
+                  <div class="flex items-center">
+                    <Checkbox
+                      id="remember"
+                      v-model:checked="rememberMe"
+                      :aria-describedby="'remember-desc'"
+                      class="h-5 w-5"
+                    />
+                    <Label
+                      for="remember"
+                      class="ml-3 text-sm text-gray-700 dark:text-gray-100 select-none"
+                    >
+                      {{ $t('auth.rememberMe') }}
+                    </Label>
+                    <div
+                      id="remember-desc"
+                      class="sr-only"
+                    >
+                      {{ $t('auth.accessibility.rememberMeDescription') }}
+                    </div>
+                  </div>
+                  <NuxtLink
+                    :to="localePath('/auth/forgot-password')"
+                    data-testid="forgot-password"
+                    class="inline-flex items-center justify-center min-h-[44px] px-3 py-2 text-sm font-medium text-primary-600 hover:text-primary-500 dark:text-primary-300 dark:hover:text-primary-200 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded-md"
+                    :aria-label="$t('auth.accessibility.forgotPasswordLink')"
+                  >
+                    {{ $t('auth.forgotPassword') }}
+                  </NuxtLink>
+                </div>
+
+                <!-- Primary action button with mobile optimization and accessibility -->
+                <Button
+                  type="submit"
+                  :disabled="isLoginDisabled"
+                  :aria-disabled="isLoginDisabled"
+                  data-testid="login-button"
+                  class="relative w-full flex justify-center items-center py-4 px-4 min-h-[48px] text-base font-semibold rounded-xl shadow-lg transition-opacity"
+                  :class="{ 'opacity-60 cursor-not-allowed pointer-events-none': isLoginDisabled }"
+                  :aria-label="loading ? $t('auth.accessibility.signingIn') : $t('auth.accessibility.signInButton')"
+                  :aria-describedby="loading ? 'login-status' : undefined"
+                >
+                  <svg
+                    v-if="loading"
+                    class="animate-spin -ml-1 mr-3 h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <circle
+                      class="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      stroke-width="4"
+                    />
+                    <path
+                      class="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    />
+                  </svg>
+                  {{ loading ? $t('common.loading') : $t('auth.signIn') }}
+                </Button>
+                <div
+                  v-if="loading"
+                  id="login-status"
+                  class="sr-only"
+                  aria-live="polite"
+                >
+                  {{ $t('auth.accessibility.processingLogin') }}
+                </div>
               </form>
             </TabsContent>
 
             <!-- Magic Link Tab Content -->
             <TabsContent value="magiclink">
-              <form class="space-y-5" @submit.prevent="handleMagicLink">
+              <form
+                class="space-y-5"
+                @submit.prevent="handleMagicLink"
+              >
                 <!-- Email field only -->
                 <div class="space-y-2">
                   <Label
@@ -243,7 +366,12 @@
                     :class="{ 'border-red-500 dark:border-red-400': emailError }"
                     @blur="validateEmailField"
                   />
-                  <p v-if="emailError" id="email-magic-error" class="text-sm text-red-600 dark:text-red-400" role="alert">
+                  <p
+                    v-if="emailError"
+                    id="email-magic-error"
+                    class="text-sm text-red-600 dark:text-red-400"
+                    role="alert"
+                  >
                     {{ emailError }}
                   </p>
                 </div>
@@ -251,12 +379,26 @@
                 <!-- Info message -->
                 <div class="rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 p-4">
                   <div class="flex items-start">
-                    <svg class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    <svg
+                      class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 mr-3 flex-shrink-0"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
                     <div class="text-sm text-blue-800 dark:text-blue-300">
-                      <p class="font-medium">{{ $t('auth.magicLinkInfo') }}</p>
-                      <p class="mt-1 text-xs text-blue-700 dark:text-blue-400">{{ $t('auth.magicLinkDescription') }}</p>
+                      <p class="font-medium">
+                        {{ $t('auth.magicLinkInfo') }}
+                      </p>
+                      <p class="mt-1 text-xs text-blue-700 dark:text-blue-400">
+                        {{ $t('auth.magicLinkDescription') }}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -272,15 +414,56 @@
                   :aria-label="loadingMagic ? $t('auth.accessibility.sendingMagicLink') : $t('auth.accessibility.magicLinkButton')"
                   :aria-describedby="loadingMagic ? 'magic-link-status' : 'magic-link-desc'"
                 >
-                  <svg v-if="loadingMagic" class="animate-spin -ml-1 mr-3 h-5 w-5" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+                  <svg
+                    v-if="loadingMagic"
+                    class="animate-spin -ml-1 mr-3 h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <circle
+                      class="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      stroke-width="4"
+                    />
+                    <path
+                      class="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    />
                   </svg>
-                  <svg v-else-if="magicLinkCooldown > 0" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  <svg
+                    v-else-if="magicLinkCooldown > 0"
+                    class="w-5 h-5 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
                   </svg>
-                  <svg v-else class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                  <svg
+                    v-else
+                    class="w-5 h-5 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                    />
                   </svg>
                   <template v-if="magicLinkCooldown > 0">
                     {{ $t('auth.resendIn') }} {{ magicLinkCooldown }}s
@@ -289,10 +472,18 @@
                     {{ loadingMagic ? $t('common.loading') : $t('auth.sendMagicLink') }}
                   </template>
                 </Button>
-                <div id="magic-link-desc" class="sr-only">
+                <div
+                  id="magic-link-desc"
+                  class="sr-only"
+                >
                   {{ $t('auth.accessibility.magicLinkDescription') }}
                 </div>
-                <div v-if="loadingMagic" id="magic-link-status" class="sr-only" aria-live="polite">
+                <div
+                  v-if="loadingMagic"
+                  id="magic-link-status"
+                  class="sr-only"
+                  aria-live="polite"
+                >
                   {{ $t('auth.accessibility.sendingMagicLink') }}
                 </div>
               </form>
@@ -319,7 +510,7 @@ import { setRememberMePreference, adjustSessionCookieDuration } from '~/utils/au
 
 // Apply guest middleware - redirect authenticated users
 definePageMeta({
-  middleware: 'guest'
+  middleware: 'guest',
 })
 
 const supabase = useSupabaseClient()
@@ -332,14 +523,14 @@ const {
   getUnlockTime,
   clearError,
   ensureInitialized,
-  triggerLockout
+  triggerLockout,
 } = useAuth()
 
 const { getAccountLockoutMessage, translateAuthError } = useAuthMessages()
 
 const form = ref({
   email: '',
-  password: ''
+  password: '',
 })
 
 // Handle redirect after successful login
@@ -372,10 +563,10 @@ const { validateEmail, validatePassword } = useAuthValidation()
 
 // Form validation
 const isFormValid = computed(() => {
-  return form.value.email && 
-         form.value.password && 
-         !emailError.value && 
-         !passwordError.value
+  return form.value.email
+    && form.value.password
+    && !emailError.value
+    && !passwordError.value
 })
 
 const isLoginDisabled = computed(() => {
@@ -442,14 +633,15 @@ async function handleLogin(): Promise<void> {
   try {
     const { data, error: authErr } = await supabase.auth.signInWithPassword({
       email: form.value.email,
-      password: form.value.password
+      password: form.value.password,
     })
 
     if (authErr) {
       if (authErr.message?.includes('Too many requests')) {
         triggerLockout(15)
         localError.value = translateAuthError('Too many requests', 'login')
-      } else {
+      }
+      else {
         localError.value = translateAuthError(authErr.message, 'login')
       }
       throw authErr
@@ -468,11 +660,13 @@ async function handleLogin(): Promise<void> {
       success.value = t('auth.loginSuccess')
       await handleRedirectAfterLogin()
     }
-  } catch (err: any) {
+  }
+  catch (err: any) {
     if (!localError.value) {
       localError.value = err?.message || t('auth.loginError')
     }
-  } finally {
+  }
+  finally {
     loading.value = false
   }
 }
@@ -509,7 +703,8 @@ function startMagicLinkCooldown(): void {
       if (typeof window !== 'undefined') {
         localStorage.removeItem('magicLinkCooldown')
       }
-    } else {
+    }
+    else {
       magicLinkCooldown.value = remaining
     }
   }, 1000)
@@ -540,11 +735,13 @@ function checkExistingCooldown(): void {
             magicLinkCooldownInterval.value = null
           }
           localStorage.removeItem('magicLinkCooldown')
-        } else {
+        }
+        else {
           magicLinkCooldown.value = currentRemaining
         }
       }, 1000)
-    } else {
+    }
+    else {
       // Expired, remove from storage
       localStorage.removeItem('magicLinkCooldown')
     }
@@ -570,8 +767,8 @@ async function handleMagicLink(): Promise<void> {
     const { error: authError } = await supabase.auth.signInWithOtp({
       email: form.value.email,
       options: {
-        emailRedirectTo: `${window.location.origin}${localePath('/auth/confirm')}`
-      }
+        emailRedirectTo: `${window.location.origin}${localePath('/auth/confirm')}`,
+      },
     })
 
     if (authError) {
@@ -582,9 +779,11 @@ async function handleMagicLink(): Promise<void> {
 
     // Start cooldown timer
     startMagicLinkCooldown()
-  } catch (err: any) {
+  }
+  catch (err: any) {
     localError.value = err.message || t('auth.magicLinkError')
-  } finally {
+  }
+  finally {
     loadingMagic.value = false
   }
 }
@@ -626,6 +825,6 @@ onBeforeUnmount(() => {
 })
 
 useHead({
-  title: t('auth.signIn')
+  title: t('auth.signIn'),
 })
 </script>

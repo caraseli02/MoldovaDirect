@@ -31,7 +31,7 @@ test.describe('Smoke Tests - Critical Paths', () => {
     // Check at least one product card exists
     const productCards = page.locator(SELECTORS.PRODUCT_CARD)
     await expect(productCards.first(), ERROR_MESSAGES.PRODUCT_NOT_FOUND).toBeVisible({
-      timeout: TIMEOUTS.LONG
+      timeout: TIMEOUTS.LONG,
     })
   })
 

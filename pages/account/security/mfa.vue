@@ -73,7 +73,10 @@
         </div>
 
         <!-- MFA Enrollment Flow -->
-        <div v-if="showEnrollment" class="mt-6 border-t border-gray-200 pt-6">
+        <div
+          v-if="showEnrollment"
+          class="mt-6 border-t border-gray-200 pt-6"
+        >
           <div class="space-y-6">
             <!-- Step 1: Scan QR Code -->
             <div v-if="!enrollmentComplete">
@@ -84,7 +87,10 @@
               <div class="bg-gray-50 rounded-lg p-6">
                 <div class="flex flex-col items-center space-y-4">
                   <!-- QR Code -->
-                  <div v-if="authStore.mfaEnrollment?.qrCode" class="bg-white p-4 rounded-lg shadow-sm">
+                  <div
+                    v-if="authStore.mfaEnrollment?.qrCode"
+                    class="bg-white p-4 rounded-lg shadow-sm"
+                  >
                     <img
                       :src="authStore.mfaEnrollment.qrCode"
                       alt="QR Code"
@@ -103,7 +109,10 @@
                     </button>
                   </div>
 
-                  <div v-if="showManualEntry" class="w-full max-w-md">
+                  <div
+                    v-if="showManualEntry"
+                    class="w-full max-w-md"
+                  >
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                       {{ $t('auth.mfa.settings.secretKey') }}
                     </label>
@@ -125,7 +134,9 @@
 
                   <!-- Instructions -->
                   <div class="text-sm text-gray-600 max-w-md">
-                    <p class="font-medium mb-2">{{ $t('auth.mfa.settings.instructions') }}</p>
+                    <p class="font-medium mb-2">
+                      {{ $t('auth.mfa.settings.instructions') }}
+                    </p>
                     <ol class="list-decimal list-inside space-y-1 text-xs">
                       <li>{{ $t('auth.mfa.settings.instruction1') }}</li>
                       <li>{{ $t('auth.mfa.settings.instruction2') }}</li>
@@ -141,10 +152,16 @@
                   {{ $t('auth.mfa.settings.enrollmentStep2') }}
                 </h4>
 
-                <form @submit.prevent="completeEnrollment" class="max-w-md">
+                <form
+                  class="max-w-md"
+                  @submit.prevent="completeEnrollment"
+                >
                   <div class="space-y-4">
                     <div>
-                      <label for="verification-code" class="block text-sm font-medium text-gray-700 mb-2">
+                      <label
+                        for="verification-code"
+                        class="block text-sm font-medium text-gray-700 mb-2"
+                      >
                         {{ $t('auth.mfa.settings.verificationCodeLabel') }}
                       </label>
                       <input
@@ -159,15 +176,20 @@
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-center text-xl tracking-widest"
                         :class="{
                           'border-red-500': enrollmentError,
-                          'border-gray-300': !enrollmentError
+                          'border-gray-300': !enrollmentError,
                         }"
                         placeholder="000000"
                         :disabled="authStore.mfaLoading"
                       />
                     </div>
 
-                    <div v-if="enrollmentError" class="rounded-md bg-red-50 p-3">
-                      <p class="text-sm text-red-800">{{ enrollmentError }}</p>
+                    <div
+                      v-if="enrollmentError"
+                      class="rounded-md bg-red-50 p-3"
+                    >
+                      <p class="text-sm text-red-800">
+                        {{ enrollmentError }}
+                      </p>
                     </div>
 
                     <div class="flex space-x-3">
@@ -177,10 +199,28 @@
                         class="flex-1 inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         <span v-if="!authStore.mfaLoading">{{ $t('auth.mfa.settings.verifyButton') }}</span>
-                        <span v-else class="flex items-center">
-                          <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        <span
+                          v-else
+                          class="flex items-center"
+                        >
+                          <svg
+                            class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              class="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              stroke-width="4"
+                            />
+                            <path
+                              class="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            />
                           </svg>
                           {{ $t('auth.mfa.settings.verifying') }}
                         </span>
@@ -202,7 +242,10 @@
         </div>
 
         <!-- Active MFA Factors -->
-        <div v-if="authStore.hasMFAEnabled" class="mt-6 border-t border-gray-200 pt-6">
+        <div
+          v-if="authStore.hasMFAEnabled"
+          class="mt-6 border-t border-gray-200 pt-6"
+        >
           <h4 class="text-sm font-medium text-gray-900 mb-4">
             {{ $t('auth.mfa.settings.activeFactors') }}
           </h4>
@@ -215,8 +258,18 @@
             >
               <div class="flex items-center space-x-3">
                 <div class="flex-shrink-0">
-                  <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                  <svg
+                    class="h-6 w-6 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"
+                    />
                   </svg>
                 </div>
                 <div>
@@ -244,12 +297,22 @@
         <div class="mt-6 bg-blue-50 border border-blue-200 rounded-md p-4">
           <div class="flex">
             <div class="flex-shrink-0">
-              <svg class="h-5 w-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+              <svg
+                class="h-5 w-5 text-blue-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                  clip-rule="evenodd"
+                />
               </svg>
             </div>
             <div class="ml-3">
-              <h3 class="text-sm font-medium text-blue-800">{{ $t('auth.mfa.settings.securityNoticeTitle') }}</h3>
+              <h3 class="text-sm font-medium text-blue-800">
+                {{ $t('auth.mfa.settings.securityNoticeTitle') }}
+              </h3>
               <div class="mt-2 text-sm text-blue-700">
                 <p>{{ $t('auth.mfa.settings.securityNoticeDescription') }}</p>
               </div>
@@ -268,17 +331,33 @@
       aria-modal="true"
     >
       <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="showDisableConfirm = false"></div>
+        <div
+          class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+          @click="showDisableConfirm = false"
+        ></div>
 
         <div class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
           <div class="sm:flex sm:items-start">
             <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-              <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              <svg
+                class="h-6 w-6 text-red-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                />
               </svg>
             </div>
             <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-              <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+              <h3
+                id="modal-title"
+                class="text-lg leading-6 font-medium text-gray-900"
+              >
                 {{ $t('auth.mfa.settings.disableConfirmTitle') }}
               </h3>
               <div class="mt-2">
@@ -315,7 +394,7 @@ import { ref } from 'vue'
 import { useAuthStore } from '~/stores/auth'
 
 definePageMeta({
-  middleware: ['auth']
+  middleware: ['auth'],
 })
 
 const authStore = useAuthStore()
@@ -333,7 +412,8 @@ const startEnrollment = async () => {
     await authStore.enrollMFA()
     showEnrollment.value = true
     enrollmentError.value = ''
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Failed to start enrollment:', error)
   }
 }
@@ -345,7 +425,8 @@ const completeEnrollment = async () => {
     enrollmentComplete.value = true
     showEnrollment.value = false
     verificationCode.value = ''
-  } catch (error) {
+  }
+  catch (error) {
     enrollmentError.value = error instanceof Error ? error.message : 'Verification failed'
   }
 }
@@ -363,7 +444,8 @@ const copySecret = async () => {
     try {
       await navigator.clipboard.writeText(authStore.mfaEnrollment.secret)
       // Could show a toast notification here
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Failed to copy secret:', error)
     }
   }
@@ -380,7 +462,8 @@ const disableMFA = async () => {
       await authStore.unenrollMFA(factorToDisable.value)
       showDisableConfirm.value = false
       factorToDisable.value = null
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Failed to disable MFA:', error)
     }
   }

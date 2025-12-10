@@ -32,7 +32,7 @@ export interface PaginationHandler {
 export function useMobileProductInteractions(
   scrollContainer: Ref<HTMLElement | undefined>,
   refreshCallback: () => Promise<void>,
-  paginationHandler: PaginationHandler
+  paginationHandler: PaginationHandler,
 ) {
   const { isMobile } = useDevice()
   const { vibrate } = useHapticFeedback()
@@ -73,7 +73,7 @@ export function useMobileProductInteractions(
         if (paginationHandler.currentPage > 1) {
           paginationHandler.goToPage(paginationHandler.currentPage - 1)
         }
-      }
+      },
     })
 
     console.debug('Mobile interactions setup complete')
@@ -97,6 +97,6 @@ export function useMobileProductInteractions(
 
     // Methods
     setup,
-    cleanup
+    cleanup,
   }
 }

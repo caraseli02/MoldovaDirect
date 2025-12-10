@@ -5,22 +5,30 @@
       :class="{ '-translate-x-full': !sidebarOpen }"
     >
       <div class="flex h-16 items-center justify-center bg-blue-600 px-4">
-        <h1 class="text-xl font-bold text-white">Moldova Direct</h1>
+        <h1 class="text-xl font-bold text-white">
+          Moldova Direct
+        </h1>
       </div>
 
       <nav class="mt-8 px-4">
         <ul class="space-y-2">
-          <li v-for="item in navItems" :key="item.to">
+          <li
+            v-for="item in navItems"
+            :key="item.to"
+          >
             <NuxtLink
               :to="item.to"
               :class="[
                 'flex items-center gap-3 rounded-xl px-4 py-2 text-sm font-medium transition-colors',
                 isActiveRoute(item)
                   ? 'bg-gray-800 text-white shadow-sm'
-                  : 'text-gray-500 hover:bg-gray-700 hover:text-white'
+                  : 'text-gray-500 hover:bg-gray-700 hover:text-white',
               ]"
             >
-              <commonIcon :name="item.icon" class="h-5 w-5" />
+              <commonIcon
+                :name="item.icon"
+                class="h-5 w-5"
+              />
               <span>{{ $t(item.labelKey) }}</span>
             </NuxtLink>
           </li>
@@ -32,27 +40,39 @@
       <header class="border-b border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
         <div class="flex items-center justify-between px-6 py-4">
           <UiButton
-            @click="toggleSidebar"
             variant="ghost"
             size="icon"
             class="lg:hidden"
             :aria-label="$t('admin.navigation.toggleSidebar')"
+            @click="toggleSidebar"
           >
-            <commonIcon name="lucide:menu" class="h-6 w-6" />
+            <commonIcon
+              name="lucide:menu"
+              class="h-6 w-6"
+            />
           </UiButton>
 
           <div class="hidden lg:block">
-            <nav class="flex" aria-label="Breadcrumb">
+            <nav
+              class="flex"
+              aria-label="Breadcrumb"
+            >
               <ol class="flex items-center space-x-4">
                 <li>
                   <div class="flex items-center">
-                    <commonIcon name="lucide:home" class="h-4 w-4 text-gray-400" />
+                    <commonIcon
+                      name="lucide:home"
+                      class="h-4 w-4 text-gray-400"
+                    />
                     <span class="ml-2 text-sm text-gray-500">{{ $t('account.sections.admin') }}</span>
                   </div>
                 </li>
                 <li v-if="currentPageName">
                   <div class="flex items-center">
-                    <commonIcon name="lucide:chevron-right" class="h-4 w-4 text-gray-400" />
+                    <commonIcon
+                      name="lucide:chevron-right"
+                      class="h-4 w-4 text-gray-400"
+                    />
                     <span class="ml-2 text-sm font-medium text-gray-900 dark:text-white">{{ currentPageName }}</span>
                   </div>
                 </li>
@@ -66,23 +86,36 @@
               size="icon"
               :aria-label="$t('admin.navigation.notifications')"
             >
-              <commonIcon name="lucide:bell" class="h-5 w-5" />
+              <commonIcon
+                name="lucide:bell"
+                class="h-5 w-5"
+              />
             </UiButton>
 
             <!-- Admin User Menu -->
-            <div class="relative" ref="userMenuRef">
+            <div
+              ref="userMenuRef"
+              class="relative"
+            >
               <button
-                @click="toggleUserMenu"
                 class="flex items-center space-x-3 rounded-lg px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                 :aria-expanded="userMenuOpen"
                 aria-haspopup="true"
+                @click="toggleUserMenu"
               >
                 <div class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600">
-                  <commonIcon name="lucide:user" class="h-5 w-5 text-white" />
+                  <commonIcon
+                    name="lucide:user"
+                    class="h-5 w-5 text-white"
+                  />
                 </div>
                 <div class="hidden md:block text-left">
-                  <p class="text-sm font-medium text-gray-900 dark:text-white">{{ $t('account.sections.adminUser') }}</p>
-                  <p class="text-xs text-gray-500 dark:text-gray-400">{{ $t('account.sections.administrator') }}</p>
+                  <p class="text-sm font-medium text-gray-900 dark:text-white">
+                    {{ $t('account.sections.adminUser') }}
+                  </p>
+                  <p class="text-xs text-gray-500 dark:text-gray-400">
+                    {{ $t('account.sections.administrator') }}
+                  </p>
                 </div>
                 <commonIcon
                   name="lucide:chevron-down"
@@ -110,7 +143,10 @@
                       class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
                       @click="userMenuOpen = false"
                     >
-                      <commonIcon name="lucide:user" class="h-4 w-4" />
+                      <commonIcon
+                        name="lucide:user"
+                        class="h-4 w-4"
+                      />
                       <span>{{ $t('common.account') }}</span>
                     </NuxtLink>
                     <NuxtLink
@@ -118,15 +154,21 @@
                       class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
                       @click="userMenuOpen = false"
                     >
-                      <commonIcon name="lucide:settings" class="h-4 w-4" />
+                      <commonIcon
+                        name="lucide:settings"
+                        class="h-4 w-4"
+                      />
                       <span>{{ $t('account.profile') }}</span>
                     </NuxtLink>
-                    <div class="my-1 h-px bg-gray-200 dark:bg-gray-700" />
+                    <div class="my-1 h-px bg-gray-200 dark:bg-gray-700"></div>
                     <button
-                      @click="handleLogout"
                       class="flex w-full items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
+                      @click="handleLogout"
                     >
-                      <commonIcon name="lucide:log-out" class="h-4 w-4" />
+                      <commonIcon
+                        name="lucide:log-out"
+                        class="h-4 w-4"
+                      />
                       <span>{{ $t('common.logout') }}</span>
                     </button>
                   </div>
@@ -138,14 +180,14 @@
       </header>
 
       <main class="p-6">
-        <slot />
+        <slot></slot>
       </main>
     </div>
 
     <div
       v-if="sidebarOpen"
-      @click="sidebarOpen = false"
       class="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
+      @click="sidebarOpen = false"
     ></div>
   </div>
 </template>
@@ -169,7 +211,7 @@ const navItems = [
   { to: '/admin/users', icon: 'lucide:users', labelKey: 'admin.navigation.users', match: (path: string) => path.startsWith('/admin/users') },
   { to: '/admin/analytics', icon: 'lucide:bar-chart-2', labelKey: 'admin.navigation.analytics', match: (path: string) => path.startsWith('/admin/analytics') },
   { to: '/admin/testing', icon: 'lucide:flask-conical', labelKey: 'admin.navigation.testing', match: (path: string) => path.startsWith('/admin/testing') },
-  { to: '/admin/tools/email-testing', icon: 'lucide:wrench', labelKey: 'admin.navigation.tools', match: (path: string) => path.startsWith('/admin/tools') }
+  { to: '/admin/tools/email-testing', icon: 'lucide:wrench', labelKey: 'admin.navigation.tools', match: (path: string) => path.startsWith('/admin/tools') },
 ]
 
 const currentPageName = computed(() => {
@@ -199,7 +241,8 @@ async function handleLogout(): Promise<void> {
   try {
     closeAllMenus()
     await authStore.logout()
-  } catch (error) {
+  }
+  catch (error) {
     console.error('[Admin] Logout failed:', error)
 
     // Re-open menu so user can try again
@@ -209,7 +252,7 @@ async function handleLogout(): Promise<void> {
     toast.toast({
       title: t('admin.errors.logoutFailed'),
       description: error instanceof Error ? error.message : t('admin.errors.unknownError'),
-      variant: 'destructive'
+      variant: 'destructive',
     })
   }
 }

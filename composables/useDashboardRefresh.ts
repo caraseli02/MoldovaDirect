@@ -15,7 +15,7 @@ const AUTO_REFRESH_INTERVAL_MS = 5 * 60 * 1000 // 5 minutes
  */
 export function useDashboardRefresh(
   supabase: SupabaseClient,
-  store: DashboardStore
+  store: DashboardStore,
 ) {
   const refreshing = ref(false)
   const autoRefreshEnabled = ref(true)
@@ -40,23 +40,23 @@ export function useDashboardRefresh(
 
       // Prepare headers with Bearer token
       const headers = {
-        'Authorization': `Bearer ${session.access_token}`
+        Authorization: `Bearer ${session.access_token}`,
       }
 
       console.log('[AdminFetch] Fetching dashboard data with Bearer token')
 
       // Fetch stats and activity in parallel with proper auth headers
       const [statsResult, activityResult] = await Promise.all([
-        $fetch<{ success: boolean; data: any }>('/api/admin/dashboard/stats', { headers })
-          .catch(err => {
+        $fetch<{ success: boolean, data: any }>('/api/admin/dashboard/stats', { headers })
+          .catch((err) => {
             console.error('[AdminFetch] Error fetching /api/admin/dashboard/stats:', err)
             return null
           }),
-        $fetch<{ success: boolean; data: any[] }>('/api/admin/dashboard/activity', { headers })
-          .catch(err => {
+        $fetch<{ success: boolean, data: any[] }>('/api/admin/dashboard/activity', { headers })
+          .catch((err) => {
             console.error('[AdminFetch] Error fetching /api/admin/dashboard/activity:', err)
             return null
-          })
+          }),
       ])
 
       // Update store with fetched data
@@ -73,11 +73,13 @@ export function useDashboardRefresh(
       // If both failed, set error
       if (!statsResult && !activityResult) {
         store.setError('Failed to load dashboard data')
-      } else {
+      }
+      else {
         // Clear any previous errors on successful fetch
         store.clearError()
       }
-    } catch (error: any) {
+    }
+    catch (error: any) {
       console.error('[AdminFetch] Error fetching dashboard data:', error)
 
       // Handle authentication errors specially
@@ -87,10 +89,12 @@ export function useDashboardRefresh(
         setTimeout(() => {
           navigateTo('/auth/login')
         }, 2000)
-      } else {
+      }
+      else {
         store.setError(error?.message || 'Failed to load dashboard data')
       }
-    } finally {
+    }
+    finally {
       store.setLoading(false)
     }
   }
@@ -124,7 +128,8 @@ export function useDashboardRefresh(
 
     if (autoRefreshEnabled.value) {
       startAutoRefresh()
-    } else {
+    }
+    else {
       stopAutoRefresh()
     }
   }
@@ -136,7 +141,8 @@ export function useDashboardRefresh(
     refreshing.value = true
     try {
       await fetchDashboardData()
-    } finally {
+    }
+    finally {
       refreshing.value = false
     }
   }
@@ -166,6 +172,6 @@ export function useDashboardRefresh(
     toggleAutoRefresh,
     refreshAll,
     initAutoRefresh,
-    cleanupAutoRefresh
+    cleanupAutoRefresh,
   }
 }

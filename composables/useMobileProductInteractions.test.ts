@@ -123,7 +123,7 @@ describe('useMobileProductInteractions', () => {
       const api = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       expect(api).toHaveProperty('pullToRefresh')
@@ -141,7 +141,7 @@ describe('useMobileProductInteractions', () => {
       useMobileProductInteractions(
         scrollContainer,
         mockCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       // usePullToRefresh should have been called with the callback
@@ -152,7 +152,7 @@ describe('useMobileProductInteractions', () => {
       useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       expect(mockUseSwipeGestures).toHaveBeenCalled()
@@ -164,7 +164,7 @@ describe('useMobileProductInteractions', () => {
       const { isMobile } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       expect(isMobile.value).toBe(true)
@@ -178,7 +178,7 @@ describe('useMobileProductInteractions', () => {
       const { setup } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       setup()
@@ -194,7 +194,7 @@ describe('useMobileProductInteractions', () => {
       const { setup } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       setup()
@@ -211,7 +211,7 @@ describe('useMobileProductInteractions', () => {
       const { setup } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       setup()
@@ -227,7 +227,7 @@ describe('useMobileProductInteractions', () => {
       const { setup } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       setup()
@@ -242,7 +242,7 @@ describe('useMobileProductInteractions', () => {
       const { setup } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       setup()
@@ -267,7 +267,7 @@ describe('useMobileProductInteractions', () => {
       const { setup } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       setup()
@@ -281,7 +281,7 @@ describe('useMobileProductInteractions', () => {
       const { setup } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       setup()
@@ -299,7 +299,7 @@ describe('useMobileProductInteractions', () => {
       const { setup } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       setup() // First call - no container
@@ -316,7 +316,7 @@ describe('useMobileProductInteractions', () => {
       const { cleanup } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       cleanup()
@@ -329,7 +329,7 @@ describe('useMobileProductInteractions', () => {
       const { cleanup } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       expect(() => cleanup()).not.toThrow()
@@ -341,7 +341,7 @@ describe('useMobileProductInteractions', () => {
       const { cleanup } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       cleanup()
@@ -358,7 +358,7 @@ describe('useMobileProductInteractions', () => {
       const { cleanup } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       cleanup()
@@ -380,7 +380,7 @@ describe('useMobileProductInteractions', () => {
       const { cleanup } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       cleanup()
@@ -394,7 +394,7 @@ describe('useMobileProductInteractions', () => {
       const { setup, cleanup } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       setup()
@@ -424,7 +424,7 @@ describe('useMobileProductInteractions', () => {
       useMobileProductInteractions(
         scrollContainer,
         mockCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       // Get the wrapped callback that was passed to usePullToRefresh
@@ -442,7 +442,7 @@ describe('useMobileProductInteractions', () => {
       const { pullToRefresh } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       expect(pullToRefresh.isRefreshing.value).toBe(true)
@@ -454,7 +454,7 @@ describe('useMobileProductInteractions', () => {
       const { pullToRefresh } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       expect(pullToRefresh.pullDistance.value).toBe(50)
@@ -466,7 +466,7 @@ describe('useMobileProductInteractions', () => {
       const { pullToRefresh } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       expect(pullToRefresh.isPulling.value).toBe(true)
@@ -478,7 +478,7 @@ describe('useMobileProductInteractions', () => {
       const { pullToRefresh } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       expect(pullToRefresh.canRefresh.value).toBe(true)
@@ -490,7 +490,7 @@ describe('useMobileProductInteractions', () => {
       useMobileProductInteractions(
         scrollContainer,
         mockCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       const wrappedCallback = mockUsePullToRefresh.mock.calls[0][0]
@@ -508,7 +508,7 @@ describe('useMobileProductInteractions', () => {
       useMobileProductInteractions(
         scrollContainer,
         mockCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       const wrappedCallback = mockUsePullToRefresh.mock.calls[0][0]
@@ -522,7 +522,7 @@ describe('useMobileProductInteractions', () => {
       useMobileProductInteractions(
         scrollContainer,
         mockCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       const wrappedCallback = mockUsePullToRefresh.mock.calls[0][0]
@@ -539,14 +539,15 @@ describe('useMobileProductInteractions', () => {
       useMobileProductInteractions(
         scrollContainer,
         mockCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       const wrappedCallback = mockUsePullToRefresh.mock.calls[0][0]
 
       try {
         await wrappedCallback()
-      } catch {
+      }
+      catch {
         // Expected to fail
       }
 
@@ -557,7 +558,7 @@ describe('useMobileProductInteractions', () => {
       const { pullToRefresh } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       expect(pullToRefresh.setupPullToRefresh).toBe(mockSetupPullToRefresh)
@@ -567,7 +568,7 @@ describe('useMobileProductInteractions', () => {
       const { pullToRefresh } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       expect(pullToRefresh.cleanupPullToRefresh).toBe(mockCleanupPullToRefresh)
@@ -583,7 +584,7 @@ describe('useMobileProductInteractions', () => {
       const { setup } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       setup()
@@ -603,7 +604,7 @@ describe('useMobileProductInteractions', () => {
       const { setup } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       setup()
@@ -622,7 +623,7 @@ describe('useMobileProductInteractions', () => {
       const { setup } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       setup()
@@ -641,7 +642,7 @@ describe('useMobileProductInteractions', () => {
       const { setup } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       setup()
@@ -660,7 +661,7 @@ describe('useMobileProductInteractions', () => {
       const { setup } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       setup()
@@ -681,7 +682,7 @@ describe('useMobileProductInteractions', () => {
       const { setup } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       setup()
@@ -700,7 +701,7 @@ describe('useMobileProductInteractions', () => {
       const { setup } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       setup()
@@ -719,7 +720,7 @@ describe('useMobileProductInteractions', () => {
       const { setup } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       setup()
@@ -738,7 +739,7 @@ describe('useMobileProductInteractions', () => {
       const { setup } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       setup()
@@ -757,7 +758,7 @@ describe('useMobileProductInteractions', () => {
       const { setup } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       setup()
@@ -778,7 +779,7 @@ describe('useMobileProductInteractions', () => {
       const { setup } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       setup()
@@ -802,7 +803,7 @@ describe('useMobileProductInteractions', () => {
       const { setup } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       setup()
@@ -823,7 +824,7 @@ describe('useMobileProductInteractions', () => {
       const { swipeGestures } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       expect(swipeGestures.isSwipeActive.value).toBe(true)
@@ -835,7 +836,7 @@ describe('useMobileProductInteractions', () => {
       const { swipeGestures } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       expect(swipeGestures.setupSwipeListeners).toBe(mockSetupSwipeListeners)
@@ -845,7 +846,7 @@ describe('useMobileProductInteractions', () => {
       const { swipeGestures } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       expect(swipeGestures.cleanupSwipeListeners).toBe(mockCleanupSwipeListeners)
@@ -859,7 +860,7 @@ describe('useMobileProductInteractions', () => {
       const { isMobile } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       expect(isMobile.value).toBe(true)
@@ -871,7 +872,7 @@ describe('useMobileProductInteractions', () => {
       const { isMobile } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       expect(isMobile.value).toBe(false)
@@ -883,7 +884,7 @@ describe('useMobileProductInteractions', () => {
       const { isMobile } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       expect(isMobile.value).toBe(false)
@@ -899,7 +900,7 @@ describe('useMobileProductInteractions', () => {
       const { setup } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       setup()
@@ -915,7 +916,7 @@ describe('useMobileProductInteractions', () => {
       useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       expect(mockUseDevice).toHaveBeenCalled()
@@ -925,7 +926,7 @@ describe('useMobileProductInteractions', () => {
       useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       expect(mockUseHapticFeedback).toHaveBeenCalled()
@@ -937,7 +938,7 @@ describe('useMobileProductInteractions', () => {
       const api = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       // Exposes sub-composable APIs
@@ -958,7 +959,7 @@ describe('useMobileProductInteractions', () => {
       const { setup, cleanup } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       setup()
@@ -979,7 +980,7 @@ describe('useMobileProductInteractions', () => {
       const { pullToRefresh, swipeGestures } = useMobileProductInteractions(
         scrollContainer,
         refreshCallback,
-        paginationHandler
+        paginationHandler,
       )
 
       // Pull-to-refresh has its own state and methods

@@ -122,21 +122,21 @@ test.describe('Admin Inventory Page', () => {
   })
 
   test('should not have rendering errors on page load', async ({ page }) => {
-    const consoleLogs: { type: string; text: string }[] = []
+    const consoleLogs: { type: string, text: string }[] = []
     const pageErrors: string[] = []
 
-    page.on('console', msg => {
+    page.on('console', (msg) => {
       consoleLogs.push({
         type: msg.type(),
         text: msg.text(),
       })
     })
 
-    page.on('pageerror', error => {
+    page.on('pageerror', (error) => {
       pageErrors.push(error.toString())
     })
 
-    page.on('requestfailed', request => {
+    page.on('requestfailed', (request) => {
       const url = request.url()
       // Don't fail on non-critical API requests that might not have data
       if (!url.includes('/api/')) {
@@ -153,9 +153,9 @@ test.describe('Admin Inventory Page', () => {
 
     // Check for console errors (not warnings)
     const errors = consoleLogs.filter(log =>
-      log.type === 'error' &&
-      !log.text.includes('404') &&
-      !log.text.includes('Network request failed')
+      log.type === 'error'
+      && !log.text.includes('404')
+      && !log.text.includes('Network request failed'),
     )
 
     // Log errors for debugging but don't fail on API 404s
@@ -182,9 +182,9 @@ test.describe('Admin Inventory Page', () => {
     const pageContent = await adminPage.content()
 
     // Stock indicator should be present (either inline or in components)
-    const hasStockIndicators = pageContent.includes('stock') ||
-                               pageContent.includes('Stock') ||
-                               pageContent.includes('inventory')
+    const hasStockIndicators = pageContent.includes('stock')
+      || pageContent.includes('Stock')
+      || pageContent.includes('inventory')
 
     expect(hasStockIndicators).toBeTruthy()
   })
@@ -201,9 +201,9 @@ test.describe('Admin Inventory Page', () => {
     // Check if reports tab is active (has blue border or active class)
     const reportsTabElement = reportsTab.locator('..')
     const isReportsActive = await reportsTabElement.evaluate((el) => {
-      return el.className.includes('border-blue') ||
-             el.className.includes('blue-600') ||
-             el.textContent?.includes('Inventory Reports')
+      return el.className.includes('border-blue')
+        || el.className.includes('blue-600')
+        || el.textContent?.includes('Inventory Reports')
     })
 
     // Click Movements tab
@@ -214,9 +214,9 @@ test.describe('Admin Inventory Page', () => {
     // Tab switching should work
     const movementsTabElement = movementsTab.locator('..')
     const isMovementsActive = await movementsTabElement.evaluate((el) => {
-      return el.className.includes('border-blue') ||
-             el.className.includes('blue-600') ||
-             el.textContent?.includes('Movement History')
+      return el.className.includes('border-blue')
+        || el.className.includes('blue-600')
+        || el.textContent?.includes('Movement History')
     })
 
     // At least one should be active
@@ -337,7 +337,7 @@ test.describe('Admin Inventory Page', () => {
     // Take screenshot of the full page
     await adminPage.screenshot({
       path: 'test-results/inventory-page-screenshot.png',
-      fullPage: true
+      fullPage: true,
     })
 
     // Screenshot should be created successfully

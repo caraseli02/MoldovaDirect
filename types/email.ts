@@ -7,25 +7,25 @@
 /**
  * Email types supported by the system
  */
-export type EmailType =
-  | 'order_confirmation'
-  | 'order_processing'
-  | 'order_shipped'
-  | 'order_delivered'
-  | 'order_cancelled'
-  | 'order_issue'
-  | 'support_ticket_customer'
-  | 'support_ticket_staff'
+export type EmailType
+  = | 'order_confirmation'
+    | 'order_processing'
+    | 'order_shipped'
+    | 'order_delivered'
+    | 'order_cancelled'
+    | 'order_issue'
+    | 'support_ticket_customer'
+    | 'support_ticket_staff'
 
 /**
  * Email delivery status
  */
-export type EmailStatus =
-  | 'pending'    // Email queued for sending
-  | 'sent'       // Email sent to provider
-  | 'delivered'  // Email confirmed delivered
-  | 'failed'     // Email failed to send
-  | 'bounced'    // Email bounced back
+export type EmailStatus
+  = | 'pending' // Email queued for sending
+    | 'sent' // Email sent to provider
+    | 'delivered' // Email confirmed delivered
+    | 'failed' // Email failed to send
+    | 'bounced' // Email bounced back
 
 /**
  * Email log record from database
@@ -158,7 +158,7 @@ export const DEFAULT_EMAIL_RETRY_CONFIG: EmailRetryConfig = {
  */
 export function calculateRetryDelay(
   attempt: number,
-  config: EmailRetryConfig = DEFAULT_EMAIL_RETRY_CONFIG
+  config: EmailRetryConfig = DEFAULT_EMAIL_RETRY_CONFIG,
 ): number {
   return config.initialDelayMs * Math.pow(config.backoffMultiplier, attempt - 1)
 }
@@ -168,7 +168,7 @@ export function calculateRetryDelay(
  */
 export function shouldRetryEmail(
   attempts: number,
-  config: EmailRetryConfig = DEFAULT_EMAIL_RETRY_CONFIG
+  config: EmailRetryConfig = DEFAULT_EMAIL_RETRY_CONFIG,
 ): boolean {
   return attempts < config.maxAttempts
 }

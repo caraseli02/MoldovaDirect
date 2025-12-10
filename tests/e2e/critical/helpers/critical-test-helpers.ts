@@ -5,7 +5,8 @@
  * and provide consistent, reliable test operations.
  */
 
-import { Page, expect } from '@playwright/test'
+import type { Page } from '@playwright/test'
+import { expect } from '@playwright/test'
 
 export class CriticalTestHelpers {
   constructor(private page: Page) {}
@@ -98,7 +99,7 @@ export class CriticalTestHelpers {
    */
   async logout(): Promise<void> {
     const logoutButton = this.page.locator(
-      'button:has-text("Cerrar sesión"), button:has-text("Logout"), a:has-text("Cerrar sesión"), [data-testid="logout-button"]'
+      'button:has-text("Cerrar sesión"), button:has-text("Logout"), a:has-text("Cerrar sesión"), [data-testid="logout-button"]',
     )
 
     await logoutButton.first().click()
@@ -117,7 +118,7 @@ export class CriticalTestHelpers {
     // Wait for "Add to Cart" button to be visible
     await this.page.waitForSelector('button:has-text("Añadir al Carrito")', {
       state: 'visible',
-      timeout: 10000
+      timeout: 10000,
     })
 
     // Get the first add to cart button
@@ -145,15 +146,16 @@ export class CriticalTestHelpers {
         // Method 1: Wait for button text to change to "En el Carrito"
         this.page.waitForSelector('button:has-text("En el Carrito"), button:has-text("En el carrito")', {
           state: 'visible',
-          timeout: 10000
+          timeout: 10000,
         }),
         // Method 2: Wait for cart count badge to appear
         this.page.waitForSelector('[data-testid="cart-count"]', {
           state: 'visible',
-          timeout: 10000
-        })
+          timeout: 10000,
+        }),
       ])
-    } catch (error) {
+    }
+    catch (error) {
       // Log the error for debugging but re-throw to fail the test
       console.error('❌ Cart update verification failed - cart functionality may be broken')
       throw new Error('Cart update indicator did not appear within timeout. The cart may be broken or the page failed to hydrate properly.')
@@ -229,7 +231,7 @@ export class CriticalTestHelpers {
   static getTestUserCredentials() {
     return {
       email: process.env.TEST_USER_EMAIL || 'teste2e@example.com',
-      password: process.env.TEST_USER_PASSWORD
+      password: process.env.TEST_USER_PASSWORD,
     }
   }
 
@@ -239,7 +241,7 @@ export class CriticalTestHelpers {
   static getAdminCredentials() {
     return {
       email: process.env.TEST_ADMIN_EMAIL || process.env.ADMIN_EMAIL || process.env.TEST_USER_EMAIL || 'admin@example.com',
-      password: process.env.TEST_ADMIN_PASSWORD || process.env.ADMIN_PASSWORD || process.env.TEST_USER_PASSWORD
+      password: process.env.TEST_ADMIN_PASSWORD || process.env.ADMIN_PASSWORD || process.env.TEST_USER_PASSWORD,
     }
   }
 }

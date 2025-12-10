@@ -1,9 +1,9 @@
 /**
  * Shipping Methods Composable
- * 
+ *
  * Manages shipping method loading, caching, and state.
  * Handles API calls with debouncing and error states.
- * 
+ *
  * Requirements addressed:
  * - 2.1: Dedicated composable for shipping method loading
  * - 2.2: Debouncing and duplicate API call prevention
@@ -33,9 +33,9 @@ export function useShippingMethods(address: Ref<Address>) {
    */
   const isValidAddress = (addr: Address): boolean => {
     return !!(
-      addr.country &&
-      addr.postalCode &&
-      addr.city
+      addr.country
+      && addr.postalCode
+      && addr.city
     )
   }
 
@@ -56,8 +56,8 @@ export function useShippingMethods(address: Ref<Address>) {
         name: t('checkout.shippingMethod.standard.name'),
         description: t('checkout.shippingMethod.standard.description'),
         price: 5.99,
-        estimatedDays: 4
-      }
+        estimatedDays: 4,
+      },
     ]
   }
 
@@ -65,10 +65,10 @@ export function useShippingMethods(address: Ref<Address>) {
    * Localize shipping method names and descriptions
    */
   const localizeShippingMethods = (methods: any[]): ShippingMethod[] => {
-    return methods.map((method) => ({
+    return methods.map(method => ({
       ...method,
       name: t(`checkout.shippingMethod.${method.id}.name`, method.name),
-      description: t(`checkout.shippingMethod.${method.id}.description`, method.description)
+      description: t(`checkout.shippingMethod.${method.id}.description`, method.description),
     }))
   }
 
@@ -104,16 +104,18 @@ export function useShippingMethods(address: Ref<Address>) {
       const methods = await fetchShippingMethods({
         country: address.value.country,
         postalCode: address.value.postalCode,
-        orderTotal
+        orderTotal,
       })
 
       availableMethods.value = localizeShippingMethods(methods)
       lastLoadedAddress.value = addressHash
-    } catch (e) {
+    }
+    catch (e) {
       error.value = e instanceof Error ? e.message : 'Failed to load shipping methods'
       availableMethods.value = getFallbackMethods()
       console.error('Failed to load shipping methods:', e)
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }, 300)
@@ -144,6 +146,6 @@ export function useShippingMethods(address: Ref<Address>) {
     error: readonly(error),
     loadShippingMethods,
     retry,
-    reset
+    reset,
   }
 }

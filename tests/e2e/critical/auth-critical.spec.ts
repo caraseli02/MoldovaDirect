@@ -70,7 +70,7 @@ test.describe('Critical Auth Flows', () => {
   test('user can login with valid credentials', async ({ page }) => {
     test.skip(
       !CriticalTestHelpers.hasTestUserCredentials(),
-      'TEST_USER_PASSWORD environment variable not set'
+      'TEST_USER_PASSWORD environment variable not set',
     )
 
     const helpers = new CriticalTestHelpers(page)
@@ -83,7 +83,7 @@ test.describe('Critical Auth Flows', () => {
   test('logged in user can logout', async ({ page }) => {
     test.skip(
       !CriticalTestHelpers.hasTestUserCredentials(),
-      'TEST_USER_PASSWORD environment variable not set'
+      'TEST_USER_PASSWORD environment variable not set',
     )
 
     const helpers = new CriticalTestHelpers(page)

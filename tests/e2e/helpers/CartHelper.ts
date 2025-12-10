@@ -26,7 +26,7 @@ export class CartHelper {
 
     // Find and click first "Add to Cart" button
     const addToCartButton = this.page.locator(
-      'button:has-text("Add to Cart"), button:has-text("Añadir al Carrito"), button:has-text("Добавить в корзину"), button:has-text("Adaugă în coș")'
+      'button:has-text("Add to Cart"), button:has-text("Añadir al Carrito"), button:has-text("Добавить в корзину"), button:has-text("Adaugă în coș")',
     ).first()
 
     await addToCartButton.waitFor({ state: 'visible', timeout: 10000 })

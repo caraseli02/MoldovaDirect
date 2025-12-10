@@ -20,9 +20,9 @@ vi.mock('chart.js', () => ({
     update: vi.fn(),
     data: config.data,
     options: config.options,
-    type: config.type
+    type: config.type,
   })),
-  registerables: []
+  registerables: [],
 }))
 
 describe('ChartLoader', () => {
@@ -46,15 +46,15 @@ describe('ChartLoader', () => {
       labels: ['A', 'B', 'C'],
       datasets: [{
         label: 'Test',
-        data: [1, 2, 3]
-      }]
+        data: [1, 2, 3],
+      }],
     }
 
     wrapper = mount(ChartLoader, {
       props: {
         type: 'line',
-        data: chartData
-      }
+        data: chartData,
+      },
     })
 
     expect(wrapper.html()).toBeTruthy()
@@ -65,17 +65,17 @@ describe('ChartLoader', () => {
       labels: ['Q1', 'Q2', 'Q3'],
       datasets: [{
         label: 'Revenue',
-        data: [100, 200, 300]
-      }]
+        data: [100, 200, 300],
+      }],
     }
 
     const chartOptions: ChartOptions<'bar'> = {
       responsive: true,
       plugins: {
         legend: {
-          display: false
-        }
-      }
+          display: false,
+        },
+      },
     }
 
     wrapper = mount(ChartLoader, {
@@ -83,8 +83,8 @@ describe('ChartLoader', () => {
         type: 'bar',
         data: chartData,
         options: chartOptions,
-        height: 400
-      }
+        height: 400,
+      },
     })
 
     expect(wrapper.props('type')).toBe('bar')
@@ -96,17 +96,17 @@ describe('ChartLoader', () => {
   it('should validate chart type prop', () => {
     const chartData: ChartData<'line'> = {
       labels: ['A'],
-      datasets: [{ label: 'Test', data: [1] }]
+      datasets: [{ label: 'Test', data: [1] }],
     }
 
     // Valid types
     const validTypes = ['line', 'bar', 'doughnut', 'pie']
-    validTypes.forEach(type => {
+    validTypes.forEach((type) => {
       wrapper = mount(ChartLoader, {
         props: {
           type: type as any,
-          data: chartData
-        }
+          data: chartData,
+        },
       })
       expect(wrapper.props('type')).toBe(type)
       wrapper.unmount()
@@ -116,14 +116,14 @@ describe('ChartLoader', () => {
   it('should emit chart-created event when chart is initialized', async () => {
     const chartData: ChartData<'line'> = {
       labels: ['A', 'B'],
-      datasets: [{ label: 'Test', data: [1, 2] }]
+      datasets: [{ label: 'Test', data: [1, 2] }],
     }
 
     wrapper = mount(ChartLoader, {
       props: {
         type: 'line',
-        data: chartData
-      }
+        data: chartData,
+      },
     })
 
     await flushPromises()
@@ -136,17 +136,17 @@ describe('ChartLoader', () => {
   it('should support all chart types', () => {
     const types: Array<'line' | 'bar' | 'doughnut' | 'pie'> = ['line', 'bar', 'doughnut', 'pie']
 
-    types.forEach(type => {
+    types.forEach((type) => {
       const chartData: ChartData = {
         labels: ['A', 'B', 'C'],
-        datasets: [{ label: 'Test', data: [1, 2, 3] }]
+        datasets: [{ label: 'Test', data: [1, 2, 3] }],
       }
 
       wrapper = mount(ChartLoader, {
         props: {
           type,
-          data: chartData
-        }
+          data: chartData,
+        },
       })
 
       expect(wrapper.props('type')).toBe(type)
@@ -157,19 +157,19 @@ describe('ChartLoader', () => {
   it('should use default options when not provided', () => {
     const chartData: ChartData<'line'> = {
       labels: ['A'],
-      datasets: [{ label: 'Test', data: [1] }]
+      datasets: [{ label: 'Test', data: [1] }],
     }
 
     wrapper = mount(ChartLoader, {
       props: {
         type: 'line',
-        data: chartData
-      }
+        data: chartData,
+      },
     })
 
     expect(wrapper.props('options')).toEqual({
       responsive: true,
-      maintainAspectRatio: true
+      maintainAspectRatio: true,
     })
   })
 
@@ -179,21 +179,21 @@ describe('ChartLoader', () => {
       setup() {
         const chartData = ref<ChartData<'line'>>({
           labels: ['A', 'B'],
-          datasets: [{ label: 'Test', data: [1, 2] }]
+          datasets: [{ label: 'Test', data: [1, 2] }],
         })
 
         const updateData = () => {
           chartData.value = {
             labels: ['X', 'Y', 'Z'],
-            datasets: [{ label: 'Updated', data: [10, 20, 30] }]
+            datasets: [{ label: 'Updated', data: [10, 20, 30] }],
           }
         }
 
         return () => h(ChartLoader, {
           type: 'line',
-          data: chartData.value
+          data: chartData.value,
         })
-      }
+      },
     })
 
     wrapper = mount(TestWrapper)
@@ -205,7 +205,7 @@ describe('ChartLoader', () => {
   it('should render with custom dimensions', () => {
     const chartData: ChartData<'bar'> = {
       labels: ['A'],
-      datasets: [{ label: 'Test', data: [1] }]
+      datasets: [{ label: 'Test', data: [1] }],
     }
 
     wrapper = mount(ChartLoader, {
@@ -213,8 +213,8 @@ describe('ChartLoader', () => {
         type: 'bar',
         data: chartData,
         height: 500,
-        width: 800
-      }
+        width: 800,
+      },
     })
 
     expect(wrapper.props('height')).toBe(500)
@@ -224,14 +224,14 @@ describe('ChartLoader', () => {
   it('should have proper wrapper div', () => {
     const chartData: ChartData<'line'> = {
       labels: ['A'],
-      datasets: [{ label: 'Test', data: [1] }]
+      datasets: [{ label: 'Test', data: [1] }],
     }
 
     wrapper = mount(ChartLoader, {
       props: {
         type: 'line',
-        data: chartData
-      }
+        data: chartData,
+      },
     })
 
     const wrapperDiv = wrapper.find('.chart-loader-wrapper')
@@ -257,8 +257,8 @@ describe('ChartLoader Integration', () => {
       type: 'line',
       data: {
         labels: ['A'],
-        datasets: [{ label: 'Test', data: [1] }]
-      }
+        datasets: [{ label: 'Test', data: [1] }],
+      },
     }
 
     expect(validProps).toBeDefined()

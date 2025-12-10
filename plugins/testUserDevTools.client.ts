@@ -19,20 +19,20 @@ export default defineNuxtPlugin(() => {
   const authStore = useAuthStore()
 
   // Expose dev tools on window
-  if (process.client) {
+  if (import.meta.client) {
     (window as any).$testUsers = {
       /**
        * List all available personas
        */
       list() {
         console.table(
-          Object.values(testUserPersonas).map((p) => ({
-            Key: p.key,
-            Title: p.title,
-            Email: p.user.email,
-            Language: p.user.preferredLanguage,
-            'Focus Areas': p.focusAreas.join(', ')
-          }))
+          Object.values(testUserPersonas).map(p => ({
+            'Key': p.key,
+            'Title': p.title,
+            'Email': p.user.email,
+            'Language': p.user.preferredLanguage,
+            'Focus Areas': p.focusAreas.join(', '),
+          })),
         )
         console.log('\nUsage: $testUsers.activate("persona-key")')
       },
@@ -54,7 +54,8 @@ export default defineNuxtPlugin(() => {
           console.log(`🌍 Language: ${testUserPersonas[key].user.preferredLanguage}`)
           console.log('\nNavigate to: /test-users to see test script')
           return true
-        } catch (error) {
+        }
+        catch (error) {
           console.error('❌ Failed to activate persona:', error)
           return false
         }
@@ -219,8 +220,8 @@ export default defineNuxtPlugin(() => {
           authStore.simulationMode,
           {
             completedSteps: progress.completedSteps,
-            notes: progress.notes
-          }
+            notes: progress.notes,
+          },
         )
 
         console.log('📤 Session exported (copy from below):')
@@ -260,13 +261,13 @@ export default defineNuxtPlugin(() => {
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Example: $testUsers.activate('vip-customer')
         `)
-      }
+      },
     }
 
     // Show welcome message in console
     console.log(
       '%c🧪 Test User Dev Tools Loaded',
-      'background: #3b82f6; color: white; padding: 4px 8px; border-radius: 4px; font-weight: bold;'
+      'background: #3b82f6; color: white; padding: 4px 8px; border-radius: 4px; font-weight: bold;',
     )
     console.log('Type $testUsers.help() for available commands')
   }

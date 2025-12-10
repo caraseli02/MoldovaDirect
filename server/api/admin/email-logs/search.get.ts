@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
     dateFrom: query.dateFrom as string | undefined,
     dateTo: query.dateTo as string | undefined,
     page: query.page ? parseInt(query.page as string) : 1,
-    limit: query.limit ? parseInt(query.limit as string) : 20
+    limit: query.limit ? parseInt(query.limit as string) : 20,
   }
 
   const result = await getEmailLogs(filters)

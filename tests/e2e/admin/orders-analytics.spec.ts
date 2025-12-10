@@ -6,7 +6,7 @@ test.describe('Admin Orders Analytics Page', () => {
     const consoleErrors: string[] = []
     const consoleWarnings: string[] = []
 
-    authenticatedPage.on('console', msg => {
+    authenticatedPage.on('console', (msg) => {
       if (msg.type() === 'error') {
         consoleErrors.push(msg.text())
       }
@@ -47,7 +47,7 @@ test.describe('Admin Orders Analytics Page', () => {
     const screenshotPath = 'tests/screenshots/orders-analytics-full.png'
     await authenticatedPage.screenshot({
       path: screenshotPath,
-      fullPage: true
+      fullPage: true,
     })
 
     console.log(`Screenshot saved to ${screenshotPath}`)
@@ -197,7 +197,8 @@ test.describe('Admin Orders Analytics Page', () => {
       const chartBars = authenticatedPage.locator('[class*="bg-blue"]')
       const barCount = await chartBars.count()
       console.log(`Found ${barCount} chart bars`)
-    } else {
+    }
+    else {
       console.log('Note: Chart may be loading or using different selectors')
     }
   })
@@ -241,7 +242,7 @@ test.describe('Admin Orders Analytics Page', () => {
 
     // Monitor network requests
     let dataRequested = false
-    authenticatedPage.on('response', response => {
+    authenticatedPage.on('response', (response) => {
       if (response.url().includes('/api/admin/orders/analytics')) {
         dataRequested = true
       }
@@ -275,7 +276,8 @@ test.describe('Admin Orders Analytics Page', () => {
       const download = await downloadPromise
       console.log(`File downloaded: ${download.suggestedFilename()}`)
       expect(download.suggestedFilename()).toContain('order-analytics')
-    } catch (e) {
+    }
+    catch (e) {
       console.log('Note: Download event not captured (may require specific Playwright configuration)')
     }
   })
@@ -285,13 +287,13 @@ test.describe('Admin Orders Analytics Page', () => {
     const pageErrors: string[] = []
 
     // Listen for errors
-    authenticatedPage.on('console', msg => {
+    authenticatedPage.on('console', (msg) => {
       if (msg.type() === 'error') {
         errors.push(msg.text())
       }
     })
 
-    authenticatedPage.on('pageerror', err => {
+    authenticatedPage.on('pageerror', (err) => {
       pageErrors.push(err.toString())
     })
 
@@ -302,10 +304,10 @@ test.describe('Admin Orders Analytics Page', () => {
 
     // Filter out non-critical errors
     const criticalErrors = errors.filter(e =>
-      !e.includes('404') &&
-      !e.includes('Failed to fetch') &&
-      !e.toLowerCase().includes('network') &&
-      !e.includes('undefined')
+      !e.includes('404')
+      && !e.includes('Failed to fetch')
+      && !e.toLowerCase().includes('network')
+      && !e.includes('undefined'),
     )
 
     console.log(`Critical errors: ${criticalErrors.length}`)
@@ -334,7 +336,7 @@ test.describe('Admin Orders Analytics Page', () => {
     const chartErrors: string[] = []
 
     // Monitor chart-related errors
-    authenticatedPage.on('console', msg => {
+    authenticatedPage.on('console', (msg) => {
       if (msg.type() === 'error' && msg.text().includes('Chart')) {
         chartErrors.push(msg.text())
       }
@@ -362,12 +364,13 @@ test.describe('Admin Orders Analytics Page', () => {
     let responseData: any = null
 
     // Intercept API responses
-    authenticatedPage.on('response', async response => {
+    authenticatedPage.on('response', async (response) => {
       if (response.url().includes('/api/admin/orders/analytics')) {
         apiResponseCaptured = true
         try {
           responseData = await response.json()
-        } catch (e) {
+        }
+        catch (e) {
           console.log('Could not parse response as JSON')
         }
       }

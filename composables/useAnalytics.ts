@@ -1,18 +1,18 @@
 /**
  * Analytics Composable
- * 
+ *
  * Requirements addressed:
  * - 3.1: Provide interface for analytics data collection and retrieval
  * - 3.3: Support user registration trends and activity analysis
- * 
+ *
  * Provides reactive analytics data and methods for tracking user activities.
  */
 
-import type { 
+import type {
   UserAnalyticsData,
   AnalyticsOverview,
   ProductAnalyticsData,
-  ActivityTrackingRequest
+  ActivityTrackingRequest,
 } from '~/types/analytics'
 
 export const useAnalytics = () => {
@@ -34,15 +34,17 @@ export const useAnalytics = () => {
 
     try {
       const { data } = await $fetch('/api/admin/analytics/users', {
-        query: params
+        query: params,
       })
 
       userAnalytics.value = data
       return data
-    } catch (err: any) {
+    }
+    catch (err: any) {
       error.value = err.message || 'Failed to fetch user analytics'
       throw err
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -58,15 +60,17 @@ export const useAnalytics = () => {
 
     try {
       const { data } = await $fetch('/api/admin/analytics/overview', {
-        query: params
+        query: params,
       })
 
       analyticsOverview.value = data
       return data
-    } catch (err: any) {
+    }
+    catch (err: any) {
       error.value = err.message || 'Failed to fetch analytics overview'
       throw err
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -83,15 +87,17 @@ export const useAnalytics = () => {
 
     try {
       const { data } = await $fetch('/api/admin/analytics/products', {
-        query: params
+        query: params,
       })
 
       productAnalytics.value = data
       return data
-    } catch (err: any) {
+    }
+    catch (err: any) {
       error.value = err.message || 'Failed to fetch product analytics'
       throw err
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -101,9 +107,10 @@ export const useAnalytics = () => {
     try {
       await $fetch('/api/admin/analytics/track', {
         method: 'POST',
-        body: activity
+        body: activity,
       })
-    } catch (err: any) {
+    }
+    catch (err: any) {
       console.error('Failed to track activity:', err)
       // Don't throw error for tracking failures to avoid disrupting user experience
     }
@@ -121,14 +128,16 @@ export const useAnalytics = () => {
     try {
       const { data } = await $fetch('/api/admin/analytics/aggregate', {
         method: 'POST',
-        body: params
+        body: params,
       })
 
       return data
-    } catch (err: any) {
+    }
+    catch (err: any) {
       error.value = err.message || 'Failed to aggregate analytics'
       throw err
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -138,7 +147,7 @@ export const useAnalytics = () => {
     return trackActivity({
       activityType: 'page_view',
       pageUrl,
-      metadata
+      metadata,
     })
   }
 
@@ -147,7 +156,7 @@ export const useAnalytics = () => {
       activityType: 'product_view',
       productId,
       pageUrl,
-      metadata
+      metadata,
     })
   }
 
@@ -155,7 +164,7 @@ export const useAnalytics = () => {
     return trackActivity({
       activityType: 'cart_add',
       productId,
-      metadata
+      metadata,
     })
   }
 
@@ -163,21 +172,21 @@ export const useAnalytics = () => {
     return trackActivity({
       activityType: 'order_create',
       orderId,
-      metadata
+      metadata,
     })
   }
 
   const trackLogin = (metadata?: Record<string, any>) => {
     return trackActivity({
       activityType: 'login',
-      metadata
+      metadata,
     })
   }
 
   const trackLogout = (metadata?: Record<string, any>) => {
     return trackActivity({
       activityType: 'logout',
-      metadata
+      metadata,
     })
   }
 
@@ -224,7 +233,7 @@ export const useAnalytics = () => {
     await Promise.all([
       fetchAnalyticsOverview(params),
       fetchUserAnalytics(params),
-      fetchProductAnalytics(params)
+      fetchProductAnalytics(params),
     ])
   }
 
@@ -242,7 +251,7 @@ export const useAnalytics = () => {
     fetchProductAnalytics,
     trackActivity,
     aggregateAnalytics,
-    
+
     // Convenience tracking methods
     trackPageView,
     trackProductView,
@@ -260,6 +269,6 @@ export const useAnalytics = () => {
 
     // Utility methods
     clearAnalytics,
-    refreshAllAnalytics
+    refreshAllAnalytics,
   }
 }

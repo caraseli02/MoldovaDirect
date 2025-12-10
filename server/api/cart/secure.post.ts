@@ -1,23 +1,23 @@
 /**
  * Secure Cart Operations API Endpoint
- * 
+ *
  * Requirements addressed:
  * - Add client-side data validation for cart operations
  * - Implement rate limiting for cart API calls
  * - Add CSRF protection for cart modifications
- * 
+ *
  * Provides secure server-side cart operations with comprehensive security measures.
  */
 
-import { 
-  cartValidationSchemas, 
-  checkRateLimit, 
-  validateCSRFToken, 
+import {
+  cartValidationSchemas,
+  checkRateLimit,
+  validateCSRFToken,
   sanitizeCartData,
   securityHeaders,
   validateSessionId,
   isValidProductId,
-  rateLimitConfig
+  rateLimitConfig,
 } from '~/server/utils/cartSecurity'
 
 interface SecureCartOperation {
@@ -31,6 +31,49 @@ interface CartValidationResult {
   isValid: boolean
   errors: string[]
   sanitizedData?: any
+}
+
+interface ProductResponse {
+  id: number
+  sku: string
+  slug: string
+  name: Record<string, string>
+  description: Record<string, string>
+  price: number
+  formattedPrice: string
+  compareAtPrice: number | null
+  formattedCompareAtPrice: string | null
+  stockQuantity: number
+  stockStatus: string
+  images: Array<{ url: string, alt?: string }>
+  primaryImage: string
+  attributes: Record<string, any>
+  category: {
+    id: number
+    slug: string
+    name: string
+    description: string
+    nameTranslations: Record<string, string>
+    breadcrumb: any[]
+  }
+  relatedProducts: any[]
+  isActive: boolean
+  createdAt: string
+  updatedAt: string
+  locale: string
+  availableLocales: string[]
+}
+
+interface ErrorWithStatusCode extends Error {
+  statusCode?: number
+  statusMessage?: string
+}
+
+interface ZodError extends Error {
+  errors?: Array<{
+    path: Array<string | number>
+    message: string
+  }>
 }
 
 export default defineEventHandler(async (event) => {
@@ -54,11 +97,11 @@ export default defineEventHandler(async (event) => {
     if (operation === 'getCSRFToken') {
       const { generateCSRFToken } = await import('~/server/utils/cartSecurity')
       const token = generateCSRFToken(sessionId)
-      
+
       return {
         success: true,
         csrfToken: token,
-        sessionId
+        sessionId,
       }
     }
 
@@ -71,8 +114,8 @@ export default defineEventHandler(async (event) => {
         data: {
           error: 'Rate limit exceeded',
           resetTime: rateLimit.resetTime,
-          retryAfter: Math.ceil((rateLimit.resetTime! - Date.now()) / 1000)
-        }
+          retryAfter: Math.ceil((rateLimit.resetTime! - Date.now()) / 1000),
+        },
       })
     }
 
@@ -82,15 +125,21 @@ export default defineEventHandler(async (event) => {
     setHeader(event, 'X-RateLimit-Reset', Math.ceil(rateLimit.resetTime! / 1000).toString())
 
     // Validate CSRF token for state-changing operations
-    if (operation !== 'validateCart' && operation !== 'getCSRFToken') {
+    const stateChangingOps: Array<'addItem' | 'updateQuantity' | 'removeItem' | 'clearCart'> = [
+      'addItem',
+      'updateQuantity',
+      'removeItem',
+      'clearCart',
+    ]
+    if (stateChangingOps.includes(operation as any)) {
       if (!csrfToken || !validateCSRFToken(sessionId, csrfToken)) {
         throw createError({
           statusCode: 403,
           statusMessage: 'Forbidden',
           data: {
             error: 'Invalid or missing CSRF token',
-            code: 'CSRF_TOKEN_INVALID'
-          }
+            code: 'CSRF_TOKEN_INVALID',
+          },
         })
       }
     }
@@ -103,8 +152,8 @@ export default defineEventHandler(async (event) => {
         statusMessage: 'Bad Request',
         data: {
           error: 'Validation failed',
-          details: validation.errors
-        }
+          details: validation.errors,
+        },
       })
     }
 
@@ -118,17 +167,18 @@ export default defineEventHandler(async (event) => {
       data: result,
       rateLimit: {
         remaining: rateLimit.remaining,
-        resetTime: rateLimit.resetTime
-      }
+        resetTime: rateLimit.resetTime,
+      },
     }
-
-  } catch (error) {
+  }
+  catch (error) {
     // Log security-related errors
-    if (error.statusCode === 429 || error.statusCode === 403) {
+    const err = error as ErrorWithStatusCode
+    if (err.statusCode === 429 || err.statusCode === 403) {
       console.warn('Cart security violation:', {
         ip: getClientIP(event),
-        error: error.statusMessage,
-        timestamp: new Date().toISOString()
+        error: err.statusMessage,
+        timestamp: new Date().toISOString(),
       })
     }
 
@@ -140,10 +190,10 @@ export default defineEventHandler(async (event) => {
  * Validate cart operation data against schemas
  */
 function validateCartOperationData(
-  operation: string, 
-  data: any, 
-  sessionId: string, 
-  csrfToken?: string
+  operation: string,
+  data: any,
+  sessionId: string,
+  csrfToken?: string,
 ): CartValidationResult {
   try {
     let validatedData: any
@@ -152,12 +202,12 @@ function validateCartOperationData(
     switch (operation) {
       case 'addItem':
         validatedData = cartValidationSchemas.addItem.parse(dataWithSession)
-        
+
         // Additional product ID validation
         if (!isValidProductId(validatedData.productId)) {
           return {
             isValid: false,
-            errors: ['Invalid product ID format']
+            errors: ['Invalid product ID format'],
           }
         }
         break
@@ -176,13 +226,13 @@ function validateCartOperationData(
 
       case 'validateCart':
         validatedData = cartValidationSchemas.validateCart.parse({ ...data, sessionId })
-        
+
         // Validate all product IDs in cart items
         for (const item of validatedData.items) {
           if (!isValidProductId(item.productId)) {
             return {
               isValid: false,
-              errors: [`Invalid product ID format for item: ${item.id}`]
+              errors: [`Invalid product ID format for item: ${item.id}`],
             }
           }
         }
@@ -191,7 +241,7 @@ function validateCartOperationData(
       default:
         return {
           isValid: false,
-          errors: [`Unknown operation: ${operation}`]
+          errors: [`Unknown operation: ${operation}`],
         }
     }
 
@@ -201,21 +251,23 @@ function validateCartOperationData(
     return {
       isValid: true,
       errors: [],
-      sanitizedData
+      sanitizedData,
     }
-
-  } catch (error) {
-    if (error.errors) {
+  }
+  catch (error) {
+    const zodError = error as ZodError
+    if (zodError.errors) {
       // Zod validation errors
       return {
         isValid: false,
-        errors: error.errors.map((err: any) => `${err.path.join('.')}: ${err.message}`)
+        errors: zodError.errors.map(err => `${err.path.join('.')}: ${err.message}`),
       }
     }
 
+    const genericError = error as Error
     return {
       isValid: false,
-      errors: [error.message || 'Validation failed']
+      errors: [genericError.message || 'Validation failed'],
     }
   }
 }
@@ -224,9 +276,9 @@ function validateCartOperationData(
  * Process validated cart operations
  */
 async function processCartOperation(
-  operation: string, 
-  data: any, 
-  sessionId: string
+  operation: string,
+  data: any,
+  sessionId: string,
 ): Promise<any> {
   switch (operation) {
     case 'addItem':
@@ -247,7 +299,7 @@ async function processCartOperation(
     default:
       throw createError({
         statusCode: 400,
-        statusMessage: 'Invalid operation'
+        statusMessage: 'Invalid operation',
       })
   }
 }
@@ -260,24 +312,24 @@ async function processAddItem(data: any): Promise<any> {
 
   try {
     // Fetch product data to validate availability
-    const product = await $fetch(`/api/products/${productId}`)
-    
+    const product = await $fetch<ProductResponse>(`/api/products/${productId}`)
+
     if (!product) {
       throw createError({
         statusCode: 404,
-        statusMessage: 'Product not found'
+        statusMessage: 'Product not found',
       })
     }
 
     // Check stock availability
-    if (product.stock < quantity) {
+    if (product.stockQuantity < quantity) {
       throw createError({
         statusCode: 400,
         statusMessage: 'Insufficient stock',
         data: {
-          available: product.stock,
-          requested: quantity
-        }
+          available: product.stockQuantity,
+          requested: quantity,
+        },
       })
     }
 
@@ -289,21 +341,22 @@ async function processAddItem(data: any): Promise<any> {
         name: product.name,
         price: product.price,
         images: product.images,
-        stock: product.stock
+        stock: product.stockQuantity,
       },
       quantity,
       validated: true,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     }
-
-  } catch (error) {
-    if (error.statusCode) {
+  }
+  catch (error) {
+    const err = error as ErrorWithStatusCode
+    if (err.statusCode) {
       throw error
     }
-    
+
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to validate product'
+      statusMessage: 'Failed to validate product',
     })
   }
 }
@@ -317,12 +370,12 @@ async function processUpdateQuantity(data: any): Promise<any> {
   // For quantity updates, we need to validate against current product stock
   // This would typically involve fetching the cart item and checking current stock
   // For now, we'll return a success response with validation timestamp
-  
+
   return {
     itemId,
     quantity,
     validated: true,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   }
 }
 
@@ -335,7 +388,7 @@ async function processRemoveItem(data: any): Promise<any> {
   return {
     itemId,
     removed: true,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   }
 }
 
@@ -345,7 +398,7 @@ async function processRemoveItem(data: any): Promise<any> {
 async function processClearCart(data: any): Promise<any> {
   return {
     cleared: true,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   }
 }
 
@@ -359,36 +412,36 @@ async function processValidateCart(data: any): Promise<any> {
   for (const item of items) {
     try {
       // Fetch current product data
-      const product = await $fetch(`/api/products/${item.productId}`)
-      
+      const product = await $fetch<ProductResponse>(`/api/products/${item.productId}`)
+
       if (!product) {
         validationResults.push({
           itemId: item.id,
           valid: false,
           error: 'Product not found',
-          action: 'remove'
+          action: 'remove',
         })
         continue
       }
 
       // Check stock availability
-      if (product.stock === 0) {
+      if (product.stockQuantity === 0) {
         validationResults.push({
           itemId: item.id,
           valid: false,
           error: 'Product out of stock',
-          action: 'remove'
+          action: 'remove',
         })
         continue
       }
 
-      if (item.quantity > product.stock) {
+      if (item.quantity > product.stockQuantity) {
         validationResults.push({
           itemId: item.id,
           valid: false,
           error: 'Quantity exceeds available stock',
           action: 'adjust',
-          suggestedQuantity: product.stock
+          suggestedQuantity: product.stockQuantity,
         })
         continue
       }
@@ -401,23 +454,23 @@ async function processValidateCart(data: any): Promise<any> {
           id: product.id,
           name: product.name,
           price: product.price,
-          stock: product.stock
-        }
+          stock: product.stockQuantity,
+        },
       })
-
-    } catch (error) {
+    }
+    catch (error) {
       validationResults.push({
         itemId: item.id,
         valid: false,
         error: 'Failed to validate product',
-        action: 'retry'
+        action: 'retry',
       })
     }
   }
 
   return {
     validationResults,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   }
 }
 
@@ -429,9 +482,18 @@ function getClientIP(event: any): string | null {
   const realIP = getHeader(event, 'x-real-ip')
   const remoteAddress = event.node.req.socket?.remoteAddress
 
-  if (forwarded) {
-    return forwarded.split(',')[0].trim()
+  if (typeof forwarded === 'string' && forwarded.length > 0) {
+    const parts = forwarded.split(',')
+    return parts[0]?.trim() || null
   }
 
-  return realIP || remoteAddress || null
+  if (typeof realIP === 'string') {
+    return realIP
+  }
+
+  if (typeof remoteAddress === 'string') {
+    return remoteAddress
+  }
+
+  return null
 }

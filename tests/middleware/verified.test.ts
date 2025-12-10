@@ -26,7 +26,7 @@ describe('Verified Middleware', () => {
     // Mock route objects
     mockTo = {
       path: '/account/settings',
-      fullPath: '/account/settings'
+      fullPath: '/account/settings',
     } as RouteLocationNormalized
     mockFrom = { path: '/' } as RouteLocationNormalized
 
@@ -53,8 +53,8 @@ describe('Verified Middleware', () => {
         path: '/auth/login',
         query: {
           redirect: '/account/settings',
-          message: 'login-required'
-        }
+          message: 'login-required',
+        },
       })
     })
 
@@ -62,7 +62,7 @@ describe('Verified Middleware', () => {
       mockUser = null
       mockTo = {
         path: '/',
-        fullPath: '/'
+        fullPath: '/',
       } as RouteLocationNormalized
 
       const { default: verifiedMiddleware } = await import('../../middleware/verified')
@@ -71,8 +71,8 @@ describe('Verified Middleware', () => {
       expect(mockNavigateTo).toHaveBeenCalledWith({
         path: '/auth/login',
         query: {
-          message: 'login-required'
-        }
+          message: 'login-required',
+        },
       })
     })
 
@@ -85,9 +85,9 @@ describe('Verified Middleware', () => {
       expect(mockNavigateTo).toHaveBeenCalledWith(
         expect.objectContaining({
           query: expect.objectContaining({
-            message: 'login-required'
-          })
-        })
+            message: 'login-required',
+          }),
+        }),
       )
     })
   })
@@ -97,7 +97,7 @@ describe('Verified Middleware', () => {
       mockUser = {
         id: 'user-123',
         email: 'user@example.com',
-        email_confirmed_at: '2024-01-01T00:00:00Z'
+        email_confirmed_at: '2024-01-01T00:00:00Z',
       }
 
       const { default: verifiedMiddleware } = await import('../../middleware/verified')
@@ -111,11 +111,11 @@ describe('Verified Middleware', () => {
       mockUser = {
         id: 'user-123',
         email: 'user@example.com',
-        email_confirmed_at: '2024-01-01T00:00:00Z'
+        email_confirmed_at: '2024-01-01T00:00:00Z',
       }
       mockTo = {
         path: '/account/orders/123',
-        fullPath: '/account/orders/123'
+        fullPath: '/account/orders/123',
       } as RouteLocationNormalized
 
       const { default: verifiedMiddleware } = await import('../../middleware/verified')
@@ -130,7 +130,7 @@ describe('Verified Middleware', () => {
       mockUser = {
         id: 'user-123',
         email: 'unverified@example.com',
-        email_confirmed_at: null
+        email_confirmed_at: null,
       }
     })
 
@@ -143,15 +143,15 @@ describe('Verified Middleware', () => {
         query: {
           message: 'email-verification-required',
           email: 'unverified@example.com',
-          redirect: '/account/settings'
-        }
+          redirect: '/account/settings',
+        },
       })
     })
 
     it('should include redirect path for post-verification navigation', async () => {
       mockTo = {
         path: '/checkout/payment',
-        fullPath: '/checkout/payment'
+        fullPath: '/checkout/payment',
       } as RouteLocationNormalized
 
       const { default: verifiedMiddleware } = await import('../../middleware/verified')
@@ -160,9 +160,9 @@ describe('Verified Middleware', () => {
       expect(mockNavigateTo).toHaveBeenCalledWith(
         expect.objectContaining({
           query: expect.objectContaining({
-            redirect: '/checkout/payment'
-          })
-        })
+            redirect: '/checkout/payment',
+          }),
+        }),
       )
     })
 
@@ -173,9 +173,9 @@ describe('Verified Middleware', () => {
       expect(mockNavigateTo).toHaveBeenCalledWith(
         expect.objectContaining({
           query: expect.objectContaining({
-            email: 'unverified@example.com'
-          })
-        })
+            email: 'unverified@example.com',
+          }),
+        }),
       )
     })
 
@@ -186,9 +186,9 @@ describe('Verified Middleware', () => {
       expect(mockNavigateTo).toHaveBeenCalledWith(
         expect.objectContaining({
           query: expect.objectContaining({
-            message: 'email-verification-required'
-          })
-        })
+            message: 'email-verification-required',
+          }),
+        }),
       )
     })
   })
@@ -205,8 +205,8 @@ describe('Verified Middleware', () => {
       expect(mockLocalePath).toHaveBeenCalledWith('/auth/login')
       expect(mockNavigateTo).toHaveBeenCalledWith(
         expect.objectContaining({
-          path: '/es/auth/login'
-        })
+          path: '/es/auth/login',
+        }),
       )
     })
 
@@ -214,7 +214,7 @@ describe('Verified Middleware', () => {
       mockUser = {
         id: 'user-123',
         email: 'user@example.com',
-        email_confirmed_at: null
+        email_confirmed_at: null,
       }
       mockLocalePath = vi.fn((path: string) => `/ro${path}`)
       vi.stubGlobal('useLocalePath', () => mockLocalePath)
@@ -225,8 +225,8 @@ describe('Verified Middleware', () => {
       expect(mockLocalePath).toHaveBeenCalledWith('/auth/verify-email')
       expect(mockNavigateTo).toHaveBeenCalledWith(
         expect.objectContaining({
-          path: '/ro/auth/verify-email'
-        })
+          path: '/ro/auth/verify-email',
+        }),
       )
     })
 
@@ -234,7 +234,7 @@ describe('Verified Middleware', () => {
       mockUser = null
       mockTo = {
         path: '/',
-        fullPath: '/'
+        fullPath: '/',
       } as RouteLocationNormalized
       mockLocalePath = vi.fn((path: string) => `/en${path}`)
       vi.stubGlobal('useLocalePath', () => mockLocalePath)
@@ -259,8 +259,8 @@ describe('Verified Middleware', () => {
 
       expect(mockNavigateTo).toHaveBeenCalledWith(
         expect.objectContaining({
-          path: '/auth/verify-email'
-        })
+          path: '/auth/verify-email',
+        }),
       )
     })
 
@@ -268,7 +268,7 @@ describe('Verified Middleware', () => {
       mockUser = {
         id: 'user-123',
         email: 'user@example.com',
-        email_confirmed_at: ''
+        email_confirmed_at: '',
       }
 
       const { default: verifiedMiddleware } = await import('../../middleware/verified')
@@ -277,8 +277,8 @@ describe('Verified Middleware', () => {
       // Empty string is falsy, should redirect to verify
       expect(mockNavigateTo).toHaveBeenCalledWith(
         expect.objectContaining({
-          path: '/auth/verify-email'
-        })
+          path: '/auth/verify-email',
+        }),
       )
     })
 
@@ -286,7 +286,7 @@ describe('Verified Middleware', () => {
       mockUser = null
       mockTo = {
         path: '/account/orders',
-        fullPath: '/account/orders?page=2&status=pending'
+        fullPath: '/account/orders?page=2&status=pending',
       } as RouteLocationNormalized
 
       const { default: verifiedMiddleware } = await import('../../middleware/verified')
@@ -295,9 +295,9 @@ describe('Verified Middleware', () => {
       expect(mockNavigateTo).toHaveBeenCalledWith(
         expect.objectContaining({
           query: expect.objectContaining({
-            redirect: '/account/orders?page=2&status=pending'
-          })
-        })
+            redirect: '/account/orders?page=2&status=pending',
+          }),
+        }),
       )
     })
   })

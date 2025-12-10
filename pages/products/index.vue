@@ -22,7 +22,10 @@
       :search-query="searchQuery"
     />
 
-    <div class="relative" ref="mainContainer">
+    <div
+      ref="mainContainer"
+      class="relative"
+    >
       <!-- Mobile Filter Sheet -->
       <ProductFilterSheet
         v-model="showFilterPanel"
@@ -35,7 +38,7 @@
       >
         <productFilterMain
           :filters="filters"
-          :available-filters="availableFilters"
+          :available-filters="availableFilters as any"
           :filtered-product-count="products?.length || 0"
           :show-title="false"
           @update:filters="handleFiltersUpdate"
@@ -43,8 +46,14 @@
         />
       </ProductFilterSheet>
 
-      <div class="mx-auto w-full max-w-7xl px-4 pb-20 pt-10 sm:px-6 lg:px-8" ref="contentContainer">
-        <div class="w-full" ref="scrollContainer">
+      <div
+        ref="contentContainer"
+        class="mx-auto w-full max-w-7xl px-4 pb-20 pt-10 sm:px-6 lg:px-8"
+      >
+        <div
+          ref="scrollContainer"
+          class="w-full"
+        >
           <MobilePullToRefreshIndicator
             v-if="mobileInteractions.isMobile.value"
             :is-refreshing="mobileInteractions.pullToRefresh.isRefreshing.value"
@@ -55,7 +64,10 @@
             :indicator-style="mobileInteractions.pullToRefresh.pullIndicatorStyle.value"
           />
 
-          <div id="results" class="space-y-12">
+          <div
+            id="results"
+            class="space-y-12"
+          >
             <!-- Search Bar -->
             <div class="relative">
               <div class="relative">
@@ -68,8 +80,19 @@
                   @input="handleSearchInput"
                 />
                 <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                  <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  <svg
+                    class="h-5 w-5 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
                   </svg>
                 </div>
                 <button
@@ -79,8 +102,19 @@
                   :aria-label="t('common.clear')"
                   @click="searchQuery = ''; handleSearchInput()"
                 >
-                  <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  <svg
+                    class="h-5 w-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
                   </svg>
                 </button>
               </div>
@@ -96,7 +130,7 @@
                   {{ t('products.showingResults', {
                     start: ((pagination.page - 1) * pagination.limit) + 1,
                     end: Math.min(pagination.page * pagination.limit, pagination.total || 0),
-                    total: pagination.total || 0
+                    total: pagination.total || 0,
                   }) }}
                 </p>
               </div>
@@ -112,32 +146,56 @@
                   class="relative inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-750"
                   @click="openFilterPanel"
                 >
-                  <commonIcon name="lucide:sliders-horizontal" class="h-4 w-4" aria-hidden="true" />
+                  <commonIcon
+                    name="lucide:sliders-horizontal"
+                    class="h-4 w-4"
+                    aria-hidden="true"
+                  />
                   <span>{{ t('products.filters.title') }}</span>
-                  <span v-if="activeFilterChips.length" class="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-blue-600 text-xs font-semibold text-white ring-2 ring-white dark:ring-gray-900">
+                  <span
+                    v-if="activeFilterChips.length"
+                    class="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-blue-600 text-xs font-semibold text-white ring-2 ring-white dark:ring-gray-900"
+                  >
                     {{ activeFilterChips.length }}
                   </span>
                 </button>
 
                 <!-- Sort Dropdown -->
                 <div class="relative">
-                  <label for="product-sort" class="sr-only">
+                  <label
+                    for="product-sort"
+                    class="sr-only"
+                  >
                     {{ t('products.sortLabel') }}
                   </label>
                   <select
                     id="product-sort"
-                    v-model="sortBy"
+                    v-model="localSortBy"
                     :aria-label="t('products.sortLabel')"
                     class="h-10 appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-10 text-sm font-medium text-gray-700 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
                     @change="handleSortChange"
                   >
-                    <option value="created">{{ t('products.sortNewest') }}</option>
-                    <option value="name">{{ t('products.sortName') }}</option>
-                    <option value="price_asc">{{ t('products.sortPriceLowHigh') }}</option>
-                    <option value="price_desc">{{ t('products.sortPriceHighLow') }}</option>
-                    <option value="featured">{{ t('products.sortFeatured') }}</option>
+                    <option value="created">
+                      {{ t('products.sortNewest') }}
+                    </option>
+                    <option value="name">
+                      {{ t('products.sortName') }}
+                    </option>
+                    <option value="price_asc">
+                      {{ t('products.sortPriceLowHigh') }}
+                    </option>
+                    <option value="price_desc">
+                      {{ t('products.sortPriceHighLow') }}
+                    </option>
+                    <option value="featured">
+                      {{ t('products.sortFeatured') }}
+                    </option>
                   </select>
-                  <commonIcon name="lucide:chevron-down" class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-600" aria-hidden="true" />
+                  <commonIcon
+                    name="lucide:chevron-down"
+                    class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-600"
+                    aria-hidden="true"
+                  />
                 </div>
               </div>
             </div>
@@ -152,9 +210,23 @@
               @clear-all="clearAllFilters"
             />
 
-            <div v-if="error" class="rounded-2xl border border-red-100 bg-white p-10 text-center shadow-sm dark:border-red-900/40 dark:bg-gray-900">
-              <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto mb-4 h-16 w-16 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <div
+              v-if="error"
+              class="rounded-2xl border border-red-100 bg-white p-10 text-center shadow-sm dark:border-red-900/40 dark:bg-gray-900"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="mx-auto mb-4 h-16 w-16 text-red-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
               </svg>
               <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
                 {{ t('common.error') }}
@@ -162,13 +234,23 @@
               <p class="text-gray-600 dark:text-gray-400 mb-6">
                 {{ error || t('common.errorGeneric') }}
               </p>
-              <UiButton type="button" class="rounded-full" @click="retryLoad">
+              <UiButton
+                type="button"
+                class="rounded-full"
+                @click="retryLoad"
+              >
                 {{ t('common.tryAgain') }}
               </UiButton>
             </div>
 
-            <div v-else-if="loading" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              <UiCard v-for="n in 8" :key="`skeleton-${n}`">
+            <div
+              v-else-if="loading"
+              class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+            >
+              <UiCard
+                v-for="n in 8"
+                :key="`skeleton-${n}`"
+              >
                 <UiCardContent class="p-4">
                   <UiSkeleton class="mb-4 aspect-square rounded-xl" />
                   <UiSkeleton class="mb-2 h-4 w-full" />
@@ -177,7 +259,12 @@
               </UiCard>
             </div>
 
-            <div v-else-if="products?.length" id="main-content" class="space-y-10" role="main">
+            <div
+              v-else-if="products?.length"
+              id="main-content"
+              class="space-y-10"
+              role="main"
+            >
               <MobileVirtualProductGrid
                 v-if="mobileInteractions.isMobile.value && products.length > 20"
                 :items="products"
@@ -186,16 +273,32 @@
                 @load-more="loadMoreProducts"
               />
               <!-- Standard Grid: Clean, predictable layout -->
-              <div v-else class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                <ProductCard v-for="product in products" :key="product.id" :product="product" />
+              <div
+                v-else
+                class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+              >
+                <ProductCard
+                  v-for="product in products"
+                  :key="product.id"
+                  :product="product"
+                />
               </div>
 
-              <div v-if="pagination.totalPages > 1" class="space-y-4 text-center">
-                <p class="text-sm text-gray-600 dark:text-gray-400" aria-live="polite">
+              <div
+                v-if="pagination.totalPages > 1"
+                class="space-y-4 text-center"
+              >
+                <p
+                  class="text-sm text-gray-600 dark:text-gray-400"
+                  aria-live="polite"
+                >
                   {{ t('products.pagination.pageOf', { page: pagination.page, total: pagination.totalPages }) }} ·
                   {{ t('products.pagination.showing', { count: pagination.total || products.length }) }}
                 </p>
-                <nav class="flex items-center justify-center gap-2" aria-label="Pagination">
+                <nav
+                  class="flex items-center justify-center gap-2"
+                  aria-label="Pagination"
+                >
                   <UiButton
                     :disabled="pagination.page <= 1"
                     variant="outline"
@@ -206,21 +309,28 @@
                   >
                     {{ t('common.previous') }}
                   </UiButton>
-                  <UiButton
+                  <template
                     v-for="page in visiblePages"
                     :key="`page-${page}`"
-                    v-if="page !== '...'"
-                    size="sm"
-                    :variant="page === pagination.page ? 'default' : 'ghost'"
-                    class="rounded-full"
-                    :class="page === pagination.page ? 'shadow-lg shadow-blue-500/30' : ''"
-                    :aria-label="t('products.pagination.goToPage', { page })"
-                    :aria-current="page === pagination.page ? 'page' : undefined"
-                    @click="goToPage(page as number)"
                   >
-                    {{ page }}
-                  </UiButton>
-                  <span v-else class="px-3 py-2 text-sm text-gray-600" aria-hidden="true">…</span>
+                    <UiButton
+                      v-if="page !== '...'"
+                      size="sm"
+                      :variant="page === pagination.page ? 'default' : 'ghost'"
+                      class="rounded-full"
+                      :class="page === pagination.page ? 'shadow-lg shadow-blue-500/30' : ''"
+                      :aria-label="t('products.pagination.goToPage', { page })"
+                      :aria-current="page === pagination.page ? 'page' : undefined"
+                      @click="goToPage(page as number)"
+                    >
+                      {{ page }}
+                    </UiButton>
+                    <span
+                      v-else
+                      class="px-3 py-2 text-sm text-gray-600"
+                      aria-hidden="true"
+                    >…</span>
+                  </template>
                   <UiButton
                     :disabled="pagination.page >= pagination.totalPages"
                     variant="outline"
@@ -235,9 +345,23 @@
               </div>
             </div>
 
-            <div v-else class="rounded-2xl border border-dashed border-gray-300 bg-white p-12 text-center shadow-sm dark:border-gray-700 dark:bg-gray-900">
-              <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto mb-4 h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+            <div
+              v-else
+              class="rounded-2xl border border-dashed border-gray-300 bg-white p-12 text-center shadow-sm dark:border-gray-700 dark:bg-gray-900"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="mx-auto mb-4 h-16 w-16 text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                />
               </svg>
               <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
                 {{ hasActiveFilters ? t('products.noResults') : t('products.noProducts') }}
@@ -245,12 +369,20 @@
               <p class="text-gray-600 dark:text-gray-400">
                 {{ hasActiveFilters ? t('products.tryDifferentFilters') : t('products.comingSoon') }}
               </p>
-              <UiButton v-if="hasActiveFilters" type="button" class="mt-6 rounded-full" @click="clearAllFilters">
+              <UiButton
+                v-if="hasActiveFilters"
+                type="button"
+                class="mt-6 rounded-full"
+                @click="clearAllFilters"
+              >
                 {{ t('products.clearFilters') }}
               </UiButton>
             </div>
 
-            <section v-if="recentlyViewedProducts.length" class="space-y-6">
+            <section
+              v-if="recentlyViewedProducts.length"
+              class="space-y-6"
+            >
               <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                 <div>
                   <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
@@ -262,7 +394,11 @@
                 </div>
               </div>
               <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                <ProductCard v-for="item in recentlyViewedProducts" :key="`recent-${item.id}`" :product="item" />
+                <ProductCard
+                  v-for="item in recentlyViewedProducts"
+                  :key="`recent-${item.id}`"
+                  :product="item"
+                />
               </div>
             </section>
 
@@ -292,7 +428,10 @@
                   <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
                     {{ story.description }}
                   </p>
-                  <button type="button" class="mt-4 inline-flex items-center gap-2 text-sm font-medium text-blue-700 transition hover:text-blue-800 dark:text-blue-200 dark:hover:text-blue-100">
+                  <button
+                    type="button"
+                    class="mt-4 inline-flex items-center gap-2 text-sm font-medium text-blue-700 transition hover:text-blue-800 dark:text-blue-200 dark:hover:text-blue-100"
+                  >
                     {{ t('products.editorial.cta') }}
                     <span aria-hidden="true">→</span>
                   </button>
@@ -319,7 +458,8 @@
  * - Handle user interactions
  */
 
-import type { ProductFilters, ProductWithRelations, ProductSortOption } from '~/types'
+import type { ProductFilters, ProductWithRelations } from '~/types'
+import type { ProductSortOption } from '~/types/guards'
 import type { FilterChip } from '~/composables/useProductFilters'
 import { ref, computed, onMounted, onUnmounted, onBeforeUnmount, nextTick, watch, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -354,7 +494,7 @@ const { t } = useI18n()
 function debounce<T extends (...args: any[]) => any>(fn: T, delay: number) {
   let timeoutId: ReturnType<typeof setTimeout> | null = null
 
-  return function(this: any, ...args: Parameters<T>) {
+  return function (this: any, ...args: Parameters<T>) {
     if (timeoutId) {
       clearTimeout(timeoutId)
     }
@@ -394,7 +534,7 @@ const {
   loading,
   error,
   sortBy,
-  showFilterPanel
+  showFilterPanel,
 } = useProductCatalog()
 
 // Initialize and fetch products during SSR (using URL params)
@@ -410,7 +550,7 @@ const {
   availableFilters,
   getCategoryName,
   removeFilterChip,
-  refreshPriceRange
+  refreshPriceRange,
 } = useProductFilters(categoriesTree)
 
 // Pagination UI
@@ -424,6 +564,9 @@ const searchQuery = ref('')
 const searchInput = ref<HTMLInputElement>()
 const searchAbortController = ref<AbortController | null>(null)
 
+// Type-safe sort ref
+const localSortBy = ref<ProductSortOption>(sortBy.value as ProductSortOption)
+
 // DOM refs
 const scrollContainer = ref<HTMLElement>()
 
@@ -433,13 +576,13 @@ const recentlyViewedProducts = useState<ProductWithRelations[]>('recentlyViewedP
 // Computed
 const hasActiveFilters = computed(() => {
   return !!(
-    searchQuery.value ||
-    filters.value.category ||
-    filters.value.priceMin ||
-    filters.value.priceMax ||
-    (filters.value.attributes && Object.keys(filters.value.attributes).length > 0) ||
-    filters.value.inStock ||
-    filters.value.featured
+    searchQuery.value
+    || filters.value.category
+    || filters.value.priceMin
+    || filters.value.priceMax
+    || (filters.value.attributes && Object.keys(filters.value.attributes).length > 0)
+    || filters.value.inStock
+    || filters.value.featured
   )
 })
 
@@ -459,27 +602,32 @@ const handleSearchInput = debounce(() => {
     search(searchQuery.value.trim(), {
       ...filters.value,
       page: 1,
-      sort: sortBy.value
+      sort: localSortBy.value,
     }, searchAbortController.value.signal)
-  } else {
+  }
+  else {
     fetchProducts({
       ...filters.value,
       page: 1,
-      sort: sortBy.value
+      sort: localSortBy.value,
     }, searchAbortController.value.signal)
   }
 }, 300)
 
 const handleSortChange = () => {
-  const currentFilters = {
+  // Update the store sortBy
+  sortBy.value = localSortBy.value
+
+  const currentFilters: ProductFilters = {
     ...filters.value,
-    sort: sortBy.value,
-    page: 1
+    sort: localSortBy.value,
+    page: 1,
   }
 
   if (searchQuery.value.trim()) {
     search(searchQuery.value.trim(), currentFilters)
-  } else {
+  }
+  else {
     fetchProducts(currentFilters)
   }
 }
@@ -489,15 +637,16 @@ const handleFiltersUpdate = (newFilters: Partial<ProductFilters>) => {
 }
 
 const handleApplyFilters = (closePanel = false) => {
-  const currentFilters = {
+  const currentFilters: ProductFilters = {
     ...filters.value,
-    sort: sortBy.value,
-    page: 1
+    sort: localSortBy.value,
+    page: 1,
   }
 
   if (searchQuery.value.trim()) {
     search(searchQuery.value.trim(), currentFilters)
-  } else {
+  }
+  else {
     fetchProducts(currentFilters)
   }
 
@@ -508,6 +657,7 @@ const handleApplyFilters = (closePanel = false) => {
 
 const clearAllFilters = () => {
   searchQuery.value = ''
+  localSortBy.value = 'created'
   sortBy.value = 'created'
   clearFilters()
   fetchProducts({ sort: 'created', page: 1, limit: 12 })
@@ -523,7 +673,7 @@ const goToPage = async (page: number) => {
   // Validate page number to prevent attacks
   const validPage = Math.max(1, Math.min(
     Math.floor(page),
-    pagination.value.totalPages || 1
+    pagination.value.totalPages || 1,
   ))
 
   if (validPage !== page) {
@@ -536,8 +686,8 @@ const goToPage = async (page: number) => {
     query: {
       ...route.query,
       page: validPage.toString(),
-      limit: (route.query.limit || '12').toString()
-    }
+      limit: (route.query.limit || '12').toString(),
+    },
   })
 
   // Note: Scroll is handled by the URL watcher after products load
@@ -549,18 +699,20 @@ const goToPage = async (page: number) => {
  */
 const refreshProducts = async () => {
   try {
-    const currentFilters = {
+    const currentFilters: ProductFilters = {
       ...filters.value,
-      sort: sortBy.value,
-      page: 1
+      sort: localSortBy.value,
+      page: 1,
     }
 
     if (searchQuery.value.trim()) {
       await search(searchQuery.value.trim(), currentFilters)
-    } else {
+    }
+    else {
       await fetchProducts(currentFilters)
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Failed to refresh products:', error)
   }
 }
@@ -577,10 +729,10 @@ const mobileInteractions = useMobileProductInteractions(
   scrollContainer,
   refreshProducts,
   {
-    currentPage: computed(() => pagination.value.page),
-    totalPages: computed(() => pagination.value.totalPages),
-    goToPage
-  }
+    get currentPage() { return pagination.value?.page ?? 1 },
+    get totalPages() { return pagination.value?.totalPages ?? 1 },
+    goToPage,
+  },
 )
 
 /**
@@ -591,18 +743,20 @@ const loadMoreProducts = async () => {
 
   try {
     const nextPage = pagination.value.page + 1
-    const currentFilters = {
+    const currentFilters: ProductFilters = {
       ...filters.value,
-      sort: sortBy.value,
-      page: nextPage
+      sort: localSortBy.value,
+      page: nextPage,
     }
 
     if (searchQuery.value.trim()) {
       await search(searchQuery.value.trim(), currentFilters)
-    } else {
+    }
+    else {
       await fetchProducts(currentFilters)
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Failed to load more products:', error)
   }
 }
@@ -612,7 +766,7 @@ const loadMoreProducts = async () => {
  */
 const removeActiveChip = (chip: FilterChip) => {
   const nextFilters = removeFilterChip(chip)
-  fetchProducts({ ...nextFilters, page: 1, sort: sortBy.value })
+  fetchProducts({ ...nextFilters, page: 1, sort: localSortBy.value })
 }
 
 const editorialStories = computed(() => {
@@ -621,20 +775,20 @@ const editorialStories = computed(() => {
       id: 'wineries',
       title: t('products.editorial.stories.wineries.title'),
       description: t('products.editorial.stories.wineries.description'),
-      tag: t('products.editorial.stories.wineries.tag')
+      tag: t('products.editorial.stories.wineries.tag'),
     },
     {
       id: 'pairings',
       title: t('products.editorial.stories.pairings.title'),
       description: t('products.editorial.stories.pairings.description'),
-      tag: t('products.editorial.stories.pairings.tag')
+      tag: t('products.editorial.stories.pairings.tag'),
     },
     {
       id: 'heritage',
       title: t('products.editorial.stories.heritage.title'),
       description: t('products.editorial.stories.heritage.description'),
-      tag: t('products.editorial.stories.heritage.tag')
-    }
+      tag: t('products.editorial.stories.heritage.tag'),
+    },
   ]
 })
 
@@ -646,14 +800,15 @@ watchEffect(() => {
   }
 })
 
-watch(() => filters.value.sort, newValue => {
-  // Sync filters.sort to sortBy (read-only sync, no fetch trigger)
-  if (newValue && newValue !== sortBy.value) {
-    sortBy.value = newValue as string
+watch(() => filters.value.sort, (newValue) => {
+  // Sync filters.sort to local sortBy (read-only sync, no fetch trigger)
+  if (newValue && newValue !== localSortBy.value) {
+    localSortBy.value = newValue
+    sortBy.value = newValue
   }
 }, { immediate: false })
 
-watch(mobileInteractions.isMobile, value => {
+watch(mobileInteractions.isMobile, (value) => {
   // Close filter panel when switching to desktop
   if (!value) {
     closeFilterPanel()
@@ -679,16 +834,17 @@ watch(() => route.query.page, async (newPage, oldPage) => {
   const validPage = Math.max(1, Math.min(pageNum, pagination.value.totalPages || 1))
 
   // Build filters for fetch
-  const currentFilters = {
+  const currentFilters: ProductFilters = {
     ...filters.value,
-    sort: sortBy.value,
-    page: validPage
+    sort: localSortBy.value,
+    page: validPage,
   }
 
   // Fetch products based on current context
   if (searchQuery.value.trim()) {
     await search(searchQuery.value.trim(), currentFilters)
-  } else {
+  }
+  else {
     await fetchProducts(currentFilters)
   }
 
@@ -699,6 +855,9 @@ watch(() => route.query.page, async (newPage, oldPage) => {
 // Lifecycle Hooks
 onMounted(async () => {
   searchQuery.value = storeSearchQuery.value || ''
+
+  // Sync local sortBy with store
+  localSortBy.value = (sortBy.value as ProductSortOption) || 'created'
 
   // Auto-focus search input if focus=search query parameter is present
   if (route.query.focus === 'search' && searchInput.value) {
@@ -721,12 +880,13 @@ onMounted(async () => {
 
 // Cleanup session storage to prevent accumulation over multiple navigations
 onBeforeUnmount(() => {
-  if (process.client) {
+  if (import.meta.client) {
     try {
       // Clean up any products-related session storage
       sessionStorage.removeItem('products-scroll-position')
       sessionStorage.removeItem('products-filter-state')
-    } catch (error) {
+    }
+    catch (error) {
       console.error('[Product Catalog] Session storage cleanup failed:', error)
 
       // Only ignore SecurityError (private browsing), rethrow others
@@ -739,9 +899,9 @@ onBeforeUnmount(() => {
 
 onUnmounted(() => {
   // Cancel any pending search requests to prevent memory leaks
-  if (searchAbortController) {
-    searchAbortController.abort()
-    searchAbortController = null
+  if (searchAbortController.value) {
+    searchAbortController.value.abort()
+    searchAbortController.value = null
   }
 
   // Cleanup mobile interactions

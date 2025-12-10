@@ -44,7 +44,10 @@
       <!-- Center Divider with Plus Icon -->
       <div class="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2">
         <div class="rounded-full bg-white p-2.5 shadow-lg md:p-3">
-          <commonIcon name="lucide:plus" class="h-4 w-4 text-gold-500 md:h-5 md:w-5" />
+          <commonIcon
+            name="lucide:plus"
+            class="h-4 w-4 text-gold-500 md:h-5 md:w-5"
+          />
         </div>
       </div>
 
@@ -68,7 +71,10 @@
           {{ getLocalizedText(pairing.wineName) }}
         </h3>
         <p class="flex items-center gap-1.5 text-sm font-medium text-slate-600">
-          <commonIcon name="lucide:utensils" class="h-3.5 w-3.5" />
+          <commonIcon
+            name="lucide:utensils"
+            class="h-3.5 w-3.5"
+          />
           {{ getLocalizedText(pairing.dishName) }}
         </p>
       </div>
@@ -76,7 +82,10 @@
       <!-- Pairing Reason -->
       <div class="mt-3 flex-1">
         <div class="mb-1 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-primary">
-          <commonIcon name="lucide:lightbulb" class="h-3 w-3" />
+          <commonIcon
+            name="lucide:lightbulb"
+            class="h-3 w-3"
+          />
           {{ t('wineStory.pairings.whyItWorks') }}
         </div>
         <p class="line-clamp-2 text-sm leading-relaxed text-slate-600">
@@ -91,7 +100,10 @@
           :key="occasion"
           class="inline-flex items-center gap-1 rounded-full bg-primary/5 px-2 py-0.5 text-xs font-medium text-primary"
         >
-          <commonIcon name="lucide:calendar" class="h-2.5 w-2.5" />
+          <commonIcon
+            name="lucide:calendar"
+            class="h-2.5 w-2.5"
+          />
           {{ t(`wineStory.pairings.occasions.${occasion}`) }}
         </span>
 
@@ -99,7 +111,10 @@
           v-if="pairing.seasons.length > 0"
           class="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700"
         >
-          <commonIcon name="lucide:sun" class="h-2.5 w-2.5" />
+          <commonIcon
+            name="lucide:sun"
+            class="h-2.5 w-2.5"
+          />
           {{ t(`wineStory.pairings.seasons.${pairing.seasons[0]}`) }}
         </span>
       </div>
@@ -110,7 +125,10 @@
         @click.stop="$emit('click', pairing)"
       >
         {{ t('wineStory.pairings.viewPairing') }}
-        <commonIcon name="lucide:arrow-right" class="h-4 w-4 transition-transform group-hover:translate-x-1" />
+        <commonIcon
+          name="lucide:arrow-right"
+          class="h-4 w-4 transition-transform group-hover:translate-x-1"
+        />
       </button>
     </div>
 
@@ -156,7 +174,7 @@ const getIntensityColor = (position: number, intensity: 'light' | 'medium' | 'bo
   const intensityMap = {
     light: 1,
     medium: 2,
-    bold: 3
+    bold: 3,
   }
 
   const level = intensityMap[intensity]

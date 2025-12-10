@@ -11,9 +11,9 @@
         </p>
       </div>
       <Button
-        @click="exportToCSV"
         :disabled="loading || exporting"
         variant="outline"
+        @click="exportToCSV"
       >
         <commonIcon
           :name="exporting ? 'lucide:loader-2' : 'lucide:download'"
@@ -52,15 +52,15 @@
             <Button
               v-for="preset in datePresets"
               :key="preset.label"
-              @click="applyDatePreset(preset.days)"
               variant="outline"
               size="sm"
+              @click="applyDatePreset(preset.days)"
             >
               {{ preset.label }}
             </Button>
             <Button
-              @click="fetchAnalytics"
               :disabled="loading"
+              @click="fetchAnalytics"
             >
               <commonIcon
                 :name="loading ? 'lucide:loader-2' : 'lucide:refresh-ccw'"
@@ -74,12 +74,21 @@
     </Card>
 
     <!-- Loading State -->
-    <div v-if="loading && !analytics" class="flex items-center justify-center py-12">
-      <commonIcon name="lucide:loader-2" class="h-12 w-12 animate-spin text-primary" />
+    <div
+      v-if="loading && !analytics"
+      class="flex items-center justify-center py-12"
+    >
+      <commonIcon
+        name="lucide:loader-2"
+        class="h-12 w-12 animate-spin text-primary"
+      />
     </div>
 
     <!-- Analytics Content -->
-    <div v-else-if="analytics" class="space-y-6">
+    <div
+      v-else-if="analytics"
+      class="space-y-6"
+    >
       <!-- Summary Metrics -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card class="rounded-2xl">
@@ -266,7 +275,10 @@
           <CardDescription>Daily revenue and order volume over time</CardDescription>
         </CardHeader>
         <CardContent>
-          <div v-if="analytics.timeSeries.length > 0" class="h-64">
+          <div
+            v-if="analytics.timeSeries.length > 0"
+            class="h-64"
+          >
             <!-- Simple bar chart visualization -->
             <div class="flex items-end justify-between h-full space-x-1">
               <div
@@ -274,14 +286,18 @@
                 :key="index"
                 class="flex-1 flex flex-col items-center"
               >
-                <div class="w-full bg-blue-500 rounded-t transition-all hover:bg-blue-600"
+                <div
+                  class="w-full bg-blue-500 rounded-t transition-all hover:bg-blue-600"
                   :style="{ height: `${(dataPoint.revenue / maxRevenue) * 100}%` }"
                   :title="`${dataPoint.date}: ${formatCurrency(dataPoint.revenue)} (${dataPoint.orders} orders)`"
-                />
+                ></div>
               </div>
             </div>
           </div>
-          <div v-else class="text-center py-8 text-gray-500 dark:text-gray-400">
+          <div
+            v-else
+            class="text-center py-8 text-gray-500 dark:text-gray-400"
+          >
             No data available for the selected date range
           </div>
         </CardContent>
@@ -289,9 +305,17 @@
     </div>
 
     <!-- Error State -->
-    <div v-else-if="error" class="text-center py-12">
-      <commonIcon name="lucide:alert-circle" class="h-12 w-12 text-red-400 mx-auto mb-4" />
-      <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Failed to load analytics</h3>
+    <div
+      v-else-if="error"
+      class="text-center py-12"
+    >
+      <commonIcon
+        name="lucide:alert-circle"
+        class="h-12 w-12 text-red-400 mx-auto mb-4"
+      />
+      <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
+        Failed to load analytics
+      </h3>
       <p class="text-gray-600 dark:text-gray-400 mb-4">
         {{ error }}
       </p>
@@ -310,13 +334,13 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from '@/components/ui/card'
 import { subDays } from 'date-fns'
 
 definePageMeta({
   layout: 'admin',
-  middleware: ['auth', 'admin']
+  middleware: ['auth', 'admin'],
 })
 
 interface AnalyticsData {
@@ -372,7 +396,7 @@ const dateTo = ref(today)
 const datePresets = [
   { label: 'Last 7 days', days: 7 },
   { label: 'Last 30 days', days: 30 },
-  { label: 'Last 90 days', days: 90 }
+  { label: 'Last 90 days', days: 90 },
 ]
 
 // Computed
@@ -393,19 +417,22 @@ const fetchAnalytics = async () => {
     }>('/api/admin/orders/analytics', {
       query: {
         date_from: dateFrom.value,
-        date_to: dateTo.value
-      }
+        date_to: dateTo.value,
+      },
     })
 
     if (response.success) {
       analytics.value = response.data
-    } else {
+    }
+    else {
       error.value = 'Failed to fetch analytics data'
     }
-  } catch (err) {
+  }
+  catch (err) {
     console.error('Error fetching analytics:', err)
     error.value = 'An error occurred while fetching analytics'
-  } finally {
+  }
+  finally {
     loading.value = false
   }
 }
@@ -419,7 +446,7 @@ const applyDatePreset = (days: number) => {
 const formatCurrency = (amount: number): string => {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'EUR'
+    currency: 'EUR',
   }).format(amount)
 }
 
@@ -434,12 +461,12 @@ const exportToCSV = async () => {
     const rows = analytics.value.timeSeries.map(d => [
       d.date,
       d.revenue.toFixed(2),
-      d.orders.toString()
+      d.orders.toString(),
     ])
 
     const csvContent = [
       headers.join(','),
-      ...rows.map(row => row.join(','))
+      ...rows.map(row => row.join(',')),
     ].join('\n')
 
     // Create download link
@@ -453,11 +480,13 @@ const exportToCSV = async () => {
 
     const toast = useToastStore()
     toast.success('Analytics exported successfully')
-  } catch (err) {
+  }
+  catch (err) {
     console.error('Error exporting CSV:', err)
     const toast = useToastStore()
     toast.error('Failed to export analytics')
-  } finally {
+  }
+  finally {
     exporting.value = false
   }
 }
@@ -473,8 +502,8 @@ useHead({
   meta: [
     {
       name: 'robots',
-      content: 'noindex, nofollow'
-    }
-  ]
+      content: 'noindex, nofollow',
+    },
+  ],
 })
 </script>

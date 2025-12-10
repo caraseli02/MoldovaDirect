@@ -34,7 +34,7 @@
                   d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-              
+
               <!-- Error Icon -->
               <svg
                 v-else-if="type === 'error'"
@@ -51,7 +51,7 @@
                   d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16c-.77.833.192 2.5 1.732 2.5z"
                 />
               </svg>
-              
+
               <!-- Warning Icon -->
               <svg
                 v-else-if="type === 'warning'"
@@ -67,7 +67,7 @@
                   d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16c-.77.833.192 2.5 1.732 2.5z"
                 />
               </svg>
-              
+
               <!-- Info Icon -->
               <svg
                 v-else
@@ -84,35 +84,49 @@
                 />
               </svg>
             </div>
-            
+
             <div class="ml-3 w-0 flex-1 pt-0.5">
-              <p class="text-sm font-medium text-gray-900 dark:text-white">{{ title }}</p>
-              <p v-if="message" class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ message }}</p>
-              
+              <p class="text-sm font-medium text-gray-900 dark:text-white">
+                {{ title }}
+              </p>
+              <p
+                v-if="message"
+                class="mt-1 text-sm text-gray-500 dark:text-gray-400"
+              >
+                {{ message }}
+              </p>
+
               <!-- Action Button -->
-              <div v-if="actionText && actionHandler" class="mt-3">
+              <div
+                v-if="actionText && actionHandler"
+                class="mt-3"
+              >
                 <Button
                   variant="link"
                   size="sm"
-                  @click="handleAction"
                   data-testid="toast-action-button"
                   class="text-sm font-medium text-primary-600 hover:text-primary-500 p-0 h-auto"
+                  @click="handleAction"
                 >
                   {{ actionText }}
                 </Button>
               </div>
             </div>
-            
+
             <div class="ml-4 flex-shrink-0 flex">
               <Button
                 variant="ghost"
                 size="icon"
-                @click="close"
                 data-testid="toast-close-button"
                 class="bg-white dark:bg-gray-800 rounded-md inline-flex text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                @click="close"
               >
                 <span class="sr-only">Close</span>
-                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <svg
+                  class="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
                   <path
                     fill-rule="evenodd"
                     d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
@@ -142,7 +156,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   type: 'info',
-  duration: 5000
+  duration: 5000,
 })
 
 const emit = defineEmits<{

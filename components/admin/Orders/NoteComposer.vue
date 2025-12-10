@@ -9,19 +9,25 @@
         <Button
           :variant="noteType === 'internal' ? 'default' : 'outline'"
           size="sm"
-          @click="noteType = 'internal'"
           type="button"
+          @click="noteType = 'internal'"
         >
-          <commonIcon name="lucide:lock" class="h-4 w-4 mr-1" />
+          <commonIcon
+            name="lucide:lock"
+            class="h-4 w-4 mr-1"
+          />
           Internal
         </Button>
         <Button
           :variant="noteType === 'customer' ? 'default' : 'outline'"
           size="sm"
-          @click="noteType = 'customer'"
           type="button"
+          @click="noteType = 'customer'"
         >
-          <commonIcon name="lucide:user" class="h-4 w-4 mr-1" />
+          <commonIcon
+            name="lucide:user"
+            class="h-4 w-4 mr-1"
+          />
           Customer
         </Button>
       </div>
@@ -29,8 +35,8 @@
 
     <!-- Note Type Description -->
     <div class="text-xs text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
-      <commonIcon 
-        :name="noteType === 'internal' ? 'lucide:info' : 'lucide:alert-circle'" 
+      <commonIcon
+        :name="noteType === 'internal' ? 'lucide:info' : 'lucide:alert-circle'"
         class="h-3 w-3 inline mr-1"
       />
       <span v-if="noteType === 'internal'">
@@ -43,14 +49,17 @@
 
     <!-- Note Content -->
     <div>
-      <label for="note-content" class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
+      <label
+        for="note-content"
+        class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block"
+      >
         Note Content
       </label>
       <Textarea
         id="note-content"
         v-model="content"
-        :placeholder="noteType === 'internal' 
-          ? 'Add internal notes about this order...' 
+        :placeholder="noteType === 'internal'
+          ? 'Add internal notes about this order...'
           : 'Add a note that will be visible to the customer...'"
         rows="4"
         :disabled="submitting"
@@ -66,17 +75,17 @@
       <Button
         variant="outline"
         size="sm"
-        @click="handleCancel"
         :disabled="submitting"
         type="button"
+        @click="handleCancel"
       >
         Cancel
       </Button>
       <Button
         size="sm"
-        @click="handleSubmit"
         :disabled="!canSubmit || submitting"
         type="button"
+        @click="handleSubmit"
       >
         <commonIcon
           v-if="submitting"
@@ -131,14 +140,14 @@ const handleSubmit = async () => {
       method: 'POST',
       body: {
         noteType: noteType.value,
-        content: content.value.trim()
-      }
+        content: content.value.trim(),
+      },
     })
 
     if (response.success) {
       // Show success toast
-      const toast = useToastStore()
-      toast.success(response.message || 'Note added successfully')
+      const toast = useToast()
+      toast.success('Success', response.message || 'Note added successfully')
 
       // Reset form
       content.value = ''
@@ -147,11 +156,13 @@ const handleSubmit = async () => {
       // Emit event to parent
       emit('note-added')
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Error adding note:', error)
-    const toast = useToastStore()
-    toast.error('Failed to add note. Please try again.')
-  } finally {
+    const toast = useToast()
+    toast.error('Error', 'Failed to add note. Please try again.')
+  }
+  finally {
     submitting.value = false
   }
 }

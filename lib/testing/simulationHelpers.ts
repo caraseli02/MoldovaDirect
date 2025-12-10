@@ -12,7 +12,7 @@ export class SimulationError extends Error {
   constructor(
     message: string,
     public personaKey: string,
-    public context: Record<string, unknown> = {}
+    public context: Record<string, unknown> = {},
   ) {
     super(message)
     this.name = 'SimulationError'
@@ -24,15 +24,15 @@ export class SimulationError extends Error {
  */
 export const simulateDelay = async (mode: SimulationMode = 'normal'): Promise<void> => {
   const delays = {
-    normal: 0,
+    'normal': 0,
     'slow-network': 2000 + Math.random() * 1000, // 2-3s
     'intermittent-errors': Math.random() * 1500, // 0-1.5s
-    offline: 0
+    'offline': 0,
   }
 
   const delay = delays[mode]
   if (delay > 0) {
-    await new Promise((resolve) => setTimeout(resolve, delay))
+    await new Promise(resolve => setTimeout(resolve, delay))
   }
 }
 
@@ -60,7 +60,7 @@ export const getPersonaMockData = (personaKey: TestUserPersonaKey) => {
     cart: persona.cart || [],
     addresses: persona.addresses || [],
     paymentMethods: persona.paymentMethods || [],
-    preferences: persona.preferences || null
+    preferences: persona.preferences || null,
   }
 }
 
@@ -69,7 +69,7 @@ export const getPersonaMockData = (personaKey: TestUserPersonaKey) => {
  */
 export const mockFetchProfile = async (
   personaKey: TestUserPersonaKey,
-  mode: SimulationMode = 'normal'
+  mode: SimulationMode = 'normal',
 ): Promise<AuthUser> => {
   await simulateDelay(mode)
 
@@ -86,7 +86,7 @@ export const mockFetchProfile = async (
  */
 export const mockFetchOrders = async (
   personaKey: TestUserPersonaKey,
-  mode: SimulationMode = 'normal'
+  mode: SimulationMode = 'normal',
 ) => {
   await simulateDelay(mode)
 
@@ -103,7 +103,7 @@ export const mockFetchOrders = async (
  */
 export const mockFetchCart = async (
   personaKey: TestUserPersonaKey,
-  mode: SimulationMode = 'normal'
+  mode: SimulationMode = 'normal',
 ) => {
   await simulateDelay(mode)
 
@@ -120,7 +120,7 @@ export const mockFetchCart = async (
  */
 export const mockFetchAddresses = async (
   personaKey: TestUserPersonaKey,
-  mode: SimulationMode = 'normal'
+  mode: SimulationMode = 'normal',
 ) => {
   await simulateDelay(mode)
 
@@ -137,7 +137,7 @@ export const mockFetchAddresses = async (
  */
 export const mockFetchPaymentMethods = async (
   personaKey: TestUserPersonaKey,
-  mode: SimulationMode = 'normal'
+  mode: SimulationMode = 'normal',
 ) => {
   await simulateDelay(mode)
 
@@ -155,7 +155,7 @@ export const mockFetchPaymentMethods = async (
 export const mockUpdateProfile = async (
   personaKey: TestUserPersonaKey,
   updates: Partial<AuthUser>,
-  mode: SimulationMode = 'normal'
+  mode: SimulationMode = 'normal',
 ): Promise<AuthUser> => {
   await simulateDelay(mode)
 
@@ -167,7 +167,7 @@ export const mockUpdateProfile = async (
   return {
     ...data.user,
     ...updates,
-    updatedAt: new Date().toISOString()
+    updatedAt: new Date().toISOString(),
   }
 }
 
@@ -178,7 +178,7 @@ export const mockAddToCart = async (
   personaKey: TestUserPersonaKey,
   productId: string,
   quantity: number,
-  mode: SimulationMode = 'normal'
+  mode: SimulationMode = 'normal',
 ) => {
   await simulateDelay(mode)
 
@@ -190,7 +190,7 @@ export const mockAddToCart = async (
   return {
     success: true,
     message: 'Item added to cart',
-    cartItemCount: (testUserPersonas[personaKey].cart?.length || 0) + 1
+    cartItemCount: (testUserPersonas[personaKey].cart?.length || 0) + 1,
   }
 }
 
@@ -200,11 +200,11 @@ export const mockAddToCart = async (
 export const mockPlaceOrder = async (
   personaKey: TestUserPersonaKey,
   orderData: {
-    items: Array<{ productId: string; quantity: number }>
+    items: Array<{ productId: string, quantity: number }>
     addressId: string
     paymentMethodId: string
   },
-  mode: SimulationMode = 'normal'
+  mode: SimulationMode = 'normal',
 ) => {
   await simulateDelay(mode)
 
@@ -218,7 +218,7 @@ export const mockPlaceOrder = async (
     success: true,
     orderId,
     status: 'pending',
-    message: 'Order placed successfully'
+    message: 'Order placed successfully',
   }
 }
 
@@ -239,14 +239,14 @@ export interface PersonaSessionState {
 export const exportPersonaSession = (
   personaKey: TestUserPersonaKey,
   simulationMode: SimulationMode,
-  testScriptProgress: { completedSteps: number[]; notes: Record<number, string> }
+  testScriptProgress: { completedSteps: number[], notes: Record<number, string> },
 ): string => {
   const state: PersonaSessionState = {
     personaKey,
     simulationMode,
     testScriptProgress,
     timestamp: new Date().toISOString(),
-    version: '1.0.0'
+    version: '1.0.0',
   }
 
   return JSON.stringify(state, null, 2)
@@ -267,11 +267,12 @@ export const importPersonaSession = (jsonString: string): PersonaSessionState =>
     }
 
     return state
-  } catch (error) {
+  }
+  catch (error) {
     throw new SimulationError(
       'Failed to import session',
       'unknown',
-      { error: error instanceof Error ? error.message : 'Unknown error' }
+      { error: error instanceof Error ? error.message : 'Unknown error' },
     )
   }
 }
@@ -280,13 +281,14 @@ export const importPersonaSession = (jsonString: string): PersonaSessionState =>
  * Helper to check if current session is using test persona
  */
 export const isTestUserSession = (): boolean => {
-  if (!process.client) return false
+  if (!import.meta.client) return false
 
   // Check if auth store has active test persona
   try {
     const authStore = useAuthStore()
     return authStore.isTestSession
-  } catch {
+  }
+  catch {
     return false
   }
 }
@@ -295,12 +297,13 @@ export const isTestUserSession = (): boolean => {
  * Helper to get current test persona key
  */
 export const getCurrentTestPersona = (): TestUserPersonaKey | null => {
-  if (!process.client) return null
+  if (!import.meta.client) return null
 
   try {
     const authStore = useAuthStore()
     return authStore.activeTestPersona
-  } catch {
+  }
+  catch {
     return null
   }
 }

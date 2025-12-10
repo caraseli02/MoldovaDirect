@@ -13,22 +13,42 @@
     </CardHeader>
     <CardContent>
       <!-- Loading State -->
-      <div v-if="loading" class="flex items-center justify-center py-8">
-        <commonIcon name="lucide:loader-2" class="h-8 w-8 animate-spin text-primary" />
+      <div
+        v-if="loading"
+        class="flex items-center justify-center py-8"
+      >
+        <commonIcon
+          name="lucide:loader-2"
+          class="h-8 w-8 animate-spin text-primary"
+        />
       </div>
 
       <!-- Error State -->
-      <div v-else-if="error" class="text-center py-8">
-        <commonIcon name="lucide:alert-circle" class="h-8 w-8 text-red-400 mx-auto mb-2" />
-        <p class="text-sm text-red-600 dark:text-red-400">{{ error }}</p>
+      <div
+        v-else-if="error"
+        class="text-center py-8"
+      >
+        <commonIcon
+          name="lucide:alert-circle"
+          class="h-8 w-8 text-red-400 mx-auto mb-2"
+        />
+        <p class="text-sm text-red-600 dark:text-red-400">
+          {{ error }}
+        </p>
       </div>
 
       <!-- Tasks List -->
-      <div v-else class="space-y-6">
+      <div
+        v-else
+        class="space-y-6"
+      >
         <!-- Picking Stage -->
         <div v-if="pickingTasks.length > 0">
           <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-3 flex items-center">
-            <commonIcon name="lucide:package-search" class="h-4 w-4 mr-2" />
+            <commonIcon
+              name="lucide:package-search"
+              class="h-4 w-4 mr-2"
+            />
             Picking
           </h3>
           <div class="space-y-2">
@@ -41,8 +61,8 @@
                 :id="`task-${task.id}`"
                 :checked="task.completed"
                 :disabled="updating || isTaskDisabled(task)"
-                @update:checked="(checked) => handleTaskToggle(task, checked)"
                 class="mt-0.5"
+                @update:checked="(checked: boolean | string) => handleTaskToggle(task, checked)"
               />
               <div class="flex-1 min-w-0">
                 <label
@@ -52,17 +72,33 @@
                 >
                   {{ task.task_name }}
                 </label>
-                <p v-if="task.description" class="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                <p
+                  v-if="task.description"
+                  class="text-xs text-gray-600 dark:text-gray-400 mt-1"
+                >
                   {{ task.description }}
                 </p>
-                <div v-if="task.completed && task.completed_at" class="flex items-center space-x-2 mt-1">
-                  <Badge variant="secondary" class="text-xs">
-                    <commonIcon name="lucide:check" class="h-3 w-3 mr-1" />
+                <div
+                  v-if="task.completed && task.completed_at"
+                  class="flex items-center space-x-2 mt-1"
+                >
+                  <Badge
+                    variant="secondary"
+                    class="text-xs"
+                  >
+                    <commonIcon
+                      name="lucide:check"
+                      class="h-3 w-3 mr-1"
+                    />
                     Completed {{ formatDate(task.completed_at) }}
                   </Badge>
                 </div>
               </div>
-              <Badge v-if="task.required" variant="outline" class="text-xs">
+              <Badge
+                v-if="task.required"
+                variant="outline"
+                class="text-xs"
+              >
                 Required
               </Badge>
             </div>
@@ -72,7 +108,10 @@
         <!-- Packing Stage -->
         <div v-if="packingTasks.length > 0">
           <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-3 flex items-center">
-            <commonIcon name="lucide:package" class="h-4 w-4 mr-2" />
+            <commonIcon
+              name="lucide:package"
+              class="h-4 w-4 mr-2"
+            />
             Packing
           </h3>
           <div class="space-y-2">
@@ -85,8 +124,8 @@
                 :id="`task-${task.id}`"
                 :checked="task.completed"
                 :disabled="updating || isTaskDisabled(task)"
-                @update:checked="(checked) => handleTaskToggle(task, checked)"
                 class="mt-0.5"
+                @update:checked="(checked: boolean | string) => handleTaskToggle(task, checked)"
               />
               <div class="flex-1 min-w-0">
                 <label
@@ -96,17 +135,33 @@
                 >
                   {{ task.task_name }}
                 </label>
-                <p v-if="task.description" class="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                <p
+                  v-if="task.description"
+                  class="text-xs text-gray-600 dark:text-gray-400 mt-1"
+                >
                   {{ task.description }}
                 </p>
-                <div v-if="task.completed && task.completed_at" class="flex items-center space-x-2 mt-1">
-                  <Badge variant="secondary" class="text-xs">
-                    <commonIcon name="lucide:check" class="h-3 w-3 mr-1" />
+                <div
+                  v-if="task.completed && task.completed_at"
+                  class="flex items-center space-x-2 mt-1"
+                >
+                  <Badge
+                    variant="secondary"
+                    class="text-xs"
+                  >
+                    <commonIcon
+                      name="lucide:check"
+                      class="h-3 w-3 mr-1"
+                    />
                     Completed {{ formatDate(task.completed_at) }}
                   </Badge>
                 </div>
               </div>
-              <Badge v-if="task.required" variant="outline" class="text-xs">
+              <Badge
+                v-if="task.required"
+                variant="outline"
+                class="text-xs"
+              >
                 Required
               </Badge>
             </div>
@@ -116,7 +171,10 @@
         <!-- Shipping Stage -->
         <div v-if="shippingTasks.length > 0">
           <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-3 flex items-center">
-            <commonIcon name="lucide:truck" class="h-4 w-4 mr-2" />
+            <commonIcon
+              name="lucide:truck"
+              class="h-4 w-4 mr-2"
+            />
             Shipping
           </h3>
           <div class="space-y-2">
@@ -129,8 +187,8 @@
                 :id="`task-${task.id}`"
                 :checked="task.completed"
                 :disabled="updating || isTaskDisabled(task)"
-                @update:checked="(checked) => handleTaskToggle(task, checked)"
                 class="mt-0.5"
+                @update:checked="(checked: boolean | string) => handleTaskToggle(task, checked)"
               />
               <div class="flex-1 min-w-0">
                 <label
@@ -140,17 +198,33 @@
                 >
                   {{ task.task_name }}
                 </label>
-                <p v-if="task.description" class="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                <p
+                  v-if="task.description"
+                  class="text-xs text-gray-600 dark:text-gray-400 mt-1"
+                >
                   {{ task.description }}
                 </p>
-                <div v-if="task.completed && task.completed_at" class="flex items-center space-x-2 mt-1">
-                  <Badge variant="secondary" class="text-xs">
-                    <commonIcon name="lucide:check" class="h-3 w-3 mr-1" />
+                <div
+                  v-if="task.completed && task.completed_at"
+                  class="flex items-center space-x-2 mt-1"
+                >
+                  <Badge
+                    variant="secondary"
+                    class="text-xs"
+                  >
+                    <commonIcon
+                      name="lucide:check"
+                      class="h-3 w-3 mr-1"
+                    />
                     Completed {{ formatDate(task.completed_at) }}
                   </Badge>
                 </div>
               </div>
-              <Badge v-if="task.required" variant="outline" class="text-xs">
+              <Badge
+                v-if="task.required"
+                variant="outline"
+                class="text-xs"
+              >
                 Required
               </Badge>
             </div>
@@ -160,7 +234,10 @@
         <!-- Quality Check Stage -->
         <div v-if="qualityCheckTasks.length > 0">
           <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-3 flex items-center">
-            <commonIcon name="lucide:clipboard-check" class="h-4 w-4 mr-2" />
+            <commonIcon
+              name="lucide:clipboard-check"
+              class="h-4 w-4 mr-2"
+            />
             Quality Check
           </h3>
           <div class="space-y-2">
@@ -173,8 +250,8 @@
                 :id="`task-${task.id}`"
                 :checked="task.completed"
                 :disabled="updating || isTaskDisabled(task)"
-                @update:checked="(checked) => handleTaskToggle(task, checked)"
                 class="mt-0.5"
+                @update:checked="(checked: boolean | string) => handleTaskToggle(task, checked)"
               />
               <div class="flex-1 min-w-0">
                 <label
@@ -184,17 +261,33 @@
                 >
                   {{ task.task_name }}
                 </label>
-                <p v-if="task.description" class="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                <p
+                  v-if="task.description"
+                  class="text-xs text-gray-600 dark:text-gray-400 mt-1"
+                >
                   {{ task.description }}
                 </p>
-                <div v-if="task.completed && task.completed_at" class="flex items-center space-x-2 mt-1">
-                  <Badge variant="secondary" class="text-xs">
-                    <commonIcon name="lucide:check" class="h-3 w-3 mr-1" />
+                <div
+                  v-if="task.completed && task.completed_at"
+                  class="flex items-center space-x-2 mt-1"
+                >
+                  <Badge
+                    variant="secondary"
+                    class="text-xs"
+                  >
+                    <commonIcon
+                      name="lucide:check"
+                      class="h-3 w-3 mr-1"
+                    />
                     Completed {{ formatDate(task.completed_at) }}
                   </Badge>
                 </div>
               </div>
-              <Badge v-if="task.required" variant="outline" class="text-xs">
+              <Badge
+                v-if="task.required"
+                variant="outline"
+                class="text-xs"
+              >
                 Required
               </Badge>
             </div>
@@ -204,7 +297,10 @@
         <!-- Custom Tasks -->
         <div v-if="customTasks.length > 0">
           <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-3 flex items-center">
-            <commonIcon name="lucide:list-checks" class="h-4 w-4 mr-2" />
+            <commonIcon
+              name="lucide:list-checks"
+              class="h-4 w-4 mr-2"
+            />
             Other Tasks
           </h3>
           <div class="space-y-2">
@@ -217,8 +313,8 @@
                 :id="`task-${task.id}`"
                 :checked="task.completed"
                 :disabled="updating"
-                @update:checked="(checked) => handleTaskToggle(task, checked)"
                 class="mt-0.5"
+                @update:checked="(checked: boolean | string) => handleTaskToggle(task, checked)"
               />
               <div class="flex-1 min-w-0">
                 <label
@@ -228,17 +324,33 @@
                 >
                   {{ task.task_name }}
                 </label>
-                <p v-if="task.description" class="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                <p
+                  v-if="task.description"
+                  class="text-xs text-gray-600 dark:text-gray-400 mt-1"
+                >
                   {{ task.description }}
                 </p>
-                <div v-if="task.completed && task.completed_at" class="flex items-center space-x-2 mt-1">
-                  <Badge variant="secondary" class="text-xs">
-                    <commonIcon name="lucide:check" class="h-3 w-3 mr-1" />
+                <div
+                  v-if="task.completed && task.completed_at"
+                  class="flex items-center space-x-2 mt-1"
+                >
+                  <Badge
+                    variant="secondary"
+                    class="text-xs"
+                  >
+                    <commonIcon
+                      name="lucide:check"
+                      class="h-3 w-3 mr-1"
+                    />
                     Completed {{ formatDate(task.completed_at) }}
                   </Badge>
                 </div>
               </div>
-              <Badge v-if="task.required" variant="outline" class="text-xs">
+              <Badge
+                v-if="task.required"
+                variant="outline"
+                class="text-xs"
+              >
                 Required
               </Badge>
             </div>
@@ -246,8 +358,14 @@
         </div>
 
         <!-- Empty State -->
-        <div v-if="tasks.length === 0" class="text-center py-8">
-          <commonIcon name="lucide:clipboard-list" class="h-12 w-12 text-gray-400 mx-auto mb-3" />
+        <div
+          v-if="tasks.length === 0"
+          class="text-center py-8"
+        >
+          <commonIcon
+            name="lucide:clipboard-list"
+            class="h-12 w-12 text-gray-400 mx-auto mb-3"
+          />
           <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
             No fulfillment tasks have been created for this order yet.
           </p>
@@ -259,7 +377,10 @@
         </div>
 
         <!-- Progress Bar -->
-        <div v-if="tasks.length > 0" class="pt-4 border-t border-gray-200 dark:border-gray-700">
+        <div
+          v-if="tasks.length > 0"
+          class="pt-4 border-t border-gray-200 dark:border-gray-700"
+        >
           <div class="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 mb-2">
             <span>Overall Progress</span>
             <span class="font-medium">{{ completedCount }} of {{ totalCount }} tasks</span>
@@ -284,14 +405,14 @@ import {
   Card,
   CardContent,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from '@/components/ui/card'
-import type { OrderFulfillmentTask } from '~/types/database'
+import type { OrderFulfillmentTaskRaw } from '~/types/database'
 
 interface Props {
   orderId: number
   currentStatus: string
-  fulfillmentTasks?: OrderFulfillmentTask[]
+  fulfillmentTasks?: OrderFulfillmentTaskRaw[]
 }
 
 const props = defineProps<Props>()
@@ -300,7 +421,7 @@ const emit = defineEmits<{
 }>()
 
 // State
-const tasks = ref<OrderFulfillmentTask[]>(props.fulfillmentTasks || [])
+const tasks = ref<OrderFulfillmentTaskRaw[]>(props.fulfillmentTasks || [])
 const loading = ref(false)
 const updating = ref(false)
 const error = ref<string | null>(null)
@@ -321,7 +442,7 @@ const progressPercentage = computed(() => {
 })
 
 // Check if task should be disabled (e.g., order already shipped)
-const isTaskDisabled = (task: OrderFulfillmentTask) => {
+const isTaskDisabled = (task: OrderFulfillmentTaskRaw) => {
   // Disable if order is already shipped or delivered
   if (props.currentStatus === 'shipped' || props.currentStatus === 'delivered') {
     return true
@@ -330,37 +451,41 @@ const isTaskDisabled = (task: OrderFulfillmentTask) => {
 }
 
 // Handle task toggle
-const handleTaskToggle = async (task: OrderFulfillmentTask, checked: boolean) => {
+const handleTaskToggle = async (task: OrderFulfillmentTaskRaw, checked: boolean | string) => {
   updating.value = true
   error.value = null
+
+  const isChecked = typeof checked === 'boolean' ? checked : checked === 'true' || checked === 'on'
 
   try {
     const response = await $fetch(`/api/admin/orders/${props.orderId}/fulfillment-tasks/${task.id}`, {
       method: 'PATCH',
       body: {
-        completed: checked
-      }
+        completed: isChecked,
+      },
     })
 
     if (response.success) {
       // Update local task state
       const taskIndex = tasks.value.findIndex(t => t.id === task.id)
-      if (taskIndex !== -1) {
+      if (taskIndex !== -1 && response.data) {
         tasks.value[taskIndex] = response.data
       }
-      
+
       // Emit update event to parent
       emit('updated')
     }
-  } catch (err) {
+  }
+  catch (err) {
     console.error('Error updating fulfillment task:', err)
     error.value = 'Failed to update task. Please try again.'
-    
+
     // Revert checkbox state on error
     setTimeout(() => {
       error.value = null
     }, 3000)
-  } finally {
+  }
+  finally {
     updating.value = false
   }
 }
@@ -371,7 +496,7 @@ const formatDate = (dateString: string) => {
     month: 'short',
     day: 'numeric',
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   })
 }
 
@@ -398,20 +523,22 @@ const handleTasksInitialized = async () => {
     const response = await $fetch<{
       success: boolean
       data: {
-        fulfillmentTasks: OrderFulfillmentTask[]
+        fulfillmentTasks: OrderFulfillmentTaskRaw[]
       }
     }>(`/api/admin/orders/${props.orderId}`)
 
     if (response.success && response.data.fulfillmentTasks) {
       tasks.value = response.data.fulfillmentTasks
     }
-    
+
     // Emit update to parent
     emit('updated')
-  } catch (err) {
+  }
+  catch (err) {
     console.error('Error fetching fulfillment tasks:', err)
     error.value = 'Failed to load tasks'
-  } finally {
+  }
+  finally {
     loading.value = false
   }
 }

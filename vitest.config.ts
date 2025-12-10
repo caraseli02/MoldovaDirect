@@ -9,7 +9,8 @@ try {
   if (vue?.default) {
     plugins.push(vue.default())
   }
-} catch (error) {
+}
+catch (error) {
   console.warn('[vitest] @vitejs/plugin-vue not found, proceeding without it.')
 }
 
@@ -61,9 +62,9 @@ export default defineConfig({
       // Current baseline: branches 75%, functions 60%, ~81k uncovered lines
       // Using negative = max uncovered allowed (prevents regression)
       thresholds: {
-        branches: 70,      // Currently 75%, set floor at 70%
-        functions: 55,     // Currently 60%, set floor at 55%
-        lines: -85000,     // Currently ~81k uncovered, allow small growth
+        branches: 70, // Currently 75%, set floor at 70%
+        functions: 55, // Currently 60%, set floor at 55%
+        lines: -85000, // Currently ~81k uncovered, allow small growth
         statements: -85000,
       },
     },

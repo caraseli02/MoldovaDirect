@@ -14,7 +14,7 @@ export default defineCachedEventHandler(async (event) => {
     const supabase = await serverSupabaseClient(event)
     const slug = getRouterParam(event, 'slug')
     const query = getQuery(event)
-    
+
     const locale = (query.locale as string) || 'es'
     const sort = (query.sort as string) || 'newest'
     const page = parseInt(query.page as string) || 1
@@ -23,7 +23,7 @@ export default defineCachedEventHandler(async (event) => {
     if (!slug) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Category slug is required'
+        statusMessage: 'Category slug is required',
       })
     }
 
@@ -47,14 +47,14 @@ export default defineCachedEventHandler(async (event) => {
     if (categoryError || !category) {
       throw createError({
         statusCode: 404,
-        statusMessage: 'Category not found'
+        statusMessage: 'Category not found',
       })
     }
 
     // Get all subcategory IDs (including the category itself)
     const getAllSubcategoryIds = async (categoryId: number): Promise<number[]> => {
       const ids = [categoryId]
-      
+
       const { data: subcategories } = await supabase
         .from('categories')
         .select('id')
@@ -129,7 +129,7 @@ export default defineCachedEventHandler(async (event) => {
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to fetch products',
-        data: productsError
+        data: productsError,
       })
     }
 
@@ -164,10 +164,11 @@ export default defineCachedEventHandler(async (event) => {
           breadcrumb.unshift({
             id: cat.id,
             slug: cat.slug,
-            name: getLocalizedContent(cat.name_translations, locale)
+            name: getLocalizedContent(cat.name_translations, locale),
           })
           currentCategoryId = cat.parent_id
-        } else {
+        }
+        else {
           break
         }
       }
@@ -187,16 +188,17 @@ export default defineCachedEventHandler(async (event) => {
       price: product.price_eur,
       formattedPrice: `€${product.price_eur.toFixed(2)}`,
       stock: product.stock_quantity,
-      stockStatus: product.stock_quantity > 5 ? 'in_stock' : 
-                   product.stock_quantity > 0 ? 'low_stock' : 'out_of_stock',
+      stockStatus: product.stock_quantity > 5
+        ? 'in_stock'
+        : product.stock_quantity > 0 ? 'low_stock' : 'out_of_stock',
       images: product.images || [],
       primaryImage: product.images?.[0]?.url || '/placeholder-product.svg',
       category: {
         id: product.categories.id,
         slug: product.categories.slug,
-        name: getLocalizedContent(product.categories.name_translations, locale)
+        name: getLocalizedContent(product.categories.name_translations, locale),
       },
-      createdAt: product.created_at
+      createdAt: product.created_at,
     })) || []
 
     const transformedSubcategories = subcategories?.map((subcat: any) => ({
@@ -205,7 +207,7 @@ export default defineCachedEventHandler(async (event) => {
       name: getLocalizedContent(subcat.name_translations, locale),
       description: getLocalizedContent(subcat.description_translations || {}, locale),
       image: subcat.image_url,
-      sortOrder: subcat.sort_order
+      sortOrder: subcat.sort_order,
     })) || []
 
     // Calculate pagination info
@@ -220,7 +222,7 @@ export default defineCachedEventHandler(async (event) => {
         description: getLocalizedContent(category.description_translations || {}, locale),
         image: category.image_url,
         breadcrumb,
-        subcategories: transformedSubcategories
+        subcategories: transformedSubcategories,
       },
       products: transformedProducts,
       pagination: {
@@ -229,15 +231,15 @@ export default defineCachedEventHandler(async (event) => {
         total: count || 0,
         totalPages,
         hasNext: page < totalPages,
-        hasPrev: page > 1
+        hasPrev: page > 1,
       },
       filters: {
-        sort
+        sort,
       },
-      locale
+      locale,
     }
-
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Category products API error:', error)
 
     if (error.statusCode) {
@@ -246,7 +248,7 @@ export default defineCachedEventHandler(async (event) => {
 
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 }, {
@@ -255,5 +257,5 @@ export default defineCachedEventHandler(async (event) => {
   getKey: (event) => {
     const slug = getRouterParam(event, 'slug')
     return `${PUBLIC_CACHE_CONFIG.categoryDetail.name}-${slug}`
-  }
+  },
 })

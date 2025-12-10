@@ -57,7 +57,7 @@ test.describe('Products Page Pagination', () => {
 
       const productCards = page.locator('button:has-text("Añadir al Carrito")')
       await expect(productCards).toHaveCount(PRODUCTS_PER_PAGE, {
-        message: `Page ${pageNum} should show exactly ${PRODUCTS_PER_PAGE} products`
+        message: `Page ${pageNum} should show exactly ${PRODUCTS_PER_PAGE} products`,
       })
 
       // Verify page indicator
@@ -124,7 +124,7 @@ test.describe('Products Page Pagination', () => {
 
       const data = await response.json()
       expect(data.products).toHaveLength(PRODUCTS_PER_PAGE, {
-        message: `API should return ${PRODUCTS_PER_PAGE} products for page ${pageNum}`
+        message: `API should return ${PRODUCTS_PER_PAGE} products for page ${pageNum}`,
       })
 
       // Verify pagination metadata (accept both string and number types)
@@ -201,7 +201,7 @@ test.describe('Products Page Pagination', () => {
     // After fix: Loads correct page from URL params during SSR
 
     const requests: string[] = []
-    page.on('request', req => {
+    page.on('request', (req) => {
       if (req.url().includes('/api/products')) {
         requests.push(req.url())
       }
@@ -237,7 +237,7 @@ test.describe('Products Page Pagination', () => {
       // Check page indicator text using specific selector for the aria-live paragraph
       const pageIndicator = page.locator('p[aria-live="polite"]')
       await expect(pageIndicator).toBeVisible({
-        message: `Page ${pageNum} should show correct page indicator`
+        message: `Page ${pageNum} should show correct page indicator`,
       })
 
       // Verify it contains the correct page number and total
@@ -251,7 +251,7 @@ test.describe('Products Page Pagination', () => {
     await page.waitForSelector('button:has-text("Añadir al Carrito")', { timeout: 10000 })
 
     const page1Products = await page.locator('a[href*="/products/"]').evaluateAll(links =>
-      links.map(l => l.getAttribute('href')).filter(href => href && !href.includes('#'))
+      links.map(l => l.getAttribute('href')).filter(href => href && !href.includes('#')),
     )
 
     // Get products from page 2
@@ -259,13 +259,13 @@ test.describe('Products Page Pagination', () => {
     await page.waitForSelector('button:has-text("Añadir al Carrito")', { timeout: 10000 })
 
     const page2Products = await page.locator('a[href*="/products/"]').evaluateAll(links =>
-      links.map(l => l.getAttribute('href')).filter(href => href && !href.includes('#'))
+      links.map(l => l.getAttribute('href')).filter(href => href && !href.includes('#')),
     )
 
     // Ensure no duplicates between pages
     const duplicates = page1Products.filter(href => page2Products.includes(href))
     expect(duplicates).toHaveLength(0, {
-      message: 'Pages 1 and 2 should not contain duplicate products'
+      message: 'Pages 1 and 2 should not contain duplicate products',
     })
   })
 })

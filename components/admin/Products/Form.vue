@@ -1,11 +1,14 @@
 <template>
-  <form @submit.prevent="handleSubmit" class="space-y-4 md:space-y-8 pb-24 md:pb-0">
+  <form
+    class="space-y-4 md:space-y-8 pb-24 md:pb-0"
+    @submit.prevent="handleSubmit"
+  >
     <!-- Basic Information -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
       <button
         type="button"
-        @click="toggleSection('basic')"
         class="w-full px-4 py-4 md:px-6 md:py-5 flex items-center justify-between text-left"
+        @click="toggleSection('basic')"
       >
         <h3 class="text-base md:text-lg font-medium text-gray-900 dark:text-white flex items-center">
           <span class="flex items-center justify-center w-6 h-6 md:w-7 md:h-7 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 text-xs md:text-sm font-semibold mr-3">1</span>
@@ -18,11 +21,19 @@
           stroke="currentColor"
           viewBox="0 0 24 24"
         >
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M19 9l-7 7-7-7"
+          />
         </svg>
       </button>
 
-      <div v-show="expandedSections.basic" class="px-4 pb-4 md:px-6 md:pb-6 space-y-4 md:space-y-6">
+      <div
+        v-show="expandedSections.basic"
+        class="px-4 pb-4 md:px-6 md:pb-6 space-y-4 md:space-y-6"
+      >
         <div class="grid grid-cols-1 gap-4 md:gap-6">
           <!-- Product Name -->
           <div>
@@ -30,7 +41,10 @@
               Product Name *
             </label>
             <div class="space-y-3">
-              <div v-for="locale in locales" :key="locale.code">
+              <div
+                v-for="locale in locales"
+                :key="locale.code"
+              >
                 <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">
                   {{ locale.name }}
                 </label>
@@ -41,7 +55,10 @@
                   class="w-full px-4 py-3 md:px-3 md:py-2 text-base md:text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   :class="{ 'border-red-500': errors.name?.[locale.code] }"
                 />
-                <p v-if="errors.name?.[locale.code]" class="mt-1 text-sm text-red-600">
+                <p
+                  v-if="errors.name?.[locale.code]"
+                  class="mt-1 text-sm text-red-600"
+                >
                   {{ errors.name[locale.code] }}
                 </p>
               </div>
@@ -60,7 +77,12 @@
               class="w-full px-4 py-3 md:px-3 md:py-2 text-base md:text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               :class="{ 'border-red-500': errors.sku }"
             />
-            <p v-if="errors.sku" class="mt-1 text-sm text-red-600">{{ errors.sku }}</p>
+            <p
+              v-if="errors.sku"
+              class="mt-1 text-sm text-red-600"
+            >
+              {{ errors.sku }}
+            </p>
           </div>
 
           <!-- Category -->
@@ -73,12 +95,23 @@
               class="w-full px-4 py-3 md:px-3 md:py-2 text-base md:text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               :class="{ 'border-red-500': errors.categoryId }"
             >
-              <option value="">Select a category</option>
-              <option v-for="category in categories" :key="category.id" :value="category.id">
+              <option value="">
+                Select a category
+              </option>
+              <option
+                v-for="category in categories"
+                :key="category.id"
+                :value="category.id"
+              >
                 {{ getLocalizedText(category.name) }}
               </option>
             </select>
-            <p v-if="errors.categoryId" class="mt-1 text-sm text-red-600">{{ errors.categoryId }}</p>
+            <p
+              v-if="errors.categoryId"
+              class="mt-1 text-sm text-red-600"
+            >
+              {{ errors.categoryId }}
+            </p>
           </div>
         </div>
       </div>
@@ -88,8 +121,8 @@
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
       <button
         type="button"
-        @click="toggleSection('description')"
         class="w-full px-4 py-4 md:px-6 md:py-5 flex items-center justify-between text-left"
+        @click="toggleSection('description')"
       >
         <h3 class="text-base md:text-lg font-medium text-gray-900 dark:text-white flex items-center">
           <span class="flex items-center justify-center w-6 h-6 md:w-7 md:h-7 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 text-xs md:text-sm font-semibold mr-3">2</span>
@@ -102,12 +135,23 @@
           stroke="currentColor"
           viewBox="0 0 24 24"
         >
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M19 9l-7 7-7-7"
+          />
         </svg>
       </button>
 
-      <div v-show="expandedSections.description" class="px-4 pb-4 md:px-6 md:pb-6 space-y-4">
-        <div v-for="locale in locales" :key="locale.code">
+      <div
+        v-show="expandedSections.description"
+        class="px-4 pb-4 md:px-6 md:pb-6 space-y-4"
+      >
+        <div
+          v-for="locale in locales"
+          :key="locale.code"
+        >
           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Description ({{ locale.name }})
           </label>
@@ -117,8 +161,11 @@
             :placeholder="`Product description in ${locale.name}`"
             class="w-full px-4 py-3 md:px-3 md:py-2 text-base md:text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             :class="{ 'border-red-500': errors.description?.[locale.code] }"
-          />
-          <p v-if="errors.description?.[locale.code]" class="mt-1 text-sm text-red-600">
+          ></textarea>
+          <p
+            v-if="errors.description?.[locale.code]"
+            class="mt-1 text-sm text-red-600"
+          >
             {{ errors.description[locale.code] }}
           </p>
         </div>
@@ -129,8 +176,8 @@
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
       <button
         type="button"
-        @click="toggleSection('pricing')"
         class="w-full px-4 py-4 md:px-6 md:py-5 flex items-center justify-between text-left"
+        @click="toggleSection('pricing')"
       >
         <h3 class="text-base md:text-lg font-medium text-gray-900 dark:text-white flex items-center">
           <span class="flex items-center justify-center w-6 h-6 md:w-7 md:h-7 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 text-xs md:text-sm font-semibold mr-3">3</span>
@@ -143,11 +190,19 @@
           stroke="currentColor"
           viewBox="0 0 24 24"
         >
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M19 9l-7 7-7-7"
+          />
         </svg>
       </button>
 
-      <div v-show="expandedSections.pricing" class="px-4 pb-4 md:px-6 md:pb-6">
+      <div
+        v-show="expandedSections.pricing"
+        class="px-4 pb-4 md:px-6 md:pb-6"
+      >
         <div class="grid grid-cols-1 gap-4 md:gap-6">
           <!-- Price -->
           <div>
@@ -169,7 +224,12 @@
                 :class="{ 'border-red-500': errors.price }"
               />
             </div>
-            <p v-if="errors.price" class="mt-1 text-sm text-red-600">{{ errors.price }}</p>
+            <p
+              v-if="errors.price"
+              class="mt-1 text-sm text-red-600"
+            >
+              {{ errors.price }}
+            </p>
           </div>
 
           <!-- Compare Price -->
@@ -192,7 +252,12 @@
                 :class="{ 'border-red-500': errors.comparePrice }"
               />
             </div>
-            <p v-if="errors.comparePrice" class="mt-1 text-sm text-red-600">{{ errors.comparePrice }}</p>
+            <p
+              v-if="errors.comparePrice"
+              class="mt-1 text-sm text-red-600"
+            >
+              {{ errors.comparePrice }}
+            </p>
           </div>
         </div>
       </div>
@@ -202,8 +267,8 @@
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
       <button
         type="button"
-        @click="toggleSection('inventory')"
         class="w-full px-4 py-4 md:px-6 md:py-5 flex items-center justify-between text-left"
+        @click="toggleSection('inventory')"
       >
         <h3 class="text-base md:text-lg font-medium text-gray-900 dark:text-white flex items-center">
           <span class="flex items-center justify-center w-6 h-6 md:w-7 md:h-7 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 text-xs md:text-sm font-semibold mr-3">4</span>
@@ -216,11 +281,19 @@
           stroke="currentColor"
           viewBox="0 0 24 24"
         >
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M19 9l-7 7-7-7"
+          />
         </svg>
       </button>
 
-      <div v-show="expandedSections.inventory" class="px-4 pb-4 md:px-6 md:pb-6">
+      <div
+        v-show="expandedSections.inventory"
+        class="px-4 pb-4 md:px-6 md:pb-6"
+      >
         <div class="grid grid-cols-1 gap-4 md:gap-6">
           <!-- Stock Quantity -->
           <div>
@@ -236,7 +309,12 @@
               class="w-full px-4 py-3 md:px-3 md:py-2 text-base md:text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               :class="{ 'border-red-500': errors.stockQuantity }"
             />
-            <p v-if="errors.stockQuantity" class="mt-1 text-sm text-red-600">{{ errors.stockQuantity }}</p>
+            <p
+              v-if="errors.stockQuantity"
+              class="mt-1 text-sm text-red-600"
+            >
+              {{ errors.stockQuantity }}
+            </p>
           </div>
 
           <!-- Low Stock Threshold -->
@@ -253,7 +331,12 @@
               class="w-full px-4 py-3 md:px-3 md:py-2 text-base md:text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               :class="{ 'border-red-500': errors.lowStockThreshold }"
             />
-            <p v-if="errors.lowStockThreshold" class="mt-1 text-sm text-red-600">{{ errors.lowStockThreshold }}</p>
+            <p
+              v-if="errors.lowStockThreshold"
+              class="mt-1 text-sm text-red-600"
+            >
+              {{ errors.lowStockThreshold }}
+            </p>
           </div>
         </div>
       </div>
@@ -263,8 +346,8 @@
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
       <button
         type="button"
-        @click="toggleSection('images')"
         class="w-full px-4 py-4 md:px-6 md:py-5 flex items-center justify-between text-left"
+        @click="toggleSection('images')"
       >
         <h3 class="text-base md:text-lg font-medium text-gray-900 dark:text-white flex items-center">
           <span class="flex items-center justify-center w-6 h-6 md:w-7 md:h-7 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 text-xs md:text-sm font-semibold mr-3">5</span>
@@ -277,11 +360,19 @@
           stroke="currentColor"
           viewBox="0 0 24 24"
         >
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M19 9l-7 7-7-7"
+          />
         </svg>
       </button>
 
-      <div v-show="expandedSections.images" class="px-4 pb-4 md:px-6 md:pb-6">
+      <div
+        v-show="expandedSections.images"
+        class="px-4 pb-4 md:px-6 md:pb-6"
+      >
         <AdminUtilsImageUpload
           v-model="form.images"
           :max-files="5"
@@ -289,7 +380,12 @@
           accept="image/*"
           @error="handleImageError"
         />
-        <p v-if="errors.images" class="mt-2 text-sm text-red-600">{{ errors.images }}</p>
+        <p
+          v-if="errors.images"
+          class="mt-2 text-sm text-red-600"
+        >
+          {{ errors.images }}
+        </p>
       </div>
     </div>
 
@@ -297,8 +393,8 @@
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
       <button
         type="button"
-        @click="toggleSection('attributes')"
         class="w-full px-4 py-4 md:px-6 md:py-5 flex items-center justify-between text-left"
+        @click="toggleSection('attributes')"
       >
         <h3 class="text-base md:text-lg font-medium text-gray-900 dark:text-white flex items-center">
           <span class="flex items-center justify-center w-6 h-6 md:w-7 md:h-7 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 text-xs md:text-sm font-semibold mr-3">6</span>
@@ -311,11 +407,19 @@
           stroke="currentColor"
           viewBox="0 0 24 24"
         >
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M19 9l-7 7-7-7"
+          />
         </svg>
       </button>
 
-      <div v-show="expandedSections.attributes" class="px-4 pb-4 md:px-6 md:pb-6">
+      <div
+        v-show="expandedSections.attributes"
+        class="px-4 pb-4 md:px-6 md:pb-6"
+      >
         <div class="grid grid-cols-1 gap-4 md:gap-6">
           <!-- Origin -->
           <div>
@@ -369,8 +473,8 @@
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
       <button
         type="button"
-        @click="toggleSection('status')"
         class="w-full px-4 py-4 md:px-6 md:py-5 flex items-center justify-between text-left"
+        @click="toggleSection('status')"
       >
         <h3 class="text-base md:text-lg font-medium text-gray-900 dark:text-white flex items-center">
           <span class="flex items-center justify-center w-6 h-6 md:w-7 md:h-7 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 text-xs md:text-sm font-semibold mr-3">7</span>
@@ -383,11 +487,19 @@
           stroke="currentColor"
           viewBox="0 0 24 24"
         >
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M19 9l-7 7-7-7"
+          />
         </svg>
       </button>
 
-      <div v-show="expandedSections.status" class="px-4 pb-4 md:px-6 md:pb-6 space-y-4">
+      <div
+        v-show="expandedSections.status"
+        class="px-4 pb-4 md:px-6 md:pb-6 space-y-4"
+      >
         <!-- Active Status -->
         <div class="flex items-start">
           <div class="flex items-center h-5">
@@ -398,7 +510,10 @@
               class="h-5 w-5 md:h-4 md:w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
             />
           </div>
-          <label for="is-active" class="ml-3 block text-sm md:text-sm text-gray-900 dark:text-white">
+          <label
+            for="is-active"
+            class="ml-3 block text-sm md:text-sm text-gray-900 dark:text-white"
+          >
             Product is active and visible to customers
           </label>
         </div>
@@ -413,7 +528,10 @@
               class="h-5 w-5 md:h-4 md:w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
             />
           </div>
-          <label for="is-featured" class="ml-3 block text-sm md:text-sm text-gray-900 dark:text-white">
+          <label
+            for="is-featured"
+            class="ml-3 block text-sm md:text-sm text-gray-900 dark:text-white"
+          >
             Feature this product on the homepage
           </label>
         </div>
@@ -472,7 +590,7 @@ interface Emits {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  isEditing: false
+  isEditing: false,
 })
 
 const emit = defineEmits<Emits>()
@@ -481,7 +599,7 @@ const emit = defineEmits<Emits>()
 const locales = [
   { code: 'es', name: 'Spanish' },
   { code: 'en', name: 'English' },
-  { code: 'ro', name: 'Romanian' }
+  { code: 'ro', name: 'Romanian' },
 ]
 
 // Form state
@@ -499,9 +617,9 @@ const form = ref({
     origin: '',
     volume: null as number | null,
     alcoholContent: null as number | null,
-    featured: false
+    featured: false,
   },
-  isActive: true
+  isActive: true,
 })
 
 const errors = ref({} as Record<string, any>)
@@ -516,7 +634,7 @@ const expandedSections = ref({
   inventory: false,
   images: false,
   attributes: false,
-  status: false
+  status: false,
 })
 
 // Toggle section visibility
@@ -526,8 +644,8 @@ const toggleSection = (section: keyof typeof expandedSections.value) => {
 
 // Validation schema
 const productSchema = z.object({
-  name: z.record(z.string().min(1, 'Product name is required')),
-  description: z.record(z.string().optional()),
+  name: z.record(z.string(), z.string().min(1, 'Product name is required')),
+  description: z.record(z.string(), z.string().optional()),
   sku: z.string().min(1, 'SKU is required'),
   categoryId: z.number().min(1, 'Category is required'),
   price: z.number().min(0.01, 'Price must be greater than 0'),
@@ -539,9 +657,9 @@ const productSchema = z.object({
     origin: z.string().optional(),
     volume: z.number().positive().optional().nullable(),
     alcoholContent: z.number().min(0).max(100).optional().nullable(),
-    featured: z.boolean().optional()
+    featured: z.boolean().optional(),
   }).optional(),
-  isActive: z.boolean()
+  isActive: z.boolean(),
 })
 
 // Initialize form with product data if editing
@@ -551,7 +669,7 @@ onMounted(() => {
 
   // On desktop, expand all sections by default
   if (!isMobile.value) {
-    Object.keys(expandedSections.value).forEach(key => {
+    Object.keys(expandedSections.value).forEach((key) => {
       expandedSections.value[key as keyof typeof expandedSections.value] = true
     })
   }
@@ -572,15 +690,15 @@ onMounted(() => {
         origin: props.product.attributes?.origin || '',
         volume: props.product.attributes?.volume || null,
         alcoholContent: props.product.attributes?.alcoholContent || null,
-        featured: props.product.attributes?.featured || false
+        featured: props.product.attributes?.featured || false,
       },
-      isActive: props.product.isActive ?? true
+      isActive: props.product.isActive ?? true,
     }
   }
 })
 
 // Utility functions
-const getLocalizedText = (text: Record<string, string> | null) => {
+const getLocalizedText = (text: Record<string, string> | null | undefined) => {
   if (!text) return ''
   return text.es || Object.values(text)[0] || ''
 }
@@ -591,18 +709,21 @@ const validateForm = () => {
     productSchema.parse(form.value)
     errors.value = {}
     return true
-  } catch (error) {
+  }
+  catch (error) {
     if (error instanceof z.ZodError) {
       const newErrors: Record<string, any> = {}
-      error.errors.forEach((err) => {
+      error.issues.forEach((err: z.ZodIssue) => {
         const path = err.path.join('.')
         if (err.path[0] === 'name' && err.path[1]) {
           if (!newErrors.name) newErrors.name = {}
           newErrors.name[err.path[1]] = err.message
-        } else if (err.path[0] === 'description' && err.path[1]) {
+        }
+        else if (err.path[0] === 'description' && err.path[1]) {
           if (!newErrors.description) newErrors.description = {}
           newErrors.description[err.path[1]] = err.message
-        } else {
+        }
+        else {
           newErrors[path] = err.message
         }
       })
@@ -621,9 +742,11 @@ const handleSubmit = async () => {
   submitting.value = true
   try {
     emit('submit', form.value)
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Form submission error:', error)
-  } finally {
+  }
+  finally {
     submitting.value = false
   }
 }

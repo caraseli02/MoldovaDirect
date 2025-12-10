@@ -25,7 +25,7 @@ describe('Order Fulfillment Tasks - Race Conditions', () => {
     // Create test admin user
     const { data: admin } = await supabase.auth.signUp({
       email: `test-admin-${Date.now()}@example.test`,
-      password: 'TestPassword123!'
+      password: 'TestPassword123!',
     })
     testAdmin = admin.user
 
@@ -42,7 +42,7 @@ describe('Order Fulfillment Tasks - Race Conditions', () => {
         name_translations: { es: 'Test Product', en: 'Test Product' },
         stock_quantity: 10,
         price: 100,
-        category: 'test'
+        category: 'test',
       })
       .select()
       .single()
@@ -56,7 +56,7 @@ describe('Order Fulfillment Tasks - Race Conditions', () => {
         user_id: testAdmin.id,
         total_amount: 300,
         status: 'processing',
-        inventory_updated: false
+        inventory_updated: false,
       })
       .select()
       .single()
@@ -70,7 +70,7 @@ describe('Order Fulfillment Tasks - Race Conditions', () => {
         order_id: order1.id,
         product_id: product.id,
         quantity: 3,
-        price_at_time: 100
+        price_at_time: 100,
       })
 
     // Create test order 2
@@ -80,7 +80,7 @@ describe('Order Fulfillment Tasks - Race Conditions', () => {
         user_id: testAdmin.id,
         total_amount: 200,
         status: 'processing',
-        inventory_updated: false
+        inventory_updated: false,
       })
       .select()
       .single()
@@ -94,7 +94,7 @@ describe('Order Fulfillment Tasks - Race Conditions', () => {
         order_id: order2.id,
         product_id: product.id,
         quantity: 2,
-        price_at_time: 100
+        price_at_time: 100,
       })
 
     // Create picking tasks for both orders
@@ -105,14 +105,14 @@ describe('Order Fulfillment Tasks - Race Conditions', () => {
           order_id: order1.id,
           task_type: 'picking',
           task_description: 'Pick items for order 1',
-          completed: false
+          completed: false,
         },
         {
           order_id: order2.id,
           task_type: 'picking',
           task_description: 'Pick items for order 2',
-          completed: false
-        }
+          completed: false,
+        },
       ])
   })
 
@@ -156,18 +156,18 @@ describe('Order Fulfillment Tasks - Race Conditions', () => {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${testAdmin.access_token}`
+          'Authorization': `Bearer ${testAdmin.access_token}`,
         },
-        body: JSON.stringify({ completed: true })
+        body: JSON.stringify({ completed: true }),
       }),
       fetch(`/api/admin/orders/${testOrder2.id}/fulfillment-tasks/${task2.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${testAdmin.access_token}`
+          'Authorization': `Bearer ${testAdmin.access_token}`,
         },
-        body: JSON.stringify({ completed: true })
-      })
+        body: JSON.stringify({ completed: true }),
+      }),
     ])
 
     // Wait for all operations to complete
@@ -211,9 +211,9 @@ describe('Order Fulfillment Tasks - Race Conditions', () => {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${testAdmin.access_token}`
+          'Authorization': `Bearer ${testAdmin.access_token}`,
         },
-        body: JSON.stringify({ completed: true })
+        body: JSON.stringify({ completed: true }),
       })
     }
 
@@ -254,9 +254,9 @@ describe('Order Fulfillment Tasks - Race Conditions', () => {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
-      body: JSON.stringify({ completed: true })
+      body: JSON.stringify({ completed: true }),
     })
 
     await new Promise(resolve => setTimeout(resolve, 500))
@@ -282,9 +282,9 @@ describe('Order Fulfillment Tasks - Race Conditions', () => {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
-      body: JSON.stringify({ completed: false })
+      body: JSON.stringify({ completed: false }),
     })
 
     await new Promise(resolve => setTimeout(resolve, 500))
@@ -293,9 +293,9 @@ describe('Order Fulfillment Tasks - Race Conditions', () => {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
-      body: JSON.stringify({ completed: true })
+      body: JSON.stringify({ completed: true }),
     })
 
     await new Promise(resolve => setTimeout(resolve, 500))
@@ -326,9 +326,9 @@ describe('Order Fulfillment Tasks - Race Conditions', () => {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
-      body: JSON.stringify({ completed: true })
+      body: JSON.stringify({ completed: true }),
     })
 
     await new Promise(resolve => setTimeout(resolve, 500))
@@ -347,9 +347,9 @@ describe('Order Fulfillment Tasks - Race Conditions', () => {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
-      body: JSON.stringify({ completed: false })
+      body: JSON.stringify({ completed: false }),
     })
 
     await new Promise(resolve => setTimeout(resolve, 500))
@@ -398,9 +398,9 @@ describe('Order Fulfillment Tasks - Race Conditions', () => {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
-      body: JSON.stringify({ completed: true })
+      body: JSON.stringify({ completed: true }),
     })
 
     // Mark order as shipped
@@ -416,9 +416,9 @@ describe('Order Fulfillment Tasks - Race Conditions', () => {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
-      body: JSON.stringify({ completed: false })
+      body: JSON.stringify({ completed: false }),
     })
 
     expect(response.status).toBe(400)
@@ -437,7 +437,7 @@ describe('Order Fulfillment Tasks - Authorization', () => {
     // Create regular user (not admin)
     const { data: user } = await supabase.auth.signUp({
       email: `test-user-${Date.now()}@example.test`,
-      password: 'TestPassword123!'
+      password: 'TestPassword123!',
     })
 
     // Try to complete task as non-admin
@@ -445,9 +445,9 @@ describe('Order Fulfillment Tasks - Authorization', () => {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${user.session.access_token}`
+        'Authorization': `Bearer ${user.session.access_token}`,
       },
-      body: JSON.stringify({ completed: true })
+      body: JSON.stringify({ completed: true }),
     })
 
     expect(response.status).toBe(403)
@@ -463,9 +463,9 @@ describe('Order Fulfillment Tasks - Authorization', () => {
     const response = await fetch('/api/admin/orders/1/fulfillment-tasks/1', {
       method: 'PATCH',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ completed: true })
+      body: JSON.stringify({ completed: true }),
     })
 
     expect(response.status).toBe(401)
@@ -479,7 +479,7 @@ describe('Order Fulfillment Tasks - Validation', () => {
     const supabase = createSupabaseClient()
     const { data: admin } = await supabase.auth.signUp({
       email: `test-admin-${Date.now()}@example.test`,
-      password: 'TestPassword123!'
+      password: 'TestPassword123!',
     })
 
     await supabase
@@ -492,9 +492,9 @@ describe('Order Fulfillment Tasks - Validation', () => {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${admin.session.access_token}`
+        'Authorization': `Bearer ${admin.session.access_token}`,
       },
-      body: JSON.stringify({})
+      body: JSON.stringify({}),
     })
 
     expect(response1.status).toBe(400)
@@ -504,9 +504,9 @@ describe('Order Fulfillment Tasks - Validation', () => {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${admin.session.access_token}`
+        'Authorization': `Bearer ${admin.session.access_token}`,
       },
-      body: JSON.stringify({ completed: 'yes' })
+      body: JSON.stringify({ completed: 'yes' }),
     })
 
     expect(response2.status).toBe(400)
@@ -522,7 +522,7 @@ describe('Order Fulfillment Tasks - Validation', () => {
     const supabase = createSupabaseClient()
     const { data: admin } = await supabase.auth.signUp({
       email: `test-admin-${Date.now()}@example.test`,
-      password: 'TestPassword123!'
+      password: 'TestPassword123!',
     })
 
     await supabase
@@ -535,9 +535,9 @@ describe('Order Fulfillment Tasks - Validation', () => {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${admin.session.access_token}`
+        'Authorization': `Bearer ${admin.session.access_token}`,
       },
-      body: JSON.stringify({ completed: true })
+      body: JSON.stringify({ completed: true }),
     })
 
     expect(response1.status).toBe(400)
@@ -547,9 +547,9 @@ describe('Order Fulfillment Tasks - Validation', () => {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${admin.session.access_token}`
+        'Authorization': `Bearer ${admin.session.access_token}`,
       },
-      body: JSON.stringify({ completed: true })
+      body: JSON.stringify({ completed: true }),
     })
 
     expect(response2.status).toBe(404)

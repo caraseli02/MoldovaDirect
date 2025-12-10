@@ -20,12 +20,12 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
   })
 
   test('2. Check Console for Errors and Hydration Issues', async ({ page }) => {
-    const consoleLogs: { type: string; text: string }[] = []
+    const consoleLogs: { type: string, text: string }[] = []
     const pageErrors: string[] = []
     const networkErrors: string[] = []
 
     // Capture console messages
-    page.on('console', msg => {
+    page.on('console', (msg) => {
       const logEntry = {
         type: msg.type(),
         text: msg.text(),
@@ -37,13 +37,13 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
     })
 
     // Capture page errors
-    page.on('pageerror', error => {
+    page.on('pageerror', (error) => {
       pageErrors.push(error.toString())
       console.log(`[PAGE ERROR] ${error.toString()}`)
     })
 
     // Capture network failures
-    page.on('requestfailed', request => {
+    page.on('requestfailed', (request) => {
       networkErrors.push(`${request.method()} ${request.url()}`)
       console.log(`[NETWORK ERROR] ${request.method()} ${request.url()}`)
     })
@@ -54,11 +54,11 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
 
     // Analyze results
     const hydrationErrors = consoleLogs.filter(
-      log => log.type === 'error' && log.text.includes('Hydration')
+      log => log.type === 'error' && log.text.includes('Hydration'),
     )
 
     const criticalErrors = pageErrors.filter(
-      err => !err.includes('hydration') && !err.includes('Hydration')
+      err => !err.includes('hydration') && !err.includes('Hydration'),
     )
 
     console.log('\n=== CONSOLE CHECK RESULTS ===')
@@ -99,7 +99,8 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
 
     if (rowCount > 0) {
       console.log(`✓ Products are displayed in the table (${rowCount} rows)`)
-    } else {
+    }
+    else {
       console.log('⚠ No product rows found in table - table may be empty or not loaded')
     }
 
@@ -114,7 +115,7 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
 
     // Look for search input
     const searchInput = authenticatedPage.locator(
-      'input[placeholder*="Search"], input[aria-label*="Search"], input[type="search"]'
+      'input[placeholder*="Search"], input[aria-label*="Search"], input[type="search"]',
     ).first()
 
     const searchExists = await searchInput.count() > 0
@@ -152,7 +153,7 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
 
     // Look for filter buttons or dropdowns
     const filterButtons = authenticatedPage.locator('button, [role="button"]').filter({
-      hasText: /Filter|Category|Status|Sort/i
+      hasText: /Filter|Category|Status|Sort/i,
     })
 
     const filterCount = await filterButtons.count()
@@ -186,7 +187,7 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
 
     // Look for "New Product" button
     const newProductButton = authenticatedPage.locator('button, a').filter({
-      hasText: /New|Create|Add/i
+      hasText: /New|Create|Add/i,
     }).first()
 
     const buttonExists = await newProductButton.count() > 0
@@ -263,7 +264,8 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
       // Take a screenshot
       await authenticatedPage.screenshot({ path: 'admin-products-details.png' })
       console.log('✓ Screenshot taken: admin-products-details.png')
-    } else {
+    }
+    else {
       // Try clicking on the row itself
       console.log('⚠ No clickable elements found - trying to click row')
       await firstRow.click().catch(() => {
@@ -282,7 +284,8 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
     try {
       await page.goto('/admin/products', { waitUntil: 'networkidle' })
       console.log('✓ Page loaded successfully')
-    } catch (error) {
+    }
+    catch (error) {
       issues.push(`Failed to load page: ${error}`)
       return
     }
@@ -291,7 +294,8 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
     const isErrorPage = await page.locator('text=/Error|404|500/i').isVisible({ timeout: 2000 }).catch(() => false)
     if (isErrorPage) {
       issues.push('Page appears to be showing an error page')
-    } else {
+    }
+    else {
       console.log('✓ Not an error page')
     }
 
@@ -299,7 +303,8 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
     const title = await page.title()
     if (title && title.length > 0) {
       console.log(`✓ Page title: "${title}"`)
-    } else {
+    }
+    else {
       warnings.push('Page title is empty')
     }
 
@@ -308,7 +313,8 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
     const hasMainContent = await mainContent.isVisible({ timeout: 5000 }).catch(() => false)
     if (hasMainContent) {
       console.log('✓ Main content area found')
-    } else {
+    }
+    else {
       warnings.push('Main content area not found')
     }
 
@@ -317,7 +323,8 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
     const hasNav = await nav.isVisible({ timeout: 5000 }).catch(() => false)
     if (hasNav) {
       console.log('✓ Navigation found')
-    } else {
+    }
+    else {
       warnings.push('Navigation not found')
     }
 
@@ -326,7 +333,8 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
     const disabledCount = await disabledInputs.count()
     if (disabledCount === 0) {
       console.log('✓ No unexpectedly disabled elements')
-    } else {
+    }
+    else {
       console.log(`⚠ Found ${disabledCount} disabled elements (may be expected)`)
     }
 
@@ -343,7 +351,7 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
 
     // Test 8: Check for layout shift (CLS)
     const layoutShifts = await page.evaluate(() => {
-      return new Promise<number>(resolve => {
+      return new Promise<number>((resolve) => {
         let cls = 0
         const observer = new PerformanceObserver((list) => {
           list.getEntries().forEach((entry: any) => {

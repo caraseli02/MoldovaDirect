@@ -24,7 +24,7 @@ const { useProductStructuredData } = await import('./useProductStructuredData')
 // Helper function to create mock product
 const createMockProduct = (
   id: number,
-  overrides: Partial<ProductWithRelations> = {}
+  overrides: Partial<ProductWithRelations> = {},
 ): ProductWithRelations => ({
   id,
   sku: `SKU-${id}`,
@@ -730,7 +730,7 @@ describe('useProductStructuredData', () => {
 
       const headCall = mockUseHead.mock.calls[0][0]
       expect(headCall.meta[0].content).toBe(
-        'Browse authentic Moldovan food and wine products. Premium quality directly from Moldova to Spain.'
+        'Browse authentic Moldovan food and wine products. Premium quality directly from Moldova to Spain.',
       )
     })
 
@@ -1070,7 +1070,7 @@ describe('useProductStructuredData', () => {
 
       const { buildProductListStructuredData, updateStructuredData } = useProductStructuredData(
         products,
-        pagination
+        pagination,
       )
 
       const structuredData = buildProductListStructuredData()

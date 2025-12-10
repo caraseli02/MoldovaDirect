@@ -1,10 +1,10 @@
 /**
  * Admin User Analytics API Endpoint
- * 
+ *
  * Requirements addressed:
  * - 3.1: Display key metrics including total users, active users
  * - 3.3: Display user registration trends, login frequency, and user activity patterns
- * 
+ *
  * Returns user analytics data including:
  * - Registration trends over time
  * - User activity patterns
@@ -63,7 +63,8 @@ export default defineEventHandler(async (event) => {
     let dateFilter = ''
     if (startDate && endDate) {
       dateFilter = `AND created_at BETWEEN '${startDate}' AND '${endDate}'`
-    } else {
+    }
+    else {
       const daysAgo = new Date()
       daysAgo.setDate(daysAgo.getDate() - days)
       dateFilter = `AND created_at >= '${daysAgo.toISOString()}'`
@@ -110,8 +111,8 @@ export default defineEventHandler(async (event) => {
       .select('user_id')
       .gte('created_at', thirtyDaysAgo.toISOString())
 
-    const activeUsersLast30Days = activeUsersData 
-      ? new Set(activeUsersData.map(u => u.user_id)).size 
+    const activeUsersLast30Days = activeUsersData
+      ? new Set(activeUsersData.map(u => u.user_id)).size
       : 0
 
     // Calculate average daily active users
@@ -126,9 +127,9 @@ export default defineEventHandler(async (event) => {
 
     // Get top user activities
     const { data: topActivitiesRaw, error: topActivitiesError } = await supabase
-      .rpc('get_top_user_activities', { 
+      .rpc('get_top_user_activities', {
         days_back: days,
-        limit_count: 10 
+        limit_count: 10,
       })
       .select('*')
 
@@ -151,8 +152,8 @@ export default defineEventHandler(async (event) => {
       if (!fallbackError && userActivities) {
         // Group by user and count activities
         const userActivityMap = new Map()
-        
-        userActivities.forEach(activity => {
+
+        userActivities.forEach((activity) => {
           const userId = activity.user_id
           if (!userActivityMap.has(userId)) {
             userActivityMap.set(userId, {
@@ -160,15 +161,15 @@ export default defineEventHandler(async (event) => {
               userName: activity.profiles?.name || 'Unknown User',
               totalActivities: 0,
               lastActivity: activity.created_at,
-              activityBreakdown: {}
+              activityBreakdown: {},
             })
           }
-          
+
           const userStats = userActivityMap.get(userId)
           userStats.totalActivities++
-          userStats.activityBreakdown[activity.activity_type] = 
-            (userStats.activityBreakdown[activity.activity_type] || 0) + 1
-          
+          userStats.activityBreakdown[activity.activity_type]
+            = (userStats.activityBreakdown[activity.activity_type] || 0) + 1
+
           // Update last activity if this is more recent
           if (new Date(activity.created_at) > new Date(userStats.lastActivity)) {
             userStats.lastActivity = activity.created_at
@@ -179,7 +180,8 @@ export default defineEventHandler(async (event) => {
           .sort((a, b) => b.totalActivities - a.totalActivities)
           .slice(0, 10)
       }
-    } else {
+    }
+    else {
       topUserActivities = topActivitiesRaw || []
     }
 
@@ -191,26 +193,26 @@ export default defineEventHandler(async (event) => {
         activeUsersLast30Days,
         newUsersLast30Days: newUsersLast30Days || 0,
         avgDailyActiveUsers,
-        userRetentionRate
+        userRetentionRate,
       },
-      topUserActivities
+      topUserActivities,
     }
 
     return {
       success: true,
-      data: analyticsData
+      data: analyticsData,
     }
-
-  } catch (error) {
+  }
+  catch (error) {
     console.error('User analytics error:', error)
-    
+
     if (error.statusCode) {
       throw error
     }
-    
+
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to fetch user analytics'
+      statusMessage: 'Failed to fetch user analytics',
     })
   }
 })

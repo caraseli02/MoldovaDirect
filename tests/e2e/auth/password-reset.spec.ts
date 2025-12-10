@@ -166,7 +166,7 @@ test.describe('Password Reset Flow', () => {
     test('should not expose password in URL or network requests', async ({ page }) => {
       const requests: string[] = []
 
-      page.on('request', request => {
+      page.on('request', (request) => {
         requests.push(request.url())
       })
 
@@ -178,7 +178,7 @@ test.describe('Password Reset Flow', () => {
       await page.waitForTimeout(2000)
 
       // Password should not appear in any URLs
-      requests.forEach(url => {
+      requests.forEach((url) => {
         expect(url.toLowerCase()).not.toContain('securepassword123')
       })
     })

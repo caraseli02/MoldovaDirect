@@ -958,7 +958,7 @@ describe('useProductFilters', () => {
       expect(filters.value.attributes).toBeUndefined()
       expect(consoleWarnSpy).toHaveBeenCalledWith(
         'Failed to parse attributes query:',
-        expect.any(Error)
+        expect.any(Error),
       )
 
       consoleWarnSpy.mockRestore()
@@ -1360,8 +1360,8 @@ describe('useProductFilters', () => {
 
   describe('Integration Scenarios', () => {
     it('supports complete filtering workflow', () => {
-      const { filters, updateFilters, activeFilterCount, activeFilterChips, syncFiltersToUrl } =
-        useProductFilters(mockCategoriesTree)
+      const { filters, updateFilters, activeFilterCount, activeFilterChips, syncFiltersToUrl }
+        = useProductFilters(mockCategoriesTree)
 
       // User selects filters
       updateFilters({
@@ -1388,8 +1388,8 @@ describe('useProductFilters', () => {
     })
 
     it('supports filter removal workflow', () => {
-      const { updateFilters, activeFilterChips, removeFilterChip, clearFilters } =
-        useProductFilters(mockCategoriesTree)
+      const { updateFilters, activeFilterChips, removeFilterChip, clearFilters }
+        = useProductFilters(mockCategoriesTree)
 
       updateFilters({
         category: 'electronics',

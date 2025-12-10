@@ -255,7 +255,7 @@ test.describe('Registration Flow', () => {
         // Click terms link
         const [newPage] = await Promise.all([
           context.waitForEvent('page'),
-          termsLink.click()
+          termsLink.click(),
         ])
 
         await expect(newPage).toHaveURL(/\/terms/)
@@ -267,7 +267,7 @@ test.describe('Registration Flow', () => {
 
         const [newPage] = await Promise.all([
           context.waitForEvent('page'),
-          privacyLink.click()
+          privacyLink.click(),
         ])
 
         await expect(newPage).toHaveURL(/\/privacy/)
@@ -399,7 +399,7 @@ test.describe('Registration Flow', () => {
     test('should not expose password in network requests', async ({ page }) => {
       const requests: string[] = []
 
-      page.on('request', request => {
+      page.on('request', (request) => {
         requests.push(request.url())
       })
 
@@ -414,7 +414,7 @@ test.describe('Registration Flow', () => {
       await page.waitForTimeout(2000)
 
       // Verify password is not in URL
-      requests.forEach(url => {
+      requests.forEach((url) => {
         expect(url.toLowerCase()).not.toContain('password123')
       })
     })

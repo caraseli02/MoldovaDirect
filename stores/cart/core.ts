@@ -1,18 +1,18 @@
 /**
  * Cart Core Module
- * 
+ *
  * Handles basic cart operations: add, remove, update items
  * This module contains the essential cart functionality
  */
 
 import { ref, computed, readonly } from 'vue'
-import type { 
-  Product, 
-  CartItem, 
-  CartCoreState, 
-  CartCoreActions, 
+import type {
+  Product,
+  CartItem,
+  CartCoreState,
+  CartCoreActions,
   CartCoreGetters,
-  CartError 
+  CartError,
 } from './types'
 
 // =============================================
@@ -29,14 +29,14 @@ const state = ref<CartCoreState>({
   isLocked: false,
   lockedAt: null,
   lockedUntil: null,
-  lockedByCheckoutSessionId: null
+  lockedByCheckoutSessionId: null,
 })
 
 // Operation-level locking to prevent race conditions
 // Tracks pending operations to ensure serialization
 const operationLock = ref({
   isOperating: false,
-  pendingOperations: [] as Array<() => Promise<void>>
+  pendingOperations: [] as Array<() => Promise<void>>,
 })
 
 // Performance optimization caches
@@ -54,15 +54,15 @@ const getters: CartCoreGetters = {
   get itemCount(): number {
     // Use cached calculation if items haven't changed
     if (
-      _cachedItemCount.value !== undefined &&
-      _lastItemsHash.value === _currentItemsHash.value
+      _cachedItemCount.value !== undefined
+      && _lastItemsHash.value === _currentItemsHash.value
     ) {
       return _cachedItemCount.value
     }
 
     const count = state.value.items.reduce(
       (total, item) => total + item.quantity,
-      0
+      0,
     )
     _cachedItemCount.value = count
     _lastItemsHash.value = _currentItemsHash.value
@@ -73,8 +73,8 @@ const getters: CartCoreGetters = {
   get subtotal(): number {
     // Use cached calculation if items haven't changed
     if (
-      _cachedSubtotal.value !== undefined &&
-      _lastItemsHash.value === _currentItemsHash.value
+      _cachedSubtotal.value !== undefined
+      && _lastItemsHash.value === _currentItemsHash.value
     ) {
       return _cachedSubtotal.value
     }
@@ -95,13 +95,13 @@ const getters: CartCoreGetters = {
 
   // Get item by product ID
   getItemByProductId(productId: string): CartItem | undefined {
-    return state.value.items.find((item) => item.product.id === productId)
+    return state.value.items.find(item => item.product.id === productId)
   },
 
   // Check if product is in cart
   isInCart(productId: string): boolean {
-    return state.value.items.some((item) => item.product.id === productId)
-  }
+    return state.value.items.some(item => item.product.id === productId)
+  },
 }
 
 // =============================================
@@ -128,7 +128,7 @@ function generateSessionId(): string {
 function invalidateCalculationCache(): void {
   _lastItemsHash.value = _currentItemsHash.value
   _currentItemsHash.value = JSON.stringify(
-    state.value.items.map(item => ({ id: item.id, quantity: item.quantity, price: item.product.price }))
+    state.value.items.map(item => ({ id: item.id, quantity: item.quantity, price: item.product.price })),
   )
   _cachedItemCount.value = undefined
   _cachedSubtotal.value = undefined
@@ -142,7 +142,7 @@ function createCartError(
   code: string,
   message: string,
   retryable: boolean = false,
-  context?: Record<string, any>
+  context?: Record<string, any>,
 ): CartError {
   return {
     type,
@@ -150,7 +150,7 @@ function createCartError(
     message,
     retryable,
     timestamp: new Date(),
-    context
+    context,
   }
 }
 
@@ -216,8 +216,8 @@ function ensureCartNotLocked(): void {
       {
         lockedAt: state.value.lockedAt,
         lockedUntil: state.value.lockedUntil,
-        lockedBySession: state.value.lockedByCheckoutSessionId
-      }
+        lockedBySession: state.value.lockedByCheckoutSessionId,
+      },
     )
   }
 }
@@ -252,7 +252,8 @@ async function withOperationLock<T>(operation: () => Promise<T>): Promise<T> {
         try {
           const result = await operation()
           resolve(result)
-        } catch (error) {
+        }
+        catch (error) {
           reject(error)
         }
       }
@@ -267,7 +268,8 @@ async function withOperationLock<T>(operation: () => Promise<T>): Promise<T> {
     // Execute the operation
     const result = await operation()
     return result
-  } finally {
+  }
+  finally {
     // Process next queued operation if any
     const nextOperation = operationLock.value.pendingOperations.shift()
     if (nextOperation) {
@@ -278,7 +280,8 @@ async function withOperationLock<T>(operation: () => Promise<T>): Promise<T> {
           operationLock.value.isOperating = false
         }
       })
-    } else {
+    }
+    else {
       operationLock.value.isOperating = false
     }
   }
@@ -322,7 +325,7 @@ const actions: CartCoreActions = {
             'INSUFFICIENT_STOCK',
             `Only ${product.stock} items available`,
             false,
-            { productId: product.id, requestedQuantity: quantity, availableStock: product.stock }
+            { productId: product.id, requestedQuantity: quantity, availableStock: product.stock },
           )
         }
 
@@ -343,8 +346,8 @@ const actions: CartCoreActions = {
                 productId: product.id,
                 currentQuantity: existingItem.quantity,
                 requestedAddition: quantity,
-                availableStock: product.stock
-              }
+                availableStock: product.stock,
+              },
             )
           }
 
@@ -352,14 +355,15 @@ const actions: CartCoreActions = {
           existingItem.lastModified = new Date()
           // Update product data with latest information
           existingItem.product = { ...existingItem.product, ...product }
-        } else {
+        }
+        else {
           // Add new item to cart
           const cartItem: CartItem = {
             id: generateItemId(),
             product,
             quantity,
             addedAt: new Date(),
-            source: 'manual'
+            source: 'manual',
           }
           state.value.items.push(cartItem)
         }
@@ -367,15 +371,16 @@ const actions: CartCoreActions = {
         // Invalidate cache and update sync time
         invalidateCalculationCache()
         state.value.lastSyncAt = new Date()
-
-      } catch (error) {
-        const cartError = error instanceof Error && 'type' in error
+      }
+      catch (error) {
+        const cartError = (error instanceof Error && 'type' in error && 'code' in error && 'retryable' in error && 'timestamp' in error)
           ? error as CartError
           : createCartError('validation', 'ADD_ITEM_FAILED', error instanceof Error ? error.message : 'Failed to add item to cart')
 
         state.value.error = cartError.message
         throw cartError
-      } finally {
+      }
+      finally {
         state.value.loading = false
       }
     })
@@ -397,7 +402,7 @@ const actions: CartCoreActions = {
           throw createCartError('validation', 'INVALID_ITEM_ID', 'Item ID is required')
         }
 
-        const index = state.value.items.findIndex((item) => item.id === itemId)
+        const index = state.value.items.findIndex(item => item.id === itemId)
         if (index === -1) {
           throw createCartError('validation', 'ITEM_NOT_FOUND', 'Item not found in cart', false, { itemId })
         }
@@ -408,15 +413,16 @@ const actions: CartCoreActions = {
         // Invalidate cache and update sync time
         invalidateCalculationCache()
         state.value.lastSyncAt = new Date()
-
-      } catch (error) {
-        const cartError = error instanceof Error && 'type' in error
+      }
+      catch (error) {
+        const cartError = (error instanceof Error && 'type' in error && 'code' in error && 'retryable' in error && 'timestamp' in error)
           ? error as CartError
           : createCartError('validation', 'REMOVE_ITEM_FAILED', error instanceof Error ? error.message : 'Failed to remove item from cart')
 
         state.value.error = cartError.message
         throw cartError
-      } finally {
+      }
+      finally {
         state.value.loading = false
       }
     })
@@ -445,7 +451,7 @@ const actions: CartCoreActions = {
 
         validateQuantity(quantity)
 
-        const item = state.value.items.find((item) => item.id === itemId)
+        const item = state.value.items.find(item => item.id === itemId)
         if (!item) {
           throw createCartError('validation', 'ITEM_NOT_FOUND', 'Item not found in cart', false, { itemId })
         }
@@ -460,8 +466,8 @@ const actions: CartCoreActions = {
             {
               productId: item.product.id,
               requestedQuantity: quantity,
-              availableStock: item.product.stock
-            }
+              availableStock: item.product.stock,
+            },
           )
         }
 
@@ -472,15 +478,16 @@ const actions: CartCoreActions = {
         // Invalidate cache and update sync time
         invalidateCalculationCache()
         state.value.lastSyncAt = new Date()
-
-      } catch (error) {
-        const cartError = error instanceof Error && 'type' in error
+      }
+      catch (error) {
+        const cartError = (error instanceof Error && 'type' in error && 'code' in error && 'retryable' in error && 'timestamp' in error)
           ? error as CartError
           : createCartError('validation', 'UPDATE_QUANTITY_FAILED', error instanceof Error ? error.message : 'Failed to update item quantity')
 
         state.value.error = cartError.message
         throw cartError
-      } finally {
+      }
+      finally {
         state.value.loading = false
       }
     })
@@ -498,16 +505,17 @@ const actions: CartCoreActions = {
       ensureCartNotLocked()
 
       state.value.items = []
-      
+
       // Invalidate cache and update sync time
       invalidateCalculationCache()
       state.value.lastSyncAt = new Date()
-
-    } catch (error) {
+    }
+    catch (error) {
       const cartError = createCartError('validation', 'CLEAR_CART_FAILED', error instanceof Error ? error.message : 'Failed to clear cart')
       state.value.error = cartError.message
       throw cartError
-    } finally {
+    }
+    finally {
       state.value.loading = false
     }
   },
@@ -529,7 +537,8 @@ const actions: CartCoreActions = {
       state.value.lockedByCheckoutSessionId = checkoutSessionId
 
       console.log(`Cart locked for checkout session: ${checkoutSessionId} until ${lockUntil}`)
-    } catch (error: any) {
+    }
+    catch (error: any) {
       const message = error.message || 'Failed to lock cart'
       state.value.error = message
       throw createCartError('validation', 'LOCK_FAILED', message, true, { checkoutSessionId })
@@ -542,8 +551,8 @@ const actions: CartCoreActions = {
   async unlockCart(checkoutSessionId?: string): Promise<void> {
     try {
       // Verify session if provided
-      if (checkoutSessionId && state.value.lockedByCheckoutSessionId &&
-          state.value.lockedByCheckoutSessionId !== checkoutSessionId) {
+      if (checkoutSessionId && state.value.lockedByCheckoutSessionId
+        && state.value.lockedByCheckoutSessionId !== checkoutSessionId) {
         // Check if lock has expired
         if (state.value.lockedUntil && new Date() < state.value.lockedUntil) {
           throw createCartError(
@@ -553,8 +562,8 @@ const actions: CartCoreActions = {
             false,
             {
               providedSession: checkoutSessionId,
-              lockingSession: state.value.lockedByCheckoutSessionId
-            }
+              lockingSession: state.value.lockedByCheckoutSessionId,
+            },
           )
         }
       }
@@ -565,7 +574,8 @@ const actions: CartCoreActions = {
       state.value.lockedByCheckoutSessionId = null
 
       console.log('Cart unlocked')
-    } catch (error: any) {
+    }
+    catch (error: any) {
       const message = error.message || 'Failed to unlock cart'
       state.value.error = message
       throw createCartError('validation', 'UNLOCK_FAILED', message, true, { checkoutSessionId })
@@ -588,14 +598,14 @@ const actions: CartCoreActions = {
       isLocked: state.value.isLocked,
       lockedAt: state.value.lockedAt,
       lockedUntil: state.value.lockedUntil,
-      lockedBySession: state.value.lockedByCheckoutSessionId
+      lockedBySession: state.value.lockedByCheckoutSessionId,
     }
   },
 
   /**
    * Check if cart is currently locked
    */
-  isCartLocked
+  isCartLocked,
 }
 
 // =============================================
@@ -624,7 +634,7 @@ export function useCartCore() {
     ...actions,
 
     // Utilities
-    invalidateCalculationCache
+    invalidateCalculationCache,
   }
 }
 
@@ -638,5 +648,5 @@ export {
   actions as cartCoreActions,
   generateItemId,
   generateSessionId,
-  invalidateCalculationCache
+  invalidateCalculationCache,
 }

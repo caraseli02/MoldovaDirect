@@ -5,23 +5,23 @@
 
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 
+import { useToast } from '~/composables/useToast'
+import { toast as mockToast } from 'vue-sonner'
+
 // Must declare mock INSIDE vi.mock factory to avoid hoisting issues
 vi.mock('vue-sonner', () => ({
   toast: {
     success: vi.fn(),
     error: vi.fn(),
     warning: vi.fn(),
-    info: vi.fn()
-  }
+    info: vi.fn(),
+  },
 }))
 
 // Mock useI18n globally
 vi.stubGlobal('useI18n', () => ({
-  t: (key: string, params?: any) => params ? `${key}:${JSON.stringify(params)}` : key
+  t: (key: string, params?: any) => params ? `${key}:${JSON.stringify(params)}` : key,
 }))
-
-import { useToast } from '~/composables/useToast'
-import { toast as mockToast } from 'vue-sonner'
 
 describe('useToast', () => {
   beforeEach(() => {
@@ -35,7 +35,7 @@ describe('useToast', () => {
       success('Title', 'Message')
 
       expect(mockToast.success).toHaveBeenCalledWith('Title', expect.objectContaining({
-        description: 'Message'
+        description: 'Message',
       }))
     })
 
@@ -45,7 +45,7 @@ describe('useToast', () => {
       error('Error Title', 'Error Message')
 
       expect(mockToast.error).toHaveBeenCalledWith('Error Title', expect.objectContaining({
-        description: 'Error Message'
+        description: 'Error Message',
       }))
     })
 
@@ -55,7 +55,7 @@ describe('useToast', () => {
       warning('Warning Title', 'Warning Message')
 
       expect(mockToast.warning).toHaveBeenCalledWith('Warning Title', expect.objectContaining({
-        description: 'Warning Message'
+        description: 'Warning Message',
       }))
     })
 
@@ -65,7 +65,7 @@ describe('useToast', () => {
       info('Info Title', 'Info Message')
 
       expect(mockToast.info).toHaveBeenCalledWith('Info Title', expect.objectContaining({
-        description: 'Info Message'
+        description: 'Info Message',
       }))
     })
   })
@@ -77,7 +77,7 @@ describe('useToast', () => {
       success('Title', 'Message', { duration: 5000 })
 
       expect(mockToast.success).toHaveBeenCalledWith('Title', expect.objectContaining({
-        duration: 5000
+        duration: 5000,
       }))
     })
 
@@ -87,14 +87,14 @@ describe('useToast', () => {
 
       success('Title', 'Message', {
         actionText: 'Undo',
-        actionHandler
+        actionHandler,
       })
 
       expect(mockToast.success).toHaveBeenCalledWith('Title', expect.objectContaining({
         action: expect.objectContaining({
           label: 'Undo',
-          onClick: actionHandler
-        })
+          onClick: actionHandler,
+        }),
       }))
     })
 
@@ -104,7 +104,7 @@ describe('useToast', () => {
       success('Title', 'Message')
 
       expect(mockToast.success).toHaveBeenCalledWith('Title', expect.objectContaining({
-        action: undefined
+        action: undefined,
       }))
     })
 
@@ -114,7 +114,7 @@ describe('useToast', () => {
       info('Title Only')
 
       expect(mockToast.info).toHaveBeenCalledWith('Title Only', expect.objectContaining({
-        description: undefined
+        description: undefined,
       }))
     })
   })
@@ -184,8 +184,8 @@ describe('useToast', () => {
       expect(mockToast.error).toHaveBeenCalledWith(
         expect.any(String),
         expect.objectContaining({
-          duration: 10000
-        })
+          duration: 10000,
+        }),
       )
     })
 

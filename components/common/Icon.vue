@@ -1,5 +1,8 @@
 <template>
-  <component :is="resolvedIcon" v-bind="$attrs" />
+  <component
+    :is="resolvedIcon"
+    v-bind="$attrs"
+  />
 </template>
 
 <script setup lang="ts">
@@ -87,7 +90,7 @@ import {
   Wallet,
   Wine,
   Wrench,
-  X
+  X,
 } from 'lucide-vue-next'
 
 const props = defineProps<{ name: string }>()
@@ -210,7 +213,7 @@ const ICONS: Record<string, Component> = {
   'image': Image,
   'photo': Image,
   'alert-octagon': AlertTriangle,
-  'alert': AlertTriangle
+  'alert': AlertTriangle,
 }
 
 const fallbackIcon = CircleHelp

@@ -100,7 +100,8 @@ test.describe('Full Checkout Flow', () => {
         }
 
         console.log('✅ Filled shipping information')
-      } else {
+      }
+      else {
         console.log('✅ Form already pre-filled with Express Checkout')
       }
 
@@ -121,7 +122,8 @@ test.describe('Full Checkout Flow', () => {
         await page.waitForLoadState('networkidle')
         console.log('✅ Navigated to payment page')
       }
-    } else if (currentUrl.includes('/payment')) {
+    }
+    else if (currentUrl.includes('/payment')) {
       console.log('🚀 Auto-routed to payment page with Express Checkout!')
 
       // Check for countdown timer

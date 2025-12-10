@@ -1,10 +1,10 @@
 /**
  * Admin Dashboard Store using Pinia
- * 
+ *
  * Requirements addressed:
  * - 3.1: Dashboard statistics management and display
  * - 6.4: Real-time data refresh functionality
- * 
+ *
  * Manages:
  * - Dashboard statistics (products, users, orders, revenue)
  * - Recent activity feed
@@ -36,7 +36,7 @@ export const useAdminDashboardStore = defineStore('adminDashboard', {
     activityLoading: false,
     error: null,
     lastRefresh: null,
-    autoRefreshInterval: null
+    autoRefreshInterval: null,
   }),
 
   getters: {
@@ -54,7 +54,7 @@ export const useAdminDashboardStore = defineStore('adminDashboard', {
       if (!state.stats) return '€0.00'
       return new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: 'EUR'
+        currency: 'EUR',
       }).format(state.stats.revenue)
     },
 
@@ -65,7 +65,7 @@ export const useAdminDashboardStore = defineStore('adminDashboard', {
       if (!state.stats) return '€0.00'
       return new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: 'EUR'
+        currency: 'EUR',
       }).format(state.stats.revenueToday)
     },
 
@@ -91,11 +91,11 @@ export const useAdminDashboardStore = defineStore('adminDashboard', {
      */
     timeSinceRefresh: (state): string => {
       if (!state.lastRefresh) return 'Never'
-      
+
       const now = new Date()
       const diff = now.getTime() - state.lastRefresh.getTime()
       const minutes = Math.floor(diff / (1000 * 60))
-      
+
       if (minutes < 1) return 'Just now'
       if (minutes === 1) return '1 minute ago'
       return `${minutes} minutes ago`
@@ -106,14 +106,14 @@ export const useAdminDashboardStore = defineStore('adminDashboard', {
      */
     activitiesByType: (state) => {
       const grouped: Record<string, ActivityItem[]> = {}
-      
-      state.recentActivity.forEach(activity => {
+
+      state.recentActivity.forEach((activity) => {
         if (!grouped[activity.type]) {
           grouped[activity.type] = []
         }
         grouped[activity.type].push(activity)
       })
-      
+
       return grouped
     },
 
@@ -121,8 +121,8 @@ export const useAdminDashboardStore = defineStore('adminDashboard', {
      * Get critical alerts (low stock, failed orders, etc.)
      */
     criticalAlerts: (state): ActivityItem[] => {
-      return state.recentActivity.filter(activity => 
-        activity.type === 'low_stock'
+      return state.recentActivity.filter(activity =>
+        activity.type === 'low_stock',
       )
     },
 
@@ -156,7 +156,7 @@ export const useAdminDashboardStore = defineStore('adminDashboard', {
       if (!state.stats) return '€0.00'
       return new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: 'EUR'
+        currency: 'EUR',
       }).format(state.stats.averageOrderValue)
     },
 
@@ -165,7 +165,7 @@ export const useAdminDashboardStore = defineStore('adminDashboard', {
      */
     ordersTodayCount: (state): number => {
       return state.stats?.ordersToday ?? 0
-    }
+    },
   },
 
   actions: {
@@ -244,6 +244,6 @@ export const useAdminDashboardStore = defineStore('adminDashboard', {
       if (this.recentActivity.length > 10) {
         this.recentActivity = this.recentActivity.slice(0, 10)
       }
-    }
-  }
+    },
+  },
 })

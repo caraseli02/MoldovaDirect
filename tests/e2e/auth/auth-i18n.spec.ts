@@ -33,7 +33,7 @@ for (const locale of locales) {
           // Common English words that should be translated
           const englishPatterns = ['Sign in', 'Login', 'Log in']
           const hasEnglish = englishPatterns.some(pattern =>
-            buttonText?.toLowerCase().includes(pattern.toLowerCase())
+            buttonText?.toLowerCase().includes(pattern.toLowerCase()),
           )
 
           // In non-English locales, button should be translated
@@ -124,7 +124,7 @@ for (const locale of locales) {
           // Common English placeholders
           const englishPlaceholders = ['Email', 'Email address', 'Enter your email']
           const hasEnglishPlaceholder = englishPlaceholders.some(en =>
-            placeholder?.toLowerCase() === en.toLowerCase()
+            placeholder?.toLowerCase() === en.toLowerCase(),
           )
 
           // In non-English locales, placeholder should be translated
@@ -227,7 +227,7 @@ for (const locale of locales) {
           await page.goto(`/${locale}/auth/login`)
 
           const direction = await page.evaluate(() =>
-            window.getComputedStyle(document.documentElement).direction
+            window.getComputedStyle(document.documentElement).direction,
           )
 
           expect(direction).toBe('rtl')
@@ -270,11 +270,11 @@ for (const locale of locales) {
       test(`should submit forms with correct locale context in ${locale}`, async ({ page }) => {
         const requests: any[] = []
 
-        page.on('request', request => {
+        page.on('request', (request) => {
           if (request.method() === 'POST') {
             requests.push({
               url: request.url(),
-              headers: request.headers()
+              headers: request.headers(),
             })
           }
         })
@@ -289,8 +289,8 @@ for (const locale of locales) {
 
         // Check if locale is sent with requests
         const hasLocaleContext = requests.some(req =>
-          req.url.includes(locale) ||
-          req.headers['accept-language']?.includes(locale)
+          req.url.includes(locale)
+          || req.headers['accept-language']?.includes(locale),
         )
 
         // Requests should include locale context

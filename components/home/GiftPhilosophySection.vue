@@ -48,7 +48,10 @@
           <!-- Authenticity -->
           <div class="group rounded-2xl bg-white/10 p-6 backdrop-blur transition-all hover:bg-white/15">
             <div class="mb-4 inline-flex rounded-full bg-primary/20 p-3">
-              <commonIcon name="lucide:heart" class="h-6 w-6 text-primary/80" />
+              <commonIcon
+                name="lucide:heart"
+                class="h-6 w-6 text-primary/80"
+              />
             </div>
             <h4 class="mb-2 text-lg font-bold">
               {{ t('wineStory.giftPhilosophy.reasons.authenticity.title') }}
@@ -61,7 +64,10 @@
           <!-- Quality -->
           <div class="group rounded-2xl bg-white/10 p-6 backdrop-blur transition-all hover:bg-white/15">
             <div class="mb-4 inline-flex rounded-full bg-primary/20 p-3">
-              <commonIcon name="lucide:award" class="h-6 w-6 text-primary/80" />
+              <commonIcon
+                name="lucide:award"
+                class="h-6 w-6 text-primary/80"
+              />
             </div>
             <h4 class="mb-2 text-lg font-bold">
               {{ t('wineStory.giftPhilosophy.reasons.quality.title') }}
@@ -74,7 +80,10 @@
           <!-- Sustainability -->
           <div class="group rounded-2xl bg-white/10 p-6 backdrop-blur transition-all hover:bg-white/15">
             <div class="mb-4 inline-flex rounded-full bg-primary/20 p-3">
-              <commonIcon name="lucide:leaf" class="h-6 w-6 text-primary/80" />
+              <commonIcon
+                name="lucide:leaf"
+                class="h-6 w-6 text-primary/80"
+              />
             </div>
             <h4 class="mb-2 text-lg font-bold">
               {{ t('wineStory.giftPhilosophy.reasons.sustainability.title') }}
@@ -87,7 +96,10 @@
           <!-- Unique -->
           <div class="group rounded-2xl bg-white/10 p-6 backdrop-blur transition-all hover:bg-white/15">
             <div class="mb-4 inline-flex rounded-full bg-primary/20 p-3">
-              <commonIcon name="lucide:sparkles" class="h-6 w-6 text-primary/80" />
+              <commonIcon
+                name="lucide:sparkles"
+                class="h-6 w-6 text-primary/80"
+              />
             </div>
             <h4 class="mb-2 text-lg font-bold">
               {{ t('wineStory.giftPhilosophy.reasons.unique.title') }}
@@ -119,7 +131,10 @@
           <div class="group rounded-2xl border border-white/20 bg-white/5 p-8 backdrop-blur transition-all hover:border-white/30 hover:bg-white/10">
             <div class="mb-4 flex items-center gap-3">
               <div class="rounded-full bg-primary/20 p-2">
-                <commonIcon name="lucide:briefcase" class="h-5 w-5 text-primary/80" />
+                <commonIcon
+                  name="lucide:briefcase"
+                  class="h-5 w-5 text-primary/80"
+                />
               </div>
               <h4 class="text-xl font-bold">
                 {{ t('wineStory.giftPhilosophy.scenarios.corporate.title') }}
@@ -134,7 +149,10 @@
           <div class="group rounded-2xl border border-white/20 bg-white/5 p-8 backdrop-blur transition-all hover:border-white/30 hover:bg-white/10">
             <div class="mb-4 flex items-center gap-3">
               <div class="rounded-full bg-primary/20 p-2">
-                <commonIcon name="lucide:party-popper" class="h-5 w-5 text-primary/80" />
+                <commonIcon
+                  name="lucide:party-popper"
+                  class="h-5 w-5 text-primary/80"
+                />
               </div>
               <h4 class="text-xl font-bold">
                 {{ t('wineStory.giftPhilosophy.scenarios.celebration.title') }}
@@ -149,7 +167,10 @@
           <div class="group rounded-2xl border border-white/20 bg-white/5 p-8 backdrop-blur transition-all hover:border-white/30 hover:bg-white/10">
             <div class="mb-4 flex items-center gap-3">
               <div class="rounded-full bg-primary/20 p-2">
-                <commonIcon name="lucide:gift" class="h-5 w-5 text-primary/80" />
+                <commonIcon
+                  name="lucide:gift"
+                  class="h-5 w-5 text-primary/80"
+                />
               </div>
               <h4 class="text-xl font-bold">
                 {{ t('wineStory.giftPhilosophy.scenarios.gratitude.title') }}
@@ -164,7 +185,10 @@
           <div class="group rounded-2xl border border-white/20 bg-white/5 p-8 backdrop-blur transition-all hover:border-white/30 hover:bg-white/10">
             <div class="mb-4 flex items-center gap-3">
               <div class="rounded-full bg-primary/20 p-2">
-                <commonIcon name="lucide:compass" class="h-5 w-5 text-primary/80" />
+                <commonIcon
+                  name="lucide:compass"
+                  class="h-5 w-5 text-primary/80"
+                />
               </div>
               <h4 class="text-xl font-bold">
                 {{ t('wineStory.giftPhilosophy.scenarios.exploration.title') }}
@@ -199,7 +223,10 @@
           class="cta-button inline-flex items-center gap-2 rounded-full bg-white px-8 py-3 font-semibold text-slate-900 shadow-lg transition-all hover:bg-white/90"
         >
           {{ t('wineStory.giftPhilosophy.cta.button') }}
-          <commonIcon name="lucide:arrow-right" class="h-5 w-5" />
+          <commonIcon
+            name="lucide:arrow-right"
+            class="h-5 w-5"
+          />
         </NuxtLink>
       </div>
     </div>

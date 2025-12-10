@@ -22,14 +22,14 @@ const ALLOWED_REDIRECT_PREFIXES = [
   '/products',
   '/cart',
   '/auth',
-  '/'
+  '/',
 ]
 
 /**
  * List of disallowed redirect paths for security
  */
 const DISALLOWED_PATHS = [
-  '/auth/logout' // Prevent redirect loops
+  '/auth/logout', // Prevent redirect loops
 ]
 
 /**
@@ -54,7 +54,7 @@ const DISALLOWED_PATHS = [
  */
 export function validateRedirectUrl(
   redirectUrl: string | undefined | null,
-  defaultRedirect: string = '/account'
+  defaultRedirect: string = '/account',
 ): string {
   // Return default if no redirect provided
   if (!redirectUrl || typeof redirectUrl !== 'string') {
@@ -80,12 +80,12 @@ export function validateRedirectUrl(
   }
 
   // Check if path starts with an allowed prefix
-  const isAllowed = ALLOWED_REDIRECT_PREFIXES.some(prefix => {
+  const isAllowed = ALLOWED_REDIRECT_PREFIXES.some((prefix) => {
     // Exact match or starts with prefix followed by / or ? or #
-    return url === prefix ||
-           url.startsWith(`${prefix}/`) ||
-           url.startsWith(`${prefix}?`) ||
-           url.startsWith(`${prefix}#`)
+    return url === prefix
+      || url.startsWith(`${prefix}/`)
+      || url.startsWith(`${prefix}?`)
+      || url.startsWith(`${prefix}#`)
   })
 
   if (!isAllowed) {
@@ -124,10 +124,10 @@ export function isValidRedirectUrl(redirectUrl: string | undefined | null): bool
   }
 
   // Check if path starts with an allowed prefix
-  return ALLOWED_REDIRECT_PREFIXES.some(prefix => {
-    return url === prefix ||
-           url.startsWith(`${prefix}/`) ||
-           url.startsWith(`${prefix}?`) ||
-           url.startsWith(`${prefix}#`)
+  return ALLOWED_REDIRECT_PREFIXES.some((prefix) => {
+    return url === prefix
+      || url.startsWith(`${prefix}/`)
+      || url.startsWith(`${prefix}?`)
+      || url.startsWith(`${prefix}#`)
   })
 }

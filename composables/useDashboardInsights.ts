@@ -28,7 +28,7 @@ export interface InsightHighlight {
  */
 export function useDashboardInsights(
   stats: Ref<DashboardStats | null>,
-  activityGroups: Ref<Record<string, any[]>>
+  activityGroups: Ref<Record<string, any[]>>,
 ) {
   /**
    * Count of orders requiring attention (pending + processing)
@@ -54,7 +54,7 @@ export function useDashboardInsights(
         icon: 'lucide:package',
         to: '/admin/orders',
         tone: ordersRequiringAttention.value > 0 ? 'warning' : 'neutral',
-        cta: 'Open orders'
+        cta: 'Open orders',
       },
       {
         key: 'inventoryAlerts',
@@ -64,7 +64,7 @@ export function useDashboardInsights(
         icon: 'lucide:triangle-alert',
         to: '/admin/inventory',
         tone: (data?.lowStockProducts || 0) > 0 ? 'error' : 'success',
-        cta: 'Review stock'
+        cta: 'Review stock',
       },
       {
         key: 'catalogUpdates',
@@ -74,7 +74,7 @@ export function useDashboardInsights(
         icon: 'lucide:sparkles',
         to: '/admin/products',
         tone: (groups?.product_update?.length || 0) > 0 ? 'info' : 'neutral',
-        cta: 'Manage catalog'
+        cta: 'Manage catalog',
       },
       {
         key: 'supportQueue',
@@ -84,8 +84,8 @@ export function useDashboardInsights(
         icon: 'lucide:life-buoy',
         to: '/admin/users',
         tone: (groups?.support_ticket?.length || 0) > 0 ? 'info' : 'success',
-        cta: 'Reply now'
-      }
+        cta: 'Reply now',
+      },
     ]
   })
 
@@ -109,9 +109,10 @@ export function useDashboardInsights(
         icon: 'lucide:megaphone',
         tone: 'warning',
         to: '/admin/tools/campaigns',
-        action: 'Launch campaign'
+        action: 'Launch campaign',
       })
-    } else {
+    }
+    else {
       insights.push({
         key: 'revenue',
         title: 'Revenue momentum',
@@ -119,7 +120,7 @@ export function useDashboardInsights(
         icon: 'lucide:trending-up',
         tone: 'success',
         to: '/admin/analytics',
-        action: 'Inspect analytics'
+        action: 'Inspect analytics',
       })
     }
 
@@ -132,9 +133,10 @@ export function useDashboardInsights(
         icon: 'lucide:user-plus',
         tone: 'info',
         to: '/admin/email-templates',
-        action: 'Plan nurture email'
+        action: 'Plan nurture email',
       })
-    } else {
+    }
+    else {
       insights.push({
         key: 'growth-flat',
         title: 'Acquisition flatline',
@@ -142,7 +144,7 @@ export function useDashboardInsights(
         icon: 'lucide:radar',
         tone: 'warning',
         to: '/admin/tools/campaigns',
-        action: 'Boost acquisition'
+        action: 'Boost acquisition',
       })
     }
 
@@ -154,7 +156,7 @@ export function useDashboardInsights(
       icon: 'lucide:cursor-click',
       tone: data.conversionRate >= 2 ? 'success' : 'info',
       to: '/admin/analytics',
-      action: 'Optimize funnel'
+      action: 'Optimize funnel',
     })
 
     return insights
@@ -163,6 +165,6 @@ export function useDashboardInsights(
   return {
     ordersRequiringAttention,
     backlogItems,
-    insightHighlights
+    insightHighlights,
   }
 }

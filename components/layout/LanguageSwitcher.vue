@@ -5,11 +5,9 @@
     @keydown.escape="closeDropdown"
   >
     <UiButton
+      :id="triggerId"
       ref="triggerRef"
       type="button"
-      @click="toggleDropdown"
-      @keydown.arrow-down.prevent="openDropdown"
-      @keydown.arrow-up.prevent="openDropdown"
       variant="outline"
       :aria-haspopup="'listbox'"
       :aria-expanded="isOpen"
@@ -17,13 +15,26 @@
       :aria-controls="isOpen ? listboxId : undefined"
       :class="cn(
         'min-w-[100px] flex items-center justify-between gap-2 px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 transition-colors dark:text-slate-200',
-        isOpen ? 'ring-2 ring-primary-500 ring-offset-2 dark:ring-offset-slate-900' : ''
+        isOpen ? 'ring-2 ring-primary-500 ring-offset-2 dark:ring-offset-slate-900' : '',
       )"
-      :id="triggerId"
+      @click="toggleDropdown"
+      @keydown.arrow-down.prevent="openDropdown"
+      @keydown.arrow-up.prevent="openDropdown"
     >
       <!-- Globe icon for better visual indication -->
-      <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+      <svg
+        class="h-4 w-4 flex-shrink-0"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
+        />
       </svg>
       <span class="flex-1 text-left">{{ currentLocale?.name }}</span>
       <svg
@@ -34,7 +45,12 @@
         viewBox="0 0 24 24"
         aria-hidden="true"
       >
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M19 9l-7 7-7-7"
+        />
       </svg>
     </UiButton>
 
@@ -49,9 +65,9 @@
     >
       <div
         v-if="isOpen"
+        :id="listboxId"
         ref="menuRef"
         class="absolute right-0 z-50 mt-2 w-48 rounded-lg bg-white py-1 shadow-lg ring-1 ring-black/10 dark:bg-slate-900 dark:ring-white/10"
-        :id="listboxId"
         role="listbox"
         :aria-labelledby="triggerId"
         @keydown.arrow-down.prevent="focusNextOption"
@@ -64,15 +80,15 @@
           :key="locale.code"
           ref="optionRefs"
           type="button"
-          @click="switchLanguage(locale.code)"
           class="block w-full px-4 py-2.5 text-left text-sm text-gray-700 transition-colors hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-slate-200 dark:hover:bg-slate-800/70 dark:focus:bg-slate-800/70"
           :class="{
             'bg-primary-50 text-primary-600 font-medium dark:bg-primary-500/20 dark:text-primary-100': locale.code === currentLocale?.code,
-            'font-normal': locale.code !== currentLocale?.code
+            'font-normal': locale.code !== currentLocale?.code,
           }"
           role="option"
           :aria-selected="locale.code === currentLocale?.code"
           :tabindex="isOpen ? 0 : -1"
+          @click="switchLanguage(locale.code)"
         >
           <span class="flex items-center justify-between">
             <span>{{ locale.name }}</span>
@@ -85,7 +101,12 @@
               viewBox="0 0 24 24"
               aria-hidden="true"
             >
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              />
             </svg>
           </span>
         </button>
@@ -132,7 +153,8 @@ onClickOutside(dropdownRef, () => {
 const toggleDropdown = () => {
   if (isOpen.value) {
     closeDropdown()
-  } else {
+  }
+  else {
     openDropdown()
   }
 }
@@ -187,7 +209,8 @@ const switchLanguage = async (code: 'es' | 'en' | 'ro' | 'ru') => {
     const newPath = switchLocalePath(code)
     closeDropdown()
     await navigateTo(newPath)
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Error switching language:', error)
     closeDropdown()
   }

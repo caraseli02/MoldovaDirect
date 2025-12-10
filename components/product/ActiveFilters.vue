@@ -79,7 +79,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  showClearAll: true
+  showClearAll: true,
 })
 
 const emit = defineEmits<{

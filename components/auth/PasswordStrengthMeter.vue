@@ -1,5 +1,9 @@
 <template>
-  <div v-if="password" class="mt-2 space-y-2" data-testid="password-strength-meter">
+  <div
+    v-if="password"
+    class="mt-2 space-y-2"
+    data-testid="password-strength-meter"
+  >
     <!-- Strength bar -->
     <div class="flex space-x-1">
       <div
@@ -7,9 +11,9 @@
         :key="i"
         class="h-1 flex-1 rounded-full transition-colors duration-300"
         :class="getBarColor(i)"
-      />
+      ></div>
     </div>
-    
+
     <!-- Strength label and requirements -->
     <div class="flex items-center justify-between text-xs">
       <span :class="getLabelColor()">
@@ -19,30 +23,33 @@
         {{ $t('auth.passwordHint') }}
       </span>
     </div>
-    
+
     <!-- Requirements checklist -->
-    <div v-if="showRequirements" class="space-y-1">
+    <div
+      v-if="showRequirements"
+      class="space-y-1"
+    >
       <div class="flex items-center space-x-2 text-xs">
         <CheckIcon :passed="requirements.length" />
         <span :class="requirements.length ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-300'">
           {{ $t('auth.validation.password.minLength') }}
         </span>
       </div>
-      
+
       <div class="flex items-center space-x-2 text-xs">
         <CheckIcon :passed="requirements.uppercase" />
         <span :class="requirements.uppercase ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-300'">
           {{ $t('auth.validation.password.uppercase') }}
         </span>
       </div>
-      
+
       <div class="flex items-center space-x-2 text-xs">
         <CheckIcon :passed="requirements.lowercase" />
         <span :class="requirements.lowercase ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-300'">
           {{ $t('auth.validation.password.lowercase') }}
         </span>
       </div>
-      
+
       <div class="flex items-center space-x-2 text-xs">
         <CheckIcon :passed="requirements.number" />
         <span :class="requirements.number ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-300'">
@@ -60,7 +67,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  showRequirements: true
+  showRequirements: true,
 })
 
 const { t } = useI18n()
@@ -78,9 +85,9 @@ const strengthLabel = computed(() => {
   const strengthLabels = [
     'Very Weak',
     'Weak',
-    'Fair', 
+    'Fair',
     'Good',
-    'Strong'
+    'Strong',
   ]
   return strengthLabels[strength.value] || strengthLabels[0]
 })
@@ -92,7 +99,7 @@ const requirements = computed(() => ({
   length: props.password.length >= 8,
   uppercase: /[A-Z]/.test(props.password),
   lowercase: /[a-z]/.test(props.password),
-  number: /[0-9]/.test(props.password)
+  number: /[0-9]/.test(props.password),
 }))
 
 /**
@@ -143,14 +150,14 @@ const CheckIcon = defineComponent({
   props: {
     passed: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
   template: `
     <svg class="w-3 h-3" :class="passed ? 'text-green-500' : 'text-gray-400 dark:text-gray-500'" fill="currentColor" viewBox="0 0 20 20">
       <path v-if="passed" fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
       <circle v-else cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
     </svg>
-  `
+  `,
 })
 </script>

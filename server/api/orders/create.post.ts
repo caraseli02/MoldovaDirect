@@ -1,10 +1,10 @@
 // POST /api/orders/create - Create a new order from cart
 import { serverSupabaseServiceRole } from '#supabase/server'
 import { sendOrderConfirmationEmail } from '~/server/utils/orderEmails'
-import { 
-  extractCustomerInfoFromOrder, 
+import {
+  extractCustomerInfoFromOrder,
   transformOrderToEmailData,
-  validateOrderForEmail 
+  validateOrderForEmail,
 } from '~/server/utils/orderDataTransform'
 
 interface CreateOrderRequest {
@@ -54,7 +54,7 @@ export default defineEventHandler(async (event) => {
     if (!body.cartId || !body.shippingAddress || !body.paymentMethod) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Missing required fields'
+        statusMessage: 'Missing required fields',
       })
     }
 
@@ -64,7 +64,7 @@ export default defineEventHandler(async (event) => {
 
     if (authHeader) {
       const { data: { user: authUser }, error: authError } = await supabase.auth.getUser(
-        authHeader.replace('Bearer ', '')
+        authHeader.replace('Bearer ', ''),
       )
       if (!authError && authUser) {
         user = authUser
@@ -75,7 +75,7 @@ export default defineEventHandler(async (event) => {
     if (!user && !body.guestEmail) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Email is required for guest checkout'
+        statusMessage: 'Email is required for guest checkout',
       })
     }
 
@@ -86,7 +86,7 @@ export default defineEventHandler(async (event) => {
     if (validationError) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to validate cart'
+        statusMessage: 'Failed to validate cart',
       })
     }
 
@@ -94,7 +94,7 @@ export default defineEventHandler(async (event) => {
       throw createError({
         statusCode: 400,
         statusMessage: 'Cart validation failed',
-        data: cartValidation[0]?.errors
+        data: cartValidation[0]?.errors,
       })
     }
 
@@ -120,7 +120,7 @@ export default defineEventHandler(async (event) => {
     if (cartError || !cartItems?.length) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Cart is empty or invalid'
+        statusMessage: 'Cart is empty or invalid',
       })
     }
 
@@ -153,7 +153,7 @@ export default defineEventHandler(async (event) => {
         shipping_address: body.shippingAddress,
         billing_address: billingAddress,
         shipping_method: body.shippingMethod || null,
-        customer_notes: body.customerNotes || null
+        customer_notes: body.customerNotes || null,
       })
       .select()
       .single()
@@ -161,7 +161,7 @@ export default defineEventHandler(async (event) => {
     if (orderError) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to create order'
+        statusMessage: 'Failed to create order',
       })
     }
 
@@ -172,7 +172,7 @@ export default defineEventHandler(async (event) => {
       product_snapshot: item.products,
       quantity: item.quantity,
       price_eur: item.products.price_eur,
-      total_eur: item.products.price_eur * item.quantity
+      total_eur: item.products.price_eur * item.quantity,
     }))
 
     const { error: itemsError } = await supabase
@@ -184,7 +184,7 @@ export default defineEventHandler(async (event) => {
       await supabase.from('orders').delete().eq('id', order.id)
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to create order items'
+        statusMessage: 'Failed to create order items',
       })
     }
 
@@ -214,7 +214,7 @@ export default defineEventHandler(async (event) => {
     if (completeOrder) {
       // Send email asynchronously without blocking the response
       sendOrderConfirmationEmailAsync(completeOrder, user, supabase)
-        .catch(error => {
+        .catch((error) => {
           console.error('Failed to send order confirmation email:', error)
           // Email failure doesn't block order creation
         })
@@ -226,10 +226,11 @@ export default defineEventHandler(async (event) => {
         orderId: order.id,
         orderNumber: order.order_number,
         total: order.total_eur,
-        status: order.status
-      }
+        status: order.status,
+      },
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     if (error.statusCode) {
       throw error
     }
@@ -237,7 +238,7 @@ export default defineEventHandler(async (event) => {
     console.error('Order creation error:', error)
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 })
@@ -246,7 +247,7 @@ export default defineEventHandler(async (event) => {
  * Send order confirmation email asynchronously
  * Handles both authenticated users and guest checkout
  * Requirements: 1.1, 1.6
- * 
+ *
  * @param order - Complete order with items
  * @param user - Authenticated user (if any)
  * @param supabase - Supabase client
@@ -254,7 +255,7 @@ export default defineEventHandler(async (event) => {
 async function sendOrderConfirmationEmailAsync(
   order: any,
   user: any,
-  supabase: any
+  supabase: any,
 ): Promise<void> {
   try {
     // Validate order data before sending email
@@ -272,7 +273,7 @@ async function sendOrderConfirmationEmailAsync(
         .select('id, email, full_name, preferred_locale')
         .eq('id', user.id)
         .single()
-      
+
       userProfile = profile
     }
 
@@ -284,7 +285,7 @@ async function sendOrderConfirmationEmailAsync(
       order,
       customerInfo.name,
       customerInfo.email,
-      customerInfo.locale
+      customerInfo.locale,
     )
 
     // Send confirmation email
@@ -292,10 +293,12 @@ async function sendOrderConfirmationEmailAsync(
 
     if (result.success) {
       console.log(`✅ Order confirmation email sent successfully for order ${order.order_number}`)
-    } else {
+    }
+    else {
       console.error(`❌ Failed to send order confirmation email for order ${order.order_number}:`, result.error)
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Error in sendOrderConfirmationEmailAsync:', error)
     // Don't throw - email failure should not affect order creation
   }

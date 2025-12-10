@@ -10,18 +10,18 @@ export default defineEventHandler(async (event) => {
     if (!authHeader) {
       throw createError({
         statusCode: 401,
-        statusMessage: 'Authentication required'
+        statusMessage: 'Authentication required',
       })
     }
 
     const { data: { user }, error: authError } = await supabase.auth.getUser(
-      authHeader.replace('Bearer ', '')
+      authHeader.replace('Bearer ', ''),
     )
 
     if (authError || !user) {
       throw createError({
         statusCode: 401,
-        statusMessage: 'Invalid authentication'
+        statusMessage: 'Invalid authentication',
       })
     }
 
@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
     if (!orderId) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Order ID is required'
+        statusMessage: 'Order ID is required',
       })
     }
 
@@ -55,19 +55,19 @@ export default defineEventHandler(async (event) => {
       if (orderError.code === 'PGRST116') {
         throw createError({
           statusCode: 404,
-          statusMessage: 'Order not found'
+          statusMessage: 'Order not found',
         })
       }
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to fetch order'
+        statusMessage: 'Failed to fetch order',
       })
     }
 
     if (!order.order_items || order.order_items.length === 0) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Order has no items to reorder'
+        statusMessage: 'Order has no items to reorder',
       })
     }
 
@@ -85,7 +85,7 @@ export default defineEventHandler(async (event) => {
         .from('carts')
         .insert({
           user_id: user.id,
-          expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() // 30 days
+          expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days
         })
         .select('id')
         .single()
@@ -93,15 +93,16 @@ export default defineEventHandler(async (event) => {
       if (createError) {
         throw createError({
           statusCode: 500,
-          statusMessage: 'Failed to create cart'
+          statusMessage: 'Failed to create cart',
         })
       }
 
       cart = newCart
-    } else if (cartError) {
+    }
+    else if (cartError) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to fetch cart'
+        statusMessage: 'Failed to fetch cart',
       })
     }
 
@@ -123,7 +124,7 @@ export default defineEventHandler(async (event) => {
             productId: orderItem.product_id,
             productName: orderItem.product_snapshot?.name_translations?.en || 'Unknown',
             status: 'unavailable',
-            reason: 'Product no longer available'
+            reason: 'Product no longer available',
           })
           continue
         }
@@ -134,19 +135,19 @@ export default defineEventHandler(async (event) => {
             productId: orderItem.product_id,
             productName: orderItem.product_snapshot?.name_translations?.en || 'Unknown',
             status: 'out_of_stock',
-            reason: 'Product is out of stock'
+            reason: 'Product is out of stock',
           })
           continue
         }
 
         // Adjust quantity if insufficient stock
         const availableQuantity = Math.min(orderItem.quantity, product.stock_quantity)
-        
+
         itemsToAdd.push({
           productId: orderItem.product_id,
           quantity: availableQuantity,
           originalQuantity: orderItem.quantity,
-          adjusted: availableQuantity < orderItem.quantity
+          adjusted: availableQuantity < orderItem.quantity,
         })
 
         validationResults.push({
@@ -155,23 +156,24 @@ export default defineEventHandler(async (event) => {
           status: 'success',
           quantity: availableQuantity,
           adjusted: availableQuantity < orderItem.quantity,
-          reason: availableQuantity < orderItem.quantity 
+          reason: availableQuantity < orderItem.quantity
             ? `Quantity adjusted from ${orderItem.quantity} to ${availableQuantity} due to stock availability`
-            : null
+            : null,
         })
-      } catch (error) {
+      }
+      catch (error) {
         validationResults.push({
           productId: orderItem.product_id,
           productName: orderItem.product_snapshot?.name_translations?.en || 'Unknown',
           status: 'error',
-          reason: 'Failed to validate product'
+          reason: 'Failed to validate product',
         })
       }
     }
 
     // Add items to cart
     const addedItems = []
-    
+
     for (const item of itemsToAdd) {
       // Check if item already exists in cart
       const { data: existingItem } = await supabase
@@ -184,7 +186,7 @@ export default defineEventHandler(async (event) => {
       if (existingItem) {
         // Update quantity
         const newQuantity = existingItem.quantity + item.quantity
-        
+
         const { error: updateError } = await supabase
           .from('cart_items')
           .update({ quantity: newQuantity })
@@ -195,24 +197,25 @@ export default defineEventHandler(async (event) => {
             productId: item.productId,
             quantity: item.quantity,
             totalQuantity: newQuantity,
-            action: 'updated'
+            action: 'updated',
           })
         }
-      } else {
+      }
+      else {
         // Insert new item
         const { error: insertError } = await supabase
           .from('cart_items')
           .insert({
             cart_id: cart.id,
             product_id: item.productId,
-            quantity: item.quantity
+            quantity: item.quantity,
           })
 
         if (!insertError) {
           addedItems.push({
             productId: item.productId,
             quantity: item.quantity,
-            action: 'added'
+            action: 'added',
           })
         }
       }
@@ -227,10 +230,11 @@ export default defineEventHandler(async (event) => {
         itemsProcessed: validationResults.length,
         itemsAdded: addedItems.length,
         validationResults,
-        addedItems
-      }
+        addedItems,
+      },
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     if (error.statusCode) {
       throw error
     }
@@ -238,7 +242,7 @@ export default defineEventHandler(async (event) => {
     console.error('Reorder error:', error)
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 })

@@ -69,7 +69,7 @@ export default defineCachedEventHandler(async (event) => {
       priceMax,
       inStock,
       featured,
-      sort = 'newest'
+      sort = 'newest',
     } = query
 
     // Parse pagination params as integers to prevent type coercion bugs
@@ -85,7 +85,7 @@ export default defineCachedEventHandler(async (event) => {
     if (search && search.length > MAX_SEARCH_LENGTH) {
       throw createError({
         statusCode: 400,
-        statusMessage: `Search term too long. Maximum ${MAX_SEARCH_LENGTH} characters allowed.`
+        statusMessage: `Search term too long. Maximum ${MAX_SEARCH_LENGTH} characters allowed.`,
       })
     }
 
@@ -163,11 +163,11 @@ export default defineCachedEventHandler(async (event) => {
       // Build multilingual search query dynamically
       const translationFields = SUPPORTED_LOCALES.flatMap(locale => [
         `name_translations->>${locale}.ilike.${searchPattern}`,
-        `description_translations->>${locale}.ilike.${searchPattern}`
+        `description_translations->>${locale}.ilike.${searchPattern}`,
       ])
 
       queryBuilder = queryBuilder.or(
-        [...translationFields, `sku.ilike.${searchPattern}`].join(',')
+        [...translationFields, `sku.ilike.${searchPattern}`].join(','),
       )
     }
 
@@ -205,7 +205,7 @@ export default defineCachedEventHandler(async (event) => {
       console.error('[Products API] Supabase error:', {
         message: error.message,
         code: error.code,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       })
 
       // Map Supabase error codes to appropriate HTTP status codes
@@ -226,7 +226,7 @@ export default defineCachedEventHandler(async (event) => {
 
       throw createError({
         statusCode: getStatusCode(error.code),
-        statusMessage: 'Failed to fetch products'
+        statusMessage: 'Failed to fetch products',
       })
     }
 
@@ -254,7 +254,7 @@ export default defineCachedEventHandler(async (event) => {
         return {
           url: imageUrl || '/placeholder-product.svg',
           altText: typeof img === 'object' ? (img.alt || img.alt_text) : undefined,
-          isPrimary: typeof img === 'object' ? (img.is_primary || index === 0) : index === 0
+          isPrimary: typeof img === 'object' ? (img.is_primary || index === 0) : index === 0,
         }
       }),
       primaryImage: (() => {
@@ -263,11 +263,13 @@ export default defineCachedEventHandler(async (event) => {
         if (typeof firstImage === 'string') return firstImage
         return firstImage?.url || '/placeholder-product.svg'
       })(),
-      category: product.categories ? {
-        id: product.categories.id,
-        slug: product.categories.slug,
-        name: product.categories.name_translations
-      } : null,
+      category: product.categories
+        ? {
+            id: product.categories.id,
+            slug: product.categories.slug,
+            name: product.categories.name_translations,
+          }
+        : null,
       // Extract attributes for display
       origin: product.attributes?.origin,
       volume: product.attributes?.volume ? parseInt(product.attributes.volume) : null,
@@ -275,7 +277,7 @@ export default defineCachedEventHandler(async (event) => {
       tags: product.attributes?.tags || [],
       isFeatured: product.attributes?.featured || false,
       is_active: product.is_active,
-      created_at: product.created_at
+      created_at: product.created_at,
     })) || []
 
     // Calculate pagination info
@@ -289,7 +291,7 @@ export default defineCachedEventHandler(async (event) => {
         total: totalCount,
         totalPages,
         hasNext: page < totalPages,
-        hasPrev: page > 1
+        hasPrev: page > 1,
       },
       filters: {
         category,
@@ -298,18 +300,18 @@ export default defineCachedEventHandler(async (event) => {
         priceMax,
         inStock,
         featured,
-        sort
-      }
+        sort,
+      },
     }
 
     return response
-
-  } catch (error) {
+  }
+  catch (error) {
     console.error('[Products API] Error:', {
       error: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined,
       fullError: error,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     })
 
     // Preserve HTTP errors (like 400 from validation)
@@ -321,11 +323,11 @@ export default defineCachedEventHandler(async (event) => {
     throw createError({
       statusCode: 500,
       statusMessage: 'Internal server error',
-      message: error instanceof Error ? error.message : 'Unknown error'
+      message: error instanceof Error ? error.message : 'Unknown error',
     })
   }
 }, {
   maxAge: PUBLIC_CACHE_CONFIG.productsList.maxAge,
   name: PUBLIC_CACHE_CONFIG.productsList.name,
-  getKey: (event) => getPublicCacheKey(PUBLIC_CACHE_CONFIG.productsList.name, event)
+  getKey: event => getPublicCacheKey(PUBLIC_CACHE_CONFIG.productsList.name, event),
 })

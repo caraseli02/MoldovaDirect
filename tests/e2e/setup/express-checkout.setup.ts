@@ -30,7 +30,7 @@ setup.describe('Express Checkout Test Setup', () => {
 
     // Save authentication state
     await context.storageState({
-      path: `${STORAGE_STATE_DIR}/user-with-preferences.json`
+      path: `${STORAGE_STATE_DIR}/user-with-preferences.json`,
     })
   })
 
@@ -48,7 +48,7 @@ setup.describe('Express Checkout Test Setup', () => {
 
     // Save authentication state
     await context.storageState({
-      path: `${STORAGE_STATE_DIR}/user-address-only.json`
+      path: `${STORAGE_STATE_DIR}/user-address-only.json`,
     })
   })
 
@@ -66,7 +66,7 @@ setup.describe('Express Checkout Test Setup', () => {
 
     // Save authentication state
     await context.storageState({
-      path: `${STORAGE_STATE_DIR}/user-no-data.json`
+      path: `${STORAGE_STATE_DIR}/user-no-data.json`,
     })
   })
 

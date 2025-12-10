@@ -1,9 +1,9 @@
 <!--
   Admin User Permission Manager Component
-  
+
   Requirements addressed:
   - 4.5: Create user permission management interface
-  
+
   Features:
   - Role assignment interface
   - Permission matrix display
@@ -17,62 +17,89 @@
     <div class="px-6 py-4 border-b border-gray-200">
       <div class="flex items-center justify-between">
         <div>
-          <h3 class="text-lg font-medium text-gray-900">User Permissions</h3>
+          <h3 class="text-lg font-medium text-gray-900">
+            User Permissions
+          </h3>
           <p class="text-sm text-gray-500 mt-1">
             Manage roles and permissions for {{ userName }}
           </p>
         </div>
-        
+
         <Button
           v-if="hasChanges"
-          @click="saveChanges"
           :disabled="saving"
           class="px-4 py-2"
+          @click="saveChanges"
         >
-          <commonIcon v-if="saving" name="lucide:refresh-ccw" class="w-4 h-4 animate-spin mr-2" />
+          <commonIcon
+            v-if="saving"
+            name="lucide:refresh-ccw"
+            class="w-4 h-4 animate-spin mr-2"
+          />
           Save Changes
         </Button>
       </div>
     </div>
 
     <!-- Loading State -->
-    <div v-if="loading" class="p-8 text-center">
+    <div
+      v-if="loading"
+      class="p-8 text-center"
+    >
       <div class="inline-flex items-center gap-2 text-gray-600">
-        <commonIcon name="lucide:refresh-ccw" class="w-5 h-5 animate-spin" />
+        <commonIcon
+          name="lucide:refresh-ccw"
+          class="w-5 h-5 animate-spin"
+        />
         Loading permissions...
       </div>
     </div>
 
     <!-- Error State -->
-    <div v-else-if="error" class="p-8 text-center">
+    <div
+      v-else-if="error"
+      class="p-8 text-center"
+    >
       <div class="text-red-600 mb-4">
-        <commonIcon name="lucide:alert-triangle" class="w-8 h-8 mx-auto mb-2" />
+        <commonIcon
+          name="lucide:alert-triangle"
+          class="w-8 h-8 mx-auto mb-2"
+        />
         {{ error }}
       </div>
       <Button
-        @click="fetchPermissions"
         class="px-4 py-2"
+        @click="fetchPermissions"
       >
         Retry
       </Button>
     </div>
 
     <!-- Permission Content -->
-    <div v-else class="p-6 space-y-6">
+    <div
+      v-else
+      class="p-6 space-y-6"
+    >
       <!-- Current Role -->
       <div>
-        <h4 class="text-md font-medium text-gray-900 mb-3">Current Role</h4>
+        <h4 class="text-md font-medium text-gray-900 mb-3">
+          Current Role
+        </h4>
         <div class="flex items-center gap-4">
           <select
             v-model="selectedRole"
             class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             @change="onRoleChange"
           >
-            <option v-for="role in availableRoles" :key="role.id" :value="role.id">
+            <option
+              v-for="role in availableRoles"
+              :key="role.id"
+              :value="role.id"
+            >
               {{ role.name }}
             </option>
           </select>
-          
+
           <div class="text-sm text-gray-600">
             {{ getRoleDescription(selectedRole) }}
           </div>
@@ -81,7 +108,9 @@
 
       <!-- Permission Matrix -->
       <div>
-        <h4 class="text-md font-medium text-gray-900 mb-3">Permissions</h4>
+        <h4 class="text-md font-medium text-gray-900 mb-3">
+          Permissions
+        </h4>
         <div class="border border-gray-200 rounded-lg overflow-hidden">
           <table class="w-full">
             <thead class="bg-gray-50">
@@ -114,7 +143,10 @@
                     class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded disabled:opacity-50"
                     @change="onPermissionChange"
                   />
-                  <div v-if="permission.inherited" class="text-xs text-gray-500 mt-1">
+                  <div
+                    v-if="permission.inherited"
+                    class="text-xs text-gray-500 mt-1"
+                  >
                     Inherited from role
                   </div>
                 </td>
@@ -129,7 +161,9 @@
 
       <!-- Role History -->
       <div v-if="roleHistory.length > 0">
-        <h4 class="text-md font-medium text-gray-900 mb-3">Role History</h4>
+        <h4 class="text-md font-medium text-gray-900 mb-3">
+          Role History
+        </h4>
         <div class="space-y-3">
           <div
             v-for="change in roleHistory"
@@ -155,7 +189,9 @@
 
       <!-- Permission Notes -->
       <div>
-        <h4 class="text-md font-medium text-gray-900 mb-3">Notes</h4>
+        <h4 class="text-md font-medium text-gray-900 mb-3">
+          Notes
+        </h4>
         <textarea
           v-model="permissionNotes"
           rows="3"
@@ -222,20 +258,20 @@ const availableRoles: Role[] = [
     id: 'user',
     name: 'User',
     description: 'Standard user with basic permissions',
-    permissions: ['view_products', 'create_orders', 'manage_profile']
+    permissions: ['view_products', 'create_orders', 'manage_profile'],
   },
   {
     id: 'moderator',
     name: 'Moderator',
     description: 'Moderator with content management permissions',
-    permissions: ['view_products', 'create_orders', 'manage_profile', 'moderate_content', 'view_reports']
+    permissions: ['view_products', 'create_orders', 'manage_profile', 'moderate_content', 'view_reports'],
   },
   {
     id: 'admin',
     name: 'Administrator',
     description: 'Full administrative access',
-    permissions: ['*'] // All permissions
-  }
+    permissions: ['*'], // All permissions
+  },
 ]
 
 // All available permissions
@@ -248,14 +284,14 @@ const allPermissions = [
   { id: 'manage_users', name: 'Manage Users', description: 'Can manage other users' },
   { id: 'manage_products', name: 'Manage Products', description: 'Can manage product catalog' },
   { id: 'view_analytics', name: 'View Analytics', description: 'Can view system analytics' },
-  { id: 'system_admin', name: 'System Admin', description: 'Full system administration' }
+  { id: 'system_admin', name: 'System Admin', description: 'Full system administration' },
 ]
 
 // Computed
 const hasChanges = computed(() => {
-  return selectedRole.value !== originalRole.value ||
-         permissionNotes.value !== originalNotes.value ||
-         JSON.stringify(permissions.value) !== JSON.stringify(originalPermissions.value)
+  return selectedRole.value !== originalRole.value
+    || permissionNotes.value !== originalNotes.value
+    || JSON.stringify(permissions.value) !== JSON.stringify(originalPermissions.value)
 })
 
 // Methods
@@ -266,7 +302,7 @@ const fetchPermissions = async () => {
   try {
     // This would typically fetch from an API
     // For now, we'll simulate the data
-    
+
     // Get current user role (from user metadata or separate API)
     const currentRole = 'user' // This would come from the user data
     selectedRole.value = currentRole
@@ -283,17 +319,18 @@ const fetchPermissions = async () => {
         newRole: 'user',
         reason: 'Initial registration',
         changedBy: 'System',
-        createdAt: new Date().toISOString()
-      }
+        createdAt: new Date().toISOString(),
+      },
     ]
 
     originalPermissions.value = JSON.parse(JSON.stringify(permissions.value))
     originalNotes.value = permissionNotes.value
-
-  } catch (err) {
+  }
+  catch (err) {
     error.value = err instanceof Error ? err.message : 'Failed to fetch permissions'
     console.error('Error fetching permissions:', err)
-  } finally {
+  }
+  finally {
     loading.value = false
   }
 }
@@ -302,12 +339,12 @@ const updatePermissionsForRole = (roleId: string) => {
   const role = availableRoles.find(r => r.id === roleId)
   if (!role) return
 
-  permissions.value = allPermissions.map(perm => {
+  permissions.value = allPermissions.map((perm) => {
     const isGranted = role.permissions.includes('*') || role.permissions.includes(perm.id)
     return {
       ...perm,
       granted: isGranted,
-      inherited: isGranted // Mark as inherited from role
+      inherited: isGranted, // Mark as inherited from role
     }
   })
 }
@@ -318,7 +355,7 @@ const onRoleChange = () => {
 
 const onPermissionChange = () => {
   // Mark permissions as manually changed (not inherited)
-  permissions.value.forEach(perm => {
+  permissions.value.forEach((perm) => {
     if (perm.granted !== getInheritedPermission(perm.id)) {
       perm.inherited = false
     }
@@ -347,7 +384,7 @@ const saveChanges = async () => {
     const changes = {
       role: selectedRole.value !== originalRole.value ? selectedRole.value : undefined,
       permissions: permissions.value.filter(p => !p.inherited && p.granted !== getInheritedPermission(p.id)),
-      notes: permissionNotes.value !== originalNotes.value ? permissionNotes.value : undefined
+      notes: permissionNotes.value !== originalNotes.value ? permissionNotes.value : undefined,
     }
 
     // This would typically save to an API
@@ -366,7 +403,7 @@ const saveChanges = async () => {
         newRole: selectedRole.value,
         reason: permissionNotes.value || 'Role updated by admin',
         changedBy: 'Admin', // This would be the current admin user
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
       })
     }
 
@@ -374,12 +411,13 @@ const saveChanges = async () => {
 
     const toast = useToast()
     toast.success('Permissions updated successfully')
-
-  } catch (err) {
+  }
+  catch (err) {
     const toast = useToast()
     toast.error('Failed to update permissions')
     console.error('Error saving permissions:', err)
-  } finally {
+  }
+  finally {
     saving.value = false
   }
 }

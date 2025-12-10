@@ -16,14 +16,14 @@ const STATUS_TRANSITIONS: Record<string, string[]> = {
   processing: ['shipped', 'cancelled'],
   shipped: ['delivered', 'cancelled'],
   delivered: [], // Terminal state
-  cancelled: [] // Terminal state
+  cancelled: [], // Terminal state
 }
 
 export default defineEventHandler(async (event) => {
   try {
     // Verify admin authentication
     const userId = await requireAdminRole(event)
-    
+
     // Use service role for database operations
     const supabase = serverSupabaseServiceRole(event)
 
@@ -32,7 +32,7 @@ export default defineEventHandler(async (event) => {
     if (!orderId) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Order ID is required'
+        statusMessage: 'Order ID is required',
       })
     }
 
@@ -42,7 +42,7 @@ export default defineEventHandler(async (event) => {
     if (!body.status) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Status is required'
+        statusMessage: 'Status is required',
       })
     }
 
@@ -51,7 +51,7 @@ export default defineEventHandler(async (event) => {
     if (!validStatuses.includes(body.status)) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Invalid status'
+        statusMessage: 'Invalid status',
       })
     }
 
@@ -66,12 +66,12 @@ export default defineEventHandler(async (event) => {
       if (fetchError.code === 'PGRST116') {
         throw createError({
           statusCode: 404,
-          statusMessage: 'Order not found'
+          statusMessage: 'Order not found',
         })
       }
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to fetch order'
+        statusMessage: 'Failed to fetch order',
       })
     }
 
@@ -80,7 +80,7 @@ export default defineEventHandler(async (event) => {
     if (currentOrder.status !== body.status && !allowedTransitions.includes(body.status)) {
       throw createError({
         statusCode: 400,
-        statusMessage: `Invalid status transition from ${currentOrder.status} to ${body.status}. Allowed transitions: ${allowedTransitions.join(', ') || 'none'}`
+        statusMessage: `Invalid status transition from ${currentOrder.status} to ${body.status}. Allowed transitions: ${allowedTransitions.join(', ') || 'none'}`,
       })
     }
 
@@ -89,13 +89,13 @@ export default defineEventHandler(async (event) => {
       if (!body.trackingNumber) {
         throw createError({
           statusCode: 400,
-          statusMessage: 'Tracking number is required when marking order as shipped'
+          statusMessage: 'Tracking number is required when marking order as shipped',
         })
       }
       if (!body.carrier) {
         throw createError({
           statusCode: 400,
-          statusMessage: 'Carrier is required when marking order as shipped'
+          statusMessage: 'Carrier is required when marking order as shipped',
         })
       }
     }
@@ -103,7 +103,7 @@ export default defineEventHandler(async (event) => {
     // Prepare update data
     const updateData: any = {
       status: body.status,
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     }
 
     if (body.adminNotes !== undefined) {
@@ -138,7 +138,7 @@ export default defineEventHandler(async (event) => {
     if (updateError) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to update order'
+        statusMessage: 'Failed to update order',
       })
     }
 
@@ -153,7 +153,7 @@ export default defineEventHandler(async (event) => {
           changed_by: userId,
           changed_at: new Date().toISOString(),
           notes: body.adminNotes || null,
-          automated: false
+          automated: false,
         })
         .select()
     }
@@ -171,10 +171,11 @@ export default defineEventHandler(async (event) => {
         carrier: updatedOrder.carrier,
         shippedAt: updatedOrder.shipped_at,
         deliveredAt: updatedOrder.delivered_at,
-        previousStatus: currentOrder.status
-      }
+        previousStatus: currentOrder.status,
+      },
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     if (error.statusCode) {
       throw error
     }
@@ -182,7 +183,7 @@ export default defineEventHandler(async (event) => {
     console.error('Order status update error:', error)
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 })

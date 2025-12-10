@@ -4,7 +4,7 @@ import type {
   ScenarioTemplate,
   GenerationHistoryItem,
   CustomDataConfig,
-  ProgressState
+  ProgressState,
 } from '~/types/admin-testing'
 
 export const useTestingDashboard = () => {
@@ -17,7 +17,7 @@ export const useTestingDashboard = () => {
     active: false,
     percent: 0,
     message: '',
-    cancellable: false
+    cancellable: false,
   })
 
   // Database Statistics
@@ -26,9 +26,11 @@ export const useTestingDashboard = () => {
     try {
       const response = await $fetch('/api/admin/stats')
       stats.value = response.stats
-    } catch (err: any) {
+    }
+    catch (err: any) {
       console.error('Failed to fetch stats:', err)
-    } finally {
+    }
+    finally {
       loadingStats.value = false
     }
   }
@@ -41,32 +43,41 @@ export const useTestingDashboard = () => {
       active: true,
       percent: 0,
       message: `Starting ${preset}...`,
-      cancellable: false
+      cancellable: false,
     }
 
     try {
       const response = await $fetch('/api/admin/seed-data', {
         method: 'POST',
-        body: { preset }
+        body: { preset },
       })
 
       progress.value.percent = 100
       progress.value.message = 'Complete!'
-      result.value = response as any
+      result.value = {
+        success: response.success,
+        message: response.message,
+        users: response.users ? [...response.users] : undefined,
+        summary: response.summary,
+        errors: response.errors,
+        results: response.results,
+      }
 
       if (onComplete) {
         onComplete(response)
       }
 
       await refreshStats()
-    } catch (err: any) {
+    }
+    catch (err: any) {
       result.value = {
         success: false,
         message: err.data?.message || err.message || 'Failed to run quick action',
         error: err,
-        suggestion: getErrorSuggestion(err)
+        suggestion: getErrorSuggestion(err),
       }
-    } finally {
+    }
+    finally {
       loading.value = false
       setTimeout(() => {
         progress.value.active = false
@@ -88,19 +99,28 @@ export const useTestingDashboard = () => {
         method: 'POST',
         body: {
           action,
-          confirm: true
-        }
+          confirm: true,
+        },
       })
 
-      result.value = response as any
+      result.value = {
+        success: response.success,
+        message: response.message,
+        users: response.users ? [...response.users] : undefined,
+        summary: response.summary,
+        errors: response.errors,
+        results: response.results,
+      }
       await refreshStats()
-    } catch (err: any) {
+    }
+    catch (err: any) {
       result.value = {
         success: false,
         message: err.data?.message || err.message || 'Failed to cleanup data',
-        error: err
+        error: err,
       }
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -114,18 +134,27 @@ export const useTestingDashboard = () => {
     try {
       const response = await $fetch('/api/admin/cleanup', {
         method: 'POST',
-        body: { action, confirm: true }
+        body: { action, confirm: true },
       })
 
-      result.value = response as any
+      result.value = {
+        success: response.success,
+        message: response.message,
+        users: response.users ? [...response.users] : undefined,
+        summary: response.summary,
+        errors: response.errors,
+        results: response.results,
+      }
       await refreshStats()
-    } catch (err: any) {
+    }
+    catch (err: any) {
       result.value = {
         success: false,
         message: err.data?.message || err.message || 'Failed to delete data',
-        error: err
+        error: err,
       }
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -143,26 +172,35 @@ export const useTestingDashboard = () => {
       active: true,
       percent: 0,
       message: 'Creating users...',
-      cancellable: false
+      cancellable: false,
     }
 
     try {
       const response = await $fetch('/api/admin/seed-users', {
         method: 'POST',
-        body: config
+        body: config,
       })
 
       progress.value.percent = 100
-      result.value = response as any
+      result.value = {
+        success: response.success,
+        message: response.message,
+        users: response.users ? [...response.users] : undefined,
+        summary: response.summary,
+        errors: response.errors,
+        results: response.results,
+      }
       await refreshStats()
-    } catch (err: any) {
+    }
+    catch (err: any) {
       result.value = {
         success: false,
         message: err.data?.message || err.message || 'Failed to create users',
         error: err,
-        suggestion: getErrorSuggestion(err)
+        suggestion: getErrorSuggestion(err),
       }
-    } finally {
+    }
+    finally {
       loading.value = false
       setTimeout(() => {
         progress.value.active = false
@@ -178,7 +216,7 @@ export const useTestingDashboard = () => {
       active: true,
       percent: 0,
       message: 'Generating custom data...',
-      cancellable: false
+      cancellable: false,
     }
 
     try {
@@ -186,20 +224,29 @@ export const useTestingDashboard = () => {
         method: 'POST',
         body: {
           preset: 'minimal',
-          ...customData
-        }
+          ...customData,
+        },
       })
 
       progress.value.percent = 100
-      result.value = response as any
+      result.value = {
+        success: response.success,
+        message: response.message,
+        users: response.users ? [...response.users] : undefined,
+        summary: response.summary,
+        errors: response.errors,
+        results: response.results,
+      }
       await refreshStats()
-    } catch (err: any) {
+    }
+    catch (err: any) {
       result.value = {
         success: false,
         message: err.data?.message || err.message || 'Failed to generate data',
-        error: err
+        error: err,
       }
-    } finally {
+    }
+    finally {
       loading.value = false
       setTimeout(() => {
         progress.value.active = false
@@ -261,6 +308,6 @@ export const useTestingDashboard = () => {
     generateCustomData,
     clearResult,
     formatKey,
-    formatValue
+    formatValue,
   }
 }

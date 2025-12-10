@@ -43,13 +43,13 @@ interface AsyncAdminOptions {
  */
 export const useAsyncAdminComponent = (
   path: string,
-  options: AsyncAdminOptions = {}
+  options: AsyncAdminOptions = {},
 ): DefineComponent => {
   const {
     delay = 200,
     timeout = 3000,
     showLoading = true,
-    showError = true
+    showError = true,
   } = options
 
   return defineAsyncComponent({
@@ -91,13 +91,13 @@ export const useAsyncAdminComponent = (
           name: 'AdminAsyncLoading',
           setup() {
             return () => h('div', {
-              class: 'animate-pulse bg-gray-200 dark:bg-gray-700 rounded-lg p-4 min-h-[200px] flex items-center justify-center'
+              class: 'animate-pulse bg-gray-200 dark:bg-gray-700 rounded-lg p-4 min-h-[200px] flex items-center justify-center',
             }, [
               h('div', {
-                class: 'text-gray-500 dark:text-gray-400 text-sm'
-              }, 'Loading component...')
+                class: 'text-gray-500 dark:text-gray-400 text-sm',
+              }, 'Loading component...'),
             ])
-          }
+          },
         })
       : undefined,
 
@@ -108,8 +108,8 @@ export const useAsyncAdminComponent = (
           props: {
             error: {
               type: Error,
-              required: false
-            }
+              required: false,
+            },
           },
           setup(props) {
             const retryLoad = () => {
@@ -118,7 +118,7 @@ export const useAsyncAdminComponent = (
             }
 
             return () => h('div', {
-              class: 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6'
+              class: 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6',
             }, [
               h('div', { class: 'flex items-start' }, [
                 h('div', { class: 'flex-shrink-0' }, [
@@ -126,34 +126,34 @@ export const useAsyncAdminComponent = (
                     class: 'h-6 w-6 text-red-600 dark:text-red-400',
                     fill: 'none',
                     viewBox: '0 0 24 24',
-                    stroke: 'currentColor'
+                    stroke: 'currentColor',
                   }, [
                     h('path', {
                       'stroke-linecap': 'round',
                       'stroke-linejoin': 'round',
                       'stroke-width': '2',
-                      d: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z'
-                    })
-                  ])
+                      'd': 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z',
+                    }),
+                  ]),
                 ]),
                 h('div', { class: 'ml-3 flex-1' }, [
                   h('h3', {
-                    class: 'text-sm font-medium text-red-800 dark:text-red-200'
+                    class: 'text-sm font-medium text-red-800 dark:text-red-200',
                   }, 'Failed to load component'),
                   h('p', {
-                    class: 'mt-2 text-sm text-red-700 dark:text-red-300'
+                    class: 'mt-2 text-sm text-red-700 dark:text-red-300',
                   }, `Component "${path}" could not be loaded. This might be due to a network issue or the component file is missing.`),
                   h('div', { class: 'mt-4' }, [
                     h('button', {
                       type: 'button',
                       class: 'inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500',
-                      onClick: retryLoad
-                    }, 'Reload Page')
-                  ])
-                ])
-              ])
+                      onClick: retryLoad,
+                    }, 'Reload Page'),
+                  ]),
+                ]),
+              ]),
             ])
-          }
+          },
         })
       : undefined,
 
@@ -168,7 +168,7 @@ export const useAsyncAdminComponent = (
       console.error(`Failed to load admin component: ${path}`, error)
       // Don't retry automatically, show error component instead
       fail()
-    }
+    },
   })
 }
 
@@ -216,7 +216,8 @@ export const preloadAdminComponent = async (path: string): Promise<void> => {
     if (loader) {
       await loader()
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.warn(`Failed to preload admin component: ${path}`, error)
   }
 }
@@ -233,9 +234,9 @@ export const createAdminSkeleton = (height: string = '200px') => {
     setup() {
       return () => h('div', {
         class: 'animate-pulse bg-gray-200 dark:bg-gray-700 rounded-lg',
-        style: { minHeight: height }
+        style: { minHeight: height },
       })
-    }
+    },
   })
 }
 
@@ -257,6 +258,6 @@ export const createAdminSkeleton = (height: string = '200px') => {
  */
 export const batchPreloadAdminComponents = async (paths: string[]): Promise<void> => {
   await Promise.allSettled(
-    paths.map(path => preloadAdminComponent(path))
+    paths.map(path => preloadAdminComponent(path)),
   )
 }

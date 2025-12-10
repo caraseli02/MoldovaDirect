@@ -73,7 +73,7 @@ export default defineEventHandler(async (event) => {
     if (error) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to retrieve audit logs'
+        statusMessage: 'Failed to retrieve audit logs',
       })
     }
 
@@ -89,7 +89,7 @@ export default defineEventHandler(async (event) => {
 
       if (profiles) {
         userProfiles = Object.fromEntries(
-          profiles.map(p => [p.id, { name: p.name, role: p.role }])
+          profiles.map(p => [p.id, { name: p.name, role: p.role }]),
         )
       }
     }
@@ -97,7 +97,7 @@ export default defineEventHandler(async (event) => {
     // Enrich logs with user information
     const enrichedLogs = logs?.map(log => ({
       ...log,
-      user: userProfiles[log.user_id] || null
+      user: userProfiles[log.user_id] || null,
     }))
 
     return {
@@ -107,18 +107,18 @@ export default defineEventHandler(async (event) => {
         limit,
         offset,
         total: count || 0,
-        hasMore: (offset + limit) < (count || 0)
+        hasMore: (offset + limit) < (count || 0),
       },
       filters: {
         userId,
         action,
         resourceType,
         startDate,
-        endDate
-      }
+        endDate,
+      },
     }
-
-  } catch (error: any) {
+  }
+  catch (error: any) {
     console.error('Audit logs retrieval error:', error)
 
     if (error.statusCode) {
@@ -127,7 +127,7 @@ export default defineEventHandler(async (event) => {
 
     throw createError({
       statusCode: 500,
-      statusMessage: error.message || 'Failed to retrieve audit logs'
+      statusMessage: error.message || 'Failed to retrieve audit logs',
     })
   }
 })

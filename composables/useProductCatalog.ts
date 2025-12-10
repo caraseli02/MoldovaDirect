@@ -54,7 +54,7 @@ export const useProductCatalog = () => {
     page: initialPageFromUrl,
     limit: initialLimitFromUrl,
     total: 0,
-    totalPages: 1
+    totalPages: 1,
   }))
   const loading = useState<boolean>('loading', () => true)
   const error = useState<string | null>('error', () => null)
@@ -93,7 +93,7 @@ export const useProductCatalog = () => {
       // Add attribute filters
       if (productFilters.attributes) {
         Object.entries(productFilters.attributes).forEach(([key, values]) => {
-          values.forEach(value => {
+          values.forEach((value) => {
             params.append(`attributes[${key}]`, value)
           })
         })
@@ -101,17 +101,17 @@ export const useProductCatalog = () => {
 
       const response = await $fetch<{
         products: ProductWithRelations[]
-        pagination: { page: number; limit: number; total: number; totalPages: number }
+        pagination: { page: number, limit: number, total: number, totalPages: number }
         filters: any
       }>(`/api/products?${params.toString()}`, {
-        signal
+        signal,
       })
 
       products.value = response.products
       pagination.value = response.pagination
       filters.value = { ...productFilters }
-
-    } catch (err) {
+    }
+    catch (err) {
       // Check if this is an intentional cancellation (DOMException with name 'AbortError')
       const isAbortError = err instanceof DOMException && err.name === 'AbortError'
       if (isAbortError) {
@@ -124,7 +124,8 @@ export const useProductCatalog = () => {
         error.value = errorMessage
         console.error('[Product Catalog] Error fetching products:', err)
       }
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -148,15 +149,16 @@ export const useProductCatalog = () => {
       }
 
       return response.product
-
-    } catch (err) {
+    }
+    catch (err) {
       const errorMessage = classifyNetworkError(err)
       if (errorMessage) {
         error.value = errorMessage
         console.error('[Product Catalog] Error fetching product:', err)
       }
       return null
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -170,8 +172,8 @@ export const useProductCatalog = () => {
 
       const response = await $fetch<{ products: ProductWithRelations[] }>(`/api/products/featured?${params.toString()}`)
       return response.products
-
-    } catch (err) {
+    }
+    catch (err) {
       console.error('Error fetching featured products:', err)
       return []
     }
@@ -210,7 +212,7 @@ export const useProductCatalog = () => {
           category: string | null
         }
       }>(`/api/search?${params.toString()}`, {
-        signal
+        signal,
       })
 
       searchResults.value = response.products
@@ -220,8 +222,8 @@ export const useProductCatalog = () => {
       pagination.value = response.pagination
 
       filters.value = { ...searchFilters }
-
-    } catch (err) {
+    }
+    catch (err) {
       // Check if this is an intentional cancellation (DOMException with name 'AbortError')
       const isAbortError = err instanceof DOMException && err.name === 'AbortError'
       if (isAbortError) {
@@ -235,7 +237,8 @@ export const useProductCatalog = () => {
         console.error('[Product Catalog] Error searching products:', err)
       }
       searchResults.value = []
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -249,7 +252,8 @@ export const useProductCatalog = () => {
     try {
       const response = await $fetch<{ suggestions: string[] }>(`/api/search/suggestions?q=${encodeURIComponent(query)}`)
       return response.suggestions
-    } catch (err) {
+    }
+    catch (err) {
       console.error('Error fetching suggestions:', err)
       return []
     }
@@ -270,17 +274,18 @@ export const useProductCatalog = () => {
           .filter(cat => cat.parentId === parentId)
           .map(cat => ({
             ...cat,
-            children: buildTree(cat.id)
+            children: buildTree(cat.id),
           }))
           .sort((a, b) => a.sortOrder - b.sortOrder)
       }
 
       categoriesTree.value = buildTree()
-
-    } catch (err) {
+    }
+    catch (err) {
       error.value = err instanceof Error ? err.message : 'Failed to fetch categories'
       console.error('Error fetching categories:', err)
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -293,7 +298,7 @@ export const useProductCatalog = () => {
     }
 
     const category = categories.value.find(cat =>
-      cat.slug === identifier || cat.id.toString() === identifier
+      cat.slug === identifier || cat.id.toString() === identifier,
     )
 
     if (category) {
@@ -306,11 +311,11 @@ export const useProductCatalog = () => {
     filters.value = { ...filters.value, ...newFilters }
 
     // Reset pagination when filters change
-    if (newFilters.category !== undefined ||
-        newFilters.search !== undefined ||
-        newFilters.priceMin !== undefined ||
-        newFilters.priceMax !== undefined ||
-        newFilters.attributes !== undefined) {
+    if (newFilters.category !== undefined
+      || newFilters.search !== undefined
+      || newFilters.priceMin !== undefined
+      || newFilters.priceMax !== undefined
+      || newFilters.attributes !== undefined) {
       filters.value.page = 1
     }
   }
@@ -373,6 +378,6 @@ export const useProductCatalog = () => {
     loading,
     error,
     sortBy,
-    showFilterPanel
+    showFilterPanel,
   }
 }

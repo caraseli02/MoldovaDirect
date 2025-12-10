@@ -1,9 +1,9 @@
 <!--
   Inventory Movements Component
-  
+
   Requirements addressed:
   - 2.6: Inventory history display showing stock changes over time
-  
+
   Features:
   - Display inventory movements with filtering
   - Pagination support
@@ -21,12 +21,16 @@
           Inventory Movements
         </h3>
         <UiButton
-          @click="refreshMovements"
           :disabled="loading"
           variant="outline"
           size="sm"
+          @click="refreshMovements"
         >
-          <commonIcon name="lucide:refresh-ccw" class="mr-2 h-4 w-4" :class="{ 'animate-spin': loading }" />
+          <commonIcon
+            name="lucide:refresh-ccw"
+            class="mr-2 h-4 w-4"
+            :class="{ 'animate-spin': loading }"
+          />
           Refresh
         </UiButton>
       </div>
@@ -40,13 +44,21 @@
           </label>
           <select
             v-model="filters.movementType"
-            @change="applyFilters"
             class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white text-sm"
+            @change="applyFilters"
           >
-            <option value="">All Types</option>
-            <option value="in">Stock In</option>
-            <option value="out">Stock Out</option>
-            <option value="adjustment">Adjustment</option>
+            <option value="">
+              All Types
+            </option>
+            <option value="in">
+              Stock In
+            </option>
+            <option value="out">
+              Stock Out
+            </option>
+            <option value="adjustment">
+              Adjustment
+            </option>
           </select>
         </div>
 
@@ -58,8 +70,8 @@
           <input
             v-model="filters.startDate"
             type="date"
-            @change="applyFilters"
             class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white text-sm"
+            @change="applyFilters"
           />
         </div>
 
@@ -71,18 +83,18 @@
           <input
             v-model="filters.endDate"
             type="date"
-            @change="applyFilters"
             class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white text-sm"
+            @change="applyFilters"
           />
         </div>
 
         <!-- Clear Filters -->
         <div class="flex items-end">
           <UiButton
-            @click="clearFilters"
             variant="outline"
             size="sm"
             class="w-full"
+            @click="clearFilters"
           >
             Clear Filters
           </UiButton>
@@ -91,9 +103,16 @@
     </div>
 
     <!-- Loading State -->
-    <div v-if="loading" class="p-6">
+    <div
+      v-if="loading"
+      class="p-6"
+    >
       <div class="animate-pulse space-y-4">
-        <div v-for="n in 5" :key="n" class="flex space-x-4">
+        <div
+          v-for="n in 5"
+          :key="n"
+          class="flex space-x-4"
+        >
           <div class="w-16 h-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
           <div class="flex-1 space-y-2">
             <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div>
@@ -104,33 +123,65 @@
     </div>
 
     <!-- Empty State -->
-    <div v-else-if="!movements?.length" class="p-12 text-center">
-      <svg class="h-12 w-12 text-gray-400 dark:text-gray-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+    <div
+      v-else-if="!movements?.length"
+      class="p-12 text-center"
+    >
+      <svg
+        class="h-12 w-12 text-gray-400 dark:text-gray-500 mx-auto mb-4"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+        />
       </svg>
-      <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">No movements found</h3>
+      <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
+        No movements found
+      </h3>
       <p class="text-gray-600 dark:text-gray-400">
         {{ hasActiveFilters ? 'Try adjusting your filters' : 'No inventory movements have been recorded yet' }}
       </p>
     </div>
 
     <!-- Movements Table -->
-    <div v-else class="overflow-x-auto">
+    <div
+      v-else
+      class="overflow-x-auto"
+    >
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead class="px-6">Date</TableHead>
-            <TableHead class="px-6">Product</TableHead>
-            <TableHead class="px-6">Type</TableHead>
-            <TableHead class="px-6">Quantity</TableHead>
-            <TableHead class="px-6">Before/After</TableHead>
-            <TableHead class="px-6">Reason</TableHead>
-            <TableHead class="px-6">Performed By</TableHead>
+            <TableHead class="px-6">
+              Date
+            </TableHead>
+            <TableHead class="px-6">
+              Product
+            </TableHead>
+            <TableHead class="px-6">
+              Type
+            </TableHead>
+            <TableHead class="px-6">
+              Quantity
+            </TableHead>
+            <TableHead class="px-6">
+              Before/After
+            </TableHead>
+            <TableHead class="px-6">
+              Reason
+            </TableHead>
+            <TableHead class="px-6">
+              Performed By
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-          <tr 
-            v-for="movement in movements" 
+          <tr
+            v-for="movement in movements"
             :key="movement.id"
             class="hover:bg-gray-50 dark:hover:bg-gray-700"
           >
@@ -152,12 +203,17 @@
             <!-- Type -->
             <td class="px-6 py-4 whitespace-nowrap">
               <span :class="getMovementTypeClasses(movement.movementType)">
-                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path 
-                    stroke-linecap="round" 
-                    stroke-linejoin="round" 
-                    stroke-width="2" 
-                    :d="getMovementTypeIcon(movement.movementType)" 
+                <svg
+                  class="w-4 h-4 mr-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    :d="getMovementTypeIcon(movement.movementType)"
                   />
                 </svg>
                 {{ getMovementTypeLabel(movement.movementType) }}
@@ -166,12 +222,14 @@
 
             <!-- Quantity -->
             <td class="px-6 py-4 whitespace-nowrap">
-              <span :class="[
-                'text-sm font-medium',
-                movement.movementType === 'in' ? 'text-green-600 dark:text-green-400' :
-                movement.movementType === 'out' ? 'text-red-600 dark:text-red-400' :
-                'text-blue-600 dark:text-blue-400'
-              ]">
+              <span
+                :class="[
+                  'text-sm font-medium',
+                  movement.movementType === 'in' ? 'text-green-600 dark:text-green-400'
+                  : movement.movementType === 'out' ? 'text-red-600 dark:text-red-400'
+                    : 'text-blue-600 dark:text-blue-400',
+                ]"
+              >
                 {{ movement.movementType === 'in' ? '+' : movement.movementType === 'out' ? '-' : '±' }}{{ movement.quantity }}
               </span>
             </td>
@@ -186,7 +244,10 @@
               <div class="text-sm text-gray-900 dark:text-white">
                 {{ formatReason(movement.reason) }}
               </div>
-              <div v-if="movement.notes" class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              <div
+                v-if="movement.notes"
+                class="text-xs text-gray-500 dark:text-gray-400 mt-1"
+              >
                 {{ movement.notes }}
               </div>
             </td>
@@ -201,7 +262,10 @@
     </div>
 
     <!-- Pagination -->
-    <div v-if="pagination && pagination.totalPages > 1" class="px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+    <div
+      v-if="pagination && pagination.totalPages > 1"
+      class="px-6 py-4 border-t border-gray-200 dark:border-gray-700"
+    >
       <AdminUtilsPagination
         :current-page="pagination.page"
         :total-pages="pagination.totalPages"
@@ -215,6 +279,7 @@
 
 <script setup lang="ts">
 import { Table, TableHeader, TableRow, TableHead, TableBody } from '@/components/ui/table'
+
 interface InventoryMovement {
   id: number
   productId: number
@@ -253,7 +318,7 @@ const loading = ref(false)
 const filters = ref({
   movementType: '',
   startDate: '',
-  endDate: ''
+  endDate: '',
 })
 
 // Computed
@@ -264,13 +329,13 @@ const hasActiveFilters = computed(() => {
 // Methods
 const fetchMovements = async (page = 1) => {
   loading.value = true
-  
+
   try {
     const queryParams: any = {
       page,
       limit: 20,
       sortBy: 'created_at',
-      sortOrder: 'desc'
+      sortOrder: 'desc',
     }
 
     if (props.productId) {
@@ -290,16 +355,18 @@ const fetchMovements = async (page = 1) => {
     }
 
     const response = await $fetch('/api/admin/inventory/movements', {
-      query: queryParams
+      query: queryParams,
     })
 
     movements.value = response.movements
     pagination.value = response.pagination
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Failed to fetch inventory movements:', error)
     const toast = useToast()
     toast.error('Failed to load inventory movements')
-  } finally {
+  }
+  finally {
     loading.value = false
   }
 }
@@ -316,7 +383,7 @@ const clearFilters = () => {
   filters.value = {
     movementType: '',
     startDate: '',
-    endDate: ''
+    endDate: '',
   }
   fetchMovements(1)
 }
@@ -337,13 +404,13 @@ const formatDate = (dateString: string) => {
     month: 'short',
     day: 'numeric',
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   })
 }
 
 const formatReason = (reason?: string) => {
   if (!reason) return 'No reason specified'
-  
+
   return reason
     .split('_')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
@@ -352,7 +419,7 @@ const formatReason = (reason?: string) => {
 
 const getMovementTypeClasses = (type: string) => {
   const baseClasses = 'inline-flex items-center px-2 py-1 rounded-full text-xs font-medium'
-  
+
   switch (type) {
     case 'in':
       return `${baseClasses} bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200`

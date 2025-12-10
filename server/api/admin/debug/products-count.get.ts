@@ -41,7 +41,7 @@ export default defineEventHandler(async (event): Promise<ProductCountsResponse> 
     await logAdminAction(event, adminId, 'debug_products_count_accessed', {
       resource_type: 'debug_endpoint',
       endpoint: '/api/admin/debug/products-count',
-      ip_address: getRequestIP(event)
+      ip_address: getRequestIP(event),
     })
 
     const supabase = serverSupabaseServiceRole(event)
@@ -64,7 +64,7 @@ export default defineEventHandler(async (event): Promise<ProductCountsResponse> 
       supabase
         .from('categories')
         .select('*', { count: 'exact', head: true })
-        .eq('is_active', true)
+        .eq('is_active', true),
     ])
 
     // Calculate counts from data (fast for small datasets)
@@ -79,7 +79,7 @@ export default defineEventHandler(async (event): Promise<ProductCountsResponse> 
       id: product.id,
       name: product.name_translations?.es || product.name_translations?.en || 'Unknown',
       has_category: !!product.category_id,
-      is_active: product.is_active
+      is_active: product.is_active,
     }))
 
     return {
@@ -89,16 +89,16 @@ export default defineEventHandler(async (event): Promise<ProductCountsResponse> 
         activeProducts,
         productsWithCategories,
         productsWithoutCategories,
-        activeCategories: categoriesResult.count || 0
+        activeCategories: categoriesResult.count || 0,
       },
-      sampleProducts: sanitizedSamples
+      sampleProducts: sanitizedSamples,
     }
-
-  } catch (error) {
+  }
+  catch (error) {
     console.error('[Debug Endpoint Error]', {
       endpoint: 'products-count',
       error: error instanceof Error ? error.message : 'Unknown error',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     })
 
     // Preserve HTTP errors from auth
@@ -108,7 +108,7 @@ export default defineEventHandler(async (event): Promise<ProductCountsResponse> 
 
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to retrieve product counts'
+      statusMessage: 'Failed to retrieve product counts',
     })
   }
 })

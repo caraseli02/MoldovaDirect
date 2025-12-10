@@ -4,16 +4,16 @@
       <div class="flex items-center justify-between h-16">
         <!-- Logo and Back Link -->
         <div class="flex items-center space-x-4">
-          <NuxtLink 
-            :to="localePath('/')" 
+          <NuxtLink
+            :to="localePath('/')"
             class="flex items-center space-x-2 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
           >
             <span class="text-xl font-bold">Moldova Direct</span>
           </NuxtLink>
-          
+
           <!-- Breadcrumb separator -->
           <span class="text-gray-400 dark:text-gray-500">/</span>
-          
+
           <!-- Checkout title -->
           <h1 class="text-lg font-semibold text-gray-900 dark:text-white">
             {{ $t('checkout.title') }}
@@ -24,14 +24,22 @@
         <div class="hidden md:flex items-center space-x-4">
           <!-- Security Badge -->
           <div class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
-            <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+            <svg
+              class="w-4 h-4 text-green-500"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                clip-rule="evenodd"
+              />
             </svg>
             <span>{{ $t('checkout.secureCheckout') }}</span>
           </div>
 
           <!-- Help Link -->
-          <NuxtLink 
+          <NuxtLink
             :to="localePath('/contact')"
             class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
           >
@@ -42,38 +50,64 @@
         <!-- Mobile Actions -->
         <div class="flex md:hidden items-center space-x-2">
           <!-- Security Icon -->
-          <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+          <svg
+            class="w-5 h-5 text-green-500"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+              clip-rule="evenodd"
+            />
           </svg>
-          
+
           <!-- Mobile Menu Button -->
           <button
-            @click="showMobileMenu = !showMobileMenu"
             class="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
             :aria-expanded="showMobileMenu"
             aria-label="Toggle menu"
+            @click="showMobileMenu = !showMobileMenu"
           >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"
+              />
             </svg>
           </button>
         </div>
       </div>
 
       <!-- Mobile Menu -->
-      <div 
+      <div
         v-if="showMobileMenu"
         class="md:hidden border-t border-gray-200 dark:border-gray-700 py-4"
       >
         <div class="flex flex-col space-y-3">
           <div class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
-            <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+            <svg
+              class="w-4 h-4 text-green-500"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                clip-rule="evenodd"
+              />
             </svg>
             <span>{{ $t('checkout.secureCheckout') }}</span>
           </div>
-          
-          <NuxtLink 
+
+          <NuxtLink
             :to="localePath('/contact')"
             class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
             @click="showMobileMenu = false"

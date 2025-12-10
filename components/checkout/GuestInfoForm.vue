@@ -5,7 +5,10 @@
     </h3>
     <div class="space-y-4">
       <div>
-        <UiLabel for="guestEmail" class="mb-2 inline-flex items-center gap-1">
+        <UiLabel
+          for="guestEmail"
+          class="mb-2 inline-flex items-center gap-1"
+        >
           {{ $t('checkout.guestInfo.email') }}
           <span class="text-red-500">*</span>
         </UiLabel>
@@ -21,7 +24,12 @@
           @blur="$emit('validate', 'email')"
           @input="handleEmailInput"
         />
-        <p v-if="errors.email" id="guestEmail-error" class="mt-1 text-sm text-destructive" role="alert">
+        <p
+          v-if="errors.email"
+          id="guestEmail-error"
+          class="mt-1 text-sm text-destructive"
+          role="alert"
+        >
           {{ errors.email }}
         </p>
       </div>
@@ -32,7 +40,10 @@
           :checked="modelValue.emailUpdates"
           @update:checked="(val:boolean) => emit('update:modelValue', { ...modelValue, emailUpdates: val })"
         />
-        <UiLabel for="emailUpdates" class="text-sm">
+        <UiLabel
+          for="emailUpdates"
+          class="text-sm"
+        >
           {{ $t('checkout.guestInfo.emailUpdates') }}
         </UiLabel>
       </div>
@@ -65,7 +76,7 @@ const handleEmailInput = (event: Event) => {
   const target = event.target as HTMLInputElement
   emit('update:modelValue', {
     ...props.modelValue,
-    email: target.value
+    email: target.value,
   })
   emit('clear-error', 'email')
 }
@@ -74,7 +85,7 @@ const handleCheckboxChange = (event: Event) => {
   const target = event.target as HTMLInputElement
   emit('update:modelValue', {
     ...props.modelValue,
-    emailUpdates: target.checked
+    emailUpdates: target.checked,
   })
 }
 

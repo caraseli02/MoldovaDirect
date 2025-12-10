@@ -24,7 +24,7 @@ describe('Admin API - Authorization (RBAC)', () => {
     // Create admin user
     const { data: admin } = await supabase.auth.signUp({
       email: `test-admin-${Date.now()}@example.test`,
-      password: 'TestPassword123!'
+      password: 'TestPassword123!',
     })
     adminUser = admin.user
 
@@ -36,7 +36,7 @@ describe('Admin API - Authorization (RBAC)', () => {
     // Create regular user
     const { data: user } = await supabase.auth.signUp({
       email: `test-user-${Date.now()}@example.test`,
-      password: 'TestPassword123!'
+      password: 'TestPassword123!',
     })
     regularUser = user.user
   })
@@ -57,8 +57,8 @@ describe('Admin API - Authorization (RBAC)', () => {
     it('should block non-admin from GET /api/admin/orders', async () => {
       const response = await fetch('/api/admin/orders', {
         headers: {
-          'Authorization': `Bearer ${regularUser.access_token}`
-        }
+          Authorization: `Bearer ${regularUser.access_token}`,
+        },
       })
 
       expect(response.status).toBe(403)
@@ -67,8 +67,8 @@ describe('Admin API - Authorization (RBAC)', () => {
     it('should allow admin to access GET /api/admin/orders', async () => {
       const response = await fetch('/api/admin/orders', {
         headers: {
-          'Authorization': `Bearer ${adminUser.access_token}`
-        }
+          Authorization: `Bearer ${adminUser.access_token}`,
+        },
       })
 
       expect([200, 404]).toContain(response.status) // 200 OK or 404 if no orders
@@ -79,9 +79,9 @@ describe('Admin API - Authorization (RBAC)', () => {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${regularUser.access_token}`
+          'Authorization': `Bearer ${regularUser.access_token}`,
         },
-        body: JSON.stringify({ status: 'processing' })
+        body: JSON.stringify({ status: 'processing' }),
       })
 
       expect(response.status).toBe(403)
@@ -92,9 +92,9 @@ describe('Admin API - Authorization (RBAC)', () => {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${regularUser.access_token}`
+          'Authorization': `Bearer ${regularUser.access_token}`,
         },
-        body: JSON.stringify({ completed: true })
+        body: JSON.stringify({ completed: true }),
       })
 
       expect(response.status).toBe(403)
@@ -105,8 +105,8 @@ describe('Admin API - Authorization (RBAC)', () => {
     it('should block non-admin from GET /api/admin/products', async () => {
       const response = await fetch('/api/admin/products', {
         headers: {
-          'Authorization': `Bearer ${regularUser.access_token}`
-        }
+          Authorization: `Bearer ${regularUser.access_token}`,
+        },
       })
 
       expect(response.status).toBe(403)
@@ -115,8 +115,8 @@ describe('Admin API - Authorization (RBAC)', () => {
     it('should allow admin to access GET /api/admin/products', async () => {
       const response = await fetch('/api/admin/products', {
         headers: {
-          'Authorization': `Bearer ${adminUser.access_token}`
-        }
+          Authorization: `Bearer ${adminUser.access_token}`,
+        },
       })
 
       expect([200, 404]).toContain(response.status)
@@ -127,13 +127,13 @@ describe('Admin API - Authorization (RBAC)', () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${regularUser.access_token}`
+          'Authorization': `Bearer ${regularUser.access_token}`,
         },
         body: JSON.stringify({
           name_translations: { es: 'Test', en: 'Test' },
           price_eur: 100,
-          category: 'test'
-        })
+          category: 'test',
+        }),
       })
 
       expect(response.status).toBe(403)
@@ -144,11 +144,11 @@ describe('Admin API - Authorization (RBAC)', () => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${regularUser.access_token}`
+          'Authorization': `Bearer ${regularUser.access_token}`,
         },
         body: JSON.stringify({
-          price_eur: 200
-        })
+          price_eur: 200,
+        }),
       })
 
       expect(response.status).toBe(403)
@@ -158,8 +158,8 @@ describe('Admin API - Authorization (RBAC)', () => {
       const response = await fetch('/api/admin/products/1', {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${regularUser.access_token}`
-        }
+          Authorization: `Bearer ${regularUser.access_token}`,
+        },
       })
 
       expect(response.status).toBe(403)
@@ -170,12 +170,12 @@ describe('Admin API - Authorization (RBAC)', () => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${regularUser.access_token}`
+          'Authorization': `Bearer ${regularUser.access_token}`,
         },
         body: JSON.stringify({
           productIds: [1],
-          updates: { isActive: false }
-        })
+          updates: { isActive: false },
+        }),
       })
 
       expect(response.status).toBe(403)
@@ -186,11 +186,11 @@ describe('Admin API - Authorization (RBAC)', () => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${regularUser.access_token}`
+          'Authorization': `Bearer ${regularUser.access_token}`,
         },
         body: JSON.stringify({
-          stock_quantity: 100
-        })
+          stock_quantity: 100,
+        }),
       })
 
       expect(response.status).toBe(403)
@@ -201,8 +201,8 @@ describe('Admin API - Authorization (RBAC)', () => {
     it('should block non-admin from GET /api/admin/users', async () => {
       const response = await fetch('/api/admin/users', {
         headers: {
-          'Authorization': `Bearer ${regularUser.access_token}`
-        }
+          Authorization: `Bearer ${regularUser.access_token}`,
+        },
       })
 
       expect(response.status).toBe(403)
@@ -211,8 +211,8 @@ describe('Admin API - Authorization (RBAC)', () => {
     it('should allow admin to access GET /api/admin/users', async () => {
       const response = await fetch('/api/admin/users', {
         headers: {
-          'Authorization': `Bearer ${adminUser.access_token}`
-        }
+          Authorization: `Bearer ${adminUser.access_token}`,
+        },
       })
 
       expect([200, 404]).toContain(response.status)
@@ -221,8 +221,8 @@ describe('Admin API - Authorization (RBAC)', () => {
     it('should block non-admin from GET /api/admin/users/:id', async () => {
       const response = await fetch(`/api/admin/users/${regularUser.id}`, {
         headers: {
-          'Authorization': `Bearer ${regularUser.access_token}`
-        }
+          Authorization: `Bearer ${regularUser.access_token}`,
+        },
       })
 
       expect(response.status).toBe(403)
@@ -233,11 +233,11 @@ describe('Admin API - Authorization (RBAC)', () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${regularUser.access_token}`
+          'Authorization': `Bearer ${regularUser.access_token}`,
         },
         body: JSON.stringify({
-          action: 'ban'
-        })
+          action: 'ban',
+        }),
       })
 
       expect(response.status).toBe(403)
@@ -248,8 +248,8 @@ describe('Admin API - Authorization (RBAC)', () => {
     it('should block non-admin from GET /api/admin/analytics/overview', async () => {
       const response = await fetch('/api/admin/analytics/overview', {
         headers: {
-          'Authorization': `Bearer ${regularUser.access_token}`
-        }
+          Authorization: `Bearer ${regularUser.access_token}`,
+        },
       })
 
       expect(response.status).toBe(403)
@@ -258,8 +258,8 @@ describe('Admin API - Authorization (RBAC)', () => {
     it('should allow admin to access GET /api/admin/analytics/overview', async () => {
       const response = await fetch('/api/admin/analytics/overview', {
         headers: {
-          'Authorization': `Bearer ${adminUser.access_token}`
-        }
+          Authorization: `Bearer ${adminUser.access_token}`,
+        },
       })
 
       expect([200, 500]).toContain(response.status) // May error if data not available
@@ -268,8 +268,8 @@ describe('Admin API - Authorization (RBAC)', () => {
     it('should block non-admin from GET /api/admin/analytics/products', async () => {
       const response = await fetch('/api/admin/analytics/products', {
         headers: {
-          'Authorization': `Bearer ${regularUser.access_token}`
-        }
+          Authorization: `Bearer ${regularUser.access_token}`,
+        },
       })
 
       expect(response.status).toBe(403)
@@ -278,8 +278,8 @@ describe('Admin API - Authorization (RBAC)', () => {
     it('should block non-admin from GET /api/admin/analytics/users', async () => {
       const response = await fetch('/api/admin/analytics/users', {
         headers: {
-          'Authorization': `Bearer ${regularUser.access_token}`
-        }
+          Authorization: `Bearer ${regularUser.access_token}`,
+        },
       })
 
       expect(response.status).toBe(403)
@@ -290,8 +290,8 @@ describe('Admin API - Authorization (RBAC)', () => {
     it('should block non-admin from GET /api/admin/email-templates/get', async () => {
       const response = await fetch('/api/admin/email-templates/get', {
         headers: {
-          'Authorization': `Bearer ${regularUser.access_token}`
-        }
+          Authorization: `Bearer ${regularUser.access_token}`,
+        },
       })
 
       expect(response.status).toBe(403)
@@ -300,8 +300,8 @@ describe('Admin API - Authorization (RBAC)', () => {
     it('should allow admin to access GET /api/admin/email-templates/get', async () => {
       const response = await fetch('/api/admin/email-templates/get', {
         headers: {
-          'Authorization': `Bearer ${adminUser.access_token}`
-        }
+          Authorization: `Bearer ${adminUser.access_token}`,
+        },
       })
 
       expect([200, 404]).toContain(response.status)
@@ -312,14 +312,14 @@ describe('Admin API - Authorization (RBAC)', () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${regularUser.access_token}`
+          'Authorization': `Bearer ${regularUser.access_token}`,
         },
         body: JSON.stringify({
           type: 'order_confirmation',
           locale: 'es',
           subject: 'Test',
-          body_html: '<p>Test</p>'
-        })
+          body_html: '<p>Test</p>',
+        }),
       })
 
       expect(response.status).toBe(403)
@@ -330,12 +330,12 @@ describe('Admin API - Authorization (RBAC)', () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${regularUser.access_token}`
+          'Authorization': `Bearer ${regularUser.access_token}`,
         },
         body: JSON.stringify({
           type: 'order_confirmation',
-          locale: 'es'
-        })
+          locale: 'es',
+        }),
       })
 
       expect(response.status).toBe(403)
@@ -346,12 +346,12 @@ describe('Admin API - Authorization (RBAC)', () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${regularUser.access_token}`
+          'Authorization': `Bearer ${regularUser.access_token}`,
         },
         body: JSON.stringify({
           sourceLocale: 'es',
-          targetLocale: 'en'
-        })
+          targetLocale: 'en',
+        }),
       })
 
       expect(response.status).toBe(403)
@@ -362,11 +362,11 @@ describe('Admin API - Authorization (RBAC)', () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${regularUser.access_token}`
+          'Authorization': `Bearer ${regularUser.access_token}`,
         },
         body: JSON.stringify({
-          historyId: 1
-        })
+          historyId: 1,
+        }),
       })
 
       expect(response.status).toBe(403)
@@ -377,8 +377,8 @@ describe('Admin API - Authorization (RBAC)', () => {
     it('should block non-admin from GET /api/admin/dashboard/stats', async () => {
       const response = await fetch('/api/admin/dashboard/stats', {
         headers: {
-          'Authorization': `Bearer ${regularUser.access_token}`
-        }
+          Authorization: `Bearer ${regularUser.access_token}`,
+        },
       })
 
       expect(response.status).toBe(403)
@@ -387,8 +387,8 @@ describe('Admin API - Authorization (RBAC)', () => {
     it('should allow admin to access GET /api/admin/dashboard/stats', async () => {
       const response = await fetch('/api/admin/dashboard/stats', {
         headers: {
-          'Authorization': `Bearer ${adminUser.access_token}`
-        }
+          Authorization: `Bearer ${adminUser.access_token}`,
+        },
       })
 
       expect([200, 500]).toContain(response.status)
@@ -397,8 +397,8 @@ describe('Admin API - Authorization (RBAC)', () => {
     it('should block non-admin from GET /api/admin/dashboard/activity', async () => {
       const response = await fetch('/api/admin/dashboard/activity', {
         headers: {
-          'Authorization': `Bearer ${regularUser.access_token}`
-        }
+          Authorization: `Bearer ${regularUser.access_token}`,
+        },
       })
 
       expect(response.status).toBe(403)
@@ -409,8 +409,8 @@ describe('Admin API - Authorization (RBAC)', () => {
     it('should block non-admin from GET /api/admin/email-logs/search', async () => {
       const response = await fetch('/api/admin/email-logs/search', {
         headers: {
-          'Authorization': `Bearer ${regularUser.access_token}`
-        }
+          Authorization: `Bearer ${regularUser.access_token}`,
+        },
       })
 
       expect(response.status).toBe(403)
@@ -419,8 +419,8 @@ describe('Admin API - Authorization (RBAC)', () => {
     it('should allow admin to access GET /api/admin/email-logs/search', async () => {
       const response = await fetch('/api/admin/email-logs/search', {
         headers: {
-          'Authorization': `Bearer ${adminUser.access_token}`
-        }
+          Authorization: `Bearer ${adminUser.access_token}`,
+        },
       })
 
       expect([200, 404]).toContain(response.status)
@@ -429,8 +429,8 @@ describe('Admin API - Authorization (RBAC)', () => {
     it('should block non-admin from GET /api/admin/email-logs/stats', async () => {
       const response = await fetch('/api/admin/email-logs/stats', {
         headers: {
-          'Authorization': `Bearer ${regularUser.access_token}`
-        }
+          Authorization: `Bearer ${regularUser.access_token}`,
+        },
       })
 
       expect(response.status).toBe(403)
@@ -440,8 +440,8 @@ describe('Admin API - Authorization (RBAC)', () => {
       const response = await fetch('/api/admin/email-logs/1/retry', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${regularUser.access_token}`
-        }
+          Authorization: `Bearer ${regularUser.access_token}`,
+        },
       })
 
       expect(response.status).toBe(403)
@@ -456,7 +456,7 @@ describe('Admin API - Authorization (RBAC)', () => {
         '/api/admin/users',
         '/api/admin/analytics/overview',
         '/api/admin/email-templates/get',
-        '/api/admin/dashboard/stats'
+        '/api/admin/dashboard/stats',
       ]
 
       for (const endpoint of endpoints) {
@@ -473,8 +473,8 @@ describe('Admin API - Authorization (RBAC)', () => {
 
       const response = await fetch('/api/admin/orders', {
         headers: {
-          'Authorization': `Bearer ${expiredToken}`
-        }
+          Authorization: `Bearer ${expiredToken}`,
+        },
       })
 
       expect(response.status).toBe(401)
@@ -483,8 +483,8 @@ describe('Admin API - Authorization (RBAC)', () => {
     it('should reject malformed tokens', async () => {
       const response = await fetch('/api/admin/orders', {
         headers: {
-          'Authorization': 'Bearer not-a-valid-token'
-        }
+          Authorization: 'Bearer not-a-valid-token',
+        },
       })
 
       expect(response.status).toBe(401)

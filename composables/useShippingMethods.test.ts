@@ -17,7 +17,7 @@ const mockT = vi.fn((key: string, fallback?: string) => fallback || key)
 // Override global mock with test-specific mock
 global.useI18n = vi.fn(() => ({
   t: mockT,
-  locale: { value: 'en' }
+  locale: { value: 'en' },
 }))
 
 // Mock checkout store
@@ -358,7 +358,7 @@ describe('useShippingMethods', () => {
       expect(mockFetch).toHaveBeenCalledWith(
         expect.objectContaining({
           orderTotal: 250,
-        })
+        }),
       )
     })
 
@@ -376,7 +376,7 @@ describe('useShippingMethods', () => {
       expect(mockFetch).toHaveBeenCalledWith(
         expect.objectContaining({
           orderTotal: 0,
-        })
+        }),
       )
     })
   })

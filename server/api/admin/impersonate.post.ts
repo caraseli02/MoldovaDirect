@@ -52,10 +52,11 @@ export default defineEventHandler(async (event) => {
 
       if (rateLimitError) {
         console.error('Rate limit check failed:', rateLimitError)
-      } else if (recentSessions && recentSessions.length >= 10) {
+      }
+      else if (recentSessions && recentSessions.length >= 10) {
         throw createError({
           statusCode: 429,
-          statusMessage: 'Too many impersonation attempts. Maximum 10 sessions per hour. Please try again later.'
+          statusMessage: 'Too many impersonation attempts. Maximum 10 sessions per hour. Please try again later.',
         })
       }
 
@@ -63,14 +64,14 @@ export default defineEventHandler(async (event) => {
       if (!userId) {
         throw createError({
           statusCode: 400,
-          statusMessage: 'userId is required for impersonation'
+          statusMessage: 'userId is required for impersonation',
         })
       }
 
       if (!reason || reason.trim().length < 10) {
         throw createError({
           statusCode: 400,
-          statusMessage: 'Reason for impersonation required (minimum 10 characters)'
+          statusMessage: 'Reason for impersonation required (minimum 10 characters)',
         })
       }
 
@@ -83,7 +84,7 @@ export default defineEventHandler(async (event) => {
       if (authError || !authData.user) {
         throw createError({
           statusCode: 404,
-          statusMessage: 'User not found'
+          statusMessage: 'User not found',
         })
       }
 
@@ -99,7 +100,7 @@ export default defineEventHandler(async (event) => {
       if (profileError || !targetProfile) {
         throw createError({
           statusCode: 404,
-          statusMessage: 'User profile not found'
+          statusMessage: 'User profile not found',
         })
       }
 
@@ -115,7 +116,7 @@ export default defineEventHandler(async (event) => {
         customer: 0,
         manager: 1,
         admin: 2,
-        super_admin: 3
+        super_admin: 3,
       }
 
       const adminRoleLevel = roleHierarchy[adminProfile?.role as string] || 0
@@ -125,7 +126,7 @@ export default defineEventHandler(async (event) => {
       if (targetRoleLevel >= adminRoleLevel) {
         throw createError({
           statusCode: 403,
-          statusMessage: 'Cannot impersonate users with equal or higher privileges'
+          statusMessage: 'Cannot impersonate users with equal or higher privileges',
         })
       }
 
@@ -134,7 +135,7 @@ export default defineEventHandler(async (event) => {
       if (isProduction && targetProfile.role !== 'customer') {
         throw createError({
           statusCode: 403,
-          statusMessage: 'Production impersonation is restricted to customer accounts only'
+          statusMessage: 'Production impersonation is restricted to customer accounts only',
         })
       }
 
@@ -150,7 +151,7 @@ export default defineEventHandler(async (event) => {
           expires_at: expiresAt.toISOString(),
           ip_address: getRequestIP(event),
           user_agent: getHeader(event, 'user-agent'),
-          reason: reason.trim()
+          reason: reason.trim(),
         })
         .select()
         .single()
@@ -159,7 +160,7 @@ export default defineEventHandler(async (event) => {
         console.error('Failed to create impersonation audit log:', auditError)
         throw createError({
           statusCode: 500,
-          statusMessage: 'Failed to create audit log for impersonation session'
+          statusMessage: 'Failed to create audit log for impersonation session',
         })
       }
 
@@ -168,7 +169,7 @@ export default defineEventHandler(async (event) => {
         adminId,
         userId,
         logId: auditLog.id,
-        expiresIn: sessionDuration * 60 // Convert to seconds
+        expiresIn: sessionDuration * 60, // Convert to seconds
       })
 
       // Log admin action in general audit_logs table
@@ -181,8 +182,8 @@ export default defineEventHandler(async (event) => {
           target_name: targetProfile.name,
           reason: reason.trim(),
           duration_minutes: sessionDuration,
-          log_id: auditLog.id
-        }
+          log_id: auditLog.id,
+        },
       })
 
       // TODO: Send notification to impersonated user
@@ -200,18 +201,18 @@ export default defineEventHandler(async (event) => {
           id: userId,
           name: targetProfile.name,
           email: targetEmail,
-          role: targetProfile.role
+          role: targetProfile.role,
         },
         message: `Now impersonating ${targetEmail}`,
-        warning: 'All actions will be performed as this user and logged for audit purposes.'
+        warning: 'All actions will be performed as this user and logged for audit purposes.',
       }
-
-    } else if (action === 'end') {
+    }
+    else if (action === 'end') {
       // Validate required fields
       if (!logId) {
         throw createError({
           statusCode: 400,
-          statusMessage: 'logId is required to end impersonation session'
+          statusMessage: 'logId is required to end impersonation session',
         })
       }
 
@@ -227,7 +228,7 @@ export default defineEventHandler(async (event) => {
       if (endError || !session) {
         throw createError({
           statusCode: 404,
-          statusMessage: 'Impersonation session not found or already ended'
+          statusMessage: 'Impersonation session not found or already ended',
         })
       }
 
@@ -238,8 +239,8 @@ export default defineEventHandler(async (event) => {
         old_values: {
           log_id: logId,
           started_at: session.started_at,
-          expires_at: session.expires_at
-        }
+          expires_at: session.expires_at,
+        },
       })
 
       return {
@@ -249,19 +250,19 @@ export default defineEventHandler(async (event) => {
           logId: session.id,
           startedAt: session.started_at,
           endedAt: session.ended_at,
-          duration: Math.round((new Date(session.ended_at!).getTime() - new Date(session.started_at).getTime()) / 60000)
+          duration: Math.round((new Date(session.ended_at!).getTime() - new Date(session.started_at).getTime()) / 60000),
         },
-        message: 'Impersonation session ended successfully.'
+        message: 'Impersonation session ended successfully.',
       }
-
-    } else {
+    }
+    else {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Invalid action. Use "start" or "end".'
+        statusMessage: 'Invalid action. Use "start" or "end".',
       })
     }
-
-  } catch (error: any) {
+  }
+  catch (error: any) {
     console.error('Impersonation error:', error)
 
     if (error.statusCode) {
@@ -270,7 +271,7 @@ export default defineEventHandler(async (event) => {
 
     throw createError({
       statusCode: 500,
-      statusMessage: error.message || 'Failed to process impersonation request'
+      statusMessage: error.message || 'Failed to process impersonation request',
     })
   }
 })

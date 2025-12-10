@@ -39,7 +39,7 @@ export default defineCachedEventHandler(async (event) => {
 
     const [{ data: minData, error: minError }, { data: maxData, error: maxError }] = await Promise.all([
       minQuery,
-      maxQuery
+      maxQuery,
     ])
 
     if (minError || maxError) {
@@ -52,19 +52,19 @@ export default defineCachedEventHandler(async (event) => {
     return {
       success: true,
       min,
-      max
+      max,
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Price range API error:', error)
     return {
       success: true,
       min: 0,
-      max: 200
+      max: 200,
     }
   }
 }, {
   maxAge: PUBLIC_CACHE_CONFIG.priceRange.maxAge,
   name: PUBLIC_CACHE_CONFIG.priceRange.name,
-  getKey: (event) => getPublicCacheKey(PUBLIC_CACHE_CONFIG.priceRange.name, event)
+  getKey: event => getPublicCacheKey(PUBLIC_CACHE_CONFIG.priceRange.name, event),
 })
-

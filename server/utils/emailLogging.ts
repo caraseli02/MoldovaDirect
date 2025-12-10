@@ -13,7 +13,7 @@ import type {
   EmailLogFilters,
   EmailLogListResponse,
   EmailDeliveryStats,
-  EmailRetryConfig
+  EmailRetryConfig,
 } from '~/types/email'
 import { DEFAULT_EMAIL_RETRY_CONFIG, calculateRetryDelay, shouldRetryEmail } from '~/types/email'
 import { resolveSupabaseClient, type ResolvedSupabaseClient } from './supabaseAdminClient'
@@ -23,10 +23,10 @@ import { resolveSupabaseClient, type ResolvedSupabaseClient } from './supabaseAd
  */
 export async function createEmailLog(
   input: CreateEmailLogInput,
-  supabaseClient?: ResolvedSupabaseClient
+  supabaseClient?: ResolvedSupabaseClient,
 ): Promise<EmailLog> {
   const supabase = resolveSupabaseClient(supabaseClient)
-  
+
   const { data, error } = await supabase
     .from('email_logs')
     .insert({
@@ -36,20 +36,20 @@ export async function createEmailLog(
       subject: input.subject,
       status: 'pending',
       attempts: 0,
-      metadata: input.metadata || {}
+      metadata: input.metadata || {},
     })
     .select()
     .single()
-  
+
   if (error) {
     console.error('Failed to create email log:', error)
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to create email log',
-      data: error
+      data: error,
     })
   }
-  
+
   return transformEmailLogFromDb(data)
 }
 
@@ -59,12 +59,12 @@ export async function createEmailLog(
 export async function updateEmailLog(
   id: number,
   input: UpdateEmailLogInput,
-  supabaseClient?: ResolvedSupabaseClient
+  supabaseClient?: ResolvedSupabaseClient,
 ): Promise<EmailLog> {
   const supabase = resolveSupabaseClient(supabaseClient)
-  
+
   const updateData: any = {}
-  
+
   if (input.status) updateData.status = input.status
   if (input.attempts !== undefined) updateData.attempts = input.attempts
   if (input.lastAttemptAt) updateData.last_attempt_at = input.lastAttemptAt
@@ -72,23 +72,23 @@ export async function updateEmailLog(
   if (input.bounceReason) updateData.bounce_reason = input.bounceReason
   if (input.externalId) updateData.external_id = input.externalId
   if (input.metadata) updateData.metadata = input.metadata
-  
+
   const { data, error } = await supabase
     .from('email_logs')
     .update(updateData)
     .eq('id', id)
     .select()
     .single()
-  
+
   if (error) {
     console.error('Failed to update email log:', error)
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to update email log',
-      data: error
+      data: error,
     })
   }
-  
+
   return transformEmailLogFromDb(data)
 }
 
@@ -97,16 +97,16 @@ export async function updateEmailLog(
  */
 export async function getEmailLog(
   id: number,
-  supabaseClient?: ResolvedSupabaseClient
+  supabaseClient?: ResolvedSupabaseClient,
 ): Promise<EmailLog | null> {
   const supabase = resolveSupabaseClient(supabaseClient)
-  
+
   const { data, error } = await supabase
     .from('email_logs')
     .select()
     .eq('id', id)
     .single()
-  
+
   if (error) {
     if (error.code === 'PGRST116') {
       return null
@@ -115,10 +115,10 @@ export async function getEmailLog(
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to get email log',
-      data: error
+      data: error,
     })
   }
-  
+
   return transformEmailLogFromDb(data)
 }
 
@@ -127,14 +127,14 @@ export async function getEmailLog(
  */
 export async function getEmailLogs(
   filters: EmailLogFilters = {},
-  supabaseClient?: ResolvedSupabaseClient
+  supabaseClient?: ResolvedSupabaseClient,
 ): Promise<EmailLogListResponse> {
   const supabase = resolveSupabaseClient(supabaseClient)
-  
+
   const page = filters.page || 1
   const limit = filters.limit || 50
   const offset = (page - 1) * limit
-  
+
   let query = supabase
     .from('email_logs')
     .select(`
@@ -146,64 +146,64 @@ export async function getEmailLogs(
         created_at
       )
     `, { count: 'exact' })
-  
+
   // Apply filters
   if (filters.orderId) {
     query = query.eq('order_id', filters.orderId)
   }
-  
+
   if (filters.orderNumber) {
     query = query.eq('order.order_number', filters.orderNumber)
   }
-  
+
   if (filters.recipientEmail) {
     query = query.ilike('recipient_email', `%${filters.recipientEmail}%`)
   }
-  
+
   if (filters.emailType) {
     query = query.eq('email_type', filters.emailType)
   }
-  
+
   if (filters.status) {
     query = query.eq('status', filters.status)
   }
-  
+
   if (filters.dateFrom) {
     query = query.gte('created_at', filters.dateFrom)
   }
-  
+
   if (filters.dateTo) {
     query = query.lte('created_at', filters.dateTo)
   }
-  
+
   // Apply pagination and ordering
   query = query
     .order('created_at', { ascending: false })
     .range(offset, offset + limit - 1)
-  
+
   const { data, error, count } = await query
-  
+
   if (error) {
     console.error('Failed to get email logs:', error)
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to get email logs',
-      data: error
+      data: error,
     })
   }
-  
+
   const logs = (data || []).map(transformEmailLogWithOrderFromDb)
   const total = count || 0
   const totalPages = Math.ceil(total / limit)
-  
+
   return {
     logs,
     pagination: {
       page,
       limit,
       total,
-      totalPages
-    }
+      totalPages,
+    },
   }
 }
 
@@ -213,42 +213,42 @@ export async function getEmailLogs(
 export async function getEmailDeliveryStats(
   dateFrom?: string,
   dateTo?: string,
-  supabaseClient?: ResolvedSupabaseClient
+  supabaseClient?: ResolvedSupabaseClient,
 ): Promise<EmailDeliveryStats> {
   const supabase = resolveSupabaseClient(supabaseClient)
-  
+
   let query = supabase
     .from('email_logs')
     .select('status')
-  
+
   if (dateFrom) {
     query = query.gte('created_at', dateFrom)
   }
-  
+
   if (dateTo) {
     query = query.lte('created_at', dateTo)
   }
-  
+
   const { data, error } = await query
-  
+
   if (error) {
     console.error('Failed to get email stats:', error)
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to get email stats',
-      data: error
+      data: error,
     })
   }
-  
+
   const total = data?.length || 0
-  const sent = data?.filter(log => log.status === 'sent').length || 0
-  const delivered = data?.filter(log => log.status === 'delivered').length || 0
-  const failed = data?.filter(log => log.status === 'failed').length || 0
-  const bounced = data?.filter(log => log.status === 'bounced').length || 0
-  
+  const sent = data?.filter((log: { status: string }) => log.status === 'sent').length || 0
+  const delivered = data?.filter((log: { status: string }) => log.status === 'delivered').length || 0
+  const failed = data?.filter((log: { status: string }) => log.status === 'failed').length || 0
+  const bounced = data?.filter((log: { status: string }) => log.status === 'bounced').length || 0
+
   const deliveryRate = total > 0 ? (delivered / total) * 100 : 0
   const bounceRate = total > 0 ? (bounced / total) * 100 : 0
-  
+
   return {
     total,
     sent,
@@ -256,7 +256,7 @@ export async function getEmailDeliveryStats(
     failed,
     bounced,
     deliveryRate: Math.round(deliveryRate * 100) / 100,
-    bounceRate: Math.round(bounceRate * 100) / 100
+    bounceRate: Math.round(bounceRate * 100) / 100,
   }
 }
 
@@ -268,45 +268,47 @@ export async function recordEmailAttempt(
   success: boolean,
   externalId?: string,
   bounceReason?: string,
-  supabaseClient?: ResolvedSupabaseClient
+  supabaseClient?: ResolvedSupabaseClient,
 ): Promise<EmailLog> {
   const emailLog = await getEmailLog(emailLogId, supabaseClient)
-  
+
   if (!emailLog) {
     throw createError({
       statusCode: 404,
-      statusMessage: 'Email log not found'
+      statusMessage: 'Email log not found',
     })
   }
-  
+
   const attempts = emailLog.attempts + 1
   const now = new Date().toISOString()
-  
+
   const updateData: UpdateEmailLogInput = {
     attempts,
-    lastAttemptAt: now
+    lastAttemptAt: now,
   }
-  
+
   if (success) {
     updateData.status = 'sent'
     updateData.deliveredAt = now
     if (externalId) {
       updateData.externalId = externalId
     }
-  } else {
+  }
+  else {
     // Check if we should retry
     const config: EmailRetryConfig = DEFAULT_EMAIL_RETRY_CONFIG
     if (shouldRetryEmail(attempts, config)) {
       updateData.status = 'pending'
-    } else {
+    }
+    else {
       updateData.status = 'failed'
     }
-    
+
     if (bounceReason) {
       updateData.bounceReason = bounceReason
     }
   }
-  
+
   return updateEmailLog(emailLogId, updateData, supabaseClient)
 }
 
@@ -315,20 +317,20 @@ export async function recordEmailAttempt(
  */
 export async function markEmailDelivered(
   externalId: string,
-  supabaseClient?: ResolvedSupabaseClient
+  supabaseClient?: ResolvedSupabaseClient,
 ): Promise<EmailLog | null> {
   const supabase = resolveSupabaseClient(supabaseClient)
-  
+
   const { data, error } = await supabase
     .from('email_logs')
     .update({
       status: 'delivered',
-      delivered_at: new Date().toISOString()
+      delivered_at: new Date().toISOString(),
     })
     .eq('external_id', externalId)
     .select()
     .single()
-  
+
   if (error) {
     if (error.code === 'PGRST116') {
       return null
@@ -337,10 +339,10 @@ export async function markEmailDelivered(
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to mark email as delivered',
-      data: error
+      data: error,
     })
   }
-  
+
   return transformEmailLogFromDb(data)
 }
 
@@ -350,20 +352,20 @@ export async function markEmailDelivered(
 export async function markEmailBounced(
   externalId: string,
   bounceReason: string,
-  supabaseClient?: ResolvedSupabaseClient
+  supabaseClient?: ResolvedSupabaseClient,
 ): Promise<EmailLog | null> {
   const supabase = resolveSupabaseClient(supabaseClient)
-  
+
   const { data, error } = await supabase
     .from('email_logs')
     .update({
       status: 'bounced',
-      bounce_reason: bounceReason
+      bounce_reason: bounceReason,
     })
     .eq('external_id', externalId)
     .select()
     .single()
-  
+
   if (error) {
     if (error.code === 'PGRST116') {
       return null
@@ -372,10 +374,10 @@ export async function markEmailBounced(
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to mark email as bounced',
-      data: error
+      data: error,
     })
   }
-  
+
   return transformEmailLogFromDb(data)
 }
 
@@ -384,9 +386,9 @@ export async function markEmailBounced(
  */
 export async function getPendingEmailsForRetry(): Promise<EmailLog[]> {
   const supabase = resolveSupabaseClient()
-  
+
   const config: EmailRetryConfig = DEFAULT_EMAIL_RETRY_CONFIG
-  
+
   const { data, error } = await supabase
     .from('email_logs')
     .select()
@@ -394,16 +396,16 @@ export async function getPendingEmailsForRetry(): Promise<EmailLog[]> {
     .lt('attempts', config.maxAttempts)
     .order('created_at', { ascending: true })
     .limit(100)
-  
+
   if (error) {
     console.error('Failed to get pending emails:', error)
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to get pending emails',
-      data: error
+      data: error,
     })
   }
-  
+
   return (data || []).map(transformEmailLogFromDb)
 }
 
@@ -429,7 +431,7 @@ function transformEmailLogFromDb(data: any): EmailLog {
     externalId: data.external_id,
     metadata: data.metadata || {},
     createdAt: data.created_at,
-    updatedAt: data.updated_at
+    updatedAt: data.updated_at,
   }
 }
 
@@ -443,7 +445,7 @@ function transformEmailLogWithOrderFromDb(data: any): any {
       orderNumber: data.order.order_number,
       status: data.order.status,
       totalEur: data.order.total_eur,
-      createdAt: data.order.created_at
-    }
+      createdAt: data.order.created_at,
+    },
   }
 }

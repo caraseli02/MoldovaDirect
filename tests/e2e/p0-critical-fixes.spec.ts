@@ -20,14 +20,14 @@ test.describe('P0 Fix #1: Toast Import (Production Crash Prevention)', () => {
     // Wait for product cards to load
     await page.waitForSelector('button:has-text("Añadir al Carrito")', {
       state: 'visible',
-      timeout: 10000
+      timeout: 10000,
     })
 
     // Mock a cart error by intercepting the add to cart request
-    await page.route('**/api/cart/**', route => {
+    await page.route('**/api/cart/**', (route) => {
       route.fulfill({
         status: 500,
-        body: JSON.stringify({ error: 'Cart operation failed' })
+        body: JSON.stringify({ error: 'Cart operation failed' }),
       })
     })
 
@@ -57,10 +57,10 @@ test.describe('P0 Fix #1: Toast Import (Production Crash Prevention)', () => {
     await page.waitForLoadState('networkidle')
 
     // Mock a cart error
-    await page.route('**/api/cart/**', route => {
+    await page.route('**/api/cart/**', (route) => {
       route.fulfill({
         status: 500,
-        body: JSON.stringify({ error: 'Cart operation failed' })
+        body: JSON.stringify({ error: 'Cart operation failed' }),
       })
     })
 
@@ -81,7 +81,7 @@ test.describe('P0 Fix #2: Console.log Guards (Performance/Security)', () => {
     const consoleLogs: string[] = []
 
     // Capture console.log messages
-    page.on('console', msg => {
+    page.on('console', (msg) => {
       if (msg.type() === 'log') {
         consoleLogs.push(msg.text())
       }
@@ -102,9 +102,9 @@ test.describe('P0 Fix #2: Console.log Guards (Performance/Security)', () => {
 
     // Verify NO debug logs like "🛒 ProductCard: Add to Cart"
     const hasDebugLogs = consoleLogs.some(log =>
-      log.includes('🛒 ProductCard') ||
-      log.includes('ProductCard: Add to Cart') ||
-      log.includes('Calling addItem')
+      log.includes('🛒 ProductCard')
+      || log.includes('ProductCard: Add to Cart')
+      || log.includes('Calling addItem'),
     )
 
     expect(hasDebugLogs).toBe(false)
@@ -117,7 +117,7 @@ test.describe('P0 Fix #2: Console.log Guards (Performance/Security)', () => {
     const consoleErrors: string[] = []
 
     // Capture console messages
-    page.on('console', msg => {
+    page.on('console', (msg) => {
       if (msg.type() === 'warning') {
         consoleWarnings.push(msg.text())
       }
@@ -140,7 +140,7 @@ test.describe('P0 Fix #3: SSR Guard Pattern (SSR Safety)', () => {
     // This test verifies SSR safety by checking for hydration errors
     const hydrationErrors: string[] = []
 
-    page.on('console', msg => {
+    page.on('console', (msg) => {
       if (msg.type() === 'error' && msg.text().includes('hydration')) {
         hydrationErrors.push(msg.text())
       }
@@ -185,13 +185,13 @@ test.describe('P0 Fix #4: Cart Operation Locking (Race Condition Prevention)', (
     // Wait for products to load
     await page.waitForSelector('button:has-text("Añadir al Carrito")', {
       state: 'visible',
-      timeout: 10000
+      timeout: 10000,
     })
 
     // Track cart operations
     let addItemCallCount = 0
 
-    await page.route('**/api/cart/**', route => {
+    await page.route('**/api/cart/**', (route) => {
       addItemCallCount++
       route.continue()
     })
@@ -226,12 +226,12 @@ test.describe('P0 Fix #4: Cart Operation Locking (Race Condition Prevention)', (
 
     await page.waitForSelector('button:has-text("Añadir al Carrito")', {
       state: 'visible',
-      timeout: 10000
+      timeout: 10000,
     })
 
     const operationTimestamps: number[] = []
 
-    await page.route('**/api/cart/**', route => {
+    await page.route('**/api/cart/**', (route) => {
       operationTimestamps.push(Date.now())
       route.continue()
     })
@@ -269,7 +269,7 @@ test.describe('P0 Fix #4: Cart Operation Locking (Race Condition Prevention)', (
 
     await page.waitForSelector('button:has-text("Añadir al Carrito")', {
       state: 'visible',
-      timeout: 10000
+      timeout: 10000,
     })
 
     // Add same product multiple times rapidly
@@ -315,11 +315,11 @@ test.describe('Integration: All P0 Fixes Working Together', () => {
     const errors: string[] = []
 
     // Capture any errors
-    page.on('pageerror', error => {
+    page.on('pageerror', (error) => {
       errors.push(error.message)
     })
 
-    page.on('console', msg => {
+    page.on('console', (msg) => {
       if (msg.type() === 'error') {
         errors.push(msg.text())
       }

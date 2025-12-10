@@ -35,7 +35,7 @@ function getProcessingTranslations(locale: string, orderNumber: string): StatusT
       statusLabel: 'En proceso',
       nextSteps: 'Estamos preparando tus productos cuidadosamente. Recibirás un correo de confirmación cuando tu pedido sea enviado con información de seguimiento.',
       ctaButton: 'Ver estado del pedido',
-      ctaUrl: `/account/orders/${orderNumber}`
+      ctaUrl: `/account/orders/${orderNumber}`,
     },
     en: {
       subject: `Your order #${orderNumber} is being processed - Moldova Direct`,
@@ -45,7 +45,7 @@ function getProcessingTranslations(locale: string, orderNumber: string): StatusT
       statusLabel: 'Processing',
       nextSteps: 'We are carefully preparing your products. You will receive a confirmation email when your order is shipped with tracking information.',
       ctaButton: 'View order status',
-      ctaUrl: `/account/orders/${orderNumber}`
+      ctaUrl: `/account/orders/${orderNumber}`,
     },
     ro: {
       subject: `Comanda ta #${orderNumber} este în curs de procesare - Moldova Direct`,
@@ -55,7 +55,7 @@ function getProcessingTranslations(locale: string, orderNumber: string): StatusT
       statusLabel: 'În procesare',
       nextSteps: 'Pregătim cu grijă produsele tale. Vei primi un email de confirmare când comanda ta va fi expediată cu informații de urmărire.',
       ctaButton: 'Vezi starea comenzii',
-      ctaUrl: `/account/orders/${orderNumber}`
+      ctaUrl: `/account/orders/${orderNumber}`,
     },
     ru: {
       subject: `Ваш заказ #${orderNumber} обрабатывается - Moldova Direct`,
@@ -65,11 +65,11 @@ function getProcessingTranslations(locale: string, orderNumber: string): StatusT
       statusLabel: 'В обработке',
       nextSteps: 'Мы тщательно готовим ваши товары. Вы получите подтверждение по электронной почте, когда ваш заказ будет отправлен с информацией об отслеживании.',
       ctaButton: 'Посмотреть статус заказа',
-      ctaUrl: `/account/orders/${orderNumber}`
-    }
+      ctaUrl: `/account/orders/${orderNumber}`,
+    },
   }
-  
-  return translations[locale] || translations.en
+
+  return (translations[locale] ?? translations.en ?? translations.es) as StatusTranslations
 }
 
 /**
@@ -85,7 +85,7 @@ function getShippedTranslations(locale: string, orderNumber: string): StatusTran
       statusLabel: 'Enviado',
       nextSteps: 'Tu paquete está en camino. Puedes usar el número de seguimiento para ver actualizaciones en tiempo real sobre la ubicación de tu pedido.',
       ctaButton: 'Seguir envío',
-      ctaUrl: ''
+      ctaUrl: '',
     },
     en: {
       subject: `Your order #${orderNumber} has been shipped - Moldova Direct`,
@@ -95,7 +95,7 @@ function getShippedTranslations(locale: string, orderNumber: string): StatusTran
       statusLabel: 'Shipped',
       nextSteps: 'Your package is on its way. You can use the tracking number to see real-time updates on your order location.',
       ctaButton: 'Track shipment',
-      ctaUrl: ''
+      ctaUrl: '',
     },
     ro: {
       subject: `Comanda ta #${orderNumber} a fost expediată - Moldova Direct`,
@@ -105,7 +105,7 @@ function getShippedTranslations(locale: string, orderNumber: string): StatusTran
       statusLabel: 'Expediată',
       nextSteps: 'Pachetul tău este în drum. Poți folosi numărul de urmărire pentru a vedea actualizări în timp real despre locația comenzii tale.',
       ctaButton: 'Urmărește expedierea',
-      ctaUrl: ''
+      ctaUrl: '',
     },
     ru: {
       subject: `Ваш заказ #${orderNumber} отправлен - Moldova Direct`,
@@ -115,11 +115,11 @@ function getShippedTranslations(locale: string, orderNumber: string): StatusTran
       statusLabel: 'Отправлен',
       nextSteps: 'Ваша посылка в пути. Вы можете использовать номер отслеживания, чтобы видеть обновления в реальном времени о местоположении вашего заказа.',
       ctaButton: 'Отследить отправление',
-      ctaUrl: ''
-    }
+      ctaUrl: '',
+    },
   }
-  
-  return translations[locale] || translations.en
+
+  return (translations[locale] ?? translations.en ?? translations.es) as StatusTranslations
 }
 
 /**
@@ -135,7 +135,7 @@ function getDeliveredTranslations(locale: string, orderNumber: string): StatusTr
       statusLabel: 'Entregado',
       nextSteps: '¿Te gustó tu compra? Nos encantaría conocer tu opinión. Tu feedback nos ayuda a mejorar nuestro servicio.',
       ctaButton: 'Dejar una reseña',
-      ctaUrl: `/account/orders/${orderNumber}/review`
+      ctaUrl: `/account/orders/${orderNumber}/review`,
     },
     en: {
       subject: `Your order #${orderNumber} has been delivered - Moldova Direct`,
@@ -145,7 +145,7 @@ function getDeliveredTranslations(locale: string, orderNumber: string): StatusTr
       statusLabel: 'Delivered',
       nextSteps: 'Did you like your purchase? We would love to hear your feedback. Your review helps us improve our service.',
       ctaButton: 'Leave a review',
-      ctaUrl: `/account/orders/${orderNumber}/review`
+      ctaUrl: `/account/orders/${orderNumber}/review`,
     },
     ro: {
       subject: `Comanda ta #${orderNumber} a fost livrată - Moldova Direct`,
@@ -155,7 +155,7 @@ function getDeliveredTranslations(locale: string, orderNumber: string): StatusTr
       statusLabel: 'Livrată',
       nextSteps: 'Ți-a plăcut achiziția? Ne-ar plăcea să auzim părerea ta. Recenzia ta ne ajută să îmbunătățim serviciul nostru.',
       ctaButton: 'Lasă o recenzie',
-      ctaUrl: `/account/orders/${orderNumber}/review`
+      ctaUrl: `/account/orders/${orderNumber}/review`,
     },
     ru: {
       subject: `Ваш заказ #${orderNumber} доставлен - Moldova Direct`,
@@ -165,11 +165,11 @@ function getDeliveredTranslations(locale: string, orderNumber: string): StatusTr
       statusLabel: 'Доставлен',
       nextSteps: 'Вам понравилась покупка? Мы будем рады услышать ваше мнение. Ваш отзыв помогает нам улучшить наш сервис.',
       ctaButton: 'Оставить отзыв',
-      ctaUrl: `/account/orders/${orderNumber}/review`
-    }
+      ctaUrl: `/account/orders/${orderNumber}/review`,
+    },
   }
-  
-  return translations[locale] || translations.en
+
+  return (translations[locale] ?? translations.en ?? translations.es) as StatusTranslations
 }
 
 /**
@@ -185,7 +185,7 @@ function getCancelledTranslations(locale: string, orderNumber: string): StatusTr
       statusLabel: 'Cancelado',
       nextSteps: 'Si pagaste con tarjeta de crédito o PayPal, el reembolso se procesará en 5-10 días hábiles. Si tienes alguna pregunta, no dudes en contactarnos.',
       ctaButton: 'Contactar soporte',
-      ctaUrl: '/contact'
+      ctaUrl: '/contact',
     },
     en: {
       subject: `Your order #${orderNumber} has been cancelled - Moldova Direct`,
@@ -195,7 +195,7 @@ function getCancelledTranslations(locale: string, orderNumber: string): StatusTr
       statusLabel: 'Cancelled',
       nextSteps: 'If you paid by credit card or PayPal, the refund will be processed within 5-10 business days. If you have any questions, please do not hesitate to contact us.',
       ctaButton: 'Contact support',
-      ctaUrl: '/contact'
+      ctaUrl: '/contact',
     },
     ro: {
       subject: `Comanda ta #${orderNumber} a fost anulată - Moldova Direct`,
@@ -205,7 +205,7 @@ function getCancelledTranslations(locale: string, orderNumber: string): StatusTr
       statusLabel: 'Anulată',
       nextSteps: 'Dacă ai plătit cu card de credit sau PayPal, rambursarea va fi procesată în 5-10 zile lucrătoare. Dacă ai întrebări, nu ezita să ne contactezi.',
       ctaButton: 'Contactează suportul',
-      ctaUrl: '/contact'
+      ctaUrl: '/contact',
     },
     ru: {
       subject: `Ваш заказ #${orderNumber} отменен - Moldova Direct`,
@@ -215,11 +215,11 @@ function getCancelledTranslations(locale: string, orderNumber: string): StatusTr
       statusLabel: 'Отменен',
       nextSteps: 'Если вы оплатили кредитной картой или PayPal, возврат будет обработан в течение 5-10 рабочих дней. Если у вас есть вопросы, пожалуйста, свяжитесь с нами.',
       ctaButton: 'Связаться с поддержкой',
-      ctaUrl: '/contact'
-    }
+      ctaUrl: '/contact',
+    },
   }
-  
-  return translations[locale] || translations.en
+
+  return (translations[locale] ?? translations.en ?? translations.es) as StatusTranslations
 }
 
 /**
@@ -235,7 +235,7 @@ function getIssueTranslations(locale: string, orderNumber: string): StatusTransl
       statusLabel: 'Requiere atención',
       nextSteps: 'Nuestro equipo de soporte está trabajando para resolver este problema. Te contactaremos pronto con más información. Si tienes preguntas urgentes, no dudes en contactarnos.',
       ctaButton: 'Contactar soporte',
-      ctaUrl: '/contact'
+      ctaUrl: '/contact',
     },
     en: {
       subject: `Issue with your order #${orderNumber} - Moldova Direct`,
@@ -245,7 +245,7 @@ function getIssueTranslations(locale: string, orderNumber: string): StatusTransl
       statusLabel: 'Requires attention',
       nextSteps: 'Our support team is working to resolve this issue. We will contact you soon with more information. If you have urgent questions, please do not hesitate to contact us.',
       ctaButton: 'Contact support',
-      ctaUrl: '/contact'
+      ctaUrl: '/contact',
     },
     ro: {
       subject: `Problemă cu comanda ta #${orderNumber} - Moldova Direct`,
@@ -255,7 +255,7 @@ function getIssueTranslations(locale: string, orderNumber: string): StatusTransl
       statusLabel: 'Necesită atenție',
       nextSteps: 'Echipa noastră de suport lucrează pentru a rezolva această problemă. Te vom contacta în curând cu mai multe informații. Dacă ai întrebări urgente, nu ezita să ne contactezi.',
       ctaButton: 'Contactează suportul',
-      ctaUrl: '/contact'
+      ctaUrl: '/contact',
     },
     ru: {
       subject: `Проблема с вашим заказом #${orderNumber} - Moldova Direct`,
@@ -265,11 +265,11 @@ function getIssueTranslations(locale: string, orderNumber: string): StatusTransl
       statusLabel: 'Требует внимания',
       nextSteps: 'Наша команда поддержки работает над решением этой проблемы. Мы свяжемся с вами в ближайшее время с дополнительной информацией. Если у вас есть срочные вопросы, пожалуйста, свяжитесь с нами.',
       ctaButton: 'Связаться с поддержкой',
-      ctaUrl: '/contact'
-    }
+      ctaUrl: '/contact',
+    },
   }
-  
-  return translations[locale] || translations.en
+
+  return (translations[locale] ?? translations.en ?? translations.es) as StatusTranslations
 }
 
 /**
@@ -279,7 +279,7 @@ function generateBaseTemplate(
   data: OrderEmailData,
   statusTranslations: StatusTranslations,
   locale: string,
-  includeOrderDetails: boolean = true
+  includeOrderDetails: boolean = true,
 ): string {
   const baseTranslations = getEmailTranslations(locale)
   const formattedDate = formatDate(data.orderDate, locale)
@@ -399,22 +399,26 @@ function generateBaseTemplate(
               ${orderDetailsSection}
               
               <!-- Next steps -->
-              ${statusTranslations.nextSteps ? `
+              ${statusTranslations.nextSteps
+                ? `
               <div style="background-color: #f0f8ff; border-left: 4px solid #e74c3c; padding: 15px; margin: 30px 0;">
                 <p style="margin: 0; font-size: 14px; line-height: 1.6; color: #333333;">
                   ${statusTranslations.nextSteps}
                 </p>
               </div>
-              ` : ''}
+              `
+                : ''}
               
               <!-- CTA Button -->
-              ${statusTranslations.ctaButton && statusTranslations.ctaUrl ? `
+              ${statusTranslations.ctaButton && statusTranslations.ctaUrl
+                ? `
               <div style="text-align: center; margin: 30px 0;">
                 <a href="${statusTranslations.ctaUrl}" style="display: inline-block; padding: 14px 32px; background-color: #e74c3c; color: #ffffff; text-decoration: none; border-radius: 5px; font-size: 16px; font-weight: bold;">
                   ${statusTranslations.ctaButton}
                 </a>
               </div>
-              ` : ''}
+              `
+                : ''}
             </td>
           </tr>
           
@@ -447,7 +451,7 @@ function generateBaseTemplate(
  */
 function generateTrackingSection(data: OrderEmailData, translations: any, locale: string): string {
   const estimatedDelivery = data.estimatedDelivery ? formatDate(data.estimatedDelivery, locale) : null
-  
+
   return `
     <!-- Tracking information -->
     <div style="background-color: #f0f8ff; border: 2px solid #e74c3c; border-radius: 8px; padding: 20px; margin: 30px 0;">
@@ -466,7 +470,8 @@ function generateTrackingSection(data: OrderEmailData, translations: any, locale
             </p>
           </td>
         </tr>
-        ${data.carrier ? `
+        ${data.carrier
+          ? `
         <tr>
           <td style="padding-bottom: 12px;">
             <p style="margin: 0; font-size: 14px; color: #666666;">
@@ -477,8 +482,10 @@ function generateTrackingSection(data: OrderEmailData, translations: any, locale
             </p>
           </td>
         </tr>
-        ` : ''}
-        ${estimatedDelivery ? `
+        `
+          : ''}
+        ${estimatedDelivery
+          ? `
         <tr>
           <td style="padding-bottom: 12px;">
             <p style="margin: 0; font-size: 14px; color: #666666;">
@@ -489,8 +496,10 @@ function generateTrackingSection(data: OrderEmailData, translations: any, locale
             </p>
           </td>
         </tr>
-        ` : ''}
-        ${data.trackingUrl ? `
+        `
+          : ''}
+        ${data.trackingUrl
+          ? `
         <tr>
           <td style="padding-top: 15px;">
             <a href="${data.trackingUrl}" style="display: inline-block; padding: 12px 24px; background-color: #e74c3c; color: #ffffff; text-decoration: none; border-radius: 5px; font-size: 14px; font-weight: bold;">
@@ -498,7 +507,8 @@ function generateTrackingSection(data: OrderEmailData, translations: any, locale
             </a>
           </td>
         </tr>
-        ` : ''}
+        `
+          : ''}
       </table>
     </div>
   `
@@ -549,24 +559,24 @@ export function generateOrderShippedTemplate(data: OrderEmailData): string {
   const locale = normalizeLocale(data.locale)
   const statusTranslations = getShippedTranslations(locale, data.orderNumber)
   const baseTranslations = getEmailTranslations(locale)
-  
+
   // Update CTA URL with tracking URL if available
   if (data.trackingUrl) {
     statusTranslations.ctaUrl = data.trackingUrl
   }
-  
+
   // Generate base template
   let template = generateBaseTemplate(data, statusTranslations, locale, true)
-  
+
   // Add tracking information section if available
   if (data.trackingNumber) {
     const trackingSection = generateTrackingSection(data, baseTranslations, locale)
-    
+
     // Insert tracking section before the next steps section
     const nextStepsMarker = '<!-- Next steps -->'
     template = template.replace(nextStepsMarker, `${trackingSection}\n              ${nextStepsMarker}`)
   }
-  
+
   return template
 }
 
@@ -594,12 +604,12 @@ export function generateOrderCancelledTemplate(data: OrderEmailData): string {
 export function generateOrderIssueTemplate(data: OrderEmailData, issueDescription?: string): string {
   const locale = normalizeLocale(data.locale)
   const statusTranslations = getIssueTranslations(locale, data.orderNumber)
-  
+
   // Add issue description if provided
   if (issueDescription) {
     statusTranslations.message = `${statusTranslations.message}\n\n${issueDescription}`
   }
-  
+
   return generateBaseTemplate(data, statusTranslations, locale, true)
 }
 
@@ -608,7 +618,7 @@ export function generateOrderIssueTemplate(data: OrderEmailData, issueDescriptio
  */
 export function getOrderStatusSubject(emailType: string, orderNumber: string, locale: string): string {
   const normalizedLocale = normalizeLocale(locale)
-  
+
   switch (emailType) {
     case 'order_processing':
       return getProcessingTranslations(normalizedLocale, orderNumber).subject

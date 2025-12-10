@@ -1,5 +1,5 @@
 <template>
-  <TableRow 
+  <TableRow
     class="hover:bg-gray-50 dark:hover:bg-gray-700"
     :class="{ 'bg-blue-50 dark:bg-blue-900/20': isSelected }"
   >
@@ -8,8 +8,8 @@
       <input
         type="checkbox"
         :checked="isSelected"
-        @change="$emit('toggle-selection', order.id)"
         class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer"
+        @change="$emit('toggle-selection', order.id)"
       />
     </TableCell>
 
@@ -73,8 +73,14 @@
           size="icon"
           as-child
         >
-          <nuxt-link :to="`/admin/orders/${order.id}`" title="View Order">
-            <commonIcon name="lucide:eye" class="h-4 w-4" />
+          <nuxt-link
+            :to="`/admin/orders/${order.id}`"
+            title="View Order"
+          >
+            <commonIcon
+              name="lucide:eye"
+              class="h-4 w-4"
+            />
           </nuxt-link>
         </Button>
       </div>
@@ -87,12 +93,12 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
   TableCell,
-  TableRow
+  TableRow,
 } from '@/components/ui/table'
-import type { OrderWithAdminDetails } from '~/types/database'
+import type { OrderWithAdminDetailsRaw } from '~/types/database'
 
 interface Props {
-  order: OrderWithAdminDetails
+  order: OrderWithAdminDetailsRaw
   isSelected?: boolean
 }
 
@@ -131,7 +137,7 @@ const formatDate = (dateString: string) => {
     month: 'short',
     day: 'numeric',
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   })
 }
 
@@ -144,7 +150,7 @@ const getPaymentStatusLabel = (status: string) => {
     pending: 'Pending',
     paid: 'Paid',
     failed: 'Failed',
-    refunded: 'Refunded'
+    refunded: 'Refunded',
   }
   return labels[status] || status
 }
@@ -154,7 +160,7 @@ const getPaymentStatusVariant = (status: string) => {
     pending: 'secondary',
     paid: 'default',
     failed: 'destructive',
-    refunded: 'secondary'
+    refunded: 'secondary',
   }
   return variants[status] || 'secondary'
 }

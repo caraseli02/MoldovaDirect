@@ -1,4 +1,5 @@
-import { chromium, FullConfig } from '@playwright/test'
+import type { FullConfig } from '@playwright/test'
+import { chromium } from '@playwright/test'
 import path from 'path'
 import fs from 'fs'
 import { fileURLToPath } from 'url'
@@ -27,7 +28,8 @@ async function waitForServer(baseURL: string, timeout = 120000) {
         console.log('✅ Server is ready!')
         return
       }
-    } catch (error) {
+    }
+    catch (error) {
       // Server not ready yet, continue waiting
     }
     await new Promise(resolve => setTimeout(resolve, 500))
@@ -47,8 +49,8 @@ async function globalSetup(config: FullConfig) {
   await waitForServer(baseURL)
 
   // Check if we're only running pre-commit tests (which don't need authentication)
-  const isPreCommitOnly = process.argv.includes('--project=pre-commit') ||
-                          process.env.PLAYWRIGHT_PROJECT === 'pre-commit'
+  const isPreCommitOnly = process.argv.includes('--project=pre-commit')
+    || process.env.PLAYWRIGHT_PROJECT === 'pre-commit'
 
   if (isPreCommitOnly) {
     console.log('⏭️  Skipping authentication for pre-commit smoke tests (no auth required)')
@@ -99,7 +101,7 @@ async function globalSetup(config: FullConfig) {
       const inputs = await page.locator('input[type="email"]').all()
       console.log(`  Found ${inputs.length} email input(s)`)
       for (let i = 0; i < inputs.length; i++) {
-        const attrs = await inputs[i].evaluate(el => {
+        const attrs = await inputs[i].evaluate((el) => {
           const attributes: Record<string, string> = {}
           for (const attr of el.attributes) {
             attributes[attr.name] = attr.value
@@ -198,7 +200,8 @@ async function globalSetup(config: FullConfig) {
       await context.storageState({ path: storageFile })
 
       console.log(`✓ Authenticated and saved storage state for locale: ${locale}`)
-    } catch (error) {
+    }
+    catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error)
 
       // If it's an auth error, try to create an empty auth file to skip this locale
@@ -211,15 +214,18 @@ async function globalSetup(config: FullConfig) {
         fs.writeFileSync(emptyAuthFile, JSON.stringify({ cookies: [], origins: [] }))
         console.log(`✓ Empty auth state created for locale: ${locale}`)
         await context.close()
-      } else {
+      }
+      else {
         await context.close()
         await browser.close()
         throw new Error(`Global setup failed for locale ${locale}: ${errorMessage}`)
       }
-    } finally {
+    }
+    finally {
       try {
         await context.close()
-      } catch (e) {
+      }
+      catch (e) {
         // Already closed in catch block
       }
     }

@@ -1,19 +1,19 @@
 /**
  * Cart Validation Module
- * 
+ *
  * Handles product validation, caching, and background validation
  * Ensures cart items are always up-to-date with current product data
  */
 
 import { ref } from 'vue'
-import type { 
-  CartValidationState, 
-  CartValidationActions, 
-  ValidationCache, 
-  ValidationQueue, 
+import type {
+  CartValidationState,
+  CartValidationActions,
+  ValidationCache,
+  ValidationQueue,
   ValidationResult,
   Product,
-  CartItem
+  CartItem,
 } from './types'
 
 // =============================================
@@ -25,7 +25,7 @@ const state = ref<CartValidationState>({
   validationQueue: {},
   backgroundValidationEnabled: true,
   lastBackgroundValidation: null,
-  validationInProgress: false
+  validationInProgress: false,
 })
 
 // Background validation worker reference
@@ -51,7 +51,7 @@ function getCachedValidation(productId: string): ValidationResult | null {
 
   return {
     isValid: cached.isValid,
-    product: cached.product
+    product: cached.product,
   }
 }
 
@@ -61,13 +61,13 @@ function getCachedValidation(productId: string): ValidationResult | null {
 function setCachedValidation(
   productId: string,
   result: ValidationResult,
-  ttl: number = 300000 // Default TTL: 5 minutes
+  ttl: number = 300000, // Default TTL: 5 minutes
 ): void {
   state.value.validationCache[productId] = {
     isValid: result.isValid,
     product: result.product,
     timestamp: Date.now(),
-    ttl
+    ttl,
   }
 }
 
@@ -77,7 +77,8 @@ function setCachedValidation(
 function clearValidationCache(productId?: string): void {
   if (productId) {
     delete state.value.validationCache[productId]
-  } else {
+  }
+  else {
     state.value.validationCache = {}
   }
 }
@@ -91,12 +92,12 @@ function clearValidationCache(productId?: string): void {
  */
 function addToValidationQueue(
   productId: string,
-  priority: 'high' | 'medium' | 'low' = 'medium'
+  priority: 'high' | 'medium' | 'low' = 'medium',
 ): void {
   state.value.validationQueue[productId] = {
     priority,
     timestamp: Date.now(),
-    retryCount: 0
+    retryCount: 0,
   }
 }
 
@@ -142,7 +143,7 @@ async function validateSingleProduct(productId: string, cartItem?: CartItem): Pr
       return {
         isValid: false,
         product: cartItem?.product || {} as Product,
-        errors: ['Product not found']
+        errors: ['Product not found'],
       }
     }
 
@@ -151,7 +152,7 @@ async function validateSingleProduct(productId: string, cartItem?: CartItem): Pr
       return {
         isValid: false,
         product: currentProduct,
-        errors: ['Product is no longer available']
+        errors: ['Product is no longer available'],
       }
     }
 
@@ -160,7 +161,7 @@ async function validateSingleProduct(productId: string, cartItem?: CartItem): Pr
       return {
         isValid: false,
         product: currentProduct,
-        errors: ['Product is out of stock']
+        errors: ['Product is out of stock'],
       }
     }
 
@@ -168,34 +169,34 @@ async function validateSingleProduct(productId: string, cartItem?: CartItem): Pr
     return {
       isValid: true,
       product: currentProduct,
-      warnings: []
+      warnings: [],
     }
-
-  } catch (error: any) {
+  }
+  catch (error: any) {
     console.warn(`Failed to validate product ${productId}:`, error)
-    
+
     // Handle different error scenarios
     if (error?.statusCode === 404) {
-      if (process.dev && cartItem?.product) {
+      if (import.meta.dev && cartItem?.product) {
         return {
           isValid: true,
           product: cartItem.product,
-          warnings: ['Product not found in API; using cached cart snapshot']
+          warnings: ['Product not found in API; using cached cart snapshot'],
         }
       }
       return {
         isValid: false,
         product: cartItem?.product || {} as Product,
-        errors: ['Product no longer exists']
+        errors: ['Product no longer exists'],
       }
     }
 
     // Network or other error
-    if (process.dev && cartItem?.product) {
+    if (import.meta.dev && cartItem?.product) {
       return {
         isValid: true,
         product: cartItem.product,
-        warnings: ['Product validation skipped due to network error']
+        warnings: ['Product validation skipped due to network error'],
       }
     }
 
@@ -203,7 +204,7 @@ async function validateSingleProduct(productId: string, cartItem?: CartItem): Pr
       isValid: false,
       product: cartItem?.product || {} as Product,
       errors: ['Validation failed due to network error'],
-      warnings: ['Product validation could not be completed']
+      warnings: ['Product validation could not be completed'],
     }
   }
 }
@@ -212,8 +213,8 @@ async function validateSingleProduct(productId: string, cartItem?: CartItem): Pr
  * Batch validate multiple products
  */
 async function batchValidateProducts(
-  productIds: string[], 
-  cartItems?: CartItem[]
+  productIds: string[],
+  cartItems?: CartItem[],
 ): Promise<void> {
   if (productIds.length === 0) return
 
@@ -231,15 +232,15 @@ async function batchValidateProducts(
 
     // Add to validation promise batch
     validationPromises.push(
-      validateSingleProduct(productId, cartItem).then(result => {
+      validateSingleProduct(productId, cartItem).then((result) => {
         // Cache the result
         setCachedValidation(productId, result)
-        
+
         // Remove from validation queue on success
         removeFromValidationQueue(productId)
-      }).catch(error => {
+      }).catch((error) => {
         console.error(`Batch validation error for ${productId}:`, error)
-        
+
         // Handle retry logic
         const queueItem = state.value.validationQueue[productId]
         if (queueItem) {
@@ -249,14 +250,15 @@ async function batchValidateProducts(
             removeFromValidationQueue(productId)
           }
         }
-      })
+      }),
     )
   }
 
   if (validationPromises.length > 0) {
     try {
       await Promise.allSettled(validationPromises)
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Batch validation error:', error)
     }
   }
@@ -293,14 +295,16 @@ function startBackgroundValidation(): void {
 
       // Note: We would need access to cart items here
       // This will be provided by the main store coordinator
-      
+
       if (productsToValidate.length > 0) {
         await batchValidateProducts(productsToValidate)
         state.value.lastBackgroundValidation = new Date()
       }
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Background validation error:', error)
-    } finally {
+    }
+    finally {
       state.value.validationInProgress = false
     }
   }, 30000) // Run every 30 seconds
@@ -368,7 +372,7 @@ async function validateCartItem(cartItem: CartItem): Promise<{
     return {
       isValid: false,
       changes: [],
-      errors: result.errors || ['Validation failed']
+      errors: result.errors || ['Validation failed'],
     }
   }
 
@@ -380,7 +384,7 @@ async function validateCartItem(cartItem: CartItem): Promise<{
   const updatedItem: CartItem = {
     ...cartItem,
     product: { ...cartItem.product, ...currentProduct },
-    lastModified: new Date()
+    lastModified: new Date(),
   }
 
   // Check for significant changes
@@ -394,9 +398,10 @@ async function validateCartItem(cartItem: CartItem): Promise<{
     return {
       isValid: false,
       changes,
-      errors
+      errors,
     }
-  } else if (cartItem.quantity > currentProduct.stock) {
+  }
+  else if (cartItem.quantity > currentProduct.stock) {
     changes.push(`Quantity reduced from ${cartItem.quantity} to ${currentProduct.stock} (limited stock)`)
     updatedItem.quantity = currentProduct.stock
   }
@@ -405,7 +410,7 @@ async function validateCartItem(cartItem: CartItem): Promise<{
     isValid: true,
     updatedItem,
     changes,
-    errors
+    errors,
   }
 }
 
@@ -415,31 +420,32 @@ async function validateCartItem(cartItem: CartItem): Promise<{
 async function validateAllCartItems(cartItems: CartItem[]): Promise<{
   validItems: CartItem[]
   invalidItems: CartItem[]
-  changes: Array<{ itemId: string; changes: string[] }>
-  errors: Array<{ itemId: string; errors: string[] }>
+  changes: Array<{ itemId: string, changes: string[] }>
+  errors: Array<{ itemId: string, errors: string[] }>
 }> {
   const validItems: CartItem[] = []
   const invalidItems: CartItem[] = []
-  const changes: Array<{ itemId: string; changes: string[] }> = []
-  const errors: Array<{ itemId: string; errors: string[] }> = []
+  const changes: Array<{ itemId: string, changes: string[] }> = []
+  const errors: Array<{ itemId: string, errors: string[] }> = []
 
   const validationPromises = cartItems.map(async (item) => {
     const validation = await validateCartItem(item)
-    
+
     if (validation.isValid && validation.updatedItem) {
       validItems.push(validation.updatedItem)
-      
+
       if (validation.changes.length > 0) {
         changes.push({
           itemId: item.id,
-          changes: validation.changes
+          changes: validation.changes,
         })
       }
-    } else {
+    }
+    else {
       invalidItems.push(item)
       errors.push({
         itemId: item.id,
-        errors: validation.errors
+        errors: validation.errors,
       })
     }
   })
@@ -450,7 +456,7 @@ async function validateAllCartItems(cartItems: CartItem[]): Promise<{
     validItems,
     invalidItems,
     changes,
-    errors
+    errors,
   }
 }
 
@@ -472,7 +478,7 @@ const actions: CartValidationActions = {
   setCachedValidation,
   clearValidationCache,
   startBackgroundValidation,
-  stopBackgroundValidation
+  stopBackgroundValidation,
 }
 
 // =============================================
@@ -483,10 +489,10 @@ export function useCartValidation() {
   return {
     // State
     state: readonly(state),
-    
+
     // Actions
     ...actions,
-    
+
     // Utilities
     addToValidationQueue,
     removeFromValidationQueue,
@@ -495,7 +501,7 @@ export function useCartValidation() {
     validateCartItem,
     validateAllCartItems,
     createDebouncedValidation,
-    debouncedValidateProduct
+    debouncedValidateProduct,
   }
 }
 
@@ -516,5 +522,5 @@ export {
   validateAllCartItems,
   startBackgroundValidation,
   stopBackgroundValidation,
-  createDebouncedValidation
+  createDebouncedValidation,
 }

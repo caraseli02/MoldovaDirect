@@ -1,7 +1,10 @@
 <template>
   <nav class="category-navigation">
     <!-- Desktop Navigation -->
-    <div v-if="!isMobile" class="hidden lg:block">
+    <div
+      v-if="!isMobile"
+      class="hidden lg:block"
+    >
       <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex items-center justify-between h-16">
@@ -13,11 +16,14 @@
                 :class="{ 'text-blue-700 dark:text-blue-300 border-b-2 border-blue-700 dark:border-blue-300': !currentCategory }"
               >
                 {{ $t('products.categories.all') }}
-                <span v-if="showProductCount && totalProductCount" class="ml-1 text-gray-500 dark:text-gray-400 text-xs">
+                <span
+                  v-if="showProductCount && totalProductCount"
+                  class="ml-1 text-gray-500 dark:text-gray-400 text-xs"
+                >
                   ({{ totalProductCount }})
                 </span>
               </NuxtLink>
-              
+
               <div
                 v-for="category in rootCategories"
                 :key="category.id"
@@ -30,18 +36,25 @@
                   @mouseenter="showDropdown(category.id)"
                   @mouseleave="hideDropdown"
                 >
-                  <commonIcon v-if="category.icon" :name="category.icon" class="w-4 h-4 mr-2" />
+                  <commonIcon
+                    v-if="category.icon"
+                    :name="category.icon"
+                    class="w-4 h-4 mr-2"
+                  />
                   {{ category.name }}
-                  <span v-if="showProductCount" class="ml-1 text-gray-500 dark:text-gray-400 text-xs">
+                  <span
+                    v-if="showProductCount"
+                    class="ml-1 text-gray-500 dark:text-gray-400 text-xs"
+                  >
                     ({{ category.productCount }})
                   </span>
-                  <commonIcon 
+                  <commonIcon
                     v-if="category.children && category.children.length > 0"
-                    name="lucide:chevron-down" 
-                    class="w-4 h-4 ml-1" 
+                    name="lucide:chevron-down"
+                    class="w-4 h-4 ml-1"
                   />
                 </button>
-                
+
                 <!-- Dropdown Menu -->
                 <div
                   v-if="category.children && category.children.length > 0 && activeDropdown === category.id"
@@ -57,9 +70,16 @@
                       class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
                       :class="{ 'bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300': isCurrentCategory(child) }"
                     >
-                      <commonIcon v-if="child.icon" :name="child.icon" class="w-4 h-4 mr-3" />
+                      <commonIcon
+                        v-if="child.icon"
+                        :name="child.icon"
+                        class="w-4 h-4 mr-3"
+                      />
                       {{ child.name }}
-                      <span v-if="showProductCount" class="ml-auto text-gray-500 dark:text-gray-400 text-xs">
+                      <span
+                        v-if="showProductCount"
+                        class="ml-auto text-gray-500 dark:text-gray-400 text-xs"
+                      >
                         {{ child.productCount }}
                       </span>
                     </NuxtLink>
@@ -73,19 +93,28 @@
     </div>
 
     <!-- Mobile Navigation -->
-    <div v-if="isMobile" class="lg:hidden">
+    <div
+      v-if="isMobile"
+      class="lg:hidden"
+    >
       <!-- Mobile Category Button -->
       <button
-        @click="showMobileNav = true"
         class="w-full flex items-center justify-between p-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 text-left"
+        @click="showMobileNav = true"
       >
         <div class="flex items-center">
-          <commonIcon name="lucide:panels-top-left" class="w-5 h-5 mr-3 text-gray-400 dark:text-gray-500" />
+          <commonIcon
+            name="lucide:panels-top-left"
+            class="w-5 h-5 mr-3 text-gray-400 dark:text-gray-500"
+          />
           <span class="font-medium text-gray-900 dark:text-white">
             {{ currentCategoryName || $t('products.categories.all') }}
           </span>
         </div>
-        <commonIcon name="lucide:chevron-down" class="w-5 h-5 text-gray-400 dark:text-gray-500" />
+        <commonIcon
+          name="lucide:chevron-down"
+          class="w-5 h-5 text-gray-400 dark:text-gray-500"
+        />
       </button>
 
       <!-- Mobile Category Modal -->
@@ -95,8 +124,8 @@
           class="fixed inset-0 z-50 lg:hidden"
           @click="showMobileNav = false"
         >
-          <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" />
-          
+          <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity"></div>
+
           <div
             class="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 rounded-t-xl max-h-[80vh] overflow-hidden transform transition-transform"
             :class="showMobileNav ? 'translate-y-0' : 'translate-y-full'"
@@ -108,10 +137,13 @@
                 {{ $t('products.filters.categories') }}
               </h2>
               <button
-                @click="showMobileNav = false"
                 class="p-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400"
+                @click="showMobileNav = false"
               >
-                <commonIcon name="lucide:x" class="w-5 h-5" />
+                <commonIcon
+                  name="lucide:x"
+                  class="w-5 h-5"
+                />
               </button>
             </div>
 
@@ -126,10 +158,16 @@
                   @click="showMobileNav = false"
                 >
                   <div class="flex items-center">
-                    <commonIcon name="lucide:panels-top-left" class="w-5 h-5 mr-3" />
+                    <commonIcon
+                      name="lucide:panels-top-left"
+                      class="w-5 h-5 mr-3"
+                    />
                     <span class="font-medium text-gray-900 dark:text-white">{{ $t('products.categories.all') }}</span>
                   </div>
-                  <span v-if="showProductCount && totalProductCount" class="text-sm text-gray-500 dark:text-gray-400">
+                  <span
+                    v-if="showProductCount && totalProductCount"
+                    class="text-sm text-gray-500 dark:text-gray-400"
+                  >
                     {{ totalProductCount }}
                   </span>
                 </NuxtLink>
@@ -152,9 +190,15 @@
     </div>
 
     <!-- Breadcrumb Navigation -->
-    <div v-if="breadcrumbs.length > 0" class="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+    <div
+      v-if="breadcrumbs.length > 0"
+      class="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700"
+    >
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <nav class="flex py-3" aria-label="Breadcrumb">
+        <nav
+          class="flex py-3"
+          aria-label="Breadcrumb"
+        >
           <ol class="flex items-center space-x-2">
             <li>
               <NuxtLink
@@ -169,7 +213,10 @@
               :key="breadcrumb.id"
               class="flex items-center"
             >
-              <commonIcon name="lucide:chevron-right" class="w-4 h-4 text-gray-400 dark:text-gray-500 mx-2" />
+              <commonIcon
+                name="lucide:chevron-right"
+                class="w-4 h-4 text-gray-400 dark:text-gray-500 mx-2"
+              />
               <NuxtLink
                 v-if="index < breadcrumbs.length - 1"
                 :to="`/products?category=${breadcrumb.slug || breadcrumb.id}`"
@@ -201,7 +248,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  showProductCount: true
+  showProductCount: true,
 })
 
 // Composables
@@ -225,7 +272,7 @@ const totalProductCount = computed(() => {
 
 const currentCategoryName = computed(() => {
   if (!props.currentCategory) return null
-  
+
   const findCategory = (categories: CategoryWithChildren[], id: string): CategoryWithChildren | null => {
     for (const category of categories) {
       if (category.id.toString() === id || category.slug === id) {
@@ -238,22 +285,22 @@ const currentCategoryName = computed(() => {
     }
     return null
   }
-  
+
   const category = findCategory(props.categories, props.currentCategory)
   return category?.name || null
 })
 
 const breadcrumbs = computed(() => {
   if (!props.currentCategory) return []
-  
+
   const buildBreadcrumbs = (categories: CategoryWithChildren[], targetId: string, path: CategoryWithChildren[] = []): CategoryWithChildren[] => {
     for (const category of categories) {
       const currentPath = [...path, category]
-      
+
       if (category.id.toString() === targetId || category.slug === targetId) {
         return currentPath
       }
-      
+
       if (category.children) {
         const result = buildBreadcrumbs(category.children, targetId, currentPath)
         if (result.length > 0) return result
@@ -261,7 +308,7 @@ const breadcrumbs = computed(() => {
     }
     return []
   }
-  
+
   return buildBreadcrumbs(props.categories, props.currentCategory)
 })
 
@@ -301,9 +348,9 @@ const setupEscapeHandler = () => {
       showMobileNav.value = false
     }
   }
-  
+
   document.addEventListener('keydown', handleEscape)
-  
+
   onUnmounted(() => {
     document.removeEventListener('keydown', handleEscape)
     if (dropdownTimeout.value) {
@@ -314,4 +361,3 @@ const setupEscapeHandler = () => {
 
 onMounted(setupEscapeHandler)
 </script>
-

@@ -19,13 +19,13 @@ test.describe('Critical Product Flows', () => {
     // Check at least one product is visible
     const productCards = page.locator(SELECTORS.PRODUCT_CARD)
     await expect(productCards.first(), ERROR_MESSAGES.PRODUCT_NOT_FOUND).toBeVisible({
-      timeout: TIMEOUTS.LONG
+      timeout: TIMEOUTS.LONG,
     })
 
     // Check we have multiple products
     const count = await productCards.count()
     expect(count, 'Products page should display at least one product').toBeGreaterThanOrEqual(
-      TEST_DATA.MIN_PRODUCTS
+      TEST_DATA.MIN_PRODUCTS,
     )
   })
 
@@ -35,7 +35,7 @@ test.describe('Critical Product Flows', () => {
     // Wait for products to load
     await page.waitForSelector(SELECTORS.PRODUCT_CARD, {
       state: 'visible',
-      timeout: TIMEOUTS.LONG
+      timeout: TIMEOUTS.LONG,
     })
 
     // Click first product

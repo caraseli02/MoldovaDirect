@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
   if (!type || !sourceLocale || !targetLocales || targetLocales.length === 0) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Template type, source locale, and target locales are required'
+      statusMessage: 'Template type, source locale, and target locales are required',
     })
   }
 
@@ -33,7 +33,7 @@ export default defineEventHandler(async (event) => {
     throw createError({
       statusCode: 404,
       statusMessage: 'Source template not found',
-      data: sourceError
+      data: sourceError,
     })
   }
 
@@ -54,7 +54,8 @@ export default defineEventHandler(async (event) => {
     if (!targetTemplate) {
       changes.push('Template will be created')
       changes.push(`${sourceKeys.length} keys will be added`)
-    } else {
+    }
+    else {
       const targetKeys = Object.keys(targetTemplate.translations)
       const newKeys = sourceKeys.filter(key => !targetKeys.includes(key))
       const removedKeys = targetKeys.filter(key => !sourceKeys.includes(key))

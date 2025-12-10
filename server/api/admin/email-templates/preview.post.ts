@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
   if (!type || !locale) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Template type and locale are required'
+      statusMessage: 'Template type and locale are required',
     })
   }
 
@@ -37,7 +37,7 @@ export default defineEventHandler(async (event) => {
         quantity: 2,
         price: 29.99,
         total: 59.98,
-        image: 'https://via.placeholder.com/80'
+        image: 'https://via.placeholder.com/80',
       },
       {
         productId: '2',
@@ -45,8 +45,8 @@ export default defineEventHandler(async (event) => {
         sku: 'SKU-002',
         quantity: 1,
         price: 49.99,
-        total: 49.99
-      }
+        total: 49.99,
+      },
     ],
     shippingAddress: {
       firstName: 'John',
@@ -56,7 +56,7 @@ export default defineEventHandler(async (event) => {
       postalCode: 'MD-2001',
       province: '',
       country: 'Moldova',
-      phone: '+373 69 123 456'
+      phone: '+373 69 123 456',
     },
     subtotal: 109.97,
     shippingCost: 10.00,
@@ -67,7 +67,7 @@ export default defineEventHandler(async (event) => {
     orderStatus: 'pending',
     trackingNumber: 'TRACK123456789',
     trackingUrl: 'https://example.com/track/TRACK123456789',
-    carrier: 'DHL'
+    carrier: 'DHL',
   }
 
   // Generate HTML preview
@@ -76,6 +76,6 @@ export default defineEventHandler(async (event) => {
   return {
     html,
     subject,
-    preheader
+    preheader,
   }
 })

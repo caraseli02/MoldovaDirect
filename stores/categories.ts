@@ -5,17 +5,17 @@ interface CategoriesState {
   // Categories data
   categories: CategoryWithChildren[]
   currentCategory: CategoryWithChildren | null
-  
+
   // Navigation state
   expandedCategories: Set<number>
   selectedCategory: string | null
-  
+
   // Loading states
   loading: boolean
   error: string | null
-  
+
   // Cache
-  cache: Map<string, { data: any; timestamp: number }>
+  cache: Map<string, { data: any, timestamp: number }>
 }
 
 export const useCategoriesStore = defineStore('categories', {
@@ -26,7 +26,7 @@ export const useCategoriesStore = defineStore('categories', {
     selectedCategory: null,
     loading: false,
     error: null,
-    cache: new Map()
+    cache: new Map(),
   }),
 
   getters: {
@@ -37,11 +37,11 @@ export const useCategoriesStore = defineStore('categories', {
           .filter(cat => cat.parentId === parentId)
           .map(cat => ({
             ...cat,
-            children: buildTree(cat.id)
+            children: buildTree(cat.id),
           }))
           .sort((a, b) => a.sortOrder - b.sortOrder)
       }
-      
+
       return buildTree()
     },
 
@@ -53,36 +53,36 @@ export const useCategoriesStore = defineStore('categories', {
     },
 
     // Get category by slug or ID
-    getCategoryByIdentifier: (state) => (identifier: string): CategoryWithChildren | undefined => {
-      return state.categories.find(cat => 
-        cat.slug === identifier || cat.id.toString() === identifier
+    getCategoryByIdentifier: state => (identifier: string): CategoryWithChildren | undefined => {
+      return state.categories.find(cat =>
+        cat.slug === identifier || cat.id.toString() === identifier,
       )
     },
 
     // Get breadcrumb path for current category
     breadcrumbs: (state): CategoryWithChildren[] => {
       if (!state.currentCategory) return []
-      
+
       const buildBreadcrumbs = (category: CategoryWithChildren, path: CategoryWithChildren[] = []): CategoryWithChildren[] => {
         const newPath = [category, ...path]
-        
+
         if (category.parentId) {
           const parent = state.categories.find(cat => cat.id === category.parentId)
           if (parent) {
             return buildBreadcrumbs(parent, newPath)
           }
         }
-        
+
         return newPath
       }
-      
+
       return buildBreadcrumbs(state.currentCategory)
     },
 
     // Check if category is expanded
-    isCategoryExpanded: (state) => (categoryId: number): boolean => {
+    isCategoryExpanded: state => (categoryId: number): boolean => {
       return state.expandedCategories.has(categoryId)
-    }
+    },
   },
 
   actions: {
@@ -90,7 +90,7 @@ export const useCategoriesStore = defineStore('categories', {
     async fetchCategories() {
       this.loading = true
       this.error = null
-      
+
       try {
         // Check cache
         const cached = this.cache.get('categories')
@@ -99,20 +99,21 @@ export const useCategoriesStore = defineStore('categories', {
           this.loading = false
           return
         }
-        
+
         const response = await $fetch<{ categories: CategoryWithChildren[] }>('/api/categories')
         this.categories = response.categories
-        
+
         // Cache the response
         this.cache.set('categories', {
           data: response.categories,
-          timestamp: Date.now()
+          timestamp: Date.now(),
         })
-        
-      } catch (error) {
+      }
+      catch (error) {
         this.error = error instanceof Error ? error.message : 'Failed to fetch categories'
         console.error('Error fetching categories:', error)
-      } finally {
+      }
+      finally {
         this.loading = false
       }
     },
@@ -124,12 +125,12 @@ export const useCategoriesStore = defineStore('categories', {
         this.selectedCategory = null
         return
       }
-      
+
       const category = this.getCategoryByIdentifier(identifier)
       if (category) {
         this.currentCategory = category
         this.selectedCategory = identifier
-        
+
         // Auto-expand parent categories
         this.expandParentCategories(category)
       }
@@ -139,7 +140,8 @@ export const useCategoriesStore = defineStore('categories', {
     toggleCategoryExpansion(categoryId: number) {
       if (this.expandedCategories.has(categoryId)) {
         this.expandedCategories.delete(categoryId)
-      } else {
+      }
+      else {
         this.expandedCategories.add(categoryId)
       }
     },
@@ -147,7 +149,7 @@ export const useCategoriesStore = defineStore('categories', {
     // Expand parent categories for a given category
     expandParentCategories(category: CategoryWithChildren) {
       let current = category
-      
+
       while (current.parentId) {
         this.expandedCategories.add(current.parentId)
         const parent = this.categories.find(cat => cat.id === current.parentId)
@@ -159,6 +161,6 @@ export const useCategoriesStore = defineStore('categories', {
     // Clear cache
     clearCache() {
       this.cache.clear()
-    }
-  }
+    },
+  },
 })

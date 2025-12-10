@@ -1,12 +1,12 @@
 /**
  * Bulk Order Operations API Endpoint
- * 
+ *
  * Requirements addressed:
  * - 8.1: Bulk status update functionality
  * - 8.2: Batch processing with progress tracking
  * - 8.3: Progress indicators and error handling
  * - 8.4: Confirmation before executing changes
- * 
+ *
  * Handles bulk operations on multiple orders:
  * - Status updates
  * - Error tracking for failed operations
@@ -25,7 +25,7 @@ interface BulkUpdateRequest {
 interface BulkUpdateResult {
   updated: number
   failed: number
-  errors: Array<{ orderId: number; error: string }>
+  errors: Array<{ orderId: number, error: string }>
 }
 
 // Valid status transitions
@@ -34,14 +34,14 @@ const VALID_TRANSITIONS: Record<string, string[]> = {
   processing: ['shipped', 'cancelled'],
   shipped: ['delivered'],
   delivered: [],
-  cancelled: []
+  cancelled: [],
 }
 
 export default defineEventHandler(async (event) => {
   try {
     // Verify admin authentication
     const userId = await requireAdminRole(event)
-    
+
     // Use service role for database operations
     const supabase = serverSupabaseServiceRole(event)
 
@@ -52,14 +52,14 @@ export default defineEventHandler(async (event) => {
     if (!body.orderIds || !Array.isArray(body.orderIds) || body.orderIds.length === 0) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Order IDs are required'
+        statusMessage: 'Order IDs are required',
       })
     }
 
     if (!body.status) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Status is required'
+        statusMessage: 'Status is required',
       })
     }
 
@@ -68,7 +68,7 @@ export default defineEventHandler(async (event) => {
     if (!validStatuses.includes(body.status)) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Invalid status'
+        statusMessage: 'Invalid status',
       })
     }
 
@@ -76,7 +76,7 @@ export default defineEventHandler(async (event) => {
     if (body.orderIds.length > 100) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Cannot update more than 100 orders at once'
+        statusMessage: 'Cannot update more than 100 orders at once',
       })
     }
 
@@ -90,7 +90,7 @@ export default defineEventHandler(async (event) => {
       console.error('Error fetching orders for bulk update:', fetchError)
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to fetch orders'
+        statusMessage: 'Failed to fetch orders',
       })
     }
 
@@ -98,7 +98,7 @@ export default defineEventHandler(async (event) => {
     const result: BulkUpdateResult = {
       updated: 0,
       failed: 0,
-      errors: []
+      errors: [],
     }
 
     // Process each order
@@ -110,7 +110,7 @@ export default defineEventHandler(async (event) => {
           result.failed++
           result.errors.push({
             orderId: order.id,
-            error: `Cannot transition from ${order.status} to ${body.status}`
+            error: `Cannot transition from ${order.status} to ${body.status}`,
           })
           continue
         }
@@ -120,7 +120,7 @@ export default defineEventHandler(async (event) => {
           .from('orders')
           .update({
             status: body.status,
-            updated_at: new Date().toISOString()
+            updated_at: new Date().toISOString(),
           })
           .eq('id', order.id)
 
@@ -128,7 +128,7 @@ export default defineEventHandler(async (event) => {
           result.failed++
           result.errors.push({
             orderId: order.id,
-            error: updateError.message
+            error: updateError.message,
           })
           continue
         }
@@ -143,7 +143,7 @@ export default defineEventHandler(async (event) => {
             changed_by: userId,
             changed_at: new Date().toISOString(),
             notes: body.notes || `Bulk status update to ${body.status}`,
-            automated: false
+            automated: false,
           })
 
         if (historyError) {
@@ -152,11 +152,12 @@ export default defineEventHandler(async (event) => {
         }
 
         result.updated++
-      } catch (error) {
+      }
+      catch (error) {
         result.failed++
         result.errors.push({
           orderId: order.id,
-          error: error instanceof Error ? error.message : 'Unknown error'
+          error: error instanceof Error ? error.message : 'Unknown error',
         })
       }
     }
@@ -170,18 +171,19 @@ export default defineEventHandler(async (event) => {
     return {
       success: true,
       data: result,
-      message
+      message,
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Bulk order update error:', error)
-    
+
     if (error && typeof error === 'object' && 'statusCode' in error) {
       throw error
     }
 
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to update orders'
+      statusMessage: 'Failed to update orders',
     })
   }
 })

@@ -17,10 +17,10 @@
 import type { H3Event } from 'h3'
 
 // Rate limit storage (in-memory for simplicity, could be Redis in production)
-const rateLimitStore = new Map<string, { count: number; resetTime: number; failedAttempts?: number }>()
+const rateLimitStore = new Map<string, { count: number, resetTime: number, failedAttempts?: number }>()
 
 // Failed login attempts tracking (for account lockout)
-const failedLoginStore = new Map<string, { count: number; lockoutUntil?: number }>()
+const failedLoginStore = new Map<string, { count: number, lockoutUntil?: number }>()
 
 /**
  * Rate limit configurations for different auth operations
@@ -77,8 +77,8 @@ function getClientIdentifier(event: H3Event): string {
 export function checkAuthRateLimit(
   event: H3Event,
   operation: AuthOperation,
-  email?: string
-): { allowed: boolean; resetTime?: number; remaining?: number; reason?: string } {
+  email?: string,
+): { allowed: boolean, resetTime?: number, remaining?: number, reason?: string } {
   const config = authRateLimitConfig[operation]
   const clientId = getClientIdentifier(event)
   const key = `${operation}:${clientId}`

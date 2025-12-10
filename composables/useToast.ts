@@ -21,7 +21,7 @@ const show = (
     action: options?.actionText && options?.actionHandler
       ? { label: options.actionText, onClick: options.actionHandler }
       : undefined,
-  } as ToasterProps & { description?: string; action?: { label: string; onClick: () => void } }
+  } as ToasterProps & { description?: string, action?: { label: string, onClick: () => void } }
 
   switch (kind) {
     case 'success':

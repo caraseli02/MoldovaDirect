@@ -26,35 +26,36 @@ export default defineEventHandler(async (event) => {
     if (!body.section_id || body.new_order === undefined) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Bad Request - section_id and new_order are required'
+        statusMessage: 'Bad Request - section_id and new_order are required',
       })
     }
 
     // Call the database function to reorder
     const { error } = await supabase.rpc('reorder_landing_sections', {
       p_section_id: body.section_id,
-      p_new_order: body.new_order
+      p_new_order: body.new_order,
     })
 
     if (error) {
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to reorder landing sections',
-        data: error
+        data: error,
       })
     }
 
     return {
       success: true,
-      message: 'Landing sections reordered successfully'
+      message: 'Landing sections reordered successfully',
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     console.error('Error reordering landing sections:', error)
 
     throw createError({
       statusCode: error.statusCode || 500,
       statusMessage: error.statusMessage || 'Failed to reorder landing sections',
-      data: error.data || error
+      data: error.data || error,
     })
   }
 })

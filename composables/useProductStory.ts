@@ -25,7 +25,7 @@ interface ReviewSummary {
 }
 
 export function useProductStory(
-  product: ComputedRef<(ProductWithRelations & { attributes?: Record<string, any> }) | null>
+  product: ComputedRef<(ProductWithRelations & { attributes?: Record<string, any> }) | null>,
 ) {
   const { t } = useI18n()
   const { getLocalizedText, getCategoryLabel } = useProductUtils()
@@ -37,15 +37,15 @@ export function useProductStory(
    * Producer story and background
    */
   const storytelling = computed((): { producer: string } => {
-    const producerStory =
-      productAttributes.value?.producer_story || productAttributes.value?.producerStory
+    const producerStory
+      = productAttributes.value?.producer_story || productAttributes.value?.producerStory
 
     return {
       producer:
-        producerStory ||
-        t('products.story.producerFallback', {
-          category: categoryLabel.value || t('products.commonProduct')
-        })
+        producerStory
+        || t('products.story.producerFallback', {
+          category: categoryLabel.value || t('products.commonProduct'),
+        }),
     }
   })
 
@@ -114,7 +114,7 @@ export function useProductStory(
     const categoryName = getLocalizedText(categoryTranslations)
 
     return t('products.story.originCategoryFallback', {
-      category: categoryName || t('products.commonProduct')
+      category: categoryName || t('products.commonProduct'),
     })
   })
 
@@ -124,22 +124,24 @@ export function useProductStory(
   const reviewSummary = computed((): ReviewSummary => {
     const rating = Number(productAttributes.value?.rating || 4.8)
     const count = Number(
-      productAttributes.value?.review_count ||
-      productAttributes.value?.reviewCount ||
-      126
+      productAttributes.value?.review_count
+      || productAttributes.value?.reviewCount
+      || 126,
     )
 
-    const highlightsRaw =
-      productAttributes.value?.review_highlights ||
-      productAttributes.value?.reviewHighlights
+    const highlightsRaw
+      = productAttributes.value?.review_highlights
+        || productAttributes.value?.reviewHighlights
 
     let highlights: string[] = []
 
     if (Array.isArray(highlightsRaw)) {
       highlights = highlightsRaw
-    } else if (typeof highlightsRaw === 'string') {
+    }
+    else if (typeof highlightsRaw === 'string') {
       highlights = highlightsRaw.split('|').map((item: string) => item.trim())
-    } else {
+    }
+    else {
       highlights = t('products.socialProof.highlights')
         .split('|')
         .map(entry => entry.trim())
@@ -148,7 +150,7 @@ export function useProductStory(
     return {
       rating: Number(rating.toFixed(1)),
       count,
-      highlights
+      highlights,
     }
   })
 
@@ -184,6 +186,6 @@ export function useProductStory(
     awards,
     originStory,
     reviewSummary,
-    sustainabilityBadges
+    sustainabilityBadges,
   }
 }

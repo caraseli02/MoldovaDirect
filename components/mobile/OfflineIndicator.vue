@@ -1,27 +1,47 @@
 <template>
   <Transition name="slide-down">
-    <div 
+    <div
       v-if="!isOnline"
       class="fixed top-0 left-0 right-0 z-50 bg-orange-500 text-white px-4 py-2 text-center text-sm font-medium"
     >
       <div class="flex items-center justify-center space-x-2">
-        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 2.25a9.75 9.75 0 100 19.5 9.75 9.75 0 000-19.5z" />
+        <svg
+          class="w-4 h-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 2.25a9.75 9.75 0 100 19.5 9.75 9.75 0 000-19.5z"
+          />
         </svg>
         <span>{{ $t('pwa.offlineMessage') }}</span>
       </div>
     </div>
   </Transition>
-  
+
   <!-- Back online notification -->
   <Transition name="slide-down">
-    <div 
+    <div
       v-if="showBackOnline"
       class="fixed top-0 left-0 right-0 z-50 bg-green-500 text-white px-4 py-2 text-center text-sm font-medium"
     >
       <div class="flex items-center justify-center space-x-2">
-        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        <svg
+          class="w-4 h-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
         </svg>
         <span>{{ $t('pwa.backOnline') }}</span>
       </div>
@@ -36,7 +56,7 @@ const showBackOnline = ref(false)
 const wasOffline = ref(false)
 
 // Set up online/offline listeners (client-side only)
-if (process.client) {
+if (import.meta.client) {
   isOnline.value = navigator.onLine
 
   const updateOnlineStatus = () => {
@@ -58,7 +78,8 @@ watch(isOnline, (online, wasOnlineBefore) => {
   if (!online) {
     wasOffline.value = true
     showBackOnline.value = false
-  } else if (wasOffline.value && wasOnlineBefore === false) {
+  }
+  else if (wasOffline.value && wasOnlineBefore === false) {
     // Show back online message briefly
     showBackOnline.value = true
     setTimeout(() => {

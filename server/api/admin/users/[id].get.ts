@@ -1,10 +1,10 @@
 /**
  * Admin Users API - Get User Details
- * 
+ *
  * Requirements addressed:
  * - 4.3: Display detailed user information including order history and account information
  * - 4.6: Display login history and account modifications
- * 
+ *
  * Provides detailed user information for admin user management interface.
  */
 
@@ -73,7 +73,7 @@ export default defineEventHandler(async (event) => {
     if (!userId) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'User ID is required'
+        statusMessage: 'User ID is required',
       })
     }
 
@@ -86,10 +86,12 @@ export default defineEventHandler(async (event) => {
       const { data, error: authError } = await supabase.auth.admin.getUserById(userId)
       if (authError) {
         console.warn('Failed to fetch auth user:', authError.message)
-      } else {
+      }
+      else {
         authUser = data?.user
       }
-    } catch (error) {
+    }
+    catch (error) {
       console.warn('Auth admin API not available:', error)
     }
 
@@ -101,7 +103,7 @@ export default defineEventHandler(async (event) => {
     if (!authUser) {
       throw createError({
         statusCode: 404,
-        statusMessage: 'User not found'
+        statusMessage: 'User not found',
       })
     }
 
@@ -163,11 +165,11 @@ export default defineEventHandler(async (event) => {
     const totalSpent = orders?.reduce((sum, order) => sum + Number(order.total_eur), 0) || 0
     const averageOrderValue = totalOrders > 0 ? totalSpent / totalOrders : 0
     const lastOrderDate = orders && orders.length > 0 ? orders[0].created_at : null
-    
+
     const accountCreated = new Date(authUser.user.created_at)
     const now = new Date()
     const accountAge = Math.floor((now.getTime() - accountCreated.getTime()) / (1000 * 60 * 60 * 24))
-    
+
     const loginCount = activity?.filter(a => a.activity_type === 'login').length || 0
     const lastLogin = authUser.user.last_sign_in_at
 
@@ -187,7 +189,7 @@ export default defineEventHandler(async (event) => {
         payment_status: order.payment_status,
         total_eur: Number(order.total_eur),
         created_at: order.created_at,
-        items_count: Array.isArray(order.order_items) ? order.order_items.length : 0
+        items_count: Array.isArray(order.order_items) ? order.order_items.length : 0,
       })) || [],
       activity: activity?.map(a => ({
         id: a.id,
@@ -195,7 +197,7 @@ export default defineEventHandler(async (event) => {
         created_at: a.created_at,
         ip_address: a.ip_address,
         user_agent: a.user_agent,
-        metadata: a.metadata
+        metadata: a.metadata,
       })) || [],
       statistics: {
         totalOrders,
@@ -204,35 +206,35 @@ export default defineEventHandler(async (event) => {
         lastOrderDate,
         accountAge,
         loginCount,
-        lastLogin
-      }
+        lastLogin,
+      },
     }
 
     return {
       success: true,
-      data: userDetail
+      data: userDetail,
     }
-
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Error in admin user detail API:', error)
-    
+
     if (error.statusCode) {
       throw error
     }
-    
+
     // Return mock data as fallback
     const userId = getRouterParam(event, 'id')
     if (userId && userId.startsWith('user-')) {
       console.warn('Returning mock user detail due to error')
       return getMockUserDetail(userId)
     }
-    
+
     return {
       success: false,
       error: {
         statusCode: 500,
-        statusMessage: error instanceof Error ? error.message : 'Failed to fetch user details'
-      }
+        statusMessage: error instanceof Error ? error.message : 'Failed to fetch user details',
+      },
     }
   }
 })
@@ -254,7 +256,7 @@ function getMockUserDetail(userId: string): any {
         phone: '+1234567890',
         preferred_language: 'en',
         created_at: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       },
       addresses: [
         {
@@ -266,8 +268,8 @@ function getMockUserDetail(userId: string): any {
           province: 'NY',
           country: 'US',
           is_default: true,
-          created_at: new Date().toISOString()
-        }
+          created_at: new Date().toISOString(),
+        },
       ],
       orders: [
         {
@@ -277,8 +279,8 @@ function getMockUserDetail(userId: string): any {
           payment_status: 'paid',
           total_eur: 99.99,
           created_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-          items_count: 3
-        }
+          items_count: 3,
+        },
       ],
       activity: [
         {
@@ -287,8 +289,8 @@ function getMockUserDetail(userId: string): any {
           created_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
           ip_address: '192.168.1.1',
           user_agent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-          metadata: { source: 'web' }
-        }
+          metadata: { source: 'web' },
+        },
       ],
       statistics: {
         totalOrders: 5,
@@ -297,8 +299,8 @@ function getMockUserDetail(userId: string): any {
         lastOrderDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
         accountAge: 30,
         loginCount: 15,
-        lastLogin: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
-      }
+        lastLogin: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+      },
     },
     'user-2': {
       id: 'user-2',
@@ -312,7 +314,7 @@ function getMockUserDetail(userId: string): any {
         phone: null,
         preferred_language: 'es',
         created_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       },
       addresses: [],
       orders: [],
@@ -323,8 +325,8 @@ function getMockUserDetail(userId: string): any {
           created_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
           ip_address: '192.168.1.2',
           user_agent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X)',
-          metadata: { source: 'mobile' }
-        }
+          metadata: { source: 'mobile' },
+        },
       ],
       statistics: {
         totalOrders: 0,
@@ -333,15 +335,15 @@ function getMockUserDetail(userId: string): any {
         lastOrderDate: null,
         accountAge: 7,
         loginCount: 0,
-        lastLogin: null
-      }
-    }
+        lastLogin: null,
+      },
+    },
   }
 
   const user = mockUsers[userId] || mockUsers['user-1']
 
   return {
     success: true,
-    data: user
+    data: user,
   }
 }

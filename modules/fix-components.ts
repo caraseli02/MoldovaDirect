@@ -1,9 +1,10 @@
-import { defineNuxtModule } from '@nuxt/kit'
+import { defineNuxtModule } from 'nuxt/kit'
+import type { Nuxt } from 'nuxt/schema'
 
 export default defineNuxtModule({
   meta: { name: 'fix-components' },
-  setup(_options, nuxt) {
-    nuxt.hook('components:dirs', (dirs) => {
+  setup(_options: any, nuxt: Nuxt) {
+    nuxt.hook('components:dirs', (dirs: any[]) => {
       for (let i = dirs.length - 1; i >= 0; i--) {
         const entry = dirs[i] as any
         if (typeof entry === 'string') continue
@@ -12,6 +13,5 @@ export default defineNuxtModule({
         }
       }
     })
-  }
+  },
 })
-

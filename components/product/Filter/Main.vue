@@ -28,7 +28,7 @@ interface Emits {
 
 const props = withDefaults(defineProps<Props>(), {
   filteredProductCount: 0,
-  showTitle: true
+  showTitle: true,
 })
 
 const emit = defineEmits<Emits>()
@@ -44,13 +44,13 @@ const localFilters = ref<ProductFilters>({ ...props.filters })
 // Computed properties
 const hasActiveFilters = computed(() => {
   return !!(
-    localFilters.value.category ||
-    localFilters.value.search ||
-    localFilters.value.priceMin ||
-    localFilters.value.priceMax ||
-    localFilters.value.inStock ||
-    localFilters.value.featured ||
-    (localFilters.value.attributes && Object.keys(localFilters.value.attributes).length > 0)
+    localFilters.value.category
+    || localFilters.value.search
+    || localFilters.value.priceMin
+    || localFilters.value.priceMax
+    || localFilters.value.inStock
+    || localFilters.value.featured
+    || (localFilters.value.attributes && Object.keys(localFilters.value.attributes).length > 0)
   )
 })
 

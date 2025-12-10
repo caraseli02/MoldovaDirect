@@ -16,13 +16,13 @@ vi.mock('h3', async () => {
   const actual = await vi.importActual('h3')
   return {
     ...actual,
-    defineEventHandler: vi.fn((handler) => handler),
+    defineEventHandler: vi.fn(handler => handler),
     readBody: vi.fn(),
     createError: vi.fn((options) => {
       const error = new Error(options.statusMessage) as Error & { statusCode: number }
       error.statusCode = options.statusCode
       return error
-    })
+    }),
   }
 })
 
@@ -30,7 +30,7 @@ vi.mock('h3', async () => {
 vi.mock('~/server/utils/orderUtils', () => ({
   validateCartItems: vi.fn(),
   calculateOrderTotals: vi.fn(),
-  getAvailableShippingMethods: vi.fn()
+  getAvailableShippingMethods: vi.fn(),
 }))
 
 // Mock Supabase
@@ -40,9 +40,9 @@ const mockSupabaseEq = vi.fn()
 vi.mock('#supabase/server', () => ({
   serverSupabaseServiceRole: vi.fn(() => ({
     from: vi.fn(() => ({
-      select: mockSupabaseSelect
-    }))
-  }))
+      select: mockSupabaseSelect,
+    })),
+  })),
 }))
 
 describe('Cart Validation API', () => {
@@ -51,7 +51,7 @@ describe('Cart Validation API', () => {
 
     // Default mock chain for Supabase
     mockSupabaseSelect.mockReturnValue({
-      eq: mockSupabaseEq
+      eq: mockSupabaseEq,
     })
   })
 
@@ -91,14 +91,14 @@ describe('Cart Validation API', () => {
             name_translations: { es: 'Vino Tinto', en: 'Red Wine' },
             price_eur: 25.00,
             stock_quantity: 10,
-            is_active: true
-          }
-        }
+            is_active: true,
+          },
+        },
       ]
 
       mockSupabaseEq.mockResolvedValue({
         data: mockCartItems,
-        error: null
+        error: null,
       })
 
       const result = await mockSupabaseEq('cart_id', 123)
@@ -110,7 +110,7 @@ describe('Cart Validation API', () => {
     it('handles empty cart', async () => {
       mockSupabaseEq.mockResolvedValue({
         data: [],
-        error: null
+        error: null,
       })
 
       const result = await mockSupabaseEq('cart_id', 123)
@@ -121,7 +121,7 @@ describe('Cart Validation API', () => {
     it('handles database error', async () => {
       mockSupabaseEq.mockResolvedValue({
         data: null,
-        error: { message: 'Database connection failed' }
+        error: { message: 'Database connection failed' },
       })
 
       const result = await mockSupabaseEq('cart_id', 123)
@@ -142,14 +142,14 @@ describe('Cart Validation API', () => {
             id: 10,
             price_eur: 25.00,
             stock_quantity: 10,
-            is_active: true
-          }
-        }
+            is_active: true,
+          },
+        },
       ]
 
       vi.mocked(validateCartItems).mockReturnValue({
         valid: true,
-        errors: []
+        errors: [],
       })
 
       const result = validateCartItems(mockCartItems as any)
@@ -169,14 +169,14 @@ describe('Cart Validation API', () => {
             id: 10,
             price_eur: 25.00,
             stock_quantity: 5,
-            is_active: true
-          }
-        }
+            is_active: true,
+          },
+        },
       ]
 
       vi.mocked(validateCartItems).mockReturnValue({
         valid: false,
-        errors: ['Insufficient stock for product 10']
+        errors: ['Insufficient stock for product 10'],
       })
 
       const result = validateCartItems(mockCartItems as any)
@@ -190,7 +190,7 @@ describe('Cart Validation API', () => {
 
       vi.mocked(validateCartItems).mockReturnValue({
         valid: false,
-        errors: ['Product 10 is no longer available']
+        errors: ['Product 10 is no longer available'],
       })
 
       const result = validateCartItems([])
@@ -208,7 +208,7 @@ describe('Cart Validation API', () => {
         subtotal: 75.00,
         tax: 0,
         shipping: 5.00,
-        total: 80.00
+        total: 80.00,
       })
 
       const result = calculateOrderTotals([])
@@ -224,7 +224,7 @@ describe('Cart Validation API', () => {
 
       const mockShippingMethods = [
         { id: 'standard', name: 'Standard Shipping', price: 5.00 },
-        { id: 'express', name: 'Express Shipping', price: 15.00 }
+        { id: 'express', name: 'Express Shipping', price: 15.00 },
       ]
 
       vi.mocked(getAvailableShippingMethods).mockReturnValue(mockShippingMethods)
@@ -240,7 +240,7 @@ describe('Cart Validation API', () => {
 
       // Some shipping methods may not be available for certain addresses
       vi.mocked(getAvailableShippingMethods).mockReturnValue([
-        { id: 'standard', name: 'Standard Shipping', price: 10.00 }
+        { id: 'standard', name: 'Standard Shipping', price: 10.00 },
       ])
 
       const result = getAvailableShippingMethods([], { country: 'MD' })
@@ -254,14 +254,14 @@ describe('Cart Validation API', () => {
       const { validateCartItems, calculateOrderTotals, getAvailableShippingMethods } = await import('~/server/utils/orderUtils')
 
       const mockCartItems = [
-        { id: 1, quantity: 2, products: { price_eur: 25.00 } }
+        { id: 1, quantity: 2, products: { price_eur: 25.00 } },
       ]
 
       vi.mocked(validateCartItems).mockReturnValue({ valid: true, errors: [] })
       vi.mocked(calculateOrderTotals).mockReturnValue({ subtotal: 50.00 })
       vi.mocked(getAvailableShippingMethods).mockReturnValue([
         { id: 'standard', price: 5.00 },
-        { id: 'express', price: 15.00 }
+        { id: 'express', price: 15.00 },
       ])
 
       const response = {
@@ -275,9 +275,9 @@ describe('Cart Validation API', () => {
           shippingMethods: [{ id: 'standard', price: 5.00 }, { id: 'express', price: 15.00 }],
           estimatedTotal: {
             min: 55.00,
-            max: 65.00
-          }
-        }
+            max: 65.00,
+          },
+        },
       }
 
       expect(response.success).toBe(true)
@@ -291,13 +291,13 @@ describe('Cart Validation API', () => {
 
       vi.mocked(validateCartItems).mockReturnValue({
         valid: false,
-        errors: ['Insufficient stock', 'Product unavailable']
+        errors: ['Insufficient stock', 'Product unavailable'],
       })
 
       const response = {
         success: false,
         valid: false,
-        errors: ['Insufficient stock', 'Product unavailable']
+        errors: ['Insufficient stock', 'Product unavailable'],
       }
 
       expect(response.success).toBe(false)
@@ -315,7 +315,7 @@ describe('Cart Validation API', () => {
     it('handles cart with many items', async () => {
       const cartItems = Array.from({ length: 50 }, (_, i) => ({
         id: i + 1,
-        quantity: 1
+        quantity: 1,
       }))
       expect(cartItems).toHaveLength(50)
     })
@@ -325,7 +325,7 @@ describe('Cart Validation API', () => {
 
       vi.mocked(validateCartItems).mockReturnValue({
         valid: false,
-        errors: ['Item quantity must be at least 1']
+        errors: ['Item quantity must be at least 1'],
       })
 
       const result = validateCartItems([{ quantity: 0 }] as any)
@@ -337,7 +337,7 @@ describe('Cart Validation API', () => {
       const cartItems = [
         { quantity: 2 },
         { quantity: 3 },
-        { quantity: 1 }
+        { quantity: 1 },
       ]
 
       const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0)

@@ -17,18 +17,18 @@ export default defineEventHandler(async (event) => {
     if (!authHeader) {
       throw createError({
         statusCode: 401,
-        statusMessage: 'Authentication required'
+        statusMessage: 'Authentication required',
       })
     }
 
     const { data: { user }, error: authError } = await supabase.auth.getUser(
-      authHeader.replace('Bearer ', '')
+      authHeader.replace('Bearer ', ''),
     )
 
     if (authError || !user) {
       throw createError({
         statusCode: 401,
-        statusMessage: 'Invalid authentication'
+        statusMessage: 'Invalid authentication',
       })
     }
 
@@ -42,7 +42,7 @@ export default defineEventHandler(async (event) => {
     if (profileError || profile?.role !== 'admin') {
       throw createError({
         statusCode: 403,
-        statusMessage: 'Admin access required'
+        statusMessage: 'Admin access required',
       })
     }
 
@@ -51,7 +51,7 @@ export default defineEventHandler(async (event) => {
     if (!orderId) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Order ID is required'
+        statusMessage: 'Order ID is required',
       })
     }
 
@@ -62,7 +62,7 @@ export default defineEventHandler(async (event) => {
     if (!body.status || !body.description) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Status and description are required'
+        statusMessage: 'Status and description are required',
       })
     }
 
@@ -77,12 +77,12 @@ export default defineEventHandler(async (event) => {
       if (orderError.code === 'PGRST116') {
         throw createError({
           statusCode: 404,
-          statusMessage: 'Order not found'
+          statusMessage: 'Order not found',
         })
       }
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to fetch order'
+        statusMessage: 'Failed to fetch order',
       })
     }
 
@@ -94,7 +94,7 @@ export default defineEventHandler(async (event) => {
         status: body.status,
         location: body.location || null,
         description: body.description,
-        timestamp: body.timestamp || new Date().toISOString()
+        timestamp: body.timestamp || new Date().toISOString(),
       })
       .select()
       .single()
@@ -102,15 +102,16 @@ export default defineEventHandler(async (event) => {
     if (trackingError) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to create tracking event'
+        statusMessage: 'Failed to create tracking event',
       })
     }
 
     return {
       success: true,
-      data: trackingEvent
+      data: trackingEvent,
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     if (error.statusCode) {
       throw error
     }
@@ -118,7 +119,7 @@ export default defineEventHandler(async (event) => {
     console.error('Tracking event creation error:', error)
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 })

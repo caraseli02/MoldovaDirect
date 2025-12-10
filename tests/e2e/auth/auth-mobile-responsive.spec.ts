@@ -127,7 +127,7 @@ test.describe('Register Page Mobile', () => {
 
     const [newPage] = await Promise.all([
       context.waitForEvent('page'),
-      termsLink.tap()
+      termsLink.tap(),
     ])
 
     await expect(newPage).toHaveURL(/\/terms/)

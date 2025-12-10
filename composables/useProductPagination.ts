@@ -104,6 +104,6 @@ export function useProductPagination(pagination: Ref<PaginationState>) {
     isFirstPage,
     isLastPage,
     hasMultiplePages,
-    currentRange
+    currentRange,
   }
 }

@@ -9,11 +9,11 @@ function getStripe(): Stripe {
     if (!secretKey) {
       throw createError({
         statusCode: 503,
-        statusMessage: 'Credit card payments are currently unavailable - service not configured'
+        statusMessage: 'Credit card payments are currently unavailable - service not configured',
       })
     }
     stripe = new Stripe(secretKey, {
-      apiVersion: '2024-06-20'
+      apiVersion: '2025-08-27.basil',
     })
   }
   return stripe
@@ -22,33 +22,43 @@ function getStripe(): Stripe {
 export default defineEventHandler(async (event) => {
   try {
     const body = await readBody(event)
-    const { paymentIntentId, paymentMethodId, sessionId } = body
+    const { paymentIntentId, paymentMethodId, sessionId } = body as {
+      paymentIntentId?: string
+      paymentMethodId?: string
+      sessionId?: string
+    }
 
     // Validate required fields
     if (!paymentIntentId || !sessionId) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Missing required fields: paymentIntentId, sessionId'
+        statusMessage: 'Missing required fields: paymentIntentId, sessionId',
       })
     }
 
-    let paymentIntent
+    let paymentIntent: Stripe.PaymentIntent
 
     const stripeInstance = getStripe()
-    
+
     if (paymentMethodId) {
       // Confirm payment intent with payment method
       paymentIntent = await stripeInstance.paymentIntents.confirm(paymentIntentId, {
         payment_method: paymentMethodId,
-        return_url: `${getHeader(event, 'origin')}/checkout/confirmation`
+        return_url: `${getHeader(event, 'origin')}/checkout/confirmation`,
       })
-    } else {
+    }
+    else {
       // Retrieve payment intent status
       paymentIntent = await stripeInstance.paymentIntents.retrieve(paymentIntentId)
     }
 
     // Check payment status
     if (paymentIntent.status === 'succeeded') {
+      // Retrieve charges separately if needed
+      const charges = paymentIntent.latest_charge
+        ? [await stripeInstance.charges.retrieve(paymentIntent.latest_charge as string)]
+        : []
+
       return {
         success: true,
         paymentIntent: {
@@ -56,61 +66,67 @@ export default defineEventHandler(async (event) => {
           status: paymentIntent.status,
           amount: paymentIntent.amount,
           currency: paymentIntent.currency,
-          charges: paymentIntent.charges.data.map(charge => ({
+          charges: charges.map(charge => ({
             id: charge.id,
             amount: charge.amount,
             currency: charge.currency,
             status: charge.status,
-            payment_method_details: charge.payment_method_details
-          }))
-        }
+            payment_method_details: charge.payment_method_details,
+          })),
+        },
       }
-    } else if (paymentIntent.status === 'requires_action') {
+    }
+    else if (paymentIntent.status === 'requires_action') {
       return {
         success: false,
         requiresAction: true,
         paymentIntent: {
           id: paymentIntent.id,
           status: paymentIntent.status,
-          client_secret: paymentIntent.client_secret
-        }
+          client_secret: paymentIntent.client_secret,
+        },
       }
-    } else {
+    }
+    else {
       return {
         success: false,
         error: 'Payment failed',
         paymentIntent: {
           id: paymentIntent.id,
-          status: paymentIntent.status
-        }
+          status: paymentIntent.status,
+        },
       }
     }
-
-  } catch (error) {
+  }
+  catch (error: unknown) {
     console.error('Failed to confirm payment:', error)
-    
-    if (error.statusCode) {
+
+    if (error && typeof error === 'object' && 'statusCode' in error) {
       throw error
     }
 
     // Handle Stripe errors
-    if (error.type === 'StripeCardError') {
-      throw createError({
-        statusCode: 400,
-        statusMessage: error.message
-      })
-    }
+    if (error && typeof error === 'object' && 'type' in error) {
+      const stripeError = error as { type: string, message?: string }
 
-    if (error.type === 'StripeInvalidRequestError') {
-      throw createError({
-        statusCode: 400,
-        statusMessage: 'Invalid payment confirmation request'
-      })
+      if (stripeError.type === 'StripeCardError') {
+        throw createError({
+          statusCode: 400,
+          statusMessage: stripeError.message || 'Card error',
+        })
+      }
+
+      if (stripeError.type === 'StripeInvalidRequestError') {
+        throw createError({
+          statusCode: 400,
+          statusMessage: 'Invalid payment confirmation request',
+        })
+      }
     }
 
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to confirm payment'
+      statusMessage: 'Failed to confirm payment',
     })
   }
 })

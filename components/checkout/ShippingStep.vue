@@ -24,7 +24,10 @@
         <!-- Guest/Login Options (for non-authenticated users) -->
         <Suspense>
           <template #default>
-            <GuestCheckoutPrompt :show="!user && !showGuestForm" @continue-as-guest="continueAsGuest" />
+            <GuestCheckoutPrompt
+              :show="!user && !showGuestForm"
+              @continue-as-guest="continueAsGuest"
+            />
           </template>
           <template #fallback>
             <div class="h-24 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse mb-8"></div>
@@ -32,11 +35,18 @@
         </Suspense>
 
         <!-- Guest Contact Information (for guest checkout) -->
-        <div v-if="!user && showGuestForm" class="mb-8">
+        <div
+          v-if="!user && showGuestForm"
+          class="mb-8"
+        >
           <Suspense>
             <template #default>
-              <GuestInfoForm v-model="guestInfo" :errors="guestErrors" @validate="validateGuestField"
-                @clear-error="clearGuestFieldError" />
+              <GuestInfoForm
+                v-model="guestInfo"
+                :errors="guestErrors"
+                @validate="(field: string) => validateGuestField(field as keyof GuestInfo)"
+                @clear-error="clearGuestFieldError"
+              />
             </template>
             <template #fallback>
               <div class="h-32 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse"></div>
@@ -45,12 +55,22 @@
         </div>
 
         <!-- Shipping Address Form -->
-        <div v-if="user || showGuestForm" class="mb-8">
+        <div
+          v-if="user || showGuestForm"
+          class="mb-8"
+        >
           <Suspense>
             <template #default>
-              <AddressForm v-model="shippingAddress" type="shipping" :saved-addresses="savedAddresses"
-                :show-save-option="!!user" :available-countries="availableCountries" @save-address="handleSaveAddress"
-                @address-complete="loadShippingMethods" ref="addressFormRef" />
+              <AddressForm
+                ref="addressFormRef"
+                v-model="shippingAddress"
+                type="shipping"
+                :saved-addresses="[...savedAddresses]"
+                :show-save-option="!!user"
+                :available-countries="availableCountries"
+                @save-address="handleSaveAddress"
+                @address-complete="loadShippingMethods"
+              />
             </template>
             <template #fallback>
               <div class="h-64 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse"></div>
@@ -59,12 +79,20 @@
         </div>
 
         <!-- Shipping Method Selection -->
-        <div v-if="(user || showGuestForm) && isAddressValid" class="mb-8">
+        <div
+          v-if="(user || showGuestForm) && isAddressValid"
+          class="mb-8"
+        >
           <Suspense>
             <template #default>
-              <ShippingMethodSelector v-model="selectedMethod" :available-methods="availableMethods"
-                :loading="loadingMethods" :error="methodsError" :validation-error="shippingMethodValidationError"
-                @retry="retryLoadingMethods" />
+              <ShippingMethodSelector
+                v-model="selectedMethod"
+                :available-methods="[...availableMethods]"
+                :loading="loadingMethods"
+                :error="methodsError"
+                :validation-error="shippingMethodValidationError"
+                @retry="retryLoadingMethods"
+              />
             </template>
             <template #fallback>
               <div class="h-40 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse"></div>
@@ -73,7 +101,10 @@
         </div>
 
         <!-- Special Instructions (Optional) -->
-        <div v-if="(user || showGuestForm) && isAddressValid" class="mb-8">
+        <div
+          v-if="(user || showGuestForm) && isAddressValid"
+          class="mb-8"
+        >
           <Suspense>
             <template #default>
               <ShippingInstructions v-model="shippingInstructions" />
@@ -87,8 +118,12 @@
         <!-- Navigation Buttons -->
         <Suspense>
           <template #default>
-            <CheckoutNavigation :can-proceed="canProceed" :processing="processing" back-to="/cart"
-              @proceed="proceedToPayment" />
+            <CheckoutNavigation
+              :can-proceed="canProceed"
+              :processing="processing"
+              back-to="/cart"
+              @proceed="proceedToPayment"
+            />
           </template>
           <template #fallback>
             <div class="h-12 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse"></div>
@@ -100,40 +135,48 @@
 </template>
 
 <script setup lang="ts">
-import type { ShippingInformation } from '~/types/checkout'
+import type { ShippingInformation, ShippingMethod, Address } from '~/types/checkout'
+import type { CheckoutStore } from '~/stores/checkout'
+import type { GuestInfo } from '~/composables/useGuestCheckout'
 
 // Lazy load heavy sub-components
 const ExpressCheckoutBanner = defineAsyncComponent(() =>
-  import('~/components/checkout/ExpressCheckoutBanner.vue')
+  import('~/components/checkout/ExpressCheckoutBanner.vue'),
 )
 const AddressForm = defineAsyncComponent(() =>
-  import('~/components/checkout/AddressForm.vue')
+  import('~/components/checkout/AddressForm.vue'),
 )
 const ShippingMethodSelector = defineAsyncComponent(() =>
-  import('~/components/checkout/ShippingMethodSelector.vue')
+  import('~/components/checkout/ShippingMethodSelector.vue'),
 )
 const GuestCheckoutPrompt = defineAsyncComponent(() =>
-  import('~/components/checkout/GuestCheckoutPrompt.vue')
+  import('~/components/checkout/GuestCheckoutPrompt.vue'),
 )
 const GuestInfoForm = defineAsyncComponent(() =>
-  import('~/components/checkout/GuestInfoForm.vue')
+  import('~/components/checkout/GuestInfoForm.vue'),
 )
 const ShippingInstructions = defineAsyncComponent(() =>
-  import('~/components/checkout/ShippingInstructions.vue')
+  import('~/components/checkout/ShippingInstructions.vue'),
 )
 const CheckoutNavigation = defineAsyncComponent(() =>
-  import('~/components/checkout/CheckoutNavigation.vue')
+  import('~/components/checkout/CheckoutNavigation.vue'),
 )
 
 // Composables
 const localePath = useLocalePath()
 const user = useSupabaseUser()
-const checkoutStore = useCheckoutStore()
+const checkoutStore = useCheckoutStore() as CheckoutStore & {
+  preferences?: { preferred_shipping_method?: string } | null
+  guestInfo?: GuestInfo | null
+  shippingInfo?: ShippingInformation | null
+  updateGuestInfo: (info: GuestInfo) => Promise<void>
+  updateShippingInfo: (info: ShippingInformation) => Promise<void>
+}
 const { t } = useI18n()
 const toast = useToast()
 
 // Component refs
-const addressFormRef = ref()
+const addressFormRef = ref<{ validateForm: () => boolean } | null>(null)
 
 // Use composables for logic
 const {
@@ -144,7 +187,7 @@ const {
   continueAsGuest,
   validateGuestField,
   clearGuestFieldError,
-  validateAll: validateGuestInfo
+  validateAll: validateGuestInfo,
 } = useGuestCheckout()
 
 const {
@@ -155,7 +198,7 @@ const {
   isAddressValid,
   loadSavedAddresses,
   handleSaveAddress,
-  loadFromStore: loadAddressFromStore
+  loadFromStore: loadAddressFromStore,
 } = useShippingAddress()
 
 const {
@@ -164,7 +207,7 @@ const {
   loading: loadingMethods,
   error: methodsError,
   loadShippingMethods,
-  retry: retryLoadingMethods
+  retry: retryLoadingMethods,
 } = useShippingMethods(shippingAddress)
 
 // Local state
@@ -177,7 +220,7 @@ const availableCountries = ref([
   { code: 'MD', name: 'Moldova' },
   { code: 'FR', name: 'France' },
   { code: 'DE', name: 'Germany' },
-  { code: 'IT', name: 'Italy' }
+  { code: 'IT', name: 'Italy' },
 ])
 
 // Computed properties
@@ -185,9 +228,9 @@ const canProceed = computed(() => {
   // For authenticated users, skip guest validation
   const guestCheckPassed = user.value ? true : isGuestInfoValid.value
 
-  return guestCheckPassed &&
-    isAddressValid.value &&
-    selectedMethod.value !== null
+  return guestCheckPassed
+    && isAddressValid.value
+    && selectedMethod.value !== null
 })
 
 const shippingMethodValidationError = computed(() => {
@@ -219,7 +262,7 @@ const proceedToPayment = async () => {
       if (!validateGuestInfo()) {
         toast.error(
           t('checkout.validation.error') || 'Validation Error',
-          t('checkout.validation.guestInfoInvalid') || 'Please provide a valid email address'
+          t('checkout.validation.guestInfoInvalid') || 'Please provide a valid email address',
         )
         processing.value = false
         return
@@ -230,7 +273,7 @@ const proceedToPayment = async () => {
     if (addressFormRef.value && !addressFormRef.value.validateForm()) {
       toast.error(
         t('checkout.validation.error') || 'Validation Error',
-        t('checkout.validation.addressInvalid') || 'Please complete all required shipping address fields'
+        t('checkout.validation.addressInvalid') || 'Please complete all required shipping address fields',
       )
       processing.value = false
       return
@@ -240,13 +283,13 @@ const proceedToPayment = async () => {
     const shippingInfo: ShippingInformation = {
       address: shippingAddress.value,
       method: selectedMethod.value!,
-      instructions: shippingInstructions.value || undefined
+      instructions: shippingInstructions.value || undefined,
     }
 
     if (!user.value && showGuestForm.value) {
       checkoutStore.updateGuestInfo({
         email: guestInfo.value.email.trim(),
-        emailUpdates: guestInfo.value.emailUpdates
+        emailUpdates: guestInfo.value.emailUpdates,
       })
     }
 
@@ -255,10 +298,11 @@ const proceedToPayment = async () => {
 
     // Navigate to payment step
     await navigateTo(localePath('/checkout/payment'))
-
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Failed to proceed to payment:', error)
-  } finally {
+  }
+  finally {
     processing.value = false
   }
 }
@@ -291,7 +335,7 @@ onMounted(async () => {
     showGuestForm.value = true
     guestInfo.value = {
       email: checkoutStore.guestInfo.email,
-      emailUpdates: checkoutStore.guestInfo.emailUpdates
+      emailUpdates: checkoutStore.guestInfo.emailUpdates,
     }
   }
 

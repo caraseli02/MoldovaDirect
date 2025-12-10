@@ -67,9 +67,10 @@ export default defineEventHandler(async (event: H3Event) => {
     stripeEvent = stripe.webhooks.constructEvent(
       body,
       signature,
-      webhookSecret
+      webhookSecret,
     )
-  } catch (err) {
+  }
+  catch (err) {
     const error = err as Error
     console.error('[Stripe Webhook] Signature verification failed:', error.message)
     throw createError({
@@ -112,7 +113,8 @@ export default defineEventHandler(async (event: H3Event) => {
       eventId: stripeEvent.id,
       eventType: stripeEvent.type,
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     console.error(`[Stripe Webhook] Error processing event ${stripeEvent.type}:`, error)
     throw createError({
       statusCode: 500,
@@ -127,14 +129,14 @@ export default defineEventHandler(async (event: H3Event) => {
  */
 async function handlePaymentIntentSucceeded(
   event: H3Event,
-  paymentIntent: Stripe.PaymentIntent
+  paymentIntent: Stripe.PaymentIntent,
 ): Promise<void> {
   const paymentIntentId = paymentIntent.id
   const amountReceived = paymentIntent.amount_received
   const currency = paymentIntent.currency
 
   console.log(
-    `[Stripe Webhook] Payment succeeded: ${paymentIntentId} - ${amountReceived / 100} ${currency.toUpperCase()}`
+    `[Stripe Webhook] Payment succeeded: ${paymentIntentId} - ${amountReceived / 100} ${currency.toUpperCase()}`,
   )
 
   // Get Supabase service role client (bypasses RLS for webhook operations)
@@ -150,7 +152,7 @@ async function handlePaymentIntentSucceeded(
   if (fetchError || !order) {
     console.error(
       `[Stripe Webhook] Order not found for payment intent ${paymentIntentId}:`,
-      fetchError
+      fetchError,
     )
     // Throw error to trigger Stripe retry - order might not exist yet (race condition)
     // Stripe will retry the webhook and eventually the order should exist
@@ -160,7 +162,7 @@ async function handlePaymentIntentSucceeded(
   // Check if already marked as paid (idempotency)
   if (order.payment_status === 'paid') {
     console.log(
-      `[Stripe Webhook] Order ${order.order_number} already marked as paid (idempotent)`
+      `[Stripe Webhook] Order ${order.order_number} already marked as paid (idempotent)`,
     )
     return
   }
@@ -169,8 +171,8 @@ async function handlePaymentIntentSucceeded(
   const expectedAmountCents = Math.round(order.total_eur * 100)
   if (amountReceived !== expectedAmountCents) {
     console.error(
-      `[Stripe Webhook] Amount mismatch for order ${order.order_number}: ` +
-        `expected ${expectedAmountCents}, received ${amountReceived}`
+      `[Stripe Webhook] Amount mismatch for order ${order.order_number}: `
+      + `expected ${expectedAmountCents}, received ${amountReceived}`,
     )
     // Still update status but log warning
   }
@@ -187,13 +189,13 @@ async function handlePaymentIntentSucceeded(
   if (updateError) {
     console.error(
       `[Stripe Webhook] Failed to update order ${order.order_number}:`,
-      updateError
+      updateError,
     )
     throw new Error(`Failed to update order payment status: ${updateError.message}`)
   }
 
   console.log(
-    `[Stripe Webhook] Order ${order.order_number} marked as paid (${amountReceived / 100} ${currency.toUpperCase()})`
+    `[Stripe Webhook] Order ${order.order_number} marked as paid (${amountReceived / 100} ${currency.toUpperCase()})`,
   )
 }
 
@@ -203,13 +205,13 @@ async function handlePaymentIntentSucceeded(
  */
 async function handlePaymentIntentFailed(
   event: H3Event,
-  paymentIntent: Stripe.PaymentIntent
+  paymentIntent: Stripe.PaymentIntent,
 ): Promise<void> {
   const paymentIntentId = paymentIntent.id
   const failureMessage = paymentIntent.last_payment_error?.message || 'Unknown error'
 
   console.log(
-    `[Stripe Webhook] Payment failed: ${paymentIntentId} - ${failureMessage}`
+    `[Stripe Webhook] Payment failed: ${paymentIntentId} - ${failureMessage}`,
   )
 
   // Get Supabase service role client (bypasses RLS for webhook operations)
@@ -225,7 +227,7 @@ async function handlePaymentIntentFailed(
   if (fetchError || !order) {
     console.error(
       `[Stripe Webhook] Order not found for payment intent ${paymentIntentId}:`,
-      fetchError
+      fetchError,
     )
     // Throw error to trigger Stripe retry - order might not exist yet (race condition)
     throw new Error(`Order not found for payment intent ${paymentIntentId}`)
@@ -234,7 +236,7 @@ async function handlePaymentIntentFailed(
   // Check if already marked as failed (idempotency)
   if (order.payment_status === 'failed') {
     console.log(
-      `[Stripe Webhook] Order ${order.order_number} already marked as failed (idempotent)`
+      `[Stripe Webhook] Order ${order.order_number} already marked as failed (idempotent)`,
     )
     return
   }
@@ -251,13 +253,13 @@ async function handlePaymentIntentFailed(
   if (updateError) {
     console.error(
       `[Stripe Webhook] Failed to update order ${order.order_number}:`,
-      updateError
+      updateError,
     )
     throw new Error(`Failed to update order payment status: ${updateError.message}`)
   }
 
   console.log(
-    `[Stripe Webhook] Order ${order.order_number} marked as failed - Reason: ${failureMessage}`
+    `[Stripe Webhook] Order ${order.order_number} marked as failed - Reason: ${failureMessage}`,
   )
 }
 
@@ -267,7 +269,7 @@ async function handlePaymentIntentFailed(
  */
 async function handleChargeRefunded(
   event: H3Event,
-  charge: Stripe.Charge
+  charge: Stripe.Charge,
 ): Promise<void> {
   const chargeId = charge.id
   const paymentIntentId = charge.payment_intent as string
@@ -275,7 +277,7 @@ async function handleChargeRefunded(
   const currency = charge.currency
 
   console.log(
-    `[Stripe Webhook] Charge refunded: ${chargeId} - ${amountRefunded / 100} ${currency.toUpperCase()}`
+    `[Stripe Webhook] Charge refunded: ${chargeId} - ${amountRefunded / 100} ${currency.toUpperCase()}`,
   )
 
   if (!paymentIntentId) {
@@ -296,7 +298,7 @@ async function handleChargeRefunded(
   if (fetchError || !order) {
     console.error(
       `[Stripe Webhook] Order not found for payment intent ${paymentIntentId}:`,
-      fetchError
+      fetchError,
     )
     // Throw error to trigger Stripe retry - order might not exist yet (race condition)
     throw new Error(`Order not found for payment intent ${paymentIntentId}`)
@@ -305,7 +307,7 @@ async function handleChargeRefunded(
   // Check if already marked as refunded (idempotency)
   if (order.payment_status === 'refunded') {
     console.log(
-      `[Stripe Webhook] Order ${order.order_number} already marked as refunded (idempotent)`
+      `[Stripe Webhook] Order ${order.order_number} already marked as refunded (idempotent)`,
     )
     return
   }
@@ -326,14 +328,14 @@ async function handleChargeRefunded(
   if (updateError) {
     console.error(
       `[Stripe Webhook] Failed to update order ${order.order_number}:`,
-      updateError
+      updateError,
     )
     throw new Error(`Failed to update order payment status: ${updateError.message}`)
   }
 
   const refundType = fullRefund ? 'Full' : 'Partial'
   console.log(
-    `[Stripe Webhook] ${refundType} refund processed for order ${order.order_number}: ` +
-      `${amountRefunded / 100} ${currency.toUpperCase()} - Status: ${refundStatus}`
+    `[Stripe Webhook] ${refundType} refund processed for order ${order.order_number}: `
+    + `${amountRefunded / 100} ${currency.toUpperCase()} - Status: ${refundStatus}`,
   )
 }

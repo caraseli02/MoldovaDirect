@@ -1,9 +1,16 @@
 <template>
   <div class="payment-form">
     <!-- Cash Payment Form -->
-    <div v-if="modelValue.type === 'cash'" class="space-y-4">
+    <div
+      v-if="modelValue.type === 'cash'"
+      class="space-y-4"
+    >
       <div class="text-center py-8">
-        <commonIcon name="lucide:banknote" class="h-16 w-16 text-green-600 mx-auto mb-4" aria-hidden="true" />
+        <commonIcon
+          name="lucide:banknote"
+          class="h-16 w-16 text-green-600 mx-auto mb-4"
+          aria-hidden="true"
+        />
         <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
           {{ $t('checkout.payment.cash.title') }}
         </h3>
@@ -13,35 +20,68 @@
       </div>
 
       <!-- Cash Payment Instructions -->
-      <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-6" role="region" aria-labelledby="cash-instructions-title">
-        <h4 id="cash-instructions-title" class="text-md font-semibold text-green-900 dark:text-green-100 mb-4">
+      <div
+        class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-6"
+        role="region"
+        aria-labelledby="cash-instructions-title"
+      >
+        <h4
+          id="cash-instructions-title"
+          class="text-md font-semibold text-green-900 dark:text-green-100 mb-4"
+        >
           {{ $t('checkout.payment.cashInstructions') }}
         </h4>
 
-        <ul class="space-y-3 text-sm text-green-800 dark:text-green-200" role="list">
+        <ul
+          class="space-y-3 text-sm text-green-800 dark:text-green-200"
+          role="list"
+        >
           <li class="flex items-start space-x-2">
-            <commonIcon name="lucide:check-circle-2" class="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" aria-hidden="true" />
+            <commonIcon
+              name="lucide:check-circle-2"
+              class="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0"
+              aria-hidden="true"
+            />
             <span>{{ $t('checkout.payment.cashInstruction1') }}</span>
           </li>
           <li class="flex items-start space-x-2">
-            <commonIcon name="lucide:check-circle-2" class="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" aria-hidden="true" />
+            <commonIcon
+              name="lucide:check-circle-2"
+              class="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0"
+              aria-hidden="true"
+            />
             <span>{{ $t('checkout.payment.cashInstruction2') }}</span>
           </li>
           <li class="flex items-start space-x-2">
-            <commonIcon name="lucide:check-circle-2" class="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" aria-hidden="true" />
+            <commonIcon
+              name="lucide:check-circle-2"
+              class="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0"
+              aria-hidden="true"
+            />
             <span>{{ $t('checkout.payment.cashInstruction3') }}</span>
           </li>
           <li class="flex items-start space-x-2">
-            <commonIcon name="lucide:check-circle-2" class="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" aria-hidden="true" />
+            <commonIcon
+              name="lucide:check-circle-2"
+              class="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0"
+              aria-hidden="true"
+            />
             <span>{{ $t('checkout.payment.cashInstruction4') }}</span>
           </li>
         </ul>
       </div>
 
       <!-- Contact Information Notice -->
-      <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4" role="status">
+      <div
+        class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4"
+        role="status"
+      >
         <div class="flex">
-          <commonIcon name="lucide:info" class="h-5 w-5 text-blue-400 mr-2 mt-0.5" aria-hidden="true" />
+          <commonIcon
+            name="lucide:info"
+            class="h-5 w-5 text-blue-400 mr-2 mt-0.5"
+            aria-hidden="true"
+          />
           <div>
             <h3 class="text-sm font-medium text-blue-800 dark:text-blue-200">
               {{ $t('checkout.payment.contactNoticeTitle') }}
@@ -55,11 +95,17 @@
     </div>
 
     <!-- Credit Card Form (Disabled) -->
-    <div v-else-if="modelValue.type === 'credit_card'" class="space-y-4">
+    <div
+      v-else-if="modelValue.type === 'credit_card'"
+      class="space-y-4"
+    >
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <!-- Card Number -->
         <div class="md:col-span-2">
-          <UiLabel for="card-number" class="mb-1">
+          <UiLabel
+            for="card-number"
+            class="mb-1"
+          >
             {{ $t('checkout.payment.cardNumber') }}
           </UiLabel>
           <div class="relative">
@@ -76,18 +122,33 @@
               @input="formatCardNumber"
               @blur="validateCardNumber"
             />
-            <div v-if="cardBrand" class="absolute inset-y-0 right-0 pr-3 flex items-center" aria-hidden="true">
-              <commonIcon :name="getCardBrandIcon(cardBrand)" class="h-6 w-6" />
+            <div
+              v-if="cardBrand"
+              class="absolute inset-y-0 right-0 pr-3 flex items-center"
+              aria-hidden="true"
+            >
+              <commonIcon
+                :name="getCardBrandIcon(cardBrand)"
+                class="h-6 w-6"
+              />
             </div>
           </div>
-          <p v-if="hasError('cardNumber')" id="card-number-error" class="mt-1 text-sm text-destructive" role="alert">
+          <p
+            v-if="hasError('cardNumber')"
+            id="card-number-error"
+            class="mt-1 text-sm text-destructive"
+            role="alert"
+          >
             {{ getError('cardNumber') }}
           </p>
         </div>
 
         <!-- Expiry Date -->
         <div>
-          <UiLabel for="expiry-date" class="mb-1">
+          <UiLabel
+            for="expiry-date"
+            class="mb-1"
+          >
             {{ $t('checkout.payment.expiryDate') }}
           </UiLabel>
           <UiInput
@@ -102,14 +163,22 @@
             @input="formatExpiry"
             @blur="validateExpiry"
           />
-          <p v-if="hasError('expiry')" id="expiry-error" class="mt-1 text-sm text-destructive" role="alert">
+          <p
+            v-if="hasError('expiry')"
+            id="expiry-error"
+            class="mt-1 text-sm text-destructive"
+            role="alert"
+          >
             {{ getError('expiry') }}
           </p>
         </div>
 
         <!-- CVV -->
         <div>
-          <UiLabel for="cvv" class="mb-1">
+          <UiLabel
+            for="cvv"
+            class="mb-1"
+          >
             {{ $t('checkout.payment.cvv') }}
           </UiLabel>
           <div class="relative">
@@ -134,13 +203,27 @@
               class="absolute inset-y-0 right-0 pr-3 min-w-[44px] min-h-[44px]"
               @click="showCVVHelp = !showCVVHelp"
             >
-              <commonIcon name="lucide:circle-help" class="h-5 w-5 text-gray-400 hover:text-gray-500" aria-hidden="true" />
+              <commonIcon
+                name="lucide:circle-help"
+                class="h-5 w-5 text-gray-400 hover:text-gray-500"
+                aria-hidden="true"
+              />
             </Button>
           </div>
-          <p v-if="hasError('cvv')" id="cvv-error" class="mt-1 text-sm text-destructive" role="alert">
+          <p
+            v-if="hasError('cvv')"
+            id="cvv-error"
+            class="mt-1 text-sm text-destructive"
+            role="alert"
+          >
             {{ getError('cvv') }}
           </p>
-          <div v-if="showCVVHelp" id="cvv-help" class="mt-2 p-3 bg-gray-50 dark:bg-gray-800 rounded-md" role="region">
+          <div
+            v-if="showCVVHelp"
+            id="cvv-help"
+            class="mt-2 p-3 bg-gray-50 dark:bg-gray-800 rounded-md"
+            role="region"
+          >
             <p class="text-sm text-muted-foreground">
               {{ $t('checkout.payment.cvvHelp') }}
             </p>
@@ -149,7 +232,10 @@
 
         <!-- Cardholder Name -->
         <div class="md:col-span-2">
-          <UiLabel for="cardholder-name" class="mb-1">
+          <UiLabel
+            for="cardholder-name"
+            class="mb-1"
+          >
             {{ $t('checkout.payment.cardholderName') }}
           </UiLabel>
           <UiInput
@@ -163,16 +249,28 @@
             @blur="validateHolderName"
             @input="(e:any) => { creditCardData.holderName = e.target.value; updatePaymentMethod() }"
           />
-          <p v-if="hasError('holderName')" id="holder-name-error" class="mt-1 text-sm text-destructive" role="alert">
+          <p
+            v-if="hasError('holderName')"
+            id="holder-name-error"
+            class="mt-1 text-sm text-destructive"
+            role="alert"
+          >
             {{ getError('holderName') }}
           </p>
         </div>
       </div>
 
       <!-- Security Notice -->
-      <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4" role="status">
+      <div
+        class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4"
+        role="status"
+      >
         <div class="flex">
-          <commonIcon name="lucide:shield-check" class="h-5 w-5 text-green-400 mr-2 mt-0.5" aria-hidden="true" />
+          <commonIcon
+            name="lucide:shield-check"
+            class="h-5 w-5 text-green-400 mr-2 mt-0.5"
+            aria-hidden="true"
+          />
           <div>
             <h3 class="text-sm font-medium text-green-800 dark:text-green-200">
               {{ $t('checkout.payment.securePayment') }}
@@ -186,9 +284,16 @@
     </div>
 
     <!-- PayPal Form -->
-    <div v-else-if="modelValue.type === 'paypal'" class="space-y-4">
+    <div
+      v-else-if="modelValue.type === 'paypal'"
+      class="space-y-4"
+    >
       <div class="text-center py-8">
-        <commonIcon name="lucide:badge-dollar-sign" class="h-16 w-16 text-blue-600 mx-auto mb-4" aria-hidden="true" />
+        <commonIcon
+          name="lucide:badge-dollar-sign"
+          class="h-16 w-16 text-blue-600 mx-auto mb-4"
+          aria-hidden="true"
+        />
         <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
           {{ $t('checkout.payment.paypal.title') }}
         </h3>
@@ -198,7 +303,10 @@
 
         <!-- PayPal Email (optional for display) -->
         <div class="max-w-md mx-auto">
-          <UiLabel for="paypal-email" class="mb-1">
+          <UiLabel
+            for="paypal-email"
+            class="mb-1"
+          >
             {{ $t('checkout.payment.paypalEmail') }}
           </UiLabel>
           <UiInput
@@ -212,16 +320,28 @@
             @input="(e:any) => { paypalData.email = e.target.value; updatePaymentMethod() }"
             @blur="validatePayPalEmail"
           />
-          <p v-if="hasError('paypalEmail')" id="paypal-email-error" class="mt-1 text-sm text-destructive" role="alert">
+          <p
+            v-if="hasError('paypalEmail')"
+            id="paypal-email-error"
+            class="mt-1 text-sm text-destructive"
+            role="alert"
+          >
             {{ getError('paypalEmail') }}
           </p>
         </div>
       </div>
 
       <!-- PayPal Notice -->
-      <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4" role="status">
+      <div
+        class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4"
+        role="status"
+      >
         <div class="flex">
-          <commonIcon name="lucide:info" class="h-5 w-5 text-blue-400 mr-2 mt-0.5" aria-hidden="true" />
+          <commonIcon
+            name="lucide:info"
+            class="h-5 w-5 text-blue-400 mr-2 mt-0.5"
+            aria-hidden="true"
+          />
           <div>
             <h3 class="text-sm font-medium text-blue-800 dark:text-blue-200">
               {{ $t('checkout.payment.paypalNoticeTitle') }}
@@ -235,9 +355,16 @@
     </div>
 
     <!-- Bank Transfer Form -->
-    <div v-else-if="modelValue.type === 'bank_transfer'" class="space-y-4">
+    <div
+      v-else-if="modelValue.type === 'bank_transfer'"
+      class="space-y-4"
+    >
       <div class="text-center py-8">
-        <commonIcon name="lucide:building-2" class="h-16 w-16 text-gray-600 dark:text-gray-400 mx-auto mb-4" aria-hidden="true" />
+        <commonIcon
+          name="lucide:building-2"
+          class="h-16 w-16 text-gray-600 dark:text-gray-400 mx-auto mb-4"
+          aria-hidden="true"
+        />
         <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
           {{ $t('checkout.payment.bankTransfer.title') }}
         </h3>
@@ -307,20 +434,34 @@
           class="mt-4 w-full inline-flex justify-center items-center min-h-[44px] focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
           @click="copyBankDetails"
         >
-          <commonIcon name="lucide:clipboard-list" class="h-4 w-4 mr-2" aria-hidden="true" />
+          <commonIcon
+            name="lucide:clipboard-list"
+            class="h-4 w-4 mr-2"
+            aria-hidden="true"
+          />
           {{ $t('checkout.payment.copyDetails') }}
         </Button>
       </div>
 
       <!-- Bank Transfer Instructions -->
-      <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4" role="alert">
+      <div
+        class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4"
+        role="alert"
+      >
         <div class="flex">
-          <commonIcon name="lucide:alert-triangle" class="h-5 w-5 text-yellow-400 mr-2 mt-0.5" aria-hidden="true" />
+          <commonIcon
+            name="lucide:alert-triangle"
+            class="h-5 w-5 text-yellow-400 mr-2 mt-0.5"
+            aria-hidden="true"
+          />
           <div>
             <h3 class="text-sm font-medium text-yellow-800 dark:text-yellow-200">
               {{ $t('checkout.payment.bankTransferInstructions') }}
             </h3>
-            <ul class="text-sm text-yellow-700 dark:text-yellow-300 mt-1 list-disc list-inside space-y-1" role="list">
+            <ul
+              class="text-sm text-yellow-700 dark:text-yellow-300 mt-1 list-disc list-inside space-y-1"
+              role="list"
+            >
               <li>{{ $t('checkout.payment.bankInstruction1') }}</li>
               <li>{{ $t('checkout.payment.bankInstruction2') }}</li>
               <li>{{ $t('checkout.payment.bankInstruction3') }}</li>
@@ -354,7 +495,7 @@ interface Emits {
 
 const props = withDefaults(defineProps<Props>(), {
   loading: false,
-  errors: () => ({})
+  errors: () => ({}),
 })
 
 const emit = defineEmits<Emits>()
@@ -379,11 +520,11 @@ const creditCardData = ref({
   expiryMonth: '',
   expiryYear: '',
   cvv: '',
-  holderName: ''
+  holderName: '',
 })
 
 const paypalData = ref({
-  email: ''
+  email: '',
 })
 
 const expiryDisplay = ref('')
@@ -410,7 +551,7 @@ const getError = (field: string): string => {
 
 const formatCardNumber = (event: Event) => {
   const input = event.target as HTMLInputElement
-  let value = input.value.replace(/\s/g, '').replace(/[^0-9]/gi, '')
+  const value = input.value.replace(/\s/g, '').replace(/[^0-9]/gi, '')
 
   // Detect card brand
   cardBrand.value = detectCardBrand(value)
@@ -458,7 +599,7 @@ const detectCardBrand = (number: string): string => {
     amex: /^3[47]/,
     discover: /^6(?:011|5)/,
     diners: /^3[0689]/,
-    jcb: /^35/
+    jcb: /^35/,
   }
 
   for (const [brand, pattern] of Object.entries(patterns)) {
@@ -477,11 +618,14 @@ const validateCardNumber = () => {
 
   if (!number) {
     validationErrors.value.cardNumber = 'Card number is required'
-  } else if (!/^\d{13,19}$/.test(number)) {
+  }
+  else if (!/^\d{13,19}$/.test(number)) {
     validationErrors.value.cardNumber = 'Invalid card number'
-  } else if (!luhnCheck(number)) {
+  }
+  else if (!luhnCheck(number)) {
     validationErrors.value.cardNumber = 'Invalid card number'
-  } else {
+  }
+  else {
     delete validationErrors.value.cardNumber
   }
 }
@@ -492,16 +636,19 @@ const validateExpiry = () => {
 
   if (!month || !year) {
     validationErrors.value.expiry = 'Expiry date is required'
-  } else if (month < 1 || month > 12) {
+  }
+  else if (month < 1 || month > 12) {
     validationErrors.value.expiry = 'Invalid month'
-  } else {
+  }
+  else {
     const currentDate = new Date()
     const currentYear = currentDate.getFullYear() % 100
     const currentMonth = currentDate.getMonth() + 1
 
     if (year < currentYear || (year === currentYear && month < currentMonth)) {
       validationErrors.value.expiry = 'Card has expired'
-    } else {
+    }
+    else {
       delete validationErrors.value.expiry
     }
   }
@@ -513,11 +660,14 @@ const validateCVV = () => {
 
   if (!cvv) {
     validationErrors.value.cvv = 'CVV is required'
-  } else if (!/^\d+$/.test(cvv)) {
+  }
+  else if (!/^\d+$/.test(cvv)) {
     validationErrors.value.cvv = 'CVV must be numeric'
-  } else if (cvv.length !== expectedLength) {
+  }
+  else if (cvv.length !== expectedLength) {
     validationErrors.value.cvv = `CVV must be ${expectedLength} digits`
-  } else {
+  }
+  else {
     delete validationErrors.value.cvv
   }
 }
@@ -527,9 +677,11 @@ const validateHolderName = () => {
 
   if (!name) {
     validationErrors.value.holderName = 'Cardholder name is required'
-  } else if (name.length < 2) {
+  }
+  else if (name.length < 2) {
     validationErrors.value.holderName = 'Name is too short'
-  } else {
+  }
+  else {
     delete validationErrors.value.holderName
   }
 }
@@ -540,9 +692,11 @@ const validatePayPalEmail = () => {
 
   if (!email) {
     validationErrors.value.paypalEmail = 'PayPal email is required'
-  } else if (!emailRegex.test(email)) {
+  }
+  else if (!emailRegex.test(email)) {
     validationErrors.value.paypalEmail = 'Invalid email address'
-  } else {
+  }
+  else {
     delete validationErrors.value.paypalEmail
   }
 }
@@ -580,26 +734,30 @@ Reference: ${bankTransferReference.value}
   try {
     await navigator.clipboard.writeText(details)
     toast.success('Bank details copied to clipboard')
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Failed to copy bank details:', error)
     toast.error('Failed to copy bank details')
   }
 }
 
 const updatePaymentMethod = () => {
-  let updatedMethod: PaymentMethod = { ...props.modelValue }
+  const updatedMethod: PaymentMethod = { ...props.modelValue }
 
   if (props.modelValue.type === 'cash') {
     updatedMethod.cash = {
-      confirmed: true
+      confirmed: true,
     }
-  } else if (props.modelValue.type === 'credit_card') {
+  }
+  else if (props.modelValue.type === 'credit_card') {
     updatedMethod.creditCard = { ...creditCardData.value }
-  } else if (props.modelValue.type === 'paypal') {
+  }
+  else if (props.modelValue.type === 'paypal') {
     updatedMethod.paypal = { ...paypalData.value }
-  } else if (props.modelValue.type === 'bank_transfer') {
+  }
+  else if (props.modelValue.type === 'bank_transfer') {
     updatedMethod.bankTransfer = {
-      reference: bankTransferReference.value
+      reference: bankTransferReference.value,
     }
   }
 
@@ -614,17 +772,17 @@ const updatePaymentMethod = () => {
 watch(() => props.modelValue, (newMethod) => {
   if (newMethod.type === 'cash') {
     // Cash payment is ready immediately - no need to update
-  } else if (newMethod.type === 'credit_card' && newMethod.creditCard) {
+  }
+  else if (newMethod.type === 'credit_card' && newMethod.creditCard) {
     // Only update if different to avoid triggering updates
     const currentNumber = creditCardData.value.number.replace(/\s/g, '')
     const newNumber = newMethod.creditCard.number.replace(/\s/g, '')
 
-    if (currentNumber !== newNumber ||
-      creditCardData.value.expiryMonth !== newMethod.creditCard.expiryMonth ||
-      creditCardData.value.expiryYear !== newMethod.creditCard.expiryYear ||
-      creditCardData.value.cvv !== newMethod.creditCard.cvv ||
-      creditCardData.value.holderName !== newMethod.creditCard.holderName) {
-
+    if (currentNumber !== newNumber
+      || creditCardData.value.expiryMonth !== newMethod.creditCard.expiryMonth
+      || creditCardData.value.expiryYear !== newMethod.creditCard.expiryYear
+      || creditCardData.value.cvv !== newMethod.creditCard.cvv
+      || creditCardData.value.holderName !== newMethod.creditCard.holderName) {
       creditCardData.value = { ...newMethod.creditCard }
 
       // Update expiry display
@@ -635,7 +793,8 @@ watch(() => props.modelValue, (newMethod) => {
       // Detect card brand
       cardBrand.value = detectCardBrand(newNumber)
     }
-  } else if (newMethod.type === 'paypal' && newMethod.paypal) {
+  }
+  else if (newMethod.type === 'paypal' && newMethod.paypal) {
     if (paypalData.value.email !== newMethod.paypal.email) {
       paypalData.value = { ...newMethod.paypal }
     }

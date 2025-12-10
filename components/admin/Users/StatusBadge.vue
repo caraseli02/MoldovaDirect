@@ -1,6 +1,6 @@
 <!--
   User Status Badge Component
-  
+
   Displays user status with appropriate styling and verification indicators
   Mobile-optimized with touch-friendly sizing
 -->
@@ -12,7 +12,7 @@
       :class="[
         'inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full',
         statusClasses,
-        sizeClasses
+        sizeClasses,
       ]"
     >
       <commonIcon
@@ -23,13 +23,13 @@
       />
       {{ statusText }}
     </span>
-    
+
     <!-- Email Verification Badge -->
     <span
       v-if="!user.email_confirmed_at"
       :class="[
         'inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300',
-        sizeClasses
+        sizeClasses,
       ]"
     >
       <commonIcon
@@ -39,13 +39,13 @@
       />
       {{ $t('admin.users.status.unverified') }}
     </span>
-    
+
     <!-- Account Locked Badge -->
     <span
       v-if="user.locked_until && new Date(user.locked_until) > new Date()"
       :class="[
         'inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300',
-        sizeClasses
+        sizeClasses,
       ]"
     >
       <commonIcon
@@ -72,7 +72,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  size: 'md'
+  size: 'md',
 })
 
 const { t } = useI18n()
@@ -83,29 +83,29 @@ const userStatus = computed(() => {
   if (props.user.locked_until && new Date(props.user.locked_until) > new Date()) {
     return 'locked'
   }
-  
+
   if (!props.user.email_confirmed_at) {
     return 'unverified'
   }
-  
+
   if (props.user.status) {
     return props.user.status
   }
-  
+
   // Determine based on activity
   const lastLogin = props.user.last_sign_in_at
   if (!lastLogin) {
     return 'inactive'
   }
-  
+
   const daysSinceLogin = Math.floor(
-    (Date.now() - new Date(lastLogin).getTime()) / (1000 * 60 * 60 * 24)
+    (Date.now() - new Date(lastLogin).getTime()) / (1000 * 60 * 60 * 24),
   )
-  
+
   if (daysSinceLogin > 90) {
     return 'inactive'
   }
-  
+
   return 'active'
 })
 
@@ -115,7 +115,7 @@ const statusClasses = computed(() => {
     inactive: 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300',
     suspended: 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300',
     locked: 'bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300',
-    unverified: 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300'
+    unverified: 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300',
   }
   return classes[userStatus.value] || classes.inactive
 })
@@ -130,7 +130,7 @@ const statusIcon = computed(() => {
     inactive: 'lucide:clock',
     suspended: 'lucide:ban',
     locked: 'lucide:lock',
-    unverified: 'lucide:alert-triangle'
+    unverified: 'lucide:alert-triangle',
   }
   return icons[userStatus.value]
 })

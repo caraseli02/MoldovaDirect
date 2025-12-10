@@ -7,9 +7,95 @@ import { serverSupabaseServiceRole } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
 import { ADMIN_CACHE_CONFIG, getAdminCacheKey } from '~/server/utils/adminCache'
 import { prepareSearchPattern } from '~/server/utils/searchSanitization'
+import type { OrderItemRaw, Address } from '~/types/database'
+
+// Database response types
+interface OrderFromDB {
+  id: number
+  order_number: string
+  user_id: string | null
+  guest_email: string | null
+  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
+  payment_method: 'stripe' | 'paypal' | 'cod'
+  payment_status: 'pending' | 'paid' | 'failed' | 'refunded'
+  subtotal_eur: number
+  shipping_cost_eur: number
+  tax_eur: number
+  total_eur: number
+  shipping_address: Address
+  billing_address: Address
+  customer_notes: string | null
+  admin_notes: string | null
+  tracking_number: string | null
+  carrier: string | null
+  priority_level: number | null
+  estimated_ship_date: string | null
+  fulfillment_progress: number | null
+  created_at: string
+  shipped_at: string | null
+  delivered_at: string | null
+  order_items?: OrderItemRaw[]
+}
+
+interface AggregateOrderFromDB {
+  total_eur: number
+  status: string
+}
+
+interface TransformedOrder {
+  id: number
+  order_number: string
+  user_id: string | null
+  guest_email: string | null
+  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
+  payment_method: 'stripe' | 'paypal' | 'cod'
+  payment_status: 'pending' | 'paid' | 'failed' | 'refunded'
+  subtotal_eur: number
+  shipping_cost_eur: number
+  tax_eur: number
+  total_eur: number
+  shipping_address: Address
+  billing_address: Address
+  customer_notes: string | null
+  admin_notes: string | null
+  tracking_number: string | null
+  carrier: string | null
+  priority_level: number | null
+  estimated_ship_date: string | null
+  fulfillment_progress: number | null
+  created_at: string
+  shipped_at: string | null
+  delivered_at: string | null
+  order_items?: OrderItemRaw[]
+  customerName: string
+  customerEmail: string
+  itemCount: number
+  daysSinceOrder: number
+  items: OrderItemRaw[]
+}
+
+interface ApiResponse {
+  success: boolean
+  data: {
+    orders: TransformedOrder[]
+    pagination: {
+      page: number
+      limit: number
+      total: number
+      totalPages: number
+      hasNext: boolean
+      hasPrev: boolean
+    }
+    aggregates: {
+      totalRevenue: number
+      averageOrderValue: number
+      statusCounts: Record<string, number>
+    }
+  }
+}
 
 // NOTE: Caching disabled for admin endpoints to ensure proper header-based authentication
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async (event): Promise<ApiResponse> => {
   // Authentication MUST happen first, never caught
   await requireAdminRole(event)
 
@@ -40,7 +126,6 @@ export default defineEventHandler(async (event) => {
   const finalSortOrder = validSortOrders.includes(sortOrder) ? sortOrder : 'desc'
 
   try {
-
     // Build query - simplified without profiles join since orders are guest orders
     let ordersQuery = supabase
       .from('orders')
@@ -118,20 +203,20 @@ export default defineEventHandler(async (event) => {
       ordersQuery = ordersQuery.eq('shipping_method', shippingMethod)
     }
 
-    const { data: orders, error: ordersError } = await ordersQuery
+    const { data: orders, error: ordersError } = await ordersQuery as { data: OrderFromDB[] | null, error: any }
 
     if (ordersError) {
       console.error('[Admin Orders] Query failed:', {
         error: ordersError.message,
         code: ordersError.code,
         timestamp: new Date().toISOString(),
-        errorId: 'ADMIN_ORDERS_FETCH_FAILED'
+        errorId: 'ADMIN_ORDERS_FETCH_FAILED',
       })
 
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to fetch orders',
-        data: { canRetry: true }
+        data: { canRetry: true },
       })
     }
 
@@ -178,39 +263,39 @@ export default defineEventHandler(async (event) => {
         error: countError.message,
         code: countError.code,
         timestamp: new Date().toISOString(),
-        errorId: 'ADMIN_ORDERS_COUNT_FAILED'
+        errorId: 'ADMIN_ORDERS_COUNT_FAILED',
       })
 
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to count orders',
-        data: { canRetry: true }
+        data: { canRetry: true },
       })
     }
 
     // Calculate aggregates
     const { data: aggregateData, error: aggregateError } = await supabase
       .from('orders')
-      .select('total_eur, status')
+      .select('total_eur, status') as { data: AggregateOrderFromDB[] | null, error: any }
 
     if (aggregateError) {
       console.error('[Admin Orders] Aggregate query failed:', {
         error: aggregateError.message,
         code: aggregateError.code,
         timestamp: new Date().toISOString(),
-        errorId: 'ADMIN_ORDERS_AGGREGATE_FAILED'
+        errorId: 'ADMIN_ORDERS_AGGREGATE_FAILED',
       })
 
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to calculate order statistics',
-        data: { canRetry: true }
+        data: { canRetry: true },
       })
     }
 
     const totalRevenue = aggregateData?.reduce((sum, order) => sum + Number(order.total_eur), 0) || 0
-    const averageOrderValue = aggregateData && aggregateData.length > 0 
-      ? totalRevenue / aggregateData.length 
+    const averageOrderValue = aggregateData && aggregateData.length > 0
+      ? totalRevenue / aggregateData.length
       : 0
 
     const statusCounts = aggregateData?.reduce((acc, order) => {
@@ -219,7 +304,7 @@ export default defineEventHandler(async (event) => {
     }, {} as Record<string, number>) || {}
 
     // Transform orders to include computed fields
-    const transformedOrders = orders?.map(order => {
+    const transformedOrders: TransformedOrder[] = orders?.map((order): TransformedOrder => {
       const orderDate = new Date(order.created_at)
       const now = new Date()
       const diffTime = Math.abs(now.getTime() - orderDate.getTime())
@@ -231,7 +316,7 @@ export default defineEventHandler(async (event) => {
         customerEmail: order.guest_email || 'N/A',
         itemCount: order.order_items?.length || 0,
         daysSinceOrder,
-        items: order.order_items || []
+        items: order.order_items || [],
       }
     }) || []
 
@@ -245,16 +330,17 @@ export default defineEventHandler(async (event) => {
           total: count || 0,
           totalPages: Math.ceil((count || 0) / limit),
           hasNext: page < Math.ceil((count || 0) / limit),
-          hasPrev: page > 1
+          hasPrev: page > 1,
         },
         aggregates: {
           totalRevenue,
           averageOrderValue,
-          statusCounts
-        }
-      }
+          statusCounts,
+        },
+      },
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     // Re-throw HTTP errors (including auth errors)
     if (error.statusCode) {
       throw error
@@ -265,14 +351,14 @@ export default defineEventHandler(async (event) => {
       error: error.message || String(error),
       stack: error.stack,
       timestamp: new Date().toISOString(),
-      errorId: 'ADMIN_ORDERS_UNEXPECTED_ERROR'
+      errorId: 'ADMIN_ORDERS_UNEXPECTED_ERROR',
     })
 
     // Throw generic 500 error for unexpected failures
     throw createError({
       statusCode: 500,
       statusMessage: 'An unexpected error occurred while fetching orders',
-      data: { canRetry: true }
+      data: { canRetry: true },
     })
   }
 })
