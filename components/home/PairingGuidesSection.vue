@@ -252,7 +252,6 @@ const openPairingModal = (pairing: PairingGuide) => {
   selectedPairing.value = pairing
   isModalOpen.value = true
   // Modal component to be implemented in future
-  console.log('Opening pairing:', pairing.slug)
 }
 </script>
 

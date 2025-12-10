@@ -292,7 +292,7 @@ const emit = defineEmits<Emits>()
 // Composables
 const { isMobile } = useDevice()
 const { vibrate } = useHapticFeedback()
-const { t } = useI18n()
+const { t: _t } = useI18n()
 
 // Template refs
 const priceInput = ref<HTMLInputElement>()

@@ -3,8 +3,6 @@
  * Templates for customer confirmation and staff notification emails
  */
 
-import { formatCurrency, formatDate } from './formatters'
-
 interface SupportTicketData {
   ticketNumber: string
   customerName: string

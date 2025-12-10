@@ -125,8 +125,6 @@ export const useOrderTracking = (): UseOrderTrackingReturn => {
 
       // Show notification
       showOrderUpdateNotification(update)
-
-      console.log('Order status updated:', update)
     }
     catch (err) {
       console.error('Error handling order update:', err)
@@ -238,8 +236,6 @@ export const useOrderTracking = (): UseOrderTrackingReturn => {
         await unsubscribeFromOrderUpdates()
       }
 
-      console.log('Setting up real-time subscription for user:', userId)
-
       // Create new channel for order updates
       orderChannel = supabaseClient
         .channel(`order-updates-${userId}`)
@@ -254,13 +250,10 @@ export const useOrderTracking = (): UseOrderTrackingReturn => {
           handleOrderUpdate,
         )
         .subscribe((status) => {
-          console.log('Subscription status:', status)
-
           if (status === 'SUBSCRIBED') {
             isConnected.value = true
             connectionError.value = null
             reconnectAttempts = 0
-            console.log('Successfully subscribed to order updates')
           }
           else if (status === 'CHANNEL_ERROR') {
             isConnected.value = false
@@ -274,7 +267,6 @@ export const useOrderTracking = (): UseOrderTrackingReturn => {
           }
           else if (status === 'CLOSED') {
             isConnected.value = false
-            console.log('Subscription closed')
           }
         })
     }
@@ -298,10 +290,6 @@ export const useOrderTracking = (): UseOrderTrackingReturn => {
     reconnectAttempts++
     const delay = RECONNECT_DELAY * Math.pow(2, reconnectAttempts - 1)
 
-    console.log(
-      `Attempting to reconnect (${reconnectAttempts}/${MAX_RECONNECT_ATTEMPTS}) in ${delay}ms`,
-    )
-
     setTimeout(() => {
       subscribeToOrderUpdates(userId)
     }, delay)
@@ -312,7 +300,6 @@ export const useOrderTracking = (): UseOrderTrackingReturn => {
    */
   const unsubscribeFromOrderUpdates = () => {
     if (orderChannel) {
-      console.log('Unsubscribing from order updates')
       supabaseClient.removeChannel(orderChannel)
       orderChannel = null
       isConnected.value = false

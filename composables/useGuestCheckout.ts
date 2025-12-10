@@ -76,7 +76,8 @@ export function useGuestCheckout() {
    */
   const clearGuestFieldError = (field: string) => {
     if (guestErrors.value[field]) {
-      delete guestErrors.value[field]
+      const { [field]: _removed, ...rest } = guestErrors.value
+      guestErrors.value = rest
     }
   }
 

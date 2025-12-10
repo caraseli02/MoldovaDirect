@@ -107,7 +107,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, nextTick } from 'vue'
+import { ref, watch, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useHapticFeedback } from '~/composables/useHapticFeedback'
 import commonIcon from '~/components/common/Icon.vue'

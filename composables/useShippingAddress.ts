@@ -16,7 +16,7 @@ import { addressFromEntity } from '~/types/address'
 
 export function useShippingAddress() {
   const user = useSupabaseUser()
-  const checkoutStore = useCheckoutStore()
+  const _checkoutStore = useCheckoutStore()
 
   // Development defaults for easier testing
   const isDevelopment = process.env.NODE_ENV === 'development'

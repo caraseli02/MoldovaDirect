@@ -8,7 +8,9 @@ const SCREENSHOTS_DIR = './visual-regression-screenshots/checkout-test'
 try {
   mkdirSync(SCREENSHOTS_DIR, { recursive: true })
 }
-catch (e) {}
+catch (_e) {
+  // Suppress errors
+}
 
 async function testCheckoutFlow() {
   const browser = await chromium.launch({ headless: false })

@@ -6,8 +6,6 @@
 
 import type {
   EmailLog,
-  EmailType,
-  EmailStatus,
   CreateEmailLogInput,
   UpdateEmailLogInput,
   EmailLogFilters,
@@ -15,7 +13,7 @@ import type {
   EmailDeliveryStats,
   EmailRetryConfig,
 } from '~/types/email'
-import { DEFAULT_EMAIL_RETRY_CONFIG, calculateRetryDelay, shouldRetryEmail } from '~/types/email'
+import { DEFAULT_EMAIL_RETRY_CONFIG, shouldRetryEmail } from '~/types/email'
 import { resolveSupabaseClient, type ResolvedSupabaseClient } from './supabaseAdminClient'
 
 /**

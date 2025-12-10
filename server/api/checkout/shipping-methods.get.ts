@@ -1,7 +1,7 @@
 export default defineEventHandler(async (event) => {
   try {
     const query = getQuery(event)
-    const { country, postalCode, orderTotal } = query
+    const { country, orderTotal } = query
 
     // Simulate shipping method calculation based on destination
     const shippingMethods = []
@@ -44,7 +44,7 @@ export default defineEventHandler(async (event) => {
       methods: shippingMethods,
     }
   }
-  catch (error) {
+  catch {
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to calculate shipping methods',

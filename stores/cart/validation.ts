@@ -9,8 +9,6 @@ import { ref } from 'vue'
 import type {
   CartValidationState,
   CartValidationActions,
-  ValidationCache,
-  ValidationQueue,
   ValidationResult,
   Product,
   CartItem,
@@ -45,7 +43,8 @@ function getCachedValidation(productId: string): ValidationResult | null {
   const now = Date.now()
   if (now - cached.timestamp > cached.ttl) {
     // Cache expired, remove it
-    delete state.value.validationCache[productId]
+    const { [productId]: _removed, ...rest } = state.value.validationCache
+    state.value.validationCache = rest
     return null
   }
 
@@ -76,7 +75,8 @@ function setCachedValidation(
  */
 function clearValidationCache(productId?: string): void {
   if (productId) {
-    delete state.value.validationCache[productId]
+    const { [productId]: _removed, ...rest } = state.value.validationCache
+    state.value.validationCache = rest
   }
   else {
     state.value.validationCache = {}
@@ -105,7 +105,8 @@ function addToValidationQueue(
  * Remove product from validation queue
  */
 function removeFromValidationQueue(productId: string): void {
-  delete state.value.validationQueue[productId]
+  const { [productId]: _removed, ...rest } = state.value.validationQueue
+  state.value.validationQueue = rest
 }
 
 /**
@@ -289,10 +290,6 @@ function startBackgroundValidation(): void {
       // Add queued products first
       productsToValidate.push(...queuedProducts.slice(0, 3)) // Max 3 from queue
 
-      // Add products that haven't been validated recently
-      const now = Date.now()
-      const validationInterval = 10 * 60 * 1000 // 10 minutes
-
       // Note: We would need access to cart items here
       // This will be provided by the main store coordinator
 
@@ -378,7 +375,6 @@ async function validateCartItem(cartItem: CartItem): Promise<{
 
   const currentProduct = result.product
   const originalPrice = cartItem.product.price
-  const originalStock = cartItem.product.stock
 
   // Create updated cart item
   const updatedItem: CartItem = {

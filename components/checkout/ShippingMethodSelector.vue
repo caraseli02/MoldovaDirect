@@ -243,7 +243,7 @@ const selectedMethodId = computed({
 })
 
 // Methods
-const selectMethod = (method: ShippingMethod) => {
+const _selectMethod = (method: ShippingMethod) => {
   // This is now redundant since v-model handles it, but keep for explicit calls
   emit('update:modelValue', method)
 }

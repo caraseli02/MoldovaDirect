@@ -1,5 +1,4 @@
 // Order utility functions for checkout processing
-import type { Database } from '~/types/database'
 
 export interface CartItem {
   id: number
@@ -70,7 +69,7 @@ export function calculateOrderTotals(
 /**
  * Calculate tax based on shipping address and business rules
  */
-function calculateTax(subtotal: number, shippingAddress?: any): number {
+function calculateTax(_subtotal: number, _shippingAddress?: any): number {
   // Implement tax calculation logic here
   // This is a placeholder - actual implementation would depend on:
   // - Business location and registration
@@ -158,7 +157,7 @@ export function generateOrderNumber(): string {
  */
 export function getAvailableShippingMethods(
   cartItems: CartItem[],
-  shippingAddress?: any,
+  _shippingAddress?: any,
 ): ShippingMethod[] {
   // Calculate total weight
   const totalWeight = cartItems.reduce((sum, item) => {

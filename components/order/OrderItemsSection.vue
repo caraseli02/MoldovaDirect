@@ -91,7 +91,7 @@ interface Props {
   order: OrderWithItems
 }
 
-const props = defineProps<Props>()
+const _props = defineProps<Props>()
 
 const { locale } = useI18n()
 

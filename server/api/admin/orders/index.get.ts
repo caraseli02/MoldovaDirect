@@ -5,7 +5,6 @@
 // - Cache invalidated on order mutations
 import { serverSupabaseServiceRole } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
-import { ADMIN_CACHE_CONFIG, getAdminCacheKey } from '~/server/utils/adminCache'
 import { prepareSearchPattern } from '~/server/utils/searchSanitization'
 import type { OrderItemRaw, Address } from '~/types/database'
 

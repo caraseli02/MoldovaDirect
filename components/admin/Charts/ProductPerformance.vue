@@ -70,7 +70,7 @@ interface Props {
   error?: string | null
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const _props = withDefaults(defineProps<Props>(), {
   data: null,
   loading: false,
   error: null,

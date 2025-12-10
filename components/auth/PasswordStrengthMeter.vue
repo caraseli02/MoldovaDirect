@@ -70,8 +70,8 @@ const props = withDefaults(defineProps<Props>(), {
   showRequirements: true,
 })
 
-const { t } = useI18n()
-const { calculatePasswordStrength, getPasswordStrengthLabel, getPasswordStrengthColor } = useAuthValidation()
+const { t: _t } = useI18n()
+const { calculatePasswordStrength, getPasswordStrengthLabel: _getPasswordStrengthLabel, getPasswordStrengthColor: _getPasswordStrengthColor } = useAuthValidation()
 
 /**
  * Calculate password strength (0-4)

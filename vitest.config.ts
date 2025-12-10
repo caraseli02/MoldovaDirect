@@ -1,6 +1,5 @@
 import { defineConfig } from 'vitest/config'
-import { resolve, dirname } from 'path'
-import { createRequire } from 'module'
+import { resolve } from 'path'
 
 const plugins = []
 
@@ -10,7 +9,7 @@ try {
     plugins.push(vue.default())
   }
 }
-catch (error) {
+catch {
   console.warn('[vitest] @vitejs/plugin-vue not found, proceeding without it.')
 }
 

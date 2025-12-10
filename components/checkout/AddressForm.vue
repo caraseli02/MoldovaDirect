@@ -485,7 +485,8 @@ const validateField = (fieldName: string) => {
 
 const clearFieldError = (fieldName: string) => {
   if (fieldErrors.value[fieldName]) {
-    delete fieldErrors.value[fieldName]
+    const { [fieldName]: _removed, ...rest } = fieldErrors.value
+    fieldErrors.value = rest
   }
 }
 

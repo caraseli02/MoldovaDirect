@@ -263,7 +263,7 @@ export const useAuthMessages = () => {
   /**
    * Get verification pending message
    */
-  const getVerificationPendingMessage = (email?: string): AuthMessage => {
+  const getVerificationPendingMessage = (_email?: string): AuthMessage => {
     return {
       type: 'info',
       message: t('auth.messages.verificationPending'),

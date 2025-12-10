@@ -371,7 +371,7 @@ const bulkOperations = ref({
 })
 
 // Real-time updates
-const { subscribeToAllOrders, unsubscribe, isSubscribed } = useAdminOrderRealtime({
+const { subscribeToAllOrders, unsubscribe, isSubscribed: _isSubscribed } = useAdminOrderRealtime({
   onOrderUpdated: async () => {
     // Refresh orders when an update is received
     await adminOrdersStore.refresh()

@@ -78,7 +78,11 @@ describe('useProductFilters', () => {
     setActivePinia(createPinia())
     vi.clearAllMocks()
     // Reset query properties instead of replacing the object
-    Object.keys(mockRoute.query).forEach(key => delete mockRoute.query[key])
+    const keysToDelete = Object.keys(mockRoute.query)
+    keysToDelete.forEach((key) => {
+      const { [key]: _removed, ...rest } = mockRoute.query
+      mockRoute.query = rest as LocationQuery
+    })
     mockPush.mockClear()
     mockFetch.mockClear()
   })

@@ -292,7 +292,7 @@ test.describe('Secure Logging - PII Protection', () => {
     expect(emailPattern.test(allLogs)).toBe(false)
 
     // Should NOT contain phone patterns
-    const phonePattern = /\+?[\d\s\-\(\)]{10,}/
+    const phonePattern = /\+?[\d\s\-()]{10,}/
     expect(phonePattern.test(allLogs)).toBe(false)
 
     // Should NOT contain typical address keywords with actual values

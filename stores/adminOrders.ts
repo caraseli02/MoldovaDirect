@@ -17,10 +17,6 @@ import { defineStore } from 'pinia'
 import type {
   OrderWithAdminDetails,
   AdminOrderFilters,
-  Pagination,
-  OrderStatusHistory,
-  OrderNote,
-  OrderFulfillmentTask,
 } from '~/types/database'
 
 interface OrderListItem extends OrderWithAdminDetails {

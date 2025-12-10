@@ -1,6 +1,5 @@
 import { serverSupabaseClient } from '#supabase/server'
 import type { GetSectionsQuery, GetSectionsResponse, LandingSectionRow } from '~/types'
-import { PUBLIC_CACHE_CONFIG } from '~/server/utils/publicCache'
 
 /**
  * GET /api/landing/sections
@@ -53,8 +52,6 @@ export default defineCachedEventHandler(async (event): Promise<GetSectionsRespon
 
       // Filter by schedule if not including scheduled sections
       if (!includeScheduled) {
-        const now = new Date().toISOString()
-
         // Use the database function for correct schedule filtering
         // This function properly handles: (starts_at IS NULL OR starts_at <= now) AND (ends_at IS NULL OR ends_at >= now)
         const { data, error, count } = await supabase.rpc('get_active_landing_sections', {

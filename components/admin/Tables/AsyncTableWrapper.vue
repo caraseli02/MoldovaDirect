@@ -4,19 +4,7 @@
   This component provides lazy loading for TanStack Vue Table with loading states.
   The table library (~15KB gzipped) is only loaded when this component is rendered.
 
-  Usage:
-  ```vue
-  <AdminTablesAsyncTableWrapper
-    :data="products"
-    :columns="columns"
-    :loading="isLoading"
-    @row-click="handleRowClick"
-  >
-    <template #default="{ table }">
-      <!-- Custom table rendering using table instance -->
-    </template>
-  </AdminTablesAsyncTableWrapper>
-  ```
+  Usage example in parent component
 -->
 
 <template>
@@ -203,7 +191,7 @@ const props = withDefaults(defineProps<Props>(), {
   enableRowSelection: false,
 })
 
-const emit = defineEmits<{
+const _emit = defineEmits<{
   'row-click': [data: TData]
   'selection-change': [rows: TData[]]
 }>()

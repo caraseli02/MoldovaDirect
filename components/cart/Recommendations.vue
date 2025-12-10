@@ -124,9 +124,8 @@ onMounted(async () => {
     try {
       await handleLoadRecommendations()
     }
-    catch (error) {
+    catch {
       // Silently handle recommendation loading errors
-      console.debug('Recommendations not available:', error.message)
     }
   }
 })
@@ -160,9 +159,7 @@ const handleLoadRecommendations = async () => {
       console.error('Failed to load recommendations:', error)
       toast.error('Error', 'No se pudieron cargar las recomendaciones')
     }
-    else {
-      console.debug('Recommendations API not available')
-    }
+    // API not available (404)
   }
 }
 

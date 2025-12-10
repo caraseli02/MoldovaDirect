@@ -439,7 +439,7 @@ const getCartButtonAriaLabel = () => {
 }
 
 // Touch event handlers
-const handleTouchStart = (event: TouchEvent) => {
+const handleTouchStart = (_event: TouchEvent) => {
   if (isMobile.value) {
     vibrate('tap')
   }
@@ -462,14 +462,7 @@ const addToCart = async () => {
     return
   }
 
-  // Debug logging (development only)
-  if (import.meta.dev) {
-    console.log('🛒 ProductCard: Add to Cart', {
-      productId: props.product.id,
-      isClient: import.meta.client,
-      hasAddItem: typeof addItem === 'function',
-    })
-  }
+  // Debug logging (development only) - disabled
 
   try {
     // Verify cart is available
@@ -492,13 +485,7 @@ const addToCart = async () => {
       stock: props.product.stockQuantity,
     }
 
-    if (import.meta.dev) {
-      console.log('🛒 Calling addItem')
-    }
     await addItem(cartProduct, 1)
-    if (import.meta.dev) {
-      console.log('✅ Item added successfully')
-    }
 
     // Success haptic feedback
     if (isMobile.value) {

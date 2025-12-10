@@ -328,7 +328,7 @@ const subscribeNewsletter = async () => {
     )
     email.value = ''
   }
-  catch (error) {
+  catch {
     toast.error(
       t('footer.newsletter.error.title') || 'Subscription failed',
       {

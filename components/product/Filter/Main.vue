@@ -35,14 +35,14 @@ const emit = defineEmits<Emits>()
 
 // Composables
 const { isMobile } = useDevice()
-const { t } = useI18n()
+const { t: _t } = useI18n()
 
 // Reactive state
 const showMobileFilters = ref(false)
 const localFilters = ref<ProductFilters>({ ...props.filters })
 
 // Computed properties
-const hasActiveFilters = computed(() => {
+const _hasActiveFilters = computed(() => {
   return !!(
     localFilters.value.category
     || localFilters.value.search
@@ -54,7 +54,7 @@ const hasActiveFilters = computed(() => {
   )
 })
 
-const activeFilterCount = computed(() => {
+const _activeFilterCount = computed(() => {
   let count = 0
   if (localFilters.value.category) count++
   if (localFilters.value.priceMin || localFilters.value.priceMax) count++

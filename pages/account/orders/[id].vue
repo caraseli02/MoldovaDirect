@@ -203,7 +203,6 @@
 
 <script setup lang="ts">
 import type { OrderWithItems } from '~/types'
-import type { TrackingInfo } from '~/composables/useOrderDetail'
 
 // Apply authentication middleware
 definePageMeta({
@@ -232,7 +231,7 @@ const {
   contactSupport,
   canReorder,
   canReturn,
-  isDelivered,
+  isDelivered: _isDelivered,
 } = useOrderDetail()
 
 // Use order tracking composable for real-time updates

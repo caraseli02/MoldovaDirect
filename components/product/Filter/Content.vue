@@ -268,13 +268,14 @@ const updatePriceRange = (range: [number, number]) => {
 }
 
 const updateAttributeFilter = (attributeName: string, values: string[]) => {
-  const attributes = { ...localFilters.value.attributes }
+  let attributes = { ...localFilters.value.attributes }
 
   if (values.length > 0) {
     attributes[attributeName] = values
   }
   else {
-    delete attributes[attributeName]
+    const { [attributeName]: _removed, ...rest } = attributes
+    attributes = rest
   }
 
   updateFilters({ attributes })

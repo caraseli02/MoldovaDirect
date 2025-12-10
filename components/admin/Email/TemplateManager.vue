@@ -212,7 +212,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
 import { Button } from '~/components/ui/button'
 import { Alert, AlertTitle, AlertDescription } from '~/components/ui/alert'
@@ -334,7 +334,7 @@ function validateTemplate() {
       }
     }
   }
-  catch (error) {
+  catch {
     validationErrors.value.push('Invalid JSON format')
   }
 

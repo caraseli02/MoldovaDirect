@@ -76,7 +76,7 @@
         @keydown.escape="closeDropdown"
       >
         <button
-          v-for="(locale, index) in locales"
+          v-for="locale in locales"
           :key="locale.code"
           ref="optionRefs"
           type="button"

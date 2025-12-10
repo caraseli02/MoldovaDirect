@@ -198,7 +198,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Get user profile for notification
-    const { data: profile } = await supabase
+    await supabase
       .from('profiles')
       .select('name, email')
       .eq('id', user.id)

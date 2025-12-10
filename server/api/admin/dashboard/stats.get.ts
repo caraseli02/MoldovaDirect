@@ -16,9 +16,8 @@
  * - Cache invalidated on product/order mutations
  */
 
-import { serverSupabaseClient, serverSupabaseUser } from '#supabase/server'
+import { serverSupabaseClient } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
-import { ADMIN_CACHE_CONFIG, getAdminCacheKey } from '~/server/utils/adminCache'
 
 export interface DashboardStats {
   totalProducts: number
@@ -51,7 +50,6 @@ export default defineEventHandler(async (event) => {
 
     const now = new Date()
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-    const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
 
     // Get product statistics
     const { data: productStats, error: productError } = await supabase

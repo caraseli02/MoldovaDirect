@@ -242,9 +242,9 @@ describe('useStripe', () => {
     })
 
     it('updates error on card element change event', async () => {
-      let changeCallback: Function
+      let changeCallback: (event: any) => void
 
-      mockCardElement.on.mockImplementation((event: string, callback: Function) => {
+      mockCardElement.on.mockImplementation((event: string, callback: (event: any) => void) => {
         if (event === 'change') {
           changeCallback = callback
         }
@@ -359,7 +359,7 @@ describe('useStripe', () => {
     })
 
     it('sets loading state during payment confirmation', async () => {
-      let resolveConfirm: Function
+      let resolveConfirm: (value: any) => void
       mockStripe.confirmCardPayment.mockReturnValue(new Promise((resolve) => {
         resolveConfirm = resolve
       }))
@@ -468,7 +468,7 @@ describe('useStripe', () => {
     })
 
     it('sets loading state during payment method creation', async () => {
-      let resolveCreate: Function
+      let resolveCreate: (value: any) => void
       mockStripe.createPaymentMethod.mockReturnValue(new Promise((resolve) => {
         resolveCreate = resolve
       }))

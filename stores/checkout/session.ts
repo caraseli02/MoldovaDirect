@@ -20,7 +20,7 @@ interface PersistPayload {
   orderData?: OrderData | null
 }
 
-interface RestoredPayload extends PersistPayload {}
+type RestoredPayload = PersistPayload
 
 // Strip sensitive payment fields before persisting to storage
 function sanitizePaymentMethodForStorage(method: PaymentMethod | null): PaymentMethod | null {
@@ -178,7 +178,8 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
 
   const clearFieldErrors = (field: string): void => {
     if (state.validationErrors[field]) {
-      delete state.validationErrors[field]
+      const { [field]: _removed, ...rest } = state.validationErrors
+      state.validationErrors = rest
     }
   }
 
@@ -189,7 +190,8 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
 
   const clearError = (field?: string): void => {
     if (field) {
-      delete state.errors[field]
+      const { [field]: _removed, ...rest } = state.errors
+      state.errors = rest
     }
     else {
       state.errors = {}

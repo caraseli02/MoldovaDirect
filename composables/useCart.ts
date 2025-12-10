@@ -1,6 +1,6 @@
 import { useCartStore } from '~/stores/cart'
 import type { Product } from '~/stores/cart/types'
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 
 export const useCart = () => {
   // CRITICAL FIX v3: Cart store is client-only, check before accessing

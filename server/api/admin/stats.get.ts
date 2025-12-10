@@ -5,7 +5,7 @@
  * Returns current database statistics for the admin testing dashboard
  */
 
-import { serverSupabaseServiceRole, serverSupabaseUser } from '#supabase/server'
+import { serverSupabaseServiceRole } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
 import type { DatabaseStats } from '~/types/admin-testing'
 

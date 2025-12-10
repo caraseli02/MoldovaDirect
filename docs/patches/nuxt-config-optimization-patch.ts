@@ -40,22 +40,24 @@ export default defineNuxtConfig({
   // ===================================
   postcss: {
     plugins: {
-      cssnano: process.env.NODE_ENV === 'production' ? {
-        preset: [
-          'default',
-          {
-            // Tailwind v4 compatibility - DO NOT CHANGE
-            minifyGradients: false,
-            // ✅ NEW: Additional safe optimizations
-            cssDeclarationSorter: true,
-            discardComments: { removeAll: true },
-            normalizeWhitespace: true,
-            // Preserve CSS custom properties
-            reduceIdents: false,
-            zindex: false,
-          },
-        ],
-      } : false,
+      cssnano: process.env.NODE_ENV === 'production'
+        ? {
+            preset: [
+              'default',
+              {
+                // Tailwind v4 compatibility - DO NOT CHANGE
+                minifyGradients: false,
+                // ✅ NEW: Additional safe optimizations
+                cssDeclarationSorter: true,
+                discardComments: { removeAll: true },
+                normalizeWhitespace: true,
+                // Preserve CSS custom properties
+                reduceIdents: false,
+                zindex: false,
+              },
+            ],
+          }
+        : false,
       // ✅ NEW: Add autoprefixer for browser support
       autoprefixer: {
         overrideBrowserslist: [

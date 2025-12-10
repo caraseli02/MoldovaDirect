@@ -231,7 +231,7 @@ export function validateAddress(address: Partial<Address>): AddressValidationErr
   }
 
   // Phone validation if provided
-  if (address.phone && !/^[\+]?[0-9\s\-\(\)]{9,}$/.test(address.phone)) {
+  if (address.phone && !/^[+]?[0-9\s\-()]{9,}$/.test(address.phone)) {
     errors.push({ field: 'phone', message: 'Invalid phone number format' })
   }
 

@@ -16,12 +16,12 @@ export interface TestUser {
   preferredShippingMethod?: string
 }
 
-export class ExpressCheckoutFixtures {
+export const ExpressCheckoutFixtures = {
   /**
    * Returning user with complete saved data (address + shipping preference)
    * Should trigger auto-skip countdown
    */
-  static returningUserWithPreferences(): TestUser {
+  returningUserWithPreferences(): TestUser {
     return {
       email: process.env.TEST_USER_WITH_PREFERENCES || 'returning.user@test.com',
       password: process.env.TEST_USER_PASSWORD || 'TestPassword123!',
@@ -45,13 +45,13 @@ export class ExpressCheckoutFixtures {
       hasPreferredShipping: true,
       preferredShippingMethod: 'standard',
     }
-  }
+  },
 
   /**
    * User with saved address but no previous orders
    * Should show banner without countdown (manual express only)
    */
-  static userWithAddressOnly(): TestUser {
+  userWithAddressOnly(): TestUser {
     return {
       email: process.env.TEST_USER_ADDRESS_ONLY || 'new.user@test.com',
       password: process.env.TEST_USER_PASSWORD || 'TestPassword123!',
@@ -74,13 +74,13 @@ export class ExpressCheckoutFixtures {
       },
       hasPreferredShipping: false,
     }
-  }
+  },
 
   /**
    * User without any saved data
    * Should not show express checkout banner
    */
-  static userWithoutAddress(): TestUser {
+  userWithoutAddress(): TestUser {
     return {
       email: process.env.TEST_USER_NO_DATA || 'empty.user@test.com',
       password: process.env.TEST_USER_PASSWORD || 'TestPassword123!',
@@ -102,22 +102,22 @@ export class ExpressCheckoutFixtures {
       },
       hasPreferredShipping: false,
     }
-  }
+  },
 
   /**
    * Guest user (not authenticated)
    */
-  static guestUser() {
+  guestUser() {
     return {
       email: 'guest@example.com',
       wantsUpdates: false,
     }
-  }
+  },
 
   /**
    * Sample addresses for different countries
    */
-  static sampleAddresses(): Record<string, Partial<Address>> {
+  sampleAddresses(): Record<string, Partial<Address>> {
     return {
       spain: {
         firstName: 'Carlos',
@@ -156,12 +156,12 @@ export class ExpressCheckoutFixtures {
         phone: '+33 6 12 34 56 78',
       },
     }
-  }
+  },
 
   /**
    * Shipping methods
    */
-  static shippingMethods() {
+  shippingMethods() {
     return {
       standard: {
         id: 'standard',
@@ -192,12 +192,12 @@ export class ExpressCheckoutFixtures {
         estimatedDays: 6,
       },
     }
-  }
+  },
 
   /**
    * Test products
    */
-  static testProducts() {
+  testProducts() {
     return {
       wine: {
         id: 1,
@@ -218,12 +218,12 @@ export class ExpressCheckoutFixtures {
         slug: 'organic-honey',
       },
     }
-  }
+  },
 
   /**
    * Create a complete test scenario
    */
-  static createScenario(type: 'auto-skip' | 'manual-express' | 'guest' | 'new-user') {
+  createScenario(type: 'auto-skip' | 'manual-express' | 'guest' | 'new-user') {
     switch (type) {
       case 'auto-skip':
         return {
@@ -264,21 +264,21 @@ export class ExpressCheckoutFixtures {
       default:
         throw new Error(`Unknown scenario type: ${type}`)
     }
-  }
+  },
 
   /**
    * Generate random email for test isolation
    */
-  static generateTestEmail(prefix: string = 'test'): string {
+  generateTestEmail(prefix: string = 'test'): string {
     const timestamp = Date.now()
     const random = Math.floor(Math.random() * 10000)
     return `${prefix}.${timestamp}.${random}@test.moldovadirect.com`
-  }
+  },
 
   /**
    * Generate random user data
    */
-  static generateRandomUser(): TestUser {
+  generateRandomUser(): TestUser {
     const firstNames = ['Maria', 'John', 'Ana', 'Carlos', 'Elena', 'Pedro']
     const lastNames = ['Rodriguez', 'Smith', 'García', 'Martínez', 'Popescu', 'López']
 
@@ -307,5 +307,5 @@ export class ExpressCheckoutFixtures {
       },
       hasPreferredShipping: false,
     }
-  }
-}
+  },
+} as const

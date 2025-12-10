@@ -125,7 +125,7 @@ interface Props {
   items: OrderItemRaw[]
 }
 
-const props = defineProps<Props>()
+const _props = defineProps<Props>()
 
 // Utility functions
 const formatPrice = (price: number) => {

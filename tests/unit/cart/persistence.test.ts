@@ -33,7 +33,13 @@ const mockLocalStorage = {
   store: {} as Record<string, string>,
   getItem: vi.fn((key: string) => mockLocalStorage.store[key] || null),
   setItem: vi.fn((key: string, value: string) => { mockLocalStorage.store[key] = value }),
-  removeItem: vi.fn((key: string) => { delete mockLocalStorage.store[key] }),
+  removeItem: vi.fn((key: string) => {
+    const store = mockLocalStorage.store as Record<string, string>
+    if (key in store) {
+      const { [key]: _removed, ...newStore } = store
+      mockLocalStorage.store = newStore
+    }
+  }),
   clear: vi.fn(() => { mockLocalStorage.store = {} }),
 }
 
@@ -41,7 +47,13 @@ const mockSessionStorage = {
   store: {} as Record<string, string>,
   getItem: vi.fn((key: string) => mockSessionStorage.store[key] || null),
   setItem: vi.fn((key: string, value: string) => { mockSessionStorage.store[key] = value }),
-  removeItem: vi.fn((key: string) => { delete mockSessionStorage.store[key] }),
+  removeItem: vi.fn((key: string) => {
+    const store = mockSessionStorage.store as Record<string, string>
+    if (key in store) {
+      const { [key]: _removed, ...newStore } = store
+      mockSessionStorage.store = newStore
+    }
+  }),
   clear: vi.fn(() => { mockSessionStorage.store = {} }),
 }
 

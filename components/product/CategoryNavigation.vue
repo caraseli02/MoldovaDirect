@@ -253,7 +253,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 // Composables
 const { isMobile } = useDevice()
-const { t } = useI18n()
+const { t: _t } = useI18n()
 const router = useRouter()
 
 // Reactive state

@@ -6,7 +6,7 @@
 
 import { getEmailTranslations, replaceTranslationPlaceholders } from './translations'
 import { formatCurrency, formatDate, normalizeLocale } from './formatters'
-import type { OrderEmailData, OrderItemData, AddressData } from './types'
+import type { OrderEmailData } from './types'
 
 /**
  * Status-specific translations
@@ -283,7 +283,6 @@ function generateBaseTemplate(
 ): string {
   const baseTranslations = getEmailTranslations(locale)
   const formattedDate = formatDate(data.orderDate, locale)
-  const greeting = replaceTranslationPlaceholders(statusTranslations.title, { name: data.customerName })
 
   let orderDetailsSection = ''
   if (includeOrderDetails) {

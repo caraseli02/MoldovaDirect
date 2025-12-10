@@ -528,7 +528,7 @@ definePageMeta({
 })
 
 const supabase = useSupabaseClient()
-const user = useSupabaseUser()
+const _user = useSupabaseUser()
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
 
@@ -556,7 +556,7 @@ const confirmPasswordError = ref('')
 const termsError = ref('')
 
 // Validation composable
-const { validateEmail, validatePassword, validatePasswordMatch, validateTermsAcceptance } = useAuthValidation()
+const { validateEmail, validatePassword, validatePasswordMatch: _validatePasswordMatch, validateTermsAcceptance } = useAuthValidation()
 
 // Form validation
 const isFormValid = computed(() => {
@@ -608,7 +608,7 @@ const validatePhoneField = () => {
     return
   }
 
-  if (!/^[\+]?[1-9][\d]{0,15}$/.test(form.value.phone)) {
+  if (!/^[+]?[1-9]\d{0,15}$/.test(form.value.phone)) {
     phoneError.value = t('auth.validation.phone.invalid')
   }
   else {

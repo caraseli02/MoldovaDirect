@@ -11,8 +11,6 @@ import type {
   CartAdvancedActions,
   CartAdvancedGetters,
   SavedForLaterItem,
-  CartRecommendation,
-  BulkOperation,
   Product,
   CartItem,
 } from './types'

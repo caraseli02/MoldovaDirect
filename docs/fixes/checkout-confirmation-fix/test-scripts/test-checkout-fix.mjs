@@ -74,7 +74,9 @@ async function main() {
           break
         }
       }
-      catch (e) {}
+      catch (_e) {
+      // Suppress errors
+      }
     }
 
     if (!added) {
@@ -108,7 +110,9 @@ async function main() {
           break
         }
       }
-      catch (e) {}
+      catch (_e) {
+      // Suppress errors
+      }
     }
 
     if (!proceeded) {
@@ -160,7 +164,9 @@ async function main() {
         await selects[0].selectOption('ES')
         console.log('  Selected country')
       }
-      catch (e) {}
+      catch (_e) {
+      // Suppress errors
+      }
     }
 
     await sleep(2000)
@@ -189,7 +195,9 @@ async function main() {
           break
         }
       }
-      catch (e) {}
+      catch (_e) {
+      // Suppress errors
+      }
     }
 
     await sleep(2000)
@@ -206,7 +214,9 @@ async function main() {
       try {
         await cb.check()
       }
-      catch (e) {}
+      catch (_e) {
+      // Suppress errors
+      }
     }
     await sleep(2000)
 
@@ -234,7 +244,9 @@ async function main() {
           break
         }
       }
-      catch (e) {}
+      catch (_e) {
+      // Suppress errors
+      }
     }
 
     if (!clicked) {

@@ -47,12 +47,10 @@ import {
   checkAAL as checkAALService,
   type MFAEnrollment,
   type MFAChallenge,
-  type MFAState,
 } from './mfa'
 
 import {
   readPersistedProgress,
-  persistProgress,
   loadTestPersona,
   toggleTestScriptStep as toggleTestScriptStepUtil,
   updateTestScriptNote as updateTestScriptNoteUtil,
@@ -66,7 +64,6 @@ import {
 import type { AuthUser, LoginCredentials, RegisterData } from './types'
 
 // Use Supabase types from Nuxt module
-type AuthChangeEvent = 'SIGNED_IN' | 'SIGNED_OUT' | 'TOKEN_REFRESHED' | 'USER_UPDATED' | 'PASSWORD_RECOVERY'
 type Session = any // Use any for Session as it's complex and comes from Supabase
 type User = any // Use any for User as it's complex and comes from Supabase
 type Subscription = { unsubscribe: () => void }
@@ -402,7 +399,7 @@ export const useAuthStore = defineStore('auth', {
       this.error = null
 
       const supabase = useSupabaseClient()
-      const { createErrorMessage, translateAuthError } = useAuthMessages()
+      const { translateAuthError } = useAuthMessages()
       const { validateLogin } = useAuthValidation()
       const toastStore = useToast()
 

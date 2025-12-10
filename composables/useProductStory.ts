@@ -9,15 +9,6 @@ import { useI18n } from 'vue-i18n'
 import { useProductUtils } from './useProductUtils'
 import type { ProductWithRelations } from '~/types/database'
 
-interface ProductStoryData {
-  producer: string
-  tastingNotes: string[]
-  pairingIdeas: string[]
-  awards: string[]
-  originStory: string
-  sustainabilityBadges: string[]
-}
-
 interface ReviewSummary {
   rating: number
   count: number

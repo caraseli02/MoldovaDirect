@@ -135,7 +135,7 @@ try {
     dashboardStore = useAdminDashboardStore()
   }
 }
-catch (error) {
+catch (_error) {
   console.warn('Admin dashboard store not available during SSR/hydration')
 }
 

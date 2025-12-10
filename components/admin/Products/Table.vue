@@ -436,7 +436,6 @@ import { Table, TableHeader, TableRow, TableHead, TableBody } from '@/components
 import { Checkbox as UiCheckbox } from '@/components/ui/checkbox'
 import { Badge } from '@/components/ui/badge'
 import { productStatusVariant } from '@/lib/uiVariants'
-import type { ProductWithRelations } from '~/types/database'
 
 interface Props {
   products: any[]

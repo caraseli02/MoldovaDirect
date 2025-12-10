@@ -81,7 +81,7 @@ const handleEmailInput = (event: Event) => {
   emit('clear-error', 'email')
 }
 
-const handleCheckboxChange = (event: Event) => {
+const _handleCheckboxChange = (event: Event) => {
   const target = event.target as HTMLInputElement
   emit('update:modelValue', {
     ...props.modelValue,

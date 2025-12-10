@@ -345,17 +345,14 @@ const filteredProducts = computed(() => {
 })
 
 function handleRowClick(product: Product) {
-  console.log('Row clicked:', product)
   useToast().info(`Clicked on ${product.name}`)
 }
 
 function handleEdit(product: Product) {
-  console.log('Edit product:', product)
   useToast().info(`Edit ${product.name}`)
 }
 
 function handleDelete(product: Product) {
-  console.log('Delete product:', product)
   useToast().warning(`Delete ${product.name}`)
 }
 </script>

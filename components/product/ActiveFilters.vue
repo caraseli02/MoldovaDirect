@@ -78,7 +78,7 @@ interface Props {
   clearAllLabel?: string
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const _props = withDefaults(defineProps<Props>(), {
   showClearAll: true,
 })
 

@@ -38,7 +38,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
   // Ensure cart is loaded from cookie before checking item count
   const cartStore = useCartStore()
   if (!cartStore.sessionId) {
-    console.log('🛒 [Checkout Middleware] Initializing cart before validation')
     await cartStore.initializeCart()
   }
 
@@ -47,7 +46,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
   // 3. Check if cart has items (Requirement 1.1, 1.2)
   if (itemCount.value === 0) {
-    console.log('🛒 [Checkout Middleware] Cart is empty, redirecting to cart')
     return navigateTo({
       path: localePath('/cart'),
       query: {
@@ -62,7 +60,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
   // 5. Initialize checkout if not already initialized
   if (!checkoutStore.sessionId) {
     try {
-      console.log('🛒 [Checkout Middleware] Initializing checkout session')
       await checkoutStore.initializeCheckout(items.value)
     }
     catch (error) {
@@ -79,9 +76,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
   // 6. Prefetch all checkout data in parallel (only once per session)
   if (!checkoutStore.dataPrefetched) {
     try {
-      console.log('📥 [Checkout Middleware] Prefetching user data (addresses, preferences)...')
       await checkoutStore.prefetchCheckoutData()
-      console.log('✅ [Checkout Middleware] Prefetch complete')
     }
     catch (error) {
       console.error('❌ [Checkout Middleware] Failed to prefetch checkout data:', error)
@@ -100,11 +95,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
     // Auto-route to payment if all conditions met
     if (hasCompleteShipping && preferredMethod && to.path === localePath('/checkout')) {
-      console.log('🚀 [Checkout Middleware] Express checkout: Auto-routing to payment step')
-      console.log('   - Complete shipping info: ✓')
-      console.log('   - Preferred method saved: ✓')
-      console.log('   - Landing on base checkout: ✓')
-
       return navigateTo({
         path: localePath('/checkout/payment'),
         query: { express: '1' }, // Flag for showing countdown banner
@@ -114,7 +104,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
   // 7. Validate checkout session hasn't expired
   if (checkoutStore.isSessionExpired) {
-    console.log('🛒 [Checkout Middleware] Session expired, redirecting to cart')
     checkoutStore.resetCheckout()
     return navigateTo({
       path: localePath('/cart'),
@@ -130,7 +119,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
     if (!canAccessStep(stepFromPath, checkoutStore)) {
       const allowedStep = getHighestAllowedStep(checkoutStore)
       const redirectPath = getStepPath(allowedStep, localePath)
-      console.log(`🛒 [Checkout Middleware] Access denied to ${stepFromPath}, redirecting to ${allowedStep}`)
 
       return navigateTo({
         path: redirectPath,

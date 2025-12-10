@@ -6,8 +6,8 @@
  */
 
 import type { H3Event } from 'h3'
-import { createError, getCookie, getHeader, getRequestIP } from 'h3'
-import { serverSupabaseClient, serverSupabaseServiceRole, serverSupabaseUser } from '#supabase/server'
+import { createError, getHeader, getRequestIP } from 'h3'
+import { serverSupabaseClient, serverSupabaseServiceRole } from '#supabase/server'
 
 /**
  * Authenticated user data from Supabase
@@ -63,7 +63,7 @@ export function isProductionEnvironment(): boolean {
  * Verifies that admin testing endpoints are not used in production
  * Throws an error if in production environment
  */
-export function requireNonProductionEnvironment(event: H3Event) {
+export function requireNonProductionEnvironment(_event: H3Event) {
   if (isProductionEnvironment()) {
     throw createError({
       statusCode: 403,

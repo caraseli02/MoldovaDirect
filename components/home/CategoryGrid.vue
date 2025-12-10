@@ -37,7 +37,7 @@
       <div class="mt-12 md:hidden">
         <div class="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-6 -mx-4 px-4 scrollbar-hide">
           <article
-            v-for="(category, index) in categories"
+            v-for="category in categories"
             :key="category.key"
             class="flex-shrink-0 w-[85%] snap-center"
             :class="{

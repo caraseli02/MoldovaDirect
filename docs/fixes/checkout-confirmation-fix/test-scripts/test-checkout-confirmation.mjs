@@ -80,8 +80,12 @@ async function main() {
     await page.fill('input[name="city"]', 'Madrid')
     await page.fill('input[name="postalCode"]', '28001')
     await page.fill('input[type="tel"]', '600123456')
-    try { await page.selectOption('select[name="country"]', 'ES') }
-    catch (e) {}
+    try {
+      await page.selectOption('select[name="country"]', 'ES')
+    }
+    catch (_e) {
+      // Suppress errors
+    }
     await sleep(1000)
     await page.screenshot({ path: join(SCREENSHOTS_DIR, '05-filled.png'), fullPage: true })
 
@@ -105,8 +109,12 @@ async function main() {
     console.log('Step 8: Terms')
     const checkboxes = await page.locator('input[type="checkbox"]').all()
     for (const cb of checkboxes) {
-      try { await cb.check() }
-      catch (e) {}
+      try {
+        await cb.check()
+      }
+      catch (_e) {
+      // Suppress errors
+      }
     }
     await sleep(1000)
 

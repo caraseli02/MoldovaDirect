@@ -74,9 +74,11 @@ export const cookieStorage = new Map<string, any>()
 let _cookieSaveCount = 0
 
 export const getCookieSaveCount = () => _cookieSaveCount
-export const resetCookieSaveCount = () => { _cookieSaveCount = 0 }
+export const resetCookieSaveCount = () => {
+  _cookieSaveCount = 0
+}
 
-global.useCookie = vi.fn((name: string, options?: any) => {
+global.useCookie = vi.fn((name: string, _options?: any) => {
   return {
     get value() {
       return cookieStorage.get(name)

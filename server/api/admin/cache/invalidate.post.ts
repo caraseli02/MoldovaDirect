@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { invalidatePublicCache, type PublicCacheScope } from '~/server/utils/publicCache'
+import { invalidatePublicCache } from '~/server/utils/publicCache'
 import { requireAdminRole, logAdminAction } from '~/server/utils/adminAuth'
 
 // Request validation schema

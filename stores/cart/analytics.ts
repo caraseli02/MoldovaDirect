@@ -10,7 +10,6 @@ import type {
   CartAnalyticsState,
   CartAnalyticsActions,
   AnalyticsEvent,
-  AnalyticsSession,
   Product,
 } from './types'
 
@@ -501,17 +500,17 @@ function getEventsForProduct(productId: string): AnalyticsEvent[] {
 // =============================================
 
 const actions: CartAnalyticsActions = {
-  trackAddToCart: (product: Product, quantity: number, subtotal: number, itemCount: number) => {
+  trackAddToCart: (_product: Product, _quantity: number, _subtotal: number, _itemCount: number) => {
     // This will be called by the main store with session info
     console.warn('trackAddToCart called without session info')
   },
 
-  trackRemoveFromCart: (product: Product, quantity: number, subtotal: number, itemCount: number) => {
+  trackRemoveFromCart: (_product: Product, _quantity: number, _subtotal: number, _itemCount: number) => {
     // This will be called by the main store with session info
     console.warn('trackRemoveFromCart called without session info')
   },
 
-  trackQuantityUpdate: (product: Product, oldQuantity: number, newQuantity: number, subtotal: number, itemCount: number) => {
+  trackQuantityUpdate: (_product: Product, _oldQuantity: number, _newQuantity: number, _subtotal: number, _itemCount: number) => {
     // This will be called by the main store with session info
     console.warn('trackQuantityUpdate called without session info')
   },

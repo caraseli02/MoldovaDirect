@@ -358,7 +358,7 @@ const fetchOrder = async () => {
 }
 
 // Handle status update
-const handleStatusUpdated = async (data: { status: string, trackingNumber?: string, carrier?: string }) => {
+const handleStatusUpdated = async (_data: { status: string, trackingNumber?: string, carrier?: string }) => {
   // Refresh order data to get updated information
   await fetchOrder()
 }
@@ -376,7 +376,7 @@ const handleNotesUpdated = async () => {
 }
 
 // Real-time updates
-const { subscribeToOrder, unsubscribe, isSubscribed } = useAdminOrderRealtime({
+const { subscribeToOrder, unsubscribe, isSubscribed: _isSubscribed } = useAdminOrderRealtime({
   onOrderUpdated: async (update: any) => {
     // Refresh order data when updated
     await fetchOrder()

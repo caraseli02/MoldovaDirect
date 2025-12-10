@@ -3,7 +3,6 @@
  * Utilities for sending support ticket-related emails
  */
 
-import type { EmailType } from '~/types/email'
 import { sendEmail } from './email'
 import {
   generateCustomerConfirmationTemplate,

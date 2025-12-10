@@ -329,7 +329,7 @@ const PaymentForm = defineAsyncComponent(() =>
 
 const checkoutStore = useCheckoutStore()
 const authStore = useAuthStore()
-const localePath = useLocalePath()
+const _localePath = useLocalePath()
 
 // =============================================
 // REACTIVE STATE
@@ -384,7 +384,7 @@ const canProceed = computed(() => {
 // METHODS
 // =============================================
 
-const selectPaymentType = (type: PaymentMethod['type']) => {
+const _selectPaymentType = (type: PaymentMethod['type']) => {
   // Only allow cash payment for now
   if (type !== 'cash') {
     return

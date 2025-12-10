@@ -73,20 +73,17 @@ export default defineEventHandler(async (event) => {
     const startDate = query.startDate as string
     const endDate = query.endDate as string
 
-    let dateFilter = ''
     let actualStartDate: Date
     let actualEndDate: Date
 
     if (startDate && endDate) {
       actualStartDate = new Date(startDate)
       actualEndDate = new Date(endDate)
-      dateFilter = `AND pa.date BETWEEN '${startDate}' AND '${endDate}'`
     }
     else {
       actualEndDate = new Date()
       actualStartDate = new Date()
       actualStartDate.setDate(actualStartDate.getDate() - days)
-      dateFilter = `AND pa.date >= '${actualStartDate.toISOString().split('T')[0]}'`
     }
 
     // Get product performance summary from view

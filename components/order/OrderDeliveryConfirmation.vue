@@ -168,7 +168,7 @@ interface Props {
   canReturn?: boolean
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const _props = withDefaults(defineProps<Props>(), {
   canReorder: true,
   canReturn: true,
 })
@@ -179,7 +179,7 @@ const emit = defineEmits<{
   contactSupport: []
 }>()
 
-const { t, d } = useI18n()
+const { t: _t, d } = useI18n()
 
 // Methods
 const formatDeliveryDate = (dateString?: string): string => {
@@ -189,7 +189,7 @@ const formatDeliveryDate = (dateString?: string): string => {
     const date = new Date(dateString)
     return d(date, 'long')
   }
-  catch (err) {
+  catch (_err) {
     return dateString
   }
 }

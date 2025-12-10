@@ -67,7 +67,7 @@ const emit = defineEmits<Emits>()
 const showAll = ref(false)
 
 // Computed properties
-const visibleOptions = computed(() => {
+const _visibleOptions = computed(() => {
   if (showAll.value || props.options.length <= props.showLimit) {
     return props.options
   }

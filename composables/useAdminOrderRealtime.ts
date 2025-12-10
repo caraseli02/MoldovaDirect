@@ -69,7 +69,6 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
       .subscribe((status) => {
         if (status === 'SUBSCRIBED') {
           isSubscribed.value = true
-          console.log(`Subscribed to order ${orderId} updates`)
         }
         else if (status === 'CHANNEL_ERROR') {
           console.error(`Error subscribing to order ${orderId}`)
@@ -113,7 +112,6 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
       .subscribe((status) => {
         if (status === 'SUBSCRIBED') {
           isSubscribed.value = true
-          console.log('Subscribed to all order updates')
         }
         else if (status === 'CHANNEL_ERROR') {
           console.error('Error subscribing to orders')
@@ -202,7 +200,6 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
       supabase.removeChannel(channel)
       channel = null
       isSubscribed.value = false
-      console.log('Unsubscribed from order updates')
     }
   }
 

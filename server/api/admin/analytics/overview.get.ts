@@ -20,7 +20,6 @@
 
 import { serverSupabaseClient } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
-import { ADMIN_CACHE_CONFIG, getAdminCacheKey } from '~/server/utils/adminCache'
 
 export interface AnalyticsOverview {
   dailyAnalytics: Array<{
@@ -167,9 +166,6 @@ export default defineEventHandler(async (event) => {
 
     const totalOrders = processedDailyAnalytics.reduce((sum, day) =>
       sum + (day.ordersCount || 0), 0)
-
-    const totalNewRegistrations = processedDailyAnalytics.reduce((sum, day) =>
-      sum + (day.newRegistrations || 0), 0)
 
     // Calculate conversion rate (orders / total users)
     const conversionRate = totalUsers > 0 ? (totalOrders / totalUsers) * 100 : 0

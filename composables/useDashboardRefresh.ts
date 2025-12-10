@@ -43,8 +43,6 @@ export function useDashboardRefresh(
         Authorization: `Bearer ${session.access_token}`,
       }
 
-      console.log('[AdminFetch] Fetching dashboard data with Bearer token')
-
       // Fetch stats and activity in parallel with proper auth headers
       const [statsResult, activityResult] = await Promise.all([
         $fetch<{ success: boolean, data: any }>('/api/admin/dashboard/stats', { headers })
@@ -62,12 +60,10 @@ export function useDashboardRefresh(
       // Update store with fetched data
       if (statsResult?.success) {
         store.setStats(statsResult.data)
-        console.log('[AdminFetch] Stats loaded successfully')
       }
 
       if (activityResult?.success) {
         store.setActivity(activityResult.data)
-        console.log('[AdminFetch] Activity loaded successfully')
       }
 
       // If both failed, set error

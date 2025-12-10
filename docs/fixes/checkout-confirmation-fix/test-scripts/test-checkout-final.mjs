@@ -106,7 +106,9 @@ async function main() {
     try {
       await countrySelect.selectOption('ES')
     }
-    catch (e) {}
+    catch (e) {
+      // Ignore if select fails
+    }
 
     console.log('  Form filled')
     await sleep(2000)
@@ -140,8 +142,12 @@ async function main() {
     const checkboxes = await page.locator('input[type="checkbox"]').all()
     console.log(`  Checking ${checkboxes.length} checkboxes`)
     for (const cb of checkboxes) {
-      try { await cb.check() }
-      catch (e) {}
+      try {
+        await cb.check()
+      }
+      catch (_e) {
+      // Suppress errors
+      }
     }
     await sleep(2000)
 
@@ -244,7 +250,9 @@ async function main() {
       await page.screenshot({ path: join(SCREENSHOTS_DIR, '99-error.png'), fullPage: true })
       console.log('Error screenshot saved: 99-error.png')
     }
-    catch (e) {}
+    catch (_e) {
+      // Suppress errors
+    }
   }
   finally {
     await browser.close()

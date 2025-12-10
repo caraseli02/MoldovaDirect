@@ -372,7 +372,7 @@ try {
     adminUsersStore = useAdminUsersStore()
   }
 }
-catch (error) {
+catch (_error) {
   console.warn('Admin users store not available during SSR/hydration')
 }
 
@@ -447,14 +447,12 @@ const handleUserAction = (action: string, userId: string, data?: any) => {
   emit('action', action, userId, data)
 }
 
-const handlePermissionChange = (userId: string, changes: any) => {
-  console.log('Permission changed for user:', userId, changes)
+const handlePermissionChange = (_userId: string, _changes: any) => {
   // Optionally refresh user data or emit event
 }
 
-const viewOrder = (orderId: number) => {
+const viewOrder = (_orderId: number) => {
   // Navigate to order detail or emit event
-  console.log('View order:', orderId)
 }
 
 const retry = () => {

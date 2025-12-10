@@ -52,7 +52,7 @@ export function useSiteUrl(): SiteUrlHelpers {
         }
         return path
       }
-      catch (error) {
+      catch {
         console.warn(`Invalid URL detected: ${path}. Using base URL instead.`)
         return base
       }

@@ -150,7 +150,7 @@ const progressAnnouncement = computed(() => {
 /**
  * Calculate progress percentage
  */
-const progressPercentage = computed(() => {
+const _progressPercentage = computed(() => {
   return Math.round((props.currentStep / props.totalSteps) * 100)
 })
 
@@ -176,5 +176,3 @@ watch(() => props.currentStep, (newStep, oldStep) => {
   }
 })
 </script>
-
-</content>

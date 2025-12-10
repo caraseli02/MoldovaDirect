@@ -147,7 +147,7 @@ export default defineEventHandler(async (event): Promise<ApiResponse> => {
     }
 
     // Fetch tracking events for this order
-    const { data: trackingEvents, error: trackingError } = await supabase
+    const { data: trackingEvents } = await supabase
       .from('order_tracking_events')
       .select('*')
       .eq('order_id', orderId)

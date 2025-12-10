@@ -17,17 +17,12 @@
 
 import { serverSupabaseServiceRole } from '#supabase/server'
 import { requireAdminTestingAccess, logAdminAction } from '~/server/utils/adminAuth'
-import type { SeedOptions, SeedDataResponse, SeedStep } from '~/types/admin-testing'
+import type { SeedOptions } from '~/types/admin-testing'
 import {
   generateMockUser,
   generatePassword,
   categoryData,
   productTemplates,
-  randomItem,
-  orderStatuses,
-  paymentStatuses,
-  streets,
-  cities,
 } from '~/server/data/mockData'
 
 export default defineEventHandler(async (event) => {
@@ -355,7 +350,7 @@ async function seedUsers(supabase: any, count: number): Promise<string[]> {
     const password = generatePassword()
 
     try {
-      const { data, error } = await supabase.auth.admin.createUser({
+      const { data } = await supabase.auth.admin.createUser({
         email: mockUser.email,
         password,
         email_confirm: true,
@@ -459,7 +454,7 @@ async function seedOrders(
       created_at: createdAt.toISOString(),
     }
 
-    const { data: insertedOrder, error } = await supabase
+    const { data: insertedOrder } = await supabase
       .from('orders')
       .insert(order)
       .select()

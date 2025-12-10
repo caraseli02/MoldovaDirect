@@ -1,4 +1,3 @@
-import { nextTick } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
 import { useCheckoutSessionStore } from './session'
 import { useCheckoutShippingStore } from './shipping'

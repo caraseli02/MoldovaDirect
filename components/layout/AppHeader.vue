@@ -177,7 +177,7 @@ import { Button } from '@/components/ui/button'
 import LanguageSwitcher from './LanguageSwitcher.vue'
 import ThemeToggle from './ThemeToggle.vue'
 
-const { t, locale } = useI18n()
+const { t, locale: _locale } = useI18n()
 const localePath = useLocalePath()
 const route = useRoute()
 

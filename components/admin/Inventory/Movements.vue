@@ -309,7 +309,7 @@ interface Props {
 const props = defineProps<Props>()
 
 // Composables
-const { getMovementTypeLabel, getMovementTypeColor } = useInventory()
+const { getMovementTypeLabel } = useInventory()
 
 // Reactive state
 const movements = ref<InventoryMovement[]>([])

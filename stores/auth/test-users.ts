@@ -158,7 +158,8 @@ export function updateTestScriptNote(
     personaProgress.notes[stepIndex] = note
   }
   else {
-    delete personaProgress.notes[stepIndex]
+    const { [stepIndex]: _removed, ...rest } = personaProgress.notes
+    personaProgress.notes = rest
   }
 
   personaProgress.lastTested = new Date().toISOString()
@@ -173,8 +174,7 @@ export function clearPersonaProgress(
   progress: Record<string, TestScriptProgress>,
   personaKey: TestUserPersonaKey,
 ): Record<string, TestScriptProgress> {
-  const updatedProgress = { ...progress }
-  delete updatedProgress[personaKey]
+  const { [personaKey]: _removed, ...updatedProgress } = progress
   persistProgress(updatedProgress)
   return updatedProgress
 }

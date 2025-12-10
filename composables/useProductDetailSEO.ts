@@ -6,7 +6,7 @@
 
 import { computed, type ComputedRef } from 'vue'
 import { useProductUtils } from './useProductUtils'
-import type { ProductWithRelations, Translations } from '~/types/database'
+import type { ProductWithRelations } from '~/types/database'
 
 interface StructuredDataOptions {
   productUrl: string

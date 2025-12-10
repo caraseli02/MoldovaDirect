@@ -133,7 +133,7 @@ const isStepCompleted = (stepId: CheckoutStep): boolean => {
   return stepIndex < currentStepIndex.value
 }
 
-const getStepClasses = (stepId: CheckoutStep, index: number): string => {
+const getStepClasses = (stepId: CheckoutStep, _index: number): string => {
   if (isStepCompleted(stepId)) {
     return 'bg-primary-600 dark:bg-primary-500 border-primary-600 dark:border-primary-500'
   }

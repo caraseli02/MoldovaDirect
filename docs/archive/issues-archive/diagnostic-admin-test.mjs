@@ -28,7 +28,9 @@ async function diagnosticTest() {
           const body = await response.text()
           console.log(`  Error body: ${body.substring(0, 200)}`)
         }
-        catch (e) {}
+        catch (_e) {
+          // Suppress errors
+        }
       }
     }
   })

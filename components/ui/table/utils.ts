@@ -32,6 +32,6 @@ export function valueUpdater<T>(updaterOrValue: Updater<T>, ref: Ref<T>): void {
  * Check if a value is a function
  * Standalone implementation without TanStack dependency
  */
-export function isFunction(value: unknown): value is Function {
+export function isFunction(value: unknown): value is (...args: any[]) => any {
   return typeof value === 'function'
 }

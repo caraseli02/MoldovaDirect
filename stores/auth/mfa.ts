@@ -30,13 +30,6 @@ export interface MFAFactor {
   friendlyName?: string
 }
 
-export interface MFAState {
-  enrollment: MFAEnrollment | null
-  challenge: MFAChallenge | null
-  loading: boolean
-  error: string | null
-}
-
 /**
  * Start MFA enrollment - generates QR code and secret
  */
@@ -83,7 +76,7 @@ export async function verifyMFAEnrollment(
 ): Promise<void> {
   const toastStore = useToast()
 
-  const { data, error } = await supabase.auth.mfa.challengeAndVerify({
+  const { error } = await supabase.auth.mfa.challengeAndVerify({
     factorId,
     code,
   })

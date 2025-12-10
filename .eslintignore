@@ -1,0 +1,21 @@
+# Archived documentation and old test scripts
+docs/archive/**/*.mjs
+docs/fixes/**/test-scripts/**/*.mjs
+
+# Test files (have their own linting rules)
+tests/**/*.ts
+tests/**/*.spec.ts
+tests/**/*.test.ts
+server/api/**/test.ts
+server/api/**/__tests__/**
+
+# Build artifacts
+.nuxt/
+.output/
+dist/
+node_modules/
+
+# Environment
+.env
+.env.local
+.env.*.local

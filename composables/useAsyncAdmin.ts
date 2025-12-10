@@ -1,5 +1,5 @@
 import { h, defineComponent, defineAsyncComponent } from 'vue'
-import type { Component, DefineComponent } from 'vue'
+import type { DefineComponent } from 'vue'
 
 /**
  * Composable for lazy loading admin components with loading states and error handling
@@ -111,7 +111,7 @@ export const useAsyncAdminComponent = (
               required: false,
             },
           },
-          setup(props) {
+          setup() {
             const retryLoad = () => {
               // Force page reload to retry loading
               window.location.reload()

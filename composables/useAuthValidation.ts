@@ -65,7 +65,7 @@ export const useAuthValidation = () => {
     .string()
     .optional()
     .refine(
-      val => !val || /^[\+]?[1-9][\d]{0,15}$/.test(val),
+      val => !val || /^[+]?[1-9]\d{0,15}$/.test(val),
       'auth.validation.phone.invalid',
     )
 

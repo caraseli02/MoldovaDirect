@@ -486,11 +486,11 @@ const saveAltText = () => {
 }
 
 // Drag and drop handlers
-const handleDragEnter = () => {
+const _handleDragEnter = () => {
   isDragging.value = true
 }
 
-const handleDragLeave = (event: DragEvent) => {
+const _handleDragLeave = (event: DragEvent) => {
   if (!event.relatedTarget || !(event.currentTarget as Element).contains(event.relatedTarget as Node)) {
     isDragging.value = false
   }

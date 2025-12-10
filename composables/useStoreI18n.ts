@@ -19,7 +19,7 @@ export const useStoreI18n = () => {
 
   // Fallback for server-side or when i18n is not available
   return {
-    t: (key: string, params?: any) => key,
+    t: (key: string, _params?: any) => key,
     locale: ref('es'),
     available: false,
   }

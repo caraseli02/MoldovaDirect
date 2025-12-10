@@ -104,7 +104,7 @@ async function testAdminPages() {
           log.type === 'error'
           && (log.text.includes('Unknown variable dynamic import')
             || log.text.includes('Failed to fetch dynamically imported module')
-            || log.text.includes('import') && log.text.includes('error')),
+            || (log.text.includes('import') && log.text.includes('error'))),
         )
 
         if (importErrors.length > 0) {
@@ -144,6 +144,7 @@ async function testAdminPages() {
           case 'dashboard':
             keyElements = ['Total Sales', 'Total Orders', 'Total Users']
             break
+
           case 'users':
             keyElements = ['Name', 'Email', 'Role']
             break

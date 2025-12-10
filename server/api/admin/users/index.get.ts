@@ -15,7 +15,6 @@
 
 import { serverSupabaseServiceRole } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
-import { ADMIN_CACHE_CONFIG, getAdminCacheKey } from '~/server/utils/adminCache'
 import { prepareSearchPattern } from '~/server/utils/searchSanitization'
 
 interface UserFilters {
@@ -245,7 +244,7 @@ export default defineEventHandler(async (event) => {
         created_at: authUser?.created_at || profile.created_at,
         updated_at: authUser?.updated_at || profile.updated_at,
         profile: profile,
-        status: (authUser?.email_confirmed_at || true) ? 'active' : 'inactive',
+        status: authUser?.email_confirmed_at ? 'active' : 'inactive',
         orderCount: orderStats.count,
         lastOrderDate: orderStats.lastOrderDate,
         totalSpent: orderStats.totalSpent,

@@ -54,12 +54,7 @@ describe('useHeroVideos', () => {
   it('throws on empty video library', async () => {
     mockDevice(false)
     vi.stubGlobal('useState', (_key: string, init: () => any) => {
-      try {
-        return ref(init())
-      }
-      catch (e) {
-        throw e
-      }
+      return ref(init())
     })
 
     vi.resetModules()

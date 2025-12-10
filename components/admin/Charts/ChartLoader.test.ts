@@ -182,7 +182,7 @@ describe('ChartLoader', () => {
           datasets: [{ label: 'Test', data: [1, 2] }],
         })
 
-        const updateData = () => {
+        const _updateData = () => {
           chartData.value = {
             labels: ['X', 'Y', 'Z'],
             datasets: [{ label: 'Updated', data: [10, 20, 30] }],

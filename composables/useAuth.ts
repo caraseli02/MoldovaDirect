@@ -17,7 +17,6 @@ import type { LoginCredentials, RegisterData, AuthUser } from '~/stores/auth'
 
 export const useAuth = () => {
   const authStore = useAuthStore()
-  const router = useRouter()
   const route = useRoute()
 
   /**
@@ -86,7 +85,7 @@ export const useAuth = () => {
    * Check if user has a specific role or permission
    * This can be extended based on future role-based access control requirements
    */
-  const hasRole = (role: string): boolean => {
+  const hasRole = (_role: string): boolean => {
     // For now, we don't have roles implemented
     // This is a placeholder for future role-based access control
     return false

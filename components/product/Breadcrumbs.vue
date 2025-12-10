@@ -204,7 +204,7 @@
             class="space-y-2 pb-3 pt-2 border-t border-gray-200 dark:border-gray-700"
           >
             <li
-              v-for="(item, index) in breadcrumbItems.slice(0, -1)"
+              v-for="item in breadcrumbItems.slice(0, -1)"
               :key="item.id"
               class="pl-6"
             >
@@ -268,7 +268,7 @@ const breadcrumbItems = computed((): BreadcrumbItem[] => {
   // Use provided category path or build from current category
   const categories = props.categoryPath.length > 0 ? props.categoryPath : buildCategoryPath(props.currentCategory)
 
-  categories.forEach((category, index) => {
+  categories.forEach((category, _index) => {
     // Get localized name from translations
     const categoryName = (category as any).name
     const label = typeof categoryName === 'string'

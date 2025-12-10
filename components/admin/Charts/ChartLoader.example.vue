@@ -147,12 +147,12 @@ const pieChartOptions: ChartOptions<'pie'> = {
 }
 
 // Event handlers
-const handleChartCreated = (chart: any) => {
-  console.log('Chart created:', chart)
+const handleChartCreated = (_chart: any) => {
+  // Chart created
 }
 
 const handleChartDestroyed = () => {
-  console.log('Chart destroyed')
+  // Chart destroyed
 }
 
 const handleError = (error: Error) => {

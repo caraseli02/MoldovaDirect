@@ -19,7 +19,6 @@
 import { ref, computed, watch, onUnmounted } from 'vue'
 import { useDebounceFn } from '@vueuse/core'
 import { useSearchStore } from '~/stores/search'
-import type { ProductWithRelations } from '~/types'
 
 export interface SearchSuggestion {
   type: 'product' | 'query' | 'history'

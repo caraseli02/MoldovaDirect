@@ -521,7 +521,7 @@ const validateForm = (): boolean => {
     return false
   }
 
-  if (form.phone && !/^[\+]?[0-9\s\-\(\)]{9,}$/.test(form.phone)) {
+  if (form.phone && !/^[+]?[0-9\s\-()]{9,}$/.test(form.phone)) {
     errors.phone = t('auth.validation.phone.invalid')
     return false
   }

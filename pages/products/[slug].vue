@@ -948,7 +948,7 @@ const addToCart = async () => {
       hasWindow: typeof window !== 'undefined',
       addItemType: typeof addItem,
     }
-    console.log('🛒 Add to Cart clicked', debugInfo)
+    // Debug info available in debugInfo variable
   }
 
   try {
@@ -977,9 +977,7 @@ const addToCart = async () => {
       t('cart.success.productAdded', { product: productName }),
     )
 
-    if (import.meta.dev) {
-      console.log('✅ Add to cart succeeded!')
-    }
+    // Add to cart succeeded
   }
   catch (err) {
     const errorMsg = err instanceof Error ? err.message : String(err)

@@ -173,7 +173,7 @@ async function saveToStorage(
 /**
  * Load data from storage
  */
-async function loadFromStorage(
+async function _loadFromStorage(
   key: string,
   options: Partial<StorageOptions> = {},
 ): Promise<StorageResult> {
@@ -251,7 +251,7 @@ async function loadFromStorage(
 /**
  * Remove data from storage
  */
-async function removeFromStorage(
+async function _removeFromStorage(
   key: string,
   options: Partial<StorageOptions> = {},
 ): Promise<StorageResult> {
@@ -338,8 +338,8 @@ function createDebouncedSave(delay: number = 1000) {
   }
 }
 
-// Default debounced save instance
-const debouncedSaveToStorage = createDebouncedSave()
+// Default debounced save instance (reserved for future use)
+// const _debouncedSaveToStorage = createDebouncedSave()
 
 // =============================================
 // CART-SPECIFIC PERSISTENCE USING COOKIES

@@ -38,7 +38,7 @@ const PII_PATTERNS = {
   email: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/gi,
 
   // Phone numbers (various formats)
-  phone: /(\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b/g,
+  phone: /(\+?\d{1,3}[-.\s]?)?(\d{3})?[-.\s]?\d{3}[-.\s]?\d{4}\b/g,
 
   // Credit card numbers (simple pattern)
   creditCard: /\b\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b/g,
@@ -56,7 +56,7 @@ const PII_PATTERNS = {
   bearerToken: /Bearer\s+[A-Za-z0-9\-._~+/]+=*/gi,
 
   // API keys (common patterns)
-  apiKey: /["\']?(?:api[_-]?key|apikey|access[_-]?token)["\']?\s*[:=]\s*["\']?[A-Za-z0-9\-._~+/]+["\']?/gi,
+  apiKey: /["']?(?:api[_-]?key|apikey|access[_-]?token)["']?\s*[:=]\s*["']?[A-Za-z0-9\-._~+/]+["']?/gi,
 }
 
 /**
@@ -211,7 +211,7 @@ function formatLogData(data: any): any {
     const cloned = JSON.parse(JSON.stringify(data))
     return redactObject(cloned)
   }
-  catch (error) {
+  catch {
     // If serialization fails, return safe error message
     return { error: 'Failed to serialize log data' }
   }

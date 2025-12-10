@@ -17,10 +17,6 @@ import {
   generatePassword,
   generateAddress,
   randomItem,
-  orderStatuses,
-  paymentStatuses,
-  streets,
-  cities,
   productTemplates,
 } from '~/server/data/mockData'
 

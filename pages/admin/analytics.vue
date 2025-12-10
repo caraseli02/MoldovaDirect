@@ -239,7 +239,7 @@ const {
   fetchAnalyticsOverview,
   fetchUserAnalytics,
   fetchProductAnalytics,
-  refreshAllAnalytics,
+  refreshAllAnalytics: _refreshAllAnalytics,
 } = useAnalytics()
 
 // State

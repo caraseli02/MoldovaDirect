@@ -4,8 +4,7 @@
 // Utilities for sending order-related emails with logging and retry support
 // Requirements: 1.1, 4.1, 4.2
 
-import type { EmailType } from '~/types/email'
-import type { OrderEmailData, OrderItemData, AddressData, DatabaseOrder } from './emailTemplates/types'
+import type { OrderEmailData, DatabaseOrder } from './emailTemplates/types'
 import { sendEmail } from './email'
 import { orderConfirmation, orderStatus } from './emailTemplates'
 import {
@@ -434,7 +433,7 @@ export function validateTrackingUrl(url: string): boolean {
 
     return isKnownDomain
   }
-  catch (error) {
+  catch {
     return false
   }
 }

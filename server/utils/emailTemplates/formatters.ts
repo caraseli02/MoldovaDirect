@@ -30,7 +30,7 @@ export function formatCurrency(amount: number, locale: SupportedLocale | string)
       maximumFractionDigits: 2,
     }).format(amount)
   }
-  catch (error) {
+  catch {
     // Fallback to simple formatting
     return `€${amount.toFixed(2)}`
   }
@@ -56,7 +56,7 @@ export function formatDate(dateString: string, locale: SupportedLocale | string)
       day: 'numeric',
     })
   }
-  catch (error) {
+  catch {
     return dateString
   }
 }
@@ -83,7 +83,7 @@ export function formatDateTime(dateString: string, locale: SupportedLocale | str
       minute: '2-digit',
     })
   }
-  catch (error) {
+  catch {
     return dateString
   }
 }
@@ -97,7 +97,7 @@ export function formatNumber(value: number, locale: SupportedLocale | string): s
   try {
     return new Intl.NumberFormat(intlLocale).format(value)
   }
-  catch (error) {
+  catch {
     return value.toString()
   }
 }
@@ -115,7 +115,7 @@ export function formatPercentage(value: number, locale: SupportedLocale | string
       maximumFractionDigits: 2,
     }).format(value / 100)
   }
-  catch (error) {
+  catch {
     return `${value}%`
   }
 }
@@ -179,7 +179,7 @@ export function normalizeLocale(locale: string | undefined): SupportedLocale {
 /**
  * Get locale-specific currency symbol
  */
-export function getCurrencySymbol(locale: SupportedLocale | string): string {
+export function getCurrencySymbol(_locale: SupportedLocale | string): string {
   // All prices are in EUR
   return '€'
 }

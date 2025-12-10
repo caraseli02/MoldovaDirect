@@ -407,9 +407,7 @@ onMounted(async () => {
 
 // Component cleanup on unmount
 onUnmounted(() => {
-  if (process.env.NODE_ENV === 'development') {
-    console.log('Cart page unmounted')
-  }
+  // Cleanup
 })
 
 // SEO Meta

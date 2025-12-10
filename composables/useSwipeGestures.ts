@@ -64,7 +64,7 @@ export const useSwipeGestures = () => {
   }
 
   // Handle touch end
-  const handleTouchEnd = (event: TouchEvent) => {
+  const handleTouchEnd = (_event: TouchEvent) => {
     if (!startTime) return
 
     const endTime = Date.now()

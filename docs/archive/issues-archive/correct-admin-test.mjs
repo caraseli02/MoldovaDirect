@@ -29,7 +29,7 @@ async function capturePageState(page, pageName) {
   state.loadedSuccessfully = errorMessages === 0
 
   const pageText = await page.textContent('body')
-  const translationPattern = /[a-z]+.[a-z]+.[a-z.]+/gi
+  const translationPattern = /[a-z]+\.[a-z]+\.[a-z.]+/gi
   const matches = pageText.match(translationPattern)
   if (matches) {
     state.translationKeys = [...new Set(matches.filter(m =>
@@ -48,7 +48,9 @@ async function capturePageState(page, pageName) {
         }
       }
     }
-    catch (e) {}
+    catch (_e) {
+      // Ignore errors during element detection
+    }
   }
 
   const bodyHTML = await page.content()

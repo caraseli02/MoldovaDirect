@@ -17,12 +17,6 @@ import { CART_COOKIE_CONFIG, COOKIE_NAMES } from '~/config/cookies'
 import type {
   Product,
   CartItem,
-  CartCoreState,
-  CartPersistenceState,
-  CartValidationState,
-  CartAnalyticsState,
-  CartSecurityState,
-  CartAdvancedState,
   SavedForLaterItem,
 } from './types'
 

@@ -166,7 +166,7 @@ async function updateInventoryForPickedItemsAtomic(supabase: any, orderId: numbe
  * - Can lose updates with concurrent requests
  * - See Issue #82 tests for demonstration
  */
-async function updateInventoryForPickedItems_DEPRECATED(supabase: any, orderId: number, userId: string) {
+async function _updateInventoryForPickedItems_DEPRECATED(supabase: any, orderId: number, userId: string) {
   try {
     // Check if inventory has already been updated for this order
     const { data: order, error: orderError } = await supabase
@@ -313,7 +313,7 @@ async function rollbackInventoryForPickedItemsAtomic(supabase: any, orderId: num
  *
  * This function has race conditions - see Issue #82 tests
  */
-async function rollbackInventoryForPickedItems_DEPRECATED(supabase: any, orderId: number, userId: string) {
+async function _rollbackInventoryForPickedItems_DEPRECATED(supabase: any, orderId: number, userId: string) {
   try {
     // Check if inventory was updated for this order and if order can be rolled back
     const { data: order, error: orderError } = await supabase

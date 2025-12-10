@@ -1,8 +1,6 @@
 import type {
   TestResult,
   DatabaseStats,
-  ScenarioTemplate,
-  GenerationHistoryItem,
   CustomDataConfig,
   ProgressState,
 } from '~/types/admin-testing'

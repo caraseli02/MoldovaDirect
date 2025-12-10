@@ -442,7 +442,7 @@ const progressPercentage = computed(() => {
 })
 
 // Check if task should be disabled (e.g., order already shipped)
-const isTaskDisabled = (task: OrderFulfillmentTaskRaw) => {
+const isTaskDisabled = (_task: OrderFulfillmentTaskRaw) => {
   // Disable if order is already shipped or delivered
   if (props.currentStatus === 'shipped' || props.currentStatus === 'delivered') {
     return true

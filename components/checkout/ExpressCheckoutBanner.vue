@@ -225,13 +225,15 @@ const useExpressCheckout = async () => {
     }
 
     // Create properly typed shipping method
-    const shippingMethod: ShippingMethod = props.preferredShippingMethod ? {
-      id: props.preferredShippingMethod,
-      name: props.preferredShippingMethod,
-      description: '',
-      price: 0, // Will be updated when shipping methods load
-      estimatedDays: 4,
-    } : defaultMethod
+    const shippingMethod: ShippingMethod = props.preferredShippingMethod
+      ? {
+          id: props.preferredShippingMethod,
+          name: props.preferredShippingMethod,
+          description: '',
+          price: 0, // Will be updated when shipping methods load
+          estimatedDays: 4,
+        }
+      : defaultMethod
 
     // Pre-populate checkout with saved data - always provide complete ShippingInformation
     const shippingInfo = {

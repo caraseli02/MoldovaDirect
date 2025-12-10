@@ -537,7 +537,7 @@ const formatDate = (dateString: string) => {
 
 // Badge variant mappings centralized in lib/uiVariants
 
-const getMovementTypeClasses = (type: string) => {
+const _getMovementTypeClasses = (type: string) => {
   const baseClasses = 'inline-flex items-center px-2 py-1 rounded-full text-xs font-medium'
 
   switch (type) {
@@ -552,7 +552,7 @@ const getMovementTypeClasses = (type: string) => {
   }
 }
 
-const getPriorityClasses = (priority: string) => {
+const _getPriorityClasses = (priority: string) => {
   const baseClasses = 'inline-flex items-center px-2 py-1 rounded-full text-xs font-medium'
 
   switch (priority) {

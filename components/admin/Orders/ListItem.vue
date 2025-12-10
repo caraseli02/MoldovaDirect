@@ -106,8 +106,8 @@ interface Emits {
   (e: 'toggle-selection', orderId: number): void
 }
 
-const props = defineProps<Props>()
-const emit = defineEmits<Emits>()
+const _props = defineProps<Props>()
+const _emit = defineEmits<Emits>()
 
 // Computed properties
 const customerName = computed(() => {

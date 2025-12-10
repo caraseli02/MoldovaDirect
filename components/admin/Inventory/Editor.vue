@@ -157,7 +157,7 @@ try {
     adminProductsStore = useAdminProductsStore()
   }
 }
-catch (error) {
+catch {
   console.warn('Admin products store not available during SSR/hydration')
 }
 
@@ -182,8 +182,17 @@ const inputRef = ref<HTMLInputElement>()
 const hasError = computed(() => {
   if (!isEditing.value || editValue.value === '') return false
   const validation = validateStockQuantity(editValue.value)
-  errorMessage.value = validation.error || ''
   return !validation.isValid
+})
+
+// Watch for validation errors
+watch([isEditing, editValue], () => {
+  if (!isEditing.value || editValue.value === '') {
+    errorMessage.value = ''
+    return
+  }
+  const validation = validateStockQuantity(editValue.value)
+  errorMessage.value = validation.error || ''
 })
 
 // Watch for prop changes
@@ -232,7 +241,7 @@ const saveChanges = async () => {
   isUpdating.value = true
 
   try {
-    const response = await adminProductsStore.updateInventory(
+    await adminProductsStore.updateInventory(
       props.productId,
       newQuantity,
       props.reason,

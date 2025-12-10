@@ -122,7 +122,7 @@ interface Props {
   canReturn: boolean
 }
 
-const props = defineProps<Props>()
+const _props = defineProps<Props>()
 
 defineEmits<{
   reorder: []

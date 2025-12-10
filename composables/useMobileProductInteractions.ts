@@ -1,4 +1,3 @@
-import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import type { Ref } from 'vue'
 import { useDevice } from '~/composables/useDevice'
 import { useHapticFeedback } from '~/composables/useHapticFeedback'
@@ -52,7 +51,6 @@ export function useMobileProductInteractions(
    */
   const setup = () => {
     if (!isMobile.value || !scrollContainer.value) {
-      console.debug('Mobile interactions skipped: not mobile or no container')
       return
     }
 
@@ -75,8 +73,6 @@ export function useMobileProductInteractions(
         }
       },
     })
-
-    console.debug('Mobile interactions setup complete')
   }
 
   /**
@@ -86,7 +82,6 @@ export function useMobileProductInteractions(
   const cleanup = () => {
     pullToRefresh.cleanupPullToRefresh()
     swipeGestures.cleanupSwipeListeners()
-    console.debug('Mobile interactions cleanup complete')
   }
 
   return {

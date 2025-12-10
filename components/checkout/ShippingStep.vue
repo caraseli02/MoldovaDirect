@@ -135,7 +135,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ShippingInformation, ShippingMethod, Address } from '~/types/checkout'
+import type { ShippingInformation } from '~/types/checkout'
 import type { CheckoutStore } from '~/stores/checkout'
 import type { GuestInfo } from '~/composables/useGuestCheckout'
 

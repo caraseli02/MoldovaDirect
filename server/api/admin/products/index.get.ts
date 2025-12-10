@@ -20,7 +20,6 @@
 import { serverSupabaseClient } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
 import { prepareSearchPattern, MAX_SEARCH_LENGTH } from '~/server/utils/searchSanitization'
-import { ADMIN_CACHE_CONFIG, getAdminCacheKey } from '~/server/utils/adminCache'
 
 interface AdminProductFilters {
   search?: string

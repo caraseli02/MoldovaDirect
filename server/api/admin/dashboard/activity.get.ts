@@ -16,9 +16,8 @@
  * - Cache invalidated on user/order/product mutations
  */
 
-import { serverSupabaseClient, serverSupabaseUser } from '#supabase/server'
+import { serverSupabaseClient } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
-import { ADMIN_CACHE_CONFIG, getAdminCacheKey } from '~/server/utils/adminCache'
 
 export interface ActivityItem {
   id: string

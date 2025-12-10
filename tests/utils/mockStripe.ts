@@ -154,7 +154,7 @@ export function mockStripeCardChangeEvent(complete = true, error: any = null) {
 export function mockStripeJs() {
   const mockStripe = createMockStripe()
 
-  // @ts-ignore
+  // @ts-expect-error - Mock for testing purposes
   global.Stripe = vi.fn(() => mockStripe)
 
   return mockStripe

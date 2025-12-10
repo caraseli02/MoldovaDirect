@@ -70,7 +70,7 @@ function isValidQuantity(quantity: number): boolean {
 /**
  * Validate cart value
  */
-function isValidCartValue(value: number): boolean {
+function _isValidCartValue(value: number): boolean {
   return typeof value === 'number'
     && value >= 0
     && value <= MAX_CART_VALUE
@@ -318,7 +318,7 @@ function detectSuspiciousBehavior(
 /**
  * Get recent operations for session (simplified implementation)
  */
-function getRecentOperations(sessionId: string): any[] {
+function getRecentOperations(_sessionId: string): any[] {
   // In a real implementation, this would check a cache or database
   // For now, return empty array
   return []

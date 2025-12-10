@@ -278,7 +278,7 @@ const emit = defineEmits<Emits>()
 // Composables
 const { isMobile } = useDevice()
 const { vibrate } = useHapticFeedback()
-const { t } = useI18n()
+const { t: _t } = useI18n()
 
 // Template refs
 const cardRef = ref<HTMLElement>()
@@ -333,7 +333,7 @@ const formatCurrency = (amount: number) => {
   }).format(amount)
 }
 
-const handleTouchStart = (event: TouchEvent) => {
+const handleTouchStart = (_event: TouchEvent) => {
   if (isMobile.value) {
     vibrate('tap')
   }

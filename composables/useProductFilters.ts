@@ -37,14 +37,6 @@ export interface FilterChip {
   attributeValue?: string
 }
 
-interface CategoryNode {
-  id: number
-  slug: string
-  name: Record<string, string>
-  productCount?: number
-  children?: CategoryNode[]
-}
-
 interface AvailableCategory {
   id: number
   name: Record<string, string>
@@ -366,12 +358,14 @@ export function useProductFilters(categoriesTree?: Ref<CategoryWithChildren[]>) 
       // Safe null check: verify attribute still exists before checking length
       const updatedValues = filters.value.attributes[attributeKey]
       if (updatedValues && updatedValues.length === 0) {
-        delete filters.value.attributes[attributeKey]
+        const { [attributeKey]: _removed, ...rest } = filters.value.attributes
+        filters.value.attributes = rest
       }
     }
     else {
       // Remove entire attribute
-      delete filters.value.attributes[attributeKey]
+      const { [attributeKey]: _removed, ...rest } = filters.value.attributes
+      filters.value.attributes = rest
     }
 
     // Clean up if no attributes left
@@ -481,7 +475,8 @@ export function useProductFilters(categoriesTree?: Ref<CategoryWithChildren[]>) 
               nextFilters.attributes[chip.attributeKey] = filtered
             }
             else {
-              delete nextFilters.attributes[chip.attributeKey]
+              const { [chip.attributeKey]: _removed, ...rest } = nextFilters.attributes
+              nextFilters.attributes = rest
             }
             if (Object.keys(nextFilters.attributes || {}).length === 0) {
               delete nextFilters.attributes
@@ -517,9 +512,9 @@ export function useProductFilters(categoriesTree?: Ref<CategoryWithChildren[]>) 
         priceRange.value = { min: res.min ?? 0, max: res.max ?? 200 }
       }
     }
-    catch (e) {
+    catch {
       // Keep existing range on error
-      console.error('Failed to load price range', e)
+      console.error('Failed to load price range')
     }
   }
 

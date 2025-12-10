@@ -52,7 +52,6 @@ export interface UseOrdersReturn {
 
 export const useOrders = (): UseOrdersReturn => {
   const supabaseClient = useSupabaseClient()
-  const { $i18n } = useNuxtApp()
 
   // State
   const orders = ref<Order[]>([])

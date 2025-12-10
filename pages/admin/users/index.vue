@@ -168,12 +168,12 @@ const closeUserDetail = () => {
   adminUsersStore.clearCurrentUser()
 }
 
-const handleUserEdit = (userId: string) => {
+const handleUserEdit = (_userId: string) => {
   // For now, just show a message - you could implement an edit modal
   toast.info('User editing functionality will be implemented in a future update')
 }
 
-const handleUserAction = async (action: string, userId: string, data?: any) => {
+const handleUserAction = async (action: string, userId: string, _data?: any) => {
   try {
     switch (action) {
       case 'view':
@@ -214,8 +214,6 @@ const fetchUsersData = async () => {
     const headers = {
       Authorization: `Bearer ${session.access_token}`,
     }
-
-    console.log('[AdminUsers] Fetching users data with Bearer token')
 
     // Use $fetch with Bearer token headers (same as dashboard)
     const response = await $fetch<{
@@ -264,8 +262,6 @@ const fetchUserDetail = async (userId: string) => {
     const headers = {
       Authorization: `Bearer ${session.access_token}`,
     }
-
-    console.log('[AdminUsers] Fetching user detail with Bearer token')
 
     // Fetch user detail
     const response = await $fetch<{

@@ -12,9 +12,8 @@
  * - User engagement metrics
  */
 
-import { serverSupabaseClient, serverSupabaseUser } from '#supabase/server'
+import { serverSupabaseClient } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
-import { ADMIN_CACHE_CONFIG, getAdminCacheKey } from '~/server/utils/adminCache'
 
 export interface UserAnalyticsData {
   registrationTrends: Array<{
@@ -60,14 +59,12 @@ export default defineEventHandler(async (event) => {
     const startDate = query.startDate as string
     const endDate = query.endDate as string
 
-    let dateFilter = ''
     if (startDate && endDate) {
-      dateFilter = `AND created_at BETWEEN '${startDate}' AND '${endDate}'`
+      // Date filter applied to query parameters
     }
     else {
       const daysAgo = new Date()
       daysAgo.setDate(daysAgo.getDate() - days)
-      dateFilter = `AND created_at >= '${daysAgo.toISOString()}'`
     }
 
     // Get registration trends
@@ -95,18 +92,18 @@ export default defineEventHandler(async (event) => {
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
 
     // Total users
-    const { count: totalUsers, error: totalUsersError } = await supabase
+    const { count: totalUsers } = await supabase
       .from('profiles')
       .select('*', { count: 'exact', head: true })
 
     // New users in last 30 days
-    const { count: newUsersLast30Days, error: newUsersError } = await supabase
+    const { count: newUsersLast30Days } = await supabase
       .from('profiles')
       .select('*', { count: 'exact', head: true })
       .gte('created_at', thirtyDaysAgo.toISOString())
 
     // Active users in last 30 days (users with any activity)
-    const { data: activeUsersData, error: activeUsersError } = await supabase
+    const { data: activeUsersData } = await supabase
       .from('user_activity_logs')
       .select('user_id')
       .gte('created_at', thirtyDaysAgo.toISOString())

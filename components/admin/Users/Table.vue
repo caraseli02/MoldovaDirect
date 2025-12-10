@@ -208,7 +208,7 @@ interface Props {
   showActions?: boolean
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const _props = withDefaults(defineProps<Props>(), {
   showActions: true,
 })
 
@@ -230,7 +230,7 @@ try {
     adminUsersStore = useAdminUsersStore()
   }
 }
-catch (error) {
+catch (_error) {
   console.warn('Admin users store not available during SSR/hydration')
 }
 

@@ -51,8 +51,6 @@ export async function useAdminFetch<T = unknown>(
     Authorization: `Bearer ${session.access_token}`,
   }
 
-  console.log('[useAdminFetch] Making request to:', url, 'with Bearer token')
-
   // Make the authenticated request using $fetch
   // Note: We use $fetch here which works in component context
   return await $fetch<T>(url, {

@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
   await requireAdminRole(event)
 
   const body = await readBody(event)
-  const { type, locale, translations, subject, preheader } = body
+  const { type, locale, subject, preheader } = body
 
   if (!type || !locale) {
     throw createError({

@@ -129,25 +129,25 @@ async function clearTestUsers(supabase: any, results: any) {
     // Delete related data first
     if (testUserIds.length > 0) {
       // Delete addresses
-      const { error: addrError } = await supabase
+      await supabase
         .from('addresses')
         .delete()
         .in('user_id', testUserIds)
 
       // Delete orders (cascade will handle order_items)
-      const { error: ordersError } = await supabase
+      await supabase
         .from('orders')
         .delete()
         .in('user_id', testUserIds)
 
       // Delete carts
-      const { error: cartsError } = await supabase
+      await supabase
         .from('carts')
         .delete()
         .in('user_id', testUserIds)
 
       // Delete profiles
-      const { error: profilesError } = await supabase
+      await supabase
         .from('profiles')
         .delete()
         .in('id', testUserIds)

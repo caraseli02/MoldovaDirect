@@ -72,12 +72,14 @@ export default defineEventHandler(async (event) => {
     }
 
     // Get or create cart for user
-    let { data: cart, error: cartError } = await supabase
+    const { data: initialCart, error: cartError } = await supabase
       .from('carts')
       .select('id')
       .eq('user_id', user.id)
       .is('session_id', null)
       .single()
+
+    let cart = initialCart
 
     if (cartError && cartError.code === 'PGRST116') {
       // Create new cart
@@ -161,7 +163,7 @@ export default defineEventHandler(async (event) => {
             : null,
         })
       }
-      catch (error) {
+      catch {
         validationResults.push({
           productId: orderItem.product_id,
           productName: orderItem.product_snapshot?.name_translations?.en || 'Unknown',

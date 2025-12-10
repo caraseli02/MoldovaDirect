@@ -75,9 +75,9 @@ describe('POST /api/webhooks/stripe', () => {
     it('should reject requests without stripe-signature header', async () => {
       const { readRawBody, getHeader, createError } = await import('#imports')
 
-      // @ts-ignore
+      // @ts-expect-error - Mock method
       readRawBody.mockResolvedValue('{"type":"payment_intent.succeeded"}')
-      // @ts-ignore
+      // @ts-expect-error - Mock method
       getHeader.mockReturnValue(undefined)
 
       const error = createError({
@@ -92,9 +92,9 @@ describe('POST /api/webhooks/stripe', () => {
     it('should reject requests without body', async () => {
       const { readRawBody, getHeader, createError } = await import('#imports')
 
-      // @ts-ignore
+      // @ts-expect-error - Mock method
       readRawBody.mockResolvedValue(null)
-      // @ts-ignore
+      // @ts-expect-error - Mock method
       getHeader.mockReturnValue('sig_test_123')
 
       const error = createError({
@@ -115,9 +115,9 @@ describe('POST /api/webhooks/stripe', () => {
         data: { object: {} },
       })
 
-      // @ts-ignore
+      // @ts-expect-error - Mock method
       readRawBody.mockResolvedValue(body)
-      // @ts-ignore
+      // @ts-expect-error - Mock method
       getHeader.mockReturnValue('invalid_signature')
 
       mockConstructEvent.mockImplementation(() => {
@@ -136,9 +136,9 @@ describe('POST /api/webhooks/stripe', () => {
         data: { object: {} },
       })
 
-      // @ts-ignore
+      // @ts-expect-error - Mock method
       readRawBody.mockResolvedValue(body)
-      // @ts-ignore
+      // @ts-expect-error - Mock method
       getHeader.mockReturnValue('valid_signature')
 
       const mockEvent: Stripe.Event = {
@@ -423,7 +423,7 @@ describe('POST /api/webhooks/stripe', () => {
     it('should return 500 when Stripe keys are missing', async () => {
       const { useRuntimeConfig, createError } = await import('#imports')
 
-      // @ts-ignore
+      // @ts-expect-error - Mock method
       useRuntimeConfig.mockReturnValue({
         stripeSecretKey: undefined,
         stripeWebhookSecret: undefined,

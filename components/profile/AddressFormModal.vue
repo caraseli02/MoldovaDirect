@@ -459,7 +459,7 @@ const validateForm = (): boolean => {
   }
 
   // Validate phone if provided
-  if (form.phone && !/^[\+]?[0-9\s\-\(\)]{9,}$/.test(form.phone)) {
+  if (form.phone && !/^[+]?[0-9\s\-()]{9,}$/.test(form.phone)) {
     errors.phone = t('profile.validation.phoneInvalid')
     return false
   }

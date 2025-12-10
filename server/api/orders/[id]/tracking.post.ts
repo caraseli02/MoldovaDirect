@@ -67,7 +67,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Verify order exists
-    const { data: order, error: orderError } = await supabase
+    const { error: orderError } = await supabase
       .from('orders')
       .select('id, order_number')
       .eq('id', orderId)

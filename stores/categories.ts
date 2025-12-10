@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { CategoryWithChildren, ProductWithRelations } from '~/types'
+import type { CategoryWithChildren } from '~/types'
 
 interface CategoriesState {
   // Categories data

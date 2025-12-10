@@ -136,7 +136,7 @@ let dashboardStore: ReturnType<typeof useAdminDashboardStore> | null = null
 try {
   dashboardStore = useAdminDashboardStore()
 }
-catch (error) {
+catch {
   console.warn('Admin dashboard store not available during SSR/hydration')
 }
 

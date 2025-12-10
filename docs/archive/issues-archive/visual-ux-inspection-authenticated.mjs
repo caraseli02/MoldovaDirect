@@ -8,7 +8,9 @@ const SCREENSHOTS_DIR = './ux-inspection-screenshots'
 try {
   mkdirSync(SCREENSHOTS_DIR, { recursive: true })
 }
-catch (e) {}
+catch (_e) {
+  // Suppress errors
+}
 
 async function inspectAdminUsersPageAuthenticated() {
   const browser = await chromium.launch({ headless: true })
@@ -299,7 +301,9 @@ async function inspectAdminUsersPageAuthenticated() {
       await page.screenshot({ path: errorPath, fullPage: true })
       report.screenshots.push({ name: 'error-state.png', description: 'Error state' })
     }
-    catch (e) {}
+    catch (_e) {
+      // Suppress errors
+    }
   }
   finally {
     await browser.close()

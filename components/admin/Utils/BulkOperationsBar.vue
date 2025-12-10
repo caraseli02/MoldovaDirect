@@ -199,6 +199,6 @@ interface Emits {
   (e: 'retry'): void
 }
 
-const props = defineProps<Props>()
-const emit = defineEmits<Emits>()
+const _props = defineProps<Props>()
+const _emit = defineEmits<Emits>()
 </script>

@@ -16,7 +16,7 @@ import type { ChartConfiguration, ChartType, ChartData, ChartOptions } from 'cha
  * />
  */
 
-const props = defineProps({
+const _props = defineProps({
   /**
    * Chart type to render
    */

@@ -278,7 +278,7 @@ function validateCartOperationData(
 async function processCartOperation(
   operation: string,
   data: any,
-  sessionId: string,
+  _sessionId: string,
 ): Promise<any> {
   switch (operation) {
     case 'addItem':
@@ -395,7 +395,7 @@ async function processRemoveItem(data: any): Promise<any> {
 /**
  * Process clear cart operation
  */
-async function processClearCart(data: any): Promise<any> {
+async function processClearCart(_data: any): Promise<any> {
   return {
     cleared: true,
     timestamp: new Date().toISOString(),
@@ -458,7 +458,7 @@ async function processValidateCart(data: any): Promise<any> {
         },
       })
     }
-    catch (error) {
+    catch {
       validationResults.push({
         itemId: item.id,
         valid: false,

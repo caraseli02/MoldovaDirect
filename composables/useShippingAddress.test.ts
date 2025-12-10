@@ -290,7 +290,7 @@ describe('useShippingAddress', () => {
     it('sets loading state during address fetch', async () => {
       mockUser.value = { id: 'user-123' } as any
 
-      let resolvePromise: Function
+      let resolvePromise: (value: any) => void
       mockFetch.mockReturnValue(new Promise((resolve) => {
         resolvePromise = resolve
       }))
@@ -461,7 +461,7 @@ describe('useShippingAddress', () => {
     it('sets loading state during address save', async () => {
       mockUser.value = { id: 'user-123' } as any
 
-      let resolvePromise: Function
+      let resolvePromise: (value: any) => void
       mockFetch.mockReturnValue(new Promise((resolve) => {
         resolvePromise = resolve
       }))
@@ -821,7 +821,7 @@ describe('useShippingAddress', () => {
 
       // Attempting to modify will be prevented by Vue's readonly wrapper
       const originalValue = savedAddresses.value
-      // @ts-ignore - intentionally testing readonly behavior
+      // @ts-expect-error - intentionally testing readonly behavior
       savedAddresses.value = []
       // Value should remain unchanged due to readonly
       expect(savedAddresses.value).toBe(originalValue)
@@ -834,7 +834,7 @@ describe('useShippingAddress', () => {
       expect(typeof loading.value).toBe('boolean')
 
       const originalValue = loading.value
-      // @ts-ignore - intentionally testing readonly behavior
+      // @ts-expect-error - intentionally testing readonly behavior
       loading.value = true
       expect(loading.value).toBe(originalValue)
     })
@@ -845,7 +845,7 @@ describe('useShippingAddress', () => {
       expect(error).toBeDefined()
 
       const originalValue = error.value
-      // @ts-ignore - intentionally testing readonly behavior
+      // @ts-expect-error - intentionally testing readonly behavior
       error.value = 'test'
       expect(error.value).toBe(originalValue)
     })
@@ -857,7 +857,7 @@ describe('useShippingAddress', () => {
       expect(typeof isAddressValid.value).toBe('boolean')
 
       const originalValue = isAddressValid.value
-      // @ts-ignore - intentionally testing readonly behavior
+      // @ts-expect-error - intentionally testing readonly behavior
       isAddressValid.value = true
       expect(isAddressValid.value).toBe(originalValue)
     })

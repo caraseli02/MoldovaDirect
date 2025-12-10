@@ -30,7 +30,7 @@ import type {
 export interface TanStackTableModule {
   // Core table functions
   useVueTable: <TData extends RowData>(options: TableOptions<TData>) => Table<TData>
-  createColumnHelper: <TData extends RowData>() => any
+  createColumnHelper: <_TData extends RowData>() => any
 
   // Row model functions
   getCoreRowModel: () => any
