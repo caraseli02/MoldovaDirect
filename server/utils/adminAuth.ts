@@ -168,11 +168,6 @@ export async function requireAdminRole(event: H3Event): Promise<UserId> {
     })
   }
 
-  // Log successful admin access in development
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`[AdminAuth] ✓ Admin access granted - ${method} ${path} - User: ${currentUser.email} - Auth: ${authMethod}`)
-  }
-
   return currentUser.id as UserId
 }
 
@@ -241,9 +236,6 @@ export async function logAdminAction(
     action,
     metadata,
   }
-
-  // Log to console for development/debugging
-  console.log('[ADMIN_AUDIT]', JSON.stringify(logEntry))
 
   try {
     const supabase = serverSupabaseServiceRole(event)

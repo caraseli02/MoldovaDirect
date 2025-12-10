@@ -333,136 +333,116 @@ export const useCartStore = defineStore('cart', () => {
    * Add item to cart with all enhancements
    */
   async function addItem(product: Product, quantity: number = 1): Promise<void> {
-    try {
-      // Use secure add if security is enabled
-      if (securityEnabled.value && sessionId.value) {
-        try {
-          await security.secureAddItem(product.id, quantity, sessionId.value)
-        }
-        catch (securityError) {
-          console.warn('Secure add failed, falling back to regular add:', securityError)
-        }
+    // Use secure add if security is enabled
+    if (securityEnabled.value && sessionId.value) {
+      try {
+        await security.secureAddItem(product.id, quantity, sessionId.value)
       }
-
-      // Add item via core module
-      await core.addItem(product, quantity)
-
-      // Track analytics
-      if (import.meta.client && sessionId.value) {
-        analytics.trackAddToCart(
-          product,
-          quantity,
-          subtotal.value,
-          itemCount.value,
-          sessionId.value,
-        )
+      catch (securityError) {
+        console.warn('Secure add failed, falling back to regular add:', securityError)
       }
-
-      // Add to validation queue for background validation
-      validation.addToValidationQueue(product.id, 'high')
-
-      // Save to storage
-      await saveAndCacheCartData()
     }
-    catch (error) {
-      throw error
+
+    // Add item via core module
+    await core.addItem(product, quantity)
+
+    // Track analytics
+    if (import.meta.client && sessionId.value) {
+      analytics.trackAddToCart(
+        product,
+        quantity,
+        subtotal.value,
+        itemCount.value,
+        sessionId.value,
+      )
     }
+
+    // Add to validation queue for background validation
+    validation.addToValidationQueue(product.id, 'high')
+
+    // Save to storage
+    await saveAndCacheCartData()
   }
 
   /**
    * Remove item from cart with all enhancements
    */
   async function removeItem(itemId: string): Promise<void> {
-    try {
-      // Get item for analytics before removal
-      const item = core.getItemByProductId(itemId)
-        || items.value.find(i => i.id === itemId)
+    // Get item for analytics before removal
+    const item = core.getItemByProductId(itemId)
+      || items.value.find(i => i.id === itemId)
 
-      // Use secure remove if security is enabled
-      if (securityEnabled.value && sessionId.value) {
-        try {
-          await security.secureRemoveItem(itemId, sessionId.value)
-        }
-        catch (securityError) {
-          console.warn('Secure remove failed, falling back to regular remove:', securityError)
-        }
+    // Use secure remove if security is enabled
+    if (securityEnabled.value && sessionId.value) {
+      try {
+        await security.secureRemoveItem(itemId, sessionId.value)
       }
-
-      // Remove item via core module
-      await core.removeItem(itemId)
-
-      // Track analytics
-      if (import.meta.client && sessionId.value && item) {
-        analytics.trackRemoveFromCart(
-          { ...item.product } as Product,
-          item.quantity,
-          subtotal.value,
-          itemCount.value,
-          sessionId.value,
-        )
+      catch (securityError) {
+        console.warn('Secure remove failed, falling back to regular remove:', securityError)
       }
+    }
 
-      // Save to storage
-      await saveAndCacheCartData()
+    // Remove item via core module
+    await core.removeItem(itemId)
+
+    // Track analytics
+    if (import.meta.client && sessionId.value && item) {
+      analytics.trackRemoveFromCart(
+        { ...item.product } as Product,
+        item.quantity,
+        subtotal.value,
+        itemCount.value,
+        sessionId.value,
+      )
     }
-    catch (error) {
-      throw error
-    }
+
+    // Save to storage
+    await saveAndCacheCartData()
   }
 
   /**
    * Update item quantity with all enhancements
    */
   async function updateQuantity(itemId: string, quantity: number): Promise<void> {
-    try {
-      // Get item for analytics before update
-      const item = items.value.find(i => i.id === itemId)
-      const oldQuantity = item?.quantity || 0
+    // Get item for analytics before update
+    const item = items.value.find(i => i.id === itemId)
+    const oldQuantity = item?.quantity || 0
 
-      // Use secure update if security is enabled
-      if (securityEnabled.value && sessionId.value) {
-        try {
-          await security.secureUpdateQuantity(itemId, quantity, sessionId.value)
-        }
-        catch (securityError) {
-          console.warn('Secure update failed, falling back to regular update:', securityError)
-        }
+    // Use secure update if security is enabled
+    if (securityEnabled.value && sessionId.value) {
+      try {
+        await security.secureUpdateQuantity(itemId, quantity, sessionId.value)
       }
-
-      // Update quantity via core module
-      await core.updateQuantity(itemId, quantity)
-
-      // Track analytics
-      if (import.meta.client && sessionId.value && item) {
-        analytics.trackQuantityUpdate(
-          { ...item.product } as Product,
-          oldQuantity,
-          quantity,
-          subtotal.value,
-          itemCount.value,
-          sessionId.value,
-        )
+      catch (securityError) {
+        console.warn('Secure update failed, falling back to regular update:', securityError)
       }
+    }
 
-      // Save to storage
-      await saveAndCacheCartData()
+    // Update quantity via core module
+    await core.updateQuantity(itemId, quantity)
+
+    // Track analytics
+    if (import.meta.client && sessionId.value && item) {
+      analytics.trackQuantityUpdate(
+        { ...item.product } as Product,
+        oldQuantity,
+        quantity,
+        subtotal.value,
+        itemCount.value,
+        sessionId.value,
+      )
     }
-    catch (error) {
-      throw error
-    }
+
+    // Save to storage
+    await saveAndCacheCartData()
   }
 
   /**
    * Clear cart with persistence
    */
   async function clearCart(): Promise<void> {
-    try {
-      await core.clearCart()
-      await saveAndCacheCartData()
-    }
-    catch (error) {
-      throw error
-    }
+    await core.clearCart()
+    await saveAndCacheCartData()
   }
 
   // =============================================

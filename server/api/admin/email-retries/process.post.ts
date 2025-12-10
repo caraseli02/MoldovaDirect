@@ -10,8 +10,6 @@ export default defineEventHandler(async (event) => {
   try {
     await requireAdminRole(event)
 
-    console.log('📧 Manual email retry processing triggered')
-
     const result = await processEmailRetries()
 
     return {

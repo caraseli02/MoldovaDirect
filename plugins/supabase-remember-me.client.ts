@@ -47,11 +47,7 @@ export default defineNuxtPlugin(() => {
       // The @nuxtjs/supabase module handles this through cookieOptions in nuxt.config
       // Our preference cookie acts as a signal for the desired behavior
 
-      // Log the preference for debugging
-      if (import.meta.dev) {
-        console.log('[Remember Me] Preference:', rememberMe ? 'persistent' : 'session')
-        console.log('[Remember Me] Supabase cookies found:', supabaseCookies.length)
-      }
+      // Log the preference for debugging (noop in dev mode)
     }
     catch (error) {
       console.warn('[Remember Me] Failed to process cookies:', error)

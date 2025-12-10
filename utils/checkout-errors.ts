@@ -348,11 +348,6 @@ export function logCheckoutError(
     additionalData,
   }
 
-  // Log to console in development
-  if (import.meta.dev) {
-    console.error('Checkout Error:', logEntry)
-  }
-
   // Send to analytics/logging service
   if (import.meta.client) {
     try {
@@ -423,12 +418,10 @@ export function getErrorSeverity(error: CheckoutError): 'low' | 'medium' | 'high
 
 async function refreshCheckoutSession(): Promise<void> {
   // Implementation would refresh the checkout session
-  console.log('Refreshing checkout session...')
 }
 
 async function refreshCartData(): Promise<void> {
   // Implementation would refresh cart data
-  console.log('Refreshing cart data...')
 }
 
 export function isRetryableError(error: CheckoutError): boolean {

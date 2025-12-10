@@ -102,19 +102,14 @@ export async function adminFetchForStores<T = any>(
   url: string,
   options: FetchOptions = {},
 ): Promise<T> {
-  console.log('[AdminFetchForStores] Making request to:', url)
-
   // Get auth headers
   const authHeaders = await getAdminAuthHeaders()
-  console.log('[AdminFetchForStores] Auth headers obtained:', Object.keys(authHeaders))
 
   // Merge with any existing headers
   const headers = {
     ...options.headers,
     ...authHeaders,
   }
-
-  console.log('[AdminFetchForStores] Final headers:', Object.keys(headers))
 
   // Make the authenticated request
   // Explicitly type the return to avoid excessive stack depth errors

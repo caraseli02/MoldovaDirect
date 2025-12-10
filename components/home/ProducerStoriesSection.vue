@@ -213,7 +213,6 @@ const onSwiper = (swiper: SwiperType) => {
 // Handle slide change (for analytics, etc.)
 const onSlideChange = () => {
   // Could track analytics here if needed
-  // console.log('Slide changed to:', swiperInstance.value?.activeIndex)
 }
 
 // Open producer modal

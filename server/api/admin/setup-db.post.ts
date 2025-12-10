@@ -96,7 +96,6 @@ export default defineEventHandler(async (event) => {
 
     if (error) {
       // If the RPC function doesn't exist, try a different approach
-      console.log('RPC function not available, trying direct SQL execution...')
 
       // Try to create tables one by one using individual queries
       const queries = [

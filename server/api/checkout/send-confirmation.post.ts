@@ -17,12 +17,6 @@ export default defineEventHandler(async (event) => {
     // Parse request body
     const body = await readBody(event) as SendConfirmationRequest
 
-    console.log('[Checkout API] send-confirmation request received', {
-      orderId: body.orderId,
-      sessionId: body.sessionId,
-      payloadEmail: body.email,
-    })
-
     // Validate required fields
     if (!body.orderId) {
       throw createError({
@@ -56,13 +50,6 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    console.log('[Checkout API] send-confirmation order loaded', {
-      orderId: order.id,
-      orderNumber: order.order_number,
-      guestEmail: order.guest_email,
-      userId: order.user_id,
-    })
-
     // Determine recipient email
     let recipientEmail = order.guest_email || body.email || null
     let recipientName = order.shipping_address?.firstName || 'Customer'
@@ -86,12 +73,6 @@ export default defineEventHandler(async (event) => {
         }
       }
     }
-
-    console.log('[Checkout API] send-confirmation recipient resolution', {
-      recipientEmail,
-      recipientName,
-      orderId: order.id,
-    })
 
     if (!recipientEmail) {
       console.error('[Checkout API] send-confirmation missing email', {
@@ -136,12 +117,6 @@ export default defineEventHandler(async (event) => {
         statusMessage: result.error || 'Failed to send confirmation email',
       })
     }
-
-    console.log('[Checkout API] send-confirmation success', {
-      orderId: order.id,
-      emailLogId: result.emailLogId,
-      externalId: result.externalId,
-    })
 
     return {
       success: true,

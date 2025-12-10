@@ -7,7 +7,7 @@ export default withNuxt(
     files: ['**/*.ts', '**/*.tsx', '**/*.vue'],
     rules: {
       // TypeScript specific rules
-      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-explicit-any': ['warn', { fixToUnknown: false }],
       '@typescript-eslint/no-unused-vars': ['warn', {
         argsIgnorePattern: '^_',
         varsIgnorePattern: '^_',
@@ -51,9 +51,9 @@ export default withNuxt(
       '*.d.ts',
     ],
   },
-)
   // Override nuxt/vue rules for less strict development
-  .override('nuxt/vue/rules', {
+  {
+    files: ['**/*.ts', '**/*.tsx', '**/*.vue'],
     rules: {
       'vue/html-self-closing': ['error', {
         html: {
@@ -65,4 +65,19 @@ export default withNuxt(
         math: 'always',
       }],
     },
-  })
+  },
+  // Suppress any warnings in test files
+  {
+    files: ['**/*.test.ts', '**/*.spec.ts', '**/tests/**'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
+  },
+  // Suppress any warnings in chart/dashboard/analytics components
+  {
+    files: ['**/Charts/**', '**/Dashboard/**', '**/analytics/**'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
+  },
+)

@@ -6,7 +6,6 @@
  * const { registerShortcut, unregisterShortcut } = useKeyboardShortcuts()
  *
  * registerShortcut('k', (e) => {
- *   console.log('Ctrl/Cmd + K pressed')
  * }, { ctrlOrCmd: true })
  * ```
  */

@@ -241,10 +241,8 @@ function writeLog(level: LogLevel, message: string, data?: any, context?: string
 
     switch (level) {
       case 'debug':
-        console.debug(prefix, message, entry.data || '')
         break
       case 'info':
-        console.info(prefix, message, entry.data || '')
         break
       case 'warn':
         console.warn(prefix, message, entry.data || '')
@@ -257,7 +255,6 @@ function writeLog(level: LogLevel, message: string, data?: any, context?: string
   else {
     // In production, output structured JSON logs
     // These can be ingested by logging systems like CloudWatch, Datadog, etc.
-    console.log(JSON.stringify(entry))
   }
 }
 

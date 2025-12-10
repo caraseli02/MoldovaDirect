@@ -142,13 +142,7 @@ async function updateInventoryForPickedItemsAtomic(supabase: any, orderId: numbe
       })
     }
 
-    if (data.skipped) {
-      console.log(data.message)
-    }
-    else {
-      console.log(`Inventory updated for order ${orderId}: ${data.products_updated} products`)
-    }
-
+    // Data contains result of atomic operation (skipped or updated)
     return data
   }
   catch (error) {
@@ -182,7 +176,6 @@ async function _updateInventoryForPickedItems_DEPRECATED(supabase: any, orderId:
 
     // Skip if inventory was already updated
     if (order.inventory_updated) {
-      console.log(`Inventory already updated for order ${orderId}, skipping duplicate update`)
       return
     }
 
@@ -292,13 +285,7 @@ async function rollbackInventoryForPickedItemsAtomic(supabase: any, orderId: num
       })
     }
 
-    if (data.skipped) {
-      console.log(data.message)
-    }
-    else {
-      console.log(`Inventory rolled back for order ${orderId}: ${data.products_updated} products`)
-    }
-
+    // Data contains result of atomic rollback operation (skipped or rolled back)
     return data
   }
   catch (error) {
@@ -329,7 +316,6 @@ async function _rollbackInventoryForPickedItems_DEPRECATED(supabase: any, orderI
 
     // Only allow rollback if inventory was updated
     if (!order.inventory_updated) {
-      console.log(`Inventory was not updated for order ${orderId}, skipping rollback`)
       return
     }
 

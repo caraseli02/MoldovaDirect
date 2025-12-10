@@ -84,7 +84,6 @@ export async function invalidateAdminCache(scope: CacheScope): Promise<CacheInva
       }
     }
 
-    console.log(`[Cache] Invalidated admin cache for scope: ${scope} (${keysInvalidated} keys)`)
     return {
       success: true,
       scope,

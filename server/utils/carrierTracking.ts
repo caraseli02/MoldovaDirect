@@ -60,7 +60,6 @@ export async function fetchCarrierTracking(
 async function fetchDHLTracking(trackingNumber: string): Promise<CarrierTrackingResponse | null> {
   // Placeholder implementation
   // In production, this would call the DHL API
-  console.log(`Fetching DHL tracking for: ${trackingNumber}`)
 
   // Example: const response = await fetch(`https://api.dhl.com/track/${trackingNumber}`, { ... })
 
@@ -72,7 +71,6 @@ async function fetchDHLTracking(trackingNumber: string): Promise<CarrierTracking
  * TODO: Implement actual FedEx API integration
  */
 async function fetchFedExTracking(trackingNumber: string): Promise<CarrierTrackingResponse | null> {
-  console.log(`Fetching FedEx tracking for: ${trackingNumber}`)
   return null
 }
 
@@ -81,7 +79,6 @@ async function fetchFedExTracking(trackingNumber: string): Promise<CarrierTracki
  * TODO: Implement actual UPS API integration
  */
 async function fetchUPSTracking(trackingNumber: string): Promise<CarrierTrackingResponse | null> {
-  console.log(`Fetching UPS tracking for: ${trackingNumber}`)
   return null
 }
 
@@ -90,7 +87,6 @@ async function fetchUPSTracking(trackingNumber: string): Promise<CarrierTracking
  * TODO: Implement actual USPS API integration
  */
 async function fetchUSPSTracking(trackingNumber: string): Promise<CarrierTrackingResponse | null> {
-  console.log(`Fetching USPS tracking for: ${trackingNumber}`)
   return null
 }
 
@@ -99,7 +95,6 @@ async function fetchUSPSTracking(trackingNumber: string): Promise<CarrierTrackin
  * TODO: Implement actual Moldova Post API integration
  */
 async function fetchMoldovaPostTracking(trackingNumber: string): Promise<CarrierTrackingResponse | null> {
-  console.log(`Fetching Moldova Post tracking for: ${trackingNumber}`)
   return null
 }
 

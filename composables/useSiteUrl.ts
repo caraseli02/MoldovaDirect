@@ -17,8 +17,6 @@ const ABSOLUTE_URL_REGEX = /^(https?:)?\/\//i
  * @returns {SiteUrlHelpers} Object containing the base site URL and URL conversion helper
  * @example
  * const { siteUrl, toAbsoluteUrl } = useSiteUrl()
- * console.log(siteUrl) // 'https://www.moldovadirect.com'
- * console.log(toAbsoluteUrl('/about')) // 'https://www.moldovadirect.com/about'
  */
 export function useSiteUrl(): SiteUrlHelpers {
   const runtimeConfig = useRuntimeConfig()

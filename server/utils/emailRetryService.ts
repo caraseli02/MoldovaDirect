@@ -55,8 +55,6 @@ const DEFAULT_ADMIN_ALERT_CONFIG: AdminAlertConfig = {
 export async function processEmailRetries(
   config: EmailRetryConfig = DEFAULT_EMAIL_RETRY_CONFIG,
 ): Promise<BatchRetryResult> {
-  console.log('🔄 Starting email retry processing...')
-
   const results: EmailRetryResult[] = []
   let succeeded = 0
   let failed = 0
@@ -66,7 +64,6 @@ export async function processEmailRetries(
     const pendingEmails = await getPendingEmailsForRetry()
 
     if (pendingEmails.length === 0) {
-      console.log('✅ No pending emails to retry')
       return {
         processed: 0,
         succeeded: 0,
@@ -74,8 +71,6 @@ export async function processEmailRetries(
         results: [],
       }
     }
-
-    console.log(`📧 Found ${pendingEmails.length} pending emails to retry`)
 
     // Process each pending email
     for (const emailLog of pendingEmails) {
@@ -89,8 +84,6 @@ export async function processEmailRetries(
         failed++
       }
     }
-
-    console.log(`✅ Email retry processing complete: ${succeeded} succeeded, ${failed} failed`)
 
     // Check if we need to send admin alerts
     if (failed > 0) {
@@ -122,7 +115,6 @@ async function processEmailRetry(
 
   // Check if we should retry
   if (!shouldRetryEmail(attempts, config)) {
-    console.log(`⏭️  Email ${id} has reached max attempts (${attempts}/${config.maxAttempts})`)
     return {
       emailLogId: id,
       success: false,
@@ -140,7 +132,6 @@ async function processEmailRetry(
   // Check if enough time has passed for retry
   if (timeSinceLastAttempt < delay) {
     const nextRetryAt = new Date(lastAttemptTime + delay).toISOString()
-    console.log(`⏰ Email ${id} not ready for retry yet. Next retry at: ${nextRetryAt}`)
     return {
       emailLogId: id,
       success: false,
@@ -151,13 +142,11 @@ async function processEmailRetry(
   }
 
   // Attempt retry
-  console.log(`🔄 Retrying email ${id} (attempt ${attempts + 1}/${config.maxAttempts})`)
 
   try {
     const result = await retryEmailDelivery(id)
 
     if (result.success) {
-      console.log(`✅ Email ${id} retry successful`)
       return {
         emailLogId: id,
         success: true,
@@ -165,8 +154,6 @@ async function processEmailRetry(
       }
     }
     else {
-      console.log(`❌ Email ${id} retry failed: ${result.error}`)
-
       // Calculate next retry time
       const nextDelay = calculateRetryDelay(attempts + 2, config)
       const nextRetryAt = new Date(now + nextDelay).toISOString()
@@ -208,7 +195,6 @@ async function checkAndSendAdminAlerts(
   const failedEmails = results.filter(r => !r.success && r.error !== 'Not ready for retry')
 
   if (failedEmails.length >= alertConfig.alertThreshold) {
-    console.log(`🚨 Sending admin alert: ${failedEmails.length} emails failed`)
     await sendAdminAlert(failedEmails, alertConfig)
   }
 }
@@ -233,8 +219,6 @@ async function sendAdminAlert(
       subject,
       html,
     })
-
-    console.log(`✅ Admin alert sent to ${alertConfig.alertEmail}`)
   }
   catch (error: any) {
     console.error('❌ Failed to send admin alert:', error)
@@ -381,8 +365,6 @@ export async function getRetryStatistics(
 export async function scheduleEmailRetries(
   intervalMinutes: number = 5,
 ): Promise<void> {
-  console.log(`📅 Scheduling email retries every ${intervalMinutes} minutes`)
-
   // Initial run
   await processEmailRetries()
 

@@ -19,11 +19,7 @@ export default defineNuxtPlugin({
         try {
           const cartStore = useCartStore()
           if (!cartStore.sessionId) {
-            console.log('🛒 Initializing cart store from plugin')
             cartStore.initializeCart()
-          }
-          else {
-            console.log('🛒 Cart store already initialized, sessionId:', cartStore.sessionId)
           }
         }
         catch (error) {

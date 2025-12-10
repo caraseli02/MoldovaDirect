@@ -79,8 +79,6 @@ export default defineEventHandler(async (event: H3Event) => {
     })
   }
 
-  console.log(`[Stripe Webhook] Received event: ${stripeEvent.type} (${stripeEvent.id})`)
-
   // Handle the event based on type
   try {
     switch (stripeEvent.type) {
@@ -100,11 +98,9 @@ export default defineEventHandler(async (event: H3Event) => {
       case 'payment_intent.canceled':
       case 'charge.succeeded':
         // Log these events but don't take action (handled elsewhere)
-        console.log(`[Stripe Webhook] ${stripeEvent.type} event logged (no action required)`)
         break
 
       default:
-        console.log(`[Stripe Webhook] Unhandled event type: ${stripeEvent.type}`)
     }
 
     // Return success response
@@ -135,10 +131,6 @@ async function handlePaymentIntentSucceeded(
   const amountReceived = paymentIntent.amount_received
   const currency = paymentIntent.currency
 
-  console.log(
-    `[Stripe Webhook] Payment succeeded: ${paymentIntentId} - ${amountReceived / 100} ${currency.toUpperCase()}`,
-  )
-
   // Get Supabase service role client (bypasses RLS for webhook operations)
   const client = serverSupabaseServiceRole(event)
 
@@ -161,9 +153,6 @@ async function handlePaymentIntentSucceeded(
 
   // Check if already marked as paid (idempotency)
   if (order.payment_status === 'paid') {
-    console.log(
-      `[Stripe Webhook] Order ${order.order_number} already marked as paid (idempotent)`,
-    )
     return
   }
 
@@ -193,10 +182,6 @@ async function handlePaymentIntentSucceeded(
     )
     throw new Error(`Failed to update order payment status: ${updateError.message}`)
   }
-
-  console.log(
-    `[Stripe Webhook] Order ${order.order_number} marked as paid (${amountReceived / 100} ${currency.toUpperCase()})`,
-  )
 }
 
 /**
@@ -209,10 +194,6 @@ async function handlePaymentIntentFailed(
 ): Promise<void> {
   const paymentIntentId = paymentIntent.id
   const failureMessage = paymentIntent.last_payment_error?.message || 'Unknown error'
-
-  console.log(
-    `[Stripe Webhook] Payment failed: ${paymentIntentId} - ${failureMessage}`,
-  )
 
   // Get Supabase service role client (bypasses RLS for webhook operations)
   const client = serverSupabaseServiceRole(event)
@@ -235,9 +216,6 @@ async function handlePaymentIntentFailed(
 
   // Check if already marked as failed (idempotency)
   if (order.payment_status === 'failed') {
-    console.log(
-      `[Stripe Webhook] Order ${order.order_number} already marked as failed (idempotent)`,
-    )
     return
   }
 
@@ -257,10 +235,6 @@ async function handlePaymentIntentFailed(
     )
     throw new Error(`Failed to update order payment status: ${updateError.message}`)
   }
-
-  console.log(
-    `[Stripe Webhook] Order ${order.order_number} marked as failed - Reason: ${failureMessage}`,
-  )
 }
 
 /**
@@ -275,10 +249,6 @@ async function handleChargeRefunded(
   const paymentIntentId = charge.payment_intent as string
   const amountRefunded = charge.amount_refunded
   const currency = charge.currency
-
-  console.log(
-    `[Stripe Webhook] Charge refunded: ${chargeId} - ${amountRefunded / 100} ${currency.toUpperCase()}`,
-  )
 
   if (!paymentIntentId) {
     console.error(`[Stripe Webhook] No payment intent ID found for charge ${chargeId}`)
@@ -306,9 +276,6 @@ async function handleChargeRefunded(
 
   // Check if already marked as refunded (idempotency)
   if (order.payment_status === 'refunded') {
-    console.log(
-      `[Stripe Webhook] Order ${order.order_number} already marked as refunded (idempotent)`,
-    )
     return
   }
 
@@ -332,10 +299,4 @@ async function handleChargeRefunded(
     )
     throw new Error(`Failed to update order payment status: ${updateError.message}`)
   }
-
-  const refundType = fullRefund ? 'Full' : 'Partial'
-  console.log(
-    `[Stripe Webhook] ${refundType} refund processed for order ${order.order_number}: `
-    + `${amountRefunded / 100} ${currency.toUpperCase()} - Status: ${refundStatus}`,
-  )
 }

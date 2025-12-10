@@ -19,8 +19,6 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    console.log(`🔄 Manual retry requested for email log ${emailLogId}`)
-
     const result = await retryEmailDelivery(emailLogId)
 
     if (result.success) {

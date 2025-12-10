@@ -56,7 +56,6 @@ export async function sendOrderConfirmationEmail(
   )
 
   if (!shouldSend) {
-    console.log(`⏭️ Skipping order confirmation email for order ${orderNumber} - user opted out`)
     return {
       success: true,
       emailLogId: -1,
@@ -100,8 +99,6 @@ export async function sendOrderConfirmationEmail(
       undefined,
       supabase,
     )
-
-    console.log(`✅ Order confirmation email sent for order ${orderNumber}`)
 
     return {
       success: true,
@@ -168,7 +165,6 @@ export async function sendOrderStatusEmail(
   )
 
   if (!shouldSend) {
-    console.log(`⏭️ Skipping ${emailType} email for order ${orderNumber} - user opted out`)
     return {
       success: true,
       emailLogId: -1,
@@ -234,8 +230,6 @@ export async function sendOrderStatusEmail(
       undefined,
       supabase,
     )
-
-    console.log(`✅ Order ${emailType} email sent for order ${orderNumber}`)
 
     return {
       success: true,
@@ -375,8 +369,6 @@ export async function retryEmailDelivery(
       undefined,
       supabase,
     )
-
-    console.log(`✅ Email retry successful for log ${emailLogId}`)
 
     return {
       success: true,

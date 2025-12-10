@@ -91,8 +91,6 @@ export async function useAdminFetchWithRetry<T = unknown>(
     // If we get a 401, try to refresh the session and retry once
     const isUnauthorized = error && typeof error === 'object' && 'statusCode' in error && (error as { statusCode: number }).statusCode === 401
     if (isUnauthorized) {
-      console.log('[AdminFetch] Session expired, attempting to refresh...')
-
       const { data: { session } } = await supabase.auth.refreshSession()
 
       if (!session) {
@@ -150,7 +148,6 @@ export type BatchResult<T>
  * // Handle results
  * results.forEach((result, index) => {
  *   if (result.success) {
- *     console.log('Data:', result.data)
  *   } else {
  *     console.error('Failed to fetch', result.url, result.error)
  *   }

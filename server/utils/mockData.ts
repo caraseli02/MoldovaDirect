@@ -382,7 +382,7 @@ export function getMockInventoryReports(reportType: string) {
         })),
       }
 
-    case 'low-stock':
+    case 'low-stock': {
       const lowStockProducts = MOCK_PRODUCTS.filter(p =>
         p.stockQuantity > 0 && p.stockQuantity <= p.lowStockThreshold,
       )
@@ -402,8 +402,9 @@ export function getMockInventoryReports(reportType: string) {
           isActive: product.isActive,
         })),
       }
+    }
 
-    case 'reorder-alerts':
+    case 'reorder-alerts': {
       const reorderProducts = MOCK_PRODUCTS.filter(p =>
         p.stockQuantity <= p.reorderPoint,
       )
@@ -437,6 +438,7 @@ export function getMockInventoryReports(reportType: string) {
           }
         }),
       }
+    }
 
     default:
       return { message: 'Mock data not available for this report type' }

@@ -22,13 +22,6 @@ export default defineEventHandler(async (event) => {
     const body = await readBody(event)
     const sessionId = body?.sessionId || getCookie(event, 'cart_session_id')
 
-    console.log('[Cart API] clear-cart request', {
-      hasAuthHeader: !!authHeader,
-      userId,
-      sessionIdFromBody: body?.sessionId,
-      sessionIdFromCookie: getCookie(event, 'cart_session_id'),
-    })
-
     if (!userId && !sessionId) {
       return {
         success: true,
@@ -60,7 +53,6 @@ export default defineEventHandler(async (event) => {
 
     if (!carts || carts.length === 0) {
       // No cart found, nothing to clear
-      console.log('[Cart API] clear-cart no cart found', { userId, sessionId })
       return {
         success: true,
         message: 'No cart to clear',
@@ -68,7 +60,6 @@ export default defineEventHandler(async (event) => {
     }
 
     const cartId = carts[0].id
-    console.log('[Cart API] clear-cart deleting cart', { cartId })
 
     // Delete all cart items
     const { error: deleteError } = await supabase
@@ -93,8 +84,6 @@ export default defineEventHandler(async (event) => {
       console.error('Failed to delete cart:', cartDeleteError)
       // Don't throw - cart items are cleared which is the main goal
     }
-
-    console.log('[Cart API] clear-cart success', { cartId })
 
     return {
       success: true,

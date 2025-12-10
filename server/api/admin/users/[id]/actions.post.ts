@@ -77,7 +77,7 @@ export default defineEventHandler(async (event) => {
     let auditDetails: any = {}
 
     switch (body.action) {
-      case 'suspend':
+      case 'suspend': {
         // Update user metadata to mark as suspended
         const suspendUntil = body.duration
           ? new Date(Date.now() + body.duration * 24 * 60 * 60 * 1000).toISOString()
@@ -109,8 +109,9 @@ export default defineEventHandler(async (event) => {
         }
         result = { suspended: true, suspend_until: suspendUntil }
         break
+      }
 
-      case 'unsuspend':
+      case 'unsuspend': {
         const { error: unsuspendError } = await supabase.auth.admin.updateUserById(userId, {
           user_metadata: {
             ...currentUser.user.user_metadata,
@@ -134,8 +135,9 @@ export default defineEventHandler(async (event) => {
         auditDetails = { reason: body.reason }
         result = { suspended: false }
         break
+      }
 
-      case 'ban':
+      case 'ban': {
         // For banning, we'll disable the user account via metadata
         const { error: banError } = await supabase.auth.admin.updateUserById(userId, {
           user_metadata: {
@@ -159,8 +161,9 @@ export default defineEventHandler(async (event) => {
         auditDetails = { reason: body.reason }
         result = { banned: true }
         break
+      }
 
-      case 'unban':
+      case 'unban': {
         const { error: unbanError } = await supabase.auth.admin.updateUserById(userId, {
           user_metadata: {
             ...currentUser.user.user_metadata,
@@ -184,8 +187,9 @@ export default defineEventHandler(async (event) => {
         auditDetails = { reason: body.reason }
         result = { banned: false }
         break
+      }
 
-      case 'verify_email':
+      case 'verify_email': {
         const { error: verifyError } = await supabase.auth.admin.updateUserById(userId, {
           email_confirm: true,
         })
@@ -201,8 +205,9 @@ export default defineEventHandler(async (event) => {
         auditDetails = { reason: body.reason }
         result = { email_verified: true }
         break
+      }
 
-      case 'reset_password':
+      case 'reset_password': {
         // Generate password reset link
         const { data: resetData, error: resetError } = await supabase.auth.admin.generateLink({
           type: 'recovery',
@@ -223,8 +228,9 @@ export default defineEventHandler(async (event) => {
           reset_link: resetData.properties?.action_link,
         }
         break
+      }
 
-      case 'update_role':
+      case 'update_role': {
         // Update user role in metadata (you might want to use a separate roles table)
         const { error: roleError } = await supabase.auth.admin.updateUserById(userId, {
           user_metadata: {
@@ -250,6 +256,7 @@ export default defineEventHandler(async (event) => {
         }
         result = { role: body.role }
         break
+      }
 
       default:
         throw createError({
@@ -353,8 +360,6 @@ function getActionSuccessMessage(action: string): string {
  * Simulate user action for development/testing
  */
 function simulateUserAction(action: string, userId: string) {
-  console.log(`Simulating action "${action}" for user ${userId}`)
-
   const result: any = {}
 
   switch (action) {

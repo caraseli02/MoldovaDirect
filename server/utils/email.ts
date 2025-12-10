@@ -16,18 +16,6 @@ export interface EmailTemplate {
 export async function sendEmail({ to, subject, html }: EmailTemplate) {
   try {
     if (!process.env.RESEND_API_KEY || !resend) {
-      console.log('📧 Development mode: Email would be sent to:', to)
-      console.log('📧 Subject:', subject)
-      console.log('📧 RESEND_API_KEY not configured, simulating email send')
-
-      // In development, log the email details
-      if (process.env.NODE_ENV === 'development') {
-        console.log('📧 Email HTML preview:')
-        console.log('---START EMAIL---')
-        console.log(html.substring(0, 500) + '...')
-        console.log('---END EMAIL---')
-      }
-
       return {
         success: true,
         id: 'dev-mock-email-' + Date.now(),
@@ -47,7 +35,6 @@ export async function sendEmail({ to, subject, html }: EmailTemplate) {
       throw new Error(`Failed to send email: ${error.message}`)
     }
 
-    console.log('✅ Email sent successfully:', data?.id)
     return { success: true, id: data?.id }
   }
   catch (error: any) {

@@ -50,7 +50,6 @@ export async function sendSupportTicketCustomerEmail(
   )
 
   if (!shouldSend) {
-    console.log(`⏭️ Skipping support ticket customer email for ticket ${data.ticketNumber} - user opted out`)
     return {
       success: true,
       emailLogId: -1,
@@ -94,8 +93,6 @@ export async function sendSupportTicketCustomerEmail(
       undefined,
       supabase,
     )
-
-    console.log(`✅ Support ticket customer email sent for ticket ${data.ticketNumber}`)
 
     return {
       success: true,
@@ -172,8 +169,6 @@ export async function sendSupportTicketStaffEmail(
       undefined,
       supabase,
     )
-
-    console.log(`✅ Support ticket staff email sent for ticket ${data.ticketNumber}`)
 
     return {
       success: true,

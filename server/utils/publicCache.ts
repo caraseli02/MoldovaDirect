@@ -50,8 +50,6 @@ export async function invalidatePublicCache(scope: PublicCacheScope): Promise<vo
         await storage.removeItem(keyPattern)
       }
     }
-
-    console.log(`[Cache] Invalidated public cache for scope: ${scope}`)
   }
   catch (error) {
     console.error(`[Cache] Failed to invalidate public cache for scope ${scope}:`, error)
