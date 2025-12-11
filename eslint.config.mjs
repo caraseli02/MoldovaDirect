@@ -66,14 +66,28 @@ export default withNuxt(
       }],
     },
   },
-  // Suppress any warnings in test files
+  // Test files - relax rules appropriate for testing
   {
-    files: ['**/*.test.ts', '**/*.spec.ts', '**/tests/**'],
+    files: ['**/*.test.ts', '**/*.spec.ts', '**/tests/**', 'tests/**/*'],
     rules: {
+      // Allow any in test files for mocking and testing
       '@typescript-eslint/no-explicit-any': 'off',
+      // Allow console in test files for debugging
+      'no-console': 'off',
+      // Allow debugger in test files
+      'no-debugger': 'off',
     },
   },
-  // Suppress any warnings in chart/dashboard/analytics components
+  // E2E test files - similar relaxed rules
+  {
+    files: ['**/*.e2e.ts', '**/*.e2e.js', '**/e2e/**'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      'no-console': 'off',
+      'no-debugger': 'off',
+    },
+  },
+  // Suppress any warnings in chart/dashboard/analytics components (complex third-party integrations)
   {
     files: ['**/Charts/**', '**/Dashboard/**', '**/analytics/**'],
     rules: {
