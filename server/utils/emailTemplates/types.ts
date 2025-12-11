@@ -70,8 +70,8 @@ export interface DatabaseOrder {
   tax_eur: number
   total_eur: number
   payment_method: string
-  shipping_address: any
-  billing_address?: any
+  shipping_address: unknown
+  billing_address?: unknown
   customer_notes?: string
   tracking_number?: string
   carrier?: string
@@ -90,7 +90,7 @@ export interface DatabaseOrderItem {
   quantity: number
   price_eur: number
   total_eur: number
-  product_snapshot?: any
+  product_snapshot?: unknown
 }
 
 /**

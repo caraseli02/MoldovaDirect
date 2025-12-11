@@ -106,7 +106,7 @@ export async function sendOrderConfirmationEmail(
       externalId: result.id,
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error(`❌ Failed to send order confirmation email for order ${orderNumber}:`, error)
 
     // Record failed attempt
@@ -237,7 +237,7 @@ export async function sendOrderStatusEmail(
       externalId: result.id,
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error(`❌ Failed to send order ${emailType} email for order ${orderNumber}:`, error)
 
     // Record failed attempt
@@ -376,7 +376,7 @@ export async function retryEmailDelivery(
       externalId: result.id,
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error(`❌ Email retry failed for log ${emailLogId}:`, error)
 
     // Record failed retry

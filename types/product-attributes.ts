@@ -94,7 +94,7 @@ export interface WineProductAttributes {
 // =============================================
 // TYPE GUARDS
 // =============================================
-export function isWineProduct(attributes: any): attributes is WineProductAttributes {
+export function isWineProduct(attributes: unknown): attributes is WineProductAttributes {
   return attributes && (
     'producer' in attributes
     || 'region' in attributes
@@ -103,10 +103,10 @@ export function isWineProduct(attributes: any): attributes is WineProductAttribu
   )
 }
 
-export function hasProducerInfo(attributes: any): attributes is { producer: ProducerInfo } {
+export function hasProducerInfo(attributes: unknown): attributes is { producer: ProducerInfo } {
   return attributes && 'producer' in attributes && attributes.producer !== null
 }
 
-export function hasRegionInfo(attributes: any): attributes is { region: WineRegionInfo } {
+export function hasRegionInfo(attributes: unknown): attributes is { region: WineRegionInfo } {
   return attributes && 'region' in attributes && attributes.region !== null
 }

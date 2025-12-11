@@ -55,7 +55,7 @@ export interface EmailMetadata {
   templateVersion?: string
   orderNumber?: string
   customerName?: string
-  [key: string]: any
+  [key: string]: unknown
 }
 
 /**

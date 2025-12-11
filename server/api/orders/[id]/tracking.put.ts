@@ -59,7 +59,7 @@ export default defineEventHandler(async (event) => {
     const body = await readBody(event) as UpdateTrackingRequest
 
     // Build update object
-    const updateData: any = {}
+    const updateData: unknown = {}
 
     if (body.trackingNumber !== undefined) {
       updateData.tracking_number = body.trackingNumber
@@ -137,7 +137,7 @@ export default defineEventHandler(async (event) => {
       data: order,
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     if (error.statusCode) {
       throw error
     }

@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { ref } from 'vue'
-import type { ProductWithRelations, ProductImage } from '~/types'
+import type { ProductWithRelations } from '~/types'
 import type { PaginationState } from './useProductPagination'
 
 // Mock dependencies BEFORE imports

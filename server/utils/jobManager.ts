@@ -16,7 +16,7 @@ const jobs = new Map<string, BackgroundJob>()
  */
 export function createJob(
   type: BackgroundJob['type'],
-  metadata?: Record<string, any>,
+  metadata?: Record<string, unknown>,
 ): BackgroundJob {
   const id = `job_${Date.now()}_${Math.random().toString(36).substring(7)}`
 
@@ -61,7 +61,7 @@ export function updateJobProgress(
 /**
  * Mark job as completed
  */
-export function completeJob(id: string, result: any): void {
+export function completeJob(id: string, result: unknown): void {
   const job = jobs.get(id)
   if (job) {
     job.status = 'completed'

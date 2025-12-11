@@ -23,7 +23,7 @@ export default defineCachedEventHandler(async (event): Promise<GetSectionsRespon
     const VALID_LOCALES = ['es', 'en', 'ro', 'ru'] as const
     const requestedLocale = query.locale || 'es'
 
-    if (!VALID_LOCALES.includes(requestedLocale as any)) {
+    if (!VALID_LOCALES.includes(requestedLocale as unknown)) {
       throw createError({
         statusCode: 400,
         statusMessage: `Bad Request - Invalid locale. Must be one of: ${VALID_LOCALES.join(', ')}`,
@@ -90,7 +90,7 @@ export default defineCachedEventHandler(async (event): Promise<GetSectionsRespon
       locale,
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Error fetching landing sections:', error)
 
     throw createError({

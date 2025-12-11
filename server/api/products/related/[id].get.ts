@@ -17,7 +17,7 @@ function getLocalizedContent(content: Record<string, string>, locale: string): s
 }
 
 // Helper function to calculate similarity score between products
-function calculateSimilarityScore(product1: any, product2: any): number {
+function calculateSimilarityScore(product1: unknown, product2: unknown): number {
   let score = 0
 
   // Same category gets highest score
@@ -157,7 +157,7 @@ export default defineCachedEventHandler(async (event) => {
         ? 'in_stock'
         : product.stock_quantity > 0 ? 'low_stock' : 'out_of_stock',
       images: Array.isArray(product.images)
-        ? product.images.map((img: any, index: number) => ({
+        ? product.images.map((img: unknown, index: number) => ({
             url: img.url || img,
             altText: img.alt || img.alt_text || getLocalizedContent(product.name_translations, locale),
             isPrimary: img.is_primary || index === 0,
@@ -206,8 +206,8 @@ export default defineCachedEventHandler(async (event) => {
       .limit(4)
 
     // Process frequently bought together data
-    const frequentlyBought = frequentlyBoughtTogether?.reduce((acc: any[], item: any) => {
-      item.orders.order_items.forEach((orderItem: any) => {
+    const frequentlyBought = frequentlyBoughtTogether?.reduce((acc: unknown[], item: unknown) => {
+      item.orders.order_items.forEach((orderItem: unknown) => {
         if (orderItem.product_id !== parseInt(productId) && orderItem.products.is_active) {
           const existing = acc.find(p => p.id === orderItem.products.id)
           if (existing) {

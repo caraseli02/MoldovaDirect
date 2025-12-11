@@ -55,7 +55,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Prepare update data
-    const updateData: any = { status }
+    const updateData: unknown = { status }
 
     if (trackingNumber) {
       updateData.tracking_number = trackingNumber
@@ -156,7 +156,7 @@ export default defineEventHandler(async (event) => {
           try {
             emailResult = await sendOrderStatusEmail(emailData, emailType, issueDescription, { supabaseClient: supabase })
           }
-          catch (emailError: any) {
+          catch (emailError: unknown) {
             console.error('Failed to send status email:', emailError)
             // Don't fail the entire request if email fails
             emailResult = {
@@ -188,7 +188,7 @@ export default defineEventHandler(async (event) => {
         : null,
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Error updating order status:', error)
 
     throw createError({

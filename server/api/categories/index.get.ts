@@ -10,7 +10,7 @@ function getLocalizedContent(content: Record<string, string>, locale: string): s
 }
 
 // Helper function to build hierarchical category tree
-function buildCategoryTree(categories: any[], parentId: number | null = null): any[] {
+function buildCategoryTree(categories: unknown[], parentId: number | null = null): unknown[] {
   return categories
     .filter(cat => cat.parentId === parentId) // Use parentId instead of parent_id
     .map(category => ({
@@ -87,13 +87,22 @@ export default defineCachedEventHandler(async (event) => {
       .in('category_id', categoryIds)
 
     // Count products per category
-    const productCountMap = (productCounts || []).reduce((acc: Record<number, number>, item: any) => {
+    const productCountMap = (productCounts || []).reduce((acc: Record<number, number>, item: ProductCountItem) => {
       acc[item.category_id] = (acc[item.category_id] || 0) + 1
       return acc
     }, {})
 
     // Transform categories with localization and product counts
-    const transformedCategories = categories?.map((category: any) => ({
+    const transformedCategories = categories?.map((category: {
+      id: number
+      slug: string
+      parent_id: number | null
+      name_translations: Record<string, string>
+      description_translations?: Record<string, string>
+      image_url: string | null
+      sort_order: number
+      is_active: boolean
+    }): TransformedCategory => ({
       id: category.id,
       slug: category.slug,
       parentId: category.parent_id,

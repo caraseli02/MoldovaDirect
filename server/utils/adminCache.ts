@@ -144,7 +144,7 @@ const MAX_QUERY_VALUE_LENGTH = 200
  * @param value - The query parameter value
  * @returns Sanitized value
  */
-function sanitizeQueryValue(value: any): string {
+function sanitizeQueryValue(value: unknown): string {
   if (value === null || value === undefined) {
     return ''
   }

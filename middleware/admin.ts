@@ -13,7 +13,7 @@
  * 4. If MFA not enabled, redirect to MFA setup page
  */
 
-export default defineNuxtRouteMiddleware(async (to, from) => {
+export default defineNuxtRouteMiddleware(async (_to, _from) => {
   const user = useSupabaseUser()
   const supabase = useSupabaseClient()
 

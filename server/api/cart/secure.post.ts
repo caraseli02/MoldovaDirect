@@ -22,7 +22,7 @@ import {
 
 interface SecureCartOperation {
   operation: 'addItem' | 'updateQuantity' | 'removeItem' | 'clearCart' | 'validateCart' | 'getCSRFToken'
-  data?: any
+  data?: unknown
   sessionId: string
   csrfToken?: string
 }
@@ -30,7 +30,7 @@ interface SecureCartOperation {
 interface CartValidationResult {
   isValid: boolean
   errors: string[]
-  sanitizedData?: any
+  sanitizedData?: unknown
 }
 
 interface ProductResponse {
@@ -47,16 +47,16 @@ interface ProductResponse {
   stockStatus: string
   images: Array<{ url: string, alt?: string }>
   primaryImage: string
-  attributes: Record<string, any>
+  attributes: Record<string, unknown>
   category: {
     id: number
     slug: string
     name: string
     description: string
     nameTranslations: Record<string, string>
-    breadcrumb: any[]
+    breadcrumb: unknown[]
   }
-  relatedProducts: any[]
+  relatedProducts: unknown[]
   isActive: boolean
   createdAt: string
   updatedAt: string
@@ -131,7 +131,7 @@ export default defineEventHandler(async (event) => {
       'removeItem',
       'clearCart',
     ]
-    if (stateChangingOps.includes(operation as any)) {
+    if (stateChangingOps.includes(operation as unknown)) {
       if (!csrfToken || !validateCSRFToken(sessionId, csrfToken)) {
         throw createError({
           statusCode: 403,
@@ -191,13 +191,13 @@ export default defineEventHandler(async (event) => {
  */
 function validateCartOperationData(
   operation: string,
-  data: any,
+  data: unknown,
   sessionId: string,
   csrfToken?: string,
 ): CartValidationResult {
   try {
-    let validatedData: any
-    const dataWithSession = { ...data, sessionId, csrfToken }
+    let validatedData: unknown
+    const dataWithSession = { ...(data as Record<string, unknown>), sessionId, csrfToken }
 
     switch (operation) {
       case 'addItem':
@@ -277,9 +277,9 @@ function validateCartOperationData(
  */
 async function processCartOperation(
   operation: string,
-  data: any,
+  data: unknown,
   _sessionId: string,
-): Promise<any> {
+): Promise<unknown> {
   switch (operation) {
     case 'addItem':
       return await processAddItem(data)
@@ -307,7 +307,7 @@ async function processCartOperation(
 /**
  * Process add item operation
  */
-async function processAddItem(data: any): Promise<any> {
+async function processAddItem(data: unknown): Promise<unknown> {
   const { productId, quantity } = data
 
   try {
@@ -364,7 +364,7 @@ async function processAddItem(data: any): Promise<any> {
 /**
  * Process update quantity operation
  */
-async function processUpdateQuantity(data: any): Promise<any> {
+async function processUpdateQuantity(data: unknown): Promise<unknown> {
   const { itemId, quantity } = data
 
   // For quantity updates, we need to validate against current product stock
@@ -382,7 +382,7 @@ async function processUpdateQuantity(data: any): Promise<any> {
 /**
  * Process remove item operation
  */
-async function processRemoveItem(data: any): Promise<any> {
+async function processRemoveItem(data: unknown): Promise<unknown> {
   const { itemId } = data
 
   return {
@@ -395,7 +395,7 @@ async function processRemoveItem(data: any): Promise<any> {
 /**
  * Process clear cart operation
  */
-async function processClearCart(_data: any): Promise<any> {
+async function processClearCart(_data: unknown): Promise<unknown> {
   return {
     cleared: true,
     timestamp: new Date().toISOString(),
@@ -405,7 +405,7 @@ async function processClearCart(_data: any): Promise<any> {
 /**
  * Process validate cart operation
  */
-async function processValidateCart(data: any): Promise<any> {
+async function processValidateCart(data: unknown): Promise<unknown> {
   const { items } = data
   const validationResults = []
 
@@ -477,7 +477,7 @@ async function processValidateCart(data: any): Promise<any> {
 /**
  * Get client IP address
  */
-function getClientIP(event: any): string | null {
+function getClientIP(event: H3Event): string | null {
   const forwarded = getHeader(event, 'x-forwarded-for')
   const realIP = getHeader(event, 'x-real-ip')
   const remoteAddress = event.node.req.socket?.remoteAddress

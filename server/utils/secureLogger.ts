@@ -26,7 +26,7 @@ interface LogEntry {
   timestamp: string
   level: LogLevel
   message: string
-  data?: any
+  data?: unknown
   context?: string
 }
 
@@ -134,7 +134,7 @@ function redactString(value: string): string {
 /**
  * Recursively redact PII from objects
  */
-function redactObject(obj: any, depth: number = 0): any {
+function redactObject(obj: unknown, depth: number = 0): unknown {
   // Prevent infinite recursion
   if (depth > 10) {
     return '[MAX_DEPTH_REACHED]'
@@ -160,7 +160,7 @@ function redactObject(obj: any, depth: number = 0): any {
       }
     }
 
-    const redacted: any = {}
+    const redacted: unknown = {}
 
     for (const [key, value] of Object.entries(obj)) {
       const lowerKey = key.toLowerCase()
@@ -205,7 +205,7 @@ function redactObject(obj: any, depth: number = 0): any {
 /**
  * Format and redact log data
  */
-function formatLogData(data: any): any {
+function formatLogData(data: unknown): unknown {
   try {
     // Deep clone and redact
     const cloned = JSON.parse(JSON.stringify(data))
@@ -220,7 +220,7 @@ function formatLogData(data: any): any {
 /**
  * Write log entry
  */
-function writeLog(level: LogLevel, message: string, data?: any, context?: string) {
+function writeLog(level: LogLevel, message: string, data?: unknown, context?: string) {
   const isDevelopment = process.env.NODE_ENV !== 'production'
 
   const entry: LogEntry = {
@@ -262,19 +262,19 @@ function writeLog(level: LogLevel, message: string, data?: any, context?: string
  * Secure Logger API
  */
 export const logger = {
-  debug(message: string, data?: any, context?: string) {
+  debug(message: string, data?: unknown, context?: string) {
     writeLog('debug', message, data, context)
   },
 
-  info(message: string, data?: any, context?: string) {
+  info(message: string, data?: unknown, context?: string) {
     writeLog('info', message, data, context)
   },
 
-  warn(message: string, data?: any, context?: string) {
+  warn(message: string, data?: unknown, context?: string) {
     writeLog('warn', message, data, context)
   },
 
-  error(message: string, data?: any, context?: string) {
+  error(message: string, data?: unknown, context?: string) {
     writeLog('error', message, data, context)
   },
 }
@@ -284,16 +284,16 @@ export const logger = {
  */
 export function createLogger(context: string) {
   return {
-    debug: (message: string, data?: any) => logger.debug(message, data, context),
-    info: (message: string, data?: any) => logger.info(message, data, context),
-    warn: (message: string, data?: any) => logger.warn(message, data, context),
-    error: (message: string, data?: any) => logger.error(message, data, context),
+    debug: (message: string, data?: unknown) => logger.debug(message, data, context),
+    info: (message: string, data?: unknown) => logger.info(message, data, context),
+    warn: (message: string, data?: unknown) => logger.warn(message, data, context),
+    error: (message: string, data?: unknown) => logger.error(message, data, context),
   }
 }
 
 /**
  * Export redaction function for testing/external use
  */
-export function redactPII(data: any): any {
+export function redactPII(data: unknown): unknown {
   return formatLogData(data)
 }

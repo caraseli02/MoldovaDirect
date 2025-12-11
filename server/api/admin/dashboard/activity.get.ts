@@ -25,7 +25,7 @@ export interface ActivityItem {
   title: string
   description: string
   timestamp: string
-  metadata?: Record<string, any>
+  metadata?: Record<string, unknown>
 }
 
 // NOTE: Caching disabled for admin endpoints to ensure proper header-based authentication

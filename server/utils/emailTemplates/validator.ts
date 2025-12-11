@@ -131,7 +131,7 @@ export function validateOrderEmailData(data: OrderEmailData): ValidationResult {
 /**
  * Validate address data
  */
-function validateAddress(address: any, type: string): string[] {
+function validateAddress(address: unknown, type: string): string[] {
   const errors: string[] = []
 
   if (!address.firstName || address.firstName.trim() === '') {
@@ -235,7 +235,7 @@ function sanitizeString(str: string): string {
 /**
  * Sanitize address object
  */
-function sanitizeAddress(address: any): any {
+function sanitizeAddress(address: unknown): unknown {
   return {
     firstName: sanitizeString(address.firstName),
     lastName: sanitizeString(address.lastName),

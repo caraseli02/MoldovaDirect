@@ -4,7 +4,7 @@ import { useCartStore } from '~/stores/cart'
 export default defineNuxtPlugin({
   name: 'cart',
 
-  setup(nuxtApp) {
+  setup(_nuxtApp) {
     // Only initialize cart on client-side and for non-admin pages
     if (import.meta.client) {
       const route = useRoute()

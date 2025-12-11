@@ -227,7 +227,7 @@ const route = useRoute()
 // Use new authentication message system
 const {
   createErrorMessage,
-  createSuccessMessage,
+  createSuccessMessage: _createSuccessMessage,
   getVerificationPendingMessage,
   translateAuthError,
 } = useAuthMessages()

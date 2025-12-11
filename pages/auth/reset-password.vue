@@ -298,7 +298,7 @@ definePageMeta({
 })
 
 const supabase = useSupabaseClient()
-const route = useRoute()
+const _route = useRoute()
 const { t } = useI18n()
 const localePath = useLocalePath()
 

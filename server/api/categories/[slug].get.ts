@@ -149,7 +149,7 @@ export default defineCachedEventHandler(async (event) => {
       .order('sort_order', { ascending: true })
 
     // Build breadcrumb
-    const buildBreadcrumb = async (categoryId: number): Promise<any[]> => {
+    const buildBreadcrumb = async (categoryId: number): Promise<CategoryBreadcrumb[]> => {
       const breadcrumb = []
       let currentCategoryId = categoryId
 
@@ -179,7 +179,7 @@ export default defineCachedEventHandler(async (event) => {
     const breadcrumb = await buildBreadcrumb(category.id)
 
     // Transform the data
-    const transformedProducts = products?.map((product: any) => ({
+    const transformedProducts = products?.map((product: ProductFromDB) => ({
       id: product.id,
       sku: product.sku,
       slug: product.sku,
@@ -201,7 +201,7 @@ export default defineCachedEventHandler(async (event) => {
       createdAt: product.created_at,
     })) || []
 
-    const transformedSubcategories = subcategories?.map((subcat: any) => ({
+    const transformedSubcategories = subcategories?.map((subcat: SubcategoryFromDB) => ({
       id: subcat.id,
       slug: subcat.slug,
       name: getLocalizedContent(subcat.name_translations, locale),

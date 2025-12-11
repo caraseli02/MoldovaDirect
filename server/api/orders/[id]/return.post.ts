@@ -116,7 +116,7 @@ export default defineEventHandler(async (event) => {
     let totalRefundAmount = 0
 
     for (const returnItem of body.items) {
-      const orderItem = order.order_items.find((item: any) => item.id === returnItem.orderItemId)
+      const orderItem = order.order_items.find((item: unknown) => item.id === returnItem.orderItemId)
 
       if (!orderItem) {
         validationResults.push({
@@ -224,7 +224,7 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     if (error.statusCode) {
       throw error
     }

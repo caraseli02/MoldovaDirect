@@ -110,7 +110,7 @@ export default defineEventHandler(async (event): Promise<GetSectionResponse> => 
       section: data as LandingSectionRow,
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Error creating landing section:', error)
 
     throw createError({

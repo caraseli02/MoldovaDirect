@@ -20,14 +20,14 @@ export default defineNuxtPlugin(() => {
   if (import.meta.server) return
 
   // Listen to auth state changes
-  supabase.auth.onAuthStateChange((event, session) => {
+  supabase.auth.onAuthStateChange((event, _session) => {
     // Only handle signed in events
     if (event !== 'SIGNED_IN' && event !== 'TOKEN_REFRESHED') {
       return
     }
 
     // Get remember me preference
-    const rememberMe = rememberMeCookie.value !== 'false'
+    const _rememberMe = rememberMeCookie.value !== 'false'
 
     // Update Supabase session cookies based on preference
     // Note: This is a best-effort approach. The actual cookie management

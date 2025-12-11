@@ -51,7 +51,7 @@ export default defineNuxtPlugin(() => {
               cartAnalytics.trackCartView(cartValue, itemCount)
             }
           }
-          catch (storeError) {
+          catch {
             // Cart store not ready yet - skip tracking (not critical)
             return
           }

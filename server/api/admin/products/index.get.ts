@@ -224,7 +224,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Transform and sort products
-    const transformedProducts = (products || []).map((product: any) => ({
+    const transformedProducts = (products || []).map((product: unknown) => ({
       id: product.id,
       sku: product.sku,
       slug: product.sku?.toLowerCase() || `product-${product.id}`,
@@ -239,7 +239,7 @@ export default defineEventHandler(async (event) => {
         ? 'high'
         : product.stock_quantity > 0 ? 'low' : 'out',
       images: Array.isArray(product.images)
-        ? product.images.map((img: any, index: number) => ({
+        ? product.images.map((img: unknown, index: number) => ({
             url: img.url || img,
             altText: img.alt || img.alt_text || product.name_translations,
             isPrimary: img.is_primary || index === 0,
@@ -293,7 +293,7 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     // Re-throw HTTP errors (including auth errors)
     if (error.statusCode) {
       throw error

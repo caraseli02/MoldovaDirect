@@ -51,7 +51,7 @@ interface UserDetail {
     created_at: string
     ip_address?: string
     user_agent?: string
-    metadata?: any
+    metadata?: unknown
   }>
   statistics: {
     totalOrders: number
@@ -81,7 +81,7 @@ export default defineEventHandler(async (event) => {
     const supabase = serverSupabaseServiceRole(event)
 
     // Try to get auth user data
-    let authUser: any = null
+    let authUser: unknown = null
     try {
       const { data, error: authError } = await supabase.auth.admin.getUserById(userId)
       if (authError) {
@@ -242,8 +242,8 @@ export default defineEventHandler(async (event) => {
 /**
  * Mock user detail data for development/testing
  */
-function getMockUserDetail(userId: string): any {
-  const mockUsers: Record<string, any> = {
+function getMockUserDetail(userId: string): unknown {
+  const mockUsers: Record<string, unknown> = {
     'user-1': {
       id: 'user-1',
       email: 'john.doe@example.com',

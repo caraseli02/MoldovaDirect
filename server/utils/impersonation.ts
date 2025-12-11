@@ -98,7 +98,7 @@ export async function verifyImpersonationToken(
 
     return decoded
   }
-  catch (error: any) {
+  catch (error: unknown) {
     // Handle JWT-specific errors
     if (error.name === 'TokenExpiredError') {
       throw createError({
@@ -136,7 +136,7 @@ export async function verifyImpersonationToken(
  * @throws Error if session is invalid or expired
  */
 export async function validateImpersonationSession(
-  event: any,
+  event: H3Event,
   token: string,
 ) {
   const decoded = await verifyImpersonationToken(token)

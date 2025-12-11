@@ -63,7 +63,7 @@ export async function invalidatePublicCache(scope: PublicCacheScope): Promise<vo
  * @param event - The H3 event object
  * @returns Cache key string
  */
-export function getPublicCacheKey(baseName: string, event: any): string {
+export function getPublicCacheKey(baseName: string, event: H3Event): string {
   const query = getQuery(event)
 
   // Convert query params to a stable sorted string

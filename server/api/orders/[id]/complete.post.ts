@@ -66,7 +66,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Update order status based on payment result
-    const updateData: any = {
+    const updateData: unknown = {
       payment_status: body.paymentStatus,
       updated_at: new Date().toISOString(),
     }
@@ -134,7 +134,7 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     if (error.statusCode) {
       throw error
     }

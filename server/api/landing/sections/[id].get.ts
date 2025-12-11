@@ -46,7 +46,7 @@ export default defineCachedEventHandler(async (event): Promise<GetSectionRespons
       section: data as LandingSectionRow,
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Error fetching landing section:', error)
 
     throw createError({

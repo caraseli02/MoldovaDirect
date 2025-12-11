@@ -18,7 +18,7 @@ export function resolveSupabaseClient(
     return providedClient
   }
 
-  const globalGetter = (globalThis as any)?.useSupabaseClient
+  const globalGetter = (globalThis as unknown)?.useSupabaseClient
   if (typeof globalGetter === 'function') {
     try {
       const client = globalGetter()

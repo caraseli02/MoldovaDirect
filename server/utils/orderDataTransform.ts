@@ -77,7 +77,7 @@ export function transformOrderToEmailData(
  * @returns Formatted order items for email display
  */
 export function transformOrderItems(
-  items: any[],
+  items: unknown[],
   locale: string = 'en',
 ): OrderItemData[] {
   return items.map((item) => {
@@ -112,7 +112,7 @@ export function transformOrderItems(
  * @param address - Raw address data from database
  * @returns Formatted address data
  */
-export function transformAddress(address: any): AddressData {
+export function transformAddress(address: unknown): AddressData {
   if (!address) {
     return {
       firstName: '',

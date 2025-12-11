@@ -79,7 +79,7 @@ export default defineEventHandler(async (event) => {
 
     // Get user details for the logs
     const userIds = [...new Set(logs?.map(log => log.user_id).filter(Boolean))]
-    let userProfiles: any = {}
+    let userProfiles: unknown = {}
 
     if (userIds.length > 0) {
       const { data: profiles } = await supabase
@@ -118,7 +118,7 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Audit logs retrieval error:', error)
 
     if (error.statusCode) {

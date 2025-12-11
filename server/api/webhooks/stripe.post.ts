@@ -110,7 +110,7 @@ export default defineEventHandler(async (event: H3Event) => {
       eventType: stripeEvent.type,
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error(`[Stripe Webhook] Error processing event ${stripeEvent.type}:`, error)
     throw createError({
       statusCode: 500,
@@ -129,7 +129,7 @@ async function handlePaymentIntentSucceeded(
 ): Promise<void> {
   const paymentIntentId = paymentIntent.id
   const amountReceived = paymentIntent.amount_received
-  const currency = paymentIntent.currency
+  const _currency = paymentIntent.currency
 
   // Get Supabase service role client (bypasses RLS for webhook operations)
   const client = serverSupabaseServiceRole(event)

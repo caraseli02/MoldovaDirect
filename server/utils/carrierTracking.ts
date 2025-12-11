@@ -57,7 +57,7 @@ export async function fetchCarrierTracking(
  * DHL tracking integration
  * TODO: Implement actual DHL API integration
  */
-async function fetchDHLTracking(trackingNumber: string): Promise<CarrierTrackingResponse | null> {
+async function fetchDHLTracking(_trackingNumber: string): Promise<CarrierTrackingResponse | null> {
   // Placeholder implementation
   // In production, this would call the DHL API
 
@@ -106,7 +106,7 @@ export async function syncCarrierTracking(
   orderId: number,
   trackingNumber: string,
   carrier: string,
-  supabase: any,
+  supabase: SupabaseClient,
 ): Promise<boolean> {
   try {
     // Fetch tracking from carrier
@@ -123,7 +123,7 @@ export async function syncCarrierTracking(
       .eq('order_id', orderId)
 
     const existingTimestamps = new Set(
-      (existingEvents || []).map((e: any) => e.timestamp),
+      (existingEvents || []).map((e: unknown) => e.timestamp),
     )
 
     // Insert new events that don't exist yet
@@ -144,7 +144,7 @@ export async function syncCarrierTracking(
     }
 
     // Update order with latest carrier data
-    const updateData: any = {}
+    const updateData: unknown = {}
 
     if (carrierData.estimatedDelivery) {
       updateData.estimated_delivery = carrierData.estimatedDelivery

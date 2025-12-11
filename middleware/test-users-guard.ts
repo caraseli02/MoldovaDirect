@@ -3,7 +3,7 @@
  * Ensures the test user simulator is only accessible when explicitly enabled
  * with enhanced production environment detection
  */
-export default defineNuxtRouteMiddleware((to) => {
+export default defineNuxtRouteMiddleware((_to) => {
   const config = useRuntimeConfig()
 
   // Check explicit flag

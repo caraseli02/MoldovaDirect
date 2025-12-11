@@ -638,7 +638,7 @@ const handleImportSession = async () => {
   }
 
   try {
-    const { importPersonaSession } = await import('~/lib/testing/simulationHelpers')
+    const { importPersonaSession: _importPersonaSession } = await import('~/lib/testing/simulationHelpers')
     const { validateSessionState } = await import('~/lib/testing/testUserValidation')
 
     // Parse and validate

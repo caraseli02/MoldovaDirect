@@ -245,7 +245,7 @@ export function generateOrderConfirmationTemplate(data: OrderEmailData): string 
   `.trim()
 }
 
-function generateOrderItemsTable(items: OrderItemData[], translations: any, locale: string): string {
+function generateOrderItemsTable(items: OrderItemData[], translations: unknown, locale: string): string {
   const rows = items.map(item => `
     <tr>
       <td style="padding: 15px 10px; border-bottom: 1px solid #eeeeee; vertical-align: middle;">
@@ -305,7 +305,7 @@ function generateOrderItemsTable(items: OrderItemData[], translations: any, loca
   `
 }
 
-function generateOrderTotals(data: OrderEmailData, translations: any, locale: string): string {
+function generateOrderTotals(data: OrderEmailData, translations: unknown, locale: string): string {
   return `
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 20px 0 30px 0;">
       <tr>
@@ -370,7 +370,7 @@ function generateAddressBlock(address: AddressData): string {
   `
 }
 
-function generateTrackingInfo(trackingNumber: string, trackingUrl: string | undefined, translations: any): string {
+function generateTrackingInfo(trackingNumber: string, trackingUrl: string | undefined, translations: unknown): string {
   return `
     <h2 style="margin: 30px 0 15px 0; font-size: 20px; color: #e74c3c; font-weight: bold;">
       ${translations.trackingInfo}
@@ -397,7 +397,7 @@ function generateTrackingInfo(trackingNumber: string, trackingUrl: string | unde
   `
 }
 
-function getPaymentMethodLabel(method: string, translations: any): string {
+function getPaymentMethodLabel(method: string, translations: unknown): string {
   const methodMap: Record<string, string> = {
     cash: translations.paymentMethods.cash,
     credit_card: translations.paymentMethods.credit_card,

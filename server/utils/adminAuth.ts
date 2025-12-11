@@ -16,8 +16,8 @@ interface AuthUser {
   id: string
   email: string
   role?: string
-  app_metadata?: Record<string, any>
-  user_metadata?: Record<string, any>
+  app_metadata?: Record<string, unknown>
+  user_metadata?: Record<string, unknown>
 }
 
 /**
@@ -199,7 +199,7 @@ export interface AuditLogResult {
  * Fallback audit logging to console when database logging fails
  * This ensures critical admin actions are always logged somewhere
  */
-function logAuditToConsole(logEntry: any, errorId: string, dbError?: any) {
+function logAuditToConsole(logEntry: unknown, errorId: string, dbError?: unknown) {
   console.error('[ADMIN_AUDIT_CRITICAL] Database logging failed - using console fallback', {
     errorId,
     timestamp: logEntry.timestamp,
@@ -227,7 +227,7 @@ export async function logAdminAction(
   event: H3Event,
   adminId: string,
   action: string,
-  metadata?: Record<string, any>,
+  metadata?: Record<string, unknown>,
 ): Promise<AuditLogResult> {
   const errorId = `audit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
   const logEntry = {

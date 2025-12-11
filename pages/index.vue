@@ -132,8 +132,8 @@ const {
   howItWorksSteps,
   testimonials,
   partnerLogos,
-  storyPoints,
-  storyTimeline,
+  storyPoints: _storyPoints,
+  storyTimeline: _storyTimeline,
   services,
   faqItems,
 } = useHomeContent()

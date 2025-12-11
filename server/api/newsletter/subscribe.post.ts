@@ -13,7 +13,7 @@ const subscriptionSchema = z.object({
     'cart',
     'footer',
   ]).optional().default('landing_page'),
-  metadata: z.record(z.any()).optional().default({}),
+  metadata: z.record(z.unknown()).optional().default({}),
 })
 
 export default defineEventHandler(async (event) => {
@@ -83,7 +83,7 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Newsletter API error:', error)
 
     // If it's already a createError, rethrow it

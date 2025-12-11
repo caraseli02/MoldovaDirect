@@ -161,11 +161,11 @@ describe('useShippingMethods', () => {
       const { fetchShippingMethods } = await import('~/lib/checkout/api')
       const mockFetch = vi.mocked(fetchShippingMethods)
 
-      let resolveCount = 0
+      let _resolveCount = 0
       mockFetch.mockImplementation(() => {
         return new Promise((resolve) => {
           setTimeout(() => {
-            resolveCount++
+            _resolveCount++
             resolve([])
           }, 50)
         })

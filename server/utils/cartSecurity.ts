@@ -170,7 +170,7 @@ export function cleanupExpiredRateLimits(): void {
 /**
  * Sanitize cart item data to prevent XSS
  */
-export function sanitizeCartData(data: any): any {
+export function sanitizeCartData(data: unknown): unknown {
   if (typeof data === 'string') {
     // Basic HTML entity encoding
     return data
@@ -187,7 +187,7 @@ export function sanitizeCartData(data: any): any {
   }
 
   if (data && typeof data === 'object') {
-    const sanitized: any = {}
+    const sanitized: unknown = {}
     for (const [key, value] of Object.entries(data)) {
       sanitized[key] = sanitizeCartData(value)
     }

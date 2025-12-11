@@ -97,7 +97,7 @@ export async function processEmailRetries(
       results,
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('❌ Error processing email retries:', error)
     throw error
   }
@@ -167,7 +167,7 @@ async function processEmailRetry(
       }
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error(`❌ Error retrying email ${id}:`, error)
 
     return {
@@ -220,7 +220,7 @@ async function sendAdminAlert(
       html,
     })
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('❌ Failed to send admin alert:', error)
     // Don't throw - we don't want alert failures to break the retry process
   }
@@ -305,7 +305,7 @@ function generateAdminAlertHtml(failedEmails: EmailRetryResult[]): string {
 export async function getRetryStatistics(
   dateFrom?: string,
   dateTo?: string,
-  supabaseClient?: any,
+  supabaseClient?: SupabaseClient,
 ): Promise<{
   totalRetries: number
   successfulRetries: number

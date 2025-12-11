@@ -101,7 +101,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Prepare update data
-    const updateData: any = {
+    const updateData: unknown = {
       status: body.status,
       updated_at: new Date().toISOString(),
     }
@@ -175,7 +175,7 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     if (error.statusCode) {
       throw error
     }

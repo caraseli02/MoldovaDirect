@@ -119,7 +119,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Transform the data
-    const transformedMovements = (movements || []).map((movement: any) => ({
+    const transformedMovements = (movements || []).map((movement: unknown) => ({
       id: movement.id,
       productId: movement.product_id,
       product: movement.products

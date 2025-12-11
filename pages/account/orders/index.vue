@@ -407,10 +407,10 @@ const {
   fetchOrders,
   refreshOrders,
   searchOrders: _searchOrders,
-  filterByStatus,
-  clearFilters,
+  filterByStatus: _filterByStatus,
+  clearFilters: _clearFilters,
   hasOrders,
-  filteredOrdersCount,
+  filteredOrdersCount: _filteredOrdersCount,
 } = useOrders()
 
 // Use order tracking composable for real-time updates

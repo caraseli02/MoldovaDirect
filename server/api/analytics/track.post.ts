@@ -17,7 +17,7 @@ export interface ActivityTrackingRequest {
   productId?: number
   orderId?: number
   sessionId?: string
-  metadata?: Record<string, any>
+  metadata?: Record<string, unknown>
 }
 
 export default defineEventHandler(async (event) => {
@@ -142,7 +142,7 @@ export default defineEventHandler(async (event) => {
 })
 
 // Helper function to get client IP
-function getClientIP(event: any): string | null {
+function getClientIP(event: H3Event): string | null {
   const forwarded = getHeader(event, 'x-forwarded-for')
   const realIP = getHeader(event, 'x-real-ip')
   const remoteAddr = event.node.req.socket?.remoteAddress

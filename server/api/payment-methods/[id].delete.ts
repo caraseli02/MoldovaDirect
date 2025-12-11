@@ -53,7 +53,7 @@ export default defineEventHandler(async (event) => {
       message: 'Payment method deleted successfully',
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     if (error.statusCode) {
       throw error
     }

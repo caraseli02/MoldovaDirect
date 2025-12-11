@@ -86,7 +86,7 @@ export default defineEventHandler(async (event) => {
       results,
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Cleanup error:', error)
     await logAdminAction(event, adminId, 'cleanup-failed', { action, error: error.message })
     return {
@@ -99,7 +99,7 @@ export default defineEventHandler(async (event) => {
 })
 
 // Clear all test data (orders, products, test users)
-async function clearAllTestData(supabase: any, results: any) {
+async function clearAllTestData(supabase: SupabaseClient, results: unknown) {
   await clearOrders(supabase, results)
   await clearProducts(supabase, results)
   await clearTestUsers(supabase, results)
@@ -107,7 +107,7 @@ async function clearAllTestData(supabase: any, results: any) {
 }
 
 // Clear test users (emails containing 'test', 'demo', 'example')
-async function clearTestUsers(supabase: any, results: any) {
+async function clearTestUsers(supabase: SupabaseClient, results: unknown) {
   try {
     // Get test users from auth
     const { data: authUsers, error: authError } = await supabase.auth.admin.listUsers()
@@ -118,13 +118,13 @@ async function clearTestUsers(supabase: any, results: any) {
     }
 
     const testUserIds = authUsers.users
-      .filter((u: any) =>
+      .filter((u: unknown) =>
         u.email.includes('test')
         || u.email.includes('demo')
         || u.email.includes('example')
         || u.email.includes('@testuser.md'),
       )
-      .map((u: any) => u.id)
+      .map((u: unknown) => u.id)
 
     // Delete related data first
     if (testUserIds.length > 0) {
@@ -165,13 +165,13 @@ async function clearTestUsers(supabase: any, results: any) {
       results.deletedCounts.testUsers = 0
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     results.errors.push(`Error clearing test users: ${error.message}`)
   }
 }
 
 // Clear all orders and order items
-async function clearOrders(supabase: any, results: any) {
+async function clearOrders(supabase: SupabaseClient, results: unknown) {
   try {
     // Count before deletion
     const { count: orderCount } = await supabase
@@ -191,13 +191,13 @@ async function clearOrders(supabase: any, results: any) {
       results.deletedCounts.orders = orderCount || 0
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     results.errors.push(`Error clearing orders: ${error.message}`)
   }
 }
 
 // Clear all products, inventory logs, and cart items
-async function clearProducts(supabase: any, results: any) {
+async function clearProducts(supabase: SupabaseClient, results: unknown) {
   try {
     // Count before deletion
     const { count: productCount } = await supabase
@@ -218,13 +218,13 @@ async function clearProducts(supabase: any, results: any) {
       results.deletedCounts.products = productCount || 0
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     results.errors.push(`Error clearing products: ${error.message}`)
   }
 }
 
 // Clear old/expired carts
-async function clearOldCarts(supabase: any, results: any, daysOld: number) {
+async function clearOldCarts(supabase: SupabaseClient, results: unknown, daysOld: number) {
   try {
     const cutoffDate = new Date()
     cutoffDate.setDate(cutoffDate.getDate() - daysOld)
@@ -258,13 +258,13 @@ async function clearOldCarts(supabase: any, results: any, daysOld: number) {
 
     results.deletedCounts.carts = count || 0
   }
-  catch (error: any) {
+  catch (error: unknown) {
     results.errors.push(`Error clearing old carts: ${error.message}`)
   }
 }
 
 // Full database reset (clear everything, keep structure)
-async function resetDatabase(supabase: any, results: any) {
+async function resetDatabase(supabase: SupabaseClient, results: unknown) {
   try {
     const tables = [
       'order_items',
@@ -292,7 +292,7 @@ async function resetDatabase(supabase: any, results: any) {
 
     results.message = 'Database reset to empty state'
   }
-  catch (error: any) {
+  catch (error: unknown) {
     results.errors.push(`Error resetting database: ${error.message}`)
   }
 }

@@ -230,7 +230,7 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     if (error.statusCode) {
       throw error
     }
@@ -253,9 +253,9 @@ export default defineEventHandler(async (event) => {
  * @param supabase - Supabase client
  */
 async function sendOrderConfirmationEmailAsync(
-  order: any,
-  user: any,
-  supabase: any,
+  order: Record<string, unknown>,
+  user: User | null,
+  supabase: SupabaseClient,
 ): Promise<void> {
   try {
     // Validate order data before sending email

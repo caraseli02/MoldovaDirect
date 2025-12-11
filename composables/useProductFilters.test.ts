@@ -1364,7 +1364,7 @@ describe('useProductFilters', () => {
 
   describe('Integration Scenarios', () => {
     it('supports complete filtering workflow', () => {
-      const { filters, updateFilters, activeFilterCount, activeFilterChips, syncFiltersToUrl }
+      const { filters: _filters, updateFilters, activeFilterCount, activeFilterChips, syncFiltersToUrl }
         = useProductFilters(mockCategoriesTree)
 
       // User selects filters

@@ -2,14 +2,14 @@
  * Global middleware to handle locale-based redirects
  * Ensures language switching works properly without authentication interference
  */
-export default defineNuxtRouteMiddleware((to, from) => {
+export default defineNuxtRouteMiddleware((to, _from) => {
   // Skip for auth pages, API routes, and assets
   const skipPaths = ['/api/', '/auth/', '/_nuxt/', '/favicon.ico']
   if (skipPaths.some(path => to.path.startsWith(path))) return
 
   // Get available locales from the configuration
   const availableLocales = ['es', 'en', 'ro', 'ru']
-  const defaultLocale = 'es'
+  const _defaultLocale = 'es'
 
   // Handle language switching - check if URL contains language prefix
   const pathSegments = to.path.split('/').filter(Boolean)

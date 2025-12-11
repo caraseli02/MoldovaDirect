@@ -10,7 +10,7 @@ export interface CartItem {
     name_translations: Record<string, string>
     description_translations: Record<string, string>
     price_eur: number
-    images: any[]
+    images: unknown[]
     weight_kg: number
     stock_quantity: number
     is_active: boolean
@@ -38,7 +38,7 @@ export interface ShippingMethod {
 export function calculateOrderTotals(
   cartItems: CartItem[],
   shippingMethod?: ShippingMethod,
-  shippingAddress?: any,
+  shippingAddress?: unknown,
 ): OrderCalculation {
   // Calculate subtotal
   const subtotal = cartItems.reduce((sum, item) => {
@@ -69,7 +69,7 @@ export function calculateOrderTotals(
 /**
  * Calculate tax based on shipping address and business rules
  */
-function calculateTax(_subtotal: number, _shippingAddress?: any): number {
+function calculateTax(_subtotal: number, _shippingAddress?: unknown): number {
   // Implement tax calculation logic here
   // This is a placeholder - actual implementation would depend on:
   // - Business location and registration
@@ -157,7 +157,7 @@ export function generateOrderNumber(): string {
  */
 export function getAvailableShippingMethods(
   cartItems: CartItem[],
-  _shippingAddress?: any,
+  _shippingAddress?: unknown,
 ): ShippingMethod[] {
   // Calculate total weight
   const totalWeight = cartItems.reduce((sum, item) => {
@@ -207,7 +207,7 @@ export function getAvailableShippingMethods(
 /**
  * Validate shipping address
  */
-export function validateShippingAddress(address: any): {
+export function validateShippingAddress(address: unknown): {
   valid: boolean
   errors: Record<string, string>
 } {
@@ -273,7 +273,7 @@ function validatePostalCode(postalCode: string, country: string): boolean {
 /**
  * Format address for display in order context
  */
-export function formatOrderAddress(address: any): string {
+export function formatOrderAddress(address: unknown): string {
   const parts = [
     address.firstName && address.lastName ? `${address.firstName} ${address.lastName}` : '',
     address.company || '',
@@ -289,7 +289,7 @@ export function formatOrderAddress(address: any): string {
 /**
  * Sanitize order data for storage
  */
-export function sanitizeOrderData(data: any): any {
+export function sanitizeOrderData(data: unknown): unknown {
   // Remove sensitive information and sanitize input
   const sanitized = { ...data }
 

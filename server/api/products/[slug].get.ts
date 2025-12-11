@@ -39,7 +39,7 @@ export default defineCachedEventHandler(async (event) => {
       ),
     )
 
-    let product: any = null
+    let product: unknown = null
 
     for (const candidate of slugCandidates) {
       const { data, error } = await supabase
@@ -113,7 +113,7 @@ export default defineCachedEventHandler(async (event) => {
       .limit(4)
 
     // Build category breadcrumb
-    const buildBreadcrumb = async (categoryId: number): Promise<any[]> => {
+    const buildBreadcrumb = async (categoryId: number): Promise<Array<{ id: number, slug: string, name: string }>> => {
       const breadcrumb = []
       let currentCategoryId = categoryId
 
@@ -145,7 +145,7 @@ export default defineCachedEventHandler(async (event) => {
     // Transform product data to match products list API format
     const descriptionTranslations = product.description_translations || {}
     const shortDescriptionTranslations
-      = (product as any).short_description_translations || descriptionTranslations
+      = (product as unknown).short_description_translations || descriptionTranslations
 
     const transformedProduct = {
       id: product.id,
@@ -177,7 +177,7 @@ export default defineCachedEventHandler(async (event) => {
         nameTranslations: product.categories.name_translations,
         breadcrumb,
       },
-      relatedProducts: relatedProducts?.map((related: any) => ({
+      relatedProducts: relatedProducts?.map((related: unknown) => ({
         id: related.id,
         sku: related.sku,
         slug: related.sku,

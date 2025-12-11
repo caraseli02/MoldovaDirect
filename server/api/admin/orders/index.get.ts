@@ -202,7 +202,7 @@ export default defineEventHandler(async (event): Promise<ApiResponse> => {
       ordersQuery = ordersQuery.eq('shipping_method', shippingMethod)
     }
 
-    const { data: orders, error: ordersError } = await ordersQuery as { data: OrderFromDB[] | null, error: any }
+    const { data: orders, error: ordersError } = await ordersQuery as { data: OrderFromDB[] | null, error: unknown }
 
     if (ordersError) {
       console.error('[Admin Orders] Query failed:', {
@@ -275,7 +275,7 @@ export default defineEventHandler(async (event): Promise<ApiResponse> => {
     // Calculate aggregates
     const { data: aggregateData, error: aggregateError } = await supabase
       .from('orders')
-      .select('total_eur, status') as { data: AggregateOrderFromDB[] | null, error: any }
+      .select('total_eur, status') as { data: AggregateOrderFromDB[] | null, error: unknown }
 
     if (aggregateError) {
       console.error('[Admin Orders] Aggregate query failed:', {
@@ -339,7 +339,7 @@ export default defineEventHandler(async (event): Promise<ApiResponse> => {
       },
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     // Re-throw HTTP errors (including auth errors)
     if (error.statusCode) {
       throw error

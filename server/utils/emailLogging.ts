@@ -61,7 +61,7 @@ export async function updateEmailLog(
 ): Promise<EmailLog> {
   const supabase = resolveSupabaseClient(supabaseClient)
 
-  const updateData: any = {}
+  const updateData: unknown = {}
 
   if (input.status) updateData.status = input.status
   if (input.attempts !== undefined) updateData.attempts = input.attempts
@@ -414,7 +414,7 @@ export async function getPendingEmailsForRetry(): Promise<EmailLog[]> {
 /**
  * Transform database record to EmailLog type
  */
-function transformEmailLogFromDb(data: any): EmailLog {
+function transformEmailLogFromDb(data: unknown): EmailLog {
   return {
     id: data.id,
     orderId: data.order_id,
@@ -436,7 +436,7 @@ function transformEmailLogFromDb(data: any): EmailLog {
 /**
  * Transform database record with order to EmailLogWithOrder type
  */
-function transformEmailLogWithOrderFromDb(data: any): any {
+function transformEmailLogWithOrderFromDb(data: unknown): unknown {
   return {
     ...transformEmailLogFromDb(data),
     order: {

@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
       // Test users (with test/demo/example emails)
       supabase.auth.admin.listUsers().then(({ data }) => {
         if (!data) return 0
-        return data.users.filter((u: any) =>
+        return data.users.filter((u: unknown) =>
           u.email?.includes('test')
           || u.email?.includes('demo')
           || u.email?.includes('example')
@@ -86,7 +86,7 @@ export default defineEventHandler(async (event) => {
 
     // Calculate total revenue
     const totalRevenue = revenueData.data?.reduce(
-      (sum: number, order: any) => sum + (order.total_eur || 0),
+      (sum: number, order: unknown) => sum + (order.total_eur || 0),
       0,
     ) || 0
 
@@ -108,7 +108,7 @@ export default defineEventHandler(async (event) => {
       stats,
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Failed to fetch database stats:', error)
     throw createError({
       statusCode: 500,

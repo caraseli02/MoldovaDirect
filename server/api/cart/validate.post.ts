@@ -4,7 +4,7 @@ import { validateCartItems, calculateOrderTotals, getAvailableShippingMethods } 
 
 interface ValidateCartRequest {
   cartId: number
-  shippingAddress?: any
+  shippingAddress?: unknown
 }
 
 export default defineEventHandler(async (event) => {
@@ -57,7 +57,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Validate cart items
-    const validation = validateCartItems(cartItems as any)
+    const validation = validateCartItems(cartItems as unknown)
 
     if (!validation.valid) {
       return {
@@ -68,10 +68,10 @@ export default defineEventHandler(async (event) => {
     }
 
     // Calculate order totals
-    const orderCalculation = calculateOrderTotals(cartItems as any)
+    const orderCalculation = calculateOrderTotals(cartItems as unknown)
 
     // Get available shipping methods
-    const shippingMethods = getAvailableShippingMethods(cartItems as any, body.shippingAddress)
+    const shippingMethods = getAvailableShippingMethods(cartItems as unknown, body.shippingAddress)
 
     return {
       success: true,
@@ -89,7 +89,7 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     if (error.statusCode) {
       throw error
     }

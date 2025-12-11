@@ -148,7 +148,7 @@ export default defineCachedEventHandler(async (event) => {
         ? 'in_stock'
         : product.stock_quantity > 0 ? 'low_stock' : 'out_of_stock',
       images: Array.isArray(product.images)
-        ? product.images.map((img: any, index: number) => ({
+        ? product.images.map((img: unknown, index: number) => ({
             url: img.url || img,
             altText: img.alt || img.alt_text || product.name_translations,
             isPrimary: img.is_primary || index === 0,
@@ -208,7 +208,7 @@ export default defineCachedEventHandler(async (event) => {
 })
 
 // Calculate relevance score for search results
-function calculateRelevance(product: any, searchTerm: string, locale: string): number {
+function calculateRelevance(product: unknown, searchTerm: string, locale: string): number {
   let score = 0
   const name = getLocalizedContent(product.name_translations, locale).toLowerCase()
 
@@ -238,7 +238,7 @@ function calculateRelevance(product: any, searchTerm: string, locale: string): n
 }
 
 // Generate search suggestions based on available products
-function generateSearchSuggestions(searchTerm: string, products: any[], locale: string, limit: number = 5): string[] {
+function generateSearchSuggestions(searchTerm: string, products: unknown[], locale: string, limit: number = 5): string[] {
   const suggestions = new Set<string>()
   const searchLower = searchTerm.toLowerCase()
 

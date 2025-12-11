@@ -14,8 +14,8 @@ export default defineEventHandler(async (event) => {
   const filters: EmailLogFilters = {
     orderNumber: query.orderNumber as string | undefined,
     recipientEmail: query.recipientEmail as string | undefined,
-    emailType: query.emailType as any,
-    status: query.status as any,
+    emailType: query.emailType as unknown,
+    status: query.status as unknown,
     dateFrom: query.dateFrom as string | undefined,
     dateTo: query.dateTo as string | undefined,
     page: query.page ? parseInt(query.page as string) : 1,

@@ -84,7 +84,7 @@ function transformOrderItems(items: DatabaseOrderItem[]): OrderItemData[] {
 /**
  * Transform address object to email format
  */
-function transformAddress(addressData: any): AddressData {
+function transformAddress(addressData: unknown): AddressData {
   if (!addressData) {
     throw new Error('Address data is required')
   }
@@ -152,7 +152,7 @@ function buildTrackingUrl(trackingNumber: string, carrier: string): string {
  * Get localized product name from snapshot
  */
 export function getLocalizedProductName(
-  productSnapshot: any,
+  productSnapshot: unknown,
   locale: string,
 ): string {
   if (!productSnapshot) return 'Product'

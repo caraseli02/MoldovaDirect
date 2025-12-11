@@ -125,7 +125,7 @@ export default defineEventHandler(async (event) => {
       externalId: result.externalId,
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     if (error.statusCode) {
       throw error
     }

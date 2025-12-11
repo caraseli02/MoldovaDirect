@@ -42,7 +42,7 @@ export default defineEventHandler(async (event) => {
       }
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('❌ Error retrying email:', error)
 
     throw createError({

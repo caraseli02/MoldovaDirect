@@ -69,7 +69,7 @@ export default defineEventHandler(async (event) => {
       message: 'Cart locked successfully',
     }
   }
-  catch (err: any) {
+  catch (err: unknown) {
     // Handle Zod validation errors
     if (err.name === 'ZodError') {
       throw createError({

@@ -170,7 +170,7 @@ export default defineEventHandler(async (event) => {
       totalDuration: results.steps.reduce((sum, step) => sum + step.duration, 0),
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Seed data error:', error)
     await logAdminAction(event, adminId, 'seed-data-failed', { preset, error: error.message })
     return {
@@ -263,7 +263,7 @@ function getPresetConfig(preset: string) {
 }
 
 // Clear test data (keeps structure)
-async function clearTestData(supabase: any): Promise<void> {
+async function clearTestData(supabase: SupabaseClient): Promise<void> {
   // Delete in order to respect foreign key constraints
   await supabase.from('order_items').delete().neq('id', 0)
   await supabase.from('orders').delete().neq('id', 0)
@@ -279,7 +279,7 @@ async function clearTestData(supabase: any): Promise<void> {
 }
 
 // Seed categories
-async function seedCategories(supabase: any): Promise<number> {
+async function seedCategories(supabase: SupabaseClient): Promise<number> {
   const { data, error } = await supabase
     .from('categories')
     .upsert(categoryData, { onConflict: 'slug' })
@@ -294,10 +294,10 @@ async function seedCategories(supabase: any): Promise<number> {
 }
 
 // Seed products
-async function seedProducts(supabase: any, count: number, lowStock: boolean): Promise<number> {
+async function seedProducts(supabase: SupabaseClient, count: number, lowStock: boolean): Promise<number> {
   // Get category IDs
   const { data: categories } = await supabase.from('categories').select('id, slug')
-  const categoryMap = new Map(categories?.map((c: any) => [c.slug, c.id]))
+  const categoryMap = new Map(categories?.map((c: unknown) => [c.slug, c.id]))
 
   const products = []
 
@@ -342,7 +342,7 @@ async function seedProducts(supabase: any, count: number, lowStock: boolean): Pr
 }
 
 // Seed users
-async function seedUsers(supabase: any, count: number): Promise<string[]> {
+async function seedUsers(supabase: SupabaseClient, count: number): Promise<string[]> {
   const userIds: string[] = []
 
   for (let i = 0; i < count; i++) {
@@ -383,7 +383,7 @@ async function seedUsers(supabase: any, count: number): Promise<string[]> {
 
 // Seed orders
 async function seedOrders(
-  supabase: any,
+  supabase: SupabaseClient,
   count: number,
   userIds: string[],
   pattern: string,

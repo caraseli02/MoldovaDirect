@@ -31,7 +31,7 @@ export default defineEventHandler(async (event): Promise<GetSectionResponse> => 
     const body = await readBody<Partial<UpdateSectionRequest>>(event)
 
     // Build update object
-    const updateData: any = {
+    const updateData: unknown = {
       updated_by: user.id,
     }
 
@@ -70,7 +70,7 @@ export default defineEventHandler(async (event): Promise<GetSectionResponse> => 
       section: data as LandingSectionRow,
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Error updating landing section:', error)
 
     throw createError({

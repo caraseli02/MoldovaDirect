@@ -49,7 +49,7 @@ export default defineEventHandler(async (event) => {
       message: 'Landing sections reordered successfully',
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Error reordering landing sections:', error)
 
     throw createError({

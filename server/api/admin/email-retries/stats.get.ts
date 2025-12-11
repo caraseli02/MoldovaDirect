@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
       data: stats,
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('❌ Error getting retry statistics:', error)
 
     throw createError({

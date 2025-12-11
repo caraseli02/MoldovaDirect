@@ -16,7 +16,7 @@ interface ActivityLog {
   created_at: string
   ip_address?: string
   user_agent?: string
-  metadata?: any
+  metadata?: unknown
 }
 
 export default defineEventHandler(async (event) => {
@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
     const supabase = serverSupabaseServiceRole(event)
 
     // Verify user exists
-    let user: any = null
+    let user: unknown = null
     try {
       const { data, error: userError } = await supabase.auth.admin.getUserById(userId)
       if (userError) {

@@ -43,7 +43,7 @@ interface TransformedOrderItem {
   id: number
   orderId: number
   productId: number
-  productSnapshot: any
+  productSnapshot: unknown
   quantity: number
   priceEur: number
   totalEur: number
@@ -131,7 +131,7 @@ export default defineEventHandler(async (event): Promise<ApiResponse> => {
       `)
       .eq('id', orderId)
       .eq('user_id', user.id)
-      .single() as { data: OrderFromDB | null, error: any }
+      .single() as { data: OrderFromDB | null, error: unknown }
 
     if (orderError || !order) {
       if (orderError?.code === 'PGRST116') {
@@ -151,7 +151,7 @@ export default defineEventHandler(async (event): Promise<ApiResponse> => {
       .from('order_tracking_events')
       .select('*')
       .eq('order_id', orderId)
-      .order('timestamp', { ascending: false }) as { data: TrackingEventFromDB[] | null, error: any }
+      .order('timestamp', { ascending: false }) as { data: TrackingEventFromDB[] | null, error: unknown }
 
     // Transform order_items to items and convert snake_case to camelCase
     const transformedOrder: TransformedOrder = {
@@ -194,7 +194,7 @@ export default defineEventHandler(async (event): Promise<ApiResponse> => {
       data: transformedOrder,
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     if (error.statusCode) {
       throw error
     }

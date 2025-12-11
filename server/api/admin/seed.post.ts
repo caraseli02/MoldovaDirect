@@ -319,8 +319,8 @@ export default defineEventHandler(async (event) => {
     }
 
     const results: {
-      categories: any[]
-      products: any[]
+      categories: unknown[]
+      products: unknown[]
       errors: string[]
     } = {
       categories: [],

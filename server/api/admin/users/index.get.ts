@@ -150,7 +150,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Fetch auth user data
-    let authUsers: any = { users: [] }
+    let authUsers: unknown = { users: [] }
     try {
       const { data, error: authError } = await supabase.auth.admin.listUsers()
       if (authError) {
@@ -164,7 +164,7 @@ export default defineEventHandler(async (event) => {
         authUsers = data
       }
     }
-    catch (error: any) {
+    catch (error: unknown) {
       console.error('[Admin Users] Auth admin API error:', {
         error: error.message || String(error),
         timestamp: new Date().toISOString(),
@@ -194,19 +194,19 @@ export default defineEventHandler(async (event) => {
         // Group orders by user_id
         const tempStats = allOrders.reduce((acc, order) => {
           if (!acc[order.user_id]) {
-            acc[order.user_id] = { count: 0, totalSpent: 0, orders: [] as any[] }
+            acc[order.user_id] = { count: 0, totalSpent: 0, orders: [] as unknown[] }
           }
           acc[order.user_id].count++
           acc[order.user_id].totalSpent += Number(order.total_eur)
           acc[order.user_id].orders.push(order)
           return acc
-        }, {} as Record<string, any>)
+        }, {} as Record<string, unknown>)
 
         // Calculate lastOrderDate for each user and create final stats object
         Object.keys(tempStats).forEach((userId) => {
           const userOrders = tempStats[userId].orders
           const lastOrderDate = userOrders.length > 0
-            ? userOrders.sort((a: any, b: any) =>
+            ? userOrders.sort((a: unknown, b: unknown) =>
               new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
             )[0].created_at
             : undefined
@@ -219,7 +219,7 @@ export default defineEventHandler(async (event) => {
         })
       }
     }
-    catch (error: any) {
+    catch (error: unknown) {
       console.error('[Admin Users] Unexpected error fetching orders:', {
         error: error.message || String(error),
         timestamp: new Date().toISOString(),
@@ -231,7 +231,7 @@ export default defineEventHandler(async (event) => {
     const users: UserWithProfile[] = []
 
     for (const profile of profiles) {
-      const authUser = authUsers.users.find((u: any) => u.id === profile.id)
+      const authUser = authUsers.users.find((u: unknown) => u.id === profile.id)
 
       // Get pre-fetched order statistics
       const orderStats = orderStatsByUser[profile.id] || { count: 0, totalSpent: 0 }
@@ -303,7 +303,7 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     // Re-throw HTTP errors (including auth errors)
     if (error.statusCode) {
       throw error

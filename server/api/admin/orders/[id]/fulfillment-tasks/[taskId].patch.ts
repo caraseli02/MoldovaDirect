@@ -58,7 +58,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Update the task
-    const updateData: any = {
+    const updateData: unknown = {
       completed,
       completed_at: completed ? new Date().toISOString() : null,
       completed_by: completed ? userId : null,
@@ -101,7 +101,7 @@ export default defineEventHandler(async (event) => {
       data: updatedTask,
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Error in fulfillment task update endpoint:', error)
 
     if (error.statusCode) {
@@ -124,7 +124,7 @@ export default defineEventHandler(async (event) => {
  *
  * Related: Issue #89 (transaction fix), Issue #82 (test coverage)
  */
-async function updateInventoryForPickedItemsAtomic(supabase: any, orderId: number, userId: string) {
+async function updateInventoryForPickedItemsAtomic(supabase: SupabaseClient, orderId: number, userId: string) {
   try {
     // Call atomic RPC function
     // This prevents race conditions by using FOR UPDATE row locking
@@ -160,7 +160,7 @@ async function updateInventoryForPickedItemsAtomic(supabase: any, orderId: numbe
  * - Can lose updates with concurrent requests
  * - See Issue #82 tests for demonstration
  */
-async function _updateInventoryForPickedItems_DEPRECATED(supabase: any, orderId: number, userId: string) {
+async function _updateInventoryForPickedItems_DEPRECATED(supabase: SupabaseClient, orderId: number, userId: string) {
   try {
     // Check if inventory has already been updated for this order
     const { data: order, error: orderError } = await supabase
@@ -259,7 +259,7 @@ async function _updateInventoryForPickedItems_DEPRECATED(supabase: any, orderId:
  *
  * Related: Issue #89 (transaction fix), Issue #82 (test coverage)
  */
-async function rollbackInventoryForPickedItemsAtomic(supabase: any, orderId: number, userId: string) {
+async function rollbackInventoryForPickedItemsAtomic(supabase: SupabaseClient, orderId: number, userId: string) {
   try {
     // Call atomic RPC function
     const { data, error } = await supabase
@@ -300,7 +300,7 @@ async function rollbackInventoryForPickedItemsAtomic(supabase: any, orderId: num
  *
  * This function has race conditions - see Issue #82 tests
  */
-async function _rollbackInventoryForPickedItems_DEPRECATED(supabase: any, orderId: number, userId: string) {
+async function _rollbackInventoryForPickedItems_DEPRECATED(supabase: SupabaseClient, orderId: number, userId: string) {
   try {
     // Check if inventory was updated for this order and if order can be rolled back
     const { data: order, error: orderError } = await supabase
@@ -404,7 +404,7 @@ async function _rollbackInventoryForPickedItems_DEPRECATED(supabase: any, orderI
  * Recalculate and update order fulfillment progress
  * Requirement 4.1: Track fulfillment progress
  */
-async function updateOrderFulfillmentProgress(supabase: any, orderId: number) {
+async function updateOrderFulfillmentProgress(supabase: SupabaseClient, orderId: number) {
   try {
     // Get all tasks for this order
     const { data: tasks, error: tasksError } = await supabase
@@ -417,7 +417,7 @@ async function updateOrderFulfillmentProgress(supabase: any, orderId: number) {
     }
 
     // Calculate progress percentage
-    const completedCount = tasks.filter((t: any) => t.completed).length
+    const completedCount = tasks.filter((t: unknown) => t.completed).length
     const totalCount = tasks.length
     const progressPercentage = Math.round((completedCount / totalCount) * 100)
 

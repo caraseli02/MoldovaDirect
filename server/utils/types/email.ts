@@ -24,5 +24,5 @@ export interface EmailSendResult {
  */
 export interface EmailSendOptions {
   /** Optional Supabase client to use (for testing or custom contexts) */
-  supabaseClient?: any // Import ResolvedSupabaseClient type if needed
+  supabaseClient?: SupabaseClient // Import ResolvedSupabaseClient type if needed
 }

@@ -103,7 +103,7 @@ export default defineEventHandler(async (event) => {
     const targetUserIds = [...new Set(logs?.map(log => log.target_user_id).filter(Boolean))]
     const allUserIds = [...new Set([...adminIds, ...targetUserIds])]
 
-    let userProfiles: any = {}
+    let userProfiles: unknown = {}
 
     if (allUserIds.length > 0) {
       const { data: profiles } = await supabase
@@ -177,7 +177,7 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Impersonation logs retrieval error:', error)
 
     if (error.statusCode) {

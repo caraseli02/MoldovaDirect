@@ -46,8 +46,8 @@ export default defineCachedEventHandler(async (event) => {
       throw createError({ statusCode: 500, statusMessage: 'Failed to compute price range', data: minError || maxError })
     }
 
-    const min = minData && minData.length > 0 ? (minData[0] as any).price_eur : 0
-    const max = maxData && maxData.length > 0 ? (maxData[0] as any).price_eur : 0
+    const min = minData && minData.length > 0 ? (minData[0] as unknown).price_eur : 0
+    const max = maxData && maxData.length > 0 ? (maxData[0] as unknown).price_eur : 0
 
     return {
       success: true,

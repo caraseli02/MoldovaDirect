@@ -89,7 +89,7 @@ export default defineEventHandler(async (event) => {
       data: trackingInfo,
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     if (error.statusCode) {
       throw error
     }

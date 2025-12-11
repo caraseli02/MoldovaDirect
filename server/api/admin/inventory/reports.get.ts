@@ -34,7 +34,7 @@ export default defineEventHandler(async (event) => {
     const validatedQuery = reportsQuerySchema.parse(query)
     const { reportType, startDate, endDate, categoryId } = validatedQuery
 
-    let reportData: any = {}
+    let reportData: unknown = {}
 
     switch (reportType) {
       case 'stock-levels':
@@ -108,7 +108,7 @@ export default defineEventHandler(async (event) => {
 /**
  * Generate stock levels report
  */
-async function generateStockLevelsReport(supabase: any, categoryId?: number) {
+async function generateStockLevelsReport(supabase: SupabaseClient, categoryId?: number) {
   let queryBuilder = supabase
     .from('products')
     .select(`
@@ -136,7 +136,7 @@ async function generateStockLevelsReport(supabase: any, categoryId?: number) {
     throw error
   }
 
-  const stockLevels = (products || []).map((product: any) => {
+  const stockLevels = (products || []).map((product: unknown) => {
     const stockQuantity = product.stock_quantity
     const lowThreshold = product.low_stock_threshold || 5
     const reorderPoint = product.reorder_point || 10
@@ -162,11 +162,11 @@ async function generateStockLevelsReport(supabase: any, categoryId?: number) {
 
   // Calculate summary statistics
   const totalProducts = stockLevels.length
-  const outOfStock = stockLevels.filter((p: any) => p.status === 'out').length
-  const lowStock = stockLevels.filter((p: any) => p.status === 'low').length
-  const mediumStock = stockLevels.filter((p: any) => p.status === 'medium').length
-  const highStock = stockLevels.filter((p: any) => p.status === 'high').length
-  const totalStockValue = stockLevels.reduce((sum: number, p: any) => sum + p.stockValue, 0)
+  const outOfStock = stockLevels.filter((p: unknown) => p.status === 'out').length
+  const lowStock = stockLevels.filter((p: unknown) => p.status === 'low').length
+  const mediumStock = stockLevels.filter((p: unknown) => p.status === 'medium').length
+  const highStock = stockLevels.filter((p: unknown) => p.status === 'high').length
+  const totalStockValue = stockLevels.reduce((sum: number, p: unknown) => sum + p.stockValue, 0)
 
   return {
     summary: {
@@ -184,7 +184,7 @@ async function generateStockLevelsReport(supabase: any, categoryId?: number) {
 /**
  * Generate movements summary report
  */
-async function generateMovementsSummaryReport(supabase: any, startDate?: string, endDate?: string, categoryId?: number) {
+async function generateMovementsSummaryReport(supabase: SupabaseClient, startDate?: string, endDate?: string, categoryId?: number) {
   let queryBuilder = supabase
     .from('inventory_movements')
     .select(`
@@ -222,21 +222,21 @@ async function generateMovementsSummaryReport(supabase: any, startDate?: string,
 
   // Filter by category if specified
   const filteredMovements = categoryId
-    ? (movements || []).filter((m: any) => m.products?.category_id === categoryId)
+    ? (movements || []).filter((m: unknown) => m.products?.category_id === categoryId)
     : movements || []
 
   // Calculate summary statistics
   const totalMovements = filteredMovements.length
-  const stockIn = filteredMovements.filter((m: any) => m.movement_type === 'in')
-  const stockOut = filteredMovements.filter((m: any) => m.movement_type === 'out')
-  const adjustments = filteredMovements.filter((m: any) => m.movement_type === 'adjustment')
+  const stockIn = filteredMovements.filter((m: unknown) => m.movement_type === 'in')
+  const stockOut = filteredMovements.filter((m: unknown) => m.movement_type === 'out')
+  const adjustments = filteredMovements.filter((m: unknown) => m.movement_type === 'adjustment')
 
-  const totalStockIn = stockIn.reduce((sum: number, m: any) => sum + m.quantity, 0)
-  const totalStockOut = stockOut.reduce((sum: number, m: any) => sum + m.quantity, 0)
-  const totalAdjustments = adjustments.reduce((sum: number, m: any) => sum + Math.abs(m.quantity), 0)
+  const totalStockIn = stockIn.reduce((sum: number, m: unknown) => sum + m.quantity, 0)
+  const totalStockOut = stockOut.reduce((sum: number, m: unknown) => sum + m.quantity, 0)
+  const totalAdjustments = adjustments.reduce((sum: number, m: unknown) => sum + Math.abs(m.quantity), 0)
 
   // Group by reason
-  const reasonSummary = filteredMovements.reduce((acc: any, movement: any) => {
+  const reasonSummary = filteredMovements.reduce((acc: unknown, movement: unknown) => {
     const reason = movement.reason || 'unknown'
     if (!acc[reason]) {
       acc[reason] = { count: 0, totalQuantity: 0 }
@@ -260,7 +260,7 @@ async function generateMovementsSummaryReport(supabase: any, startDate?: string,
       adjustments: adjustments.length,
     },
     byReason: reasonSummary,
-    recentMovements: filteredMovements.slice(0, 10).map((m: any) => ({
+    recentMovements: filteredMovements.slice(0, 10).map((m: unknown) => ({
       id: m.id,
       productId: m.product_id,
       productName: m.products?.name_translations,
@@ -275,7 +275,7 @@ async function generateMovementsSummaryReport(supabase: any, startDate?: string,
 /**
  * Generate low stock report
  */
-async function generateLowStockReport(supabase: any, categoryId?: number) {
+async function generateLowStockReport(supabase: SupabaseClient, categoryId?: number) {
   let queryBuilder = supabase
     .from('products')
     .select(`
@@ -304,9 +304,9 @@ async function generateLowStockReport(supabase: any, categoryId?: number) {
     throw error
   }
 
-  const lowStockProducts = (products || []).filter((product: any) => {
+  const lowStockProducts = (products || []).filter((product: unknown) => {
     return product.stock_quantity <= (product.low_stock_threshold || 5)
-  }).map((product: any) => ({
+  }).map((product: unknown) => ({
     productId: product.id,
     sku: product.sku,
     name: product.name_translations,
@@ -321,15 +321,15 @@ async function generateLowStockReport(supabase: any, categoryId?: number) {
 
   return {
     totalLowStockProducts: lowStockProducts.length,
-    totalValue: lowStockProducts.reduce((sum: number, p: any) => sum + p.stockValue, 0),
-    products: lowStockProducts.sort((a: any, b: any) => a.stockQuantity - b.stockQuantity),
+    totalValue: lowStockProducts.reduce((sum: number, p: unknown) => sum + p.stockValue, 0),
+    products: lowStockProducts.sort((a: unknown, b: unknown) => a.stockQuantity - b.stockQuantity),
   }
 }
 
 /**
  * Generate reorder alerts report
  */
-async function generateReorderAlertsReport(supabase: any, categoryId?: number) {
+async function generateReorderAlertsReport(supabase: SupabaseClient, categoryId?: number) {
   let queryBuilder = supabase
     .from('products')
     .select(`
@@ -358,9 +358,9 @@ async function generateReorderAlertsReport(supabase: any, categoryId?: number) {
     throw error
   }
 
-  const reorderProducts = (products || []).filter((product: any) => {
+  const reorderProducts = (products || []).filter((product: unknown) => {
     return product.stock_quantity <= (product.reorder_point || 10)
-  }).map((product: any) => {
+  }).map((product: unknown) => {
     const reorderQuantity = Math.max(
       (product.reorder_point || 10) * 2 - product.stock_quantity,
       product.reorder_point || 10,
@@ -385,13 +385,13 @@ async function generateReorderAlertsReport(supabase: any, categoryId?: number) {
 
   return {
     totalReorderProducts: reorderProducts.length,
-    totalEstimatedCost: reorderProducts.reduce((sum: number, p: any) => sum + p.estimatedCost, 0),
+    totalEstimatedCost: reorderProducts.reduce((sum: number, p: unknown) => sum + p.estimatedCost, 0),
     byPriority: {
-      critical: reorderProducts.filter((p: any) => p.priority === 'critical').length,
-      high: reorderProducts.filter((p: any) => p.priority === 'high').length,
-      medium: reorderProducts.filter((p: any) => p.priority === 'medium').length,
+      critical: reorderProducts.filter((p: unknown) => p.priority === 'critical').length,
+      high: reorderProducts.filter((p: unknown) => p.priority === 'high').length,
+      medium: reorderProducts.filter((p: unknown) => p.priority === 'medium').length,
     },
-    products: reorderProducts.sort((a: any, b: any) => {
+    products: reorderProducts.sort((a: unknown, b: unknown) => {
       const priorityOrder: Record<string, number> = { critical: 0, high: 1, medium: 2 }
       return (priorityOrder[a.priority] ?? 3) - (priorityOrder[b.priority] ?? 3)
     }),

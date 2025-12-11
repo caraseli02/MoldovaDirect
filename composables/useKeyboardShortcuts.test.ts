@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 
 // Mock navigator for platform detection
 const originalNavigator = global.navigator

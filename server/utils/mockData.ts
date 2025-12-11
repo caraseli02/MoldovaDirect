@@ -26,7 +26,7 @@ export interface MockProduct {
     slug: string
     name: Record<string, string>
   } | null
-  attributes: Record<string, any>
+  attributes: Record<string, unknown>
   isActive: boolean
   createdAt: string
   updatedAt: string
@@ -300,7 +300,7 @@ export function getMockProducts(options: {
   // Apply sorting
   if (options.sortBy) {
     filteredProducts.sort((a, b) => {
-      let aValue: any, bValue: any
+      let aValue: unknown, bValue: unknown
 
       switch (options.sortBy) {
         case 'name':

@@ -56,7 +56,7 @@ export function createCartSecurityMiddleware(options: SecurityOptions = {}) {
       if (!options.skipRateLimit && options.rateLimitOperation) {
         const rateLimit = checkRateLimit(
           rateLimitKey,
-          options.rateLimitOperation as any,
+          options.rateLimitOperation as unknown,
         )
 
         if (!rateLimit.allowed) {
@@ -133,7 +133,7 @@ export function createCartSecurityMiddleware(options: SecurityOptions = {}) {
         })
       }
     }
-    catch (error: any) {
+    catch (error: unknown) {
       // Log security violations
       console.warn('Cart security violation:', {
         ip: getClientIP(event),
@@ -151,7 +151,7 @@ export function createCartSecurityMiddleware(options: SecurityOptions = {}) {
 /**
  * Get client IP address from request
  */
-function getClientIP(event: any): string | null {
+function getClientIP(event: H3Event): string | null {
   const forwarded = getHeader(event, 'x-forwarded-for')
   const realIP = getHeader(event, 'x-real-ip')
   const remoteAddress = event.node.req.socket?.remoteAddress
@@ -171,7 +171,7 @@ if (typeof setInterval !== 'undefined') {
     try {
       performSecurityCleanup()
     }
-    catch (error: any) {
+    catch (error: unknown) {
       console.error('Security cleanup failed:', error)
     }
   }, 5 * 60 * 1000)

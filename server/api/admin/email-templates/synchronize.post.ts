@@ -51,7 +51,7 @@ export default defineEventHandler(async (event) => {
 
     if (!targetTemplate) {
       // Create new template with source structure but placeholder translations
-      const newTranslations: Record<string, any> = {}
+      const newTranslations: Record<string, unknown> = {}
       for (const key of sourceKeys) {
         const sourceValue = sourceTemplate.translations[key]
         if (typeof sourceValue === 'object') {
@@ -77,7 +77,7 @@ export default defineEventHandler(async (event) => {
     }
     else {
       // Merge structures: keep existing translations, add new keys, remove obsolete keys
-      const mergedTranslations: Record<string, any> = {}
+      const mergedTranslations: Record<string, unknown> = {}
 
       for (const key of sourceKeys) {
         if (targetTemplate.translations[key] !== undefined) {

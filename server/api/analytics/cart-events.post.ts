@@ -24,7 +24,7 @@ interface CartAnalyticsEvent {
     category?: string
     quantity: number
   }
-  metadata?: Record<string, any>
+  metadata?: Record<string, unknown>
 }
 
 interface CartConversionMetrics {
@@ -191,7 +191,7 @@ export default defineEventHandler(async (event) => {
 
 // Update daily analytics with cart-specific metrics
 async function updateDailyCartAnalytics(
-  supabase: any,
+  supabase: SupabaseClient,
   events: CartAnalyticsEvent[],
   conversions: CartConversionMetrics[],
   abandonments: CartAbandonmentData[],

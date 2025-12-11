@@ -63,7 +63,7 @@ export default defineEventHandler(async (event) => {
     const notFoundIds = productIds.filter(id => !foundIds.includes(id))
 
     // Build update object
-    const updateData: any = {
+    const updateData: unknown = {
       updated_at: new Date().toISOString(),
     }
 

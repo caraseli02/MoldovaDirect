@@ -48,7 +48,7 @@ export default defineEventHandler(async (event) => {
 
     // For advanced search (product names), we need to fetch all orders first if search is provided
     // This is a trade-off for better search functionality
-    let orders: any[] = []
+    let orders: unknown[] = []
     let totalCount = 0
 
     if (search && search.length >= 2) {
@@ -96,10 +96,10 @@ export default defineEventHandler(async (event) => {
 
         // Search in product names within order items
         if (order.order_items && Array.isArray(order.order_items)) {
-          return order.order_items.some((item: any) => {
+          return order.order_items.some((item: unknown) => {
             const snapshot = item.product_snapshot
             if (snapshot?.name_translations) {
-              return Object.values(snapshot.name_translations).some((name: any) =>
+              return Object.values(snapshot.name_translations).some((name: unknown) =>
                 name?.toLowerCase().includes(searchLower),
               )
             }
@@ -292,7 +292,7 @@ export default defineEventHandler(async (event) => {
       deliveredAt: order.delivered_at,
       createdAt: order.created_at,
       updatedAt: order.updated_at,
-      items: (order.order_items || []).map((item: any) => ({
+      items: (order.order_items || []).map((item: unknown) => ({
         id: item.id,
         orderId: item.order_id,
         productId: item.product_id,
@@ -326,7 +326,7 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     if (error.statusCode) {
       throw error
     }
