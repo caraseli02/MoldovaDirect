@@ -188,7 +188,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
-  confirm: [data?: Record<string, unknown>]
+  confirm: [data?: Record<string, any>]
   cancel: []
 }>()
 
@@ -328,7 +328,7 @@ const isFormValid = () => {
 const confirm = () => {
   if (!isFormValid()) return
 
-  const data: Record<string, unknown> = {}
+  const data: Record<string, any> = {}
 
   if (formData.reason.trim()) {
     data.reason = formData.reason.trim()

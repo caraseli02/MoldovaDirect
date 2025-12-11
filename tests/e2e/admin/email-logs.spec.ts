@@ -10,7 +10,7 @@
  * - Error handling and edge cases
  */
 
-import { test, expect, type _Page } from '@playwright/test'
+import { test, expect, type Page } from '@playwright/test'
 
 test.describe('Admin Email Logs Page', () => {
   test.beforeEach(async ({ page, context }) => {

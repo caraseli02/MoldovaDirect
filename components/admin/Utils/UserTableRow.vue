@@ -258,14 +258,14 @@
 
 <script setup lang="ts">
 interface Props {
-  user: Record<string, unknown> // Replace with proper User type
+  user: Record<string, any> // Replace with proper User type
   isSelected?: boolean
 }
 
 interface Emits {
   (e: 'view', userId: string): void
   (e: 'edit', userId: string): void
-  (e: 'action', action: string, userId: string, data?: Record<string, unknown>): void
+  (e: 'action', action: string, userId: string, data?: Record<string, any>): void
   (e: 'select', userId: string): void
 }
 
@@ -386,7 +386,7 @@ const handleEdit = () => {
   }, 200)
 }
 
-const handleUserAction = (action: string, userId: string, data?: Record<string, unknown>) => {
+const handleUserAction = (action: string, userId: string, data?: Record<string, any>) => {
   emit('action', action, userId, data)
 
   if (isMobile.value) {

@@ -80,7 +80,7 @@ test.describe('Admin Email Testing Tool', () => {
 
     // Issue description should not be visible initially
     const issueDescriptionField = authenticatedPage.locator('textarea#issueDescription')
-    const _initiallyVisible = await issueDescriptionField.isVisible().catch(() => false)
+    const initiallyVisible = await issueDescriptionField.isVisible().catch(() => false)
 
     // Select "Order Issue" email type
     const emailTypeSelect = authenticatedPage.locator('select#emailType')
@@ -208,7 +208,7 @@ test.describe('Admin Email Testing Tool', () => {
 
     // Check for dark mode aware elements
     const container = authenticatedPage.locator('[class*="dark:"]').first()
-    const _isDarkAware = await container.evaluate(() => {
+    const isDarkAware = await container.evaluate(() => {
       const classList = Array.from(document.documentElement.classList)
       return classList.some(c => c.includes('dark')) || document.body.className.includes('dark')
     }).catch(() => false)

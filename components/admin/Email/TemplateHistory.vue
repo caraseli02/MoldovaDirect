@@ -168,7 +168,7 @@ interface TemplateHistoryEntry {
   locale: string
   subject: string
   preheader?: string
-  translations: Record<string, unknown>
+  translations: Record<string, any>
   archivedAt: string
 }
 

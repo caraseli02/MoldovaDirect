@@ -177,8 +177,8 @@ const loadApexCharts = async () => {
     return null
   }
 
-  if ((window as unknown as Record<string, unknown>).ApexCharts) {
-    return (window as unknown as Record<string, unknown>).ApexCharts
+  if ((window as unknown as Record<string, any>).ApexCharts) {
+    return (window as unknown as Record<string, any>).ApexCharts
   }
 
   if (apexPromise) {
@@ -189,7 +189,7 @@ const loadApexCharts = async () => {
     const script = document.createElement('script')
     script.src = 'https://cdn.jsdelivr.net/npm/apexcharts'
     script.async = true
-    script.onload = () => resolve((window as unknown as Record<string, unknown>).ApexCharts)
+    script.onload = () => resolve((window as unknown as Record<string, any>).ApexCharts)
     script.onerror = () => reject(new Error('Unable to load ApexCharts script'))
     document.head.appendChild(script)
   })

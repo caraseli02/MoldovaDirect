@@ -16,8 +16,8 @@ interface AuthUser {
   id: string
   email: string
   role?: string
-  app_metadata?: Record<string, unknown>
-  user_metadata?: Record<string, unknown>
+  app_metadata?: Record<string, any>
+  user_metadata?: Record<string, any>
 }
 
 /**
@@ -227,7 +227,7 @@ export async function logAdminAction(
   event: H3Event,
   adminId: string,
   action: string,
-  metadata?: Record<string, unknown>,
+  metadata?: Record<string, any>,
 ): Promise<AuditLogResult> {
   const errorId = `audit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
   const logEntry = {

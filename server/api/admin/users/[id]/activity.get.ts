@@ -16,7 +16,7 @@ interface ActivityLog {
   created_at: string
   ip_address?: string
   user_agent?: string
-  metadata?: unknown
+  metadata?: any
 }
 
 export default defineEventHandler(async (event) => {

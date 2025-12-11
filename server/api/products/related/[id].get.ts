@@ -206,7 +206,7 @@ export default defineCachedEventHandler(async (event) => {
       .limit(4)
 
     // Process frequently bought together data
-    const frequentlyBought = frequentlyBoughtTogether?.reduce((acc: unknown[], item: unknown) => {
+    const frequentlyBought = frequentlyBoughtTogether?.reduce((acc: any[], item: unknown) => {
       item.orders.order_items.forEach((orderItem: unknown) => {
         if (orderItem.product_id !== parseInt(productId) && orderItem.products.is_active) {
           const existing = acc.find(p => p.id === orderItem.products.id)

@@ -5,7 +5,7 @@
  */
 
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { generateImpersonationToken, verifyImpersonationToken, _validateImpersonationSession } from '../impersonation'
+import { generateImpersonationToken, verifyImpersonationToken, validateImpersonationSession } from '../impersonation'
 import jwt from 'jsonwebtoken'
 
 describe('Impersonation Utilities', () => {

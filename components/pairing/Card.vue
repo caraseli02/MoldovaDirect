@@ -164,7 +164,7 @@ defineEmits<{
 const { t, locale } = useI18n()
 
 // Get localized text from Translations object
-const getLocalizedText = (translations: Record<string, unknown>): string => {
+const getLocalizedText = (translations: Record<string, any>): string => {
   if (!translations) return ''
   return translations[locale.value] || translations.en || Object.values(translations)[0] || ''
 }

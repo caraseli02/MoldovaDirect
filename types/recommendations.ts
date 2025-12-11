@@ -96,7 +96,7 @@ export interface ProductRecommendation {
   /** Position in the recommendation list (1-based) */
   position: number
   /** Additional metadata specific to this recommendation */
-  metadata?: Record<string, unknown>
+  metadata?: Record<string, any>
 }
 
 /**
@@ -110,7 +110,7 @@ export interface RecommendationReason {
   /** Confidence level in this recommendation (0-1) */
   confidence: number
   /** Additional context data for the reason */
-  context?: Record<string, unknown>
+  context?: Record<string, any>
 }
 
 /**
@@ -128,7 +128,7 @@ export interface RecommendationMetadata {
   /** Time taken to generate recommendations in milliseconds */
   processingTimeMs: number
   /** Additional debug information */
-  debug?: Record<string, unknown>
+  debug?: Record<string, any>
 }
 
 // =============================================
@@ -165,7 +165,7 @@ export interface RecommendationAnalyticsEvent {
   /** Timestamp of the interaction */
   timestamp: string
   /** Additional event metadata */
-  metadata?: Record<string, unknown>
+  metadata?: Record<string, any>
 }
 
 /**
@@ -283,7 +283,7 @@ export interface RecommendationError {
   /** Suggested fallback strategy */
   fallbackStrategy?: 'popular_products' | 'category_products' | 'empty_state' | 'cached_results'
   /** Additional error details */
-  details?: Record<string, unknown>
+  details?: Record<string, any>
 }
 
 // =============================================

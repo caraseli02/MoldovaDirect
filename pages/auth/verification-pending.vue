@@ -340,6 +340,7 @@ onMounted(() => {
   const messageParam = route.query.message as string
   if (messageParam === 'email-verification-required') {
     // Show the verification pending message
+    const message = getVerificationPendingMessage(emailParam)
     // This is an info message, so we don't set it as success or error
   }
 })

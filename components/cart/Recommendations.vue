@@ -163,7 +163,7 @@ const handleLoadRecommendations = async () => {
   }
 }
 
-const handleAddToCart = async (product: Record<string, unknown>) => {
+const handleAddToCart = async (product: Record<string, any>) => {
   try {
     await addItem(product, 1)
     toast.success('Producto añadido', `${product.name} ha sido añadido al carrito`)

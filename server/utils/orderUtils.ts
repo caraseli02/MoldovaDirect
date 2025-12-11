@@ -10,7 +10,7 @@ export interface CartItem {
     name_translations: Record<string, string>
     description_translations: Record<string, string>
     price_eur: number
-    images: unknown[]
+    images: any[]
     weight_kg: number
     stock_quantity: number
     is_active: boolean
@@ -289,7 +289,7 @@ export function formatOrderAddress(address: unknown): string {
 /**
  * Sanitize order data for storage
  */
-export function sanitizeOrderData(data: unknown): unknown {
+export function sanitizeOrderData(data: any): unknown {
   // Remove sensitive information and sanitize input
   const sanitized = { ...data }
 

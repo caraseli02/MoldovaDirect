@@ -150,11 +150,11 @@ const emit = defineEmits<Emits>()
 // Composables
 const { validateStockQuantity } = useInventory()
 // Store - safely access with fallback
-let adminProductsStore: Record<string, unknown> = {}
+let adminProductsStore: Record<string, any> = {}
 
 try {
   if (import.meta.client) {
-    adminProductsStore = useAdminProductsStore() as Record<string, unknown>
+    adminProductsStore = useAdminProductsStore() as Record<string, any>
   }
 }
 catch {

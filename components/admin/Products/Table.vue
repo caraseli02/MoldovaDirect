@@ -438,7 +438,7 @@ import { Badge } from '@/components/ui/badge'
 import { productStatusVariant } from '@/lib/uiVariants'
 
 interface Props {
-  products: Record<string, unknown>[]
+  products: Record<string, any>[]
   loading: boolean
   hasActiveFilters: boolean
   hasSelectedProducts: boolean

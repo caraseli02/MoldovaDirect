@@ -22,7 +22,7 @@ export type StockStatus = 'in_stock' | 'low_stock' | 'out_of_stock'
 /**
  * Check if a value is a valid translations object
  */
-export function isTranslations(value: unknown): value is Translations {
+export function isTranslations(value: any): value is Translations {
   return (
     typeof value === 'object'
     && value !== null
@@ -36,7 +36,7 @@ export function isTranslations(value: unknown): value is Translations {
 /**
  * Check if a value is a valid Product
  */
-export function isProduct(value: unknown): value is Product {
+export function isProduct(value: any): value is Product {
   return (
     typeof value === 'object'
     && value !== null
@@ -53,7 +53,7 @@ export function isProduct(value: unknown): value is Product {
 /**
  * Check if a value is a ProductWithRelations
  */
-export function isProductWithRelations(value: unknown): value is ProductWithRelations {
+export function isProductWithRelations(value: any): value is ProductWithRelations {
   return (
     typeof value === 'object'
     && value !== null
@@ -74,7 +74,7 @@ export function isProductWithRelations(value: unknown): value is ProductWithRela
 /**
  * Check if a value is a valid Category
  */
-export function isCategory(value: unknown): value is Category {
+export function isCategory(value: any): value is Category {
   return (
     typeof value === 'object'
     && value !== null
@@ -89,7 +89,7 @@ export function isCategory(value: unknown): value is Category {
 /**
  * Check if a value is a CategoryWithChildren
  */
-export function isCategoryWithChildren(value: unknown): value is CategoryWithChildren {
+export function isCategoryWithChildren(value: any): value is CategoryWithChildren {
   return (
     typeof value === 'object'
     && value !== null
@@ -106,14 +106,14 @@ export function isCategoryWithChildren(value: unknown): value is CategoryWithChi
 /**
  * Check if a value is a valid language code
  */
-export function isLanguageCode(value: unknown): value is LanguageCode {
+export function isLanguageCode(value: any): value is LanguageCode {
   return typeof value === 'string' && ['es', 'en', 'ro', 'ru'].includes(value)
 }
 
 /**
  * Check if a value is a valid product sort option
  */
-export function isProductSortOption(value: unknown): value is ProductSortOption {
+export function isProductSortOption(value: any): value is ProductSortOption {
   return typeof value === 'string'
     && ['name', 'price_asc', 'price_desc', 'newest', 'featured', 'created'].includes(value)
 }
@@ -121,7 +121,7 @@ export function isProductSortOption(value: unknown): value is ProductSortOption 
 /**
  * Check if a value is a valid stock status
  */
-export function isStockStatus(value: unknown): value is StockStatus {
+export function isStockStatus(value: any): value is StockStatus {
   return typeof value === 'string'
     && ['in_stock', 'low_stock', 'out_of_stock'].includes(value)
 }
@@ -129,7 +129,7 @@ export function isStockStatus(value: unknown): value is StockStatus {
 /**
  * Check if a value is valid ProductFilters
  */
-export function isProductFilters(value: unknown): value is ProductFilters {
+export function isProductFilters(value: any): value is ProductFilters {
   if (typeof value !== 'object' || value === null) return false
 
   const filters = value as ProductFilters
@@ -154,7 +154,7 @@ export function isProductFilters(value: unknown): value is ProductFilters {
 /**
  * Validate product data for creation/update
  */
-export function validateProduct(data: unknown): { valid: boolean, errors: string[] } {
+export function validateProduct(data: any): { valid: boolean, errors: string[] } {
   const errors: string[] = []
 
   if (!data.sku || typeof data.sku !== 'string') {
@@ -186,7 +186,7 @@ export function validateProduct(data: unknown): { valid: boolean, errors: string
 /**
  * Validate category data for creation/update
  */
-export function validateCategory(data: unknown): { valid: boolean, errors: string[] } {
+export function validateCategory(data: any): { valid: boolean, errors: string[] } {
   const errors: string[] = []
 
   if (!data.slug || typeof data.slug !== 'string') {
@@ -259,7 +259,7 @@ export function validateProductFilters(filters: unknown): ProductFilters {
 /**
  * Transform a raw product from database to ProductWithRelations
  */
-export function transformProduct(rawProduct: unknown, _locale: LanguageCode = 'es'): ProductWithRelations | null {
+export function transformProduct(rawProduct: unknown, locale: LanguageCode = 'es'): ProductWithRelations | null {
   if (!isProduct(rawProduct)) return null
 
   const stockStatus: StockStatus
@@ -409,7 +409,7 @@ export function deepClone<T>(obj: T): T {
 /**
  * Debounce function for search inputs
  */
-export function debounce<T extends (...args: unknown[]) => unknown>(
+export function debounce<T extends (...args: any[]) => unknown>(
   func: T,
   wait: number,
 ): (...args: Parameters<T>) => void {
@@ -424,7 +424,7 @@ export function debounce<T extends (...args: unknown[]) => unknown>(
 /**
  * Throttle function for scroll events
  */
-export function throttle<T extends (...args: unknown[]) => unknown>(
+export function throttle<T extends (...args: any[]) => unknown>(
   func: T,
   limit: number,
 ): (...args: Parameters<T>) => void {

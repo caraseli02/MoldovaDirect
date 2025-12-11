@@ -1,5 +1,5 @@
 import { test, expect } from '../../fixtures/base'
-import type { _Page } from '@playwright/test'
+import type { Page } from '@playwright/test'
 
 test.describe('Login Flow', () => {
   test.beforeEach(async ({ page }) => {
@@ -307,7 +307,7 @@ test.describe('Login Flow', () => {
   })
 
   test.describe('Forgot Password Link', () => {
-    test('should navigate to forgot password page', async ({ page, _locale }) => {
+    test('should navigate to forgot password page', async ({ page, locale }) => {
       const forgotPasswordLink = page.locator('[data-testid="forgot-password"]')
       await forgotPasswordLink.click()
 

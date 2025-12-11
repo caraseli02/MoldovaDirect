@@ -238,7 +238,7 @@ function calculateRelevance(product: unknown, searchTerm: string, locale: string
 }
 
 // Generate search suggestions based on available products
-function generateSearchSuggestions(searchTerm: string, products: unknown[], locale: string, limit: number = 5): string[] {
+function generateSearchSuggestions(searchTerm: string, products: any[], locale: string, limit: number = 5): string[] {
   const suggestions = new Set<string>()
   const searchLower = searchTerm.toLowerCase()
 

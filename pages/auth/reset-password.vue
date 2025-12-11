@@ -319,7 +319,7 @@ const passwordError = ref('')
 const confirmPasswordError = ref('')
 
 // Validation composable
-const { validatePassword, _validatePasswordMatch } = useAuthValidation()
+const { validatePassword, validatePasswordMatch } = useAuthValidation()
 
 // Form validation
 const isFormValid = computed(() => {

@@ -2,7 +2,7 @@
 // Supports wine and food pairing education and recommendations
 
 import type { Translations } from './database'
-import type { _WineRegion } from './product-attributes'
+import type { WineRegion } from './product-attributes'
 
 // =============================================
 // PAIRING GUIDE

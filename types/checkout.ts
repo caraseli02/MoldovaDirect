@@ -85,7 +85,7 @@ export interface ShippingInformation {
 
 export interface OrderItem {
   productId: number | string
-  productSnapshot: Record<string, unknown>
+  productSnapshot: Record<string, any>
   quantity: number
   price: number
   total: number
@@ -105,7 +105,7 @@ export interface OrderData {
 
 export interface CheckoutSession {
   id: string
-  cartItems: unknown[]
+  cartItems: any[]
   shippingInfo?: ShippingInformation
   paymentMethod?: PaymentMethod
   orderData?: OrderData

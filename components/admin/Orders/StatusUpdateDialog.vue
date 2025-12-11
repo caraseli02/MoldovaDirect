@@ -345,8 +345,8 @@ const handleSubmit = async () => {
   }
   catch (err: unknown) {
     console.error('Error updating order status:', err)
-    const errorData = err as Record<string, unknown>
-    const dataObj = errorData.data as Record<string, unknown> | undefined
+    const errorData = err as Record<string, any>
+    const dataObj = errorData.data as Record<string, any> | undefined
     const message = (err as Error).message
     error.value = (dataObj?.statusMessage as string) || message || 'Failed to update order status'
     toast.error('Error', error.value ?? 'Failed to update order status')

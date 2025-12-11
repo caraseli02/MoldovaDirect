@@ -248,7 +248,7 @@ onMounted(() => {
 const hoveredRegion = ref<WineRegion | null>(null)
 
 // Get localized text
-const getLocalizedText = (translations: Record<string, unknown>): string => {
+const getLocalizedText = (translations: Record<string, any>): string => {
   if (!translations) return ''
   const localeCode = locale?.value || 'es'
   return translations[localeCode] || translations.en || Object.values(translations)[0] || ''

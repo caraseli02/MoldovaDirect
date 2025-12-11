@@ -270,7 +270,7 @@ const breadcrumbItems = computed((): BreadcrumbItem[] => {
 
   categories.forEach((category, _index) => {
     // Get localized name from translations
-    const categoryName = (category as Record<string, unknown>).name
+    const categoryName = (category as Record<string, any>).name
     const label = typeof categoryName === 'string'
       ? categoryName
       : typeof categoryName === 'object'
@@ -300,7 +300,7 @@ function buildCategoryPath(category: Category | null | undefined): Category[] {
   while (current) {
     path.unshift(current)
     // Check for parent property, fallback to undefined
-    current = (current as Record<string, unknown>).parent as Record<string, unknown> || undefined
+    current = (current as Record<string, any>).parent as Record<string, any> || undefined
   }
 
   return path

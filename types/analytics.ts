@@ -126,7 +126,7 @@ export interface ActivityTrackingRequest {
   productId?: number
   orderId?: number
   sessionId?: string
-  metadata?: Record<string, unknown>
+  metadata?: Record<string, any>
 }
 
 export interface ActivityItem {
@@ -135,7 +135,7 @@ export interface ActivityItem {
   title: string
   description: string
   timestamp: string
-  metadata?: Record<string, unknown>
+  metadata?: Record<string, any>
 }
 
 // Dashboard Statistics Types
@@ -211,7 +211,7 @@ export interface UserActivityLog {
   sessionId?: string
   ipAddress?: string
   userAgent?: string
-  metadata?: Record<string, unknown>
+  metadata?: Record<string, any>
   createdAt: string
 }
 
@@ -221,8 +221,8 @@ export interface AuditLog {
   action: string
   resourceType: string
   resourceId?: string
-  oldValues?: Record<string, unknown>
-  newValues?: Record<string, unknown>
+  oldValues?: Record<string, any>
+  newValues?: Record<string, any>
   ipAddress?: string
   userAgent?: string
   createdAt: string

@@ -46,6 +46,7 @@ export function updateSupabaseSessionCookies(remember: boolean): void {
   try {
     // Get all cookies
     const cookies = document.cookie.split(';')
+    const supabaseCookies = cookies
       .map(c => c.trim())
       .filter(c => c.startsWith('sb-'))
 

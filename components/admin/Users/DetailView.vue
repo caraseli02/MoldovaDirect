@@ -361,11 +361,11 @@ const props = defineProps<Props>()
 
 const emit = defineEmits<{
   edit: [userId: string]
-  action: [action: string, userId: string, data?: Record<string, unknown>]
+  action: [action: string, userId: string, data?: Record<string, any>]
 }>()
 
 // Store - safely access with fallback
-let adminUsersStore: Record<string, unknown> = {}
+let adminUsersStore: Record<string, any> = {}
 
 try {
   if (import.meta.client) {
@@ -443,11 +443,11 @@ const editUser = () => {
   emit('edit', props.userId)
 }
 
-const handleUserAction = (action: string, userId: string, data?: Record<string, unknown>) => {
+const handleUserAction = (action: string, userId: string, data?: Record<string, any>) => {
   emit('action', action, userId, data)
 }
 
-const handlePermissionChange = (_userId: string, _changes: Record<string, unknown>) => {
+const handlePermissionChange = (_userId: string, _changes: Record<string, any>) => {
   // Optionally refresh user data or emit event
 }
 

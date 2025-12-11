@@ -445,7 +445,7 @@ const { getMovementTypeLabel } = useInventory()
 
 // Reactive state
 const selectedReportType = ref('stock-levels')
-const reportData = ref<Record<string, unknown> | null>(null)
+const reportData = ref<Record<string, any> | null>(null)
 const loading = ref(false)
 const dateRange = ref({
   startDate: '',
@@ -485,7 +485,7 @@ const generateReport = async () => {
   loading.value = true
 
   try {
-    const queryParams: Record<string, unknown> = {
+    const queryParams: Record<string, any> = {
       reportType: selectedReportType.value,
     }
 

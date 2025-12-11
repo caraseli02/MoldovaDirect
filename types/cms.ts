@@ -355,12 +355,12 @@ export interface SectionFormData {
   starts_at: string
   ends_at: string
   translations: {
-    es: Record<string, unknown>
-    en: Record<string, unknown>
-    ro: Record<string, unknown>
-    ru: Record<string, unknown>
+    es: Record<string, any>
+    en: Record<string, any>
+    ro: Record<string, any>
+    ru: Record<string, any>
   }
-  config: Record<string, unknown>
+  config: Record<string, any>
 }
 
 /**

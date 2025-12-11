@@ -74,10 +74,10 @@ interface MetricCardViewModel {
 
 const { t } = useI18n()
 
-let dashboardStore: Record<string, unknown> = {}
+let dashboardStore: Record<string, any> = {}
 
 try {
-  dashboardStore = useAdminDashboardStore() as Record<string, unknown>
+  dashboardStore = useAdminDashboardStore() as Record<string, any>
 }
 catch {
   console.warn('Admin dashboard store not available during SSR/hydration')

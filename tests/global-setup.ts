@@ -29,7 +29,7 @@ async function waitForServer(baseURL: string, timeout = 120000) {
         return
       }
     }
-    catch (_error) {
+    catch (error) {
       // Server not ready yet, continue waiting
     }
     await new Promise(resolve => setTimeout(resolve, 500))
@@ -225,7 +225,7 @@ async function globalSetup(config: FullConfig) {
       try {
         await context.close()
       }
-      catch (_e) {
+      catch (e) {
         // Already closed in catch block
       }
     }

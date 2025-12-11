@@ -26,7 +26,7 @@ export interface MockProduct {
     slug: string
     name: Record<string, string>
   } | null
-  attributes: Record<string, unknown>
+  attributes: Record<string, any>
   isActive: boolean
   createdAt: string
   updatedAt: string

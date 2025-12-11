@@ -49,8 +49,8 @@ const initializeTasks = async () => {
   }
   catch (error: unknown) {
     console.error('Error initializing fulfillment tasks:', error)
-    const errorData = error as Record<string, unknown>
-    const errorMessage = (errorData.data as Record<string, unknown>)?.statusMessage as string
+    const errorData = error as Record<string, any>
+    const errorMessage = (errorData.data as Record<string, any>)?.statusMessage as string
     toast.error('Error', errorMessage || 'Failed to create fulfillment tasks')
   }
   finally {

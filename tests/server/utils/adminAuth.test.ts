@@ -109,6 +109,7 @@ vi.mock('#supabase/server', () => ({
 }))
 
 // Cast to mock functions for test manipulation
+const mockGetCookie = getCookie as ReturnType<typeof vi.fn>
 const mockGetHeader = getHeader as ReturnType<typeof vi.fn>
 const mockGetRequestIP = getRequestIP as ReturnType<typeof vi.fn>
 const mockCreateError = createError as ReturnType<typeof vi.fn>

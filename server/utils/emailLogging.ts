@@ -414,7 +414,7 @@ export async function getPendingEmailsForRetry(): Promise<EmailLog[]> {
 /**
  * Transform database record to EmailLog type
  */
-function transformEmailLogFromDb(data: unknown): EmailLog {
+function transformEmailLogFromDb(data: any): EmailLog {
   return {
     id: data.id,
     orderId: data.order_id,
@@ -436,7 +436,7 @@ function transformEmailLogFromDb(data: unknown): EmailLog {
 /**
  * Transform database record with order to EmailLogWithOrder type
  */
-function transformEmailLogWithOrderFromDb(data: unknown): unknown {
+function transformEmailLogWithOrderFromDb(data: any): unknown {
   return {
     ...transformEmailLogFromDb(data),
     order: {

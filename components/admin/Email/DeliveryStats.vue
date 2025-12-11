@@ -139,7 +139,7 @@
 import { ref, onMounted } from 'vue'
 import { Card, CardContent } from '~/components/ui/card'
 
-const stats = ref<Record<string, unknown> | null>(null)
+const stats = ref<Record<string, any> | null>(null)
 
 async function loadStats() {
   try {

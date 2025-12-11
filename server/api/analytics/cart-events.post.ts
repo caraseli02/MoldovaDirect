@@ -24,7 +24,7 @@ interface CartAnalyticsEvent {
     category?: string
     quantity: number
   }
-  metadata?: Record<string, unknown>
+  metadata?: Record<string, any>
 }
 
 interface CartConversionMetrics {

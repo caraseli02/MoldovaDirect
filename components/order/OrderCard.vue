@@ -192,12 +192,12 @@ const canReorder = computed(() => {
 })
 
 // Helper functions
-const getLocalizedName = (productSnapshot: Record<string, unknown>) => {
+const getLocalizedName = (productSnapshot: Record<string, any>) => {
   if (!productSnapshot?.nameTranslations) return ''
   return productSnapshot.nameTranslations[locale.value] || productSnapshot.nameTranslations.en || ''
 }
 
-const getProductImage = (item: Record<string, unknown>) => {
+const getProductImage = (item: Record<string, any>) => {
   try {
     const snapshot = item?.productSnapshot
     if (!snapshot) return null

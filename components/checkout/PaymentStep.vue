@@ -349,9 +349,9 @@ const paymentMethod = ref<PaymentMethod>({
 // =============================================
 
 const isAuthenticated = computed(() => authStore.isAuthenticated)
-const savedPaymentMethods = computed(() => (checkoutStore as Record<string, unknown>).savedPaymentMethods ?? [])
-const loading = computed(() => (checkoutStore as Record<string, unknown>).loading ?? false)
-const errors = computed(() => (checkoutStore as Record<string, unknown>).errors ?? {})
+const savedPaymentMethods = computed(() => (checkoutStore as Record<string, any>).savedPaymentMethods ?? [])
+const loading = computed(() => (checkoutStore as Record<string, any>).loading ?? false)
+const errors = computed(() => (checkoutStore as Record<string, any>).errors ?? {})
 
 const canProceed = computed(() => {
   if (selectedSavedMethod.value) {
@@ -463,7 +463,7 @@ const getPaymentMethodDescription = (savedMethod: SavedPaymentMethod) => {
 }
 
 const goBack = async () => {
-  const previousStep = (checkoutStore as Record<string, unknown>).goToPreviousStep?.()
+  const previousStep = (checkoutStore as Record<string, any>).goToPreviousStep?.()
   if (previousStep) {
     const localePath = useLocalePath()
     const stepPath = previousStep === 'shipping' ? '/checkout' : `/checkout/${previousStep}`
@@ -490,10 +490,10 @@ const proceedToReview = async () => {
       methodToSave = paymentMethod.value
     }
 
-    await (checkoutStore as Record<string, unknown>).updatePaymentMethod?.(methodToSave)
+    await (checkoutStore as Record<string, any>).updatePaymentMethod?.(methodToSave)
 
     // Get the next step and navigate to it
-    const nextStep = await (checkoutStore as Record<string, unknown>).proceedToNextStep?.()
+    const nextStep = await (checkoutStore as Record<string, any>).proceedToNextStep?.()
     if (nextStep) {
       const localePath = useLocalePath()
       const stepPath = nextStep === 'shipping' ? '/checkout' : `/checkout/${nextStep}`
@@ -510,8 +510,8 @@ const proceedToReview = async () => {
 // =============================================
 
 // Initialize with existing payment method if available
-if ((checkoutStore as Record<string, unknown>).paymentMethod) {
-  paymentMethod.value = { ...(checkoutStore as Record<string, unknown>).paymentMethod }
+if ((checkoutStore as Record<string, any>).paymentMethod) {
+  paymentMethod.value = { ...(checkoutStore as Record<string, any>).paymentMethod }
 }
 
 // Watch for changes in saved payment methods

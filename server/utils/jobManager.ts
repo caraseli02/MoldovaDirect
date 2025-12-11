@@ -16,7 +16,7 @@ const jobs = new Map<string, BackgroundJob>()
  */
 export function createJob(
   type: BackgroundJob['type'],
-  metadata?: Record<string, unknown>,
+  metadata?: Record<string, any>,
 ): BackgroundJob {
   const id = `job_${Date.now()}_${Math.random().toString(36).substring(7)}`
 

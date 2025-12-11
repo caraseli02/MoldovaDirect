@@ -7,7 +7,7 @@
 
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
-import { _ref } from 'vue'
+import { ref } from 'vue'
 import { useComposableName } from './useComposableName'
 
 describe('useComposableName', () => {
@@ -56,7 +56,7 @@ describe('useComposableName', () => {
 
     it('triggers computed values to recalculate', () => {
       // Arrange
-      const { _state, computedValue, updateState } = useComposableName()
+      const { state, computedValue, updateState } = useComposableName()
 
       // Act
       updateState({ value: 10 })
@@ -139,6 +139,7 @@ describe('useComposableName', () => {
     it('cleans up resources when disposed', () => {
       // Arrange
       const { cleanup } = useComposableName()
+      const mockUnsubscribe = vi.fn()
 
       // Simulate subscription
       vi.spyOn(window, 'addEventListener')

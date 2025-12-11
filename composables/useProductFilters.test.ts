@@ -1547,6 +1547,7 @@ describe('useProductFilters', () => {
       updateFilter('category', 'unknown-category')
 
       // Access the chips to trigger the computed property
+      const chips = activeFilterChips.value
 
       expect(mockT).toHaveBeenCalledWith('products.filters.unknownCategory')
     })

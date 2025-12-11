@@ -51,7 +51,7 @@ interface UserDetail {
     created_at: string
     ip_address?: string
     user_agent?: string
-    metadata?: unknown
+    metadata?: any
   }>
   statistics: {
     totalOrders: number
@@ -243,7 +243,7 @@ export default defineEventHandler(async (event) => {
  * Mock user detail data for development/testing
  */
 function getMockUserDetail(userId: string): unknown {
-  const mockUsers: Record<string, unknown> = {
+  const mockUsers: Record<string, any> = {
     'user-1': {
       id: 'user-1',
       email: 'john.doe@example.com',

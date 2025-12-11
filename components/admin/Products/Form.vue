@@ -579,13 +579,13 @@ import { z } from 'zod'
 import type { CategoryWithChildren } from '~/types/database'
 
 interface Props {
-  product?: Record<string, unknown>
+  product?: Record<string, any>
   categories: CategoryWithChildren[]
   isEditing?: boolean
 }
 
 interface Emits {
-  (e: 'submit', data: Record<string, unknown>): void
+  (e: 'submit', data: Record<string, any>): void
   (e: 'cancel'): void
 }
 
@@ -622,7 +622,7 @@ const form = ref({
   isActive: true,
 })
 
-const errors = ref({} as Record<string, unknown>)
+const errors = ref({} as Record<string, any>)
 const submitting = ref(false)
 
 // Collapsible sections state - on mobile, start with only basic section expanded
@@ -712,7 +712,7 @@ const validateForm = () => {
   }
   catch (error) {
     if (error instanceof z.ZodError) {
-      const newErrors: Record<string, unknown> = {}
+      const newErrors: Record<string, any> = {}
       error.issues.forEach((err: z.ZodIssue) => {
         const path = err.path.join('.')
         if (err.path[0] === 'name' && err.path[1]) {

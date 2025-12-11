@@ -313,7 +313,7 @@ const { getMovementTypeLabel } = useInventory()
 
 // Reactive state
 const movements = ref<InventoryMovement[]>([])
-const pagination = ref<Record<string, unknown> | null>(null)
+const pagination = ref<Record<string, any> | null>(null)
 const loading = ref(false)
 const filters = ref({
   movementType: '',
@@ -331,7 +331,7 @@ const fetchMovements = async (page = 1) => {
   loading.value = true
 
   try {
-    const queryParams: Record<string, unknown> = {
+    const queryParams: Record<string, any> = {
       page,
       limit: 20,
       sortBy: 'created_at',

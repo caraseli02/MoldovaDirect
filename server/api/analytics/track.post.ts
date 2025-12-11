@@ -17,7 +17,7 @@ export interface ActivityTrackingRequest {
   productId?: number
   orderId?: number
   sessionId?: string
-  metadata?: Record<string, unknown>
+  metadata?: Record<string, any>
 }
 
 export default defineEventHandler(async (event) => {

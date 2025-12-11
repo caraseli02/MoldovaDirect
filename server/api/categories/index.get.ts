@@ -10,7 +10,7 @@ function getLocalizedContent(content: Record<string, string>, locale: string): s
 }
 
 // Helper function to build hierarchical category tree
-function buildCategoryTree(categories: unknown[], parentId: number | null = null): unknown[] {
+function buildCategoryTree(categories: any[], parentId: number | null = null): any[] {
   return categories
     .filter(cat => cat.parentId === parentId) // Use parentId instead of parent_id
     .map(category => ({

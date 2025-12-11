@@ -132,9 +132,9 @@ const formatPrice = (price: number) => {
   return Number(price).toFixed(2)
 }
 
-const getProductName = (item: Record<string, unknown>) => {
+const getProductName = (item: Record<string, any>) => {
   if (item.product_snapshot) {
-    const snapshot = item.product_snapshot as Record<string, unknown>
+    const snapshot = item.product_snapshot as Record<string, any>
     if (snapshot.nameTranslations) {
       return snapshot.nameTranslations.en || snapshot.nameTranslations.es || 'Unknown Product'
     }
@@ -148,21 +148,21 @@ const getProductName = (item: Record<string, unknown>) => {
   return 'Unknown Product'
 }
 
-const getProductSku = (item: Record<string, unknown>) => {
+const getProductSku = (item: Record<string, any>) => {
   if (item.product_snapshot) {
-    const snapshot = item.product_snapshot as Record<string, unknown>
+    const snapshot = item.product_snapshot as Record<string, any>
     return snapshot.sku || null
   }
   return null
 }
 
-const getProductImage = (item: Record<string, unknown>) => {
+const getProductImage = (item: Record<string, any>) => {
   if (item.product_snapshot) {
-    const snapshot = item.product_snapshot as Record<string, unknown>
+    const snapshot = item.product_snapshot as Record<string, any>
 
     // Check for images array
     if (snapshot.images && Array.isArray(snapshot.images) && snapshot.images.length > 0) {
-      const primaryImage = snapshot.images.find((img: Record<string, unknown>) => img.isPrimary)
+      const primaryImage = snapshot.images.find((img: Record<string, any>) => img.isPrimary)
       if (primaryImage) {
         return primaryImage.url
       }

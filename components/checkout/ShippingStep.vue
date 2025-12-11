@@ -194,7 +194,7 @@ const {
   shippingAddress,
   savedAddresses,
   defaultAddress,
-  _hasAddresses,
+  hasAddresses,
   isAddressValid,
   loadSavedAddresses,
   handleSaveAddress,

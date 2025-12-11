@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-async function globalTeardown(_config: FullConfig) {
+async function globalTeardown(config: FullConfig) {
   console.log('Starting global teardown...')
 
   if (process.env.KEEP_TEST_DATA !== 'true') {

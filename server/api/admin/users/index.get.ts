@@ -194,13 +194,13 @@ export default defineEventHandler(async (event) => {
         // Group orders by user_id
         const tempStats = allOrders.reduce((acc, order) => {
           if (!acc[order.user_id]) {
-            acc[order.user_id] = { count: 0, totalSpent: 0, orders: [] as unknown[] }
+            acc[order.user_id] = { count: 0, totalSpent: 0, orders: [] as any[] }
           }
           acc[order.user_id].count++
           acc[order.user_id].totalSpent += Number(order.total_eur)
           acc[order.user_id].orders.push(order)
           return acc
-        }, {} as Record<string, unknown>)
+        }, {} as Record<string, any>)
 
         // Calculate lastOrderDate for each user and create final stats object
         Object.keys(tempStats).forEach((userId) => {

@@ -214,7 +214,7 @@ const _props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{
   userSelected: [userId: string]
-  userAction: [action: string, userId: string, data?: Record<string, unknown>]
+  userAction: [action: string, userId: string, data?: Record<string, any>]
   refetch: []
 }>()
 
@@ -223,7 +223,7 @@ const { isMobile } = useDevice()
 const { vibrate } = useHapticFeedback()
 
 // Store - safely access with fallback
-let adminUsersStore: Record<string, unknown> = {}
+let adminUsersStore: Record<string, any> = {}
 
 try {
   if (import.meta.client) {
@@ -267,12 +267,12 @@ const totalUsers = ref(0)
 
 // Computed - with type safety for storeToRefs
 const storeRefs = storeToRefs(adminUsersStore)
-const users = computed(() => (storeRefs as Record<string, unknown>).users?.value ?? [])
-const usersWithDisplayData = computed(() => (storeRefs as Record<string, unknown>).usersWithDisplayData?.value ?? [])
-const pagination = computed(() => (storeRefs as Record<string, unknown>).pagination?.value ?? { page: 1, totalPages: 1, total: 0, limit: 10 })
-const loading = computed(() => (storeRefs as Record<string, unknown>).loading?.value ?? false)
-const error = computed(() => (storeRefs as Record<string, unknown>).error?.value ?? null)
-const hasActiveFilters = computed(() => (storeRefs as Record<string, unknown>).hasActiveFilters?.value ?? false)
+const users = computed(() => (storeRefs as Record<string, any>).users?.value ?? [])
+const usersWithDisplayData = computed(() => (storeRefs as Record<string, any>).usersWithDisplayData?.value ?? [])
+const pagination = computed(() => (storeRefs as Record<string, any>).pagination?.value ?? { page: 1, totalPages: 1, total: 0, limit: 10 })
+const loading = computed(() => (storeRefs as Record<string, any>).loading?.value ?? false)
+const error = computed(() => (storeRefs as Record<string, any>).error?.value ?? null)
+const hasActiveFilters = computed(() => (storeRefs as Record<string, any>).hasActiveFilters?.value ?? false)
 
 // Debounced search function
 const debouncedSearch = useDebounceFn((query: string) => {
@@ -386,7 +386,7 @@ const handleInviteUser = () => {
   }
 }
 
-const handleUserAction = (action: string, userId: string, data?: Record<string, unknown>) => {
+const handleUserAction = (action: string, userId: string, data?: Record<string, any>) => {
   emit('userAction', action, userId, data)
 }
 

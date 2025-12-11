@@ -75,13 +75,13 @@ export interface GetRelatedProductsRequest {
 // =============================================
 
 // Standard API response wrapper
-export interface ApiResponse<T = unknown> {
+export interface ApiResponse<T = any> {
   success: boolean
   data?: T
   error?: {
     code: string
     message: string
-    details?: unknown
+    details?: any
   }
   meta?: {
     timestamp: string
@@ -257,11 +257,11 @@ export interface FilterAggregation {
 
 export interface CacheKey {
   type: 'products' | 'product' | 'categories' | 'category' | 'search'
-  params: Record<string, unknown>
+  params: Record<string, any>
   locale: string
 }
 
-export interface CacheEntry<T = unknown> {
+export interface CacheEntry<T = any> {
   key: string
   data: T
   timestamp: number
@@ -283,13 +283,13 @@ export interface ValidationError {
   field: string
   code: string
   message: string
-  value?: unknown
+  value?: any
 }
 
 export interface ValidationResult {
   valid: boolean
   errors: ValidationError[]
-  data?: unknown
+  data?: any
 }
 
 // =============================================
@@ -351,7 +351,7 @@ export interface ApiErrorDetails {
   code: string
   message: string
   field?: string
-  value?: unknown
+  value?: any
   suggestion?: string
 }
 
@@ -369,7 +369,7 @@ export interface ApiError extends Error {
 export interface WebhookEvent {
   id: string
   type: 'product.created' | 'product.updated' | 'product.deleted' | 'category.created' | 'category.updated' | 'category.deleted'
-  data: unknown
+  data: any
   timestamp: string
   source: string
 }
@@ -425,7 +425,7 @@ export interface AdminProductRequest {
     sortOrder: number
     isPrimary: boolean
   }>
-  attributes?: Record<string, unknown>
+  attributes?: Record<string, any>
   isActive?: boolean
 }
 
@@ -442,7 +442,7 @@ export interface AdminCategoryRequest {
 export interface BulkOperationRequest {
   operation: 'update' | 'delete' | 'activate' | 'deactivate'
   ids: number[]
-  data?: unknown
+  data?: any
 }
 
 export interface BulkOperationResponse {

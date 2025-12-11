@@ -170,7 +170,7 @@ export function cleanupExpiredRateLimits(): void {
 /**
  * Sanitize cart item data to prevent XSS
  */
-export function sanitizeCartData(data: unknown): unknown {
+export function sanitizeCartData(data: any): unknown {
   if (typeof data === 'string') {
     // Basic HTML entity encoding
     return data

@@ -414,7 +414,7 @@ const getLocalizedText = (text: Translations | Record<string, string> | null | u
   if (!text) return ''
   const localeText = text[locale.value]
   if (localeText) return localeText
-  const esText = (text as Record<string, unknown>).es
+  const esText = (text as Record<string, any>).es
   if (esText) return esText
   const values = Object.values(text).filter((v): v is string => typeof v === 'string')
   return values[0] || ''

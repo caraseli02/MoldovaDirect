@@ -187,7 +187,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
-  action: [action: string, userId: string, data?: Record<string, unknown>]
+  action: [action: string, userId: string, data?: Record<string, any>]
 }>()
 
 // State
@@ -225,7 +225,7 @@ const handleAction = (action: string) => {
   }
 }
 
-const confirmAction = (data?: Record<string, unknown>) => {
+const confirmAction = (data?: Record<string, any>) => {
   emit('action', selectedAction.value, props.user.id, data)
   showActionModal.value = false
   selectedAction.value = ''

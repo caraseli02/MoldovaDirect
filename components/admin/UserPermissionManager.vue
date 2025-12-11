@@ -213,7 +213,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
-  permissionChanged: [userId: string, changes: Record<string, unknown>]
+  permissionChanged: [userId: string, changes: Record<string, any>]
 }>()
 
 interface Role {

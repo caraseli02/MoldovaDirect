@@ -27,7 +27,7 @@ describe('Products API', () => {
         console.log(`⚠️ Server returned status ${response.status} - API tests will be skipped`)
       }
     }
-    catch (_error) {
+    catch (error) {
       isServerAvailable = false
       console.log('⚠️ Server not available at', API_BASE, '- API tests will be skipped')
     }

@@ -253,7 +253,7 @@ export default defineEventHandler(async (event) => {
  * @param supabase - Supabase client
  */
 async function sendOrderConfirmationEmailAsync(
-  order: Record<string, unknown>,
+  order: Record<string, any>,
   user: User | null,
   supabase: SupabaseClient,
 ): Promise<void> {

@@ -106,13 +106,13 @@ export interface ImpersonationSession {
 }
 
 // API Response types
-export interface ApiResponse<T = unknown> {
+export interface ApiResponse<T = any> {
   success: boolean
   message: string
   data?: T
   errors?: Array<{ email?: string, error: string }>
-  summary?: Record<string, unknown>
-  results?: unknown
+  summary?: Record<string, any>
+  results?: any
 }
 
 export interface SeedUsersResponse extends ApiResponse {
@@ -168,9 +168,9 @@ export interface BackgroundJob {
   progressMessage: string
   startedAt: string
   completedAt?: string
-  result?: unknown
+  result?: any
   error?: string
-  metadata?: Record<string, unknown>
+  metadata?: Record<string, any>
 }
 
 // Scenario templates
@@ -202,10 +202,10 @@ export interface TestResult {
   success: boolean
   message: string
   users?: CreatedUser[]
-  summary?: Record<string, unknown>
+  summary?: Record<string, any>
   errors?: Array<{ email?: string, error: string }>
-  results?: unknown
-  error?: unknown
+  results?: any
+  error?: any
   suggestion?: string
 }
 

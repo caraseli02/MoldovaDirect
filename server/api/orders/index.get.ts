@@ -48,7 +48,7 @@ export default defineEventHandler(async (event) => {
 
     // For advanced search (product names), we need to fetch all orders first if search is provided
     // This is a trade-off for better search functionality
-    let orders: unknown[] = []
+    let orders: any[] = []
     let totalCount = 0
 
     if (search && search.length >= 2) {

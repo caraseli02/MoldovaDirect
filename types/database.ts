@@ -65,7 +65,7 @@ export interface Product {
   stockQuantity: number
   lowStockThreshold: number
   images?: ProductImage[]
-  attributes?: Record<string, unknown>
+  attributes?: Record<string, any>
   isActive: boolean
   createdAt: string
   updatedAt: string

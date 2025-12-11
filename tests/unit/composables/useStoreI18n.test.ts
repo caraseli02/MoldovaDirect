@@ -84,7 +84,7 @@ describe('useStoreI18n', () => {
     it('should handle null nuxtApp', () => {
       vi.mocked(useNuxtApp).mockReturnValueOnce(null as unknown)
 
-      const { t, _locale, available } = useStoreI18n()
+      const { t, locale, available } = useStoreI18n()
 
       expect(available).toBe(false)
       expect(typeof t).toBe('function')

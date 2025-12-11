@@ -77,7 +77,7 @@ export function transformOrderToEmailData(
  * @returns Formatted order items for email display
  */
 export function transformOrderItems(
-  items: unknown[],
+  items: any[],
   locale: string = 'en',
 ): OrderItemData[] {
   return items.map((item) => {
