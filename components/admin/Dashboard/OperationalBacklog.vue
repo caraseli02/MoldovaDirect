@@ -104,7 +104,7 @@ interface BacklogItem {
   cta?: string
 }
 
-const props = withDefaults(defineProps<{ items: BacklogItem[], loading?: boolean }>(), {
+const props = withDefaults(defineProps<{ items?: BacklogItem[], loading?: boolean }>(), {
   items: () => [],
   loading: false,
 })

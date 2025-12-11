@@ -25,31 +25,31 @@
         </label>
         <div class="space-y-3">
           <div
-            v-for="locale in locales"
-            :key="locale.code"
+            v-for="localeItem in locales"
+            :key="localeItem.code"
           >
             <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">
-              {{ locale.name }}
+              {{ localeItem.name }}
             </label>
             <input
               ref="nameInputs"
-              v-model="localForm.name[locale.code]"
+              v-model="localForm.name[localeItem.code]"
               type="text"
-              :placeholder="$t('admin.products.placeholders.productName', { language: locale.name })"
+              :placeholder="$t('admin.products.placeholders.productName', { language: localeItem.name })"
               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white touch-manipulation"
               :class="{
-                'border-red-500': errors?.name?.[locale.code],
+                'border-red-500': errors?.name?.[localeItem.code],
                 'min-h-[44px]': isMobile,
               }"
-              @input="handleNameInput(locale.code)"
+              @input="handleNameInput(localeItem.code)"
               @focus="handleInputFocus"
               @blur="handleInputBlur"
             />
             <p
-              v-if="errors?.name?.[locale.code]"
+              v-if="errors?.name?.[localeItem.code]"
               class="mt-1 text-sm text-red-600"
             >
-              {{ errors.name[locale.code] }}
+              {{ errors.name[localeItem.code] }}
             </p>
           </div>
         </div>

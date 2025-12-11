@@ -86,7 +86,7 @@ interface InsightItem {
   action?: string
 }
 
-const props = withDefaults(defineProps<{ insights: InsightItem[] }>(), {
+const props = withDefaults(defineProps<{ insights?: InsightItem[] }>(), {
   insights: () => [],
 })
 

@@ -76,25 +76,25 @@
         @keydown.escape="closeDropdown"
       >
         <button
-          v-for="locale in locales"
-          :key="locale.code"
+          v-for="localeOption in locales"
+          :key="localeOption.code"
           ref="optionRefs"
           type="button"
           class="block w-full px-4 py-2.5 text-left text-sm text-gray-700 transition-colors hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-slate-200 dark:hover:bg-slate-800/70 dark:focus:bg-slate-800/70"
           :class="{
-            'bg-primary-50 text-primary-600 font-medium dark:bg-primary-500/20 dark:text-primary-100': locale.code === currentLocale?.code,
-            'font-normal': locale.code !== currentLocale?.code,
+            'bg-primary-50 text-primary-600 font-medium dark:bg-primary-500/20 dark:text-primary-100': localeOption.code === currentLocale?.code,
+            'font-normal': localeOption.code !== currentLocale?.code,
           }"
           role="option"
-          :aria-selected="locale.code === currentLocale?.code"
+          :aria-selected="localeOption.code === currentLocale?.code"
           :tabindex="isOpen ? 0 : -1"
-          @click="switchLanguage(locale.code)"
+          @click="switchLanguage(localeOption.code)"
         >
           <span class="flex items-center justify-between">
-            <span>{{ locale.name }}</span>
+            <span>{{ localeOption.name }}</span>
             <!-- Check mark for selected language -->
             <svg
-              v-if="locale.code === currentLocale?.code"
+              v-if="localeOption.code === currentLocale?.code"
               class="h-4 w-4 text-primary-600 dark:text-primary-400"
               fill="none"
               stroke="currentColor"
