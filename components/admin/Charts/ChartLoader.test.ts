@@ -26,8 +26,8 @@ vi.mock('chart.js', () => ({
 }))
 
 describe('ChartLoader', () => {
-  let wrapper: any
-  let ChartLoader: any
+  let wrapper: unknown
+  let ChartLoader: unknown
 
   beforeEach(async () => {
     // Dynamically import component to test
@@ -104,7 +104,7 @@ describe('ChartLoader', () => {
     validTypes.forEach((type) => {
       wrapper = mount(ChartLoader, {
         props: {
-          type: type as any,
+          type: type as unknown,
           data: chartData,
         },
       })

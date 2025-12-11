@@ -340,7 +340,7 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
 
     // Test 7: Check page response time
     const navigationTiming = await page.evaluate(() => {
-      const timing = performance.getEntriesByType('navigation')[0] as any
+      const timing = performance.getEntriesByType('navigation')[0] as unknown
       return {
         loadTime: timing?.loadEventEnd - timing?.loadEventStart || 0,
         domContentLoaded: timing?.domContentLoadedEventEnd - timing?.domContentLoadedEventStart || 0,
@@ -354,7 +354,7 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
       return new Promise<number>((resolve) => {
         let cls = 0
         const observer = new PerformanceObserver((list) => {
-          list.getEntries().forEach((entry: any) => {
+          list.getEntries().forEach((entry: unknown) => {
             if (!entry.hadRecentInput) {
               cls += entry.value
             }

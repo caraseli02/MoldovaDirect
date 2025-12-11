@@ -13,9 +13,9 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { createSupabaseClient } from '~/server/utils/supabaseAdminClient'
 
 describe('Bulk Product Operations - Error Handling', () => {
-  let supabase: any
-  let testAdmin: any
-  let testProducts: any[]
+  let supabase: unknown
+  let testAdmin: unknown
+  let testProducts: unknown[]
 
   beforeEach(async () => {
     supabase = createSupabaseClient()
@@ -113,7 +113,7 @@ describe('Bulk Product Operations - Error Handling', () => {
       .select('is_active')
       .in('id', validIds)
 
-    expect(updatedProducts.every((p: any) => p.is_active === false)).toBe(true)
+    expect(updatedProducts.every((p: unknown) => p.is_active === false)).toBe(true)
   })
 
   it('should return error when no products found', async () => {
@@ -233,7 +233,7 @@ describe('Bulk Product Operations - Error Handling', () => {
 
     expect(auditLogs).toHaveLength(3)
 
-    auditLogs.forEach((log: any) => {
+    auditLogs.forEach((log: unknown) => {
       expect(log.resource_type).toBe('product')
       expect(log.old_values).toBeDefined()
       expect(log.new_values).toBeDefined()
@@ -363,9 +363,9 @@ describe('Bulk Product Operations - Authorization', () => {
 })
 
 describe('Bulk Product Delete - Error Handling', () => {
-  let supabase: any
-  let testAdmin: any
-  let testProducts: any[]
+  let supabase: unknown
+  let testAdmin: unknown
+  let testProducts: unknown[]
 
   beforeEach(async () => {
     supabase = createSupabaseClient()

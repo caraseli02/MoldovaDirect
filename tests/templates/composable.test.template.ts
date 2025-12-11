@@ -176,7 +176,7 @@ describe('useComposableName', () => {
       const { processInput } = useComposableName()
 
       // Act & Assert
-      await expect(processInput(null as any)).rejects.toThrow()
+      await expect(processInput(null as unknown)).rejects.toThrow()
     })
   })
 })

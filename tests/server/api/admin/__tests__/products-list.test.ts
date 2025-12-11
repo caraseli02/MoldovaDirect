@@ -94,7 +94,7 @@ describe('Admin Products List API', () => {
     it('requires admin role', async () => {
       const { requireAdminRole } = await import('~/server/utils/adminAuth')
 
-      await requireAdminRole({} as any)
+      await requireAdminRole({} as unknown)
 
       expect(requireAdminRole).toHaveBeenCalled()
     })
@@ -107,7 +107,7 @@ describe('Admin Products List API', () => {
         statusMessage: 'Unauthorized',
       })
 
-      await expect(requireAdminRole({} as any)).rejects.toMatchObject({
+      await expect(requireAdminRole({} as unknown)).rejects.toMatchObject({
         statusCode: 401,
       })
     })
@@ -120,7 +120,7 @@ describe('Admin Products List API', () => {
         statusMessage: 'Admin role required',
       })
 
-      await expect(requireAdminRole({} as any)).rejects.toMatchObject({
+      await expect(requireAdminRole({} as unknown)).rejects.toMatchObject({
         statusCode: 403,
       })
     })

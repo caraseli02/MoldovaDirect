@@ -11,12 +11,12 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import type { RouteLocationNormalized } from 'vue-router'
 
 describe('Admin Middleware', () => {
-  let middleware: any
+  let middleware: unknown
   let mockTo: RouteLocationNormalized
   let mockFrom: RouteLocationNormalized
-  let mockUser: any
-  let mockSupabase: any
-  let mockProfile: any
+  let mockUser: unknown
+  let mockSupabase: unknown
+  let mockProfile: unknown
 
   beforeEach(() => {
     // Mock route objects
@@ -62,7 +62,7 @@ describe('Admin Middleware', () => {
     vi.stubGlobal('useSupabaseUser', () => ({ value: mockUser }))
     vi.stubGlobal('useSupabaseClient', () => mockSupabase)
     vi.stubGlobal('navigateTo', vi.fn((path: string) => path))
-    vi.stubGlobal('createError', vi.fn((error: any) => {
+    vi.stubGlobal('createError', vi.fn((error: unknown) => {
       throw new Error(error.statusMessage)
     }))
   })

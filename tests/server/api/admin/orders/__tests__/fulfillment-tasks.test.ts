@@ -12,11 +12,11 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { createSupabaseClient } from '~/server/utils/supabaseAdminClient'
 
 describe('Order Fulfillment Tasks - Race Conditions', () => {
-  let supabase: any
-  let testProduct: any
-  let testOrder1: any
-  let testOrder2: any
-  let testAdmin: any
+  let supabase: unknown
+  let testProduct: unknown
+  let testOrder1: unknown
+  let testOrder2: unknown
+  let testAdmin: unknown
 
   beforeEach(async () => {
     // Setup test database connection
@@ -147,8 +147,8 @@ describe('Order Fulfillment Tasks - Race Conditions', () => {
       .select('*')
       .in('order_id', [testOrder1.id, testOrder2.id])
 
-    const task1 = tasks.find((t: any) => t.order_id === testOrder1.id)
-    const task2 = tasks.find((t: any) => t.order_id === testOrder2.id)
+    const task1 = tasks.find((t: unknown) => t.order_id === testOrder1.id)
+    const task2 = tasks.find((t: unknown) => t.order_id === testOrder2.id)
 
     // Simulate concurrent completion of both tasks
     const results = await Promise.allSettled([

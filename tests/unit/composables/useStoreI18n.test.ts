@@ -64,7 +64,7 @@ describe('useStoreI18n', () => {
   describe('Without i18n Available', () => {
     it('should return fallback t function', () => {
       // Override mock to simulate missing i18n
-      vi.mocked(useNuxtApp).mockReturnValueOnce({} as any)
+      vi.mocked(useNuxtApp).mockReturnValueOnce({} as unknown)
 
       const { t, available } = useStoreI18n()
 
@@ -73,7 +73,7 @@ describe('useStoreI18n', () => {
     })
 
     it('should return default locale', () => {
-      vi.mocked(useNuxtApp).mockReturnValueOnce({} as any)
+      vi.mocked(useNuxtApp).mockReturnValueOnce({} as unknown)
 
       const { locale, available } = useStoreI18n()
 
@@ -82,7 +82,7 @@ describe('useStoreI18n', () => {
     })
 
     it('should handle null nuxtApp', () => {
-      vi.mocked(useNuxtApp).mockReturnValueOnce(null as any)
+      vi.mocked(useNuxtApp).mockReturnValueOnce(null as unknown)
 
       const { t, locale, available } = useStoreI18n()
 

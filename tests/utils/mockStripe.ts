@@ -136,7 +136,7 @@ export function mockStripePaymentError(message: string, code = 'card_declined') 
 /**
  * Helper to mock Stripe card element change event
  */
-export function mockStripeCardChangeEvent(complete = true, error: any = null) {
+export function mockStripeCardChangeEvent(complete = true, error: unknown = null) {
   return {
     complete,
     empty: false,

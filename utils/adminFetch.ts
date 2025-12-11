@@ -155,7 +155,7 @@ export type BatchResult<T>
  *
  * // Extract successful results only
  * const successfulData = results
- *   .filter((r): r is { success: true; data: any } => r.success)
+ *   .filter((r): r is { success: true; data: unknown } => r.success)
  *   .map(r => r.data)
  * ```
  */

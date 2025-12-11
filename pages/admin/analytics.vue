@@ -62,7 +62,7 @@
         <!-- Overview Tab -->
         <div v-if="activeTab === 'overview'">
           <AdminDashboardAnalyticsOverview
-            :data="analyticsOverview as any"
+            :data="analyticsOverview as unknown"
             :loading="loading"
             :error="error"
             @date-range-change="handleDateRangeChange"
@@ -83,12 +83,12 @@
 
           <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
             <AdminChartsUserRegistration
-              :data="userAnalytics as any"
+              :data="userAnalytics as unknown"
               :loading="loading"
               :error="error"
             />
             <AdminChartsUserActivity
-              :data="userAnalytics as any"
+              :data="userAnalytics as unknown"
               :loading="loading"
               :error="error"
             />
@@ -135,7 +135,7 @@
 
           <!-- Conversion Funnel -->
           <AdminChartsConversionFunnel
-            :data="productAnalytics as any"
+            :data="productAnalytics as unknown"
             :loading="loading"
             :error="error"
           />
@@ -143,12 +143,12 @@
           <!-- Product Performance Chart and Top Products -->
           <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
             <AdminChartsProductPerformance
-              :data="productAnalytics as any"
+              :data="productAnalytics as unknown"
               :loading="loading"
               :error="error"
             />
             <AdminUtilsTopProductsTable
-              :data="productAnalytics as any"
+              :data="productAnalytics as unknown"
               :loading="loading"
               :error="error"
               title="Top Performing Products"
@@ -158,7 +158,7 @@
 
           <!-- Detailed Product Table -->
           <AdminUtilsTopProductsTable
-            :data="productAnalytics as any"
+            :data="productAnalytics as unknown"
             :loading="loading"
             :error="error"
             title="All Products Performance"

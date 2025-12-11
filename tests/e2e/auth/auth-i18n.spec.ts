@@ -268,7 +268,7 @@ for (const locale of locales) {
 
     test.describe('Form Submission with Locale', () => {
       test(`should submit forms with correct locale context in ${locale}`, async ({ page }) => {
-        const requests: any[] = []
+        const requests: unknown[] = []
 
         page.on('request', (request) => {
           if (request.method() === 'POST') {

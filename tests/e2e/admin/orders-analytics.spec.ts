@@ -361,7 +361,7 @@ test.describe('Admin Orders Analytics Page', () => {
 
   test('should verify API response structure', async ({ authenticatedPage }) => {
     let apiResponseCaptured = false
-    let responseData: any = null
+    let responseData: unknown = null
 
     // Intercept API responses
     authenticatedPage.on('response', async (response) => {

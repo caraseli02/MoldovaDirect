@@ -64,8 +64,8 @@ import {
 import type { AuthUser, LoginCredentials, RegisterData } from './types'
 
 // Use Supabase types from Nuxt module
-type Session = any // Use any for Session as it's complex and comes from Supabase
-type User = any // Use any for User as it's complex and comes from Supabase
+type Session = unknown // Use any for Session as it's complex and comes from Supabase
+type User = unknown // Use any for User as it's complex and comes from Supabase
 type Subscription = { unsubscribe: () => void }
 
 let authSubscription: Subscription | null = null

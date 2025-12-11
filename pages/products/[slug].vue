@@ -747,7 +747,7 @@ interface CategoryWithBreadcrumb {
 interface ProductDetailResponse extends Omit<ProductWithRelations, 'category'> {
   category: CategoryWithBreadcrumb
   relatedProducts?: ProductWithRelations[]
-  attributes?: Record<string, any>
+  attributes?: Record<string, unknown>
 }
 
 const route = useRoute()
@@ -782,7 +782,7 @@ const stockQuantity = computed(() => product.value?.stockQuantity || 0)
 const categoryLabel = computed(() => getCategoryLabel(product.value?.category))
 
 // Create computed product ref for composables (cast to expected type)
-const computedProduct = computed(() => (product.value ?? null) as (ProductWithRelations & { attributes?: Record<string, any> }) | null)
+const computedProduct = computed(() => (product.value ?? null) as (ProductWithRelations & { attributes?: Record<string, unknown> }) | null)
 
 // Stock status composable
 const {

@@ -11,8 +11,8 @@ import type { H3Event } from 'h3'
 
 // Helper to create mock H3 events
 const createMockEvent = (options: {
-  query?: Record<string, any>
-  body?: any
+  query?: Record<string, unknown>
+  body?: unknown
   headers?: Record<string, string>
   params?: Record<string, string>
 } = {}): H3Event => {
@@ -28,7 +28,7 @@ const createMockEvent = (options: {
     context: {
       params: options.params || {},
     },
-  } as any
+  } as unknown
 }
 
 // Mock Supabase client

@@ -9,12 +9,12 @@ import { describe, it, expect, vi } from 'vitest'
 describe('Checkout Shipping - Helper Functions', () => {
   describe('Cart Item Normalization Logic', () => {
     // Test the normalization logic directly
-    function normalizeCartItems(cartItems?: any[] | { value: any[] }): any[] {
+    function normalizeCartItems(cartItems?: unknown[] | { value: unknown[] }): unknown[] {
       if (Array.isArray(cartItems)) {
         return [...cartItems]
       }
-      if (cartItems && Array.isArray((cartItems as any).value)) {
-        return [...(cartItems as any).value]
+      if (cartItems && Array.isArray((cartItems as unknown).value)) {
+        return [...(cartItems as unknown).value]
       }
       return []
     }
@@ -40,7 +40,7 @@ describe('Checkout Shipping - Helper Functions', () => {
     })
 
     it('should handle null-like values', () => {
-      const result = normalizeCartItems(null as any)
+      const result = normalizeCartItems(null as unknown)
       expect(result).toEqual([])
     })
 
@@ -56,20 +56,20 @@ describe('Checkout Shipping - Helper Functions', () => {
   })
 
   describe('Cart Item Resolution Logic', () => {
-    function normalizeCartItems(cartItems?: any[] | { value: any[] }): any[] {
+    function normalizeCartItems(cartItems?: unknown[] | { value: unknown[] }): unknown[] {
       if (Array.isArray(cartItems)) {
         return [...cartItems]
       }
-      if (cartItems && Array.isArray((cartItems as any).value)) {
-        return [...(cartItems as any).value]
+      if (cartItems && Array.isArray((cartItems as unknown).value)) {
+        return [...(cartItems as unknown).value]
       }
       return []
     }
 
     function resolveCartItems(
-      cartStoreItems: any[] | { value: any[] },
-      provided?: any[] | { value: any[] },
-    ): any[] {
+      cartStoreItems: unknown[] | { value: unknown[] },
+      provided?: unknown[] | { value: unknown[] },
+    ): unknown[] {
       const prioritized = [
         provided !== undefined ? normalizeCartItems(provided) : [],
         normalizeCartItems(cartStoreItems),
@@ -95,7 +95,7 @@ describe('Checkout Shipping - Helper Functions', () => {
 
     it('should fall back to store items when provided is empty', () => {
       const storeItems = [{ id: 'store-item' }]
-      const providedItems: any[] = []
+      const providedItems: unknown[] = []
 
       const result = resolveCartItems(storeItems, providedItems)
 
@@ -148,7 +148,7 @@ describe('Checkout Shipping - Order Calculation', () => {
     })
 
     it('should handle empty cart', () => {
-      const items: any[] = []
+      const items: unknown[] = []
       const subtotal = items.reduce((sum, item) => sum + item.product.price * item.quantity, 0)
 
       expect(subtotal).toBe(0)

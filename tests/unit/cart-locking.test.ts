@@ -109,11 +109,11 @@ describe('Cart Locking', () => {
       await cart.lockCart(sessionId1, 30)
 
       // Try to unlock with different session - should throw
-      let caughtError: any = null
+      let caughtError: unknown = null
       try {
         await cart.unlockCart(sessionId2)
       }
-      catch (error: any) {
+      catch (error: unknown) {
         caughtError = error
       }
 
@@ -168,11 +168,11 @@ describe('Cart Locking', () => {
       await cart.lockCart(sessionId, 30)
 
       // Try to add item - should throw
-      let caughtError: any = null
+      let caughtError: unknown = null
       try {
         await cart.addItem(mockProduct, 1)
       }
-      catch (error: any) {
+      catch (error: unknown) {
         caughtError = error
       }
 
@@ -193,11 +193,11 @@ describe('Cart Locking', () => {
       await cart.lockCart(sessionId, 30)
 
       // Try to remove item - should throw
-      let caughtError: any = null
+      let caughtError: unknown = null
       try {
         await cart.removeItem(itemId)
       }
-      catch (error: any) {
+      catch (error: unknown) {
         caughtError = error
       }
 
@@ -217,11 +217,11 @@ describe('Cart Locking', () => {
       await cart.lockCart(sessionId, 30)
 
       // Try to update quantity - should throw
-      let caughtError: any = null
+      let caughtError: unknown = null
       try {
         await cart.updateQuantity(itemId, 2)
       }
-      catch (error: any) {
+      catch (error: unknown) {
         caughtError = error
       }
 
@@ -240,11 +240,11 @@ describe('Cart Locking', () => {
       await cart.lockCart(sessionId, 30)
 
       // Try to clear cart - should throw
-      let caughtError: any = null
+      let caughtError: unknown = null
       try {
         await cart.clearCart()
       }
-      catch (error: any) {
+      catch (error: unknown) {
         caughtError = error
       }
 
@@ -383,11 +383,11 @@ describe('Cart Locking', () => {
 
       await cart.lockCart(sessionId, 30)
 
-      let caughtError: any = null
+      let caughtError: unknown = null
       try {
         await cart.addItem(mockProduct, 1)
       }
-      catch (error: any) {
+      catch (error: unknown) {
         caughtError = error
       }
 

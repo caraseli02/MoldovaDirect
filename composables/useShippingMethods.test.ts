@@ -5,7 +5,7 @@ import type { Address } from '~/types/checkout'
 
 // Mock dependencies BEFORE imports
 vi.mock('@vueuse/core', () => ({
-  useDebounceFn: <T extends (...args: any[]) => any>(fn: T) => fn, // No debouncing in tests for speed
+  useDebounceFn: <T extends (...args: unknown[]) => any>(fn: T) => fn, // No debouncing in tests for speed
 }))
 
 vi.mock('~/lib/checkout/api', () => ({
@@ -136,7 +136,7 @@ describe('useShippingMethods', () => {
       const { fetchShippingMethods } = await import('~/lib/checkout/api')
       const mockFetch = vi.mocked(fetchShippingMethods)
 
-      let resolvePromise: (value: any) => void
+      let resolvePromise: (value: unknown) => void
       mockFetch.mockReturnValue(new Promise((resolve) => {
         resolvePromise = resolve
       }))

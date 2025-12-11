@@ -26,12 +26,12 @@ describe('useKeyboardShortcuts', () => {
     __resetKeyboardShortcutsState()
 
     // Mock addEventListener and removeEventListener on window
-    window.addEventListener = vi.fn((event: string, handler: any) => {
+    window.addEventListener = vi.fn((event: string, handler: unknown) => {
       eventListeners.set(event, handler)
-    }) as any
+    }) as unknown
     window.removeEventListener = vi.fn((event: string) => {
       eventListeners.delete(event)
-    }) as any
+    }) as unknown
   })
 
   afterEach(() => {

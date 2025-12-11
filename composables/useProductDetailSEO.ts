@@ -18,7 +18,7 @@ interface StructuredDataOptions {
 }
 
 export function useProductDetailSEO(
-  product: ComputedRef<(ProductWithRelations & { attributes?: Record<string, any> }) | null>,
+  product: ComputedRef<(ProductWithRelations & { attributes?: Record<string, unknown> }) | null>,
   options: ComputedRef<StructuredDataOptions>,
 ) {
   const { getLocalizedText, getCategoryLabel } = useProductUtils()

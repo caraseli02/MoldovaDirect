@@ -8,12 +8,12 @@ import { describe, it, expect, beforeAll, afterAll } from 'vitest'
 import { createSupabaseClient } from '~/server/utils/supabaseAdminClient'
 
 describe('GET /api/admin/impersonation-logs', () => {
-  let supabase: any
-  let adminUser: any
+  let supabase: unknown
+  let adminUser: unknown
   let adminToken: string
-  let regularUser: any
+  let regularUser: unknown
   let regularToken: string
-  let targetUser: any
+  let targetUser: unknown
 
   beforeAll(async () => {
     supabase = createSupabaseClient()
@@ -145,7 +145,7 @@ describe('GET /api/admin/impersonation-logs', () => {
       const data = await response.json()
 
       if (data.logs && data.logs.length > 0) {
-        expect(data.logs.every((log: any) => log.admin_id === adminUser.id)).toBe(true)
+        expect(data.logs.every((log: unknown) => log.admin_id === adminUser.id)).toBe(true)
       }
     })
 
@@ -160,7 +160,7 @@ describe('GET /api/admin/impersonation-logs', () => {
       const data = await response.json()
 
       if (data.logs && data.logs.length > 0) {
-        expect(data.logs.every((log: any) => log.target_user_id === targetUser.id)).toBe(true)
+        expect(data.logs.every((log: unknown) => log.target_user_id === targetUser.id)).toBe(true)
       }
     })
 
@@ -175,7 +175,7 @@ describe('GET /api/admin/impersonation-logs', () => {
       const data = await response.json()
 
       if (data.logs && data.logs.length > 0) {
-        expect(data.logs.every((log: any) => log.status === 'active')).toBe(true)
+        expect(data.logs.every((log: unknown) => log.status === 'active')).toBe(true)
       }
     })
 
@@ -190,7 +190,7 @@ describe('GET /api/admin/impersonation-logs', () => {
       const data = await response.json()
 
       if (data.logs && data.logs.length > 0) {
-        expect(data.logs.every((log: any) => log.status === 'ended')).toBe(true)
+        expect(data.logs.every((log: unknown) => log.status === 'ended')).toBe(true)
       }
     })
 
@@ -205,7 +205,7 @@ describe('GET /api/admin/impersonation-logs', () => {
       const data = await response.json()
 
       if (data.logs && data.logs.length > 0) {
-        expect(data.logs.every((log: any) => log.status === 'expired')).toBe(true)
+        expect(data.logs.every((log: unknown) => log.status === 'expired')).toBe(true)
       }
     })
   })

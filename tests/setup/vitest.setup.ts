@@ -7,8 +7,8 @@ vi.mock('h3', () => ({
   getCookie: vi.fn(),
   getHeader: vi.fn(),
   getRequestIP: vi.fn(() => '127.0.0.1'),
-  createError: vi.fn((error: any) => {
-    const err = new Error(error.statusMessage || error.message) as any
+  createError: vi.fn((error: unknown) => {
+    const err = new Error(error.statusMessage || error.message) as unknown
     err.statusCode = error.statusCode
     err.statusMessage = error.statusMessage
     return err
@@ -25,7 +25,7 @@ global.onUnmounted = onUnmounted
 
 // Mock Nuxt composables
 global.useI18n = vi.fn(() => ({
-  t: vi.fn((key: string, params?: any) => {
+  t: vi.fn((key: string, params?: unknown) => {
     // Simple mock that returns the key for testing
     if (params) {
       let result = key
@@ -51,9 +51,9 @@ global.navigateTo = vi.fn()
 global.defineNuxtRouteMiddleware = vi.fn(middleware => middleware)
 global.useSupabaseClient = vi.fn()
 global.useSupabaseUser = vi.fn()
-global.createError = vi.fn((error: any) => {
+global.createError = vi.fn((error: unknown) => {
   const err = new Error(error.statusMessage)
-  ;(err as any).statusCode = error.statusCode
+  ;(err as unknown).statusCode = error.statusCode
   throw err
 })
 
@@ -78,12 +78,12 @@ export const resetCookieSaveCount = () => {
   _cookieSaveCount = 0
 }
 
-global.useCookie = vi.fn((name: string, _options?: any) => {
+global.useCookie = vi.fn((name: string, _options?: unknown) => {
   return {
     get value() {
       return cookieStorage.get(name)
     },
-    set value(val: any) {
+    set value(val: unknown) {
       _cookieSaveCount++
       if (val === null || val === undefined) {
         cookieStorage.delete(name)

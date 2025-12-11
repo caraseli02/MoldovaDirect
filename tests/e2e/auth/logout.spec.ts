@@ -172,7 +172,7 @@ test.describe('Logout Flow', () => {
 
     test('should prevent CSRF attacks during logout', async ({ authenticatedPage }) => {
       // Logout request should include CSRF token or use POST method
-      const requests: any[] = []
+      const requests: unknown[] = []
 
       authenticatedPage.on('request', (request) => {
         if (request.url().includes('logout') || request.url().includes('signout')) {

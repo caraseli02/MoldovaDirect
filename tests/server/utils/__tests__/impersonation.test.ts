@@ -48,7 +48,7 @@ describe('Impersonation Utilities', () => {
       }
 
       const token = await generateImpersonationToken(options)
-      const decoded = jwt.verify(token, mockSecret) as any
+      const decoded = jwt.verify(token, mockSecret) as unknown
 
       expect(decoded.type).toBe('impersonation')
       expect(decoded.admin_id).toBe('admin-123')
@@ -67,7 +67,7 @@ describe('Impersonation Utilities', () => {
       }
 
       const token = await generateImpersonationToken(options)
-      const decoded = jwt.verify(token, mockSecret) as any
+      const decoded = jwt.verify(token, mockSecret) as unknown
 
       const now = Math.floor(Date.now() / 1000)
       expect(decoded.exp).toBeGreaterThan(now)

@@ -11,11 +11,11 @@ const mockFetch = vi.fn()
 global.useSupabaseUser = vi.fn(() => mockUser)
 
 // Mock global $fetch
-global.$fetch = mockFetch as any
+global.$fetch = mockFetch as unknown
 
 // Mock checkout store
 const mockCheckoutStore = {
-  shippingInfo: null as any,
+  shippingInfo: null as unknown,
   savedAddresses: [] as Address[],
 }
 
@@ -226,7 +226,7 @@ describe('useShippingAddress', () => {
     })
 
     it('loads saved addresses for authenticated users', async () => {
-      mockUser.value = { id: 'user-123', email: 'test@example.com' } as any
+      mockUser.value = { id: 'user-123', email: 'test@example.com' } as unknown
 
       const mockApiAddresses = [
         {
@@ -288,9 +288,9 @@ describe('useShippingAddress', () => {
     })
 
     it('sets loading state during address fetch', async () => {
-      mockUser.value = { id: 'user-123' } as any
+      mockUser.value = { id: 'user-123' } as unknown
 
-      let resolvePromise: (value: any) => void
+      let resolvePromise: (value: unknown) => void
       mockFetch.mockReturnValue(new Promise((resolve) => {
         resolvePromise = resolve
       }))
@@ -311,7 +311,7 @@ describe('useShippingAddress', () => {
     })
 
     it('handles API error with Error object', async () => {
-      mockUser.value = { id: 'user-123' } as any
+      mockUser.value = { id: 'user-123' } as unknown
 
       const errorMessage = 'Network error occurred'
       mockFetch.mockRejectedValue(new Error(errorMessage))
@@ -325,7 +325,7 @@ describe('useShippingAddress', () => {
     })
 
     it('handles API error with non-Error object', async () => {
-      mockUser.value = { id: 'user-123' } as any
+      mockUser.value = { id: 'user-123' } as unknown
 
       mockFetch.mockRejectedValue('String error')
 
@@ -337,7 +337,7 @@ describe('useShippingAddress', () => {
     })
 
     it('falls back to store data on API failure', async () => {
-      mockUser.value = { id: 'user-123' } as any
+      mockUser.value = { id: 'user-123' } as unknown
 
       const storeAddresses: Address[] = [{
         type: 'shipping',
@@ -360,7 +360,7 @@ describe('useShippingAddress', () => {
     })
 
     it('handles missing addresses in API response', async () => {
-      mockUser.value = { id: 'user-123' } as any
+      mockUser.value = { id: 'user-123' } as unknown
 
       mockFetch.mockResolvedValue({
         success: true,
@@ -376,7 +376,7 @@ describe('useShippingAddress', () => {
     })
 
     it('handles unsuccessful API response', async () => {
-      mockUser.value = { id: 'user-123' } as any
+      mockUser.value = { id: 'user-123' } as unknown
 
       mockFetch.mockResolvedValue({
         success: false,
@@ -414,7 +414,7 @@ describe('useShippingAddress', () => {
     })
 
     it('saves address for authenticated users', async () => {
-      mockUser.value = { id: 'user-123' } as any
+      mockUser.value = { id: 'user-123' } as unknown
 
       const address: Address = {
         type: 'shipping',
@@ -459,9 +459,9 @@ describe('useShippingAddress', () => {
     })
 
     it('sets loading state during address save', async () => {
-      mockUser.value = { id: 'user-123' } as any
+      mockUser.value = { id: 'user-123' } as unknown
 
-      let resolvePromise: (value: any) => void
+      let resolvePromise: (value: unknown) => void
       mockFetch.mockReturnValue(new Promise((resolve) => {
         resolvePromise = resolve
       }))
@@ -492,7 +492,7 @@ describe('useShippingAddress', () => {
     })
 
     it('handles save error with Error object', async () => {
-      mockUser.value = { id: 'user-123' } as any
+      mockUser.value = { id: 'user-123' } as unknown
 
       const errorMessage = 'Failed to save'
       mockFetch.mockRejectedValue(new Error(errorMessage))
@@ -514,7 +514,7 @@ describe('useShippingAddress', () => {
     })
 
     it('handles save error with non-Error object', async () => {
-      mockUser.value = { id: 'user-123' } as any
+      mockUser.value = { id: 'user-123' } as unknown
 
       mockFetch.mockRejectedValue('String error')
 
@@ -537,7 +537,7 @@ describe('useShippingAddress', () => {
 
   describe('Address Format Mapping', () => {
     it('maps API address format to internal format correctly', async () => {
-      mockUser.value = { id: 'user-123' } as any
+      mockUser.value = { id: 'user-123' } as unknown
 
       const mockApiAddress = {
         id: 1,
@@ -580,7 +580,7 @@ describe('useShippingAddress', () => {
     })
 
     it('handles optional fields in API mapping', async () => {
-      mockUser.value = { id: 'user-123' } as any
+      mockUser.value = { id: 'user-123' } as unknown
 
       const mockApiAddress = {
         id: 1,
@@ -689,7 +689,7 @@ describe('useShippingAddress', () => {
         country: 'ES',
       }
 
-      mockCheckoutStore.shippingInfo = { address: storeAddress } as any
+      mockCheckoutStore.shippingInfo = { address: storeAddress } as unknown
 
       const { loadFromStore, shippingAddress } = useShippingAddress()
 
@@ -714,7 +714,7 @@ describe('useShippingAddress', () => {
 
   describe('Reset Functionality', () => {
     it('resets all state to initial values', async () => {
-      mockUser.value = { id: 'user-123' } as any
+      mockUser.value = { id: 'user-123' } as unknown
 
       mockFetch.mockResolvedValue({
         success: true,
@@ -760,7 +760,7 @@ describe('useShippingAddress', () => {
 
   describe('Edge Cases', () => {
     it('handles concurrent load operations', async () => {
-      mockUser.value = { id: 'user-123' } as any
+      mockUser.value = { id: 'user-123' } as unknown
 
       let callCount = 0
       mockFetch.mockImplementation(() => {
@@ -793,7 +793,7 @@ describe('useShippingAddress', () => {
     })
 
     it('clears error on successful operation after previous error', async () => {
-      mockUser.value = { id: 'user-123' } as any
+      mockUser.value = { id: 'user-123' } as unknown
 
       // First call fails
       mockFetch.mockRejectedValueOnce(new Error('Network error'))

@@ -14,7 +14,7 @@ export interface TestProduct {
   stock?: number
   sku?: string
   featured?: boolean
-  attributes?: Record<string, any>
+  attributes?: Record<string, unknown>
   created_at?: string
   updated_at?: string
 }

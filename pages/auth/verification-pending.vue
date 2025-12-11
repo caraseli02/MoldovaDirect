@@ -297,7 +297,7 @@ const handleResendVerification = async () => {
       form.value.email = email.value
     }
   }
-  catch (err: any) {
+  catch (err: unknown) {
     const errorMsg = createErrorMessage(err, 'verify', true)
     errorMessage.value = errorMsg.message
   }

@@ -222,7 +222,7 @@ describe('useMobileProductInteractions', () => {
 
     it('setup skips initialization when container is null', () => {
       mockIsMobile.value = true
-      scrollContainer.value = null as any
+      scrollContainer.value = null as unknown
 
       const { setup } = useMobileProductInteractions(
         scrollContainer,

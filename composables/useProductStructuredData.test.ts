@@ -358,7 +358,7 @@ describe('useProductStructuredData', () => {
     })
 
     it('sets availability to OutOfStock when stockQuantity is undefined', () => {
-      const products = ref([createMockProduct(1, { stockQuantity: undefined as any })])
+      const products = ref([createMockProduct(1, { stockQuantity: undefined as unknown })])
       const pagination = ref(createMockPagination())
 
       const { buildProductListStructuredData } = useProductStructuredData(products, pagination)
@@ -406,7 +406,7 @@ describe('useProductStructuredData', () => {
       mockLocale.value = 'fr' // Unsupported locale
       const products = ref([
         createMockProduct(1, {
-          name: { es: 'Producto', en: 'Product' } as any,
+          name: { es: 'Producto', en: 'Product' } as unknown,
         }),
       ])
       const pagination = ref(createMockPagination())
@@ -421,7 +421,7 @@ describe('useProductStructuredData', () => {
       mockLocale.value = 'fr'
       const products = ref([
         createMockProduct(1, {
-          name: { en: 'Product', ro: 'Produs' } as any,
+          name: { en: 'Product', ro: 'Produs' } as unknown,
         }),
       ])
       const pagination = ref(createMockPagination())
@@ -437,7 +437,7 @@ describe('useProductStructuredData', () => {
       mockLocale.value = 'en'
       const products = ref([
         createMockProduct(1, {
-          name: {} as any,
+          name: {} as unknown,
         }),
       ])
       const pagination = ref(createMockPagination())
@@ -452,7 +452,7 @@ describe('useProductStructuredData', () => {
       mockLocale.value = 'en'
       const products = ref([
         createMockProduct(1, {
-          name: 'Direct String Name' as any,
+          name: 'Direct String Name' as unknown,
         }),
       ])
       const pagination = ref(createMockPagination())
@@ -467,7 +467,7 @@ describe('useProductStructuredData', () => {
       mockLocale.value = 'en'
       const products = ref([
         createMockProduct(1, {
-          name: undefined as any,
+          name: undefined as unknown,
         }),
       ])
       const pagination = ref(createMockPagination())
@@ -513,7 +513,7 @@ describe('useProductStructuredData', () => {
       const products = ref([
         createMockProduct(1, {
           images: [
-            { id: 1, url: '', sortOrder: 0, isPrimary: true } as any,
+            { id: 1, url: '', sortOrder: 0, isPrimary: true } as unknown,
             { id: 2, url: 'https://example.com/valid.jpg', sortOrder: 1, isPrimary: false },
           ],
         }),
@@ -543,7 +543,7 @@ describe('useProductStructuredData', () => {
     it('omits image property when images is not an array', () => {
       const products = ref([
         createMockProduct(1, {
-          images: null as any,
+          images: null as unknown,
         }),
       ])
       const pagination = ref(createMockPagination())
@@ -597,7 +597,7 @@ describe('useProductStructuredData', () => {
     })
 
     it('maps null stock to OutOfStock', () => {
-      const products = ref([createMockProduct(1, { stockQuantity: null as any })])
+      const products = ref([createMockProduct(1, { stockQuantity: null as unknown })])
       const pagination = ref(createMockPagination())
 
       const { buildProductListStructuredData } = useProductStructuredData(products, pagination)
@@ -883,7 +883,7 @@ describe('useProductStructuredData', () => {
     })
 
     it('handles product with null price', () => {
-      const products = ref([createMockProduct(1, { price: null as any })])
+      const products = ref([createMockProduct(1, { price: null as unknown })])
       const pagination = ref(createMockPagination())
 
       const { buildProductListStructuredData } = useProductStructuredData(products, pagination)
@@ -893,7 +893,7 @@ describe('useProductStructuredData', () => {
     })
 
     it('handles product with undefined price', () => {
-      const products = ref([createMockProduct(1, { price: undefined as any })])
+      const products = ref([createMockProduct(1, { price: undefined as unknown })])
       const pagination = ref(createMockPagination())
 
       const { buildProductListStructuredData } = useProductStructuredData(products, pagination)
@@ -955,7 +955,7 @@ describe('useProductStructuredData', () => {
     it('escapes special characters in product names', () => {
       const products = ref([
         createMockProduct(1, {
-          name: 'Product with "quotes" & <tags>' as any,
+          name: 'Product with "quotes" & <tags>' as unknown,
         }),
       ])
       const pagination = ref(createMockPagination())

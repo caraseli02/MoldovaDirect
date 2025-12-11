@@ -6,7 +6,7 @@ import type { CategoryWithChildren } from '~/types'
 // Mock router and route BEFORE imports
 const mockPush = vi.fn()
 const mockRoute = {
-  query: {} as Record<string, any>,
+  query: {} as Record<string, unknown>,
 }
 
 // Use vi.mock for vue-router
@@ -18,14 +18,14 @@ vi.mock('vue-router', () => ({
 }))
 
 // Mock i18n
-const mockT = vi.fn((key: string, params?: any) => {
-  const translations: Record<string, string | ((p: any) => string)> = {
-    'products.chips.category': (p: any) => `Category: ${p.value}`,
-    'products.chips.priceMin': (p: any) => `Min: €${p.value}`,
-    'products.chips.priceMax': (p: any) => `Max: €${p.value}`,
+const mockT = vi.fn((key: string, params?: unknown) => {
+  const translations: Record<string, string | ((p: unknown) => string)> = {
+    'products.chips.category': (p: unknown) => `Category: ${p.value}`,
+    'products.chips.priceMin': (p: unknown) => `Min: €${p.value}`,
+    'products.chips.priceMax': (p: unknown) => `Max: €${p.value}`,
     'products.chips.inStock': 'In Stock',
     'products.chips.featured': 'Featured',
-    'products.chips.attribute': (p: any) => `${p.label}: ${p.value}`,
+    'products.chips.attribute': (p: unknown) => `${p.label}: ${p.value}`,
     'products.filters.unknownCategory': 'Unknown Category',
   }
 
@@ -43,7 +43,7 @@ global.useI18n = vi.fn(() => ({
 
 // Mock $fetch
 const mockFetch = vi.fn()
-global.$fetch = mockFetch as any
+global.$fetch = mockFetch as unknown
 
 // Import composable AFTER mocks are set up
 const { useProductFilters } = await import('./useProductFilters')
@@ -1491,7 +1491,7 @@ describe('useProductFilters', () => {
       }
 
       expect(() => {
-        removeFilterChip(malformedChip as any)
+        removeFilterChip(malformedChip as unknown)
       }).not.toThrow()
 
       expect(filters.value).toBeDefined()

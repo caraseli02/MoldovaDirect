@@ -55,7 +55,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
   }
 
   // 4. Now it's safe to access checkout store (cart is initialized)
-  const checkoutStore = useCheckoutStore() as ReturnType<typeof useCheckoutStore> & Record<string, any>
+  const checkoutStore = useCheckoutStore() as ReturnType<typeof useCheckoutStore> & Record<string, unknown>
 
   // 5. Initialize checkout if not already initialized
   if (!checkoutStore.sessionId) {
@@ -150,7 +150,7 @@ function extractStepFromPath(path: string): CheckoutStep | null {
 /**
  * Check if user can access a specific checkout step
  */
-function canAccessStep(step: CheckoutStep, store: ReturnType<typeof useCheckoutStore> & Record<string, any>): boolean {
+function canAccessStep(step: CheckoutStep, store: ReturnType<typeof useCheckoutStore> & Record<string, unknown>): boolean {
   switch (step) {
     case 'shipping':
       return true // Always accessible
@@ -177,7 +177,7 @@ function canAccessStep(step: CheckoutStep, store: ReturnType<typeof useCheckoutS
 /**
  * Get the highest step the user can currently access
  */
-function getHighestAllowedStep(store: ReturnType<typeof useCheckoutStore> & Record<string, any>): CheckoutStep {
+function getHighestAllowedStep(store: ReturnType<typeof useCheckoutStore> & Record<string, unknown>): CheckoutStep {
   if (store.canCompleteOrder && store.orderData?.orderId) {
     return 'confirmation'
   }

@@ -4,7 +4,7 @@ import { ref } from 'vue'
 import AppHeader from './AppHeader.vue'
 
 // Mock the useKeyboardShortcuts composable
-const mockGetShortcutDisplay = vi.fn((key: string, options: any) => {
+const mockGetShortcutDisplay = vi.fn((key: string, options: unknown) => {
   if (options?.ctrlOrCmd) {
     return 'Ctrl+K'
   }

@@ -122,7 +122,7 @@ describe('Orders List API', () => {
 
   describe('Query Parameters', () => {
     it('parses pagination parameters', () => {
-      const parseParams = (query: Record<string, any>) => {
+      const parseParams = (query: Record<string, unknown>) => {
         const page = parseInt(query.page) || 1
         const limit = Math.min(parseInt(query.limit) || 10, 50)
         return { page, limit }
@@ -223,7 +223,7 @@ describe('Orders List API', () => {
         return order.order_items.some((item) => {
           const snapshot = item.product_snapshot
           if (snapshot?.name_translations) {
-            return Object.values(snapshot.name_translations).some((name: any) =>
+            return Object.values(snapshot.name_translations).some((name: unknown) =>
               name?.toLowerCase().includes(searchLower),
             )
           }

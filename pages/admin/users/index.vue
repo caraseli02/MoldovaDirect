@@ -173,7 +173,7 @@ const handleUserEdit = (_userId: string) => {
   toast.info('User editing functionality will be implemented in a future update')
 }
 
-const handleUserAction = async (action: string, userId: string, _data?: any) => {
+const handleUserAction = async (action: string, userId: string, _data?: unknown) => {
   try {
     switch (action) {
       case 'view':
@@ -219,9 +219,9 @@ const fetchUsersData = async () => {
     const response = await $fetch<{
       success: boolean
       data: {
-        users: any[]
-        pagination: any
-        summary: any
+        users: unknown[]
+        pagination: unknown
+        summary: unknown
       }
     }>('/api/admin/users', {
       headers,
@@ -266,7 +266,7 @@ const fetchUserDetail = async (userId: string) => {
     // Fetch user detail
     const response = await $fetch<{
       success: boolean
-      data: any
+      data: unknown
     }>(`/api/admin/users/${userId}`, {
       headers,
     })

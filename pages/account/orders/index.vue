@@ -459,7 +459,7 @@ const paginationValue = computed(() => unref(pagination))
 const errorValue = computed(() => unref(error))
 
 // Initialize filters from URL query params
-const initializeFromUrl = (): Record<string, any> => {
+const initializeFromUrl = (): Record<string, unknown> => {
   const query = route.query
 
   searchFilters.value = {
@@ -480,7 +480,7 @@ const initializeFromUrl = (): Record<string, any> => {
 }
 
 // Update URL with current filters
-const updateUrl = (params: Record<string, any>) => {
+const updateUrl = (params: Record<string, unknown>) => {
   const query: Record<string, string> = {}
 
   if (params.search) query.search = params.search

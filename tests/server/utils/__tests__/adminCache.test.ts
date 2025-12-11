@@ -30,8 +30,8 @@ vi.mock('h3', async () => {
     getCookie: vi.fn(),
     getHeader: vi.fn(),
     getRequestIP: vi.fn(() => '127.0.0.1'),
-    createError: vi.fn((error: any) => {
-      const err = new Error(error.statusMessage || error.message) as any
+    createError: vi.fn((error: unknown) => {
+      const err = new Error(error.statusMessage || error.message) as unknown
       err.statusCode = error.statusCode
       err.statusMessage = error.statusMessage
       return err
@@ -56,11 +56,11 @@ const mockGetQuery = getQuery as ReturnType<typeof vi.fn>
 const mockUseStorage = useStorage as ReturnType<typeof vi.fn>
 
 // Type for H3Event (simplified for testing)
-type H3Event = any
+type H3Event = unknown
 
 describe('adminCache', () => {
   let mockEvent: Partial<H3Event>
-  let mockStorage: any
+  let mockStorage: unknown
 
   beforeEach(() => {
     // Setup mock H3Event

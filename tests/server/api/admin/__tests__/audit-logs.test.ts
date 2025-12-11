@@ -8,10 +8,10 @@ import { describe, it, expect, beforeAll, afterAll } from 'vitest'
 import { createSupabaseClient } from '~/server/utils/supabaseAdminClient'
 
 describe('GET /api/admin/audit-logs', () => {
-  let supabase: any
-  let adminUser: any
+  let supabase: unknown
+  let adminUser: unknown
   let adminToken: string
-  let regularUser: any
+  let regularUser: unknown
   let regularToken: string
 
   beforeAll(async () => {
@@ -113,7 +113,7 @@ describe('GET /api/admin/audit-logs', () => {
       const data = await response.json()
 
       if (data.logs && data.logs.length > 0) {
-        expect(data.logs.every((log: any) => log.user_id === adminUser.id)).toBe(true)
+        expect(data.logs.every((log: unknown) => log.user_id === adminUser.id)).toBe(true)
       }
     })
 
@@ -128,7 +128,7 @@ describe('GET /api/admin/audit-logs', () => {
       const data = await response.json()
 
       if (data.logs && data.logs.length > 0) {
-        expect(data.logs.every((log: any) => log.action === 'test-action-1')).toBe(true)
+        expect(data.logs.every((log: unknown) => log.action === 'test-action-1')).toBe(true)
       }
     })
 
@@ -143,7 +143,7 @@ describe('GET /api/admin/audit-logs', () => {
       const data = await response.json()
 
       if (data.logs && data.logs.length > 0) {
-        expect(data.logs.every((log: any) => log.resource_type === 'test')).toBe(true)
+        expect(data.logs.every((log: unknown) => log.resource_type === 'test')).toBe(true)
       }
     })
   })

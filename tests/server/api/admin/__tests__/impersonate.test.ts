@@ -8,10 +8,10 @@ import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest'
 import { createSupabaseClient } from '~/server/utils/supabaseAdminClient'
 
 describe('POST /api/admin/impersonate', () => {
-  let supabase: any
-  let adminUser: any
+  let supabase: unknown
+  let adminUser: unknown
   let adminToken: string
-  let regularUser: any
+  let regularUser: unknown
   let regularToken: string
 
   beforeAll(async () => {

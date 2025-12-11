@@ -377,11 +377,11 @@ const handleNotesUpdated = async () => {
 
 // Real-time updates
 const { subscribeToOrder, unsubscribe, isSubscribed: _isSubscribed } = useAdminOrderRealtime({
-  onOrderUpdated: async (_update: any) => {
+  onOrderUpdated: async (_update: unknown) => {
     // Refresh order data when updated
     await fetchOrder()
   },
-  onOrderStatusChanged: async (_update: any) => {
+  onOrderStatusChanged: async (_update: unknown) => {
     // Refresh order data when status changes
     await fetchOrder()
   },

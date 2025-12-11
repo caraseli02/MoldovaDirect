@@ -19,14 +19,14 @@ export function createCookie<T = unknown>(
   name: string,
   config: CookieConfig,
 ) {
-  return useCookie<T>(name, config as any)
+  return useCookie<T>(name, config as unknown)
 }
 
 /**
  * Serialize data for cookie storage
  * Handles Date objects and other non-JSON types
  */
-export function serializeCookieData(data: any): any {
+export function serializeCookieData(data: unknown): unknown {
   if (!data) return null
 
   try {
@@ -64,7 +64,7 @@ export function deserializeCookieData<T = unknown>(
   try {
     // Parse dates if field names are provided
     if (dateFields.length > 0 && typeof data === 'object' && data !== null) {
-      const restored = { ...data } as Record<string, any>
+      const restored = { ...data } as Record<string, unknown>
 
       for (const field of dateFields) {
         if (restored[field]) {
@@ -118,15 +118,15 @@ export function setCookieValue<T = unknown>(
   value: T,
   config?: CookieConfig,
 ): void {
-  const cookie = config ? useCookie<T>(name, config as any) : useCookie<T>(name)
-  cookie.value = value as any
+  const cookie = config ? useCookie<T>(name, config as unknown) : useCookie<T>(name)
+  cookie.value = value as unknown
 }
 
 /**
  * Cookie manager class for complex cookie operations
  */
 export class CookieManager<T = unknown> {
-  private cookieRef: any
+  private cookieRef: unknown
   private dateFields: string[]
 
   constructor(
@@ -134,7 +134,7 @@ export class CookieManager<T = unknown> {
     config: CookieConfig,
     dateFields: string[] = [],
   ) {
-    this.cookieRef = useCookie<T>(name, config as any)
+    this.cookieRef = useCookie<T>(name, config as unknown)
     this.dateFields = dateFields
   }
 

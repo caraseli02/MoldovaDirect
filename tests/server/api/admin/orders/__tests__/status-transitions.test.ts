@@ -13,9 +13,9 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { createSupabaseClient } from '~/server/utils/supabaseAdminClient'
 
 describe('Order Status Transitions - Valid Transitions', () => {
-  let supabase: any
-  let testAdmin: any
-  let testOrder: any
+  let supabase: unknown
+  let testAdmin: unknown
+  let testOrder: unknown
 
   beforeEach(async () => {
     supabase = createSupabaseClient()
@@ -220,9 +220,9 @@ describe('Order Status Transitions - Valid Transitions', () => {
 })
 
 describe('Order Status Transitions - Invalid Transitions', () => {
-  let supabase: any
-  let testAdmin: any
-  let testOrder: any
+  let supabase: unknown
+  let testAdmin: unknown
+  let testOrder: unknown
 
   beforeEach(async () => {
     supabase = createSupabaseClient()
@@ -371,9 +371,9 @@ describe('Order Status Transitions - Invalid Transitions', () => {
 })
 
 describe('Order Status Transitions - Required Fields', () => {
-  let supabase: any
-  let testAdmin: any
-  let testOrder: any
+  let supabase: unknown
+  let testAdmin: unknown
+  let testOrder: unknown
 
   beforeEach(async () => {
     supabase = createSupabaseClient()
@@ -571,8 +571,8 @@ describe('Order Status Transitions - Required Fields', () => {
 })
 
 describe('Order Status Transitions - Validation', () => {
-  let supabase: any
-  let testAdmin: any
+  let supabase: unknown
+  let testAdmin: unknown
 
   beforeEach(async () => {
     supabase = createSupabaseClient()

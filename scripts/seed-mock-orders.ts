@@ -19,7 +19,7 @@ if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
 // Simple Supabase client using fetch
 const supabase = {
   from: (table: string) => ({
-    insert: async (data: any) => {
+    insert: async (data: unknown) => {
       const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
         method: 'POST',
         headers: {

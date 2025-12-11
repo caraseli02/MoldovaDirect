@@ -126,8 +126,8 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
     const pageInfo = await page.evaluate(() => {
       return {
         title: document.title,
-        hasErrors: !!(window as any).__NUXT_ERROR__,
-        errorCount: (window as any).__NUXT_ERROR_LOG__?.length || 0,
+        hasErrors: !!(window as unknown).__NUXT_ERROR__,
+        errorCount: (window as unknown).__NUXT_ERROR_LOG__?.length || 0,
       }
     })
 

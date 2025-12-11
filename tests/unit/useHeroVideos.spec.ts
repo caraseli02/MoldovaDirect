@@ -6,7 +6,7 @@ describe('useHeroVideos', () => {
   beforeEach(() => {
     vi.restoreAllMocks()
     // Simulate client environment for SSR guard
-    ;(process as any).client = true
+    ;(process as unknown).client = true
     // Minimal Nuxt composable stubs
     vi.stubGlobal('useState', (_key: string, init: () => any) => {
       return ref(init())
@@ -61,7 +61,7 @@ describe('useHeroVideos', () => {
     vi.doMock('~/composables/useHeroVideos', async () => {
       const mod = await vi.importActual<typeof heroModule>('~/composables/useHeroVideos')
       const useHeroVideos = () => {
-        const videos: any[] = []
+        const videos: unknown[] = []
         const { isMobile } = { isMobile: ref(false) }
         const isClient = true
         const getRandomVideo = () => {
@@ -116,10 +116,10 @@ describe('useHeroVideos', () => {
 
   it('returns false for showVideo during SSR (process.client false)', () => {
     mockDevice(false)
-    ;(process as any).client = false
+    ;(process as unknown).client = false
     const { useHeroVideos } = heroModule
     const { showVideo } = useHeroVideos()
     expect(showVideo.value).toBe(false)
-    ;(process as any).client = true
+    ;(process as unknown).client = true
   })
 })

@@ -14,9 +14,9 @@ import { describe, it, expect, beforeAll, afterAll } from 'vitest'
 import { createSupabaseClient } from '~/server/utils/supabaseAdminClient'
 
 describe('Admin API - Authorization (RBAC)', () => {
-  let supabase: any
-  let adminUser: any
-  let regularUser: any
+  let supabase: unknown
+  let adminUser: unknown
+  let regularUser: unknown
 
   beforeAll(async () => {
     supabase = createSupabaseClient()

@@ -82,7 +82,7 @@ describe('Account Deletion API', () => {
     it('requires DELETE method', async () => {
       const { assertMethod } = await import('h3')
 
-      assertMethod({} as any, 'DELETE')
+      assertMethod({} as unknown, 'DELETE')
 
       expect(assertMethod).toHaveBeenCalledWith(expect.anything(), 'DELETE')
     })
@@ -92,7 +92,7 @@ describe('Account Deletion API', () => {
 
       vi.mocked(readBody).mockResolvedValue({ password: undefined })
 
-      const body = await readBody({} as any)
+      const body = await readBody({} as unknown)
 
       if (!body.password) {
         const error = vi.mocked(createError)({
@@ -111,7 +111,7 @@ describe('Account Deletion API', () => {
         reason: 'Moving to another service',
       })
 
-      const body = await readBody({} as any)
+      const body = await readBody({} as unknown)
 
       expect(body.reason).toBe('Moving to another service')
     })

@@ -661,7 +661,7 @@ async function handleLogin(): Promise<void> {
       await handleRedirectAfterLogin()
     }
   }
-  catch (err: any) {
+  catch (err: unknown) {
     if (!localError.value) {
       localError.value = err?.message || t('auth.loginError')
     }
@@ -780,7 +780,7 @@ async function handleMagicLink(): Promise<void> {
     // Start cooldown timer
     startMagicLinkCooldown()
   }
-  catch (err: any) {
+  catch (err: unknown) {
     localError.value = err.message || t('auth.magicLinkError')
   }
   finally {

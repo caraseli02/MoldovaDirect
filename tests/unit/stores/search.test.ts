@@ -100,7 +100,7 @@ describe('Search Store', () => {
       const store = useSearchStore()
       expect(store.hasResults).toBe(false)
 
-      store.results = [{ id: '1', name: 'Product' }] as any
+      store.results = [{ id: '1', name: 'Product' }] as unknown
       expect(store.hasResults).toBe(true)
     })
 
@@ -137,7 +137,7 @@ describe('Search Store', () => {
     it('should clear search for empty query', async () => {
       const store = useSearchStore()
       store.query = 'existing'
-      store.results = [{ id: '1' }] as any
+      store.results = [{ id: '1' }] as unknown
 
       await store.search('   ')
 
@@ -295,7 +295,7 @@ describe('Search Store', () => {
     it('should reset all search state', () => {
       const store = useSearchStore()
       store.query = 'wine'
-      store.results = [{ id: '1' }] as any
+      store.results = [{ id: '1' }] as unknown
       store.suggestions = ['wine red']
       store.filters = { category: 'wines' }
       store.error = 'Previous error'

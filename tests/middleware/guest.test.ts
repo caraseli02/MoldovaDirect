@@ -17,7 +17,7 @@ import type { RouteLocationNormalized } from 'vue-router'
 describe('Guest Middleware', () => {
   let mockTo: RouteLocationNormalized
   let mockFrom: RouteLocationNormalized
-  let mockUser: any
+  let mockUser: unknown
   let mockLocalePath: ReturnType<typeof vi.fn>
   let mockNavigateTo: ReturnType<typeof vi.fn>
 
@@ -41,7 +41,7 @@ describe('Guest Middleware', () => {
     vi.stubGlobal('useSupabaseUser', () => ({ value: mockUser }))
     vi.stubGlobal('useLocalePath', () => mockLocalePath)
     vi.stubGlobal('navigateTo', mockNavigateTo)
-    vi.stubGlobal('defineNuxtRouteMiddleware', (fn: any) => fn)
+    vi.stubGlobal('defineNuxtRouteMiddleware', (fn: unknown) => fn)
   })
 
   describe('Unauthenticated Users (Guest Access)', () => {

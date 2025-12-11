@@ -31,7 +31,7 @@ const mockRuntimeConfig = {
 describe('useStripe', () => {
   let mockStripe: ReturnType<typeof createMockStripe>
   let mockCardElement: ReturnType<typeof createMockStripeCardElement>
-  let mockElements: any
+  let mockElements: unknown
 
   beforeEach(async () => {
     // CRITICAL: Reset modules to clear the singleton state
@@ -242,9 +242,9 @@ describe('useStripe', () => {
     })
 
     it('updates error on card element change event', async () => {
-      let changeCallback: (event: any) => void
+      let changeCallback: (event: unknown) => void
 
-      mockCardElement.on.mockImplementation((event: string, callback: (event: any) => void) => {
+      mockCardElement.on.mockImplementation((event: string, callback: (event: unknown) => void) => {
         if (event === 'change') {
           changeCallback = callback
         }
@@ -359,7 +359,7 @@ describe('useStripe', () => {
     })
 
     it('sets loading state during payment confirmation', async () => {
-      let resolveConfirm: (value: any) => void
+      let resolveConfirm: (value: unknown) => void
       mockStripe.confirmCardPayment.mockReturnValue(new Promise((resolve) => {
         resolveConfirm = resolve
       }))
@@ -468,7 +468,7 @@ describe('useStripe', () => {
     })
 
     it('sets loading state during payment method creation', async () => {
-      let resolveCreate: (value: any) => void
+      let resolveCreate: (value: unknown) => void
       mockStripe.createPaymentMethod.mockReturnValue(new Promise((resolve) => {
         resolveCreate = resolve
       }))
@@ -514,7 +514,7 @@ describe('useStripe', () => {
 
 describe('formatStripeError', () => {
   // Import once for these pure function tests
-  let formatStripeError: any
+  let formatStripeError: unknown
 
   beforeEach(async () => {
     const module = await import('./useStripe')

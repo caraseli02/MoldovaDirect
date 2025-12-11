@@ -161,7 +161,7 @@ class AuthTestRunner {
 
       console.log(`     ✅ ${result.passed} passed, ${result.failed} failed, ${result.skipped} skipped (${duration}ms)`)
     }
-    catch (error: any) {
+    catch (error: unknown) {
       const duration = Date.now() - startTime
       const result: TestResult = {
         suite: name,

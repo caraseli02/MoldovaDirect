@@ -104,11 +104,11 @@ describe('Cart Security Module', () => {
     })
 
     it('should reject null session ID', () => {
-      expect(isValidSessionId(null as any)).toBe(false)
+      expect(isValidSessionId(null as unknown)).toBe(false)
     })
 
     it('should reject non-string session ID', () => {
-      expect(isValidSessionId(123 as any)).toBe(false)
+      expect(isValidSessionId(123 as unknown)).toBe(false)
     })
 
     it('should reject session ID without cart prefix', () => {
@@ -138,7 +138,7 @@ describe('Cart Security Module', () => {
     })
 
     it('should reject null product ID', () => {
-      expect(isValidProductId(null as any)).toBe(false)
+      expect(isValidProductId(null as unknown)).toBe(false)
     })
 
     it('should reject product ID exceeding max length', () => {

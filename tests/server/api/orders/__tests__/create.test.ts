@@ -55,14 +55,14 @@ describe.skip('Order Creation with Email Integration', () => {
     expect(validateOrderForEmail).toBeDefined()
 
     // Verify mock responses
-    const emailResult = await sendOrderConfirmationEmail({} as any)
+    const emailResult = await sendOrderConfirmationEmail({} as unknown)
     expect(emailResult.success).toBe(true)
     expect(emailResult.emailLogId).toBe(1)
 
-    const customerInfo = await extractCustomerInfoFromOrder({} as any)
+    const customerInfo = await extractCustomerInfoFromOrder({} as unknown)
     expect(customerInfo.email).toBe('test@example.com')
 
-    const validationResult = validateOrderForEmail({} as any)
+    const validationResult = validateOrderForEmail({} as unknown)
     expect(validationResult.isValid).toBe(true)
   })
 

@@ -445,7 +445,7 @@ describe('validateShippingAddress', () => {
     const result = validateShippingAddress({
       firstName: null,
       lastName: undefined,
-    } as any)
+    } as unknown)
 
     expect(result.valid).toBe(false)
     expect(result.errors.firstName).toBeDefined()

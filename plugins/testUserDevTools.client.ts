@@ -20,7 +20,7 @@ export default defineNuxtPlugin(() => {
 
   // Expose dev tools on window
   if (import.meta.client) {
-    (window as any).$testUsers = {
+    (window as unknown).$testUsers = {
       /**
        * List all available personas
        */

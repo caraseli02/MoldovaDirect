@@ -38,7 +38,7 @@
       >
         <productFilterMain
           :filters="filters"
-          :available-filters="availableFilters as any"
+          :available-filters="availableFilters as unknown"
           :filtered-product-count="products?.length || 0"
           :show-title="false"
           @update:filters="handleFiltersUpdate"
@@ -491,10 +491,10 @@ const { t } = useI18n()
 // - Properly cleans up timeouts to prevent memory leaks
 //
 // Performance: 300ms delay prevents excessive API calls during rapid typing
-function debounce<T extends (...args: any[]) => any>(fn: T, delay: number) {
+function debounce<T extends (...args: unknown[]) => any>(fn: T, delay: number) {
   let timeoutId: ReturnType<typeof setTimeout> | null = null
 
-  return function (this: any, ...args: Parameters<T>) {
+  return function (this: unknown, ...args: Parameters<T>) {
     if (timeoutId) {
       clearTimeout(timeoutId)
     }

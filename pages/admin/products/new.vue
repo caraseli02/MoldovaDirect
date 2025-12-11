@@ -165,7 +165,7 @@ const { data: categoriesData } = await useFetch<{ categories: CategoryWithChildr
 const categories = computed(() => categoriesData.value?.categories || [])
 
 // Event handlers
-const handleSubmit = async (formData: any) => {
+const handleSubmit = async (formData: unknown) => {
   try {
     errorMessage.value = ''
 
@@ -189,7 +189,7 @@ const handleSubmit = async (formData: any) => {
       is_active: formData.isActive,
     }
 
-    const response = await $fetch<{ success: boolean, data: any }>('/api/admin/products', {
+    const response = await $fetch<{ success: boolean, data: unknown }>('/api/admin/products', {
       method: 'POST',
       body: productData,
     })

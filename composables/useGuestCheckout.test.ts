@@ -400,7 +400,7 @@ describe('useGuestCheckout', () => {
 
       // Should not throw or modify errors for unknown fields
       expect(() => {
-        validateGuestField('emailUpdates' as any)
+        validateGuestField('emailUpdates' as unknown)
       }).not.toThrow()
 
       expect(guestErrors.value.emailUpdates).toBeUndefined()

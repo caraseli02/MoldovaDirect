@@ -715,7 +715,7 @@ const handleRegister = async () => {
 
     success.value = t('auth.registrationSuccess')
   }
-  catch (err: any) {
+  catch (err: unknown) {
     error.value = err.message || t('auth.registerError')
   }
   finally {

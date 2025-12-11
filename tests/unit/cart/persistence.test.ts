@@ -18,12 +18,12 @@ import type { CartItem, Product } from '~/stores/cart/types'
 
 // Mock useCookie before importing the module
 // Use a module-level variable to track the current mock value
-let currentCookieData: any = null
+let currentCookieData: unknown = null
 
 vi.mock('#app', () => ({
-  useCookie: vi.fn((_key: string, _options?: any) => ({
+  useCookie: vi.fn((_key: string, _options?: unknown) => ({
     get value() { return currentCookieData },
-    set value(v: any) { currentCookieData = v },
+    set value(v: unknown) { currentCookieData = v },
   })),
   useRuntimeConfig: vi.fn(() => ({ public: {} })),
 }))
@@ -329,7 +329,7 @@ describe('Cart Persistence Module', () => {
         ...mockCartItem,
         addedAt: '2024-01-15T10:00:00Z',
       }
-      delete (itemWithoutLastModified as any).lastModified
+      delete (itemWithoutLastModified as unknown).lastModified
 
       // Set cookie data without lastModified field
       currentCookieData = {

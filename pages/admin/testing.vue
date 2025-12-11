@@ -197,14 +197,14 @@ const startImpersonation = async (config: { userEmail: string, reason: string, d
     })
 
     if (response.success && 'impersonating' in response && 'expiresAt' in response && 'logId' in response) {
-      const impersonatingUser = (response as any).impersonating
+      const impersonatingUser = (response as unknown).impersonating
       impersonation.value.active = true
       impersonation.value.targetName = impersonatingUser?.name || ''
-      impersonation.value.expiresAt = (response as any).expiresAt
-      impersonation.value.logId = (response as any).logId
+      impersonation.value.expiresAt = (response as unknown).expiresAt
+      impersonation.value.logId = (response as unknown).logId
     }
   }
-  catch (err: any) {
+  catch (err: unknown) {
     console.error('Failed to start impersonation:', err)
   }
 }
@@ -226,7 +226,7 @@ const stopImpersonation = async () => {
       impersonation.value.targetName = ''
     }
   }
-  catch (err: any) {
+  catch (err: unknown) {
     console.error('Failed to stop impersonation:', err)
   }
 }
@@ -308,16 +308,16 @@ const loadGenerationHistory = () => {
   }
 }
 
-const addToHistory = (preset: string, response: any) => {
+const addToHistory = (preset: string, response: unknown) => {
   const item: GenerationHistoryItem = {
     id: Date.now().toString(),
     preset,
-    config: { preset: preset as any },
+    config: { preset: preset as unknown },
     timestamp: new Date().toISOString(),
     results: {
-      users: response.results?.steps?.find((s: any) => s.step === 'Create users')?.count || 0,
-      products: response.results?.steps?.find((s: any) => s.step === 'Create products')?.count || 0,
-      orders: response.results?.steps?.find((s: any) => s.step === 'Create orders')?.count || 0,
+      users: response.results?.steps?.find((s: unknown) => s.step === 'Create users')?.count || 0,
+      products: response.results?.steps?.find((s: unknown) => s.step === 'Create products')?.count || 0,
+      orders: response.results?.steps?.find((s: unknown) => s.step === 'Create orders')?.count || 0,
     },
     duration: response.totalDuration || 0,
   }

@@ -30,7 +30,7 @@ export interface CreateOrderParams {
   shippingAddress: ShippingInformation['address']
   billingAddress: ShippingInformation['address']
   paymentMethod: PaymentMethod['type']
-  paymentResult: Record<string, any>
+  paymentResult: Record<string, unknown>
   subtotal: number
   shippingCost: number
   tax: number

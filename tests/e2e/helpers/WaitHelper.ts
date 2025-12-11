@@ -51,7 +51,7 @@ export class WaitHelper {
     const startTime = Date.now()
 
     return new Promise((resolve, reject) => {
-      const listener = (request: any) => {
+      const listener = (request: unknown) => {
         const url = request.url()
         const matches = typeof urlPattern === 'string'
           ? url.includes(urlPattern)

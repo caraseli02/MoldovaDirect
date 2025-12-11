@@ -209,7 +209,7 @@ const successMessage = ref('')
 const errorMessage = ref('')
 
 // Fetch product data
-const { data: productData, pending, error } = await useLazyFetch<{ product: any }>(`/api/admin/products/${productId}`)
+const { data: productData, pending, error } = await useLazyFetch<{ product: unknown }>(`/api/admin/products/${productId}`)
 const product = computed(() => productData.value?.product)
 
 // Fetch categories
@@ -223,7 +223,7 @@ const getLocalizedText = (text: Record<string, string> | null) => {
 }
 
 // Event handlers
-const handleSubmit = async (formData: any) => {
+const handleSubmit = async (formData: unknown) => {
   try {
     errorMessage.value = ''
 
@@ -247,7 +247,7 @@ const handleSubmit = async (formData: any) => {
       is_active: formData.isActive,
     }
 
-    const response = await $fetch<{ success: boolean, data: any }>(`/api/admin/products/${productId}`, {
+    const response = await $fetch<{ success: boolean, data: unknown }>(`/api/admin/products/${productId}`, {
       method: 'PUT',
       body: productData,
     })

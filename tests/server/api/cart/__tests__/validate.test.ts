@@ -73,7 +73,7 @@ describe('Cart Validation API', () => {
       const { readBody } = await import('h3')
       vi.mocked(readBody).mockResolvedValue({ cartId: 123 })
 
-      const body = await readBody({} as any)
+      const body = await readBody({} as unknown)
       expect(body.cartId).toBe(123)
     })
   })
@@ -152,7 +152,7 @@ describe('Cart Validation API', () => {
         errors: [],
       })
 
-      const result = validateCartItems(mockCartItems as any)
+      const result = validateCartItems(mockCartItems as unknown)
 
       expect(result.valid).toBe(true)
       expect(result.errors).toHaveLength(0)
@@ -179,7 +179,7 @@ describe('Cart Validation API', () => {
         errors: ['Insufficient stock for product 10'],
       })
 
-      const result = validateCartItems(mockCartItems as any)
+      const result = validateCartItems(mockCartItems as unknown)
 
       expect(result.valid).toBe(false)
       expect(result.errors).toContain('Insufficient stock for product 10')
@@ -328,7 +328,7 @@ describe('Cart Validation API', () => {
         errors: ['Item quantity must be at least 1'],
       })
 
-      const result = validateCartItems([{ quantity: 0 }] as any)
+      const result = validateCartItems([{ quantity: 0 }] as unknown)
 
       expect(result.valid).toBe(false)
     })

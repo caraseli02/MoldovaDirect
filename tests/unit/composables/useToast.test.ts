@@ -20,7 +20,7 @@ vi.mock('vue-sonner', () => ({
 
 // Mock useI18n globally
 vi.stubGlobal('useI18n', () => ({
-  t: (key: string, params?: any) => params ? `${key}:${JSON.stringify(params)}` : key,
+  t: (key: string, params?: unknown) => params ? `${key}:${JSON.stringify(params)}` : key,
 }))
 
 describe('useToast', () => {

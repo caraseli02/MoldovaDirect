@@ -428,7 +428,7 @@ export class CartTestHelpers {
   /**
    * Set cart data directly in storage for testing
    */
-  async setCartDataInStorage(cartData: any): Promise<void> {
+  async setCartDataInStorage(cartData: unknown): Promise<void> {
     await this.page.evaluate((data) => {
       localStorage.setItem('moldova-direct-cart', JSON.stringify(data))
     }, cartData)
