@@ -1,4 +1,34 @@
 // @ts-check
+/**
+ * ESLint Configuration for Moldova Direct
+ *
+ * KEY PRINCIPLE: 'any' vs 'unknown'
+ * =================================
+ * DO NOT blindly replace 'any' with 'unknown' - they are NOT equivalent!
+ *
+ * CORRECT usage:
+ * - 'any': Use in type definitions, Record<string, any>, generics defaults (T = any)
+ *   → intentionally permissive, disables type checking
+ *   → appropriate for flexible data contracts
+ *
+ * - 'unknown': Use in function parameters, catch blocks, external data
+ *   → requires type narrowing/guards before use
+ *   → appropriate for untrusted external input
+ *
+ * Why? TypeScript Issue #41746, #42096:
+ * - Function types extend Record<string, any> but NOT Record<string, unknown>
+ * - Record<string, unknown> breaks type compatibility in generics
+ * - These are fundamentally different in terms of type assignability
+ *
+ * WRONG (breaks types):
+ *   interface Config { settings: Record<string, unknown> }
+ *   const config: Record<string, any> = ... // ERROR: incompatible
+ *
+ * RIGHT (maintains compatibility):
+ *   interface Config { settings: Record<string, any> }
+ *   const config: Record<string, any> = ... // OK: compatible
+ */
+
 import withNuxt from './.nuxt/eslint.config.mjs'
 
 export default withNuxt(
@@ -7,11 +37,17 @@ export default withNuxt(
     files: ['**/*.ts', '**/*.tsx', '**/*.vue'],
     rules: {
       // TypeScript specific rules
+      // IMPORTANT: Do NOT use fixToUnknown=true - 'any' and 'unknown' are NOT equivalent
+      // See: https://github.com/microsoft/TypeScript/issues/41746
+      // 'any' is intentionally permissive (for data contracts, Record<string, X>, generics)
+      // 'unknown' requires type narrowing (for untrusted external data)
       '@typescript-eslint/no-explicit-any': ['warn', { fixToUnknown: false }],
+
       '@typescript-eslint/no-unused-vars': ['warn', {
         argsIgnorePattern: '^_',
         varsIgnorePattern: '^_',
       }],
+
       // Disable unified-signatures as it's too strict for Vue emit definitions
       '@typescript-eslint/unified-signatures': 'off',
 
