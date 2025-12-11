@@ -74,7 +74,7 @@ const updateFilters = (newFilters: Partial<ProductFilters>) => {
   }
 }
 
-const applyFilters = () => {
+const _applyFilters = () => {
   emit('update:filters', localFilters.value)
   emit('apply-filters')
   if (isMobile.value) {
@@ -82,7 +82,7 @@ const applyFilters = () => {
   }
 }
 
-const clearAllFilters = () => {
+const _clearAllFilters = () => {
   localFilters.value = {}
   emit('update:filters', {})
   emit('apply-filters')

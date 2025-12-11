@@ -48,8 +48,8 @@ vi.mock('#supabase/server', () => ({
 }))
 
 describe('POST /api/webhooks/stripe', () => {
-  let eventHandler: unknown
-  let mockEvent: unknown
+  let _eventHandler: unknown
+  let _mockEvent: unknown
 
   beforeEach(async () => {
     vi.clearAllMocks()
@@ -167,7 +167,7 @@ describe('POST /api/webhooks/stripe', () => {
 
   describe('payment_intent.succeeded Event', () => {
     it('should update order status to paid when payment succeeds', async () => {
-      const paymentIntent: Partial<Stripe.PaymentIntent> = {
+      const _paymentIntent: Partial<Stripe.PaymentIntent> = {
         id: 'pi_test_123',
         amount_received: 10000,
         currency: 'eur',
@@ -246,13 +246,13 @@ describe('POST /api/webhooks/stripe', () => {
     it('should log warning on amount mismatch', async () => {
       const consoleErrorSpy = vi.spyOn(console, 'error')
 
-      const paymentIntent: Partial<Stripe.PaymentIntent> = {
+      const _paymentIntent: Partial<Stripe.PaymentIntent> = {
         id: 'pi_test_123',
         amount_received: 15000, // 150 EUR
         currency: 'eur',
       }
 
-      const mockOrder = {
+      const _mockOrder = {
         id: 1,
         order_number: 'ORD-12345',
         payment_status: 'pending',
@@ -268,7 +268,7 @@ describe('POST /api/webhooks/stripe', () => {
 
   describe('payment_intent.payment_failed Event', () => {
     it('should update order status to failed when payment fails', async () => {
-      const paymentIntent: Partial<Stripe.PaymentIntent> = {
+      const _paymentIntent: Partial<Stripe.PaymentIntent> = {
         id: 'pi_test_failed',
         status: 'requires_payment_method',
         last_payment_error: {
@@ -328,7 +328,7 @@ describe('POST /api/webhooks/stripe', () => {
 
   describe('charge.refunded Event', () => {
     it('should update order status to refunded for full refund', async () => {
-      const charge: Partial<Stripe.Charge> = {
+      const _charge: Partial<Stripe.Charge> = {
         id: 'ch_test_123',
         payment_intent: 'pi_test_123',
         amount_refunded: 10000,
@@ -362,7 +362,7 @@ describe('POST /api/webhooks/stripe', () => {
     })
 
     it('should keep order as paid for partial refund', async () => {
-      const charge: Partial<Stripe.Charge> = {
+      const _charge: Partial<Stripe.Charge> = {
         id: 'ch_test_123',
         payment_intent: 'pi_test_123',
         amount_refunded: 5000, // Partial refund
@@ -370,7 +370,7 @@ describe('POST /api/webhooks/stripe', () => {
         refunded: false, // Not fully refunded
       }
 
-      const mockOrder = {
+      const _mockOrder = {
         id: 3,
         order_number: 'ORD-11111',
         payment_status: 'paid',
@@ -384,7 +384,7 @@ describe('POST /api/webhooks/stripe', () => {
     it('should handle refund without payment_intent_id', async () => {
       const consoleErrorSpy = vi.spyOn(console, 'error')
 
-      const charge: Partial<Stripe.Charge> = {
+      const _charge: Partial<Stripe.Charge> = {
         id: 'ch_test_123',
         payment_intent: undefined, // No payment intent
         amount_refunded: 10000,

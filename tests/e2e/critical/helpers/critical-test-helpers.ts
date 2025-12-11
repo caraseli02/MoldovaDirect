@@ -6,7 +6,7 @@
  */
 
 import type { Page } from '@playwright/test'
-import { expect } from '@playwright/test'
+import { _expect } from '@playwright/test'
 
 export class CriticalTestHelpers {
   constructor(private page: Page) {}
@@ -155,7 +155,7 @@ export class CriticalTestHelpers {
         }),
       ])
     }
-    catch (error) {
+    catch (_error) {
       // Log the error for debugging but re-throw to fail the test
       console.error('❌ Cart update verification failed - cart functionality may be broken')
       throw new Error('Cart update indicator did not appear within timeout. The cart may be broken or the page failed to hydrate properly.')

@@ -117,7 +117,6 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
     }
 
     // Check for unhandled rejections
-    let unhandledRejection = false
     page.once('crash', () => {
       unhandledRejection = true
       console.log('✗ Page crashed!')

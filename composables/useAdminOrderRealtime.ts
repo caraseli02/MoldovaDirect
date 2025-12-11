@@ -206,7 +206,7 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
   /**
    * Check if order was recently updated (potential conflict)
    */
-  const checkForConflict = (orderId: number, lastKnownUpdate: string): boolean => {
+  const checkForConflict = (_orderId: number, _lastKnownUpdate: string): boolean => {
     // This would typically fetch the latest order data and compare timestamps
     // For now, we'll rely on the realtime updates to detect conflicts
     return false

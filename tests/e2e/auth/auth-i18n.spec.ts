@@ -32,7 +32,7 @@ for (const locale of locales) {
         if (locale !== 'en') {
           // Common English words that should be translated
           const englishPatterns = ['Sign in', 'Login', 'Log in']
-          const hasEnglish = englishPatterns.some(pattern =>
+          const _hasEnglish = englishPatterns.some(pattern =>
             buttonText?.toLowerCase().includes(pattern.toLowerCase()),
           )
 

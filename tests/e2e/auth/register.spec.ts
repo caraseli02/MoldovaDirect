@@ -9,7 +9,7 @@ test.describe('Registration Flow', () => {
   })
 
   test.describe('Valid Registration', () => {
-    test('should successfully register with valid data', async ({ page, locale }) => {
+    test('should successfully register with valid data', async ({ page, _locale }) => {
       const timestamp = Date.now()
       const testEmail = `newuser-${timestamp}@example.test`
 

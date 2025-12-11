@@ -259,7 +259,7 @@ export function validateProductFilters(filters: unknown): ProductFilters {
 /**
  * Transform a raw product from database to ProductWithRelations
  */
-export function transformProduct(rawProduct: unknown, locale: LanguageCode = 'es'): ProductWithRelations | null {
+export function transformProduct(rawProduct: unknown, _locale: LanguageCode = 'es'): ProductWithRelations | null {
   if (!isProduct(rawProduct)) return null
 
   const stockStatus: StockStatus

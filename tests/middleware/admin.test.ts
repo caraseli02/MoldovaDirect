@@ -11,7 +11,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import type { RouteLocationNormalized } from 'vue-router'
 
 describe('Admin Middleware', () => {
-  let middleware: unknown
+  let _middleware: unknown
   let mockTo: RouteLocationNormalized
   let mockFrom: RouteLocationNormalized
   let mockUser: unknown
@@ -75,7 +75,6 @@ describe('Admin Middleware', () => {
 
       // Import and execute middleware
       const { default: adminMiddleware } = await import('../../middleware/admin')
-      const result = await adminMiddleware(mockTo, mockFrom)
 
       expect(navigateTo).toHaveBeenCalledWith('/auth/login')
     })

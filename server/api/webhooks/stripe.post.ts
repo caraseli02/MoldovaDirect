@@ -193,7 +193,6 @@ async function handlePaymentIntentFailed(
   paymentIntent: Stripe.PaymentIntent,
 ): Promise<void> {
   const paymentIntentId = paymentIntent.id
-  const failureMessage = paymentIntent.last_payment_error?.message || 'Unknown error'
 
   // Get Supabase service role client (bypasses RLS for webhook operations)
   const client = serverSupabaseServiceRole(event)

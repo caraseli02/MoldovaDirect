@@ -616,7 +616,6 @@ describe('Cart Advanced Features Module', () => {
   describe('Edge Cases', () => {
     it('should handle concurrent bulk operations protection', async () => {
       const removeItemFn = vi.fn().mockResolvedValue(undefined)
-      const addItemFn = vi.fn().mockResolvedValue(undefined)
 
       selectItem('item-1')
 

@@ -168,7 +168,6 @@ test.describe('Admin Analytics Page', () => {
     await authenticatedPage.goto('/admin/analytics')
 
     // Check for loading state or error message handling
-    const loadingIndicator = authenticatedPage.locator('text=/loading|please wait/i')
     const errorMessage = authenticatedPage.locator('[class*="error"], text=/failed to load/i')
 
     // Wait for page to fully load

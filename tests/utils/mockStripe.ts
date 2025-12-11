@@ -33,7 +33,7 @@ export function createMockStripeCardElement(): MockStripeCardElement {
     mount: vi.fn(),
     unmount: vi.fn(),
     destroy: vi.fn(),
-    on: vi.fn((event, callback) => {
+    on: vi.fn((_event, _callback) => {
       // Store callback for manual triggering in tests
       return vi.fn()
     }),

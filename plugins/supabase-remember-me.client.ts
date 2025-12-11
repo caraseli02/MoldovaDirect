@@ -36,7 +36,6 @@ export default defineNuxtPlugin(() => {
     try {
       // Get all cookies that start with 'sb-'
       const cookies = document.cookie.split(';')
-      const supabaseCookies = cookies
         .map(c => c.trim())
         .filter(c => c.startsWith('sb-'))
 

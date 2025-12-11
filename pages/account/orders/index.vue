@@ -579,7 +579,7 @@ const handleViewDetails = (order: OrderWithItems) => {
   router.push(localePath(`/account/orders/${order.id}`))
 }
 
-const handleReorder = async (order: OrderWithItems) => {
+const handleReorder = async (_order: OrderWithItems) => {
   // TODO: Implement reorder functionality
   // Will add items from this order to cart
 }
@@ -594,7 +594,6 @@ const setupMobileFeatures = () => {
 
     // Setup swipe gestures for pagination
     setupSwipeListeners(scrollContainer.value)
-    const pag = unref(pagination)
     setSwipeHandlers({
       onLeft: () => {
         // Swipe left to go to next page

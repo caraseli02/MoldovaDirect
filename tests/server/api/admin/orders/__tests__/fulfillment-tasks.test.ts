@@ -8,7 +8,7 @@
  * - Authorization
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, _vi } from 'vitest'
 import { createSupabaseClient } from '~/server/utils/supabaseAdminClient'
 
 describe('Order Fulfillment Tasks - Race Conditions', () => {
@@ -151,7 +151,7 @@ describe('Order Fulfillment Tasks - Race Conditions', () => {
     const task2 = tasks.find((t: unknown) => t.order_id === testOrder2.id)
 
     // Simulate concurrent completion of both tasks
-    const results = await Promise.allSettled([
+    const _results = await Promise.allSettled([
       fetch(`/api/admin/orders/${testOrder1.id}/fulfillment-tasks/${task1.id}`, {
         method: 'PATCH',
         headers: {

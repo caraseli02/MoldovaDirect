@@ -163,7 +163,6 @@ describe('Guest Middleware', () => {
       } as unknown as RouteLocationNormalized
 
       const { default: guestMiddleware } = await import('../../middleware/guest')
-      const result = await guestMiddleware(mockTo, mockFrom)
 
       expect(mockNavigateTo).not.toHaveBeenCalled()
     })

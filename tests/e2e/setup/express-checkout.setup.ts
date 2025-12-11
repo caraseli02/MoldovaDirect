@@ -77,7 +77,7 @@ setup.describe('Express Checkout Test Setup', () => {
     expect(response.ok()).toBeTruthy()
   })
 
-  setup('seed test data if needed', async ({ page }) => {
+  setup('seed test data if needed', async ({ _page }) => {
     // This would typically seed database with test users and addresses
     // Implementation depends on your database setup
 
