@@ -9,6 +9,7 @@
  * Provides secure server-side cart operations with comprehensive security measures.
  */
 
+import type { H3Event } from 'h3'
 import {
   cartValidationSchemas,
   checkRateLimit,

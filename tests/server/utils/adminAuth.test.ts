@@ -6,6 +6,7 @@
  */
 
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
+import type { H3Event } from 'h3'
 import type { SupabaseClient } from '@supabase/supabase-js'
 
 // Import mocked h3 functions

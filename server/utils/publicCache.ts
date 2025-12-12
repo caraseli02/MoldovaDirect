@@ -1,3 +1,4 @@
+import type { H3Event } from 'h3'
 /**
  * Public API Cache Management Utilities
  *

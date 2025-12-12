@@ -1,3 +1,4 @@
+import type { Address } from './database'
 // Checkout domain types
 // Centralized definitions shared across store, composables, and utilities
 

@@ -8,6 +8,7 @@
  * - Security headers
  */
 
+import type { H3Event } from 'h3'
 import {
   checkRateLimit,
   validateCSRFToken,

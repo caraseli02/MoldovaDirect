@@ -10,6 +10,7 @@
  */
 
 import { serverSupabaseClient } from '#supabase/server'
+import type { H3Event } from 'h3'
 import type { SupabaseClient } from '@supabase/supabase-js'
 
 export interface ActivityTrackingRequest {

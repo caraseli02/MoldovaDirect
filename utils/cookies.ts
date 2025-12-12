@@ -15,18 +15,18 @@ import { COOKIE_NAMES, type CookieConfig } from '~/config/cookies'
  * @param config Cookie configuration
  * @returns Cookie ref with type safety
  */
-export function createCookie<T = unknown>(
+export function createCookie<T = any>(
   name: string,
   config: CookieConfig,
 ) {
-  return useCookie<T>(name, config as unknown)
+  return useCookie<T>(name, config as any)
 }
 
 /**
  * Serialize data for cookie storage
  * Handles Date objects and other non-JSON types
  */
-export function serializeCookieData(data: any): unknown {
+export function serializeCookieData(data: any): any {
   if (!data) return null
 
   try {
@@ -113,13 +113,13 @@ export function getCookieValue<T = unknown>(
 /**
  * Set cookie value with optional serialization
  */
-export function setCookieValue<T = unknown>(
+export function setCookieValue<T = any>(
   name: string,
   value: T,
   config?: CookieConfig,
 ): void {
-  const cookie = config ? useCookie<T>(name, config as unknown) : useCookie<T>(name)
-  cookie.value = value as unknown
+  const cookie = config ? useCookie<T>(name, config as any) : useCookie<T>(name)
+  cookie.value = value as any
 }
 
 /**

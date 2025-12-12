@@ -5,6 +5,7 @@
  */
 
 import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { serverSupabaseServiceRole } from '#supabase/server'
 import { generateImpersonationToken, verifyImpersonationToken, validateImpersonationSession } from '../impersonation'
 import jwt from 'jsonwebtoken'
 

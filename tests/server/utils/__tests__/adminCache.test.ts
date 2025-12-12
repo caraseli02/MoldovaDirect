@@ -11,6 +11,7 @@
  */
 
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
+import type { H3Event } from 'h3'
 
 // Import mocked modules
 import { getQuery } from 'h3'

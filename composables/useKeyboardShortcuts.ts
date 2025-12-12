@@ -10,6 +10,21 @@
  * ```
  */
 
+interface KeyboardShortcutOptions {
+  /** Require Ctrl (Windows/Linux) or Cmd (Mac) */
+  ctrlOrCmd?: boolean
+  /** Require Shift key */
+  shift?: boolean
+  /** Require Alt/Option key */
+  alt?: boolean
+  /** Prevent default browser behavior */
+  preventDefault?: boolean
+  /** Stop event propagation */
+  stopPropagation?: boolean
+  /** Description for accessibility/documentation */
+  description?: string
+}
+
 // Global registry shared across all instances
 const globalShortcuts = new Map<string, {
   handler: (e: KeyboardEvent) => void
@@ -28,21 +43,6 @@ export function __resetKeyboardShortcutsState() {
 export function useKeyboardShortcuts() {
   // Track shortcuts registered by this instance for cleanup
   const instanceShortcuts = new Set<string>()
-
-  interface KeyboardShortcutOptions {
-    /** Require Ctrl (Windows/Linux) or Cmd (Mac) */
-    ctrlOrCmd?: boolean
-    /** Require Shift key */
-    shift?: boolean
-    /** Require Alt/Option key */
-    alt?: boolean
-    /** Prevent default browser behavior */
-    preventDefault?: boolean
-    /** Stop event propagation */
-    stopPropagation?: boolean
-    /** Description for accessibility/documentation */
-    description?: string
-  }
 
   /**
    * Check if the keyboard event matches the shortcut configuration
