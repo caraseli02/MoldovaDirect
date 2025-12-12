@@ -125,8 +125,8 @@ export function setCookieValue<T = unknown>(
 /**
  * Cookie manager class for complex cookie operations
  */
-export class CookieManager<T = unknown> {
-  private cookieRef: unknown
+export class CookieManager<T = any> {
+  private cookieRef: any
   private dateFields: string[]
 
   constructor(
@@ -134,7 +134,7 @@ export class CookieManager<T = unknown> {
     config: CookieConfig,
     dateFields: string[] = [],
   ) {
-    this.cookieRef = useCookie<T>(name, config as unknown)
+    this.cookieRef = useCookie<T>(name, config as any)
     this.dateFields = dateFields
   }
 
