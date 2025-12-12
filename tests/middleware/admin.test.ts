@@ -12,12 +12,12 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import type { RouteLocationNormalized } from 'vue-router'
 
 describe('Admin Middleware', () => {
-  let middleware: unknown
+  let middleware: any
   let mockTo: RouteLocationNormalized
   let mockFrom: RouteLocationNormalized
-  let mockUser: unknown
-  let mockSupabase: unknown
-  let mockProfile: unknown
+  let mockUser: any
+  let mockSupabase: any
+  let mockProfile: any
 
   beforeEach(() => {
     // Mock route objects

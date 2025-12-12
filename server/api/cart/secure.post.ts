@@ -196,7 +196,7 @@ function validateCartOperationData(
   csrfToken?: string,
 ): CartValidationResult {
   try {
-    let validatedData: unknown
+    let validatedData: any
     const dataWithSession = { ...(data as Record<string, any>), sessionId, csrfToken }
 
     switch (operation) {

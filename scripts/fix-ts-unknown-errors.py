@@ -121,10 +121,28 @@ def fix_function_params(content):
         r'(\1: any,',
         content
     )
+    # Pattern: , param: unknown) -> , param: any)
+    content = re.sub(
+        r',\s*([a-zA-Z_][a-zA-Z0-9_]*):\s*unknown\)',
+        r', \1: any)',
+        content
+    )
     return content
 
 def fix_variable_declarations(content):
     """Fix variable declarations with explicit unknown type"""
+    # Pattern: let x: unknown, y: unknown -> let x: any, y: any
+    content = re.sub(
+        r':\s*unknown\s*,',
+        r': any,',
+        content
+    )
+    # Pattern: let x: unknown (without assignment) -> let x: any
+    content = re.sub(
+        r'(const|let|var)\s+([a-zA-Z_][a-zA-Z0-9_]*):\s*unknown(?![a-zA-Z0-9_])',
+        r'\1 \2: any',
+        content
+    )
     # Pattern: const/let/var variable: unknown = ... -> const variable = ... as any
     content = re.sub(
         r'(const|let|var)\s+([a-zA-Z_][a-zA-Z0-9_]*):\s*unknown\s*=\s*',

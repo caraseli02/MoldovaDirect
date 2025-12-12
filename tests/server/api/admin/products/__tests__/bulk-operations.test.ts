@@ -14,9 +14,9 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import { createSupabaseClient } from '~/server/utils/supabaseAdminClient'
 
 describe('Bulk Product Operations - Error Handling', () => {
-  let supabase: unknown
-  let testAdmin: unknown
-  let testProducts: unknown[]
+  let supabase: any
+  let testAdmin: any
+  let testProducts: any[]
 
   beforeEach(async () => {
     supabase = createSupabaseClient()
@@ -364,9 +364,9 @@ describe('Bulk Product Operations - Authorization', () => {
 })
 
 describe('Bulk Product Delete - Error Handling', () => {
-  let supabase: unknown
-  let testAdmin: unknown
-  let testProducts: unknown[]
+  let supabase: any
+  let testAdmin: any
+  let testProducts: any[]
 
   beforeEach(async () => {
     supabase = createSupabaseClient()

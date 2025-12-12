@@ -275,7 +275,7 @@ export interface CartAnalyticsActions {
 }
 
 export interface CartSecurityActions {
-  validateCartData(operation: string, data: unknown): SecurityValidation
+  validateCartData(operation: string, data: any): SecurityValidation
   isValidSessionId(sessionId: string): boolean
   isValidProductId(productId: string): boolean
   generateSecureSessionId(): string

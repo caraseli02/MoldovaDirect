@@ -308,7 +308,7 @@ const loadGenerationHistory = () => {
   }
 }
 
-const addToHistory = (preset: string, response: unknown) => {
+const addToHistory = (preset: string, response: any) => {
   const item: GenerationHistoryItem = {
     id: Date.now().toString(),
     preset,

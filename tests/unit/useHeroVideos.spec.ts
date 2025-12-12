@@ -61,7 +61,7 @@ describe('useHeroVideos', () => {
     vi.doMock('~/composables/useHeroVideos', async () => {
       const mod = await vi.importActual<typeof heroModule>('~/composables/useHeroVideos')
       const useHeroVideos = () => {
-        const videos: unknown[] = []
+        const videos: any[] = []
         const { isMobile } = { isMobile: ref(false) }
         const isClient = true
         const getRandomVideo = () => {

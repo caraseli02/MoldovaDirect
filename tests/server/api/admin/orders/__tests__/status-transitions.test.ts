@@ -14,9 +14,9 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import { createSupabaseClient } from '~/server/utils/supabaseAdminClient'
 
 describe('Order Status Transitions - Valid Transitions', () => {
-  let supabase: unknown
-  let testAdmin: unknown
-  let testOrder: unknown
+  let supabase: any
+  let testAdmin: any
+  let testOrder: any
 
   beforeEach(async () => {
     supabase = createSupabaseClient()
@@ -221,9 +221,9 @@ describe('Order Status Transitions - Valid Transitions', () => {
 })
 
 describe('Order Status Transitions - Invalid Transitions', () => {
-  let supabase: unknown
-  let testAdmin: unknown
-  let testOrder: unknown
+  let supabase: any
+  let testAdmin: any
+  let testOrder: any
 
   beforeEach(async () => {
     supabase = createSupabaseClient()
@@ -372,9 +372,9 @@ describe('Order Status Transitions - Invalid Transitions', () => {
 })
 
 describe('Order Status Transitions - Required Fields', () => {
-  let supabase: unknown
-  let testAdmin: unknown
-  let testOrder: unknown
+  let supabase: any
+  let testAdmin: any
+  let testOrder: any
 
   beforeEach(async () => {
     supabase = createSupabaseClient()
@@ -572,8 +572,8 @@ describe('Order Status Transitions - Required Fields', () => {
 })
 
 describe('Order Status Transitions - Validation', () => {
-  let supabase: unknown
-  let testAdmin: unknown
+  let supabase: any
+  let testAdmin: any
 
   beforeEach(async () => {
     supabase = createSupabaseClient()

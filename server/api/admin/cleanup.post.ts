@@ -100,7 +100,7 @@ export default defineEventHandler(async (event) => {
 })
 
 // Clear all test data (orders, products, test users)
-async function clearAllTestData(supabase: SupabaseClient, results: unknown) {
+async function clearAllTestData(supabase: SupabaseClient, results: any) {
   await clearOrders(supabase, results)
   await clearProducts(supabase, results)
   await clearTestUsers(supabase, results)
@@ -108,7 +108,7 @@ async function clearAllTestData(supabase: SupabaseClient, results: unknown) {
 }
 
 // Clear test users (emails containing 'test', 'demo', 'example')
-async function clearTestUsers(supabase: SupabaseClient, results: unknown) {
+async function clearTestUsers(supabase: SupabaseClient, results: any) {
   try {
     // Get test users from auth
     const { data: authUsers, error: authError } = await supabase.auth.admin.listUsers()
@@ -172,7 +172,7 @@ async function clearTestUsers(supabase: SupabaseClient, results: unknown) {
 }
 
 // Clear all orders and order items
-async function clearOrders(supabase: SupabaseClient, results: unknown) {
+async function clearOrders(supabase: SupabaseClient, results: any) {
   try {
     // Count before deletion
     const { count: orderCount } = await supabase
@@ -198,7 +198,7 @@ async function clearOrders(supabase: SupabaseClient, results: unknown) {
 }
 
 // Clear all products, inventory logs, and cart items
-async function clearProducts(supabase: SupabaseClient, results: unknown) {
+async function clearProducts(supabase: SupabaseClient, results: any) {
   try {
     // Count before deletion
     const { count: productCount } = await supabase
@@ -225,7 +225,7 @@ async function clearProducts(supabase: SupabaseClient, results: unknown) {
 }
 
 // Clear old/expired carts
-async function clearOldCarts(supabase: SupabaseClient, results: unknown, daysOld: number) {
+async function clearOldCarts(supabase: SupabaseClient, results: any, daysOld: number) {
   try {
     const cutoffDate = new Date()
     cutoffDate.setDate(cutoffDate.getDate() - daysOld)
@@ -265,7 +265,7 @@ async function clearOldCarts(supabase: SupabaseClient, results: unknown, daysOld
 }
 
 // Full database reset (clear everything, keep structure)
-async function resetDatabase(supabase: SupabaseClient, results: unknown) {
+async function resetDatabase(supabase: SupabaseClient, results: any) {
   try {
     const tables = [
       'order_items',

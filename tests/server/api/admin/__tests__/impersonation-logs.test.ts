@@ -9,12 +9,12 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import { createSupabaseClient } from '~/server/utils/supabaseAdminClient'
 
 describe('GET /api/admin/impersonation-logs', () => {
-  let supabase: unknown
-  let adminUser: unknown
+  let supabase: any
+  let adminUser: any
   let adminToken: string
-  let regularUser: unknown
+  let regularUser: any
   let regularToken: string
-  let targetUser: unknown
+  let targetUser: any
 
   beforeAll(async () => {
     supabase = createSupabaseClient()

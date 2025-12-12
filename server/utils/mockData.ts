@@ -300,7 +300,7 @@ export function getMockProducts(options: {
   // Apply sorting
   if (options.sortBy) {
     filteredProducts.sort((a, b) => {
-      let aValue: unknown, bValue: unknown
+      let aValue: any, bValue: unknown
 
       switch (options.sortBy) {
         case 'name':

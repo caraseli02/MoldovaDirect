@@ -56,7 +56,7 @@ export function serializeCookieData(data: any): unknown {
  * Restores Date objects from ISO strings
  */
 export function deserializeCookieData<T = unknown>(
-  data: unknown,
+  data: any,
   dateFields: string[] = [],
 ): T | null {
   if (!data) return null

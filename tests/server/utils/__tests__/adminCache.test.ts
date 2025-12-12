@@ -60,7 +60,7 @@ type H3Event = unknown
 
 describe('adminCache', () => {
   let mockEvent: Partial<H3Event>
-  let mockStorage: unknown
+  let mockStorage: any
 
   beforeEach(() => {
     // Setup mock H3Event

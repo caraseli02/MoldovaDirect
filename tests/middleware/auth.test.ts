@@ -16,7 +16,7 @@ import type { RouteLocationNormalized } from 'vue-router'
 describe('Auth Middleware', () => {
   let mockTo: RouteLocationNormalized
   let mockFrom: RouteLocationNormalized
-  let mockUser: unknown
+  let mockUser: any
   let mockLocalePath: ReturnType<typeof vi.fn>
   let mockNavigateTo: ReturnType<typeof vi.fn>
 

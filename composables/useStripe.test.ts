@@ -31,7 +31,7 @@ const mockRuntimeConfig = {
 describe('useStripe', () => {
   let mockStripe: ReturnType<typeof createMockStripe>
   let mockCardElement: ReturnType<typeof createMockStripeCardElement>
-  let mockElements: unknown
+  let mockElements: any
 
   beforeEach(async () => {
     // CRITICAL: Reset modules to clear the singleton state
@@ -514,7 +514,7 @@ describe('useStripe', () => {
 
 describe('formatStripeError', () => {
   // Import once for these pure function tests
-  let formatStripeError: unknown
+  let formatStripeError: any
 
   beforeEach(async () => {
     const module = await import('./useStripe')

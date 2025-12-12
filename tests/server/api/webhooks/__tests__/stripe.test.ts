@@ -48,8 +48,8 @@ vi.mock('#supabase/server', () => ({
 }))
 
 describe('POST /api/webhooks/stripe', () => {
-  let eventHandler: unknown
-  let mockEvent: unknown
+  let eventHandler: any
+  let mockEvent: any
 
   beforeEach(async () => {
     vi.clearAllMocks()
@@ -495,7 +495,7 @@ describe('POST /api/webhooks/stripe', () => {
  */
 export function generateTestWebhookPayload(
   type: string,
-  data: unknown,
+  data: any,
 ): Stripe.Event {
   return {
     id: `evt_test_${Date.now()}`,

@@ -828,9 +828,9 @@ describe('adminAuth.ts', () => {
     })
 
     describe('Logging Behavior', () => {
-      let consoleLogSpy: unknown
-      let consoleErrorSpy: unknown
-      let consoleWarnSpy: unknown
+      let consoleLogSpy: any
+      let consoleErrorSpy: any
+      let consoleWarnSpy: any
 
       beforeEach(() => {
         consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
@@ -1040,8 +1040,8 @@ describe('adminAuth.ts', () => {
   })
 
   describe('logAdminAction', () => {
-    let consoleLogSpy: unknown
-    let consoleErrorSpy: unknown
+    let consoleLogSpy: any
+    let consoleErrorSpy: any
 
     beforeEach(() => {
       consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
@@ -1136,7 +1136,7 @@ describe('adminAuth.ts', () => {
       }
 
       mockServerSupabaseServiceRole.mockReturnValue(mockSupabase)
-      mockGetHeader.mockImplementation((event: any, header: unknown) => {
+      mockGetHeader.mockImplementation((event: any, header: any) => {
         if (header === 'user-agent') return 'Mozilla/5.0'
         return null
       })

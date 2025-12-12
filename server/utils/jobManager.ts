@@ -61,7 +61,7 @@ export function updateJobProgress(
 /**
  * Mark job as completed
  */
-export function completeJob(id: string, result: unknown): void {
+export function completeJob(id: string, result: any): void {
   const job = jobs.get(id)
   if (job) {
     job.status = 'completed'

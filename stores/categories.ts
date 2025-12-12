@@ -15,7 +15,7 @@ interface CategoriesState {
   error: string | null
 
   // Cache
-  cache: Map<string, { data: unknown, timestamp: number }>
+  cache: Map<string, { data: any, timestamp: number }>
 }
 
 export const useCategoriesStore = defineStore('categories', {

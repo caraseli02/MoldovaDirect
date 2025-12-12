@@ -13,11 +13,11 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import { createSupabaseClient } from '~/server/utils/supabaseAdminClient'
 
 describe('Order Fulfillment Tasks - Race Conditions', () => {
-  let supabase: unknown
-  let testProduct: unknown
-  let testOrder1: unknown
-  let testOrder2: unknown
-  let testAdmin: unknown
+  let supabase: any
+  let testProduct: any
+  let testOrder1: any
+  let testOrder2: any
+  let testAdmin: any
 
   beforeEach(async () => {
     // Setup test database connection

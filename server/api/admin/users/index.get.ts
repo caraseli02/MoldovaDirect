@@ -206,7 +206,7 @@ export default defineEventHandler(async (event) => {
         Object.keys(tempStats).forEach((userId) => {
           const userOrders = tempStats[userId].orders
           const lastOrderDate = userOrders.length > 0
-            ? userOrders.sort((a: any, b: unknown) =>
+            ? userOrders.sort((a: any, b: any) =>
               new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
             )[0].created_at
             : undefined

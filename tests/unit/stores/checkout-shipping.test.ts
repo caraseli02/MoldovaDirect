@@ -95,7 +95,7 @@ describe('Checkout Shipping - Helper Functions', () => {
 
     it('should fall back to store items when provided is empty', () => {
       const storeItems = [{ id: 'store-item' }]
-      const providedItems: unknown[] = []
+      const providedItems: any[] = []
 
       const result = resolveCartItems(storeItems, providedItems)
 
@@ -148,7 +148,7 @@ describe('Checkout Shipping - Order Calculation', () => {
     })
 
     it('should handle empty cart', () => {
-      const items: unknown[] = []
+      const items: any[] = []
       const subtotal = items.reduce((sum, item) => sum + item.product.price * item.quantity, 0)
 
       expect(subtotal).toBe(0)

@@ -15,9 +15,9 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import { createSupabaseClient } from '~/server/utils/supabaseAdminClient'
 
 describe('Admin API - Authorization (RBAC)', () => {
-  let supabase: unknown
-  let adminUser: unknown
-  let regularUser: unknown
+  let supabase: any
+  let adminUser: any
+  let regularUser: any
 
   beforeAll(async () => {
     supabase = createSupabaseClient()

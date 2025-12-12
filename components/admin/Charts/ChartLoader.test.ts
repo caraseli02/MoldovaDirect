@@ -26,8 +26,8 @@ vi.mock('chart.js', () => ({
 }))
 
 describe('ChartLoader', () => {
-  let wrapper: unknown
-  let ChartLoader: unknown
+  let wrapper: any
+  let ChartLoader: any
 
   beforeEach(async () => {
     // Dynamically import component to test

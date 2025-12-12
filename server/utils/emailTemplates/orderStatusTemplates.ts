@@ -448,7 +448,7 @@ function generateBaseTemplate(
 /**
  * Generate tracking information section
  */
-function generateTrackingSection(data: OrderEmailData, translations: unknown, locale: string): string {
+function generateTrackingSection(data: OrderEmailData, translations: any, locale: string): string {
   const estimatedDelivery = data.estimatedDelivery ? formatDate(data.estimatedDelivery, locale) : null
 
   return `
@@ -516,7 +516,7 @@ function generateTrackingSection(data: OrderEmailData, translations: unknown, lo
 /**
  * Generate order items summary (simplified version)
  */
-function generateOrderItemsSummary(items: OrderItemData[], translations: unknown, locale: string): string {
+function generateOrderItemsSummary(items: OrderItemData[], translations: any, locale: string): string {
   const rows = items.map(item => `
     <tr>
       <td style="padding: 12px 10px; border-bottom: 1px solid #eeeeee;">

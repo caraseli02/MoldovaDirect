@@ -38,7 +38,7 @@ export interface ShippingMethod {
 export function calculateOrderTotals(
   cartItems: CartItem[],
   shippingMethod?: ShippingMethod,
-  shippingAddress?: unknown,
+  shippingAddress?: any,
 ): OrderCalculation {
   // Calculate subtotal
   const subtotal = cartItems.reduce((sum, item) => {
@@ -157,7 +157,7 @@ export function generateOrderNumber(): string {
  */
 export function getAvailableShippingMethods(
   cartItems: CartItem[],
-  _shippingAddress?: unknown,
+  _shippingAddress?: any,
 ): ShippingMethod[] {
   // Calculate total weight
   const totalWeight = cartItems.reduce((sum, item) => {

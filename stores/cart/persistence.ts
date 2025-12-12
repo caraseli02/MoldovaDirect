@@ -106,7 +106,7 @@ function getBestStorageType(): StorageType {
  */
 async function saveToStorage(
   key: string,
-  data: unknown,
+  data: any,
   options: Partial<StorageOptions> = {},
 ): Promise<StorageResult> {
   const storageType = options.type || state.value.storageType
@@ -293,7 +293,7 @@ async function _removeFromStorage(
 // =============================================
 
 let debouncedSaveTimeout: NodeJS.Timeout | null = null
-let pendingSaveData: { key: string, data: unknown, options?: Partial<StorageOptions> } | null = null
+let pendingSaveData: { key: string, data: any, options?: Partial<StorageOptions> } | null = null
 
 /**
  * Create debounced save function
@@ -301,7 +301,7 @@ let pendingSaveData: { key: string, data: unknown, options?: Partial<StorageOpti
 function createDebouncedSave(delay: number = 1000) {
   return function debouncedSave(
     key: string,
-    data: unknown,
+    data: any,
     options: Partial<StorageOptions> = {},
   ): Promise<StorageResult> {
     return new Promise((resolve, reject) => {

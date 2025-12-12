@@ -86,7 +86,7 @@ export default defineEventHandler(async (event) => {
 
     // Calculate total revenue
     const totalRevenue = revenueData.data?.reduce(
-      (sum: number, order: unknown) => sum + (order.total_eur || 0),
+      (sum: number, order: any) => sum + (order.total_eur || 0),
       0,
     ) || 0
 

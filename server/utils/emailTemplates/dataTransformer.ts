@@ -152,7 +152,7 @@ function buildTrackingUrl(trackingNumber: string, carrier: string): string {
  * Get localized product name from snapshot
  */
 export function getLocalizedProductName(
-  productSnapshot: unknown,
+  productSnapshot: any,
   locale: string,
 ): string {
   if (!productSnapshot) return 'Product'

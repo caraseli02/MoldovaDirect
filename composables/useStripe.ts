@@ -129,7 +129,7 @@ export const useStripe = (): StripeComposable => {
       loading.value = true
       error.value = null
 
-      const paymentDataTyped = paymentData as { payment_method?: unknown, billing_details?: unknown } | undefined
+      const paymentDataTyped = paymentData as { payment_method?: any, billing_details?: unknown } | undefined
       const result = await stripe.value.confirmCardPayment(clientSecret, {
         payment_method: paymentDataTyped?.payment_method || {
           card: cardElement.value!,

@@ -44,7 +44,7 @@ export interface TanStackTableModule {
   getFacetedMinMaxValues: () => unknown
 
   // Rendering helper
-  flexRender: (component: any, props: unknown) => unknown
+  flexRender: (component: any, props: any) => unknown
 
   // Utility functions
   isFunction: (value: any) => boolean

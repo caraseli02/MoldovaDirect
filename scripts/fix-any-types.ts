@@ -8,7 +8,7 @@
  *
  * Patterns fixed:
  * - function params: `(arg: any)` → `(arg: any)`
- * - variable declarations: `const x: unknown` → `const x: unknown`
+ * - variable declarations: `const x: any` → `const x: any`
  * - return types: `: unknown` → `: unknown`
  * - generics: `T = unknown` → `T = unknown`
  * - type aliases: `Record<K, unknown>` → `Record<K, unknown>`

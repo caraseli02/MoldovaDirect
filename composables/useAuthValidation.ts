@@ -151,7 +151,7 @@ export const useAuthValidation = () => {
    */
   const validateForm = <T>(
     schema: z.ZodSchema<T>,
-    data: unknown,
+    data: any,
   ): AuthValidationResult => {
     try {
       schema.parse(data)

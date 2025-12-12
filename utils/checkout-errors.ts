@@ -337,7 +337,7 @@ export interface ErrorLogEntry {
 export function logCheckoutError(
   error: CheckoutError,
   context: Partial<ErrorLogEntry['context']>,
-  additionalData?: unknown,
+  additionalData?: any,
 ): void {
   const logEntry: ErrorLogEntry = {
     error,
