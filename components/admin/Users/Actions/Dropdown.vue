@@ -171,6 +171,7 @@ interface Props {
   user: {
     id: string
     email: string
+    email_confirmed_at?: string | null
     profile?: {
       name: string
     } | null

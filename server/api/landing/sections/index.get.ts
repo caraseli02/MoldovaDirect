@@ -22,19 +22,20 @@ export default defineCachedEventHandler(async (event): Promise<GetSectionsRespon
 
     // Validate and set locale
     const VALID_LOCALES = ['es', 'en', 'ro', 'ru'] as const
+    type ValidLocale = typeof VALID_LOCALES[number]
     const requestedLocale = query.locale || 'es'
 
-    if (!VALID_LOCALES.includes(requestedLocale as unknown)) {
+    if (!VALID_LOCALES.includes(requestedLocale as ValidLocale)) {
       throw createError({
         statusCode: 400,
         statusMessage: `Bad Request - Invalid locale. Must be one of: ${VALID_LOCALES.join(', ')}`,
       })
     }
 
-    const locale = requestedLocale as 'es' | 'en' | 'ro' | 'ru'
-    const activeOnly = query.active_only !== 'false' // Default true
-    const sectionType = query.section_type
-    const includeScheduled = query.include_scheduled === 'true' // Default false
+    const locale = requestedLocale as ValidLocale
+    const activeOnly = query.active_only !== false && query.active_only !== 'false' // Default true
+    const sectionType = query.section_type as string | undefined
+    const includeScheduled = query.include_scheduled === true || query.include_scheduled === 'true' // Default false
 
     // Build query
     let queryBuilder = supabase

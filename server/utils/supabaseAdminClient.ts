@@ -1,4 +1,4 @@
-import { createClient, type SupabaseClient } from '@supabase/supabase-js'
+import { createClient } from '@supabase/supabase-js'
 import type { SupabaseClient } from '@supabase/supabase-js'
 
 type GenericSupabaseClient = SupabaseClient<any, 'public', any>
@@ -19,7 +19,7 @@ export function resolveSupabaseClient(
     return providedClient
   }
 
-  const globalGetter = (globalThis as unknown)?.useSupabaseClient
+  const globalGetter = (globalThis as any)?.useSupabaseClient
   if (typeof globalGetter === 'function') {
     try {
       const client = globalGetter()

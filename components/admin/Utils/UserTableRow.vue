@@ -258,7 +258,18 @@
 
 <script setup lang="ts">
 interface Props {
-  user: Record<string, any> // Replace with proper User type
+  user: {
+    id: string
+    email: string
+    email_confirmed_at?: string | null
+    profile?: { name: string, phone?: string } | null
+    status: string
+    user_metadata?: {
+      suspended?: boolean
+      banned?: boolean
+      role?: string
+    }
+  }
   isSelected?: boolean
 }
 
@@ -399,7 +410,8 @@ onMounted(() => {
   if (isMobile.value && cardRef.value) {
     // Optimize touch events for better performance
     cardRef.value.style.touchAction = 'manipulation'
-    cardRef.value.style.webkitTapHighlightColor = 'transparent'
+    // Use type assertion for webkit-specific property
+    ;(cardRef.value.style as any).webkitTapHighlightColor = 'transparent'
   }
 })
 </script>

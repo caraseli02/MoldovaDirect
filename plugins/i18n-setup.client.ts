@@ -1,5 +1,5 @@
 export default defineNuxtPlugin((nuxtApp) => {
-  const { locale } = nuxtApp.$i18n
+  const { locale } = nuxtApp.$i18n as { locale: { value: string } }
 
   // Set the lang attribute on the HTML element
   if (import.meta.client) {

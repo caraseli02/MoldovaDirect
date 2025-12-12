@@ -103,32 +103,46 @@ export default defineEventHandler(async (event) => {
 
     if (!productPerformance || productPerformance.length === 0) {
       // Manual calculation from product_analytics table
+      // Note: Supabase doesn't support .group() in query builder
+      // We need to fetch all data and aggregate manually
       const { data: analyticsData, error: analyticsError } = await supabase
         .from('product_analytics')
         .select(`
           product_id,
-          SUM(views) as total_views,
-          SUM(cart_additions) as total_cart_additions,
-          SUM(purchases) as total_purchases,
-          SUM(revenue) as total_revenue,
+          views,
+          cart_additions,
+          purchases,
+          revenue,
           products!inner(name_translations, price_eur, is_active)
         `)
         .gte('date', actualStartDate.toISOString().split('T')[0])
         .lte('date', actualEndDate.toISOString().split('T')[0])
         .eq('products.is_active', true)
-        .group('product_id, products.name_translations, products.price_eur, products.is_active')
-        .order('total_revenue', { ascending: false })
-        .limit(limit * 2)
 
       if (!analyticsError && analyticsData) {
-        processedPerformance = analyticsData.map(item => ({
-          id: item.product_id,
-          name_translations: item.products.name_translations,
-          price_eur: item.products.price_eur,
-          total_views: item.total_views || 0,
-          total_cart_additions: item.total_cart_additions || 0,
-          total_purchases: item.total_purchases || 0,
-          total_revenue: item.total_revenue || 0,
+        // Manually aggregate the data by product_id
+        const aggregated = analyticsData.reduce((acc, item) => {
+          const productId = item.product_id
+          if (!acc[productId]) {
+            acc[productId] = {
+              id: productId,
+              name_translations: item.products.name_translations,
+              price_eur: item.products.price_eur,
+              total_views: 0,
+              total_cart_additions: 0,
+              total_purchases: 0,
+              total_revenue: 0,
+            }
+          }
+          acc[productId].total_views += item.views || 0
+          acc[productId].total_cart_additions += item.cart_additions || 0
+          acc[productId].total_purchases += item.purchases || 0
+          acc[productId].total_revenue += item.revenue || 0
+          return acc
+        }, {} as Record<number, any>)
+
+        processedPerformance = Object.values(aggregated).map((item: any) => ({
+          ...item,
           view_to_cart_rate: item.total_views > 0
             ? Math.round((item.total_cart_additions / item.total_views) * 100 * 100) / 100
             : 0,

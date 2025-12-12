@@ -166,7 +166,7 @@ const updateLineChartData = () => {
 
   if (!dataset1 || !dataset2) return
 
-  lineChartData.value = {
+  const newData = {
     ...lineChartData.value,
     datasets: [
       {
@@ -179,6 +179,7 @@ const updateLineChartData = () => {
       },
     ],
   }
+  lineChartData.value = newData as any
 }
 </script>
 

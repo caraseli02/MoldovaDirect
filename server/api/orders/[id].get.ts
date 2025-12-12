@@ -134,7 +134,8 @@ export default defineEventHandler(async (event): Promise<ApiResponse> => {
       .single() as { data: OrderFromDB | null, error: unknown }
 
     if (orderError || !order) {
-      if (orderError?.code === 'PGRST116') {
+      const errorObj = orderError as any
+      if (errorObj?.code === 'PGRST116') {
         throw createError({
           statusCode: 404,
           statusMessage: 'Order not found',

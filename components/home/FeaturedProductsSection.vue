@@ -229,7 +229,7 @@ const handleTabKeydown = (event: KeyboardEvent) => {
   }
 
   // Update active filter and focus the new tab
-  activeFilter.value = filters.value[nextIndex].value
+  activeFilter.value = filters.value[nextIndex]?.value || filters.value[0].value
   nextTick(() => {
     tabRefs[nextIndex]?.focus()
   })

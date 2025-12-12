@@ -2,6 +2,25 @@ import { serverSupabaseClient } from '#supabase/server'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { PUBLIC_CACHE_CONFIG, getPublicCacheKey } from '~/server/utils/publicCache'
 
+// Type definitions for API response
+interface ProductCountItem {
+  category_id: number
+}
+
+interface TransformedCategory {
+  id: number
+  slug: string
+  parentId: number | null
+  name: string
+  description: string
+  nameTranslations: Record<string, string>
+  descriptionTranslations?: Record<string, string>
+  image: string | null
+  sortOrder: number
+  productCount: number
+  children?: TransformedCategory[]
+}
+
 // Helper function to get localized content with fallback
 function getLocalizedContent(content: Record<string, string>, locale: string): string {
   if (content[locale]) return content[locale]

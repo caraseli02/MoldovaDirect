@@ -99,7 +99,7 @@ export function useShippingMethods(address: Ref<Address>) {
     error.value = null
 
     try {
-      const orderTotal = checkoutStore.orderData?.subtotal || 0
+      const orderTotal = (checkoutStore.orderData as { subtotal?: number })?.subtotal || 0
 
       const methods = await fetchShippingMethods({
         country: address.value.country,

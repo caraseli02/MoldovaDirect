@@ -13,9 +13,24 @@
 
 import { serverSupabaseClient } from '#supabase/server'
 import type { SupabaseClient } from '@supabase/supabase-js'
+import type { H3Event } from 'h3'
 import { requireAdminRole } from '~/server/utils/adminAuth'
 import { invalidateMultipleScopes } from '~/server/utils/adminCache'
 import { invalidatePublicCache } from '~/server/utils/publicCache'
+
+/**
+ * Get client IP address from request
+ */
+function getClientIP(event: H3Event): string | null {
+  const headers = getHeaders(event)
+  return (
+    headers['x-forwarded-for']?.split(',')[0].trim()
+    || headers['x-real-ip']
+    || headers['cf-connecting-ip']
+    || getRequestIP(event)
+    || null
+  )
+}
 
 export default defineEventHandler(async (event) => {
   await requireAdminRole(event)

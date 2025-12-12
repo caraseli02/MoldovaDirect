@@ -161,7 +161,7 @@ const startDrag = (type: 'min' | 'max', event: MouseEvent | TouchEvent) => {
     const rect = (event.target as HTMLElement).closest('.relative')?.getBoundingClientRect()
     if (!rect) return
 
-    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
+    const clientX = 'touches' in e ? e.touches[0]?.clientX : e.clientX
     const percentage = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width))
     const newValue = props.min + percentage * (props.max - props.min)
 

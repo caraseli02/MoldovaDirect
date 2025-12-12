@@ -80,6 +80,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+// @ts-expect-error - vue3-carousel types not available
 import { Carousel, Slide } from 'vue3-carousel'
 import 'vue3-carousel/dist/carousel.css'
 

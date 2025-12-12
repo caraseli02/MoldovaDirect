@@ -389,12 +389,12 @@ if (!adminUsersStore) {
 const activeTab = ref('profile')
 
 // Computed
-const { currentUser: user, userDetailLoading: loading, error } = storeToRefs(adminUsersStore)
+const { currentUser: user, userDetailLoading: loading, error } = storeToRefs(adminUsersStore as any)
 
 const tabs = computed(() => [
   { id: 'profile', name: 'Profile' },
-  { id: 'orders', name: 'Orders', count: user.value?.orders.length },
-  { id: 'activity', name: 'Activity', count: user.value?.activity.length },
+  { id: 'orders', name: 'Orders', count: user.value?.orders?.length },
+  { id: 'activity', name: 'Activity', count: user.value?.activity?.length },
   { id: 'permissions', name: 'Permissions' },
 ])
 

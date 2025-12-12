@@ -17,7 +17,7 @@
  */
 
 import { ref, computed, watch, onUnmounted } from 'vue'
-import { useDebounceFn } from '@vueuse/core'
+import { useDebounceFn, type UseDebounceFnReturn } from '@vueuse/core'
 import { useSearchStore } from '~/stores/search'
 
 export interface SearchSuggestion {
@@ -107,7 +107,7 @@ export const useProductSearch = () => {
     if (query.length >= 3) {
       await searchStore.search(query)
     }
-  }, 300)
+  }, 300) as UseDebounceFnReturn<(query: string) => Promise<void>> & { cancel: () => void }
 
   /**
    * Handle search input changes
@@ -183,7 +183,10 @@ export const useProductSearch = () => {
       case 'Enter':
         event.preventDefault()
         if (selectedSuggestionIndex.value >= 0) {
-          selectSuggestion(suggestions.value[selectedSuggestionIndex.value])
+          const selectedSuggestion = suggestions.value[selectedSuggestionIndex.value]
+          if (selectedSuggestion) {
+            selectSuggestion(selectedSuggestion)
+          }
         }
         else {
           executeSearch()

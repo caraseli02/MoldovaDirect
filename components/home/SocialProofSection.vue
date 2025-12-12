@@ -261,7 +261,7 @@ const animatedStats = computed(() => {
     // Extract number from value (e.g., "2k+" -> 2000, "4.9/5" -> 4.9)
     const numericMatch = stat.value.match(/(\d+(?:\.\d+)?)(k|K)?/)
 
-    if (numericMatch) {
+    if (numericMatch && numericMatch[1]) {
       let number = parseFloat(numericMatch[1])
 
       // Convert k to thousands

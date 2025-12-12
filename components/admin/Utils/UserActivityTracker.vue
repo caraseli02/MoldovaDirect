@@ -378,7 +378,7 @@ const activitySummary = computed((): ActivitySummary | null => {
   const uniqueIPs = new Set(activities.value.map(a => a.ip_address).filter(Boolean)).size
   const uniqueDays = new Set(activities.value.map(a => new Date(a.created_at).toDateString())).size
 
-  const lastActivity = activities.value.length > 0
+  const lastActivity = activities.value.length > 0 && activities.value[0]
     ? new Date(activities.value[0].created_at)
     : new Date()
   const daysSinceLastSeen = Math.floor((new Date().getTime() - lastActivity.getTime()) / (1000 * 60 * 60 * 24))

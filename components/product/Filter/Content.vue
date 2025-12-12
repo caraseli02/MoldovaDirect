@@ -116,7 +116,7 @@ interface ActiveFilter {
   id: string
   label: string
   type: 'category' | 'price' | 'stock' | 'featured' | 'attribute'
-  value?: unknown
+  value?: { attributeName: string, value: string }
 }
 
 interface Props {
@@ -136,7 +136,7 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 // Composables
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 // Local reactive state
 const localFilters = ref<ProductFilters>({ ...props.filters })
@@ -212,7 +212,7 @@ const activeFilters = computed((): ActiveFilter[] => {
         const attribute = props.availableFilters.attributes.find(a => a.name === attributeName)
         values.forEach((value) => {
           const option = attribute?.values.find(v => v.value === value)
-          if (option) {
+          if (option && attribute) {
             filters.push({
               id: `${attributeName}-${value}`,
               label: `${attribute.label}: ${option.label}`,
@@ -244,7 +244,14 @@ const getCategoryName = (categoryId: string | number): string => {
   }
 
   const category = findCategory(props.availableFilters.categories, categoryId)
-  return category?.name || t('products.filters.unknownCategory')
+  const categoryName = category?.name
+  if (typeof categoryName === 'string') {
+    return categoryName
+  }
+  if (categoryName && typeof categoryName === 'object') {
+    return categoryName[locale.value] || categoryName.es || categoryName.en
+  }
+  return t('products.filters.unknownCategory')
 }
 
 const updateFilters = (newFilters: Partial<ProductFilters>) => {
@@ -281,7 +288,7 @@ const updateAttributeFilter = (attributeName: string, values: string[]) => {
   updateFilters({ attributes })
 }
 
-const removeFilter = (id: string, type: string, value?: unknown) => {
+const removeFilter = (id: string, type: string, value?: { attributeName: string, value: string }) => {
   switch (type) {
     case 'category':
       updateFilters({ category: undefined })

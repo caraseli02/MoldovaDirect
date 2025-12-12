@@ -221,8 +221,8 @@ export default defineEventHandler(async (event) => {
         activityGrowth: getTrend(activityGrowthRate),
       },
       dateRange: {
-        startDate: actualStartDate.toISOString().split('T')[0],
-        endDate: actualEndDate.toISOString().split('T')[0],
+        startDate: actualStartDate.toISOString().split('T')[0] || '',
+        endDate: actualEndDate.toISOString().split('T')[0] || '',
         totalDays: Math.ceil((actualEndDate.getTime() - actualStartDate.getTime()) / (1000 * 60 * 60 * 24)),
       },
     }

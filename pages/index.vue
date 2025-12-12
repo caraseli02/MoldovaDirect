@@ -150,7 +150,7 @@ const { data: featuredData, pending: featuredPending, error: featuredError, refr
   },
 )
 
-const featuredProducts = computed<ProductWithRelations[]>(() => featuredData.value?.products || [])
+const featuredProducts = computed<ProductWithRelations[]>(() => (featuredData.value?.products || []) as ProductWithRelations[])
 const featuredErrorState = computed<Error | null>(() => (featuredError.value as Error | null) ?? null)
 
 const { siteUrl, toAbsoluteUrl } = useSiteUrl()

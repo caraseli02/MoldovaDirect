@@ -60,7 +60,7 @@ const checkoutSteps = [
 
 // Get current step from checkout store
 const checkoutStore = useCheckoutStore()
-const currentStep = computed(() => checkoutStore.currentStep)
+const currentStep = computed(() => checkoutStore.currentStep as CheckoutStep)
 
 // Set page meta
 useHead({

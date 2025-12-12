@@ -47,7 +47,7 @@ export const useCheckoutShippingStore = defineStore('checkout-shipping', () => {
   const { shippingInfo, availableShippingMethods, orderData, loading, contactEmail, paymentMethod } = storeToRefs(session)
 
   const calculateOrderData = async (cartItems?: CartItem[] | { value: CartItem[] }): Promise<void> => {
-    const items = resolveCartItems(cartStore.items, cartItems)
+    const items = resolveCartItems(cartStore.items as any, cartItems)
 
     if (import.meta.dev) {
       console.info('[Checkout][Shipping] calculateOrderData', {
@@ -68,9 +68,9 @@ export const useCheckoutShippingStore = defineStore('checkout-shipping', () => {
       session.setOrderData(order)
     }
 
-    if (contactEmail.value && session.orderData.value) {
+    if (contactEmail.value && session.orderData) {
       session.setOrderData({
-        ...session.orderData.value,
+        ...session.orderData,
         customerEmail: contactEmail.value,
       })
     }

@@ -8,8 +8,7 @@
  * Provides real-time updates for admin order management using Supabase Realtime
  */
 
-import type { RealtimeChannel } from '@supabase/supabase-js'
-import type { SupabaseClient } from '@supabase/supabase-js'
+import type { RealtimeChannel, SupabaseClient } from '@supabase/supabase-js'
 
 interface OrderUpdate {
   id: number

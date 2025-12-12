@@ -18,6 +18,8 @@ const EMAIL_TYPE_LABELS: Record<EmailType, string> = {
   order_delivered: 'Order Delivered',
   order_cancelled: 'Order Cancelled',
   order_issue: 'Order Issue',
+  support_ticket_customer: 'Support Ticket (Customer)',
+  support_ticket_staff: 'Support Ticket (Staff)',
 }
 
 const STATUS_BY_EMAIL_TYPE: Partial<Record<EmailType, string>> = {

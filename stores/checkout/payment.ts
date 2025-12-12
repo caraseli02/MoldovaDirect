@@ -105,7 +105,7 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
 
       session.setPaymentMethodState(method)
       await session.persist({
-        shippingInfo: shipping.shippingInfo.value,
+        shippingInfo: (shipping.shippingInfo as { value: ShippingInformation | null })?.value || null,
         paymentMethod: paymentMethod.value,
       })
     }
@@ -420,7 +420,7 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
 
       // Persist with the completed order data passed as parameter (not from store to avoid stale refs)
       await session.persist({
-        shippingInfo: shipping.shippingInfo.value,
+        shippingInfo: (shipping.shippingInfo as { value: ShippingInformation | null })?.value || null,
         paymentMethod: paymentMethod.value,
         orderData: completedOrderData, // Use the fresh data passed from createOrderRecord
       })

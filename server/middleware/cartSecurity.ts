@@ -57,22 +57,22 @@ export function createCartSecurityMiddleware(options: SecurityOptions = {}) {
       if (!options.skipRateLimit && options.rateLimitOperation) {
         const rateLimit = checkRateLimit(
           rateLimitKey,
-          options.rateLimitOperation as unknown,
+          options.rateLimitOperation as 'addItem' | 'updateQuantity' | 'removeItem' | 'clearCart' | 'validateCart',
         )
 
         if (!rateLimit.allowed) {
           // Set rate limit headers
-          setHeader(event, 'X-RateLimit-Limit', '0')
-          setHeader(event, 'X-RateLimit-Remaining', '0')
+          setHeader(event, 'X-RateLimit-Limit', 0)
+          setHeader(event, 'X-RateLimit-Remaining', 0)
           setHeader(
             event,
             'X-RateLimit-Reset',
-            Math.ceil(rateLimit.resetTime! / 1000).toString(),
+            Math.ceil((rateLimit.resetTime || Date.now()) / 1000).toString(),
           )
           setHeader(
             event,
             'Retry-After',
-            Math.ceil((rateLimit.resetTime! - Date.now()) / 1000).toString(),
+            Math.ceil(((rateLimit.resetTime || Date.now()) - Date.now()) / 1000).toString(),
           )
 
           throw createError({

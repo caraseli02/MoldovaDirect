@@ -145,8 +145,8 @@ export default defineEventHandler(async (event) => {
         ...log,
         status: sessionStatus,
         duration_minutes: durationMinutes,
-        admin: userProfiles[log.admin_id] || null,
-        target_user: userProfiles[log.target_user_id] || null,
+        admin: (userProfiles as Record<string, any>)[log.admin_id] || null,
+        target_user: (userProfiles as Record<string, any>)[log.target_user_id] || null,
       }
     })
 

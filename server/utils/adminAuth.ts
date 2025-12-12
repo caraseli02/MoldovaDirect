@@ -94,10 +94,12 @@ export async function requireAdminRole(event: H3Event): Promise<UserId> {
   let userError: AuthError | null = null
   let authMethod = 'unknown'
 
-  if (authHeader?.startsWith('Bearer ')) {
+  const authHeaderStr = typeof authHeader === 'string' ? authHeader : String(authHeader || '')
+
+  if (authHeaderStr.startsWith('Bearer ')) {
     authMethod = 'bearer'
     // Extract token from Authorization header
-    const token = authHeader.substring(7)
+    const token = authHeaderStr.substring(7)
 
     // Use service role client to verify the token
     const supabase = serverSupabaseServiceRole(event)

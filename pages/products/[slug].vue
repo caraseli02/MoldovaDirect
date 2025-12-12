@@ -721,6 +721,7 @@ import { useHead } from '#imports'
 import { Button } from '@/components/ui/button'
 import ProductCard from '~/components/product/Card.vue'
 import type { ProductWithRelations, Translations } from '~/types/database'
+import type { Product } from '~/stores/cart/types'
 import { useCart } from '~/composables/useCart'
 import { useProductUtils } from '~/composables/useProductUtils'
 import { useProductStory } from '~/composables/useProductStory'
@@ -959,8 +960,8 @@ const addToCart = async () => {
     }
 
     // Construct the product object in the format expected by the cart store
-    const cartProduct = {
-      id: product.value.id,
+    const cartProduct: Product = {
+      id: product.value.id.toString(),
       slug: product.value.slug,
       name: getLocalizedText(product.value.name as Record<string, string>),
       price: Number(product.value.price),

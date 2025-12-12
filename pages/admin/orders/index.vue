@@ -83,7 +83,7 @@
 
     <!-- Filters -->
     <AdminOrdersFilters
-      :search="adminOrdersStore.filters.search"
+      :search="adminOrdersStore.filters.search || ''"
       :status="adminOrdersStore.filters.status"
       :payment-status="adminOrdersStore.filters.paymentStatus"
       :date-range="adminOrdersStore.filters.dateRange"
@@ -506,9 +506,10 @@ const retryBulkOperation = async () => {
   }
 }
 
-const handleTabChange = async (value: string) => {
-  activeTab.value = value
-  if (value === '') {
+const handleTabChange = async (value: unknown) => {
+  const stringValue = String(value)
+  activeTab.value = stringValue
+  if (stringValue === '') {
     await adminOrdersStore.updateStatusFilter(undefined)
   }
   else {

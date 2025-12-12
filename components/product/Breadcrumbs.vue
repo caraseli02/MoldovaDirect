@@ -300,7 +300,7 @@ function buildCategoryPath(category: Category | null | undefined): Category[] {
   while (current) {
     path.unshift(current)
     // Check for parent property, fallback to undefined
-    current = (current as Record<string, any>).parent as Record<string, any> || undefined
+    current = (current as any).parent as Category || undefined
   }
 
   return path

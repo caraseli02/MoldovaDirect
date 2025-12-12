@@ -342,6 +342,7 @@ export function logCheckoutError(
   const logEntry: ErrorLogEntry = {
     error,
     context: {
+      step: context.step || '',
       timestamp: new Date(),
       ...context,
     },

@@ -103,10 +103,11 @@ export function useLandingSeo(input: LandingSeoInput): LandingSeoHelpers {
     const basePath = input.path || routePath.replace(localePattern, '') || '/'
 
     for (const code of localeCodes) {
-      if (code !== currentLocale) {
+      if (code !== currentLocale && meta) {
         meta.push({ property: 'og:locale:alternate', content: code.replace('_', '-') })
       }
-      const localizedPath = localePath(basePath, code)
+      const localeCode = code as 'es' | 'en' | 'ro' | 'ru'
+      const localizedPath = localePath(basePath, localeCode)
       links.push({ rel: 'alternate', hreflang: code, href: toAbsoluteUrl(localizedPath) })
     }
     links.push({ rel: 'alternate', hreflang: 'x-default', href: canonicalUrl })
@@ -119,8 +120,8 @@ export function useLandingSeo(input: LandingSeoInput): LandingSeoHelpers {
     for (const payload of payloads) {
       scripts.push({
         type: 'application/ld+json',
-        children: JSON.stringify(payload),
-      })
+        innerHTML: JSON.stringify(payload),
+      } as any)
     }
   }
 
@@ -137,8 +138,8 @@ export function useLandingSeo(input: LandingSeoInput): LandingSeoHelpers {
     }
     scripts.push({
       type: 'application/ld+json',
-      children: JSON.stringify(breadcrumbList),
-    })
+      innerHTML: JSON.stringify(breadcrumbList),
+    } as any)
   }
 
   useHead({

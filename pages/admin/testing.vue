@@ -103,7 +103,7 @@
 
 <script setup lang="ts">
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import type { ScenarioTemplate, GenerationHistoryItem, CustomDataConfig, TestResult } from '~/types/admin-testing'
+import type { ScenarioTemplate, GenerationHistoryItem, CustomDataConfig, TestResult, PresetType } from '~/types/admin-testing'
 
 // Import components
 import DatabaseStatsCard from '~/components/admin/testing/DatabaseStatsCard.vue'
@@ -197,11 +197,11 @@ const startImpersonation = async (config: { userEmail: string, reason: string, d
     }) as any
 
     if (response.success && 'impersonating' in response && 'expiresAt' in response && 'logId' in response) {
-      const impersonatingUser = (response as unknown).impersonating
+      const impersonatingUser = (response as any).impersonating
       impersonation.value.active = true
       impersonation.value.targetName = impersonatingUser?.name || ''
-      impersonation.value.expiresAt = (response as unknown).expiresAt
-      impersonation.value.logId = (response as unknown).logId
+      impersonation.value.expiresAt = (response as any).expiresAt
+      impersonation.value.logId = (response as any).logId
     }
   }
   catch (err: any) {
@@ -312,7 +312,7 @@ const addToHistory = (preset: string, response: any) => {
   const item: GenerationHistoryItem = {
     id: Date.now().toString(),
     preset,
-    config: { preset: preset as unknown },
+    config: { preset: preset as PresetType | undefined },
     timestamp: new Date().toISOString(),
     results: {
       users: response.results?.steps?.find((s: any) => s.step === 'Create users')?.count || 0,

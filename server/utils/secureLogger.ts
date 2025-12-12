@@ -169,24 +169,24 @@ function redactObject(obj: any, depth: number = 0): unknown {
       if (SENSITIVE_FIELDS.has(key) || SENSITIVE_FIELDS.has(lowerKey)) {
         // Preserve structure but redact value
         if (typeof value === 'string') {
-          redacted[key] = '[PII_REDACTED]'
+          (redacted as Record<string, any>)[key] = '[PII_REDACTED]'
         }
         else if (typeof value === 'object' && value !== null) {
           // For address objects, show structure but redact values
-          redacted[key] = '[PII_OBJECT_REDACTED]'
+          (redacted as Record<string, any>)[key] = '[PII_OBJECT_REDACTED]'
         }
         else {
-          redacted[key] = '[REDACTED]'
+          (redacted as Record<string, any>)[key] = '[REDACTED]'
         }
       }
       else if (typeof value === 'string') {
-        redacted[key] = redactString(value)
+        (redacted as Record<string, any>)[key] = redactString(value)
       }
       else if (typeof value === 'object') {
-        redacted[key] = redactObject(value, depth + 1)
+        (redacted as Record<string, any>)[key] = redactObject(value, depth + 1)
       }
       else {
-        redacted[key] = value
+        (redacted as Record<string, any>)[key] = value
       }
     }
 

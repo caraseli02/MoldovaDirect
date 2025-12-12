@@ -29,7 +29,7 @@ export default defineConfig({
     ['json', { outputFile: 'test-results/results.json' }],
     ['junit', { outputFile: 'test-results/junit.xml' }],
     process.env.CI ? ['github'] : ['list'],
-  ].filter(Boolean),
+  ].filter(Boolean) as any,
 
   use: {
     // Support both BASE_URL and PLAYWRIGHT_TEST_BASE_URL for CI/CD flexibility

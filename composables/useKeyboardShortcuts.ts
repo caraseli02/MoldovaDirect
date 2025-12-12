@@ -102,7 +102,7 @@ export function useKeyboardShortcuts() {
       const keyParts = shortcutKey.split('+')
       const key = keyParts[keyParts.length - 1]
 
-      if (matchesShortcut(event, key, options)) {
+      if (key && matchesShortcut(event, key, options)) {
         if (options.preventDefault) {
           event.preventDefault()
         }

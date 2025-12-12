@@ -202,7 +202,7 @@ export const emailTranslations: Record<string, EmailTranslations> = {
  * Falls back to Spanish if locale not found
  */
 export function getEmailTranslations(locale: string): EmailTranslations {
-  return emailTranslations[locale] || emailTranslations.es
+  return emailTranslations[locale] || emailTranslations.es || {} as EmailTranslations
 }
 
 /**

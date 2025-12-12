@@ -122,7 +122,7 @@ export interface SecurityContext {
 // PERSISTENCE TYPES
 // =============================================
 
-export type StorageType = 'localStorage' | 'sessionStorage' | 'memory'
+export type StorageType = 'localStorage' | 'sessionStorage' | 'memory' | 'cookie'
 
 export interface StorageOptions {
   type: StorageType

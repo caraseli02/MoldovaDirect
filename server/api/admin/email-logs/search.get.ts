@@ -5,7 +5,7 @@
 
 import { requireAdminRole } from '~/server/utils/adminAuth'
 import { getEmailLogs } from '~/server/utils/emailLogging'
-import type { EmailLogFilters } from '~/types/email'
+import type { EmailLogFilters, EmailType, EmailStatus } from '~/types/email'
 
 export default defineEventHandler(async (event) => {
   await requireAdminRole(event)
@@ -14,8 +14,8 @@ export default defineEventHandler(async (event) => {
   const filters: EmailLogFilters = {
     orderNumber: query.orderNumber as string | undefined,
     recipientEmail: query.recipientEmail as string | undefined,
-    emailType: query.emailType as unknown,
-    status: query.status as unknown,
+    emailType: query.emailType as EmailType | undefined,
+    status: query.status as EmailStatus | undefined,
     dateFrom: query.dateFrom as string | undefined,
     dateTo: query.dateTo as string | undefined,
     page: query.page ? parseInt(query.page as string) : 1,

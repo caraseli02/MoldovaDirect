@@ -77,8 +77,8 @@ export default defineCachedEventHandler(async (event) => {
     // Add bounds validation to prevent DoS attacks
     const MAX_LIMIT = 100
     const MAX_PAGE = 10000
-    const parsedPage = parseInt(query.page as string) || 1
-    const parsedLimit = parseInt(query.limit as string) || 12
+    const parsedPage = parseInt(String(query.page || 1)) || 1
+    const parsedLimit = parseInt(String(query.limit || 12)) || 12
     const page = Math.min(Math.max(1, parsedPage), MAX_PAGE)
     const limit = Math.min(Math.max(1, parsedLimit), MAX_LIMIT)
 

@@ -10,7 +10,10 @@
       </p>
 
       <!-- Pagination -->
-      <UiPagination>
+      <UiPagination
+        v-bind="{}"
+        as="nav"
+      >
         <UiPaginationContent>
           <UiPaginationPrevious
             :disabled="!internal.hasPrev"
@@ -21,7 +24,10 @@
             v-for="pageNum in visiblePages"
             :key="pageKey(pageNum)"
           >
-            <UiPaginationItem v-if="pageNum !== '...'">
+            <UiPaginationItem
+              v-if="pageNum !== '...'"
+              v-bind="{}"
+            >
               <button
                 :data-testid="pageNum === internal.page ? 'current-page' : undefined"
                 class="px-3 py-1 rounded-md"

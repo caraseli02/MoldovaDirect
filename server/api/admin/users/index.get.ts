@@ -129,7 +129,7 @@ export default defineEventHandler(async (event) => {
       return {
         success: true,
         data: {
-          users: [],
+          users: [] as any[],
           pagination: {
             page: Number(page),
             limit: Number(limit),
@@ -231,7 +231,7 @@ export default defineEventHandler(async (event) => {
     const users: UserWithProfile[] = []
 
     for (const profile of profiles) {
-      const authUser = authUsers.users.find((u: any) => u.id === profile.id)
+      const authUser = authUsers.users.find((u: any) => u.id === profile.id) as any
 
       // Get pre-fetched order statistics
       const orderStats = orderStatsByUser[profile.id] || { count: 0, totalSpent: 0 }
@@ -284,7 +284,7 @@ export default defineEventHandler(async (event) => {
     return {
       success: true,
       data: {
-        users: filteredUsers,
+        users: filteredUsers as any,
         pagination: {
           page: Number(page),
           limit: Number(limit),

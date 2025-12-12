@@ -126,9 +126,19 @@
 </template>
 
 <script setup lang="ts">
+import type { UserWithProfile, UsersSummary, UserDetail } from '~/stores/adminUsers'
 import AdminUsersTable from '~/components/admin/Users/Table.vue'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import AdminUsersDetailView from '~/components/admin/Users/DetailView.vue'
+
+interface PaginationState {
+  page: number
+  limit: number
+  total: number
+  totalPages: number
+  hasNext: boolean
+  hasPrev: boolean
+}
 
 // Define page meta for admin layout and authentication
 definePageMeta({
@@ -220,9 +230,9 @@ const fetchUsersData = async () => {
     const response = await $fetch<{
       success: boolean
       data: {
-        users: unknown[]
-        pagination: unknown
-        summary: unknown
+        users: UserWithProfile[]
+        pagination: PaginationState
+        summary: UsersSummary
       }
     }>('/api/admin/users', {
       headers,
@@ -232,7 +242,7 @@ const fetchUsersData = async () => {
     if (response.success) {
       // Update store with the fetched data using setter methods
       adminUsersStore.setUsers(response.data.users)
-      adminUsersStore.setPagination(response.data.pagination)
+      adminUsersStore.setPagination(response.data.pagination as any)
       adminUsersStore.setSummary(response.data.summary)
     }
   }
@@ -267,7 +277,7 @@ const fetchUserDetail = async (userId: string) => {
     // Fetch user detail
     const response = await $fetch<{
       success: boolean
-      data: unknown
+      data: UserDetail
     }>(`/api/admin/users/${userId}`, {
       headers,
     })

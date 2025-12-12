@@ -699,7 +699,7 @@ const handleKeyPress = (event: KeyboardEvent) => {
       const personas = Object.values(testUserPersonas)
       if (personas[num - 1]) {
         event.preventDefault()
-        handleActivatePersona(personas[num - 1].key)
+        handleActivatePersona(personas[num - 1]?.key || '')
       }
     }
   }

@@ -32,7 +32,7 @@ export default defineEventHandler(async (event): Promise<GetSectionResponse> => 
     const body = await readBody<Partial<UpdateSectionRequest>>(event)
 
     // Build update object
-    const updateData = {
+    const updateData: Record<string, any> = {
       updated_by: user.id,
     }
 

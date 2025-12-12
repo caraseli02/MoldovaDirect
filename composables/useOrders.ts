@@ -33,11 +33,11 @@ export interface OrdersResponse {
 
 export interface UseOrdersReturn {
   // State
-  orders: Ref<Order[]>
-  loading: Ref<boolean>
-  error: Ref<string | null>
-  pagination: Ref<Pagination>
-  filters: Ref<OrderFilters>
+  orders: Readonly<Ref<readonly Order[]>>
+  loading: Readonly<Ref<boolean>>
+  error: Readonly<Ref<string | null>>
+  pagination: Readonly<Ref<Pagination>>
+  filters: Readonly<Ref<OrderFilters>>
 
   // Actions
   fetchOrders: (params?: Partial<OrderFilters>) => Promise<void>

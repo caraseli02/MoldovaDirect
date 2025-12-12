@@ -139,12 +139,12 @@
 import { ref, onMounted } from 'vue'
 import { Card, CardContent } from '~/components/ui/card'
 
-const stats = ref<Record<string, any> | null>(null)
+const stats = ref<Record<string, any> | null | undefined>(null)
 
 async function loadStats() {
   try {
     const { data } = await useFetch('/api/admin/email-logs/stats')
-    stats.value = data.value
+    stats.value = data.value as Record<string, any> | null | undefined
   }
   catch (error: any) {
     console.error('Failed to load email stats:', error)

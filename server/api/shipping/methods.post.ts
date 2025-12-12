@@ -1,6 +1,7 @@
 // POST /api/shipping/methods - Get available shipping methods for cart and address
 import { serverSupabaseServiceRole } from '#supabase/server'
 import { getAvailableShippingMethods, calculateOrderTotals } from '~/server/utils/orderUtils'
+import type { CartItem } from '~/types/database'
 
 interface ShippingMethodsRequest {
   cartId: number
@@ -60,11 +61,11 @@ export default defineEventHandler(async (event) => {
     }
 
     // Get available shipping methods
-    const shippingMethods = getAvailableShippingMethods(cartItems as unknown, body.shippingAddress)
+    const shippingMethods = getAvailableShippingMethods(cartItems as CartItem[], body.shippingAddress)
 
     // Calculate totals for each shipping method
     const methodsWithTotals = shippingMethods.map((method) => {
-      const calculation = calculateOrderTotals(cartItems as unknown, method, body.shippingAddress)
+      const calculation = calculateOrderTotals(cartItems as CartItem[], method, body.shippingAddress)
       return {
         ...method,
         total: calculation.total,

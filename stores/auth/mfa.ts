@@ -184,7 +184,7 @@ export async function fetchMFAFactors(
       return []
     }
 
-    return data.totp?.map((factor: { id: string, status: string, friendly_name: string }) => ({
+    return data.totp?.map((factor: any) => ({
       id: factor.id,
       type: 'totp' as const,
       status: factor.status as 'verified' | 'unverified',

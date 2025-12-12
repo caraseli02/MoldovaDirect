@@ -6,6 +6,7 @@
 
 import type { OrderEmailData, DatabaseOrder } from './emailTemplates/types'
 import type { SupabaseClient } from '@supabase/supabase-js'
+import type { EmailType } from '~/types/email'
 import { sendEmail } from './email'
 import { orderConfirmation, orderStatus } from './emailTemplates'
 import {
@@ -328,7 +329,7 @@ export async function retryEmailDelivery(
     )
 
     // Regenerate email HTML using original email type
-    const issueDescription = emailLog.metadata.issueDescription
+    const issueDescription = emailLog.metadata.issueDescription as string | undefined
 
     let html: string
 

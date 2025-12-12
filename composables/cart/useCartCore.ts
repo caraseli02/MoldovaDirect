@@ -11,7 +11,7 @@ import type { Product, CartItem } from '~/stores/cart/types'
 
 export interface UseCartCoreReturn {
   // State
-  items: ComputedRef<CartItem[]>
+  items: ComputedRef<readonly CartItem[]>
   sessionId: ComputedRef<string | null>
   loading: ComputedRef<boolean>
   error: ComputedRef<string | null>
@@ -22,7 +22,7 @@ export interface UseCartCoreReturn {
   isEmpty: ComputedRef<boolean>
 
   // Actions
-  addItem: (product: Product, quantity?: number) => Promise<void>
+  addItem: (product: Product, quantity: number) => Promise<void>
   removeItem: (itemId: string) => Promise<void>
   updateQuantity: (itemId: string, quantity: number) => Promise<void>
   clearCart: () => Promise<void>
@@ -47,7 +47,7 @@ export function useCartCore(): UseCartCoreReturn {
 
   return {
     // State
-    items: computed(() => cartCore.state.value.items),
+    items: computed(() => cartCore.state.value.items) as ComputedRef<readonly CartItem[]>,
     sessionId: computed(() => cartCore.state.value.sessionId),
     loading: computed(() => cartCore.state.value.loading),
     error: computed(() => cartCore.state.value.error),

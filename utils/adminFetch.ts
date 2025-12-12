@@ -60,7 +60,7 @@ export async function useAdminFetch<T = unknown>(
   return $fetch<T>(url, {
     ...options,
     headers,
-  } as unknown) as Promise<T>
+  } as any)
 }
 
 /**
@@ -112,7 +112,7 @@ export async function useAdminFetchWithRetry<T = unknown>(
       return $fetch<T>(url, {
         ...options,
         headers,
-      } as unknown) as Promise<T>
+      } as any)
     }
 
     // Re-throw other errors
@@ -189,7 +189,7 @@ export async function useAdminFetchBatch<T = unknown>(
           ...(options.headers as Record<string, string> || {}),
           ...authHeaders,
         },
-      } as unknown)
+      } as any)
       return { success: true, data } as BatchResult<T>
     }
     catch (error: any) {

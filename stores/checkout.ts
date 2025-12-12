@@ -133,7 +133,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
         await payment.processPayment()
       }
 
-      return nextStep
+      return nextStep as CheckoutStep | undefined || null
     }
 
     return null
@@ -144,7 +144,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
     const currentIndex = steps.indexOf(sessionRefs.currentStep.value)
 
     if (currentIndex > 0) {
-      return steps[currentIndex - 1]
+      return steps[currentIndex - 1] as CheckoutStep | undefined || null
     }
 
     return null
@@ -248,8 +248,8 @@ export const useCheckoutStore = defineStore('checkout', () => {
     await payment.savePaymentMethodData(method)
   }
 
-  const saveAddress = async (address: Address): Promise<void> => {
-    session.setSavedAddresses([...sessionRefs.savedAddresses.value, address])
+  const saveAddress = async (address: Address | { id?: number | undefined, userId?: string | undefined, type: 'shipping' | 'billing', street: string, city: string, postalCode: string, province?: string | undefined, country: string, isDefault: boolean, createdAt?: string | undefined }): Promise<void> => {
+    session.setSavedAddresses([...sessionRefs.savedAddresses.value, address as Address])
   }
 
   const resetCheckout = (): void => {

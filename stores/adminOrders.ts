@@ -549,7 +549,7 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
           // Update local state for successfully updated orders
           this.orders.forEach((order) => {
             if (this.selectedOrders.includes(order.id)) {
-              order.status = status as string
+              order.status = status as 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
             }
           })
 

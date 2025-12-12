@@ -212,15 +212,15 @@ onMounted(async () => {
     const options: TableOptions<TData> = {
       data: props.data,
       columns: props.columns,
-      getCoreRowModel: module.getCoreRowModel(),
+      getCoreRowModel: module.getCoreRowModel() as any,
       ...(props.enablePagination && {
-        getPaginationRowModel: module.getPaginationRowModel(),
+        getPaginationRowModel: module.getPaginationRowModel() as any,
       }),
       ...(props.enableSorting && {
-        getSortedRowModel: module.getSortedRowModel(),
+        getSortedRowModel: module.getSortedRowModel() as any,
       }),
       ...(props.enableFiltering && {
-        getFilteredRowModel: module.getFilteredRowModel(),
+        getFilteredRowModel: module.getFilteredRowModel() as any,
       }),
       ...props.tableOptions,
     }
@@ -235,15 +235,15 @@ watch(() => props.data, (newData) => {
     const options: TableOptions<TData> = {
       data: newData,
       columns: props.columns,
-      getCoreRowModel: tableModule.value.getCoreRowModel(),
+      getCoreRowModel: tableModule.value.getCoreRowModel() as any,
       ...(props.enablePagination && {
-        getPaginationRowModel: tableModule.value.getPaginationRowModel(),
+        getPaginationRowModel: tableModule.value.getPaginationRowModel() as any,
       }),
       ...(props.enableSorting && {
-        getSortedRowModel: tableModule.value.getSortedRowModel(),
+        getSortedRowModel: tableModule.value.getSortedRowModel() as any,
       }),
       ...(props.enableFiltering && {
-        getFilteredRowModel: tableModule.value.getFilteredRowModel(),
+        getFilteredRowModel: tableModule.value.getFilteredRowModel() as any,
       }),
       ...props.tableOptions,
     }

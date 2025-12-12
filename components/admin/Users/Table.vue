@@ -266,12 +266,12 @@ const selectedUserId = ref<string | null>(null)
 const totalUsers = ref(0)
 
 // Computed - with type safety for storeToRefs
-const storeRefs = storeToRefs(adminUsersStore)
-const users = computed(() => (storeRefs as Record<string, any>).users?.value ?? [])
-const usersWithDisplayData = computed(() => (storeRefs as Record<string, any>).usersWithDisplayData?.value ?? [])
-const pagination = computed(() => (storeRefs as Record<string, any>).pagination?.value ?? { page: 1, totalPages: 1, total: 0, limit: 10 })
-const loading = computed(() => (storeRefs as Record<string, any>).loading?.value ?? false)
-const error = computed(() => (storeRefs as Record<string, any>).error?.value ?? null)
+const storeRefs = storeToRefs(adminUsersStore as any)
+const users = computed(() => (storeRefs as any).users?.value ?? [])
+const usersWithDisplayData = computed(() => (storeRefs as any).usersWithDisplayData?.value ?? [])
+const pagination = computed(() => (storeRefs as any).pagination?.value ?? { page: 1, totalPages: 1, total: 0, limit: 10 })
+const loading = computed(() => (storeRefs as any).loading?.value ?? false)
+const error = computed(() => (storeRefs as any).error?.value ?? null)
 const hasActiveFilters = computed(() => (storeRefs as Record<string, any>).hasActiveFilters?.value ?? false)
 
 // Debounced search function

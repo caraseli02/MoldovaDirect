@@ -143,7 +143,7 @@
         <PairingCard
           v-for="pairing in displayedPairings"
           :key="pairing.id"
-          :pairing="pairing"
+          :pairing="pairing as PairingGuide"
           @click="openPairingModal"
         />
       </div>
@@ -236,7 +236,7 @@ const setFilter = (filter: string) => {
   }
   else {
     applyFilters({
-      wineType: [filter as unknown],
+      wineType: [filter as 'red' | 'white' | 'rose' | 'sparkling' | 'dessert'],
     })
   }
 }

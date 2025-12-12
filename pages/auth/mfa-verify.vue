@@ -163,7 +163,7 @@ async function handleVerify(): Promise<void> {
     const redirect = route.query.redirect as string
     const user = useSupabaseUser()
 
-    await handleAuthRedirect(redirect, user.value, supabase, localePath, navigateTo)
+    await handleAuthRedirect(redirect, user.value || null, supabase, localePath, navigateTo)
   }
   catch (err: any) {
     error.value = err instanceof Error ? err.message : 'Verification failed'

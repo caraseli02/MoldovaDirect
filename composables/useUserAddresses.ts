@@ -100,7 +100,7 @@ export const useUserAddresses = () => {
 
       const { data, error: insertError } = await supabase
         .from('user_addresses')
-        .insert(dbAddress as unknown as Record<string, any>)
+        .insert(dbAddress)
         .select()
         .single<Record<string, any>>()
 
@@ -167,7 +167,7 @@ export const useUserAddresses = () => {
 
       const { data, error: updateError } = await supabase
         .from('user_addresses')
-        .update(dbUpdates as Record<string, any>)
+        .update(dbUpdates as any)
         .eq('id', addressId)
         .eq('user_id', user.value.id)
         .select()

@@ -66,7 +66,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Update order status based on payment result
-    const updateData = {
+    const updateData: Record<string, any> = {
       payment_status: body.paymentStatus,
       updated_at: new Date().toISOString(),
     }

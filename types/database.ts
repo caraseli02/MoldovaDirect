@@ -64,6 +64,7 @@ export interface Product {
   weightKg?: number
   stockQuantity: number
   lowStockThreshold: number
+  reorderPoint?: number
   images?: ProductImage[]
   attributes?: Record<string, any>
   isActive: boolean
@@ -118,6 +119,7 @@ export interface CategoryFilter {
   name: Translations
   slug: string
   productCount: number
+  count?: number // Alias for productCount, used by some components
   children?: CategoryFilter[]
 }
 

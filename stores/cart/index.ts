@@ -18,6 +18,7 @@ import type {
   Product,
   CartItem,
   SavedForLaterItem,
+  CartAdvancedState,
 } from './types'
 
 // =============================================
@@ -120,7 +121,7 @@ export const useCartStore = defineStore('cart', () => {
    */
   function serializeCartData(): CartCookieData {
     return {
-      items: items.value,
+      items: items.value as CartItem[],
       sessionId: sessionId.value,
       lastSyncAt: lastSyncAt.value,
       timestamp: new Date().toISOString(),

@@ -38,7 +38,7 @@
       >
         <productFilterMain
           :filters="filters"
-          :available-filters="availableFilters as unknown"
+          :available-filters="availableFilters as { categories: CategoryFilter[]; priceRange: PriceRange; attributes: AttributeFilter[] }"
           :filtered-product-count="products?.length || 0"
           :show-title="false"
           @update:filters="handleFiltersUpdate"
@@ -458,7 +458,7 @@
  * - Handle user interactions
  */
 
-import type { ProductFilters, ProductWithRelations } from '~/types'
+import type { ProductFilters, ProductWithRelations, CategoryFilter, PriceRange, AttributeFilter } from '~/types'
 import type { ProductSortOption } from '~/types/guards'
 import type { FilterChip } from '~/composables/useProductFilters'
 import { ref, computed, onMounted, onUnmounted, onBeforeUnmount, nextTick, watch, watchEffect } from 'vue'

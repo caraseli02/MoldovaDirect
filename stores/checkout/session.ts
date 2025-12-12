@@ -128,7 +128,7 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
     state.dataPrefetched = value
   }
 
-  const setPreferences = (preferences: Record<string, any>): void => {
+  const setPreferences = (preferences: { user_id: string, preferred_shipping_method?: string, updated_at?: string }): void => {
     state.preferences = preferences
   }
 
@@ -233,7 +233,7 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
     paymentMethod?: Record<string, any>
   }
 
-  const checkoutCookie = useCookie<CheckoutCookieData | null>(COOKIE_NAMES.CHECKOUT_SESSION, CHECKOUT_SESSION_COOKIE_CONFIG)
+  const checkoutCookie = useCookie<CheckoutCookieData | null>(COOKIE_NAMES.CHECKOUT_SESSION, CHECKOUT_SESSION_COOKIE_CONFIG as any)
 
   const persist = async (payload: PersistPayload): Promise<void> => {
     try {
@@ -252,7 +252,7 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
         paymentMethod: sanitizePaymentMethodForStorage(payload.paymentMethod),
       }
 
-      checkoutCookie.value = snapshot
+      checkoutCookie.value = snapshot as any
       await nextTick() // Wait for cookie write to complete
     }
     catch (error: any) {
@@ -275,21 +275,21 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
 
       // Restore state from snapshot
       state.sessionId = snapshot.sessionId
-      state.currentStep = snapshot.currentStep || 'shipping'
-      state.guestInfo = snapshot.guestInfo || null
-      state.contactEmail = snapshot.contactEmail || null
-      state.orderData = snapshot.orderData || null
+      state.currentStep = (snapshot.currentStep as CheckoutStep) || 'shipping'
+      state.guestInfo = (snapshot.guestInfo as { email: string, emailUpdates: boolean } | null) || null
+      state.contactEmail = (snapshot.contactEmail as string | null) || null
+      state.orderData = (snapshot.orderData as any) || null
       state.sessionExpiresAt = snapshot.sessionExpiresAt ? new Date(snapshot.sessionExpiresAt) : null
       state.lastSyncAt = snapshot.lastSyncAt ? new Date(snapshot.lastSyncAt) : null
       state.termsAccepted = snapshot.termsAccepted || false
       state.privacyAccepted = snapshot.privacyAccepted || false
       state.marketingConsent = snapshot.marketingConsent || false
 
-      const sanitizedPaymentMethod = sanitizePaymentMethodForStorage(snapshot.paymentMethod || null)
+      const sanitizedPaymentMethod = sanitizePaymentMethodForStorage((snapshot.paymentMethod || null) as any)
       state.paymentMethod = sanitizedPaymentMethod
 
       return {
-        shippingInfo: snapshot.shippingInfo || null,
+        shippingInfo: (snapshot.shippingInfo as any) || null,
         paymentMethod: sanitizedPaymentMethod,
       }
     }

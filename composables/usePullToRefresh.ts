@@ -24,7 +24,7 @@ export const usePullToRefresh = (onRefresh: () => Promise<void> | void) => {
   const handleTouchStart = (event: TouchEvent) => {
     if (!scrollElement || !canPull(scrollElement)) return
 
-    startY = event.touches[0].clientY
+    startY = event.touches[0]?.clientY || 0
     isPulling.value = false
     pullDistance.value = 0
   }
@@ -33,7 +33,7 @@ export const usePullToRefresh = (onRefresh: () => Promise<void> | void) => {
   const handleTouchMove = (event: TouchEvent) => {
     if (!scrollElement || !canPull(scrollElement) || isRefreshing.value) return
 
-    currentY = event.touches[0].clientY
+    currentY = event.touches[0]?.clientY || 0
     const deltaY = currentY - startY
 
     if (deltaY > 0) {

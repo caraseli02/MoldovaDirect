@@ -16,7 +16,7 @@ export default defineNuxtRouteMiddleware((to, _from) => {
   const firstSegment = pathSegments[0]
 
   // Check if first segment is a valid locale
-  const isValidLocale = availableLocales.includes(firstSegment)
+  const isValidLocale = firstSegment ? availableLocales.includes(firstSegment) : false
 
   if (isValidLocale) {
     // This is a valid locale route - allow it to proceed

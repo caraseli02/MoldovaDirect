@@ -44,7 +44,7 @@ interface AsyncAdminOptions {
 export const useAsyncAdminComponent = (
   path: string,
   options: AsyncAdminOptions = {},
-): DefineComponent => {
+): Component => {
   const {
     delay = 200,
     timeout = 3000,
@@ -53,7 +53,7 @@ export const useAsyncAdminComponent = (
   } = options
 
   return defineAsyncComponent({
-    loader: async () => {
+    loader: async (): Promise<Component> => {
       // Use dynamic import with explicit path pattern for Vite
       const modules: Record<string, () => Promise<unknown>> = {
         'Email/TemplateManager': () => import('~/components/admin/Email/TemplateManager.vue'),
@@ -82,7 +82,7 @@ export const useAsyncAdminComponent = (
       if (!loader) {
         throw new Error(`Unknown admin component: ${path}`)
       }
-      return loader()
+      return loader() as any
     },
 
     // Loading component - simple skeleton with pulse animation

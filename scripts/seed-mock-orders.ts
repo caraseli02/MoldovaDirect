@@ -69,7 +69,11 @@ const statuses = ['pending', 'processing', 'shipped', 'delivered', 'cancelled']
 const paymentStatuses = ['pending', 'paid', 'failed']
 
 function randomItem<T>(array: T[]): T {
-  return array[Math.floor(Math.random() * array.length)]
+  const item = array[Math.floor(Math.random() * array.length)]
+  if (item === undefined) {
+    throw new Error('Array is empty')
+  }
+  return item
 }
 
 function randomDate(daysAgo: number): Date {

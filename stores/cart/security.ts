@@ -335,7 +335,7 @@ async function secureAddItem(
   productId: string,
   quantity: number,
   sessionId: string,
-): Promise<void> {
+): Promise<{ success: boolean, itemId: string, quantity: number }> {
   const context = createSecurityContext(sessionId)
 
   // Validate security context
@@ -364,7 +364,12 @@ async function secureAddItem(
   ))
 
   // In a real implementation, this would make a secure API call
-  // Operation completed successfully (void return)
+  // Operation completed successfully
+  return {
+    success: true,
+    itemId: productId,
+    quantity,
+  }
 }
 
 /**
@@ -374,7 +379,7 @@ async function secureUpdateQuantity(
   itemId: string,
   quantity: number,
   sessionId: string,
-): Promise<void> {
+): Promise<{ success: boolean, itemId: string, quantity: number }> {
   const context = createSecurityContext(sessionId)
 
   // Validate security context

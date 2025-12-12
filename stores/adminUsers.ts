@@ -307,7 +307,7 @@ export const useAdminUsersStore = defineStore('adminUsers', {
      * Update sorting (component will handle refetch)
      */
     updateSort(sortBy: string, sortOrder: 'asc' | 'desc' = 'asc') {
-      this.filters.sortBy = sortBy as string
+      this.filters.sortBy = sortBy as 'name' | 'created_at' | 'email' | 'last_login' | undefined
       this.filters.sortOrder = sortOrder
     },
 

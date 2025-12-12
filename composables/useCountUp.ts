@@ -81,7 +81,7 @@ export function useCountUp(target: number | Ref<number>, options: CountUpOptions
   const formatted = computed(() => {
     const num = current.value.toString()
     const parts = num.split('.')
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, separator)
+    parts[0] = parts[0]?.replace(/\B(?=(\d{3})+(?!\d))/g, separator) || ''
     return parts.join(decimal)
   })
 

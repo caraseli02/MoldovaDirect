@@ -1,4 +1,4 @@
-import type { Translations } from '~/types/database'
+import type { Translations as BaseTranslations } from '~/types/database'
 /**
  * Landing Page CMS Types
  *
@@ -237,7 +237,7 @@ export interface LandingSection<
   is_active: boolean
   starts_at: Date | null
   ends_at: Date | null
-  translations: Translations<T>
+  translations: T
   config: C
   created_by: string | null
   updated_by: string | null

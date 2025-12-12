@@ -203,7 +203,7 @@ export async function extractCustomerInfoFromOrder(
   }
 
   // Guest checkout - extract from shipping address and guest email
-  const shippingAddr = order.shipping_address || {}
+  const shippingAddr = (order.shipping_address || {}) as Record<string, any>
   const firstName = shippingAddr.firstName || shippingAddr.first_name || ''
   const lastName = shippingAddr.lastName || shippingAddr.last_name || ''
   const fullName = `${firstName} ${lastName}`.trim()

@@ -73,12 +73,9 @@ export default defineNuxtConfig({
   // Component Auto-Registration
   // ===================================
   components: {
-    extensions: ['vue'],
     dirs: [...BASE_COMPONENT_DIRS],
     // ✅ NEW: Explicit global registration
     global: true,
-    // ✅ NEW: Target specification
-    target: 'client',
   },
 
   // ===================================

@@ -138,7 +138,7 @@ export function useShippingAddress() {
       })
 
       if (response.success && response.address) {
-        const newAddress = addressFromEntity(response.address as unknown as Record<string, any>)
+        const newAddress = addressFromEntity(response.address as any)
         savedAddresses.value.push(newAddress)
       }
     }

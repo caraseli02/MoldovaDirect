@@ -187,7 +187,7 @@ export function sanitizeCartData(data: any): unknown {
   }
 
   if (data && typeof data === 'object') {
-    const sanitized = {}
+    const sanitized: Record<string, any> = {}
     for (const [key, value] of Object.entries(data)) {
       sanitized[key] = sanitizeCartData(value)
     }

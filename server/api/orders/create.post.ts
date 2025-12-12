@@ -1,6 +1,7 @@
 // POST /api/orders/create - Create a new order from cart
 import { serverSupabaseServiceRole } from '#supabase/server'
 import type { SupabaseClient } from '@supabase/supabase-js'
+import type { User } from '~/types/auth'
 import { sendOrderConfirmationEmail } from '~/server/utils/orderEmails'
 import {
   extractCustomerInfoFromOrder,
@@ -260,7 +261,7 @@ async function sendOrderConfirmationEmailAsync(
 ): Promise<void> {
   try {
     // Validate order data before sending email
-    const validation = validateOrderForEmail(order)
+    const validation = validateOrderForEmail(order as any)
     if (!validation.isValid) {
       console.error('Order validation failed for email:', validation.errors)
       return
@@ -279,11 +280,11 @@ async function sendOrderConfirmationEmailAsync(
     }
 
     // Extract customer information (handles both authenticated and guest)
-    const customerInfo = await extractCustomerInfoFromOrder(order, userProfile)
+    const customerInfo = await extractCustomerInfoFromOrder(order as any, userProfile)
 
     // Transform order data for email template
     const emailData = transformOrderToEmailData(
-      order,
+      order as any,
       customerInfo.name,
       customerInfo.email,
       customerInfo.locale,

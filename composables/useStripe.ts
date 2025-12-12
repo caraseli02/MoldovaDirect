@@ -42,7 +42,7 @@ export const useStripe = (): StripeComposable => {
         stripeLibraryPromise = import('@stripe/stripe-js')
       }
 
-      const { loadStripe } = await stripeLibraryPromise
+      const { loadStripe } = await stripeLibraryPromise as { loadStripe: (key: string) => Promise<Stripe | null> }
 
       // Use singleton pattern to avoid loading Stripe multiple times
       if (!stripePromise) {

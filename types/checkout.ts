@@ -1,6 +1,8 @@
-import type { Address } from './database'
 // Checkout domain types
 // Centralized definitions shared across store, composables, and utilities
+
+// Import Address from the correct source with firstName, lastName, company, phone
+import type { Address as AddressFromAddressTypes } from './address'
 
 export type CheckoutStep = 'shipping' | 'payment' | 'review' | 'confirmation'
 
@@ -42,6 +44,9 @@ export interface OldAddress {
 // Re-export correct Address type from unified source
 export type { Address, AddressEntity, AddressFormData } from '~/types/address'
 
+// Use the correct Address type for checkout operations
+export type CheckoutAddress = AddressFromAddressTypes
+
 export interface PaymentMethod {
   type: 'cash' | 'credit_card' | 'paypal' | 'bank_transfer'
   creditCard?: {
@@ -79,7 +84,7 @@ export interface GuestInfo {
 }
 
 export interface ShippingInformation {
-  address: Address
+  address: CheckoutAddress
   method: ShippingMethod
   instructions?: string
 }
@@ -152,7 +157,7 @@ export interface CheckoutState {
   contactEmail: string | null
   validationErrors: Record<string, string[]>
   isValid: boolean
-  savedAddresses: Address[]
+  savedAddresses: CheckoutAddress[]
   savedPaymentMethods: SavedPaymentMethod[]
   availableShippingMethods: ShippingMethod[]
   availableCountries: string[]

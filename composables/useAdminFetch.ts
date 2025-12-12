@@ -57,5 +57,5 @@ export async function useAdminFetch<T = unknown>(
   return await $fetch<T>(url, {
     ...options,
     headers,
-  } as FetchOptions<'json'>)
+  } as any) as T
 }

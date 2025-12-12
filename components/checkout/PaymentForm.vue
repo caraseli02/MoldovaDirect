@@ -517,8 +517,8 @@ const validationErrors = ref<Record<string, string>>({})
 // Form data refs
 const creditCardData = ref({
   number: '',
-  expiryMonth: '',
-  expiryYear: '',
+  expiryMonth: undefined as string | undefined,
+  expiryYear: undefined as string | undefined,
   cvv: '',
   holderName: '',
 })
@@ -576,8 +576,8 @@ const formatExpiry = (event: Event) => {
   // Parse month and year
   const parts = value.split('/')
   if (parts.length === 2) {
-    creditCardData.value.expiryMonth = parts[0]
-    creditCardData.value.expiryYear = parts[1]
+    creditCardData.value.expiryMonth = parts[0] || undefined
+    creditCardData.value.expiryYear = parts[1] || undefined
   }
 
   updatePaymentMethod()
@@ -631,8 +631,8 @@ const validateCardNumber = () => {
 }
 
 const validateExpiry = () => {
-  const month = parseInt(creditCardData.value.expiryMonth)
-  const year = parseInt(creditCardData.value.expiryYear)
+  const month = parseInt(creditCardData.value.expiryMonth || '')
+  const year = parseInt(creditCardData.value.expiryYear || '')
 
   if (!month || !year) {
     validationErrors.value.expiry = 'Expiry date is required'

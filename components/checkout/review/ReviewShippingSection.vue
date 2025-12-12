@@ -67,7 +67,14 @@
 </template>
 
 <script setup lang="ts">
-import type { ShippingInformation } from '~/types/checkout'
+import type { ShippingMethod } from '~/types/checkout'
+import type { Address } from '~/types/address'
+
+interface ShippingInformation {
+  address: Address
+  method: ShippingMethod
+  instructions?: string
+}
 
 interface Props {
   shippingInfo: ShippingInformation | null

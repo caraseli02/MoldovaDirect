@@ -211,7 +211,7 @@ export const useProductsStore = defineStore('products', {
         const cacheKey = `products-${JSON.stringify(filters)}`
 
         // Check cache first
-        const cached = this.getCache(cacheKey)
+        const cached = this.getCache(cacheKey) as ProductListResponse | null
         if (cached) {
           this.products = cached.products
           this.pagination = cached.pagination
@@ -279,7 +279,7 @@ export const useProductsStore = defineStore('products', {
       try {
         // Check cache first
         const cacheKey = `product-${normalizedSlug}`
-        const cached = this.getCache(cacheKey)
+        const cached = this.getCache(cacheKey) as ProductDetailResponse | null
         if (cached) {
           this.currentProduct = cached.product
           this.relatedProducts = cached.relatedProducts
@@ -315,7 +315,7 @@ export const useProductsStore = defineStore('products', {
         const cacheKey = `featured-${limit}-${category || 'all'}`
         const cached = this.getCache(cacheKey)
         if (cached) {
-          this.featuredProducts = cached
+          this.featuredProducts = cached as ProductWithRelations[]
           return
         }
 
@@ -343,7 +343,7 @@ export const useProductsStore = defineStore('products', {
       try {
         // Check cache first
         const cacheKey = `search-${query}-${JSON.stringify(filters)}`
-        const cached = this.getCache(cacheKey)
+        const cached = this.getCache(cacheKey) as SearchResponse | null
         if (cached) {
           this.searchResults = cached.products
           this.searchSuggestions = cached.suggestions
@@ -390,7 +390,7 @@ export const useProductsStore = defineStore('products', {
         const cacheKey = 'categories'
         const cached = this.getCache(cacheKey)
         if (cached) {
-          this.categories = cached
+          this.categories = cached as CategoryWithChildren[]
           this.categoryLoading = false
           return
         }
@@ -418,7 +418,7 @@ export const useProductsStore = defineStore('products', {
       try {
         // Check cache first
         const cacheKey = `category-${slug}-${JSON.stringify(filters)}`
-        const cached = this.getCache(cacheKey)
+        const cached = this.getCache(cacheKey) as { category: CategoryWithChildren, products: ProductWithRelations[], pagination: Pagination } | null
         if (cached) {
           this.currentCategory = cached.category
           this.products = cached.products

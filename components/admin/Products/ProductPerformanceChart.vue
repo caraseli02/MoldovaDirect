@@ -145,7 +145,8 @@ const chartOptions: ChartOptions = {
     tooltip: {
       callbacks: {
         title: (context) => {
-          const product = props.data?.productPerformance?.[context[0]?.dataIndex]
+          const dataIndex = context[0]?.dataIndex
+          const product = props.data?.productPerformance?.[dataIndex ?? 0]
           return product?.productName || ''
         },
         label: (context) => {

@@ -166,20 +166,21 @@ export default defineEventHandler(async (event) => {
     const averageOrderValue = totalOrders > 0 ? totalSpent / totalOrders : 0
     const lastOrderDate = orders && orders.length > 0 ? orders[0].created_at : null
 
-    const accountCreated = new Date(authUser.user.created_at)
+    const authUserData = authUser as any
+    const accountCreated = new Date(authUserData.created_at)
     const now = new Date()
     const accountAge = Math.floor((now.getTime() - accountCreated.getTime()) / (1000 * 60 * 60 * 24))
 
     const loginCount = activity?.filter(a => a.activity_type === 'login').length || 0
-    const lastLogin = authUser.user.last_sign_in_at
+    const lastLogin = authUserData.last_sign_in_at
 
     const userDetail: UserDetail = {
-      id: authUser.user.id,
-      email: authUser.user.email || '',
-      email_confirmed_at: authUser.user.email_confirmed_at,
-      last_sign_in_at: authUser.user.last_sign_in_at,
-      created_at: authUser.user.created_at,
-      updated_at: authUser.user.updated_at,
+      id: authUserData.id,
+      email: authUserData.email || '',
+      email_confirmed_at: authUserData.email_confirmed_at,
+      last_sign_in_at: authUserData.last_sign_in_at,
+      created_at: authUserData.created_at,
+      updated_at: authUserData.updated_at,
       profile: profile || null,
       addresses: addresses || [],
       orders: orders?.map(order => ({

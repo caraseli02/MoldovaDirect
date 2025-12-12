@@ -2,6 +2,38 @@ import { serverSupabaseClient } from '#supabase/server'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { PUBLIC_CACHE_CONFIG } from '~/server/utils/publicCache'
 
+// Type definitions for API response
+interface CategoryBreadcrumb {
+  id: number
+  slug: string
+  name: string
+}
+
+interface ProductFromDB {
+  id: number
+  sku: string
+  name_translations: Record<string, string>
+  description_translations: Record<string, string>
+  price_eur: number
+  stock_quantity: number
+  images: Array<{ url: string }>
+  created_at: string
+  categories: {
+    id: number
+    slug: string
+    name_translations: Record<string, string>
+  }
+}
+
+interface SubcategoryFromDB {
+  id: number
+  slug: string
+  name_translations: Record<string, string>
+  description_translations?: Record<string, string>
+  image_url?: string
+  sort_order: number
+}
+
 // Helper function to get localized content with fallback
 function getLocalizedContent(content: Record<string, string>, locale: string): string {
   if (content[locale]) return content[locale]

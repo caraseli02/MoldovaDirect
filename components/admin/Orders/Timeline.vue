@@ -146,7 +146,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import type { OrderStatusHistory, OrderNote, OrderStatus } from '~/types/database'
+import type { OrderStatusHistory, OrderNote } from '~/types/database'
+import type { OrderStatus } from '~/types'
 
 interface TimelineEvent {
   id: string

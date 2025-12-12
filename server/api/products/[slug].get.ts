@@ -146,7 +146,7 @@ export default defineCachedEventHandler(async (event) => {
     // Transform product data to match products list API format
     const descriptionTranslations = product.description_translations || {}
     const shortDescriptionTranslations
-      = (product as unknown).short_description_translations || descriptionTranslations
+      = (product as any).short_description_translations || descriptionTranslations
 
     const transformedProduct = {
       id: product.id,

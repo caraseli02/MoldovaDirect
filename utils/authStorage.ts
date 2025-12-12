@@ -81,7 +81,7 @@ export function clearAuthCookies(): void {
       const cookies = document.cookie.split(';')
       cookies.forEach((cookie) => {
         const [name] = cookie.split('=')
-        const trimmedName = name.trim()
+        const trimmedName = name?.trim() || ''
 
         // Clear Supabase auth cookies (sb-*)
         if (trimmedName.startsWith('sb-')) {

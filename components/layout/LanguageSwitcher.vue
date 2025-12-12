@@ -165,7 +165,7 @@ const openDropdown = async () => {
   await nextTick()
   focusedIndex.value = locales.value.findIndex((l: { code: string }) => l.code === locale.value)
   if (focusedIndex.value !== -1 && optionRefs.value[focusedIndex.value]) {
-    optionRefs.value[focusedIndex.value].focus()
+    optionRefs.value[focusedIndex.value]?.focus()
   }
 }
 
@@ -174,7 +174,7 @@ const closeDropdown = () => {
   focusedIndex.value = -1
   // Return focus to trigger button
   if (triggerRef.value) {
-    const button = triggerRef.value.$el || triggerRef.value
+    const button = (triggerRef.value as any).$el || triggerRef.value
     if (button?.focus) {
       button.focus()
     }

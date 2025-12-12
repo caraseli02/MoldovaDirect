@@ -62,7 +62,7 @@
         <!-- Overview Tab -->
         <div v-if="activeTab === 'overview'">
           <AdminDashboardAnalyticsOverview
-            :data="analyticsOverview as unknown"
+            :data="analyticsOverviewData"
             :loading="loading"
             :error="error"
             @date-range-change="handleDateRangeChange"
@@ -83,12 +83,12 @@
 
           <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
             <AdminChartsUserRegistration
-              :data="userAnalytics as unknown"
+              :data="userAnalyticsData"
               :loading="loading"
               :error="error"
             />
             <AdminChartsUserActivity
-              :data="userAnalytics as unknown"
+              :data="userAnalyticsData"
               :loading="loading"
               :error="error"
             />
@@ -135,7 +135,7 @@
 
           <!-- Conversion Funnel -->
           <AdminChartsConversionFunnel
-            :data="productAnalytics as unknown"
+            :data="productAnalyticsData"
             :loading="loading"
             :error="error"
           />
@@ -143,12 +143,12 @@
           <!-- Product Performance Chart and Top Products -->
           <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
             <AdminChartsProductPerformance
-              :data="productAnalytics as unknown"
+              :data="productAnalyticsData"
               :loading="loading"
               :error="error"
             />
             <AdminUtilsTopProductsTable
-              :data="productAnalytics as unknown"
+              :data="productAnalyticsData"
               :loading="loading"
               :error="error"
               title="Top Performing Products"
@@ -158,7 +158,7 @@
 
           <!-- Detailed Product Table -->
           <AdminUtilsTopProductsTable
-            :data="productAnalytics as unknown"
+            :data="productAnalyticsData"
             :loading="loading"
             :error="error"
             title="All Products Performance"
@@ -215,6 +215,7 @@ import {
   ShoppingBag,
   Users,
 } from 'lucide-vue-next'
+import type { AnalyticsOverview, UserAnalyticsData, ProductAnalyticsData } from '~/types/analytics'
 import AdminDashboardAnalyticsOverview from '~/components/admin/Dashboard/AnalyticsOverview.vue'
 import AdminUtilsDateRangePicker from '~/components/admin/Utils/DateRangePicker.vue'
 import AdminChartsUserRegistration from '~/components/admin/Charts/UserRegistration.vue'
@@ -248,6 +249,11 @@ const dateRange = ref({
   startDate: '',
   endDate: '',
 })
+
+// Computed properties for type-safe prop passing (avoids ESLint filter errors)
+const analyticsOverviewData = computed(() => analyticsOverview.value as AnalyticsOverview | null | undefined)
+const userAnalyticsData = computed(() => userAnalytics.value as UserAnalyticsData | null | undefined)
+const productAnalyticsData = computed(() => productAnalytics.value as ProductAnalyticsData | null | undefined)
 
 // Tab configuration
 const tabs = [

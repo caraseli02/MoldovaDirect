@@ -181,7 +181,7 @@
               class="p-4 rounded-lg border border-gray-200 dark:border-gray-700"
             >
               <div class="flex items-center justify-between mb-2">
-                <AdminOrdersStatusBadge :status="status" />
+                <AdminOrdersStatusBadge :status="status as OrderStatus" />
               </div>
               <div class="text-2xl font-bold text-gray-900 dark:text-white">
                 {{ count }}
@@ -327,8 +327,10 @@
 </template>
 
 <script setup lang="ts">
+import type { OrderStatus } from '~/types'
 import { Button } from '@/components/ui/button'
-import { useToastStore } from '~/stores/toast'
+// Toast composable used instead of store
+// import { useToastStore } from '~/stores/toast'
 import { Input } from '@/components/ui/input'
 import {
   Card,

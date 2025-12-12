@@ -150,7 +150,7 @@ function getClientIP(event: H3Event): string | null {
   const remoteAddr = event.node.req.socket?.remoteAddress
 
   if (forwarded) {
-    return forwarded.split(',')[0].trim()
+    return forwarded.split(',')[0]?.trim() || null
   }
 
   if (realIP) {

@@ -19,7 +19,7 @@
  */
 
 import { defineStore } from 'pinia'
-import type { SupabaseClient } from '@supabase/supabase-js'
+import type { SupabaseClient, User, Session } from '@supabase/supabase-js'
 import type { WatchStopHandle } from 'vue'
 import { useAuthMessages } from '~/composables/useAuthMessages'
 import { useAuthValidation } from '~/composables/useAuthValidation'

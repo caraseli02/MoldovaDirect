@@ -37,7 +37,7 @@ export default defineEventHandler((event) => {
   // But we ensure they have the private directive to prevent CDN caching
   const existingCacheControl = getResponseHeader(event, 'Cache-Control')
 
-  if (!existingCacheControl || !existingCacheControl.includes('private')) {
+  if (!existingCacheControl || (typeof existingCacheControl === 'string' && !existingCacheControl.includes('private'))) {
     // Set default private cache control if not already set
     setResponseHeaders(event, {
       'Cache-Control': 'private, max-age=60, stale-while-revalidate=30',

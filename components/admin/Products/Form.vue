@@ -578,6 +578,17 @@ import { Button } from '@/components/ui/button'
 import { z } from 'zod'
 import type { CategoryWithChildren } from '~/types/database'
 
+interface ImageFile {
+  id?: string
+  url?: string
+  preview?: string
+  file?: File
+  altText?: string
+  isPrimary?: boolean
+  uploading?: boolean
+  progress?: number
+}
+
 interface Props {
   product?: Record<string, any>
   categories: CategoryWithChildren[]
@@ -612,7 +623,7 @@ const form = ref({
   comparePrice: null as number | null,
   stockQuantity: 0,
   lowStockThreshold: 5,
-  images: [] as unknown[],
+  images: [] as ImageFile[],
   attributes: {
     origin: '',
     volume: null as number | null,
@@ -698,9 +709,9 @@ onMounted(() => {
 })
 
 // Utility functions
-const getLocalizedText = (text: Record<string, string> | null | undefined) => {
+const getLocalizedText = (text: Record<string, string | undefined> | null | undefined) => {
   if (!text) return ''
-  return text.es || Object.values(text)[0] || ''
+  return text.es || Object.values(text).find(v => v) || ''
 }
 
 // Validation function

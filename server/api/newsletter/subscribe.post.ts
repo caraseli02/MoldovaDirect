@@ -19,7 +19,7 @@ const subscriptionSchema = z.object({
 
 export default defineEventHandler(async (event) => {
   try {
-    const supabase = await serverSupabaseClient(event)
+    const supabase = serverSupabaseClient(event)
     const body = await readBody(event)
 
     // Validate input

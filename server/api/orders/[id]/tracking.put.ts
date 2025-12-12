@@ -59,7 +59,7 @@ export default defineEventHandler(async (event) => {
     const body = await readBody(event) as UpdateTrackingRequest
 
     // Build update object
-    const updateData = {}
+    const updateData: Record<string, any> = {}
 
     if (body.trackingNumber !== undefined) {
       updateData.tracking_number = body.trackingNumber

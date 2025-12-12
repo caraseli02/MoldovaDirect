@@ -97,7 +97,7 @@ export default defineEventHandler(async (event) => {
     // Enrich logs with user information
     const enrichedLogs = logs?.map(log => ({
       ...log,
-      user: userProfiles[log.user_id] || null,
+      user: (userProfiles as Record<string, any>)[log.user_id] || null,
     }))
 
     return {

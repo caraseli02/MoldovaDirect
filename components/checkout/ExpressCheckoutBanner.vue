@@ -242,7 +242,7 @@ const useExpressCheckout = async () => {
       instructions: undefined,
     }
 
-    await checkoutStore.updateShippingInfo(shippingInfo)
+    await (checkoutStore.updateShippingInfo as any)(shippingInfo)
 
     if (props.preferredShippingMethod) {
       toast.success(

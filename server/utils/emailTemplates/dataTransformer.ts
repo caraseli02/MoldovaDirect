@@ -60,7 +60,7 @@ export function buildOrderEmailData(
  */
 function transformOrderItems(items: DatabaseOrderItem[]): OrderItemData[] {
   return items.map((item) => {
-    const snapshot = item.product_snapshot || {}
+    const snapshot = (item.product_snapshot || {}) as Record<string, any>
 
     // Get product name from snapshot (with locale fallback)
     const name = snapshot.name_translations?.en || snapshot.name || 'Product'
@@ -187,7 +187,7 @@ export function transformOrderItemsWithLocale(
   locale: string,
 ): OrderItemData[] {
   return items.map((item) => {
-    const snapshot = item.product_snapshot || {}
+    const snapshot = (item.product_snapshot || {}) as Record<string, any>
 
     // Get localized product name
     const name = getLocalizedProductName(snapshot, locale)

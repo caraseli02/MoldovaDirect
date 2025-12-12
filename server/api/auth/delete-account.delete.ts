@@ -12,8 +12,7 @@
  */
 
 import { getRequestIP } from 'h3'
-import { serverSupabaseClient } from '#supabase/server'
-import { serverSupabaseServiceRole } from '#supabase/server'
+import { serverSupabaseClient, serverSupabaseServiceRole } from '#supabase/server'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { createLogger } from '~/server/utils/secureLogger'
 

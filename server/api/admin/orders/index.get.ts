@@ -205,9 +205,10 @@ export default defineEventHandler(async (event): Promise<ApiResponse> => {
     const { data: orders, error: ordersError } = await ordersQuery as { data: OrderFromDB[] | null, error: unknown }
 
     if (ordersError) {
+      const errorObj = ordersError as any
       console.error('[Admin Orders] Query failed:', {
-        error: ordersError.message,
-        code: ordersError.code,
+        error: errorObj.message,
+        code: errorObj.code,
         timestamp: new Date().toISOString(),
         errorId: 'ADMIN_ORDERS_FETCH_FAILED',
       })
@@ -278,9 +279,10 @@ export default defineEventHandler(async (event): Promise<ApiResponse> => {
       .select('total_eur, status') as { data: AggregateOrderFromDB[] | null, error: unknown }
 
     if (aggregateError) {
+      const errorObj = aggregateError as any
       console.error('[Admin Orders] Aggregate query failed:', {
-        error: aggregateError.message,
-        code: aggregateError.code,
+        error: errorObj.message,
+        code: errorObj.code,
         timestamp: new Date().toISOString(),
         errorId: 'ADMIN_ORDERS_AGGREGATE_FAILED',
       })

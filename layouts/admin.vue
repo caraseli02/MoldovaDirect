@@ -193,11 +193,12 @@
 </template>
 
 <script setup lang="ts">
+import { toast } from 'vue-sonner'
+
 const { t } = useI18n()
 const route = useRoute()
 const localePath = useLocalePath()
 const authStore = useAuthStore()
-const toast = useToast()
 
 const sidebarOpen = ref(false)
 const userMenuOpen = ref(false)
@@ -249,10 +250,8 @@ async function handleLogout(): Promise<void> {
     userMenuOpen.value = true
 
     // Show error toast
-    toast.toast({
-      title: t('admin.errors.logoutFailed'),
+    toast.error(t('admin.errors.logoutFailed'), {
       description: error instanceof Error ? error.message : t('admin.errors.unknownError'),
-      variant: 'destructive',
     })
   }
 }

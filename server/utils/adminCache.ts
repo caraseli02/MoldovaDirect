@@ -7,6 +7,7 @@
 
 import type { H3Event } from 'h3'
 import { getQuery } from 'h3'
+// @ts-expect-error - Nitro storage import
 import { useStorage } from '#nitro'
 
 type CacheScope = 'stats' | 'products' | 'orders' | 'users' | 'analytics' | 'audit-logs' | 'email-logs' | 'inventory' | 'all'
@@ -70,7 +71,7 @@ export async function invalidateAdminCache(scope: CacheScope): Promise<CacheInva
       if (keyPattern.endsWith('-')) {
         // Get all keys and remove those matching the prefix
         const allKeys = await storage.getKeys()
-        const matchingKeys = allKeys.filter(key => key.startsWith(keyPattern))
+        const matchingKeys = allKeys.filter((key: string) => key.startsWith(keyPattern))
 
         for (const key of matchingKeys) {
           await storage.removeItem(key)

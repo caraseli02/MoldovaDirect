@@ -5,8 +5,8 @@
 
 import {
   orderConfirmation,
-  type OrderEmailData,
 } from '~/server/utils/emailTemplates'
+import type { OrderEmailData } from '~/server/utils/emailTemplates/types'
 import { requireAdminRole } from '~/server/utils/adminAuth'
 
 export default defineEventHandler(async (event) => {

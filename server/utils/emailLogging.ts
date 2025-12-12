@@ -7,6 +7,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type {
   EmailLog,
+  EmailLogWithOrder,
   CreateEmailLogInput,
   UpdateEmailLogInput,
   EmailLogFilters,
@@ -62,7 +63,7 @@ export async function updateEmailLog(
 ): Promise<EmailLog> {
   const supabase = resolveSupabaseClient(supabaseClient)
 
-  const updateData = {}
+  const updateData: Record<string, any> = {}
 
   if (input.status) updateData.status = input.status
   if (input.attempts !== undefined) updateData.attempts = input.attempts
@@ -191,7 +192,7 @@ export async function getEmailLogs(
     })
   }
 
-  const logs = (data || []).map(transformEmailLogWithOrderFromDb)
+  const logs = (data || []).map(transformEmailLogWithOrderFromDb) as EmailLogWithOrder[]
   const total = count || 0
   const totalPages = Math.ceil(total / limit)
 

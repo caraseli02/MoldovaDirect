@@ -387,7 +387,7 @@ onMounted(async () => {
   // because cart validation runs before this code executes.
   if (!orderData.value) {
     try {
-      await checkoutStore.restore()
+      await (checkoutStore.restore as any)()
       // Wait for Vue's reactivity system to propagate the state changes
       await nextTick()
 
@@ -464,7 +464,7 @@ onBeforeUnmount(() => {
   // Clear checkout session when leaving confirmation page
   // This allows user to start a fresh checkout next time
   setTimeout(() => {
-    checkoutStore.resetCheckout()
+    (checkoutStore.resetCheckout as any)()
   }, 1000)
 })
 

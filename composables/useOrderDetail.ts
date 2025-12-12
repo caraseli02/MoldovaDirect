@@ -12,6 +12,7 @@
  */
 
 import type { Order, OrderStatus, OrderItem } from '~/types'
+import type { Product } from '~/types/database'
 import type { SupabaseClient } from '@supabase/supabase-js'
 
 export interface TrackingEvent {
@@ -210,7 +211,7 @@ export const useOrderDetail = (): UseOrderDetailReturn => {
 
       // Add each item to cart
       for (const item of order.value.items || []) {
-        const product = item.productSnapshot as unknown as { id: string, name: string, price: number }
+        const product = item.productSnapshot as unknown as Product
         if (product) {
           await addItem(product, item.quantity)
         }

@@ -72,9 +72,9 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    let result = {}
+    let result: Record<string, any> = {}
     let auditAction = ''
-    let auditDetails = {}
+    let auditDetails: Record<string, any> = {}
 
     switch (body.action) {
       case 'suspend': {
@@ -360,7 +360,7 @@ function getActionSuccessMessage(action: string): string {
  * Simulate user action for development/testing
  */
 function simulateUserAction(action: string, userId: string) {
-  const result = {}
+  const result: Record<string, any> = {}
 
   switch (action) {
     case 'suspend':

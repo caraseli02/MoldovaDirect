@@ -111,7 +111,7 @@
             class="h-auto"
           >
             <ProducerCard
-              :producer="producer"
+              :producer="producer as Producer"
               @click="openProducerModal"
             />
           </SwiperSlide>

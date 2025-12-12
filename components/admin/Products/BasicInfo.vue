@@ -256,9 +256,9 @@ const selectedCategoryInfo = computed(() => {
 })
 
 // Utility functions
-const getLocalizedText = (text: Record<string, string> | null | undefined) => {
+const getLocalizedText = (text: Record<string, string | undefined> | null | undefined) => {
   if (!text) return ''
-  return text[locale.value] || text.es || Object.values(text)[0] || ''
+  return text[locale.value] || text.es || Object.values(text).find(v => v) || ''
 }
 
 const generateSkuFromName = (name: string) => {

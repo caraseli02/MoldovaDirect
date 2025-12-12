@@ -363,7 +363,7 @@ const clearSearch = () => {
   emit('update-search', '')
 }
 
-const updateStatusFilter = (value: string | number | null | undefined) => {
+const updateStatusFilter = (value: unknown) => {
   const status = value && typeof value === 'string' ? [value as 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'] : undefined
   emit('update-status', status)
 }
@@ -372,7 +372,7 @@ const clearStatusFilter = () => {
   emit('update-status', undefined)
 }
 
-const updatePaymentStatusFilter = (value: string | number | null | undefined) => {
+const updatePaymentStatusFilter = (value: unknown) => {
   const paymentStatus = value && typeof value === 'string' ? [value as 'pending' | 'paid' | 'failed' | 'refunded'] : undefined
   emit('update-payment-status', paymentStatus)
 }

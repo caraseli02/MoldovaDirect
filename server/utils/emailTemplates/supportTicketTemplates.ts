@@ -271,7 +271,7 @@ export function generateCustomerConfirmationTemplate(data: SupportTicketData): s
                     ? `
                   <tr>
                     <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">${t.orderTotal}:</td>
-                    <td style="padding: 8px 0; color: #1f2937; font-size: 14px; font-weight: 600; text-align: right;">${formatCurrency(data.orderTotal, data.locale)}</td>
+                    <td style="padding: 8px 0; color: #1f2937; font-size: 14px; font-weight: 600; text-align: right;">${formatCurrency(data.orderTotal)}</td>
                   </tr>
                   `
                     : ''}
@@ -417,7 +417,7 @@ export function generateStaffNotificationTemplate(data: SupportTicketData): stri
                     ? `
                   <tr>
                     <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">${t.orderTotal}:</td>
-                    <td style="padding: 8px 0; color: #1f2937; font-size: 14px; font-weight: 600; text-align: right;">${formatCurrency(data.orderTotal, data.locale)}</td>
+                    <td style="padding: 8px 0; color: #1f2937; font-size: 14px; font-weight: 600; text-align: right;">${formatCurrency(data.orderTotal)}</td>
                   </tr>
                   `
                     : ''}
@@ -469,4 +469,4 @@ export function getSupportTicketSubject(emailType: 'customer' | 'staff', ticketN
   }
 }
 
-export { SupportTicketData }
+export type { SupportTicketData }

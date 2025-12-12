@@ -323,11 +323,11 @@ export function getMockProducts(options: {
       }
 
       if (typeof aValue === 'string') {
-        const comparison = aValue.localeCompare(bValue)
+        const comparison = aValue.localeCompare(bValue as string)
         return options.sortOrder === 'asc' ? comparison : -comparison
       }
       else {
-        return options.sortOrder === 'asc' ? aValue - bValue : bValue - aValue
+        return options.sortOrder === 'asc' ? (aValue as number) - (bValue as number) : (bValue as number) - (aValue as number)
       }
     })
   }

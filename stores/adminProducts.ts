@@ -235,7 +235,7 @@ export const useAdminProductsStore = defineStore('adminProducts', {
      * Update sorting and refresh
      */
     async updateSort(sortBy: string, sortOrder: 'asc' | 'desc' = 'asc') {
-      this.filters.sortBy = sortBy as string
+      this.filters.sortBy = sortBy as 'name' | 'created_at' | 'price' | 'stock' | undefined
       this.filters.sortOrder = sortOrder
       await this.fetchProducts()
     },

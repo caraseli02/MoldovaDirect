@@ -17,11 +17,11 @@ const classifyNetworkError = (err: any): string => {
   // HTTP errors with status codes
   if (typeof err === 'object' && err !== null && 'statusCode' in err) {
     const statusCode = (err as { statusCode?: number }).statusCode
-    if (statusCode === 404) return 'Resource not found'
-    if (statusCode === 403) return 'Access denied'
-    if (statusCode === 401) return 'Authentication required'
-    if (statusCode === 400) return 'Invalid request'
-    if (statusCode >= 500) return 'Server error. Please try again later.'
+    if (statusCode && statusCode === 404) return 'Resource not found'
+    if (statusCode && statusCode === 403) return 'Access denied'
+    if (statusCode && statusCode === 401) return 'Authentication required'
+    if (statusCode && statusCode === 400) return 'Invalid request'
+    if (statusCode && statusCode >= 500) return 'Server error. Please try again later.'
   }
 
   // Generic error
@@ -339,7 +339,7 @@ export const useProductCatalog = () => {
   // Sort helpers
   const updateSort = (sort: string) => {
     sortBy.value = sort
-    filters.value.sort = sort as unknown as 'price' | 'name' | 'created'
+    filters.value.sort = sort as 'name' | 'featured' | 'price_asc' | 'price_desc' | 'newest' | 'created' | undefined
   }
 
   return {

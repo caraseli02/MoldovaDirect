@@ -76,7 +76,7 @@ export default defineEventHandler(async (event) => {
         order_id: orderId,
         note_type: body.noteType,
         content: body.content.trim(),
-        created_by: user.id,
+        created_by: user?.id,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       })

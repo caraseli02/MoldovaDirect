@@ -56,7 +56,18 @@
 
 <script setup lang="ts">
 interface Props {
-  user: Record<string, any> // Replace with proper User type
+  user: {
+    id: string
+    email: string
+    email_confirmed_at?: string | null
+    profile?: { name: string } | null
+    status: string
+    user_metadata?: {
+      suspended?: boolean
+      banned?: boolean
+      role?: string
+    }
+  }
 }
 
 interface Emits {

@@ -68,7 +68,7 @@
               Edit Product
             </h1>
             <p class="text-gray-600 dark:text-gray-400">
-              {{ getLocalizedText(product?.name) }}
+              {{ getLocalizedText((product as { name?: Record<string, string> })?.name) }}
             </p>
           </div>
         </div>
@@ -275,7 +275,7 @@ const handleCancel = () => {
 // SEO
 useHead({
   title: computed(() => {
-    const productName = getLocalizedText(product.value?.name)
+    const productName = getLocalizedText((product.value as { name?: Record<string, string> })?.name)
     return `Edit ${productName || 'Product'} - Admin - Moldova Direct`
   }),
   meta: [

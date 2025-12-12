@@ -92,7 +92,7 @@ export default defineEventHandler(async (event) => {
         .select('id')
         .single()
 
-      if (createError) {
+      if (createError as any) {
         throw createError({
           statusCode: 500,
           statusMessage: 'Failed to create cart',

@@ -1,6 +1,7 @@
 // POST /api/cart/validate - Validate cart items before checkout
 import { serverSupabaseServiceRole } from '#supabase/server'
 import { validateCartItems, calculateOrderTotals, getAvailableShippingMethods } from '~/server/utils/orderUtils'
+import type { CartItem } from '~/types/database'
 
 interface ValidateCartRequest {
   cartId: number
@@ -57,7 +58,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Validate cart items
-    const validation = validateCartItems(cartItems as unknown)
+    const validation = validateCartItems(cartItems as CartItem[])
 
     if (!validation.valid) {
       return {
@@ -68,10 +69,10 @@ export default defineEventHandler(async (event) => {
     }
 
     // Calculate order totals
-    const orderCalculation = calculateOrderTotals(cartItems as unknown)
+    const orderCalculation = calculateOrderTotals(cartItems as CartItem[])
 
     // Get available shipping methods
-    const shippingMethods = getAvailableShippingMethods(cartItems as unknown, body.shippingAddress)
+    const shippingMethods = getAvailableShippingMethods(cartItems as CartItem[], body.shippingAddress)
 
     return {
       success: true,

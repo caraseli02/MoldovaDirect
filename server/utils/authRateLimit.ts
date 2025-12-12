@@ -61,7 +61,7 @@ function getClientIdentifier(event: H3Event): string {
   const remoteAddr = event.node.req.socket?.remoteAddress
 
   if (forwarded) {
-    return forwarded.split(',')[0].trim()
+    return forwarded.split(',')[0]?.trim() || 'unknown'
   }
 
   if (realIP) {

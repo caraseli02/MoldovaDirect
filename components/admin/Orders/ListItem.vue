@@ -98,7 +98,12 @@ import {
 import type { OrderWithAdminDetailsRaw } from '~/types/database'
 
 interface Props {
-  order: OrderWithAdminDetailsRaw
+  order: Partial<OrderWithAdminDetailsRaw> & {
+    id: number
+    created_at: string
+    total_eur: number
+    status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
+  }
   isSelected?: boolean
 }
 

@@ -163,7 +163,8 @@ const chartOptions: ChartOptions = {
     tooltip: {
       callbacks: {
         title: (context) => {
-          const date = new Date(props.data?.activityTrends?.[context[0]?.dataIndex]?.date || '')
+          const dataIndex = context[0]?.dataIndex
+          const date = new Date(props.data?.activityTrends?.[dataIndex ?? 0]?.date || '')
           return date.toLocaleDateString('en-US', {
             weekday: 'long',
             year: 'numeric',

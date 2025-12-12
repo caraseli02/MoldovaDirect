@@ -212,8 +212,8 @@ export function validateAndSanitizeOrderData(data: OrderEmailData): OrderEmailDa
       name: sanitizeString(item.name),
       sku: item.sku ? sanitizeString(item.sku) : undefined,
     })),
-    shippingAddress: sanitizeAddress(data.shippingAddress),
-    billingAddress: data.billingAddress ? sanitizeAddress(data.billingAddress) : undefined,
+    shippingAddress: sanitizeAddress(data.shippingAddress) as AddressData,
+    billingAddress: data.billingAddress ? sanitizeAddress(data.billingAddress) as AddressData | undefined : undefined,
     paymentMethod: sanitizeString(data.paymentMethod),
     locale: data.locale.toLowerCase(),
   }

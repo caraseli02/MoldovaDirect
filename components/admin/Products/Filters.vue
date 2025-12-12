@@ -280,9 +280,9 @@ const hasActiveFilters = computed(() => {
 })
 
 // Utility functions
-const getLocalizedText = (text: Record<string, string> | null | undefined) => {
+const getLocalizedText = (text: Record<string, string | undefined> | null | undefined) => {
   if (!text) return ''
-  return text.es || Object.values(text)[0] || ''
+  return text.es || Object.values(text).find(v => v) || ''
 }
 
 const getCategoryName = (categoryId: number) => {

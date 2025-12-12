@@ -71,7 +71,7 @@ interface Props {
 }
 
 const _props = withDefaults(defineProps<Props>(), {
-  data: null,
+  data: undefined,
   loading: false,
   error: null,
 })

@@ -106,6 +106,7 @@
 
 <script setup lang="ts">
 import { Button } from '@/components/ui/button'
+import type { Product } from '~/stores/cart/types'
 
 const toast = useToast()
 
@@ -163,7 +164,7 @@ const handleLoadRecommendations = async () => {
   }
 }
 
-const handleAddToCart = async (product: Record<string, any>) => {
+const handleAddToCart = async (product: Product) => {
   try {
     await addItem(product, 1)
     toast.success('Producto añadido', `${product.name} ha sido añadido al carrito`)

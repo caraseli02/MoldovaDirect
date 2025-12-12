@@ -9,8 +9,7 @@
  * - 4.4: Notify about shipping delays
  */
 
-import type { RealtimeChannel } from '@supabase/supabase-js'
-import type { SupabaseClient } from '@supabase/supabase-js'
+import type { RealtimeChannel, SupabaseClient } from '@supabase/supabase-js'
 import type { Order, OrderStatus } from '~/types'
 
 export interface OrderStatusUpdate {
@@ -24,10 +23,10 @@ export interface OrderStatusUpdate {
 
 export interface UseOrderTrackingReturn {
   // State
-  isConnected: Ref<boolean>
-  lastUpdate: Ref<OrderStatusUpdate | null>
-  recentUpdates: Ref<OrderStatusUpdate[]>
-  connectionError: Ref<string | null>
+  isConnected: Readonly<Ref<boolean>>
+  lastUpdate: Readonly<Ref<OrderStatusUpdate | null>>
+  recentUpdates: Readonly<Ref<readonly OrderStatusUpdate[]>>
+  connectionError: Readonly<Ref<string | null>>
 
   // Actions
   subscribeToOrderUpdates: (userId: string) => Promise<void>

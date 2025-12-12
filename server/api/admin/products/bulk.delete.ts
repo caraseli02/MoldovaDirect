@@ -14,8 +14,23 @@
 
 import { serverSupabaseClient } from '#supabase/server'
 import type { SupabaseClient } from '@supabase/supabase-js'
+import type { H3Event } from 'h3'
 import { requireAdminRole } from '~/server/utils/adminAuth'
 import { z } from 'zod'
+
+/**
+ * Get client IP address from request
+ */
+function getClientIP(event: H3Event): string | null {
+  const headers = getHeaders(event)
+  return (
+    headers['x-forwarded-for']?.split(',')[0].trim()
+    || headers['x-real-ip']
+    || headers['cf-connecting-ip']
+    || getRequestIP(event)
+    || null
+  )
+}
 
 const bulkDeleteSchema = z.object({
   productIds: z.array(z.number()).min(1, 'At least one product ID is required'),

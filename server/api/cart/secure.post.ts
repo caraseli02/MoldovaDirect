@@ -132,7 +132,7 @@ export default defineEventHandler(async (event) => {
       'removeItem',
       'clearCart',
     ]
-    if (stateChangingOps.includes(operation as unknown)) {
+    if (stateChangingOps.includes(operation as 'addItem' | 'updateQuantity' | 'removeItem' | 'clearCart')) {
       if (!csrfToken || !validateCSRFToken(sessionId, csrfToken)) {
         throw createError({
           statusCode: 403,

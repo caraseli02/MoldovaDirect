@@ -449,7 +449,7 @@ async function loadCartData(): Promise<StorageResult<{
 
     return {
       success: true,
-      data: loadedData,
+      data: loadedData as { items: CartItem[], sessionId: string | null, lastSyncAt: Date | null },
     }
   }
   catch (error: any) {
