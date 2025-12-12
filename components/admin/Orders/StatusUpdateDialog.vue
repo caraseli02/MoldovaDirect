@@ -325,7 +325,7 @@ const handleSubmit = async () => {
         trackingNumber: formData.value.trackingNumber || undefined,
         carrier: formData.value.carrier || undefined,
       },
-    })
+    }) as any
 
     if (response.success) {
       toast.success(`Order status updated to ${formData.value.status}`)

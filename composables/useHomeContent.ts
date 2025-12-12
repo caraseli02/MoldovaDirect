@@ -152,7 +152,7 @@ export const useHomeContent = () => {
         return []
       }
 
-      return logos.map((_: unknown, index: number) => t(`home.socialProof.logos.${index}`))
+      return logos.map((_: any, index: number) => t(`home.socialProof.logos.${index}`))
     }
     catch {
       return []
@@ -182,7 +182,7 @@ export const useHomeContent = () => {
         return []
       }
 
-      return timelineItems.map((_: unknown, index: number): StoryTimelineItem => ({
+      return timelineItems.map((_: any, index: number): StoryTimelineItem => ({
         year: t(`home.story.timeline.items.${index}.year`),
         title: t(`home.story.timeline.items.${index}.title`),
         description: t(`home.story.timeline.items.${index}.description`),

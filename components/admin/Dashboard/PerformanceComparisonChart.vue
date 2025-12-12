@@ -83,7 +83,7 @@ interface TrendSummary {
 const props = defineProps<{ dataset: PerformanceDataset, revenueSummary: TrendSummary, customerSummary: TrendSummary }>()
 
 const chartRef = ref<HTMLElement | null>(null)
-let chartInstance: unknown = null
+let chartInstance = null
 let apexPromise: Promise<unknown> | null = null
 
 const renderChart = async () => {

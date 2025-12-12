@@ -223,7 +223,7 @@ describe('Orders List API', () => {
         return order.order_items.some((item) => {
           const snapshot = item.product_snapshot
           if (snapshot?.name_translations) {
-            return Object.values(snapshot.name_translations).some((name: unknown) =>
+            return Object.values(snapshot.name_translations).some((name: any) =>
               name?.toLowerCase().includes(searchLower),
             )
           }

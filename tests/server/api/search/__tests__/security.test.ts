@@ -21,7 +21,7 @@ describe.skip('Search API Security', () => {
     it('should handle percent signs in search queries', async () => {
       const response = await $fetch('/api/search', {
         params: { q: '50% off' },
-      })
+      }) as any
 
       expect(response).toBeDefined()
       expect(response.meta.query).toBe('50% off')
@@ -31,7 +31,7 @@ describe.skip('Search API Security', () => {
     it('should handle underscores in search queries', async () => {
       const response = await $fetch('/api/search', {
         params: { q: 'product_name' },
-      })
+      }) as any
 
       expect(response).toBeDefined()
       expect(response.meta.query).toBe('product_name')
@@ -40,7 +40,7 @@ describe.skip('Search API Security', () => {
     it('should handle single quotes in search queries', async () => {
       const response = await $fetch('/api/search', {
         params: { q: 'O\'Reilly\'s wine' },
-      })
+      }) as any
 
       expect(response).toBeDefined()
       expect(response.meta.query).toBe('O\'Reilly\'s wine')
@@ -49,7 +49,7 @@ describe.skip('Search API Security', () => {
     it('should handle commas in search queries', async () => {
       const response = await $fetch('/api/search', {
         params: { q: '10,000' },
-      })
+      }) as any
 
       expect(response).toBeDefined()
       expect(response.meta.query).toBe('10,000')
@@ -59,7 +59,7 @@ describe.skip('Search API Security', () => {
     it('should handle backslashes in search queries', async () => {
       const response = await $fetch('/api/search', {
         params: { q: 'path\\to\\file' },
-      })
+      }) as any
 
       expect(response).toBeDefined()
       expect(response.meta.query).toBe('path\\to\\file')
@@ -68,7 +68,7 @@ describe.skip('Search API Security', () => {
     it('should handle multiple special characters together', async () => {
       const response = await $fetch('/api/search', {
         params: { q: '50% off, wine\'s best_seller' },
-      })
+      }) as any
 
       expect(response).toBeDefined()
       expect(response.meta.query).toBe('50% off, wine\'s best_seller')
@@ -81,7 +81,7 @@ describe.skip('Search API Security', () => {
 
       const response = await $fetch('/api/search', {
         params: { q: maliciousQuery },
-      })
+      }) as any
 
       // Should return safely without executing SQL
       expect(response).toBeDefined()
@@ -94,7 +94,7 @@ describe.skip('Search API Security', () => {
 
       const response = await $fetch('/api/search', {
         params: { q: maliciousQuery },
-      })
+      }) as any
 
       // Should search for literal "%%", not match everything
       expect(response).toBeDefined()
@@ -106,7 +106,7 @@ describe.skip('Search API Security', () => {
 
       const response = await $fetch('/api/search', {
         params: { q: maliciousQuery },
-      })
+      }) as any
 
       // Should search for the literal string, not execute UNION
       expect(response).toBeDefined()
@@ -118,7 +118,7 @@ describe.skip('Search API Security', () => {
 
       const response = await $fetch('/api/search', {
         params: { q: maliciousQuery },
-      })
+      }) as any
 
       // Should search for the literal string, not match all products
       expect(response).toBeDefined()
@@ -142,7 +142,7 @@ describe.skip('Search API Security', () => {
 
       const response = await $fetch('/api/search', {
         params: { q: exactlyMax },
-      })
+      }) as any
 
       expect(response).toBeDefined()
       expect(response.meta.query).toBe(exactlyMax)
@@ -151,7 +151,7 @@ describe.skip('Search API Security', () => {
     it('should reject search terms below minimum length', async () => {
       const response = await $fetch('/api/search', {
         params: { q: 'a' },
-      })
+      }) as any
 
       expect(response.meta.message).toContain('at least 2 characters')
       expect(response.products).toHaveLength(0)
@@ -160,7 +160,7 @@ describe.skip('Search API Security', () => {
     it('should accept search terms at minimum length', async () => {
       const response = await $fetch('/api/search', {
         params: { q: 'ab' },
-      })
+      }) as any
 
       expect(response).toBeDefined()
       expect(response.products).toBeDefined()
@@ -169,7 +169,7 @@ describe.skip('Search API Security', () => {
     it('should trim whitespace when checking minimum length', async () => {
       const response = await $fetch('/api/search', {
         params: { q: '  ab  ' },
-      })
+      }) as any
 
       expect(response).toBeDefined()
       expect(response.products).toBeDefined()
@@ -178,7 +178,7 @@ describe.skip('Search API Security', () => {
     it('should reject empty search terms', async () => {
       const response = await $fetch('/api/search', {
         params: { q: '' },
-      })
+      }) as any
 
       expect(response.meta.message).toContain('at least 2 characters')
       expect(response.products).toHaveLength(0)
@@ -187,7 +187,7 @@ describe.skip('Search API Security', () => {
     it('should reject whitespace-only search terms', async () => {
       const response = await $fetch('/api/search', {
         params: { q: '   ' },
-      })
+      }) as any
 
       expect(response.meta.message).toContain('at least 2 characters')
       expect(response.products).toHaveLength(0)
@@ -198,7 +198,7 @@ describe.skip('Search API Security', () => {
     it('should return proper response structure with valid query', async () => {
       const response = await $fetch('/api/search', {
         params: { q: 'wine' },
-      })
+      }) as any
 
       expect(response).toHaveProperty('products')
       expect(response).toHaveProperty('meta')
@@ -213,7 +213,7 @@ describe.skip('Search API Security', () => {
       const query = 'test with \'special\' chars & symbols'
       const response = await $fetch('/api/search', {
         params: { q: query },
-      })
+      }) as any
 
       expect(response.meta.query).toBe(query)
     })
@@ -223,7 +223,7 @@ describe.skip('Search API Security', () => {
     it('should handle product code searches with special formatting', async () => {
       const response = await $fetch('/api/search', {
         params: { q: 'SKU-123_ABC' },
-      })
+      }) as any
 
       expect(response).toBeDefined()
       expect(response.products).toBeDefined()
@@ -232,7 +232,7 @@ describe.skip('Search API Security', () => {
     it('should handle price searches with currency symbols', async () => {
       const response = await $fetch('/api/search', {
         params: { q: '$10.99' },
-      })
+      }) as any
 
       expect(response).toBeDefined()
       expect(response.products).toBeDefined()
@@ -241,7 +241,7 @@ describe.skip('Search API Security', () => {
     it('should handle multi-word searches with punctuation', async () => {
       const response = await $fetch('/api/search', {
         params: { q: 'red wine, 2020' },
-      })
+      }) as any
 
       expect(response).toBeDefined()
       expect(response.products).toBeDefined()
@@ -249,7 +249,7 @@ describe.skip('Search API Security', () => {
 
     it('should handle searches with parentheses and brackets', async () => {
       const response = await $fetch('/api/search', {
-        params: { q: 'wine (organic) [750ml]' },
+        params: { q: 'wine (organic) as any [750ml]' },
       })
 
       expect(response).toBeDefined()

@@ -283,7 +283,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
 
     try {
       // Fetch addresses and preferences in parallel from the API
-      const response = await $fetch('/api/checkout/user-data')
+      const response = await $fetch('/api/checkout/user-data') as any
 
       // Update session with fetched data
       if (response.addresses && Array.isArray(response.addresses)) {

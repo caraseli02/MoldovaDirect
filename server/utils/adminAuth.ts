@@ -37,7 +37,7 @@ type UserId = string & { readonly __brand: 'UserId' }
 /**
  * Type guard to validate if an unknown value is a valid AuthUser
  */
-function isValidAuthUser(user: unknown): user is AuthUser {
+function isValidAuthUser(user: any): user is AuthUser {
   return (
     typeof user === 'object'
     && user !== null
@@ -199,7 +199,7 @@ export interface AuditLogResult {
  * Fallback audit logging to console when database logging fails
  * This ensures critical admin actions are always logged somewhere
  */
-function logAuditToConsole(logEntry: unknown, errorId: string, dbError?: unknown) {
+function logAuditToConsole(logEntry: any, errorId: string, dbError?: unknown) {
   console.error('[ADMIN_AUDIT_CRITICAL] Database logging failed - using console fallback', {
     errorId,
     timestamp: logEntry.timestamp,

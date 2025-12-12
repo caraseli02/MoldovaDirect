@@ -112,7 +112,7 @@ export function transformOrderItems(
  * @param address - Raw address data from database
  * @returns Formatted address data
  */
-export function transformAddress(address: unknown): AddressData {
+export function transformAddress(address: any): AddressData {
   if (!address) {
     return {
       firstName: '',

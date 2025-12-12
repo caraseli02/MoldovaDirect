@@ -440,7 +440,7 @@ async function retryEmail(logId: number) {
   try {
     await $fetch(`/api/admin/email-logs/${logId}/retry`, {
       method: 'POST',
-    })
+    }) as any
     useToast().success('Email retry initiated')
     showDetailsModal.value = false
     await searchLogs()

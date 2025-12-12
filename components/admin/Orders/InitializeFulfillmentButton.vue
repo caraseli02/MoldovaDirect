@@ -40,7 +40,7 @@ const initializeTasks = async () => {
   try {
     const response = await $fetch(`/api/admin/orders/${props.orderId}/fulfillment-tasks`, {
       method: 'POST',
-    })
+    }) as any
 
     if (response.success) {
       toast.success('Success', 'Fulfillment tasks have been created')

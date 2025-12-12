@@ -109,7 +109,7 @@ describe('Cart Locking', () => {
       await cart.lockCart(sessionId1, 30)
 
       // Try to unlock with different session - should throw
-      let caughtError: unknown = null
+      let caughtError = null
       try {
         await cart.unlockCart(sessionId2)
       }
@@ -168,7 +168,7 @@ describe('Cart Locking', () => {
       await cart.lockCart(sessionId, 30)
 
       // Try to add item - should throw
-      let caughtError: unknown = null
+      let caughtError = null
       try {
         await cart.addItem(mockProduct, 1)
       }
@@ -193,7 +193,7 @@ describe('Cart Locking', () => {
       await cart.lockCart(sessionId, 30)
 
       // Try to remove item - should throw
-      let caughtError: unknown = null
+      let caughtError = null
       try {
         await cart.removeItem(itemId)
       }
@@ -217,7 +217,7 @@ describe('Cart Locking', () => {
       await cart.lockCart(sessionId, 30)
 
       // Try to update quantity - should throw
-      let caughtError: unknown = null
+      let caughtError = null
       try {
         await cart.updateQuantity(itemId, 2)
       }
@@ -240,7 +240,7 @@ describe('Cart Locking', () => {
       await cart.lockCart(sessionId, 30)
 
       // Try to clear cart - should throw
-      let caughtError: unknown = null
+      let caughtError = null
       try {
         await cart.clearCart()
       }
@@ -383,7 +383,7 @@ describe('Cart Locking', () => {
 
       await cart.lockCart(sessionId, 30)
 
-      let caughtError: unknown = null
+      let caughtError = null
       try {
         await cart.addItem(mockProduct, 1)
       }

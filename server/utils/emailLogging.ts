@@ -61,7 +61,7 @@ export async function updateEmailLog(
 ): Promise<EmailLog> {
   const supabase = resolveSupabaseClient(supabaseClient)
 
-  const updateData: unknown = {}
+  const updateData = {}
 
   if (input.status) updateData.status = input.status
   if (input.attempts !== undefined) updateData.attempts = input.attempts

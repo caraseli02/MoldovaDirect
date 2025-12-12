@@ -181,7 +181,7 @@ async function handleSubmit() {
     const response = await $fetch('/api/tools/send-test-email', {
       method: 'POST',
       body: {
-        email: email.value.trim(),
+        email: email.value.trim() as any,
         type: selectedType.value,
         locale: locale.value,
         issueDescription: selectedType.value === 'order_issue' ? issueDescription.value : undefined,

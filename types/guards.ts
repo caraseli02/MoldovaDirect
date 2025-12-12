@@ -210,7 +210,7 @@ export function validateCategory(data: any): { valid: boolean, errors: string[] 
 /**
  * Validate product filters
  */
-export function validateProductFilters(filters: unknown): ProductFilters {
+export function validateProductFilters(filters: any): ProductFilters {
   const validated: ProductFilters = {}
 
   if (filters.category && (typeof filters.category === 'string' || typeof filters.category === 'number')) {
@@ -259,7 +259,7 @@ export function validateProductFilters(filters: unknown): ProductFilters {
 /**
  * Transform a raw product from database to ProductWithRelations
  */
-export function transformProduct(rawProduct: unknown, locale: LanguageCode = 'es'): ProductWithRelations | null {
+export function transformProduct(rawProduct: any, locale: LanguageCode = 'es'): ProductWithRelations | null {
   if (!isProduct(rawProduct)) return null
 
   const stockStatus: StockStatus

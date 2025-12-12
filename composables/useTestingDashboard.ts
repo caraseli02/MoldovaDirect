@@ -22,7 +22,7 @@ export const useTestingDashboard = () => {
   const refreshStats = async () => {
     loadingStats.value = true
     try {
-      const response = await $fetch('/api/admin/stats')
+      const response = await $fetch('/api/admin/stats') as any
       stats.value = response.stats
     }
     catch (err: any) {
@@ -34,7 +34,7 @@ export const useTestingDashboard = () => {
   }
 
   // Quick Actions
-  const runQuickAction = async (preset: string, onComplete?: (response: unknown) => void) => {
+  const runQuickAction = async (preset: string, onComplete?: (response: any) => void) => {
     loading.value = true
     result.value = null
     progress.value = {
@@ -48,7 +48,7 @@ export const useTestingDashboard = () => {
       const response = await $fetch('/api/admin/seed-data', {
         method: 'POST',
         body: { preset },
-      })
+      }) as any
 
       progress.value.percent = 100
       progress.value.message = 'Complete!'
@@ -100,7 +100,7 @@ export const useTestingDashboard = () => {
           action,
           confirm: true,
         },
-      })
+      }) as any
 
       result.value = {
         success: response.success,
@@ -135,7 +135,7 @@ export const useTestingDashboard = () => {
       const response = await $fetch('/api/admin/cleanup', {
         method: 'POST',
         body: { action, confirm: true },
-      })
+      }) as any
 
       result.value = {
         success: response.success,
@@ -180,7 +180,7 @@ export const useTestingDashboard = () => {
       const response = await $fetch('/api/admin/seed-users', {
         method: 'POST',
         body: config,
-      })
+      }) as any
 
       progress.value.percent = 100
       result.value = {
@@ -228,7 +228,7 @@ export const useTestingDashboard = () => {
           preset: 'minimal',
           ...customData,
         },
-      })
+      }) as any
 
       progress.value.percent = 100
       result.value = {
@@ -258,7 +258,7 @@ export const useTestingDashboard = () => {
   }
 
   // Error Handling
-  const getErrorSuggestion = (error: unknown): string | undefined => {
+  const getErrorSuggestion = (error: any): string | undefined => {
     const err = error as { data?: { message?: string }, message?: string }
     const message = err.data?.message || err.message || ''
 
@@ -285,7 +285,7 @@ export const useTestingDashboard = () => {
       .replace(/^./, str => str.toUpperCase())
   }
 
-  const formatValue = (value: unknown): string => {
+  const formatValue = (value: any): string => {
     if (Array.isArray(value)) return value.join(', ')
     if (typeof value === 'boolean') return value ? 'Yes' : 'No'
     return String(value)

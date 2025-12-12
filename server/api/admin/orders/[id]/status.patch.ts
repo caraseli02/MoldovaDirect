@@ -101,7 +101,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Prepare update data
-    const updateData: unknown = {
+    const updateData = {
       status: body.status,
       updated_at: new Date().toISOString(),
     }

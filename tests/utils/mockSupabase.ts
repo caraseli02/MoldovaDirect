@@ -45,7 +45,7 @@ export interface MockSupabaseClient {
 }
 
 export function createMockSupabaseQuery(): MockSupabaseQuery {
-  const query: unknown = {
+  const query = {
     select: vi.fn().mockReturnThis(),
     insert: vi.fn().mockReturnThis(),
     update: vi.fn().mockReturnThis(),

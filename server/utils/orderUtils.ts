@@ -207,7 +207,7 @@ export function getAvailableShippingMethods(
 /**
  * Validate shipping address
  */
-export function validateShippingAddress(address: unknown): {
+export function validateShippingAddress(address: any): {
   valid: boolean
   errors: Record<string, string>
 } {
@@ -273,7 +273,7 @@ function validatePostalCode(postalCode: string, country: string): boolean {
 /**
  * Format address for display in order context
  */
-export function formatOrderAddress(address: unknown): string {
+export function formatOrderAddress(address: any): string {
   const parts = [
     address.firstName && address.lastName ? `${address.firstName} ${address.lastName}` : '',
     address.company || '',

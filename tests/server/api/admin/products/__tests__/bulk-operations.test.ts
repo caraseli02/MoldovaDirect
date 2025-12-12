@@ -113,7 +113,7 @@ describe('Bulk Product Operations - Error Handling', () => {
       .select('is_active')
       .in('id', validIds)
 
-    expect(updatedProducts.every((p: unknown) => p.is_active === false)).toBe(true)
+    expect(updatedProducts.every((p: any) => p.is_active === false)).toBe(true)
   })
 
   it('should return error when no products found', async () => {

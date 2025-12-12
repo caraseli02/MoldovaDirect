@@ -17,7 +17,7 @@ function getLocalizedContent(content: Record<string, string>, locale: string): s
 }
 
 // Helper function to calculate similarity score between products
-function calculateSimilarityScore(product1: unknown, product2: unknown): number {
+function calculateSimilarityScore(product1: any, product2: unknown): number {
   let score = 0
 
   // Same category gets highest score
@@ -157,7 +157,7 @@ export default defineCachedEventHandler(async (event) => {
         ? 'in_stock'
         : product.stock_quantity > 0 ? 'low_stock' : 'out_of_stock',
       images: Array.isArray(product.images)
-        ? product.images.map((img: unknown, index: number) => ({
+        ? product.images.map((img: any, index: number) => ({
             url: img.url || img,
             altText: img.alt || img.alt_text || getLocalizedContent(product.name_translations, locale),
             isPrimary: img.is_primary || index === 0,

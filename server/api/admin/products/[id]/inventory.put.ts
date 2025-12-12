@@ -78,7 +78,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Update product inventory and status if needed
-    const updateData: unknown = {
+    const updateData = {
       stock_quantity: newQuantity,
       updated_at: new Date().toISOString(),
     }

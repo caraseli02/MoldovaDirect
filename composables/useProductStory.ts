@@ -152,7 +152,7 @@ export function useProductStory(
     const badges: string[] = []
     const attrs = productAttributes.value || {}
 
-    const truthy = (value: unknown) => value === true || value === 'true' || value === 1
+    const truthy = (value: any) => value === true || value === 'true' || value === 1
 
     if (truthy(attrs.organic) || truthy(attrs.organicCertified)) badges.push('organic')
     if (truthy(attrs.handcrafted) || truthy(attrs.smallBatch)) badges.push('handcrafted')

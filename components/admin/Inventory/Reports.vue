@@ -500,7 +500,7 @@ const generateReport = async () => {
 
     const response = await $fetch('/api/admin/inventory/reports', {
       query: queryParams,
-    })
+    }) as any
 
     reportData.value = response.data
   }

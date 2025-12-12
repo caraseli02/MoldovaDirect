@@ -95,7 +95,7 @@ export const useOrderTracking = (): UseOrderTrackingReturn => {
   /**
    * Handle order status update from real-time subscription
    */
-  const handleOrderUpdate = (payload: unknown) => {
+  const handleOrderUpdate = (payload: any) => {
     try {
       const payloadTyped = payload as { new: Order, old: Order }
       const newOrder = payloadTyped.new

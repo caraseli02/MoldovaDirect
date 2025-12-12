@@ -39,7 +39,7 @@ describe('Auth Middleware', () => {
     vi.stubGlobal('useSupabaseUser', () => ({ value: mockUser }))
     vi.stubGlobal('useLocalePath', () => mockLocalePath)
     vi.stubGlobal('navigateTo', mockNavigateTo)
-    vi.stubGlobal('defineNuxtRouteMiddleware', (fn: unknown) => fn)
+    vi.stubGlobal('defineNuxtRouteMiddleware', (fn: any) => fn)
   })
 
   describe('Unauthenticated Users', () => {

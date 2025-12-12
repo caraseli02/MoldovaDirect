@@ -3,7 +3,7 @@ import type { ProductFilters, ProductWithRelations, CategoryWithChildren } from 
 /**
  * Classify network errors for better user feedback
  */
-const classifyNetworkError = (err: unknown): string => {
+const classifyNetworkError = (err: any): string => {
   // Abort errors are intentional and should be silent
   if (err instanceof DOMException && err.name === 'AbortError') {
     return ''

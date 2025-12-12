@@ -64,7 +64,7 @@ export function useShippingMethods(address: Ref<Address>) {
   /**
    * Localize shipping method names and descriptions
    */
-  const localizeShippingMethods = (methods: unknown[]): ShippingMethod[] => {
+  const localizeShippingMethods = (methods: any[]): ShippingMethod[] => {
     return methods.map(method => ({
       ...method,
       name: t(`checkout.shippingMethod.${method.id}.name`, method.name),

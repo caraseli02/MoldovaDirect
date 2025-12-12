@@ -98,7 +98,7 @@ export async function confirmPaymentIntent(params: ConfirmPaymentParams): Promis
       paymentMethodId: params.paymentMethodId,
       sessionId: params.sessionId,
     },
-  })
+  }) as any
 }
 
 export async function createOrder(params: CreateOrderParams): Promise<{
@@ -147,7 +147,7 @@ export async function sendConfirmationEmail(params: SendConfirmationParams): Pro
       sessionId: params.sessionId,
       email: params.email,
     },
-  })
+  }) as any
 }
 
 /**
@@ -164,7 +164,7 @@ export async function updateInventory(items: OrderData['items'], orderId?: numbe
       items,
       orderId,
     },
-  })
+  }) as any
 }
 
 export async function fetchSavedPaymentMethods(): Promise<SavedPaymentMethod[]> {

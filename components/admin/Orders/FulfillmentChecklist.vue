@@ -463,7 +463,7 @@ const handleTaskToggle = async (task: OrderFulfillmentTaskRaw, checked: boolean 
       body: {
         completed: isChecked,
       },
-    })
+    }) as any
 
     if (response.success) {
       // Update local task state

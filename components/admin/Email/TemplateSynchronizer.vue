@@ -177,7 +177,7 @@ async function synchronizeTemplates() {
         sourceLocale: sourceLocale.value,
         targetLocales: targetLocales.value,
       },
-    })
+    }) as any
 
     useToast().success('Templates synchronized successfully')
     syncPreview.value = null

@@ -34,7 +34,7 @@ export default defineEventHandler(async (event) => {
     const validatedQuery = reportsQuerySchema.parse(query)
     const { reportType, startDate, endDate, categoryId } = validatedQuery
 
-    let reportData: unknown = {}
+    let reportData = {}
 
     switch (reportType) {
       case 'stock-levels':
@@ -236,7 +236,7 @@ async function generateMovementsSummaryReport(supabase: SupabaseClient, startDat
   const totalAdjustments = adjustments.reduce((sum: number, m: unknown) => sum + Math.abs(m.quantity), 0)
 
   // Group by reason
-  const reasonSummary = filteredMovements.reduce((acc: unknown, movement: unknown) => {
+  const reasonSummary = filteredMovements.reduce((acc: any, movement: unknown) => {
     const reason = movement.reason || 'unknown'
     if (!acc[reason]) {
       acc[reason] = { count: 0, totalQuantity: 0 }
@@ -322,7 +322,7 @@ async function generateLowStockReport(supabase: SupabaseClient, categoryId?: num
   return {
     totalLowStockProducts: lowStockProducts.length,
     totalValue: lowStockProducts.reduce((sum: number, p: unknown) => sum + p.stockValue, 0),
-    products: lowStockProducts.sort((a: unknown, b: unknown) => a.stockQuantity - b.stockQuantity),
+    products: lowStockProducts.sort((a: any, b: unknown) => a.stockQuantity - b.stockQuantity),
   }
 }
 
@@ -391,7 +391,7 @@ async function generateReorderAlertsReport(supabase: SupabaseClient, categoryId?
       high: reorderProducts.filter((p: any) => p.priority === 'high').length,
       medium: reorderProducts.filter((p: any) => p.priority === 'medium').length,
     },
-    products: reorderProducts.sort((a: unknown, b: unknown) => {
+    products: reorderProducts.sort((a: any, b: unknown) => {
       const priorityOrder: Record<string, number> = { critical: 0, high: 1, medium: 2 }
       return (priorityOrder[a.priority] ?? 3) - (priorityOrder[b.priority] ?? 3)
     }),

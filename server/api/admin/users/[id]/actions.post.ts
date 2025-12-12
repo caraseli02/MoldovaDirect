@@ -46,7 +46,7 @@ export default defineEventHandler(async (event) => {
     const supabase = serverSupabaseServiceRole(event)
 
     // Get current user to verify they exist
-    let currentUser: unknown = null
+    let currentUser = null
     try {
       const { data, error: userError } = await supabase.auth.admin.getUserById(userId)
       if (userError) {
@@ -72,9 +72,9 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    let result: unknown = {}
+    let result = {}
     let auditAction = ''
-    let auditDetails: unknown = {}
+    let auditDetails = {}
 
     switch (body.action) {
       case 'suspend': {
@@ -360,7 +360,7 @@ function getActionSuccessMessage(action: string): string {
  * Simulate user action for development/testing
  */
 function simulateUserAction(action: string, userId: string) {
-  const result: unknown = {}
+  const result = {}
 
   switch (action) {
     case 'suspend':

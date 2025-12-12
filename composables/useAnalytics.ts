@@ -35,7 +35,7 @@ export const useAnalytics = () => {
     try {
       const { data } = await $fetch('/api/admin/analytics/users', {
         query: params,
-      })
+      }) as any
 
       userAnalytics.value = data
       return data
@@ -61,7 +61,7 @@ export const useAnalytics = () => {
     try {
       const { data } = await $fetch('/api/admin/analytics/overview', {
         query: params,
-      })
+      }) as any
 
       analyticsOverview.value = data
       return data
@@ -88,7 +88,7 @@ export const useAnalytics = () => {
     try {
       const { data } = await $fetch('/api/admin/analytics/products', {
         query: params,
-      })
+      }) as any
 
       productAnalytics.value = data
       return data
@@ -108,7 +108,7 @@ export const useAnalytics = () => {
       await $fetch('/api/admin/analytics/track', {
         method: 'POST',
         body: activity,
-      })
+      }) as any
     }
     catch (err: any) {
       console.error('Failed to track activity:', err)
@@ -129,7 +129,7 @@ export const useAnalytics = () => {
       const { data } = await $fetch('/api/admin/analytics/aggregate', {
         method: 'POST',
         body: params,
-      })
+      }) as any
 
       return data
     }

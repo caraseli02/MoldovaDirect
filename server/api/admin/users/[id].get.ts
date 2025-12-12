@@ -81,7 +81,7 @@ export default defineEventHandler(async (event) => {
     const supabase = serverSupabaseServiceRole(event)
 
     // Try to get auth user data
-    let authUser: unknown = null
+    let authUser = null
     try {
       const { data, error: authError } = await supabase.auth.admin.getUserById(userId)
       if (authError) {

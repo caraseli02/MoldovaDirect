@@ -116,6 +116,6 @@ export async function adminFetchForStores<T = unknown>(
   const response = await $fetch(url, {
     ...options,
     headers,
-  } as unknown)
+  } as unknown) as any
   return response as T
 }

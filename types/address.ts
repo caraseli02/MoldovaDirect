@@ -274,7 +274,7 @@ export function formatAddress(address: Address, style: 'single-line' | 'multi-li
 /**
  * Type guard: Check if object is a valid Address
  */
-export function isAddress(obj: unknown): obj is Address {
+export function isAddress(obj: any): obj is Address {
   return (
     obj
     && typeof obj === 'object'

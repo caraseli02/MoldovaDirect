@@ -494,7 +494,7 @@ const { t } = useI18n()
 function debounce<T extends (...args: unknown[]) => any>(fn: T, delay: number) {
   let timeoutId: ReturnType<typeof setTimeout> | null = null
 
-  return function (this: unknown, ...args: Parameters<T>) {
+  return function (this: any, ...args: Parameters<T>) {
     if (timeoutId) {
       clearTimeout(timeoutId)
     }

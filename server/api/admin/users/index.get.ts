@@ -150,7 +150,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Fetch auth user data
-    let authUsers: unknown = { users: [] }
+    let authUsers = { users: [] }
     try {
       const { data, error: authError } = await supabase.auth.admin.listUsers()
       if (authError) {
@@ -206,7 +206,7 @@ export default defineEventHandler(async (event) => {
         Object.keys(tempStats).forEach((userId) => {
           const userOrders = tempStats[userId].orders
           const lastOrderDate = userOrders.length > 0
-            ? userOrders.sort((a: unknown, b: unknown) =>
+            ? userOrders.sort((a: any, b: unknown) =>
               new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
             )[0].created_at
             : undefined
@@ -231,7 +231,7 @@ export default defineEventHandler(async (event) => {
     const users: UserWithProfile[] = []
 
     for (const profile of profiles) {
-      const authUser = authUsers.users.find((u: unknown) => u.id === profile.id)
+      const authUser = authUsers.users.find((u: any) => u.id === profile.id)
 
       // Get pre-fetched order statistics
       const orderStats = orderStatsByUser[profile.id] || { count: 0, totalSpent: 0 }

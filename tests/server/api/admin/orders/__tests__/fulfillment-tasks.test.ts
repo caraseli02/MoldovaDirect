@@ -147,8 +147,8 @@ describe('Order Fulfillment Tasks - Race Conditions', () => {
       .select('*')
       .in('order_id', [testOrder1.id, testOrder2.id])
 
-    const task1 = tasks.find((t: unknown) => t.order_id === testOrder1.id)
-    const task2 = tasks.find((t: unknown) => t.order_id === testOrder2.id)
+    const task1 = tasks.find((t: any) => t.order_id === testOrder1.id)
+    const task2 = tasks.find((t: any) => t.order_id === testOrder2.id)
 
     // Simulate concurrent completion of both tasks
     const results = await Promise.allSettled([

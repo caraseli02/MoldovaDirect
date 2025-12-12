@@ -161,7 +161,7 @@ export const TestScriptProgressSchema = z.object({
 /**
  * Validate a test user persona
  */
-export const validatePersona = (persona: unknown) => {
+export const validatePersona = (persona: any) => {
   try {
     return TestUserPersonaSchema.parse(persona)
   }
@@ -177,7 +177,7 @@ export const validatePersona = (persona: unknown) => {
 /**
  * Validate persona session state
  */
-export const validateSessionState = (state: unknown) => {
+export const validateSessionState = (state: any) => {
   try {
     return PersonaSessionStateSchema.parse(state)
   }
@@ -193,7 +193,7 @@ export const validateSessionState = (state: unknown) => {
 /**
  * Validate test script progress
  */
-export const validateProgress = (progress: unknown) => {
+export const validateProgress = (progress: any) => {
   try {
     return TestScriptProgressSchema.parse(progress)
   }
@@ -209,14 +209,14 @@ export const validateProgress = (progress: unknown) => {
 /**
  * Safe parse (returns result without throwing)
  */
-export const safeValidatePersona = (persona: unknown) => {
+export const safeValidatePersona = (persona: any) => {
   return TestUserPersonaSchema.safeParse(persona)
 }
 
-export const safeValidateSessionState = (state: unknown) => {
+export const safeValidateSessionState = (state: any) => {
   return PersonaSessionStateSchema.safeParse(state)
 }
 
-export const safeValidateProgress = (progress: unknown) => {
+export const safeValidateProgress = (progress: any) => {
   return TestScriptProgressSchema.safeParse(progress)
 }

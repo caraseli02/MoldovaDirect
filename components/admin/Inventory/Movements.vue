@@ -356,7 +356,7 @@ const fetchMovements = async (page = 1) => {
 
     const response = await $fetch('/api/admin/inventory/movements', {
       query: queryParams,
-    })
+    }) as any
 
     movements.value = response.movements
     pagination.value = response.pagination

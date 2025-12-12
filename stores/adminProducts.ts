@@ -385,7 +385,7 @@ export const useAdminProductsStore = defineStore('adminProducts', {
       try {
         await $fetch(`/api/admin/products/${productId}`, {
           method: 'DELETE',
-        })
+        }) as any
 
         // Remove from local state
         this.products = this.products.filter(p => p.id !== productId)
@@ -417,7 +417,7 @@ export const useAdminProductsStore = defineStore('adminProducts', {
         await $fetch('/api/admin/products/bulk', {
           method: 'DELETE',
           body: { productIds: this.selectedProducts },
-        })
+        }) as any
 
         // Remove from local state
         this.products = this.products.filter(p =>
@@ -460,7 +460,7 @@ export const useAdminProductsStore = defineStore('adminProducts', {
             productIds: this.selectedProducts,
             updates: { isActive },
           },
-        })
+        }) as any
 
         // Update local state
         this.products.forEach((product) => {

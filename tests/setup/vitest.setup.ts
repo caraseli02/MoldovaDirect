@@ -7,7 +7,7 @@ vi.mock('h3', () => ({
   getCookie: vi.fn(),
   getHeader: vi.fn(),
   getRequestIP: vi.fn(() => '127.0.0.1'),
-  createError: vi.fn((error: unknown) => {
+  createError: vi.fn((error: any) => {
     const err = new Error(error.statusMessage || error.message) as unknown
     err.statusCode = error.statusCode
     err.statusMessage = error.statusMessage
@@ -51,7 +51,7 @@ global.navigateTo = vi.fn()
 global.defineNuxtRouteMiddleware = vi.fn(middleware => middleware)
 global.useSupabaseClient = vi.fn()
 global.useSupabaseUser = vi.fn()
-global.createError = vi.fn((error: unknown) => {
+global.createError = vi.fn((error: any) => {
   const err = new Error(error.statusMessage)
   ;(err as unknown).statusCode = error.statusCode
   throw err
@@ -83,7 +83,7 @@ global.useCookie = vi.fn((name: string, _options?: unknown) => {
     get value() {
       return cookieStorage.get(name)
     },
-    set value(val: unknown) {
+    set value(val: any) {
       _cookieSaveCount++
       if (val === null || val === undefined) {
         cookieStorage.delete(name)

@@ -260,35 +260,35 @@ export const useAuthValidation = () => {
   /**
    * Validate registration form
    */
-  const validateRegistration = (data: unknown): AuthValidationResult => {
+  const validateRegistration = (data: any): AuthValidationResult => {
     return validateForm(registerSchema, data)
   }
 
   /**
    * Validate login form
    */
-  const validateLogin = (data: unknown): AuthValidationResult => {
+  const validateLogin = (data: any): AuthValidationResult => {
     return validateForm(loginSchema, data)
   }
 
   /**
    * Validate forgot password form
    */
-  const validateForgotPassword = (data: unknown): AuthValidationResult => {
+  const validateForgotPassword = (data: any): AuthValidationResult => {
     return validateForm(forgotPasswordSchema, data)
   }
 
   /**
    * Validate reset password form
    */
-  const validateResetPassword = (data: unknown): AuthValidationResult => {
+  const validateResetPassword = (data: any): AuthValidationResult => {
     return validateForm(resetPasswordSchema, data)
   }
 
   /**
    * Validate email verification
    */
-  const validateEmailVerification = (data: unknown): AuthValidationResult => {
+  const validateEmailVerification = (data: any): AuthValidationResult => {
     return validateForm(verifyEmailSchema, data)
   }
 

@@ -76,7 +76,7 @@ export default defineEventHandler(async (event) => {
         ? 'high'
         : product.stock_quantity > 0 ? 'low' : 'out',
       images: Array.isArray(product.images)
-        ? product.images.map((img: unknown, index: number) => ({
+        ? product.images.map((img: any, index: number) => ({
             id: img.id || `img-${index}`,
             url: img.url || img,
             altText: img.alt || img.alt_text || product.name_translations,

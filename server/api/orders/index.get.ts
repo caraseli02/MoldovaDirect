@@ -96,10 +96,10 @@ export default defineEventHandler(async (event) => {
 
         // Search in product names within order items
         if (order.order_items && Array.isArray(order.order_items)) {
-          return order.order_items.some((item: unknown) => {
+          return order.order_items.some((item: any) => {
             const snapshot = item.product_snapshot
             if (snapshot?.name_translations) {
-              return Object.values(snapshot.name_translations).some((name: unknown) =>
+              return Object.values(snapshot.name_translations).some((name: any) =>
                 name?.toLowerCase().includes(searchLower),
               )
             }

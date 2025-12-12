@@ -19,13 +19,13 @@ vi.mock('vue-router', () => ({
 
 // Mock i18n
 const mockT = vi.fn((key: string, params?: unknown) => {
-  const translations: Record<string, string | ((p: unknown) => string)> = {
-    'products.chips.category': (p: unknown) => `Category: ${p.value}`,
-    'products.chips.priceMin': (p: unknown) => `Min: €${p.value}`,
-    'products.chips.priceMax': (p: unknown) => `Max: €${p.value}`,
+  const translations: Record<string, string | ((p: any) => string)> = {
+    'products.chips.category': (p: any) => `Category: ${p.value}`,
+    'products.chips.priceMin': (p: any) => `Min: €${p.value}`,
+    'products.chips.priceMax': (p: any) => `Max: €${p.value}`,
     'products.chips.inStock': 'In Stock',
     'products.chips.featured': 'Featured',
-    'products.chips.attribute': (p: unknown) => `${p.label}: ${p.value}`,
+    'products.chips.attribute': (p: any) => `${p.label}: ${p.value}`,
     'products.filters.unknownCategory': 'Unknown Category',
   }
 

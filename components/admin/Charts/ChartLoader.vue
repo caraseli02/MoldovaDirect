@@ -291,7 +291,7 @@ const ChartComponent = defineAsyncComponent({
 /**
  * Handle chart creation event
  */
-const handleChartCreated = (chart: unknown) => {
+const handleChartCreated = (chart: any) => {
   emit('chart-created', chart)
 }
 

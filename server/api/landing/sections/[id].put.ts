@@ -31,7 +31,7 @@ export default defineEventHandler(async (event): Promise<GetSectionResponse> => 
     const body = await readBody<Partial<UpdateSectionRequest>>(event)
 
     // Build update object
-    const updateData: unknown = {
+    const updateData = {
       updated_by: user.id,
     }
 

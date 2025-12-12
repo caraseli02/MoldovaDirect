@@ -217,7 +217,7 @@ async function rollbackToVersion(version: TemplateHistoryEntry): Promise<void> {
         type: version.templateType,
         locale: version.locale,
       },
-    })
+    }) as any
 
     toast.success('Template rolled back successfully')
     showVersionModal.value = false

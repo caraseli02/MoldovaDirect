@@ -26,7 +26,7 @@ export function createCookie<T = unknown>(
  * Serialize data for cookie storage
  * Handles Date objects and other non-JSON types
  */
-export function serializeCookieData(data: unknown): unknown {
+export function serializeCookieData(data: any): unknown {
   if (!data) return null
 
   try {

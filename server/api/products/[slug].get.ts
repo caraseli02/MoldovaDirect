@@ -39,7 +39,7 @@ export default defineCachedEventHandler(async (event) => {
       ),
     )
 
-    let product: unknown = null
+    let product = null
 
     for (const candidate of slugCandidates) {
       const { data, error } = await supabase

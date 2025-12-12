@@ -273,7 +273,7 @@ async function loadRecommendations(cartItems: CartItem[]): Promise<void> {
         categories,
         limit: 5,
       },
-    })
+    }) as any
 
     if (response.success && response.recommendations) {
       state.value.recommendations = response.recommendations.map((product: Product) => ({

@@ -169,7 +169,7 @@ const seedOrders = async () => {
   try {
     const response = await $fetch('/api/admin/seed-orders', {
       method: 'POST',
-    })
+    }) as any
 
     result.value = response
   }

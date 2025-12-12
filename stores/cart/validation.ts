@@ -136,7 +136,7 @@ function getValidationQueueByPriority(): string[] {
 async function validateSingleProduct(productId: string, cartItem?: CartItem): Promise<ValidationResult> {
   try {
     // Fetch current product data from API
-    const response = await $fetch(`/api/products/${cartItem?.product.slug || productId}`)
+    const response = await $fetch(`/api/products/${cartItem?.product.slug || productId}`) as any
     const currentProduct = response.product || response
 
     // Validate product data

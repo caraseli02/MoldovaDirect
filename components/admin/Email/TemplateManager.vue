@@ -388,7 +388,7 @@ async function saveTemplate() {
       body: {
         type: selectedType.value,
         locale: selectedLocale.value,
-        translations: JSON.parse(templateContent.value),
+        translations: JSON.parse(templateContent.value) as any,
         subject: templateData.value.subject,
         preheader: templateData.value.preheader,
       },

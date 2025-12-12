@@ -200,7 +200,7 @@ export const useStripe = (): StripeComposable => {
 }
 
 // Utility function to format Stripe errors for user display
-export const formatStripeError = (error: unknown): string => {
+export const formatStripeError = (error: any): string => {
   if (!error) return 'An unknown error occurred'
 
   const err = error as { code?: string, message?: string }

@@ -153,7 +153,7 @@ export function createSystemError(
 // ERROR PARSING AND HANDLING
 // =============================================
 
-export function parseApiError(error: unknown): CheckoutError {
+export function parseApiError(error: any): CheckoutError {
   // Handle different error formats from API responses
   if (error?.response?.data) {
     const apiError = error.response.data

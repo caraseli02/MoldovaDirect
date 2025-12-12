@@ -8,7 +8,7 @@
  *
  * Patterns fixed:
  * - script type annotations: `type SomeType<T = unknown>` → `type SomeType<T = unknown>`
- * - function parameters: `function foo(arg: unknown)` → `function foo(arg: unknown)`
+ * - function parameters: `function foo(arg: any)` → `function foo(arg: any)`
  * - reactive declarations: `reactive<any>()` → `reactive<unknown>()`
  * - computed types: `computed<any>()`
  * - ref types: `ref<any>()`

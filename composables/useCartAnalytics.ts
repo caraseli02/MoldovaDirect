@@ -552,7 +552,7 @@ export const useCartAnalytics = () => {
         await $fetch('/api/analytics/cart-events', {
           method: 'POST',
           body: {
-            events: events ? JSON.parse(events) : [],
+            events: events ? JSON.parse(events) as any : [],
             conversions: metrics ? JSON.parse(metrics) : [],
             abandonments: abandonments ? JSON.parse(abandonments) : [],
           },

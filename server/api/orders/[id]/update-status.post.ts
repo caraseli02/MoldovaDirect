@@ -55,7 +55,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Prepare update data
-    const updateData: unknown = { status }
+    const updateData = { status }
 
     if (trackingNumber) {
       updateData.tracking_number = trackingNumber

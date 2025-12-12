@@ -290,7 +290,7 @@ describe('useShippingAddress', () => {
     it('sets loading state during address fetch', async () => {
       mockUser.value = { id: 'user-123' } as unknown
 
-      let resolvePromise: (value: unknown) => void
+      let resolvePromise: (value: any) => void
       mockFetch.mockReturnValue(new Promise((resolve) => {
         resolvePromise = resolve
       }))
@@ -461,7 +461,7 @@ describe('useShippingAddress', () => {
     it('sets loading state during address save', async () => {
       mockUser.value = { id: 'user-123' } as unknown
 
-      let resolvePromise: (value: unknown) => void
+      let resolvePromise: (value: any) => void
       mockFetch.mockReturnValue(new Promise((resolve) => {
         resolvePromise = resolve
       }))

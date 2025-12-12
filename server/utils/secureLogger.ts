@@ -134,7 +134,7 @@ function redactString(value: string): string {
 /**
  * Recursively redact PII from objects
  */
-function redactObject(obj: unknown, depth: number = 0): unknown {
+function redactObject(obj: any, depth: number = 0): unknown {
   // Prevent infinite recursion
   if (depth > 10) {
     return '[MAX_DEPTH_REACHED]'
@@ -160,7 +160,7 @@ function redactObject(obj: unknown, depth: number = 0): unknown {
       }
     }
 
-    const redacted: unknown = {}
+    const redacted = {}
 
     for (const [key, value] of Object.entries(obj)) {
       const lowerKey = key.toLowerCase()

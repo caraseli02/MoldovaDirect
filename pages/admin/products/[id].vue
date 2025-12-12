@@ -223,7 +223,7 @@ const getLocalizedText = (text: Record<string, string> | null) => {
 }
 
 // Event handlers
-const handleSubmit = async (formData: unknown) => {
+const handleSubmit = async (formData: any) => {
   try {
     errorMessage.value = ''
 

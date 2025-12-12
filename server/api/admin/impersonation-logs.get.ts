@@ -103,7 +103,7 @@ export default defineEventHandler(async (event) => {
     const targetUserIds = [...new Set(logs?.map(log => log.target_user_id).filter(Boolean))]
     const allUserIds = [...new Set([...adminIds, ...targetUserIds])]
 
-    let userProfiles: unknown = {}
+    let userProfiles = {}
 
     if (allUserIds.length > 0) {
       const { data: profiles } = await supabase

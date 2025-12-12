@@ -165,7 +165,7 @@ const { data: categoriesData } = await useFetch<{ categories: CategoryWithChildr
 const categories = computed(() => categoriesData.value?.categories || [])
 
 // Event handlers
-const handleSubmit = async (formData: unknown) => {
+const handleSubmit = async (formData: any) => {
   try {
     errorMessage.value = ''
 

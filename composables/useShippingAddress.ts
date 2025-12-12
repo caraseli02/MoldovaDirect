@@ -102,7 +102,7 @@ export function useShippingAddress() {
     error.value = null
 
     try {
-      const response = await $fetch('/api/checkout/addresses')
+      const response = await $fetch('/api/checkout/addresses') as any
 
       if (response.success && response.addresses) {
         savedAddresses.value = response.addresses.map(addressFromEntity)

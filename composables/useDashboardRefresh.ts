@@ -2,8 +2,8 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 
 interface DashboardStore {
   setLoading: (value: boolean) => void
-  setStats: (data: unknown) => void
-  setActivity: (data: unknown[]) => void
+  setStats: (data: any) => void
+  setActivity: (data: any[]) => void
   setError: (message: string) => void
   clearError: () => void
 }

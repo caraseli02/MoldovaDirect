@@ -192,7 +192,7 @@ async function syncEventsWithServer(): Promise<void> {
       body: {
         events: eventsToSync,
       },
-    })
+    }) as any
 
     if (response.success) {
       // Clear synced events

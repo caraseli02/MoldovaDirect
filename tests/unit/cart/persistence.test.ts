@@ -18,12 +18,12 @@ import type { CartItem, Product } from '~/stores/cart/types'
 
 // Mock useCookie before importing the module
 // Use a module-level variable to track the current mock value
-let currentCookieData: unknown = null
+let currentCookieData = null
 
 vi.mock('#app', () => ({
   useCookie: vi.fn((_key: string, _options?: unknown) => ({
     get value() { return currentCookieData },
-    set value(v: unknown) { currentCookieData = v },
+    set value(v: any) { currentCookieData = v },
   })),
   useRuntimeConfig: vi.fn(() => ({ public: {} })),
 }))

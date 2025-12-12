@@ -194,7 +194,7 @@ const startImpersonation = async (config: { userEmail: string, reason: string, d
         reason: config.reason,
         duration: config.duration,
       },
-    })
+    }) as any
 
     if (response.success && 'impersonating' in response && 'expiresAt' in response && 'logId' in response) {
       const impersonatingUser = (response as unknown).impersonating
@@ -217,7 +217,7 @@ const stopImpersonation = async () => {
         action: 'end',
         logId: impersonation.value.logId,
       },
-    })
+    }) as any
 
     if (response.success) {
       impersonation.value.active = false
@@ -315,9 +315,9 @@ const addToHistory = (preset: string, response: unknown) => {
     config: { preset: preset as unknown },
     timestamp: new Date().toISOString(),
     results: {
-      users: response.results?.steps?.find((s: unknown) => s.step === 'Create users')?.count || 0,
-      products: response.results?.steps?.find((s: unknown) => s.step === 'Create products')?.count || 0,
-      orders: response.results?.steps?.find((s: unknown) => s.step === 'Create orders')?.count || 0,
+      users: response.results?.steps?.find((s: any) => s.step === 'Create users')?.count || 0,
+      products: response.results?.steps?.find((s: any) => s.step === 'Create products')?.count || 0,
+      orders: response.results?.steps?.find((s: any) => s.step === 'Create orders')?.count || 0,
     },
     duration: response.totalDuration || 0,
   }

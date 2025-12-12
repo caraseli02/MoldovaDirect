@@ -152,7 +152,7 @@ const setupInventorySchema = async () => {
   try {
     await $fetch('/api/admin/setup-inventory', {
       method: 'POST',
-    })
+    }) as any
 
     const toast = useToast()
     toast.success('Inventory database schema setup successfully')

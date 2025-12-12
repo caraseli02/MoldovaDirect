@@ -44,10 +44,10 @@ export interface TanStackTableModule {
   getFacetedMinMaxValues: () => unknown
 
   // Rendering helper
-  flexRender: (component: unknown, props: unknown) => unknown
+  flexRender: (component: any, props: unknown) => unknown
 
   // Utility functions
-  isFunction: (value: unknown) => boolean
+  isFunction: (value: any) => boolean
 }
 
 export function useAsyncTable() {

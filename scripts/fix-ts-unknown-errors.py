@@ -101,6 +101,44 @@ def fix_variable_unknown_type(content, var_name):
     content = re.sub(pattern, replacer, content)
     return content
 
+def fix_function_params(content):
+    """Fix function parameters typed as unknown[] or unknown"""
+    # Pattern: (param: unknown[]) -> (param: any[])
+    content = re.sub(
+        r'\(([a-zA-Z_][a-zA-Z0-9_]*):\s*unknown\[\]\)',
+        r'(\1: any[])',
+        content
+    )
+    # Pattern: (param: unknown) -> (param: any) in function signatures
+    content = re.sub(
+        r'\(([a-zA-Z_][a-zA-Z0-9_]*):\s*unknown\)',
+        r'(\1: any)',
+        content
+    )
+    # Pattern: (param: unknown, -> (param: any,
+    content = re.sub(
+        r'\(([a-zA-Z_][a-zA-Z0-9_]*):\s*unknown,',
+        r'(\1: any,',
+        content
+    )
+    return content
+
+def fix_variable_declarations(content):
+    """Fix variable declarations with explicit unknown type"""
+    # Pattern: const/let/var variable: unknown = ... -> const variable = ... as any
+    content = re.sub(
+        r'(const|let|var)\s+([a-zA-Z_][a-zA-Z0-9_]*):\s*unknown\s*=\s*',
+        r'\1 \2 = ',
+        content
+    )
+    # Add 'as any' to $fetch calls that don't already have it
+    content = re.sub(
+        r'(await\s+\$fetch\([^)]+\))(?!\s+as\s+)',
+        r'\1 as any',
+        content
+    )
+    return content
+
 def process_file(file_path):
     """Process a single file and fix unknown type errors"""
     try:
@@ -115,6 +153,8 @@ def process_file(file_path):
         content = fix_array_map(content)
         content = fix_array_filter(content)
         content = fix_array_foreach(content)
+        content = fix_function_params(content)
+        content = fix_variable_declarations(content)
 
         # Write back if changed
         if content != original_content:

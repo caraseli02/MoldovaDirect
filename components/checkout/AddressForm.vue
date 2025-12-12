@@ -443,7 +443,7 @@ const validateField = (fieldName: string) => {
   const value = localAddress.value[fieldName as keyof Address]
 
   // Type guard to check if value is a string
-  const getStringValue = (val: unknown): string => {
+  const getStringValue = (val: any): string => {
     if (typeof val === 'string') return val
     if (val != null && typeof val !== 'boolean' && typeof val !== 'number') return String(val)
     return ''

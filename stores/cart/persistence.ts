@@ -72,7 +72,7 @@ const memoryStorage = new Map<string, string>()
 /**
  * Compress data for storage (simple JSON stringification for now)
  */
-function compressData(data: unknown): string {
+function compressData(data: any): string {
   return JSON.stringify(data)
 }
 

@@ -84,7 +84,7 @@ function transformOrderItems(items: DatabaseOrderItem[]): OrderItemData[] {
 /**
  * Transform address object to email format
  */
-function transformAddress(addressData: unknown): AddressData {
+function transformAddress(addressData: any): AddressData {
   if (!addressData) {
     throw new Error('Address data is required')
   }

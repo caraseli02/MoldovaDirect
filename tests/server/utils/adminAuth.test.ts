@@ -92,7 +92,7 @@ vi.mock('h3', async () => {
     getCookie: vi.fn(),
     getHeader: vi.fn(),
     getRequestIP: vi.fn(() => '127.0.0.1'),
-    createError: vi.fn((error: unknown) => {
+    createError: vi.fn((error: any) => {
       const err = new Error(error.statusMessage || error.message) as unknown
       err.statusCode = error.statusCode
       err.statusMessage = error.statusMessage
@@ -1135,7 +1135,7 @@ describe('adminAuth.ts', () => {
       }
 
       mockServerSupabaseServiceRole.mockReturnValue(mockSupabase)
-      mockGetHeader.mockImplementation((event: unknown, header: unknown) => {
+      mockGetHeader.mockImplementation((event: any, header: unknown) => {
         if (header === 'user-agent') return 'Mozilla/5.0'
         return null
       })

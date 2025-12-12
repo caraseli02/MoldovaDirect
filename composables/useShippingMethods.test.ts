@@ -136,7 +136,7 @@ describe('useShippingMethods', () => {
       const { fetchShippingMethods } = await import('~/lib/checkout/api')
       const mockFetch = vi.mocked(fetchShippingMethods)
 
-      let resolvePromise: (value: unknown) => void
+      let resolvePromise: (value: any) => void
       mockFetch.mockReturnValue(new Promise((resolve) => {
         resolvePromise = resolve
       }))

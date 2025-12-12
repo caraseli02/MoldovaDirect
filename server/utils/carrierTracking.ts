@@ -144,7 +144,7 @@ export async function syncCarrierTracking(
     }
 
     // Update order with latest carrier data
-    const updateData: unknown = {}
+    const updateData = {}
 
     if (carrierData.estimatedDelivery) {
       updateData.estimated_delivery = carrierData.estimatedDelivery

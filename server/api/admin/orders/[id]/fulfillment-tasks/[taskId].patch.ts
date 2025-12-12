@@ -58,7 +58,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Update the task
-    const updateData: unknown = {
+    const updateData = {
       completed,
       completed_at: completed ? new Date().toISOString() : null,
       completed_by: completed ? userId : null,

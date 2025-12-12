@@ -140,7 +140,7 @@ const handleSubmit = async () => {
       method: 'POST',
       body: {
         noteType: noteType.value,
-        content: content.value.trim(),
+        content: content.value.trim() as any,
       },
     })
 

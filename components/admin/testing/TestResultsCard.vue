@@ -162,7 +162,7 @@ const formatKey = (key: string | number) => {
     .replace(/^./, str => str.toUpperCase())
 }
 
-const formatValue = (value: unknown): string => {
+const formatValue = (value: any): string => {
   if (Array.isArray(value)) return value.join(', ')
   if (typeof value === 'boolean') return value ? 'Yes' : 'No'
   return String(value)

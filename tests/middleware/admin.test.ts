@@ -62,7 +62,7 @@ describe('Admin Middleware', () => {
     vi.stubGlobal('useSupabaseUser', () => ({ value: mockUser }))
     vi.stubGlobal('useSupabaseClient', () => mockSupabase)
     vi.stubGlobal('navigateTo', vi.fn((path: string) => path))
-    vi.stubGlobal('createError', vi.fn((error: unknown) => {
+    vi.stubGlobal('createError', vi.fn((error: any) => {
       throw new Error(error.statusMessage)
     }))
   })

@@ -7,7 +7,7 @@
  * in safe contexts where it doesn't break type contracts.
  *
  * Patterns fixed:
- * - function params: `(arg: unknown)` → `(arg: unknown)`
+ * - function params: `(arg: any)` → `(arg: any)`
  * - variable declarations: `const x: unknown` → `const x: unknown`
  * - return types: `: unknown` → `: unknown`
  * - generics: `T = unknown` → `T = unknown`

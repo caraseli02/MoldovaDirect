@@ -30,7 +30,7 @@ vi.mock('h3', async () => {
     getCookie: vi.fn(),
     getHeader: vi.fn(),
     getRequestIP: vi.fn(() => '127.0.0.1'),
-    createError: vi.fn((error: unknown) => {
+    createError: vi.fn((error: any) => {
       const err = new Error(error.statusMessage || error.message) as unknown
       err.statusCode = error.statusCode
       err.statusMessage = error.statusMessage
