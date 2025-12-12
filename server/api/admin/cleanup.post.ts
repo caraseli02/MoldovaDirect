@@ -8,6 +8,7 @@
  */
 
 import { serverSupabaseServiceRole } from '#supabase/server'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { requireAdminTestingAccess, logAdminAction } from '~/server/utils/adminAuth'
 
 interface CleanupOptions {

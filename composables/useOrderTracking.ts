@@ -10,6 +10,7 @@
  */
 
 import type { RealtimeChannel } from '@supabase/supabase-js'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import type { Order, OrderStatus } from '~/types'
 
 export interface OrderStatusUpdate {

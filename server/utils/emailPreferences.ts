@@ -4,6 +4,7 @@
  */
 
 import type { EmailType } from '~/types/email'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { resolveSupabaseClient, type ResolvedSupabaseClient } from './supabaseAdminClient'
 
 export interface EmailPreferences {

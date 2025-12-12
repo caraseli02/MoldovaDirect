@@ -99,6 +99,7 @@
     "@nuxtjs/supabase": "^1.6.2",
     "@pinia/testing": "^1.0.2",
     "@playwright/test": "^1.55.1",
+    "@supabase/supabase-js": "^2.87.1",
     "@tailwindcss/vite": "^4.1.17",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.3.0",

@@ -120,6 +120,7 @@
 
 <script setup lang="ts">
 import type { AuthError } from '@supabase/supabase-js'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
 // Apply guest middleware
 definePageMeta({

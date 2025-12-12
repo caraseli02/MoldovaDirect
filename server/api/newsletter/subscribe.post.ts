@@ -1,4 +1,5 @@
 import { serverSupabaseClient } from '#supabase/server'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { z } from 'zod'
 
 // Validation schema for newsletter subscription

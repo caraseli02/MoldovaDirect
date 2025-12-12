@@ -10,6 +10,7 @@
  */
 
 import { serverSupabaseClient } from '#supabase/server'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
 export interface ActivityTrackingRequest {
   activityType: 'login' | 'logout' | 'page_view' | 'product_view' | 'cart_add' | 'order_create'

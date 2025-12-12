@@ -1,3 +1,4 @@
+import type { SupabaseClient } from '@supabase/supabase-js'
 <template>
   <div class="min-h-screen flex flex-col bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
     <!-- Mobile-optimized container -->

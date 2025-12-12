@@ -127,6 +127,7 @@
 
 <script setup lang="ts">
 import AdminUsersTable from '~/components/admin/Users/Table.vue'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import AdminUsersDetailView from '~/components/admin/Users/DetailView.vue'
 
 // Define page meta for admin layout and authentication

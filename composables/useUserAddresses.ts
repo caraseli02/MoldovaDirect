@@ -16,6 +16,7 @@
  */
 
 import { ref, computed } from 'vue'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import type { Address } from '~/types/checkout'
 
 export const useUserAddresses = () => {

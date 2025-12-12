@@ -1,5 +1,6 @@
 // POST /api/orders/create - Create a new order from cart
 import { serverSupabaseServiceRole } from '#supabase/server'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { sendOrderConfirmationEmail } from '~/server/utils/orderEmails'
 import {
   extractCustomerInfoFromOrder,

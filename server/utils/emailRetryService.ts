@@ -5,6 +5,7 @@
 // Requirements: 4.2, 4.3
 
 import type { EmailLog, EmailRetryConfig } from '~/types/email'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { DEFAULT_EMAIL_RETRY_CONFIG, calculateRetryDelay, shouldRetryEmail } from '~/types/email'
 import { getPendingEmailsForRetry } from './emailLogging'
 import { retryEmailDelivery } from './orderEmails'

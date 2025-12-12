@@ -12,6 +12,7 @@
  */
 
 import type { Order, OrderStatus, OrderItem } from '~/types'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
 export interface TrackingEvent {
   id: number

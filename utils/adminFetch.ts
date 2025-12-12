@@ -9,6 +9,7 @@
  */
 
 import type { FetchOptions } from 'ofetch'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
 /**
  * Make an authenticated request to an admin API endpoint

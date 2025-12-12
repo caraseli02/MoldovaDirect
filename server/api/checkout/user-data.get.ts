@@ -14,6 +14,7 @@
  */
 
 import { serverSupabaseUser, serverSupabaseClient } from '#supabase/server'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
 export default defineEventHandler(async (event) => {
   // Verify user authentication

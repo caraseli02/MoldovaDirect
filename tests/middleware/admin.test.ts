@@ -8,6 +8,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import type { RouteLocationNormalized } from 'vue-router'
 
 describe('Admin Middleware', () => {

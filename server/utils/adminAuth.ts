@@ -6,6 +6,7 @@
  */
 
 import type { H3Event } from 'h3'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { createError, getHeader, getRequestIP } from 'h3'
 import { serverSupabaseClient, serverSupabaseServiceRole } from '#supabase/server'
 

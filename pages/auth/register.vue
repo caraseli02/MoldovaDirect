@@ -516,6 +516,7 @@
 
 <script setup lang="ts">
 import { Alert, AlertDescription } from '@/components/ui/alert'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'

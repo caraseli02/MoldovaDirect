@@ -3,6 +3,7 @@
  */
 
 import { vi } from 'vitest'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
 export const serverSupabaseClient = vi.fn()
 export const serverSupabaseServiceRole = vi.fn()

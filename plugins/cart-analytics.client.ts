@@ -1,3 +1,4 @@
+import { useCartStore } from '~/stores/cart'
 /**
  * Cart Analytics Plugin
  *

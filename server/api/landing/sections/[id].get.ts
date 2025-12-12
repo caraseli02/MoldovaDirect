@@ -1,4 +1,5 @@
 import { serverSupabaseClient } from '#supabase/server'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import type { GetSectionResponse, LandingSectionRow } from '~/types'
 import { PUBLIC_CACHE_CONFIG } from '~/server/utils/publicCache'
 

@@ -4,6 +4,7 @@
  */
 
 import { serverSupabaseClient } from '#supabase/server'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { sendOrderStatusEmail } from '~/server/utils/orderEmails'
 import { transformOrderToEmailData } from '~/server/utils/orderDataTransform'
 import type { EmailType } from '~/types/email'

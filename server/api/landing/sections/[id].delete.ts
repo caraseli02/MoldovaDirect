@@ -1,4 +1,5 @@
 import { serverSupabaseClient } from '#supabase/server'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
 /**
  * DELETE /api/landing/sections/[id]

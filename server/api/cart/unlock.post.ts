@@ -7,6 +7,7 @@
  */
 
 import { serverSupabaseClient } from '#supabase/server'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { z } from 'zod'
 
 const unlockCartSchema = z.object({

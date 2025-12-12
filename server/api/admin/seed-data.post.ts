@@ -16,6 +16,7 @@
  */
 
 import { serverSupabaseServiceRole } from '#supabase/server'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { requireAdminTestingAccess, logAdminAction } from '~/server/utils/adminAuth'
 import type { SeedOptions } from '~/types/admin-testing'
 import {

@@ -10,6 +10,7 @@
  */
 
 import { serverSupabaseServiceRole } from '#supabase/server'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
 interface CartAnalyticsEvent {
   eventType: 'cart_add' | 'cart_remove' | 'cart_update' | 'cart_view' | 'cart_abandon' | 'cart_checkout_start' | 'cart_checkout_complete'

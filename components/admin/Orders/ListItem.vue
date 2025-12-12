@@ -115,15 +115,15 @@ const customerName = computed(() => {
 })
 
 const customerEmail = computed(() => {
-  return props.order.guest_email || 'guest@example.com'
+  return _props.order.guest_email || 'guest@example.com'
 })
 
 const itemCount = computed(() => {
-  return props.order.order_items?.length || 0
+  return _props.order.order_items?.length || 0
 })
 
 const daysSinceOrder = computed(() => {
-  const orderDate = new Date(props.order.created_at)
+  const orderDate = new Date(_props.order.created_at)
   const now = new Date()
   const diffTime = Math.abs(now.getTime() - orderDate.getTime())
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))

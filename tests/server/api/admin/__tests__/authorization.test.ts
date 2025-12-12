@@ -11,6 +11,7 @@
  */
 
 import { describe, it, expect, beforeAll, afterAll } from 'vitest'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { createSupabaseClient } from '~/server/utils/supabaseAdminClient'
 
 describe('Admin API - Authorization (RBAC)', () => {

@@ -1,4 +1,5 @@
 import { serverSupabaseClient, serverSupabaseUser } from '#supabase/server'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import type { H3Event } from 'h3'
 
 export default defineEventHandler(async (event) => {

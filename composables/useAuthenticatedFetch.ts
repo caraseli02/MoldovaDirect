@@ -1,3 +1,4 @@
+import type { SupabaseClient } from '@supabase/supabase-js'
 /**
  * Composable for making authenticated API requests
  *

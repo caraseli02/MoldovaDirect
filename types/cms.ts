@@ -1,3 +1,4 @@
+import type { Translations } from '~/types/database'
 /**
  * Landing Page CMS Types
  *

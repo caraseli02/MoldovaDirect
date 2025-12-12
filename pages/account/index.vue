@@ -1,3 +1,4 @@
+import type { SupabaseClient } from '@supabase/supabase-js'
 <template>
   <div class="py-12">
     <div class="container">

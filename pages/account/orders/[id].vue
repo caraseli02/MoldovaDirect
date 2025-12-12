@@ -203,6 +203,7 @@
 
 <script setup lang="ts">
 import type { OrderWithItems } from '~/types'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
 // Apply authentication middleware
 definePageMeta({

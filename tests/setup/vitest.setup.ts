@@ -1,4 +1,5 @@
 import { vi } from 'vitest'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { computed, ref, readonly, watch, onMounted, onUnmounted } from 'vue'
 
 // Mock h3 module

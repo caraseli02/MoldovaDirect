@@ -1,3 +1,4 @@
+import type { SupabaseClient } from '@supabase/supabase-js'
 // Carrier tracking integration utilities
 // This module provides integration with external carrier tracking APIs
 
