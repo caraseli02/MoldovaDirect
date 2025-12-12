@@ -116,7 +116,7 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
      * Uses snake_case to match server expectations
      */
     queryParams: (state) => {
-      const params: Record<string, unknown> = {
+      const params: Record<string, any> = {
         page: state.pagination.page,
         limit: state.pagination.limit,
       }
@@ -274,7 +274,7 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
           throw new Error('Failed to fetch orders')
         }
       }
-      catch (error) {
+      catch (error: any) {
         this.error = error instanceof Error ? error.message : 'Failed to fetch orders'
         console.error('Error fetching admin orders:', error)
       }
@@ -304,7 +304,7 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
           throw new Error('Failed to fetch order details')
         }
       }
-      catch (error) {
+      catch (error: any) {
         this.error = error instanceof Error ? error.message : 'Failed to fetch order details'
         console.error('Error fetching order detail:', error)
         throw error
@@ -573,7 +573,7 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
           throw new Error('Failed to update orders')
         }
       }
-      catch (error) {
+      catch (error: any) {
         this.error = error instanceof Error ? error.message : 'Failed to update orders'
         const toast = useToast()
         toast.error('Error', this.error)

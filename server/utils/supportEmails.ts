@@ -100,7 +100,7 @@ export async function sendSupportTicketCustomerEmail(
       externalId: result.id,
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     console.error(`❌ Failed to send support ticket customer email for ticket ${data.ticketNumber}:`, error)
 
     // Record failed attempt
@@ -176,7 +176,7 @@ export async function sendSupportTicketStaffEmail(
       externalId: result.id,
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     console.error(`❌ Failed to send support ticket staff email for ticket ${data.ticketNumber}:`, error)
 
     // Record failed attempt

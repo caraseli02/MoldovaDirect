@@ -141,7 +141,7 @@ export const useOrderDetail = (): UseOrderDetailReturn => {
         throw new Error('Failed to fetch order')
       }
     }
-    catch (err: unknown) {
+    catch (err: any) {
       console.error('Error fetching order:', err)
 
       const error_obj = err as { statusCode?: number, message?: string }
@@ -177,7 +177,7 @@ export const useOrderDetail = (): UseOrderDetailReturn => {
         tracking.value = response.data
       }
     }
-    catch (err) {
+    catch (err: any) {
       console.error('Error fetching tracking:', err)
       // Don't set error state for tracking failures
     }
@@ -223,7 +223,7 @@ export const useOrderDetail = (): UseOrderDetailReturn => {
       // Navigate to cart
       router.push('/cart')
     }
-    catch (err: unknown) {
+    catch (err: any) {
       console.error('Error reordering:', err)
       toast.error(
         'Reorder failed',

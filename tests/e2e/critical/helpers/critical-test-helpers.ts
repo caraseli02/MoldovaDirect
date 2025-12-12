@@ -155,7 +155,7 @@ export class CriticalTestHelpers {
         }),
       ])
     }
-    catch (error) {
+    catch (error: any) {
       // Log the error for debugging but re-throw to fail the test
       console.error('❌ Cart update verification failed - cart functionality may be broken')
       throw new Error('Cart update indicator did not appear within timeout. The cart may be broken or the page failed to hydrate properly.')

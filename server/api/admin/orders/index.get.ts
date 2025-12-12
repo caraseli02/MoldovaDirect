@@ -339,7 +339,7 @@ export default defineEventHandler(async (event): Promise<ApiResponse> => {
       },
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     // Re-throw HTTP errors (including auth errors)
     if (error.statusCode) {
       throw error

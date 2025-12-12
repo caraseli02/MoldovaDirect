@@ -130,7 +130,7 @@ async function saveToStorage(
       fallbackUsed: true,
     }
   }
-  catch (error) {
+  catch (error: any) {
     // Try fallback storage types
     const fallbackTypes: StorageType[] = ['sessionStorage', 'memory']
 
@@ -204,7 +204,7 @@ async function _loadFromStorage(
 
     return { success: true, data: null }
   }
-  catch (error) {
+  catch (error: any) {
     // Try fallback storage types
     const fallbackTypes: StorageType[] = ['localStorage', 'sessionStorage', 'memory']
 
@@ -280,7 +280,7 @@ async function _removeFromStorage(
 
     return { success: true }
   }
-  catch (error) {
+  catch (error: any) {
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Storage removal failed',
@@ -325,7 +325,7 @@ function createDebouncedSave(delay: number = 1000) {
             state.value.lastSaveAt = new Date()
             resolve(result)
           }
-          catch (error) {
+          catch (error: any) {
             reject(error)
           }
           finally {
@@ -389,7 +389,7 @@ async function saveCartData(cartData: {
 
     return { success: true }
   }
-  catch (error) {
+  catch (error: any) {
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to save cart data',
@@ -452,7 +452,7 @@ async function loadCartData(): Promise<StorageResult<{
       data: loadedData,
     }
   }
-  catch (error) {
+  catch (error: any) {
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to load cart data',
@@ -471,7 +471,7 @@ async function clearCartData(): Promise<StorageResult> {
 
     return { success: true }
   }
-  catch (error) {
+  catch (error: any) {
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to clear cart data',

@@ -69,7 +69,7 @@ export default defineEventHandler(async (event) => {
       preferences: preferencesResult.data || null,
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Failed to fetch user checkout data:', error)
 
     // Re-throw if already a createError

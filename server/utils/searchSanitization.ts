@@ -62,7 +62,7 @@ export function sanitizeSearchTerm(searchTerm: string): string {
  * try {
  *   validateSearchLength(userInput)
  *   // proceed with search
- * } catch (error) {
+ * } catch (error: any) {
  *   // handle validation error
  * }
  * ```

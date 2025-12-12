@@ -101,7 +101,7 @@ export default defineEventHandler(async (event) => {
       data: updatedTask,
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     console.error('Error in fulfillment task update endpoint:', error)
 
     if (error.statusCode) {
@@ -145,7 +145,7 @@ async function updateInventoryForPickedItemsAtomic(supabase: SupabaseClient, ord
     // Data contains result of atomic operation (skipped or updated)
     return data
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Error updating inventory atomically:', error)
     throw error
   }
@@ -245,7 +245,7 @@ async function _updateInventoryForPickedItems_DEPRECATED(supabase: SupabaseClien
       console.error('Error setting inventory_updated flag:', flagError)
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Error updating inventory for picked items:', error)
   }
 }
@@ -288,7 +288,7 @@ async function rollbackInventoryForPickedItemsAtomic(supabase: SupabaseClient, o
     // Data contains result of atomic rollback operation (skipped or rolled back)
     return data
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Error rolling back inventory atomically:', error)
     throw error
   }
@@ -394,7 +394,7 @@ async function _rollbackInventoryForPickedItems_DEPRECATED(supabase: SupabaseCli
       console.error('Error resetting inventory_updated flag:', flagError)
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Error rolling back inventory for picked items:', error)
     throw error
   }
@@ -417,7 +417,7 @@ async function updateOrderFulfillmentProgress(supabase: SupabaseClient, orderId:
     }
 
     // Calculate progress percentage
-    const completedCount = tasks.filter((t: unknown) => t.completed).length
+    const completedCount = tasks.filter((t: any) => t.completed).length
     const totalCount = tasks.length
     const progressPercentage = Math.round((completedCount / totalCount) * 100)
 
@@ -431,7 +431,7 @@ async function updateOrderFulfillmentProgress(supabase: SupabaseClient, orderId:
       console.error('Error updating order fulfillment progress:', updateError)
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Error calculating fulfillment progress:', error)
   }
 }

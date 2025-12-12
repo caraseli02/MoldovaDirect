@@ -55,7 +55,7 @@ function createAnalyticsEvent(
   productId?: string,
   quantity?: number,
   value?: number,
-  metadata?: Record<string, unknown>,
+  metadata?: Record<string, any>,
 ): AnalyticsEvent {
   return {
     id: generateEventId(),
@@ -107,7 +107,7 @@ function saveEventsToStorage(): void {
 
     localStorage.setItem('cart_analytics_events', JSON.stringify(eventsData))
   }
-  catch (error) {
+  catch (error: any) {
     console.warn('Failed to save analytics events to storage:', error)
   }
 }
@@ -128,7 +128,7 @@ function loadEventsFromStorage(): void {
       state.value.lastActivity = eventsData.lastActivity ? new Date(eventsData.lastActivity) : null
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.warn('Failed to load analytics events from storage:', error)
   }
 }
@@ -202,7 +202,7 @@ async function syncEventsWithServer(): Promise<void> {
       console.log(`Synced ${eventsToSync.length} cart analytics events`)
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.warn('Failed to sync analytics events:', error)
   }
   finally {
@@ -442,7 +442,7 @@ function endCartSession(
 
   // Final sync attempt
   if (import.meta.client) {
-    syncEventsWithServer().catch((error) => {
+    syncEventsWithServer().catch((error: any) => {
       console.warn('Final sync failed:', error)
     })
   }

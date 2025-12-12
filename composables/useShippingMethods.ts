@@ -110,7 +110,7 @@ export function useShippingMethods(address: Ref<Address>) {
       availableMethods.value = localizeShippingMethods(methods)
       lastLoadedAddress.value = addressHash
     }
-    catch (e) {
+    catch (e: any) {
       error.value = e instanceof Error ? e.message : 'Failed to load shipping methods'
       availableMethods.value = getFallbackMethods()
       console.error('Failed to load shipping methods:', e)

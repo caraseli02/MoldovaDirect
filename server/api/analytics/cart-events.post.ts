@@ -103,7 +103,7 @@ export default defineEventHandler(async (event) => {
           results.eventsProcessed = cartEvents.length
         }
       }
-      catch (error: unknown) {
+      catch (error: any) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error'
         results.errors.push(`Events processing error: ${errorMessage}`)
       }
@@ -133,7 +133,7 @@ export default defineEventHandler(async (event) => {
           results.conversionsProcessed = conversionMetrics.length
         }
       }
-      catch (error: unknown) {
+      catch (error: any) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error'
         results.errors.push(`Conversions processing error: ${errorMessage}`)
       }
@@ -163,7 +163,7 @@ export default defineEventHandler(async (event) => {
           results.abandonmentsProcessed = abandonmentData.length
         }
       }
-      catch (error: unknown) {
+      catch (error: any) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error'
         results.errors.push(`Abandonments processing error: ${errorMessage}`)
       }
@@ -180,7 +180,7 @@ export default defineEventHandler(async (event) => {
         : 'All cart analytics data processed successfully',
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     console.error('Cart analytics processing error:', error)
     throw createError({
       statusCode: 500,
@@ -290,7 +290,7 @@ async function updateDailyCartAnalytics(
       }
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     console.error('Failed to update daily cart analytics:', error)
   }
 }

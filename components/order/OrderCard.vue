@@ -161,7 +161,7 @@ const previewItems = computed(() => {
 
     return items.slice(0, maxPreview)
   }
-  catch (err) {
+  catch (err: any) {
     console.warn('Error computing preview items:', err)
     return []
   }
@@ -181,7 +181,7 @@ const totalItems = computed(() => {
     }
     return items.reduce((sum, item) => sum + (item?.quantity || 0), 0)
   }
-  catch (err) {
+  catch (err: any) {
     console.warn('Error computing total items:', err)
     return 0
   }
@@ -216,7 +216,7 @@ const getProductImage = (item: Record<string, any>) => {
 
     return null
   }
-  catch (err) {
+  catch (err: any) {
     console.warn('Error getting product image:', err)
     return null
   }
@@ -234,7 +234,7 @@ const formatPrice = (price: number) => {
       currency: 'EUR',
     }).format(price)
   }
-  catch (err) {
+  catch (err: any) {
     console.warn('Error formatting price:', err)
     return `€${price.toFixed(2)}`
   }

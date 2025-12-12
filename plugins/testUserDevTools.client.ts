@@ -55,7 +55,7 @@ export default defineNuxtPlugin(() => {
           console.log('\nNavigate to: /test-users to see test script')
           return true
         }
-        catch (error) {
+        catch (error: any) {
           console.error('❌ Failed to activate persona:', error)
           return false
         }

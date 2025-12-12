@@ -129,7 +129,7 @@ export const useOrders = (): UseOrdersReturn => {
         throw new Error('Failed to fetch orders')
       }
     }
-    catch (err: unknown) {
+    catch (err: any) {
       console.error('Error fetching orders:', err)
       error.value = err.message || 'Failed to load orders'
       orders.value = []

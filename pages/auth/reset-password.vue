@@ -416,7 +416,7 @@ const handleResetPassword = async () => {
     success.value = true
     message.value = t('auth.passwordResetSuccess')
   }
-  catch (err: unknown) {
+  catch (err: any) {
     error.value = err.message || t('auth.resetPasswordError')
   }
   finally {

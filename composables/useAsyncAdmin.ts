@@ -217,7 +217,7 @@ export const preloadAdminComponent = async (path: string): Promise<void> => {
       await loader()
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.warn(`Failed to preload admin component: ${path}`, error)
   }
 }

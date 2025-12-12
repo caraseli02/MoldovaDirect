@@ -86,7 +86,7 @@ export default defineEventHandler(async (event) => {
       results,
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     console.error('Cleanup error:', error)
     await logAdminAction(event, adminId, 'cleanup-failed', { action, error: error.message })
     return {
@@ -118,13 +118,13 @@ async function clearTestUsers(supabase: SupabaseClient, results: unknown) {
     }
 
     const testUserIds = authUsers.users
-      .filter((u: unknown) =>
+      .filter((u: any) =>
         u.email.includes('test')
         || u.email.includes('demo')
         || u.email.includes('example')
         || u.email.includes('@testuser.md'),
       )
-      .map((u: unknown) => u.id)
+      .map((u: any) => u.id)
 
     // Delete related data first
     if (testUserIds.length > 0) {
@@ -165,7 +165,7 @@ async function clearTestUsers(supabase: SupabaseClient, results: unknown) {
       results.deletedCounts.testUsers = 0
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     results.errors.push(`Error clearing test users: ${error.message}`)
   }
 }
@@ -191,7 +191,7 @@ async function clearOrders(supabase: SupabaseClient, results: unknown) {
       results.deletedCounts.orders = orderCount || 0
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     results.errors.push(`Error clearing orders: ${error.message}`)
   }
 }
@@ -218,7 +218,7 @@ async function clearProducts(supabase: SupabaseClient, results: unknown) {
       results.deletedCounts.products = productCount || 0
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     results.errors.push(`Error clearing products: ${error.message}`)
   }
 }
@@ -258,7 +258,7 @@ async function clearOldCarts(supabase: SupabaseClient, results: unknown, daysOld
 
     results.deletedCounts.carts = count || 0
   }
-  catch (error: unknown) {
+  catch (error: any) {
     results.errors.push(`Error clearing old carts: ${error.message}`)
   }
 }
@@ -292,7 +292,7 @@ async function resetDatabase(supabase: SupabaseClient, results: unknown) {
 
     results.message = 'Database reset to empty state'
   }
-  catch (error: unknown) {
+  catch (error: any) {
     results.errors.push(`Error resetting database: ${error.message}`)
   }
 }

@@ -222,7 +222,7 @@ export const useSearchStore = defineStore('search', {
         // Add to search history
         this.addToHistory(query, response.products.length)
       }
-      catch (error) {
+      catch (error: any) {
         this.error = error instanceof Error ? error.message : 'Search failed'
         this.results = []
         this.suggestions = []
@@ -261,7 +261,7 @@ export const useSearchStore = defineStore('search', {
           suggestions: response.suggestions,
         })
       }
-      catch (error) {
+      catch (error: any) {
         console.error('Error fetching suggestions:', error)
         this.suggestions = []
       }
@@ -334,7 +334,7 @@ export const useSearchStore = defineStore('search', {
         const response = await $fetch<{ searches: string[] }>('/api/search/popular')
         this.popularSearches = response.searches
       }
-      catch (error) {
+      catch (error: any) {
         console.error('Error loading popular searches:', error)
         // Fallback to default popular searches
         this.popularSearches = ['wine', 'cheese', 'honey', 'preserves', 'traditional']
@@ -347,7 +347,7 @@ export const useSearchStore = defineStore('search', {
         try {
           localStorage.setItem('moldova-direct-search-history', JSON.stringify(this.history))
         }
-        catch (error) {
+        catch (error: any) {
           console.warn('Failed to save search history:', error)
         }
       }
@@ -371,7 +371,7 @@ export const useSearchStore = defineStore('search', {
             }
           }
         }
-        catch (error) {
+        catch (error: any) {
           console.warn('Failed to load search history:', error)
           this.history = []
         }

@@ -112,7 +112,7 @@ const handleUpdate = async () => {
     await pwa?.updateServiceWorker(true) // true = reload page after update
     vibrate('success')
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Update failed:', error)
     vibrate('error')
   }

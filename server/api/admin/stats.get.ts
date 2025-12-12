@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
       // Test users (with test/demo/example emails)
       supabase.auth.admin.listUsers().then(({ data }) => {
         if (!data) return 0
-        return data.users.filter((u: unknown) =>
+        return data.users.filter((u: any) =>
           u.email?.includes('test')
           || u.email?.includes('demo')
           || u.email?.includes('example')
@@ -108,7 +108,7 @@ export default defineEventHandler(async (event) => {
       stats,
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     console.error('Failed to fetch database stats:', error)
     throw createError({
       statusCode: 500,

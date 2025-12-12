@@ -173,7 +173,7 @@ export default defineEventHandler(async (event) => {
       data: createdTasks,
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     console.error('Error in fulfillment tasks creation endpoint:', error)
 
     if (error.statusCode) {

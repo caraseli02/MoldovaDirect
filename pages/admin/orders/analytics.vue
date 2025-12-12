@@ -428,7 +428,7 @@ const fetchAnalytics = async () => {
       error.value = 'Failed to fetch analytics data'
     }
   }
-  catch (err) {
+  catch (err: any) {
     console.error('Error fetching analytics:', err)
     error.value = 'An error occurred while fetching analytics'
   }
@@ -481,7 +481,7 @@ const exportToCSV = async () => {
     const toast = useToastStore()
     toast.success('Analytics exported successfully')
   }
-  catch (err) {
+  catch (err: any) {
     console.error('Error exporting CSV:', err)
     const toast = useToastStore()
     toast.error('Failed to export analytics')

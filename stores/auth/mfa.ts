@@ -191,7 +191,7 @@ export async function fetchMFAFactors(
       friendlyName: factor.friendly_name,
     })) || []
   }
-  catch (error) {
+  catch (error: any) {
     console.warn('Failed to fetch MFA factors:', error)
     return []
   }
@@ -212,7 +212,7 @@ export async function checkAAL(supabase: SupabaseClient) {
 
     return data
   }
-  catch (error) {
+  catch (error: any) {
     console.warn('AAL check error:', error)
     return null
   }

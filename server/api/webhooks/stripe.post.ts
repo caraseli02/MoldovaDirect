@@ -70,7 +70,7 @@ export default defineEventHandler(async (event: H3Event) => {
       webhookSecret,
     )
   }
-  catch (err) {
+  catch (err: any) {
     const error = err as Error
     console.error('[Stripe Webhook] Signature verification failed:', error.message)
     throw createError({
@@ -110,7 +110,7 @@ export default defineEventHandler(async (event: H3Event) => {
       eventType: stripeEvent.type,
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     console.error(`[Stripe Webhook] Error processing event ${stripeEvent.type}:`, error)
     throw createError({
       statusCode: 500,

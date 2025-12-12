@@ -109,7 +109,7 @@ export const useCategoriesStore = defineStore('categories', {
           timestamp: Date.now(),
         })
       }
-      catch (error) {
+      catch (error: any) {
         this.error = error instanceof Error ? error.message : 'Failed to fetch categories'
         console.error('Error fetching categories:', error)
       }

@@ -343,7 +343,7 @@ const handleSubmit = async () => {
       throw new Error('Failed to update order status')
     }
   }
-  catch (err: unknown) {
+  catch (err: any) {
     console.error('Error updating order status:', err)
     const errorData = err as Record<string, any>
     const dataObj = errorData.data as Record<string, any> | undefined

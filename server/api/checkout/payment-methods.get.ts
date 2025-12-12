@@ -44,7 +44,7 @@ export default defineEventHandler(async (event) => {
       paymentMethods,
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Load payment methods error:', error)
 
     if (error.statusCode) {

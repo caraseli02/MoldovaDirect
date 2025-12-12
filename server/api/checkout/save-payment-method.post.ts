@@ -69,7 +69,7 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Save payment method error:', error)
 
     if (error.statusCode) {

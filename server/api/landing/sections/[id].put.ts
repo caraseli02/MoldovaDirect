@@ -70,7 +70,7 @@ export default defineEventHandler(async (event): Promise<GetSectionResponse> => 
       section: data as LandingSectionRow,
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     console.error('Error updating landing section:', error)
 
     throw createError({

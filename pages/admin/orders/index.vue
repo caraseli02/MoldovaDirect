@@ -457,7 +457,7 @@ const performBulkOperation = async (
       closeBulkOperations()
     }, 3000)
   }
-  catch (error) {
+  catch (error: any) {
     bulkOperations.value.inProgress = false
     bulkOperations.value.error = true
     bulkOperations.value.success = false
@@ -498,7 +498,7 @@ const retryBulkOperation = async () => {
       bulkOperations.value.success = true
       bulkOperations.value.resultMessage = 'Operation completed successfully'
     }
-    catch (error) {
+    catch (error: any) {
       bulkOperations.value.inProgress = false
       bulkOperations.value.error = true
       bulkOperations.value.errorMessage = error instanceof Error ? error.message : 'Operation failed'

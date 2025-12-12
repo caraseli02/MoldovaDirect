@@ -82,7 +82,7 @@ export const useCheckoutShippingStore = defineStore('checkout-shipping', () => {
     try {
       session.setOrderData(applyShippingMethod(orderData.value, shippingInfo.value.method))
     }
-    catch (error) {
+    catch (error: any) {
       console.error('Failed to update shipping costs:', error)
     }
   }
@@ -101,7 +101,7 @@ export const useCheckoutShippingStore = defineStore('checkout-shipping', () => {
       })
       session.setAvailableShippingMethods(methods)
     }
-    catch (error) {
+    catch (error: any) {
       console.error('Failed to load shipping methods:', error)
       session.setAvailableShippingMethods([
         {
@@ -138,7 +138,7 @@ export const useCheckoutShippingStore = defineStore('checkout-shipping', () => {
         paymentMethod: paymentMethod.value,
       })
     }
-    catch (error) {
+    catch (error: any) {
       const message = error instanceof Error ? error.message : 'Failed to update shipping information'
       const checkoutError = createValidationError('shipping', message, CheckoutErrorCode.SHIPPING_ADDRESS_INVALID)
       session.handleError(checkoutError)

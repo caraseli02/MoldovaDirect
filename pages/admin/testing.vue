@@ -204,7 +204,7 @@ const startImpersonation = async (config: { userEmail: string, reason: string, d
       impersonation.value.logId = (response as unknown).logId
     }
   }
-  catch (err: unknown) {
+  catch (err: any) {
     console.error('Failed to start impersonation:', err)
   }
 }
@@ -226,7 +226,7 @@ const stopImpersonation = async () => {
       impersonation.value.targetName = ''
     }
   }
-  catch (err: unknown) {
+  catch (err: any) {
     console.error('Failed to stop impersonation:', err)
   }
 }
@@ -240,7 +240,7 @@ const loadSavedScenarios = () => {
         savedScenarios.value = JSON.parse(saved)
       }
     }
-    catch (error) {
+    catch (error: any) {
       console.error('Failed to load saved scenarios:', error)
       localStorage.removeItem('admin-test-scenarios')
     }
@@ -262,7 +262,7 @@ const saveScenario = (data: { name: string, description: string }) => {
     try {
       localStorage.setItem('admin-test-scenarios', JSON.stringify(savedScenarios.value))
     }
-    catch (error) {
+    catch (error: any) {
       console.error('Failed to save scenario:', error)
     }
   }
@@ -286,7 +286,7 @@ const deleteScenario = (id: string) => {
     try {
       localStorage.setItem('admin-test-scenarios', JSON.stringify(savedScenarios.value))
     }
-    catch (error) {
+    catch (error: any) {
       console.error('Failed to delete scenario:', error)
     }
   }
@@ -301,7 +301,7 @@ const loadGenerationHistory = () => {
         generationHistory.value = JSON.parse(saved)
       }
     }
-    catch (error) {
+    catch (error: any) {
       console.error('Failed to load generation history:', error)
       localStorage.removeItem('admin-test-history')
     }
@@ -329,7 +329,7 @@ const addToHistory = (preset: string, response: unknown) => {
     try {
       localStorage.setItem('admin-test-history', JSON.stringify(generationHistory.value))
     }
-    catch (error) {
+    catch (error: any) {
       console.error('Failed to save generation history:', error)
     }
   }

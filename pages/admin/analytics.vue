@@ -320,7 +320,7 @@ const loadAnalyticsData = async (params?: { startDate?: string, endDate?: string
       fetchProductAnalytics(params),
     ])
   }
-  catch (err) {
+  catch (err: any) {
     console.error('Failed to load analytics:', err)
   }
 }

@@ -173,7 +173,7 @@ const seedOrders = async () => {
 
     result.value = response
   }
-  catch (err: unknown) {
+  catch (err: any) {
     error.value = err.message || 'Failed to create orders'
     console.error('Seed error:', err)
   }

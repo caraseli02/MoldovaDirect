@@ -197,7 +197,7 @@ const loadApexCharts = async () => {
   try {
     return await apexPromise
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Failed to load ApexCharts', error)
     apexPromise = null
     return null

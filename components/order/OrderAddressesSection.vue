@@ -117,7 +117,7 @@ const shippingAddress = computed(() => {
 
     return null
   }
-  catch (err) {
+  catch (err: any) {
     console.warn('Error parsing shipping address:', err)
     return null
   }
@@ -140,7 +140,7 @@ const billingAddress = computed(() => {
 
     return null
   }
-  catch (err) {
+  catch (err: any) {
     console.warn('Error parsing billing address:', err)
     return null
   }

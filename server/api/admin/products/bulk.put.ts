@@ -155,7 +155,7 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Bulk update products error:', error)
 
     if (error.statusCode) {

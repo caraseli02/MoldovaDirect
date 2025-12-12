@@ -122,7 +122,7 @@ describe('Orders List API', () => {
 
   describe('Query Parameters', () => {
     it('parses pagination parameters', () => {
-      const parseParams = (query: Record<string, unknown>) => {
+      const parseParams = (query: Record<string, any>) => {
         const page = parseInt(query.page) || 1
         const limit = Math.min(parseInt(query.limit) || 10, 50)
         return { page, limit }

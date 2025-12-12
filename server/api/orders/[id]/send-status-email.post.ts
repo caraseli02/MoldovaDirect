@@ -127,7 +127,7 @@ export default defineEventHandler(async (event) => {
       externalId: result.externalId,
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     console.error('Error sending order status email:', error)
 
     throw createError({

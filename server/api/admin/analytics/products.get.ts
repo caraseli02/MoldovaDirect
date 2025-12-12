@@ -233,7 +233,7 @@ export default defineEventHandler(async (event) => {
       data: analyticsData,
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Product analytics error:', error)
 
     if (error.statusCode) {

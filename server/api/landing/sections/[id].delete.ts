@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
       message: 'Landing section deleted successfully',
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     console.error('Error deleting landing section:', error)
 
     throw createError({

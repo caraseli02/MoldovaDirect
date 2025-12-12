@@ -146,7 +146,7 @@ async function loadStats() {
     const { data } = await useFetch('/api/admin/email-logs/stats')
     stats.value = data.value
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Failed to load email stats:', error)
   }
 }

@@ -60,7 +60,7 @@ export default defineEventHandler(async (event) => {
       scope,
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('[Cache Invalidation Error]', {
       error: error instanceof Error ? error.message : 'Unknown error',
       timestamp: new Date().toISOString(),

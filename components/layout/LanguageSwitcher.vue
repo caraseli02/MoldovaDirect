@@ -210,7 +210,7 @@ const switchLanguage = async (code: 'es' | 'en' | 'ro' | 'ru') => {
     closeDropdown()
     await navigateTo(newPath)
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Error switching language:', error)
     closeDropdown()
   }

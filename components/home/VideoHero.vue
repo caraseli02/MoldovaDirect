@@ -330,7 +330,7 @@ onMounted(() => {
   // Programmatically start playback as fallback for browsers that don't
   // respect the autoplay attribute. Gracefully handles autoplay policy rejections.
   if (videoRef.value && props.showVideo) {
-    videoRef.value.play().catch((error) => {
+    videoRef.value.play().catch((error: any) => {
       console.error('[VideoHero] Video autoplay failed (likely browser policy):', {
         error: error.message,
         errorType: error.name,

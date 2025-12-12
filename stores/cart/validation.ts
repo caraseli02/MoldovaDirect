@@ -173,7 +173,7 @@ async function validateSingleProduct(productId: string, cartItem?: CartItem): Pr
       warnings: [],
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     console.warn(`Failed to validate product ${productId}:`, error)
 
     // Handle different error scenarios
@@ -239,7 +239,7 @@ async function batchValidateProducts(
 
         // Remove from validation queue on success
         removeFromValidationQueue(productId)
-      }).catch((error) => {
+      }).catch((error: any) => {
         console.error(`Batch validation error for ${productId}:`, error)
 
         // Handle retry logic
@@ -259,7 +259,7 @@ async function batchValidateProducts(
     try {
       await Promise.allSettled(validationPromises)
     }
-    catch (error) {
+    catch (error: any) {
       console.error('Batch validation error:', error)
     }
   }
@@ -298,7 +298,7 @@ function startBackgroundValidation(): void {
         state.value.lastBackgroundValidation = new Date()
       }
     }
-    catch (error) {
+    catch (error: any) {
       console.error('Background validation error:', error)
     }
     finally {

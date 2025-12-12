@@ -476,7 +476,7 @@ const handleSubmit = async () => {
   try {
     emit('save', { ...form })
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Error saving address:', error)
   }
   finally {

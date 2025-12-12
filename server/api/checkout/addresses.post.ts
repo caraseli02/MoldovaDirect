@@ -81,7 +81,7 @@ export default defineEventHandler(async (event) => {
       address: addressFromEntity(address),
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     if (error && typeof error === 'object' && 'statusCode' in error) {
       throw error
     }

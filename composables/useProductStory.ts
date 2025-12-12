@@ -16,7 +16,7 @@ interface ReviewSummary {
 }
 
 export function useProductStory(
-  product: ComputedRef<(ProductWithRelations & { attributes?: Record<string, unknown> }) | null>,
+  product: ComputedRef<(ProductWithRelations & { attributes?: Record<string, any> }) | null>,
 ) {
   const { t } = useI18n()
   const { getLocalizedText, getCategoryLabel } = useProductUtils()

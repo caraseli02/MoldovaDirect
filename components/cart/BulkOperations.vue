@@ -89,7 +89,7 @@ const handleRemoveSelected = async () => {
     await removeSelectedItems()
     toast.success('Productos eliminados', 'Los productos seleccionados han sido eliminados del carrito')
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Failed to remove selected items:', error)
     toast.error('Error', 'No se pudieron eliminar los productos seleccionados')
   }
@@ -100,7 +100,7 @@ const handleMoveToSavedForLater = async () => {
     await moveSelectedToSavedForLater()
     toast.success('Productos guardados', 'Los productos seleccionados han sido guardados para más tarde')
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Failed to move selected items to saved for later:', error)
     toast.error('Error', 'No se pudieron guardar los productos para más tarde')
   }

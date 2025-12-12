@@ -265,7 +265,7 @@ export async function logAdminAction(
 
     return { success: true }
   }
-  catch (error) {
+  catch (error: any) {
     // Use fallback logging - this is critical for compliance
     logAuditToConsole(logEntry, errorId, error)
     return {

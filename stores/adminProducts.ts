@@ -95,7 +95,7 @@ export const useAdminProductsStore = defineStore('adminProducts', {
      * Get current query parameters for API calls
      */
     queryParams: (state) => {
-      const params: Record<string, unknown> = {
+      const params: Record<string, any> = {
         page: state.pagination.page,
         limit: state.pagination.limit,
         admin: true, // Flag for admin-specific data
@@ -186,7 +186,7 @@ export const useAdminProductsStore = defineStore('adminProducts', {
         this.products = response.products
         this.pagination = response.pagination
       }
-      catch (error) {
+      catch (error: any) {
         this.error = error instanceof Error ? error.message : 'Failed to fetch products'
         console.error('Error fetching admin products:', error)
       }
@@ -345,8 +345,8 @@ export const useAdminProductsStore = defineStore('adminProducts', {
       try {
         const response = await $fetch<{
           success: boolean
-          product: Record<string, unknown>
-          movement: Record<string, unknown>
+          product: Record<string, any>
+          movement: Record<string, any>
           statusChanged: boolean
           message: string
         }>(`/api/admin/products/${productId}/inventory`, {
@@ -371,7 +371,7 @@ export const useAdminProductsStore = defineStore('adminProducts', {
 
         return response
       }
-      catch (error) {
+      catch (error: any) {
         const toast = useToast()
         toast.error('Failed to update inventory')
         throw error
@@ -399,7 +399,7 @@ export const useAdminProductsStore = defineStore('adminProducts', {
         const toast = useToast()
         toast.success('Product deleted successfully')
       }
-      catch (error) {
+      catch (error: any) {
         const toast = useToast()
         toast.error('Failed to delete product')
         throw error
@@ -436,7 +436,7 @@ export const useAdminProductsStore = defineStore('adminProducts', {
         const toast = useToast()
         toast.success(`${this.selectedProducts.length} products deleted successfully`)
       }
-      catch (error) {
+      catch (error: any) {
         const toast = useToast()
         toast.error('Failed to delete products')
         throw error
@@ -475,7 +475,7 @@ export const useAdminProductsStore = defineStore('adminProducts', {
         const action = isActive ? 'activated' : 'deactivated'
         toast.success(`${this.selectedProducts.length} products ${action} successfully`)
       }
-      catch (error) {
+      catch (error: any) {
         const toast = useToast()
         toast.error('Failed to update products')
         throw error

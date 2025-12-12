@@ -476,7 +476,7 @@ const handleTaskToggle = async (task: OrderFulfillmentTaskRaw, checked: boolean 
       emit('updated')
     }
   }
-  catch (err) {
+  catch (err: any) {
     console.error('Error updating fulfillment task:', err)
     error.value = 'Failed to update task. Please try again.'
 
@@ -534,7 +534,7 @@ const handleTasksInitialized = async () => {
     // Emit update to parent
     emit('updated')
   }
-  catch (err) {
+  catch (err: any) {
     console.error('Error fetching fulfillment tasks:', err)
     error.value = 'Failed to load tasks'
   }

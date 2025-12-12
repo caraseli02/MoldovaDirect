@@ -107,7 +107,7 @@ export default defineEventHandler(async (event) => {
       product: transformedProduct,
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Get product error:', error)
 
     if (error.statusCode) {

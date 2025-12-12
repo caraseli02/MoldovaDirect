@@ -56,7 +56,7 @@ export default defineNuxtPlugin(() => {
             return
           }
         }
-        catch (error) {
+        catch (error: any) {
           console.warn('Failed to track cart view:', error)
         }
       }, 500) // Increased delay to ensure cart plugin has initialized
@@ -72,7 +72,7 @@ export default defineNuxtPlugin(() => {
         const { syncEventsWithServer } = useCartAnalytics()
         await syncEventsWithServer()
       }
-      catch (error) {
+      catch (error: any) {
         console.warn('Failed to sync cart analytics:', error)
       }
     }, 5 * 60 * 1000) // Sync every 5 minutes
@@ -83,7 +83,7 @@ export default defineNuxtPlugin(() => {
         const { syncEventsWithServer } = useCartAnalytics()
         await syncEventsWithServer()
       }
-      catch (error) {
+      catch (error: any) {
         console.warn('Failed to sync cart analytics on unload:', error)
       }
     }

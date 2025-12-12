@@ -139,7 +139,7 @@ function processFile(filePath: string): number {
     }
 
     return fileFixed
-  } catch (error) {
+  } catch (error: any) {
     console.error(`Error processing ${filePath}:`, error)
     return 0
   }
@@ -155,7 +155,7 @@ function main() {
       { encoding: 'utf-8' },
     )
     tsFiles = result.trim().split('\n').filter((f) => f)
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error finding files:', error)
     return
   }

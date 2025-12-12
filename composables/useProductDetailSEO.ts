@@ -18,7 +18,7 @@ interface StructuredDataOptions {
 }
 
 export function useProductDetailSEO(
-  product: ComputedRef<(ProductWithRelations & { attributes?: Record<string, unknown> }) | null>,
+  product: ComputedRef<(ProductWithRelations & { attributes?: Record<string, any> }) | null>,
   options: ComputedRef<StructuredDataOptions>,
 ) {
   const { getLocalizedText, getCategoryLabel } = useProductUtils()
@@ -47,7 +47,7 @@ export function useProductDetailSEO(
         || 'Moldova Direct'
 
     // Build Product structured data
-    const data: Record<string, unknown> = {
+    const data: Record<string, any> = {
       '@context': 'https://schema.org',
       '@type': 'Product',
       'name': getLocalizedText(product.value.name),

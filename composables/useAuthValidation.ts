@@ -161,7 +161,7 @@ export const useAuthValidation = () => {
         fieldErrors: {},
       }
     }
-    catch (error) {
+    catch (error: any) {
       if (error instanceof z.ZodError) {
         const errors: AuthValidationError[] = []
         const fieldErrors: Record<string, string> = {}

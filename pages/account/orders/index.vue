@@ -459,7 +459,7 @@ const paginationValue = computed(() => unref(pagination))
 const errorValue = computed(() => unref(error))
 
 // Initialize filters from URL query params
-const initializeFromUrl = (): Record<string, unknown> => {
+const initializeFromUrl = (): Record<string, any> => {
   const query = route.query
 
   searchFilters.value = {
@@ -480,7 +480,7 @@ const initializeFromUrl = (): Record<string, unknown> => {
 }
 
 // Update URL with current filters
-const updateUrl = (params: Record<string, unknown>) => {
+const updateUrl = (params: Record<string, any>) => {
   const query: Record<string, string> = {}
 
   if (params.search) query.search = params.search
@@ -612,7 +612,7 @@ const setupMobileFeatures = () => {
       },
     })
   }
-  catch (err) {
+  catch (err: any) {
     console.warn('Failed to setup mobile features:', err)
   }
 }
@@ -639,7 +639,7 @@ onMounted(async () => {
       // Mark updates as viewed when user visits the page
       markUpdatesAsViewed()
     }
-    catch (subscriptionError) {
+    catch (subscriptionError: any) {
       console.warn('Failed to setup real-time updates:', subscriptionError)
       // Continue without real-time updates
     }
@@ -649,7 +649,7 @@ onMounted(async () => {
       setupMobileFeatures()
     })
   }
-  catch (err) {
+  catch (err: any) {
     console.error('Failed to initialize orders page:', err)
   }
 })

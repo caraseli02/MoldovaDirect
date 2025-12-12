@@ -15,7 +15,7 @@ async function globalTeardown(config: FullConfig) {
       await fs.rm(testDataPath, { recursive: true, force: true })
       console.log('✓ Cleaned up test data')
     }
-    catch (error) {
+    catch (error: any) {
       console.error('✗ Failed to cleanup test data:', error)
     }
   }

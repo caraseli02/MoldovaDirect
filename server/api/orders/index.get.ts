@@ -292,7 +292,7 @@ export default defineEventHandler(async (event) => {
       deliveredAt: order.delivered_at,
       createdAt: order.created_at,
       updatedAt: order.updated_at,
-      items: (order.order_items || []).map((item: unknown) => ({
+      items: (order.order_items || []).map((item: any) => ({
         id: item.id,
         orderId: item.order_id,
         productId: item.product_id,
@@ -326,7 +326,7 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     if (error.statusCode) {
       throw error
     }

@@ -259,7 +259,7 @@ export const useAuthStore = defineStore('auth', {
 
         this.sessionInitialized = true
       }
-      catch (error) {
+      catch (error: any) {
         console.error('Failed to initialize auth:', error)
         this.error = 'Failed to initialize authentication'
       }
@@ -495,7 +495,7 @@ export const useAuthStore = defineStore('auth', {
           }
         }
       }
-      catch (error) {
+      catch (error: any) {
         const errorMessage = error instanceof Error ? error.message : 'Login failed'
         this.error = errorMessage
 
@@ -593,7 +593,7 @@ export const useAuthStore = defineStore('auth', {
           })
         }
       }
-      catch (error) {
+      catch (error: any) {
         const errorMessage = error instanceof Error ? error.message : 'Registration failed'
         this.error = errorMessage
 
@@ -648,7 +648,7 @@ export const useAuthStore = defineStore('auth', {
           query: { message: 'email-verified' },
         })
       }
-      catch (error) {
+      catch (error: any) {
         const errorMessage = error instanceof Error ? error.message : 'Email verification failed'
         this.error = errorMessage
 
@@ -700,7 +700,7 @@ export const useAuthStore = defineStore('auth', {
           'Se ha enviado un nuevo email de verificación. Revisa tu bandeja de entrada.',
         )
       }
-      catch (error) {
+      catch (error: any) {
         const errorMessage = error instanceof Error ? error.message : 'Failed to resend verification'
         this.error = errorMessage
 
@@ -749,7 +749,7 @@ export const useAuthStore = defineStore('auth', {
           'Si el email existe, recibirás instrucciones para restablecer tu contraseña.',
         )
       }
-      catch (error) {
+      catch (error: any) {
         const errorMessage = error instanceof Error ? error.message : 'Password reset request failed'
         this.error = errorMessage
 
@@ -801,7 +801,7 @@ export const useAuthStore = defineStore('auth', {
           query: { message: 'password-reset' },
         })
       }
-      catch (error) {
+      catch (error: any) {
         const errorMessage = error instanceof Error ? error.message : 'Password reset failed'
         this.error = errorMessage
 
@@ -863,7 +863,7 @@ export const useAuthStore = defineStore('auth', {
           query: { message: 'logged-out' },
         })
       }
-      catch (error) {
+      catch (error: any) {
         console.error('Logout failed:', error)
 
         // Force logout even if there's an error
@@ -941,7 +941,7 @@ export const useAuthStore = defineStore('auth', {
           'Tu perfil ha sido actualizado correctamente.',
         )
       }
-      catch (error) {
+      catch (error: any) {
         const errorMessage = error instanceof Error ? error.message : 'Profile update failed'
         this.profileError = errorMessage
 
@@ -973,7 +973,7 @@ export const useAuthStore = defineStore('auth', {
           },
         })
       }
-      catch (error) {
+      catch (error: any) {
         // Non-critical error, just log it
         console.warn('Failed to update last login:', error)
       }
@@ -1017,7 +1017,7 @@ export const useAuthStore = defineStore('auth', {
           // Let Supabase handle automatic logout if refresh fails
         }
       }
-      catch (error) {
+      catch (error: any) {
         console.warn('Session refresh error:', error)
       }
     },
@@ -1040,7 +1040,7 @@ export const useAuthStore = defineStore('auth', {
         this.mfaEnrollment = enrollment
         return enrollment
       }
-      catch (error) {
+      catch (error: any) {
         const errorMessage = error instanceof Error ? error.message : 'MFA enrollment failed'
         this.mfaError = errorMessage
         throw error
@@ -1073,7 +1073,7 @@ export const useAuthStore = defineStore('auth', {
         // Clear enrollment data
         this.mfaEnrollment = null
       }
-      catch (error) {
+      catch (error: any) {
         const errorMessage = error instanceof Error ? error.message : 'MFA verification failed'
         this.mfaError = errorMessage
         throw error
@@ -1105,7 +1105,7 @@ export const useAuthStore = defineStore('auth', {
         this.mfaChallenge = challenge
         return challenge
       }
-      catch (error) {
+      catch (error: any) {
         const errorMessage = error instanceof Error ? error.message : 'MFA challenge failed'
         this.mfaError = errorMessage
         throw error
@@ -1133,7 +1133,7 @@ export const useAuthStore = defineStore('auth', {
         // Clear challenge
         this.mfaChallenge = null
       }
-      catch (error) {
+      catch (error: any) {
         const errorMessage = error instanceof Error ? error.message : 'MFA verification failed'
         this.mfaError = errorMessage
         throw error
@@ -1159,7 +1159,7 @@ export const useAuthStore = defineStore('auth', {
         const supabaseUser = useSupabaseUser()
         await this.syncUserState(supabaseUser.value)
       }
-      catch (error) {
+      catch (error: any) {
         const errorMessage = error instanceof Error ? error.message : 'Failed to disable MFA'
         this.mfaError = errorMessage
         throw error

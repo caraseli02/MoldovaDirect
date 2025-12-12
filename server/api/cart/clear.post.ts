@@ -90,7 +90,7 @@ export default defineEventHandler(async (event) => {
       message: 'Cart cleared successfully',
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     if (error.statusCode) {
       throw error
     }

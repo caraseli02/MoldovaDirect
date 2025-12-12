@@ -244,7 +244,7 @@ const handleReorder = async () => {
     loading.value = true
     emit('reorder', props.order)
   }
-  catch (error) {
+  catch (error: any) {
     emit('error', error as Error)
   }
   finally {
@@ -262,7 +262,7 @@ const handleReturn = () => {
         loading.value = true
         emit('return', props.order)
       }
-      catch (error) {
+      catch (error: any) {
         emit('error', error as Error)
       }
       finally {
@@ -278,7 +278,7 @@ const handleSupport = () => {
     loading.value = true
     emit('support', props.order)
   }
-  catch (error) {
+  catch (error: any) {
     emit('error', error as Error)
   }
   finally {
@@ -291,7 +291,7 @@ const handleTrack = () => {
     loading.value = true
     emit('track', props.order)
   }
-  catch (error) {
+  catch (error: any) {
     emit('error', error as Error)
   }
   finally {

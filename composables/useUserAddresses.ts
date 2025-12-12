@@ -59,7 +59,7 @@ export const useUserAddresses = () => {
 
       addresses.value = data || []
     }
-    catch (err) {
+    catch (err: any) {
       console.error('Failed to load addresses:', err)
       error.value = t('checkout.errors.failedToLoadAddresses')
       addresses.value = []
@@ -99,9 +99,9 @@ export const useUserAddresses = () => {
 
       const { data, error: insertError } = await supabase
         .from('user_addresses')
-        .insert(dbAddress as unknown as Record<string, unknown>)
+        .insert(dbAddress as unknown as Record<string, any>)
         .select()
-        .single<Record<string, unknown>>()
+        .single<Record<string, any>>()
 
       if (insertError) throw insertError
       if (!data) throw new Error('No data returned from insert')
@@ -128,7 +128,7 @@ export const useUserAddresses = () => {
 
       return newAddress
     }
-    catch (err) {
+    catch (err: any) {
       console.error('Failed to save address:', err)
       error.value = t('checkout.errors.failedToSaveAddress')
       throw err
@@ -151,7 +151,7 @@ export const useUserAddresses = () => {
       error.value = null
 
       // Convert camelCase updates to snake_case for database
-      const dbUpdates: Record<string, unknown> = {}
+      const dbUpdates: Record<string, any> = {}
       if (updates.firstName !== undefined) dbUpdates.first_name = updates.firstName
       if (updates.lastName !== undefined) dbUpdates.last_name = updates.lastName
       if (updates.company !== undefined) dbUpdates.company = updates.company || null
@@ -166,11 +166,11 @@ export const useUserAddresses = () => {
 
       const { data, error: updateError } = await supabase
         .from('user_addresses')
-        .update(dbUpdates as Record<string, unknown>)
+        .update(dbUpdates as Record<string, any>)
         .eq('id', addressId)
         .eq('user_id', user.value.id)
         .select()
-        .single<Record<string, unknown>>()
+        .single<Record<string, any>>()
 
       if (updateError) throw updateError
       if (!data) throw new Error('No data returned from update')
@@ -200,7 +200,7 @@ export const useUserAddresses = () => {
 
       return updatedAddress
     }
-    catch (err) {
+    catch (err: any) {
       console.error('Failed to update address:', err)
       error.value = t('checkout.errors.failedToUpdateAddress')
       throw err
@@ -230,7 +230,7 @@ export const useUserAddresses = () => {
       // Reload to get updated state from database
       await loadAddresses()
     }
-    catch (err) {
+    catch (err: any) {
       console.error('Failed to set default address:', err)
       error.value = t('checkout.errors.failedToSetDefaultAddress')
       throw err
@@ -263,7 +263,7 @@ export const useUserAddresses = () => {
       // Optimistically update local state
       addresses.value = addresses.value.filter(addr => addr.id !== addressId)
     }
-    catch (err) {
+    catch (err: any) {
       console.error('Failed to delete address:', err)
       error.value = t('checkout.errors.failedToDeleteAddress')
       throw err

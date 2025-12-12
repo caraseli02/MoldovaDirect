@@ -194,7 +194,7 @@ export default defineEventHandler(async (event): Promise<ApiResponse> => {
       data: transformedOrder,
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     if (error.statusCode) {
       throw error
     }

@@ -413,7 +413,7 @@ const startEnrollment = async () => {
     showEnrollment.value = true
     enrollmentError.value = ''
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Failed to start enrollment:', error)
   }
 }
@@ -426,7 +426,7 @@ const completeEnrollment = async () => {
     showEnrollment.value = false
     verificationCode.value = ''
   }
-  catch (error) {
+  catch (error: any) {
     enrollmentError.value = error instanceof Error ? error.message : 'Verification failed'
   }
 }
@@ -445,7 +445,7 @@ const copySecret = async () => {
       await navigator.clipboard.writeText(authStore.mfaEnrollment.secret)
       // Could show a toast notification here
     }
-    catch (error) {
+    catch (error: any) {
       console.error('Failed to copy secret:', error)
     }
   }
@@ -463,7 +463,7 @@ const disableMFA = async () => {
       showDisableConfirm.value = false
       factorToDisable.value = null
     }
-    catch (error) {
+    catch (error: any) {
       console.error('Failed to disable MFA:', error)
     }
   }

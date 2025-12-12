@@ -94,7 +94,7 @@ export default defineEventHandler(async (event): Promise<ProductCountsResponse> 
       sampleProducts: sanitizedSamples,
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('[Debug Endpoint Error]', {
       endpoint: 'products-count',
       error: error instanceof Error ? error.message : 'Unknown error',

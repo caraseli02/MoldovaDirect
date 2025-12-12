@@ -125,7 +125,7 @@ describe('Admin Authentication Integration Tests', () => {
       try {
         await cleanupAuthTestUser(supabase, user.id)
       }
-      catch (error) {
+      catch (error: any) {
         console.warn(`Failed to cleanup user ${user.id}:`, error)
       }
     }

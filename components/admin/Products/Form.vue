@@ -710,7 +710,7 @@ const validateForm = () => {
     errors.value = {}
     return true
   }
-  catch (error) {
+  catch (error: any) {
     if (error instanceof z.ZodError) {
       const newErrors: Record<string, any> = {}
       error.issues.forEach((err: z.ZodIssue) => {
@@ -743,7 +743,7 @@ const handleSubmit = async () => {
   try {
     emit('submit', form.value)
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Form submission error:', error)
   }
   finally {

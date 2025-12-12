@@ -231,7 +231,7 @@ export default defineEventHandler(async (event) => {
       data: overview,
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Analytics overview error:', error)
 
     if (error.statusCode) {

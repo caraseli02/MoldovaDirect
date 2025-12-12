@@ -57,7 +57,7 @@ export default defineEventHandler(async (event) => {
       currentTime: data.current_time,
     }
   }
-  catch (err: unknown) {
+  catch (err: any) {
     // Handle Zod validation errors
     if (err.name === 'ZodError') {
       throw createError({

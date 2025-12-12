@@ -177,7 +177,7 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     console.error('Impersonation logs retrieval error:', error)
 
     if (error.statusCode) {

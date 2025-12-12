@@ -153,7 +153,7 @@ const handleLoadRecommendations = async () => {
   try {
     await loadRecommendations()
   }
-  catch (error) {
+  catch (error: any) {
     // Only show error toast for non-404 errors
     if (error.statusCode !== 404) {
       console.error('Failed to load recommendations:', error)
@@ -168,7 +168,7 @@ const handleAddToCart = async (product: Record<string, any>) => {
     await addItem(product, 1)
     toast.success('Producto añadido', `${product.name} ha sido añadido al carrito`)
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Failed to add recommended product to cart:', error)
     toast.error('Error', 'No se pudo añadir el producto al carrito')
   }

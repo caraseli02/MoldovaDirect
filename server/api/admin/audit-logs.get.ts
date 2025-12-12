@@ -118,7 +118,7 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     console.error('Audit logs retrieval error:', error)
 
     if (error.statusCode) {

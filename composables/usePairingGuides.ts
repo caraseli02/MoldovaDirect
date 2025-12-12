@@ -237,7 +237,7 @@ export const usePairingGuides = () => {
 
       pairings.value = staticPairings
     }
-    catch (err) {
+    catch (err: any) {
       error.value = err instanceof Error ? err.message : 'Failed to fetch pairing guides'
       console.error('Error fetching pairing guides:', err)
     }
@@ -270,7 +270,7 @@ export const usePairingGuides = () => {
       error.value = 'Pairing guide not found'
       return null
     }
-    catch (err) {
+    catch (err: any) {
       error.value = err instanceof Error ? err.message : 'Failed to fetch pairing guide'
       console.error('Error fetching pairing guide:', err)
       return null

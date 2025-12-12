@@ -90,7 +90,7 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Delete product error:', error)
 
     if (error.statusCode) {

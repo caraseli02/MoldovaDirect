@@ -94,7 +94,7 @@ export default defineEventHandler(async (event) => {
         await serviceRoleSupabase.storage
           .from('avatars')
           .remove([fileName])
-          .catch((err) => {
+          .catch((err: any) => {
             // Log but don't fail - storage deletion is non-critical
             logger.warn('Failed to delete profile picture', { error: err.message })
           })
@@ -122,7 +122,7 @@ export default defineEventHandler(async (event) => {
         },
       }
     }
-    catch (deletionError) {
+    catch (deletionError: any) {
       // Log the error for debugging
       logger.error('Account deletion failed', {
         error: deletionError instanceof Error ? deletionError.message : String(deletionError),
@@ -140,7 +140,7 @@ export default defineEventHandler(async (event) => {
       })
     }
   }
-  catch (error) {
+  catch (error: any) {
     logger.error('Account deletion error', {
       error: error instanceof Error ? error.message : String(error),
     })

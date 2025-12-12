@@ -111,7 +111,7 @@ export const useProductCatalog = () => {
       pagination.value = response.pagination
       filters.value = { ...productFilters }
     }
-    catch (err) {
+    catch (err: any) {
       // Check if this is an intentional cancellation (DOMException with name 'AbortError')
       const isAbortError = err instanceof DOMException && err.name === 'AbortError'
       if (isAbortError) {
@@ -150,7 +150,7 @@ export const useProductCatalog = () => {
 
       return response.product
     }
-    catch (err) {
+    catch (err: any) {
       const errorMessage = classifyNetworkError(err)
       if (errorMessage) {
         error.value = errorMessage
@@ -173,7 +173,7 @@ export const useProductCatalog = () => {
       const response = await $fetch<{ products: ProductWithRelations[] }>(`/api/products/featured?${params.toString()}`)
       return response.products
     }
-    catch (err) {
+    catch (err: any) {
       console.error('Error fetching featured products:', err)
       return []
     }
@@ -223,7 +223,7 @@ export const useProductCatalog = () => {
 
       filters.value = { ...searchFilters }
     }
-    catch (err) {
+    catch (err: any) {
       // Check if this is an intentional cancellation (DOMException with name 'AbortError')
       const isAbortError = err instanceof DOMException && err.name === 'AbortError'
       if (isAbortError) {
@@ -253,7 +253,7 @@ export const useProductCatalog = () => {
       const response = await $fetch<{ suggestions: string[] }>(`/api/search/suggestions?q=${encodeURIComponent(query)}`)
       return response.suggestions
     }
-    catch (err) {
+    catch (err: any) {
       console.error('Error fetching suggestions:', err)
       return []
     }
@@ -281,7 +281,7 @@ export const useProductCatalog = () => {
 
       categoriesTree.value = buildTree()
     }
-    catch (err) {
+    catch (err: any) {
       error.value = err instanceof Error ? err.message : 'Failed to fetch categories'
       console.error('Error fetching categories:', err)
     }

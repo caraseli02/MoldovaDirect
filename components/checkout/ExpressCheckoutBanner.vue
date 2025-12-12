@@ -262,7 +262,7 @@ const useExpressCheckout = async () => {
 
     emit('use-express')
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Express checkout failed:', error)
     toast.error(
       t('checkout.errors.expressCheckoutFailed', 'Express checkout failed'),

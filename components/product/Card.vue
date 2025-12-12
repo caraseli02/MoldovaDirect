@@ -492,7 +492,7 @@ const addToCart = async () => {
       vibrate('success')
     }
   }
-  catch (error) {
+  catch (error: any) {
     const errorMsg = error instanceof Error ? error.message : String(error)
     console.error('❌ Failed to add item to cart:', errorMsg, error)
 

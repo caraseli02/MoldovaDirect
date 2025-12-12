@@ -217,7 +217,7 @@ export default defineCachedEventHandler(async (event) => {
       },
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Featured products API error:', error)
 
     if (error.statusCode) {

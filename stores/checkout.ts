@@ -166,7 +166,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
         await cartStore.lockCart(sessionRefs.sessionId.value as string, 30)
         console.log('Cart locked for checkout session:', sessionRefs.sessionId.value)
       }
-      catch (lockError) {
+      catch (lockError: any) {
         console.warn('Failed to lock cart:', lockError)
         // Continue with checkout even if locking fails
       }
@@ -198,7 +198,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
         paymentMethod: sessionRefs.paymentMethod.value,
       })
     }
-    catch (error) {
+    catch (error: any) {
       const checkoutError = createSystemError(
         error instanceof Error ? error.message : 'Failed to initialize checkout',
         CheckoutErrorCode.SYSTEM_ERROR,
@@ -267,7 +267,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
       // Reset checkout session
       session.reset()
     }
-    catch (error) {
+    catch (error: any) {
       console.error('Error canceling checkout:', error)
       // Reset anyway
       session.reset()
@@ -297,7 +297,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
       // Mark data as prefetched
       session.setDataPrefetched(true)
     }
-    catch (error) {
+    catch (error: any) {
       console.error('Failed to prefetch checkout data:', error)
       // Don't throw - this is a non-critical enhancement
       // Mark as prefetched anyway to avoid repeated failed attempts

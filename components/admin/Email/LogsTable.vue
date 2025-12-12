@@ -407,7 +407,7 @@ async function searchLogs() {
       pagination.value = data.value.pagination
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Failed to search email logs:', error)
     useToast().error('Failed to load email logs')
   }
@@ -445,7 +445,7 @@ async function retryEmail(logId: number) {
     showDetailsModal.value = false
     await searchLogs()
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Failed to retry email:', error)
     useToast().error('Failed to retry email')
   }

@@ -367,7 +367,7 @@ export default defineEventHandler(async (event) => {
           results.categories.push(category)
         }
       }
-      catch (error: unknown) {
+      catch (error: any) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error'
         results.errors.push(`Category ${categoryData.slug}: ${errorMessage}`)
       }
@@ -413,7 +413,7 @@ export default defineEventHandler(async (event) => {
           results.products.push(product)
         }
       }
-      catch (error: unknown) {
+      catch (error: any) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error'
         results.errors.push(`Product ${productData.sku}: ${errorMessage}`)
       }
@@ -432,7 +432,7 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     console.error('Seed API error:', error)
 
     if (error && typeof error === 'object' && 'statusCode' in error) {

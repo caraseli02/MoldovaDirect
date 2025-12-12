@@ -204,7 +204,7 @@ export default defineEventHandler(async (event) => {
       message: 'Product created successfully',
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     console.error('Create product error:', error)
 
     if (error.statusCode) {

@@ -239,7 +239,7 @@ export default defineCachedEventHandler(async (event) => {
       locale,
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Category products API error:', error)
 
     if (error.statusCode) {

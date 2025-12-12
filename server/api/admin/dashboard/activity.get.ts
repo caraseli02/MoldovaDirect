@@ -150,7 +150,7 @@ export default defineEventHandler(async (event) => {
       data: recentActivities,
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Dashboard activity error:', error)
 
     if (error.statusCode) {

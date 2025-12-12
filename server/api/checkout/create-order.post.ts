@@ -309,7 +309,7 @@ export default defineEventHandler(async (event) => {
           })
         }
       }
-      catch (prefError: unknown) {
+      catch (prefError: any) {
         // Don't fail the order if preference saving fails
         logger.warn('Error saving user preferences', {
           userId: user.id,
@@ -330,7 +330,7 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     if (error.statusCode) {
       throw error
     }

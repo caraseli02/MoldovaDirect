@@ -6,7 +6,7 @@ import type { CategoryWithChildren } from '~/types'
 // Mock router and route BEFORE imports
 const mockPush = vi.fn()
 const mockRoute = {
-  query: {} as Record<string, unknown>,
+  query: {} as Record<string, any>,
 }
 
 // Use vi.mock for vue-router

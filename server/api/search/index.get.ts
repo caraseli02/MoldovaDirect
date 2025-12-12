@@ -189,7 +189,7 @@ export default defineCachedEventHandler(async (event) => {
       suggestions: generateSearchSuggestions(searchTerm, matchingProducts || [], locale),
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Search API error:', error)
 
     if (error.statusCode) {

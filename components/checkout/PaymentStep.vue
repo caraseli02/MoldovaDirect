@@ -500,7 +500,7 @@ const proceedToReview = async () => {
       await navigateTo(localePath(stepPath))
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Failed to proceed to review:', error)
   }
 }

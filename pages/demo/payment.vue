@@ -141,7 +141,7 @@ onMounted(async () => {
     // Type assertion needed because initializeCheckout expects a different cart item type
     await (checkoutStore as unknown).initializeCheckout(mockItems)
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Failed to initialize checkout demo:', error)
   }
 })

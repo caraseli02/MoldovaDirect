@@ -712,7 +712,7 @@ const refreshProducts = async () => {
       await fetchProducts(currentFilters)
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Failed to refresh products:', error)
   }
 }
@@ -756,7 +756,7 @@ const loadMoreProducts = async () => {
       await fetchProducts(currentFilters)
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Failed to load more products:', error)
   }
 }
@@ -886,7 +886,7 @@ onBeforeUnmount(() => {
       sessionStorage.removeItem('products-scroll-position')
       sessionStorage.removeItem('products-filter-state')
     }
-    catch (error) {
+    catch (error: any) {
       console.error('[Product Catalog] Session storage cleanup failed:', error)
 
       // Only ignore SecurityError (private browsing), rethrow others

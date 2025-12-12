@@ -747,7 +747,7 @@ interface CategoryWithBreadcrumb {
 interface ProductDetailResponse extends Omit<ProductWithRelations, 'category'> {
   category: CategoryWithBreadcrumb
   relatedProducts?: ProductWithRelations[]
-  attributes?: Record<string, unknown>
+  attributes?: Record<string, any>
 }
 
 const route = useRoute()
@@ -782,7 +782,7 @@ const stockQuantity = computed(() => product.value?.stockQuantity || 0)
 const categoryLabel = computed(() => getCategoryLabel(product.value?.category))
 
 // Create computed product ref for composables (cast to expected type)
-const computedProduct = computed(() => (product.value ?? null) as (ProductWithRelations & { attributes?: Record<string, unknown> }) | null)
+const computedProduct = computed(() => (product.value ?? null) as (ProductWithRelations & { attributes?: Record<string, any> }) | null)
 
 // Stock status composable
 const {
@@ -890,7 +890,7 @@ const shareProduct = async () => {
       shareFeedback.value = null
     }, 4000)
   }
-  catch (err) {
+  catch (err: any) {
     console.error('Share failed', err)
     shareFeedback.value = t('products.actions.shareError')
   }
@@ -979,7 +979,7 @@ const addToCart = async () => {
 
     // Add to cart succeeded
   }
-  catch (err) {
+  catch (err: any) {
     const errorMsg = err instanceof Error ? err.message : String(err)
     console.error('Add to cart failed:', errorMsg, err)
 

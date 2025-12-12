@@ -205,7 +205,7 @@ export default defineEventHandler(async (event) => {
           }
         }
       }
-      catch (dateError: unknown) {
+      catch (dateError: any) {
         const errorMessage = dateError instanceof Error ? dateError.message : 'Unknown error'
         result.errors.push(`Error processing date ${dateStr}: ${errorMessage}`)
       }
@@ -218,7 +218,7 @@ export default defineEventHandler(async (event) => {
       data: result,
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     console.error('Analytics aggregation error:', error)
 
     if (error && typeof error === 'object' && 'statusCode' in error) {

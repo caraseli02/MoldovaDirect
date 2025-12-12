@@ -53,7 +53,7 @@ export default defineEventHandler(async (event) => {
         user = data
       }
     }
-    catch (error) {
+    catch (error: any) {
       console.warn('Auth admin API not available:', error)
     }
 
@@ -177,7 +177,7 @@ export default defineEventHandler(async (event) => {
           .slice(0, Number(limit))
       }
     }
-    catch (error) {
+    catch (error: any) {
       console.warn('Failed to fetch order activities:', error)
     }
 
@@ -186,7 +186,7 @@ export default defineEventHandler(async (event) => {
       data: activityLogs,
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Error in admin user activity API:', error)
 
     if (error.statusCode) {

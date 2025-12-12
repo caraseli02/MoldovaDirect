@@ -280,7 +280,7 @@ const handleSubmit = async () => {
       reason: reason.value || undefined,
     })
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Error confirming account deletion:', error)
   }
   finally {

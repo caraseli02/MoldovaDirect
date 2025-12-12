@@ -230,7 +230,7 @@ export default defineEventHandler(async (event) => {
       message: 'Product updated successfully',
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     console.error('Update product error:', error)
 
     if (error && typeof error === 'object' && 'statusCode' in error) {

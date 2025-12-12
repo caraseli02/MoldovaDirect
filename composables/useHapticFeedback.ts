@@ -65,7 +65,7 @@ export const useHapticFeedback = () => {
       navigator.vibrate(vibrationPattern)
       return true
     }
-    catch (error) {
+    catch (error: any) {
       console.warn('Haptic feedback failed:', error)
       return false
     }

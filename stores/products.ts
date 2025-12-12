@@ -254,7 +254,7 @@ export const useProductsStore = defineStore('products', {
           pagination: response.pagination,
         })
       }
-      catch (error) {
+      catch (error: any) {
         this.error = error instanceof Error ? error.message : 'Failed to fetch products'
         console.error('Error fetching products:', error)
       }
@@ -298,7 +298,7 @@ export const useProductsStore = defineStore('products', {
           relatedProducts: response.relatedProducts,
         }, 10 * 60 * 1000) // 10 minutes cache for product details
       }
-      catch (error) {
+      catch (error: any) {
         this.error = error instanceof Error ? error.message : 'Failed to fetch product'
         this.currentProduct = null
         console.error('Error fetching product:', error)
@@ -330,7 +330,7 @@ export const useProductsStore = defineStore('products', {
         // Cache the response
         this.setCache(cacheKey, response.products, 15 * 60 * 1000) // 15 minutes cache
       }
-      catch (error) {
+      catch (error: any) {
         console.error('Error fetching featured products:', error)
       }
     },
@@ -372,7 +372,7 @@ export const useProductsStore = defineStore('products', {
           suggestions: response.suggestions,
         }, 2 * 60 * 1000) // 2 minutes cache for search results
       }
-      catch (error) {
+      catch (error: any) {
         this.searchError = error instanceof Error ? error.message : 'Search failed'
         console.error('Error searching products:', error)
       }
@@ -402,7 +402,7 @@ export const useProductsStore = defineStore('products', {
         // Cache the response
         this.setCache(cacheKey, response.categories, 30 * 60 * 1000) // 30 minutes cache
       }
-      catch (error) {
+      catch (error: any) {
         console.error('Error fetching categories:', error)
       }
       finally {
@@ -449,7 +449,7 @@ export const useProductsStore = defineStore('products', {
           pagination: response.pagination,
         })
       }
-      catch (error) {
+      catch (error: any) {
         this.error = error instanceof Error ? error.message : 'Failed to fetch category'
         console.error('Error fetching category:', error)
       }

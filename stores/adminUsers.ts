@@ -64,7 +64,7 @@ interface UserDetail extends UserWithProfile {
     created_at: string
     ip_address?: string
     user_agent?: string
-    metadata?: Record<string, unknown>
+    metadata?: Record<string, any>
   }>
   statistics: {
     totalOrders: number
@@ -169,7 +169,7 @@ export const useAdminUsersStore = defineStore('adminUsers', {
      * Get current query parameters for API calls
      */
     queryParams: (state) => {
-      const params: Record<string, unknown> = {
+      const params: Record<string, any> = {
         page: state.pagination.page,
         limit: state.pagination.limit,
       }

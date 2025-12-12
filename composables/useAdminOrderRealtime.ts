@@ -51,7 +51,7 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
           filter: `id=eq.${orderId}`,
         },
         (payload) => {
-          handleOrderUpdate(payload.new as unknown as Record<string, unknown>)
+          handleOrderUpdate(payload.new as unknown as Record<string, any>)
         },
       )
       .on(
@@ -63,7 +63,7 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
           filter: `order_id=eq.${orderId}`,
         },
         (payload) => {
-          handleStatusChange(payload.new as unknown as Record<string, unknown>)
+          handleStatusChange(payload.new as unknown as Record<string, any>)
         },
       )
       .subscribe((status) => {
@@ -95,7 +95,7 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
           table: 'orders',
         },
         (payload) => {
-          handleOrderUpdate(payload.new as unknown as Record<string, unknown>)
+          handleOrderUpdate(payload.new as unknown as Record<string, any>)
         },
       )
       .on(
@@ -106,7 +106,7 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
           table: 'orders',
         },
         (payload) => {
-          handleNewOrder(payload.new as unknown as Record<string, unknown>)
+          handleNewOrder(payload.new as unknown as Record<string, any>)
         },
       )
       .subscribe((status) => {
@@ -123,7 +123,7 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
   /**
    * Handle order update event
    */
-  const handleOrderUpdate = (order: Record<string, unknown>) => {
+  const handleOrderUpdate = (order: Record<string, any>) => {
     lastUpdate.value = new Date()
 
     const update: OrderUpdate = {
@@ -153,7 +153,7 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
   /**
    * Handle status change event
    */
-  const handleStatusChange = (statusHistory: Record<string, unknown>) => {
+  const handleStatusChange = (statusHistory: Record<string, any>) => {
     const update: OrderUpdate = {
       id: statusHistory.order_id as number,
       orderNumber: '', // Will be filled by callback
@@ -175,7 +175,7 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
   /**
    * Handle new order event
    */
-  const handleNewOrder = (order: Record<string, unknown>) => {
+  const handleNewOrder = (order: Record<string, any>) => {
     lastUpdate.value = new Date()
 
     // Show toast notification

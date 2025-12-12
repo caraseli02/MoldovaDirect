@@ -11,7 +11,7 @@ import type { H3Event } from 'h3'
 
 // Helper to create mock H3 events
 const createMockEvent = (options: {
-  query?: Record<string, unknown>
+  query?: Record<string, any>
   body?: unknown
   headers?: Record<string, string>
   params?: Record<string, string>

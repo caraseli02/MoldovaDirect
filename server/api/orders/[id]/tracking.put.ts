@@ -137,7 +137,7 @@ export default defineEventHandler(async (event) => {
       data: order,
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     if (error.statusCode) {
       throw error
     }

@@ -200,7 +200,7 @@ export default defineEventHandler(async (event) => {
       data: analyticsData,
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('User analytics error:', error)
 
     if (error.statusCode) {

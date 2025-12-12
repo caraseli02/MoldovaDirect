@@ -306,7 +306,7 @@ export default defineCachedEventHandler(async (event) => {
 
     return response
   }
-  catch (error) {
+  catch (error: any) {
     console.error('[Products API] Error:', {
       error: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined,

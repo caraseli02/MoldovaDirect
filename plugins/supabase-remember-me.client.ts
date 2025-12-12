@@ -49,7 +49,7 @@ export default defineNuxtPlugin(() => {
 
       // Log the preference for debugging (noop in dev mode)
     }
-    catch (error) {
+    catch (error: any) {
       console.warn('[Remember Me] Failed to process cookies:', error)
     }
   })

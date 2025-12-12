@@ -54,7 +54,7 @@ export default defineEventHandler(async (event) => {
       data: paymentMethods || [],
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     if (error.statusCode) {
       throw error
     }

@@ -37,7 +37,7 @@ export async function sendEmail({ to, subject, html }: EmailTemplate) {
 
     return { success: true, id: data?.id }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     console.error('❌ Email service error:', error)
     throw error
   }

@@ -12,7 +12,7 @@ export class SimulationError extends Error {
   constructor(
     message: string,
     public personaKey: string,
-    public context: Record<string, unknown> = {},
+    public context: Record<string, any> = {},
   ) {
     super(message)
     this.name = 'SimulationError'
@@ -268,7 +268,7 @@ export const importPersonaSession = (jsonString: string): PersonaSessionState =>
 
     return state
   }
-  catch (error) {
+  catch (error: any) {
     throw new SimulationError(
       'Failed to import session',
       'unknown',

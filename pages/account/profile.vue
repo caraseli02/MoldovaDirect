@@ -500,7 +500,7 @@ const loadAddresses = async () => {
       isDefault: addr.is_default,
     }))
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Error loading addresses:', error)
     $toast.error(t('profile.errors.loadAddressesFailed'))
   }
@@ -566,7 +566,7 @@ const handleSubmit = async () => {
 
     $toast.success(t('profile.success.profileUpdated'))
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Error updating profile:', error)
     $toast.error(t('profile.errors.updateFailed'))
   }
@@ -632,7 +632,7 @@ const handleFileUpload = async (event: Event) => {
     profilePictureUrl.value = avatarUrl
     $toast.success(t('profile.success.pictureUpdated'))
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Error uploading profile picture:', error)
     const errorMessage = error instanceof Error ? error.message : 'An error occurred'
     $toast.error(t('profile.errors.uploadFailed') + ': ' + errorMessage)
@@ -662,7 +662,7 @@ const removePicture = async () => {
     profilePictureUrl.value = null
     $toast.success(t('profile.success.pictureRemoved'))
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Error removing profile picture:', error)
     $toast.error(t('profile.errors.removeFailed'))
   }
@@ -730,7 +730,7 @@ const handleAddressSave = async (addressData: Address) => {
     closeAddressForm()
     $toast.success(t('profile.success.addressSaved'))
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Error saving address:', error)
     $toast.error(t('profile.errors.addressSaveFailed'))
   }
@@ -756,7 +756,7 @@ const deleteAddress = async (addressId: number) => {
     await loadAddresses()
     $toast.success(t('profile.success.addressDeleted'))
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Error deleting address:', error)
     $toast.error(t('profile.errors.addressDeleteFailed'))
   }
@@ -778,7 +778,7 @@ const handleDeleteAccount = async () => {
     $toast.success(t('profile.success.accountDeleted'))
     await navigateTo('/')
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Error deleting account:', error)
     const errorMessage = error instanceof Error ? error.message : 'An error occurred'
     $toast.error(t('profile.errors.deleteFailed') + ': ' + errorMessage)

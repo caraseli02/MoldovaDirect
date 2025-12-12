@@ -91,7 +91,7 @@ describe('searchSanitization', () => {
         validateSearchLength(tooLong)
         expect.fail('Should have thrown error')
       }
-      catch (error: unknown) {
+      catch (error: any) {
         expect(error.statusCode).toBe(400)
         expect(error.statusMessage).toContain('Search term too long')
         expect(error.statusMessage).toContain(String(MAX_SEARCH_LENGTH))

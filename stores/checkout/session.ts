@@ -128,7 +128,7 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
     state.dataPrefetched = value
   }
 
-  const setPreferences = (preferences: Record<string, unknown>): void => {
+  const setPreferences = (preferences: Record<string, any>): void => {
     state.preferences = preferences
   }
 
@@ -221,16 +221,16 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
   interface CheckoutCookieData {
     sessionId: string | null
     currentStep: string
-    guestInfo: Record<string, unknown> | null
+    guestInfo: Record<string, any> | null
     contactEmail: string | null
-    orderData: Record<string, unknown> | null
+    orderData: Record<string, any> | null
     sessionExpiresAt: Date | null
     lastSyncAt: Date
     termsAccepted: boolean
     privacyAccepted: boolean
     marketingConsent: boolean
-    shippingInfo?: Record<string, unknown>
-    paymentMethod?: Record<string, unknown>
+    shippingInfo?: Record<string, any>
+    paymentMethod?: Record<string, any>
   }
 
   const checkoutCookie = useCookie<CheckoutCookieData | null>(COOKIE_NAMES.CHECKOUT_SESSION, CHECKOUT_SESSION_COOKIE_CONFIG)
@@ -255,7 +255,7 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
       checkoutCookie.value = snapshot
       await nextTick() // Wait for cookie write to complete
     }
-    catch (error) {
+    catch (error: any) {
       console.error('Failed to persist checkout session:', error)
     }
   }
@@ -293,7 +293,7 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
         paymentMethod: sanitizedPaymentMethod,
       }
     }
-    catch (error) {
+    catch (error: any) {
       console.error('Failed to restore checkout session:', error)
       clearStorage()
       return null

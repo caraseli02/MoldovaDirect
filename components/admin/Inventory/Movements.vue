@@ -361,7 +361,7 @@ const fetchMovements = async (page = 1) => {
     movements.value = response.movements
     pagination.value = response.pagination
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Failed to fetch inventory movements:', error)
     const toast = useToast()
     toast.error('Failed to load inventory movements')

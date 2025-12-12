@@ -171,7 +171,7 @@ function validateSecurityContext(context: SecurityContext): SecurityValidation {
 /**
  * Validate cart operation data
  */
-function validateCartData(operation: string, data: Record<string, unknown>): SecurityValidation {
+function validateCartData(operation: string, data: Record<string, any>): SecurityValidation {
   const errors: string[] = []
   const warnings: string[] = []
   let riskLevel: 'low' | 'medium' | 'high' = 'low'
@@ -279,7 +279,7 @@ function validateProductData(product: Product): SecurityValidation {
  */
 function detectSuspiciousBehavior(
   operation: string,
-  data: Record<string, unknown>,
+  data: Record<string, any>,
   context: SecurityContext,
 ): SecurityValidation {
   const errors: string[] = []
@@ -318,7 +318,7 @@ function detectSuspiciousBehavior(
 /**
  * Get recent operations for session (simplified implementation)
  */
-function getRecentOperations(_sessionId: string): Array<Record<string, unknown>> {
+function getRecentOperations(_sessionId: string): Array<Record<string, any>> {
   // In a real implementation, this would check a cache or database
   // For now, return empty array
   return []

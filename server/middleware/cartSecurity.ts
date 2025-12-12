@@ -133,7 +133,7 @@ export function createCartSecurityMiddleware(options: SecurityOptions = {}) {
         })
       }
     }
-    catch (error: unknown) {
+    catch (error: any) {
       // Log security violations
       console.warn('Cart security violation:', {
         ip: getClientIP(event),
@@ -171,7 +171,7 @@ if (typeof setInterval !== 'undefined') {
     try {
       performSecurityCleanup()
     }
-    catch (error: unknown) {
+    catch (error: any) {
       console.error('Security cleanup failed:', error)
     }
   }, 5 * 60 * 1000)

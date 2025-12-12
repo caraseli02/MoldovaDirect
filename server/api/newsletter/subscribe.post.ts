@@ -83,7 +83,7 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     console.error('Newsletter API error:', error)
 
     // If it's already a createError, rethrow it

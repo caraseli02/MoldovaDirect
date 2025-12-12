@@ -173,7 +173,7 @@ export default defineEventHandler(async (event) => {
         : 'Inventory updated successfully',
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Update inventory error:', error)
 
     if (error.statusCode) {

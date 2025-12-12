@@ -67,7 +67,7 @@ export default defineEventHandler(async (event) => {
       data: reportData,
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     console.error('Inventory reports API error, falling back to mock data:', error)
 
     // If it's a known error, throw it
@@ -95,7 +95,7 @@ export default defineEventHandler(async (event) => {
         mockData: true, // Flag to indicate this is mock data
       }
     }
-    catch (mockError) {
+    catch (mockError: any) {
       console.error('Failed to generate mock report data:', mockError)
       throw createError({
         statusCode: 500,
@@ -136,7 +136,7 @@ async function generateStockLevelsReport(supabase: SupabaseClient, categoryId?: 
     throw error
   }
 
-  const stockLevels = (products || []).map((product: unknown) => {
+  const stockLevels = (products || []).map((product: any) => {
     const stockQuantity = product.stock_quantity
     const lowThreshold = product.low_stock_threshold || 5
     const reorderPoint = product.reorder_point || 10
@@ -162,10 +162,10 @@ async function generateStockLevelsReport(supabase: SupabaseClient, categoryId?: 
 
   // Calculate summary statistics
   const totalProducts = stockLevels.length
-  const outOfStock = stockLevels.filter((p: unknown) => p.status === 'out').length
-  const lowStock = stockLevels.filter((p: unknown) => p.status === 'low').length
-  const mediumStock = stockLevels.filter((p: unknown) => p.status === 'medium').length
-  const highStock = stockLevels.filter((p: unknown) => p.status === 'high').length
+  const outOfStock = stockLevels.filter((p: any) => p.status === 'out').length
+  const lowStock = stockLevels.filter((p: any) => p.status === 'low').length
+  const mediumStock = stockLevels.filter((p: any) => p.status === 'medium').length
+  const highStock = stockLevels.filter((p: any) => p.status === 'high').length
   const totalStockValue = stockLevels.reduce((sum: number, p: unknown) => sum + p.stockValue, 0)
 
   return {
@@ -222,14 +222,14 @@ async function generateMovementsSummaryReport(supabase: SupabaseClient, startDat
 
   // Filter by category if specified
   const filteredMovements = categoryId
-    ? (movements || []).filter((m: unknown) => m.products?.category_id === categoryId)
+    ? (movements || []).filter((m: any) => m.products?.category_id === categoryId)
     : movements || []
 
   // Calculate summary statistics
   const totalMovements = filteredMovements.length
-  const stockIn = filteredMovements.filter((m: unknown) => m.movement_type === 'in')
-  const stockOut = filteredMovements.filter((m: unknown) => m.movement_type === 'out')
-  const adjustments = filteredMovements.filter((m: unknown) => m.movement_type === 'adjustment')
+  const stockIn = filteredMovements.filter((m: any) => m.movement_type === 'in')
+  const stockOut = filteredMovements.filter((m: any) => m.movement_type === 'out')
+  const adjustments = filteredMovements.filter((m: any) => m.movement_type === 'adjustment')
 
   const totalStockIn = stockIn.reduce((sum: number, m: unknown) => sum + m.quantity, 0)
   const totalStockOut = stockOut.reduce((sum: number, m: unknown) => sum + m.quantity, 0)
@@ -260,7 +260,7 @@ async function generateMovementsSummaryReport(supabase: SupabaseClient, startDat
       adjustments: adjustments.length,
     },
     byReason: reasonSummary,
-    recentMovements: filteredMovements.slice(0, 10).map((m: unknown) => ({
+    recentMovements: filteredMovements.slice(0, 10).map((m: any) => ({
       id: m.id,
       productId: m.product_id,
       productName: m.products?.name_translations,
@@ -304,9 +304,9 @@ async function generateLowStockReport(supabase: SupabaseClient, categoryId?: num
     throw error
   }
 
-  const lowStockProducts = (products || []).filter((product: unknown) => {
+  const lowStockProducts = (products || []).filter((product: any) => {
     return product.stock_quantity <= (product.low_stock_threshold || 5)
-  }).map((product: unknown) => ({
+  }).map((product: any) => ({
     productId: product.id,
     sku: product.sku,
     name: product.name_translations,
@@ -358,9 +358,9 @@ async function generateReorderAlertsReport(supabase: SupabaseClient, categoryId?
     throw error
   }
 
-  const reorderProducts = (products || []).filter((product: unknown) => {
+  const reorderProducts = (products || []).filter((product: any) => {
     return product.stock_quantity <= (product.reorder_point || 10)
-  }).map((product: unknown) => {
+  }).map((product: any) => {
     const reorderQuantity = Math.max(
       (product.reorder_point || 10) * 2 - product.stock_quantity,
       product.reorder_point || 10,
@@ -387,9 +387,9 @@ async function generateReorderAlertsReport(supabase: SupabaseClient, categoryId?
     totalReorderProducts: reorderProducts.length,
     totalEstimatedCost: reorderProducts.reduce((sum: number, p: unknown) => sum + p.estimatedCost, 0),
     byPriority: {
-      critical: reorderProducts.filter((p: unknown) => p.priority === 'critical').length,
-      high: reorderProducts.filter((p: unknown) => p.priority === 'high').length,
-      medium: reorderProducts.filter((p: unknown) => p.priority === 'medium').length,
+      critical: reorderProducts.filter((p: any) => p.priority === 'critical').length,
+      high: reorderProducts.filter((p: any) => p.priority === 'high').length,
+      medium: reorderProducts.filter((p: any) => p.priority === 'medium').length,
     },
     products: reorderProducts.sort((a: unknown, b: unknown) => {
       const priorityOrder: Record<string, number> = { critical: 0, high: 1, medium: 2 }

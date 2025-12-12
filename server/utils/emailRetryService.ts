@@ -97,7 +97,7 @@ export async function processEmailRetries(
       results,
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     console.error('❌ Error processing email retries:', error)
     throw error
   }
@@ -167,7 +167,7 @@ async function processEmailRetry(
       }
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     console.error(`❌ Error retrying email ${id}:`, error)
 
     return {
@@ -220,7 +220,7 @@ async function sendAdminAlert(
       html,
     })
   }
-  catch (error: unknown) {
+  catch (error: any) {
     console.error('❌ Failed to send admin alert:', error)
     // Don't throw - we don't want alert failures to break the retry process
   }
@@ -373,7 +373,7 @@ export async function scheduleEmailRetries(
     try {
       await processEmailRetries()
     }
-    catch (error) {
+    catch (error: any) {
       console.error('❌ Scheduled email retry failed:', error)
     }
   }, intervalMinutes * 60 * 1000)

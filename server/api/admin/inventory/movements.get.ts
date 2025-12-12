@@ -119,7 +119,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Transform the data
-    const transformedMovements = (movements || []).map((movement: unknown) => ({
+    const transformedMovements = (movements || []).map((movement: any) => ({
       id: movement.id,
       productId: movement.product_id,
       product: movement.products
@@ -169,7 +169,7 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Inventory movements API error:', error)
 
     if (error.statusCode) {

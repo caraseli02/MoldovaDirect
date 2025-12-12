@@ -326,7 +326,7 @@ const fetchPermissions = async () => {
     originalPermissions.value = JSON.parse(JSON.stringify(permissions.value))
     originalNotes.value = permissionNotes.value
   }
-  catch (err) {
+  catch (err: any) {
     error.value = err instanceof Error ? err.message : 'Failed to fetch permissions'
     console.error('Error fetching permissions:', err)
   }
@@ -412,7 +412,7 @@ const saveChanges = async () => {
     const toast = useToast()
     toast.success('Permissions updated successfully')
   }
-  catch (err) {
+  catch (err: any) {
     const toast = useToast()
     toast.error('Failed to update permissions')
     console.error('Error saving permissions:', err)

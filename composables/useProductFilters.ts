@@ -154,7 +154,7 @@ export function useProductFilters(categoriesTree?: Ref<CategoryWithChildren[]>) 
 
       return Object.keys(validated).length > 0 ? validated : undefined
     }
-    catch (error) {
+    catch (error: any) {
       console.warn('Failed to parse attributes query:', error)
       return undefined
     }

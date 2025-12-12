@@ -233,7 +233,7 @@ describe('Bulk Product Operations - Error Handling', () => {
 
     expect(auditLogs).toHaveLength(3)
 
-    auditLogs.forEach((log: unknown) => {
+    auditLogs.forEach((log: any) => {
       expect(log.resource_type).toBe('product')
       expect(log.old_values).toBeDefined()
       expect(log.new_values).toBeDefined()

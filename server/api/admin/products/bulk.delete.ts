@@ -96,7 +96,7 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Bulk delete products error:', error)
 
     if (error.statusCode) {

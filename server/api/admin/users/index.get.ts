@@ -164,7 +164,7 @@ export default defineEventHandler(async (event) => {
         authUsers = data
       }
     }
-    catch (error: unknown) {
+    catch (error: any) {
       console.error('[Admin Users] Auth admin API error:', {
         error: error.message || String(error),
         timestamp: new Date().toISOString(),
@@ -219,7 +219,7 @@ export default defineEventHandler(async (event) => {
         })
       }
     }
-    catch (error: unknown) {
+    catch (error: any) {
       console.error('[Admin Users] Unexpected error fetching orders:', {
         error: error.message || String(error),
         timestamp: new Date().toISOString(),
@@ -303,7 +303,7 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     // Re-throw HTTP errors (including auth errors)
     if (error.statusCode) {
       throw error

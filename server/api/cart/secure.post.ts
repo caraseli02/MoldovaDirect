@@ -171,7 +171,7 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error) {
+  catch (error: any) {
     // Log security-related errors
     const err = error as ErrorWithStatusCode
     if (err.statusCode === 429 || err.statusCode === 403) {
@@ -254,7 +254,7 @@ function validateCartOperationData(
       sanitizedData,
     }
   }
-  catch (error) {
+  catch (error: any) {
     const zodError = error as ZodError
     if (zodError.errors) {
       // Zod validation errors
@@ -348,7 +348,7 @@ async function processAddItem(data: any): Promise<unknown> {
       timestamp: new Date().toISOString(),
     }
   }
-  catch (error) {
+  catch (error: any) {
     const err = error as ErrorWithStatusCode
     if (err.statusCode) {
       throw error

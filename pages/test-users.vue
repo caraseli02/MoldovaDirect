@@ -565,7 +565,7 @@ const handleActivatePersona = async (key: TestUserPersonaKey) => {
       `Ahora navegas como ${persona.user.name}. Sigue la lista de comprobación para validar el flujo.`,
     )
   }
-  catch (error) {
+  catch (error: any) {
     const message = error instanceof Error ? error.message : 'No se pudo iniciar la simulación.'
     toast.error('Error al activar la persona', message)
   }
@@ -620,7 +620,7 @@ const handleExportSession = async () => {
     document.body.removeChild(a)
     URL.revokeObjectURL(url)
   }
-  catch (error) {
+  catch (error: any) {
     const message = error instanceof Error ? error.message : 'Failed to export session'
     toast.error('Export failed', message)
   }
@@ -670,7 +670,7 @@ const handleImportSession = async () => {
     showImportModal.value = false
     toast.success('Session imported', `Restored session for ${persona?.title || sessionState.personaKey}`)
   }
-  catch (error) {
+  catch (error: any) {
     const message = error instanceof Error ? error.message : 'Failed to import session'
     toast.error('Import failed', message)
   }

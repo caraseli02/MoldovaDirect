@@ -29,7 +29,7 @@ async function waitForServer(baseURL: string, timeout = 120000) {
         return
       }
     }
-    catch (error) {
+    catch (error: any) {
       // Server not ready yet, continue waiting
     }
     await new Promise(resolve => setTimeout(resolve, 500))
@@ -201,7 +201,7 @@ async function globalSetup(config: FullConfig) {
 
       console.log(`✓ Authenticated and saved storage state for locale: ${locale}`)
     }
-    catch (error) {
+    catch (error: any) {
       const errorMessage = error instanceof Error ? error.message : String(error)
 
       // If it's an auth error, try to create an empty auth file to skip this locale
@@ -225,7 +225,7 @@ async function globalSetup(config: FullConfig) {
       try {
         await context.close()
       }
-      catch (e) {
+      catch (e: any) {
         // Already closed in catch block
       }
     }

@@ -96,7 +96,7 @@ describe('Products List API', () => {
 
   describe('Query Parameter Parsing', () => {
     it('parses pagination parameters with defaults', () => {
-      const parseParams = (query: Record<string, unknown>) => {
+      const parseParams = (query: Record<string, any>) => {
         const MAX_LIMIT = 100
         const MAX_PAGE = 10000
         const parsedPage = parseInt(query.page) || 1
@@ -115,7 +115,7 @@ describe('Products List API', () => {
     })
 
     it('handles negative pagination values', () => {
-      const parseParams = (query: Record<string, unknown>) => {
+      const parseParams = (query: Record<string, any>) => {
         const parsedPage = parseInt(query.page) || 1
         const parsedLimit = parseInt(query.limit) || 12
 

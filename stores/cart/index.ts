@@ -183,7 +183,7 @@ export const useCartStore = defineStore('cart', () => {
       console.log('   Resumed auto-save watch')
       console.log('✅ Deserialization complete')
     }
-    catch (error) {
+    catch (error: any) {
       console.error('❌ Failed to deserialize cart items:', error)
       // Ensure watch is resumed even if deserialization fails
       if (!stopWatcher) {
@@ -213,7 +213,7 @@ export const useCartStore = defineStore('cart', () => {
       console.log('✅ Cart cookie value set')
       return { success: true }
     }
-    catch (error) {
+    catch (error: any) {
       console.error('❌ Failed to save cart to storage:', error)
       return {
         success: false,
@@ -241,7 +241,7 @@ export const useCartStore = defineStore('cart', () => {
       console.log('   No items in cookie (empty cart)')
       return { success: true, data: null }
     }
-    catch (error) {
+    catch (error: any) {
       console.error('❌ Failed to load cart from storage:', error)
       return {
         success: false,
@@ -258,7 +258,7 @@ export const useCartStore = defineStore('cart', () => {
       cartCookie.value = null
       return { success: true }
     }
-    catch (error) {
+    catch (error: any) {
       console.error('Failed to clear cart storage:', error)
       return {
         success: false,
@@ -280,7 +280,7 @@ export const useCartStore = defineStore('cart', () => {
 
     // Load from storage
     if (import.meta.client) {
-      loadFromStorage().catch((error) => {
+      loadFromStorage().catch((error: any) => {
         console.warn('Failed to load cart from storage:', error)
       })
     }
@@ -297,7 +297,7 @@ export const useCartStore = defineStore('cart', () => {
 
     // Load recommendations if cart has items
     if (import.meta.client && items.value.length > 0) {
-      advanced.loadRecommendations([...items.value] as CartItem[]).catch((error) => {
+      advanced.loadRecommendations([...items.value] as CartItem[]).catch((error: any) => {
         console.warn('Failed to load recommendations:', error)
       })
     }
@@ -327,7 +327,7 @@ export const useCartStore = defineStore('cart', () => {
       try {
         await saveToStorage()
       }
-      catch (error) {
+      catch (error: any) {
         console.warn('❌ Debounced save failed:', error)
       }
     }, 1000) // 1 second debounce
@@ -346,7 +346,7 @@ export const useCartStore = defineStore('cart', () => {
       try {
         await security.secureAddItem(product.id, quantity, sessionId.value)
       }
-      catch (securityError) {
+      catch (securityError: any) {
         console.warn('Secure add failed, falling back to regular add:', securityError)
       }
     }
@@ -385,7 +385,7 @@ export const useCartStore = defineStore('cart', () => {
       try {
         await security.secureRemoveItem(itemId, sessionId.value)
       }
-      catch (securityError) {
+      catch (securityError: any) {
         console.warn('Secure remove failed, falling back to regular remove:', securityError)
       }
     }
@@ -421,7 +421,7 @@ export const useCartStore = defineStore('cart', () => {
       try {
         await security.secureUpdateQuantity(itemId, quantity, sessionId.value)
       }
-      catch (securityError) {
+      catch (securityError: any) {
         console.warn('Secure update failed, falling back to regular update:', securityError)
       }
     }
@@ -555,7 +555,7 @@ export const useCartStore = defineStore('cart', () => {
       await saveAndCacheCartData()
       return true
     }
-    catch (error) {
+    catch (error: any) {
       console.error('Cart validation failed:', error)
       return false
     }
@@ -567,7 +567,7 @@ export const useCartStore = defineStore('cart', () => {
         const success = await validateCart()
         if (success) return true
       }
-      catch (error) {
+      catch (error: any) {
         if (i === maxRetries - 1) throw error
         await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)))
       }
@@ -587,7 +587,7 @@ export const useCartStore = defineStore('cart', () => {
       const result = await loadFromStorage()
       return result.success
     }
-    catch (error) {
+    catch (error: any) {
       console.error('Cart recovery failed:', error)
       return false
     }

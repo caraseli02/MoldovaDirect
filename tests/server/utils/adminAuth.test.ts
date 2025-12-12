@@ -39,8 +39,8 @@ interface AuthUser {
   id: string
   email: string
   role?: string
-  app_metadata?: Record<string, unknown>
-  user_metadata?: Record<string, unknown>
+  app_metadata?: Record<string, any>
+  user_metadata?: Record<string, any>
 }
 
 interface AuthError {
@@ -902,7 +902,7 @@ describe('adminAuth.ts', () => {
         try {
           await requireAdminRole(mockEvent as unknown)
         }
-        catch (e) {
+        catch (e: any) {
           // Expected to throw
         }
 
@@ -929,7 +929,7 @@ describe('adminAuth.ts', () => {
         try {
           await requireAdminRole(mockEvent as unknown)
         }
-        catch (e) {
+        catch (e: any) {
           // Expected to throw
         }
 
@@ -966,7 +966,7 @@ describe('adminAuth.ts', () => {
         try {
           await requireAdminRole(mockEvent as unknown)
         }
-        catch (e) {
+        catch (e: any) {
           // Expected to throw
         }
 

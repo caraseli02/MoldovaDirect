@@ -224,7 +224,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Transform and sort products
-    const transformedProducts = (products || []).map((product: unknown) => ({
+    const transformedProducts = (products || []).map((product: any) => ({
       id: product.id,
       sku: product.sku,
       slug: product.sku?.toLowerCase() || `product-${product.id}`,
@@ -293,7 +293,7 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     // Re-throw HTTP errors (including auth errors)
     if (error.statusCode) {
       throw error

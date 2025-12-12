@@ -81,7 +81,7 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Recommendations API error:', error)
 
     return {

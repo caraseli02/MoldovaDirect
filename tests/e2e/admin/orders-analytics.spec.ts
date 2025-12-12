@@ -277,7 +277,7 @@ test.describe('Admin Orders Analytics Page', () => {
       console.log(`File downloaded: ${download.suggestedFilename()}`)
       expect(download.suggestedFilename()).toContain('order-analytics')
     }
-    catch (e) {
+    catch (e: any) {
       console.log('Note: Download event not captured (may require specific Playwright configuration)')
     }
   })
@@ -370,7 +370,7 @@ test.describe('Admin Orders Analytics Page', () => {
         try {
           responseData = await response.json()
         }
-        catch (e) {
+        catch (e: any) {
           console.log('Could not parse response as JSON')
         }
       }

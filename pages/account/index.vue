@@ -340,7 +340,7 @@ const fetchOrderSummary = async () => {
     if (ordersError) throw ordersError
     orderStats.value.recentOrders = (orders as OrderSummary[]) || []
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Error fetching order summary:', error)
   }
   finally {
@@ -355,7 +355,7 @@ const handleLogout = async () => {
 
     await navigateTo(localePath('/'))
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Logout error:', error)
   }
 }

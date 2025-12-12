@@ -301,7 +301,7 @@ async function loadTemplate() {
       await refreshPreview()
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Failed to load template:', error)
   }
 }
@@ -366,7 +366,7 @@ async function refreshPreview() {
       previewHtml.value = data.value.html
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Failed to generate preview:', error)
     useToast().error('Failed to generate preview')
   }
@@ -397,7 +397,7 @@ async function saveTemplate() {
     hasChanges.value = false
     useToast().success('Template saved successfully')
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Failed to save template:', error)
     useToast().error('Failed to save template')
   }

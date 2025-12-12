@@ -219,7 +219,7 @@ onMounted(() => {
         viewedUpdates.value = new Set(parsed.viewed || [])
       }
     }
-    catch (err) {
+    catch (err: any) {
       console.error('Error loading viewed updates:', err)
     }
   }

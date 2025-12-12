@@ -190,7 +190,7 @@ const handleUserAction = async (action: string, userId: string, _data?: unknown)
         toast.info('This action will be implemented in a future update')
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Error performing user action:', error)
     toast.error(error instanceof Error ? error.message : 'Failed to perform action')
   }
@@ -235,7 +235,7 @@ const fetchUsersData = async () => {
       adminUsersStore.setSummary(response.data.summary)
     }
   }
-  catch (err) {
+  catch (err: any) {
     console.error('[AdminUsers] Error fetching users:', err)
     adminUsersStore.setError(err instanceof Error ? err.message : 'Failed to fetch users')
   }
@@ -275,7 +275,7 @@ const fetchUserDetail = async (userId: string) => {
       adminUsersStore.setCurrentUser(response.data)
     }
   }
-  catch (err) {
+  catch (err: any) {
     console.error('[AdminUsers] Error fetching user detail:', err)
     adminUsersStore.setError(err instanceof Error ? err.message : 'Failed to fetch user detail')
   }

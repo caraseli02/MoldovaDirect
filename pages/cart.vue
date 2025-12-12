@@ -319,7 +319,7 @@ const safeUpdateQuantity = async (itemId: string, quantity: number) => {
   try {
     await updateQuantity(itemId, quantity)
   }
-  catch (error) {
+  catch (error: any) {
     // Error is already handled by the store with toast notifications
     console.error('Failed to update quantity:', error)
   }
@@ -329,7 +329,7 @@ const safeRemoveItem = async (itemId: string) => {
   try {
     await removeItem(itemId)
   }
-  catch (error) {
+  catch (error: any) {
     // Error is already handled by the store with toast notifications
     console.error('Failed to remove item:', error)
   }
@@ -344,7 +344,7 @@ const handleSwipeRemove = async (itemId: string) => {
       navigator.vibrate(50)
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Failed to remove item via swipe:', error)
   }
 }
@@ -364,7 +364,7 @@ const handleSaveForLater = async (itemId: string) => {
       await removeItem(itemId)
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Failed to save item for later:', error)
   }
 }
@@ -388,7 +388,7 @@ const goToCheckout = async () => {
     // Navigate to checkout
     await navigateTo(localePath('/checkout'))
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Failed to proceed to checkout:', error)
     toast.error($t('common.cartError'), $t('cart.error.checkoutFailed'))
   }
@@ -399,7 +399,7 @@ onMounted(async () => {
   try {
     await validateCart()
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Failed to validate cart:', error)
     toast.error($t('common.cartValidationError'), $t('cart.error.validationFailedDetails'))
   }

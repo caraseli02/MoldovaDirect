@@ -33,7 +33,7 @@ export default defineEventHandler(async (event) => {
       addresses: addresses || [],
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     // Re-throw authentication errors
     if (error && typeof error === 'object' && 'statusCode' in error && error.statusCode === 401) {
       throw error

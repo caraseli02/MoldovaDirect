@@ -292,7 +292,7 @@ async function loadRecommendations(cartItems: CartItem[]): Promise<void> {
       state.value.recommendations = []
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     // Handle different types of errors gracefully
     const err = error as { statusCode?: number, statusMessage?: string, message?: string }
     if (err.statusCode === 404) {

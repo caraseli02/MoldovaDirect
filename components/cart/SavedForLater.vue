@@ -97,7 +97,7 @@ const handleMoveToCart = async (itemId: string) => {
     await moveToCartFromSavedForLater(itemId)
     toast.success('Producto añadido', 'El producto ha sido añadido al carrito')
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Failed to move item to cart:', error)
     toast.error('Error', 'No se pudo añadir el producto al carrito')
   }
@@ -108,7 +108,7 @@ const handleRemoveFromSaved = async (itemId: string) => {
     await removeFromSavedForLater(itemId)
     toast.success('Producto eliminado', 'El producto ha sido eliminado de guardados')
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Failed to remove item from saved:', error)
     toast.error('Error', 'No se pudo eliminar el producto de guardados')
   }

@@ -177,7 +177,7 @@ export default defineCachedEventHandler(async (event) => {
         nameTranslations: product.categories.name_translations,
         breadcrumb,
       },
-      relatedProducts: relatedProducts?.map((related: unknown) => ({
+      relatedProducts: relatedProducts?.map((related: any) => ({
         id: related.id,
         sku: related.sku,
         slug: related.sku,
@@ -204,7 +204,7 @@ export default defineCachedEventHandler(async (event) => {
 
     return transformedProduct
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Product detail API error:', error)
 
     if (error.statusCode) {

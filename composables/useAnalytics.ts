@@ -40,7 +40,7 @@ export const useAnalytics = () => {
       userAnalytics.value = data
       return data
     }
-    catch (err: unknown) {
+    catch (err: any) {
       error.value = (err as Error).message || 'Failed to fetch user analytics'
       throw err
     }
@@ -66,7 +66,7 @@ export const useAnalytics = () => {
       analyticsOverview.value = data
       return data
     }
-    catch (err: unknown) {
+    catch (err: any) {
       error.value = (err as Error).message || 'Failed to fetch analytics overview'
       throw err
     }
@@ -93,7 +93,7 @@ export const useAnalytics = () => {
       productAnalytics.value = data
       return data
     }
-    catch (err: unknown) {
+    catch (err: any) {
       error.value = (err as Error).message || 'Failed to fetch product analytics'
       throw err
     }
@@ -110,7 +110,7 @@ export const useAnalytics = () => {
         body: activity,
       })
     }
-    catch (err: unknown) {
+    catch (err: any) {
       console.error('Failed to track activity:', err)
       // Don't throw error for tracking failures to avoid disrupting user experience
     }
@@ -133,7 +133,7 @@ export const useAnalytics = () => {
 
       return data
     }
-    catch (err: unknown) {
+    catch (err: any) {
       error.value = (err as Error).message || 'Failed to aggregate analytics'
       throw err
     }
@@ -143,7 +143,7 @@ export const useAnalytics = () => {
   }
 
   // Convenience methods for common tracking scenarios
-  const trackPageView = (pageUrl: string, metadata?: Record<string, unknown>) => {
+  const trackPageView = (pageUrl: string, metadata?: Record<string, any>) => {
     return trackActivity({
       activityType: 'page_view',
       pageUrl,
@@ -151,7 +151,7 @@ export const useAnalytics = () => {
     })
   }
 
-  const trackProductView = (productId: number, pageUrl?: string, metadata?: Record<string, unknown>) => {
+  const trackProductView = (productId: number, pageUrl?: string, metadata?: Record<string, any>) => {
     return trackActivity({
       activityType: 'product_view',
       productId,
@@ -160,7 +160,7 @@ export const useAnalytics = () => {
     })
   }
 
-  const trackCartAddition = (productId: number, metadata?: Record<string, unknown>) => {
+  const trackCartAddition = (productId: number, metadata?: Record<string, any>) => {
     return trackActivity({
       activityType: 'cart_add',
       productId,
@@ -168,7 +168,7 @@ export const useAnalytics = () => {
     })
   }
 
-  const trackOrderCreation = (orderId: number, metadata?: Record<string, unknown>) => {
+  const trackOrderCreation = (orderId: number, metadata?: Record<string, any>) => {
     return trackActivity({
       activityType: 'order_create',
       orderId,
@@ -176,14 +176,14 @@ export const useAnalytics = () => {
     })
   }
 
-  const trackLogin = (metadata?: Record<string, unknown>) => {
+  const trackLogin = (metadata?: Record<string, any>) => {
     return trackActivity({
       activityType: 'login',
       metadata,
     })
   }
 
-  const trackLogout = (metadata?: Record<string, unknown>) => {
+  const trackLogout = (metadata?: Record<string, any>) => {
     return trackActivity({
       activityType: 'logout',
       metadata,

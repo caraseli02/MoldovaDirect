@@ -51,7 +51,7 @@ export async function invalidatePublicCache(scope: PublicCacheScope): Promise<vo
       }
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error(`[Cache] Failed to invalidate public cache for scope ${scope}:`, error)
   }
 }

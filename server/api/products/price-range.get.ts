@@ -55,7 +55,7 @@ export default defineCachedEventHandler(async (event) => {
       max,
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Price range API error:', error)
     return {
       success: true,

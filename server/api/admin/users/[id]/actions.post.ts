@@ -56,7 +56,7 @@ export default defineEventHandler(async (event) => {
         currentUser = data
       }
     }
-    catch (error) {
+    catch (error: any) {
       console.warn('Auth admin API not available:', error)
     }
 
@@ -280,7 +280,7 @@ export default defineEventHandler(async (event) => {
           user_agent: getHeader(event, 'user-agent'),
         })
     }
-    catch (auditError) {
+    catch (auditError: any) {
       console.warn('Failed to log audit trail:', auditError)
       // Don't fail the main operation if audit logging fails
     }
@@ -297,7 +297,7 @@ export default defineEventHandler(async (event) => {
       const analyticsKeys = await storage.getKeys('nitro:handlers:admin-analytics-users:')
       await Promise.all(analyticsKeys.map(key => storage.removeItem(key)))
     }
-    catch (cacheError) {
+    catch (cacheError: any) {
       console.warn('Failed to invalidate user caches:', cacheError)
       // Don't fail the main operation if cache invalidation fails
     }
@@ -313,7 +313,7 @@ export default defineEventHandler(async (event) => {
       message: getActionSuccessMessage(body.action),
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     console.error('Error in admin user actions API:', error)
 
     // Always throw errors with proper HTTP status codes

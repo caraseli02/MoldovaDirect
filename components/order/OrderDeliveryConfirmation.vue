@@ -189,7 +189,7 @@ const formatDeliveryDate = (dateString?: string): string => {
     const date = new Date(dateString)
     return d(date, 'long')
   }
-  catch (_err) {
+  catch (_err: any) {
     return dateString
   }
 }

@@ -18,7 +18,7 @@ export interface Product {
   category?: string
   weight?: number
   dimensions?: ProductDimensions
-  attributes?: Record<string, unknown>
+  attributes?: Record<string, any>
 }
 
 export interface ProductDimensions {
@@ -43,7 +43,7 @@ export interface CartSession {
   createdAt: Date
   lastActivity: Date
   expiresAt: Date
-  metadata?: Record<string, unknown>
+  metadata?: Record<string, any>
 }
 
 // =============================================
@@ -87,7 +87,7 @@ export interface AnalyticsEvent {
   productId?: string
   quantity?: number
   value?: number
-  metadata?: Record<string, unknown>
+  metadata?: Record<string, any>
 }
 
 export interface AnalyticsSession {
@@ -162,7 +162,7 @@ export interface CartRecommendation {
   product: Product
   reason: 'frequently_bought_together' | 'similar_products' | 'price_drop' | 'back_in_stock'
   confidence: number
-  metadata?: Record<string, unknown>
+  metadata?: Record<string, any>
 }
 
 // =============================================
@@ -176,7 +176,7 @@ export interface CartError {
   field?: string
   retryable: boolean
   timestamp: Date
-  context?: Record<string, unknown>
+  context?: Record<string, any>
 }
 
 // =============================================

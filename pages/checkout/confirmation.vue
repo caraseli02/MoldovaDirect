@@ -400,7 +400,7 @@ onMounted(async () => {
         )
       }
     }
-    catch (error) {
+    catch (error: any) {
       console.error('[CRITICAL] Exception during session restore:', error)
       toast.error(
         t('checkout.confirmation.errorLoadingOrder'),
@@ -443,7 +443,7 @@ onMounted(async () => {
   try {
     await cartStore.clearCart()
   }
-  catch (error) {
+  catch (error: any) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error'
     console.error('[ERROR] Failed to clear cart on confirmation page:', {
       error: errorMessage,

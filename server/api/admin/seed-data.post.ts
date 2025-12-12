@@ -170,7 +170,7 @@ export default defineEventHandler(async (event) => {
       totalDuration: results.steps.reduce((sum, step) => sum + step.duration, 0),
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     console.error('Seed data error:', error)
     await logAdminAction(event, adminId, 'seed-data-failed', { preset, error: error.message })
     return {
@@ -297,7 +297,7 @@ async function seedCategories(supabase: SupabaseClient): Promise<number> {
 async function seedProducts(supabase: SupabaseClient, count: number, lowStock: boolean): Promise<number> {
   // Get category IDs
   const { data: categories } = await supabase.from('categories').select('id, slug')
-  const categoryMap = new Map(categories?.map((c: unknown) => [c.slug, c.id]))
+  const categoryMap = new Map(categories?.map((c: any) => [c.slug, c.id]))
 
   const products = []
 
@@ -373,7 +373,7 @@ async function seedUsers(supabase: SupabaseClient, count: number): Promise<strin
         })
       }
     }
-    catch (error) {
+    catch (error: any) {
       console.error(`Failed to create user ${mockUser.email}:`, error)
     }
   }

@@ -90,7 +90,7 @@ export default defineCachedEventHandler(async (event): Promise<GetSectionsRespon
       locale,
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     console.error('Error fetching landing sections:', error)
 
     throw createError({

@@ -55,14 +55,14 @@ export default defineNuxtRouteMiddleware(async (to) => {
   }
 
   // 4. Now it's safe to access checkout store (cart is initialized)
-  const checkoutStore = useCheckoutStore() as ReturnType<typeof useCheckoutStore> & Record<string, unknown>
+  const checkoutStore = useCheckoutStore() as ReturnType<typeof useCheckoutStore> & Record<string, any>
 
   // 5. Initialize checkout if not already initialized
   if (!checkoutStore.sessionId) {
     try {
       await checkoutStore.initializeCheckout(items.value)
     }
-    catch (error) {
+    catch (error: any) {
       console.error('Failed to initialize checkout:', error)
       return navigateTo({
         path: localePath('/cart'),
@@ -78,7 +78,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
     try {
       await checkoutStore.prefetchCheckoutData()
     }
-    catch (error) {
+    catch (error: any) {
       console.error('❌ [Checkout Middleware] Failed to prefetch checkout data:', error)
     }
   }
@@ -150,7 +150,7 @@ function extractStepFromPath(path: string): CheckoutStep | null {
 /**
  * Check if user can access a specific checkout step
  */
-function canAccessStep(step: CheckoutStep, store: ReturnType<typeof useCheckoutStore> & Record<string, unknown>): boolean {
+function canAccessStep(step: CheckoutStep, store: ReturnType<typeof useCheckoutStore> & Record<string, any>): boolean {
   switch (step) {
     case 'shipping':
       return true // Always accessible
@@ -177,7 +177,7 @@ function canAccessStep(step: CheckoutStep, store: ReturnType<typeof useCheckoutS
 /**
  * Get the highest step the user can currently access
  */
-function getHighestAllowedStep(store: ReturnType<typeof useCheckoutStore> & Record<string, unknown>): CheckoutStep {
+function getHighestAllowedStep(store: ReturnType<typeof useCheckoutStore> & Record<string, any>): CheckoutStep {
   if (store.canCompleteOrder && store.orderData?.orderId) {
     return 'confirmation'
   }

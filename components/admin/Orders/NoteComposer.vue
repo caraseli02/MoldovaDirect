@@ -157,7 +157,7 @@ const handleSubmit = async () => {
       emit('note-added')
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Error adding note:', error)
     const toast = useToast()
     toast.error('Error', 'Failed to add note. Please try again.')

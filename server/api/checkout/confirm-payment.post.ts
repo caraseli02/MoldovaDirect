@@ -98,7 +98,7 @@ export default defineEventHandler(async (event) => {
       }
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     console.error('Failed to confirm payment:', error)
 
     if (error && typeof error === 'object' && 'statusCode' in error) {

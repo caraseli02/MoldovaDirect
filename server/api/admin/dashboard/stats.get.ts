@@ -148,7 +148,7 @@ export default defineEventHandler(async (event) => {
       data: stats,
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Dashboard stats error:', error)
 
     if (error.statusCode) {

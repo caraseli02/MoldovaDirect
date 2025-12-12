@@ -207,7 +207,7 @@ export default defineCachedEventHandler(async (event) => {
 
     // Process frequently bought together data
     const frequentlyBought = frequentlyBoughtTogether?.reduce((acc: any[], item: unknown) => {
-      item.orders.order_items.forEach((orderItem: unknown) => {
+      item.orders.order_items.forEach((orderItem: any) => {
         if (orderItem.product_id !== parseInt(productId) && orderItem.products.is_active) {
           const existing = acc.find(p => p.id === orderItem.products.id)
           if (existing) {
@@ -266,7 +266,7 @@ export default defineCachedEventHandler(async (event) => {
       },
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Product recommendations API error:', error)
 
     if (error.statusCode) {

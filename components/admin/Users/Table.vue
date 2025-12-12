@@ -230,7 +230,7 @@ try {
     adminUsersStore = useAdminUsersStore()
   }
 }
-catch (_error) {
+catch (_error: any) {
   console.warn('Admin users store not available during SSR/hydration')
 }
 

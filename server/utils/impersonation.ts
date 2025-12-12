@@ -98,7 +98,7 @@ export async function verifyImpersonationToken(
 
     return decoded
   }
-  catch (error: unknown) {
+  catch (error: any) {
     // Handle JWT-specific errors
     if (error.name === 'TokenExpiredError') {
       throw createError({

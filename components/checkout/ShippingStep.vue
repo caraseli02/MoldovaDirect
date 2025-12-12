@@ -299,7 +299,7 @@ const proceedToPayment = async () => {
     // Navigate to payment step
     await navigateTo(localePath('/checkout/payment'))
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Failed to proceed to payment:', error)
   }
   finally {

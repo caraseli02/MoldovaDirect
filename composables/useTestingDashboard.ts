@@ -25,7 +25,7 @@ export const useTestingDashboard = () => {
       const response = await $fetch('/api/admin/stats')
       stats.value = response.stats
     }
-    catch (err: unknown) {
+    catch (err: any) {
       console.error('Failed to fetch stats:', err)
     }
     finally {
@@ -67,7 +67,7 @@ export const useTestingDashboard = () => {
 
       await refreshStats()
     }
-    catch (err: unknown) {
+    catch (err: any) {
       const error = err as { data?: { message?: string }, message?: string }
       result.value = {
         success: false,
@@ -112,7 +112,7 @@ export const useTestingDashboard = () => {
       }
       await refreshStats()
     }
-    catch (err: unknown) {
+    catch (err: any) {
       const error = err as { data?: { message?: string }, message?: string }
       result.value = {
         success: false,
@@ -147,7 +147,7 @@ export const useTestingDashboard = () => {
       }
       await refreshStats()
     }
-    catch (err: unknown) {
+    catch (err: any) {
       const error = err as { data?: { message?: string }, message?: string }
       result.value = {
         success: false,
@@ -193,7 +193,7 @@ export const useTestingDashboard = () => {
       }
       await refreshStats()
     }
-    catch (err: unknown) {
+    catch (err: any) {
       const error = err as { data?: { message?: string }, message?: string }
       result.value = {
         success: false,
@@ -241,7 +241,7 @@ export const useTestingDashboard = () => {
       }
       await refreshStats()
     }
-    catch (err: unknown) {
+    catch (err: any) {
       const error = err as { data?: { message?: string }, message?: string }
       result.value = {
         success: false,

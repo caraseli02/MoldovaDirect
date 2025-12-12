@@ -47,7 +47,7 @@ export async function fetchCarrierTracking(
         return null
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error(`Error fetching tracking for ${carrier}:`, error)
     return null
   }
@@ -123,7 +123,7 @@ export async function syncCarrierTracking(
       .eq('order_id', orderId)
 
     const existingTimestamps = new Set(
-      (existingEvents || []).map((e: unknown) => e.timestamp),
+      (existingEvents || []).map((e: any) => e.timestamp),
     )
 
     // Insert new events that don't exist yet
@@ -167,7 +167,7 @@ export async function syncCarrierTracking(
 
     return true
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Error syncing carrier tracking:', error)
     return false
   }

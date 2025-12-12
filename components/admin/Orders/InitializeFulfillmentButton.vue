@@ -47,7 +47,7 @@ const initializeTasks = async () => {
       emit('initialized')
     }
   }
-  catch (error: unknown) {
+  catch (error: any) {
     console.error('Error initializing fulfillment tasks:', error)
     const errorData = error as Record<string, any>
     const errorMessage = (errorData.data as Record<string, any>)?.statusMessage as string

@@ -22,7 +22,7 @@ export default defineNuxtPlugin({
             cartStore.initializeCart()
           }
         }
-        catch (error) {
+        catch (error: any) {
           console.warn('Cart initialization deferred:', error)
         }
       })

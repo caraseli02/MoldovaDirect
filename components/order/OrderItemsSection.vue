@@ -131,7 +131,7 @@ const getProductImage = (item: Record<string, any>) => {
 
     return null
   }
-  catch (err) {
+  catch (err: any) {
     console.warn('Error getting product image:', err)
     return null
   }
@@ -148,7 +148,7 @@ const formatPrice = (price: number) => {
       currency: 'EUR',
     }).format(price)
   }
-  catch (err) {
+  catch (err: any) {
     console.warn('Error formatting price:', err)
     return `€${price.toFixed(2)}`
   }

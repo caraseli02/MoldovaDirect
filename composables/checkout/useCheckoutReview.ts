@@ -59,7 +59,7 @@ export function useCheckoutReview() {
       try {
         await cartStore.loadFromStorage()
       }
-      catch (error) {
+      catch (error: any) {
         console.error('Failed to load cart from storage for checkout review:', error)
       }
     }
@@ -125,7 +125,7 @@ export function useCheckoutReview() {
         await (checkoutStore as unknown as { updateShippingCosts: () => Promise<void> }).updateShippingCosts()
         lastCartSignature.value = signature
       }
-      catch (error) {
+      catch (error: any) {
         console.error('Failed to refresh checkout totals on review page:', error)
       }
     },
@@ -206,7 +206,7 @@ export function useCheckoutReview() {
         success: Boolean(nextStep),
       }
     }
-    catch (error) {
+    catch (error: any) {
       console.error('Failed to process order:', error)
       return { nextStep: null, success: false }
     }

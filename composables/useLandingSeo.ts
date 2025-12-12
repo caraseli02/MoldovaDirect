@@ -16,7 +16,7 @@ export interface LandingSeoInput {
   pageType?: 'website' | 'article' | 'webpage' | string
   keywords?: string[] | string
   robots?: string
-  structuredData?: Record<string, unknown> | Array<Record<string, unknown>>
+  structuredData?: Record<string, any> | Array<Record<string, any>>
   breadcrumbs?: BreadcrumbInput[]
 }
 

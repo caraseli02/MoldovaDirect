@@ -194,7 +194,7 @@ async function seedMockOrders(count: number = 20) {
       }
 
       console.log(`✅ Created order ${order.order_number} with ${items.length} items`)
-    } catch (error) {
+    } catch (error: any) {
       console.error(`❌ Error creating order:`, error)
     }
   }
@@ -208,7 +208,7 @@ seedMockOrders(20)
     console.log('\n✨ Seeding complete!')
     process.exit(0)
   })
-  .catch((error) => {
+  .catch((error: any) => {
     console.error('\n❌ Seeding failed:', error)
     process.exit(1)
   })

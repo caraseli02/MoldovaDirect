@@ -45,7 +45,7 @@ export function serializeCookieData(data: unknown): unknown {
 
     return serialized
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Failed to serialize cookie data:', error)
     return null
   }
@@ -64,7 +64,7 @@ export function deserializeCookieData<T = unknown>(
   try {
     // Parse dates if field names are provided
     if (dateFields.length > 0 && typeof data === 'object' && data !== null) {
-      const restored = { ...data } as Record<string, unknown>
+      const restored = { ...data } as Record<string, any>
 
       for (const field of dateFields) {
         if (restored[field]) {
@@ -77,7 +77,7 @@ export function deserializeCookieData<T = unknown>(
 
     return data as T
   }
-  catch (error: unknown) {
+  catch (error: any) {
     console.error('Failed to deserialize cookie data:', error)
     return null
   }

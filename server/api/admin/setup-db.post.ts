@@ -135,7 +135,7 @@ export default defineEventHandler(async (event) => {
           const result = await supabase.rpc('exec_sql', { sql_query: query })
           results.push({ query: query.substring(0, 50) + '...', success: !result.error, error: result.error })
         }
-        catch (err) {
+        catch (err: any) {
           results.push({ query: query.substring(0, 50) + '...', success: false, error: err.message })
         }
       }
@@ -152,7 +152,7 @@ export default defineEventHandler(async (event) => {
       data,
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Database setup error:', error)
 
     return {

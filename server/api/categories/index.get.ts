@@ -134,7 +134,7 @@ export default defineCachedEventHandler(async (event) => {
       parent,
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Categories API error:', error)
 
     if (error.statusCode) {

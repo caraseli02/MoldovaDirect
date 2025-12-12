@@ -87,7 +87,7 @@ export async function useAdminFetchWithRetry<T = unknown>(
   try {
     return await useAdminFetch<T>(url, options)
   }
-  catch (error: unknown) {
+  catch (error: any) {
     // If we get a 401, try to refresh the session and retry once
     const isUnauthorized = error && typeof error === 'object' && 'statusCode' in error && (error as { statusCode: number }).statusCode === 401
     if (isUnauthorized) {
@@ -191,7 +191,7 @@ export async function useAdminFetchBatch<T = unknown>(
       } as unknown)
       return { success: true, data } as BatchResult<T>
     }
-    catch (error: unknown) {
+    catch (error: any) {
       // Don't log error object that may contain sensitive data
       console.error(`[AdminFetch] Error fetching ${url} - ADMIN_BATCH_FETCH_FAILED`)
       return {

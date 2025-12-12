@@ -190,7 +190,7 @@ async function loadHistory(): Promise<void> {
       history.value = data.value
     }
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Failed to load version history:', error)
   }
   finally {
@@ -224,7 +224,7 @@ async function rollbackToVersion(version: TemplateHistoryEntry): Promise<void> {
     emit('rollback')
     await loadHistory()
   }
-  catch (error) {
+  catch (error: any) {
     console.error('Failed to rollback template:', error)
     toast.error('Failed to rollback template')
   }

@@ -165,7 +165,7 @@ export const validatePersona = (persona: unknown) => {
   try {
     return TestUserPersonaSchema.parse(persona)
   }
-  catch (error) {
+  catch (error: any) {
     if (error instanceof z.ZodError) {
       console.error('Persona validation errors:', error.issues)
       throw new Error(`Invalid persona data: ${error.issues.map((e: z.ZodIssue) => e.message).join(', ')}`)
@@ -181,7 +181,7 @@ export const validateSessionState = (state: unknown) => {
   try {
     return PersonaSessionStateSchema.parse(state)
   }
-  catch (error) {
+  catch (error: any) {
     if (error instanceof z.ZodError) {
       console.error('Session state validation errors:', error.issues)
       throw new Error(`Invalid session state: ${error.issues.map((e: z.ZodIssue) => e.message).join(', ')}`)
@@ -197,7 +197,7 @@ export const validateProgress = (progress: unknown) => {
   try {
     return TestScriptProgressSchema.parse(progress)
   }
-  catch (error) {
+  catch (error: any) {
     if (error instanceof z.ZodError) {
       console.error('Progress validation errors:', error.issues)
       throw new Error(`Invalid progress data: ${error.issues.map((e: z.ZodIssue) => e.message).join(', ')}`)
