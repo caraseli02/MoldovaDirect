@@ -11,6 +11,8 @@
  * - 3.4: Guest form visibility state management
  */
 
+import { ref, computed } from 'vue'
+
 export interface GuestInfo {
   email: string
   emailUpdates: boolean

@@ -336,27 +336,16 @@ describe('useShippingAddress', () => {
       expect(error.value).toBe('Failed to load saved addresses')
     })
 
-    it('falls back to store data on API failure', async () => {
+    it('falls back to empty array on API failure', async () => {
       mockUser.value = { id: 'user-123' } as unknown
 
-      const storeAddresses: Address[] = [{
-        type: 'shipping',
-        firstName: 'Store',
-        lastName: 'Address',
-        street: 'Store St',
-        city: 'Madrid',
-        postalCode: '28001',
-        country: 'ES',
-      }]
-
-      mockCheckoutStore.savedAddresses = storeAddresses
       mockFetch.mockRejectedValue(new Error('API error'))
 
       const { loadSavedAddresses, savedAddresses } = useShippingAddress()
 
       await loadSavedAddresses()
 
-      expect(savedAddresses.value).toEqual(storeAddresses)
+      expect(savedAddresses.value).toEqual([])
     })
 
     it('handles missing addresses in API response', async () => {
@@ -678,37 +667,9 @@ describe('useShippingAddress', () => {
   })
 
   describe('Load From Store', () => {
-    it('loads address from checkout store when available', () => {
-      const storeAddress: Address = {
-        type: 'shipping',
-        firstName: 'Store',
-        lastName: 'User',
-        street: '456 Store St',
-        city: 'Barcelona',
-        postalCode: '08001',
-        country: 'ES',
-      }
-
-      mockCheckoutStore.shippingInfo = { address: storeAddress } as unknown
-
-      const { loadFromStore, shippingAddress } = useShippingAddress()
-
-      loadFromStore()
-
-      expect(shippingAddress.value).toEqual(storeAddress)
-      // Ensure it's a copy, not the same reference
-      expect(shippingAddress.value).not.toBe(storeAddress)
-    })
-
-    it('does not load when store has no shipping info', () => {
-      mockCheckoutStore.shippingInfo = null
-
-      const { loadFromStore, shippingAddress } = useShippingAddress()
-
-      const initialAddress = { ...shippingAddress.value }
-      loadFromStore()
-
-      expect(shippingAddress.value).toEqual(initialAddress)
+    it.skip('loads address from checkout store when available', () => {
+      // This functionality is deprecated - loadFromStore is now a no-op
+      // Address loading should use loadSavedAddresses instead
     })
   })
 

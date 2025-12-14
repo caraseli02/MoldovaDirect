@@ -14,6 +14,8 @@
  * const { currentVideo, showVideo } = useHeroVideos()
  */
 
+import { ref } from 'vue'
+
 export interface HeroVideo {
   id: string
   webm: string

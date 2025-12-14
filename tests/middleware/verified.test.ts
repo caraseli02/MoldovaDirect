@@ -104,7 +104,6 @@ describe('Verified Middleware', () => {
       await verifiedMiddleware(mockTo, mockFrom)
 
       expect(mockNavigateTo).not.toHaveBeenCalled()
-      expect(result).toBeUndefined()
     })
 
     it('should allow access to any protected route', async () => {

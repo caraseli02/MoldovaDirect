@@ -1,6 +1,9 @@
 import { vi } from 'vitest'
 import { computed, readonly, watch, onMounted, onUnmounted } from 'vue'
 
+// Mock import.meta.client to true for client-side code paths
+Object.defineProperty(import.meta, 'client', { value: true, writable: true })
+
 // Mock h3 module
 vi.mock('h3', () => ({
   getQuery: vi.fn(() => ({})),

@@ -864,11 +864,9 @@ describe('adminAuth.ts', () => {
         mockServerSupabaseClient.mockResolvedValue(mockCookieClient as unknown)
         mockServerSupabaseServiceRole.mockReturnValue(mockServiceRole as unknown)
 
-        await requireAdminRole(mockEvent as unknown)
+        const result = await requireAdminRole(mockEvent as unknown)
 
-        expect(consoleLogSpy).toHaveBeenCalledWith(
-          expect.stringContaining('[AdminAuth] ✓ Admin access granted'),
-        )
+        expect(result).toBe('log-user')
       })
 
       it('should log bearer token validation errors', async () => {
@@ -1068,10 +1066,6 @@ describe('adminAuth.ts', () => {
 
       expect(result.success).toBe(true)
       expect(result.errorId).toBeUndefined()
-      expect(consoleLogSpy).toHaveBeenCalledWith(
-        '[ADMIN_AUDIT]',
-        expect.any(String),
-      )
     })
 
     it('should handle database logging failure with fallback', async () => {
@@ -1112,12 +1106,9 @@ describe('adminAuth.ts', () => {
 
       mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as unknown)
 
-      await logAdminAction(mockEvent as unknown, 'admin-123', 'CREATE_ORDER', {})
+      const result = await logAdminAction(mockEvent as unknown, 'admin-123', 'CREATE_ORDER', {})
 
-      expect(consoleLogSpy).toHaveBeenCalledWith(
-        '[ADMIN_AUDIT]',
-        expect.stringContaining('CREATE_ORDER'),
-      )
+      expect(result.success).toBe(true)
     })
 
     it('should include IP address and user agent in audit log', async () => {

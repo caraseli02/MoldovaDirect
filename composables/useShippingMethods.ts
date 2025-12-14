@@ -11,6 +11,8 @@
  * - 2.4: Localized method names and descriptions
  */
 
+import { ref } from 'vue'
+import type { Ref } from 'vue'
 import type { ShippingMethod, Address } from '~/types/checkout'
 import { useDebounceFn } from '@vueuse/core'
 import { fetchShippingMethods } from '~/lib/checkout/api'

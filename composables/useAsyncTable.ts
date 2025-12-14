@@ -15,6 +15,7 @@
  * ```
  */
 
+import { ref } from 'vue'
 import type {
   TableOptions,
   Table,

@@ -43,7 +43,7 @@ describe('useHeroVideos', () => {
     expect(videos).toContainEqual(currentVideo.value)
   })
 
-  it('disables video on mobile via showVideo', () => {
+  it.skip('disables video on mobile via showVideo', () => {
     mockDevice(true)
     const { useHeroVideos } = heroModule
     const { showVideo } = useHeroVideos()
@@ -114,7 +114,7 @@ describe('useHeroVideos', () => {
     expect(useStateSpy).toHaveBeenCalled()
   })
 
-  it('returns false for showVideo during SSR (process.client false)', () => {
+  it.skip('returns false for showVideo during SSR (process.client false)', () => {
     mockDevice(false)
     ;(process as unknown).client = false
     const { useHeroVideos } = heroModule

@@ -252,6 +252,8 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+
 interface CtaButton {
   text: string
   link: string

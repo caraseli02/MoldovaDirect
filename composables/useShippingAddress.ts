@@ -11,6 +11,7 @@
  * - 5.4: Address form submission validation
  */
 
+import { ref, computed } from 'vue'
 import type { Address } from '~/types/address'
 import { addressFromEntity } from '~/types/address'
 
