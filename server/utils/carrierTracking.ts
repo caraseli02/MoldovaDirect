@@ -1,6 +1,7 @@
-import type { SupabaseClient } from '@supabase/supabase-js'
 // Carrier tracking integration utilities
 // This module provides integration with external carrier tracking APIs
+
+import type { SupabaseClient } from '@supabase/supabase-js'
 
 interface CarrierTrackingEvent {
   timestamp: string
@@ -71,7 +72,7 @@ async function fetchDHLTracking(_trackingNumber: string): Promise<CarrierTrackin
  * FedEx tracking integration
  * TODO: Implement actual FedEx API integration
  */
-async function fetchFedExTracking(trackingNumber: string): Promise<CarrierTrackingResponse | null> {
+async function fetchFedExTracking(_trackingNumber: string): Promise<CarrierTrackingResponse | null> {
   return null
 }
 
@@ -79,7 +80,7 @@ async function fetchFedExTracking(trackingNumber: string): Promise<CarrierTracki
  * UPS tracking integration
  * TODO: Implement actual UPS API integration
  */
-async function fetchUPSTracking(trackingNumber: string): Promise<CarrierTrackingResponse | null> {
+async function fetchUPSTracking(_trackingNumber: string): Promise<CarrierTrackingResponse | null> {
   return null
 }
 
@@ -87,7 +88,7 @@ async function fetchUPSTracking(trackingNumber: string): Promise<CarrierTracking
  * USPS tracking integration
  * TODO: Implement actual USPS API integration
  */
-async function fetchUSPSTracking(trackingNumber: string): Promise<CarrierTrackingResponse | null> {
+async function fetchUSPSTracking(_trackingNumber: string): Promise<CarrierTrackingResponse | null> {
   return null
 }
 
@@ -95,7 +96,7 @@ async function fetchUSPSTracking(trackingNumber: string): Promise<CarrierTrackin
  * Moldova Post tracking integration
  * TODO: Implement actual Moldova Post API integration
  */
-async function fetchMoldovaPostTracking(trackingNumber: string): Promise<CarrierTrackingResponse | null> {
+async function fetchMoldovaPostTracking(_trackingNumber: string): Promise<CarrierTrackingResponse | null> {
   return null
 }
 

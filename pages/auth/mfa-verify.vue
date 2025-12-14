@@ -119,7 +119,6 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { SupabaseClient } from '@supabase/supabase-js'
 import { useAuthStore } from '~/stores/auth'
 import { useAuthValidation } from '~/composables/useAuthValidation'
 

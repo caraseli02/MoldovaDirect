@@ -8,13 +8,11 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import type { SupabaseClient } from '@supabase/supabase-js'
 import type { RouteLocationNormalized } from 'vue-router'
 
 describe('Admin Middleware', () => {
-  let middleware: any
   let mockTo: RouteLocationNormalized
-  let mockFrom: RouteLocationNormalized
+  let _mockFrom: RouteLocationNormalized
   let mockUser: any
   let mockSupabase: any
   let mockProfile: any
@@ -22,7 +20,7 @@ describe('Admin Middleware', () => {
   beforeEach(() => {
     // Mock route objects
     mockTo = { path: '/admin/dashboard' } as RouteLocationNormalized
-    mockFrom = { path: '/' } as RouteLocationNormalized
+    _mockFrom = { path: '/' } as RouteLocationNormalized
 
     // Reset mocks
     mockUser = null
@@ -76,7 +74,7 @@ describe('Admin Middleware', () => {
 
       // Import and execute middleware
       const { default: adminMiddleware } = await import('../../middleware/admin')
-      const result = await adminMiddleware(mockTo, mockFrom)
+      await adminMiddleware(mockTo, _mockFrom)
 
       expect(navigateTo).toHaveBeenCalledWith('/auth/login')
     })
@@ -88,7 +86,7 @@ describe('Admin Middleware', () => {
       const { default: adminMiddleware } = await import('../../middleware/admin')
 
       // Should not throw
-      await expect(adminMiddleware(mockTo, mockFrom)).resolves.not.toThrow()
+      await expect(adminMiddleware(mockTo, _mockFrom)).resolves.not.toThrow()
     })
   })
 
@@ -103,7 +101,7 @@ describe('Admin Middleware', () => {
       const { default: adminMiddleware } = await import('../../middleware/admin')
 
       // Should throw 403 error
-      await expect(adminMiddleware(mockTo, mockFrom)).rejects.toThrow(
+      await expect(adminMiddleware(mockTo, _mockFrom)).rejects.toThrow(
         'Admin access required',
       )
     })
@@ -113,7 +111,7 @@ describe('Admin Middleware', () => {
 
       const { default: adminMiddleware } = await import('../../middleware/admin')
 
-      await expect(adminMiddleware(mockTo, mockFrom)).rejects.toThrow(
+      await expect(adminMiddleware(mockTo, _mockFrom)).rejects.toThrow(
         'Admin access required',
       )
     })
@@ -123,7 +121,7 @@ describe('Admin Middleware', () => {
 
       const { default: adminMiddleware } = await import('../../middleware/admin')
 
-      await expect(adminMiddleware(mockTo, mockFrom)).rejects.toThrow(
+      await expect(adminMiddleware(mockTo, _mockFrom)).rejects.toThrow(
         'Admin access required',
       )
     })
@@ -134,7 +132,7 @@ describe('Admin Middleware', () => {
       const { default: adminMiddleware } = await import('../../middleware/admin')
 
       // Should not throw
-      await expect(adminMiddleware(mockTo, mockFrom)).resolves.not.toThrow()
+      await expect(adminMiddleware(mockTo, _mockFrom)).resolves.not.toThrow()
     })
 
     it('should throw 401 if profile cannot be fetched', async () => {
@@ -151,7 +149,7 @@ describe('Admin Middleware', () => {
 
       const { default: adminMiddleware } = await import('../../middleware/admin')
 
-      await expect(adminMiddleware(mockTo, mockFrom)).rejects.toThrow(
+      await expect(adminMiddleware(mockTo, _mockFrom)).rejects.toThrow(
         'Authentication required',
       )
     })
@@ -178,7 +176,7 @@ describe('Admin Middleware', () => {
       mockSupabase.from = fromMock
 
       const { default: adminMiddleware } = await import('../../middleware/admin')
-      await adminMiddleware(mockTo, mockFrom)
+      await adminMiddleware(mockTo, _mockFrom)
 
       expect(fromMock).toHaveBeenCalledWith('profiles')
     })
@@ -198,7 +196,7 @@ describe('Admin Middleware', () => {
       }))
 
       const { default: adminMiddleware } = await import('../../middleware/admin')
-      await adminMiddleware(mockTo, mockFrom)
+      await adminMiddleware(mockTo, _mockFrom)
 
       expect(selectMock).toHaveBeenCalledWith('role')
     })
@@ -216,7 +214,7 @@ describe('Admin Middleware', () => {
       const { default: adminMiddleware } = await import('../../middleware/admin')
 
       // MUST throw 403 error
-      await expect(adminMiddleware(mockTo, mockFrom)).rejects.toThrow(
+      await expect(adminMiddleware(mockTo, _mockFrom)).rejects.toThrow(
         'Admin access required',
       )
     })
@@ -233,7 +231,7 @@ describe('Admin Middleware', () => {
 
           const { default: adminMiddleware } = await import('../../middleware/admin')
 
-          await expect(adminMiddleware(mockTo, mockFrom)).rejects.toThrow()
+          await expect(adminMiddleware(mockTo, _mockFrom)).rejects.toThrow()
         }
       }
     })

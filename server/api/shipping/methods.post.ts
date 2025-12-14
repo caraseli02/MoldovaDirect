@@ -1,7 +1,6 @@
 // POST /api/shipping/methods - Get available shipping methods for cart and address
 import { serverSupabaseServiceRole } from '#supabase/server'
 import { getAvailableShippingMethods, calculateOrderTotals } from '~/server/utils/orderUtils'
-import type { CartItem } from '~/types/database'
 
 interface ShippingMethodsRequest {
   cartId: number

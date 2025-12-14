@@ -4,9 +4,8 @@
  * Tests for JWT token generation, verification, and session validation
  */
 
-import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { serverSupabaseServiceRole } from '#supabase/server'
-import { generateImpersonationToken, verifyImpersonationToken, validateImpersonationSession } from '../impersonation'
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
+import { generateImpersonationToken, verifyImpersonationToken } from '../impersonation'
 import jwt from 'jsonwebtoken'
 
 describe('Impersonation Utilities', () => {

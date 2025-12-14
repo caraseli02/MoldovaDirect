@@ -6,11 +6,9 @@
  */
 
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
-import type { H3Event } from 'h3'
-import type { SupabaseClient } from '@supabase/supabase-js'
 
 // Import mocked h3 functions
-import { getCookie, getHeader, getRequestIP, createError } from 'h3'
+import { getHeader, getRequestIP, createError } from 'h3'
 
 // Import after mocks are set up
 import {
@@ -41,8 +39,6 @@ interface AuthUser {
   id: string
   email: string
   role?: string
-  app_metadata?: Record<string, any>
-  user_metadata?: Record<string, any>
 }
 
 interface AuthError {
@@ -50,8 +46,6 @@ interface AuthError {
   code?: string
   status?: number
 }
-
-type UserId = string & { readonly __brand: 'UserId' }
 
 /**
  * Helper to create mock H3Event
@@ -73,17 +67,17 @@ function createMockEvent(overrides?: Partial<MockH3Event>): MockH3Event {
 /**
  * Helper to create mock Supabase responses
  */
-function createAuthResponse(user: AuthUser | null, error: AuthError | null = null) {
+function createAuthResponse(user: AuthUser | null, _error: AuthError | null = null) {
   return {
     data: { user },
-    error,
+    error: _error,
   }
 }
 
-function createProfileResponse(profile: { role: string | null } | null, error: unknown = null) {
+function createProfileResponse(profile: { role: string | null } | null, _error: unknown = null) {
   return {
     data: profile,
-    error,
+    error: _error,
   }
 }
 
@@ -111,9 +105,8 @@ vi.mock('#supabase/server', () => ({
 }))
 
 // Cast to mock functions for test manipulation
-const mockGetCookie = getCookie as ReturnType<typeof vi.fn>
 const mockGetHeader = getHeader as ReturnType<typeof vi.fn>
-const mockGetRequestIP = getRequestIP as ReturnType<typeof vi.fn>
+const _mockGetRequestIP = getRequestIP as ReturnType<typeof vi.fn>
 const mockCreateError = createError as ReturnType<typeof vi.fn>
 const mockServerSupabaseClient = serverSupabaseClient as ReturnType<typeof vi.fn>
 const mockServerSupabaseServiceRole = serverSupabaseServiceRole as ReturnType<typeof vi.fn>
@@ -904,7 +897,7 @@ describe('adminAuth.ts', () => {
         try {
           await requireAdminRole(mockEvent as unknown)
         }
-        catch (e: any) {
+        catch (_e: any) {
           // Expected to throw
         }
 
@@ -931,7 +924,7 @@ describe('adminAuth.ts', () => {
         try {
           await requireAdminRole(mockEvent as unknown)
         }
-        catch (e: any) {
+        catch (_e: any) {
           // Expected to throw
         }
 
@@ -968,7 +961,7 @@ describe('adminAuth.ts', () => {
         try {
           await requireAdminRole(mockEvent as unknown)
         }
-        catch (e: any) {
+        catch (_e: any) {
           // Expected to throw
         }
 

@@ -1,5 +1,4 @@
 import { serverSupabaseClient } from '#supabase/server'
-import type { SupabaseClient } from '@supabase/supabase-js'
 import { PUBLIC_CACHE_CONFIG } from '~/server/utils/publicCache'
 
 // Helper function to get localized content with fallback

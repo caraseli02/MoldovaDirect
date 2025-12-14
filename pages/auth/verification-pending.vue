@@ -199,7 +199,6 @@
 
 <script setup lang="ts">
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import type { SupabaseClient } from '@supabase/supabase-js'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -228,7 +227,6 @@ const route = useRoute()
 // Use new authentication message system
 const {
   createErrorMessage,
-  createSuccessMessage: _createSuccessMessage,
   getVerificationPendingMessage,
   translateAuthError,
 } = useAuthMessages()
@@ -340,9 +338,8 @@ onMounted(() => {
   // Check if there's a message from the URL
   const messageParam = route.query.message as string
   if (messageParam === 'email-verification-required') {
-    // Show the verification pending message
-    const message = getVerificationPendingMessage(emailParam)
-    // This is an info message, so we don't set it as success or error
+    // Show the verification pending message - message is used for UI display
+    getVerificationPendingMessage(emailParam)
   }
 })
 

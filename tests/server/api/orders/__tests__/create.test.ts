@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 // TODO: Fix import - @supabase/supabase-js is not a direct dependency
 // The project uses @nuxtjs/supabase which may not export createClient the same way
 // import { createClient } from '@supabase/supabase-js'

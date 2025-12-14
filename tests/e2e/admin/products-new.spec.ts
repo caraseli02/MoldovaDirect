@@ -132,9 +132,6 @@ test.describe('Admin Products - New Product Page', () => {
     await page.goto('/admin/products')
     await page.waitForLoadState('networkidle')
 
-    // Then navigate to new product page
-    const newProductLink = page.locator('a, button').filter({ hasText: /New|Create|Add/i }).first()
-
     // Even if link doesn't exist, direct navigation should work
     await page.goto('/admin/products/new')
     await page.waitForLoadState('networkidle')

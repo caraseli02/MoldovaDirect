@@ -5,7 +5,6 @@
 // Requirements: 1.1, 4.1, 4.2
 
 import type { OrderEmailData, DatabaseOrder } from './emailTemplates/types'
-import type { SupabaseClient } from '@supabase/supabase-js'
 import type { EmailType } from '~/types/email'
 import { sendEmail } from './email'
 import { orderConfirmation, orderStatus } from './emailTemplates'

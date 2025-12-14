@@ -7,7 +7,7 @@
  */
 
 import { test, expect } from '@playwright/test'
-import { SELECTORS, TIMEOUTS, ERROR_MESSAGES } from './constants'
+import { TIMEOUTS, ERROR_MESSAGES } from './constants'
 
 test.describe('Critical Search Flows', () => {
   test('search input is accessible on products page', async ({ page }) => {
@@ -97,9 +97,6 @@ test.describe('Critical Search Flows', () => {
       state: 'visible',
       timeout: TIMEOUTS.LONG,
     })
-
-    // Count initial products
-    const initialCount = await page.locator('[data-testid="product-card"], .product-card, article').count()
 
     // Search for something specific
     const searchInput = page.locator('input[type="search"]').first()

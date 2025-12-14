@@ -24,7 +24,7 @@
 <script setup lang="ts">
 import { Sonner } from '@/components/ui/sonner'
 
-const { registerShortcut, getShortcutDisplay } = useKeyboardShortcuts()
+const { registerShortcut } = useKeyboardShortcuts()
 const localePath = useLocalePath()
 const router = useRouter()
 

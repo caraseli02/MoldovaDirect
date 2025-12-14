@@ -10,7 +10,6 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
-import type { SupabaseClient } from '@supabase/supabase-js'
 import { createSupabaseClient } from '~/server/utils/supabaseAdminClient'
 
 describe('Order Status Transitions - Valid Transitions', () => {

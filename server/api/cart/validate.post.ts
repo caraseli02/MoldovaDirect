@@ -1,7 +1,6 @@
 // POST /api/cart/validate - Validate cart items before checkout
 import { serverSupabaseServiceRole } from '#supabase/server'
 import { validateCartItems, calculateOrderTotals, getAvailableShippingMethods } from '~/server/utils/orderUtils'
-import type { CartItem } from '~/types/database'
 
 interface ValidateCartRequest {
   cartId: number

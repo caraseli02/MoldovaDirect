@@ -4,7 +4,6 @@
  */
 
 import { sendEmail } from './email'
-import type { SupabaseClient } from '@supabase/supabase-js'
 import {
   generateCustomerConfirmationTemplate,
   generateStaffNotificationTemplate,

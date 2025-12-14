@@ -12,7 +12,6 @@
  */
 
 import { serverSupabaseClient } from '#supabase/server'
-import type { SupabaseClient } from '@supabase/supabase-js'
 import type { H3Event } from 'h3'
 import { requireAdminRole } from '~/server/utils/adminAuth'
 import { invalidateMultipleScopes } from '~/server/utils/adminCache'

@@ -5,7 +5,6 @@
  */
 
 import { describe, it, expect, beforeAll, afterAll } from 'vitest'
-import type { SupabaseClient } from '@supabase/supabase-js'
 import { createSupabaseClient } from '~/server/utils/supabaseAdminClient'
 
 describe('GET /api/admin/audit-logs', () => {

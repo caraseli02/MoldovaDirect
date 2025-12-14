@@ -193,7 +193,7 @@ async function handlePaymentIntentFailed(
   paymentIntent: Stripe.PaymentIntent,
 ): Promise<void> {
   const paymentIntentId = paymentIntent.id
-  const failureMessage = paymentIntent.last_payment_error?.message || 'Unknown error'
+  const _failureMessage = paymentIntent.last_payment_error?.message || 'Unknown error'
 
   // Get Supabase service role client (bypasses RLS for webhook operations)
   const client = serverSupabaseServiceRole(event)
@@ -247,8 +247,8 @@ async function handleChargeRefunded(
 ): Promise<void> {
   const chargeId = charge.id
   const paymentIntentId = charge.payment_intent as string
-  const amountRefunded = charge.amount_refunded
-  const currency = charge.currency
+  const _amountRefunded = charge.amount_refunded
+  const _currency = charge.currency
 
   if (!paymentIntentId) {
     console.error(`[Stripe Webhook] No payment intent ID found for charge ${chargeId}`)

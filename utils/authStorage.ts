@@ -44,12 +44,6 @@ export function updateSupabaseSessionCookies(remember: boolean): void {
   if (import.meta.server) return
 
   try {
-    // Get all cookies
-    const cookies = document.cookie.split(';')
-    const supabaseCookies = cookies
-      .map(c => c.trim())
-      .filter(c => c.startsWith('sb-'))
-
     // For each Supabase cookie, we need to update its attributes
     // Since we can't directly modify cookie attributes, we'll rely on
     // the cookie being recreated on next auth state change with correct maxAge

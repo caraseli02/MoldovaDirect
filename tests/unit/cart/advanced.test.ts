@@ -365,14 +365,14 @@ describe('Cart Advanced Features Module', () => {
 
     describe('restoreFromSaved', () => {
       it('should restore saved item to cart', async () => {
-        const addItemFn = vi.fn().mockResolvedValue(undefined)
+        const _addItemFn = vi.fn().mockResolvedValue(undefined)
 
         await saveItemForLater(mockCartItem)
         const savedId = cartAdvancedState.value.savedForLater[0].id
 
-        await restoreFromSaved(savedId, addItemFn)
+        await restoreFromSaved(savedId, _addItemFn)
 
-        expect(addItemFn).toHaveBeenCalledWith(mockProduct, 2)
+        expect(_addItemFn).toHaveBeenCalledWith(mockProduct, 2)
       })
 
       it('should remove item from saved for later after restore', async () => {
@@ -616,7 +616,6 @@ describe('Cart Advanced Features Module', () => {
   describe('Edge Cases', () => {
     it('should handle concurrent bulk operations protection', async () => {
       const removeItemFn = vi.fn().mockResolvedValue(undefined)
-      const addItemFn = vi.fn().mockResolvedValue(undefined)
 
       selectItem('item-1')
 

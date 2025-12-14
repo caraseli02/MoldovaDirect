@@ -101,7 +101,7 @@ describe('Verified Middleware', () => {
       }
 
       const { default: verifiedMiddleware } = await import('../../middleware/verified')
-      const result = await verifiedMiddleware(mockTo, mockFrom)
+      await verifiedMiddleware(mockTo, mockFrom)
 
       expect(mockNavigateTo).not.toHaveBeenCalled()
       expect(result).toBeUndefined()
@@ -119,7 +119,7 @@ describe('Verified Middleware', () => {
       } as RouteLocationNormalized
 
       const { default: verifiedMiddleware } = await import('../../middleware/verified')
-      const result = await verifiedMiddleware(mockTo, mockFrom)
+      await verifiedMiddleware(mockTo, mockFrom)
 
       expect(mockNavigateTo).not.toHaveBeenCalled()
     })

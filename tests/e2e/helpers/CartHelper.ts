@@ -4,7 +4,7 @@
  * Provides utilities for cart-related operations in tests
  */
 
-import { type Page, type Locator, expect } from '@playwright/test'
+import { type Page, expect } from '@playwright/test'
 
 export class CartHelper {
   readonly page: Page

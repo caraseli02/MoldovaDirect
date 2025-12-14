@@ -144,9 +144,6 @@ test.describe('Admin Inventory Page', () => {
       }
     })
 
-    // Authenticate first using the fixture's adminPage mechanism
-    const adminPageContext = await page.context()
-
     // Navigate to inventory page
     await page.goto('/admin/inventory')
     await page.waitForLoadState('networkidle')

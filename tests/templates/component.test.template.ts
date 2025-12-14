@@ -5,7 +5,7 @@
  * Follow the AAA pattern: Arrange, Act, Assert
  */
 
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createTestingPinia } from '@pinia/testing'
 import ComponentName from './ComponentName.vue'

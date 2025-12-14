@@ -5,7 +5,7 @@
  */
 
 import { useI18n } from 'vue-i18n'
-import type { ProductWithRelations, Translations } from '~/types/database'
+import type { Translations } from '~/types/database'
 
 export function useProductUtils() {
   const { locale } = useI18n()

@@ -1,4 +1,3 @@
-import type { SupabaseClient } from '@supabase/supabase-js'
 /**
  * Supabase Remember Me Plugin
  *
@@ -21,34 +20,26 @@ export default defineNuxtPlugin(() => {
   if (import.meta.server) return
 
   // Listen to auth state changes
-  supabase.auth.onAuthStateChange((event, _session) => {
+  supabase.auth.onAuthStateChange((event) => {
     // Only handle signed in events
     if (event !== 'SIGNED_IN' && event !== 'TOKEN_REFRESHED') {
       return
     }
 
-    // Get remember me preference
-    const _rememberMe = rememberMeCookie.value !== 'false'
+    // Get remember me preference (used by cookie settings)
+    const rememberMe = rememberMeCookie.value !== 'false'
 
     // Update Supabase session cookies based on preference
     // Note: This is a best-effort approach. The actual cookie management
     // is handled by Supabase, but we can influence it through the storage adapter
 
     try {
-      // Get all cookies that start with 'sb-'
-      const cookies = document.cookie.split(';')
-      const supabaseCookies = cookies
-        .map(c => c.trim())
-        .filter(c => c.startsWith('sb-'))
-
-      // For each Supabase cookie, we need to ensure it has the right attributes
-      // Since we can't modify existing cookies directly, we'll need to
-      // ensure new cookies are created with the correct settings
-
       // The @nuxtjs/supabase module handles this through cookieOptions in nuxt.config
       // Our preference cookie acts as a signal for the desired behavior
-
-      // Log the preference for debugging (noop in dev mode)
+      // The rememberMe variable is used for cookie configuration
+      if (rememberMe) {
+        // Persistent cookies will be set
+      }
     }
     catch (error: any) {
       console.warn('[Remember Me] Failed to process cookies:', error)

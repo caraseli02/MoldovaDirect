@@ -360,7 +360,6 @@
 <script setup lang="ts">
 // Component imports
 import { Button } from '@/components/ui/button'
-import type { SupabaseClient } from '@supabase/supabase-js'
 import AddressFormModal from '~/components/profile/AddressFormModal.vue'
 import DeleteAccountModal from '~/components/profile/DeleteAccountModal.vue'
 

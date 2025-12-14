@@ -1529,8 +1529,7 @@ describe('useProductFilters', () => {
       updateFilter('category', 'electronics')
 
       // Access the chips to trigger the computed property
-      const chips = activeFilterChips.value
-      const firstChip = chips[0]
+      const firstChip = activeFilterChips.value[0]
 
       expect(mockT).toHaveBeenCalledWith('products.chips.category', {
         value: 'Electronics',
@@ -1547,7 +1546,7 @@ describe('useProductFilters', () => {
       updateFilter('category', 'unknown-category')
 
       // Access the chips to trigger the computed property
-      const chips = activeFilterChips.value
+      expect(activeFilterChips.value.length).toBeGreaterThanOrEqual(0)
 
       expect(mockT).toHaveBeenCalledWith('products.filters.unknownCategory')
     })

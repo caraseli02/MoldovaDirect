@@ -117,9 +117,7 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
     }
 
     // Check for unhandled rejections
-    let unhandledRejection = false
     page.once('crash', () => {
-      unhandledRejection = true
       console.log('✗ Page crashed!')
     })
 
@@ -305,7 +303,7 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
     }
 
     console.log(`\n✓ Navigation test summary: ${testedLinks.length}/${Math.min(foundLinks.length, 5)} links tested`)
-    testedLinks.forEach((link, idx) => {
+    testedLinks.forEach((link) => {
       const icon = link.clickable ? '✓' : '✗'
       console.log(`  ${icon} ${link.text}: ${link.status}`)
     })

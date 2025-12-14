@@ -3,7 +3,7 @@
  * Tests for shipping calculations and helper functions
  */
 
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect } from 'vitest'
 
 // Test the helper functions directly without store dependencies
 describe('Checkout Shipping - Helper Functions', () => {

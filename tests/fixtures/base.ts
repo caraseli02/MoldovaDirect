@@ -1,5 +1,5 @@
 import { test as base, expect } from '@playwright/test'
-import type { Page, BrowserContext } from '@playwright/test'
+import type { Page } from '@playwright/test'
 import { generateSecurePassword } from '../utils/generateSecurePassword'
 
 export interface TestUser {

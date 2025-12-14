@@ -1,5 +1,4 @@
 import { vi } from 'vitest'
-import type { SupabaseClient } from '@supabase/supabase-js'
 
 // Mock Nuxt auto-imports for testing
 export const useHead = global.useHead || vi.fn()

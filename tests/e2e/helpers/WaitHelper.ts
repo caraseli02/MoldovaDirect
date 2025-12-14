@@ -48,7 +48,6 @@ export class WaitHelper {
    */
   async waitForRequests(urlPattern: string | RegExp, count: number, timeout: number = 10000): Promise<void> {
     let requestCount = 0
-    const startTime = Date.now()
 
     return new Promise((resolve, reject) => {
       const listener = (request: any) => {

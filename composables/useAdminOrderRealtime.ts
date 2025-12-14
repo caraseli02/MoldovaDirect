@@ -8,7 +8,7 @@
  * Provides real-time updates for admin order management using Supabase Realtime
  */
 
-import type { RealtimeChannel, SupabaseClient } from '@supabase/supabase-js'
+import type { RealtimeChannel } from '@supabase/supabase-js'
 
 interface OrderUpdate {
   id: number
@@ -204,15 +204,6 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
   }
 
   /**
-   * Check if order was recently updated (potential conflict)
-   */
-  const checkForConflict = (orderId: number, lastKnownUpdate: string): boolean => {
-    // This would typically fetch the latest order data and compare timestamps
-    // For now, we'll rely on the realtime updates to detect conflicts
-    return false
-  }
-
-  /**
    * Get status label for display
    */
   const getStatusLabel = (status: string): string => {
@@ -235,7 +226,6 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
     subscribeToOrder,
     subscribeToAllOrders,
     unsubscribe,
-    checkForConflict,
     isSubscribed: readonly(isSubscribed),
     lastUpdate: readonly(lastUpdate),
   }

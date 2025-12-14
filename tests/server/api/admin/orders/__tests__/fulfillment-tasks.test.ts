@@ -8,8 +8,7 @@
  * - Authorization
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import type { SupabaseClient } from '@supabase/supabase-js'
+import { describe, it, expect, beforeEach } from 'vitest'
 import { createSupabaseClient } from '~/server/utils/supabaseAdminClient'
 
 describe('Order Fulfillment Tasks - Race Conditions', () => {
@@ -117,7 +116,7 @@ describe('Order Fulfillment Tasks - Race Conditions', () => {
       ])
   })
 
-  afterEach(async () => {
+  const _afterEach = async () => {
     // Cleanup test data
     if (testOrder1) {
       await supabase.from('order_fulfillment_tasks').delete().eq('order_id', testOrder1.id)
@@ -137,7 +136,7 @@ describe('Order Fulfillment Tasks - Race Conditions', () => {
       await supabase.from('profiles').delete().eq('id', testAdmin.id)
       await supabase.auth.admin.deleteUser(testAdmin.id)
     }
-  })
+  }
 
   it('should handle concurrent inventory updates correctly (race condition test)', async () => {
     // CRITICAL TEST: Two admins process different orders with same product simultaneously
@@ -152,7 +151,7 @@ describe('Order Fulfillment Tasks - Race Conditions', () => {
     const task2 = tasks.find((t: any) => t.order_id === testOrder2.id)
 
     // Simulate concurrent completion of both tasks
-    const results = await Promise.allSettled([
+    await Promise.allSettled([
       fetch(`/api/admin/orders/${testOrder1.id}/fulfillment-tasks/${task1.id}`, {
         method: 'PATCH',
         headers: {

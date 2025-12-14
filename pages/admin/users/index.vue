@@ -128,7 +128,6 @@
 <script setup lang="ts">
 import type { UserWithProfile, UsersSummary, UserDetail } from '~/stores/adminUsers'
 import AdminUsersTable from '~/components/admin/Users/Table.vue'
-import type { SupabaseClient } from '@supabase/supabase-js'
 import AdminUsersDetailView from '~/components/admin/Users/DetailView.vue'
 
 interface PaginationState {

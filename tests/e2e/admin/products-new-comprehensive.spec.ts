@@ -1,5 +1,4 @@
 import { test, expect } from '../../fixtures/base'
-import type { Page } from '@playwright/test'
 
 test.describe('Admin Products New Page - Comprehensive Testing', () => {
   test.beforeEach(async ({ page }) => {
@@ -375,7 +374,7 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
 
 // Additional test for authentication flow
 test.describe('Admin Products New - Authentication Flow', () => {
-  test('should not allow unauthenticated access (redirect to login)', async ({ page, baseURL }) => {
+  test('should not allow unauthenticated access (redirect to login)', async ({ page }) => {
     console.log('\n=== TEST: Unauthenticated access check ===')
 
     // Clear all cookies/storage to simulate unauthenticated state

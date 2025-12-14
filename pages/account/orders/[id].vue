@@ -203,7 +203,6 @@
 
 <script setup lang="ts">
 import type { OrderWithItems } from '~/types'
-import type { SupabaseClient } from '@supabase/supabase-js'
 
 // Apply authentication middleware
 definePageMeta({
@@ -229,7 +228,6 @@ const {
   refreshTracking,
   reorder,
   initiateReturn,
-  contactSupport,
   canReorder,
   canReturn,
   isDelivered: _isDelivered,
@@ -296,7 +294,16 @@ const handleReturn = async () => {
 }
 
 const handleSupport = () => {
-  contactSupport()
+  if (!order.value) return
+
+  // Navigate to contact page with order context
+  router.push({
+    path: '/contact',
+    query: {
+      order: order.value.orderNumber,
+      subject: `Order ${order.value.orderNumber}`,
+    },
+  })
 }
 
 // Setup mobile swipe navigation

@@ -13,7 +13,6 @@
 
 import { getRequestIP } from 'h3'
 import { serverSupabaseClient, serverSupabaseServiceRole } from '#supabase/server'
-import type { SupabaseClient } from '@supabase/supabase-js'
 import { createLogger } from '~/server/utils/secureLogger'
 
 const logger = createLogger('delete-account')

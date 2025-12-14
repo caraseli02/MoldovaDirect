@@ -2,6 +2,7 @@
  * Composable for using i18n in Pinia stores
  * This provides a safe way to access i18n functions within stores
  */
+import { ref } from 'vue'
 
 export const useStoreI18n = () => {
   // Get the Nuxt app instance to access i18n

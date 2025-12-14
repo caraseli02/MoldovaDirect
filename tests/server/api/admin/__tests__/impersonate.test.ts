@@ -5,7 +5,6 @@
  */
 
 import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest'
-import type { SupabaseClient } from '@supabase/supabase-js'
 import { createSupabaseClient } from '~/server/utils/supabaseAdminClient'
 
 describe('POST /api/admin/impersonate', () => {

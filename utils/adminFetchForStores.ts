@@ -8,7 +8,6 @@
  */
 
 import type { FetchOptions } from 'ofetch'
-import type { SupabaseClient } from '@supabase/supabase-js'
 
 /**
  * Get authentication headers for admin API requests

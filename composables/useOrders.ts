@@ -12,7 +12,6 @@
  */
 
 import type { Order, OrderStatus, Pagination } from '~/types'
-import type { SupabaseClient } from '@supabase/supabase-js'
 
 export interface OrderFilters {
   status?: OrderStatus

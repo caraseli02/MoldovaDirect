@@ -544,11 +544,8 @@ await fetchProducts({ sort: 'created', page: initialPage, limit: initialLimit })
 
 // Filter Management
 const {
-  priceRange,
-  hasActiveFilters: hasActiveFiltersComputed,
   activeFilterChips,
   availableFilters,
-  getCategoryName,
   removeFilterChip,
   refreshPriceRange,
 } = useProductFilters(categoriesTree)
@@ -586,7 +583,7 @@ const hasActiveFilters = computed(() => {
   )
 })
 
-const totalProducts = computed(() => pagination.value?.total || products.value?.length || 0)
+const _totalProducts = computed(() => pagination.value?.total || products.value?.length || 0)
 
 // Debounced search handler to prevent excessive API calls
 const handleSearchInput = debounce(() => {

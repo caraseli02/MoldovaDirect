@@ -1,5 +1,4 @@
 import { h, defineComponent, defineAsyncComponent } from 'vue'
-import type { DefineComponent } from 'vue'
 
 /**
  * Composable for lazy loading admin components with loading states and error handling

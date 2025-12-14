@@ -11,7 +11,6 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import type { SupabaseClient } from '@supabase/supabase-js'
 
 // Mock secure logger
 vi.mock('~/server/utils/secureLogger', () => ({

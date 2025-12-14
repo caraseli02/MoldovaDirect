@@ -3,7 +3,6 @@
  */
 
 import { vi } from 'vitest'
-import type { SupabaseClient } from '@supabase/supabase-js'
 
 export interface MockSupabaseQuery {
   select: ReturnType<typeof vi.fn>

@@ -4,7 +4,6 @@
 // Utilities for logging email delivery attempts and status
 // Requirements: 4.1, 4.2, 4.3
 
-import type { SupabaseClient } from '@supabase/supabase-js'
 import type {
   EmailLog,
   EmailLogWithOrder,

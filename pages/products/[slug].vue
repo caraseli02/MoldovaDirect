@@ -715,7 +715,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch, onUnmounted } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useHead } from '#imports'
 import { Button } from '@/components/ui/button'
@@ -756,19 +756,13 @@ const slug = route.params.slug as string
 
 const { data: product, pending, error } = await useLazyFetch<ProductDetailResponse>(`/api/products/${slug}`)
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 
 // UI state
 const selectedImageIndex = ref(0)
 const selectedQuantity = ref(1)
 const shareFeedback = ref<string | null>(null)
 const showZoomModal = ref(false)
-
-// Detect mobile device
-const isMobile = computed(() => {
-  if (typeof window === 'undefined') return false
-  return window.innerWidth < 1024 // lg breakpoint
-})
 
 const recentlyViewedProducts = useState<ProductWithRelations[]>('recentlyViewedProducts', () => [])
 
@@ -942,7 +936,7 @@ const addToCart = async () => {
   // - hasWindow: Verifies browser context availability
   // - addItemType: Confirms cart composable loaded correctly
   if (import.meta.dev) {
-    const debugInfo = {
+    const _debugInfo = {
       productId: product.value.id,
       quantity: selectedQuantity.value,
       isClient: import.meta.client,

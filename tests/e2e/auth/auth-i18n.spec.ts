@@ -29,16 +29,7 @@ for (const locale of locales) {
         expect(buttonText).toBeTruthy()
 
         // Button text should not be the default English if we're in a different locale
-        if (locale !== 'en') {
-          // Common English words that should be translated
-          const englishPatterns = ['Sign in', 'Login', 'Log in']
-          const hasEnglish = englishPatterns.some(pattern =>
-            buttonText?.toLowerCase().includes(pattern.toLowerCase()),
-          )
-
-          // In non-English locales, button should be translated
-          // Note: This might fail if translations are missing
-        }
+        // Note: This might fail if translations are missing
       })
 
       test(`should have translated error messages in ${locale}`, async ({ page }) => {
@@ -120,15 +111,7 @@ for (const locale of locales) {
         expect(placeholder).toBeTruthy()
 
         // Placeholder should be translated (not English if locale is not 'en')
-        if (locale !== 'en') {
-          // Common English placeholders
-          const englishPlaceholders = ['Email', 'Email address', 'Enter your email']
-          const hasEnglishPlaceholder = englishPlaceholders.some(en =>
-            placeholder?.toLowerCase() === en.toLowerCase(),
-          )
-
-          // In non-English locales, placeholder should be translated
-        }
+        // In non-English locales, placeholder should be translated
       })
 
       test(`should have translated form validation in ${locale}`, async ({ page }) => {
@@ -191,9 +174,6 @@ for (const locale of locales) {
         await page.fill('#email', 'test@example.com')
         await page.click('button[type="submit"]')
 
-        // Success message should appear
-        const successMessage = page.locator('text=/./i').filter({ hasText: /.+/ })
-
         await page.waitForTimeout(2000)
 
         // Message should be in the correct locale
@@ -210,9 +190,6 @@ for (const locale of locales) {
 
         // If there are any dates displayed (e.g., "Last login: ...")
         // they should be formatted according to locale
-
-        const datePattern = locale === 'en' ? /\d{1,2}\/\d{1,2}\/\d{4}/ : /\d{1,2}\.\d{1,2}\.\d{4}/
-
         // This is a placeholder test - adjust based on actual date displays
       })
     })
@@ -268,7 +245,7 @@ for (const locale of locales) {
 
     test.describe('Form Submission with Locale', () => {
       test(`should submit forms with correct locale context in ${locale}`, async ({ page }) => {
-        const requests: any[] = []
+        const requests: { url: string, headers: Record<string, string> }[] = []
 
         page.on('request', (request) => {
           if (request.method() === 'POST') {
@@ -288,7 +265,7 @@ for (const locale of locales) {
         await page.waitForTimeout(2000)
 
         // Check if locale is sent with requests
-        const hasLocaleContext = requests.some(req =>
+        const _hasLocaleContext = requests.some(req =>
           req.url.includes(locale)
           || req.headers['accept-language']?.includes(locale),
         )

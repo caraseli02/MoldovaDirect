@@ -1,5 +1,4 @@
 import { serverSupabaseClient } from '#supabase/server'
-import type { SupabaseClient } from '@supabase/supabase-js'
 import { PUBLIC_CACHE_CONFIG, getPublicCacheKey } from '~/server/utils/publicCache'
 
 // Type definitions for API response

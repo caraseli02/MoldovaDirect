@@ -12,8 +12,6 @@
  */
 
 import type { Order, OrderStatus, OrderItem } from '~/types'
-import type { Product } from '~/types/database'
-import type { SupabaseClient } from '@supabase/supabase-js'
 
 export interface TrackingEvent {
   id: number
@@ -63,7 +61,6 @@ export interface UseOrderDetailReturn {
   refreshTracking: () => Promise<void>
   reorder: () => Promise<void>
   initiateReturn: () => Promise<void>
-  contactSupport: () => void
 
   // Computed
   canReorder: ComputedRef<boolean>
@@ -257,22 +254,6 @@ export const useOrderDetail = (): UseOrderDetailReturn => {
     )
   }
 
-  /**
-   * Contact support about this order
-   */
-  const contactSupport = () => {
-    if (!order.value) return
-
-    // Navigate to contact page with order context
-    router.push({
-      path: '/contact',
-      query: {
-        order: order.value.orderNumber,
-        subject: `Order ${order.value.orderNumber}`,
-      },
-    })
-  }
-
   // Computed properties
   const canReorder = computed(() => {
     if (!order.value) return false
@@ -314,7 +295,6 @@ export const useOrderDetail = (): UseOrderDetailReturn => {
     refreshTracking,
     reorder,
     initiateReturn,
-    contactSupport,
 
     // Computed
     canReorder,

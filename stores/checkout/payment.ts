@@ -1,6 +1,5 @@
 import { defineStore, storeToRefs } from 'pinia'
 import { useCheckoutSessionStore } from './session'
-import { useCheckoutShippingStore } from './shipping'
 import { useCartStore } from '~/stores/cart'
 import { useToast } from '~/composables/useToast'
 import { useStoreI18n } from '~/composables/useStoreI18n'
@@ -35,7 +34,6 @@ const PAYMENT_METHODS = {
 
 export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
   const session = useCheckoutSessionStore()
-  const shipping = useCheckoutShippingStore()
   const cartStore = useCartStore()
   const authStore = useAuthStore()
   const toast = useToast()

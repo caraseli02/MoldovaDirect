@@ -6,7 +6,6 @@
  */
 
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import type { SupabaseClient } from '@supabase/supabase-js'
 import handler from './index.get'
 import type { H3Event } from 'h3'
 

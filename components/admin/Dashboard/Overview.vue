@@ -124,7 +124,6 @@
 
 <script setup lang="ts">
 import { useAdminDashboardStore } from '~/stores/adminDashboard'
-import type { SupabaseClient } from '@supabase/supabase-js'
 import { useDashboardMetrics } from '~/composables/useDashboardMetrics'
 import { useDashboardCharts } from '~/composables/useDashboardCharts'
 import { useDashboardInsights } from '~/composables/useDashboardInsights'

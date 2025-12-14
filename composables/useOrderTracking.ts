@@ -9,7 +9,7 @@
  * - 4.4: Notify about shipping delays
  */
 
-import type { RealtimeChannel, SupabaseClient } from '@supabase/supabase-js'
+import type { RealtimeChannel } from '@supabase/supabase-js'
 import type { Order, OrderStatus } from '~/types'
 
 export interface OrderStatusUpdate {

@@ -1,5 +1,4 @@
 import { serverSupabaseClient } from '#supabase/server'
-import type { SupabaseClient } from '@supabase/supabase-js'
 import { requireAdminRole } from '~/server/utils/adminAuth'
 
 // Sample data for seeding

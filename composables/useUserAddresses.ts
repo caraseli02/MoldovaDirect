@@ -16,7 +16,6 @@
  */
 
 import { ref, computed } from 'vue'
-import type { SupabaseClient } from '@supabase/supabase-js'
 import type { Address } from '~/types/checkout'
 
 export const useUserAddresses = () => {
@@ -33,8 +32,6 @@ export const useUserAddresses = () => {
   const defaultAddress = computed(() =>
     addresses.value.find(addr => addr.isDefault) || null,
   )
-
-  const hasAddresses = computed(() => addresses.value.length > 0)
 
   /**
    * Load all addresses for the current user
@@ -297,7 +294,6 @@ export const useUserAddresses = () => {
 
     // Computed
     defaultAddress,
-    hasAddresses,
 
     // Methods
     loadAddresses,

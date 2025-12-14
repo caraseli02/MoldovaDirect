@@ -8,7 +8,6 @@
  */
 
 import { test, expect, type Page } from '@playwright/test'
-import path from 'path'
 
 // Helper function to login via UI (triggers Vue reactivity correctly)
 async function loginUser(page: Page, email: string, password: string) {
@@ -305,7 +304,7 @@ test.describe('Secure Logging - PII Protection', () => {
     console.log('✓ No PII detected in console logs')
   })
 
-  test('should not expose user data in error messages', async ({ page, request }) => {
+  test('should not expose user data in error messages', async ({ request }) => {
     consoleErrors = []
 
     // Trigger an error that might contain user data

@@ -1,6 +1,5 @@
 import { vi } from 'vitest'
-import type { SupabaseClient } from '@supabase/supabase-js'
-import { computed, ref, readonly, watch, onMounted, onUnmounted } from 'vue'
+import { computed, readonly, watch, onMounted, onUnmounted } from 'vue'
 
 // Mock h3 module
 vi.mock('h3', () => ({
@@ -18,7 +17,6 @@ vi.mock('h3', () => ({
 
 // Make Vue reactivity functions available globally
 global.computed = computed
-global.ref = ref
 global.readonly = readonly
 global.watch = watch
 global.onMounted = onMounted

@@ -48,7 +48,7 @@ interface Props {
   theme?: 'light' | 'dark' | 'system'
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   position: 'bottom-right',
   richColors: false,
   expand: false,

@@ -385,7 +385,6 @@
 
 <script setup lang="ts">
 import type { OrderWithItems, OrderStatus } from '~/types'
-import type { SupabaseClient } from '@supabase/supabase-js'
 
 // Apply authentication middleware
 definePageMeta({
@@ -404,14 +403,9 @@ const {
   loading,
   error,
   pagination,
-  filters: _filters,
   fetchOrders,
   refreshOrders,
-  searchOrders: _searchOrders,
-  filterByStatus: _filterByStatus,
-  clearFilters: _clearFilters,
   hasOrders,
-  filteredOrdersCount: _filteredOrdersCount,
 } = useOrders()
 
 // Use order tracking composable for real-time updates
@@ -580,7 +574,7 @@ const handleViewDetails = (order: OrderWithItems) => {
   router.push(localePath(`/account/orders/${order.id}`))
 }
 
-const handleReorder = async (order: OrderWithItems) => {
+const handleReorder = async (_order: OrderWithItems) => {
   // TODO: Implement reorder functionality
   // Will add items from this order to cart
 }
@@ -595,7 +589,6 @@ const setupMobileFeatures = () => {
 
     // Setup swipe gestures for pagination
     setupSwipeListeners(scrollContainer.value)
-    const pag = unref(pagination)
     setSwipeHandlers({
       onLeft: () => {
         // Swipe left to go to next page
@@ -662,7 +655,7 @@ onUnmounted(() => {
 })
 
 // Watch for URL changes (browser back/forward)
-watch(() => route.query, async (newQuery) => {
+watch(() => route.query, async (_newQuery) => {
   const urlParams = initializeFromUrl()
   await fetchOrders(urlParams)
 }, { deep: true })
