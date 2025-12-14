@@ -72,7 +72,7 @@ export function createCartSecurityMiddleware(options: SecurityOptions = {}) {
           setHeader(
             event,
             'Retry-After',
-            Math.ceil(((rateLimit.resetTime || Date.now()) - Date.now()) / 1000).toString(),
+            Math.ceil(((rateLimit.resetTime || Date.now()) - Date.now()) / 1000),
           )
 
           throw createError({
@@ -158,7 +158,7 @@ function getClientIP(event: H3Event): string | null {
   const remoteAddress = event.node.req.socket?.remoteAddress
 
   if (forwarded) {
-    return forwarded.split(',')[0].trim()
+    return forwarded.split(',')[0]?.trim() || null
   }
 
   return realIP || remoteAddress || null

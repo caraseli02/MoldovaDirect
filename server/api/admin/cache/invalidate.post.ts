@@ -4,9 +4,8 @@ import { requireAdminRole, logAdminAction } from '~/server/utils/adminAuth'
 
 // Request validation schema
 const InvalidateCacheSchema = z.object({
-  scope: z.enum(['products', 'categories', 'search', 'landing', 'all'] as const, {
-    required_error: 'scope is required',
-    invalid_type_error: 'scope must be a valid cache scope',
+  scope: z.enum(['products', 'categories', 'search', 'landing', 'all']).refine(val => val !== undefined, {
+    message: 'scope is required',
   }),
 })
 

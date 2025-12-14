@@ -60,7 +60,7 @@ export async function useAdminFetch<T = unknown>(
   return $fetch<T>(url, {
     ...options,
     headers,
-  } as any)
+  } as any) as Promise<T>
 }
 
 /**
@@ -112,7 +112,7 @@ export async function useAdminFetchWithRetry<T = unknown>(
       return $fetch<T>(url, {
         ...options,
         headers,
-      } as any)
+      } as any) as Promise<T>
     }
 
     // Re-throw other errors

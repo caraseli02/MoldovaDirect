@@ -211,7 +211,7 @@ export const useOrderDetail = (): UseOrderDetailReturn => {
 
       // Add each item to cart
       for (const item of order.value.items || []) {
-        const product = item.productSnapshot as unknown as Product
+        const product = item.productSnapshot as any
         if (product) {
           await addItem(product, item.quantity)
         }

@@ -21,8 +21,8 @@ import {
 } from '~/server/data/mockData'
 
 // Mock data for orders
-const statuses = ['pending', 'processing', 'shipped', 'delivered', 'cancelled'] as const
-const paymentStatuses = ['pending', 'paid', 'failed'] as const
+const statuses = ['pending', 'processing', 'shipped', 'delivered', 'cancelled']
+const paymentStatuses = ['pending', 'paid', 'failed']
 const streets = ['Strada Ștefan cel Mare', 'Strada Mihai Eminescu', 'Strada Alexandru cel Bun', 'Strada Vasile Alecsandri', 'Bulevardul Decebal']
 const cities = ['Chișinău', 'Bălți', 'Tiraspol', 'Cahul', 'Orhei']
 

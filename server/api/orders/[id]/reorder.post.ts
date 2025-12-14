@@ -83,7 +83,7 @@ export default defineEventHandler(async (event) => {
 
     if (cartError && cartError.code === 'PGRST116') {
       // Create new cart
-      const { data: newCart, error: createError } = await supabase
+      const { data: newCart, error: cartCreateError } = await supabase
         .from('carts')
         .insert({
           user_id: user.id,
@@ -92,7 +92,7 @@ export default defineEventHandler(async (event) => {
         .select('id')
         .single()
 
-      if (createError as any) {
+      if (cartCreateError) {
         throw createError({
           statusCode: 500,
           statusMessage: 'Failed to create cart',

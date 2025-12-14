@@ -33,9 +33,9 @@ export default defineCachedEventHandler(async (event): Promise<GetSectionsRespon
     }
 
     const locale = requestedLocale as ValidLocale
-    const activeOnly = query.active_only !== false && query.active_only !== 'false' // Default true
+    const activeOnly = String(query.active_only) !== 'false' // Default true
     const sectionType = query.section_type as string | undefined
-    const includeScheduled = query.include_scheduled === true || query.include_scheduled === 'true' // Default false
+    const includeScheduled = String(query.include_scheduled) === 'true' // Default false
 
     // Build query
     let queryBuilder = supabase

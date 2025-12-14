@@ -61,11 +61,11 @@ export default defineEventHandler(async (event) => {
     }
 
     // Get available shipping methods
-    const shippingMethods = getAvailableShippingMethods(cartItems as CartItem[], body.shippingAddress)
+    const shippingMethods = getAvailableShippingMethods(cartItems as any, body.shippingAddress)
 
     // Calculate totals for each shipping method
     const methodsWithTotals = shippingMethods.map((method) => {
-      const calculation = calculateOrderTotals(cartItems as CartItem[], method, body.shippingAddress)
+      const calculation = calculateOrderTotals(cartItems as any, method, body.shippingAddress)
       return {
         ...method,
         total: calculation.total,

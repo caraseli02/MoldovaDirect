@@ -279,8 +279,8 @@ export interface CartSecurityActions {
   isValidSessionId(sessionId: string): boolean
   isValidProductId(productId: string): boolean
   generateSecureSessionId(): string
-  secureAddItem(productId: string, quantity: number, sessionId: string): Promise<void>
-  secureUpdateQuantity(itemId: string, quantity: number, sessionId: string): Promise<void>
+  secureAddItem(productId: string, quantity: number, sessionId: string): Promise<{ success: boolean, itemId: string, quantity: number }>
+  secureUpdateQuantity(itemId: string, quantity: number, sessionId: string): Promise<{ success: boolean, itemId: string, quantity: number }>
   secureRemoveItem(itemId: string, sessionId: string): Promise<void>
 }
 

@@ -237,7 +237,7 @@
               <AdminOrdersListItem
                 v-for="order in adminOrdersStore.orders"
                 :key="order.id"
-                :order="order"
+                :order="order as any"
                 :is-selected="adminOrdersStore.selectedOrders.includes(order.id)"
                 @toggle-selection="adminOrdersStore.toggleOrderSelection"
               />

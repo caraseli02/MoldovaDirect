@@ -19,7 +19,7 @@
  */
 
 import { defineStore } from 'pinia'
-import type { SupabaseClient, User, Session } from '@supabase/supabase-js'
+import type { SupabaseClient, User as SupabaseUser, Session as SupabaseSession } from '@supabase/supabase-js'
 import type { WatchStopHandle } from 'vue'
 import { useAuthMessages } from '~/composables/useAuthMessages'
 import { useAuthValidation } from '~/composables/useAuthValidation'
@@ -64,9 +64,6 @@ import {
 
 import type { AuthUser, LoginCredentials, RegisterData } from './types'
 
-// Use Supabase types from Nuxt module
-type Session = unknown // Use any for Session as it's complex and comes from Supabase
-type User = unknown // Use any for User as it's complex and comes from Supabase
 type Subscription = { unsubscribe: () => void }
 
 let authSubscription: Subscription | null = null
@@ -270,7 +267,7 @@ export const useAuthStore = defineStore('auth', {
      * Sync internal user state with Supabase user
      * Requirement 5.3: Reactive authentication status
      */
-    async syncUserState(supabaseUser: User | null) {
+    async syncUserState(supabaseUser: SupabaseUser | null) {
       if (this.isTestUser && !supabaseUser) {
         return
       }
@@ -279,16 +276,19 @@ export const useAuthStore = defineStore('auth', {
         // Fetch MFA factors if user is authenticated
         const mfaFactors = await fetchMFAFactors(useSupabaseClient())
 
+        // Type assertion for Supabase user properties
+        const user = supabaseUser as any
+
         this.user = {
-          id: supabaseUser.id,
-          email: supabaseUser.email!,
-          emailVerified: !!supabaseUser.email_confirmed_at,
-          name: supabaseUser.user_metadata?.name || supabaseUser.user_metadata?.full_name,
-          phone: supabaseUser.user_metadata?.phone,
-          preferredLanguage: supabaseUser.user_metadata?.preferred_language || 'es',
-          lastLogin: supabaseUser.last_sign_in_at,
-          createdAt: supabaseUser.created_at,
-          updatedAt: supabaseUser.updated_at,
+          id: user.id,
+          email: user.email!,
+          emailVerified: !!user.email_confirmed_at,
+          name: user.user_metadata?.name || user.user_metadata?.full_name,
+          phone: user.user_metadata?.phone,
+          preferredLanguage: user.user_metadata?.preferred_language || 'es',
+          lastLogin: user.last_sign_in_at,
+          createdAt: user.created_at,
+          updatedAt: user.updated_at,
           mfaEnabled: mfaFactors.some(f => f.status === 'verified'),
           mfaFactors,
         }
@@ -349,7 +349,7 @@ export const useAuthStore = defineStore('auth', {
     /**
      * Handle auth state changes from Supabase
      */
-    handleAuthStateChange(event: string, session: Session | null) {
+    handleAuthStateChange(event: string, session: SupabaseSession | null) {
       if (event === 'TOKEN_REFRESHED') {
         this.error = null
       }
@@ -357,7 +357,9 @@ export const useAuthStore = defineStore('auth', {
       // Handle password recovery - user clicked reset link in email
       // Don't redirect, let them stay on reset-password page to enter new password
       if (event === 'PASSWORD_RECOVERY') {
-        this.syncUserState(session?.user ?? null)
+        // Type assertion for session properties
+        const sessionData = session as any
+        this.syncUserState(sessionData?.user ?? null)
         return
       }
 
@@ -383,7 +385,9 @@ export const useAuthStore = defineStore('auth', {
         return
       }
 
-      this.syncUserState(session?.user ?? null)
+      // Type assertion for session properties
+      const sessionData = session as any
+      this.syncUserState(sessionData?.user ?? null)
     },
 
     /**

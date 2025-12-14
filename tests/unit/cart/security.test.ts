@@ -419,7 +419,8 @@ describe('Cart Security Module', () => {
         const result = await secureAddItem('prod-123', 2, validSession)
 
         expect(result.success).toBe(true)
-        expect(result.product.id).toBe('prod-123')
+        expect(result.itemId).toBe('prod-123')
+        expect(result.quantity).toBe(2)
       })
     })
 
@@ -463,10 +464,8 @@ describe('Cart Security Module', () => {
 
       it('should succeed with valid inputs', async () => {
         const validSession = generateSecureSessionId()
-        const result = await secureRemoveItem('item-123', validSession)
-
-        expect(result.success).toBe(true)
-        expect(result.itemId).toBe('item-123')
+        // secureRemoveItem returns void, so we just verify it doesn't throw
+        await expect(secureRemoveItem('item-123', validSession)).resolves.toBeUndefined()
       })
     })
   })

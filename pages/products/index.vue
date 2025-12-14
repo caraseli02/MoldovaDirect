@@ -38,7 +38,7 @@
       >
         <productFilterMain
           :filters="filters"
-          :available-filters="availableFilters as { categories: CategoryFilter[]; priceRange: PriceRange; attributes: AttributeFilter[] }"
+          :available-filters="availableFilters as unknown as { categories: CategoryFilter[]; priceRange: PriceRange; attributes: AttributeFilter[] }"
           :filtered-product-count="products?.length || 0"
           :show-title="false"
           @update:filters="handleFiltersUpdate"

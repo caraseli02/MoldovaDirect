@@ -23,7 +23,7 @@ import {
   CheckoutErrorCode,
   logCheckoutError,
 } from '~/utils/checkout-errors'
-import type { PaymentMethod, SavedPaymentMethod, OrderData } from '~/types/checkout'
+import type { PaymentMethod, SavedPaymentMethod, OrderData, ShippingInformation } from '~/types/checkout'
 
 // Payment method type constants
 const PAYMENT_METHODS = {
@@ -105,7 +105,7 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
 
       session.setPaymentMethodState(method)
       await session.persist({
-        shippingInfo: (shipping.shippingInfo as { value: ShippingInformation | null })?.value || null,
+        shippingInfo: shippingInfo.value as unknown as ShippingInformation | null,
         paymentMethod: paymentMethod.value,
       })
     }
@@ -420,7 +420,7 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
 
       // Persist with the completed order data passed as parameter (not from store to avoid stale refs)
       await session.persist({
-        shippingInfo: (shipping.shippingInfo as { value: ShippingInformation | null })?.value || null,
+        shippingInfo: shippingInfo.value as unknown as ShippingInformation | null,
         paymentMethod: paymentMethod.value,
         orderData: completedOrderData, // Use the fresh data passed from createOrderRecord
       })

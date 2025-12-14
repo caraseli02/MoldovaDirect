@@ -14,12 +14,12 @@ const subscriptionSchema = z.object({
     'cart',
     'footer',
   ]).optional().default('landing_page'),
-  metadata: z.record(z.unknown()).optional().default({}),
+  metadata: z.record(z.string(), z.unknown()).optional().default({}),
 })
 
 export default defineEventHandler(async (event) => {
   try {
-    const supabase = serverSupabaseClient(event)
+    const supabase = await serverSupabaseClient(event)
     const body = await readBody(event)
 
     // Validate input

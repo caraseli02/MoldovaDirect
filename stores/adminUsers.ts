@@ -17,7 +17,7 @@
 
 import { defineStore } from 'pinia'
 
-interface UserWithProfile {
+export interface UserWithProfile {
   id: string
   email: string
   email_confirmed_at: string | null
@@ -35,9 +35,18 @@ interface UserWithProfile {
   orderCount?: number
   lastOrderDate?: string
   totalSpent?: number
+  statistics?: {
+    totalOrders: number
+    totalSpent: number
+    averageOrderValue: number
+    lastOrderDate: string | null
+    accountAge: number
+    loginCount: number
+    lastLogin: string | null
+  }
 }
 
-interface UserDetail extends UserWithProfile {
+export interface UserDetail extends UserWithProfile {
   addresses: Array<{
     id: number
     type: string
@@ -95,7 +104,7 @@ interface PaginationState {
   hasPrev: boolean
 }
 
-interface UsersSummary {
+export interface UsersSummary {
   totalUsers: number
   activeUsers: number
   inactiveUsers: number

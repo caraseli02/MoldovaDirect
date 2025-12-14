@@ -60,8 +60,8 @@
 
     <!-- Payment Status -->
     <TableCell>
-      <Badge :variant="getPaymentStatusVariant(order.payment_status)">
-        {{ getPaymentStatusLabel(order.payment_status) }}
+      <Badge :variant="getPaymentStatusVariant(order.payment_status || '')">
+        {{ getPaymentStatusLabel(order.payment_status || '') }}
       </Badge>
     </TableCell>
 
@@ -120,7 +120,7 @@ const customerName = computed(() => {
 })
 
 const customerEmail = computed(() => {
-  return _props.order.guest_email || 'guest@example.com'
+  return _props.order.guest_email || ''
 })
 
 const itemCount = computed(() => {

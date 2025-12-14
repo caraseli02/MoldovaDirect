@@ -24,7 +24,7 @@ import { z } from 'zod'
 function getClientIP(event: H3Event): string | null {
   const headers = getHeaders(event)
   return (
-    headers['x-forwarded-for']?.split(',')[0].trim()
+    headers['x-forwarded-for']?.split(',')[0]?.trim()
     || headers['x-real-ip']
     || headers['cf-connecting-ip']
     || getRequestIP(event)

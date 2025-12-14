@@ -750,7 +750,13 @@ const updatePaymentMethod = () => {
     }
   }
   else if (props.modelValue.type === 'credit_card') {
-    updatedMethod.creditCard = { ...creditCardData.value }
+    updatedMethod.creditCard = {
+      number: creditCardData.value.number,
+      expiryMonth: creditCardData.value.expiryMonth || '',
+      expiryYear: creditCardData.value.expiryYear || '',
+      cvv: creditCardData.value.cvv,
+      holderName: creditCardData.value.holderName,
+    }
   }
   else if (props.modelValue.type === 'paypal') {
     updatedMethod.paypal = { ...paypalData.value }

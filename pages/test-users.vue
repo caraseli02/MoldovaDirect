@@ -697,9 +697,10 @@ const handleKeyPress = (event: KeyboardEvent) => {
     const num = parseInt(event.key)
     if (num >= 1 && num <= 8) {
       const personas = Object.values(testUserPersonas)
-      if (personas[num - 1]) {
+      const personaKey = personas[num - 1]?.key
+      if (personaKey) {
         event.preventDefault()
-        handleActivatePersona(personas[num - 1]?.key || '')
+        handleActivatePersona(personaKey)
       }
     }
   }

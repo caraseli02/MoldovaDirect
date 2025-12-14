@@ -262,12 +262,28 @@ interface Props {
     id: string
     email: string
     email_confirmed_at?: string | null
-    profile?: { name: string, phone?: string } | null
+    created_at?: string
+    last_sign_in_at?: string | null
+    profile?: {
+      name: string
+      phone?: string
+      preferred_language?: string
+    } | null
     status: string
     user_metadata?: {
       suspended?: boolean
       banned?: boolean
       role?: string
+    }
+    orderCount?: number
+    statistics?: {
+      totalOrders?: number
+      totalSpent?: number
+      averageOrderValue?: number
+      lastOrderDate?: string | null
+      accountAge?: number
+      loginCount?: number
+      lastLogin?: string | null
     }
   }
   isSelected?: boolean

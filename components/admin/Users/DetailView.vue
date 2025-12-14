@@ -364,32 +364,17 @@ const emit = defineEmits<{
   action: [action: string, userId: string, data?: Record<string, any>]
 }>()
 
-// Store - safely access with fallback
-let adminUsersStore: Record<string, any> = {}
-
-try {
-  if (import.meta.client) {
-    adminUsersStore = useAdminUsersStore()
-  }
-}
-catch (_error: any) {
-  console.warn('Admin users store not available during SSR/hydration')
-}
-
-if (!adminUsersStore) {
-  adminUsersStore = {
-    // Add fallback properties as needed
-    users: ref([]),
-    isLoading: ref(false),
-    error: ref(null),
-  }
-}
+// Store
+const adminUsersStore = useAdminUsersStore()
 
 // State
 const activeTab = ref('profile')
 
-// Computed
-const { currentUser: user, userDetailLoading: loading, error } = storeToRefs(adminUsersStore as any)
+// Computed - use type assertion like Table.vue
+const storeRefs = storeToRefs(adminUsersStore as any)
+const user = computed(() => (storeRefs as any).currentUser?.value ?? null)
+const loading = computed(() => (storeRefs as any).userDetailLoading?.value ?? false)
+const error = computed(() => (storeRefs as any).error?.value ?? null)
 
 const tabs = computed(() => [
   { id: 'profile', name: 'Profile' },
@@ -456,15 +441,9 @@ const viewOrder = (_orderId: number) => {
 }
 
 const retry = () => {
-  adminUsersStore.fetchUserDetail(props.userId)
+  // Emit a retry event or just reload - the parent component handles fetching
+  emit('action', 'retry', props.userId)
 }
-
-// Watch for userId changes
-watch(() => props.userId, (newUserId) => {
-  if (newUserId) {
-    adminUsersStore.fetchUserDetail(newUserId)
-  }
-}, { immediate: true })
 
 // Cleanup when component unmounts
 onUnmounted(() => {

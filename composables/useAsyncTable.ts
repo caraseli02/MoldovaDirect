@@ -83,7 +83,7 @@ export function useAsyncTable() {
         getFacetedRowModel: module.getFacetedRowModel,
         getFacetedUniqueValues: module.getFacetedUniqueValues,
         getFacetedMinMaxValues: module.getFacetedMinMaxValues,
-        flexRender: module.FlexRender,
+        flexRender: module.FlexRender as any,
         isFunction: module.isFunction,
       }
 

@@ -18,6 +18,7 @@ interface TransformedCategory {
   image: string | null
   sortOrder: number
   productCount: number
+  isActive: boolean
   children?: TransformedCategory[]
 }
 

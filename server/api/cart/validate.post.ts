@@ -58,7 +58,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Validate cart items
-    const validation = validateCartItems(cartItems as CartItem[])
+    const validation = validateCartItems(cartItems as any)
 
     if (!validation.valid) {
       return {
@@ -69,10 +69,10 @@ export default defineEventHandler(async (event) => {
     }
 
     // Calculate order totals
-    const orderCalculation = calculateOrderTotals(cartItems as CartItem[])
+    const orderCalculation = calculateOrderTotals(cartItems as any)
 
     // Get available shipping methods
-    const shippingMethods = getAvailableShippingMethods(cartItems as CartItem[], body.shippingAddress)
+    const shippingMethods = getAvailableShippingMethods(cartItems as any, body.shippingAddress)
 
     return {
       success: true,

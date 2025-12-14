@@ -217,7 +217,7 @@ const { data: categoriesData } = await useFetch<{ categories: CategoryWithChildr
 const categories = computed(() => categoriesData.value?.categories || [])
 
 // Utility functions
-const getLocalizedText = (text: Record<string, string> | null) => {
+const getLocalizedText = (text: Record<string, string> | null | undefined) => {
   if (!text) return ''
   return text.es || Object.values(text)[0] || ''
 }

@@ -124,7 +124,7 @@ import { useAuthStore } from '~/stores/auth'
 import { useAuthValidation } from '~/composables/useAuthValidation'
 
 definePageMeta({
-  layout: 'auth',
+  layout: 'auth' as any,
   middleware: [],
 })
 
@@ -150,7 +150,7 @@ async function handleVerify(): Promise<void> {
   // Validate code format
   const validation = validateMFACode(code.value)
   if (!validation.isValid) {
-    error.value = validation.errors[0].message
+    error.value = validation.errors?.[0]?.message || 'Invalid MFA code'
     return
   }
 

@@ -100,7 +100,7 @@ export const useUserAddresses = () => {
 
       const { data, error: insertError } = await supabase
         .from('user_addresses')
-        .insert(dbAddress)
+        .insert(dbAddress as any)
         .select()
         .single<Record<string, any>>()
 
@@ -152,7 +152,7 @@ export const useUserAddresses = () => {
       error.value = null
 
       // Convert camelCase updates to snake_case for database
-      const dbUpdates: Record<string, any> = {}
+      const dbUpdates: any = {}
       if (updates.firstName !== undefined) dbUpdates.first_name = updates.firstName
       if (updates.lastName !== undefined) dbUpdates.last_name = updates.lastName
       if (updates.company !== undefined) dbUpdates.company = updates.company || null
@@ -167,7 +167,8 @@ export const useUserAddresses = () => {
 
       const { data, error: updateError } = await supabase
         .from('user_addresses')
-        .update(dbUpdates as any)
+        // @ts-expect-error - Supabase type inference issue with dynamic updates
+        .update(dbUpdates)
         .eq('id', addressId)
         .eq('user_id', user.value.id)
         .select()

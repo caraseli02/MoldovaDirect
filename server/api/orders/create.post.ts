@@ -215,7 +215,7 @@ export default defineEventHandler(async (event) => {
     // Requirements: 1.1, 1.6
     if (completeOrder) {
       // Send email asynchronously without blocking the response
-      sendOrderConfirmationEmailAsync(completeOrder, user, supabase)
+      sendOrderConfirmationEmailAsync(completeOrder, user as any, supabase)
         .catch((error: any) => {
           console.error('Failed to send order confirmation email:', error)
           // Email failure doesn't block order creation
@@ -280,7 +280,7 @@ async function sendOrderConfirmationEmailAsync(
     }
 
     // Extract customer information (handles both authenticated and guest)
-    const customerInfo = await extractCustomerInfoFromOrder(order as any, userProfile)
+    const customerInfo = await extractCustomerInfoFromOrder(order as any, userProfile as any)
 
     // Transform order data for email template
     const emailData = transformOrderToEmailData(

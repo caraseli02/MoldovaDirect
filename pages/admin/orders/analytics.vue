@@ -329,8 +329,6 @@
 <script setup lang="ts">
 import type { OrderStatus } from '~/types'
 import { Button } from '@/components/ui/button'
-// Toast composable used instead of store
-// import { useToastStore } from '~/stores/toast'
 import { Input } from '@/components/ui/input'
 import {
   Card,
@@ -481,13 +479,13 @@ const exportToCSV = async () => {
     link.click()
     window.URL.revokeObjectURL(url)
 
-    const toast = useToastStore()
-    toast.success('Analytics exported successfully')
+    const { success } = useToast()
+    success('Success', 'Analytics exported successfully')
   }
   catch (err: any) {
     console.error('Error exporting CSV:', err)
-    const toast = useToastStore()
-    toast.error('Failed to export analytics')
+    const { error: showError } = useToast()
+    showError('Error', 'Failed to export analytics')
   }
   finally {
     exporting.value = false

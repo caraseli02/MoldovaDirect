@@ -150,7 +150,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Fetch auth user data
-    let authUsers = { users: [] }
+    let authUsers: { users: any[] } = { users: [] }
     try {
       const { data, error: authError } = await supabase.auth.admin.listUsers()
       if (authError) {
@@ -160,8 +160,8 @@ export default defineEventHandler(async (event) => {
           errorId: 'ADMIN_USERS_AUTH_FETCH_WARNING',
         })
       }
-      else {
-        authUsers = data
+      else if (data) {
+        authUsers = data as any
       }
     }
     catch (error: any) {

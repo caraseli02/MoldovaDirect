@@ -11,7 +11,9 @@
 
       <!-- Pagination -->
       <UiPagination
-        v-bind="{}"
+        :total="internal.total"
+        :items-per-page="internal.limit"
+        :page="internal.page"
         as="nav"
       >
         <UiPaginationContent>
@@ -26,7 +28,7 @@
           >
             <UiPaginationItem
               v-if="pageNum !== '...'"
-              v-bind="{}"
+              :value="pageNum as number"
             >
               <button
                 :data-testid="pageNum === internal.page ? 'current-page' : undefined"

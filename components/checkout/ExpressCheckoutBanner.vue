@@ -33,7 +33,7 @@
       </div>
 
       <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">
-        {{ $t('checkout.expressCheckout.countdownMessage', 'Redirecting to payment in {seconds} seconds...', { seconds: countdown }) }}
+        {{ $t('checkout.expressCheckout.countdownMessage', { seconds: countdown }, 'Redirecting to payment in {seconds} seconds...') }}
       </p>
 
       <!-- Progress bar -->

@@ -93,7 +93,7 @@
               :disabled="isInCart(recommendation.product.id)"
               size="sm"
               class="w-full text-xs bg-blue-600 text-white py-2 px-3 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
-              @click="handleAddToCart(recommendation.product)"
+              @click="handleAddToCart(recommendation.product as any)"
             >
               {{ isInCart(recommendation.product.id) ? $t('cart.inCart') : $t('cart.addToCart') }}
             </Button>
