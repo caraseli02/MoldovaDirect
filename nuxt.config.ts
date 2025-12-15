@@ -133,10 +133,8 @@ export default defineNuxtConfig({
     config: {
       stylistic: true, // Enable stylistic rules
     },
-    checker: {
-      lintOnStart: true, // Check files on dev server start
-      fix: true, // Auto-fix issues where possible
-    },
+    // Disable in-dev-server checking - use CLI and pre-commit hooks
+    checker: false,
   },
 
   i18n: {

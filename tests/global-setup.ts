@@ -75,6 +75,19 @@ async function globalSetup(config: FullConfig) {
 
     const page = await context.newPage()
 
+    // Capture browser console output
+    page.on('console', (msg) => {
+      const type = msg.type()
+      if (type === 'error' || type === 'warning') {
+        console.log(`  [Browser ${type}]:`, msg.text())
+      }
+    })
+
+    // Capture page errors
+    page.on('pageerror', (err) => {
+      console.error(`  [Page Error]:`, err.message)
+    })
+
     try {
       // ACTUALLY LOGIN - Get credentials from environment variables
       const testEmail = process.env.TEST_USER_EMAIL || `test-${locale}@example.test`
