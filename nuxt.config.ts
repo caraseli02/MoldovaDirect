@@ -29,7 +29,7 @@ export default defineNuxtConfig({
   components: {
     dirs: [...BASE_COMPONENT_DIRS],
   },
-  devtools: { enabled: true },
+  devtools: { enabled: false },
 
   css: ['~/assets/css/tailwind.css'],
 
