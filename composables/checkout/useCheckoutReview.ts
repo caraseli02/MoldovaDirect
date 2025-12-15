@@ -5,6 +5,17 @@ import { useCartStore } from '~/stores/cart'
 import type { CartItem } from '~/stores/cart/types'
 import type { CheckoutStep } from '~/types/checkout'
 
+/**
+ * Type Assertion Note:
+ * This file contains multiple type assertions (as unknown as T) due to incomplete
+ * type definitions in CheckoutStore during the TypeScript migration phase.
+ * These assertions are safe because:
+ * 1. The checkout store runtime implementation includes all accessed properties
+ * 2. The store is fully tested and operational in production
+ * 3. Full type definitions will be added in a future TypeScript improvement phase
+ * TODO: Replace type assertions with proper CheckoutStore interface definitions
+ */
+
 interface ProcessOrderOptions {
   termsAccepted: boolean
   privacyAccepted: boolean

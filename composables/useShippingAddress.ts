@@ -84,7 +84,7 @@ export function useShippingAddress() {
   })
 
   /**
-   * Check if user has unknown saved addresses
+   * Check if user has any saved addresses
    */
   const hasAddresses = computed(() => {
     return savedAddresses.value.length > 0

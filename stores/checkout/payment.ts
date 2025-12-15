@@ -102,6 +102,8 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
       }
 
       session.setPaymentMethodState(method)
+      // Type assertion: shippingInfo ref value matches ShippingInformation at runtime
+      // but storeToRefs() typing doesn't preserve the exact type during migration
       await session.persist({
         shippingInfo: shippingInfo.value as unknown as ShippingInformation | null,
         paymentMethod: paymentMethod.value,

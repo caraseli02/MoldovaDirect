@@ -269,7 +269,8 @@ export function transformProduct(rawProduct: any, _locale: LanguageCode = 'es'):
         ? 'low_stock'
         : 'in_stock'
 
-  // Ensure we have a valid category object
+  // Type assertion: rawProduct may include nested category from Supabase join
+  // Cast needed because base type doesn't include optional category relation
   const rawCategory = (rawProduct as unknown as { category?: Category }).category
   const category = rawCategory || {
     id: rawProduct.categoryId,
@@ -391,6 +392,8 @@ export function buildCategoryBreadcrumbs(
 
 /**
  * Deep clone an object (for immutable updates)
+ * Type assertions used for Date and Array because TypeScript can't infer
+ * that new Date() and mapped arrays are assignable to generic type T
  */
 export function deepClone<T>(obj: T): T {
   if (obj === null || typeof obj !== 'object') return obj
