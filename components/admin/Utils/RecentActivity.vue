@@ -127,8 +127,8 @@ import type { ActivityItem } from '~/server/api/admin/dashboard/activity.get'
 
 const { t } = useI18n()
 
-// Store - safely access with fallback
-let dashboardStore: Record<string, any> = {}
+// Store - safely access with fallback for SSR
+let dashboardStore: any = null
 
 try {
   if (import.meta.client) {
@@ -139,19 +139,32 @@ catch (_error: any) {
   console.warn('Admin dashboard store not available during SSR/hydration')
 }
 
+// Provide SSR-safe fallback
 if (!dashboardStore) {
   dashboardStore = {
-    recentActivity: ref([]),
-    activityLoading: ref(false),
+    recentActivity: [],
+    activityLoading: false,
   }
 }
 
 // Emit event to parent to trigger refresh
 const emit = defineEmits(['refresh'])
 
-// Computed properties
-const recentActivity = computed(() => dashboardStore.recentActivity)
-const isLoading = computed(() => dashboardStore.activityLoading)
+// Computed properties - ensure safe access during SSR
+const recentActivity = computed(() => {
+  if (!dashboardStore || !dashboardStore.recentActivity) {
+    return []
+  }
+  // Handle both ref and direct value
+  return unref(dashboardStore.recentActivity) || []
+})
+
+const isLoading = computed(() => {
+  if (!dashboardStore || !dashboardStore.activityLoading) {
+    return false
+  }
+  return unref(dashboardStore.activityLoading) || false
+})
 
 // Methods
 const refresh = () => {

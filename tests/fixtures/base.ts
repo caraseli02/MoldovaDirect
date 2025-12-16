@@ -129,9 +129,15 @@ export const test = base.extend<TestFixtures>({
 
     // Navigate to admin dashboard to activate the session
     await page.goto('/admin')
+    await page.waitForLoadState('networkidle')
 
-    // Verify admin authentication
-    const isAdmin = await page.locator('[data-testid="admin-menu"]').or(page.locator('h1:has-text("Admin")')).isVisible({ timeout: 5000 })
+    // Verify admin authentication by checking for admin navigation
+    // Look for admin-specific navigation links that only admins can see
+    const isAdmin = await page.locator('a[href="/admin/products"]')
+      .or(page.locator('a[href="/admin/inventory"]'))
+      .or(page.locator('a[href="/admin/users"]'))
+      .first()
+      .isVisible({ timeout: 5000 })
       .catch(() => false)
 
     if (!isAdmin) {
