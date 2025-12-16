@@ -51,7 +51,7 @@ test.describe('Registration Flow', () => {
     test.describe('Name Validation', () => {
       test('should show error for name shorter than 2 characters', async ({ page }) => {
         await page.fill('[data-testid="name-input"]', 'A')
-        await page.blur('[data-testid="name-input"]')
+        await page.locator('[data-testid="name-input"]').blur()
 
         const nameError = page.locator('#name-error')
         await expect(nameError).toBeVisible()
@@ -59,7 +59,7 @@ test.describe('Registration Flow', () => {
 
       test('should show error for invalid name characters', async ({ page }) => {
         await page.fill('[data-testid="name-input"]', 'Test123')
-        await page.blur('[data-testid="name-input"]')
+        await page.locator('[data-testid="name-input"]').blur()
 
         const nameError = page.locator('#name-error')
         await expect(nameError).toBeVisible()
@@ -67,7 +67,7 @@ test.describe('Registration Flow', () => {
 
       test('should accept names with spaces and hyphens', async ({ page }) => {
         await page.fill('[data-testid="name-input"]', 'John-Paul Smith')
-        await page.blur('[data-testid="name-input"]')
+        await page.locator('[data-testid="name-input"]').blur()
 
         const nameError = page.locator('#name-error')
         await expect(nameError).not.toBeVisible()
@@ -75,7 +75,7 @@ test.describe('Registration Flow', () => {
 
       test('should accept names with accented characters', async ({ page }) => {
         await page.fill('[data-testid="name-input"]', 'José María García')
-        await page.blur('[data-testid="name-input"]')
+        await page.locator('[data-testid="name-input"]').blur()
 
         const nameError = page.locator('#name-error')
         await expect(nameError).not.toBeVisible()
@@ -85,7 +85,7 @@ test.describe('Registration Flow', () => {
     test.describe('Email Validation', () => {
       test('should show error for invalid email format', async ({ page }) => {
         await page.fill('[data-testid="email-input"]', 'invalid-email')
-        await page.blur('[data-testid="email-input"]')
+        await page.locator('[data-testid="email-input"]').blur()
 
         const emailError = page.locator('#email-error')
         await expect(emailError).toBeVisible()
@@ -93,7 +93,7 @@ test.describe('Registration Flow', () => {
 
       test('should show error for email without domain', async ({ page }) => {
         await page.fill('[data-testid="email-input"]', 'test@')
-        await page.blur('[data-testid="email-input"]')
+        await page.locator('[data-testid="email-input"]').blur()
 
         const emailError = page.locator('#email-error')
         await expect(emailError).toBeVisible()
@@ -108,7 +108,7 @@ test.describe('Registration Flow', () => {
 
         for (const email of validEmails) {
           await page.fill('[data-testid="email-input"]', email)
-          await page.blur('[data-testid="email-input"]')
+          await page.locator('[data-testid="email-input"]').blur()
 
           const emailError = page.locator('#email-error')
           await expect(emailError).not.toBeVisible()
@@ -119,7 +119,7 @@ test.describe('Registration Flow', () => {
     test.describe('Phone Validation', () => {
       test('should show error for invalid phone format', async ({ page }) => {
         await page.fill('[data-testid="phone-input"]', 'abc123')
-        await page.blur('[data-testid="phone-input"]')
+        await page.locator('[data-testid="phone-input"]').blur()
 
         const phoneError = page.locator('#phone-error')
         await expect(phoneError).toBeVisible()
@@ -134,7 +134,7 @@ test.describe('Registration Flow', () => {
 
         for (const phone of validPhones) {
           await page.fill('[data-testid="phone-input"]', phone)
-          await page.blur('[data-testid="phone-input"]')
+          await page.locator('[data-testid="phone-input"]').blur()
 
           const phoneError = page.locator('#phone-error')
           await expect(phoneError).not.toBeVisible()
@@ -145,7 +145,7 @@ test.describe('Registration Flow', () => {
     test.describe('Password Validation', () => {
       test('should show error for password shorter than 8 characters', async ({ page }) => {
         await page.fill('[data-testid="password-input"]', 'Short1!')
-        await page.blur('[data-testid="password-input"]')
+        await page.locator('[data-testid="password-input"]').blur()
 
         const passwordError = page.locator('#password-error')
         await expect(passwordError).toBeVisible()
@@ -189,7 +189,7 @@ test.describe('Registration Flow', () => {
       test('should show error when passwords do not match', async ({ page }) => {
         await page.fill('[data-testid="password-input"]', 'Password123!')
         await page.fill('[data-testid="confirm-password-input"]', 'DifferentPassword123!')
-        await page.blur('[data-testid="confirm-password-input"]')
+        await page.locator('[data-testid="confirm-password-input"]').blur()
 
         const confirmError = page.locator('#confirm-password-error')
         await expect(confirmError).toBeVisible()
@@ -211,7 +211,7 @@ test.describe('Registration Flow', () => {
 
         // Change password
         await page.fill('[data-testid="password-input"]', 'NewPassword123!')
-        await page.blur('[data-testid="password-input"]')
+        await page.locator('[data-testid="password-input"]').blur()
 
         // Confirmation error should appear
         const confirmError = page.locator('#confirm-password-error')
@@ -423,7 +423,7 @@ test.describe('Registration Flow', () => {
       const xssPayload = '<script>alert("XSS")</script>'
 
       await page.fill('[data-testid="name-input"]', xssPayload)
-      await page.blur('[data-testid="name-input"]')
+      await page.locator('[data-testid="name-input"]').blur()
 
       // Should either sanitize or show validation error
       const nameValue = await page.locator('[data-testid="name-input"]').inputValue()
@@ -445,7 +445,7 @@ test.describe('Registration Flow', () => {
 
     test('should announce validation errors to screen readers', async ({ page }) => {
       await page.fill('[data-testid="email-input"]', 'invalid')
-      await page.blur('[data-testid="email-input"]')
+      await page.locator('[data-testid="email-input"]').blur()
 
       const emailError = page.locator('#email-error')
       await expect(emailError).toHaveAttribute('role', 'alert')

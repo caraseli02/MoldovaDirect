@@ -13,7 +13,7 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
     })
   })
 
-  test('01. Navigate to admin/products/new with authentication', async ({ authenticatedPage: page }) => {
+  test('01. Navigate to admin/products/new with authentication', async ({ adminAuthenticatedPage: page }) => {
     console.log('\n=== TEST 1: Navigate to admin/products/new with authentication ===')
 
     // Navigate to the page
@@ -33,7 +33,7 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
     console.log('✓ Successfully navigated to /admin/products/new')
   })
 
-  test('02. Take screenshot of the page', async ({ authenticatedPage: page }) => {
+  test('02. Take screenshot of the page', async ({ adminAuthenticatedPage: page }) => {
     console.log('\n=== TEST 2: Take screenshot of the page ===')
 
     await page.goto('/admin/products/new')
@@ -45,7 +45,7 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
     console.log(`✓ Screenshot saved to ${screenshotPath}`)
   })
 
-  test('03. Check console for errors', async ({ authenticatedPage: page }) => {
+  test('03. Check console for errors', async ({ adminAuthenticatedPage: page }) => {
     console.log('\n=== TEST 3: Check console for errors ===')
 
     const consoleErrors: string[] = []
@@ -90,7 +90,7 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
     }
   })
 
-  test('04. Verify all form sections render', async ({ authenticatedPage: page }) => {
+  test('04. Verify all form sections render', async ({ adminAuthenticatedPage: page }) => {
     console.log('\n=== TEST 4: Verify all form sections render ===')
 
     await page.goto('/admin/products/new')
@@ -149,7 +149,7 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
     console.log('✓ Form has input fields')
   })
 
-  test('05. Test form interactions - click name input and type', async ({ authenticatedPage: page }) => {
+  test('05. Test form interactions - click name input and type', async ({ adminAuthenticatedPage: page }) => {
     console.log('\n=== TEST 5: Test form interactions ===')
 
     await page.goto('/admin/products/new')
@@ -192,7 +192,7 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
     }
   })
 
-  test('06. Test changing price field', async ({ authenticatedPage: page }) => {
+  test('06. Test changing price field', async ({ adminAuthenticatedPage: page }) => {
     console.log('\n=== TEST 6: Test changing price field ===')
 
     await page.goto('/admin/products/new')
@@ -227,7 +227,7 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
     }
   })
 
-  test('07. Test image upload area', async ({ authenticatedPage: page }) => {
+  test('07. Test image upload area', async ({ adminAuthenticatedPage: page }) => {
     console.log('\n=== TEST 7: Test image upload area ===')
 
     await page.goto('/admin/products/new')
@@ -260,7 +260,7 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
     console.log(`Image-related elements: ${imageElements.length}`)
   })
 
-  test('08. Check mobile responsiveness', async ({ authenticatedPage: page }) => {
+  test('08. Check mobile responsiveness', async ({ adminAuthenticatedPage: page }) => {
     console.log('\n=== TEST 8: Check mobile responsiveness ===')
 
     // Test at desktop size first
@@ -296,7 +296,7 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
     console.log('✓ Page layout adapts to different screen sizes')
   })
 
-  test('09. Comprehensive element visibility and structure check', async ({ authenticatedPage: page }) => {
+  test('09. Comprehensive element visibility and structure check', async ({ adminAuthenticatedPage: page }) => {
     console.log('\n=== TEST 9: Comprehensive element visibility and structure check ===')
 
     await page.goto('/admin/products/new')
@@ -335,7 +335,7 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
     console.log('✓ Page structure verified')
   })
 
-  test('10. Report comprehensive findings', async ({ authenticatedPage: page }) => {
+  test('10. Report comprehensive findings', async ({ adminAuthenticatedPage: page }) => {
     console.log('\n=== TEST 10: Comprehensive test report ===')
 
     await page.goto('/admin/products/new')

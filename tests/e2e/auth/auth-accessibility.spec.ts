@@ -34,7 +34,7 @@ test.describe('Authentication Accessibility (WCAG 2.1 Level AA)', () => {
 
     test('should have proper ARIA attributes for error states', async ({ page }) => {
       await page.fill('[data-testid="email-input"]', 'invalid-email')
-      await page.blur('[data-testid="email-input"]')
+      await page.locator('[data-testid="email-input"]').blur()
 
       const emailInput = page.locator('[data-testid="email-input"]')
       const emailError = page.locator('#email-error')
@@ -394,7 +394,7 @@ test.describe('Authentication Accessibility (WCAG 2.1 Level AA)', () => {
       await page.goto('/auth/login')
 
       await page.fill('[data-testid="email-input"]', 'invalid')
-      await page.blur('[data-testid="email-input"]')
+      await page.locator('[data-testid="email-input"]').blur()
 
       const emailError = page.locator('#email-error')
 

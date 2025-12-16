@@ -244,6 +244,62 @@ async function globalSetup(config: FullConfig) {
     }
   }
 
+  // Create admin auth storage state
+  console.log('→ Setting up admin authentication')
+  const adminEmail = process.env.TEST_ADMIN_EMAIL || 'admin@example.test'
+  const adminPassword = process.env.TEST_ADMIN_PASSWORD || process.env.TEST_USER_PASSWORD
+
+  if (adminPassword) {
+    const adminContext = await browser.newContext({
+      baseURL,
+      locale: 'es',
+      timezoneId: 'Europe/Madrid',
+    })
+
+    const adminPage = await adminContext.newPage()
+
+    try {
+      console.log(`  Admin email: ${adminEmail}`)
+      await adminPage.goto(`${baseURL}/auth/login`, { waitUntil: 'networkidle' })
+      await adminPage.waitForLoadState('networkidle')
+      await adminPage.waitForTimeout(2000)
+
+      const emailInput = adminPage.locator('[data-testid="email-input"]')
+      const passwordInput = adminPage.locator('[data-testid="password-input"]')
+      const loginButton = adminPage.locator('[data-testid="login-button"]')
+
+      await emailInput.click()
+      await emailInput.fill(adminEmail)
+      await passwordInput.click()
+      await passwordInput.fill(adminPassword)
+      await loginButton.click({ force: true })
+
+      await adminPage.waitForTimeout(3000)
+
+      const urlAfterLogin = adminPage.url()
+      console.log(`  URL after admin login: ${urlAfterLogin}`)
+
+      if (!urlAfterLogin.match(/\/(admin|account)/)) {
+        console.warn(`  ⚠️  Admin login may have failed - URL: ${urlAfterLogin}`)
+      }
+      else {
+        const adminStorageFile = path.join(authDir, 'admin.json')
+        await adminContext.storageState({ path: adminStorageFile })
+        console.log(`✓ Admin authentication completed and saved`)
+      }
+    }
+    catch (error: any) {
+      console.warn(`⚠️ Admin auth setup failed: ${error.message}`)
+      console.warn('  Admin tests may fail. Please ensure TEST_ADMIN_EMAIL and TEST_ADMIN_PASSWORD are set.')
+    }
+    finally {
+      await adminContext.close()
+    }
+  }
+  else {
+    console.warn('⚠️  No admin password provided - skipping admin auth setup')
+  }
+
   await browser.close()
 
   console.log('✓ Global setup completed successfully')

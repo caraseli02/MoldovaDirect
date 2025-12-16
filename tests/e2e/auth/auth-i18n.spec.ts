@@ -2,11 +2,21 @@ import { test, expect } from '../../fixtures/base'
 
 const locales = ['es', 'en', 'ro', 'ru']
 
+/**
+ * Get the correct URL path for a locale
+ * Nuxt i18n config: strategy: 'prefix_except_default', defaultLocale: 'es'
+ * - Spanish (es): /path (no prefix)
+ * - Other locales: /{locale}/path
+ */
+function getLocalePath(locale: string, path: string): string {
+  return locale === 'es' ? path : `/${locale}${path}`
+}
+
 for (const locale of locales) {
   test.describe(`Authentication i18n - ${locale.toUpperCase()}`, () => {
     test.describe('Login Page Localization', () => {
       test(`should display login page in ${locale}`, async ({ page }) => {
-        await page.goto(`/${locale}/auth/login`)
+        await page.goto(getLocalePath(locale, '/auth/login'))
         await page.waitForLoadState('networkidle')
 
         // Page should be in the correct locale
@@ -20,7 +30,7 @@ for (const locale of locales) {
       })
 
       test(`should have translated labels in ${locale}`, async ({ page }) => {
-        await page.goto(`/${locale}/auth/login`)
+        await page.goto(getLocalePath(locale, '/auth/login'))
 
         // Check for translated content (labels should not be in English if locale is not 'en')
         const loginButton = page.locator('[data-testid="login-button"]')
@@ -33,10 +43,10 @@ for (const locale of locales) {
       })
 
       test(`should have translated error messages in ${locale}`, async ({ page }) => {
-        await page.goto(`/${locale}/auth/login`)
+        await page.goto(getLocalePath(locale, '/auth/login'))
 
         await page.fill('[data-testid="email-input"]', 'invalid-email')
-        await page.blur('[data-testid="email-input"]')
+        await page.locator('[data-testid="email-input"]').blur()
 
         const emailError = page.locator('#email-error')
 
@@ -55,7 +65,7 @@ for (const locale of locales) {
       })
 
       test(`should maintain locale after login in ${locale}`, async ({ page }) => {
-        await page.goto(`/${locale}/auth/login`)
+        await page.goto(getLocalePath(locale, '/auth/login'))
 
         const testEmail = `test-${locale}@example.test`
         const testPassword = process.env.TEST_USER_PASSWORD || 'TestPassword123!'
@@ -67,13 +77,20 @@ for (const locale of locales) {
         // Wait for redirect or response
         await page.waitForTimeout(3000)
 
-        // URL should still contain the locale
+        // URL should still be in correct locale format
         const currentUrl = page.url()
-        expect(currentUrl).toContain(locale)
+        if (locale === 'es') {
+          // Spanish is default, should NOT have /es/ prefix
+          expect(currentUrl).not.toContain('/es/')
+        }
+        else {
+          // Other locales should have prefix
+          expect(currentUrl).toContain(`/${locale}/`)
+        }
       })
 
       test(`should switch locales correctly from ${locale}`, async ({ page }) => {
-        await page.goto(`/${locale}/auth/login`)
+        await page.goto(getLocalePath(locale, '/auth/login'))
 
         // Look for locale switcher
         const localeSwitcher = page.locator('[data-testid="locale-switcher"]')
@@ -93,7 +110,7 @@ for (const locale of locales) {
 
     test.describe('Register Page Localization', () => {
       test(`should display registration form in ${locale}`, async ({ page }) => {
-        await page.goto(`/${locale}/auth/register`)
+        await page.goto(getLocalePath(locale, '/auth/register'))
         await page.waitForLoadState('networkidle')
 
         // Form fields should be visible
@@ -103,7 +120,7 @@ for (const locale of locales) {
       })
 
       test(`should have translated placeholder text in ${locale}`, async ({ page }) => {
-        await page.goto(`/${locale}/auth/register`)
+        await page.goto(getLocalePath(locale, '/auth/register'))
 
         const emailInput = page.locator('[data-testid="email-input"]')
         const placeholder = await emailInput.getAttribute('placeholder')
@@ -115,10 +132,10 @@ for (const locale of locales) {
       })
 
       test(`should have translated form validation in ${locale}`, async ({ page }) => {
-        await page.goto(`/${locale}/auth/register`)
+        await page.goto(getLocalePath(locale, '/auth/register'))
 
         await page.fill('[data-testid="name-input"]', 'A')
-        await page.blur('[data-testid="name-input"]')
+        await page.locator('[data-testid="name-input"]').blur()
 
         const nameError = page.locator('#name-error')
 
@@ -129,7 +146,7 @@ for (const locale of locales) {
       })
 
       test(`should have translated password requirements in ${locale}`, async ({ page }) => {
-        await page.goto(`/${locale}/auth/register`)
+        await page.goto(getLocalePath(locale, '/auth/register'))
 
         await page.focus('[data-testid="password-input"]')
 
@@ -145,7 +162,7 @@ for (const locale of locales) {
 
     test.describe('Forgot Password Localization', () => {
       test(`should display forgot password page in ${locale}`, async ({ page }) => {
-        await page.goto(`/${locale}/auth/forgot-password`)
+        await page.goto(getLocalePath(locale, '/auth/forgot-password'))
         await page.waitForLoadState('networkidle')
 
         // Check page title is translated
@@ -157,7 +174,7 @@ for (const locale of locales) {
       })
 
       test(`should have translated instructions in ${locale}`, async ({ page }) => {
-        await page.goto(`/${locale}/auth/forgot-password`)
+        await page.goto(getLocalePath(locale, '/auth/forgot-password'))
 
         // Look for instruction text
         const instructions = page.locator('p').filter({ hasText: /.+/ }).first()
@@ -169,7 +186,7 @@ for (const locale of locales) {
       })
 
       test(`should show translated success message in ${locale}`, async ({ page }) => {
-        await page.goto(`/${locale}/auth/forgot-password`)
+        await page.goto(getLocalePath(locale, '/auth/forgot-password'))
 
         await page.fill('#email', 'test@example.com')
         await page.click('button[type="submit"]')
@@ -186,7 +203,7 @@ for (const locale of locales) {
         // This test assumes there are dates displayed somewhere in the auth flow
         // Adjust based on actual implementation
 
-        await page.goto(`/${locale}/auth/login`)
+        await page.goto(getLocalePath(locale, '/auth/login'))
 
         // If there are any dates displayed (e.g., "Last login: ...")
         // they should be formatted according to locale
@@ -201,7 +218,7 @@ for (const locale of locales) {
         const rtlLocales = ['ar', 'he']
 
         if (rtlLocales.includes(locale)) {
-          await page.goto(`/${locale}/auth/login`)
+          await page.goto(getLocalePath(locale, '/auth/login'))
 
           const direction = await page.evaluate(() =>
             window.getComputedStyle(document.documentElement).direction,
@@ -214,24 +231,26 @@ for (const locale of locales) {
 
     test.describe('Locale Persistence', () => {
       test(`should persist ${locale} across navigation`, async ({ page }) => {
-        await page.goto(`/${locale}/auth/login`)
+        await page.goto(getLocalePath(locale, '/auth/login'))
 
         // Navigate to register
         await page.click('a[href*="/auth/register"]')
 
         // Should stay in same locale
-        await expect(page).toHaveURL(new RegExp(`/${locale}/`))
+        const expectedPattern = locale === 'es' ? /\/auth\/register/ : new RegExp(`/${locale}/auth/register`)
+        await expect(page).toHaveURL(expectedPattern)
 
         // Navigate to forgot password
-        await page.goto(`/${locale}/auth/login`)
+        await page.goto(getLocalePath(locale, '/auth/login'))
         await page.click('[data-testid="forgot-password"]')
 
         // Should still be in same locale
-        await expect(page).toHaveURL(new RegExp(`/${locale}/`))
+        const forgotPasswordPattern = locale === 'es' ? /\/auth\/forgot-password/ : new RegExp(`/${locale}/auth/forgot-password`)
+        await expect(page).toHaveURL(forgotPasswordPattern)
       })
 
       test(`should store ${locale} preference`, async ({ page }) => {
-        await page.goto(`/${locale}/auth/login`)
+        await page.goto(getLocalePath(locale, '/auth/login'))
 
         // Check for locale in localStorage or cookie
         const storedLocale = await page.evaluate(() => {
@@ -256,7 +275,7 @@ for (const locale of locales) {
           }
         })
 
-        await page.goto(`/${locale}/auth/login`)
+        await page.goto(getLocalePath(locale, '/auth/login'))
 
         await page.fill('[data-testid="email-input"]', 'test@example.com')
         await page.fill('[data-testid="password-input"]', 'password123')
@@ -277,17 +296,17 @@ for (const locale of locales) {
 
     test.describe('Accessibility with Localization', () => {
       test(`should have proper lang attribute for ${locale}`, async ({ page }) => {
-        await page.goto(`/${locale}/auth/login`)
+        await page.goto(getLocalePath(locale, '/auth/login'))
 
         const htmlLang = await page.getAttribute('html', 'lang')
         expect(htmlLang).toBe(locale)
       })
 
       test(`should announce errors in ${locale} to screen readers`, async ({ page }) => {
-        await page.goto(`/${locale}/auth/login`)
+        await page.goto(getLocalePath(locale, '/auth/login'))
 
         await page.fill('[data-testid="email-input"]', 'invalid')
-        await page.blur('[data-testid="email-input"]')
+        await page.locator('[data-testid="email-input"]').blur()
 
         const emailError = page.locator('#email-error')
 
@@ -307,19 +326,20 @@ for (const locale of locales) {
 test.describe('Locale Switching', () => {
   test('should switch between all supported locales', async ({ page }) => {
     for (const locale of locales) {
-      await page.goto(`/${locale}/auth/login`)
+      await page.goto(getLocalePath(locale, '/auth/login'))
 
       // Verify we're on the correct locale
       const htmlLang = await page.getAttribute('html', 'lang')
       expect(htmlLang).toBe(locale)
 
-      // Verify URL contains locale
-      await expect(page).toHaveURL(new RegExp(`/${locale}/`))
+      // Verify URL format is correct for locale
+      const expectedPattern = locale === 'es' ? /\/auth\/login$/ : new RegExp(`/${locale}/auth/login`)
+      await expect(page).toHaveURL(expectedPattern)
     }
   })
 
   test('should maintain form state when switching locales', async ({ page }) => {
-    await page.goto('/es/auth/login')
+    await page.goto(getLocalePath('es', '/auth/login'))
 
     // Fill in some data
     await page.fill('[data-testid="email-input"]', 'test@example.com')

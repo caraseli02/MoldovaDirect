@@ -140,7 +140,7 @@ test.describe('Mobile Form Validation', () => {
     await page.goto('/auth/login')
 
     await page.fill('[data-testid="email-input"]', 'invalid-email')
-    await page.blur('[data-testid="email-input"]')
+    await page.locator('[data-testid="email-input"]').blur()
 
     const emailError = page.locator('#email-error')
     const emailInput = page.locator('[data-testid="email-input"]')

@@ -26,6 +26,7 @@ export interface AdminUser {
 export interface TestFixtures {
   authenticatedPage: Page
   adminPage: Page
+  adminAuthenticatedPage: Page
   testUser: TestUser
   adminUser: AdminUser
   testProducts: TestProduct[]
@@ -117,6 +118,30 @@ export const test = base.extend<TestFixtures>({
     // TODO: Add MFA handling if admin routes require it
 
     await use(page)
+  },
+
+  adminAuthenticatedPage: async ({ browser }, use) => {
+    // Create a new context with admin storage state
+    const context = await browser.newContext({
+      storageState: 'tests/fixtures/.auth/admin.json',
+    })
+    const page = await context.newPage()
+
+    // Navigate to admin dashboard to activate the session
+    await page.goto('/admin')
+
+    // Verify admin authentication
+    const isAdmin = await page.locator('[data-testid="admin-menu"]').or(page.locator('h1:has-text("Admin")')).isVisible({ timeout: 5000 })
+      .catch(() => false)
+
+    if (!isAdmin) {
+      throw new Error('Admin authentication failed - storage state may be invalid or user lacks admin role')
+    }
+
+    await use(page)
+
+    // Cleanup
+    await context.close()
   },
 
   resetDatabase: async ({ page, baseURL }, use) => {

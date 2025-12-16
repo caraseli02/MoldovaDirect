@@ -1,34 +1,34 @@
 import { test, expect } from '../../fixtures/base'
 
 test.describe('Admin Products - New Product Page', () => {
-  test('should load the admin products new page successfully', async ({ authenticatedPage }) => {
+  test('should load the admin products new page successfully', async ({ adminAuthenticatedPage }) => {
     // Navigate to admin products new page
-    await authenticatedPage.goto('/admin/products/new')
-    await authenticatedPage.waitForLoadState('networkidle')
+    await adminAuthenticatedPage.goto('/admin/products/new')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
     // Check that we're on the correct page
-    const currentUrl = authenticatedPage.url()
+    const currentUrl = adminAuthenticatedPage.url()
     expect(currentUrl).toContain('/admin/products/new')
 
     // Check page title
-    await expect(authenticatedPage).toHaveTitle(/Create Product|Product|Admin/i)
+    await expect(adminAuthenticatedPage).toHaveTitle(/Create Product|Product|Admin/i)
   })
 
-  test('should display the product form with all required fields', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/admin/products/new')
-    await authenticatedPage.waitForLoadState('networkidle')
+  test('should display the product form with all required fields', async ({ adminAuthenticatedPage }) => {
+    await adminAuthenticatedPage.goto('/admin/products/new')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
     // Check for form existence
-    const form = authenticatedPage.locator('form').first()
+    const form = adminAuthenticatedPage.locator('form').first()
     await expect(form).toBeVisible()
 
     // Check for main heading
-    const heading = authenticatedPage.locator('h1')
+    const heading = adminAuthenticatedPage.locator('h1')
     const headingText = await heading.textContent()
     expect(headingText).toContain('Create New Product')
 
     // Check for common form fields
-    const inputs = await authenticatedPage.locator('input').count()
+    const inputs = await adminAuthenticatedPage.locator('input').count()
     expect(inputs).toBeGreaterThan(0)
 
     console.log(`Found ${inputs} input fields in the form`)
@@ -67,28 +67,28 @@ test.describe('Admin Products - New Product Page', () => {
     }
   })
 
-  test('should display success/error message containers', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/admin/products/new')
-    await authenticatedPage.waitForLoadState('networkidle')
+  test('should display success/error message containers', async ({ adminAuthenticatedPage }) => {
+    await adminAuthenticatedPage.goto('/admin/products/new')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
     // Check for success message container (may not be visible initially)
-    const successMessageDiv = authenticatedPage.locator('div.bg-green-50, div.bg-green-900').first()
+    const successMessageDiv = adminAuthenticatedPage.locator('div.bg-green-50, div.bg-green-900').first()
     const isSuccessVisible = await successMessageDiv.isVisible().catch(() => false)
 
     // Check for error message container (may not be visible initially)
-    const errorMessageDiv = authenticatedPage.locator('div.bg-red-50, div.bg-red-900').first()
+    const errorMessageDiv = adminAuthenticatedPage.locator('div.bg-red-50, div.bg-red-900').first()
     const isErrorVisible = await errorMessageDiv.isVisible().catch(() => false)
 
     // Either could be visible, neither should cause errors
     console.log(`Success message visible: ${isSuccessVisible}, Error message visible: ${isErrorVisible}`)
   })
 
-  test('should have functioning cancel button', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/admin/products/new')
-    await authenticatedPage.waitForLoadState('networkidle')
+  test('should have functioning cancel button', async ({ adminAuthenticatedPage }) => {
+    await adminAuthenticatedPage.goto('/admin/products/new')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
     // Look for cancel button
-    const cancelButton = authenticatedPage.locator('button').filter({ hasText: /Cancel|Back/i }).first()
+    const cancelButton = adminAuthenticatedPage.locator('button').filter({ hasText: /Cancel|Back/i }).first()
     const buttonExists = await cancelButton.count() > 0
 
     if (buttonExists) {
@@ -100,27 +100,27 @@ test.describe('Admin Products - New Product Page', () => {
     }
   })
 
-  test('should have functioning submit button', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/admin/products/new')
-    await authenticatedPage.waitForLoadState('networkidle')
+  test('should have functioning submit button', async ({ adminAuthenticatedPage }) => {
+    await adminAuthenticatedPage.goto('/admin/products/new')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
     // Look for submit button
-    const submitButton = authenticatedPage.locator('button[type="submit"]').first()
+    const submitButton = adminAuthenticatedPage.locator('button[type="submit"]').first()
     await expect(submitButton).toBeVisible()
     console.log('Submit button found and visible')
   })
 
-  test('should render AdminProductsForm component', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/admin/products/new')
-    await authenticatedPage.waitForLoadState('networkidle')
+  test('should render AdminProductsForm component', async ({ adminAuthenticatedPage }) => {
+    await adminAuthenticatedPage.goto('/admin/products/new')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
     // The AdminProductsForm should be loaded via async component
     // Check for form content specific to product creation
-    const form = authenticatedPage.locator('form')
+    const form = adminAuthenticatedPage.locator('form')
     await expect(form.first()).toBeVisible()
 
     // Check that the page is not showing login form (authenticated)
-    const loginForm = authenticatedPage.locator('input[type="email"][placeholder*="Correo"]').first()
+    const loginForm = adminAuthenticatedPage.locator('input[type="email"][placeholder*="Correo"]').first()
     const isLoginVisible = await loginForm.isVisible().catch(() => false)
 
     expect(isLoginVisible).toBe(false)

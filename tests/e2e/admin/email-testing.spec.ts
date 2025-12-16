@@ -1,46 +1,46 @@
 import { test, expect } from '../../fixtures/base'
 
 test.describe('Admin Email Testing Tool', () => {
-  test('should load the email testing page successfully', async ({ authenticatedPage }) => {
+  test('should load the email testing page successfully', async ({ adminAuthenticatedPage }) => {
     // Navigate to email testing page
-    await authenticatedPage.goto('/admin/tools/email-testing')
-    await authenticatedPage.waitForLoadState('networkidle')
+    await adminAuthenticatedPage.goto('/admin/tools/email-testing')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
     // Check that the page title is correct
-    await expect(authenticatedPage).toHaveTitle(/Email|Admin/i)
+    await expect(adminAuthenticatedPage).toHaveTitle(/Email|Admin/i)
 
     // Check for main heading
-    const heading = authenticatedPage.locator('h1:has-text("Email Testing Playground")')
+    const heading = adminAuthenticatedPage.locator('h1:has-text("Email Testing Playground")')
     await expect(heading).toBeVisible()
   })
 
-  test('should render all form fields correctly', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/admin/tools/email-testing')
-    await authenticatedPage.waitForLoadState('networkidle')
+  test('should render all form fields correctly', async ({ adminAuthenticatedPage }) => {
+    await adminAuthenticatedPage.goto('/admin/tools/email-testing')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
     // Check for recipient email input
-    const emailInput = authenticatedPage.locator('input[type="email"]#email')
+    const emailInput = adminAuthenticatedPage.locator('input[type="email"]#email')
     await expect(emailInput).toBeVisible()
     await expect(emailInput).toHaveAttribute('placeholder', 'qa@example.com')
 
     // Check for email type select dropdown
-    const emailTypeSelect = authenticatedPage.locator('select#emailType')
+    const emailTypeSelect = adminAuthenticatedPage.locator('select#emailType')
     await expect(emailTypeSelect).toBeVisible()
 
     // Check for locale select dropdown
-    const localeSelect = authenticatedPage.locator('select#locale')
+    const localeSelect = adminAuthenticatedPage.locator('select#locale')
     await expect(localeSelect).toBeVisible()
 
     // Check for submit button
-    const submitButton = authenticatedPage.locator('button[type="submit"]:has-text("Send Test Email")')
+    const submitButton = adminAuthenticatedPage.locator('button[type="submit"]:has-text("Send Test Email")')
     await expect(submitButton).toBeVisible()
   })
 
-  test('should have all email type options available', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/admin/tools/email-testing')
-    await authenticatedPage.waitForLoadState('networkidle')
+  test('should have all email type options available', async ({ adminAuthenticatedPage }) => {
+    await adminAuthenticatedPage.goto('/admin/tools/email-testing')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
-    const emailTypeSelect = authenticatedPage.locator('select#emailType')
+    const emailTypeSelect = adminAuthenticatedPage.locator('select#emailType')
     const options = emailTypeSelect.locator('option')
 
     const optionCount = await options.count()
@@ -56,11 +56,11 @@ test.describe('Admin Email Testing Tool', () => {
     expect(optionTexts).toContain(expect.stringContaining('Order Issue'))
   })
 
-  test('should have all locale options available', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/admin/tools/email-testing')
-    await authenticatedPage.waitForLoadState('networkidle')
+  test('should have all locale options available', async ({ adminAuthenticatedPage }) => {
+    await adminAuthenticatedPage.goto('/admin/tools/email-testing')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
-    const localeSelect = authenticatedPage.locator('select#locale')
+    const localeSelect = adminAuthenticatedPage.locator('select#locale')
     const options = localeSelect.locator('option')
 
     const optionCount = await options.count()
@@ -74,59 +74,59 @@ test.describe('Admin Email Testing Tool', () => {
     expect(optionTexts).toContain('Русский')
   })
 
-  test('should show issue description field when "Order Issue" is selected', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/admin/tools/email-testing')
-    await authenticatedPage.waitForLoadState('networkidle')
+  test('should show issue description field when "Order Issue" is selected', async ({ adminAuthenticatedPage }) => {
+    await adminAuthenticatedPage.goto('/admin/tools/email-testing')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
     // Issue description should not be visible initially
-    const issueDescriptionField = authenticatedPage.locator('textarea#issueDescription')
+    const issueDescriptionField = adminAuthenticatedPage.locator('textarea#issueDescription')
 
     // Select "Order Issue" email type
-    const emailTypeSelect = authenticatedPage.locator('select#emailType')
+    const emailTypeSelect = adminAuthenticatedPage.locator('select#emailType')
     await emailTypeSelect.selectOption('order_issue')
 
     // Wait for the conditional field to appear
-    await authenticatedPage.waitForTimeout(500)
+    await adminAuthenticatedPage.waitForTimeout(500)
 
     // Now the issue description should be visible
     await expect(issueDescriptionField).toBeVisible()
     await expect(issueDescriptionField).toHaveAttribute('placeholder', expect.stringContaining('Optional context'))
   })
 
-  test('should hide issue description field when non-issue email type is selected', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/admin/tools/email-testing')
-    await authenticatedPage.waitForLoadState('networkidle')
+  test('should hide issue description field when non-issue email type is selected', async ({ adminAuthenticatedPage }) => {
+    await adminAuthenticatedPage.goto('/admin/tools/email-testing')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
     // Select "Order Issue" first
-    const emailTypeSelect = authenticatedPage.locator('select#emailType')
+    const emailTypeSelect = adminAuthenticatedPage.locator('select#emailType')
     await emailTypeSelect.selectOption('order_issue')
-    await authenticatedPage.waitForTimeout(500)
+    await adminAuthenticatedPage.waitForTimeout(500)
 
     // Verify it's visible
-    const issueDescriptionField = authenticatedPage.locator('textarea#issueDescription')
+    const issueDescriptionField = adminAuthenticatedPage.locator('textarea#issueDescription')
     await expect(issueDescriptionField).toBeVisible()
 
     // Select "Order Confirmation"
     await emailTypeSelect.selectOption('order_confirmation')
-    await authenticatedPage.waitForTimeout(500)
+    await adminAuthenticatedPage.waitForTimeout(500)
 
     // Issue description should be hidden
     const isHidden = await issueDescriptionField.isVisible().catch(() => false)
     expect(isHidden).toBe(false)
   })
 
-  test('should disable submit button while loading', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/admin/tools/email-testing')
-    await authenticatedPage.waitForLoadState('networkidle')
+  test('should disable submit button while loading', async ({ adminAuthenticatedPage }) => {
+    await adminAuthenticatedPage.goto('/admin/tools/email-testing')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
-    const emailInput = authenticatedPage.locator('input#email')
-    const submitButton = authenticatedPage.locator('button[type="submit"]')
+    const emailInput = adminAuthenticatedPage.locator('input#email')
+    const submitButton = adminAuthenticatedPage.locator('button[type="submit"]')
 
     // Fill in valid email
     await emailInput.fill('test@example.com')
 
     // Intercept the API call to simulate loading
-    await authenticatedPage.route('/api/tools/send-test-email', (route) => {
+    await adminAuthenticatedPage.route('/api/tools/send-test-email', (route) => {
       // Delay the response
       setTimeout(() => {
         route.continue()
@@ -137,7 +137,7 @@ test.describe('Admin Email Testing Tool', () => {
     const clickPromise = submitButton.click()
 
     // Check that button is disabled immediately after click
-    await authenticatedPage.waitForTimeout(100)
+    await adminAuthenticatedPage.waitForTimeout(100)
     const isDisabled = await submitButton.isDisabled().catch(() => false)
 
     // Button should be disabled or have loading indicator
@@ -148,20 +148,20 @@ test.describe('Admin Email Testing Tool', () => {
     await clickPromise
   })
 
-  test('should validate email format before submission', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/admin/tools/email-testing')
-    await authenticatedPage.waitForLoadState('networkidle')
+  test('should validate email format before submission', async ({ adminAuthenticatedPage }) => {
+    await adminAuthenticatedPage.goto('/admin/tools/email-testing')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
-    const emailInput = authenticatedPage.locator('input#email')
-    const submitButton = authenticatedPage.locator('button[type="submit"]')
-    const errorMessage = authenticatedPage.locator('[class*="error"]')
+    const emailInput = adminAuthenticatedPage.locator('input#email')
+    const submitButton = adminAuthenticatedPage.locator('button[type="submit"]')
+    const errorMessage = adminAuthenticatedPage.locator('[class*="error"]')
 
     // Try to submit with invalid email
     await emailInput.fill('invalid-email')
     await submitButton.click()
 
     // Should show error message
-    await authenticatedPage.waitForTimeout(500)
+    await adminAuthenticatedPage.waitForTimeout(500)
     const errorVisible = await errorMessage.isVisible().catch(() => false)
 
     if (errorVisible) {
@@ -170,28 +170,28 @@ test.describe('Admin Email Testing Tool', () => {
     }
   })
 
-  test('should display success message on successful submission', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/admin/tools/email-testing')
-    await authenticatedPage.waitForLoadState('networkidle')
+  test('should display success message on successful submission', async ({ adminAuthenticatedPage }) => {
+    await adminAuthenticatedPage.goto('/admin/tools/email-testing')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
-    const emailInput = authenticatedPage.locator('input#email')
-    const submitButton = authenticatedPage.locator('button[type="submit"]')
+    const emailInput = adminAuthenticatedPage.locator('input#email')
+    const submitButton = adminAuthenticatedPage.locator('button[type="submit"]')
 
     // Fill in valid email
     await emailInput.fill('qa@example.com')
 
     // Mock successful API response
-    await authenticatedPage.route('/api/tools/send-test-email', async (route) => {
+    await adminAuthenticatedPage.route('/api/tools/send-test-email', async (route) => {
       await route.abort('blockedbyclient')
     })
 
     // Try to submit (will fail due to abort, but we're testing UI response)
     await submitButton.click()
-    await authenticatedPage.waitForTimeout(1000)
+    await adminAuthenticatedPage.waitForTimeout(1000)
 
     // Look for either success or error message
-    const successMessage = authenticatedPage.locator('[class*="bg-green"], text=/✔/i')
-    const errorMessage = authenticatedPage.locator('[class*="bg-red"]')
+    const successMessage = adminAuthenticatedPage.locator('[class*="bg-green"], text=/✔/i')
+    const errorMessage = adminAuthenticatedPage.locator('[class*="bg-red"]')
 
     const hasSuccessOrError = await Promise.race([
       successMessage.isVisible().catch(() => false),
@@ -201,37 +201,37 @@ test.describe('Admin Email Testing Tool', () => {
     expect(hasSuccessOrError).toBeDefined()
   })
 
-  test('should render properly with dark mode styles', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/admin/tools/email-testing')
-    await authenticatedPage.waitForLoadState('networkidle')
+  test('should render properly with dark mode styles', async ({ adminAuthenticatedPage }) => {
+    await adminAuthenticatedPage.goto('/admin/tools/email-testing')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
     // Page should have dark mode styling available
-    const darkModeElements = await authenticatedPage.locator('[class*="dark:"]').count()
+    const darkModeElements = await adminAuthenticatedPage.locator('[class*="dark:"]').count()
     expect(darkModeElements).toBeGreaterThan(0)
   })
 
-  test('should not have critical console errors', async ({ authenticatedPage }) => {
+  test('should not have critical console errors', async ({ adminAuthenticatedPage }) => {
     const consoleErrors: string[] = []
     const pageErrors: string[] = []
 
     // Listen for console messages
-    authenticatedPage.on('console', (msg) => {
+    adminAuthenticatedPage.on('console', (msg) => {
       if (msg.type() === 'error') {
         consoleErrors.push(msg.text())
       }
     })
 
     // Listen for page errors
-    authenticatedPage.on('pageerror', (err) => {
+    adminAuthenticatedPage.on('pageerror', (err) => {
       pageErrors.push(err.toString())
     })
 
     // Navigate to email testing page
-    await authenticatedPage.goto('/admin/tools/email-testing')
-    await authenticatedPage.waitForLoadState('networkidle')
+    await adminAuthenticatedPage.goto('/admin/tools/email-testing')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
     // Wait a bit for any delayed errors
-    await authenticatedPage.waitForTimeout(2000)
+    await adminAuthenticatedPage.waitForTimeout(2000)
 
     // Log any errors for debugging
     if (consoleErrors.length > 0) {
@@ -253,77 +253,77 @@ test.describe('Admin Email Testing Tool', () => {
     expect(pageErrors.length).toBe(0)
   })
 
-  test('should render responsive design on mobile', async ({ authenticatedPage }) => {
+  test('should render responsive design on mobile', async ({ adminAuthenticatedPage }) => {
     // Set mobile viewport
-    await authenticatedPage.setViewportSize({ width: 375, height: 667 })
+    await adminAuthenticatedPage.setViewportSize({ width: 375, height: 667 })
 
-    await authenticatedPage.goto('/admin/tools/email-testing')
-    await authenticatedPage.waitForLoadState('networkidle')
+    await adminAuthenticatedPage.goto('/admin/tools/email-testing')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
     // Check that main elements are visible
-    const heading = authenticatedPage.locator('h1:has-text("Email Testing Playground")')
+    const heading = adminAuthenticatedPage.locator('h1:has-text("Email Testing Playground")')
     await expect(heading).toBeVisible()
 
-    const emailInput = authenticatedPage.locator('input#email')
+    const emailInput = adminAuthenticatedPage.locator('input#email')
     await expect(emailInput).toBeVisible()
 
-    const submitButton = authenticatedPage.locator('button[type="submit"]')
+    const submitButton = adminAuthenticatedPage.locator('button[type="submit"]')
     await expect(submitButton).toBeVisible()
 
     // Form should be readable on mobile
-    const formContainer = authenticatedPage.locator('form').first()
+    const formContainer = adminAuthenticatedPage.locator('form').first()
     await expect(formContainer).toBeVisible()
   })
 
-  test('should have proper accessibility attributes', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/admin/tools/email-testing')
-    await authenticatedPage.waitForLoadState('networkidle')
+  test('should have proper accessibility attributes', async ({ adminAuthenticatedPage }) => {
+    await adminAuthenticatedPage.goto('/admin/tools/email-testing')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
     // Check for form labels
-    const emailLabel = authenticatedPage.locator('label[for="email"]')
+    const emailLabel = adminAuthenticatedPage.locator('label[for="email"]')
     await expect(emailLabel).toBeVisible()
 
-    const emailTypeLabel = authenticatedPage.locator('label[for="emailType"]')
+    const emailTypeLabel = adminAuthenticatedPage.locator('label[for="emailType"]')
     await expect(emailTypeLabel).toBeVisible()
 
-    const localeLabel = authenticatedPage.locator('label[for="locale"]')
+    const localeLabel = adminAuthenticatedPage.locator('label[for="locale"]')
     await expect(localeLabel).toBeVisible()
 
     // Check that inputs are associated with labels
-    const emailInput = authenticatedPage.locator('input#email')
+    const emailInput = adminAuthenticatedPage.locator('input#email')
     const emailInputId = await emailInput.getAttribute('id')
     expect(emailInputId).toBe('email')
   })
 
-  test('should have description text explaining the tool', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/admin/tools/email-testing')
-    await authenticatedPage.waitForLoadState('networkidle')
+  test('should have description text explaining the tool', async ({ adminAuthenticatedPage }) => {
+    await adminAuthenticatedPage.goto('/admin/tools/email-testing')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
     // Check for description paragraph
-    const description = authenticatedPage.locator('[class*="text-sm"][class*="text-gray"]').first()
+    const description = adminAuthenticatedPage.locator('[class*="text-sm"][class*="text-gray"]').first()
     const descriptionVisible = await description.isVisible().catch(() => false)
 
     // Check for note about test data
-    const testDataNote = authenticatedPage.locator('text=/TEST|test|temporary/i')
+    const testDataNote = adminAuthenticatedPage.locator('text=/TEST|test|temporary/i')
     const noteVisible = await testDataNote.isVisible().catch(() => false)
 
     expect(descriptionVisible || noteVisible).toBe(true)
   })
 
-  test('should clear error/success messages when user modifies form', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/admin/tools/email-testing')
-    await authenticatedPage.waitForLoadState('networkidle')
+  test('should clear error/success messages when user modifies form', async ({ adminAuthenticatedPage }) => {
+    await adminAuthenticatedPage.goto('/admin/tools/email-testing')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
-    const emailInput = authenticatedPage.locator('input#email')
-    const submitButton = authenticatedPage.locator('button[type="submit"]')
+    const emailInput = adminAuthenticatedPage.locator('input#email')
+    const submitButton = adminAuthenticatedPage.locator('button[type="submit"]')
 
     // Trigger error by submitting invalid email
     await emailInput.fill('invalid-email')
     await submitButton.click()
-    await authenticatedPage.waitForTimeout(500)
+    await adminAuthenticatedPage.waitForTimeout(500)
 
     // Check for error message
-    const errorMessage = authenticatedPage.locator('[class*="bg-red"]')
+    const errorMessage = adminAuthenticatedPage.locator('[class*="bg-red"]')
     const errorVisible = await errorMessage.isVisible().catch(() => false)
 
     if (errorVisible) {
@@ -332,63 +332,63 @@ test.describe('Admin Email Testing Tool', () => {
 
       // Now modify input - error should clear on next submission attempt
       await emailInput.fill('valid@email.com')
-      await authenticatedPage.waitForTimeout(300)
+      await adminAuthenticatedPage.waitForTimeout(300)
 
       // The form should be ready for new submission
       await expect(submitButton).not.toBeDisabled()
     }
   })
 
-  test('should take screenshot for visual inspection', async ({ authenticatedPage }) => {
+  test('should take screenshot for visual inspection', async ({ adminAuthenticatedPage }) => {
     // Navigate and wait for load
-    await authenticatedPage.goto('/admin/tools/email-testing')
-    await authenticatedPage.waitForLoadState('networkidle')
-    await authenticatedPage.waitForTimeout(1000)
+    await adminAuthenticatedPage.goto('/admin/tools/email-testing')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
+    await adminAuthenticatedPage.waitForTimeout(1000)
 
     // Take screenshot of page with all form fields
-    await authenticatedPage.screenshot({
+    await adminAuthenticatedPage.screenshot({
       path: 'tests/screenshots/email-testing-page.png',
       fullPage: true,
     })
   })
 
-  test('should take screenshot with Order Issue variant', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/admin/tools/email-testing')
-    await authenticatedPage.waitForLoadState('networkidle')
+  test('should take screenshot with Order Issue variant', async ({ adminAuthenticatedPage }) => {
+    await adminAuthenticatedPage.goto('/admin/tools/email-testing')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
     // Select Order Issue type
-    const emailTypeSelect = authenticatedPage.locator('select#emailType')
+    const emailTypeSelect = adminAuthenticatedPage.locator('select#emailType')
     await emailTypeSelect.selectOption('order_issue')
-    await authenticatedPage.waitForTimeout(500)
+    await adminAuthenticatedPage.waitForTimeout(500)
 
     // Take screenshot with issue description field visible
-    await authenticatedPage.screenshot({
+    await adminAuthenticatedPage.screenshot({
       path: 'tests/screenshots/email-testing-order-issue.png',
       fullPage: true,
     })
   })
 
-  test('should handle API timeout gracefully', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/admin/tools/email-testing')
-    await authenticatedPage.waitForLoadState('networkidle')
+  test('should handle API timeout gracefully', async ({ adminAuthenticatedPage }) => {
+    await adminAuthenticatedPage.goto('/admin/tools/email-testing')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
-    const emailInput = authenticatedPage.locator('input#email')
-    const submitButton = authenticatedPage.locator('button[type="submit"]')
+    const emailInput = adminAuthenticatedPage.locator('input#email')
+    const submitButton = adminAuthenticatedPage.locator('button[type="submit"]')
 
     // Fill in valid email
     await emailInput.fill('test@example.com')
 
     // Mock API timeout
-    await authenticatedPage.route('/api/tools/send-test-email', (route) => {
+    await adminAuthenticatedPage.route('/api/tools/send-test-email', (route) => {
       route.abort('timedout')
     })
 
     // Submit form
     await submitButton.click()
-    await authenticatedPage.waitForTimeout(2000)
+    await adminAuthenticatedPage.waitForTimeout(2000)
 
     // Should display an error message gracefully
-    const errorMessage = authenticatedPage.locator('[class*="bg-red"], [class*="error"]')
+    const errorMessage = adminAuthenticatedPage.locator('[class*="bg-red"], [class*="error"]')
     const hasErrorMessage = await errorMessage.isVisible().catch(() => false)
 
     if (hasErrorMessage) {
@@ -400,24 +400,24 @@ test.describe('Admin Email Testing Tool', () => {
     expect(isDisabled).toBe(false)
   })
 
-  test('should have proper page structure and layout', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/admin/tools/email-testing')
-    await authenticatedPage.waitForLoadState('networkidle')
+  test('should have proper page structure and layout', async ({ adminAuthenticatedPage }) => {
+    await adminAuthenticatedPage.goto('/admin/tools/email-testing')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
     // Check for main container
-    const mainContainer = authenticatedPage.locator('[class*="max-w"]').first()
+    const mainContainer = adminAuthenticatedPage.locator('[class*="max-w"]').first()
     await expect(mainContainer).toBeVisible()
 
     // Check for card/box styling
-    const cardElement = authenticatedPage.locator('[class*="bg-white"], [class*="dark:bg-gray"], [class*="rounded"], [class*="shadow"]').first()
+    const cardElement = adminAuthenticatedPage.locator('[class*="bg-white"], [class*="dark:bg-gray"], [class*="rounded"], [class*="shadow"]').first()
     await expect(cardElement).toBeVisible()
 
     // Check for form element
-    const form = authenticatedPage.locator('form').first()
+    const form = adminAuthenticatedPage.locator('form').first()
     await expect(form).toBeVisible()
 
     // Form should have proper spacing
-    const formGroups = await authenticatedPage.locator('[class*="space-y"]').count()
+    const formGroups = await adminAuthenticatedPage.locator('[class*="space-y"]').count()
     expect(formGroups).toBeGreaterThan(0)
   })
 })
