@@ -256,25 +256,32 @@ useHead(() => ({
 }))
 
 // Parse numeric values from highlights and create animated counters
+// Create counters during setup (not in computed) to avoid lifecycle hook issues
+const counters = props.highlights.map((stat) => {
+  const numericMatch = stat.value.match(/(\d+(?:\.\d+)?)(k|K)?/)
+
+  if (numericMatch && numericMatch[1]) {
+    let number = parseFloat(numericMatch[1])
+
+    // Convert k to thousands
+    if (numericMatch[2]?.toLowerCase() === 'k') {
+      number = number * 1000
+    }
+
+    return useCountUp(number, {
+      duration: 2000,
+      useEasing: true,
+    })
+  }
+
+  return null
+})
+
 const animatedStats = computed(() => {
-  return props.highlights.map((stat) => {
-    // Extract number from value (e.g., "2k+" -> 2000, "4.9/5" -> 4.9)
-    const numericMatch = stat.value.match(/(\d+(?:\.\d+)?)(k|K)?/)
+  return props.highlights.map((stat, index) => {
+    const counter = counters[index]
 
-    if (numericMatch && numericMatch[1]) {
-      let number = parseFloat(numericMatch[1])
-
-      // Convert k to thousands
-      if (numericMatch[2]?.toLowerCase() === 'k') {
-        number = number * 1000
-      }
-
-      // Create counter for whole numbers
-      const counter = useCountUp(number, {
-        duration: 2000,
-        useEasing: true,
-      })
-
+    if (counter) {
       return {
         label: stat.label,
         displayValue: computed(() => {

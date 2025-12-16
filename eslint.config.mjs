@@ -88,6 +88,7 @@ export default withNuxt(
       'checkout-ux-testing/**',
       'tests/**/*.mjs',
       'tests/**/*.js',
+      'tests/fixtures/**', // Ignore all test fixtures (including TypeScript)
       // Generated files
       'supabase/**',
       '*.d.ts',
@@ -125,6 +126,9 @@ export default withNuxt(
       'no-console': 'off',
       // Allow debugger in test files
       'no-debugger': 'off',
+      // Allow empty patterns and unused vars in Playwright fixtures
+      'no-empty-pattern': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
     },
   },
   // E2E test files - similar relaxed rules

@@ -108,11 +108,13 @@ interface CheckoutStepInfo {
 }
 
 interface Props {
-  currentStep: CheckoutStep
+  currentStep?: CheckoutStep
   steps: CheckoutStepInfo[]
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  currentStep: 'shipping', // Default to first step
+})
 
 // Computed properties
 const currentStepIndex = computed(() => {
