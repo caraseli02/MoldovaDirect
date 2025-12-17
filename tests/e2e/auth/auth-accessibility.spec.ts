@@ -1,6 +1,9 @@
 import { test, expect } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 
+// Use unauthenticated context for auth page testing
+test.use({ storageState: { cookies: [], origins: [] } })
+
 test.describe('Authentication Accessibility (WCAG 2.1 Level AA)', () => {
   test.describe('Login Page Accessibility', () => {
     test.beforeEach(async ({ page }) => {

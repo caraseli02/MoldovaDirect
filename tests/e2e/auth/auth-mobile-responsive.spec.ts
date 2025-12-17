@@ -1,5 +1,8 @@
 import { test, expect } from '@playwright/test'
 
+// Use unauthenticated context for auth page testing
+test.use({ storageState: { cookies: [], origins: [] } })
+
 // These tests run on mobile devices configured in playwright.config.ts
 // Projects: 'Mobile Chrome' (Pixel 5) and 'Mobile Safari' (iPhone 12)
 

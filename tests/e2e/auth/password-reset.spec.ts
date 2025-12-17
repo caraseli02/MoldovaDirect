@@ -1,5 +1,8 @@
 import { test, expect } from '../../fixtures/base'
 
+// Use unauthenticated context for auth page testing
+test.use({ storageState: { cookies: [], origins: [] } })
+
 test.describe('Password Reset Flow', () => {
   test.describe('Forgot Password Page', () => {
     test.beforeEach(async ({ page }) => {

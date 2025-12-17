@@ -1,9 +1,10 @@
 import { test, expect } from '../../fixtures/base'
 
+// Use unauthenticated context for auth page testing
+test.use({ storageState: { cookies: [], origins: [] } })
+
 test.describe('Login Flow', () => {
   test.beforeEach(async ({ page }) => {
-    // Clear storage state to test unauthenticated login
-    await page.context().clearCookies()
     await page.goto('/auth/login')
     await page.waitForLoadState('networkidle')
   })

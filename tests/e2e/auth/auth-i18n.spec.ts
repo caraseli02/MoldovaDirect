@@ -1,5 +1,8 @@
 import { test, expect } from '../../fixtures/base'
 
+// Use unauthenticated context for auth page testing
+test.use({ storageState: { cookies: [], origins: [] } })
+
 const locales = ['es', 'en', 'ro', 'ru']
 
 /**
