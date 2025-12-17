@@ -1,7 +1,7 @@
 import { test, expect } from '../../fixtures/base'
 
 test.describe('Admin Inventory Page', () => {
-  test('should load the admin inventory page successfully', async ({ adminPage }) => {
+  test('should load the admin inventory page successfully', async ({ adminAuthenticatedPage: adminPage }) => {
     // Navigate to admin inventory page
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
@@ -14,7 +14,7 @@ test.describe('Admin Inventory Page', () => {
     await expect(adminPage).toHaveTitle(/Inventory|Admin/i)
   })
 
-  test('should display the page header with navigation', async ({ adminPage }) => {
+  test('should display the page header with navigation', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
@@ -29,7 +29,7 @@ test.describe('Admin Inventory Page', () => {
     expect(hasSubtitle).toBeTruthy()
   })
 
-  test('should display tab navigation with correct tabs', async ({ adminPage }) => {
+  test('should display tab navigation with correct tabs', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
@@ -46,7 +46,7 @@ test.describe('Admin Inventory Page', () => {
     await expect(movementsTab).toBeVisible()
   })
 
-  test('should display setup database button', async ({ adminPage }) => {
+  test('should display setup database button', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
@@ -59,7 +59,7 @@ test.describe('Admin Inventory Page', () => {
     expect(isDisabled).toBeFalsy()
   })
 
-  test('should render Inventory Reports component by default', async ({ adminPage }) => {
+  test('should render Inventory Reports component by default', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
@@ -68,7 +68,7 @@ test.describe('Admin Inventory Page', () => {
     await expect(reportsSection).toBeVisible({ timeout: 10000 })
   })
 
-  test('should render Inventory Movements component on tab switch', async ({ adminPage }) => {
+  test('should render Inventory Movements component on tab switch', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
@@ -81,7 +81,7 @@ test.describe('Admin Inventory Page', () => {
     await expect(movementsSection).toBeVisible({ timeout: 10000 })
   })
 
-  test('should test Inventory Reports component functionality', async ({ adminPage }) => {
+  test('should test Inventory Reports component functionality', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
@@ -100,7 +100,7 @@ test.describe('Admin Inventory Page', () => {
     expect(hasStockLevelsOption || hasLowStockOption).toBeTruthy()
   })
 
-  test('should test Movement History filtering options', async ({ adminPage }) => {
+  test('should test Movement History filtering options', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
@@ -166,7 +166,7 @@ test.describe('Admin Inventory Page', () => {
     }
   })
 
-  test('should verify stock indicator component is used', async ({ adminPage }) => {
+  test('should verify stock indicator component is used', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
@@ -186,7 +186,7 @@ test.describe('Admin Inventory Page', () => {
     expect(hasStockIndicators).toBeTruthy()
   })
 
-  test('should test tab switching interaction', async ({ adminPage }) => {
+  test('should test tab switching interaction', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
@@ -220,7 +220,7 @@ test.describe('Admin Inventory Page', () => {
     expect(isReportsActive || isMovementsActive).toBeTruthy()
   })
 
-  test('should display responsive layout on different screen sizes', async ({ adminPage }) => {
+  test('should display responsive layout on different screen sizes', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
@@ -234,7 +234,7 @@ test.describe('Admin Inventory Page', () => {
     expect(isHeaderVisible).toBeTruthy()
   })
 
-  test('should handle async component loading', async ({ adminPage }) => {
+  test('should handle async component loading', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
 
     // Page should load even if components are async
@@ -249,7 +249,7 @@ test.describe('Admin Inventory Page', () => {
     expect(await tabs.count()).toBeGreaterThan(0)
   })
 
-  test('should verify dark mode support in UI', async ({ adminPage }) => {
+  test('should verify dark mode support in UI', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
@@ -264,7 +264,7 @@ test.describe('Admin Inventory Page', () => {
     expect(hasDarkClasses).toBeTruthy()
   })
 
-  test('should verify all UI components are accessible', async ({ adminPage }) => {
+  test('should verify all UI components are accessible', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
@@ -284,7 +284,7 @@ test.describe('Admin Inventory Page', () => {
     }
   })
 
-  test('should verify page renders without layout shift', async ({ adminPage }) => {
+  test('should verify page renders without layout shift', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
@@ -302,7 +302,7 @@ test.describe('Admin Inventory Page', () => {
     }
   })
 
-  test('should verify tab content switches without full page reload', async ({ adminPage }) => {
+  test('should verify tab content switches without full page reload', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
@@ -327,7 +327,7 @@ test.describe('Admin Inventory Page', () => {
     expect(backUrl).toBe(initialUrl)
   })
 
-  test('should take screenshot of loaded page', async ({ adminPage }) => {
+  test('should take screenshot of loaded page', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
@@ -341,7 +341,7 @@ test.describe('Admin Inventory Page', () => {
     expect(true).toBeTruthy()
   })
 
-  test('should verify all text content is readable', async ({ adminPage }) => {
+  test('should verify all text content is readable', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 

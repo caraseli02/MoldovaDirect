@@ -104,8 +104,15 @@ export const test = base.extend<TestFixtures>({
     await use(page)
   },
 
-  adminPage: async ({ page, adminUser, baseURL }, use) => {
-    await page.goto(`${baseURL}/login`)
+  adminPage: async ({ browser, adminUser, baseURL }, use) => {
+    // Create a fresh context without any storage state to ensure clean login
+    const context = await browser.newContext()
+    const page = await context.newPage()
+
+    await page.goto(`${baseURL}/auth/login`)
+
+    // Wait for the page to be fully loaded
+    await page.waitForLoadState('networkidle')
 
     await page.fill('[data-testid="email-input"]', adminUser.email)
     await page.fill('[data-testid="password-input"]', adminUser.password)
@@ -118,6 +125,9 @@ export const test = base.extend<TestFixtures>({
     // TODO: Add MFA handling if admin routes require it
 
     await use(page)
+
+    // Cleanup
+    await context.close()
   },
 
   adminAuthenticatedPage: async ({ browser }, use) => {
