@@ -24,14 +24,18 @@
 
 import { createClient } from '@supabase/supabase-js'
 import { generateSecurePassword } from './generateSecurePassword.mjs'
+import dotenv from 'dotenv'
+
+// Load environment variables
+dotenv.config()
 
 // Configuration
 const SUPABASE_URL = process.env.SUPABASE_URL || process.env.PUBLIC_SUPABASE_URL
-const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY
 
 if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
   console.error('❌ Error: Missing required environment variables')
-  console.error('Please set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY')
+  console.error('Please set SUPABASE_URL and SUPABASE_SERVICE_KEY')
   console.error('\nYou can find these in your Supabase dashboard:')
   console.error('1. Go to Settings > API')
   console.error('2. Copy your Project URL')

@@ -283,6 +283,22 @@ async function globalSetup(config: FullConfig) {
         console.warn(`  ⚠️  Admin login may have failed - URL: ${urlAfterLogin}`)
       }
       else {
+        // Set admin role via test API
+        console.log(`  Setting admin role in database...`)
+        const roleResponse = await adminPage.request.post(`${baseURL}/api/test/set-admin-role`, {
+          data: { email: adminEmail },
+        })
+
+        if (roleResponse.ok()) {
+          const roleData = await roleResponse.json()
+          console.log(`  ✅ Admin role set: ${roleData.user.profile.role}`)
+        }
+        else {
+          const errorText = await roleResponse.text()
+          console.warn(`  ⚠️  Failed to set admin role: ${roleResponse.status()}`)
+          console.warn(`  Error: ${errorText}`)
+        }
+
         const adminStorageFile = path.join(authDir, 'admin.json')
         await adminContext.storageState({ path: adminStorageFile })
         console.log(`✓ Admin authentication completed and saved`)
