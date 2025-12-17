@@ -521,6 +521,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { AlertCircle, CheckCircle2 } from 'lucide-vue-next'
+import PasswordStrengthMeter from '@/components/auth/PasswordStrengthMeter.vue'
 
 // Apply guest middleware - redirect authenticated users
 definePageMeta({
