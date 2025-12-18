@@ -82,9 +82,11 @@ export default defineConfig({
       },
     },
 
-    // Full E2E: English locale testing
+    // Full E2E: English locale testing - ONLY i18n-specific tests
     {
       name: 'chromium-en',
+      testDir: './tests',
+      testMatch: '**/auth-i18n.spec.ts', // Only i18n tests for locale verification
       use: {
         ...devices['Desktop Chrome'],
         locale: 'en',
@@ -94,9 +96,11 @@ export default defineConfig({
       },
     },
 
-    // Full E2E: Cross-browser testing
+    // Full E2E: Cross-browser testing - ONLY critical tests
     {
       name: 'firefox-es',
+      testDir: './tests/e2e/critical',
+      testMatch: '**/*.spec.ts', // Only critical tests for browser compatibility
       use: {
         ...devices['Desktop Firefox'],
         locale: 'es',
@@ -105,9 +109,11 @@ export default defineConfig({
       },
     },
 
-    // Full E2E: Mobile responsive testing
+    // Full E2E: Mobile responsive testing - ONLY mobile-specific tests
     {
       name: 'mobile',
+      testDir: './tests',
+      testMatch: '**/auth-mobile-responsive.spec.ts', // Only mobile-responsive tests
       use: {
         ...devices['Pixel 5'],
         locale: 'es',
