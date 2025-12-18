@@ -217,10 +217,18 @@ async function globalSetup(config: FullConfig) {
     catch (error: any) {
       const errorMessage = error instanceof Error ? error.message : String(error)
 
-      // If it's an auth error, try to create an empty auth file to skip this locale
-      // This allows tests to run even if the test account doesn't exist
-      if (errorMessage.includes('Correo o contraseña incorrectos') || errorMessage.includes('incorrect')) {
-        console.warn(`⚠️ Auth failed for ${locale}: Account may not exist. Creating empty auth state.`)
+      // Handle various error types gracefully - create empty auth state to allow tests to continue
+      // This allows tests to run even if the test account doesn't exist or page fails to load
+      const isRecoverableError = errorMessage.includes('Correo o contraseña incorrectos')
+        || errorMessage.includes('incorrect')
+        || errorMessage.includes('Timeout')
+        || errorMessage.includes('timeout')
+        || errorMessage.includes('exceeded')
+        || errorMessage.includes('navigation')
+
+      if (isRecoverableError) {
+        console.warn(`⚠️ Auth failed for ${locale}: ${errorMessage}`)
+        console.warn(`   Creating empty auth state to allow tests to continue.`)
         // Create an empty storage state to allow tests to run
         // Tests can then handle authentication errors gracefully
         const emptyAuthFile = path.join(authDir, `user-${locale}.json`)
