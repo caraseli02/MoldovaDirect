@@ -39,21 +39,19 @@ export default defineEventHandler(async (event) => {
   // Authentication MUST happen first, never caught
   await requireAdminRole(event)
 
-  const query = getQuery(event) as AdminProductFilters
+  const query = getQuery(event)
 
-  // Parse query parameters with defaults
-  const {
-    search,
-    categoryId,
-    active,
-    inStock,
-    outOfStock,
-    lowStock,
-    sortBy = 'created_at',
-    sortOrder = 'desc',
-    page = 1,
-    limit = 20,
-  } = query
+  // Parse query parameters with defaults and proper type conversion
+  const search = query.search as string | undefined
+  const categoryId = query.categoryId ? parseInt(query.categoryId as string) : undefined
+  const active = query.active !== undefined ? query.active === 'true' || query.active === true : undefined
+  const inStock = query.inStock === 'true' || query.inStock === true
+  const outOfStock = query.outOfStock === 'true' || query.outOfStock === true
+  const lowStock = query.lowStock === 'true' || query.lowStock === true
+  const sortBy = (query.sortBy as 'name' | 'price' | 'stock' | 'created_at') || 'created_at'
+  const sortOrder = (query.sortOrder as 'asc' | 'desc') || 'desc'
+  const page = parseInt(query.page as string) || 1
+  const limit = Math.min(parseInt(query.limit as string) || 20, 100)
 
   // Validate search term length if provided
   if (search && search.length > MAX_SEARCH_LENGTH) {

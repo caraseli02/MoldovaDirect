@@ -58,20 +58,18 @@ export default defineEventHandler(async (event) => {
   const supabase = serverSupabaseServiceRole(event)
 
   // Parse query parameters
-  const query = getQuery(event) as UserFilters
-  const {
-    search = '',
-    registrationDateFrom,
-    registrationDateTo,
-    status,
-    sortBy = 'created_at',
-    sortOrder = 'desc',
-    page = 1,
-    limit = 20,
-  } = query
+  const query = getQuery(event)
+  const search = (query.search as string) || ''
+  const registrationDateFrom = query.registrationDateFrom as string | undefined
+  const registrationDateTo = query.registrationDateTo as string | undefined
+  const status = query.status as string | undefined
+  const sortBy = (query.sortBy as string) || 'created_at'
+  const sortOrder = (query.sortOrder as string) || 'desc'
+  const page = parseInt(query.page as string) || 1
+  const limit = Math.min(parseInt(query.limit as string) || 20, 100)
 
   // Calculate pagination
-  const offset = (Number(page) - 1) * Number(limit)
+  const offset = (page - 1) * limit
 
   try {
     // Fetch profiles

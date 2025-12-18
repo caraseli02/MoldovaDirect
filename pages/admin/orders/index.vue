@@ -124,7 +124,7 @@
       >
         <div class="rounded-full bg-muted p-6 mb-4">
           <commonIcon
-            name="lucide:package-search"
+            name="lucide:package"
             class="h-12 w-12 text-muted-foreground"
           />
         </div>
@@ -179,7 +179,7 @@
                     <span>Order #</span>
                     <commonIcon
                       v-if="adminOrdersStore.filters.sortBy === 'created_at'"
-                      name="lucide:arrow-down"
+                      name="lucide:chevron-down"
                       class="h-4 w-4"
                       :class="adminOrdersStore.filters.sortOrder === 'asc' ? 'transform rotate-180' : ''"
                     />
@@ -194,7 +194,7 @@
                     <span>Date</span>
                     <commonIcon
                       v-if="adminOrdersStore.filters.sortBy === 'created_at'"
-                      name="lucide:arrow-down"
+                      name="lucide:chevron-down"
                       class="h-4 w-4"
                       :class="adminOrdersStore.filters.sortOrder === 'asc' ? 'transform rotate-180' : ''"
                     />
@@ -209,7 +209,7 @@
                     <span>Total</span>
                     <commonIcon
                       v-if="adminOrdersStore.filters.sortBy === 'total_eur'"
-                      name="lucide:arrow-down"
+                      name="lucide:chevron-down"
                       class="h-4 w-4"
                       :class="adminOrdersStore.filters.sortOrder === 'asc' ? 'transform rotate-180' : ''"
                     />
@@ -223,7 +223,7 @@
                     <span>Status</span>
                     <commonIcon
                       v-if="adminOrdersStore.filters.sortBy === 'status'"
-                      name="lucide:arrow-down"
+                      name="lucide:chevron-down"
                       class="h-4 w-4"
                       :class="adminOrdersStore.filters.sortOrder === 'asc' ? 'transform rotate-180' : ''"
                     />
@@ -332,7 +332,7 @@ const statusFilters = [
     value: 'processing',
     label: 'Processing',
     shortLabel: 'Process',
-    icon: 'lucide:loader',
+    icon: 'lucide:loader-2',
     iconColor: 'text-blue-600 dark:text-blue-500',
   },
   {

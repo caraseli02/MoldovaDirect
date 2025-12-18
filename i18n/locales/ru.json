@@ -319,7 +319,10 @@
       "passwordMatch": "Passwords match",
       "resetPasswordButton": "Reset your password",
       "resettingPassword": "Resetting your password",
-      "processingPasswordReset": "Processing your password reset request"
+      "processingPasswordReset": "Processing your password reset request",
+      "sendResetEmailButton": "Отправить письмо для сброса пароля",
+      "sendingResetEmail": "Отправка письма",
+      "backToLoginLink": "Вернуться на страницу входа"
     },
     "errors": {
       "invalidCredentials": "Неверный email или пароль",
@@ -363,6 +366,7 @@
         "lowercase": "Должен содержать хотя бы одну строчную букву",
         "number": "Должен содержать хотя бы одну цифру",
         "mismatch": "Пароли не совпадают",
+        "match": "Пароли совпадают",
         "weak": "Пароль слишком слабый",
         "current": "Текущий пароль обязателен"
       },

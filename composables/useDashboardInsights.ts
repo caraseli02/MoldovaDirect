@@ -108,8 +108,8 @@ export function useDashboardInsights(
         description: 'You haven\'t made any sales yet. Promote your store to start seeing results.',
         icon: 'lucide:megaphone',
         tone: 'warning',
-        to: '/admin/tools/campaigns',
-        action: 'Launch campaign',
+        to: '/admin/products',
+        action: 'View products',
       })
     }
     else {
@@ -143,7 +143,7 @@ export function useDashboardInsights(
         description: 'No new customer sign-ups detected today. Activate promotions or outreach to reignite traffic.',
         icon: 'lucide:radar',
         tone: 'warning',
-        to: '/admin/tools/campaigns',
+        to: '/admin/products',
         action: 'Boost acquisition',
       })
     }

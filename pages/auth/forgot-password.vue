@@ -2,7 +2,7 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 <template>
   <div class="min-h-screen flex flex-col bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
     <!-- Mobile-optimized container -->
-    <div class="flex-1 flex items-center justify-center px-6 py-8 sm:px-8 lg:px-12">
+    <main class="flex-1 flex items-center justify-center px-6 py-8 sm:px-8 lg:px-12">
       <div class="w-full max-w-sm sm:max-w-md space-y-6 sm:space-y-8">
         <!-- Logo/Brand area -->
         <div class="text-center space-y-2">
@@ -21,9 +21,9 @@ import type { SupabaseClient } from '@supabase/supabase-js'
               />
             </svg>
           </div>
-          <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+          <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
             {{ $t('auth.forgotPassword') }}
-          </h2>
+          </h1>
           <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 px-4">
             {{ $t('auth.forgotPasswordInstructions') }}
           </p>
@@ -39,6 +39,7 @@ import type { SupabaseClient } from '@supabase/supabase-js'
             <Transition name="slide-fade">
               <div
                 v-if="success"
+                role="alert"
                 class="rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 p-3 sm:p-4"
               >
                 <div class="flex items-start">
@@ -46,6 +47,7 @@ import type { SupabaseClient } from '@supabase/supabase-js'
                     class="w-5 h-5 text-green-500 dark:text-green-400 mt-0.5"
                     fill="currentColor"
                     viewBox="0 0 20 20"
+                    aria-hidden="true"
                   >
                     <path
                       fill-rule="evenodd"
@@ -63,6 +65,7 @@ import type { SupabaseClient } from '@supabase/supabase-js'
             <Transition name="slide-fade">
               <div
                 v-if="error"
+                role="alert"
                 class="rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-3 sm:p-4"
               >
                 <div class="flex items-start">
@@ -70,6 +73,7 @@ import type { SupabaseClient } from '@supabase/supabase-js'
                     class="w-5 h-5 text-red-500 dark:text-red-400 mt-0.5"
                     fill="currentColor"
                     viewBox="0 0 20 20"
+                    aria-hidden="true"
                   >
                     <path
                       fill-rule="evenodd"
@@ -92,7 +96,14 @@ import type { SupabaseClient } from '@supabase/supabase-js'
                 name="email"
                 type="email"
                 autocomplete="email"
+                autocapitalize="none"
+                autocorrect="off"
+                spellcheck="false"
+                inputmode="email"
                 required
+                data-testid="email-input"
+                :aria-invalid="error ? 'true' : 'false'"
+                :aria-describedby="error ? 'email-error' : undefined"
                 class="peer w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-500 rounded-xl text-gray-900 dark:text-white placeholder-transparent focus:border-primary-500 dark:focus:border-primary-400 focus:outline-none transition-all bg-white dark:bg-gray-700"
                 placeholder="Email"
               />
@@ -108,33 +119,48 @@ import type { SupabaseClient } from '@supabase/supabase-js'
             <UiButton
               type="submit"
               :disabled="loading || success"
+              data-testid="reset-button"
               class="w-full"
               size="lg"
+              :aria-label="loading ? $t('auth.accessibility.sendingResetEmail') : $t('auth.accessibility.sendResetEmailButton')"
+              :aria-describedby="loading ? 'reset-status' : undefined"
             >
               <commonIcon
                 v-if="loading"
                 name="lucide:loader-2"
                 class="mr-2 h-5 w-5 animate-spin"
+                aria-hidden="true"
               />
               <commonIcon
                 v-else
                 name="lucide:mail"
                 class="mr-2 h-5 w-5"
+                aria-hidden="true"
               />
               {{ loading ? $t('common.loading') : $t('auth.sendResetEmail') }}
             </UiButton>
+            <div
+              v-if="loading"
+              id="reset-status"
+              class="sr-only"
+              aria-live="polite"
+            >
+              {{ $t('auth.accessibility.sendingResetEmail') }}
+            </div>
 
             <!-- Back to login link -->
             <div class="text-center pt-4">
               <NuxtLink
                 :to="localePath('/auth/login')"
-                class="inline-flex items-center text-sm font-medium text-primary-600 hover:text-primary-500 dark:text-primary-300 dark:hover:text-primary-200 transition-colors"
+                class="inline-flex items-center text-sm font-medium text-primary-600 hover:text-primary-500 dark:text-primary-300 dark:hover:text-primary-200 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded-md px-2 py-1"
+                :aria-label="$t('auth.accessibility.backToLoginLink')"
               >
                 <svg
                   class="w-4 h-4 mr-1"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  aria-hidden="true"
                 >
                   <path
                     stroke-linecap="round"
@@ -149,7 +175,7 @@ import type { SupabaseClient } from '@supabase/supabase-js'
           </form>
         </div>
       </div>
-    </div>
+    </main>
   </div>
 </template>
 

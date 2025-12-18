@@ -46,7 +46,7 @@
         <div v-if="pickingTasks.length > 0">
           <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-3 flex items-center">
             <commonIcon
-              name="lucide:package-search"
+              name="lucide:package"
               class="h-4 w-4 mr-2"
             />
             Picking

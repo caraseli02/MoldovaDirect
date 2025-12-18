@@ -143,7 +143,10 @@
       "passwordMatch": "Parolele se potrivesc",
       "resetPasswordButton": "Resetează-ți parola",
       "resettingPassword": "Resetare parolă",
-      "processingPasswordReset": "Procesăm cererea ta de resetare a parolei"
+      "processingPasswordReset": "Procesăm cererea ta de resetare a parolei",
+      "sendResetEmailButton": "Trimite email de resetare parolă",
+      "sendingResetEmail": "Trimitere email de resetare",
+      "backToLoginLink": "Înapoi la pagina de autentificare"
     },
     "errors": {
       "invalidCredentials": "Email sau parolă incorectă",
@@ -187,6 +190,7 @@
         "lowercase": "Trebuie să conțină cel puțin o literă mică",
         "number": "Trebuie să conțină cel puțin un număr",
         "mismatch": "Parolele nu se potrivesc",
+        "match": "Parolele se potrivesc",
         "weak": "Parola este prea slabă",
         "current": "Parola curentă este obligatorie"
       },
