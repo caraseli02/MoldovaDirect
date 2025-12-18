@@ -12,7 +12,7 @@
           </p>
           <!-- Trust & Security Badges -->
           <div class="mt-6">
-            <p class="text-xs text-gray-500 mb-3">
+            <p class="text-xs text-gray-400 mb-3">
               {{ $t('footer.trust.title') }}
             </p>
             <div class="flex flex-wrap gap-3">
@@ -197,7 +197,7 @@
       <div class="mt-12 pt-8 border-t border-gray-800">
         <div class="flex flex-col md:flex-row items-center justify-between gap-4">
           <div class="text-center md:text-left">
-            <p class="text-xs text-gray-500 mb-2">
+            <p class="text-xs text-gray-400 mb-2">
               {{ $t('footer.payment.title') }}
             </p>
             <div class="flex gap-2 items-center">
