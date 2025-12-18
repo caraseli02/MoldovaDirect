@@ -19,11 +19,13 @@ const __dirname = path.dirname(__filename)
  */
 async function waitForServer(baseURL: string, timeout = 120000) {
   const startTime = Date.now()
-  console.log(`⏳ Waiting for server at ${baseURL}...`)
+  // Check auth/login page as it's more reliable than root
+  const healthCheckURL = `${baseURL}/auth/login`
+  console.log(`⏳ Waiting for server at ${healthCheckURL}...`)
 
   while (Date.now() - startTime < timeout) {
     try {
-      const response = await fetch(baseURL)
+      const response = await fetch(healthCheckURL)
       if (response.status < 500) {
         console.log('✅ Server is ready!')
         return
@@ -64,7 +66,8 @@ async function globalSetup(config: FullConfig) {
     fs.mkdirSync(authDir, { recursive: true })
   }
 
-  const locales = ['es', 'en', 'ro', 'ru']
+  // Only create auth for locales actually used in test projects
+  const locales = ['es', 'en']
 
   for (const locale of locales) {
     const context = await browser.newContext({

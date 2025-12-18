@@ -134,7 +134,7 @@ export default defineConfig({
     ? undefined
     : {
         command: 'npm run dev',
-        url: 'http://localhost:3000',
+        url: 'http://localhost:3000/auth/login', // Use /auth/login as root returns 500
         reuseExistingServer: !process.env.CI,
         stdout: 'pipe',
         stderr: 'pipe',

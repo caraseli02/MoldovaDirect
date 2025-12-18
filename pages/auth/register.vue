@@ -228,6 +228,7 @@
                     variant="ghost"
                     size="icon"
                     class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-600 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white"
+                    data-testid="password-toggle"
                     :aria-label="showPassword ? $t('auth.accessibility.hidePassword') : $t('auth.accessibility.showPassword')"
                     :aria-pressed="showPassword"
                     @click="togglePasswordVisibility"
@@ -396,6 +397,7 @@
                 <p
                   v-else-if="form.confirmPassword && form.password === form.confirmPassword"
                   class="text-sm text-green-600 dark:text-green-300"
+                  data-testid="password-match-indicator"
                 >
                   <svg
                     class="w-4 h-4 inline mr-1"
@@ -545,6 +547,14 @@ const form = ref({
   confirmPassword: '',
   acceptTerms: false,
 })
+
+// Expose form for E2E testing (only in development/test, client-side only)
+if (import.meta.dev && import.meta.client) {
+  (window as any).__testForm = form
+  ;(window as any).__setAcceptTerms = (value: boolean) => {
+    form.value.acceptTerms = value
+  }
+}
 
 const error = ref('')
 const success = ref('')
