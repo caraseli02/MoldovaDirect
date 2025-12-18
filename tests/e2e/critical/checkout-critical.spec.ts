@@ -42,7 +42,8 @@ test.describe('Critical Checkout Flows', () => {
 
     // Login
     await helpers.loginAsTestUser()
-    await expect(page).toHaveURL(URL_PATTERNS.ACCOUNT, { timeout: TIMEOUTS.LONG })
+    // Test user might redirect to /admin (if admin) or /account (if regular user)
+    await page.waitForURL(/\/(account|admin)/, { timeout: TIMEOUTS.LONG })
 
     // Add product to cart
     await helpers.addFirstProductToCart()

@@ -48,12 +48,12 @@ test.describe('Admin Email Testing Tool', () => {
 
     // Check for specific email types
     const optionTexts = await options.allTextContents()
-    expect(optionTexts).toContain(expect.stringContaining('Order Confirmation'))
-    expect(optionTexts).toContain(expect.stringContaining('Order Processing'))
-    expect(optionTexts).toContain(expect.stringContaining('Order Shipped'))
-    expect(optionTexts).toContain(expect.stringContaining('Order Delivered'))
-    expect(optionTexts).toContain(expect.stringContaining('Order Cancelled'))
-    expect(optionTexts).toContain(expect.stringContaining('Order Issue'))
+    expect(optionTexts.join(', ')).toContain('Order Confirmation')
+    expect(optionTexts.join(', ')).toContain('Order Processing')
+    expect(optionTexts.join(', ')).toContain('Order Shipped')
+    expect(optionTexts.join(', ')).toContain('Order Delivered')
+    expect(optionTexts.join(', ')).toContain('Order Cancelled')
+    expect(optionTexts.join(', ')).toContain('Order Issue')
   })
 
   test('should have all locale options available', async ({ adminAuthenticatedPage }) => {

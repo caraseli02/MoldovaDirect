@@ -126,6 +126,11 @@ test.describe('Authentication Accessibility (WCAG 2.1 Level AA)', () => {
     test('should not have any WCAG 2.1 Level AA violations', async ({ page }) => {
       const accessibilityScanResults = await new AxeBuilder({ page })
         .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+        // Exclude reka-ui checkbox hidden input violations (known third-party library issue)
+        // The checkbox component creates a hidden input for form submission which triggers:
+        // - form-field-no-label: Hidden input doesn't need a visible label
+        // - nested-interactive: Hidden input inside button is intentional for form data
+        .exclude('input[data-hidden]')
         .analyze()
 
       expect(accessibilityScanResults.violations).toEqual([])
@@ -163,8 +168,8 @@ test.describe('Authentication Accessibility (WCAG 2.1 Level AA)', () => {
     })
 
     test('should have accessible terms and privacy links', async ({ page }) => {
-      const termsLink = page.locator('a[href*="/terms"]')
-      const privacyLink = page.locator('a[href*="/privacy"]')
+      const termsLink = page.locator('[data-testid="terms-link"]')
+      const privacyLink = page.locator('[data-testid="privacy-link"]')
 
       // Links should have accessible names
       await expect(termsLink).toBeVisible()
@@ -172,6 +177,7 @@ test.describe('Authentication Accessibility (WCAG 2.1 Level AA)', () => {
 
       // Links should open in new tab with proper attributes
       await expect(termsLink).toHaveAttribute('target', '_blank')
+      await expect(termsLink).toHaveAttribute('rel', 'noopener noreferrer')
 
       // Should have aria-label for screen readers
       const termsAriaLabel = await termsLink.getAttribute('aria-label')

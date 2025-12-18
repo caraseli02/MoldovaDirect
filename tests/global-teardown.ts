@@ -9,15 +9,21 @@ const __dirname = path.dirname(__filename)
 async function globalTeardown(_config: FullConfig) {
   console.log('Starting global teardown...')
 
-  if (process.env.KEEP_TEST_DATA !== 'true') {
+  // Don't delete auth files - they're needed for test runs
+  // and should persist across multiple test executions
+  // Only clean up if explicitly requested via CLEAN_AUTH environment variable
+  if (process.env.CLEAN_AUTH === 'true') {
     try {
       const testDataPath = path.join(__dirname, 'fixtures', '.auth')
       await fs.rm(testDataPath, { recursive: true, force: true })
-      console.log('✓ Cleaned up test data')
+      console.log('✓ Cleaned up auth data')
     }
     catch (error: any) {
-      console.error('✗ Failed to cleanup test data:', error)
+      console.error('✗ Failed to cleanup auth data:', error)
     }
+  }
+  else {
+    console.log('✓ Auth data preserved for reuse')
   }
 
   console.log('Global teardown completed')

@@ -130,10 +130,11 @@ export const test = base.extend<TestFixtures>({
     await context.close()
   },
 
-  adminAuthenticatedPage: async ({ browser }, use) => {
+  adminAuthenticatedPage: async ({ browser, baseURL }, use) => {
     // Create a new context with admin storage state
     const context = await browser.newContext({
       storageState: 'tests/fixtures/.auth/admin.json',
+      baseURL,
     })
     const page = await context.newPage()
 

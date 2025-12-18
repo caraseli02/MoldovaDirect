@@ -18,15 +18,13 @@ test.describe('Admin Inventory Page', () => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
-    // Check main heading
-    const heading = adminPage.locator('h1')
-    const headingText = await heading.textContent()
-    expect(headingText).toContain('Inventory Management')
+    // Check main heading - use getByRole to be more specific
+    const heading = adminPage.getByRole('heading', { name: /Inventory Management/i })
+    await expect(heading).toBeVisible()
 
     // Check subtitle
-    const subtitle = adminPage.locator('p.text-sm')
-    const hasSubtitle = await subtitle.isVisible()
-    expect(hasSubtitle).toBeTruthy()
+    const subtitle = adminPage.locator('main p.text-sm').first()
+    await expect(subtitle).toBeVisible()
   })
 
   test('should display tab navigation with correct tabs', async ({ adminAuthenticatedPage: adminPage }) => {
@@ -38,9 +36,9 @@ test.describe('Admin Inventory Page', () => {
     const tabCount = await tabButtons.count()
     expect(tabCount).toBeGreaterThan(0)
 
-    // Check for specific tab labels
-    const reportsTab = adminPage.locator('text=Inventory Reports')
-    const movementsTab = adminPage.locator('text=Movement History')
+    // Check for specific tab labels - use getByRole for buttons
+    const reportsTab = adminPage.getByRole('button', { name: /Inventory Reports/i })
+    const movementsTab = adminPage.getByRole('button', { name: /Movement History/i })
 
     await expect(reportsTab).toBeVisible()
     await expect(movementsTab).toBeVisible()
@@ -63,9 +61,9 @@ test.describe('Admin Inventory Page', () => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
-    // Wait for reports component to be visible
-    const reportsSection = adminPage.locator('text=Inventory Reports')
-    await expect(reportsSection).toBeVisible({ timeout: 10000 })
+    // Wait for reports component heading to be visible
+    const reportsHeading = adminPage.getByRole('heading', { name: /Inventory Reports/i }).last()
+    await expect(reportsHeading).toBeVisible({ timeout: 10000 })
   })
 
   test('should render Inventory Movements component on tab switch', async ({ adminAuthenticatedPage: adminPage }) => {

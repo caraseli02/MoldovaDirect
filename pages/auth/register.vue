@@ -216,7 +216,7 @@
                     minlength="8"
                     data-testid="password-input"
                     :aria-invalid="passwordError ? 'true' : 'false'"
-                    :aria-describedby="passwordError ? 'password-error' : 'password-requirements'"
+                    :aria-describedby="passwordError ? 'password-error password-strength-status' : 'password-strength-status password-requirements'"
                     :placeholder="$t('auth.password')"
                     class="h-11 border-2 border-gray-200 bg-white pr-12 text-gray-900 placeholder:text-gray-500 dark:border-gray-500 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-300"
                     :class="{ 'border-red-500 dark:border-red-400': passwordError }"
@@ -434,8 +434,10 @@
                   {{ $t('auth.acceptTerms') }}
                   <NuxtLink
                     :to="localePath('/terms')"
+                    data-testid="terms-link"
                     class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-300 dark:hover:text-primary-200 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded"
                     target="_blank"
+                    rel="noopener noreferrer"
                     :aria-label="$t('auth.accessibility.termsLink')"
                   >
                     {{ $t('footer.terms') }}
@@ -443,8 +445,10 @@
                   {{ $t('common.and') }}
                   <NuxtLink
                     :to="localePath('/privacy')"
+                    data-testid="privacy-link"
                     class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-300 dark:hover:text-primary-200 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded"
                     target="_blank"
+                    rel="noopener noreferrer"
                     :aria-label="$t('auth.accessibility.privacyLink')"
                   >
                     {{ $t('footer.privacy') }}

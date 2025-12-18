@@ -1,11 +1,12 @@
 <template>
   <div
     v-if="password"
+    id="password-strength-status"
     class="mt-2 space-y-2"
     data-testid="password-strength-meter"
     role="status"
-    :aria-label="`Password strength: ${strengthLabel}`"
     aria-live="polite"
+    :aria-atomic="true"
   >
     <!-- Strength bar -->
     <div

@@ -240,12 +240,12 @@ test.describe('Admin Analytics Page', () => {
     await adminAuthenticatedPage.goto('/admin/analytics')
     await adminAuthenticatedPage.waitForLoadState('networkidle')
 
-    // Check for main heading
-    const mainHeading = adminAuthenticatedPage.locator('h1')
-    await expect(mainHeading).toBeVisible()
+    // Check for main heading - use more specific selector
+    const mainHeading = adminAuthenticatedPage.locator('main h1, h1:has-text("Analytics")')
+    await expect(mainHeading.first()).toBeVisible()
 
     // Tabs should have proper navigation
-    const tabs = adminAuthenticatedPage.locator('button[role="button"]').filter({ hasText: /Overview|Users|Products/i })
+    const tabs = adminAuthenticatedPage.getByRole('button').filter({ hasText: /Overview|Users|Products/i })
     const tabCount = await tabs.count()
 
     expect(tabCount).toBeGreaterThanOrEqual(3)
