@@ -138,6 +138,10 @@ definePageMeta({
   middleware: 'admin',
 })
 
+useHead({
+  title: 'Email Testing - Admin',
+})
+
 const email = ref('')
 const selectedType = ref<EmailType>('order_confirmation')
 const issueDescription = ref('Customer reported a damaged parcel on delivery (test data).')
