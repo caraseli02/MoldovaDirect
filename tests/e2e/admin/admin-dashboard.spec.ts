@@ -1,5 +1,6 @@
 import type { Page } from '@playwright/test'
 import { test, expect } from '@playwright/test'
+import path from 'node:path'
 
 test.describe('Admin Dashboard - Comprehensive Testing', () => {
   let page: Page
@@ -46,7 +47,7 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
     await page.waitForLoadState('networkidle')
 
     // Take screenshot
-    const screenshotPath = '/Users/vladislavcaraseli/Documents/MoldovaDirect.worktrees/products-improvments/admin-test-1-page-load.png'
+    const screenshotPath = path.join('test-results', 'screenshots', 'admin-test-1-page-load.png')
     await page.screenshot({ path: screenshotPath, fullPage: true })
     console.log(`✓ Screenshot saved to: ${screenshotPath}`)
 
@@ -202,7 +203,7 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
     console.log(`  - Has content: ${textContent.hasContent}`)
 
     // Take screenshot
-    const screenshotPath = '/Users/vladislavcaraseli/Documents/MoldovaDirect.worktrees/products-improvments/admin-test-2-ui-elements.png'
+    const screenshotPath = path.join('test-results', 'screenshots', 'admin-test-2-ui-elements.png')
     await page.screenshot({ path: screenshotPath, fullPage: true })
     console.log(`\n✓ Screenshot saved to: ${screenshotPath}`)
   })
@@ -505,7 +506,7 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
     console.log(`    Load Complete: ${metrics.loadComplete}ms`)
 
     // Take final full screenshot
-    const screenshotPath = '/Users/vladislavcaraseli/Documents/MoldovaDirect.worktrees/products-improvments/admin-test-3-final.png'
+    const screenshotPath = path.join('test-results', 'screenshots', 'admin-test-3-final.png')
     await page.screenshot({ path: screenshotPath, fullPage: true })
     console.log(`\n✓ Final screenshot saved to: ${screenshotPath}`)
   })

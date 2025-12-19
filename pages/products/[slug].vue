@@ -699,6 +699,8 @@
       </Teleport>
 
       <!-- Image Zoom Modal -->
+      <!-- TODO: Implement ProductImageZoomModal component -->
+      <!--
       <ProductImageZoomModal
         v-if="product?.images?.length"
         :is-open="showZoomModal"
@@ -710,6 +712,7 @@
         @previous="handlePreviousImage"
         @next="handleNextImage"
       />
+      -->
     </div>
   </div>
 </template>
