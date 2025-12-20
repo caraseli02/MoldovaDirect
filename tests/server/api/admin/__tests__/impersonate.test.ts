@@ -20,7 +20,7 @@ describe('POST /api/admin/impersonate', () => {
     // Create admin user
     const { data: admin } = await supabase.auth.signUp({
       email: `test-admin-impersonate-${Date.now()}@example.test`,
-      password: 'TestPassword123!'
+      password: 'TestPassword123!',
     })
     adminUser = admin.user
     adminToken = admin.session.access_token
@@ -33,7 +33,7 @@ describe('POST /api/admin/impersonate', () => {
     // Create regular user to impersonate
     const { data: user } = await supabase.auth.signUp({
       email: `test-user-impersonate-${Date.now()}@example.test`,
-      password: 'TestPassword123!'
+      password: 'TestPassword123!',
     })
     regularUser = user.user
     regularToken = user.session.access_token
@@ -77,14 +77,14 @@ describe('POST /api/admin/impersonate', () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${adminToken}`
+          'Authorization': `Bearer ${adminToken}`,
         },
         body: JSON.stringify({
           action: 'start',
           userId: regularUser.id,
           reason: 'Testing impersonation functionality for unit tests',
-          duration: 30
-        })
+          duration: 30,
+        }),
       })
 
       const data = await response.json()
@@ -102,13 +102,13 @@ describe('POST /api/admin/impersonate', () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${adminToken}`
+          'Authorization': `Bearer ${adminToken}`,
         },
         body: JSON.stringify({
           action: 'start',
           userId: regularUser.id,
-          duration: 30
-        })
+          duration: 30,
+        }),
       })
 
       expect(response.status).toBe(400)
@@ -121,14 +121,14 @@ describe('POST /api/admin/impersonate', () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${adminToken}`
+          'Authorization': `Bearer ${adminToken}`,
         },
         body: JSON.stringify({
           action: 'start',
           userId: regularUser.id,
           reason: 'short',
-          duration: 30
-        })
+          duration: 30,
+        }),
       })
 
       expect(response.status).toBe(400)
@@ -141,13 +141,13 @@ describe('POST /api/admin/impersonate', () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${adminToken}`
+          'Authorization': `Bearer ${adminToken}`,
         },
         body: JSON.stringify({
           action: 'start',
           reason: 'Testing without user ID for validation',
-          duration: 30
-        })
+          duration: 30,
+        }),
       })
 
       expect(response.status).toBe(400)
@@ -160,14 +160,14 @@ describe('POST /api/admin/impersonate', () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${adminToken}`
+          'Authorization': `Bearer ${adminToken}`,
         },
         body: JSON.stringify({
           action: 'start',
           userId: '00000000-0000-0000-0000-000000000000',
           reason: 'Testing with non-existent user ID',
-          duration: 30
-        })
+          duration: 30,
+        }),
       })
 
       expect(response.status).toBe(404)
@@ -178,14 +178,14 @@ describe('POST /api/admin/impersonate', () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${adminToken}`
+          'Authorization': `Bearer ${adminToken}`,
         },
         body: JSON.stringify({
           action: 'start',
           userId: regularUser.id,
           reason: 'Testing duration clamping to maximum value',
-          duration: 200 // Over max of 120
-        })
+          duration: 200, // Over max of 120
+        }),
       })
 
       const data = await response.json()
@@ -198,14 +198,14 @@ describe('POST /api/admin/impersonate', () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${regularToken}`
+          'Authorization': `Bearer ${regularToken}`,
         },
         body: JSON.stringify({
           action: 'start',
           userId: adminUser.id,
           reason: 'Testing non-admin access control',
-          duration: 30
-        })
+          duration: 30,
+        }),
       })
 
       expect(response.status).toBe(403)
@@ -220,15 +220,15 @@ describe('POST /api/admin/impersonate', () => {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer ${adminToken}`
+              'Authorization': `Bearer ${adminToken}`,
             },
             body: JSON.stringify({
               action: 'start',
               userId: regularUser.id,
               reason: `Rate limit test session ${i + 1}`,
-              duration: 1
-            })
-          })
+              duration: 1,
+            }),
+          }),
         )
       }
 
@@ -239,14 +239,14 @@ describe('POST /api/admin/impersonate', () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${adminToken}`
+          'Authorization': `Bearer ${adminToken}`,
         },
         body: JSON.stringify({
           action: 'start',
           userId: regularUser.id,
           reason: 'This should be rate limited',
-          duration: 30
-        })
+          duration: 30,
+        }),
       })
 
       expect(response.status).toBe(429)
@@ -262,14 +262,14 @@ describe('POST /api/admin/impersonate', () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${adminToken}`
+          'Authorization': `Bearer ${adminToken}`,
         },
         body: JSON.stringify({
           action: 'start',
           userId: regularUser.id,
           reason: 'Testing session ending functionality',
-          duration: 30
-        })
+          duration: 30,
+        }),
       })
 
       const startData = await startResponse.json()
@@ -280,12 +280,12 @@ describe('POST /api/admin/impersonate', () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${adminToken}`
+          'Authorization': `Bearer ${adminToken}`,
         },
         body: JSON.stringify({
           action: 'end',
-          logId
-        })
+          logId,
+        }),
       })
 
       const endData = await endResponse.json()
@@ -302,11 +302,11 @@ describe('POST /api/admin/impersonate', () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${adminToken}`
+          'Authorization': `Bearer ${adminToken}`,
         },
         body: JSON.stringify({
-          action: 'end'
-        })
+          action: 'end',
+        }),
       })
 
       expect(response.status).toBe(400)
@@ -319,12 +319,12 @@ describe('POST /api/admin/impersonate', () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${adminToken}`
+          'Authorization': `Bearer ${adminToken}`,
         },
         body: JSON.stringify({
           action: 'end',
-          logId: 999999
-        })
+          logId: 999999,
+        }),
       })
 
       expect(response.status).toBe(404)
@@ -337,11 +337,11 @@ describe('POST /api/admin/impersonate', () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${adminToken}`
+          'Authorization': `Bearer ${adminToken}`,
         },
         body: JSON.stringify({
-          action: 'invalid'
-        })
+          action: 'invalid',
+        }),
       })
 
       expect(response.status).toBe(400)

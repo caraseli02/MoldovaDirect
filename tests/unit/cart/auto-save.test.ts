@@ -17,7 +17,7 @@ const mockProduct: Product = {
   price: 25.99,
   images: ['/test-image.jpg'],
   stock: 10,
-  category: 'Test'
+  category: 'Test',
 }
 
 describe('Cart Auto-Save Mechanism', () => {

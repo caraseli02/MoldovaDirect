@@ -39,4 +39,3 @@ export const priorityVariant = (priority: 'critical' | 'high' | 'medium' | 'low'
 }
 
 export const productStatusVariant = (active: boolean): BadgeVariant => (active ? 'default' : 'secondary')
-

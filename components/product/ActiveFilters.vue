@@ -78,8 +78,8 @@ interface Props {
   clearAllLabel?: string
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  showClearAll: true
+const _props = withDefaults(defineProps<Props>(), {
+  showClearAll: true,
 })
 
 const emit = defineEmits<{

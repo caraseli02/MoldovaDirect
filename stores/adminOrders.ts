@@ -1,10 +1,10 @@
 /**
  * Admin Orders Store using Pinia
- * 
+ *
  * Requirements addressed:
  * - 1.1: Paginated order listing with search and filtering capabilities
  * - 1.2: Order fetching with customer information and status tracking
- * 
+ *
  * Manages:
  * - Order listing with admin-specific data
  * - Search and filtering functionality
@@ -14,13 +14,9 @@
  */
 
 import { defineStore } from 'pinia'
-import type { 
-  OrderWithAdminDetails, 
+import type {
+  OrderWithAdminDetails,
   AdminOrderFilters,
-  Pagination,
-  OrderStatusHistory,
-  OrderNote,
-  OrderFulfillmentTask
 } from '~/types/database'
 
 interface OrderListItem extends OrderWithAdminDetails {
@@ -75,7 +71,7 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
       sortBy: 'created_at',
       sortOrder: 'desc',
       page: 1,
-      limit: 20
+      limit: 20,
     },
     pagination: {
       page: 1,
@@ -83,7 +79,7 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
       total: 0,
       totalPages: 0,
       hasNext: false,
-      hasPrev: false
+      hasPrev: false,
     },
     aggregates: null,
     loading: false,
@@ -92,7 +88,7 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
     error: null,
     lastRefresh: null,
     selectedOrders: [],
-    bulkOperationInProgress: false
+    bulkOperationInProgress: false,
   }),
 
   getters: {
@@ -104,14 +100,14 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
         ...order,
         formattedTotal: new Intl.NumberFormat('en-US', {
           style: 'currency',
-          currency: 'EUR'
+          currency: 'EUR',
         }).format(order.totalEur),
         formattedDate: new Date(order.createdAt).toLocaleDateString(),
         formattedStatus: order.status.charAt(0).toUpperCase() + order.status.slice(1),
         statusBadgeVariant: getStatusBadgeVariant(order.status),
         paymentStatusBadgeVariant: getPaymentStatusBadgeVariant(order.paymentStatus),
         urgencyLevel: getOrderUrgency(order),
-        isOverdue: isOrderOverdue(order)
+        isOverdue: isOrderOverdue(order),
       }))
     },
 
@@ -120,9 +116,9 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
      * Uses snake_case to match server expectations
      */
     queryParams: (state) => {
-      const params: any = {
+      const params: Record<string, any> = {
         page: state.pagination.page,
-        limit: state.pagination.limit
+        limit: state.pagination.limit,
       }
 
       if (state.filters.search) {
@@ -164,13 +160,13 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
      */
     hasActiveFilters: (state): boolean => {
       return !!(
-        state.filters.search ||
-        (state.filters.status && state.filters.status.length > 0) ||
-        (state.filters.paymentStatus && state.filters.paymentStatus.length > 0) ||
-        state.filters.dateRange ||
-        state.filters.amountRange ||
-        (state.filters.priority && state.filters.priority.length > 0) ||
-        (state.filters.shippingMethod && state.filters.shippingMethod.length > 0)
+        state.filters.search
+        || (state.filters.status && state.filters.status.length > 0)
+        || (state.filters.paymentStatus && state.filters.paymentStatus.length > 0)
+        || state.filters.dateRange
+        || state.filters.amountRange
+        || (state.filters.priority && state.filters.priority.length > 0)
+        || (state.filters.shippingMethod && state.filters.shippingMethod.length > 0)
       )
     },
 
@@ -184,12 +180,12 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
         ...state.aggregates,
         formattedRevenue: new Intl.NumberFormat('en-US', {
           style: 'currency',
-          currency: 'EUR'
+          currency: 'EUR',
         }).format(state.aggregates.totalRevenue),
         formattedAverageOrderValue: new Intl.NumberFormat('en-US', {
           style: 'currency',
-          currency: 'EUR'
-        }).format(state.aggregates.averageOrderValue)
+          currency: 'EUR',
+        }).format(state.aggregates.averageOrderValue),
       }
     },
 
@@ -205,7 +201,7 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
     /**
      * Get orders by status
      */
-    ordersByStatus: (state) => (status: string) => {
+    ordersByStatus: state => (status: string) => {
       return state.orders.filter(order => order.status === status)
     },
 
@@ -235,8 +231,8 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
      */
     allVisibleSelected: (state): boolean => {
       if (state.orders.length === 0) return false
-      return state.orders.every(order => 
-        state.selectedOrders.includes(order.id)
+      return state.orders.every(order =>
+        state.selectedOrders.includes(order.id),
       )
     },
 
@@ -245,7 +241,7 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
      */
     selectedCount: (state): number => {
       return state.selectedOrders.length
-    }
+    },
   },
 
   actions: {
@@ -265,7 +261,7 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
             aggregates: OrderAggregates
           }
         }>('/api/admin/orders', {
-          query: this.queryParams
+          query: this.queryParams,
         })
 
         if (response.success) {
@@ -273,13 +269,16 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
           this.pagination = response.data.pagination
           this.aggregates = response.data.aggregates
           this.lastRefresh = new Date()
-        } else {
+        }
+        else {
           throw new Error('Failed to fetch orders')
         }
-      } catch (error) {
+      }
+      catch (error: any) {
         this.error = error instanceof Error ? error.message : 'Failed to fetch orders'
         console.error('Error fetching admin orders:', error)
-      } finally {
+      }
+      finally {
         this.loading = false
       }
     },
@@ -300,14 +299,17 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
         if (response.success) {
           this.currentOrder = response.data
           return response.data
-        } else {
+        }
+        else {
           throw new Error('Failed to fetch order details')
         }
-      } catch (error) {
+      }
+      catch (error: any) {
         this.error = error instanceof Error ? error.message : 'Failed to fetch order details'
         console.error('Error fetching order detail:', error)
         throw error
-      } finally {
+      }
+      finally {
         this.orderDetailLoading = false
       }
     },
@@ -345,7 +347,8 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
     async updateDateRange(start?: string, end?: string) {
       if (start && end) {
         this.filters.dateRange = { start, end }
-      } else {
+      }
+      else {
         this.filters.dateRange = undefined
       }
       this.pagination.page = 1
@@ -358,7 +361,8 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
     async updateAmountRange(min?: number, max?: number) {
       if (min !== undefined && max !== undefined) {
         this.filters.amountRange = { min, max }
-      } else {
+      }
+      else {
         this.filters.amountRange = undefined
       }
       this.pagination.page = 1
@@ -426,7 +430,7 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
         sortBy: 'created_at',
         sortOrder: 'desc',
         page: 1,
-        limit: 20
+        limit: 20,
       }
       this.pagination.page = 1
       await this.fetchOrders()
@@ -467,7 +471,8 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
       const index = this.selectedOrders.indexOf(orderId)
       if (index > -1) {
         this.selectedOrders.splice(index, 1)
-      } else {
+      }
+      else {
         this.selectedOrders.push(orderId)
       }
     },
@@ -477,7 +482,7 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
      */
     selectAllVisible() {
       const visibleIds = this.orders.map(o => o.id)
-      visibleIds.forEach(id => {
+      visibleIds.forEach((id) => {
         if (!this.selectedOrders.includes(id)) {
           this.selectedOrders.push(id)
         }
@@ -489,8 +494,8 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
      */
     deselectAllVisible() {
       const visibleIds = this.orders.map(o => o.id)
-      this.selectedOrders = this.selectedOrders.filter(id => 
-        !visibleIds.includes(id)
+      this.selectedOrders = this.selectedOrders.filter(id =>
+        !visibleIds.includes(id),
       )
     },
 
@@ -500,7 +505,8 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
     toggleAllVisible() {
       if (this.allVisibleSelected) {
         this.deselectAllVisible()
-      } else {
+      }
+      else {
         this.selectAllVisible()
       }
     },
@@ -527,50 +533,53 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
           data: {
             updated: number
             failed: number
-            errors: Array<{ orderId: number; error: string }>
+            errors: Array<{ orderId: number, error: string }>
           }
           message: string
         }>('/api/admin/orders/bulk', {
           method: 'POST',
-          body: { 
+          body: {
             orderIds: this.selectedOrders,
             status,
-            notes
-          }
+            notes,
+          },
         })
 
         if (response.success) {
           // Update local state for successfully updated orders
-          this.orders.forEach(order => {
+          this.orders.forEach((order) => {
             if (this.selectedOrders.includes(order.id)) {
-              order.status = status as any
+              order.status = status as 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
             }
           })
 
           this.clearSelection()
 
           // Show success toast
-          const toast = useToastStore()
-          toast.success(response.message)
+          const toast = useToast()
+          toast.success('Success', response.message)
 
           // Show warning if some failed
           if (response.data.failed > 0) {
-            toast.warning(`${response.data.failed} orders failed to update`)
+            toast.warning('Warning', `${response.data.failed} orders failed to update`)
           }
 
           // Refresh orders to get latest data
           await this.fetchOrders()
 
           return response.data
-        } else {
+        }
+        else {
           throw new Error('Failed to update orders')
         }
-      } catch (error) {
+      }
+      catch (error: any) {
         this.error = error instanceof Error ? error.message : 'Failed to update orders'
-        const toast = useToastStore()
-        toast.error(this.error)
+        const toast = useToast()
+        toast.error('Error', this.error)
         throw error
-      } finally {
+      }
+      finally {
         this.bulkOperationInProgress = false
       }
     },
@@ -580,8 +589,8 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
      */
     reset() {
       this.$reset()
-    }
-  }
+    },
+  },
 })
 
 // =============================================
@@ -597,7 +606,7 @@ function getStatusBadgeVariant(status: string): string {
     processing: 'default',
     shipped: 'default',
     delivered: 'default',
-    cancelled: 'destructive'
+    cancelled: 'destructive',
   }
   return variants[status] || 'secondary'
 }
@@ -610,7 +619,7 @@ function getPaymentStatusBadgeVariant(status: string): string {
     pending: 'secondary',
     paid: 'default',
     failed: 'destructive',
-    refunded: 'secondary'
+    refunded: 'secondary',
   }
   return variants[status] || 'secondary'
 }
@@ -641,7 +650,7 @@ function getOrderUrgency(order: OrderListItem): 'low' | 'medium' | 'high' {
  */
 function isOrderOverdue(order: OrderListItem): boolean {
   const daysSinceOrder = order.daysSinceOrder
-  
+
   if (order.status === 'pending' && daysSinceOrder > 2) {
     return true
   }
@@ -652,6 +661,6 @@ function isOrderOverdue(order: OrderListItem): boolean {
     const estimatedDate = new Date(order.estimatedShipDate)
     return new Date() > estimatedDate
   }
-  
+
   return false
 }

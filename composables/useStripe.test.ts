@@ -7,11 +7,12 @@
 
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
 import { nextTick } from 'vue'
+import type {
+  createMockStripe } from '~/tests/utils/mockStripe'
 import {
-  createMockStripe,
   createMockStripeCardElement,
   mockStripePaymentSuccess,
-  mockStripePaymentError
+  mockStripePaymentError,
 } from '~/tests/utils/mockStripe'
 
 // Mock @stripe/stripe-js at module level
@@ -241,9 +242,9 @@ describe('useStripe', () => {
     })
 
     it('updates error on card element change event', async () => {
-      let changeCallback: Function
+      let changeCallback: (event: any) => void
 
-      mockCardElement.on.mockImplementation((event: string, callback: Function) => {
+      mockCardElement.on.mockImplementation((event: string, callback: (event: any) => void) => {
         if (event === 'change') {
           changeCallback = callback
         }
@@ -290,7 +291,7 @@ describe('useStripe', () => {
         mockClientSecret,
         expect.objectContaining({
           payment_method: expect.any(Object),
-        })
+        }),
       )
     })
 
@@ -316,7 +317,7 @@ describe('useStripe', () => {
         mockClientSecret,
         expect.objectContaining({
           payment_method: 'pm_custom_123',
-        })
+        }),
       )
     })
 
@@ -327,7 +328,7 @@ describe('useStripe', () => {
 
       const mockClientSecret = 'pi_test_secret_123'
       mockStripe.confirmCardPayment.mockResolvedValue(
-        mockStripePaymentError('Your card was declined', 'card_declined')
+        mockStripePaymentError('Your card was declined', 'card_declined'),
       )
 
       const result = await confirmPayment(mockClientSecret)
@@ -358,7 +359,7 @@ describe('useStripe', () => {
     })
 
     it('sets loading state during payment confirmation', async () => {
-      let resolveConfirm: Function
+      let resolveConfirm: (value: any) => void
       mockStripe.confirmCardPayment.mockReturnValue(new Promise((resolve) => {
         resolveConfirm = resolve
       }))
@@ -467,7 +468,7 @@ describe('useStripe', () => {
     })
 
     it('sets loading state during payment method creation', async () => {
-      let resolveCreate: Function
+      let resolveCreate: (value: any) => void
       mockStripe.createPaymentMethod.mockReturnValue(new Promise((resolve) => {
         resolveCreate = resolve
       }))

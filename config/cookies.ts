@@ -25,7 +25,7 @@ export const CART_COOKIE_CONFIG: CookieConfig = {
   secure: process.env.NODE_ENV === 'production',
   path: '/', // Ensure cookie is accessible from all routes
   // watch removed - let Nuxt handle reactivity
-  default: () => null
+  default: () => null,
 }
 
 /**
@@ -37,7 +37,7 @@ export const CHECKOUT_SESSION_COOKIE_CONFIG: CookieConfig = {
   maxAge: 60 * 60 * 2, // 2 hours
   sameSite: 'lax',
   secure: process.env.NODE_ENV === 'production',
-  path: '/' // Ensure cookie is accessible from all routes (fixes scoping issue)
+  path: '/', // Ensure cookie is accessible from all routes (fixes scoping issue)
 }
 
 /**
@@ -45,5 +45,5 @@ export const CHECKOUT_SESSION_COOKIE_CONFIG: CookieConfig = {
  */
 export const COOKIE_NAMES = {
   CART: 'moldova_direct_cart',
-  CHECKOUT_SESSION: 'checkout_session'
+  CHECKOUT_SESSION: 'checkout_session',
 } as const

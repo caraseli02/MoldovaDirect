@@ -1,9 +1,9 @@
 /**
  * Inventory Movements API Endpoint
- * 
+ *
  * Requirements addressed:
  * - 2.6: Inventory movement tracking and reporting
- * 
+ *
  * Features:
  * - Fetch inventory movements with filtering
  * - Pagination support
@@ -24,7 +24,7 @@ const movementsQuerySchema = z.object({
   page: z.coerce.number().min(1).default(1),
   limit: z.coerce.number().min(1).max(100).default(20),
   sortBy: z.enum(['created_at', 'quantity', 'movement_type']).default('created_at'),
-  sortOrder: z.enum(['asc', 'desc']).default('desc')
+  sortOrder: z.enum(['asc', 'desc']).default('desc'),
 })
 
 export default defineEventHandler(async (event) => {
@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
       page,
       limit,
       sortBy,
-      sortOrder
+      sortOrder,
     } = validatedQuery
 
     // Build the base query
@@ -100,7 +100,7 @@ export default defineEventHandler(async (event) => {
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to get movements count',
-        data: countError
+        data: countError,
       })
     }
 
@@ -114,7 +114,7 @@ export default defineEventHandler(async (event) => {
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to fetch inventory movements',
-        data: error
+        data: error,
       })
     }
 
@@ -122,11 +122,13 @@ export default defineEventHandler(async (event) => {
     const transformedMovements = (movements || []).map((movement: any) => ({
       id: movement.id,
       productId: movement.product_id,
-      product: movement.products ? {
-        id: movement.products.id,
-        sku: movement.products.sku,
-        name: movement.products.name_translations
-      } : null,
+      product: movement.products
+        ? {
+            id: movement.products.id,
+            sku: movement.products.sku,
+            name: movement.products.name_translations,
+          }
+        : null,
       movementType: movement.movement_type,
       quantity: movement.quantity,
       quantityBefore: movement.quantity_before,
@@ -134,11 +136,13 @@ export default defineEventHandler(async (event) => {
       reason: movement.reason,
       referenceId: movement.reference_id,
       notes: movement.notes,
-      performedBy: movement.profiles ? {
-        id: movement.profiles.id,
-        name: movement.profiles.name
-      } : null,
-      createdAt: movement.created_at
+      performedBy: movement.profiles
+        ? {
+            id: movement.profiles.id,
+            name: movement.profiles.name,
+          }
+        : null,
+      createdAt: movement.created_at,
     }))
 
     // Calculate pagination info
@@ -153,7 +157,7 @@ export default defineEventHandler(async (event) => {
         total: totalCount,
         totalPages,
         hasNext: page < totalPages,
-        hasPrev: page > 1
+        hasPrev: page > 1,
       },
       filters: {
         productId,
@@ -161,20 +165,20 @@ export default defineEventHandler(async (event) => {
         startDate,
         endDate,
         sortBy,
-        sortOrder
-      }
+        sortOrder,
+      },
     }
-
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Inventory movements API error:', error)
-    
+
     if (error.statusCode) {
       throw error
     }
-    
+
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to fetch inventory movements'
+      statusMessage: 'Failed to fetch inventory movements',
     })
   }
 })

@@ -1,8 +1,8 @@
 /**
  * PATCH /api/admin/orders/:id/fulfillment-tasks/:taskId
- * 
+ *
  * Update a fulfillment task (mark as completed/incomplete)
- * 
+ *
  * Requirements addressed:
  * - 4.1: Fulfillment checklist with task completion tracking
  * - 4.2: Update inventory levels when items are picked
@@ -10,13 +10,14 @@
  */
 
 import { serverSupabaseServiceRole } from '#supabase/server'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { requireAdminRole } from '~/server/utils/adminAuth'
 
 export default defineEventHandler(async (event) => {
   try {
     // Verify admin authentication
     const userId = await requireAdminRole(event)
-    
+
     // Use service role for database operations
     const supabase = serverSupabaseServiceRole(event)
 
@@ -27,7 +28,7 @@ export default defineEventHandler(async (event) => {
     if (!orderId || !taskId) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Invalid order ID or task ID'
+        statusMessage: 'Invalid order ID or task ID',
       })
     }
 
@@ -38,7 +39,7 @@ export default defineEventHandler(async (event) => {
     if (typeof completed !== 'boolean') {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Invalid request body. "completed" must be a boolean'
+        statusMessage: 'Invalid request body. "completed" must be a boolean',
       })
     }
 
@@ -53,15 +54,15 @@ export default defineEventHandler(async (event) => {
     if (fetchError || !existingTask) {
       throw createError({
         statusCode: 404,
-        statusMessage: 'Fulfillment task not found'
+        statusMessage: 'Fulfillment task not found',
       })
     }
 
     // Update the task
-    const updateData: any = {
+    const updateData = {
       completed,
       completed_at: completed ? new Date().toISOString() : null,
-      completed_by: completed ? userId : null
+      completed_by: completed ? userId : null,
     }
 
     const { data: updatedTask, error: updateError } = await supabase
@@ -75,7 +76,7 @@ export default defineEventHandler(async (event) => {
       console.error('Error updating fulfillment task:', updateError)
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to update fulfillment task'
+        statusMessage: 'Failed to update fulfillment task',
       })
     }
 
@@ -85,7 +86,8 @@ export default defineEventHandler(async (event) => {
         // Task is being marked as completed (was incomplete before)
         // Use atomic RPC function to prevent race conditions (Issue #89)
         await updateInventoryForPickedItemsAtomic(supabase, orderId, userId)
-      } else if (!completed && existingTask.completed) {
+      }
+      else if (!completed && existingTask.completed) {
         // Task is being marked as incomplete (was completed before)
         // Use atomic RPC function to prevent race conditions (Issue #89)
         await rollbackInventoryForPickedItemsAtomic(supabase, orderId, userId)
@@ -97,18 +99,19 @@ export default defineEventHandler(async (event) => {
 
     return {
       success: true,
-      data: updatedTask
+      data: updatedTask,
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     console.error('Error in fulfillment task update endpoint:', error)
-    
+
     if (error.statusCode) {
       throw error
     }
 
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 })
@@ -122,32 +125,28 @@ export default defineEventHandler(async (event) => {
  *
  * Related: Issue #89 (transaction fix), Issue #82 (test coverage)
  */
-async function updateInventoryForPickedItemsAtomic(supabase: any, orderId: number, userId: string) {
+async function updateInventoryForPickedItemsAtomic(supabase: SupabaseClient, orderId: number, userId: string) {
   try {
     // Call atomic RPC function
     // This prevents race conditions by using FOR UPDATE row locking
     const { data, error } = await supabase
       .rpc('update_inventory_for_order_atomic', {
         p_order_id: orderId,
-        p_user_id: userId
+        p_user_id: userId,
       })
 
     if (error) {
       console.error('Error calling atomic inventory update:', error)
       throw createError({
         statusCode: 500,
-        statusMessage: `Failed to update inventory: ${error.message}`
+        statusMessage: `Failed to update inventory: ${error.message}`,
       })
     }
 
-    if (data.skipped) {
-      console.log(data.message)
-    } else {
-      console.log(`Inventory updated for order ${orderId}: ${data.products_updated} products`)
-    }
-
+    // Data contains result of atomic operation (skipped or updated)
     return data
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Error updating inventory atomically:', error)
     throw error
   }
@@ -162,7 +161,7 @@ async function updateInventoryForPickedItemsAtomic(supabase: any, orderId: numbe
  * - Can lose updates with concurrent requests
  * - See Issue #82 tests for demonstration
  */
-async function updateInventoryForPickedItems_DEPRECATED(supabase: any, orderId: number, userId: string) {
+async function _updateInventoryForPickedItems_DEPRECATED(supabase: SupabaseClient, orderId: number, userId: string) {
   try {
     // Check if inventory has already been updated for this order
     const { data: order, error: orderError } = await supabase
@@ -178,7 +177,6 @@ async function updateInventoryForPickedItems_DEPRECATED(supabase: any, orderId: 
 
     // Skip if inventory was already updated
     if (order.inventory_updated) {
-      console.log(`Inventory already updated for order ${orderId}, skipping duplicate update`)
       return
     }
 
@@ -230,7 +228,7 @@ async function updateInventoryForPickedItems_DEPRECATED(supabase: any, orderId: 
           quantity_after: newStockQuantity,
           reason: 'sale',
           reference_id: orderId,
-          created_by: userId
+          created_by: userId,
         })
 
       if (logError) {
@@ -247,7 +245,8 @@ async function updateInventoryForPickedItems_DEPRECATED(supabase: any, orderId: 
     if (flagError) {
       console.error('Error setting inventory_updated flag:', flagError)
     }
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Error updating inventory for picked items:', error)
   }
 }
@@ -261,13 +260,13 @@ async function updateInventoryForPickedItems_DEPRECATED(supabase: any, orderId: 
  *
  * Related: Issue #89 (transaction fix), Issue #82 (test coverage)
  */
-async function rollbackInventoryForPickedItemsAtomic(supabase: any, orderId: number, userId: string) {
+async function rollbackInventoryForPickedItemsAtomic(supabase: SupabaseClient, orderId: number, userId: string) {
   try {
     // Call atomic RPC function
     const { data, error } = await supabase
       .rpc('rollback_inventory_for_order_atomic', {
         p_order_id: orderId,
-        p_user_id: userId
+        p_user_id: userId,
       })
 
     if (error) {
@@ -277,24 +276,20 @@ async function rollbackInventoryForPickedItemsAtomic(supabase: any, orderId: num
       if (error.message && error.message.includes('Cannot rollback inventory for')) {
         throw createError({
           statusCode: 400,
-          statusMessage: error.message
+          statusMessage: error.message,
         })
       }
 
       throw createError({
         statusCode: 500,
-        statusMessage: `Failed to rollback inventory: ${error.message}`
+        statusMessage: `Failed to rollback inventory: ${error.message}`,
       })
     }
 
-    if (data.skipped) {
-      console.log(data.message)
-    } else {
-      console.log(`Inventory rolled back for order ${orderId}: ${data.products_updated} products`)
-    }
-
+    // Data contains result of atomic rollback operation (skipped or rolled back)
     return data
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Error rolling back inventory atomically:', error)
     throw error
   }
@@ -306,7 +301,7 @@ async function rollbackInventoryForPickedItemsAtomic(supabase: any, orderId: num
  *
  * This function has race conditions - see Issue #82 tests
  */
-async function rollbackInventoryForPickedItems_DEPRECATED(supabase: any, orderId: number, userId: string) {
+async function _rollbackInventoryForPickedItems_DEPRECATED(supabase: SupabaseClient, orderId: number, userId: string) {
   try {
     // Check if inventory was updated for this order and if order can be rolled back
     const { data: order, error: orderError } = await supabase
@@ -322,7 +317,6 @@ async function rollbackInventoryForPickedItems_DEPRECATED(supabase: any, orderId
 
     // Only allow rollback if inventory was updated
     if (!order.inventory_updated) {
-      console.log(`Inventory was not updated for order ${orderId}, skipping rollback`)
       return
     }
 
@@ -331,7 +325,7 @@ async function rollbackInventoryForPickedItems_DEPRECATED(supabase: any, orderId
       console.error(`Cannot rollback inventory for order ${orderId}: order already ${order.status}`)
       throw createError({
         statusCode: 400,
-        statusMessage: `Cannot uncheck picking tasks for ${order.status} orders`
+        statusMessage: `Cannot uncheck picking tasks for ${order.status} orders`,
       })
     }
 
@@ -383,7 +377,7 @@ async function rollbackInventoryForPickedItems_DEPRECATED(supabase: any, orderId
           quantity_after: newStockQuantity,
           reason: 'sale_reversal',
           reference_id: orderId,
-          created_by: userId
+          created_by: userId,
         })
 
       if (logError) {
@@ -400,7 +394,8 @@ async function rollbackInventoryForPickedItems_DEPRECATED(supabase: any, orderId
     if (flagError) {
       console.error('Error resetting inventory_updated flag:', flagError)
     }
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Error rolling back inventory for picked items:', error)
     throw error
   }
@@ -410,7 +405,7 @@ async function rollbackInventoryForPickedItems_DEPRECATED(supabase: any, orderId
  * Recalculate and update order fulfillment progress
  * Requirement 4.1: Track fulfillment progress
  */
-async function updateOrderFulfillmentProgress(supabase: any, orderId: number) {
+async function updateOrderFulfillmentProgress(supabase: SupabaseClient, orderId: number) {
   try {
     // Get all tasks for this order
     const { data: tasks, error: tasksError } = await supabase
@@ -436,7 +431,8 @@ async function updateOrderFulfillmentProgress(supabase: any, orderId: number) {
     if (updateError) {
       console.error('Error updating order fulfillment progress:', updateError)
     }
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Error calculating fulfillment progress:', error)
   }
 }

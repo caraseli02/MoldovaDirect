@@ -18,15 +18,15 @@ const mockShippingInfo: ShippingInformation = {
     city: 'Test City',
     postalCode: '12345',
     country: 'US',
-    phone: '+1234567890'
+    phone: '+1234567890',
   },
   method: {
     id: 'standard',
     name: 'Standard Shipping',
     description: '5-7 business days',
     price: 9.99,
-    estimatedDays: 7
-  }
+    estimatedDays: 7,
+  },
 }
 
 const mockPaymentMethod: PaymentMethod = {
@@ -35,8 +35,8 @@ const mockPaymentMethod: PaymentMethod = {
     number: '4242424242424242',
     cvc: '123',
     expMonth: 12,
-    expYear: 2025
-  }
+    expYear: 2025,
+  },
 }
 
 const mockOrderData: OrderData = {
@@ -48,7 +48,7 @@ const mockOrderData: OrderData = {
   tax: 10.00,
   total: 119.98,
   currency: 'USD',
-  customerEmail: 'test@example.com'
+  customerEmail: 'test@example.com',
 }
 
 describe('Checkout Session Persistence', () => {
@@ -65,7 +65,7 @@ describe('Checkout Session Persistence', () => {
 
       session.persist({
         shippingInfo: mockShippingInfo,
-        paymentMethod: mockPaymentMethod
+        paymentMethod: mockPaymentMethod,
       })
 
       const cookieValue = cookieStorage.get('checkout_session')
@@ -81,7 +81,7 @@ describe('Checkout Session Persistence', () => {
 
       session.persist({
         shippingInfo: mockShippingInfo,
-        paymentMethod: mockPaymentMethod
+        paymentMethod: mockPaymentMethod,
       })
 
       expect(cookieStorage.get('checkout_session').sessionId).toBe('session-123')
@@ -95,7 +95,7 @@ describe('Checkout Session Persistence', () => {
 
       session.persist({
         shippingInfo: mockShippingInfo,
-        paymentMethod: null
+        paymentMethod: null,
       })
 
       expect(cookieStorage.get('checkout_session').orderData).toEqual(mockOrderData)
@@ -105,17 +105,17 @@ describe('Checkout Session Persistence', () => {
       const session = useCheckoutSessionStore()
       session.setGuestInfo({
         email: 'guest@example.com',
-        emailUpdates: true
+        emailUpdates: true,
       })
 
       session.persist({
         shippingInfo: mockShippingInfo,
-        paymentMethod: null
+        paymentMethod: null,
       })
 
       expect(cookieStorage.get('checkout_session').guestInfo).toEqual({
         email: 'guest@example.com',
-        emailUpdates: true
+        emailUpdates: true,
       })
     })
   })
@@ -126,7 +126,7 @@ describe('Checkout Session Persistence', () => {
 
       session.persist({
         shippingInfo: mockShippingInfo,
-        paymentMethod: mockPaymentMethod
+        paymentMethod: mockPaymentMethod,
       })
 
       // Card data should be removed
@@ -139,13 +139,13 @@ describe('Checkout Session Persistence', () => {
       const cashPayment: PaymentMethod = {
         type: 'cash',
         cash: {
-          confirmed: true
-        }
+          confirmed: true,
+        },
       }
 
       session.persist({
         shippingInfo: mockShippingInfo,
-        paymentMethod: cashPayment
+        paymentMethod: cashPayment,
       })
 
       expect(cookieStorage.get('checkout_session').paymentMethod.type).toBe('cash')
@@ -156,12 +156,12 @@ describe('Checkout Session Persistence', () => {
       const session = useCheckoutSessionStore()
       const paymentWithSave: PaymentMethod = {
         type: 'credit_card',
-        saveForFuture: true
+        saveForFuture: true,
       }
 
       session.persist({
         shippingInfo: null,
-        paymentMethod: paymentWithSave
+        paymentMethod: paymentWithSave,
       })
 
       expect(cookieStorage.get('checkout_session').paymentMethod.saveForFuture).toBe(true)
@@ -181,7 +181,7 @@ describe('Checkout Session Persistence', () => {
         lastSyncAt: new Date().toISOString(),
         termsAccepted: true,
         privacyAccepted: true,
-        marketingConsent: false
+        marketingConsent: false,
       })
 
       const session = useCheckoutSessionStore()
@@ -209,7 +209,7 @@ describe('Checkout Session Persistence', () => {
         currentStep: 'payment',
         sessionExpiresAt: new Date(Date.now() - 1000).toISOString(), // Expired
         shippingInfo: mockShippingInfo,
-        paymentMethod: null
+        paymentMethod: null,
       })
 
       const session = useCheckoutSessionStore()
@@ -229,7 +229,7 @@ describe('Checkout Session Persistence', () => {
         sessionExpiresAt: expiryDate.toISOString(),
         lastSyncAt: syncDate.toISOString(),
         shippingInfo: null,
-        paymentMethod: null
+        paymentMethod: null,
       })
 
       const session = useCheckoutSessionStore()
@@ -248,7 +248,7 @@ describe('Checkout Session Persistence', () => {
         currentStep: 'invalid-step',
         // Data that exists but might be problematic
         shippingInfo: null,
-        paymentMethod: null
+        paymentMethod: null,
       }
       cookieStorage.set('checkout_session', invalidSnapshot)
 
@@ -275,7 +275,7 @@ describe('Checkout Session Persistence', () => {
     it('should clear storage on demand', () => {
       cookieStorage.set('checkout_session', {
         sessionId: 'test',
-        shippingInfo: mockShippingInfo
+        shippingInfo: mockShippingInfo,
       })
 
       const session = useCheckoutSessionStore()
@@ -307,7 +307,7 @@ describe('Checkout Session Persistence', () => {
 
       session.persist({
         shippingInfo: mockShippingInfo,
-        paymentMethod: null
+        paymentMethod: null,
       })
 
       // Verify useCookie was called with correct name
@@ -315,8 +315,8 @@ describe('Checkout Session Persistence', () => {
         'checkout_session',
         expect.objectContaining({
           maxAge: expect.any(Number),
-          sameSite: 'lax'
-        })
+          sameSite: 'lax',
+        }),
       )
     })
   })
@@ -327,14 +327,14 @@ describe('Checkout Session Persistence', () => {
 
       session.setGuestInfo({
         email: 'guest@example.com',
-        emailUpdates: true
+        emailUpdates: true,
       })
 
       session.setOrderData(mockOrderData)
 
       session.persist({
         shippingInfo: mockShippingInfo,
-        paymentMethod: { type: 'cash' }
+        paymentMethod: { type: 'cash' },
       })
 
       expect(cookieStorage.get('checkout_session').guestInfo.email).toBe('guest@example.com')
@@ -348,13 +348,13 @@ describe('Checkout Session Persistence', () => {
         currentStep: 'confirmation',
         guestInfo: {
           email: 'guest@example.com',
-          emailUpdates: true
+          emailUpdates: true,
         },
         orderData: mockOrderData,
         shippingInfo: mockShippingInfo,
         paymentMethod: { type: 'cash' },
         termsAccepted: true,
-        privacyAccepted: true
+        privacyAccepted: true,
       })
 
       const session = useCheckoutSessionStore()

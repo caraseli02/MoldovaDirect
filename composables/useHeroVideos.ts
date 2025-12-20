@@ -14,6 +14,8 @@
  * const { currentVideo, showVideo } = useHeroVideos()
  */
 
+import { ref } from 'vue'
+
 export interface HeroVideo {
   id: string
   webm: string
@@ -52,29 +54,29 @@ export const useHeroVideos = () => {
       webm: '/videos/hero/hero-1.webm',
       mp4: '/videos/hero/hero-1.mp4',
       poster: '/videos/hero/hero-1-poster.jpg',
-      alt: 'Moldovan vineyard at sunset'
+      alt: 'Moldovan vineyard at sunset',
     },
     {
       id: 'wine-pouring',
       webm: '/videos/hero/hero-2.webm',
       mp4: '/videos/hero/hero-2.mp4',
       poster: '/videos/hero/hero-2-poster.jpg',
-      alt: 'Premium Moldovan wine being poured'
+      alt: 'Premium Moldovan wine being poured',
     },
     {
       id: 'cellar-barrels',
       webm: '/videos/hero/hero-3.webm',
       mp4: '/videos/hero/hero-3.mp4',
       poster: '/videos/hero/hero-3-poster.jpg',
-      alt: 'Traditional wine cellar with oak barrels'
+      alt: 'Traditional wine cellar with oak barrels',
     },
     {
       id: 'vineyard-aerial',
       webm: '/videos/hero/hero-4.webm',
       mp4: '/videos/hero/hero-4.mp4',
       poster: '/videos/hero/hero-4-poster.jpg',
-      alt: 'Aerial view of Moldovan vineyards at golden hour'
-    }
+      alt: 'Aerial view of Moldovan vineyards at golden hour',
+    },
     // Temporarily disabled until webm file is generated
     // Run: bash scripts/generate-hero-assets.sh after installing ffmpeg
     // {
@@ -90,7 +92,7 @@ export const useHeroVideos = () => {
   // Detect mobile devices to show poster image instead of video (bandwidth savings)
   const { isMobile, updateDimensions } = useDevice()
   const deviceReady = ref(false)
-  const isClient = process.client
+  const isClient = import.meta.client
 
   /**
    * Randomly select a video from the library
@@ -128,7 +130,8 @@ export const useHeroVideos = () => {
   if (isClient) {
     if (getCurrentInstance()) {
       onMounted(setDeviceReady)
-    } else {
+    }
+    else {
       setDeviceReady()
     }
   }
@@ -147,6 +150,6 @@ export const useHeroVideos = () => {
   return {
     videos,
     currentVideo,
-    showVideo
+    showVideo,
   }
 }

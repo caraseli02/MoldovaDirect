@@ -38,7 +38,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
   // Ensure cart is loaded from cookie before checking item count
   const cartStore = useCartStore()
   if (!cartStore.sessionId) {
-    console.log('🛒 [Checkout Middleware] Initializing cart before validation')
     await cartStore.initializeCart()
   }
 
@@ -47,30 +46,29 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
   // 3. Check if cart has items (Requirement 1.1, 1.2)
   if (itemCount.value === 0) {
-    console.log('🛒 [Checkout Middleware] Cart is empty, redirecting to cart')
     return navigateTo({
       path: localePath('/cart'),
       query: {
-        message: 'empty-cart-checkout'
-      }
+        message: 'empty-cart-checkout',
+      },
     })
   }
 
   // 4. Now it's safe to access checkout store (cart is initialized)
-  const checkoutStore = useCheckoutStore()
+  const checkoutStore = useCheckoutStore() as ReturnType<typeof useCheckoutStore> & Record<string, any>
 
   // 5. Initialize checkout if not already initialized
   if (!checkoutStore.sessionId) {
     try {
-      console.log('🛒 [Checkout Middleware] Initializing checkout session')
       await checkoutStore.initializeCheckout(items.value)
-    } catch (error) {
+    }
+    catch (error: any) {
       console.error('Failed to initialize checkout:', error)
       return navigateTo({
         path: localePath('/cart'),
         query: {
-          message: 'checkout-initialization-failed'
-        }
+          message: 'checkout-initialization-failed',
+        },
       })
     }
   }
@@ -78,10 +76,9 @@ export default defineNuxtRouteMiddleware(async (to) => {
   // 6. Prefetch all checkout data in parallel (only once per session)
   if (!checkoutStore.dataPrefetched) {
     try {
-      console.log('📥 [Checkout Middleware] Prefetching user data (addresses, preferences)...')
       await checkoutStore.prefetchCheckoutData()
-      console.log('✅ [Checkout Middleware] Prefetch complete')
-    } catch (error) {
+    }
+    catch (error: any) {
       console.error('❌ [Checkout Middleware] Failed to prefetch checkout data:', error)
     }
   }
@@ -98,27 +95,21 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
     // Auto-route to payment if all conditions met
     if (hasCompleteShipping && preferredMethod && to.path === localePath('/checkout')) {
-      console.log('🚀 [Checkout Middleware] Express checkout: Auto-routing to payment step')
-      console.log('   - Complete shipping info: ✓')
-      console.log('   - Preferred method saved: ✓')
-      console.log('   - Landing on base checkout: ✓')
-
       return navigateTo({
         path: localePath('/checkout/payment'),
-        query: { express: '1' } // Flag for showing countdown banner
+        query: { express: '1' }, // Flag for showing countdown banner
       })
     }
   }
 
   // 7. Validate checkout session hasn't expired
   if (checkoutStore.isSessionExpired) {
-    console.log('🛒 [Checkout Middleware] Session expired, redirecting to cart')
     checkoutStore.resetCheckout()
     return navigateTo({
       path: localePath('/cart'),
       query: {
-        message: 'checkout-session-expired'
-      }
+        message: 'checkout-session-expired',
+      },
     })
   }
 
@@ -128,13 +119,12 @@ export default defineNuxtRouteMiddleware(async (to) => {
     if (!canAccessStep(stepFromPath, checkoutStore)) {
       const allowedStep = getHighestAllowedStep(checkoutStore)
       const redirectPath = getStepPath(allowedStep, localePath)
-      console.log(`🛒 [Checkout Middleware] Access denied to ${stepFromPath}, redirecting to ${allowedStep}`)
 
       return navigateTo({
         path: redirectPath,
         query: {
-          message: 'step-access-denied'
-        }
+          message: 'step-access-denied',
+        },
       })
     }
 
@@ -160,7 +150,7 @@ function extractStepFromPath(path: string): CheckoutStep | null {
 /**
  * Check if user can access a specific checkout step
  */
-function canAccessStep(step: CheckoutStep, store: any): boolean {
+function canAccessStep(step: CheckoutStep, store: ReturnType<typeof useCheckoutStore> & Record<string, any>): boolean {
   switch (step) {
     case 'shipping':
       return true // Always accessible
@@ -175,9 +165,9 @@ function canAccessStep(step: CheckoutStep, store: any): boolean {
       // Allow if already on confirmation page (order completed)
       // OR if coming from review page (order just placed - navigation happens before store updates)
       // OR if we have orderId set (order was created)
-      return store.currentStep === 'confirmation' ||
-             store.currentStep === 'review' ||
-             Boolean(store.orderData?.orderId)
+      return store.currentStep === 'confirmation'
+        || store.currentStep === 'review'
+        || Boolean(store.orderData?.orderId)
 
     default:
       return false
@@ -187,14 +177,17 @@ function canAccessStep(step: CheckoutStep, store: any): boolean {
 /**
  * Get the highest step the user can currently access
  */
-function getHighestAllowedStep(store: any): CheckoutStep {
+function getHighestAllowedStep(store: ReturnType<typeof useCheckoutStore> & Record<string, any>): CheckoutStep {
   if (store.canCompleteOrder && store.orderData?.orderId) {
     return 'confirmation'
-  } else if (store.canProceedToReview) {
+  }
+  else if (store.canProceedToReview) {
     return 'review'
-  } else if (store.canProceedToPayment) {
+  }
+  else if (store.canProceedToPayment) {
     return 'payment'
-  } else {
+  }
+  else {
     return 'shipping'
   }
 }

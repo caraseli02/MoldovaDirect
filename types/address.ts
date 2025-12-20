@@ -120,7 +120,7 @@ export function addressFromEntity(entity: AddressEntity): Address {
     province: entity.province || undefined,
     country: entity.country,
     phone: entity.phone || undefined,
-    isDefault: entity.is_default
+    isDefault: entity.is_default,
   }
 }
 
@@ -129,7 +129,7 @@ export function addressFromEntity(entity: AddressEntity): Address {
  */
 export function addressToEntity(
   address: Address,
-  userId: string
+  userId: string,
 ): Omit<AddressEntity, 'id' | 'created_at' | 'updated_at'> {
   return {
     user_id: userId,
@@ -143,7 +143,7 @@ export function addressToEntity(
     province: address.province || null,
     country: address.country,
     phone: address.phone || null,
-    is_default: address.isDefault
+    is_default: address.isDefault,
   }
 }
 
@@ -162,7 +162,7 @@ export function addressFromFormData(formData: AddressFormData): Omit<Address, 'i
     province: formData.province,
     country: formData.country,
     phone: formData.phone,
-    isDefault: formData.isDefault
+    isDefault: formData.isDefault,
   }
 }
 
@@ -181,7 +181,7 @@ export function addressToFormData(address: Address): AddressFormData {
     province: address.province,
     country: address.country,
     phone: address.phone,
-    isDefault: address.isDefault
+    isDefault: address.isDefault,
   }
 }
 
@@ -225,13 +225,13 @@ export function validateAddress(address: Partial<Address>): AddressValidationErr
     if (!postalCodeRegex.test(address.postalCode)) {
       errors.push({
         field: 'postalCode',
-        message: `Invalid postal code format for ${address.country}`
+        message: `Invalid postal code format for ${address.country}`,
       })
     }
   }
 
   // Phone validation if provided
-  if (address.phone && !/^[\+]?[0-9\s\-\(\)]{9,}$/.test(address.phone)) {
+  if (address.phone && !/^[+]?[0-9\s\-()]{9,}$/.test(address.phone)) {
     errors.push({ field: 'phone', message: 'Invalid phone number format' })
   }
 
@@ -249,7 +249,7 @@ function getPostalCodeRegex(country: string): RegExp {
     PT: /^\d{4}-\d{3}$/, // Portugal: 4 digits-3 digits
     DE: /^\d{5}$/, // Germany: 5 digits
     MD: /^MD-\d{4}$/, // Moldova: MD-4 digits
-    RO: /^\d{6}$/ // Romania: 6 digits
+    RO: /^\d{6}$/, // Romania: 6 digits
   }
   return patterns[country] || /.+/ // Fallback: accept any non-empty
 }
@@ -265,7 +265,7 @@ export function formatAddress(address: Address, style: 'single-line' | 'multi-li
     `${address.city}, ${address.postalCode}`,
     address.province,
     address.country,
-    address.phone
+    address.phone,
   ].filter(Boolean)
 
   return style === 'single-line' ? parts.join(', ') : parts.join('\n')
@@ -276,15 +276,15 @@ export function formatAddress(address: Address, style: 'single-line' | 'multi-li
  */
 export function isAddress(obj: any): obj is Address {
   return (
-    obj &&
-    typeof obj === 'object' &&
-    typeof obj.firstName === 'string' &&
-    typeof obj.lastName === 'string' &&
-    typeof obj.street === 'string' &&
-    typeof obj.city === 'string' &&
-    typeof obj.postalCode === 'string' &&
-    typeof obj.country === 'string' &&
-    (obj.type === 'shipping' || obj.type === 'billing') &&
-    typeof obj.isDefault === 'boolean'
+    obj
+    && typeof obj === 'object'
+    && typeof obj.firstName === 'string'
+    && typeof obj.lastName === 'string'
+    && typeof obj.street === 'string'
+    && typeof obj.city === 'string'
+    && typeof obj.postalCode === 'string'
+    && typeof obj.country === 'string'
+    && (obj.type === 'shipping' || obj.type === 'billing')
+    && typeof obj.isDefault === 'boolean'
   )
 }

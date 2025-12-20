@@ -6,14 +6,19 @@
     :class="{
       'active:scale-95': isMobile,
       'touch-manipulation': isMobile,
-      'h-full': variant === 'hero' || variant === 'featured'
+      'h-full': variant === 'hero' || variant === 'featured',
     }"
     :aria-label="$t('products.commonProduct')"
     role="article"
     @touchstart="handleTouchStart"
   >
     <!-- Screen reader announcements -->
-    <div class="sr-only" role="status" aria-live="polite" aria-atomic="true">
+    <div
+      class="sr-only"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    >
       {{ cartStatusAnnouncement }}
     </div>
 
@@ -23,7 +28,7 @@
       :class="{
         'aspect-square': variant === 'standard',
         'aspect-[4/3]': variant === 'hero',
-        'aspect-[3/2]': variant === 'featured'
+        'aspect-[3/2]': variant === 'featured',
       }"
     >
       <nuxt-link :to="`/products/${product.slug}`">
@@ -31,7 +36,7 @@
           v-if="primaryImage"
           preset="productThumbnail"
           :src="primaryImage.url"
-          :alt="getLocalizedText(primaryImage.altText) || getLocalizedText(product.name)"
+          :alt="(primaryImage.altText ? getLocalizedText(primaryImage.altText) : '') || getLocalizedText(product.name)"
           sizes="100vw sm:50vw md:33vw lg:25vw"
           densities="x1 x2"
           loading="lazy"
@@ -39,10 +44,19 @@
           :placeholder-class="'blur-xl'"
           class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
         />
-        <div v-else class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900" role="img" :aria-label="$t('products.noImageAvailable')">
+        <div
+          v-else
+          class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900"
+          role="img"
+          :aria-label="$t('products.noImageAvailable')"
+        >
           <div class="relative">
             <div class="absolute inset-0 bg-blue-500/10 blur-2xl rounded-full"></div>
-            <commonIcon name="wine" class="relative h-12 w-12 text-blue-400 dark:text-blue-500" aria-hidden="true" />
+            <commonIcon
+              name="wine"
+              class="relative h-12 w-12 text-blue-400 dark:text-blue-500"
+              aria-hidden="true"
+            />
           </div>
         </div>
       </nuxt-link>
@@ -59,38 +73,64 @@
             :aria-label="$t('products.quickViewProduct', { name: getLocalizedText(product.name) })"
             class="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors text-sm font-medium text-gray-900 dark:text-white focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2"
           >
-            <commonIcon name="eye" class="h-4 w-4" />
+            <commonIcon
+              name="eye"
+              class="h-4 w-4"
+            />
             <span class="hidden sm:inline">{{ $t('products.quickView') }}</span>
           </nuxt-link>
-
         </div>
       </div>
 
       <!-- Product Labels/Badges (top-left corner) -->
       <div class="absolute top-3 left-3 flex flex-col gap-2">
         <!-- New Badge -->
-        <span v-if="isNew" class="inline-flex items-center gap-1 bg-primary-600 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg">
-          <commonIcon name="lucide:sparkles" class="h-3 w-3" />
+        <span
+          v-if="isNew"
+          class="inline-flex items-center gap-1 bg-primary-600 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg"
+        >
+          <commonIcon
+            name="lucide:sparkles"
+            class="h-3 w-3"
+          />
           {{ $t('products.new') }}
         </span>
 
         <!-- Best Seller Badge -->
-        <span v-if="product.isFeatured" class="inline-flex items-center gap-1 bg-amber-500 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg">
-          <commonIcon name="lucide:trending-up" class="h-3 w-3" />
+        <span
+          v-if="product.isFeatured"
+          class="inline-flex items-center gap-1 bg-amber-500 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg"
+        >
+          <commonIcon
+            name="lucide:trending-up"
+            class="h-3 w-3"
+          />
           {{ $t('products.bestSeller') }}
         </span>
 
         <!-- Low Stock Badge (urgency) -->
-        <span v-if="product.stockQuantity > 0 && product.stockQuantity <= PRODUCTS.LOW_STOCK_THRESHOLD" class="inline-flex items-center gap-1 bg-red-600 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg animate-pulse">
-          <commonIcon name="lucide:alert-circle" class="h-3 w-3" />
+        <span
+          v-if="product.stockQuantity > 0 && product.stockQuantity <= PRODUCTS.LOW_STOCK_THRESHOLD"
+          class="inline-flex items-center gap-1 bg-red-600 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg animate-pulse"
+        >
+          <commonIcon
+            name="lucide:alert-circle"
+            class="h-3 w-3"
+          />
           {{ $t('products.onlyLeft', { count: product.stockQuantity }) }}
         </span>
       </div>
 
       <!-- Sale Badge (top-right corner) -->
-      <div v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)" class="absolute top-3 right-3">
+      <div
+        v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)"
+        class="absolute top-3 right-3"
+      >
         <span class="inline-flex items-center gap-1 bg-red-600 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg">
-          <commonIcon name="lucide:tag" class="h-3 w-3" />
+          <commonIcon
+            name="lucide:tag"
+            class="h-3 w-3"
+          />
           -{{ calculateDiscount }}%
         </span>
       </div>
@@ -100,7 +140,7 @@
     <div class="p-4">
       <!-- Category -->
       <p class="text-sm text-gray-600 dark:text-slate-400 mb-2">
-        {{ getLocalizedText(product.category?.name) }}
+        {{ product.category?.nameTranslations ? getLocalizedText(product.category.nameTranslations) : '' }}
       </p>
 
       <!-- Product Name -->
@@ -115,12 +155,18 @@
       </h3>
 
       <!-- Short Description -->
-      <p v-if="product.shortDescription" class="text-sm text-gray-600 dark:text-slate-300 mb-3 line-clamp-2">
+      <p
+        v-if="product.shortDescription"
+        class="text-sm text-gray-600 dark:text-slate-300 mb-3 line-clamp-2"
+      >
         {{ getLocalizedText(product.shortDescription) }}
       </p>
 
       <!-- Tags -->
-      <div v-if="product.tags?.length" class="flex flex-wrap gap-1 mb-3">
+      <div
+        v-if="product.tags?.length"
+        class="flex flex-wrap gap-1 mb-3"
+      >
         <span
           v-for="tag in product.tags.slice(0, PRODUCTS.MAX_VISIBLE_TAGS)"
           :key="tag"
@@ -128,20 +174,32 @@
         >
           {{ tag }}
         </span>
-        <span v-if="product.tags.length > PRODUCTS.MAX_VISIBLE_TAGS" class="text-xs text-gray-600 dark:text-slate-400">
+        <span
+          v-if="product.tags.length > PRODUCTS.MAX_VISIBLE_TAGS"
+          class="text-xs text-gray-600 dark:text-slate-400"
+        >
           +{{ product.tags.length - PRODUCTS.MAX_VISIBLE_TAGS }}
         </span>
       </div>
 
       <!-- Product Details -->
       <div class="flex flex-wrap gap-2 text-xs text-gray-600 dark:text-slate-400 mb-3">
-        <span v-if="product.origin" class="flex items-center">
+        <span
+          v-if="product.origin"
+          class="flex items-center"
+        >
           🌍 {{ product.origin }}
         </span>
-        <span v-if="product.volume" class="flex items-center">
+        <span
+          v-if="product.volume"
+          class="flex items-center"
+        >
           📏 {{ product.volume }}ml
         </span>
-        <span v-if="product.alcoholContent" class="flex items-center">
+        <span
+          v-if="product.alcoholContent"
+          class="flex items-center"
+        >
           🍷 {{ product.alcoholContent }}%
         </span>
       </div>
@@ -155,7 +213,10 @@
           </span>
 
           <!-- Compare Price (if on sale) -->
-          <span v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)" class="text-sm text-gray-600 dark:text-slate-400 line-through">
+          <span
+            v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)"
+            class="text-sm text-gray-600 dark:text-slate-400 line-through"
+          >
             €{{ formatPrice(product.comparePrice) }}
           </span>
         </div>
@@ -169,7 +230,10 @@
           >
             {{ stockStatusText }}
           </span>
-          <span v-else class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300">
+          <span
+            v-else
+            class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300"
+          >
             {{ $t('products.stockStatus.outOfStock') }}
           </span>
         </div>
@@ -182,39 +246,83 @@
         :aria-live="cartLoading ? 'polite' : undefined"
         class="cta-button w-full mt-4 transition-all duration-200 flex items-center justify-center space-x-2 touch-manipulation rounded-full min-h-[44px] focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2"
         :class="[
-          isInCart(product.id)
+          isInCart(String(product.id))
             ? 'bg-green-600 dark:bg-green-500 text-white hover:bg-green-700 dark:hover:bg-green-600'
-            : 'bg-primary-600 dark:bg-primary-500 text-white hover:bg-primary-700 dark:hover:bg-primary-600'
+            : 'bg-primary-600 dark:bg-primary-500 text-white hover:bg-primary-700 dark:hover:bg-primary-600',
         ]"
         @click="addToCart"
         @touchstart="isMobile && !cartLoading && vibrate('tap')"
       >
         <!-- Loading Spinner -->
-        <svg v-if="cartLoading" class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true" role="status">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-        </svg>
-
-        <!-- Cart Icon -->
-        <svg v-else-if="!isInCart(product.id)" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m2.6 8L6 21h13M7 13v4a1 1 0 001 1h9a1 1 0 001-1v-4M7 13L6 9" />
+        <svg
+          v-if="cartLoading"
+          class="animate-spin h-5 w-5"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+          role="status"
+        >
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          />
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+          />
         </svg>
 
         <!-- Check Icon -->
-        <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        <svg
+          v-else-if="isInCart(String(product.id))"
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M5 13l4 4L19 7"
+          />
+        </svg>
+
+        <!-- Cart Icon (default) -->
+        <svg
+          v-else
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 3h2l.4 2M7 13h10l4-8H5.4m2.6 8L6 21h13M7 13v4a1 1 0 001 1h9a1 1 0 001-1v-4M7 13L6 9"
+          />
         </svg>
 
         <span>
           {{
-            cartLoading ? $t('products.adding') :
-            product.stockQuantity <= 0 ? $t('products.outOfStock') :
-            isInCart(product.id) ? $t('products.inCart') :
-            $t('products.addToCart')
+            cartLoading ? $t('products.adding')
+            : product.stockQuantity <= 0 ? $t('products.outOfStock')
+              : isInCart(String(product.id)) ? $t('products.inCart')
+                : $t('products.addToCart')
           }}
         </span>
       </Button>
-
     </div>
   </article>
 </template>
@@ -224,12 +332,12 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { Button } from '@/components/ui/button'
 import type { ProductWithRelations } from '~/types'
 import { useCart } from '~/composables/useCart'
+import type { Translations } from '~/types/database'
 import { useDevice } from '~/composables/useDevice'
 import { useHapticFeedback } from '~/composables/useHapticFeedback'
 import { useTouchEvents } from '~/composables/useTouchEvents'
 import { useToast } from '~/composables/useToast'
-import { useRouter } from '#imports'
-import { useI18n } from '#imports'
+import { useRouter, useI18n } from '#imports'
 import { PRODUCTS } from '~/constants/products'
 
 interface Props {
@@ -238,7 +346,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  variant: 'standard'
+  variant: 'standard',
 })
 
 // Composables
@@ -295,16 +403,21 @@ const cartStatusAnnouncement = computed(() => {
   if (cartLoading.value) {
     return t('products.adding')
   }
-  if (isInCart(props.product.id)) {
+  if (isInCart(String(props.product.id))) {
     return t('products.inCart')
   }
   return ''
 })
 
 // Utility functions
-const getLocalizedText = (text: Record<string, string> | null | undefined) => {
+const getLocalizedText = (text: Translations | Record<string, string> | null | undefined): string => {
   if (!text) return ''
-  return text[locale.value] || text.es || Object.values(text)[0] || ''
+  const localeText = text[locale.value]
+  if (localeText) return localeText
+  const esText = (text as Record<string, any>).es
+  if (esText) return esText
+  const values = Object.values(text).filter((v): v is string => typeof v === 'string')
+  return values[0] || ''
 }
 
 const formatPrice = (price: string | number) => {
@@ -319,14 +432,14 @@ const getCartButtonAriaLabel = () => {
   if (props.product.stockQuantity <= 0) {
     return t('products.productOutOfStock', { name: productName })
   }
-  if (isInCart(props.product.id)) {
+  if (isInCart(String(props.product.id))) {
     return t('products.productInCart', { name: productName })
   }
   return t('products.addProductToCart', { name: productName })
 }
 
 // Touch event handlers
-const handleTouchStart = (event: TouchEvent) => {
+const handleTouchStart = (_event: TouchEvent) => {
   if (isMobile.value) {
     vibrate('tap')
   }
@@ -349,14 +462,7 @@ const addToCart = async () => {
     return
   }
 
-  // Debug logging (development only)
-  if (import.meta.dev) {
-    console.log('🛒 ProductCard: Add to Cart', {
-      productId: props.product.id,
-      isClient: process.client,
-      hasAddItem: typeof addItem === 'function'
-    })
-  }
+  // Debug logging (development only) - disabled
 
   try {
     // Verify cart is available
@@ -371,34 +477,29 @@ const addToCart = async () => {
 
     // Convert the product to the format expected by the cart
     const cartProduct = {
-      id: props.product.id,
+      id: String(props.product.id),
       slug: props.product.slug,
       name: getLocalizedText(props.product.name),
       price: Number(props.product.price),
       images: props.product.images?.map(img => img.url) || [],
-      stock: props.product.stockQuantity
+      stock: props.product.stockQuantity,
     }
 
-    if (import.meta.dev) {
-      console.log('🛒 Calling addItem')
-    }
     await addItem(cartProduct, 1)
-    if (import.meta.dev) {
-      console.log('✅ Item added successfully')
-    }
 
     // Success haptic feedback
     if (isMobile.value) {
       vibrate('success')
     }
-  } catch (error) {
+  }
+  catch (error: any) {
     const errorMsg = error instanceof Error ? error.message : String(error)
     console.error('❌ Failed to add item to cart:', errorMsg, error)
 
     // Show error toast to user
     toast.error(
       t('cart.error.addFailed'),
-      t('cart.error.addFailedDetails')
+      t('cart.error.addFailedDetails'),
     )
 
     // Error haptic feedback
@@ -419,11 +520,11 @@ const setupMobileTouch = () => {
       const router = useRouter()
       const productPath = `/products/${props.product.slug}`
       router.push(productPath)
-    }
+    },
   })
 
   const cleanup = touchEvents.setupTouchListeners(cardRef.value, {
-    passive: true
+    passive: true,
   })
 
   // Cleanup on unmount

@@ -5,6 +5,20 @@
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 
+import {
+  cartAnalyticsState,
+  trackAddToCart,
+  trackRemoveFromCart,
+  trackQuantityUpdate,
+  trackCartView,
+  trackCartAbandonment,
+  initializeCartSession,
+  endCartSession,
+  syncEventsWithServer,
+  getAnalyticsSummary,
+} from '~/stores/cart/analytics'
+import type { Product } from '~/stores/cart/types'
+
 // Mock $fetch before importing the module
 const mockFetch = vi.fn()
 vi.stubGlobal('$fetch', mockFetch)
@@ -14,8 +28,14 @@ const mockLocalStorage = {
   store: {} as Record<string, string>,
   getItem: vi.fn((key: string) => mockLocalStorage.store[key] || null),
   setItem: vi.fn((key: string, value: string) => { mockLocalStorage.store[key] = value }),
-  removeItem: vi.fn((key: string) => { delete mockLocalStorage.store[key] }),
-  clear: vi.fn(() => { mockLocalStorage.store = {} })
+  removeItem: vi.fn((key: string) => {
+    const store = mockLocalStorage.store as Record<string, string>
+    if (key in store) {
+      const { [key]: _removed, ...newStore } = store
+      mockLocalStorage.store = newStore
+    }
+  }),
+  clear: vi.fn(() => { mockLocalStorage.store = {} }),
 }
 
 // Set up localStorage mock
@@ -30,20 +50,6 @@ vi.stubGlobal('navigator', { userAgent: 'Mozilla/5.0 (Test Browser)' })
 // Mock document
 vi.stubGlobal('document', { referrer: 'https://example.com' })
 
-import {
-  cartAnalyticsState,
-  trackAddToCart,
-  trackRemoveFromCart,
-  trackQuantityUpdate,
-  trackCartView,
-  trackCartAbandonment,
-  initializeCartSession,
-  endCartSession,
-  syncEventsWithServer,
-  getAnalyticsSummary
-} from '~/stores/cart/analytics'
-import type { Product } from '~/stores/cart/types'
-
 // Mock product data
 const mockProduct: Product = {
   id: 'prod-1',
@@ -52,7 +58,7 @@ const mockProduct: Product = {
   price: 25.99,
   images: ['/images/wine.jpg'],
   stock: 10,
-  category: 'Wines'
+  category: 'Wines',
 }
 
 // Helper to reset analytics state
@@ -63,7 +69,7 @@ function resetAnalyticsState() {
     events: [],
     abandonmentTimer: null,
     syncInProgress: false,
-    offlineEvents: []
+    offlineEvents: [],
   }
 }
 
@@ -255,7 +261,7 @@ describe('Cart Analytics Module', () => {
 
       // Find the session start event
       const sessionStartEvent = cartAnalyticsState.value.events.find(
-        e => e.metadata?.sessionStart === true
+        e => e.metadata?.sessionStart === true,
       )
       expect(sessionStartEvent).toBeDefined()
       expect(sessionStartEvent?.type).toBe('view_cart')
@@ -281,7 +287,7 @@ describe('Cart Analytics Module', () => {
       expect(cartAnalyticsState.value.events.length).toBeGreaterThan(initialEventCount)
 
       const abandonEvent = cartAnalyticsState.value.events.find(
-        e => e.type === 'abandon_cart'
+        e => e.type === 'abandon_cart',
       )
       expect(abandonEvent).toBeDefined()
     })
@@ -311,7 +317,7 @@ describe('Cart Analytics Module', () => {
       expect(mockLocalStorage.setItem).toHaveBeenCalled()
       expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
         'cart_analytics_events',
-        expect.any(String)
+        expect.any(String),
       )
     })
   })
@@ -328,8 +334,8 @@ describe('Cart Analytics Module', () => {
       expect(mockFetch).toHaveBeenCalledWith('/api/analytics/cart-events', {
         method: 'POST',
         body: {
-          events: expect.any(Array)
-        }
+          events: expect.any(Array),
+        },
       })
     })
 

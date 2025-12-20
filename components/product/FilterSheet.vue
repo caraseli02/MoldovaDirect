@@ -11,9 +11,9 @@
       <div
         v-if="modelValue"
         class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
-        @click="handleBackdropClick"
         role="presentation"
-      />
+        @click="handleBackdropClick"
+      ></div>
     </Transition>
 
     <Transition
@@ -37,14 +37,20 @@
       >
         <!-- Drag Handle -->
         <div class="flex justify-center px-4 pt-4">
-          <div class="h-1.5 w-12 rounded-full bg-gray-300 dark:bg-gray-700" aria-hidden="true" />
+          <div
+            class="h-1.5 w-12 rounded-full bg-gray-300 dark:bg-gray-700"
+            aria-hidden="true"
+          ></div>
           <span class="sr-only">{{ t('products.filters.swipeToClose') }}</span>
         </div>
 
         <!-- Header -->
         <div class="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 px-6 py-4">
           <div class="flex items-center gap-3">
-            <h2 :id="titleId" class="text-xl font-semibold text-gray-900 dark:text-white">
+            <h2
+              :id="titleId"
+              class="text-xl font-semibold text-gray-900 dark:text-white"
+            >
               {{ title }}
             </h2>
             <span
@@ -61,13 +67,17 @@
             :aria-label="t('common.close')"
             @click="handleClose"
           >
-            <commonIcon name="lucide:x" class="h-5 w-5" aria-hidden="true" />
+            <commonIcon
+              name="lucide:x"
+              class="h-5 w-5"
+              aria-hidden="true"
+            />
           </button>
         </div>
 
         <!-- Content -->
         <div class="flex-1 overflow-y-auto overscroll-contain px-6 py-4">
-          <slot />
+          <slot></slot>
         </div>
 
         <!-- Footer -->
@@ -97,7 +107,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, nextTick } from 'vue'
+import { ref, watch, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useHapticFeedback } from '~/composables/useHapticFeedback'
 import commonIcon from '~/components/common/Icon.vue'
@@ -120,7 +130,7 @@ const props = withDefaults(defineProps<Props>(), {
   filteredCount: 0,
   showClearButton: true,
   closeOnBackdrop: true,
-  swipeToClose: true
+  swipeToClose: true,
 })
 
 const emit = defineEmits<{
@@ -146,6 +156,8 @@ const handleTouchStart = (e: TouchEvent) => {
   if (!props.swipeToClose) return
 
   const touch = e.touches[0]
+  if (!touch) return
+
   touchStartY.value = touch.clientY
   touchCurrentY.value = touch.clientY
   isDragging.value = true
@@ -155,6 +167,8 @@ const handleTouchMove = (e: TouchEvent) => {
   if (!props.swipeToClose || !isDragging.value) return
 
   const touch = e.touches[0]
+  if (!touch) return
+
   touchCurrentY.value = touch.clientY
 
   const deltaY = touchCurrentY.value - touchStartY.value
@@ -171,9 +185,10 @@ const handleTouchEnd = () => {
   const deltaY = touchCurrentY.value - touchStartY.value
 
   if (deltaY > SWIPE_THRESHOLD) {
-    vibrate('close')
+    vibrate('light')
     handleClose()
-  } else if (sheetRef.value) {
+  }
+  else if (sheetRef.value) {
     // Reset position
     sheetRef.value.style.transform = ''
   }
@@ -210,8 +225,9 @@ watch(() => props.modelValue, async (isOpen) => {
 
   if (isOpen) {
     document.body.style.overflow = 'hidden'
-    vibrate('open')
-  } else {
+    vibrate('light')
+  }
+  else {
     document.body.style.overflow = ''
   }
 })

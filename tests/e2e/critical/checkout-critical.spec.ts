@@ -24,7 +24,7 @@ test.describe('Critical Checkout Flows', () => {
     // Verify on checkout page
     await expect(page, ERROR_MESSAGES.CHECKOUT_NOT_ACCESSIBLE).toHaveURL(
       URL_PATTERNS.CHECKOUT,
-      { timeout: TIMEOUTS.STANDARD }
+      { timeout: TIMEOUTS.STANDARD },
     )
 
     // Checkout form should be visible
@@ -35,14 +35,15 @@ test.describe('Critical Checkout Flows', () => {
   test('authenticated user can access checkout', async ({ page }) => {
     test.skip(
       !CriticalTestHelpers.hasTestUserCredentials(),
-      'TEST_USER_PASSWORD environment variable not set'
+      'TEST_USER_PASSWORD environment variable not set',
     )
 
     const helpers = new CriticalTestHelpers(page)
 
     // Login
     await helpers.loginAsTestUser()
-    await expect(page).toHaveURL(URL_PATTERNS.ACCOUNT, { timeout: TIMEOUTS.LONG })
+    // Test user might redirect to /admin (if admin) or /account (if regular user)
+    await page.waitForURL(/\/(account|admin)/, { timeout: TIMEOUTS.LONG })
 
     // Add product to cart
     await helpers.addFirstProductToCart()
@@ -53,7 +54,7 @@ test.describe('Critical Checkout Flows', () => {
     // Verify on checkout page
     await expect(page, ERROR_MESSAGES.CHECKOUT_NOT_ACCESSIBLE).toHaveURL(
       URL_PATTERNS.CHECKOUT,
-      { timeout: TIMEOUTS.STANDARD }
+      { timeout: TIMEOUTS.STANDARD },
     )
 
     // Checkout form should be visible
@@ -106,7 +107,8 @@ test.describe('Critical Checkout Flows', () => {
 
       // Checkout page should have interactive elements
       expect(elementCount).toBeGreaterThan(0)
-    } else {
+    }
+    else {
       // If redirected away, that's acceptable behavior (e.g., cart issues)
       expect(url).toMatch(/\/(cart|products|auth)/)
     }
@@ -151,7 +153,8 @@ test.describe('Critical Checkout Flows', () => {
 
       // Either shows empty message or the page redirects
       expect(hasEmptyMessage || page.url().includes('/cart') || page.url().includes('/products')).toBe(true)
-    } else {
+    }
+    else {
       // Was redirected away from checkout - this is expected behavior
       expect(page.url()).not.toContain('/checkout')
     }

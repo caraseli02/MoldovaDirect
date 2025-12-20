@@ -20,18 +20,18 @@
         />
       </div>
     </div>
-    
+
     <div class="flex gap-2">
       <button
         v-for="preset in presets"
         :key="preset.label"
-        @click="applyPreset(preset)"
         :class="[
           'px-3 py-2 text-sm rounded-md border transition-colors',
-          isActivePreset(preset) 
-            ? 'bg-blue-600 text-white border-blue-600' 
-            : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
+          isActivePreset(preset)
+            ? 'bg-blue-600 text-white border-blue-600'
+            : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700',
         ]"
+        @click="applyPreset(preset)"
       >
         {{ preset.label }}
       </button>
@@ -55,13 +55,13 @@ interface Props {
 }
 
 interface Emits {
-  (e: 'update:modelValue', value: { startDate: string; endDate: string }): void
-  (e: 'change', value: { startDate: string; endDate: string }): void
+  (e: 'update:modelValue', value: { startDate: string, endDate: string }): void
+  (e: 'change', value: { startDate: string, endDate: string }): void
 }
 
 const props = withDefaults(defineProps<Props>(), {
   startDate: '',
-  endDate: ''
+  endDate: '',
 })
 
 const emit = defineEmits<Emits>()
@@ -71,7 +71,7 @@ const presets: DatePreset[] = [
   { label: 'Last 7 days', days: 7 },
   { label: 'Last 30 days', days: 30 },
   { label: 'Last 90 days', days: 90 },
-  { label: 'Last year', days: 365 }
+  { label: 'Last year', days: 365 },
 ]
 
 // Local date state
@@ -84,18 +84,20 @@ const initializeDates = () => {
   if (props.modelValue) {
     localStartDate.value = props.modelValue.startDate
     localEndDate.value = props.modelValue.endDate
-  } else if (props.startDate && props.endDate) {
+  }
+  else if (props.startDate && props.endDate) {
     localStartDate.value = props.startDate
     localEndDate.value = props.endDate
-  } else {
+  }
+  else {
     // Default to last 30 days
     const endDate = new Date()
     const startDate = new Date()
     startDate.setDate(startDate.getDate() - 30)
-    
-    localStartDate.value = startDate.toISOString().split('T')[0]
-    localEndDate.value = endDate.toISOString().split('T')[0]
-    
+
+    localStartDate.value = startDate.toISOString().split('T')[0] ?? ''
+    localEndDate.value = endDate.toISOString().split('T')[0] ?? ''
+
     activePreset.value = presets.find(p => p.days === 30) || null
   }
 }
@@ -105,11 +107,11 @@ const applyPreset = (preset: DatePreset) => {
   const endDate = new Date()
   const startDate = new Date()
   startDate.setDate(startDate.getDate() - preset.days)
-  
-  localStartDate.value = startDate.toISOString().split('T')[0]
-  localEndDate.value = endDate.toISOString().split('T')[0]
+
+  localStartDate.value = startDate.toISOString().split('T')[0] ?? ''
+  localEndDate.value = endDate.toISOString().split('T')[0] ?? ''
   activePreset.value = preset
-  
+
   updateDateRange()
 }
 
@@ -123,21 +125,21 @@ const updateDateRange = () => {
   if (localStartDate.value && localEndDate.value) {
     const dateRange = {
       startDate: localStartDate.value,
-      endDate: localEndDate.value
+      endDate: localEndDate.value,
     }
-    
+
     // Clear active preset if dates don't match any preset
-    const matchingPreset = presets.find(preset => {
+    const matchingPreset = presets.find((preset) => {
       const endDate = new Date()
       const startDate = new Date()
       startDate.setDate(startDate.getDate() - preset.days)
-      
-      return startDate.toISOString().split('T')[0] === localStartDate.value &&
-             endDate.toISOString().split('T')[0] === localEndDate.value
+
+      return startDate.toISOString().split('T')[0] === localStartDate.value
+        && endDate.toISOString().split('T')[0] === localEndDate.value
     })
-    
+
     activePreset.value = matchingPreset || null
-    
+
     emit('update:modelValue', dateRange)
     emit('change', dateRange)
   }

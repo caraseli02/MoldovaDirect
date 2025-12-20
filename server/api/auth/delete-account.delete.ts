@@ -12,6 +12,7 @@
  */
 
 import { getRequestIP } from 'h3'
+import { serverSupabaseClient, serverSupabaseServiceRole } from '#supabase/server'
 import { createLogger } from '~/server/utils/secureLogger'
 
 const logger = createLogger('delete-account')
@@ -28,7 +29,7 @@ export default defineEventHandler(async (event) => {
     if (authError || !user) {
       throw createError({
         statusCode: 401,
-        statusMessage: 'Authentication required'
+        statusMessage: 'Authentication required',
       })
     }
 
@@ -39,20 +40,20 @@ export default defineEventHandler(async (event) => {
     if (!password) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Password confirmation required'
+        statusMessage: 'Password confirmation required',
       })
     }
 
     // Verify password by attempting to sign in
     const { error: passwordError } = await supabase.auth.signInWithPassword({
       email: user.email!,
-      password: password
+      password: password,
     })
 
     if (passwordError) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Invalid password'
+        statusMessage: 'Invalid password',
       })
     }
 
@@ -64,8 +65,8 @@ export default defineEventHandler(async (event) => {
       user_agent: getHeader(event, 'user-agent'),
       metadata: JSON.stringify({
         reason: reason || 'not_specified',
-        timestamp: new Date().toISOString()
-      })
+        timestamp: new Date().toISOString(),
+      }),
     })
 
     // Use atomic deletion function for GDPR compliance
@@ -78,13 +79,13 @@ export default defineEventHandler(async (event) => {
       const { data: deletionResult, error: deletionError } = await serviceRoleSupabase
         .rpc('delete_user_account_atomic', {
           target_user_id: user.id,
-          deletion_reason: reason || 'not_specified'
+          deletion_reason: reason || 'not_specified',
         })
 
       if (deletionError) {
         throw createError({
           statusCode: 500,
-          statusMessage: `Failed to delete account data: ${deletionError.message}`
+          statusMessage: `Failed to delete account data: ${deletionError.message}`,
         })
       }
 
@@ -94,7 +95,7 @@ export default defineEventHandler(async (event) => {
         await serviceRoleSupabase.storage
           .from('avatars')
           .remove([fileName])
-          .catch(err => {
+          .catch((err: any) => {
             // Log but don't fail - storage deletion is non-critical
             logger.warn('Failed to delete profile picture', { error: err.message })
           })
@@ -106,7 +107,7 @@ export default defineEventHandler(async (event) => {
       if (deleteUserError) {
         throw createError({
           statusCode: 500,
-          statusMessage: `Failed to delete user account: ${deleteUserError.message}`
+          statusMessage: `Failed to delete user account: ${deleteUserError.message}`,
         })
       }
 
@@ -118,15 +119,15 @@ export default defineEventHandler(async (event) => {
           addresses_deleted: deletionResult?.addresses_deleted || 0,
           carts_deleted: deletionResult?.carts_deleted || 0,
           orders_anonymized: deletionResult?.orders_anonymized || 0,
-          profile_deleted: deletionResult?.profile_deleted || false
-        }
+          profile_deleted: deletionResult?.profile_deleted || false,
+        },
       }
-
-    } catch (deletionError) {
+    }
+    catch (deletionError: any) {
       // Log the error for debugging
       logger.error('Account deletion failed', {
         error: deletionError instanceof Error ? deletionError.message : String(deletionError),
-        userId: user.id
+        userId: user.id,
       })
 
       // Re-throw with appropriate error message
@@ -136,13 +137,13 @@ export default defineEventHandler(async (event) => {
 
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to delete account. Please try again or contact support.'
+        statusMessage: 'Failed to delete account. Please try again or contact support.',
       })
     }
-
-  } catch (error) {
+  }
+  catch (error: any) {
     logger.error('Account deletion error', {
-      error: error instanceof Error ? error.message : String(error)
+      error: error instanceof Error ? error.message : String(error),
     })
 
     // Return appropriate error response
@@ -152,7 +153,7 @@ export default defineEventHandler(async (event) => {
 
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to delete account'
+      statusMessage: 'Failed to delete account',
     })
   }
 })

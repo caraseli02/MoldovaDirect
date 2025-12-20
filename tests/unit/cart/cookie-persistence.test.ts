@@ -18,14 +18,14 @@ const mockProduct: Product = {
   price: 25.99,
   images: ['/test-image.jpg'],
   stock: 10,
-  category: 'Test'
+  category: 'Test',
 }
 
 // Mock process.client to simulate client-side execution
 Object.defineProperty(globalThis.process, 'client', {
   value: true,
   writable: true,
-  configurable: true
+  configurable: true,
 })
 
 describe('Cart Cookie Persistence', () => {
@@ -103,7 +103,7 @@ describe('Cart Cookie Persistence', () => {
       // Set corrupted cookie data
       cookieStorage.set('moldova_direct_cart', {
         items: 'not-an-array', // Invalid - should cause .map() to fail
-        sessionId: 123 // Wrong type
+        sessionId: 123, // Wrong type
       })
 
       // loadFromStorage tries to deserialize, hits error calling .map() on string
@@ -158,7 +158,7 @@ describe('Cart Cookie Persistence', () => {
 
     it('should clear cart storage', async () => {
       cookieStorage.set('moldova_direct_cart', {
-        items: [{ id: '1', product: mockProduct, quantity: 1, addedAt: new Date() }]
+        items: [{ id: '1', product: mockProduct, quantity: 1, addedAt: new Date() }],
       })
 
       const cart = useCartStore()
@@ -200,10 +200,10 @@ describe('Cart Cookie Persistence', () => {
         product: expect.objectContaining({
           id: mockProduct.id,
           name: mockProduct.name,
-          price: mockProduct.price
+          price: mockProduct.price,
         }),
         quantity: 1,
-        addedAt: expect.any(Date)
+        addedAt: expect.any(Date),
       })
     })
 
@@ -223,9 +223,9 @@ describe('Cart Cookie Persistence', () => {
       expect(cart.items[0]).toMatchObject({
         id: expect.any(String),
         product: expect.objectContaining({
-          id: mockProduct.id
+          id: mockProduct.id,
         }),
-        quantity: testQuantity
+        quantity: testQuantity,
       })
 
       // Verify dates are Date objects
@@ -278,7 +278,7 @@ describe('Cart Cookie Persistence', () => {
         await cart.addItem({
           ...mockProduct,
           id: `product-${i}`,
-          name: `Product ${i}`
+          name: `Product ${i}`,
         }, 1)
       }
 

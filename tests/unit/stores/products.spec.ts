@@ -28,7 +28,7 @@ const mockProducts: ProductWithRelations[] = [
     updatedAt: '2024-01-01',
     category: null,
     images: [],
-    attributes: []
+    attributes: [],
   },
   {
     id: 2,
@@ -43,7 +43,7 @@ const mockProducts: ProductWithRelations[] = [
     updatedAt: '2024-01-02',
     category: null,
     images: [],
-    attributes: []
+    attributes: [],
   },
   {
     id: 3,
@@ -58,15 +58,15 @@ const mockProducts: ProductWithRelations[] = [
     updatedAt: '2024-01-03',
     category: null,
     images: [],
-    attributes: []
-  }
+    attributes: [],
+  },
 ]
 
 const mockCategories: CategoryWithChildren[] = [
   { id: 1, slug: 'wines', name: { es: 'Vinos', en: 'Wines', ro: 'Vinuri', ru: 'Вина' }, parentId: undefined, sortOrder: 1, isActive: true, children: [] },
   { id: 2, slug: 'red-wines', name: { es: 'Vinos Tintos', en: 'Red Wines', ro: 'Vinuri Roșii', ru: 'Красные вина' }, parentId: 1, sortOrder: 1, isActive: true, children: [] },
   { id: 3, slug: 'white-wines', name: { es: 'Vinos Blancos', en: 'White Wines', ro: 'Vinuri Albe', ru: 'Белые вина' }, parentId: 1, sortOrder: 2, isActive: true, children: [] },
-  { id: 4, slug: 'spirits', name: { es: 'Licores', en: 'Spirits', ro: 'Spirtoase', ru: 'Спиртные напитки' }, parentId: undefined, sortOrder: 2, isActive: true, children: [] }
+  { id: 4, slug: 'spirits', name: { es: 'Licores', en: 'Spirits', ro: 'Spirtoase', ru: 'Спиртные напитки' }, parentId: undefined, sortOrder: 2, isActive: true, children: [] },
 ]
 
 describe('Products Store', () => {
@@ -96,7 +96,7 @@ describe('Products Store', () => {
         page: 1,
         limit: 12,
         total: 0,
-        totalPages: 0
+        totalPages: 0,
       })
     })
 
@@ -328,7 +328,7 @@ describe('Products Store', () => {
       it('sets loading state during fetch', async () => {
         mockFetch.mockResolvedValueOnce({
           products: mockProducts,
-          pagination: { page: 1, limit: 12, total: 3, totalPages: 1 }
+          pagination: { page: 1, limit: 12, total: 3, totalPages: 1 },
         })
 
         const fetchPromise = store.fetchProducts()
@@ -341,7 +341,7 @@ describe('Products Store', () => {
       it('populates products from API response', async () => {
         mockFetch.mockResolvedValueOnce({
           products: mockProducts,
-          pagination: { page: 1, limit: 12, total: 3, totalPages: 1 }
+          pagination: { page: 1, limit: 12, total: 3, totalPages: 1 },
         })
 
         await store.fetchProducts()
@@ -354,7 +354,7 @@ describe('Products Store', () => {
         // Pre-populate cache
         store.setCache('products-{}', {
           products: mockProducts,
-          pagination: { page: 1, limit: 12, total: 3, totalPages: 1 }
+          pagination: { page: 1, limit: 12, total: 3, totalPages: 1 },
         }, 60000)
 
         await store.fetchProducts()
@@ -376,7 +376,7 @@ describe('Products Store', () => {
       it('builds query params from filters', async () => {
         mockFetch.mockResolvedValueOnce({
           products: [],
-          pagination: { page: 1, limit: 12, total: 0, totalPages: 0 }
+          pagination: { page: 1, limit: 12, total: 0, totalPages: 0 },
         })
 
         await store.fetchProducts({
@@ -388,7 +388,7 @@ describe('Products Store', () => {
           featured: true,
           sort: 'price_asc',
           page: 2,
-          limit: 24
+          limit: 24,
         })
 
         const callUrl = mockFetch.mock.calls[0][0]
@@ -408,7 +408,7 @@ describe('Products Store', () => {
       it('fetches single product by slug', async () => {
         mockFetch.mockResolvedValueOnce({
           product: mockProducts[0],
-          relatedProducts: [mockProducts[1]]
+          relatedProducts: [mockProducts[1]],
         })
 
         await store.fetchProduct('test-wine-1')
@@ -503,7 +503,7 @@ describe('Products Store', () => {
           page: 1,
           limit: 12,
           total: 0,
-          totalPages: 0
+          totalPages: 0,
         })
       })
     })

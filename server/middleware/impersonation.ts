@@ -40,17 +40,17 @@ export default defineEventHandler(async (event: H3Event) => {
       adminId: session.admin_id,
       targetUserId: session.target_user_id,
       sessionId: session.id,
-      reason: session.reason
+      reason: session.reason,
     }
 
     // Log impersonation context for debugging
     console.log('[IMPERSONATION]', {
       admin: session.admin_id,
       target: session.target_user_id,
-      session: session.id
+      session: session.id,
     })
-
-  } catch (error: any) {
+  }
+  catch (error: any) {
     // Invalid or expired token - log and clear the impersonation context
     console.warn('[IMPERSONATION] Invalid token:', error.statusMessage)
 
@@ -58,7 +58,7 @@ export default defineEventHandler(async (event: H3Event) => {
     // This allows the request to continue as the original user
     event.context.impersonation = {
       isImpersonating: false,
-      error: error.statusMessage
+      error: error.statusMessage,
     }
   }
 })

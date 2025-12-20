@@ -9,8 +9,6 @@
  * - Unchecked: Cookies have no maxAge (session cookies, cleared on browser close)
  */
 
-import type { CookieOptions } from '@supabase/ssr'
-
 const REMEMBER_ME_COOKIE = 'auth-remember-me'
 const SESSION_MAX_AGE = 60 * 60 * 24 * 30 // 30 days in seconds
 
@@ -76,7 +74,7 @@ export function createRememberMeStorage() {
       // Also try with domain to ensure removal
       const domain = window.location.hostname
       document.cookie = `${key}=; path=/; domain=${domain}; expires=Thu, 01 Jan 1970 00:00:00 UTC`
-    }
+    },
   }
 }
 

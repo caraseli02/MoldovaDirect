@@ -1,6 +1,5 @@
 import { serverSupabaseClient } from '#supabase/server'
 import type { GetSectionsQuery, GetSectionsResponse, LandingSectionRow } from '~/types'
-import { PUBLIC_CACHE_CONFIG } from '~/server/utils/publicCache'
 
 /**
  * GET /api/landing/sections
@@ -22,19 +21,20 @@ export default defineCachedEventHandler(async (event): Promise<GetSectionsRespon
 
     // Validate and set locale
     const VALID_LOCALES = ['es', 'en', 'ro', 'ru'] as const
+    type ValidLocale = typeof VALID_LOCALES[number]
     const requestedLocale = query.locale || 'es'
 
-    if (!VALID_LOCALES.includes(requestedLocale as any)) {
+    if (!VALID_LOCALES.includes(requestedLocale as ValidLocale)) {
       throw createError({
         statusCode: 400,
-        statusMessage: `Bad Request - Invalid locale. Must be one of: ${VALID_LOCALES.join(', ')}`
+        statusMessage: `Bad Request - Invalid locale. Must be one of: ${VALID_LOCALES.join(', ')}`,
       })
     }
 
-    const locale = requestedLocale as 'es' | 'en' | 'ro' | 'ru'
-    const activeOnly = query.active_only !== 'false' // Default true
-    const sectionType = query.section_type
-    const includeScheduled = query.include_scheduled === 'true' // Default false
+    const locale = requestedLocale as ValidLocale
+    const activeOnly = String(query.active_only) !== 'false' // Default true
+    const sectionType = query.section_type as string | undefined
+    const includeScheduled = String(query.include_scheduled) === 'true' // Default false
 
     // Build query
     let queryBuilder = supabase
@@ -53,26 +53,24 @@ export default defineCachedEventHandler(async (event): Promise<GetSectionsRespon
 
       // Filter by schedule if not including scheduled sections
       if (!includeScheduled) {
-        const now = new Date().toISOString()
-
         // Use the database function for correct schedule filtering
         // This function properly handles: (starts_at IS NULL OR starts_at <= now) AND (ends_at IS NULL OR ends_at >= now)
         const { data, error, count } = await supabase.rpc('get_active_landing_sections', {
-          p_locale: locale
+          p_locale: locale,
         })
 
         if (error) {
           throw createError({
             statusCode: 500,
             statusMessage: 'Failed to fetch landing sections',
-            data: error
+            data: error,
           })
         }
 
         return {
           sections: (data as LandingSectionRow[]) || [],
           total: count || data?.length || 0,
-          locale
+          locale,
         }
       }
     }
@@ -83,26 +81,27 @@ export default defineCachedEventHandler(async (event): Promise<GetSectionsRespon
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to fetch landing sections',
-        data: error
+        data: error,
       })
     }
 
     return {
       sections: (data as LandingSectionRow[]) || [],
       total: count || data?.length || 0,
-      locale
+      locale,
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     console.error('Error fetching landing sections:', error)
 
     throw createError({
       statusCode: error.statusCode || 500,
       statusMessage: error.statusMessage || 'Failed to fetch landing sections',
-      data: error.data || error
+      data: error.data || error,
     })
   }
 }, {
   maxAge: PUBLIC_CACHE_CONFIG.landingSections.maxAge,
   name: PUBLIC_CACHE_CONFIG.landingSections.name,
-  getKey: () => PUBLIC_CACHE_CONFIG.landingSections.name
+  getKey: () => PUBLIC_CACHE_CONFIG.landingSections.name,
 })

@@ -30,49 +30,63 @@
         <!-- Order Metadata -->
         <div class="border-t border-gray-200 dark:border-gray-700 pt-4 space-y-3">
           <div>
-            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Order Number</p>
+            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+              Order Number
+            </p>
             <p class="text-sm text-gray-900 dark:text-white font-mono">
               {{ order.order_number }}
             </p>
           </div>
-          
+
           <div>
-            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Order Date</p>
+            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+              Order Date
+            </p>
             <p class="text-sm text-gray-900 dark:text-white">
               {{ formatDate(order.created_at) }}
             </p>
           </div>
 
           <div v-if="order.updated_at && order.updated_at !== order.created_at">
-            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Last Updated</p>
+            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+              Last Updated
+            </p>
             <p class="text-sm text-gray-900 dark:text-white">
               {{ formatDate(order.updated_at) }}
             </p>
           </div>
 
           <div v-if="order.shipped_at">
-            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Shipped Date</p>
+            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+              Shipped Date
+            </p>
             <p class="text-sm text-gray-900 dark:text-white">
               {{ formatDate(order.shipped_at) }}
             </p>
           </div>
 
           <div v-if="order.delivered_at">
-            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Delivered Date</p>
+            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+              Delivered Date
+            </p>
             <p class="text-sm text-gray-900 dark:text-white">
               {{ formatDate(order.delivered_at) }}
             </p>
           </div>
 
           <div v-if="order.estimated_ship_date">
-            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Estimated Ship Date</p>
+            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+              Estimated Ship Date
+            </p>
             <p class="text-sm text-gray-900 dark:text-white">
               {{ formatDate(order.estimated_ship_date) }}
             </p>
           </div>
 
           <div v-if="order.priority_level">
-            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Priority Level</p>
+            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+              Priority Level
+            </p>
             <div class="flex items-center space-x-2 mt-1">
               <Badge :variant="getPriorityVariant(order.priority_level)">
                 {{ getPriorityLabel(order.priority_level) }}
@@ -81,7 +95,9 @@
           </div>
 
           <div v-if="order.fulfillment_progress !== undefined && order.fulfillment_progress !== null">
-            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Fulfillment Progress</p>
+            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+              Fulfillment Progress
+            </p>
             <div class="mt-2">
               <div class="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400 mb-1">
                 <span>{{ order.fulfillment_progress }}%</span>
@@ -115,13 +131,13 @@ import {
   Card,
   CardContent,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import type { OrderWithAdminDetails } from '~/types/database'
+import type { OrderWithAdminDetailsRaw } from '~/types/database'
 
 interface Props {
-  order: OrderWithAdminDetails
+  order: OrderWithAdminDetailsRaw
 }
 
 const props = defineProps<Props>()
@@ -142,7 +158,7 @@ const formatDate = (dateString: string) => {
     month: 'short',
     day: 'numeric',
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   })
 }
 

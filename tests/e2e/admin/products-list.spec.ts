@@ -1,31 +1,31 @@
 import { test, expect } from '../../fixtures/base'
 
 test.describe('Admin Products List Page - Comprehensive Testing', () => {
-  test('1. Page Load & Screenshots', async ({ authenticatedPage }) => {
+  test('1. Page Load & Screenshots', async ({ adminAuthenticatedPage }) => {
     // Navigate to admin products page
-    await authenticatedPage.goto('/admin/products')
-    await authenticatedPage.waitForLoadState('networkidle')
+    await adminAuthenticatedPage.goto('/admin/products')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
     // Verify correct URL
-    const currentUrl = authenticatedPage.url()
+    const currentUrl = adminAuthenticatedPage.url()
     expect(currentUrl).toContain('/admin/products')
 
     // Take a screenshot
-    await authenticatedPage.screenshot({ path: 'admin-products-page.png' })
+    await adminAuthenticatedPage.screenshot({ path: 'admin-products-page.png' })
     console.log('✓ Screenshot taken: admin-products-page.png')
 
     // Verify page title
-    await expect(authenticatedPage).toHaveTitle(/Product|Admin/i)
+    await expect(adminAuthenticatedPage).toHaveTitle(/Product|Admin/i)
     console.log('✓ Page title verified')
   })
 
   test('2. Check Console for Errors and Hydration Issues', async ({ page }) => {
-    const consoleLogs: { type: string; text: string }[] = []
+    const consoleLogs: { type: string, text: string }[] = []
     const pageErrors: string[] = []
     const networkErrors: string[] = []
 
     // Capture console messages
-    page.on('console', msg => {
+    page.on('console', (msg) => {
       const logEntry = {
         type: msg.type(),
         text: msg.text(),
@@ -37,13 +37,13 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
     })
 
     // Capture page errors
-    page.on('pageerror', error => {
+    page.on('pageerror', (error) => {
       pageErrors.push(error.toString())
       console.log(`[PAGE ERROR] ${error.toString()}`)
     })
 
     // Capture network failures
-    page.on('requestfailed', request => {
+    page.on('requestfailed', (request) => {
       networkErrors.push(`${request.method()} ${request.url()}`)
       console.log(`[NETWORK ERROR] ${request.method()} ${request.url()}`)
     })
@@ -54,11 +54,11 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
 
     // Analyze results
     const hydrationErrors = consoleLogs.filter(
-      log => log.type === 'error' && log.text.includes('Hydration')
+      log => log.type === 'error' && log.text.includes('Hydration'),
     )
 
     const criticalErrors = pageErrors.filter(
-      err => !err.includes('hydration') && !err.includes('Hydration')
+      err => !err.includes('hydration') && !err.includes('Hydration'),
     )
 
     console.log('\n=== CONSOLE CHECK RESULTS ===')
@@ -78,28 +78,29 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
     console.log('\n✓ No critical errors found')
   })
 
-  test('3. Verify Products Table Renders', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/admin/products')
-    await authenticatedPage.waitForLoadState('networkidle')
+  test('3. Verify Products Table Renders', async ({ adminAuthenticatedPage }) => {
+    await adminAuthenticatedPage.goto('/admin/products')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
     // Look for table element
-    const table = authenticatedPage.locator('table, [role="table"], [role="grid"]').first()
+    const table = adminAuthenticatedPage.locator('table, [role="table"], [role="grid"]').first()
     await expect(table).toBeVisible({ timeout: 10000 })
     console.log('✓ Products table found and visible')
 
     // Check for table headers
-    const headers = authenticatedPage.locator('th, [role="columnheader"]')
+    const headers = adminAuthenticatedPage.locator('th, [role="columnheader"]')
     const headerCount = await headers.count()
     console.log(`✓ Table headers found: ${headerCount}`)
 
     // Check for table rows (products)
-    const rows = authenticatedPage.locator('tbody tr, [role="row"]')
+    const rows = adminAuthenticatedPage.locator('tbody tr, [role="row"]')
     const rowCount = await rows.count()
     console.log(`✓ Table rows found: ${rowCount}`)
 
     if (rowCount > 0) {
       console.log(`✓ Products are displayed in the table (${rowCount} rows)`)
-    } else {
+    }
+    else {
       console.log('⚠ No product rows found in table - table may be empty or not loaded')
     }
 
@@ -108,13 +109,13 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
     console.log('✓ Screenshot taken: admin-products-table.png')
   })
 
-  test('4. Test Search Functionality', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/admin/products')
-    await authenticatedPage.waitForLoadState('networkidle')
+  test('4. Test Search Functionality', async ({ adminAuthenticatedPage }) => {
+    await adminAuthenticatedPage.goto('/admin/products')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
     // Look for search input
-    const searchInput = authenticatedPage.locator(
-      'input[placeholder*="Search"], input[aria-label*="Search"], input[type="search"]'
+    const searchInput = adminAuthenticatedPage.locator(
+      'input[placeholder*="Search"], input[aria-label*="Search"], input[type="search"]',
     ).first()
 
     const searchExists = await searchInput.count() > 0
@@ -128,31 +129,31 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
 
     // Type in search box
     await searchInput.fill('test')
-    await authenticatedPage.waitForLoadState('networkidle')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
     console.log('✓ Search term entered')
 
     // Verify search was triggered
-    const url = authenticatedPage.url()
+    const url = adminAuthenticatedPage.url()
     const hasSearchParam = url.includes('search') || url.includes('q')
     console.log(`✓ Search triggered (URL updated: ${hasSearchParam})`)
 
     // Take a screenshot of search results
-    await authenticatedPage.screenshot({ path: 'admin-products-search.png' })
+    await adminAuthenticatedPage.screenshot({ path: 'admin-products-search.png' })
     console.log('✓ Screenshot taken: admin-products-search.png')
 
     // Clear search
     await searchInput.clear()
-    await authenticatedPage.waitForLoadState('networkidle')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
     console.log('✓ Search cleared')
   })
 
-  test('5. Test Filter Functionality', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/admin/products')
-    await authenticatedPage.waitForLoadState('networkidle')
+  test('5. Test Filter Functionality', async ({ adminAuthenticatedPage }) => {
+    await adminAuthenticatedPage.goto('/admin/products')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
     // Look for filter buttons or dropdowns
-    const filterButtons = authenticatedPage.locator('button, [role="button"]').filter({
-      hasText: /Filter|Category|Status|Sort/i
+    const filterButtons = adminAuthenticatedPage.locator('button, [role="button"]').filter({
+      hasText: /Filter|Category|Status|Sort/i,
     })
 
     const filterCount = await filterButtons.count()
@@ -167,26 +168,26 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
     const firstFilter = filterButtons.first()
     await expect(firstFilter).toBeVisible()
     await firstFilter.click()
-    await authenticatedPage.waitForTimeout(500)
+    await adminAuthenticatedPage.waitForTimeout(500)
 
     console.log('✓ Filter dropdown opened')
 
     // Take a screenshot
-    await authenticatedPage.screenshot({ path: 'admin-products-filter.png' })
+    await adminAuthenticatedPage.screenshot({ path: 'admin-products-filter.png' })
     console.log('✓ Screenshot taken: admin-products-filter.png')
 
     // Click elsewhere to close dropdown
-    await authenticatedPage.click('body')
+    await adminAuthenticatedPage.click('body')
     console.log('✓ Filter tested')
   })
 
-  test('6. Click "New Product" Button to Test Navigation', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/admin/products')
-    await authenticatedPage.waitForLoadState('networkidle')
+  test('6. Click "New Product" Button to Test Navigation', async ({ adminAuthenticatedPage }) => {
+    await adminAuthenticatedPage.goto('/admin/products')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
     // Look for "New Product" button
-    const newProductButton = authenticatedPage.locator('button, a').filter({
-      hasText: /New|Create|Add/i
+    const newProductButton = adminAuthenticatedPage.locator('button, a').filter({
+      hasText: /New|Create|Add/i,
     }).first()
 
     const buttonExists = await newProductButton.count() > 0
@@ -204,31 +205,31 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
 
     // Click the button
     await newProductButton.click()
-    await authenticatedPage.waitForLoadState('networkidle')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
     // Verify navigation
-    const newUrl = authenticatedPage.url()
+    const newUrl = adminAuthenticatedPage.url()
     expect(newUrl).toContain('/admin/products')
     console.log(`✓ Navigated to: ${newUrl}`)
 
     // Check if form is visible
-    const form = authenticatedPage.locator('form').first()
+    const form = adminAuthenticatedPage.locator('form').first()
     const formVisible = await form.isVisible().catch(() => false)
     if (formVisible) {
       console.log('✓ Product form is visible')
     }
 
     // Take a screenshot
-    await authenticatedPage.screenshot({ path: 'admin-products-new.png' })
+    await adminAuthenticatedPage.screenshot({ path: 'admin-products-new.png' })
     console.log('✓ Screenshot taken: admin-products-new.png')
   })
 
-  test('7. Click on Product to View Details', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/admin/products')
-    await authenticatedPage.waitForLoadState('networkidle')
+  test('7. Click on Product to View Details', async ({ adminAuthenticatedPage }) => {
+    await adminAuthenticatedPage.goto('/admin/products')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
     // Look for product rows
-    const productRows = authenticatedPage.locator('tbody tr, [role="row"]')
+    const productRows = adminAuthenticatedPage.locator('tbody tr, [role="row"]')
     const rowCount = await productRows.count()
 
     if (rowCount === 0) {
@@ -255,15 +256,16 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
       console.log(`✓ Found ${clickableCount} clickable elements in row`)
       const firstClickable = clickableElements.first()
       await firstClickable.click()
-      await authenticatedPage.waitForLoadState('networkidle')
+      await adminAuthenticatedPage.waitForLoadState('networkidle')
 
-      const detailUrl = authenticatedPage.url()
+      const detailUrl = adminAuthenticatedPage.url()
       console.log(`✓ Navigated to: ${detailUrl}`)
 
       // Take a screenshot
-      await authenticatedPage.screenshot({ path: 'admin-products-details.png' })
+      await adminAuthenticatedPage.screenshot({ path: 'admin-products-details.png' })
       console.log('✓ Screenshot taken: admin-products-details.png')
-    } else {
+    }
+    else {
       // Try clicking on the row itself
       console.log('⚠ No clickable elements found - trying to click row')
       await firstRow.click().catch(() => {
@@ -282,7 +284,8 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
     try {
       await page.goto('/admin/products', { waitUntil: 'networkidle' })
       console.log('✓ Page loaded successfully')
-    } catch (error) {
+    }
+    catch (error: any) {
       issues.push(`Failed to load page: ${error}`)
       return
     }
@@ -291,7 +294,8 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
     const isErrorPage = await page.locator('text=/Error|404|500/i').isVisible({ timeout: 2000 }).catch(() => false)
     if (isErrorPage) {
       issues.push('Page appears to be showing an error page')
-    } else {
+    }
+    else {
       console.log('✓ Not an error page')
     }
 
@@ -299,7 +303,8 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
     const title = await page.title()
     if (title && title.length > 0) {
       console.log(`✓ Page title: "${title}"`)
-    } else {
+    }
+    else {
       warnings.push('Page title is empty')
     }
 
@@ -308,7 +313,8 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
     const hasMainContent = await mainContent.isVisible({ timeout: 5000 }).catch(() => false)
     if (hasMainContent) {
       console.log('✓ Main content area found')
-    } else {
+    }
+    else {
       warnings.push('Main content area not found')
     }
 
@@ -317,7 +323,8 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
     const hasNav = await nav.isVisible({ timeout: 5000 }).catch(() => false)
     if (hasNav) {
       console.log('✓ Navigation found')
-    } else {
+    }
+    else {
       warnings.push('Navigation not found')
     }
 
@@ -326,13 +333,14 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
     const disabledCount = await disabledInputs.count()
     if (disabledCount === 0) {
       console.log('✓ No unexpectedly disabled elements')
-    } else {
+    }
+    else {
       console.log(`⚠ Found ${disabledCount} disabled elements (may be expected)`)
     }
 
     // Test 7: Check page response time
     const navigationTiming = await page.evaluate(() => {
-      const timing = performance.getEntriesByType('navigation')[0] as any
+      const timing = performance.getEntriesByType('navigation')[0] as unknown
       return {
         loadTime: timing?.loadEventEnd - timing?.loadEventStart || 0,
         domContentLoaded: timing?.domContentLoadedEventEnd - timing?.domContentLoadedEventStart || 0,
@@ -343,7 +351,7 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
 
     // Test 8: Check for layout shift (CLS)
     const layoutShifts = await page.evaluate(() => {
-      return new Promise<number>(resolve => {
+      return new Promise<number>((resolve) => {
         let cls = 0
         const observer = new PerformanceObserver((list) => {
           list.getEntries().forEach((entry: any) => {

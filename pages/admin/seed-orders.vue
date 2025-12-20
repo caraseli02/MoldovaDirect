@@ -8,7 +8,10 @@
         </CardDescription>
       </CardHeader>
       <CardContent class="space-y-4">
-        <div v-if="!loading && !result" class="space-y-4">
+        <div
+          v-if="!loading && !result"
+          class="space-y-4"
+        >
           <p class="text-sm text-muted-foreground">
             This will create 20 mock orders with:
           </p>
@@ -19,31 +22,59 @@
             <li>Realistic dates (last 30 days)</li>
             <li>Different payment statuses</li>
           </ul>
-          
-          <Button @click="seedOrders" class="w-full" size="lg">
-            <commonIcon name="lucide:database" class="h-5 w-5 mr-2" />
+
+          <Button
+            class="w-full"
+            size="lg"
+            @click="seedOrders"
+          >
+            <commonIcon
+              name="lucide:database"
+              class="h-5 w-5 mr-2"
+            />
             Create Mock Orders
           </Button>
         </div>
 
-        <div v-if="loading" class="text-center py-8">
-          <commonIcon name="lucide:loader-2" class="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
-          <p class="text-sm text-muted-foreground">Creating orders...</p>
+        <div
+          v-if="loading"
+          class="text-center py-8"
+        >
+          <commonIcon
+            name="lucide:loader-2"
+            class="h-12 w-12 animate-spin text-primary mx-auto mb-4"
+          />
+          <p class="text-sm text-muted-foreground">
+            Creating orders...
+          </p>
         </div>
 
-        <div v-if="result && !error" class="space-y-4">
+        <div
+          v-if="result && !error"
+          class="space-y-4"
+        >
           <div class="rounded-lg bg-green-50 dark:bg-green-900/20 p-4 border border-green-200 dark:border-green-800">
             <div class="flex items-center gap-2 mb-2">
-              <commonIcon name="lucide:check-circle" class="h-5 w-5 text-green-600 dark:text-green-400" />
-              <h3 class="font-semibold text-green-900 dark:text-green-100">Success!</h3>
+              <commonIcon
+                name="lucide:check-circle"
+                class="h-5 w-5 text-green-600 dark:text-green-400"
+              />
+              <h3 class="font-semibold text-green-900 dark:text-green-100">
+                Success!
+              </h3>
             </div>
             <p class="text-sm text-green-800 dark:text-green-200">
               {{ result.message }}
             </p>
           </div>
 
-          <div v-if="result.orders && result.orders.length > 0" class="space-y-2">
-            <h4 class="text-sm font-medium">Created Orders:</h4>
+          <div
+            v-if="result.orders && result.orders.length > 0"
+            class="space-y-2"
+          >
+            <h4 class="text-sm font-medium">
+              Created Orders:
+            </h4>
             <div class="max-h-64 overflow-y-auto space-y-1">
               <div
                 v-for="order in result.orders"
@@ -57,30 +88,58 @@
           </div>
 
           <div class="flex gap-2">
-            <Button @click="goToOrders" class="flex-1">
-              <commonIcon name="lucide:arrow-right" class="h-4 w-4 mr-2" />
+            <Button
+              class="flex-1"
+              @click="goToOrders"
+            >
+              <commonIcon
+                name="lucide:arrow-right"
+                class="h-4 w-4 mr-2"
+              />
               View Orders
             </Button>
-            <Button @click="reset" variant="outline" class="flex-1">
-              <commonIcon name="lucide:refresh-cw" class="h-4 w-4 mr-2" />
+            <Button
+              variant="outline"
+              class="flex-1"
+              @click="reset"
+            >
+              <commonIcon
+                name="lucide:refresh-cw"
+                class="h-4 w-4 mr-2"
+              />
               Create More
             </Button>
           </div>
         </div>
 
-        <div v-if="error" class="space-y-4">
+        <div
+          v-if="error"
+          class="space-y-4"
+        >
           <div class="rounded-lg bg-red-50 dark:bg-red-900/20 p-4 border border-red-200 dark:border-red-800">
             <div class="flex items-center gap-2 mb-2">
-              <commonIcon name="lucide:alert-circle" class="h-5 w-5 text-red-600 dark:text-red-400" />
-              <h3 class="font-semibold text-red-900 dark:text-red-100">Error</h3>
+              <commonIcon
+                name="lucide:alert-circle"
+                class="h-5 w-5 text-red-600 dark:text-red-400"
+              />
+              <h3 class="font-semibold text-red-900 dark:text-red-100">
+                Error
+              </h3>
             </div>
             <p class="text-sm text-red-800 dark:text-red-200">
               {{ error }}
             </p>
           </div>
 
-          <Button @click="reset" variant="outline" class="w-full">
-            <commonIcon name="lucide:refresh-cw" class="h-4 w-4 mr-2" />
+          <Button
+            variant="outline"
+            class="w-full"
+            @click="reset"
+          >
+            <commonIcon
+              name="lucide:refresh-cw"
+              class="h-4 w-4 mr-2"
+            />
             Try Again
           </Button>
         </div>
@@ -95,7 +154,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 
 definePageMeta({
   layout: 'admin',
-  middleware: ['auth', 'admin']
+  middleware: ['auth', 'admin'],
 })
 
 const loading = ref(false)
@@ -109,14 +168,16 @@ const seedOrders = async () => {
 
   try {
     const response = await $fetch('/api/admin/seed-orders', {
-      method: 'POST'
-    })
+      method: 'POST',
+    }) as any
 
     result.value = response
-  } catch (err: any) {
+  }
+  catch (err: any) {
     error.value = err.message || 'Failed to create orders'
     console.error('Seed error:', err)
-  } finally {
+  }
+  finally {
     loading.value = false
   }
 }
@@ -131,6 +192,6 @@ const reset = () => {
 }
 
 useHead({
-  title: 'Seed Orders - Admin - Moldova Direct'
+  title: 'Seed Orders - Admin - Moldova Direct',
 })
 </script>

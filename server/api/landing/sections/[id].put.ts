@@ -23,7 +23,7 @@ export default defineEventHandler(async (event): Promise<GetSectionResponse> => 
     if (!id) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Bad Request - Section ID is required'
+        statusMessage: 'Bad Request - Section ID is required',
       })
     }
 
@@ -31,8 +31,8 @@ export default defineEventHandler(async (event): Promise<GetSectionResponse> => 
     const body = await readBody<Partial<UpdateSectionRequest>>(event)
 
     // Build update object
-    const updateData: any = {
-      updated_by: user.id
+    const updateData: Record<string, any> = {
+      updated_by: user.id,
     }
 
     if (body.section_type !== undefined) updateData.section_type = body.section_type
@@ -55,27 +55,28 @@ export default defineEventHandler(async (event): Promise<GetSectionResponse> => 
       if (error.code === 'PGRST116') {
         throw createError({
           statusCode: 404,
-          statusMessage: 'Section not found'
+          statusMessage: 'Section not found',
         })
       }
 
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to update landing section',
-        data: error
+        data: error,
       })
     }
 
     return {
-      section: data as LandingSectionRow
+      section: data as LandingSectionRow,
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     console.error('Error updating landing section:', error)
 
     throw createError({
       statusCode: error.statusCode || 500,
       statusMessage: error.statusMessage || 'Failed to update landing section',
-      data: error.data || error
+      data: error.data || error,
     })
   }
 })

@@ -21,7 +21,7 @@ export function useCountUp(target: number | Ref<number>, options: CountUpOptions
     useEasing = true,
     separator = ',',
     decimal = '.',
-    autoStart = true
+    autoStart = true,
   } = options
 
   const current = ref(start)
@@ -49,7 +49,8 @@ export function useCountUp(target: number | Ref<number>, options: CountUpOptions
 
       if (progress < 1) {
         animationFrame.value = requestAnimationFrame(animate)
-      } else {
+      }
+      else {
         current.value = targetValue
       }
     }
@@ -80,7 +81,7 @@ export function useCountUp(target: number | Ref<number>, options: CountUpOptions
   const formatted = computed(() => {
     const num = current.value.toString()
     const parts = num.split('.')
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, separator)
+    parts[0] = parts[0]?.replace(/\B(?=(\d{3})+(?!\d))/g, separator) || ''
     return parts.join(decimal)
   })
 
@@ -100,7 +101,8 @@ export function useCountUp(target: number | Ref<number>, options: CountUpOptions
     onUnmounted(() => {
       stopAnimation()
     })
-  } else if (autoStart) {
+  }
+  else if (autoStart) {
     // If not in component context but autoStart is true, start immediately
     startAnimation()
   }
@@ -111,6 +113,6 @@ export function useCountUp(target: number | Ref<number>, options: CountUpOptions
     reset,
     restart,
     start: startAnimation,
-    stop: stopAnimation
+    stop: stopAnimation,
   }
 }

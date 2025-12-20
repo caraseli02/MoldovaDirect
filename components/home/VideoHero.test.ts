@@ -61,7 +61,7 @@ describe('VideoHero', () => {
       wrapper.find('video').trigger('error')
       expect(consoleSpy).toHaveBeenCalledWith(
         expect.stringContaining('Video loading error:'),
-        expect.objectContaining({ webmSrc: undefined, mp4Src: '/broken.mp4' })
+        expect.objectContaining({ webmSrc: undefined, mp4Src: '/broken.mp4' }),
       )
       expect(wrapper.vm.videoLoadError).toBe(true)
     })
@@ -105,7 +105,7 @@ describe('VideoHero', () => {
       expect(playSpy).toHaveBeenCalled()
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         expect.stringContaining('Video autoplay failed'),
-        expect.objectContaining({ error: 'Autoplay blocked' })
+        expect.objectContaining({ error: 'Autoplay blocked' }),
       )
     })
   })

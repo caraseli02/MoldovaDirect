@@ -3,15 +3,29 @@
     <!-- Page Header -->
     <div class="flex justify-between items-center mb-8">
       <div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Products</h1>
-        <p class="text-gray-600 dark:text-gray-400">Manage your product catalog</p>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
+          Products
+        </h1>
+        <p class="text-gray-600 dark:text-gray-400">
+          Manage your product catalog
+        </p>
       </div>
       <nuxt-link
         to="/admin/products/new"
         class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 dark:bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-800"
       >
-        <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        <svg
+          class="h-5 w-5 mr-2"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 4v16m8-8H4"
+          />
         </svg>
         Add Product
       </nuxt-link>
@@ -19,17 +33,17 @@
 
     <!-- Filters -->
     <AdminProductsFilters
-      :search="adminProductsStore.filters.search"
+      :search="adminProductsStore.filters.search || ''"
       :category-id="adminProductsStore.filters.categoryId"
-      :status="adminProductsStore.filters.status"
-      :stock-level="adminProductsStore.filters.stockLevel"
+      :status="adminProductsStore.filters.status || ''"
+      :stock-level="adminProductsStore.filters.stockLevel || ''"
       :categories="categories"
       :total="adminProductsStore.pagination.total"
       :loading="adminProductsStore.loading"
       @update-search="adminProductsStore.updateSearch"
       @update-category="adminProductsStore.updateCategoryFilter"
-      @update-status="adminProductsStore.updateStatusFilter"
-      @update-stock="adminProductsStore.updateStockFilter"
+      @update-status="(val: string) => adminProductsStore.updateStatusFilter(val as '' | 'active' | 'inactive')"
+      @update-stock="(val: string) => adminProductsStore.updateStockFilter(val as '' | 'in-stock' | 'low-stock' | 'out-of-stock')"
       @clear-filters="adminProductsStore.clearFilters"
     />
 
@@ -42,8 +56,8 @@
       :all-visible-selected="adminProductsStore.allVisibleSelected"
       :selected-count="adminProductsStore.selectedCount"
       :bulk-operation-in-progress="adminProductsStore.bulkOperationInProgress"
-      :sort-by="adminProductsStore.filters.sortBy"
-      :sort-order="adminProductsStore.filters.sortOrder"
+      :sort-by="adminProductsStore.filters.sortBy || 'created_at'"
+      :sort-order="adminProductsStore.filters.sortOrder || 'desc'"
       @toggle-product-selection="adminProductsStore.toggleProductSelection"
       @toggle-all-visible="adminProductsStore.toggleAllVisible"
       @clear-selection="adminProductsStore.clearSelection"
@@ -70,7 +84,10 @@
     />
 
     <!-- Stock Edit Modal -->
-    <div v-if="stockEditModal.show" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+    <div
+      v-if="stockEditModal.show"
+      class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50"
+    >
       <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-gray-800">
         <div class="mt-3">
           <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">
@@ -89,15 +106,15 @@
           </div>
           <div class="flex justify-end space-x-3">
             <Button
-              @click="closeStockEditModal"
               variant="outline"
+              @click="closeStockEditModal"
             >
               Cancel
             </Button>
             <Button
-              @click="saveStockEdit"
               :disabled="stockEditModal.saving"
               type="submit"
+              @click="saveStockEdit"
             >
               {{ stockEditModal.saving ? 'Saving...' : 'Save' }}
             </Button>
@@ -107,11 +124,17 @@
     </div>
 
     <!-- Delete Confirmation Dialog -->
-    <Dialog :open="deleteDialog.show" @update:open="handleDeleteDialogOpen">
+    <Dialog
+      :open="deleteDialog.show"
+      @update:open="handleDeleteDialogOpen"
+    >
       <DialogContent class="sm:max-w-md">
         <DialogHeader>
           <DialogTitle class="text-red-600 dark:text-red-400 flex items-center gap-2">
-            <commonIcon name="lucide:alert-triangle" class="w-5 h-5" />
+            <commonIcon
+              name="lucide:alert-triangle"
+              class="w-5 h-5"
+            />
             {{ deleteDialog.title }}
           </DialogTitle>
           <DialogDescription>
@@ -126,15 +149,15 @@
         <DialogFooter class="mt-6 flex justify-end gap-3">
           <Button
             variant="outline"
-            @click="cancelDelete"
             :disabled="deleteDialog.loading"
+            @click="cancelDelete"
           >
             Cancel
           </Button>
           <Button
             variant="destructive"
-            @click="confirmDelete"
             :disabled="deleteDialog.loading"
+            @click="confirmDelete"
           >
             <commonIcon
               v-if="deleteDialog.loading"
@@ -174,7 +197,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle
+  DialogTitle,
 } from '@/components/ui/dialog'
 import type { CategoryWithChildren, ProductWithRelations } from '~/types/database'
 import { usePinia } from '#imports'
@@ -185,39 +208,70 @@ import AdminUtilsBulkOperationsBar from '~/components/admin/Utils/BulkOperations
 
 definePageMeta({
   layout: 'admin',
-  middleware: ['auth', 'admin']
+  middleware: ['auth', 'admin'],
 })
 
 // Initialize stores - safely access with fallback
 const pinia = usePinia()
 const adminProductsStore = useAdminProductsStore(pinia)
 
-
 // Fetch categories
 const { data: categoriesData } = await useFetch<{ categories: CategoryWithChildren[] }>('/api/categories')
 const categories = computed(() => categoriesData.value?.categories || [])
 
 // Stock edit modal state
-const stockEditModal = ref({
+interface StockEditModalState {
+  show: boolean
+  product: ProductWithRelations | null
+  quantity: number
+  saving: boolean
+}
+
+const stockEditModal = ref<StockEditModalState>({
   show: false,
-  product: null as any,
+  product: null,
   quantity: 0,
-  saving: false
+  saving: false,
 })
 
 // Delete confirmation dialog state
-const deleteDialog = ref({
+interface DeleteDialogState {
+  show: boolean
+  title: string
+  message: string
+  details: string
+  loading: boolean
+  productId: number | null
+  isBulk: boolean
+}
+
+const deleteDialog = ref<DeleteDialogState>({
   show: false,
   title: '',
   message: '',
   details: '',
   loading: false,
-  productId: null as number | null,
-  isBulk: false
+  productId: null,
+  isBulk: false,
 })
 
 // Bulk operations state
-const bulkOperations = ref({
+interface BulkOperationsState {
+  show: boolean
+  inProgress: boolean
+  completed: boolean
+  error: boolean
+  success: boolean
+  progress: number
+  operationText: string
+  progressText: string
+  resultMessage: string
+  resultDetails: string
+  errorMessage: string
+  currentOperation: (() => Promise<void>) | null
+}
+
+const bulkOperations = ref<BulkOperationsState>({
   show: false,
   inProgress: false,
   completed: false,
@@ -229,7 +283,7 @@ const bulkOperations = ref({
   resultMessage: '',
   resultDetails: '',
   errorMessage: '',
-  currentOperation: null as (() => Promise<void>) | null
+  currentOperation: null,
 })
 
 // Initialize the store on mount
@@ -238,18 +292,19 @@ onMounted(async () => {
 })
 
 // Utility functions
-const getLocalizedText = (text: Record<string, string> | null) => {
+const getLocalizedText = (text: Record<string, string | undefined> | null | undefined): string => {
   if (!text) return ''
-  return text.es || Object.values(text)[0] || ''
+  const textValue = text.es || text.en || Object.values(text).find(v => v !== undefined)
+  return textValue || ''
 }
 
 // Event handlers
-const handleEditStock = (product: any) => {
+const handleEditStock = (product: ProductWithRelations) => {
   stockEditModal.value = {
     show: true,
     product,
-    quantity: product.stockQuantity,
-    saving: false
+    quantity: product.stockQuantity || 0,
+    saving: false,
   }
 }
 
@@ -258,31 +313,33 @@ const closeStockEditModal = () => {
     show: false,
     product: null,
     quantity: 0,
-    saving: false
+    saving: false,
   }
 }
 
 const saveStockEdit = async () => {
   if (!stockEditModal.value.product) return
-  
+
   stockEditModal.value.saving = true
   try {
     await adminProductsStore.updateInventory(
       stockEditModal.value.product.id,
-      stockEditModal.value.quantity
+      stockEditModal.value.quantity,
     )
     closeStockEditModal()
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Failed to update stock:', error)
-  } finally {
+  }
+  finally {
     stockEditModal.value.saving = false
   }
 }
 
 const handleDeleteProduct = async (productId: number) => {
   const product = adminProductsStore.products.find((p: ProductWithRelations) => p.id === productId)
-  const productName = product ? getLocalizedText(product.name) : 'this product'
-  
+  const productName = product?.name ? getLocalizedText(product.name) : 'this product'
+
   deleteDialog.value = {
     show: true,
     title: 'Delete Product',
@@ -290,7 +347,7 @@ const handleDeleteProduct = async (productId: number) => {
     details: 'This action cannot be undone. The product will be permanently removed from your catalog.',
     loading: false,
     productId,
-    isBulk: false
+    isBulk: false,
   }
 }
 
@@ -300,7 +357,7 @@ const handleBulkActivate = async () => {
     () => adminProductsStore.bulkUpdateStatus(true),
     `Activating ${count} products...`,
     `Successfully activated ${count} products`,
-    'activate'
+    'activate',
   )
 }
 
@@ -310,13 +367,13 @@ const handleBulkDeactivate = async () => {
     () => adminProductsStore.bulkUpdateStatus(false),
     `Deactivating ${count} products...`,
     `Successfully deactivated ${count} products`,
-    'deactivate'
+    'deactivate',
   )
 }
 
 const handleBulkDelete = async () => {
   const count = adminProductsStore.selectedCount
-  
+
   deleteDialog.value = {
     show: true,
     title: 'Delete Products',
@@ -324,20 +381,22 @@ const handleBulkDelete = async () => {
     details: 'This action cannot be undone. All selected products will be permanently removed from your catalog.',
     loading: false,
     productId: null,
-    isBulk: true
+    isBulk: true,
   }
 }
 
 const handleUpdateLimit = async (limit: number) => {
-  adminProductsStore.pagination.limit = limit
-  adminProductsStore.pagination.page = 1
+  if (adminProductsStore.pagination) {
+    adminProductsStore.pagination.limit = limit
+    adminProductsStore.pagination.page = 1
+  }
   await adminProductsStore.fetchProducts()
 }
 
 // Delete confirmation handlers
 const confirmDelete = async () => {
   deleteDialog.value.loading = true
-  
+
   try {
     if (deleteDialog.value.isBulk) {
       const count = adminProductsStore.selectedCount
@@ -345,16 +404,19 @@ const confirmDelete = async () => {
         () => adminProductsStore.bulkDelete(),
         `Deleting ${count} products...`,
         `Successfully deleted ${count} products`,
-        'delete'
+        'delete',
       )
-    } else if (deleteDialog.value.productId) {
+    }
+    else if (deleteDialog.value.productId) {
       await adminProductsStore.deleteProduct(deleteDialog.value.productId)
     }
-    
+
     deleteDialog.value.show = false
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Failed to delete:', error)
-  } finally {
+  }
+  finally {
     deleteDialog.value.loading = false
   }
 }
@@ -367,7 +429,7 @@ const cancelDelete = () => {
     details: '',
     loading: false,
     productId: null,
-    isBulk: false
+    isBulk: false,
   }
 }
 
@@ -382,7 +444,7 @@ const performBulkOperation = async (
   operation: () => Promise<void>,
   operationText: string,
   successMessage: string,
-  operationType: string
+  operationType: string,
 ) => {
   bulkOperations.value = {
     show: true,
@@ -396,7 +458,7 @@ const performBulkOperation = async (
     resultMessage: '',
     resultDetails: '',
     errorMessage: '',
-    currentOperation: operation
+    currentOperation: operation,
   }
 
   try {
@@ -411,19 +473,19 @@ const performBulkOperation = async (
     await operation()
 
     clearInterval(progressInterval)
-    
+
     bulkOperations.value.progress = 100
     bulkOperations.value.inProgress = false
     bulkOperations.value.completed = true
     bulkOperations.value.success = true
     bulkOperations.value.resultMessage = successMessage
-    
+
     // Auto-close after 3 seconds
     setTimeout(() => {
       closeBulkOperations()
     }, 3000)
-    
-  } catch (error) {
+  }
+  catch (error: any) {
     bulkOperations.value.inProgress = false
     bulkOperations.value.error = true
     bulkOperations.value.success = false
@@ -444,26 +506,27 @@ const closeBulkOperations = () => {
     resultMessage: '',
     resultDetails: '',
     errorMessage: '',
-    currentOperation: null
+    currentOperation: null,
   }
 }
 
 const retryBulkOperation = async () => {
   if (bulkOperations.value.currentOperation) {
     const operation = bulkOperations.value.currentOperation
-    
+
     bulkOperations.value.error = false
     bulkOperations.value.inProgress = true
     bulkOperations.value.progress = 0
     bulkOperations.value.progressText = 'Retrying...'
-    
+
     try {
       await operation()
       bulkOperations.value.inProgress = false
       bulkOperations.value.completed = true
       bulkOperations.value.success = true
       bulkOperations.value.resultMessage = 'Operation completed successfully'
-    } catch (error) {
+    }
+    catch (error: any) {
       bulkOperations.value.inProgress = false
       bulkOperations.value.error = true
       bulkOperations.value.errorMessage = error instanceof Error ? error.message : 'Operation failed'
@@ -477,8 +540,8 @@ useHead({
   meta: [
     {
       name: 'robots',
-      content: 'noindex, nofollow'
-    }
-  ]
+      content: 'noindex, nofollow',
+    },
+  ],
 })
 </script>

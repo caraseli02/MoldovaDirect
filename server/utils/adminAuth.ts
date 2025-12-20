@@ -6,8 +6,8 @@
  */
 
 import type { H3Event } from 'h3'
-import { createError, getCookie, getHeader, getRequestIP } from 'h3'
-import { serverSupabaseClient, serverSupabaseServiceRole, serverSupabaseUser } from '#supabase/server'
+import { createError, getHeader, getRequestIP } from 'h3'
+import { serverSupabaseClient, serverSupabaseServiceRole } from '#supabase/server'
 
 /**
  * Authenticated user data from Supabase
@@ -37,14 +37,14 @@ type UserId = string & { readonly __brand: 'UserId' }
 /**
  * Type guard to validate if an unknown value is a valid AuthUser
  */
-function isValidAuthUser(user: unknown): user is AuthUser {
+function isValidAuthUser(user: any): user is AuthUser {
   return (
-    typeof user === 'object' &&
-    user !== null &&
-    'id' in user &&
-    typeof user.id === 'string' &&
-    'email' in user &&
-    typeof user.email === 'string'
+    typeof user === 'object'
+    && user !== null
+    && 'id' in user
+    && typeof user.id === 'string'
+    && 'email' in user
+    && typeof user.email === 'string'
   )
 }
 
@@ -63,11 +63,11 @@ export function isProductionEnvironment(): boolean {
  * Verifies that admin testing endpoints are not used in production
  * Throws an error if in production environment
  */
-export function requireNonProductionEnvironment(event: H3Event) {
+export function requireNonProductionEnvironment(_event: H3Event) {
   if (isProductionEnvironment()) {
     throw createError({
       statusCode: 403,
-      statusMessage: 'Admin testing endpoints are disabled in production for security'
+      statusMessage: 'Admin testing endpoints are disabled in production for security',
     })
   }
 }
@@ -86,17 +86,19 @@ export async function requireAdminRole(event: H3Event): Promise<UserId> {
   // Check for Authorization header (Bearer token) first
   // Access directly from Node.js request headers for reliability
   const nodeHeaders = event.node.req.headers
-  const authHeader = nodeHeaders.authorization || nodeHeaders.Authorization ||
-                     getHeader(event, 'authorization') || getHeader(event, 'Authorization')
+  const authHeader = nodeHeaders.authorization || nodeHeaders.Authorization
+    || getHeader(event, 'authorization') || getHeader(event, 'Authorization')
 
   let currentUser: AuthUser | null = null
   let userError: AuthError | null = null
   let authMethod = 'unknown'
 
-  if (authHeader?.startsWith('Bearer ')) {
+  const authHeaderStr = typeof authHeader === 'string' ? authHeader : String(authHeader || '')
+
+  if (authHeaderStr.startsWith('Bearer ')) {
     authMethod = 'bearer'
     // Extract token from Authorization header
-    const token = authHeader.substring(7)
+    const token = authHeaderStr.substring(7)
 
     // Use service role client to verify the token
     const supabase = serverSupabaseServiceRole(event)
@@ -111,10 +113,11 @@ export async function requireAdminRole(event: H3Event): Promise<UserId> {
       console.error(`[AdminAuth] Bearer token validation failed for ${method} ${path}:`, {
         error: userError.message,
         tokenLength: token.length,
-        tokenPrefix: token.substring(0, 20) + '...'
+        tokenPrefix: token.substring(0, 20) + '...',
       })
     }
-  } else {
+  }
+  else {
     authMethod = 'cookie'
     // Fall back to cookie-based auth
     const supabaseClient = await serverSupabaseClient(event)
@@ -135,7 +138,7 @@ export async function requireAdminRole(event: H3Event): Promise<UserId> {
     console.warn(`[AdminAuth] 401 Unauthorized - ${method} ${path} - Auth method: ${authMethod}`)
     throw createError({
       statusCode: 401,
-      statusMessage: 'Authentication required'
+      statusMessage: 'Authentication required',
     })
   }
 
@@ -151,11 +154,11 @@ export async function requireAdminRole(event: H3Event): Promise<UserId> {
     console.error(`[AdminAuth] Profile lookup failed for user ${currentUser.id}:`, {
       error: error?.message,
       hasProfile: !!profile,
-      email: currentUser.email
+      email: currentUser.email,
     })
     throw createError({
       statusCode: 403,
-      statusMessage: 'Unable to verify admin privileges'
+      statusMessage: 'Unable to verify admin privileges',
     })
   }
 
@@ -163,13 +166,8 @@ export async function requireAdminRole(event: H3Event): Promise<UserId> {
     console.warn(`[AdminAuth] 403 Forbidden - User ${currentUser.email} (role: ${profile.role}) attempted to access ${method} ${path}`)
     throw createError({
       statusCode: 403,
-      statusMessage: 'Admin access required'
+      statusMessage: 'Admin access required',
     })
-  }
-
-  // Log successful admin access in development
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`[AdminAuth] ✓ Admin access granted - ${method} ${path} - User: ${currentUser.email} - Auth: ${authMethod}`)
   }
 
   return currentUser.id as UserId
@@ -203,14 +201,14 @@ export interface AuditLogResult {
  * Fallback audit logging to console when database logging fails
  * This ensures critical admin actions are always logged somewhere
  */
-function logAuditToConsole(logEntry: any, errorId: string, dbError?: any) {
+function logAuditToConsole(logEntry: any, errorId: string, dbError?: unknown) {
   console.error('[ADMIN_AUDIT_CRITICAL] Database logging failed - using console fallback', {
     errorId,
     timestamp: logEntry.timestamp,
     adminId: logEntry.adminId,
     action: logEntry.action,
     metadata: logEntry.metadata,
-    dbError: dbError instanceof Error ? dbError.message : String(dbError)
+    dbError: dbError instanceof Error ? dbError.message : String(dbError),
   })
 }
 
@@ -231,18 +229,15 @@ export async function logAdminAction(
   event: H3Event,
   adminId: string,
   action: string,
-  metadata?: Record<string, any>
+  metadata?: Record<string, any>,
 ): Promise<AuditLogResult> {
   const errorId = `audit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
   const logEntry = {
     timestamp: new Date().toISOString(),
     adminId,
     action,
-    metadata
+    metadata,
   }
-
-  // Log to console for development/debugging
-  console.log('[ADMIN_AUDIT]', JSON.stringify(logEntry))
 
   try {
     const supabase = serverSupabaseServiceRole(event)
@@ -257,7 +252,7 @@ export async function logAdminAction(
       new_values: metadata?.new_values || null,
       ip_address: getRequestIP(event),
       user_agent: getHeader(event, 'user-agent'),
-      created_at: new Date().toISOString()
+      created_at: new Date().toISOString(),
     })
 
     if (dbError) {
@@ -266,18 +261,19 @@ export async function logAdminAction(
       return {
         success: false,
         errorId,
-        error: `Failed to store audit log in database: ${dbError.message}`
+        error: `Failed to store audit log in database: ${dbError.message}`,
       }
     }
 
     return { success: true }
-  } catch (error) {
+  }
+  catch (error: any) {
     // Use fallback logging - this is critical for compliance
     logAuditToConsole(logEntry, errorId, error)
     return {
       success: false,
       errorId,
-      error: error instanceof Error ? error.message : 'Unknown audit logging error'
+      error: error instanceof Error ? error.message : 'Unknown audit logging error',
     }
   }
 }

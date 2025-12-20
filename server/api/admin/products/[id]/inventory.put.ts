@@ -1,11 +1,11 @@
 /**
  * Update Product Inventory API Endpoint
- * 
+ *
  * Requirements addressed:
  * - 2.3: Inline inventory editing with input validation
  * - 2.4: Inventory update API with positive number validation
  * - 2.5: Automatic out-of-stock status updates when inventory reaches zero
- * 
+ *
  * Features:
  * - Validates positive number input
  * - Automatically updates product status based on stock
@@ -20,7 +20,7 @@ import { z } from 'zod'
 const updateInventorySchema = z.object({
   quantity: z.number().int().min(0, 'Stock quantity cannot be negative'),
   reason: z.string().optional().default('manual_adjustment'),
-  notes: z.string().optional()
+  notes: z.string().optional(),
 })
 
 export default defineEventHandler(async (event) => {
@@ -28,11 +28,11 @@ export default defineEventHandler(async (event) => {
     await requireAdminRole(event)
     const supabase = await serverSupabaseClient(event)
     const productId = getRouterParam(event, 'id')
-    
+
     if (!productId || isNaN(Number(productId))) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Invalid product ID'
+        statusMessage: 'Invalid product ID',
       })
     }
 
@@ -45,7 +45,7 @@ export default defineEventHandler(async (event) => {
     if (authError || !user) {
       throw createError({
         statusCode: 401,
-        statusMessage: 'Authentication required'
+        statusMessage: 'Authentication required',
       })
     }
 
@@ -59,7 +59,7 @@ export default defineEventHandler(async (event) => {
     if (fetchError || !currentProduct) {
       throw createError({
         statusCode: 404,
-        statusMessage: 'Product not found'
+        statusMessage: 'Product not found',
       })
     }
 
@@ -78,9 +78,9 @@ export default defineEventHandler(async (event) => {
     }
 
     // Update product inventory and status if needed
-    const updateData: any = {
+    const updateData: Record<string, any> = {
       stock_quantity: newQuantity,
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     }
 
     if (shouldUpdateStatus) {
@@ -96,13 +96,14 @@ export default defineEventHandler(async (event) => {
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to update inventory',
-        data: updateError
+        data: updateError,
       })
     }
 
     // Log inventory movement
-    const movementType = newQuantity > oldQuantity ? 'in' : 
-                        newQuantity < oldQuantity ? 'out' : 'adjustment'
+    const movementType = newQuantity > oldQuantity
+      ? 'in'
+      : newQuantity < oldQuantity ? 'out' : 'adjustment'
 
     const { error: logError } = await supabase
       .from('inventory_movements')
@@ -114,7 +115,7 @@ export default defineEventHandler(async (event) => {
         quantity_after: newQuantity,
         reason: validatedData.reason,
         performed_by: user.id,
-        notes: validatedData.notes
+        notes: validatedData.notes,
       })
 
     if (logError) {
@@ -139,13 +140,14 @@ export default defineEventHandler(async (event) => {
     if (refetchError) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to fetch updated product data'
+        statusMessage: 'Failed to fetch updated product data',
       })
     }
 
     // Calculate stock status
-    const stockStatus = updatedProduct.stock_quantity > (updatedProduct.low_stock_threshold || 5) ? 'high' : 
-                       updatedProduct.stock_quantity > 0 ? 'low' : 'out'
+    const stockStatus = updatedProduct.stock_quantity > (updatedProduct.low_stock_threshold || 5)
+      ? 'high'
+      : updatedProduct.stock_quantity > 0 ? 'low' : 'out'
 
     return {
       success: true,
@@ -156,31 +158,31 @@ export default defineEventHandler(async (event) => {
         reorderPoint: updatedProduct.reorder_point,
         isActive: updatedProduct.is_active,
         stockStatus,
-        updatedAt: updatedProduct.updated_at
+        updatedAt: updatedProduct.updated_at,
       },
       movement: {
         type: movementType,
         quantity: Math.abs(newQuantity - oldQuantity),
         from: oldQuantity,
         to: newQuantity,
-        reason: validatedData.reason
+        reason: validatedData.reason,
       },
       statusChanged: shouldUpdateStatus,
-      message: shouldUpdateStatus && !newActiveStatus ? 
-        'Inventory updated. Product automatically deactivated due to zero stock.' :
-        'Inventory updated successfully'
+      message: shouldUpdateStatus && !newActiveStatus
+        ? 'Inventory updated. Product automatically deactivated due to zero stock.'
+        : 'Inventory updated successfully',
     }
-
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Update inventory error:', error)
-    
+
     if (error.statusCode) {
       throw error
     }
-    
+
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to update inventory'
+      statusMessage: 'Failed to update inventory',
     })
   }
 })

@@ -28,7 +28,7 @@ const PROGRESS_STORAGE_KEY = 'md-test-script-progress'
  * Read persisted test script progress from localStorage
  */
 export const readPersistedProgress = (): Record<string, TestScriptProgress> => {
-  if (!process.client) {
+  if (!import.meta.client) {
     return {}
   }
 
@@ -39,7 +39,8 @@ export const readPersistedProgress = (): Record<string, TestScriptProgress> => {
 
   try {
     return JSON.parse(storedValue)
-  } catch {
+  }
+  catch {
     return {}
   }
 }
@@ -48,7 +49,7 @@ export const readPersistedProgress = (): Record<string, TestScriptProgress> => {
  * Persist test script progress to localStorage
  */
 export const persistProgress = (progress: Record<string, TestScriptProgress>) => {
-  if (!process.client) {
+  if (!import.meta.client) {
     return
   }
 
@@ -59,7 +60,7 @@ export const persistProgress = (progress: Record<string, TestScriptProgress>) =>
  * Load test user persona and simulate login
  */
 export async function loadTestPersona(
-  personaKey: TestUserPersonaKey
+  personaKey: TestUserPersonaKey,
 ): Promise<{
   user: AuthUser
   lockoutTime: Date | null
@@ -85,7 +86,7 @@ export async function loadTestPersona(
 
   return {
     user: { ...persona.user },
-    lockoutTime: simulatedLockout
+    lockoutTime: simulatedLockout,
   }
 }
 
@@ -96,7 +97,7 @@ export function toggleTestScriptStep(
   progress: Record<string, TestScriptProgress>,
   personaKey: TestUserPersonaKey,
   stepIndex: number,
-  totalSteps: number
+  totalSteps: number,
 ): Record<string, TestScriptProgress> {
   const updatedProgress = { ...progress }
 
@@ -105,7 +106,7 @@ export function toggleTestScriptStep(
       completedSteps: [],
       notes: {},
       lastTested: new Date().toISOString(),
-      completionPercentage: 0
+      completionPercentage: 0,
     }
   }
 
@@ -115,7 +116,8 @@ export function toggleTestScriptStep(
   if (stepIdx > -1) {
     // Remove step
     personaProgress.completedSteps.splice(stepIdx, 1)
-  } else {
+  }
+  else {
     // Add step
     personaProgress.completedSteps.push(stepIndex)
   }
@@ -123,7 +125,7 @@ export function toggleTestScriptStep(
   // Update last tested and completion percentage
   personaProgress.lastTested = new Date().toISOString()
   personaProgress.completionPercentage = Math.round(
-    (personaProgress.completedSteps.length / totalSteps) * 100
+    (personaProgress.completedSteps.length / totalSteps) * 100,
   )
 
   persistProgress(updatedProgress)
@@ -137,7 +139,7 @@ export function updateTestScriptNote(
   progress: Record<string, TestScriptProgress>,
   personaKey: TestUserPersonaKey,
   stepIndex: number,
-  note: string
+  note: string,
 ): Record<string, TestScriptProgress> {
   const updatedProgress = { ...progress }
 
@@ -146,7 +148,7 @@ export function updateTestScriptNote(
       completedSteps: [],
       notes: {},
       lastTested: new Date().toISOString(),
-      completionPercentage: 0
+      completionPercentage: 0,
     }
   }
 
@@ -154,8 +156,10 @@ export function updateTestScriptNote(
 
   if (note.trim()) {
     personaProgress.notes[stepIndex] = note
-  } else {
-    delete personaProgress.notes[stepIndex]
+  }
+  else {
+    const { [stepIndex]: _removed, ...rest } = personaProgress.notes
+    personaProgress.notes = rest
   }
 
   personaProgress.lastTested = new Date().toISOString()
@@ -168,10 +172,9 @@ export function updateTestScriptNote(
  */
 export function clearPersonaProgress(
   progress: Record<string, TestScriptProgress>,
-  personaKey: TestUserPersonaKey
+  personaKey: TestUserPersonaKey,
 ): Record<string, TestScriptProgress> {
-  const updatedProgress = { ...progress }
-  delete updatedProgress[personaKey]
+  const { [personaKey]: _removed, ...updatedProgress } = progress
   persistProgress(updatedProgress)
   return updatedProgress
 }
@@ -189,7 +192,7 @@ export function clearAllProgress(): Record<string, TestScriptProgress> {
  */
 export function getPersonaProgress(
   progress: Record<string, TestScriptProgress>,
-  personaKey: TestUserPersonaKey | null
+  personaKey: TestUserPersonaKey | null,
 ): TestScriptProgress | null {
   if (!personaKey) return null
   return progress[personaKey] || null

@@ -13,14 +13,20 @@
           size="sm"
           @click="showComposer = true"
         >
-          <commonIcon name="lucide:plus" class="h-4 w-4 mr-1" />
+          <commonIcon
+            name="lucide:plus"
+            class="h-4 w-4 mr-1"
+          />
           Add Note
         </Button>
       </div>
     </CardHeader>
     <CardContent>
       <!-- Note Composer -->
-      <div v-if="showComposer" class="mb-6 p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800">
+      <div
+        v-if="showComposer"
+        class="mb-6 p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800"
+      >
         <AdminOrdersNoteComposer
           :order-id="orderId"
           @note-added="handleNoteAdded"
@@ -29,45 +35,48 @@
       </div>
 
       <!-- Notes List -->
-      <div v-if="sortedNotes.length > 0" class="space-y-4">
+      <div
+        v-if="sortedNotes.length > 0"
+        class="space-y-4"
+      >
         <!-- Filter Tabs -->
         <div class="flex items-center space-x-2 border-b border-gray-200 dark:border-gray-700">
           <Button
-            @click="filterType = 'all'"
             variant="ghost"
             size="sm"
             :class="[
               'border-b-2 rounded-none',
               filterType === 'all'
                 ? 'border-primary text-primary'
-                : 'border-transparent'
+                : 'border-transparent',
             ]"
+            @click="filterType = 'all'"
           >
             All ({{ notes.length }})
           </Button>
           <Button
-            @click="filterType = 'internal'"
             variant="ghost"
             size="sm"
             :class="[
               'border-b-2 rounded-none',
               filterType === 'internal'
                 ? 'border-primary text-primary'
-                : 'border-transparent'
+                : 'border-transparent',
             ]"
+            @click="filterType = 'internal'"
           >
             Internal ({{ internalNotesCount }})
           </Button>
           <Button
-            @click="filterType = 'customer'"
             variant="ghost"
             size="sm"
             :class="[
               'border-b-2 rounded-none',
               filterType === 'customer'
                 ? 'border-primary text-primary'
-                : 'border-transparent'
+                : 'border-transparent',
             ]"
+            @click="filterType = 'customer'"
           >
             Customer ({{ customerNotesCount }})
           </Button>
@@ -82,7 +91,7 @@
             :class="[
               note.noteType === 'internal'
                 ? 'bg-yellow-50 dark:bg-yellow-900/10 border-yellow-200 dark:border-yellow-800'
-                : 'bg-blue-50 dark:bg-blue-900/10 border-blue-200 dark:border-blue-800'
+                : 'bg-blue-50 dark:bg-blue-900/10 border-blue-200 dark:border-blue-800',
             ]"
           >
             <!-- Note Header -->
@@ -102,8 +111,14 @@
                   {{ formatTimestamp(note.createdAt) }}
                 </span>
               </div>
-              <span v-if="note.createdBy" class="text-xs text-gray-500 dark:text-gray-400 flex items-center">
-                <commonIcon name="lucide:user-circle" class="h-3 w-3 mr-1" />
+              <span
+                v-if="note.createdBy"
+                class="text-xs text-gray-500 dark:text-gray-400 flex items-center"
+              >
+                <commonIcon
+                  name="lucide:user-circle"
+                  class="h-3 w-3 mr-1"
+                />
                 Admin
               </span>
             </div>
@@ -114,7 +129,10 @@
             </p>
 
             <!-- Note Footer (if updated) -->
-            <div v-if="note.updatedAt !== note.createdAt" class="mt-2 pt-2 border-t border-gray-200 dark:border-gray-700">
+            <div
+              v-if="note.updatedAt !== note.createdAt"
+              class="mt-2 pt-2 border-t border-gray-200 dark:border-gray-700"
+            >
               <span class="text-xs text-gray-500 dark:text-gray-400">
                 Updated {{ formatTimestamp(note.updatedAt) }}
               </span>
@@ -124,8 +142,14 @@
       </div>
 
       <!-- Empty State -->
-      <div v-else-if="!showComposer" class="text-center py-8">
-        <commonIcon name="lucide:message-square" class="h-12 w-12 text-gray-400 mx-auto mb-3" />
+      <div
+        v-else-if="!showComposer"
+        class="text-center py-8"
+      >
+        <commonIcon
+          name="lucide:message-square"
+          class="h-12 w-12 text-gray-400 mx-auto mb-3"
+        />
         <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
           No notes have been added to this order yet.
         </p>
@@ -133,7 +157,10 @@
           size="sm"
           @click="showComposer = true"
         >
-          <commonIcon name="lucide:plus" class="h-4 w-4 mr-1" />
+          <commonIcon
+            name="lucide:plus"
+            class="h-4 w-4 mr-1"
+          />
           Add First Note
         </Button>
       </div>
@@ -149,7 +176,7 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from '@/components/ui/card'
 import type { OrderNote } from '~/types/database'
 
@@ -223,7 +250,7 @@ const formatTimestamp = (timestamp: string): string => {
     month: 'short',
     day: 'numeric',
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   })
 }
 </script>

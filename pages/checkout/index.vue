@@ -19,21 +19,21 @@
 <script setup lang="ts">
 // Lazy load the shipping step component
 const ShippingStep = defineAsyncComponent(() =>
-  import('~/components/checkout/ShippingStep.vue')
+  import('~/components/checkout/ShippingStep.vue'),
 )
 
 // Layout
 definePageMeta({
   layout: 'checkout',
-  middleware: ['checkout']
+  middleware: ['checkout'],
 })
 
 // Page meta
 useHead({
   title: 'Shipping Information - Checkout',
   meta: [
-    { name: 'description', content: 'Enter your shipping information to complete your order' }
-  ]
+    { name: 'description', content: 'Enter your shipping information to complete your order' },
+  ],
 })
 </script>
 

@@ -9,17 +9,17 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 
+import { useCartStore } from '~/stores/cart'
+import { cartCoreState } from '~/stores/cart/core'
+import type { Product } from '~/stores/cart/types'
+
 // Mock Nuxt composables before importing the store
 vi.mock('#app', () => ({
   useCookie: vi.fn(() => ({ value: null })),
   useRuntimeConfig: vi.fn(() => ({
-    public: {}
-  }))
+    public: {},
+  })),
 }))
-
-import { useCartStore } from '~/stores/cart'
-import { cartCoreState } from '~/stores/cart/core'
-import type { Product } from '~/stores/cart/types'
 
 // Mock product for testing
 const mockProduct: Product = {
@@ -29,7 +29,7 @@ const mockProduct: Product = {
   price: 25.99,
   images: ['/test-image.jpg'],
   stock: 10,
-  category: 'Test'
+  category: 'Test',
 }
 
 /**
@@ -47,7 +47,7 @@ function resetCartCoreState() {
     isLocked: false,
     lockedAt: null,
     lockedUntil: null,
-    lockedByCheckoutSessionId: null
+    lockedByCheckoutSessionId: null,
   }
 }
 
@@ -109,10 +109,11 @@ describe('Cart Locking', () => {
       await cart.lockCart(sessionId1, 30)
 
       // Try to unlock with different session - should throw
-      let caughtError: any = null
+      let caughtError = null
       try {
         await cart.unlockCart(sessionId2)
-      } catch (error: any) {
+      }
+      catch (error: any) {
         caughtError = error
       }
 
@@ -167,10 +168,11 @@ describe('Cart Locking', () => {
       await cart.lockCart(sessionId, 30)
 
       // Try to add item - should throw
-      let caughtError: any = null
+      let caughtError = null
       try {
         await cart.addItem(mockProduct, 1)
-      } catch (error: any) {
+      }
+      catch (error: any) {
         caughtError = error
       }
 
@@ -191,10 +193,11 @@ describe('Cart Locking', () => {
       await cart.lockCart(sessionId, 30)
 
       // Try to remove item - should throw
-      let caughtError: any = null
+      let caughtError = null
       try {
         await cart.removeItem(itemId)
-      } catch (error: any) {
+      }
+      catch (error: any) {
         caughtError = error
       }
 
@@ -214,10 +217,11 @@ describe('Cart Locking', () => {
       await cart.lockCart(sessionId, 30)
 
       // Try to update quantity - should throw
-      let caughtError: any = null
+      let caughtError = null
       try {
         await cart.updateQuantity(itemId, 2)
-      } catch (error: any) {
+      }
+      catch (error: any) {
         caughtError = error
       }
 
@@ -236,10 +240,11 @@ describe('Cart Locking', () => {
       await cart.lockCart(sessionId, 30)
 
       // Try to clear cart - should throw
-      let caughtError: any = null
+      let caughtError = null
       try {
         await cart.clearCart()
-      } catch (error: any) {
+      }
+      catch (error: any) {
         caughtError = error
       }
 
@@ -353,8 +358,18 @@ describe('Cart Locking', () => {
       await cart.lockCart(sessionId, 30)
 
       // Multiple failed operations shouldn't change lock state
-      try { await cart.addItem(mockProduct, 1) } catch {}
-      try { await cart.clearCart() } catch {}
+      try {
+        await cart.addItem(mockProduct, 1)
+      }
+      catch {
+        // Expected to fail while locked
+      }
+      try {
+        await cart.clearCart()
+      }
+      catch {
+        // Expected to fail while locked
+      }
 
       expect(cart.isLocked).toBe(true)
       expect(cart.lockedByCheckoutSessionId).toBe(sessionId)
@@ -368,10 +383,11 @@ describe('Cart Locking', () => {
 
       await cart.lockCart(sessionId, 30)
 
-      let caughtError: any = null
+      let caughtError = null
       try {
         await cart.addItem(mockProduct, 1)
-      } catch (error: any) {
+      }
+      catch (error: any) {
         caughtError = error
       }
 

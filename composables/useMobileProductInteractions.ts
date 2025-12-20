@@ -1,4 +1,3 @@
-import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import type { Ref } from 'vue'
 import { useDevice } from '~/composables/useDevice'
 import { useHapticFeedback } from '~/composables/useHapticFeedback'
@@ -32,7 +31,7 @@ export interface PaginationHandler {
 export function useMobileProductInteractions(
   scrollContainer: Ref<HTMLElement | undefined>,
   refreshCallback: () => Promise<void>,
-  paginationHandler: PaginationHandler
+  paginationHandler: PaginationHandler,
 ) {
   const { isMobile } = useDevice()
   const { vibrate } = useHapticFeedback()
@@ -52,7 +51,6 @@ export function useMobileProductInteractions(
    */
   const setup = () => {
     if (!isMobile.value || !scrollContainer.value) {
-      console.debug('Mobile interactions skipped: not mobile or no container')
       return
     }
 
@@ -73,10 +71,8 @@ export function useMobileProductInteractions(
         if (paginationHandler.currentPage > 1) {
           paginationHandler.goToPage(paginationHandler.currentPage - 1)
         }
-      }
+      },
     })
-
-    console.debug('Mobile interactions setup complete')
   }
 
   /**
@@ -86,7 +82,6 @@ export function useMobileProductInteractions(
   const cleanup = () => {
     pullToRefresh.cleanupPullToRefresh()
     swipeGestures.cleanupSwipeListeners()
-    console.debug('Mobile interactions cleanup complete')
   }
 
   return {
@@ -97,6 +92,6 @@ export function useMobileProductInteractions(
 
     // Methods
     setup,
-    cleanup
+    cleanup,
   }
 }

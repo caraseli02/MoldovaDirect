@@ -15,6 +15,7 @@
  * ```
  */
 
+import { ref } from 'vue'
 import type {
   TableOptions,
   Table,
@@ -24,30 +25,30 @@ import type {
   Header,
   Column,
   RowData,
-  Updater
+  Updater,
 } from '@tanstack/vue-table'
 
 export interface TanStackTableModule {
   // Core table functions
   useVueTable: <TData extends RowData>(options: TableOptions<TData>) => Table<TData>
-  createColumnHelper: <TData extends RowData>() => any
+  createColumnHelper: <_TData extends RowData>() => unknown
 
   // Row model functions
-  getCoreRowModel: () => any
-  getFilteredRowModel: () => any
-  getPaginationRowModel: () => any
-  getSortedRowModel: () => any
-  getExpandedRowModel: () => any
-  getGroupedRowModel: () => any
-  getFacetedRowModel: () => any
-  getFacetedUniqueValues: () => any
-  getFacetedMinMaxValues: () => any
+  getCoreRowModel: () => unknown
+  getFilteredRowModel: () => unknown
+  getPaginationRowModel: () => unknown
+  getSortedRowModel: () => unknown
+  getExpandedRowModel: () => unknown
+  getGroupedRowModel: () => unknown
+  getFacetedRowModel: () => unknown
+  getFacetedUniqueValues: () => unknown
+  getFacetedMinMaxValues: () => unknown
 
   // Rendering helper
-  flexRender: (component: any, props: any) => any
+  flexRender: (component: any, props: any) => unknown
 
   // Utility functions
-  isFunction: (value: unknown) => boolean
+  isFunction: (value: any) => boolean
 }
 
 export function useAsyncTable() {
@@ -83,16 +84,18 @@ export function useAsyncTable() {
         getFacetedRowModel: module.getFacetedRowModel,
         getFacetedUniqueValues: module.getFacetedUniqueValues,
         getFacetedMinMaxValues: module.getFacetedMinMaxValues,
-        flexRender: module.flexRender,
+        flexRender: module.FlexRender as any,
         isFunction: module.isFunction,
       }
 
       return tableModule.value
-    } catch (err) {
+    }
+    catch (err: any) {
       error.value = err instanceof Error ? err : new Error('Failed to load table module')
       console.error('Failed to load TanStack Table:', err)
       return null
-    } finally {
+    }
+    finally {
       isLoading.value = false
     }
   }
@@ -112,7 +115,8 @@ export function useAsyncTable() {
 export function valueUpdater<T>(updaterOrValue: Updater<T>, ref: Ref<T>): void {
   if (typeof updaterOrValue === 'function') {
     ref.value = (updaterOrValue as (old: T) => T)(ref.value)
-  } else {
+  }
+  else {
     ref.value = updaterOrValue
   }
 }

@@ -11,7 +11,10 @@
           </p>
         </header>
 
-        <div v-if="loading" class="flex justify-center items-center py-12">
+        <div
+          v-if="loading"
+          class="flex justify-center items-center py-12"
+        >
           <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
           <span class="ml-3 text-gray-600 dark:text-gray-400">
             {{ $t('common.loading') }}
@@ -23,8 +26,18 @@
           class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-6"
         >
           <div class="flex">
-            <svg class="h-5 w-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            <svg
+              class="h-5 w-5 text-red-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+              />
             </svg>
             <div class="ml-3">
               <h3 class="text-sm font-medium text-red-800 dark:text-red-200">
@@ -37,7 +50,10 @@
           </div>
         </div>
 
-        <div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div
+          v-else
+          class="grid grid-cols-1 lg:grid-cols-3 gap-8"
+        >
           <div class="lg:col-span-2 space-y-6">
             <Suspense>
               <template #default>
@@ -96,9 +112,9 @@
         <Suspense>
           <template #default>
             <ReviewTermsSection
-              v-model:termsAccepted="termsAccepted"
-              v-model:privacyAccepted="privacyAccepted"
-              v-model:marketingConsent="marketingConsent"
+              v-model:terms-accepted="termsAccepted"
+              v-model:privacy-accepted="privacyAccepted"
+              v-model:marketing-consent="marketingConsent"
               :show-terms-error="showTermsError"
               :show-privacy-error="showPrivacyError"
               class="mt-8"
@@ -111,22 +127,33 @@
 
         <footer class="flex flex-col sm:flex-row justify-between items-center pt-6 border-t border-gray-200 dark:border-gray-700 space-y-3 sm:space-y-0 mt-8">
           <UiButton
-            @click="goBack"
             :disabled="processing"
             variant="outline"
+            @click="goBack"
           >
-            <commonIcon name="lucide:chevron-left" class="mr-2 h-4 w-4" />
+            <commonIcon
+              name="lucide:chevron-left"
+              class="mr-2 h-4 w-4"
+            />
             {{ $t('checkout.backToPayment') }}
           </UiButton>
 
           <UiButton
-            @click="handlePlaceOrder"
             :disabled="!canProceed || processing"
             class="bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600"
+            @click="handlePlaceOrder"
           >
-            <commonIcon v-if="processing" name="lucide:loader-2" class="mr-2 h-4 w-4 animate-spin" />
+            <commonIcon
+              v-if="processing"
+              name="lucide:loader-2"
+              class="mr-2 h-4 w-4 animate-spin"
+            />
             {{ processing ? $t('checkout.processing') : $t('checkout.placeOrder') }}
-            <commonIcon v-if="!processing" name="lucide:chevron-right" class="ml-2 h-4 w-4" />
+            <commonIcon
+              v-if="!processing"
+              name="lucide:chevron-right"
+              class="ml-2 h-4 w-4"
+            />
           </UiButton>
         </footer>
       </div>
@@ -139,24 +166,24 @@ import { useCheckoutReview } from '~/composables/checkout/useCheckoutReview'
 
 // Lazy load review section components
 const ReviewCartSection = defineAsyncComponent(() =>
-  import('~/components/checkout/review/ReviewCartSection.vue')
+  import('~/components/checkout/review/ReviewCartSection.vue'),
 )
 const ReviewPaymentSection = defineAsyncComponent(() =>
-  import('~/components/checkout/review/ReviewPaymentSection.vue')
+  import('~/components/checkout/review/ReviewPaymentSection.vue'),
 )
 const ReviewShippingSection = defineAsyncComponent(() =>
-  import('~/components/checkout/review/ReviewShippingSection.vue')
+  import('~/components/checkout/review/ReviewShippingSection.vue'),
 )
 const ReviewSummaryCard = defineAsyncComponent(() =>
-  import('~/components/checkout/review/ReviewSummaryCard.vue')
+  import('~/components/checkout/review/ReviewSummaryCard.vue'),
 )
 const ReviewTermsSection = defineAsyncComponent(() =>
-  import('~/components/checkout/review/ReviewTermsSection.vue')
+  import('~/components/checkout/review/ReviewTermsSection.vue'),
 )
 
 definePageMeta({
   layout: 'checkout',
-  middleware: ['checkout']
+  middleware: ['checkout'],
 })
 
 const {
@@ -173,7 +200,7 @@ const {
   editCart,
   editShipping,
   editPayment,
-  processOrder
+  processOrder,
 } = useCheckoutReview()
 
 const localePath = useLocalePath()
@@ -185,9 +212,9 @@ const showTermsError = ref(false)
 const showPrivacyError = ref(false)
 
 const canProceed = computed(() => {
-  return baseCanProceed.value &&
-    termsAccepted.value &&
-    privacyAccepted.value
+  return baseCanProceed.value
+    && termsAccepted.value
+    && privacyAccepted.value
 })
 
 const scrollToTerms = () => {
@@ -209,7 +236,7 @@ const handlePlaceOrder = async () => {
   const { nextStep, success } = await processOrder({
     termsAccepted: termsAccepted.value,
     privacyAccepted: privacyAccepted.value,
-    marketingConsent: marketingConsent.value
+    marketingConsent: marketingConsent.value,
   })
 
   if (!success || !nextStep) {
@@ -228,8 +255,8 @@ onMounted(async () => {
 useHead({
   title: 'Review Order - Checkout',
   meta: [
-    { name: 'description', content: 'Review your order details before completing your purchase' }
-  ]
+    { name: 'description', content: 'Review your order details before completing your purchase' },
+  ],
 })
 </script>
 

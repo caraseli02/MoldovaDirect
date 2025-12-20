@@ -29,10 +29,10 @@ export const useCheckoutStore = defineStore('checkout', () => {
     const shippingErrors = sessionRefs.validationErrors.value.shipping
     const paymentErrors = sessionRefs.validationErrors.value.payment
     return Boolean(
-      sessionRefs.shippingInfo.value &&
-      sessionRefs.paymentMethod.value &&
-      (!shippingErrors || shippingErrors.length === 0) &&
-      (!paymentErrors || paymentErrors.length === 0)
+      sessionRefs.shippingInfo.value
+      && sessionRefs.paymentMethod.value
+      && (!shippingErrors || shippingErrors.length === 0)
+      && (!paymentErrors || paymentErrors.length === 0),
     )
   })
 
@@ -40,11 +40,11 @@ export const useCheckoutStore = defineStore('checkout', () => {
     const shippingErrors = sessionRefs.validationErrors.value.shipping
     const paymentErrors = sessionRefs.validationErrors.value.payment
     return Boolean(
-      sessionRefs.shippingInfo.value &&
-      sessionRefs.paymentMethod.value &&
-      sessionRefs.orderData.value &&
-      (!shippingErrors || shippingErrors.length === 0) &&
-      (!paymentErrors || paymentErrors.length === 0)
+      sessionRefs.shippingInfo.value
+      && sessionRefs.paymentMethod.value
+      && sessionRefs.orderData.value
+      && (!shippingErrors || shippingErrors.length === 0)
+      && (!paymentErrors || paymentErrors.length === 0),
     )
   })
 
@@ -59,7 +59,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
     if (!sessionRefs.orderData.value) return '€0.00'
     return new Intl.NumberFormat('es-ES', {
       style: 'currency',
-      currency: 'EUR'
+      currency: 'EUR',
     }).format(sessionRefs.orderData.value.total)
   })
 
@@ -108,7 +108,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
     session.setCurrentStep(step)
     await session.persist({
       shippingInfo: sessionRefs.shippingInfo.value,
-      paymentMethod: sessionRefs.paymentMethod.value
+      paymentMethod: sessionRefs.paymentMethod.value,
     })
   }
 
@@ -125,13 +125,15 @@ export const useCheckoutStore = defineStore('checkout', () => {
 
       if (sessionRefs.currentStep.value === 'shipping' && nextStep === 'payment') {
         await shipping.updateShippingCosts()
-      } else if (sessionRefs.currentStep.value === 'payment' && nextStep === 'review') {
+      }
+      else if (sessionRefs.currentStep.value === 'payment' && nextStep === 'review') {
         await payment.preparePayment()
-      } else if (sessionRefs.currentStep.value === 'review' && nextStep === 'confirmation') {
+      }
+      else if (sessionRefs.currentStep.value === 'review' && nextStep === 'confirmation') {
         await payment.processPayment()
       }
 
-      return nextStep
+      return nextStep as CheckoutStep | undefined || null
     }
 
     return null
@@ -142,7 +144,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
     const currentIndex = steps.indexOf(sessionRefs.currentStep.value)
 
     if (currentIndex > 0) {
-      return steps[currentIndex - 1]
+      return steps[currentIndex - 1] as CheckoutStep | undefined || null
     }
 
     return null
@@ -163,7 +165,8 @@ export const useCheckoutStore = defineStore('checkout', () => {
       try {
         await cartStore.lockCart(sessionRefs.sessionId.value as string, 30)
         console.log('Cart locked for checkout session:', sessionRefs.sessionId.value)
-      } catch (lockError) {
+      }
+      catch (lockError: any) {
         console.warn('Failed to lock cart:', lockError)
         // Continue with checkout even if locking fails
       }
@@ -192,16 +195,18 @@ export const useCheckoutStore = defineStore('checkout', () => {
       session.setLastSyncAt(new Date())
       await session.persist({
         shippingInfo: sessionRefs.shippingInfo.value,
-        paymentMethod: sessionRefs.paymentMethod.value
+        paymentMethod: sessionRefs.paymentMethod.value,
       })
-    } catch (error) {
+    }
+    catch (error: any) {
       const checkoutError = createSystemError(
         error instanceof Error ? error.message : 'Failed to initialize checkout',
-        CheckoutErrorCode.SYSTEM_ERROR
+        CheckoutErrorCode.SYSTEM_ERROR,
       )
       session.handleError(checkoutError)
       throw error
-    } finally {
+    }
+    finally {
       session.setLoading(false)
     }
   }
@@ -210,14 +215,14 @@ export const useCheckoutStore = defineStore('checkout', () => {
     session.setGuestInfo(info)
     await session.persist({
       shippingInfo: sessionRefs.shippingInfo.value,
-      paymentMethod: sessionRefs.paymentMethod.value
+      paymentMethod: sessionRefs.paymentMethod.value,
     })
   }
 
   const saveToStorage = async (): Promise<void> => {
     await session.persist({
       shippingInfo: sessionRefs.shippingInfo.value,
-      paymentMethod: sessionRefs.paymentMethod.value
+      paymentMethod: sessionRefs.paymentMethod.value,
     })
   }
 
@@ -243,8 +248,8 @@ export const useCheckoutStore = defineStore('checkout', () => {
     await payment.savePaymentMethodData(method)
   }
 
-  const saveAddress = async (address: Address): Promise<void> => {
-    session.setSavedAddresses([...sessionRefs.savedAddresses.value, address])
+  const saveAddress = async (address: Address | { id?: number | undefined, userId?: string | undefined, type: 'shipping' | 'billing', street: string, city: string, postalCode: string, province?: string | undefined, country: string, isDefault: boolean, createdAt?: string | undefined }): Promise<void> => {
+    session.setSavedAddresses([...sessionRefs.savedAddresses.value, address as Address])
   }
 
   const resetCheckout = (): void => {
@@ -261,7 +266,8 @@ export const useCheckoutStore = defineStore('checkout', () => {
 
       // Reset checkout session
       session.reset()
-    } catch (error) {
+    }
+    catch (error: any) {
       console.error('Error canceling checkout:', error)
       // Reset anyway
       session.reset()
@@ -277,7 +283,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
 
     try {
       // Fetch addresses and preferences in parallel from the API
-      const response = await $fetch('/api/checkout/user-data')
+      const response = await $fetch('/api/checkout/user-data') as any
 
       // Update session with fetched data
       if (response.addresses && Array.isArray(response.addresses)) {
@@ -290,7 +296,8 @@ export const useCheckoutStore = defineStore('checkout', () => {
 
       // Mark data as prefetched
       session.setDataPrefetched(true)
-    } catch (error) {
+    }
+    catch (error: any) {
       console.error('Failed to prefetch checkout data:', error)
       // Don't throw - this is a non-critical enhancement
       // Mark as prefetched anyway to avoid repeated failed attempts
@@ -298,7 +305,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
     }
   }
 
-  const api: Record<string | symbol, any> = {
+  const api: Record<string | symbol, unknown> = {
     canProceedToPayment,
     canProceedToReview,
     canCompleteOrder,
@@ -347,7 +354,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
     setPrivacyAccepted: session.setPrivacyAccepted,
     setMarketingConsent: session.setMarketingConsent,
     resetCheckout,
-    cancelCheckout
+    cancelCheckout,
   }
 
   return new Proxy(api, {
@@ -361,7 +368,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
           return (refCandidate as { value: unknown }).value
         }
       }
-      return (session as any)[prop as keyof typeof session]
+      return Reflect.get(session, prop as keyof typeof session)
     },
     set(target, prop, value) {
       if (Reflect.has(target, prop)) {
@@ -374,10 +381,9 @@ export const useCheckoutStore = defineStore('checkout', () => {
           return true
         }
       }
-      (session as any)[prop as keyof typeof session] = value
-      return true
-    }
-  }) as any
+      return Reflect.set(session, prop as keyof typeof session, value)
+    },
+  })
 })
 
 export type CheckoutStore = ReturnType<typeof useCheckoutStore>

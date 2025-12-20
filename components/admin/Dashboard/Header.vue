@@ -24,13 +24,13 @@
             v-for="option in rangeOptions"
             :key="option.value"
             type="button"
-            @click="$emit('select-range', option.value)"
             :class="[
               'rounded-xl border px-4 py-2 text-sm font-medium transition-colors duration-200',
               selectedRange === option.value
                 ? 'border-blue-500 bg-blue-50 text-blue-600 shadow-[0_0_0_3px_rgba(59,130,246,0.12)]'
-                : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:text-gray-900'
+                : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:text-gray-900',
             ]"
+            @click="$emit('select-range', option.value)"
           >
             {{ option.label }}
           </button>
@@ -41,32 +41,32 @@
             <span class="text-sm text-gray-500">{{ $t('admin.dashboard.autoRefresh') }}</span>
             <button
               type="button"
-              @click="$emit('toggle-auto-refresh')"
               :class="[
                 'relative inline-flex h-7 w-14 items-center rounded-full transition-all duration-300',
                 autoRefreshEnabled
                   ? 'bg-blue-500 shadow-[0_0_0_4px_rgba(59,130,246,0.18)] animate-pulse'
-                  : 'bg-gray-200'
+                  : 'bg-gray-200',
               ]"
+              @click="$emit('toggle-auto-refresh')"
             >
               <span class="sr-only">Toggle auto refresh</span>
               <span
                 :class="[
                   'inline-block h-5 w-5 transform rounded-full bg-white shadow transition-all duration-300',
-                  autoRefreshEnabled ? 'translate-x-7 shadow-[0_4px_10px_rgba(59,130,246,0.35)]' : 'translate-x-1'
+                  autoRefreshEnabled ? 'translate-x-7 shadow-[0_4px_10px_rgba(59,130,246,0.35)]' : 'translate-x-1',
                 ]"
-              />
+              ></span>
             </button>
           </div>
 
           <button
             type="button"
-            @click="$emit('refresh')"
             :disabled="refreshing || isLoading"
             :class="[
               'flex items-center gap-2 rounded-xl px-5 py-2 text-sm font-medium text-white transition-all duration-200',
-              refreshing || isLoading ? 'bg-blue-400' : 'bg-blue-600 hover:bg-blue-700'
+              refreshing || isLoading ? 'bg-blue-400' : 'bg-blue-600 hover:bg-blue-700',
             ]"
+            @click="$emit('refresh')"
           >
             <commonIcon
               name="lucide:refresh-ccw"
@@ -80,7 +80,10 @@
 
     <footer class="flex flex-col gap-3 border-t border-gray-100 bg-gray-50 px-6 py-4 text-sm text-gray-500 md:flex-row md:items-center md:justify-between">
       <div class="flex items-center gap-2">
-        <commonIcon name="lucide:clock" class="h-4 w-4 text-blue-500" />
+        <commonIcon
+          name="lucide:clock"
+          class="h-4 w-4 text-blue-500"
+        />
         <span>Last updated {{ timeSinceRefresh }}</span>
       </div>
       <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500">
@@ -88,9 +91,9 @@
           <span
             :class="[
               'h-2 w-2 rounded-full transition-colors',
-              autoRefreshEnabled ? 'bg-green-500' : 'bg-gray-300'
+              autoRefreshEnabled ? 'bg-green-500' : 'bg-gray-300',
             ]"
-          />
+          ></span>
           {{ autoRefreshEnabled ? 'Auto-refresh active every 5 minutes' : 'Auto-refresh paused' }}
         </span>
         <span>{{ healthSummary }}</span>

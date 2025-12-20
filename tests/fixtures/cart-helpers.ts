@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test'
+import type { Page, Locator } from '@playwright/test'
 
 export interface CartTestProduct {
   id: string
@@ -21,7 +21,7 @@ export class CartTestHelpers {
   async addProductFromListing(productId: string): Promise<void> {
     const productCard = this.page.locator(`[data-testid="product-card-${productId}"]`)
     await productCard.locator('button:has-text("Añadir al Carrito")').click()
-    
+
     // Wait for toast notification
     await this.page.waitForSelector('[data-testid="toast"]', { timeout: 5000 })
   }
@@ -31,14 +31,14 @@ export class CartTestHelpers {
    */
   async addProductFromDetail(productSlug: string, quantity: number = 1): Promise<void> {
     await this.page.goto(`/products/${productSlug}`)
-    
+
     // Set quantity if different from 1
     if (quantity !== 1) {
       await this.page.fill('[data-testid="quantity-input"]', quantity.toString())
     }
-    
+
     await this.page.click('[data-testid="add-to-cart-button"]')
-    
+
     // Wait for toast notification
     await this.page.waitForSelector('[data-testid="toast"]', { timeout: 5000 })
   }
@@ -96,7 +96,7 @@ export class CartTestHelpers {
    */
   async removeItem(productId: string): Promise<void> {
     await this.page.click(`[data-testid="remove-item-${productId}"]`)
-    
+
     // Wait for removal animation/update
     await this.page.waitForTimeout(1000)
   }
@@ -106,13 +106,13 @@ export class CartTestHelpers {
    */
   async clearCart(): Promise<void> {
     await this.page.click('[data-testid="clear-cart-button"]')
-    
+
     // Confirm if confirmation dialog appears
     const confirmButton = this.page.locator('button:has-text("OK")').first()
     if (await confirmButton.isVisible({ timeout: 2000 })) {
       await confirmButton.click()
     }
-    
+
     await this.page.waitForTimeout(1000)
   }
 
@@ -162,7 +162,7 @@ export class CartTestHelpers {
    */
   async waitForCartUpdate(): Promise<void> {
     await this.page.waitForTimeout(1000)
-    
+
     // Wait for any loading states to complete
     const loadingElements = this.page.locator('[data-testid*="loading"]')
     if (await loadingElements.count() > 0) {
@@ -176,7 +176,7 @@ export class CartTestHelpers {
   async verifyCartPersistence(expectedItemCount: number): Promise<void> {
     await this.page.reload()
     await this.waitForCartUpdate()
-    
+
     const actualCount = await this.getCartItemCount()
     if (actualCount !== expectedItemCount) {
       throw new Error(`Cart persistence failed: expected ${expectedItemCount} items, got ${actualCount}`)
@@ -193,8 +193,8 @@ export class CartTestHelpers {
           getItem: () => { throw new Error(`${type} disabled`) },
           setItem: () => { throw new Error(`${type} disabled`) },
           removeItem: () => { throw new Error(`${type} disabled`) },
-          clear: () => { throw new Error(`${type} disabled`) }
-        }
+          clear: () => { throw new Error(`${type} disabled`) },
+        },
       })
     }, storageType)
   }
@@ -226,7 +226,7 @@ export class CartTestHelpers {
   async verifyToastMessage(expectedMessage: string): Promise<void> {
     const toast = this.getToast()
     await toast.waitFor({ state: 'visible', timeout: 5000 })
-    
+
     const toastText = await toast.textContent()
     if (!toastText?.includes(expectedMessage)) {
       throw new Error(`Expected toast message "${expectedMessage}", got "${toastText}"`)
@@ -248,7 +248,8 @@ export class CartTestHelpers {
     const closeButton = this.page.locator('[data-testid="toast-close-button"]')
     if (await closeButton.isVisible()) {
       await closeButton.click()
-    } else {
+    }
+    else {
       // Wait for auto-dismiss
       await this.getToast().waitFor({ state: 'hidden', timeout: 10000 })
     }
@@ -272,13 +273,13 @@ export class CartTestHelpers {
     const bulkRemoveButton = this.page.locator('button:has-text("Eliminar seleccionados")')
     if (await bulkRemoveButton.isVisible()) {
       await bulkRemoveButton.click()
-      
+
       // Confirm if confirmation dialog appears
       const confirmButton = this.page.locator('button:has-text("OK")').first()
       if (await confirmButton.isVisible({ timeout: 2000 })) {
         await confirmButton.click()
       }
-      
+
       await this.waitForCartUpdate()
     }
   }
@@ -311,7 +312,7 @@ export class CartTestHelpers {
   async proceedToCheckout(): Promise<void> {
     const checkoutButton = this.page.locator('[data-testid="checkout-button"]')
     await checkoutButton.click()
-    
+
     // Wait for navigation to checkout page
     await this.page.waitForURL(/.*\/checkout/, { timeout: 10000 })
   }
@@ -322,7 +323,7 @@ export class CartTestHelpers {
   async continueShopping(): Promise<void> {
     const continueButton = this.page.locator('[data-testid="continue-shopping"]')
     await continueButton.click()
-    
+
     // Wait for navigation to products page
     await this.page.waitForURL(/.*\/products/, { timeout: 10000 })
   }
@@ -337,7 +338,7 @@ export class CartTestHelpers {
       await localeButton.click()
       await this.waitForCartUpdate()
     }
-    
+
     // Verify cart persisted
     const actualCount = await this.getCartItemCount()
     if (actualCount !== expectedItemCount) {
@@ -361,7 +362,7 @@ export class CartTestHelpers {
     for (const product of products) {
       await this.addProductFromDetail(product.slug, 1)
     }
-    
+
     await this.goToCart()
     await this.waitForCartUpdate()
   }
@@ -380,7 +381,7 @@ export class CartTestHelpers {
     if (actualItemCount !== expectedState.itemCount) {
       throw new Error(`Item count mismatch: expected ${expectedState.itemCount}, got ${actualItemCount}`)
     }
-    
+
     // Check if empty
     if (expectedState.isEmpty !== undefined) {
       const isEmpty = await this.isCartEmpty()
@@ -388,7 +389,7 @@ export class CartTestHelpers {
         throw new Error(`Empty state mismatch: expected ${expectedState.isEmpty}, got ${isEmpty}`)
       }
     }
-    
+
     // Check subtotal
     if (expectedState.subtotal !== undefined) {
       const actualSubtotal = await this.getSubtotalValue()
@@ -396,7 +397,7 @@ export class CartTestHelpers {
         throw new Error(`Subtotal mismatch: expected ${expectedState.subtotal}, got ${actualSubtotal}`)
       }
     }
-    
+
     // Check individual items
     if (expectedState.items) {
       for (const expectedItem of expectedState.items) {
@@ -404,7 +405,7 @@ export class CartTestHelpers {
         if (!await cartItem.isVisible()) {
           throw new Error(`Expected item ${expectedItem.productId} not found in cart`)
         }
-        
+
         const quantityDisplay = this.getQuantityDisplay(expectedItem.productId)
         const actualQuantity = parseInt(await quantityDisplay.textContent() || '0')
         if (actualQuantity !== expectedItem.quantity) {

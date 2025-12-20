@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
   if (!id) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Email log ID is required'
+      statusMessage: 'Email log ID is required',
     })
   }
 

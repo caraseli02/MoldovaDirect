@@ -24,23 +24,30 @@
               {{ kpi.value }}
             </p>
           </div>
-          <div :class="[
-            'p-3 rounded-full',
-            kpi.bgColor
-          ]">
-            <component :is="kpi.icon" :class="['w-6 h-6', kpi.iconColor]" />
+          <div
+            :class="[
+              'p-3 rounded-full',
+              kpi.bgColor,
+            ]"
+          >
+            <component
+              :is="kpi.icon"
+              :class="['w-6 h-6', kpi.iconColor]"
+            />
           </div>
         </div>
         <div class="mt-4 flex items-center">
-          <div :class="[
-            'flex items-center text-sm',
-            kpi.trend === 'up' ? 'text-green-600 dark:text-green-400' : 
-            kpi.trend === 'down' ? 'text-red-600 dark:text-red-400' : 
-            'text-gray-600 dark:text-gray-400'
-          ]">
-            <component 
-              :is="getTrendIcon(kpi.trend)" 
-              class="w-4 h-4 mr-1" 
+          <div
+            :class="[
+              'flex items-center text-sm',
+              kpi.trend === 'up' ? 'text-green-600 dark:text-green-400'
+              : kpi.trend === 'down' ? 'text-red-600 dark:text-red-400'
+                : 'text-gray-600 dark:text-gray-400',
+            ]"
+          >
+            <component
+              :is="getTrendIcon(kpi.trend)"
+              class="w-4 h-4 mr-1"
             />
             <span>{{ kpi.changeText }}</span>
           </div>
@@ -98,10 +105,12 @@
           >
             <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
               <div class="flex items-center gap-3">
-                <div :class="[
-                  'w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium',
-                  step.color
-                ]">
+                <div
+                  :class="[
+                    'w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium',
+                    step.color,
+                  ]"
+                >
                   {{ index + 1 }}
                 </div>
                 <span class="font-medium text-gray-900 dark:text-gray-100">
@@ -120,7 +129,7 @@
             <div
               v-if="index < conversionSteps.length - 1"
               class="absolute left-4 top-full w-0.5 h-4 bg-gray-300 dark:bg-gray-600"
-            />
+            ></div>
           </div>
         </div>
       </div>
@@ -162,7 +171,7 @@ import {
   Euro,
   Minus,
   ShoppingCart,
-  Users
+  Users,
 } from 'lucide-vue-next'
 
 interface Props {
@@ -174,27 +183,27 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   data: null,
   loading: false,
-  error: null
+  error: null,
 })
 
 const emit = defineEmits<{
-  (e: 'dateRangeChange', value: { startDate: string; endDate: string }): void
+  (e: 'dateRangeChange', value: { startDate: string, endDate: string }): void
 }>()
 
 // Date range state
 const dateRange = ref({
   startDate: '',
-  endDate: ''
+  endDate: '',
 })
 
 // Handle date range changes
-const handleDateRangeChange = (newRange: { startDate: string; endDate: string }) => {
+const handleDateRangeChange = (newRange: { startDate: string, endDate: string }) => {
   dateRange.value = newRange
   emit('dateRangeChange', newRange)
 }
 
 // Get trend icon
-const getTrendIcon = (trend: 'up' | 'down' | 'stable') => {
+const getTrendIcon = (trend: string) => {
   switch (trend) {
     case 'up':
       return ArrowUp
@@ -220,7 +229,7 @@ const kpiCards = computed(() => {
       bgColor: 'bg-blue-100 dark:bg-blue-900',
       iconColor: 'text-blue-600 dark:text-blue-400',
       trend: trends.userGrowth,
-      changeText: `${Math.abs(kpis.userGrowthRate)}% vs last period`
+      changeText: `${Math.abs(kpis.userGrowthRate)}% vs last period`,
     },
     {
       key: 'totalRevenue',
@@ -230,7 +239,7 @@ const kpiCards = computed(() => {
       bgColor: 'bg-green-100 dark:bg-green-900',
       iconColor: 'text-green-600 dark:text-green-400',
       trend: trends.revenueGrowth,
-      changeText: `${Math.abs(kpis.revenueGrowthRate)}% vs last period`
+      changeText: `${Math.abs(kpis.revenueGrowthRate)}% vs last period`,
     },
     {
       key: 'conversionRate',
@@ -240,7 +249,7 @@ const kpiCards = computed(() => {
       bgColor: 'bg-purple-100 dark:bg-purple-900',
       iconColor: 'text-purple-600 dark:text-purple-400',
       trend: 'stable',
-      changeText: 'Stable performance'
+      changeText: 'Stable performance',
     },
     {
       key: 'avgOrderValue',
@@ -250,8 +259,8 @@ const kpiCards = computed(() => {
       bgColor: 'bg-amber-100 dark:bg-amber-900',
       iconColor: 'text-amber-600 dark:text-amber-400',
       trend: 'stable',
-      changeText: 'Per order average'
-    }
+      changeText: 'Per order average',
+    },
   ]
 })
 
@@ -262,7 +271,7 @@ const revenueChartData = computed((): ChartData => {
   }
 
   const analytics = props.data.dailyAnalytics
-  const labels = analytics.map(item => {
+  const labels = analytics.map((item) => {
     const date = new Date(item.date)
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
   })
@@ -277,9 +286,9 @@ const revenueChartData = computed((): ChartData => {
         backgroundColor: 'rgba(16, 185, 129, 0.1)',
         borderWidth: 2,
         fill: true,
-        tension: 0.4
-      }
-    ]
+        tension: 0.4,
+      },
+    ],
   }
 })
 
@@ -290,7 +299,7 @@ const userGrowthChartData = computed((): ChartData => {
   }
 
   const analytics = props.data.dailyAnalytics
-  const labels = analytics.map(item => {
+  const labels = analytics.map((item) => {
     const date = new Date(item.date)
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
   })
@@ -303,9 +312,9 @@ const userGrowthChartData = computed((): ChartData => {
         data: analytics.map(item => item.newRegistrations),
         backgroundColor: 'rgba(59, 130, 246, 0.8)',
         borderColor: '#3b82f6',
-        borderWidth: 1
-      }
-    ]
+        borderWidth: 1,
+      },
+    ],
   }
 })
 
@@ -317,31 +326,31 @@ const revenueChartOptions: ChartOptions = {
     legend: { display: false },
     tooltip: {
       callbacks: {
-        label: (context) => `Revenue: €${context.parsed.y.toLocaleString()}`
-      }
-    }
+        label: context => `Revenue: €${(context.parsed.y ?? 0).toLocaleString()}`,
+      },
+    },
   },
   scales: {
     y: {
       beginAtZero: true,
       ticks: {
-        callback: (value) => `€${value}`
-      }
-    }
-  }
+        callback: value => `€${value}`,
+      },
+    },
+  },
 }
 
 const userGrowthChartOptions: ChartOptions = {
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
-    legend: { display: false }
+    legend: { display: false },
   },
   scales: {
     y: {
-      beginAtZero: true
-    }
-  }
+      beginAtZero: true,
+    },
+  },
 }
 
 // Conversion steps
@@ -357,20 +366,20 @@ const conversionSteps = computed(() => {
       label: 'Total Users',
       value: totalUsers,
       percentage: 100,
-      color: 'bg-blue-500 text-white'
+      color: 'bg-blue-500 text-white',
     },
     {
       label: 'Active Users',
       value: activeUsers,
       percentage: totalUsers > 0 ? Math.round((activeUsers / totalUsers) * 100) : 0,
-      color: 'bg-green-500 text-white'
+      color: 'bg-green-500 text-white',
     },
     {
       label: 'Orders',
       value: orders,
       percentage: totalUsers > 0 ? Math.round((orders / totalUsers) * 100) : 0,
-      color: 'bg-purple-500 text-white'
-    }
+      color: 'bg-purple-500 text-white',
+    },
   ]
 })
 
@@ -382,23 +391,23 @@ const detailedMetrics = computed(() => {
     {
       label: 'Active Users',
       value: props.data.kpis.activeUsers.toLocaleString(),
-      description: 'Daily average'
+      description: 'Daily average',
     },
     {
       label: 'User Growth',
       value: `${props.data.kpis.userGrowthRate}%`,
-      description: 'Period over period'
+      description: 'Period over period',
     },
     {
       label: 'Revenue Growth',
       value: `${props.data.kpis.revenueGrowthRate}%`,
-      description: 'Period over period'
+      description: 'Period over period',
     },
     {
       label: 'Total Days',
       value: props.data.dateRange.totalDays.toString(),
-      description: 'Analysis period'
-    }
+      description: 'Analysis period',
+    },
   ]
 })
 </script>

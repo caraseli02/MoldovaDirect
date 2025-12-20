@@ -8,7 +8,6 @@
  */
 
 import { test, expect, type Page } from '@playwright/test'
-import path from 'path'
 
 // Helper function to login via UI (triggers Vue reactivity correctly)
 async function loginUser(page: Page, email: string, password: string) {
@@ -68,8 +67,8 @@ test.describe('GDPR Compliance - Account Deletion', () => {
     const deleteResponse = await request.delete('/api/auth/delete-account', {
       data: {
         password: process.env.TEST_USER_PASSWORD || 'Admin123!@#',
-        reason: 'E2E test - automated account deletion'
-      }
+        reason: 'E2E test - automated account deletion',
+      },
     })
 
     // Verify successful deletion
@@ -118,9 +117,9 @@ test.describe('GDPR Compliance - Account Deletion', () => {
     // Try to delete without password
     const response = await request.delete('/api/auth/delete-account', {
       data: {
-        reason: 'E2E test'
+        reason: 'E2E test',
         // password missing
-      }
+      },
     })
 
     // Should fail with 400 Bad Request
@@ -131,8 +130,8 @@ test.describe('GDPR Compliance - Account Deletion', () => {
     const response = await request.delete('/api/auth/delete-account', {
       data: {
         password: 'WrongPassword123!',
-        reason: 'E2E test'
-      }
+        reason: 'E2E test',
+      },
     })
 
     // Should fail with 401 Unauthorized
@@ -145,8 +144,8 @@ test.describe('GDPR Compliance - Account Deletion', () => {
     const response = await request.delete('/api/auth/delete-account', {
       data: {
         password: process.env.TEST_USER_PASSWORD || 'Admin123!@#',
-        reason: 'E2E test - checking data exposure'
-      }
+        reason: 'E2E test - checking data exposure',
+      },
     })
 
     const result = await response.json()
@@ -193,7 +192,8 @@ test.describe('Admin MFA Enforcement', () => {
       console.log('✓ Admin redirected to MFA setup (MFA not enabled)')
       // Verify MFA setup page loaded
       await expect(page.locator('text=Multi-Factor Authentication')).toBeVisible()
-    } else {
+    }
+    else {
       console.log('✓ Admin accessed dashboard (MFA already enabled)')
     }
   })
@@ -219,7 +219,8 @@ test.describe('Admin MFA Enforcement', () => {
       console.log('✓ Admin API blocked without MFA')
       const result = await response.json()
       expect(result.statusMessage).toBeDefined()
-    } else {
+    }
+    else {
       console.log('✓ Admin API accessible (MFA verified)')
     }
   })
@@ -229,7 +230,7 @@ test.describe('Admin MFA Enforcement', () => {
     const adminPassword = process.env.TEST_ADMIN_PASSWORD || 'Admin123!@#'
 
     // Simulate network error during MFA check
-    await page.route('**/auth/v1/factors**', route => {
+    await page.route('**/auth/v1/factors**', (route) => {
       route.abort('failed')
     })
 
@@ -245,9 +246,9 @@ test.describe('Admin MFA Enforcement', () => {
     await page.waitForLoadState('networkidle')
 
     // Check for error message or error state
-    const hasError = await page.locator(':text("Failed")').count() > 0 ||
-                     await page.locator(':text("Error")').count() > 0 ||
-                     await page.locator('[role="alert"]').count() > 0
+    const hasError = await page.locator(':text("Failed")').count() > 0
+      || await page.locator(':text("Error")').count() > 0
+      || await page.locator('[role="alert"]').count() > 0
 
     expect(hasError).toBe(true)
     console.log('✓ MFA error handled with visible error message')
@@ -256,15 +257,16 @@ test.describe('Admin MFA Enforcement', () => {
 
 test.describe('Secure Logging - PII Protection', () => {
   let consoleErrors: string[] = []
-  let consoleLogs: string[] = []
+  const consoleLogs: string[] = []
 
   test.beforeEach(async ({ page }) => {
     // Capture console output
-    page.on('console', msg => {
+    page.on('console', (msg) => {
       const text = msg.text()
       if (msg.type() === 'error') {
         consoleErrors.push(text)
-      } else {
+      }
+      else {
         consoleLogs.push(text)
       }
     })
@@ -289,12 +291,12 @@ test.describe('Secure Logging - PII Protection', () => {
     expect(emailPattern.test(allLogs)).toBe(false)
 
     // Should NOT contain phone patterns
-    const phonePattern = /\+?[\d\s\-\(\)]{10,}/
+    const phonePattern = /\+?[\d\s\-()]{10,}/
     expect(phonePattern.test(allLogs)).toBe(false)
 
     // Should NOT contain typical address keywords with actual values
     const sensitiveKeywords = ['street', 'apartment', 'postal', 'zipcode']
-    sensitiveKeywords.forEach(keyword => {
+    sensitiveKeywords.forEach((keyword) => {
       const keywordRegex = new RegExp(`${keyword}.*:.*["'][^"']+["']`, 'i')
       expect(keywordRegex.test(allLogs)).toBe(false)
     })
@@ -302,7 +304,7 @@ test.describe('Secure Logging - PII Protection', () => {
     console.log('✓ No PII detected in console logs')
   })
 
-  test('should not expose user data in error messages', async ({ page, request }) => {
+  test('should not expose user data in error messages', async ({ request }) => {
     consoleErrors = []
 
     // Trigger an error that might contain user data
@@ -313,9 +315,9 @@ test.describe('Secure Logging - PII Protection', () => {
         guestEmail: 'test-pii@example.com',
         shippingAddress: {
           street: '123 Secret Lane',
-          city: 'Privacy City'
-        }
-      }
+          city: 'Privacy City',
+        },
+      },
     })
 
     // Error response should NOT contain PII
@@ -340,10 +342,10 @@ test.describe('Secure Logging - PII Protection', () => {
 
     // Filter out expected emails (like form placeholders, support emails)
     const unexpectedEmails = emailsInPage.filter(email =>
-      !email.includes('example.com') &&
-      !email.includes('placeholder') &&
-      !email.includes('moldovadirect.com') &&
-      !email.endsWith('@')
+      !email.includes('example.com')
+      && !email.includes('placeholder')
+      && !email.includes('moldovadirect.com')
+      && !email.endsWith('@'),
     )
 
     expect(unexpectedEmails.length).toBe(0)
@@ -358,7 +360,8 @@ test.describe('Security Integration Tests', () => {
 
     if (process.env.NODE_ENV === 'production') {
       expect(currentUrl).toMatch(/^https:\/\//)
-    } else {
+    }
+    else {
       // In development, http is acceptable
       console.log('✓ Development environment - HTTP allowed')
     }
@@ -377,7 +380,7 @@ test.describe('Security Integration Tests', () => {
 
     // At least some security headers should be present
     const hasSecurityHeaders = Object.keys(securityHeaders).some(header =>
-      headers[header] !== undefined
+      headers[header] !== undefined,
     )
 
     expect(hasSecurityHeaders).toBe(true)

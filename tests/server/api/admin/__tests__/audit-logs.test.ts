@@ -20,7 +20,7 @@ describe('GET /api/admin/audit-logs', () => {
     // Create admin user
     const { data: admin } = await supabase.auth.signUp({
       email: `test-admin-audit-${Date.now()}@example.test`,
-      password: 'TestPassword123!'
+      password: 'TestPassword123!',
     })
     adminUser = admin.user
     adminToken = admin.session.access_token
@@ -33,7 +33,7 @@ describe('GET /api/admin/audit-logs', () => {
     // Create regular user
     const { data: user } = await supabase.auth.signUp({
       email: `test-user-audit-${Date.now()}@example.test`,
-      password: 'TestPassword123!'
+      password: 'TestPassword123!',
     })
     regularUser = user.user
     regularToken = user.session.access_token
@@ -44,14 +44,14 @@ describe('GET /api/admin/audit-logs', () => {
         user_id: adminUser.id,
         action: 'test-action-1',
         resource_type: 'test',
-        resource_id: '1'
+        resource_id: '1',
       },
       {
         user_id: adminUser.id,
         action: 'test-action-2',
         resource_type: 'test',
-        resource_id: '2'
-      }
+        resource_id: '2',
+      },
     ])
   })
 
@@ -77,8 +77,8 @@ describe('GET /api/admin/audit-logs', () => {
     it('should allow admin to access audit logs', async () => {
       const response = await fetch('/api/admin/audit-logs', {
         headers: {
-          'Authorization': `Bearer ${adminToken}`
-        }
+          Authorization: `Bearer ${adminToken}`,
+        },
       })
 
       expect([200, 404]).toContain(response.status)
@@ -87,8 +87,8 @@ describe('GET /api/admin/audit-logs', () => {
     it('should block non-admin from accessing audit logs', async () => {
       const response = await fetch('/api/admin/audit-logs', {
         headers: {
-          'Authorization': `Bearer ${regularToken}`
-        }
+          Authorization: `Bearer ${regularToken}`,
+        },
       })
 
       expect(response.status).toBe(403)
@@ -105,8 +105,8 @@ describe('GET /api/admin/audit-logs', () => {
     it('should filter by user_id', async () => {
       const response = await fetch(`/api/admin/audit-logs?user_id=${adminUser.id}`, {
         headers: {
-          'Authorization': `Bearer ${adminToken}`
-        }
+          Authorization: `Bearer ${adminToken}`,
+        },
       })
 
       expect(response.status).toBe(200)
@@ -120,8 +120,8 @@ describe('GET /api/admin/audit-logs', () => {
     it('should filter by action', async () => {
       const response = await fetch('/api/admin/audit-logs?action=test-action-1', {
         headers: {
-          'Authorization': `Bearer ${adminToken}`
-        }
+          Authorization: `Bearer ${adminToken}`,
+        },
       })
 
       expect(response.status).toBe(200)
@@ -135,8 +135,8 @@ describe('GET /api/admin/audit-logs', () => {
     it('should filter by resource_type', async () => {
       const response = await fetch('/api/admin/audit-logs?resource_type=test', {
         headers: {
-          'Authorization': `Bearer ${adminToken}`
-        }
+          Authorization: `Bearer ${adminToken}`,
+        },
       })
 
       expect(response.status).toBe(200)
@@ -152,8 +152,8 @@ describe('GET /api/admin/audit-logs', () => {
     it('should respect limit parameter', async () => {
       const response = await fetch('/api/admin/audit-logs?limit=1', {
         headers: {
-          'Authorization': `Bearer ${adminToken}`
-        }
+          Authorization: `Bearer ${adminToken}`,
+        },
       })
 
       expect(response.status).toBe(200)
@@ -167,8 +167,8 @@ describe('GET /api/admin/audit-logs', () => {
     it('should respect offset parameter', async () => {
       const response = await fetch('/api/admin/audit-logs?offset=1', {
         headers: {
-          'Authorization': `Bearer ${adminToken}`
-        }
+          Authorization: `Bearer ${adminToken}`,
+        },
       })
 
       expect(response.status).toBe(200)
@@ -177,8 +177,8 @@ describe('GET /api/admin/audit-logs', () => {
     it('should enforce maximum limit', async () => {
       const response = await fetch('/api/admin/audit-logs?limit=10000', {
         headers: {
-          'Authorization': `Bearer ${adminToken}`
-        }
+          Authorization: `Bearer ${adminToken}`,
+        },
       })
 
       expect(response.status).toBe(200)
@@ -195,8 +195,8 @@ describe('GET /api/admin/audit-logs', () => {
       const yesterday = new Date(Date.now() - 86400000).toISOString()
       const response = await fetch(`/api/admin/audit-logs?start_date=${yesterday}`, {
         headers: {
-          'Authorization': `Bearer ${adminToken}`
-        }
+          Authorization: `Bearer ${adminToken}`,
+        },
       })
 
       expect(response.status).toBe(200)
@@ -206,8 +206,8 @@ describe('GET /api/admin/audit-logs', () => {
       const tomorrow = new Date(Date.now() + 86400000).toISOString()
       const response = await fetch(`/api/admin/audit-logs?end_date=${tomorrow}`, {
         headers: {
-          'Authorization': `Bearer ${adminToken}`
-        }
+          Authorization: `Bearer ${adminToken}`,
+        },
       })
 
       expect(response.status).toBe(200)
@@ -221,9 +221,9 @@ describe('GET /api/admin/audit-logs', () => {
         `/api/admin/audit-logs?start_date=${yesterday}&end_date=${tomorrow}`,
         {
           headers: {
-            'Authorization': `Bearer ${adminToken}`
-          }
-        }
+            Authorization: `Bearer ${adminToken}`,
+          },
+        },
       )
 
       expect(response.status).toBe(200)

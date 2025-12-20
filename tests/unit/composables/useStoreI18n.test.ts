@@ -4,19 +4,17 @@
  */
 
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { ref } from 'vue'
+import { useStoreI18n } from '~/composables/useStoreI18n'
 
 // Mock useNuxtApp with i18n available
 const mockNuxtApp = {
   $i18n: {
     t: vi.fn((key: string) => `translated:${key}`),
-    locale: ref('es')
-  }
+    locale: { value: 'es' },
+  },
 }
 
 vi.stubGlobal('useNuxtApp', vi.fn(() => mockNuxtApp))
-
-import { useStoreI18n } from '~/composables/useStoreI18n'
 
 describe('useStoreI18n', () => {
   beforeEach(() => {
@@ -32,10 +30,10 @@ describe('useStoreI18n', () => {
     })
 
     it('should return locale ref', () => {
-      const { locale } = useStoreI18n()
+      const { locale: _locale } = useStoreI18n()
 
-      expect(locale).toBeDefined()
-      expect(locale.value).toBe('es')
+      expect(_locale).toBeDefined()
+      expect(_locale.value).toBe('es')
     })
 
     it('should indicate availability', () => {
@@ -64,7 +62,7 @@ describe('useStoreI18n', () => {
   describe('Without i18n Available', () => {
     it('should return fallback t function', () => {
       // Override mock to simulate missing i18n
-      vi.mocked(useNuxtApp).mockReturnValueOnce({} as any)
+      vi.mocked(useNuxtApp).mockReturnValueOnce({} as unknown)
 
       const { t, available } = useStoreI18n()
 
@@ -73,7 +71,7 @@ describe('useStoreI18n', () => {
     })
 
     it('should return default locale', () => {
-      vi.mocked(useNuxtApp).mockReturnValueOnce({} as any)
+      vi.mocked(useNuxtApp).mockReturnValueOnce({} as unknown)
 
       const { locale, available } = useStoreI18n()
 
@@ -82,9 +80,9 @@ describe('useStoreI18n', () => {
     })
 
     it('should handle null nuxtApp', () => {
-      vi.mocked(useNuxtApp).mockReturnValueOnce(null as any)
+      vi.mocked(useNuxtApp).mockReturnValueOnce(null as unknown)
 
-      const { t, locale, available } = useStoreI18n()
+      const { t, locale: _locale, available } = useStoreI18n()
 
       expect(available).toBe(false)
       expect(typeof t).toBe('function')

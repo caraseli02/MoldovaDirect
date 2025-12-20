@@ -18,7 +18,7 @@
         <span class="text-sm text-gray-600 dark:text-gray-400">
           {{ $t('orders.paymentStatus', 'Payment Status') }}
         </span>
-        <span 
+        <span
           class="text-xs font-medium px-2 py-1 rounded-full"
           :class="paymentStatusClasses"
         >
@@ -59,11 +59,17 @@
           <span>{{ $t('orders.placed', 'Placed') }}</span>
           <span>{{ formatDateTime(order.createdAt) }}</span>
         </div>
-        <div v-if="order.shippedAt" class="flex justify-between">
+        <div
+          v-if="order.shippedAt"
+          class="flex justify-between"
+        >
           <span>{{ $t('orders.shipped', 'Shipped') }}</span>
           <span>{{ formatDateTime(order.shippedAt) }}</span>
         </div>
-        <div v-if="order.deliveredAt" class="flex justify-between">
+        <div
+          v-if="order.deliveredAt"
+          class="flex justify-between"
+        >
           <span>{{ $t('orders.delivered', 'Delivered') }}</span>
           <span>{{ formatDateTime(order.deliveredAt) }}</span>
         </div>
@@ -90,7 +96,7 @@ const paymentStatusClasses = computed(() => {
     pending: 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-300',
     paid: 'bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-300',
     failed: 'bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-300',
-    refunded: 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300'
+    refunded: 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300',
   }
   return classes[status] || classes.pending
 })
@@ -100,13 +106,14 @@ const formatPrice = (price: number) => {
   if (price === null || price === undefined || isNaN(price)) {
     return '€0.00'
   }
-  
+
   try {
     return new Intl.NumberFormat(locale.value, {
       style: 'currency',
-      currency: 'EUR'
+      currency: 'EUR',
     }).format(price)
-  } catch (err) {
+  }
+  catch (err: any) {
     console.warn('Error formatting price:', err)
     return `€${price.toFixed(2)}`
   }
@@ -116,7 +123,7 @@ const formatPaymentMethod = (method: PaymentMethod) => {
   const methods = {
     stripe: 'Credit Card (Stripe)',
     paypal: 'PayPal',
-    cod: 'Cash on Delivery'
+    cod: 'Cash on Delivery',
   }
   return methods[method] || method
 }
@@ -126,7 +133,7 @@ const formatPaymentStatus = (status: PaymentStatus) => {
     pending: t('orders.paymentPending', 'Pending'),
     paid: t('orders.paymentPaid', 'Paid'),
     failed: t('orders.paymentFailed', 'Failed'),
-    refunded: t('orders.paymentRefunded', 'Refunded')
+    refunded: t('orders.paymentRefunded', 'Refunded'),
   }
   return statuses[status] || status
 }
@@ -140,7 +147,7 @@ const formatDateTime = (dateString: string) => {
     day: 'numeric',
     year: 'numeric',
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   }).format(date)
 }
 </script>

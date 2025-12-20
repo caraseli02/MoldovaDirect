@@ -20,13 +20,14 @@ describe('Products API', () => {
   beforeAll(async () => {
     try {
       const response = await fetch(`${API_BASE}/api/products`, {
-        signal: AbortSignal.timeout(5000)
+        signal: AbortSignal.timeout(5000),
       })
       isServerAvailable = response.ok
       if (!isServerAvailable) {
         console.log(`⚠️ Server returned status ${response.status} - API tests will be skipped`)
       }
-    } catch (error) {
+    }
+    catch (_error: any) {
       isServerAvailable = false
       console.log('⚠️ Server not available at', API_BASE, '- API tests will be skipped')
     }
@@ -136,10 +137,12 @@ describe('Products API', () => {
         if (quantity > 5) {
           // In stock: quantity > 5
           expect(product.stockStatus).toBe('in_stock')
-        } else if (quantity > 0) {
+        }
+        else if (quantity > 0) {
           // Low stock: 0 < quantity <= 5
           expect(product.stockStatus).toBe('low_stock')
-        } else {
+        }
+        else {
           // Out of stock: quantity = 0
           expect(product.stockStatus).toBe('out_of_stock')
         }

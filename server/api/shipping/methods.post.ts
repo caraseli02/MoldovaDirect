@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
     if (!body.cartId || !body.shippingAddress) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Cart ID and shipping address are required'
+        statusMessage: 'Cart ID and shipping address are required',
       })
     }
 
@@ -48,14 +48,14 @@ export default defineEventHandler(async (event) => {
     if (cartError) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to fetch cart items'
+        statusMessage: 'Failed to fetch cart items',
       })
     }
 
     if (!cartItems?.length) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Cart is empty'
+        statusMessage: 'Cart is empty',
       })
     }
 
@@ -63,13 +63,13 @@ export default defineEventHandler(async (event) => {
     const shippingMethods = getAvailableShippingMethods(cartItems as any, body.shippingAddress)
 
     // Calculate totals for each shipping method
-    const methodsWithTotals = shippingMethods.map(method => {
+    const methodsWithTotals = shippingMethods.map((method) => {
       const calculation = calculateOrderTotals(cartItems as any, method, body.shippingAddress)
       return {
         ...method,
         total: calculation.total,
         subtotal: calculation.subtotal,
-        tax: calculation.tax
+        tax: calculation.tax,
       }
     })
 
@@ -80,11 +80,12 @@ export default defineEventHandler(async (event) => {
         cartSummary: {
           itemCount: cartItems.length,
           totalQuantity: cartItems.reduce((sum, item) => sum + item.quantity, 0),
-          subtotal: cartItems.reduce((sum, item) => sum + (item.products.price_eur * item.quantity), 0)
-        }
-      }
+          subtotal: cartItems.reduce((sum, item) => sum + (item.products.price_eur * item.quantity), 0),
+        },
+      },
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     if (error.statusCode) {
       throw error
     }
@@ -92,7 +93,7 @@ export default defineEventHandler(async (event) => {
     console.error('Shipping methods error:', error)
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 })

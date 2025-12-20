@@ -5,6 +5,7 @@
  * cookie handling across the application.
  */
 
+import { useCookie } from '#imports'
 import { COOKIE_NAMES, type CookieConfig } from '~/config/cookies'
 
 /**
@@ -16,9 +17,9 @@ import { COOKIE_NAMES, type CookieConfig } from '~/config/cookies'
  */
 export function createCookie<T = any>(
   name: string,
-  config: CookieConfig
-): ReturnType<typeof useCookie<T>> {
-  return useCookie<T>(name, config)
+  config: CookieConfig,
+) {
+  return useCookie<T>(name, config as any)
 }
 
 /**
@@ -43,7 +44,8 @@ export function serializeCookieData(data: any): any {
     }))
 
     return serialized
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Failed to serialize cookie data:', error)
     return null
   }
@@ -53,16 +55,16 @@ export function serializeCookieData(data: any): any {
  * Deserialize data from cookie storage
  * Restores Date objects from ISO strings
  */
-export function deserializeCookieData<T = any>(
+export function deserializeCookieData<T = unknown>(
   data: any,
-  dateFields: string[] = []
+  dateFields: string[] = [],
 ): T | null {
   if (!data) return null
 
   try {
     // Parse dates if field names are provided
-    if (dateFields.length > 0) {
-      const restored = { ...data }
+    if (dateFields.length > 0 && typeof data === 'object' && data !== null) {
+      const restored = { ...data } as Record<string, any>
 
       for (const field of dateFields) {
         if (restored[field]) {
@@ -74,7 +76,8 @@ export function deserializeCookieData<T = any>(
     }
 
     return data as T
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Failed to deserialize cookie data:', error)
     return null
   }
@@ -99,9 +102,9 @@ export function hasCookie(name: string): boolean {
 /**
  * Get cookie value with type safety
  */
-export function getCookieValue<T = any>(
+export function getCookieValue<T = unknown>(
   name: string,
-  defaultValue?: T
+  defaultValue?: T,
 ): T | undefined {
   const cookie = useCookie<T>(name)
   return cookie.value ?? defaultValue
@@ -113,9 +116,9 @@ export function getCookieValue<T = any>(
 export function setCookieValue<T = any>(
   name: string,
   value: T,
-  config?: CookieConfig
+  config?: CookieConfig,
 ): void {
-  const cookie = config ? useCookie<T>(name, config) : useCookie<T>(name)
+  const cookie = config ? useCookie<T>(name, config as any) : useCookie<T>(name)
   cookie.value = value as any
 }
 
@@ -123,15 +126,15 @@ export function setCookieValue<T = any>(
  * Cookie manager class for complex cookie operations
  */
 export class CookieManager<T = any> {
-  private cookie: ReturnType<typeof useCookie<T>>
+  private cookieRef: any
   private dateFields: string[]
 
   constructor(
     name: string,
     config: CookieConfig,
-    dateFields: string[] = []
+    dateFields: string[] = [],
   ) {
-    this.cookie = useCookie<T>(name, config)
+    this.cookieRef = useCookie<T>(name, config as any)
     this.dateFields = dateFields
   }
 
@@ -139,7 +142,7 @@ export class CookieManager<T = any> {
    * Get the current cookie value
    */
   get value(): T | null {
-    const raw = this.cookie.value
+    const raw = this.cookieRef.value
     if (!raw) return null
 
     // Deserialize if date fields are specified
@@ -155,26 +158,26 @@ export class CookieManager<T = any> {
    */
   set value(data: T | null) {
     if (data === null) {
-      this.cookie.value = null
+      this.cookieRef.value = null
       return
     }
 
     // Serialize if needed
-    this.cookie.value = serializeCookieData(data) as any
+    this.cookieRef.value = serializeCookieData(data)
   }
 
   /**
    * Clear the cookie
    */
   clear(): void {
-    this.cookie.value = null
+    this.cookieRef.value = null
   }
 
   /**
    * Check if cookie exists
    */
   exists(): boolean {
-    return this.cookie.value != null
+    return this.cookieRef.value != null
   }
 
   /**
@@ -218,9 +221,9 @@ export const cartCookieManager = () =>
       sameSite: 'lax',
       secure: process.env.NODE_ENV === 'production',
       watch: 'shallow',
-      default: () => null
+      default: () => null,
     },
-    ['lastSyncAt', 'addedAt', 'lastModified'] // Date fields to restore
+    ['lastSyncAt', 'addedAt', 'lastModified'], // Date fields to restore
   )
 
 export const checkoutCookieManager = () =>
@@ -229,7 +232,7 @@ export const checkoutCookieManager = () =>
     {
       maxAge: 60 * 60 * 2, // 2 hours
       sameSite: 'lax',
-      secure: process.env.NODE_ENV === 'production'
+      secure: process.env.NODE_ENV === 'production',
     },
-    ['sessionExpiresAt', 'lastSyncAt'] // Date fields to restore
+    ['sessionExpiresAt', 'lastSyncAt'], // Date fields to restore
   )

@@ -6,10 +6,24 @@
  * const { registerShortcut, unregisterShortcut } = useKeyboardShortcuts()
  *
  * registerShortcut('k', (e) => {
- *   console.log('Ctrl/Cmd + K pressed')
  * }, { ctrlOrCmd: true })
  * ```
  */
+
+interface KeyboardShortcutOptions {
+  /** Require Ctrl (Windows/Linux) or Cmd (Mac) */
+  ctrlOrCmd?: boolean
+  /** Require Shift key */
+  shift?: boolean
+  /** Require Alt/Option key */
+  alt?: boolean
+  /** Prevent default browser behavior */
+  preventDefault?: boolean
+  /** Stop event propagation */
+  stopPropagation?: boolean
+  /** Description for accessibility/documentation */
+  description?: string
+}
 
 // Global registry shared across all instances
 const globalShortcuts = new Map<string, {
@@ -30,28 +44,13 @@ export function useKeyboardShortcuts() {
   // Track shortcuts registered by this instance for cleanup
   const instanceShortcuts = new Set<string>()
 
-  interface KeyboardShortcutOptions {
-    /** Require Ctrl (Windows/Linux) or Cmd (Mac) */
-    ctrlOrCmd?: boolean
-    /** Require Shift key */
-    shift?: boolean
-    /** Require Alt/Option key */
-    alt?: boolean
-    /** Prevent default browser behavior */
-    preventDefault?: boolean
-    /** Stop event propagation */
-    stopPropagation?: boolean
-    /** Description for accessibility/documentation */
-    description?: string
-  }
-
   /**
    * Check if the keyboard event matches the shortcut configuration
    */
   const matchesShortcut = (
     event: KeyboardEvent,
     key: string,
-    options: KeyboardShortcutOptions
+    options: KeyboardShortcutOptions,
   ): boolean => {
     // Check if the key matches (case-insensitive)
     if (event.key.toLowerCase() !== key.toLowerCase()) {
@@ -86,9 +85,9 @@ export function useKeyboardShortcuts() {
   const handleKeydown = (event: KeyboardEvent) => {
     // Don't trigger shortcuts when user is typing in an input field
     const target = event.target as HTMLElement
-    const isInput = target.tagName === 'INPUT' ||
-                    target.tagName === 'TEXTAREA' ||
-                    target.isContentEditable
+    const isInput = target.tagName === 'INPUT'
+      || target.tagName === 'TEXTAREA'
+      || target.isContentEditable
 
     // Allow Ctrl/Cmd+K even in input fields for search
     const isSearchShortcut = (event.key.toLowerCase() === 'k' && (event.ctrlKey || event.metaKey))
@@ -103,7 +102,7 @@ export function useKeyboardShortcuts() {
       const keyParts = shortcutKey.split('+')
       const key = keyParts[keyParts.length - 1]
 
-      if (matchesShortcut(event, key, options)) {
+      if (key && matchesShortcut(event, key, options)) {
         if (options.preventDefault) {
           event.preventDefault()
         }
@@ -122,7 +121,7 @@ export function useKeyboardShortcuts() {
   const registerShortcut = (
     key: string,
     handler: (e: KeyboardEvent) => void,
-    options: KeyboardShortcutOptions = {}
+    options: KeyboardShortcutOptions = {},
   ) => {
     const shortcutKey = getShortcutKey(key, options)
     globalShortcuts.set(shortcutKey, { handler, options })
@@ -200,6 +199,6 @@ export function useKeyboardShortcuts() {
   return {
     registerShortcut,
     unregisterShortcut,
-    getShortcutDisplay
+    getShortcutDisplay,
   }
 }

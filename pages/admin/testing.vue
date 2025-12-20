@@ -2,15 +2,23 @@
   <div class="space-y-6 pb-12">
     <!-- Page Header -->
     <div>
-      <h1 class="text-3xl font-bold tracking-tight">Testing Dashboard</h1>
+      <h1 class="text-3xl font-bold tracking-tight">
+        Testing Dashboard
+      </h1>
       <p class="text-muted-foreground mt-2">
         Generate test data, simulate users, and test admin functionality
       </p>
     </div>
 
     <!-- Warning Banner -->
-    <Alert variant="destructive" v-if="showWarning">
-      <commonIcon name="lucide:alert-triangle" class="h-4 w-4" />
+    <Alert
+      v-if="showWarning"
+      variant="destructive"
+    >
+      <commonIcon
+        name="lucide:alert-triangle"
+        class="h-4 w-4"
+      />
       <AlertTitle>Testing Mode</AlertTitle>
       <AlertDescription>
         This page allows you to modify database content. Use with caution.
@@ -95,7 +103,7 @@
 
 <script setup lang="ts">
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import type { ScenarioTemplate, GenerationHistoryItem, CustomDataConfig } from '~/types/admin-testing'
+import type { ScenarioTemplate, GenerationHistoryItem, CustomDataConfig, TestResult, PresetType } from '~/types/admin-testing'
 
 // Import components
 import DatabaseStatsCard from '~/components/admin/testing/DatabaseStatsCard.vue'
@@ -112,14 +120,14 @@ import SaveScenarioDialog from '~/components/admin/testing/SaveScenarioDialog.vu
 
 definePageMeta({
   layout: 'admin',
-  middleware: ['auth', 'admin']
+  middleware: ['auth', 'admin'],
 })
 
 // Use composable for shared state and logic
 const {
   loading,
   loadingStats,
-  result,
+  result: composableResult,
   stats,
   progress,
   refreshStats,
@@ -128,8 +136,11 @@ const {
   quickDelete,
   createUsers,
   generateCustomData,
-  clearResult
+  clearResult,
 } = useTestingDashboard()
+
+// Create a local computed to properly type the result
+const result = computed(() => composableResult.value as TestResult | null)
 
 // Local state
 const showWarning = ref(true)
@@ -137,7 +148,7 @@ const customData = ref<CustomDataConfig>({
   products: 20,
   users: 10,
   orders: 30,
-  clearExisting: false
+  clearExisting: false,
 })
 
 // Impersonation state
@@ -148,7 +159,7 @@ const impersonation = ref({
   duration: 30,
   targetName: '',
   expiresAt: '',
-  logId: 0
+  logId: 0,
 })
 
 // Scenarios
@@ -173,7 +184,7 @@ const handleRunQuickAction = async (preset: string) => {
 }
 
 // Impersonation handlers
-const startImpersonation = async (config: { userEmail: string; reason: string; duration: number }) => {
+const startImpersonation = async (config: { userEmail: string, reason: string, duration: number }) => {
   try {
     const response = await $fetch('/api/admin/impersonate', {
       method: 'POST',
@@ -181,17 +192,19 @@ const startImpersonation = async (config: { userEmail: string; reason: string; d
         action: 'start',
         userId: config.userEmail,
         reason: config.reason,
-        duration: config.duration
-      }
-    })
+        duration: config.duration,
+      },
+    }) as any
 
-    if (response.success) {
+    if (response.success && 'impersonating' in response && 'expiresAt' in response && 'logId' in response) {
+      const impersonatingUser = (response as any).impersonating
       impersonation.value.active = true
-      impersonation.value.targetName = response.impersonating.name
-      impersonation.value.expiresAt = response.expiresAt
-      impersonation.value.logId = response.logId
+      impersonation.value.targetName = impersonatingUser?.name || ''
+      impersonation.value.expiresAt = (response as any).expiresAt
+      impersonation.value.logId = (response as any).logId
     }
-  } catch (err: any) {
+  }
+  catch (err: any) {
     console.error('Failed to start impersonation:', err)
   }
 }
@@ -202,9 +215,9 @@ const stopImpersonation = async () => {
       method: 'POST',
       body: {
         action: 'end',
-        logId: impersonation.value.logId
-      }
-    })
+        logId: impersonation.value.logId,
+      },
+    }) as any
 
     if (response.success) {
       impersonation.value.active = false
@@ -212,41 +225,44 @@ const stopImpersonation = async () => {
       impersonation.value.reason = ''
       impersonation.value.targetName = ''
     }
-  } catch (err: any) {
+  }
+  catch (err: any) {
     console.error('Failed to stop impersonation:', err)
   }
 }
 
 // Scenario management
 const loadSavedScenarios = () => {
-  if (process.client) {
+  if (import.meta.client) {
     try {
       const saved = localStorage.getItem('admin-test-scenarios')
       if (saved) {
         savedScenarios.value = JSON.parse(saved)
       }
-    } catch (error) {
+    }
+    catch (error: any) {
       console.error('Failed to load saved scenarios:', error)
       localStorage.removeItem('admin-test-scenarios')
     }
   }
 }
 
-const saveScenario = (data: { name: string; description: string }) => {
+const saveScenario = (data: { name: string, description: string }) => {
   const scenario: ScenarioTemplate = {
     id: Date.now().toString(),
     name: data.name,
     description: data.description,
     config: { ...customData.value },
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
   }
 
   savedScenarios.value.push(scenario)
 
-  if (process.client) {
+  if (import.meta.client) {
     try {
       localStorage.setItem('admin-test-scenarios', JSON.stringify(savedScenarios.value))
-    } catch (error) {
+    }
+    catch (error: any) {
       console.error('Failed to save scenario:', error)
     }
   }
@@ -255,16 +271,22 @@ const saveScenario = (data: { name: string; description: string }) => {
 }
 
 const loadScenario = (scenario: ScenarioTemplate) => {
-  customData.value = { ...scenario.config }
+  customData.value = {
+    products: scenario.config.products || 20,
+    users: scenario.config.users || 10,
+    orders: scenario.config.orders || 30,
+    clearExisting: scenario.config.clearExisting || false,
+  }
 }
 
 const deleteScenario = (id: string) => {
   savedScenarios.value = savedScenarios.value.filter(s => s.id !== id)
 
-  if (process.client) {
+  if (import.meta.client) {
     try {
       localStorage.setItem('admin-test-scenarios', JSON.stringify(savedScenarios.value))
-    } catch (error) {
+    }
+    catch (error: any) {
       console.error('Failed to delete scenario:', error)
     }
   }
@@ -272,13 +294,14 @@ const deleteScenario = (id: string) => {
 
 // History management
 const loadGenerationHistory = () => {
-  if (process.client) {
+  if (import.meta.client) {
     try {
       const saved = localStorage.getItem('admin-test-history')
       if (saved) {
         generationHistory.value = JSON.parse(saved)
       }
-    } catch (error) {
+    }
+    catch (error: any) {
       console.error('Failed to load generation history:', error)
       localStorage.removeItem('admin-test-history')
     }
@@ -289,23 +312,24 @@ const addToHistory = (preset: string, response: any) => {
   const item: GenerationHistoryItem = {
     id: Date.now().toString(),
     preset,
-    config: { preset: preset as any },
+    config: { preset: preset as PresetType | undefined },
     timestamp: new Date().toISOString(),
     results: {
       users: response.results?.steps?.find((s: any) => s.step === 'Create users')?.count || 0,
       products: response.results?.steps?.find((s: any) => s.step === 'Create products')?.count || 0,
-      orders: response.results?.steps?.find((s: any) => s.step === 'Create orders')?.count || 0
+      orders: response.results?.steps?.find((s: any) => s.step === 'Create orders')?.count || 0,
     },
-    duration: response.totalDuration || 0
+    duration: response.totalDuration || 0,
   }
 
   generationHistory.value.unshift(item)
   generationHistory.value = generationHistory.value.slice(0, 10)
 
-  if (process.client) {
+  if (import.meta.client) {
     try {
       localStorage.setItem('admin-test-history', JSON.stringify(generationHistory.value))
-    } catch (error) {
+    }
+    catch (error: any) {
       console.error('Failed to save generation history:', error)
     }
   }
@@ -313,13 +337,14 @@ const addToHistory = (preset: string, response: any) => {
 
 // Export credentials
 const exportCredentials = () => {
-  if (!result.value?.users) return
+  const resultValue = result.value
+  if (!resultValue?.users) return
 
   const csv = [
     ['Name', 'Email', 'Role', 'Phone'].join(','),
-    ...result.value.users.map(u =>
-      [u.name, u.email, u.role, u.phone].join(',')
-    )
+    ...resultValue.users.map(u =>
+      [u.name, u.email, u.role, u.phone || ''].join(','),
+    ),
   ].join('\n')
 
   const blob = new Blob([csv], { type: 'text/csv' })
@@ -332,6 +357,6 @@ const exportCredentials = () => {
 }
 
 useHead({
-  title: 'Testing Dashboard - Admin - Moldova Direct'
+  title: 'Testing Dashboard - Admin - Moldova Direct',
 })
 </script>

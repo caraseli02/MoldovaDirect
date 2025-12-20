@@ -141,7 +141,7 @@ describe('validateTrackingUrl', () => {
     })
 
     it('should handle international carrier variants', () => {
-      const url = 'https://www.dhl.de/tracking/123'  // German DHL
+      const url = 'https://www.dhl.de/tracking/123' // German DHL
       expect(validateTrackingUrl(url)).toBe(true)
     })
   })
@@ -152,10 +152,10 @@ describe('validateTrackingUrl', () => {
         'https://www.dhl-secure.com/track',
         'https://www.correos-es.com/track',
         'https://ups-tracking.com/track',
-        'https://fedex-delivery.net/track'
+        'https://fedex-delivery.net/track',
       ]
 
-      phishingUrls.forEach(url => {
+      phishingUrls.forEach((url) => {
         expect(validateTrackingUrl(url)).toBe(false)
       })
     })
@@ -171,7 +171,7 @@ describe('validateTrackingUrl', () => {
 
     it('should handle Unicode domain attacks', () => {
       // Punycode attack attempt (homograph)
-      const url = 'https://www.dhⅼ.com/tracking'  // Using similar-looking character
+      const url = 'https://www.dhⅼ.com/tracking' // Using similar-looking character
       expect(validateTrackingUrl(url)).toBe(false)
     })
   })

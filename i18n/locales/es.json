@@ -324,7 +324,10 @@
       "passwordMatch": "Las contraseñas coinciden",
       "resetPasswordButton": "Restablecer tu contraseña",
       "resettingPassword": "Restableciendo tu contraseña",
-      "processingPasswordReset": "Procesando tu solicitud de restablecimiento de contraseña"
+      "processingPasswordReset": "Procesando tu solicitud de restablecimiento de contraseña",
+      "sendResetEmailButton": "Enviar correo de restablecimiento de contraseña",
+      "sendingResetEmail": "Enviando correo de restablecimiento",
+      "backToLoginLink": "Volver a la página de inicio de sesión"
     },
     "errors": {
       "invalidCredentials": "Correo o contraseña incorrectos",
@@ -368,6 +371,7 @@
         "lowercase": "Debe contener al menos una letra minúscula",
         "number": "Debe contener al menos un número",
         "mismatch": "Las contraseñas no coinciden",
+        "match": "Las contraseñas coinciden",
         "weak": "La contraseña es muy débil",
         "current": "La contraseña actual es obligatoria"
       },

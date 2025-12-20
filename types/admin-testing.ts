@@ -28,15 +28,15 @@ export interface UserSummary {
 }
 
 // Data seeding types
-export type PresetType =
-  | 'empty'
-  | 'minimal'
-  | 'development'
-  | 'demo'
-  | 'stress'
-  | 'low-stock'
-  | 'holiday-rush'
-  | 'new-store'
+export type PresetType
+  = | 'empty'
+    | 'minimal'
+    | 'development'
+    | 'demo'
+    | 'stress'
+    | 'low-stock'
+    | 'holiday-rush'
+    | 'new-store'
 
 export interface SeedOptions {
   preset?: PresetType
@@ -57,17 +57,17 @@ export interface SeedResults {
   preset: string
   startTime: string
   steps: SeedStep[]
-  errors: Array<{ step: string; error: string }>
+  errors: Array<{ step: string, error: string }>
 }
 
 // Cleanup types
-export type CleanupAction =
-  | 'clear-all'
-  | 'clear-test-users'
-  | 'clear-orders'
-  | 'clear-products'
-  | 'reset-database'
-  | 'clear-old-carts'
+export type CleanupAction
+  = | 'clear-all'
+    | 'clear-test-users'
+    | 'clear-orders'
+    | 'clear-products'
+    | 'reset-database'
+    | 'clear-old-carts'
 
 export interface CleanupOptions {
   action: CleanupAction
@@ -110,7 +110,7 @@ export interface ApiResponse<T = any> {
   success: boolean
   message: string
   data?: T
-  errors?: Array<{ email?: string; error: string }>
+  errors?: Array<{ email?: string, error: string }>
   summary?: Record<string, any>
   results?: any
 }
@@ -203,9 +203,10 @@ export interface TestResult {
   message: string
   users?: CreatedUser[]
   summary?: Record<string, any>
-  errors?: Array<{ email?: string; error: string }>
+  errors?: Array<{ email?: string, error: string }>
   results?: any
   error?: any
+  suggestion?: string
 }
 
 export interface CustomDataConfig {

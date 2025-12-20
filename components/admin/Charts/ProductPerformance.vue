@@ -11,25 +11,38 @@
     </div>
 
     <!-- Loading State -->
-    <div v-if="loading" class="flex items-center justify-center h-64">
+    <div
+      v-if="loading"
+      class="flex items-center justify-center h-64"
+    >
       <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
     </div>
 
     <!-- Error State -->
-    <div v-else-if="error" class="flex items-center justify-center h-64">
+    <div
+      v-else-if="error"
+      class="flex items-center justify-center h-64"
+    >
       <div class="text-center">
         <AlertTriangle class="w-12 h-12 text-red-400 mx-auto mb-4" />
-        <p class="text-gray-600 dark:text-gray-400">Failed to load chart data</p>
+        <p class="text-gray-600 dark:text-gray-400">
+          Failed to load chart data
+        </p>
       </div>
     </div>
 
     <!-- Chart Content -->
-    <div v-else class="h-64">
+    <div
+      v-else
+      class="h-64"
+    >
       <div class="flex items-center justify-center h-full text-gray-500 dark:text-gray-400">
         <div class="text-center">
-        <BarChart2 class="w-16 h-16 mx-auto mb-4 opacity-50" />
+          <BarChart2 class="w-16 h-16 mx-auto mb-4 opacity-50" />
           <p>Product performance chart will be rendered here</p>
-          <p class="text-sm mt-2">Chart library integration needed</p>
+          <p class="text-sm mt-2">
+            Chart library integration needed
+          </p>
         </div>
       </div>
     </div>
@@ -52,14 +65,14 @@
 import { AlertTriangle, BarChart2 } from 'lucide-vue-next'
 
 interface Props {
-  data?: any
+  data?: unknown
   loading?: boolean
   error?: string | null
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  data: null,
+const _props = withDefaults(defineProps<Props>(), {
+  data: undefined,
   loading: false,
-  error: null
+  error: null,
 })
 </script>

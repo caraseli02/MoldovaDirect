@@ -28,7 +28,7 @@ export default defineEventHandler((event) => {
       'Cache-Control': 'private, no-store, no-cache, must-revalidate',
       'CDN-Cache-Control': 'no-store',
       'Pragma': 'no-cache',
-      'Expires': '0'
+      'Expires': '0',
     })
     return
   }
@@ -37,11 +37,11 @@ export default defineEventHandler((event) => {
   // But we ensure they have the private directive to prevent CDN caching
   const existingCacheControl = getResponseHeader(event, 'Cache-Control')
 
-  if (!existingCacheControl || !existingCacheControl.includes('private')) {
+  if (!existingCacheControl || (typeof existingCacheControl === 'string' && !existingCacheControl.includes('private'))) {
     // Set default private cache control if not already set
     setResponseHeaders(event, {
       'Cache-Control': 'private, max-age=60, stale-while-revalidate=30',
-      'CDN-Cache-Control': 'no-store'
+      'CDN-Cache-Control': 'no-store',
     })
   }
 
@@ -49,6 +49,6 @@ export default defineEventHandler((event) => {
   setResponseHeaders(event, {
     'X-Content-Type-Options': 'nosniff',
     'X-Frame-Options': 'DENY',
-    'Referrer-Policy': 'strict-origin-when-cross-origin'
+    'Referrer-Policy': 'strict-origin-when-cross-origin',
   })
 })

@@ -45,7 +45,7 @@ export function sanitizeSearchTerm(searchTerm: string): string {
     // Underscore - wildcard in ILIKE (matches any single character)
     .replace(/_/g, '\\_')
     // Single quote - SQL string delimiter
-    .replace(/'/g, "''")
+    .replace(/'/g, '\'\'')
     // Comma - Supabase .or() filter uses commas to separate conditions
     .replace(/,/g, '\\,')
 }
@@ -62,7 +62,7 @@ export function sanitizeSearchTerm(searchTerm: string): string {
  * try {
  *   validateSearchLength(userInput)
  *   // proceed with search
- * } catch (error) {
+ * } catch (error: any) {
  *   // handle validation error
  * }
  * ```
@@ -71,7 +71,7 @@ export function validateSearchLength(searchTerm: string, maxLength: number = MAX
   if (searchTerm.length > maxLength) {
     throw createError({
       statusCode: 400,
-      statusMessage: `Search term too long. Maximum ${maxLength} characters allowed.`
+      statusMessage: `Search term too long. Maximum ${maxLength} characters allowed.`,
     })
   }
 }
@@ -114,12 +114,12 @@ export function prepareSearchPattern(
     validateLength?: boolean
     maxLength?: number
     wrapWithWildcards?: boolean
-  } = {}
+  } = {},
 ): string {
   const {
     validateLength = true,
     maxLength = MAX_SEARCH_LENGTH,
-    wrapWithWildcards = true
+    wrapWithWildcards = true,
   } = options
 
   // Validate length if requested

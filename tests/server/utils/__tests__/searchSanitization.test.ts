@@ -14,7 +14,7 @@ import {
   validateSearchLength,
   validateMinSearchLength,
   prepareSearchPattern,
-  MAX_SEARCH_LENGTH
+  MAX_SEARCH_LENGTH,
 } from '../searchSanitization'
 
 describe('searchSanitization', () => {
@@ -35,8 +35,8 @@ describe('searchSanitization', () => {
     })
 
     it('should escape single quotes (SQL delimiter)', () => {
-      expect(sanitizeSearchTerm("wine's best")).toBe("wine''s best")
-      expect(sanitizeSearchTerm("O'Reilly")).toBe("O''Reilly")
+      expect(sanitizeSearchTerm('wine\'s best')).toBe('wine\'\'s best')
+      expect(sanitizeSearchTerm('O\'Reilly')).toBe('O\'\'Reilly')
     })
 
     it('should escape commas (Supabase .or() separator)', () => {
@@ -45,8 +45,8 @@ describe('searchSanitization', () => {
     })
 
     it('should handle multiple special characters together', () => {
-      const input = "50% off, wine's best_seller\\new"
-      const expected = "50\\% off\\, wine''s best\\_seller\\\\new"
+      const input = '50% off, wine\'s best_seller\\new'
+      const expected = '50\\% off\\, wine\'\'s best\\_seller\\\\new'
       expect(sanitizeSearchTerm(input)).toBe(expected)
     })
 
@@ -90,7 +90,8 @@ describe('searchSanitization', () => {
       try {
         validateSearchLength(tooLong)
         expect.fail('Should have thrown error')
-      } catch (error: any) {
+      }
+      catch (error: any) {
         expect(error.statusCode).toBe(400)
         expect(error.statusMessage).toContain('Search term too long')
         expect(error.statusMessage).toContain(String(MAX_SEARCH_LENGTH))
@@ -156,7 +157,7 @@ describe('searchSanitization', () => {
       expect(prepareSearchPattern('50% discount')).toBe('%50\\% discount%')
 
       // Search for "O'Reilly's book"
-      expect(prepareSearchPattern("O'Reilly's")).toBe("%O''Reilly''s%")
+      expect(prepareSearchPattern('O\'Reilly\'s')).toBe('%O\'\'Reilly\'\'s%')
 
       // Search for "red, white, blue"
       expect(prepareSearchPattern('red, white')).toBe('%red\\, white%')
@@ -174,10 +175,10 @@ describe('searchSanitization', () => {
 
     it('should prevent SQL injection via quote escaping', () => {
       // Attacker tries to break out of string with quotes
-      const malicious = "'; DROP TABLE products; --"
+      const malicious = '\'; DROP TABLE products; --'
       const safe = sanitizeSearchTerm(malicious)
-      expect(safe).toContain("''") // Quotes should be escaped
-      expect(safe).toBe("''; DROP TABLE products; --") // Full expected result
+      expect(safe).toContain('\'\'') // Quotes should be escaped
+      expect(safe).toBe('\'\'; DROP TABLE products; --') // Full expected result
       // The single quote at the start is escaped to '', making it safe in SQL strings
     })
 
@@ -192,9 +193,9 @@ describe('searchSanitization', () => {
 
     it('should handle backslash-based escape attempts', () => {
       // Attacker tries to use backslash to escape our escaping
-      const malicious = "\\' OR 1=1 --"
+      const malicious = '\\\' OR 1=1 --'
       const safe = sanitizeSearchTerm(malicious)
-      expect(safe).toBe("\\\\'' OR 1=1 --")
+      expect(safe).toBe('\\\\\'\' OR 1=1 --')
       // The backslash is escaped, and the quote is escaped
     })
   })

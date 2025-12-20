@@ -9,14 +9,22 @@
           v-model="selectedMetric"
           class="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
         >
-          <option value="views">Views</option>
-          <option value="cartAdditions">Cart Additions</option>
-          <option value="purchases">Purchases</option>
-          <option value="revenue">Revenue</option>
+          <option value="views">
+            Views
+          </option>
+          <option value="cartAdditions">
+            Cart Additions
+          </option>
+          <option value="purchases">
+            Purchases
+          </option>
+          <option value="revenue">
+            Revenue
+          </option>
         </select>
       </div>
     </div>
-    
+
     <div class="h-80">
       <AdminChartsBase
         type="bar"
@@ -26,7 +34,7 @@
         :error="error"
       />
     </div>
-    
+
     <div class="mt-4 grid grid-cols-2 gap-4 text-center">
       <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
         <div class="text-xl font-bold text-blue-600 dark:text-blue-400">
@@ -61,7 +69,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   data: null,
   loading: false,
-  error: null
+  error: null,
 })
 
 // Selected metric
@@ -72,14 +80,14 @@ const metricLabels = {
   views: 'Views',
   cartAdditions: 'Cart Additions',
   purchases: 'Purchases',
-  revenue: 'Revenue'
+  revenue: 'Revenue',
 }
 
 const metricColors = {
   views: '#3b82f6', // blue-500
   cartAdditions: '#f59e0b', // amber-500
   purchases: '#10b981', // green-500
-  revenue: '#8b5cf6' // violet-500
+  revenue: '#8b5cf6', // violet-500
 }
 
 // Chart data
@@ -87,19 +95,19 @@ const chartData = computed((): ChartData => {
   if (!props.data?.productPerformance) {
     return {
       labels: [],
-      datasets: []
+      datasets: [],
     }
   }
 
   const products = props.data.productPerformance.slice(0, 10) // Top 10 products
-  const labels = products.map(product => {
+  const labels = products.map((product) => {
     // Truncate long product names
     const name = product.productName
     return name.length > 20 ? name.substring(0, 20) + '...' : name
   })
 
   const color = metricColors[selectedMetric.value]
-  const data = products.map(product => {
+  const data = products.map((product) => {
     switch (selectedMetric.value) {
       case 'views': return product.views
       case 'cartAdditions': return product.cartAdditions
@@ -119,9 +127,9 @@ const chartData = computed((): ChartData => {
         borderColor: color,
         borderWidth: 1,
         borderRadius: 4,
-        borderSkipped: false
-      }
-    ]
+        borderSkipped: false,
+      },
+    ],
   }
 })
 
@@ -132,25 +140,26 @@ const chartOptions: ChartOptions = {
   indexAxis: 'y', // Horizontal bar chart
   plugins: {
     legend: {
-      display: false
+      display: false,
     },
     tooltip: {
       callbacks: {
         title: (context) => {
-          const product = props.data?.productPerformance[context[0].dataIndex]
+          const dataIndex = context[0]?.dataIndex
+          const product = props.data?.productPerformance?.[dataIndex ?? 0]
           return product?.productName || ''
         },
         label: (context) => {
-          const value = context.parsed.x
+          const value = context.parsed.x ?? 0
           const label = metricLabels[selectedMetric.value]
-          
+
           if (selectedMetric.value === 'revenue') {
             return `${label}: €${value.toLocaleString()}`
           }
           return `${label}: ${value.toLocaleString()}`
-        }
-      }
-    }
+        },
+      },
+    },
   },
   scales: {
     x: {
@@ -161,15 +170,15 @@ const chartOptions: ChartOptions = {
             return `€${value}`
           }
           return typeof value === 'number' ? value.toLocaleString() : value
-        }
-      }
+        },
+      },
     },
     y: {
       ticks: {
-        maxTicksLimit: 10
-      }
-    }
-  }
+        maxTicksLimit: 10,
+      },
+    },
+  },
 }
 
 // Computed properties
@@ -179,18 +188,20 @@ const topProduct = computed(() => {
   }
 
   const products = props.data.productPerformance
-  let topProduct = products[0]
+  let topProductItem = products[0]
+
+  if (!topProductItem) return null
 
   for (const product of products) {
     const currentValue = product[selectedMetric.value]
-    const topValue = topProduct[selectedMetric.value]
-    
+    const topValue = topProductItem[selectedMetric.value]
+
     if (currentValue > topValue) {
-      topProduct = product
+      topProductItem = product
     }
   }
 
-  return topProduct
+  return topProductItem
 })
 
 const averagePerformance = computed(() => {
@@ -205,7 +216,7 @@ const averagePerformance = computed(() => {
   if (selectedMetric.value === 'revenue') {
     return `€${Math.round(average).toLocaleString()}`
   }
-  
+
   return Math.round(average).toLocaleString()
 })
 </script>

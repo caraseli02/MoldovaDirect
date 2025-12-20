@@ -96,10 +96,10 @@ export interface WineProductAttributes {
 // =============================================
 export function isWineProduct(attributes: any): attributes is WineProductAttributes {
   return attributes && (
-    'producer' in attributes ||
-    'region' in attributes ||
-    'grapeVarieties' in attributes ||
-    'tastingNotes' in attributes
+    'producer' in attributes
+    || 'region' in attributes
+    || 'grapeVarieties' in attributes
+    || 'tastingNotes' in attributes
   )
 }
 

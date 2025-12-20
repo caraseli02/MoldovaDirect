@@ -12,7 +12,7 @@ import { z } from 'zod'
 const lockCartSchema = z.object({
   cartId: z.number().int().positive(),
   checkoutSessionId: z.string().min(1),
-  lockDurationMinutes: z.number().int().min(1).max(60).default(30)
+  lockDurationMinutes: z.number().int().min(1).max(60).default(30),
 })
 
 export default defineEventHandler(async (event) => {
@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
     const { data, error } = await supabase.rpc('lock_cart', {
       p_cart_id: cartId,
       p_checkout_session_id: checkoutSessionId,
-      p_lock_duration_minutes: lockDurationMinutes
+      p_lock_duration_minutes: lockDurationMinutes,
     })
 
     if (error) {
@@ -38,14 +38,15 @@ export default defineEventHandler(async (event) => {
       throw createError({
         statusCode: 500,
         message: 'Failed to lock cart',
-        data: { error: error.message }
+        data: { error: error.message },
       })
     }
 
     // Check if the lock was successful
     if (!data.success) {
-      const statusCode = data.code === 'CART_NOT_FOUND' ? 404 :
-                         data.code === 'CART_ALREADY_LOCKED' ? 409 : 400
+      const statusCode = data.code === 'CART_NOT_FOUND'
+        ? 404
+        : data.code === 'CART_ALREADY_LOCKED' ? 409 : 400
 
       throw createError({
         statusCode,
@@ -53,8 +54,8 @@ export default defineEventHandler(async (event) => {
         data: {
           code: data.code,
           lockedUntil: data.locked_until,
-          lockedBySession: data.locked_by_session
-        }
+          lockedBySession: data.locked_by_session,
+        },
       })
     }
 
@@ -65,16 +66,16 @@ export default defineEventHandler(async (event) => {
       lockedAt: data.locked_at,
       lockedUntil: data.locked_until,
       checkoutSessionId: data.checkout_session_id,
-      message: 'Cart locked successfully'
+      message: 'Cart locked successfully',
     }
-
-  } catch (err: any) {
+  }
+  catch (err: any) {
     // Handle Zod validation errors
     if (err.name === 'ZodError') {
       throw createError({
         statusCode: 400,
         message: 'Invalid request data',
-        data: { errors: err.errors }
+        data: { errors: err.errors },
       })
     }
 
@@ -87,7 +88,7 @@ export default defineEventHandler(async (event) => {
     console.error('Unexpected error in lock cart endpoint:', err)
     throw createError({
       statusCode: 500,
-      message: 'An unexpected error occurred while locking the cart'
+      message: 'An unexpected error occurred while locking the cart',
     })
   }
 })

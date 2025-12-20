@@ -10,8 +10,8 @@
           id="accept-terms"
           type="checkbox"
           :checked="termsAccepted"
-          @change="updateTermsAccepted($event.target.checked)"
           class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+          @change="updateTermsAccepted(($event.target as HTMLInputElement)?.checked ?? false)"
         />
         <div class="text-sm">
           <p class="text-gray-700 dark:text-gray-300">
@@ -30,7 +30,10 @@
               {{ $t('checkout.terms.privacyPolicy') }}
             </NuxtLink>
           </p>
-          <p v-if="showTermsError" class="mt-1 text-sm text-red-600 dark:text-red-400">
+          <p
+            v-if="showTermsError"
+            class="mt-1 text-sm text-red-600 dark:text-red-400"
+          >
             {{ $t('checkout.terms.termsRequired') }}
           </p>
         </div>
@@ -41,14 +44,17 @@
           id="accept-privacy"
           type="checkbox"
           :checked="privacyAccepted"
-          @change="updatePrivacyAccepted($event.target.checked)"
           class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+          @change="updatePrivacyAccepted(($event.target as HTMLInputElement)?.checked ?? false)"
         />
         <div class="text-sm">
           <p class="text-gray-700 dark:text-gray-300">
             {{ $t('checkout.terms.acceptPrivacy') }}
           </p>
-          <p v-if="showPrivacyError" class="mt-1 text-sm text-red-600 dark:text-red-400">
+          <p
+            v-if="showPrivacyError"
+            class="mt-1 text-sm text-red-600 dark:text-red-400"
+          >
             {{ $t('checkout.terms.privacyRequired') }}
           </p>
         </div>
@@ -59,8 +65,8 @@
           id="marketing-consent"
           type="checkbox"
           :checked="marketingConsent"
-          @change="updateMarketingConsent($event.target.checked)"
           class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+          @change="updateMarketingConsent(($event.target as HTMLInputElement)?.checked ?? false)"
         />
         <div class="text-sm">
           <p class="text-gray-700 dark:text-gray-300">

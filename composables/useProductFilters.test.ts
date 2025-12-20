@@ -18,7 +18,7 @@ vi.mock('vue-router', () => ({
 }))
 
 // Mock i18n
-const mockT = vi.fn((key: string, params?: any) => {
+const mockT = vi.fn((key: string, params?: unknown) => {
   const translations: Record<string, string | ((p: any) => string)> = {
     'products.chips.category': (p: any) => `Category: ${p.value}`,
     'products.chips.priceMin': (p: any) => `Min: €${p.value}`,
@@ -43,7 +43,7 @@ global.useI18n = vi.fn(() => ({
 
 // Mock $fetch
 const mockFetch = vi.fn()
-global.$fetch = mockFetch as any
+global.$fetch = mockFetch as unknown
 
 // Import composable AFTER mocks are set up
 const { useProductFilters } = await import('./useProductFilters')
@@ -78,7 +78,11 @@ describe('useProductFilters', () => {
     setActivePinia(createPinia())
     vi.clearAllMocks()
     // Reset query properties instead of replacing the object
-    Object.keys(mockRoute.query).forEach(key => delete mockRoute.query[key])
+    const keysToDelete = Object.keys(mockRoute.query)
+    keysToDelete.forEach((key) => {
+      const { [key]: _removed, ...rest } = mockRoute.query
+      mockRoute.query = rest as LocationQuery
+    })
     mockPush.mockClear()
     mockFetch.mockClear()
   })
@@ -958,7 +962,7 @@ describe('useProductFilters', () => {
       expect(filters.value.attributes).toBeUndefined()
       expect(consoleWarnSpy).toHaveBeenCalledWith(
         'Failed to parse attributes query:',
-        expect.any(Error)
+        expect.any(Error),
       )
 
       consoleWarnSpy.mockRestore()
@@ -1360,8 +1364,8 @@ describe('useProductFilters', () => {
 
   describe('Integration Scenarios', () => {
     it('supports complete filtering workflow', () => {
-      const { filters, updateFilters, activeFilterCount, activeFilterChips, syncFiltersToUrl } =
-        useProductFilters(mockCategoriesTree)
+      const { filters: _filters, updateFilters, activeFilterCount, activeFilterChips, syncFiltersToUrl }
+        = useProductFilters(mockCategoriesTree)
 
       // User selects filters
       updateFilters({
@@ -1388,8 +1392,8 @@ describe('useProductFilters', () => {
     })
 
     it('supports filter removal workflow', () => {
-      const { updateFilters, activeFilterChips, removeFilterChip, clearFilters } =
-        useProductFilters(mockCategoriesTree)
+      const { updateFilters, activeFilterChips, removeFilterChip, clearFilters }
+        = useProductFilters(mockCategoriesTree)
 
       updateFilters({
         category: 'electronics',
@@ -1487,7 +1491,7 @@ describe('useProductFilters', () => {
       }
 
       expect(() => {
-        removeFilterChip(malformedChip as any)
+        removeFilterChip(malformedChip as unknown)
       }).not.toThrow()
 
       expect(filters.value).toBeDefined()
@@ -1525,8 +1529,7 @@ describe('useProductFilters', () => {
       updateFilter('category', 'electronics')
 
       // Access the chips to trigger the computed property
-      const chips = activeFilterChips.value
-      const firstChip = chips[0]
+      const firstChip = activeFilterChips.value[0]
 
       expect(mockT).toHaveBeenCalledWith('products.chips.category', {
         value: 'Electronics',
@@ -1543,7 +1546,7 @@ describe('useProductFilters', () => {
       updateFilter('category', 'unknown-category')
 
       // Access the chips to trigger the computed property
-      const chips = activeFilterChips.value
+      expect(activeFilterChips.value.length).toBeGreaterThanOrEqual(0)
 
       expect(mockT).toHaveBeenCalledWith('products.filters.unknownCategory')
     })

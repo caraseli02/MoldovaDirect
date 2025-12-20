@@ -28,18 +28,18 @@ export default defineCachedEventHandler(async (event) => {
     if (!normalizedSlug) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Product slug is required'
+        statusMessage: 'Product slug is required',
       })
     }
 
     const slugCandidates = Array.from(
       new Set(
         [normalizedSlug, normalizedSlug.toUpperCase(), normalizedSlug.toLowerCase()]
-          .filter(Boolean)
-      )
+          .filter(Boolean),
+      ),
     )
 
-    let product: any = null
+    let product = null
 
     for (const candidate of slugCandidates) {
       const { data, error } = await supabase
@@ -74,7 +74,7 @@ export default defineCachedEventHandler(async (event) => {
         throw createError({
           statusCode: 500,
           statusMessage: 'Failed to fetch product',
-          data: error
+          data: error,
         })
       }
 
@@ -87,7 +87,7 @@ export default defineCachedEventHandler(async (event) => {
     if (!product) {
       throw createError({
         statusCode: 404,
-        statusMessage: 'Product not found'
+        statusMessage: 'Product not found',
       })
     }
 
@@ -113,7 +113,7 @@ export default defineCachedEventHandler(async (event) => {
       .limit(4)
 
     // Build category breadcrumb
-    const buildBreadcrumb = async (categoryId: number): Promise<any[]> => {
+    const buildBreadcrumb = async (categoryId: number): Promise<Array<{ id: number, slug: string, name: string }>> => {
       const breadcrumb = []
       let currentCategoryId = categoryId
 
@@ -128,10 +128,11 @@ export default defineCachedEventHandler(async (event) => {
           breadcrumb.unshift({
             id: category.id,
             slug: category.slug,
-            name: getLocalizedContent(category.name_translations, locale)
+            name: getLocalizedContent(category.name_translations, locale),
           })
           currentCategoryId = category.parent_id
-        } else {
+        }
+        else {
           break
         }
       }
@@ -143,8 +144,8 @@ export default defineCachedEventHandler(async (event) => {
 
     // Transform product data to match products list API format
     const descriptionTranslations = product.description_translations || {}
-    const shortDescriptionTranslations =
-      (product as any).short_description_translations || descriptionTranslations
+    const shortDescriptionTranslations
+      = (product as any).short_description_translations || descriptionTranslations
 
     const transformedProduct = {
       id: product.id,
@@ -158,12 +159,13 @@ export default defineCachedEventHandler(async (event) => {
       price: product.price_eur,
       formattedPrice: `€${product.price_eur.toFixed(2)}`,
       compareAtPrice: product.compare_at_price_eur,
-      formattedCompareAtPrice: product.compare_at_price_eur 
-        ? `€${product.compare_at_price_eur.toFixed(2)}` 
+      formattedCompareAtPrice: product.compare_at_price_eur
+        ? `€${product.compare_at_price_eur.toFixed(2)}`
         : null,
       stockQuantity: product.stock_quantity,
-      stockStatus: product.stock_quantity > 5 ? 'in_stock' :
-                   product.stock_quantity > 0 ? 'low_stock' : 'out_of_stock',
+      stockStatus: product.stock_quantity > 5
+        ? 'in_stock'
+        : product.stock_quantity > 0 ? 'low_stock' : 'out_of_stock',
       images: product.images || [],
       primaryImage: product.images?.[0]?.url || '/placeholder-product.svg',
       attributes: product.attributes || {},
@@ -173,7 +175,7 @@ export default defineCachedEventHandler(async (event) => {
         name: getLocalizedContent(product.categories.name_translations, locale),
         description: getLocalizedContent(product.categories.description_translations || {}, locale),
         nameTranslations: product.categories.name_translations,
-        breadcrumb
+        breadcrumb,
       },
       relatedProducts: relatedProducts?.map((related: any) => ({
         id: related.id,
@@ -183,25 +185,26 @@ export default defineCachedEventHandler(async (event) => {
         price: related.price_eur,
         formattedPrice: `€${related.price_eur.toFixed(2)}`,
         stockQuantity: related.stock_quantity,
-        stockStatus: related.stock_quantity > 5 ? 'in_stock' :
-                     related.stock_quantity > 0 ? 'low_stock' : 'out_of_stock',
+        stockStatus: related.stock_quantity > 5
+          ? 'in_stock'
+          : related.stock_quantity > 0 ? 'low_stock' : 'out_of_stock',
         primaryImage: related.images?.[0]?.url || '/placeholder-product.svg',
         category: {
           id: related.categories.id,
           slug: related.categories.slug,
-          name: related.categories.name_translations
-        }
+          name: related.categories.name_translations,
+        },
       })) || [],
       isActive: product.is_active,
       createdAt: product.created_at,
       updatedAt: product.updated_at,
       locale,
-      availableLocales: Object.keys(product.name_translations)
+      availableLocales: Object.keys(product.name_translations),
     }
 
     return transformedProduct
-
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Product detail API error:', error)
 
     if (error.statusCode) {
@@ -210,7 +213,7 @@ export default defineCachedEventHandler(async (event) => {
 
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 }, {
@@ -221,5 +224,5 @@ export default defineCachedEventHandler(async (event) => {
     const query = getQuery(event)
     const locale = query.locale || 'es'
     return `${PUBLIC_CACHE_CONFIG.productDetail.name}-${slug}-${locale}`
-  }
+  },
 })

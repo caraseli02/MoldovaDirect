@@ -200,7 +200,8 @@ export class CheckoutPage {
     // Handle country select or input
     if (await this.addressFields.country.evaluate(el => el.tagName === 'SELECT')) {
       await this.addressFields.country.selectOption(address.country)
-    } else {
+    }
+    else {
       await this.addressFields.country.fill(address.country)
     }
 

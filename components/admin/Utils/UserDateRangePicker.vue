@@ -1,6 +1,6 @@
 <!--
   Admin Date Range Picker Component
-  
+
   Simple date range picker for filtering users by registration date.
 -->
 
@@ -37,7 +37,7 @@ const props = defineProps<Props>()
 const emit = defineEmits<{
   'update:from': [value: string]
   'update:to': [value: string]
-  update: [from?: string, to?: string]
+  'update': [from?: string, to?: string]
 }>()
 
 const fromDate = ref(props.from || '')

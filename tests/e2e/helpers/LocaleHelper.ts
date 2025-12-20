@@ -4,7 +4,7 @@
  * Provides utilities for testing multi-language functionality
  */
 
-import { type Page } from '@playwright/test'
+import type { Page } from '@playwright/test'
 
 type Locale = 'es' | 'en' | 'ro' | 'ru'
 
@@ -123,7 +123,8 @@ export class LocaleHelper {
       await localeSwitcher.click()
       const localeOption = this.page.locator(`text=/^${newLocale.toUpperCase()}$/i`)
       await localeOption.click()
-    } else {
+    }
+    else {
       // Fallback: navigate directly
       const currentPath = this.page.url().replace(/\/(es|en|ro|ru)/, '')
       await this.page.goto(`/${newLocale}${currentPath}`)

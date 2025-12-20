@@ -1,13 +1,13 @@
 /**
  * Authentication composable
- * 
+ *
  * Provides easy access to authentication store and helper functions
  * Requirements addressed:
  * - 5.1: Session persistence across browser tabs
  * - 5.3: Reactive authentication status
  * - 9.1: Proper error handling and loading states
  * - 9.2: User profile management functionality
- * 
+ *
  * This composable acts as a convenient wrapper around the auth store
  * and provides additional utility functions for authentication.
  */
@@ -17,7 +17,6 @@ import type { LoginCredentials, RegisterData, AuthUser } from '~/stores/auth'
 
 export const useAuth = () => {
   const authStore = useAuthStore()
-  const router = useRouter()
   const route = useRoute()
 
   /**
@@ -86,7 +85,7 @@ export const useAuth = () => {
    * Check if user has a specific role or permission
    * This can be extended based on future role-based access control requirements
    */
-  const hasRole = (role: string): boolean => {
+  const hasRole = (_role: string): boolean => {
     // For now, we don't have roles implemented
     // This is a placeholder for future role-based access control
     return false
@@ -101,12 +100,12 @@ export const useAuth = () => {
       '/account',
       '/cart',
       '/checkout',
-      '/admin'
+      '/admin',
     ]
 
     // Check if route requires authentication
-    const requiresAuth = protectedRoutes.some(route => 
-      routePath.startsWith(route)
+    const requiresAuth = protectedRoutes.some(route =>
+      routePath.startsWith(route),
     )
 
     if (!requiresAuth) {
@@ -122,12 +121,12 @@ export const useAuth = () => {
    */
   const redirectToLogin = (message?: string) => {
     const query: Record<string, string> = {}
-    
+
     // Preserve current route for post-login redirect
     if (route.fullPath !== '/') {
       query.redirect = route.fullPath
     }
-    
+
     // Add message if provided
     if (message) {
       query.message = message
@@ -135,7 +134,7 @@ export const useAuth = () => {
 
     return navigateTo({
       path: '/auth/login',
-      query
+      query,
     })
   }
 
@@ -144,16 +143,16 @@ export const useAuth = () => {
    */
   const redirectToVerification = (email?: string) => {
     const query: Record<string, string> = {
-      message: 'email-verification-required'
+      message: 'email-verification-required',
     }
-    
+
     if (email) {
       query.email = email
     }
 
     return navigateTo({
       path: '/auth/verify-email',
-      query
+      query,
     })
   }
 
@@ -162,7 +161,7 @@ export const useAuth = () => {
    */
   const getUserDisplayName = (): string => {
     if (!user.value) return ''
-    
+
     return user.value.name || user.value.email.split('@')[0] || 'Usuario'
   }
 
@@ -171,15 +170,15 @@ export const useAuth = () => {
    */
   const getUserInitials = (): string => {
     if (!user.value) return ''
-    
+
     if (user.value.name) {
       return user.value.name
         .split(' ')
-        .map(word => word.charAt(0).toUpperCase())
+        .map((word: string) => word.charAt(0).toUpperCase())
         .slice(0, 2)
         .join('')
     }
-    
+
     return user.value.email.charAt(0).toUpperCase()
   }
 
@@ -188,10 +187,10 @@ export const useAuth = () => {
    */
   const needsAttention = computed(() => {
     if (!user.value) return false
-    
+
     // Check if email is not verified
     if (!user.value.emailVerified) return true
-    
+
     // Add other checks as needed (incomplete profile, etc.)
     return false
   })
@@ -201,11 +200,11 @@ export const useAuth = () => {
    */
   const getAttentionMessage = (): string => {
     if (!user.value) return ''
-    
+
     if (!user.value.emailVerified) {
       return 'Por favor verifica tu email para acceder a todas las funciones'
     }
-    
+
     return ''
   }
 
@@ -238,11 +237,11 @@ export const useAuth = () => {
   const formatLockoutTime = (): string => {
     const minutes = lockoutMinutesRemaining.value
     if (minutes <= 0) return ''
-    
+
     if (minutes === 1) {
       return '1 minuto'
     }
-    
+
     return `${minutes} minutos`
   }
 
@@ -282,6 +281,6 @@ export const useAuth = () => {
     getAttentionMessage,
     ensureInitialized,
     getUnlockTime,
-    formatLockoutTime
+    formatLockoutTime,
   }
 }

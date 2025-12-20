@@ -16,22 +16,10 @@ export interface EmailTemplate {
 export async function sendEmail({ to, subject, html }: EmailTemplate) {
   try {
     if (!process.env.RESEND_API_KEY || !resend) {
-      console.log('📧 Development mode: Email would be sent to:', to)
-      console.log('📧 Subject:', subject)
-      console.log('📧 RESEND_API_KEY not configured, simulating email send')
-      
-      // In development, log the email details
-      if (process.env.NODE_ENV === 'development') {
-        console.log('📧 Email HTML preview:')
-        console.log('---START EMAIL---')
-        console.log(html.substring(0, 500) + '...')
-        console.log('---END EMAIL---')
-      }
-      
-      return { 
-        success: true, 
-        id: 'dev-mock-email-' + Date.now(), 
-        message: 'Email simulated in development mode' 
+      return {
+        success: true,
+        id: 'dev-mock-email-' + Date.now(),
+        message: 'Email simulated in development mode',
       }
     }
 
@@ -39,7 +27,7 @@ export async function sendEmail({ to, subject, html }: EmailTemplate) {
       from: process.env.FROM_EMAIL || 'Moldova Direct <noreply@moldovadirect.com>',
       to,
       subject,
-      html
+      html,
     })
 
     if (error) {
@@ -47,9 +35,9 @@ export async function sendEmail({ to, subject, html }: EmailTemplate) {
       throw new Error(`Failed to send email: ${error.message}`)
     }
 
-    console.log('✅ Email sent successfully:', data?.id)
     return { success: true, id: data?.id }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     console.error('❌ Email service error:', error)
     throw error
   }
@@ -65,7 +53,7 @@ export function generateVerificationEmailHtml(name: string, verificationUrl: str
       button: 'Verificar Cuenta',
       expiry: 'Este enlace expirará en 24 horas.',
       footer: 'Si no creaste esta cuenta, puedes ignorar este email.',
-      signature: 'Equipo de Moldova Direct'
+      signature: 'Equipo de Moldova Direct',
     },
     en: {
       subject: 'Verify your account - Moldova Direct',
@@ -75,7 +63,7 @@ export function generateVerificationEmailHtml(name: string, verificationUrl: str
       button: 'Verify Account',
       expiry: 'This link will expire in 24 hours.',
       footer: 'If you did not create this account, you can safely ignore this email.',
-      signature: 'Moldova Direct Team'
+      signature: 'Moldova Direct Team',
     },
     ro: {
       subject: 'Verifică-ți contul - Moldova Direct',
@@ -85,7 +73,7 @@ export function generateVerificationEmailHtml(name: string, verificationUrl: str
       button: 'Verifică Contul',
       expiry: 'Acest link va expira în 24 de ore.',
       footer: 'Dacă nu ai creat acest cont, poți ignora acest email.',
-      signature: 'Echipa Moldova Direct'
+      signature: 'Echipa Moldova Direct',
     },
     ru: {
       subject: 'Подтвердите ваш аккаунт - Moldova Direct',
@@ -95,8 +83,8 @@ export function generateVerificationEmailHtml(name: string, verificationUrl: str
       button: 'Подтвердить Аккаунт',
       expiry: 'Эта ссылка истечет через 24 часа.',
       footer: 'Если вы не создавали этот аккаунт, можете проигнорировать это письмо.',
-      signature: 'Команда Moldova Direct'
-    }
+      signature: 'Команда Moldova Direct',
+    },
   }
 
   const t = translations[locale as keyof typeof translations] || translations.es
@@ -154,7 +142,7 @@ export function generatePasswordResetEmailHtml(name: string, resetUrl: string, l
       button: 'Restablecer Contraseña',
       expiry: 'Este enlace expirará en 30 minutos.',
       footer: 'Si no solicitaste este cambio, puedes ignorar este email y tu contraseña permanecerá sin cambios.',
-      signature: 'Equipo de Moldova Direct'
+      signature: 'Equipo de Moldova Direct',
     },
     en: {
       subject: 'Reset your password - Moldova Direct',
@@ -164,7 +152,7 @@ export function generatePasswordResetEmailHtml(name: string, resetUrl: string, l
       button: 'Reset Password',
       expiry: 'This link will expire in 30 minutes.',
       footer: 'If you did not request this change, you can safely ignore this email and your password will remain unchanged.',
-      signature: 'Moldova Direct Team'
+      signature: 'Moldova Direct Team',
     },
     ro: {
       subject: 'Resetează parola - Moldova Direct',
@@ -174,7 +162,7 @@ export function generatePasswordResetEmailHtml(name: string, resetUrl: string, l
       button: 'Resetează Parola',
       expiry: 'Acest link va expira în 30 de minute.',
       footer: 'Dacă nu ai solicitat această schimbare, poți ignora acest email și parola ta va rămâne neschimbată.',
-      signature: 'Echipa Moldova Direct'
+      signature: 'Echipa Moldova Direct',
     },
     ru: {
       subject: 'Сброс пароля - Moldova Direct',
@@ -184,8 +172,8 @@ export function generatePasswordResetEmailHtml(name: string, resetUrl: string, l
       button: 'Сбросить Пароль',
       expiry: 'Эта ссылка истечет через 30 минут.',
       footer: 'Если вы не запрашивали это изменение, можете проигнорировать это письмо, и ваш пароль останется неизменным.',
-      signature: 'Команда Moldova Direct'
-    }
+      signature: 'Команда Moldova Direct',
+    },
   }
 
   const t = translations[locale as keyof typeof translations] || translations.es

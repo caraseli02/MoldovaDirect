@@ -6,18 +6,21 @@
     >
       <UiButton
         v-if="category.children && category.children.length > 0"
-        @click="toggleExpanded"
         variant="ghost"
         size="icon"
         class="mr-2 h-6 w-6"
         :aria-label="isExpanded ? $t('common.collapse') : $t('common.expand')"
+        @click="toggleExpanded"
       >
         <commonIcon
           :name="isExpanded ? 'lucide:chevron-down' : 'lucide:chevron-right'"
           class="h-4 w-4"
         />
       </UiButton>
-      <div v-else class="w-6" />
+      <div
+        v-else
+        class="w-6"
+      ></div>
 
       <label class="flex items-center flex-1 cursor-pointer">
         <input
@@ -26,7 +29,7 @@
           :name="'category-' + level"
           class="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 bg-white dark:bg-gray-700"
           @change="handleSelection"
-        >
+        />
         <span class="ml-2 text-sm text-gray-700 dark:text-gray-300 flex-1">
           {{ category.name }}
         </span>
@@ -85,7 +88,8 @@ const handleSelection = () => {
   if (isSelected.value) {
     // Deselect
     emit('update:selected', [])
-  } else {
+  }
+  else {
     // Select this category (single selection)
     emit('update:selected', [props.category.id.toString()])
   }
@@ -95,10 +99,10 @@ const handleSelection = () => {
 watch(() => props.selected, (newSelected) => {
   if (props.category.children) {
     const hasSelectedChild = props.category.children.some(child =>
-      newSelected.includes(child.id.toString()) ||
-      (child.children && child.children.some(grandchild =>
-        newSelected.includes(grandchild.id.toString())
-      ))
+      newSelected.includes(child.id.toString())
+      || (child.children && child.children.some(grandchild =>
+        newSelected.includes(grandchild.id.toString()),
+      )),
     )
     if (hasSelectedChild) {
       isExpanded.value = true

@@ -3,7 +3,7 @@ import type {
   PaymentMethod,
   SavedPaymentMethod,
   OrderData,
-  ShippingInformation
+  ShippingInformation,
 } from '~/types/checkout'
 
 export interface FetchShippingMethodsParams {
@@ -49,12 +49,12 @@ export interface SendConfirmationParams {
 }
 
 export async function fetchShippingMethods(params: FetchShippingMethodsParams): Promise<ShippingMethod[]> {
-  const response = await $fetch<{ success: boolean; methods: ShippingMethod[] }>('/api/checkout/shipping-methods', {
+  const response = await $fetch<{ success: boolean, methods: ShippingMethod[] }>('/api/checkout/shipping-methods', {
     query: {
       country: params.country,
       postalCode: params.postalCode,
-      orderTotal: params.orderTotal.toString()
-    }
+      orderTotal: params.orderTotal.toString(),
+    },
   })
 
   if (!response.success) {
@@ -70,14 +70,14 @@ export async function createPaymentIntent(params: CreatePaymentIntentParams): Pr
 }> {
   const response = await $fetch<{
     success: boolean
-    paymentIntent: { id: string; client_secret: string }
+    paymentIntent: { id: string, client_secret: string }
   }>('/api/checkout/create-payment-intent', {
     method: 'POST',
     body: {
       amount: params.amount,
       currency: params.currency,
-      sessionId: params.sessionId
-    }
+      sessionId: params.sessionId,
+    },
   })
 
   if (!response.success || !response.paymentIntent?.id || !response.paymentIntent?.client_secret) {
@@ -86,7 +86,7 @@ export async function createPaymentIntent(params: CreatePaymentIntentParams): Pr
 
   return {
     id: response.paymentIntent.id,
-    clientSecret: response.paymentIntent.client_secret
+    clientSecret: response.paymentIntent.client_secret,
   }
 }
 
@@ -96,16 +96,16 @@ export async function confirmPaymentIntent(params: ConfirmPaymentParams): Promis
     body: {
       paymentIntentId: params.paymentIntentId,
       paymentMethodId: params.paymentMethodId,
-      sessionId: params.sessionId
-    }
-  })
+      sessionId: params.sessionId,
+    },
+  }) as any
 }
 
 export async function createOrder(params: CreateOrderParams): Promise<{
   id: number
   orderNumber: string
 }> {
-  const response = await $fetch<{ success: boolean; order: { id: number; orderNumber: string } }>(
+  const response = await $fetch<{ success: boolean, order: { id: number, orderNumber: string } }>(
     '/api/checkout/create-order',
     {
       method: 'POST',
@@ -124,9 +124,9 @@ export async function createOrder(params: CreateOrderParams): Promise<{
         guestEmail: params.guestEmail ?? undefined,
         customerName: params.customerName,
         locale: params.locale,
-        marketingConsent: params.marketingConsent
-      }
-    }
+        marketingConsent: params.marketingConsent,
+      },
+    },
   )
 
   if (!response.success || !response.order) {
@@ -135,7 +135,7 @@ export async function createOrder(params: CreateOrderParams): Promise<{
 
   return {
     id: response.order.id,
-    orderNumber: response.order.orderNumber
+    orderNumber: response.order.orderNumber,
   }
 }
 
@@ -145,9 +145,9 @@ export async function sendConfirmationEmail(params: SendConfirmationParams): Pro
     body: {
       orderId: params.orderId,
       sessionId: params.sessionId,
-      email: params.email
-    }
-  })
+      email: params.email,
+    },
+  }) as any
 }
 
 /**
@@ -162,14 +162,14 @@ export async function updateInventory(items: OrderData['items'], orderId?: numbe
     method: 'POST',
     body: {
       items,
-      orderId
-    }
-  })
+      orderId,
+    },
+  }) as any
 }
 
 export async function fetchSavedPaymentMethods(): Promise<SavedPaymentMethod[]> {
-  const response = await $fetch<{ success: boolean; paymentMethods: SavedPaymentMethod[] }>(
-    '/api/checkout/payment-methods'
+  const response = await $fetch<{ success: boolean, paymentMethods: SavedPaymentMethod[] }>(
+    '/api/checkout/payment-methods',
   )
 
   if (!response.success) {
@@ -180,7 +180,7 @@ export async function fetchSavedPaymentMethods(): Promise<SavedPaymentMethod[]> 
 }
 
 export async function savePaymentMethod(method: SavedPaymentMethod): Promise<SavedPaymentMethod> {
-  const response = await $fetch<{ success: boolean; paymentMethod: SavedPaymentMethod }>(
+  const response = await $fetch<{ success: boolean, paymentMethod: SavedPaymentMethod }>(
     '/api/checkout/save-payment-method',
     {
       method: 'POST',
@@ -191,9 +191,9 @@ export async function savePaymentMethod(method: SavedPaymentMethod): Promise<Sav
         brand: method.brand,
         expiryMonth: method.expiryMonth,
         expiryYear: method.expiryYear,
-        isDefault: method.isDefault
-      }
-    }
+        isDefault: method.isDefault,
+      },
+    },
   )
 
   if (!response.success || !response.paymentMethod) {
@@ -207,8 +207,8 @@ export async function clearRemoteCart(sessionId: string): Promise<boolean> {
   const response = await $fetch<{ success: boolean }>('/api/cart/clear', {
     method: 'POST',
     body: {
-      sessionId
-    }
+      sessionId,
+    },
   })
 
   return response.success

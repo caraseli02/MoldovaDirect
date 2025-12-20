@@ -20,7 +20,7 @@ const mockCategories: CategoryWithChildren[] = [
   { id: 3, slug: 'white-wines', name: { es: 'Vinos Blancos', en: 'White Wines', ro: 'Vinuri Albe', ru: 'Белые вина' }, parentId: 1, sortOrder: 2, isActive: true, children: [] },
   { id: 4, slug: 'sparkling', name: { es: 'Espumantes', en: 'Sparkling', ro: 'Spumante', ru: 'Игристые' }, parentId: 1, sortOrder: 3, isActive: true, children: [] },
   { id: 5, slug: 'spirits', name: { es: 'Licores', en: 'Spirits', ro: 'Spirtoase', ru: 'Спиртные напитки' }, parentId: undefined, sortOrder: 2, isActive: true, children: [] },
-  { id: 6, slug: 'brandy', name: { es: 'Brandy', en: 'Brandy', ro: 'Brandy', ru: 'Бренди' }, parentId: 5, sortOrder: 1, isActive: true, children: [] }
+  { id: 6, slug: 'brandy', name: { es: 'Brandy', en: 'Brandy', ro: 'Brandy', ru: 'Бренди' }, parentId: 5, sortOrder: 1, isActive: true, children: [] },
 ]
 
 describe('Categories Store', () => {
@@ -219,7 +219,7 @@ describe('Categories Store', () => {
         // Pre-populate cache
         store.cache.set('categories', {
           data: mockCategories,
-          timestamp: Date.now()
+          timestamp: Date.now(),
         })
 
         await store.fetchCategories()
@@ -233,7 +233,7 @@ describe('Categories Store', () => {
         // Set expired cache (31 minutes old)
         store.cache.set('categories', {
           data: [],
-          timestamp: Date.now() - 31 * 60 * 1000
+          timestamp: Date.now() - 31 * 60 * 1000,
         })
 
         mockFetch.mockResolvedValueOnce({ categories: mockCategories })
@@ -345,7 +345,7 @@ describe('Categories Store', () => {
           ...mockCategories[1],
           id: 100,
           parentId: 2, // Child of red-wines
-          slug: 'merlot'
+          slug: 'merlot',
         }
         store.categories = [...mockCategories, deepCategory]
 

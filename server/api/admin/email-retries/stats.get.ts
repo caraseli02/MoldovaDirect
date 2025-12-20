@@ -15,22 +15,23 @@ export default defineEventHandler(async (event) => {
     const query = getQuery(event)
     const dateFrom = query.dateFrom as string | undefined
     const dateTo = query.dateTo as string | undefined
-    
+
     const stats = await getRetryStatistics(dateFrom, dateTo, supabase)
-    
+
     return {
       success: true,
-      data: stats
+      data: stats,
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     console.error('❌ Error getting retry statistics:', error)
-    
+
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to get retry statistics',
       data: {
-        error: error.message
-      }
+        error: error.message,
+      },
     })
   }
 })

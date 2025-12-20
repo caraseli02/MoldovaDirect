@@ -35,14 +35,28 @@
         >
           <div class="sticky top-24 rounded-2xl bg-slate-50 p-8 shadow-lg">
             <!-- Loading State -->
-            <div v-if="loading" class="flex h-96 items-center justify-center">
-              <commonIcon name="lucide:loader-2" class="h-8 w-8 animate-spin text-primary" />
+            <div
+              v-if="loading"
+              class="flex h-96 items-center justify-center"
+            >
+              <commonIcon
+                name="lucide:loader-2"
+                class="h-8 w-8 animate-spin text-primary"
+              />
             </div>
 
             <!-- Error State -->
-            <div v-else-if="error" class="flex h-96 flex-col items-center justify-center text-center">
-              <commonIcon name="lucide:alert-circle" class="h-12 w-12 text-red-500" />
-              <p class="mt-2 text-sm text-red-600">{{ t('wineStory.regions.error') }}</p>
+            <div
+              v-else-if="error"
+              class="flex h-96 flex-col items-center justify-center text-center"
+            >
+              <commonIcon
+                name="lucide:alert-circle"
+                class="h-12 w-12 text-red-500"
+              />
+              <p class="mt-2 text-sm text-red-600">
+                {{ t('wineStory.regions.error') }}
+              </p>
             </div>
 
             <!-- SVG Map -->
@@ -101,7 +115,7 @@
                 :class="[
                   selectedRegion === region.id
                     ? 'bg-primary text-white shadow-lg'
-                    : 'bg-white text-slate-700 hover:bg-slate-100'
+                    : 'bg-white text-slate-700 hover:bg-slate-100',
                 ]"
                 @click="selectRegion(region.id)"
               >
@@ -117,7 +131,10 @@
                 class="inline-flex items-center gap-2 rounded-full bg-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-300"
                 @click="clearSelection"
               >
-                <commonIcon name="lucide:x" class="h-3 w-3" />
+                <commonIcon
+                  name="lucide:x"
+                  class="h-3 w-3"
+                />
                 {{ t('wineStory.regions.clearFilter') }}
               </button>
             </div>
@@ -160,7 +177,10 @@
             <!-- Characteristics -->
             <div class="mt-4 space-y-3">
               <div class="flex items-start gap-3 text-sm">
-                <commonIcon name="lucide:layers" class="mt-0.5 h-4 w-4 flex-shrink-0 text-slate-400" />
+                <commonIcon
+                  name="lucide:layers"
+                  class="mt-0.5 h-4 w-4 flex-shrink-0 text-slate-400"
+                />
                 <div>
                   <span class="font-medium text-slate-700">{{ t('wineStory.regions.soilType') }}:</span>
                   <span class="ml-1 text-slate-600">{{ getLocalizedText(region.characteristics.soilType) }}</span>
@@ -168,7 +188,10 @@
               </div>
 
               <div class="flex items-start gap-3 text-sm">
-                <commonIcon name="lucide:thermometer" class="mt-0.5 h-4 w-4 flex-shrink-0 text-slate-400" />
+                <commonIcon
+                  name="lucide:thermometer"
+                  class="mt-0.5 h-4 w-4 flex-shrink-0 text-slate-400"
+                />
                 <div>
                   <span class="font-medium text-slate-700">{{ t('wineStory.regions.climate') }}:</span>
                   <span class="ml-1 text-slate-600">{{ getLocalizedText(region.climate) }}</span>
@@ -176,7 +199,10 @@
               </div>
 
               <div class="flex items-start gap-3 text-sm">
-                <commonIcon name="lucide:grape" class="mt-0.5 h-4 w-4 flex-shrink-0 text-slate-400" />
+                <commonIcon
+                  name="lucide:grape"
+                  class="mt-0.5 h-4 w-4 flex-shrink-0 text-slate-400"
+                />
                 <div>
                   <span class="font-medium text-slate-700">{{ t('wineStory.regions.primaryGrapes') }}:</span>
                   <span class="ml-1 text-slate-600">{{ region.primaryGrapes.join(', ') }}</span>
@@ -184,7 +210,10 @@
               </div>
 
               <div class="flex items-start gap-3 text-sm">
-                <commonIcon name="lucide:users" class="mt-0.5 h-4 w-4 flex-shrink-0 text-slate-400" />
+                <commonIcon
+                  name="lucide:users"
+                  class="mt-0.5 h-4 w-4 flex-shrink-0 text-slate-400"
+                />
                 <div>
                   <span class="font-medium text-slate-700">
                     {{ t('wineStory.regions.producerCount', { count: region.producerCount || 0 }) }}
@@ -219,7 +248,7 @@ onMounted(() => {
 const hoveredRegion = ref<WineRegion | null>(null)
 
 // Get localized text
-const getLocalizedText = (translations: any): string => {
+const getLocalizedText = (translations: Record<string, any>): string => {
   if (!translations) return ''
   const localeCode = locale?.value || 'es'
   return translations[localeCode] || translations.en || Object.values(translations)[0] || ''
@@ -237,7 +266,7 @@ const displayedRegions = computed(() => {
 const regionColors: Record<WineRegion, string> = {
   'codru': '#8B5CF6',
   'stefan-voda': '#EF4444',
-  'valul-lui-traian': '#10B981'
+  'valul-lui-traian': '#10B981',
 }
 
 const getRegionColor = (regionId: WineRegion): string => {
@@ -248,7 +277,7 @@ const getRegionColor = (regionId: WineRegion): string => {
 const regionPaths: Record<WineRegion, string> = {
   'codru': 'M 28.2 47.5 L 28.8 47.5 L 29.0 47.2 L 29.2 46.8 L 28.9 46.5 L 28.3 46.6 L 27.9 46.9 L 27.8 47.2 Z',
   'stefan-voda': 'M 29.2 46.8 L 29.8 46.7 L 30.1 46.4 L 30.0 46.0 L 29.5 45.8 L 28.9 45.9 L 28.7 46.2 L 28.9 46.5 Z',
-  'valul-lui-traian': 'M 28.3 46.6 L 28.9 46.5 L 28.7 46.2 L 28.9 45.9 L 28.5 45.7 L 28.0 45.8 L 27.6 46.0 L 27.5 46.3 L 27.8 46.5 Z'
+  'valul-lui-traian': 'M 28.3 46.6 L 28.9 46.5 L 28.7 46.2 L 28.9 45.9 L 28.5 45.7 L 28.0 45.8 L 27.6 46.0 L 27.5 46.3 L 27.8 46.5 Z',
 }
 
 const getRegionPath = (regionId: WineRegion): string => {
@@ -256,13 +285,13 @@ const getRegionPath = (regionId: WineRegion): string => {
 }
 
 // Region center points for labels
-const regionCenters: Record<WineRegion, { x: number; y: number }> = {
+const regionCenters: Record<WineRegion, { x: number, y: number }> = {
   'codru': { x: 28.5, y: 47.0 },
   'stefan-voda': { x: 29.4, y: 46.3 },
-  'valul-lui-traian': { x: 28.2, y: 46.1 }
+  'valul-lui-traian': { x: 28.2, y: 46.1 },
 }
 
-const getRegionCenter = (regionId: WineRegion): { x: number; y: number } => {
+const getRegionCenter = (regionId: WineRegion): { x: number, y: number } => {
   return regionCenters[regionId] || { x: 28.5, y: 46.5 }
 }
 
@@ -270,7 +299,8 @@ const getRegionCenter = (regionId: WineRegion): { x: number; y: number } => {
 const selectRegion = (regionId: WineRegion) => {
   if (selectedRegion.value === regionId) {
     clearSelection()
-  } else {
+  }
+  else {
     selectRegionComposable(regionId)
   }
 }

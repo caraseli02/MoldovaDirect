@@ -9,12 +9,12 @@ interface StripeComposable {
   error: Ref<string | null>
   initializeStripe: () => Promise<void>
   createCardElement: (container: HTMLElement) => Promise<void>
-  confirmPayment: (clientSecret: string, paymentData?: any) => Promise<any>
-  createPaymentMethod: (cardElement: StripeCardElement, billingDetails?: any) => Promise<any>
+  confirmPayment: (clientSecret: string, paymentData?: unknown) => Promise<unknown>
+  createPaymentMethod: (cardElement: StripeCardElement, billingDetails?: unknown) => Promise<unknown>
 }
 
 let stripePromise: Promise<Stripe | null> | null = null
-let stripeLibraryPromise: Promise<any> | null = null
+let stripeLibraryPromise: Promise<unknown> | null = null
 
 export const useStripe = (): StripeComposable => {
   const stripe = ref<Stripe | null>(null)
@@ -42,7 +42,7 @@ export const useStripe = (): StripeComposable => {
         stripeLibraryPromise = import('@stripe/stripe-js')
       }
 
-      const { loadStripe } = await stripeLibraryPromise
+      const { loadStripe } = await stripeLibraryPromise as { loadStripe: (key: string) => Promise<Stripe | null> }
 
       // Use singleton pattern to avoid loading Stripe multiple times
       if (!stripePromise) {
@@ -56,11 +56,12 @@ export const useStripe = (): StripeComposable => {
 
       stripe.value = stripeInstance
       elements.value = stripeInstance.elements()
-
-    } catch (err) {
+    }
+    catch (err: any) {
       error.value = err instanceof Error ? err.message : 'Failed to initialize Stripe'
       console.error('Stripe initialization error:', err)
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -82,12 +83,12 @@ export const useStripe = (): StripeComposable => {
       const cardElementInstance = elements.value.create('card', {
         style: {
           base: {
-            fontSize: '16px',
-            color: '#424770',
+            'fontSize': '16px',
+            'color': '#424770',
             '::placeholder': {
               color: '#aab7c4',
             },
-            fontFamily: 'system-ui, -apple-system, sans-serif',
+            'fontFamily': 'system-ui, -apple-system, sans-serif',
           },
           invalid: {
             color: '#9e2146',
@@ -104,20 +105,22 @@ export const useStripe = (): StripeComposable => {
       cardElementInstance.on('change', (event) => {
         if (event.error) {
           error.value = event.error.message
-        } else {
+        }
+        else {
           error.value = null
         }
       })
-
-    } catch (err) {
+    }
+    catch (err: any) {
       error.value = err instanceof Error ? err.message : 'Failed to create card element'
       console.error('Card element creation error:', err)
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
 
-  const confirmPayment = async (clientSecret: string, paymentData?: any): Promise<any> => {
+  const confirmPayment = async (clientSecret: string, paymentData?: unknown): Promise<unknown> => {
     if (!stripe.value) {
       throw new Error('Stripe not initialized')
     }
@@ -126,11 +129,12 @@ export const useStripe = (): StripeComposable => {
       loading.value = true
       error.value = null
 
+      const paymentDataTyped = paymentData as { payment_method?: any, billing_details?: unknown } | undefined
       const result = await stripe.value.confirmCardPayment(clientSecret, {
-        payment_method: paymentData?.payment_method || {
+        payment_method: paymentDataTyped?.payment_method || {
           card: cardElement.value!,
-          billing_details: paymentData?.billing_details || {}
-        }
+          billing_details: paymentDataTyped?.billing_details || {},
+        },
       })
 
       if (result.error) {
@@ -139,17 +143,18 @@ export const useStripe = (): StripeComposable => {
       }
 
       return { success: true, paymentIntent: result.paymentIntent }
-
-    } catch (err) {
+    }
+    catch (err: any) {
       error.value = err instanceof Error ? err.message : 'Payment confirmation failed'
       console.error('Payment confirmation error:', err)
       return { success: false, error: err }
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
 
-  const createPaymentMethod = async (cardElement: StripeCardElement, billingDetails?: any): Promise<any> => {
+  const createPaymentMethod = async (cardElement: StripeCardElement, billingDetails?: unknown): Promise<unknown> => {
     if (!stripe.value) {
       throw new Error('Stripe not initialized')
     }
@@ -161,7 +166,7 @@ export const useStripe = (): StripeComposable => {
       const result = await stripe.value.createPaymentMethod({
         type: 'card',
         card: cardElement,
-        billing_details: billingDetails || {}
+        billing_details: billingDetails || {},
       })
 
       if (result.error) {
@@ -170,12 +175,13 @@ export const useStripe = (): StripeComposable => {
       }
 
       return { success: true, paymentMethod: result.paymentMethod }
-
-    } catch (err) {
+    }
+    catch (err: any) {
       error.value = err instanceof Error ? err.message : 'Failed to create payment method'
       console.error('Payment method creation error:', err)
       return { success: false, error: err }
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -189,7 +195,7 @@ export const useStripe = (): StripeComposable => {
     initializeStripe,
     createCardElement,
     confirmPayment,
-    createPaymentMethod
+    createPaymentMethod,
   }
 }
 
@@ -197,7 +203,8 @@ export const useStripe = (): StripeComposable => {
 export const formatStripeError = (error: any): string => {
   if (!error) return 'An unknown error occurred'
 
-  switch (error.code) {
+  const err = error as { code?: string, message?: string }
+  switch (err.code) {
     case 'card_declined':
       return 'Your card was declined. Please try a different payment method.'
     case 'expired_card':
@@ -221,6 +228,6 @@ export const formatStripeError = (error: any): string => {
     case 'invalid_cvc':
       return 'Your card\'s security code is invalid.'
     default:
-      return error.message || 'An error occurred while processing your payment.'
+      return err.message || 'An error occurred while processing your payment.'
   }
 }

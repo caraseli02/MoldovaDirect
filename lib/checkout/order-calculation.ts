@@ -9,14 +9,14 @@ export interface OrderCalculationOptions {
 
 export function buildOrderData(
   cartItems: CartItem[],
-  options: OrderCalculationOptions = {}
+  options: OrderCalculationOptions = {},
 ): OrderData {
   const taxRate = options.taxRate ?? 0.21
   const currency = options.currency ?? 'EUR'
   const shippingCost = options.shippingCost ?? 0
 
   const subtotal = roundToCurrency(
-    cartItems.reduce((sum, item) => sum + item.product.price * item.quantity, 0)
+    cartItems.reduce((sum, item) => sum + item.product.price * item.quantity, 0),
   )
   const tax = roundToCurrency(subtotal * taxRate)
 
@@ -31,8 +31,8 @@ export function buildOrderData(
       productSnapshot: { ...item.product },
       quantity: item.quantity,
       price: item.product.price,
-      total: roundToCurrency(item.product.price * item.quantity)
-    }))
+      total: roundToCurrency(item.product.price * item.quantity),
+    })),
   }
 }
 
@@ -43,7 +43,7 @@ export function applyShippingMethod(order: OrderData, method: ShippingMethod): O
   return {
     ...order,
     shippingCost: updatedShipping,
-    total: updatedTotal
+    total: updatedTotal,
   }
 }
 

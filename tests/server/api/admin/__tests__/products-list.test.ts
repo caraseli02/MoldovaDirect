@@ -13,21 +13,21 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
 // Mock admin auth
 vi.mock('~/server/utils/adminAuth', () => ({
-  requireAdminRole: vi.fn().mockResolvedValue(undefined)
+  requireAdminRole: vi.fn().mockResolvedValue(undefined),
 }))
 
 // Mock search sanitization
 vi.mock('~/server/utils/searchSanitization', () => ({
-  prepareSearchPattern: vi.fn((search) => `%${search}%`),
-  MAX_SEARCH_LENGTH: 100
+  prepareSearchPattern: vi.fn(search => `%${search}%`),
+  MAX_SEARCH_LENGTH: 100,
 }))
 
 // Mock admin cache
 vi.mock('~/server/utils/adminCache', () => ({
   ADMIN_CACHE_CONFIG: {
-    productsList: { maxAge: 60, name: 'admin-products-list' }
+    productsList: { maxAge: 60, name: 'admin-products-list' },
   },
-  getAdminCacheKey: vi.fn(() => 'test-cache-key')
+  getAdminCacheKey: vi.fn(() => 'test-cache-key'),
 }))
 
 // Mock Supabase query builder
@@ -41,9 +41,9 @@ const mockSupabaseRange = vi.fn()
 vi.mock('#supabase/server', () => ({
   serverSupabaseClient: vi.fn(() => ({
     from: vi.fn(() => ({
-      select: mockSupabaseSelect
-    }))
-  }))
+      select: mockSupabaseSelect,
+    })),
+  })),
 }))
 
 // Mock h3
@@ -51,13 +51,13 @@ vi.mock('h3', async () => {
   const actual = await vi.importActual('h3')
   return {
     ...actual,
-    defineEventHandler: vi.fn((handler) => handler),
+    defineEventHandler: vi.fn(handler => handler),
     getQuery: vi.fn(),
     createError: vi.fn((options) => {
       const error = new Error(options.statusMessage) as Error & { statusCode: number }
       error.statusCode = options.statusCode
       return error
-    })
+    }),
   }
 })
 
@@ -71,7 +71,7 @@ describe('Admin Products List API', () => {
       gt: mockSupabaseGt,
       or: mockSupabaseOr,
       order: mockSupabaseOrder,
-      range: mockSupabaseRange
+      range: mockSupabaseRange,
     }
 
     mockSupabaseSelect.mockReturnValue(chainable)
@@ -82,7 +82,7 @@ describe('Admin Products List API', () => {
     mockSupabaseRange.mockResolvedValue({
       data: [],
       error: null,
-      count: 0
+      count: 0,
     })
   })
 
@@ -94,7 +94,7 @@ describe('Admin Products List API', () => {
     it('requires admin role', async () => {
       const { requireAdminRole } = await import('~/server/utils/adminAuth')
 
-      await requireAdminRole({} as any)
+      await requireAdminRole({} as unknown)
 
       expect(requireAdminRole).toHaveBeenCalled()
     })
@@ -104,11 +104,11 @@ describe('Admin Products List API', () => {
 
       vi.mocked(requireAdminRole).mockRejectedValue({
         statusCode: 401,
-        statusMessage: 'Unauthorized'
+        statusMessage: 'Unauthorized',
       })
 
-      await expect(requireAdminRole({} as any)).rejects.toMatchObject({
-        statusCode: 401
+      await expect(requireAdminRole({} as unknown)).rejects.toMatchObject({
+        statusCode: 401,
       })
     })
 
@@ -117,11 +117,11 @@ describe('Admin Products List API', () => {
 
       vi.mocked(requireAdminRole).mockRejectedValue({
         statusCode: 403,
-        statusMessage: 'Admin role required'
+        statusMessage: 'Admin role required',
       })
 
-      await expect(requireAdminRole({} as any)).rejects.toMatchObject({
-        statusCode: 403
+      await expect(requireAdminRole({} as unknown)).rejects.toMatchObject({
+        statusCode: 403,
       })
     })
   })
@@ -132,7 +132,7 @@ describe('Admin Products List API', () => {
         sortBy: 'created_at',
         sortOrder: 'desc',
         page: 1,
-        limit: 20
+        limit: 20,
       }
 
       expect(defaults.sortBy).toBe('created_at')
@@ -148,7 +148,7 @@ describe('Admin Products List API', () => {
       if (longSearch.length > MAX_SEARCH_LENGTH) {
         const error = vi.mocked(createError)({
           statusCode: 400,
-          statusMessage: `Search term too long. Maximum ${MAX_SEARCH_LENGTH} characters allowed.`
+          statusMessage: `Search term too long. Maximum ${MAX_SEARCH_LENGTH} characters allowed.`,
         })
         expect(error.statusCode).toBe(400)
       }
@@ -212,7 +212,7 @@ describe('Admin Products List API', () => {
       const products = [
         { name: { es: 'Vino' } },
         { name: { es: 'Aceite' } },
-        { name: { es: 'Queso' } }
+        { name: { es: 'Queso' } },
       ]
 
       products.sort((a, b) => {
@@ -289,7 +289,7 @@ describe('Admin Products List API', () => {
         is_active: true,
         created_at: '2024-01-01',
         updated_at: '2024-01-02',
-        categories: { id: 1, slug: 'vinos', name_translations: { es: 'Vinos' } }
+        categories: { id: 1, slug: 'vinos', name_translations: { es: 'Vinos' } },
       }
 
       const transformed = {
@@ -303,11 +303,12 @@ describe('Admin Products List API', () => {
         stockQuantity: dbProduct.stock_quantity,
         lowStockThreshold: dbProduct.low_stock_threshold || 5,
         reorderPoint: dbProduct.reorder_point || 10,
-        stockStatus: dbProduct.stock_quantity > (dbProduct.low_stock_threshold || 5) ? 'high' :
-                     dbProduct.stock_quantity > 0 ? 'low' : 'out',
+        stockStatus: dbProduct.stock_quantity > (dbProduct.low_stock_threshold || 5)
+          ? 'high'
+          : dbProduct.stock_quantity > 0 ? 'low' : 'out',
         isActive: dbProduct.is_active,
         createdAt: dbProduct.created_at,
-        updatedAt: dbProduct.updated_at
+        updatedAt: dbProduct.updated_at,
       }
 
       expect(transformed.slug).toBe('wine-001')
@@ -345,7 +346,7 @@ describe('Admin Products List API', () => {
         total: 50,
         totalPages: 3,
         hasNext: true,
-        hasPrev: true
+        hasPrev: true,
       }
 
       expect(pagination.hasNext).toBe(true)
@@ -360,7 +361,7 @@ describe('Admin Products List API', () => {
       const error = vi.mocked(createError)({
         statusCode: 500,
         statusMessage: 'Failed to fetch products',
-        data: { canRetry: true }
+        data: { canRetry: true },
       })
 
       expect(error.statusCode).toBe(500)
@@ -378,7 +379,7 @@ describe('Admin Products List API', () => {
 
       console.error('[Admin Products] Unexpected error:', {
         error: 'Test error',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       })
 
       expect(consoleErrorSpy).toHaveBeenCalled()
@@ -396,7 +397,7 @@ describe('Admin Products List API', () => {
           total: 0,
           totalPages: 0,
           hasNext: false,
-          hasPrev: false
+          hasPrev: false,
         },
         filters: {
           search: undefined,
@@ -406,8 +407,8 @@ describe('Admin Products List API', () => {
           outOfStock: undefined,
           lowStock: undefined,
           sortBy: 'created_at',
-          sortOrder: 'desc'
-        }
+          sortOrder: 'desc',
+        },
       }
 
       expect(response).toHaveProperty('products')

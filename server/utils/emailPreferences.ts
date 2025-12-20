@@ -37,7 +37,7 @@ export interface CreateEmailPreferencesInput {
 export async function getEmailPreferences(
   userId?: string,
   guestEmail?: string,
-  supabaseClient?: ResolvedSupabaseClient
+  supabaseClient?: ResolvedSupabaseClient,
 ): Promise<EmailPreferences | null> {
   const supabase = resolveSupabaseClient(supabaseClient)
 
@@ -49,7 +49,8 @@ export async function getEmailPreferences(
 
   if (userId) {
     query = query.eq('user_id', userId)
-  } else if (guestEmail) {
+  }
+  else if (guestEmail) {
     query = query.eq('guest_email', guestEmail)
   }
 
@@ -72,7 +73,7 @@ export async function getEmailPreferences(
  */
 export async function createEmailPreferences(
   input: CreateEmailPreferencesInput,
-  supabaseClient?: ResolvedSupabaseClient
+  supabaseClient?: ResolvedSupabaseClient,
 ): Promise<EmailPreferences | null> {
   const supabase = resolveSupabaseClient(supabaseClient)
 
@@ -86,7 +87,7 @@ export async function createEmailPreferences(
       order_shipped: input.orderShipped ?? true,
       order_delivered: input.orderDelivered ?? true,
       support_tickets: input.supportTickets ?? true,
-      marketing: input.marketing ?? false
+      marketing: input.marketing ?? false,
     })
     .select()
     .single()
@@ -106,7 +107,7 @@ export async function updateEmailPreferences(
   userId: string | undefined,
   guestEmail: string | undefined,
   preferences: Partial<CreateEmailPreferencesInput>,
-  supabaseClient?: ResolvedSupabaseClient
+  supabaseClient?: ResolvedSupabaseClient,
 ): Promise<EmailPreferences | null> {
   const supabase = resolveSupabaseClient(supabaseClient)
 
@@ -120,12 +121,13 @@ export async function updateEmailPreferences(
     order_shipped: preferences.orderShipped,
     order_delivered: preferences.orderDelivered,
     support_tickets: preferences.supportTickets,
-    marketing: preferences.marketing
+    marketing: preferences.marketing,
   })
 
   if (userId) {
     query = query.eq('user_id', userId)
-  } else if (guestEmail) {
+  }
+  else if (guestEmail) {
     query = query.eq('guest_email', guestEmail)
   }
 
@@ -147,7 +149,7 @@ export async function shouldSendEmail(
   emailType: EmailType,
   userId?: string,
   guestEmail?: string,
-  supabaseClient?: ResolvedSupabaseClient
+  supabaseClient?: ResolvedSupabaseClient,
 ): Promise<boolean> {
   // Get user preferences
   const preferences = await getEmailPreferences(userId, guestEmail, supabaseClient)
@@ -190,7 +192,7 @@ export async function shouldSendEmail(
 export async function getOrCreateEmailPreferences(
   userId?: string,
   guestEmail?: string,
-  supabaseClient?: ResolvedSupabaseClient
+  supabaseClient?: ResolvedSupabaseClient,
 ): Promise<EmailPreferences | null> {
   // Try to get existing preferences
   let preferences = await getEmailPreferences(userId, guestEmail, supabaseClient)
@@ -199,7 +201,7 @@ export async function getOrCreateEmailPreferences(
   if (!preferences) {
     preferences = await createEmailPreferences(
       { userId, guestEmail },
-      supabaseClient
+      supabaseClient,
     )
   }
 

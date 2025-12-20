@@ -1,13 +1,13 @@
 // GET /api/admin/orders/analytics - Admin endpoint to get order analytics and metrics
 import { serverSupabaseServiceRole } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
-import { subDays, startOfDay, endOfDay } from 'date-fns'
+import { subDays } from 'date-fns'
 
 export default defineEventHandler(async (event) => {
   try {
     // Verify admin authentication
     await requireAdminRole(event)
-    
+
     // Use service role for database operations
     const supabase = serverSupabaseServiceRole(event)
 
@@ -44,7 +44,7 @@ export default defineEventHandler(async (event) => {
     if (ordersError) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to fetch orders for analytics'
+        statusMessage: 'Failed to fetch orders for analytics',
       })
     }
 
@@ -87,7 +87,7 @@ export default defineEventHandler(async (event) => {
     // Calculate average fulfillment time (from created to shipped)
     const fulfillmentTimes = shippedOrders
       .filter(o => o.shipped_at)
-      .map(o => {
+      .map((o) => {
         const created = new Date(o.created_at).getTime()
         const shipped = new Date(o.shipped_at!).getTime()
         return (shipped - created) / (1000 * 60 * 60 * 24) // days
@@ -99,7 +99,7 @@ export default defineEventHandler(async (event) => {
     // Calculate average delivery time (from shipped to delivered)
     const deliveryTimes = deliveredOrders
       .filter(o => o.shipped_at && o.delivered_at)
-      .map(o => {
+      .map((o) => {
         const shipped = new Date(o.shipped_at!).getTime()
         const delivered = new Date(o.delivered_at!).getTime()
         return (delivered - shipped) / (1000 * 60 * 60 * 24) // days
@@ -120,7 +120,7 @@ export default defineEventHandler(async (event) => {
     const dailyRevenue: Record<string, number> = {}
     const dailyOrders: Record<string, number> = {}
 
-    orders?.forEach(order => {
+    orders?.forEach((order) => {
       const date = formatDateISO(new Date(order.created_at))
       dailyRevenue[date] = (dailyRevenue[date] || 0) + Number(order.total_eur)
       dailyOrders[date] = (dailyOrders[date] || 0) + 1
@@ -131,7 +131,7 @@ export default defineEventHandler(async (event) => {
     const revenueTimeSeries = dates.map(date => ({
       date,
       revenue: dailyRevenue[date],
-      orders: dailyOrders[date]
+      orders: dailyOrders[date],
     }))
 
     // Calculate revenue breakdown
@@ -148,7 +148,7 @@ export default defineEventHandler(async (event) => {
           averageOrderValue,
           fulfillmentRate,
           averageFulfillmentTime,
-          averageDeliveryTime
+          averageDeliveryTime,
         },
         statusBreakdown: statusCounts,
         paymentStatusBreakdown: paymentStatusCounts,
@@ -158,16 +158,17 @@ export default defineEventHandler(async (event) => {
           subtotal: subtotalRevenue,
           shipping: shippingRevenue,
           tax: taxRevenue,
-          total: totalRevenue
+          total: totalRevenue,
         },
         timeSeries: revenueTimeSeries,
         dateRange: {
           start: startDate.toISOString(),
-          end: endDate.toISOString()
-        }
-      }
+          end: endDate.toISOString(),
+        },
+      },
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     if (error.statusCode) {
       throw error
     }
@@ -175,7 +176,7 @@ export default defineEventHandler(async (event) => {
     console.error('Admin orders analytics error:', error)
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 })

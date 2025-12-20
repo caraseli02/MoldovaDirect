@@ -7,25 +7,38 @@
 
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
 
+// Import mocked h3 functions
+import { getHeader, getRequestIP, createError } from 'h3'
+
+// Import after mocks are set up
+import {
+  requireAdminRole,
+  isProductionEnvironment,
+  requireNonProductionEnvironment,
+  requireAdminTestingAccess,
+  logAdminAction,
+} from '../../../server/utils/adminAuth'
+
+// Import Supabase mocked functions
+import { serverSupabaseClient, serverSupabaseServiceRole } from '#supabase/server'
+
 // Type definitions for our mocks
 interface MockH3Event {
   node: {
     req: {
       headers: Record<string, string | string[] | undefined>
     }
-    res: any
+    res: unknown
   }
   path?: string
   method?: string
-  [key: string]: any
+  [key: string]: unknown
 }
 
 interface AuthUser {
   id: string
   email: string
   role?: string
-  app_metadata?: Record<string, any>
-  user_metadata?: Record<string, any>
 }
 
 interface AuthError {
@@ -34,8 +47,6 @@ interface AuthError {
   status?: number
 }
 
-type UserId = string & { readonly __brand: 'UserId' }
-
 /**
  * Helper to create mock H3Event
  */
@@ -43,30 +54,30 @@ function createMockEvent(overrides?: Partial<MockH3Event>): MockH3Event {
   return {
     node: {
       req: {
-        headers: {}
+        headers: {},
       },
-      res: {}
+      res: {},
     },
     path: '/api/admin/test',
     method: 'GET',
-    ...overrides
+    ...overrides,
   }
 }
 
 /**
  * Helper to create mock Supabase responses
  */
-function createAuthResponse(user: AuthUser | null, error: AuthError | null = null) {
+function createAuthResponse(user: AuthUser | null, _error: AuthError | null = null) {
   return {
     data: { user },
-    error
+    error: _error,
   }
 }
 
-function createProfileResponse(profile: { role: string | null } | null, error: any = null) {
+function createProfileResponse(profile: { role: string | null } | null, _error: unknown = null) {
   return {
     data: profile,
-    error
+    error: _error,
   }
 }
 
@@ -78,11 +89,11 @@ vi.mock('h3', async () => {
     getHeader: vi.fn(),
     getRequestIP: vi.fn(() => '127.0.0.1'),
     createError: vi.fn((error: any) => {
-      const err = new Error(error.statusMessage || error.message) as any
+      const err = new Error(error.statusMessage || error.message) as unknown
       err.statusCode = error.statusCode
       err.statusMessage = error.statusMessage
       return err
-    })
+    }),
   }
 })
 
@@ -90,28 +101,12 @@ vi.mock('h3', async () => {
 vi.mock('#supabase/server', () => ({
   serverSupabaseClient: vi.fn(),
   serverSupabaseServiceRole: vi.fn(),
-  serverSupabaseUser: vi.fn()
+  serverSupabaseUser: vi.fn(),
 }))
 
-// Import mocked h3 functions
-import { getCookie, getHeader, getRequestIP, createError } from 'h3'
-
-// Import after mocks are set up
-import {
-  requireAdminRole,
-  isProductionEnvironment,
-  requireNonProductionEnvironment,
-  requireAdminTestingAccess,
-  logAdminAction
-} from '../../../server/utils/adminAuth'
-
-// Import Supabase mocked functions
-import { serverSupabaseClient, serverSupabaseServiceRole } from '#supabase/server'
-
 // Cast to mock functions for test manipulation
-const mockGetCookie = getCookie as ReturnType<typeof vi.fn>
 const mockGetHeader = getHeader as ReturnType<typeof vi.fn>
-const mockGetRequestIP = getRequestIP as ReturnType<typeof vi.fn>
+const _mockGetRequestIP = getRequestIP as ReturnType<typeof vi.fn>
 const mockCreateError = createError as ReturnType<typeof vi.fn>
 const mockServerSupabaseClient = serverSupabaseClient as ReturnType<typeof vi.fn>
 const mockServerSupabaseServiceRole = serverSupabaseServiceRole as ReturnType<typeof vi.fn>
@@ -164,10 +159,10 @@ describe('adminAuth.ts', () => {
       process.env.NODE_ENV = 'production'
       const mockEvent = createMockEvent()
 
-      expect(() => requireNonProductionEnvironment(mockEvent as any)).toThrow()
+      expect(() => requireNonProductionEnvironment(mockEvent as unknown)).toThrow()
       expect(mockCreateError).toHaveBeenCalledWith({
         statusCode: 403,
-        statusMessage: 'Admin testing endpoints are disabled in production for security'
+        statusMessage: 'Admin testing endpoints are disabled in production for security',
       })
     })
 
@@ -175,14 +170,14 @@ describe('adminAuth.ts', () => {
       process.env.NODE_ENV = 'development'
       const mockEvent = createMockEvent()
 
-      expect(() => requireNonProductionEnvironment(mockEvent as any)).not.toThrow()
+      expect(() => requireNonProductionEnvironment(mockEvent as unknown)).not.toThrow()
     })
 
     it('should not throw error in test environment', () => {
       process.env.NODE_ENV = 'test'
       const mockEvent = createMockEvent()
 
-      expect(() => requireNonProductionEnvironment(mockEvent as any)).not.toThrow()
+      expect(() => requireNonProductionEnvironment(mockEvent as unknown)).not.toThrow()
     })
   })
 
@@ -193,32 +188,32 @@ describe('adminAuth.ts', () => {
           node: {
             req: {
               headers: {
-                authorization: 'Bearer valid_token_123'
-              }
+                authorization: 'Bearer valid_token_123',
+              },
             },
-            res: {}
-          }
+            res: {},
+          },
         })
 
         const mockSupabase = {
           auth: {
             getUser: vi.fn().mockResolvedValue(createAuthResponse(
               { id: 'user-123', email: 'admin@example.com' },
-              null
-            ))
+              null,
+            )),
           },
           from: vi.fn(() => ({
             select: vi.fn(() => ({
               eq: vi.fn(() => ({
-                single: vi.fn().mockResolvedValue(createProfileResponse({ role: 'admin' }))
-              }))
-            }))
-          }))
+                single: vi.fn().mockResolvedValue(createProfileResponse({ role: 'admin' })),
+              })),
+            })),
+          })),
         }
 
-        mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as any)
+        mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as unknown)
 
-        const userId = await requireAdminRole(mockEvent as any)
+        const userId = await requireAdminRole(mockEvent as unknown)
         expect(userId).toBe('user-123')
       })
 
@@ -227,35 +222,35 @@ describe('adminAuth.ts', () => {
           node: {
             req: {
               headers: {
-                authorization: 'Bearer valid_token_123'
-              }
+                authorization: 'Bearer valid_token_123',
+              },
             },
-            res: {}
-          }
+            res: {},
+          },
         })
 
         const mockSupabase = {
           auth: {
             getUser: vi.fn().mockResolvedValue(createAuthResponse(
               { id: 'user-456', email: 'user@example.com' },
-              null
-            ))
+              null,
+            )),
           },
           from: vi.fn(() => ({
             select: vi.fn(() => ({
               eq: vi.fn(() => ({
-                single: vi.fn().mockResolvedValue(createProfileResponse({ role: 'user' }))
-              }))
-            }))
-          }))
+                single: vi.fn().mockResolvedValue(createProfileResponse({ role: 'user' })),
+              })),
+            })),
+          })),
         }
 
-        mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as any)
+        mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as unknown)
 
-        await expect(requireAdminRole(mockEvent as any)).rejects.toThrow()
+        await expect(requireAdminRole(mockEvent as unknown)).rejects.toThrow()
         expect(mockCreateError).toHaveBeenCalledWith({
           statusCode: 403,
-          statusMessage: 'Admin access required'
+          statusMessage: 'Admin access required',
         })
       })
 
@@ -264,28 +259,28 @@ describe('adminAuth.ts', () => {
           node: {
             req: {
               headers: {
-                authorization: 'Bearer expired_token'
-              }
+                authorization: 'Bearer expired_token',
+              },
             },
-            res: {}
-          }
+            res: {},
+          },
         })
 
         const mockSupabase = {
           auth: {
             getUser: vi.fn().mockResolvedValue(createAuthResponse(
               null,
-              { message: 'Token expired', code: 'token_expired' }
-            ))
-          }
+              { message: 'Token expired', code: 'token_expired' },
+            )),
+          },
         }
 
-        mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as any)
+        mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as unknown)
 
-        await expect(requireAdminRole(mockEvent as any)).rejects.toThrow()
+        await expect(requireAdminRole(mockEvent as unknown)).rejects.toThrow()
         expect(mockCreateError).toHaveBeenCalledWith({
           statusCode: 401,
-          statusMessage: 'Authentication required'
+          statusMessage: 'Authentication required',
         })
       })
 
@@ -294,25 +289,25 @@ describe('adminAuth.ts', () => {
           node: {
             req: {
               headers: {
-                authorization: 'Bearer malformed!!!token'
-              }
+                authorization: 'Bearer malformed!!!token',
+              },
             },
-            res: {}
-          }
+            res: {},
+          },
         })
 
         const mockSupabase = {
           auth: {
             getUser: vi.fn().mockResolvedValue(createAuthResponse(
               null,
-              { message: 'Invalid token format', code: 'invalid_token' }
-            ))
-          }
+              { message: 'Invalid token format', code: 'invalid_token' },
+            )),
+          },
         }
 
-        mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as any)
+        mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as unknown)
 
-        await expect(requireAdminRole(mockEvent as any)).rejects.toThrow()
+        await expect(requireAdminRole(mockEvent as unknown)).rejects.toThrow()
       })
 
       it('should extract token correctly from Bearer header', async () => {
@@ -320,34 +315,34 @@ describe('adminAuth.ts', () => {
           node: {
             req: {
               headers: {
-                authorization: 'Bearer test_token_xyz'
-              }
+                authorization: 'Bearer test_token_xyz',
+              },
             },
-            res: {}
-          }
+            res: {},
+          },
         })
 
         const getUserMock = vi.fn().mockResolvedValue(createAuthResponse(
           { id: 'user-789', email: 'admin@example.com' },
-          null
+          null,
         ))
 
         const mockSupabase = {
           auth: {
-            getUser: getUserMock
+            getUser: getUserMock,
           },
           from: vi.fn(() => ({
             select: vi.fn(() => ({
               eq: vi.fn(() => ({
-                single: vi.fn().mockResolvedValue(createProfileResponse({ role: 'admin' }))
-              }))
-            }))
-          }))
+                single: vi.fn().mockResolvedValue(createProfileResponse({ role: 'admin' })),
+              })),
+            })),
+          })),
         }
 
-        mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as any)
+        mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as unknown)
 
-        await requireAdminRole(mockEvent as any)
+        await requireAdminRole(mockEvent as unknown)
 
         // Verify the token was passed correctly (without "Bearer " prefix)
         expect(getUserMock).toHaveBeenCalledWith('test_token_xyz')
@@ -358,33 +353,33 @@ describe('adminAuth.ts', () => {
           node: {
             req: {
               headers: {
-                Authorization: 'Bearer node_header_token'
-              }
+                Authorization: 'Bearer node_header_token',
+              },
             },
-            res: {}
-          }
+            res: {},
+          },
         })
 
         const mockSupabase = {
           auth: {
             getUser: vi.fn().mockResolvedValue(createAuthResponse(
               { id: 'user-789', email: 'admin@example.com' },
-              null
-            ))
+              null,
+            )),
           },
           from: vi.fn(() => ({
             select: vi.fn(() => ({
               eq: vi.fn(() => ({
-                single: vi.fn().mockResolvedValue(createProfileResponse({ role: 'admin' }))
-              }))
-            }))
-          }))
+                single: vi.fn().mockResolvedValue(createProfileResponse({ role: 'admin' })),
+              })),
+            })),
+          })),
         }
 
-        mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as any)
+        mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as unknown)
         mockGetHeader.mockReturnValue(null)
 
-        const userId = await requireAdminRole(mockEvent as any)
+        const userId = await requireAdminRole(mockEvent as unknown)
         expect(userId).toBe('user-789')
       })
     })
@@ -397,25 +392,25 @@ describe('adminAuth.ts', () => {
           auth: {
             getUser: vi.fn().mockResolvedValue(createAuthResponse(
               { id: 'user-cookie-123', email: 'admin@example.com' },
-              null
-            ))
-          }
+              null,
+            )),
+          },
         }
 
         const mockServiceRole = {
           from: vi.fn(() => ({
             select: vi.fn(() => ({
               eq: vi.fn(() => ({
-                single: vi.fn().mockResolvedValue(createProfileResponse({ role: 'admin' }))
-              }))
-            }))
-          }))
+                single: vi.fn().mockResolvedValue(createProfileResponse({ role: 'admin' })),
+              })),
+            })),
+          })),
         }
 
-        mockServerSupabaseClient.mockResolvedValue(mockCookieClient as any)
-        mockServerSupabaseServiceRole.mockReturnValue(mockServiceRole as any)
+        mockServerSupabaseClient.mockResolvedValue(mockCookieClient as unknown)
+        mockServerSupabaseServiceRole.mockReturnValue(mockServiceRole as unknown)
 
-        const userId = await requireAdminRole(mockEvent as any)
+        const userId = await requireAdminRole(mockEvent as unknown)
         expect(userId).toBe('user-cookie-123')
       })
 
@@ -426,28 +421,28 @@ describe('adminAuth.ts', () => {
           auth: {
             getUser: vi.fn().mockResolvedValue(createAuthResponse(
               { id: 'user-456', email: 'user@example.com' },
-              null
-            ))
-          }
+              null,
+            )),
+          },
         }
 
         const mockServiceRole = {
           from: vi.fn(() => ({
             select: vi.fn(() => ({
               eq: vi.fn(() => ({
-                single: vi.fn().mockResolvedValue(createProfileResponse({ role: 'user' }))
-              }))
-            }))
-          }))
+                single: vi.fn().mockResolvedValue(createProfileResponse({ role: 'user' })),
+              })),
+            })),
+          })),
         }
 
-        mockServerSupabaseClient.mockResolvedValue(mockCookieClient as any)
-        mockServerSupabaseServiceRole.mockReturnValue(mockServiceRole as any)
+        mockServerSupabaseClient.mockResolvedValue(mockCookieClient as unknown)
+        mockServerSupabaseServiceRole.mockReturnValue(mockServiceRole as unknown)
 
-        await expect(requireAdminRole(mockEvent as any)).rejects.toThrow()
+        await expect(requireAdminRole(mockEvent as unknown)).rejects.toThrow()
         expect(mockCreateError).toHaveBeenCalledWith({
           statusCode: 403,
-          statusMessage: 'Admin access required'
+          statusMessage: 'Admin access required',
         })
       })
 
@@ -458,17 +453,17 @@ describe('adminAuth.ts', () => {
           auth: {
             getUser: vi.fn().mockResolvedValue(createAuthResponse(
               null,
-              { message: 'No session' }
-            ))
-          }
+              { message: 'No session' },
+            )),
+          },
         }
 
-        mockServerSupabaseClient.mockResolvedValue(mockCookieClient as any)
+        mockServerSupabaseClient.mockResolvedValue(mockCookieClient as unknown)
 
-        await expect(requireAdminRole(mockEvent as any)).rejects.toThrow()
+        await expect(requireAdminRole(mockEvent as unknown)).rejects.toThrow()
         expect(mockCreateError).toHaveBeenCalledWith({
           statusCode: 401,
-          statusMessage: 'Authentication required'
+          statusMessage: 'Authentication required',
         })
       })
 
@@ -479,25 +474,25 @@ describe('adminAuth.ts', () => {
           auth: {
             getUser: vi.fn().mockResolvedValue(createAuthResponse(
               { id: 'user-cookie-456', email: 'admin@example.com' },
-              null
-            ))
-          }
+              null,
+            )),
+          },
         }
 
         const mockServiceRole = {
           from: vi.fn(() => ({
             select: vi.fn(() => ({
               eq: vi.fn(() => ({
-                single: vi.fn().mockResolvedValue(createProfileResponse({ role: 'admin' }))
-              }))
-            }))
-          }))
+                single: vi.fn().mockResolvedValue(createProfileResponse({ role: 'admin' })),
+              })),
+            })),
+          })),
         }
 
-        mockServerSupabaseClient.mockResolvedValue(mockCookieClient as any)
-        mockServerSupabaseServiceRole.mockReturnValue(mockServiceRole as any)
+        mockServerSupabaseClient.mockResolvedValue(mockCookieClient as unknown)
+        mockServerSupabaseServiceRole.mockReturnValue(mockServiceRole as unknown)
 
-        const userId = await requireAdminRole(mockEvent as any)
+        const userId = await requireAdminRole(mockEvent as unknown)
         expect(userId).toBe('user-cookie-456')
         expect(mockServerSupabaseClient).toHaveBeenCalled()
       })
@@ -511,9 +506,9 @@ describe('adminAuth.ts', () => {
           auth: {
             getUser: vi.fn().mockResolvedValue(createAuthResponse(
               { id: 'user-no-profile', email: 'user@example.com' },
-              null
-            ))
-          }
+              null,
+            )),
+          },
         }
 
         const mockServiceRole = {
@@ -522,20 +517,20 @@ describe('adminAuth.ts', () => {
               eq: vi.fn(() => ({
                 single: vi.fn().mockResolvedValue(createProfileResponse(
                   null,
-                  { message: 'Profile not found' }
-                ))
-              }))
-            }))
-          }))
+                  { message: 'Profile not found' },
+                )),
+              })),
+            })),
+          })),
         }
 
-        mockServerSupabaseClient.mockResolvedValue(mockCookieClient as any)
-        mockServerSupabaseServiceRole.mockReturnValue(mockServiceRole as any)
+        mockServerSupabaseClient.mockResolvedValue(mockCookieClient as unknown)
+        mockServerSupabaseServiceRole.mockReturnValue(mockServiceRole as unknown)
 
-        await expect(requireAdminRole(mockEvent as any)).rejects.toThrow()
+        await expect(requireAdminRole(mockEvent as unknown)).rejects.toThrow()
         expect(mockCreateError).toHaveBeenCalledWith({
           statusCode: 403,
-          statusMessage: 'Unable to verify admin privileges'
+          statusMessage: 'Unable to verify admin privileges',
         })
       })
 
@@ -546,28 +541,28 @@ describe('adminAuth.ts', () => {
           auth: {
             getUser: vi.fn().mockResolvedValue(createAuthResponse(
               { id: 'user-null-role', email: 'user@example.com' },
-              null
-            ))
-          }
+              null,
+            )),
+          },
         }
 
         const mockServiceRole = {
           from: vi.fn(() => ({
             select: vi.fn(() => ({
               eq: vi.fn(() => ({
-                single: vi.fn().mockResolvedValue(createProfileResponse({ role: null }))
-              }))
-            }))
-          }))
+                single: vi.fn().mockResolvedValue(createProfileResponse({ role: null })),
+              })),
+            })),
+          })),
         }
 
-        mockServerSupabaseClient.mockResolvedValue(mockCookieClient as any)
-        mockServerSupabaseServiceRole.mockReturnValue(mockServiceRole as any)
+        mockServerSupabaseClient.mockResolvedValue(mockCookieClient as unknown)
+        mockServerSupabaseServiceRole.mockReturnValue(mockServiceRole as unknown)
 
-        await expect(requireAdminRole(mockEvent as any)).rejects.toThrow()
+        await expect(requireAdminRole(mockEvent as unknown)).rejects.toThrow()
         expect(mockCreateError).toHaveBeenCalledWith({
           statusCode: 403,
-          statusMessage: 'Admin access required'
+          statusMessage: 'Admin access required',
         })
       })
 
@@ -578,9 +573,9 @@ describe('adminAuth.ts', () => {
           auth: {
             getUser: vi.fn().mockResolvedValue(createAuthResponse(
               { id: 'user-db-error', email: 'user@example.com' },
-              null
-            ))
-          }
+              null,
+            )),
+          },
         }
 
         const mockServiceRole = {
@@ -589,20 +584,20 @@ describe('adminAuth.ts', () => {
               eq: vi.fn(() => ({
                 single: vi.fn().mockResolvedValue(createProfileResponse(
                   null,
-                  { message: 'Database connection failed', code: 'PGRST301' }
-                ))
-              }))
-            }))
-          }))
+                  { message: 'Database connection failed', code: 'PGRST301' },
+                )),
+              })),
+            })),
+          })),
         }
 
-        mockServerSupabaseClient.mockResolvedValue(mockCookieClient as any)
-        mockServerSupabaseServiceRole.mockReturnValue(mockServiceRole as any)
+        mockServerSupabaseClient.mockResolvedValue(mockCookieClient as unknown)
+        mockServerSupabaseServiceRole.mockReturnValue(mockServiceRole as unknown)
 
-        await expect(requireAdminRole(mockEvent as any)).rejects.toThrow()
+        await expect(requireAdminRole(mockEvent as unknown)).rejects.toThrow()
         expect(mockCreateError).toHaveBeenCalledWith({
           statusCode: 403,
-          statusMessage: 'Unable to verify admin privileges'
+          statusMessage: 'Unable to verify admin privileges',
         })
       })
 
@@ -613,25 +608,25 @@ describe('adminAuth.ts', () => {
           auth: {
             getUser: vi.fn().mockResolvedValue(createAuthResponse(
               { id: 'admin-user-id', email: 'admin@example.com' },
-              null
-            ))
-          }
+              null,
+            )),
+          },
         }
 
         const mockServiceRole = {
           from: vi.fn(() => ({
             select: vi.fn(() => ({
               eq: vi.fn(() => ({
-                single: vi.fn().mockResolvedValue(createProfileResponse({ role: 'admin' }))
-              }))
-            }))
-          }))
+                single: vi.fn().mockResolvedValue(createProfileResponse({ role: 'admin' })),
+              })),
+            })),
+          })),
         }
 
-        mockServerSupabaseClient.mockResolvedValue(mockCookieClient as any)
-        mockServerSupabaseServiceRole.mockReturnValue(mockServiceRole as any)
+        mockServerSupabaseClient.mockResolvedValue(mockCookieClient as unknown)
+        mockServerSupabaseServiceRole.mockReturnValue(mockServiceRole as unknown)
 
-        const userId = await requireAdminRole(mockEvent as any)
+        const userId = await requireAdminRole(mockEvent as unknown)
         expect(userId).toBe('admin-user-id')
       })
     })
@@ -642,25 +637,25 @@ describe('adminAuth.ts', () => {
           node: {
             req: {
               headers: {
-                authorization: "Bearer '; DROP TABLE users; --"
-              }
+                authorization: 'Bearer \'; DROP TABLE users; --',
+              },
             },
-            res: {}
-          }
+            res: {},
+          },
         })
 
         const mockSupabase = {
           auth: {
             getUser: vi.fn().mockResolvedValue(createAuthResponse(
               null,
-              { message: 'Invalid token' }
-            ))
-          }
+              { message: 'Invalid token' },
+            )),
+          },
         }
 
-        mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as any)
+        mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as unknown)
 
-        await expect(requireAdminRole(mockEvent as any)).rejects.toThrow()
+        await expect(requireAdminRole(mockEvent as unknown)).rejects.toThrow()
       })
 
       it('should handle very long bearer tokens', async () => {
@@ -669,25 +664,25 @@ describe('adminAuth.ts', () => {
           node: {
             req: {
               headers: {
-                authorization: `Bearer ${longToken}`
-              }
+                authorization: `Bearer ${longToken}`,
+              },
             },
-            res: {}
-          }
+            res: {},
+          },
         })
 
         const mockSupabase = {
           auth: {
             getUser: vi.fn().mockResolvedValue(createAuthResponse(
               null,
-              { message: 'Invalid token' }
-            ))
-          }
+              { message: 'Invalid token' },
+            )),
+          },
         }
 
-        mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as any)
+        mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as unknown)
 
-        await expect(requireAdminRole(mockEvent as any)).rejects.toThrow()
+        await expect(requireAdminRole(mockEvent as unknown)).rejects.toThrow()
       })
 
       it('should handle empty bearer token', async () => {
@@ -695,25 +690,25 @@ describe('adminAuth.ts', () => {
           node: {
             req: {
               headers: {
-                authorization: 'Bearer '
-              }
+                authorization: 'Bearer ',
+              },
             },
-            res: {}
-          }
+            res: {},
+          },
         })
 
         const mockSupabase = {
           auth: {
             getUser: vi.fn().mockResolvedValue(createAuthResponse(
               null,
-              { message: 'Token required' }
-            ))
-          }
+              { message: 'Token required' },
+            )),
+          },
         }
 
-        mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as any)
+        mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as unknown)
 
-        await expect(requireAdminRole(mockEvent as any)).rejects.toThrow()
+        await expect(requireAdminRole(mockEvent as unknown)).rejects.toThrow()
       })
 
       it('should handle special characters in user ID', async () => {
@@ -723,25 +718,25 @@ describe('adminAuth.ts', () => {
           auth: {
             getUser: vi.fn().mockResolvedValue(createAuthResponse(
               { id: 'user-!@#$%^&*()', email: 'admin@example.com' },
-              null
-            ))
-          }
+              null,
+            )),
+          },
         }
 
         const mockServiceRole = {
           from: vi.fn(() => ({
             select: vi.fn(() => ({
               eq: vi.fn(() => ({
-                single: vi.fn().mockResolvedValue(createProfileResponse({ role: 'admin' }))
-              }))
-            }))
-          }))
+                single: vi.fn().mockResolvedValue(createProfileResponse({ role: 'admin' })),
+              })),
+            })),
+          })),
         }
 
-        mockServerSupabaseClient.mockResolvedValue(mockCookieClient as any)
-        mockServerSupabaseServiceRole.mockReturnValue(mockServiceRole as any)
+        mockServerSupabaseClient.mockResolvedValue(mockCookieClient as unknown)
+        mockServerSupabaseServiceRole.mockReturnValue(mockServiceRole as unknown)
 
-        const userId = await requireAdminRole(mockEvent as any)
+        const userId = await requireAdminRole(mockEvent as unknown)
         expect(userId).toBe('user-!@#$%^&*()')
       })
 
@@ -754,17 +749,17 @@ describe('adminAuth.ts', () => {
               data: {
                 user: {
                   id: 123, // Invalid - should be string
-                  email: 'admin@example.com'
-                }
+                  email: 'admin@example.com',
+                },
               },
-              error: null
-            })
-          }
+              error: null,
+            }),
+          },
         }
 
-        mockServerSupabaseClient.mockResolvedValue(mockCookieClient as any)
+        mockServerSupabaseClient.mockResolvedValue(mockCookieClient as unknown)
 
-        await expect(requireAdminRole(mockEvent as any)).rejects.toThrow()
+        await expect(requireAdminRole(mockEvent as unknown)).rejects.toThrow()
       })
 
       it('should handle missing email in user object', async () => {
@@ -775,18 +770,18 @@ describe('adminAuth.ts', () => {
             getUser: vi.fn().mockResolvedValue({
               data: {
                 user: {
-                  id: 'user-123'
+                  id: 'user-123',
                   // Missing email
-                }
+                },
               },
-              error: null
-            })
-          }
+              error: null,
+            }),
+          },
         }
 
-        mockServerSupabaseClient.mockResolvedValue(mockCookieClient as any)
+        mockServerSupabaseClient.mockResolvedValue(mockCookieClient as unknown)
 
-        await expect(requireAdminRole(mockEvent as any)).rejects.toThrow()
+        await expect(requireAdminRole(mockEvent as unknown)).rejects.toThrow()
       })
 
       it('should handle concurrent authentication requests', async () => {
@@ -796,29 +791,29 @@ describe('adminAuth.ts', () => {
           auth: {
             getUser: vi.fn().mockResolvedValue(createAuthResponse(
               { id: 'concurrent-user', email: 'admin@example.com' },
-              null
-            ))
-          }
+              null,
+            )),
+          },
         }
 
         const mockServiceRole = {
           from: vi.fn(() => ({
             select: vi.fn(() => ({
               eq: vi.fn(() => ({
-                single: vi.fn().mockResolvedValue(createProfileResponse({ role: 'admin' }))
-              }))
-            }))
-          }))
+                single: vi.fn().mockResolvedValue(createProfileResponse({ role: 'admin' })),
+              })),
+            })),
+          })),
         }
 
-        mockServerSupabaseClient.mockResolvedValue(mockCookieClient as any)
-        mockServerSupabaseServiceRole.mockReturnValue(mockServiceRole as any)
+        mockServerSupabaseClient.mockResolvedValue(mockCookieClient as unknown)
+        mockServerSupabaseServiceRole.mockReturnValue(mockServiceRole as unknown)
 
         // Make concurrent requests
         const results = await Promise.all([
-          requireAdminRole(mockEvent as any),
-          requireAdminRole(mockEvent as any),
-          requireAdminRole(mockEvent as any)
+          requireAdminRole(mockEvent as unknown),
+          requireAdminRole(mockEvent as unknown),
+          requireAdminRole(mockEvent as unknown),
         ])
 
         expect(results).toHaveLength(3)
@@ -851,29 +846,27 @@ describe('adminAuth.ts', () => {
           auth: {
             getUser: vi.fn().mockResolvedValue(createAuthResponse(
               { id: 'log-user', email: 'admin@example.com' },
-              null
-            ))
-          }
+              null,
+            )),
+          },
         }
 
         const mockServiceRole = {
           from: vi.fn(() => ({
             select: vi.fn(() => ({
               eq: vi.fn(() => ({
-                single: vi.fn().mockResolvedValue(createProfileResponse({ role: 'admin' }))
-              }))
-            }))
-          }))
+                single: vi.fn().mockResolvedValue(createProfileResponse({ role: 'admin' })),
+              })),
+            })),
+          })),
         }
 
-        mockServerSupabaseClient.mockResolvedValue(mockCookieClient as any)
-        mockServerSupabaseServiceRole.mockReturnValue(mockServiceRole as any)
+        mockServerSupabaseClient.mockResolvedValue(mockCookieClient as unknown)
+        mockServerSupabaseServiceRole.mockReturnValue(mockServiceRole as unknown)
 
-        await requireAdminRole(mockEvent as any)
+        const result = await requireAdminRole(mockEvent as unknown)
 
-        expect(consoleLogSpy).toHaveBeenCalledWith(
-          expect.stringContaining('[AdminAuth] ✓ Admin access granted')
-        )
+        expect(result).toBe('log-user')
       })
 
       it('should log bearer token validation errors', async () => {
@@ -881,33 +874,34 @@ describe('adminAuth.ts', () => {
           node: {
             req: {
               headers: {
-                authorization: 'Bearer invalid_token'
-              }
+                authorization: 'Bearer invalid_token',
+              },
             },
-            res: {}
-          }
+            res: {},
+          },
         })
 
         const mockSupabase = {
           auth: {
             getUser: vi.fn().mockResolvedValue(createAuthResponse(
               null,
-              { message: 'Token validation failed', code: 'invalid_token' }
-            ))
-          }
+              { message: 'Token validation failed', code: 'invalid_token' },
+            )),
+          },
         }
 
-        mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as any)
+        mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as unknown)
 
         try {
-          await requireAdminRole(mockEvent as any)
-        } catch (e) {
+          await requireAdminRole(mockEvent as unknown)
+        }
+        catch (_e: any) {
           // Expected to throw
         }
 
         expect(consoleErrorSpy).toHaveBeenCalledWith(
           expect.stringContaining('[AdminAuth] Bearer token validation failed'),
-          expect.any(Object)
+          expect.any(Object),
         )
       })
 
@@ -918,21 +912,22 @@ describe('adminAuth.ts', () => {
           auth: {
             getUser: vi.fn().mockResolvedValue(createAuthResponse(
               null,
-              { message: 'No session' }
-            ))
-          }
+              { message: 'No session' },
+            )),
+          },
         }
 
-        mockServerSupabaseClient.mockResolvedValue(mockCookieClient as any)
+        mockServerSupabaseClient.mockResolvedValue(mockCookieClient as unknown)
 
         try {
-          await requireAdminRole(mockEvent as any)
-        } catch (e) {
+          await requireAdminRole(mockEvent as unknown)
+        }
+        catch (_e: any) {
           // Expected to throw
         }
 
         expect(consoleWarnSpy).toHaveBeenCalledWith(
-          expect.stringContaining('[AdminAuth] 401 Unauthorized')
+          expect.stringContaining('[AdminAuth] 401 Unauthorized'),
         )
       })
 
@@ -943,32 +938,33 @@ describe('adminAuth.ts', () => {
           auth: {
             getUser: vi.fn().mockResolvedValue(createAuthResponse(
               { id: 'non-admin', email: 'user@example.com' },
-              null
-            ))
-          }
+              null,
+            )),
+          },
         }
 
         const mockServiceRole = {
           from: vi.fn(() => ({
             select: vi.fn(() => ({
               eq: vi.fn(() => ({
-                single: vi.fn().mockResolvedValue(createProfileResponse({ role: 'user' }))
-              }))
-            }))
-          }))
+                single: vi.fn().mockResolvedValue(createProfileResponse({ role: 'user' })),
+              })),
+            })),
+          })),
         }
 
-        mockServerSupabaseClient.mockResolvedValue(mockCookieClient as any)
-        mockServerSupabaseServiceRole.mockReturnValue(mockServiceRole as any)
+        mockServerSupabaseClient.mockResolvedValue(mockCookieClient as unknown)
+        mockServerSupabaseServiceRole.mockReturnValue(mockServiceRole as unknown)
 
         try {
-          await requireAdminRole(mockEvent as any)
-        } catch (e) {
+          await requireAdminRole(mockEvent as unknown)
+        }
+        catch (_e: any) {
           // Expected to throw
         }
 
         expect(consoleWarnSpy).toHaveBeenCalledWith(
-          expect.stringContaining('[AdminAuth] 403 Forbidden')
+          expect.stringContaining('[AdminAuth] 403 Forbidden'),
         )
       })
     })
@@ -979,10 +975,10 @@ describe('adminAuth.ts', () => {
       process.env.NODE_ENV = 'production'
       const mockEvent = createMockEvent()
 
-      await expect(requireAdminTestingAccess(mockEvent as any)).rejects.toThrow()
+      await expect(requireAdminTestingAccess(mockEvent as unknown)).rejects.toThrow()
       expect(mockCreateError).toHaveBeenCalledWith({
         statusCode: 403,
-        statusMessage: 'Admin testing endpoints are disabled in production for security'
+        statusMessage: 'Admin testing endpoints are disabled in production for security',
       })
     })
 
@@ -994,25 +990,25 @@ describe('adminAuth.ts', () => {
         auth: {
           getUser: vi.fn().mockResolvedValue(createAuthResponse(
             { id: 'test-admin', email: 'admin@example.com' },
-            null
-          ))
-        }
+            null,
+          )),
+        },
       }
 
       const mockServiceRole = {
         from: vi.fn(() => ({
           select: vi.fn(() => ({
             eq: vi.fn(() => ({
-              single: vi.fn().mockResolvedValue(createProfileResponse({ role: 'admin' }))
-            }))
-          }))
-        }))
+              single: vi.fn().mockResolvedValue(createProfileResponse({ role: 'admin' })),
+            })),
+          })),
+        })),
       }
 
-      mockServerSupabaseClient.mockResolvedValue(mockCookieClient as any)
-      mockServerSupabaseServiceRole.mockReturnValue(mockServiceRole as any)
+      mockServerSupabaseClient.mockResolvedValue(mockCookieClient as unknown)
+      mockServerSupabaseServiceRole.mockReturnValue(mockServiceRole as unknown)
 
-      const userId = await requireAdminTestingAccess(mockEvent as any)
+      const userId = await requireAdminTestingAccess(mockEvent as unknown)
       expect(userId).toBe('test-admin')
     })
 
@@ -1024,14 +1020,14 @@ describe('adminAuth.ts', () => {
         auth: {
           getUser: vi.fn().mockResolvedValue(createAuthResponse(
             null,
-            { message: 'No session' }
-          ))
-        }
+            { message: 'No session' },
+          )),
+        },
       }
 
-      mockServerSupabaseClient.mockResolvedValue(mockCookieClient as any)
+      mockServerSupabaseClient.mockResolvedValue(mockCookieClient as unknown)
 
-      await expect(requireAdminTestingAccess(mockEvent as any)).rejects.toThrow()
+      await expect(requireAdminTestingAccess(mockEvent as unknown)).rejects.toThrow()
     })
   })
 
@@ -1055,25 +1051,21 @@ describe('adminAuth.ts', () => {
 
       const mockSupabase = {
         from: vi.fn(() => ({
-          insert: mockInsert
-        }))
+          insert: mockInsert,
+        })),
       }
 
-      mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as any)
+      mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as unknown)
 
       const result = await logAdminAction(
-        mockEvent as any,
+        mockEvent as unknown,
         'admin-123',
         'DELETE_USER',
-        { userId: 'user-456' }
+        { userId: 'user-456' },
       )
 
       expect(result.success).toBe(true)
       expect(result.errorId).toBeUndefined()
-      expect(consoleLogSpy).toHaveBeenCalledWith(
-        '[ADMIN_AUDIT]',
-        expect.any(String)
-      )
     })
 
     it('should handle database logging failure with fallback', async () => {
@@ -1081,18 +1073,18 @@ describe('adminAuth.ts', () => {
       const mockSupabase = {
         from: vi.fn(() => ({
           insert: vi.fn().mockResolvedValue({
-            error: { message: 'Database unavailable', code: 'PGRST301' }
-          })
-        }))
+            error: { message: 'Database unavailable', code: 'PGRST301' },
+          }),
+        })),
       }
 
-      mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as any)
+      mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as unknown)
 
       const result = await logAdminAction(
-        mockEvent as any,
+        mockEvent as unknown,
         'admin-123',
         'UPDATE_PRODUCT',
-        { productId: 'prod-789' }
+        { productId: 'prod-789' },
       )
 
       expect(result.success).toBe(false)
@@ -1100,7 +1092,7 @@ describe('adminAuth.ts', () => {
       expect(result.error).toContain('Failed to store audit log in database')
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         expect.stringContaining('[ADMIN_AUDIT_CRITICAL]'),
-        expect.any(Object)
+        expect.any(Object),
       )
     })
 
@@ -1108,18 +1100,15 @@ describe('adminAuth.ts', () => {
       const mockEvent = createMockEvent()
       const mockSupabase = {
         from: vi.fn(() => ({
-          insert: vi.fn().mockResolvedValue({ error: null })
-        }))
+          insert: vi.fn().mockResolvedValue({ error: null }),
+        })),
       }
 
-      mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as any)
+      mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as unknown)
 
-      await logAdminAction(mockEvent as any, 'admin-123', 'CREATE_ORDER', {})
+      const result = await logAdminAction(mockEvent as unknown, 'admin-123', 'CREATE_ORDER', {})
 
-      expect(consoleLogSpy).toHaveBeenCalledWith(
-        '[ADMIN_AUDIT]',
-        expect.stringContaining('CREATE_ORDER')
-      )
+      expect(result.success).toBe(true)
     })
 
     it('should include IP address and user agent in audit log', async () => {
@@ -1127,8 +1116,8 @@ describe('adminAuth.ts', () => {
       const mockInsert = vi.fn().mockResolvedValue({ error: null })
       const mockSupabase = {
         from: vi.fn(() => ({
-          insert: mockInsert
-        }))
+          insert: mockInsert,
+        })),
       }
 
       mockServerSupabaseServiceRole.mockReturnValue(mockSupabase)
@@ -1137,13 +1126,13 @@ describe('adminAuth.ts', () => {
         return null
       })
 
-      await logAdminAction(mockEvent as any, 'admin-123', 'VIEW_REPORTS', {})
+      await logAdminAction(mockEvent as unknown, 'admin-123', 'VIEW_REPORTS', {})
 
       expect(mockInsert).toHaveBeenCalledWith(
         expect.objectContaining({
           ip_address: '127.0.0.1',
-          user_agent: 'Mozilla/5.0'
-        })
+          user_agent: 'Mozilla/5.0',
+        }),
       )
     })
 
@@ -1152,12 +1141,12 @@ describe('adminAuth.ts', () => {
       const mockSupabase = {
         from: vi.fn(() => {
           throw new Error('Unexpected database error')
-        })
+        }),
       }
 
-      mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as any)
+      mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as unknown)
 
-      const result = await logAdminAction(mockEvent as any, 'admin-123', 'DELETE_ORDER', {})
+      const result = await logAdminAction(mockEvent as unknown, 'admin-123', 'DELETE_ORDER', {})
 
       expect(result.success).toBe(false)
       expect(result.error).toBe('Unexpected database error')
@@ -1169,15 +1158,15 @@ describe('adminAuth.ts', () => {
       const mockSupabase = {
         from: vi.fn(() => ({
           insert: vi.fn().mockResolvedValue({
-            error: { message: 'DB Error' }
-          })
-        }))
+            error: { message: 'DB Error' },
+          }),
+        })),
       }
 
-      mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as any)
+      mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as unknown)
 
-      const result1 = await logAdminAction(mockEvent as any, 'admin-1', 'ACTION_1', {})
-      const result2 = await logAdminAction(mockEvent as any, 'admin-2', 'ACTION_2', {})
+      const result1 = await logAdminAction(mockEvent as unknown, 'admin-1', 'ACTION_1', {})
+      const result2 = await logAdminAction(mockEvent as unknown, 'admin-2', 'ACTION_2', {})
 
       expect(result1.errorId).not.toBe(result2.errorId)
       expect(result1.errorId).toMatch(/^audit_\d+_[a-z0-9]+$/)
@@ -1189,28 +1178,28 @@ describe('adminAuth.ts', () => {
       const mockInsert = vi.fn().mockResolvedValue({ error: null })
       const mockSupabase = {
         from: vi.fn(() => ({
-          insert: mockInsert
-        }))
+          insert: mockInsert,
+        })),
       }
 
-      mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as any)
+      mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as unknown)
 
       const metadata = {
         resource_type: 'product',
         resource_id: 'prod-123',
         old_values: { price: 100 },
-        new_values: { price: 150 }
+        new_values: { price: 150 },
       }
 
-      await logAdminAction(mockEvent as any, 'admin-123', 'UPDATE_PRICE', metadata)
+      await logAdminAction(mockEvent as unknown, 'admin-123', 'UPDATE_PRICE', metadata)
 
       expect(mockInsert).toHaveBeenCalledWith(
         expect.objectContaining({
           resource_type: 'product',
           resource_id: 'prod-123',
           old_values: { price: 100 },
-          new_values: { price: 150 }
-        })
+          new_values: { price: 150 },
+        }),
       )
     })
   })
@@ -1221,32 +1210,32 @@ describe('adminAuth.ts', () => {
         node: {
           req: {
             headers: {
-              authorization: 'Bearer integration_token'
-            }
+              authorization: 'Bearer integration_token',
+            },
           },
-          res: {}
-        }
+          res: {},
+        },
       })
 
       const mockSupabase = {
         auth: {
           getUser: vi.fn().mockResolvedValue(createAuthResponse(
             { id: 'integration-user', email: 'integration@example.com' },
-            null
-          ))
+            null,
+          )),
         },
         from: vi.fn(() => ({
           select: vi.fn(() => ({
             eq: vi.fn(() => ({
-              single: vi.fn().mockResolvedValue(createProfileResponse({ role: 'admin' }))
-            }))
-          }))
-        }))
+              single: vi.fn().mockResolvedValue(createProfileResponse({ role: 'admin' })),
+            })),
+          })),
+        })),
       }
 
-      mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as any)
+      mockServerSupabaseServiceRole.mockReturnValue(mockSupabase as unknown)
 
-      const userId = await requireAdminRole(mockEvent as any)
+      const userId = await requireAdminRole(mockEvent as unknown)
       expect(userId).toBe('integration-user')
     })
 
@@ -1257,25 +1246,25 @@ describe('adminAuth.ts', () => {
         auth: {
           getUser: vi.fn().mockResolvedValue(createAuthResponse(
             { id: 'cookie-integration-user', email: 'cookie@example.com' },
-            null
-          ))
-        }
+            null,
+          )),
+        },
       }
 
       const mockServiceRole = {
         from: vi.fn(() => ({
           select: vi.fn(() => ({
             eq: vi.fn(() => ({
-              single: vi.fn().mockResolvedValue(createProfileResponse({ role: 'admin' }))
-            }))
-          }))
-        }))
+              single: vi.fn().mockResolvedValue(createProfileResponse({ role: 'admin' })),
+            })),
+          })),
+        })),
       }
 
-      mockServerSupabaseClient.mockResolvedValue(mockCookieClient as any)
-      mockServerSupabaseServiceRole.mockReturnValue(mockServiceRole as any)
+      mockServerSupabaseClient.mockResolvedValue(mockCookieClient as unknown)
+      mockServerSupabaseServiceRole.mockReturnValue(mockServiceRole as unknown)
 
-      const userId = await requireAdminRole(mockEvent as any)
+      const userId = await requireAdminRole(mockEvent as unknown)
       expect(userId).toBe('cookie-integration-user')
     })
   })

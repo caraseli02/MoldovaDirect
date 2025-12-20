@@ -16,7 +16,7 @@ export function generateOrderConfirmationTemplate(data: OrderEmailData): string 
   const translations = getEmailTranslations(locale)
   const formattedDate = formatDate(data.orderDate, locale)
   const formattedDelivery = data.estimatedDelivery ? formatDate(data.estimatedDelivery, locale) : null
-  
+
   // Replace placeholders in subject and preheader
   const subject = replaceTranslationPlaceholders(translations.subject, { orderNumber: data.orderNumber })
   const preheader = replaceTranslationPlaceholders(translations.preheader, { orderNumber: data.orderNumber })
@@ -161,14 +161,16 @@ export function generateOrderConfirmationTemplate(data: OrderEmailData): string 
                           <span style="color: #666666; font-size: 14px; margin-left: 10px;">${formattedDate}</span>
                         </td>
                       </tr>
-                      ${formattedDelivery ? `
+                      ${formattedDelivery
+                        ? `
                       <tr>
                         <td>
                           <strong style="color: #333333; font-size: 14px;">${translations.estimatedDelivery}:</strong>
                           <span style="color: #666666; font-size: 14px; margin-left: 10px;">${formattedDelivery}</span>
                         </td>
                       </tr>
-                      ` : ''}
+                      `
+                        : ''}
                     </table>
                   </td>
                 </tr>
@@ -247,19 +249,23 @@ function generateOrderItemsTable(items: OrderItemData[], translations: any, loca
   const rows = items.map(item => `
     <tr>
       <td style="padding: 15px 10px; border-bottom: 1px solid #eeeeee; vertical-align: middle;">
-        ${item.image ? `
+        ${item.image
+          ? `
         <img src="${item.image}" alt="${item.name}" class="order-item-image" width="80" height="80" style="display: block; border-radius: 4px; object-fit: cover;">
-        ` : ''}
+        `
+          : ''}
       </td>
       <td style="padding: 15px 10px; border-bottom: 1px solid #eeeeee; vertical-align: middle;">
         <p style="margin: 0 0 5px 0; font-size: 14px; color: #333333; font-weight: bold;">
           ${item.name}
         </p>
-        ${item.sku ? `
+        ${item.sku
+          ? `
         <p style="margin: 0; font-size: 12px; color: #999999;">
           SKU: ${item.sku}
         </p>
-        ` : ''}
+        `
+          : ''}
       </td>
       <td style="padding: 15px 10px; border-bottom: 1px solid #eeeeee; text-align: center; vertical-align: middle;">
         <span style="font-size: 14px; color: #666666;">${item.quantity}</span>
@@ -376,13 +382,15 @@ function generateTrackingInfo(trackingNumber: string, trackingUrl: string | unde
           <p style="margin: 0 0 10px 0; font-size: 14px; color: #333333;">
             <strong>${translations.trackingNumber}:</strong> ${trackingNumber}
           </p>
-          ${trackingUrl ? `
+          ${trackingUrl
+            ? `
           <p style="margin: 0;">
             <a href="${trackingUrl}" style="display: inline-block; padding: 10px 20px; background-color: #e74c3c; color: #ffffff; text-decoration: none; border-radius: 4px; font-size: 14px; font-weight: bold;">
               ${translations.trackOrder}
             </a>
           </p>
-          ` : ''}
+          `
+            : ''}
         </td>
       </tr>
     </table>
@@ -396,7 +404,7 @@ function getPaymentMethodLabel(method: string, translations: any): string {
     paypal: translations.paymentMethods.paypal,
     bank_transfer: translations.paymentMethods.bank_transfer,
   }
-  
+
   return methodMap[method] || method
 }
 

@@ -1,6 +1,6 @@
 <!--
   User Table Empty State Component
-  
+
   Mobile-responsive empty state for when no users are found
   Follows mobile patterns and includes appropriate actions
 -->
@@ -9,20 +9,20 @@
   <div
     class="p-8 text-center"
     :class="{
-      'py-12': isMobile
+      'py-12': isMobile,
     }"
   >
     <!-- Empty State Icon -->
     <div class="mb-4">
-      <commonIcon 
-        :name="emptyStateIcon" 
+      <commonIcon
+        :name="emptyStateIcon"
         :class="iconSizeClasses"
         class="text-gray-400 dark:text-gray-500 mx-auto"
       />
     </div>
 
     <!-- Title -->
-    <h3 
+    <h3
       class="font-medium text-gray-900 dark:text-gray-100 mb-2"
       :class="titleSizeClasses"
     >
@@ -30,7 +30,7 @@
     </h3>
 
     <!-- Description -->
-    <p 
+    <p
       class="text-gray-500 dark:text-gray-400 mb-6"
       :class="descriptionSizeClasses"
     >
@@ -38,55 +38,67 @@
     </p>
 
     <!-- Action Buttons -->
-    <div v-if="showActions" class="space-y-3">
+    <div
+      v-if="showActions"
+      class="space-y-3"
+    >
       <!-- Primary Action -->
       <button
         v-if="hasActiveFilters"
-        @click="clearFilters"
-        @touchstart="isMobile && vibrate('tap')"
         class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-medium rounded-lg transition-colors touch-manipulation active:scale-95"
         :class="{
-          'min-h-[44px] px-6': isMobile
+          'min-h-[44px] px-6': isMobile,
         }"
         type="button"
+        @click="clearFilters"
+        @touchstart="isMobile && vibrate('tap')"
       >
-        <commonIcon name="lucide:filter" class="w-4 h-4 mr-2" />
+        <commonIcon
+          name="lucide:filter"
+          class="w-4 h-4 mr-2"
+        />
         {{ $t('admin.users.actions.clearFilters') }}
       </button>
 
       <!-- Secondary Actions -->
-      <div 
+      <div
         class="flex flex-col sm:flex-row gap-3 justify-center items-center"
         :class="{
-          'space-y-2 sm:space-y-0': isMobile
+          'space-y-2 sm:space-y-0': isMobile,
         }"
       >
         <!-- Refresh Button -->
         <button
-          @click="refreshUsers"
-          @touchstart="isMobile && vibrate('tap')"
           class="inline-flex items-center px-3 py-2 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 rounded-lg transition-colors touch-manipulation active:scale-95"
           :class="{
-            'min-h-[44px] w-full sm:w-auto': isMobile
+            'min-h-[44px] w-full sm:w-auto': isMobile,
           }"
           type="button"
+          @click="refreshUsers"
+          @touchstart="isMobile && vibrate('tap')"
         >
-          <commonIcon name="lucide:refresh-ccw" class="w-4 h-4 mr-2" />
+          <commonIcon
+            name="lucide:refresh-ccw"
+            class="w-4 h-4 mr-2"
+          />
           {{ $t('admin.users.actions.refresh') }}
         </button>
 
         <!-- Invite User Button (if no users at all) -->
         <button
           v-if="!hasActiveFilters && totalUsers === 0"
-          @click="inviteUser"
-          @touchstart="isMobile && vibrate('tap')"
           class="inline-flex items-center px-3 py-2 text-green-700 dark:text-green-300 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 hover:bg-green-100 dark:hover:bg-green-900/50 rounded-lg transition-colors touch-manipulation active:scale-95"
           :class="{
-            'min-h-[44px] w-full sm:w-auto': isMobile
+            'min-h-[44px] w-full sm:w-auto': isMobile,
           }"
           type="button"
+          @click="inviteUser"
+          @touchstart="isMobile && vibrate('tap')"
         >
-          <commonIcon name="lucide:user-plus" class="w-4 h-4 mr-2" />
+          <commonIcon
+            name="lucide:user-plus"
+            class="w-4 h-4 mr-2"
+          />
           {{ $t('admin.users.actions.invite') }}
         </button>
       </div>
@@ -97,21 +109,32 @@
       v-if="showHelpText"
       class="mt-6 text-sm text-gray-400 dark:text-gray-500"
       :class="{
-        'mt-8': isMobile
+        'mt-8': isMobile,
       }"
     >
-      <div class="mb-2">{{ $t('admin.users.empty.helpTitle') }}</div>
+      <div class="mb-2">
+        {{ $t('admin.users.empty.helpTitle') }}
+      </div>
       <ul class="text-left max-w-md mx-auto space-y-1">
         <li class="flex items-center">
-          <commonIcon name="lucide:check" class="w-3 h-3 mr-2 text-green-500" />
+          <commonIcon
+            name="lucide:check"
+            class="w-3 h-3 mr-2 text-green-500"
+          />
           {{ $t('admin.users.empty.helpTip1') }}
         </li>
         <li class="flex items-center">
-          <commonIcon name="lucide:check" class="w-3 h-3 mr-2 text-green-500" />
+          <commonIcon
+            name="lucide:check"
+            class="w-3 h-3 mr-2 text-green-500"
+          />
           {{ $t('admin.users.empty.helpTip2') }}
         </li>
         <li class="flex items-center">
-          <commonIcon name="lucide:check" class="w-3 h-3 mr-2 text-green-500" />
+          <commonIcon
+            name="lucide:check"
+            class="w-3 h-3 mr-2 text-green-500"
+          />
           {{ $t('admin.users.empty.helpTip3') }}
         </li>
       </ul>
@@ -122,7 +145,10 @@
       v-if="isMobile && hasActiveFilters"
       class="mt-6 flex items-center justify-center text-xs text-gray-400 dark:text-gray-500"
     >
-      <commonIcon name="lucide:hand" class="w-4 h-4 mr-1" />
+      <commonIcon
+        name="lucide:hand"
+        class="w-4 h-4 mr-1"
+      />
       {{ $t('admin.users.empty.swipeHint') }}
     </div>
   </div>
@@ -150,7 +176,7 @@ const props = withDefaults(defineProps<Props>(), {
   searchQuery: '',
   statusFilter: '',
   showActions: true,
-  showHelpText: false
+  showHelpText: false,
 })
 
 const emit = defineEmits<Emits>()
@@ -172,11 +198,11 @@ const emptyStateTitle = computed(() => {
   if (props.hasActiveFilters) {
     return t('admin.users.empty.noResults')
   }
-  
+
   if (props.totalUsers === 0) {
     return t('admin.users.empty.noUsers')
   }
-  
+
   return t('admin.users.empty.noData')
 })
 
@@ -187,11 +213,11 @@ const emptyStateDescription = computed(() => {
     }
     return t('admin.users.empty.tryDifferentFilters')
   }
-  
+
   if (props.totalUsers === 0) {
     return t('admin.users.empty.noUsersDescription')
   }
-  
+
   return t('admin.users.empty.checkConnection')
 })
 
@@ -210,7 +236,7 @@ const descriptionSizeClasses = computed(() => {
 // Methods
 const clearFilters = () => {
   emit('clearFilters')
-  
+
   if (isMobile.value) {
     vibrate('success')
   }
@@ -218,7 +244,7 @@ const clearFilters = () => {
 
 const refreshUsers = () => {
   emit('refresh')
-  
+
   if (isMobile.value) {
     vibrate('medium')
   }
@@ -226,7 +252,7 @@ const refreshUsers = () => {
 
 const inviteUser = () => {
   emit('inviteUser')
-  
+
   if (isMobile.value) {
     vibrate('success')
   }

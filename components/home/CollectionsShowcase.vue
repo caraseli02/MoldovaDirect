@@ -3,7 +3,10 @@
     <div class="container">
       <div class="mx-auto max-w-3xl text-center">
         <span class="inline-flex items-center gap-2 rounded-full bg-primary-100 px-4 py-2 text-sm font-semibold text-primary-700 dark:bg-primary-500/20 dark:text-primary-200">
-          <commonIcon name="lucide:sparkles" class="h-4 w-4" />
+          <commonIcon
+            name="lucide:sparkles"
+            class="h-4 w-4"
+          />
           {{ t('home.collections.badge') }}
         </span>
         <h2 class="mt-4 text-4xl font-bold text-gray-900 dark:text-gray-50 md:text-5xl lg:text-6xl tracking-tight">
@@ -49,7 +52,10 @@
                 </div>
                 <span class="inline-flex items-center gap-2 text-sm font-semibold text-white transition group-hover:translate-x-1">
                   {{ card.cta }}
-                  <commonIcon name="lucide:arrow-right" class="h-4 w-4" />
+                  <commonIcon
+                    name="lucide:arrow-right"
+                    class="h-4 w-4"
+                  />
                 </span>
               </div>
             </NuxtLink>
@@ -86,7 +92,10 @@
             </div>
             <span class="inline-flex items-center gap-2 text-sm font-semibold text-white transition group-hover:translate-x-1">
               {{ card.cta }}
-              <commonIcon name="lucide:arrow-right" class="h-4 w-4" />
+              <commonIcon
+                name="lucide:arrow-right"
+                class="h-4 w-4"
+              />
             </span>
           </div>
         </NuxtLink>
@@ -127,7 +136,7 @@ const cards = computed<Card[]>(() => [
     tag: t('home.collections.cards.reserve.tag'),
     colSpan: 'lg:col-span-7',
     colStart: '',
-    rowSpan: 'lg:row-span-2'
+    rowSpan: 'lg:row-span-2',
   },
   {
     key: 'artisan',
@@ -140,7 +149,7 @@ const cards = computed<Card[]>(() => [
     tag: t('home.collections.cards.artisan.tag'),
     colSpan: 'lg:col-span-5',
     colStart: 'lg:col-start-8',
-    rowSpan: ''
+    rowSpan: '',
   },
   {
     key: 'experience',
@@ -153,8 +162,8 @@ const cards = computed<Card[]>(() => [
     tag: t('home.collections.cards.experience.tag'),
     colSpan: 'lg:col-span-5',
     colStart: 'lg:col-start-8',
-    rowSpan: ''
-  }
+    rowSpan: '',
+  },
 ])
 </script>
 

@@ -5,6 +5,19 @@
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 
+import {
+  cartSecurityState,
+  isValidSessionId,
+  isValidProductId,
+  generateSecureSessionId,
+  validateCartData,
+  validateProductData,
+  secureAddItem,
+  secureUpdateQuantity,
+  secureRemoveItem,
+} from '~/stores/cart/security'
+import type { Product } from '~/stores/cart/types'
+
 // Mock window.crypto
 const mockCrypto = {
   getRandomValues: vi.fn((arr: Uint8Array) => {
@@ -12,7 +25,7 @@ const mockCrypto = {
       arr[i] = Math.floor(Math.random() * 256)
     }
     return arr
-  })
+  }),
 }
 
 // Mock window before importing
@@ -24,19 +37,6 @@ vi.stubGlobal('process', { client: true, dev: false })
 // Mock navigator
 vi.stubGlobal('navigator', { userAgent: 'Mozilla/5.0 (Test Browser)' })
 
-import {
-  cartSecurityState,
-  isValidSessionId,
-  isValidProductId,
-  generateSecureSessionId,
-  validateCartData,
-  validateProductData,
-  secureAddItem,
-  secureUpdateQuantity,
-  secureRemoveItem
-} from '~/stores/cart/security'
-import type { Product } from '~/stores/cart/types'
-
 // Mock product data
 const mockProduct: Product = {
   id: 'prod-1',
@@ -45,7 +45,7 @@ const mockProduct: Product = {
   price: 25.99,
   images: ['/images/wine.jpg'],
   stock: 10,
-  category: 'Wines'
+  category: 'Wines',
 }
 
 // Helper to reset security state
@@ -54,7 +54,7 @@ function resetSecurityState() {
     securityEnabled: true,
     lastSecurityCheck: null,
     securityErrors: [],
-    riskLevel: 'low'
+    riskLevel: 'low',
   }
 }
 
@@ -104,11 +104,11 @@ describe('Cart Security Module', () => {
     })
 
     it('should reject null session ID', () => {
-      expect(isValidSessionId(null as any)).toBe(false)
+      expect(isValidSessionId(null as unknown)).toBe(false)
     })
 
     it('should reject non-string session ID', () => {
-      expect(isValidSessionId(123 as any)).toBe(false)
+      expect(isValidSessionId(123 as unknown)).toBe(false)
     })
 
     it('should reject session ID without cart prefix', () => {
@@ -138,7 +138,7 @@ describe('Cart Security Module', () => {
     })
 
     it('should reject null product ID', () => {
-      expect(isValidProductId(null as any)).toBe(false)
+      expect(isValidProductId(null as unknown)).toBe(false)
     })
 
     it('should reject product ID exceeding max length', () => {
@@ -187,7 +187,7 @@ describe('Cart Security Module', () => {
       it('should validate valid add item data', () => {
         const result = validateCartData('addItem', {
           productId: 'prod-123',
-          quantity: 2
+          quantity: 2,
         })
 
         expect(result.isValid).toBe(true)
@@ -197,7 +197,7 @@ describe('Cart Security Module', () => {
       it('should reject invalid product ID in add item', () => {
         const result = validateCartData('addItem', {
           productId: '',
-          quantity: 2
+          quantity: 2,
         })
 
         expect(result.isValid).toBe(false)
@@ -208,7 +208,7 @@ describe('Cart Security Module', () => {
       it('should reject invalid quantity in add item', () => {
         const result = validateCartData('addItem', {
           productId: 'prod-123',
-          quantity: -1
+          quantity: -1,
         })
 
         expect(result.isValid).toBe(false)
@@ -218,7 +218,7 @@ describe('Cart Security Module', () => {
       it('should reject quantity exceeding max limit', () => {
         const result = validateCartData('addItem', {
           productId: 'prod-123',
-          quantity: 150 // Max is 100
+          quantity: 150, // Max is 100
         })
 
         expect(result.isValid).toBe(false)
@@ -228,7 +228,7 @@ describe('Cart Security Module', () => {
       it('should warn for large quantities', () => {
         const result = validateCartData('addItem', {
           productId: 'prod-123',
-          quantity: 15
+          quantity: 15,
         })
 
         expect(result.isValid).toBe(true)
@@ -239,7 +239,7 @@ describe('Cart Security Module', () => {
       it('should reject non-integer quantity', () => {
         const result = validateCartData('addItem', {
           productId: 'prod-123',
-          quantity: 2.5
+          quantity: 2.5,
         })
 
         expect(result.isValid).toBe(false)
@@ -251,7 +251,7 @@ describe('Cart Security Module', () => {
       it('should validate valid update quantity data', () => {
         const result = validateCartData('updateQuantity', {
           itemId: 'item-123',
-          quantity: 5
+          quantity: 5,
         })
 
         expect(result.isValid).toBe(true)
@@ -261,7 +261,7 @@ describe('Cart Security Module', () => {
       it('should reject missing item ID', () => {
         const result = validateCartData('updateQuantity', {
           itemId: '',
-          quantity: 5
+          quantity: 5,
         })
 
         expect(result.isValid).toBe(false)
@@ -271,7 +271,7 @@ describe('Cart Security Module', () => {
       it('should reject invalid quantity in update', () => {
         const result = validateCartData('updateQuantity', {
           itemId: 'item-123',
-          quantity: 0
+          quantity: 0,
         })
 
         expect(result.isValid).toBe(false)
@@ -282,7 +282,7 @@ describe('Cart Security Module', () => {
     describe('Remove Item Operation', () => {
       it('should validate valid remove item data', () => {
         const result = validateCartData('removeItem', {
-          itemId: 'item-123'
+          itemId: 'item-123',
         })
 
         expect(result.isValid).toBe(true)
@@ -291,7 +291,7 @@ describe('Cart Security Module', () => {
 
       it('should reject missing item ID in remove', () => {
         const result = validateCartData('removeItem', {
-          itemId: ''
+          itemId: '',
         })
 
         expect(result.isValid).toBe(false)
@@ -396,21 +396,21 @@ describe('Cart Security Module', () => {
     describe('Secure Add Item', () => {
       it('should validate session ID before adding item', async () => {
         await expect(secureAddItem('prod-123', 2, 'invalid-session')).rejects.toThrow(
-          'Security validation failed'
+          'Security validation failed',
         )
       })
 
       it('should validate product ID before adding item', async () => {
         const validSession = generateSecureSessionId()
         await expect(secureAddItem('', 2, validSession)).rejects.toThrow(
-          'Data validation failed'
+          'Data validation failed',
         )
       })
 
       it('should validate quantity before adding item', async () => {
         const validSession = generateSecureSessionId()
         await expect(secureAddItem('prod-123', -1, validSession)).rejects.toThrow(
-          'Data validation failed'
+          'Data validation failed',
         )
       })
 
@@ -419,21 +419,22 @@ describe('Cart Security Module', () => {
         const result = await secureAddItem('prod-123', 2, validSession)
 
         expect(result.success).toBe(true)
-        expect(result.product.id).toBe('prod-123')
+        expect(result.itemId).toBe('prod-123')
+        expect(result.quantity).toBe(2)
       })
     })
 
     describe('Secure Update Quantity', () => {
       it('should validate session ID before updating', async () => {
         await expect(secureUpdateQuantity('item-123', 5, 'invalid-session')).rejects.toThrow(
-          'Security validation failed'
+          'Security validation failed',
         )
       })
 
       it('should validate item ID before updating', async () => {
         const validSession = generateSecureSessionId()
         await expect(secureUpdateQuantity('', 5, validSession)).rejects.toThrow(
-          'Data validation failed'
+          'Data validation failed',
         )
       })
 
@@ -450,23 +451,21 @@ describe('Cart Security Module', () => {
     describe('Secure Remove Item', () => {
       it('should validate session ID before removing', async () => {
         await expect(secureRemoveItem('item-123', 'invalid-session')).rejects.toThrow(
-          'Security validation failed'
+          'Security validation failed',
         )
       })
 
       it('should validate item ID before removing', async () => {
         const validSession = generateSecureSessionId()
         await expect(secureRemoveItem('', validSession)).rejects.toThrow(
-          'Data validation failed'
+          'Data validation failed',
         )
       })
 
       it('should succeed with valid inputs', async () => {
         const validSession = generateSecureSessionId()
-        const result = await secureRemoveItem('item-123', validSession)
-
-        expect(result.success).toBe(true)
-        expect(result.itemId).toBe('item-123')
+        // secureRemoveItem returns void, so we just verify it doesn't throw
+        await expect(secureRemoveItem('item-123', validSession)).resolves.toBeUndefined()
       })
     })
   })
@@ -493,7 +492,7 @@ describe('Cart Security Module', () => {
       // Test that validation still works even with edge cases
       const result = validateCartData('addItem', {
         productId: 'prod-123',
-        quantity: 1
+        quantity: 1,
       })
 
       expect(result.isValid).toBe(true)
@@ -523,7 +522,7 @@ describe('Cart Security Module', () => {
     it('should handle quantity at max limit', () => {
       const result = validateCartData('addItem', {
         productId: 'prod-123',
-        quantity: 100 // Exactly at max
+        quantity: 100, // Exactly at max
       })
 
       expect(result.isValid).toBe(true)

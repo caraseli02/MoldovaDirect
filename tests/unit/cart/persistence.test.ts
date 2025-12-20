@@ -5,18 +5,6 @@
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 
-// Mock useCookie before importing the module
-// Use a module-level variable to track the current mock value
-let currentCookieData: any = null
-
-vi.mock('#app', () => ({
-  useCookie: vi.fn((_key: string, _options?: any) => ({
-    get value() { return currentCookieData },
-    set value(v: any) { currentCookieData = v }
-  })),
-  useRuntimeConfig: vi.fn(() => ({ public: {} }))
-}))
-
 import {
   cartPersistenceState,
   saveCartData,
@@ -24,25 +12,49 @@ import {
   clearCartData,
   isStorageAvailable,
   getBestStorageType,
-  createDebouncedSave
+  createDebouncedSave,
 } from '~/stores/cart/persistence'
 import type { CartItem, Product } from '~/stores/cart/types'
+
+// Mock useCookie before importing the module
+// Use a module-level variable to track the current mock value
+let currentCookieData = null
+
+vi.mock('#app', () => ({
+  useCookie: vi.fn((_key: string, _options?: unknown) => ({
+    get value() { return currentCookieData },
+    set value(v: any) { currentCookieData = v },
+  })),
+  useRuntimeConfig: vi.fn(() => ({ public: {} })),
+}))
 
 // Mock localStorage and sessionStorage
 const mockLocalStorage = {
   store: {} as Record<string, string>,
   getItem: vi.fn((key: string) => mockLocalStorage.store[key] || null),
   setItem: vi.fn((key: string, value: string) => { mockLocalStorage.store[key] = value }),
-  removeItem: vi.fn((key: string) => { delete mockLocalStorage.store[key] }),
-  clear: vi.fn(() => { mockLocalStorage.store = {} })
+  removeItem: vi.fn((key: string) => {
+    const store = mockLocalStorage.store as Record<string, string>
+    if (key in store) {
+      const { [key]: _removed, ...newStore } = store
+      mockLocalStorage.store = newStore
+    }
+  }),
+  clear: vi.fn(() => { mockLocalStorage.store = {} }),
 }
 
 const mockSessionStorage = {
   store: {} as Record<string, string>,
   getItem: vi.fn((key: string) => mockSessionStorage.store[key] || null),
   setItem: vi.fn((key: string, value: string) => { mockSessionStorage.store[key] = value }),
-  removeItem: vi.fn((key: string) => { delete mockSessionStorage.store[key] }),
-  clear: vi.fn(() => { mockSessionStorage.store = {} })
+  removeItem: vi.fn((key: string) => {
+    const store = mockSessionStorage.store as Record<string, string>
+    if (key in store) {
+      const { [key]: _removed, ...newStore } = store
+      mockSessionStorage.store = newStore
+    }
+  }),
+  clear: vi.fn(() => { mockSessionStorage.store = {} }),
 }
 
 // Mock product data
@@ -53,7 +65,7 @@ const mockProduct: Product = {
   price: 25.99,
   images: ['/images/wine.jpg'],
   stock: 10,
-  category: 'Wines'
+  category: 'Wines',
 }
 
 const mockCartItem: CartItem = {
@@ -61,7 +73,7 @@ const mockCartItem: CartItem = {
   product: mockProduct,
   quantity: 2,
   addedAt: new Date('2024-01-15T10:00:00Z'),
-  source: 'manual'
+  source: 'manual',
 }
 
 // Helper to reset persistence state
@@ -70,7 +82,7 @@ function resetPersistenceState() {
     storageType: 'cookie',
     lastSaveAt: null,
     saveInProgress: false,
-    autoSaveEnabled: true
+    autoSaveEnabled: true,
   }
 }
 
@@ -143,7 +155,7 @@ describe('Cart Persistence Module', () => {
       const cartData = {
         items: [mockCartItem],
         sessionId: 'session-123',
-        lastSyncAt: new Date()
+        lastSyncAt: new Date(),
       }
 
       const result = await saveCartData(cartData)
@@ -158,12 +170,12 @@ describe('Cart Persistence Module', () => {
       const savedData = {
         items: [{
           ...mockCartItem,
-          addedAt: '2024-01-15T10:00:00Z'
+          addedAt: '2024-01-15T10:00:00Z',
         }],
         sessionId: 'session-123',
         lastSyncAt: '2024-01-15T10:00:00Z',
         timestamp: '2024-01-15T10:00:00Z',
-        version: '1.0'
+        version: '1.0',
       }
 
       // Set the cookie data directly
@@ -232,7 +244,7 @@ describe('Cart Persistence Module', () => {
       const cartData = {
         items: [mockCartItem],
         sessionId: 'session-123',
-        lastSyncAt: new Date()
+        lastSyncAt: new Date(),
       }
 
       const result = await saveCartData(cartData)
@@ -249,7 +261,7 @@ describe('Cart Persistence Module', () => {
       const cartData = {
         items: [mockCartItem],
         sessionId: 'session-123',
-        lastSyncAt: new Date()
+        lastSyncAt: new Date(),
       }
 
       const result = await saveCartData(cartData)
@@ -262,7 +274,7 @@ describe('Cart Persistence Module', () => {
       const cartData = {
         items: [mockCartItem],
         sessionId: 'session-123',
-        lastSyncAt: new Date()
+        lastSyncAt: new Date(),
       }
 
       await saveCartData(cartData)
@@ -301,7 +313,7 @@ describe('Cart Persistence Module', () => {
       const cartData = {
         items: [mockCartItem],
         sessionId: 'session-123',
-        lastSyncAt: new Date()
+        lastSyncAt: new Date(),
       }
 
       const result = await saveCartData(cartData)
@@ -315,15 +327,15 @@ describe('Cart Persistence Module', () => {
     it('should handle items without lastModified field', async () => {
       const itemWithoutLastModified = {
         ...mockCartItem,
-        addedAt: '2024-01-15T10:00:00Z'
+        addedAt: '2024-01-15T10:00:00Z',
       }
-      delete (itemWithoutLastModified as any).lastModified
+      delete (itemWithoutLastModified as unknown).lastModified
 
       // Set cookie data without lastModified field
       currentCookieData = {
         items: [itemWithoutLastModified],
         sessionId: 'session-123',
-        lastSyncAt: '2024-01-15T10:00:00Z'
+        lastSyncAt: '2024-01-15T10:00:00Z',
       }
 
       const result = await loadCartData()
@@ -342,7 +354,7 @@ describe('Cart Persistence Module', () => {
       const cartData = {
         items: [mockCartItem],
         sessionId: 'session-123',
-        lastSyncAt: new Date()
+        lastSyncAt: new Date(),
       }
 
       // Normal save should succeed
@@ -364,10 +376,10 @@ describe('Cart Persistence Module', () => {
       currentCookieData = {
         items: [{
           ...mockCartItem,
-          addedAt: '2024-01-15T10:00:00Z'
+          addedAt: '2024-01-15T10:00:00Z',
         }],
         sessionId: 'session-123',
-        lastSyncAt: '2024-01-15T10:00:00Z'
+        lastSyncAt: '2024-01-15T10:00:00Z',
       }
 
       const result = await loadCartData()
@@ -385,20 +397,20 @@ describe('Cart Persistence Module', () => {
           ...mockCartItem,
           id: 'item-2',
           product: { ...mockProduct, id: 'prod-2', name: 'Wine 2' },
-          quantity: 3
+          quantity: 3,
         },
         {
           ...mockCartItem,
           id: 'item-3',
           product: { ...mockProduct, id: 'prod-3', name: 'Wine 3' },
-          quantity: 1
-        }
+          quantity: 1,
+        },
       ]
 
       const cartData = {
         items: cartItems,
         sessionId: 'session-multi',
-        lastSyncAt: new Date()
+        lastSyncAt: new Date(),
       }
 
       // Save
@@ -410,10 +422,10 @@ describe('Cart Persistence Module', () => {
       currentCookieData = {
         items: cartItems.map(item => ({
           ...item,
-          addedAt: item.addedAt.toISOString()
+          addedAt: item.addedAt.toISOString(),
         })),
         sessionId: 'session-multi',
-        lastSyncAt: cartData.lastSyncAt?.toISOString()
+        lastSyncAt: cartData.lastSyncAt?.toISOString(),
       }
 
       // Load
@@ -428,7 +440,7 @@ describe('Cart Persistence Module', () => {
       const cartData = {
         items: [],
         sessionId: 'session-empty',
-        lastSyncAt: new Date()
+        lastSyncAt: new Date(),
       }
 
       const result = await saveCartData(cartData)

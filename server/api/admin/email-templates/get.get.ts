@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
   if (!type || !locale) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Template type and locale are required'
+      statusMessage: 'Template type and locale are required',
     })
   }
 
@@ -33,6 +33,6 @@ export default defineEventHandler(async (event) => {
     locale: normalizedLocale,
     translations: templateTranslations,
     subject: templateTranslations.subject,
-    preheader: templateTranslations.preheader
+    preheader: templateTranslations.preheader,
   }
 })

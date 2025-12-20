@@ -1,8 +1,8 @@
 /**
  * POST /api/admin/orders/:id/notes
- * 
+ *
  * Create a new note for an order
- * 
+ *
  * Requirements addressed:
  * - 7.1: Direct messaging functionality within order interface
  * - 7.2: Log all communications in order history
@@ -28,11 +28,11 @@ export default defineEventHandler(async (event) => {
 
     // Get order ID from route params
     const orderId = parseInt(event.context.params?.id || '0')
-    
+
     if (!orderId || isNaN(orderId)) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Invalid order ID'
+        statusMessage: 'Invalid order ID',
       })
     }
 
@@ -43,14 +43,14 @@ export default defineEventHandler(async (event) => {
     if (!body.content || body.content.trim().length === 0) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Note content is required'
+        statusMessage: 'Note content is required',
       })
     }
 
     if (!body.noteType || !['internal', 'customer'].includes(body.noteType)) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Invalid note type. Must be "internal" or "customer"'
+        statusMessage: 'Invalid note type. Must be "internal" or "customer"',
       })
     }
 
@@ -64,7 +64,7 @@ export default defineEventHandler(async (event) => {
     if (orderError || !order) {
       throw createError({
         statusCode: 404,
-        statusMessage: 'Order not found'
+        statusMessage: 'Order not found',
       })
     }
 
@@ -75,9 +75,9 @@ export default defineEventHandler(async (event) => {
         order_id: orderId,
         note_type: body.noteType,
         content: body.content.trim(),
-        created_by: user.id,
+        created_by: user?.id,
         created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       })
       .select()
       .single()
@@ -86,25 +86,26 @@ export default defineEventHandler(async (event) => {
       console.error('Error creating order note:', insertError)
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to create note'
+        statusMessage: 'Failed to create note',
       })
     }
 
     return {
       success: true,
       data: note,
-      message: `${body.noteType === 'internal' ? 'Internal' : 'Customer'} note added successfully`
+      message: `${body.noteType === 'internal' ? 'Internal' : 'Customer'} note added successfully`,
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     console.error('Error in order notes creation endpoint:', error)
-    
+
     if (error.statusCode) {
       throw error
     }
 
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 })

@@ -1,6 +1,6 @@
 <template>
-  <div 
-    v-if="show" 
+  <div
+    v-if="show"
     class="bg-blue-50 dark:bg-blue-900/20 px-6 py-3 border-b border-gray-200 dark:border-gray-700"
   >
     <div class="flex items-center justify-between">
@@ -9,51 +9,66 @@
           {{ selectedCount }} {{ selectedCount === 1 ? 'order' : 'orders' }} selected
         </span>
         <Button
-          @click="$emit('clear-selection')"
           variant="link"
           class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
+          @click="$emit('clear-selection')"
         >
           Clear selection
         </Button>
       </div>
       <div class="flex items-center space-x-2">
         <Button
-          @click="handleBulkStatusUpdate('processing')"
           :disabled="disabled"
           size="sm"
           variant="secondary"
           class="dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600"
+          @click="handleBulkStatusUpdate('processing')"
         >
-          <commonIcon name="lucide:clock" class="w-4 h-4 mr-1" />
+          <commonIcon
+            name="lucide:clock"
+            class="w-4 h-4 mr-1"
+          />
           Mark Processing
         </Button>
         <Button
-          @click="handleBulkStatusUpdate('shipped')"
           :disabled="disabled"
           size="sm"
           class="text-blue-700 bg-blue-100 hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-100 dark:hover:bg-blue-800"
+          @click="handleBulkStatusUpdate('shipped')"
         >
-          <commonIcon name="lucide:truck" class="w-4 h-4 mr-1" />
+          <commonIcon
+            name="lucide:truck"
+            class="w-4 h-4 mr-1"
+          />
           Mark Shipped
         </Button>
         <Button
-          @click="handleBulkStatusUpdate('delivered')"
           :disabled="disabled"
           size="sm"
           class="text-green-700 bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:text-green-100 dark:hover:bg-green-800"
+          @click="handleBulkStatusUpdate('delivered')"
         >
-          <commonIcon name="lucide:check-circle" class="w-4 h-4 mr-1" />
+          <commonIcon
+            name="lucide:check-circle"
+            class="w-4 h-4 mr-1"
+          />
           Mark Delivered
         </Button>
       </div>
     </div>
 
     <!-- Confirmation Dialog -->
-    <Dialog :open="confirmDialog.show" @update:open="handleDialogOpen">
+    <Dialog
+      :open="confirmDialog.show"
+      @update:open="handleDialogOpen"
+    >
       <DialogContent class="sm:max-w-md">
         <DialogHeader>
           <DialogTitle class="flex items-center gap-2">
-            <commonIcon name="lucide:alert-circle" class="w-5 h-5 text-blue-600 dark:text-blue-400" />
+            <commonIcon
+              name="lucide:alert-circle"
+              class="w-5 h-5 text-blue-600 dark:text-blue-400"
+            />
             Confirm Bulk Status Update
           </DialogTitle>
           <DialogDescription>
@@ -67,7 +82,10 @@
           </p>
 
           <!-- Optional notes for bulk update -->
-          <div v-if="confirmDialog.status === 'shipped'" class="space-y-2">
+          <div
+            v-if="confirmDialog.status === 'shipped'"
+            class="space-y-2"
+          >
             <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
               Tracking Information (Optional)
             </label>
@@ -83,14 +101,14 @@
         <DialogFooter class="mt-6 flex justify-end gap-3">
           <Button
             variant="outline"
-            @click="cancelBulkUpdate"
             :disabled="confirmDialog.loading"
+            @click="cancelBulkUpdate"
           >
             Cancel
           </Button>
           <Button
-            @click="confirmBulkUpdate"
             :disabled="confirmDialog.loading"
+            @click="confirmBulkUpdate"
           >
             <commonIcon
               v-if="confirmDialog.loading"
@@ -113,7 +131,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle
+  DialogTitle,
 } from '@/components/ui/dialog'
 import { Textarea } from '@/components/ui/textarea'
 
@@ -138,14 +156,14 @@ const confirmDialog = ref({
   message: '',
   details: '',
   notes: '',
-  loading: false
+  loading: false,
 })
 
 // Status display names
 const statusNames: Record<string, string> = {
   processing: 'Processing',
   shipped: 'Shipped',
-  delivered: 'Delivered'
+  delivered: 'Delivered',
 }
 
 // Handle bulk status update button click
@@ -158,24 +176,24 @@ const handleBulkStatusUpdate = (status: string) => {
     status,
     message: `Update ${count} ${count === 1 ? 'order' : 'orders'} to "${statusName}"?`,
     details: `This will change the status of all selected orders to "${statusName}". ${
-      status === 'shipped' 
-        ? 'Customers will receive shipping confirmation emails.' 
+      status === 'shipped'
+        ? 'Customers will receive shipping confirmation emails.'
         : status === 'delivered'
-        ? 'Customers will receive delivery confirmation emails.'
-        : 'This action can be reversed if needed.'
+          ? 'Customers will receive delivery confirmation emails.'
+          : 'This action can be reversed if needed.'
     }`,
     notes: '',
-    loading: false
+    loading: false,
   }
 }
 
 // Confirm bulk update
 const confirmBulkUpdate = async () => {
   confirmDialog.value.loading = true
-  
+
   try {
     emit('bulk-update-status', confirmDialog.value.status, confirmDialog.value.notes || undefined)
-    
+
     // Close dialog after a short delay to show loading state
     setTimeout(() => {
       confirmDialog.value = {
@@ -184,10 +202,11 @@ const confirmBulkUpdate = async () => {
         message: '',
         details: '',
         notes: '',
-        loading: false
+        loading: false,
       }
     }, 500)
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Bulk update failed:', error)
     confirmDialog.value.loading = false
   }
@@ -201,7 +220,7 @@ const cancelBulkUpdate = () => {
     message: '',
     details: '',
     notes: '',
-    loading: false
+    loading: false,
   }
 }
 

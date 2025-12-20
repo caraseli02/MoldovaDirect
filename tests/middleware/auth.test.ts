@@ -26,7 +26,7 @@ describe('Auth Middleware', () => {
     // Mock route objects
     mockTo = {
       path: '/account/orders',
-      fullPath: '/account/orders'
+      fullPath: '/account/orders',
     } as RouteLocationNormalized
     mockFrom = { path: '/' } as RouteLocationNormalized
 
@@ -53,8 +53,8 @@ describe('Auth Middleware', () => {
         path: '/auth/login',
         query: {
           redirect: '/account/orders',
-          message: 'login-required'
-        }
+          message: 'login-required',
+        },
       })
     })
 
@@ -62,7 +62,7 @@ describe('Auth Middleware', () => {
       mockUser = null
       mockTo = {
         path: '/',
-        fullPath: '/'
+        fullPath: '/',
       } as RouteLocationNormalized
 
       const { default: authMiddleware } = await import('../../middleware/auth')
@@ -71,8 +71,8 @@ describe('Auth Middleware', () => {
       expect(mockNavigateTo).toHaveBeenCalledWith({
         path: '/auth/login',
         query: {
-          message: 'login-required'
-        }
+          message: 'login-required',
+        },
       })
     })
 
@@ -80,7 +80,7 @@ describe('Auth Middleware', () => {
       mockUser = null
       mockTo = {
         path: '/account/orders',
-        fullPath: '/account/orders?status=pending'
+        fullPath: '/account/orders?status=pending',
       } as RouteLocationNormalized
 
       const { default: authMiddleware } = await import('../../middleware/auth')
@@ -90,8 +90,8 @@ describe('Auth Middleware', () => {
         path: '/auth/login',
         query: {
           redirect: '/account/orders?status=pending',
-          message: 'login-required'
-        }
+          message: 'login-required',
+        },
       })
     })
   })
@@ -101,7 +101,7 @@ describe('Auth Middleware', () => {
       mockUser = {
         id: 'user-123',
         email: 'user@example.com',
-        email_confirmed_at: '2024-01-01T00:00:00Z'
+        email_confirmed_at: '2024-01-01T00:00:00Z',
       }
 
       const { default: authMiddleware } = await import('../../middleware/auth')
@@ -117,7 +117,7 @@ describe('Auth Middleware', () => {
       mockUser = {
         id: 'user-123',
         email: 'user@example.com',
-        email_confirmed_at: null
+        email_confirmed_at: null,
       }
 
       const { default: authMiddleware } = await import('../../middleware/auth')
@@ -127,8 +127,8 @@ describe('Auth Middleware', () => {
         path: '/auth/verify-email',
         query: {
           message: 'email-verification-required',
-          email: 'user@example.com'
-        }
+          email: 'user@example.com',
+        },
       })
     })
 
@@ -136,7 +136,7 @@ describe('Auth Middleware', () => {
       mockUser = {
         id: 'user-123',
         email: 'test@example.com',
-        email_confirmed_at: undefined
+        email_confirmed_at: undefined,
       }
 
       const { default: authMiddleware } = await import('../../middleware/auth')
@@ -145,9 +145,9 @@ describe('Auth Middleware', () => {
       expect(mockNavigateTo).toHaveBeenCalledWith(
         expect.objectContaining({
           query: expect.objectContaining({
-            email: 'test@example.com'
-          })
-        })
+            email: 'test@example.com',
+          }),
+        }),
       )
     })
   })
@@ -164,8 +164,8 @@ describe('Auth Middleware', () => {
       expect(mockLocalePath).toHaveBeenCalledWith('/auth/login')
       expect(mockNavigateTo).toHaveBeenCalledWith(
         expect.objectContaining({
-          path: '/es/auth/login'
-        })
+          path: '/es/auth/login',
+        }),
       )
     })
 
@@ -173,7 +173,7 @@ describe('Auth Middleware', () => {
       mockUser = {
         id: 'user-123',
         email: 'user@example.com',
-        email_confirmed_at: null
+        email_confirmed_at: null,
       }
       mockLocalePath = vi.fn((path: string) => `/ro${path}`)
       vi.stubGlobal('useLocalePath', () => mockLocalePath)

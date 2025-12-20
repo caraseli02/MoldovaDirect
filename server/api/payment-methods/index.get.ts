@@ -10,18 +10,18 @@ export default defineEventHandler(async (event) => {
     if (!authHeader) {
       throw createError({
         statusCode: 401,
-        statusMessage: 'Authentication required'
+        statusMessage: 'Authentication required',
       })
     }
 
     const { data: { user }, error: authError } = await supabase.auth.getUser(
-      authHeader.replace('Bearer ', '')
+      authHeader.replace('Bearer ', ''),
     )
 
     if (authError || !user) {
       throw createError({
         statusCode: 401,
-        statusMessage: 'Invalid authentication'
+        statusMessage: 'Invalid authentication',
       })
     }
 
@@ -45,15 +45,16 @@ export default defineEventHandler(async (event) => {
     if (paymentError) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to fetch payment methods'
+        statusMessage: 'Failed to fetch payment methods',
       })
     }
 
     return {
       success: true,
-      data: paymentMethods || []
+      data: paymentMethods || [],
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     if (error.statusCode) {
       throw error
     }
@@ -61,7 +62,7 @@ export default defineEventHandler(async (event) => {
     console.error('Payment methods fetch error:', error)
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 })

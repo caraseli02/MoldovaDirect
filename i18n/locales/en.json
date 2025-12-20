@@ -325,7 +325,10 @@
       "passwordMatch": "Passwords match",
       "resetPasswordButton": "Reset your password",
       "resettingPassword": "Resetting your password",
-      "processingPasswordReset": "Processing your password reset request"
+      "processingPasswordReset": "Processing your password reset request",
+      "sendResetEmailButton": "Send password reset email",
+      "sendingResetEmail": "Sending reset email",
+      "backToLoginLink": "Back to login page"
     },
     "errors": {
       "invalidCredentials": "Invalid email or password",
@@ -369,6 +372,7 @@
         "lowercase": "Must contain at least one lowercase letter",
         "number": "Must contain at least one number",
         "mismatch": "Passwords do not match",
+        "match": "Passwords match",
         "weak": "Password is too weak",
         "current": "Current password is required"
       },

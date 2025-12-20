@@ -1,27 +1,27 @@
 <script setup lang="ts">
-import type { HTMLAttributes } from "vue"
-import { useVModel } from "@vueuse/core"
-import { cn } from "@/lib/utils"
+import type { HTMLAttributes } from 'vue'
+import { useVModel } from '@vueuse/core'
+import { cn } from '@/lib/utils'
 
 defineOptions({
-  inheritAttrs: false
+  inheritAttrs: false,
 })
 
 const props = defineProps<{
   defaultValue?: string | number
   modelValue?: string | number
-  class?: HTMLAttributes["class"]
+  class?: HTMLAttributes['class']
 }>()
 
 const emits = defineEmits<{
-  (e: "update:modelValue", payload: string | number): void
+  (e: 'update:modelValue', payload: string | number): void
 }>()
 
 // CUSTOMIZATION: Changed from passive: true to passive: false
 // Reason: shadcn-vue's default passive:true breaks v-model reactivity (see issue #771)
 // This is a known bug where form inputs don't emit updates properly
 // DO NOT regenerate this component from shadcn-vue without keeping this fix
-const modelValue = useVModel(props, "modelValue", emits, {
+const modelValue = useVModel(props, 'modelValue', emits, {
   passive: false,
   defaultValue: props.defaultValue,
 })
@@ -38,5 +38,5 @@ const modelValue = useVModel(props, "modelValue", emits, {
       'aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive',
       props.class,
     )"
-  >
+  />
 </template>

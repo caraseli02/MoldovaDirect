@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
   if (!id) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Job ID is required'
+      statusMessage: 'Job ID is required',
     })
   }
 
@@ -26,12 +26,12 @@ export default defineEventHandler(async (event) => {
   if (!job) {
     throw createError({
       statusCode: 404,
-      statusMessage: 'Job not found or expired'
+      statusMessage: 'Job not found or expired',
     })
   }
 
   return {
     success: true,
-    job
+    job,
   }
 })

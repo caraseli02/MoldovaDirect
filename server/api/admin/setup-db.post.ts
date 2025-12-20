@@ -85,19 +85,18 @@ export default defineEventHandler(async (event) => {
     if (getMethod(event) !== 'POST') {
       throw createError({
         statusCode: 405,
-        statusMessage: 'Method not allowed'
+        statusMessage: 'Method not allowed',
       })
     }
 
     // Execute the SQL to create tables
-    const { data, error } = await supabase.rpc('exec_sql', { 
-      sql_query: createTablesSQL 
+    const { data, error } = await supabase.rpc('exec_sql', {
+      sql_query: createTablesSQL,
     })
 
     if (error) {
       // If the RPC function doesn't exist, try a different approach
-      console.log('RPC function not available, trying direct SQL execution...')
-      
+
       // Try to create tables one by one using individual queries
       const queries = [
         `CREATE TABLE IF NOT EXISTS categories (
@@ -127,7 +126,7 @@ export default defineEventHandler(async (event) => {
           is_active BOOLEAN DEFAULT TRUE,
           created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-        )`
+        )`,
       ]
 
       const results = []
@@ -135,7 +134,8 @@ export default defineEventHandler(async (event) => {
         try {
           const result = await supabase.rpc('exec_sql', { sql_query: query })
           results.push({ query: query.substring(0, 50) + '...', success: !result.error, error: result.error })
-        } catch (err) {
+        }
+        catch (err: any) {
           results.push({ query: query.substring(0, 50) + '...', success: false, error: err.message })
         }
       }
@@ -143,18 +143,18 @@ export default defineEventHandler(async (event) => {
       return {
         message: 'Database setup attempted with individual queries',
         results,
-        note: 'You may need to run the schema manually in Supabase SQL Editor'
+        note: 'You may need to run the schema manually in Supabase SQL Editor',
       }
     }
 
     return {
       message: 'Database tables created successfully',
-      data
+      data,
     }
-
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Database setup error:', error)
-    
+
     return {
       message: 'Database setup failed - please run schema manually',
       error: error.message,
@@ -163,8 +163,8 @@ export default defineEventHandler(async (event) => {
         '2. Navigate to SQL Editor',
         '3. Copy and paste the contents of supabase/sql/supabase-schema.sql',
         '4. Click Run to execute the schema',
-        '5. Then try the seed endpoint again'
-      ]
+        '5. Then try the seed endpoint again',
+      ],
     }
   }
 })

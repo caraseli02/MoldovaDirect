@@ -2,9 +2,9 @@
   <Button
     variant="ghost"
     size="icon"
-    @click="toggleTheme"
     class="relative inline-flex items-center justify-center w-10 h-10 rounded-lg bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors duration-200"
     :aria-label="theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'"
+    @click="toggleTheme"
   >
     <svg
       v-if="theme === 'light'"
@@ -41,5 +41,6 @@
 
 <script setup lang="ts">
 import { Button } from '@/components/ui/button'
+
 const { theme, toggleTheme } = useTheme()
 </script>

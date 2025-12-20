@@ -1,12 +1,13 @@
-import { useCartStore } from "~/stores/cart";
-import { ref, computed } from "vue";
+import { useCartStore } from '~/stores/cart'
+import type { Product } from '~/stores/cart/types'
+import { computed } from 'vue'
 
 export const useCart = () => {
   // CRITICAL FIX v3: Cart store is client-only, check before accessing
   // The cart uses cookies which are only available on the client
   // Attempting to access the store during SSR will fail
 
-  if (!process.client) {
+  if (!import.meta.client) {
     // Return empty cart interface for SSR
     return {
       items: computed(() => []),
@@ -35,42 +36,42 @@ export const useCart = () => {
         totalOperations: 0,
         averageOperationTime: 0,
         slowestOperation: null,
-        fastestOperation: null
+        fastestOperation: null,
       })),
-      isInCart: () => false,
-      getItemByProductId: () => undefined,
-      addItem: async () => {},
-      updateQuantity: async () => {},
-      removeItem: async () => {},
+      isInCart: (_productId: string) => false,
+      getItemByProductId: (_productId: string) => undefined,
+      addItem: async (_product: Product, _quantity?: number) => {},
+      updateQuantity: async (_itemId: string, _quantity: number) => {},
+      removeItem: async (_itemId: string) => {},
       clearCart: async () => {},
       validateCart: async () => {},
-      directAddItem: async () => {},
-      directUpdateQuantity: async () => {},
-      directRemoveItem: async () => {},
+      directAddItem: async (_product: Product, _quantity?: number) => {},
+      directUpdateQuantity: async (_itemId: string, _quantity: number) => {},
+      directRemoveItem: async (_itemId: string) => {},
       directClearCart: async () => {},
       directValidateCart: async () => {},
       recoverCart: async () => {},
       forceSync: () => {},
       toggleBackgroundValidation: () => {},
       clearValidationCache: () => {},
-      validateCartWithRetry: async () => {},
-      isItemSelected: () => false,
+      validateCartWithRetry: async (_maxRetries?: number) => {},
+      isItemSelected: (_itemId: string) => false,
       getSelectedItems: () => [],
-      toggleItemSelection: () => {},
+      toggleItemSelection: (_itemId: string) => {},
       toggleSelectAll: () => {},
       removeSelectedItems: async () => {},
       moveSelectedToSavedForLater: async () => {},
-      addToSavedForLater: async () => {},
-      removeFromSavedForLater: async () => {},
-      moveToCartFromSavedForLater: async () => {},
+      addToSavedForLater: async (_product: Product, _quantity?: number) => {},
+      removeFromSavedForLater: async (_itemId: string) => {},
+      moveToCartFromSavedForLater: async (_itemId: string) => {},
       loadRecommendations: async () => {},
       getPerformanceMetrics: () => ({
         totalOperations: 0,
         averageOperationTime: 0,
         slowestOperation: null,
-        fastestOperation: null
+        fastestOperation: null,
       }),
-      resetPerformanceMetrics: () => {}
+      resetPerformanceMetrics: () => {},
     }
   }
 
@@ -109,12 +110,12 @@ export const useCart = () => {
   // Store methods - direct passthrough to store
   const isInCart = (productId: string) => cartStore.isInCart(productId)
   const getItemByProductId = (productId: string) => cartStore.getItemByProductId(productId)
-  const addItem = async (product: any, quantity?: number) => cartStore.addItem(product, quantity)
+  const addItem = async (product: Product, quantity?: number) => cartStore.addItem(product, quantity)
   const updateQuantity = async (itemId: string, quantity: number) => cartStore.updateQuantity(itemId, quantity)
   const removeItem = async (itemId: string) => cartStore.removeItem(itemId)
   const clearCart = async () => cartStore.clearCart()
   const validateCart = async () => cartStore.validateCart()
-  const directAddItem = async (product: any, quantity?: number) => cartStore.directAddItem(product, quantity)
+  const directAddItem = async (product: Product, quantity?: number) => cartStore.directAddItem(product, quantity)
   const directUpdateQuantity = async (itemId: string, quantity: number) => cartStore.directUpdateQuantity(itemId, quantity)
   const directRemoveItem = async (itemId: string) => cartStore.directRemoveItem(itemId)
   const directClearCart = async () => cartStore.directClearCart()
@@ -130,7 +131,7 @@ export const useCart = () => {
   const toggleSelectAll = () => cartStore.toggleSelectAll()
   const removeSelectedItems = async () => cartStore.removeSelectedItems()
   const moveSelectedToSavedForLater = async () => cartStore.moveSelectedToSavedForLater()
-  const addToSavedForLater = async (product: any, quantity?: number) => cartStore.addToSavedForLater(product, quantity)
+  const addToSavedForLater = async (product: Product, quantity?: number) => cartStore.addToSavedForLater(product, quantity)
   const removeFromSavedForLater = async (itemId: string) => cartStore.removeFromSavedForLater(itemId)
   const moveToCartFromSavedForLater = async (itemId: string) => cartStore.moveToCartFromSavedForLater(itemId)
   const loadRecommendations = async () => cartStore.loadRecommendations()
@@ -189,6 +190,6 @@ export const useCart = () => {
     moveToCartFromSavedForLater,
     loadRecommendations,
     getPerformanceMetrics,
-    resetPerformanceMetrics
+    resetPerformanceMetrics,
   }
 }

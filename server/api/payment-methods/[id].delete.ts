@@ -10,18 +10,18 @@ export default defineEventHandler(async (event) => {
     if (!authHeader) {
       throw createError({
         statusCode: 401,
-        statusMessage: 'Authentication required'
+        statusMessage: 'Authentication required',
       })
     }
 
     const { data: { user }, error: authError } = await supabase.auth.getUser(
-      authHeader.replace('Bearer ', '')
+      authHeader.replace('Bearer ', ''),
     )
 
     if (authError || !user) {
       throw createError({
         statusCode: 401,
-        statusMessage: 'Invalid authentication'
+        statusMessage: 'Invalid authentication',
       })
     }
 
@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
     if (!paymentMethodId) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Payment method ID is required'
+        statusMessage: 'Payment method ID is required',
       })
     }
 
@@ -44,15 +44,16 @@ export default defineEventHandler(async (event) => {
     if (deleteError) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to delete payment method'
+        statusMessage: 'Failed to delete payment method',
       })
     }
 
     return {
       success: true,
-      message: 'Payment method deleted successfully'
+      message: 'Payment method deleted successfully',
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     if (error.statusCode) {
       throw error
     }
@@ -60,7 +61,7 @@ export default defineEventHandler(async (event) => {
     console.error('Payment method deletion error:', error)
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 })

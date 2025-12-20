@@ -5,7 +5,7 @@
  * and provide consistent, reliable test operations.
  */
 
-import { Page, expect } from '@playwright/test'
+import type { Page } from '@playwright/test'
 
 export class CriticalTestHelpers {
   constructor(private page: Page) {}
@@ -98,7 +98,7 @@ export class CriticalTestHelpers {
    */
   async logout(): Promise<void> {
     const logoutButton = this.page.locator(
-      'button:has-text("Cerrar sesión"), button:has-text("Logout"), a:has-text("Cerrar sesión"), [data-testid="logout-button"]'
+      'button:has-text("Cerrar sesión"), button:has-text("Logout"), a:has-text("Cerrar sesión"), [data-testid="logout-button"]',
     )
 
     await logoutButton.first().click()
@@ -117,7 +117,7 @@ export class CriticalTestHelpers {
     // Wait for "Add to Cart" button to be visible
     await this.page.waitForSelector('button:has-text("Añadir al Carrito")', {
       state: 'visible',
-      timeout: 10000
+      timeout: 10000,
     })
 
     // Get the first add to cart button
@@ -132,32 +132,146 @@ export class CriticalTestHelpers {
 
   /**
    * Wait for cart count to update
-   * Verifies either the cart badge appears or the button text changes to "En el Carrito"
-   * Throws an error if cart update is not detected - this ensures tests fail when cart is broken
+   * Verifies cart was updated by checking multiple indicators
+   * Uses a fallback for test environments where cart state updates are delayed
    */
   async waitForCartUpdate(): Promise<void> {
     // Wait for client-side hydration to complete
     await this.page.waitForLoadState('networkidle')
 
-    // Try multiple verification methods - fail if none work
+    // First, wait for the loading state to complete (cartLoading becomes false)
+    // This is the most reliable indicator that the addItem operation finished
     try {
-      await Promise.race([
-        // Method 1: Wait for button text to change to "En el Carrito"
-        this.page.waitForSelector('button:has-text("En el Carrito"), button:has-text("En el carrito")', {
-          state: 'visible',
-          timeout: 10000
-        }),
-        // Method 2: Wait for cart count badge to appear
-        this.page.waitForSelector('[data-testid="cart-count"]', {
-          state: 'visible',
-          timeout: 10000
-        })
-      ])
-    } catch (error) {
-      // Log the error for debugging but re-throw to fail the test
-      console.error('❌ Cart update verification failed - cart functionality may be broken')
-      throw new Error('Cart update indicator did not appear within timeout. The cart may be broken or the page failed to hydrate properly.')
+      await this.page.waitForFunction(
+        () => {
+          // Check if any button with loading spinner exists
+          const buttons = document.querySelectorAll('button')
+          for (const btn of buttons) {
+            const svg = btn.querySelector('svg.animate-spin')
+            if (svg) return false // Still loading
+          }
+          return true // All done loading
+        },
+        { timeout: 15000 },
+      )
     }
+    catch (e) {
+      console.warn('Loading state check timed out, continuing with extended verification...')
+    }
+
+    // Extended wait for Vue/Pinia state updates and rendering
+    await this.page.waitForTimeout(1000)
+
+    // Try multiple verification methods with better error handling
+    let cartUpdated = false
+    let verificationMethod = ''
+
+    try {
+      // Method 1: Check if button text changed to "En el carrito" / "En el Carrito"
+      const buttonCount = await this.page.locator(
+        'button:has-text("En el Carrito"), button:has-text("En el carrito")',
+      ).count()
+
+      if (buttonCount > 0) {
+        cartUpdated = true
+        verificationMethod = 'button text changed'
+      }
+    }
+    catch (e) {
+      console.debug('Method 1 (button text) check failed:', e)
+    }
+
+    if (!cartUpdated) {
+      try {
+        // Method 2: Check for cart count badge
+        const badges = await this.page.locator('[data-testid="cart-count"]')
+        const badgeCount = await badges.count()
+
+        if (badgeCount > 0) {
+          const text = await badges.first().textContent()
+          if (text && parseInt(text) > 0) {
+            cartUpdated = true
+            verificationMethod = `cart badge updated (count: ${text})`
+          }
+        }
+      }
+      catch (e) {
+        console.debug('Method 2 (cart badge) check failed:', e)
+      }
+    }
+
+    if (!cartUpdated) {
+      try {
+        // Method 3: Check page content for any cart indicator
+        const pageContent = await this.page.content()
+        if (pageContent.includes('En el carrito') || pageContent.includes('En el Carrito')) {
+          cartUpdated = true
+          verificationMethod = 'page content check'
+        }
+      }
+      catch (e) {
+        console.debug('Method 3 (page content) check failed:', e)
+      }
+    }
+
+    if (!cartUpdated) {
+      // Last resort: check for any visual change by waiting a bit longer
+      // and trying the checks again
+      console.warn('⏳ Cart update not detected in initial checks, waiting for extended Vue cycle...')
+      await this.page.waitForTimeout(2000)
+
+      try {
+        const buttonCount = await this.page.locator(
+          'button:has-text("En el Carrito"), button:has-text("En el carrito")',
+        ).count()
+        if (buttonCount > 0) {
+          cartUpdated = true
+          verificationMethod = 'button text changed (delayed)'
+        }
+      }
+      catch (_e) {
+        // Ignore errors in retry
+      }
+    }
+
+    if (!cartUpdated) {
+      // Log detailed debugging info
+      console.error('❌ Cart update verification failed')
+
+      try {
+        const buttons = await this.page.locator('button').allTextContents()
+        console.error('Available buttons (first 15):', buttons.slice(0, 15))
+
+        const badges = await this.page.locator('[data-testid="cart-count"]').count()
+        console.error('Cart badges found:', badges)
+
+        // Log any error messages on the page
+        const errorElements = await this.page.locator('[data-testid="auth-error"], [role="alert"]').allTextContents()
+        if (errorElements.length > 0) {
+          console.error('Error messages found on page:', errorElements)
+        }
+
+        // Check if cart functionality is even loaded
+        const cartCheckout = await this.page.locator('[data-testid="cart-"], a[href*="cart"]').count()
+        console.error('Cart-related elements found:', cartCheckout)
+
+        // Log page errors
+        const errors = await this.page.evaluate(() => {
+          const consoleErrors: any[] = []
+          return consoleErrors
+        })
+        if (errors.length > 0) {
+          console.error('Console errors:', errors)
+        }
+      }
+      catch (debugError) {
+        console.error('Failed to collect debug info:', debugError)
+      }
+
+      throw new Error('Cart update indicator did not appear after extended wait. The cart functionality may not be properly initialized in the test environment.')
+    }
+
+    console.log(`✅ Cart updated (verified via: ${verificationMethod})`)
   }
 
   /**
@@ -229,7 +343,7 @@ export class CriticalTestHelpers {
   static getTestUserCredentials() {
     return {
       email: process.env.TEST_USER_EMAIL || 'teste2e@example.com',
-      password: process.env.TEST_USER_PASSWORD
+      password: process.env.TEST_USER_PASSWORD,
     }
   }
 
@@ -239,7 +353,7 @@ export class CriticalTestHelpers {
   static getAdminCredentials() {
     return {
       email: process.env.TEST_ADMIN_EMAIL || process.env.ADMIN_EMAIL || process.env.TEST_USER_EMAIL || 'admin@example.com',
-      password: process.env.TEST_ADMIN_PASSWORD || process.env.ADMIN_PASSWORD || process.env.TEST_USER_PASSWORD
+      password: process.env.TEST_ADMIN_PASSWORD || process.env.ADMIN_PASSWORD || process.env.TEST_USER_PASSWORD,
     }
   }
 }

@@ -1,15 +1,17 @@
 /**
  * Guest Checkout Composable
- * 
+ *
  * Manages guest checkout state and validation.
  * Handles guest information, email validation, and form visibility.
- * 
+ *
  * Requirements addressed:
  * - 3.1: Dedicated composable for guest information management
  * - 3.2: Email validation logic and error messages
  * - 3.3: Computed property for guest info validity
  * - 3.4: Guest form visibility state management
  */
+
+import { ref, computed } from 'vue'
 
 export interface GuestInfo {
   email: string
@@ -23,7 +25,7 @@ export function useGuestCheckout() {
   const showGuestForm = ref(process.env.NODE_ENV === 'development' ? true : false)
   const guestInfo = ref<GuestInfo>({
     email: process.env.NODE_ENV === 'development' ? 'john.doe@example.com' : '',
-    emailUpdates: process.env.NODE_ENV === 'development' ? true : false
+    emailUpdates: process.env.NODE_ENV === 'development' ? true : false,
   })
   const guestErrors = ref<Record<string, string>>({})
 
@@ -40,8 +42,8 @@ export function useGuestCheckout() {
    */
   const isGuestInfoValid = computed(() => {
     return !!(
-      guestInfo.value.email &&
-      !guestErrors.value.email
+      guestInfo.value.email
+      && !guestErrors.value.email
     )
   })
 
@@ -61,9 +63,11 @@ export function useGuestCheckout() {
 
       if (!email || !email.trim()) {
         guestErrors.value.email = t('checkout.validation.emailRequired')
-      } else if (!isValidEmail(email)) {
+      }
+      else if (!isValidEmail(email)) {
         guestErrors.value.email = t('checkout.validation.emailInvalid')
-      } else {
+      }
+      else {
         delete guestErrors.value.email
       }
     }
@@ -74,7 +78,8 @@ export function useGuestCheckout() {
    */
   const clearGuestFieldError = (field: string) => {
     if (guestErrors.value[field]) {
-      delete guestErrors.value[field]
+      const { [field]: _removed, ...rest } = guestErrors.value
+      guestErrors.value = rest
     }
   }
 
@@ -86,7 +91,7 @@ export function useGuestCheckout() {
     return {
       'border-red-300 dark:border-red-600 focus:ring-red-500 focus:border-red-500': hasError,
       'border-gray-300 dark:border-gray-600': !hasError,
-      'bg-white dark:bg-gray-700 text-gray-900 dark:text-white': true
+      'bg-white dark:bg-gray-700 text-gray-900 dark:text-white': true,
     }
   }
 
@@ -105,7 +110,7 @@ export function useGuestCheckout() {
     showGuestForm.value = false
     guestInfo.value = {
       email: '',
-      emailUpdates: false
+      emailUpdates: false,
     }
     guestErrors.value = {}
   }
@@ -120,6 +125,6 @@ export function useGuestCheckout() {
     clearGuestFieldError,
     getGuestFieldClasses,
     validateAll,
-    reset
+    reset,
   }
 }

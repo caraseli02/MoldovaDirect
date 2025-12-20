@@ -13,7 +13,7 @@ const mockT = vi.fn((key: string) => {
 // Override global mock with test-specific mock
 global.useI18n = vi.fn(() => ({
   t: mockT,
-  locale: { value: 'en' }
+  locale: { value: 'en' },
 }))
 
 // Import composable AFTER mock is set up
@@ -400,7 +400,7 @@ describe('useGuestCheckout', () => {
 
       // Should not throw or modify errors for unknown fields
       expect(() => {
-        validateGuestField('emailUpdates' as any)
+        validateGuestField('emailUpdates' as unknown)
       }).not.toThrow()
 
       expect(guestErrors.value.emailUpdates).toBeUndefined()

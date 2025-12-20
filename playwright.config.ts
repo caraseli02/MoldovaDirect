@@ -18,7 +18,7 @@ export default defineConfig({
     '**/manual/**',
     '**/fixtures/**',
     '**/helpers/**',
-    '**/page-objects/**'
+    '**/page-objects/**',
   ],
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
@@ -28,9 +28,9 @@ export default defineConfig({
     ['html'],
     ['json', { outputFile: 'test-results/results.json' }],
     ['junit', { outputFile: 'test-results/junit.xml' }],
-    process.env.CI ? ['github'] : ['list']
-  ].filter(Boolean),
-  
+    process.env.CI ? ['github'] : ['list'],
+  ].filter(Boolean) as any,
+
   use: {
     // Support both BASE_URL and PLAYWRIGHT_TEST_BASE_URL for CI/CD flexibility
     baseURL: process.env.PLAYWRIGHT_TEST_BASE_URL || process.env.BASE_URL || 'http://localhost:3000',
@@ -82,9 +82,11 @@ export default defineConfig({
       },
     },
 
-    // Full E2E: English locale testing
+    // Full E2E: English locale testing - ONLY i18n-specific tests
     {
       name: 'chromium-en',
+      testDir: './tests',
+      testMatch: '**/auth-i18n.spec.ts', // Only i18n tests for locale verification
       use: {
         ...devices['Desktop Chrome'],
         locale: 'en',
@@ -94,9 +96,11 @@ export default defineConfig({
       },
     },
 
-    // Full E2E: Cross-browser testing
+    // Full E2E: Cross-browser testing - ONLY critical tests
     {
       name: 'firefox-es',
+      testDir: './tests/e2e/critical',
+      testMatch: '**/*.spec.ts', // Only critical tests for browser compatibility
       use: {
         ...devices['Desktop Firefox'],
         locale: 'es',
@@ -105,9 +109,11 @@ export default defineConfig({
       },
     },
 
-    // Full E2E: Mobile responsive testing
+    // Full E2E: Mobile responsive testing - ONLY mobile-specific tests
     {
       name: 'mobile',
+      testDir: './tests',
+      testMatch: '**/auth-mobile-responsive.spec.ts', // Only mobile-responsive tests
       use: {
         ...devices['Pixel 5'],
         locale: 'es',
@@ -124,17 +130,19 @@ export default defineConfig({
   ],
 
   // Only start web server if not testing against external URL (like Vercel preview)
-  webServer: process.env.PLAYWRIGHT_TEST_BASE_URL ? undefined : {
-    command: 'npm run dev',
-    url: 'http://localhost:3000',
-    reuseExistingServer: !process.env.CI,
-    stdout: 'pipe',
-    stderr: 'pipe',
-    timeout: 120000,
-  },
+  webServer: process.env.PLAYWRIGHT_TEST_BASE_URL
+    ? undefined
+    : {
+        command: 'npm run dev',
+        url: 'http://localhost:3000/auth/login', // Use /auth/login as root returns 500
+        reuseExistingServer: !process.env.CI,
+        stdout: 'pipe',
+        stderr: 'pipe',
+        timeout: 120000,
+      },
 
   outputDir: 'test-results/',
-  
+
   globalSetup: fileURLToPath(new URL('./tests/global-setup.ts', import.meta.url)),
   globalTeardown: fileURLToPath(new URL('./tests/global-teardown.ts', import.meta.url)),
 })

@@ -11,8 +11,15 @@
     </div>
 
     <!-- Loading State -->
-    <div v-if="loading" class="space-y-4">
-      <div v-for="i in 3" :key="i" class="animate-pulse">
+    <div
+      v-if="loading"
+      class="space-y-4"
+    >
+      <div
+        v-for="i in 3"
+        :key="i"
+        class="animate-pulse"
+      >
         <div class="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
           <div class="flex items-center space-x-3">
             <div class="w-4 h-4 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
@@ -27,63 +34,94 @@
     </div>
 
     <!-- Shipping Methods -->
-    <div v-else-if="availableMethods.length > 0" class="space-y-3">
-      <RadioGroup v-model="selectedMethodId" :aria-label="$t('checkout.shippingMethod.title')">
-        <div v-for="method in availableMethods" :key="method.id" class="relative">
+    <div
+      v-else-if="availableMethods.length > 0"
+      class="space-y-3"
+    >
+      <RadioGroup
+        v-model="selectedMethodId"
+        :aria-label="$t('checkout.shippingMethod.title')"
+      >
+        <div
+          v-for="method in availableMethods"
+          :key="method.id"
+          class="relative"
+        >
           <label
             class="flex items-start space-x-3 p-4 border rounded-lg cursor-pointer transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-700"
             :for="`ship-${method.id}`"
             :class="selectedMethodId === method.id
               ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 ring-1 ring-primary-500'
-              : 'border-gray-200 dark:border-gray-600'">
-            <RadioGroupItem :id="`ship-${method.id}`" :value="method.id" class="mt-1" />
+              : 'border-gray-200 dark:border-gray-600'"
+          >
+            <RadioGroupItem
+              :id="`ship-${method.id}`"
+              :value="method.id"
+              class="mt-1"
+            />
 
             <div class="flex-1 min-w-0">
               <div class="flex items-center justify-between">
                 <h4 class="text-sm font-medium text-gray-900 dark:text-white">
                   {{ method.name }}
                 </h4>
-              <div class="flex items-center space-x-2">
-                <!-- Free shipping badge -->
-                <span v-if="method.price === 0"
-                  class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-                  {{ $t('checkout.shippingMethod.free.label') }}
-                </span>
+                <div class="flex items-center space-x-2">
+                  <!-- Free shipping badge -->
+                  <span
+                    v-if="method.price === 0"
+                    class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                  >
+                    {{ $t('checkout.shippingMethod.free.label') }}
+                  </span>
 
-                <!-- Express shipping badge -->
-                <span v-else-if="method.estimatedDays <= 2"
-                  class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                  {{ $t('checkout.shippingMethod.express.label') }}
-                </span>
+                  <!-- Express shipping badge -->
+                  <span
+                    v-else-if="method.estimatedDays <= 2"
+                    class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                  >
+                    {{ $t('checkout.shippingMethod.express.label') }}
+                  </span>
 
-                <!-- Price -->
-                <span class="text-sm font-semibold text-gray-900 dark:text-white">
-                  {{ formatPrice(method.price) }}
+                  <!-- Price -->
+                  <span class="text-sm font-semibold text-gray-900 dark:text-white">
+                    {{ formatPrice(method.price) }}
+                  </span>
+                </div>
+              </div>
+
+              <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                {{ method.description }}
+              </p>
+
+              <!-- Delivery estimate -->
+              <div class="flex items-center space-x-2 mt-2">
+                <svg
+                  class="w-4 h-4 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <span class="text-xs text-gray-500 dark:text-gray-400">
+                  {{ getDeliveryEstimate(method.estimatedDays) }}
                 </span>
               </div>
-            </div>
 
-            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-              {{ method.description }}
-            </p>
-
-            <!-- Delivery estimate -->
-            <div class="flex items-center space-x-2 mt-2">
-              <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span class="text-xs text-gray-500 dark:text-gray-400">
-                {{ getDeliveryEstimate(method.estimatedDays) }}
-              </span>
-            </div>
-
-            <!-- Special conditions -->
-            <div v-if="getMethodConditions(method)" class="mt-2">
-              <p class="text-xs text-gray-500 dark:text-gray-400 italic">
-                {{ getMethodConditions(method) }}
-              </p>
-            </div>
+              <!-- Special conditions -->
+              <div
+                v-if="getMethodConditions(method)"
+                class="mt-2"
+              >
+                <p class="text-xs text-gray-500 dark:text-gray-400 italic">
+                  {{ getMethodConditions(method) }}
+                </p>
+              </div>
             </div>
           </label>
         </div>
@@ -91,11 +129,22 @@
     </div>
 
     <!-- No Methods Available -->
-    <div v-else class="text-center py-8">
-      <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor"
-        viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2M4 13h2m13-8l-4 4m0 0l-4-4m4 4V3" />
+    <div
+      v-else
+      class="text-center py-8"
+    >
+      <svg
+        class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2M4 13h2m13-8l-4 4m0 0l-4-4m4 4V3"
+        />
       </svg>
       <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">
         {{ $t('checkout.shippingMethod.noMethods') }}
@@ -106,13 +155,22 @@
     </div>
 
     <!-- Error State -->
-    <div v-if="error" class="rounded-md bg-red-50 dark:bg-red-900/20 p-4 border border-red-200 dark:border-red-800">
+    <div
+      v-if="error"
+      class="rounded-md bg-red-50 dark:bg-red-900/20 p-4 border border-red-200 dark:border-red-800"
+    >
       <div class="flex">
         <div class="flex-shrink-0">
-          <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd"
+          <svg
+            class="h-5 w-5 text-red-400"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fill-rule="evenodd"
               d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-              clip-rule="evenodd" />
+              clip-rule="evenodd"
+            />
           </svg>
         </div>
         <div class="ml-3">
@@ -126,8 +184,8 @@
             <Button
               variant="link"
               size="sm"
-              @click="$emit('retry')"
               class="text-sm font-medium text-red-800 dark:text-red-200 hover:text-red-900 dark:hover:text-red-100 p-0 h-auto"
+              @click="$emit('retry')"
             >
               {{ $t('common.retry') }}
             </Button>
@@ -137,7 +195,10 @@
     </div>
 
     <!-- Validation Error -->
-    <p v-if="validationError" class="mt-2 text-sm text-red-600 dark:text-red-400">
+    <p
+      v-if="validationError"
+      class="mt-2 text-sm text-red-600 dark:text-red-400"
+    >
       {{ validationError }}
     </p>
   </div>
@@ -164,7 +225,7 @@ interface Emits {
 const props = withDefaults(defineProps<Props>(), {
   loading: false,
   error: null,
-  validationError: null
+  validationError: null,
 })
 
 const emit = defineEmits<Emits>()
@@ -178,11 +239,11 @@ const selectedMethodId = computed({
     if (method) {
       emit('update:modelValue', method)
     }
-  }
+  },
 })
 
 // Methods
-const selectMethod = (method: ShippingMethod) => {
+const _selectMethod = (method: ShippingMethod) => {
   // This is now redundant since v-model handles it, but keep for explicit calls
   emit('update:modelValue', method)
 }
@@ -193,7 +254,7 @@ const formatPrice = (price: number): string => {
   }
   return new Intl.NumberFormat('es-ES', {
     style: 'currency',
-    currency: 'EUR'
+    currency: 'EUR',
   }).format(price)
 }
 
@@ -204,9 +265,11 @@ const getDeliveryEstimate = (days: number): string => {
 
   if (days === 1) {
     return 'Delivery tomorrow'
-  } else if (days <= 3) {
+  }
+  else if (days <= 3) {
     return `Delivery by ${deliveryDate.toLocaleDateString('en-US', { weekday: 'long' })}`
-  } else {
+  }
+  else {
     return `Delivery in ${days} business days`
   }
 }
@@ -215,7 +278,8 @@ const getDeliveryEstimate = (days: number): string => {
 const getMethodConditions = (method: ShippingMethod): string => {
   if (method.id === 'free' && method.price === 0) {
     return 'Available for orders over €50'
-  } else if (method.id === 'express') {
+  }
+  else if (method.id === 'express') {
     return 'Order before 2 PM for next-day delivery'
   }
   return ''

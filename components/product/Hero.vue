@@ -68,7 +68,10 @@
             {{ ctaText }}
           </UiButton>
 
-          <div v-if="collections.length" class="flex flex-wrap items-center gap-2">
+          <div
+            v-if="collections.length"
+            class="flex flex-wrap items-center gap-2"
+          >
             <UiButton
               v-for="collection in collections"
               :key="collection.id"

@@ -21,7 +21,7 @@ export function setRememberMePreference(remember: boolean): void {
     maxAge: remember ? SESSION_MAX_AGE : undefined, // undefined = session cookie
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
-    path: '/'
+    path: '/',
   })
 
   rememberMeCookie.value = remember ? 'true' : 'false'
@@ -41,15 +41,9 @@ export function getRememberMePreference(): boolean {
  */
 export function updateSupabaseSessionCookies(remember: boolean): void {
   // Client-side only operation
-  if (process.server) return
+  if (import.meta.server) return
 
   try {
-    // Get all cookies
-    const cookies = document.cookie.split(';')
-    const supabaseCookies = cookies
-      .map(c => c.trim())
-      .filter(c => c.startsWith('sb-'))
-
     // For each Supabase cookie, we need to update its attributes
     // Since we can't directly modify cookie attributes, we'll rely on
     // the cookie being recreated on next auth state change with correct maxAge
@@ -59,8 +53,8 @@ export function updateSupabaseSessionCookies(remember: boolean): void {
 
     // Store the preference so it can be used by the auth system
     setRememberMePreference(remember)
-
-  } catch (error) {
+  }
+  catch (error: any) {
     console.warn('Failed to update Supabase session cookies:', error)
   }
 }
@@ -75,13 +69,13 @@ export function clearAuthCookies(): void {
   rememberMeCookie.value = null
 
   // Client-side: Clear Supabase cookies
-  if (process.client) {
+  if (import.meta.client) {
     try {
       // Get all cookies and find Supabase auth cookies
       const cookies = document.cookie.split(';')
-      cookies.forEach(cookie => {
+      cookies.forEach((cookie) => {
         const [name] = cookie.split('=')
-        const trimmedName = name.trim()
+        const trimmedName = name?.trim() || ''
 
         // Clear Supabase auth cookies (sb-*)
         if (trimmedName.startsWith('sb-')) {
@@ -92,7 +86,8 @@ export function clearAuthCookies(): void {
           document.cookie = `${trimmedName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${domain}`
         }
       })
-    } catch (error) {
+    }
+    catch (error: any) {
       console.warn('Failed to clear auth cookies:', error)
     }
   }
@@ -103,7 +98,7 @@ export function clearAuthCookies(): void {
  * This can be called after login to adjust session duration
  */
 export function adjustSessionCookieDuration(remember: boolean): void {
-  if (process.server) return
+  if (import.meta.server) return
 
   try {
     // Update the preference cookie
@@ -115,7 +110,8 @@ export function adjustSessionCookieDuration(remember: boolean): void {
 
     // If we need more control, we can implement a custom storage adapter
     // that checks this preference cookie
-  } catch (error) {
+  }
+  catch (error: any) {
     console.warn('Failed to adjust session cookie duration:', error)
   }
 }

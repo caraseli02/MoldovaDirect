@@ -1,4 +1,5 @@
-import { createClient, type SupabaseClient } from '@supabase/supabase-js'
+import { createClient } from '@supabase/supabase-js'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
 type GenericSupabaseClient = SupabaseClient<any, 'public', any>
 
@@ -12,7 +13,7 @@ let cachedServiceClient: GenericSupabaseClient | null = null
  * 3. Service role client instantiated from runtime config.
  */
 export function resolveSupabaseClient(
-  providedClient?: GenericSupabaseClient
+  providedClient?: GenericSupabaseClient,
 ): GenericSupabaseClient {
   if (providedClient) {
     return providedClient
@@ -25,7 +26,8 @@ export function resolveSupabaseClient(
       if (client) {
         return client
       }
-    } catch {
+    }
+    catch {
       // Fallback to service client below
     }
   }
@@ -38,7 +40,7 @@ export function resolveSupabaseClient(
   if (!url || !serviceKey) {
     throw createError({
       statusCode: 500,
-      statusMessage: 'Supabase credentials are not configured for server email utilities'
+      statusMessage: 'Supabase credentials are not configured for server email utilities',
     })
   }
 
@@ -46,8 +48,8 @@ export function resolveSupabaseClient(
     cachedServiceClient = createClient(url, serviceKey, {
       auth: {
         autoRefreshToken: false,
-        persistSession: false
-      }
+        persistSession: false,
+      },
     })
   }
 

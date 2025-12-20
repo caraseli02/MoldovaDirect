@@ -3,18 +3,18 @@
  * Tests for shipping calculations and helper functions
  */
 
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect } from 'vitest'
 
 // Test the helper functions directly without store dependencies
 describe('Checkout Shipping - Helper Functions', () => {
   describe('Cart Item Normalization Logic', () => {
     // Test the normalization logic directly
-    function normalizeCartItems(cartItems?: any[] | { value: any[] }): any[] {
+    function normalizeCartItems(cartItems?: unknown[] | { value: unknown[] }): unknown[] {
       if (Array.isArray(cartItems)) {
         return [...cartItems]
       }
-      if (cartItems && Array.isArray((cartItems as any).value)) {
-        return [...(cartItems as any).value]
+      if (cartItems && Array.isArray((cartItems as unknown).value)) {
+        return [...(cartItems as unknown).value]
       }
       return []
     }
@@ -40,7 +40,7 @@ describe('Checkout Shipping - Helper Functions', () => {
     })
 
     it('should handle null-like values', () => {
-      const result = normalizeCartItems(null as any)
+      const result = normalizeCartItems(null as unknown)
       expect(result).toEqual([])
     })
 
@@ -56,23 +56,23 @@ describe('Checkout Shipping - Helper Functions', () => {
   })
 
   describe('Cart Item Resolution Logic', () => {
-    function normalizeCartItems(cartItems?: any[] | { value: any[] }): any[] {
+    function normalizeCartItems(cartItems?: unknown[] | { value: unknown[] }): unknown[] {
       if (Array.isArray(cartItems)) {
         return [...cartItems]
       }
-      if (cartItems && Array.isArray((cartItems as any).value)) {
-        return [...(cartItems as any).value]
+      if (cartItems && Array.isArray((cartItems as unknown).value)) {
+        return [...(cartItems as unknown).value]
       }
       return []
     }
 
     function resolveCartItems(
-      cartStoreItems: any[] | { value: any[] },
-      provided?: any[] | { value: any[] }
-    ): any[] {
+      cartStoreItems: unknown[] | { value: unknown[] },
+      provided?: unknown[] | { value: unknown[] },
+    ): unknown[] {
       const prioritized = [
         provided !== undefined ? normalizeCartItems(provided) : [],
-        normalizeCartItems(cartStoreItems)
+        normalizeCartItems(cartStoreItems),
       ]
 
       for (const items of prioritized) {
@@ -131,7 +131,7 @@ describe('Checkout Shipping - Order Calculation', () => {
     it('should calculate subtotal from items', () => {
       const items = [
         { product: { price: 25.99 }, quantity: 2 },
-        { product: { price: 15.00 }, quantity: 1 }
+        { product: { price: 15.00 }, quantity: 1 },
       ]
 
       const subtotal = items.reduce((sum, item) => sum + item.product.price * item.quantity, 0)
@@ -156,7 +156,7 @@ describe('Checkout Shipping - Order Calculation', () => {
 
     it('should handle large quantities', () => {
       const items = [
-        { product: { price: 10.00 }, quantity: 100 }
+        { product: { price: 10.00 }, quantity: 100 },
       ]
 
       const subtotal = items.reduce((sum, item) => sum + item.product.price * item.quantity, 0)
@@ -173,7 +173,7 @@ describe('Checkout Shipping - Order Calculation', () => {
       const updated = {
         ...order,
         shippingCost: method.price,
-        total: order.subtotal + method.price
+        total: order.subtotal + method.price,
       }
 
       expect(updated.shippingCost).toBe(12.99)
@@ -187,7 +187,7 @@ describe('Checkout Shipping - Order Calculation', () => {
       const updated = {
         ...order,
         shippingCost: method.price,
-        total: order.subtotal + method.price
+        total: order.subtotal + method.price,
       }
 
       expect(updated.shippingCost).toBe(0)
@@ -205,7 +205,7 @@ describe('Checkout Shipping - Validation', () => {
       country?: string
     }
 
-    function validateShippingAddress(address: ShippingAddress | null): { isValid: boolean; errors: string[] } {
+    function validateShippingAddress(address: ShippingAddress | null): { isValid: boolean, errors: string[] } {
       const errors: string[] = []
 
       if (!address) {
@@ -233,7 +233,7 @@ describe('Checkout Shipping - Validation', () => {
         street: '123 Main St',
         city: 'Madrid',
         postalCode: '28001',
-        country: 'ES'
+        country: 'ES',
       }
 
       const result = validateShippingAddress(address)
@@ -253,7 +253,7 @@ describe('Checkout Shipping - Validation', () => {
       const address = {
         city: 'Madrid',
         postalCode: '28001',
-        country: 'ES'
+        country: 'ES',
       }
 
       const result = validateShippingAddress(address)
@@ -267,7 +267,7 @@ describe('Checkout Shipping - Validation', () => {
         street: '   ',
         city: '',
         postalCode: '28001',
-        country: 'ES'
+        country: 'ES',
       }
 
       const result = validateShippingAddress(address)
@@ -282,7 +282,7 @@ describe('Checkout Shipping - Validation', () => {
         street: '',
         city: '',
         postalCode: '',
-        country: ''
+        country: '',
       }
 
       const result = validateShippingAddress(address)
@@ -298,7 +298,7 @@ describe('Checkout Shipping - Method Selection', () => {
     const methods = [
       { id: 'standard', name: 'Standard', price: 5.99, estimatedDays: 5 },
       { id: 'express', name: 'Express', price: 12.99, estimatedDays: 2 },
-      { id: 'overnight', name: 'Overnight', price: 24.99, estimatedDays: 1 }
+      { id: 'overnight', name: 'Overnight', price: 24.99, estimatedDays: 1 },
     ]
 
     it('should find cheapest method', () => {

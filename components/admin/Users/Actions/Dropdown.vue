@@ -1,10 +1,10 @@
 <!--
   Admin User Actions Dropdown Component
-  
+
   Requirements addressed:
   - 4.4: Implement user account suspension and ban functionality
   - 4.5: Create user permission management interface
-  
+
   Features:
   - Dropdown menu with user management actions
   - Conditional actions based on user status
@@ -13,16 +13,22 @@
 -->
 
 <template>
-  <div ref="dropdownRef" class="relative">
+  <div
+    ref="dropdownRef"
+    class="relative"
+  >
     <!-- Dropdown Trigger -->
     <UiButton
-      @click="toggleDropdown"
       variant="ghost"
       size="icon"
       class="h-8 w-8"
       :aria-label="$t('admin.users.actions.menu')"
+      @click="toggleDropdown"
     >
-      <commonIcon name="lucide:more-vertical" class="h-4 w-4" />
+      <commonIcon
+        name="lucide:more-vertical"
+        class="h-4 w-4"
+      />
     </UiButton>
 
     <!-- Dropdown Menu -->
@@ -34,19 +40,25 @@
       <div class="py-1">
         <!-- View Details -->
         <button
-          @click="handleAction('view')"
           class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+          @click="handleAction('view')"
         >
-          <commonIcon name="lucide:eye" class="w-4 h-4" />
+          <commonIcon
+            name="lucide:eye"
+            class="w-4 h-4"
+          />
           View Details
         </button>
 
         <!-- Edit Profile -->
         <button
-          @click="handleAction('edit')"
           class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+          @click="handleAction('edit')"
         >
-          <commonIcon name="lucide:pencil" class="w-4 h-4" />
+          <commonIcon
+            name="lucide:pencil"
+            class="w-4 h-4"
+          />
           Edit Profile
         </button>
 
@@ -55,18 +67,24 @@
         <!-- Email Actions -->
         <button
           v-if="!user.email_confirmed_at"
-          @click="handleAction('verify_email')"
           class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+          @click="handleAction('verify_email')"
         >
-          <commonIcon name="lucide:badge-check" class="w-4 h-4" />
+          <commonIcon
+            name="lucide:badge-check"
+            class="w-4 h-4"
+          />
           Verify Email
         </button>
 
         <button
-          @click="handleAction('reset_password')"
           class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+          @click="handleAction('reset_password')"
         >
-          <commonIcon name="lucide:key" class="w-4 h-4" />
+          <commonIcon
+            name="lucide:key"
+            class="w-4 h-4"
+          />
           Reset Password
         </button>
 
@@ -74,10 +92,13 @@
 
         <!-- Role Management -->
         <button
-          @click="handleAction('update_role')"
           class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+          @click="handleAction('update_role')"
         >
-          <commonIcon name="lucide:shield-check" class="w-4 h-4" />
+          <commonIcon
+            name="lucide:shield-check"
+            class="w-4 h-4"
+          />
           Manage Role
         </button>
 
@@ -86,37 +107,49 @@
         <!-- Account Status Actions -->
         <button
           v-if="!isSuspended"
-          @click="handleAction('suspend')"
           class="w-full text-left px-4 py-2 text-sm text-yellow-700 dark:text-yellow-400 hover:bg-yellow-50 dark:hover:bg-yellow-900/20 flex items-center gap-2"
+          @click="handleAction('suspend')"
         >
-          <commonIcon name="lucide:pause" class="w-4 h-4" />
+          <commonIcon
+            name="lucide:pause"
+            class="w-4 h-4"
+          />
           Suspend Account
         </button>
 
         <button
           v-if="isSuspended"
-          @click="handleAction('unsuspend')"
           class="w-full text-left px-4 py-2 text-sm text-green-700 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 flex items-center gap-2"
+          @click="handleAction('unsuspend')"
         >
-          <commonIcon name="lucide:play" class="w-4 h-4" />
+          <commonIcon
+            name="lucide:play"
+            class="w-4 h-4"
+          />
           Unsuspend Account
         </button>
 
         <button
           v-if="!isBanned"
-          @click="handleAction('ban')"
           class="w-full text-left px-4 py-2 text-sm text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-2"
+          @click="handleAction('ban')"
         >
-          <commonIcon name="lucide:ban" class="w-4 h-4" />
+          <commonIcon
+            name="lucide:ban"
+            class="w-4 h-4"
+          />
           Ban Account
         </button>
 
         <button
           v-if="isBanned"
-          @click="handleAction('unban')"
           class="w-full text-left px-4 py-2 text-sm text-green-700 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 flex items-center gap-2"
+          @click="handleAction('unban')"
         >
-          <commonIcon name="lucide:check-circle-2" class="w-4 h-4" />
+          <commonIcon
+            name="lucide:check-circle-2"
+            class="w-4 h-4"
+          />
           Unban Account
         </button>
       </div>
@@ -138,6 +171,7 @@ interface Props {
   user: {
     id: string
     email: string
+    email_confirmed_at?: string | null
     profile?: {
       name: string
     } | null
@@ -154,7 +188,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
-  action: [action: string, userId: string, data?: any]
+  action: [action: string, userId: string, data?: Record<string, any>]
 }>()
 
 // State
@@ -178,20 +212,21 @@ const toggleDropdown = () => {
 
 const handleAction = (action: string) => {
   isOpen.value = false
-  
+
   // Actions that need confirmation
   const confirmationActions = ['suspend', 'ban', 'reset_password', 'verify_email', 'update_role']
-  
+
   if (confirmationActions.includes(action)) {
     selectedAction.value = action
     showActionModal.value = true
-  } else {
+  }
+  else {
     // Direct actions
     emit('action', action, props.user.id)
   }
 }
 
-const confirmAction = (data?: any) => {
+const confirmAction = (data?: Record<string, any>) => {
   emit('action', selectedAction.value, props.user.id, data)
   showActionModal.value = false
   selectedAction.value = ''
@@ -211,9 +246,9 @@ const setupClickOutsideHandler = () => {
       isOpen.value = false
     }
   }
-  
+
   document.addEventListener('click', handleClickOutside)
-  
+
   onUnmounted(() => {
     document.removeEventListener('click', handleClickOutside)
   })

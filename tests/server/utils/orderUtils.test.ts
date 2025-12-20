@@ -14,7 +14,7 @@ import {
   formatOrderAddress,
   sanitizeOrderData,
   type CartItem,
-  type ShippingMethod
+  type ShippingMethod,
 } from '~/server/utils/orderUtils'
 
 // Test fixtures
@@ -28,7 +28,7 @@ const createMockProduct = (overrides = {}) => ({
   weight_kg: 1.5,
   stock_quantity: 10,
   is_active: true,
-  ...overrides
+  ...overrides,
 })
 
 const createMockCartItem = (overrides = {}): CartItem => ({
@@ -36,7 +36,7 @@ const createMockCartItem = (overrides = {}): CartItem => ({
   product_id: 1,
   quantity: 1,
   products: createMockProduct(),
-  ...overrides
+  ...overrides,
 })
 
 describe('calculateOrderTotals', () => {
@@ -56,8 +56,8 @@ describe('calculateOrderTotals', () => {
         id: 2,
         product_id: 2,
         quantity: 1,
-        products: createMockProduct({ id: 2, price_eur: 35.00 })
-      })
+        products: createMockProduct({ id: 2, price_eur: 35.00 }),
+      }),
     ]
     const result = calculateOrderTotals(items)
 
@@ -71,7 +71,7 @@ describe('calculateOrderTotals', () => {
       id: 'standard',
       name: 'Standard Shipping',
       price: 5.99,
-      estimatedDays: 5
+      estimatedDays: 5,
     }
     const result = calculateOrderTotals(items, shippingMethod)
 
@@ -86,7 +86,7 @@ describe('calculateOrderTotals', () => {
       id: 'free',
       name: 'Free Shipping',
       price: 0,
-      estimatedDays: 7
+      estimatedDays: 7,
     }
     const result = calculateOrderTotals(items, shippingMethod)
 
@@ -129,8 +129,8 @@ describe('validateCartItems', () => {
   it('should detect inactive products', () => {
     const items = [
       createMockCartItem({
-        products: createMockProduct({ is_active: false })
-      })
+        products: createMockProduct({ is_active: false }),
+      }),
     ]
     const result = validateCartItems(items)
 
@@ -144,8 +144,8 @@ describe('validateCartItems', () => {
     const items = [
       createMockCartItem({
         quantity: 15,
-        products: createMockProduct({ stock_quantity: 10 })
-      })
+        products: createMockProduct({ stock_quantity: 10 }),
+      }),
     ]
     const result = validateCartItems(items)
 
@@ -176,8 +176,8 @@ describe('validateCartItems', () => {
     const items = [
       createMockCartItem({
         quantity: 0,
-        products: createMockProduct({ is_active: false })
-      })
+        products: createMockProduct({ is_active: false }),
+      }),
     ]
     const result = validateCartItems(items)
 
@@ -188,14 +188,14 @@ describe('validateCartItems', () => {
   it('should collect errors from multiple items', () => {
     const items = [
       createMockCartItem({
-        products: createMockProduct({ id: 1, is_active: false })
+        products: createMockProduct({ id: 1, is_active: false }),
       }),
       createMockCartItem({
         id: 2,
         product_id: 2,
         quantity: 20,
-        products: createMockProduct({ id: 2, stock_quantity: 5 })
-      })
+        products: createMockProduct({ id: 2, stock_quantity: 5 }),
+      }),
     ]
     const result = validateCartItems(items)
 
@@ -258,8 +258,8 @@ describe('getAvailableShippingMethods', () => {
     const items = [
       createMockCartItem({
         quantity: 2,
-        products: createMockProduct({ price_eur: 30 })
-      })
+        products: createMockProduct({ price_eur: 30 }),
+      }),
     ]
     const methods = getAvailableShippingMethods(items)
 
@@ -271,8 +271,8 @@ describe('getAvailableShippingMethods', () => {
   it('should not include free shipping for orders under 50 EUR', () => {
     const items = [
       createMockCartItem({
-        products: createMockProduct({ price_eur: 20 })
-      })
+        products: createMockProduct({ price_eur: 20 }),
+      }),
     ]
     const methods = getAvailableShippingMethods(items)
 
@@ -282,14 +282,14 @@ describe('getAvailableShippingMethods', () => {
   it('should increase shipping cost for heavy orders (over 5kg)', () => {
     const lightItems = [
       createMockCartItem({
-        products: createMockProduct({ weight_kg: 1 })
-      })
+        products: createMockProduct({ weight_kg: 1 }),
+      }),
     ]
     const heavyItems = [
       createMockCartItem({
         quantity: 10,
-        products: createMockProduct({ weight_kg: 1.5 })
-      })
+        products: createMockProduct({ weight_kg: 1.5 }),
+      }),
     ]
 
     const lightMethods = getAvailableShippingMethods(lightItems)
@@ -305,7 +305,7 @@ describe('getAvailableShippingMethods', () => {
     const items = [createMockCartItem()]
     const methods = getAvailableShippingMethods(items)
 
-    methods.forEach(method => {
+    methods.forEach((method) => {
       expect(method.estimatedDays).toBeGreaterThan(0)
     })
   })
@@ -318,7 +318,7 @@ describe('validateShippingAddress', () => {
     street: '123 Main St',
     city: 'Madrid',
     postalCode: '28001',
-    country: 'ES'
+    country: 'ES',
   }
 
   it('should validate a complete address', () => {
@@ -374,7 +374,7 @@ describe('validateShippingAddress', () => {
     const result = validateShippingAddress({
       ...validAddress,
       country: 'ES',
-      postalCode: '123' // Invalid - should be 5 digits
+      postalCode: '123', // Invalid - should be 5 digits
     })
 
     expect(result.valid).toBe(false)
@@ -385,7 +385,7 @@ describe('validateShippingAddress', () => {
     const result = validateShippingAddress({
       ...validAddress,
       country: 'ES',
-      postalCode: '28001'
+      postalCode: '28001',
     })
 
     expect(result.valid).toBe(true)
@@ -395,7 +395,7 @@ describe('validateShippingAddress', () => {
     const result = validateShippingAddress({
       ...validAddress,
       country: 'US',
-      postalCode: '12345'
+      postalCode: '12345',
     })
 
     expect(result.valid).toBe(true)
@@ -405,7 +405,7 @@ describe('validateShippingAddress', () => {
     const result = validateShippingAddress({
       ...validAddress,
       country: 'US',
-      postalCode: '12345-6789'
+      postalCode: '12345-6789',
     })
 
     expect(result.valid).toBe(true)
@@ -415,7 +415,7 @@ describe('validateShippingAddress', () => {
     const result = validateShippingAddress({
       ...validAddress,
       country: 'RO',
-      postalCode: '123456'
+      postalCode: '123456',
     })
 
     expect(result.valid).toBe(true)
@@ -425,7 +425,7 @@ describe('validateShippingAddress', () => {
     const result = validateShippingAddress({
       ...validAddress,
       country: 'XX',
-      postalCode: 'ANY-FORMAT'
+      postalCode: 'ANY-FORMAT',
     })
 
     expect(result.valid).toBe(true)
@@ -434,7 +434,7 @@ describe('validateShippingAddress', () => {
   it('should trim whitespace from fields', () => {
     const result = validateShippingAddress({
       ...validAddress,
-      firstName: '  John  '
+      firstName: '  John  ',
     })
 
     // Should still be valid (trimmed internally)
@@ -444,8 +444,8 @@ describe('validateShippingAddress', () => {
   it('should handle null/undefined fields', () => {
     const result = validateShippingAddress({
       firstName: null,
-      lastName: undefined
-    } as any)
+      lastName: undefined,
+    } as unknown)
 
     expect(result.valid).toBe(false)
     expect(result.errors.firstName).toBeDefined()
@@ -462,7 +462,7 @@ describe('formatOrderAddress', () => {
       city: 'Madrid',
       province: 'Madrid',
       postalCode: '28001',
-      country: 'Spain'
+      country: 'Spain',
     }
 
     const formatted = formatOrderAddress(address)
@@ -482,7 +482,7 @@ describe('formatOrderAddress', () => {
       street: '123 Main St',
       city: 'Madrid',
       postalCode: '28001',
-      country: 'Spain'
+      country: 'Spain',
     }
 
     const formatted = formatOrderAddress(address)
@@ -497,7 +497,7 @@ describe('formatOrderAddress', () => {
       street: '123 Main St',
       city: 'Madrid',
       postalCode: '28001',
-      country: 'Spain'
+      country: 'Spain',
     }
 
     const formatted = formatOrderAddress(address)
@@ -516,7 +516,7 @@ describe('formatOrderAddress', () => {
   it('should combine city and province', () => {
     const address = {
       city: 'Barcelona',
-      province: 'Catalonia'
+      province: 'Catalonia',
     }
 
     const formatted = formatOrderAddress(address)
@@ -528,7 +528,7 @@ describe('formatOrderAddress', () => {
 describe('sanitizeOrderData', () => {
   it('should remove script tags from customerNotes', () => {
     const data = {
-      customerNotes: 'Hello <script>alert("xss")</script> World'
+      customerNotes: 'Hello <script>alert("xss")</script> World',
     }
 
     const sanitized = sanitizeOrderData(data)
@@ -539,7 +539,7 @@ describe('sanitizeOrderData', () => {
 
   it('should remove script tags from adminNotes', () => {
     const data = {
-      adminNotes: '<script>document.cookie</script>Important note'
+      adminNotes: '<script>document.cookie</script>Important note',
     }
 
     const sanitized = sanitizeOrderData(data)
@@ -550,7 +550,7 @@ describe('sanitizeOrderData', () => {
 
   it('should handle nested script tags', () => {
     const data = {
-      customerNotes: '<script><script>nested</script></script>Safe'
+      customerNotes: '<script><script>nested</script></script>Safe',
     }
 
     const sanitized = sanitizeOrderData(data)
@@ -562,7 +562,7 @@ describe('sanitizeOrderData', () => {
     const data = {
       orderId: 123,
       customerEmail: 'test@example.com',
-      items: [{ id: 1 }]
+      items: [{ id: 1 }],
     }
 
     const sanitized = sanitizeOrderData(data)
@@ -583,7 +583,7 @@ describe('sanitizeOrderData', () => {
 
   it('should handle script tags with attributes', () => {
     const data = {
-      customerNotes: '<script type="text/javascript" src="evil.js"></script>Clean'
+      customerNotes: '<script type="text/javascript" src="evil.js"></script>Clean',
     }
 
     const sanitized = sanitizeOrderData(data)

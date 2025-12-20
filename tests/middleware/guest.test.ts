@@ -28,7 +28,7 @@ describe('Guest Middleware', () => {
     mockTo = {
       path: '/auth/login',
       fullPath: '/auth/login',
-      query: {}
+      query: {},
     } as unknown as RouteLocationNormalized
     mockFrom = { path: '/' } as RouteLocationNormalized
 
@@ -81,7 +81,7 @@ describe('Guest Middleware', () => {
       mockUser = {
         id: 'user-123',
         email: 'user@example.com',
-        email_confirmed_at: '2024-01-01T00:00:00Z'
+        email_confirmed_at: '2024-01-01T00:00:00Z',
       }
     })
 
@@ -96,7 +96,7 @@ describe('Guest Middleware', () => {
       mockTo = {
         path: '/auth/login',
         fullPath: '/auth/login?redirect=/products',
-        query: { redirect: '/products' }
+        query: { redirect: '/products' },
       } as unknown as RouteLocationNormalized
 
       const { default: guestMiddleware } = await import('../../middleware/guest')
@@ -109,7 +109,7 @@ describe('Guest Middleware', () => {
       mockTo = {
         path: '/auth/login',
         fullPath: '/auth/login?redirect=https://evil.com',
-        query: { redirect: 'https://evil.com' }
+        query: { redirect: 'https://evil.com' },
       } as unknown as RouteLocationNormalized
 
       const { default: guestMiddleware } = await import('../../middleware/guest')
@@ -123,7 +123,7 @@ describe('Guest Middleware', () => {
       mockTo = {
         path: '/auth/login',
         fullPath: '/auth/login?redirect=//evil.com/steal',
-        query: { redirect: '//evil.com/steal' }
+        query: { redirect: '//evil.com/steal' },
       } as unknown as RouteLocationNormalized
 
       const { default: guestMiddleware } = await import('../../middleware/guest')
@@ -136,7 +136,7 @@ describe('Guest Middleware', () => {
       mockTo = {
         path: '/auth/login',
         fullPath: '/auth/login?redirect=/checkout',
-        query: { redirect: '/checkout' }
+        query: { redirect: '/checkout' },
       } as unknown as RouteLocationNormalized
 
       const { default: guestMiddleware } = await import('../../middleware/guest')
@@ -151,7 +151,7 @@ describe('Guest Middleware', () => {
       mockUser = {
         id: 'user-123',
         email: 'user@example.com',
-        email_confirmed_at: null
+        email_confirmed_at: null,
       }
     })
 
@@ -159,11 +159,11 @@ describe('Guest Middleware', () => {
       mockTo = {
         path: '/auth/verify-email',
         fullPath: '/auth/verify-email',
-        query: {}
+        query: {},
       } as unknown as RouteLocationNormalized
 
       const { default: guestMiddleware } = await import('../../middleware/guest')
-      const result = await guestMiddleware(mockTo, mockFrom)
+      await guestMiddleware(mockTo, mockFrom)
 
       expect(mockNavigateTo).not.toHaveBeenCalled()
     })
@@ -172,11 +172,11 @@ describe('Guest Middleware', () => {
       mockTo = {
         path: '/auth/logout',
         fullPath: '/auth/logout',
-        query: {}
+        query: {},
       } as unknown as RouteLocationNormalized
 
       const { default: guestMiddleware } = await import('../../middleware/guest')
-      const result = await guestMiddleware(mockTo, mockFrom)
+      await guestMiddleware(mockTo, mockFrom)
 
       expect(mockNavigateTo).not.toHaveBeenCalled()
     })
@@ -185,7 +185,7 @@ describe('Guest Middleware', () => {
       mockTo = {
         path: '/auth/login',
         fullPath: '/auth/login',
-        query: {}
+        query: {},
       } as unknown as RouteLocationNormalized
 
       const { default: guestMiddleware } = await import('../../middleware/guest')
@@ -195,8 +195,8 @@ describe('Guest Middleware', () => {
         path: '/auth/verify-email',
         query: {
           message: 'email-verification-required',
-          email: 'user@example.com'
-        }
+          email: 'user@example.com',
+        },
       })
     })
 
@@ -204,7 +204,7 @@ describe('Guest Middleware', () => {
       mockTo = {
         path: '/auth/register',
         fullPath: '/auth/register',
-        query: {}
+        query: {},
       } as unknown as RouteLocationNormalized
 
       const { default: guestMiddleware } = await import('../../middleware/guest')
@@ -214,8 +214,8 @@ describe('Guest Middleware', () => {
         path: '/auth/verify-email',
         query: {
           message: 'email-verification-required',
-          email: 'user@example.com'
-        }
+          email: 'user@example.com',
+        },
       })
     })
   })
@@ -225,7 +225,7 @@ describe('Guest Middleware', () => {
       mockUser = {
         id: 'user-123',
         email: 'user@example.com',
-        email_confirmed_at: '2024-01-01T00:00:00Z'
+        email_confirmed_at: '2024-01-01T00:00:00Z',
       }
       mockLocalePath = vi.fn((path: string) => `/es${path}`)
       vi.stubGlobal('useLocalePath', () => mockLocalePath)
@@ -241,14 +241,14 @@ describe('Guest Middleware', () => {
       mockUser = {
         id: 'user-123',
         email: 'user@example.com',
-        email_confirmed_at: null
+        email_confirmed_at: null,
       }
       mockLocalePath = vi.fn((path: string) => `/ru${path}`)
       vi.stubGlobal('useLocalePath', () => mockLocalePath)
       mockTo = {
         path: '/ru/auth/verify-email',
         fullPath: '/ru/auth/verify-email',
-        query: {}
+        query: {},
       } as unknown as RouteLocationNormalized
 
       const { default: guestMiddleware } = await import('../../middleware/guest')
@@ -273,8 +273,8 @@ describe('Guest Middleware', () => {
       expect(mockNavigateTo).toHaveBeenCalledWith({
         path: '/auth/verify-email',
         query: expect.objectContaining({
-          message: 'email-verification-required'
-        })
+          message: 'email-verification-required',
+        }),
       })
     })
 
@@ -282,12 +282,12 @@ describe('Guest Middleware', () => {
       mockUser = {
         id: 'user-123',
         email: 'user@example.com',
-        email_confirmed_at: '2024-01-01T00:00:00Z'
+        email_confirmed_at: '2024-01-01T00:00:00Z',
       }
       mockTo = {
         path: '/auth/login',
         fullPath: '/auth/login?redirect=',
-        query: { redirect: '' }
+        query: { redirect: '' },
       } as unknown as RouteLocationNormalized
 
       const { default: guestMiddleware } = await import('../../middleware/guest')

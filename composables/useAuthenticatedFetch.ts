@@ -6,7 +6,7 @@
  * composables are available.
  */
 
-export async function useAuthenticatedFetch<T>(url: string, options: any = {}) {
+export async function useAuthenticatedFetch<T>(url: string, options: Record<string, any> = {}) {
   const supabase = useSupabaseClient()
 
   // Get the current session
@@ -19,12 +19,12 @@ export async function useAuthenticatedFetch<T>(url: string, options: any = {}) {
   // Add Authorization header with the access token
   const headers = {
     ...options.headers,
-    'Authorization': `Bearer ${session.access_token}`
+    Authorization: `Bearer ${session.access_token}`,
   }
 
   // Make the request with the auth header
   return await $fetch<T>(url, {
     ...options,
-    headers
+    headers,
   })
 }

@@ -5,10 +5,6 @@
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 
-// Mock $fetch before importing the module
-const mockFetch = vi.fn()
-vi.stubGlobal('$fetch', mockFetch)
-
 import {
   cartAdvancedState,
   selectItem,
@@ -23,9 +19,13 @@ import {
   removeFromSavedForLater,
   moveSelectedToSavedForLater,
   loadRecommendations,
-  clearRecommendations
+  clearRecommendations,
 } from '~/stores/cart/advanced'
 import type { CartItem, Product } from '~/stores/cart/types'
+
+// Mock $fetch before importing the module
+const mockFetch = vi.fn()
+vi.stubGlobal('$fetch', mockFetch)
 
 // Mock product data
 const mockProduct: Product = {
@@ -35,7 +35,7 @@ const mockProduct: Product = {
   price: 25.99,
   images: ['/images/wine.jpg'],
   stock: 10,
-  category: 'Wines'
+  category: 'Wines',
 }
 
 const mockProduct2: Product = {
@@ -45,7 +45,7 @@ const mockProduct2: Product = {
   price: 35.99,
   images: ['/images/wine2.jpg'],
   stock: 5,
-  category: 'Wines'
+  category: 'Wines',
 }
 
 // Mock cart items
@@ -54,7 +54,7 @@ const mockCartItem: CartItem = {
   product: mockProduct,
   quantity: 2,
   addedAt: new Date(),
-  source: 'manual'
+  source: 'manual',
 }
 
 const mockCartItem2: CartItem = {
@@ -62,7 +62,7 @@ const mockCartItem2: CartItem = {
   product: mockProduct2,
   quantity: 1,
   addedAt: new Date(),
-  source: 'manual'
+  source: 'manual',
 }
 
 // Helper to reset advanced state
@@ -72,7 +72,7 @@ function resetAdvancedState() {
     bulkOperationInProgress: false,
     savedForLater: [],
     recommendations: [],
-    recommendationsLoading: false
+    recommendationsLoading: false,
   }
 }
 
@@ -277,7 +277,7 @@ describe('Cart Advanced Features Module', () => {
         const removeItemFn = vi.fn()
 
         await expect(bulkRemoveSelected([mockCartItem], removeItemFn)).rejects.toThrow(
-          'Bulk operation already in progress'
+          'Bulk operation already in progress',
         )
 
         cartAdvancedState.value.bulkOperationInProgress = false
@@ -365,14 +365,14 @@ describe('Cart Advanced Features Module', () => {
 
     describe('restoreFromSaved', () => {
       it('should restore saved item to cart', async () => {
-        const addItemFn = vi.fn().mockResolvedValue(undefined)
+        const _addItemFn = vi.fn().mockResolvedValue(undefined)
 
         await saveItemForLater(mockCartItem)
         const savedId = cartAdvancedState.value.savedForLater[0].id
 
-        await restoreFromSaved(savedId, addItemFn)
+        await restoreFromSaved(savedId, _addItemFn)
 
-        expect(addItemFn).toHaveBeenCalledWith(mockProduct, 2)
+        expect(_addItemFn).toHaveBeenCalledWith(mockProduct, 2)
       })
 
       it('should remove item from saved for later after restore', async () => {
@@ -390,7 +390,7 @@ describe('Cart Advanced Features Module', () => {
         const addItemFn = vi.fn()
 
         await expect(restoreFromSaved('non-existent', addItemFn)).rejects.toThrow(
-          'Saved item not found'
+          'Saved item not found',
         )
       })
     })
@@ -407,7 +407,7 @@ describe('Cart Advanced Features Module', () => {
 
       it('should throw if item not found', async () => {
         await expect(removeFromSavedForLater('non-existent')).rejects.toThrow(
-          'Saved item not found'
+          'Saved item not found',
         )
       })
 
@@ -449,7 +449,7 @@ describe('Cart Advanced Features Module', () => {
         const removeItemFn = vi.fn()
 
         await expect(moveSelectedToSavedForLater([mockCartItem], removeItemFn)).rejects.toThrow(
-          'Bulk operation already in progress'
+          'Bulk operation already in progress',
         )
 
         cartAdvancedState.value.bulkOperationInProgress = false
@@ -472,7 +472,7 @@ describe('Cart Advanced Features Module', () => {
         mockFetch.mockResolvedValueOnce({
           success: true,
           recommendations: [mockProduct, mockProduct2],
-          metadata: { algorithm: 'collaborative_filtering' }
+          metadata: { algorithm: 'collaborative_filtering' },
         })
 
         await loadRecommendations([mockCartItem])
@@ -483,7 +483,7 @@ describe('Cart Advanced Features Module', () => {
       it('should call API with product IDs and categories', async () => {
         mockFetch.mockResolvedValueOnce({
           success: true,
-          recommendations: []
+          recommendations: [],
         })
 
         await loadRecommendations([mockCartItem, mockCartItem2])
@@ -493,8 +493,8 @@ describe('Cart Advanced Features Module', () => {
           body: {
             productIds: ['prod-1', 'prod-2'],
             categories: ['Wines'],
-            limit: 5
-          }
+            limit: 5,
+          },
         })
       })
 
@@ -539,7 +539,7 @@ describe('Cart Advanced Features Module', () => {
       it('should handle empty cart items', async () => {
         mockFetch.mockResolvedValueOnce({
           success: true,
-          recommendations: []
+          recommendations: [],
         })
 
         await loadRecommendations([])
@@ -549,8 +549,8 @@ describe('Cart Advanced Features Module', () => {
           body: {
             productIds: [],
             categories: [],
-            limit: 5
-          }
+            limit: 5,
+          },
         })
       })
 
@@ -558,7 +558,7 @@ describe('Cart Advanced Features Module', () => {
         mockFetch.mockResolvedValueOnce({
           success: true,
           recommendations: [mockProduct],
-          metadata: { algorithm: 'ml_model' }
+          metadata: { algorithm: 'ml_model' },
         })
 
         await loadRecommendations([mockCartItem])
@@ -569,7 +569,7 @@ describe('Cart Advanced Features Module', () => {
       it('should clear recommendations on unsuccessful response', async () => {
         mockFetch.mockResolvedValueOnce({
           success: false,
-          recommendations: null
+          recommendations: null,
         })
 
         await loadRecommendations([mockCartItem])
@@ -582,7 +582,7 @@ describe('Cart Advanced Features Module', () => {
       it('should clear all recommendations', async () => {
         mockFetch.mockResolvedValueOnce({
           success: true,
-          recommendations: [mockProduct]
+          recommendations: [mockProduct],
         })
 
         await loadRecommendations([mockCartItem])
@@ -616,7 +616,6 @@ describe('Cart Advanced Features Module', () => {
   describe('Edge Cases', () => {
     it('should handle concurrent bulk operations protection', async () => {
       const removeItemFn = vi.fn().mockResolvedValue(undefined)
-      const addItemFn = vi.fn().mockResolvedValue(undefined)
 
       selectItem('item-1')
 
@@ -641,7 +640,7 @@ describe('Cart Advanced Features Module', () => {
 
       mockFetch.mockResolvedValueOnce({
         success: true,
-        recommendations: []
+        recommendations: [],
       })
 
       await loadRecommendations([itemNoCategory])
@@ -651,8 +650,8 @@ describe('Cart Advanced Features Module', () => {
         body: {
           productIds: ['prod-1'],
           categories: [],
-          limit: 5
-        }
+          limit: 5,
+        },
       })
     })
 
@@ -662,12 +661,12 @@ describe('Cart Advanced Features Module', () => {
         product: { ...mockProduct, id: 'prod-3' },
         quantity: 1,
         addedAt: new Date(),
-        source: 'manual'
+        source: 'manual',
       }
 
       mockFetch.mockResolvedValueOnce({
         success: true,
-        recommendations: []
+        recommendations: [],
       })
 
       await loadRecommendations([mockCartItem, mockCartItem2, item3])
@@ -677,8 +676,8 @@ describe('Cart Advanced Features Module', () => {
         body: {
           productIds: ['prod-1', 'prod-2', 'prod-3'],
           categories: ['Wines'], // Only one, deduplicated
-          limit: 5
-        }
+          limit: 5,
+        },
       })
     })
   })

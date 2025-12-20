@@ -8,7 +8,8 @@ try {
   if (vue?.default) {
     plugins.push(vue.default())
   }
-} catch (error) {
+}
+catch {
   console.warn('[vitest] @vitejs/plugin-vue not found, proceeding without it.')
 }
 

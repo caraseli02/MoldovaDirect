@@ -1,5 +1,8 @@
 import { test, expect } from '../../fixtures/base'
 
+// Use unauthenticated context for auth page testing
+test.use({ storageState: { cookies: [], origins: [] } })
+
 test.describe('Password Reset Flow', () => {
   test.describe('Forgot Password Page', () => {
     test.beforeEach(async ({ page }) => {
@@ -98,7 +101,7 @@ test.describe('Password Reset Flow', () => {
 
     test('should validate password strength', async ({ page }) => {
       await page.fill('[data-testid="password-input"]', 'weak')
-      await page.blur('[data-testid="password-input"]')
+      await page.locator('[data-testid="password-input"]').blur()
 
       const passwordError = page.locator('#password-error')
       await expect(passwordError).toBeVisible()
@@ -107,7 +110,7 @@ test.describe('Password Reset Flow', () => {
     test('should validate password confirmation match', async ({ page }) => {
       await page.fill('[data-testid="password-input"]', 'NewPassword123!')
       await page.fill('[data-testid="confirm-password-input"]', 'DifferentPassword123!')
-      await page.blur('[data-testid="confirm-password-input"]')
+      await page.locator('[data-testid="confirm-password-input"]').blur()
 
       const confirmError = page.locator('#confirm-password-error')
       await expect(confirmError).toBeVisible()
@@ -166,7 +169,7 @@ test.describe('Password Reset Flow', () => {
     test('should not expose password in URL or network requests', async ({ page }) => {
       const requests: string[] = []
 
-      page.on('request', request => {
+      page.on('request', (request) => {
         requests.push(request.url())
       })
 
@@ -178,7 +181,7 @@ test.describe('Password Reset Flow', () => {
       await page.waitForTimeout(2000)
 
       // Password should not appear in any URLs
-      requests.forEach(url => {
+      requests.forEach((url) => {
         expect(url.toLowerCase()).not.toContain('securepassword123')
       })
     })
@@ -216,7 +219,7 @@ test.describe('Password Reset Flow', () => {
 
       for (const password of weakPasswords) {
         await page.fill('[data-testid="password-input"]', password)
-        await page.blur('[data-testid="password-input"]')
+        await page.locator('[data-testid="password-input"]').blur()
 
         const passwordError = page.locator('#password-error')
         const isVisible = await passwordError.isVisible()
@@ -242,7 +245,7 @@ test.describe('Password Reset Flow', () => {
       await page.goto('/auth/reset-password?token=test-token')
 
       await page.fill('[data-testid="password-input"]', 'weak')
-      await page.blur('[data-testid="password-input"]')
+      await page.locator('[data-testid="password-input"]').blur()
 
       const passwordError = page.locator('#password-error')
       await expect(passwordError).toHaveAttribute('role', 'alert')

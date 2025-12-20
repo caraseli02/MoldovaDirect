@@ -20,7 +20,7 @@ export async function requireAdmin(event: H3Event) {
   if (!user) {
     throw createError({
       statusCode: 401,
-      statusMessage: 'Unauthorized - Authentication required'
+      statusMessage: 'Unauthorized - Authentication required',
     })
   }
 
@@ -35,14 +35,14 @@ export async function requireAdmin(event: H3Event) {
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to verify user profile',
-      data: error
+      data: error,
     })
   }
 
   if (profile.role !== 'admin') {
     throw createError({
       statusCode: 403,
-      statusMessage: 'Forbidden - Admin role required'
+      statusMessage: 'Forbidden - Admin role required',
     })
   }
 

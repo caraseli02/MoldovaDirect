@@ -1,7 +1,7 @@
 import { test, expect } from '../../fixtures/base'
 
 test.describe('Admin Inventory Page', () => {
-  test('should load the admin inventory page successfully', async ({ adminPage }) => {
+  test('should load the admin inventory page successfully', async ({ adminAuthenticatedPage: adminPage }) => {
     // Navigate to admin inventory page
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
@@ -14,22 +14,20 @@ test.describe('Admin Inventory Page', () => {
     await expect(adminPage).toHaveTitle(/Inventory|Admin/i)
   })
 
-  test('should display the page header with navigation', async ({ adminPage }) => {
+  test('should display the page header with navigation', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
-    // Check main heading
-    const heading = adminPage.locator('h1')
-    const headingText = await heading.textContent()
-    expect(headingText).toContain('Inventory Management')
+    // Check main heading - use getByRole to be more specific
+    const heading = adminPage.getByRole('heading', { name: /Inventory Management/i })
+    await expect(heading).toBeVisible()
 
     // Check subtitle
-    const subtitle = adminPage.locator('p.text-sm')
-    const hasSubtitle = await subtitle.isVisible()
-    expect(hasSubtitle).toBeTruthy()
+    const subtitle = adminPage.locator('main p.text-sm').first()
+    await expect(subtitle).toBeVisible()
   })
 
-  test('should display tab navigation with correct tabs', async ({ adminPage }) => {
+  test('should display tab navigation with correct tabs', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
@@ -38,15 +36,15 @@ test.describe('Admin Inventory Page', () => {
     const tabCount = await tabButtons.count()
     expect(tabCount).toBeGreaterThan(0)
 
-    // Check for specific tab labels
-    const reportsTab = adminPage.locator('text=Inventory Reports')
-    const movementsTab = adminPage.locator('text=Movement History')
+    // Check for specific tab labels - use getByRole for buttons
+    const reportsTab = adminPage.getByRole('button', { name: /Inventory Reports/i })
+    const movementsTab = adminPage.getByRole('button', { name: /Movement History/i })
 
     await expect(reportsTab).toBeVisible()
     await expect(movementsTab).toBeVisible()
   })
 
-  test('should display setup database button', async ({ adminPage }) => {
+  test('should display setup database button', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
@@ -59,16 +57,16 @@ test.describe('Admin Inventory Page', () => {
     expect(isDisabled).toBeFalsy()
   })
 
-  test('should render Inventory Reports component by default', async ({ adminPage }) => {
+  test('should render Inventory Reports component by default', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
-    // Wait for reports component to be visible
-    const reportsSection = adminPage.locator('text=Inventory Reports')
-    await expect(reportsSection).toBeVisible({ timeout: 10000 })
+    // Wait for reports component heading to be visible
+    const reportsHeading = adminPage.getByRole('heading', { name: /Inventory Reports/i }).last()
+    await expect(reportsHeading).toBeVisible({ timeout: 10000 })
   })
 
-  test('should render Inventory Movements component on tab switch', async ({ adminPage }) => {
+  test('should render Inventory Movements component on tab switch', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
@@ -81,7 +79,7 @@ test.describe('Admin Inventory Page', () => {
     await expect(movementsSection).toBeVisible({ timeout: 10000 })
   })
 
-  test('should test Inventory Reports component functionality', async ({ adminPage }) => {
+  test('should test Inventory Reports component functionality', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
@@ -100,7 +98,7 @@ test.describe('Admin Inventory Page', () => {
     expect(hasStockLevelsOption || hasLowStockOption).toBeTruthy()
   })
 
-  test('should test Movement History filtering options', async ({ adminPage }) => {
+  test('should test Movement History filtering options', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
@@ -122,21 +120,21 @@ test.describe('Admin Inventory Page', () => {
   })
 
   test('should not have rendering errors on page load', async ({ page }) => {
-    const consoleLogs: { type: string; text: string }[] = []
+    const consoleLogs: { type: string, text: string }[] = []
     const pageErrors: string[] = []
 
-    page.on('console', msg => {
+    page.on('console', (msg) => {
       consoleLogs.push({
         type: msg.type(),
         text: msg.text(),
       })
     })
 
-    page.on('pageerror', error => {
+    page.on('pageerror', (error) => {
       pageErrors.push(error.toString())
     })
 
-    page.on('requestfailed', request => {
+    page.on('requestfailed', (request) => {
       const url = request.url()
       // Don't fail on non-critical API requests that might not have data
       if (!url.includes('/api/')) {
@@ -144,18 +142,15 @@ test.describe('Admin Inventory Page', () => {
       }
     })
 
-    // Authenticate first using the fixture's adminPage mechanism
-    const adminPageContext = await page.context()
-
     // Navigate to inventory page
     await page.goto('/admin/inventory')
     await page.waitForLoadState('networkidle')
 
     // Check for console errors (not warnings)
     const errors = consoleLogs.filter(log =>
-      log.type === 'error' &&
-      !log.text.includes('404') &&
-      !log.text.includes('Network request failed')
+      log.type === 'error'
+      && !log.text.includes('404')
+      && !log.text.includes('Network request failed'),
     )
 
     // Log errors for debugging but don't fail on API 404s
@@ -169,7 +164,7 @@ test.describe('Admin Inventory Page', () => {
     }
   })
 
-  test('should verify stock indicator component is used', async ({ adminPage }) => {
+  test('should verify stock indicator component is used', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
@@ -182,14 +177,14 @@ test.describe('Admin Inventory Page', () => {
     const pageContent = await adminPage.content()
 
     // Stock indicator should be present (either inline or in components)
-    const hasStockIndicators = pageContent.includes('stock') ||
-                               pageContent.includes('Stock') ||
-                               pageContent.includes('inventory')
+    const hasStockIndicators = pageContent.includes('stock')
+      || pageContent.includes('Stock')
+      || pageContent.includes('inventory')
 
     expect(hasStockIndicators).toBeTruthy()
   })
 
-  test('should test tab switching interaction', async ({ adminPage }) => {
+  test('should test tab switching interaction', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
@@ -201,9 +196,9 @@ test.describe('Admin Inventory Page', () => {
     // Check if reports tab is active (has blue border or active class)
     const reportsTabElement = reportsTab.locator('..')
     const isReportsActive = await reportsTabElement.evaluate((el) => {
-      return el.className.includes('border-blue') ||
-             el.className.includes('blue-600') ||
-             el.textContent?.includes('Inventory Reports')
+      return el.className.includes('border-blue')
+        || el.className.includes('blue-600')
+        || el.textContent?.includes('Inventory Reports')
     })
 
     // Click Movements tab
@@ -214,16 +209,16 @@ test.describe('Admin Inventory Page', () => {
     // Tab switching should work
     const movementsTabElement = movementsTab.locator('..')
     const isMovementsActive = await movementsTabElement.evaluate((el) => {
-      return el.className.includes('border-blue') ||
-             el.className.includes('blue-600') ||
-             el.textContent?.includes('Movement History')
+      return el.className.includes('border-blue')
+        || el.className.includes('blue-600')
+        || el.textContent?.includes('Movement History')
     })
 
     // At least one should be active
     expect(isReportsActive || isMovementsActive).toBeTruthy()
   })
 
-  test('should display responsive layout on different screen sizes', async ({ adminPage }) => {
+  test('should display responsive layout on different screen sizes', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
@@ -237,7 +232,7 @@ test.describe('Admin Inventory Page', () => {
     expect(isHeaderVisible).toBeTruthy()
   })
 
-  test('should handle async component loading', async ({ adminPage }) => {
+  test('should handle async component loading', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
 
     // Page should load even if components are async
@@ -252,7 +247,7 @@ test.describe('Admin Inventory Page', () => {
     expect(await tabs.count()).toBeGreaterThan(0)
   })
 
-  test('should verify dark mode support in UI', async ({ adminPage }) => {
+  test('should verify dark mode support in UI', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
@@ -267,7 +262,7 @@ test.describe('Admin Inventory Page', () => {
     expect(hasDarkClasses).toBeTruthy()
   })
 
-  test('should verify all UI components are accessible', async ({ adminPage }) => {
+  test('should verify all UI components are accessible', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
@@ -287,7 +282,7 @@ test.describe('Admin Inventory Page', () => {
     }
   })
 
-  test('should verify page renders without layout shift', async ({ adminPage }) => {
+  test('should verify page renders without layout shift', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
@@ -305,7 +300,7 @@ test.describe('Admin Inventory Page', () => {
     }
   })
 
-  test('should verify tab content switches without full page reload', async ({ adminPage }) => {
+  test('should verify tab content switches without full page reload', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
@@ -330,21 +325,21 @@ test.describe('Admin Inventory Page', () => {
     expect(backUrl).toBe(initialUrl)
   })
 
-  test('should take screenshot of loaded page', async ({ adminPage }) => {
+  test('should take screenshot of loaded page', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
     // Take screenshot of the full page
     await adminPage.screenshot({
       path: 'test-results/inventory-page-screenshot.png',
-      fullPage: true
+      fullPage: true,
     })
 
     // Screenshot should be created successfully
     expect(true).toBeTruthy()
   })
 
-  test('should verify all text content is readable', async ({ adminPage }) => {
+  test('should verify all text content is readable', async ({ adminAuthenticatedPage: adminPage }) => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 

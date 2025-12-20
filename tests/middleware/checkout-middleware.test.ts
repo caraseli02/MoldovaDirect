@@ -25,7 +25,7 @@ const mockProduct: Product = {
   price: 25.99,
   images: ['/test.jpg'],
   stock: 10,
-  category: 'Test'
+  category: 'Test',
 }
 
 describe('Checkout Middleware - Confirmation Page Access', () => {
@@ -53,7 +53,7 @@ describe('Checkout Middleware - Confirmation Page Access', () => {
         tax: 10.00,
         total: 119.98,
         currency: 'USD',
-        customerEmail: 'test@example.com'
+        customerEmail: 'test@example.com',
       })
 
       checkoutStore.currentStep = 'confirmation'
@@ -79,12 +79,12 @@ describe('Checkout Middleware - Confirmation Page Access', () => {
         tax: 5.00,
         total: 60.00,
         currency: 'USD',
-        customerEmail: 'test2@example.com'
+        customerEmail: 'test2@example.com',
       })
 
       // User just completed checkout, navigating to confirmation
-      const canAccess = checkoutStore.currentStep === 'review' ||
-                        Boolean(checkoutStore.orderData?.orderId)
+      const canAccess = checkoutStore.currentStep === 'review'
+        || Boolean(checkoutStore.orderData?.orderId)
 
       expect(canAccess).toBe(true)
     })
@@ -103,7 +103,7 @@ describe('Checkout Middleware - Confirmation Page Access', () => {
         tax: 10.00,
         total: 120.00,
         currency: 'USD',
-        customerEmail: 'test3@example.com'
+        customerEmail: 'test3@example.com',
       })
 
       checkoutStore.currentStep = 'confirmation'
@@ -136,10 +136,10 @@ describe('Checkout Middleware - Confirmation Page Access', () => {
           tax: 7.50,
           total: 90.00,
           currency: 'USD',
-          customerEmail: 'restored@example.com'
+          customerEmail: 'restored@example.com',
         },
         shippingInfo: null,
-        paymentMethod: null
+        paymentMethod: null,
       })
 
       checkoutStore.restore()
@@ -190,15 +190,15 @@ describe('Checkout Middleware - Confirmation Page Access', () => {
           city: 'Test',
           postalCode: '12345',
           country: 'US',
-          phone: '+1234567890'
+          phone: '+1234567890',
         },
         method: {
           id: 'standard',
           name: 'Standard',
           description: '5-7 days',
           price: 9.99,
-          estimatedDays: 7
-        }
+          estimatedDays: 7,
+        },
       })
 
       checkoutStore.currentStep = 'payment'
@@ -217,21 +217,21 @@ describe('Checkout Middleware - Confirmation Page Access', () => {
           city: 'Test',
           postalCode: '12345',
           country: 'US',
-          phone: '+1234567890'
+          phone: '+1234567890',
         },
         method: {
           id: 'standard',
           name: 'Standard',
           description: '5-7 days',
           price: 9.99,
-          estimatedDays: 7
-        }
+          estimatedDays: 7,
+        },
       })
       // No payment method
       checkoutStore.paymentMethod = null
 
-      const canAccessReview = checkoutStore.shippingInfo !== null &&
-                              checkoutStore.paymentMethod !== null
+      const canAccessReview = checkoutStore.shippingInfo !== null
+        && checkoutStore.paymentMethod !== null
       expect(canAccessReview).toBe(false)
     })
 
@@ -245,26 +245,26 @@ describe('Checkout Middleware - Confirmation Page Access', () => {
           city: 'Test',
           postalCode: '12345',
           country: 'US',
-          phone: '+1234567890'
+          phone: '+1234567890',
         },
         method: {
           id: 'standard',
           name: 'Standard',
           description: '5-7 days',
           price: 9.99,
-          estimatedDays: 7
-        }
+          estimatedDays: 7,
+        },
       })
 
       // Set up payment
       checkoutStore.setPaymentMethodState({
-        type: 'cash'
+        type: 'cash',
       })
 
       checkoutStore.currentStep = 'review'
 
-      const canAccessReview = checkoutStore.shippingInfo !== null &&
-                              checkoutStore.paymentMethod !== null
+      const canAccessReview = checkoutStore.shippingInfo !== null
+        && checkoutStore.paymentMethod !== null
       expect(canAccessReview).toBe(true)
     })
   })
@@ -274,7 +274,7 @@ describe('Checkout Middleware - Confirmation Page Access', () => {
       // Guest info set
       checkoutStore.setGuestInfo({
         email: 'guest@example.com',
-        emailUpdates: false
+        emailUpdates: false,
       })
 
       // Order completed
@@ -287,7 +287,7 @@ describe('Checkout Middleware - Confirmation Page Access', () => {
         tax: 5.00,
         total: 60.00,
         currency: 'USD',
-        customerEmail: 'guest@example.com'
+        customerEmail: 'guest@example.com',
       })
 
       checkoutStore.currentStep = 'confirmation'
@@ -305,7 +305,7 @@ describe('Checkout Middleware - Confirmation Page Access', () => {
         currentStep: 'confirmation',
         guestInfo: {
           email: 'guest@test.com',
-          emailUpdates: true
+          emailUpdates: true,
         },
         orderData: {
           orderId: 'guest-order-456',
@@ -316,10 +316,10 @@ describe('Checkout Middleware - Confirmation Page Access', () => {
           tax: 7.50,
           total: 90.00,
           currency: 'USD',
-          customerEmail: 'guest@test.com'
+          customerEmail: 'guest@test.com',
         },
         shippingInfo: null,
-        paymentMethod: null
+        paymentMethod: null,
       })
 
       checkoutStore.restore()
@@ -342,7 +342,7 @@ describe('Checkout Middleware - Confirmation Page Access', () => {
       checkoutStore.currentStep = 'review'
       checkoutStore.persist({
         shippingInfo: null,
-        paymentMethod: null
+        paymentMethod: null,
       })
 
       // Simulate page refresh
@@ -352,10 +352,10 @@ describe('Checkout Middleware - Confirmation Page Access', () => {
     })
 
     it('should handle step validation correctly', () => {
-      const steps: Array<'shipping' | 'payment' | 'review' | 'confirmation'> =
-        ['shipping', 'payment', 'review', 'confirmation']
+      const steps: Array<'shipping' | 'payment' | 'review' | 'confirmation'>
+        = ['shipping', 'payment', 'review', 'confirmation']
 
-      steps.forEach(step => {
+      steps.forEach((step) => {
         checkoutStore.currentStep = step
         expect(checkoutStore.currentStep).toBe(step)
       })
@@ -367,7 +367,7 @@ describe('Checkout Middleware - Confirmation Page Access', () => {
       checkoutStore.currentStep = 'confirmation'
       checkoutStore.orderData = null
 
-      const shouldRedirect = !Boolean(checkoutStore.orderData?.orderId)
+      const shouldRedirect = !checkoutStore.orderData?.orderId
       expect(shouldRedirect).toBe(true)
     })
 
@@ -375,7 +375,7 @@ describe('Checkout Middleware - Confirmation Page Access', () => {
       cookieStorage.set('checkout_session', {
         sessionId: 'corrupted',
         currentStep: 'invalid-step',
-        orderData: null
+        orderData: null,
       })
 
       checkoutStore.restore()

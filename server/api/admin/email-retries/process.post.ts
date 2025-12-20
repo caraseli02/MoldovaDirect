@@ -10,24 +10,23 @@ export default defineEventHandler(async (event) => {
   try {
     await requireAdminRole(event)
 
-    console.log('📧 Manual email retry processing triggered')
-    
     const result = await processEmailRetries()
-    
+
     return {
       success: true,
       data: result,
-      message: `Processed ${result.processed} emails: ${result.succeeded} succeeded, ${result.failed} failed`
+      message: `Processed ${result.processed} emails: ${result.succeeded} succeeded, ${result.failed} failed`,
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     console.error('❌ Error processing email retries:', error)
-    
+
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to process email retries',
       data: {
-        error: error.message
-      }
+        error: error.message,
+      },
     })
   }
 })

@@ -1,6 +1,13 @@
 <template>
-  <Badge :variant="statusVariant" :class="cn('transition-colors', props.class)">
-    <commonIcon v-if="showIcon" :name="statusIcon" class="h-3 w-3" />
+  <Badge
+    :variant="statusVariant"
+    :class="cn('transition-colors', props.class)"
+  >
+    <commonIcon
+      v-if="showIcon"
+      :name="statusIcon"
+      class="h-3 w-3"
+    />
     <span>{{ statusLabel }}</span>
   </Badge>
 </template>
@@ -19,7 +26,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  showIcon: true
+  showIcon: true,
 })
 
 // Status configuration
@@ -31,28 +38,28 @@ const statusConfig: Record<OrderStatus, {
   pending: {
     label: 'Pending',
     variant: 'secondary',
-    icon: 'lucide:clock'
+    icon: 'lucide:clock',
   },
   processing: {
     label: 'Processing',
     variant: 'default',
-    icon: 'lucide:package'
+    icon: 'lucide:package',
   },
   shipped: {
     label: 'Shipped',
     variant: 'default',
-    icon: 'lucide:truck'
+    icon: 'lucide:truck',
   },
   delivered: {
     label: 'Delivered',
     variant: 'default',
-    icon: 'lucide:check-circle'
+    icon: 'lucide:check-circle',
   },
   cancelled: {
     label: 'Cancelled',
     variant: 'destructive',
-    icon: 'lucide:x-circle'
-  }
+    icon: 'lucide:x-circle',
+  },
 }
 
 const statusLabel = computed(() => statusConfig[props.status]?.label || props.status)

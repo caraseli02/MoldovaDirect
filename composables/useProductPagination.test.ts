@@ -14,7 +14,7 @@ describe('useProductPagination', () => {
         page: 1,
         limit: 10,
         total: 5,
-        totalPages: 1
+        totalPages: 1,
       })
 
       // Act
@@ -30,7 +30,7 @@ describe('useProductPagination', () => {
         page: 1,
         limit: 10,
         total: 15,
-        totalPages: 2
+        totalPages: 2,
       })
 
       // Act
@@ -46,7 +46,7 @@ describe('useProductPagination', () => {
         page: 3,
         limit: 10,
         total: 45,
-        totalPages: 5
+        totalPages: 5,
       })
 
       // Act
@@ -62,7 +62,7 @@ describe('useProductPagination', () => {
         page: 4,
         limit: 10,
         total: 70,
-        totalPages: 7
+        totalPages: 7,
       })
 
       // Act
@@ -78,7 +78,7 @@ describe('useProductPagination', () => {
         page: 1,
         limit: 10,
         total: 60,
-        totalPages: 6
+        totalPages: 6,
       })
 
       // Act
@@ -96,7 +96,7 @@ describe('useProductPagination', () => {
         page: 1,
         limit: 10,
         total: 80,
-        totalPages: 8
+        totalPages: 8,
       })
 
       // Act
@@ -112,7 +112,7 @@ describe('useProductPagination', () => {
         page: 2,
         limit: 10,
         total: 80,
-        totalPages: 8
+        totalPages: 8,
       })
 
       // Act
@@ -128,7 +128,7 @@ describe('useProductPagination', () => {
         page: 3,
         limit: 10,
         total: 80,
-        totalPages: 8
+        totalPages: 8,
       })
 
       // Act
@@ -144,7 +144,7 @@ describe('useProductPagination', () => {
         page: 1,
         limit: 10,
         total: 200,
-        totalPages: 20
+        totalPages: 20,
       })
 
       // Act
@@ -160,7 +160,7 @@ describe('useProductPagination', () => {
         page: 5,
         limit: 10,
         total: 200,
-        totalPages: 20
+        totalPages: 20,
       })
 
       // Act
@@ -176,7 +176,7 @@ describe('useProductPagination', () => {
         page: 10,
         limit: 10,
         total: 200,
-        totalPages: 20
+        totalPages: 20,
       })
 
       // Act
@@ -192,7 +192,7 @@ describe('useProductPagination', () => {
         page: 19,
         limit: 10,
         total: 200,
-        totalPages: 20
+        totalPages: 20,
       })
 
       // Act
@@ -208,7 +208,7 @@ describe('useProductPagination', () => {
         page: 20,
         limit: 10,
         total: 200,
-        totalPages: 20
+        totalPages: 20,
       })
 
       // Act
@@ -226,7 +226,7 @@ describe('useProductPagination', () => {
         page: 1,
         limit: 10,
         total: 1000,
-        totalPages: 100
+        totalPages: 100,
       })
 
       // Act
@@ -242,7 +242,7 @@ describe('useProductPagination', () => {
         page: 5,
         limit: 10,
         total: 1000,
-        totalPages: 100
+        totalPages: 100,
       })
 
       // Act
@@ -258,7 +258,7 @@ describe('useProductPagination', () => {
         page: 50,
         limit: 10,
         total: 1000,
-        totalPages: 100
+        totalPages: 100,
       })
 
       // Act
@@ -274,7 +274,7 @@ describe('useProductPagination', () => {
         page: 96,
         limit: 10,
         total: 1000,
-        totalPages: 100
+        totalPages: 100,
       })
 
       // Act
@@ -290,7 +290,7 @@ describe('useProductPagination', () => {
         page: 97,
         limit: 10,
         total: 1000,
-        totalPages: 100
+        totalPages: 100,
       })
 
       // Act
@@ -306,7 +306,7 @@ describe('useProductPagination', () => {
         page: 100,
         limit: 10,
         total: 1000,
-        totalPages: 100
+        totalPages: 100,
       })
 
       // Act
@@ -324,7 +324,7 @@ describe('useProductPagination', () => {
         page: 3,
         limit: 10,
         total: 100,
-        totalPages: 10
+        totalPages: 10,
       })
 
       // Act
@@ -341,7 +341,7 @@ describe('useProductPagination', () => {
         page: 4,
         limit: 10,
         total: 100,
-        totalPages: 10
+        totalPages: 10,
       })
 
       // Act
@@ -358,7 +358,7 @@ describe('useProductPagination', () => {
         page: 5,
         limit: 10,
         total: 100,
-        totalPages: 10
+        totalPages: 10,
       })
 
       // Act
@@ -375,7 +375,7 @@ describe('useProductPagination', () => {
         page: 7,
         limit: 10,
         total: 100,
-        totalPages: 10
+        totalPages: 10,
       })
 
       // Act
@@ -392,7 +392,7 @@ describe('useProductPagination', () => {
         page: 6,
         limit: 10,
         total: 100,
-        totalPages: 10
+        totalPages: 10,
       })
 
       // Act
@@ -409,7 +409,7 @@ describe('useProductPagination', () => {
         page: 15,
         limit: 10,
         total: 300,
-        totalPages: 30
+        totalPages: 30,
       })
 
       // Act
@@ -428,7 +428,7 @@ describe('useProductPagination', () => {
         page: 1,
         limit: 10,
         total: 50,
-        totalPages: 5
+        totalPages: 5,
       })
 
       // Act
@@ -445,7 +445,7 @@ describe('useProductPagination', () => {
         page: 2,
         limit: 10,
         total: 50,
-        totalPages: 5
+        totalPages: 5,
       })
 
       // Act
@@ -461,7 +461,7 @@ describe('useProductPagination', () => {
         page: 5,
         limit: 10,
         total: 50,
-        totalPages: 5
+        totalPages: 5,
       })
 
       // Act
@@ -478,7 +478,7 @@ describe('useProductPagination', () => {
         page: 3,
         limit: 10,
         total: 50,
-        totalPages: 5
+        totalPages: 5,
       })
 
       // Act
@@ -494,7 +494,7 @@ describe('useProductPagination', () => {
         page: 1,
         limit: 10,
         total: 5,
-        totalPages: 1
+        totalPages: 1,
       })
 
       // Act
@@ -511,7 +511,7 @@ describe('useProductPagination', () => {
         page: 0,
         limit: 10,
         total: 50,
-        totalPages: 5
+        totalPages: 5,
       })
 
       // Act
@@ -527,7 +527,7 @@ describe('useProductPagination', () => {
         page: 10,
         limit: 10,
         total: 50,
-        totalPages: 5
+        totalPages: 5,
       })
 
       // Act
@@ -543,7 +543,7 @@ describe('useProductPagination', () => {
         page: -1,
         limit: 10,
         total: 50,
-        totalPages: 5
+        totalPages: 5,
       })
 
       // Act
@@ -561,7 +561,7 @@ describe('useProductPagination', () => {
         page: 1,
         limit: 10,
         total: 50,
-        totalPages: 5
+        totalPages: 5,
       })
 
       // Act
@@ -577,7 +577,7 @@ describe('useProductPagination', () => {
         page: 2,
         limit: 10,
         total: 50,
-        totalPages: 5
+        totalPages: 5,
       })
 
       // Act
@@ -593,7 +593,7 @@ describe('useProductPagination', () => {
         page: 3,
         limit: 10,
         total: 50,
-        totalPages: 5
+        totalPages: 5,
       })
 
       // Act
@@ -609,7 +609,7 @@ describe('useProductPagination', () => {
         page: 5,
         limit: 10,
         total: 50,
-        totalPages: 5
+        totalPages: 5,
       })
 
       // Act
@@ -625,7 +625,7 @@ describe('useProductPagination', () => {
         page: 5,
         limit: 10,
         total: 47,
-        totalPages: 5
+        totalPages: 5,
       })
 
       // Act
@@ -641,7 +641,7 @@ describe('useProductPagination', () => {
         page: 2,
         limit: 20,
         total: 100,
-        totalPages: 5
+        totalPages: 5,
       })
 
       // Act
@@ -657,7 +657,7 @@ describe('useProductPagination', () => {
         page: 3,
         limit: 5,
         total: 25,
-        totalPages: 5
+        totalPages: 5,
       })
 
       // Act
@@ -673,7 +673,7 @@ describe('useProductPagination', () => {
         page: 6,
         limit: 10,
         total: 51,
-        totalPages: 6
+        totalPages: 6,
       })
 
       // Act
@@ -689,7 +689,7 @@ describe('useProductPagination', () => {
         page: 1,
         limit: 10,
         total: 0,
-        totalPages: 0
+        totalPages: 0,
       })
 
       // Act
@@ -705,7 +705,7 @@ describe('useProductPagination', () => {
         page: 50,
         limit: 10,
         total: 1000,
-        totalPages: 100
+        totalPages: 100,
       })
 
       // Act
@@ -723,7 +723,7 @@ describe('useProductPagination', () => {
         page: 1,
         limit: 10,
         total: 5,
-        totalPages: 1
+        totalPages: 1,
       })
 
       // Act
@@ -739,7 +739,7 @@ describe('useProductPagination', () => {
         page: 1,
         limit: 10,
         total: 15,
-        totalPages: 2
+        totalPages: 2,
       })
 
       // Act
@@ -755,7 +755,7 @@ describe('useProductPagination', () => {
         page: 5,
         limit: 10,
         total: 100,
-        totalPages: 10
+        totalPages: 10,
       })
 
       // Act
@@ -771,7 +771,7 @@ describe('useProductPagination', () => {
         page: 1,
         limit: 10,
         total: 0,
-        totalPages: 0
+        totalPages: 0,
       })
 
       // Act
@@ -789,7 +789,7 @@ describe('useProductPagination', () => {
         page: 1,
         limit: 10,
         total: 100,
-        totalPages: 10
+        totalPages: 10,
       })
       const { visiblePages } = useProductPagination(pagination)
 
@@ -806,7 +806,7 @@ describe('useProductPagination', () => {
         page: 1,
         limit: 10,
         total: 50,
-        totalPages: 5
+        totalPages: 5,
       })
       const { currentRange } = useProductPagination(pagination)
 
@@ -823,7 +823,7 @@ describe('useProductPagination', () => {
         page: 1,
         limit: 10,
         total: 50,
-        totalPages: 5
+        totalPages: 5,
       })
       const { isFirstPage } = useProductPagination(pagination)
 
@@ -840,7 +840,7 @@ describe('useProductPagination', () => {
         page: 1,
         limit: 10,
         total: 50,
-        totalPages: 5
+        totalPages: 5,
       })
       const { isLastPage } = useProductPagination(pagination)
 
@@ -857,7 +857,7 @@ describe('useProductPagination', () => {
         page: 1,
         limit: 10,
         total: 5,
-        totalPages: 1
+        totalPages: 1,
       })
       const { hasMultiplePages } = useProductPagination(pagination)
 
@@ -879,7 +879,7 @@ describe('useProductPagination', () => {
         page: 4,
         limit: 10,
         total: 100,
-        totalPages: 10
+        totalPages: 10,
       })
 
       // Act
@@ -895,7 +895,7 @@ describe('useProductPagination', () => {
         page: 500,
         limit: 10,
         total: 10000,
-        totalPages: 1000
+        totalPages: 1000,
       })
 
       // Act
@@ -912,7 +912,7 @@ describe('useProductPagination', () => {
         page: 5,
         limit: 1,
         total: 10,
-        totalPages: 10
+        totalPages: 10,
       })
 
       // Act

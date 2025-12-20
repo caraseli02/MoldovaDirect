@@ -34,7 +34,7 @@ export const SELECTORS = {
     '[data-testid="cart-count"]',
     '[data-testid="cart-badge"]',
     '.cart-count',
-    '[aria-label*="cart"] [aria-label*="item"]'
+    '[aria-label*="cart"] [aria-label*="item"]',
   ],
 
   /** Add to cart button */

@@ -10,16 +10,16 @@ import type { PaginationState } from './useProductPagination'
  */
 interface ProductListItem {
   '@type': 'ListItem'
-  position: number
-  item: {
+  'position': number
+  'item': {
     '@type': 'Product'
-    name: string
-    image?: string
-    offers: {
+    'name': string
+    'image'?: string
+    'offers': {
       '@type': 'Offer'
-      priceCurrency: string
-      price: string
-      availability: string
+      'priceCurrency': string
+      'price': string
+      'availability': string
     }
   }
 }
@@ -30,8 +30,8 @@ interface ProductListItem {
 interface ProductListStructuredData {
   '@context': string
   '@type': 'ItemList'
-  itemListElement: ProductListItem[]
-  numberOfItems: number
+  'itemListElement': ProductListItem[]
+  'numberOfItems': number
 }
 
 /**
@@ -47,7 +47,7 @@ interface ProductListStructuredData {
  */
 export function useProductStructuredData(
   products: Ref<ProductWithRelations[] | null>,
-  pagination: Ref<PaginationState>
+  pagination: Ref<PaginationState>,
 ) {
   const { locale } = useI18n()
 
@@ -73,28 +73,28 @@ export function useProductStructuredData(
 
       return {
         '@type': 'ListItem',
-        position: (pagination.value.page - 1) * pagination.value.limit + index + 1,
-        item: {
+        'position': (pagination.value.page - 1) * pagination.value.limit + index + 1,
+        'item': {
           '@type': 'Product',
-          name: productName,
-          image: productImages.length > 0 ? productImages[0] : undefined,
-          offers: {
+          'name': productName,
+          'image': productImages.length > 0 ? productImages[0] : undefined,
+          'offers': {
             '@type': 'Offer',
-            priceCurrency: 'EUR',
-            price: Number(product.price).toFixed(2),
-            availability: (product.stockQuantity || 0) > 0
+            'priceCurrency': 'EUR',
+            'price': Number(product.price).toFixed(2),
+            'availability': (product.stockQuantity || 0) > 0
               ? 'https://schema.org/InStock'
-              : 'https://schema.org/OutOfStock'
-          }
-        }
+              : 'https://schema.org/OutOfStock',
+          },
+        },
       }
     })
 
     return {
       '@context': 'https://schema.org',
       '@type': 'ItemList',
-      itemListElement: itemListElements,
-      numberOfItems: pagination.value.total || products.value.length
+      'itemListElement': itemListElements,
+      'numberOfItems': pagination.value.total || products.value.length,
     }
   }
 
@@ -103,22 +103,24 @@ export function useProductStructuredData(
    */
   const updateStructuredData = () => {
     const structuredData = buildProductListStructuredData()
-    const scripts = structuredData ? [
-      {
-        type: 'application/ld+json',
-        children: JSON.stringify(structuredData)
-      }
-    ] : []
+    const scripts = structuredData
+      ? [
+          {
+            type: 'application/ld+json',
+            children: JSON.stringify(structuredData),
+          },
+        ]
+      : []
 
     useHead({
       title: 'Shop - Moldova Direct',
       meta: [
         {
           name: 'description',
-          content: 'Browse authentic Moldovan food and wine products. Premium quality directly from Moldova to Spain.'
-        }
+          content: 'Browse authentic Moldovan food and wine products. Premium quality directly from Moldova to Spain.',
+        },
       ],
-      script: scripts
+      script: scripts,
     })
   }
 
@@ -140,6 +142,6 @@ export function useProductStructuredData(
     // Methods
     buildProductListStructuredData,
     updateStructuredData,
-    setupWatchers
+    setupWatchers,
   }
 }

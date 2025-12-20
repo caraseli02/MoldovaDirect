@@ -3,7 +3,7 @@
  * Ensures the test user simulator is only accessible when explicitly enabled
  * with enhanced production environment detection
  */
-export default defineNuxtRouteMiddleware((to) => {
+export default defineNuxtRouteMiddleware((_to) => {
   const config = useRuntimeConfig()
 
   // Check explicit flag
@@ -14,10 +14,10 @@ export default defineNuxtRouteMiddleware((to) => {
   // Additional production safety checks
   if (process.env.NODE_ENV === 'production') {
     // Allow only on preview deployments (Vercel, Netlify, etc.)
-    const isPreview =
-      process.env.VERCEL_ENV === 'preview' ||
-      process.env.CONTEXT === 'deploy-preview' ||
-      process.env.DEPLOY_PRIME_URL?.includes('preview')
+    const isPreview
+      = process.env.VERCEL_ENV === 'preview'
+        || process.env.CONTEXT === 'deploy-preview'
+        || process.env.DEPLOY_PRIME_URL?.includes('preview')
 
     // Block if it's production but not a preview environment
     if (!isPreview && !process.env.ENABLE_TEST_USERS_OVERRIDE) {
@@ -27,7 +27,7 @@ export default defineNuxtRouteMiddleware((to) => {
   }
 
   // Rate limiting check (prevent abuse)
-  if (process.client) {
+  if (import.meta.client) {
     const lastAccess = sessionStorage.getItem('md-test-users-last-access')
     const now = Date.now()
 

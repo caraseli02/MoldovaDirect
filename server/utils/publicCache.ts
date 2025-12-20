@@ -1,3 +1,4 @@
+import type { H3Event } from 'h3'
 /**
  * Public API Cache Management Utilities
  *
@@ -15,7 +16,7 @@ const PUBLIC_CACHE_KEY_PATTERNS = {
   categories: ['public-categories-'],
   search: ['public-search-'],
   landing: ['public-landing-'],
-  all: ['public-']
+  all: ['public-'],
 } as const
 
 /**
@@ -44,14 +45,14 @@ export async function invalidatePublicCache(scope: PublicCacheScope): Promise<vo
         for (const key of matchingKeys) {
           await storage.removeItem(key)
         }
-      } else {
+      }
+      else {
         // Direct key removal
         await storage.removeItem(keyPattern)
       }
     }
-
-    console.log(`[Cache] Invalidated public cache for scope: ${scope}`)
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error(`[Cache] Failed to invalidate public cache for scope ${scope}:`, error)
   }
 }
@@ -63,7 +64,7 @@ export async function invalidatePublicCache(scope: PublicCacheScope): Promise<vo
  * @param event - The H3 event object
  * @returns Cache key string
  */
-export function getPublicCacheKey(baseName: string, event: any): string {
+export function getPublicCacheKey(baseName: string, event: H3Event): string {
   const query = getQuery(event)
 
   // Convert query params to a stable sorted string
@@ -85,44 +86,44 @@ export const PUBLIC_CACHE_CONFIG = {
   // Products endpoints - moderate caching
   productsList: {
     maxAge: 300, // 5 minutes
-    name: 'public-products-list'
+    name: 'public-products-list',
   },
   productDetail: {
     maxAge: 600, // 10 minutes
-    name: 'public-product-detail'
+    name: 'public-product-detail',
   },
   featuredProducts: {
     maxAge: 300, // 5 minutes
-    name: 'public-featured-products'
+    name: 'public-featured-products',
   },
   relatedProducts: {
     maxAge: 600, // 10 minutes
-    name: 'public-related-products'
+    name: 'public-related-products',
   },
   priceRange: {
     maxAge: 300, // 5 minutes
-    name: 'public-price-range'
+    name: 'public-price-range',
   },
 
   // Categories - longer caching (rarely change)
   categoriesList: {
     maxAge: 600, // 10 minutes
-    name: 'public-categories-list'
+    name: 'public-categories-list',
   },
   categoryDetail: {
     maxAge: 600, // 10 minutes
-    name: 'public-category-detail'
+    name: 'public-category-detail',
   },
 
   // Search - short caching (user-specific queries)
   search: {
     maxAge: 180, // 3 minutes
-    name: 'public-search'
+    name: 'public-search',
   },
 
   // Landing sections - longer caching (admin managed)
   landingSections: {
     maxAge: 600, // 10 minutes
-    name: 'public-landing-sections'
-  }
+    name: 'public-landing-sections',
+  },
 } as const

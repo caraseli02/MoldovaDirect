@@ -5,7 +5,7 @@
  * Returns current database statistics for the admin testing dashboard
  */
 
-import { serverSupabaseServiceRole, serverSupabaseUser } from '#supabase/server'
+import { serverSupabaseServiceRole } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
 import type { DatabaseStats } from '~/types/admin-testing'
 
@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
       recentOrdersCount,
       categoriesCount,
       activeCartsCount,
-      revenueData
+      revenueData,
     ] = await Promise.all([
       // Total users
       supabase
@@ -37,10 +37,10 @@ export default defineEventHandler(async (event) => {
       supabase.auth.admin.listUsers().then(({ data }) => {
         if (!data) return 0
         return data.users.filter((u: any) =>
-          u.email?.includes('test') ||
-          u.email?.includes('demo') ||
-          u.email?.includes('example') ||
-          u.email?.includes('@testuser.md')
+          u.email?.includes('test')
+          || u.email?.includes('demo')
+          || u.email?.includes('example')
+          || u.email?.includes('@testuser.md'),
         ).length
       }),
 
@@ -81,13 +81,13 @@ export default defineEventHandler(async (event) => {
       supabase
         .from('orders')
         .select('total_eur')
-        .eq('payment_status', 'paid')
+        .eq('payment_status', 'paid'),
     ])
 
     // Calculate total revenue
     const totalRevenue = revenueData.data?.reduce(
       (sum: number, order: any) => sum + (order.total_eur || 0),
-      0
+      0,
     ) || 0
 
     const stats: DatabaseStats = {
@@ -100,20 +100,20 @@ export default defineEventHandler(async (event) => {
       categories: categoriesCount.count || 0,
       activeCarts: activeCartsCount.count || 0,
       totalRevenue: Math.round(totalRevenue * 100) / 100,
-      lastUpdated: new Date().toISOString()
+      lastUpdated: new Date().toISOString(),
     }
 
     return {
       success: true,
-      stats
+      stats,
     }
-
-  } catch (error: any) {
+  }
+  catch (error: any) {
     console.error('Failed to fetch database stats:', error)
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to fetch database statistics',
-      data: { error: error.message }
+      data: { error: error.message },
     })
   }
 })

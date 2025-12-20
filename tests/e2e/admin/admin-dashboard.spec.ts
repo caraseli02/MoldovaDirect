@@ -1,27 +1,29 @@
-import { test, expect, Page } from '@playwright/test'
+import type { Page } from '@playwright/test'
+import { test, expect } from '@playwright/test'
+import path from 'node:path'
 
 test.describe('Admin Dashboard - Comprehensive Testing', () => {
   let page: Page
-  const consoleMessages: Array<{ type: string; message: string }> = []
+  const consoleMessages: Array<{ type: string, message: string }> = []
 
   test.beforeEach(async ({ browser }) => {
     const context = await browser.newContext()
     page = await context.newPage()
 
     // Capture console messages
-    page.on('console', msg => {
+    page.on('console', (msg) => {
       consoleMessages.push({
         type: msg.type(),
-        message: msg.text()
+        message: msg.text(),
       })
       console.log(`[${msg.type().toUpperCase()}] ${msg.text()}`)
     })
 
     // Capture page errors
-    page.on('pageerror', error => {
+    page.on('pageerror', (error) => {
       consoleMessages.push({
         type: 'error',
-        message: `Page Error: ${error.message}`
+        message: `Page Error: ${error.message}`,
       })
       console.log(`[PAGE ERROR] ${error.message}`)
     })
@@ -32,7 +34,7 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
 
     // Navigate to admin page
     const response = await page.goto('http://localhost:3000/admin', {
-      waitUntil: 'networkidle'
+      waitUntil: 'networkidle',
     })
 
     // Verify response is OK
@@ -45,7 +47,7 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
     await page.waitForLoadState('networkidle')
 
     // Take screenshot
-    const screenshotPath = '/Users/vladislavcaraseli/Documents/MoldovaDirect.worktrees/products-improvments/admin-test-1-page-load.png'
+    const screenshotPath = path.join('test-results', 'screenshots', 'admin-test-1-page-load.png')
     await page.screenshot({ path: screenshotPath, fullPage: true })
     console.log(`✓ Screenshot saved to: ${screenshotPath}`)
 
@@ -70,7 +72,7 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
         documentElement: document.documentElement.tagName,
         bodyChildCount: document.body.children.length,
         readyState: document.readyState,
-        location: window.location.href
+        location: window.location.href,
       }
     })
 
@@ -116,17 +118,15 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
     }
 
     // Check for unhandled rejections
-    let unhandledRejection = false
     page.once('crash', () => {
-      unhandledRejection = true
       console.log('✗ Page crashed!')
     })
 
     const pageInfo = await page.evaluate(() => {
       return {
         title: document.title,
-        hasErrors: !!(window as any).__NUXT_ERROR__,
-        errorCount: (window as any).__NUXT_ERROR_LOG__?.length || 0
+        hasErrors: !!(window as unknown).__NUXT_ERROR__,
+        errorCount: (window as unknown).__NUXT_ERROR_LOG__?.length || 0,
       }
     })
 
@@ -146,7 +146,7 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
       { name: 'main element', selector: 'main' },
       { name: 'admin layout', selector: '[class*="admin"]' },
       { name: 'dashboard container', selector: '[class*="dashboard"]' },
-      { name: 'generic container', selector: '#__nuxt' }
+      { name: 'generic container', selector: '#__nuxt' },
     ]
 
     let foundMain = false
@@ -170,7 +170,7 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
       { name: 'Tables', selectors: ['table', '[role="table"]', '[class*="table"]'] },
       { name: 'Buttons', selectors: ['button', '[role="button"]'] },
       { name: 'Forms/Inputs', selectors: ['form', 'input:not([type="hidden"])', 'textarea', 'select'] },
-      { name: 'Navigation Links', selectors: ['nav a', '[class*="nav"] a', '[class*="sidebar"] a', 'aside a'] }
+      { name: 'Navigation Links', selectors: ['nav a', '[class*="nav"] a', '[class*="sidebar"] a', 'aside a'] },
     ]
 
     console.log(`\n✓ UI Element Count:`)
@@ -193,7 +193,7 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
       return {
         length: text.length,
         wordCount: text.split(/\s+/).length,
-        hasContent: text.length > 0
+        hasContent: text.length > 0,
       }
     })
 
@@ -203,7 +203,7 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
     console.log(`  - Has content: ${textContent.hasContent}`)
 
     // Take screenshot
-    const screenshotPath = '/Users/vladislavcaraseli/Documents/MoldovaDirect.worktrees/products-improvments/admin-test-2-ui-elements.png'
+    const screenshotPath = path.join('test-results', 'screenshots', 'admin-test-2-ui-elements.png')
     await page.screenshot({ path: screenshotPath, fullPage: true })
     console.log(`\n✓ Screenshot saved to: ${screenshotPath}`)
   })
@@ -216,7 +216,7 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
     // Find navigation elements
     const navSelectors = ['nav a', '[class*="sidebar"] a', '[class*="menu"] a', 'aside a', '[role="navigation"] a']
 
-    let foundLinks: Array<{ text: string; href: string; selector: string }> = []
+    let foundLinks: Array<{ text: string, href: string, selector: string }> = []
 
     for (const selector of navSelectors) {
       const links = await page.locator(selector).all()
@@ -228,7 +228,7 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
           foundLinks.push({
             text: text.trim(),
             href: href,
-            selector: selector
+            selector: selector,
           })
         }
       }
@@ -239,7 +239,7 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
 
     console.log(`✓ Found ${foundLinks.length} navigation links`)
 
-    const testedLinks: Array<{ text: string; href: string; clickable: boolean; status: string; error?: string }> = []
+    const testedLinks: Array<{ text: string, href: string, clickable: boolean, status: string, error?: string }> = []
 
     // Test clicking first 5 links
     for (let i = 0; i < Math.min(foundLinks.length, 5); i++) {
@@ -260,7 +260,7 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
             text: linkInfo.text,
             href: linkInfo.href,
             clickable: false,
-            status: 'Not visible'
+            status: 'Not visible',
           })
           continue
         }
@@ -277,32 +277,34 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
             text: linkInfo.text,
             href: linkInfo.href,
             clickable: true,
-            status: 'Success'
+            status: 'Success',
           })
-        } else {
+        }
+        else {
           console.log(`    ⚠ Clicked but URL mismatch. Got: ${newUrl}`)
           testedLinks.push({
             text: linkInfo.text,
             href: linkInfo.href,
             clickable: true,
             status: 'URL mismatch',
-            error: `Expected ${linkInfo.href}, got ${newUrl}`
+            error: `Expected ${linkInfo.href}, got ${newUrl}`,
           })
         }
-      } catch (error) {
+      }
+      catch (error: any) {
         console.log(`    ✗ Error: ${error}`)
         testedLinks.push({
           text: linkInfo.text,
           href: linkInfo.href,
           clickable: false,
           status: 'Error',
-          error: String(error).substring(0, 100)
+          error: String(error).substring(0, 100),
         })
       }
     }
 
     console.log(`\n✓ Navigation test summary: ${testedLinks.length}/${Math.min(foundLinks.length, 5)} links tested`)
-    testedLinks.forEach((link, idx) => {
+    testedLinks.forEach((link) => {
       const icon = link.clickable ? '✓' : '✗'
       console.log(`  ${icon} ${link.text}: ${link.status}`)
     })
@@ -313,7 +315,7 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
 
     await page.goto('http://localhost:3000/admin', { waitUntil: 'networkidle' })
 
-    const issues: Array<{ type: string; description: string; severity: 'critical' | 'warning' | 'info' }> = []
+    const issues: Array<{ type: string, description: string, severity: 'critical' | 'warning' | 'info' }> = []
 
     // Check for broken images
     console.log(`\n  Checking images...`)
@@ -326,7 +328,7 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
         src: element.src,
         complete: element.complete,
         naturalWidth: element.naturalWidth,
-        naturalHeight: element.naturalHeight
+        naturalHeight: element.naturalHeight,
       }))
 
       if (imageStatus.complete && imageStatus.naturalWidth === 0 && imageStatus.naturalHeight === 0) {
@@ -334,14 +336,15 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
         issues.push({
           type: 'Broken Image',
           description: `Failed to load image: ${imageStatus.src}`,
-          severity: 'warning'
+          severity: 'warning',
         })
       }
     }
 
     if (brokenImages === 0 && images.length > 0) {
       console.log(`    ✓ All ${images.length} images loaded correctly`)
-    } else if (brokenImages > 0) {
+    }
+    else if (brokenImages > 0) {
       console.log(`    ✗ ${brokenImages}/${images.length} images failed to load`)
     }
 
@@ -356,7 +359,7 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
         issues.push({
           type: 'Error Message',
           description: text.trim(),
-          severity: 'warning'
+          severity: 'warning',
         })
       }
     }
@@ -370,7 +373,7 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
       issues.push({
         type: 'Possible Data Loading Issue',
         description: `Found ${skeletons.length} loading/skeleton elements - data may still be loading`,
-        severity: 'info'
+        severity: 'info',
       })
     }
 
@@ -385,7 +388,7 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
         scriptsLoaded: scripts.length,
         stylesLoaded: stylesheets.length,
         metaTags: metaTags.length,
-        hasMainContent: document.body.children.length > 0
+        hasMainContent: document.body.children.length > 0,
       }
     })
 
@@ -398,7 +401,7 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
       issues.push({
         type: 'Missing Scripts',
         description: 'No scripts loaded on page',
-        severity: 'critical'
+        severity: 'critical',
       })
     }
 
@@ -442,7 +445,7 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
           h3: document.querySelectorAll('h3').length,
           h4: document.querySelectorAll('h4').length,
           h5: document.querySelectorAll('h5').length,
-          h6: document.querySelectorAll('h6').length
+          h6: document.querySelectorAll('h6').length,
         },
         buttons: document.querySelectorAll('button').length,
         links: document.querySelectorAll('a').length,
@@ -450,18 +453,18 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
           inputs: document.querySelectorAll('input:not([type="hidden"])').length,
           textareas: document.querySelectorAll('textarea').length,
           selects: document.querySelectorAll('select').length,
-          forms: document.querySelectorAll('form').length
+          forms: document.querySelectorAll('form').length,
         },
         lists: {
           unordered: document.querySelectorAll('ul').length,
           ordered: document.querySelectorAll('ol').length,
-          datalists: document.querySelectorAll('datalist').length
+          datalists: document.querySelectorAll('datalist').length,
         },
         media: {
           images: document.querySelectorAll('img').length,
           videos: document.querySelectorAll('video').length,
-          audios: document.querySelectorAll('audio').length
-        }
+          audios: document.querySelectorAll('audio').length,
+        },
       }
     })
 
@@ -478,7 +481,7 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
         ariaDescribedBy: document.querySelectorAll('[aria-describedby]').length,
         roles: document.querySelectorAll('[role]').length,
         ariaHidden: document.querySelectorAll('[aria-hidden="true"]').length,
-        langAttribute: document.documentElement.lang || 'not set'
+        langAttribute: document.documentElement.lang || 'not set',
       }
     })
 
@@ -495,7 +498,7 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
       return {
         domContentLoaded: perfData?.domContentLoadedEventEnd - perfData?.domContentLoadedEventStart || 'N/A',
         loadComplete: perfData?.loadEventEnd - perfData?.loadEventStart || 'N/A',
-        domInteractive: perfData?.domInteractive || 'N/A'
+        domInteractive: perfData?.domInteractive || 'N/A',
       }
     })
 
@@ -503,7 +506,7 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
     console.log(`    Load Complete: ${metrics.loadComplete}ms`)
 
     // Take final full screenshot
-    const screenshotPath = '/Users/vladislavcaraseli/Documents/MoldovaDirect.worktrees/products-improvments/admin-test-3-final.png'
+    const screenshotPath = path.join('test-results', 'screenshots', 'admin-test-3-final.png')
     await page.screenshot({ path: screenshotPath, fullPage: true })
     console.log(`\n✓ Final screenshot saved to: ${screenshotPath}`)
   })
@@ -518,7 +521,7 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
       warning: consoleMessages.filter(m => m.type === 'warning').length,
       log: consoleMessages.filter(m => m.type === 'log').length,
       info: consoleMessages.filter(m => m.type === 'info').length,
-      debug: consoleMessages.filter(m => m.type === 'debug').length
+      debug: consoleMessages.filter(m => m.type === 'debug').length,
     }
 
     console.log(`Message breakdown:`)

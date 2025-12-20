@@ -16,14 +16,14 @@ import type { ChartConfiguration, ChartType, ChartData, ChartOptions } from 'cha
  * />
  */
 
-const props = defineProps({
+const _props = defineProps({
   /**
    * Chart type to render
    */
   type: {
     type: String as PropType<'line' | 'bar' | 'doughnut' | 'pie'>,
     required: true,
-    validator: (value: string) => ['line', 'bar', 'doughnut', 'pie'].includes(value)
+    validator: (value: string) => ['line', 'bar', 'doughnut', 'pie'].includes(value),
   },
 
   /**
@@ -31,7 +31,7 @@ const props = defineProps({
    */
   data: {
     type: Object as PropType<ChartData>,
-    required: true
+    required: true,
   },
 
   /**
@@ -41,8 +41,8 @@ const props = defineProps({
     type: Object as PropType<ChartOptions>,
     default: () => ({
       responsive: true,
-      maintainAspectRatio: true
-    })
+      maintainAspectRatio: true,
+    }),
   },
 
   /**
@@ -50,7 +50,7 @@ const props = defineProps({
    */
   height: {
     type: Number,
-    default: 300
+    default: 300,
   },
 
   /**
@@ -58,12 +58,12 @@ const props = defineProps({
    */
   width: {
     type: Number,
-    default: undefined
-  }
+    default: undefined,
+  },
 })
 
 const emit = defineEmits<{
-  'chart-created': [chart: any]
+  'chart-created': [chart: unknown]
   'chart-destroyed': []
   'error': [error: Error]
 }>()
@@ -88,7 +88,7 @@ const ChartComponent = defineAsyncComponent({
           data: Object as PropType<ChartData>,
           options: Object as PropType<ChartOptions>,
           height: Number,
-          width: Number
+          width: Number,
         },
         emits: ['chart-created', 'chart-destroyed', 'error'],
         setup(innerProps, { emit: innerEmit }) {
@@ -112,14 +112,15 @@ const ChartComponent = defineAsyncComponent({
               const config: ChartConfiguration = {
                 type: innerProps.type as ChartType,
                 data: innerProps.data as ChartData,
-                options: innerProps.options as ChartOptions
+                options: innerProps.options as ChartOptions,
               }
 
               chartInstance = new Chart(canvasRef.value, config)
 
               // Emit chart-created event with instance
               innerEmit('chart-created', chartInstance)
-            } catch (error) {
+            }
+            catch (error: any) {
               console.error('Failed to initialize chart:', error)
               innerEmit('error', error instanceof Error ? error : new Error('Chart initialization failed'))
             }
@@ -142,7 +143,8 @@ const ChartComponent = defineAsyncComponent({
 
               // Re-render chart
               chartInstance.update()
-            } catch (error) {
+            }
+            catch (error: any) {
               console.error('Failed to update chart:', error)
               innerEmit('error', error instanceof Error ? error : new Error('Chart update failed'))
             }
@@ -159,7 +161,7 @@ const ChartComponent = defineAsyncComponent({
             () => {
               updateChart()
             },
-            { deep: true }
+            { deep: true },
           )
 
           // Watch for options changes and update chart
@@ -168,7 +170,7 @@ const ChartComponent = defineAsyncComponent({
             () => {
               updateChart()
             },
-            { deep: true }
+            { deep: true },
           )
 
           // Watch for type changes and reinitialize chart
@@ -176,7 +178,7 @@ const ChartComponent = defineAsyncComponent({
             () => innerProps.type,
             () => {
               initChart()
-            }
+            },
           )
 
           // Cleanup chart instance on unmount
@@ -190,15 +192,16 @@ const ChartComponent = defineAsyncComponent({
 
           // Render canvas element
           return () => h('canvas', {
-            ref: canvasRef,
-            height: innerProps.height,
-            width: innerProps.width,
+            'ref': canvasRef,
+            'height': innerProps.height,
+            'width': innerProps.width,
             'aria-label': `${innerProps.type} chart`,
-            role: 'img'
+            'role': 'img',
           })
-        }
+        },
       })
-    } catch (error) {
+    }
+    catch (error: any) {
       console.error('Failed to load Chart.js:', error)
       throw error
     }
@@ -210,7 +213,7 @@ const ChartComponent = defineAsyncComponent({
   loadingComponent: defineComponent({
     name: 'ChartLoadingSkeleton',
     props: {
-      height: Number
+      height: Number,
     },
     setup(skeletonProps) {
       return () => h('div', {
@@ -227,10 +230,10 @@ const ChartComponent = defineAsyncComponent({
           justifyContent: 'center',
           color: '#999',
           fontSize: '14px',
-          fontFamily: 'system-ui, -apple-system, sans-serif'
-        }
+          fontFamily: 'system-ui, -apple-system, sans-serif',
+        },
       }, 'Loading chart...')
-    }
+    },
   }),
 
   /**
@@ -240,7 +243,7 @@ const ChartComponent = defineAsyncComponent({
     name: 'ChartError',
     props: {
       error: Object as PropType<Error>,
-      height: Number
+      height: Number,
     },
     setup(errorProps) {
       return () => h('div', {
@@ -257,32 +260,32 @@ const ChartComponent = defineAsyncComponent({
           justifyContent: 'center',
           color: '#c53030',
           padding: '20px',
-          fontFamily: 'system-ui, -apple-system, sans-serif'
-        }
+          fontFamily: 'system-ui, -apple-system, sans-serif',
+        },
       }, [
         h('div', {
           style: {
             fontSize: '16px',
             fontWeight: 'bold',
-            marginBottom: '8px'
-          }
+            marginBottom: '8px',
+          },
         }, 'Failed to load chart'),
         h('div', {
           style: {
             fontSize: '12px',
             color: '#9b2c2c',
-            textAlign: 'center'
-          }
-        }, errorProps.error?.message || 'An error occurred while loading the chart library')
+            textAlign: 'center',
+          },
+        }, errorProps.error?.message || 'An error occurred while loading the chart library'),
       ])
-    }
+    },
   }),
 
   // Delay before showing loading component (avoids flash for fast loads)
   delay: 200,
 
   // Timeout for loading (10 seconds)
-  timeout: 10000
+  timeout: 10000,
 })
 
 /**

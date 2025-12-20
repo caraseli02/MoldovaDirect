@@ -13,9 +13,9 @@ import type { Product } from '~/stores/cart/types'
 vi.mock('#imports', () => ({
   useRuntimeConfig: () => ({
     public: {
-      siteUrl: 'http://localhost:3000'
-    }
-  })
+      siteUrl: 'http://localhost:3000',
+    },
+  }),
 }))
 
 // Mock products for testing
@@ -26,7 +26,7 @@ const mockProduct1: Product = {
   price: 25.99,
   images: ['/test-image-1.jpg'],
   stock: 10,
-  category: 'Test'
+  category: 'Test',
 }
 
 const mockProduct2: Product = {
@@ -36,7 +36,7 @@ const mockProduct2: Product = {
   price: 15.50,
   images: ['/test-image-2.jpg'],
   stock: 5,
-  category: 'Test'
+  category: 'Test',
 }
 
 describe('Cart Core Module', () => {

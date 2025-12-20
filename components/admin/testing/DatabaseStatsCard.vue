@@ -6,7 +6,12 @@
           <CardTitle>Current Database State</CardTitle>
           <CardDescription>Real-time overview of your database</CardDescription>
         </div>
-        <Button @click="$emit('refresh')" variant="outline" size="sm" :disabled="loadingStats">
+        <Button
+          variant="outline"
+          size="sm"
+          :disabled="loadingStats"
+          @click="$emit('refresh')"
+        >
           <commonIcon
             :name="loadingStats ? 'lucide:loader-2' : 'lucide:refresh-cw'"
             :class="loadingStats ? 'animate-spin' : ''"
@@ -19,28 +24,54 @@
     <CardContent>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div class="space-y-1 p-4 rounded-lg border bg-card">
-          <div class="text-2xl font-bold">{{ stats?.users || 0 }}</div>
-          <div class="text-sm text-muted-foreground">Total Users</div>
-          <div class="text-xs text-orange-600">{{ stats?.testUsers || 0 }} test users</div>
+          <div class="text-2xl font-bold">
+            {{ stats?.users || 0 }}
+          </div>
+          <div class="text-sm text-muted-foreground">
+            Total Users
+          </div>
+          <div class="text-xs text-orange-600">
+            {{ stats?.testUsers || 0 }} test users
+          </div>
         </div>
         <div class="space-y-1 p-4 rounded-lg border bg-card">
-          <div class="text-2xl font-bold">{{ stats?.products || 0 }}</div>
-          <div class="text-sm text-muted-foreground">Products</div>
-          <div class="text-xs text-orange-600" v-if="stats?.lowStockProducts">
+          <div class="text-2xl font-bold">
+            {{ stats?.products || 0 }}
+          </div>
+          <div class="text-sm text-muted-foreground">
+            Products
+          </div>
+          <div
+            v-if="stats?.lowStockProducts"
+            class="text-xs text-orange-600"
+          >
             {{ stats.lowStockProducts }} low stock
           </div>
         </div>
         <div class="space-y-1 p-4 rounded-lg border bg-card">
-          <div class="text-2xl font-bold">{{ stats?.orders || 0 }}</div>
-          <div class="text-sm text-muted-foreground">Total Orders</div>
-          <div class="text-xs text-green-600" v-if="stats?.recentOrders">
+          <div class="text-2xl font-bold">
+            {{ stats?.orders || 0 }}
+          </div>
+          <div class="text-sm text-muted-foreground">
+            Total Orders
+          </div>
+          <div
+            v-if="stats?.recentOrders"
+            class="text-xs text-green-600"
+          >
             {{ stats.recentOrders }} last 7 days
           </div>
         </div>
         <div class="space-y-1 p-4 rounded-lg border bg-card">
-          <div class="text-2xl font-bold">€{{ stats?.totalRevenue?.toFixed(2) || '0.00' }}</div>
-          <div class="text-sm text-muted-foreground">Total Revenue</div>
-          <div class="text-xs text-muted-foreground">{{ stats?.categories || 0 }} categories</div>
+          <div class="text-2xl font-bold">
+            €{{ stats?.totalRevenue?.toFixed(2) || '0.00' }}
+          </div>
+          <div class="text-sm text-muted-foreground">
+            Total Revenue
+          </div>
+          <div class="text-xs text-muted-foreground">
+            {{ stats?.categories || 0 }} categories
+          </div>
         </div>
       </div>
     </CardContent>

@@ -23,8 +23,8 @@ beforeAll(() => {
 
   if (missing.length > 0) {
     throw new Error(
-      `Missing required environment variables for integration tests: ${missing.join(', ')}\n` +
-      'Please set these variables in your .env file or skip integration tests.'
+      `Missing required environment variables for integration tests: ${missing.join(', ')}\n`
+      + 'Please set these variables in your .env file or skip integration tests.',
     )
   }
 

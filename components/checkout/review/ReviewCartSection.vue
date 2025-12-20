@@ -5,14 +5,17 @@
         {{ $t('checkout.review.cartItems') }}
       </h3>
       <button
-        @click="$emit('lucide:square-pen')"
         class="text-sm text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 font-medium"
+        @click="$emit('lucide:square-pen')"
       >
         {{ $t('checkout.review.editCart') }}
       </button>
     </header>
 
-    <div v-if="items.length > 0" class="space-y-4">
+    <div
+      v-if="items.length > 0"
+      class="space-y-4"
+    >
       <article
         v-for="item in items"
         :key="item.productId"
@@ -46,7 +49,10 @@
       </article>
     </div>
 
-    <p v-else class="text-sm text-gray-500 dark:text-gray-400">
+    <p
+      v-else
+      class="text-sm text-gray-500 dark:text-gray-400"
+    >
       {{ $t('checkout.review.emptyCart') }}
     </p>
   </section>

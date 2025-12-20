@@ -70,27 +70,28 @@ test.describe('Critical Auth Flows', () => {
   test('user can login with valid credentials', async ({ page }) => {
     test.skip(
       !CriticalTestHelpers.hasTestUserCredentials(),
-      'TEST_USER_PASSWORD environment variable not set'
+      'TEST_USER_PASSWORD environment variable not set',
     )
 
     const helpers = new CriticalTestHelpers(page)
     await helpers.loginAsTestUser()
 
-    // Verify redirected to account page
-    await expect(page).toHaveURL(URL_PATTERNS.ACCOUNT, { timeout: TIMEOUTS.LONG })
+    // Verify redirected to account or admin page (test user might be admin)
+    await page.waitForURL(/\/(account|admin)/, { timeout: TIMEOUTS.LONG })
   })
 
   test('logged in user can logout', async ({ page }) => {
     test.skip(
       !CriticalTestHelpers.hasTestUserCredentials(),
-      'TEST_USER_PASSWORD environment variable not set'
+      'TEST_USER_PASSWORD environment variable not set',
     )
 
     const helpers = new CriticalTestHelpers(page)
 
     // Login first
     await helpers.loginAsTestUser()
-    await expect(page).toHaveURL(URL_PATTERNS.ACCOUNT, { timeout: TIMEOUTS.LONG })
+    // Test user might redirect to /admin (if admin) or /account (if regular user)
+    await page.waitForURL(/\/(account|admin)/, { timeout: TIMEOUTS.LONG })
 
     // Logout
     await helpers.logout()

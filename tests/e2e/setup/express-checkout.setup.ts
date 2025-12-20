@@ -30,7 +30,7 @@ setup.describe('Express Checkout Test Setup', () => {
 
     // Save authentication state
     await context.storageState({
-      path: `${STORAGE_STATE_DIR}/user-with-preferences.json`
+      path: `${STORAGE_STATE_DIR}/user-with-preferences.json`,
     })
   })
 
@@ -48,7 +48,7 @@ setup.describe('Express Checkout Test Setup', () => {
 
     // Save authentication state
     await context.storageState({
-      path: `${STORAGE_STATE_DIR}/user-address-only.json`
+      path: `${STORAGE_STATE_DIR}/user-address-only.json`,
     })
   })
 
@@ -66,7 +66,7 @@ setup.describe('Express Checkout Test Setup', () => {
 
     // Save authentication state
     await context.storageState({
-      path: `${STORAGE_STATE_DIR}/user-no-data.json`
+      path: `${STORAGE_STATE_DIR}/user-no-data.json`,
     })
   })
 
@@ -77,7 +77,7 @@ setup.describe('Express Checkout Test Setup', () => {
     expect(response.ok()).toBeTruthy()
   })
 
-  setup('seed test data if needed', async ({ page }) => {
+  setup('seed test data if needed', async () => {
     // This would typically seed database with test users and addresses
     // Implementation depends on your database setup
 

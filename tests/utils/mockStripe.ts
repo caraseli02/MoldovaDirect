@@ -33,7 +33,7 @@ export function createMockStripeCardElement(): MockStripeCardElement {
     mount: vi.fn(),
     unmount: vi.fn(),
     destroy: vi.fn(),
-    on: vi.fn((event, callback) => {
+    on: vi.fn((_event, _callback) => {
       // Store callback for manual triggering in tests
       return vi.fn()
     }),
@@ -136,11 +136,11 @@ export function mockStripePaymentError(message: string, code = 'card_declined') 
 /**
  * Helper to mock Stripe card element change event
  */
-export function mockStripeCardChangeEvent(complete = true, error: any = null) {
+export function mockStripeCardChangeEvent(complete = true, _error: unknown = null) {
   return {
     complete,
     empty: false,
-    error,
+    error: _error,
     brand: 'visa',
     value: {
       postalCode: complete ? '12345' : '',
@@ -154,7 +154,7 @@ export function mockStripeCardChangeEvent(complete = true, error: any = null) {
 export function mockStripeJs() {
   const mockStripe = createMockStripe()
 
-  // @ts-ignore
+  // @ts-expect-error - Mock for testing purposes
   global.Stripe = vi.fn(() => mockStripe)
 
   return mockStripe

@@ -16,16 +16,24 @@
     />
 
     <!-- Error Alert -->
-    <div v-if="error" class="rounded-2xl border border-red-200 bg-red-50 p-6 text-sm text-red-600">
+    <div
+      v-if="error"
+      class="rounded-2xl border border-red-200 bg-red-50 p-6 text-sm text-red-600"
+    >
       <div class="flex items-start gap-3">
-        <commonIcon name="lucide:alert-triangle" class="h-5 w-5 text-red-500" />
+        <commonIcon
+          name="lucide:alert-triangle"
+          class="h-5 w-5 text-red-500"
+        />
         <div class="space-y-2">
-          <p class="font-medium text-red-700">{{ $t('admin.dashboard.errors.loadingData') }}</p>
+          <p class="font-medium text-red-700">
+            {{ $t('admin.dashboard.errors.loadingData') }}
+          </p>
           <p>{{ error }}</p>
           <button
             type="button"
-            @click="clearError"
             class="text-sm font-medium text-red-600 underline hover:text-red-700"
+            @click="clearError"
           >
             Dismiss alert
           </button>
@@ -36,8 +44,12 @@
     <!-- Key Metrics Section -->
     <section class="space-y-4">
       <header class="flex items-center justify-between">
-        <h2 class="text-xs font-semibold uppercase tracking-wide text-gray-500">Key Metrics</h2>
-        <p class="text-sm text-gray-400">Real-time KPIs and operational signals</p>
+        <h2 class="text-xs font-semibold uppercase tracking-wide text-gray-500">
+          Key Metrics
+        </h2>
+        <p class="text-sm text-gray-400">
+          Real-time KPIs and operational signals
+        </p>
       </header>
       <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         <AdminDashboardMetricCard
@@ -63,7 +75,7 @@
                 <div
                   :class="['h-full rounded-full transition-all duration-500', card.progressClass]"
                   :style="{ width: `${card.progress}%` }"
-                />
+                ></div>
               </div>
             </div>
           </template>
@@ -85,7 +97,9 @@
     <div class="grid grid-cols-1 gap-6 xl:grid-cols-3">
       <div class="space-y-6 xl:col-span-2">
         <header class="flex items-center justify-between">
-          <h2 class="text-xs font-semibold uppercase tracking-wide text-gray-500">Recent Activity</h2>
+          <h2 class="text-xs font-semibold uppercase tracking-wide text-gray-500">
+            Recent Activity
+          </h2>
           <span class="text-sm text-gray-400">Live operational events</span>
         </header>
         <AdminUtilsRecentActivity />
@@ -121,7 +135,8 @@ let dashboardStore: ReturnType<typeof useAdminDashboardStore> | null = null
 
 try {
   dashboardStore = useAdminDashboardStore()
-} catch (error) {
+}
+catch {
   console.warn('Admin dashboard store not available during SSR/hydration')
 }
 
@@ -145,14 +160,14 @@ const store = dashboardStore ?? {
   clearError: () => {},
   clearData: () => {},
   updateStat: () => {},
-  addActivity: () => {}
+  addActivity: () => {},
 }
 
 // Range options for date filtering
 const rangeOptions = [
   { label: 'Today', value: 'today' as const },
   { label: 'Last 7 days', value: '7d' as const },
-  { label: 'Last 30 days', value: '30d' as const }
+  { label: 'Last 30 days', value: '30d' as const },
 ]
 const selectedRange = ref<'today' | '7d' | '30d'>('today')
 const route = useRoute()
@@ -180,7 +195,7 @@ const {
   toggleAutoRefresh,
   refreshAll,
   initAutoRefresh,
-  cleanupAutoRefresh
+  cleanupAutoRefresh,
 } = useDashboardRefresh(supabase, store)
 
 // Header subtitle
@@ -224,10 +239,10 @@ onUnmounted(() => {
 // Route watcher for refreshing data
 watch(
   () => route.path,
-  newPath => {
+  (newPath) => {
     if (newPath === '/admin' || newPath === '/admin/dashboard') {
       fetchDashboardData()
     }
-  }
+  },
 )
 </script>

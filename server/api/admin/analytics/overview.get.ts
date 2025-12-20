@@ -20,7 +20,6 @@
 
 import { serverSupabaseClient } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
-import { ADMIN_CACHE_CONFIG, getAdminCacheKey } from '~/server/utils/adminCache'
 
 export interface AnalyticsOverview {
   dailyAnalytics: Array<{
@@ -73,7 +72,8 @@ export default defineEventHandler(async (event) => {
     if (startDate && endDate) {
       actualStartDate = new Date(startDate)
       actualEndDate = new Date(endDate)
-    } else {
+    }
+    else {
       actualEndDate = new Date()
       actualStartDate = new Date()
       actualStartDate.setDate(actualStartDate.getDate() - days)
@@ -93,7 +93,7 @@ export default defineEventHandler(async (event) => {
 
     // If no daily analytics data exists, create it from raw data
     let processedDailyAnalytics = dailyAnalytics || []
-    
+
     if (!dailyAnalytics || dailyAnalytics.length === 0) {
       // Generate analytics from existing data
       const { data: profiles } = await supabase
@@ -111,7 +111,7 @@ export default defineEventHandler(async (event) => {
 
       // Group data by date
       const dateMap = new Map()
-      
+
       // Initialize all dates in range
       const currentDate = new Date(actualStartDate)
       while (currentDate <= actualEndDate) {
@@ -124,14 +124,14 @@ export default defineEventHandler(async (event) => {
           pageViews: 0,
           uniqueVisitors: 0,
           ordersCount: 0,
-          revenue: 0
+          revenue: 0,
         })
         currentDate.setDate(currentDate.getDate() + 1)
       }
 
       // Process profiles
       if (profiles) {
-        profiles.forEach(profile => {
+        profiles.forEach((profile) => {
           const dateStr = profile.created_at.split('T')[0]
           if (dateMap.has(dateStr)) {
             dateMap.get(dateStr).newRegistrations++
@@ -141,7 +141,7 @@ export default defineEventHandler(async (event) => {
 
       // Process orders
       if (orders) {
-        orders.forEach(order => {
+        orders.forEach((order) => {
           const dateStr = order.created_at.split('T')[0]
           if (dateMap.has(dateStr)) {
             const dayData = dateMap.get(dateStr)
@@ -155,24 +155,21 @@ export default defineEventHandler(async (event) => {
     }
 
     // Calculate KPIs
-    const totalUsers = processedDailyAnalytics.reduce((sum, day) => 
+    const totalUsers = processedDailyAnalytics.reduce((sum, day) =>
       Math.max(sum, day.totalUsers || 0), 0)
-    
-    const totalActiveUsers = processedDailyAnalytics.reduce((sum, day) => 
+
+    const totalActiveUsers = processedDailyAnalytics.reduce((sum, day) =>
       sum + (day.activeUsers || 0), 0)
-    
-    const totalRevenue = processedDailyAnalytics.reduce((sum, day) => 
+
+    const totalRevenue = processedDailyAnalytics.reduce((sum, day) =>
       sum + (day.revenue || 0), 0)
-    
-    const totalOrders = processedDailyAnalytics.reduce((sum, day) => 
+
+    const totalOrders = processedDailyAnalytics.reduce((sum, day) =>
       sum + (day.ordersCount || 0), 0)
-    
-    const totalNewRegistrations = processedDailyAnalytics.reduce((sum, day) => 
-      sum + (day.newRegistrations || 0), 0)
 
     // Calculate conversion rate (orders / total users)
     const conversionRate = totalUsers > 0 ? (totalOrders / totalUsers) * 100 : 0
-    
+
     // Calculate average order value
     const avgOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0
 
@@ -183,14 +180,14 @@ export default defineEventHandler(async (event) => {
 
     const firstHalfUsers = firstHalf.reduce((sum, day) => sum + (day.newRegistrations || 0), 0)
     const secondHalfUsers = secondHalf.reduce((sum, day) => sum + (day.newRegistrations || 0), 0)
-    const userGrowthRate = firstHalfUsers > 0 
-      ? ((secondHalfUsers - firstHalfUsers) / firstHalfUsers) * 100 
+    const userGrowthRate = firstHalfUsers > 0
+      ? ((secondHalfUsers - firstHalfUsers) / firstHalfUsers) * 100
       : 0
 
     const firstHalfRevenue = firstHalf.reduce((sum, day) => sum + (day.revenue || 0), 0)
     const secondHalfRevenue = secondHalf.reduce((sum, day) => sum + (day.revenue || 0), 0)
-    const revenueGrowthRate = firstHalfRevenue > 0 
-      ? ((secondHalfRevenue - firstHalfRevenue) / firstHalfRevenue) * 100 
+    const revenueGrowthRate = firstHalfRevenue > 0
+      ? ((secondHalfRevenue - firstHalfRevenue) / firstHalfRevenue) * 100
       : 0
 
     // Determine trends
@@ -202,8 +199,8 @@ export default defineEventHandler(async (event) => {
 
     const firstHalfActivity = firstHalf.reduce((sum, day) => sum + (day.activeUsers || 0), 0)
     const secondHalfActivity = secondHalf.reduce((sum, day) => sum + (day.activeUsers || 0), 0)
-    const activityGrowthRate = firstHalfActivity > 0 
-      ? ((secondHalfActivity - firstHalfActivity) / firstHalfActivity) * 100 
+    const activityGrowthRate = firstHalfActivity > 0
+      ? ((secondHalfActivity - firstHalfActivity) / firstHalfActivity) * 100
       : 0
 
     const overview: AnalyticsOverview = {
@@ -215,35 +212,35 @@ export default defineEventHandler(async (event) => {
         conversionRate: Math.round(conversionRate * 100) / 100,
         avgOrderValue: Math.round(avgOrderValue * 100) / 100,
         userGrowthRate: Math.round(userGrowthRate * 100) / 100,
-        revenueGrowthRate: Math.round(revenueGrowthRate * 100) / 100
+        revenueGrowthRate: Math.round(revenueGrowthRate * 100) / 100,
       },
       trends: {
         userGrowth: getTrend(userGrowthRate),
         revenueGrowth: getTrend(revenueGrowthRate),
-        activityGrowth: getTrend(activityGrowthRate)
+        activityGrowth: getTrend(activityGrowthRate),
       },
       dateRange: {
-        startDate: actualStartDate.toISOString().split('T')[0],
-        endDate: actualEndDate.toISOString().split('T')[0],
-        totalDays: Math.ceil((actualEndDate.getTime() - actualStartDate.getTime()) / (1000 * 60 * 60 * 24))
-      }
+        startDate: actualStartDate.toISOString().split('T')[0] || '',
+        endDate: actualEndDate.toISOString().split('T')[0] || '',
+        totalDays: Math.ceil((actualEndDate.getTime() - actualStartDate.getTime()) / (1000 * 60 * 60 * 24)),
+      },
     }
 
     return {
       success: true,
-      data: overview
+      data: overview,
     }
-
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Analytics overview error:', error)
-    
+
     if (error.statusCode) {
       throw error
     }
-    
+
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to fetch analytics overview'
+      statusMessage: 'Failed to fetch analytics overview',
     })
   }
 })

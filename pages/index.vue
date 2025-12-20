@@ -1,7 +1,10 @@
 <template>
   <div class="text-gray-900 dark:text-gray-100">
     <!-- Promotional announcement bar -->
-    <HomeAnnouncementBar v-if="isSectionEnabled('announcementBar')" :show-cta="true" />
+    <HomeAnnouncementBar
+      v-if="isSectionEnabled('announcementBar')"
+      :show-cta="true"
+    />
 
     <!--
       Hero Section - Random Video Background
@@ -32,11 +35,11 @@
       :primary-cta="{
         text: t('home.hero.primaryCta'),
         link: localePath('/products'),
-        icon: 'lucide:arrow-right'
+        icon: 'lucide:arrow-right',
       }"
       :secondary-cta="{
         text: t('home.hero.secondaryCta'),
-        link: localePath('/about')
+        link: localePath('/about'),
       }"
       :highlights="heroHighlights"
     />
@@ -45,7 +48,10 @@
     <LazyHomeMediaMentions v-if="isSectionEnabled('mediaMentions')" />
 
     <!-- Quick category navigation for immediate browsing -->
-    <LazyHomeCategoryGrid v-if="isSectionEnabled('categoryGrid')" :categories="categoryCards" />
+    <LazyHomeCategoryGrid
+      v-if="isSectionEnabled('categoryGrid')"
+      :categories="categoryCards"
+    />
 
     <!-- Featured products - primary conversion driver -->
     <LazyHomeFeaturedProductsSection
@@ -77,10 +83,16 @@
     <LazyHomeUgcGallery v-if="isSectionEnabled('ugcGallery')" />
 
     <!-- Process explanation -->
-    <LazyHomeHowItWorksSection v-if="isSectionEnabled('howItWorks')" :steps="howItWorksSteps" />
+    <LazyHomeHowItWorksSection
+      v-if="isSectionEnabled('howItWorks')"
+      :steps="howItWorksSteps"
+    />
 
     <!-- Service offerings -->
-    <LazyHomeServicesSection v-if="isSectionEnabled('services')" :services="services" />
+    <LazyHomeServicesSection
+      v-if="isSectionEnabled('services')"
+      :services="services"
+    />
 
     <!-- Trust badges and payment security -->
     <LazyHomeTrustBadges v-if="isSectionEnabled('trustBadges')" />
@@ -92,7 +104,10 @@
     <LazyHomeNewsletterSignup v-if="isSectionEnabled('newsletter')" />
 
     <!-- FAQ preview -->
-    <LazyHomeFaqPreviewSection v-if="isSectionEnabled('faqPreview')" :items="faqItems" />
+    <LazyHomeFaqPreviewSection
+      v-if="isSectionEnabled('faqPreview')"
+      :items="faqItems"
+    />
   </div>
 </template>
 
@@ -117,10 +132,10 @@ const {
   howItWorksSteps,
   testimonials,
   partnerLogos,
-  storyPoints,
-  storyTimeline,
+  storyPoints: _storyPoints,
+  storyTimeline: _storyTimeline,
   services,
-  faqItems
+  faqItems,
 } = useHomeContent()
 
 const { data: featuredData, pending: featuredPending, error: featuredError, refresh: refreshFeatured } = useFetch(
@@ -128,14 +143,14 @@ const { data: featuredData, pending: featuredPending, error: featuredError, refr
   {
     query: {
       limit: 12,
-      locale: locale.value
+      locale: locale.value,
     },
     server: true,
-    lazy: true
-  }
+    lazy: true,
+  },
 )
 
-const featuredProducts = computed<ProductWithRelations[]>(() => featuredData.value?.products || [])
+const featuredProducts = computed<ProductWithRelations[]>(() => (featuredData.value?.products || []) as unknown as ProductWithRelations[])
 const featuredErrorState = computed<Error | null>(() => (featuredError.value as Error | null) ?? null)
 
 const { siteUrl, toAbsoluteUrl } = useSiteUrl()
@@ -144,29 +159,29 @@ const structuredData = [
   {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'Moldova Direct',
-    url: siteUrl,
-    logo: toAbsoluteUrl('/icon.svg'),
-    contactPoint: [
+    'name': 'Moldova Direct',
+    'url': siteUrl,
+    'logo': toAbsoluteUrl('/icon.svg'),
+    'contactPoint': [
       {
         '@type': 'ContactPoint',
-        telephone: CONTACT_INFO.PHONE,
-        contactType: 'customer service',
-        areaServed: 'ES'
-      }
-    ]
+        'telephone': CONTACT_INFO.PHONE,
+        'contactType': 'customer service',
+        'areaServed': 'ES',
+      },
+    ],
   },
   {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'Moldova Direct',
-    url: siteUrl,
-    potentialAction: {
+    'name': 'Moldova Direct',
+    'url': siteUrl,
+    'potentialAction': {
       '@type': 'SearchAction',
-      target: `${siteUrl}/products?search={search_term_string}`,
-      'query-input': 'required name=search_term_string'
-    }
-  }
+      'target': `${siteUrl}/products?search={search_term_string}`,
+      'query-input': 'required name=search_term_string',
+    },
+  },
 ]
 
 useLandingSeo({
@@ -180,9 +195,9 @@ useLandingSeo({
     'Moldovan wine delivery',
     'Moldovan gourmet food Spain',
     'authentic Moldovan products',
-    'Moldova Direct store'
+    'Moldova Direct store',
   ],
-  structuredData
+  structuredData,
 })
 
 // No external image preloading to prevent SSR issues on Vercel

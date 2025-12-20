@@ -2,8 +2,12 @@
   <section class="bg-white py-20 dark:bg-gray-950 md:py-28">
     <div class="container">
       <div class="mx-auto max-w-3xl text-center">
-        <h2 class="text-4xl font-bold md:text-5xl lg:text-6xl tracking-tight">{{ t('home.faqPreview.title') }}</h2>
-        <p class="mt-4 text-sm md:text-base text-gray-600 dark:text-gray-400">{{ t('home.faqPreview.subtitle') }}</p>
+        <h2 class="text-4xl font-bold md:text-5xl lg:text-6xl tracking-tight">
+          {{ t('home.faqPreview.title') }}
+        </h2>
+        <p class="mt-4 text-sm md:text-base text-gray-600 dark:text-gray-400">
+          {{ t('home.faqPreview.subtitle') }}
+        </p>
       </div>
       <div class="mt-12 grid gap-6 md:grid-cols-2">
         <details
@@ -13,9 +17,14 @@
         >
           <summary class="flex cursor-pointer items-center justify-between text-left text-lg font-semibold">
             <span>{{ item.question }}</span>
-            <commonIcon name="lucide:chevron-down" class="h-5 w-5 transition group-open:rotate-180" />
+            <commonIcon
+              name="lucide:chevron-down"
+              class="h-5 w-5 transition group-open:rotate-180"
+            />
           </summary>
-          <p class="mt-4 text-sm text-gray-600 dark:text-gray-400">{{ item.answer }}</p>
+          <p class="mt-4 text-sm text-gray-600 dark:text-gray-400">
+            {{ item.answer }}
+          </p>
         </details>
       </div>
       <div class="mt-12 text-center">
@@ -24,7 +33,10 @@
           class="inline-flex items-center gap-2 rounded-full bg-primary-600 px-6 py-3 font-semibold text-white transition hover:bg-primary-700"
         >
           {{ t('home.faqPreview.cta') }}
-          <commonIcon name="lucide:arrow-right" class="h-5 w-5" />
+          <commonIcon
+            name="lucide:arrow-right"
+            class="h-5 w-5"
+          />
         </NuxtLink>
       </div>
     </div>

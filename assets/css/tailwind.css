@@ -281,6 +281,20 @@
 
 /* Animation Presets for Landing Page Modernization */
 @layer utilities {
+  /* Screen Reader Only - Accessibility utility */
+  .sr-only,
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
   /* CTA Button Micro-interactions */
   .cta-button {
     transition: transform 200ms ease-out, box-shadow 200ms ease-out;

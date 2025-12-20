@@ -1,20 +1,19 @@
 import { test, expect } from '../../fixtures/base'
-import type { Page } from '@playwright/test'
 
 test.describe('Admin Products New Page - Comprehensive Testing', () => {
   test.beforeEach(async ({ page }) => {
     // Set up console and error logging
-    page.on('console', msg => {
+    page.on('console', (msg) => {
       console.log(`[CONSOLE ${msg.type().toUpperCase()}] ${msg.text()}`)
     })
 
-    page.on('pageerror', error => {
+    page.on('pageerror', (error) => {
       console.log(`[PAGE ERROR] ${error.message}`)
       console.log(`[PAGE ERROR STACK] ${error.stack}`)
     })
   })
 
-  test('01. Navigate to admin/products/new with authentication', async ({ authenticatedPage: page }) => {
+  test('01. Navigate to admin/products/new with authentication', async ({ adminAuthenticatedPage: page }) => {
     console.log('\n=== TEST 1: Navigate to admin/products/new with authentication ===')
 
     // Navigate to the page
@@ -34,7 +33,7 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
     console.log('✓ Successfully navigated to /admin/products/new')
   })
 
-  test('02. Take screenshot of the page', async ({ authenticatedPage: page }) => {
+  test('02. Take screenshot of the page', async ({ adminAuthenticatedPage: page }) => {
     console.log('\n=== TEST 2: Take screenshot of the page ===')
 
     await page.goto('/admin/products/new')
@@ -46,14 +45,14 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
     console.log(`✓ Screenshot saved to ${screenshotPath}`)
   })
 
-  test('03. Check console for errors', async ({ authenticatedPage: page }) => {
+  test('03. Check console for errors', async ({ adminAuthenticatedPage: page }) => {
     console.log('\n=== TEST 3: Check console for errors ===')
 
     const consoleErrors: string[] = []
     const consoleWarnings: string[] = []
     const pageErrors: string[] = []
 
-    page.on('console', msg => {
+    page.on('console', (msg) => {
       if (msg.type() === 'error') {
         consoleErrors.push(msg.text())
         console.log(`[CONSOLE ERROR] ${msg.text()}`)
@@ -64,7 +63,7 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
       }
     })
 
-    page.on('pageerror', error => {
+    page.on('pageerror', (error) => {
       pageErrors.push(error.toString())
       console.log(`[PAGE ERROR] ${error.toString()}`)
     })
@@ -85,12 +84,13 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
       console.log('Critical errors found:')
       criticalErrors.forEach(err => console.log(`  - ${err}`))
       expect(criticalErrors).toHaveLength(0)
-    } else {
+    }
+    else {
       console.log('✓ No critical errors found')
     }
   })
 
-  test('04. Verify all form sections render', async ({ authenticatedPage: page }) => {
+  test('04. Verify all form sections render', async ({ adminAuthenticatedPage: page }) => {
     console.log('\n=== TEST 4: Verify all form sections render ===')
 
     await page.goto('/admin/products/new')
@@ -125,8 +125,8 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
       // Try finding by class
       const sectionByClass = page.locator(`[class*="${sectionName.toLowerCase()}"]`)
       if (
-        await sectionByClass.count() > 0 &&
-        !foundSections.includes(sectionName)
+        await sectionByClass.count() > 0
+        && !foundSections.includes(sectionName)
       ) {
         foundSections.push(sectionName)
         console.log(`✓ Found section: ${sectionName} (via class)`)
@@ -149,7 +149,7 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
     console.log('✓ Form has input fields')
   })
 
-  test('05. Test form interactions - click name input and type', async ({ authenticatedPage: page }) => {
+  test('05. Test form interactions - click name input and type', async ({ adminAuthenticatedPage: page }) => {
     console.log('\n=== TEST 5: Test form interactions ===')
 
     await page.goto('/admin/products/new')
@@ -175,7 +175,8 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
       const value = await nameInput.inputValue()
       expect(value).toBe(testText)
       console.log(`✓ Verified text input: "${value}"`)
-    } else {
+    }
+    else {
       console.log('⚠ Name input field not found - checking for alternative selectors')
 
       // List all inputs found for debugging
@@ -191,7 +192,7 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
     }
   })
 
-  test('06. Test changing price field', async ({ authenticatedPage: page }) => {
+  test('06. Test changing price field', async ({ adminAuthenticatedPage: page }) => {
     console.log('\n=== TEST 6: Test changing price field ===')
 
     await page.goto('/admin/products/new')
@@ -217,7 +218,8 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
       // Verify
       const value = await priceInput.inputValue()
       console.log(`✓ Current price value: ${value}`)
-    } else {
+    }
+    else {
       console.log('⚠ Price input field not found - checking available number inputs')
 
       const allNumberInputs = await page.locator('input[type="number"]').all()
@@ -225,7 +227,7 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
     }
   })
 
-  test('07. Test image upload area', async ({ authenticatedPage: page }) => {
+  test('07. Test image upload area', async ({ adminAuthenticatedPage: page }) => {
     console.log('\n=== TEST 7: Test image upload area ===')
 
     await page.goto('/admin/products/new')
@@ -248,7 +250,8 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
       const uploadArea = page.locator('[class*="upload"], [class*="dropzone"], [class*="drag"]').first()
       const isUploadAreaVisible = await uploadArea.isVisible().catch(() => false)
       console.log(`Upload area visible: ${isUploadAreaVisible}`)
-    } else {
+    }
+    else {
       console.log('⚠ File input not found')
     }
 
@@ -257,7 +260,7 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
     console.log(`Image-related elements: ${imageElements.length}`)
   })
 
-  test('08. Check mobile responsiveness', async ({ authenticatedPage: page }) => {
+  test('08. Check mobile responsiveness', async ({ adminAuthenticatedPage: page }) => {
     console.log('\n=== TEST 8: Check mobile responsiveness ===')
 
     // Test at desktop size first
@@ -293,7 +296,7 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
     console.log('✓ Page layout adapts to different screen sizes')
   })
 
-  test('09. Comprehensive element visibility and structure check', async ({ authenticatedPage: page }) => {
+  test('09. Comprehensive element visibility and structure check', async ({ adminAuthenticatedPage: page }) => {
     console.log('\n=== TEST 9: Comprehensive element visibility and structure check ===')
 
     await page.goto('/admin/products/new')
@@ -332,7 +335,7 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
     console.log('✓ Page structure verified')
   })
 
-  test('10. Report comprehensive findings', async ({ authenticatedPage: page }) => {
+  test('10. Report comprehensive findings', async ({ adminAuthenticatedPage: page }) => {
     console.log('\n=== TEST 10: Comprehensive test report ===')
 
     await page.goto('/admin/products/new')
@@ -371,7 +374,7 @@ test.describe('Admin Products New Page - Comprehensive Testing', () => {
 
 // Additional test for authentication flow
 test.describe('Admin Products New - Authentication Flow', () => {
-  test('should not allow unauthenticated access (redirect to login)', async ({ page, baseURL }) => {
+  test('should not allow unauthenticated access (redirect to login)', async ({ page }) => {
     console.log('\n=== TEST: Unauthenticated access check ===')
 
     // Clear all cookies/storage to simulate unauthenticated state

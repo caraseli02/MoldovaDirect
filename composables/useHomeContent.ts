@@ -63,16 +63,16 @@ export const useHomeContent = () => {
   const heroHighlights = computed<Highlight[]>(() => [
     {
       value: t('home.hero.highlights.orders.value'),
-      label: t('home.hero.highlights.orders.label')
+      label: t('home.hero.highlights.orders.label'),
     },
     {
       value: t('home.hero.highlights.delivery.value'),
-      label: t('home.hero.highlights.delivery.label')
+      label: t('home.hero.highlights.delivery.label'),
     },
     {
       value: t('home.hero.highlights.rating.value'),
-      label: t('home.hero.highlights.rating.label')
-    }
+      label: t('home.hero.highlights.rating.label'),
+    },
   ])
 
   const categoryKeys = ['wines', 'gourmet', 'gifts', 'subscriptions'] as const
@@ -80,13 +80,13 @@ export const useHomeContent = () => {
     wines: 'lucide:sparkles',
     gourmet: 'lucide:flask-conical',
     gifts: 'lucide:gift',
-    subscriptions: 'lucide:boxes'
+    subscriptions: 'lucide:boxes',
   }
   const categoryAccents = [
     'bg-gradient-to-br from-rose-500/20 via-orange-400/20 to-amber-300/20',
     'bg-gradient-to-br from-emerald-500/20 via-lime-400/20 to-teal-300/20',
     'bg-gradient-to-br from-sky-500/20 via-indigo-400/20 to-blue-300/20',
-    'bg-gradient-to-br from-purple-500/20 via-fuchsia-400/20 to-pink-300/20'
+    'bg-gradient-to-br from-purple-500/20 via-fuchsia-400/20 to-pink-300/20',
   ]
   // TODO: Replace with actual product photography when available
   // These are temporary placeholder images from Unsplash
@@ -94,7 +94,7 @@ export const useHomeContent = () => {
     wines: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=1200',
     gourmet: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?q=80&w=1200',
     gifts: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?q=80&w=1200',
-    subscriptions: 'https://images.unsplash.com/photo-1606787365614-d990e8c69f0e?q=80&w=1200'
+    subscriptions: 'https://images.unsplash.com/photo-1606787365614-d990e8c69f0e?q=80&w=1200',
   }
 
   const categoryCards = computed<CategoryCard[]>(() => {
@@ -103,19 +103,19 @@ export const useHomeContent = () => {
       wines: 'wine',
       gourmet: 'gourmet',
       gifts: 'gift',
-      subscriptions: 'subscription'
+      subscriptions: 'subscription',
     }
 
-    return categoryKeys.map((key, index) => ({
+    return categoryKeys.map((key, index): CategoryCard => ({
       key,
       title: t(`home.categories.items.${key}.title`),
       description: t(`home.categories.items.${key}.description`),
       cta: t(`home.categories.items.${key}.cta`),
       href: `${baseProducts}?category=${queryMap[key]}`,
       icon: categoryIcons[key],
-      accentBackground: categoryAccents[index % categoryAccents.length],
+      accentBackground: categoryAccents[index % categoryAccents.length] || categoryAccents[0] || '',
       image: categoryImages[key],
-      imageAlt: t(`home.categories.items.${key}.imageAlt`)
+      imageAlt: t(`home.categories.items.${key}.imageAlt`),
     }))
   })
 
@@ -123,90 +123,100 @@ export const useHomeContent = () => {
   const howItWorksIcons: Record<(typeof howItWorksKeys)[number], string> = {
     choose: 'lucide:search',
     prepare: 'lucide:sparkles',
-    deliver: 'lucide:truck'
+    deliver: 'lucide:truck',
   }
 
   const howItWorksSteps = computed<HowItWorksStep[]>(() =>
-    howItWorksKeys.map((key) => ({
+    howItWorksKeys.map(key => ({
       key,
       title: t(`home.howItWorks.steps.${key}.title`),
       description: t(`home.howItWorks.steps.${key}.description`),
-      icon: howItWorksIcons[key]
-    }))
+      icon: howItWorksIcons[key],
+    })),
   )
 
   const testimonialKeys = ['maria', 'carlos', 'sofia'] as const
   const testimonials = computed<Testimonial[]>(() =>
-    testimonialKeys.map((key) => ({
+    testimonialKeys.map(key => ({
       name: t(`home.socialProof.testimonials.${key}.name`),
       quote: t(`home.socialProof.testimonials.${key}.quote`),
-      location: t(`home.socialProof.testimonials.${key}.location`)
-    }))
+      location: t(`home.socialProof.testimonials.${key}.location`),
+    })),
   )
 
   const partnerLogos = computed<string[]>(() => {
-    const logos = tm('home.socialProof.logos')
+    try {
+      const logos = tm('home.socialProof.logos') as unknown[]
 
-    if (!Array.isArray(logos)) {
+      if (!logos || !Array.isArray(logos) || logos.length === 0) {
+        return []
+      }
+
+      return logos.map((_: any, index: number) => t(`home.socialProof.logos.${index}`))
+    }
+    catch {
       return []
     }
-
-    return logos.map((_, index) => t(`home.socialProof.logos.${index}`))
   })
 
   const storyPointKeys = ['heritage', 'craft', 'pairings'] as const
   const storyPointIcons: Record<(typeof storyPointKeys)[number], string> = {
     heritage: 'lucide:globe-2',
     craft: 'lucide:heart',
-    pairings: 'lucide:sparkles'
+    pairings: 'lucide:sparkles',
   }
 
   const storyPoints = computed<StoryPoint[]>(() =>
-    storyPointKeys.map((key) => ({
+    storyPointKeys.map(key => ({
       title: t(`home.story.points.${key}.title`),
       description: t(`home.story.points.${key}.description`),
-      icon: storyPointIcons[key]
-    }))
+      icon: storyPointIcons[key],
+    })),
   )
 
   const storyTimeline = computed<StoryTimelineItem[]>(() => {
-    const timelineItems = tm('home.story.timeline.items')
+    try {
+      const timelineItems = tm('home.story.timeline.items') as unknown[]
 
-    if (!Array.isArray(timelineItems)) {
+      if (!timelineItems || !Array.isArray(timelineItems) || timelineItems.length === 0) {
+        return []
+      }
+
+      return timelineItems.map((_: any, index: number): StoryTimelineItem => ({
+        year: t(`home.story.timeline.items.${index}.year`),
+        title: t(`home.story.timeline.items.${index}.title`),
+        description: t(`home.story.timeline.items.${index}.description`),
+      }))
+    }
+    catch {
       return []
     }
-
-    return timelineItems.map((_, index) => ({
-      year: t(`home.story.timeline.items.${index}.year`),
-      title: t(`home.story.timeline.items.${index}.title`),
-      description: t(`home.story.timeline.items.${index}.description`)
-    }))
   })
 
   const serviceKeys = ['gifting', 'corporate'] as const
   const serviceIcons: Record<(typeof serviceKeys)[number], string> = {
     gifting: 'lucide:gift',
-    corporate: 'lucide:users'
+    corporate: 'lucide:users',
   }
 
   const services = computed<ServiceCard[]>(() => {
     const contactBase = localePath('/contact')
 
-    return serviceKeys.map((key) => ({
+    return serviceKeys.map(key => ({
       title: t(`home.services.items.${key}.title`),
       description: t(`home.services.items.${key}.description`),
       cta: t(`home.services.items.${key}.cta`),
       href: key === 'corporate' ? `${contactBase}?topic=corporate` : contactBase,
-      icon: serviceIcons[key]
+      icon: serviceIcons[key],
     }))
   })
 
   const faqKeys = ['shipping', 'packaging', 'support'] as const
   const faqItems = computed<FaqItem[]>(() =>
-    faqKeys.map((key) => ({
+    faqKeys.map(key => ({
       question: t(`home.faqPreview.items.${key}.question`),
-      answer: t(`home.faqPreview.items.${key}.answer`)
-    }))
+      answer: t(`home.faqPreview.items.${key}.answer`),
+    })),
   )
 
   return {
@@ -219,6 +229,6 @@ export const useHomeContent = () => {
     storyPoints,
     storyTimeline,
     services,
-    faqItems
+    faqItems,
   }
 }

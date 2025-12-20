@@ -18,16 +18,16 @@ const lineChartData = ref<ChartData<'line'>>({
       data: [65, 59, 80, 81, 56, 55],
       borderColor: 'rgb(75, 192, 192)',
       backgroundColor: 'rgba(75, 192, 192, 0.2)',
-      tension: 0.1
+      tension: 0.1,
     },
     {
       label: 'Sales 2023',
       data: [45, 49, 60, 71, 46, 45],
       borderColor: 'rgb(255, 99, 132)',
       backgroundColor: 'rgba(255, 99, 132, 0.2)',
-      tension: 0.1
-    }
-  ]
+      tension: 0.1,
+    },
+  ],
 })
 
 const lineChartOptions: ChartOptions<'line'> = {
@@ -38,9 +38,9 @@ const lineChartOptions: ChartOptions<'line'> = {
     },
     title: {
       display: true,
-      text: 'Monthly Sales Comparison'
-    }
-  }
+      text: 'Monthly Sales Comparison',
+    },
+  },
 }
 
 // Bar Chart Example
@@ -52,32 +52,32 @@ const barChartData = ref<ChartData<'bar'>>({
       data: [12000, 19000, 15000, 22000],
       backgroundColor: 'rgba(54, 162, 235, 0.5)',
       borderColor: 'rgb(54, 162, 235)',
-      borderWidth: 1
-    }
-  ]
+      borderWidth: 1,
+    },
+  ],
 })
 
 const barChartOptions: ChartOptions<'bar'> = {
   responsive: true,
   plugins: {
     legend: {
-      display: false
+      display: false,
     },
     title: {
       display: true,
-      text: 'Quarterly Revenue'
-    }
+      text: 'Quarterly Revenue',
+    },
   },
   scales: {
     y: {
       beginAtZero: true,
       ticks: {
-        callback: function(value) {
+        callback: function (value) {
           return '$' + value.toLocaleString()
-        }
-      }
-    }
-  }
+        },
+      },
+    },
+  },
 }
 
 // Doughnut Chart Example
@@ -90,16 +90,16 @@ const doughnutChartData = ref<ChartData<'doughnut'>>({
       backgroundColor: [
         'rgba(255, 99, 132, 0.7)',
         'rgba(54, 162, 235, 0.7)',
-        'rgba(255, 206, 86, 0.7)'
+        'rgba(255, 206, 86, 0.7)',
       ],
       borderColor: [
         'rgba(255, 99, 132, 1)',
         'rgba(54, 162, 235, 1)',
-        'rgba(255, 206, 86, 1)'
+        'rgba(255, 206, 86, 1)',
       ],
-      borderWidth: 1
-    }
-  ]
+      borderWidth: 1,
+    },
+  ],
 })
 
 const doughnutChartOptions: ChartOptions<'doughnut'> = {
@@ -110,9 +110,9 @@ const doughnutChartOptions: ChartOptions<'doughnut'> = {
     },
     title: {
       display: true,
-      text: 'Traffic by Device Type'
-    }
-  }
+      text: 'Traffic by Device Type',
+    },
+  },
 }
 
 // Pie Chart Example
@@ -126,11 +126,11 @@ const pieChartData = ref<ChartData<'pie'>>({
         'rgba(255, 99, 132, 0.7)',
         'rgba(255, 206, 86, 0.7)',
         'rgba(54, 162, 235, 0.7)',
-        'rgba(75, 192, 192, 0.7)'
+        'rgba(75, 192, 192, 0.7)',
       ],
-      borderWidth: 1
-    }
-  ]
+      borderWidth: 1,
+    },
+  ],
 })
 
 const pieChartOptions: ChartOptions<'pie'> = {
@@ -141,18 +141,18 @@ const pieChartOptions: ChartOptions<'pie'> = {
     },
     title: {
       display: true,
-      text: 'Order Status Distribution'
-    }
-  }
+      text: 'Order Status Distribution',
+    },
+  },
 }
 
 // Event handlers
-const handleChartCreated = (chart: any) => {
-  console.log('Chart created:', chart)
+const handleChartCreated = (_chart: any) => {
+  // Chart created
 }
 
 const handleChartDestroyed = () => {
-  console.log('Chart destroyed')
+  // Chart destroyed
 }
 
 const handleError = (error: Error) => {
@@ -161,19 +161,25 @@ const handleError = (error: Error) => {
 
 // Example: Update data reactively
 const updateLineChartData = () => {
-  lineChartData.value = {
+  const dataset1 = lineChartData.value.datasets[0]
+  const dataset2 = lineChartData.value.datasets[1]
+
+  if (!dataset1 || !dataset2) return
+
+  const newData = {
     ...lineChartData.value,
     datasets: [
       {
-        ...lineChartData.value.datasets[0],
-        data: lineChartData.value.datasets[0].data.map(() => Math.floor(Math.random() * 100))
+        ...dataset1,
+        data: (dataset1.data as number[]).map(() => Math.floor(Math.random() * 100)),
       },
       {
-        ...lineChartData.value.datasets[1],
-        data: lineChartData.value.datasets[1].data.map(() => Math.floor(Math.random() * 100))
-      }
-    ]
+        ...dataset2,
+        data: (dataset2.data as number[]).map(() => Math.floor(Math.random() * 100)),
+      },
+    ],
   }
+  lineChartData.value = newData as any
 }
 </script>
 
@@ -192,7 +198,9 @@ const updateLineChartData = () => {
         @chart-destroyed="handleChartDestroyed"
         @error="handleError"
       />
-      <button @click="updateLineChartData">Update Data</button>
+      <button @click="updateLineChartData">
+        Update Data
+      </button>
     </div>
 
     <div class="example-section">

@@ -13,12 +13,12 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
 // Mock search sanitization
 vi.mock('~/server/utils/searchSanitization', () => ({
-  prepareSearchPattern: vi.fn((search) => `%${search}%`)
+  prepareSearchPattern: vi.fn(search => `%${search}%`),
 }))
 
 // Mock Supabase
 const mockSupabaseAuth = {
-  getUser: vi.fn()
+  getUser: vi.fn(),
 }
 const mockSupabaseSelect = vi.fn()
 const mockSupabaseEq = vi.fn()
@@ -32,9 +32,9 @@ vi.mock('#supabase/server', () => ({
   serverSupabaseServiceRole: vi.fn(() => ({
     auth: mockSupabaseAuth,
     from: vi.fn(() => ({
-      select: mockSupabaseSelect
-    }))
-  }))
+      select: mockSupabaseSelect,
+    })),
+  })),
 }))
 
 // Mock h3
@@ -42,14 +42,14 @@ vi.mock('h3', async () => {
   const actual = await vi.importActual('h3')
   return {
     ...actual,
-    defineEventHandler: vi.fn((handler) => handler),
+    defineEventHandler: vi.fn(handler => handler),
     getQuery: vi.fn(),
     getHeader: vi.fn(),
     createError: vi.fn((options) => {
       const error = new Error(options.statusMessage) as Error & { statusCode: number }
       error.statusCode = options.statusCode
       return error
-    })
+    }),
   }
 })
 
@@ -64,7 +64,7 @@ describe('Orders List API', () => {
       lte: mockSupabaseLte,
       ilike: mockSupabaseIlike,
       order: mockSupabaseOrder,
-      range: mockSupabaseRange
+      range: mockSupabaseRange,
     }
 
     mockSupabaseSelect.mockReturnValue(chainable)
@@ -75,7 +75,7 @@ describe('Orders List API', () => {
     mockSupabaseOrder.mockReturnValue(chainable)
     mockSupabaseRange.mockResolvedValue({
       data: [],
-      error: null
+      error: null,
     })
   })
 
@@ -91,7 +91,7 @@ describe('Orders List API', () => {
 
       const error = vi.mocked(createError)({
         statusCode: 401,
-        statusMessage: 'Authentication required'
+        statusMessage: 'Authentication required',
       })
 
       expect(error.statusCode).toBe(401)
@@ -100,7 +100,7 @@ describe('Orders List API', () => {
     it('validates authentication token', async () => {
       mockSupabaseAuth.getUser.mockResolvedValue({
         data: { user: { id: 'user-123' } },
-        error: null
+        error: null,
       })
 
       const result = await mockSupabaseAuth.getUser('valid-token')
@@ -111,7 +111,7 @@ describe('Orders List API', () => {
     it('rejects invalid authentication', async () => {
       mockSupabaseAuth.getUser.mockResolvedValue({
         data: { user: null },
-        error: { message: 'Invalid token' }
+        error: { message: 'Invalid token' },
       })
 
       const result = await mockSupabaseAuth.getUser('invalid-token')
@@ -139,7 +139,7 @@ describe('Orders List API', () => {
 
       const validateSort = (sortBy: string, sortOrder: string) => ({
         sortBy: validSortFields.includes(sortBy) ? sortBy : 'created_at',
-        sortOrder: validSortOrders.includes(sortOrder) ? sortOrder : 'desc'
+        sortOrder: validSortOrders.includes(sortOrder) ? sortOrder : 'desc',
       })
 
       expect(validateSort('created_at', 'asc')).toEqual({ sortBy: 'created_at', sortOrder: 'asc' })
@@ -172,7 +172,7 @@ describe('Orders List API', () => {
       const orders = [
         { total_eur: 50 },
         { total_eur: 100 },
-        { total_eur: 150 }
+        { total_eur: 150 },
       ]
 
       const minAmount = 75
@@ -199,32 +199,32 @@ describe('Orders List API', () => {
           order_items: [
             {
               product_snapshot: {
-                name_translations: { es: 'Vino Tinto', en: 'Red Wine' }
-              }
-            }
-          ]
+                name_translations: { es: 'Vino Tinto', en: 'Red Wine' },
+              },
+            },
+          ],
         },
         {
           order_number: 'ORD-002',
           order_items: [
             {
               product_snapshot: {
-                name_translations: { es: 'Queso', en: 'Cheese' }
-              }
-            }
-          ]
-        }
+                name_translations: { es: 'Queso', en: 'Cheese' },
+              },
+            },
+          ],
+        },
       ]
 
       const searchLower = search.toLowerCase()
-      const filtered = orders.filter(order => {
+      const filtered = orders.filter((order) => {
         if (order.order_number?.toLowerCase().includes(searchLower)) return true
 
-        return order.order_items.some(item => {
+        return order.order_items.some((item) => {
           const snapshot = item.product_snapshot
           if (snapshot?.name_translations) {
             return Object.values(snapshot.name_translations).some((name: any) =>
-              name?.toLowerCase().includes(searchLower)
+              name?.toLowerCase().includes(searchLower),
             )
           }
           return false
@@ -239,7 +239,7 @@ describe('Orders List API', () => {
       const search = 'ORD-001'
       const orders = [
         { order_number: 'ORD-001' },
-        { order_number: 'ORD-002' }
+        { order_number: 'ORD-002' },
       ]
 
       const filtered = orders.filter(o => o.order_number.includes(search))
@@ -253,7 +253,7 @@ describe('Orders List API', () => {
       const orders = [
         { created_at: '2024-01-01' },
         { created_at: '2024-03-01' },
-        { created_at: '2024-02-01' }
+        { created_at: '2024-02-01' },
       ]
 
       orders.sort((a, b) => {
@@ -270,7 +270,7 @@ describe('Orders List API', () => {
       const orders = [
         { total_eur: 100 },
         { total_eur: 50 },
-        { total_eur: 75 }
+        { total_eur: 75 },
       ]
 
       orders.sort((a, b) => a.total_eur - b.total_eur)
@@ -301,7 +301,7 @@ describe('Orders List API', () => {
         shipped_at: null,
         delivered_at: null,
         created_at: '2024-01-01',
-        updated_at: '2024-01-01'
+        updated_at: '2024-01-01',
       }
 
       const transformed = {
@@ -323,7 +323,7 @@ describe('Orders List API', () => {
         shippedAt: dbOrder.shipped_at,
         deliveredAt: dbOrder.delivered_at,
         createdAt: dbOrder.created_at,
-        updatedAt: dbOrder.updated_at
+        updatedAt: dbOrder.updated_at,
       }
 
       expect(transformed.orderNumber).toBe('ORD-001')
@@ -340,8 +340,8 @@ describe('Orders List API', () => {
           product_snapshot: { name: 'Wine' },
           quantity: 2,
           price_eur: 25,
-          total_eur: 50
-        }
+          total_eur: 50,
+        },
       ]
 
       const transformedItems = dbOrderItems.map(item => ({
@@ -351,7 +351,7 @@ describe('Orders List API', () => {
         productSnapshot: item.product_snapshot,
         quantity: item.quantity,
         priceEur: item.price_eur,
-        totalEur: item.total_eur
+        totalEur: item.total_eur,
       }))
 
       expect(transformedItems[0].priceEur).toBe(25)
@@ -369,7 +369,7 @@ describe('Orders List API', () => {
         page,
         limit,
         total: totalCount,
-        totalPages: Math.ceil(totalCount / limit)
+        totalPages: Math.ceil(totalCount / limit),
       }
 
       expect(pagination.totalPages).toBe(5)
@@ -390,7 +390,7 @@ describe('Orders List API', () => {
 
       const error = vi.mocked(createError)({
         statusCode: 401,
-        statusMessage: 'Authentication required'
+        statusMessage: 'Authentication required',
       })
 
       expect(error.statusCode).toBe(401)
@@ -401,7 +401,7 @@ describe('Orders List API', () => {
 
       const error = vi.mocked(createError)({
         statusCode: 500,
-        statusMessage: 'Failed to fetch orders'
+        statusMessage: 'Failed to fetch orders',
       })
 
       expect(error.statusCode).toBe(500)
@@ -424,7 +424,7 @@ describe('Orders List API', () => {
             page: 1,
             limit: 10,
             total: 0,
-            totalPages: 0
+            totalPages: 0,
           },
           filters: {
             status: undefined,
@@ -434,9 +434,9 @@ describe('Orders List API', () => {
             minAmount: undefined,
             maxAmount: undefined,
             sortBy: 'created_at',
-            sortOrder: 'desc'
-          }
-        }
+            sortOrder: 'desc',
+          },
+        },
       }
 
       expect(response.success).toBe(true)

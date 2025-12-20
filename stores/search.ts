@@ -52,13 +52,15 @@ class LRUCache<T> {
     // Evict oldest if at max size
     if (this.cache.size >= this.maxSize && !this.cache.has(key)) {
       const firstKey = this.cache.keys().next().value
-      this.cache.delete(firstKey)
+      if (firstKey) {
+        this.cache.delete(firstKey)
+      }
     }
 
     this.cache.set(key, {
       data,
       timestamp: Date.now(),
-      accessCount: 1
+      accessCount: 1,
     })
   }
 
@@ -126,7 +128,7 @@ export const useSearchStore = defineStore('search', {
     filters: {},
 
     // LRU Cache with max 20 entries and 5 minute TTL
-    cache: new LRUCache<CachedSearchResult>(20, 5 * 60 * 1000)
+    cache: new LRUCache<CachedSearchResult>(20, 5 * 60 * 1000),
   }),
 
   getters: {
@@ -156,12 +158,12 @@ export const useSearchStore = defineStore('search', {
     // Get filtered suggestions (exclude current query and duplicates)
     filteredSuggestions: (state): string[] => {
       return state.suggestions
-        .filter(suggestion => 
-          suggestion.toLowerCase() !== state.query.toLowerCase() &&
-          suggestion.length > 0
+        .filter(suggestion =>
+          suggestion.toLowerCase() !== state.query.toLowerCase()
+          && suggestion.length > 0,
         )
         .slice(0, 8) // Limit to 8 suggestions
-    }
+    },
   },
 
   actions: {
@@ -216,18 +218,19 @@ export const useSearchStore = defineStore('search', {
         // Cache the results (LRU cache handles eviction automatically)
         this.cache.set(cacheKey, {
           results: response.products,
-          suggestions: response.suggestions
+          suggestions: response.suggestions,
         })
 
         // Add to search history
         this.addToHistory(query, response.products.length)
-
-      } catch (error) {
+      }
+      catch (error: any) {
         this.error = error instanceof Error ? error.message : 'Search failed'
         this.results = []
         this.suggestions = []
         console.error('Search error:', error)
-      } finally {
+      }
+      finally {
         this.loading = false
       }
     },
@@ -257,13 +260,14 @@ export const useSearchStore = defineStore('search', {
         // Cache suggestions (LRU cache handles eviction automatically)
         this.cache.set(`suggestions-${query}`, {
           results: [],
-          suggestions: response.suggestions
+          suggestions: response.suggestions,
         })
-
-      } catch (error) {
+      }
+      catch (error: any) {
         console.error('Error fetching suggestions:', error)
         this.suggestions = []
-      } finally {
+      }
+      finally {
         this.suggestionsLoading = false
       }
     },
@@ -271,20 +275,21 @@ export const useSearchStore = defineStore('search', {
     // Add search to history
     addToHistory(query: string, resultsCount: number) {
       const existingIndex = this.history.findIndex(item => item.query.toLowerCase() === query.toLowerCase())
-      
+
       const historyItem: SearchHistoryItem = {
         query,
         timestamp: Date.now(),
-        resultsCount
+        resultsCount,
       }
 
       if (existingIndex > -1) {
         // Update existing entry
         this.history[existingIndex] = historyItem
-      } else {
+      }
+      else {
         // Add new entry
         this.history.unshift(historyItem)
-        
+
         // Keep only last 50 searches
         if (this.history.length > 50) {
           this.history = this.history.slice(0, 50)
@@ -318,7 +323,7 @@ export const useSearchStore = defineStore('search', {
     // Update search filters
     updateFilters(newFilters: Partial<ProductFilters>) {
       this.filters = { ...this.filters, ...newFilters }
-      
+
       // Re-search with new filters if there's an active query
       if (this.query) {
         this.search(this.query, this.filters)
@@ -330,7 +335,8 @@ export const useSearchStore = defineStore('search', {
       try {
         const response = await $fetch<{ searches: string[] }>('/api/search/popular')
         this.popularSearches = response.searches
-      } catch (error) {
+      }
+      catch (error: any) {
         console.error('Error loading popular searches:', error)
         // Fallback to default popular searches
         this.popularSearches = ['wine', 'cheese', 'honey', 'preserves', 'traditional']
@@ -339,10 +345,11 @@ export const useSearchStore = defineStore('search', {
 
     // Save search history to localStorage
     saveHistoryToStorage() {
-      if (process.client) {
+      if (import.meta.client) {
         try {
           localStorage.setItem('moldova-direct-search-history', JSON.stringify(this.history))
-        } catch (error) {
+        }
+        catch (error: any) {
           console.warn('Failed to save search history:', error)
         }
       }
@@ -350,22 +357,23 @@ export const useSearchStore = defineStore('search', {
 
     // Load search history from localStorage
     loadHistoryFromStorage() {
-      if (process.client) {
+      if (import.meta.client) {
         try {
           const saved = localStorage.getItem('moldova-direct-search-history')
           if (saved) {
             const history = JSON.parse(saved)
-            
+
             // Filter out old searches (older than 30 days)
             const thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000
             this.history = history.filter((item: SearchHistoryItem) => item.timestamp > thirtyDaysAgo)
-            
+
             // Save cleaned history back
             if (this.history.length !== history.length) {
               this.saveHistoryToStorage()
             }
           }
-        } catch (error) {
+        }
+        catch (error: any) {
           console.warn('Failed to load search history:', error)
           this.history = []
         }
@@ -386,7 +394,7 @@ export const useSearchStore = defineStore('search', {
           acc[item.query] = (acc[item.query] || 0) + 1
           return acc
         }, {} as Record<string, number>)
-      
+
       const sortedQueries = Object.entries(topQueries)
         .sort(([, a], [, b]) => b - a)
         .slice(0, 10)
@@ -396,8 +404,8 @@ export const useSearchStore = defineStore('search', {
         totalSearches,
         averageResults: Math.round(averageResults * 100) / 100,
         topQueries: sortedQueries,
-        recentSearches: this.recentSearches.slice(0, 5)
+        recentSearches: this.recentSearches.slice(0, 5),
       }
-    }
-  }
+    },
+  },
 })

@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
   if (!historyId || !type || !locale) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'History ID, template type, and locale are required'
+      statusMessage: 'History ID, template type, and locale are required',
     })
   }
 
@@ -32,7 +32,7 @@ export default defineEventHandler(async (event) => {
     throw createError({
       statusCode: 404,
       statusMessage: 'Historical version not found',
-      data: historyError
+      data: historyError,
     })
   }
 
@@ -47,7 +47,7 @@ export default defineEventHandler(async (event) => {
   if (!currentTemplate) {
     throw createError({
       statusCode: 404,
-      statusMessage: 'Current template not found'
+      statusMessage: 'Current template not found',
     })
   }
 
@@ -62,7 +62,7 @@ export default defineEventHandler(async (event) => {
       translations: historicalVersion.translations,
       subject: historicalVersion.subject,
       preheader: historicalVersion.preheader,
-      archived_at: new Date().toISOString()
+      archived_at: new Date().toISOString(),
     })
 
   // Update template with historical content
@@ -73,7 +73,7 @@ export default defineEventHandler(async (event) => {
       subject: historicalVersion.subject,
       preheader: historicalVersion.preheader,
       version: currentTemplate.version + 1,
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     })
     .eq('id', currentTemplate.id)
 
@@ -81,12 +81,12 @@ export default defineEventHandler(async (event) => {
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to rollback template',
-      data: updateError
+      data: updateError,
     })
   }
 
   return {
     success: true,
-    message: 'Template rolled back successfully'
+    message: 'Template rolled back successfully',
   }
 })

@@ -17,9 +17,8 @@
  */
 
 import { ref, computed, watch, onUnmounted } from 'vue'
-import { useDebounceFn } from '@vueuse/core'
+import { useDebounceFn, type UseDebounceFnReturn } from '@vueuse/core'
 import { useSearchStore } from '~/stores/search'
-import type { ProductWithRelations } from '~/types'
 
 export interface SearchSuggestion {
   type: 'product' | 'query' | 'history'
@@ -41,7 +40,7 @@ export const useProductSearch = () => {
   const isSearching = computed(() => searchStore.loading)
 
   // Initialize search store
-  if (process.client) {
+  if (import.meta.client) {
     searchStore.initialize()
   }
 
@@ -53,22 +52,22 @@ export const useProductSearch = () => {
 
     // Add product results as suggestions (top 3)
     const topProducts = searchStore.results.slice(0, 3)
-    topProducts.forEach(product => {
+    topProducts.forEach((product) => {
       allSuggestions.push({
         type: 'product',
         id: `product-${product.id}`,
         label: typeof product.name === 'string' ? product.name : product.name?.en || 'Product',
         subtitle: `€${product.price}`,
-        image: product.images?.[0]?.url
+        image: product.images?.[0]?.url,
       })
     })
 
     // Add query suggestions (next 5)
-    searchStore.filteredSuggestions.slice(0, 5).forEach(suggestion => {
+    searchStore.filteredSuggestions.slice(0, 5).forEach((suggestion) => {
       allSuggestions.push({
         type: 'query',
         id: `query-${suggestion}`,
-        label: suggestion
+        label: suggestion,
       })
     })
 
@@ -77,18 +76,18 @@ export const useProductSearch = () => {
       searchStore.recentSearches
         .filter(item => item.query.toLowerCase().includes(searchQuery.value.toLowerCase()))
         .slice(0, 8 - allSuggestions.length)
-        .forEach(historyItem => {
+        .forEach((historyItem) => {
           allSuggestions.push({
             type: 'history',
             id: `history-${historyItem.query}`,
             label: historyItem.query,
-            resultsCount: historyItem.resultsCount
+            resultsCount: historyItem.resultsCount,
           })
         })
     }
 
     // Limit to 10 suggestions max (8 on mobile)
-    const maxSuggestions = process.client && window.innerWidth < 768 ? 8 : 10
+    const maxSuggestions = import.meta.client && window.innerWidth < 768 ? 8 : 10
     return allSuggestions.slice(0, maxSuggestions)
   })
 
@@ -108,7 +107,7 @@ export const useProductSearch = () => {
     if (query.length >= 3) {
       await searchStore.search(query)
     }
-  }, 300)
+  }, 300) as UseDebounceFnReturn<(query: string) => Promise<void>> & { cancel: () => void }
 
   /**
    * Handle search input changes
@@ -120,7 +119,8 @@ export const useProductSearch = () => {
     if (value.trim()) {
       showSuggestions.value = true
       debouncedSearch(value)
-    } else {
+    }
+    else {
       showSuggestions.value = false
       searchStore.clearSearch()
     }
@@ -138,7 +138,7 @@ export const useProductSearch = () => {
     // Navigate to products page with search query
     router.push({
       path: '/products',
-      query: { q: searchQuery.value }
+      query: { q: searchQuery.value },
     })
   }
 
@@ -150,7 +150,8 @@ export const useProductSearch = () => {
       // Navigate to product detail page
       const productSlug = suggestion.id.replace('product-', '')
       router.push(`/products/${productSlug}`)
-    } else {
+    }
+    else {
       // Use the suggestion as search query
       searchQuery.value = suggestion.label
       executeSearch()
@@ -170,7 +171,7 @@ export const useProductSearch = () => {
         event.preventDefault()
         selectedSuggestionIndex.value = Math.min(
           selectedSuggestionIndex.value + 1,
-          suggestions.value.length - 1
+          suggestions.value.length - 1,
         )
         break
 
@@ -182,8 +183,12 @@ export const useProductSearch = () => {
       case 'Enter':
         event.preventDefault()
         if (selectedSuggestionIndex.value >= 0) {
-          selectSuggestion(suggestions.value[selectedSuggestionIndex.value])
-        } else {
+          const selectedSuggestion = suggestions.value[selectedSuggestionIndex.value]
+          if (selectedSuggestion) {
+            selectSuggestion(selectedSuggestion)
+          }
+        }
+        else {
           executeSearch()
         }
         break
@@ -261,7 +266,7 @@ export const useProductSearch = () => {
         }
       }
     },
-    { immediate: true }
+    { immediate: true },
   )
 
   return {
@@ -285,6 +290,6 @@ export const useProductSearch = () => {
     handleKeyDown,
     clearSearch,
     removeFromHistory,
-    clearHistory
+    clearHistory,
   }
 }

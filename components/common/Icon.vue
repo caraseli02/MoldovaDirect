@@ -1,5 +1,8 @@
 <template>
-  <component :is="resolvedIcon" v-bind="$attrs" />
+  <component
+    :is="resolvedIcon"
+    v-bind="$attrs"
+  />
 </template>
 
 <script setup lang="ts">
@@ -8,9 +11,11 @@ import type { Component } from 'vue'
 import {
   AlertCircle,
   AlertTriangle,
+  Apple,
   ArrowLeft,
   ArrowRight,
   ArrowUpRight,
+  Award,
   BadgeCheck,
   BadgeDollarSign,
   Ban,
@@ -38,15 +43,19 @@ import {
   Eye,
   Filter,
   FlaskConical,
+  Grape,
   Gift,
   Globe2,
   Hand,
+  Headphones,
   Heart,
   Home,
   Image,
   Info,
   Key,
+  Landmark,
   LayoutDashboard,
+  Leaf,
   LifeBuoy,
   Lightbulb,
   Loader2,
@@ -69,15 +78,19 @@ import {
   Plus,
   Radar,
   RefreshCcw,
+  RotateCcw,
   Search,
   Send,
+  Shield,
   ShieldCheck,
   ShoppingBag,
   ShoppingCart,
+  SlidersHorizontal,
   Smartphone,
   Sparkles,
   SquarePen,
   Star,
+  Tag,
   Trash2,
   TrendingUp,
   Truck,
@@ -87,7 +100,7 @@ import {
   Wallet,
   Wine,
   Wrench,
-  X
+  X,
 } from 'lucide-vue-next'
 
 const props = defineProps<{ name: string }>()
@@ -95,6 +108,7 @@ const props = defineProps<{ name: string }>()
 const ICONS: Record<string, Component> = {
   'alert-circle': AlertCircle,
   'alert-triangle': AlertTriangle,
+  'apple': Apple,
   'arrow-left': ArrowLeft,
   'arrow-right': ArrowRight,
   'arrow-trending-up': TrendingUp,
@@ -102,6 +116,7 @@ const ICONS: Record<string, Component> = {
   'arrow-path': RefreshCcw,
   'arrow-right-on-rectangle': LogOut,
   'arrow-left-on-rectangle': LogIn,
+  'award': Award,
   'banknote': Banknote,
   'banknotes': Banknote,
   'bar-chart-2': BarChart2,
@@ -110,6 +125,8 @@ const ICONS: Record<string, Component> = {
   'badge-dollar-sign': BadgeDollarSign,
   'ban': Ban,
   'bell': Bell,
+  'box': Box,
+  'boxes': Boxes,
   'building-2': Building2,
   'building-library': Building2,
   'calendar-days': CalendarDays,
@@ -147,14 +164,18 @@ const ICONS: Record<string, Component> = {
   'gift-top': Gift,
   'globe-2': Globe2,
   'globe-alt': Globe2,
+  'grape': Grape,
   'hand': Hand,
   'hand-raised': Hand,
+  'headphones': Headphones,
   'heart': Heart,
   'home': Home,
   'information-circle': Info,
   'info': Info,
   'key': Key,
+  'landmark': Landmark,
   'layout-dashboard': LayoutDashboard,
+  'leaf': Leaf,
   'life-buoy': LifeBuoy,
   'light-bulb': Lightbulb,
   'lightbulb': Lightbulb,
@@ -182,18 +203,22 @@ const ICONS: Record<string, Component> = {
   'question-circle': CircleHelp,
   'radar': Radar,
   'refresh-ccw': RefreshCcw,
+  'rotate-ccw': RotateCcw,
   'arrow-path-refresh': RefreshCcw,
   'search': Search,
   'send': Send,
+  'shield': Shield,
   'shield-check': ShieldCheck,
   'shopping-bag': ShoppingBag,
   'shopping-cart': ShoppingCart,
+  'sliders-horizontal': SlidersHorizontal,
   'smartphone': Smartphone,
   'sparkles': Sparkles,
   'squares-2x2': PanelsTopLeft,
   'panels-top-left': PanelsTopLeft,
   'square-pen': SquarePen,
   'star': Star,
+  'tag': Tag,
   'trash-2': Trash2,
   'trending-up': TrendingUp,
   'triangle-alert': AlertTriangle,
@@ -210,7 +235,7 @@ const ICONS: Record<string, Component> = {
   'image': Image,
   'photo': Image,
   'alert-octagon': AlertTriangle,
-  'alert': AlertTriangle
+  'alert': AlertTriangle,
 }
 
 const fallbackIcon = CircleHelp
