@@ -202,25 +202,26 @@ test.describe('Cart Functionality E2E Tests', () => {
     await page.goto('/cart')
     await waitForPageLoad(page)
 
-    // Cart uses +/- buttons for quantity control
-    // The quantity is displayed between two buttons: [-] [qty] [+]
-    // Find the cart item container first
-    const cartItem = page.locator('.border-b, [class*="cart-item"]').first()
+    // Cart items have data-testid="cart-item-{productId}"
+    const cartItem = page.locator('[data-testid^="cart-item-"]').first()
+    await expect(cartItem).toBeVisible({ timeout: 5000 })
 
-    // Find the quantity display - it's a span with min-w-[2rem] class showing the number
-    const quantityDisplay = cartItem.locator('span.min-w-\\[2rem\\], span.text-center.font-medium').first()
+    // Find the quantity display - it's within the cart item
+    const quantityDisplay = page.locator('span.min-w-\\[2rem\\].text-center').first()
     await expect(quantityDisplay).toBeVisible({ timeout: 5000 })
 
     // Get current quantity
     const currentQuantityText = await quantityDisplay.textContent()
     const currentQuantity = parseInt(currentQuantityText?.trim() || '1', 10)
 
-    // Find and click the increase button (+) - it's the second button in the quantity controls
-    // Look for the button with the + icon (path with "M12 6v6m0 0v6")
-    const increaseButton = cartItem.locator('button:has(svg path[d*="M12 6v"])').first()
+    // Find the increase button (+) - it's within quantity controls, has + icon
+    // The button is near the quantity display
+    const increaseButton = page.locator('button').filter({
+      has: page.locator('svg path[d="M12 6v6m0 0v6m0-6h6m-6 0H6"]'),
+    }).first()
     await expect(increaseButton).toBeVisible({ timeout: 3000 })
     await increaseButton.click()
-    await page.waitForTimeout(500)
+    await page.waitForTimeout(800)
 
     // Verify quantity updated
     const newQuantityText = await quantityDisplay.textContent()
@@ -245,8 +246,14 @@ test.describe('Cart Functionality E2E Tests', () => {
     await page.goto('/cart')
     await waitForPageLoad(page)
 
-    // Find and click remove button
-    const removeButton = page.locator('button:has-text("Remove"), button:has-text("Eliminar"), [aria-label*="Remove"], [aria-label*="Eliminar"]').first()
+    // Find the cart item using testid
+    const cartItem = page.locator('[data-testid^="cart-item-"]').first()
+    await expect(cartItem).toBeVisible({ timeout: 5000 })
+
+    // Find and click remove button - it has a trash icon SVG with specific path
+    const removeButton = page.locator('button').filter({
+      has: page.locator('svg path[d*="M19 7l-.867 12.142"]'),
+    }).first()
     await expect(removeButton).toBeVisible({ timeout: 5000 })
     await removeButton.click()
     await page.waitForTimeout(1000)
@@ -280,9 +287,13 @@ test.describe('Cart Functionality E2E Tests', () => {
     await page.goto('/cart')
     await waitForPageLoad(page)
 
-    // Verify item is in cart - look for cart item container
-    const cartItem = page.locator('.border-b, [class*="item"]').first()
+    // Verify item is in cart using testid
+    const cartItem = page.locator('[data-testid^="cart-item-"]').first()
     await expect(cartItem).toBeVisible({ timeout: 5000 })
+
+    // Verify cart count is still the same
+    const cartCountOnCartPage = await getCartCount(page)
+    expect(cartCountOnCartPage).toBe(cartCountAfterAdd)
   })
 
   test('should show correct cart badge count', async ({ page }) => {
@@ -357,12 +368,17 @@ test.describe('Cart Functionality E2E Tests', () => {
     await page.goto('/cart')
     await waitForPageLoad(page)
 
-    // Verify subtotal is displayed and is a number
-    const subtotal = page.locator('[data-testid="cart-subtotal"], :has-text("Subtotal")').first()
-    await expect(subtotal).toBeVisible({ timeout: 5000 })
+    // Find the subtotal in the order summary - it's after the "Subtotal" label
+    // The label is in text-gray-600 and the value is in font-medium text-gray-900
+    const subtotalContainer = page.locator('text=/Subtotal|subtotal/i').locator('..')
+    await expect(subtotalContainer).toBeVisible({ timeout: 5000 })
 
-    const subtotalText = await subtotal.textContent()
-    expect(subtotalText).toMatch(/\d+\.\d{2}/) // Should contain price like 25.99
+    // Get the value span (it has font-medium class)
+    const subtotalValue = subtotalContainer.locator('span.font-medium').first()
+    const subtotalText = await subtotalValue.textContent()
+
+    // Should contain currency and price (e.g., "€25.99" or "25,99 €")
+    expect(subtotalText).toMatch(/[\d,]+[.,]\d{2}/) // Should contain price like 25.99 or 25,99
   })
 
   test('should handle rapid add to cart clicks gracefully', async ({ page }) => {
