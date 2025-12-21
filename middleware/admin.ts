@@ -16,6 +16,15 @@
 export default defineNuxtRouteMiddleware(async (_to, _from) => {
   const user = useSupabaseUser()
   const supabase = useSupabaseClient()
+  const authStore = useAuthStore()
+  const runtimeConfig = useRuntimeConfig()
+
+  // Handle test personas for local/preview environments ONLY
+  const isDevEnv = runtimeConfig.public.env === 'development' || import.meta.dev
+  const isPreviewEnv = runtimeConfig.public.env === 'preview'
+  if ((isDevEnv || isPreviewEnv) && authStore.isTestSession && authStore.user?.role === 'admin') {
+    return
+  }
 
   // Check if user is authenticated
   // Wait for session to load if we're on the client

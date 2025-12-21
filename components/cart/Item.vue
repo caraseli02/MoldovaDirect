@@ -12,8 +12,8 @@
     <!-- Product Image -->
     <div class="flex-shrink-0">
       <NuxtImg
-        :src="item.product.images?.[0] || '/placeholder-product.svg'"
-        :alt="item.product.name"
+        :src="typeof item.product.images?.[0] === 'object' ? (item.product.images[0] as any).url : (item.product.images?.[0] || '/placeholder-product.svg')"
+        :alt="getLocalizedText(item.product.name)"
         class="w-16 h-16 md:w-20 md:h-20 object-cover rounded-lg"
         loading="lazy"
       />
@@ -22,7 +22,7 @@
     <!-- Product Details -->
     <div class="flex-1 min-w-0">
       <h3 class="text-sm md:text-base font-medium text-gray-900 dark:text-white truncate">
-        {{ item.product.name }}
+        {{ getLocalizedText(item.product.name) }}
       </h3>
       <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
         {{ formatPrice(item.product.price) }} {{ $t('common.each') }}
@@ -141,9 +141,9 @@ interface Props {
     id: string
     product: {
       id: string
-      name: string
+      name: any
       price: number
-      images: string[]
+      images: any[]
       stock: number
     }
     quantity: number
@@ -164,12 +164,24 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<Emits>()
+const { locale } = useI18n()
 
 // Check if item is selected (this would come from the cart store)
 const { isItemSelected } = useCart()
 const isSelected = computed(() => isItemSelected(props.item.id))
 
 // Utility functions
+const getLocalizedText = (text: any): string => {
+  if (!text) return ''
+  if (typeof text === 'string') return text
+  const localeText = text[locale.value]
+  if (localeText) return localeText
+  const esText = text.es
+  if (esText) return esText
+  const values = Object.values(text).filter((v): v is string => typeof v === 'string')
+  return values[0] || ''
+}
+
 const formatPrice = (price: number) => {
   return new Intl.NumberFormat('es-ES', {
     style: 'currency',

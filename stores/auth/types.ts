@@ -12,6 +12,7 @@ export interface AuthUser {
   lastLogin?: string
   createdAt: string
   updatedAt?: string
+  role?: string
   mfaEnabled: boolean
   mfaFactors: Array<{
     id: string

@@ -15,6 +15,7 @@
  */
 
 import { defineStore } from 'pinia'
+import { useAuthStore } from './auth'
 import type { ProductWithRelations } from '~/types/database'
 
 interface ProductFilters {
@@ -172,6 +173,67 @@ export const useAdminProductsStore = defineStore('adminProducts', {
      * Fetch products with current filters and pagination
      */
     async fetchProducts() {
+      const authStore = useAuthStore()
+
+      if (authStore.isTestSession) {
+        this.loading = true
+        await new Promise(resolve => setTimeout(resolve, 800))
+
+        const mockProducts: ProductWithRelations[] = [
+          {
+            id: 1,
+            sku: 'WINE-RED-001',
+            categoryId: 1,
+            nameTranslations: { es: 'Vino Tinto Premium', en: 'Premium Red Wine' },
+            descriptionTranslations: { es: 'Un vino tinto excepcional.', en: 'An exceptional red wine.' },
+            priceEur: 24.99,
+            stockQuantity: 45,
+            lowStockThreshold: 10,
+            isActive: true,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            price: 24.99,
+            name: { es: 'Vino Tinto Premium', en: 'Premium Red Wine' },
+            slug: 'vino-tinto-premium',
+            stockStatus: 'in_stock',
+            formattedPrice: '24,99 €',
+            images: [{ id: 1, url: '/placeholder-product.svg', sortOrder: 0, isPrimary: true }],
+            category: { id: 1, slug: 'wines', nameTranslations: { es: 'Vinos', en: 'Wines' }, sortOrder: 0, isActive: true, createdAt: new Date().toISOString() } as any,
+          },
+          {
+            id: 2,
+            sku: 'HONEY-ORG-001',
+            categoryId: 2,
+            nameTranslations: { es: 'Miel Orgánica', en: 'Organic Honey' },
+            priceEur: 12.50,
+            stockQuantity: 3,
+            lowStockThreshold: 5,
+            isActive: true,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            price: 12.50,
+            name: { es: 'Miel Orgánica', en: 'Organic Honey' },
+            slug: 'miel-organica',
+            stockStatus: 'low_stock',
+            formattedPrice: '12,50 €',
+            images: [{ id: 2, url: '/placeholder-product.svg', sortOrder: 0, isPrimary: true }],
+            category: { id: 2, slug: 'honey', nameTranslations: { es: 'Miel', en: 'Honey' }, sortOrder: 1, isActive: true, createdAt: new Date().toISOString() } as any,
+          },
+        ]
+
+        this.products = mockProducts
+        this.pagination = {
+          page: 1,
+          limit: 20,
+          total: 2,
+          totalPages: 1,
+          hasNext: false,
+          hasPrev: false,
+        }
+        this.loading = false
+        return
+      }
+
       this.loading = true
       this.error = null
 

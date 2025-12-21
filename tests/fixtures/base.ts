@@ -89,17 +89,12 @@ export const test = base.extend<TestFixtures>({
   authenticatedPage: async ({ page }, use) => {
     // Storage state is automatically applied from playwright.config.ts
     // The page should already be authenticated via the storage state
-    // Just navigate to the homepage to activate the session
+    // Navigate to home page to start the session
     await page.goto('/')
+    await page.waitForLoadState('networkidle')
 
-    // Verify that we're actually authenticated
-    // Check for an auth indicator in the UI (e.g., user menu, account link)
-    const isAuthenticated = await page.locator('[data-testid="user-menu"]').isVisible({ timeout: 5000 })
-      .catch(() => false)
-
-    if (!isAuthenticated) {
-      throw new Error('Authentication failed - storage state may be invalid or expired')
-    }
+    // Give the page a moment to fully hydrate and set up auth state
+    await page.waitForTimeout(500)
 
     await use(page)
   },

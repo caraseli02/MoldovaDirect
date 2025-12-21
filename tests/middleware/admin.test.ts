@@ -64,6 +64,17 @@ describe('Admin Middleware', () => {
     vi.stubGlobal('createError', vi.fn((error: any) => {
       throw new Error(error.statusMessage)
     }))
+    // Mock auth store
+    vi.stubGlobal('useAuthStore', () => ({
+      isTestSession: false,
+      user: null,
+    }))
+    // Mock runtime config
+    vi.stubGlobal('useRuntimeConfig', () => ({
+      public: {
+        env: 'development',
+      },
+    }))
   })
 
   describe('Authentication Check', () => {

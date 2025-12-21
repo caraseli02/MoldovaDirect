@@ -1329,7 +1329,6 @@
       "subtitle": "Producto auténtico moldavo garantizado",
       "description": "Imágenes de alta calidad estarán disponibles en breve"
     },
-    "noImageAvailable": "No hay imagen disponible",
     "socialProof": {
       "title": "Amado por nuestros clientes",
       "subtitle": "Opiniones reales de catas, cenas y pedidos para regalar.",
@@ -1406,8 +1405,7 @@
       "sharedSuccess": "¡Gracias por compartir este descubrimiento!",
       "shareText": "Descubre este favorito moldavo conmigo.",
       "copyFallback": "Copia este enlace y envíalo a quien quieras."
-    },
-    "commonProduct": "este producto"
+    }
   },
   "footer": {
     "terms": "Términos y Condiciones",
@@ -2426,5 +2424,21 @@
         "description": "Muchos de nuestros productores están haciendo la transición a la agricultura orgánica y biodinámica, asegurando que los viñedos de Moldavia prosperen durante generaciones venideras."
       }
     }
+  },
+  "shipping": {
+    "title": "Configuración del Envío",
+    "description": "Información sobre nuestros métodos de envío y plazos de entrega."
+  },
+  "faq": {
+    "title": "Preguntas Frecuentes",
+    "description": "Respuestas a tus dudas más comunes."
+  },
+  "returns": {
+    "title": "Devoluciones",
+    "description": "Nuestra política de devoluciones y reembolsos."
+  },
+  "trackOrder": {
+    "title": "Sigue tu Pedido",
+    "description": "Introduce tu número de pedido para conocer su estado."
   }
 }

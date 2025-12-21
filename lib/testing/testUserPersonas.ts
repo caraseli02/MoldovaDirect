@@ -105,6 +105,7 @@ export type TestUserPersonaKey
     | 'international-shopper'
     | 'mobile-only-user'
     | 'bulk-buyer'
+    | 'platform-admin'
 
 const baseDate = new Date('2024-01-15T08:30:00Z')
 
@@ -831,6 +832,55 @@ export const testUserPersonas: Record<TestUserPersonaKey, TestUserPersona> = {
         theme: 'light',
         currency: 'EUR',
       },
+    },
+  },
+  'platform-admin': {
+    key: 'platform-admin',
+    title: 'Platform Admin',
+    summary: 'Internal administrator with full access to products, orders, inventory, and system analytics.',
+    goals: [
+      'Validate admin dashboard statistics and real-time updates',
+      'Test product management and inventory tracking',
+      'Verify order fulfillment and status update flows',
+    ],
+    focusAreas: ['Inventory Management', 'Order Fulfillment', 'System Analytics'],
+    quickLinks: [
+      {
+        label: 'Admin Dashboard',
+        description: 'Review platform performance metrics',
+        route: '/admin',
+      },
+      {
+        label: 'Product Management',
+        description: 'Edit product details and stock levels',
+        route: '/admin/products',
+      },
+      {
+        label: 'Order Management',
+        description: 'Process pending orders and update shipping',
+        route: '/admin/orders',
+      },
+    ],
+    testScript: [
+      'Navigate to the admin dashboard and confirm that KPI cards (sales, orders, users) populate.',
+      'Open the inventory page and update stock for a product, then verify the change persists.',
+      'Review a pending order and simulate status changes from "Pending" to "Shipped".',
+      'Check the email logs to verify that customer notifications are being triggered.',
+      'Use the seed tools to generate test data if the environment is empty.',
+    ],
+    user: {
+      id: 'test-user-admin',
+      email: 'admin@moldovadirect.com',
+      emailVerified: true,
+      name: 'Platform Administrator',
+      phone: '+34600000000',
+      preferredLanguage: 'en',
+      role: 'admin',
+      lastLogin: new Date().toISOString(),
+      createdAt: new Date('2023-01-01T00:00:00Z').toISOString(),
+      updatedAt: new Date().toISOString(),
+      mfaEnabled: false,
+      mfaFactors: [],
     },
   },
 }
