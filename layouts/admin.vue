@@ -98,6 +98,7 @@
               class="relative"
             >
               <button
+                data-testid="admin-user-menu"
                 class="flex items-center space-x-3 rounded-lg px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                 :aria-expanded="userMenuOpen"
                 aria-haspopup="true"
@@ -162,6 +163,8 @@
                     </NuxtLink>
                     <div class="my-1 h-px bg-gray-200 dark:bg-gray-700"></div>
                     <button
+                      data-testid="logout-button"
+                      aria-label="Logout"
                       class="flex w-full items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
                       @click="handleLogout"
                     >
