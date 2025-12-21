@@ -69,6 +69,12 @@ describe('Admin Middleware', () => {
       isTestSession: false,
       user: null,
     }))
+    // Mock runtime config
+    vi.stubGlobal('useRuntimeConfig', () => ({
+      public: {
+        env: 'development',
+      },
+    }))
   })
 
   describe('Authentication Check', () => {

@@ -1,9 +1,13 @@
 import { test as base, expect } from '@playwright/test'
 import path from 'path'
 
-// Test credentials - use environment variables
-const TEST_EMAIL = process.env.TEST_USER_EMAIL || 'teste2e@example.com'
-const TEST_PASSWORD = process.env.TEST_USER_PASSWORD || 'N7jKAcu2FHbt7cj'
+// Test credentials - require environment variables
+const TEST_EMAIL = process.env.TEST_USER_EMAIL
+const TEST_PASSWORD = process.env.TEST_USER_PASSWORD
+
+if (!TEST_EMAIL || !TEST_PASSWORD) {
+  throw new Error('TEST_USER_EMAIL and TEST_USER_PASSWORD environment variables are required for logout tests')
+}
 
 // Helper to perform inline login
 async function performInlineLogin(page: any) {
