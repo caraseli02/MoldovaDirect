@@ -208,6 +208,71 @@ const handleUserAction = async (action: string, userId: string, _data?: unknown)
 
 // Fetch users data with proper authentication
 const fetchUsersData = async () => {
+  const authStore = useAuthStore()
+
+  if (authStore.isTestSession) {
+    adminUsersStore.setLoading(true)
+    await new Promise(resolve => setTimeout(resolve, 800))
+
+    const mockUsers: UserWithProfile[] = [
+      {
+        id: 'user_1',
+        email: 'juan@example.com',
+        email_confirmed_at: new Date().toISOString(),
+        last_sign_in_at: new Date().toISOString(),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        status: 'active',
+        orderCount: 5,
+        totalSpent: 450.25,
+        profile: {
+          name: 'Juan Pérez',
+          phone: '+34 600 000 001',
+          preferred_language: 'es',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        },
+      },
+      {
+        id: 'user_2',
+        email: 'maria@example.com',
+        email_confirmed_at: new Date().toISOString(),
+        last_sign_in_at: new Date().toISOString(),
+        created_at: new Date(Date.now() - 86400000 * 30).toISOString(),
+        updated_at: new Date().toISOString(),
+        status: 'inactive',
+        orderCount: 0,
+        totalSpent: 0,
+        profile: {
+          name: 'Maria Popescu',
+          phone: '+373 60 000 002',
+          preferred_language: 'ro',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        },
+      },
+    ]
+
+    adminUsersStore.setUsers(mockUsers)
+    adminUsersStore.setPagination({
+      page: 1,
+      limit: 20,
+      total: 2,
+      totalPages: 1,
+      hasNext: false,
+      hasPrev: false,
+    } as any)
+    adminUsersStore.setSummary({
+      totalUsers: 1250,
+      activeUsers: 850,
+      inactiveUsers: 400,
+      totalOrders: 2450,
+      totalRevenue: 154200.50,
+    })
+    adminUsersStore.setLoading(false)
+    return
+  }
+
   try {
     adminUsersStore.setLoading(true)
 
@@ -256,6 +321,75 @@ const fetchUsersData = async () => {
 
 // Fetch user detail with proper authentication
 const fetchUserDetail = async (userId: string) => {
+  const authStore = useAuthStore()
+
+  if (authStore.isTestSession) {
+    adminUsersStore.setUserDetailLoading(true)
+    await new Promise(resolve => setTimeout(resolve, 500))
+
+    const mockDetail: UserDetail = {
+      id: userId,
+      email: userId === 'user_1' ? 'juan@example.com' : 'maria@example.com',
+      email_confirmed_at: new Date().toISOString(),
+      last_sign_in_at: new Date().toISOString(),
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      status: userId === 'user_1' ? 'active' : 'inactive',
+      profile: {
+        name: userId === 'user_1' ? 'Juan Pérez' : 'Maria Popescu',
+        phone: userId === 'user_1' ? '+34 600 000 001' : '+373 60 000 002',
+        preferred_language: userId === 'user_1' ? 'es' : 'ro',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      },
+      addresses: [
+        {
+          id: 1,
+          type: 'shipping',
+          street: 'Calle Principal 123',
+          city: 'Madrid',
+          postal_code: '28001',
+          province: 'Madrid',
+          country: 'ES',
+          is_default: true,
+          created_at: new Date().toISOString(),
+        },
+      ],
+      orders: [
+        {
+          id: 1,
+          order_number: 'ORD-2024-001',
+          status: 'delivered',
+          payment_status: 'paid',
+          total_eur: 145.50,
+          created_at: new Date().toISOString(),
+          items_count: 3,
+        },
+      ],
+      activity: [
+        {
+          id: 'act_1',
+          event_type: 'login',
+          created_at: new Date().toISOString(),
+          ip_address: '127.0.0.1',
+        },
+      ],
+      statistics: {
+        totalOrders: 5,
+        totalSpent: 450.25,
+        averageOrderValue: 90.05,
+        lastOrderDate: new Date().toISOString(),
+        accountAge: 365,
+        loginCount: 42,
+        lastLogin: new Date().toISOString(),
+      },
+    }
+
+    adminUsersStore.setCurrentUser(mockDetail)
+    adminUsersStore.setUserDetailLoading(false)
+    return
+  }
+
   try {
     adminUsersStore.setUserDetailLoading(true)
 

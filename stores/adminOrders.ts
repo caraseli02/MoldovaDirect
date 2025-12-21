@@ -14,6 +14,7 @@
  */
 
 import { defineStore } from 'pinia'
+import { useAuthStore } from './auth'
 import type {
   OrderWithAdminDetails,
   AdminOrderFilters,
@@ -249,6 +250,72 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
      * Fetch orders with current filters and pagination
      */
     async fetchOrders() {
+      const authStore = useAuthStore()
+
+      if (authStore.isTestSession) {
+        this.loading = true
+        await new Promise(resolve => setTimeout(resolve, 800))
+
+        const mockOrders: OrderListItem[] = [
+          {
+            id: 1,
+            orderNumber: 'ORD-2024-001',
+            status: 'pending',
+            paymentMethod: 'stripe',
+            paymentStatus: 'paid',
+            subtotalEur: 120.50,
+            shippingCostEur: 25.00,
+            taxEur: 0,
+            totalEur: 145.50,
+            shippingAddress: { id: 1, type: 'shipping', street: 'Calle Principal 123', city: 'Madrid', postalCode: '28001', country: 'ES', isDefault: true },
+            billingAddress: { id: 2, type: 'billing', street: 'Calle Principal 123', city: 'Madrid', postalCode: '28001', country: 'ES', isDefault: true },
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            itemCount: 3,
+            daysSinceOrder: 0,
+            customerName: 'Juan Pérez',
+            customerEmail: 'juan@example.com',
+          },
+          {
+            id: 2,
+            orderNumber: 'ORD-2024-002',
+            status: 'processing',
+            paymentMethod: 'cod',
+            paymentStatus: 'pending',
+            subtotalEur: 85.00,
+            shippingCostEur: 15.00,
+            taxEur: 0,
+            totalEur: 100.00,
+            shippingAddress: { id: 3, type: 'shipping', street: 'Strada Albă 45', city: 'Chișinău', postalCode: 'MD-2001', country: 'MD', isDefault: true },
+            billingAddress: { id: 4, type: 'billing', street: 'Strada Albă 45', city: 'Chișinău', postalCode: 'MD-2001', country: 'MD', isDefault: true },
+            createdAt: new Date(Date.now() - 86400000).toISOString(),
+            updatedAt: new Date(Date.now() - 86400000).toISOString(),
+            itemCount: 2,
+            daysSinceOrder: 1,
+            customerName: 'Maria Popescu',
+            customerEmail: 'maria@example.com',
+          },
+        ]
+
+        this.orders = mockOrders
+        this.pagination = {
+          page: 1,
+          limit: 20,
+          total: 2,
+          totalPages: 1,
+          hasNext: false,
+          hasPrev: false,
+        }
+        this.aggregates = {
+          totalRevenue: 245.50,
+          averageOrderValue: 122.75,
+          statusCounts: { pending: 1, processing: 1 },
+        }
+        this.lastRefresh = new Date()
+        this.loading = false
+        return
+      }
+
       this.loading = true
       this.error = null
 
