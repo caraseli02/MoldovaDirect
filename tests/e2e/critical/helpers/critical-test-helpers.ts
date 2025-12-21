@@ -94,14 +94,21 @@ export class CriticalTestHelpers {
 
   /**
    * Logout current user
-   * Tries multiple selector variations for logout button
+   * Navigates to account page and clicks logout button
    */
   async logout(): Promise<void> {
+    // First, navigate to account page where the logout button is located
+    await this.page.goto('/account')
+    await this.page.waitForLoadState('networkidle')
+
+    // Try multiple selector variations for logout button
     const logoutButton = this.page.locator(
-      'button:has-text("Cerrar sesión"), button:has-text("Logout"), a:has-text("Cerrar sesión"), [data-testid="logout-button"]',
+      '[data-testid="logout-button"], button:has-text("Cerrar sesión"), button:has-text("Logout")',
     )
 
+    await logoutButton.first().waitFor({ state: 'visible', timeout: 10000 })
     await logoutButton.first().click()
+
     // Wait for redirect to home or login page (login may include query params)
     await this.page.waitForURL(/\/(|auth\/login)/, { timeout: 10000 })
   }
