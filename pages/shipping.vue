@@ -436,33 +436,33 @@ const timeline = computed(() => [
   },
 ])
 
-const description
-  = 'Review Moldova Direct shipping methods, delivery timelines, and coverage across Spain for Moldovan food and wine orders.'
+const seoTitle = computed(() => t('shippingPage.seo.title'))
+const seoDescription = computed(() => t('shippingPage.seo.description'))
 
-const structuredData = {
+const structuredData = computed(() => ({
   '@context': 'https://schema.org',
   '@type': 'WebPage',
-  'name': 'Shipping Information',
+  'name': seoTitle.value,
   'url': toAbsoluteUrl('/shipping'),
-  description,
+  'description': seoDescription.value,
   'isPartOf': {
     '@type': 'WebSite',
     'name': 'Moldova Direct',
     'url': siteUrl,
   },
-}
+}))
 
 useLandingSeo({
-  title: 'Shipping Information - Moldova Direct',
-  description,
+  title: seoTitle.value,
+  description: seoDescription.value,
   image: '/icon.svg',
-  imageAlt: 'Courier delivering Moldova Direct orders across Spain',
+  imageAlt: t('shippingPage.hero.title'),
   pageType: 'webpage',
-  keywords: ['Moldova Direct shipping', 'Moldovan food delivery Spain', 'shipping Moldova Direct'],
+  keywords: [t('shippingPage.seo.title'), 'Moldova Direct', t('shippingPage.hero.badge')],
   breadcrumbs: [
-    { name: 'Home', path: '/' },
-    { name: 'Shipping', path: '/shipping' },
+    { name: t('common.home'), path: '/' },
+    { name: t('shippingPage.hero.badge'), path: '/shipping' },
   ],
-  structuredData,
+  structuredData: structuredData.value,
 })
 </script>

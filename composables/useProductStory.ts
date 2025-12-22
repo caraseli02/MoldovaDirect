@@ -1,7 +1,13 @@
 /**
  * Product Storytelling Composable
  *
- * Handles product storytelling, attributes, and marketing content
+ * Extracts and formats product narrative content from attributes for display,
+ * including tasting notes, food pairings, awards, origin stories, reviews,
+ * and sustainability badges. Automatically determines whether culinary-specific
+ * details should be shown based on product category.
+ *
+ * Returns null or empty arrays when data is not available - the UI layer
+ * should handle displaying appropriate "no data" states.
  */
 
 import { computed, type ComputedRef } from 'vue'
@@ -95,9 +101,8 @@ export function useProductStory(
       return notes.split(',').map(note => note.trim()).filter(Boolean)
     }
 
-    return t('products.story.defaultNotes')
-      .split('|')
-      .map(entry => entry.trim())
+    // Return empty array when no tasting notes exist - UI should handle this gracefully
+    return []
   })
 
   /**
@@ -124,9 +129,8 @@ export function useProductStory(
       return pairings.split(',').map(pairing => pairing.trim()).filter(Boolean)
     }
 
-    return t('products.story.defaultPairings')
-      .split('|')
-      .map(entry => entry.trim())
+    // Return empty array when no pairing ideas exist - UI should handle this gracefully
+    return []
   })
 
   /**
@@ -165,19 +169,23 @@ export function useProductStory(
   })
 
   /**
-   * Review summary with ratings and highlights
+   * Review summary with ratings and highlights.
+   * Returns null when no review data exists - UI should display "no reviews yet" state.
    */
-  const reviewSummary = computed((): ReviewSummary => {
-    const rating = Number(productAttributes.value?.rating || 4.8)
-    const count = Number(
-      productAttributes.value?.review_count
-      || productAttributes.value?.reviewCount
-      || 126,
-    )
+  const reviewSummary = computed((): ReviewSummary | null => {
+    const attrs = productAttributes.value || {}
+    const ratingRaw = attrs.rating
+    const countRaw = attrs.review_count || attrs.reviewCount
 
-    const highlightsRaw
-      = productAttributes.value?.review_highlights
-        || productAttributes.value?.reviewHighlights
+    // Return null when no real review data exists - never fabricate reviews
+    if (ratingRaw === undefined && countRaw === undefined) {
+      return null
+    }
+
+    const rating = Number(ratingRaw || 0)
+    const count = Number(countRaw || 0)
+
+    const highlightsRaw = attrs.review_highlights || attrs.reviewHighlights
 
     let highlights: string[] = []
 
@@ -186,11 +194,6 @@ export function useProductStory(
     }
     else if (typeof highlightsRaw === 'string') {
       highlights = highlightsRaw.split('|').map((item: string) => item.trim())
-    }
-    else {
-      highlights = t('products.socialProof.highlights')
-        .split('|')
-        .map(entry => entry.trim())
     }
 
     return {
@@ -201,7 +204,9 @@ export function useProductStory(
   })
 
   /**
-   * Sustainability and certification badges
+   * Sustainability and certification badges.
+   * Returns only badges that the product actually has - never fabricates badges.
+   * UI should handle empty array gracefully (hide section or show "no certifications").
    */
   const sustainabilityBadges = computed((): string[] => {
     const badges: string[] = []
@@ -217,11 +222,7 @@ export function useProductStory(
       badges.push('heritage')
     }
 
-    // Default badges if none are set
-    if (!badges.length) {
-      badges.push('handcrafted', 'familyOwned')
-    }
-
+    // Return only actual badges - do not fabricate badges for products without certifications
     return Array.from(new Set(badges)).slice(0, 5)
   })
 

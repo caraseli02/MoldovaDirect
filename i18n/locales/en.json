@@ -2531,5 +2531,143 @@
         "actions": "Actions"
       }
     }
+  },
+  "shippingPage": {
+    "seo": {
+      "title": "Shipping Information - Moldova Direct",
+      "description": "Review Moldova Direct shipping methods, delivery timelines, and coverage across Spain for Moldovan food and wine orders."
+    },
+    "hero": {
+      "badge": "Shipping & Delivery",
+      "title": "Fast, Reliable Delivery Across Spain",
+      "description": "We deliver authentic Moldovan products to your door with care. Track your order in real-time and enjoy flexible delivery options.",
+      "notice": "Free shipping on orders over €50",
+      "secondaryNotice": "Most orders arrive within 2-4 business days"
+    },
+    "ctas": {
+      "track": "Track Your Order",
+      "contact": "Contact Support"
+    },
+    "highlights": {
+      "title": "Why Choose Us",
+      "subtitle": "Experience the Moldova Direct difference",
+      "items": {
+        "fast": {
+          "title": "Fast Delivery",
+          "description": "Most orders delivered within 2-4 business days across mainland Spain"
+        },
+        "coverage": {
+          "title": "Nationwide Coverage",
+          "description": "We deliver to all regions of Spain, including islands"
+        },
+        "packaging": {
+          "title": "Temperature-Controlled",
+          "description": "Insulated packaging keeps perishables fresh during transit"
+        },
+        "updates": {
+          "title": "Real-Time Updates",
+          "description": "Track your package with SMS and email notifications"
+        }
+      }
+    },
+    "methods": {
+      "title": "Shipping Methods",
+      "subtitle": "Choose the option that works best for you",
+      "tag": "Most Popular",
+      "cards": {
+        "express": {
+          "speed": "1-2 Days",
+          "title": "Express Delivery",
+          "description": "Priority handling for time-sensitive orders",
+          "note": "Available in major cities"
+        },
+        "standard": {
+          "speed": "2-4 Days",
+          "title": "Standard Delivery",
+          "description": "Reliable delivery at an affordable price",
+          "note": "Free over €50"
+        },
+        "refrigerated": {
+          "speed": "2-3 Days",
+          "title": "Refrigerated Shipping",
+          "description": "Temperature-controlled for perishable items",
+          "note": "Required for dairy & meat"
+        }
+      }
+    },
+    "coverage": {
+      "title": "Delivery Coverage",
+      "subtitle": "We ship throughout Spain and select EU countries",
+      "regions": {
+        "mainland": {
+          "title": "Mainland Spain",
+          "description": "All provinces covered with standard and express options",
+          "badge": "2-4 days"
+        },
+        "balearic": {
+          "title": "Balearic Islands",
+          "description": "Mallorca, Menorca, Ibiza, and Formentera",
+          "badge": "3-5 days"
+        },
+        "canary": {
+          "title": "Canary Islands",
+          "description": "All seven main islands served weekly",
+          "badge": "5-7 days"
+        },
+        "eu": {
+          "title": "European Union",
+          "description": "Select countries - contact us for availability",
+          "badge": "5-10 days"
+        }
+      }
+    },
+    "extras": {
+      "title": "Additional Services",
+      "items": {
+        "instructions": {
+          "title": "Special Instructions",
+          "description": "Add delivery notes for the courier at checkout"
+        },
+        "sustainability": {
+          "title": "Eco-Friendly Packaging",
+          "description": "Recyclable materials used whenever possible"
+        },
+        "support": {
+          "title": "Dedicated Support",
+          "description": "Questions? Our team is here to help via chat or email"
+        }
+      }
+    },
+    "timeline": {
+      "title": "How It Works",
+      "subtitle": "From our warehouse to your door",
+      "reminder": "Orders placed before 2 PM ship same day",
+      "steps": {
+        "method": {
+          "title": "Choose Your Method",
+          "description": "Select standard, express, or refrigerated shipping at checkout"
+        },
+        "pack": {
+          "title": "We Pack With Care",
+          "description": "Products are carefully packaged with appropriate insulation"
+        },
+        "handoff": {
+          "title": "Courier Pickup",
+          "description": "Our trusted courier partner collects your order"
+        },
+        "delivery": {
+          "title": "Delivered to You",
+          "description": "Receive your authentic Moldovan products at home"
+        }
+      }
+    },
+    "contactCard": {
+      "title": "Questions About Shipping?",
+      "description": "Our customer service team is ready to help with any delivery inquiries.",
+      "cta": "Contact Us",
+      "secondary": "View FAQ",
+      "noteTitle": "Business Hours",
+      "noteDescription": "Monday to Friday, 9 AM - 6 PM CET"
+    }
   }
 }

@@ -2440,5 +2440,143 @@
   "trackOrder": {
     "title": "Sigue tu Pedido",
     "description": "Introduce tu número de pedido para conocer su estado."
+  },
+  "shippingPage": {
+    "seo": {
+      "title": "Información de Envío - Moldova Direct",
+      "description": "Consulta los métodos de envío, plazos de entrega y cobertura de Moldova Direct en España para pedidos de comida y vino moldavos."
+    },
+    "hero": {
+      "badge": "Envío y Entrega",
+      "title": "Entrega Rápida y Fiable en Toda España",
+      "description": "Entregamos productos auténticos de Moldavia a tu puerta con cuidado. Sigue tu pedido en tiempo real y disfruta de opciones de entrega flexibles.",
+      "notice": "Envío gratis en pedidos superiores a 50€",
+      "secondaryNotice": "La mayoría de pedidos llegan en 2-4 días laborables"
+    },
+    "ctas": {
+      "track": "Seguir Tu Pedido",
+      "contact": "Contactar Soporte"
+    },
+    "highlights": {
+      "title": "Por Qué Elegirnos",
+      "subtitle": "Experimenta la diferencia Moldova Direct",
+      "items": {
+        "fast": {
+          "title": "Entrega Rápida",
+          "description": "La mayoría de pedidos entregados en 2-4 días laborables en la península"
+        },
+        "coverage": {
+          "title": "Cobertura Nacional",
+          "description": "Enviamos a todas las regiones de España, incluidas las islas"
+        },
+        "packaging": {
+          "title": "Control de Temperatura",
+          "description": "Embalaje isotérmico mantiene los perecederos frescos durante el tránsito"
+        },
+        "updates": {
+          "title": "Actualizaciones en Tiempo Real",
+          "description": "Sigue tu paquete con notificaciones por SMS y correo electrónico"
+        }
+      }
+    },
+    "methods": {
+      "title": "Métodos de Envío",
+      "subtitle": "Elige la opción que mejor se adapte a ti",
+      "tag": "Más Popular",
+      "cards": {
+        "express": {
+          "speed": "1-2 Días",
+          "title": "Entrega Exprés",
+          "description": "Gestión prioritaria para pedidos urgentes",
+          "note": "Disponible en grandes ciudades"
+        },
+        "standard": {
+          "speed": "2-4 Días",
+          "title": "Entrega Estándar",
+          "description": "Entrega fiable a un precio asequible",
+          "note": "Gratis a partir de 50€"
+        },
+        "refrigerated": {
+          "speed": "2-3 Días",
+          "title": "Envío Refrigerado",
+          "description": "Control de temperatura para productos perecederos",
+          "note": "Obligatorio para lácteos y carnes"
+        }
+      }
+    },
+    "coverage": {
+      "title": "Cobertura de Entrega",
+      "subtitle": "Enviamos a toda España y países seleccionados de la UE",
+      "regions": {
+        "mainland": {
+          "title": "España Peninsular",
+          "description": "Todas las provincias cubiertas con opciones estándar y exprés",
+          "badge": "2-4 días"
+        },
+        "balearic": {
+          "title": "Islas Baleares",
+          "description": "Mallorca, Menorca, Ibiza y Formentera",
+          "badge": "3-5 días"
+        },
+        "canary": {
+          "title": "Islas Canarias",
+          "description": "Las siete islas principales con servicio semanal",
+          "badge": "5-7 días"
+        },
+        "eu": {
+          "title": "Unión Europea",
+          "description": "Países seleccionados - contáctanos para disponibilidad",
+          "badge": "5-10 días"
+        }
+      }
+    },
+    "extras": {
+      "title": "Servicios Adicionales",
+      "items": {
+        "instructions": {
+          "title": "Instrucciones Especiales",
+          "description": "Añade notas de entrega para el mensajero en el checkout"
+        },
+        "sustainability": {
+          "title": "Embalaje Ecológico",
+          "description": "Materiales reciclables utilizados siempre que sea posible"
+        },
+        "support": {
+          "title": "Soporte Dedicado",
+          "description": "¿Preguntas? Nuestro equipo está aquí para ayudarte por chat o correo"
+        }
+      }
+    },
+    "timeline": {
+      "title": "Cómo Funciona",
+      "subtitle": "De nuestro almacén a tu puerta",
+      "reminder": "Pedidos antes de las 14h se envían el mismo día",
+      "steps": {
+        "method": {
+          "title": "Elige Tu Método",
+          "description": "Selecciona envío estándar, exprés o refrigerado en el checkout"
+        },
+        "pack": {
+          "title": "Empaquetamos con Cuidado",
+          "description": "Los productos se empaquetan cuidadosamente con aislamiento apropiado"
+        },
+        "handoff": {
+          "title": "Recogida del Mensajero",
+          "description": "Nuestro socio de mensajería de confianza recoge tu pedido"
+        },
+        "delivery": {
+          "title": "Entregado a Ti",
+          "description": "Recibe tus productos auténticos de Moldavia en casa"
+        }
+      }
+    },
+    "contactCard": {
+      "title": "¿Preguntas Sobre el Envío?",
+      "description": "Nuestro equipo de atención al cliente está listo para ayudarte con cualquier consulta de entrega.",
+      "cta": "Contáctanos",
+      "secondary": "Ver FAQ",
+      "noteTitle": "Horario de Atención",
+      "noteDescription": "Lunes a viernes, 9:00 - 18:00 CET"
+    }
   }
 }
