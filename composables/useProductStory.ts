@@ -225,6 +225,26 @@ export function useProductStory(
     return Array.from(new Set(badges)).slice(0, 5)
   })
 
+  /**
+   * Category-aware section titles
+   * Returns appropriate titles based on whether the product is culinary or not
+   */
+  const sectionTitles = computed(() => {
+    const isCulinary = shouldShowCulinaryDetails.value
+
+    return {
+      story: isCulinary
+        ? t('products.story.titleCulinary')
+        : t('products.story.titleGeneric'),
+      related: isCulinary
+        ? t('products.related.titleCulinary')
+        : t('products.related.titleGeneric'),
+      relatedSubtitle: isCulinary
+        ? t('products.related.subtitle')
+        : t('products.related.subtitleGeneric'),
+    }
+  })
+
   return {
     storytelling,
     tastingNotes,
@@ -234,5 +254,7 @@ export function useProductStory(
     reviewSummary,
     sustainabilityBadges,
     shouldShowCulinaryDetails,
+    isCulinaryCategory,
+    sectionTitles,
   }
 }

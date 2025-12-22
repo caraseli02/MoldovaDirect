@@ -1388,6 +1388,9 @@
     },
     "story": {
       "title": "Tasting journey",
+      "titleCulinary": "Tasting journey",
+      "titleGeneric": "Product story",
+      "titleCraft": "Craft & details",
       "tastingNotes": "Tasting notes",
       "pairings": "Pairing ideas",
       "awards": "Accolades",
@@ -1469,7 +1472,10 @@
     },
     "related": {
       "title": "Pairs well with…",
-      "subtitle": "Complete the experience with these curated recommendations."
+      "titleCulinary": "Pairs well with…",
+      "titleGeneric": "You may also like",
+      "subtitle": "Complete the experience with these curated recommendations.",
+      "subtitleGeneric": "Discover more products you might enjoy."
     },
     "actions": {
       "addToWishlist": "Save to wishlist",
