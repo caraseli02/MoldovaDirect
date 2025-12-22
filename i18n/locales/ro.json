@@ -1140,6 +1140,135 @@
     },
     "commonProduct": "acest produs"
   },
+  "returns": {
+    "badge": "Gata pentru MVP",
+    "title": "Returnări și rambursări",
+    "description": "Pași clari pentru a raporta probleme, a cere înlocuiri sau a solicita rambursări pentru comenzile Moldova Direct.",
+    "cta": {
+      "start": "Începe un retur",
+      "orders": "Vezi comenzile mele"
+    },
+    "summary": {
+      "window": {
+        "title": "Fereastră de retur",
+        "metric": "30 de zile",
+        "description": "Produse neînchise în 30 de zile de la livrare"
+      },
+      "condition": {
+        "title": "Condiție",
+        "metric": "Sigilat / nedeteriorat",
+        "description": "Păstrează ambalajul original pentru aprobare rapidă"
+      },
+      "support": {
+        "title": "Asistență",
+        "metric": "Răspuns în 48 h",
+        "description": "Concierge în EN / ES / RO / RU"
+      },
+      "refunds": {
+        "title": "Timp de rambursare",
+        "metric": "2–5 zile lucrătoare",
+        "description": "După finalizarea inspecției"
+      }
+    },
+    "eligibility": {
+      "title": "Ce este eligibil pentru retur?",
+      "subtitle": "Punem pe primul loc siguranța și prospețimea fiecărei comenzi.",
+      "allowedTitle": "Cazuri eligibile",
+      "deniedTitle": "Nu este eligibil",
+      "allowed": {
+        "damaged": "Deteriorat la livrare (sunt necesare poze)",
+        "incorrect": "Articole sau cantități greșite",
+        "quality": "Problemă de calitate sau siguranță raportată în 7 zile",
+        "unopened": "Produse de cămară neînchise în 30 de zile"
+      },
+      "denied": {
+        "used": "Articole deschise, folosite sau consumate parțial",
+        "late": "Solicitări după expirarea ferestrei de retur",
+        "perishable": "Produse perisabile fără problemă raportată la livrare",
+        "custom": "Comenzi personalizate fără defecte"
+      },
+      "note": "Pentru vin, păstrează sticlele vertical și evită temperaturile extreme cât timp analizăm cazul."
+    },
+    "resolution": {
+      "title": "Opțiuni de rezolvare",
+      "subtitle": "Alege varianta potrivită după ce validăm solicitarea.",
+      "options": {
+        "refund": {
+          "title": "Rambursare pe metoda originală",
+          "description": "Se emite după inspecție, de obicei în 2–5 zile lucrătoare.",
+          "badge": "Standard"
+        },
+        "replacement": {
+          "title": "Expediere de înlocuire",
+          "description": "Trimitem din nou articolele corecte sau nedeteriorate fără cost suplimentar când greșeala este a noastră.",
+          "badge": "Cel mai rapid"
+        },
+        "credit": {
+          "title": "Credit în magazin",
+          "description": "Credit imediat pentru viitoare comenzi în timp ce ridicăm articolele originale.",
+          "badge": "Instant"
+        }
+      },
+      "note": "Menționează opțiunea preferată în solicitare. Confirmăm stocul înainte de a trimite înlocuiri."
+    },
+    "steps": {
+      "title": "Cum începi un retur",
+      "subtitle": "Oferă detalii pentru a rezolva rapid solicitarea.",
+      "items": {
+        "review": {
+          "title": "Revizuiește comanda",
+          "description": "Notează articolele afectate, cantitățile și data livrării."
+        },
+        "document": {
+          "title": "Documentează problema",
+          "description": "Fă poze clare cu ambalajul, etichetele și orice defect."
+        },
+        "contact": {
+          "title": "Trimite solicitarea",
+          "description": "Scrie-ne pe email sau formular cu numărul comenzii și preferința (rambursare, înlocuire, credit)."
+        },
+        "ship": {
+          "title": "Pregătește ridicarea sau expedierea",
+          "description": "Păstrează articolele în ambalajul original. Coordonăm curierul sau eticheta de retur când este cazul."
+        }
+      },
+      "documentsTitle": "Pregătește",
+      "packagingTitle": "Ghid de ambalare",
+      "packagingDescription": "Păstrează sticlele în poziție verticală, sigilează cutiile și include accesoriile sau cadourile.",
+      "documents": {
+        "order": "Număr de comandă și date de contact",
+        "photos": "Poze cu deteriorarea sau problema",
+        "packaging": "Ambalajul original sau etichetele sticlei",
+        "preference": "Rezoluția preferată (rambursare, înlocuire, credit)"
+      }
+    },
+    "fees": {
+      "title": "Costuri și acoperire",
+      "description": "Acoperim transportul când eroarea este a noastră. Alte cazuri urmează politica de mai jos.",
+      "items": {
+        "ourError": "Transport de retur gratuit pentru articole deteriorate, greșite sau defecte",
+        "customerChoice": "Schimbarea deciziei poate necesita cost de retur",
+        "inspection": "Rambursările se emit după inspecție și verificare de calitate"
+      }
+    },
+    "expectations": {
+      "title": "La ce să te aștepți",
+      "description": "Actualizări transparente de la cerere până la rezolvare.",
+      "items": {
+        "scan": "Urmărire disponibilă imediat ce emitem eticheta de curier",
+        "refundTimeline": "Rambursări procesate în 2–5 zile lucrătoare după inspecție",
+        "updates": "Notificări pe email la fiecare etapă"
+      }
+    },
+    "support": {
+      "title": "Ai nevoie de ajutor rapid?",
+      "description": "Echipa noastră concierge te ghidează pentru retur sau schimb.",
+      "badge": "Asistență prioritară",
+      "contactLink": "Folosește formularul de contact",
+      "responseTime": "Răspundem în 48 de ore lucrătoare (de obicei mai repede).",
+      "emailSubject": "Solicitare retur"
+    }
+  },
   "footer": {
     "terms": "Termeni și Condiții",
     "privacy": "Politica de Confidențialitate",
