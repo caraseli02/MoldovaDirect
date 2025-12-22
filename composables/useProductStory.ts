@@ -15,6 +15,10 @@ interface ReviewSummary {
   highlights: string[]
 }
 
+interface PairingRecipe {
+  name?: string
+}
+
 export function useProductStory(
   product: ComputedRef<(ProductWithRelations & { attributes?: Record<string, any> }) | null>,
 ) {
@@ -23,6 +27,34 @@ export function useProductStory(
 
   const productAttributes = computed(() => product.value?.attributes || {})
   const categoryLabel = computed(() => getCategoryLabel(product.value?.category))
+  const culinaryKeywords = [
+    'wine', 'beverage', 'drink', 'beer', 'cider', 'spirits', 'liqueur',
+    'food', 'gourmet', 'grocery', 'tea', 'coffee', 'snack', 'confection',
+    'condiment', 'sauce', 'spice', 'bakery', 'dairy', 'meat', 'seafood',
+    'honey', 'jam', 'preserve', 'oil', 'vinegar', 'chocolate', 'candy',
+  ]
+  const isCulinaryCategory = computed(() => {
+    const slug = (product.value?.category?.slug || '').toString().toLowerCase()
+    const name = (categoryLabel.value || '').toLowerCase()
+
+    return culinaryKeywords.some(keyword => slug.includes(keyword) || name.includes(keyword))
+  })
+
+  const hasCulinaryAttributes = computed(() => {
+    const attrs = productAttributes.value || {}
+    const tastingNotesAttr = attrs.tasting_notes || attrs.tastingNotes
+    const pairingsAttr = attrs.pairings || attrs.pairingIdeas
+    const flavorSignals = [
+      attrs.flavorProfile,
+      attrs.flavor_profile,
+      attrs.tasteProfile,
+      attrs.taste_profile,
+    ].filter(Boolean)
+
+    return Boolean(tastingNotesAttr || pairingsAttr || flavorSignals.length)
+  })
+
+  const shouldShowCulinaryDetails = computed(() => isCulinaryCategory.value || hasCulinaryAttributes.value)
 
   /**
    * Producer story and background
@@ -44,9 +76,20 @@ export function useProductStory(
    * Tasting notes from product attributes
    */
   const tastingNotes = computed((): string[] => {
+    if (!shouldShowCulinaryDetails.value) return []
+
     const notes = productAttributes.value?.tasting_notes || productAttributes.value?.tastingNotes
 
     if (Array.isArray(notes)) return notes
+
+    if (notes && typeof notes === 'object') {
+      const structuredNotes = [
+        ...(Array.isArray(notes.aromas) ? notes.aromas : []),
+        ...(Array.isArray(notes.flavors) ? notes.flavors : []),
+      ].filter(Boolean)
+
+      if (structuredNotes.length) return structuredNotes
+    }
 
     if (typeof notes === 'string') {
       return notes.split(',').map(note => note.trim()).filter(Boolean)
@@ -61,9 +104,21 @@ export function useProductStory(
    * Food pairing suggestions
    */
   const pairingIdeas = computed((): string[] => {
+    if (!shouldShowCulinaryDetails.value) return []
+
     const pairings = productAttributes.value?.pairings
 
     if (Array.isArray(pairings)) return pairings
+
+    if (pairings && typeof pairings === 'object') {
+      const structuredPairings = [
+        ...(Array.isArray(pairings.foods) ? pairings.foods : []),
+        ...(Array.isArray(pairings.recipes) ? pairings.recipes.map((recipe: PairingRecipe) => recipe?.name).filter(Boolean) : []),
+        ...(Array.isArray(pairings.occasions) ? pairings.occasions : []),
+      ].filter(Boolean)
+
+      if (structuredPairings.length) return structuredPairings
+    }
 
     if (typeof pairings === 'string') {
       return pairings.split(',').map(pairing => pairing.trim()).filter(Boolean)
@@ -178,5 +233,6 @@ export function useProductStory(
     originStory,
     reviewSummary,
     sustainabilityBadges,
+    shouldShowCulinaryDetails,
   }
 }
