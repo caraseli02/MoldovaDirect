@@ -45,7 +45,19 @@ global.useRoute = vi.fn(() => ({
   query: {},
 }))
 
-global.useLocalePath = vi.fn(() => (path: string) => path)
+global.useRouter = vi.fn(() => ({
+  push: vi.fn(),
+  replace: vi.fn(),
+  back: vi.fn(),
+  forward: vi.fn(),
+  currentRoute: { value: { query: {} } },
+}))
+
+global.useLocalePath = vi.fn(() => (path: any) => {
+  if (typeof path === 'string') return path
+  if (path?.name === 'products-slug') return `/products/${path.params?.slug || ''}`
+  return path?.path || '/'
+})
 
 global.navigateTo = vi.fn()
 

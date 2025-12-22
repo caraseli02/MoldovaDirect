@@ -928,7 +928,6 @@ const addToCart = async () => {
   // Behavior: Server-rendered buttons appear but don't execute cart logic
   // until hydration completes. This is intentional and prevents 500 errors.
   if (import.meta.server || typeof window === 'undefined') {
-    console.warn('Add to Cart: Server-side render, skipping')
     return
   }
 
