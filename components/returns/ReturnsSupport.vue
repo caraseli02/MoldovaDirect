@@ -68,5 +68,12 @@ const { t } = useI18n()
 const localePath = useLocalePath()
 const config = useRuntimeConfig()
 
-const supportEmail = config.public.supportEmail
+// Validate supportEmail with dev-mode warning and fallback
+const supportEmail = computed(() => {
+  const email = config.public.supportEmail
+  if (!email && import.meta.dev) {
+    console.warn('[ReturnsSupport] Missing supportEmail in runtime config - check NUXT_PUBLIC_SUPPORT_EMAIL env var')
+  }
+  return email || 'support@moldovadirect.com'
+})
 </script>
