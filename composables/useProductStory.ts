@@ -15,6 +15,10 @@ interface ReviewSummary {
   highlights: string[]
 }
 
+interface PairingRecipe {
+  name?: string
+}
+
 export function useProductStory(
   product: ComputedRef<(ProductWithRelations & { attributes?: Record<string, any> }) | null>,
 ) {
@@ -23,7 +27,12 @@ export function useProductStory(
 
   const productAttributes = computed(() => product.value?.attributes || {})
   const categoryLabel = computed(() => getCategoryLabel(product.value?.category))
-  const culinaryKeywords = ['wine', 'beverage', 'drink', 'beer', 'cider', 'spirits', 'liqueur', 'food', 'gourmet', 'grocery']
+  const culinaryKeywords = [
+    'wine', 'beverage', 'drink', 'beer', 'cider', 'spirits', 'liqueur',
+    'food', 'gourmet', 'grocery', 'tea', 'coffee', 'snack', 'confection',
+    'condiment', 'sauce', 'spice', 'bakery', 'dairy', 'meat', 'seafood',
+    'honey', 'jam', 'preserve', 'oil', 'vinegar', 'chocolate', 'candy',
+  ]
   const isCulinaryCategory = computed(() => {
     const slug = (product.value?.category?.slug || '').toString().toLowerCase()
     const name = (categoryLabel.value || '').toLowerCase()
@@ -104,7 +113,7 @@ export function useProductStory(
     if (pairings && typeof pairings === 'object') {
       const structuredPairings = [
         ...(Array.isArray(pairings.foods) ? pairings.foods : []),
-        ...(Array.isArray(pairings.recipes) ? pairings.recipes.map((recipe: any) => recipe?.name).filter(Boolean) : []),
+        ...(Array.isArray(pairings.recipes) ? pairings.recipes.map((recipe: PairingRecipe) => recipe?.name).filter(Boolean) : []),
         ...(Array.isArray(pairings.occasions) ? pairings.occasions : []),
       ].filter(Boolean)
 
