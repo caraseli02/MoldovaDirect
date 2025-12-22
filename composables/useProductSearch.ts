@@ -32,6 +32,7 @@ export interface SearchSuggestion {
 export const useProductSearch = () => {
   const searchStore = useSearchStore()
   const router = useRouter()
+  const localePath = useLocalePath()
 
   // Local reactive state
   const searchQuery = ref('')
@@ -149,7 +150,7 @@ export const useProductSearch = () => {
     if (suggestion.type === 'product') {
       // Navigate to product detail page
       const productSlug = suggestion.id.replace('product-', '')
-      router.push(`/products/${productSlug}`)
+      router.push(localePath({ name: 'products-slug', params: { slug: productSlug } }))
     }
     else {
       // Use the suggestion as search query
