@@ -132,16 +132,16 @@ test.describe('Admin Products - New Product Page', () => {
     console.log('Product form confirmed, not login form')
   })
 
-  test('should handle page navigation correctly', async ({ page }) => {
+  test('should handle page navigation correctly', async ({ adminAuthenticatedPage }) => {
     // Navigate to the admin products list first
-    await page.goto('/admin/products')
-    await page.waitForLoadState('networkidle')
+    await adminAuthenticatedPage.goto('/admin/products')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
     // Even if link doesn't exist, direct navigation should work
-    await page.goto('/admin/products/new')
-    await page.waitForLoadState('networkidle')
+    await adminAuthenticatedPage.goto('/admin/products/new')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
-    const currentUrl = page.url()
+    const currentUrl = adminAuthenticatedPage.url()
     expect(currentUrl).toContain('/admin/products/new')
     console.log(`Successfully navigated to: ${currentUrl}`)
   })
