@@ -44,6 +44,7 @@ export default defineNuxtConfig({
         ? `https://${process.env.VERCEL_URL}`
         : process.env.NUXT_PUBLIC_SITE_URL || 'https://moldova-direct.vercel.app',
       enableTestUsers: process.env.ENABLE_TEST_USERS === 'true' || process.env.NODE_ENV !== 'production',
+      supportEmail: process.env.NUXT_PUBLIC_SUPPORT_EMAIL || 'support@moldovadirect.com',
     },
   },
 

@@ -1413,6 +1413,135 @@
       "copyFallback": "Copia este enlace y envíalo a quien quieras."
     }
   },
+  "returns": {
+    "badge": "Listo para MVP",
+    "title": "Devoluciones y reembolsos",
+    "description": "Pasos claros para reportar incidencias, pedir reemplazos o solicitar reembolsos en Moldova Direct.",
+    "cta": {
+      "start": "Iniciar devolución",
+      "orders": "Ver mis pedidos"
+    },
+    "summary": {
+      "window": {
+        "title": "Ventana de devolución",
+        "metric": "30 días",
+        "description": "Alimentos sin abrir dentro de los 30 días desde la entrega"
+      },
+      "condition": {
+        "title": "Condición",
+        "metric": "Sin abrir / sin daños",
+        "description": "Conserva el embalaje original para una aprobación rápida"
+      },
+      "support": {
+        "title": "Soporte",
+        "metric": "Respuesta en 48 h",
+        "description": "Conserjería en EN / ES / RO / RU"
+      },
+      "refunds": {
+        "title": "Tiempo de reembolso",
+        "metric": "2–5 días hábiles",
+        "description": "Después de completar la inspección"
+      }
+    },
+    "eligibility": {
+      "title": "¿Qué califica para devolución?",
+      "subtitle": "Priorizamos la seguridad y frescura en cada pedido.",
+      "allowedTitle": "Casos elegibles",
+      "deniedTitle": "No elegible",
+      "allowed": {
+        "damaged": "Daños al recibir (se requieren fotos)",
+        "incorrect": "Artículos o cantidades incorrectas",
+        "quality": "Problema de calidad o seguridad reportado en 7 días",
+        "unopened": "Productos de despensa sin abrir dentro de 30 días"
+      },
+      "denied": {
+        "used": "Artículos abiertos, usados o parcialmente consumidos",
+        "late": "Solicitudes fuera del plazo de devolución",
+        "perishable": "Perecederos sin incidencia reportada al momento de la entrega",
+        "custom": "Pedidos personalizados sin defectos"
+      },
+      "note": "Para vino, guarda las botellas en posición vertical y evita temperaturas extremas mientras revisamos tu caso."
+    },
+    "resolution": {
+      "title": "Opciones de resolución",
+      "subtitle": "Elige lo que mejor funcione cuando validemos la incidencia.",
+      "options": {
+        "refund": {
+          "title": "Reembolso al método original",
+          "description": "Se emite tras la inspección, normalmente en 2–5 días hábiles.",
+          "badge": "Estándar"
+        },
+        "replacement": {
+          "title": "Envío de reemplazo",
+          "description": "Reenviamos los artículos correctos o sin daños sin coste extra si el error es nuestro.",
+          "badge": "Más rápido"
+        },
+        "credit": {
+          "title": "Crédito en tienda",
+          "description": "Crédito inmediato para futuros pedidos mientras recogemos los artículos originales.",
+          "badge": "Instantáneo"
+        }
+      },
+      "note": "Indica tu opción preferida en la solicitud. Confirmamos stock antes de enviar reemplazos."
+    },
+    "steps": {
+      "title": "Cómo iniciar una devolución",
+      "subtitle": "Comparte detalles para resolver tu solicitud rápidamente.",
+      "items": {
+        "review": {
+          "title": "Revisa tu pedido",
+          "description": "Anota artículos afectados, cantidades y fecha de entrega."
+        },
+        "document": {
+          "title": "Documenta la incidencia",
+          "description": "Toma fotos claras del embalaje, etiquetas y cualquier daño."
+        },
+        "contact": {
+          "title": "Envía tu solicitud",
+          "description": "Escríbenos o usa el formulario con tu número de pedido y preferencia (reembolso, reemplazo, crédito)."
+        },
+        "ship": {
+          "title": "Prepara la recogida o entrega",
+          "description": "Conserva los artículos en su embalaje original. Coordinamos recogida o etiqueta de envío cuando aplique."
+        }
+      },
+      "documentsTitle": "Ten a mano",
+      "packagingTitle": "Guía de embalaje",
+      "packagingDescription": "Mantén las botellas en vertical, sella las cajas y conserva accesorios o regalos incluidos.",
+      "documents": {
+        "order": "Número de pedido y datos de contacto",
+        "photos": "Fotos del daño o incidencia",
+        "packaging": "Embalaje original o etiquetas de la botella",
+        "preference": "Resolución preferida (reembolso, reemplazo, crédito)"
+      }
+    },
+    "fees": {
+      "title": "Costes y cobertura",
+      "description": "Cubrimos el envío cuando el error es nuestro. Otros casos siguen esta política.",
+      "items": {
+        "ourError": "Envío de devolución gratuito por artículos dañados, incorrectos o defectuosos",
+        "customerChoice": "Cambios de opinión pueden requerir envío de retorno",
+        "inspection": "Reembolsos tras inspección y verificación de calidad"
+      }
+    },
+    "expectations": {
+      "title": "Qué puedes esperar",
+      "description": "Actualizaciones claras de principio a fin.",
+      "items": {
+        "scan": "Seguimiento disponible al emitir la etiqueta del transportista",
+        "refundTimeline": "Reembolsos procesados en 2–5 días hábiles tras la inspección",
+        "updates": "Notificaciones por email en cada etapa"
+      }
+    },
+    "support": {
+      "title": "¿Necesitas ayuda rápida?",
+      "description": "Nuestro equipo de conserjería guía tu devolución o cambio.",
+      "badge": "Soporte prioritario",
+      "contactLink": "Usar el formulario de contacto",
+      "responseTime": "Respondemos en 48 horas hábiles (a menudo antes).",
+      "emailSubject": "Solicitud de devolución"
+    }
+  },
   "footer": {
     "terms": "Términos y Condiciones",
     "privacy": "Política de Privacidad",
@@ -2438,10 +2567,6 @@
   "faq": {
     "title": "Preguntas Frecuentes",
     "description": "Respuestas a tus dudas más comunes."
-  },
-  "returns": {
-    "title": "Devoluciones",
-    "description": "Nuestra política de devoluciones y reembolsos."
   },
   "trackOrder": {
     "title": "Sigue tu Pedido",

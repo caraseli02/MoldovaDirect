@@ -1,7 +1,13 @@
 /**
  * Product Storytelling Composable
  *
- * Handles product storytelling, attributes, and marketing content
+ * Extracts marketing and storytelling content from product attributes including:
+ * - Producer stories and origin narratives
+ * - Tasting notes and food pairings (conditionally shown for culinary categories)
+ * - Awards and sustainability badges
+ * - Review summaries with ratings
+ *
+ * Provides localized fallback content when product attributes are not available.
  */
 
 import { computed, type ComputedRef } from 'vue'
@@ -9,14 +15,38 @@ import { useI18n } from 'vue-i18n'
 import { useProductUtils } from './useProductUtils'
 import type { ProductWithRelations } from '~/types/database'
 
+/** Review summary with rating, count, and highlighted excerpts */
 interface ReviewSummary {
   rating: number
   count: number
   highlights: string[]
 }
 
+/**
+ * Recipe item from structured pairing data.
+ * Used when pairings.recipes contains objects rather than strings.
+ */
 interface PairingRecipe {
   name?: string
+}
+
+// Default values for products without review data
+const DEFAULT_RATING = 4.8
+const DEFAULT_REVIEW_COUNT = 126
+
+/**
+ * Safely parses a numeric value with NaN protection and dev-mode logging.
+ */
+function parseNumeric(value: unknown, fallback: number, fieldName: string, productId?: number): number {
+  if (value === null || value === undefined) return fallback
+  const parsed = typeof value === 'number' ? value : Number.parseFloat(String(value).replace(',', '.'))
+  if (Number.isNaN(parsed)) {
+    if (import.meta.dev) {
+      console.warn(`[useProductStory] Invalid numeric value for ${fieldName}: ${JSON.stringify(value)}${productId ? ` (product ${productId})` : ''}, using fallback ${fallback}`)
+    }
+    return fallback
+  }
+  return parsed
 }
 
 export function useProductStory(
@@ -54,6 +84,10 @@ export function useProductStory(
     return Boolean(tastingNotesAttr || pairingsAttr || flavorSignals.length)
   })
 
+  /**
+   * Whether to display culinary-specific content (tasting notes, pairings).
+   * True when product is in a culinary category or has culinary-related attributes.
+   */
   const shouldShowCulinaryDetails = computed(() => isCulinaryCategory.value || hasCulinaryAttributes.value)
 
   /**
@@ -73,7 +107,11 @@ export function useProductStory(
   })
 
   /**
-   * Tasting notes from product attributes
+   * Tasting notes for culinary products.
+   * Returns empty array for non-culinary categories without tasting attributes.
+   * Supports array, string (comma-separated), and structured object formats
+   * (with aromas and flavors sub-arrays).
+   * Falls back to localized defaults when no tasting_notes attribute is present.
    */
   const tastingNotes = computed((): string[] => {
     if (!shouldShowCulinaryDetails.value) return []
@@ -101,7 +139,11 @@ export function useProductStory(
   })
 
   /**
-   * Food pairing suggestions
+   * Food pairing suggestions for culinary products.
+   * Returns empty array for non-culinary categories without pairing attributes.
+   * Supports array, string (comma-separated), and structured object formats
+   * (with foods, recipes, and occasions sub-arrays).
+   * Falls back to localized defaults when no pairings attribute is present.
    */
   const pairingIdeas = computed((): string[] => {
     if (!shouldShowCulinaryDetails.value) return []
@@ -165,15 +207,22 @@ export function useProductStory(
   })
 
   /**
-   * Review summary with ratings and highlights
+   * Review summary with ratings and highlights.
+   * Uses default values (4.8 rating, 126 count) when review data is missing.
+   * Logs warnings in dev mode when falling back to defaults.
    */
   const reviewSummary = computed((): ReviewSummary => {
-    const rating = Number(productAttributes.value?.rating || 4.8)
-    const count = Number(
-      productAttributes.value?.review_count
-      || productAttributes.value?.reviewCount
-      || 126,
-    )
+    const productId = product.value?.id
+    const rawRating = productAttributes.value?.rating
+    const rawCount = productAttributes.value?.review_count || productAttributes.value?.reviewCount
+
+    // Log when using fallback values in dev mode
+    if (import.meta.dev && !rawRating && !rawCount && productId) {
+      console.warn(`[useProductStory] Product ${productId} missing review data - using placeholder values`)
+    }
+
+    const rating = parseNumeric(rawRating, DEFAULT_RATING, 'rating', productId)
+    const count = parseNumeric(rawCount, DEFAULT_REVIEW_COUNT, 'review_count', productId)
 
     const highlightsRaw
       = productAttributes.value?.review_highlights
@@ -219,6 +268,9 @@ export function useProductStory(
 
     // Default badges if none are set
     if (!badges.length) {
+      if (import.meta.dev && product.value?.id) {
+        console.warn(`[useProductStory] Product ${product.value.id} has no sustainability badges - using defaults`)
+      }
       badges.push('handcrafted', 'familyOwned')
     }
 

@@ -81,6 +81,31 @@ const createProduct = (overrides: Partial<ProductWithRelations> & { attributes?:
 }
 
 describe('useProductStory', () => {
+  it('handles null product gracefully', () => {
+    const product = computed(() => null)
+    const {
+      tastingNotes,
+      pairingIdeas,
+      storytelling,
+      awards,
+      sustainabilityBadges,
+      shouldShowCulinaryDetails,
+      reviewSummary,
+    } = useProductStory(product)
+
+    expect(tastingNotes.value).toEqual([])
+    expect(pairingIdeas.value).toEqual([])
+    expect(awards.value).toEqual([])
+    expect(shouldShowCulinaryDetails.value).toBe(false)
+    // Default badges when no product
+    expect(sustainabilityBadges.value).toEqual(['handcrafted', 'familyOwned'])
+    // Storytelling uses fallback with category param (mock appends :param)
+    expect(storytelling.value.producer).toContain('Producer fallback')
+    // Review summary uses defaults
+    expect(reviewSummary.value.rating).toBe(4.8)
+    expect(reviewSummary.value.count).toBe(126)
+  })
+
   it('uses culinary defaults for beverage categories without tasting data', () => {
     const product = createProduct({
       category: { ...baseProduct.category, slug: 'wine' },
