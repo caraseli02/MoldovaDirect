@@ -2192,6 +2192,117 @@
     "notificationsEnabled": "Notificaciones activadas",
     "notificationsDisabled": "Notificaciones desactivadas"
   },
+  "faqPage": {
+    "badge": "Centro de ayuda",
+    "title": "Preguntas frecuentes",
+    "description": "Respuestas rápidas sobre pedidos, envíos, devoluciones y productos moldavos auténticos en España.",
+    "updated": "Actualizado cada semana con los últimos detalles de entrega y producto.",
+    "ctaPrimary": "Hablar con soporte",
+    "ctaSecondary": "Rastrear mi pedido",
+    "responseTime": "Tiempo de respuesta: menos de 1 hora laboral",
+    "languages": "Atención en ES / EN / RO / RU",
+    "highlights": {
+      "title": "Lo que más preguntan",
+      "items": {
+        "dispatch": "Los pedidos antes de las 16:00 salen el mismo día desde Madrid.",
+        "packaging": "Embalaje resistente a golpes para vinos y productos delicados.",
+        "support": "Equipo humano listo para resolver incidencias rápidamente."
+      },
+      "turnaround": {
+        "title": "Gestión prioritaria",
+        "description": "Los artículos dañados o faltantes se sustituyen inmediatamente tras la verificación."
+      }
+    },
+    "sections": {
+      "orders": {
+        "title": "Pedidos y entrega",
+        "items": {
+          "delivery": {
+            "question": "¿Qué tan rápido entregan?",
+            "answer": "Los pedidos realizados antes de las 16:00 se envían el mismo día y llegan en 48–72 horas en la península. Las opciones exprés aparecen en el checkout cuando están disponibles."
+          },
+          "shippingCosts": {
+            "question": "¿Cuánto cuesta el envío?",
+            "answer": "El envío estándar se calcula en el checkout según peso y código postal. Ofrecemos entrega gratuita en pedidos superiores a 69 € en la península."
+          },
+          "updates": {
+            "question": "¿Cómo puedo seguir mi pedido?",
+            "answer": "Recibirás seguimiento por correo y SMS al despachar. También puedes verlo en cualquier momento en la página de Seguimiento con tu correo y número de pedido."
+          }
+        }
+      },
+      "payments": {
+        "title": "Pagos y facturas",
+        "items": {
+          "methods": {
+            "question": "¿Qué métodos de pago aceptan?",
+            "answer": "Aceptamos tarjetas principales, Bizum y transferencias bancarias seguras. Todos los pagos están cifrados y cumplen con PSD2."
+          },
+          "invoices": {
+            "question": "¿Puedo obtener una factura para empresa?",
+            "answer": "Sí. Añade los datos de tu empresa y CIF en el checkout y la factura se emitirá automáticamente después del pago."
+          },
+          "addresses": {
+            "question": "¿Puedo enviar a una dirección diferente?",
+            "answer": "Sí, introduce una dirección de envío distinta durante el checkout. Conservaremos la información de facturación para tus registros."
+          }
+        }
+      },
+      "returns": {
+        "title": "Devoluciones e incidencias",
+        "items": {
+          "policy": {
+            "question": "¿Cuál es su política de devoluciones?",
+            "answer": "Tienes 30 días para devolver artículos sin abrir en su estado original. Gestionamos una etiqueta prepago o recogida por mensajero cuando esté disponible."
+          },
+          "damaged": {
+            "question": "¿Y si una botella llega dañada?",
+            "answer": "Haz una foto del paquete y del artículo dañado y contacta con soporte. Enviamos un reemplazo o emitimos un reembolso de inmediato."
+          },
+          "process": {
+            "question": "¿Cómo inicio una devolución o cambio?",
+            "answer": "Visita la página de Devoluciones o contacta con soporte con tu número de pedido. Confirmaremos la elegibilidad y los siguientes pasos en un día laborable."
+          }
+        }
+      },
+      "products": {
+        "title": "Productos y autenticidad",
+        "items": {
+          "authenticity": {
+            "question": "¿Los productos son auténticos de Moldavia?",
+            "answer": "Sí. Trabajamos directamente con productores moldavos y certificamos el origen en cada etiqueta. Nuestro centro de Madrid gestiona el almacenamiento controlado."
+          },
+          "storage": {
+            "question": "¿Cómo debo almacenar vinos y delicatessen?",
+            "answer": "Mantén los vinos entre 12–18°C lejos de la luz directa. Los productos de despensa deben estar en un lugar fresco y seco; refrigera después de abrir si se indica."
+          },
+          "allergens": {
+            "question": "¿Dónde veo la información de alérgenos?",
+            "answer": "Los alérgenos se indican en cada página de producto y en la etiqueta. Contáctanos para aclaraciones específicas antes de comprar."
+          }
+        }
+      }
+    },
+    "quickLinks": {
+      "shipping": "Información de envío",
+      "returns": "Política de devoluciones",
+      "tracking": "Rastrear mi pedido",
+      "contact": "Contactar soporte"
+    },
+    "needMore": {
+      "title": "¿Necesitas más ayuda?",
+      "description": "Compártenos tu número de pedido y una breve nota; respondemos en menos de una hora laboral.",
+      "commitment": {
+        "title": "Promesa de servicio",
+        "description": "Personas reales, respuestas rápidas y soluciones proactivas para incidencias de entrega."
+      }
+    },
+    "seo": {
+      "title": "Preguntas frecuentes - Moldova Direct",
+      "description": "Encuentra respuestas rápidas sobre envíos, pagos, devoluciones y productos moldavos auténticos en España.",
+      "imageAlt": "Cliente consultando las preguntas frecuentes de Moldova Direct"
+    }
+  },
   "wineStory": {
     "hero": {
       "badge": "Patrimonio Vinícola de Moldavia",
