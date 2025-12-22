@@ -2425,6 +2425,140 @@
       }
     }
   },
+  "shippingPage": {
+    "hero": {
+      "badge": "Envíos listos para el MVP",
+      "title": "Información de Envío",
+      "description": "Todo lo que necesitas saber sobre cómo Moldova Direct envía tus vinos, alimentos y regalos por España y por rutas compatibles con la UE.",
+      "notice": "Los pedidos realizados antes de las 16:00 salen el mismo día desde Madrid.",
+      "secondaryNotice": "Las ventanas de entrega y el seguimiento llegan por SMS/WhatsApp cuando el paquete se escanea."
+    },
+    "ctas": {
+      "track": "Rastrear pedido",
+      "contact": "¿Necesitas ayuda? Contacta soporte"
+    },
+    "highlights": {
+      "title": "Qué puedes esperar",
+      "subtitle": "Logística fiable ahora, con margen para sumar más transportistas conforme crezcamos.",
+      "items": {
+        "fast": {
+          "title": "Entrega en 48h peninsular",
+          "description": "La mayoría de los pedidos llegan en dos días laborables en la península."
+        },
+        "coverage": {
+          "title": "Logística compatible con la UE",
+          "description": "Primero España, con opciones personalizadas para envíos a la UE bajo petición."
+        },
+        "packaging": {
+          "title": "Protegido y con control térmico",
+          "description": "Aislantes y protectores de botellas mantienen seguros vinos y productos refrigerados."
+        },
+        "updates": {
+          "title": "Notificaciones en vivo",
+          "description": "Recibe estados, enlaces de seguimiento y recordatorios de ventana de entrega."
+        }
+      }
+    },
+    "methods": {
+      "title": "Métodos de envío",
+      "subtitle": "Elige lo que encaje con tu horario y cesta.",
+      "tag": "Disponible ahora",
+      "cards": {
+        "express": {
+          "speed": "Mismo/día siguiente — zona Madrid",
+          "title": "Mensajería exprés",
+          "description": "Despacho prioritario para Madrid y alrededores con entregas cómodas por la tarde.",
+          "note": "Ideal para regalos y pedidos de última hora."
+        },
+        "standard": {
+          "speed": "48h — península",
+          "title": "Estándar con seguimiento",
+          "description": "Entrega fiable con ventanas previsibles; las islas pueden requerir más tiempo.",
+          "note": "Enlace de seguimiento automático tras la recogida."
+        },
+        "refrigerated": {
+          "speed": "Despacho en días laborables",
+          "title": "Refrigerado y frágil",
+          "description": "Más protección y packs fríos para vino, cristal y productos delicados.",
+          "note": "Empaquetado para mantenerse estable durante el tránsito."
+        }
+      }
+    },
+    "coverage": {
+      "title": "Cobertura de entrega",
+      "subtitle": "Rutas actuales y qué esperar.",
+      "regions": {
+        "mainland": {
+          "title": "Península",
+          "description": "Servicio 48h con seguimiento y avisos por SMS/WhatsApp.",
+          "badge": "Mejor experiencia"
+        },
+        "balearic": {
+          "title": "Islas Baleares",
+          "description": "Prevé 72–96h; usamos embalaje frío cuando es necesario.",
+          "badge": "Añade tiempo extra"
+        },
+        "canary": {
+          "title": "Islas Canarias",
+          "description": "Tiempos mayores por aduanas; confirmamos antes del envío.",
+          "badge": "Con confirmación previa"
+        },
+        "eu": {
+          "title": "Consultas UE",
+          "description": "Consúltanos para rutas compatibles y envíos a granel hacia la UE.",
+          "badge": "Bajo petición"
+        }
+      }
+    },
+    "extras": {
+      "title": "Información útil",
+      "items": {
+        "instructions": {
+          "title": "Instrucciones de entrega bienvenidas",
+          "description": "Añade códigos de portal, preferencia de entrega segura o vecino en las notas."
+        },
+        "sustainability": {
+          "title": "Embalaje sostenible primero",
+          "description": "Priorizamos rellenos reciclables; las bolsas frías se pueden reutilizar cuando sea posible."
+        },
+        "support": {
+          "title": "Resoluciones con soporte",
+          "description": "Avísanos en 24h si algo falla: reemplazamos o reembolsamos rápidamente."
+        }
+      }
+    },
+    "timeline": {
+      "title": "Cómo funciona la entrega",
+      "subtitle": "Un recorrido sencillo y trazado desde nuestros socios hasta tu puerta.",
+      "reminder": "Recibirás el enlace de seguimiento al recoger el paquete.",
+      "steps": {
+        "method": {
+          "title": "Elige tu método",
+          "description": "Selecciona estándar o exprés y añade notas de entrega en el checkout."
+        },
+        "pack": {
+          "title": "Empaquetado cuidadoso",
+          "description": "Aseguramos botellas, añadimos aislamiento y comprobamos cada etiqueta."
+        },
+        "handoff": {
+          "title": "Entrega al transportista",
+          "description": "Compartimos el tracking cuando el paquete se escanea con el transportista."
+        },
+        "delivery": {
+          "title": "Ventana de entrega",
+          "description": "Recibirás una ventana antes de la llegada; los fallos de entrega pueden reprogramarse."
+        }
+      }
+    },
+    "contactCard": {
+      "title": "¿Necesitas ayuda personalizada?",
+      "description": "Confirmamos plazos para pedidos grandes, regalos o envíos a la UE antes de que pagues.",
+      "cta": "Contactar soporte",
+      "secondary": "Ver Preguntas Frecuentes",
+      "noteTitle": "Nota del equipo",
+      "noteDescription": "El envío está listo para España y es adaptable para la UE; seguiremos mejorando transportistas y recogidas conforme crezcamos."
+    }
+  },
   "shipping": {
     "title": "Configuración del Envío",
     "description": "Información sobre nuestros métodos de envío y plazos de entrega."

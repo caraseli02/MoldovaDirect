@@ -1660,6 +1660,140 @@
       "countdownCancelledDetails": "Ia-ți timp să revizuiești comanda"
     }
   },
+  "shippingPage": {
+    "hero": {
+      "badge": "Livrare pregătită pentru MVP",
+      "title": "Informații Livrare",
+      "description": "Tot ce trebuie să știi despre cum Moldova Direct expediază vinuri, produse alimentare și cadouri în toată Spania și pe rute compatibile cu UE.",
+      "notice": "Comenzile plasate înainte de 16:00 pleacă în aceeași zi din Madrid.",
+      "secondaryNotice": "Ferestrele de livrare și tracking-ul sosesc prin SMS/WhatsApp după scanarea coletului."
+    },
+    "ctas": {
+      "track": "Urmărește comanda",
+      "contact": "Ai nevoie de ajutor? Contactează suportul"
+    },
+    "highlights": {
+      "title": "La ce să te aștepți",
+      "subtitle": "Logistică de încredere acum, cu spațiu să adăugăm mai mulți curieri pe măsură ce creștem.",
+      "items": {
+        "fast": {
+          "title": "Livrare 48h în peninsulă",
+          "description": "Majoritatea comenzilor ajung în două zile lucrătoare în Spania continentală."
+        },
+        "coverage": {
+          "title": "Logistică prietenoasă cu UE",
+          "description": "Începem cu Spania, cu opțiuni personalizate pentru livrări în UE la cerere."
+        },
+        "packaging": {
+          "title": "Protejat și cu control termic",
+          "description": "Izolație și protecții pentru sticle păstrează vinurile și produsele reci în siguranță."
+        },
+        "updates": {
+          "title": "Notificări live",
+          "description": "Primești actualizări de stare, link-uri de tracking și mementouri pentru fereastra de livrare."
+        }
+      }
+    },
+    "methods": {
+      "title": "Metode de livrare",
+      "subtitle": "Alege ce se potrivește programului și coșului tău.",
+      "tag": "Disponibil acum",
+      "cards": {
+        "express": {
+          "speed": "În aceeași/următoarea zi — zona Madrid",
+          "title": "Curier express",
+          "description": "Expediere prioritară pentru Madrid și împrejurimi, cu livrări prietenoase seara.",
+          "note": "Ideal pentru cadouri și comenzi de ultim moment."
+        },
+        "standard": {
+          "speed": "48h — Spania continentală",
+          "title": "Standard cu tracking",
+          "description": "Livrare fiabilă cu ferestre previzibile; insulele pot necesita timp suplimentar.",
+          "note": "Link-ul de urmărire este trimis automat după preluare."
+        },
+        "refrigerated": {
+          "speed": "Expediere în zile lucrătoare",
+          "title": "Refrigerat și fragil",
+          "description": "Protecție suplimentară și pachete reci pentru vin, sticlă și produse sensibile.",
+          "note": "Ambalat pentru stabilitate pe durata transportului."
+        }
+      }
+    },
+    "coverage": {
+      "title": "Acoperirea livrărilor",
+      "subtitle": "Rutele actuale și la ce să te aștepți.",
+      "regions": {
+        "mainland": {
+          "title": "Spania continentală",
+          "description": "Serviciu 48h cu tracking și notificări SMS/WhatsApp.",
+          "badge": "Cea mai bună experiență"
+        },
+        "balearic": {
+          "title": "Insulele Baleare",
+          "description": "Planifică 72–96h; folosim ambalaj rece când e nevoie.",
+          "badge": "Timp suplimentar"
+        },
+        "canary": {
+          "title": "Insulele Canare",
+          "description": "Timp mai lung din cauza vămii; confirmăm înainte de expediere.",
+          "badge": "Cu confirmare"
+        },
+        "eu": {
+          "title": "Solicitări UE",
+          "description": "Contactează-ne pentru rute prietenoase cu UE și livrări în volum.",
+          "badge": "La cerere"
+        }
+      }
+    },
+    "extras": {
+      "title": "De reținut",
+      "items": {
+        "instructions": {
+          "title": "Instrucțiuni de livrare binevenite",
+          "description": "Adaugă coduri de acces, preferințe de predare sau vecinul de încredere în note."
+        },
+        "sustainability": {
+          "title": "Ambalaj sustenabil mai întâi",
+          "description": "Prioritizăm materiale reciclabile; pachetele reci se pot refolosi când e posibil."
+        },
+        "support": {
+          "title": "Rezolvări cu suport",
+          "description": "Anunță-ne în 24h dacă ceva nu e în regulă—înlocuim sau rambursăm rapid."
+        }
+      }
+    },
+    "timeline": {
+      "title": "Cum decurge livrarea",
+      "subtitle": "Un parcurs simplu și urmărit de la parteneri la ușa ta.",
+      "reminder": "Primești link-ul de tracking la preluare.",
+      "steps": {
+        "method": {
+          "title": "Alege metoda",
+          "description": "Selectează standard sau express la checkout și adaugă note de livrare."
+        },
+        "pack": {
+          "title": "Ambalare atentă",
+          "description": "Fixăm sticlele, adăugăm izolație pentru produse reci și verificăm etichetele."
+        },
+        "handoff": {
+          "title": "Predare la curier",
+          "description": "Link-ul de urmărire se trimite după ce coletul este scanat de partenerii noștri."
+        },
+        "delivery": {
+          "title": "Fereastră de livrare",
+          "description": "Primești o fereastră înainte de sosire; livrările ratate se pot reprograma."
+        }
+      }
+    },
+    "contactCard": {
+      "title": "Ai nevoie de ajutor personalizat?",
+      "description": "Confirmăm termenele pentru comenzi mari, cadouri sau livrări în UE înainte de plată.",
+      "cta": "Contactează suportul",
+      "secondary": "Vezi Întrebările Frecvente",
+      "noteTitle": "Nota echipei",
+      "noteDescription": "Livrarea este gata pentru Spania și adaptabilă pentru UE; vom îmbunătăți curierii și intervalele pe măsură ce creștem."
+    }
+  },
   "admin": {
     "navigation": {
       "toggleSidebar": "Comutare bară laterală",

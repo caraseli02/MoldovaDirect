@@ -2501,6 +2501,140 @@
       }
     }
   },
+  "shippingPage": {
+    "hero": {
+      "badge": "Delivery-ready for MVP",
+      "title": "Shipping Information",
+      "description": "Everything you need to know about how Moldova Direct ships your favourite wines, groceries, and gifts across Spain and EU-friendly routes.",
+      "notice": "Orders placed before 16:00 ship the same day from Madrid.",
+      "secondaryNotice": "Delivery windows and tracking arrive by SMS/WhatsApp once the parcel is scanned."
+    },
+    "ctas": {
+      "track": "Track your order",
+      "contact": "Need help? Contact support"
+    },
+    "highlights": {
+      "title": "What to expect",
+      "subtitle": "Reliable fulfilment now, with room to add more carriers as we grow.",
+      "items": {
+        "fast": {
+          "title": "48h mainland delivery",
+          "description": "Most orders arrive within two business days across mainland Spain."
+        },
+        "coverage": {
+          "title": "EU-friendly logistics",
+          "description": "Spain first, with personalised options for EU deliveries on request."
+        },
+        "packaging": {
+          "title": "Protected & temperature-aware",
+          "description": "Insulated liners and bottle guards keep wines and chilled items secure."
+        },
+        "updates": {
+          "title": "Live notifications",
+          "description": "Get status updates, tracking links, and delivery window reminders."
+        }
+      }
+    },
+    "methods": {
+      "title": "Shipping methods",
+      "subtitle": "Pick what fits your schedule and basket.",
+      "tag": "Now available",
+      "cards": {
+        "express": {
+          "speed": "Same/next-day — Madrid region",
+          "title": "Express courier",
+          "description": "Prioritised dispatch for Madrid and nearby areas with evening-friendly drops.",
+          "note": "Ideal for gifts and last-minute top-ups."
+        },
+        "standard": {
+          "speed": "48h — mainland Spain",
+          "title": "Tracked standard",
+          "description": "Reliable delivery with predictable windows; islands may add extra time.",
+          "note": "Tracking link shared automatically after pickup."
+        },
+        "refrigerated": {
+          "speed": "Weekday dispatch",
+          "title": "Refrigerated & fragile",
+          "description": "Extra cushioning and chill packs for wine, glass, and delicate produce.",
+          "note": "Packaged to stay stable through transit."
+        }
+      }
+    },
+    "coverage": {
+      "title": "Delivery coverage",
+      "subtitle": "Current routes and what to expect.",
+      "regions": {
+        "mainland": {
+          "title": "Mainland Spain",
+          "description": "48h tracked service with SMS/WhatsApp status updates.",
+          "badge": "Best experience"
+        },
+        "balearic": {
+          "title": "Balearic Islands",
+          "description": "Plan for 72–96h delivery; cooled packing used when required.",
+          "badge": "Allow extra time"
+        },
+        "canary": {
+          "title": "Canary Islands",
+          "description": "Longer lead times due to customs; we confirm before dispatch.",
+          "badge": "Pre-approval"
+        },
+        "eu": {
+          "title": "EU enquiries",
+          "description": "Contact us for EU-friendly routes and bulk shipping arrangements.",
+          "badge": "On request"
+        }
+      }
+    },
+    "extras": {
+      "title": "Good to know",
+      "items": {
+        "instructions": {
+          "title": "Delivery instructions welcome",
+          "description": "Add gate codes, safe-drop preferences, or a neighbour handoff in checkout notes."
+        },
+        "sustainability": {
+          "title": "Sustainable packing first",
+          "description": "We prioritise recyclable fillers; chill packs are reusable where possible."
+        },
+        "support": {
+          "title": "Support-first resolutions",
+          "description": "Tell us within 24h if something is off—we’ll replace or refund promptly."
+        }
+      }
+    },
+    "timeline": {
+      "title": "How delivery works",
+      "subtitle": "A simple, tracked journey from our partners to your doorstep.",
+      "reminder": "You’ll receive a tracking link at pickup.",
+      "steps": {
+        "method": {
+          "title": "Choose your method",
+          "description": "Select standard or express at checkout and add any delivery notes."
+        },
+        "pack": {
+          "title": "Careful packing",
+          "description": "We secure bottles, add insulation for chilled items, and verify each label."
+        },
+        "handoff": {
+          "title": "Courier handoff",
+          "description": "A tracking link is shared once the parcel is scanned by our carrier partners."
+        },
+        "delivery": {
+          "title": "Delivery window",
+          "description": "You’ll get a window before arrival; missed attempts receive a reschedule link."
+        }
+      }
+    },
+    "contactCard": {
+      "title": "Need personalised help?",
+      "description": "We’ll confirm timelines for bulk orders, gifts, or EU deliveries before you pay.",
+      "cta": "Contact support",
+      "secondary": "View FAQs",
+      "noteTitle": "Team note",
+      "noteDescription": "Shipping is production-ready for Spain and adaptable for the EU; we’ll keep improving carriers and pickup slots as we grow."
+    }
+  },
   "admin": {
     "navigation": {
       "toggleSidebar": "Toggle sidebar",
