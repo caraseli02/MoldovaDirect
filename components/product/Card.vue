@@ -186,21 +186,36 @@
       <div class="flex flex-wrap gap-2 text-xs text-gray-600 dark:text-slate-400 mb-3">
         <span
           v-if="product.origin"
-          class="flex items-center"
+          class="flex items-center gap-1"
         >
-          🌍 {{ product.origin }}
+          <commonIcon
+            name="globe-2"
+            class="h-3 w-3"
+            aria-hidden="true"
+          />
+          {{ product.origin }}
         </span>
         <span
           v-if="product.volume"
-          class="flex items-center"
+          class="flex items-center gap-1"
         >
-          📏 {{ product.volume }}ml
+          <commonIcon
+            name="flask-conical"
+            class="h-3 w-3"
+            aria-hidden="true"
+          />
+          {{ product.volume }}ml
         </span>
         <span
           v-if="product.alcoholContent"
-          class="flex items-center"
+          class="flex items-center gap-1"
         >
-          🍷 {{ product.alcoholContent }}%
+          <commonIcon
+            name="wine"
+            class="h-3 w-3"
+            aria-hidden="true"
+          />
+          {{ product.alcoholContent }}%
         </span>
       </div>
 
@@ -467,13 +482,10 @@ const addToCart = async () => {
   // - User session state unavailable during server render
   //
   // Behavior: Server-rendered buttons appear but don't execute cart logic
-  // until hydration completes. This is intentional and prevents 500 errors.
+  // until hydration completes. This prevents hydration mismatches and runtime errors.
   if (import.meta.server || typeof window === 'undefined') {
-    console.warn('Add to Cart: Server-side render, skipping')
     return
   }
-
-  // Debug logging (development only) - disabled
 
   try {
     // Verify cart is available

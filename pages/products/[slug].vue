@@ -287,7 +287,7 @@
             </UiCardContent>
           </UiCard>
 
-          <UiCard>
+          <UiCard v-if="reviewSummary">
             <UiCardHeader>
               <div class="flex flex-wrap items-center justify-between gap-4">
                 <div>
@@ -806,7 +806,9 @@ const {
 const config = useRuntimeConfig()
 const seoOptions = computed(() => ({
   productUrl: `${config.public.siteUrl}${route.path}`,
-  rating: reviewSummary.value,
+  rating: reviewSummary.value
+    ? { rating: reviewSummary.value.rating, count: reviewSummary.value.count }
+    : undefined,
   brand: productAttributes.value?.brand || productAttributes.value?.producer || categoryLabel.value,
 }))
 

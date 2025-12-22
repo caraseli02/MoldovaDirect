@@ -37,7 +37,7 @@
             :key="item"
             class="flex gap-2"
           >
-            <span class="mt-1 h-2 w-2 rounded-full bg-primary-500" />
+            <span class="mt-1 h-2 w-2 rounded-full bg-primary-500"></span>
             <span>{{ item }}</span>
           </li>
         </ul>
@@ -52,7 +52,7 @@
             :key="item"
             class="flex gap-2"
           >
-            <span class="mt-1 h-2 w-2 rounded-full bg-gray-400" />
+            <span class="mt-1 h-2 w-2 rounded-full bg-gray-400"></span>
             <span>{{ item }}</span>
           </li>
         </ul>

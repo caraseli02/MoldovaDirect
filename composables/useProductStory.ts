@@ -1,13 +1,13 @@
 /**
  * Product Storytelling Composable
  *
- * Extracts marketing and storytelling content from product attributes including:
- * - Producer stories and origin narratives
- * - Tasting notes and food pairings (conditionally shown for culinary categories)
- * - Awards and sustainability badges
- * - Review summaries with ratings
+ * Extracts and formats product narrative content from attributes for display,
+ * including tasting notes, food pairings, awards, origin stories, reviews,
+ * and sustainability badges. Automatically determines whether culinary-specific
+ * details should be shown based on product category.
  *
- * Provides localized fallback content when product attributes are not available.
+ * Returns null or empty arrays when data is not available - the UI layer
+ * should handle displaying appropriate "no data" states.
  */
 
 import { computed, type ComputedRef } from 'vue'
@@ -28,25 +28,6 @@ interface ReviewSummary {
  */
 interface PairingRecipe {
   name?: string
-}
-
-// Default values for products without review data
-const DEFAULT_RATING = 4.8
-const DEFAULT_REVIEW_COUNT = 126
-
-/**
- * Safely parses a numeric value with NaN protection and dev-mode logging.
- */
-function parseNumeric(value: unknown, fallback: number, fieldName: string, productId?: number): number {
-  if (value === null || value === undefined) return fallback
-  const parsed = typeof value === 'number' ? value : Number.parseFloat(String(value).replace(',', '.'))
-  if (Number.isNaN(parsed)) {
-    if (import.meta.dev) {
-      console.warn(`[useProductStory] Invalid numeric value for ${fieldName}: ${JSON.stringify(value)}${productId ? ` (product ${productId})` : ''}, using fallback ${fallback}`)
-    }
-    return fallback
-  }
-  return parsed
 }
 
 export function useProductStory(
@@ -111,7 +92,6 @@ export function useProductStory(
    * Returns empty array for non-culinary categories without tasting attributes.
    * Supports array, string (comma-separated), and structured object formats
    * (with aromas and flavors sub-arrays).
-   * Falls back to localized defaults when no tasting_notes attribute is present.
    */
   const tastingNotes = computed((): string[] => {
     if (!shouldShowCulinaryDetails.value) return []
@@ -133,9 +113,8 @@ export function useProductStory(
       return notes.split(',').map(note => note.trim()).filter(Boolean)
     }
 
-    return t('products.story.defaultNotes')
-      .split('|')
-      .map(entry => entry.trim())
+    // Return empty array when no tasting notes exist - UI should handle this gracefully
+    return []
   })
 
   /**
@@ -143,7 +122,6 @@ export function useProductStory(
    * Returns empty array for non-culinary categories without pairing attributes.
    * Supports array, string (comma-separated), and structured object formats
    * (with foods, recipes, and occasions sub-arrays).
-   * Falls back to localized defaults when no pairings attribute is present.
    */
   const pairingIdeas = computed((): string[] => {
     if (!shouldShowCulinaryDetails.value) return []
@@ -166,9 +144,8 @@ export function useProductStory(
       return pairings.split(',').map(pairing => pairing.trim()).filter(Boolean)
     }
 
-    return t('products.story.defaultPairings')
-      .split('|')
-      .map(entry => entry.trim())
+    // Return empty array when no pairing ideas exist - UI should handle this gracefully
+    return []
   })
 
   /**
@@ -208,25 +185,22 @@ export function useProductStory(
 
   /**
    * Review summary with ratings and highlights.
-   * Uses default values (4.8 rating, 126 count) when review data is missing.
-   * Logs warnings in dev mode when falling back to defaults.
+   * Returns null when no review data exists - UI should display "no reviews yet" state.
    */
-  const reviewSummary = computed((): ReviewSummary => {
-    const productId = product.value?.id
-    const rawRating = productAttributes.value?.rating
-    const rawCount = productAttributes.value?.review_count || productAttributes.value?.reviewCount
+  const reviewSummary = computed((): ReviewSummary | null => {
+    const attrs = productAttributes.value || {}
+    const ratingRaw = attrs.rating
+    const countRaw = attrs.review_count || attrs.reviewCount
 
-    // Log when using fallback values in dev mode
-    if (import.meta.dev && !rawRating && !rawCount && productId) {
-      console.warn(`[useProductStory] Product ${productId} missing review data - using placeholder values`)
+    // Return null when no real review data exists - never fabricate reviews
+    if (ratingRaw === undefined && countRaw === undefined) {
+      return null
     }
 
-    const rating = parseNumeric(rawRating, DEFAULT_RATING, 'rating', productId)
-    const count = parseNumeric(rawCount, DEFAULT_REVIEW_COUNT, 'review_count', productId)
+    const rating = Number(ratingRaw || 0)
+    const count = Number(countRaw || 0)
 
-    const highlightsRaw
-      = productAttributes.value?.review_highlights
-        || productAttributes.value?.reviewHighlights
+    const highlightsRaw = attrs.review_highlights || attrs.reviewHighlights
 
     let highlights: string[] = []
 
@@ -235,11 +209,6 @@ export function useProductStory(
     }
     else if (typeof highlightsRaw === 'string') {
       highlights = highlightsRaw.split('|').map((item: string) => item.trim())
-    }
-    else {
-      highlights = t('products.socialProof.highlights')
-        .split('|')
-        .map(entry => entry.trim())
     }
 
     return {
@@ -250,7 +219,9 @@ export function useProductStory(
   })
 
   /**
-   * Sustainability and certification badges
+   * Sustainability and certification badges.
+   * Returns only badges that the product actually has - never fabricates badges.
+   * UI should handle empty array gracefully (hide section or show "no certifications").
    */
   const sustainabilityBadges = computed((): string[] => {
     const badges: string[] = []
@@ -266,14 +237,7 @@ export function useProductStory(
       badges.push('heritage')
     }
 
-    // Default badges if none are set
-    if (!badges.length) {
-      if (import.meta.dev && product.value?.id) {
-        console.warn(`[useProductStory] Product ${product.value.id} has no sustainability badges - using defaults`)
-      }
-      badges.push('handcrafted', 'familyOwned')
-    }
-
+    // Return only actual badges - do not fabricate badges for products without certifications
     return Array.from(new Set(badges)).slice(0, 5)
   })
 
