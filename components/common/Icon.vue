@@ -24,6 +24,7 @@ import {
   Bell,
   Box,
   Boxes,
+  Briefcase,
   Building2,
   CalendarDays,
   Camera,
@@ -65,6 +66,7 @@ import {
   MapPin,
   Megaphone,
   Menu,
+  MessageCircle,
   Minus,
   Monitor,
   MoreVertical,
@@ -87,6 +89,7 @@ import {
   ShoppingCart,
   SlidersHorizontal,
   Smartphone,
+  Snowflake,
   Sparkles,
   SquarePen,
   Star,
@@ -101,6 +104,7 @@ import {
   Wine,
   Wrench,
   X,
+  Zap,
 } from 'lucide-vue-next'
 
 const props = defineProps<{ name: string }>()
@@ -236,6 +240,14 @@ const ICONS: Record<string, Component> = {
   'photo': Image,
   'alert-octagon': AlertTriangle,
   'alert': AlertTriangle,
+  'zap': Zap,
+  'bolt': Zap,
+  'lightning': Zap,
+  'snowflake': Snowflake,
+  'message-circle': MessageCircle,
+  'chat': MessageCircle,
+  'briefcase': Briefcase,
+  'luggage': Briefcase,
 }
 
 const fallbackIcon = CircleHelp
