@@ -357,7 +357,7 @@
             <!-- Actions -->
             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
               <nuxt-link
-                :to="`/products/${product.slug}`"
+                :to="localePath({ name: 'products-slug', params: { slug: product.slug } }, locale)"
                 target="_blank"
                 class="text-gray-600 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
                 title="View Product"
@@ -436,6 +436,7 @@ import { Table, TableHeader, TableRow, TableHead, TableBody } from '@/components
 import { Checkbox as UiCheckbox } from '@/components/ui/checkbox'
 import { Badge } from '@/components/ui/badge'
 import { productStatusVariant } from '@/lib/uiVariants'
+import { useLocalePath, useI18n } from '#imports'
 
 interface Props {
   products: Record<string, any>[]
@@ -464,6 +465,8 @@ interface Emits {
 
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
+const localePath = useLocalePath()
+const { locale } = useI18n()
 
 // Utility functions
 const getLocalizedText = (text: Record<string, string> | null) => {

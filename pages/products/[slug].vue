@@ -230,7 +230,7 @@
                 <p class="text-sm text-gray-600 dark:text-gray-400">
                   {{ storytelling.producer }}
                 </p>
-                <div>
+                <div v-if="tastingNotes.length">
                   <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400">
                     {{ $t('products.story.tastingNotes') }}
                   </h3>
@@ -244,7 +244,7 @@
                     </li>
                   </ul>
                 </div>
-                <div>
+                <div v-if="pairingIdeas.length">
                   <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400">
                     {{ $t('products.story.pairings') }}
                   </h3>
