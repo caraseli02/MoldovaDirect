@@ -31,7 +31,7 @@
         'aspect-[3/2]': variant === 'featured',
       }"
     >
-      <nuxt-link :to="`/products/${product.slug}`">
+      <nuxt-link :to="productDetailPath">
         <NuxtImg
           v-if="primaryImage"
           preset="productThumbnail"
@@ -69,7 +69,7 @@
         <div class="flex items-center justify-between px-3 py-2 gap-2">
           <!-- Quick View Button -->
           <nuxt-link
-            :to="`/products/${product.slug}`"
+            :to="productDetailPath"
             :aria-label="$t('products.quickViewProduct', { name: getLocalizedText(product.name) })"
             class="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors text-sm font-medium text-gray-900 dark:text-white focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2"
           >
@@ -146,7 +146,7 @@
       <!-- Product Name -->
       <h3 class="font-semibold text-gray-900 dark:text-slate-100 mb-2 line-clamp-2">
         <nuxt-link
-          :to="`/products/${product.slug}`"
+          :to="productDetailPath"
           class="hover:text-blue-700 dark:hover:text-blue-300 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 rounded"
           :aria-label="$t('products.viewDetails') + ': ' + getLocalizedText(product.name)"
         >
@@ -337,7 +337,7 @@ import { useDevice } from '~/composables/useDevice'
 import { useHapticFeedback } from '~/composables/useHapticFeedback'
 import { useTouchEvents } from '~/composables/useTouchEvents'
 import { useToast } from '~/composables/useToast'
-import { useRouter, useI18n } from '#imports'
+import { useRouter, useI18n, useLocalePath } from '#imports'
 import { PRODUCTS } from '~/constants/products'
 
 interface Props {
@@ -356,6 +356,7 @@ const { vibrate } = useHapticFeedback()
 const touchEvents = useTouchEvents()
 const toast = useToast()
 const { addItem, loading: cartLoading, isInCart } = useCart()
+const localePath = useLocalePath()
 
 // Template refs
 const cardRef = ref<HTMLElement>()
@@ -380,6 +381,16 @@ const stockStatusText = computed(() => {
   if (stock > 0) return t('products.stockStatus.onlyLeft', { count: stock })
   return t('products.stockStatus.outOfStock')
 })
+
+const productDetailPath = computed(() =>
+  localePath(
+    {
+      name: 'products-slug',
+      params: { slug: props.product.slug },
+    },
+    locale.value,
+  ),
+)
 
 const isNew = computed(() => {
   // Consider product "new" if created within threshold days
@@ -518,8 +529,7 @@ const setupMobileTouch = () => {
     onTap: () => {
       // Navigate to product detail on tap (if not button)
       const router = useRouter()
-      const productPath = `/products/${props.product.slug}`
-      router.push(productPath)
+      router.push(productDetailPath.value)
     },
   })
 
