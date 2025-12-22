@@ -1483,6 +1483,135 @@
     },
     "commonProduct": "this product"
   },
+  "returns": {
+    "badge": "Returns ready for MVP",
+    "title": "Returns & Refunds",
+    "description": "Simple steps to report issues, request replacements, or receive refunds for Moldova Direct orders.",
+    "cta": {
+      "start": "Start a return",
+      "orders": "View my orders"
+    },
+    "summary": {
+      "window": {
+        "title": "Return window",
+        "metric": "30 days",
+        "description": "Unopened pantry items within 30 days of delivery"
+      },
+      "condition": {
+        "title": "Condition",
+        "metric": "Unopened/undamaged",
+        "description": "Keep original packaging for fast approval"
+      },
+      "support": {
+        "title": "Support",
+        "metric": "48h response",
+        "description": "Concierge help in EN / ES / RO / RU"
+      },
+      "refunds": {
+        "title": "Refund timing",
+        "metric": "2–5 business days",
+        "description": "After inspection is complete"
+      }
+    },
+    "eligibility": {
+      "title": "What qualifies for a return?",
+      "subtitle": "We prioritise safety and freshness for every order.",
+      "allowedTitle": "Eligible cases",
+      "deniedTitle": "Not eligible",
+      "allowed": {
+        "damaged": "Damaged on arrival (photos required)",
+        "incorrect": "Incorrect items or quantities received",
+        "quality": "Quality or safety concern reported within 7 days",
+        "unopened": "Unopened pantry goods within 30 days"
+      },
+      "denied": {
+        "used": "Opened, used, or partially consumed items",
+        "late": "Requests after the return window",
+        "perishable": "Perishable items without a reported issue on delivery",
+        "custom": "Custom or personalised orders without defects"
+      },
+      "note": "For wine, store bottles upright and avoid extreme temperatures while we review your case."
+    },
+    "resolution": {
+      "title": "Resolution options",
+      "subtitle": "Choose what works best for you once we validate the issue.",
+      "options": {
+        "refund": {
+          "title": "Refund to original payment",
+          "description": "Issued after inspection, typically within 2–5 business days.",
+          "badge": "Standard"
+        },
+        "replacement": {
+          "title": "Replacement shipment",
+          "description": "We resend the correct or undamaged items at no extra cost for our error.",
+          "badge": "Fastest"
+        },
+        "credit": {
+          "title": "Store credit",
+          "description": "Instant credit for future orders while we pick up the original items.",
+          "badge": "Instant"
+        }
+      },
+      "note": "Select your preferred option in your request. We confirm availability before shipping replacements."
+    },
+    "steps": {
+      "title": "How to start a return",
+      "subtitle": "Share details so we can resolve your request quickly.",
+      "items": {
+        "review": {
+          "title": "Review your order",
+          "description": "Note the affected items, quantities, and delivery date."
+        },
+        "document": {
+          "title": "Document the issue",
+          "description": "Take clear photos of packaging, labels, and any damage."
+        },
+        "contact": {
+          "title": "Submit your request",
+          "description": "Email us or use the contact form with your order number and preference (refund, replacement, credit)."
+        },
+        "ship": {
+          "title": "Prepare pickup or drop-off",
+          "description": "Keep items in original packaging. We coordinate courier pickup or a drop-off label where required."
+        }
+      },
+      "documentsTitle": "Have these ready",
+      "packagingTitle": "Packaging guidance",
+      "packagingDescription": "Keep bottles upright, seal boxes securely, and include all accessories or gifts.",
+      "documents": {
+        "order": "Order number and contact details",
+        "photos": "Photos of damage or issue",
+        "packaging": "Original packaging or bottle labels",
+        "preference": "Preferred resolution (refund, replacement, credit)"
+      }
+    },
+    "fees": {
+      "title": "Costs & coverage",
+      "description": "We cover shipping for our mistakes. Other cases follow the policy below.",
+      "items": {
+        "ourError": "Free return shipping for damaged, incorrect, or defective items",
+        "customerChoice": "Change-of-mind returns may require return shipping",
+        "inspection": "Refunds issued after inspection and quality verification"
+      }
+    },
+    "expectations": {
+      "title": "What to expect",
+      "description": "Transparent updates from request to resolution.",
+      "items": {
+        "scan": "Tracking shared once a courier label is issued",
+        "refundTimeline": "Refunds processed 2–5 business days after inspection",
+        "updates": "Status updates via email at each stage"
+      }
+    },
+    "support": {
+      "title": "Need help fast?",
+      "description": "Our concierge team is ready to guide your return or exchange.",
+      "badge": "Priority support",
+      "contactLink": "Use the contact form",
+      "responseTime": "We reply within 48 business hours (often sooner).",
+      "emailSubject": "Return request"
+    }
+  },
   "footer": {
     "terms": "Terms and Conditions",
     "privacy": "Privacy Policy",
