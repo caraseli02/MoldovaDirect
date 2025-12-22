@@ -81,6 +81,30 @@ const createProduct = (overrides: Partial<ProductWithRelations> & { attributes?:
 }
 
 describe('useProductStory', () => {
+  it('handles null product gracefully', () => {
+    const product = computed(() => null)
+    const {
+      tastingNotes,
+      pairingIdeas,
+      storytelling,
+      awards,
+      sustainabilityBadges,
+      shouldShowCulinaryDetails,
+      reviewSummary,
+    } = useProductStory(product)
+
+    expect(tastingNotes.value).toEqual([])
+    expect(pairingIdeas.value).toEqual([])
+    expect(awards.value).toEqual([])
+    expect(shouldShowCulinaryDetails.value).toBe(false)
+    // No fake badges when no product
+    expect(sustainabilityBadges.value).toEqual([])
+    // Storytelling uses fallback with category param (mock appends :param)
+    expect(storytelling.value.producer).toContain('Producer fallback')
+    // Review summary returns null when no data exists
+    expect(reviewSummary.value).toBeNull()
+  })
+
   describe('tastingNotes and pairingIdeas', () => {
     it('returns empty arrays for culinary categories without tasting data', () => {
       const product = createProduct({

@@ -15,12 +15,17 @@ import { useI18n } from 'vue-i18n'
 import { useProductUtils } from './useProductUtils'
 import type { ProductWithRelations } from '~/types/database'
 
+/** Review summary with rating, count, and highlighted excerpts */
 interface ReviewSummary {
   rating: number
   count: number
   highlights: string[]
 }
 
+/**
+ * Recipe item from structured pairing data.
+ * Used when pairings.recipes contains objects rather than strings.
+ */
 interface PairingRecipe {
   name?: string
 }
@@ -60,6 +65,10 @@ export function useProductStory(
     return Boolean(tastingNotesAttr || pairingsAttr || flavorSignals.length)
   })
 
+  /**
+   * Whether to display culinary-specific content (tasting notes, pairings).
+   * True when product is in a culinary category or has culinary-related attributes.
+   */
   const shouldShowCulinaryDetails = computed(() => isCulinaryCategory.value || hasCulinaryAttributes.value)
 
   /**
@@ -79,7 +88,10 @@ export function useProductStory(
   })
 
   /**
-   * Tasting notes from product attributes
+   * Tasting notes for culinary products.
+   * Returns empty array for non-culinary categories without tasting attributes.
+   * Supports array, string (comma-separated), and structured object formats
+   * (with aromas and flavors sub-arrays).
    */
   const tastingNotes = computed((): string[] => {
     if (!shouldShowCulinaryDetails.value) return []
@@ -106,7 +118,10 @@ export function useProductStory(
   })
 
   /**
-   * Food pairing suggestions
+   * Food pairing suggestions for culinary products.
+   * Returns empty array for non-culinary categories without pairing attributes.
+   * Supports array, string (comma-separated), and structured object formats
+   * (with foods, recipes, and occasions sub-arrays).
    */
   const pairingIdeas = computed((): string[] => {
     if (!shouldShowCulinaryDetails.value) return []
@@ -226,6 +241,26 @@ export function useProductStory(
     return Array.from(new Set(badges)).slice(0, 5)
   })
 
+  /**
+   * Category-aware section titles
+   * Returns appropriate titles based on whether the product is culinary or not
+   */
+  const sectionTitles = computed(() => {
+    const isCulinary = shouldShowCulinaryDetails.value
+
+    return {
+      story: isCulinary
+        ? t('products.story.titleCulinary')
+        : t('products.story.titleGeneric'),
+      related: isCulinary
+        ? t('products.related.titleCulinary')
+        : t('products.related.titleGeneric'),
+      relatedSubtitle: isCulinary
+        ? t('products.related.subtitle')
+        : t('products.related.subtitleGeneric'),
+    }
+  })
+
   return {
     storytelling,
     tastingNotes,
@@ -235,5 +270,7 @@ export function useProductStory(
     reviewSummary,
     sustainabilityBadges,
     shouldShowCulinaryDetails,
+    isCulinaryCategory,
+    sectionTitles,
   }
 }

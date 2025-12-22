@@ -18,16 +18,16 @@ test.describe('Admin Products - New Product Page', () => {
     await adminAuthenticatedPage.goto('/admin/products/new')
     await adminAuthenticatedPage.waitForLoadState('networkidle')
 
-    // Check for form existence
+    // Wait for async AdminProductsForm component to load
+    // The form takes time to render because it uses useAsyncAdminComponent
     const form = adminAuthenticatedPage.locator('form').first()
-    await expect(form).toBeVisible()
+    await expect(form).toBeVisible({ timeout: 15000 })
 
-    // Check for main heading
-    const heading = adminAuthenticatedPage.locator('h1')
-    const headingText = await heading.textContent()
-    expect(headingText).toContain('Create New Product')
+    // Check for main heading - should be "Create New Product"
+    const heading = adminAuthenticatedPage.getByRole('heading', { name: /Create New Product/i })
+    await expect(heading).toBeVisible({ timeout: 5000 })
 
-    // Check for common form fields
+    // Check for common form fields after form loads
     const inputs = await adminAuthenticatedPage.locator('input').count()
     expect(inputs).toBeGreaterThan(0)
 
@@ -104,10 +104,15 @@ test.describe('Admin Products - New Product Page', () => {
     await adminAuthenticatedPage.goto('/admin/products/new')
     await adminAuthenticatedPage.waitForLoadState('networkidle')
 
-    // Look for submit button
-    const submitButton = adminAuthenticatedPage.locator('button[type="submit"]').first()
-    await expect(submitButton).toBeVisible()
-    console.log('Submit button found and visible')
+    // Wait for async AdminProductsForm component to load
+    const form = adminAuthenticatedPage.locator('form').first()
+    await expect(form).toBeVisible({ timeout: 15000 })
+
+    // Look for the "Create Product" button specifically using role and text
+    // This is more reliable than type="submit" which may match multiple hidden buttons
+    const createButton = adminAuthenticatedPage.getByRole('button', { name: /Create Product|Create$/i })
+    await expect(createButton).toBeVisible({ timeout: 10000 })
+    console.log('Create Product button found and visible')
   })
 
   test('should render AdminProductsForm component', async ({ adminAuthenticatedPage }) => {
@@ -127,16 +132,16 @@ test.describe('Admin Products - New Product Page', () => {
     console.log('Product form confirmed, not login form')
   })
 
-  test('should handle page navigation correctly', async ({ page }) => {
+  test('should handle page navigation correctly', async ({ adminAuthenticatedPage }) => {
     // Navigate to the admin products list first
-    await page.goto('/admin/products')
-    await page.waitForLoadState('networkidle')
+    await adminAuthenticatedPage.goto('/admin/products')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
     // Even if link doesn't exist, direct navigation should work
-    await page.goto('/admin/products/new')
-    await page.waitForLoadState('networkidle')
+    await adminAuthenticatedPage.goto('/admin/products/new')
+    await adminAuthenticatedPage.waitForLoadState('networkidle')
 
-    const currentUrl = page.url()
+    const currentUrl = adminAuthenticatedPage.url()
     expect(currentUrl).toContain('/admin/products/new')
     console.log(`Successfully navigated to: ${currentUrl}`)
   })
