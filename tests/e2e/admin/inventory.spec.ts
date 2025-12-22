@@ -217,10 +217,15 @@ test.describe('Admin Inventory Page', () => {
     if (reportsVisible) {
       await reportsTab.click()
       await adminPage.waitForTimeout(500)
-    }
 
-    // Test passes if we can interact with tabs without errors
-    expect(true).toBeTruthy()
+      // Verify Reports content is now visible after switching back
+      const reportsHeading = adminPage.getByRole('heading', { name: /Inventory Reports/i }).last()
+      await expect(reportsHeading).toBeVisible({ timeout: 5000 })
+    }
+    else {
+      // Tabs not visible - verify we're still on the inventory page
+      expect(adminPage.url()).toContain('/admin/inventory')
+    }
   })
 
   test('should display responsive layout on different screen sizes', async ({ adminAuthenticatedPage: adminPage }) => {
@@ -355,14 +360,18 @@ test.describe('Admin Inventory Page', () => {
     await adminPage.goto('/admin/inventory')
     await adminPage.waitForLoadState('networkidle')
 
+    // Verify page content is visible before taking screenshot
+    const heading = adminPage.getByRole('heading', { name: /Inventory Management/i })
+    await expect(heading).toBeVisible({ timeout: 10000 })
+
     // Take screenshot of the full page
-    await adminPage.screenshot({
+    const screenshot = await adminPage.screenshot({
       path: 'test-results/inventory-page-screenshot.png',
       fullPage: true,
     })
 
-    // Screenshot should be created successfully
-    expect(true).toBeTruthy()
+    // Verify screenshot was captured (returns a Buffer with actual image data)
+    expect(screenshot.length).toBeGreaterThan(0)
   })
 
   test('should verify all text content is readable', async ({ adminAuthenticatedPage: adminPage }) => {

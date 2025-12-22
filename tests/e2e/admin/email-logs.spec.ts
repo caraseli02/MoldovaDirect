@@ -50,8 +50,9 @@ test.describe('Admin Email Logs Page', () => {
 
     console.log(`Table visible: ${hasTable}, Empty state: ${hasEmpty}, Loading: ${hasLoading}`)
 
-    // Page should show some content (table, empty state, or at least be loading)
-    expect(hasTable || hasEmpty || hasLoading || true).toBe(true)
+    // Page should show some content (table, empty state, or loading indicator)
+    // If none of these are visible, the page may not be rendering correctly
+    expect(hasTable || hasEmpty || hasLoading).toBe(true)
   })
 
   test('should handle pagination controls', async ({ adminAuthenticatedPage }) => {
@@ -101,8 +102,18 @@ test.describe('Admin Email Logs Page', () => {
 
     console.log(`Filter inputs found: ${inputCount}`)
 
-    // Page should either have filters or at least load without error
-    expect(inputCount >= 0).toBe(true)
+    // If filters exist, verify they are functional (visible and interactive)
+    if (inputCount > 0) {
+      const firstInput = inputs.first()
+      await expect(firstInput).toBeVisible()
+      console.log('Filter inputs are visible and functional')
+    }
+    else {
+      // No filters - verify the page still has essential content
+      const mainContent = adminAuthenticatedPage.locator('main')
+      await expect(mainContent).toBeVisible()
+      console.log('No filters found - page renders without filters')
+    }
   })
 
   test('should not have console errors on page load', async ({ adminAuthenticatedPage }) => {

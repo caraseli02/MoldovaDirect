@@ -114,10 +114,10 @@ test.describe('Full Checkout Flow', () => {
     const hasCheckoutButton = await checkoutButton.isVisible({ timeout: 5000 }).catch(() => false)
 
     if (!hasCheckoutButton) {
-      console.log('⚠️ No checkout button found - cart may be empty')
       // Take screenshot for debugging
       await page.screenshot({ path: 'test-results/cart-debug.png' })
-      return
+      // Fail explicitly - checkout flow cannot be tested without items in cart
+      expect(hasCheckoutButton, 'No checkout button found - cart may be empty. Screenshot saved to test-results/cart-debug.png').toBe(true)
     }
 
     console.log('✅ Step 3: Cart page loaded with items')
@@ -241,25 +241,23 @@ test.describe('Full Checkout Flow', () => {
     const hasEmptyCart = await emptyCart.isVisible({ timeout: 3000 }).catch(() => false)
 
     if (hasEmptyCart) {
-      console.log('⚠️ Cart is empty as guest - add to cart may not persist without session')
-      // This is expected behavior in some implementations
       // Take screenshot for debugging
       await page.screenshot({ path: 'test-results/guest-cart-debug.png' })
 
       // Verify we're on cart page at least
       expect(page.url()).toContain('/cart')
-      console.log('✅ Guest cart page loads correctly (empty state)')
-      return
+
+      // Guest cart without session is expected behavior - skip remaining assertions
+      // but mark the test as known limitation
+      test.skip(true, 'Guest cart is empty - cart may require session storage which is not available for guests')
     }
 
     // Step 3: Look for checkout button
     const checkoutButton = page.locator('button:has-text("Proceder al Pago"), button:has-text("Checkout")')
     const hasCheckoutButton = await checkoutButton.isVisible({ timeout: 5000 }).catch(() => false)
 
-    if (!hasCheckoutButton) {
-      console.log('⚠️ No checkout button - cart may be empty')
-      return
-    }
+    // Fail explicitly if cart has items but no checkout button
+    expect(hasCheckoutButton, 'Checkout button should be visible when cart has items').toBe(true)
 
     await checkoutButton.first().click()
     await page.waitForLoadState('networkidle')
