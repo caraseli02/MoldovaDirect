@@ -1041,6 +1041,9 @@
     },
     "story": {
       "title": "Călătorie gustativă",
+      "titleCulinary": "Călătorie gustativă",
+      "titleGeneric": "Povestea produsului",
+      "titleCraft": "Meșteșug și detalii",
       "tastingNotes": "Note de degustare",
       "pairings": "Idei de asortare",
       "awards": "Distincții",
@@ -1126,7 +1129,10 @@
     },
     "related": {
       "title": "Se potrivește cu…",
-      "subtitle": "Completează experiența cu aceste recomandări curate."
+      "titleCulinary": "Se potrivește cu…",
+      "titleGeneric": "S-ar putea să-ți placă și",
+      "subtitle": "Completează experiența cu aceste recomandări curate.",
+      "subtitleGeneric": "Descoperă mai multe produse care te-ar putea interesa."
     },
     "actions": {
       "addToWishlist": "Salvează în favorite",

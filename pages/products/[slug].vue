@@ -225,7 +225,7 @@
             <UiCardContent class="grid gap-6 lg:grid-cols-2">
               <div class="space-y-4">
                 <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-                  {{ $t('products.story.title') }}
+                  {{ sectionTitles.story }}
                 </h2>
                 <p class="text-sm text-gray-600 dark:text-gray-400">
                   {{ storytelling.producer }}
@@ -608,10 +608,10 @@
         <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">
-              {{ $t('products.related.title') }}
+              {{ sectionTitles.related }}
             </h2>
             <p class="text-sm text-gray-600 dark:text-gray-400">
-              {{ $t('products.related.subtitle') }}
+              {{ sectionTitles.relatedSubtitle }}
             </p>
           </div>
         </div>
@@ -799,6 +799,7 @@ const {
   originStory,
   reviewSummary,
   sustainabilityBadges,
+  sectionTitles,
 } = useProductStory(computedProduct)
 
 // SEO composable

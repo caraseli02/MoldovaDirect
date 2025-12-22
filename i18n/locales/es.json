@@ -1313,6 +1313,9 @@
     },
     "story": {
       "title": "Experiencia de cata",
+      "titleCulinary": "Experiencia de cata",
+      "titleGeneric": "Historia del producto",
+      "titleCraft": "Artesanía y detalles",
       "tastingNotes": "Notas de cata",
       "pairings": "Ideas de maridaje",
       "awards": "Reconocimientos",
@@ -1394,7 +1397,10 @@
     },
     "related": {
       "title": "Combina con…",
-      "subtitle": "Completa la experiencia con estas recomendaciones."
+      "titleCulinary": "Combina con…",
+      "titleGeneric": "También te puede gustar",
+      "subtitle": "Completa la experiencia con estas recomendaciones.",
+      "subtitleGeneric": "Descubre más productos que podrían interesarte."
     },
     "actions": {
       "addToWishlist": "Guardar en favoritos",
