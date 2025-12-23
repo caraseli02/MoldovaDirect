@@ -897,6 +897,9 @@
     "outOfStock": "Stoc Epuizat",
     "inCart": "În Coș",
     "adding": "Se adaugă...",
+    "addingToCart": "Se adaugă {name}...",
+    "productInCart": "{name} este deja în coș",
+    "addProductToCart": "Adaugă {name} în coș",
     "cartEmpty": "Coșul tău este gol",
     "cartEmptyDescription": "Începe să cumperi pentru a adăuga articole în coș",
     "itemsInCart": "articole în coș",
@@ -1497,6 +1500,13 @@
   "checkout": {
     "title": "Finalizare Comandă",
     "secureCheckout": "Finalizare Securizată",
+    "trust": {
+      "secureCheckout": "Comandă 100% Securizată",
+      "sslEncrypted": "Criptare SSL 256-bit",
+      "dataProtected": "Datele tale sunt protejate",
+      "moneyBackGuarantee": "Garanția banilor înapoi",
+      "needHelp": "Ai nevoie de ajutor? Contactează-ne la"
+    },
     "steps": {
       "shipping": {
         "name": "Livrare",
@@ -1535,10 +1545,13 @@
     "continueAsGuest": "Continuă ca Vizitator",
     "backToCart": "Înapoi la Coș",
     "continueToPayment": "Continuă la Plată",
+    "continueToReview": "Revizuiește Comanda Ta",
     "backToShipping": "Înapoi la Livrare",
     "reviewOrder": "Revizuiește Comanda",
     "backToPayment": "Înapoi la Plată",
     "placeOrder": "Plasează Comanda",
+    "placeOrderSecure": "Plasează Comanda Securizată",
+    "notChargedYet": "Nu vei fi taxat încă",
     "shippingForm": {
       "title": "Informații de Livrare",
       "placeholder": "Formularul de livrare va fi implementat în următoarea sarcină"
@@ -1585,8 +1598,20 @@
       "orderCompleted": "Comandă Finalizată",
       "orderConfirmation": "Comanda ta a fost plasată cu succes"
     },
+    "error": {
+      "title": "Eroare",
+      "proceedToPayment": "Nu s-a putut continua la plată. Te rugăm să încerci din nou.",
+      "proceedToReview": "Nu s-a putut continua la verificare. Te rugăm să încerci din nou.",
+      "orderFailed": "Comandă eșuată",
+      "orderProcessingFailed": "Nu s-a putut procesa comanda. Te rugăm să încerci din nou."
+    },
     "validation": {
       "firstNameRequired": "Prenumele este obligatoriu",
+      "orderDataMissing": "Lipsesc datele comenzii. Te rugăm să reîncepi procesul de plată.",
+      "shippingInfoMissing": "Lipsesc informațiile de livrare. Te rugăm să completezi detaliile de livrare.",
+      "paymentMethodMissing": "Lipsește metoda de plată. Te rugăm să selectezi o metodă de plată.",
+      "cartEmpty": "Coșul tău este gol. Te rugăm să adaugi produse înainte de plată.",
+      "invalidTotal": "Total comandă invalid. Te rugăm să încerci din nou.",
       "lastNameRequired": "Numele de familie este obligatoriu",
       "streetRequired": "Adresa stradală este obligatorie",
       "cityRequired": "Orașul este obligatoriu",
@@ -1651,6 +1676,8 @@
       "noMethods": "Nu sunt disponibile metode de livrare",
       "noMethodsDescription": "Te rugăm să verifici adresa sau să contactezi suportul",
       "error": "Eroare la încărcarea metodelor de livrare",
+      "loadError": "Metode de Livrare",
+      "usingDefaultOptions": "Se folosesc opțiuni de livrare implicite. Tarifele reale pot varia.",
       "standard": {
         "name": "Livrare Standard",
         "description": "Livrare în 3-5 zile lucrătoare"

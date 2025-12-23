@@ -289,21 +289,23 @@
 
         <UiButton
           type="button"
+          size="lg"
+          class="h-12 px-6"
           :disabled="!canProceed || loading"
           @click="proceedToReview"
         >
           <template v-if="loading">
             <commonIcon
               name="lucide:loader-2"
-              class="animate-spin h-4 w-4 mr-2"
+              class="animate-spin h-5 w-5 mr-2"
             />
             {{ $t('checkout.navigation.processing') }}
           </template>
           <template v-else>
-            {{ $t('checkout.navigation.reviewOrder') }}
+            {{ $t('checkout.continueToReview') }}
             <commonIcon
               name="lucide:arrow-right"
-              class="h-4 w-4 ml-2"
+              class="h-5 w-5 ml-2"
             />
           </template>
         </UiButton>
@@ -502,6 +504,12 @@ const proceedToReview = async () => {
   }
   catch (error: any) {
     console.error('Failed to proceed to review:', error)
+    const toast = useToast()
+    const { t } = useI18n()
+    toast.error(
+      t('checkout.error.title') || 'Error',
+      t('checkout.error.proceedToReview') || 'Failed to proceed to review. Please try again.',
+    )
   }
 }
 

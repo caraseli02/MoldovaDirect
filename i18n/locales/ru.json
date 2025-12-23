@@ -1073,6 +1073,9 @@
     "outOfStock": "Нет в наличии",
     "inCart": "В корзине",
     "adding": "Добавление...",
+    "addingToCart": "Добавление {name}...",
+    "productInCart": "{name} уже в корзине",
+    "addProductToCart": "Добавить {name} в корзину",
     "cartEmpty": "Your cart is empty",
     "cartEmptyDescription": "Start shopping to add items to your cart",
     "itemsInCart": "items in cart",
@@ -1495,8 +1498,15 @@
     "copyright": "© 2024 Moldova Direct. Все права защищены."
   },
   "checkout": {
-    "title": "Checkout",
-    "secureCheckout": "Secure Checkout",
+    "title": "Оформление заказа",
+    "secureCheckout": "Безопасное оформление",
+    "trust": {
+      "secureCheckout": "100% Безопасная покупка",
+      "sslEncrypted": "256-битное SSL шифрование",
+      "dataProtected": "Ваши данные защищены",
+      "moneyBackGuarantee": "Гарантия возврата денег",
+      "needHelp": "Нужна помощь? Свяжитесь с нами"
+    },
     "steps": {
       "shipping": {
         "name": "Shipping",
@@ -1534,11 +1544,14 @@
     },
     "continueAsGuest": "Continue as Guest",
     "backToCart": "Back to Cart",
-    "continueToPayment": "Continue to Payment",
-    "backToShipping": "Back to Shipping",
-    "reviewOrder": "Review Order",
-    "backToPayment": "Back to Payment",
-    "placeOrder": "Place Order",
+    "continueToPayment": "Продолжить к оплате",
+    "continueToReview": "Проверить ваш заказ",
+    "backToShipping": "Назад к доставке",
+    "reviewOrder": "Проверить заказ",
+    "backToPayment": "Назад к оплате",
+    "placeOrder": "Оформить заказ",
+    "placeOrderSecure": "Безопасно оформить заказ",
+    "notChargedYet": "Оплата ещё не будет списана",
     "shippingForm": {
       "title": "Shipping Information",
       "placeholder": "Shipping form will be implemented in the next task"
@@ -1578,15 +1591,27 @@
       "privacyRequired": "You must accept the Privacy Policy to continue"
     },
     "success": {
-      "shippingUpdated": "Shipping Updated",
-      "shippingInfoSaved": "Your shipping information has been saved",
-      "paymentUpdated": "Payment Updated",
-      "paymentMethodSaved": "Your payment method has been saved",
-      "orderCompleted": "Order Completed",
-      "orderConfirmation": "Your order has been successfully placed"
+      "shippingUpdated": "Доставка обновлена",
+      "shippingInfoSaved": "Информация о доставке сохранена",
+      "paymentUpdated": "Оплата обновлена",
+      "paymentMethodSaved": "Способ оплаты сохранен",
+      "orderCompleted": "Заказ завершен",
+      "orderConfirmation": "Ваш заказ успешно оформлен"
+    },
+    "error": {
+      "title": "Ошибка",
+      "proceedToPayment": "Не удалось перейти к оплате. Пожалуйста, попробуйте снова.",
+      "proceedToReview": "Не удалось перейти к проверке. Пожалуйста, попробуйте снова.",
+      "orderFailed": "Ошибка заказа",
+      "orderProcessingFailed": "Не удалось обработать ваш заказ. Пожалуйста, попробуйте снова."
     },
     "validation": {
-      "firstNameRequired": "First name is required",
+      "firstNameRequired": "Имя обязательно",
+      "orderDataMissing": "Данные заказа отсутствуют. Пожалуйста, начните оформление заново.",
+      "shippingInfoMissing": "Информация о доставке отсутствует. Пожалуйста, заполните данные доставки.",
+      "paymentMethodMissing": "Способ оплаты не выбран. Пожалуйста, выберите способ оплаты.",
+      "cartEmpty": "Ваша корзина пуста. Пожалуйста, добавьте товары перед оформлением.",
+      "invalidTotal": "Неверная сумма заказа. Пожалуйста, попробуйте снова.",
       "lastNameRequired": "Last name is required",
       "streetRequired": "Street address is required",
       "cityRequired": "City is required",
@@ -1648,9 +1673,11 @@
         "name": "Express Shipping",
         "description": "Delivery in 1-2 business days"
       },
-      "noMethods": "No shipping methods available",
-      "noMethodsDescription": "Please check your address or contact support",
-      "error": "Error loading shipping methods",
+      "noMethods": "Способы доставки недоступны",
+      "noMethodsDescription": "Пожалуйста, проверьте адрес или свяжитесь со службой поддержки",
+      "error": "Ошибка загрузки способов доставки",
+      "loadError": "Способы доставки",
+      "usingDefaultOptions": "Используются стандартные варианты доставки. Фактические тарифы могут отличаться.",
       "standard": {
         "name": "Standard Shipping",
         "description": "Delivery in 3-5 business days"

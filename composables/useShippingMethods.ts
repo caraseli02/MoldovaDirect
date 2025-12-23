@@ -116,6 +116,13 @@ export function useShippingMethods(address: Ref<Address>) {
       error.value = e instanceof Error ? e.message : 'Failed to load shipping methods'
       availableMethods.value = getFallbackMethods()
       console.error('Failed to load shipping methods:', e)
+      // Notify user that fallback methods are being used
+      const toast = useToast()
+      const { t } = useI18n()
+      toast.warning(
+        t('checkout.shippingMethod.loadError') || 'Shipping Methods',
+        t('checkout.shippingMethod.usingDefaultOptions') || 'Using default shipping options. Actual rates may vary.',
+      )
     }
     finally {
       loading.value = false

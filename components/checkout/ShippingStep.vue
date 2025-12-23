@@ -300,6 +300,10 @@ const proceedToPayment = async () => {
   }
   catch (error: any) {
     console.error('Failed to proceed to payment:', error)
+    toast.error(
+      t('checkout.error.title') || 'Error',
+      t('checkout.error.proceedToPayment') || 'Failed to proceed to payment. Please try again.',
+    )
   }
   finally {
     processing.value = false

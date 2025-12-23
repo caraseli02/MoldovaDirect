@@ -16,10 +16,12 @@
           id="guestEmail"
           :value="modelValue.email"
           type="email"
+          inputmode="email"
+          autocomplete="email"
           :placeholder="$t('checkout.guestInfo.emailPlaceholder')"
           :aria-invalid="!!errors.email"
           :aria-describedby="errors.email ? 'guestEmail-error' : undefined"
-          class="transition-colors"
+          class="transition-colors h-12 text-base"
           :class="{ 'aria-invalid:border-destructive': !!errors.email }"
           @blur="$emit('validate', 'email')"
           @input="handleEmailInput"
@@ -79,14 +81,6 @@ const handleEmailInput = (event: Event) => {
     email: target.value,
   })
   emit('clear-error', 'email')
-}
-
-const _handleCheckboxChange = (event: Event) => {
-  const target = event.target as HTMLInputElement
-  emit('update:modelValue', {
-    ...props.modelValue,
-    emailUpdates: target.checked,
-  })
 }
 
 // Styling now handled by shadcn-vue Input variants and aria-invalid

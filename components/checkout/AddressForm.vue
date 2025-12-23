@@ -104,8 +104,9 @@
             id="firstName"
             :value="localAddress.firstName"
             type="text"
+            autocomplete="given-name"
             :placeholder="$t('checkout.addressForm.firstNamePlaceholder')"
-            class="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors"
+            class="w-full px-4 py-3 border rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors text-base"
             :class="getFieldClasses('firstName')"
             @input="updateField('firstName', ($event.target as HTMLInputElement).value)"
             @blur="validateField('firstName')"
@@ -114,6 +115,7 @@
           <p
             v-if="fieldErrors.firstName"
             class="mt-1 text-sm text-red-600 dark:text-red-400"
+            role="alert"
           >
             {{ fieldErrors.firstName }}
           </p>
@@ -131,8 +133,9 @@
             id="lastName"
             :value="localAddress.lastName"
             type="text"
+            autocomplete="family-name"
             :placeholder="$t('checkout.addressForm.lastNamePlaceholder')"
-            class="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors"
+            class="w-full px-4 py-3 border rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors text-base"
             :class="getFieldClasses('lastName')"
             @input="updateField('lastName', ($event.target as HTMLInputElement).value)"
             @blur="validateField('lastName')"
@@ -141,6 +144,7 @@
           <p
             v-if="fieldErrors.lastName"
             class="mt-1 text-sm text-red-600 dark:text-red-400"
+            role="alert"
           >
             {{ fieldErrors.lastName }}
           </p>
@@ -160,8 +164,9 @@
           id="company"
           :value="localAddress.company"
           type="text"
+          autocomplete="organization"
           :placeholder="$t('checkout.addressForm.companyPlaceholder')"
-          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
+          class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors text-base"
           @input="updateField('company', ($event.target as HTMLInputElement).value)"
         />
       </div>
@@ -179,8 +184,9 @@
           id="street"
           :value="localAddress.street"
           type="text"
+          autocomplete="street-address"
           :placeholder="$t('checkout.addressForm.streetPlaceholder')"
-          class="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors"
+          class="w-full px-4 py-3 border rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors text-base"
           :class="getFieldClasses('street')"
           @input="updateField('street', ($event.target as HTMLInputElement).value)"
           @blur="validateField('street')"
@@ -189,6 +195,7 @@
         <p
           v-if="fieldErrors.street"
           class="mt-1 text-sm text-red-600 dark:text-red-400"
+          role="alert"
         >
           {{ fieldErrors.street }}
         </p>
@@ -208,8 +215,9 @@
             id="city"
             :value="localAddress.city"
             type="text"
+            autocomplete="address-level2"
             :placeholder="$t('checkout.addressForm.cityPlaceholder')"
-            class="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors"
+            class="w-full px-4 py-3 border rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors text-base"
             :class="getFieldClasses('city')"
             @input="updateField('city', ($event.target as HTMLInputElement).value)"
             @blur="validateField('city')"
@@ -218,6 +226,7 @@
           <p
             v-if="fieldErrors.city"
             class="mt-1 text-sm text-red-600 dark:text-red-400"
+            role="alert"
           >
             {{ fieldErrors.city }}
           </p>
@@ -235,8 +244,10 @@
             id="postalCode"
             :value="localAddress.postalCode"
             type="text"
+            inputmode="numeric"
+            autocomplete="postal-code"
             :placeholder="$t('checkout.addressForm.postalCodePlaceholder')"
-            class="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors"
+            class="w-full px-4 py-3 border rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors text-base"
             :class="getFieldClasses('postalCode')"
             @input="updateField('postalCode', ($event.target as HTMLInputElement).value)"
             @blur="validateField('postalCode')"
@@ -245,6 +256,7 @@
           <p
             v-if="fieldErrors.postalCode"
             class="mt-1 text-sm text-red-600 dark:text-red-400"
+            role="alert"
           >
             {{ fieldErrors.postalCode }}
           </p>
@@ -262,8 +274,9 @@
             id="province"
             :value="localAddress.province"
             type="text"
+            autocomplete="address-level1"
             :placeholder="$t('checkout.addressForm.provincePlaceholder')"
-            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
+            class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors text-base"
             @input="updateField('province', ($event.target as HTMLInputElement).value)"
           />
         </div>
@@ -281,7 +294,8 @@
         <select
           id="country"
           :value="localAddress.country"
-          class="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors"
+          autocomplete="country"
+          class="w-full px-4 py-3 border rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors text-base"
           :class="getFieldClasses('country')"
           @change="updateField('country', ($event.target as HTMLSelectElement).value); clearFieldError('country')"
           @blur="validateField('country')"
@@ -300,6 +314,7 @@
         <p
           v-if="fieldErrors.country"
           class="mt-1 text-sm text-red-600 dark:text-red-400"
+          role="alert"
         >
           {{ fieldErrors.country }}
         </p>
@@ -318,8 +333,10 @@
           id="phone"
           :value="localAddress.phone"
           type="tel"
+          inputmode="tel"
+          autocomplete="tel"
           :placeholder="$t('checkout.addressForm.phonePlaceholder')"
-          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
+          class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors text-base"
           @input="updateField('phone', ($event.target as HTMLInputElement).value)"
         />
       </div>

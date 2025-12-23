@@ -151,28 +151,51 @@ export function useCheckoutReview() {
   }
 
   const validateOrder = (): boolean => {
+    const toast = useToast()
+    const { t } = useI18n()
+
     if (!orderData.value) {
       console.error('Order data is missing')
+      toast.error(
+        t('checkout.error.title') || 'Error',
+        t('checkout.validation.orderDataMissing') || 'Order data is missing. Please start checkout again.',
+      )
       return false
     }
 
     if (!shippingInfo.value) {
       console.error('Shipping information is missing')
+      toast.error(
+        t('checkout.error.title') || 'Error',
+        t('checkout.validation.shippingInfoMissing') || 'Shipping information is missing. Please complete shipping details.',
+      )
       return false
     }
 
     if (!paymentMethod.value) {
       console.error('Payment method is missing')
+      toast.error(
+        t('checkout.error.title') || 'Error',
+        t('checkout.validation.paymentMethodMissing') || 'Payment method is missing. Please select a payment method.',
+      )
       return false
     }
 
     if (!orderData.value.items || orderData.value.items.length === 0) {
       console.error('Cart is empty')
+      toast.error(
+        t('checkout.error.title') || 'Error',
+        t('checkout.validation.cartEmpty') || 'Your cart is empty. Please add items before checkout.',
+      )
       return false
     }
 
     if (orderData.value.total <= 0) {
       console.error('Invalid order total')
+      toast.error(
+        t('checkout.error.title') || 'Error',
+        t('checkout.validation.invalidTotal') || 'Invalid order total. Please try again.',
+      )
       return false
     }
 
@@ -219,6 +242,12 @@ export function useCheckoutReview() {
     }
     catch (error: any) {
       console.error('Failed to process order:', error)
+      const toast = useToast()
+      const { t } = useI18n()
+      toast.error(
+        t('checkout.error.orderFailed') || 'Order Failed',
+        error.message || t('checkout.error.orderProcessingFailed') || 'Failed to process your order. Please try again.',
+      )
       return { nextStep: null, success: false }
     }
   }

@@ -5,13 +5,14 @@
     <NuxtLink
       v-if="backTo"
       :to="localePath(backTo)"
-      class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+      class="inline-flex items-center px-6 py-3 text-base font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors min-h-[48px]"
     >
       <svg
         class="w-4 h-4 mr-2"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
+        aria-hidden="true"
       >
         <path
           stroke-linecap="round"
@@ -26,7 +27,8 @@
 
     <Button
       :disabled="!canProceed || processing"
-      class="inline-flex items-center px-6 py-2 text-sm font-medium"
+      size="lg"
+      class="inline-flex items-center px-8 h-12 text-base font-medium min-w-[180px] justify-center"
       @click="$emit('proceed')"
     >
       <span
@@ -34,9 +36,10 @@
         class="inline-flex items-center"
       >
         <svg
-          class="animate-spin -ml-1 mr-2 h-4 w-4"
+          class="animate-spin -ml-1 mr-2 h-5 w-5"
           fill="none"
           viewBox="0 0 24 24"
+          aria-hidden="true"
         >
           <circle
             class="opacity-25"
@@ -60,10 +63,11 @@
       >
         {{ nextLabel || $t('checkout.continueToPayment') }}
         <svg
-          class="w-4 h-4 ml-2"
+          class="w-5 h-5 ml-2"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
+          aria-hidden="true"
         >
           <path
             stroke-linecap="round"
@@ -100,15 +104,3 @@ defineEmits<Emits>()
 
 const localePath = useLocalePath()
 </script>
-
-<style scoped>
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.animate-spin {
-  animation: spin 1s linear infinite;
-}
-</style>
