@@ -877,7 +877,7 @@
     }
   },
   "products": {
-    "commonProduct": "Produs",
+    "commonProduct": "acest produs",
     "viewDetails": "Vezi Detalii",
     "featured": "Recomandat",
     "sale": "Ofertă",
@@ -1143,8 +1143,7 @@
       "sharedSuccess": "Mulțumim că ai împărtășit descoperirea!",
       "shareText": "Descoperă acest favorit moldovenesc alături de mine.",
       "copyFallback": "Copiază linkul și trimite-l prietenilor."
-    },
-    "commonProduct": "acest produs"
+    }
   },
   "returns": {
     "badge": "Gata pentru MVP",
@@ -1985,6 +1984,117 @@
       "secondary": "Vezi FAQ",
       "noteTitle": "Program de Lucru",
       "noteDescription": "Luni până vineri, 9:00 - 18:00 CET"
+    }
+  },
+  "faqPage": {
+    "badge": "Centru de ajutor",
+    "title": "Întrebări frecvente",
+    "description": "Răspunsuri rapide despre comenzi, livrare, retururi și produse autentice din Moldova în Spania.",
+    "updated": "Actualizat săptămânal cu cele mai noi detalii despre livrare și produse.",
+    "ctaPrimary": "Vorbește cu suportul",
+    "ctaSecondary": "Urmărește comanda",
+    "responseTime": "Timp de răspuns: sub 1 oră lucrătoare",
+    "languages": "Suport în RO / EN / ES / RU",
+    "highlights": {
+      "title": "Cele mai frecvente întrebări",
+      "items": {
+        "dispatch": "Comenzile plasate înainte de 16:00 pleacă în aceeași zi din Madrid.",
+        "packaging": "Ambalaj rezistent la șocuri pentru vinuri și produse delicate.",
+        "support": "Echipă umană pregătită să rezolve rapid orice incident."
+      },
+      "turnaround": {
+        "title": "Prioritate la rezolvare",
+        "description": "Articolele deteriorate sau lipsă sunt înlocuite imediat după verificare."
+      }
+    },
+    "sections": {
+      "orders": {
+        "title": "Comenzi și livrare",
+        "items": {
+          "delivery": {
+            "question": "Cât de repede livrați?",
+            "answer": "Comenzile plasate înainte de 16:00 se trimit în aceeași zi și ajung în 48–72 de ore în Spania continentală. Opțiunile expres apar la checkout când sunt disponibile."
+          },
+          "shippingCosts": {
+            "question": "Care sunt costurile de livrare?",
+            "answer": "Livrarea standard se calculează la checkout în funcție de greutate și cod poștal. Oferim livrare gratuită pentru coșuri peste 69 € în Spania continentală."
+          },
+          "updates": {
+            "question": "Cum îmi urmăresc comanda?",
+            "answer": "Primești tracking prin e-mail și SMS după expediere. Poți verifica oricând progresul pe pagina Urmărește comanda cu e-mailul și numărul tău de comandă."
+          }
+        }
+      },
+      "payments": {
+        "title": "Plăți și facturi",
+        "items": {
+          "methods": {
+            "question": "Ce metode de plată acceptați?",
+            "answer": "Acceptăm principalele carduri, Bizum și transfer bancar securizat. Toate plățile sunt criptate și conforme PSD2."
+          },
+          "invoices": {
+            "question": "Pot primi factură pentru firmă?",
+            "answer": "Da. Adaugă datele companiei și codul fiscal la checkout, iar factura se emite automat după plată."
+          },
+          "addresses": {
+            "question": "Pot livra la o altă adresă?",
+            "answer": "Da, introdu o adresă de livrare diferită la checkout. Păstrăm datele de facturare pentru evidența ta."
+          }
+        }
+      },
+      "returns": {
+        "title": "Retururi și probleme",
+        "items": {
+          "policy": {
+            "question": "Care este politica de retur?",
+            "answer": "Ai 30 de zile pentru a returna produse sigilate în stare originală. Oferim etichetă preplătită sau ridicare prin curier unde este posibil."
+          },
+          "damaged": {
+            "question": "Ce fac dacă o sticlă ajunge deteriorată?",
+            "answer": "Fă o fotografie coletului și produsului deteriorat, apoi contactează suportul. Trimitem un înlocuitor sau rambursăm imediat."
+          },
+          "process": {
+            "question": "Cum încep un retur sau schimb?",
+            "answer": "Mergi la pagina de Retururi sau contactează suportul cu numărul comenzii. Confirmăm eligibilitatea și următorii pași în maximum o zi lucrătoare."
+          }
+        }
+      },
+      "products": {
+        "title": "Produse și autenticitate",
+        "items": {
+          "authenticity": {
+            "question": "Produsele sunt autentice din Moldova?",
+            "answer": "Da. Lucrăm direct cu producători moldoveni și certificăm originea pe fiecare etichetă. Centrul nostru din Madrid asigură depozitare controlată."
+          },
+          "storage": {
+            "question": "Cum păstrez vinurile și delicatesele?",
+            "answer": "Păstrează vinurile între 12–18°C ferite de lumină directă. Produsele de cămară trebuie într-un loc răcoros și uscat; refrigerează după deschidere dacă este indicat."
+          },
+          "allergens": {
+            "question": "Unde găsesc informații despre alergeni?",
+            "answer": "Detaliile despre alergeni sunt pe pagina fiecărui produs și pe etichetă. Contactează-ne pentru clarificări specifice înainte de comandă."
+          }
+        }
+      }
+    },
+    "quickLinks": {
+      "shipping": "Informații despre livrare",
+      "returns": "Politica de retur",
+      "tracking": "Urmărește comanda",
+      "contact": "Contactează suportul"
+    },
+    "needMore": {
+      "title": "Ai nevoie de ajutor suplimentar?",
+      "description": "Trimite numărul comenzii și o scurtă descriere — răspundem în mai puțin de o oră lucrătoare.",
+      "commitment": {
+        "title": "Promisiunea noastră",
+        "description": "Oameni reali, răspunsuri rapide și soluții proactive pentru probleme de livrare."
+      }
+    },
+    "seo": {
+      "title": "Întrebări frecvente - Moldova Direct",
+      "description": "Găsește răspunsuri rapide despre livrare, plăți, retururi și produse autentice din Moldova în Spania.",
+      "imageAlt": "Client care citește întrebările frecvente Moldova Direct"
     }
   }
 }

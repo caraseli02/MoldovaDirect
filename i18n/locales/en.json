@@ -2403,6 +2403,117 @@
     "notificationsEnabled": "Notifications enabled",
     "notificationsDisabled": "Notifications disabled"
   },
+  "faqPage": {
+    "badge": "Help Centre",
+    "title": "Frequently Asked Questions",
+    "description": "Quick answers about ordering, delivery, returns, and authentic Moldovan products in Spain.",
+    "updated": "Updated weekly with the latest delivery and product details.",
+    "ctaPrimary": "Talk to support",
+    "ctaSecondary": "Track my order",
+    "responseTime": "Response time: under 1 business hour",
+    "languages": "Support in EN / ES / RO / RU",
+    "highlights": {
+      "title": "What customers ask most",
+      "items": {
+        "dispatch": "Orders placed before 16:00 ship same day from Madrid.",
+        "packaging": "Shock-resistant packaging for wines and delicate products.",
+        "support": "Human support team ready to solve issues fast."
+      },
+      "turnaround": {
+        "title": "Priority handling",
+        "description": "Damaged or missing items are replaced immediately after verification."
+      }
+    },
+    "sections": {
+      "orders": {
+        "title": "Orders & delivery",
+        "items": {
+          "delivery": {
+            "question": "How fast do you deliver?",
+            "answer": "Orders placed before 16:00 ship the same day and arrive within 48–72 hours in mainland Spain. Express options appear at checkout where available."
+          },
+          "shippingCosts": {
+            "question": "What are the shipping costs?",
+            "answer": "Standard shipping is calculated at checkout based on weight and postcode. We offer free delivery on baskets over €69 in mainland Spain."
+          },
+          "updates": {
+            "question": "How do I track my order?",
+            "answer": "You'll receive tracking by email and SMS once dispatched. You can also follow progress anytime on the Track Order page with your email and order number."
+          }
+        }
+      },
+      "payments": {
+        "title": "Payments & invoices",
+        "items": {
+          "methods": {
+            "question": "Which payment methods do you accept?",
+            "answer": "We accept major cards, Bizum, and secure bank transfers. All payments are encrypted and PSD2 compliant."
+          },
+          "invoices": {
+            "question": "Can I get a business invoice?",
+            "answer": "Yes. Add your company details and tax ID at checkout, and your invoice will be issued automatically after payment."
+          },
+          "addresses": {
+            "question": "Can I ship to a different address?",
+            "answer": "Yes, enter a separate shipping address during checkout. We'll keep billing information for your records."
+          }
+        }
+      },
+      "returns": {
+        "title": "Returns & issues",
+        "items": {
+          "policy": {
+            "question": "What is your return policy?",
+            "answer": "You have 30 days to return unopened items in original condition. We’ll arrange a prepaid label or courier pickup where available."
+          },
+          "damaged": {
+            "question": "What if a bottle arrives damaged?",
+            "answer": "Take a photo of the package and the damaged item, then contact support. We ship a replacement or issue a refund immediately."
+          },
+          "process": {
+            "question": "How do I start a return or exchange?",
+            "answer": "Visit the Returns page or contact support with your order number. We’ll confirm eligibility and share the next steps within one business day."
+          }
+        }
+      },
+      "products": {
+        "title": "Products & authenticity",
+        "items": {
+          "authenticity": {
+            "question": "Are your products authentic from Moldova?",
+            "answer": "Yes. We work directly with Moldovan producers and certify origin on every label. Our Madrid fulfilment centre handles controlled storage."
+          },
+          "storage": {
+            "question": "How should I store wines and delicacies?",
+            "answer": "Keep wines between 12–18°C away from direct sunlight. Pantry items should stay in a cool, dry place; refrigerate after opening if indicated."
+          },
+          "allergens": {
+            "question": "Where can I see allergen information?",
+            "answer": "Allergen details are listed on each product page and label. Contact us for specific ingredient clarifications before ordering."
+          }
+        }
+      }
+    },
+    "quickLinks": {
+      "shipping": "Shipping information",
+      "returns": "Returns policy",
+      "tracking": "Track my order",
+      "contact": "Contact support"
+    },
+    "needMore": {
+      "title": "Need more help?",
+      "description": "Share your order number and a short note—our team replies within one business hour.",
+      "commitment": {
+        "title": "Service promise",
+        "description": "Real humans, fast answers, and proactive fixes for delivery issues."
+      }
+    },
+    "seo": {
+      "title": "Frequently Asked Questions - Moldova Direct",
+      "description": "Find quick answers about Moldova Direct shipping timelines, payment options, returns, and authentic Moldovan products in Spain.",
+      "imageAlt": "Customer browsing Moldova Direct frequently asked questions"
+    }
+  },
   "wineStory": {
     "hero": {
       "badge": "Moldova's Wine Heritage",
