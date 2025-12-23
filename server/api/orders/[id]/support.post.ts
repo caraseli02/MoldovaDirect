@@ -19,18 +19,18 @@ export default defineEventHandler(async (event) => {
     if (!authHeader) {
       throw createError({
         statusCode: 401,
-        statusMessage: 'Authentication required'
+        statusMessage: 'Authentication required',
       })
     }
 
     const { data: { user }, error: authError } = await supabase.auth.getUser(
-      authHeader.replace('Bearer ', '')
+      authHeader.replace('Bearer ', ''),
     )
 
     if (authError || !user) {
       throw createError({
         statusCode: 401,
-        statusMessage: 'Invalid authentication'
+        statusMessage: 'Invalid authentication',
       })
     }
 
@@ -39,7 +39,7 @@ export default defineEventHandler(async (event) => {
     if (!orderId) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Order ID is required'
+        statusMessage: 'Order ID is required',
       })
     }
 
@@ -50,21 +50,21 @@ export default defineEventHandler(async (event) => {
     if (!body.subject || body.subject.trim().length === 0) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Subject is required'
+        statusMessage: 'Subject is required',
       })
     }
 
     if (!body.message || body.message.trim().length === 0) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Message is required'
+        statusMessage: 'Message is required',
       })
     }
 
     if (!body.category) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Category is required'
+        statusMessage: 'Category is required',
       })
     }
 
@@ -72,7 +72,7 @@ export default defineEventHandler(async (event) => {
     if (!validCategories.includes(body.category)) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Invalid category'
+        statusMessage: 'Invalid category',
       })
     }
 
@@ -103,12 +103,12 @@ export default defineEventHandler(async (event) => {
       if (orderError.code === 'PGRST116') {
         throw createError({
           statusCode: 404,
-          statusMessage: 'Order not found'
+          statusMessage: 'Order not found',
         })
       }
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to fetch order'
+        statusMessage: 'Failed to fetch order',
       })
     }
 
@@ -129,7 +129,7 @@ export default defineEventHandler(async (event) => {
       trackingNumber: order.tracking_number,
       carrier: order.carrier,
       itemCount: order.order_items?.length || 0,
-      shippingAddress: order.shipping_address
+      shippingAddress: order.shipping_address,
     }
 
     // Create support ticket
@@ -147,7 +147,7 @@ export default defineEventHandler(async (event) => {
         customer_name: profile?.name || 'Unknown',
         customer_email: profile?.email || user.email,
         customer_phone: profile?.phone || null,
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
       })
       .select()
       .single()
@@ -157,13 +157,13 @@ export default defineEventHandler(async (event) => {
       if (ticketError.code === '42P01') {
         throw createError({
           statusCode: 503,
-          statusMessage: 'Support system is not yet configured. Please contact us directly.'
+          statusMessage: 'Support system is not yet configured. Please contact us directly.',
         })
       }
-      
+
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to create support ticket'
+        statusMessage: 'Failed to create support ticket',
       })
     }
 
@@ -185,7 +185,7 @@ export default defineEventHandler(async (event) => {
       orderNumber: order.order_number,
       orderStatus: order.status,
       orderTotal: order.total_eur,
-      locale
+      locale,
     }
 
     // Send confirmation email to customer
@@ -193,7 +193,7 @@ export default defineEventHandler(async (event) => {
       ticketEmailData,
       ticket.id,
       order.id,
-      { supabaseClient: supabase }
+      { supabaseClient: supabase },
     )
 
     if (!customerEmailResult.success) {
@@ -209,7 +209,7 @@ export default defineEventHandler(async (event) => {
       ticket.id,
       supportEmail,
       order.id,
-      { supabaseClient: supabase }
+      { supabaseClient: supabase },
     )
 
     if (!staffEmailResult.success) {
@@ -232,11 +232,12 @@ export default defineEventHandler(async (event) => {
         contactMethods: [
           'You will receive updates via email',
           'You can view ticket status in your account',
-          'For urgent matters, please call our support line'
-        ]
-      }
+          'For urgent matters, please call our support line',
+        ],
+      },
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     if (error.statusCode) {
       throw error
     }
@@ -244,7 +245,7 @@ export default defineEventHandler(async (event) => {
     console.error('Support ticket creation error:', error)
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 })

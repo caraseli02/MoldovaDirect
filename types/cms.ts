@@ -12,20 +12,20 @@
 /**
  * Available section types for the landing page
  */
-export type SectionType =
-  | 'announcement_bar'
-  | 'hero_carousel'
-  | 'hero_slide'
-  | 'category_grid'
-  | 'featured_products'
-  | 'collections_showcase'
-  | 'social_proof'
-  | 'how_it_works'
-  | 'services'
-  | 'newsletter'
-  | 'faq_preview'
-  | 'promotional_banner'
-  | 'flash_sale'
+export type SectionType
+  = | 'announcement_bar'
+    | 'hero_carousel'
+    | 'hero_slide'
+    | 'category_grid'
+    | 'featured_products'
+    | 'collections_showcase'
+    | 'social_proof'
+    | 'how_it_works'
+    | 'services'
+    | 'newsletter'
+    | 'faq_preview'
+    | 'promotional_banner'
+    | 'flash_sale'
 
 /**
  * Supported locales for multi-language content
@@ -191,15 +191,15 @@ export interface FlashSaleConfig extends BaseConfig {
 /**
  * Union type for all possible configurations
  */
-export type SectionConfig =
-  | AnnouncementBarConfig
-  | HeroSlideConfig
-  | HeroCarouselConfig
-  | FeaturedProductsConfig
-  | CategoryGridConfig
-  | PromotionalBannerConfig
-  | FlashSaleConfig
-  | BaseConfig
+export type SectionConfig
+  = | AnnouncementBarConfig
+    | HeroSlideConfig
+    | HeroCarouselConfig
+    | FeaturedProductsConfig
+    | CategoryGridConfig
+    | PromotionalBannerConfig
+    | FlashSaleConfig
+    | BaseConfig
 
 // =====================================================
 // DATABASE MODELS
@@ -228,7 +228,7 @@ export interface LandingSectionRow {
  */
 export interface LandingSection<
   T extends BaseTranslation = BaseTranslation,
-  C extends SectionConfig = SectionConfig
+  C extends SectionConfig = SectionConfig,
 > {
   id: string
   section_type: SectionType
@@ -236,7 +236,7 @@ export interface LandingSection<
   is_active: boolean
   starts_at: Date | null
   ends_at: Date | null
-  translations: Translations<T>
+  translations: T
   config: C
   created_by: string | null
   updated_by: string | null
@@ -420,7 +420,7 @@ export interface SectionTemplate {
  * Check if section is an announcement bar
  */
 export function isAnnouncementBarSection(
-  section: LandingSectionRow
+  section: LandingSectionRow,
 ): section is LandingSectionRow & { section_type: 'announcement_bar' } {
   return section.section_type === 'announcement_bar'
 }
@@ -429,7 +429,7 @@ export function isAnnouncementBarSection(
  * Check if section is a hero slide
  */
 export function isHeroSlideSection(
-  section: LandingSectionRow
+  section: LandingSectionRow,
 ): section is LandingSectionRow & { section_type: 'hero_slide' } {
   return section.section_type === 'hero_slide'
 }
@@ -438,7 +438,7 @@ export function isHeroSlideSection(
  * Check if section is featured products
  */
 export function isFeaturedProductsSection(
-  section: LandingSectionRow
+  section: LandingSectionRow,
 ): section is LandingSectionRow & { section_type: 'featured_products' } {
   return section.section_type === 'featured_products'
 }
@@ -450,7 +450,7 @@ export function requiresProducts(sectionType: SectionType): boolean {
   return [
     'featured_products',
     'flash_sale',
-    'promotional_banner'
+    'promotional_banner',
   ].includes(sectionType)
 }
 

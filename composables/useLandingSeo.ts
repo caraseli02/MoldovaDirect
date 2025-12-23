@@ -16,7 +16,7 @@ export interface LandingSeoInput {
   pageType?: 'website' | 'article' | 'webpage' | string
   keywords?: string[] | string
   robots?: string
-  structuredData?: Record<string, unknown> | Array<Record<string, unknown>>
+  structuredData?: Record<string, any> | Array<Record<string, any>>
   breadcrumbs?: BreadcrumbInput[]
 }
 
@@ -69,8 +69,8 @@ export function useLandingSeo(input: LandingSeoInput): LandingSeoHelpers {
   const pageType = input.pageType ?? SEO_DEFAULTS.DEFAULT_PAGE_TYPE
 
   // Properly type locale codes from i18n
-  const localeCodes = (locales?.value || []).map((loc: any) =>
-    typeof loc === 'string' ? loc : loc.code
+  const localeCodes = (locales?.value || []).map((loc: { code: string }) =>
+    typeof loc === 'string' ? loc : loc.code,
   )
   const currentLocale = locale?.value || 'es'
 
@@ -90,7 +90,7 @@ export function useLandingSeo(input: LandingSeoInput): LandingSeoHelpers {
     { name: 'twitter:title', content: input.title },
     { name: 'twitter:description', content: input.description },
     { name: 'twitter:image', content: ogImage },
-    { name: 'twitter:image:alt', content: imageAlt }
+    { name: 'twitter:image:alt', content: imageAlt },
   ].filter(Boolean) as MetaObject['meta']
 
   const links: MetaObject['link'] = [{ rel: 'canonical', href: canonicalUrl }]
@@ -103,10 +103,11 @@ export function useLandingSeo(input: LandingSeoInput): LandingSeoHelpers {
     const basePath = input.path || routePath.replace(localePattern, '') || '/'
 
     for (const code of localeCodes) {
-      if (code !== currentLocale) {
+      if (code !== currentLocale && meta) {
         meta.push({ property: 'og:locale:alternate', content: code.replace('_', '-') })
       }
-      const localizedPath = localePath(basePath, code)
+      const localeCode = code as 'es' | 'en' | 'ro' | 'ru'
+      const localizedPath = localePath(basePath, localeCode)
       links.push({ rel: 'alternate', hreflang: code, href: toAbsoluteUrl(localizedPath) })
     }
     links.push({ rel: 'alternate', hreflang: 'x-default', href: canonicalUrl })
@@ -119,8 +120,8 @@ export function useLandingSeo(input: LandingSeoInput): LandingSeoHelpers {
     for (const payload of payloads) {
       scripts.push({
         type: 'application/ld+json',
-        children: JSON.stringify(payload)
-      })
+        innerHTML: JSON.stringify(payload),
+      } as any)
     }
   }
 
@@ -128,29 +129,29 @@ export function useLandingSeo(input: LandingSeoInput): LandingSeoHelpers {
     const breadcrumbList = {
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',
-      itemListElement: input.breadcrumbs.map((crumb, index) => ({
+      'itemListElement': input.breadcrumbs.map((crumb, index) => ({
         '@type': 'ListItem',
-        position: index + 1,
-        name: crumb.name,
-        item: toAbsoluteUrl(crumb.path)
-      }))
+        'position': index + 1,
+        'name': crumb.name,
+        'item': toAbsoluteUrl(crumb.path),
+      })),
     }
     scripts.push({
       type: 'application/ld+json',
-      children: JSON.stringify(breadcrumbList)
-    })
+      innerHTML: JSON.stringify(breadcrumbList),
+    } as any)
   }
 
   useHead({
     title: input.title,
     meta,
     link: links,
-    script: scripts
+    script: scripts,
   })
 
   return {
     canonicalUrl,
     siteUrl,
-    toAbsoluteUrl
+    toAbsoluteUrl,
   }
 }

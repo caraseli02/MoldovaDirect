@@ -1,6 +1,6 @@
 <!--
   Email Template Manager Component
-  
+
   Requirements addressed:
   - 5.1: Edit email template HTML and styling
   - 5.2: Preview function to test email appearance
@@ -20,13 +20,13 @@
           <button
             v-for="type in templateTypes"
             :key="type.value"
-            @click="selectedType = type.value"
             :class="[
               'p-4 border-2 rounded-lg text-left transition-all',
               selectedType === type.value
                 ? 'border-red-500 bg-red-50 dark:bg-red-900/20'
-                : 'border-gray-200 dark:border-gray-700 hover:border-gray-300'
+                : 'border-gray-200 dark:border-gray-700 hover:border-gray-300',
             ]"
+            @click="selectedType = type.value"
           >
             <div class="font-semibold text-gray-900 dark:text-white">
               {{ type.label }}
@@ -49,13 +49,13 @@
           <button
             v-for="locale in supportedLocales"
             :key="locale.code"
-            @click="selectedLocale = locale.code"
             :class="[
               'px-4 py-2 rounded-lg font-medium transition-all',
               selectedLocale === locale.code
                 ? 'bg-red-500 text-white'
-                : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200'
+                : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200',
             ]"
+            @click="selectedLocale = locale.code"
           >
             {{ locale.name }}
           </button>
@@ -85,16 +85,16 @@
             <CardTitle>Template Editor</CardTitle>
             <div class="flex gap-2">
               <Button
-                @click="validateTemplate"
                 variant="outline"
                 size="sm"
+                @click="validateTemplate"
               >
                 Validate
               </Button>
               <Button
-                @click="saveTemplate"
                 :disabled="saving || !hasChanges"
                 size="sm"
+                @click="saveTemplate"
               >
                 {{ saving ? 'Saving...' : 'Save Changes' }}
               </Button>
@@ -138,16 +138,22 @@
               rows="20"
               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-mono text-sm"
               placeholder="Enter template translations JSON"
-            />
+            ></textarea>
           </div>
 
           <!-- Validation Messages -->
-          <div v-if="validationErrors.length > 0" class="mt-4">
+          <div
+            v-if="validationErrors.length > 0"
+            class="mt-4"
+          >
             <Alert variant="destructive">
               <AlertTitle>Validation Errors</AlertTitle>
               <AlertDescription>
                 <ul class="list-disc list-inside space-y-1">
-                  <li v-for="(error, index) in validationErrors" :key="index">
+                  <li
+                    v-for="(error, index) in validationErrors"
+                    :key="index"
+                  >
                     {{ error }}
                   </li>
                 </ul>
@@ -155,12 +161,18 @@
             </Alert>
           </div>
 
-          <div v-if="validationWarnings.length > 0" class="mt-4">
+          <div
+            v-if="validationWarnings.length > 0"
+            class="mt-4"
+          >
             <Alert>
               <AlertTitle>Warnings</AlertTitle>
               <AlertDescription>
                 <ul class="list-disc list-inside space-y-1">
-                  <li v-for="(warning, index) in validationWarnings" :key="index">
+                  <li
+                    v-for="(warning, index) in validationWarnings"
+                    :key="index"
+                  >
                     {{ warning }}
                   </li>
                 </ul>
@@ -176,9 +188,9 @@
           <div class="flex items-center justify-between">
             <CardTitle>Preview</CardTitle>
             <Button
-              @click="refreshPreview"
               variant="outline"
               size="sm"
+              @click="refreshPreview"
             >
               Refresh Preview
             </Button>
@@ -191,7 +203,7 @@
               :srcdoc="previewHtml"
               class="w-full h-[600px] bg-white"
               sandbox="allow-same-origin"
-            />
+            ></iframe>
           </div>
         </CardContent>
       </Card>
@@ -200,7 +212,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
 import { Button } from '~/components/ui/button'
 import { Alert, AlertTitle, AlertDescription } from '~/components/ui/alert'
@@ -209,40 +221,40 @@ const templateTypes = [
   {
     value: 'order_confirmation',
     label: 'Order Confirmation',
-    description: 'Sent when order is placed'
+    description: 'Sent when order is placed',
   },
   {
     value: 'order_processing',
     label: 'Order Processing',
-    description: 'Sent when order is being processed'
+    description: 'Sent when order is being processed',
   },
   {
     value: 'order_shipped',
     label: 'Order Shipped',
-    description: 'Sent when order is shipped'
+    description: 'Sent when order is shipped',
   },
   {
     value: 'order_delivered',
     label: 'Order Delivered',
-    description: 'Sent when order is delivered'
+    description: 'Sent when order is delivered',
   },
   {
     value: 'order_cancelled',
     label: 'Order Cancelled',
-    description: 'Sent when order is cancelled'
+    description: 'Sent when order is cancelled',
   },
   {
     value: 'order_issue',
     label: 'Order Issue',
-    description: 'Sent when there is an issue'
-  }
+    description: 'Sent when there is an issue',
+  },
 ]
 
 const supportedLocales = [
   { code: 'en', name: 'English' },
   { code: 'es', name: 'Español' },
   { code: 'ro', name: 'Română' },
-  { code: 'ru', name: 'Русский' }
+  { code: 'ru', name: 'Русский' },
 ]
 
 const selectedType = ref('order_confirmation')
@@ -250,7 +262,7 @@ const selectedLocale = ref('en')
 const templateContent = ref('')
 const templateData = ref({
   subject: '',
-  preheader: ''
+  preheader: '',
 })
 const previewHtml = ref('')
 const saving = ref(false)
@@ -275,20 +287,21 @@ async function loadTemplate() {
     const { data } = await useFetch('/api/admin/email-templates/get', {
       params: {
         type: selectedType.value,
-        locale: selectedLocale.value
-      }
+        locale: selectedLocale.value,
+      },
     })
 
     if (data.value) {
       templateContent.value = JSON.stringify(data.value.translations, null, 2)
       templateData.value = {
         subject: data.value.subject || '',
-        preheader: data.value.preheader || ''
+        preheader: data.value.preheader || '',
       }
       hasChanges.value = false
       await refreshPreview()
     }
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Failed to load template:', error)
   }
 }
@@ -301,7 +314,7 @@ function validateTemplate() {
   // Validate JSON
   try {
     const parsed = JSON.parse(templateContent.value)
-    
+
     // Check required fields
     const requiredFields = ['title', 'greeting', 'message', 'orderNumber', 'orderDate', 'thankYou']
     for (const field of requiredFields) {
@@ -320,7 +333,8 @@ function validateTemplate() {
         }
       }
     }
-  } catch (error) {
+  }
+  catch {
     validationErrors.value.push('Invalid JSON format')
   }
 
@@ -344,14 +358,15 @@ async function refreshPreview() {
         locale: selectedLocale.value,
         translations: JSON.parse(templateContent.value),
         subject: templateData.value.subject,
-        preheader: templateData.value.preheader
-      }
+        preheader: templateData.value.preheader,
+      },
     })
 
     if (data.value) {
       previewHtml.value = data.value.html
     }
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Failed to generate preview:', error)
     useToast().error('Failed to generate preview')
   }
@@ -360,7 +375,7 @@ async function refreshPreview() {
 // Save template
 async function saveTemplate() {
   validateTemplate()
-  
+
   if (validationErrors.value.length > 0) {
     useToast().error('Please fix validation errors before saving')
     return
@@ -373,18 +388,20 @@ async function saveTemplate() {
       body: {
         type: selectedType.value,
         locale: selectedLocale.value,
-        translations: JSON.parse(templateContent.value),
+        translations: JSON.parse(templateContent.value) as any,
         subject: templateData.value.subject,
-        preheader: templateData.value.preheader
-      }
+        preheader: templateData.value.preheader,
+      },
     })
 
     hasChanges.value = false
     useToast().success('Template saved successfully')
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Failed to save template:', error)
     useToast().error('Failed to save template')
-  } finally {
+  }
+  finally {
     saving.value = false
   }
 }

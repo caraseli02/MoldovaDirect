@@ -67,6 +67,6 @@ export function useProductStockStatus(stockQuantity: ComputedRef<number>) {
     stockStatusText,
     estimatedDelivery,
     stockUrgencyMessage,
-    isInStock
+    isInStock,
   }
 }

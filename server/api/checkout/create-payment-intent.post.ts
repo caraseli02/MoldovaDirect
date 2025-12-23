@@ -9,11 +9,11 @@ function getStripe(): Stripe {
     if (!secretKey) {
       throw createError({
         statusCode: 503,
-        statusMessage: 'Credit card payments are currently unavailable - service not configured'
+        statusMessage: 'Credit card payments are currently unavailable - service not configured',
       })
     }
     stripe = new Stripe(secretKey, {
-      apiVersion: '2024-06-20'
+      apiVersion: '2025-08-27.basil',
     })
   }
   return stripe
@@ -28,7 +28,7 @@ export default defineEventHandler(async (event) => {
     if (!amount || !sessionId) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Missing required fields: amount, sessionId'
+        statusMessage: 'Missing required fields: amount, sessionId',
       })
     }
 
@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
     if (!Number.isInteger(amount) || amount <= 0) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Amount must be a positive integer in cents'
+        statusMessage: 'Amount must be a positive integer in cents',
       })
     }
 
@@ -47,11 +47,11 @@ export default defineEventHandler(async (event) => {
       currency: currency.toLowerCase(),
       metadata: {
         sessionId,
-        source: 'moldovan-products-checkout'
+        source: 'moldovan-products-checkout',
       },
       automatic_payment_methods: {
-        enabled: true
-      }
+        enabled: true,
+      },
     })
 
     return {
@@ -61,35 +61,40 @@ export default defineEventHandler(async (event) => {
         client_secret: paymentIntent.client_secret,
         amount: paymentIntent.amount,
         currency: paymentIntent.currency,
-        status: paymentIntent.status
-      }
+        status: paymentIntent.status,
+      },
     }
-
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Failed to create payment intent:', error)
-    
-    if (error.statusCode) {
+
+    // Check if it's a createError with statusCode
+    if (error && typeof error === 'object' && 'statusCode' in error) {
       throw error
     }
 
     // Handle Stripe errors
-    if (error.type === 'StripeCardError') {
-      throw createError({
-        statusCode: 400,
-        statusMessage: error.message
-      })
-    }
+    if (error && typeof error === 'object' && 'type' in error) {
+      const stripeError = error as { type: string, message?: string }
 
-    if (error.type === 'StripeInvalidRequestError') {
-      throw createError({
-        statusCode: 400,
-        statusMessage: 'Invalid payment request'
-      })
+      if (stripeError.type === 'StripeCardError') {
+        throw createError({
+          statusCode: 400,
+          statusMessage: stripeError.message || 'Card error',
+        })
+      }
+
+      if (stripeError.type === 'StripeInvalidRequestError') {
+        throw createError({
+          statusCode: 400,
+          statusMessage: 'Invalid payment request',
+        })
+      }
     }
 
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to create payment intent'
+      statusMessage: 'Failed to create payment intent',
     })
   }
 })

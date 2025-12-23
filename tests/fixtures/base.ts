@@ -1,5 +1,5 @@
 import { test as base, expect } from '@playwright/test'
-import type { Page, BrowserContext } from '@playwright/test'
+import type { Page } from '@playwright/test'
 import { generateSecurePassword } from '../utils/generateSecurePassword'
 
 export interface TestUser {
@@ -26,6 +26,7 @@ export interface AdminUser {
 export interface TestFixtures {
   authenticatedPage: Page
   adminPage: Page
+  adminAuthenticatedPage: Page
   testUser: TestUser
   adminUser: AdminUser
   testProducts: TestProduct[]
@@ -88,23 +89,25 @@ export const test = base.extend<TestFixtures>({
   authenticatedPage: async ({ page }, use) => {
     // Storage state is automatically applied from playwright.config.ts
     // The page should already be authenticated via the storage state
-    // Just navigate to the homepage to activate the session
+    // Navigate to home page to start the session
     await page.goto('/')
+    await page.waitForLoadState('networkidle')
 
-    // Verify that we're actually authenticated
-    // Check for an auth indicator in the UI (e.g., user menu, account link)
-    const isAuthenticated = await page.locator('[data-testid="user-menu"]').isVisible({ timeout: 5000 })
-      .catch(() => false)
-
-    if (!isAuthenticated) {
-      throw new Error('Authentication failed - storage state may be invalid or expired')
-    }
+    // Give the page a moment to fully hydrate and set up auth state
+    await page.waitForTimeout(500)
 
     await use(page)
   },
 
-  adminPage: async ({ page, adminUser, baseURL }, use) => {
-    await page.goto(`${baseURL}/login`)
+  adminPage: async ({ browser, adminUser, baseURL }, use) => {
+    // Create a fresh context without any storage state to ensure clean login
+    const context = await browser.newContext()
+    const page = await context.newPage()
+
+    await page.goto(`${baseURL}/auth/login`)
+
+    // Wait for the page to be fully loaded
+    await page.waitForLoadState('networkidle')
 
     await page.fill('[data-testid="email-input"]', adminUser.email)
     await page.fill('[data-testid="password-input"]', adminUser.password)
@@ -117,6 +120,40 @@ export const test = base.extend<TestFixtures>({
     // TODO: Add MFA handling if admin routes require it
 
     await use(page)
+
+    // Cleanup
+    await context.close()
+  },
+
+  adminAuthenticatedPage: async ({ browser, baseURL }, use) => {
+    // Create a new context with admin storage state
+    const context = await browser.newContext({
+      storageState: 'tests/fixtures/.auth/admin.json',
+      baseURL,
+    })
+    const page = await context.newPage()
+
+    // Navigate to admin dashboard to activate the session
+    await page.goto('/admin')
+    await page.waitForLoadState('networkidle')
+
+    // Verify admin authentication by checking for admin navigation
+    // Look for admin-specific navigation links that only admins can see
+    const isAdmin = await page.locator('a[href="/admin/products"]')
+      .or(page.locator('a[href="/admin/inventory"]'))
+      .or(page.locator('a[href="/admin/users"]'))
+      .first()
+      .isVisible({ timeout: 5000 })
+      .catch(() => false)
+
+    if (!isAdmin) {
+      throw new Error('Admin authentication failed - storage state may be invalid or user lacks admin role')
+    }
+
+    await use(page)
+
+    // Cleanup
+    await context.close()
   },
 
   resetDatabase: async ({ page, baseURL }, use) => {

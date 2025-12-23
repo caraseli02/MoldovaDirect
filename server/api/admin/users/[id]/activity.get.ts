@@ -1,9 +1,9 @@
 /**
  * Admin Users API - Get User Activity
- * 
+ *
  * Requirements addressed:
  * - 4.6: Display login history and account modifications
- * 
+ *
  * Provides user activity history for admin interface.
  */
 
@@ -27,7 +27,7 @@ export default defineEventHandler(async (event) => {
     if (!userId) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'User ID is required'
+        statusMessage: 'User ID is required',
       })
     }
 
@@ -36,22 +36,24 @@ export default defineEventHandler(async (event) => {
     const {
       activity_type,
       limit = 50,
-      offset = 0
+      offset = 0,
     } = query
 
     // Verify admin authentication
     const supabase = serverSupabaseServiceRole(event)
 
     // Verify user exists
-    let user: any = null
+    let user = null
     try {
       const { data, error: userError } = await supabase.auth.admin.getUserById(userId)
       if (userError) {
         console.warn('Failed to fetch user for activity:', userError.message)
-      } else {
+      }
+      else {
         user = data
       }
-    } catch (error) {
+    }
+    catch (error: any) {
       console.warn('Auth admin API not available:', error)
     }
 
@@ -59,11 +61,11 @@ export default defineEventHandler(async (event) => {
     if (!user && userId.startsWith('user-')) {
       return getMockActivity(userId)
     }
-    
+
     if (!user?.user) {
       throw createError({
         statusCode: 404,
-        statusMessage: 'User not found'
+        statusMessage: 'User not found',
       })
     }
 
@@ -89,7 +91,7 @@ export default defineEventHandler(async (event) => {
       // Return empty array if activity logs table doesn't exist or has issues
       return {
         success: true,
-        data: []
+        data: [],
       }
     }
 
@@ -109,8 +111,8 @@ export default defineEventHandler(async (event) => {
         user_agent: undefined,
         metadata: {
           source: 'auth_system',
-          email: user.user.email
-        }
+          email: user.user.email,
+        },
       })
 
       // Add last login if available
@@ -122,8 +124,8 @@ export default defineEventHandler(async (event) => {
           ip_address: undefined,
           user_agent: undefined,
           metadata: {
-            source: 'auth_system'
-          }
+            source: 'auth_system',
+          },
         })
       }
 
@@ -137,13 +139,13 @@ export default defineEventHandler(async (event) => {
           user_agent: undefined,
           metadata: {
             source: 'auth_system',
-            email: user.user.email
-          }
+            email: user.user.email,
+          },
         })
       }
 
-      activityLogs = authActivities.sort((a, b) => 
-        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      activityLogs = authActivities.sort((a, b) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
       )
     }
 
@@ -166,43 +168,44 @@ export default defineEventHandler(async (event) => {
           metadata: {
             order_id: order.id,
             order_number: order.order_number,
-            status: order.status
-          }
+            status: order.status,
+          },
         }))
 
         activityLogs = [...activityLogs, ...orderActivities]
           .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
           .slice(0, Number(limit))
       }
-    } catch (error) {
+    }
+    catch (error: any) {
       console.warn('Failed to fetch order activities:', error)
     }
 
     return {
       success: true,
-      data: activityLogs
+      data: activityLogs,
     }
-
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Error in admin user activity API:', error)
-    
+
     if (error.statusCode) {
       throw error
     }
-    
+
     // Return mock data as fallback
     const userId = getRouterParam(event, 'id')
     if (userId && userId.startsWith('user-')) {
       console.warn('Returning mock activity due to error')
       return getMockActivity(userId)
     }
-    
+
     return {
       success: false,
       error: {
         statusCode: 500,
-        statusMessage: error instanceof Error ? error.message : 'Failed to fetch user activity'
-      }
+        statusMessage: error instanceof Error ? error.message : 'Failed to fetch user activity',
+      },
     }
   }
 })
@@ -218,7 +221,7 @@ function getMockActivity(userId: string) {
       created_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
       ip_address: '192.168.1.1',
       user_agent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-      metadata: { source: 'web', browser: 'Chrome' }
+      metadata: { source: 'web', browser: 'Chrome' },
     },
     {
       id: `${userId}-activity-2`,
@@ -226,7 +229,7 @@ function getMockActivity(userId: string) {
       created_at: new Date(Date.now() - 25 * 60 * 60 * 1000).toISOString(),
       ip_address: '192.168.1.1',
       user_agent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-      metadata: { page: '/products', source: 'web' }
+      metadata: { page: '/products', source: 'web' },
     },
     {
       id: `${userId}-activity-3`,
@@ -234,12 +237,12 @@ function getMockActivity(userId: string) {
       created_at: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
       ip_address: '192.168.1.1',
       user_agent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-      metadata: { source: 'web', referrer: 'google.com' }
-    }
+      metadata: { source: 'web', referrer: 'google.com' },
+    },
   ]
 
   return {
     success: true,
-    data: mockActivities
+    data: mockActivities,
   }
 }

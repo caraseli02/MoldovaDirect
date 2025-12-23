@@ -1,6 +1,15 @@
 // Main types export file for Moldova Direct
 // This file re-exports all types for easy importing
 
+// Import types needed for internal type definitions
+import type {
+  Product as DatabaseProduct,
+  ProductWithRelations as DatabaseProductWithRelations,
+  Category as DatabaseCategory,
+  CategoryWithChildren as DatabaseCategoryWithChildren,
+  ApiError as DatabaseApiError,
+} from './database'
+
 // CMS types
 export type {
   // Section types
@@ -52,7 +61,7 @@ export type {
 
   // Utility types
   SectionTypeMeta,
-  SectionTemplate
+  SectionTemplate,
 } from './cms'
 
 export {
@@ -61,30 +70,30 @@ export {
   isHeroSlideSection,
   isFeaturedProductsSection,
   requiresProducts,
-  isSectionActive
+  isSectionActive,
 } from './cms'
 
 // Database types
 export type {
   // Core types
   Translations,
-  
+
   // Category types
   Category,
   CategoryWithChildren,
   CategoryFilter,
-  
+
   // Product types
   Product,
   ProductImage,
   ProductAttribute,
   ProductWithRelations,
-  
+
   // Filtering and search
   ProductFilters,
   PriceRange,
   AttributeFilter,
-  
+
   // API response types
   Pagination,
   ProductListResponse,
@@ -92,41 +101,41 @@ export type {
   CategoryListResponse,
   CategoryDetailResponse,
   SearchResponse,
-  
+
   // Cart types
   Cart,
   CartItem,
   CartWithItems,
-  
+
   // Order types
   Address,
   Order,
   OrderItem,
   OrderWithItems,
-  
+
   // Inventory types
   InventoryLog,
-  
+
   // User types
   Profile,
-  
+
   // Utility types
   ApiError,
   ApiResponse,
-  
+
   // Form types
   ProductSearchForm,
   ProductFilterForm,
-  
+
   // Component prop types
   ProductCardProps,
   ProductGridProps,
   ProductFilterProps,
   CategoryNavigationProps,
-  
+
   // Store state types
   ProductStoreState,
-  CartStoreState
+  CartStoreState,
 } from './database'
 
 // API types
@@ -139,7 +148,7 @@ export type {
   GetCategoryRequest,
   GetFeaturedProductsRequest,
   GetRelatedProductsRequest,
-  
+
   // Response types
   ProductsApiResponse,
   ProductApiResponse,
@@ -147,37 +156,37 @@ export type {
   CategoryApiResponse,
   SearchApiResponse,
   FeaturedProductsApiResponse,
-  
+
   // Query types
   ProductQueryOptions,
   CategoryQueryOptions,
-  
+
   // Search types
   SearchQuery,
   SearchResult,
   FilterAggregation,
-  
+
   // Cache types
   CacheKey,
   CacheEntry,
   CacheOptions,
-  
+
   // Validation types
   ValidationError,
   ValidationResult,
-  
+
   // Localization types
   LocalizedContent,
   LocalizationContext,
   LocalizedApiResponse,
-  
+
   // Performance types
   PerformanceMetrics,
   ApiMetrics,
-  
+
   // Error types
   ApiErrorDetails,
-  
+
   // Webhook types
   WebhookEvent,
   WebhookPayload,
@@ -190,10 +199,10 @@ export type {
   AdminCategoryRequest,
   BulkOperationRequest,
   BulkOperationResponse,
-  
+
   // Export types
   ExportRequest,
-  ExportResponse
+  ExportResponse,
 } from './api'
 
 // Auth types (re-export existing)
@@ -210,7 +219,7 @@ export type {
   AuthResponse,
   ErrorResponse,
   SecurityConfig,
-  RateLimitConfig
+  RateLimitConfig,
 } from './auth'
 
 // Recommendation types
@@ -219,50 +228,50 @@ export type {
   RecommendationContext,
   RecommendationAlgorithm,
   RecommendationReasonType,
-  
+
   // Request/Response types
   RecommendationRequest,
   RecommendationResponse,
   ProductRecommendation,
   RecommendationReason,
   RecommendationMetadata,
-  
+
   // Analytics types
   RecommendationInteractionType,
   RecommendationAnalyticsEvent,
   RecommendationAnalyticsBatch,
-  
+
   // User preferences
   UserRecommendationPreferences,
   AnonymousRecommendationPreferences,
-  
+
   // Recently viewed types
   RecentlyViewedProduct,
   RecentlyViewedStorage,
-  
+
   // Error types
   RecommendationErrorCode,
   RecommendationError,
-  
+
   // Component prop types
   ProductRecommendationsProps,
   RecommendationCardProps,
   RecentlyViewedProps,
-  
+
   // Composable return types
   UseRecommendationsReturn,
   UseRecentlyViewedReturn,
   UseRecommendationAnalyticsReturn,
-  
+
   // Algorithm types
   ContentBasedParams,
   CollaborativeFilteringParams,
   BehavioralParams,
   AlgorithmConfig,
-  
+
   // Cache types
   RecommendationCacheKey,
-  CachedRecommendation
+  CachedRecommendation,
 } from './recommendations'
 
 // Recommendation constants
@@ -275,28 +284,28 @@ export type {
   EmailStatus,
   EmailLog,
   EmailMetadata,
-  
+
   // Input types
   CreateEmailLogInput,
   UpdateEmailLogInput,
-  
+
   // Response types
   EmailLogWithOrder,
   EmailLogFilters,
   EmailLogListResponse,
-  
+
   // Statistics types
   EmailDeliveryStats,
-  
+
   // Configuration types
-  EmailRetryConfig
+  EmailRetryConfig,
 } from './email'
 
 // Email constants and utilities
 export {
   DEFAULT_EMAIL_RETRY_CONFIG,
   calculateRetryDelay,
-  shouldRetryEmail
+  shouldRetryEmail,
 } from './email'
 
 // Wine storytelling types
@@ -307,14 +316,14 @@ export type {
   ProducerInfo,
   TastingNotes,
   PairingInfo,
-  WineProductAttributes
+  WineProductAttributes,
 } from './product-attributes'
 
 export {
   // Product attribute type guards
   isWineProduct,
   hasProducerInfo,
-  hasRegionInfo
+  hasRegionInfo,
 } from './product-attributes'
 
 // Wine regions types
@@ -324,7 +333,7 @@ export type {
   RegionFilter,
   RegionGeoJSONFeature,
   RegionGeoJSON,
-  UseWineRegionsReturn
+  UseWineRegionsReturn,
 } from './wine-regions'
 
 // Producer types
@@ -333,7 +342,7 @@ export type {
   ProducerCardData,
   ProducerDetailData,
   ProducerCarouselOptions,
-  UseProducersReturn
+  UseProducersReturn,
 } from './producers'
 
 // Pairing guides types
@@ -343,7 +352,7 @@ export type {
   PairingFilters,
   PairingSectionOptions,
   PairingEducation,
-  UsePairingGuidesReturn
+  UsePairingGuidesReturn,
 } from './pairing-guides'
 
 // =============================================
@@ -417,31 +426,31 @@ export type CartId = Brand<number, 'CartId'>
 
 // Type that includes relations based on a condition
 export type WithRelations<T, Include extends boolean> = Include extends true
-  ? T extends Product
-    ? ProductWithRelations
-    : T extends Category
-    ? CategoryWithChildren
-    : T
+  ? T extends DatabaseProduct
+    ? DatabaseProductWithRelations
+    : T extends DatabaseCategory
+      ? DatabaseCategoryWithChildren
+      : T
   : T
 
 // Type for API responses that may include error states
-export type ApiResult<T> = 
-  | { success: true; data: T; error?: never }
-  | { success: false; data?: never; error: ApiError }
+export type ApiResult<T>
+  = | { success: true, data: T, error?: never }
+    | { success: false, data?: never, error: DatabaseApiError }
 
 // =============================================
 // TEMPLATE LITERAL TYPES
 // =============================================
 
 // API endpoint paths
-export type ApiEndpoint = 
-  | '/api/products'
-  | '/api/products/[slug]'
-  | '/api/categories'
-  | '/api/categories/[slug]'
-  | '/api/search'
-  | '/api/products/featured'
-  | '/api/products/related/[id]'
+export type ApiEndpoint
+  = | '/api/products'
+    | '/api/products/[slug]'
+    | '/api/categories'
+    | '/api/categories/[slug]'
+    | '/api/search'
+    | '/api/products/featured'
+    | '/api/products/related/[id]'
 
 // Image size variants
 export type ImageSize = 'thumbnail' | 'small' | 'medium' | 'large' | 'original'
@@ -489,12 +498,12 @@ export {
   isProductSortOption,
   isStockStatus,
   isProductFilters,
-  
+
   // Validation functions
   validateProduct,
   validateCategory,
   validateProductFilters,
-  
+
   // Transformation functions
   transformProduct,
   getLocalizedText,
@@ -503,9 +512,9 @@ export {
   generateSlug,
   sanitizeSearchQuery,
   buildCategoryBreadcrumbs,
-  
+
   // Utility functions
   deepClone,
   debounce,
-  throttle
+  throttle,
 } from './guards'

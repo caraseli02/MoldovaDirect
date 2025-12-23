@@ -3,23 +3,32 @@
     <!-- Search Bar -->
     <div class="relative">
       <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-        <commonIcon name="lucide:search" class="h-5 w-5 text-muted-foreground" />
+        <commonIcon
+          name="lucide:search"
+          class="h-5 w-5 text-muted-foreground"
+        />
       </div>
       <Input
         :model-value="search"
-        @update:model-value="updateSearch"
         type="text"
         placeholder="Search orders by number, customer name, or email..."
         class="pl-12 pr-12 h-12 text-base bg-background border-2 focus-visible:ring-2"
+        @update:model-value="updateSearch"
       />
-      <div v-if="search" class="absolute inset-y-0 right-0 pr-3 flex items-center">
+      <div
+        v-if="search"
+        class="absolute inset-y-0 right-0 pr-3 flex items-center"
+      >
         <Button
-          @click="clearSearch"
           variant="ghost"
           size="icon"
           class="h-8 w-8 hover:bg-muted"
+          @click="clearSearch"
         >
-          <commonIcon name="lucide:x" class="h-4 w-4" />
+          <commonIcon
+            name="lucide:x"
+            class="h-4 w-4"
+          />
         </Button>
       </div>
     </div>
@@ -28,16 +37,22 @@
     <Card>
       <CardContent class="p-4">
         <div class="flex items-center gap-2 mb-4">
-          <commonIcon name="lucide:filter" class="h-4 w-4 text-muted-foreground" />
+          <commonIcon
+            name="lucide:filter"
+            class="h-4 w-4 text-muted-foreground"
+          />
           <span class="text-sm font-medium text-foreground">Filters</span>
           <Button
             v-if="hasActiveFilters"
-            @click="clearAllFilters"
             variant="ghost"
             size="sm"
             class="ml-auto h-7 text-xs"
+            @click="clearAllFilters"
           >
-            <commonIcon name="lucide:x" class="h-3 w-3 mr-1" />
+            <commonIcon
+              name="lucide:x"
+              class="h-3 w-3 mr-1"
+            />
             Clear all
           </Button>
         </div>
@@ -47,36 +62,60 @@
           <!-- Status Filter -->
           <div class="space-y-2">
             <label class="text-xs font-medium text-muted-foreground">Order Status</label>
-            <Select :model-value="statusValue" @update:model-value="updateStatusFilter">
+            <Select
+              :model-value="statusValue"
+              @update:model-value="updateStatusFilter"
+            >
               <SelectTrigger class="w-full">
                 <SelectValue placeholder="All Statuses" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="pending">Pending</SelectItem>
-                <SelectItem value="processing">Processing</SelectItem>
-                <SelectItem value="shipped">Shipped</SelectItem>
-                <SelectItem value="delivered">Delivered</SelectItem>
-                <SelectItem value="cancelled">Cancelled</SelectItem>
+                <SelectItem value="pending">
+                  Pending
+                </SelectItem>
+                <SelectItem value="processing">
+                  Processing
+                </SelectItem>
+                <SelectItem value="shipped">
+                  Shipped
+                </SelectItem>
+                <SelectItem value="delivered">
+                  Delivered
+                </SelectItem>
+                <SelectItem value="cancelled">
+                  Cancelled
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
-          
+
           <!-- Payment Status Filter -->
           <div class="space-y-2">
             <label class="text-xs font-medium text-muted-foreground">Payment Status</label>
-            <Select :model-value="paymentStatusValue" @update:model-value="updatePaymentStatusFilter">
+            <Select
+              :model-value="paymentStatusValue"
+              @update:model-value="updatePaymentStatusFilter"
+            >
               <SelectTrigger class="w-full">
                 <SelectValue placeholder="All Payment Statuses" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="pending">Pending</SelectItem>
-                <SelectItem value="paid">Paid</SelectItem>
-                <SelectItem value="failed">Failed</SelectItem>
-                <SelectItem value="refunded">Refunded</SelectItem>
+                <SelectItem value="pending">
+                  Pending
+                </SelectItem>
+                <SelectItem value="paid">
+                  Paid
+                </SelectItem>
+                <SelectItem value="failed">
+                  Failed
+                </SelectItem>
+                <SelectItem value="refunded">
+                  Refunded
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
-          
+
           <!-- Date Start -->
           <div class="space-y-2">
             <label class="text-xs font-medium text-muted-foreground">Start Date</label>
@@ -103,45 +142,87 @@
           <Button
             v-for="preset in datePresets"
             :key="preset.label"
-            @click="applyDatePreset(preset.days)"
             variant="outline"
             size="sm"
             class="h-7 text-xs"
+            @click="applyDatePreset(preset.days)"
           >
             {{ preset.label }}
           </Button>
           <Button
             v-if="dateRange"
-            @click="clearDateRange"
             variant="ghost"
             size="sm"
             class="h-7 text-xs"
+            @click="clearDateRange"
           >
-            <commonIcon name="lucide:x" class="h-3 w-3 mr-1" />
+            <commonIcon
+              name="lucide:x"
+              class="h-3 w-3 mr-1"
+            />
             Clear dates
           </Button>
         </div>
 
         <!-- Active Filter Badges -->
-        <div v-if="hasActiveFilters" class="flex items-center gap-2 pt-3 border-t">
-          <Badge v-if="status && status.length > 0 && status[0]" variant="secondary" class="gap-1">
+        <div
+          v-if="hasActiveFilters"
+          class="flex items-center gap-2 pt-3 border-t"
+        >
+          <Badge
+            v-if="status && status.length > 0 && status[0]"
+            variant="secondary"
+            class="gap-1"
+          >
             Status: {{ getStatusLabel(status[0]) }}
-            <Button @click="clearStatusFilter" variant="ghost" size="icon" class="ml-1 h-4 w-4 rounded-full hover:bg-muted">
-              <commonIcon name="lucide:x" class="h-3 w-3" />
+            <Button
+              variant="ghost"
+              size="icon"
+              class="ml-1 h-4 w-4 rounded-full hover:bg-muted"
+              @click="clearStatusFilter"
+            >
+              <commonIcon
+                name="lucide:x"
+                class="h-3 w-3"
+              />
             </Button>
           </Badge>
 
-          <Badge v-if="paymentStatus && paymentStatus.length > 0 && paymentStatus[0]" variant="secondary" class="gap-1">
+          <Badge
+            v-if="paymentStatus && paymentStatus.length > 0 && paymentStatus[0]"
+            variant="secondary"
+            class="gap-1"
+          >
             Payment: {{ getPaymentStatusLabel(paymentStatus[0]) }}
-            <Button @click="clearPaymentStatusFilter" variant="ghost" size="icon" class="ml-1 h-4 w-4 rounded-full hover:bg-muted">
-              <commonIcon name="lucide:x" class="h-3 w-3" />
+            <Button
+              variant="ghost"
+              size="icon"
+              class="ml-1 h-4 w-4 rounded-full hover:bg-muted"
+              @click="clearPaymentStatusFilter"
+            >
+              <commonIcon
+                name="lucide:x"
+                class="h-3 w-3"
+              />
             </Button>
           </Badge>
 
-          <Badge v-if="dateRange" variant="secondary" class="gap-1">
+          <Badge
+            v-if="dateRange"
+            variant="secondary"
+            class="gap-1"
+          >
             {{ formatDateRange(dateRange) }}
-            <Button @click="clearDateRange" variant="ghost" size="icon" class="ml-1 h-4 w-4 rounded-full hover:bg-muted">
-              <commonIcon name="lucide:x" class="h-3 w-3" />
+            <Button
+              variant="ghost"
+              size="icon"
+              class="ml-1 h-4 w-4 rounded-full hover:bg-muted"
+              @click="clearDateRange"
+            >
+              <commonIcon
+                name="lucide:x"
+                class="h-3 w-3"
+              />
             </Button>
           </Badge>
         </div>
@@ -165,7 +246,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from '@/components/ui/select'
 
 interface Props {
@@ -194,10 +275,10 @@ const emit = defineEmits<Emits>()
 // Computed properties
 const hasActiveFilters = computed(() => {
   return !!(
-    props.search || 
-    (props.status && props.status.length > 0) || 
-    (props.paymentStatus && props.paymentStatus.length > 0) || 
-    props.dateRange
+    props.search
+    || (props.status && props.status.length > 0)
+    || (props.paymentStatus && props.paymentStatus.length > 0)
+    || props.dateRange
   )
 })
 
@@ -209,25 +290,27 @@ const datePresets = [
   { label: 'Today', days: 0 },
   { label: 'Last 7 days', days: 7 },
   { label: 'Last 30 days', days: 30 },
-  { label: 'This month', days: -1 }
+  { label: 'This month', days: -1 },
 ]
 
 const applyDatePreset = (days: number) => {
   const end = new Date()
   const start = new Date()
-  
+
   if (days === 0) {
     // Today
     start.setHours(0, 0, 0, 0)
-  } else if (days === -1) {
+  }
+  else if (days === -1) {
     // This month
     start.setDate(1)
     start.setHours(0, 0, 0, 0)
-  } else {
+  }
+  else {
     // Last X days
     start.setDate(start.getDate() - days)
   }
-  
+
   emit('update-date-range', start.toISOString().split('T')[0], end.toISOString().split('T')[0])
 }
 
@@ -238,7 +321,7 @@ const getStatusLabel = (status: string) => {
     processing: 'Processing',
     shipped: 'Shipped',
     delivered: 'Delivered',
-    cancelled: 'Cancelled'
+    cancelled: 'Cancelled',
   }
   return labels[status] || status
 }
@@ -248,12 +331,12 @@ const getPaymentStatusLabel = (status: string) => {
     pending: 'Pending',
     paid: 'Paid',
     failed: 'Failed',
-    refunded: 'Refunded'
+    refunded: 'Refunded',
   }
   return labels[status] || status
 }
 
-const formatDateRange = (range: { start: string; end: string }) => {
+const formatDateRange = (range: { start: string, end: string }) => {
   const start = new Date(range.start).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
   const end = new Date(range.end).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
   return `${start} - ${end}`
@@ -267,7 +350,7 @@ const updateSearch = (value: string | number) => {
   if (searchTimeout) {
     clearTimeout(searchTimeout)
   }
-  
+
   searchTimeout = setTimeout(() => {
     emit('update-search', searchValue)
   }, 300)
@@ -280,8 +363,8 @@ const clearSearch = () => {
   emit('update-search', '')
 }
 
-const updateStatusFilter = (value: string | null | undefined) => {
-  const status = value ? [value as 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'] : undefined
+const updateStatusFilter = (value: unknown) => {
+  const status = value && typeof value === 'string' ? [value as 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'] : undefined
   emit('update-status', status)
 }
 
@@ -289,8 +372,8 @@ const clearStatusFilter = () => {
   emit('update-status', undefined)
 }
 
-const updatePaymentStatusFilter = (value: string | null | undefined) => {
-  const paymentStatus = value ? [value as 'pending' | 'paid' | 'failed' | 'refunded'] : undefined
+const updatePaymentStatusFilter = (value: unknown) => {
+  const paymentStatus = value && typeof value === 'string' ? [value as 'pending' | 'paid' | 'failed' | 'refunded'] : undefined
   emit('update-payment-status', paymentStatus)
 }
 

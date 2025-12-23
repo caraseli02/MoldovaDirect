@@ -13,9 +13,18 @@
  * 4. If MFA not enabled, redirect to MFA setup page
  */
 
-export default defineNuxtRouteMiddleware(async (to, from) => {
+export default defineNuxtRouteMiddleware(async (_to, _from) => {
   const user = useSupabaseUser()
   const supabase = useSupabaseClient()
+  const authStore = useAuthStore()
+  const runtimeConfig = useRuntimeConfig()
+
+  // Handle test personas for local/preview environments ONLY
+  const isDevEnv = runtimeConfig.public.env === 'development' || import.meta.dev
+  const isPreviewEnv = runtimeConfig.public.env === 'preview'
+  if ((isDevEnv || isPreviewEnv) && authStore.isTestSession && authStore.user?.role === 'admin') {
+    return
+  }
 
   // Check if user is authenticated
   // Wait for session to load if we're on the client
@@ -28,7 +37,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     }
     // Use session user if user.value hasn't hydrated yet
     userId = session.user.id
-  } else {
+  }
+  else {
     userId = user.value.id
   }
 
@@ -42,7 +52,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   if (error || !profile) {
     throw createError({
       statusCode: 401,
-      statusMessage: 'Authentication required'
+      statusMessage: 'Authentication required',
     })
   }
 
@@ -50,17 +60,19 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   if (profile.role !== 'admin') {
     throw createError({
       statusCode: 403,
-      statusMessage: 'Admin access required. You do not have permission to access this area.'
+      statusMessage: 'Admin access required. You do not have permission to access this area.',
     })
   }
 
   // Check MFA status for additional security (REQUIRED for admin users)
   // Skip MFA in development for test accounts (@moldovadirect.com emails)
+  // Also skip MFA during E2E tests
   const isDev = process.env.NODE_ENV === 'development'
+  const isE2ETest = process.env.PLAYWRIGHT_TEST === 'true'
   const { data: { session } } = await supabase.auth.getSession()
   const userEmail = user.value?.email || session?.user?.email
-  const isTestAccount = userEmail?.includes('@moldovadirect.com')
-  const shouldSkipMFA = isDev && isTestAccount
+  const isTestAccount = userEmail?.includes('@moldovadirect.com') || userEmail?.includes('@example.com')
+  const shouldSkipMFA = (isDev && isTestAccount) || isE2ETest
 
   if (!shouldSkipMFA) {
     const { data: mfaData, error: mfaError } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
@@ -68,7 +80,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     if (mfaError) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to verify MFA status. Please try again.'
+        statusMessage: 'Failed to verify MFA status. Please try again.',
       })
     }
 

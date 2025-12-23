@@ -48,7 +48,6 @@ export class WaitHelper {
    */
   async waitForRequests(urlPattern: string | RegExp, count: number, timeout: number = 10000): Promise<void> {
     let requestCount = 0
-    const startTime = Date.now()
 
     return new Promise((resolve, reject) => {
       const listener = (request: any) => {
@@ -88,7 +87,7 @@ export class WaitHelper {
   async waitWithBackoff(
     condition: () => Promise<boolean>,
     maxAttempts: number = 5,
-    initialDelay: number = 100
+    initialDelay: number = 100,
   ): Promise<boolean> {
     let delay = initialDelay
 
@@ -110,7 +109,7 @@ export class WaitHelper {
   async pollFor(
     condition: () => Promise<boolean>,
     interval: number = 100,
-    timeout: number = 5000
+    timeout: number = 5000,
   ): Promise<boolean> {
     const startTime = Date.now()
 

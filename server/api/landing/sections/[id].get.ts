@@ -17,7 +17,7 @@ export default defineCachedEventHandler(async (event): Promise<GetSectionRespons
     if (!id) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Bad Request - Section ID is required'
+        statusMessage: 'Bad Request - Section ID is required',
       })
     }
 
@@ -31,27 +31,28 @@ export default defineCachedEventHandler(async (event): Promise<GetSectionRespons
       if (error.code === 'PGRST116') {
         throw createError({
           statusCode: 404,
-          statusMessage: 'Section not found'
+          statusMessage: 'Section not found',
         })
       }
 
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to fetch landing section',
-        data: error
+        data: error,
       })
     }
 
     return {
-      section: data as LandingSectionRow
+      section: data as LandingSectionRow,
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     console.error('Error fetching landing section:', error)
 
     throw createError({
       statusCode: error.statusCode || 500,
       statusMessage: error.statusMessage || 'Failed to fetch landing section',
-      data: error.data || error
+      data: error.data || error,
     })
   }
 }, {
@@ -60,5 +61,5 @@ export default defineCachedEventHandler(async (event): Promise<GetSectionRespons
   getKey: (event) => {
     const id = getRouterParam(event, 'id')
     return `${PUBLIC_CACHE_CONFIG.landingSections.name}-${id}`
-  }
+  },
 })

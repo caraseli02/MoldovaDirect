@@ -14,18 +14,18 @@ const testCategories = [
       es: 'Vinos de Prueba',
       en: 'Test Wines',
       ro: 'Vinuri Test',
-      ru: 'Тестовые Вина'
+      ru: 'Тестовые Вина',
     },
     description_translations: {
       es: 'Categoría de vinos para pruebas',
       en: 'Wine category for testing',
       ro: 'Categoria de vinuri pentru teste',
-      ru: 'Категория вин для тестирования'
+      ru: 'Категория вин для тестирования',
     },
     image_url: '/categories/test-wines.jpg',
     sort_order: 1,
-    parent_id: null
-  }
+    parent_id: null,
+  },
 ]
 
 const testProducts = [
@@ -36,13 +36,13 @@ const testProducts = [
       es: 'Vino de Prueba 1',
       en: 'Test Wine 1',
       ro: 'Vin Test 1',
-      ru: 'Тестовое Вино 1'
+      ru: 'Тестовое Вино 1',
     },
     description_translations: {
       es: 'Un vino de prueba para testing',
       en: 'A test wine for testing purposes',
       ro: 'Un vin de test pentru testare',
-      ru: 'Тестовое вино для целей тестирования'
+      ru: 'Тестовое вино для целей тестирования',
     },
     price: 25.99,
     compare_at_price: 35.99,
@@ -51,7 +51,7 @@ const testProducts = [
     is_active: true,
     weight: 750,
     images: ['/products/test-wine-1.jpg'],
-    category_slug: 'test-wines'
+    category_slug: 'test-wines',
   },
   {
     slug: 'test-wine-2',
@@ -60,13 +60,13 @@ const testProducts = [
       es: 'Vino de Prueba 2',
       en: 'Test Wine 2',
       ro: 'Vin Test 2',
-      ru: 'Тестовое Вино 2'
+      ru: 'Тестовое Вино 2',
     },
     description_translations: {
       es: 'Otro vino de prueba',
       en: 'Another test wine',
       ro: 'Alt vin de test',
-      ru: 'Другое тестовое вино'
+      ru: 'Другое тестовое вино',
     },
     price: 19.99,
     compare_at_price: null,
@@ -75,8 +75,8 @@ const testProducts = [
     is_active: true,
     weight: 750,
     images: ['/products/test-wine-2.jpg'],
-    category_slug: 'test-wines'
-  }
+    category_slug: 'test-wines',
+  },
 ]
 
 export async function seedDatabase() {
@@ -110,7 +110,7 @@ export async function seedDatabase() {
     // Update products with correct category_id
     const productsWithCategoryId = testProducts.map(product => ({
       ...product,
-      category_id: testCategory.id
+      category_id: testCategory.id,
     }))
 
     // Insert test products
@@ -130,10 +130,10 @@ export async function seedDatabase() {
 
     return {
       categories: categoryData,
-      products: productData
+      products: productData,
     }
-
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('❌ Database seeding failed:', error)
     throw error
   }
@@ -142,12 +142,13 @@ export async function seedDatabase() {
 export async function cleanupTestData() {
   try {
     console.log('🧹 Cleaning up test data...')
-    
+
     await supabase.from('products').delete().like('slug', 'test-%')
     await supabase.from('categories').delete().like('slug', 'test-%')
-    
+
     console.log('✅ Test data cleanup completed')
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('❌ Test data cleanup failed:', error)
     throw error
   }

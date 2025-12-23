@@ -11,18 +11,18 @@ export default defineEventHandler(async (event) => {
     if (!authHeader) {
       throw createError({
         statusCode: 401,
-        statusMessage: 'Authentication required'
+        statusMessage: 'Authentication required',
       })
     }
 
     const { data: { user }, error: authError } = await supabase.auth.getUser(
-      authHeader.replace('Bearer ', '')
+      authHeader.replace('Bearer ', ''),
     )
 
     if (authError || !user) {
       throw createError({
         statusCode: 401,
-        statusMessage: 'Invalid authentication'
+        statusMessage: 'Invalid authentication',
       })
     }
 
@@ -82,31 +82,31 @@ export default defineEventHandler(async (event) => {
       if (allOrdersError) {
         throw createError({
           statusCode: 500,
-          statusMessage: 'Failed to fetch orders'
+          statusMessage: 'Failed to fetch orders',
         })
       }
 
       // Filter orders by search term (order number or product names)
       const searchLower = search.toLowerCase()
-      const filteredOrders = (allOrders || []).filter(order => {
+      const filteredOrders = (allOrders || []).filter((order) => {
         // Search in order number
         if (order.order_number?.toLowerCase().includes(searchLower)) {
           return true
         }
-        
+
         // Search in product names within order items
         if (order.order_items && Array.isArray(order.order_items)) {
           return order.order_items.some((item: any) => {
             const snapshot = item.product_snapshot
             if (snapshot?.name_translations) {
-              return Object.values(snapshot.name_translations).some((name: any) => 
-                name?.toLowerCase().includes(searchLower)
+              return Object.values(snapshot.name_translations).some((name: any) =>
+                name?.toLowerCase().includes(searchLower),
               )
             }
             return false
           })
         }
-        
+
         return false
       })
 
@@ -139,22 +139,24 @@ export default defineEventHandler(async (event) => {
       finalOrders.sort((a, b) => {
         let aVal = a[finalSortBy]
         let bVal = b[finalSortBy]
-        
+
         if (finalSortBy === 'created_at') {
           aVal = new Date(aVal).getTime()
           bVal = new Date(bVal).getTime()
         }
-        
+
         if (finalSortOrder === 'asc') {
           return aVal > bVal ? 1 : -1
-        } else {
+        }
+        else {
           return aVal < bVal ? 1 : -1
         }
       })
 
       totalCount = finalOrders.length
       orders = finalOrders.slice(offset, offset + limit)
-    } else {
+    }
+    else {
       // Standard query without product search
       let ordersQuery = supabase
         .from('orders')
@@ -222,7 +224,7 @@ export default defineEventHandler(async (event) => {
       if (ordersError) {
         throw createError({
           statusCode: 500,
-          statusMessage: 'Failed to fetch orders'
+          statusMessage: 'Failed to fetch orders',
         })
       }
 
@@ -262,7 +264,7 @@ export default defineEventHandler(async (event) => {
       if (countError) {
         throw createError({
           statusCode: 500,
-          statusMessage: 'Failed to get orders count'
+          statusMessage: 'Failed to get orders count',
         })
       }
 
@@ -297,8 +299,8 @@ export default defineEventHandler(async (event) => {
         productSnapshot: item.product_snapshot,
         quantity: item.quantity,
         priceEur: item.price_eur,
-        totalEur: item.total_eur
-      }))
+        totalEur: item.total_eur,
+      })),
     }))
 
     return {
@@ -309,7 +311,7 @@ export default defineEventHandler(async (event) => {
           page,
           limit,
           total: totalCount,
-          totalPages: Math.ceil(totalCount / limit)
+          totalPages: Math.ceil(totalCount / limit),
         },
         filters: {
           status,
@@ -319,11 +321,12 @@ export default defineEventHandler(async (event) => {
           minAmount,
           maxAmount,
           sortBy: finalSortBy,
-          sortOrder: finalSortOrder
-        }
-      }
+          sortOrder: finalSortOrder,
+        },
+      },
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     if (error.statusCode) {
       throw error
     }
@@ -331,7 +334,7 @@ export default defineEventHandler(async (event) => {
     console.error('Orders fetch error:', error)
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 })

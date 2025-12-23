@@ -77,8 +77,8 @@ vi.mock('@/components/ui/button', () => ({
     computed: {
       className() {
         return this.class || ''
-      }
-    }
+      },
+    },
   },
 }))
 
@@ -98,8 +98,8 @@ const createGlobalConfig = () => ({
       computed: {
         className() {
           return this.class || ''
-        }
-      }
+        },
+      },
     },
   },
 })
@@ -149,7 +149,7 @@ describe('AppHeader', () => {
 
       // Check search button exists
       const searchButtons = wrapper.findAll('button').filter(btn =>
-        btn.attributes('aria-label')?.includes('common.search')
+        btn.attributes('aria-label')?.includes('common.search'),
       )
       expect(searchButtons.length).toBeGreaterThan(0)
 
@@ -164,7 +164,7 @@ describe('AppHeader', () => {
 
       // Find and click search button
       const searchButtons = wrapper.findAll('button').filter(btn =>
-        btn.attributes('aria-label')?.includes('common.search')
+        btn.attributes('aria-label')?.includes('common.search'),
       )
 
       if (searchButtons.length > 0) {
@@ -175,7 +175,7 @@ describe('AppHeader', () => {
           expect.objectContaining({
             path: '/products',
             query: { focus: 'search' },
-          })
+          }),
         )
       }
     })
@@ -186,7 +186,7 @@ describe('AppHeader', () => {
       })
 
       const searchButtons = wrapper.findAll('button').filter(btn =>
-        btn.attributes('aria-label')?.includes('Ctrl+K')
+        btn.attributes('aria-label')?.includes('Ctrl+K'),
       )
       expect(searchButtons.length).toBeGreaterThan(0)
     })
@@ -214,7 +214,7 @@ describe('AppHeader', () => {
 
       // Cart badge should be visible with count
       const badges = wrapper.findAll('span').filter(span =>
-        span.text() === '3'
+        span.text() === '3',
       )
       expect(badges.length).toBeGreaterThan(0)
     })
@@ -238,7 +238,7 @@ describe('AppHeader', () => {
 
       // Check that search button has aria-label
       const searchButtons = wrapper.findAll('button').filter(btn =>
-        btn.attributes('aria-label')?.includes('common.search')
+        btn.attributes('aria-label')?.includes('common.search'),
       )
       expect(searchButtons.length).toBeGreaterThan(0)
     })

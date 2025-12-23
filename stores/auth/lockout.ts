@@ -12,7 +12,7 @@ const LOCKOUT_STORAGE_KEY = 'md-auth-lockout-until'
  * Automatically cleans up expired lockouts
  */
 export const readPersistedLockout = (): Date | null => {
-  if (!process.client) {
+  if (!import.meta.client) {
     return null
   }
 
@@ -35,13 +35,14 @@ export const readPersistedLockout = (): Date | null => {
  * Pass null to clear the lockout
  */
 export const persistLockout = (lockoutTime: Date | null) => {
-  if (!process.client) {
+  if (!import.meta.client) {
     return
   }
 
   if (lockoutTime) {
     window.localStorage.setItem(LOCKOUT_STORAGE_KEY, lockoutTime.toISOString())
-  } else {
+  }
+  else {
     window.localStorage.removeItem(LOCKOUT_STORAGE_KEY)
   }
 }

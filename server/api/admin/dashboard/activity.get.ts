@@ -16,9 +16,8 @@
  * - Cache invalidated on user/order/product mutations
  */
 
-import { serverSupabaseClient, serverSupabaseUser } from '#supabase/server'
+import { serverSupabaseClient } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
-import { ADMIN_CACHE_CONFIG, getAdminCacheKey } from '~/server/utils/adminCache'
 
 export interface ActivityItem {
   id: string
@@ -49,14 +48,14 @@ export default defineEventHandler(async (event) => {
       .limit(5)
 
     if (!usersError && recentUsers) {
-      recentUsers.forEach(user => {
+      recentUsers.forEach((user) => {
         activities.push({
           id: `user_${user.id}`,
           type: 'user_registration',
           title: 'New User Registration',
           description: `${user.name || 'New user'} joined the platform`,
           timestamp: user.created_at,
-          metadata: { userId: user.id, userName: user.name }
+          metadata: { userId: user.id, userName: user.name },
         })
       })
     }
@@ -70,19 +69,19 @@ export default defineEventHandler(async (event) => {
       .limit(5)
 
     if (!ordersError && recentOrders) {
-      recentOrders.forEach(order => {
+      recentOrders.forEach((order) => {
         activities.push({
           id: `order_${order.id}`,
           type: 'new_order',
           title: 'New Order',
           description: `Order ${order.order_number} for €${order.total_eur}`,
           timestamp: order.created_at,
-          metadata: { 
-            orderId: order.id, 
+          metadata: {
+            orderId: order.id,
             orderNumber: order.order_number,
             total: order.total_eur,
-            status: order.status
-          }
+            status: order.status,
+          },
         })
       })
     }
@@ -97,7 +96,7 @@ export default defineEventHandler(async (event) => {
       .limit(5)
 
     if (!stockError && lowStockProducts) {
-      lowStockProducts.forEach(product => {
+      lowStockProducts.forEach((product) => {
         const productName = product.name_translations?.es || product.name_translations?.en || 'Unknown Product'
         activities.push({
           id: `stock_${product.id}`,
@@ -105,12 +104,12 @@ export default defineEventHandler(async (event) => {
           title: 'Low Stock Alert',
           description: `${productName} has only ${product.stock_quantity} items left`,
           timestamp: product.updated_at,
-          metadata: { 
-            productId: product.id, 
+          metadata: {
+            productId: product.id,
             productName,
             stockQuantity: product.stock_quantity,
-            threshold: product.low_stock_threshold
-          }
+            threshold: product.low_stock_threshold,
+          },
         })
       })
     }
@@ -124,7 +123,7 @@ export default defineEventHandler(async (event) => {
       .limit(3)
 
     if (!productsError && updatedProducts) {
-      updatedProducts.forEach(product => {
+      updatedProducts.forEach((product) => {
         const productName = product.name_translations?.es || product.name_translations?.en || 'Unknown Product'
         activities.push({
           id: `product_${product.id}`,
@@ -132,10 +131,10 @@ export default defineEventHandler(async (event) => {
           title: 'Product Updated',
           description: `${productName} was recently modified`,
           timestamp: product.updated_at,
-          metadata: { 
-            productId: product.id, 
-            productName
-          }
+          metadata: {
+            productId: product.id,
+            productName,
+          },
         })
       })
     }
@@ -148,19 +147,19 @@ export default defineEventHandler(async (event) => {
 
     return {
       success: true,
-      data: recentActivities
+      data: recentActivities,
     }
-
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Dashboard activity error:', error)
-    
+
     if (error.statusCode) {
       throw error
     }
 
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 })

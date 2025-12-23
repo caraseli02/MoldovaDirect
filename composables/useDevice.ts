@@ -25,7 +25,7 @@ export const useDevice = () => {
 
   // Touch device detection
   const isTouchDevice = computed(() => {
-    if (process.client) {
+    if (import.meta.client) {
       return 'ontouchstart' in window || navigator.maxTouchPoints > 0
     }
     return false
@@ -33,7 +33,7 @@ export const useDevice = () => {
 
   // Update window dimensions
   const updateDimensions = () => {
-    if (process.client) {
+    if (import.meta.client) {
       windowWidth.value = window.innerWidth
       windowHeight.value = window.innerHeight
     }
@@ -47,7 +47,7 @@ export const useDevice = () => {
   })
 
   onUnmounted(() => {
-    if (process.client) {
+    if (import.meta.client) {
       window.removeEventListener('resize', updateDimensions)
       window.removeEventListener('orientationchange', updateDimensions)
     }
@@ -74,31 +74,31 @@ export const useDevice = () => {
     // Dimensions
     windowWidth: readonly(windowWidth),
     windowHeight: readonly(windowHeight),
-    
+
     // Device types
     isMobile: readonly(isMobile),
     isTablet: readonly(isTablet),
     isDesktop: readonly(isDesktop),
     isLargeDesktop: readonly(isLargeDesktop),
-    
+
     // Breakpoints
     isSmall: readonly(isSmall),
     isMedium: readonly(isMedium),
     isLarge: readonly(isLarge),
     isExtraLarge: readonly(isExtraLarge),
-    
+
     // Orientation
     isPortrait: readonly(isPortrait),
     isLandscape: readonly(isLandscape),
-    
+
     // Touch
     isTouchDevice: readonly(isTouchDevice),
-    
+
     // Computed values
     deviceType: readonly(deviceType),
     breakpoint: readonly(breakpoint),
-    
+
     // Methods
-    updateDimensions
+    updateDimensions,
   }
 }

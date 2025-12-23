@@ -2,7 +2,10 @@
   <Card v-if="history.length > 0">
     <CardHeader>
       <CardTitle class="flex items-center gap-2">
-        <commonIcon name="lucide:history" class="h-5 w-5" />
+        <commonIcon
+          name="lucide:history"
+          class="h-5 w-5"
+        />
         Recent Generations
       </CardTitle>
     </CardHeader>
@@ -14,7 +17,9 @@
           class="flex items-center justify-between p-3 border rounded-lg text-sm"
         >
           <div>
-            <div class="font-medium">{{ item.preset }}</div>
+            <div class="font-medium">
+              {{ item.preset }}
+            </div>
             <div class="text-xs text-muted-foreground">
               {{ new Date(item.timestamp).toLocaleString() }} • {{ item.duration }}ms
             </div>

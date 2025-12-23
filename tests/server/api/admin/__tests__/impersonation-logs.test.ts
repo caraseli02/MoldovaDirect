@@ -21,7 +21,7 @@ describe('GET /api/admin/impersonation-logs', () => {
     // Create admin user
     const { data: admin } = await supabase.auth.signUp({
       email: `test-admin-implogs-${Date.now()}@example.test`,
-      password: 'TestPassword123!'
+      password: 'TestPassword123!',
     })
     adminUser = admin.user
     adminToken = admin.session.access_token
@@ -34,7 +34,7 @@ describe('GET /api/admin/impersonation-logs', () => {
     // Create regular user
     const { data: user } = await supabase.auth.signUp({
       email: `test-user-implogs-${Date.now()}@example.test`,
-      password: 'TestPassword123!'
+      password: 'TestPassword123!',
     })
     regularUser = user.user
     regularToken = user.session.access_token
@@ -42,7 +42,7 @@ describe('GET /api/admin/impersonation-logs', () => {
     // Create target user for impersonation
     const { data: target } = await supabase.auth.signUp({
       email: `test-target-implogs-${Date.now()}@example.test`,
-      password: 'TestPassword123!'
+      password: 'TestPassword123!',
     })
     targetUser = target.user
 
@@ -59,7 +59,7 @@ describe('GET /api/admin/impersonation-logs', () => {
         expires_at: futureExpiry.toISOString(),
         reason: 'Test active session',
         ip_address: '127.0.0.1',
-        user_agent: 'Test Agent'
+        user_agent: 'Test Agent',
       },
       {
         admin_id: adminUser.id,
@@ -69,7 +69,7 @@ describe('GET /api/admin/impersonation-logs', () => {
         ended_at: now.toISOString(),
         reason: 'Test ended session',
         ip_address: '127.0.0.1',
-        user_agent: 'Test Agent'
+        user_agent: 'Test Agent',
       },
       {
         admin_id: adminUser.id,
@@ -78,8 +78,8 @@ describe('GET /api/admin/impersonation-logs', () => {
         expires_at: pastExpiry.toISOString(),
         reason: 'Test expired session',
         ip_address: '127.0.0.1',
-        user_agent: 'Test Agent'
-      }
+        user_agent: 'Test Agent',
+      },
     ])
   })
 
@@ -109,8 +109,8 @@ describe('GET /api/admin/impersonation-logs', () => {
     it('should allow admin to access impersonation logs', async () => {
       const response = await fetch('/api/admin/impersonation-logs', {
         headers: {
-          'Authorization': `Bearer ${adminToken}`
-        }
+          Authorization: `Bearer ${adminToken}`,
+        },
       })
 
       expect([200, 404]).toContain(response.status)
@@ -119,8 +119,8 @@ describe('GET /api/admin/impersonation-logs', () => {
     it('should block non-admin from accessing impersonation logs', async () => {
       const response = await fetch('/api/admin/impersonation-logs', {
         headers: {
-          'Authorization': `Bearer ${regularToken}`
-        }
+          Authorization: `Bearer ${regularToken}`,
+        },
       })
 
       expect(response.status).toBe(403)
@@ -137,8 +137,8 @@ describe('GET /api/admin/impersonation-logs', () => {
     it('should filter by admin_id', async () => {
       const response = await fetch(`/api/admin/impersonation-logs?admin_id=${adminUser.id}`, {
         headers: {
-          'Authorization': `Bearer ${adminToken}`
-        }
+          Authorization: `Bearer ${adminToken}`,
+        },
       })
 
       expect(response.status).toBe(200)
@@ -152,8 +152,8 @@ describe('GET /api/admin/impersonation-logs', () => {
     it('should filter by target_user_id', async () => {
       const response = await fetch(`/api/admin/impersonation-logs?target_user_id=${targetUser.id}`, {
         headers: {
-          'Authorization': `Bearer ${adminToken}`
-        }
+          Authorization: `Bearer ${adminToken}`,
+        },
       })
 
       expect(response.status).toBe(200)
@@ -167,8 +167,8 @@ describe('GET /api/admin/impersonation-logs', () => {
     it('should filter by status: active', async () => {
       const response = await fetch('/api/admin/impersonation-logs?status=active', {
         headers: {
-          'Authorization': `Bearer ${adminToken}`
-        }
+          Authorization: `Bearer ${adminToken}`,
+        },
       })
 
       expect(response.status).toBe(200)
@@ -182,8 +182,8 @@ describe('GET /api/admin/impersonation-logs', () => {
     it('should filter by status: ended', async () => {
       const response = await fetch('/api/admin/impersonation-logs?status=ended', {
         headers: {
-          'Authorization': `Bearer ${adminToken}`
-        }
+          Authorization: `Bearer ${adminToken}`,
+        },
       })
 
       expect(response.status).toBe(200)
@@ -197,8 +197,8 @@ describe('GET /api/admin/impersonation-logs', () => {
     it('should filter by status: expired', async () => {
       const response = await fetch('/api/admin/impersonation-logs?status=expired', {
         headers: {
-          'Authorization': `Bearer ${adminToken}`
-        }
+          Authorization: `Bearer ${adminToken}`,
+        },
       })
 
       expect(response.status).toBe(200)
@@ -214,8 +214,8 @@ describe('GET /api/admin/impersonation-logs', () => {
     it('should respect limit parameter', async () => {
       const response = await fetch('/api/admin/impersonation-logs?limit=1', {
         headers: {
-          'Authorization': `Bearer ${adminToken}`
-        }
+          Authorization: `Bearer ${adminToken}`,
+        },
       })
 
       expect(response.status).toBe(200)
@@ -229,8 +229,8 @@ describe('GET /api/admin/impersonation-logs', () => {
     it('should respect offset parameter', async () => {
       const response = await fetch('/api/admin/impersonation-logs?offset=1', {
         headers: {
-          'Authorization': `Bearer ${adminToken}`
-        }
+          Authorization: `Bearer ${adminToken}`,
+        },
       })
 
       expect(response.status).toBe(200)
@@ -239,8 +239,8 @@ describe('GET /api/admin/impersonation-logs', () => {
     it('should enforce maximum limit', async () => {
       const response = await fetch('/api/admin/impersonation-logs?limit=10000', {
         headers: {
-          'Authorization': `Bearer ${adminToken}`
-        }
+          Authorization: `Bearer ${adminToken}`,
+        },
       })
 
       expect(response.status).toBe(200)
@@ -256,8 +256,8 @@ describe('GET /api/admin/impersonation-logs', () => {
     it('should include summary statistics', async () => {
       const response = await fetch('/api/admin/impersonation-logs', {
         headers: {
-          'Authorization': `Bearer ${adminToken}`
-        }
+          Authorization: `Bearer ${adminToken}`,
+        },
       })
 
       expect(response.status).toBe(200)
@@ -273,8 +273,8 @@ describe('GET /api/admin/impersonation-logs', () => {
     it('should include enriched user information', async () => {
       const response = await fetch('/api/admin/impersonation-logs', {
         headers: {
-          'Authorization': `Bearer ${adminToken}`
-        }
+          Authorization: `Bearer ${adminToken}`,
+        },
       })
 
       expect(response.status).toBe(200)
@@ -290,8 +290,8 @@ describe('GET /api/admin/impersonation-logs', () => {
     it('should calculate session duration', async () => {
       const response = await fetch('/api/admin/impersonation-logs', {
         headers: {
-          'Authorization': `Bearer ${adminToken}`
-        }
+          Authorization: `Bearer ${adminToken}`,
+        },
       })
 
       expect(response.status).toBe(200)
@@ -307,8 +307,8 @@ describe('GET /api/admin/impersonation-logs', () => {
     it('should include status field', async () => {
       const response = await fetch('/api/admin/impersonation-logs', {
         headers: {
-          'Authorization': `Bearer ${adminToken}`
-        }
+          Authorization: `Bearer ${adminToken}`,
+        },
       })
 
       expect(response.status).toBe(200)
@@ -327,8 +327,8 @@ describe('GET /api/admin/impersonation-logs', () => {
       const yesterday = new Date(Date.now() - 86400000).toISOString()
       const response = await fetch(`/api/admin/impersonation-logs?start_date=${yesterday}`, {
         headers: {
-          'Authorization': `Bearer ${adminToken}`
-        }
+          Authorization: `Bearer ${adminToken}`,
+        },
       })
 
       expect(response.status).toBe(200)
@@ -338,8 +338,8 @@ describe('GET /api/admin/impersonation-logs', () => {
       const tomorrow = new Date(Date.now() + 86400000).toISOString()
       const response = await fetch(`/api/admin/impersonation-logs?end_date=${tomorrow}`, {
         headers: {
-          'Authorization': `Bearer ${adminToken}`
-        }
+          Authorization: `Bearer ${adminToken}`,
+        },
       })
 
       expect(response.status).toBe(200)

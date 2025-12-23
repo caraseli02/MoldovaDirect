@@ -1,13 +1,12 @@
 import { z } from 'zod'
-import { invalidatePublicCache, type PublicCacheScope } from '~/server/utils/publicCache'
+import { invalidatePublicCache } from '~/server/utils/publicCache'
 import { requireAdminRole, logAdminAction } from '~/server/utils/adminAuth'
 
 // Request validation schema
 const InvalidateCacheSchema = z.object({
-  scope: z.enum(['products', 'categories', 'search', 'landing', 'all'], {
-    required_error: 'scope is required',
-    invalid_type_error: 'scope must be a valid cache scope'
-  })
+  scope: z.enum(['products', 'categories', 'search', 'landing', 'all']).refine(val => val !== undefined, {
+    message: 'scope is required',
+  }),
 })
 
 /**
@@ -38,7 +37,7 @@ export default defineEventHandler(async (event) => {
       throw createError({
         statusCode: 400,
         statusMessage: 'Invalid request body',
-        data: validationResult.error.format()
+        data: validationResult.error.format(),
       })
     }
 
@@ -48,7 +47,7 @@ export default defineEventHandler(async (event) => {
     await logAdminAction(event, adminId, 'cache_invalidation', {
       resource_type: 'cache',
       scope,
-      ip_address: getRequestIP(event)
+      ip_address: getRequestIP(event),
     })
 
     // Invalidate cache (type-safe now)
@@ -57,13 +56,13 @@ export default defineEventHandler(async (event) => {
     return {
       success: true,
       message: `Successfully invalidated ${scope} cache`,
-      scope
+      scope,
     }
-
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('[Cache Invalidation Error]', {
       error: error instanceof Error ? error.message : 'Unknown error',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     })
 
     // Preserve HTTP errors from validation or auth
@@ -73,7 +72,7 @@ export default defineEventHandler(async (event) => {
 
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to invalidate cache'
+      statusMessage: 'Failed to invalidate cache',
     })
   }
 })

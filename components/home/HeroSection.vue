@@ -20,7 +20,10 @@
             }"
             class="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 text-sm font-medium ring-1 ring-white/30 backdrop-blur"
           >
-            <commonIcon name="lucide:shield-check" class="h-4 w-4" />
+            <commonIcon
+              name="lucide:shield-check"
+              class="h-4 w-4"
+            />
             <span>{{ t('home.hero.trustBadge') }}</span>
           </div>
 
@@ -68,7 +71,10 @@
               class="cta-button inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-semibold text-primary-700 shadow-lg shadow-primary-900/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
             >
               {{ t('home.hero.primaryCta') }}
-              <commonIcon name="lucide:arrow-right" class="h-5 w-5" />
+              <commonIcon
+                name="lucide:arrow-right"
+                class="h-5 w-5"
+              />
             </NuxtLink>
             <NuxtLink
               :to="localePath('/about')"
@@ -92,8 +98,12 @@
               }"
               class="space-y-2"
             >
-              <dt class="text-sm font-medium text-white/60">{{ highlight.label }}</dt>
-              <dd class="text-3xl font-semibold">{{ highlight.value }}</dd>
+              <dt class="text-sm font-medium text-white/60">
+                {{ highlight.label }}
+              </dt>
+              <dd class="text-3xl font-semibold">
+                {{ highlight.value }}
+              </dd>
             </div>
           </dl>
         </div>

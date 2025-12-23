@@ -10,10 +10,16 @@
         </p>
       </div>
 
-      <form class="mt-8 space-y-6" @submit.prevent="handleVerify">
+      <form
+        class="mt-8 space-y-6"
+        @submit.prevent="handleVerify"
+      >
         <div class="rounded-md shadow-sm -space-y-px">
           <div>
-            <label for="mfa-code" class="sr-only">
+            <label
+              for="mfa-code"
+              class="sr-only"
+            >
               {{ $t('auth.mfa.verify.codeLabel') }}
             </label>
             <input
@@ -28,7 +34,7 @@
               class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm text-center text-2xl tracking-widest"
               :class="{
                 'border-red-500': error,
-                'border-gray-300': !error
+                'border-gray-300': !error,
               }"
               :placeholder="$t('auth.mfa.verify.codePlaceholder')"
               :disabled="authStore.mfaLoading"
@@ -37,11 +43,23 @@
           </div>
         </div>
 
-        <div v-if="error" class="rounded-md bg-red-50 p-4">
+        <div
+          v-if="error"
+          class="rounded-md bg-red-50 p-4"
+        >
           <div class="flex">
             <div class="flex-shrink-0">
-              <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+              <svg
+                class="h-5 w-5 text-red-400"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clip-rule="evenodd"
+                />
               </svg>
             </div>
             <div class="ml-3">
@@ -62,7 +80,10 @@
               {{ $t('auth.mfa.verify.submitButton') }}
             </template>
             <template v-else>
-              <commonIcon name="lucide:loader-2" class="mr-2 h-5 w-5 animate-spin" />
+              <commonIcon
+                name="lucide:loader-2"
+                class="mr-2 h-5 w-5 animate-spin"
+              />
               {{ $t('auth.mfa.verify.verifying') }}
             </template>
           </UiButton>
@@ -82,7 +103,9 @@
 
       <div class="mt-6 border-t border-gray-200 pt-6">
         <div class="text-sm text-gray-600 space-y-2">
-          <p class="font-medium">{{ $t('auth.mfa.verify.helpTitle') }}</p>
+          <p class="font-medium">
+            {{ $t('auth.mfa.verify.helpTitle') }}
+          </p>
           <ul class="list-disc list-inside space-y-1 text-xs">
             <li>{{ $t('auth.mfa.verify.helpItem1') }}</li>
             <li>{{ $t('auth.mfa.verify.helpItem2') }}</li>
@@ -100,8 +123,8 @@ import { useAuthStore } from '~/stores/auth'
 import { useAuthValidation } from '~/composables/useAuthValidation'
 
 definePageMeta({
-  layout: 'auth',
-  middleware: []
+  layout: 'auth' as any,
+  middleware: [],
 })
 
 const authStore = useAuthStore()
@@ -126,7 +149,7 @@ async function handleVerify(): Promise<void> {
   // Validate code format
   const validation = validateMFACode(code.value)
   if (!validation.isValid) {
-    error.value = validation.errors[0].message
+    error.value = validation.errors?.[0]?.message || 'Invalid MFA code'
     return
   }
 
@@ -139,8 +162,9 @@ async function handleVerify(): Promise<void> {
     const redirect = route.query.redirect as string
     const user = useSupabaseUser()
 
-    await handleAuthRedirect(redirect, user.value, supabase, localePath, navigateTo)
-  } catch (err) {
+    await handleAuthRedirect(redirect, user.value || null, supabase, localePath, navigateTo)
+  }
+  catch (err: any) {
     error.value = err instanceof Error ? err.message : 'Verification failed'
   }
 }

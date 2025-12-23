@@ -7,7 +7,10 @@
         </UiDialogTitle>
       </UiDialogHeader>
 
-      <div v-if="producer" class="space-y-6">
+      <div
+        v-if="producer"
+        class="space-y-6"
+      >
         <!-- Hero Section with Portrait -->
         <div class="relative -mx-6 -mt-6">
           <div class="relative h-80 overflow-hidden bg-slate-100">
@@ -23,35 +26,58 @@
             <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
               <div class="flex items-end justify-between">
                 <div>
-                  <h2 class="text-3xl font-bold">{{ producer.name }}</h2>
+                  <h2 class="text-3xl font-bold">
+                    {{ producer.name }}
+                  </h2>
                   <p class="mt-1 text-lg font-medium text-white/90">
                     {{ getLocalizedText(producer.specialty) }}
                   </p>
                   <div class="mt-2 flex flex-wrap items-center gap-4 text-sm">
                     <span class="inline-flex items-center gap-1">
-                      <commonIcon name="lucide:map-pin" class="h-4 w-4" />
+                      <commonIcon
+                        name="lucide:map-pin"
+                        class="h-4 w-4"
+                      />
                       {{ regionName }}
                     </span>
-                    <span v-if="producer.establishedYear" class="inline-flex items-center gap-1">
-                      <commonIcon name="lucide:calendar" class="h-4 w-4" />
+                    <span
+                      v-if="producer.establishedYear"
+                      class="inline-flex items-center gap-1"
+                    >
+                      <commonIcon
+                        name="lucide:calendar"
+                        class="h-4 w-4"
+                      />
                       {{ t('wineStory.producers.establishedYear', { year: producer.establishedYear }) }}
                     </span>
-                    <span v-if="producer.generationsOfWinemaking" class="inline-flex items-center gap-1">
-                      <commonIcon name="lucide:users" class="h-4 w-4" />
+                    <span
+                      v-if="producer.generationsOfWinemaking"
+                      class="inline-flex items-center gap-1"
+                    >
+                      <commonIcon
+                        name="lucide:users"
+                        class="h-4 w-4"
+                      />
                       {{ t('wineStory.producers.generations', { count: producer.generationsOfWinemaking }) }}
                     </span>
                   </div>
                 </div>
 
                 <!-- Certifications -->
-                <div v-if="producer.certifications && producer.certifications.length > 0" class="flex gap-2">
+                <div
+                  v-if="producer.certifications && producer.certifications.length > 0"
+                  class="flex gap-2"
+                >
                   <div
                     v-for="cert in producer.certifications"
                     :key="cert.name"
                     class="rounded-full bg-green-500 p-2 shadow-lg"
                     :title="cert.name"
                   >
-                    <commonIcon name="lucide:leaf" class="h-5 w-5 text-white" />
+                    <commonIcon
+                      name="lucide:leaf"
+                      class="h-5 w-5 text-white"
+                    />
                   </div>
                 </div>
               </div>
@@ -62,8 +88,14 @@
         <!-- Content -->
         <div class="space-y-6">
           <!-- Philosophy Quote (if available) -->
-          <div v-if="producer.philosophy" class="rounded-lg bg-primary/5 p-6">
-            <commonIcon name="lucide:quote" class="h-8 w-8 text-primary" />
+          <div
+            v-if="producer.philosophy"
+            class="rounded-lg bg-primary/5 p-6"
+          >
+            <commonIcon
+              name="lucide:quote"
+              class="h-8 w-8 text-primary"
+            />
             <p class="mt-2 text-lg italic leading-relaxed text-slate-700">
               "{{ getLocalizedText(producer.philosophy) }}"
             </p>
@@ -81,28 +113,52 @@
 
           <!-- Production Details Grid -->
           <div class="grid gap-4 sm:grid-cols-2">
-            <div v-if="producer.vineyardSize" class="rounded-lg border border-slate-200 p-4">
+            <div
+              v-if="producer.vineyardSize"
+              class="rounded-lg border border-slate-200 p-4"
+            >
               <div class="flex items-center gap-2 text-sm font-medium text-slate-500">
-                <commonIcon name="lucide:map" class="h-4 w-4" />
+                <commonIcon
+                  name="lucide:map"
+                  class="h-4 w-4"
+                />
                 {{ t('wineStory.producers.vineyardSize') }}
               </div>
-              <p class="mt-1 text-lg font-semibold text-slate-900">{{ producer.vineyardSize }}</p>
+              <p class="mt-1 text-lg font-semibold text-slate-900">
+                {{ producer.vineyardSize }}
+              </p>
             </div>
 
-            <div v-if="producer.annualProduction" class="rounded-lg border border-slate-200 p-4">
+            <div
+              v-if="producer.annualProduction"
+              class="rounded-lg border border-slate-200 p-4"
+            >
               <div class="flex items-center gap-2 text-sm font-medium text-slate-500">
-                <commonIcon name="lucide:wine" class="h-4 w-4" />
+                <commonIcon
+                  name="lucide:wine"
+                  class="h-4 w-4"
+                />
                 {{ t('wineStory.producers.annualProduction') }}
               </div>
-              <p class="mt-1 text-lg font-semibold text-slate-900">{{ producer.annualProduction }}</p>
+              <p class="mt-1 text-lg font-semibold text-slate-900">
+                {{ producer.annualProduction }}
+              </p>
             </div>
 
-            <div v-if="producer.primaryGrapes && producer.primaryGrapes.length > 0" class="rounded-lg border border-slate-200 p-4 sm:col-span-2">
+            <div
+              v-if="producer.primaryGrapes && producer.primaryGrapes.length > 0"
+              class="rounded-lg border border-slate-200 p-4 sm:col-span-2"
+            >
               <div class="flex items-center gap-2 text-sm font-medium text-slate-500">
-                <commonIcon name="lucide:grape" class="h-4 w-4" />
+                <commonIcon
+                  name="lucide:grape"
+                  class="h-4 w-4"
+                />
                 {{ t('wineStory.regions.primaryGrapes') }}
               </div>
-              <p class="mt-1 text-base text-slate-900">{{ producer.primaryGrapes.join(', ') }}</p>
+              <p class="mt-1 text-base text-slate-900">
+                {{ producer.primaryGrapes.join(', ') }}
+              </p>
             </div>
           </div>
 
@@ -118,11 +174,18 @@
                 class="flex items-start gap-3 rounded-lg border border-slate-200 p-3"
               >
                 <div class="rounded-full bg-amber-100 p-2">
-                  <commonIcon name="lucide:award" class="h-5 w-5 text-amber-600" />
+                  <commonIcon
+                    name="lucide:award"
+                    class="h-5 w-5 text-amber-600"
+                  />
                 </div>
                 <div class="flex-1">
-                  <p class="font-semibold text-slate-900">{{ getLocalizedText(award.name) }}</p>
-                  <p class="text-sm text-slate-600">{{ award.organization }} • {{ award.year }}</p>
+                  <p class="font-semibold text-slate-900">
+                    {{ getLocalizedText(award.name) }}
+                  </p>
+                  <p class="text-sm text-slate-600">
+                    {{ award.organization }} • {{ award.year }}
+                  </p>
                 </div>
               </div>
             </div>
@@ -139,16 +202,24 @@
                 :key="index"
                 class="inline-flex items-center gap-2 rounded-full bg-green-100 px-4 py-2 text-sm font-medium text-green-800"
               >
-                <commonIcon name="lucide:shield-check" class="h-4 w-4" />
+                <commonIcon
+                  name="lucide:shield-check"
+                  class="h-4 w-4"
+                />
                 {{ cert.name }}
-                <span v-if="cert.year" class="text-xs text-green-600">{{ cert.year }}</span>
+                <span
+                  v-if="cert.year"
+                  class="text-xs text-green-600"
+                >{{ cert.year }}</span>
               </span>
             </div>
           </div>
 
           <!-- Gallery (if available) -->
           <div v-if="producer.gallery && producer.gallery.length > 0">
-            <h3 class="text-lg font-bold text-slate-900">Gallery</h3>
+            <h3 class="text-lg font-bold text-slate-900">
+              Gallery
+            </h3>
             <div class="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
               <div
                 v-for="(image, index) in producer.gallery"
@@ -167,14 +238,20 @@
           </div>
 
           <!-- Website Link -->
-          <div v-if="producer.website" class="pt-4">
+          <div
+            v-if="producer.website"
+            class="pt-4"
+          >
             <a
               :href="producer.website"
               target="_blank"
               rel="noopener noreferrer"
               class="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 font-semibold text-white shadow-lg transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
-              <commonIcon name="lucide:external-link" class="h-5 w-5" />
+              <commonIcon
+                name="lucide:external-link"
+                class="h-5 w-5"
+              />
               {{ t('wineStory.producers.contact') }}
             </a>
           </div>
@@ -186,7 +263,10 @@
         class="absolute right-4 top-4 rounded-full bg-black/50 p-2 text-white backdrop-blur transition-colors hover:bg-black/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
         :aria-label="t('wineStory.producers.closeModal')"
       >
-        <commonIcon name="lucide:x" class="h-5 w-5" />
+        <commonIcon
+          name="lucide:x"
+          class="h-5 w-5"
+        />
       </UiDialogClose>
     </UiDialogContent>
   </UiDialog>
@@ -210,11 +290,11 @@ const { t, locale } = useI18n()
 // Two-way binding for dialog open state
 const isOpen = computed({
   get: () => props.open,
-  set: (value) => emit('update:open', value)
+  set: value => emit('update:open', value),
 })
 
 // Get localized text from Translations object
-const getLocalizedText = (translations: any): string => {
+const getLocalizedText = (translations: Record<string, any>): string => {
   if (!translations) return ''
   return translations[locale.value] || translations.en || Object.values(translations)[0] || ''
 }

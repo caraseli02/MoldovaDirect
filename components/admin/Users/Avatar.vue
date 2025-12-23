@@ -1,6 +1,6 @@
 <!--
   User Avatar Component
-  
+
   Displays user avatar with fallback to initials or default icon
   Supports different sizes and mobile optimizations
 -->
@@ -49,7 +49,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  size: 'md'
+  size: 'md',
 })
 
 // Computed
@@ -60,13 +60,13 @@ const displayName = computed(() => {
 const initials = computed(() => {
   const name = displayName.value
   if (!name) return ''
-  
+
   const parts = name.trim().split(/\s+/)
   if (parts.length === 1) {
-    return parts[0].charAt(0).toUpperCase()
+    return parts[0]?.charAt(0).toUpperCase() || ''
   }
-  
-  return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase()
+
+  return ((parts[0]?.charAt(0) || '') + (parts[parts.length - 1]?.charAt(0) || '')).toUpperCase()
 })
 
 const sizeClasses = computed(() => {
@@ -74,7 +74,7 @@ const sizeClasses = computed(() => {
     sm: 'w-8 h-8',
     md: 'w-10 h-10',
     lg: 'w-12 h-12',
-    xl: 'w-16 h-16'
+    xl: 'w-16 h-16',
   }
   return sizes[props.size]
 })
@@ -84,7 +84,7 @@ const textSizeClasses = computed(() => {
     sm: 'text-xs',
     md: 'text-sm',
     lg: 'text-base',
-    xl: 'text-lg'
+    xl: 'text-lg',
   }
   return sizes[props.size]
 })
@@ -94,7 +94,7 @@ const iconSizeClasses = computed(() => {
     sm: 'w-4 h-4',
     md: 'w-5 h-5',
     lg: 'w-6 h-6',
-    xl: 'w-8 h-8'
+    xl: 'w-8 h-8',
   }
   return sizes[props.size]
 })

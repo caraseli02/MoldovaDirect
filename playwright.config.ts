@@ -1,18 +1,24 @@
 import { defineConfig, devices } from '@playwright/test'
 import { fileURLToPath } from 'node:url'
+import dotenv from 'dotenv'
 
-const locales = ['es', 'en', 'ro', 'ru']
+// Load environment variables from .env file
+dotenv.config()
 
 export default defineConfig({
   testDir: './tests',
-  testMatch: ['**/e2e/**/*.spec.ts', '**/pre-commit/**/*.spec.ts'],
+  testMatch: ['**/e2e/**/*.spec.ts', '**/pre-commit/**/*.spec.ts', '**/critical/**/*.spec.ts'],
   testIgnore: [
     '**/node_modules/**',
     '**/*.test.ts',
     '**/unit/**',
     '**/templates/**',
     '**/utils/**',
-    '**/setup/**'
+    '**/setup/**',
+    '**/manual/**',
+    '**/fixtures/**',
+    '**/helpers/**',
+    '**/page-objects/**',
   ],
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
@@ -22,9 +28,9 @@ export default defineConfig({
     ['html'],
     ['json', { outputFile: 'test-results/results.json' }],
     ['junit', { outputFile: 'test-results/junit.xml' }],
-    process.env.CI ? ['github'] : ['list']
-  ].filter(Boolean),
-  
+    process.env.CI ? ['github'] : ['list'],
+  ].filter(Boolean) as any,
+
   use: {
     // Support both BASE_URL and PLAYWRIGHT_TEST_BASE_URL for CI/CD flexibility
     baseURL: process.env.PLAYWRIGHT_TEST_BASE_URL || process.env.BASE_URL || 'http://localhost:3000',
@@ -36,7 +42,7 @@ export default defineConfig({
   },
 
   projects: [
-    // Pre-commit: Fast smoke tests (< 60 seconds)
+    // Pre-commit: Fast smoke tests (< 30 seconds)
     {
       name: 'pre-commit',
       testDir: './tests/pre-commit',
@@ -47,58 +53,75 @@ export default defineConfig({
         timezoneId: 'Europe/Madrid',
       },
       retries: 0, // No retries for fast feedback
-      timeout: 60000, // 60s per test
+      timeout: 30000, // 30s per test (allows for Vite cold start)
     },
 
-    // CI/CD: Comprehensive E2E tests (all browsers, all locales)
-    ...locales.flatMap(locale => [
-      {
-        name: `chromium-${locale}`,
-        use: { 
-          ...devices['Desktop Chrome'],
-          locale,
-          timezoneId: 'Europe/Madrid',
-          permissions: ['geolocation'],
-          storageState: `tests/fixtures/.auth/user-${locale}.json`,
-        },
-      },
-      {
-        name: `firefox-${locale}`,
-        use: {
-          ...devices['Desktop Firefox'],
-          locale,
-          timezoneId: 'Europe/Madrid',
-          storageState: `tests/fixtures/.auth/user-${locale}.json`,
-        },
-      },
-      {
-        name: `webkit-${locale}`,
-        use: {
-          ...devices['Desktop Safari'],
-          locale,
-          timezoneId: 'Europe/Madrid',
-          storageState: `tests/fixtures/.auth/user-${locale}.json`,
-        },
-      },
-    ]),
-    
+    // Critical: Fast deployment confidence tests (< 5 minutes)
     {
-      name: 'Mobile Chrome',
+      name: 'critical',
+      testDir: './tests/e2e/critical',
+      testMatch: '**/*.spec.ts',
+      use: {
+        ...devices['Desktop Chrome'],
+        locale: 'es',
+        timezoneId: 'Europe/Madrid',
+      },
+      retries: 1, // Allow 1 retry for critical tests
+      timeout: 30000, // 30s per test
+    },
+
+    // Full E2E: Default browser + locale for development
+    {
+      name: 'chromium-es',
+      use: {
+        ...devices['Desktop Chrome'],
+        locale: 'es',
+        timezoneId: 'Europe/Madrid',
+        permissions: ['geolocation'],
+        storageState: 'tests/fixtures/.auth/user-es.json',
+      },
+    },
+
+    // Full E2E: English locale testing - ONLY i18n-specific tests
+    {
+      name: 'chromium-en',
+      testDir: './tests',
+      testMatch: '**/auth-i18n.spec.ts', // Only i18n tests for locale verification
+      use: {
+        ...devices['Desktop Chrome'],
+        locale: 'en',
+        timezoneId: 'Europe/Madrid',
+        permissions: ['geolocation'],
+        storageState: 'tests/fixtures/.auth/user-en.json',
+      },
+    },
+
+    // Full E2E: Cross-browser testing - ONLY critical tests
+    {
+      name: 'firefox-es',
+      testDir: './tests/e2e/critical',
+      testMatch: '**/*.spec.ts', // Only critical tests for browser compatibility
+      use: {
+        ...devices['Desktop Firefox'],
+        locale: 'es',
+        timezoneId: 'Europe/Madrid',
+        storageState: 'tests/fixtures/.auth/user-es.json',
+      },
+    },
+
+    // Full E2E: Mobile responsive testing - ONLY mobile-specific tests
+    {
+      name: 'mobile',
+      testDir: './tests',
+      testMatch: '**/auth-mobile-responsive.spec.ts', // Only mobile-responsive tests
       use: {
         ...devices['Pixel 5'],
         locale: 'es',
-        storageState: `tests/fixtures/.auth/user-es.json`,
+        storageState: 'tests/fixtures/.auth/user-es.json',
       },
     },
-    {
-      name: 'Mobile Safari',
-      use: {
-        ...devices['iPhone 12'],
-        locale: 'es',
-        storageState: `tests/fixtures/.auth/user-es.json`,
-      },
-    },
-    
+
+    // Setup: Authentication and global setup
     {
       name: 'setup',
       testDir: './tests/setup',
@@ -107,17 +130,19 @@ export default defineConfig({
   ],
 
   // Only start web server if not testing against external URL (like Vercel preview)
-  webServer: process.env.PLAYWRIGHT_TEST_BASE_URL ? undefined : {
-    command: 'npm run dev',
-    url: 'http://localhost:3000',
-    reuseExistingServer: !process.env.CI,
-    stdout: 'pipe',
-    stderr: 'pipe',
-    timeout: 120000,
-  },
+  webServer: process.env.PLAYWRIGHT_TEST_BASE_URL
+    ? undefined
+    : {
+        command: 'npm run dev',
+        url: 'http://localhost:3000/auth/login', // Use /auth/login as root returns 500
+        reuseExistingServer: !process.env.CI,
+        stdout: 'pipe',
+        stderr: 'pipe',
+        timeout: 120000,
+      },
 
   outputDir: 'test-results/',
-  
+
   globalSetup: fileURLToPath(new URL('./tests/global-setup.ts', import.meta.url)),
   globalTeardown: fileURLToPath(new URL('./tests/global-teardown.ts', import.meta.url)),
 })

@@ -1,9 +1,9 @@
 /**
  * Setup Inventory Management Database Schema
- * 
+ *
  * Requirements addressed:
  * - 2.6: Inventory movement tracking and reporting
- * 
+ *
  * Creates:
  * - inventory_movements table for tracking stock changes
  * - Enhanced product schema for inventory management
@@ -102,27 +102,27 @@ export default defineEventHandler(async (event) => {
           AFTER UPDATE ON products
           FOR EACH ROW
           EXECUTE FUNCTION log_inventory_movement();
-      `
+      `,
     })
 
     if (createTableError) {
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to create inventory tables',
-        data: createTableError
+        data: createTableError,
       })
     }
 
     return {
       success: true,
-      message: 'Inventory management schema created successfully'
+      message: 'Inventory management schema created successfully',
     }
-
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Setup inventory error:', error)
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to setup inventory management'
+      statusMessage: 'Failed to setup inventory management',
     })
   }
 })

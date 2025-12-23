@@ -11,40 +11,68 @@
           {{ result.success ? 'Success' : 'Error' }}
         </CardTitle>
         <Button
-          @click="$emit('export-credentials')"
           v-if="result.users && result.users.length > 0"
           variant="outline"
           size="sm"
+          @click="$emit('export-credentials')"
         >
-          <commonIcon name="lucide:download" class="h-4 w-4 mr-2" />
+          <commonIcon
+            name="lucide:download"
+            class="h-4 w-4 mr-2"
+          />
           Export CSV
         </Button>
       </div>
     </CardHeader>
     <CardContent>
       <div class="space-y-4">
-        <p class="text-sm">{{ result.message }}</p>
+        <p class="text-sm">
+          {{ result.message }}
+        </p>
 
-        <Alert v-if="result.suggestion" variant="default">
-          <commonIcon name="lucide:lightbulb" class="h-4 w-4" />
+        <Alert
+          v-if="result.suggestion"
+          variant="default"
+        >
+          <commonIcon
+            name="lucide:lightbulb"
+            class="h-4 w-4"
+          />
           <AlertTitle>Suggestion</AlertTitle>
           <AlertDescription>{{ result.suggestion }}</AlertDescription>
         </Alert>
 
         <!-- Summary -->
-        <div v-if="result.summary" class="bg-muted p-4 rounded-lg space-y-2">
-          <h4 class="font-semibold text-sm">Summary</h4>
+        <div
+          v-if="result.summary"
+          class="bg-muted p-4 rounded-lg space-y-2"
+        >
+          <h4 class="font-semibold text-sm">
+            Summary
+          </h4>
           <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-            <div v-for="(value, key) in result.summary" :key="key">
-              <div class="text-muted-foreground">{{ formatKey(key) }}</div>
-              <div class="font-semibold">{{ formatValue(value) }}</div>
+            <div
+              v-for="(value, key) in result.summary"
+              :key="key"
+            >
+              <div class="text-muted-foreground">
+                {{ formatKey(key) }}
+              </div>
+              <div class="font-semibold">
+                {{ formatValue(value) }}
+              </div>
             </div>
           </div>
         </div>
 
         <!-- Created Users -->
-        <div v-if="result.users && result.users.length > 0" class="space-y-2">
-          <h4 class="font-semibold text-sm">Created Users</h4>
+        <div
+          v-if="result.users && result.users.length > 0"
+          class="space-y-2"
+        >
+          <h4 class="font-semibold text-sm">
+            Created Users
+          </h4>
           <div class="max-h-48 overflow-y-auto space-y-1">
             <div
               v-for="user in result.users"
@@ -58,31 +86,53 @@
         </div>
 
         <!-- Deleted Counts -->
-        <div v-if="result.results?.deletedCounts" class="space-y-2">
-          <h4 class="font-semibold text-sm">Deleted Items</h4>
+        <div
+          v-if="result.results?.deletedCounts"
+          class="space-y-2"
+        >
+          <h4 class="font-semibold text-sm">
+            Deleted Items
+          </h4>
           <div class="grid grid-cols-2 gap-2 text-sm">
             <div
               v-for="(count, table) in result.results.deletedCounts"
               :key="table"
               class="bg-muted p-2 rounded"
             >
-              <div class="text-muted-foreground">{{ formatKey(table) }}</div>
-              <div class="font-semibold">{{ count }}</div>
+              <div class="text-muted-foreground">
+                {{ formatKey(table) }}
+              </div>
+              <div class="font-semibold">
+                {{ count }}
+              </div>
             </div>
           </div>
         </div>
 
         <!-- Errors -->
-        <div v-if="result.errors && result.errors.length > 0" class="space-y-2">
-          <h4 class="font-semibold text-sm text-red-500">Errors</h4>
+        <div
+          v-if="result.errors && result.errors.length > 0"
+          class="space-y-2"
+        >
+          <h4 class="font-semibold text-sm text-red-500">
+            Errors
+          </h4>
           <ul class="text-xs space-y-1">
-            <li v-for="(error, index) in result.errors" :key="index" class="text-red-600">
+            <li
+              v-for="(error, index) in result.errors"
+              :key="index"
+              class="text-red-600"
+            >
               {{ typeof error === 'string' ? error : error.error || JSON.stringify(error) }}
             </li>
           </ul>
         </div>
 
-        <Button @click="$emit('close')" variant="outline" class="w-full">
+        <Button
+          variant="outline"
+          class="w-full"
+          @click="$emit('close')"
+        >
           Close
         </Button>
       </div>
@@ -101,12 +151,12 @@ defineProps<{
 }>()
 
 defineEmits<{
-  close: []
+  'close': []
   'export-credentials': []
 }>()
 
-const formatKey = (key: string) => {
-  return key
+const formatKey = (key: string | number) => {
+  return String(key)
     .replace(/_/g, ' ')
     .replace(/([A-Z])/g, ' $1')
     .replace(/^./, str => str.toUpperCase())

@@ -7,7 +7,7 @@ export default defineConfig({
   retries: 0,
   workers: 1,
   reporter: 'list',
-  
+
   use: {
     baseURL: 'http://localhost:3000',
     trace: 'on',
@@ -20,7 +20,7 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { 
+      use: {
         ...devices['Desktop Chrome'],
         locale: 'es',
         timezoneId: 'Europe/Madrid',

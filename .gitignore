@@ -89,8 +89,11 @@ tmp/
 /tests/visual/screenshots/
 /tests-examples/
 **/*.spec.ts-snapshots/
+!tests/visual-regression/*.spec.ts-snapshots/
 test-results/
 playwright-report/
+test-run-output.txt
+test-screenshots/
 
 # Working test files and directories
 /tests/browser-automation/
@@ -143,6 +146,15 @@ visual-regression-screenshots/
 *.png
 *.jpg
 *.jpeg
+
+# Hero video assets are required for builds and MUST be tracked
+# Exceptions for public/videos/hero directory
+!public/videos/hero/*.jpg
+!public/videos/hero/*.mp4
+!public/videos/hero/*.webm
+
+# Video files (too large for git - host on CDN or server)
+# (If you need to ignore other large media, scope it outside public/videos/hero)
 
 # Temporary scripts and utilities
 apply-rls-fix.sh

@@ -5,7 +5,7 @@ import type { Address } from '~/types/checkout'
 
 // Mock dependencies BEFORE imports
 vi.mock('@vueuse/core', () => ({
-  useDebounceFn: (fn: Function) => fn, // No debouncing in tests for speed
+  useDebounceFn: <T extends (...args: unknown[]) => any>(fn: T) => fn, // No debouncing in tests for speed
 }))
 
 vi.mock('~/lib/checkout/api', () => ({
@@ -17,7 +17,7 @@ const mockT = vi.fn((key: string, fallback?: string) => fallback || key)
 // Override global mock with test-specific mock
 global.useI18n = vi.fn(() => ({
   t: mockT,
-  locale: { value: 'en' }
+  locale: { value: 'en' },
 }))
 
 // Mock checkout store
@@ -136,7 +136,7 @@ describe('useShippingMethods', () => {
       const { fetchShippingMethods } = await import('~/lib/checkout/api')
       const mockFetch = vi.mocked(fetchShippingMethods)
 
-      let resolvePromise: Function
+      let resolvePromise: (value: any) => void
       mockFetch.mockReturnValue(new Promise((resolve) => {
         resolvePromise = resolve
       }))
@@ -161,11 +161,11 @@ describe('useShippingMethods', () => {
       const { fetchShippingMethods } = await import('~/lib/checkout/api')
       const mockFetch = vi.mocked(fetchShippingMethods)
 
-      let resolveCount = 0
+      let _resolveCount = 0
       mockFetch.mockImplementation(() => {
         return new Promise((resolve) => {
           setTimeout(() => {
-            resolveCount++
+            _resolveCount++
             resolve([])
           }, 50)
         })
@@ -358,7 +358,7 @@ describe('useShippingMethods', () => {
       expect(mockFetch).toHaveBeenCalledWith(
         expect.objectContaining({
           orderTotal: 250,
-        })
+        }),
       )
     })
 
@@ -376,7 +376,7 @@ describe('useShippingMethods', () => {
       expect(mockFetch).toHaveBeenCalledWith(
         expect.objectContaining({
           orderTotal: 0,
-        })
+        }),
       )
     })
   })

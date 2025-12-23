@@ -1,11 +1,11 @@
 /**
  * Inventory Management Composable
- * 
+ *
  * Requirements addressed:
  * - 2.1: Visual stock level indicators with configurable thresholds
  * - 2.2: Low stock threshold system
  * - 2.5: Automatic out-of-stock status updates
- * 
+ *
  * Provides:
  * - Stock status calculation with visual indicators
  * - Configurable threshold management
@@ -38,42 +38,42 @@ export const useInventory = () => {
    * Calculate stock status based on quantity and thresholds
    */
   const getStockStatus = (
-    stockQuantity: number, 
+    stockQuantity: number,
     lowStockThreshold: number = 5,
-    reorderPoint: number = 10
+    reorderPoint: number = 10,
   ): StockStatus => {
     if (stockQuantity === 0) {
       return {
         level: 'out',
         color: 'red',
         label: 'Out of Stock',
-        icon: 'M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728'
+        icon: 'M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728',
       }
     }
-    
+
     if (stockQuantity <= lowStockThreshold) {
       return {
         level: 'low',
         color: 'red',
         label: 'Low Stock',
-        icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.732 15.5c-.77.833.192 2.5 1.732 2.5z'
+        icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.732 15.5c-.77.833.192 2.5 1.732 2.5z',
       }
     }
-    
+
     if (stockQuantity <= reorderPoint) {
       return {
         level: 'medium',
         color: 'yellow',
         label: 'Medium Stock',
-        icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.732 15.5c-.77.833.192 2.5 1.732 2.5z'
+        icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.732 15.5c-.77.833.192 2.5 1.732 2.5z',
       }
     }
-    
+
     return {
       level: 'high',
       color: 'green',
       label: 'In Stock',
-      icon: 'M5 13l4 4L19 7'
+      icon: 'M5 13l4 4L19 7',
     }
   }
 
@@ -82,7 +82,7 @@ export const useInventory = () => {
    */
   const getStockStatusClasses = (status: StockStatus): string => {
     const baseClasses = 'inline-flex items-center px-2 py-1 rounded-full text-xs font-medium'
-    
+
     switch (status.color) {
       case 'green':
         return `${baseClasses} bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200`
@@ -102,7 +102,7 @@ export const useInventory = () => {
    */
   const getStockIndicatorClasses = (status: StockStatus): string => {
     const baseClasses = 'inline-block w-2 h-2 rounded-full mr-2'
-    
+
     switch (status.color) {
       case 'green':
         return `${baseClasses} bg-green-500`
@@ -122,7 +122,7 @@ export const useInventory = () => {
    */
   const needsReorder = (
     stockQuantity: number,
-    reorderPoint: number = 10
+    reorderPoint: number = 10,
   ): boolean => {
     return stockQuantity <= reorderPoint
   }
@@ -139,7 +139,7 @@ export const useInventory = () => {
    */
   const hasLowStock = (
     stockQuantity: number,
-    lowStockThreshold: number = 5
+    lowStockThreshold: number = 5,
   ): boolean => {
     return stockQuantity > 0 && stockQuantity <= lowStockThreshold
   }
@@ -158,7 +158,7 @@ export const useInventory = () => {
    */
   const getStockLevelPercentage = (
     stockQuantity: number,
-    maxStock: number = 100
+    maxStock: number = 100,
   ): number => {
     if (maxStock === 0) return 0
     return Math.min((stockQuantity / maxStock) * 100, 100)
@@ -173,31 +173,31 @@ export const useInventory = () => {
     value?: number
   } => {
     const numValue = typeof quantity === 'string' ? parseInt(quantity, 10) : quantity
-    
+
     if (isNaN(numValue)) {
       return {
         isValid: false,
-        error: 'Stock quantity must be a valid number'
+        error: 'Stock quantity must be a valid number',
       }
     }
-    
+
     if (numValue < 0) {
       return {
         isValid: false,
-        error: 'Stock quantity cannot be negative'
+        error: 'Stock quantity cannot be negative',
       }
     }
-    
+
     if (numValue > 999999) {
       return {
         isValid: false,
-        error: 'Stock quantity is too large'
+        error: 'Stock quantity is too large',
       }
     }
-    
+
     return {
       isValid: true,
-      value: numValue
+      value: numValue,
     }
   }
 
@@ -206,7 +206,7 @@ export const useInventory = () => {
    */
   const calculateStockValue = (
     stockQuantity: number,
-    unitPrice: number
+    unitPrice: number,
   ): number => {
     return stockQuantity * unitPrice
   }
@@ -248,22 +248,22 @@ export const useInventory = () => {
     getStockStatus,
     getStockStatusClasses,
     getStockIndicatorClasses,
-    
+
     // Stock level checks
     needsReorder,
     isOutOfStock,
     hasLowStock,
-    
+
     // Formatting and display
     formatStockQuantity,
     getStockLevelPercentage,
     calculateStockValue,
-    
+
     // Validation
     validateStockQuantity,
-    
+
     // Movement tracking
     getMovementTypeLabel,
-    getMovementTypeColor
+    getMovementTypeColor,
   }
 }

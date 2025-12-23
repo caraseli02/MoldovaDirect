@@ -4,33 +4,33 @@
     <div class="hidden md:block">
       <nav aria-label="Progress">
         <ol class="flex items-center justify-center space-x-8">
-          <li 
-            v-for="(step, index) in steps" 
+          <li
+            v-for="(step, index) in steps"
             :key="step.id"
             class="flex items-center"
           >
             <!-- Step Circle -->
             <div class="flex items-center">
-              <div 
+              <div
                 class="flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-200"
                 :class="getStepClasses(step.id, index)"
               >
                 <!-- Completed Step -->
-                <svg 
+                <svg
                   v-if="isStepCompleted(step.id)"
-                  class="w-5 h-5 text-white" 
-                  fill="currentColor" 
+                  class="w-5 h-5 text-white"
+                  fill="currentColor"
                   viewBox="0 0 20 20"
                 >
-                  <path 
-                    fill-rule="evenodd" 
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" 
-                    clip-rule="evenodd" 
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
                   />
                 </svg>
-                
+
                 <!-- Current or Future Step -->
-                <span 
+                <span
                   v-else
                   class="text-sm font-medium"
                   :class="isCurrentStep(step.id) ? 'text-white' : 'text-gray-500 dark:text-gray-400'"
@@ -38,34 +38,34 @@
                   {{ index + 1 }}
                 </span>
               </div>
-              
+
               <!-- Step Label -->
               <div class="ml-4 min-w-0">
-                <p 
+                <p
                   class="text-sm font-medium transition-colors duration-200"
                   :class="getStepTextClasses(step.id)"
                 >
                   {{ $t(`checkout.steps.${step.id}.name`) || step.name }}
                 </p>
-                <p 
+                <p
                   class="text-xs transition-colors duration-200"
-                  :class="isCurrentStep(step.id) || isStepCompleted(step.id) 
-                    ? 'text-gray-600 dark:text-gray-300' 
+                  :class="isCurrentStep(step.id) || isStepCompleted(step.id)
+                    ? 'text-gray-600 dark:text-gray-300'
                     : 'text-gray-400 dark:text-gray-500'"
                 >
                   {{ $t(`checkout.steps.${step.id}.description`) || step.description }}
                 </p>
               </div>
             </div>
-            
+
             <!-- Connector Line -->
-            <div 
+            <div
               v-if="index < steps.length - 1"
               class="hidden lg:block w-16 h-0.5 ml-8 transition-colors duration-200"
-              :class="isStepCompleted(step.id) 
-                ? 'bg-primary-600 dark:bg-primary-500' 
+              :class="isStepCompleted(step.id)
+                ? 'bg-primary-600 dark:bg-primary-500'
                 : 'bg-gray-200 dark:bg-gray-700'"
-            />
+            ></div>
           </li>
         </ol>
       </nav>
@@ -81,15 +81,15 @@
           {{ currentStepIndex + 1 }} {{ $t('common.of') }} {{ steps.length }}
         </span>
       </div>
-      
+
       <!-- Progress Bar -->
       <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-        <div 
+        <div
           class="bg-primary-600 dark:bg-primary-500 h-2 rounded-full transition-all duration-300 ease-out"
           :style="{ width: `${progressPercentage}%` }"
-        />
+        ></div>
       </div>
-      
+
       <!-- Step Description -->
       <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
         {{ $t(`checkout.steps.${currentStep}.description`) || getCurrentStepDescription() }}
@@ -108,11 +108,13 @@ interface CheckoutStepInfo {
 }
 
 interface Props {
-  currentStep: CheckoutStep
+  currentStep?: CheckoutStep
   steps: CheckoutStepInfo[]
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  currentStep: 'shipping', // Default to first step
+})
 
 // Computed properties
 const currentStepIndex = computed(() => {
@@ -133,12 +135,14 @@ const isStepCompleted = (stepId: CheckoutStep): boolean => {
   return stepIndex < currentStepIndex.value
 }
 
-const getStepClasses = (stepId: CheckoutStep, index: number): string => {
+const getStepClasses = (stepId: CheckoutStep, _index: number): string => {
   if (isStepCompleted(stepId)) {
     return 'bg-primary-600 dark:bg-primary-500 border-primary-600 dark:border-primary-500'
-  } else if (isCurrentStep(stepId)) {
+  }
+  else if (isCurrentStep(stepId)) {
     return 'bg-primary-600 dark:bg-primary-500 border-primary-600 dark:border-primary-500'
-  } else {
+  }
+  else {
     return 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600'
   }
 }
@@ -146,7 +150,8 @@ const getStepClasses = (stepId: CheckoutStep, index: number): string => {
 const getStepTextClasses = (stepId: CheckoutStep): string => {
   if (isCurrentStep(stepId) || isStepCompleted(stepId)) {
     return 'text-gray-900 dark:text-white'
-  } else {
+  }
+  else {
     return 'text-gray-500 dark:text-gray-400'
   }
 }

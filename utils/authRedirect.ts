@@ -1,5 +1,4 @@
-import type { SupabaseClient } from '@supabase/supabase-js'
-import type { User } from '@supabase/supabase-js'
+import type { SupabaseClient, User } from '@supabase/supabase-js'
 
 /**
  * Determines the appropriate redirect path based on user role
@@ -8,7 +7,7 @@ import type { User } from '@supabase/supabase-js'
 export async function getUserRoleRedirectPath(
   user: User | null,
   supabase: SupabaseClient,
-  localePath: (path: string) => string
+  localePath: (path: string) => string,
 ): Promise<string | null> {
   if (!user) return null
 
@@ -21,7 +20,7 @@ export async function getUserRoleRedirectPath(
   if (roleError) {
     console.error('[Auth] Failed to check user role:', roleError.message, {
       code: roleError.code,
-      userId: user.id
+      userId: user.id,
     })
     return null
   }
@@ -42,7 +41,7 @@ export async function handleAuthRedirect(
   user: User | null,
   supabase: SupabaseClient,
   localePath: (path: string) => string,
-  navigateTo: (path: string) => Promise<void>
+  navigateTo: (...args: any[]) => any,
 ): Promise<void> {
   // Priority 1: Query parameter redirect
   if (redirect && redirect.startsWith('/')) {

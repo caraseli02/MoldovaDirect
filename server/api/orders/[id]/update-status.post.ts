@@ -12,23 +12,23 @@ export default defineEventHandler(async (event) => {
   try {
     const supabase = await serverSupabaseClient(event)
     const orderId = getRouterParam(event, 'id')
-    
+
     if (!orderId) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Order ID is required'
+        statusMessage: 'Order ID is required',
       })
     }
 
     // Get request body
     const body = await readBody(event)
-    const { 
-      status, 
-      trackingNumber, 
-      carrier, 
+    const {
+      status,
+      trackingNumber,
+      carrier,
       estimatedDelivery,
       sendEmail = true,
-      issueDescription 
+      issueDescription,
     } = body as {
       status: string
       trackingNumber?: string
@@ -41,7 +41,7 @@ export default defineEventHandler(async (event) => {
     if (!status) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Status is required'
+        statusMessage: 'Status is required',
       })
     }
 
@@ -50,29 +50,30 @@ export default defineEventHandler(async (event) => {
     if (!validStatuses.includes(status)) {
       throw createError({
         statusCode: 400,
-        statusMessage: `Invalid status. Must be one of: ${validStatuses.join(', ')}`
+        statusMessage: `Invalid status. Must be one of: ${validStatuses.join(', ')}`,
       })
     }
 
     // Prepare update data
-    const updateData: any = { status }
-    
+    const updateData: Record<string, any> = { status }
+
     if (trackingNumber) {
       updateData.tracking_number = trackingNumber
     }
-    
+
     if (carrier) {
       updateData.carrier = carrier
     }
-    
+
     if (estimatedDelivery) {
       updateData.estimated_delivery = estimatedDelivery
     }
-    
+
     // Add timestamp fields based on status
     if (status === 'shipped' && !updateData.shipped_at) {
       updateData.shipped_at = new Date().toISOString()
-    } else if (status === 'delivered' && !updateData.delivered_at) {
+    }
+    else if (status === 'delivered' && !updateData.delivered_at) {
       updateData.delivered_at = new Date().toISOString()
     }
 
@@ -90,7 +91,7 @@ export default defineEventHandler(async (event) => {
     if (updateError || !updatedOrder) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to update order status'
+        statusMessage: 'Failed to update order status',
       })
     }
 
@@ -99,7 +100,7 @@ export default defineEventHandler(async (event) => {
     if (sendEmail) {
       // Determine email type based on status
       let emailType: EmailType | null = null
-      
+
       switch (status) {
         case 'processing':
           emailType = 'order_processing'
@@ -133,7 +134,8 @@ export default defineEventHandler(async (event) => {
             customerEmail = profile.email
             locale = profile.preferred_locale || 'en'
           }
-        } else if (updatedOrder.guest_email) {
+        }
+        else if (updatedOrder.guest_email) {
           customerEmail = updatedOrder.guest_email
           const shippingAddr = updatedOrder.shipping_address
           if (shippingAddr) {
@@ -147,18 +149,19 @@ export default defineEventHandler(async (event) => {
             updatedOrder,
             customerName,
             customerEmail,
-            locale
+            locale,
           )
 
           // Send status email
           try {
             emailResult = await sendOrderStatusEmail(emailData, emailType, issueDescription, { supabaseClient: supabase })
-          } catch (emailError: any) {
+          }
+          catch (emailError: any) {
             console.error('Failed to send status email:', emailError)
             // Don't fail the entire request if email fails
             emailResult = {
               success: false,
-              error: emailError.message
+              error: emailError.message,
             }
           }
         }
@@ -174,20 +177,23 @@ export default defineEventHandler(async (event) => {
         status: updatedOrder.status,
         trackingNumber: updatedOrder.tracking_number,
         carrier: updatedOrder.carrier,
-        estimatedDelivery: updatedOrder.estimated_delivery
+        estimatedDelivery: updatedOrder.estimated_delivery,
       },
-      email: emailResult ? {
-        sent: emailResult.success,
-        emailLogId: emailResult.emailLogId,
-        error: emailResult.error
-      } : null
+      email: emailResult
+        ? {
+            sent: emailResult.success,
+            emailLogId: emailResult.emailLogId,
+            error: emailResult.error,
+          }
+        : null,
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     console.error('Error updating order status:', error)
-    
+
     throw createError({
       statusCode: error.statusCode || 500,
-      statusMessage: error.statusMessage || 'Failed to update order status'
+      statusMessage: error.statusMessage || 'Failed to update order status',
     })
   }
 })

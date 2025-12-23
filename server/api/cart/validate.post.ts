@@ -4,7 +4,7 @@ import { validateCartItems, calculateOrderTotals, getAvailableShippingMethods } 
 
 interface ValidateCartRequest {
   cartId: number
-  shippingAddress?: any
+  shippingAddress?: unknown
 }
 
 export default defineEventHandler(async (event) => {
@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
     if (!body.cartId) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Cart ID is required'
+        statusMessage: 'Cart ID is required',
       })
     }
 
@@ -45,14 +45,14 @@ export default defineEventHandler(async (event) => {
     if (cartError) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to fetch cart items'
+        statusMessage: 'Failed to fetch cart items',
       })
     }
 
     if (!cartItems?.length) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Cart is empty'
+        statusMessage: 'Cart is empty',
       })
     }
 
@@ -63,7 +63,7 @@ export default defineEventHandler(async (event) => {
       return {
         success: false,
         valid: false,
-        errors: validation.errors
+        errors: validation.errors,
       }
     }
 
@@ -84,11 +84,12 @@ export default defineEventHandler(async (event) => {
         shippingMethods,
         estimatedTotal: {
           min: orderCalculation.subtotal + Math.min(...shippingMethods.map(m => m.price)),
-          max: orderCalculation.subtotal + Math.max(...shippingMethods.map(m => m.price))
-        }
-      }
+          max: orderCalculation.subtotal + Math.max(...shippingMethods.map(m => m.price)),
+        },
+      },
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     if (error.statusCode) {
       throw error
     }
@@ -96,7 +97,7 @@ export default defineEventHandler(async (event) => {
     console.error('Cart validation error:', error)
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 })

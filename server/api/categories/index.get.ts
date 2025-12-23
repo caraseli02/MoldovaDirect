@@ -1,6 +1,26 @@
 import { serverSupabaseClient } from '#supabase/server'
 import { PUBLIC_CACHE_CONFIG, getPublicCacheKey } from '~/server/utils/publicCache'
 
+// Type definitions for API response
+interface ProductCountItem {
+  category_id: number
+}
+
+interface TransformedCategory {
+  id: number
+  slug: string
+  parentId: number | null
+  name: string
+  description: string
+  nameTranslations: Record<string, string>
+  descriptionTranslations?: Record<string, string>
+  image: string | null
+  sortOrder: number
+  productCount: number
+  isActive: boolean
+  children?: TransformedCategory[]
+}
+
 // Helper function to get localized content with fallback
 function getLocalizedContent(content: Record<string, string>, locale: string): string {
   if (content[locale]) return content[locale]
@@ -15,7 +35,7 @@ function buildCategoryTree(categories: any[], parentId: number | null = null): a
     .filter(cat => cat.parentId === parentId) // Use parentId instead of parent_id
     .map(category => ({
       ...category,
-      children: buildCategoryTree(categories, category.id)
+      children: buildCategoryTree(categories, category.id),
     }))
     .sort((a, b) => a.sortOrder - b.sortOrder) // Use sortOrder instead of sort_order
 }
@@ -47,7 +67,8 @@ export default defineCachedEventHandler(async (event) => {
     if (parent) {
       if (parent === 'root') {
         queryBuilder = queryBuilder.is('parent_id', null)
-      } else {
+      }
+      else {
         // Find parent category by slug first
         const { data: parentCategory } = await supabase
           .from('categories')
@@ -59,7 +80,7 @@ export default defineCachedEventHandler(async (event) => {
         if (!parentCategory) {
           throw createError({
             statusCode: 404,
-            statusMessage: 'Parent category not found'
+            statusMessage: 'Parent category not found',
           })
         }
 
@@ -73,7 +94,7 @@ export default defineCachedEventHandler(async (event) => {
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to fetch categories',
-        data: error
+        data: error,
       })
     }
 
@@ -86,13 +107,22 @@ export default defineCachedEventHandler(async (event) => {
       .in('category_id', categoryIds)
 
     // Count products per category
-    const productCountMap = (productCounts || []).reduce((acc: Record<number, number>, item: any) => {
+    const productCountMap = (productCounts || []).reduce((acc: Record<number, number>, item: ProductCountItem) => {
       acc[item.category_id] = (acc[item.category_id] || 0) + 1
       return acc
     }, {})
 
     // Transform categories with localization and product counts
-    const transformedCategories = categories?.map((category: any) => ({
+    const transformedCategories = categories?.map((category: {
+      id: number
+      slug: string
+      parent_id: number | null
+      name_translations: Record<string, string>
+      description_translations?: Record<string, string>
+      image_url: string | null
+      sort_order: number
+      is_active: boolean
+    }): TransformedCategory => ({
       id: category.id,
       slug: category.slug,
       parentId: category.parent_id,
@@ -103,7 +133,7 @@ export default defineCachedEventHandler(async (event) => {
       image: category.image_url,
       sortOrder: category.sort_order,
       productCount: productCountMap[category.id] || 0,
-      isActive: category.is_active
+      isActive: category.is_active,
     })) || []
 
     // If no parent filter is specified, return hierarchical tree
@@ -112,7 +142,7 @@ export default defineCachedEventHandler(async (event) => {
       return {
         categories: categoryTree,
         total: transformedCategories.length,
-        locale
+        locale,
       }
     }
 
@@ -121,23 +151,23 @@ export default defineCachedEventHandler(async (event) => {
       categories: transformedCategories,
       total: transformedCategories.length,
       locale,
-      parent
+      parent,
     }
-
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Categories API error:', error)
-    
+
     if (error.statusCode) {
       throw error
     }
-    
+
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 }, {
   maxAge: PUBLIC_CACHE_CONFIG.categoriesList.maxAge,
   name: PUBLIC_CACHE_CONFIG.categoriesList.name,
-  getKey: (event) => getPublicCacheKey(PUBLIC_CACHE_CONFIG.categoriesList.name, event)
+  getKey: event => getPublicCacheKey(PUBLIC_CACHE_CONFIG.categoriesList.name, event),
 })

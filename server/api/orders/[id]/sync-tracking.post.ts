@@ -11,18 +11,18 @@ export default defineEventHandler(async (event) => {
     if (!authHeader) {
       throw createError({
         statusCode: 401,
-        statusMessage: 'Authentication required'
+        statusMessage: 'Authentication required',
       })
     }
 
     const { data: { user }, error: authError } = await supabase.auth.getUser(
-      authHeader.replace('Bearer ', '')
+      authHeader.replace('Bearer ', ''),
     )
 
     if (authError || !user) {
       throw createError({
         statusCode: 401,
-        statusMessage: 'Invalid authentication'
+        statusMessage: 'Invalid authentication',
       })
     }
 
@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
     if (profileError || profile?.role !== 'admin') {
       throw createError({
         statusCode: 403,
-        statusMessage: 'Admin access required'
+        statusMessage: 'Admin access required',
       })
     }
 
@@ -45,7 +45,7 @@ export default defineEventHandler(async (event) => {
     if (!orderId) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Order ID is required'
+        statusMessage: 'Order ID is required',
       })
     }
 
@@ -60,12 +60,12 @@ export default defineEventHandler(async (event) => {
       if (orderError.code === 'PGRST116') {
         throw createError({
           statusCode: 404,
-          statusMessage: 'Order not found'
+          statusMessage: 'Order not found',
         })
       }
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to fetch order'
+        statusMessage: 'Failed to fetch order',
       })
     }
 
@@ -73,7 +73,7 @@ export default defineEventHandler(async (event) => {
     if (!order.tracking_number || !order.carrier) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Order does not have tracking information'
+        statusMessage: 'Order does not have tracking information',
       })
     }
 
@@ -82,13 +82,13 @@ export default defineEventHandler(async (event) => {
       parseInt(orderId),
       order.tracking_number,
       order.carrier,
-      supabase
+      supabase,
     )
 
     if (!success) {
       throw createError({
         statusCode: 503,
-        statusMessage: 'Failed to sync tracking from carrier'
+        statusMessage: 'Failed to sync tracking from carrier',
       })
     }
 
@@ -107,10 +107,11 @@ export default defineEventHandler(async (event) => {
         trackingNumber: order.tracking_number,
         carrier: order.carrier,
         events: trackingEvents || [],
-        syncedAt: new Date().toISOString()
-      }
+        syncedAt: new Date().toISOString(),
+      },
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     if (error.statusCode) {
       throw error
     }
@@ -118,7 +119,7 @@ export default defineEventHandler(async (event) => {
     console.error('Tracking sync error:', error)
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 })

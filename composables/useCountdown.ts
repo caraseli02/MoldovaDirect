@@ -41,7 +41,7 @@ export const useCountdown = (endDate: Ref<Date | string | null | undefined>) => 
         hours: 0,
         minutes: 0,
         seconds: 0,
-        total: 0
+        total: 0,
       }
     }
 
@@ -55,7 +55,7 @@ export const useCountdown = (endDate: Ref<Date | string | null | undefined>) => 
       hours,
       minutes,
       seconds,
-      total
+      total,
     }
   })
 
@@ -142,11 +142,12 @@ export const useCountdown = (endDate: Ref<Date | string | null | undefined>) => 
     (newEndDate) => {
       if (newEndDate) {
         restart()
-      } else {
+      }
+      else {
         stopInterval()
       }
     },
-    { immediate: true }
+    { immediate: true },
   )
 
   // Cleanup on unmount
@@ -158,6 +159,6 @@ export const useCountdown = (endDate: Ref<Date | string | null | undefined>) => 
     timeRemaining,
     formattedTimeRemaining,
     hasEnded,
-    restart
+    restart,
   }
 }

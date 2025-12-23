@@ -11,7 +11,7 @@ import { z } from 'zod'
 
 const unlockCartSchema = z.object({
   cartId: z.number().int().positive(),
-  checkoutSessionId: z.string().min(1).optional()
+  checkoutSessionId: z.string().min(1).optional(),
 })
 
 export default defineEventHandler(async (event) => {
@@ -28,7 +28,7 @@ export default defineEventHandler(async (event) => {
     // Call the unlock_cart function
     const { data, error } = await supabase.rpc('unlock_cart', {
       p_cart_id: cartId,
-      p_checkout_session_id: checkoutSessionId || null
+      p_checkout_session_id: checkoutSessionId || null,
     })
 
     if (error) {
@@ -36,22 +36,23 @@ export default defineEventHandler(async (event) => {
       throw createError({
         statusCode: 500,
         message: 'Failed to unlock cart',
-        data: { error: error.message }
+        data: { error: error.message },
       })
     }
 
     // Check if the unlock was successful
     if (!data.success) {
-      const statusCode = data.code === 'CART_NOT_FOUND' ? 404 :
-                         data.code === 'UNAUTHORIZED_UNLOCK' ? 403 : 400
+      const statusCode = data.code === 'CART_NOT_FOUND'
+        ? 404
+        : data.code === 'UNAUTHORIZED_UNLOCK' ? 403 : 400
 
       throw createError({
         statusCode,
         message: data.error || 'Failed to unlock cart',
         data: {
           code: data.code,
-          lockedBySession: data.locked_by_session
-        }
+          lockedBySession: data.locked_by_session,
+        },
       })
     }
 
@@ -59,16 +60,16 @@ export default defineEventHandler(async (event) => {
     return {
       success: true,
       locked: false,
-      message: data.message || 'Cart unlocked successfully'
+      message: data.message || 'Cart unlocked successfully',
     }
-
-  } catch (err: any) {
+  }
+  catch (err: any) {
     // Handle Zod validation errors
     if (err.name === 'ZodError') {
       throw createError({
         statusCode: 400,
         message: 'Invalid request data',
-        data: { errors: err.errors }
+        data: { errors: err.errors },
       })
     }
 
@@ -81,7 +82,7 @@ export default defineEventHandler(async (event) => {
     console.error('Unexpected error in unlock cart endpoint:', err)
     throw createError({
       statusCode: 500,
-      message: 'An unexpected error occurred while unlocking the cart'
+      message: 'An unexpected error occurred while unlocking the cart',
     })
   }
 })

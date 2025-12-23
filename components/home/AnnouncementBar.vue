@@ -6,7 +6,10 @@
   >
     <div class="container">
       <div class="flex items-center justify-center gap-3 py-3 text-sm font-medium md:text-base">
-        <commonIcon name="lucide:sparkles" class="h-4 w-4 flex-shrink-0" />
+        <commonIcon
+          name="lucide:sparkles"
+          class="h-4 w-4 flex-shrink-0"
+        />
         <p class="text-center">
           <span class="font-semibold">{{ t('home.announcement.highlight') }}</span>
           <span class="mx-2 hidden sm:inline">•</span>
@@ -18,7 +21,10 @@
           class="ml-2 hidden whitespace-nowrap rounded-full border border-brand-light/25 bg-brand-light/15 px-4 py-1 text-xs font-medium tracking-wide backdrop-blur-sm transition-all hover:border-brand-light/35 hover:bg-brand-light/25 md:inline-flex"
         >
           {{ t('home.announcement.cta') }}
-          <commonIcon name="lucide:arrow-right" class="ml-1 h-3 w-3" />
+          <commonIcon
+            name="lucide:arrow-right"
+            class="ml-1 h-3 w-3"
+          />
         </NuxtLink>
       </div>
     </div>

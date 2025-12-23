@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
     { name: 'Jane Smith', email: 'jane.smith@example.com' },
     { name: 'Bob Johnson', email: 'bob.johnson@example.com' },
     { name: 'Alice Williams', email: 'alice.williams@example.com' },
-    { name: 'Charlie Brown', email: 'charlie.brown@example.com' }
+    { name: 'Charlie Brown', email: 'charlie.brown@example.com' },
   ]
 
   const mockProducts = [
@@ -26,14 +26,18 @@ export default defineEventHandler(async (event) => {
     { name: 'Handcrafted Pottery', price: 45.50, sku: 'POT-001' },
     { name: 'Organic Honey', price: 15.99, sku: 'HONEY-001' },
     { name: 'Wool Blanket', price: 89.99, sku: 'BLANKET-001' },
-    { name: 'Embroidered Shirt', price: 65.00, sku: 'SHIRT-001' }
+    { name: 'Embroidered Shirt', price: 65.00, sku: 'SHIRT-001' },
   ]
 
   const statuses = ['pending', 'processing', 'shipped', 'delivered', 'cancelled']
   const paymentStatuses = ['pending', 'paid', 'failed']
 
   function randomItem<T>(array: T[]): T {
-    return array[Math.floor(Math.random() * array.length)]
+    const item = array[Math.floor(Math.random() * array.length)]
+    if (item === undefined) {
+      throw new Error('Array is empty')
+    }
+    return item
   }
 
   function randomDate(daysAgo: number): Date {
@@ -54,7 +58,7 @@ export default defineEventHandler(async (event) => {
     const status = randomItem(statuses)
     const paymentStatus = status === 'cancelled' ? 'failed' : randomItem(paymentStatuses)
     const createdAt = randomDate(30)
-    
+
     // Generate 1-4 items per order
     const itemCount = Math.floor(Math.random() * 4) + 1
     const items = []
@@ -72,12 +76,12 @@ export default defineEventHandler(async (event) => {
           sku: product.sku,
           nameTranslations: {
             en: product.name,
-            es: product.name
-          }
+            es: product.name,
+          },
         },
         quantity,
         price_eur: product.price,
-        total_eur: itemTotal
+        total_eur: itemTotal,
       })
     }
 
@@ -101,14 +105,14 @@ export default defineEventHandler(async (event) => {
         city: 'Chisinau',
         province: 'Chisinau',
         postalCode: `MD-${Math.floor(Math.random() * 9000) + 1000}`,
-        country: 'Moldova'
+        country: 'Moldova',
       },
       billing_address: {
         street: `${Math.floor(Math.random() * 999) + 1} Main St`,
         city: 'Chisinau',
         province: 'Chisinau',
         postalCode: `MD-${Math.floor(Math.random() * 9000) + 1000}`,
-        country: 'Moldova'
+        country: 'Moldova',
       },
       customer_notes: Math.random() > 0.7 ? 'Please deliver between 9 AM - 5 PM' : null,
       admin_notes: null,
@@ -119,7 +123,7 @@ export default defineEventHandler(async (event) => {
       fulfillment_progress: status === 'processing' ? Math.floor(Math.random() * 100) : null,
       created_at: createdAt.toISOString(),
       shipped_at: status === 'shipped' || status === 'delivered' ? new Date(createdAt.getTime() + 86400000 * 2).toISOString() : null,
-      delivered_at: status === 'delivered' ? new Date(createdAt.getTime() + 86400000 * 5).toISOString() : null
+      delivered_at: status === 'delivered' ? new Date(createdAt.getTime() + 86400000 * 5).toISOString() : null,
     }
 
     try {
@@ -138,7 +142,7 @@ export default defineEventHandler(async (event) => {
       // Insert order items
       const orderItems = items.map(item => ({
         ...item,
-        order_id: insertedOrder.id
+        order_id: insertedOrder.id,
       }))
 
       const { error: itemsError } = await supabase
@@ -153,9 +157,10 @@ export default defineEventHandler(async (event) => {
       createdOrders.push({
         orderNumber: order.order_number,
         itemCount: items.length,
-        total: total.toFixed(2)
+        total: total.toFixed(2),
       })
-    } catch (error) {
+    }
+    catch (error: any) {
       console.error('Error creating order:', error)
     }
   }
@@ -163,6 +168,6 @@ export default defineEventHandler(async (event) => {
   return {
     success: true,
     message: `Created ${createdOrders.length} mock orders`,
-    orders: createdOrders
+    orders: createdOrders,
   }
 })

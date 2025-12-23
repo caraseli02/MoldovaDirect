@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { DialogTriggerProps } from "reka-ui"
-import { DialogTrigger } from "reka-ui"
+import type { DialogTriggerProps } from 'reka-ui'
+import { DialogTrigger } from 'reka-ui'
 
 const props = defineProps<DialogTriggerProps>()
 </script>
@@ -10,6 +10,6 @@ const props = defineProps<DialogTriggerProps>()
     data-slot="dialog-trigger"
     v-bind="props"
   >
-    <slot />
+    <slot></slot>
   </DialogTrigger>
 </template>

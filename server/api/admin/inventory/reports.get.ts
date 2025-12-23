@@ -1,9 +1,9 @@
 /**
  * Inventory Reports API Endpoint
- * 
+ *
  * Requirements addressed:
  * - 2.6: Inventory reports with movement history and current levels
- * 
+ *
  * Features:
  * - Stock level reports
  * - Movement summary reports
@@ -13,6 +13,7 @@
  */
 
 import { serverSupabaseClient } from '#supabase/server'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { requireAdminRole } from '~/server/utils/adminAuth'
 import { z } from 'zod'
 import { getMockInventoryReports } from '~/server/utils/mockData'
@@ -21,7 +22,7 @@ const reportsQuerySchema = z.object({
   reportType: z.enum(['stock-levels', 'movements-summary', 'low-stock', 'reorder-alerts']).default('stock-levels'),
   startDate: z.string().optional(),
   endDate: z.string().optional(),
-  categoryId: z.coerce.number().optional()
+  categoryId: z.coerce.number().optional(),
 })
 
 export default defineEventHandler(async (event) => {
@@ -34,29 +35,29 @@ export default defineEventHandler(async (event) => {
     const validatedQuery = reportsQuerySchema.parse(query)
     const { reportType, startDate, endDate, categoryId } = validatedQuery
 
-    let reportData: any = {}
+    let reportData = {}
 
     switch (reportType) {
       case 'stock-levels':
         reportData = await generateStockLevelsReport(supabase, categoryId)
         break
-      
+
       case 'movements-summary':
         reportData = await generateMovementsSummaryReport(supabase, startDate, endDate, categoryId)
         break
-      
+
       case 'low-stock':
         reportData = await generateLowStockReport(supabase, categoryId)
         break
-      
+
       case 'reorder-alerts':
         reportData = await generateReorderAlertsReport(supabase, categoryId)
         break
-      
+
       default:
         throw createError({
           statusCode: 400,
-          statusMessage: 'Invalid report type'
+          statusMessage: 'Invalid report type',
         })
     }
 
@@ -64,41 +65,42 @@ export default defineEventHandler(async (event) => {
       reportType,
       generatedAt: new Date().toISOString(),
       filters: { startDate, endDate, categoryId },
-      data: reportData
+      data: reportData,
     }
-
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Inventory reports API error, falling back to mock data:', error)
-    
+
     // If it's a known error, throw it
-    if (error.statusCode && error.statusMessage?.includes('Authentication')) {
+    if (error && typeof error === 'object' && 'statusCode' in error && 'statusMessage' in error && typeof error.statusMessage === 'string' && error.statusMessage.includes('Authentication')) {
       throw error
     }
-    
+
     // Use mock data as fallback
     try {
       const query = getQuery(event)
       const validatedQuery = reportsQuerySchema.parse(query)
       const { reportType } = validatedQuery
-      
+
       const reportData = getMockInventoryReports(reportType)
-      
+
       return {
         reportType,
         generatedAt: new Date().toISOString(),
-        filters: { 
-          startDate: validatedQuery.startDate, 
-          endDate: validatedQuery.endDate, 
-          categoryId: validatedQuery.categoryId 
+        filters: {
+          startDate: validatedQuery.startDate,
+          endDate: validatedQuery.endDate,
+          categoryId: validatedQuery.categoryId,
         },
         data: reportData,
-        mockData: true // Flag to indicate this is mock data
+        mockData: true, // Flag to indicate this is mock data
       }
-    } catch (mockError) {
+    }
+    catch (mockError: any) {
       console.error('Failed to generate mock report data:', mockError)
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to generate inventory report'
+        statusMessage: 'Failed to generate inventory report',
       })
     }
   }
@@ -107,7 +109,7 @@ export default defineEventHandler(async (event) => {
 /**
  * Generate stock levels report
  */
-async function generateStockLevelsReport(supabase: any, categoryId?: number) {
+async function generateStockLevelsReport(supabase: SupabaseClient, categoryId?: number) {
   let queryBuilder = supabase
     .from('products')
     .select(`
@@ -139,7 +141,7 @@ async function generateStockLevelsReport(supabase: any, categoryId?: number) {
     const stockQuantity = product.stock_quantity
     const lowThreshold = product.low_stock_threshold || 5
     const reorderPoint = product.reorder_point || 10
-    
+
     let status = 'high'
     if (stockQuantity === 0) status = 'out'
     else if (stockQuantity <= lowThreshold) status = 'low'
@@ -155,17 +157,17 @@ async function generateStockLevelsReport(supabase: any, categoryId?: number) {
       reorderPoint,
       status,
       stockValue: stockQuantity * product.price_eur,
-      isActive: product.is_active
+      isActive: product.is_active,
     }
   })
 
   // Calculate summary statistics
   const totalProducts = stockLevels.length
-  const outOfStock = stockLevels.filter(p => p.status === 'out').length
-  const lowStock = stockLevels.filter(p => p.status === 'low').length
-  const mediumStock = stockLevels.filter(p => p.status === 'medium').length
-  const highStock = stockLevels.filter(p => p.status === 'high').length
-  const totalStockValue = stockLevels.reduce((sum, p) => sum + p.stockValue, 0)
+  const outOfStock = stockLevels.filter((p: any) => p.status === 'out').length
+  const lowStock = stockLevels.filter((p: any) => p.status === 'low').length
+  const mediumStock = stockLevels.filter((p: any) => p.status === 'medium').length
+  const highStock = stockLevels.filter((p: any) => p.status === 'high').length
+  const totalStockValue = stockLevels.reduce((sum: number, p: any) => sum + p.stockValue, 0)
 
   return {
     summary: {
@@ -174,16 +176,16 @@ async function generateStockLevelsReport(supabase: any, categoryId?: number) {
       lowStock,
       mediumStock,
       highStock,
-      totalStockValue
+      totalStockValue,
     },
-    products: stockLevels
+    products: stockLevels,
   }
 }
 
 /**
  * Generate movements summary report
  */
-async function generateMovementsSummaryReport(supabase: any, startDate?: string, endDate?: string, categoryId?: number) {
+async function generateMovementsSummaryReport(supabase: SupabaseClient, startDate?: string, endDate?: string, categoryId?: number) {
   let queryBuilder = supabase
     .from('inventory_movements')
     .select(`
@@ -220,7 +222,7 @@ async function generateMovementsSummaryReport(supabase: any, startDate?: string,
   }
 
   // Filter by category if specified
-  const filteredMovements = categoryId 
+  const filteredMovements = categoryId
     ? (movements || []).filter((m: any) => m.products?.category_id === categoryId)
     : movements || []
 
@@ -251,12 +253,12 @@ async function generateMovementsSummaryReport(supabase: any, startDate?: string,
       totalStockIn,
       totalStockOut,
       totalAdjustments,
-      netChange: totalStockIn - totalStockOut
+      netChange: totalStockIn - totalStockOut,
     },
     byType: {
       stockIn: stockIn.length,
       stockOut: stockOut.length,
-      adjustments: adjustments.length
+      adjustments: adjustments.length,
     },
     byReason: reasonSummary,
     recentMovements: filteredMovements.slice(0, 10).map((m: any) => ({
@@ -266,15 +268,15 @@ async function generateMovementsSummaryReport(supabase: any, startDate?: string,
       movementType: m.movement_type,
       quantity: m.quantity,
       reason: m.reason,
-      createdAt: m.created_at
-    }))
+      createdAt: m.created_at,
+    })),
   }
 }
 
 /**
  * Generate low stock report
  */
-async function generateLowStockReport(supabase: any, categoryId?: number) {
+async function generateLowStockReport(supabase: SupabaseClient, categoryId?: number) {
   let queryBuilder = supabase
     .from('products')
     .select(`
@@ -315,20 +317,20 @@ async function generateLowStockReport(supabase: any, categoryId?: number) {
     reorderPoint: product.reorder_point || 10,
     stockValue: product.stock_quantity * product.price_eur,
     daysUntilOutOfStock: Math.floor(product.stock_quantity / 1), // Simplified calculation
-    isActive: product.is_active
+    isActive: product.is_active,
   }))
 
   return {
     totalLowStockProducts: lowStockProducts.length,
-    totalValue: lowStockProducts.reduce((sum, p) => sum + p.stockValue, 0),
-    products: lowStockProducts.sort((a, b) => a.stockQuantity - b.stockQuantity)
+    totalValue: lowStockProducts.reduce((sum: number, p: any) => sum + p.stockValue, 0),
+    products: lowStockProducts.sort((a: any, b: any) => a.stockQuantity - b.stockQuantity),
   }
 }
 
 /**
  * Generate reorder alerts report
  */
-async function generateReorderAlertsReport(supabase: any, categoryId?: number) {
+async function generateReorderAlertsReport(supabase: SupabaseClient, categoryId?: number) {
   let queryBuilder = supabase
     .from('products')
     .select(`
@@ -362,7 +364,7 @@ async function generateReorderAlertsReport(supabase: any, categoryId?: number) {
   }).map((product: any) => {
     const reorderQuantity = Math.max(
       (product.reorder_point || 10) * 2 - product.stock_quantity,
-      product.reorder_point || 10
+      product.reorder_point || 10,
     )
 
     return {
@@ -375,23 +377,24 @@ async function generateReorderAlertsReport(supabase: any, categoryId?: number) {
       recommendedOrderQuantity: reorderQuantity,
       estimatedCost: reorderQuantity * product.price_eur,
       supplierInfo: product.supplier_info,
-      priority: product.stock_quantity === 0 ? 'critical' :
-                product.stock_quantity <= (product.low_stock_threshold || 5) ? 'high' : 'medium',
-      isActive: product.is_active
+      priority: product.stock_quantity === 0
+        ? 'critical'
+        : product.stock_quantity <= (product.low_stock_threshold || 5) ? 'high' : 'medium',
+      isActive: product.is_active,
     }
   })
 
   return {
     totalReorderProducts: reorderProducts.length,
-    totalEstimatedCost: reorderProducts.reduce((sum, p) => sum + p.estimatedCost, 0),
+    totalEstimatedCost: reorderProducts.reduce((sum: number, p: any) => sum + p.estimatedCost, 0),
     byPriority: {
-      critical: reorderProducts.filter(p => p.priority === 'critical').length,
-      high: reorderProducts.filter(p => p.priority === 'high').length,
-      medium: reorderProducts.filter(p => p.priority === 'medium').length
+      critical: reorderProducts.filter((p: any) => p.priority === 'critical').length,
+      high: reorderProducts.filter((p: any) => p.priority === 'high').length,
+      medium: reorderProducts.filter((p: any) => p.priority === 'medium').length,
     },
-    products: reorderProducts.sort((a, b) => {
-      const priorityOrder = { critical: 0, high: 1, medium: 2 }
-      return priorityOrder[a.priority] - priorityOrder[b.priority]
-    })
+    products: reorderProducts.sort((a: any, b: any) => {
+      const priorityOrder: Record<string, number> = { critical: 0, high: 1, medium: 2 }
+      return (priorityOrder[a.priority] ?? 3) - (priorityOrder[b.priority] ?? 3)
+    }),
   }
 }

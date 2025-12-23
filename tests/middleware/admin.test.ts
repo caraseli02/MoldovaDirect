@@ -11,9 +11,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import type { RouteLocationNormalized } from 'vue-router'
 
 describe('Admin Middleware', () => {
-  let middleware: any
   let mockTo: RouteLocationNormalized
-  let mockFrom: RouteLocationNormalized
+  let _mockFrom: RouteLocationNormalized
   let mockUser: any
   let mockSupabase: any
   let mockProfile: any
@@ -21,7 +20,7 @@ describe('Admin Middleware', () => {
   beforeEach(() => {
     // Mock route objects
     mockTo = { path: '/admin/dashboard' } as RouteLocationNormalized
-    mockFrom = { path: '/' } as RouteLocationNormalized
+    _mockFrom = { path: '/' } as RouteLocationNormalized
 
     // Reset mocks
     mockUser = null
@@ -32,28 +31,30 @@ describe('Admin Middleware', () => {
           eq: vi.fn(() => ({
             single: vi.fn(async () => ({
               data: mockProfile,
-              error: null
-            }))
-          }))
-        }))
+              error: null,
+            })),
+          })),
+        })),
       })),
       auth: {
         getSession: vi.fn(async () => ({
           data: {
-            session: mockUser ? {
-              user: mockUser,
-              access_token: 'mock-token'
-            } : null
+            session: mockUser
+              ? {
+                  user: mockUser,
+                  access_token: 'mock-token',
+                }
+              : null,
           },
-          error: null
+          error: null,
         })),
         mfa: {
           getAuthenticatorAssuranceLevel: vi.fn(async () => ({
             data: { currentLevel: 'aal2' },
-            error: null
-          }))
-        }
-      }
+            error: null,
+          })),
+        },
+      },
     }
 
     // Mock Nuxt composables
@@ -62,6 +63,17 @@ describe('Admin Middleware', () => {
     vi.stubGlobal('navigateTo', vi.fn((path: string) => path))
     vi.stubGlobal('createError', vi.fn((error: any) => {
       throw new Error(error.statusMessage)
+    }))
+    // Mock auth store
+    vi.stubGlobal('useAuthStore', () => ({
+      isTestSession: false,
+      user: null,
+    }))
+    // Mock runtime config
+    vi.stubGlobal('useRuntimeConfig', () => ({
+      public: {
+        env: 'development',
+      },
     }))
   })
 
@@ -73,7 +85,7 @@ describe('Admin Middleware', () => {
 
       // Import and execute middleware
       const { default: adminMiddleware } = await import('../../middleware/admin')
-      const result = await adminMiddleware(mockTo, mockFrom)
+      await adminMiddleware(mockTo, _mockFrom)
 
       expect(navigateTo).toHaveBeenCalledWith('/auth/login')
     })
@@ -85,7 +97,7 @@ describe('Admin Middleware', () => {
       const { default: adminMiddleware } = await import('../../middleware/admin')
 
       // Should not throw
-      await expect(adminMiddleware(mockTo, mockFrom)).resolves.not.toThrow()
+      await expect(adminMiddleware(mockTo, _mockFrom)).resolves.not.toThrow()
     })
   })
 
@@ -100,8 +112,8 @@ describe('Admin Middleware', () => {
       const { default: adminMiddleware } = await import('../../middleware/admin')
 
       // Should throw 403 error
-      await expect(adminMiddleware(mockTo, mockFrom)).rejects.toThrow(
-        'Admin access required'
+      await expect(adminMiddleware(mockTo, _mockFrom)).rejects.toThrow(
+        'Admin access required',
       )
     })
 
@@ -110,8 +122,8 @@ describe('Admin Middleware', () => {
 
       const { default: adminMiddleware } = await import('../../middleware/admin')
 
-      await expect(adminMiddleware(mockTo, mockFrom)).rejects.toThrow(
-        'Admin access required'
+      await expect(adminMiddleware(mockTo, _mockFrom)).rejects.toThrow(
+        'Admin access required',
       )
     })
 
@@ -120,8 +132,8 @@ describe('Admin Middleware', () => {
 
       const { default: adminMiddleware } = await import('../../middleware/admin')
 
-      await expect(adminMiddleware(mockTo, mockFrom)).rejects.toThrow(
-        'Admin access required'
+      await expect(adminMiddleware(mockTo, _mockFrom)).rejects.toThrow(
+        'Admin access required',
       )
     })
 
@@ -131,7 +143,7 @@ describe('Admin Middleware', () => {
       const { default: adminMiddleware } = await import('../../middleware/admin')
 
       // Should not throw
-      await expect(adminMiddleware(mockTo, mockFrom)).resolves.not.toThrow()
+      await expect(adminMiddleware(mockTo, _mockFrom)).resolves.not.toThrow()
     })
 
     it('should throw 401 if profile cannot be fetched', async () => {
@@ -140,16 +152,16 @@ describe('Admin Middleware', () => {
           eq: vi.fn(() => ({
             single: vi.fn(async () => ({
               data: null,
-              error: new Error('Database error')
-            }))
-          }))
-        }))
+              error: new Error('Database error'),
+            })),
+          })),
+        })),
       }))
 
       const { default: adminMiddleware } = await import('../../middleware/admin')
 
-      await expect(adminMiddleware(mockTo, mockFrom)).rejects.toThrow(
-        'Authentication required'
+      await expect(adminMiddleware(mockTo, _mockFrom)).rejects.toThrow(
+        'Authentication required',
       )
     })
   })
@@ -166,16 +178,16 @@ describe('Admin Middleware', () => {
             expect(column).toBe('id')
             expect(value).toBe(userId)
             return {
-              single: vi.fn(async () => ({ data: mockProfile, error: null }))
+              single: vi.fn(async () => ({ data: mockProfile, error: null })),
             }
-          })
-        }))
+          }),
+        })),
       }))
 
       mockSupabase.from = fromMock
 
       const { default: adminMiddleware } = await import('../../middleware/admin')
-      await adminMiddleware(mockTo, mockFrom)
+      await adminMiddleware(mockTo, _mockFrom)
 
       expect(fromMock).toHaveBeenCalledWith('profiles')
     })
@@ -186,16 +198,16 @@ describe('Admin Middleware', () => {
 
       const selectMock = vi.fn(() => ({
         eq: vi.fn(() => ({
-          single: vi.fn(async () => ({ data: mockProfile, error: null }))
-        }))
+          single: vi.fn(async () => ({ data: mockProfile, error: null })),
+        })),
       }))
 
       mockSupabase.from = vi.fn(() => ({
-        select: selectMock
+        select: selectMock,
       }))
 
       const { default: adminMiddleware } = await import('../../middleware/admin')
-      await adminMiddleware(mockTo, mockFrom)
+      await adminMiddleware(mockTo, _mockFrom)
 
       expect(selectMock).toHaveBeenCalledWith('role')
     })
@@ -213,8 +225,8 @@ describe('Admin Middleware', () => {
       const { default: adminMiddleware } = await import('../../middleware/admin')
 
       // MUST throw 403 error
-      await expect(adminMiddleware(mockTo, mockFrom)).rejects.toThrow(
-        'Admin access required'
+      await expect(adminMiddleware(mockTo, _mockFrom)).rejects.toThrow(
+        'Admin access required',
       )
     })
 
@@ -230,7 +242,7 @@ describe('Admin Middleware', () => {
 
           const { default: adminMiddleware } = await import('../../middleware/admin')
 
-          await expect(adminMiddleware(mockTo, mockFrom)).rejects.toThrow()
+          await expect(adminMiddleware(mockTo, _mockFrom)).rejects.toThrow()
         }
       }
     })

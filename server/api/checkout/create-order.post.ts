@@ -33,6 +33,7 @@ interface CreateOrderFromCheckoutRequest {
     province?: string
     country: string
     phone?: string
+    method?: string
   }
   billingAddress: {
     firstName: string
@@ -79,14 +80,14 @@ export default defineEventHandler(async (event) => {
       guestEmail: body.guestEmail,
       paymentMethod: body.paymentMethod,
       hasShippingAddress: !!body.shippingAddress,
-      hasAuthHeader: !!getHeader(event, 'authorization')
+      hasAuthHeader: !!getHeader(event, 'authorization'),
     })
 
     // Validate required fields
     if (!body.sessionId || !body.items?.length || !body.shippingAddress || !body.paymentMethod) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Missing required fields'
+        statusMessage: 'Missing required fields',
       })
     }
 
@@ -94,7 +95,7 @@ export default defineEventHandler(async (event) => {
     if (!body.paymentResult?.success) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Payment was not successful'
+        statusMessage: 'Payment was not successful',
       })
     }
 
@@ -105,7 +106,7 @@ export default defineEventHandler(async (event) => {
 
     if (authHeader) {
       const { data: { user: authUser }, error: authError } = await supabase.auth.getUser(
-        authHeader.replace('Bearer ', '')
+        authHeader.replace('Bearer ', ''),
       )
       if (!authError && authUser) {
         user = authUser
@@ -115,7 +116,7 @@ export default defineEventHandler(async (event) => {
     logger.info('User resolution completed', {
       isAuthenticated: !!user,
       // PII will be automatically redacted
-      guestEmail
+      guestEmail,
     })
 
     // For guest checkout, try to get email from shipping address or body
@@ -132,9 +133,11 @@ export default defineEventHandler(async (event) => {
     let dbPaymentMethod = 'cod'
     if (body.paymentMethod === 'credit_card') {
       dbPaymentMethod = 'stripe'
-    } else if (body.paymentMethod === 'paypal') {
+    }
+    else if (body.paymentMethod === 'paypal') {
       dbPaymentMethod = 'paypal'
-    } else if (body.paymentMethod === 'cash' || body.paymentMethod === 'bank_transfer') {
+    }
+    else if (body.paymentMethod === 'cash' || body.paymentMethod === 'bank_transfer') {
       dbPaymentMethod = 'cod'
     }
 
@@ -143,9 +146,11 @@ export default defineEventHandler(async (event) => {
     let paymentStatus = 'pending'
     if (body.paymentMethod === 'cash') {
       paymentStatus = 'pending' // Will be paid on delivery
-    } else if (body.paymentResult.pending) {
+    }
+    else if (body.paymentResult.pending) {
       paymentStatus = 'pending' // Bank transfer pending
-    } else if (body.paymentResult.success) {
+    }
+    else if (body.paymentResult.success) {
       paymentStatus = 'paid' // Credit card or PayPal completed
     }
 
@@ -182,7 +187,7 @@ export default defineEventHandler(async (event) => {
       tax_eur: body.tax,
       total_eur: body.total,
       shipping_address: body.shippingAddress,
-      billing_address: body.billingAddress
+      billing_address: body.billingAddress,
     }
 
     // Add guest_email only if user is not authenticated
@@ -195,7 +200,7 @@ export default defineEventHandler(async (event) => {
       userId: user?.id,
       paymentMethod: orderData.payment_method,
       paymentStatus,
-      hasGuestEmail: !!orderData.guest_email
+      hasGuestEmail: !!orderData.guest_email,
     })
 
     // Prepare order items for RPC function - ensure productId is a number
@@ -204,13 +209,13 @@ export default defineEventHandler(async (event) => {
       product_snapshot: item.productSnapshot,
       quantity: item.quantity,
       price_eur: item.price,
-      total_eur: item.total
+      total_eur: item.total,
     }))
 
     // Call atomic RPC function that creates order + updates inventory in a single transaction
     const { data, error: rpcError } = await supabase.rpc('create_order_with_inventory', {
       order_data: orderData,
-      order_items_data: orderItemsData
+      order_items_data: orderItemsData,
     })
 
     if (rpcError) {
@@ -220,7 +225,7 @@ export default defineEventHandler(async (event) => {
         userId: user?.id || null,
         status: orderStatus,
         paymentMethod: dbPaymentMethod,
-        paymentStatus
+        paymentStatus,
       })
 
       // Check if error is due to insufficient stock
@@ -228,7 +233,7 @@ export default defineEventHandler(async (event) => {
       if (rpcError.message?.includes('Insufficient stock')) {
         throw createError({
           statusCode: 409,
-          statusMessage: 'One or more items in your cart are out of stock. Please review your cart and try again.'
+          statusMessage: 'One or more items in your cart are out of stock. Please review your cart and try again.',
         })
       }
 
@@ -236,7 +241,7 @@ export default defineEventHandler(async (event) => {
       if (rpcError.message?.includes('currently being processed')) {
         throw createError({
           statusCode: 409,
-          statusMessage: 'Some items are currently being processed by other orders. Please try again in a moment.'
+          statusMessage: 'Some items are currently being processed by other orders. Please try again in a moment.',
         })
       }
 
@@ -244,13 +249,13 @@ export default defineEventHandler(async (event) => {
       if (rpcError.message?.includes('not found or inactive')) {
         throw createError({
           statusCode: 400,
-          statusMessage: 'One or more items in your cart are no longer available.'
+          statusMessage: 'One or more items in your cart are no longer available.',
         })
       }
 
       throw createError({
         statusCode: 500,
-        statusMessage: `Failed to create order: ${rpcError.message || 'Unknown error'}`
+        statusMessage: `Failed to create order: ${rpcError.message || 'Unknown error'}`,
       })
     }
 
@@ -260,7 +265,7 @@ export default defineEventHandler(async (event) => {
     if (!order) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Order creation succeeded but no order data returned'
+        statusMessage: 'Order creation succeeded but no order data returned',
       })
     }
 
@@ -269,7 +274,7 @@ export default defineEventHandler(async (event) => {
       orderNumber: order.order_number,
       // PII will be automatically redacted
       guestEmail: orderData.guest_email,
-      userId: user?.id
+      userId: user?.id,
     })
 
     // Save user preferences for authenticated users
@@ -285,28 +290,30 @@ export default defineEventHandler(async (event) => {
           .upsert({
             user_id: user.id,
             preferred_shipping_method: shippingMethodId,
-            updated_at: new Date().toISOString()
+            updated_at: new Date().toISOString(),
           }, {
-            onConflict: 'user_id'
+            onConflict: 'user_id',
           })
 
         if (prefError) {
           // Log error but don't fail the order
           logger.warn('Failed to save user preferences', {
             userId: user.id,
-            error: prefError.message
-          })
-        } else {
-          logger.info('User preferences saved', {
-            userId: user.id,
-            shippingMethod: shippingMethodId
+            error: prefError.message,
           })
         }
-      } catch (prefError: any) {
+        else {
+          logger.info('User preferences saved', {
+            userId: user.id,
+            shippingMethod: shippingMethodId,
+          })
+        }
+      }
+      catch (prefError: any) {
         // Don't fail the order if preference saving fails
         logger.warn('Error saving user preferences', {
           userId: user.id,
-          error: prefError.message || 'Unknown error'
+          error: prefError.message || 'Unknown error',
         })
       }
     }
@@ -319,10 +326,11 @@ export default defineEventHandler(async (event) => {
         total: order.total,
         status: order.status,
         paymentStatus: order.payment_status,
-        createdAt: order.created_at
-      }
+        createdAt: order.created_at,
+      },
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     if (error.statusCode) {
       throw error
     }
@@ -330,7 +338,7 @@ export default defineEventHandler(async (event) => {
     logger.error('Order creation failed', { error: error.message || 'Unknown error' })
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 })

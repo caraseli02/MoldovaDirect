@@ -19,18 +19,18 @@ export default defineEventHandler(async (event) => {
     if (!authHeader) {
       throw createError({
         statusCode: 401,
-        statusMessage: 'Authentication required'
+        statusMessage: 'Authentication required',
       })
     }
 
     const { data: { user }, error: authError } = await supabase.auth.getUser(
-      authHeader.replace('Bearer ', '')
+      authHeader.replace('Bearer ', ''),
     )
 
     if (authError || !user) {
       throw createError({
         statusCode: 401,
-        statusMessage: 'Invalid authentication'
+        statusMessage: 'Invalid authentication',
       })
     }
 
@@ -39,7 +39,7 @@ export default defineEventHandler(async (event) => {
     if (!orderId) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Order ID is required'
+        statusMessage: 'Order ID is required',
       })
     }
 
@@ -50,7 +50,7 @@ export default defineEventHandler(async (event) => {
     if (!body.items || body.items.length === 0) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'At least one item must be selected for return'
+        statusMessage: 'At least one item must be selected for return',
       })
     }
 
@@ -81,12 +81,12 @@ export default defineEventHandler(async (event) => {
       if (orderError.code === 'PGRST116') {
         throw createError({
           statusCode: 404,
-          statusMessage: 'Order not found'
+          statusMessage: 'Order not found',
         })
       }
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to fetch order'
+        statusMessage: 'Failed to fetch order',
       })
     }
 
@@ -95,7 +95,7 @@ export default defineEventHandler(async (event) => {
     if (order.status !== 'delivered') {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Only delivered orders can be returned'
+        statusMessage: 'Only delivered orders can be returned',
       })
     }
 
@@ -103,11 +103,11 @@ export default defineEventHandler(async (event) => {
     const returnWindowDays = 30
     const deliveredDate = new Date(order.delivered_at || order.created_at)
     const daysSinceDelivery = Math.floor((Date.now() - deliveredDate.getTime()) / (1000 * 60 * 60 * 24))
-    
+
     if (daysSinceDelivery > returnWindowDays) {
       throw createError({
         statusCode: 400,
-        statusMessage: `Return window has expired. Returns must be initiated within ${returnWindowDays} days of delivery.`
+        statusMessage: `Return window has expired. Returns must be initiated within ${returnWindowDays} days of delivery.`,
       })
     }
 
@@ -117,12 +117,12 @@ export default defineEventHandler(async (event) => {
 
     for (const returnItem of body.items) {
       const orderItem = order.order_items.find((item: any) => item.id === returnItem.orderItemId)
-      
+
       if (!orderItem) {
         validationResults.push({
           orderItemId: returnItem.orderItemId,
           valid: false,
-          reason: 'Item not found in order'
+          reason: 'Item not found in order',
         })
         continue
       }
@@ -131,7 +131,7 @@ export default defineEventHandler(async (event) => {
         validationResults.push({
           orderItemId: returnItem.orderItemId,
           valid: false,
-          reason: `Invalid quantity. Must be between 1 and ${orderItem.quantity}`
+          reason: `Invalid quantity. Must be between 1 and ${orderItem.quantity}`,
         })
         continue
       }
@@ -140,7 +140,7 @@ export default defineEventHandler(async (event) => {
         validationResults.push({
           orderItemId: returnItem.orderItemId,
           valid: false,
-          reason: 'Return reason is required'
+          reason: 'Return reason is required',
         })
         continue
       }
@@ -153,7 +153,7 @@ export default defineEventHandler(async (event) => {
         valid: true,
         productName: orderItem.product_snapshot?.name_translations?.en || 'Unknown',
         quantity: returnItem.quantity,
-        refundAmount
+        refundAmount,
       })
     }
 
@@ -163,7 +163,7 @@ export default defineEventHandler(async (event) => {
       throw createError({
         statusCode: 400,
         statusMessage: 'Invalid return items',
-        data: { validationResults }
+        data: { validationResults },
       })
     }
 
@@ -177,7 +177,7 @@ export default defineEventHandler(async (event) => {
         return_items: body.items,
         total_refund_amount: totalRefundAmount,
         additional_notes: body.additionalNotes || null,
-        requested_at: new Date().toISOString()
+        requested_at: new Date().toISOString(),
       })
       .select()
       .single()
@@ -187,18 +187,18 @@ export default defineEventHandler(async (event) => {
       if (returnError.code === '42P01') {
         throw createError({
           statusCode: 503,
-          statusMessage: 'Return system is not yet configured. Please contact support.'
+          statusMessage: 'Return system is not yet configured. Please contact support.',
         })
       }
-      
+
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to create return request'
+        statusMessage: 'Failed to create return request',
       })
     }
 
     // Get user profile for notification
-    const { data: profile } = await supabase
+    await supabase
       .from('profiles')
       .select('name, email')
       .eq('id', user.id)
@@ -219,11 +219,12 @@ export default defineEventHandler(async (event) => {
           'You will receive a confirmation email shortly',
           'Our team will review your return request within 1-2 business days',
           'Once approved, you will receive return shipping instructions',
-          `Estimated refund amount: €${totalRefundAmount.toFixed(2)}`
-        ]
-      }
+          `Estimated refund amount: €${totalRefundAmount.toFixed(2)}`,
+        ],
+      },
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     if (error.statusCode) {
       throw error
     }
@@ -231,7 +232,7 @@ export default defineEventHandler(async (event) => {
     console.error('Return initiation error:', error)
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 })

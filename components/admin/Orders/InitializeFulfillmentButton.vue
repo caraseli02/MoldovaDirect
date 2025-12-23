@@ -1,9 +1,9 @@
 <template>
   <Button
-    @click="initializeTasks"
     :disabled="loading"
     variant="outline"
     size="sm"
+    @click="initializeTasks"
   >
     <commonIcon
       v-if="loading"
@@ -39,25 +39,21 @@ const initializeTasks = async () => {
 
   try {
     const response = await $fetch(`/api/admin/orders/${props.orderId}/fulfillment-tasks`, {
-      method: 'POST'
-    })
+      method: 'POST',
+    }) as any
 
     if (response.success) {
-      toast.add({
-        title: 'Success',
-        description: 'Fulfillment tasks have been created',
-        type: 'success'
-      })
+      toast.success('Success', 'Fulfillment tasks have been created')
       emit('initialized')
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     console.error('Error initializing fulfillment tasks:', error)
-    toast.add({
-      title: 'Error',
-      description: error.data?.statusMessage || 'Failed to create fulfillment tasks',
-      type: 'error'
-    })
-  } finally {
+    const errorData = error as Record<string, any>
+    const errorMessage = (errorData.data as Record<string, any>)?.statusMessage as string
+    toast.error('Error', errorMessage || 'Failed to create fulfillment tasks')
+  }
+  finally {
     loading.value = false
   }
 }

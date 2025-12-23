@@ -45,13 +45,78 @@ describe('VideoHero', () => {
     vi.clearAllMocks()
   })
 
+  describe('Error handling', () => {
+    it('logs and flags load error', () => {
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+      const wrapper = mount(VideoHero, {
+        props: {
+          title: 'Test Title',
+          showVideo: true,
+          videoMp4: '/broken.mp4',
+          posterImage: '/test-poster.jpg',
+        },
+        ...createGlobalStubs(),
+      })
+
+      wrapper.find('video').trigger('error')
+      expect(consoleSpy).toHaveBeenCalledWith(
+        expect.stringContaining('Video loading error:'),
+        expect.objectContaining({ webmSrc: undefined, mp4Src: '/broken.mp4' }),
+      )
+      expect(wrapper.vm.videoLoadError).toBe(true)
+    })
+
+    it('logs source errors without crashing', () => {
+      const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+      const wrapper = mount(VideoHero, {
+        props: {
+          title: 'Test Title',
+          showVideo: true,
+          videoWebm: '/broken.webm',
+          videoMp4: '/test.mp4',
+        },
+        ...createGlobalStubs(),
+      })
+
+      const sources = wrapper.findAll('source')
+      sources[0].trigger('error')
+      expect(consoleWarnSpy).toHaveBeenCalled()
+    })
+
+    it('handles autoplay rejection gracefully', async () => {
+      const playSpy = vi.fn().mockRejectedValue(new Error('Autoplay blocked'))
+      Object.defineProperty(HTMLMediaElement.prototype, 'play', {
+        configurable: true,
+        value: playSpy,
+      })
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+
+      const wrapper = mount(VideoHero, {
+        props: {
+          title: 'Test Title',
+          showVideo: true,
+          videoMp4: '/test-video.mp4',
+          posterImage: '/test-poster.jpg',
+        },
+        ...createGlobalStubs(),
+      })
+
+      await wrapper.vm.$nextTick()
+      expect(playSpy).toHaveBeenCalled()
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        expect.stringContaining('Video autoplay failed'),
+        expect.objectContaining({ error: 'Autoplay blocked' }),
+      )
+    })
+  })
+
   describe('Rendering modes', () => {
     it('renders video background when showVideo is true', () => {
       const wrapper = mount(VideoHero, {
         props: {
           title: 'Test Title',
           showVideo: true,
-          videoWebM: '/test-video.webm',
+          videoWebm: '/test-video.webm',
           videoMp4: '/test-video.mp4',
         },
         ...createGlobalStubs(),

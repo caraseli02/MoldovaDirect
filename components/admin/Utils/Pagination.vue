@@ -1,5 +1,8 @@
 <template>
-  <div v-if="internal.totalPages > 1" class="bg-white dark:bg-gray-800 px-4 py-3 border-t border-gray-200 dark:border-gray-700 sm:px-6">
+  <div
+    v-if="internal.totalPages > 1"
+    class="bg-white dark:bg-gray-800 px-4 py-3 border-t border-gray-200 dark:border-gray-700 sm:px-6"
+  >
     <div class="flex items-center justify-between">
       <!-- Results Info -->
       <p class="hidden sm:block text-sm text-muted-foreground">
@@ -7,12 +10,26 @@
       </p>
 
       <!-- Pagination -->
-      <UiPagination>
+      <UiPagination
+        :total="internal.total"
+        :items-per-page="internal.limit"
+        :page="internal.page"
+        as="nav"
+      >
         <UiPaginationContent>
-          <UiPaginationPrevious :disabled="!internal.hasPrev" @click="emitPrev()" />
+          <UiPaginationPrevious
+            :disabled="!internal.hasPrev"
+            @click="emitPrev()"
+          />
 
-          <template v-for="pageNum in visiblePages" :key="pageKey(pageNum)">
-            <UiPaginationItem v-if="pageNum !== '...'">
+          <template
+            v-for="pageNum in visiblePages"
+            :key="pageKey(pageNum)"
+          >
+            <UiPaginationItem
+              v-if="pageNum !== '...'"
+              :value="pageNum as number"
+            >
               <button
                 :data-testid="pageNum === internal.page ? 'current-page' : undefined"
                 class="px-3 py-1 rounded-md"
@@ -25,7 +42,10 @@
             <UiPaginationEllipsis v-else />
           </template>
 
-          <UiPaginationNext :disabled="!internal.hasNext" @click="emitNext()" />
+          <UiPaginationNext
+            :disabled="!internal.hasNext"
+            @click="emitNext()"
+          />
         </UiPaginationContent>
       </UiPagination>
     </div>
@@ -85,38 +105,38 @@ const visiblePages = computed<(number | string)[]>(() => {
   const pages: (number | string)[] = []
   const current = internal.value.page
   const total = internal.value.totalPages
-  
+
   // Always show first page
   if (total > 0) {
     pages.push(1)
   }
-  
+
   // Calculate range around current page
-  let start = Math.max(2, current - 2)
-  let end = Math.min(total - 1, current + 2)
-  
+  const start = Math.max(2, current - 2)
+  const end = Math.min(total - 1, current + 2)
+
   // Add ellipsis after first page if needed
   if (start > 2) {
     pages.push('...')
   }
-  
+
   // Add pages around current
   for (let i = start; i <= end; i++) {
     if (i !== 1 && i !== total) {
       pages.push(i)
     }
   }
-  
+
   // Add ellipsis before last page if needed
   if (end < total - 1) {
     pages.push('...')
   }
-  
+
   // Always show last page (if different from first)
   if (total > 1) {
     pages.push(total)
   }
-  
+
   return pages
 })
 

@@ -1,6 +1,6 @@
 <!--
   User Row Actions Component
-  
+
   Action buttons for user table rows with mobile optimizations
   Provides consistent action interface across desktop and mobile
 -->
@@ -9,34 +9,40 @@
   <div class="flex items-center justify-end gap-2">
     <!-- View Button -->
     <UiButton
-      @click.stop="handleView"
-      @touchstart="isMobile && vibrate('tap')"
       variant="ghost"
       size="icon"
       class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 touch-manipulation"
       :class="{
         'h-9 w-9 active:scale-90': isMobile,
-        'h-8 w-8': !isMobile
+        'h-8 w-8': !isMobile,
       }"
       :aria-label="$t('admin.users.actions.view')"
+      @click.stop="handleView"
+      @touchstart="isMobile && vibrate('tap')"
     >
-      <commonIcon name="lucide:eye" :class="iconSizeClass" />
+      <commonIcon
+        name="lucide:eye"
+        :class="iconSizeClass"
+      />
     </UiButton>
 
     <!-- Edit Button -->
     <UiButton
-      @click.stop="handleEdit"
-      @touchstart="isMobile && vibrate('tap')"
       variant="ghost"
       size="icon"
       class="touch-manipulation"
       :class="{
         'h-9 w-9 active:scale-90': isMobile,
-        'h-8 w-8': !isMobile
+        'h-8 w-8': !isMobile,
       }"
       :aria-label="$t('admin.users.actions.edit')"
+      @click.stop="handleEdit"
+      @touchstart="isMobile && vibrate('tap')"
     >
-      <commonIcon name="lucide:pencil" :class="iconSizeClass" />
+      <commonIcon
+        name="lucide:pencil"
+        :class="iconSizeClass"
+      />
     </UiButton>
 
     <!-- Actions Dropdown -->
@@ -50,13 +56,24 @@
 
 <script setup lang="ts">
 interface Props {
-  user: any // Replace with proper User type
+  user: {
+    id: string
+    email: string
+    email_confirmed_at?: string | null
+    profile?: { name: string } | null
+    status: string
+    user_metadata?: {
+      suspended?: boolean
+      banned?: boolean
+      role?: string
+    }
+  }
 }
 
 interface Emits {
   (e: 'view', userId: string): void
   (e: 'edit', userId: string): void
-  (e: 'action', action: string, userId: string, data?: any): void
+  (e: 'action', action: string, userId: string, data?: Record<string, any>): void
 }
 
 const props = defineProps<Props>()
@@ -80,7 +97,7 @@ const handleEdit = () => {
   emit('edit', props.user.id)
 }
 
-const handleAction = (action: string, userId: string, data?: any) => {
+const handleAction = (action: string, userId: string, data?: Record<string, any>) => {
   emit('action', action, userId, data)
 }
 </script>

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 
 // Mock navigator for platform detection
 const originalNavigator = global.navigator
@@ -28,10 +28,10 @@ describe('useKeyboardShortcuts', () => {
     // Mock addEventListener and removeEventListener on window
     window.addEventListener = vi.fn((event: string, handler: any) => {
       eventListeners.set(event, handler)
-    }) as any
+    }) as unknown
     window.removeEventListener = vi.fn((event: string) => {
       eventListeners.delete(event)
-    }) as any
+    }) as unknown
   })
 
   afterEach(() => {
@@ -448,8 +448,8 @@ describe('useKeyboardShortcuts', () => {
       // Mock import.meta.client to be true for this test
       vi.stubGlobal('import', {
         meta: {
-          client: true
-        }
+          client: true,
+        },
       })
 
       const TestComponent = defineComponent({

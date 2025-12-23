@@ -143,7 +143,10 @@
       "passwordMatch": "Parolele se potrivesc",
       "resetPasswordButton": "Resetează-ți parola",
       "resettingPassword": "Resetare parolă",
-      "processingPasswordReset": "Procesăm cererea ta de resetare a parolei"
+      "processingPasswordReset": "Procesăm cererea ta de resetare a parolei",
+      "sendResetEmailButton": "Trimite email de resetare parolă",
+      "sendingResetEmail": "Trimitere email de resetare",
+      "backToLoginLink": "Înapoi la pagina de autentificare"
     },
     "errors": {
       "invalidCredentials": "Email sau parolă incorectă",
@@ -187,6 +190,7 @@
         "lowercase": "Trebuie să conțină cel puțin o literă mică",
         "number": "Trebuie să conțină cel puțin un număr",
         "mismatch": "Parolele nu se potrivesc",
+        "match": "Parolele se potrivesc",
         "weak": "Parola este prea slabă",
         "current": "Parola curentă este obligatorie"
       },
@@ -1039,6 +1043,9 @@
     },
     "story": {
       "title": "Călătorie gustativă",
+      "titleCulinary": "Călătorie gustativă",
+      "titleGeneric": "Povestea produsului",
+      "titleCraft": "Meșteșug și detalii",
       "tastingNotes": "Note de degustare",
       "pairings": "Idei de asortare",
       "awards": "Distincții",
@@ -1128,7 +1135,10 @@
     },
     "related": {
       "title": "Se potrivește cu…",
-      "subtitle": "Completează experiența cu aceste recomandări curate."
+      "titleCulinary": "Se potrivește cu…",
+      "titleGeneric": "S-ar putea să-ți placă și",
+      "subtitle": "Completează experiența cu aceste recomandări curate.",
+      "subtitleGeneric": "Descoperă mai multe produse care te-ar putea interesa."
     },
     "actions": {
       "addToWishlist": "Salvează în favorite",
@@ -1141,6 +1151,135 @@
       "copyFallback": "Copiază linkul și trimite-l prietenilor."
     },
     "commonProduct": "acest produs"
+  },
+  "returns": {
+    "badge": "Gata pentru MVP",
+    "title": "Returnări și rambursări",
+    "description": "Pași clari pentru a raporta probleme, a cere înlocuiri sau a solicita rambursări pentru comenzile Moldova Direct.",
+    "cta": {
+      "start": "Începe un retur",
+      "orders": "Vezi comenzile mele"
+    },
+    "summary": {
+      "window": {
+        "title": "Fereastră de retur",
+        "metric": "30 de zile",
+        "description": "Produse neînchise în 30 de zile de la livrare"
+      },
+      "condition": {
+        "title": "Condiție",
+        "metric": "Sigilat / nedeteriorat",
+        "description": "Păstrează ambalajul original pentru aprobare rapidă"
+      },
+      "support": {
+        "title": "Asistență",
+        "metric": "Răspuns în 48 h",
+        "description": "Concierge în EN / ES / RO / RU"
+      },
+      "refunds": {
+        "title": "Timp de rambursare",
+        "metric": "2–5 zile lucrătoare",
+        "description": "După finalizarea inspecției"
+      }
+    },
+    "eligibility": {
+      "title": "Ce este eligibil pentru retur?",
+      "subtitle": "Punem pe primul loc siguranța și prospețimea fiecărei comenzi.",
+      "allowedTitle": "Cazuri eligibile",
+      "deniedTitle": "Nu este eligibil",
+      "allowed": {
+        "damaged": "Deteriorat la livrare (sunt necesare poze)",
+        "incorrect": "Articole sau cantități greșite",
+        "quality": "Problemă de calitate sau siguranță raportată în 7 zile",
+        "unopened": "Produse de cămară neînchise în 30 de zile"
+      },
+      "denied": {
+        "used": "Articole deschise, folosite sau consumate parțial",
+        "late": "Solicitări după expirarea ferestrei de retur",
+        "perishable": "Produse perisabile fără problemă raportată la livrare",
+        "custom": "Comenzi personalizate fără defecte"
+      },
+      "note": "Pentru vin, păstrează sticlele vertical și evită temperaturile extreme cât timp analizăm cazul."
+    },
+    "resolution": {
+      "title": "Opțiuni de rezolvare",
+      "subtitle": "Alege varianta potrivită după ce validăm solicitarea.",
+      "options": {
+        "refund": {
+          "title": "Rambursare pe metoda originală",
+          "description": "Se emite după inspecție, de obicei în 2–5 zile lucrătoare.",
+          "badge": "Standard"
+        },
+        "replacement": {
+          "title": "Expediere de înlocuire",
+          "description": "Trimitem din nou articolele corecte sau nedeteriorate fără cost suplimentar când greșeala este a noastră.",
+          "badge": "Cel mai rapid"
+        },
+        "credit": {
+          "title": "Credit în magazin",
+          "description": "Credit imediat pentru viitoare comenzi în timp ce ridicăm articolele originale.",
+          "badge": "Instant"
+        }
+      },
+      "note": "Menționează opțiunea preferată în solicitare. Confirmăm stocul înainte de a trimite înlocuiri."
+    },
+    "steps": {
+      "title": "Cum începi un retur",
+      "subtitle": "Oferă detalii pentru a rezolva rapid solicitarea.",
+      "items": {
+        "review": {
+          "title": "Revizuiește comanda",
+          "description": "Notează articolele afectate, cantitățile și data livrării."
+        },
+        "document": {
+          "title": "Documentează problema",
+          "description": "Fă poze clare cu ambalajul, etichetele și orice defect."
+        },
+        "contact": {
+          "title": "Trimite solicitarea",
+          "description": "Scrie-ne pe email sau formular cu numărul comenzii și preferința (rambursare, înlocuire, credit)."
+        },
+        "ship": {
+          "title": "Pregătește ridicarea sau expedierea",
+          "description": "Păstrează articolele în ambalajul original. Coordonăm curierul sau eticheta de retur când este cazul."
+        }
+      },
+      "documentsTitle": "Pregătește",
+      "packagingTitle": "Ghid de ambalare",
+      "packagingDescription": "Păstrează sticlele în poziție verticală, sigilează cutiile și include accesoriile sau cadourile.",
+      "documents": {
+        "order": "Număr de comandă și date de contact",
+        "photos": "Poze cu deteriorarea sau problema",
+        "packaging": "Ambalajul original sau etichetele sticlei",
+        "preference": "Rezoluția preferată (rambursare, înlocuire, credit)"
+      }
+    },
+    "fees": {
+      "title": "Costuri și acoperire",
+      "description": "Acoperim transportul când eroarea este a noastră. Alte cazuri urmează politica de mai jos.",
+      "items": {
+        "ourError": "Transport de retur gratuit pentru articole deteriorate, greșite sau defecte",
+        "customerChoice": "Schimbarea deciziei poate necesita cost de retur",
+        "inspection": "Rambursările se emit după inspecție și verificare de calitate"
+      }
+    },
+    "expectations": {
+      "title": "La ce să te aștepți",
+      "description": "Actualizări transparente de la cerere până la rezolvare.",
+      "items": {
+        "scan": "Urmărire disponibilă imediat ce emitem eticheta de curier",
+        "refundTimeline": "Rambursări procesate în 2–5 zile lucrătoare după inspecție",
+        "updates": "Notificări pe email la fiecare etapă"
+      }
+    },
+    "support": {
+      "title": "Ai nevoie de ajutor rapid?",
+      "description": "Echipa noastră concierge te ghidează pentru retur sau schimb.",
+      "badge": "Asistență prioritară",
+      "contactLink": "Folosește formularul de contact",
+      "responseTime": "Răspundem în 48 de ore lucrătoare (de obicei mai repede).",
+      "emailSubject": "Solicitare retur"
+    }
   },
   "footer": {
     "terms": "Termeni și Condiții",
@@ -1715,5 +1854,143 @@
     "enableNotifications": "Activează notificările",
     "notificationsEnabled": "Notificări activate",
     "notificationsDisabled": "Notificări dezactivate"
+  },
+  "shippingPage": {
+    "seo": {
+      "title": "Informații Livrare - Moldova Direct",
+      "description": "Consultă metodele de livrare, termenele și acoperirea Moldova Direct în Spania pentru comenzi de produse alimentare și vinuri moldovenești."
+    },
+    "hero": {
+      "badge": "Livrare",
+      "title": "Livrare Rapidă și Sigură în Toată Spania",
+      "description": "Livrăm produse autentice moldovenești la ușa ta cu grijă. Urmărește comanda în timp real și bucură-te de opțiuni flexibile de livrare.",
+      "notice": "Livrare gratuită pentru comenzi peste 50€",
+      "secondaryNotice": "Majoritatea comenzilor ajung în 2-4 zile lucrătoare"
+    },
+    "ctas": {
+      "track": "Urmărește Comanda",
+      "contact": "Contactează Suportul"
+    },
+    "highlights": {
+      "title": "De Ce Să Ne Alegi",
+      "subtitle": "Experimentează diferența Moldova Direct",
+      "items": {
+        "fast": {
+          "title": "Livrare Rapidă",
+          "description": "Majoritatea comenzilor livrate în 2-4 zile lucrătoare pe teritoriul peninsular"
+        },
+        "coverage": {
+          "title": "Acoperire Națională",
+          "description": "Livrăm în toate regiunile Spaniei, inclusiv insulele"
+        },
+        "packaging": {
+          "title": "Control Temperatură",
+          "description": "Ambalaj izoterm menține produsele proaspete în timpul transportului"
+        },
+        "updates": {
+          "title": "Actualizări în Timp Real",
+          "description": "Urmărește coletul cu notificări SMS și email"
+        }
+      }
+    },
+    "methods": {
+      "title": "Metode de Livrare",
+      "subtitle": "Alege opțiunea care ți se potrivește",
+      "tag": "Cel Mai Popular",
+      "cards": {
+        "express": {
+          "speed": "1-2 Zile",
+          "title": "Livrare Express",
+          "description": "Procesare prioritară pentru comenzi urgente",
+          "note": "Disponibil în orașe mari"
+        },
+        "standard": {
+          "speed": "2-4 Zile",
+          "title": "Livrare Standard",
+          "description": "Livrare sigură la un preț accesibil",
+          "note": "Gratuită peste 50€"
+        },
+        "refrigerated": {
+          "speed": "2-3 Zile",
+          "title": "Transport Refrigerat",
+          "description": "Control temperatură pentru produse perisabile",
+          "note": "Obligatoriu pentru lactate și carne"
+        }
+      }
+    },
+    "coverage": {
+      "title": "Acoperire Livrare",
+      "subtitle": "Livrăm în toată Spania și țări selectate din UE",
+      "regions": {
+        "mainland": {
+          "title": "Spania Peninsulară",
+          "description": "Toate provinciile acoperite cu opțiuni standard și express",
+          "badge": "2-4 zile"
+        },
+        "balearic": {
+          "title": "Insulele Baleare",
+          "description": "Mallorca, Menorca, Ibiza și Formentera",
+          "badge": "3-5 zile"
+        },
+        "canary": {
+          "title": "Insulele Canare",
+          "description": "Toate cele șapte insule principale deservite săptămânal",
+          "badge": "5-7 zile"
+        },
+        "eu": {
+          "title": "Uniunea Europeană",
+          "description": "Țări selectate - contactează-ne pentru disponibilitate",
+          "badge": "5-10 zile"
+        }
+      }
+    },
+    "extras": {
+      "title": "Servicii Suplimentare",
+      "items": {
+        "instructions": {
+          "title": "Instrucțiuni Speciale",
+          "description": "Adaugă note de livrare pentru curier la finalizarea comenzii"
+        },
+        "sustainability": {
+          "title": "Ambalaj Ecologic",
+          "description": "Materiale reciclabile folosite ori de câte ori este posibil"
+        },
+        "support": {
+          "title": "Suport Dedicat",
+          "description": "Întrebări? Echipa noastră este aici să te ajute prin chat sau email"
+        }
+      }
+    },
+    "timeline": {
+      "title": "Cum Funcționează",
+      "subtitle": "De la depozitul nostru la ușa ta",
+      "reminder": "Comenzile plasate înainte de ora 14 sunt expediate în aceeași zi",
+      "steps": {
+        "method": {
+          "title": "Alege Metoda",
+          "description": "Selectează livrare standard, express sau refrigerată la checkout"
+        },
+        "pack": {
+          "title": "Ambalăm cu Grijă",
+          "description": "Produsele sunt ambalate cu atenție cu izolație adecvată"
+        },
+        "handoff": {
+          "title": "Preluare Curier",
+          "description": "Partenerul nostru de curierat de încredere preia comanda"
+        },
+        "delivery": {
+          "title": "Livrat la Tine",
+          "description": "Primește produsele tale autentice moldovenești acasă"
+        }
+      }
+    },
+    "contactCard": {
+      "title": "Întrebări Despre Livrare?",
+      "description": "Echipa noastră de servicii clienți este pregătită să te ajute cu orice întrebare despre livrare.",
+      "cta": "Contactează-ne",
+      "secondary": "Vezi FAQ",
+      "noteTitle": "Program de Lucru",
+      "noteDescription": "Luni până vineri, 9:00 - 18:00 CET"
+    }
   }
 }

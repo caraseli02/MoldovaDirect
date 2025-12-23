@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   try {
     // Verify admin authentication
     await requireAdminRole(event)
-    
+
     // Use service role for database operations
     const supabase = serverSupabaseServiceRole(event)
 
@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
     if (!orderId) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Order ID is required'
+        statusMessage: 'Order ID is required',
       })
     }
 
@@ -64,12 +64,12 @@ export default defineEventHandler(async (event) => {
       if (orderError.code === 'PGRST116') {
         throw createError({
           statusCode: 404,
-          statusMessage: 'Order not found'
+          statusMessage: 'Order not found',
         })
       }
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to fetch order'
+        statusMessage: 'Failed to fetch order',
       })
     }
 
@@ -125,16 +125,18 @@ export default defineEventHandler(async (event) => {
     // Calculate additional metrics
     const itemCount = order.order_items?.length || 0
     const daysSinceOrder = Math.floor(
-      (new Date().getTime() - new Date(order.created_at).getTime()) / (1000 * 60 * 60 * 24)
+      (new Date().getTime() - new Date(order.created_at).getTime()) / (1000 * 60 * 60 * 24),
     )
 
     // Determine urgency level based on days since order and status
     let urgencyLevel: 'low' | 'medium' | 'high' = 'low'
     if (order.status === 'pending' && daysSinceOrder > 2) {
       urgencyLevel = 'high'
-    } else if (order.status === 'processing' && daysSinceOrder > 3) {
+    }
+    else if (order.status === 'processing' && daysSinceOrder > 3) {
       urgencyLevel = 'high'
-    } else if (daysSinceOrder > 1) {
+    }
+    else if (daysSinceOrder > 1) {
       urgencyLevel = 'medium'
     }
 
@@ -151,15 +153,16 @@ export default defineEventHandler(async (event) => {
         name: 'Guest Customer',
         email: order.guest_email || '',
         phone: null,
-        preferredLanguage: 'en'
-      }
+        preferredLanguage: 'en',
+      },
     }
 
     return {
       success: true,
-      data: orderWithDetails
+      data: orderWithDetails,
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     if (error.statusCode) {
       throw error
     }
@@ -167,7 +170,7 @@ export default defineEventHandler(async (event) => {
     console.error('Admin order detail fetch error:', error)
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 })

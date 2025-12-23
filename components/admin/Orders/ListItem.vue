@@ -1,5 +1,5 @@
 <template>
-  <TableRow 
+  <TableRow
     class="hover:bg-gray-50 dark:hover:bg-gray-700"
     :class="{ 'bg-blue-50 dark:bg-blue-900/20': isSelected }"
   >
@@ -8,8 +8,8 @@
       <input
         type="checkbox"
         :checked="isSelected"
-        @change="$emit('toggle-selection', order.id)"
         class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer"
+        @change="$emit('toggle-selection', order.id)"
       />
     </TableCell>
 
@@ -60,8 +60,8 @@
 
     <!-- Payment Status -->
     <TableCell>
-      <Badge :variant="getPaymentStatusVariant(order.payment_status)">
-        {{ getPaymentStatusLabel(order.payment_status) }}
+      <Badge :variant="getPaymentStatusVariant(order.payment_status || '')">
+        {{ getPaymentStatusLabel(order.payment_status || '') }}
       </Badge>
     </TableCell>
 
@@ -73,8 +73,14 @@
           size="icon"
           as-child
         >
-          <nuxt-link :to="`/admin/orders/${order.id}`" title="View Order">
-            <commonIcon name="lucide:eye" class="h-4 w-4" />
+          <nuxt-link
+            :to="`/admin/orders/${order.id}`"
+            title="View Order"
+          >
+            <commonIcon
+              name="lucide:eye"
+              class="h-4 w-4"
+            />
           </nuxt-link>
         </Button>
       </div>
@@ -87,12 +93,17 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
   TableCell,
-  TableRow
+  TableRow,
 } from '@/components/ui/table'
-import type { OrderWithAdminDetails } from '~/types/database'
+import type { OrderWithAdminDetailsRaw } from '~/types/database'
 
 interface Props {
-  order: OrderWithAdminDetails
+  order: Partial<OrderWithAdminDetailsRaw> & {
+    id: number
+    created_at: string
+    total_eur: number
+    status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
+  }
   isSelected?: boolean
 }
 
@@ -100,8 +111,8 @@ interface Emits {
   (e: 'toggle-selection', orderId: number): void
 }
 
-const props = defineProps<Props>()
-const emit = defineEmits<Emits>()
+const _props = defineProps<Props>()
+const _emit = defineEmits<Emits>()
 
 // Computed properties
 const customerName = computed(() => {
@@ -109,15 +120,15 @@ const customerName = computed(() => {
 })
 
 const customerEmail = computed(() => {
-  return props.order.guest_email || 'guest@example.com'
+  return _props.order.guest_email || ''
 })
 
 const itemCount = computed(() => {
-  return props.order.order_items?.length || 0
+  return _props.order.order_items?.length || 0
 })
 
 const daysSinceOrder = computed(() => {
-  const orderDate = new Date(props.order.created_at)
+  const orderDate = new Date(_props.order.created_at)
   const now = new Date()
   const diffTime = Math.abs(now.getTime() - orderDate.getTime())
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
@@ -131,7 +142,7 @@ const formatDate = (dateString: string) => {
     month: 'short',
     day: 'numeric',
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   })
 }
 
@@ -144,7 +155,7 @@ const getPaymentStatusLabel = (status: string) => {
     pending: 'Pending',
     paid: 'Paid',
     failed: 'Failed',
-    refunded: 'Refunded'
+    refunded: 'Refunded',
   }
   return labels[status] || status
 }
@@ -154,7 +165,7 @@ const getPaymentStatusVariant = (status: string) => {
     pending: 'secondary',
     paid: 'default',
     failed: 'destructive',
-    refunded: 'secondary'
+    refunded: 'secondary',
   }
   return variants[status] || 'secondary'
 }

@@ -1,20 +1,37 @@
 <template>
   <div>
     <!-- Loading State -->
-    <div v-if="loading" class="flex items-center justify-center min-h-96">
-      <commonIcon name="lucide:loader-2" class="h-12 w-12 animate-spin text-primary" />
+    <div
+      v-if="loading"
+      class="flex items-center justify-center min-h-96"
+    >
+      <commonIcon
+        name="lucide:loader-2"
+        class="h-12 w-12 animate-spin text-primary"
+      />
     </div>
 
     <!-- Error State -->
-    <div v-else-if="error" class="text-center py-12">
-      <commonIcon name="lucide:alert-circle" class="h-12 w-12 text-red-400 mx-auto mb-4" />
-      <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Order not found</h3>
+    <div
+      v-else-if="error"
+      class="text-center py-12"
+    >
+      <commonIcon
+        name="lucide:alert-circle"
+        class="h-12 w-12 text-red-400 mx-auto mb-4"
+      />
+      <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
+        Order not found
+      </h3>
       <p class="text-gray-600 dark:text-gray-400 mb-4">
         The order you're looking for doesn't exist or has been deleted.
       </p>
       <Button as-child>
         <nuxt-link to="/admin/orders">
-          <commonIcon name="lucide:arrow-left" class="h-4 w-4 mr-2" />
+          <commonIcon
+            name="lucide:arrow-left"
+            class="h-4 w-4 mr-2"
+          />
           Back to Orders
         </nuxt-link>
       </Button>
@@ -32,7 +49,10 @@
               as-child
             >
               <nuxt-link to="/admin/orders">
-                <commonIcon name="lucide:arrow-left" class="h-5 w-5" />
+                <commonIcon
+                  name="lucide:arrow-left"
+                  class="h-5 w-5"
+                />
               </nuxt-link>
             </Button>
             <div>
@@ -44,7 +64,7 @@
               </p>
             </div>
           </div>
-          
+
           <!-- Quick Actions -->
           <div class="flex items-center space-x-2">
             <AdminOrdersStatusBadge :status="order.status" />
@@ -106,19 +126,25 @@
             <CardContent>
               <div class="space-y-3">
                 <div>
-                  <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Name</p>
+                  <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    Name
+                  </p>
                   <p class="text-sm text-gray-900 dark:text-white">
                     {{ order.customer?.name || 'Guest Customer' }}
                   </p>
                 </div>
                 <div>
-                  <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Email</p>
+                  <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    Email
+                  </p>
                   <p class="text-sm text-gray-900 dark:text-white">
-                    {{ order.customer?.email || order.guestEmail || 'N/A' }}
+                    {{ order.customer?.email || order.guest_email || 'N/A' }}
                   </p>
                 </div>
                 <div v-if="order.customer?.phone">
-                  <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Phone</p>
+                  <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    Phone
+                  </p>
                   <p class="text-sm text-gray-900 dark:text-white">
                     {{ order.customer.phone }}
                   </p>
@@ -128,7 +154,10 @@
           </Card>
 
           <!-- Shipping Address -->
-          <Card v-if="order.shipping_address" class="rounded-2xl">
+          <Card
+            v-if="order.shipping_address"
+            class="rounded-2xl"
+          >
             <CardHeader>
               <CardTitle>Shipping Address</CardTitle>
             </CardHeader>
@@ -136,14 +165,19 @@
               <div class="text-sm text-gray-900 dark:text-white space-y-1">
                 <p>{{ order.shipping_address.street }}</p>
                 <p>{{ order.shipping_address.city }}, {{ order.shipping_address.postalCode }}</p>
-                <p v-if="order.shipping_address.province">{{ order.shipping_address.province }}</p>
+                <p v-if="order.shipping_address.province">
+                  {{ order.shipping_address.province }}
+                </p>
                 <p>{{ order.shipping_address.country }}</p>
               </div>
             </CardContent>
           </Card>
 
           <!-- Billing Address -->
-          <Card v-if="order.billing_address" class="rounded-2xl">
+          <Card
+            v-if="order.billing_address"
+            class="rounded-2xl"
+          >
             <CardHeader>
               <CardTitle>Billing Address</CardTitle>
             </CardHeader>
@@ -151,7 +185,9 @@
               <div class="text-sm text-gray-900 dark:text-white space-y-1">
                 <p>{{ order.billing_address.street }}</p>
                 <p>{{ order.billing_address.city }}, {{ order.billing_address.postalCode }}</p>
-                <p v-if="order.billing_address.province">{{ order.billing_address.province }}</p>
+                <p v-if="order.billing_address.province">
+                  {{ order.billing_address.province }}
+                </p>
                 <p>{{ order.billing_address.country }}</p>
               </div>
             </CardContent>
@@ -165,19 +201,28 @@
             <CardContent>
               <div class="space-y-3">
                 <div>
-                  <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Payment Method</p>
+                  <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    Payment Method
+                  </p>
                   <p class="text-sm text-gray-900 dark:text-white capitalize">
                     {{ order.payment_method }}
                   </p>
                 </div>
                 <div>
-                  <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Payment Status</p>
-                  <Badge :variant="getPaymentStatusVariant(order.payment_status)" class="mt-1">
+                  <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    Payment Status
+                  </p>
+                  <Badge
+                    :variant="getPaymentStatusVariant(order.payment_status)"
+                    class="mt-1"
+                  >
                     {{ getPaymentStatusLabel(order.payment_status) }}
                   </Badge>
                 </div>
                 <div v-if="order.payment_intent_id">
-                  <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Payment Intent ID</p>
+                  <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    Payment Intent ID
+                  </p>
                   <p class="text-xs text-gray-600 dark:text-gray-300 font-mono">
                     {{ order.payment_intent_id }}
                   </p>
@@ -187,20 +232,27 @@
           </Card>
 
           <!-- Tracking Information (if available) -->
-          <Card v-if="order.tracking_number" class="rounded-2xl">
+          <Card
+            v-if="order.tracking_number"
+            class="rounded-2xl"
+          >
             <CardHeader>
               <CardTitle>Tracking Information</CardTitle>
             </CardHeader>
             <CardContent>
               <div class="space-y-3">
                 <div v-if="order.carrier">
-                  <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Carrier</p>
+                  <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    Carrier
+                  </p>
                   <p class="text-sm text-gray-900 dark:text-white">
                     {{ order.carrier }}
                   </p>
                 </div>
                 <div>
-                  <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Tracking Number</p>
+                  <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    Tracking Number
+                  </p>
                   <p class="text-sm text-gray-900 dark:text-white font-mono">
                     {{ order.tracking_number }}
                   </p>
@@ -210,7 +262,10 @@
           </Card>
 
           <!-- Customer Notes (if available) -->
-          <Card v-if="order.customer_notes" class="rounded-2xl">
+          <Card
+            v-if="order.customer_notes"
+            class="rounded-2xl"
+          >
             <CardHeader>
               <CardTitle>Customer Notes</CardTitle>
             </CardHeader>
@@ -222,7 +277,10 @@
           </Card>
 
           <!-- Admin Notes (if available) -->
-          <Card v-if="order.admin_notes" class="rounded-2xl">
+          <Card
+            v-if="order.admin_notes"
+            class="rounded-2xl"
+          >
             <CardHeader>
               <CardTitle>Admin Notes</CardTitle>
             </CardHeader>
@@ -245,13 +303,13 @@ import {
   Card,
   CardContent,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from '@/components/ui/card'
-import type { OrderWithAdminDetails } from '~/types/database'
+import type { OrderWithAdminDetailsRaw } from '~/types/database'
 
 definePageMeta({
   layout: 'admin',
-  middleware: ['auth', 'admin']
+  middleware: ['auth', 'admin'],
 })
 
 // Lazy load admin order detail components to reduce main bundle size
@@ -270,7 +328,7 @@ const orderId = route.params.id as string
 // State
 const loading = ref(true)
 const error = ref(false)
-const order = ref<OrderWithAdminDetails | null>(null)
+const order = ref<OrderWithAdminDetailsRaw | null>(null)
 
 // Fetch order data
 const fetchOrder = async () => {
@@ -280,24 +338,27 @@ const fetchOrder = async () => {
 
     const response = await $fetch<{
       success: boolean
-      data: OrderWithAdminDetails
+      data: OrderWithAdminDetailsRaw
     }>(`/api/admin/orders/${orderId}`)
 
     if (response.success) {
       order.value = response.data
-    } else {
+    }
+    else {
       error.value = true
     }
-  } catch (err) {
+  }
+  catch (err: any) {
     console.error('Error fetching order:', err)
     error.value = true
-  } finally {
+  }
+  finally {
     loading.value = false
   }
 }
 
 // Handle status update
-const handleStatusUpdated = async (data: { status: string, trackingNumber?: string, carrier?: string }) => {
+const handleStatusUpdated = async (_data: { status: string, trackingNumber?: string, carrier?: string }) => {
   // Refresh order data to get updated information
   await fetchOrder()
 }
@@ -315,25 +376,24 @@ const handleNotesUpdated = async () => {
 }
 
 // Real-time updates
-const { subscribeToOrder, unsubscribe, isSubscribed } = useAdminOrderRealtime({
-  onOrderUpdated: async (update) => {
+const { subscribeToOrder, unsubscribe, isSubscribed: _isSubscribed } = useAdminOrderRealtime({
+  onOrderUpdated: async (_update: any) => {
     // Refresh order data when updated
     await fetchOrder()
   },
-  onOrderStatusChanged: async (update) => {
+  onOrderStatusChanged: async (_update: any) => {
     // Refresh order data when status changes
     await fetchOrder()
   },
-  onConflict: (orderId, message) => {
+  onConflict: (orderId: number, message: string) => {
     // Show warning when order was modified by another admin
-    const toast = useToastStore()
-    toast.warning(message)
-  }
+    console.warn('Order conflict detected:', orderId, message)
+  },
 })
 
 onMounted(async () => {
   await fetchOrder()
-  
+
   // Subscribe to real-time updates for this order
   if (order.value) {
     subscribeToOrder(order.value.id)
@@ -352,7 +412,7 @@ const formatDate = (dateString: string) => {
     month: 'long',
     day: 'numeric',
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   })
 }
 
@@ -361,7 +421,7 @@ const getPaymentStatusLabel = (status: string) => {
     pending: 'Pending',
     paid: 'Paid',
     failed: 'Failed',
-    refunded: 'Refunded'
+    refunded: 'Refunded',
   }
   return labels[status] || status
 }
@@ -371,7 +431,7 @@ const getPaymentStatusVariant = (status: string) => {
     pending: 'secondary',
     paid: 'default',
     failed: 'destructive',
-    refunded: 'secondary'
+    refunded: 'secondary',
   }
   return variants[status] || 'secondary'
 }
@@ -380,14 +440,14 @@ const getPaymentStatusVariant = (status: string) => {
 useHead({
   title: computed(() => {
     return order.value
-      ? `Order #${order.value.orderNumber} - Admin - Moldova Direct`
+      ? `Order #${order.value.order_number} - Admin - Moldova Direct`
       : 'Order Details - Admin - Moldova Direct'
   }),
   meta: [
     {
       name: 'robots',
-      content: 'noindex, nofollow'
-    }
-  ]
+      content: 'noindex, nofollow',
+    },
+  ],
 })
 </script>

@@ -15,7 +15,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="h-80">
       <AdminChartsBase
         type="line"
@@ -25,7 +25,7 @@
         :error="error"
       />
     </div>
-    
+
     <div class="mt-4 grid grid-cols-2 gap-4 text-center">
       <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
         <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">
@@ -60,7 +60,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   data: null,
   loading: false,
-  error: null
+  error: null,
 })
 
 // Chart data
@@ -68,16 +68,16 @@ const chartData = computed((): ChartData => {
   if (!props.data?.registrationTrends) {
     return {
       labels: [],
-      datasets: []
+      datasets: [],
     }
   }
 
   const trends = props.data.registrationTrends
-  const labels = trends.map(item => {
+  const labels = trends.map((item) => {
     const date = new Date(item.date)
-    return date.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric' 
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
     })
   })
 
@@ -96,7 +96,7 @@ const chartData = computed((): ChartData => {
         pointBorderColor: '#ffffff',
         pointBorderWidth: 2,
         pointRadius: 4,
-        pointHoverRadius: 6
+        pointHoverRadius: 6,
       },
       {
         label: 'Total Users',
@@ -110,9 +110,9 @@ const chartData = computed((): ChartData => {
         pointBorderColor: '#ffffff',
         pointBorderWidth: 2,
         pointRadius: 4,
-        pointHoverRadius: 6
-      }
-    ]
+        pointHoverRadius: 6,
+      },
+    ],
   }
 })
 
@@ -122,49 +122,50 @@ const chartOptions: ChartOptions = {
   maintainAspectRatio: false,
   interaction: {
     intersect: false,
-    mode: 'index'
+    mode: 'index',
   },
   plugins: {
     legend: {
-      display: false // We have custom legend
+      display: false, // We have custom legend
     },
     tooltip: {
       callbacks: {
         title: (context) => {
-          const date = new Date(props.data?.registrationTrends[context[0].dataIndex]?.date || '')
-          return date.toLocaleDateString('en-US', { 
+          const dataIndex = context[0]?.dataIndex
+          const date = new Date(props.data?.registrationTrends?.[dataIndex ?? 0]?.date || '')
+          return date.toLocaleDateString('en-US', {
             weekday: 'long',
             year: 'numeric',
             month: 'long',
-            day: 'numeric'
+            day: 'numeric',
           })
         },
         label: (context) => {
-          const value = context.parsed.y
+          const value = context.parsed.y ?? 0
           const label = context.dataset.label
           return `${label}: ${value.toLocaleString()}`
-        }
-      }
-    }
+        },
+      },
+    },
   },
   scales: {
     x: {
       grid: {
-        display: false
+        display: false,
       },
       ticks: {
-        maxTicksLimit: 8
-      }
+        maxTicksLimit: 8,
+      },
     },
     y: {
       beginAtZero: true,
       ticks: {
         callback: (value) => {
           return typeof value === 'number' ? value.toLocaleString() : value
-        }
-      }
-    }
-  }
+        },
+      },
+    },
+  },
 }
 
 // Computed metrics
@@ -175,17 +176,17 @@ const totalNewUsers = computed(() => {
 
 const growthRate = computed(() => {
   if (!props.data?.registrationTrends || props.data.registrationTrends.length < 2) return 0
-  
+
   const trends = props.data.registrationTrends
   const midPoint = Math.floor(trends.length / 2)
   const firstHalf = trends.slice(0, midPoint)
   const secondHalf = trends.slice(midPoint)
-  
+
   const firstHalfTotal = firstHalf.reduce((sum, item) => sum + item.registrations, 0)
   const secondHalfTotal = secondHalf.reduce((sum, item) => sum + item.registrations, 0)
-  
+
   if (firstHalfTotal === 0) return 0
-  
+
   const growth = ((secondHalfTotal - firstHalfTotal) / firstHalfTotal) * 100
   return Math.round(growth * 10) / 10 // Round to 1 decimal place
 })

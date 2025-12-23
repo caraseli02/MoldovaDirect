@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 // TODO: Fix import - @supabase/supabase-js is not a direct dependency
 // The project uses @nuxtjs/supabase which may not export createClient the same way
 // import { createClient } from '@supabase/supabase-js'
@@ -8,15 +8,15 @@ vi.mock('~/server/utils/orderEmails', () => ({
   sendOrderConfirmationEmail: vi.fn().mockResolvedValue({
     success: true,
     emailLogId: 1,
-    externalId: 'test-email-id'
-  })
+    externalId: 'test-email-id',
+  }),
 }))
 
 vi.mock('~/server/utils/orderDataTransform', () => ({
   extractCustomerInfoFromOrder: vi.fn().mockResolvedValue({
     name: 'Test User',
     email: 'test@example.com',
-    locale: 'en'
+    locale: 'en',
   }),
   transformOrderToEmailData: vi.fn().mockReturnValue({
     customerName: 'Test User',
@@ -30,12 +30,12 @@ vi.mock('~/server/utils/orderDataTransform', () => ({
     tax: 0,
     total: 110,
     paymentMethod: 'credit_card',
-    locale: 'en'
+    locale: 'en',
   }),
   validateOrderForEmail: vi.fn().mockReturnValue({
     isValid: true,
-    errors: []
-  })
+    errors: [],
+  }),
 }))
 
 // TODO: Fix Supabase import issue before re-enabling these tests
@@ -55,14 +55,14 @@ describe.skip('Order Creation with Email Integration', () => {
     expect(validateOrderForEmail).toBeDefined()
 
     // Verify mock responses
-    const emailResult = await sendOrderConfirmationEmail({} as any)
+    const emailResult = await sendOrderConfirmationEmail({} as unknown)
     expect(emailResult.success).toBe(true)
     expect(emailResult.emailLogId).toBe(1)
 
-    const customerInfo = await extractCustomerInfoFromOrder({} as any)
+    const customerInfo = await extractCustomerInfoFromOrder({} as unknown)
     expect(customerInfo.email).toBe('test@example.com')
 
-    const validationResult = validateOrderForEmail({} as any)
+    const validationResult = validateOrderForEmail({} as unknown)
     expect(validationResult.isValid).toBe(true)
   })
 

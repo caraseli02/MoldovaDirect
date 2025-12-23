@@ -7,9 +7,9 @@
     <Button
       variant="ghost"
       size="icon"
-      @click="toggleDropdown"
       class="relative p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
       :aria-label="$t('orders.notifications.title')"
+      @click="toggleDropdown"
     >
       <svg
         class="w-6 h-6 text-gray-700 dark:text-gray-300"
@@ -33,7 +33,7 @@
         {{ unviewedCount > 9 ? '9+' : unviewedCount }}
       </span>
     </Button>
-    
+
     <!-- Dropdown panel -->
     <Transition
       enter-active-class="transition ease-out duration-200"
@@ -57,13 +57,13 @@
             v-if="recentUpdates.length > 0"
             variant="link"
             size="sm"
-            @click="handleClearAll"
             class="text-xs text-blue-600 dark:text-blue-400 hover:underline p-0 h-auto"
+            @click="handleClearAll"
           >
             {{ $t('orders.notifications.clearAll') }}
           </Button>
         </div>
-        
+
         <!-- Updates list -->
         <div class="max-h-96 overflow-y-auto">
           <div
@@ -83,15 +83,17 @@
                 d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
               />
             </svg>
-            <p class="text-sm">{{ $t('orders.notifications.noUpdates') }}</p>
+            <p class="text-sm">
+              {{ $t('orders.notifications.noUpdates') }}
+            </p>
           </div>
-          
+
           <div
             v-for="update in recentUpdates"
             :key="`${update.orderId}-${update.timestamp}`"
-            @click="handleUpdateClick(update)"
             class="px-4 py-3 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer transition-colors"
             :class="{ 'bg-blue-50 dark:bg-blue-900/10': !isUpdateViewed(update) }"
+            @click="handleUpdateClick(update)"
           >
             <div class="flex items-start space-x-3">
               <!-- Status icon -->
@@ -135,7 +137,7 @@
                   />
                 </svg>
               </div>
-              
+
               <!-- Update content -->
               <div class="flex-1 min-w-0">
                 <p class="text-sm font-medium text-gray-900 dark:text-white">
@@ -148,7 +150,7 @@
                   {{ formatTimestamp(update.timestamp) }}
                 </p>
               </div>
-              
+
               <!-- Unviewed indicator -->
               <div
                 v-if="!isUpdateViewed(update)"
@@ -157,7 +159,7 @@
             </div>
           </div>
         </div>
-        
+
         <!-- Footer -->
         <div
           v-if="recentUpdates.length > 0"
@@ -165,20 +167,20 @@
         >
           <Button
             variant="link"
-            @click="handleViewAllOrders"
             class="w-full text-sm text-center text-blue-600 dark:text-blue-400 hover:underline p-0 h-auto"
+            @click="handleViewAllOrders"
           >
             {{ $t('orders.notifications.viewAllOrders') }}
           </Button>
         </div>
       </div>
     </Transition>
-    
+
     <!-- Backdrop -->
     <div
       v-if="isOpen"
-      @click="closeDropdown"
       class="fixed inset-0 z-40"
+      @click="closeDropdown"
     ></div>
   </div>
 </template>
@@ -199,7 +201,7 @@ const {
   unviewedCount,
   recentUpdates,
   markUpdatesAsViewed,
-  clearRecentUpdates
+  clearRecentUpdates,
 } = useOrderTracking()
 
 // Local state
@@ -209,14 +211,15 @@ const dropdownRef = ref<HTMLElement>()
 
 // Load viewed updates from localStorage
 onMounted(() => {
-  if (process.client) {
+  if (import.meta.client) {
     try {
       const stored = localStorage.getItem('order_recent_updates')
       if (stored) {
         const parsed = JSON.parse(stored)
         viewedUpdates.value = new Set(parsed.viewed || [])
       }
-    } catch (err) {
+    }
+    catch (err: any) {
       console.error('Error loading viewed updates:', err)
     }
   }
@@ -259,7 +262,7 @@ const getStatusTitle = (status: OrderStatus): string => {
     processing: t('orders.notifications.processing.title'),
     shipped: t('orders.notifications.shipped.title'),
     delivered: t('orders.notifications.delivered.title'),
-    cancelled: t('orders.notifications.cancelled.title')
+    cancelled: t('orders.notifications.cancelled.title'),
   }
   return titles[status] || t('orders.notifications.statusChanged.title')
 }
@@ -270,7 +273,7 @@ const getStatusIconClass = (status: OrderStatus): string => {
     processing: 'bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400',
     shipped: 'bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400',
     delivered: 'bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400',
-    cancelled: 'bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400'
+    cancelled: 'bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400',
   }
   return classes[status] || 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
 }
@@ -284,16 +287,20 @@ const formatTimestamp = (timestamp: string): string => {
   const diffMins = Math.floor(diffMs / 60000)
   const diffHours = Math.floor(diffMs / 3600000)
   const diffDays = Math.floor(diffMs / 86400000)
-  
+
   if (diffMins < 1) {
     return t('orders.notifications.justNow')
-  } else if (diffMins < 60) {
+  }
+  else if (diffMins < 60) {
     return t('orders.notifications.minutesAgo', { count: diffMins })
-  } else if (diffHours < 24) {
+  }
+  else if (diffHours < 24) {
     return t('orders.notifications.hoursAgo', { count: diffHours })
-  } else if (diffDays < 7) {
+  }
+  else if (diffDays < 7) {
     return t('orders.notifications.daysAgo', { count: diffDays })
-  } else {
+  }
+  else {
     return date.toLocaleDateString()
   }
 }

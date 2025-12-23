@@ -19,7 +19,7 @@
  */
 
 import { defineStore } from 'pinia'
-import type { AuthChangeEvent, Session, User } from '@supabase/supabase-js'
+import type { User as SupabaseUser, Session as SupabaseSession } from '@supabase/supabase-js'
 import type { WatchStopHandle } from 'vue'
 import { useAuthMessages } from '~/composables/useAuthMessages'
 import { useAuthValidation } from '~/composables/useAuthValidation'
@@ -33,7 +33,7 @@ import {
   isAccountLocked,
   getLockoutMinutesRemaining,
   triggerLockout as triggerAccountLockout,
-  clearLockout as clearAccountLockout
+  clearLockout as clearAccountLockout,
 } from './lockout'
 
 import { clearAuthCookies } from '~/utils/authStorage'
@@ -48,12 +48,10 @@ import {
   checkAAL as checkAALService,
   type MFAEnrollment,
   type MFAChallenge,
-  type MFAState
 } from './mfa'
 
 import {
   readPersistedProgress,
-  persistProgress,
   loadTestPersona,
   toggleTestScriptStep as toggleTestScriptStepUtil,
   updateTestScriptNote as updateTestScriptNoteUtil,
@@ -61,16 +59,14 @@ import {
   clearAllProgress as clearAllProgressUtil,
   getPersonaProgress,
   type TestScriptProgress,
-  type TestUserState
+  type TestUserState,
 } from './test-users'
 
 import type { AuthUser, LoginCredentials, RegisterData } from './types'
 
-type AuthSubscription = {
-  unsubscribe: () => PromiseLike<unknown>
-}
+type Subscription = { unsubscribe: () => void }
 
-let authSubscription: AuthSubscription | null = null
+let authSubscription: Subscription | null = null
 let stopUserWatcher: WatchStopHandle | null = null
 
 export interface AuthState extends TestUserState {
@@ -103,7 +99,7 @@ export const useAuthStore = defineStore('auth', {
     isTestUser: false,
     testPersonaKey: null,
     testScriptProgress: readPersistedProgress(),
-    simulationMode: 'normal'
+    simulationMode: 'normal',
   }),
 
   getters: {
@@ -182,7 +178,7 @@ export const useAuthStore = defineStore('auth', {
      * Check if user requires MFA verification (AAL2)
      */
     requiresMFAVerification: (state): boolean => {
-      return state.user?.mfaEnabled && !!state.mfaChallenge
+      return (state.user?.mfaEnabled ?? false) && !!state.mfaChallenge
     },
 
     /**
@@ -209,9 +205,9 @@ export const useAuthStore = defineStore('auth', {
     /**
      * Get test script progress for a specific persona
      */
-    getPersonaProgress: (state) => (personaKey: TestUserPersonaKey): TestScriptProgress | null => {
+    getPersonaProgress: state => (personaKey: TestUserPersonaKey): TestScriptProgress | null => {
       return getPersonaProgress(state.testScriptProgress, personaKey)
-    }
+    },
   },
 
   actions: {
@@ -235,7 +231,8 @@ export const useAuthStore = defineStore('auth', {
           stopUserWatcher = watch(supabaseUser, (newUser) => {
             this.syncUserState(newUser)
           }, { immediate: true })
-        } else {
+        }
+        else {
           this.syncUserState(supabaseUser.value)
         }
 
@@ -246,7 +243,8 @@ export const useAuthStore = defineStore('auth', {
           if (!this.error) {
             this.error = 'Failed to retrieve authentication session'
           }
-        } else if (sessionData?.session?.user) {
+        }
+        else if (sessionData?.session?.user) {
           this.syncUserState(sessionData.session.user)
         }
 
@@ -258,7 +256,8 @@ export const useAuthStore = defineStore('auth', {
         }
 
         this.sessionInitialized = true
-      } catch (error) {
+      }
+      catch (error: any) {
         console.error('Failed to initialize auth:', error)
         this.error = 'Failed to initialize authentication'
       }
@@ -268,7 +267,7 @@ export const useAuthStore = defineStore('auth', {
      * Sync internal user state with Supabase user
      * Requirement 5.3: Reactive authentication status
      */
-    async syncUserState(supabaseUser: User | null) {
+    async syncUserState(supabaseUser: SupabaseUser | null) {
       if (this.isTestUser && !supabaseUser) {
         return
       }
@@ -277,24 +276,28 @@ export const useAuthStore = defineStore('auth', {
         // Fetch MFA factors if user is authenticated
         const mfaFactors = await fetchMFAFactors(useSupabaseClient())
 
+        // Type assertion for Supabase user properties
+        const user = supabaseUser as any
+
         this.user = {
-          id: supabaseUser.id,
-          email: supabaseUser.email!,
-          emailVerified: !!supabaseUser.email_confirmed_at,
-          name: supabaseUser.user_metadata?.name || supabaseUser.user_metadata?.full_name,
-          phone: supabaseUser.user_metadata?.phone,
-          preferredLanguage: supabaseUser.user_metadata?.preferred_language || 'es',
-          lastLogin: supabaseUser.last_sign_in_at,
-          createdAt: supabaseUser.created_at,
-          updatedAt: supabaseUser.updated_at,
+          id: user.id,
+          email: user.email!,
+          emailVerified: !!user.email_confirmed_at,
+          name: user.user_metadata?.name || user.user_metadata?.full_name,
+          phone: user.user_metadata?.phone,
+          preferredLanguage: user.user_metadata?.preferred_language || 'es',
+          lastLogin: user.last_sign_in_at,
+          createdAt: user.created_at,
+          updatedAt: user.updated_at,
           mfaEnabled: mfaFactors.some(f => f.status === 'verified'),
-          mfaFactors
+          mfaFactors,
         }
         this.isTestUser = false
         this.testPersonaKey = null
         this.error = null
         this.clearLockout()
-      } else {
+      }
+      else {
         this.user = null
         this.error = null
         if (this.lockoutTime && this.lockoutTime <= new Date()) {
@@ -321,7 +324,8 @@ export const useAuthStore = defineStore('auth', {
 
       if (lockoutTime) {
         persistLockout(lockoutTime)
-      } else {
+      }
+      else {
         persistLockout(null)
       }
     },
@@ -345,7 +349,7 @@ export const useAuthStore = defineStore('auth', {
     /**
      * Handle auth state changes from Supabase
      */
-    handleAuthStateChange(event: AuthChangeEvent, session: Session | null) {
+    handleAuthStateChange(event: string, session: SupabaseSession | null) {
       if (event === 'TOKEN_REFRESHED') {
         this.error = null
       }
@@ -353,7 +357,9 @@ export const useAuthStore = defineStore('auth', {
       // Handle password recovery - user clicked reset link in email
       // Don't redirect, let them stay on reset-password page to enter new password
       if (event === 'PASSWORD_RECOVERY') {
-        this.syncUserState(session?.user ?? null)
+        // Type assertion for session properties
+        const sessionData = session as any
+        this.syncUserState(sessionData?.user ?? null)
         return
       }
 
@@ -361,7 +367,7 @@ export const useAuthStore = defineStore('auth', {
         this.syncUserState(null)
 
         // Redirect to login page when session expires or user logs out
-        if (process.client) {
+        if (import.meta.client) {
           const route = useRoute()
           const localePath = useLocalePath()
 
@@ -371,15 +377,17 @@ export const useAuthStore = defineStore('auth', {
               path: localePath('/auth/login'),
               query: {
                 message: 'session-expired',
-                redirect: route.fullPath
-              }
+                redirect: route.fullPath,
+              },
             })
           }
         }
         return
       }
 
-      this.syncUserState(session?.user ?? null)
+      // Type assertion for session properties
+      const sessionData = session as any
+      this.syncUserState(sessionData?.user ?? null)
     },
 
     /**
@@ -396,7 +404,7 @@ export const useAuthStore = defineStore('auth', {
       this.error = null
 
       const supabase = useSupabaseClient()
-      const { createErrorMessage, translateAuthError } = useAuthMessages()
+      const { translateAuthError } = useAuthMessages()
       const { validateLogin } = useAuthValidation()
       const toastStore = useToast()
 
@@ -405,35 +413,41 @@ export const useAuthStore = defineStore('auth', {
         const validation = validateLogin(credentials)
         if (!validation.isValid) {
           const firstError = validation.errors[0]
+          if (!firstError) {
+            throw new Error('Validation failed')
+          }
           throw new Error(firstError.message)
         }
 
         // Attempt login
         const { data, error } = await supabase.auth.signInWithPassword({
           email: credentials.email,
-          password: credentials.password
+          password: credentials.password,
         })
 
         if (error) {
           // Handle specific authentication errors
           if (error.message.includes('Invalid login credentials')) {
             this.error = translateAuthError('Invalid login credentials', 'login')
-          } else if (error.message.includes('Email not confirmed')) {
+          }
+          else if (error.message.includes('Email not confirmed')) {
             this.error = translateAuthError('Email not confirmed', 'login')
             // Redirect to verification page
             await navigateTo({
               path: '/auth/verify-email',
               query: {
                 message: 'email-verification-required',
-                email: credentials.email
-              }
+                email: credentials.email,
+              },
             })
             return
-          } else if (error.message.includes('Too many requests')) {
+          }
+          else if (error.message.includes('Too many requests')) {
             // Handle rate limiting
             this.lockoutTime = triggerAccountLockout(15)
             this.error = translateAuthError('Too many requests', 'login')
-          } else {
+          }
+          else {
             this.error = translateAuthError(error.message, 'login')
           }
           throw new Error(this.error)
@@ -455,20 +469,23 @@ export const useAuthStore = defineStore('auth', {
           if (verifiedFactors.length > 0 && !shouldSkipMFA) {
             // User has MFA enabled, redirect to MFA verification page
             const firstFactor = verifiedFactors[0]
+            if (!firstFactor) {
+              throw new Error('MFA factor not found')
+            }
             await this.challengeMFA(firstFactor.id)
 
             const route = useRoute()
             const redirect = route.query.redirect as string
             await navigateTo({
               path: '/auth/mfa-verify',
-              query: { redirect: redirect || '/account' }
+              query: { redirect: redirect || '/account' },
             })
             return
           }
 
           toastStore.success(
             'Inicio de sesión exitoso',
-            `Bienvenido de vuelta, ${data.user.user_metadata?.name || data.user.email}`
+            `Bienvenido de vuelta, ${data.user.user_metadata?.name || data.user.email}`,
           )
 
           // Handle redirect after successful login
@@ -477,12 +494,13 @@ export const useAuthStore = defineStore('auth', {
           // Prevent open redirect attacks - only allow relative paths, not protocol-relative URLs
           if (redirect && redirect.startsWith('/') && !redirect.startsWith('//')) {
             await navigateTo(redirect)
-          } else {
+          }
+          else {
             await navigateTo('/account')
           }
         }
-
-      } catch (error) {
+      }
+      catch (error: any) {
         const errorMessage = error instanceof Error ? error.message : 'Login failed'
         this.error = errorMessage
 
@@ -491,12 +509,13 @@ export const useAuthStore = defineStore('auth', {
           errorMessage,
           {
             actionText: 'Reintentar',
-            actionHandler: () => this.login(credentials)
-          }
+            actionHandler: () => this.login(credentials),
+          },
         )
 
         throw error
-      } finally {
+      }
+      finally {
         this.loading = false
       }
     },
@@ -524,6 +543,9 @@ export const useAuthStore = defineStore('auth', {
         const validation = validateRegistration(userData)
         if (!validation.isValid) {
           const firstError = validation.errors[0]
+          if (!firstError) {
+            throw new Error('Validation failed')
+          }
           throw new Error(firstError.message)
         }
 
@@ -536,9 +558,9 @@ export const useAuthStore = defineStore('auth', {
               name: userData.name,
               phone: userData.phone,
               preferred_language: userData.language,
-              full_name: userData.name
-            }
-          }
+              full_name: userData.name,
+            },
+          },
         })
 
         if (error) {
@@ -550,10 +572,11 @@ export const useAuthStore = defineStore('auth', {
               'Este email ya está registrado. ¿Quieres iniciar sesión?',
               {
                 actionText: 'Ir a login',
-                actionHandler: () => navigateTo('/auth/login')
-              }
+                actionHandler: () => navigateTo('/auth/login'),
+              },
             )
-          } else {
+          }
+          else {
             this.error = translateAuthError(error.message, 'register')
           }
           throw new Error(this.error)
@@ -562,7 +585,7 @@ export const useAuthStore = defineStore('auth', {
         if (data.user) {
           toastStore.success(
             'Registro exitoso',
-            'Cuenta creada correctamente. Revisa tu email para verificar tu cuenta.'
+            'Cuenta creada correctamente. Revisa tu email para verificar tu cuenta.',
           )
 
           // Redirect to verification pending page
@@ -570,12 +593,12 @@ export const useAuthStore = defineStore('auth', {
             path: '/auth/verification-pending',
             query: {
               message: 'registration-complete',
-              email: userData.email
-            }
+              email: userData.email,
+            },
           })
         }
-
-      } catch (error) {
+      }
+      catch (error: any) {
         const errorMessage = error instanceof Error ? error.message : 'Registration failed'
         this.error = errorMessage
 
@@ -585,13 +608,14 @@ export const useAuthStore = defineStore('auth', {
             errorMessage,
             {
               actionText: 'Reintentar',
-              actionHandler: () => this.register(userData)
-            }
+              actionHandler: () => this.register(userData),
+            },
           )
         }
 
         throw error
-      } finally {
+      }
+      finally {
         this.loading = false
       }
     },
@@ -610,7 +634,7 @@ export const useAuthStore = defineStore('auth', {
       try {
         const { error } = await supabase.auth.verifyOtp({
           token_hash: token,
-          type: 'email'
+          type: 'email',
         })
 
         if (error) {
@@ -620,16 +644,16 @@ export const useAuthStore = defineStore('auth', {
 
         toastStore.success(
           'Email verificado',
-          'Tu email ha sido verificado correctamente. Ya puedes iniciar sesión.'
+          'Tu email ha sido verificado correctamente. Ya puedes iniciar sesión.',
         )
 
         // Redirect to login with success message
         await navigateTo({
           path: '/auth/login',
-          query: { message: 'email-verified' }
+          query: { message: 'email-verified' },
         })
-
-      } catch (error) {
+      }
+      catch (error: any) {
         const errorMessage = error instanceof Error ? error.message : 'Email verification failed'
         this.error = errorMessage
 
@@ -638,12 +662,13 @@ export const useAuthStore = defineStore('auth', {
           errorMessage,
           {
             actionText: 'Reenviar email',
-            actionHandler: () => this.resendVerification()
-          }
+            actionHandler: () => this.resendVerification(),
+          },
         )
 
         throw error
-      } finally {
+      }
+      finally {
         this.loading = false
       }
     },
@@ -667,7 +692,7 @@ export const useAuthStore = defineStore('auth', {
 
         const { error } = await supabase.auth.resend({
           type: 'signup',
-          email: emailToUse
+          email: emailToUse,
         })
 
         if (error) {
@@ -677,20 +702,21 @@ export const useAuthStore = defineStore('auth', {
 
         toastStore.success(
           'Email reenviado',
-          'Se ha enviado un nuevo email de verificación. Revisa tu bandeja de entrada.'
+          'Se ha enviado un nuevo email de verificación. Revisa tu bandeja de entrada.',
         )
-
-      } catch (error) {
+      }
+      catch (error: any) {
         const errorMessage = error instanceof Error ? error.message : 'Failed to resend verification'
         this.error = errorMessage
 
         toastStore.error(
           'Error al reenviar',
-          errorMessage
+          errorMessage,
         )
 
         throw error
-      } finally {
+      }
+      finally {
         this.loading = false
       }
     },
@@ -708,14 +734,14 @@ export const useAuthStore = defineStore('auth', {
       const runtimeConfig = useRuntimeConfig()
 
       try {
-        const siteUrl = runtimeConfig.public.siteUrl || (process.client ? window.location.origin : undefined)
+        const siteUrl = runtimeConfig.public.siteUrl || (import.meta.client ? window.location.origin : undefined)
         const redirectTo = siteUrl
           ? new URL('/auth/reset-password', siteUrl).toString()
           : undefined
 
         const { error } = await supabase.auth.resetPasswordForEmail(
           email,
-          redirectTo ? { redirectTo } : undefined
+          redirectTo ? { redirectTo } : undefined,
         )
 
         if (error) {
@@ -725,10 +751,10 @@ export const useAuthStore = defineStore('auth', {
 
         toastStore.success(
           'Instrucciones enviadas',
-          'Si el email existe, recibirás instrucciones para restablecer tu contraseña.'
+          'Si el email existe, recibirás instrucciones para restablecer tu contraseña.',
         )
-
-      } catch (error) {
+      }
+      catch (error: any) {
         const errorMessage = error instanceof Error ? error.message : 'Password reset request failed'
         this.error = errorMessage
 
@@ -737,12 +763,13 @@ export const useAuthStore = defineStore('auth', {
           errorMessage,
           {
             actionText: 'Reintentar',
-            actionHandler: () => this.forgotPassword(email)
-          }
+            actionHandler: () => this.forgotPassword(email),
+          },
         )
 
         throw error
-      } finally {
+      }
+      finally {
         this.loading = false
       }
     },
@@ -760,7 +787,7 @@ export const useAuthStore = defineStore('auth', {
 
       try {
         const { error } = await supabase.auth.updateUser({
-          password: password
+          password: password,
         })
 
         if (error) {
@@ -770,16 +797,16 @@ export const useAuthStore = defineStore('auth', {
 
         toastStore.success(
           'Contraseña actualizada',
-          'Tu contraseña ha sido actualizada correctamente.'
+          'Tu contraseña ha sido actualizada correctamente.',
         )
 
         // Redirect to login with success message
         await navigateTo({
           path: '/auth/login',
-          query: { message: 'password-reset' }
+          query: { message: 'password-reset' },
         })
-
-      } catch (error) {
+      }
+      catch (error: any) {
         const errorMessage = error instanceof Error ? error.message : 'Password reset failed'
         this.error = errorMessage
 
@@ -788,12 +815,13 @@ export const useAuthStore = defineStore('auth', {
           errorMessage,
           {
             actionText: 'Reintentar',
-            actionHandler: () => this.resetPassword(password)
-          }
+            actionHandler: () => this.resetPassword(password),
+          },
         )
 
         throw error
-      } finally {
+      }
+      finally {
         this.loading = false
       }
     },
@@ -831,16 +859,16 @@ export const useAuthStore = defineStore('auth', {
 
         toastStore.success(
           'Sesión cerrada',
-          'Has cerrado sesión correctamente.'
+          'Has cerrado sesión correctamente.',
         )
 
         // Redirect to homepage with logout confirmation
         await navigateTo({
           path: '/',
-          query: { message: 'logged-out' }
+          query: { message: 'logged-out' },
         })
-
-      } catch (error) {
+      }
+      catch (error: any) {
         console.error('Logout failed:', error)
 
         // Force logout even if there's an error
@@ -855,7 +883,8 @@ export const useAuthStore = defineStore('auth', {
         clearAuthCookies()
 
         await navigateTo('/')
-      } finally {
+      }
+      finally {
         this.loading = false
       }
     },
@@ -875,13 +904,13 @@ export const useAuthStore = defineStore('auth', {
           if (this.user) {
             this.user = {
               ...this.user,
-              ...profileData
+              ...profileData,
             }
           }
 
           toastStore.info(
             'Modo demo',
-            'Los cambios de perfil se han aplicado solo para esta sesión simulada.'
+            'Los cambios de perfil se han aplicado solo para esta sesión simulada.',
           )
 
           return
@@ -894,8 +923,8 @@ export const useAuthStore = defineStore('auth', {
             name: profileData.name,
             phone: profileData.phone,
             preferred_language: profileData.preferredLanguage,
-            full_name: profileData.name
-          }
+            full_name: profileData.name,
+          },
         })
 
         if (error) {
@@ -908,16 +937,16 @@ export const useAuthStore = defineStore('auth', {
           this.user = {
             ...this.user,
             ...profileData,
-            updatedAt: new Date().toISOString()
+            updatedAt: new Date().toISOString(),
           }
         }
 
         toastStore.success(
           'Perfil actualizado',
-          'Tu perfil ha sido actualizado correctamente.'
+          'Tu perfil ha sido actualizado correctamente.',
         )
-
-      } catch (error) {
+      }
+      catch (error: any) {
         const errorMessage = error instanceof Error ? error.message : 'Profile update failed'
         this.profileError = errorMessage
 
@@ -926,12 +955,13 @@ export const useAuthStore = defineStore('auth', {
           errorMessage,
           {
             actionText: 'Reintentar',
-            actionHandler: () => this.updateProfile(profileData)
-          }
+            actionHandler: () => this.updateProfile(profileData),
+          },
         )
 
         throw error
-      } finally {
+      }
+      finally {
         this.profileLoading = false
       }
     },
@@ -944,10 +974,11 @@ export const useAuthStore = defineStore('auth', {
         const supabase = useSupabaseClient()
         await supabase.auth.updateUser({
           data: {
-            last_login: new Date().toISOString()
-          }
+            last_login: new Date().toISOString(),
+          },
         })
-      } catch (error) {
+      }
+      catch (error: any) {
         // Non-critical error, just log it
         console.warn('Failed to update last login:', error)
       }
@@ -990,7 +1021,8 @@ export const useAuthStore = defineStore('auth', {
           console.warn('Session refresh failed:', error)
           // Let Supabase handle automatic logout if refresh fails
         }
-      } catch (error) {
+      }
+      catch (error: any) {
         console.warn('Session refresh error:', error)
       }
     },
@@ -1012,11 +1044,13 @@ export const useAuthStore = defineStore('auth', {
         const enrollment = await enrollMFAService(supabase, friendlyName)
         this.mfaEnrollment = enrollment
         return enrollment
-      } catch (error) {
+      }
+      catch (error: any) {
         const errorMessage = error instanceof Error ? error.message : 'MFA enrollment failed'
         this.mfaError = errorMessage
         throw error
-      } finally {
+      }
+      finally {
         this.mfaLoading = false
       }
     },
@@ -1043,11 +1077,13 @@ export const useAuthStore = defineStore('auth', {
 
         // Clear enrollment data
         this.mfaEnrollment = null
-      } catch (error) {
+      }
+      catch (error: any) {
         const errorMessage = error instanceof Error ? error.message : 'MFA verification failed'
         this.mfaError = errorMessage
         throw error
-      } finally {
+      }
+      finally {
         this.mfaLoading = false
       }
     },
@@ -1073,11 +1109,13 @@ export const useAuthStore = defineStore('auth', {
         const challenge = await challengeMFAService(supabase, factorId)
         this.mfaChallenge = challenge
         return challenge
-      } catch (error) {
+      }
+      catch (error: any) {
         const errorMessage = error instanceof Error ? error.message : 'MFA challenge failed'
         this.mfaError = errorMessage
         throw error
-      } finally {
+      }
+      finally {
         this.mfaLoading = false
       }
     },
@@ -1099,11 +1137,13 @@ export const useAuthStore = defineStore('auth', {
         await verifyMFAService(supabase, this.mfaChallenge, code)
         // Clear challenge
         this.mfaChallenge = null
-      } catch (error) {
+      }
+      catch (error: any) {
         const errorMessage = error instanceof Error ? error.message : 'MFA verification failed'
         this.mfaError = errorMessage
         throw error
-      } finally {
+      }
+      finally {
         this.mfaLoading = false
       }
     },
@@ -1123,11 +1163,13 @@ export const useAuthStore = defineStore('auth', {
         // Refresh user state to update MFA factors
         const supabaseUser = useSupabaseUser()
         await this.syncUserState(supabaseUser.value)
-      } catch (error) {
+      }
+      catch (error: any) {
         const errorMessage = error instanceof Error ? error.message : 'Failed to disable MFA'
         this.mfaError = errorMessage
         throw error
-      } finally {
+      }
+      finally {
         this.mfaLoading = false
       }
     },
@@ -1160,7 +1202,7 @@ export const useAuthStore = defineStore('auth', {
         this.testScriptProgress,
         personaKey,
         stepIndex,
-        totalSteps
+        totalSteps,
       )
     },
 
@@ -1172,7 +1214,7 @@ export const useAuthStore = defineStore('auth', {
         this.testScriptProgress,
         personaKey,
         stepIndex,
-        note
+        note,
       )
     },
 
@@ -1195,8 +1237,8 @@ export const useAuthStore = defineStore('auth', {
      */
     setSimulationMode(mode: import('~/lib/testing/testUserPersonas').SimulationMode) {
       this.simulationMode = mode
-    }
-  }
+    },
+  },
 })
 
 // Re-export types for convenience

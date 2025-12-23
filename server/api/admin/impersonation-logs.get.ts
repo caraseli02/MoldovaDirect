@@ -94,7 +94,7 @@ export default defineEventHandler(async (event) => {
     if (error) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to retrieve impersonation logs'
+        statusMessage: 'Failed to retrieve impersonation logs',
       })
     }
 
@@ -103,7 +103,7 @@ export default defineEventHandler(async (event) => {
     const targetUserIds = [...new Set(logs?.map(log => log.target_user_id).filter(Boolean))]
     const allUserIds = [...new Set([...adminIds, ...targetUserIds])]
 
-    let userProfiles: any = {}
+    let userProfiles = {}
 
     if (allUserIds.length > 0) {
       const { data: profiles } = await supabase
@@ -113,14 +113,14 @@ export default defineEventHandler(async (event) => {
 
       if (profiles) {
         userProfiles = Object.fromEntries(
-          profiles.map(p => [p.id, { name: p.name, email: p.email, role: p.role }])
+          profiles.map(p => [p.id, { name: p.name, email: p.email, role: p.role }]),
         )
       }
     }
 
     // Calculate session status and enrich logs
     const now = new Date()
-    const enrichedLogs = logs?.map(log => {
+    const enrichedLogs = logs?.map((log) => {
       const expiresAt = new Date(log.expires_at)
       const isExpired = expiresAt < now
       const isEnded = !!log.ended_at
@@ -128,9 +128,11 @@ export default defineEventHandler(async (event) => {
       let sessionStatus: 'active' | 'ended' | 'expired'
       if (isEnded) {
         sessionStatus = 'ended'
-      } else if (isExpired) {
+      }
+      else if (isExpired) {
         sessionStatus = 'expired'
-      } else {
+      }
+      else {
         sessionStatus = 'active'
       }
 
@@ -143,8 +145,8 @@ export default defineEventHandler(async (event) => {
         ...log,
         status: sessionStatus,
         duration_minutes: durationMinutes,
-        admin: userProfiles[log.admin_id] || null,
-        target_user: userProfiles[log.target_user_id] || null
+        admin: (userProfiles as Record<string, any>)[log.admin_id] || null,
+        target_user: (userProfiles as Record<string, any>)[log.target_user_id] || null,
       }
     })
 
@@ -153,7 +155,7 @@ export default defineEventHandler(async (event) => {
       total: count || 0,
       active: enrichedLogs?.filter(l => l.status === 'active').length || 0,
       ended: enrichedLogs?.filter(l => l.status === 'ended').length || 0,
-      expired: enrichedLogs?.filter(l => l.status === 'expired').length || 0
+      expired: enrichedLogs?.filter(l => l.status === 'expired').length || 0,
     }
 
     return {
@@ -164,18 +166,18 @@ export default defineEventHandler(async (event) => {
         limit,
         offset,
         total: count || 0,
-        hasMore: (offset + limit) < (count || 0)
+        hasMore: (offset + limit) < (count || 0),
       },
       filters: {
         adminId,
         targetUserId,
         status,
         startDate,
-        endDate
-      }
+        endDate,
+      },
     }
-
-  } catch (error: any) {
+  }
+  catch (error: any) {
     console.error('Impersonation logs retrieval error:', error)
 
     if (error.statusCode) {
@@ -184,7 +186,7 @@ export default defineEventHandler(async (event) => {
 
     throw createError({
       statusCode: 500,
-      statusMessage: error.message || 'Failed to retrieve impersonation logs'
+      statusMessage: error.message || 'Failed to retrieve impersonation logs',
     })
   }
 })

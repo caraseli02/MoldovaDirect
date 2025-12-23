@@ -1,11 +1,11 @@
 <!--
   Admin User Table Component - Refactored
-  
+
   Requirements addressed:
   - 4.1: Display paginated list of all registered users with basic information
   - 4.2: Implement user search by name, email, and registration date
   - 4.3: Create user detail view with order history and account information
-  
+
   Features:
   - Mobile-optimized with responsive sub-components
   - Touch-friendly interactions with haptic feedback
@@ -28,23 +28,35 @@
     />
 
     <!-- Loading State -->
-    <div v-if="loading" class="p-8 text-center">
+    <div
+      v-if="loading"
+      class="p-8 text-center"
+    >
       <div class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400">
-        <commonIcon name="lucide:refresh-ccw" class="w-5 h-5 animate-spin" />
+        <commonIcon
+          name="lucide:refresh-ccw"
+          class="w-5 h-5 animate-spin"
+        />
         {{ $t('admin.users.loading') }}
       </div>
     </div>
 
     <!-- Error State -->
-    <div v-else-if="error" class="p-8 text-center">
+    <div
+      v-else-if="error"
+      class="p-8 text-center"
+    >
       <div class="text-red-600 dark:text-red-400 mb-4">
-        <commonIcon name="lucide:alert-triangle" class="w-8 h-8 mx-auto mb-2" />
+        <commonIcon
+          name="lucide:alert-triangle"
+          class="w-8 h-8 mx-auto mb-2"
+        />
         {{ error }}
       </div>
       <Button
+        :class="{ 'min-h-[44px]': isMobile }"
         @click="retry"
         @touchstart="isMobile && vibrate('tap')"
-        :class="{ 'min-h-[44px]': isMobile }"
       >
         {{ $t('admin.users.retry') }}
       </Button>
@@ -53,38 +65,77 @@
     <!-- Users Content -->
     <div v-else>
       <!-- Desktop Table -->
-      <div v-if="!isMobile" class="overflow-x-auto">
+      <div
+        v-if="!isMobile"
+        class="overflow-x-auto"
+      >
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead class="px-6">
-                <Button @click="updateSort('name')" variant="ghost" class="flex items-center gap-1 h-auto p-0 font-normal">
+                <Button
+                  variant="ghost"
+                  class="flex items-center gap-1 h-auto p-0 font-normal"
+                  @click="updateSort('name')"
+                >
                   {{ $t('admin.users.columns.user') }}
-                  <commonIcon :name="getSortIcon('name')" class="w-4 h-4" />
+                  <commonIcon
+                    :name="getSortIcon('name')"
+                    class="w-4 h-4"
+                  />
                 </Button>
               </TableHead>
               <TableHead class="px-6">
-                <Button @click="updateSort('email')" variant="ghost" class="flex items-center gap-1 h-auto p-0 font-normal">
+                <Button
+                  variant="ghost"
+                  class="flex items-center gap-1 h-auto p-0 font-normal"
+                  @click="updateSort('email')"
+                >
                   {{ $t('admin.users.columns.email') }}
-                  <commonIcon :name="getSortIcon('email')" class="w-4 h-4" />
+                  <commonIcon
+                    :name="getSortIcon('email')"
+                    class="w-4 h-4"
+                  />
                 </Button>
               </TableHead>
-              <TableHead class="px-6">{{ $t('admin.users.columns.status') }}</TableHead>
-              <TableHead class="px-6">{{ $t('admin.users.columns.orders') }}</TableHead>
-              <TableHead class="px-6">{{ $t('admin.users.columns.totalSpent') }}</TableHead>
               <TableHead class="px-6">
-                <Button @click="updateSort('created_at')" variant="ghost" class="flex items-center gap-1 h-auto p-0 font-normal">
+                {{ $t('admin.users.columns.status') }}
+              </TableHead>
+              <TableHead class="px-6">
+                {{ $t('admin.users.columns.orders') }}
+              </TableHead>
+              <TableHead class="px-6">
+                {{ $t('admin.users.columns.totalSpent') }}
+              </TableHead>
+              <TableHead class="px-6">
+                <Button
+                  variant="ghost"
+                  class="flex items-center gap-1 h-auto p-0 font-normal"
+                  @click="updateSort('created_at')"
+                >
                   {{ $t('admin.users.columns.registered') }}
-                  <commonIcon :name="getSortIcon('created_at')" class="w-4 h-4" />
+                  <commonIcon
+                    :name="getSortIcon('created_at')"
+                    class="w-4 h-4"
+                  />
                 </Button>
               </TableHead>
               <TableHead class="px-6">
-                <Button @click="updateSort('last_login')" variant="ghost" class="flex items-center gap-1 h-auto p-0 font-normal">
+                <Button
+                  variant="ghost"
+                  class="flex items-center gap-1 h-auto p-0 font-normal"
+                  @click="updateSort('last_login')"
+                >
                   {{ $t('admin.users.columns.lastLogin') }}
-                  <commonIcon :name="getSortIcon('last_login')" class="w-4 h-4" />
+                  <commonIcon
+                    :name="getSortIcon('last_login')"
+                    class="w-4 h-4"
+                  />
                 </Button>
               </TableHead>
-              <TableHead class="px-6 text-right">{{ $t('admin.users.columns.actions') }}</TableHead>
+              <TableHead class="px-6 text-right">
+                {{ $t('admin.users.columns.actions') }}
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -103,7 +154,10 @@
       </div>
 
       <!-- Mobile List -->
-      <div v-else class="p-4">
+      <div
+        v-else
+        class="p-4"
+      >
         <AdminUtilsUserTableRow
           v-for="user in usersWithDisplayData"
           :key="user.id"
@@ -147,35 +201,36 @@
 import { Button } from '@/components/ui/button'
 import { Table, TableHeader, TableRow, TableHead, TableBody } from '@/components/ui/table'
 
+// Import VueUse utilities
+import { useDebounceFn } from '@vueuse/core'
+
 interface Props {
   showActions?: boolean
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  showActions: true
+const _props = withDefaults(defineProps<Props>(), {
+  showActions: true,
 })
 
 const emit = defineEmits<{
   userSelected: [userId: string]
-  userAction: [action: string, userId: string, data?: any]
+  userAction: [action: string, userId: string, data?: Record<string, any>]
   refetch: []
 }>()
-
-// Import VueUse utilities
-import { useDebounceFn } from '@vueuse/core'
 
 // Composables
 const { isMobile } = useDevice()
 const { vibrate } = useHapticFeedback()
 
 // Store - safely access with fallback
-let adminUsersStore: any = null
+let adminUsersStore: Record<string, any> = {}
 
 try {
-  if (process.client) {
+  if (import.meta.client) {
     adminUsersStore = useAdminUsersStore()
   }
-} catch (error) {
+}
+catch (_error: any) {
   console.warn('Admin users store not available during SSR/hydration')
 }
 
@@ -192,13 +247,13 @@ if (!adminUsersStore) {
       dateFrom: '',
       dateTo: '',
       sortBy: 'created_at',
-      sortOrder: 'desc'
+      sortOrder: 'desc',
     },
     updateSort: () => {},
     updateSearch: () => {},
     updateStatusFilter: () => {},
     updateDateRange: () => {},
-    initialize: () => Promise.resolve()
+    initialize: () => Promise.resolve(),
   }
 }
 
@@ -210,15 +265,14 @@ const dateTo = ref('')
 const selectedUserId = ref<string | null>(null)
 const totalUsers = ref(0)
 
-// Computed
-const { 
-  users, 
-  usersWithDisplayData, 
-  pagination, 
-  loading, 
-  error, 
-  hasActiveFilters 
-} = storeToRefs(adminUsersStore)
+// Computed - with type safety for storeToRefs
+const storeRefs = storeToRefs(adminUsersStore as any)
+const users = computed(() => (storeRefs as any).users?.value ?? [])
+const usersWithDisplayData = computed(() => (storeRefs as any).usersWithDisplayData?.value ?? [])
+const pagination = computed(() => (storeRefs as any).pagination?.value ?? { page: 1, totalPages: 1, total: 0, limit: 10 })
+const loading = computed(() => (storeRefs as any).loading?.value ?? false)
+const error = computed(() => (storeRefs as any).error?.value ?? null)
+const hasActiveFilters = computed(() => (storeRefs as Record<string, any>).hasActiveFilters?.value ?? false)
 
 // Debounced search function
 const debouncedSearch = useDebounceFn((query: string) => {
@@ -232,7 +286,7 @@ const handleSearch = (query: string) => {
 }
 
 const handleStatusChange = (status: string) => {
-  adminUsersStore.updateStatusFilter(status as any)
+  adminUsersStore.updateStatusFilter(status as unknown)
   emit('refetch')
 
   if (isMobile.value) {
@@ -306,7 +360,7 @@ const prevPage = () => {
 const handleViewUser = (userId: string) => {
   selectedUserId.value = userId
   emit('userSelected', userId)
-  
+
   if (isMobile.value) {
     vibrate('success')
   }
@@ -326,13 +380,13 @@ const handleSelectUser = (userId: string) => {
 
 const handleInviteUser = () => {
   emit('userAction', 'invite', '')
-  
+
   if (isMobile.value) {
     vibrate('success')
   }
 }
 
-const handleUserAction = (action: string, userId: string, data?: any) => {
+const handleUserAction = (action: string, userId: string, data?: Record<string, any>) => {
   emit('userAction', action, userId, data)
 }
 

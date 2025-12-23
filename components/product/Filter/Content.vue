@@ -1,7 +1,10 @@
 <template>
   <div class="filter-content space-y-6">
     <!-- Active Filters -->
-    <div v-if="hasActiveFilters" class="filter-section">
+    <div
+      v-if="hasActiveFilters"
+      class="filter-section"
+    >
       <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-3">
         {{ $t('products.filters.active') }}
       </h3>
@@ -16,7 +19,10 @@
     </div>
 
     <!-- Category Filter -->
-    <div v-if="availableFilters.categories.length > 0" class="filter-section">
+    <div
+      v-if="availableFilters.categories.length > 0"
+      class="filter-section"
+    >
       <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-3">
         {{ $t('products.filters.categories') }}
       </h3>
@@ -28,7 +34,10 @@
     </div>
 
     <!-- Price Range Filter -->
-    <div v-if="availableFilters.priceRange" class="filter-section">
+    <div
+      v-if="availableFilters.priceRange"
+      class="filter-section"
+    >
       <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-3">
         {{ $t('products.filters.priceRange') }}
       </h3>
@@ -42,10 +51,17 @@
 
     <!-- Stock Filter -->
     <div class="filter-section">
-      <h3 id="availability-filter" class="text-sm font-medium text-gray-900 dark:text-white mb-3">
+      <h3
+        id="availability-filter"
+        class="text-sm font-medium text-gray-900 dark:text-white mb-3"
+      >
         {{ $t('products.filters.availability') }}
       </h3>
-      <div class="space-y-2" role="group" aria-labelledby="availability-filter">
+      <div
+        class="space-y-2"
+        role="group"
+        aria-labelledby="availability-filter"
+      >
         <label class="flex items-center cursor-pointer">
           <input
             id="filter-in-stock"
@@ -54,7 +70,7 @@
             class="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 bg-white dark:bg-gray-700"
             :aria-label="$t('products.filters.inStockOnly')"
             @change="updateFilters({ inStock: localFilters.inStock })"
-          >
+          />
           <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
             {{ $t('products.filters.inStockOnly') }}
           </span>
@@ -67,7 +83,7 @@
             class="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 bg-white dark:bg-gray-700"
             :aria-label="$t('products.filters.featuredOnly')"
             @change="updateFilters({ featured: localFilters.featured })"
-          >
+          />
           <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
             {{ $t('products.filters.featuredOnly') }}
           </span>
@@ -100,7 +116,7 @@ interface ActiveFilter {
   id: string
   label: string
   type: 'category' | 'price' | 'stock' | 'featured' | 'attribute'
-  value?: any
+  value?: { attributeName: string, value: string }
 }
 
 interface Props {
@@ -120,7 +136,7 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 // Composables
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 // Local reactive state
 const localFilters = ref<ProductFilters>({ ...props.filters })
@@ -129,7 +145,8 @@ const localFilters = ref<ProductFilters>({ ...props.filters })
 const selectedCategories = computed(() => {
   if (typeof localFilters.value.category === 'string') {
     return [localFilters.value.category]
-  } else if (typeof localFilters.value.category === 'number') {
+  }
+  else if (typeof localFilters.value.category === 'number') {
     return [localFilters.value.category.toString()]
   }
   return []
@@ -137,12 +154,12 @@ const selectedCategories = computed(() => {
 
 const hasActiveFilters = computed(() => {
   return !!(
-    localFilters.value.category ||
-    localFilters.value.priceMin ||
-    localFilters.value.priceMax ||
-    localFilters.value.inStock ||
-    localFilters.value.featured ||
-    (localFilters.value.attributes && Object.keys(localFilters.value.attributes).length > 0)
+    localFilters.value.category
+    || localFilters.value.priceMin
+    || localFilters.value.priceMax
+    || localFilters.value.inStock
+    || localFilters.value.featured
+    || (localFilters.value.attributes && Object.keys(localFilters.value.attributes).length > 0)
   )
 })
 
@@ -155,7 +172,7 @@ const activeFilters = computed((): ActiveFilter[] => {
     filters.push({
       id: 'category',
       label: categoryName,
-      type: 'category'
+      type: 'category',
     })
   }
 
@@ -166,7 +183,7 @@ const activeFilters = computed((): ActiveFilter[] => {
     filters.push({
       id: 'price',
       label: `€${min} - €${max}`,
-      type: 'price'
+      type: 'price',
     })
   }
 
@@ -175,7 +192,7 @@ const activeFilters = computed((): ActiveFilter[] => {
     filters.push({
       id: 'stock',
       label: t('products.filters.inStockOnly'),
-      type: 'stock'
+      type: 'stock',
     })
   }
 
@@ -184,7 +201,7 @@ const activeFilters = computed((): ActiveFilter[] => {
     filters.push({
       id: 'featured',
       label: t('products.filters.featuredOnly'),
-      type: 'featured'
+      type: 'featured',
     })
   }
 
@@ -193,14 +210,14 @@ const activeFilters = computed((): ActiveFilter[] => {
     Object.entries(localFilters.value.attributes).forEach(([attributeName, values]) => {
       if (values.length > 0) {
         const attribute = props.availableFilters.attributes.find(a => a.name === attributeName)
-        values.forEach(value => {
+        values.forEach((value) => {
           const option = attribute?.values.find(v => v.value === value)
-          if (option) {
+          if (option && attribute) {
             filters.push({
               id: `${attributeName}-${value}`,
               label: `${attribute.label}: ${option.label}`,
               type: 'attribute',
-              value: { attributeName, value }
+              value: { attributeName, value },
             })
           }
         })
@@ -227,7 +244,14 @@ const getCategoryName = (categoryId: string | number): string => {
   }
 
   const category = findCategory(props.availableFilters.categories, categoryId)
-  return category?.name || t('products.filters.unknownCategory')
+  const categoryName = category?.name
+  if (typeof categoryName === 'string') {
+    return categoryName
+  }
+  if (categoryName && typeof categoryName === 'object') {
+    return categoryName[locale.value] || categoryName.es || categoryName.en
+  }
+  return t('products.filters.unknownCategory')
 }
 
 const updateFilters = (newFilters: Partial<ProductFilters>) => {
@@ -246,23 +270,25 @@ const updatePriceRange = (range: [number, number]) => {
 
   updateFilters({
     priceMin: min > availableMin ? min : undefined,
-    priceMax: max < availableMax ? max : undefined
+    priceMax: max < availableMax ? max : undefined,
   })
 }
 
 const updateAttributeFilter = (attributeName: string, values: string[]) => {
-  const attributes = { ...localFilters.value.attributes }
+  let attributes = { ...localFilters.value.attributes }
 
   if (values.length > 0) {
     attributes[attributeName] = values
-  } else {
-    delete attributes[attributeName]
+  }
+  else {
+    const { [attributeName]: _removed, ...rest } = attributes
+    attributes = rest
   }
 
   updateFilters({ attributes })
 }
 
-const removeFilter = (id: string, type: string, value?: any) => {
+const removeFilter = (id: string, type: string, value?: { attributeName: string, value: string }) => {
   switch (type) {
     case 'category':
       updateFilters({ category: undefined })

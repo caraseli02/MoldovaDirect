@@ -20,9 +20,9 @@ export const TestOrderSchema = z.object({
       productId: z.string(),
       name: z.string(),
       quantity: z.number().int().positive(),
-      price: z.number().positive()
-    })
-  )
+      price: z.number().positive(),
+    }),
+  ),
 })
 
 export const TestAddressSchema = z.object({
@@ -35,7 +35,7 @@ export const TestAddressSchema = z.object({
   state: z.string().min(1),
   postalCode: z.string().min(1),
   country: z.string().length(2),
-  phone: z.string().optional()
+  phone: z.string().optional(),
 })
 
 export const TestCartItemSchema = z.object({
@@ -43,7 +43,7 @@ export const TestCartItemSchema = z.object({
   name: z.string().min(1),
   quantity: z.number().int().positive(),
   price: z.number().positive(),
-  image: z.string().optional()
+  image: z.string().optional(),
 })
 
 export const TestPaymentMethodSchema = z.object({
@@ -53,7 +53,7 @@ export const TestPaymentMethodSchema = z.object({
   last4: z.string().length(4).optional(),
   brand: z.string().optional(),
   expiryMonth: z.number().int().min(1).max(12).optional(),
-  expiryYear: z.number().int().min(2024).max(2050).optional()
+  expiryYear: z.number().int().min(2024).max(2050).optional(),
 })
 
 export const TestUserPreferencesSchema = z.object({
@@ -61,16 +61,16 @@ export const TestUserPreferencesSchema = z.object({
     email: z.boolean(),
     sms: z.boolean(),
     orderUpdates: z.boolean(),
-    promotions: z.boolean()
+    promotions: z.boolean(),
   }),
   marketing: z.object({
     newsletter: z.boolean(),
-    recommendations: z.boolean()
+    recommendations: z.boolean(),
   }),
   display: z.object({
     theme: z.enum(['light', 'dark', 'auto']),
-    currency: z.string().length(3)
-  })
+    currency: z.string().length(3),
+  }),
 })
 
 export const SimulationModeSchema = z.enum(['normal', 'slow-network', 'intermittent-errors', 'offline'])
@@ -91,9 +91,9 @@ export const AuthUserSchema = z.object({
       id: z.string(),
       type: z.literal('totp'),
       status: z.enum(['verified', 'unverified']),
-      friendlyName: z.string().optional()
-    })
-  )
+      friendlyName: z.string().optional(),
+    }),
+  ),
 })
 
 export const TestUserPersonaKeySchema = z.enum([
@@ -104,7 +104,7 @@ export const TestUserPersonaKeySchema = z.enum([
   'vip-customer',
   'international-shopper',
   'mobile-only-user',
-  'bulk-buyer'
+  'bulk-buyer',
 ])
 
 export const TestUserPersonaSchema = z.object({
@@ -117,8 +117,8 @@ export const TestUserPersonaSchema = z.object({
     z.object({
       label: z.string().min(1),
       description: z.string().min(1),
-      route: z.string().startsWith('/')
-    })
+      route: z.string().startsWith('/'),
+    }),
   ),
   testScript: z.array(z.string().min(1)),
   lockoutMinutes: z.number().int().positive().optional(),
@@ -134,10 +134,10 @@ export const TestUserPersonaSchema = z.object({
       z.object({
         date: z.string(),
         changes: z.string(),
-        version: z.string()
-      })
+        version: z.string(),
+      }),
     )
-    .optional()
+    .optional(),
 })
 
 export const PersonaSessionStateSchema = z.object({
@@ -145,29 +145,30 @@ export const PersonaSessionStateSchema = z.object({
   simulationMode: SimulationModeSchema,
   testScriptProgress: z.object({
     completedSteps: z.array(z.number().int().nonnegative()),
-    notes: z.record(z.number(), z.string())
+    notes: z.record(z.number(), z.string()),
   }),
   timestamp: z.string().datetime(),
-  version: z.string()
+  version: z.string(),
 })
 
 export const TestScriptProgressSchema = z.object({
   completedSteps: z.array(z.number().int().nonnegative()),
   notes: z.record(z.number(), z.string()),
   lastTested: z.string().datetime(),
-  completionPercentage: z.number().int().min(0).max(100)
+  completionPercentage: z.number().int().min(0).max(100),
 })
 
 /**
  * Validate a test user persona
  */
-export const validatePersona = (persona: unknown) => {
+export const validatePersona = (persona: any) => {
   try {
     return TestUserPersonaSchema.parse(persona)
-  } catch (error) {
+  }
+  catch (error: any) {
     if (error instanceof z.ZodError) {
-      console.error('Persona validation errors:', error.errors)
-      throw new Error(`Invalid persona data: ${error.errors.map((e) => e.message).join(', ')}`)
+      console.error('Persona validation errors:', error.issues)
+      throw new Error(`Invalid persona data: ${error.issues.map((e: z.ZodIssue) => e.message).join(', ')}`)
     }
     throw error
   }
@@ -176,13 +177,14 @@ export const validatePersona = (persona: unknown) => {
 /**
  * Validate persona session state
  */
-export const validateSessionState = (state: unknown) => {
+export const validateSessionState = (state: any) => {
   try {
     return PersonaSessionStateSchema.parse(state)
-  } catch (error) {
+  }
+  catch (error: any) {
     if (error instanceof z.ZodError) {
-      console.error('Session state validation errors:', error.errors)
-      throw new Error(`Invalid session state: ${error.errors.map((e) => e.message).join(', ')}`)
+      console.error('Session state validation errors:', error.issues)
+      throw new Error(`Invalid session state: ${error.issues.map((e: z.ZodIssue) => e.message).join(', ')}`)
     }
     throw error
   }
@@ -191,13 +193,14 @@ export const validateSessionState = (state: unknown) => {
 /**
  * Validate test script progress
  */
-export const validateProgress = (progress: unknown) => {
+export const validateProgress = (progress: any) => {
   try {
     return TestScriptProgressSchema.parse(progress)
-  } catch (error) {
+  }
+  catch (error: any) {
     if (error instanceof z.ZodError) {
-      console.error('Progress validation errors:', error.errors)
-      throw new Error(`Invalid progress data: ${error.errors.map((e) => e.message).join(', ')}`)
+      console.error('Progress validation errors:', error.issues)
+      throw new Error(`Invalid progress data: ${error.issues.map((e: z.ZodIssue) => e.message).join(', ')}`)
     }
     throw error
   }
@@ -206,14 +209,14 @@ export const validateProgress = (progress: unknown) => {
 /**
  * Safe parse (returns result without throwing)
  */
-export const safeValidatePersona = (persona: unknown) => {
+export const safeValidatePersona = (persona: any) => {
   return TestUserPersonaSchema.safeParse(persona)
 }
 
-export const safeValidateSessionState = (state: unknown) => {
+export const safeValidateSessionState = (state: any) => {
   return PersonaSessionStateSchema.safeParse(state)
 }
 
-export const safeValidateProgress = (progress: unknown) => {
+export const safeValidateProgress = (progress: any) => {
   return TestScriptProgressSchema.safeParse(progress)
 }

@@ -15,11 +15,17 @@
           </div>
           <div class="flex flex-col gap-2 text-sm text-slate-600 dark:text-slate-300">
             <span class="inline-flex items-center gap-2 rounded-full bg-primary-50 px-3 py-1 text-primary-700 dark:bg-primary-900/40 dark:text-primary-200">
-              <Icon name="i-heroicons-beaker" class="h-5 w-5" />
+              <Icon
+                name="i-heroicons-beaker"
+                class="h-5 w-5"
+              />
               Simulation tools are for local and preview environments only
             </span>
             <span class="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-slate-700 dark:bg-slate-700 dark:text-slate-200">
-              <Icon name="i-heroicons-wrench-screwdriver" class="h-5 w-5" />
+              <Icon
+                name="i-heroicons-wrench-screwdriver"
+                class="h-5 w-5"
+              />
               Toggle with <code class="rounded bg-slate-200 px-1.5 py-0.5 text-xs dark:bg-slate-600">ENABLE_TEST_USERS</code>
             </span>
           </div>
@@ -30,7 +36,9 @@
         v-if="!isSimulationEnabled"
         class="mb-10 rounded-xl border border-dashed border-red-400 bg-white/70 p-6 text-red-700 shadow dark:border-red-500 dark:bg-red-900/10 dark:text-red-200"
       >
-        <h2 class="mb-2 text-xl font-semibold">Simulation disabled</h2>
+        <h2 class="mb-2 text-xl font-semibold">
+          Simulation disabled
+        </h2>
         <p class="text-sm">
           Enable personas by setting <code class="rounded bg-red-100 px-1 py-0.5 dark:bg-red-500/40">ENABLE_TEST_USERS=true</code>
           in your environment or by running Nuxt in development mode. The store exposes test helpers only when the flag is
@@ -38,8 +46,14 @@
         </p>
       </div>
 
-      <div v-else class="space-y-10">
-        <section v-if="activePersona" class="rounded-2xl bg-white p-8 shadow-xl ring-1 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700">
+      <div
+        v-else
+        class="space-y-10"
+      >
+        <section
+          v-if="activePersona"
+          class="rounded-2xl bg-white p-8 shadow-xl ring-1 ring-slate-100 dark:bg-slate-800 dark:ring-slate-700"
+        >
           <div class="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
             <div>
               <span class="inline-flex items-center gap-2 rounded-full bg-primary-100 px-3 py-1 text-sm font-medium text-primary-800 dark:bg-primary-900/40 dark:text-primary-100">
@@ -54,14 +68,23 @@
 
               <div class="mt-6 grid gap-4 text-sm text-slate-600 dark:text-slate-300 md:grid-cols-2">
                 <div>
-                  <h3 class="font-semibold text-slate-900 dark:text-white">Persona goals</h3>
+                  <h3 class="font-semibold text-slate-900 dark:text-white">
+                    Persona goals
+                  </h3>
                   <ul class="mt-2 list-disc space-y-1 pl-5">
-                    <li v-for="goal in activePersona.goals" :key="goal">{{ goal }}</li>
+                    <li
+                      v-for="goal in activePersona.goals"
+                      :key="goal"
+                    >
+                      {{ goal }}
+                    </li>
                   </ul>
                 </div>
                 <div>
                   <div class="flex items-center justify-between">
-                    <h3 class="font-semibold text-slate-900 dark:text-white">Test Script Progress</h3>
+                    <h3 class="font-semibold text-slate-900 dark:text-white">
+                      Test Script Progress
+                    </h3>
                     <span
                       v-if="currentProgress"
                       class="rounded-full px-2 py-1 text-xs font-medium"
@@ -78,11 +101,11 @@
                     >
                       <div class="flex items-start gap-3">
                         <input
-                          type="checkbox"
                           :id="`step-${index}`"
+                          type="checkbox"
                           :checked="isStepCompleted(index)"
-                          @change="handleToggleStep(index)"
                           class="mt-0.5 h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500 dark:border-slate-600 dark:bg-slate-800"
+                          @change="handleToggleStep(index)"
                         />
                         <label
                           :for="`step-${index}`"
@@ -98,16 +121,16 @@
                       >
                         <textarea
                           :value="getStepNote(index)"
-                          @input="(e) => handleUpdateNote(index, (e.target as HTMLTextAreaElement).value)"
                           placeholder="Add notes (issues found, observations, etc.)"
                           rows="2"
                           class="w-full rounded border border-slate-300 bg-slate-50 px-2 py-1 text-xs text-slate-700 placeholder-slate-400 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:placeholder-slate-500"
-                        />
+                          @input="(e) => handleUpdateNote(index, (e.target as HTMLTextAreaElement).value)"
+                        ></textarea>
                       </div>
                       <button
                         v-if="!showNoteInput[index] && !getStepNote(index)"
-                        @click="showNoteInput[index] = true"
                         class="ml-7 mt-1 text-xs text-slate-400 opacity-0 transition group-hover:opacity-100 hover:text-primary-600 dark:text-slate-500 dark:hover:text-primary-400"
+                        @click="showNoteInput[index] = true"
                       >
                         + Add note
                       </button>
@@ -115,8 +138,8 @@
                   </div>
                   <button
                     v-if="currentProgress && currentProgress.completedSteps.length > 0"
-                    @click="handleClearProgress"
                     class="mt-3 text-xs text-slate-500 hover:text-red-600 dark:text-slate-400 dark:hover:text-red-400"
+                    @click="handleClearProgress"
                   >
                     Clear progress
                   </button>
@@ -125,7 +148,9 @@
             </div>
             <div class="flex w-full max-w-xs flex-col gap-4 rounded-xl bg-slate-50 p-5 text-sm dark:bg-slate-900">
               <div>
-                <h3 class="font-semibold text-slate-900 dark:text-white">Session details</h3>
+                <h3 class="font-semibold text-slate-900 dark:text-white">
+                  Session details
+                </h3>
                 <p class="mt-2 text-slate-600 dark:text-slate-300">
                   <strong class="font-medium text-slate-900 dark:text-white">{{ activePersona.user.name }}</strong>
                   · {{ activePersona.user.email }}
@@ -133,15 +158,23 @@
                 <p class="mt-1 text-slate-500 dark:text-slate-400">
                   Preferred language: <span class="font-medium">{{ activePersona.user.preferredLanguage.toUpperCase() }}</span>
                 </p>
-                <p v-if="authStore.lockoutTime" class="mt-1 text-orange-600 dark:text-orange-300">
+                <p
+                  v-if="authStore.lockoutTime"
+                  class="mt-1 text-orange-600 dark:text-orange-300"
+                >
                   Lockout timer: about {{ authStore.lockoutMinutesRemaining }} minutes remaining
                 </p>
               </div>
 
               <div class="space-y-2">
-                <h3 class="font-semibold text-slate-900 dark:text-white">Quick links</h3>
+                <h3 class="font-semibold text-slate-900 dark:text-white">
+                  Quick links
+                </h3>
                 <ul class="space-y-2">
-                  <li v-for="link in activePersona.quickLinks" :key="link.route">
+                  <li
+                    v-for="link in activePersona.quickLinks"
+                    :key="link.route"
+                  >
                     <NuxtLink
                       :to="localePath(link.route)"
                       class="group flex items-start justify-between rounded-lg border border-slate-200 bg-white px-3 py-2 text-left transition hover:border-primary-500 hover:text-primary-600 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-primary-400"
@@ -150,7 +183,10 @@
                         <span class="font-medium">{{ link.label }}</span>
                         <p class="text-xs text-slate-500 dark:text-slate-400">{{ link.description }}</p>
                       </div>
-                      <Icon name="i-heroicons-arrow-right" class="h-4 w-4 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-primary-500" />
+                      <Icon
+                        name="i-heroicons-arrow-right"
+                        class="h-4 w-4 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-primary-500"
+                      />
                     </NuxtLink>
                   </li>
                 </ul>
@@ -161,26 +197,35 @@
                   :to="localePath('/account')"
                   class="inline-flex items-center justify-center gap-2 rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-primary-700"
                 >
-                  <Icon name="i-heroicons-rocket-launch" class="h-4 w-4" />
+                  <Icon
+                    name="i-heroicons-rocket-launch"
+                    class="h-4 w-4"
+                  />
                   Open account dashboard
                 </NuxtLink>
                 <div class="flex gap-2">
                   <button
                     class="flex-1 inline-flex items-center justify-center gap-2 rounded-md border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
                     type="button"
-                    @click="handleExportSession"
                     title="Export current session state"
+                    @click="handleExportSession"
                   >
-                    <Icon name="i-heroicons-arrow-down-tray" class="h-4 w-4" />
+                    <Icon
+                      name="i-heroicons-arrow-down-tray"
+                      class="h-4 w-4"
+                    />
                     Export
                   </button>
                   <button
                     class="flex-1 inline-flex items-center justify-center gap-2 rounded-md border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
                     type="button"
-                    @click="handleShowImport"
                     title="Import session state"
+                    @click="handleShowImport"
                   >
-                    <Icon name="i-heroicons-arrow-up-tray" class="h-4 w-4" />
+                    <Icon
+                      name="i-heroicons-arrow-up-tray"
+                      class="h-4 w-4"
+                    />
                     Import
                   </button>
                 </div>
@@ -190,7 +235,10 @@
                   type="button"
                   @click="handleClearLockout"
                 >
-                  <Icon name="i-heroicons-clock" class="h-4 w-4" />
+                  <Icon
+                    name="i-heroicons-clock"
+                    class="h-4 w-4"
+                  />
                   Clear lockout timer
                 </button>
                 <button
@@ -198,7 +246,10 @@
                   type="button"
                   @click="handleEndSimulation"
                 >
-                  <Icon name="i-heroicons-power" class="h-4 w-4" />
+                  <Icon
+                    name="i-heroicons-power"
+                    class="h-4 w-4"
+                  />
                   End simulation
                 </button>
               </div>
@@ -208,7 +259,9 @@
 
         <section>
           <div class="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <h2 class="text-2xl font-semibold text-slate-900 dark:text-white">Available personas</h2>
+            <h2 class="text-2xl font-semibold text-slate-900 dark:text-white">
+              Available personas
+            </h2>
             <div class="flex flex-col gap-3 md:flex-row md:items-center">
               <input
                 v-model="searchQuery"
@@ -220,18 +273,29 @@
                 v-model="filterFocusArea"
                 class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm text-slate-900 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
               >
-                <option value="">All Focus Areas</option>
-                <option v-for="area in uniqueFocusAreas" :key="area" :value="area">
+                <option value="">
+                  All Focus Areas
+                </option>
+                <option
+                  v-for="area in uniqueFocusAreas"
+                  :key="area"
+                  :value="area"
+                >
                   {{ area }}
                 </option>
               </select>
             </div>
           </div>
-          <div v-if="filteredPersonas.length === 0" class="col-span-2 rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 p-12 text-center dark:border-slate-700 dark:bg-slate-900">
-            <p class="text-slate-600 dark:text-slate-400">No personas match your search criteria</p>
+          <div
+            v-if="filteredPersonas.length === 0"
+            class="col-span-2 rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 p-12 text-center dark:border-slate-700 dark:bg-slate-900"
+          >
+            <p class="text-slate-600 dark:text-slate-400">
+              No personas match your search criteria
+            </p>
             <button
-              @click="searchQuery = ''; filterFocusArea = ''"
               class="mt-4 text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400"
+              @click="searchQuery = ''; filterFocusArea = ''"
             >
               Clear filters
             </button>
@@ -245,8 +309,12 @@
               <div>
                 <div class="flex items-start justify-between gap-3">
                   <div>
-                    <h3 class="text-xl font-semibold text-slate-900 dark:text-white">{{ persona.title }}</h3>
-                    <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">{{ persona.summary }}</p>
+                    <h3 class="text-xl font-semibold text-slate-900 dark:text-white">
+                      {{ persona.title }}
+                    </h3>
+                    <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                      {{ persona.summary }}
+                    </p>
                   </div>
                   <span
                     v-if="activePersona?.key === persona.key"
@@ -262,15 +330,25 @@
                     :key="focus"
                     class="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600 dark:bg-slate-700 dark:text-slate-200"
                   >
-                    <Icon name="i-heroicons-sparkles" class="h-4 w-4" />
+                    <Icon
+                      name="i-heroicons-sparkles"
+                      class="h-4 w-4"
+                    />
                     {{ focus }}
                   </span>
                 </div>
 
                 <div class="mt-6 space-y-2 text-sm text-slate-600 dark:text-slate-300">
-                  <h4 class="font-semibold text-slate-900 dark:text-white">Test steps</h4>
+                  <h4 class="font-semibold text-slate-900 dark:text-white">
+                    Test steps
+                  </h4>
                   <ul class="list-disc space-y-1 pl-5">
-                    <li v-for="task in persona.testScript" :key="task">{{ task }}</li>
+                    <li
+                      v-for="task in persona.testScript"
+                      :key="task"
+                    >
+                      {{ task }}
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -282,14 +360,20 @@
                   :disabled="activePersona?.key === persona.key"
                   @click="() => handleActivatePersona(persona.key)"
                 >
-                  <Icon name="i-heroicons-play" class="h-4 w-4" />
+                  <Icon
+                    name="i-heroicons-play"
+                    class="h-4 w-4"
+                  />
                   Activate persona
                 </button>
                 <NuxtLink
                   :to="localePath(persona.quickLinks[0]?.route || '/account')"
                   class="inline-flex items-center justify-center gap-2 rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
                 >
-                  <Icon name="i-heroicons-cursor-arrow-rays" class="h-4 w-4" />
+                  <Icon
+                    name="i-heroicons-cursor-arrow-rays"
+                    class="h-4 w-4"
+                  />
                   Jump to first checkpoint
                 </NuxtLink>
               </div>
@@ -306,12 +390,17 @@
       >
         <div class="max-w-2xl w-full rounded-2xl bg-white p-6 shadow-2xl dark:bg-slate-800">
           <div class="flex items-center justify-between mb-4">
-            <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Import Session State</h3>
+            <h3 class="text-xl font-semibold text-slate-900 dark:text-white">
+              Import Session State
+            </h3>
             <button
-              @click="showImportModal = false"
               class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+              @click="showImportModal = false"
             >
-              <Icon name="i-heroicons-x-mark" class="h-6 w-6" />
+              <Icon
+                name="i-heroicons-x-mark"
+                class="h-6 w-6"
+              />
             </button>
           </div>
           <p class="mb-4 text-sm text-slate-600 dark:text-slate-300">
@@ -322,17 +411,17 @@
             placeholder="Paste exported session JSON here..."
             rows="10"
             class="w-full rounded-lg border border-slate-300 bg-slate-50 px-4 py-3 font-mono text-sm text-slate-900 placeholder-slate-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:border-slate-600 dark:bg-slate-900 dark:text-white dark:placeholder-slate-500"
-          />
+          ></textarea>
           <div class="mt-4 flex gap-3 justify-end">
             <button
-              @click="showImportModal = false"
               class="px-4 py-2 text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
+              @click="showImportModal = false"
             >
               Cancel
             </button>
             <button
-              @click="handleImportSession"
               class="rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700"
+              @click="handleImportSession"
             >
               Import Session
             </button>
@@ -350,14 +439,14 @@ import { testUserPersonas, type TestUserPersonaKey } from '~/lib/testing/testUse
 
 definePageMeta({
   layout: false,
-  middleware: ['test-users-guard']
+  middleware: ['test-users-guard'],
 })
 
 useHead({
   title: 'Test Users Simulator — Moldova Direct',
   meta: [
-    { name: 'robots', content: 'noindex, nofollow' }
-  ]
+    { name: 'robots', content: 'noindex, nofollow' },
+  ],
 })
 
 const authStore = useAuthStore()
@@ -383,7 +472,7 @@ const activePersona = computed(() => {
 const uniqueFocusAreas = computed(() => {
   const areas = new Set<string>()
   personaList.value.forEach((persona) => {
-    persona.focusAreas.forEach((area) => areas.add(area))
+    persona.focusAreas.forEach(area => areas.add(area))
   })
   return Array.from(areas).sort()
 })
@@ -396,18 +485,18 @@ const filteredPersonas = computed(() => {
     const query = searchQuery.value.toLowerCase()
     filtered = filtered.filter((persona) => {
       return (
-        persona.title.toLowerCase().includes(query) ||
-        persona.summary.toLowerCase().includes(query) ||
-        persona.user.email.toLowerCase().includes(query) ||
-        persona.focusAreas.some((area) => area.toLowerCase().includes(query))
+        persona.title.toLowerCase().includes(query)
+        || persona.summary.toLowerCase().includes(query)
+        || persona.user.email.toLowerCase().includes(query)
+        || persona.focusAreas.some(area => area.toLowerCase().includes(query))
       )
     })
   }
 
   // Apply focus area filter
   if (filterFocusArea.value) {
-    filtered = filtered.filter((persona) =>
-      persona.focusAreas.includes(filterFocusArea.value)
+    filtered = filtered.filter(persona =>
+      persona.focusAreas.includes(filterFocusArea.value),
     )
   }
 
@@ -425,7 +514,8 @@ onMounted(() => {
       if (autoStart === 'true' || !authStore.activeTestPersona) {
         handleActivatePersona(personaKey)
       }
-    } else {
+    }
+    else {
       toast.error('Invalid persona', `Persona "${activate}" not found`)
     }
 
@@ -451,7 +541,7 @@ const handleToggleStep = (stepIndex: number) => {
   authStore.toggleTestScriptStep(
     activePersona.value.key,
     stepIndex,
-    activePersona.value.testScript.length
+    activePersona.value.testScript.length,
   )
 }
 
@@ -472,9 +562,10 @@ const handleActivatePersona = async (key: TestUserPersonaKey) => {
     const persona = testUserPersonas[key]
     toast.success(
       'Simulación activada',
-      `Ahora navegas como ${persona.user.name}. Sigue la lista de comprobación para validar el flujo.`
+      `Ahora navegas como ${persona.user.name}. Sigue la lista de comprobación para validar el flujo.`,
     )
-  } catch (error) {
+  }
+  catch (error: any) {
     const message = error instanceof Error ? error.message : 'No se pudo iniciar la simulación.'
     toast.error('Error al activar la persona', message)
   }
@@ -504,15 +595,16 @@ const handleExportSession = async () => {
       authStore.simulationMode,
       {
         completedSteps: currentProgress.value.completedSteps,
-        notes: currentProgress.value.notes
-      }
+        notes: currentProgress.value.notes,
+      },
     )
 
     // Copy to clipboard
     if (navigator.clipboard) {
       await navigator.clipboard.writeText(sessionJson)
       toast.success('Session exported', 'Session data copied to clipboard')
-    } else {
+    }
+    else {
       // Fallback: show in alert
       alert('Copy this session data:\n\n' + sessionJson)
     }
@@ -527,7 +619,8 @@ const handleExportSession = async () => {
     a.click()
     document.body.removeChild(a)
     URL.revokeObjectURL(url)
-  } catch (error) {
+  }
+  catch (error: any) {
     const message = error instanceof Error ? error.message : 'Failed to export session'
     toast.error('Export failed', message)
   }
@@ -545,7 +638,7 @@ const handleImportSession = async () => {
   }
 
   try {
-    const { importPersonaSession } = await import('~/lib/testing/simulationHelpers')
+    const { importPersonaSession: _importPersonaSession } = await import('~/lib/testing/simulationHelpers')
     const { validateSessionState } = await import('~/lib/testing/testUserValidation')
 
     // Parse and validate
@@ -576,7 +669,8 @@ const handleImportSession = async () => {
 
     showImportModal.value = false
     toast.success('Session imported', `Restored session for ${persona?.title || sessionState.personaKey}`)
-  } catch (error) {
+  }
+  catch (error: any) {
     const message = error instanceof Error ? error.message : 'Failed to import session'
     toast.error('Import failed', message)
   }
@@ -603,9 +697,10 @@ const handleKeyPress = (event: KeyboardEvent) => {
     const num = parseInt(event.key)
     if (num >= 1 && num <= 8) {
       const personas = Object.values(testUserPersonas)
-      if (personas[num - 1]) {
+      const personaKey = personas[num - 1]?.key
+      if (personaKey) {
         event.preventDefault()
-        handleActivatePersona(personas[num - 1].key)
+        handleActivatePersona(personaKey)
       }
     }
   }

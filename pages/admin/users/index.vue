@@ -1,12 +1,12 @@
 <!--
   Admin Users Management Page
-  
+
   Requirements addressed:
   - 4.1: Display searchable list of all registered users with basic information
   - 4.2: Implement user search by name, email, and registration date
   - 4.3: Create user detail view with order history and account information
   - 4.4, 4.5, 4.6: User account management actions
-  
+
   Main admin page for user management with listing, search, and actions.
 -->
 
@@ -15,32 +15,52 @@
     <!-- Page Title -->
     <Head>
       <Title>User Management - Admin Dashboard</Title>
-      <Meta name="description" content="Manage users, view profiles, and perform account actions" />
+      <Meta
+        name="description"
+        content="Manage users, view profiles, and perform account actions"
+      />
     </Head>
 
     <div class="space-y-6">
       <!-- Page Header -->
       <div class="flex items-center justify-between">
         <div>
-          <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">User Management</h1>
+          <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
+            User Management
+          </h1>
           <p class="text-gray-600 dark:text-gray-400 mt-1">
             Manage user accounts, view profiles, and perform administrative actions
           </p>
         </div>
-        
+
         <!-- Summary Stats -->
-        <div v-if="summary" class="flex items-center gap-4">
+        <div
+          v-if="summary"
+          class="flex items-center gap-4"
+        >
           <div class="text-center">
-            <div class="text-2xl font-bold text-gray-900 dark:text-gray-100">{{ summary.totalUsers }}</div>
-            <div class="text-sm text-gray-500 dark:text-gray-400">Total Users</div>
+            <div class="text-2xl font-bold text-gray-900 dark:text-gray-100">
+              {{ summary.totalUsers }}
+            </div>
+            <div class="text-sm text-gray-500 dark:text-gray-400">
+              Total Users
+            </div>
           </div>
           <div class="text-center">
-            <div class="text-2xl font-bold text-green-600 dark:text-green-400">{{ summary.activeUsers }}</div>
-            <div class="text-sm text-gray-500 dark:text-gray-400">Active</div>
+            <div class="text-2xl font-bold text-green-600 dark:text-green-400">
+              {{ summary.activeUsers }}
+            </div>
+            <div class="text-sm text-gray-500 dark:text-gray-400">
+              Active
+            </div>
           </div>
           <div class="text-center">
-            <div class="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{{ summary.inactiveUsers }}</div>
-            <div class="text-sm text-gray-500 dark:text-gray-400">Inactive</div>
+            <div class="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
+              {{ summary.inactiveUsers }}
+            </div>
+            <div class="text-sm text-gray-500 dark:text-gray-400">
+              Inactive
+            </div>
           </div>
         </div>
       </div>
@@ -61,15 +81,20 @@
         <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
           <!-- Modal Header -->
           <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-            <h2 class="text-lg font-medium text-gray-900">User Details</h2>
+            <h2 class="text-lg font-medium text-gray-900">
+              User Details
+            </h2>
             <button
-              @click="closeUserDetail"
               class="text-gray-400 hover:text-gray-600"
+              @click="closeUserDetail"
             >
-              <commonIcon name="lucide:x" class="w-6 h-6" />
+              <commonIcon
+                name="lucide:x"
+                class="w-6 h-6"
+              />
             </button>
           </div>
-          
+
           <!-- Modal Content -->
           <div class="overflow-y-auto max-h-[calc(90vh-80px)]">
             <AdminUsersDetailView
@@ -88,7 +113,10 @@
       >
         <div class="bg-white rounded-lg p-6 shadow-xl">
           <div class="flex items-center gap-3">
-            <commonIcon name="lucide:refresh-ccw" class="w-6 h-6 animate-spin text-blue-600" />
+            <commonIcon
+              name="lucide:refresh-ccw"
+              class="w-6 h-6 animate-spin text-blue-600"
+            />
             <span class="text-gray-900">Processing action...</span>
           </div>
         </div>
@@ -98,13 +126,23 @@
 </template>
 
 <script setup lang="ts">
+import type { UserWithProfile, UsersSummary, UserDetail } from '~/stores/adminUsers'
 import AdminUsersTable from '~/components/admin/Users/Table.vue'
 import AdminUsersDetailView from '~/components/admin/Users/DetailView.vue'
+
+interface PaginationState {
+  page: number
+  limit: number
+  total: number
+  totalPages: number
+  hasNext: boolean
+  hasPrev: boolean
+}
 
 // Define page meta for admin layout and authentication
 definePageMeta({
   layout: 'admin',
-  middleware: ['auth', 'admin']
+  middleware: ['auth', 'admin'],
 })
 
 // SEO and meta
@@ -112,8 +150,8 @@ useHead({
   title: 'User Management - Admin Dashboard',
   meta: [
     { name: 'description', content: 'Manage users, view profiles, and perform account actions' },
-    { name: 'robots', content: 'noindex, nofollow' }
-  ]
+    { name: 'robots', content: 'noindex, nofollow' },
+  ],
 })
 
 const toast = useToast()
@@ -140,12 +178,12 @@ const closeUserDetail = () => {
   adminUsersStore.clearCurrentUser()
 }
 
-const handleUserEdit = (userId: string) => {
+const handleUserEdit = (_userId: string) => {
   // For now, just show a message - you could implement an edit modal
   toast.info('User editing functionality will be implemented in a future update')
 }
 
-const handleUserAction = async (action: string, userId: string, data?: any) => {
+const handleUserAction = async (action: string, userId: string, _data?: unknown) => {
   try {
     switch (action) {
       case 'view':
@@ -161,7 +199,8 @@ const handleUserAction = async (action: string, userId: string, data?: any) => {
         console.warn('User action not yet implemented:', action)
         toast.info('This action will be implemented in a future update')
     }
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Error performing user action:', error)
     toast.error(error instanceof Error ? error.message : 'Failed to perform action')
   }
@@ -169,6 +208,71 @@ const handleUserAction = async (action: string, userId: string, data?: any) => {
 
 // Fetch users data with proper authentication
 const fetchUsersData = async () => {
+  const authStore = useAuthStore()
+
+  if (authStore.isTestSession) {
+    adminUsersStore.setLoading(true)
+    await new Promise(resolve => setTimeout(resolve, 800))
+
+    const mockUsers: UserWithProfile[] = [
+      {
+        id: 'user_1',
+        email: 'juan@example.com',
+        email_confirmed_at: new Date().toISOString(),
+        last_sign_in_at: new Date().toISOString(),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        status: 'active',
+        orderCount: 5,
+        totalSpent: 450.25,
+        profile: {
+          name: 'Juan Pérez',
+          phone: '+34 600 000 001',
+          preferred_language: 'es',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        },
+      },
+      {
+        id: 'user_2',
+        email: 'maria@example.com',
+        email_confirmed_at: new Date().toISOString(),
+        last_sign_in_at: new Date().toISOString(),
+        created_at: new Date(Date.now() - 86400000 * 30).toISOString(),
+        updated_at: new Date().toISOString(),
+        status: 'inactive',
+        orderCount: 0,
+        totalSpent: 0,
+        profile: {
+          name: 'Maria Popescu',
+          phone: '+373 60 000 002',
+          preferred_language: 'ro',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        },
+      },
+    ]
+
+    adminUsersStore.setUsers(mockUsers)
+    adminUsersStore.setPagination({
+      page: 1,
+      limit: 20,
+      total: 2,
+      totalPages: 1,
+      hasNext: false,
+      hasPrev: false,
+    } as any)
+    adminUsersStore.setSummary({
+      totalUsers: 1250,
+      activeUsers: 850,
+      inactiveUsers: 400,
+      totalOrders: 2450,
+      totalRevenue: 154200.50,
+    })
+    adminUsersStore.setLoading(false)
+    return
+  }
+
   try {
     adminUsersStore.setLoading(true)
 
@@ -183,40 +287,109 @@ const fetchUsersData = async () => {
 
     // Prepare headers with Bearer token
     const headers = {
-      'Authorization': `Bearer ${session.access_token}`
+      Authorization: `Bearer ${session.access_token}`,
     }
-
-    console.log('[AdminUsers] Fetching users data with Bearer token')
 
     // Use $fetch with Bearer token headers (same as dashboard)
     const response = await $fetch<{
       success: boolean
       data: {
-        users: any[]
-        pagination: any
-        summary: any
+        users: UserWithProfile[]
+        pagination: PaginationState
+        summary: UsersSummary
       }
     }>('/api/admin/users', {
       headers,
-      query: adminUsersStore.queryParams
+      query: adminUsersStore.queryParams,
     })
 
     if (response.success) {
       // Update store with the fetched data using setter methods
       adminUsersStore.setUsers(response.data.users)
-      adminUsersStore.setPagination(response.data.pagination)
+      adminUsersStore.setPagination(response.data.pagination as any)
       adminUsersStore.setSummary(response.data.summary)
     }
-  } catch (err) {
+  }
+  catch (err: any) {
     console.error('[AdminUsers] Error fetching users:', err)
     adminUsersStore.setError(err instanceof Error ? err.message : 'Failed to fetch users')
-  } finally {
+  }
+  finally {
     adminUsersStore.setLoading(false)
   }
 }
 
 // Fetch user detail with proper authentication
 const fetchUserDetail = async (userId: string) => {
+  const authStore = useAuthStore()
+
+  if (authStore.isTestSession) {
+    adminUsersStore.setUserDetailLoading(true)
+    await new Promise(resolve => setTimeout(resolve, 500))
+
+    const mockDetail: UserDetail = {
+      id: userId,
+      email: userId === 'user_1' ? 'juan@example.com' : 'maria@example.com',
+      email_confirmed_at: new Date().toISOString(),
+      last_sign_in_at: new Date().toISOString(),
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      status: userId === 'user_1' ? 'active' : 'inactive',
+      profile: {
+        name: userId === 'user_1' ? 'Juan Pérez' : 'Maria Popescu',
+        phone: userId === 'user_1' ? '+34 600 000 001' : '+373 60 000 002',
+        preferred_language: userId === 'user_1' ? 'es' : 'ro',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      },
+      addresses: [
+        {
+          id: 1,
+          type: 'shipping',
+          street: 'Calle Principal 123',
+          city: 'Madrid',
+          postal_code: '28001',
+          province: 'Madrid',
+          country: 'ES',
+          is_default: true,
+          created_at: new Date().toISOString(),
+        },
+      ],
+      orders: [
+        {
+          id: 1,
+          order_number: 'ORD-2024-001',
+          status: 'delivered',
+          payment_status: 'paid',
+          total_eur: 145.50,
+          created_at: new Date().toISOString(),
+          items_count: 3,
+        },
+      ],
+      activity: [
+        {
+          id: 'act_1',
+          event_type: 'login',
+          created_at: new Date().toISOString(),
+          ip_address: '127.0.0.1',
+        },
+      ],
+      statistics: {
+        totalOrders: 5,
+        totalSpent: 450.25,
+        averageOrderValue: 90.05,
+        lastOrderDate: new Date().toISOString(),
+        accountAge: 365,
+        loginCount: 42,
+        lastLogin: new Date().toISOString(),
+      },
+    }
+
+    adminUsersStore.setCurrentUser(mockDetail)
+    adminUsersStore.setUserDetailLoading(false)
+    return
+  }
+
   try {
     adminUsersStore.setUserDetailLoading(true)
 
@@ -231,26 +404,26 @@ const fetchUserDetail = async (userId: string) => {
 
     // Prepare headers with Bearer token
     const headers = {
-      'Authorization': `Bearer ${session.access_token}`
+      Authorization: `Bearer ${session.access_token}`,
     }
-
-    console.log('[AdminUsers] Fetching user detail with Bearer token')
 
     // Fetch user detail
     const response = await $fetch<{
       success: boolean
-      data: any
+      data: UserDetail
     }>(`/api/admin/users/${userId}`, {
-      headers
+      headers,
     })
 
     if (response.success) {
       adminUsersStore.setCurrentUser(response.data)
     }
-  } catch (err) {
+  }
+  catch (err: any) {
     console.error('[AdminUsers] Error fetching user detail:', err)
     adminUsersStore.setError(err instanceof Error ? err.message : 'Failed to fetch user detail')
-  } finally {
+  }
+  finally {
     adminUsersStore.setUserDetailLoading(false)
   }
 }

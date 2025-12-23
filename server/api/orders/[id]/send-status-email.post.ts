@@ -12,11 +12,11 @@ export default defineEventHandler(async (event) => {
   try {
     const supabase = await serverSupabaseClient(event)
     const orderId = getRouterParam(event, 'id')
-    
+
     if (!orderId) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Order ID is required'
+        statusMessage: 'Order ID is required',
       })
     }
 
@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
     if (!emailType) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Email type is required'
+        statusMessage: 'Email type is required',
       })
     }
 
@@ -40,13 +40,13 @@ export default defineEventHandler(async (event) => {
       'order_shipped',
       'order_delivered',
       'order_cancelled',
-      'order_issue'
+      'order_issue',
     ]
 
     if (!validEmailTypes.includes(emailType)) {
       throw createError({
         statusCode: 400,
-        statusMessage: `Invalid email type. Must be one of: ${validEmailTypes.join(', ')}`
+        statusMessage: `Invalid email type. Must be one of: ${validEmailTypes.join(', ')}`,
       })
     }
 
@@ -63,7 +63,7 @@ export default defineEventHandler(async (event) => {
     if (orderError || !order) {
       throw createError({
         statusCode: 404,
-        statusMessage: 'Order not found'
+        statusMessage: 'Order not found',
       })
     }
 
@@ -85,7 +85,8 @@ export default defineEventHandler(async (event) => {
         customerEmail = profile.email
         locale = profile.preferred_locale || 'en'
       }
-    } else if (order.guest_email) {
+    }
+    else if (order.guest_email) {
       // Guest checkout
       customerEmail = order.guest_email
       const shippingAddr = order.shipping_address
@@ -97,7 +98,7 @@ export default defineEventHandler(async (event) => {
     if (!customerEmail) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Customer email not found'
+        statusMessage: 'Customer email not found',
       })
     }
 
@@ -106,7 +107,7 @@ export default defineEventHandler(async (event) => {
       order,
       customerName,
       customerEmail,
-      locale
+      locale,
     )
 
     // Send status email
@@ -115,7 +116,7 @@ export default defineEventHandler(async (event) => {
     if (!result.success) {
       throw createError({
         statusCode: 500,
-        statusMessage: result.error || 'Failed to send email'
+        statusMessage: result.error || 'Failed to send email',
       })
     }
 
@@ -123,14 +124,15 @@ export default defineEventHandler(async (event) => {
       success: true,
       message: `${emailType} email sent successfully`,
       emailLogId: result.emailLogId,
-      externalId: result.externalId
+      externalId: result.externalId,
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     console.error('Error sending order status email:', error)
-    
+
     throw createError({
       statusCode: error.statusCode || 500,
-      statusMessage: error.statusMessage || 'Failed to send order status email'
+      statusMessage: error.statusMessage || 'Failed to send order status email',
     })
   }
 })

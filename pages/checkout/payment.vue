@@ -19,21 +19,21 @@
 <script setup lang="ts">
 // Lazy load the payment step component
 const PaymentStep = defineAsyncComponent(() =>
-  import('~/components/checkout/PaymentStep.vue')
+  import('~/components/checkout/PaymentStep.vue'),
 )
 
 // Layout
 definePageMeta({
   layout: 'checkout',
-  middleware: ['checkout']
+  middleware: ['checkout'],
 })
 
 // Page meta
 useHead({
   title: 'Payment Method - Checkout',
   meta: [
-    { name: 'description', content: 'Select your payment method to complete your order' }
-  ]
+    { name: 'description', content: 'Select your payment method to complete your order' },
+  ],
 })
 </script>
 

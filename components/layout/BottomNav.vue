@@ -80,6 +80,7 @@
           <ClientOnly>
             <span
               v-if="itemCount > 0"
+              data-testid="cart-count"
               class="absolute -top-1 -right-2 flex items-center justify-center min-w-[18px] h-[18px] px-1 text-[10px] font-bold text-white bg-primary-600 rounded-full"
               aria-hidden="true"
             >

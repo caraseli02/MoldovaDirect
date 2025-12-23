@@ -5,7 +5,7 @@
  */
 
 import { useI18n } from 'vue-i18n'
-import type { ProductWithRelations } from '~/types/database'
+import type { Translations } from '~/types/database'
 
 export function useProductUtils() {
   const { locale } = useI18n()
@@ -13,9 +13,10 @@ export function useProductUtils() {
   /**
    * Get localized text from translation object
    */
-  const getLocalizedText = (text: Record<string, string> | null | undefined): string => {
+  const getLocalizedText = (text: Translations | Record<string, string> | null | undefined): string => {
     if (!text) return ''
-    return text[locale.value] || text.es || Object.values(text)[0] || ''
+    const textObj = text as Record<string, string | undefined>
+    return textObj[locale.value] || textObj.es || Object.values(textObj).find(v => v) || ''
   }
 
   /**
@@ -68,7 +69,7 @@ export function useProductUtils() {
     return new Intl.DateTimeFormat(locale.value, {
       weekday: 'short',
       month: 'short',
-      day: 'numeric'
+      day: 'numeric',
     }).format(baseDate)
   }
 
@@ -78,6 +79,6 @@ export function useProductUtils() {
     getCategoryLabel,
     calculateDiscountPercentage,
     hasActiveDiscount,
-    getEstimatedDelivery
+    getEstimatedDelivery,
   }
 }

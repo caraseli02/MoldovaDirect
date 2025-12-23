@@ -1,9 +1,9 @@
 <!--
   Admin User Table Row Component
-  
+
   Mobile-responsive user row component with touch optimizations
   Follows mobile patterns from ProductCard.vue and mobile components
-  
+
   Features:
   - Mobile-responsive layout that stacks on small screens
   - Touch-friendly action buttons
@@ -39,8 +39,13 @@
 
     <!-- Email -->
     <td class="px-6 py-4 whitespace-nowrap">
-      <div class="text-sm text-gray-900 dark:text-gray-100">{{ user.email }}</div>
-      <div v-if="user.profile?.phone" class="text-sm text-gray-500 dark:text-gray-400">
+      <div class="text-sm text-gray-900 dark:text-gray-100">
+        {{ user.email }}
+      </div>
+      <div
+        v-if="user.profile?.phone"
+        class="text-sm text-gray-500 dark:text-gray-400"
+      >
         {{ user.profile.phone }}
       </div>
     </td>
@@ -52,8 +57,12 @@
 
     <!-- Orders -->
     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-      <div class="font-medium">{{ user.orderCount || 0 }}</div>
-      <div class="text-gray-500 dark:text-gray-400">{{ formattedLastOrder }}</div>
+      <div class="font-medium">
+        {{ user.orderCount || 0 }}
+      </div>
+      <div class="text-gray-500 dark:text-gray-400">
+        {{ formattedLastOrder }}
+      </div>
     </td>
 
     <!-- Total Spent -->
@@ -89,7 +98,7 @@
     class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-4 transition-all duration-200 touch-manipulation"
     :class="{
       'active:scale-98 active:bg-gray-50 dark:active:bg-gray-750': !isActionInProgress,
-      'shadow-md': isSelected
+      'shadow-md': isSelected,
     }"
     @touchstart="handleTouchStart"
     @click="handleRowClick"
@@ -110,32 +119,41 @@
             {{ user.email }}
           </div>
           <div class="flex items-center gap-2 mt-1">
-            <UserStatusBadge :user="user" size="sm" />
+            <UserStatusBadge
+              :user="user"
+              size="sm"
+            />
           </div>
         </div>
       </div>
-      
+
       <!-- Mobile Quick Actions -->
       <div class="flex items-center space-x-2 ml-2">
         <UiButton
-          @click.stop="handleView"
-          @touchstart="vibrate('tap')"
           variant="ghost"
           size="icon"
           class="h-9 w-9 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 touch-manipulation active:scale-90"
           :aria-label="$t('admin.users.actions.view')"
+          @click.stop="handleView"
+          @touchstart="vibrate('tap')"
         >
-          <commonIcon name="lucide:eye" class="h-5 w-5" />
+          <commonIcon
+            name="lucide:eye"
+            class="h-5 w-5"
+          />
         </UiButton>
         <UiButton
-          @click.stop="handleEdit"
-          @touchstart="vibrate('tap')"
           variant="ghost"
           size="icon"
           class="h-9 w-9 touch-manipulation active:scale-90"
           :aria-label="$t('admin.users.actions.edit')"
+          @click.stop="handleEdit"
+          @touchstart="vibrate('tap')"
         >
-          <commonIcon name="lucide:pencil" class="h-5 w-5" />
+          <commonIcon
+            name="lucide:pencil"
+            class="h-5 w-5"
+          />
         </UiButton>
         <AdminUsersActionsDropdown
           :user="user"
@@ -167,33 +185,54 @@
 
     <!-- Mobile Details -->
     <div class="space-y-2 text-sm">
-      <div v-if="user.profile?.phone" class="flex items-center text-gray-600 dark:text-gray-400">
-        <commonIcon name="lucide:phone" class="w-4 h-4 mr-2" />
+      <div
+        v-if="user.profile?.phone"
+        class="flex items-center text-gray-600 dark:text-gray-400"
+      >
+        <commonIcon
+          name="lucide:phone"
+          class="w-4 h-4 mr-2"
+        />
         {{ user.profile.phone }}
       </div>
       <div class="flex items-center justify-between text-gray-500 dark:text-gray-400">
         <span class="flex items-center">
-          <commonIcon name="lucide:calendar-days" class="w-4 h-4 mr-2" />
+          <commonIcon
+            name="lucide:calendar-days"
+            class="w-4 h-4 mr-2"
+          />
           {{ $t('admin.users.registered') }}: {{ formattedRegistration }}
         </span>
       </div>
-      <div v-if="formattedLastLogin !== 'Never'" class="flex items-center text-gray-500 dark:text-gray-400">
-        <commonIcon name="lucide:clock" class="w-4 h-4 mr-2" />
+      <div
+        v-if="formattedLastLogin !== 'Never'"
+        class="flex items-center text-gray-500 dark:text-gray-400"
+      >
+        <commonIcon
+          name="lucide:clock"
+          class="w-4 h-4 mr-2"
+        />
         {{ $t('admin.users.lastLogin') }}: {{ formattedLastLogin }}
       </div>
-      <div v-if="formattedLastOrder" class="flex items-center text-gray-500 dark:text-gray-400">
-        <commonIcon name="lucide:shopping-bag" class="w-4 h-4 mr-2" />
+      <div
+        v-if="formattedLastOrder"
+        class="flex items-center text-gray-500 dark:text-gray-400"
+      >
+        <commonIcon
+          name="lucide:shopping-bag"
+          class="w-4 h-4 mr-2"
+        />
         {{ $t('admin.users.lastOrder') }}: {{ formattedLastOrder }}
       </div>
     </div>
 
     <!-- Mobile Expand Indicator -->
-    <div 
+    <div
       v-if="hasExpandableContent"
       class="flex justify-center mt-3 pt-2 border-t border-gray-200 dark:border-gray-700"
     >
-      <commonIcon 
-        name="lucide:chevron-down" 
+      <commonIcon
+        name="lucide:chevron-down"
         class="w-4 h-4 text-gray-400 transition-transform"
         :class="{ 'rotate-180': isExpanded }"
       />
@@ -206,11 +245,11 @@
     >
       <div><strong>ID:</strong> {{ user.id }}</div>
       <div v-if="user.profile?.preferred_language">
-        <strong>{{ $t('admin.users.language') }}:</strong> 
+        <strong>{{ $t('admin.users.language') }}:</strong>
         {{ user.profile.preferred_language.toUpperCase() }}
       </div>
       <div v-if="user.statistics?.averageOrderValue">
-        <strong>{{ $t('admin.users.avgOrderValue') }}:</strong> 
+        <strong>{{ $t('admin.users.avgOrderValue') }}:</strong>
         {{ formatCurrency(user.statistics.averageOrderValue) }}
       </div>
     </div>
@@ -219,19 +258,46 @@
 
 <script setup lang="ts">
 interface Props {
-  user: any // Replace with proper User type
+  user: {
+    id: string
+    email: string
+    email_confirmed_at?: string | null
+    created_at?: string
+    last_sign_in_at?: string | null
+    profile?: {
+      name: string
+      phone?: string
+      preferred_language?: string
+    } | null
+    status: string
+    user_metadata?: {
+      suspended?: boolean
+      banned?: boolean
+      role?: string
+    }
+    orderCount?: number
+    statistics?: {
+      totalOrders?: number
+      totalSpent?: number
+      averageOrderValue?: number
+      lastOrderDate?: string | null
+      accountAge?: number
+      loginCount?: number
+      lastLogin?: string | null
+    }
+  }
   isSelected?: boolean
 }
 
 interface Emits {
   (e: 'view', userId: string): void
   (e: 'edit', userId: string): void
-  (e: 'action', action: string, userId: string, data?: any): void
+  (e: 'action', action: string, userId: string, data?: Record<string, any>): void
   (e: 'select', userId: string): void
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  isSelected: false
+  isSelected: false,
 })
 
 const emit = defineEmits<Emits>()
@@ -239,7 +305,7 @@ const emit = defineEmits<Emits>()
 // Composables
 const { isMobile } = useDevice()
 const { vibrate } = useHapticFeedback()
-const { t } = useI18n()
+const { t: _t } = useI18n()
 
 // Template refs
 const cardRef = ref<HTMLElement>()
@@ -261,7 +327,7 @@ const formattedTotalSpent = computed(() => {
 const dateFormatter = new Intl.DateTimeFormat('en-US', {
   year: 'numeric',
   month: 'short',
-  day: '2-digit'
+  day: '2-digit',
 })
 
 const formattedRegistration = computed(() => {
@@ -281,8 +347,8 @@ const formattedLastOrder = computed(() => {
 
 const hasExpandableContent = computed(() => {
   return isMobile.value && (
-    props.user.profile?.preferred_language ||
-    props.user.statistics?.averageOrderValue
+    props.user.profile?.preferred_language
+    || props.user.statistics?.averageOrderValue
   )
 })
 
@@ -290,11 +356,11 @@ const hasExpandableContent = computed(() => {
 const formatCurrency = (amount: number) => {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'EUR'
+    currency: 'EUR',
   }).format(amount)
 }
 
-const handleTouchStart = (event: TouchEvent) => {
+const handleTouchStart = (_event: TouchEvent) => {
   if (isMobile.value) {
     vibrate('tap')
   }
@@ -305,15 +371,17 @@ const handleRowClick = (event: Event) => {
   if ((event.target as HTMLElement).closest('button, a')) {
     return
   }
-  
+
   if (isMobile.value) {
     if (hasExpandableContent.value) {
       isExpanded.value = !isExpanded.value
       vibrate(isExpanded.value ? 'light' : 'tap')
-    } else {
+    }
+    else {
       handleView()
     }
-  } else {
+  }
+  else {
     emit('select', props.user.id)
   }
 }
@@ -321,11 +389,11 @@ const handleRowClick = (event: Event) => {
 const handleView = () => {
   isActionInProgress.value = true
   emit('view', props.user.id)
-  
+
   if (isMobile.value) {
     vibrate('success')
   }
-  
+
   // Reset after animation
   setTimeout(() => {
     isActionInProgress.value = false
@@ -335,19 +403,19 @@ const handleView = () => {
 const handleEdit = () => {
   isActionInProgress.value = true
   emit('edit', props.user.id)
-  
+
   if (isMobile.value) {
     vibrate('medium')
   }
-  
+
   setTimeout(() => {
     isActionInProgress.value = false
   }, 200)
 }
 
-const handleUserAction = (action: string, userId: string, data?: any) => {
+const handleUserAction = (action: string, userId: string, data?: Record<string, any>) => {
   emit('action', action, userId, data)
-  
+
   if (isMobile.value) {
     vibrate('light')
   }
@@ -358,7 +426,8 @@ onMounted(() => {
   if (isMobile.value && cardRef.value) {
     // Optimize touch events for better performance
     cardRef.value.style.touchAction = 'manipulation'
-    cardRef.value.style.webkitTapHighlightColor = 'transparent'
+    // Use type assertion for webkit-specific property
+    ;(cardRef.value.style as any).webkitTapHighlightColor = 'transparent'
   }
 })
 </script>
@@ -401,7 +470,7 @@ button:focus {
     -webkit-user-select: none;
     user-select: none;
   }
-  
+
   .touch-manipulation * {
     -webkit-user-select: none;
     user-select: none;

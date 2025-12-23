@@ -45,7 +45,7 @@ export interface MockSupabaseClient {
 }
 
 export function createMockSupabaseQuery(): MockSupabaseQuery {
-  const query: any = {
+  const query = {
     select: vi.fn().mockReturnThis(),
     insert: vi.fn().mockReturnThis(),
     update: vi.fn().mockReturnThis(),
@@ -145,7 +145,7 @@ export function mockSupabaseError(message: string, code?: string) {
 /**
  * Helper to mock Supabase auth session
  */
-export function mockAuthSession(user: any = null) {
+export function mockAuthSession(user: unknown = null) {
   return {
     data: {
       session: user

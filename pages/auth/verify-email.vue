@@ -1,3 +1,4 @@
+import type { SupabaseClient } from '@supabase/supabase-js'
 <template>
   <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-8">
@@ -6,18 +7,34 @@
           {{ $t('auth.emailVerification') }}
         </h2>
       </div>
-      
+
       <div class="mt-8 space-y-6">
-        <div v-if="loading" class="text-center">
+        <div
+          v-if="loading"
+          class="text-center"
+        >
           <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
-          <p class="mt-2 text-sm text-gray-600">{{ $t('auth.verifying') }}...</p>
+          <p class="mt-2 text-sm text-gray-600">
+            {{ $t('auth.verifying') }}...
+          </p>
         </div>
-        
-        <div v-else-if="success" class="rounded-md bg-green-50 p-4">
+
+        <div
+          v-else-if="success"
+          class="rounded-md bg-green-50 p-4"
+        >
           <div class="flex">
             <div class="flex-shrink-0">
-              <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+              <svg
+                class="h-5 w-5 text-green-400"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd"
+                />
               </svg>
             </div>
             <div class="ml-3">
@@ -30,17 +47,31 @@
             </div>
           </div>
           <div class="mt-4">
-            <NuxtLink :to="localePath('/auth/login')" class="text-sm font-medium text-primary-600 hover:text-primary-500">
+            <NuxtLink
+              :to="localePath('/auth/login')"
+              class="text-sm font-medium text-primary-600 hover:text-primary-500"
+            >
               {{ $t('auth.signIn') }} →
             </NuxtLink>
           </div>
         </div>
-        
-        <div v-else-if="error" class="rounded-md bg-red-50 p-4">
+
+        <div
+          v-else-if="error"
+          class="rounded-md bg-red-50 p-4"
+        >
           <div class="flex">
             <div class="flex-shrink-0">
-              <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+              <svg
+                class="h-5 w-5 text-red-400"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clip-rule="evenodd"
+                />
               </svg>
             </div>
             <div class="ml-3">
@@ -52,7 +83,7 @@
               </p>
             </div>
           </div>
-          
+
           <div class="mt-4 space-y-2">
             <div class="flex space-x-2">
               <input
@@ -60,18 +91,25 @@
                 type="email"
                 :placeholder="$t('auth.email')"
                 class="flex-1 px-3 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
-              >
+              />
               <UiButton
-                @click="resendVerification"
                 :disabled="resendLoading || !email"
                 size="sm"
                 variant="outline"
+                @click="resendVerification"
               >
-                <commonIcon v-if="resendLoading" name="lucide:loader-2" class="mr-1 h-3 w-3 animate-spin" />
+                <commonIcon
+                  v-if="resendLoading"
+                  name="lucide:loader-2"
+                  class="mr-1 h-3 w-3 animate-spin"
+                />
                 {{ resendLoading ? $t('common.loading') : $t('auth.resendVerification') }}
               </UiButton>
             </div>
-            <NuxtLink :to="localePath('/auth/login')" class="block text-sm font-medium text-gray-600 hover:text-gray-500">
+            <NuxtLink
+              :to="localePath('/auth/login')"
+              class="block text-sm font-medium text-gray-600 hover:text-gray-500"
+            >
               {{ $t('auth.backToLogin') }}
             </NuxtLink>
           </div>
@@ -103,19 +141,23 @@ const verifyEmail = async () => {
       // Supabase will automatically handle email verification from hash
       // Check if user is now authenticated
       await new Promise(resolve => setTimeout(resolve, 1000)) // Wait a bit for auth to process
-      
+
       if (user.value && user.value.email_confirmed_at) {
         success.value = true
         message.value = t('auth.emailVerified')
-      } else {
+      }
+      else {
         throw new Error('Verification failed')
       }
-    } else {
+    }
+    else {
       throw new Error('Missing verification link')
     }
-  } catch (err: any) {
+  }
+  catch (err: any) {
     error.value = err.message || t('auth.verificationError')
-  } finally {
+  }
+  finally {
     loading.value = false
   }
 }
@@ -125,26 +167,28 @@ const resendVerification = async () => {
     error.value = t('auth.emailRequired')
     return
   }
-  
+
   resendLoading.value = true
   try {
     const { error: authError } = await supabase.auth.resend({
       type: 'signup',
       email: email.value,
       options: {
-        emailRedirectTo: `${window.location.origin}${localePath('/auth/verify-email')}`
-      }
+        emailRedirectTo: `${window.location.origin}${localePath('/auth/verify-email')}`,
+      },
     })
-    
+
     if (authError) {
       throw authError
     }
-    
+
     message.value = t('auth.verificationResent')
     error.value = ''
-  } catch (err: any) {
+  }
+  catch (err: any) {
     error.value = err.message || t('auth.resendError')
-  } finally {
+  }
+  finally {
     resendLoading.value = false
   }
 }
@@ -155,11 +199,11 @@ onMounted(() => {
   if (emailParam) {
     email.value = emailParam
   }
-  
+
   verifyEmail()
 })
 
 useHead({
-  title: t('auth.emailVerification')
+  title: t('auth.emailVerification'),
 })
 </script>

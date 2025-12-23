@@ -11,35 +11,35 @@ import type { ProductWithRelations, CartItem } from './database'
 /**
  * Context in which recommendations are being requested
  */
-export type RecommendationContext = 
-  | 'product_detail'
-  | 'cart_view'
-  | 'homepage'
-  | 'category_browse'
-  | 'search_results'
-  | 'checkout'
+export type RecommendationContext
+  = | 'product_detail'
+    | 'cart_view'
+    | 'homepage'
+    | 'category_browse'
+    | 'search_results'
+    | 'checkout'
 
 /**
  * Available recommendation algorithms
  */
-export type RecommendationAlgorithm = 
-  | 'content_based'
-  | 'collaborative_filtering'
-  | 'behavioral'
-  | 'popularity'
-  | 'hybrid'
+export type RecommendationAlgorithm
+  = | 'content_based'
+    | 'collaborative_filtering'
+    | 'behavioral'
+    | 'popularity'
+    | 'hybrid'
 
 /**
  * Types of recommendation reasons/explanations
  */
-export type RecommendationReasonType = 
-  | 'similar_category'
-  | 'frequently_bought_together'
-  | 'based_on_history'
-  | 'trending'
-  | 'complementary'
-  | 'recently_viewed'
-  | 'popular_choice'
+export type RecommendationReasonType
+  = | 'similar_category'
+    | 'frequently_bought_together'
+    | 'based_on_history'
+    | 'trending'
+    | 'complementary'
+    | 'recently_viewed'
+    | 'popular_choice'
 
 // =============================================
 // REQUEST AND RESPONSE INTERFACES
@@ -138,13 +138,13 @@ export interface RecommendationMetadata {
 /**
  * Types of recommendation interactions to track
  */
-export type RecommendationInteractionType = 
-  | 'impression'
-  | 'click'
-  | 'conversion'
-  | 'dismissal'
-  | 'add_to_cart'
-  | 'view_details'
+export type RecommendationInteractionType
+  = | 'impression'
+    | 'click'
+    | 'conversion'
+    | 'dismissal'
+    | 'add_to_cart'
+    | 'view_details'
 
 /**
  * Analytics event for recommendation interactions
@@ -265,7 +265,7 @@ export const RecommendationErrorCodes = {
   INVALID_REQUEST: 'INVALID_REQUEST',
   RATE_LIMIT_EXCEEDED: 'RATE_LIMIT_EXCEEDED',
   CACHE_ERROR: 'CACHE_ERROR',
-  DATABASE_ERROR: 'DATABASE_ERROR'
+  DATABASE_ERROR: 'DATABASE_ERROR',
 } as const
 
 export type RecommendationErrorCode = typeof RecommendationErrorCodes[keyof typeof RecommendationErrorCodes]

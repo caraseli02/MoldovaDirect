@@ -325,7 +325,10 @@
       "passwordMatch": "Passwords match",
       "resetPasswordButton": "Reset your password",
       "resettingPassword": "Resetting your password",
-      "processingPasswordReset": "Processing your password reset request"
+      "processingPasswordReset": "Processing your password reset request",
+      "sendResetEmailButton": "Send password reset email",
+      "sendingResetEmail": "Sending reset email",
+      "backToLoginLink": "Back to login page"
     },
     "errors": {
       "invalidCredentials": "Invalid email or password",
@@ -369,6 +372,7 @@
         "lowercase": "Must contain at least one lowercase letter",
         "number": "Must contain at least one number",
         "mismatch": "Passwords do not match",
+        "match": "Passwords match",
         "weak": "Password is too weak",
         "current": "Current password is required"
       },
@@ -1386,6 +1390,9 @@
     },
     "story": {
       "title": "Tasting journey",
+      "titleCulinary": "Tasting journey",
+      "titleGeneric": "Product story",
+      "titleCraft": "Craft & details",
       "tastingNotes": "Tasting notes",
       "pairings": "Pairing ideas",
       "awards": "Accolades",
@@ -1471,7 +1478,10 @@
     },
     "related": {
       "title": "Pairs well with…",
-      "subtitle": "Complete the experience with these curated recommendations."
+      "titleCulinary": "Pairs well with…",
+      "titleGeneric": "You may also like",
+      "subtitle": "Complete the experience with these curated recommendations.",
+      "subtitleGeneric": "Discover more products you might enjoy."
     },
     "actions": {
       "addToWishlist": "Save to wishlist",
@@ -1484,6 +1494,135 @@
       "copyFallback": "Copy this link to share with friends."
     },
     "commonProduct": "this product"
+  },
+  "returns": {
+    "badge": "Returns ready for MVP",
+    "title": "Returns & Refunds",
+    "description": "Simple steps to report issues, request replacements, or receive refunds for Moldova Direct orders.",
+    "cta": {
+      "start": "Start a return",
+      "orders": "View my orders"
+    },
+    "summary": {
+      "window": {
+        "title": "Return window",
+        "metric": "30 days",
+        "description": "Unopened pantry items within 30 days of delivery"
+      },
+      "condition": {
+        "title": "Condition",
+        "metric": "Unopened/undamaged",
+        "description": "Keep original packaging for fast approval"
+      },
+      "support": {
+        "title": "Support",
+        "metric": "48h response",
+        "description": "Concierge help in EN / ES / RO / RU"
+      },
+      "refunds": {
+        "title": "Refund timing",
+        "metric": "2–5 business days",
+        "description": "After inspection is complete"
+      }
+    },
+    "eligibility": {
+      "title": "What qualifies for a return?",
+      "subtitle": "We prioritise safety and freshness for every order.",
+      "allowedTitle": "Eligible cases",
+      "deniedTitle": "Not eligible",
+      "allowed": {
+        "damaged": "Damaged on arrival (photos required)",
+        "incorrect": "Incorrect items or quantities received",
+        "quality": "Quality or safety concern reported within 7 days",
+        "unopened": "Unopened pantry goods within 30 days"
+      },
+      "denied": {
+        "used": "Opened, used, or partially consumed items",
+        "late": "Requests after the return window",
+        "perishable": "Perishable items without a reported issue on delivery",
+        "custom": "Custom or personalised orders without defects"
+      },
+      "note": "For wine, store bottles upright and avoid extreme temperatures while we review your case."
+    },
+    "resolution": {
+      "title": "Resolution options",
+      "subtitle": "Choose what works best for you once we validate the issue.",
+      "options": {
+        "refund": {
+          "title": "Refund to original payment",
+          "description": "Issued after inspection, typically within 2–5 business days.",
+          "badge": "Standard"
+        },
+        "replacement": {
+          "title": "Replacement shipment",
+          "description": "We resend the correct or undamaged items at no extra cost for our error.",
+          "badge": "Fastest"
+        },
+        "credit": {
+          "title": "Store credit",
+          "description": "Instant credit for future orders while we pick up the original items.",
+          "badge": "Instant"
+        }
+      },
+      "note": "Select your preferred option in your request. We confirm availability before shipping replacements."
+    },
+    "steps": {
+      "title": "How to start a return",
+      "subtitle": "Share details so we can resolve your request quickly.",
+      "items": {
+        "review": {
+          "title": "Review your order",
+          "description": "Note the affected items, quantities, and delivery date."
+        },
+        "document": {
+          "title": "Document the issue",
+          "description": "Take clear photos of packaging, labels, and any damage."
+        },
+        "contact": {
+          "title": "Submit your request",
+          "description": "Email us or use the contact form with your order number and preference (refund, replacement, credit)."
+        },
+        "ship": {
+          "title": "Prepare pickup or drop-off",
+          "description": "Keep items in original packaging. We coordinate courier pickup or a drop-off label where required."
+        }
+      },
+      "documentsTitle": "Have these ready",
+      "packagingTitle": "Packaging guidance",
+      "packagingDescription": "Keep bottles upright, seal boxes securely, and include all accessories or gifts.",
+      "documents": {
+        "order": "Order number and contact details",
+        "photos": "Photos of damage or issue",
+        "packaging": "Original packaging or bottle labels",
+        "preference": "Preferred resolution (refund, replacement, credit)"
+      }
+    },
+    "fees": {
+      "title": "Costs & coverage",
+      "description": "We cover shipping for our mistakes. Other cases follow the policy below.",
+      "items": {
+        "ourError": "Free return shipping for damaged, incorrect, or defective items",
+        "customerChoice": "Change-of-mind returns may require return shipping",
+        "inspection": "Refunds issued after inspection and quality verification"
+      }
+    },
+    "expectations": {
+      "title": "What to expect",
+      "description": "Transparent updates from request to resolution.",
+      "items": {
+        "scan": "Tracking shared once a courier label is issued",
+        "refundTimeline": "Refunds processed 2–5 business days after inspection",
+        "updates": "Status updates via email at each stage"
+      }
+    },
+    "support": {
+      "title": "Need help fast?",
+      "description": "Our concierge team is ready to guide your return or exchange.",
+      "badge": "Priority support",
+      "contactLink": "Use the contact form",
+      "responseTime": "We reply within 48 business hours (often sooner).",
+      "emailSubject": "Return request"
+    }
   },
   "footer": {
     "terms": "Terms and Conditions",
@@ -2532,6 +2671,144 @@
         "lastLogin": "Last Login",
         "actions": "Actions"
       }
+    }
+  },
+  "shippingPage": {
+    "seo": {
+      "title": "Shipping Information - Moldova Direct",
+      "description": "Review Moldova Direct shipping methods, delivery timelines, and coverage across Spain for Moldovan food and wine orders."
+    },
+    "hero": {
+      "badge": "Shipping & Delivery",
+      "title": "Fast, Reliable Delivery Across Spain",
+      "description": "We deliver authentic Moldovan products to your door with care. Track your order in real-time and enjoy flexible delivery options.",
+      "notice": "Free shipping on orders over €50",
+      "secondaryNotice": "Most orders arrive within 2-4 business days"
+    },
+    "ctas": {
+      "track": "Track Your Order",
+      "contact": "Contact Support"
+    },
+    "highlights": {
+      "title": "Why Choose Us",
+      "subtitle": "Experience the Moldova Direct difference",
+      "items": {
+        "fast": {
+          "title": "Fast Delivery",
+          "description": "Most orders delivered within 2-4 business days across mainland Spain"
+        },
+        "coverage": {
+          "title": "Nationwide Coverage",
+          "description": "We deliver to all regions of Spain, including islands"
+        },
+        "packaging": {
+          "title": "Temperature-Controlled",
+          "description": "Insulated packaging keeps perishables fresh during transit"
+        },
+        "updates": {
+          "title": "Real-Time Updates",
+          "description": "Track your package with SMS and email notifications"
+        }
+      }
+    },
+    "methods": {
+      "title": "Shipping Methods",
+      "subtitle": "Choose the option that works best for you",
+      "tag": "Most Popular",
+      "cards": {
+        "express": {
+          "speed": "1-2 Days",
+          "title": "Express Delivery",
+          "description": "Priority handling for time-sensitive orders",
+          "note": "Available in major cities"
+        },
+        "standard": {
+          "speed": "2-4 Days",
+          "title": "Standard Delivery",
+          "description": "Reliable delivery at an affordable price",
+          "note": "Free over €50"
+        },
+        "refrigerated": {
+          "speed": "2-3 Days",
+          "title": "Refrigerated Shipping",
+          "description": "Temperature-controlled for perishable items",
+          "note": "Required for dairy & meat"
+        }
+      }
+    },
+    "coverage": {
+      "title": "Delivery Coverage",
+      "subtitle": "We ship throughout Spain and select EU countries",
+      "regions": {
+        "mainland": {
+          "title": "Mainland Spain",
+          "description": "All provinces covered with standard and express options",
+          "badge": "2-4 days"
+        },
+        "balearic": {
+          "title": "Balearic Islands",
+          "description": "Mallorca, Menorca, Ibiza, and Formentera",
+          "badge": "3-5 days"
+        },
+        "canary": {
+          "title": "Canary Islands",
+          "description": "All seven main islands served weekly",
+          "badge": "5-7 days"
+        },
+        "eu": {
+          "title": "European Union",
+          "description": "Select countries - contact us for availability",
+          "badge": "5-10 days"
+        }
+      }
+    },
+    "extras": {
+      "title": "Additional Services",
+      "items": {
+        "instructions": {
+          "title": "Special Instructions",
+          "description": "Add delivery notes for the courier at checkout"
+        },
+        "sustainability": {
+          "title": "Eco-Friendly Packaging",
+          "description": "Recyclable materials used whenever possible"
+        },
+        "support": {
+          "title": "Dedicated Support",
+          "description": "Questions? Our team is here to help via chat or email"
+        }
+      }
+    },
+    "timeline": {
+      "title": "How It Works",
+      "subtitle": "From our warehouse to your door",
+      "reminder": "Orders placed before 2 PM ship same day",
+      "steps": {
+        "method": {
+          "title": "Choose Your Method",
+          "description": "Select standard, express, or refrigerated shipping at checkout"
+        },
+        "pack": {
+          "title": "We Pack With Care",
+          "description": "Products are carefully packaged with appropriate insulation"
+        },
+        "handoff": {
+          "title": "Courier Pickup",
+          "description": "Our trusted courier partner collects your order"
+        },
+        "delivery": {
+          "title": "Delivered to You",
+          "description": "Receive your authentic Moldovan products at home"
+        }
+      }
+    },
+    "contactCard": {
+      "title": "Questions About Shipping?",
+      "description": "Our customer service team is ready to help with any delivery inquiries.",
+      "cta": "Contact Us",
+      "secondary": "View FAQ",
+      "noteTitle": "Business Hours",
+      "noteDescription": "Monday to Friday, 9 AM - 6 PM CET"
     }
   }
 }

@@ -1,6 +1,6 @@
 /**
  * Cart Core Composable
- * 
+ *
  * Provides a clean interface for basic cart operations
  * This composable can be used independently of the Pinia store
  */
@@ -11,22 +11,22 @@ import type { Product, CartItem } from '~/stores/cart/types'
 
 export interface UseCartCoreReturn {
   // State
-  items: ComputedRef<CartItem[]>
+  items: ComputedRef<readonly CartItem[]>
   sessionId: ComputedRef<string | null>
   loading: ComputedRef<boolean>
   error: ComputedRef<string | null>
-  
+
   // Getters
   itemCount: ComputedRef<number>
   subtotal: ComputedRef<number>
   isEmpty: ComputedRef<boolean>
-  
+
   // Actions
-  addItem: (product: Product, quantity?: number) => Promise<void>
+  addItem: (product: Product, quantity: number) => Promise<void>
   removeItem: (itemId: string) => Promise<void>
   updateQuantity: (itemId: string, quantity: number) => Promise<void>
   clearCart: () => Promise<void>
-  
+
   // Utilities
   getItemByProductId: (productId: string) => CartItem | undefined
   isInCart: (productId: string) => boolean
@@ -37,44 +37,44 @@ export interface UseCartCoreReturn {
 
 /**
  * Cart core composable
- * 
+ *
  * Provides access to basic cart functionality without requiring Pinia
  * This is useful for components that need cart functionality but want to
  * avoid direct store dependencies
  */
 export function useCartCore(): UseCartCoreReturn {
   const cartCore = useCartCoreModule()
-  
+
   return {
     // State
-    items: computed(() => cartCore.state.value.items),
+    items: computed(() => cartCore.state.value.items) as ComputedRef<readonly CartItem[]>,
     sessionId: computed(() => cartCore.state.value.sessionId),
     loading: computed(() => cartCore.state.value.loading),
     error: computed(() => cartCore.state.value.error),
-    
+
     // Getters
     itemCount: cartCore.itemCount,
     subtotal: cartCore.subtotal,
     isEmpty: cartCore.isEmpty,
-    
+
     // Actions
     addItem: cartCore.addItem,
     removeItem: cartCore.removeItem,
     updateQuantity: cartCore.updateQuantity,
     clearCart: cartCore.clearCart,
-    
+
     // Utilities
     getItemByProductId: cartCore.getItemByProductId,
     isInCart: cartCore.isInCart,
     generateItemId: cartCore.generateItemId,
     generateSessionId: cartCore.generateSessionId,
-    initializeCart: cartCore.initializeCart
+    initializeCart: cartCore.initializeCart,
   }
 }
 
 /**
  * Cart core composable with Pinia availability check
- * 
+ *
  * This version checks if Pinia is available before initializing
  * Provides graceful fallbacks for SSR and timing issues
  */
@@ -84,10 +84,11 @@ export function useCartCoreWithFallback(): UseCartCoreReturn | null {
     if (typeof window === 'undefined') {
       return null
     }
-    
+
     // Try to use the cart core
     return useCartCore()
-  } catch (error) {
+  }
+  catch (error: any) {
     console.warn('Cart core not available:', error)
     return null
   }
@@ -95,17 +96,17 @@ export function useCartCoreWithFallback(): UseCartCoreReturn | null {
 
 /**
  * Safe cart core composable
- * 
+ *
  * Returns a minimal interface when the cart system is not available
  * Useful for components that need to handle cart unavailability gracefully
  */
 export function useSafeCartCore(): UseCartCoreReturn {
   const cartCore = useCartCoreWithFallback()
-  
+
   if (cartCore) {
     return cartCore
   }
-  
+
   // Return minimal fallback interface
   return {
     // State
@@ -113,12 +114,12 @@ export function useSafeCartCore(): UseCartCoreReturn {
     sessionId: computed(() => null),
     loading: computed(() => false),
     error: computed(() => null),
-    
+
     // Getters
     itemCount: computed(() => 0),
     subtotal: computed(() => 0),
     isEmpty: computed(() => true),
-    
+
     // Actions (no-op implementations)
     addItem: async () => {
       console.warn('Cart not available: addItem called')
@@ -132,7 +133,7 @@ export function useSafeCartCore(): UseCartCoreReturn {
     clearCart: async () => {
       console.warn('Cart not available: clearCart called')
     },
-    
+
     // Utilities
     getItemByProductId: () => undefined,
     isInCart: () => false,
@@ -140,6 +141,6 @@ export function useSafeCartCore(): UseCartCoreReturn {
     generateSessionId: () => 'fallback_session_' + Date.now(),
     initializeCart: () => {
       console.warn('Cart not available: initializeCart called')
-    }
+    },
   }
 }

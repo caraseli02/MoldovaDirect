@@ -40,21 +40,23 @@ export function validateAddress(address: Partial<Address>, type: 'shipping' | 'b
       field: 'firstName',
       code: 'REQUIRED',
       message: 'First name is required',
-      severity: 'error'
+      severity: 'error',
     })
-  } else if (address.firstName.length < 2) {
+  }
+  else if (address.firstName.length < 2) {
     errors.push({
       field: 'firstName',
       code: 'TOO_SHORT',
       message: 'First name must be at least 2 characters',
-      severity: 'error'
+      severity: 'error',
     })
-  } else if (address.firstName.length > 50) {
+  }
+  else if (address.firstName.length > 50) {
     errors.push({
       field: 'firstName',
       code: 'TOO_LONG',
       message: 'First name must be less than 50 characters',
-      severity: 'error'
+      severity: 'error',
     })
   }
 
@@ -63,21 +65,23 @@ export function validateAddress(address: Partial<Address>, type: 'shipping' | 'b
       field: 'lastName',
       code: 'REQUIRED',
       message: 'Last name is required',
-      severity: 'error'
+      severity: 'error',
     })
-  } else if (address.lastName.length < 2) {
+  }
+  else if (address.lastName.length < 2) {
     errors.push({
       field: 'lastName',
       code: 'TOO_SHORT',
       message: 'Last name must be at least 2 characters',
-      severity: 'error'
+      severity: 'error',
     })
-  } else if (address.lastName.length > 50) {
+  }
+  else if (address.lastName.length > 50) {
     errors.push({
       field: 'lastName',
       code: 'TOO_LONG',
       message: 'Last name must be less than 50 characters',
-      severity: 'error'
+      severity: 'error',
     })
   }
 
@@ -86,21 +90,23 @@ export function validateAddress(address: Partial<Address>, type: 'shipping' | 'b
       field: 'street',
       code: 'REQUIRED',
       message: 'Street address is required',
-      severity: 'error'
+      severity: 'error',
     })
-  } else if (address.street.length < 5) {
+  }
+  else if (address.street.length < 5) {
     errors.push({
       field: 'street',
       code: 'TOO_SHORT',
       message: 'Street address must be at least 5 characters',
-      severity: 'error'
+      severity: 'error',
     })
-  } else if (address.street.length > 100) {
+  }
+  else if (address.street.length > 100) {
     errors.push({
       field: 'street',
       code: 'TOO_LONG',
       message: 'Street address must be less than 100 characters',
-      severity: 'error'
+      severity: 'error',
     })
   }
 
@@ -109,21 +115,23 @@ export function validateAddress(address: Partial<Address>, type: 'shipping' | 'b
       field: 'city',
       code: 'REQUIRED',
       message: 'City is required',
-      severity: 'error'
+      severity: 'error',
     })
-  } else if (address.city.length < 2) {
+  }
+  else if (address.city.length < 2) {
     errors.push({
       field: 'city',
       code: 'TOO_SHORT',
       message: 'City must be at least 2 characters',
-      severity: 'error'
+      severity: 'error',
     })
-  } else if (address.city.length > 50) {
+  }
+  else if (address.city.length > 50) {
     errors.push({
       field: 'city',
       code: 'TOO_LONG',
       message: 'City must be less than 50 characters',
-      severity: 'error'
+      severity: 'error',
     })
   }
 
@@ -132,14 +140,15 @@ export function validateAddress(address: Partial<Address>, type: 'shipping' | 'b
       field: 'postalCode',
       code: 'REQUIRED',
       message: 'Postal code is required',
-      severity: 'error'
+      severity: 'error',
     })
-  } else if (!isValidPostalCode(address.postalCode, address.country)) {
+  }
+  else if (!isValidPostalCode(address.postalCode, address.country)) {
     errors.push({
       field: 'postalCode',
       code: 'INVALID_FORMAT',
       message: 'Invalid postal code format for the selected country',
-      severity: 'error'
+      severity: 'error',
     })
   }
 
@@ -148,14 +157,15 @@ export function validateAddress(address: Partial<Address>, type: 'shipping' | 'b
       field: 'country',
       code: 'REQUIRED',
       message: 'Country is required',
-      severity: 'error'
+      severity: 'error',
     })
-  } else if (!isValidCountryCode(address.country)) {
+  }
+  else if (!isValidCountryCode(address.country)) {
     errors.push({
       field: 'country',
       code: 'INVALID_COUNTRY',
       message: 'Invalid country code',
-      severity: 'error'
+      severity: 'error',
     })
   }
 
@@ -165,7 +175,7 @@ export function validateAddress(address: Partial<Address>, type: 'shipping' | 'b
       field: 'company',
       code: 'TOO_LONG',
       message: 'Company name must be less than 100 characters',
-      severity: 'error'
+      severity: 'error',
     })
   }
 
@@ -174,7 +184,7 @@ export function validateAddress(address: Partial<Address>, type: 'shipping' | 'b
       field: 'province',
       code: 'TOO_LONG',
       message: 'Province must be less than 50 characters',
-      severity: 'error'
+      severity: 'error',
     })
   }
 
@@ -184,21 +194,22 @@ export function validateAddress(address: Partial<Address>, type: 'shipping' | 'b
         field: 'phone',
         code: 'INVALID_FORMAT',
         message: 'Invalid phone number format',
-        severity: 'error'
+        severity: 'error',
       })
     }
-  } else if (type === 'shipping') {
+  }
+  else if (type === 'shipping') {
     warnings.push({
       field: 'phone',
       code: 'RECOMMENDED',
-      message: 'Phone number is recommended for shipping notifications'
+      message: 'Phone number is recommended for shipping notifications',
     })
   }
 
   return {
     isValid: errors.length === 0,
     errors,
-    warnings
+    warnings,
   }
 }
 
@@ -215,7 +226,7 @@ export function validatePaymentMethod(paymentMethod: Partial<PaymentMethod>): Ch
       field: 'type',
       code: 'REQUIRED',
       message: 'Payment method type is required',
-      severity: 'error'
+      severity: 'error',
     })
     return { isValid: false, errors, warnings }
   }
@@ -234,14 +245,14 @@ export function validatePaymentMethod(paymentMethod: Partial<PaymentMethod>): Ch
         field: 'type',
         code: 'INVALID_TYPE',
         message: 'Invalid payment method type',
-        severity: 'error'
+        severity: 'error',
       })
   }
 
   return {
     isValid: errors.length === 0,
     errors,
-    warnings
+    warnings,
   }
 }
 
@@ -254,7 +265,7 @@ function validateCreditCard(creditCard?: PaymentMethod['creditCard']): CheckoutV
       field: 'creditCard',
       code: 'REQUIRED',
       message: 'Credit card information is required',
-      severity: 'error'
+      severity: 'error',
     })
     return { isValid: false, errors, warnings }
   }
@@ -265,23 +276,25 @@ function validateCreditCard(creditCard?: PaymentMethod['creditCard']): CheckoutV
       field: 'number',
       code: 'REQUIRED',
       message: 'Card number is required',
-      severity: 'error'
+      severity: 'error',
     })
-  } else {
+  }
+  else {
     const cardNumber = creditCard.number.replace(/\s/g, '')
     if (!isValidCardNumber(cardNumber)) {
       errors.push({
         field: 'number',
         code: 'INVALID_FORMAT',
         message: 'Invalid card number format',
-        severity: 'error'
+        severity: 'error',
       })
-    } else if (!isValidLuhn(cardNumber)) {
+    }
+    else if (!isValidLuhn(cardNumber)) {
       errors.push({
         field: 'number',
         code: 'INVALID_CHECKSUM',
         message: 'Invalid card number',
-        severity: 'error'
+        severity: 'error',
       })
     }
   }
@@ -292,9 +305,10 @@ function validateCreditCard(creditCard?: PaymentMethod['creditCard']): CheckoutV
       field: 'expiry',
       code: 'REQUIRED',
       message: 'Expiry date is required',
-      severity: 'error'
+      severity: 'error',
     })
-  } else {
+  }
+  else {
     const month = parseInt(creditCard.expiryMonth)
     const year = parseInt(creditCard.expiryYear)
     const currentDate = new Date()
@@ -306,7 +320,7 @@ function validateCreditCard(creditCard?: PaymentMethod['creditCard']): CheckoutV
         field: 'expiryMonth',
         code: 'INVALID_MONTH',
         message: 'Invalid expiry month',
-        severity: 'error'
+        severity: 'error',
       })
     }
 
@@ -315,13 +329,14 @@ function validateCreditCard(creditCard?: PaymentMethod['creditCard']): CheckoutV
         field: 'expiry',
         code: 'EXPIRED',
         message: 'Card has expired',
-        severity: 'error'
+        severity: 'error',
       })
-    } else if (year === currentYear && month === currentMonth) {
+    }
+    else if (year === currentYear && month === currentMonth) {
       warnings.push({
         field: 'expiry',
         code: 'EXPIRES_SOON',
-        message: 'Card expires this month'
+        message: 'Card expires this month',
       })
     }
   }
@@ -332,14 +347,15 @@ function validateCreditCard(creditCard?: PaymentMethod['creditCard']): CheckoutV
       field: 'cvv',
       code: 'REQUIRED',
       message: 'CVV is required',
-      severity: 'error'
+      severity: 'error',
     })
-  } else if (!/^\d{3,4}$/.test(creditCard.cvv)) {
+  }
+  else if (!/^\d{3,4}$/.test(creditCard.cvv)) {
     errors.push({
       field: 'cvv',
       code: 'INVALID_FORMAT',
       message: 'CVV must be 3 or 4 digits',
-      severity: 'error'
+      severity: 'error',
     })
   }
 
@@ -349,28 +365,30 @@ function validateCreditCard(creditCard?: PaymentMethod['creditCard']): CheckoutV
       field: 'holderName',
       code: 'REQUIRED',
       message: 'Cardholder name is required',
-      severity: 'error'
+      severity: 'error',
     })
-  } else if (creditCard.holderName.length < 2) {
+  }
+  else if (creditCard.holderName.length < 2) {
     errors.push({
       field: 'holderName',
       code: 'TOO_SHORT',
       message: 'Cardholder name must be at least 2 characters',
-      severity: 'error'
+      severity: 'error',
     })
-  } else if (creditCard.holderName.length > 50) {
+  }
+  else if (creditCard.holderName.length > 50) {
     errors.push({
       field: 'holderName',
       code: 'TOO_LONG',
       message: 'Cardholder name must be less than 50 characters',
-      severity: 'error'
+      severity: 'error',
     })
   }
 
   return {
     isValid: errors.length === 0,
     errors,
-    warnings
+    warnings,
   }
 }
 
@@ -383,7 +401,7 @@ function validatePayPal(paypal?: PaymentMethod['paypal']): CheckoutValidationRes
       field: 'paypal',
       code: 'REQUIRED',
       message: 'PayPal information is required',
-      severity: 'error'
+      severity: 'error',
     })
     return { isValid: false, errors, warnings }
   }
@@ -393,21 +411,22 @@ function validatePayPal(paypal?: PaymentMethod['paypal']): CheckoutValidationRes
       field: 'email',
       code: 'REQUIRED',
       message: 'PayPal email is required',
-      severity: 'error'
+      severity: 'error',
     })
-  } else if (!isValidEmail(paypal.email)) {
+  }
+  else if (!isValidEmail(paypal.email)) {
     errors.push({
       field: 'email',
       code: 'INVALID_FORMAT',
       message: 'Invalid email format',
-      severity: 'error'
+      severity: 'error',
     })
   }
 
   return {
     isValid: errors.length === 0,
     errors,
-    warnings
+    warnings,
   }
 }
 
@@ -421,7 +440,7 @@ function validateBankTransfer(bankTransfer?: PaymentMethod['bankTransfer']): Che
       field: 'bankTransfer',
       code: 'REQUIRED',
       message: 'Bank transfer information is required',
-      severity: 'error'
+      severity: 'error',
     })
     return { isValid: false, errors, warnings }
   }
@@ -432,14 +451,14 @@ function validateBankTransfer(bankTransfer?: PaymentMethod['bankTransfer']): Che
       field: 'reference',
       code: 'TOO_LONG',
       message: 'Reference must be less than 50 characters',
-      severity: 'error'
+      severity: 'error',
     })
   }
 
   return {
     isValid: errors.length === 0,
     errors,
-    warnings
+    warnings,
   }
 }
 
@@ -457,9 +476,10 @@ export function validateShippingInformation(shippingInfo: Partial<ShippingInform
       field: 'address',
       code: 'REQUIRED',
       message: 'Shipping address is required',
-      severity: 'error'
+      severity: 'error',
     })
-  } else {
+  }
+  else {
     const addressValidation = validateAddress(shippingInfo.address, 'shipping')
     errors.push(...addressValidation.errors)
     if (addressValidation.warnings) {
@@ -473,15 +493,16 @@ export function validateShippingInformation(shippingInfo: Partial<ShippingInform
       field: 'method',
       code: 'REQUIRED',
       message: 'Shipping method is required',
-      severity: 'error'
+      severity: 'error',
     })
-  } else {
+  }
+  else {
     if (!shippingInfo.method.id) {
       errors.push({
         field: 'method.id',
         code: 'REQUIRED',
         message: 'Shipping method ID is required',
-        severity: 'error'
+        severity: 'error',
       })
     }
     if (typeof shippingInfo.method.price !== 'number' || shippingInfo.method.price < 0) {
@@ -489,7 +510,7 @@ export function validateShippingInformation(shippingInfo: Partial<ShippingInform
         field: 'method.price',
         code: 'INVALID_PRICE',
         message: 'Invalid shipping method price',
-        severity: 'error'
+        severity: 'error',
       })
     }
   }
@@ -500,14 +521,14 @@ export function validateShippingInformation(shippingInfo: Partial<ShippingInform
       field: 'instructions',
       code: 'TOO_LONG',
       message: 'Shipping instructions must be less than 500 characters',
-      severity: 'error'
+      severity: 'error',
     })
   }
 
   return {
     isValid: errors.length === 0,
     errors,
-    warnings
+    warnings,
   }
 }
 
@@ -522,7 +543,7 @@ export function isValidEmail(email: string): boolean {
 
 export function isValidPhoneNumber(phone: string): boolean {
   // Basic international phone number validation
-  const phoneRegex = /^\+?[\d\s\-\(\)]{7,15}$/
+  const phoneRegex = /^\+?[\d\s\-()]{7,15}$/
   return phoneRegex.test(phone)
 }
 
@@ -530,14 +551,14 @@ export function isValidPostalCode(postalCode: string, country?: string): boolean
   if (!country) return true // Skip validation if country not provided
 
   const patterns: Record<string, RegExp> = {
-    'ES': /^\d{5}$/, // Spain
-    'RO': /^\d{6}$/, // Romania
-    'MD': /^MD-?\d{4}$/, // Moldova
-    'FR': /^\d{5}$/, // France
-    'DE': /^\d{5}$/, // Germany
-    'IT': /^\d{5}$/, // Italy
-    'US': /^\d{5}(-\d{4})?$/, // United States
-    'GB': /^[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}$/i, // United Kingdom
+    ES: /^\d{5}$/, // Spain
+    RO: /^\d{6}$/, // Romania
+    MD: /^MD-?\d{4}$/, // Moldova
+    FR: /^\d{5}$/, // France
+    DE: /^\d{5}$/, // Germany
+    IT: /^\d{5}$/, // Italy
+    US: /^\d{5}(-\d{4})?$/, // United States
+    GB: /^[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}$/i, // United Kingdom
   }
 
   const pattern = patterns[country.toUpperCase()]
@@ -562,16 +583,22 @@ export function isValidLuhn(cardNumber: string): boolean {
   let isEven = false
 
   for (let i = digits.length - 1; i >= 0; i--) {
-    let digit = digits[i]
+    const digit = digits[i]
 
+    // Handle undefined case (should never happen with valid array access)
+    if (digit === undefined) {
+      continue
+    }
+
+    let processedDigit = digit
     if (isEven) {
-      digit *= 2
-      if (digit > 9) {
-        digit -= 9
+      processedDigit *= 2
+      if (processedDigit > 9) {
+        processedDigit -= 9
       }
     }
 
-    sum += digit
+    sum += processedDigit
     isEven = !isEven
   }
 
@@ -580,12 +607,12 @@ export function isValidLuhn(cardNumber: string): boolean {
 
 export function getCardBrand(cardNumber: string): string {
   const cleaned = cardNumber.replace(/\s/g, '')
-  
+
   if (/^4/.test(cleaned)) return 'visa'
   if (/^5[1-5]/.test(cleaned)) return 'mastercard'
   if (/^3[47]/.test(cleaned)) return 'amex'
   if (/^6(?:011|5)/.test(cleaned)) return 'discover'
-  
+
   return 'unknown'
 }
 
@@ -619,7 +646,7 @@ export function validateCheckoutData(data: {
   return {
     isValid: errors.length === 0,
     errors,
-    warnings
+    warnings,
   }
 }
 
@@ -638,7 +665,7 @@ export function sanitizeAddress(address: Partial<Address>): Partial<Address> {
     postalCode: address.postalCode?.trim().toUpperCase(),
     province: address.province?.trim() || undefined,
     country: address.country?.trim().toUpperCase(),
-    phone: address.phone?.trim() || undefined
+    phone: address.phone?.trim() || undefined,
   }
 }
 
@@ -650,21 +677,22 @@ export function sanitizePaymentMethod(paymentMethod: Partial<PaymentMethod>): Pa
       ...sanitized.creditCard,
       number: sanitized.creditCard.number?.replace(/\s/g, ''),
       holderName: sanitized.creditCard.holderName?.trim(),
-      cvv: sanitized.creditCard.cvv?.trim()
+      cvv: sanitized.creditCard.cvv?.trim(),
     }
   }
 
   if (sanitized.paypal) {
     sanitized.paypal = {
       ...sanitized.paypal,
-      email: sanitized.paypal.email?.trim().toLowerCase()
+      email: sanitized.paypal.email?.trim().toLowerCase(),
     }
   }
 
   if (sanitized.bankTransfer) {
+    const trimmedRef = sanitized.bankTransfer.reference?.trim()
     sanitized.bankTransfer = {
       ...sanitized.bankTransfer,
-      reference: sanitized.bankTransfer.reference?.trim() || undefined
+      reference: trimmedRef || '',
     }
   }
 

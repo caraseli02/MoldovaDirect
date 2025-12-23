@@ -1,12 +1,12 @@
 /**
  * Admin Users Store using Pinia
- * 
+ *
  * Requirements addressed:
  * - 4.1: Paginated user listing with search and filtering capabilities
  * - 4.2: User search by name, email, and registration date
  * - 4.3: User detail view with order history and account information
  * - 4.4, 4.5, 4.6: User account management actions
- * 
+ *
  * Manages:
  * - User listing with admin-specific data
  * - Search and filtering functionality
@@ -17,7 +17,7 @@
 
 import { defineStore } from 'pinia'
 
-interface UserWithProfile {
+export interface UserWithProfile {
   id: string
   email: string
   email_confirmed_at: string | null
@@ -35,9 +35,18 @@ interface UserWithProfile {
   orderCount?: number
   lastOrderDate?: string
   totalSpent?: number
+  statistics?: {
+    totalOrders: number
+    totalSpent: number
+    averageOrderValue: number
+    lastOrderDate: string | null
+    accountAge: number
+    loginCount: number
+    lastLogin: string | null
+  }
 }
 
-interface UserDetail extends UserWithProfile {
+export interface UserDetail extends UserWithProfile {
   addresses: Array<{
     id: number
     type: string
@@ -64,7 +73,7 @@ interface UserDetail extends UserWithProfile {
     created_at: string
     ip_address?: string
     user_agent?: string
-    metadata?: any
+    metadata?: Record<string, any>
   }>
   statistics: {
     totalOrders: number
@@ -95,7 +104,7 @@ interface PaginationState {
   hasPrev: boolean
 }
 
-interface UsersSummary {
+export interface UsersSummary {
   totalUsers: number
   activeUsers: number
   inactiveUsers: number
@@ -125,7 +134,7 @@ export const useAdminUsersStore = defineStore('adminUsers', {
       registrationDateTo: undefined,
       status: '',
       sortBy: 'created_at',
-      sortOrder: 'desc'
+      sortOrder: 'desc',
     },
     pagination: {
       page: 1,
@@ -133,13 +142,13 @@ export const useAdminUsersStore = defineStore('adminUsers', {
       total: 0,
       totalPages: 0,
       hasNext: false,
-      hasPrev: false
+      hasPrev: false,
     },
     summary: null,
     loading: false,
     userDetailLoading: false,
     actionLoading: false,
-    error: null
+    error: null,
   }),
 
   getters: {
@@ -153,15 +162,15 @@ export const useAdminUsersStore = defineStore('adminUsers', {
         statusBadge: user.status === 'active' ? 'success' : 'warning',
         formattedTotalSpent: new Intl.NumberFormat('en-US', {
           style: 'currency',
-          currency: 'EUR'
+          currency: 'EUR',
         }).format(user.totalSpent || 0),
-        formattedLastOrder: user.lastOrderDate 
+        formattedLastOrder: user.lastOrderDate
           ? new Date(user.lastOrderDate).toLocaleDateString()
           : 'Never',
         formattedRegistration: new Date(user.created_at).toLocaleDateString(),
         formattedLastLogin: user.last_sign_in_at
           ? new Date(user.last_sign_in_at).toLocaleDateString()
-          : 'Never'
+          : 'Never',
       }))
     },
 
@@ -169,9 +178,9 @@ export const useAdminUsersStore = defineStore('adminUsers', {
      * Get current query parameters for API calls
      */
     queryParams: (state) => {
-      const params: any = {
+      const params: Record<string, any> = {
         page: state.pagination.page,
-        limit: state.pagination.limit
+        limit: state.pagination.limit,
       }
 
       if (state.filters.search) {
@@ -199,10 +208,10 @@ export const useAdminUsersStore = defineStore('adminUsers', {
      */
     hasActiveFilters: (state): boolean => {
       return !!(
-        state.filters.search ||
-        state.filters.registrationDateFrom ||
-        state.filters.registrationDateTo ||
-        state.filters.status
+        state.filters.search
+        || state.filters.registrationDateFrom
+        || state.filters.registrationDateTo
+        || state.filters.status
       )
     },
 
@@ -216,13 +225,13 @@ export const useAdminUsersStore = defineStore('adminUsers', {
         ...state.summary,
         formattedRevenue: new Intl.NumberFormat('en-US', {
           style: 'currency',
-          currency: 'EUR'
+          currency: 'EUR',
         }).format(state.summary.totalRevenue),
-        activePercentage: state.summary.totalUsers > 0 
+        activePercentage: state.summary.totalUsers > 0
           ? Math.round((state.summary.activeUsers / state.summary.totalUsers) * 100)
-          : 0
+          : 0,
       }
-    }
+    },
   },
 
   actions: {
@@ -307,7 +316,7 @@ export const useAdminUsersStore = defineStore('adminUsers', {
      * Update sorting (component will handle refetch)
      */
     updateSort(sortBy: string, sortOrder: 'asc' | 'desc' = 'asc') {
-      this.filters.sortBy = sortBy as any
+      this.filters.sortBy = sortBy as 'name' | 'created_at' | 'email' | 'last_login' | undefined
       this.filters.sortOrder = sortOrder
     },
 
@@ -348,11 +357,10 @@ export const useAdminUsersStore = defineStore('adminUsers', {
         registrationDateTo: undefined,
         status: '',
         sortBy: 'created_at',
-        sortOrder: 'desc'
+        sortOrder: 'desc',
       }
       this.pagination.page = 1
     },
-
 
     /**
      * Clear current user detail
@@ -373,6 +381,6 @@ export const useAdminUsersStore = defineStore('adminUsers', {
      */
     reset() {
       this.$reset()
-    }
-  }
+    },
+  },
 })

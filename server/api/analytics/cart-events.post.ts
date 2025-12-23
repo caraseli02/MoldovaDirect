@@ -1,15 +1,16 @@
 /**
  * Cart Analytics Events API Endpoint
- * 
+ *
  * Requirements addressed:
  * - Store cart analytics events from client-side tracking
  * - Process cart abandonment data
  * - Handle cart conversion metrics
- * 
+ *
  * Receives and processes comprehensive cart analytics data.
  */
 
 import { serverSupabaseServiceRole } from '#supabase/server'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
 interface CartAnalyticsEvent {
   eventType: 'cart_add' | 'cart_remove' | 'cart_update' | 'cart_view' | 'cart_abandon' | 'cart_checkout_start' | 'cart_checkout_complete'
@@ -72,7 +73,7 @@ export default defineEventHandler(async (event) => {
       eventsProcessed: 0,
       conversionsProcessed: 0,
       abandonmentsProcessed: 0,
-      errors: [] as string[]
+      errors: [] as string[],
     }
 
     // Process cart events
@@ -89,7 +90,7 @@ export default defineEventHandler(async (event) => {
           product_price: event.productDetails?.price || null,
           product_category: event.productDetails?.category || null,
           product_quantity: event.productDetails?.quantity || null,
-          metadata: event.metadata || {}
+          metadata: event.metadata || {},
         }))
 
         const { error: eventsError } = await supabase
@@ -98,11 +99,14 @@ export default defineEventHandler(async (event) => {
 
         if (eventsError) {
           results.errors.push(`Events error: ${eventsError.message}`)
-        } else {
+        }
+        else {
           results.eventsProcessed = cartEvents.length
         }
-      } catch (error) {
-        results.errors.push(`Events processing error: ${error.message}`)
+      }
+      catch (error: any) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+        results.errors.push(`Events processing error: ${errorMessage}`)
       }
     }
 
@@ -116,7 +120,7 @@ export default defineEventHandler(async (event) => {
           item_count: conversion.itemCount,
           time_to_conversion: conversion.timeToConversion || null,
           conversion_stage: conversion.conversionStage,
-          products: conversion.products
+          products: conversion.products,
         }))
 
         const { error: conversionsError } = await supabase
@@ -125,11 +129,14 @@ export default defineEventHandler(async (event) => {
 
         if (conversionsError) {
           results.errors.push(`Conversions error: ${conversionsError.message}`)
-        } else {
+        }
+        else {
           results.conversionsProcessed = conversionMetrics.length
         }
-      } catch (error) {
-        results.errors.push(`Conversions processing error: ${error.message}`)
+      }
+      catch (error: any) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+        results.errors.push(`Conversions processing error: ${errorMessage}`)
       }
     }
 
@@ -143,7 +150,7 @@ export default defineEventHandler(async (event) => {
           time_spent_in_cart: abandonment.timeSpentInCart,
           last_activity: abandonment.lastActivity,
           abandonment_stage: abandonment.abandonmentStage,
-          products: abandonment.products
+          products: abandonment.products,
         }))
 
         const { error: abandonmentsError } = await supabase
@@ -152,11 +159,14 @@ export default defineEventHandler(async (event) => {
 
         if (abandonmentsError) {
           results.errors.push(`Abandonments error: ${abandonmentsError.message}`)
-        } else {
+        }
+        else {
           results.abandonmentsProcessed = abandonmentData.length
         }
-      } catch (error) {
-        results.errors.push(`Abandonments processing error: ${error.message}`)
+      }
+      catch (error: any) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+        results.errors.push(`Abandonments processing error: ${errorMessage}`)
       }
     }
 
@@ -166,27 +176,27 @@ export default defineEventHandler(async (event) => {
     return {
       success: results.errors.length === 0,
       results,
-      message: results.errors.length > 0 
+      message: results.errors.length > 0
         ? `Processed with ${results.errors.length} errors`
-        : 'All cart analytics data processed successfully'
+        : 'All cart analytics data processed successfully',
     }
-
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Cart analytics processing error:', error)
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to process cart analytics data'
+      statusMessage: 'Failed to process cart analytics data',
     })
   }
 })
 
 // Update daily analytics with cart-specific metrics
 async function updateDailyCartAnalytics(
-  supabase: any,
+  supabase: SupabaseClient,
   events: CartAnalyticsEvent[],
   conversions: CartConversionMetrics[],
-  abandonments: CartAbandonmentData[]
-) {
+  abandonments: CartAbandonmentData[],
+): Promise<void> {
   try {
     // Group events by date
     const eventsByDate = new Map<string, {
@@ -199,9 +209,10 @@ async function updateDailyCartAnalytics(
     }>()
 
     // Process events
-    events.forEach(event => {
+    events.forEach((event) => {
       const date = new Date(event.timestamp).toISOString().split('T')[0]
-      
+      if (!date) return
+
       if (!eventsByDate.has(date)) {
         eventsByDate.set(date, {
           cartAdds: 0,
@@ -209,12 +220,12 @@ async function updateDailyCartAnalytics(
           checkoutStarts: 0,
           checkoutCompletes: 0,
           cartValue: 0,
-          abandonments: 0
+          abandonments: 0,
         })
       }
 
       const dayData = eventsByDate.get(date)!
-      
+
       switch (event.eventType) {
         case 'cart_add':
           dayData.cartAdds++
@@ -236,9 +247,10 @@ async function updateDailyCartAnalytics(
     })
 
     // Process abandonments
-    abandonments.forEach(abandonment => {
+    abandonments.forEach((abandonment) => {
       const date = new Date(abandonment.lastActivity).toISOString().split('T')[0]
-      
+      if (!date) return
+
       if (!eventsByDate.has(date)) {
         eventsByDate.set(date, {
           cartAdds: 0,
@@ -246,7 +258,7 @@ async function updateDailyCartAnalytics(
           checkoutStarts: 0,
           checkoutCompletes: 0,
           cartValue: 0,
-          abandonments: 0
+          abandonments: 0,
         })
       }
 
@@ -255,6 +267,8 @@ async function updateDailyCartAnalytics(
 
     // Update or insert daily analytics
     for (const [date, data] of eventsByDate) {
+      if (!date) continue
+
       const { error } = await supabase
         .from('daily_cart_analytics')
         .upsert({
@@ -267,17 +281,17 @@ async function updateDailyCartAnalytics(
           total_cart_value: data.cartValue,
           conversion_rate: data.checkoutStarts > 0 ? (data.checkoutCompletes / data.checkoutStarts) * 100 : 0,
           abandonment_rate: (data.cartAdds + data.cartViews) > 0 ? (data.abandonments / (data.cartAdds + data.cartViews)) * 100 : 0,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         }, {
-          onConflict: 'date'
+          onConflict: 'date',
         })
 
       if (error) {
         console.error(`Failed to update daily cart analytics for ${date}:`, error)
       }
     }
-
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Failed to update daily cart analytics:', error)
   }
 }

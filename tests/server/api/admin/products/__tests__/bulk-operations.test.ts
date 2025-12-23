@@ -23,7 +23,7 @@ describe('Bulk Product Operations - Error Handling', () => {
     // Create test admin user
     const { data: admin } = await supabase.auth.signUp({
       email: `test-admin-${Date.now()}@example.test`,
-      password: 'TestPassword123!'
+      password: 'TestPassword123!',
     })
     testAdmin = admin.user
 
@@ -41,22 +41,22 @@ describe('Bulk Product Operations - Error Handling', () => {
           stock_quantity: 10,
           price_eur: 100,
           category: 'test',
-          is_active: true
+          is_active: true,
         },
         {
           name_translations: { es: 'Product 2', en: 'Product 2' },
           stock_quantity: 20,
           price_eur: 200,
           category: 'test',
-          is_active: true
+          is_active: true,
         },
         {
           name_translations: { es: 'Product 3', en: 'Product 3' },
           stock_quantity: 30,
           price_eur: 300,
           category: 'test',
-          is_active: true
-        }
+          is_active: true,
+        },
       ])
       .select()
 
@@ -88,14 +88,14 @@ describe('Bulk Product Operations - Error Handling', () => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
       body: JSON.stringify({
         productIds: allIds,
         updates: {
-          isActive: false
-        }
-      })
+          isActive: false,
+        },
+      }),
     })
 
     expect(response.status).toBe(200)
@@ -123,14 +123,14 @@ describe('Bulk Product Operations - Error Handling', () => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
       body: JSON.stringify({
         productIds: [999999, 888888],
         updates: {
-          isActive: false
-        }
-      })
+          isActive: false,
+        },
+      }),
     })
 
     expect(response.status).toBe(404)
@@ -147,12 +147,12 @@ describe('Bulk Product Operations - Error Handling', () => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
       body: JSON.stringify({
         productIds: [],
-        updates: { isActive: false }
-      })
+        updates: { isActive: false },
+      }),
     })
 
     expect(response1.status).toBe(400)
@@ -162,12 +162,12 @@ describe('Bulk Product Operations - Error Handling', () => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
       body: JSON.stringify({
         productIds: [testProducts[0].id],
-        updates: {}
-      })
+        updates: {},
+      }),
     })
 
     expect(response2.status).toBe(400)
@@ -177,12 +177,12 @@ describe('Bulk Product Operations - Error Handling', () => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
       body: JSON.stringify({
         productIds: [testProducts[0].id],
-        updates: { price: -100 }
-      })
+        updates: { price: -100 },
+      }),
     })
 
     expect(response3.status).toBe(400)
@@ -192,12 +192,12 @@ describe('Bulk Product Operations - Error Handling', () => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
       body: JSON.stringify({
         productIds: [testProducts[0].id],
-        updates: { stockQuantity: -10 }
-      })
+        updates: { stockQuantity: -10 },
+      }),
     })
 
     expect(response4.status).toBe(400)
@@ -212,14 +212,14 @@ describe('Bulk Product Operations - Error Handling', () => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
       body: JSON.stringify({
         productIds,
         updates: {
-          isActive: false
-        }
-      })
+          isActive: false,
+        },
+      }),
     })
 
     await new Promise(resolve => setTimeout(resolve, 500))
@@ -253,14 +253,14 @@ describe('Bulk Product Operations - Error Handling', () => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
       body: JSON.stringify({
         productIds: [productId],
         updates: {
-          stockQuantity: newStock
-        }
-      })
+          stockQuantity: newStock,
+        },
+      }),
     })
 
     await new Promise(resolve => setTimeout(resolve, 500))
@@ -286,16 +286,16 @@ describe('Bulk Product Operations - Error Handling', () => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
       body: JSON.stringify({
         productIds: [productId],
         updates: {
           isActive: false,
           price: 999.99,
-          stockQuantity: 100
-        }
-      })
+          stockQuantity: 100,
+        },
+      }),
     })
 
     expect(response.status).toBe(200)
@@ -322,19 +322,19 @@ describe('Bulk Product Operations - Authorization', () => {
     // Create regular user
     const { data: user } = await supabase.auth.signUp({
       email: `test-user-${Date.now()}@example.test`,
-      password: 'TestPassword123!'
+      password: 'TestPassword123!',
     })
 
     const response = await fetch('/api/admin/products/bulk', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${user.session.access_token}`
+        'Authorization': `Bearer ${user.session.access_token}`,
       },
       body: JSON.stringify({
         productIds: [1],
-        updates: { isActive: false }
-      })
+        updates: { isActive: false },
+      }),
     })
 
     expect(response.status).toBe(403)
@@ -350,12 +350,12 @@ describe('Bulk Product Operations - Authorization', () => {
     const response = await fetch('/api/admin/products/bulk', {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         productIds: [1],
-        updates: { isActive: false }
-      })
+        updates: { isActive: false },
+      }),
     })
 
     expect(response.status).toBe(401)
@@ -372,7 +372,7 @@ describe('Bulk Product Delete - Error Handling', () => {
 
     const { data: admin } = await supabase.auth.signUp({
       email: `test-admin-${Date.now()}@example.test`,
-      password: 'TestPassword123!'
+      password: 'TestPassword123!',
     })
     testAdmin = admin.user
 
@@ -388,14 +388,14 @@ describe('Bulk Product Delete - Error Handling', () => {
           name_translations: { es: 'Product 1', en: 'Product 1' },
           stock_quantity: 10,
           price_eur: 100,
-          category: 'test'
+          category: 'test',
         },
         {
           name_translations: { es: 'Product 2', en: 'Product 2' },
           stock_quantity: 20,
           price_eur: 200,
-          category: 'test'
-        }
+          category: 'test',
+        },
       ])
       .select()
 
@@ -424,11 +424,11 @@ describe('Bulk Product Delete - Error Handling', () => {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
       body: JSON.stringify({
-        productIds: allIds
-      })
+        productIds: allIds,
+      }),
     })
 
     expect(response.status).toBe(200)
@@ -463,7 +463,7 @@ describe('Bulk Product Delete - Error Handling', () => {
       .insert({
         user_id: testAdmin.id,
         total_amount: 100,
-        status: 'pending'
+        status: 'pending',
       })
       .select()
       .single()
@@ -474,18 +474,18 @@ describe('Bulk Product Delete - Error Handling', () => {
         order_id: order.id,
         product_id: productId,
         quantity: 1,
-        price_at_time: 100
+        price_at_time: 100,
       })
 
     const response = await fetch('/api/admin/products/bulk', {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${testAdmin.access_token}`
+        'Authorization': `Bearer ${testAdmin.access_token}`,
       },
       body: JSON.stringify({
-        productIds: [productId]
-      })
+        productIds: [productId],
+      }),
     })
 
     // Depending on implementation, this might be 400 or 409

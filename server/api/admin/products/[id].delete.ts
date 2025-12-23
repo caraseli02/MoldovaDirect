@@ -12,9 +12,24 @@
  */
 
 import { serverSupabaseClient } from '#supabase/server'
+import type { H3Event } from 'h3'
 import { requireAdminRole } from '~/server/utils/adminAuth'
 import { invalidateMultipleScopes } from '~/server/utils/adminCache'
 import { invalidatePublicCache } from '~/server/utils/publicCache'
+
+/**
+ * Get client IP address from request
+ */
+function getClientIP(event: H3Event): string | null {
+  const headers = getHeaders(event)
+  return (
+    headers['x-forwarded-for']?.split(',')[0]?.trim()
+    || headers['x-real-ip']
+    || headers['cf-connecting-ip']
+    || getRequestIP(event)
+    || null
+  )
+}
 
 export default defineEventHandler(async (event) => {
   await requireAdminRole(event)
@@ -26,7 +41,7 @@ export default defineEventHandler(async (event) => {
     if (!productId || isNaN(Number(productId))) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Invalid product ID'
+        statusMessage: 'Invalid product ID',
       })
     }
 
@@ -40,7 +55,7 @@ export default defineEventHandler(async (event) => {
     if (fetchError || !product) {
       throw createError({
         statusCode: 404,
-        statusMessage: 'Product not found'
+        statusMessage: 'Product not found',
       })
     }
 
@@ -53,7 +68,7 @@ export default defineEventHandler(async (event) => {
     if (deleteError) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to delete product'
+        statusMessage: 'Failed to delete product',
       })
     }
 
@@ -68,38 +83,38 @@ export default defineEventHandler(async (event) => {
           id: product.id,
           sku: product.sku,
           name: product.name_translations,
-          is_active: product.is_active
+          is_active: product.is_active,
         },
         new_values: null,
         performed_by: null, // TODO: Get current admin user ID
         ip_address: getClientIP(event),
-        user_agent: getHeader(event, 'user-agent')
+        user_agent: getHeader(event, 'user-agent'),
       })
 
     // Invalidate related caches (both admin and public)
     await Promise.all([
       invalidateMultipleScopes(['products', 'stats']),
-      invalidatePublicCache('products')
+      invalidatePublicCache('products'),
     ])
 
     return {
       success: true,
       data: {
         productId: Number(productId),
-        message: 'Product deleted successfully'
-      }
+        message: 'Product deleted successfully',
+      },
     }
-
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Delete product error:', error)
-    
+
     if (error.statusCode) {
       throw error
     }
 
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 })

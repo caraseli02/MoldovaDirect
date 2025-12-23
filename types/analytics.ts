@@ -1,6 +1,6 @@
 /**
  * Analytics Type Definitions
- * 
+ *
  * Requirements addressed:
  * - 3.1: Type definitions for analytics data structures
  * - 3.3: User analytics and activity tracking types
@@ -265,26 +265,4 @@ export interface PerformanceMetrics {
   throughput: number
   errorRate: number
   availability: number
-}
-
-// Export all types
-export type {
-  UserAnalyticsData,
-  AnalyticsOverview,
-  ProductAnalyticsData,
-  ActivityTrackingRequest,
-  ActivityItem,
-  DashboardStats,
-  AnalyticsQueryParams,
-  AggregationRequest,
-  AggregationResult,
-  DailyAnalytics,
-  ProductAnalytics,
-  UserActivityLog,
-  AuditLog,
-  ChartDataPoint,
-  TimeSeriesData,
-  CategoryData,
-  AnalyticsFilters,
-  PerformanceMetrics
 }

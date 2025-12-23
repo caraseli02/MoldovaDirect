@@ -9,7 +9,7 @@ const { locale } = useI18n()
 
 useHead({
   htmlAttrs: {
-    lang: () => locale.value
-  }
+    lang: () => locale.value,
+  },
 })
 </script>

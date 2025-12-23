@@ -55,7 +55,10 @@
           v-if="producer.establishedYear"
           class="flex items-center gap-1.5"
         >
-          <commonIcon name="lucide:calendar" class="h-3 w-3" />
+          <commonIcon
+            name="lucide:calendar"
+            class="h-3 w-3"
+          />
           <span>{{ t('wineStory.producers.establishedYear', { year: producer.establishedYear }) }}</span>
         </div>
 
@@ -63,7 +66,10 @@
           v-if="producer.generationsOfWinemaking"
           class="flex items-center gap-1.5"
         >
-          <commonIcon name="lucide:users" class="h-3 w-3" />
+          <commonIcon
+            name="lucide:users"
+            class="h-3 w-3"
+          />
           <span>{{ t('wineStory.producers.generations', { count: producer.generationsOfWinemaking }) }}</span>
         </div>
       </div>
@@ -79,7 +85,10 @@
         @click.stop="$emit('click', producer)"
       >
         {{ t('wineStory.producers.readMore') }}
-        <commonIcon name="lucide:arrow-right" class="h-4 w-4 transition-transform group-hover:translate-x-1" />
+        <commonIcon
+          name="lucide:arrow-right"
+          class="h-4 w-4 transition-transform group-hover:translate-x-1"
+        />
       </button>
     </div>
 
@@ -89,7 +98,10 @@
       class="absolute right-3 top-3 rounded-full bg-green-500 p-2 shadow-lg"
       :title="producer.certifications.map(c => c.name).join(', ')"
     >
-      <commonIcon name="lucide:leaf" class="h-4 w-4 text-white" />
+      <commonIcon
+        name="lucide:leaf"
+        class="h-4 w-4 text-white"
+      />
     </div>
   </article>
 </template>
@@ -109,7 +121,7 @@ defineEmits<{
 const { t, locale } = useI18n()
 
 // Get localized text from Translations object
-const getLocalizedText = (translations: any): string => {
+const getLocalizedText = (translations: Record<string, any>): string => {
   if (!translations) return ''
   return translations[locale.value] || translations.en || Object.values(translations)[0] || ''
 }

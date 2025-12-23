@@ -1,11 +1,11 @@
 <!--
   Email Delivery Monitoring Page
-  
+
   Requirements addressed:
   - 4.4: View email delivery logs and statistics
   - 4.5: Search by order number, customer email, and date range
   - 4.6: Email delivery status reporting and bounce reason tracking
-  
+
   Admin dashboard for monitoring email delivery
 -->
 
@@ -38,7 +38,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: 'admin',
-  middleware: ['auth', 'admin']
+  middleware: ['auth', 'admin'],
 })
 
 // Lazy load admin email components to reduce main bundle size
@@ -49,7 +49,7 @@ useHead({
   title: 'Email Logs - Admin - Moldova Direct',
   meta: [
     { name: 'description', content: 'Monitor email delivery logs and statistics' },
-    { name: 'robots', content: 'noindex, nofollow' }
-  ]
+    { name: 'robots', content: 'noindex, nofollow' },
+  ],
 })
 </script>

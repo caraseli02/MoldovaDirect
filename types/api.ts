@@ -1,14 +1,14 @@
 // API-specific TypeScript types for Moldova Direct
 // These types define the structure for API requests and responses
 
-import type { 
-  ProductWithRelations, 
-  CategoryWithChildren, 
-  ProductFilters, 
+import type {
+  ProductWithRelations,
+  CategoryWithChildren,
+  ProductFilters,
   Pagination,
   CategoryFilter,
   PriceRange,
-  AttributeFilter
+  AttributeFilter,
 } from './database'
 
 // =============================================
@@ -166,7 +166,7 @@ export interface ProductQueryOptions {
     isActive?: boolean
     featured?: boolean
     inStock?: boolean
-    priceRange?: { min: number; max: number }
+    priceRange?: { min: number, max: number }
     search?: string
   }
   sort?: {
@@ -381,16 +381,16 @@ export interface WebhookPayload {
 }
 
 // Stripe Webhook Types
-export type StripeWebhookEventType =
-  | 'payment_intent.succeeded'
-  | 'payment_intent.payment_failed'
-  | 'payment_intent.canceled'
-  | 'payment_intent.created'
-  | 'charge.succeeded'
-  | 'charge.refunded'
-  | 'customer.created'
-  | 'customer.updated'
-  | 'customer.deleted'
+export type StripeWebhookEventType
+  = | 'payment_intent.succeeded'
+    | 'payment_intent.payment_failed'
+    | 'payment_intent.canceled'
+    | 'payment_intent.created'
+    | 'charge.succeeded'
+    | 'charge.refunded'
+    | 'customer.created'
+    | 'customer.updated'
+    | 'customer.deleted'
 
 export interface StripeWebhookResponse {
   received: boolean

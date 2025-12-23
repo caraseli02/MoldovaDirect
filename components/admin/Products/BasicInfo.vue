@@ -24,26 +24,32 @@
           {{ $t('admin.products.fields.name') }} *
         </label>
         <div class="space-y-3">
-          <div v-for="locale in locales" :key="locale.code">
+          <div
+            v-for="localeItem in locales"
+            :key="localeItem.code"
+          >
             <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">
-              {{ locale.name }}
+              {{ localeItem.name }}
             </label>
             <input
               ref="nameInputs"
-              v-model="localForm.name[locale.code]"
+              v-model="localForm.name[localeItem.code]"
               type="text"
-              :placeholder="$t('admin.products.placeholders.productName', { language: locale.name })"
+              :placeholder="$t('admin.products.placeholders.productName', { language: localeItem.name })"
               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white touch-manipulation"
               :class="{
-                'border-red-500': errors?.name?.[locale.code],
-                'min-h-[44px]': isMobile
+                'border-red-500': errors?.name?.[localeItem.code],
+                'min-h-[44px]': isMobile,
               }"
-              @input="handleNameInput(locale.code)"
+              @input="handleNameInput(localeItem.code)"
               @focus="handleInputFocus"
               @blur="handleInputBlur"
             />
-            <p v-if="errors?.name?.[locale.code]" class="mt-1 text-sm text-red-600">
-              {{ errors.name[locale.code] }}
+            <p
+              v-if="errors?.name?.[localeItem.code]"
+              class="mt-1 text-sm text-red-600"
+            >
+              {{ errors.name[localeItem.code] }}
             </p>
           </div>
         </div>
@@ -64,7 +70,7 @@
             :class="{
               'border-red-500': errors?.sku,
               'min-h-[44px]': isMobile,
-              'pr-10': isGeneratingSku
+              'pr-10': isGeneratingSku,
             }"
             @input="handleSkuInput"
             @focus="handleInputFocus"
@@ -73,28 +79,40 @@
           <!-- Auto-generate SKU button -->
           <UiButton
             v-if="!localForm.sku && localForm.name.es"
-            @click="generateSku"
-            @touchstart="isMobile && vibrate('tap')"
             type="button"
             variant="ghost"
             size="icon"
             class="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 touch-manipulation"
             :aria-label="$t('admin.products.actions.generateSku')"
+            @click="generateSku"
+            @touchstart="isMobile && vibrate('tap')"
           >
-            <commonIcon name="lucide:sparkles" class="h-4 w-4" />
+            <commonIcon
+              name="lucide:sparkles"
+              class="h-4 w-4"
+            />
           </UiButton>
           <!-- Loading spinner for SKU generation -->
           <div
             v-if="isGeneratingSku"
             class="absolute right-2 top-1/2 transform -translate-y-1/2"
           >
-            <commonIcon name="lucide:refresh-ccw" class="w-4 h-4 animate-spin text-blue-600" />
+            <commonIcon
+              name="lucide:refresh-ccw"
+              class="w-4 h-4 animate-spin text-blue-600"
+            />
           </div>
         </div>
-        <p v-if="errors?.sku" class="mt-1 text-sm text-red-600">
+        <p
+          v-if="errors?.sku"
+          class="mt-1 text-sm text-red-600"
+        >
           {{ errors.sku }}
         </p>
-        <p v-if="skuSuggestion" class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+        <p
+          v-if="skuSuggestion"
+          class="mt-1 text-xs text-gray-500 dark:text-gray-400"
+        >
           {{ $t('admin.products.hints.skuSuggestion', { suggestion: skuSuggestion }) }}
         </p>
       </div>
@@ -109,31 +127,51 @@
           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white touch-manipulation"
           :class="{
             'border-red-500': errors?.categoryId,
-            'min-h-[44px]': isMobile
+            'min-h-[44px]': isMobile,
           }"
           @change="handleCategoryChange"
           @focus="handleInputFocus"
         >
-          <option value="">{{ $t('admin.products.placeholders.selectCategory') }}</option>
-          <option v-for="category in categories" :key="category.id" :value="category.id">
+          <option value="">
+            {{ $t('admin.products.placeholders.selectCategory') }}
+          </option>
+          <option
+            v-for="category in categories"
+            :key="category.id"
+            :value="category.id"
+          >
             {{ getLocalizedText(category.name) }}
           </option>
         </select>
-        <p v-if="errors?.categoryId" class="mt-1 text-sm text-red-600">
+        <p
+          v-if="errors?.categoryId"
+          class="mt-1 text-sm text-red-600"
+        >
           {{ errors.categoryId }}
         </p>
-        <p v-if="selectedCategoryInfo" class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+        <p
+          v-if="selectedCategoryInfo"
+          class="mt-1 text-xs text-gray-500 dark:text-gray-400"
+        >
           {{ selectedCategoryInfo }}
         </p>
       </div>
     </div>
 
     <!-- Mobile-specific help text -->
-    <div v-if="isMobile && showMobileHints" class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+    <div
+      v-if="isMobile && showMobileHints"
+      class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg"
+    >
       <div class="flex items-start space-x-3">
-        <commonIcon name="lucide:lightbulb" class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+        <commonIcon
+          name="lucide:lightbulb"
+          class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0"
+        />
         <div class="text-sm text-blue-800 dark:text-blue-200">
-          <p class="font-medium mb-1">{{ $t('admin.products.hints.mobileTitle') }}</p>
+          <p class="font-medium mb-1">
+            {{ $t('admin.products.hints.mobileTitle') }}
+          </p>
           <ul class="space-y-1 text-xs">
             <li>{{ $t('admin.products.hints.mobile1') }}</li>
             <li>{{ $t('admin.products.hints.mobile2') }}</li>
@@ -141,11 +179,14 @@
           </ul>
         </div>
         <button
+          class="text-blue-600 dark:text-blue-400 touch-manipulation p-1"
           @click="showMobileHints = false"
           @touchstart="vibrate('tap')"
-          class="text-blue-600 dark:text-blue-400 touch-manipulation p-1"
         >
-          <commonIcon name="lucide:x" class="w-4 h-4" />
+          <commonIcon
+            name="lucide:x"
+            class="w-4 h-4"
+          />
         </button>
       </div>
     </div>
@@ -173,7 +214,7 @@ interface Emits {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  disabled: false
+  disabled: false,
 })
 
 const emit = defineEmits<Emits>()
@@ -198,7 +239,7 @@ const isFocused = ref(false)
 const locales = [
   { code: 'es', name: 'Spanish' },
   { code: 'en', name: 'English' },
-  { code: 'ro', name: 'Romanian' }
+  { code: 'ro', name: 'Romanian' },
 ]
 
 // Computed
@@ -208,14 +249,16 @@ const selectedCategoryInfo = computed(() => {
   const category = props.categories.find(c => c.id === localForm.value.categoryId)
   if (!category) return ''
 
-  const productCount = category.products?.length || 0
+  const categoryData = category as unknown as Record<string, any>
+  const products = categoryData.products as unknown[] | undefined
+  const productCount = products?.length || 0
   return t('admin.products.hints.categoryInfo', { count: productCount })
 })
 
 // Utility functions
-const getLocalizedText = (text: Record<string, string> | null) => {
+const getLocalizedText = (text: Record<string, string | undefined> | null | undefined) => {
   if (!text) return ''
-  return text[locale.value] || text.es || Object.values(text)[0] || ''
+  return text[locale.value] || text.es || Object.values(text).find(v => v) || ''
 }
 
 const generateSkuFromName = (name: string) => {
@@ -298,13 +341,15 @@ const generateSku = async () => {
     nextTick(() => {
       skuInput.value?.focus()
     })
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Failed to generate SKU:', error)
 
     if (isMobile.value) {
       vibrate('error')
     }
-  } finally {
+  }
+  finally {
     isGeneratingSku.value = false
   }
 }

@@ -44,7 +44,7 @@
               :class="[
                 activeFilter === 'all'
                   ? 'bg-primary text-white shadow-md'
-                  : 'text-slate-600 hover:bg-slate-100'
+                  : 'text-slate-600 hover:bg-slate-100',
               ]"
               @click="setFilter('all')"
             >
@@ -58,7 +58,7 @@
               :class="[
                 activeFilter === type
                   ? 'bg-primary text-white shadow-md'
-                  : 'text-slate-600 hover:bg-slate-100'
+                  : 'text-slate-600 hover:bg-slate-100',
               ]"
               @click="setFilter(type)"
             >
@@ -75,7 +75,7 @@
               :class="[
                 activeFilter === 'all'
                   ? 'bg-primary text-white shadow-md'
-                  : 'bg-white text-slate-600 shadow-sm'
+                  : 'bg-white text-slate-600 shadow-sm',
               ]"
               @click="setFilter('all')"
             >
@@ -89,7 +89,7 @@
               :class="[
                 activeFilter === type
                   ? 'bg-primary text-white shadow-md'
-                  : 'bg-white text-slate-600 shadow-sm'
+                  : 'bg-white text-slate-600 shadow-sm',
               ]"
               @click="setFilter(type)"
             >
@@ -100,15 +100,32 @@
       </div>
 
       <!-- Loading State -->
-      <div v-if="loading" class="mt-8 grid gap-4 md:mt-12 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
-        <div v-for="i in 3" :key="i" class="h-[400px] animate-pulse rounded-2xl bg-slate-200 md:h-[480px]"></div>
+      <div
+        v-if="loading"
+        class="mt-8 grid gap-4 md:mt-12 md:grid-cols-2 md:gap-6 lg:grid-cols-3"
+      >
+        <div
+          v-for="i in 3"
+          :key="i"
+          class="h-[400px] animate-pulse rounded-2xl bg-slate-200 md:h-[480px]"
+        ></div>
       </div>
 
       <!-- Error State -->
-      <div v-else-if="error" class="mt-8 rounded-lg bg-red-50 p-6 text-center md:mt-12">
-        <commonIcon name="lucide:alert-circle" class="mx-auto h-12 w-12 text-red-500" />
-        <p class="mt-2 text-lg font-medium text-red-900">{{ t('wineStory.pairings.error') }}</p>
-        <p class="mt-1 text-sm text-red-700">{{ error }}</p>
+      <div
+        v-else-if="error"
+        class="mt-8 rounded-lg bg-red-50 p-6 text-center md:mt-12"
+      >
+        <commonIcon
+          name="lucide:alert-circle"
+          class="mx-auto h-12 w-12 text-red-500"
+        />
+        <p class="mt-2 text-lg font-medium text-red-900">
+          {{ t('wineStory.pairings.error') }}
+        </p>
+        <p class="mt-1 text-sm text-red-700">
+          {{ error }}
+        </p>
       </div>
 
       <!-- Pairing Cards Grid -->
@@ -126,21 +143,32 @@
         <PairingCard
           v-for="pairing in displayedPairings"
           :key="pairing.id"
-          :pairing="pairing"
+          :pairing="pairing as PairingGuide"
           @click="openPairingModal"
         />
       </div>
 
       <!-- No Results State -->
-      <div v-else class="mt-8 rounded-lg bg-slate-100 p-12 text-center md:mt-12">
-        <commonIcon name="lucide:wine" class="mx-auto h-16 w-16 text-slate-400" />
-        <p class="mt-4 text-lg font-medium text-slate-600">{{ t('wineStory.pairings.noResults') }}</p>
+      <div
+        v-else
+        class="mt-8 rounded-lg bg-slate-100 p-12 text-center md:mt-12"
+      >
+        <commonIcon
+          name="lucide:wine"
+          class="mx-auto h-16 w-16 text-slate-400"
+        />
+        <p class="mt-4 text-lg font-medium text-slate-600">
+          {{ t('wineStory.pairings.noResults') }}
+        </p>
         <button
           class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary/90"
           @click="clearFilters"
         >
           {{ t('wineStory.pairings.filters.all') }}
-          <commonIcon name="lucide:x" class="h-4 w-4" />
+          <commonIcon
+            name="lucide:x"
+            class="h-4 w-4"
+          />
         </button>
       </div>
 
@@ -154,7 +182,10 @@
           class="cta-button inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-semibold text-white shadow-lg transition-all hover:bg-primary/90 md:px-8"
         >
           {{ t('common.showMore') }}
-          <commonIcon name="lucide:arrow-right" class="h-5 w-5" />
+          <commonIcon
+            name="lucide:arrow-right"
+            class="h-5 w-5"
+          />
         </NuxtLink>
       </div>
     </div>
@@ -192,7 +223,7 @@ const displayedPairings = computed(() => {
     return pairings.value.filter(p => p.isActive && p.isFeatured)
   }
   return pairings.value.filter(p =>
-    p.isActive && p.isFeatured && p.wineType === activeFilter.value
+    p.isActive && p.isFeatured && p.wineType === activeFilter.value,
   )
 })
 
@@ -202,9 +233,10 @@ const setFilter = (filter: string) => {
 
   if (filter === 'all') {
     clearFiltersComposable()
-  } else {
+  }
+  else {
     applyFilters({
-      wineType: [filter as any]
+      wineType: [filter as 'red' | 'white' | 'rose' | 'sparkling' | 'dessert'],
     })
   }
 }
@@ -220,7 +252,6 @@ const openPairingModal = (pairing: PairingGuide) => {
   selectedPairing.value = pairing
   isModalOpen.value = true
   // Modal component to be implemented in future
-  console.log('Opening pairing:', pairing.slug)
 }
 </script>
 

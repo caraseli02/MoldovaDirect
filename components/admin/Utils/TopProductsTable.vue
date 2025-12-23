@@ -10,15 +10,23 @@
             v-model="sortBy"
             class="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
           >
-            <option value="views">Most Viewed</option>
-            <option value="revenue">Best Selling</option>
-            <option value="conversionRate">Best Converting</option>
-            <option value="cartAdditions">Most Added to Cart</option>
+            <option value="views">
+              Most Viewed
+            </option>
+            <option value="revenue">
+              Best Selling
+            </option>
+            <option value="conversionRate">
+              Best Converting
+            </option>
+            <option value="cartAdditions">
+              Most Added to Cart
+            </option>
           </select>
         </div>
       </div>
     </div>
-    
+
     <div class="overflow-x-auto">
       <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
         <thead class="bg-gray-50 dark:bg-gray-700">
@@ -97,10 +105,10 @@
                     {{ product.conversionRate.toFixed(2) }}%
                   </div>
                   <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-1">
-                    <div 
+                    <div
                       class="bg-blue-600 h-2 rounded-full transition-all duration-300"
                       :style="{ width: `${Math.min(product.conversionRate, 100)}%` }"
-                    />
+                    ></div>
                   </div>
                 </div>
               </div>
@@ -109,7 +117,7 @@
         </tbody>
       </table>
     </div>
-    
+
     <!-- Empty state -->
     <div
       v-if="!loading && (!products || products.length === 0)"
@@ -123,14 +131,16 @@
         Product analytics will appear here once there's activity data.
       </p>
     </div>
-    
+
     <!-- Loading state -->
     <div
       v-if="loading"
       class="px-6 py-12 text-center"
     >
       <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-      <p class="text-gray-600 dark:text-gray-400">Loading product data...</p>
+      <p class="text-gray-600 dark:text-gray-400">
+        Loading product data...
+      </p>
     </div>
   </div>
 </template>
@@ -152,7 +162,7 @@ const props = withDefaults(defineProps<Props>(), {
   loading: false,
   error: null,
   title: 'Top Products',
-  limit: 10
+  limit: 10,
 })
 
 // Sort options

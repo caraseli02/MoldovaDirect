@@ -1,11 +1,11 @@
 /**
  * Bulk Delete Products API Endpoint
- * 
+ *
  * Requirements addressed:
  * - 1.6: Bulk operations for multiple product management
  * - 6.6: Progress indicators for bulk operations
  * - 5.5: Audit logging for admin actions
- * 
+ *
  * Features:
  * - Delete multiple products at once
  * - Audit trail logging
@@ -13,11 +13,26 @@
  */
 
 import { serverSupabaseClient } from '#supabase/server'
+import type { H3Event } from 'h3'
 import { requireAdminRole } from '~/server/utils/adminAuth'
 import { z } from 'zod'
 
+/**
+ * Get client IP address from request
+ */
+function getClientIP(event: H3Event): string | null {
+  const headers = getHeaders(event)
+  return (
+    headers['x-forwarded-for']?.split(',')[0]?.trim()
+    || headers['x-real-ip']
+    || headers['cf-connecting-ip']
+    || getRequestIP(event)
+    || null
+  )
+}
+
 const bulkDeleteSchema = z.object({
-  productIds: z.array(z.number()).min(1, 'At least one product ID is required')
+  productIds: z.array(z.number()).min(1, 'At least one product ID is required'),
 })
 
 export default defineEventHandler(async (event) => {
@@ -38,14 +53,14 @@ export default defineEventHandler(async (event) => {
     if (fetchError) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to fetch products for deletion'
+        statusMessage: 'Failed to fetch products for deletion',
       })
     }
 
     if (!products || products.length === 0) {
       throw createError({
         statusCode: 404,
-        statusMessage: 'No products found to delete'
+        statusMessage: 'No products found to delete',
       })
     }
 
@@ -61,7 +76,7 @@ export default defineEventHandler(async (event) => {
     if (deleteError) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to delete products'
+        statusMessage: 'Failed to delete products',
       })
     }
 
@@ -74,12 +89,12 @@ export default defineEventHandler(async (event) => {
         id: product.id,
         sku: product.sku,
         name: product.name_translations,
-        is_active: product.is_active
+        is_active: product.is_active,
       },
       new_values: null,
       performed_by: null, // TODO: Get current admin user ID
       ip_address: getClientIP(event),
-      user_agent: getHeader(event, 'user-agent')
+      user_agent: getHeader(event, 'user-agent'),
     }))
 
     await supabase
@@ -92,20 +107,20 @@ export default defineEventHandler(async (event) => {
         deletedCount: foundIds.length,
         deletedIds: foundIds,
         notFoundIds,
-        message: `${foundIds.length} products deleted successfully`
-      }
+        message: `${foundIds.length} products deleted successfully`,
+      },
     }
-
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Bulk delete products error:', error)
-    
+
     if (error.statusCode) {
       throw error
     }
 
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 })

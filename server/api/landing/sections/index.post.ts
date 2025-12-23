@@ -37,34 +37,34 @@ export default defineEventHandler(async (event): Promise<GetSectionResponse> => 
       'newsletter',
       'faq_preview',
       'promotional_banner',
-      'flash_sale'
+      'flash_sale',
     ] as const
 
     if (!body.section_type) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Bad Request - section_type is required'
+        statusMessage: 'Bad Request - section_type is required',
       })
     }
 
     if (!VALID_SECTION_TYPES.includes(body.section_type as typeof VALID_SECTION_TYPES[number])) {
       throw createError({
         statusCode: 400,
-        statusMessage: `Bad Request - Invalid section_type. Must be one of: ${VALID_SECTION_TYPES.join(', ')}`
+        statusMessage: `Bad Request - Invalid section_type. Must be one of: ${VALID_SECTION_TYPES.join(', ')}`,
       })
     }
 
     if (!body.translations || Object.keys(body.translations).length === 0) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Bad Request - translations are required'
+        statusMessage: 'Bad Request - translations are required',
       })
     }
 
     if (!body.config) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Bad Request - config is required'
+        statusMessage: 'Bad Request - config is required',
       })
     }
 
@@ -93,7 +93,7 @@ export default defineEventHandler(async (event): Promise<GetSectionResponse> => 
         translations: body.translations,
         config: body.config,
         created_by: user.id,
-        updated_by: user.id
+        updated_by: user.id,
       })
       .select()
       .single()
@@ -102,20 +102,21 @@ export default defineEventHandler(async (event): Promise<GetSectionResponse> => 
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to create landing section',
-        data: error
+        data: error,
       })
     }
 
     return {
-      section: data as LandingSectionRow
+      section: data as LandingSectionRow,
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     console.error('Error creating landing section:', error)
 
     throw createError({
       statusCode: error.statusCode || 500,
       statusMessage: error.statusMessage || 'Failed to create landing section',
-      data: error.data || error
+      data: error.data || error,
     })
   }
 })

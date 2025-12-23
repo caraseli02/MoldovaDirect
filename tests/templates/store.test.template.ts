@@ -105,9 +105,9 @@ describe('StoreName Store', () => {
           new Promise(resolve =>
             setTimeout(() => resolve({
               ok: true,
-              json: async () => ({ data: [] })
-            }), 100)
-          )
+              json: async () => ({ data: [] }),
+            }), 100),
+          ),
         )
 
         // Act

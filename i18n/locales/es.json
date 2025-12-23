@@ -324,7 +324,10 @@
       "passwordMatch": "Las contraseñas coinciden",
       "resetPasswordButton": "Restablecer tu contraseña",
       "resettingPassword": "Restableciendo tu contraseña",
-      "processingPasswordReset": "Procesando tu solicitud de restablecimiento de contraseña"
+      "processingPasswordReset": "Procesando tu solicitud de restablecimiento de contraseña",
+      "sendResetEmailButton": "Enviar correo de restablecimiento de contraseña",
+      "sendingResetEmail": "Enviando correo de restablecimiento",
+      "backToLoginLink": "Volver a la página de inicio de sesión"
     },
     "errors": {
       "invalidCredentials": "Correo o contraseña incorrectos",
@@ -368,6 +371,7 @@
         "lowercase": "Debe contener al menos una letra minúscula",
         "number": "Debe contener al menos un número",
         "mismatch": "Las contraseñas no coinciden",
+        "match": "Las contraseñas coinciden",
         "weak": "La contraseña es muy débil",
         "current": "La contraseña actual es obligatoria"
       },
@@ -1311,6 +1315,9 @@
     },
     "story": {
       "title": "Experiencia de cata",
+      "titleCulinary": "Experiencia de cata",
+      "titleGeneric": "Historia del producto",
+      "titleCraft": "Artesanía y detalles",
       "tastingNotes": "Notas de cata",
       "pairings": "Ideas de maridaje",
       "awards": "Reconocimientos",
@@ -1327,7 +1334,6 @@
       "subtitle": "Producto auténtico moldavo garantizado",
       "description": "Imágenes de alta calidad estarán disponibles en breve"
     },
-    "noImageAvailable": "No hay imagen disponible",
     "socialProof": {
       "title": "Amado por nuestros clientes",
       "subtitle": "Opiniones reales de catas, cenas y pedidos para regalar.",
@@ -1397,7 +1403,10 @@
     },
     "related": {
       "title": "Combina con…",
-      "subtitle": "Completa la experiencia con estas recomendaciones."
+      "titleCulinary": "Combina con…",
+      "titleGeneric": "También te puede gustar",
+      "subtitle": "Completa la experiencia con estas recomendaciones.",
+      "subtitleGeneric": "Descubre más productos que podrían interesarte."
     },
     "actions": {
       "addToWishlist": "Guardar en favoritos",
@@ -1408,8 +1417,136 @@
       "sharedSuccess": "¡Gracias por compartir este descubrimiento!",
       "shareText": "Descubre este favorito moldavo conmigo.",
       "copyFallback": "Copia este enlace y envíalo a quien quieras."
+    }
+  },
+  "returns": {
+    "badge": "Listo para MVP",
+    "title": "Devoluciones y reembolsos",
+    "description": "Pasos claros para reportar incidencias, pedir reemplazos o solicitar reembolsos en Moldova Direct.",
+    "cta": {
+      "start": "Iniciar devolución",
+      "orders": "Ver mis pedidos"
     },
-    "commonProduct": "este producto"
+    "summary": {
+      "window": {
+        "title": "Ventana de devolución",
+        "metric": "30 días",
+        "description": "Alimentos sin abrir dentro de los 30 días desde la entrega"
+      },
+      "condition": {
+        "title": "Condición",
+        "metric": "Sin abrir / sin daños",
+        "description": "Conserva el embalaje original para una aprobación rápida"
+      },
+      "support": {
+        "title": "Soporte",
+        "metric": "Respuesta en 48 h",
+        "description": "Conserjería en EN / ES / RO / RU"
+      },
+      "refunds": {
+        "title": "Tiempo de reembolso",
+        "metric": "2–5 días hábiles",
+        "description": "Después de completar la inspección"
+      }
+    },
+    "eligibility": {
+      "title": "¿Qué califica para devolución?",
+      "subtitle": "Priorizamos la seguridad y frescura en cada pedido.",
+      "allowedTitle": "Casos elegibles",
+      "deniedTitle": "No elegible",
+      "allowed": {
+        "damaged": "Daños al recibir (se requieren fotos)",
+        "incorrect": "Artículos o cantidades incorrectas",
+        "quality": "Problema de calidad o seguridad reportado en 7 días",
+        "unopened": "Productos de despensa sin abrir dentro de 30 días"
+      },
+      "denied": {
+        "used": "Artículos abiertos, usados o parcialmente consumidos",
+        "late": "Solicitudes fuera del plazo de devolución",
+        "perishable": "Perecederos sin incidencia reportada al momento de la entrega",
+        "custom": "Pedidos personalizados sin defectos"
+      },
+      "note": "Para vino, guarda las botellas en posición vertical y evita temperaturas extremas mientras revisamos tu caso."
+    },
+    "resolution": {
+      "title": "Opciones de resolución",
+      "subtitle": "Elige lo que mejor funcione cuando validemos la incidencia.",
+      "options": {
+        "refund": {
+          "title": "Reembolso al método original",
+          "description": "Se emite tras la inspección, normalmente en 2–5 días hábiles.",
+          "badge": "Estándar"
+        },
+        "replacement": {
+          "title": "Envío de reemplazo",
+          "description": "Reenviamos los artículos correctos o sin daños sin coste extra si el error es nuestro.",
+          "badge": "Más rápido"
+        },
+        "credit": {
+          "title": "Crédito en tienda",
+          "description": "Crédito inmediato para futuros pedidos mientras recogemos los artículos originales.",
+          "badge": "Instantáneo"
+        }
+      },
+      "note": "Indica tu opción preferida en la solicitud. Confirmamos stock antes de enviar reemplazos."
+    },
+    "steps": {
+      "title": "Cómo iniciar una devolución",
+      "subtitle": "Comparte detalles para resolver tu solicitud rápidamente.",
+      "items": {
+        "review": {
+          "title": "Revisa tu pedido",
+          "description": "Anota artículos afectados, cantidades y fecha de entrega."
+        },
+        "document": {
+          "title": "Documenta la incidencia",
+          "description": "Toma fotos claras del embalaje, etiquetas y cualquier daño."
+        },
+        "contact": {
+          "title": "Envía tu solicitud",
+          "description": "Escríbenos o usa el formulario con tu número de pedido y preferencia (reembolso, reemplazo, crédito)."
+        },
+        "ship": {
+          "title": "Prepara la recogida o entrega",
+          "description": "Conserva los artículos en su embalaje original. Coordinamos recogida o etiqueta de envío cuando aplique."
+        }
+      },
+      "documentsTitle": "Ten a mano",
+      "packagingTitle": "Guía de embalaje",
+      "packagingDescription": "Mantén las botellas en vertical, sella las cajas y conserva accesorios o regalos incluidos.",
+      "documents": {
+        "order": "Número de pedido y datos de contacto",
+        "photos": "Fotos del daño o incidencia",
+        "packaging": "Embalaje original o etiquetas de la botella",
+        "preference": "Resolución preferida (reembolso, reemplazo, crédito)"
+      }
+    },
+    "fees": {
+      "title": "Costes y cobertura",
+      "description": "Cubrimos el envío cuando el error es nuestro. Otros casos siguen esta política.",
+      "items": {
+        "ourError": "Envío de devolución gratuito por artículos dañados, incorrectos o defectuosos",
+        "customerChoice": "Cambios de opinión pueden requerir envío de retorno",
+        "inspection": "Reembolsos tras inspección y verificación de calidad"
+      }
+    },
+    "expectations": {
+      "title": "Qué puedes esperar",
+      "description": "Actualizaciones claras de principio a fin.",
+      "items": {
+        "scan": "Seguimiento disponible al emitir la etiqueta del transportista",
+        "refundTimeline": "Reembolsos procesados en 2–5 días hábiles tras la inspección",
+        "updates": "Notificaciones por email en cada etapa"
+      }
+    },
+    "support": {
+      "title": "¿Necesitas ayuda rápida?",
+      "description": "Nuestro equipo de conserjería guía tu devolución o cambio.",
+      "badge": "Soporte prioritario",
+      "contactLink": "Usar el formulario de contacto",
+      "responseTime": "Respondemos en 48 horas hábiles (a menudo antes).",
+      "emailSubject": "Solicitud de devolución"
+    }
   },
   "footer": {
     "terms": "Términos y Condiciones",
@@ -2427,6 +2564,156 @@
         "title": "Prácticas Sostenibles",
         "description": "Muchos de nuestros productores están haciendo la transición a la agricultura orgánica y biodinámica, asegurando que los viñedos de Moldavia prosperen durante generaciones venideras."
       }
+    }
+  },
+  "shipping": {
+    "title": "Configuración del Envío",
+    "description": "Información sobre nuestros métodos de envío y plazos de entrega."
+  },
+  "faq": {
+    "title": "Preguntas Frecuentes",
+    "description": "Respuestas a tus dudas más comunes."
+  },
+  "trackOrder": {
+    "title": "Sigue tu Pedido",
+    "description": "Introduce tu número de pedido para conocer su estado."
+  },
+  "shippingPage": {
+    "seo": {
+      "title": "Información de Envío - Moldova Direct",
+      "description": "Consulta los métodos de envío, plazos de entrega y cobertura de Moldova Direct en España para pedidos de comida y vino moldavos."
+    },
+    "hero": {
+      "badge": "Envío y Entrega",
+      "title": "Entrega Rápida y Fiable en Toda España",
+      "description": "Entregamos productos auténticos de Moldavia a tu puerta con cuidado. Sigue tu pedido en tiempo real y disfruta de opciones de entrega flexibles.",
+      "notice": "Envío gratis en pedidos superiores a 50€",
+      "secondaryNotice": "La mayoría de pedidos llegan en 2-4 días laborables"
+    },
+    "ctas": {
+      "track": "Seguir Tu Pedido",
+      "contact": "Contactar Soporte"
+    },
+    "highlights": {
+      "title": "Por Qué Elegirnos",
+      "subtitle": "Experimenta la diferencia Moldova Direct",
+      "items": {
+        "fast": {
+          "title": "Entrega Rápida",
+          "description": "La mayoría de pedidos entregados en 2-4 días laborables en la península"
+        },
+        "coverage": {
+          "title": "Cobertura Nacional",
+          "description": "Enviamos a todas las regiones de España, incluidas las islas"
+        },
+        "packaging": {
+          "title": "Control de Temperatura",
+          "description": "Embalaje isotérmico mantiene los perecederos frescos durante el tránsito"
+        },
+        "updates": {
+          "title": "Actualizaciones en Tiempo Real",
+          "description": "Sigue tu paquete con notificaciones por SMS y correo electrónico"
+        }
+      }
+    },
+    "methods": {
+      "title": "Métodos de Envío",
+      "subtitle": "Elige la opción que mejor se adapte a ti",
+      "tag": "Más Popular",
+      "cards": {
+        "express": {
+          "speed": "1-2 Días",
+          "title": "Entrega Exprés",
+          "description": "Gestión prioritaria para pedidos urgentes",
+          "note": "Disponible en grandes ciudades"
+        },
+        "standard": {
+          "speed": "2-4 Días",
+          "title": "Entrega Estándar",
+          "description": "Entrega fiable a un precio asequible",
+          "note": "Gratis a partir de 50€"
+        },
+        "refrigerated": {
+          "speed": "2-3 Días",
+          "title": "Envío Refrigerado",
+          "description": "Control de temperatura para productos perecederos",
+          "note": "Obligatorio para lácteos y carnes"
+        }
+      }
+    },
+    "coverage": {
+      "title": "Cobertura de Entrega",
+      "subtitle": "Enviamos a toda España y países seleccionados de la UE",
+      "regions": {
+        "mainland": {
+          "title": "España Peninsular",
+          "description": "Todas las provincias cubiertas con opciones estándar y exprés",
+          "badge": "2-4 días"
+        },
+        "balearic": {
+          "title": "Islas Baleares",
+          "description": "Mallorca, Menorca, Ibiza y Formentera",
+          "badge": "3-5 días"
+        },
+        "canary": {
+          "title": "Islas Canarias",
+          "description": "Las siete islas principales con servicio semanal",
+          "badge": "5-7 días"
+        },
+        "eu": {
+          "title": "Unión Europea",
+          "description": "Países seleccionados - contáctanos para disponibilidad",
+          "badge": "5-10 días"
+        }
+      }
+    },
+    "extras": {
+      "title": "Servicios Adicionales",
+      "items": {
+        "instructions": {
+          "title": "Instrucciones Especiales",
+          "description": "Añade notas de entrega para el mensajero en el checkout"
+        },
+        "sustainability": {
+          "title": "Embalaje Ecológico",
+          "description": "Materiales reciclables utilizados siempre que sea posible"
+        },
+        "support": {
+          "title": "Soporte Dedicado",
+          "description": "¿Preguntas? Nuestro equipo está aquí para ayudarte por chat o correo"
+        }
+      }
+    },
+    "timeline": {
+      "title": "Cómo Funciona",
+      "subtitle": "De nuestro almacén a tu puerta",
+      "reminder": "Pedidos antes de las 14h se envían el mismo día",
+      "steps": {
+        "method": {
+          "title": "Elige Tu Método",
+          "description": "Selecciona envío estándar, exprés o refrigerado en el checkout"
+        },
+        "pack": {
+          "title": "Empaquetamos con Cuidado",
+          "description": "Los productos se empaquetan cuidadosamente con aislamiento apropiado"
+        },
+        "handoff": {
+          "title": "Recogida del Mensajero",
+          "description": "Nuestro socio de mensajería de confianza recoge tu pedido"
+        },
+        "delivery": {
+          "title": "Entregado a Ti",
+          "description": "Recibe tus productos auténticos de Moldavia en casa"
+        }
+      }
+    },
+    "contactCard": {
+      "title": "¿Preguntas Sobre el Envío?",
+      "description": "Nuestro equipo de atención al cliente está listo para ayudarte con cualquier consulta de entrega.",
+      "cta": "Contáctanos",
+      "secondary": "Ver FAQ",
+      "noteTitle": "Horario de Atención",
+      "noteDescription": "Lunes a viernes, 9:00 - 18:00 CET"
     }
   }
 }

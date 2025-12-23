@@ -8,7 +8,7 @@
         Overall Conversion: {{ overallConversionRate }}%
       </div>
     </div>
-    
+
     <div class="space-y-4">
       <div
         v-for="(step, index) in funnelSteps"
@@ -19,10 +19,12 @@
         <div class="flex items-center justify-between">
           <!-- Left side - Step info -->
           <div class="flex items-center gap-4 flex-1">
-            <div :class="[
-              'w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white',
-              step.color
-            ]">
+            <div
+              :class="[
+                'w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white',
+                step.color,
+              ]"
+            >
               {{ index + 1 }}
             </div>
             <div>
@@ -34,35 +36,35 @@
               </div>
             </div>
           </div>
-          
+
           <!-- Center - Visual funnel -->
           <div class="flex-1 mx-8">
             <div class="relative h-12 flex items-center">
               <!-- Funnel bar -->
               <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-6 relative overflow-hidden">
-                <div 
+                <div
                   :class="[
                     'h-full rounded-full transition-all duration-500',
-                    step.color.replace('bg-', 'bg-').replace('-500', '-400')
+                    step.color.replace('bg-', 'bg-').replace('-500', '-400'),
                   ]"
                   :style="{ width: `${step.percentage}%` }"
-                />
+                ></div>
                 <!-- Percentage label -->
                 <div class="absolute inset-0 flex items-center justify-center text-xs font-medium text-gray-700 dark:text-gray-300">
                   {{ step.percentage }}%
                 </div>
               </div>
-              
+
               <!-- Drop-off indicator -->
-              <div 
+              <div
                 v-if="index < funnelSteps.length - 1"
                 class="absolute -right-2 top-1/2 transform -translate-y-1/2 text-red-500 text-xs font-medium"
               >
-                -{{ Math.round(step.percentage - funnelSteps[index + 1].percentage) }}%
+                -{{ Math.round(step.percentage - (funnelSteps[index + 1]?.percentage || 0)) }}%
               </div>
             </div>
           </div>
-          
+
           <!-- Right side - Numbers -->
           <div class="text-right">
             <div class="text-xl font-bold text-gray-900 dark:text-gray-100">
@@ -73,15 +75,15 @@
             </div>
           </div>
         </div>
-        
+
         <!-- Connector line -->
         <div
           v-if="index < funnelSteps.length - 1"
           class="ml-5 w-0.5 h-4 bg-gray-300 dark:bg-gray-600"
-        />
+        ></div>
       </div>
     </div>
-    
+
     <!-- Summary Stats -->
     <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
       <div class="grid grid-cols-3 gap-4 text-center">
@@ -126,7 +128,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   data: null,
   loading: false,
-  error: null
+  error: null,
 })
 
 // Funnel steps
@@ -145,7 +147,7 @@ const funnelSteps = computed(() => {
       value: funnel.totalViews,
       percentage: maxValue > 0 ? 100 : 0,
       conversionRate: 100,
-      color: 'bg-blue-500'
+      color: 'bg-blue-500',
     },
     {
       label: 'Cart Additions',
@@ -153,7 +155,7 @@ const funnelSteps = computed(() => {
       value: funnel.totalCartAdditions,
       percentage: funnel.totalViews > 0 ? Math.round((funnel.totalCartAdditions / funnel.totalViews) * 100) : 0,
       conversionRate: funnel.viewToCartRate,
-      color: 'bg-amber-500'
+      color: 'bg-amber-500',
     },
     {
       label: 'Purchases',
@@ -161,8 +163,8 @@ const funnelSteps = computed(() => {
       value: funnel.totalPurchases,
       percentage: funnel.totalViews > 0 ? Math.round((funnel.totalPurchases / funnel.totalViews) * 100) : 0,
       conversionRate: funnel.overallConversionRate,
-      color: 'bg-green-500'
-    }
+      color: 'bg-green-500',
+    },
   ]
 })
 

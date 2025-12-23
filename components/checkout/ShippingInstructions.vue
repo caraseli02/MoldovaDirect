@@ -1,10 +1,13 @@
 <template>
   <div>
-    <UiLabel for="instructions" class="mb-2">
+    <UiLabel
+      for="instructions"
+      class="mb-2"
+    >
       {{ $t('checkout.shippingInstructions.title') }}
       <span class="text-muted-foreground text-xs">({{ $t('common.optional') }})</span>
     </UiLabel>
-    <UiTextarea 
+    <UiTextarea
       id="instructions"
       :value="modelValue"
       rows="3"
@@ -31,7 +34,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  maxLength: 500
+  maxLength: 500,
 })
 
 interface Emits {

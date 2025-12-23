@@ -1,5 +1,8 @@
 import { vi } from 'vitest'
-import { computed, ref, readonly, watch, onMounted, onUnmounted } from 'vue'
+import { computed, readonly, watch, onMounted, onUnmounted } from 'vue'
+
+// Mock import.meta.client to true for client-side code paths
+Object.defineProperty(import.meta, 'client', { value: true, writable: true })
 
 // Mock h3 module
 vi.mock('h3', () => ({
@@ -8,16 +11,15 @@ vi.mock('h3', () => ({
   getHeader: vi.fn(),
   getRequestIP: vi.fn(() => '127.0.0.1'),
   createError: vi.fn((error: any) => {
-    const err = new Error(error.statusMessage || error.message) as any
+    const err = new Error(error.statusMessage || error.message) as unknown
     err.statusCode = error.statusCode
     err.statusMessage = error.statusMessage
     return err
-  })
+  }),
 }))
 
 // Make Vue reactivity functions available globally
 global.computed = computed
-global.ref = ref
 global.readonly = readonly
 global.watch = watch
 global.onMounted = onMounted
@@ -25,7 +27,7 @@ global.onUnmounted = onUnmounted
 
 // Mock Nuxt composables
 global.useI18n = vi.fn(() => ({
-  t: vi.fn((key: string, params?: any) => {
+  t: vi.fn((key: string, params?: unknown) => {
     // Simple mock that returns the key for testing
     if (params) {
       let result = key
@@ -36,24 +38,36 @@ global.useI18n = vi.fn(() => ({
     }
     return key
   }),
-  locale: { value: 'en' }
+  locale: { value: 'en' },
 }))
 
 global.useRoute = vi.fn(() => ({
-  query: {}
+  query: {},
 }))
 
-global.useLocalePath = vi.fn(() => (path: string) => path)
+global.useRouter = vi.fn(() => ({
+  push: vi.fn(),
+  replace: vi.fn(),
+  back: vi.fn(),
+  forward: vi.fn(),
+  currentRoute: { value: { query: {} } },
+}))
+
+global.useLocalePath = vi.fn(() => (path: any) => {
+  if (typeof path === 'string') return path
+  if (path?.name === 'products-slug') return `/products/${path.params?.slug || ''}`
+  return path?.path || '/'
+})
 
 global.navigateTo = vi.fn()
 
 // Mock other Nuxt utilities as needed
-global.defineNuxtRouteMiddleware = vi.fn((middleware) => middleware)
+global.defineNuxtRouteMiddleware = vi.fn(middleware => middleware)
 global.useSupabaseClient = vi.fn()
 global.useSupabaseUser = vi.fn()
 global.createError = vi.fn((error: any) => {
   const err = new Error(error.statusMessage)
-  ;(err as any).statusCode = error.statusCode
+  ;(err as unknown).statusCode = error.statusCode
   throw err
 })
 
@@ -61,8 +75,8 @@ global.createError = vi.fn((error: any) => {
 global.useNuxtApp = vi.fn(() => ({
   $i18n: {
     t: vi.fn((key: string) => key),
-    locale: { value: 'en' }
-  }
+    locale: { value: 'en' },
+  },
 }))
 
 // Mock useCookie for testing with shared storage
@@ -74,9 +88,11 @@ export const cookieStorage = new Map<string, any>()
 let _cookieSaveCount = 0
 
 export const getCookieSaveCount = () => _cookieSaveCount
-export const resetCookieSaveCount = () => { _cookieSaveCount = 0 }
+export const resetCookieSaveCount = () => {
+  _cookieSaveCount = 0
+}
 
-global.useCookie = vi.fn((name: string, options?: any) => {
+global.useCookie = vi.fn((name: string, _options?: unknown) => {
   return {
     get value() {
       return cookieStorage.get(name)
@@ -85,9 +101,10 @@ global.useCookie = vi.fn((name: string, options?: any) => {
       _cookieSaveCount++
       if (val === null || val === undefined) {
         cookieStorage.delete(name)
-      } else {
+      }
+      else {
         cookieStorage.set(name, val)
       }
-    }
+    },
   }
 })

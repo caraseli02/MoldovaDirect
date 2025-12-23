@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
 
     if (authHeader) {
       const { data: { user }, error: authError } = await supabase.auth.getUser(
-        authHeader.replace('Bearer ', '')
+        authHeader.replace('Bearer ', ''),
       )
       if (!authError && user) {
         userId = user.id
@@ -22,17 +22,10 @@ export default defineEventHandler(async (event) => {
     const body = await readBody(event)
     const sessionId = body?.sessionId || getCookie(event, 'cart_session_id')
 
-    console.log('[Cart API] clear-cart request', {
-      hasAuthHeader: !!authHeader,
-      userId,
-      sessionIdFromBody: body?.sessionId,
-      sessionIdFromCookie: getCookie(event, 'cart_session_id')
-    })
-
     if (!userId && !sessionId) {
       return {
         success: true,
-        message: 'No cart to clear'
+        message: 'No cart to clear',
       }
     }
 
@@ -44,7 +37,8 @@ export default defineEventHandler(async (event) => {
 
     if (userId) {
       cartQuery = cartQuery.eq('user_id', userId)
-    } else {
+    }
+    else {
       cartQuery = cartQuery.eq('session_id', sessionId)
     }
 
@@ -53,21 +47,19 @@ export default defineEventHandler(async (event) => {
     if (cartError) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to find cart'
+        statusMessage: 'Failed to find cart',
       })
     }
 
     if (!carts || carts.length === 0) {
       // No cart found, nothing to clear
-      console.log('[Cart API] clear-cart no cart found', { userId, sessionId })
       return {
         success: true,
-        message: 'No cart to clear'
+        message: 'No cart to clear',
       }
     }
 
     const cartId = carts[0].id
-    console.log('[Cart API] clear-cart deleting cart', { cartId })
 
     // Delete all cart items
     const { error: deleteError } = await supabase
@@ -78,7 +70,7 @@ export default defineEventHandler(async (event) => {
     if (deleteError) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to clear cart items'
+        statusMessage: 'Failed to clear cart items',
       })
     }
 
@@ -93,13 +85,12 @@ export default defineEventHandler(async (event) => {
       // Don't throw - cart items are cleared which is the main goal
     }
 
-    console.log('[Cart API] clear-cart success', { cartId })
-
     return {
       success: true,
-      message: 'Cart cleared successfully'
+      message: 'Cart cleared successfully',
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     if (error.statusCode) {
       throw error
     }
@@ -107,7 +98,7 @@ export default defineEventHandler(async (event) => {
     console.error('Cart clear error:', error)
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 })

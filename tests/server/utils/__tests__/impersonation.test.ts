@@ -4,8 +4,8 @@
  * Tests for JWT token generation, verification, and session validation
  */
 
-import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { generateImpersonationToken, verifyImpersonationToken, validateImpersonationSession } from '../impersonation'
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
+import { generateImpersonationToken, verifyImpersonationToken } from '../impersonation'
 import jwt from 'jsonwebtoken'
 
 describe('Impersonation Utilities', () => {
@@ -29,7 +29,7 @@ describe('Impersonation Utilities', () => {
         adminId: 'admin-123',
         userId: 'user-456',
         logId: 1,
-        expiresIn: 1800 // 30 minutes
+        expiresIn: 1800, // 30 minutes
       }
 
       const token = await generateImpersonationToken(options)
@@ -44,11 +44,11 @@ describe('Impersonation Utilities', () => {
         adminId: 'admin-123',
         userId: 'user-456',
         logId: 1,
-        expiresIn: 1800
+        expiresIn: 1800,
       }
 
       const token = await generateImpersonationToken(options)
-      const decoded = jwt.verify(token, mockSecret) as any
+      const decoded = jwt.verify(token, mockSecret) as unknown
 
       expect(decoded.type).toBe('impersonation')
       expect(decoded.admin_id).toBe('admin-123')
@@ -63,11 +63,11 @@ describe('Impersonation Utilities', () => {
         adminId: 'admin-123',
         userId: 'user-456',
         logId: 1,
-        expiresIn: 60 // 1 minute
+        expiresIn: 60, // 1 minute
       }
 
       const token = await generateImpersonationToken(options)
-      const decoded = jwt.verify(token, mockSecret) as any
+      const decoded = jwt.verify(token, mockSecret) as unknown
 
       const now = Math.floor(Date.now() / 1000)
       expect(decoded.exp).toBeGreaterThan(now)
@@ -81,7 +81,7 @@ describe('Impersonation Utilities', () => {
         adminId: 'admin-123',
         userId: 'user-456',
         logId: 1,
-        expiresIn: 1800
+        expiresIn: 1800,
       }
 
       await expect(generateImpersonationToken(options)).rejects.toThrow()
@@ -94,7 +94,7 @@ describe('Impersonation Utilities', () => {
         adminId: 'admin-123',
         userId: 'user-456',
         logId: 1,
-        expiresIn: 1800
+        expiresIn: 1800,
       }
 
       const token = await generateImpersonationToken(options)
@@ -111,7 +111,7 @@ describe('Impersonation Utilities', () => {
         adminId: 'admin-123',
         userId: 'user-456',
         logId: 1,
-        expiresIn: -1 // Already expired
+        expiresIn: -1, // Already expired
       }
 
       const token = await generateImpersonationToken(options)
@@ -126,7 +126,7 @@ describe('Impersonation Utilities', () => {
       const fakeToken = jwt.sign(
         { type: 'impersonation', admin_id: 'admin', user_id: 'user', log_id: 1 },
         'wrong-secret',
-        { expiresIn: 1800 }
+        { expiresIn: 1800 },
       )
 
       await expect(verifyImpersonationToken(fakeToken)).rejects.toThrow()
@@ -139,8 +139,8 @@ describe('Impersonation Utilities', () => {
         {
           expiresIn: 1800,
           issuer: 'moldovadirect-admin',
-          audience: 'moldovadirect-impersonation'
-        }
+          audience: 'moldovadirect-impersonation',
+        },
       )
 
       await expect(verifyImpersonationToken(badToken)).rejects.toThrow('Invalid token type')
@@ -157,8 +157,8 @@ describe('Impersonation Utilities', () => {
         {
           expiresIn: 1800,
           issuer: 'wrong-issuer',
-          audience: 'moldovadirect-impersonation'
-        }
+          audience: 'moldovadirect-impersonation',
+        },
       )
 
       await expect(verifyImpersonationToken(badToken)).rejects.toThrow()
@@ -171,8 +171,8 @@ describe('Impersonation Utilities', () => {
         {
           expiresIn: 1800,
           issuer: 'moldovadirect-admin',
-          audience: 'wrong-audience'
-        }
+          audience: 'wrong-audience',
+        },
       )
 
       await expect(verifyImpersonationToken(badToken)).rejects.toThrow()

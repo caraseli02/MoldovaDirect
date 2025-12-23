@@ -15,7 +15,10 @@
           class="inline-flex items-center justify-center rounded-full p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
           :aria-label="ariaLabel"
         >
-          <commonIcon :name="icon" class="h-4 w-4" />
+          <commonIcon
+            :name="icon"
+            class="h-4 w-4"
+          />
         </button>
       </slot>
     </div>
@@ -41,7 +44,7 @@
           <div
             class="absolute h-2 w-2 rotate-45 bg-gray-900 dark:bg-gray-800"
             :style="arrowStyle"
-          />
+          ></div>
 
           <!-- Content -->
           <div class="relative z-10">
@@ -69,7 +72,7 @@ const props = withDefaults(defineProps<Props>(), {
   icon: 'lucide:info',
   ariaLabel: 'More information',
   placement: 'top',
-  delay: 200
+  delay: 200,
 })
 
 const triggerRef = ref<HTMLElement>()
@@ -82,18 +85,21 @@ let touchTimeout: ReturnType<typeof setTimeout> | null = null
 
 const tooltipStyle = computed(() => ({
   top: `${tooltipPosition.value.top}px`,
-  left: `${tooltipPosition.value.left}px`
+  left: `${tooltipPosition.value.left}px`,
 }))
 
 const arrowStyle = computed(() => {
   const placement = props.placement
   if (placement === 'top') {
     return { bottom: '-4px', left: '50%', transform: 'translateX(-50%)' }
-  } else if (placement === 'bottom') {
+  }
+  else if (placement === 'bottom') {
     return { top: '-4px', left: '50%', transform: 'translateX(-50%)' }
-  } else if (placement === 'left') {
+  }
+  else if (placement === 'left') {
     return { right: '-4px', top: '50%', transform: 'translateY(-50%)' }
-  } else {
+  }
+  else {
     return { left: '-4px', top: '50%', transform: 'translateY(-50%)' }
   }
 })
@@ -168,7 +174,8 @@ const toggleTouch = () => {
   // Handle touch devices - toggle visibility
   if (isVisible.value) {
     hide()
-  } else {
+  }
+  else {
     show()
     // Auto-hide after 3 seconds on touch
     if (touchTimeout) clearTimeout(touchTimeout)

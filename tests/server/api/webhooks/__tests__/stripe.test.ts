@@ -12,7 +12,7 @@
  * - Error cases and edge cases
  */
 
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import type Stripe from 'stripe'
 
 // Mock Stripe SDK
@@ -39,8 +39,8 @@ vi.mock('#imports', () => ({
   })),
   readRawBody: vi.fn(),
   getHeader: vi.fn(),
-  createError: vi.fn((error) => error),
-  defineEventHandler: vi.fn((handler) => handler),
+  createError: vi.fn(error => error),
+  defineEventHandler: vi.fn(handler => handler),
 }))
 
 vi.mock('#supabase/server', () => ({
@@ -48,36 +48,24 @@ vi.mock('#supabase/server', () => ({
 }))
 
 describe('POST /api/webhooks/stripe', () => {
-  let eventHandler: any
-  let mockEvent: any
-
   beforeEach(async () => {
     vi.clearAllMocks()
 
     // Reset mock implementations
     mockSupabaseServiceRole.from = vi.fn()
 
-    // Mock H3 event
-    mockEvent = {
-      headers: new Map([['stripe-signature', 'sig_test_123']]),
-    }
-
     // Import the handler
     // Note: This is a simplified test setup. In a real environment,
     // you'd need to properly test the Nuxt API handler
-  })
-
-  afterEach(() => {
-    vi.clearAllMocks()
   })
 
   describe('Signature Verification', () => {
     it('should reject requests without stripe-signature header', async () => {
       const { readRawBody, getHeader, createError } = await import('#imports')
 
-      // @ts-ignore
+      // @ts-expect-error - Mock method
       readRawBody.mockResolvedValue('{"type":"payment_intent.succeeded"}')
-      // @ts-ignore
+      // @ts-expect-error - Mock method
       getHeader.mockReturnValue(undefined)
 
       const error = createError({
@@ -92,9 +80,9 @@ describe('POST /api/webhooks/stripe', () => {
     it('should reject requests without body', async () => {
       const { readRawBody, getHeader, createError } = await import('#imports')
 
-      // @ts-ignore
+      // @ts-expect-error - Mock method
       readRawBody.mockResolvedValue(null)
-      // @ts-ignore
+      // @ts-expect-error - Mock method
       getHeader.mockReturnValue('sig_test_123')
 
       const error = createError({
@@ -115,9 +103,9 @@ describe('POST /api/webhooks/stripe', () => {
         data: { object: {} },
       })
 
-      // @ts-ignore
+      // @ts-expect-error - Mock method
       readRawBody.mockResolvedValue(body)
-      // @ts-ignore
+      // @ts-expect-error - Mock method
       getHeader.mockReturnValue('invalid_signature')
 
       mockConstructEvent.mockImplementation(() => {
@@ -136,9 +124,9 @@ describe('POST /api/webhooks/stripe', () => {
         data: { object: {} },
       })
 
-      // @ts-ignore
+      // @ts-expect-error - Mock method
       readRawBody.mockResolvedValue(body)
-      // @ts-ignore
+      // @ts-expect-error - Mock method
       getHeader.mockReturnValue('valid_signature')
 
       const mockEvent: Stripe.Event = {
@@ -167,7 +155,7 @@ describe('POST /api/webhooks/stripe', () => {
 
   describe('payment_intent.succeeded Event', () => {
     it('should update order status to paid when payment succeeds', async () => {
-      const paymentIntent: Partial<Stripe.PaymentIntent> = {
+      const _paymentIntent: Partial<Stripe.PaymentIntent> = {
         id: 'pi_test_123',
         amount_received: 10000,
         currency: 'eur',
@@ -246,13 +234,13 @@ describe('POST /api/webhooks/stripe', () => {
     it('should log warning on amount mismatch', async () => {
       const consoleErrorSpy = vi.spyOn(console, 'error')
 
-      const paymentIntent: Partial<Stripe.PaymentIntent> = {
+      const _paymentIntent: Partial<Stripe.PaymentIntent> = {
         id: 'pi_test_123',
         amount_received: 15000, // 150 EUR
         currency: 'eur',
       }
 
-      const mockOrder = {
+      const _mockOrder = {
         id: 1,
         order_number: 'ORD-12345',
         payment_status: 'pending',
@@ -268,7 +256,7 @@ describe('POST /api/webhooks/stripe', () => {
 
   describe('payment_intent.payment_failed Event', () => {
     it('should update order status to failed when payment fails', async () => {
-      const paymentIntent: Partial<Stripe.PaymentIntent> = {
+      const _paymentIntent: Partial<Stripe.PaymentIntent> = {
         id: 'pi_test_failed',
         status: 'requires_payment_method',
         last_payment_error: {
@@ -328,7 +316,7 @@ describe('POST /api/webhooks/stripe', () => {
 
   describe('charge.refunded Event', () => {
     it('should update order status to refunded for full refund', async () => {
-      const charge: Partial<Stripe.Charge> = {
+      const _charge: Partial<Stripe.Charge> = {
         id: 'ch_test_123',
         payment_intent: 'pi_test_123',
         amount_refunded: 10000,
@@ -362,7 +350,7 @@ describe('POST /api/webhooks/stripe', () => {
     })
 
     it('should keep order as paid for partial refund', async () => {
-      const charge: Partial<Stripe.Charge> = {
+      const _charge: Partial<Stripe.Charge> = {
         id: 'ch_test_123',
         payment_intent: 'pi_test_123',
         amount_refunded: 5000, // Partial refund
@@ -370,7 +358,7 @@ describe('POST /api/webhooks/stripe', () => {
         refunded: false, // Not fully refunded
       }
 
-      const mockOrder = {
+      const _mockOrder = {
         id: 3,
         order_number: 'ORD-11111',
         payment_status: 'paid',
@@ -384,7 +372,7 @@ describe('POST /api/webhooks/stripe', () => {
     it('should handle refund without payment_intent_id', async () => {
       const consoleErrorSpy = vi.spyOn(console, 'error')
 
-      const charge: Partial<Stripe.Charge> = {
+      const _charge: Partial<Stripe.Charge> = {
         id: 'ch_test_123',
         payment_intent: undefined, // No payment intent
         amount_refunded: 10000,
@@ -423,7 +411,7 @@ describe('POST /api/webhooks/stripe', () => {
     it('should return 500 when Stripe keys are missing', async () => {
       const { useRuntimeConfig, createError } = await import('#imports')
 
-      // @ts-ignore
+      // @ts-expect-error - Mock method
       useRuntimeConfig.mockReturnValue({
         stripeSecretKey: undefined,
         stripeWebhookSecret: undefined,
@@ -495,15 +483,15 @@ describe('POST /api/webhooks/stripe', () => {
  */
 export function generateTestWebhookPayload(
   type: string,
-  data: any
+  _data: any,
 ): Stripe.Event {
   return {
     id: `evt_test_${Date.now()}`,
     object: 'event',
     api_version: '2024-06-20',
     created: Math.floor(Date.now() / 1000),
-    type: type as any,
-    data: { object: data },
+    type: type as unknown,
+    data: { object: _data },
     livemode: false,
     pending_webhooks: 0,
     request: { id: null, idempotency_key: null },
@@ -515,7 +503,7 @@ export function generateTestWebhookPayload(
  */
 export function generateTestPaymentIntent(
   status: Stripe.PaymentIntent.Status = 'succeeded',
-  amount = 10000
+  amount = 10000,
 ): Partial<Stripe.PaymentIntent> {
   return {
     id: `pi_test_${Date.now()}`,
@@ -534,7 +522,7 @@ export function generateTestPaymentIntent(
  */
 export function generateTestCharge(
   refunded = false,
-  amountRefunded = 0
+  amountRefunded = 0,
 ): Partial<Stripe.Charge> {
   return {
     id: `ch_test_${Date.now()}`,

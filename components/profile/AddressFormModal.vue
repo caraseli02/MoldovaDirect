@@ -17,224 +17,293 @@
           <Button
             variant="ghost"
             size="icon"
-            @click="$emit('close')"
             class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            @click="$emit('close')"
           >
-            <commonIcon name="lucide:x" class="h-6 w-6" />
+            <commonIcon
+              name="lucide:x"
+              class="h-6 w-6"
+            />
           </Button>
         </div>
 
         <!-- Scrollable form content -->
         <div class="overflow-y-auto flex-1 px-6 py-4">
-          <form @submit.prevent="handleSubmit" class="space-y-4" id="addressForm">
-          <!-- Address Type -->
-          <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              {{ $t('profile.addressType.label') }} *
-            </label>
-            <div class="flex space-x-4">
-              <label class="flex items-center">
-                <input
-                  v-model="form.type"
-                  type="radio"
-                  value="shipping"
-                  class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300"
+          <form
+            id="addressForm"
+            class="space-y-4"
+            @submit.prevent="handleSubmit"
+          >
+            <!-- Address Type -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                {{ $t('profile.addressType.label') }} *
+              </label>
+              <div class="flex space-x-4">
+                <label class="flex items-center">
+                  <input
+                    v-model="form.type"
+                    type="radio"
+                    value="shipping"
+                    class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300"
+                  />
+                  <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                    {{ $t('profile.addressType.shipping') }}
+                  </span>
+                </label>
+                <label class="flex items-center">
+                  <input
+                    v-model="form.type"
+                    type="radio"
+                    value="billing"
+                    class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300"
+                  />
+                  <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                    {{ $t('profile.addressType.billing') }}
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <!-- First Name and Last Name -->
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label
+                  for="firstName"
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                 >
-                <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                  {{ $t('profile.addressType.shipping') }}
-                </span>
-              </label>
-              <label class="flex items-center">
+                  {{ $t('profile.firstName') }} *
+                </label>
                 <input
-                  v-model="form.type"
-                  type="radio"
-                  value="billing"
-                  class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300"
+                  id="firstName"
+                  v-model="form.firstName"
+                  type="text"
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
+                  :class="{ 'border-red-500': errors.firstName }"
+                  :placeholder="$t('profile.firstNamePlaceholder')"
+                />
+                <p
+                  v-if="errors.firstName"
+                  class="mt-1 text-sm text-red-600 dark:text-red-400"
                 >
-                <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                  {{ $t('profile.addressType.billing') }}
-                </span>
-              </label>
-            </div>
-          </div>
+                  {{ errors.firstName }}
+                </p>
+              </div>
 
-          <!-- First Name and Last Name -->
-          <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label
+                  for="lastName"
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                >
+                  {{ $t('profile.lastName') }} *
+                </label>
+                <input
+                  id="lastName"
+                  v-model="form.lastName"
+                  type="text"
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
+                  :class="{ 'border-red-500': errors.lastName }"
+                  :placeholder="$t('profile.lastNamePlaceholder')"
+                />
+                <p
+                  v-if="errors.lastName"
+                  class="mt-1 text-sm text-red-600 dark:text-red-400"
+                >
+                  {{ errors.lastName }}
+                </p>
+              </div>
+            </div>
+
+            <!-- Company (optional) -->
             <div>
-              <label for="firstName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                {{ $t('profile.firstName') }} *
+              <label
+                for="company"
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+              >
+                {{ $t('profile.company') }}
               </label>
               <input
-                id="firstName"
-                v-model="form.firstName"
+                id="company"
+                v-model="form.company"
+                type="text"
+                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
+                :placeholder="$t('profile.companyPlaceholder')"
+              />
+            </div>
+
+            <!-- Street Address -->
+            <div>
+              <label
+                for="street"
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+              >
+                {{ $t('profile.street') }} *
+              </label>
+              <input
+                id="street"
+                v-model="form.street"
                 type="text"
                 required
                 class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
-                :class="{ 'border-red-500': errors.firstName }"
-                :placeholder="$t('profile.firstNamePlaceholder')"
+                :class="{ 'border-red-500': errors.street }"
+                :placeholder="$t('profile.streetPlaceholder')"
+              />
+              <p
+                v-if="errors.street"
+                class="mt-1 text-sm text-red-600 dark:text-red-400"
               >
-              <p v-if="errors.firstName" class="mt-1 text-sm text-red-600 dark:text-red-400">
-                {{ errors.firstName }}
+                {{ errors.street }}
               </p>
             </div>
 
+            <!-- City and Postal Code -->
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label
+                  for="city"
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                >
+                  {{ $t('profile.city') }} *
+                </label>
+                <input
+                  id="city"
+                  v-model="form.city"
+                  type="text"
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
+                  :class="{ 'border-red-500': errors.city }"
+                  :placeholder="$t('profile.cityPlaceholder')"
+                />
+                <p
+                  v-if="errors.city"
+                  class="mt-1 text-sm text-red-600 dark:text-red-400"
+                >
+                  {{ errors.city }}
+                </p>
+              </div>
+
+              <div>
+                <label
+                  for="postalCode"
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                >
+                  {{ $t('profile.postalCode') }} *
+                </label>
+                <input
+                  id="postalCode"
+                  v-model="form.postalCode"
+                  type="text"
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
+                  :class="{ 'border-red-500': errors.postalCode }"
+                  :placeholder="$t('profile.postalCodePlaceholder')"
+                />
+                <p
+                  v-if="errors.postalCode"
+                  class="mt-1 text-sm text-red-600 dark:text-red-400"
+                >
+                  {{ errors.postalCode }}
+                </p>
+              </div>
+            </div>
+
+            <!-- Province and Country -->
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label
+                  for="province"
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                >
+                  {{ $t('profile.province') }}
+                </label>
+                <input
+                  id="province"
+                  v-model="form.province"
+                  type="text"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
+                  :placeholder="$t('profile.provincePlaceholder')"
+                />
+              </div>
+
+              <div>
+                <label
+                  for="country"
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                >
+                  {{ $t('profile.country') }} *
+                </label>
+                <select
+                  id="country"
+                  v-model="form.country"
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
+                >
+                  <option value="ES">
+                    España
+                  </option>
+                  <option value="FR">
+                    France
+                  </option>
+                  <option value="IT">
+                    Italia
+                  </option>
+                  <option value="PT">
+                    Portugal
+                  </option>
+                  <option value="DE">
+                    Deutschland
+                  </option>
+                  <option value="MD">
+                    Moldova
+                  </option>
+                  <option value="RO">
+                    România
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Phone -->
             <div>
-              <label for="lastName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                {{ $t('profile.lastName') }} *
+              <label
+                for="phone"
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+              >
+                {{ $t('profile.phone') }}
               </label>
               <input
-                id="lastName"
-                v-model="form.lastName"
-                type="text"
-                required
+                id="phone"
+                v-model="form.phone"
+                type="tel"
                 class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
-                :class="{ 'border-red-500': errors.lastName }"
-                :placeholder="$t('profile.lastNamePlaceholder')"
+                :class="{ 'border-red-500': errors.phone }"
+                :placeholder="$t('profile.phonePlaceholder')"
+              />
+              <p
+                v-if="errors.phone"
+                class="mt-1 text-sm text-red-600 dark:text-red-400"
               >
-              <p v-if="errors.lastName" class="mt-1 text-sm text-red-600 dark:text-red-400">
-                {{ errors.lastName }}
+                {{ errors.phone }}
               </p>
             </div>
-          </div>
 
-          <!-- Company (optional) -->
-          <div>
-            <label for="company" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              {{ $t('profile.company') }}
-            </label>
-            <input
-              id="company"
-              v-model="form.company"
-              type="text"
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
-              :placeholder="$t('profile.companyPlaceholder')"
-            >
-          </div>
-
-          <!-- Street Address -->
-          <div>
-            <label for="street" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              {{ $t('profile.street') }} *
-            </label>
-            <input
-              id="street"
-              v-model="form.street"
-              type="text"
-              required
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
-              :class="{ 'border-red-500': errors.street }"
-              :placeholder="$t('profile.streetPlaceholder')"
-            >
-            <p v-if="errors.street" class="mt-1 text-sm text-red-600 dark:text-red-400">
-              {{ errors.street }}
-            </p>
-          </div>
-
-          <!-- City and Postal Code -->
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label for="city" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                {{ $t('profile.city') }} *
-              </label>
+            <!-- Default Address -->
+            <div class="flex items-center">
               <input
-                id="city"
-                v-model="form.city"
-                type="text"
-                required
-                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
-                :class="{ 'border-red-500': errors.city }"
-                :placeholder="$t('profile.cityPlaceholder')"
+                id="isDefault"
+                v-model="form.isDefault"
+                type="checkbox"
+                class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+              />
+              <label
+                for="isDefault"
+                class="ml-2 text-sm text-gray-700 dark:text-gray-300"
               >
-              <p v-if="errors.city" class="mt-1 text-sm text-red-600 dark:text-red-400">
-                {{ errors.city }}
-              </p>
-            </div>
-
-            <div>
-              <label for="postalCode" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                {{ $t('profile.postalCode') }} *
+                {{ $t('profile.setAsDefault') }}
               </label>
-              <input
-                id="postalCode"
-                v-model="form.postalCode"
-                type="text"
-                required
-                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
-                :class="{ 'border-red-500': errors.postalCode }"
-                :placeholder="$t('profile.postalCodePlaceholder')"
-              >
-              <p v-if="errors.postalCode" class="mt-1 text-sm text-red-600 dark:text-red-400">
-                {{ errors.postalCode }}
-              </p>
             </div>
-          </div>
-
-          <!-- Province and Country -->
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label for="province" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                {{ $t('profile.province') }}
-              </label>
-              <input
-                id="province"
-                v-model="form.province"
-                type="text"
-                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
-                :placeholder="$t('profile.provincePlaceholder')"
-              >
-            </div>
-
-            <div>
-              <label for="country" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                {{ $t('profile.country') }} *
-              </label>
-              <select
-                id="country"
-                v-model="form.country"
-                required
-                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
-              >
-                <option value="ES">España</option>
-                <option value="FR">France</option>
-                <option value="IT">Italia</option>
-                <option value="PT">Portugal</option>
-                <option value="DE">Deutschland</option>
-                <option value="MD">Moldova</option>
-                <option value="RO">România</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Phone -->
-          <div>
-            <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              {{ $t('profile.phone') }}
-            </label>
-            <input
-              id="phone"
-              v-model="form.phone"
-              type="tel"
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
-              :class="{ 'border-red-500': errors.phone }"
-              :placeholder="$t('profile.phonePlaceholder')"
-            >
-            <p v-if="errors.phone" class="mt-1 text-sm text-red-600 dark:text-red-400">
-              {{ errors.phone }}
-            </p>
-          </div>
-
-          <!-- Default Address -->
-          <div class="flex items-center">
-            <input
-              id="isDefault"
-              v-model="form.isDefault"
-              type="checkbox"
-              class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-            >
-            <label for="isDefault" class="ml-2 text-sm text-gray-700 dark:text-gray-300">
-              {{ $t('profile.setAsDefault') }}
-            </label>
-          </div>
           </form>
         </div>
 
@@ -244,8 +313,8 @@
             type="button"
             variant="outline"
             size="sm"
-            @click="$emit('close')"
             class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors"
+            @click="$emit('close')"
           >
             {{ $t('common.cancel') }}
           </Button>
@@ -255,8 +324,14 @@
             :disabled="isLoading"
             class="px-6 py-2 bg-primary-600 text-white text-sm font-medium rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
-            <span v-if="isLoading" class="flex items-center">
-              <commonIcon name="lucide:loader-2" class="animate-spin h-4 w-4 mr-2" />
+            <span
+              v-if="isLoading"
+              class="flex items-center"
+            >
+              <commonIcon
+                name="lucide:loader-2"
+                class="animate-spin h-4 w-4 mr-2"
+              />
               {{ $t('common.loading') }}
             </span>
             <span v-else>
@@ -273,7 +348,7 @@
 import { Button } from '@/components/ui/button'
 
 interface Address {
-  id?: number  // SERIAL id from database
+  id?: number // SERIAL id from database
   type: 'shipping' | 'billing'
   firstName: string
   lastName: string
@@ -323,7 +398,7 @@ const form = reactive<Address>({
   province: '',
   country: 'ES',
   phone: user.value?.user_metadata?.phone || '',
-  isDefault: false
+  isDefault: false,
 })
 
 // Form validation
@@ -333,7 +408,7 @@ const errors = reactive({
   street: '',
   city: '',
   postalCode: '',
-  phone: ''
+  phone: '',
 })
 
 // Initialize form with address data if editing
@@ -384,7 +459,7 @@ const validateForm = (): boolean => {
   }
 
   // Validate phone if provided
-  if (form.phone && !/^[\+]?[0-9\s\-\(\)]{9,}$/.test(form.phone)) {
+  if (form.phone && !/^[+]?[0-9\s\-()]{9,}$/.test(form.phone)) {
     errors.phone = t('profile.validation.phoneInvalid')
     return false
   }
@@ -400,9 +475,11 @@ const handleSubmit = async () => {
 
   try {
     emit('save', { ...form })
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Error saving address:', error)
-  } finally {
+  }
+  finally {
     isLoading.value = false
   }
 }

@@ -3,13 +3,12 @@
  * Utilities for sending support ticket-related emails
  */
 
-import type { EmailType } from '~/types/email'
 import { sendEmail } from './email'
 import {
   generateCustomerConfirmationTemplate,
   generateStaffNotificationTemplate,
   getSupportTicketSubject,
-  type SupportTicketData
+  type SupportTicketData,
 } from './emailTemplates/supportTicketTemplates'
 import { createEmailLog, recordEmailAttempt } from './emailLogging'
 import { resolveSupabaseClient, type ResolvedSupabaseClient } from './supabaseAdminClient'
@@ -27,7 +26,7 @@ export async function sendSupportTicketCustomerEmail(
   data: SupportTicketData,
   ticketId: number,
   orderId?: number,
-  options: EmailSendOptions = {}
+  options: EmailSendOptions = {},
 ): Promise<EmailSendResult> {
   const supabase = resolveSupabaseClient(options.supabaseClient)
 
@@ -47,15 +46,14 @@ export async function sendSupportTicketCustomerEmail(
     'support_ticket_customer',
     userId,
     userId ? undefined : data.customerEmail,
-    supabase
+    supabase,
   )
 
   if (!shouldSend) {
-    console.log(`⏭️ Skipping support ticket customer email for ticket ${data.ticketNumber} - user opted out`)
     return {
       success: true,
       emailLogId: -1,
-      error: 'User opted out of email notifications'
+      error: 'User opted out of email notifications',
     }
   }
 
@@ -72,8 +70,8 @@ export async function sendSupportTicketCustomerEmail(
       ticketId,
       ticketNumber: data.ticketNumber,
       customerName: data.customerName,
-      templateVersion: '1.0'
-    }
+      templateVersion: '1.0',
+    },
   }, supabase)
 
   try {
@@ -84,7 +82,7 @@ export async function sendSupportTicketCustomerEmail(
     const result = await sendEmail({
       to: data.customerEmail,
       subject,
-      html
+      html,
     })
 
     // Record successful attempt
@@ -93,17 +91,16 @@ export async function sendSupportTicketCustomerEmail(
       true,
       result.id,
       undefined,
-      supabase
+      supabase,
     )
-
-    console.log(`✅ Support ticket customer email sent for ticket ${data.ticketNumber}`)
 
     return {
       success: true,
       emailLogId: emailLog.id,
-      externalId: result.id
+      externalId: result.id,
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     console.error(`❌ Failed to send support ticket customer email for ticket ${data.ticketNumber}:`, error)
 
     // Record failed attempt
@@ -112,13 +109,13 @@ export async function sendSupportTicketCustomerEmail(
       false,
       undefined,
       error.message,
-      supabase
+      supabase,
     )
 
     return {
       success: false,
       emailLogId: emailLog.id,
-      error: error.message
+      error: error.message,
     }
   }
 }
@@ -131,7 +128,7 @@ export async function sendSupportTicketStaffEmail(
   ticketId: number,
   staffEmail: string,
   orderId?: number,
-  options: EmailSendOptions = {}
+  options: EmailSendOptions = {},
 ): Promise<EmailSendResult> {
   const supabase = resolveSupabaseClient(options.supabaseClient)
 
@@ -149,8 +146,8 @@ export async function sendSupportTicketStaffEmail(
       ticketNumber: data.ticketNumber,
       customerName: data.customerName,
       customerEmail: data.customerEmail,
-      templateVersion: '1.0'
-    }
+      templateVersion: '1.0',
+    },
   }, supabase)
 
   try {
@@ -161,7 +158,7 @@ export async function sendSupportTicketStaffEmail(
     const result = await sendEmail({
       to: staffEmail,
       subject,
-      html
+      html,
     })
 
     // Record successful attempt
@@ -170,17 +167,16 @@ export async function sendSupportTicketStaffEmail(
       true,
       result.id,
       undefined,
-      supabase
+      supabase,
     )
-
-    console.log(`✅ Support ticket staff email sent for ticket ${data.ticketNumber}`)
 
     return {
       success: true,
       emailLogId: emailLog.id,
-      externalId: result.id
+      externalId: result.id,
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     console.error(`❌ Failed to send support ticket staff email for ticket ${data.ticketNumber}:`, error)
 
     // Record failed attempt
@@ -189,13 +185,13 @@ export async function sendSupportTicketStaffEmail(
       false,
       undefined,
       error.message,
-      supabase
+      supabase,
     )
 
     return {
       success: false,
       emailLogId: emailLog.id,
-      error: error.message
+      error: error.message,
     }
   }
 }

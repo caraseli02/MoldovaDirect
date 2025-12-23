@@ -20,18 +20,18 @@ export default defineEventHandler(async (event) => {
     if (!authHeader) {
       throw createError({
         statusCode: 401,
-        statusMessage: 'Authentication required'
+        statusMessage: 'Authentication required',
       })
     }
 
     const { data: { user }, error: authError } = await supabase.auth.getUser(
-      authHeader.replace('Bearer ', '')
+      authHeader.replace('Bearer ', ''),
     )
 
     if (authError || !user) {
       throw createError({
         statusCode: 401,
-        statusMessage: 'Invalid authentication'
+        statusMessage: 'Invalid authentication',
       })
     }
 
@@ -42,7 +42,7 @@ export default defineEventHandler(async (event) => {
     if (!body.type || !body.providerId) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Type and provider ID are required'
+        statusMessage: 'Type and provider ID are required',
       })
     }
 
@@ -55,7 +55,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Create payment method
-    const { data: paymentMethod, error: createError } = await supabase
+    const { data: paymentMethod, error: dbError } = await supabase
       .from('payment_methods')
       .insert({
         user_id: user.id,
@@ -65,15 +65,22 @@ export default defineEventHandler(async (event) => {
         brand: body.brand || null,
         expires_month: body.expiresMonth || null,
         expires_year: body.expiresYear || null,
-        is_default: body.isDefault || false
+        is_default: body.isDefault || false,
       })
       .select()
       .single()
 
-    if (createError) {
+    if (dbError) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to save payment method'
+        statusMessage: 'Failed to save payment method',
+      })
+    }
+
+    if (!paymentMethod) {
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Payment method created but no data returned',
       })
     }
 
@@ -86,10 +93,11 @@ export default defineEventHandler(async (event) => {
         brand: paymentMethod.brand,
         expiresMonth: paymentMethod.expires_month,
         expiresYear: paymentMethod.expires_year,
-        isDefault: paymentMethod.is_default
-      }
+        isDefault: paymentMethod.is_default,
+      },
     }
-  } catch (error: any) {
+  }
+  catch (error: any) {
     if (error.statusCode) {
       throw error
     }
@@ -97,7 +105,7 @@ export default defineEventHandler(async (event) => {
     console.error('Payment method creation error:', error)
     throw createError({
       statusCode: 500,
-      statusMessage: 'Internal server error'
+      statusMessage: 'Internal server error',
     })
   }
 })

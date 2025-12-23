@@ -15,7 +15,10 @@
             }"
             class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-medium ring-1 ring-white/20 backdrop-blur-sm"
           >
-            <commonIcon name="lucide:star" class="h-5 w-5" />
+            <commonIcon
+              name="lucide:star"
+              class="h-5 w-5"
+            />
             <span>{{ t('home.socialProof.badge') }}</span>
           </div>
 
@@ -61,8 +64,16 @@
               }"
               class="rounded-xl bg-white/10 p-6 backdrop-blur-sm ring-1 ring-white/10"
             >
-              <p class="text-3xl font-bold" aria-live="polite" aria-atomic="true">{{ stat.displayValue }}</p>
-              <p class="mt-2 text-sm text-primary-100">{{ stat.label }}</p>
+              <p
+                class="text-3xl font-bold"
+                aria-live="polite"
+                aria-atomic="true"
+              >
+                {{ stat.displayValue }}
+              </p>
+              <p class="mt-2 text-sm text-primary-100">
+                {{ stat.label }}
+              </p>
             </div>
           </div>
 
@@ -82,7 +93,10 @@
               :key="logo"
               class="flex items-center gap-3 rounded-xl bg-white/5 px-5 py-4 text-sm font-semibold backdrop-blur-sm transition hover:bg-white/10"
             >
-              <commonIcon name="lucide:sparkles" class="h-5 w-5 text-primary-100" />
+              <commonIcon
+                name="lucide:sparkles"
+                class="h-5 w-5 text-primary-100"
+              />
               <span>{{ logo }}</span>
             </div>
           </div>
@@ -105,23 +119,35 @@
               <article class="rounded-3xl bg-white/95 p-8 text-left text-gray-900 shadow-xl shadow-primary-950/20">
                 <!-- Star rating at top -->
                 <div class="mb-4 flex items-center justify-between">
-                  <CustomStarRating :rating="5" size="sm" />
+                  <CustomStarRating
+                    :rating="5"
+                    size="sm"
+                  />
 
                   <!-- Verified badge -->
                   <span class="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-700">
-                    <commonIcon name="lucide:check-circle" class="h-3 w-3" />
+                    <commonIcon
+                      name="lucide:check-circle"
+                      class="h-3 w-3"
+                    />
                     {{ t('home.socialProof.verified') }}
                   </span>
                 </div>
 
                 <!-- Quote -->
-                <p class="text-lg font-medium leading-relaxed">"{{ testimonial.quote }}"</p>
+                <p class="text-lg font-medium leading-relaxed">
+                  "{{ testimonial.quote }}"
+                </p>
 
                 <!-- Customer info -->
                 <div class="mt-6 flex items-center justify-between border-t border-gray-200 pt-4 text-sm">
                   <div>
-                    <p class="font-semibold text-primary-600">{{ testimonial.name }}</p>
-                    <p class="text-gray-500">{{ testimonial.location }}</p>
+                    <p class="font-semibold text-primary-600">
+                      {{ testimonial.name }}
+                    </p>
+                    <p class="text-gray-500">
+                      {{ testimonial.location }}
+                    </p>
                   </div>
                 </div>
               </article>
@@ -145,23 +171,35 @@
           >
             <!-- Star rating at top -->
             <div class="mb-4 flex items-center justify-between">
-              <CustomStarRating :rating="5" size="sm" />
+              <CustomStarRating
+                :rating="5"
+                size="sm"
+              />
 
               <!-- Verified badge -->
               <span class="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-700">
-                <commonIcon name="lucide:check-circle" class="h-3 w-3" />
+                <commonIcon
+                  name="lucide:check-circle"
+                  class="h-3 w-3"
+                />
                 {{ t('home.socialProof.verified') }}
               </span>
             </div>
 
             <!-- Quote -->
-            <p class="text-lg font-medium leading-relaxed">"{{ testimonial.quote }}"</p>
+            <p class="text-lg font-medium leading-relaxed">
+              "{{ testimonial.quote }}"
+            </p>
 
             <!-- Customer info -->
             <div class="mt-6 flex items-center justify-between border-t border-gray-200 pt-4 text-sm">
               <div>
-                <p class="font-semibold text-primary-600">{{ testimonial.name }}</p>
-                <p class="text-gray-500">{{ testimonial.location }}</p>
+                <p class="font-semibold text-primary-600">
+                  {{ testimonial.name }}
+                </p>
+                <p class="text-gray-500">
+                  {{ testimonial.location }}
+                </p>
               </div>
             </div>
           </article>
@@ -190,76 +228,86 @@ const { t } = useI18n()
 // Add Review schema markup for SEO
 const reviewSchema = computed(() => {
   return props.testimonials.map(testimonial => ({
-    "@context": "https://schema.org",
-    "@type": "Review",
-    "itemReviewed": {
-      "@type": "Organization",
-      "name": "Moldova Direct"
+    '@context': 'https://schema.org',
+    '@type': 'Review',
+    'itemReviewed': {
+      '@type': 'Organization',
+      'name': 'Moldova Direct',
     },
-    "reviewRating": {
-      "@type": "Rating",
-      "ratingValue": "5",
-      "bestRating": "5"
+    'reviewRating': {
+      '@type': 'Rating',
+      'ratingValue': '5',
+      'bestRating': '5',
     },
-    "author": {
-      "@type": "Person",
-      "name": testimonial.name
+    'author': {
+      '@type': 'Person',
+      'name': testimonial.name,
     },
-    "reviewBody": testimonial.quote
+    'reviewBody': testimonial.quote,
   }))
 })
 
 // Inject schema markup into page head
-useHead({
+useHead(() => ({
   script: reviewSchema.value.map(schema => ({
     type: 'application/ld+json',
-    children: JSON.stringify(schema)
-  }))
-})
+    children: JSON.stringify(schema),
+  })),
+}))
 
 // Parse numeric values from highlights and create animated counters
+// Create counters during setup (not in computed) to avoid lifecycle hook issues
+const counters = props.highlights.map((stat) => {
+  const numericMatch = stat.value.match(/(\d+(?:\.\d+)?)(k|K)?/)
+
+  if (numericMatch && numericMatch[1]) {
+    let number = parseFloat(numericMatch[1])
+
+    // Convert k to thousands
+    if (numericMatch[2]?.toLowerCase() === 'k') {
+      number = number * 1000
+    }
+
+    return useCountUp(number, {
+      duration: 2000,
+      useEasing: true,
+    })
+  }
+
+  return null
+})
+
 const animatedStats = computed(() => {
-  return props.highlights.map((stat) => {
-    // Extract number from value (e.g., "2k+" -> 2000, "4.9/5" -> 4.9)
-    const numericMatch = stat.value.match(/(\d+(?:\.\d+)?)(k|K)?/)
+  return props.highlights.map((stat, index) => {
+    const counter = counters[index]
 
-    if (numericMatch) {
-      let number = parseFloat(numericMatch[1])
-
-      // Convert k to thousands
-      if (numericMatch[2]?.toLowerCase() === 'k') {
-        number = number * 1000
-      }
-
-      // Create counter for whole numbers
-      const counter = useCountUp(number, {
-        duration: 2000,
-        useEasing: true
-      })
-
+    if (counter) {
       return {
         label: stat.label,
         displayValue: computed(() => {
           // Format based on original value
           if (stat.value.includes('k') || stat.value.includes('K')) {
             return `${(counter.current.value / 1000).toFixed(1)}k+`
-          } else if (stat.value.includes('/')) {
+          }
+          else if (stat.value.includes('/')) {
             // For ratings like "4.9/5"
             return `${counter.current.value.toFixed(1)}/5`
-          } else if (stat.value.includes('h')) {
+          }
+          else if (stat.value.includes('h')) {
             // For time like "48h"
             return `${counter.current.value}h`
-          } else {
+          }
+          else {
             return counter.formatted.value
           }
-        })
+        }),
       }
     }
 
     // Fallback for non-numeric values
     return {
       label: stat.label,
-      displayValue: computed(() => stat.value)
+      displayValue: computed(() => stat.value),
     }
   })
 })

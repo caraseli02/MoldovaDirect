@@ -1,10 +1,10 @@
 /**
  * Admin Order Realtime Composable
- * 
+ *
  * Requirements addressed:
  * - 3.4: Real-time order status updates
  * - 4.5: Prevent conflicts through order locking mechanisms
- * 
+ *
  * Provides real-time updates for admin order management using Supabase Realtime
  */
 
@@ -27,7 +27,7 @@ interface UseAdminOrderRealtimeOptions {
 export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}) => {
   const supabase = useSupabaseClient()
   const toast = useToast()
-  
+
   let channel: RealtimeChannel | null = null
   const isSubscribed = ref(false)
   const lastUpdate = ref<Date | null>(null)
@@ -48,11 +48,11 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
           event: 'UPDATE',
           schema: 'public',
           table: 'orders',
-          filter: `id=eq.${orderId}`
+          filter: `id=eq.${orderId}`,
         },
         (payload) => {
-          handleOrderUpdate(payload.new as any)
-        }
+          handleOrderUpdate(payload.new as unknown as Record<string, any>)
+        },
       )
       .on(
         'postgres_changes',
@@ -60,17 +60,17 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
           event: 'INSERT',
           schema: 'public',
           table: 'order_status_history',
-          filter: `order_id=eq.${orderId}`
+          filter: `order_id=eq.${orderId}`,
         },
         (payload) => {
-          handleStatusChange(payload.new as any)
-        }
+          handleStatusChange(payload.new as unknown as Record<string, any>)
+        },
       )
       .subscribe((status) => {
         if (status === 'SUBSCRIBED') {
           isSubscribed.value = true
-          console.log(`Subscribed to order ${orderId} updates`)
-        } else if (status === 'CHANNEL_ERROR') {
+        }
+        else if (status === 'CHANNEL_ERROR') {
           console.error(`Error subscribing to order ${orderId}`)
           toast.error('Failed to connect to real-time updates')
         }
@@ -92,28 +92,28 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
         {
           event: 'UPDATE',
           schema: 'public',
-          table: 'orders'
+          table: 'orders',
         },
         (payload) => {
-          handleOrderUpdate(payload.new as any)
-        }
+          handleOrderUpdate(payload.new as unknown as Record<string, any>)
+        },
       )
       .on(
         'postgres_changes',
         {
           event: 'INSERT',
           schema: 'public',
-          table: 'orders'
+          table: 'orders',
         },
         (payload) => {
-          handleNewOrder(payload.new as any)
-        }
+          handleNewOrder(payload.new as unknown as Record<string, any>)
+        },
       )
       .subscribe((status) => {
         if (status === 'SUBSCRIBED') {
           isSubscribed.value = true
-          console.log('Subscribed to all order updates')
-        } else if (status === 'CHANNEL_ERROR') {
+        }
+        else if (status === 'CHANNEL_ERROR') {
           console.error('Error subscribing to orders')
           toast.error('Failed to connect to real-time updates')
         }
@@ -123,22 +123,22 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
   /**
    * Handle order update event
    */
-  const handleOrderUpdate = (order: any) => {
+  const handleOrderUpdate = (order: Record<string, any>) => {
     lastUpdate.value = new Date()
 
     const update: OrderUpdate = {
-      id: order.id,
-      orderNumber: order.order_number,
-      status: order.status,
-      updatedAt: order.updated_at,
-      updatedBy: order.updated_by
+      id: order.id as number,
+      orderNumber: order.order_number as string,
+      status: order.status as string,
+      updatedAt: order.updated_at as string,
+      updatedBy: order.updated_by as string | undefined,
     }
 
     // Check for conflicts (order was updated by another admin)
-    const timeSinceUpdate = Date.now() - new Date(order.updated_at).getTime()
+    const timeSinceUpdate = Date.now() - new Date(order.updated_at as string).getTime()
     if (timeSinceUpdate < 5000 && options.onConflict) {
       // Order was updated very recently, might be a conflict
-      options.onConflict(order.id, 'This order was just updated by another admin')
+      options.onConflict(order.id as number, 'This order was just updated by another admin')
     }
 
     // Call callback
@@ -147,19 +147,19 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
     }
 
     // Show toast notification
-    toast.info(`Order #${order.order_number} was updated`)
+    toast.info(`Order #${order.order_number as string} was updated`)
   }
 
   /**
    * Handle status change event
    */
-  const handleStatusChange = (statusHistory: any) => {
+  const handleStatusChange = (statusHistory: Record<string, any>) => {
     const update: OrderUpdate = {
-      id: statusHistory.order_id,
+      id: statusHistory.order_id as number,
       orderNumber: '', // Will be filled by callback
-      status: statusHistory.to_status,
-      updatedAt: statusHistory.changed_at,
-      updatedBy: statusHistory.changed_by
+      status: statusHistory.to_status as string,
+      updatedAt: statusHistory.changed_at as string,
+      updatedBy: statusHistory.changed_by as string | undefined,
     }
 
     // Call callback
@@ -168,26 +168,26 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
     }
 
     // Show toast notification
-    const statusLabel = getStatusLabel(statusHistory.to_status)
+    const statusLabel = getStatusLabel(statusHistory.to_status as string)
     toast.success(`Order status changed to ${statusLabel}`)
   }
 
   /**
    * Handle new order event
    */
-  const handleNewOrder = (order: any) => {
+  const handleNewOrder = (order: Record<string, any>) => {
     lastUpdate.value = new Date()
 
     // Show toast notification
-    toast.info(`New order #${order.order_number} received`)
+    toast.info(`New order #${order.order_number as string} received`)
 
     // Call callback
     if (options.onOrderUpdated) {
       options.onOrderUpdated({
-        id: order.id,
-        orderNumber: order.order_number,
-        status: order.status,
-        updatedAt: order.created_at
+        id: order.id as number,
+        orderNumber: order.order_number as string,
+        status: order.status as string,
+        updatedAt: order.created_at as string,
       })
     }
   }
@@ -200,17 +200,7 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
       supabase.removeChannel(channel)
       channel = null
       isSubscribed.value = false
-      console.log('Unsubscribed from order updates')
     }
-  }
-
-  /**
-   * Check if order was recently updated (potential conflict)
-   */
-  const checkForConflict = (orderId: number, lastKnownUpdate: string): boolean => {
-    // This would typically fetch the latest order data and compare timestamps
-    // For now, we'll rely on the realtime updates to detect conflicts
-    return false
   }
 
   /**
@@ -222,7 +212,7 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
       processing: 'Processing',
       shipped: 'Shipped',
       delivered: 'Delivered',
-      cancelled: 'Cancelled'
+      cancelled: 'Cancelled',
     }
     return labels[status] || status
   }
@@ -236,8 +226,7 @@ export const useAdminOrderRealtime = (options: UseAdminOrderRealtimeOptions = {}
     subscribeToOrder,
     subscribeToAllOrders,
     unsubscribe,
-    checkForConflict,
     isSubscribed: readonly(isSubscribed),
-    lastUpdate: readonly(lastUpdate)
+    lastUpdate: readonly(lastUpdate),
   }
 }

@@ -1,6 +1,6 @@
 /**
  * Order Detail composable for individual order management
- * 
+ *
  * Provides functionality for fetching order details, tracking, and actions
  * Requirements addressed:
  * - 2.1: Navigate to detailed order view
@@ -11,7 +11,7 @@
  * - 6.3: Implement return initiation
  */
 
-import type { Order, OrderStatus } from '~/types'
+import type { Order, OrderStatus, OrderItem } from '~/types'
 
 export interface TrackingEvent {
   id: number
@@ -32,11 +32,16 @@ export interface TrackingInfo {
   has_tracking: boolean
 }
 
+export interface OrderWithTracking extends Order {
+  tracking_events?: TrackingEvent[]
+  items?: OrderItem[]
+  carrier?: string
+  estimated_delivery?: string
+}
+
 export interface OrderDetailResponse {
   success: boolean
-  data: Order & {
-    tracking_events?: TrackingEvent[]
-  }
+  data: OrderWithTracking
 }
 
 export interface TrackingResponse {
@@ -46,18 +51,17 @@ export interface TrackingResponse {
 
 export interface UseOrderDetailReturn {
   // State
-  order: Ref<Order | null>
+  order: Ref<OrderWithTracking | null>
   loading: Ref<boolean>
   error: Ref<string | null>
   tracking: Ref<TrackingInfo | null>
-  
+
   // Actions
   fetchOrder: (id: number) => Promise<void>
   refreshTracking: () => Promise<void>
   reorder: () => Promise<void>
   initiateReturn: () => Promise<void>
-  contactSupport: () => void
-  
+
   // Computed
   canReorder: ComputedRef<boolean>
   canReturn: ComputedRef<boolean>
@@ -69,17 +73,17 @@ export const useOrderDetail = (): UseOrderDetailReturn => {
   const router = useRouter()
   const { addItem } = useCart()
   const toast = useToast()
-  
+
   // State
-  const order = ref<Order | null>(null)
+  const order = ref<OrderWithTracking | null>(null)
   const loading = ref(false)
   const error = ref<string | null>(null)
   const tracking = ref<TrackingInfo | null>(null)
-  
+
   // Cache for order details
-  const orderCache = new Map<number, { data: Order, timestamp: number }>()
+  const orderCache = new Map<number, { data: OrderWithTracking, timestamp: number }>()
   const CACHE_DURATION = 2 * 60 * 1000 // 2 minutes
-  
+
   /**
    * Fetch order details with caching
    */
@@ -87,7 +91,7 @@ export const useOrderDetail = (): UseOrderDetailReturn => {
     try {
       loading.value = true
       error.value = null
-      
+
       // Check cache first
       const cached = orderCache.get(id)
       if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
@@ -97,58 +101,63 @@ export const useOrderDetail = (): UseOrderDetailReturn => {
         loading.value = false
         return
       }
-      
+
       // Get auth token
       const { data: { session } } = await supabaseClient.auth.getSession()
       if (!session) {
         throw new Error('Authentication required')
       }
-      
+
       // Fetch order from API
       const response = await $fetch<OrderDetailResponse>(`/api/orders/${id}`, {
         headers: {
-          Authorization: `Bearer ${session.access_token}`
-        }
+          Authorization: `Bearer ${session.access_token}`,
+        },
       })
-      
+
       if (response.success) {
         order.value = response.data
-        
+
         // Cache the order
         orderCache.set(id, {
           data: response.data,
-          timestamp: Date.now()
+          timestamp: Date.now(),
         })
-        
+
         // Extract tracking events if available
         if (response.data.tracking_events) {
           tracking.value = {
-            tracking_number: response.data.tracking_number,
+            tracking_number: response.data.trackingNumber,
             carrier: response.data.carrier,
             estimated_delivery: response.data.estimated_delivery,
             current_status: response.data.status,
             events: response.data.tracking_events,
-            has_tracking: !!response.data.tracking_number
+            has_tracking: !!response.data.trackingNumber,
           }
         }
-      } else {
+      }
+      else {
         throw new Error('Failed to fetch order')
       }
-    } catch (err: any) {
+    }
+    catch (err: any) {
       console.error('Error fetching order:', err)
-      
-      if (err.statusCode === 404) {
+
+      const error_obj = err as { statusCode?: number, message?: string }
+      if (error_obj.statusCode === 404) {
         error.value = 'Order not found'
-      } else {
-        error.value = err.message || 'Failed to load order details'
       }
-      
+      else {
+        error.value = error_obj.message || 'Failed to load order details'
+      }
+
       order.value = null
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
-  
+
   /**
    * Fetch tracking information separately
    */
@@ -156,159 +165,140 @@ export const useOrderDetail = (): UseOrderDetailReturn => {
     try {
       const { data: { session } } = await supabaseClient.auth.getSession()
       if (!session) return
-      
+
       const response = await $fetch<TrackingResponse>(`/api/orders/${id}/tracking`, {
         headers: {
-          Authorization: `Bearer ${session.access_token}`
-        }
+          Authorization: `Bearer ${session.access_token}`,
+        },
       })
-      
+
       if (response.success) {
         tracking.value = response.data
       }
-    } catch (err) {
+    }
+    catch (err: any) {
       console.error('Error fetching tracking:', err)
       // Don't set error state for tracking failures
     }
   }
-  
+
   /**
    * Refresh tracking information
    */
   const refreshTracking = async () => {
     if (!order.value) return
-    
+
     await fetchTrackingInfo(order.value.id)
   }
-  
+
   /**
    * Reorder - add all items from order to cart
    */
   const reorder = async () => {
     if (!order.value || !canReorder.value) {
-      toast.add({
-        title: 'Cannot reorder',
-        description: 'This order cannot be reordered at this time',
-        color: 'red'
-      })
+      toast.error(
+        'Cannot reorder',
+        'This order cannot be reordered at this time',
+      )
       return
     }
-    
+
     try {
       loading.value = true
-      
+
       // Add each item to cart
       for (const item of order.value.items || []) {
-        const product = item.productSnapshot
+        const product = item.productSnapshot as any
         if (product) {
           await addItem(product, item.quantity)
         }
       }
-      
-      toast.add({
-        title: 'Items added to cart',
-        description: `${order.value.items?.length || 0} items from order ${order.value.orderNumber} added to your cart`,
-        color: 'green'
-      })
-      
+
+      toast.success(
+        'Items added to cart',
+        `${order.value.items?.length || 0} items from order ${order.value.orderNumber} added to your cart`,
+      )
+
       // Navigate to cart
       router.push('/cart')
-    } catch (err: any) {
+    }
+    catch (err: any) {
       console.error('Error reordering:', err)
-      toast.add({
-        title: 'Reorder failed',
-        description: err.message || 'Failed to add items to cart',
-        color: 'red'
-      })
-    } finally {
+      toast.error(
+        'Reorder failed',
+        err.message || 'Failed to add items to cart',
+      )
+    }
+    finally {
       loading.value = false
     }
   }
-  
+
   /**
    * Initiate return process
    */
   const initiateReturn = async () => {
     if (!order.value || !canReturn.value) {
-      toast.add({
-        title: 'Cannot return',
-        description: 'This order is not eligible for return',
-        color: 'red'
-      })
+      toast.error(
+        'Cannot return',
+        'This order is not eligible for return',
+      )
       return
     }
-    
+
     // Navigate to return page (to be implemented)
     // For now, show a message
-    toast.add({
-      title: 'Return process',
-      description: 'Return functionality will be available soon. Please contact support.',
-      color: 'blue'
-    })
+    toast.info(
+      'Return process',
+      'Return functionality will be available soon. Please contact support.',
+    )
   }
-  
-  /**
-   * Contact support about this order
-   */
-  const contactSupport = () => {
-    if (!order.value) return
-    
-    // Navigate to contact page with order context
-    router.push({
-      path: '/contact',
-      query: {
-        order: order.value.orderNumber,
-        subject: `Order ${order.value.orderNumber}`
-      }
-    })
-  }
-  
+
   // Computed properties
   const canReorder = computed(() => {
     if (!order.value) return false
-    
+
     // Can reorder if order is delivered or cancelled (but not pending/processing)
     const reorderableStatuses: OrderStatus[] = ['delivered', 'cancelled']
     return reorderableStatuses.includes(order.value.status)
   })
-  
+
   const canReturn = computed(() => {
     if (!order.value) return false
-    
+
     // Can return if order is delivered and within return window (e.g., 30 days)
     if (order.value.status !== 'delivered' || !order.value.deliveredAt) {
       return false
     }
-    
+
     const deliveredDate = new Date(order.value.deliveredAt)
     const now = new Date()
     const daysSinceDelivery = Math.floor((now.getTime() - deliveredDate.getTime()) / (1000 * 60 * 60 * 24))
-    
+
     // Allow returns within 30 days
     return daysSinceDelivery <= 30
   })
-  
+
   const isDelivered = computed(() => {
     return order.value?.status === 'delivered'
   })
-  
+
   return {
     // State
-    order: readonly(order),
-    loading: readonly(loading),
-    error: readonly(error),
-    tracking: readonly(tracking),
-    
+    order: readonly(order) as Ref<OrderWithTracking | null>,
+    loading: readonly(loading) as Ref<boolean>,
+    error: readonly(error) as Ref<string | null>,
+    tracking: readonly(tracking) as Ref<TrackingInfo | null>,
+
     // Actions
     fetchOrder,
     refreshTracking,
     reorder,
     initiateReturn,
-    contactSupport,
-    
+
     // Computed
     canReorder,
     canReturn,
-    isDelivered
+    isDelivered,
   }
 }

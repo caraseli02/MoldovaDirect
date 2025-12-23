@@ -37,14 +37,6 @@ export interface FilterChip {
   attributeValue?: string
 }
 
-interface CategoryNode {
-  id: number
-  slug: string
-  name: Record<string, string>
-  productCount?: number
-  children?: CategoryNode[]
-}
-
 interface AvailableCategory {
   id: number
   name: Record<string, string>
@@ -62,7 +54,7 @@ export function useProductFilters(categoriesTree?: Ref<CategoryWithChildren[]>) 
    * Parse and validate price parameter from URL query
    * Prevents DoS attacks with invalid numbers (NaN, Infinity, negative, too large)
    */
-  const parsePrice = (value: string | string[] | undefined): number | undefined => {
+  const parsePrice = (value: string | string[] | null | undefined): number | undefined => {
     if (!value || Array.isArray(value)) return undefined
 
     const num = Number(value)
@@ -79,19 +71,19 @@ export function useProductFilters(categoriesTree?: Ref<CategoryWithChildren[]>) 
 
   // Initialize filters from URL query parameters
   const filters = ref<FilterState>({
-    category: route.query.category as string | undefined,
-    priceMin: parsePrice(route.query.priceMin),
-    priceMax: parsePrice(route.query.priceMax),
+    category: typeof route.query.category === 'string' ? route.query.category : undefined,
+    priceMin: parsePrice(typeof route.query.priceMin === 'string' ? route.query.priceMin : undefined),
+    priceMax: parsePrice(typeof route.query.priceMax === 'string' ? route.query.priceMax : undefined),
     inStock: route.query.inStock === 'true',
     featured: route.query.featured === 'true',
-    attributes: parseAttributesFromQuery(route.query.attributes as string | undefined)
+    attributes: parseAttributesFromQuery(typeof route.query.attributes === 'string' ? route.query.attributes : undefined),
   })
 
   // Track if filters panel is open (for mobile)
   const isFilterPanelOpen = ref(false)
 
   // Price range state for filter UI
-  const priceRange = ref<{ min: number; max: number }>({ min: 0, max: 200 })
+  const priceRange = ref<{ min: number, max: number }>({ min: 0, max: 200 })
 
   /**
    * Count active filters
@@ -152,7 +144,7 @@ export function useProductFilters(categoriesTree?: Ref<CategoryWithChildren[]>) 
 
         // Validate all array elements are strings with max length
         const validStrings = value.filter(v =>
-          typeof v === 'string' && v.length > 0 && v.length <= 100
+          typeof v === 'string' && v.length > 0 && v.length <= 100,
         )
 
         if (validStrings.length > 0) {
@@ -161,7 +153,8 @@ export function useProductFilters(categoriesTree?: Ref<CategoryWithChildren[]>) 
       }
 
       return Object.keys(validated).length > 0 ? validated : undefined
-    } catch (error) {
+    }
+    catch (error: any) {
       console.warn('Failed to parse attributes query:', error)
       return undefined
     }
@@ -186,7 +179,7 @@ export function useProductFilters(categoriesTree?: Ref<CategoryWithChildren[]>) 
     const map = new Map<string | number, string>()
 
     const buildMap = (nodes: CategoryWithChildren[]): void => {
-      nodes.forEach(node => {
+      nodes.forEach((node) => {
         // Get localized name with fallback
         const name = node.name?.[locale.value] || node.name?.es || Object.values(node.name || {})[0] || ''
 
@@ -224,9 +217,9 @@ export function useProductFilters(categoriesTree?: Ref<CategoryWithChildren[]>) 
       chips.push({
         id: 'category',
         label: t('products.chips.category', {
-          value: getCategoryName(filters.value.category) || t('products.filters.unknownCategory')
+          value: getCategoryName(filters.value.category) || t('products.filters.unknownCategory'),
         }),
-        type: 'category'
+        type: 'category',
       })
     }
 
@@ -234,7 +227,7 @@ export function useProductFilters(categoriesTree?: Ref<CategoryWithChildren[]>) 
       chips.push({
         id: 'priceMin',
         label: t('products.chips.priceMin', { value: filters.value.priceMin }),
-        type: 'priceMin'
+        type: 'priceMin',
       })
     }
 
@@ -242,7 +235,7 @@ export function useProductFilters(categoriesTree?: Ref<CategoryWithChildren[]>) 
       chips.push({
         id: 'priceMax',
         label: t('products.chips.priceMax', { value: filters.value.priceMax }),
-        type: 'priceMax'
+        type: 'priceMax',
       })
     }
 
@@ -250,7 +243,7 @@ export function useProductFilters(categoriesTree?: Ref<CategoryWithChildren[]>) 
       chips.push({
         id: 'inStock',
         label: t('products.chips.inStock'),
-        type: 'inStock'
+        type: 'inStock',
       })
     }
 
@@ -258,19 +251,19 @@ export function useProductFilters(categoriesTree?: Ref<CategoryWithChildren[]>) 
       chips.push({
         id: 'featured',
         label: t('products.chips.featured'),
-        type: 'featured'
+        type: 'featured',
       })
     }
 
     if (filters.value.attributes) {
       Object.entries(filters.value.attributes).forEach(([key, values]) => {
-        values.forEach(value => {
+        values.forEach((value) => {
           chips.push({
             id: `attr-${key}-${value}`,
             label: t('products.chips.attribute', { label: key, value }),
             type: 'attribute',
             attributeKey: key,
-            attributeValue: value
+            attributeValue: value,
           })
         })
       })
@@ -284,19 +277,19 @@ export function useProductFilters(categoriesTree?: Ref<CategoryWithChildren[]>) 
    */
   const availableFilters = computed(() => {
     const convertCategories = (cats: CategoryWithChildren[]): AvailableCategory[] => {
-      return cats.map(cat => ({
+      return cats.map((cat): AvailableCategory => ({
         id: cat.id,
-        name: cat.name,
+        name: cat.name as Record<string, string>,
         slug: cat.slug,
         productCount: cat.productCount || 0,
-        children: cat.children ? convertCategories(cat.children) : []
+        children: cat.children ? convertCategories(cat.children) : [],
       }))
     }
 
     return {
       categories: categoriesTree ? convertCategories(categoriesTree.value || []) : [],
       priceRange: priceRange.value,
-      attributes: []
+      attributes: [],
     }
   })
 
@@ -313,7 +306,7 @@ export function useProductFilters(categoriesTree?: Ref<CategoryWithChildren[]>) 
   const updateFilters = (updates: Partial<FilterState>) => {
     filters.value = {
       ...filters.value,
-      ...updates
+      ...updates,
     }
   }
 
@@ -327,7 +320,7 @@ export function useProductFilters(categoriesTree?: Ref<CategoryWithChildren[]>) 
       priceMax: undefined,
       inStock: false,
       featured: false,
-      attributes: undefined
+      attributes: undefined,
     }
 
     // Update URL
@@ -340,9 +333,11 @@ export function useProductFilters(categoriesTree?: Ref<CategoryWithChildren[]>) 
   const clearFilter = (key: keyof FilterState) => {
     if (key === 'attributes') {
       filters.value.attributes = undefined
-    } else if (key === 'inStock' || key === 'featured') {
+    }
+    else if (key === 'inStock' || key === 'featured') {
       filters.value[key] = false
-    } else {
+    }
+    else {
       filters.value[key] = undefined
     }
 
@@ -363,11 +358,14 @@ export function useProductFilters(categoriesTree?: Ref<CategoryWithChildren[]>) 
       // Safe null check: verify attribute still exists before checking length
       const updatedValues = filters.value.attributes[attributeKey]
       if (updatedValues && updatedValues.length === 0) {
-        delete filters.value.attributes[attributeKey]
+        const { [attributeKey]: _removed, ...rest } = filters.value.attributes
+        filters.value.attributes = rest
       }
-    } else {
+    }
+    else {
       // Remove entire attribute
-      delete filters.value.attributes[attributeKey]
+      const { [attributeKey]: _removed, ...rest } = filters.value.attributes
+      filters.value.attributes = rest
     }
 
     // Clean up if no attributes left
@@ -385,7 +383,7 @@ export function useProductFilters(categoriesTree?: Ref<CategoryWithChildren[]>) 
     const query: Record<string, string> = {}
 
     if (filters.value.category) {
-      query.category = filters.value.category
+      query.category = String(filters.value.category)
     }
     if (filters.value.priceMin !== undefined) {
       query.priceMin = String(filters.value.priceMin)
@@ -407,8 +405,8 @@ export function useProductFilters(categoriesTree?: Ref<CategoryWithChildren[]>) 
     }
 
     // Preserve search query if it exists
-    if (route.query.q) {
-      query.q = route.query.q as string
+    if (route.query.q && typeof route.query.q === 'string') {
+      query.q = route.query.q
     }
 
     router.push({ query })
@@ -467,17 +465,22 @@ export function useProductFilters(categoriesTree?: Ref<CategoryWithChildren[]>) 
         delete nextFilters.featured
         break
       case 'attribute':
-        if (chip.attributeKey && chip.attributeValue && nextFilters.attributes?.[chip.attributeKey]) {
-          const filtered = nextFilters.attributes[chip.attributeKey].filter(
-            value => value !== chip.attributeValue
-          )
-          if (filtered.length) {
-            nextFilters.attributes![chip.attributeKey] = filtered
-          } else {
-            delete nextFilters.attributes![chip.attributeKey]
-          }
-          if (Object.keys(nextFilters.attributes || {}).length === 0) {
-            delete nextFilters.attributes
+        if (chip.attributeKey && chip.attributeValue && nextFilters.attributes) {
+          const currentValues = nextFilters.attributes[chip.attributeKey]
+          if (currentValues) {
+            const filtered = currentValues.filter(
+              value => value !== chip.attributeValue,
+            )
+            if (filtered.length) {
+              nextFilters.attributes[chip.attributeKey] = filtered
+            }
+            else {
+              const { [chip.attributeKey]: _removed, ...rest } = nextFilters.attributes
+              nextFilters.attributes = rest
+            }
+            if (Object.keys(nextFilters.attributes || {}).length === 0) {
+              delete nextFilters.attributes
+            }
           }
         }
         break
@@ -501,16 +504,17 @@ export function useProductFilters(categoriesTree?: Ref<CategoryWithChildren[]>) 
       if (filters.value.inStock) params.append('inStock', 'true')
       if (filters.value.featured) params.append('featured', 'true')
 
-      const res = await $fetch<{ success: boolean; min: number; max: number }>(
-        `/api/products/price-range?${params.toString()}`
+      const res = await $fetch<{ success: boolean, min: number, max: number }>(
+        `/api/products/price-range?${params.toString()}`,
       )
 
       if (res.success) {
         priceRange.value = { min: res.min ?? 0, max: res.max ?? 200 }
       }
-    } catch (e) {
+    }
+    catch {
       // Keep existing range on error
-      console.error('Failed to load price range', e)
+      console.error('Failed to load price range')
     }
   }
 
@@ -525,18 +529,18 @@ export function useProductFilters(categoriesTree?: Ref<CategoryWithChildren[]>) 
       priceMax: route.query.priceMax,
       inStock: route.query.inStock,
       featured: route.query.featured,
-      attributes: route.query.attributes
+      attributes: route.query.attributes,
     }),
     (newQuery) => {
       filters.value = {
-        category: newQuery.category as string | undefined,
-        priceMin: parsePrice(newQuery.priceMin),
-        priceMax: parsePrice(newQuery.priceMax),
+        category: typeof newQuery.category === 'string' ? newQuery.category : undefined,
+        priceMin: parsePrice(typeof newQuery.priceMin === 'string' ? newQuery.priceMin : undefined),
+        priceMax: parsePrice(typeof newQuery.priceMax === 'string' ? newQuery.priceMax : undefined),
         inStock: newQuery.inStock === 'true',
         featured: newQuery.featured === 'true',
-        attributes: parseAttributesFromQuery(newQuery.attributes as string | undefined)
+        attributes: parseAttributesFromQuery(typeof newQuery.attributes === 'string' ? newQuery.attributes : undefined),
       }
-    }
+    },
   )
 
   return {
@@ -565,6 +569,6 @@ export function useProductFilters(categoriesTree?: Ref<CategoryWithChildren[]>) 
     toggleFilterPanel,
     openFilterPanel,
     closeFilterPanel,
-    refreshPriceRange
+    refreshPriceRange,
   }
 }

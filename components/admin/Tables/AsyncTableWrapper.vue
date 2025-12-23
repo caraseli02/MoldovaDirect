@@ -4,19 +4,7 @@
   This component provides lazy loading for TanStack Vue Table with loading states.
   The table library (~15KB gzipped) is only loaded when this component is rendered.
 
-  Usage:
-  ```vue
-  <AdminTablesAsyncTableWrapper
-    :data="products"
-    :columns="columns"
-    :loading="isLoading"
-    @row-click="handleRowClick"
-  >
-    <template #default="{ table }">
-      <!-- Custom table rendering using table instance -->
-    </template>
-  </AdminTablesAsyncTableWrapper>
-  ```
+  Usage example in parent component
 -->
 
 <template>
@@ -30,7 +18,11 @@
         <div class="h-6 bg-gray-200 dark:bg-gray-700 rounded w-1/4 animate-pulse"></div>
       </div>
       <div class="p-6 space-y-4">
-        <div v-for="n in skeletonRows" :key="n" class="flex space-x-4 animate-pulse">
+        <div
+          v-for="n in skeletonRows"
+          :key="n"
+          class="flex space-x-4 animate-pulse"
+        >
           <div class="w-4 h-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
           <div class="flex-1 space-y-2">
             <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
@@ -46,17 +38,27 @@
       class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-red-200 dark:border-red-700 p-6"
     >
       <div class="flex items-center gap-3 text-red-600 dark:text-red-400">
-        <commonIcon name="lucide:alert-triangle" class="w-6 h-6" />
+        <commonIcon
+          name="lucide:alert-triangle"
+          class="w-6 h-6"
+        />
         <div>
-          <h3 class="font-semibold">Failed to load table</h3>
-          <p class="text-sm">{{ moduleError.message }}</p>
+          <h3 class="font-semibold">
+            Failed to load table
+          </h3>
+          <p class="text-sm">
+            {{ moduleError.message }}
+          </p>
         </div>
       </div>
     </div>
 
     <!-- Table Content -->
     <div v-else-if="tableInstance">
-      <slot :table="tableInstance" :module="tableModule">
+      <slot
+        :table="tableInstance"
+        :module="tableModule"
+      >
         <!-- Default table rendering -->
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
           <div class="overflow-x-auto">
@@ -69,12 +71,12 @@
                   <TableHead
                     v-for="header in headerGroup.headers"
                     :key="header.id"
-                    :class="header.column.columnDef.meta?.headerClass"
+                    :class="(header.column.columnDef.meta as Record<string, any>)?.headerClass"
                   >
                     <component
                       :is="tableModule?.flexRender(
                         header.column.columnDef.header,
-                        header.getContext()
+                        header.getContext(),
                       )"
                     />
                   </TableHead>
@@ -91,19 +93,22 @@
                     <TableCell
                       v-for="cell in row.getVisibleCells()"
                       :key="cell.id"
-                      :class="cell.column.columnDef.meta?.cellClass"
+                      :class="(cell.column.columnDef.meta as Record<string, any>)?.cellClass"
                     >
                       <component
                         :is="tableModule?.flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext()
+                          cell.getContext(),
                         )"
                       />
                     </TableCell>
                   </TableRow>
                 </template>
                 <TableRow v-else>
-                  <TableCell :colspan="columns.length" class="h-24 text-center">
+                  <TableCell
+                    :colspan="columns.length"
+                    class="h-24 text-center"
+                  >
                     <slot name="empty">
                       <div class="text-gray-500 dark:text-gray-400">
                         {{ emptyMessage }}
@@ -133,7 +138,7 @@ interface Props {
   /**
    * Column definitions for TanStack Table
    */
-  columns: ColumnDef<TData, any>[]
+  columns: ColumnDef<TData, unknown>[]
 
   /**
    * External loading state (e.g., data fetching)
@@ -186,7 +191,7 @@ const props = withDefaults(defineProps<Props>(), {
   enableRowSelection: false,
 })
 
-const emit = defineEmits<{
+const _emit = defineEmits<{
   'row-click': [data: TData]
   'selection-change': [rows: TData[]]
 }>()
@@ -207,15 +212,15 @@ onMounted(async () => {
     const options: TableOptions<TData> = {
       data: props.data,
       columns: props.columns,
-      getCoreRowModel: module.getCoreRowModel(),
+      getCoreRowModel: module.getCoreRowModel() as any,
       ...(props.enablePagination && {
-        getPaginationRowModel: module.getPaginationRowModel(),
+        getPaginationRowModel: module.getPaginationRowModel() as any,
       }),
       ...(props.enableSorting && {
-        getSortedRowModel: module.getSortedRowModel(),
+        getSortedRowModel: module.getSortedRowModel() as any,
       }),
       ...(props.enableFiltering && {
-        getFilteredRowModel: module.getFilteredRowModel(),
+        getFilteredRowModel: module.getFilteredRowModel() as any,
       }),
       ...props.tableOptions,
     }
@@ -230,15 +235,15 @@ watch(() => props.data, (newData) => {
     const options: TableOptions<TData> = {
       data: newData,
       columns: props.columns,
-      getCoreRowModel: tableModule.value.getCoreRowModel(),
+      getCoreRowModel: tableModule.value.getCoreRowModel() as any,
       ...(props.enablePagination && {
-        getPaginationRowModel: tableModule.value.getPaginationRowModel(),
+        getPaginationRowModel: tableModule.value.getPaginationRowModel() as any,
       }),
       ...(props.enableSorting && {
-        getSortedRowModel: tableModule.value.getSortedRowModel(),
+        getSortedRowModel: tableModule.value.getSortedRowModel() as any,
       }),
       ...(props.enableFiltering && {
-        getFilteredRowModel: tableModule.value.getFilteredRowModel(),
+        getFilteredRowModel: tableModule.value.getFilteredRowModel() as any,
       }),
       ...props.tableOptions,
     }

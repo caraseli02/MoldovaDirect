@@ -23,9 +23,17 @@
           aria-controls="filter-panel"
           @click="$emit('open-filters')"
         >
-          <commonIcon name="lucide:filter" class="mr-2 h-4 w-4" aria-hidden="true" />
+          <commonIcon
+            name="lucide:filter"
+            class="mr-2 h-4 w-4"
+            aria-hidden="true"
+          />
           <span>{{ filterButtonLabel }}</span>
-          <span v-if="activeFilterCount" class="ml-1 inline-flex items-center justify-center rounded-full bg-blue-100 px-2 py-0.5 text-xs font-semibold text-blue-700 dark:bg-blue-900/40 dark:text-blue-300" aria-label="Active filters count">
+          <span
+            v-if="activeFilterCount"
+            class="ml-1 inline-flex items-center justify-center rounded-full bg-blue-100 px-2 py-0.5 text-xs font-semibold text-blue-700 dark:bg-blue-900/40 dark:text-blue-300"
+            aria-label="Active filters count"
+          >
             {{ activeFilterCount }}
           </span>
         </UiButton>
@@ -33,7 +41,10 @@
         <div class="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center">
           <!-- Search input -->
           <div class="relative flex-1">
-            <label :for="searchInputId" class="sr-only">
+            <label
+              :for="searchInputId"
+              class="sr-only"
+            >
               {{ searchLabel }}
             </label>
             <commonIcon
@@ -42,10 +53,31 @@
               class="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400"
               aria-hidden="true"
             />
-            <div v-else class="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2" role="status" :aria-label="$t('common.loading')">
-              <svg class="h-5 w-5 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            <div
+              v-else
+              class="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2"
+              role="status"
+              :aria-label="$t('common.loading')"
+            >
+              <svg
+                class="h-5 w-5 animate-spin text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                />
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                />
               </svg>
             </div>
             <input
@@ -65,7 +97,10 @@
 
           <!-- Sort dropdown -->
           <div class="relative">
-            <label :for="sortSelectId" class="sr-only">
+            <label
+              :for="sortSelectId"
+              class="sr-only"
+            >
               {{ sortLabel }}
             </label>
             <select
@@ -75,7 +110,11 @@
               class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:focus:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 sm:w-48"
               @change="$emit('update:sortBy', ($event.target as HTMLSelectElement).value)"
             >
-              <option v-for="option in sortOptions" :key="option.value" :value="option.value">
+              <option
+                v-for="option in sortOptions"
+                :key="option.value"
+                :value="option.value"
+              >
                 {{ option.label }}
               </option>
             </select>

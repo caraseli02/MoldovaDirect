@@ -1,13 +1,30 @@
 <template>
-  <section class="bg-gray-100 py-20 dark:bg-gray-900/80 md:py-28" aria-labelledby="newsletter-heading">
+  <section
+    class="bg-gray-100 py-20 dark:bg-gray-900/80 md:py-28"
+    aria-labelledby="newsletter-heading"
+  >
     <div class="container">
       <div class="grid gap-8 rounded-3xl bg-white p-10 shadow-xl dark:bg-gray-950">
         <div class="max-w-3xl">
-          <h2 id="newsletter-heading" class="text-4xl font-bold md:text-5xl lg:text-6xl tracking-tight">{{ t('home.newsletter.title') }}</h2>
-          <p class="mt-4 text-sm md:text-base text-gray-600 dark:text-gray-400">{{ t('home.newsletter.subtitle') }}</p>
+          <h2
+            id="newsletter-heading"
+            class="text-4xl font-bold md:text-5xl lg:text-6xl tracking-tight"
+          >
+            {{ t('home.newsletter.title') }}
+          </h2>
+          <p class="mt-4 text-sm md:text-base text-gray-600 dark:text-gray-400">
+            {{ t('home.newsletter.subtitle') }}
+          </p>
         </div>
-        <form class="flex flex-col gap-4 md:flex-row" aria-labelledby="newsletter-heading" @submit.prevent="submitNewsletter">
-          <label for="newsletter-email" class="sr-only">{{ t('home.newsletter.placeholder') }}</label>
+        <form
+          class="flex flex-col gap-4 md:flex-row"
+          aria-labelledby="newsletter-heading"
+          @submit.prevent="submitNewsletter"
+        >
+          <label
+            for="newsletter-email"
+            class="sr-only"
+          >{{ t('home.newsletter.placeholder') }}</label>
           <input
             id="newsletter-email"
             v-model="email"
@@ -28,20 +45,45 @@
             :aria-busy="loading"
             class="rounded-full min-h-[44px] focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
           >
-            <commonIcon v-if="!loading" name="lucide:send" class="mr-2 h-5 w-5" aria-hidden="true" />
-            <commonIcon v-else name="lucide:loader-2" class="mr-2 h-5 w-5 animate-spin" aria-hidden="true" />
+            <commonIcon
+              v-if="!loading"
+              name="lucide:send"
+              class="mr-2 h-5 w-5"
+              aria-hidden="true"
+            />
+            <commonIcon
+              v-else
+              name="lucide:loader-2"
+              class="mr-2 h-5 w-5 animate-spin"
+              aria-hidden="true"
+            />
             {{ loading ? t('common.loading') : t('home.newsletter.cta') }}
           </UiButton>
         </form>
-        <div role="status" aria-live="polite" aria-atomic="true">
-          <p v-if="submitted" id="newsletter-success" class="text-sm font-medium text-emerald-600 dark:text-emerald-400">
+        <div
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          <p
+            v-if="submitted"
+            id="newsletter-success"
+            class="text-sm font-medium text-emerald-600 dark:text-emerald-400"
+          >
             {{ t('home.newsletter.success') }}
           </p>
-          <p v-if="error" id="newsletter-error" class="text-sm font-medium text-red-600 dark:text-red-400" role="alert">
+          <p
+            v-if="error"
+            id="newsletter-error"
+            class="text-sm font-medium text-red-600 dark:text-red-400"
+            role="alert"
+          >
             {{ error }}
           </p>
         </div>
-        <p class="text-sm text-gray-500 dark:text-gray-400">{{ t('home.newsletter.disclaimer') }}</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+          {{ t('home.newsletter.disclaimer') }}
+        </p>
       </div>
     </div>
   </section>
@@ -67,8 +109,8 @@ const submitNewsletter = async () => {
       body: {
         email: email.value,
         locale: locale?.value || 'es',
-        source: 'landing_page'
-      }
+        source: 'landing_page',
+      },
     })
 
     if (apiError.value) {
@@ -85,13 +127,16 @@ const submitNewsletter = async () => {
       setTimeout(() => {
         submitted.value = false
       }, 5000)
-    } else {
+    }
+    else {
       error.value = t('home.newsletter.error')
     }
-  } catch (e) {
+  }
+  catch (e: any) {
     console.error('Newsletter submission failed:', e)
     error.value = t('home.newsletter.error')
-  } finally {
+  }
+  finally {
     loading.value = false
   }
 }

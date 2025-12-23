@@ -38,7 +38,7 @@ const PII_PATTERNS = {
   email: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/gi,
 
   // Phone numbers (various formats)
-  phone: /(\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b/g,
+  phone: /(\+?\d{1,3}[-.\s]?)?(\d{3})?[-.\s]?\d{3}[-.\s]?\d{4}\b/g,
 
   // Credit card numbers (simple pattern)
   creditCard: /\b\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b/g,
@@ -56,7 +56,7 @@ const PII_PATTERNS = {
   bearerToken: /Bearer\s+[A-Za-z0-9\-._~+/]+=*/gi,
 
   // API keys (common patterns)
-  apiKey: /["\']?(?:api[_-]?key|apikey|access[_-]?token)["\']?\s*[:=]\s*["\']?[A-Za-z0-9\-._~+/]+["\']?/gi,
+  apiKey: /["']?(?:api[_-]?key|apikey|access[_-]?token)["']?\s*[:=]\s*["']?[A-Za-z0-9\-._~+/]+["']?/gi,
 }
 
 /**
@@ -134,7 +134,7 @@ function redactString(value: string): string {
 /**
  * Recursively redact PII from objects
  */
-function redactObject(obj: any, depth: number = 0): any {
+function redactObject(obj: any, depth: number = 0): unknown {
   // Prevent infinite recursion
   if (depth > 10) {
     return '[MAX_DEPTH_REACHED]'
@@ -156,11 +156,11 @@ function redactObject(obj: any, depth: number = 0): any {
       return {
         name: obj.name,
         message: redactString(obj.message),
-        stack: '[STACK_TRACE_REDACTED]'
+        stack: '[STACK_TRACE_REDACTED]',
       }
     }
 
-    const redacted: any = {}
+    const redacted = {}
 
     for (const [key, value] of Object.entries(obj)) {
       const lowerKey = key.toLowerCase()
@@ -169,19 +169,24 @@ function redactObject(obj: any, depth: number = 0): any {
       if (SENSITIVE_FIELDS.has(key) || SENSITIVE_FIELDS.has(lowerKey)) {
         // Preserve structure but redact value
         if (typeof value === 'string') {
-          redacted[key] = '[PII_REDACTED]'
-        } else if (typeof value === 'object' && value !== null) {
-          // For address objects, show structure but redact values
-          redacted[key] = '[PII_OBJECT_REDACTED]'
-        } else {
-          redacted[key] = '[REDACTED]'
+          (redacted as Record<string, any>)[key] = '[PII_REDACTED]'
         }
-      } else if (typeof value === 'string') {
-        redacted[key] = redactString(value)
-      } else if (typeof value === 'object') {
-        redacted[key] = redactObject(value, depth + 1)
-      } else {
-        redacted[key] = value
+        else if (typeof value === 'object' && value !== null) {
+          // For address objects, show structure but redact values
+          (redacted as Record<string, any>)[key] = '[PII_OBJECT_REDACTED]'
+        }
+        else {
+          (redacted as Record<string, any>)[key] = '[REDACTED]'
+        }
+      }
+      else if (typeof value === 'string') {
+        (redacted as Record<string, any>)[key] = redactString(value)
+      }
+      else if (typeof value === 'object') {
+        (redacted as Record<string, any>)[key] = redactObject(value, depth + 1)
+      }
+      else {
+        (redacted as Record<string, any>)[key] = value
       }
     }
 
@@ -200,12 +205,13 @@ function redactObject(obj: any, depth: number = 0): any {
 /**
  * Format and redact log data
  */
-function formatLogData(data: any): any {
+function formatLogData(data: any): unknown {
   try {
     // Deep clone and redact
     const cloned = JSON.parse(JSON.stringify(data))
     return redactObject(cloned)
-  } catch (error) {
+  }
+  catch {
     // If serialization fails, return safe error message
     return { error: 'Failed to serialize log data' }
   }
@@ -235,10 +241,8 @@ function writeLog(level: LogLevel, message: string, data?: any, context?: string
 
     switch (level) {
       case 'debug':
-        console.debug(prefix, message, entry.data || '')
         break
       case 'info':
-        console.info(prefix, message, entry.data || '')
         break
       case 'warn':
         console.warn(prefix, message, entry.data || '')
@@ -247,10 +251,10 @@ function writeLog(level: LogLevel, message: string, data?: any, context?: string
         console.error(prefix, message, entry.data || '')
         break
     }
-  } else {
+  }
+  else {
     // In production, output structured JSON logs
     // These can be ingested by logging systems like CloudWatch, Datadog, etc.
-    console.log(JSON.stringify(entry))
   }
 }
 
@@ -290,6 +294,6 @@ export function createLogger(context: string) {
 /**
  * Export redaction function for testing/external use
  */
-export function redactPII(data: any): any {
+export function redactPII(data: any): unknown {
   return formatLogData(data)
 }

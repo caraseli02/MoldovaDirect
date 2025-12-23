@@ -6,8 +6,18 @@
         <!-- Logo/Brand area -->
         <div class="text-center space-y-2">
           <div class="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-primary-100 dark:bg-primary-900/30 rounded-2xl mb-4">
-            <svg class="w-10 h-10 sm:w-12 sm:h-12 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            <svg
+              class="w-10 h-10 sm:w-12 sm:h-12 text-primary-600 dark:text-primary-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+              />
             </svg>
           </div>
           <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
@@ -17,7 +27,7 @@
             {{ $t('auth.messages.verificationPending') }}
           </p>
         </div>
-      
+
         <!-- Card container -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 sm:p-8">
           <!-- Message display using new components -->
@@ -26,7 +36,10 @@
               v-if="successMessage"
               class="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20"
             >
-              <CheckCircle2 class="h-5 w-5 text-green-500 dark:text-green-400" aria-hidden="true" />
+              <CheckCircle2
+                class="h-5 w-5 text-green-500 dark:text-green-400"
+                aria-hidden="true"
+              />
               <AlertDescription class="text-sm text-green-800 dark:text-green-300">
                 {{ successMessage }}
               </AlertDescription>
@@ -36,19 +49,25 @@
                 class="absolute right-2 top-2 text-green-500 hover:text-green-600 dark:text-green-300 dark:hover:text-green-200"
                 @click="successMessage = null"
               >
-                <X class="h-4 w-4" aria-hidden="true" />
+                <X
+                  class="h-4 w-4"
+                  aria-hidden="true"
+                />
                 <span class="sr-only">{{ $t('common.dismiss') }}</span>
               </Button>
             </Alert>
           </Transition>
-          
+
           <Transition name="slide-fade">
             <Alert
               v-if="errorMessage"
               variant="destructive"
               class="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20"
             >
-              <AlertCircle class="h-5 w-5 text-red-500 dark:text-red-400" aria-hidden="true" />
+              <AlertCircle
+                class="h-5 w-5 text-red-500 dark:text-red-400"
+                aria-hidden="true"
+              />
               <div class="flex flex-col gap-2">
                 <AlertDescription class="text-sm text-red-800 dark:text-red-300">
                   {{ errorMessage }}
@@ -68,7 +87,10 @@
                 class="absolute right-2 top-2 text-red-500 hover:text-red-600 dark:text-red-300 dark:hover:text-red-200"
                 @click="errorMessage = null"
               >
-                <X class="h-4 w-4" aria-hidden="true" />
+                <X
+                  class="h-4 w-4"
+                  aria-hidden="true"
+                />
                 <span class="sr-only">{{ $t('common.dismiss') }}</span>
               </Button>
             </Alert>
@@ -76,7 +98,10 @@
 
           <div class="space-y-5">
             <!-- Email display -->
-            <div v-if="email" class="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+            <div
+              v-if="email"
+              class="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
+            >
               <p class="text-sm text-gray-600 dark:text-gray-400">
                 {{ $t('auth.messages.checkEmail') }}
               </p>
@@ -86,8 +111,14 @@
             </div>
 
             <!-- Resend verification form -->
-            <form @submit.prevent="handleResendVerification" class="space-y-4">
-              <div v-if="!email" class="space-y-2">
+            <form
+              class="space-y-4"
+              @submit.prevent="handleResendVerification"
+            >
+              <div
+                v-if="!email"
+                class="space-y-2"
+              >
                 <Label
                   for="email"
                   class="text-sm font-medium text-gray-700 dark:text-gray-300"
@@ -113,24 +144,48 @@
                 class="w-full"
                 size="lg"
               >
-                <commonIcon v-if="loading" name="lucide:loader-2" class="mr-2 h-5 w-5 animate-spin" />
-                <commonIcon v-else name="lucide:mail" class="mr-2 h-5 w-5" />
+                <commonIcon
+                  v-if="loading"
+                  name="lucide:loader-2"
+                  class="mr-2 h-5 w-5 animate-spin"
+                />
+                <commonIcon
+                  v-else
+                  name="lucide:mail"
+                  class="mr-2 h-5 w-5"
+                />
                 {{ loading ? $t('auth.messages.processing') : $t('auth.buttons.resendVerification') }}
               </UiButton>
 
               <!-- Rate limiting info -->
-              <div v-if="!canResend && cooldownTime > 0" class="text-center text-sm text-gray-500 dark:text-gray-400">
+              <div
+                v-if="!canResend && cooldownTime > 0"
+                class="text-center text-sm text-gray-500 dark:text-gray-400"
+              >
                 {{ $t('auth.messages.resendAvailable') }}
-                <br>
+                <br />
                 {{ $t('common.retry') }} {{ $t('common.in') }} {{ cooldownTime }}s
               </div>
             </form>
 
             <!-- Back to login link -->
             <div class="text-center pt-4">
-              <NuxtLink :to="localePath('/auth/login')" class="inline-flex items-center text-sm font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 transition-colors">
-                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+              <NuxtLink
+                :to="localePath('/auth/login')"
+                class="inline-flex items-center text-sm font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 transition-colors"
+              >
+                <svg
+                  class="w-4 h-4 mr-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                  />
                 </svg>
                 {{ $t('auth.buttons.backToLogin') }}
               </NuxtLink>
@@ -150,7 +205,7 @@ import { Label } from '@/components/ui/label'
 import { AlertCircle, CheckCircle2, X } from 'lucide-vue-next'
 /**
  * Email verification pending page with comprehensive multi-language support
- * 
+ *
  * Requirements addressed:
  * - 1.2: Display verification pending message after successful registration
  * - 2.5, 2.6: Provide resend verification email functionality with rate limiting feedback
@@ -161,7 +216,7 @@ import { AlertCircle, CheckCircle2, X } from 'lucide-vue-next'
 
 // Apply guest middleware - redirect authenticated users
 definePageMeta({
-  middleware: 'guest'
+  middleware: 'guest',
 })
 
 const supabase = useSupabaseClient()
@@ -170,18 +225,17 @@ const localePath = useLocalePath()
 const route = useRoute()
 
 // Use new authentication message system
-const { 
-  createErrorMessage, 
-  createSuccessMessage, 
+const {
+  createErrorMessage,
   getVerificationPendingMessage,
-  translateAuthError 
+  translateAuthError,
 } = useAuthMessages()
 
 // Use validation system
 const { validateEmail } = useAuthValidation()
 
 const form = ref({
-  email: ''
+  email: '',
 })
 
 const loading = ref(false)
@@ -202,7 +256,7 @@ const email = computed(() => {
  */
 const handleResendVerification = async () => {
   if (!canResend.value) return
-  
+
   const emailToUse = email.value || form.value.email
   if (!emailToUse) {
     errorMessage.value = translateAuthError('Email is required', 'verify')
@@ -219,14 +273,14 @@ const handleResendVerification = async () => {
   loading.value = true
   errorMessage.value = null
   successMessage.value = null
-  
+
   try {
     const { error: authError } = await supabase.auth.resend({
       type: 'signup',
       email: emailToUse,
       options: {
-        emailRedirectTo: `${window.location.origin}${localePath('/auth/verify-email')}`
-      }
+        emailRedirectTo: `${window.location.origin}${localePath('/auth/verify-email')}`,
+      },
     })
 
     if (authError) {
@@ -236,16 +290,17 @@ const handleResendVerification = async () => {
     // Success - show success message and start cooldown
     successMessage.value = t('auth.success.verificationResent')
     startCooldown()
-    
+
     // Update form email if it was provided via query
     if (!form.value.email && email.value) {
       form.value.email = email.value
     }
-    
-  } catch (err: any) {
+  }
+  catch (err: any) {
     const errorMsg = createErrorMessage(err, 'verify', true)
     errorMessage.value = errorMsg.message
-  } finally {
+  }
+  finally {
     loading.value = false
   }
 }
@@ -257,7 +312,7 @@ const handleResendVerification = async () => {
 const startCooldown = () => {
   canResend.value = false
   cooldownTime.value = 60 // 60 seconds cooldown
-  
+
   cooldownInterval.value = setInterval(() => {
     cooldownTime.value--
     if (cooldownTime.value <= 0) {
@@ -279,13 +334,12 @@ onMounted(() => {
   if (emailParam) {
     form.value.email = emailParam
   }
-  
+
   // Check if there's a message from the URL
   const messageParam = route.query.message as string
   if (messageParam === 'email-verification-required') {
-    // Show the verification pending message
-    const message = getVerificationPendingMessage(emailParam)
-    // This is an info message, so we don't set it as success or error
+    // Show the verification pending message - message is used for UI display
+    getVerificationPendingMessage(emailParam)
   }
 })
 
@@ -299,6 +353,6 @@ onUnmounted(() => {
 })
 
 useHead({
-  title: t('auth.emailVerification')
+  title: t('auth.emailVerification'),
 })
 </script>

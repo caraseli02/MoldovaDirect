@@ -7,7 +7,7 @@
  * For basic table utilities that don't require TanStack Table, use these helper functions.
  */
 
-import type { Ref } from "vue"
+import type { Ref } from 'vue'
 
 /**
  * Type definition for value updaters (from TanStack Table)
@@ -32,6 +32,6 @@ export function valueUpdater<T>(updaterOrValue: Updater<T>, ref: Ref<T>): void {
  * Check if a value is a function
  * Standalone implementation without TanStack dependency
  */
-export function isFunction(value: unknown): value is Function {
+export function isFunction(value: any): value is (...args: unknown[]) => any {
   return typeof value === 'function'
 }

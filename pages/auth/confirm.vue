@@ -3,15 +3,53 @@
     <div class="max-w-md w-full space-y-8">
       <div class="text-center">
         <div class="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-primary-100 dark:bg-primary-900/30 rounded-2xl mb-4">
-          <svg v-if="loading" class="w-10 h-10 sm:w-12 sm:h-12 text-primary-600 dark:text-primary-400 animate-spin" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+          <svg
+            v-if="loading"
+            class="w-10 h-10 sm:w-12 sm:h-12 text-primary-600 dark:text-primary-400 animate-spin"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            />
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            />
           </svg>
-          <svg v-else-if="success" class="w-10 h-10 sm:w-12 sm:h-12 text-green-500 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <svg
+            v-else-if="success"
+            class="w-10 h-10 sm:w-12 sm:h-12 text-green-500 dark:text-green-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
           </svg>
-          <svg v-else class="w-10 h-10 sm:w-12 sm:h-12 text-red-500 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <svg
+            v-else
+            class="w-10 h-10 sm:w-12 sm:h-12 text-red-500 dark:text-red-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
           </svg>
         </div>
         <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
@@ -20,14 +58,22 @@
       </div>
 
       <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-none dark:border dark:border-gray-700 p-6 sm:p-8">
-        <div v-if="loading" class="text-center space-y-4">
-          <p class="text-sm text-gray-600 dark:text-gray-400">{{ $t('auth.processing') }}</p>
+        <div
+          v-if="loading"
+          class="text-center space-y-4"
+        >
+          <p class="text-sm text-gray-600 dark:text-gray-400">
+            {{ $t('auth.processing') }}
+          </p>
           <div class="text-xs text-gray-500 dark:text-gray-500">
             {{ $t('auth.pleaseWait') }}
           </div>
         </div>
 
-        <div v-else-if="success" class="space-y-4">
+        <div
+          v-else-if="success"
+          class="space-y-4"
+        >
           <div class="rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 p-4">
             <p class="text-sm text-green-800 dark:text-green-300">
               {{ $t('auth.magicLinkSuccess') }}
@@ -38,7 +84,10 @@
           </div>
         </div>
 
-        <div v-else-if="error" class="space-y-4">
+        <div
+          v-else-if="error"
+          class="space-y-4"
+        >
           <div class="rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-4">
             <h3 class="text-sm font-medium text-red-800 dark:text-red-300">
               {{ errorTitle }}
@@ -57,8 +106,8 @@
             </NuxtLink>
             <button
               v-if="canRetry"
-              @click="retryConfirmation"
               class="flex-1 inline-flex items-center justify-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-lg text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+              @click="retryConfirmation"
             >
               {{ $t('auth.retry') }}
             </button>
@@ -74,7 +123,7 @@ import type { AuthError } from '@supabase/supabase-js'
 
 // Apply guest middleware
 definePageMeta({
-  middleware: 'guest'
+  middleware: 'guest',
 })
 
 const supabase = useSupabaseClient()
@@ -127,7 +176,7 @@ const handleAuthCallback = async () => {
     if (tokenHash && (type === 'magiclink' || type === 'email')) {
       const { data, error: verifyError } = await supabase.auth.verifyOtp({
         token_hash: tokenHash,
-        type: type as 'magiclink' | 'email'
+        type: type as 'magiclink' | 'email',
       })
 
       if (verifyError) {
@@ -153,10 +202,11 @@ const handleAuthCallback = async () => {
 
     // No valid token found
     throw new Error('Invalid or missing authentication token')
-
-  } catch (err: any) {
+  }
+  catch (err: any) {
     handleAuthError(err)
-  } finally {
+  }
+  finally {
     loading.value = false
   }
 }
@@ -225,6 +275,6 @@ onMounted(() => {
 })
 
 useHead({
-  title: t('auth.confirmingAccount')
+  title: t('auth.confirmingAccount'),
 })
 </script>

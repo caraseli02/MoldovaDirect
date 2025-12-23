@@ -1,11 +1,11 @@
 /**
  * Cart Analytics Composable
- * 
+ *
  * Requirements addressed:
  * - Track add-to-cart events with product details
  * - Monitor cart abandonment patterns
  * - Implement cart value and conversion tracking
- * 
+ *
  * Provides comprehensive analytics tracking for shopping cart interactions.
  */
 
@@ -60,7 +60,7 @@ interface CartConversionMetrics {
 
 export const useCartAnalytics = () => {
   const analytics = useAnalytics()
-  
+
   // Session tracking for cart analytics
   const cartSessionData = ref<{
     sessionId: string
@@ -75,16 +75,16 @@ export const useCartAnalytics = () => {
     lastActivity: new Date(),
     checkoutStartedAt: null,
     totalTimeInCart: 0,
-    activityCount: 0
+    activityCount: 0,
   })
 
   // Initialize cart session tracking
   const initializeCartSession = (sessionId: string) => {
     cartSessionData.value.sessionId = sessionId
     cartSessionData.value.lastActivity = new Date()
-    
+
     // Load existing session data from localStorage if available
-    if (process.client) {
+    if (import.meta.client) {
       try {
         const stored = localStorage.getItem(`cart-analytics-${sessionId}`)
         if (stored) {
@@ -94,10 +94,11 @@ export const useCartAnalytics = () => {
             ...data,
             cartCreatedAt: data.cartCreatedAt ? new Date(data.cartCreatedAt) : null,
             lastActivity: new Date(data.lastActivity),
-            checkoutStartedAt: data.checkoutStartedAt ? new Date(data.checkoutStartedAt) : null
+            checkoutStartedAt: data.checkoutStartedAt ? new Date(data.checkoutStartedAt) : null,
           }
         }
-      } catch (error) {
+      }
+      catch (error: any) {
         console.warn('Failed to load cart analytics session data:', error)
       }
     }
@@ -105,7 +106,7 @@ export const useCartAnalytics = () => {
 
   // Save cart session data
   const saveCartSession = () => {
-    if (process.client && cartSessionData.value.sessionId) {
+    if (import.meta.client && cartSessionData.value.sessionId) {
       try {
         localStorage.setItem(
           `cart-analytics-${cartSessionData.value.sessionId}`,
@@ -113,10 +114,11 @@ export const useCartAnalytics = () => {
             ...cartSessionData.value,
             cartCreatedAt: cartSessionData.value.cartCreatedAt?.toISOString(),
             lastActivity: cartSessionData.value.lastActivity.toISOString(),
-            checkoutStartedAt: cartSessionData.value.checkoutStartedAt?.toISOString()
-          })
+            checkoutStartedAt: cartSessionData.value.checkoutStartedAt?.toISOString(),
+          }),
         )
-      } catch (error) {
+      }
+      catch (error: any) {
         console.warn('Failed to save cart analytics session data:', error)
       }
     }
@@ -135,7 +137,7 @@ export const useCartAnalytics = () => {
   // Track detailed add-to-cart events
   const trackAddToCart = async (product: Product, quantity: number, cartValue: number, itemCount: number) => {
     updateActivity()
-    
+
     // Set cart creation time if this is the first item
     if (!cartSessionData.value.cartCreatedAt) {
       cartSessionData.value.cartCreatedAt = new Date()
@@ -153,13 +155,13 @@ export const useCartAnalytics = () => {
         name: product.name,
         price: product.price,
         quantity,
-        category: product.category || 'uncategorized'
+        category: product.category || 'uncategorized',
       },
       metadata: {
         timeInSession: cartSessionData.value.totalTimeInCart,
         activityCount: cartSessionData.value.activityCount,
-        isFirstItem: itemCount === quantity
-      }
+        isFirstItem: itemCount === quantity,
+      },
     }
 
     // Track with existing analytics system
@@ -171,7 +173,7 @@ export const useCartAnalytics = () => {
       itemCount,
       sessionId: cartSessionData.value.sessionId,
       timeInSession: cartSessionData.value.totalTimeInCart,
-      category: product.category
+      category: product.category,
     })
 
     // Store detailed event for cart-specific analytics
@@ -193,13 +195,13 @@ export const useCartAnalytics = () => {
         name: product.name,
         price: product.price,
         quantity,
-        category: product.category || 'uncategorized'
+        category: product.category || 'uncategorized',
       },
       metadata: {
         timeInSession: cartSessionData.value.totalTimeInCart,
         activityCount: cartSessionData.value.activityCount,
-        isCartEmpty: itemCount === 0
-      }
+        isCartEmpty: itemCount === 0,
+      },
     }
 
     await analytics.trackActivity({
@@ -214,8 +216,8 @@ export const useCartAnalytics = () => {
         cartValue,
         itemCount,
         timeInSession: cartSessionData.value.totalTimeInCart,
-        category: product.category
-      }
+        category: product.category,
+      },
     })
 
     await storeCartEvent(event)
@@ -236,14 +238,14 @@ export const useCartAnalytics = () => {
         name: product.name,
         price: product.price,
         quantity: newQuantity,
-        category: product.category || 'uncategorized'
+        category: product.category || 'uncategorized',
       },
       metadata: {
         oldQuantity,
         quantityChange: newQuantity - oldQuantity,
         timeInSession: cartSessionData.value.totalTimeInCart,
-        activityCount: cartSessionData.value.activityCount
-      }
+        activityCount: cartSessionData.value.activityCount,
+      },
     }
 
     await analytics.trackActivity({
@@ -260,8 +262,8 @@ export const useCartAnalytics = () => {
         cartValue,
         itemCount,
         timeInSession: cartSessionData.value.totalTimeInCart,
-        category: product.category
-      }
+        category: product.category,
+      },
     })
 
     await storeCartEvent(event)
@@ -279,15 +281,15 @@ export const useCartAnalytics = () => {
       itemCount,
       metadata: {
         timeInSession: cartSessionData.value.totalTimeInCart,
-        activityCount: cartSessionData.value.activityCount
-      }
+        activityCount: cartSessionData.value.activityCount,
+      },
     }
 
     await analytics.trackPageView('/cart', {
       cartValue,
       itemCount,
       sessionId: cartSessionData.value.sessionId,
-      timeInSession: cartSessionData.value.totalTimeInCart
+      timeInSession: cartSessionData.value.totalTimeInCart,
     })
 
     await storeCartEvent(event)
@@ -309,8 +311,8 @@ export const useCartAnalytics = () => {
         id: item.product.id,
         name: item.product.name,
         price: item.product.price,
-        quantity: item.quantity
-      }))
+        quantity: item.quantity,
+      })),
     }
 
     const event: CartAnalyticsEvent = {
@@ -321,11 +323,12 @@ export const useCartAnalytics = () => {
       itemCount,
       metadata: {
         timeInSession: cartSessionData.value.totalTimeInCart,
-        timeToCheckout: cartSessionData.value.cartCreatedAt ? 
-          Date.now() - cartSessionData.value.cartCreatedAt.getTime() : 0,
+        timeToCheckout: cartSessionData.value.cartCreatedAt
+          ? Date.now() - cartSessionData.value.cartCreatedAt.getTime()
+          : 0,
         activityCount: cartSessionData.value.activityCount,
-        products: conversionMetrics.products
-      }
+        products: conversionMetrics.products,
+      },
     }
 
     await analytics.trackActivity({
@@ -338,8 +341,8 @@ export const useCartAnalytics = () => {
         itemCount,
         timeInSession: cartSessionData.value.totalTimeInCart,
         timeToCheckout: event.metadata?.timeToCheckout,
-        products: conversionMetrics.products
-      }
+        products: conversionMetrics.products,
+      },
     })
 
     await storeCartEvent(event)
@@ -350,8 +353,9 @@ export const useCartAnalytics = () => {
   const trackCheckoutComplete = async (orderId: number, cartValue: number, itemCount: number, products: CartItem[]) => {
     updateActivity()
 
-    const timeToConversion = cartSessionData.value.cartCreatedAt ? 
-      Date.now() - cartSessionData.value.cartCreatedAt.getTime() : 0
+    const timeToConversion = cartSessionData.value.cartCreatedAt
+      ? Date.now() - cartSessionData.value.cartCreatedAt.getTime()
+      : 0
 
     const conversionMetrics: CartConversionMetrics = {
       sessionId: cartSessionData.value.sessionId,
@@ -364,8 +368,8 @@ export const useCartAnalytics = () => {
         id: item.product.id,
         name: item.product.name,
         price: item.product.price,
-        quantity: item.quantity
-      }))
+        quantity: item.quantity,
+      })),
     }
 
     const event: CartAnalyticsEvent = {
@@ -379,8 +383,8 @@ export const useCartAnalytics = () => {
         timeInSession: cartSessionData.value.totalTimeInCart,
         timeToConversion,
         activityCount: cartSessionData.value.activityCount,
-        products: conversionMetrics.products
-      }
+        products: conversionMetrics.products,
+      },
     }
 
     await analytics.trackOrderCreation(orderId, {
@@ -389,7 +393,7 @@ export const useCartAnalytics = () => {
       sessionId: cartSessionData.value.sessionId,
       timeInSession: cartSessionData.value.totalTimeInCart,
       timeToConversion,
-      products: conversionMetrics.products
+      products: conversionMetrics.products,
     })
 
     await storeCartEvent(event)
@@ -414,8 +418,8 @@ export const useCartAnalytics = () => {
         id: item.product.id,
         name: item.product.name,
         price: item.product.price,
-        quantity: item.quantity
-      }))
+        quantity: item.quantity,
+      })),
     }
 
     const event: CartAnalyticsEvent = {
@@ -428,8 +432,8 @@ export const useCartAnalytics = () => {
         abandonmentStage: stage,
         timeSpentInCart: cartSessionData.value.totalTimeInCart,
         activityCount: cartSessionData.value.activityCount,
-        products: abandonmentData.products
-      }
+        products: abandonmentData.products,
+      },
     }
 
     await analytics.trackActivity({
@@ -442,8 +446,8 @@ export const useCartAnalytics = () => {
         itemCount,
         abandonmentStage: stage,
         timeSpentInCart: cartSessionData.value.totalTimeInCart,
-        products: abandonmentData.products
-      }
+        products: abandonmentData.products,
+      },
     })
 
     await storeCartEvent(event)
@@ -452,16 +456,16 @@ export const useCartAnalytics = () => {
 
   // Store cart event in localStorage for offline capability
   const storeCartEvent = async (event: CartAnalyticsEvent) => {
-    if (!process.client) return
+    if (!import.meta.client) return
 
     try {
       const key = 'cart-analytics-events'
       const stored = localStorage.getItem(key)
       const events = stored ? JSON.parse(stored) : []
-      
+
       events.push({
         ...event,
-        timestamp: event.timestamp.toISOString()
+        timestamp: event.timestamp.toISOString(),
       })
 
       // Keep only last 100 events to prevent storage bloat
@@ -473,23 +477,24 @@ export const useCartAnalytics = () => {
 
       // Try to sync with server
       await syncEventsWithServer()
-    } catch (error) {
+    }
+    catch (error: any) {
       console.warn('Failed to store cart analytics event:', error)
     }
   }
 
   // Store conversion metrics
   const storeConversionMetrics = async (metrics: CartConversionMetrics) => {
-    if (!process.client) return
+    if (!import.meta.client) return
 
     try {
       const key = 'cart-conversion-metrics'
       const stored = localStorage.getItem(key)
       const conversions = stored ? JSON.parse(stored) : []
-      
+
       conversions.push({
         ...metrics,
-        cartCreatedAt: metrics.cartCreatedAt.toISOString()
+        cartCreatedAt: metrics.cartCreatedAt.toISOString(),
       })
 
       // Keep only last 50 conversions
@@ -498,23 +503,24 @@ export const useCartAnalytics = () => {
       }
 
       localStorage.setItem(key, JSON.stringify(conversions))
-    } catch (error) {
+    }
+    catch (error: any) {
       console.warn('Failed to store conversion metrics:', error)
     }
   }
 
   // Store abandonment data
   const storeAbandonmentData = async (data: CartAbandonmentData) => {
-    if (!process.client) return
+    if (!import.meta.client) return
 
     try {
       const key = 'cart-abandonment-data'
       const stored = localStorage.getItem(key)
       const abandonments = stored ? JSON.parse(stored) : []
-      
+
       abandonments.push({
         ...data,
-        lastActivity: data.lastActivity.toISOString()
+        lastActivity: data.lastActivity.toISOString(),
       })
 
       // Keep only last 50 abandonments
@@ -523,14 +529,15 @@ export const useCartAnalytics = () => {
       }
 
       localStorage.setItem(key, JSON.stringify(abandonments))
-    } catch (error) {
+    }
+    catch (error: any) {
       console.warn('Failed to store abandonment data:', error)
     }
   }
 
   // Sync events with server
   const syncEventsWithServer = async () => {
-    if (!process.client) return
+    if (!import.meta.client) return
 
     try {
       const eventsKey = 'cart-analytics-events'
@@ -545,10 +552,10 @@ export const useCartAnalytics = () => {
         await $fetch('/api/analytics/cart-events', {
           method: 'POST',
           body: {
-            events: events ? JSON.parse(events) : [],
+            events: events ? JSON.parse(events) as any : [],
             conversions: metrics ? JSON.parse(metrics) : [],
-            abandonments: abandonments ? JSON.parse(abandonments) : []
-          }
+            abandonments: abandonments ? JSON.parse(abandonments) : [],
+          },
         })
 
         // Clear synced data
@@ -556,30 +563,31 @@ export const useCartAnalytics = () => {
         localStorage.removeItem(metricsKey)
         localStorage.removeItem(abandonmentKey)
       }
-    } catch (error) {
+    }
+    catch (error: any) {
       console.warn('Failed to sync cart analytics with server:', error)
     }
   }
 
   // Clear cart session data
   const clearCartSession = () => {
-    if (process.client && cartSessionData.value.sessionId) {
+    if (import.meta.client && cartSessionData.value.sessionId) {
       localStorage.removeItem(`cart-analytics-${cartSessionData.value.sessionId}`)
     }
-    
+
     cartSessionData.value = {
       sessionId: '',
       cartCreatedAt: null,
       lastActivity: new Date(),
       checkoutStartedAt: null,
       totalTimeInCart: 0,
-      activityCount: 0
+      activityCount: 0,
     }
   }
 
   // Setup abandonment detection
   const setupAbandonmentDetection = (cartItems: Ref<CartItem[]>) => {
-    if (!process.client) return
+    if (!import.meta.client) return
 
     let abandonmentTimer: NodeJS.Timeout | null = null
     const ABANDONMENT_TIMEOUT = 30 * 60 * 1000 // 30 minutes
@@ -595,7 +603,7 @@ export const useCartAnalytics = () => {
             cartItems.value.reduce((sum, item) => sum + (item.product.price * item.quantity), 0),
             cartItems.value.reduce((sum, item) => sum + item.quantity, 0),
             cartItems.value,
-            'cart_view'
+            'cart_view',
           )
         }, ABANDONMENT_TIMEOUT)
       }
@@ -613,7 +621,7 @@ export const useCartAnalytics = () => {
 
     // Reset timer on user activity
     const activityEvents = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart']
-    activityEvents.forEach(event => {
+    activityEvents.forEach((event) => {
       document.addEventListener(event, resetAbandonmentTimer, { passive: true })
     })
 
@@ -625,7 +633,7 @@ export const useCartAnalytics = () => {
       if (abandonmentTimer) {
         clearTimeout(abandonmentTimer)
       }
-      activityEvents.forEach(event => {
+      activityEvents.forEach((event) => {
         document.removeEventListener(event, resetAbandonmentTimer)
       })
     }
@@ -648,6 +656,6 @@ export const useCartAnalytics = () => {
 
     // Utility functions
     syncEventsWithServer,
-    setupAbandonmentDetection
+    setupAbandonmentDetection,
   }
 }

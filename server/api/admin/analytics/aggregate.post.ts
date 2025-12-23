@@ -1,10 +1,10 @@
 /**
  * Admin Analytics Aggregation API Endpoint
- * 
+ *
  * Requirements addressed:
  * - 3.1: Implement daily analytics aggregation system for user metrics
  * - 3.3: Build database views for efficient analytics data retrieval
- * 
+ *
  * Triggers analytics data aggregation for specified date ranges.
  * This endpoint can be called manually or scheduled to run daily.
  */
@@ -40,7 +40,8 @@ export default defineEventHandler(async (event) => {
     if (startDate && endDate) {
       actualStartDate = new Date(startDate)
       actualEndDate = new Date(endDate)
-    } else {
+    }
+    else {
       // Default to last 7 days
       actualEndDate = new Date()
       actualStartDate = new Date()
@@ -51,14 +52,14 @@ export default defineEventHandler(async (event) => {
       datesProcessed: [],
       recordsCreated: 0,
       recordsUpdated: 0,
-      errors: []
+      errors: [],
     }
 
     // Process each date in the range
     const currentDate = new Date(actualStartDate)
     while (currentDate <= actualEndDate) {
-      const dateStr = currentDate.toISOString().split('T')[0]
-      
+      const dateStr = currentDate.toISOString().split('T')[0] as string
+
       try {
         // Check if data already exists for this date
         const { data: existingData, error: checkError } = await supabase
@@ -75,7 +76,7 @@ export default defineEventHandler(async (event) => {
         }
 
         const dataExists = !!existingData
-        
+
         if (dataExists && !forceRefresh) {
           // Skip if data exists and not forcing refresh
           currentDate.setDate(currentDate.getDate() + 1)
@@ -129,7 +130,7 @@ export default defineEventHandler(async (event) => {
           page_views: pageViews,
           unique_visitors: uniqueVisitors,
           orders_count: ordersCount,
-          revenue: Math.round(revenue * 100) / 100
+          revenue: Math.round(revenue * 100) / 100,
         }
 
         if (dataExists) {
@@ -140,20 +141,23 @@ export default defineEventHandler(async (event) => {
             .eq('date', dateStr)
 
           if (updateError) {
-            result.errors.push(`Error updating data for ${dateStr}: ${updateError.message}`)
-          } else {
+            result.errors.push(`Error updating data for ${dateStr}: ${updateError.message ?? 'Unknown error'}`)
+          }
+          else {
             result.recordsUpdated++
             result.datesProcessed.push(dateStr)
           }
-        } else {
+        }
+        else {
           // Insert new record
           const { error: insertError } = await supabase
             .from('daily_analytics')
             .insert(analyticsData)
 
           if (insertError) {
-            result.errors.push(`Error inserting data for ${dateStr}: ${insertError.message}`)
-          } else {
+            result.errors.push(`Error inserting data for ${dateStr}: ${insertError.message ?? 'Unknown error'}`)
+          }
+          else {
             result.recordsCreated++
             result.datesProcessed.push(dateStr)
           }
@@ -161,22 +165,23 @@ export default defineEventHandler(async (event) => {
 
         // Also update product analytics for this date if we have activity data
         if (activityData && activityData.length > 0) {
-          const productActivities = activityData.filter(a => 
-            ['product_view', 'cart_add'].includes(a.activity_type) && a.product_id
+          const productActivities = activityData.filter(a =>
+            ['product_view', 'cart_add'].includes(a.activity_type) && a.product_id,
           )
 
           // Group by product
           const productMap = new Map()
-          productActivities.forEach(activity => {
+          productActivities.forEach((activity) => {
             const productId = activity.product_id
             if (!productMap.has(productId)) {
               productMap.set(productId, { views: 0, cartAdditions: 0 })
             }
-            
+
             const stats = productMap.get(productId)
             if (activity.activity_type === 'product_view') {
               stats.views++
-            } else if (activity.activity_type === 'cart_add') {
+            }
+            else if (activity.activity_type === 'cart_add') {
               stats.cartAdditions++
             }
           })
@@ -191,7 +196,7 @@ export default defineEventHandler(async (event) => {
                 views: stats.views,
                 cart_additions: stats.cartAdditions,
                 purchases: 0, // Will be updated separately when orders are processed
-                revenue: 0
+                revenue: 0,
               })
 
             if (productError) {
@@ -199,9 +204,10 @@ export default defineEventHandler(async (event) => {
             }
           }
         }
-
-      } catch (dateError) {
-        result.errors.push(`Error processing date ${dateStr}: ${dateError.message}`)
+      }
+      catch (dateError: any) {
+        const errorMessage = dateError instanceof Error ? dateError.message : 'Unknown error'
+        result.errors.push(`Error processing date ${dateStr}: ${errorMessage}`)
       }
 
       currentDate.setDate(currentDate.getDate() + 1)
@@ -209,19 +215,19 @@ export default defineEventHandler(async (event) => {
 
     return {
       success: true,
-      data: result
+      data: result,
     }
-
-  } catch (error) {
+  }
+  catch (error: any) {
     console.error('Analytics aggregation error:', error)
-    
-    if (error.statusCode) {
+
+    if (error && typeof error === 'object' && 'statusCode' in error) {
       throw error
     }
-    
+
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to aggregate analytics data'
+      statusMessage: 'Failed to aggregate analytics data',
     })
   }
 })

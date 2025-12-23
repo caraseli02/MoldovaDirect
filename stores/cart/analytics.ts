@@ -1,17 +1,16 @@
 /**
  * Cart Analytics Module
- * 
+ *
  * Handles cart behavior tracking, abandonment detection, and analytics events
  * Provides offline capability and server synchronization
  */
 
 import { ref } from 'vue'
-import type { 
-  CartAnalyticsState, 
-  CartAnalyticsActions, 
-  AnalyticsEvent, 
-  AnalyticsSession,
-  Product
+import type {
+  CartAnalyticsState,
+  CartAnalyticsActions,
+  AnalyticsEvent,
+  Product,
 } from './types'
 
 // =============================================
@@ -24,7 +23,7 @@ const state = ref<CartAnalyticsState>({
   events: [],
   abandonmentTimer: null,
   syncInProgress: false,
-  offlineEvents: []
+  offlineEvents: [],
 })
 
 // Configuration
@@ -56,7 +55,7 @@ function createAnalyticsEvent(
   productId?: string,
   quantity?: number,
   value?: number,
-  metadata?: Record<string, any>
+  metadata?: Record<string, any>,
 ): AnalyticsEvent {
   return {
     id: generateEventId(),
@@ -67,7 +66,7 @@ function createAnalyticsEvent(
     productId,
     quantity,
     value,
-    metadata
+    metadata,
   }
 }
 
@@ -77,18 +76,18 @@ function createAnalyticsEvent(
 function addEvent(event: AnalyticsEvent): void {
   state.value.events.push(event)
   state.value.lastActivity = new Date()
-  
+
   // Store offline for sync
   state.value.offlineEvents.push(event)
-  
+
   // Limit offline events to prevent memory issues
   if (state.value.offlineEvents.length > MAX_OFFLINE_EVENTS) {
     state.value.offlineEvents = state.value.offlineEvents.slice(-MAX_OFFLINE_EVENTS)
   }
-  
+
   // Save to localStorage for persistence
   saveEventsToStorage()
-  
+
   // Reset abandonment timer
   resetAbandonmentTimer()
 }
@@ -98,16 +97,17 @@ function addEvent(event: AnalyticsEvent): void {
  */
 function saveEventsToStorage(): void {
   if (typeof window === 'undefined') return
-  
+
   try {
     const eventsData = {
       events: state.value.offlineEvents,
       sessionStartTime: state.value.sessionStartTime,
-      lastActivity: state.value.lastActivity
+      lastActivity: state.value.lastActivity,
     }
-    
+
     localStorage.setItem('cart_analytics_events', JSON.stringify(eventsData))
-  } catch (error) {
+  }
+  catch (error: any) {
     console.warn('Failed to save analytics events to storage:', error)
   }
 }
@@ -117,17 +117,18 @@ function saveEventsToStorage(): void {
  */
 function loadEventsFromStorage(): void {
   if (typeof window === 'undefined') return
-  
+
   try {
     const stored = localStorage.getItem('cart_analytics_events')
     if (stored) {
       const eventsData = JSON.parse(stored)
-      
+
       state.value.offlineEvents = eventsData.events || []
       state.value.sessionStartTime = eventsData.sessionStartTime ? new Date(eventsData.sessionStartTime) : null
       state.value.lastActivity = eventsData.lastActivity ? new Date(eventsData.lastActivity) : null
     }
-  } catch (error) {
+  }
+  catch (error: any) {
     console.warn('Failed to load analytics events from storage:', error)
   }
 }
@@ -143,7 +144,7 @@ function resetAbandonmentTimer(): void {
   if (state.value.abandonmentTimer) {
     clearTimeout(state.value.abandonmentTimer)
   }
-  
+
   state.value.abandonmentTimer = setTimeout(() => {
     trackAbandonmentWarning()
   }, ABANDONMENT_TIMEOUT)
@@ -178,31 +179,33 @@ async function syncEventsWithServer(): Promise<void> {
   if (state.value.syncInProgress || state.value.offlineEvents.length === 0) {
     return
   }
-  
+
   state.value.syncInProgress = true
-  
+
   try {
     // Prepare events for sync
     const eventsToSync = [...state.value.offlineEvents]
-    
+
     // Send to server
     const response = await $fetch('/api/analytics/cart-events', {
       method: 'POST',
       body: {
-        events: eventsToSync
-      }
-    })
-    
+        events: eventsToSync,
+      },
+    }) as any
+
     if (response.success) {
       // Clear synced events
       state.value.offlineEvents = []
       saveEventsToStorage()
-      
+
       console.log(`Synced ${eventsToSync.length} cart analytics events`)
     }
-  } catch (error) {
+  }
+  catch (error: any) {
     console.warn('Failed to sync analytics events:', error)
-  } finally {
+  }
+  finally {
     state.value.syncInProgress = false
   }
 }
@@ -212,7 +215,7 @@ async function syncEventsWithServer(): Promise<void> {
  */
 function startSyncWorker(): void {
   if (syncWorker) return
-  
+
   syncWorker = setInterval(async () => {
     await syncEventsWithServer()
   }, SYNC_INTERVAL)
@@ -241,7 +244,7 @@ function trackAddToCart(
   subtotal: number,
   itemCount: number,
   sessionId: string,
-  userId?: string
+  userId?: string,
 ): void {
   const event = createAnalyticsEvent(
     'add_to_cart',
@@ -255,10 +258,10 @@ function trackAddToCart(
       productPrice: product.price,
       productCategory: product.category,
       cartSubtotal: subtotal,
-      cartItemCount: itemCount
-    }
+      cartItemCount: itemCount,
+    },
   )
-  
+
   addEvent(event)
 }
 
@@ -271,7 +274,7 @@ function trackRemoveFromCart(
   subtotal: number,
   itemCount: number,
   sessionId: string,
-  userId?: string
+  userId?: string,
 ): void {
   const event = createAnalyticsEvent(
     'remove_from_cart',
@@ -285,10 +288,10 @@ function trackRemoveFromCart(
       productPrice: product.price,
       productCategory: product.category,
       cartSubtotal: subtotal,
-      cartItemCount: itemCount
-    }
+      cartItemCount: itemCount,
+    },
   )
-  
+
   addEvent(event)
 }
 
@@ -302,7 +305,7 @@ function trackQuantityUpdate(
   subtotal: number,
   itemCount: number,
   sessionId: string,
-  userId?: string
+  userId?: string,
 ): void {
   const event = createAnalyticsEvent(
     'update_quantity',
@@ -319,10 +322,10 @@ function trackQuantityUpdate(
       newQuantity,
       quantityChange: newQuantity - oldQuantity,
       cartSubtotal: subtotal,
-      cartItemCount: itemCount
-    }
+      cartItemCount: itemCount,
+    },
   )
-  
+
   addEvent(event)
 }
 
@@ -333,7 +336,7 @@ function trackCartView(
   sessionId: string,
   userId?: string,
   subtotal?: number,
-  itemCount?: number
+  itemCount?: number,
 ): void {
   const event = createAnalyticsEvent(
     'view_cart',
@@ -345,10 +348,10 @@ function trackCartView(
     {
       cartSubtotal: subtotal,
       cartItemCount: itemCount,
-      viewSource: 'direct' // Could be 'navigation', 'button', etc.
-    }
+      viewSource: 'direct', // Could be 'navigation', 'button', etc.
+    },
   )
-  
+
   addEvent(event)
 }
 
@@ -360,7 +363,7 @@ function trackCartAbandonment(
   userId?: string,
   subtotal?: number,
   itemCount?: number,
-  timeSpent?: number
+  timeSpent?: number,
 ): void {
   const event = createAnalyticsEvent(
     'abandon_cart',
@@ -373,10 +376,10 @@ function trackCartAbandonment(
       cartSubtotal: subtotal,
       cartItemCount: itemCount,
       timeSpent,
-      abandonmentReason: 'timeout' // Could be 'navigation', 'close', etc.
-    }
+      abandonmentReason: 'timeout', // Could be 'navigation', 'close', etc.
+    },
   )
-  
+
   addEvent(event)
 }
 
@@ -390,15 +393,15 @@ function trackCartAbandonment(
 function initializeCartSession(sessionId: string, userId?: string): void {
   state.value.sessionStartTime = new Date()
   state.value.lastActivity = new Date()
-  
+
   // Load existing events from storage
   loadEventsFromStorage()
-  
+
   // Start sync worker if in client environment
-  if (process.client) {
+  if (import.meta.client) {
     startSyncWorker()
   }
-  
+
   // Track session start
   const event = createAnalyticsEvent(
     'view_cart',
@@ -409,11 +412,11 @@ function initializeCartSession(sessionId: string, userId?: string): void {
     undefined,
     {
       sessionStart: true,
-      userAgent: process.client ? navigator.userAgent : undefined,
-      referrer: process.client ? document.referrer : undefined
-    }
+      userAgent: import.meta.client ? navigator.userAgent : undefined,
+      referrer: import.meta.client ? document.referrer : undefined,
+    },
   )
-  
+
   addEvent(event)
 }
 
@@ -423,23 +426,23 @@ function initializeCartSession(sessionId: string, userId?: string): void {
 function endCartSession(
   sessionId: string,
   userId?: string,
-  reason: 'checkout' | 'abandonment' | 'navigation' = 'navigation'
+  reason: 'checkout' | 'abandonment' | 'navigation' = 'navigation',
 ): void {
-  const timeSpent = state.value.sessionStartTime 
+  const timeSpent = state.value.sessionStartTime
     ? Date.now() - state.value.sessionStartTime.getTime()
     : 0
-  
+
   if (reason === 'abandonment') {
     trackCartAbandonment(sessionId, userId, undefined, undefined, timeSpent)
   }
-  
+
   // Clear timers
   clearAbandonmentTimer()
   stopSyncWorker()
-  
+
   // Final sync attempt
-  if (process.client) {
-    syncEventsWithServer().catch(error => {
+  if (import.meta.client) {
+    syncEventsWithServer().catch((error: any) => {
       console.warn('Final sync failed:', error)
     })
   }
@@ -463,18 +466,18 @@ function getAnalyticsSummary(): {
   const addToCartEvents = state.value.events.filter(e => e.type === 'add_to_cart').length
   const removeFromCartEvents = state.value.events.filter(e => e.type === 'remove_from_cart').length
   const viewCartEvents = state.value.events.filter(e => e.type === 'view_cart').length
-  
-  const sessionDuration = state.value.sessionStartTime 
+
+  const sessionDuration = state.value.sessionStartTime
     ? Date.now() - state.value.sessionStartTime.getTime()
     : 0
-  
+
   return {
     totalEvents: state.value.events.length,
     sessionDuration,
     addToCartEvents,
     removeFromCartEvents,
     viewCartEvents,
-    lastActivity: state.value.lastActivity
+    lastActivity: state.value.lastActivity,
   }
 }
 
@@ -497,29 +500,29 @@ function getEventsForProduct(productId: string): AnalyticsEvent[] {
 // =============================================
 
 const actions: CartAnalyticsActions = {
-  trackAddToCart: (product: Product, quantity: number, subtotal: number, itemCount: number) => {
+  trackAddToCart: (_product: Product, _quantity: number, _subtotal: number, _itemCount: number) => {
     // This will be called by the main store with session info
     console.warn('trackAddToCart called without session info')
   },
-  
-  trackRemoveFromCart: (product: Product, quantity: number, subtotal: number, itemCount: number) => {
+
+  trackRemoveFromCart: (_product: Product, _quantity: number, _subtotal: number, _itemCount: number) => {
     // This will be called by the main store with session info
     console.warn('trackRemoveFromCart called without session info')
   },
-  
-  trackQuantityUpdate: (product: Product, oldQuantity: number, newQuantity: number, subtotal: number, itemCount: number) => {
+
+  trackQuantityUpdate: (_product: Product, _oldQuantity: number, _newQuantity: number, _subtotal: number, _itemCount: number) => {
     // This will be called by the main store with session info
     console.warn('trackQuantityUpdate called without session info')
   },
-  
+
   trackCartView: () => {
     // This will be called by the main store with session info
     console.warn('trackCartView called without session info')
   },
-  
+
   trackAbandonmentWarning,
   syncEventsWithServer,
-  initializeCartSession
+  initializeCartSession,
 }
 
 // =============================================
@@ -530,10 +533,10 @@ export function useCartAnalytics() {
   return {
     // State
     state: readonly(state),
-    
+
     // Actions
     ...actions,
-    
+
     // Utilities
     trackAddToCart,
     trackRemoveFromCart,
@@ -547,7 +550,7 @@ export function useCartAnalytics() {
     getEventsForProduct,
     syncEventsWithServer,
     startSyncWorker,
-    stopSyncWorker
+    stopSyncWorker,
   }
 }
 
@@ -566,5 +569,5 @@ export {
   initializeCartSession,
   endCartSession,
   syncEventsWithServer,
-  getAnalyticsSummary
+  getAnalyticsSummary,
 }
