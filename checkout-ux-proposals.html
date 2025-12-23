@@ -1,0 +1,1717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout UX Proposals - Moldova Direct</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .phone-frame {
+      width: 375px;
+      height: 700px;
+      border-radius: 40px;
+      border: 12px solid #1f2937;
+      overflow: hidden;
+      position: relative;
+      background: #111827;
+    }
+    .phone-frame::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 150px;
+      height: 28px;
+      background: #1f2937;
+      border-radius: 0 0 20px 20px;
+      z-index: 10;
+    }
+    .phone-content {
+      height: 100%;
+      overflow-y: auto;
+      background: #111827;
+    }
+    .phone-content::-webkit-scrollbar {
+      width: 4px;
+    }
+    .phone-content::-webkit-scrollbar-thumb {
+      background: #374151;
+      border-radius: 2px;
+    }
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+    .accordion-content.open {
+      max-height: 1000px;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .step-indicator {
+      transition: all 0.3s ease;
+    }
+    .fade-in {
+      animation: fadeIn 0.3s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .pulse-once {
+      animation: pulse 0.5s ease-out;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    .recommendation-badge {
+      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    }
+  </style>
+</head>
+<body class="bg-zinc-900 text-zinc-100 min-h-screen">
+  <!-- Header -->
+  <header class="bg-zinc-800 border-b border-zinc-700 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-6">
+      <h1 class="text-3xl font-bold text-white">Checkout Flow UX Proposals</h1>
+      <p class="text-zinc-400 mt-2">Moldova Direct - Reducing checkout steps to minimum for higher conversion</p>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <nav class="bg-zinc-800/50 border-b border-zinc-700 sticky top-[88px] z-40">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex space-x-1 overflow-x-auto py-2">
+        <button onclick="showTab('overview')" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-primary-600 text-white" data-tab="overview">
+          Overview
+        </button>
+        <button onclick="showTab('option-a')" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-colors text-zinc-400 hover:text-white hover:bg-zinc-700" data-tab="option-a">
+          Option A: Accordion
+        </button>
+        <button onclick="showTab('option-b')" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-colors text-zinc-400 hover:text-white hover:bg-zinc-700" data-tab="option-b">
+          Option B: Two-Step
+        </button>
+        <button onclick="showTab('option-c')" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-colors text-zinc-400 hover:text-white hover:bg-zinc-700" data-tab="option-c">
+          Option C: Single-Page
+        </button>
+        <button onclick="showTab('option-d')" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-colors text-zinc-400 hover:text-white hover:bg-zinc-700" data-tab="option-d">
+          Option D: Hybrid ⭐
+        </button>
+        <button onclick="showTab('comparison')" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-colors text-zinc-400 hover:text-white hover:bg-zinc-700" data-tab="comparison">
+          Comparison
+        </button>
+        <button onclick="showTab('sources')" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-colors text-zinc-400 hover:text-white hover:bg-zinc-700" data-tab="sources">
+          Sources
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Overview Tab -->
+    <div id="overview" class="tab-content active">
+      <div class="grid lg:grid-cols-2 gap-8 mb-12">
+        <!-- Current State Analysis -->
+        <div class="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
+          <h2 class="text-xl font-semibold text-white mb-4 flex items-center">
+            <span class="w-8 h-8 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center mr-3 text-sm">!</span>
+            Current Implementation (4 Steps)
+          </h2>
+          <div class="space-y-3">
+            <div class="flex items-center p-3 bg-zinc-700/50 rounded-lg">
+              <span class="w-6 h-6 rounded-full bg-zinc-600 text-zinc-300 flex items-center justify-center text-xs mr-3">1</span>
+              <div>
+                <p class="font-medium text-zinc-200">Shipping</p>
+                <p class="text-sm text-zinc-400">Address + Method + Instructions</p>
+              </div>
+            </div>
+            <div class="flex items-center p-3 bg-zinc-700/50 rounded-lg">
+              <span class="w-6 h-6 rounded-full bg-zinc-600 text-zinc-300 flex items-center justify-center text-xs mr-3">2</span>
+              <div>
+                <p class="font-medium text-zinc-200">Payment</p>
+                <p class="text-sm text-zinc-400">Payment method selection</p>
+              </div>
+            </div>
+            <div class="flex items-center p-3 bg-zinc-700/50 rounded-lg">
+              <span class="w-6 h-6 rounded-full bg-zinc-600 text-zinc-300 flex items-center justify-center text-xs mr-3">3</span>
+              <div>
+                <p class="font-medium text-zinc-200">Review</p>
+                <p class="text-sm text-zinc-400">Order summary + Terms</p>
+              </div>
+            </div>
+            <div class="flex items-center p-3 bg-zinc-700/50 rounded-lg">
+              <span class="w-6 h-6 rounded-full bg-zinc-600 text-zinc-300 flex items-center justify-center text-xs mr-3">4</span>
+              <div>
+                <p class="font-medium text-zinc-200">Confirmation</p>
+                <p class="text-sm text-zinc-400">Order success page</p>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+            <p class="text-sm text-red-300">
+              <strong>Problem:</strong> Each page transition creates 3-5% drop-off risk. With 4 steps, potential loss of 12-20% of customers.
+            </p>
+          </div>
+        </div>
+
+        <!-- Key Statistics -->
+        <div class="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
+          <h2 class="text-xl font-semibold text-white mb-4 flex items-center">
+            <span class="w-8 h-8 rounded-full bg-primary-500/20 text-primary-400 flex items-center justify-center mr-3">📊</span>
+            Industry Research Insights
+          </h2>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="p-4 bg-zinc-700/50 rounded-lg text-center">
+              <p class="text-3xl font-bold text-primary-400">70%</p>
+              <p class="text-sm text-zinc-400">Cart abandonment rate</p>
+            </div>
+            <div class="p-4 bg-zinc-700/50 rounded-lg text-center">
+              <p class="text-3xl font-bold text-primary-400">50%</p>
+              <p class="text-sm text-zinc-400">Conversion lift with 1-click</p>
+            </div>
+            <div class="p-4 bg-zinc-700/50 rounded-lg text-center">
+              <p class="text-3xl font-bold text-primary-400">47%</p>
+              <p class="text-sm text-zinc-400">Drop if checkout > 90s</p>
+            </div>
+            <div class="p-4 bg-zinc-700/50 rounded-lg text-center">
+              <p class="text-3xl font-bold text-primary-400">35%</p>
+              <p class="text-sm text-zinc-400">Gain from UX changes</p>
+            </div>
+          </div>
+          <div class="mt-4 p-3 bg-primary-500/10 border border-primary-500/30 rounded-lg">
+            <p class="text-sm text-primary-300">
+              <strong>Goal:</strong> Reduce from 4 steps to 1-2 steps while maintaining all required information collection.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Proposals Grid -->
+      <h2 class="text-2xl font-bold text-white mb-6">Proposed Solutions</h2>
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div onclick="showTab('option-a')" class="bg-zinc-800 rounded-xl p-5 border border-zinc-700 hover:border-zinc-500 cursor-pointer transition-colors">
+          <div class="w-10 h-10 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center mb-3">A</div>
+          <h3 class="font-semibold text-white mb-2">Single-Page Accordion</h3>
+          <p class="text-sm text-zinc-400 mb-3">Collapsible sections on one page. User completes one section, it collapses, next expands.</p>
+          <div class="flex flex-wrap gap-1">
+            <span class="px-2 py-0.5 bg-zinc-700 rounded text-xs text-zinc-300">Apple</span>
+            <span class="px-2 py-0.5 bg-zinc-700 rounded text-xs text-zinc-300">Nike</span>
+          </div>
+        </div>
+        <div onclick="showTab('option-b')" class="bg-zinc-800 rounded-xl p-5 border border-zinc-700 hover:border-zinc-500 cursor-pointer transition-colors">
+          <div class="w-10 h-10 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center mb-3">B</div>
+          <h3 class="font-semibold text-white mb-2">Two-Step Express</h3>
+          <p class="text-sm text-zinc-400 mb-3">Combine shipping+payment, then review+place order. Minimal steps with clear progress.</p>
+          <div class="flex flex-wrap gap-1">
+            <span class="px-2 py-0.5 bg-zinc-700 rounded text-xs text-zinc-300">Shopify</span>
+            <span class="px-2 py-0.5 bg-zinc-700 rounded text-xs text-zinc-300">ASOS</span>
+          </div>
+        </div>
+        <div onclick="showTab('option-c')" class="bg-zinc-800 rounded-xl p-5 border border-zinc-700 hover:border-zinc-500 cursor-pointer transition-colors">
+          <div class="w-10 h-10 rounded-lg bg-orange-500/20 text-orange-400 flex items-center justify-center mb-3">C</div>
+          <h3 class="font-semibold text-white mb-2">Single-Page Inline</h3>
+          <p class="text-sm text-zinc-400 mb-3">All sections visible at once. Order summary sticky on side. One-click place order.</p>
+          <div class="flex flex-wrap gap-1">
+            <span class="px-2 py-0.5 bg-zinc-700 rounded text-xs text-zinc-300">Stripe</span>
+            <span class="px-2 py-0.5 bg-zinc-700 rounded text-xs text-zinc-300">Warby Parker</span>
+          </div>
+        </div>
+        <div onclick="showTab('option-d')" class="bg-zinc-800 rounded-xl p-5 border border-primary-500 cursor-pointer transition-colors relative overflow-hidden">
+          <div class="absolute top-0 right-0 recommendation-badge text-white text-xs px-3 py-1 rounded-bl-lg font-medium">RECOMMENDED</div>
+          <div class="w-10 h-10 rounded-lg bg-primary-500/20 text-primary-400 flex items-center justify-center mb-3">D</div>
+          <h3 class="font-semibold text-white mb-2">Hybrid Progressive</h3>
+          <p class="text-sm text-zinc-400 mb-3">Smart single-page with auto-expansion. 1-click for returning users, guided for new.</p>
+          <div class="flex flex-wrap gap-1">
+            <span class="px-2 py-0.5 bg-zinc-700 rounded text-xs text-zinc-300">Amazon</span>
+            <span class="px-2 py-0.5 bg-zinc-700 rounded text-xs text-zinc-300">Best Buy</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Option A: Accordion -->
+    <div id="option-a" class="tab-content">
+      <div class="grid lg:grid-cols-2 gap-8">
+        <!-- Description -->
+        <div class="space-y-6">
+          <div class="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-xl font-bold mr-4">A</div>
+              <div>
+                <h2 class="text-2xl font-bold text-white">Single-Page Accordion</h2>
+                <p class="text-zinc-400">Progressive disclosure pattern</p>
+              </div>
+            </div>
+            <p class="text-zinc-300 mb-4">
+              All checkout sections exist on a single page but are displayed as collapsible accordion panels. When user completes a section, it collapses showing a summary, and the next section automatically expands.
+            </p>
+            <div class="space-y-2">
+              <h4 class="font-medium text-white">Companies using this pattern:</h4>
+              <div class="flex flex-wrap gap-2">
+                <span class="px-3 py-1 bg-zinc-700 rounded-full text-sm text-zinc-300">Apple Store</span>
+                <span class="px-3 py-1 bg-zinc-700 rounded-full text-sm text-zinc-300">Nike</span>
+                <span class="px-3 py-1 bg-zinc-700 rounded-full text-sm text-zinc-300">Adidas</span>
+                <span class="px-3 py-1 bg-zinc-700 rounded-full text-sm text-zinc-300">Target</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
+            <h3 class="font-semibold text-white mb-4 flex items-center">
+              <span class="text-primary-400 mr-2">✓</span> Key Features & Benefits
+            </h3>
+            <ul class="space-y-3">
+              <li class="flex items-start">
+                <span class="w-5 h-5 rounded-full bg-primary-500/20 text-primary-400 flex items-center justify-center text-xs mr-3 mt-0.5">1</span>
+                <div>
+                  <p class="font-medium text-zinc-200">No page reloads</p>
+                  <p class="text-sm text-zinc-400">Eliminates 3-5% drop-off per page transition</p>
+                </div>
+              </li>
+              <li class="flex items-start">
+                <span class="w-5 h-5 rounded-full bg-primary-500/20 text-primary-400 flex items-center justify-center text-xs mr-3 mt-0.5">2</span>
+                <div>
+                  <p class="font-medium text-zinc-200">Visual progress tracking</p>
+                  <p class="text-sm text-zinc-400">Completed sections show summary, creating sense of progress</p>
+                </div>
+              </li>
+              <li class="flex items-start">
+                <span class="w-5 h-5 rounded-full bg-primary-500/20 text-primary-400 flex items-center justify-center text-xs mr-3 mt-0.5">3</span>
+                <div>
+                  <p class="font-medium text-zinc-200">Easy editing</p>
+                  <p class="text-sm text-zinc-400">Click any collapsed section to expand and edit</p>
+                </div>
+              </li>
+              <li class="flex items-start">
+                <span class="w-5 h-5 rounded-full bg-primary-500/20 text-primary-400 flex items-center justify-center text-xs mr-3 mt-0.5">4</span>
+                <div>
+                  <p class="font-medium text-zinc-200">Reduced cognitive load</p>
+                  <p class="text-sm text-zinc-400">Focus on one task at a time</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
+            <h3 class="font-semibold text-white mb-4">Potential Drawbacks</h3>
+            <ul class="space-y-2 text-sm text-zinc-400">
+              <li class="flex items-center"><span class="text-yellow-400 mr-2">⚠</span> Long scrolling on mobile with many sections</li>
+              <li class="flex items-center"><span class="text-yellow-400 mr-2">⚠</span> Users can't see all information at once</li>
+              <li class="flex items-center"><span class="text-yellow-400 mr-2">⚠</span> Animation delays can feel slow</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Phone Demo -->
+        <div class="flex justify-center">
+          <div class="phone-frame">
+            <div class="phone-content p-4 pt-10">
+              <!-- Mini Progress -->
+              <div class="flex items-center justify-between mb-4 px-2">
+                <span class="text-sm font-medium text-white">Checkout</span>
+                <span class="text-xs text-zinc-400">Step <span id="accordion-step">1</span>/3</span>
+              </div>
+
+              <!-- Accordion Sections -->
+              <div class="space-y-3">
+                <!-- Section 1: Shipping -->
+                <div class="bg-zinc-800 rounded-xl border border-zinc-700 overflow-hidden" id="accordion-shipping">
+                  <button onclick="toggleAccordion('shipping')" class="w-full p-4 flex items-center justify-between">
+                    <div class="flex items-center">
+                      <span class="w-6 h-6 rounded-full bg-primary-500 text-white flex items-center justify-center text-xs mr-3" id="shipping-indicator">1</span>
+                      <div class="text-left">
+                        <p class="font-medium text-white text-sm">Shipping</p>
+                        <p class="text-xs text-zinc-400" id="shipping-summary">Enter delivery address</p>
+                      </div>
+                    </div>
+                    <svg class="w-5 h-5 text-zinc-400 transition-transform" id="shipping-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                  </button>
+                  <div class="accordion-content open px-4 pb-4" id="shipping-content">
+                    <div class="space-y-3">
+                      <div>
+                        <label class="block text-xs text-zinc-400 mb-1">Full Name</label>
+                        <input type="text" placeholder="Juan García" class="w-full bg-zinc-700 border border-zinc-600 rounded-lg px-3 py-2 text-sm text-white placeholder-zinc-500 focus:border-primary-500 focus:outline-none">
+                      </div>
+                      <div>
+                        <label class="block text-xs text-zinc-400 mb-1">Address</label>
+                        <input type="text" placeholder="Calle Mayor 45" class="w-full bg-zinc-700 border border-zinc-600 rounded-lg px-3 py-2 text-sm text-white placeholder-zinc-500 focus:border-primary-500 focus:outline-none">
+                      </div>
+                      <div class="grid grid-cols-2 gap-2">
+                        <div>
+                          <label class="block text-xs text-zinc-400 mb-1">City</label>
+                          <input type="text" placeholder="Madrid" class="w-full bg-zinc-700 border border-zinc-600 rounded-lg px-3 py-2 text-sm text-white placeholder-zinc-500 focus:border-primary-500 focus:outline-none">
+                        </div>
+                        <div>
+                          <label class="block text-xs text-zinc-400 mb-1">Postal Code</label>
+                          <input type="text" placeholder="28013" class="w-full bg-zinc-700 border border-zinc-600 rounded-lg px-3 py-2 text-sm text-white placeholder-zinc-500 focus:border-primary-500 focus:outline-none">
+                        </div>
+                      </div>
+                      <div>
+                        <label class="block text-xs text-zinc-400 mb-2">Shipping Method</label>
+                        <div class="space-y-2">
+                          <label class="flex items-center p-2 bg-zinc-700/50 rounded-lg cursor-pointer border border-transparent hover:border-zinc-600">
+                            <input type="radio" name="shipping-method-a" checked class="mr-2 text-primary-500">
+                            <span class="text-sm text-zinc-300 flex-1">Standard (3-5 days)</span>
+                            <span class="text-sm text-zinc-400">5,99 €</span>
+                          </label>
+                          <label class="flex items-center p-2 bg-zinc-700/50 rounded-lg cursor-pointer border border-transparent hover:border-zinc-600">
+                            <input type="radio" name="shipping-method-a" class="mr-2 text-primary-500">
+                            <span class="text-sm text-zinc-300 flex-1">Express (1-2 days)</span>
+                            <span class="text-sm text-zinc-400">12,99 €</span>
+                          </label>
+                        </div>
+                      </div>
+                      <button onclick="completeSection('shipping')" class="w-full bg-primary-600 hover:bg-primary-700 text-white py-2.5 rounded-lg text-sm font-medium transition-colors">
+                        Continue to Payment
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Section 2: Payment -->
+                <div class="bg-zinc-800 rounded-xl border border-zinc-700 overflow-hidden opacity-50" id="accordion-payment">
+                  <button onclick="toggleAccordion('payment')" class="w-full p-4 flex items-center justify-between" disabled id="payment-btn">
+                    <div class="flex items-center">
+                      <span class="w-6 h-6 rounded-full bg-zinc-600 text-zinc-400 flex items-center justify-center text-xs mr-3" id="payment-indicator">2</span>
+                      <div class="text-left">
+                        <p class="font-medium text-zinc-400 text-sm" id="payment-title">Payment</p>
+                        <p class="text-xs text-zinc-500" id="payment-summary">Select payment method</p>
+                      </div>
+                    </div>
+                    <svg class="w-5 h-5 text-zinc-500 transition-transform" id="payment-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                  </button>
+                  <div class="accordion-content px-4 pb-4" id="payment-content">
+                    <div class="space-y-3">
+                      <div class="p-3 bg-primary-500/10 border border-primary-500/30 rounded-lg">
+                        <div class="flex items-center">
+                          <span class="text-primary-400 mr-2">💵</span>
+                          <div>
+                            <p class="text-sm font-medium text-white">Cash on Delivery</p>
+                            <p class="text-xs text-zinc-400">Pay when you receive your order</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="p-3 bg-zinc-700/50 rounded-lg opacity-50">
+                        <div class="flex items-center justify-between">
+                          <div class="flex items-center">
+                            <span class="text-zinc-500 mr-2">💳</span>
+                            <span class="text-sm text-zinc-500">Credit Card</span>
+                          </div>
+                          <span class="text-xs bg-zinc-600 text-zinc-400 px-2 py-0.5 rounded">Coming Soon</span>
+                        </div>
+                      </div>
+                      <button onclick="completeSection('payment')" class="w-full bg-primary-600 hover:bg-primary-700 text-white py-2.5 rounded-lg text-sm font-medium transition-colors">
+                        Continue to Review
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Section 3: Review -->
+                <div class="bg-zinc-800 rounded-xl border border-zinc-700 overflow-hidden opacity-50" id="accordion-review">
+                  <button onclick="toggleAccordion('review')" class="w-full p-4 flex items-center justify-between" disabled id="review-btn">
+                    <div class="flex items-center">
+                      <span class="w-6 h-6 rounded-full bg-zinc-600 text-zinc-400 flex items-center justify-center text-xs mr-3" id="review-indicator">3</span>
+                      <div class="text-left">
+                        <p class="font-medium text-zinc-400 text-sm" id="review-title">Review & Place Order</p>
+                        <p class="text-xs text-zinc-500" id="review-summary">Confirm your order</p>
+                      </div>
+                    </div>
+                    <svg class="w-5 h-5 text-zinc-500 transition-transform" id="review-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                  </button>
+                  <div class="accordion-content px-4 pb-4" id="review-content">
+                    <div class="space-y-3">
+                      <div class="p-3 bg-zinc-700/50 rounded-lg">
+                        <p class="text-xs text-zinc-400 mb-1">Order Total</p>
+                        <p class="text-lg font-bold text-white">171,40 €</p>
+                        <p class="text-xs text-zinc-500">Including shipping & tax</p>
+                      </div>
+                      <label class="flex items-start p-2 rounded cursor-pointer">
+                        <input type="checkbox" class="mr-2 mt-0.5 text-primary-500">
+                        <span class="text-xs text-zinc-400">I agree to the Terms of Service and Privacy Policy</span>
+                      </label>
+                      <button class="w-full bg-primary-600 hover:bg-primary-700 text-white py-3 rounded-lg text-sm font-medium transition-colors">
+                        Place Order - 171,40 €
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Order Summary (Collapsed) -->
+              <div class="mt-4 p-3 bg-zinc-800/50 rounded-xl border border-zinc-700">
+                <button onclick="this.nextElementSibling.classList.toggle('hidden')" class="w-full flex items-center justify-between">
+                  <span class="text-sm text-zinc-400">Order Summary (2 items)</span>
+                  <span class="text-sm font-medium text-white">171,40 €</span>
+                </button>
+                <div class="hidden mt-3 pt-3 border-t border-zinc-700 space-y-2">
+                  <div class="flex justify-between text-xs">
+                    <span class="text-zinc-400">Subtotal</span>
+                    <span class="text-zinc-300">136,70 €</span>
+                  </div>
+                  <div class="flex justify-between text-xs">
+                    <span class="text-zinc-400">Shipping</span>
+                    <span class="text-zinc-300">5,99 €</span>
+                  </div>
+                  <div class="flex justify-between text-xs">
+                    <span class="text-zinc-400">Tax</span>
+                    <span class="text-zinc-300">28,71 €</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Option B: Two-Step -->
+    <div id="option-b" class="tab-content">
+      <div class="grid lg:grid-cols-2 gap-8">
+        <!-- Description -->
+        <div class="space-y-6">
+          <div class="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-xl font-bold mr-4">B</div>
+              <div>
+                <h2 class="text-2xl font-bold text-white">Two-Step Express</h2>
+                <p class="text-zinc-400">Consolidated checkout flow</p>
+              </div>
+            </div>
+            <p class="text-zinc-300 mb-4">
+              Combines the 4-step flow into just 2 meaningful steps: <strong>Step 1</strong> collects all information (shipping + payment), <strong>Step 2</strong> shows summary and places order. Clear, simple, fast.
+            </p>
+            <div class="space-y-2">
+              <h4 class="font-medium text-white">Companies using this pattern:</h4>
+              <div class="flex flex-wrap gap-2">
+                <span class="px-3 py-1 bg-zinc-700 rounded-full text-sm text-zinc-300">Shopify Checkout</span>
+                <span class="px-3 py-1 bg-zinc-700 rounded-full text-sm text-zinc-300">ASOS</span>
+                <span class="px-3 py-1 bg-zinc-700 rounded-full text-sm text-zinc-300">Zara</span>
+                <span class="px-3 py-1 bg-zinc-700 rounded-full text-sm text-zinc-300">H&M</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
+            <h3 class="font-semibold text-white mb-4 flex items-center">
+              <span class="text-primary-400 mr-2">✓</span> Key Features & Benefits
+            </h3>
+            <ul class="space-y-3">
+              <li class="flex items-start">
+                <span class="w-5 h-5 rounded-full bg-primary-500/20 text-primary-400 flex items-center justify-center text-xs mr-3 mt-0.5">1</span>
+                <div>
+                  <p class="font-medium text-zinc-200">50% fewer page loads</p>
+                  <p class="text-sm text-zinc-400">Only 1 transition vs 3, reducing drop-off significantly</p>
+                </div>
+              </li>
+              <li class="flex items-start">
+                <span class="w-5 h-5 rounded-full bg-primary-500/20 text-primary-400 flex items-center justify-center text-xs mr-3 mt-0.5">2</span>
+                <div>
+                  <p class="font-medium text-zinc-200">Clear mental model</p>
+                  <p class="text-sm text-zinc-400">"Fill info" → "Confirm & pay" is intuitive</p>
+                </div>
+              </li>
+              <li class="flex items-start">
+                <span class="w-5 h-5 rounded-full bg-primary-500/20 text-primary-400 flex items-center justify-center text-xs mr-3 mt-0.5">3</span>
+                <div>
+                  <p class="font-medium text-zinc-200">Strong progress indication</p>
+                  <p class="text-sm text-zinc-400">Binary progress (1/2, 2/2) feels achievable</p>
+                </div>
+              </li>
+              <li class="flex items-start">
+                <span class="w-5 h-5 rounded-full bg-primary-500/20 text-primary-400 flex items-center justify-center text-xs mr-3 mt-0.5">4</span>
+                <div>
+                  <p class="font-medium text-zinc-200">Easy to implement</p>
+                  <p class="text-sm text-zinc-400">Minimal changes to existing codebase</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
+            <h3 class="font-semibold text-white mb-4">Potential Drawbacks</h3>
+            <ul class="space-y-2 text-sm text-zinc-400">
+              <li class="flex items-center"><span class="text-yellow-400 mr-2">⚠</span> Step 1 can feel long with all fields</li>
+              <li class="flex items-center"><span class="text-yellow-400 mr-2">⚠</span> Still has one page transition</li>
+              <li class="flex items-center"><span class="text-yellow-400 mr-2">⚠</span> May need scrolling on mobile</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Phone Demo -->
+        <div class="flex justify-center">
+          <div class="phone-frame">
+            <div class="phone-content p-4 pt-10">
+              <!-- Two-Step Progress -->
+              <div class="flex items-center justify-center mb-6">
+                <div class="flex items-center">
+                  <div class="w-8 h-8 rounded-full bg-primary-500 text-white flex items-center justify-center text-sm font-medium" id="twostep-1">1</div>
+                  <div class="w-16 h-1 bg-zinc-600 mx-2" id="twostep-line">
+                    <div class="h-full bg-primary-500 transition-all duration-300" id="twostep-progress" style="width: 0%"></div>
+                  </div>
+                  <div class="w-8 h-8 rounded-full bg-zinc-600 text-zinc-400 flex items-center justify-center text-sm font-medium" id="twostep-2">2</div>
+                </div>
+              </div>
+
+              <!-- Step 1: Information -->
+              <div id="twostep-step1">
+                <h2 class="text-lg font-semibold text-white mb-4">Delivery & Payment</h2>
+
+                <div class="space-y-4">
+                  <!-- Shipping Section -->
+                  <div class="bg-zinc-800 rounded-xl p-4 border border-zinc-700">
+                    <h3 class="text-sm font-medium text-zinc-300 mb-3 flex items-center">
+                      <span class="mr-2">📦</span> Shipping Address
+                    </h3>
+                    <div class="space-y-2">
+                      <input type="text" placeholder="Full Name" class="w-full bg-zinc-700 border border-zinc-600 rounded-lg px-3 py-2 text-sm text-white placeholder-zinc-500 focus:border-primary-500 focus:outline-none">
+                      <input type="text" placeholder="Street Address" class="w-full bg-zinc-700 border border-zinc-600 rounded-lg px-3 py-2 text-sm text-white placeholder-zinc-500 focus:border-primary-500 focus:outline-none">
+                      <div class="grid grid-cols-2 gap-2">
+                        <input type="text" placeholder="City" class="w-full bg-zinc-700 border border-zinc-600 rounded-lg px-3 py-2 text-sm text-white placeholder-zinc-500 focus:border-primary-500 focus:outline-none">
+                        <input type="text" placeholder="Postal Code" class="w-full bg-zinc-700 border border-zinc-600 rounded-lg px-3 py-2 text-sm text-white placeholder-zinc-500 focus:border-primary-500 focus:outline-none">
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Shipping Method -->
+                  <div class="bg-zinc-800 rounded-xl p-4 border border-zinc-700">
+                    <h3 class="text-sm font-medium text-zinc-300 mb-3 flex items-center">
+                      <span class="mr-2">🚚</span> Shipping Method
+                    </h3>
+                    <div class="space-y-2">
+                      <label class="flex items-center p-2 bg-primary-500/10 border border-primary-500/30 rounded-lg cursor-pointer">
+                        <input type="radio" name="shipping-b" checked class="mr-2 text-primary-500">
+                        <span class="text-sm text-zinc-300 flex-1">Standard</span>
+                        <span class="text-sm text-zinc-400">5,99 €</span>
+                      </label>
+                      <label class="flex items-center p-2 bg-zinc-700/50 rounded-lg cursor-pointer">
+                        <input type="radio" name="shipping-b" class="mr-2 text-primary-500">
+                        <span class="text-sm text-zinc-300 flex-1">Express</span>
+                        <span class="text-sm text-zinc-400">12,99 €</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <!-- Payment Section -->
+                  <div class="bg-zinc-800 rounded-xl p-4 border border-zinc-700">
+                    <h3 class="text-sm font-medium text-zinc-300 mb-3 flex items-center">
+                      <span class="mr-2">💳</span> Payment Method
+                    </h3>
+                    <div class="p-3 bg-primary-500/10 border border-primary-500/30 rounded-lg">
+                      <div class="flex items-center">
+                        <input type="radio" checked class="mr-2 text-primary-500">
+                        <span class="text-sm text-white">Cash on Delivery</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <button onclick="showTwoStepReview()" class="w-full bg-primary-600 hover:bg-primary-700 text-white py-3 rounded-lg text-sm font-medium transition-colors">
+                    Review Order →
+                  </button>
+                </div>
+              </div>
+
+              <!-- Step 2: Review -->
+              <div id="twostep-step2" class="hidden">
+                <h2 class="text-lg font-semibold text-white mb-4">Review & Place Order</h2>
+
+                <div class="space-y-4">
+                  <!-- Order Items -->
+                  <div class="bg-zinc-800 rounded-xl p-4 border border-zinc-700">
+                    <div class="flex items-center justify-between mb-3">
+                      <h3 class="text-sm font-medium text-zinc-300">Items (2)</h3>
+                      <button class="text-xs text-primary-400">Edit Cart</button>
+                    </div>
+                    <div class="space-y-2">
+                      <div class="flex items-center">
+                        <div class="w-10 h-10 bg-zinc-700 rounded mr-3"></div>
+                        <div class="flex-1">
+                          <p class="text-xs text-white">Ceramic Vase #16</p>
+                          <p class="text-xs text-zinc-500">Qty: 1</p>
+                        </div>
+                        <p class="text-xs text-zinc-300">117,32 €</p>
+                      </div>
+                      <div class="flex items-center">
+                        <div class="w-10 h-10 bg-zinc-700 rounded mr-3"></div>
+                        <div class="flex-1">
+                          <p class="text-xs text-white">Painted Easter Eggs</p>
+                          <p class="text-xs text-zinc-500">Qty: 1</p>
+                        </div>
+                        <p class="text-xs text-zinc-300">19,38 €</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Shipping Summary -->
+                  <div class="bg-zinc-800 rounded-xl p-4 border border-zinc-700">
+                    <div class="flex items-center justify-between mb-2">
+                      <h3 class="text-sm font-medium text-zinc-300">Shipping</h3>
+                      <button onclick="showTwoStepInfo()" class="text-xs text-primary-400">Edit</button>
+                    </div>
+                    <p class="text-xs text-zinc-400">Juan García</p>
+                    <p class="text-xs text-zinc-400">Calle Mayor 45, Madrid 28013</p>
+                    <p class="text-xs text-zinc-500 mt-1">Standard Shipping • 5,99 €</p>
+                  </div>
+
+                  <!-- Payment Summary -->
+                  <div class="bg-zinc-800 rounded-xl p-4 border border-zinc-700">
+                    <div class="flex items-center justify-between mb-2">
+                      <h3 class="text-sm font-medium text-zinc-300">Payment</h3>
+                      <button onclick="showTwoStepInfo()" class="text-xs text-primary-400">Edit</button>
+                    </div>
+                    <p class="text-xs text-zinc-400">Cash on Delivery</p>
+                  </div>
+
+                  <!-- Total -->
+                  <div class="bg-zinc-800 rounded-xl p-4 border border-zinc-700">
+                    <div class="space-y-1">
+                      <div class="flex justify-between text-xs">
+                        <span class="text-zinc-400">Subtotal</span>
+                        <span class="text-zinc-300">136,70 €</span>
+                      </div>
+                      <div class="flex justify-between text-xs">
+                        <span class="text-zinc-400">Shipping</span>
+                        <span class="text-zinc-300">5,99 €</span>
+                      </div>
+                      <div class="flex justify-between text-xs">
+                        <span class="text-zinc-400">Tax</span>
+                        <span class="text-zinc-300">28,71 €</span>
+                      </div>
+                      <div class="flex justify-between text-sm font-medium pt-2 border-t border-zinc-700 mt-2">
+                        <span class="text-white">Total</span>
+                        <span class="text-white">171,40 €</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <label class="flex items-start p-2">
+                    <input type="checkbox" class="mr-2 mt-0.5 text-primary-500">
+                    <span class="text-xs text-zinc-400">I agree to the Terms & Privacy Policy</span>
+                  </label>
+
+                  <button class="w-full bg-primary-600 hover:bg-primary-700 text-white py-3 rounded-lg text-sm font-medium transition-colors">
+                    Place Order - 171,40 €
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Option C: Single-Page Inline -->
+    <div id="option-c" class="tab-content">
+      <div class="grid lg:grid-cols-2 gap-8">
+        <!-- Description -->
+        <div class="space-y-6">
+          <div class="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center text-xl font-bold mr-4">C</div>
+              <div>
+                <h2 class="text-2xl font-bold text-white">Single-Page Inline</h2>
+                <p class="text-zinc-400">Everything visible at once</p>
+              </div>
+            </div>
+            <p class="text-zinc-300 mb-4">
+              All checkout sections are visible on one scrollable page. Order summary stays sticky on the side (or bottom on mobile). User fills all fields and clicks one "Place Order" button.
+            </p>
+            <div class="space-y-2">
+              <h4 class="font-medium text-white">Companies using this pattern:</h4>
+              <div class="flex flex-wrap gap-2">
+                <span class="px-3 py-1 bg-zinc-700 rounded-full text-sm text-zinc-300">Stripe Checkout</span>
+                <span class="px-3 py-1 bg-zinc-700 rounded-full text-sm text-zinc-300">Warby Parker</span>
+                <span class="px-3 py-1 bg-zinc-700 rounded-full text-sm text-zinc-300">Everlane</span>
+                <span class="px-3 py-1 bg-zinc-700 rounded-full text-sm text-zinc-300">Glossier</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
+            <h3 class="font-semibold text-white mb-4 flex items-center">
+              <span class="text-primary-400 mr-2">✓</span> Key Features & Benefits
+            </h3>
+            <ul class="space-y-3">
+              <li class="flex items-start">
+                <span class="w-5 h-5 rounded-full bg-primary-500/20 text-primary-400 flex items-center justify-center text-xs mr-3 mt-0.5">1</span>
+                <div>
+                  <p class="font-medium text-zinc-200">Zero page transitions</p>
+                  <p class="text-sm text-zinc-400">Everything happens on one page, no navigation needed</p>
+                </div>
+              </li>
+              <li class="flex items-start">
+                <span class="w-5 h-5 rounded-full bg-primary-500/20 text-primary-400 flex items-center justify-center text-xs mr-3 mt-0.5">2</span>
+                <div>
+                  <p class="font-medium text-zinc-200">Full transparency</p>
+                  <p class="text-sm text-zinc-400">User can see everything at once, no hidden surprises</p>
+                </div>
+              </li>
+              <li class="flex items-start">
+                <span class="w-5 h-5 rounded-full bg-primary-500/20 text-primary-400 flex items-center justify-center text-xs mr-3 mt-0.5">3</span>
+                <div>
+                  <p class="font-medium text-zinc-200">Sticky order summary</p>
+                  <p class="text-sm text-zinc-400">Total always visible, updates in real-time</p>
+                </div>
+              </li>
+              <li class="flex items-start">
+                <span class="w-5 h-5 rounded-full bg-primary-500/20 text-primary-400 flex items-center justify-center text-xs mr-3 mt-0.5">4</span>
+                <div>
+                  <p class="font-medium text-zinc-200">Fastest completion</p>
+                  <p class="text-sm text-zinc-400">Tab through fields, one click to order</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
+            <h3 class="font-semibold text-white mb-4">Potential Drawbacks</h3>
+            <ul class="space-y-2 text-sm text-zinc-400">
+              <li class="flex items-center"><span class="text-yellow-400 mr-2">⚠</span> Can feel overwhelming with many fields</li>
+              <li class="flex items-center"><span class="text-yellow-400 mr-2">⚠</span> Long scroll on mobile devices</li>
+              <li class="flex items-center"><span class="text-yellow-400 mr-2">⚠</span> No sense of progress/completion</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Phone Demo -->
+        <div class="flex justify-center">
+          <div class="phone-frame">
+            <div class="phone-content p-4 pt-10">
+              <h2 class="text-lg font-semibold text-white mb-4">Checkout</h2>
+
+              <div class="space-y-4 pb-32">
+                <!-- Contact -->
+                <div>
+                  <h3 class="text-sm font-medium text-zinc-300 mb-2">Contact</h3>
+                  <input type="email" placeholder="Email address" class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-primary-500 focus:outline-none">
+                </div>
+
+                <!-- Shipping Address -->
+                <div>
+                  <h3 class="text-sm font-medium text-zinc-300 mb-2">Shipping Address</h3>
+                  <div class="space-y-2">
+                    <div class="grid grid-cols-2 gap-2">
+                      <input type="text" placeholder="First name" class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-primary-500 focus:outline-none">
+                      <input type="text" placeholder="Last name" class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-primary-500 focus:outline-none">
+                    </div>
+                    <input type="text" placeholder="Address" class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-primary-500 focus:outline-none">
+                    <div class="grid grid-cols-2 gap-2">
+                      <input type="text" placeholder="City" class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-primary-500 focus:outline-none">
+                      <input type="text" placeholder="Postal code" class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-primary-500 focus:outline-none">
+                    </div>
+                    <input type="tel" placeholder="Phone" class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-primary-500 focus:outline-none">
+                  </div>
+                </div>
+
+                <!-- Shipping Method -->
+                <div>
+                  <h3 class="text-sm font-medium text-zinc-300 mb-2">Shipping Method</h3>
+                  <div class="space-y-2">
+                    <label class="flex items-center p-3 bg-primary-500/10 border border-primary-500/30 rounded-lg cursor-pointer">
+                      <input type="radio" name="shipping-c" checked class="mr-3 text-primary-500">
+                      <div class="flex-1">
+                        <p class="text-sm text-white">Standard Shipping</p>
+                        <p class="text-xs text-zinc-500">3-5 business days</p>
+                      </div>
+                      <span class="text-sm text-zinc-300">5,99 €</span>
+                    </label>
+                    <label class="flex items-center p-3 bg-zinc-800 border border-zinc-700 rounded-lg cursor-pointer">
+                      <input type="radio" name="shipping-c" class="mr-3 text-primary-500">
+                      <div class="flex-1">
+                        <p class="text-sm text-white">Express Shipping</p>
+                        <p class="text-xs text-zinc-500">1-2 business days</p>
+                      </div>
+                      <span class="text-sm text-zinc-300">12,99 €</span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Payment -->
+                <div>
+                  <h3 class="text-sm font-medium text-zinc-300 mb-2">Payment</h3>
+                  <div class="p-3 bg-primary-500/10 border border-primary-500/30 rounded-lg">
+                    <div class="flex items-center">
+                      <span class="text-lg mr-2">💵</span>
+                      <div>
+                        <p class="text-sm text-white">Cash on Delivery</p>
+                        <p class="text-xs text-zinc-500">Pay when you receive</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Terms -->
+                <label class="flex items-start">
+                  <input type="checkbox" class="mr-2 mt-1 text-primary-500">
+                  <span class="text-xs text-zinc-400">I agree to the Terms of Service and Privacy Policy</span>
+                </label>
+              </div>
+
+              <!-- Sticky Order Summary -->
+              <div class="fixed bottom-0 left-0 right-0 bg-zinc-900 border-t border-zinc-700 p-4" style="width: 351px; margin-left: 12px;">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-sm text-zinc-400">Total (2 items)</span>
+                  <span class="text-lg font-bold text-white">171,40 €</span>
+                </div>
+                <button class="w-full bg-primary-600 hover:bg-primary-700 text-white py-3 rounded-lg text-sm font-medium transition-colors">
+                  Place Order
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Option D: Hybrid (RECOMMENDED) -->
+    <div id="option-d" class="tab-content">
+      <div class="grid lg:grid-cols-2 gap-8">
+        <!-- Description -->
+        <div class="space-y-6">
+          <div class="bg-zinc-800 rounded-xl p-6 border border-primary-500 relative overflow-hidden">
+            <div class="absolute top-0 right-0 recommendation-badge text-white text-sm px-4 py-2 rounded-bl-xl font-medium">
+              ⭐ RECOMMENDED
+            </div>
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 rounded-xl bg-primary-500/20 text-primary-400 flex items-center justify-center text-xl font-bold mr-4">D</div>
+              <div>
+                <h2 class="text-2xl font-bold text-white">Hybrid Progressive</h2>
+                <p class="text-zinc-400">Best of all patterns combined</p>
+              </div>
+            </div>
+            <p class="text-zinc-300 mb-4">
+              Smart single-page checkout that adapts to user type. <strong>Returning users</strong> get 1-click express checkout with saved data. <strong>New users</strong> get a guided single-page flow with smart auto-expansion and inline validation.
+            </p>
+            <div class="space-y-2">
+              <h4 class="font-medium text-white">Companies using this pattern:</h4>
+              <div class="flex flex-wrap gap-2">
+                <span class="px-3 py-1 bg-zinc-700 rounded-full text-sm text-zinc-300">Amazon</span>
+                <span class="px-3 py-1 bg-zinc-700 rounded-full text-sm text-zinc-300">Best Buy</span>
+                <span class="px-3 py-1 bg-zinc-700 rounded-full text-sm text-zinc-300">Walmart</span>
+                <span class="px-3 py-1 bg-zinc-700 rounded-full text-sm text-zinc-300">eBay</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
+            <h3 class="font-semibold text-white mb-4 flex items-center">
+              <span class="text-primary-400 mr-2">✓</span> Key Features & Benefits
+            </h3>
+            <ul class="space-y-3">
+              <li class="flex items-start">
+                <span class="w-5 h-5 rounded-full bg-primary-500/20 text-primary-400 flex items-center justify-center text-xs mr-3 mt-0.5">1</span>
+                <div>
+                  <p class="font-medium text-zinc-200">1-Click for returning users</p>
+                  <p class="text-sm text-zinc-400">Express checkout banner with saved address & payment</p>
+                </div>
+              </li>
+              <li class="flex items-start">
+                <span class="w-5 h-5 rounded-full bg-primary-500/20 text-primary-400 flex items-center justify-center text-xs mr-3 mt-0.5">2</span>
+                <div>
+                  <p class="font-medium text-zinc-200">Smart auto-expansion</p>
+                  <p class="text-sm text-zinc-400">Sections expand as user completes previous one</p>
+                </div>
+              </li>
+              <li class="flex items-start">
+                <span class="w-5 h-5 rounded-full bg-primary-500/20 text-primary-400 flex items-center justify-center text-xs mr-3 mt-0.5">3</span>
+                <div>
+                  <p class="font-medium text-zinc-200">Inline real-time validation</p>
+                  <p class="text-sm text-zinc-400">Errors shown immediately, not after submission</p>
+                </div>
+              </li>
+              <li class="flex items-start">
+                <span class="w-5 h-5 rounded-full bg-primary-500/20 text-primary-400 flex items-center justify-center text-xs mr-3 mt-0.5">4</span>
+                <div>
+                  <p class="font-medium text-zinc-200">Order summary always visible</p>
+                  <p class="text-sm text-zinc-400">Sticky summary with live updates</p>
+                </div>
+              </li>
+              <li class="flex items-start">
+                <span class="w-5 h-5 rounded-full bg-primary-500/20 text-primary-400 flex items-center justify-center text-xs mr-3 mt-0.5">5</span>
+                <div>
+                  <p class="font-medium text-zinc-200">Mobile-optimized bottom sheet</p>
+                  <p class="text-sm text-zinc-400">Touch-friendly with large tap targets</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="bg-primary-500/10 border border-primary-500/30 rounded-xl p-6">
+            <h3 class="font-semibold text-white mb-3 flex items-center">
+              <span class="mr-2">🎯</span> Why This is Recommended
+            </h3>
+            <ul class="space-y-2 text-sm text-zinc-300">
+              <li class="flex items-start">
+                <span class="text-primary-400 mr-2">•</span>
+                <span>Combines best features: accordion UX + express checkout + inline validation</span>
+              </li>
+              <li class="flex items-start">
+                <span class="text-primary-400 mr-2">•</span>
+                <span>Builds on your existing ExpressCheckoutBanner component</span>
+              </li>
+              <li class="flex items-start">
+                <span class="text-primary-400 mr-2">•</span>
+                <span>Reduces steps from 4 to effectively 1 for returning users</span>
+              </li>
+              <li class="flex items-start">
+                <span class="text-primary-400 mr-2">•</span>
+                <span>Expected conversion increase: 25-40% based on industry data</span>
+              </li>
+              <li class="flex items-start">
+                <span class="text-primary-400 mr-2">•</span>
+                <span>Minimal implementation effort - reuses existing components</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Phone Demo -->
+        <div class="flex justify-center">
+          <div class="phone-frame">
+            <div class="phone-content p-4 pt-10">
+              <!-- Express Checkout for Returning Users -->
+              <div class="bg-gradient-to-r from-primary-500/20 to-primary-600/20 border border-primary-500/40 rounded-xl p-4 mb-4" id="hybrid-express">
+                <div class="flex items-center justify-between mb-3">
+                  <div class="flex items-center">
+                    <span class="text-lg mr-2">⚡</span>
+                    <span class="text-sm font-medium text-white">Express Checkout</span>
+                  </div>
+                  <button onclick="hideExpressCheckout()" class="text-zinc-400 hover:text-white">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                  </button>
+                </div>
+                <div class="bg-zinc-800/50 rounded-lg p-3 mb-3">
+                  <p class="text-sm font-medium text-white">Juan García</p>
+                  <p class="text-xs text-zinc-400">Calle Mayor 45, Madrid 28013</p>
+                  <p class="text-xs text-zinc-500">Cash on Delivery • Standard Shipping</p>
+                </div>
+                <div class="flex gap-2">
+                  <button class="flex-1 bg-primary-600 hover:bg-primary-700 text-white py-2.5 rounded-lg text-sm font-medium transition-colors">
+                    Place Order - 171,40 €
+                  </button>
+                  <button onclick="hideExpressCheckout()" class="px-4 bg-zinc-700 hover:bg-zinc-600 text-white py-2.5 rounded-lg text-sm transition-colors">
+                    Edit
+                  </button>
+                </div>
+              </div>
+
+              <!-- Full Checkout Form (shown when express is dismissed) -->
+              <div id="hybrid-full" class="hidden">
+                <h2 class="text-lg font-semibold text-white mb-4">Checkout</h2>
+
+                <div class="space-y-3 pb-32">
+                  <!-- Shipping - Auto-expanded first -->
+                  <div class="bg-zinc-800 rounded-xl border border-primary-500/50 overflow-hidden">
+                    <div class="p-4 border-b border-zinc-700 flex items-center">
+                      <span class="w-6 h-6 rounded-full bg-primary-500 text-white flex items-center justify-center text-xs mr-3">1</span>
+                      <span class="text-sm font-medium text-white">Shipping</span>
+                    </div>
+                    <div class="p-4 space-y-3">
+                      <!-- Saved Address Option -->
+                      <div class="p-3 bg-primary-500/10 border border-primary-500/30 rounded-lg">
+                        <label class="flex items-start cursor-pointer">
+                          <input type="radio" name="address-d" checked class="mr-3 mt-1 text-primary-500">
+                          <div>
+                            <p class="text-sm font-medium text-white">Juan García</p>
+                            <p class="text-xs text-zinc-400">Calle Mayor 45, Madrid 28013</p>
+                            <span class="text-xs text-primary-400">Default address</span>
+                          </div>
+                        </label>
+                      </div>
+                      <div class="p-3 bg-zinc-700/50 rounded-lg">
+                        <label class="flex items-center cursor-pointer">
+                          <input type="radio" name="address-d" class="mr-3 text-primary-500">
+                          <span class="text-sm text-zinc-300">Use a different address</span>
+                        </label>
+                      </div>
+
+                      <!-- Shipping Method -->
+                      <div class="pt-3 border-t border-zinc-700">
+                        <p class="text-xs text-zinc-400 mb-2">Shipping Method</p>
+                        <div class="space-y-2">
+                          <label class="flex items-center p-2 bg-primary-500/10 border border-primary-500/30 rounded-lg cursor-pointer">
+                            <input type="radio" name="ship-d" checked class="mr-2 text-primary-500">
+                            <span class="text-xs text-zinc-300 flex-1">Standard (3-5 days)</span>
+                            <span class="text-xs text-zinc-400">5,99 €</span>
+                          </label>
+                          <label class="flex items-center p-2 bg-zinc-700/50 rounded-lg cursor-pointer">
+                            <input type="radio" name="ship-d" class="mr-2 text-primary-500">
+                            <span class="text-xs text-zinc-300 flex-1">Express (1-2 days)</span>
+                            <span class="text-xs text-zinc-400">12,99 €</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Payment - Auto-expands after shipping -->
+                  <div class="bg-zinc-800 rounded-xl border border-zinc-700 overflow-hidden">
+                    <div class="p-4 border-b border-zinc-700 flex items-center">
+                      <span class="w-6 h-6 rounded-full bg-zinc-600 text-zinc-300 flex items-center justify-center text-xs mr-3">2</span>
+                      <span class="text-sm font-medium text-zinc-300">Payment</span>
+                    </div>
+                    <div class="p-4">
+                      <div class="p-3 bg-primary-500/10 border border-primary-500/30 rounded-lg">
+                        <div class="flex items-center">
+                          <span class="text-lg mr-2">💵</span>
+                          <div>
+                            <p class="text-sm text-white">Cash on Delivery</p>
+                            <p class="text-xs text-zinc-500">Pay when you receive</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Terms & Place Order -->
+                  <div class="bg-zinc-800 rounded-xl border border-zinc-700 p-4">
+                    <label class="flex items-start mb-4">
+                      <input type="checkbox" class="mr-2 mt-0.5 text-primary-500">
+                      <span class="text-xs text-zinc-400">I agree to the Terms of Service and Privacy Policy</span>
+                    </label>
+                    <button class="w-full bg-primary-600 hover:bg-primary-700 text-white py-3 rounded-lg text-sm font-medium transition-colors">
+                      Place Order - 171,40 €
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- New User Flow (simpler) -->
+              <div id="hybrid-new" class="hidden">
+                <h2 class="text-lg font-semibold text-white mb-1">Checkout</h2>
+                <p class="text-xs text-zinc-500 mb-4">Complete your order in one page</p>
+
+                <div class="space-y-4 pb-32">
+                  <!-- Contact -->
+                  <div>
+                    <label class="block text-xs text-zinc-400 mb-1">Email</label>
+                    <input type="email" placeholder="your@email.com" class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-primary-500 focus:outline-none">
+                  </div>
+
+                  <!-- Shipping -->
+                  <div class="space-y-2">
+                    <label class="block text-xs text-zinc-400">Shipping Address</label>
+                    <input type="text" placeholder="Full name" class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-primary-500 focus:outline-none">
+                    <input type="text" placeholder="Address" class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-primary-500 focus:outline-none">
+                    <div class="grid grid-cols-2 gap-2">
+                      <input type="text" placeholder="City" class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-primary-500 focus:outline-none">
+                      <input type="text" placeholder="Postal" class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-primary-500 focus:outline-none">
+                    </div>
+                  </div>
+
+                  <!-- Shipping Method -->
+                  <div>
+                    <label class="block text-xs text-zinc-400 mb-2">Shipping Method</label>
+                    <label class="flex items-center p-2 bg-primary-500/10 border border-primary-500/30 rounded-lg cursor-pointer">
+                      <input type="radio" name="ship-new" checked class="mr-2 text-primary-500">
+                      <span class="text-xs text-zinc-300 flex-1">Standard</span>
+                      <span class="text-xs text-zinc-400">5,99 €</span>
+                    </label>
+                  </div>
+
+                  <!-- Payment -->
+                  <div>
+                    <label class="block text-xs text-zinc-400 mb-2">Payment</label>
+                    <div class="p-3 bg-primary-500/10 border border-primary-500/30 rounded-lg">
+                      <div class="flex items-center">
+                        <span class="mr-2">💵</span>
+                        <span class="text-sm text-white">Cash on Delivery</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Terms -->
+                  <label class="flex items-start">
+                    <input type="checkbox" class="mr-2 mt-0.5 text-primary-500">
+                    <span class="text-xs text-zinc-400">I agree to the Terms & Privacy</span>
+                  </label>
+                </div>
+
+                <!-- Sticky CTA -->
+                <div class="fixed bottom-0 left-0 right-0 bg-zinc-900 border-t border-zinc-700 p-4" style="width: 351px; margin-left: 12px;">
+                  <button class="w-full bg-primary-600 hover:bg-primary-700 text-white py-3 rounded-lg text-sm font-medium transition-colors">
+                    Place Order - 171,40 €
+                  </button>
+                </div>
+              </div>
+
+              <!-- Toggle Demo Mode -->
+              <div class="fixed bottom-4 right-4 flex flex-col gap-2" style="z-index: 100;">
+                <button onclick="showHybridDemo('express')" class="px-3 py-1.5 bg-zinc-700 hover:bg-zinc-600 text-xs text-white rounded-lg transition-colors">
+                  Returning User
+                </button>
+                <button onclick="showHybridDemo('full')" class="px-3 py-1.5 bg-zinc-700 hover:bg-zinc-600 text-xs text-white rounded-lg transition-colors">
+                  Edit Mode
+                </button>
+                <button onclick="showHybridDemo('new')" class="px-3 py-1.5 bg-zinc-700 hover:bg-zinc-600 text-xs text-white rounded-lg transition-colors">
+                  New User
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comparison Table -->
+    <div id="comparison" class="tab-content">
+      <h2 class="text-2xl font-bold text-white mb-6">Feature Comparison</h2>
+
+      <div class="overflow-x-auto">
+        <table class="w-full bg-zinc-800 rounded-xl border border-zinc-700 overflow-hidden">
+          <thead>
+            <tr class="bg-zinc-700/50">
+              <th class="text-left p-4 text-sm font-medium text-zinc-300">Feature</th>
+              <th class="text-center p-4 text-sm font-medium text-zinc-300">Current<br>(4-Step)</th>
+              <th class="text-center p-4 text-sm font-medium text-blue-400">Option A<br>Accordion</th>
+              <th class="text-center p-4 text-sm font-medium text-purple-400">Option B<br>Two-Step</th>
+              <th class="text-center p-4 text-sm font-medium text-orange-400">Option C<br>Single-Page</th>
+              <th class="text-center p-4 text-sm font-medium text-primary-400">Option D<br>Hybrid ⭐</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-zinc-700">
+            <tr>
+              <td class="p-4 text-sm text-zinc-300">Number of Steps</td>
+              <td class="p-4 text-center text-sm text-red-400">4</td>
+              <td class="p-4 text-center text-sm text-zinc-300">1 (3 sections)</td>
+              <td class="p-4 text-center text-sm text-zinc-300">2</td>
+              <td class="p-4 text-center text-sm text-zinc-300">1</td>
+              <td class="p-4 text-center text-sm text-primary-400 font-medium">1 (or instant)</td>
+            </tr>
+            <tr>
+              <td class="p-4 text-sm text-zinc-300">Page Transitions</td>
+              <td class="p-4 text-center text-sm text-red-400">3</td>
+              <td class="p-4 text-center text-sm text-zinc-300">0</td>
+              <td class="p-4 text-center text-sm text-zinc-300">1</td>
+              <td class="p-4 text-center text-sm text-zinc-300">0</td>
+              <td class="p-4 text-center text-sm text-primary-400 font-medium">0</td>
+            </tr>
+            <tr>
+              <td class="p-4 text-sm text-zinc-300">Express Checkout</td>
+              <td class="p-4 text-center text-sm text-yellow-400">Partial</td>
+              <td class="p-4 text-center text-sm text-red-400">No</td>
+              <td class="p-4 text-center text-sm text-red-400">No</td>
+              <td class="p-4 text-center text-sm text-red-400">No</td>
+              <td class="p-4 text-center text-sm text-primary-400 font-medium">Yes ✓</td>
+            </tr>
+            <tr>
+              <td class="p-4 text-sm text-zinc-300">1-Click for Returning</td>
+              <td class="p-4 text-center text-sm text-red-400">No</td>
+              <td class="p-4 text-center text-sm text-red-400">No</td>
+              <td class="p-4 text-center text-sm text-red-400">No</td>
+              <td class="p-4 text-center text-sm text-red-400">No</td>
+              <td class="p-4 text-center text-sm text-primary-400 font-medium">Yes ✓</td>
+            </tr>
+            <tr>
+              <td class="p-4 text-sm text-zinc-300">Progress Indication</td>
+              <td class="p-4 text-center text-sm text-zinc-300">Stepper</td>
+              <td class="p-4 text-center text-sm text-zinc-300">Collapse</td>
+              <td class="p-4 text-center text-sm text-zinc-300">2-Step</td>
+              <td class="p-4 text-center text-sm text-yellow-400">None</td>
+              <td class="p-4 text-center text-sm text-primary-400 font-medium">Smart</td>
+            </tr>
+            <tr>
+              <td class="p-4 text-sm text-zinc-300">Mobile Experience</td>
+              <td class="p-4 text-center text-sm text-yellow-400">Good</td>
+              <td class="p-4 text-center text-sm text-zinc-300">Good</td>
+              <td class="p-4 text-center text-sm text-zinc-300">Good</td>
+              <td class="p-4 text-center text-sm text-yellow-400">Long scroll</td>
+              <td class="p-4 text-center text-sm text-primary-400 font-medium">Excellent</td>
+            </tr>
+            <tr>
+              <td class="p-4 text-sm text-zinc-300">Implementation Effort</td>
+              <td class="p-4 text-center text-sm text-zinc-500">—</td>
+              <td class="p-4 text-center text-sm text-zinc-300">Medium</td>
+              <td class="p-4 text-center text-sm text-zinc-300">Low</td>
+              <td class="p-4 text-center text-sm text-zinc-300">Medium</td>
+              <td class="p-4 text-center text-sm text-primary-400 font-medium">Low-Medium</td>
+            </tr>
+            <tr>
+              <td class="p-4 text-sm text-zinc-300">Expected Conversion Lift</td>
+              <td class="p-4 text-center text-sm text-zinc-500">Baseline</td>
+              <td class="p-4 text-center text-sm text-zinc-300">+15-20%</td>
+              <td class="p-4 text-center text-sm text-zinc-300">+10-15%</td>
+              <td class="p-4 text-center text-sm text-zinc-300">+20-25%</td>
+              <td class="p-4 text-center text-sm text-primary-400 font-medium">+25-40%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Recommendation Box -->
+      <div class="mt-8 bg-primary-500/10 border border-primary-500/30 rounded-xl p-6">
+        <div class="flex items-start">
+          <div class="w-12 h-12 rounded-xl bg-primary-500/20 text-primary-400 flex items-center justify-center text-2xl mr-4 flex-shrink-0">⭐</div>
+          <div>
+            <h3 class="text-xl font-bold text-white mb-2">Recommendation: Option D - Hybrid Progressive</h3>
+            <p class="text-zinc-300 mb-4">
+              Based on industry research and your current implementation, <strong>Option D</strong> offers the best balance of conversion optimization and implementation feasibility. It:
+            </p>
+            <ul class="space-y-2 text-sm text-zinc-300">
+              <li class="flex items-start">
+                <span class="text-primary-400 mr-2">✓</span>
+                <span>Leverages your existing <code class="bg-zinc-700 px-1 rounded">ExpressCheckoutBanner</code> component</span>
+              </li>
+              <li class="flex items-start">
+                <span class="text-primary-400 mr-2">✓</span>
+                <span>Reduces checkout to 1-click for 30-40% of users (returning customers)</span>
+              </li>
+              <li class="flex items-start">
+                <span class="text-primary-400 mr-2">✓</span>
+                <span>Provides guided single-page experience for new users</span>
+              </li>
+              <li class="flex items-start">
+                <span class="text-primary-400 mr-2">✓</span>
+                <span>Expected conversion increase of 25-40% based on industry benchmarks</span>
+              </li>
+              <li class="flex items-start">
+                <span class="text-primary-400 mr-2">✓</span>
+                <span>Can be implemented incrementally without breaking existing flow</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Implementation Priority -->
+      <div class="mt-8 grid md:grid-cols-3 gap-6">
+        <div class="bg-zinc-800 rounded-xl p-5 border border-zinc-700">
+          <div class="w-10 h-10 rounded-lg bg-primary-500/20 text-primary-400 flex items-center justify-center mb-3">1</div>
+          <h4 class="font-semibold text-white mb-2">Phase 1: Express Checkout</h4>
+          <p class="text-sm text-zinc-400">Enhance existing ExpressCheckoutBanner to allow 1-click purchase for returning users with saved data.</p>
+        </div>
+        <div class="bg-zinc-800 rounded-xl p-5 border border-zinc-700">
+          <div class="w-10 h-10 rounded-lg bg-primary-500/20 text-primary-400 flex items-center justify-center mb-3">2</div>
+          <h4 class="font-semibold text-white mb-2">Phase 2: Single-Page Merge</h4>
+          <p class="text-sm text-zinc-400">Combine shipping, payment, and review into one scrollable page with sticky order summary.</p>
+        </div>
+        <div class="bg-zinc-800 rounded-xl p-5 border border-zinc-700">
+          <div class="w-10 h-10 rounded-lg bg-primary-500/20 text-primary-400 flex items-center justify-center mb-3">3</div>
+          <h4 class="font-semibold text-white mb-2">Phase 3: Smart Auto-Fill</h4>
+          <p class="text-sm text-zinc-400">Add address autocomplete, auto-selection of default options, and inline validation.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sources -->
+    <div id="sources" class="tab-content">
+      <h2 class="text-2xl font-bold text-white mb-6">Research Sources</h2>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- Checkout UX Research -->
+        <div class="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
+          <h3 class="font-semibold text-white mb-4 flex items-center">
+            <span class="mr-2">📊</span> Checkout UX Research
+          </h3>
+          <ul class="space-y-3">
+            <li>
+              <a href="https://baymard.com/blog/current-state-of-checkout-ux" target="_blank" class="text-primary-400 hover:text-primary-300 text-sm">
+                Baymard Institute - Checkout UX Best Practices 2025
+              </a>
+              <p class="text-xs text-zinc-500 mt-1">Comprehensive research on checkout usability</p>
+            </li>
+            <li>
+              <a href="https://www.designstudiouiux.com/blog/ecommerce-checkout-ux-best-practices/" target="_blank" class="text-primary-400 hover:text-primary-300 text-sm">
+                15 Ecommerce Checkout & Cart UX Best Practices for 2025
+              </a>
+              <p class="text-xs text-zinc-500 mt-1">Industry best practices compilation</p>
+            </li>
+            <li>
+              <a href="https://www.convertcart.com/blog/checkout-page-examples" target="_blank" class="text-primary-400 hover:text-primary-300 text-sm">
+                35 Stunning Examples of Checkout Pages
+              </a>
+              <p class="text-xs text-zinc-500 mt-1">Real-world checkout implementations</p>
+            </li>
+            <li>
+              <a href="https://www.bigcommerce.com/articles/ecommerce/checkout-optimization/" target="_blank" class="text-primary-400 hover:text-primary-300 text-sm">
+                BigCommerce - Checkout Optimization Best Practices 2025
+              </a>
+              <p class="text-xs text-zinc-500 mt-1">Conversion optimization strategies</p>
+            </li>
+          </ul>
+        </div>
+
+        <!-- One-Click & Express Checkout -->
+        <div class="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
+          <h3 class="font-semibold text-white mb-4 flex items-center">
+            <span class="mr-2">⚡</span> One-Click & Express Checkout
+          </h3>
+          <ul class="space-y-3">
+            <li>
+              <a href="https://wisernotify.com/blog/one-click-checkout/" target="_blank" class="text-primary-400 hover:text-primary-300 text-sm">
+                One-Click Checkout: 5 Examples & Tested Tactics (2025)
+              </a>
+              <p class="text-xs text-zinc-500 mt-1">50% conversion increase statistics</p>
+            </li>
+            <li>
+              <a href="https://www.shopify.com/enterprise/blog/faster-checkout-process" target="_blank" class="text-primary-400 hover:text-primary-300 text-sm">
+                Shopify - 7 Proven Ways to Get Faster Checkouts (2025)
+              </a>
+              <p class="text-xs text-zinc-500 mt-1">Shopify's checkout optimization guide</p>
+            </li>
+            <li>
+              <a href="https://www.convertcart.com/blog/one-click-checkout" target="_blank" class="text-primary-400 hover:text-primary-300 text-sm">
+                6 eCommerce Brands Acing One Click Checkout
+              </a>
+              <p class="text-xs text-zinc-500 mt-1">Case studies from leading brands</p>
+            </li>
+            <li>
+              <a href="https://wisernotify.com/blog/express-checkout-guide/" target="_blank" class="text-primary-400 hover:text-primary-300 text-sm">
+                How to Implement Express Checkout for eCommerce Success
+              </a>
+              <p class="text-xs text-zinc-500 mt-1">Implementation guide</p>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Single vs Multi-Step Research -->
+        <div class="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
+          <h3 class="font-semibold text-white mb-4 flex items-center">
+            <span class="mr-2">📈</span> Single vs Multi-Step Research
+          </h3>
+          <ul class="space-y-3">
+            <li>
+              <a href="https://stripe.com/resources/more/one-page-checkout-vs-multistep-checkout" target="_blank" class="text-primary-400 hover:text-primary-300 text-sm">
+                Stripe - One-page vs. Multistep Checkout
+              </a>
+              <p class="text-xs text-zinc-500 mt-1">Stripe's official comparison guide</p>
+            </li>
+            <li>
+              <a href="https://www.convertcart.com/blog/checkout-ux-for-ecommerce-store" target="_blank" class="text-primary-400 hover:text-primary-300 text-sm">
+                Multi-step vs Single Page Checkout Comparison
+              </a>
+              <p class="text-xs text-zinc-500 mt-1">21.8% higher conversion for single-page</p>
+            </li>
+            <li>
+              <a href="https://storepro.io/learn/one-page-vs-multi-step-checkout-which-to-use-when/" target="_blank" class="text-primary-400 hover:text-primary-300 text-sm">
+                StorePro - One-page vs. Multi-step: Which to Use When?
+              </a>
+              <p class="text-xs text-zinc-500 mt-1">Context-specific recommendations</p>
+            </li>
+            <li>
+              <a href="https://clutch.co/agencies/ui-ux/resources/one-page-checkout-vs-multi-step-checkout" target="_blank" class="text-primary-400 hover:text-primary-300 text-sm">
+                Clutch - What Works for Your Store
+              </a>
+              <p class="text-xs text-zinc-500 mt-1">UX agency perspective</p>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Stripe & Payment Integration -->
+        <div class="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
+          <h3 class="font-semibold text-white mb-4 flex items-center">
+            <span class="mr-2">💳</span> Stripe & Payment Integration
+          </h3>
+          <ul class="space-y-3">
+            <li>
+              <a href="https://docs.stripe.com/payments/payment-element/best-practices" target="_blank" class="text-primary-400 hover:text-primary-300 text-sm">
+                Stripe - Payment Element Best Practices
+              </a>
+              <p class="text-xs text-zinc-500 mt-1">Official Stripe integration guide</p>
+            </li>
+            <li>
+              <a href="https://docs.stripe.com/elements/express-checkout-element" target="_blank" class="text-primary-400 hover:text-primary-300 text-sm">
+                Stripe - Express Checkout Element
+              </a>
+              <p class="text-xs text-zinc-500 mt-1">Apple Pay, Google Pay integration</p>
+            </li>
+            <li>
+              <a href="https://docs.stripe.com/apple-pay/best-practices" target="_blank" class="text-primary-400 hover:text-primary-300 text-sm">
+                Stripe - Apple Pay Best Practices
+              </a>
+              <p class="text-xs text-zinc-500 mt-1">250% conversion increase case study</p>
+            </li>
+            <li>
+              <a href="https://stripe.com/payments/checkout" target="_blank" class="text-primary-400 hover:text-primary-300 text-sm">
+                Stripe Checkout - Prebuilt Payment Page
+              </a>
+              <p class="text-xs text-zinc-500 mt-1">11.9% more revenue on average</p>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Mobile & Micro-interactions -->
+        <div class="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
+          <h3 class="font-semibold text-white mb-4 flex items-center">
+            <span class="mr-2">📱</span> Mobile & Micro-interactions
+          </h3>
+          <ul class="space-y-3">
+            <li>
+              <a href="https://www.nngroup.com/articles/mobile-checkout-ux/" target="_blank" class="text-primary-400 hover:text-primary-300 text-sm">
+                NN/g - The Mobile Checkout Experience
+              </a>
+              <p class="text-xs text-zinc-500 mt-1">Nielsen Norman Group research</p>
+            </li>
+            <li>
+              <a href="https://medium.com/@JanefrancesUIUX/mobile-ux-design-patterns-that-convert-in-2025-23137d3b0e56" target="_blank" class="text-primary-400 hover:text-primary-300 text-sm">
+                Mobile UX Design Patterns That Convert in 2025
+              </a>
+              <p class="text-xs text-zinc-500 mt-1">Modern mobile patterns</p>
+            </li>
+            <li>
+              <a href="https://userpilot.com/blog/micro-interaction-examples/" target="_blank" class="text-primary-400 hover:text-primary-300 text-sm">
+                14 Micro-interaction Examples to Enhance UX
+              </a>
+              <p class="text-xs text-zinc-500 mt-1">32% higher engagement with micro-interactions</p>
+            </li>
+            <li>
+              <a href="https://www.eleken.co/blog-posts/mobile-ux-design-examples" target="_blank" class="text-primary-400 hover:text-primary-300 text-sm">
+                Mobile UX Design Examples from Apps That Convert
+              </a>
+              <p class="text-xs text-zinc-500 mt-1">2025 mobile best practices</p>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Cart Abandonment & Optimization -->
+        <div class="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
+          <h3 class="font-semibold text-white mb-4 flex items-center">
+            <span class="mr-2">🛒</span> Cart Abandonment & Optimization
+          </h3>
+          <ul class="space-y-3">
+            <li>
+              <a href="https://www.omniconvert.com/blog/ecommerce-checkout-optimization/" target="_blank" class="text-primary-400 hover:text-primary-300 text-sm">
+                25 eCommerce Checkout Optimization Best Practices
+              </a>
+              <p class="text-xs text-zinc-500 mt-1">Comprehensive optimization guide</p>
+            </li>
+            <li>
+              <a href="https://litextension.com/blog/ecommerce-checkout-optimization/" target="_blank" class="text-primary-400 hover:text-primary-300 text-sm">
+                eCommerce Checkout Optimization: 15 Tips to Convert
+              </a>
+              <p class="text-xs text-zinc-500 mt-1">2025 conversion tips</p>
+            </li>
+            <li>
+              <a href="https://www.ingrid.com/blog/e-commerce-checkout-experience-best-practices" target="_blank" class="text-primary-400 hover:text-primary-300 text-sm">
+                Ingrid - E-commerce Checkout Optimization Guide
+              </a>
+              <p class="text-xs text-zinc-500 mt-1">Friction reduction strategies</p>
+            </li>
+            <li>
+              <a href="https://binmile.com/blog/e-commerce-checkout-page-optimization/" target="_blank" class="text-primary-400 hover:text-primary-300 text-sm">
+                7 Checkout Hacks to Reduce Cart Abandonment 2025
+              </a>
+              <p class="text-xs text-zinc-500 mt-1">Quick wins for conversion</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Key Statistics Summary -->
+      <div class="mt-8 bg-zinc-800 rounded-xl p-6 border border-zinc-700">
+        <h3 class="font-semibold text-white mb-4">Key Statistics from Research</h3>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="p-4 bg-zinc-700/50 rounded-lg text-center">
+            <p class="text-2xl font-bold text-red-400">70%</p>
+            <p class="text-xs text-zinc-400">Average cart abandonment rate</p>
+            <p class="text-xs text-zinc-500 mt-1">Source: Baymard Institute</p>
+          </div>
+          <div class="p-4 bg-zinc-700/50 rounded-lg text-center">
+            <p class="text-2xl font-bold text-primary-400">50%</p>
+            <p class="text-xs text-zinc-400">Conversion lift with 1-click checkout</p>
+            <p class="text-xs text-zinc-500 mt-1">Source: WiserNotify</p>
+          </div>
+          <div class="p-4 bg-zinc-700/50 rounded-lg text-center">
+            <p class="text-2xl font-bold text-yellow-400">47%</p>
+            <p class="text-xs text-zinc-400">Drop-off if checkout > 90 seconds</p>
+            <p class="text-xs text-zinc-500 mt-1">Source: Industry research</p>
+          </div>
+          <div class="p-4 bg-zinc-700/50 rounded-lg text-center">
+            <p class="text-2xl font-bold text-blue-400">21.8%</p>
+            <p class="text-xs text-zinc-400">Higher conversion for single-page</p>
+            <p class="text-xs text-zinc-500 mt-1">Source: Elasticpath A/B test</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-zinc-800 border-t border-zinc-700 py-6 mt-12">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+      <p class="text-sm text-zinc-500">
+        Moldova Direct Checkout UX Proposals • Created December 2025 • Tech Stack: Nuxt 4, Vue 3, TailwindCSS
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // Tab Navigation
+    function showTab(tabId) {
+      // Hide all tabs
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+      });
+
+      // Show selected tab
+      document.getElementById(tabId).classList.add('active');
+
+      // Update button styles
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        if (btn.dataset.tab === tabId) {
+          btn.classList.remove('text-zinc-400', 'hover:text-white', 'hover:bg-zinc-700');
+          btn.classList.add('bg-primary-600', 'text-white');
+        } else {
+          btn.classList.add('text-zinc-400', 'hover:text-white', 'hover:bg-zinc-700');
+          btn.classList.remove('bg-primary-600', 'text-white');
+        }
+      });
+    }
+
+    // Option A: Accordion functionality
+    let accordionState = {
+      shipping: 'open',
+      payment: 'locked',
+      review: 'locked'
+    };
+
+    function toggleAccordion(section) {
+      if (accordionState[section] === 'locked') return;
+
+      const content = document.getElementById(`${section}-content`);
+      const arrow = document.getElementById(`${section}-arrow`);
+
+      if (content.classList.contains('open')) {
+        content.classList.remove('open');
+        arrow.style.transform = 'rotate(0deg)';
+      } else {
+        content.classList.add('open');
+        arrow.style.transform = 'rotate(180deg)';
+      }
+    }
+
+    function completeSection(section) {
+      const indicator = document.getElementById(`${section}-indicator`);
+      const summary = document.getElementById(`${section}-summary`);
+      const content = document.getElementById(`${section}-content`);
+      const arrow = document.getElementById(`${section}-arrow`);
+      const sectionEl = document.getElementById(`accordion-${section}`);
+
+      // Mark as completed
+      indicator.innerHTML = '✓';
+      indicator.classList.remove('bg-primary-500');
+      indicator.classList.add('bg-primary-600');
+
+      // Collapse
+      content.classList.remove('open');
+      arrow.style.transform = 'rotate(0deg)';
+
+      // Update summary
+      if (section === 'shipping') {
+        summary.textContent = 'Calle Mayor 45, Madrid • Standard';
+
+        // Enable payment
+        const paymentSection = document.getElementById('accordion-payment');
+        const paymentContent = document.getElementById('payment-content');
+        const paymentIndicator = document.getElementById('payment-indicator');
+        const paymentTitle = document.getElementById('payment-title');
+        const paymentBtn = document.getElementById('payment-btn');
+
+        paymentSection.classList.remove('opacity-50');
+        paymentIndicator.classList.remove('bg-zinc-600', 'text-zinc-400');
+        paymentIndicator.classList.add('bg-primary-500', 'text-white');
+        paymentTitle.classList.remove('text-zinc-400');
+        paymentTitle.classList.add('text-white');
+        paymentBtn.disabled = false;
+        paymentContent.classList.add('open');
+        accordionState.payment = 'open';
+
+        document.getElementById('accordion-step').textContent = '2';
+      } else if (section === 'payment') {
+        summary.textContent = 'Cash on Delivery';
+
+        // Enable review
+        const reviewSection = document.getElementById('accordion-review');
+        const reviewContent = document.getElementById('review-content');
+        const reviewIndicator = document.getElementById('review-indicator');
+        const reviewTitle = document.getElementById('review-title');
+        const reviewBtn = document.getElementById('review-btn');
+
+        reviewSection.classList.remove('opacity-50');
+        reviewIndicator.classList.remove('bg-zinc-600', 'text-zinc-400');
+        reviewIndicator.classList.add('bg-primary-500', 'text-white');
+        reviewTitle.classList.remove('text-zinc-400');
+        reviewTitle.classList.add('text-white');
+        reviewBtn.disabled = false;
+        reviewContent.classList.add('open');
+        accordionState.review = 'open';
+
+        document.getElementById('accordion-step').textContent = '3';
+      }
+    }
+
+    // Option B: Two-step functionality
+    function showTwoStepReview() {
+      document.getElementById('twostep-step1').classList.add('hidden');
+      document.getElementById('twostep-step2').classList.remove('hidden');
+      document.getElementById('twostep-1').classList.remove('bg-primary-500', 'text-white');
+      document.getElementById('twostep-1').classList.add('bg-primary-600', 'text-white');
+      document.getElementById('twostep-1').innerHTML = '✓';
+      document.getElementById('twostep-2').classList.remove('bg-zinc-600', 'text-zinc-400');
+      document.getElementById('twostep-2').classList.add('bg-primary-500', 'text-white');
+      document.getElementById('twostep-progress').style.width = '100%';
+    }
+
+    function showTwoStepInfo() {
+      document.getElementById('twostep-step1').classList.remove('hidden');
+      document.getElementById('twostep-step2').classList.add('hidden');
+      document.getElementById('twostep-1').innerHTML = '1';
+      document.getElementById('twostep-1').classList.add('bg-primary-500', 'text-white');
+      document.getElementById('twostep-2').classList.add('bg-zinc-600', 'text-zinc-400');
+      document.getElementById('twostep-2').classList.remove('bg-primary-500', 'text-white');
+      document.getElementById('twostep-progress').style.width = '0%';
+    }
+
+    // Option D: Hybrid functionality
+    function hideExpressCheckout() {
+      document.getElementById('hybrid-express').classList.add('hidden');
+      document.getElementById('hybrid-full').classList.remove('hidden');
+    }
+
+    function showHybridDemo(mode) {
+      document.getElementById('hybrid-express').classList.add('hidden');
+      document.getElementById('hybrid-full').classList.add('hidden');
+      document.getElementById('hybrid-new').classList.add('hidden');
+
+      if (mode === 'express') {
+        document.getElementById('hybrid-express').classList.remove('hidden');
+      } else if (mode === 'full') {
+        document.getElementById('hybrid-full').classList.remove('hidden');
+      } else if (mode === 'new') {
+        document.getElementById('hybrid-new').classList.remove('hidden');
+      }
+    }
+  </script>
+</body>
+</html>
