@@ -68,12 +68,19 @@ const { t } = useI18n()
 const localePath = useLocalePath()
 const config = useRuntimeConfig()
 
-// Validate supportEmail with dev-mode warning and fallback
+const DEFAULT_SUPPORT_EMAIL = 'support@moldovadirect.com'
+
+// Track if we've already logged the fallback warning (avoid spam)
+let hasLoggedFallback = false
+
+// Validate supportEmail with warning and fallback
 const supportEmail = computed(() => {
   const email = config.public.supportEmail
-  if (!email && import.meta.dev) {
-    console.warn('[ReturnsSupport] Missing supportEmail in runtime config - check NUXT_PUBLIC_SUPPORT_EMAIL env var')
+  if (!email && !hasLoggedFallback) {
+    hasLoggedFallback = true
+    // Log in both dev and production so operators can detect misconfiguration
+    console.warn('[ReturnsSupport] Using fallback email - set NUXT_PUBLIC_SUPPORT_EMAIL env var for production')
   }
-  return email || 'support@moldovadirect.com'
+  return email || DEFAULT_SUPPORT_EMAIL
 })
 </script>

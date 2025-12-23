@@ -13,6 +13,13 @@ vi.mock('vue-i18n', () => ({
         'products.story.originFallback': 'Origin fallback',
         'products.story.originCategoryFallback': 'Origin category fallback',
         'products.socialProof.highlights': 'Balanced|Bright',
+        // Section titles for culinary products
+        'products.story.titleCulinary': 'The Story Behind This Flavor',
+        'products.story.titleGeneric': 'About This Product',
+        'products.related.titleCulinary': 'Complete Your Tasting Experience',
+        'products.related.titleGeneric': 'You May Also Like',
+        'products.related.subtitle': 'Pair with these selections',
+        'products.related.subtitleGeneric': 'Explore similar items',
       }
 
       if (params?.category) return `${translations[key]}:${params.category}`
@@ -289,6 +296,96 @@ describe('useProductStory', () => {
       const { awards } = useProductStory(product)
 
       expect(awards.value).toEqual(['Silver Medal', 'Bronze Award'])
+    })
+  })
+
+  describe('sectionTitles', () => {
+    it('returns culinary titles for wine category', () => {
+      const product = createProduct({
+        category: { ...baseProduct.category, slug: 'wine' },
+      })
+      const { sectionTitles } = useProductStory(product)
+
+      expect(sectionTitles.value.story).toBe('The Story Behind This Flavor')
+      expect(sectionTitles.value.related).toBe('Complete Your Tasting Experience')
+      expect(sectionTitles.value.relatedSubtitle).toBe('Pair with these selections')
+    })
+
+    it('returns culinary titles for honey category', () => {
+      const product = createProduct({
+        category: { ...baseProduct.category, slug: 'honey' },
+      })
+      const { sectionTitles } = useProductStory(product)
+
+      expect(sectionTitles.value.story).toBe('The Story Behind This Flavor')
+      expect(sectionTitles.value.related).toBe('Complete Your Tasting Experience')
+    })
+
+    it('returns culinary titles for preserves category', () => {
+      const product = createProduct({
+        category: { ...baseProduct.category, slug: 'preserves' },
+      })
+      const { sectionTitles } = useProductStory(product)
+
+      expect(sectionTitles.value.story).toBe('The Story Behind This Flavor')
+      expect(sectionTitles.value.related).toBe('Complete Your Tasting Experience')
+    })
+
+    it('returns generic titles for non-culinary category', () => {
+      const product = createProduct({
+        category: {
+          ...baseProduct.category,
+          slug: 'home-decor',
+          nameTranslations: { en: 'Home Decor', es: 'Decoración' },
+        },
+      })
+      const { sectionTitles } = useProductStory(product)
+
+      expect(sectionTitles.value.story).toBe('About This Product')
+      expect(sectionTitles.value.related).toBe('You May Also Like')
+      expect(sectionTitles.value.relatedSubtitle).toBe('Explore similar items')
+    })
+
+    it('returns generic titles for skincare category', () => {
+      const product = createProduct({
+        category: {
+          ...baseProduct.category,
+          slug: 'skincare',
+          nameTranslations: { en: 'Skincare', es: 'Cuidado de la piel' },
+        },
+      })
+      const { sectionTitles } = useProductStory(product)
+
+      expect(sectionTitles.value.story).toBe('About This Product')
+      expect(sectionTitles.value.related).toBe('You May Also Like')
+    })
+
+    it('returns culinary titles when non-food product has culinary attributes', () => {
+      const product = createProduct({
+        category: {
+          ...baseProduct.category,
+          slug: 'gifts',
+          nameTranslations: { en: 'Gifts', es: 'Regalos' },
+        },
+        attributes: {
+          tasting_notes: 'Sweet, Aromatic',
+          pairings: ['Tea time', 'Desserts'],
+        },
+      })
+      const { sectionTitles } = useProductStory(product)
+
+      // Has culinary attributes so uses culinary titles
+      expect(sectionTitles.value.story).toBe('The Story Behind This Flavor')
+      expect(sectionTitles.value.related).toBe('Complete Your Tasting Experience')
+    })
+
+    it('returns generic titles for null product', () => {
+      const product = computed(() => null)
+      const { sectionTitles } = useProductStory(product)
+
+      expect(sectionTitles.value.story).toBe('About This Product')
+      expect(sectionTitles.value.related).toBe('You May Also Like')
+      expect(sectionTitles.value.relatedSubtitle).toBe('Explore similar items')
     })
   })
 })
