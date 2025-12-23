@@ -83,13 +83,5 @@ const handleEmailInput = (event: Event) => {
   emit('clear-error', 'email')
 }
 
-const _handleCheckboxChange = (event: Event) => {
-  const target = event.target as HTMLInputElement
-  emit('update:modelValue', {
-    ...props.modelValue,
-    emailUpdates: target.checked,
-  })
-}
-
 // Styling now handled by shadcn-vue Input variants and aria-invalid
 </script>

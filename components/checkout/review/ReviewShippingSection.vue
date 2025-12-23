@@ -6,7 +6,7 @@
       </h3>
       <button
         class="text-sm text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 font-medium"
-        @click="$emit('lucide:square-pen')"
+        @click="$emit('edit')"
       >
         {{ $t('checkout.review.editShipping') }}
       </button>
@@ -84,6 +84,6 @@ interface Props {
 defineProps<Props>()
 
 defineEmits<{
-  (e: 'lucide:square-pen'): void
+  (e: 'edit'): void
 }>()
 </script>

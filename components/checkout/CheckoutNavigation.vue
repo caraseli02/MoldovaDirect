@@ -101,15 +101,3 @@ defineEmits<Emits>()
 
 const localePath = useLocalePath()
 </script>
-
-<style scoped>
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.animate-spin {
-  animation: spin 1s linear infinite;
-}
-</style>

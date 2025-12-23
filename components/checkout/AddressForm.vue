@@ -115,6 +115,7 @@
           <p
             v-if="fieldErrors.firstName"
             class="mt-1 text-sm text-red-600 dark:text-red-400"
+            role="alert"
           >
             {{ fieldErrors.firstName }}
           </p>
@@ -143,6 +144,7 @@
           <p
             v-if="fieldErrors.lastName"
             class="mt-1 text-sm text-red-600 dark:text-red-400"
+            role="alert"
           >
             {{ fieldErrors.lastName }}
           </p>
@@ -193,6 +195,7 @@
         <p
           v-if="fieldErrors.street"
           class="mt-1 text-sm text-red-600 dark:text-red-400"
+          role="alert"
         >
           {{ fieldErrors.street }}
         </p>
@@ -223,6 +226,7 @@
           <p
             v-if="fieldErrors.city"
             class="mt-1 text-sm text-red-600 dark:text-red-400"
+            role="alert"
           >
             {{ fieldErrors.city }}
           </p>
@@ -252,6 +256,7 @@
           <p
             v-if="fieldErrors.postalCode"
             class="mt-1 text-sm text-red-600 dark:text-red-400"
+            role="alert"
           >
             {{ fieldErrors.postalCode }}
           </p>
@@ -309,6 +314,7 @@
         <p
           v-if="fieldErrors.country"
           class="mt-1 text-sm text-red-600 dark:text-red-400"
+          role="alert"
         >
           {{ fieldErrors.country }}
         </p>

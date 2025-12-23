@@ -11,6 +11,7 @@
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
+          aria-hidden="true"
         >
           <path
             stroke-linecap="round"
@@ -27,6 +28,7 @@
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
+          aria-hidden="true"
         >
           <path
             stroke-linecap="round"
@@ -50,6 +52,7 @@
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
+          aria-hidden="true"
         >
           <path
             stroke-linecap="round"
@@ -69,6 +72,7 @@
             class="w-4 h-4 text-green-500 flex-shrink-0"
             fill="currentColor"
             viewBox="0 0 20 20"
+            aria-hidden="true"
           >
             <path
               fill-rule="evenodd"
@@ -83,6 +87,7 @@
             class="w-4 h-4 text-green-500 flex-shrink-0"
             fill="currentColor"
             viewBox="0 0 20 20"
+            aria-hidden="true"
           >
             <path
               fill-rule="evenodd"
@@ -97,6 +102,7 @@
             class="w-4 h-4 text-green-500 flex-shrink-0"
             fill="currentColor"
             viewBox="0 0 20 20"
+            aria-hidden="true"
           >
             <path
               fill-rule="evenodd"
