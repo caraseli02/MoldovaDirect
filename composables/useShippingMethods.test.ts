@@ -20,6 +20,15 @@ global.useI18n = vi.fn(() => ({
   locale: { value: 'en' },
 }))
 
+// Mock useToast
+const mockToast = {
+  success: vi.fn(),
+  error: vi.fn(),
+  warning: vi.fn(),
+  info: vi.fn(),
+}
+global.useToast = vi.fn(() => mockToast)
+
 // Mock checkout store
 const mockCheckoutStore = {
   orderData: { subtotal: 100 },

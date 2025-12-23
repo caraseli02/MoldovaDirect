@@ -432,8 +432,8 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
           t('checkout.success.orderConfirmation'),
         )
       }
-      catch {
-        // Ignore toast errors
+      catch (toastError) {
+        console.warn('Failed to show success toast:', toastError)
       }
     }
     catch (error: any) {

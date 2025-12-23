@@ -1599,8 +1599,20 @@
       "orderCompleted": "Comandă Finalizată",
       "orderConfirmation": "Comanda ta a fost plasată cu succes"
     },
+    "error": {
+      "title": "Eroare",
+      "proceedToPayment": "Nu s-a putut continua la plată. Te rugăm să încerci din nou.",
+      "proceedToReview": "Nu s-a putut continua la verificare. Te rugăm să încerci din nou.",
+      "orderFailed": "Comandă eșuată",
+      "orderProcessingFailed": "Nu s-a putut procesa comanda. Te rugăm să încerci din nou."
+    },
     "validation": {
       "firstNameRequired": "Prenumele este obligatoriu",
+      "orderDataMissing": "Lipsesc datele comenzii. Te rugăm să reîncepi procesul de plată.",
+      "shippingInfoMissing": "Lipsesc informațiile de livrare. Te rugăm să completezi detaliile de livrare.",
+      "paymentMethodMissing": "Lipsește metoda de plată. Te rugăm să selectezi o metodă de plată.",
+      "cartEmpty": "Coșul tău este gol. Te rugăm să adaugi produse înainte de plată.",
+      "invalidTotal": "Total comandă invalid. Te rugăm să încerci din nou.",
       "lastNameRequired": "Numele de familie este obligatoriu",
       "streetRequired": "Adresa stradală este obligatorie",
       "cityRequired": "Orașul este obligatoriu",
@@ -1665,6 +1677,8 @@
       "noMethods": "Nu sunt disponibile metode de livrare",
       "noMethodsDescription": "Te rugăm să verifici adresa sau să contactezi suportul",
       "error": "Eroare la încărcarea metodelor de livrare",
+      "loadError": "Metode de Livrare",
+      "usingDefaultOptions": "Se folosesc opțiuni de livrare implicite. Tarifele reale pot varia.",
       "standard": {
         "name": "Livrare Standard",
         "description": "Livrare în 3-5 zile lucrătoare"

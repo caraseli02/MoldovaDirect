@@ -177,23 +177,11 @@
 
 <script setup lang="ts">
 import { useCheckoutReview } from '~/composables/checkout/useCheckoutReview'
-
-// Lazy load review section components
-const ReviewCartSection = defineAsyncComponent(() =>
-  import('~/components/checkout/review/ReviewCartSection.vue'),
-)
-const ReviewPaymentSection = defineAsyncComponent(() =>
-  import('~/components/checkout/review/ReviewPaymentSection.vue'),
-)
-const ReviewShippingSection = defineAsyncComponent(() =>
-  import('~/components/checkout/review/ReviewShippingSection.vue'),
-)
-const ReviewSummaryCard = defineAsyncComponent(() =>
-  import('~/components/checkout/review/ReviewSummaryCard.vue'),
-)
-const ReviewTermsSection = defineAsyncComponent(() =>
-  import('~/components/checkout/review/ReviewTermsSection.vue'),
-)
+import ReviewCartSection from '~/components/checkout/review/ReviewCartSection.vue'
+import ReviewPaymentSection from '~/components/checkout/review/ReviewPaymentSection.vue'
+import ReviewShippingSection from '~/components/checkout/review/ReviewShippingSection.vue'
+import ReviewSummaryCard from '~/components/checkout/review/ReviewSummaryCard.vue'
+import ReviewTermsSection from '~/components/checkout/review/ReviewTermsSection.vue'
 
 definePageMeta({
   layout: 'checkout',

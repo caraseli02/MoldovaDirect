@@ -1766,8 +1766,20 @@
       "orderCompleted": "Order Completed",
       "orderConfirmation": "Your order has been successfully placed"
     },
+    "error": {
+      "title": "Error",
+      "proceedToPayment": "Failed to proceed to payment. Please try again.",
+      "proceedToReview": "Failed to proceed to review. Please try again.",
+      "orderFailed": "Order Failed",
+      "orderProcessingFailed": "Failed to process your order. Please try again."
+    },
     "validation": {
       "firstNameRequired": "First name is required",
+      "orderDataMissing": "Order data is missing. Please start checkout again.",
+      "shippingInfoMissing": "Shipping information is missing. Please complete shipping details.",
+      "paymentMethodMissing": "Payment method is missing. Please select a payment method.",
+      "cartEmpty": "Your cart is empty. Please add items before checkout.",
+      "invalidTotal": "Invalid order total. Please try again.",
       "lastNameRequired": "Last name is required",
       "streetRequired": "Street address is required",
       "cityRequired": "City is required",
@@ -1832,6 +1844,8 @@
       "noMethods": "No shipping methods available",
       "noMethodsDescription": "Please check your address or contact support",
       "error": "Error loading shipping methods",
+      "loadError": "Shipping Methods",
+      "usingDefaultOptions": "Using default shipping options. Actual rates may vary.",
       "standard": {
         "name": "Standard Shipping",
         "description": "Delivery in 3-5 business days"

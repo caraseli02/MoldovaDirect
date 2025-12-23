@@ -67,7 +67,11 @@
       </div>
 
       <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-        <li class="flex items-center gap-2">
+        <li
+          v-for="item in trustItems"
+          :key="item"
+          class="flex items-center gap-2"
+        >
           <svg
             class="w-4 h-4 text-green-500 flex-shrink-0"
             fill="currentColor"
@@ -80,37 +84,7 @@
               clip-rule="evenodd"
             />
           </svg>
-          {{ $t('checkout.trust.sslEncrypted') }}
-        </li>
-        <li class="flex items-center gap-2">
-          <svg
-            class="w-4 h-4 text-green-500 flex-shrink-0"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            aria-hidden="true"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-              clip-rule="evenodd"
-            />
-          </svg>
-          {{ $t('checkout.trust.dataProtected') }}
-        </li>
-        <li class="flex items-center gap-2">
-          <svg
-            class="w-4 h-4 text-green-500 flex-shrink-0"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            aria-hidden="true"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-              clip-rule="evenodd"
-            />
-          </svg>
-          {{ $t('checkout.trust.moneyBackGuarantee') }}
+          {{ $t(item) }}
         </li>
       </ul>
 
@@ -119,10 +93,10 @@
         <p class="text-xs text-gray-500 dark:text-gray-400">
           {{ $t('checkout.trust.needHelp') }}
           <a
-            href="mailto:support@moldovadirect.com"
+            :href="`mailto:${supportEmail}`"
             class="text-primary-600 hover:underline"
           >
-            support@moldovadirect.com
+            {{ supportEmail }}
           </a>
         </p>
       </div>
@@ -138,4 +112,15 @@ interface Props {
 withDefaults(defineProps<Props>(), {
   variant: 'full',
 })
+
+// Trust items for v-for loop
+const trustItems = [
+  'checkout.trust.sslEncrypted',
+  'checkout.trust.dataProtected',
+  'checkout.trust.moneyBackGuarantee',
+] as const
+
+// Use runtime config for support email with fallback
+const config = useRuntimeConfig()
+const supportEmail = computed(() => config.public?.supportEmail || 'support@moldovadirect.com')
 </script>

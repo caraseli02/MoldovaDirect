@@ -1689,8 +1689,20 @@
       "orderCompleted": "Pedido Completado",
       "orderConfirmation": "Tu pedido ha sido realizado exitosamente"
     },
+    "error": {
+      "title": "Error",
+      "proceedToPayment": "No se pudo continuar al pago. Por favor, inténtalo de nuevo.",
+      "proceedToReview": "No se pudo continuar a la revisión. Por favor, inténtalo de nuevo.",
+      "orderFailed": "Pedido Fallido",
+      "orderProcessingFailed": "No se pudo procesar tu pedido. Por favor, inténtalo de nuevo."
+    },
     "validation": {
       "firstNameRequired": "El nombre es requerido",
+      "orderDataMissing": "Faltan datos del pedido. Por favor, inicia el proceso de pago de nuevo.",
+      "shippingInfoMissing": "Falta información de envío. Por favor, completa los datos de envío.",
+      "paymentMethodMissing": "Falta el método de pago. Por favor, selecciona un método de pago.",
+      "cartEmpty": "Tu carrito está vacío. Por favor, añade productos antes de pagar.",
+      "invalidTotal": "Total del pedido inválido. Por favor, inténtalo de nuevo.",
       "lastNameRequired": "El apellido es requerido",
       "streetRequired": "La dirección es requerida",
       "cityRequired": "La ciudad es requerida",
@@ -1755,6 +1767,8 @@
       "noMethods": "No hay métodos de envío disponibles",
       "noMethodsDescription": "Por favor verifica tu dirección o contacta soporte",
       "error": "Error cargando métodos de envío",
+      "loadError": "Métodos de Envío",
+      "usingDefaultOptions": "Usando opciones de envío predeterminadas. Las tarifas reales pueden variar.",
       "standard": {
         "name": "Envío Estándar",
         "description": "Entrega en 3-5 días hábiles"

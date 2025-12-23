@@ -367,13 +367,13 @@ const getLocalizedText = (text: any): string => {
  * Get product image URL from snapshot
  * Handles both array of strings and array of image objects
  */
-const getProductImage = (snapshot: Record<string, any>): string => {
+const getProductImage = (snapshot: Record<string, any> | null | undefined): string => {
+  if (!snapshot) return '/placeholder-product.svg'
   const images = snapshot.images
   if (!images || !images.length) return '/placeholder-product.svg'
   const firstImage = images[0]
   if (typeof firstImage === 'string') return firstImage
-  if (typeof firstImage === 'object' && firstImage.url) return firstImage.url
-  return '/placeholder-product.svg'
+  return firstImage?.url ?? '/placeholder-product.svg'
 }
 
 // Computed properties
@@ -402,7 +402,7 @@ const formatPrice = (price: number): string => {
 }
 
 const formatDate = (date: Date): string => {
-  return new Intl.DateTimeFormat('en-US', {
+  return new Intl.DateTimeFormat(locale.value, {
     weekday: 'long',
     year: 'numeric',
     month: 'long',

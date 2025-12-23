@@ -504,6 +504,12 @@ const proceedToReview = async () => {
   }
   catch (error: any) {
     console.error('Failed to proceed to review:', error)
+    const toast = useToast()
+    const { t } = useI18n()
+    toast.error(
+      t('checkout.error.title') || 'Error',
+      t('checkout.error.proceedToReview') || 'Failed to proceed to review. Please try again.',
+    )
   }
 }
 
