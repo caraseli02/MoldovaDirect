@@ -54,7 +54,9 @@
     "selectAll": "Выбрать все",
     "deselectAll": "Снять выделение",
     "cartError": "Ошибка корзины",
-    "cartValidationError": "Ошибка проверки"
+    "cartValidationError": "Ошибка проверки",
+    "item": "товар",
+    "items": "товаров"
   },
   "cart": {
     "shippingCalculatedAtCheckout": "Рассчитывается при оформлении",
@@ -1818,8 +1820,35 @@
       "countdownMessage": "Перенаправление к оплате через {seconds} секунд...",
       "cancelButton": "Подождите, я хочу проверить",
       "countdownCancelled": "Обратный отсчет отменен",
-      "countdownCancelledDetails": "Не спешите, проверьте свой заказ"
-    }
+      "countdownCancelledDetails": "Не спешите, проверьте свой заказ",
+      "oneClickDescription": "Завершите заказ одним кликом",
+      "shippingTo": "Доставка",
+      "paymentMethod": "Оплата",
+      "shipping": "Доставка",
+      "placeOrderNow": "Оформить Заказ",
+      "editDetails": "Изменить Данные"
+    },
+    "hybrid": {
+      "contact": "Контакт",
+      "shippingAddress": "Адрес Доставки",
+      "shippingMethod": "Способ Доставки",
+      "payment": "Оплата",
+      "reviewAndPay": "Проверить и Оплатить"
+    },
+    "trustBadges": {
+      "secure": "Безопасно",
+      "guaranteed": "Гарантировано",
+      "fastDelivery": "Быстрая Доставка"
+    },
+    "showItems": "Показать товары",
+    "hideItems": "Скрыть товары",
+    "estimatedDelivery": "Ожидаемая доставка",
+    "calculatedAtNextStep": "Рассчитано",
+    "securePayment": "Безопасная Оплата",
+    "moneyBackGuarantee": "Гарантия Возврата",
+    "needHelp": "Нужна Помощь?",
+    "secure": "Безопасно",
+    "guaranteed": "Гарантировано"
   },
   "admin": {
     "navigation": {

@@ -54,7 +54,9 @@
     "selectAll": "Selectează Tot",
     "deselectAll": "Deselectează Tot",
     "cartError": "Eroare Coș",
-    "cartValidationError": "Eroare de Validare"
+    "cartValidationError": "Eroare de Validare",
+    "item": "articol",
+    "items": "articole"
   },
   "auth": {
     "signIn": "Autentificare",
@@ -1818,8 +1820,35 @@
       "countdownMessage": "Redirecționare către plată în {seconds} secunde...",
       "cancelButton": "Așteaptă, vreau să revizuiesc",
       "countdownCancelled": "Numărătoare inversă anulată",
-      "countdownCancelledDetails": "Ia-ți timp să revizuiești comanda"
-    }
+      "countdownCancelledDetails": "Ia-ți timp să revizuiești comanda",
+      "oneClickDescription": "Finalizează comanda cu un singur clic",
+      "shippingTo": "Livrare la",
+      "paymentMethod": "Plată",
+      "shipping": "Livrare",
+      "placeOrderNow": "Plasează Comanda Acum",
+      "editDetails": "Editează Detalii"
+    },
+    "hybrid": {
+      "contact": "Contact",
+      "shippingAddress": "Adresa de Livrare",
+      "shippingMethod": "Metoda de Livrare",
+      "payment": "Plată",
+      "reviewAndPay": "Revizuiește și Plătește"
+    },
+    "trustBadges": {
+      "secure": "Securizat",
+      "guaranteed": "Garantat",
+      "fastDelivery": "Livrare Rapidă"
+    },
+    "showItems": "Arată articole",
+    "hideItems": "Ascunde articole",
+    "estimatedDelivery": "Livrare estimată",
+    "calculatedAtNextStep": "Calculat",
+    "securePayment": "Plată Securizată",
+    "moneyBackGuarantee": "Garanție de Returnare",
+    "needHelp": "Ai Nevoie de Ajutor?",
+    "secure": "Securizat",
+    "guaranteed": "Garantat"
   },
   "admin": {
     "navigation": {

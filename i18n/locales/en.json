@@ -60,7 +60,9 @@
       "hours": "h",
       "minutes": "m",
       "seconds": "s"
-    }
+    },
+    "item": "item",
+    "items": "items"
   },
   "cart": {
     "shippingCalculatedAtCheckout": "Calculated at checkout",
@@ -1203,7 +1205,7 @@
     }
   },
   "products": {
-    "commonProduct": "Product",
+    "commonProduct": "this product",
     "viewDetails": "View Details",
     "featured": "Featured",
     "sale": "Sale",
@@ -1489,8 +1491,7 @@
       "sharedSuccess": "Shared—thanks for spreading the word!",
       "shareText": "Discover this Moldovan favourite with me.",
       "copyFallback": "Copy this link to share with friends."
-    },
-    "commonProduct": "this product"
+    }
   },
   "returns": {
     "badge": "Returns ready for MVP",
@@ -1986,285 +1987,55 @@
       "countdownMessage": "Redirecting to payment in {seconds} seconds...",
       "cancelButton": "Wait, let me review",
       "countdownCancelled": "Countdown cancelled",
-      "countdownCancelledDetails": "Take your time to review your order"
-    }
+      "countdownCancelledDetails": "Take your time to review your order",
+      "oneClickDescription": "Complete your order with one click",
+      "shippingTo": "Shipping to",
+      "paymentMethod": "Payment",
+      "shipping": "Shipping",
+      "placeOrderNow": "Place Order Now",
+      "editDetails": "Edit Details"
+    },
+    "hybrid": {
+      "contact": "Contact",
+      "shippingAddress": "Shipping Address",
+      "shippingMethod": "Shipping Method",
+      "payment": "Payment",
+      "reviewAndPay": "Review & Pay"
+    },
+    "trustBadges": {
+      "secure": "Secure",
+      "guaranteed": "Guaranteed",
+      "fastDelivery": "Fast Delivery"
+    },
+    "showItems": "Show items",
+    "hideItems": "Hide items",
+    "estimatedDelivery": "Estimated delivery",
+    "calculatedAtNextStep": "Calculated",
+    "securePayment": "Secure Payment",
+    "moneyBackGuarantee": "Money-back Guarantee",
+    "needHelp": "Need Help?",
+    "secure": "Secure",
+    "guaranteed": "Guaranteed"
   },
   "admin": {
     "navigation": {
+      "toggleSidebar": "Toggle sidebar",
+      "notifications": "Notifications",
       "dashboard": "Dashboard",
       "products": "Products",
+      "inventory": "Inventory",
       "orders": "Orders",
       "users": "Users",
       "analytics": "Analytics",
-      "inventory": "Inventory",
-      "testing": "Testing",
       "tools": "Tools",
-      "toggleSidebar": "Toggle sidebar",
-      "notifications": "Notifications"
-    },
-    "errors": {
-      "logoutFailed": "Logout failed",
-      "unknownError": "An unknown error occurred"
-    },
-    "dashboard": {
-      "title": "Dashboard",
-      "welcome": "Welcome back! Here's what's happening with your store.",
-      "autoRefresh": "Auto-refresh",
-      "refreshAll": "Refresh All",
-      "lastUpdated": "Last updated: {time}",
-      "refresh": "Refresh",
-      "criticalAlerts": "Critical Alerts",
-      "stats": {
-        "sectionTitle": "Operational Snapshot",
-        "refreshHint": "Metrics refresh automatically every five minutes.",
-        "totalProducts": "Total Products",
-        "activeProducts": "{count} active",
-        "lowStockProducts": "{count} products low in stock",
-        "totalUsers": "Total Users",
-        "activeUsers": "{count} active",
-        "newUsersToday": "{count} new today",
-        "totalOrders": "Total Orders",
-        "conversionRate": "{rate} conversion",
-        "totalRevenue": "Total Revenue",
-        "revenueToday": "{amount} today",
-        "pendingOrders": "{count} pending",
-        "processingOrders": "{count} processing",
-        "shippedOrders": "{count} shipped",
-        "deliveredOrders": "{count} delivered",
-        "ordersToday": "{count} orders today",
-        "averageOrderValue": "Avg. {amount}"
-      },
-      "quickActions": {
-        "title": "Quick Actions",
-        "addNewProduct": "Add New Product",
-        "viewOrders": "View Orders",
-        "manageUsers": "Manage Users"
-      },
-      "systemStatus": {
-        "title": "System Status",
-        "database": "Database",
-        "api": "API",
-        "lastBackup": "Last Backup",
-        "online": "Online",
-        "operational": "Operational",
-        "offline": "Offline",
-        "error": "Error",
-        "hoursAgo": "{hours} hours ago"
-      },
-      "recentActivity": {
-        "title": "Recent Activity",
-        "noActivity": "No recent activity",
-        "activityDescription": "Activity will appear here as users interact with your store",
-        "justNow": "Just now",
-        "minutesAgo": "{minutes}m ago",
-        "hoursAgo": "{hours}h ago",
-        "daysAgo": "{days}d ago",
-        "types": {
-          "userRegistration": "User",
-          "newOrder": "Order",
-          "lowStock": "Stock Alert",
-          "productUpdate": "Product"
-        }
-      },
-      "errors": {
-        "loadingData": "Error loading dashboard data",
-        "tryAgain": "Please try again"
-      }
+      "testing": "Testing"
     },
     "products": {
-      "title": "Products",
-      "subtitle": "Manage your product catalog",
-      "addProduct": "Add Product",
-      "editProduct": "Edit Product",
-      "deleteProduct": "Delete Product",
-      "bulkActions": "Bulk Actions",
-      "selectAll": "Select All",
-      "deselectAll": "Deselect All",
-      "selectedCount": "{count} selected",
-      "clearSelection": "Clear Selection",
-      "filters": {
-        "search": "Search products...",
-        "category": "Category",
-        "allCategories": "All Categories",
-        "status": "Status",
-        "allStatuses": "All Statuses",
-        "active": "Active",
-        "inactive": "Inactive",
-        "stockLevel": "Stock Level",
-        "allStock": "All Stock",
-        "inStock": "In Stock",
-        "lowStock": "Low Stock",
-        "outOfStock": "Out of Stock",
-        "clearFilters": "Clear Filters",
-        "resultsCount": "{count} results found"
-      },
-      "table": {
-        "name": "Name",
-        "sku": "SKU",
-        "category": "Category",
-        "price": "Price",
-        "stock": "Stock",
-        "status": "Status",
-        "actions": "Actions",
-        "edit": "Edit",
-        "delete": "Delete",
-        "editStock": "Edit Stock",
-        "noProducts": "No products found",
-        "noProductsMessage": "Create your first product to get started"
-      },
-      "form": {
-        "basicInformation": "Basic Information",
-        "productName": "Product Name",
-        "productNameRequired": "Product name is required",
-        "sku": "SKU",
-        "skuRequired": "SKU is required",
-        "category": "Category",
-        "categoryRequired": "Category is required",
-        "selectCategory": "Select a category",
-        "description": "Description",
-        "pricing": "Pricing",
-        "price": "Price (EUR)",
-        "priceRequired": "Price is required",
-        "salePrice": "Sale Price (EUR)",
-        "inventory": "Inventory",
-        "stockQuantity": "Stock Quantity",
-        "stockRequired": "Stock quantity is required",
-        "lowStockThreshold": "Low Stock Threshold",
-        "trackInventory": "Track Inventory",
-        "allowBackorders": "Allow Backorders",
-        "media": "Media",
-        "productImages": "Product Images",
-        "dragImages": "Drag images here or click to upload",
-        "maxImages": "Maximum 5 images",
-        "supportedFormats": "Supported formats: JPG, PNG, WebP",
-        "maxFileSize": "Max file size: 5MB",
-        "settings": "Settings",
-        "featured": "Featured Product",
-        "status": "Status",
-        "active": "Active",
-        "inactive": "Inactive",
-        "metaData": "SEO & Meta Data",
-        "metaTitle": "Meta Title",
-        "metaDescription": "Meta Description",
-        "save": "Save Product",
-        "saving": "Saving...",
-        "cancel": "Cancel",
-        "errors": {
-          "saveFailed": "Failed to save product",
-          "invalidData": "Please check the form data",
-          "networkError": "Network error occurred"
-        }
-      },
-      "stockModal": {
-        "title": "Edit Stock for {product}",
-        "stockQuantity": "Stock Quantity",
-        "cancel": "Cancel",
-        "save": "Save Stock",
-        "saving": "Saving..."
-      },
-      "bulkOperations": {
-        "activate": "Activate Selected",
-        "deactivate": "Deactivate Selected",
-        "delete": "Delete Selected",
-        "confirmDelete": "Are you sure you want to delete {count} products?",
-        "confirmDeleteSingle": "Are you sure you want to delete this product?",
-        "deleteWarning": "This action cannot be undone.",
-        "operationInProgress": "Operation in progress..."
-      },
-      "pagination": {
-        "showing": "Showing {start} to {end} of {total} products",
-        "previous": "Previous",
-        "next": "Next",
-        "page": "Page {page}",
-        "perPage": "Per page",
-        "goToPage": "Go to page {page}"
-      },
-      "success": {
-        "productSaved": "Product saved successfully",
-        "productDeleted": "Product deleted successfully",
-        "stockUpdated": "Stock updated successfully",
-        "bulkActivated": "{count} products activated",
-        "bulkDeactivated": "{count} products deactivated",
-        "bulkDeleted": "{count} products deleted"
-      },
-      "errors": {
-        "loadFailed": "Failed to load products",
-        "saveFailed": "Failed to save product",
-        "deleteFailed": "Failed to delete product",
-        "stockUpdateFailed": "Failed to update stock",
-        "bulkOperationFailed": "Bulk operation failed"
-      },
-      "headers": {
-        "product": "Product",
-        "category": "Category",
-        "price": "Price",
-        "stock": "Stock",
-        "status": "Status",
-        "created": "Created",
-        "actions": "Actions"
-      }
-    },
-    "orders": {
-      "title": "Orders",
-      "subtitle": "Manage customer orders",
-      "viewOrder": "View Order",
-      "editOrder": "Edit Order",
-      "deleteOrder": "Delete Order",
-      "orderNumber": "Order #{number}",
-      "customer": "Customer",
-      "total": "Total",
-      "status": "Status",
-      "date": "Date",
-      "actions": "Actions",
-      "statuses": {
-        "pending": "Pending",
-        "processing": "Processing",
-        "shipped": "Shipped",
-        "delivered": "Delivered",
-        "cancelled": "Cancelled",
-        "refunded": "Refunded"
-      }
+      "select": "Select product"
     },
     "users": {
-      "title": "Users",
-      "subtitle": "Manage user accounts",
-      "viewUser": "View User",
-      "editUser": "Edit User",
-      "deleteUser": "Delete User",
-      "userId": "User ID",
-      "name": "Name",
-      "email": "Email",
-      "role": "Role",
-      "status": "Status",
-      "registered": "Registered",
-      "lastLogin": "Last Login",
-      "lastOrder": "Last Order",
-      "orders": "Orders",
-      "totalSpent": "Total Spent",
-      "language": "Language",
-      "avgOrderValue": "Avg Order Value",
-      "actions": {
-        "view": "View user details",
-        "edit": "Edit user",
-        "clearFilters": "Clear Filters",
-        "refresh": "Refresh",
-        "invite": "Invite User"
-      },
       "loading": "Loading users...",
-      "retry": "Retry",
-      "searchPlaceholder": "Search users by name, email, or ID...",
-      "roles": {
-        "admin": "Administrator",
-        "user": "Customer",
-        "manager": "Manager"
-      },
-      "statuses": {
-        "active": "Active",
-        "inactive": "Inactive",
-        "banned": "Banned",
-        "unverified": "Unverified",
-        "locked": "Locked"
-      },
+      "retry": "Retry loading",
       "columns": {
         "user": "User",
         "email": "Email",
@@ -2274,140 +2045,6 @@
         "registered": "Registered",
         "lastLogin": "Last Login",
         "actions": "Actions"
-      },
-      "filters": {
-        "allStatus": "All Status",
-        "active": "Active",
-        "inactive": "Inactive",
-        "clear": "Clear Filters",
-        "toggle": "Filters",
-        "activeFilters": "Active Filters",
-        "from": "From",
-        "to": "To"
-      },
-      "empty": {
-        "noResults": "No users found",
-        "noUsers": "No users yet",
-        "noData": "No data available",
-        "noResultsForQuery": "No users found for '{query}'",
-        "tryDifferentFilters": "Try different filters or search terms",
-        "noUsersDescription": "No users have registered yet. Users will appear here once they create accounts.",
-        "checkConnection": "Check your connection and try again",
-        "helpTitle": "Tips for managing users:",
-        "helpTip1": "Use search to find specific users quickly",
-        "helpTip2": "Filter by status to focus on specific user groups",
-        "helpTip3": "Click on any user to view detailed information",
-        "swipeHint": "Swipe left on mobile for quick actions"
-      }
-    },
-    "analytics": {
-      "title": "Analytics",
-      "subtitle": "View store performance",
-      "revenue": "Revenue",
-      "orders": "Orders",
-      "customers": "Customers",
-      "products": "Products",
-      "conversionRate": "Conversion Rate",
-      "averageOrderValue": "Average Order Value",
-      "topProducts": "Top Products",
-      "topCategories": "Top Categories",
-      "recentSales": "Recent Sales",
-      "performanceMetrics": "Performance Metrics"
-    },
-    "common": {
-      "save": "Save",
-      "cancel": "Cancel",
-      "delete": "Delete",
-      "edit": "Edit",
-      "view": "View",
-      "create": "Create",
-      "update": "Update",
-      "search": "Search",
-      "filter": "Filter",
-      "sort": "Sort",
-      "export": "Export",
-      "import": "Import",
-      "loading": "Loading...",
-      "saving": "Saving...",
-      "deleting": "Deleting...",
-      "noData": "No data available",
-      "error": "An error occurred",
-      "success": "Operation completed successfully",
-      "confirm": "Are you sure?",
-      "yes": "Yes",
-      "no": "No",
-      "close": "Close",
-      "back": "Back",
-      "next": "Next",
-      "previous": "Previous",
-      "showMore": "Show More",
-      "showLess": "Show Less",
-      "selectAll": "Select All",
-      "deselectAll": "Deselect All",
-      "required": "Required",
-      "optional": "Optional"
-    },
-    "breadcrumbs": {
-      "admin": "Admin",
-      "dashboard": "Dashboard",
-      "products": "Products",
-      "newProduct": "New Product",
-      "editProduct": "Edit Product",
-      "orders": "Orders",
-      "users": "Users",
-      "analytics": "Analytics",
-      "inventory": "Inventory"
-    },
-    "userMenu": {
-      "profile": "Profile",
-      "settings": "Settings",
-      "logout": "Logout",
-      "adminUser": "Admin User",
-      "administrator": "Administrator"
-    },
-    "notifications": {
-      "title": "Notifications",
-      "noNotifications": "No new notifications",
-      "markAllRead": "Mark all as read"
-    },
-    "autoRefresh": {
-      "enabled": "Auto-refresh enabled",
-      "disabled": "Auto-refresh disabled",
-      "interval": "Refresh every {minutes} minutes",
-      "lastRefresh": "Last refresh: {time}"
-    },
-    "emailLogs": {
-      "title": "Email Delivery Logs",
-      "headers": {
-        "order": "Order",
-        "recipient": "Recipient",
-        "type": "Type",
-        "status": "Status",
-        "attempts": "Attempts",
-        "date": "Date",
-        "actions": "Actions"
-      },
-      "buttons": {
-        "view": "View",
-        "retry": "Retry",
-        "retrying": "Retrying..."
-      }
-    },
-    "inventory": {
-      "reports": {
-        "recentMovements": "Recent Movements",
-        "headers": {
-          "product": "Product",
-          "type": "Type",
-          "quantity": "Quantity",
-          "date": "Date",
-          "currentStock": "Current Stock",
-          "threshold": "Threshold",
-          "stockValue": "Stock Value",
-          "priority": "Priority",
-          "recommendedOrder": "Recommended Order",
-          "estimatedCost": "Estimated Cost"
-        }
       }
     }
   },
@@ -2771,37 +2408,6 @@
       "sustainability": {
         "title": "Sustainable Practices",
         "description": "Many of our producers are transitioning to organic and biodynamic farming, ensuring that Moldova's vineyards thrive for generations to come."
-      }
-    }
-  },
-  "admin": {
-    "navigation": {
-      "toggleSidebar": "Toggle sidebar",
-      "notifications": "Notifications",
-      "dashboard": "Dashboard",
-      "products": "Products",
-      "inventory": "Inventory",
-      "orders": "Orders",
-      "users": "Users",
-      "analytics": "Analytics",
-      "tools": "Tools",
-      "testing": "Testing"
-    },
-    "products": {
-      "select": "Select product"
-    },
-    "users": {
-      "loading": "Loading users...",
-      "retry": "Retry loading",
-      "columns": {
-        "user": "User",
-        "email": "Email",
-        "status": "Status",
-        "orders": "Orders",
-        "totalSpent": "Total Spent",
-        "registered": "Registered",
-        "lastLogin": "Last Login",
-        "actions": "Actions"
       }
     }
   },

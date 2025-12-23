@@ -56,7 +56,9 @@
     "cartError": "Error en el carrito",
     "cartValidationError": "Error de validación",
     "proceedToCheckout": "Proceder al Pago",
-    "showOrderSummary": "Mostrar resumen del pedido"
+    "showOrderSummary": "Mostrar resumen del pedido",
+    "item": "artículo",
+    "items": "artículos"
   },
   "cart": {
     "shippingCalculatedAtCheckout": "Calculado al finalizar",
@@ -1909,8 +1911,35 @@
       "countdownMessage": "Redirigiendo al pago en {seconds} segundos...",
       "cancelButton": "Espera, déjame revisar",
       "countdownCancelled": "Cuenta regresiva cancelada",
-      "countdownCancelledDetails": "Tómate tu tiempo para revisar tu pedido"
-    }
+      "countdownCancelledDetails": "Tómate tu tiempo para revisar tu pedido",
+      "oneClickDescription": "Completa tu pedido con un solo clic",
+      "shippingTo": "Enviar a",
+      "paymentMethod": "Pago",
+      "shipping": "Envío",
+      "placeOrderNow": "Realizar Pedido Ahora",
+      "editDetails": "Editar Detalles"
+    },
+    "hybrid": {
+      "contact": "Contacto",
+      "shippingAddress": "Dirección de Envío",
+      "shippingMethod": "Método de Envío",
+      "payment": "Pago",
+      "reviewAndPay": "Revisar y Pagar"
+    },
+    "trustBadges": {
+      "secure": "Seguro",
+      "guaranteed": "Garantizado",
+      "fastDelivery": "Entrega Rápida"
+    },
+    "showItems": "Mostrar artículos",
+    "hideItems": "Ocultar artículos",
+    "estimatedDelivery": "Entrega estimada",
+    "calculatedAtNextStep": "Calculado",
+    "securePayment": "Pago Seguro",
+    "moneyBackGuarantee": "Garantía de Devolución",
+    "needHelp": "¿Necesitas Ayuda?",
+    "secure": "Seguro",
+    "guaranteed": "Garantizado"
   },
   "admin": {
     "navigation": {
