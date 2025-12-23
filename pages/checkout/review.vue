@@ -138,24 +138,38 @@
             {{ $t('checkout.backToPayment') }}
           </UiButton>
 
-          <UiButton
-            :disabled="!canProceed || processing"
-            class="bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600"
-            @click="handlePlaceOrder"
-          >
-            <commonIcon
-              v-if="processing"
-              name="lucide:loader-2"
-              class="mr-2 h-4 w-4 animate-spin"
-            />
-            {{ processing ? $t('checkout.processing') : $t('checkout.placeOrder') }}
-            <commonIcon
-              v-if="!processing"
-              name="lucide:chevron-right"
-              class="ml-2 h-4 w-4"
-            />
-          </UiButton>
+          <div class="flex flex-col items-end gap-2">
+            <UiButton
+              :disabled="!canProceed || processing"
+              size="lg"
+              class="bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 h-12 px-8 text-base font-semibold"
+              @click="handlePlaceOrder"
+            >
+              <commonIcon
+                v-if="processing"
+                name="lucide:loader-2"
+                class="mr-2 h-5 w-5 animate-spin"
+              />
+              <commonIcon
+                v-else
+                name="lucide:lock"
+                class="mr-2 h-4 w-4"
+              />
+              {{ processing ? $t('checkout.processing') : $t('checkout.placeOrderSecure') }}
+              <commonIcon
+                v-if="!processing"
+                name="lucide:chevron-right"
+                class="ml-2 h-5 w-5"
+              />
+            </UiButton>
+            <p class="text-xs text-gray-500 dark:text-gray-400">
+              {{ $t('checkout.notChargedYet') }}
+            </p>
+          </div>
         </footer>
+
+        <!-- Trust Badges -->
+        <CheckoutTrustBadges class="mt-8" />
       </div>
     </div>
   </div>

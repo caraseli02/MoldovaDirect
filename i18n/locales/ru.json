@@ -1499,8 +1499,15 @@
     "copyright": "© 2024 Moldova Direct. Все права защищены."
   },
   "checkout": {
-    "title": "Checkout",
-    "secureCheckout": "Secure Checkout",
+    "title": "Оформление заказа",
+    "secureCheckout": "Безопасное оформление",
+    "trust": {
+      "secureCheckout": "100% Безопасная покупка",
+      "sslEncrypted": "256-битное SSL шифрование",
+      "dataProtected": "Ваши данные защищены",
+      "moneyBackGuarantee": "Гарантия возврата денег",
+      "needHelp": "Нужна помощь? Свяжитесь с нами"
+    },
     "steps": {
       "shipping": {
         "name": "Shipping",
@@ -1538,11 +1545,14 @@
     },
     "continueAsGuest": "Continue as Guest",
     "backToCart": "Back to Cart",
-    "continueToPayment": "Continue to Payment",
-    "backToShipping": "Back to Shipping",
-    "reviewOrder": "Review Order",
-    "backToPayment": "Back to Payment",
-    "placeOrder": "Place Order",
+    "continueToPayment": "Продолжить к оплате",
+    "continueToReview": "Проверить ваш заказ",
+    "backToShipping": "Назад к доставке",
+    "reviewOrder": "Проверить заказ",
+    "backToPayment": "Назад к оплате",
+    "placeOrder": "Оформить заказ",
+    "placeOrderSecure": "Безопасно оформить заказ",
+    "notChargedYet": "Оплата ещё не будет списана",
     "shippingForm": {
       "title": "Shipping Information",
       "placeholder": "Shipping form will be implemented in the next task"

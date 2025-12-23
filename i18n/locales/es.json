@@ -1591,6 +1591,13 @@
   "checkout": {
     "title": "Finalizar Compra",
     "secureCheckout": "Compra Segura",
+    "trust": {
+      "secureCheckout": "Compra 100% Segura",
+      "sslEncrypted": "Cifrado SSL de 256 bits",
+      "dataProtected": "Tus datos están protegidos",
+      "moneyBackGuarantee": "Garantía de devolución del dinero",
+      "needHelp": "¿Necesitas ayuda? Contáctanos en"
+    },
     "steps": {
       "shipping": {
         "name": "Envío",
@@ -1629,10 +1636,13 @@
     "continueAsGuest": "Continuar como Invitado",
     "backToCart": "Volver al Carrito",
     "continueToPayment": "Continuar al Pago",
+    "continueToReview": "Revisar tu Pedido",
     "backToShipping": "Volver al Envío",
     "reviewOrder": "Revisar Pedido",
     "backToPayment": "Volver al Pago",
     "placeOrder": "Realizar Pedido",
+    "placeOrderSecure": "Realizar Pedido Seguro",
+    "notChargedYet": "No se te cobrará todavía",
     "shippingForm": {
       "title": "Información de Envío",
       "placeholder": "El formulario de envío se implementará en la siguiente tarea"

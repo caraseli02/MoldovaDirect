@@ -1501,6 +1501,13 @@
   "checkout": {
     "title": "Finalizare Comandă",
     "secureCheckout": "Finalizare Securizată",
+    "trust": {
+      "secureCheckout": "Comandă 100% Securizată",
+      "sslEncrypted": "Criptare SSL 256-bit",
+      "dataProtected": "Datele tale sunt protejate",
+      "moneyBackGuarantee": "Garanția banilor înapoi",
+      "needHelp": "Ai nevoie de ajutor? Contactează-ne la"
+    },
     "steps": {
       "shipping": {
         "name": "Livrare",
@@ -1539,10 +1546,13 @@
     "continueAsGuest": "Continuă ca Vizitator",
     "backToCart": "Înapoi la Coș",
     "continueToPayment": "Continuă la Plată",
+    "continueToReview": "Revizuiește Comanda Ta",
     "backToShipping": "Înapoi la Livrare",
     "reviewOrder": "Revizuiește Comanda",
     "backToPayment": "Înapoi la Plată",
     "placeOrder": "Plasează Comanda",
+    "placeOrderSecure": "Plasează Comanda Securizată",
+    "notChargedYet": "Nu vei fi taxat încă",
     "shippingForm": {
       "title": "Informații de Livrare",
       "placeholder": "Formularul de livrare va fi implementat în următoarea sarcină"
