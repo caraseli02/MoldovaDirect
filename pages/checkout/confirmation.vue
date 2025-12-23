@@ -68,8 +68,8 @@
                   <!-- Product Image -->
                   <div class="flex-shrink-0">
                     <img
-                      :src="item.productSnapshot.images?.[0] || '/placeholder-product.svg'"
-                      :alt="item.productSnapshot.name"
+                      :src="getProductImage(item.productSnapshot)"
+                      :alt="getLocalizedText(item.productSnapshot.name)"
                       class="w-16 h-16 object-cover rounded-lg border border-gray-200 dark:border-gray-600"
                     />
                   </div>
@@ -77,7 +77,7 @@
                   <!-- Product Details -->
                   <div class="flex-1 min-w-0">
                     <h4 class="text-sm font-medium text-gray-900 dark:text-white truncate">
-                      {{ item.productSnapshot.name }}
+                      {{ getLocalizedText(item.productSnapshot.name) }}
                     </h4>
                     <p class="text-sm text-gray-500 dark:text-gray-400">
                       {{ $t('common.quantity') }}: {{ item.quantity }}
@@ -342,8 +342,39 @@ const cartStore = useCartStore()
 
 // Composables
 const localePath = useLocalePath()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const toast = useToast()
+
+/**
+ * Get localized text from a translation object or string
+ * Handles both string values and translation objects like { en: "...", es: "..." }
+ */
+const getLocalizedText = (text: any): string => {
+  if (!text) return ''
+  if (typeof text === 'string') return text
+  // Try current locale first
+  const localeText = text[locale.value]
+  if (localeText) return localeText
+  // Fall back to Spanish (primary locale)
+  const esText = text.es
+  if (esText) return esText
+  // Fall back to any available translation
+  const values = Object.values(text).filter((v): v is string => typeof v === 'string')
+  return values[0] || ''
+}
+
+/**
+ * Get product image URL from snapshot
+ * Handles both array of strings and array of image objects
+ */
+const getProductImage = (snapshot: Record<string, any>): string => {
+  const images = snapshot.images
+  if (!images || !images.length) return '/placeholder-product.svg'
+  const firstImage = images[0]
+  if (typeof firstImage === 'string') return firstImage
+  if (typeof firstImage === 'object' && firstImage.url) return firstImage.url
+  return '/placeholder-product.svg'
+}
 
 // Computed properties
 // Access data directly from session store to bypass the checkout store proxy

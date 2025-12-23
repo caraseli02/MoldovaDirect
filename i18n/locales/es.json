@@ -1159,8 +1159,10 @@
     "outOfStock": "Agotado",
     "inCart": "En el Carrito",
     "adding": "Añadiendo...",
+    "addingToCart": "Añadiendo {name}...",
+    "productInCart": "{name} ya está en el carrito",
     "quickViewProduct": "Vista Rápida",
-    "addProductToCart": "Añadir al Carrito",
+    "addProductToCart": "Añadir {name} al carrito",
     "noImageAvailable": "Sin imagen disponible",
     "imageGallery": "Galería de Imágenes",
     "imageZoom": {

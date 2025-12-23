@@ -1,14 +1,16 @@
 # Moldova Direct - MVP Assessment Report
 
-**Date:** December 20, 2025
-**Version:** 1.0
+**Date:** December 23, 2025
+**Version:** 1.1
 **Status:** In Development - Approaching MVP
+
+> **Update v1.1:** Corrected status of rate limiting, order history, and auth store refactor based on codebase verification.
 
 ---
 
 ## Executive Summary
 
-Moldova Direct is an e-commerce platform for authentic Moldovan products targeting the Spanish market. After reviewing the codebase, feature tracking, and documentation, the project is approximately **70% complete** toward a functional MVP.
+Moldova Direct is an e-commerce platform for authentic Moldovan products targeting the Spanish market. After reviewing the codebase, feature tracking, and documentation, the project is approximately **80% complete** toward a functional MVP.
 
 ### Overall Health
 - **Build Status:** ✅ Passes (production build successful)
@@ -27,7 +29,7 @@ Moldova Direct is an e-commerce platform for authentic Moldovan products targeti
 | 3 | User Authentication | ✅ Complete | ✅ Yes |
 | 4 | Shopping Cart & Error Handling | ✅ Complete | ✅ Yes |
 | 5 | Checkout & Payment | 🟡 In Progress | ❌ No |
-| 6 | Order Management | ❌ Not Started | ❌ No |
+| 6 | Order Management | 🟡 In Progress | ❌ No |
 
 ---
 
@@ -114,11 +116,12 @@ server/api/orders/create.post.ts - trigger email
 server/utils/emails/ - email templates
 ```
 
-#### 5. **Rate Limiting** (1 day)
-Critical security for:
-- Authentication endpoints (`/api/auth/*`)
-- Checkout endpoints (`/api/checkout/*`)
-- Order creation
+#### 5. ~~**Rate Limiting**~~ ✅ COMPLETED
+Rate limiting is now implemented in `server/utils/authRateLimit.ts`:
+- ✅ Authentication endpoints with per-IP and per-email limits
+- ✅ Account lockout after failed attempts
+- ✅ Configurable limits for login, register, reset-password, verify-otp
+- ✅ Checkout endpoints protected via `server/utils/cartSecurity.ts`
 
 ### Important (Should Have for MVP)
 
@@ -127,11 +130,11 @@ Critical security for:
 - Prevent price manipulation attacks
 - Location: `server/api/checkout/create-order.post.ts`
 
-#### 7. **Order History Page** (2-3 days)
-Users need to view past orders:
-- `pages/account/orders/index.vue`
-- `pages/account/orders/[id].vue`
-- API: `server/api/orders/index.get.ts` ✅ exists
+#### 7. ~~**Order History Page**~~ ✅ COMPLETED
+Order history pages are now implemented:
+- ✅ `pages/account/orders/index.vue` (20KB - full implementation)
+- ✅ `pages/account/orders/[id].vue` (11KB - order detail view)
+- ✅ API: `server/api/orders/index.get.ts` exists
 
 #### 8. **Guest Checkout** (2 days)
 Allow purchases without account:
@@ -152,10 +155,10 @@ Allow purchases without account:
 ## Technical Debt Items
 
 ### High Priority
-| Item | Location | Effort |
-|------|----------|--------|
-| Products page refactor | `pages/products/index.vue` (915 lines) | 3-4 days |
-| Auth store refactor | `stores/auth.ts` (1,172 lines) | 2-3 days |
+| Item | Location | Effort | Status |
+|------|----------|--------|--------|
+| Products page refactor | `pages/products/index.vue` (915 lines) | 3-4 days | Pending |
+| ~~Auth store refactor~~ | `stores/auth.ts` | ~~2-3 days~~ | ✅ Done (Issue #230) |
 
 ### Medium Priority
 | Item | Location | Effort |
@@ -171,7 +174,7 @@ Allow purchases without account:
 |------|--------|----------|
 | Admin middleware enabled | ✅ Done | Critical |
 | MFA for admin users | ✅ Done | Critical |
-| Rate limiting | ❌ Missing | Critical |
+| Rate limiting | ✅ Done | Critical |
 | Server-side price verification | ❌ Missing | Critical |
 | CSRF protection | ✅ Done | High |
 | Input validation | ✅ Done | High |
@@ -205,7 +208,7 @@ APP_URL=https://moldovadirect.com
 - [ ] Complete Stripe payment UI integration
 - [ ] Test full checkout flow end-to-end
 - [ ] Configure production Stripe keys
-- [ ] Enable rate limiting
+- [x] Enable rate limiting ✅ (Dec 2025)
 - [ ] Test order confirmation emails
 - [ ] Verify mobile checkout experience
 - [ ] Security audit (basic)
@@ -222,19 +225,21 @@ APP_URL=https://moldovadirect.com
 - [ ] Monitor cart abandonment
 - [ ] Check order completion rates
 - [ ] Address critical user feedback
-- [ ] Implement order history
+- [x] Implement order history ✅ (Dec 2025)
 
 ---
 
 ## Estimated Time to MVP
 
-| Category | Items | Estimated Days |
-|----------|-------|----------------|
-| Stripe Payment UI | Integration + testing | 5 days |
-| Order Flow | Confirmation + emails | 4 days |
-| Security | Rate limiting + verification | 2 days |
-| Testing & QA | E2E + manual testing | 3 days |
-| **Total** | | **~14 days** |
+| Category | Items | Estimated Days | Status |
+|----------|-------|----------------|--------|
+| Stripe Payment UI | Integration + testing | 5 days | Pending |
+| Order Flow | Confirmation + emails | 4 days | Pending |
+| ~~Security~~ | ~~Rate limiting~~ + verification | ~~2 days~~ → 1 day | ✅ Rate limiting done |
+| Testing & QA | E2E + manual testing | 3 days | Pending |
+| **Total** | | **~13 days** | Updated |
+
+> **Updated Dec 23:** Rate limiting complete, order history complete. Remaining: ~10-13 days.
 
 ---
 
@@ -242,7 +247,7 @@ APP_URL=https://moldovadirect.com
 
 ### Immediate Actions (This Week)
 1. **Complete Stripe Elements integration** in checkout payment page
-2. **Implement rate limiting** for auth and checkout endpoints
+2. ~~**Implement rate limiting**~~ ✅ Done - `server/utils/authRateLimit.ts`
 3. **Add server-side price verification** before order creation
 
 ### Next Week
@@ -259,15 +264,22 @@ APP_URL=https://moldovadirect.com
 
 ## Conclusion
 
-The project has a solid foundation with Phases 1-4 fully complete and tested. The main gaps are in **payment UI integration** and **order management**. The backend infrastructure for payments (Stripe) and orders is largely complete.
+The project has a solid foundation with Phases 1-4 fully complete and tested. Phase 5 (Checkout) and Phase 6 (Order Management) are now in progress with significant work done. The main remaining gap is **Stripe payment UI integration**.
 
-**Estimated MVP readiness: 2-3 weeks** with focused development on:
-1. Stripe checkout UI
+**Estimated MVP readiness: ~2 weeks** with focused development on:
+1. Stripe checkout UI (card payment form)
 2. Order confirmation flow
-3. Critical security items (rate limiting)
+3. ~~Critical security items (rate limiting)~~ ✅ Done
+
+**Completed since last assessment:**
+- ✅ Rate limiting implemented
+- ✅ Order history pages built
+- ✅ Auth store refactored
+- ✅ Checkout progress indicator added
 
 The codebase is well-structured with good testing coverage and documentation. The architecture supports the planned features without major refactoring needed for MVP.
 
 ---
 
 *Report generated: December 20, 2025*
+*Updated: December 23, 2025 (v1.1)*
