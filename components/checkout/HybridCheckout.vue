@@ -691,31 +691,80 @@ onMounted(async () => {
 }
 
 .checkout-section {
-  @apply bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden;
+  background-color: white;
+  border-radius: 0.5rem;
+  border: 1px solid rgb(229 231 235);
+  overflow: hidden;
+}
+
+:root.dark .checkout-section,
+.dark .checkout-section {
+  background-color: rgb(31 41 55);
+  border-color: rgb(55 65 81);
 }
 
 .checkout-section-highlight {
-  @apply border-primary-200 dark:border-primary-700 bg-primary-50/50 dark:bg-primary-900/10;
+  border-color: rgb(191 219 254);
+  background-color: rgb(239 246 255 / 0.5);
+}
+
+:root.dark .checkout-section-highlight,
+.dark .checkout-section-highlight {
+  border-color: rgb(30 64 175);
+  background-color: rgb(30 58 138 / 0.1);
 }
 
 .section-header {
-  @apply flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgb(243 244 246);
+}
+
+:root.dark .section-header,
+.dark .section-header {
+  border-bottom-color: rgb(55 65 81);
 }
 
 .section-number {
-  @apply w-6 h-6 rounded-full bg-primary-600 text-white flex items-center justify-center text-xs font-medium mr-3;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 9999px;
+  background-color: rgb(79 70 229);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-right: 0.75rem;
 }
 
 .section-title {
-  @apply text-base font-semibold text-gray-900 dark:text-white;
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgb(17 24 39);
+}
+
+:root.dark .section-title,
+.dark .section-title {
+  color: white;
 }
 
 .section-complete {
-  @apply w-5 h-5 rounded-full bg-green-500 text-white flex items-center justify-center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 9999px;
+  background-color: rgb(34 197 94);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .section-content {
-  @apply p-6;
+  padding: 1.5rem;
 }
 
 .fade-in {
