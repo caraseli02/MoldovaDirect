@@ -414,6 +414,7 @@ const toast = useToast()
 const { addItem, loading: cartLoading, isInCart } = useCart()
 const localePath = useLocalePath()
 const { fly } = useFlyToCart()
+const router = useRouter()
 
 // Template refs
 const cardRef = ref<HTMLElement>()
@@ -614,7 +615,6 @@ const setupMobileTouch = () => {
   touchEvents.setHandlers({
     onTap: () => {
       // Navigate to product detail on tap (if not button)
-      const router = useRouter()
       router.push(productDetailPath.value)
     },
   })

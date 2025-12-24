@@ -146,7 +146,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useCart } from '@/composables/useCart'
 
@@ -155,14 +155,24 @@ const { itemCount } = useCart()
 
 // Cart bounce animation state
 const cartBounce = ref(false)
+let bounceTimeout: ReturnType<typeof setTimeout> | null = null
 
 // Watch for cart count increases to trigger bounce
 watch(itemCount, (newVal, oldVal) => {
   if (newVal > oldVal) {
+    if (bounceTimeout) clearTimeout(bounceTimeout)
     cartBounce.value = true
-    setTimeout(() => {
+    bounceTimeout = setTimeout(() => {
       cartBounce.value = false
     }, 400) // matches animation duration
+  }
+})
+
+// Clean up on unmount
+onUnmounted(() => {
+  if (bounceTimeout) {
+    clearTimeout(bounceTimeout)
+    bounceTimeout = null
   }
 })
 

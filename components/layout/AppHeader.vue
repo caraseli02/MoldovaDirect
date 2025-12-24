@@ -229,27 +229,33 @@ const iconButtonClass = computed(() => [
     : 'text-brand-light/80 hover:text-brand-light drop-shadow-lg dark:text-brand-light/80 dark:hover:text-brand-light',
 ])
 
-// Clean up on unmount
-onUnmounted(() => {
-  if (typeof window !== 'undefined') {
-    window.removeEventListener('scroll', handleScroll)
-  }
-})
-
 // Cart functionality
 const { itemCount } = useCart()
 const cartItemsCount = computed(() => itemCount.value)
 
 // Cart bounce animation state
 const cartBounce = ref(false)
+let bounceTimeout: ReturnType<typeof setTimeout> | null = null
 
 // Watch for cart count increases to trigger bounce
 watch(itemCount, (newVal, oldVal) => {
   if (newVal > oldVal) {
+    if (bounceTimeout) clearTimeout(bounceTimeout)
     cartBounce.value = true
-    setTimeout(() => {
+    bounceTimeout = setTimeout(() => {
       cartBounce.value = false
     }, 400) // matches animation duration
+  }
+})
+
+// Clean up on unmount
+onUnmounted(() => {
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('scroll', handleScroll)
+  }
+  if (bounceTimeout) {
+    clearTimeout(bounceTimeout)
+    bounceTimeout = null
   }
 })
 
