@@ -1804,7 +1804,10 @@
       "failedToSetDefaultAddress": "Nu s-a putut seta adresa implicită",
       "failedToDeleteAddress": "Nu s-a putut șterge adresa",
       "expressCheckoutFailed": "Plată express eșuată",
-      "pleaseTryAgain": "Vă rugăm să încercați din nou sau să editați manual detaliile"
+      "pleaseTryAgain": "Vă rugăm să încercați din nou sau să editați manual detaliile",
+      "orderFailed": "Procesarea comenzii a eșuat",
+      "initFailed": "Inițializarea checkout-ului a eșuat",
+      "loadFailed": "Încărcarea checkout-ului a eșuat"
     },
     "expressCheckout": {
       "title": "Plată Express Disponibilă",

@@ -13,7 +13,10 @@
     </div>
 
     <!-- Loading State -->
-    <div v-if="loading" class="p-6">
+    <div
+      v-if="loading"
+      class="p-6"
+    >
       <div class="animate-pulse space-y-4">
         <div class="flex items-center space-x-3">
           <div class="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded"></div>
@@ -33,7 +36,10 @@
     </div>
 
     <!-- Content -->
-    <div v-else class="p-6">
+    <div
+      v-else
+      class="p-6"
+    >
       <!-- Cart Items (Collapsed by default) -->
       <div class="mb-4">
         <button
@@ -48,7 +54,12 @@
             stroke="currentColor"
             viewBox="0 0 24 24"
           >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 9l-7 7-7-7"
+            />
           </svg>
         </button>
 
@@ -72,8 +83,18 @@
                 v-else
                 class="w-full h-full flex items-center justify-center text-gray-400"
               >
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                <svg
+                  class="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
                 </svg>
               </div>
             </div>
@@ -104,7 +125,10 @@
         <div class="flex justify-between text-sm">
           <span class="text-gray-600 dark:text-gray-400">
             {{ $t('common.shipping') }}
-            <span v-if="shippingMethod" class="text-xs text-gray-500">
+            <span
+              v-if="shippingMethod"
+              class="text-xs text-gray-500"
+            >
               ({{ shippingMethod.name }})
             </span>
           </span>
@@ -146,8 +170,18 @@
         class="mt-4 p-3 bg-primary-50 dark:bg-primary-900/20 rounded-lg"
       >
         <div class="flex items-center text-sm text-primary-700 dark:text-primary-300">
-          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          <svg
+            class="w-4 h-4 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+            />
           </svg>
           <span>
             {{ $t('checkout.estimatedDelivery', 'Estimated delivery') }}:
@@ -161,14 +195,30 @@
     <div class="px-6 py-3 bg-gray-50 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-700">
       <div class="flex items-center justify-center space-x-4 text-xs text-gray-500 dark:text-gray-400">
         <span class="flex items-center">
-          <svg class="w-3 h-3 mr-1 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+          <svg
+            class="w-3 h-3 mr-1 text-green-500"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+              clip-rule="evenodd"
+            />
           </svg>
           {{ $t('checkout.secure', 'Secure') }}
         </span>
         <span class="flex items-center">
-          <svg class="w-3 h-3 mr-1 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+          <svg
+            class="w-3 h-3 mr-1 text-green-500"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+              clip-rule="evenodd"
+            />
           </svg>
           {{ $t('checkout.guaranteed', 'Guaranteed') }}
         </span>
@@ -185,11 +235,11 @@ interface CartItem {
   name: string | Record<string, string>
   quantity: number
   price: number
-  images?: string[]
+  images?: readonly string[]
 }
 
 const props = defineProps<{
-  items: CartItem[]
+  items: readonly CartItem[]
   subtotal: number
   shippingCost: number
   tax: number

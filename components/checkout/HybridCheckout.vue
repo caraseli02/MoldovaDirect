@@ -39,7 +39,9 @@
             <div class="section-header">
               <div class="flex items-center">
                 <span class="section-number">1</span>
-                <h3 class="section-title">{{ $t('checkout.hybrid.contact') }}</h3>
+                <h3 class="section-title">
+                  {{ $t('checkout.hybrid.contact') }}
+                </h3>
               </div>
             </div>
             <div class="section-content">
@@ -57,14 +59,24 @@
             <div class="section-header">
               <div class="flex items-center">
                 <span class="section-number">{{ user ? '1' : '2' }}</span>
-                <h3 class="section-title">{{ $t('checkout.hybrid.shippingAddress') }}</h3>
+                <h3 class="section-title">
+                  {{ $t('checkout.hybrid.shippingAddress') }}
+                </h3>
               </div>
               <span
                 v-if="isAddressComplete"
                 class="section-complete"
               >
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                <svg
+                  class="w-4 h-4"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  />
                 </svg>
               </span>
             </div>
@@ -91,14 +103,24 @@
             <div class="section-header">
               <div class="flex items-center">
                 <span class="section-number">{{ user ? '2' : '3' }}</span>
-                <h3 class="section-title">{{ $t('checkout.hybrid.shippingMethod') }}</h3>
+                <h3 class="section-title">
+                  {{ $t('checkout.hybrid.shippingMethod') }}
+                </h3>
               </div>
               <span
                 v-if="selectedMethod"
                 class="section-complete"
               >
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                <svg
+                  class="w-4 h-4"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  />
                 </svg>
               </span>
             </div>
@@ -122,14 +144,24 @@
             <div class="section-header">
               <div class="flex items-center">
                 <span class="section-number">{{ user ? '3' : '4' }}</span>
-                <h3 class="section-title">{{ $t('checkout.hybrid.payment') }}</h3>
+                <h3 class="section-title">
+                  {{ $t('checkout.hybrid.payment') }}
+                </h3>
               </div>
               <span
                 v-if="isPaymentValid"
                 class="section-complete"
               >
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                <svg
+                  class="w-4 h-4"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  />
                 </svg>
               </span>
             </div>
@@ -208,7 +240,11 @@
                   />
                   <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
                     {{ $t('checkout.review.acceptTerms') }}
-                    <a href="/terms" target="_blank" class="text-primary-600 hover:text-primary-700 underline">
+                    <a
+                      href="/terms"
+                      target="_blank"
+                      class="text-primary-600 hover:text-primary-700 underline"
+                    >
                       {{ $t('checkout.review.termsOfService') }}
                     </a>
                     <span
@@ -226,7 +262,11 @@
                   />
                   <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
                     {{ $t('checkout.review.acceptPrivacy') }}
-                    <a href="/privacy" target="_blank" class="text-primary-600 hover:text-primary-700 underline">
+                    <a
+                      href="/privacy"
+                      target="_blank"
+                      class="text-primary-600 hover:text-primary-700 underline"
+                    >
                       {{ $t('checkout.review.privacyPolicy') }}
                     </a>
                     <span
@@ -254,17 +294,48 @@
                 class="hidden lg:flex w-full items-center justify-center px-6 py-4 bg-primary-600 hover:bg-primary-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors"
                 @click="handlePlaceOrder"
               >
-                <span v-if="processingOrder" class="flex items-center">
-                  <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                <span
+                  v-if="processingOrder"
+                  class="flex items-center"
+                >
+                  <svg
+                    class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      class="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      stroke-width="4"
+                    />
+                    <path
+                      class="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    />
                   </svg>
                   {{ $t('checkout.processing') }}
                 </span>
-                <span v-else class="flex items-center">
+                <span
+                  v-else
+                  class="flex items-center"
+                >
                   {{ $t('checkout.placeOrder') }} - {{ formattedTotal }}
-                  <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  <svg
+                    class="ml-2 w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M5 13l4 4L19 7"
+                    />
                   </svg>
                 </span>
               </button>
@@ -303,10 +374,28 @@
         class="w-full flex items-center justify-center px-6 py-3 bg-primary-600 hover:bg-primary-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors"
         @click="handlePlaceOrder"
       >
-        <span v-if="processingOrder" class="flex items-center">
-          <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+        <span
+          v-if="processingOrder"
+          class="flex items-center"
+        >
+          <svg
+            class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            />
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            />
           </svg>
           {{ $t('checkout.processing') }}
         </span>
@@ -323,8 +412,18 @@
         :to="localePath('/cart')"
         class="inline-flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
       >
-        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        <svg
+          class="w-4 h-4 mr-1"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          />
         </svg>
         {{ $t('checkout.backToCart') }}
       </NuxtLink>
@@ -336,6 +435,7 @@
 import type { ShippingInformation, PaymentMethod as PaymentMethodType, ShippingMethod } from '~/types/checkout'
 import type { GuestInfo } from '~/composables/useGuestCheckout'
 import type { Address } from '~/types/address'
+import { useCartStore } from '~/stores/cart'
 
 // Components
 const ExpressCheckoutBannerEnhanced = defineAsyncComponent(() =>
@@ -433,8 +533,16 @@ const availableCountries = ref([
   { code: 'IT', name: 'Italy' },
 ])
 
-// Computed
-const cartItems = computed(() => cartStore.items || [])
+// Computed - map cart items to the format expected by OrderSummaryCard
+const cartItems = computed(() => {
+  return (cartStore.items || []).map(item => ({
+    productId: item.product.id,
+    name: item.product.name,
+    quantity: item.quantity,
+    price: item.product.price,
+    images: item.product.images,
+  }))
+})
 
 const orderData = computed(() => (checkoutStore as any).orderData)
 
@@ -525,13 +633,15 @@ const handleExpressPlaceOrder = async () => {
 
     // Process order
     await processOrder()
-  } catch (error: any) {
+  }
+  catch (error: any) {
     console.error('Express checkout failed:', error)
     toast.error(
       t('checkout.errors.orderFailed'),
       t('checkout.errors.pleaseTryAgain'),
     )
-  } finally {
+  }
+  finally {
     processingOrder.value = false
   }
 }
@@ -593,44 +703,36 @@ const handlePlaceOrder = async () => {
 
     // Process order
     await processOrder()
-  } catch (error: any) {
+  }
+  catch (error: any) {
     console.error('Failed to place order:', error)
     toast.error(
       t('checkout.errors.orderFailed'),
       error.message || t('checkout.errors.pleaseTryAgain'),
     )
-  } finally {
+  }
+  finally {
     processingOrder.value = false
   }
 }
 
 const processOrder = async () => {
-  try {
-    // Set terms in store
-    ;(checkoutStore as any).setTermsAccepted(true)
-    ;(checkoutStore as any).setPrivacyAccepted(true)
-    ;(checkoutStore as any).setMarketingConsent(marketingConsent.value)
+  // Set terms acceptance in store before processing
+  ;(checkoutStore as any).setTermsAccepted(true)
+  ;(checkoutStore as any).setPrivacyAccepted(true)
+  ;(checkoutStore as any).setMarketingConsent(marketingConsent.value)
 
-    // Go directly to review step processing
-    ;(checkoutStore as any).currentStep = 'review'
+  // Set step to review for checkout flow
+  ;(checkoutStore as any).currentStep = 'review'
 
-    // Process the order
-    const result = await (checkoutStore as any).completeCheckout({
-      termsAccepted: true,
-      privacyAccepted: true,
-      marketingConsent: marketingConsent.value,
-    })
+  // Process payment - this handles the full checkout flow:
+  // 1. Creates order record
+  // 2. Processes payment by type
+  // 3. Calls completeCheckout with order data
+  await (checkoutStore as any).processPayment()
 
-    if (result?.success) {
-      // Navigate to confirmation
-      await navigateTo(localePath('/checkout/confirmation'))
-    } else {
-      throw new Error(result?.error || 'Order processing failed')
-    }
-  } catch (error: any) {
-    console.error('Order processing failed:', error)
-    throw error
-  }
+  // Navigate to confirmation after successful payment
+  await navigateTo(localePath('/checkout/confirmation'))
 }
 
 // Initialize
@@ -679,7 +781,15 @@ onMounted(async () => {
     if (isAddressValid.value && shippingAddress.value.country && shippingAddress.value.postalCode) {
       loadShippingMethods()
     }
-  } finally {
+  }
+  catch (error) {
+    console.error('Failed to initialize checkout:', error)
+    toast.error(
+      t('checkout.errors.initFailed'),
+      t('checkout.errors.pleaseTryAgain'),
+    )
+  }
+  finally {
     loadingOrder.value = false
   }
 })

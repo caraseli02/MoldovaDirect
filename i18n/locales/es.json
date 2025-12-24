@@ -1895,7 +1895,10 @@
       "failedToSetDefaultAddress": "No se pudo establecer la dirección predeterminada",
       "failedToDeleteAddress": "No se pudo eliminar la dirección",
       "expressCheckoutFailed": "Falló el pago express",
-      "pleaseTryAgain": "Por favor, inténtalo de nuevo o edita tus datos manualmente"
+      "pleaseTryAgain": "Por favor, inténtalo de nuevo o edita tus datos manualmente",
+      "orderFailed": "Error al procesar el pedido",
+      "initFailed": "Error al inicializar el checkout",
+      "loadFailed": "Error al cargar el checkout"
     },
     "expressCheckout": {
       "title": "Pago Express Disponible",

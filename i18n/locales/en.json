@@ -1971,7 +1971,10 @@
       "failedToSetDefaultAddress": "Failed to set default address",
       "failedToDeleteAddress": "Failed to delete address",
       "expressCheckoutFailed": "Express checkout failed",
-      "pleaseTryAgain": "Please try again or edit your details manually"
+      "pleaseTryAgain": "Please try again or edit your details manually",
+      "orderFailed": "Order processing failed",
+      "initFailed": "Failed to initialize checkout",
+      "loadFailed": "Failed to load checkout"
     },
     "expressCheckout": {
       "title": "Express Checkout Available",
