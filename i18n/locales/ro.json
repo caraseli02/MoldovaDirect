@@ -962,6 +962,20 @@
       "removeFilter": "Elimină filtrul {filter}",
       "unknownCategory": "Categorie Necunoscută"
     },
+    "quickFilters": {
+      "all": "Toate",
+      "moreFilters": "Mai multe filtre"
+    },
+    "addToWishlist": "Adaugă la favorite",
+    "quickAdd": "Adaugă",
+    "added": "Adăugat",
+    "new": "Nou",
+    "bestSeller": "Bestseller",
+    "quickView": "Vizualizare rapidă",
+    "quickViewProduct": "Vizualizare rapidă: {name}",
+    "noImageAvailable": "Imagine indisponibilă",
+    "wishlistComingSoon": "Favorite în curând",
+    "wishlistComingSoonDetails": "Funcția de favorite va fi disponibilă în curând",
     "hero": {
       "seasonal": "Recomandări de sezon",
       "title": "Descoperă aromele emblematice ale Moldovei",

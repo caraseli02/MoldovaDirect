@@ -126,6 +126,7 @@
               :to="localePath('/cart')"
               :aria-label="cartAriaLabel"
               :class="iconButtonClass"
+              data-cart-target="desktop"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -147,7 +148,10 @@
                 <span
                   v-if="cartItemsCount > 0"
                   data-testid="cart-count"
-                  class="absolute -top-1 -right-1 bg-primary-600 dark:bg-primary-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
+                  :class="[
+                    'absolute -top-1 -right-1 bg-primary-600 dark:bg-primary-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center',
+                    cartBounce ? 'cart-bounce' : '',
+                  ]"
                   aria-hidden="true"
                 >
                   {{ cartItemsCount }}
@@ -171,7 +175,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed, nextTick } from 'vue'
+import { ref, onMounted, onUnmounted, computed, nextTick, watch } from 'vue'
 import { useThrottleFn } from '@vueuse/core'
 import { Button } from '@/components/ui/button'
 import LanguageSwitcher from './LanguageSwitcher.vue'
@@ -235,6 +239,19 @@ onUnmounted(() => {
 // Cart functionality
 const { itemCount } = useCart()
 const cartItemsCount = computed(() => itemCount.value)
+
+// Cart bounce animation state
+const cartBounce = ref(false)
+
+// Watch for cart count increases to trigger bounce
+watch(itemCount, (newVal, oldVal) => {
+  if (newVal > oldVal) {
+    cartBounce.value = true
+    setTimeout(() => {
+      cartBounce.value = false
+    }, 400) // matches animation duration
+  }
+})
 
 const cartAriaLabel = computed(() => {
   const base = t('common.cart')

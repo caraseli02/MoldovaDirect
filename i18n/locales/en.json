@@ -1302,6 +1302,15 @@
       "openFilters": "Open filters panel",
       "activeCount": "{count} active filters"
     },
+    "quickFilters": {
+      "all": "All",
+      "moreFilters": "More filters"
+    },
+    "addToWishlist": "Add to wishlist",
+    "quickAdd": "Add",
+    "added": "Added",
+    "wishlistComingSoon": "Wishlist coming soon",
+    "wishlistComingSoonDetails": "The wishlist feature will be available soon",
     "hero": {
       "seasonal": "Seasonal highlights",
       "title": "Discover Moldova's signature flavors",

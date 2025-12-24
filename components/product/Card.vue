@@ -24,6 +24,7 @@
 
     <!-- Product Image -->
     <div
+      ref="productImageRef"
       class="relative overflow-hidden rounded-t-2xl bg-gray-100 dark:bg-slate-700"
       :class="{
         'aspect-square': variant === 'standard',
@@ -71,7 +72,7 @@
           <nuxt-link
             :to="productDetailPath"
             :aria-label="$t('products.quickViewProduct', { name: getLocalizedText(product.name) })"
-            class="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors text-sm font-medium text-gray-900 dark:text-white focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2"
+            class="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors text-sm font-medium text-gray-900 dark:text-white focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2"
           >
             <commonIcon
               name="eye"
@@ -79,6 +80,30 @@
             />
             <span class="hidden sm:inline">{{ $t('products.quickView') }}</span>
           </nuxt-link>
+
+          <!-- Quick Add Button -->
+          <button
+            type="button"
+            :disabled="product.stockQuantity <= 0 || cartLoading"
+            :aria-label="$t('products.quickAdd')"
+            class="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg transition-all duration-200 text-sm font-medium focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2"
+            :class="[
+              product.stockQuantity <= 0
+                ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                : isInCart(String(product.id))
+                  ? 'bg-green-600 text-white hover:bg-green-700'
+                  : 'bg-primary-600 text-white hover:bg-primary-700',
+            ]"
+            @click.prevent.stop="quickAddToCart"
+          >
+            <commonIcon
+              :name="cartLoading ? 'lucide:loader-2' : isInCart(String(product.id)) ? 'lucide:check' : 'lucide:plus'"
+              :class="['h-4 w-4', cartLoading ? 'animate-spin' : '']"
+            />
+            <span class="hidden sm:inline">
+              {{ isInCart(String(product.id)) ? $t('products.added') : $t('products.quickAdd') }}
+            </span>
+          </button>
         </div>
       </div>
 
@@ -121,18 +146,33 @@
         </span>
       </div>
 
-      <!-- Sale Badge (top-right corner) -->
-      <div
-        v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)"
-        class="absolute top-3 right-3"
-      >
-        <span class="inline-flex items-center gap-1 bg-red-600 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg">
+      <!-- Top-right actions: Sale Badge + Wishlist -->
+      <div class="absolute top-3 right-3 flex flex-col items-end gap-2">
+        <!-- Sale Badge -->
+        <span
+          v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)"
+          class="inline-flex items-center gap-1 bg-red-600 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg"
+        >
           <commonIcon
             name="lucide:tag"
             class="h-3 w-3"
           />
           -{{ calculateDiscount }}%
         </span>
+
+        <!-- Wishlist Button (progressive disclosure - appears on hover) -->
+        <button
+          type="button"
+          :aria-label="$t('products.addToWishlist')"
+          class="p-2 rounded-full bg-white/90 dark:bg-gray-900/90 shadow-md backdrop-blur-sm transition-all duration-300"
+          :class="isMobile ? 'opacity-100' : 'opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0'"
+          @click.prevent.stop="handleWishlistClick"
+        >
+          <commonIcon
+            name="lucide:heart"
+            class="h-5 w-5 text-gray-600 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-400 transition-colors"
+          />
+        </button>
       </div>
     </div>
 
@@ -352,6 +392,7 @@ import { useDevice } from '~/composables/useDevice'
 import { useHapticFeedback } from '~/composables/useHapticFeedback'
 import { useTouchEvents } from '~/composables/useTouchEvents'
 import { useToast } from '~/composables/useToast'
+import { useFlyToCart } from '~/composables/useFlyToCart'
 import { useRouter, useI18n, useLocalePath } from '#imports'
 import { PRODUCTS } from '~/constants/products'
 
@@ -372,9 +413,11 @@ const touchEvents = useTouchEvents()
 const toast = useToast()
 const { addItem, loading: cartLoading, isInCart } = useCart()
 const localePath = useLocalePath()
+const { fly } = useFlyToCart()
 
 // Template refs
 const cardRef = ref<HTMLElement>()
+const productImageRef = ref<HTMLElement>()
 
 // Local state
 
@@ -498,6 +541,15 @@ const addToCart = async () => {
       vibrate('buttonPress')
     }
 
+    // Trigger fly-to-cart animation
+    const imageUrl = primaryImage.value?.url || ''
+    if (imageUrl && productImageRef.value) {
+      fly({
+        sourceElement: productImageRef.value,
+        imageUrl,
+      })
+    }
+
     // Convert the product to the format expected by the cart
     const cartProduct = {
       id: String(props.product.id),
@@ -530,6 +582,28 @@ const addToCart = async () => {
       vibrate('error')
     }
   }
+}
+
+/**
+ * Quick add to cart from hover overlay
+ * Same as addToCart but with simpler flow
+ */
+const quickAddToCart = async () => {
+  await addToCart()
+}
+
+/**
+ * Handle wishlist button click
+ * Shows toast for now - wishlist feature to be implemented
+ */
+const handleWishlistClick = () => {
+  if (isMobile.value) {
+    vibrate('tap')
+  }
+  toast.info(
+    t('products.wishlistComingSoon'),
+    t('products.wishlistComingSoonDetails'),
+  )
 }
 
 // Setup touch optimizations for mobile

@@ -1138,6 +1138,20 @@
       "removeFilter": "Удалить фильтр {filter}",
       "unknownCategory": "Неизвестная категория"
     },
+    "quickFilters": {
+      "all": "Все",
+      "moreFilters": "Ещё фильтры"
+    },
+    "addToWishlist": "В избранное",
+    "quickAdd": "Добавить",
+    "added": "Добавлено",
+    "new": "Новинка",
+    "bestSeller": "Бестселлер",
+    "quickView": "Быстрый просмотр",
+    "quickViewProduct": "Быстрый просмотр: {name}",
+    "noImageAvailable": "Изображение недоступно",
+    "wishlistComingSoon": "Избранное скоро",
+    "wishlistComingSoonDetails": "Функция избранного скоро будет доступна",
     "hero": {
       "seasonal": "Сезонные рекомендации",
       "title": "Откройте фирменные вкусы Молдовы",

@@ -120,6 +120,15 @@
               </div>
             </div>
 
+            <!-- Quick Category Filters -->
+            <ProductQuickCategoryFilter
+              :categories="availableFilters.categories"
+              :selected-category="filters.category"
+              :active-filter-count="activeFilterChips.length"
+              @update:selected-category="handleQuickCategoryChange"
+              @open-filters="openFilterPanel"
+            />
+
             <!-- Clean Header Section -->
             <div class="flex items-end justify-between border-b border-gray-200 pb-6 dark:border-gray-800">
               <div class="flex-1">
@@ -620,6 +629,27 @@ const handleSortChange = () => {
     sort: localSortBy.value,
     page: 1,
   }
+
+  if (searchQuery.value.trim()) {
+    search(searchQuery.value.trim(), currentFilters)
+  }
+  else {
+    fetchProducts(currentFilters)
+  }
+}
+
+/**
+ * Handle quick category filter selection from horizontal pills
+ */
+const handleQuickCategoryChange = (categoryId: string | undefined) => {
+  const currentFilters: ProductFilters = {
+    ...filters.value,
+    category: categoryId,
+    sort: localSortBy.value,
+    page: 1,
+  }
+
+  updateFilters({ category: categoryId })
 
   if (searchQuery.value.trim()) {
     search(searchQuery.value.trim(), currentFilters)

@@ -60,6 +60,7 @@
         :class="isActive('/cart') ? 'text-primary-600 dark:text-primary-400' : 'text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400'"
         :aria-current="isActive('/cart') ? 'page' : undefined"
         :aria-label="`${$t('common.cart')}${itemCount > 0 ? ` (${itemCount} items)` : ''}`"
+        data-cart-target="mobile"
       >
         <div class="relative">
           <svg
@@ -81,7 +82,10 @@
             <span
               v-if="itemCount > 0"
               data-testid="cart-count"
-              class="absolute -top-1 -right-2 flex items-center justify-center min-w-[18px] h-[18px] px-1 text-[10px] font-bold text-white bg-primary-600 rounded-full"
+              :class="[
+                'absolute -top-1 -right-2 flex items-center justify-center min-w-[18px] h-[18px] px-1 text-[10px] font-bold text-white bg-primary-600 rounded-full',
+                cartBounce ? 'cart-bounce' : '',
+              ]"
               aria-hidden="true"
             >
               {{ itemCount > 99 ? '99+' : itemCount }}
@@ -142,12 +146,25 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useCart } from '@/composables/useCart'
 
 const route = useRoute()
 const { itemCount } = useCart()
+
+// Cart bounce animation state
+const cartBounce = ref(false)
+
+// Watch for cart count increases to trigger bounce
+watch(itemCount, (newVal, oldVal) => {
+  if (newVal > oldVal) {
+    cartBounce.value = true
+    setTimeout(() => {
+      cartBounce.value = false
+    }, 400) // matches animation duration
+  }
+})
 
 // Check if current route matches
 const isActive = (path: string) => {
