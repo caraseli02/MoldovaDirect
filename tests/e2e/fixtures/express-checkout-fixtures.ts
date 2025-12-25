@@ -1,7 +1,12 @@
 /**
  * Test Fixtures: Express Checkout
  *
- * Provides test data and user personas for express checkout tests
+ * Provides test data and user personas for express checkout tests.
+ *
+ * Updated for Hybrid Progressive Checkout (Option D)
+ * - Express checkout is now a banner with "Place Order Now" button
+ * - No countdown timer (removed for better UX)
+ * - Users can dismiss to see full checkout form
  */
 
 import type { Address } from '~/types/address'
@@ -222,43 +227,51 @@ export const ExpressCheckoutFixtures = {
 
   /**
    * Create a complete test scenario
+   *
+   * Updated for Hybrid Progressive Checkout:
+   * - shouldShowExpressBanner: Whether the express checkout banner should appear
+   * - canUseOneClick: Whether user has all data needed for one-click checkout
    */
-  createScenario(type: 'auto-skip' | 'manual-express' | 'guest' | 'new-user') {
+  createScenario(type: 'returning-user' | 'address-only' | 'guest' | 'new-user') {
     switch (type) {
-      case 'auto-skip':
+      case 'returning-user':
+        // User with saved address and shipping preference - shows express banner
         return {
           user: this.returningUserWithPreferences(),
           product: this.testProducts().wine,
           shippingMethod: this.shippingMethods().standard,
-          shouldAutoSkip: true,
-          shouldShowCountdown: true,
+          shouldShowExpressBanner: true,
+          canUseOneClick: true,
         }
 
-      case 'manual-express':
+      case 'address-only':
+        // User with saved address but no shipping preference - shows express banner
         return {
           user: this.userWithAddressOnly(),
           product: this.testProducts().cheese,
           shippingMethod: this.shippingMethods().standard,
-          shouldAutoSkip: false,
-          shouldShowCountdown: false,
+          shouldShowExpressBanner: true,
+          canUseOneClick: false, // Needs to select shipping method
         }
 
       case 'guest':
+        // Guest user - no express banner, shows guest checkout prompt
         return {
           user: this.guestUser(),
           product: this.testProducts().honey,
           shippingMethod: this.shippingMethods().free,
-          shouldAutoSkip: false,
-          shouldShowCountdown: false,
+          shouldShowExpressBanner: false,
+          canUseOneClick: false,
         }
 
       case 'new-user':
+        // Authenticated user without saved data - no express banner
         return {
           user: this.userWithoutAddress(),
           product: this.testProducts().wine,
           shippingMethod: this.shippingMethods().express,
-          shouldAutoSkip: false,
-          shouldShowCountdown: false,
+          shouldShowExpressBanner: false,
+          canUseOneClick: false,
         }
 
       default:

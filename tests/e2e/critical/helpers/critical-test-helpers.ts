@@ -3,9 +3,12 @@
  *
  * Shared utilities for critical E2E tests to eliminate code duplication
  * and provide consistent, reliable test operations.
+ *
+ * Updated for Hybrid Progressive Checkout (Option D)
  */
 
 import type { Page } from '@playwright/test'
+import { SELECTORS, TIMEOUTS, TEST_DATA } from '../constants'
 
 export class CriticalTestHelpers {
   constructor(private page: Page) {}
@@ -362,5 +365,146 @@ export class CriticalTestHelpers {
       email: process.env.TEST_ADMIN_EMAIL || process.env.ADMIN_EMAIL || process.env.TEST_USER_EMAIL || 'admin@example.com',
       password: process.env.TEST_ADMIN_PASSWORD || process.env.ADMIN_PASSWORD || process.env.TEST_USER_PASSWORD,
     }
+  }
+
+  // ===========================================
+  // Checkout Helpers (Hybrid Progressive)
+  // ===========================================
+
+  /**
+   * Handle express checkout banner or guest prompt
+   * Dismisses banners to show full checkout form
+   */
+  async handleCheckoutPrompts(): Promise<void> {
+    // Handle express checkout banner if visible
+    const expressBanner = this.page.locator(SELECTORS.EXPRESS_BANNER)
+    if (await expressBanner.isVisible({ timeout: TIMEOUTS.SHORT }).catch(() => false)) {
+      await this.page.locator(SELECTORS.EXPRESS_EDIT).click()
+      await this.page.waitForTimeout(TIMEOUTS.VERY_SHORT)
+    }
+
+    // Handle guest prompt if visible
+    const guestPrompt = this.page.locator(SELECTORS.GUEST_PROMPT)
+    if (await guestPrompt.isVisible({ timeout: TIMEOUTS.SHORT }).catch(() => false)) {
+      await this.page.locator(SELECTORS.CONTINUE_AS_GUEST).click()
+      await this.page.waitForTimeout(TIMEOUTS.VERY_SHORT)
+    }
+  }
+
+  /**
+   * Fill shipping address form with test data
+   */
+  async fillShippingAddress(address?: typeof TEST_DATA.TEST_ADDRESS): Promise<void> {
+    const addr = address || TEST_DATA.TEST_ADDRESS
+
+    const firstName = this.page.locator(SELECTORS.ADDRESS_FIRST_NAME).first()
+    if (await firstName.isVisible({ timeout: TIMEOUTS.STANDARD }).catch(() => false)) {
+      await firstName.fill(addr.firstName)
+      await this.page.locator(SELECTORS.ADDRESS_LAST_NAME).first().fill(addr.lastName)
+      await this.page.locator(SELECTORS.ADDRESS_STREET).first().fill(addr.street)
+      await this.page.locator(SELECTORS.ADDRESS_CITY).first().fill(addr.city)
+      await this.page.locator(SELECTORS.ADDRESS_POSTAL_CODE).first().fill(addr.postalCode)
+
+      // Select country if available
+      const country = this.page.locator(SELECTORS.ADDRESS_COUNTRY).first()
+      if (await country.isVisible({ timeout: TIMEOUTS.SHORT }).catch(() => false)) {
+        await country.selectOption(addr.country)
+      }
+
+      // Fill phone if available
+      const phone = this.page.locator(SELECTORS.ADDRESS_PHONE).first()
+      if (await phone.isVisible({ timeout: TIMEOUTS.SHORT }).catch(() => false)) {
+        await phone.fill(addr.phone)
+      }
+
+      // Trigger blur to validate
+      await this.page.locator(SELECTORS.ADDRESS_POSTAL_CODE).first().blur()
+      await this.page.waitForTimeout(TIMEOUTS.VERY_SHORT)
+    }
+  }
+
+  /**
+   * Wait for shipping methods to load and select first option
+   */
+  async selectShippingMethod(index: number = 0): Promise<void> {
+    // Wait for loading to finish
+    const loadingSpinner = this.page.locator(SELECTORS.SHIPPING_METHOD_LOADING)
+    await loadingSpinner.waitFor({ state: 'hidden', timeout: TIMEOUTS.LONG }).catch(() => {})
+
+    // Wait for shipping options
+    const shippingOptions = this.page.locator(SELECTORS.SHIPPING_METHOD_OPTIONS)
+    await shippingOptions.first().waitFor({ state: 'visible', timeout: TIMEOUTS.LONG }).catch(() => {})
+
+    // Select option
+    const option = shippingOptions.nth(index)
+    if (await option.isVisible({ timeout: TIMEOUTS.SHORT }).catch(() => false)) {
+      await option.click()
+      await this.page.waitForTimeout(TIMEOUTS.VERY_SHORT)
+    }
+  }
+
+  /**
+   * Select cash payment method
+   */
+  async selectCashPayment(): Promise<void> {
+    const cashOption = this.page.locator(SELECTORS.PAYMENT_CASH)
+    if (await cashOption.isVisible({ timeout: TIMEOUTS.STANDARD }).catch(() => false)) {
+      await cashOption.click()
+      await this.page.waitForTimeout(TIMEOUTS.VERY_SHORT)
+    }
+  }
+
+  /**
+   * Accept terms and privacy checkboxes
+   */
+  async acceptTerms(): Promise<void> {
+    const termsCheckbox = this.page.locator(SELECTORS.TERMS_CHECKBOX)
+    const privacyCheckbox = this.page.locator(SELECTORS.PRIVACY_CHECKBOX)
+
+    if (await termsCheckbox.isVisible({ timeout: TIMEOUTS.STANDARD }).catch(() => false)) {
+      await termsCheckbox.check()
+    }
+
+    if (await privacyCheckbox.isVisible({ timeout: TIMEOUTS.SHORT }).catch(() => false)) {
+      await privacyCheckbox.check()
+    }
+  }
+
+  /**
+   * Complete full checkout form (without placing order)
+   * Fills address, selects shipping, selects payment, accepts terms
+   */
+  async fillCheckoutForm(): Promise<void> {
+    await this.handleCheckoutPrompts()
+    await this.fillShippingAddress()
+    await this.selectShippingMethod()
+    await this.selectCashPayment()
+    await this.acceptTerms()
+  }
+
+  /**
+   * Check if express checkout banner is visible
+   */
+  async isExpressBannerVisible(): Promise<boolean> {
+    const expressBanner = this.page.locator(SELECTORS.EXPRESS_BANNER)
+    return await expressBanner.isVisible({ timeout: TIMEOUTS.SHORT }).catch(() => false)
+  }
+
+  /**
+   * Use express checkout to place order
+   */
+  async useExpressCheckout(): Promise<void> {
+    const expressButton = this.page.locator(SELECTORS.EXPRESS_PLACE_ORDER)
+    await expressButton.click()
+    await this.page.waitForLoadState('networkidle')
+  }
+
+  /**
+   * Click place order button
+   */
+  async placeOrder(): Promise<void> {
+    const placeOrderButton = this.page.locator(SELECTORS.PLACE_ORDER_BUTTON).first()
+    await placeOrderButton.click()
+    await this.page.waitForLoadState('networkidle')
   }
 }
