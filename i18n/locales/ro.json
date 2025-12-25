@@ -1,4 +1,10 @@
 {
+  "nav": {
+    "wines": "Vinuri",
+    "gourmet": "Gourmet",
+    "allProducts": "Toate Produsele",
+    "gifts": "Seturi Cadou"
+  },
   "common": {
     "home": "Acasă",
     "shop": "Magazin",
@@ -664,6 +670,7 @@
       }
     },
     "categories": {
+      "eyebrow": "Produsele noastre",
       "title": "Începe călătoria",
       "subtitle": "Explorează selecțiile noastre preferate și găsește combinația potrivită pentru orice moment.",
       "viewAll": "Vezi toate produsele",
@@ -779,6 +786,7 @@
       "contactUs": "Contactează-ne"
     },
     "featuredProducts": {
+      "eyebrow": "Selecție curatoriată",
       "title": "Alegerea editorului",
       "subtitle": "Lansări limitate și best-seller-e care ne inspiră săptămâna aceasta.",
       "noProducts": "Momentan nu sunt produse recomandate. Explorează întregul catalog.",
@@ -849,11 +857,13 @@
       }
     },
     "newsletter": {
+      "eyebrow": "Rămâi conectat",
       "title": "Rămâi la curent cu noutățile",
       "subtitle": "Află primul despre edițiile de sezon, ghidurile de pairing și invitațiile la degustări private.",
       "placeholder": "Introdu adresa de email",
       "cta": "Mă abonez",
       "success": "Îți mulțumim! Vei primi următorul nostru newsletter în curând.",
+      "error": "Ceva nu a mers bine. Te rugăm să încerci din nou.",
       "disclaimer": "Trimitem unul sau două emailuri pe lună și te poți dezabona oricând."
     },
     "faqPreview": {

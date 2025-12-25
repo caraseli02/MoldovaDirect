@@ -1,209 +1,123 @@
 <template>
-  <section class="relative overflow-hidden bg-gradient-to-br from-primary-950 via-primary-900 to-primary-700 py-20 text-white md:py-28">
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.12),_transparent_55%)]"></div>
-    <div class="container relative">
-      <div class="flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">
-        <div class="max-w-xl">
-          <!-- Badge with animation -->
-          <div
-            v-motion
-            :initial="{ opacity: 0, x: -20 }"
-            :visible-once="{
-              opacity: 1,
-              x: 0,
-              transition: { duration: 500 },
-            }"
-            class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-medium ring-1 ring-white/20 backdrop-blur-sm"
-          >
-            <commonIcon
-              name="lucide:star"
-              class="h-5 w-5"
-            />
-            <span>{{ t('home.socialProof.badge') }}</span>
-          </div>
-
-          <!-- Title with animation -->
-          <h2
-            v-motion
-            :initial="{ opacity: 0, x: -20 }"
-            :visible-once="{
-              opacity: 1,
-              x: 0,
-              transition: { duration: 500, delay: 100 },
-            }"
-            class="mt-6 text-3xl font-bold md:text-4xl"
-          >
+  <section class="luxury-social-proof">
+    <div class="proof-container">
+      <!-- Left Column - Stats & Logos -->
+      <div class="proof-content">
+        <div
+          v-motion
+          :initial="{ opacity: 0, y: 30 }"
+          :visible-once="{
+            opacity: 1,
+            y: 0,
+            transition: { duration: 600 },
+          }"
+          class="content-header"
+        >
+          <span class="section-eyebrow">{{ t('home.socialProof.badge') }}</span>
+          <h2 class="section-title">
             {{ t('home.socialProof.title') }}
           </h2>
-
-          <!-- Subtitle with animation -->
-          <p
-            v-motion
-            :initial="{ opacity: 0, x: -20 }"
-            :visible-once="{
-              opacity: 1,
-              x: 0,
-              transition: { duration: 500, delay: 200 },
-            }"
-            class="mt-4 text-lg text-primary-100"
-          >
+          <p class="section-subtitle">
             {{ t('home.socialProof.subtitle') }}
           </p>
+        </div>
 
-          <!-- Animated stats with counter -->
-          <div class="mt-8 grid gap-6 sm:grid-cols-2">
-            <div
-              v-for="(stat, index) in animatedStats"
-              :key="stat.label"
-              v-motion
-              :initial="{ opacity: 0, scale: 0.9 }"
-              :visible-once="{
-                opacity: 1,
-                scale: 1,
-                transition: { duration: 400, delay: 300 + index * 100 },
-              }"
-              class="rounded-xl bg-white/10 p-6 backdrop-blur-sm ring-1 ring-white/10"
-            >
-              <p
-                class="text-3xl font-bold"
-                aria-live="polite"
-                aria-atomic="true"
-              >
-                {{ stat.displayValue }}
-              </p>
-              <p class="mt-2 text-sm text-primary-100">
-                {{ stat.label }}
-              </p>
-            </div>
-          </div>
-
-          <!-- Partner logos with animation -->
+        <!-- Stats Grid -->
+        <div class="stats-grid">
           <div
+            v-for="(stat, index) in animatedStats"
+            :key="stat.label"
             v-motion
-            :initial="{ opacity: 0, y: 20 }"
+            :initial="{ opacity: 0, scale: 0.9 }"
             :visible-once="{
               opacity: 1,
-              y: 0,
-              transition: { duration: 500, delay: 600 },
+              scale: 1,
+              transition: { duration: 400, delay: 200 + index * 100 },
             }"
-            class="mt-10 grid gap-4 sm:grid-cols-2"
+            class="stat-card"
           >
-            <div
-              v-for="logo in logos"
-              :key="logo"
-              class="flex items-center gap-3 rounded-xl bg-white/5 px-5 py-4 text-sm font-semibold backdrop-blur-sm transition hover:bg-white/10"
+            <span
+              class="stat-value"
+              aria-live="polite"
+              aria-atomic="true"
             >
-              <commonIcon
-                name="lucide:sparkles"
-                class="h-5 w-5 text-primary-100"
-              />
-              <span>{{ logo }}</span>
-            </div>
+              {{ stat.displayValue }}
+            </span>
+            <span class="stat-label">{{ stat.label }}</span>
           </div>
         </div>
 
-        <!-- Testimonials - Carousel on mobile, Grid on desktop -->
-        <!-- Mobile: Horizontal carousel -->
-        <div class="lg:hidden">
-          <Swiper
-            :modules="[SwiperPagination]"
-            :slides-per-view="1"
-            :space-between="20"
-            :pagination="{ clickable: true, dynamicBullets: true }"
-            class="testimonials-carousel"
+        <!-- Partner Logos -->
+        <div
+          v-motion
+          :initial="{ opacity: 0, y: 20 }"
+          :visible-once="{
+            opacity: 1,
+            y: 0,
+            transition: { duration: 500, delay: 500 },
+          }"
+          class="partner-logos"
+        >
+          <div
+            v-for="logo in logos"
+            :key="logo"
+            class="partner-logo"
           >
-            <SwiperSlide
-              v-for="testimonial in testimonials"
-              :key="testimonial.name"
-            >
-              <article class="rounded-3xl bg-white/95 p-8 text-left text-gray-900 shadow-xl shadow-primary-950/20">
-                <!-- Star rating at top -->
-                <div class="mb-4 flex items-center justify-between">
-                  <CustomStarRating
-                    :rating="5"
-                    size="sm"
-                  />
-
-                  <!-- Verified badge -->
-                  <span class="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-700">
-                    <commonIcon
-                      name="lucide:check-circle"
-                      class="h-3 w-3"
-                    />
-                    {{ t('home.socialProof.verified') }}
-                  </span>
-                </div>
-
-                <!-- Quote -->
-                <p class="text-lg font-medium leading-relaxed">
-                  "{{ testimonial.quote }}"
-                </p>
-
-                <!-- Customer info -->
-                <div class="mt-6 flex items-center justify-between border-t border-gray-200 pt-4 text-sm">
-                  <div>
-                    <p class="font-semibold text-primary-600">
-                      {{ testimonial.name }}
-                    </p>
-                    <p class="text-gray-500">
-                      {{ testimonial.location }}
-                    </p>
-                  </div>
-                </div>
-              </article>
-            </SwiperSlide>
-          </Swiper>
+            <span class="logo-text">{{ logo }}</span>
+          </div>
         </div>
+      </div>
 
-        <!-- Desktop: Grid with animations -->
-        <div class="hidden gap-6 lg:grid lg:max-w-xl">
-          <article
-            v-for="(testimonial, index) in testimonials"
-            :key="testimonial.name"
-            v-motion
-            :initial="{ opacity: 0, x: 40 }"
-            :visible-once="{
-              opacity: 1,
-              x: 0,
-              transition: { duration: 500, delay: 400 + index * 150 },
-            }"
-            class="rounded-3xl bg-white/95 p-8 text-left text-gray-900 shadow-xl shadow-primary-950/20"
-          >
-            <!-- Star rating at top -->
-            <div class="mb-4 flex items-center justify-between">
-              <CustomStarRating
-                :rating="5"
-                size="sm"
-              />
-
-              <!-- Verified badge -->
-              <span class="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-700">
-                <commonIcon
-                  name="lucide:check-circle"
-                  class="h-3 w-3"
-                />
-                {{ t('home.socialProof.verified') }}
-              </span>
+      <!-- Right Column - Testimonials -->
+      <div class="testimonials-column">
+        <article
+          v-for="(testimonial, index) in testimonials"
+          :key="testimonial.name"
+          v-motion
+          :initial="{ opacity: 0, x: 40 }"
+          :visible-once="{
+            opacity: 1,
+            x: 0,
+            transition: { duration: 500, delay: 300 + index * 150 },
+          }"
+          class="testimonial-card"
+        >
+          <div class="testimonial-header">
+            <div class="star-rating">
+              <svg
+                v-for="i in 5"
+                :key="i"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+              </svg>
             </div>
-
-            <!-- Quote -->
-            <p class="text-lg font-medium leading-relaxed">
-              "{{ testimonial.quote }}"
-            </p>
-
-            <!-- Customer info -->
-            <div class="mt-6 flex items-center justify-between border-t border-gray-200 pt-4 text-sm">
-              <div>
-                <p class="font-semibold text-primary-600">
-                  {{ testimonial.name }}
-                </p>
-                <p class="text-gray-500">
-                  {{ testimonial.location }}
-                </p>
-              </div>
-            </div>
-          </article>
-        </div>
+            <span class="verified-badge">
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg>
+              {{ t('home.socialProof.verified') }}
+            </span>
+          </div>
+          <p class="testimonial-quote">
+            "{{ testimonial.quote }}"
+          </p>
+          <div class="testimonial-author">
+            <span class="author-name">{{ testimonial.name }}</span>
+            <span class="author-location">{{ testimonial.location }}</span>
+          </div>
+        </article>
       </div>
     </div>
   </section>
@@ -256,7 +170,6 @@ useHead(() => ({
 }))
 
 // Parse numeric values from highlights and create animated counters
-// Create counters during setup (not in computed) to avoid lifecycle hook issues
 const counters = props.highlights.map((stat) => {
   const numericMatch = stat.value.match(/(\d+(?:\.\d+)?)(k|K)?/)
 
@@ -314,17 +227,242 @@ const animatedStats = computed(() => {
 </script>
 
 <style scoped>
-/* Swiper pagination dots styling for testimonials */
-:deep(.testimonials-carousel .swiper-pagination) {
-  bottom: -2.5rem;
+/* ============================================
+ * LUXURY SOCIAL PROOF SECTION
+ * Moldova Direct - Premium Design System
+ * ============================================ */
+
+.luxury-social-proof {
+  --proof-cream: #F8F5EE;
+  --proof-black: #0A0A0A;
+  --proof-charcoal: #151515;
+  --proof-gold: #C9A227;
+  --proof-gold-light: #DDB93D;
+  --proof-wine: #8B2E3B;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, sans-serif;
+  --transition-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  padding: 8rem 4rem;
+  background: var(--proof-wine);
 }
 
-:deep(.testimonials-carousel .swiper-pagination-bullet) {
-  background-color: rgb(255 255 255 / 0.5); /* white with 50% opacity */
+.proof-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
 }
 
-:deep(.testimonials-carousel .swiper-pagination-bullet-active) {
-  background-color: rgb(255 255 255); /* white */
-  opacity: 1;
+/* Left Column */
+.proof-content {
+  color: var(--proof-cream);
+}
+
+.content-header {
+  margin-bottom: 3rem;
+}
+
+.section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--proof-gold);
+  margin-bottom: 1rem;
+}
+
+.section-eyebrow::before {
+  content: '';
+  width: 32px;
+  height: 1px;
+  background: var(--proof-gold);
+}
+
+.section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 3.5vw, 2.75rem);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  color: var(--proof-cream);
+  margin-bottom: 1rem;
+}
+
+.section-subtitle {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  color: rgba(248, 245, 238, 0.7);
+  line-height: 1.7;
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.stat-card {
+  padding: 1.5rem;
+  background: rgba(248, 245, 238, 0.08);
+  border: 1px solid rgba(248, 245, 238, 0.12);
+}
+
+.stat-value {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 2.5rem;
+  font-weight: 500;
+  color: var(--proof-gold);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  color: rgba(248, 245, 238, 0.7);
+}
+
+/* Partner Logos */
+.partner-logos {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.partner-logo {
+  padding: 1rem 1.25rem;
+  background: rgba(248, 245, 238, 0.05);
+  border: 1px solid rgba(248, 245, 238, 0.1);
+  transition: all 0.3s ease;
+}
+
+.partner-logo:hover {
+  background: rgba(248, 245, 238, 0.1);
+  border-color: var(--proof-gold);
+}
+
+.logo-text {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--proof-cream);
+}
+
+/* Testimonials Column */
+.testimonials-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.testimonial-card {
+  padding: 2rem;
+  background: var(--proof-cream);
+  color: var(--proof-black);
+}
+
+.testimonial-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.star-rating {
+  display: flex;
+  gap: 0.25rem;
+  color: var(--proof-gold);
+}
+
+.verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #2D6A4F;
+  padding: 0.375rem 0.625rem;
+  background: rgba(45, 106, 79, 0.1);
+}
+
+.testimonial-quote {
+  font-family: var(--font-serif);
+  font-size: 1.125rem;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--proof-charcoal);
+  margin-bottom: 1.5rem;
+}
+
+.testimonial-author {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(10, 10, 10, 0.1);
+}
+
+.author-name {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--proof-black);
+}
+
+.author-location {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: #5E5E5E;
+}
+
+/* Mobile Responsive */
+@media (max-width: 1024px) {
+  .luxury-social-proof {
+    padding: 5rem 1.5rem;
+  }
+
+  .proof-container {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .partner-logos {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .partner-logos {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-value {
+    font-size: 2rem;
+  }
+
+  .testimonial-card {
+    padding: 1.5rem;
+  }
 }
 </style>

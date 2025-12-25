@@ -2,11 +2,10 @@
   <article
     ref="cardRef"
     data-testid="product-card"
-    class="group relative bg-white dark:bg-slate-800 rounded-2xl shadow-elevated-sm hover:shadow-elevated-lg border border-gray-200 dark:border-slate-700 transition-all duration-300 overflow-hidden"
+    class="luxury-product-card group"
     :class="{
-      'active:scale-95': isMobile,
+      'active:scale-[0.98]': isMobile,
       'touch-manipulation': isMobile,
-      'h-full': variant === 'hero' || variant === 'featured',
     }"
     :aria-label="$t('products.commonProduct')"
     role="article"
@@ -23,15 +22,11 @@
     </div>
 
     <!-- Product Image -->
-    <div
-      class="relative overflow-hidden rounded-t-2xl bg-gray-100 dark:bg-slate-700"
-      :class="{
-        'aspect-square': variant === 'standard',
-        'aspect-[4/3]': variant === 'hero',
-        'aspect-[3/2]': variant === 'featured',
-      }"
-    >
-      <nuxt-link :to="productDetailPath">
+    <div class="card-image-wrapper">
+      <nuxt-link
+        :to="productDetailPath"
+        class="card-image-link"
+      >
         <NuxtImg
           v-if="primaryImage"
           preset="productThumbnail"
@@ -42,112 +37,82 @@
           loading="lazy"
           placeholder
           :placeholder-class="'blur-xl'"
-          class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          class="card-image"
         />
         <div
           v-else
-          class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900"
+          class="card-image-placeholder"
           role="img"
           :aria-label="$t('products.noImageAvailable')"
         >
-          <div class="relative">
-            <div class="absolute inset-0 bg-blue-500/10 blur-2xl rounded-full"></div>
-            <commonIcon
-              name="wine"
-              class="relative h-12 w-12 text-blue-400 dark:text-blue-500"
-              aria-hidden="true"
-            />
-          </div>
+          <commonIcon
+            name="wine"
+            class="placeholder-icon"
+            aria-hidden="true"
+          />
         </div>
+        <div class="card-overlay"></div>
       </nuxt-link>
 
-      <!-- Quick Actions Bottom Bar -->
-      <div
-        class="absolute bottom-0 left-0 right-0 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-t border-gray-200 dark:border-gray-700 transition-all duration-300"
-        :class="isMobile ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100'"
-      >
-        <div class="flex items-center justify-between px-3 py-2 gap-2">
-          <!-- Quick View Button -->
-          <nuxt-link
-            :to="productDetailPath"
-            :aria-label="$t('products.quickViewProduct', { name: getLocalizedText(product.name) })"
-            class="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors text-sm font-medium text-gray-900 dark:text-white focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2"
-          >
-            <commonIcon
-              name="eye"
-              class="h-4 w-4"
-            />
-            <span class="hidden sm:inline">{{ $t('products.quickView') }}</span>
-          </nuxt-link>
-        </div>
-      </div>
-
-      <!-- Product Labels/Badges (top-left corner) -->
-      <div class="absolute top-3 left-3 flex flex-col gap-2">
-        <!-- New Badge -->
+      <!-- Badges -->
+      <div class="card-badges-left">
         <span
           v-if="isNew"
-          class="inline-flex items-center gap-1 bg-primary-600 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg"
+          class="card-badge badge-new"
         >
-          <commonIcon
-            name="lucide:sparkles"
-            class="h-3 w-3"
-          />
           {{ $t('products.new') }}
         </span>
-
-        <!-- Best Seller Badge -->
         <span
           v-if="product.isFeatured"
-          class="inline-flex items-center gap-1 bg-amber-500 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg"
+          class="card-badge badge-featured"
         >
-          <commonIcon
-            name="lucide:trending-up"
-            class="h-3 w-3"
-          />
           {{ $t('products.bestSeller') }}
         </span>
-
-        <!-- Low Stock Badge (urgency) -->
         <span
           v-if="product.stockQuantity > 0 && product.stockQuantity <= PRODUCTS.LOW_STOCK_THRESHOLD"
-          class="inline-flex items-center gap-1 bg-red-600 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg animate-pulse"
+          class="card-badge badge-low-stock"
         >
-          <commonIcon
-            name="lucide:alert-circle"
-            class="h-3 w-3"
-          />
           {{ $t('products.onlyLeft', { count: product.stockQuantity }) }}
         </span>
       </div>
 
-      <!-- Sale Badge (top-right corner) -->
       <div
         v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)"
-        class="absolute top-3 right-3"
+        class="card-badges-right"
       >
-        <span class="inline-flex items-center gap-1 bg-red-600 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg">
-          <commonIcon
-            name="lucide:tag"
-            class="h-3 w-3"
-          />
+        <span class="card-badge badge-sale">
           -{{ calculateDiscount }}%
         </span>
+      </div>
+
+      <!-- Quick View on Hover -->
+      <div class="quick-view-overlay">
+        <nuxt-link
+          :to="productDetailPath"
+          :aria-label="$t('products.quickViewProduct', { name: getLocalizedText(product.name) })"
+          class="quick-view-btn"
+        >
+          <commonIcon
+            name="eye"
+            class="h-4 w-4"
+          />
+          <span>{{ $t('products.quickView') }}</span>
+        </nuxt-link>
       </div>
     </div>
 
     <!-- Product Info -->
-    <div class="p-4">
+    <div class="card-content">
       <!-- Category -->
-      <p class="text-sm text-gray-600 dark:text-slate-400 mb-2">
+      <p class="card-category">
         {{ product.category?.nameTranslations ? getLocalizedText(product.category.nameTranslations) : '' }}
       </p>
 
       <!-- Product Name -->
-      <h3 class="font-semibold text-gray-900 dark:text-slate-100 mb-2 line-clamp-2">
+      <h3 class="card-title">
         <nuxt-link
           :to="productDetailPath"
-          class="hover:text-blue-700 dark:hover:text-blue-300 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 rounded"
+          class="card-title-link"
           :aria-label="$t('products.viewDetails') + ': ' + getLocalizedText(product.name)"
         >
           {{ getLocalizedText(product.name) }}
@@ -157,114 +122,87 @@
       <!-- Short Description -->
       <p
         v-if="product.shortDescription"
-        class="text-sm text-gray-600 dark:text-slate-300 mb-3 line-clamp-2"
+        class="card-description"
       >
         {{ getLocalizedText(product.shortDescription) }}
       </p>
 
-      <!-- Tags -->
+      <!-- Product Details -->
       <div
-        v-if="product.tags?.length"
-        class="flex flex-wrap gap-1 mb-3"
+        v-if="product.origin || product.volume || product.alcoholContent"
+        class="card-details"
       >
         <span
-          v-for="tag in product.tags.slice(0, PRODUCTS.MAX_VISIBLE_TAGS)"
-          :key="tag"
-          class="inline-block bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 text-xs px-2 py-1 rounded-full"
-        >
-          {{ tag }}
-        </span>
-        <span
-          v-if="product.tags.length > PRODUCTS.MAX_VISIBLE_TAGS"
-          class="text-xs text-gray-600 dark:text-slate-400"
-        >
-          +{{ product.tags.length - PRODUCTS.MAX_VISIBLE_TAGS }}
-        </span>
-      </div>
-
-      <!-- Product Details -->
-      <div class="flex flex-wrap gap-2 text-xs text-gray-600 dark:text-slate-400 mb-3">
-        <span
           v-if="product.origin"
-          class="flex items-center gap-1"
+          class="detail-item"
         >
           <commonIcon
             name="globe-2"
-            class="h-3 w-3"
+            class="h-3.5 w-3.5"
             aria-hidden="true"
           />
           {{ product.origin }}
         </span>
         <span
           v-if="product.volume"
-          class="flex items-center gap-1"
+          class="detail-item"
         >
           <commonIcon
             name="flask-conical"
-            class="h-3 w-3"
+            class="h-3.5 w-3.5"
             aria-hidden="true"
           />
           {{ product.volume }}ml
         </span>
         <span
           v-if="product.alcoholContent"
-          class="flex items-center gap-1"
+          class="detail-item"
         >
           <commonIcon
             name="wine"
-            class="h-3 w-3"
+            class="h-3.5 w-3.5"
             aria-hidden="true"
           />
           {{ product.alcoholContent }}%
         </span>
       </div>
 
-      <!-- Price and Stock -->
-      <div class="flex items-center justify-between">
-        <div class="flex items-center space-x-2">
-          <!-- Current Price -->
-          <span class="font-bold text-lg text-gray-900 dark:text-slate-100">
+      <!-- Price Row -->
+      <div class="card-price-row">
+        <div class="price-group">
+          <span class="current-price">
             €{{ formatPrice(product.price) }}
           </span>
-
-          <!-- Compare Price (if on sale) -->
           <span
             v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)"
-            class="text-sm text-gray-600 dark:text-slate-400 line-through"
+            class="compare-price"
           >
             €{{ formatPrice(product.comparePrice) }}
           </span>
         </div>
-
-        <!-- Stock Status -->
-        <div class="text-right">
-          <span
-            v-if="product.stockQuantity > 0"
-            class="inline-flex items-center px-2 py-1 rounded-full text-xs"
-            :class="stockStatusClass"
-          >
-            {{ stockStatusText }}
-          </span>
-          <span
-            v-else
-            class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300"
-          >
-            {{ $t('products.stockStatus.outOfStock') }}
-          </span>
-        </div>
+        <span
+          v-if="product.stockQuantity > 0"
+          class="stock-status"
+          :class="stockStatusClass"
+        >
+          {{ stockStatusText }}
+        </span>
+        <span
+          v-else
+          class="stock-status out-of-stock"
+        >
+          {{ $t('products.stockStatus.outOfStock') }}
+        </span>
       </div>
 
       <!-- Add to Cart Button -->
-      <Button
+      <button
+        type="button"
         :disabled="product.stockQuantity <= 0 || cartLoading"
         :aria-label="getCartButtonAriaLabel()"
         :aria-live="cartLoading ? 'polite' : undefined"
-        class="cta-button w-full mt-4 transition-all duration-200 flex items-center justify-center space-x-2 touch-manipulation rounded-full min-h-[44px] focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2"
-        :class="[
-          isInCart(String(product.id))
-            ? 'bg-green-600 dark:bg-green-500 text-white hover:bg-green-700 dark:hover:bg-green-600'
-            : 'bg-primary-600 dark:bg-primary-500 text-white hover:bg-primary-700 dark:hover:bg-primary-600',
-        ]"
+        class="add-to-cart-btn"
+        :class="{ 'in-cart': isInCart(String(product.id)) }"
         @click="addToCart"
         @touchstart="isMobile && !cartLoading && vibrate('tap')"
       >
@@ -337,14 +275,13 @@
                 : $t('products.addToCart')
           }}
         </span>
-      </Button>
+      </button>
     </div>
   </article>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { Button } from '@/components/ui/button'
 import type { ProductWithRelations } from '~/types'
 import { useCart } from '~/composables/useCart'
 import type { Translations } from '~/types/database'
@@ -385,9 +322,9 @@ const primaryImage = computed(() => {
 
 const stockStatusClass = computed(() => {
   const stock = props.product.stockQuantity
-  if (stock > 10) return 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300'
-  if (stock > 0) return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300'
-  return 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300'
+  if (stock > 10) return 'in-stock'
+  if (stock > 0) return 'low-stock'
+  return 'out-of-stock'
 })
 
 const stockStatusText = computed(() => {
@@ -558,3 +495,376 @@ const setupMobileTouch = () => {
 
 onMounted(setupMobileTouch)
 </script>
+
+<style scoped>
+/* ============================================
+ * LUXURY PRODUCT CARD STYLES
+ * Moldova Direct - Premium Design System
+ * ============================================ */
+
+.luxury-product-card {
+  --card-cream: #F8F5EE;
+  --card-black: #0A0A0A;
+  --card-charcoal: #151515;
+  --card-gold: #C9A227;
+  --card-gold-light: #DDB93D;
+  --card-wine: #8B2E3B;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, sans-serif;
+  --transition-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  position: relative;
+  background: white;
+  transition: all 0.4s var(--transition-smooth);
+}
+
+.luxury-product-card:hover {
+  box-shadow: 0 20px 40px -12px rgba(10, 10, 10, 0.15);
+}
+
+/* Image Wrapper */
+.card-image-wrapper {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 3/4;
+  background: var(--card-cream);
+}
+
+.card-image-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s var(--transition-smooth);
+}
+
+.luxury-product-card:hover .card-image {
+  transform: scale(1.08);
+}
+
+.card-image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(201, 162, 39, 0.1), rgba(139, 46, 59, 0.1));
+}
+
+.placeholder-icon {
+  width: 3rem;
+  height: 3rem;
+  color: var(--card-gold);
+  opacity: 0.5;
+}
+
+.card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(10, 10, 10, 0.4) 0%,
+    transparent 50%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.luxury-product-card:hover .card-overlay {
+  opacity: 1;
+}
+
+/* Badges */
+.card-badges-left {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 2;
+}
+
+.card-badges-right {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 2;
+}
+
+.card-badge {
+  font-family: var(--font-sans);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.5rem 0.75rem;
+}
+
+.badge-new {
+  background: var(--card-black);
+  color: var(--card-cream);
+}
+
+.badge-featured {
+  background: var(--card-gold);
+  color: var(--card-black);
+}
+
+.badge-low-stock {
+  background: var(--card-wine);
+  color: white;
+}
+
+.badge-sale {
+  background: var(--card-wine);
+  color: white;
+}
+
+/* Quick View */
+.quick-view-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  transform: translateY(100%);
+  opacity: 0;
+  transition: all 0.4s var(--transition-smooth);
+  z-index: 2;
+}
+
+.luxury-product-card:hover .quick-view-overlay {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.quick-view-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.875rem;
+  background: white;
+  color: var(--card-black);
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.quick-view-btn:hover {
+  background: var(--card-black);
+  color: white;
+}
+
+/* Card Content */
+.card-content {
+  padding: 1.5rem;
+}
+
+.card-category {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--card-gold);
+  margin-bottom: 0.5rem;
+}
+
+.card-title {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--card-black);
+  margin-bottom: 0.5rem;
+}
+
+.card-title-link {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.3s ease;
+}
+
+.card-title-link:hover {
+  color: var(--card-gold);
+}
+
+.card-description {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  color: #5E5E5E;
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: #5E5E5E;
+}
+
+/* Price Row */
+.card-price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(10, 10, 10, 0.08);
+}
+
+.price-group {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.current-price {
+  font-family: var(--font-serif);
+  font-size: 1.375rem;
+  font-weight: 600;
+  color: var(--card-black);
+}
+
+.compare-price {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.stock-status {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+.stock-status.in-stock {
+  color: #2D6A4F;
+}
+
+.stock-status.low-stock {
+  color: var(--card-wine);
+}
+
+.stock-status.out-of-stock {
+  color: #999;
+}
+
+/* Add to Cart Button */
+.add-to-cart-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: var(--card-black);
+  color: var(--card-cream);
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: all 0.4s var(--transition-smooth);
+}
+
+.add-to-cart-btn:hover:not(:disabled) {
+  background: var(--card-gold);
+  color: var(--card-black);
+}
+
+.add-to-cart-btn.in-cart {
+  background: var(--card-gold);
+  color: var(--card-black);
+}
+
+.add-to-cart-btn:disabled {
+  background: #E5E5E5;
+  color: #999;
+  cursor: not-allowed;
+}
+
+/* Dark Mode */
+.dark .luxury-product-card {
+  background: var(--card-charcoal);
+}
+
+.dark .card-title {
+  color: var(--card-cream);
+}
+
+.dark .card-description {
+  color: rgba(248, 245, 238, 0.6);
+}
+
+.dark .detail-item {
+  color: rgba(248, 245, 238, 0.6);
+}
+
+.dark .card-price-row {
+  border-top-color: rgba(248, 245, 238, 0.1);
+}
+
+.dark .current-price {
+  color: var(--card-cream);
+}
+
+.dark .add-to-cart-btn {
+  background: var(--card-cream);
+  color: var(--card-black);
+}
+
+.dark .add-to-cart-btn:hover:not(:disabled) {
+  background: var(--card-gold);
+}
+
+/* Mobile Responsive */
+@media (max-width: 640px) {
+  .card-content {
+    padding: 1rem;
+  }
+
+  .card-title {
+    font-size: 1.125rem;
+  }
+
+  .current-price {
+    font-size: 1.25rem;
+  }
+
+  .quick-view-overlay {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+</style>

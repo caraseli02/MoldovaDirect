@@ -84,7 +84,7 @@
       </div>
 
       <!-- Content Container - Luxury Editorial Layout -->
-      <div class="hero-content relative z-10 flex flex-col justify-center px-6 py-32 md:px-16 lg:px-24">
+      <div class="hero-content relative z-10 flex flex-col justify-center px-6 pb-40 pt-32 md:px-16 md:pb-44 lg:px-24 lg:pb-48">
         <div
           v-motion
           :initial="{ opacity: 0, y: 30 }"
@@ -217,7 +217,7 @@
                 scale: 1,
                 transition: { delay: 700 + index * 100 },
               }"
-              class="stat"
+              class="stat group"
             >
               <div class="stat-value">
                 {{ highlight.value }}
@@ -225,6 +225,12 @@
               <div class="stat-label">
                 {{ highlight.label }}
               </div>
+              <!-- Vertical divider (hidden on last item and mobile) -->
+              <span
+                v-if="index < highlights.length - 1"
+                class="stat-divider"
+                aria-hidden="true"
+              ></span>
             </div>
           </div>
         </div>
@@ -529,39 +535,70 @@ video {
 /* Luxury Stats Section */
 .hero-stats {
   display: flex;
-  gap: 3.5rem;
-  margin-top: 3rem;
-  padding-top: 2.5rem;
-  border-top: 1px solid rgba(201, 162, 39, 0.25);
+  flex-direction: column;
+  gap: 1.75rem;
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(201, 162, 39, 0.2);
+}
+
+@media (min-width: 640px) {
+  .hero-stats {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 2.5rem;
+    margin-top: 3rem;
+    padding-top: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-stats {
+    flex-wrap: nowrap;
+    gap: 3.5rem;
+  }
 }
 
 .stat {
   text-align: left;
   position: relative;
+  padding: 0.75rem 0;
+  cursor: default;
+  transition: transform 0.3s var(--transition-smooth);
 }
 
-.stat::after {
-  content: '';
-  position: absolute;
-  right: -1.75rem;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 1px;
-  height: 60%;
-  background: rgba(248, 245, 238, 0.15);
+/* Hover effect - subtle lift */
+.stat:hover {
+  transform: translateY(-2px);
 }
 
-.stat:last-child::after {
-  display: none;
-}
-
+/* Stat value with hover color transition */
 .stat-value {
   font-family: var(--font-serif);
-  font-size: 2.75rem;
+  font-size: 2.25rem;
   font-weight: 500;
   color: var(--color-cream);
   text-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
   line-height: 1;
+  transition: color 0.3s var(--transition-smooth), text-shadow 0.3s var(--transition-smooth);
+}
+
+@media (min-width: 640px) {
+  .stat-value {
+    font-size: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .stat-value {
+    font-size: 2.75rem;
+  }
+}
+
+/* Hover: Gold accent on value */
+.stat:hover .stat-value {
+  color: var(--color-gold-light);
+  text-shadow: 0 3px 16px rgba(201, 162, 39, 0.25);
 }
 
 .stat-label {
@@ -569,9 +606,60 @@ video {
   font-size: 0.6875rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(248, 245, 238, 0.6);
-  margin-top: 0.5rem;
+  color: rgba(248, 245, 238, 0.55);
+  margin-top: 0.625rem;
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: color 0.3s var(--transition-smooth);
+}
+
+/* Hover: Brighter label */
+.stat:hover .stat-label {
+  color: rgba(248, 245, 238, 0.8);
+}
+
+/* Vertical divider between stats */
+.stat-divider {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .stat-divider {
+    display: block;
+    position: absolute;
+    right: -1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 50%;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(201, 162, 39, 0.35) 20%,
+      rgba(201, 162, 39, 0.35) 80%,
+      transparent 100%
+    );
+    transition: opacity 0.3s var(--transition-smooth);
+  }
+}
+
+@media (min-width: 1024px) {
+  .stat-divider {
+    right: -1.75rem;
+    height: 60%;
+  }
+}
+
+/* Horizontal divider for mobile (between stacked items) */
+@media (max-width: 639px) {
+  .stat {
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid rgba(201, 162, 39, 0.15);
+  }
+
+  .stat:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
 }
 
 /* Scroll Indicator */
@@ -616,33 +704,26 @@ video {
   }
 }
 
-/* Mobile Responsive */
-@media (max-width: 1024px) {
-  .hero-stats {
-    flex-wrap: wrap;
-    gap: 2rem;
-  }
-
-  .stat::after {
-    display: none;
-  }
-}
-
+/* Mobile Responsive - Additional Refinements */
 @media (max-width: 640px) {
   .hero-title {
     font-size: 2.5rem;
   }
 
-  .hero-stats {
-    gap: 1.5rem;
-  }
-
-  .stat-value {
-    font-size: 2rem;
+  .hero-subtitle {
+    font-size: 1rem;
+    line-height: 1.7;
   }
 
   .scroll-indicator {
-    display: none;
+    bottom: 1.5rem;
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 641px) and (max-width: 1023px) {
+  .hero-title {
+    font-size: clamp(2.75rem, 5vw, 4rem);
   }
 }
 </style>

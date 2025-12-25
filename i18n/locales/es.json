@@ -1,4 +1,10 @@
 {
+  "nav": {
+    "wines": "Vinos",
+    "gourmet": "Gourmet",
+    "allProducts": "Todos los Productos",
+    "gifts": "Regalos"
+  },
   "common": {
     "home": "Inicio",
     "shop": "Tienda",
@@ -899,6 +905,7 @@
       }
     },
     "categories": {
+      "eyebrow": "Nuestros productos",
       "title": "Qué vendemos",
       "subtitle": "Vinos, comida y regalos de Moldavia. Todo directo del productor.",
       "viewAll": "Ver todo el catálogo",
@@ -1037,6 +1044,7 @@
       "contactUs": "Contáctanos"
     },
     "featuredProducts": {
+      "eyebrow": "Selección destacada",
       "title": "Lo que más se vende",
       "subtitle": "Vinos y productos que otros clientes están comprando ahora.",
       "noProducts": "No hay productos disponibles en este momento. Vuelve pronto.",
@@ -1107,11 +1115,13 @@
       }
     },
     "newsletter": {
+      "eyebrow": "Mantente conectado",
       "title": "No te pierdas las novedades",
       "subtitle": "Sé la primera persona en enterarte de lanzamientos de temporada, guías de maridaje e invitaciones a catas privadas.",
       "placeholder": "Introduce tu correo electrónico",
       "cta": "Quiero recibir novedades",
       "success": "¡Gracias! Recibirás nuestro próximo boletín en tu bandeja.",
+      "error": "Algo salió mal. Por favor, inténtalo de nuevo.",
       "disclaimer": "Enviamos uno o dos correos al mes y puedes darte de baja cuando quieras.",
       "subscribeButton": "Suscribirse"
     },

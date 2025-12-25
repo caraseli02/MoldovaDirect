@@ -1,169 +1,130 @@
 <template>
   <header
     :class="[
-      'sticky top-0 z-50 transition-all duration-300 will-change-transform',
+      'luxury-header fixed left-0 right-0 z-50 transition-all duration-400',
       scrolled
-        ? 'bg-brand-light/95 backdrop-blur-md shadow-elevated-sm dark:bg-brand-dark/95 dark:shadow-brand-light/5'
-        : 'bg-transparent dark:bg-transparent',
+        ? 'header-scrolled top-0'
+        : 'header-transparent top-[42px] md:top-[46px]',
     ]"
   >
-    <div class="container">
-      <div class="flex items-center justify-between h-16">
-        <!-- Logo with dynamic color based on scroll state -->
+    <div class="nav-container">
+      <!-- Logo with serif typography -->
+      <NuxtLink
+        :to="localePath('/')"
+        class="nav-logo"
+      >
+        Moldova Direct
+      </NuxtLink>
+
+      <!-- Desktop Navigation with luxury styling -->
+      <nav class="nav-links">
         <NuxtLink
-          :to="localePath('/')"
-          class="flex items-center space-x-2"
+          v-for="link in navLinks"
+          :key="link.path"
+          :to="localePath(link.path)"
+          class="nav-link"
         >
-          <span
-            :class="[
-              'text-xl font-bold tracking-tight transition-colors duration-300',
-              scrolled
-                ? 'text-brand-dark dark:text-brand-light'
-                : 'text-brand-light dark:text-brand-light drop-shadow-lg',
-            ]"
-          >
-            Moldova Direct
-          </span>
+          {{ $t(link.label) }}
         </NuxtLink>
+      </nav>
 
-        <!-- Desktop Navigation with dynamic colors -->
-        <nav class="hidden md:flex items-center space-x-8">
-          <NuxtLink
-            :to="localePath('/')"
-            :class="navLinkClass"
-          >
-            {{ $t('common.home') }}
-          </NuxtLink>
-          <NuxtLink
-            :to="localePath('/products')"
-            :class="navLinkClass"
-          >
-            {{ $t('common.shop') }}
-          </NuxtLink>
-          <NuxtLink
-            :to="localePath('/about')"
-            :class="navLinkClass"
-          >
-            {{ $t('common.about') }}
-          </NuxtLink>
-          <NuxtLink
-            :to="localePath('/contact')"
-            :class="navLinkClass"
-          >
-            {{ $t('common.contact') }}
-          </NuxtLink>
-        </nav>
+      <!-- Right side actions -->
+      <div class="nav-actions">
+        <!-- Desktop actions -->
+        <div class="hidden md:flex items-center gap-4">
+          <!-- Language Switcher -->
+          <LanguageSwitcher />
 
-        <!-- Right side actions -->
-        <div class="flex items-center">
-          <!-- Desktop actions -->
-          <div class="hidden md:flex items-center space-x-4">
-            <!-- Language Switcher -->
-            <LanguageSwitcher />
+          <!-- Theme Toggle -->
+          <ThemeToggle />
 
-            <!-- Theme Toggle -->
-            <ThemeToggle />
-
-            <!-- Search with dynamic color -->
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              :aria-label="`${t('common.search')} (Ctrl+K)`"
-              :class="iconButtonClass"
-              @click="goToSearch"
+          <!-- Search -->
+          <button
+            type="button"
+            :aria-label="`${t('common.search')} (Ctrl+K)`"
+            class="nav-icon-btn"
+            @click="goToSearch"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-              <!-- Keyboard shortcut hint - client only to prevent hydration mismatch -->
-              <ClientOnly>
-                <span class="absolute -bottom-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap bg-gray-900 dark:bg-gray-700 text-white text-xs px-2 py-1 rounded pointer-events-none">
-                  {{ searchShortcut }}
-                </span>
-              </ClientOnly>
-            </Button>
+              <circle
+                cx="11"
+                cy="11"
+                r="8"
+              />
+              <path d="m21 21-4.35-4.35" />
+            </svg>
+          </button>
 
-            <!-- Account with dynamic color -->
-            <NuxtLink
-              :to="localePath('/account')"
-              :aria-label="accountLabel"
-              :class="iconButtonClass"
-              data-testid="user-menu"
+          <!-- Account -->
+          <NuxtLink
+            :to="localePath('/account')"
+            :aria-label="accountLabel"
+            class="nav-icon-btn"
+            data-testid="user-menu"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                />
-              </svg>
-              <span class="sr-only">{{ accountLabel }}</span>
-            </NuxtLink>
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle
+                cx="12"
+                cy="7"
+                r="4"
+              />
+            </svg>
+          </NuxtLink>
 
-            <!-- Cart with dynamic color -->
-            <NuxtLink
-              :to="localePath('/cart')"
-              :aria-label="cartAriaLabel"
-              :class="iconButtonClass"
+          <!-- Cart -->
+          <NuxtLink
+            :to="localePath('/cart')"
+            :aria-label="cartAriaLabel"
+            class="nav-cart"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+              <line
+                x1="3"
+                y1="6"
+                x2="21"
+                y2="6"
+              />
+              <path d="M16 10a4 4 0 0 1-8 0" />
+            </svg>
+            <ClientOnly>
+              <span
+                v-if="cartItemsCount > 0"
+                data-testid="cart-count"
+                class="cart-count"
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                />
-              </svg>
-              <!-- Cart count badge - client only to prevent hydration mismatch -->
-              <ClientOnly>
-                <span
-                  v-if="cartItemsCount > 0"
-                  data-testid="cart-count"
-                  class="absolute -top-1 -right-1 bg-primary-600 dark:bg-primary-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
-                  aria-hidden="true"
-                >
-                  {{ cartItemsCount }}
-                </span>
-              </ClientOnly>
-            </NuxtLink>
-          </div>
+                {{ cartItemsCount }}
+              </span>
+            </ClientOnly>
+          </NuxtLink>
+        </div>
 
-          <!-- Mobile actions - Language and Theme -->
-          <div class="flex md:hidden items-center space-x-1">
-            <!-- Language Switcher -->
-            <LanguageSwitcher />
-
-            <!-- Theme Toggle -->
-            <ThemeToggle />
-          </div>
+        <!-- Mobile actions -->
+        <div class="flex md:hidden items-center gap-2">
+          <LanguageSwitcher />
+          <ThemeToggle />
         </div>
       </div>
     </div>
@@ -173,19 +134,24 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed, nextTick } from 'vue'
 import { useThrottleFn } from '@vueuse/core'
-import { Button } from '@/components/ui/button'
 import LanguageSwitcher from './LanguageSwitcher.vue'
 import ThemeToggle from './ThemeToggle.vue'
 
-const { t, locale: _locale } = useI18n()
+const { t } = useI18n()
 const localePath = useLocalePath()
 const route = useRoute()
 
+// Navigation links
+const navLinks = [
+  { path: '/products', label: 'common.shop' },
+  { path: '/products?category=wines', label: 'nav.wines' },
+  { path: '/products?category=gourmet', label: 'nav.gourmet' },
+  { path: '/about', label: 'common.about' },
+]
+
 // Scroll detection for luxury header transparency
-// Initialize as true to prevent hydration mismatch
-// We'll update it immediately on client side in onMounted
 const scrolled = ref(true)
-const SCROLL_THRESHOLD = 20 // px - threshold for header transparency
+const SCROLL_THRESHOLD = 50
 
 // Pages that have dark hero sections and support transparent header
 const pagesWithDarkHero = ['/']
@@ -194,38 +160,20 @@ const handleScroll = useThrottleFn(() => {
   const currentPath = route.path?.replace(/\/(en|ro|ru)/, '') || '/'
   const hasDarkHero = pagesWithDarkHero.includes(currentPath)
 
-  // Only allow transparent header on pages with dark hero sections
   scrolled.value = hasDarkHero
     ? window.scrollY > SCROLL_THRESHOLD
     : true
-}, 50) // Throttle to 50ms (20 updates/second) for optimal performance
+}, 50)
 
 onMounted(() => {
   if (typeof window !== 'undefined') {
-    // Wait for next tick to avoid hydration mismatch
     nextTick(() => {
       window.addEventListener('scroll', handleScroll, { passive: true })
-      handleScroll() // Initial check after hydration
+      handleScroll()
     })
   }
 })
 
-// Dynamic classes based on scroll state
-const navLinkClass = computed(() => [
-  'font-medium tracking-wide transition-colors duration-300',
-  scrolled.value
-    ? 'text-brand-dark/80 hover:text-brand-accent dark:text-brand-light/80 dark:hover:text-brand-accent'
-    : 'text-brand-light/90 hover:text-brand-light drop-shadow-md dark:text-brand-light/90 dark:hover:text-brand-light',
-])
-
-const iconButtonClass = computed(() => [
-  'group relative p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center transition-all duration-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-accent focus:ring-offset-2',
-  scrolled.value
-    ? 'text-brand-dark/70 hover:text-brand-accent dark:text-brand-light/70 dark:hover:text-brand-accent'
-    : 'text-brand-light/80 hover:text-brand-light drop-shadow-lg dark:text-brand-light/80 dark:hover:text-brand-light',
-])
-
-// Clean up on unmount
 onUnmounted(() => {
   if (typeof window !== 'undefined') {
     window.removeEventListener('scroll', handleScroll)
@@ -246,8 +194,217 @@ const accountLabel = computed(() => t('common.account'))
 const goToSearch = () => {
   navigateTo(localePath({ path: '/products', query: { focus: 'search' } }))
 }
-
-// Get keyboard shortcut display
-const { getShortcutDisplay } = useKeyboardShortcuts()
-const searchShortcut = computed(() => getShortcutDisplay('k', { ctrlOrCmd: true }))
 </script>
+
+<style scoped>
+/* ============================================
+ * LUXURY HEADER STYLES
+ * Moldova Direct - Premium Design System
+ * ============================================ */
+
+.luxury-header {
+  --header-cream: #F8F5EE;
+  --header-black: #0A0A0A;
+  --header-charcoal: #151515;
+  --header-gold: #C9A227;
+  --header-gold-light: #DDB93D;
+  --header-wine: #8B2E3B;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, sans-serif;
+  --transition-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 4rem;
+  transition: padding 0.3s ease;
+}
+
+/* Transparent state (on hero) */
+.header-transparent {
+  background: transparent;
+}
+
+.header-transparent .nav-logo {
+  color: var(--header-cream);
+}
+
+.header-transparent .nav-link {
+  color: rgba(248, 245, 238, 0.85);
+}
+
+.header-transparent .nav-link:hover {
+  color: var(--header-gold-light);
+}
+
+.header-transparent .nav-icon-btn,
+.header-transparent .nav-cart {
+  color: var(--header-cream);
+}
+
+/* Scrolled state (solid background) */
+.header-scrolled {
+  background: var(--header-cream);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
+}
+
+.header-scrolled .nav-container {
+  padding: 1rem 4rem;
+}
+
+.header-scrolled .nav-logo {
+  color: var(--header-black);
+}
+
+.header-scrolled .nav-link {
+  color: var(--header-charcoal);
+}
+
+.header-scrolled .nav-link:hover {
+  color: var(--header-gold);
+}
+
+.header-scrolled .nav-icon-btn,
+.header-scrolled .nav-cart {
+  color: var(--header-black);
+}
+
+/* Logo */
+.nav-logo {
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  transition: color 0.4s ease;
+}
+
+/* Navigation Links */
+.nav-links {
+  display: flex;
+  gap: 3rem;
+  list-style: none;
+}
+
+.nav-link {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  position: relative;
+  padding: 0.5rem 0;
+  transition: color 0.4s var(--transition-smooth);
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 1px;
+  background: var(--header-gold);
+  transition: width 0.4s var(--transition-smooth), left 0.4s var(--transition-smooth);
+}
+
+.nav-link:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+/* Actions */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.4s ease, transform 0.3s ease;
+}
+
+.nav-icon-btn:hover {
+  color: var(--header-gold);
+  transform: translateY(-1px);
+}
+
+/* Cart */
+.nav-cart {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  text-decoration: none;
+  transition: color 0.4s ease;
+}
+
+.nav-cart:hover {
+  color: var(--header-gold);
+}
+
+.cart-count {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 18px;
+  height: 18px;
+  background: var(--header-wine);
+  color: white;
+  font-family: var(--font-sans);
+  font-size: 0.625rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+/* Dark mode adjustments */
+.dark .header-scrolled {
+  background: var(--header-charcoal);
+}
+
+.dark .header-scrolled .nav-logo,
+.dark .header-scrolled .nav-link,
+.dark .header-scrolled .nav-icon-btn,
+.dark .header-scrolled .nav-cart {
+  color: var(--header-cream);
+}
+
+.dark .header-scrolled .nav-link:hover,
+.dark .header-scrolled .nav-icon-btn:hover,
+.dark .header-scrolled .nav-cart:hover {
+  color: var(--header-gold-light);
+}
+
+/* Mobile Responsive */
+@media (max-width: 1024px) {
+  .nav-container {
+    padding: 1rem 1.5rem;
+  }
+
+  .header-scrolled .nav-container {
+    padding: 0.75rem 1.5rem;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .nav-logo {
+    font-size: 1.5rem;
+  }
+}
+</style>

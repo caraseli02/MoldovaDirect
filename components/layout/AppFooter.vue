@@ -1,151 +1,171 @@
 <template>
-  <footer class="bg-gray-900 text-white">
-    <div class="container py-12">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        <!-- About Section -->
-        <div>
-          <h3 class="text-lg font-semibold mb-4">
+  <footer class="luxury-footer">
+    <!-- Main Footer Content -->
+    <div class="footer-main">
+      <div class="footer-grid">
+        <!-- Brand Column -->
+        <div class="footer-brand">
+          <NuxtLink
+            :to="localePath('/')"
+            class="brand-logo"
+          >
             Moldova Direct
-          </h3>
-          <p class="text-gray-400 text-sm">
+          </NuxtLink>
+          <p class="brand-tagline">
             {{ $t('footer.info.about') }}
           </p>
-          <!-- Trust & Security Badges -->
-          <div class="mt-6">
-            <p class="text-xs text-gray-400 mb-3">
-              {{ $t('footer.trust.title') }}
-            </p>
-            <div class="flex flex-wrap gap-3">
-              <!-- SSL Secure Badge -->
-              <div class="flex items-center gap-2 bg-gray-800 px-3 py-2 rounded-lg">
-                <svg
-                  class="h-5 w-5 text-green-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                  />
-                </svg>
-                <span class="text-xs text-gray-300">{{ $t('footer.trust.sslSecure') }}</span>
-              </div>
-              <!-- Secure Payment Badge -->
-              <div class="flex items-center gap-2 bg-gray-800 px-3 py-2 rounded-lg">
-                <svg
-                  class="h-5 w-5 text-blue-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                  />
-                </svg>
-                <span class="text-xs text-gray-300">{{ $t('footer.trust.securePayment') }}</span>
-              </div>
-            </div>
+
+          <!-- Social Links -->
+          <div class="social-links">
+            <a
+              href="#"
+              class="social-link"
+              aria-label="Instagram"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <rect
+                  x="2"
+                  y="2"
+                  width="20"
+                  height="20"
+                  rx="5"
+                />
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="4"
+                />
+                <circle
+                  cx="18"
+                  cy="6"
+                  r="1"
+                  fill="currentColor"
+                />
+              </svg>
+            </a>
+            <a
+              href="#"
+              class="social-link"
+              aria-label="Facebook"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+              </svg>
+            </a>
           </div>
         </div>
 
-        <!-- Information -->
-        <div>
-          <h3 class="text-lg font-semibold mb-4">
-            {{ $t('footer.info.title') }}
-          </h3>
-          <ul class="space-y-2">
+        <!-- Shop Links -->
+        <div class="footer-column">
+          <h4 class="column-title">
+            {{ $t('common.shop') }}
+          </h4>
+          <ul class="footer-links">
             <li>
-              <NuxtLink
-                :to="localePath('/about')"
-                class="text-gray-400 hover:text-white transition-colors text-sm"
-              >
-                {{ $t('footer.info.about') }}
+              <NuxtLink :to="localePath('/products')">
+                {{ $t('nav.allProducts') || 'All Products' }}
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink
-                :to="localePath('/terms')"
-                class="text-gray-400 hover:text-white transition-colors text-sm"
-              >
-                {{ $t('footer.info.terms') }}
+              <NuxtLink :to="localePath('/products?category=wines')">
+                {{ $t('nav.wines') || 'Wines' }}
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink
-                :to="localePath('/privacy')"
-                class="text-gray-400 hover:text-white transition-colors text-sm"
-              >
-                {{ $t('footer.info.privacy') }}
+              <NuxtLink :to="localePath('/products?category=gourmet')">
+                {{ $t('nav.gourmet') || 'Gourmet' }}
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink
-                :to="localePath('/shipping')"
-                class="text-gray-400 hover:text-white transition-colors text-sm"
-              >
-                {{ $t('footer.info.shipping') }}
+              <NuxtLink :to="localePath('/products?category=gifts')">
+                {{ $t('nav.gifts') || 'Gift Sets' }}
               </NuxtLink>
             </li>
           </ul>
         </div>
 
-        <!-- Help -->
-        <div>
-          <h3 class="text-lg font-semibold mb-4">
-            {{ $t('footer.help.title') }}
-          </h3>
-          <ul class="space-y-2">
+        <!-- Info Links -->
+        <div class="footer-column">
+          <h4 class="column-title">
+            {{ $t('footer.info.title') }}
+          </h4>
+          <ul class="footer-links">
             <li>
-              <NuxtLink
-                :to="localePath('/contact')"
-                class="text-gray-400 hover:text-white transition-colors text-sm"
-              >
-                {{ $t('footer.help.contact') }}
+              <NuxtLink :to="localePath('/about')">
+                {{ $t('common.about') }}
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink
-                :to="localePath('/faq')"
-                class="text-gray-400 hover:text-white transition-colors text-sm"
-              >
-                {{ $t('footer.help.faq') }}
+              <NuxtLink :to="localePath('/shipping')">
+                {{ $t('footer.info.shipping') }}
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink
-                :to="localePath('/returns')"
-                class="text-gray-400 hover:text-white transition-colors text-sm"
-              >
+              <NuxtLink :to="localePath('/returns')">
                 {{ $t('footer.help.returns') }}
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink
-                :to="localePath('/track-order')"
-                class="text-gray-400 hover:text-white transition-colors text-sm"
-              >
+              <NuxtLink :to="localePath('/terms')">
+                {{ $t('footer.info.terms') }}
+              </NuxtLink>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Help Links -->
+        <div class="footer-column">
+          <h4 class="column-title">
+            {{ $t('footer.help.title') }}
+          </h4>
+          <ul class="footer-links">
+            <li>
+              <NuxtLink :to="localePath('/contact')">
+                {{ $t('footer.help.contact') }}
+              </NuxtLink>
+            </li>
+            <li>
+              <NuxtLink :to="localePath('/faq')">
+                {{ $t('footer.help.faq') }}
+              </NuxtLink>
+            </li>
+            <li>
+              <NuxtLink :to="localePath('/track-order')">
                 {{ $t('footer.help.track') }}
+              </NuxtLink>
+            </li>
+            <li>
+              <NuxtLink :to="localePath('/privacy')">
+                {{ $t('footer.info.privacy') }}
               </NuxtLink>
             </li>
           </ul>
         </div>
 
         <!-- Newsletter -->
-        <div>
-          <h3 class="text-lg font-semibold mb-4">
+        <div class="footer-column footer-newsletter">
+          <h4 class="column-title">
             {{ $t('footer.newsletter.title') }}
-          </h3>
-          <p class="text-gray-400 text-sm mb-4">
+          </h4>
+          <p class="newsletter-text">
             {{ $t('footer.newsletter.description') }}
           </p>
           <form
-            class="flex flex-col space-y-2"
+            class="newsletter-form"
             @submit.prevent="subscribeNewsletter"
           >
             <input
@@ -153,134 +173,112 @@
               type="email"
               :placeholder="$t('footer.newsletter.placeholder')"
               :disabled="isSubmitting"
-              :aria-label="$t('footer.newsletter.placeholder')"
-              class="px-4 py-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              class="newsletter-input"
               required
             />
-            <Button
+            <button
               type="submit"
               :disabled="isSubmitting"
-              class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              class="newsletter-btn"
             >
-              <span v-if="!isSubmitting">{{ isSubmitting ? $t('footer.newsletter.submitting') : $t('footer.newsletter.button') }}</span>
-              <span
-                v-else
-                class="flex items-center justify-center gap-2"
+              <svg
+                v-if="!isSubmitting"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
               >
-                <svg
-                  class="animate-spin h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    class="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    stroke-width="4"
-                  />
-                  <path
-                    class="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  />
-                </svg>
-                {{ $t('footer.newsletter.subscribing') || 'Subscribing...' }}
-              </span>
-            </Button>
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+              <svg
+                v-else
+                class="animate-spin"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                />
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                />
+              </svg>
+            </button>
           </form>
         </div>
       </div>
+    </div>
 
-      <!-- Payment Methods -->
-      <div class="mt-12 pt-8 border-t border-gray-800">
-        <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-          <div class="text-center md:text-left">
-            <p class="text-xs text-gray-400 mb-2">
-              {{ $t('footer.payment.title') }}
-            </p>
-            <div class="flex gap-2 items-center">
-              <!-- Visa -->
-              <div class="h-8 px-3 bg-white rounded flex items-center justify-center">
-                <svg
-                  class="h-5"
-                  viewBox="0 0 48 32"
-                  fill="none"
-                >
-                  <rect
-                    width="48"
-                    height="32"
-                    rx="4"
-                    fill="white"
-                  />
-                  <path
-                    d="M20.925 11.088h-3.085l-1.93 11.825h3.086l1.929-11.825zm8.696 7.652l1.623-4.47.934 4.47h-2.557zm3.436 4.173h2.852l-2.49-11.825h-2.631c-.592 0-1.091.344-1.312.874l-4.623 10.951h3.243l.645-1.783h3.965l.351 1.783zm-7.863-3.85c.013-3.117-4.31-3.289-4.281-4.682.009-.423.413-.874 1.297-.989.437-.057 1.643-.101 3.01.527l.536-2.5c-.735-.267-1.682-.523-2.858-.523-3.022 0-5.15 1.606-5.167 3.907-.019 1.701 1.518 2.651 2.677 3.216 1.19.578 1.59.949 1.585 1.466-.008.791-.948 1.141-1.825 1.155-1.533.024-2.422-.414-3.131-.745l-.553 2.582c.713.327 2.03.612 3.395.626 3.215 0 5.318-1.588 5.315-4.04zm-13.282-7.975l-4.975 11.825h-3.264l-2.443-9.468c-.148-.581-.277-.794-.727-.94-.735-.29-1.949-.562-3.014-.731l.073-.349h5.197c.662 0 1.257.441 1.408 1.204l1.286 6.83 3.175-8.034h3.284z"
-                    fill="#1434CB"
-                  />
-                </svg>
-              </div>
-              <!-- Mastercard -->
-              <div class="h-8 px-3 bg-white rounded flex items-center justify-center">
-                <svg
-                  class="h-5"
-                  viewBox="0 0 48 32"
-                  fill="none"
-                >
-                  <rect
-                    width="48"
-                    height="32"
-                    rx="4"
-                    fill="white"
-                  />
-                  <circle
-                    cx="18"
-                    cy="16"
-                    r="8"
-                    fill="#EB001B"
-                  />
-                  <circle
-                    cx="30"
-                    cy="16"
-                    r="8"
-                    fill="#F79E1B"
-                  />
-                  <path
-                    d="M24 9.6c-1.64 1.52-2.67 3.69-2.67 6.12s1.03 4.6 2.67 6.12c1.64-1.52 2.67-3.69 2.67-6.12s-1.03-4.6-2.67-6.12z"
-                    fill="#FF5F00"
-                  />
-                </svg>
-              </div>
-              <!-- PayPal -->
-              <div class="h-8 px-3 bg-white rounded flex items-center justify-center">
-                <svg
-                  class="h-5"
-                  viewBox="0 0 100 32"
-                  fill="none"
-                >
-                  <path
-                    d="M35.8 6.3c1.1 0 2.1.2 2.9.6.8.4 1.4 1 1.8 1.7.4.7.6 1.6.6 2.6 0 1.3-.3 2.4-.9 3.3-.6.9-1.4 1.6-2.4 2.1-1 .5-2.1.7-3.3.7h-1.7l-.9 4.4h-2.4l2.3-10.9c.2-.8.7-1.5 1.4-2 .7-.5 1.5-.8 2.5-.8h2.1zm-1.3 8.6c.7 0 1.3-.2 1.8-.5.5-.3.7-.8.7-1.4 0-.4-.1-.7-.4-.9-.3-.2-.7-.3-1.1-.3h-1.4l-.7 3.1h1.1z"
-                    fill="#003087"
-                  />
-                  <path
-                    d="M47.8 11.2c.9 0 1.7.3 2.3.8.6.5.9 1.3.9 2.2 0 .6-.1 1.2-.4 1.8-.3.6-.7 1.1-1.3 1.5-.6.4-1.2.6-2 .6-.9 0-1.7-.3-2.3-.8-.6-.5-.9-1.3-.9-2.2 0-.6.1-1.2.4-1.8.3-.6.7-1.1 1.3-1.5.6-.4 1.2-.6 2-.6zm-.8 5.5c.5 0 .9-.2 1.2-.5.3-.3.5-.8.5-1.3 0-.4-.1-.7-.3-.9-.2-.2-.5-.3-.8-.3-.5 0-.9.2-1.2.5-.3.3-.5.8-.5 1.3 0 .4.1.7.3.9.2.2.5.3.8.3z"
-                    fill="#003087"
-                  />
-                  <path
-                    d="M53.8 11.4l-.3 1.5h.1c.3-.5.7-.9 1.1-1.2.4-.3.9-.4 1.5-.4.2 0 .4 0 .6.1l-.5 2.3c-.2 0-.4-.1-.6-.1-.6 0-1.1.2-1.5.5-.4.3-.6.8-.7 1.4l-.8 3.8H51l1.5-7.9h1.3z"
-                    fill="#003087"
-                  />
-                  <path
-                    d="M62.1 11.2c.9 0 1.6.2 2.1.7.5.5.7 1.1.7 1.9 0 .3 0 .6-.1.9h-4.9c0 .5.2.9.5 1.1.3.2.7.4 1.2.4.4 0 .8-.1 1.1-.2.3-.1.7-.3 1-.5l.7 1.5c-.4.3-.9.5-1.4.7-.5.2-1 .2-1.6.2-.8 0-1.5-.1-2.1-.4-.6-.3-1.1-.7-1.4-1.2-.3-.5-.5-1.1-.5-1.8 0-.6.1-1.2.4-1.8.3-.6.7-1.1 1.3-1.5.6-.4 1.2-.6 2-.6zm1.1 2.9c0-.4-.1-.7-.3-.9-.2-.2-.5-.3-.9-.3-.4 0-.8.1-1.1.4-.3.3-.5.6-.6 1h2.9v-.2z"
-                    fill="#003087"
-                  />
-                </svg>
-              </div>
+    <!-- Footer Bottom -->
+    <div class="footer-bottom">
+      <div class="footer-bottom-content">
+        <p class="copyright">
+          &copy; {{ new Date().getFullYear() }} Moldova Direct. {{ $t('footer.copyright') || 'All rights reserved.' }}
+        </p>
+
+        <!-- Payment Methods -->
+        <div class="payment-methods">
+          <span class="payment-label">{{ $t('footer.payment.title') }}</span>
+          <div class="payment-icons">
+            <!-- Visa -->
+            <div class="payment-icon">
+              <svg
+                viewBox="0 0 48 32"
+                fill="none"
+              >
+                <rect
+                  width="48"
+                  height="32"
+                  rx="4"
+                  fill="white"
+                />
+                <path
+                  d="M20.925 11h-3.085l-1.93 11.8h3.086L20.925 11zm8.696 7.65l1.623-4.47.934 4.47h-2.557zm3.436 4.17h2.852l-2.49-11.82h-2.631c-.592 0-1.091.34-1.312.87l-4.623 10.95h3.243l.645-1.78h3.965l.351 1.78zm-7.863-3.85c.013-3.12-4.31-3.29-4.281-4.68.009-.42.413-.87 1.297-.99.437-.06 1.643-.1 3.01.53l.536-2.5c-.735-.27-1.682-.52-2.858-.52-3.022 0-5.15 1.6-5.167 3.9-.019 1.7 1.518 2.65 2.677 3.22 1.19.58 1.59.95 1.585 1.47-.008.79-.948 1.14-1.825 1.15-1.533.02-2.422-.41-3.131-.74l-.553 2.58c.713.33 2.03.61 3.395.63 3.215 0 5.318-1.59 5.315-4.04zm-13.282-7.97l-4.975 11.82h-3.264l-2.443-9.47c-.148-.58-.277-.79-.727-.94-.735-.29-1.949-.56-3.014-.73l.073-.35h5.197c.662 0 1.257.44 1.408 1.2l1.286 6.83 3.175-8.03h3.284z"
+                  fill="#1434CB"
+                />
+              </svg>
             </div>
-          </div>
-
-          <div class="text-center text-gray-400 text-sm">
-            {{ $t('footer.copyright') }}
+            <!-- Mastercard -->
+            <div class="payment-icon">
+              <svg
+                viewBox="0 0 48 32"
+                fill="none"
+              >
+                <rect
+                  width="48"
+                  height="32"
+                  rx="4"
+                  fill="white"
+                />
+                <circle
+                  cx="18"
+                  cy="16"
+                  r="8"
+                  fill="#EB001B"
+                />
+                <circle
+                  cx="30"
+                  cy="16"
+                  r="8"
+                  fill="#F79E1B"
+                />
+                <path
+                  d="M24 9.6c-1.64 1.52-2.67 3.69-2.67 6.12s1.03 4.6 2.67 6.12c1.64-1.52 2.67-3.69 2.67-6.12s-1.03-4.6-2.67-6.12z"
+                  fill="#FF5F00"
+                />
+              </svg>
+            </div>
           </div>
         </div>
       </div>
@@ -290,7 +288,6 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Button } from '@/components/ui/button'
 import { toast } from 'vue-sonner'
 
 const { t } = useI18n()
@@ -301,43 +298,462 @@ const isSubmitting = ref(false)
 const subscribeNewsletter = async () => {
   if (!email.value || isSubmitting.value) return
 
-  // Basic email validation
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   if (!emailRegex.test(email.value)) {
-    toast.error(
-      t('footer.newsletter.error.title') || 'Invalid email',
-      {
-        description: t('footer.newsletter.error.invalidEmail') || 'Please enter a valid email address',
-      },
-    )
+    toast.error(t('footer.newsletter.error.title') || 'Invalid email', {
+      description: t('footer.newsletter.error.invalidEmail') || 'Please enter a valid email address',
+    })
     return
   }
 
   isSubmitting.value = true
 
   try {
-    // TODO: Implement actual newsletter subscription API call
-    // Simulating API call for now
     await new Promise(resolve => setTimeout(resolve, 500))
-
-    toast.success(
-      t('footer.newsletter.success.title') || 'Subscribed!',
-      {
-        description: t('footer.newsletter.success.message') || `You've been subscribed to our newsletter at ${email.value}`,
-      },
-    )
+    toast.success(t('footer.newsletter.success.title') || 'Subscribed!', {
+      description: t('footer.newsletter.success.message') || `You've been subscribed to our newsletter`,
+    })
     email.value = ''
   }
   catch {
-    toast.error(
-      t('footer.newsletter.error.title') || 'Subscription failed',
-      {
-        description: t('footer.newsletter.error.message') || 'Something went wrong. Please try again later.',
-      },
-    )
+    toast.error(t('footer.newsletter.error.title') || 'Subscription failed', {
+      description: t('footer.newsletter.error.message') || 'Something went wrong. Please try again later.',
+    })
   }
   finally {
     isSubmitting.value = false
   }
 }
 </script>
+
+<style scoped>
+/* ============================================
+ * LUXURY FOOTER STYLES
+ * Moldova Direct - Premium Design System
+ * ============================================ */
+
+.luxury-footer {
+  --footer-charcoal: #151515;
+  --footer-black: #0A0A0A;
+  --footer-cream: #F8F5EE;
+  --footer-cream-muted: rgba(248, 245, 238, 0.6);
+  --footer-gold: #C9A227;
+  --footer-gold-light: #DDB93D;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, sans-serif;
+  --transition-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.footer-main {
+  background: var(--footer-charcoal);
+  padding: 5rem 4rem 4rem;
+  position: relative;
+}
+
+.footer-main::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(80%, 800px);
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(201, 162, 39, 0.3),
+    transparent
+  );
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.5fr repeat(3, 1fr) 1.25fr;
+  gap: 4rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Brand Column */
+.footer-brand {
+  padding-right: 2rem;
+}
+
+.brand-logo {
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--footer-cream);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+  display: block;
+  margin-bottom: 1.25rem;
+}
+
+.brand-tagline {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  color: var(--footer-cream-muted);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+/* Social Links */
+.social-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(248, 245, 238, 0.2);
+  color: var(--footer-cream-muted);
+  transition: all 0.4s var(--transition-smooth);
+}
+
+.social-link:hover {
+  color: var(--footer-gold);
+  border-color: var(--footer-gold);
+}
+
+/* Footer Columns with subtle dividers */
+.footer-column {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.footer-column::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(201, 162, 39, 0.3),
+    rgba(248, 245, 238, 0.08) 50%,
+    transparent
+  );
+}
+
+.footer-brand + .footer-column::before,
+.footer-newsletter::before {
+  display: none;
+}
+
+/* Column Titles */
+.column-title {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--footer-gold);
+  margin-bottom: 1.75rem;
+  text-shadow: 0 0 20px rgba(201, 162, 39, 0.25);
+  position: relative;
+  display: inline-block;
+}
+
+.column-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -0.5rem;
+  width: 20px;
+  height: 1px;
+  background: var(--footer-gold);
+  opacity: 0.5;
+}
+
+/* Footer Links */
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li {
+  margin-bottom: 0.875rem;
+}
+
+.footer-links a {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  color: var(--footer-cream-muted);
+  text-decoration: none;
+  transition: all 0.3s var(--transition-smooth);
+  position: relative;
+  display: inline-block;
+}
+
+.footer-links a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0;
+  height: 1px;
+  background: var(--footer-gold);
+  transition: width 0.3s var(--transition-smooth);
+}
+
+.footer-links a:hover {
+  color: var(--footer-gold);
+}
+
+.footer-links a:hover::after {
+  width: 100%;
+}
+
+/* Newsletter */
+.newsletter-text {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  color: var(--footer-cream-muted);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.newsletter-form {
+  display: flex;
+  gap: 0;
+}
+
+.newsletter-input {
+  flex: 1;
+  padding: 0.875rem 1rem;
+  background: rgba(248, 245, 238, 0.05);
+  border: 1px solid rgba(248, 245, 238, 0.15);
+  border-right: none;
+  color: var(--footer-cream);
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  outline: none;
+  transition: all 0.4s var(--transition-smooth);
+}
+
+.newsletter-input::placeholder {
+  color: rgba(248, 245, 238, 0.4);
+  transition: color 0.3s ease;
+}
+
+.newsletter-input:hover {
+  background: rgba(248, 245, 238, 0.07);
+  border-color: rgba(248, 245, 238, 0.25);
+}
+
+.newsletter-input:focus {
+  border-color: var(--footer-gold);
+  background: rgba(248, 245, 238, 0.1);
+  box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.15);
+}
+
+.newsletter-input:focus::placeholder {
+  color: rgba(248, 245, 238, 0.5);
+}
+
+.newsletter-btn {
+  padding: 0.875rem 1.25rem;
+  background: var(--footer-gold);
+  border: 1px solid var(--footer-gold);
+  color: var(--footer-black);
+  cursor: pointer;
+  transition: all 0.4s var(--transition-smooth);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.newsletter-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.newsletter-btn:hover:not(:disabled)::before {
+  transform: translateX(100%);
+}
+
+.newsletter-btn:hover:not(:disabled) {
+  background: var(--footer-gold-light);
+  border-color: var(--footer-gold-light);
+  box-shadow: 0 4px 16px rgba(201, 162, 39, 0.35);
+}
+
+.newsletter-btn:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.newsletter-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.newsletter-btn svg {
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.newsletter-btn:hover:not(:disabled) svg {
+  transform: translateX(3px);
+}
+
+/* Footer Bottom */
+.footer-bottom {
+  background: var(--footer-black);
+  padding: 1.5rem 4rem;
+}
+
+.footer-bottom-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.copyright {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: rgba(248, 245, 238, 0.4);
+}
+
+/* Payment Methods */
+.payment-methods {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.payment-label {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  color: rgba(248, 245, 238, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.payment-icons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.payment-icon {
+  height: 24px;
+  width: 38px;
+  background: white;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+}
+
+.payment-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Mobile Responsive */
+@media (max-width: 1024px) {
+  .footer-main {
+    padding: 3rem 1.5rem;
+  }
+
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+  }
+
+  .footer-brand {
+    grid-column: span 2;
+    padding-right: 0;
+  }
+
+  .footer-column {
+    padding-left: 0;
+  }
+
+  .footer-column::before {
+    display: none;
+  }
+
+  .footer-newsletter {
+    grid-column: span 2;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(248, 245, 238, 0.08);
+  }
+
+  .footer-bottom {
+    padding: 1.25rem 1.5rem;
+  }
+
+  .footer-bottom-content {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .footer-brand,
+  .footer-newsletter {
+    grid-column: span 1;
+  }
+
+  .footer-column {
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(248, 245, 238, 0.06);
+  }
+
+  .footer-brand {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .column-title::after {
+    display: none;
+  }
+
+  .newsletter-form {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .newsletter-input {
+    border-right: 1px solid rgba(248, 245, 238, 0.15);
+    text-align: center;
+  }
+
+  .newsletter-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .social-links {
+    justify-content: flex-start;
+  }
+}
+</style>

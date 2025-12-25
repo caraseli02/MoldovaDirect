@@ -125,11 +125,11 @@ describe('AppHeader', () => {
       global: createGlobalConfig(),
     })
 
-    // Desktop nav should contain these links
-    expect(wrapper.text()).toContain('common.home')
+    // Desktop nav should contain these links (updated for luxury design)
     expect(wrapper.text()).toContain('common.shop')
+    expect(wrapper.text()).toContain('nav.wines')
+    expect(wrapper.text()).toContain('nav.gourmet')
     expect(wrapper.text()).toContain('common.about')
-    expect(wrapper.text()).toContain('common.contact')
   })
 
   it('renders language switcher and theme toggle', () => {
@@ -153,8 +153,9 @@ describe('AppHeader', () => {
       )
       expect(searchButtons.length).toBeGreaterThan(0)
 
-      // Check that getShortcutDisplay was called for the search shortcut
-      expect(mockGetShortcutDisplay).toHaveBeenCalledWith('k', { ctrlOrCmd: true })
+      // Verify search button has Ctrl+K hint in aria-label
+      const searchButton = searchButtons[0]
+      expect(searchButton.attributes('aria-label')).toContain('Ctrl+K')
     })
 
     it('navigates to products page with search focus on button click', async () => {
