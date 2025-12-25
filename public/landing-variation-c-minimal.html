@@ -1,0 +1,1804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moldova Direct - Modern Minimal Design</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --color-black: #000000;
+      --color-off-black: #0A0A0A;
+      --color-white: #FFFFFF;
+      --color-gray-50: #FAFAFA;
+      --color-gray-100: #F5F5F5;
+      --color-gray-200: #E5E5E5;
+      --color-gray-400: #A3A3A3;
+      --color-gray-600: #525252;
+      --color-gray-800: #262626;
+      --color-gray-900: #171717;
+      --color-accent: #DC2626;
+      --color-accent-dark: #B91C1C;
+      --color-accent-light: #EF4444;
+      --font-main: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+      --radius: 12px;
+      --radius-lg: 20px;
+      --radius-xl: 28px;
+      --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --transition-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --shadow-subtle: 0 2px 10px rgba(0, 0, 0, 0.05);
+      --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.1);
+      --shadow-strong: 0 20px 50px rgba(0, 0, 0, 0.15);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--color-white);
+      color: var(--color-gray-900);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      cursor: default;
+    }
+
+    /* Scroll Progress Bar */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 3px;
+      background: var(--color-accent);
+      z-index: 1000;
+      transition: width 0.1s linear;
+    }
+
+    /* Cursor changes for interactive elements */
+    a, button, .category-card, .product-card, .feature-card {
+      cursor: pointer;
+    }
+
+    /* Entrance Animations */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes countUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade-up {
+      animation: fadeUp 0.8s ease-out forwards;
+    }
+
+    .animate-scale-in {
+      animation: scaleIn 0.8s ease-out forwards;
+    }
+
+    .animate-delay-1 { animation-delay: 0.1s; }
+    .animate-delay-2 { animation-delay: 0.2s; }
+    .animate-delay-3 { animation-delay: 0.3s; }
+    .animate-delay-4 { animation-delay: 0.4s; }
+    .animate-delay-5 { animation-delay: 0.5s; }
+    .animate-delay-6 { animation-delay: 0.6s; }
+
+    /* Selection */
+    ::selection {
+      background: var(--color-black);
+      color: var(--color-white);
+    }
+
+    /* Navigation */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1rem 2rem;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--color-gray-200);
+    }
+
+    .nav-container {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--color-black);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--color-gray-600);
+      text-decoration: none;
+      transition: color 0.3s var(--transition-smooth);
+      position: relative;
+      padding: 0.5rem 0;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--color-accent);
+      transition: width 0.3s var(--transition-smooth);
+    }
+
+    .nav-links a:hover {
+      color: var(--color-black);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .nav-cart {
+      position: relative;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-gray-100);
+      border-radius: 50%;
+      color: var(--color-black);
+      text-decoration: none;
+      transition: background var(--transition);
+    }
+
+    .nav-cart:hover {
+      background: var(--color-gray-200);
+    }
+
+    .cart-count {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 18px;
+      height: 18px;
+      background: var(--color-accent);
+      color: white;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    .nav-cta {
+      padding: 0.75rem 1.5rem;
+      background: var(--color-black);
+      color: white;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 50px;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+
+    .nav-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: var(--color-gray-100);
+      border: none;
+      cursor: pointer;
+      padding: 0.75rem;
+      border-radius: var(--radius);
+    }
+
+    .mobile-menu-btn span {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: var(--color-black);
+      margin: 4px 0;
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 8rem 2rem 4rem;
+      background: var(--color-black);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-video-container {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .hero-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.45) 50%, rgba(0, 0, 0, 0.55) 100%),
+        linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.2) 100%);
+      z-index: 1;
+    }
+
+    .hero-overlay::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 70% 40%, transparent 0%, rgba(0, 0, 0, 0.15) 100%);
+    }
+
+    .hero-container {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.625rem;
+      padding: 0.5rem 1.125rem 0.5rem 0.875rem;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--color-white);
+      border-radius: 50px;
+      margin-bottom: 1.75rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease-out 0.2s forwards;
+      transition: all 0.3s var(--transition-smooth);
+    }
+
+    .hero-tag:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .hero-tag-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--color-accent);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+      box-shadow: 0 0 10px var(--color-accent);
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(0.9); }
+    }
+
+    .hero-title {
+      font-size: clamp(3rem, 6.5vw, 5.5rem);
+      font-weight: 700;
+      line-height: 1.02;
+      letter-spacing: -0.045em;
+      color: var(--color-white);
+      margin-bottom: 1.75rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease-out 0.3s forwards;
+      text-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-title span {
+      display: block;
+    }
+
+    .hero-description {
+      font-size: 1.125rem;
+      color: rgba(255, 255, 255, 0.85);
+      max-width: 480px;
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+      opacity: 0;
+      animation: fadeUp 0.8s ease-out 0.4s forwards;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 4rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease-out 0.5s forwards;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.625rem;
+      padding: 0.9375rem 1.875rem;
+      background: var(--color-white);
+      color: var(--color-black);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      text-decoration: none;
+      border-radius: 50px;
+      transition: all 0.4s var(--transition-smooth);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--color-accent);
+      opacity: 0;
+      transition: opacity 0.4s var(--transition-smooth);
+      border-radius: inherit;
+    }
+
+    .btn-primary span,
+    .btn-primary svg {
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-primary:hover {
+      color: var(--color-white);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(220, 38, 38, 0.4);
+    }
+
+    .btn-primary:hover::before {
+      opacity: 1;
+    }
+
+    .btn-primary svg {
+      transition: transform 0.3s var(--transition-smooth);
+    }
+
+    .btn-primary:hover svg {
+      transform: translateX(4px);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.625rem;
+      padding: 0.875rem 1.75rem;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      color: var(--color-white);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      text-decoration: none;
+      border-radius: 50px;
+      border: 1.5px solid rgba(255, 255, 255, 0.35);
+      transition: all 0.4s var(--transition-smooth);
+    }
+
+    .btn-secondary:hover {
+      background: var(--color-white);
+      color: var(--color-black);
+      border-color: var(--color-white);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(255, 255, 255, 0.2);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 3.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease-out 0.6s forwards;
+    }
+
+    .stat {
+      position: relative;
+    }
+
+    .stat::after {
+      content: '';
+      position: absolute;
+      right: -1.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1px;
+      height: 60%;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .stat:last-child::after {
+      display: none;
+    }
+
+    .stat-value {
+      font-size: 2.25rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--color-white);
+      line-height: 1;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .stat-value[data-count] {
+      animation: countUp 0.6s ease-out forwards;
+      animation-delay: 0.8s;
+    }
+
+    .stat-label {
+      font-size: 0.8125rem;
+      letter-spacing: 0.01em;
+      color: rgba(255, 255, 255, 0.65);
+      margin-top: 0.375rem;
+    }
+
+    .hero-visual {
+      position: relative;
+      z-index: 3;
+    }
+
+    .hero-image-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .hero-image {
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.08);
+      opacity: 0;
+      transition: all 0.5s var(--transition-smooth);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .hero-image:hover {
+      transform: scale(1.02) translateY(-4px);
+      box-shadow:
+        0 0 40px rgba(255, 255, 255, 0.15),
+        0 25px 50px rgba(0, 0, 0, 0.35);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .hero-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s var(--transition-smooth);
+    }
+
+    .hero-image:hover img {
+      transform: scale(1.06);
+    }
+
+    .hero-image-1 {
+      grid-row: span 2;
+      height: 500px;
+      animation: scaleIn 0.8s ease-out 0.4s forwards;
+    }
+
+    .hero-image-2 {
+      height: 240px;
+      animation: scaleIn 0.8s ease-out 0.5s forwards;
+    }
+
+    .hero-image-3 {
+      height: 240px;
+      animation: scaleIn 0.8s ease-out 0.6s forwards;
+    }
+
+    /* Section Styles */
+    .section {
+      padding: 7rem 2rem;
+    }
+
+    .section-container {
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 3rem;
+    }
+
+    .section-header-content {
+      max-width: 500px;
+    }
+
+    .section-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 3.5vw, 2.5rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      color: var(--color-black);
+    }
+
+    .section-subtitle {
+      font-size: 1rem;
+      color: var(--color-gray-600);
+      margin-top: 0.75rem;
+    }
+
+    .section-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--color-black);
+      text-decoration: none;
+      transition: gap var(--transition);
+    }
+
+    .section-link:hover {
+      gap: 0.75rem;
+    }
+
+    /* Categories Grid */
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+
+    .category-card {
+      position: relative;
+      aspect-ratio: 3/4;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .category-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .category-card:hover img {
+      transform: scale(1.08);
+    }
+
+    .category-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 50%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
+    }
+
+    .category-number {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: white;
+      padding: 0.25rem 0.75rem;
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(10px);
+      border-radius: 50px;
+    }
+
+    .category-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 0.25rem;
+    }
+
+    .category-count {
+      font-size: 0.875rem;
+      color: rgba(255,255,255,0.7);
+    }
+
+    /* Products Grid */
+    .products-section {
+      background: var(--color-gray-50);
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+
+    .product-card {
+      background: var(--color-white);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    }
+
+    .product-image {
+      position: relative;
+      aspect-ratio: 1;
+      overflow: hidden;
+      background: var(--color-gray-100);
+    }
+
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .product-card:hover .product-image img {
+      transform: scale(1.05);
+    }
+
+    .product-badge {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      padding: 0.375rem 0.75rem;
+      background: var(--color-black);
+      color: white;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-radius: 50px;
+    }
+
+    .product-badge.sale {
+      background: var(--color-accent);
+    }
+
+    .product-quick-add {
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem;
+      right: 1rem;
+      padding: 0.875rem;
+      background: var(--color-white);
+      color: var(--color-black);
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-align: center;
+      text-decoration: none;
+      border-radius: var(--radius);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all var(--transition);
+    }
+
+    .product-card:hover .product-quick-add {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .product-info {
+      padding: 1.25rem;
+    }
+
+    .product-category {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-gray-400);
+      margin-bottom: 0.5rem;
+    }
+
+    .product-name {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--color-black);
+      margin-bottom: 0.75rem;
+    }
+
+    .product-price {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--color-black);
+    }
+
+    /* Features Section */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    .feature-card {
+      padding: 2.5rem;
+      background: var(--color-white);
+      border: 1px solid var(--color-gray-200);
+      border-radius: var(--radius-lg);
+      transition: all var(--transition);
+    }
+
+    .feature-card:hover {
+      border-color: var(--color-black);
+      transform: translateY(-4px);
+    }
+
+    .feature-icon {
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-gray-100);
+      border-radius: var(--radius);
+      margin-bottom: 1.5rem;
+      transition: all var(--transition);
+    }
+
+    .feature-card:hover .feature-icon {
+      background: var(--color-black);
+      color: white;
+    }
+
+    .feature-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--color-black);
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-description {
+      font-size: 0.9375rem;
+      color: var(--color-gray-600);
+      line-height: 1.6;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      background: var(--color-black);
+      color: white;
+    }
+
+    .cta-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .cta-content {
+      padding-right: 2rem;
+    }
+
+    .cta-title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+    }
+
+    .cta-description {
+      font-size: 1.0625rem;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 2rem;
+      line-height: 1.7;
+    }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      background: var(--color-white);
+      color: var(--color-black);
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 50px;
+      transition: all var(--transition);
+    }
+
+    .cta-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .cta-image {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      height: 400px;
+    }
+
+    .cta-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Testimonials */
+    .testimonials-section {
+      background: var(--color-gray-50);
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .testimonial-card {
+      background: var(--color-white);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+    }
+
+    .testimonial-rating {
+      display: flex;
+      gap: 0.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .testimonial-rating svg {
+      color: var(--color-black);
+    }
+
+    .testimonial-text {
+      font-size: 1rem;
+      color: var(--color-gray-600);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .testimonial-avatar {
+      width: 44px;
+      height: 44px;
+      background: var(--color-black);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+    }
+
+    .testimonial-name {
+      font-weight: 600;
+      color: var(--color-black);
+    }
+
+    .testimonial-location {
+      font-size: 0.8125rem;
+      color: var(--color-gray-400);
+    }
+
+    /* Newsletter */
+    .newsletter-section {
+      background: var(--color-white);
+      border-top: 1px solid var(--color-gray-200);
+    }
+
+    .newsletter-container {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .newsletter-title {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.75rem;
+    }
+
+    .newsletter-subtitle {
+      font-size: 1rem;
+      color: var(--color-gray-600);
+      margin-bottom: 2rem;
+    }
+
+    .newsletter-form {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .newsletter-input {
+      flex: 1;
+      padding: 1rem 1.5rem;
+      background: var(--color-gray-100);
+      border: 2px solid transparent;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-family: inherit;
+      color: var(--color-black);
+      transition: border-color var(--transition);
+    }
+
+    .newsletter-input::placeholder {
+      color: var(--color-gray-400);
+    }
+
+    .newsletter-input:focus {
+      outline: none;
+      border-color: var(--color-black);
+    }
+
+    .newsletter-btn {
+      padding: 1rem 2rem;
+      background: var(--color-black);
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: transform var(--transition);
+      white-space: nowrap;
+    }
+
+    .newsletter-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .newsletter-disclaimer {
+      font-size: 0.8125rem;
+      color: var(--color-gray-400);
+      margin-top: 1rem;
+    }
+
+    /* Footer */
+    .footer {
+      padding: 5rem 2rem 2rem;
+      background: var(--color-gray-900);
+      color: var(--color-gray-200);
+    }
+
+    .footer-container {
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 4rem;
+      margin-bottom: 4rem;
+    }
+
+    .footer-brand {
+      max-width: 300px;
+    }
+
+    .footer-logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 1.25rem;
+    }
+
+    .footer-description {
+      font-size: 0.9375rem;
+      color: var(--color-gray-400);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .footer-social a {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      color: white;
+      text-decoration: none;
+      transition: background var(--transition);
+    }
+
+    .footer-social a:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    .footer-heading {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: white;
+      margin-bottom: 1.25rem;
+    }
+
+    .footer-links {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-links a {
+      font-size: 0.9375rem;
+      color: var(--color-gray-400);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+
+    .footer-links a:hover {
+      color: white;
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .footer-copyright {
+      font-size: 0.875rem;
+      color: var(--color-gray-400);
+    }
+
+    .footer-legal {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .footer-legal a {
+      font-size: 0.875rem;
+      color: var(--color-gray-400);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+
+    .footer-legal a:hover {
+      color: white;
+    }
+
+    /* Mobile Styles */
+    @media (max-width: 1024px) {
+      .nav-links {
+        display: none;
+      }
+
+      .nav-cta {
+        display: none;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      .hero-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .hero-description {
+        margin: 0 auto 2.5rem;
+      }
+
+      .hero-cta {
+        justify-content: center;
+      }
+
+      .hero-stats {
+        justify-content: center;
+      }
+
+      .hero-visual {
+        order: -1;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+
+      .categories-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-container {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-content {
+        padding-right: 0;
+        text-align: center;
+      }
+
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero {
+        padding: 7rem 1.5rem 3rem;
+      }
+
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .hero-stats {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .stat::after {
+        display: none;
+      }
+
+      .hero-image-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+      }
+
+      .hero-image-1 {
+        grid-row: auto;
+        height: 300px;
+      }
+
+      .hero-image-2,
+      .hero-image-3 {
+        display: none;
+      }
+
+      .categories-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .newsletter-form {
+        flex-direction: column;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 1.5rem;
+        text-align: center;
+      }
+
+      .footer-legal {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Scroll Progress Bar -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-container">
+      <a href="#" class="nav-logo">Moldova Direct</a>
+      <ul class="nav-links">
+        <li><a href="#">Shop</a></li>
+        <li><a href="#">Wines</a></li>
+        <li><a href="#">Gourmet</a></li>
+        <li><a href="#">Gifts</a></li>
+        <li><a href="#">About</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="#" class="nav-cart">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span class="cart-count">2</span>
+        </a>
+        <a href="#" class="nav-cta">Shop Now</a>
+        <button class="mobile-menu-btn" aria-label="Toggle menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <!-- Video Background -->
+    <div class="hero-video-container">
+      <video class="hero-video" autoplay muted loop playsinline poster="/videos/hero/hero-3-poster.jpg">
+        <source src="/videos/hero/hero-3.webm" type="video/webm">
+        <source src="/videos/hero/hero-3.mp4" type="video/mp4">
+      </video>
+      <div class="hero-overlay"></div>
+    </div>
+
+    <div class="hero-container">
+      <div class="hero-content">
+        <div class="hero-tag">
+          <span class="hero-tag-dot"></span>
+          Direct from Moldova
+        </div>
+        <h1 class="hero-title">
+          <span>Taste Moldova</span>
+          <span>in Every</span>
+          <span>Delivery</span>
+        </h1>
+        <p class="hero-description">Premium wines, gourmet foods, and authentic flavours from Moldova's finest artisan producers. Delivered across Spain.</p>
+        <div class="hero-cta">
+          <a href="#" class="btn-primary">
+            Shop Collections
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+          <a href="#" class="btn-secondary">Learn More</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat">
+            <div class="stat-value" data-count="2000">2k+</div>
+            <div class="stat-label">Orders Delivered</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value" data-count="48">48h</div>
+            <div class="stat-label">Fast Delivery</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value" data-count="4.9">4.9</div>
+            <div class="stat-label">Rating</div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-image-grid">
+          <div class="hero-image hero-image-1">
+            <img loading="lazy" src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=600&h=800&fit=crop" alt="Premium Moldovan wines">
+          </div>
+          <div class="hero-image hero-image-2">
+            <img loading="lazy" src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=400&h=400&fit=crop" alt="Gourmet foods">
+          </div>
+          <div class="hero-image hero-image-3">
+            <img loading="lazy" src="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=400&h=400&fit=crop" alt="Gift hampers">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories Section -->
+  <section class="section">
+    <div class="section-container">
+      <div class="section-header">
+        <div class="section-header-content">
+          <span class="section-tag">Collections</span>
+          <h2 class="section-title">Explore by Category</h2>
+        </div>
+        <a href="#" class="section-link">
+          View All
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+      </div>
+      <div class="categories-grid">
+        <article class="category-card">
+          <img loading="lazy" src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=500&h=667&fit=crop" alt="Signature Wines">
+          <div class="category-overlay">
+            <span class="category-number">01</span>
+            <h3 class="category-title">Signature Wines</h3>
+            <span class="category-count">42 products</span>
+          </div>
+        </article>
+        <article class="category-card">
+          <img loading="lazy" src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=500&h=667&fit=crop" alt="Gourmet Pantry">
+          <div class="category-overlay">
+            <span class="category-number">02</span>
+            <h3 class="category-title">Gourmet Pantry</h3>
+            <span class="category-count">28 products</span>
+          </div>
+        </article>
+        <article class="category-card">
+          <img loading="lazy" src="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=500&h=667&fit=crop" alt="Gift Hampers">
+          <div class="category-overlay">
+            <span class="category-number">03</span>
+            <h3 class="category-title">Gift Hampers</h3>
+            <span class="category-count">15 products</span>
+          </div>
+        </article>
+        <article class="category-card">
+          <img loading="lazy" src="https://images.unsplash.com/photo-1606787365614-d990e8c69f0e?w=500&h=667&fit=crop" alt="Monthly Boxes">
+          <div class="category-overlay">
+            <span class="category-number">04</span>
+            <h3 class="category-title">Monthly Boxes</h3>
+            <span class="category-count">6 options</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Products -->
+  <section class="section products-section">
+    <div class="section-container">
+      <div class="section-header">
+        <div class="section-header-content">
+          <span class="section-tag">Best Sellers</span>
+          <h2 class="section-title">Editor's Picks</h2>
+          <p class="section-subtitle">Limited releases and best-sellers our team is loving this week.</p>
+        </div>
+        <a href="#" class="section-link">
+          View All Products
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+      </div>
+      <div class="products-grid">
+        <article class="product-card">
+          <div class="product-image">
+            <span class="product-badge">New</span>
+            <img loading="lazy" src="https://images.unsplash.com/photo-1586370434639-0fe43b2d32e6?w=400&h=400&fit=crop" alt="Purcari Negru de Purcari">
+            <a href="#" class="product-quick-add">Add to Cart</a>
+          </div>
+          <div class="product-info">
+            <span class="product-category">Red Wine</span>
+            <h3 class="product-name">Purcari Negru de Purcari</h3>
+            <span class="product-price">EUR 42.00</span>
+          </div>
+        </article>
+        <article class="product-card">
+          <div class="product-image">
+            <span class="product-badge sale">Best Seller</span>
+            <img loading="lazy" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=400&fit=crop" alt="Cricova Ice Wine">
+            <a href="#" class="product-quick-add">Add to Cart</a>
+          </div>
+          <div class="product-info">
+            <span class="product-category">Dessert Wine</span>
+            <h3 class="product-name">Cricova Ice Wine 2019</h3>
+            <span class="product-price">EUR 68.00</span>
+          </div>
+        </article>
+        <article class="product-card">
+          <div class="product-image">
+            <img loading="lazy" src="https://images.unsplash.com/photo-1550583724-b2692b85b150?w=400&h=400&fit=crop" alt="Acacia Honey Reserve">
+            <a href="#" class="product-quick-add">Add to Cart</a>
+          </div>
+          <div class="product-info">
+            <span class="product-category">Gourmet</span>
+            <h3 class="product-name">Acacia Honey Reserve</h3>
+            <span class="product-price">EUR 28.00</span>
+          </div>
+        </article>
+        <article class="product-card">
+          <div class="product-image">
+            <img loading="lazy" src="https://images.unsplash.com/photo-1549924231-f129b911e442?w=400&h=400&fit=crop" alt="Heritage Gift Box">
+            <a href="#" class="product-quick-add">Add to Cart</a>
+          </div>
+          <div class="product-info">
+            <span class="product-category">Gift Set</span>
+            <h3 class="product-name">Heritage Gift Box</h3>
+            <span class="product-price">EUR 125.00</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="section">
+    <div class="section-container">
+      <div class="section-header">
+        <div class="section-header-content">
+          <span class="section-tag">How It Works</span>
+          <h2 class="section-title">From Vineyard to Doorstep</h2>
+        </div>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </div>
+          <h3 class="feature-title">Choose Your Favourites</h3>
+          <p class="feature-description">Pick from curated collections, limited drops, and regional discoveries selected by our experts.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title">We Prepare in Moldova</h3>
+          <p class="feature-description">Producers pack every order by hand with protective and eco-conscious materials.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="1" y="3" width="15" height="13"></rect>
+              <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+              <circle cx="5.5" cy="18.5" r="2.5"></circle>
+              <circle cx="18.5" cy="18.5" r="2.5"></circle>
+            </svg>
+          </div>
+          <h3 class="feature-title">Delivered Across Spain</h3>
+          <p class="feature-description">Fast courier delivery with tracking, chilled transport, and proactive updates.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="section cta-section">
+    <div class="section-container">
+      <div class="cta-container">
+        <div class="cta-content">
+          <h2 class="cta-title">Discover the Story Behind Every Bottle</h2>
+          <p class="cta-description">We are on a mission to make Moldova's heritage ingredients and winemaking accessible to curious palates everywhere. Every collection highlights native grapes, protected origins, and regional recipes.</p>
+          <a href="#" class="cta-btn">
+            Learn Our Story
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+        <div class="cta-image">
+          <img loading="lazy" src="https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=600&h=400&fit=crop" alt="Moldovan vineyard">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="section testimonials-section">
+    <div class="section-container">
+      <div class="section-header">
+        <div class="section-header-content">
+          <span class="section-tag">Reviews</span>
+          <h2 class="section-title">What Customers Say</h2>
+        </div>
+      </div>
+      <div class="testimonials-grid">
+        <article class="testimonial-card">
+          <div class="testimonial-rating">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          </div>
+          <p class="testimonial-text">"The sparkling wines were a revelation and delivery was perfectly timed for our dinner party."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">M</div>
+            <div>
+              <p class="testimonial-name">Maria</p>
+              <p class="testimonial-location">Barcelona</p>
+            </div>
+          </div>
+        </article>
+        <article class="testimonial-card">
+          <div class="testimonial-rating">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          </div>
+          <p class="testimonial-text">"Their hampers made corporate gifting effortless - premium, authentic, and beautifully presented."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">C</div>
+            <div>
+              <p class="testimonial-name">Carlos</p>
+              <p class="testimonial-location">Madrid</p>
+            </div>
+          </div>
+        </article>
+        <article class="testimonial-card">
+          <div class="testimonial-rating">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          </div>
+          <p class="testimonial-text">"I love the seasonal boxes; they arrive chilled and include stories from each producer."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">S</div>
+            <div>
+              <p class="testimonial-name">Sofia</p>
+              <p class="testimonial-location">Valencia</p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="section newsletter-section">
+    <div class="section-container">
+      <div class="newsletter-container">
+        <h2 class="newsletter-title">Stay in the Loop</h2>
+        <p class="newsletter-subtitle">Be the first to hear about seasonal releases, pairing guides, and invitations to private tastings.</p>
+        <form class="newsletter-form">
+          <input type="email" class="newsletter-input" placeholder="Enter your email" required>
+          <button type="submit" class="newsletter-btn">Subscribe</button>
+        </form>
+        <p class="newsletter-disclaimer">We send one or two emails per month. Unsubscribe at any time.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">Moldova Direct</div>
+          <p class="footer-description">Premium wines, gourmet foods, and authentic flavours from Moldova's finest artisan producers.</p>
+          <div class="footer-social">
+            <a href="#" aria-label="Instagram">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+            </a>
+            <a href="#" aria-label="Twitter">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+              </svg>
+            </a>
+            <a href="#" aria-label="Facebook">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+        <div>
+          <h4 class="footer-heading">Shop</h4>
+          <ul class="footer-links">
+            <li><a href="#">All Products</a></li>
+            <li><a href="#">Wines</a></li>
+            <li><a href="#">Gourmet</a></li>
+            <li><a href="#">Gift Hampers</a></li>
+            <li><a href="#">Subscriptions</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-heading">Company</h4>
+          <ul class="footer-links">
+            <li><a href="#">Our Story</a></li>
+            <li><a href="#">Producers</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-heading">Support</h4>
+          <ul class="footer-links">
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">Shipping</a></li>
+            <li><a href="#">Returns</a></li>
+            <li><a href="#">Track Order</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copyright">2024 Moldova Direct. All rights reserved.</p>
+        <div class="footer-legal">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Cookie Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts for animations -->
+  <script>
+    // Scroll Progress Bar
+    window.addEventListener('scroll', () => {
+      const scrollProgress = document.getElementById('scrollProgress');
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const progress = (scrollTop / scrollHeight) * 100;
+      scrollProgress.style.width = progress + '%';
+    });
+
+    // Count-up animation for stats
+    const animateCountUp = (element, target, suffix = '') => {
+      const duration = 2000;
+      const startTime = performance.now();
+      const startValue = 0;
+
+      const isDecimal = target % 1 !== 0;
+
+      const animate = (currentTime) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        // Ease out cubic
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        const currentValue = startValue + (target - startValue) * easeOut;
+
+        if (isDecimal) {
+          element.textContent = currentValue.toFixed(1) + suffix;
+        } else if (target >= 1000) {
+          element.textContent = Math.floor(currentValue / 1000) + 'k+';
+        } else {
+          element.textContent = Math.floor(currentValue) + suffix;
+        }
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        }
+      };
+
+      requestAnimationFrame(animate);
+    };
+
+    // Intersection Observer for stats animation
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const statValues = entry.target.querySelectorAll('.stat-value[data-count]');
+          statValues.forEach((stat, index) => {
+            const targetValue = parseFloat(stat.dataset.count);
+            const suffix = stat.textContent.includes('h') ? 'h' : '';
+            setTimeout(() => {
+              animateCountUp(stat, targetValue, suffix);
+            }, index * 200);
+          });
+          statsObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    // Observe hero stats
+    const heroStats = document.querySelector('.hero-stats');
+    if (heroStats) {
+      statsObserver.observe(heroStats);
+    }
+  </script>
+</body>
+</html>
