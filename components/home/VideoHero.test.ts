@@ -244,9 +244,9 @@ describe('VideoHero', () => {
       expect(wrapper.text()).toContain('4.9/5')
       expect(wrapper.text()).toContain('Rating')
 
-      // Check grid layout
-      const grid = wrapper.find('.grid.grid-cols-3')
-      expect(grid.exists()).toBe(true)
+      // Check stats layout (luxury design uses .hero-stats)
+      const stats = wrapper.find('.hero-stats')
+      expect(stats.exists()).toBe(true)
     })
 
     it('does not render highlights section when array is empty', () => {
@@ -258,8 +258,8 @@ describe('VideoHero', () => {
         ...createGlobalStubs(),
       })
 
-      const grid = wrapper.find('.grid.grid-cols-3')
-      expect(grid.exists()).toBe(false)
+      const stats = wrapper.find('.hero-stats')
+      expect(stats.exists()).toBe(false)
     })
   })
 
@@ -279,7 +279,7 @@ describe('VideoHero', () => {
       expect(wrapper.find('h1').exists()).toBe(true)
     })
 
-    it('has proper text shadow for readability', () => {
+    it('has proper styling classes for readability', () => {
       const wrapper = mount(VideoHero, {
         props: {
           title: 'Test Title',
@@ -288,16 +288,20 @@ describe('VideoHero', () => {
         ...createGlobalStubs(),
       })
 
+      // Luxury design applies text-shadow via CSS classes
       const title = wrapper.find('h1')
       const subtitle = wrapper.find('p')
 
-      expect(title.attributes('style')).toContain('text-shadow')
-      expect(subtitle.attributes('style')).toContain('text-shadow')
+      // Check elements exist and have proper classes
+      expect(title.exists()).toBe(true)
+      expect(title.classes()).toContain('hero-title')
+      expect(subtitle.exists()).toBe(true)
+      expect(subtitle.classes()).toContain('hero-subtitle')
     })
   })
 
   describe('Responsive design', () => {
-    it('has mobile-first responsive classes', () => {
+    it('has full viewport height hero layout', () => {
       const wrapper = mount(VideoHero, {
         props: {
           title: 'Test Title',
@@ -305,9 +309,9 @@ describe('VideoHero', () => {
         ...createGlobalStubs(),
       })
 
-      const container = wrapper.find('.min-h-\\[60vh\\]')
+      // Luxury design uses full viewport height (100vh)
+      const container = wrapper.find('.min-h-\\[100vh\\]')
       expect(container.exists()).toBe(true)
-      expect(container.classes()).toContain('md:min-h-[75vh]')
     })
   })
 })
