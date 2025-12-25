@@ -523,14 +523,14 @@ const marketingConsent = ref(false)
 const showTermsError = ref(false)
 const showPrivacyError = ref(false)
 
-// Countries
+// Countries with flags for display in dropdown
 const availableCountries = ref([
-  { code: 'ES', name: 'Spain' },
-  { code: 'RO', name: 'Romania' },
-  { code: 'MD', name: 'Moldova' },
-  { code: 'FR', name: 'France' },
-  { code: 'DE', name: 'Germany' },
-  { code: 'IT', name: 'Italy' },
+  { code: 'ES', name: 'Spain', flag: '🇪🇸' },
+  { code: 'RO', name: 'Romania', flag: '🇷🇴' },
+  { code: 'MD', name: 'Moldova', flag: '🇲🇩' },
+  { code: 'FR', name: 'France', flag: '🇫🇷' },
+  { code: 'DE', name: 'Germany', flag: '🇩🇪' },
+  { code: 'IT', name: 'Italy', flag: '🇮🇹' },
 ])
 
 // Computed - map cart items to the format expected by OrderSummaryCard
@@ -636,10 +636,32 @@ const handleExpressPlaceOrder = async () => {
   }
   catch (error: any) {
     console.error('Express checkout failed:', error)
-    toast.error(
-      t('checkout.errors.orderFailed'),
-      t('checkout.errors.pleaseTryAgain'),
-    )
+
+    // Provide actionable guidance based on error type
+    const errorMessage = error?.message || ''
+    const isNetworkError = errorMessage.includes('network') || errorMessage.includes('fetch') || errorMessage.includes('Failed to fetch')
+    const isSessionError = errorMessage.includes('session') || errorMessage.includes('expired') || errorMessage.includes('unauthorized')
+
+    if (isNetworkError) {
+      toast.error(
+        t('checkout.errors.networkError', 'Connection Error'),
+        t('checkout.errors.checkConnection', 'Please check your internet connection and try again.'),
+      )
+    }
+    else if (isSessionError) {
+      toast.error(
+        t('checkout.errors.sessionExpired', 'Session Expired'),
+        t('checkout.errors.refreshPage', 'Your session has expired. Please refresh the page.'),
+      )
+    }
+    else {
+      toast.error(
+        t('checkout.errors.expressCheckoutFailed', 'Express Checkout Failed'),
+        t('checkout.errors.tryFullCheckout', 'Please use the full checkout form below.'),
+      )
+      // Offer to switch to full checkout
+      dismissExpressCheckout()
+    }
   }
   finally {
     processingOrder.value = false
@@ -706,10 +728,30 @@ const handlePlaceOrder = async () => {
   }
   catch (error: any) {
     console.error('Failed to place order:', error)
-    toast.error(
-      t('checkout.errors.orderFailed'),
-      error.message || t('checkout.errors.pleaseTryAgain'),
-    )
+
+    // Provide user-friendly error message without exposing technical details
+    const errorMessage = error?.message || ''
+    const isNetworkError = errorMessage.includes('network') || errorMessage.includes('fetch') || errorMessage.includes('Failed to fetch')
+    const isValidationError = errorMessage.includes('validation') || errorMessage.includes('invalid')
+
+    if (isNetworkError) {
+      toast.error(
+        t('checkout.errors.networkError', 'Connection Error'),
+        t('checkout.errors.checkConnection', 'Please check your internet connection and try again.'),
+      )
+    }
+    else if (isValidationError) {
+      toast.error(
+        t('checkout.errors.validationFailed', 'Please Check Your Information'),
+        t('checkout.errors.reviewFields', 'Some fields may need to be corrected.'),
+      )
+    }
+    else {
+      toast.error(
+        t('checkout.errors.orderFailed', 'Order Failed'),
+        t('checkout.errors.pleaseTryAgain', 'Please try again or contact support if the issue persists.'),
+      )
+    }
   }
   finally {
     processingOrder.value = false
@@ -725,14 +767,37 @@ const processOrder = async () => {
   // Set step to review for checkout flow
   ;(checkoutStore as any).currentStep = 'review'
 
-  // Process payment - this handles the full checkout flow:
-  // 1. Creates order record
-  // 2. Processes payment by type
-  // 3. Calls completeCheckout with order data
-  await (checkoutStore as any).processPayment()
+  try {
+    // Process payment - this handles the full checkout flow:
+    // 1. Creates order record
+    // 2. Processes payment by type
+    // 3. Calls completeCheckout with order data
+    await (checkoutStore as any).processPayment()
+  }
+  catch (paymentError: any) {
+    // Log error for debugging (production would use proper error tracking)
+    console.error('Payment processing failed:', paymentError)
+    throw paymentError // Re-throw to be handled by caller
+  }
 
-  // Navigate to confirmation after successful payment
-  await navigateTo(localePath('/checkout/confirmation'))
+  try {
+    // Navigate to confirmation after successful payment
+    await navigateTo(localePath('/checkout/confirmation'))
+  }
+  catch (navError: any) {
+    // Payment succeeded but navigation failed - critical scenario
+    console.error('Navigation to confirmation failed after successful payment:', navError)
+
+    toast.warning(
+      t('checkout.success.orderCompleted'),
+      t('checkout.errors.redirectManually', 'Please navigate to your orders to see confirmation.'),
+    )
+
+    // Attempt recovery by using window.location
+    setTimeout(() => {
+      window.location.href = localePath('/checkout/confirmation')
+    }, 2000)
+  }
 }
 
 // Initialize

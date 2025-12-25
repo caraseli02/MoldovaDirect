@@ -1775,6 +1775,7 @@
       "orderProcessingFailed": "Failed to process your order. Please try again."
     },
     "validation": {
+      "fullNameRequired": "Full name is required",
       "firstNameRequired": "First name is required",
       "orderDataMissing": "Order data is missing. Please start checkout again.",
       "shippingInfoMissing": "Shipping information is missing. Please complete shipping details.",

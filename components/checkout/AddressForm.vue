@@ -149,7 +149,7 @@
             v-if="isLoadingAutocomplete"
             class="absolute right-3 top-1/2 -translate-y-1/2"
           >
-            <div class="w-5 h-5 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" />
+            <div class="w-5 h-5 border-2 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
           </div>
         </div>
 
@@ -257,9 +257,8 @@
           :value="localAddress.country"
           name="country"
           autocomplete="country"
-          class="w-full px-4 py-3 border rounded-lg shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors text-base appearance-none bg-no-repeat"
+          class="country-select w-full px-4 py-3 border rounded-lg shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors text-base appearance-none bg-no-repeat"
           :class="getFieldClasses('country')"
-          :style="{ backgroundImage: 'url(\'data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' fill=\\'none\\' viewBox=\\'0 0 24 24\\' stroke=\\'%236B7280\\'><path stroke-linecap=\\'round\\' stroke-linejoin=\\'round\\' stroke-width=\\'2\\' d=\\'M19 9l-7 7-7-7\\'/></svg>\\')' , backgroundPosition: 'right 12px center', backgroundSize: '20px' }"
           @change="updateField('country', ($event.target as HTMLSelectElement).value); clearFieldError('country')"
           @blur="validateField('country')"
         >
@@ -415,20 +414,40 @@ const showForm = computed(() => {
 })
 
 // Methods
+
+/**
+ * Splits a full name input into firstName and lastName fields.
+ *
+ * Business Logic:
+ * - Single word (e.g., "Madonna"): Treated as firstName only, lastName empty
+ * - Two words (e.g., "John Smith"): First word → firstName, second → lastName
+ * - Three+ words (e.g., "Mary Jane Watson"): First word → firstName, rest joined → lastName
+ *
+ * Note: This is a Western-centric simplification. Some cultures have different naming
+ * conventions (e.g., family name first in East Asian cultures, patronymics in Icelandic
+ * names). For a more international approach, consider using a single "fullName" field
+ * in the database or integrating a name parsing library.
+ *
+ * @param value - The full name entered by the user
+ */
 const handleFullNameInput = (value: string) => {
-  // Split full name into first and last name
-  const parts = value.trim().split(/\s+/)
+  const parts = value.trim().split(/\s+/).filter(Boolean)
   let firstName = ''
   let lastName = ''
 
   if (parts.length === 1) {
-    firstName = parts[0]
-  } else if (parts.length === 2) {
-    firstName = parts[0]
-    lastName = parts[1]
-  } else if (parts.length > 2) {
-    // First part is first name, rest is last name
-    firstName = parts[0]
+    // Single name (e.g., mononymous individuals like "Cher", "Madonna")
+    firstName = parts[0] ?? ''
+  }
+  else if (parts.length === 2) {
+    // Standard "First Last" format
+    firstName = parts[0] ?? ''
+    lastName = parts[1] ?? ''
+  }
+  else if (parts.length > 2) {
+    // Multiple words: assume first word is given name, rest is family name
+    // Handles compound surnames like "García Márquez" or middle names
+    firstName = parts[0] ?? ''
     lastName = parts.slice(1).join(' ')
   }
 
@@ -452,7 +471,8 @@ const handleStreetInput = (value: string) => {
     autocompleteDebounceTimer.value = setTimeout(() => {
       searchAddresses(value)
     }, 300)
-  } else {
+  }
+  else {
     addressSuggestions.value = []
     showSuggestions.value = false
   }
@@ -465,28 +485,40 @@ const handleStreetFocus = () => {
   }
 }
 
-// Simple mock address search - in production, integrate with Google Places API or similar
+/**
+ * Address autocomplete search - PLACEHOLDER IMPLEMENTATION
+ *
+ * Current status: Returns empty results (autocomplete not yet integrated)
+ * Future integration: Google Places API, Mapbox, or similar service
+ *
+ * The UI elements for autocomplete are in place but non-functional
+ * until an address API is integrated.
+ */
 const searchAddresses = async (query: string) => {
   isLoadingAutocomplete.value = true
 
   try {
-    // In production, replace with actual API call:
-    // const response = await $fetch('/api/address/autocomplete', { query: { q: query, country: localAddress.value.country } })
+    // TODO: Integrate with address autocomplete API
+    // Example: const response = await $fetch('/api/address/autocomplete', { query: { q: query, country: localAddress.value.country } })
 
-    // Mock suggestions for demonstration - shows the pattern
+    // Simulate API delay for UX consistency
     await new Promise(resolve => setTimeout(resolve, 200))
 
-    // Only show suggestions if country is selected
+    // Currently returns empty - will be populated when API is integrated
     if (localAddress.value.country) {
       const mockSuggestions: AddressSuggestion[] = []
-      // In production, these would come from the API
-
       addressSuggestions.value = mockSuggestions
       showSuggestions.value = mockSuggestions.length > 0
     }
-  } catch (error) {
+  }
+  catch (error) {
+    // Log error for debugging - autocomplete failure is non-blocking
+    // Users can still manually enter their address
     console.error('Address autocomplete error:', error)
-  } finally {
+    addressSuggestions.value = []
+    showSuggestions.value = false
+  }
+  finally {
     isLoadingAutocomplete.value = false
   }
 }
@@ -557,7 +589,8 @@ const validateField = (fieldName: string) => {
     case 'fullName':
       if (!getStringValue(value).trim()) {
         fieldErrors.value.fullName = t('checkout.validation.fullNameRequired', 'Full name is required')
-      } else if (getStringValue(value).trim().split(/\s+/).length < 2) {
+      }
+      else if (getStringValue(value).trim().split(/\s+/).length < 2) {
         // Encourage but don't require last name
         // fieldErrors.value.fullName = t('checkout.validation.fullNameComplete', 'Please enter your first and last name')
       }
@@ -724,5 +757,12 @@ defineExpose({
 /* Custom select arrow */
 .address-form select {
   padding-right: 40px;
+}
+
+/* Country select dropdown arrow */
+.country-select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236B7280'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3e%3c/svg%3e");
+  background-position: right 12px center;
+  background-size: 20px;
 }
 </style>

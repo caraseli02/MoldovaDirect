@@ -393,14 +393,14 @@ export class CriticalTestHelpers {
 
   /**
    * Fill shipping address form with test data
+   * Uses fullName field which is internally split into firstName/lastName
    */
   async fillShippingAddress(address?: typeof TEST_DATA.TEST_ADDRESS): Promise<void> {
     const addr = address || TEST_DATA.TEST_ADDRESS
 
-    const firstName = this.page.locator(SELECTORS.ADDRESS_FIRST_NAME).first()
-    if (await firstName.isVisible({ timeout: TIMEOUTS.STANDARD }).catch(() => false)) {
-      await firstName.fill(addr.firstName)
-      await this.page.locator(SELECTORS.ADDRESS_LAST_NAME).first().fill(addr.lastName)
+    const fullName = this.page.locator(SELECTORS.ADDRESS_FULL_NAME).first()
+    if (await fullName.isVisible({ timeout: TIMEOUTS.STANDARD }).catch(() => false)) {
+      await fullName.fill(addr.fullName)
       await this.page.locator(SELECTORS.ADDRESS_STREET).first().fill(addr.street)
       await this.page.locator(SELECTORS.ADDRESS_CITY).first().fill(addr.city)
       await this.page.locator(SELECTORS.ADDRESS_POSTAL_CODE).first().fill(addr.postalCode)

@@ -52,8 +52,7 @@ export class CheckoutPage {
   // ===========================================
   readonly addressForm: Locator
   readonly addressFields: {
-    firstName: Locator
-    lastName: Locator
+    fullName: Locator
     street: Locator
     city: Locator
     postalCode: Locator
@@ -154,11 +153,10 @@ export class CheckoutPage {
     this.shippingSectionComplete = this.shippingMethodSection.locator('.section-complete')
     this.paymentSectionComplete = this.paymentSection.locator('.section-complete')
 
-    // Address Form
+    // Address Form - Updated for Hybrid Checkout with single fullName field
     this.addressForm = page.locator('[class*="AddressForm"], [data-testid="address-form"]')
     this.addressFields = {
-      firstName: page.locator('input[name="firstName"], input[id="firstName"]'),
-      lastName: page.locator('input[name="lastName"], input[id="lastName"]'),
+      fullName: page.locator('input[name="fullName"], input[id="fullName"]'),
       street: page.locator('input[name="street"], input[id="street"]'),
       city: page.locator('input[name="city"], input[id="city"]'),
       postalCode: page.locator('input[name="postalCode"], input[id="postalCode"]'),
@@ -312,18 +310,17 @@ export class CheckoutPage {
 
   /**
    * Fill shipping address form
+   * Uses fullName field which is internally split into firstName/lastName
    */
   async fillShippingAddress(address: {
-    firstName: string
-    lastName: string
+    fullName: string
     street: string
     city: string
     postalCode: string
     country: string
     phone?: string
   }) {
-    await this.addressFields.firstName.fill(address.firstName)
-    await this.addressFields.lastName.fill(address.lastName)
+    await this.addressFields.fullName.fill(address.fullName)
     await this.addressFields.street.fill(address.street)
     await this.addressFields.city.fill(address.city)
     await this.addressFields.postalCode.fill(address.postalCode)
@@ -440,8 +437,7 @@ export class CheckoutPage {
    */
   async completeCheckout(options: {
     address: {
-      firstName: string
-      lastName: string
+      fullName: string
       street: string
       city: string
       postalCode: string

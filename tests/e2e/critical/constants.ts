@@ -105,9 +105,8 @@ export const SELECTORS = {
   // Address Form Selectors
   // ===========================================
 
-  /** Address form fields */
-  ADDRESS_FIRST_NAME: 'input[name="firstName"], input[id="firstName"]',
-  ADDRESS_LAST_NAME: 'input[name="lastName"], input[id="lastName"]',
+  /** Address form fields - Updated for Hybrid Checkout with single fullName field */
+  ADDRESS_FULL_NAME: 'input[name="fullName"], input[id="fullName"]',
   ADDRESS_STREET: 'input[name="street"], input[id="street"]',
   ADDRESS_CITY: 'input[name="city"], input[id="city"]',
   ADDRESS_POSTAL_CODE: 'input[name="postalCode"], input[id="postalCode"]',
@@ -233,10 +232,9 @@ export const TEST_DATA = {
   /** Minimum products expected on products page */
   MIN_PRODUCTS: 1,
 
-  /** Test shipping address */
+  /** Test shipping address - uses fullName which is split into firstName/lastName internally */
   TEST_ADDRESS: {
-    firstName: 'Test',
-    lastName: 'User',
+    fullName: 'Test User',
     street: '123 Test Street',
     city: 'Test City',
     postalCode: '12345',

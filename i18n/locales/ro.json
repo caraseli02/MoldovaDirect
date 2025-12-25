@@ -1608,6 +1608,7 @@
       "orderProcessingFailed": "Nu s-a putut procesa comanda. Te rugăm să încerci din nou."
     },
     "validation": {
+      "fullNameRequired": "Numele complet este obligatoriu",
       "firstNameRequired": "Prenumele este obligatoriu",
       "orderDataMissing": "Lipsesc datele comenzii. Te rugăm să reîncepi procesul de plată.",
       "shippingInfoMissing": "Lipsesc informațiile de livrare. Te rugăm să completezi detaliile de livrare.",

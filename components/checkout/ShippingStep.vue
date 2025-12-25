@@ -214,12 +214,12 @@ const processing = ref(false)
 const expressCheckoutDismissed = ref(false)
 const shippingInstructions = ref('')
 const availableCountries = ref([
-  { code: 'ES', name: 'Spain' },
-  { code: 'RO', name: 'Romania' },
-  { code: 'MD', name: 'Moldova' },
-  { code: 'FR', name: 'France' },
-  { code: 'DE', name: 'Germany' },
-  { code: 'IT', name: 'Italy' },
+  { code: 'ES', name: 'Spain', flag: '🇪🇸' },
+  { code: 'RO', name: 'Romania', flag: '🇷🇴' },
+  { code: 'MD', name: 'Moldova', flag: '🇲🇩' },
+  { code: 'FR', name: 'France', flag: '🇫🇷' },
+  { code: 'DE', name: 'Germany', flag: '🇩🇪' },
+  { code: 'IT', name: 'Italy', flag: '🇮🇹' },
 ])
 
 // Computed properties

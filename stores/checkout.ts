@@ -168,7 +168,18 @@ export const useCheckoutStore = defineStore('checkout', () => {
       }
       catch (lockError: any) {
         console.warn('Failed to lock cart:', lockError)
-        // Continue with checkout even if locking fails
+
+        // Check if cart is locked by another session (potential double checkout)
+        const lockMessage = lockError?.message || ''
+        if (lockMessage.includes('already locked') || lockMessage.includes('locked by')) {
+          // Critical: Cart may be in use in another tab/session
+          console.error('Cart locked by another session - potential concurrent checkout')
+          // Don't throw - allow checkout to continue but user should be aware
+          // The UI should ideally warn users not to use multiple tabs
+        }
+
+        // Continue with checkout even if locking fails (degraded mode)
+        // In production, consider showing a subtle warning to the user
       }
 
       const restored = session.restore()

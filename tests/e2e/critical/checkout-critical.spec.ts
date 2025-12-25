@@ -337,11 +337,10 @@ test.describe('Checkout Form Validation', () => {
       await page.waitForTimeout(TIMEOUTS.VERY_SHORT)
     }
 
-    // Fill address fields
-    const firstName = page.locator(SELECTORS.ADDRESS_FIRST_NAME).first()
-    if (await firstName.isVisible({ timeout: TIMEOUTS.STANDARD }).catch(() => false)) {
-      await firstName.fill(TEST_DATA.TEST_ADDRESS.firstName)
-      await page.locator(SELECTORS.ADDRESS_LAST_NAME).first().fill(TEST_DATA.TEST_ADDRESS.lastName)
+    // Fill address fields - using fullName which is split into firstName/lastName internally
+    const fullName = page.locator(SELECTORS.ADDRESS_FULL_NAME).first()
+    if (await fullName.isVisible({ timeout: TIMEOUTS.STANDARD }).catch(() => false)) {
+      await fullName.fill(TEST_DATA.TEST_ADDRESS.fullName)
       await page.locator(SELECTORS.ADDRESS_STREET).first().fill(TEST_DATA.TEST_ADDRESS.street)
       await page.locator(SELECTORS.ADDRESS_CITY).first().fill(TEST_DATA.TEST_ADDRESS.city)
       await page.locator(SELECTORS.ADDRESS_POSTAL_CODE).first().fill(TEST_DATA.TEST_ADDRESS.postalCode)
@@ -351,8 +350,8 @@ test.describe('Checkout Form Validation', () => {
       await page.waitForTimeout(TIMEOUTS.VERY_SHORT)
 
       // Verify field has value
-      const firstNameValue = await firstName.inputValue()
-      expect(firstNameValue).toBe(TEST_DATA.TEST_ADDRESS.firstName)
+      const fullNameValue = await fullName.inputValue()
+      expect(fullNameValue).toBe(TEST_DATA.TEST_ADDRESS.fullName)
     }
   })
 
@@ -379,11 +378,10 @@ test.describe('Checkout Form Validation', () => {
       await page.waitForTimeout(TIMEOUTS.VERY_SHORT)
     }
 
-    // Fill address
-    const firstName = page.locator(SELECTORS.ADDRESS_FIRST_NAME).first()
-    if (await firstName.isVisible({ timeout: TIMEOUTS.STANDARD }).catch(() => false)) {
-      await firstName.fill(TEST_DATA.TEST_ADDRESS.firstName)
-      await page.locator(SELECTORS.ADDRESS_LAST_NAME).first().fill(TEST_DATA.TEST_ADDRESS.lastName)
+    // Fill address - using fullName which is split into firstName/lastName internally
+    const fullName = page.locator(SELECTORS.ADDRESS_FULL_NAME).first()
+    if (await fullName.isVisible({ timeout: TIMEOUTS.STANDARD }).catch(() => false)) {
+      await fullName.fill(TEST_DATA.TEST_ADDRESS.fullName)
       await page.locator(SELECTORS.ADDRESS_STREET).first().fill(TEST_DATA.TEST_ADDRESS.street)
       await page.locator(SELECTORS.ADDRESS_CITY).first().fill(TEST_DATA.TEST_ADDRESS.city)
       await page.locator(SELECTORS.ADDRESS_POSTAL_CODE).first().fill(TEST_DATA.TEST_ADDRESS.postalCode)
