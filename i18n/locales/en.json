@@ -539,6 +539,11 @@
     "wishlistItems": "Wishlist Items",
     "recentOrders": "Recent Orders",
     "noOrdersYet": "You don't have any orders yet",
+    "viewProfile": "View profile",
+    "quickAccess": "Quick Access",
+    "myProfile": "My Profile",
+    "paymentMethods": "Payment Methods",
+    "returns": "Returns",
     "sections": {
       "admin": "Admin",
       "adminUser": "Admin User",

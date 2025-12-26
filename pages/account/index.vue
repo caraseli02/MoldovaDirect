@@ -1,264 +1,395 @@
-import type { SupabaseClient } from '@supabase/supabase-js'
 <template>
-  <div class="py-12">
-    <div class="container">
-      <div
-        v-if="!isAuthenticated"
-        class="text-center py-20"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-16 w-16 text-gray-400 mx-auto mb-4"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-          />
-        </svg>
-        <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
+  <div class="min-h-screen bg-zinc-50 dark:bg-zinc-900">
+    <!-- Not Authenticated State -->
+    <div
+      v-if="!isAuthenticated"
+      class="container py-20"
+    >
+      <div class="max-w-md mx-auto text-center">
+        <div class="w-16 h-16 bg-zinc-100 dark:bg-zinc-800 rounded-full flex items-center justify-center mx-auto mb-6">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-8 w-8 text-zinc-400 dark:text-zinc-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+            />
+          </svg>
+        </div>
+        <h2 class="text-2xl font-bold text-zinc-900 dark:text-white mb-3">
           {{ $t('auth.signInRequired') }}
         </h2>
-        <p class="text-gray-600 dark:text-gray-400 mb-6">
+        <p class="text-base text-zinc-600 dark:text-zinc-400 mb-8">
           {{ $t('auth.signInToViewAccount') }}
         </p>
         <div class="flex gap-4 justify-center">
           <NuxtLink
             :to="localePath('/auth/login')"
-            class="px-6 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700"
+            class="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-primary-600 font-semibold"
           >
             {{ $t('auth.signIn') }}
           </NuxtLink>
           <NuxtLink
             :to="localePath('/auth/register')"
-            class="px-6 py-2 border border-primary-600 text-primary-600 rounded-md hover:bg-primary-50"
+            class="px-6 py-2 border-2 border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-white rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors font-semibold"
           >
             {{ $t('auth.signUp') }}
           </NuxtLink>
         </div>
       </div>
+    </div>
 
-      <div v-else>
-        <h1 class="text-4xl font-bold mb-8 text-gray-900 dark:text-white">
-          {{ $t('common.account') }}
-        </h1>
-
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div class="lg:col-span-1">
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-              <div class="flex items-center mb-4">
-                <div class="h-16 w-16 bg-primary-100 rounded-full flex items-center justify-center">
-                  <span class="text-2xl font-semibold text-primary-600">
-                    {{ userProfile?.name?.charAt(0).toUpperCase() }}
-                  </span>
-                </div>
-                <div class="ml-4">
-                  <h2 class="text-xl font-semibold text-gray-900 dark:text-white">
-                    {{ userProfile?.name }}
-                  </h2>
-                  <p class="text-gray-600 dark:text-gray-400">
-                    {{ userProfile?.email }}
-                  </p>
-                </div>
-              </div>
-
-              <nav class="mt-6 space-y-2">
-                <NuxtLink
-                  :to="localePath('/account')"
-                  class="block px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
-                  :class="{ 'bg-gray-100 dark:bg-gray-700': route.path === localePath('/account') }"
-                >
-                  {{ $t('account.dashboard') }}
-                </NuxtLink>
-                <NuxtLink
-                  :to="localePath('/account/orders')"
-                  class="block px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
-                  :class="{ 'bg-gray-100 dark:bg-gray-700': route.path.startsWith(localePath('/account/orders')) }"
-                >
-                  {{ $t('account.orders') }}
-                </NuxtLink>
-                <NuxtLink
-                  :to="localePath('/account/profile')"
-                  class="block px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
-                  :class="{ 'bg-gray-100 dark:bg-gray-700': route.path === localePath('/account/profile') }"
-                >
-                  {{ $t('account.profile') }}
-                </NuxtLink>
-                <UiButton
-                  variant="ghost"
-                  data-testid="logout-button"
-                  aria-label="Logout"
-                  class="w-full justify-start text-red-600 hover:bg-red-50 hover:text-red-600 dark:text-red-400 dark:hover:bg-red-900/20 dark:hover:text-red-400"
-                  @click="handleLogout"
-                >
-                  {{ $t('common.logout') }}
-                </UiButton>
-              </nav>
+    <!-- Authenticated State - Option D Design -->
+    <div
+      v-else
+      class="container py-8 max-w-2xl mx-auto"
+    >
+      <!-- Compact Header -->
+      <div class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg p-6 mb-6">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <div class="w-12 h-12 bg-zinc-900 dark:bg-zinc-100 rounded-full flex items-center justify-center">
+              <span class="text-xl font-bold text-white dark:text-zinc-900">
+                {{ userProfile?.name?.charAt(0).toUpperCase() }}
+              </span>
+            </div>
+            <div class="ml-4">
+              <h2 class="text-base font-bold text-zinc-900 dark:text-white">
+                {{ userProfile?.name }}
+              </h2>
+              <NuxtLink
+                :to="localePath('/account/profile')"
+                class="text-sm text-zinc-600 dark:text-zinc-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+              >
+                {{ $t('account.viewProfile') }}
+              </NuxtLink>
             </div>
           </div>
+          <button
+            class="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded-lg transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-primary-600"
+            aria-label="Notifications"
+          >
+            <svg
+              class="w-6 h-6 text-zinc-600 dark:text-zinc-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
 
-          <div class="lg:col-span-2">
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-              <h2 class="text-2xl font-semibold mb-6 text-gray-900 dark:text-white">
-                {{ $t('account.welcomeBack') }}
-              </h2>
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-2 gap-4 mb-8">
+        <!-- Total Orders Card -->
+        <NuxtLink
+          :to="localePath('/account/orders')"
+          class="bg-white dark:bg-zinc-800 border-2 border-primary-200 dark:border-primary-900 rounded-xl p-4 hover:border-primary-300 dark:hover:border-primary-800 hover:-translate-y-0.5 transition-all focus:ring-2 focus:ring-offset-2 focus:ring-primary-600"
+        >
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+              {{ $t('account.totalOrders') }}
+            </span>
+            <div class="w-8 h-8 bg-primary-50 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+              <svg
+                class="w-4 h-4 text-primary-600 dark:text-primary-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                />
+              </svg>
+            </div>
+          </div>
+          <p
+            v-if="orderStats.loading"
+            class="text-3xl font-bold text-zinc-400 dark:text-zinc-500 animate-pulse"
+          >
+            ...
+          </p>
+          <p
+            v-else
+            class="text-3xl font-bold text-zinc-900 dark:text-white"
+          >
+            {{ orderStats.totalOrders }}
+          </p>
+        </NuxtLink>
 
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <NuxtLink
-                  :to="localePath('/account/orders')"
-                  class="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer"
-                >
-                  <div class="flex items-center justify-between mb-2">
-                    <span class="text-gray-600 dark:text-gray-400">{{ $t('account.totalOrders') }}</span>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-5 w-5 text-gray-400"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-                      />
-                    </svg>
-                  </div>
-                  <p
-                    v-if="orderStats.loading"
-                    class="text-2xl font-bold text-gray-400 dark:text-gray-500 animate-pulse"
-                  >...</p>
-                  <p
-                    v-else
-                    class="text-2xl font-bold text-gray-900 dark:text-white"
-                  >{{ orderStats.totalOrders }}</p>
-                </NuxtLink>
+        <!-- Wishlist Card -->
+        <div class="bg-white dark:bg-zinc-800 border-2 border-zinc-200 dark:border-zinc-700 rounded-xl p-4">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+              {{ $t('account.wishlistItems') }}
+            </span>
+            <div class="w-8 h-8 bg-zinc-100 dark:bg-zinc-700 rounded-lg flex items-center justify-center">
+              <svg
+                class="w-4 h-4 text-zinc-600 dark:text-zinc-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                />
+              </svg>
+            </div>
+          </div>
+          <p class="text-3xl font-bold text-zinc-900 dark:text-white">
+            0
+          </p>
+        </div>
+      </div>
 
-                <div class="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
-                  <div class="flex items-center justify-between mb-2">
-                    <span class="text-gray-600 dark:text-gray-400">{{ $t('account.wishlistItems') }}</span>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-5 w-5 text-gray-400"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                      />
-                    </svg>
-                  </div>
-                  <p class="text-2xl font-bold text-gray-900 dark:text-white">
-                    0
-                  </p>
-                </div>
-              </div>
+      <!-- Recent Orders Section -->
+      <div class="mb-8">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-bold text-zinc-900 dark:text-white">
+            {{ $t('account.recentOrders') }}
+          </h3>
+          <NuxtLink
+            v-if="orderStats.recentOrders.length > 0"
+            :to="localePath('/account/orders')"
+            class="text-sm font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors px-2 py-1 rounded focus:ring-2 focus:ring-offset-2 focus:ring-primary-600"
+          >
+            {{ $t('orders.viewAllOrders') }}
+          </NuxtLink>
+        </div>
 
-              <div>
-                <div class="flex items-center justify-between mb-4">
-                  <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                    {{ $t('account.recentOrders') }}
-                  </h3>
-                  <NuxtLink
-                    v-if="orderStats.recentOrders.length > 0"
-                    :to="localePath('/account/orders')"
-                    class="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
-                  >
-                    {{ $t('orders.viewAllOrders') }}
-                  </NuxtLink>
-                </div>
-
-                <!-- Loading state -->
-                <div
-                  v-if="orderStats.loading"
-                  class="space-y-4"
-                >
-                  <div
-                    v-for="i in 3"
-                    :key="i"
-                    class="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 animate-pulse"
-                  >
-                    <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/4 mb-2"></div>
-                    <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
-                  </div>
-                </div>
-
-                <!-- Recent orders list -->
-                <div
-                  v-else-if="orderStats.recentOrders.length > 0"
-                  class="space-y-4"
-                >
-                  <NuxtLink
-                    v-for="order in orderStats.recentOrders"
-                    :key="order.id"
-                    :to="localePath(`/account/orders/${order.id}`)"
-                    class="block bg-gray-50 dark:bg-gray-900 rounded-lg p-4 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                  >
-                    <div class="flex items-center justify-between mb-2">
-                      <span class="font-semibold text-gray-900 dark:text-white">{{ order.order_number }}</span>
-                      <span
-                        class="px-2 py-1 text-xs rounded-full"
-                        :class="{
-                          'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200': order.status === 'pending',
-                          'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200': order.status === 'processing',
-                          'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200': order.status === 'shipped',
-                          'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200': order.status === 'delivered',
-                          'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200': order.status === 'cancelled',
-                        }"
-                      >
-                        {{ $t(`orders.status.${order.status}`) }}
-                      </span>
-                    </div>
-                    <div class="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
-                      <span>{{ new Date(order.created_at).toLocaleDateString() }}</span>
-                      <span class="font-semibold">€{{ order.total_eur.toFixed(2) }}</span>
-                    </div>
-                  </NuxtLink>
-                </div>
-
-                <!-- Empty state -->
-                <div
-                  v-else
-                  class="text-center py-8 bg-gray-50 dark:bg-gray-900 rounded-lg"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-12 w-12 text-gray-400 mx-auto mb-3"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                    />
-                  </svg>
-                  <p class="text-gray-600 dark:text-gray-400">
-                    {{ $t('account.noOrdersYet') }}
-                  </p>
-                  <NuxtLink
-                    :to="localePath('/products')"
-                    class="inline-block mt-4 px-6 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700"
-                  >
-                    {{ $t('common.shop') }}
-                  </NuxtLink>
-                </div>
-              </div>
+        <!-- Loading State -->
+        <div
+          v-if="orderStats.loading"
+          class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl p-8"
+        >
+          <div class="space-y-4">
+            <div
+              v-for="i in 3"
+              :key="i"
+              class="animate-pulse"
+            >
+              <div class="h-4 bg-zinc-200 dark:bg-zinc-700 rounded w-1/4 mb-2" />
+              <div class="h-4 bg-zinc-200 dark:bg-zinc-700 rounded w-1/2" />
             </div>
           </div>
         </div>
+
+        <!-- Recent Orders List -->
+        <div
+          v-else-if="orderStats.recentOrders.length > 0"
+          class="space-y-3"
+        >
+          <NuxtLink
+            v-for="order in orderStats.recentOrders"
+            :key="order.id"
+            :to="localePath(`/account/orders/${order.id}`)"
+            class="block bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl p-4 hover:border-zinc-300 dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-700/50 transition-all focus:ring-2 focus:ring-offset-2 focus:ring-primary-600"
+          >
+            <div class="flex items-center justify-between mb-2">
+              <span class="font-semibold text-zinc-900 dark:text-white">{{ order.order_number }}</span>
+              <span
+                class="px-2 py-1 text-xs font-medium rounded-md"
+                :class="{
+                  'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400': order.status === 'pending',
+                  'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400': order.status === 'processing',
+                  'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400': order.status === 'shipped',
+                  'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400': order.status === 'delivered',
+                  'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400': order.status === 'cancelled',
+                }"
+              >
+                {{ $t(`orders.status.${order.status}`) }}
+              </span>
+            </div>
+            <div class="flex items-center justify-between text-sm text-zinc-600 dark:text-zinc-400">
+              <span>{{ new Date(order.created_at).toLocaleDateString() }}</span>
+              <span class="font-semibold">€{{ order.total_eur.toFixed(2) }}</span>
+            </div>
+          </NuxtLink>
+        </div>
+
+        <!-- Empty State -->
+        <div
+          v-else
+          class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl p-12 text-center"
+        >
+          <div class="w-16 h-16 bg-zinc-100 dark:bg-zinc-700 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg
+              class="w-8 h-8 text-zinc-400 dark:text-zinc-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+              />
+            </svg>
+          </div>
+          <p class="text-base text-zinc-600 dark:text-zinc-400 mb-6">
+            {{ $t('account.noOrdersYet') }}
+          </p>
+          <NuxtLink
+            :to="localePath('/products')"
+            class="inline-block px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-primary-600 font-semibold"
+          >
+            {{ $t('common.shop') }}
+          </NuxtLink>
+        </div>
       </div>
+
+      <!-- Quick Actions Grid -->
+      <div class="mb-8">
+        <h3 class="text-lg font-bold text-zinc-900 dark:text-white mb-4">
+          {{ $t('account.quickAccess') }}
+        </h3>
+        <div class="grid grid-cols-2 gap-3">
+          <!-- Profile Button -->
+          <NuxtLink
+            :to="localePath('/account/profile')"
+            class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl p-4 hover:border-zinc-300 dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-700/50 hover:-translate-y-0.5 transition-all focus:ring-2 focus:ring-offset-2 focus:ring-primary-600"
+          >
+            <div class="flex flex-col items-center text-center">
+              <div class="w-12 h-12 bg-zinc-100 dark:bg-zinc-700 rounded-full flex items-center justify-center mb-3">
+                <svg
+                  class="w-6 h-6 text-zinc-700 dark:text-zinc-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  />
+                </svg>
+              </div>
+              <span class="text-sm font-semibold text-zinc-900 dark:text-white">
+                {{ $t('account.myProfile') }}
+              </span>
+            </div>
+          </NuxtLink>
+
+          <!-- Addresses Button -->
+          <NuxtLink
+            :to="localePath('/account/profile')"
+            class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl p-4 hover:border-zinc-300 dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-700/50 hover:-translate-y-0.5 transition-all focus:ring-2 focus:ring-offset-2 focus:ring-primary-600"
+          >
+            <div class="flex flex-col items-center text-center">
+              <div class="w-12 h-12 bg-zinc-100 dark:bg-zinc-700 rounded-full flex items-center justify-center mb-3">
+                <svg
+                  class="w-6 h-6 text-zinc-700 dark:text-zinc-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                </svg>
+              </div>
+              <span class="text-sm font-semibold text-zinc-900 dark:text-white">
+                {{ $t('account.addresses') }}
+              </span>
+            </div>
+          </NuxtLink>
+
+          <!-- Payment Methods Button -->
+          <button
+            class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl p-4 hover:border-zinc-300 dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-700/50 hover:-translate-y-0.5 transition-all focus:ring-2 focus:ring-offset-2 focus:ring-primary-600"
+            disabled
+          >
+            <div class="flex flex-col items-center text-center">
+              <div class="w-12 h-12 bg-zinc-100 dark:bg-zinc-700 rounded-full flex items-center justify-center mb-3">
+                <svg
+                  class="w-6 h-6 text-zinc-700 dark:text-zinc-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                  />
+                </svg>
+              </div>
+              <span class="text-sm font-semibold text-zinc-900 dark:text-white">
+                {{ $t('account.paymentMethods') }}
+              </span>
+            </div>
+          </button>
+
+          <!-- Returns Button -->
+          <NuxtLink
+            :to="localePath('/account/orders')"
+            class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl p-4 hover:border-zinc-300 dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-700/50 hover:-translate-y-0.5 transition-all focus:ring-2 focus:ring-offset-2 focus:ring-primary-600"
+          >
+            <div class="flex flex-col items-center text-center">
+              <div class="w-12 h-12 bg-zinc-100 dark:bg-zinc-700 rounded-full flex items-center justify-center mb-3">
+                <svg
+                  class="w-6 h-6 text-zinc-700 dark:text-zinc-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"
+                  />
+                </svg>
+              </div>
+              <span class="text-sm font-semibold text-zinc-900 dark:text-white">
+                {{ $t('account.returns') }}
+              </span>
+            </div>
+          </NuxtLink>
+        </div>
+      </div>
+
+      <!-- Logout Button -->
+      <button
+        class="w-full bg-white dark:bg-zinc-800 border-2 border-primary-200 dark:border-primary-900 rounded-lg p-4 hover:bg-primary-50 dark:hover:bg-primary-950/30 transition-all focus:ring-2 focus:ring-offset-2 focus:ring-primary-600"
+        data-testid="logout-button"
+        @click="handleLogout"
+      >
+        <span class="text-base font-semibold text-primary-600 dark:text-primary-400">
+          {{ $t('common.logout') }}
+        </span>
+      </button>
     </div>
   </div>
 </template>
@@ -287,9 +418,8 @@ const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 const { t } = useI18n()
 const localePath = useLocalePath()
-const route = useRoute()
 
-// Computed properties to replace auth store functionality
+// Computed properties
 const isAuthenticated = computed(() => !!user.value)
 const userProfile = computed(() => user.value
   ? {

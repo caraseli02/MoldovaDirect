@@ -538,6 +538,11 @@
     "wishlistItems": "Artículos en Lista de Deseos",
     "recentOrders": "Pedidos Recientes",
     "noOrdersYet": "Aún no tienes pedidos",
+    "viewProfile": "Ver perfil",
+    "quickAccess": "Acceso Rápido",
+    "myProfile": "Mi Perfil",
+    "paymentMethods": "Métodos de Pago",
+    "returns": "Devoluciones",
     "sections": {
       "admin": "Admin",
       "adminUser": "Usuario Admin",

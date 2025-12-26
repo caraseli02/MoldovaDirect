@@ -303,6 +303,11 @@
     "wishlistItems": "Articole din Lista de Dorințe",
     "recentOrders": "Comenzi Recente",
     "noOrdersYet": "Nu ai încă comenzi",
+    "viewProfile": "Vezi profilul",
+    "quickAccess": "Acces Rapid",
+    "myProfile": "Profilul Meu",
+    "paymentMethods": "Metode de Plată",
+    "returns": "Retururi",
     "sections": {
       "admin": "Administrator",
       "adminUser": "Utilizator Administrator",

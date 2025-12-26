@@ -479,6 +479,11 @@
     "wishlistItems": "Товары в избранном",
     "recentOrders": "Последние заказы",
     "noOrdersYet": "У вас еще нет заказов",
+    "viewProfile": "Посмотреть профиль",
+    "quickAccess": "Быстрый доступ",
+    "myProfile": "Мой профиль",
+    "paymentMethods": "Способы оплаты",
+    "returns": "Возвраты",
     "sections": {
       "admin": "Администратор",
       "adminUser": "Пользователь-администратор",
