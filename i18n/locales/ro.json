@@ -1683,6 +1683,11 @@
       "error": "Eroare la încărcarea metodelor de livrare",
       "loadError": "Metode de Livrare",
       "usingDefaultOptions": "Se folosesc opțiuni de livrare implicite. Tarifele reale pot varia.",
+      "fallbackWarning": {
+        "title": "Tarife de Livrare Estimate",
+        "description": "Nu am putut încărca tarifele în timp real de la transportatori. Arătăm tarife estimate mai jos. Tarifele reale vor fi calculate înainte de confirmarea finală.",
+        "retry": "Reîncercați încărcarea tarifelor reale"
+      },
       "standard": {
         "name": "Livrare Standard",
         "description": "Livrare în 3-5 zile lucrătoare"

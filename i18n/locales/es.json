@@ -1774,6 +1774,11 @@
       "error": "Error cargando métodos de envío",
       "loadError": "Métodos de Envío",
       "usingDefaultOptions": "Usando opciones de envío predeterminadas. Las tarifas reales pueden variar.",
+      "fallbackWarning": {
+        "title": "Tarifas de Envío Estimadas",
+        "description": "No pudimos cargar las tarifas en tiempo real de nuestros transportistas. Mostrando tarifas estimadas a continuación. Las tarifas reales se calcularán antes de la confirmación final.",
+        "retry": "Reintentar cargar tarifas reales"
+      },
       "standard": {
         "name": "Envío Estándar",
         "description": "Entrega en 3-5 días hábiles"

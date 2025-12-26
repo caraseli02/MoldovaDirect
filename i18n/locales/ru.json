@@ -1656,6 +1656,11 @@
       "noMethods": "No shipping methods available",
       "noMethodsDescription": "Please check your address or contact support",
       "error": "Error loading shipping methods",
+      "fallbackWarning": {
+        "title": "Расчетные Тарифы Доставки",
+        "description": "Не удалось загрузить тарифы в реальном времени от наших перевозчиков. Показываем расчетные тарифы ниже. Фактические тарифы будут рассчитаны перед окончательным подтверждением.",
+        "retry": "Повторить загрузку реальных тарифов"
+      },
       "standard": {
         "name": "Standard Shipping",
         "description": "Delivery in 3-5 business days"
