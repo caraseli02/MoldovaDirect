@@ -65,34 +65,52 @@ export class CheckoutHelpers {
     postalCode: string
     country: string
   }) {
-    // Wait for form to be visible
-    await this.page.waitForSelector('input[name="fullName"], input[id="fullName"]', { timeout: 10000 })
+    // Check if there are saved addresses and we need to select "Use new address"
+    const useNewAddressOption = this.page.locator('input[type="radio"][value="null"]').filter({ hasText: /use.*new.*address|usar.*nueva.*dirección|folosește.*adresă.*nouă|использовать.*новый.*адрес/i })
+    if (await useNewAddressOption.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await useNewAddressOption.click()
+      await this.page.waitForTimeout(500)
+    }
 
-    // Fill fullName
-    const fullNameInput = this.page.locator('input[name="fullName"], input[id="fullName"]').first()
+    // Wait for form to be visible - use the correct selector (id="fullName" and name="name")
+    await this.page.waitForSelector('#fullName, input[id="fullName"]', { timeout: 15000 })
+    await this.page.waitForTimeout(500) // Allow form to fully render
+
+    // Fill fullName (has id="fullName" but name="name")
+    const fullNameInput = this.page.locator('#fullName').first()
+    await expect(fullNameInput).toBeVisible({ timeout: 5000 })
     await fullNameInput.fill(address.fullName)
+    await fullNameInput.blur()
+    await this.page.waitForTimeout(300)
 
     // Fill street
-    const streetInput = this.page.locator('input[name="street"], input[id="street"]').first()
+    const streetInput = this.page.locator('#street').first()
+    await expect(streetInput).toBeVisible({ timeout: 5000 })
     await streetInput.fill(address.street)
+    await streetInput.blur()
+    await this.page.waitForTimeout(300)
 
     // Fill city
-    const cityInput = this.page.locator('input[name="city"], input[id="city"]').first()
+    const cityInput = this.page.locator('#city').first()
+    await expect(cityInput).toBeVisible({ timeout: 5000 })
     await cityInput.fill(address.city)
+    await cityInput.blur()
+    await this.page.waitForTimeout(300)
 
     // Fill postal code
-    const postalCodeInput = this.page.locator('input[name="postalCode"], input[id="postalCode"]').first()
+    const postalCodeInput = this.page.locator('#postalCode').first()
+    await expect(postalCodeInput).toBeVisible({ timeout: 5000 })
     await postalCodeInput.fill(address.postalCode)
     await postalCodeInput.blur()
 
     // Select country if select exists
-    const countrySelect = this.page.locator('select[name="country"], select[id="country"]').first()
+    const countrySelect = this.page.locator('#country').first()
     if (await countrySelect.isVisible({ timeout: 2000 }).catch(() => false)) {
       await countrySelect.selectOption(address.country)
     }
 
-    // Wait for validation
-    await this.page.waitForTimeout(500)
+    // Wait for validation and any auto-complete
+    await this.page.waitForTimeout(1000)
   }
 
   /**
