@@ -348,10 +348,10 @@
           <div class="sticky top-6">
             <OrderSummaryCard
               :items="cartItems"
-              :subtotal="orderData?.subtotal || 0"
-              :shipping-cost="orderData?.shippingCost || 0"
-              :tax="orderData?.tax || 0"
-              :total="orderData?.total || 0"
+              :subtotal="calculatedSubtotal"
+              :shipping-cost="calculatedShippingCost"
+              :tax="calculatedTax"
+              :total="calculatedTotal"
               :shipping-method="selectedMethod"
               :loading="loadingOrder"
             />
@@ -546,8 +546,26 @@ const cartItems = computed(() => {
 
 const orderData = computed(() => (checkoutStore as any).orderData)
 
+// Calculate order totals directly from cart items (fallback for reactivity issues)
+const calculatedSubtotal = computed(() => {
+  return cartStore.items.reduce((sum, item) => sum + item.product.price * item.quantity, 0)
+})
+
+const calculatedShippingCost = computed(() => {
+  return selectedMethod.value?.price || 0
+})
+
+const calculatedTax = computed(() => {
+  // 21% VAT for Spain
+  return Math.round(calculatedSubtotal.value * 0.21 * 100) / 100
+})
+
+const calculatedTotal = computed(() => {
+  return calculatedSubtotal.value + calculatedShippingCost.value + calculatedTax.value
+})
+
 const formattedTotal = computed(() => {
-  const total = orderData.value?.total || 0
+  const total = calculatedTotal.value || orderData.value?.total || 0
   return new Intl.NumberFormat('es-ES', {
     style: 'currency',
     currency: 'EUR',
@@ -805,6 +823,12 @@ onMounted(async () => {
   loadingOrder.value = true
 
   try {
+    // Ensure cart is loaded from storage first (required for SSR hydration)
+    await cartStore.loadFromStorage()
+
+    // Calculate order data from cart items
+    await (checkoutStore as any).calculateOrderData()
+
     // Load existing data from store
     loadAddressFromStore()
 

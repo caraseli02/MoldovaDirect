@@ -165,10 +165,11 @@ export class CheckoutPage {
     }
     this.savedAddressSelect = page.locator('[data-testid="saved-address-select"], select[name="savedAddress"]')
 
-    // Shipping Method
-    this.shippingMethodOptions = page.locator('[class*="ShippingMethodSelector"] input[type="radio"], [data-testid="shipping-method-option"]')
-    this.shippingMethodError = page.locator('[class*="ShippingMethodSelector"] [class*="error"], [data-testid="shipping-method-error"]')
-    this.shippingMethodLoading = page.locator('[class*="ShippingMethodSelector"] .animate-spin')
+    // Shipping Method - RadioGroupItem renders as button with role="radio" and data-slot="radio-group-item"
+    // Note: Component class is "shipping-method-selector" (lowercase with dashes)
+    this.shippingMethodOptions = page.locator('.shipping-method-selector button[role="radio"], .shipping-method-selector [data-slot="radio-group-item"], [data-testid="shipping-method-option"]')
+    this.shippingMethodError = page.locator('.shipping-method-selector [class*="error"], [data-testid="shipping-method-error"]')
+    this.shippingMethodLoading = page.locator('.shipping-method-selector .animate-pulse')
 
     // Payment Options
     this.cashPaymentOption = page.locator('input[type="radio"][value="cash"], [data-testid="payment-cash"]')

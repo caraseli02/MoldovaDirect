@@ -229,8 +229,8 @@ test.describe('Checkout - Guest Checkout Flow', () => {
     try {
       await checkoutPage.waitForShippingMethods()
       await checkoutPage.selectShippingMethod(0)
-      // Verify shipping method was selected
-      await expect(checkoutPage.shippingMethodOptions.first()).toBeChecked({ timeout: 3000 })
+      // Verify shipping method was selected (RadioGroupItem uses data-state="checked" not checked attribute)
+      await expect(checkoutPage.shippingMethodOptions.first()).toHaveAttribute('data-state', 'checked', { timeout: 3000 })
       await page.waitForTimeout(500)
     }
     catch (e) {
@@ -261,7 +261,7 @@ test.describe('Checkout - Guest Checkout Flow', () => {
     try {
       await checkoutPage.waitForShippingMethods()
       await checkoutPage.selectShippingMethod(0)
-      await expect(checkoutPage.shippingMethodOptions.first()).toBeChecked({ timeout: 3000 })
+      await expect(checkoutPage.shippingMethodOptions.first()).toHaveAttribute('data-state', 'checked', { timeout: 3000 })
       await page.waitForTimeout(500)
       await checkoutPage.selectCashPayment()
       await expect(checkoutPage.cashPaymentOption).toBeChecked({ timeout: 3000 })
@@ -295,7 +295,7 @@ test.describe('Checkout - Guest Checkout Flow', () => {
     try {
       await checkoutPage.waitForShippingMethods()
       await checkoutPage.selectShippingMethod(0)
-      await expect(checkoutPage.shippingMethodOptions.first()).toBeChecked({ timeout: 3000 })
+      await expect(checkoutPage.shippingMethodOptions.first()).toHaveAttribute('data-state', 'checked', { timeout: 3000 })
       await page.waitForTimeout(500)
       await checkoutPage.selectCashPayment()
       await expect(checkoutPage.cashPaymentOption).toBeChecked({ timeout: 3000 })
@@ -331,7 +331,7 @@ test.describe('Checkout - Guest Checkout Flow', () => {
     try {
       await checkoutPage.waitForShippingMethods()
       await checkoutPage.selectShippingMethod(0)
-      await expect(checkoutPage.shippingMethodOptions.first()).toBeChecked({ timeout: 3000 })
+      await expect(checkoutPage.shippingMethodOptions.first()).toHaveAttribute('data-state', 'checked', { timeout: 3000 })
       await page.waitForTimeout(500)
       await checkoutPage.selectCashPayment()
       await expect(checkoutPage.cashPaymentOption).toBeChecked({ timeout: 3000 })
@@ -509,7 +509,7 @@ test.describe('Checkout - Component Screenshots', () => {
     try {
       await checkoutPage.waitForShippingMethods()
       await checkoutPage.selectShippingMethod(0)
-      await expect(checkoutPage.shippingMethodOptions.first()).toBeChecked({ timeout: 3000 })
+      await expect(checkoutPage.shippingMethodOptions.first()).toHaveAttribute('data-state', 'checked', { timeout: 3000 })
       await checkoutPage.selectCashPayment()
       await expect(checkoutPage.cashPaymentOption).toBeChecked({ timeout: 3000 })
       await page.waitForTimeout(500)
