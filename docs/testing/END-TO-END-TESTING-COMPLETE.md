@@ -278,29 +278,37 @@ npx tsx tests/fixtures/order-cleanup.ts
 
 ### HIGH PRIORITY
 
-1. **Fix Visual Regression Timeout Issues** (19 failing tests)
-   - **Issue:** Tests timing out when trying to fill `fullName` field
-   - **Root Cause:** Likely guest prompt not being handled correctly, or form not visible
-   - **Impact:** Cannot generate remaining 19 screenshot baselines
-   - **Next Steps:**
-     1. Debug guest prompt handling in visual tests
-     2. Add better waits for form field visibility
-     3. Update `CheckoutHelpers.fillAddress()` method
-     4. Regenerate all 28 baselines
+1. **Confirmation Page Visual Tests Skipped** (10 tests)
+   - **Issue:** Cart state not syncing to checkout store during test execution
+   - **Root Cause:** Pinia cart state not persisted during `page.goto()` navigation
+   - **Workaround:** Use client-side navigation via `CheckoutHelpers.addProductAndGoToCheckout()`
+   - **Tracking:** See PR #324 for investigation notes
+   - **Re-enable when:** Cart → Checkout state sync is fixed for SSR/hydration
 
-2. **Review Generated Baselines** (9 screenshots)
+### RESOLVED ✅
+
+2. **~~Fix Visual Regression Timeout Issues~~** → RESOLVED
+   - Silent catch blocks were hiding failures in test helpers
+   - Fixed by adding proper error throwing in:
+     - `waitForCartUpdate()` - throws when no cart indicator found
+     - `selectShippingMethod()` - throws when no shipping options found
+     - `waitForShippingMethods()` - improved logging
+
+3. **~~Extract Duplicate Navigation Logic~~** → RESOLVED
+   - Added `navigateToCheckoutClientSide()` and `addProductAndNavigateToCheckout()` to CriticalTestHelpers
+   - Reduced code duplication in 4 beforeEach blocks
+
+4. **~~Add Verification Assertions~~** → RESOLVED
+   - Added `expect(checkbox).toBeChecked()` assertions in `acceptTerms()`
+
+### MEDIUM PRIORITY
+
+5. **Review Generated Baselines** (9 screenshots)
    - **Action:** Manually review the 9 generated screenshots
    - **Purpose:** Validate UI/UX looks correct across viewports and locales
    - **Location:** `tests/visual-regression/checkout-flow.spec.ts-snapshots/`
 
-### MEDIUM PRIORITY
-
-3. **Generate Confirmation Page Baselines** (10 new tests)
-   - **Action:** Run confirmation page visual tests to generate baselines
-   - **Command:** `npx playwright test confirmation-page --config=playwright.visual-regression.config.ts`
-   - **Expected:** 10 new screenshots in `tests/visual-regression/confirmation-page.spec.ts-snapshots/`
-
-4. **Add to CI/CD Pipeline**
+6. **Add to CI/CD Pipeline**
    - Add `order-cleanup.ts` to test teardown in CI
    - Ensure test orders don't accumulate in staging/test databases
    - Add visual regression tests to CI (with baseline comparison)

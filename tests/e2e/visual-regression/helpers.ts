@@ -3,6 +3,10 @@
  *
  * Simplified helpers for completing checkout flows in visual regression tests.
  * These helpers abstract away the complexity of the checkout process.
+ *
+ * Uses client-side navigation (click-through cart page) rather than page.goto()
+ * because direct navigation triggers a full page reload that loses Pinia store
+ * state before it can be persisted to cookies/localStorage.
  */
 
 import type { Page } from '@playwright/test'
@@ -14,44 +18,34 @@ export class CheckoutHelpers {
   constructor(private page: Page) {}
 
   /**
-   * Add a product to cart and navigate to checkout
-   * Uses client-side navigation to preserve Pinia cart state
+   * Add a product to cart and navigate to checkout.
+   * Uses client-side navigation to preserve Pinia cart state.
+   * @throws Error if cart update verification fails
    */
   async addProductAndGoToCheckout() {
-    // Go to products page
     await this.page.goto(`${BASE_URL}/products`)
     await this.page.waitForLoadState('networkidle')
 
-    // Add first product to cart
     const addButton = this.page.locator('button').filter({ hasText: /add.*cart|añadir.*carrito|adaugă.*coș|добавить.*корзину/i }).first()
     await expect(addButton).toBeVisible({ timeout: 10000 })
     await addButton.click()
 
-    // Wait for cart to update (button text changes to "In Cart" / "En el Carrito")
     await this.waitForCartUpdate()
 
-    // Use CLIENT-SIDE navigation to preserve Pinia cart state
-    // (page.goto() causes full page reload which loses Pinia state before cookies persist)
-
-    // Find the VISIBLE cart link (different on mobile vs desktop)
-    // On mobile, the bottom nav has the cart link; on desktop, it's in the header
-    // We simply find any visible cart link and click it
+    // Click visible cart link (location differs on mobile vs desktop)
     const cartLink = this.page.locator('a[href*="/cart"]:visible').first()
     await expect(cartLink).toBeVisible({ timeout: 5000 })
     await cartLink.click()
 
     await this.page.waitForURL(/\/cart/, { timeout: 10000 })
     await this.page.waitForLoadState('networkidle')
-    await this.page.waitForTimeout(1000) // Wait for cart state to sync
+    await this.page.waitForTimeout(1000)
 
-    // Click Checkout button (client-side navigation preserves Pinia state)
-    // Scroll to make sure button is in view on mobile
     const checkoutButton = this.page.locator('button').filter({ hasText: /checkout|finalizar.*compra|proceder.*pago|оформить/i }).first()
     await checkoutButton.scrollIntoViewIfNeeded()
     await expect(checkoutButton).toBeVisible({ timeout: 5000 })
     await checkoutButton.click()
 
-    // Wait for checkout page
     await this.page.waitForURL(/\/checkout/, { timeout: 10000 })
     await this.page.waitForLoadState('networkidle')
     await this.page.waitForTimeout(1000)
@@ -81,7 +75,8 @@ export class CheckoutHelpers {
   }
 
   /**
-   * Fill shipping address
+   * Fill shipping address form
+   * @param address - Address fields to fill
    */
   async fillAddress(address: {
     fullName: string
@@ -90,71 +85,65 @@ export class CheckoutHelpers {
     postalCode: string
     country: string
   }) {
-    // Check if there are saved addresses and we need to select "Use new address"
+    // Handle saved addresses - select "Use new address" if visible
     const useNewAddressOption = this.page.locator('input[type="radio"][value="null"]').filter({ hasText: /use.*new.*address|usar.*nueva.*dirección|folosește.*adresă.*nouă|использовать.*новый.*адрес/i })
     if (await useNewAddressOption.isVisible({ timeout: 2000 }).catch(() => false)) {
       await useNewAddressOption.click()
       await this.page.waitForTimeout(500)
     }
 
-    // Wait for form to be visible - use the correct selector (id="fullName" and name="name")
-    await this.page.waitForSelector('#fullName, input[id="fullName"]', { timeout: 15000 })
-    await this.page.waitForTimeout(500) // Allow form to fully render
+    await this.page.waitForSelector('#fullName', { timeout: 15000 })
+    await this.page.waitForTimeout(500)
 
-    // Fill fullName (has id="fullName" but name="name")
     const fullNameInput = this.page.locator('#fullName').first()
     await expect(fullNameInput).toBeVisible({ timeout: 5000 })
     await fullNameInput.fill(address.fullName)
     await fullNameInput.blur()
     await this.page.waitForTimeout(300)
 
-    // Fill street
     const streetInput = this.page.locator('#street').first()
     await expect(streetInput).toBeVisible({ timeout: 5000 })
     await streetInput.fill(address.street)
     await streetInput.blur()
     await this.page.waitForTimeout(300)
 
-    // Fill city
     const cityInput = this.page.locator('#city').first()
     await expect(cityInput).toBeVisible({ timeout: 5000 })
     await cityInput.fill(address.city)
     await cityInput.blur()
     await this.page.waitForTimeout(300)
 
-    // Fill postal code
     const postalCodeInput = this.page.locator('#postalCode').first()
     await expect(postalCodeInput).toBeVisible({ timeout: 5000 })
     await postalCodeInput.fill(address.postalCode)
     await postalCodeInput.blur()
 
-    // Select country if select exists
     const countrySelect = this.page.locator('#country').first()
     if (await countrySelect.isVisible({ timeout: 2000 }).catch(() => false)) {
       await countrySelect.selectOption(address.country)
     }
 
-    // Wait for validation and any auto-complete
     await this.page.waitForTimeout(1000)
   }
 
   /**
-   * Wait for shipping methods to load
+   * Wait for shipping methods to load after address is filled
+   * @param timeout - Maximum time to wait in ms (default: 15000)
+   * @throws Error if no shipping methods appear within timeout
    */
   async waitForShippingMethods(timeout = 15000) {
-    // First wait a bit for the shipping calculation to start
     await this.page.waitForTimeout(1000)
 
-    // Wait for loading spinner to disappear (if exists)
+    // Wait for loading spinner to disappear if present
     const loadingSpinner = this.page.locator('[data-testid="shipping-loading"], .loading, .animate-spin')
     try {
       await expect(loadingSpinner).not.toBeVisible({ timeout: 5000 })
     }
-    catch {
-      // Loading spinner may not exist, continue
+    catch (error) {
+      // Loading spinner may not exist - this is expected in some UI states
+      console.debug(`Loading spinner check: ${error instanceof Error ? error.message : 'element not found'}`)
     }
 
-    // Try multiple selectors for shipping options
     const shippingSelectors = [
       '[data-testid="shipping-method"]',
       'input[type="radio"][name="shippingMethod"]',
@@ -166,7 +155,6 @@ export class CheckoutHelpers {
       'label:has-text("Envío") input[type="radio"]',
     ]
 
-    // Wait for any shipping option to appear
     for (const selector of shippingSelectors) {
       const option = this.page.locator(selector).first()
       if (await option.isVisible({ timeout: 2000 }).catch(() => false)) {
@@ -174,20 +162,20 @@ export class CheckoutHelpers {
       }
     }
 
-    // If no shipping options found, throw error
     throw new Error(`Shipping methods not found after ${timeout}ms. Tried selectors: ${shippingSelectors.join(', ')}`)
   }
 
   /**
    * Select shipping method by index (0-based)
+   * @param index - Index of shipping method to select (default: 0)
+   * @throws Error if no shipping method could be selected
    */
   async selectShippingMethod(index = 0) {
-    // Try multiple selectors for shipping options
     const selectors = [
       '[data-testid="shipping-method"]',
       'input[type="radio"][name="shippingMethod"]',
       'input[type="radio"][name="shipping"]',
-      '[id^="ship-"]', // RadioGroupItem with id="ship-${method.id}"
+      '[id^="ship-"]',
       '.shipping-method-selector label',
       'button[role="radio"]',
     ]
@@ -198,6 +186,7 @@ export class CheckoutHelpers {
       if (count > index) {
         await options.nth(index).click()
         await this.page.waitForTimeout(500)
+        console.log(`✅ Shipping method selected (selector: ${selector}, index: ${index})`)
         return
       }
     }
@@ -207,7 +196,11 @@ export class CheckoutHelpers {
     if (await anyOption.isVisible({ timeout: 2000 }).catch(() => false)) {
       await anyOption.click()
       await this.page.waitForTimeout(500)
+      console.log('✅ Shipping method selected (fallback selector)')
+      return
     }
+
+    throw new Error(`Failed to select shipping method at index ${index}. No shipping options found using any of the expected selectors.`)
   }
 
   /**
@@ -221,17 +214,20 @@ export class CheckoutHelpers {
   }
 
   /**
-   * Accept terms and conditions
+   * Accept terms and conditions checkboxes
+   * Verifies checkboxes are checked after clicking
    */
   async acceptTerms() {
     const termsCheckbox = this.page.locator('input[type="checkbox"][id="terms"], input[type="checkbox"][name="terms"]')
     if (await termsCheckbox.isVisible({ timeout: 3000 }).catch(() => false)) {
       await termsCheckbox.check()
+      await expect(termsCheckbox).toBeChecked({ timeout: 2000 })
     }
 
     const privacyCheckbox = this.page.locator('input[type="checkbox"][id="privacy"], input[type="checkbox"][name="privacy"]')
     if (await privacyCheckbox.isVisible({ timeout: 3000 }).catch(() => false)) {
       await privacyCheckbox.check()
+      await expect(privacyCheckbox).toBeChecked({ timeout: 2000 })
     }
 
     await this.page.waitForTimeout(500)
@@ -250,7 +246,8 @@ export class CheckoutHelpers {
 
   /**
    * Wait for cart to update after adding item
-   * Checks for button state change and loading spinners
+   * Verifies cart update by checking for button state change or cart badge
+   * @throws Error if cart update cannot be verified
    */
   private async waitForCartUpdate(): Promise<void> {
     await this.page.waitForLoadState('networkidle')
@@ -269,8 +266,9 @@ export class CheckoutHelpers {
         { timeout: 10000 },
       )
     }
-    catch {
-      // Continue anyway
+    catch (error) {
+      // Log but don't fail - spinner check is supplementary
+      console.warn(`Cart loading spinner check timed out: ${error instanceof Error ? error.message : String(error)}`)
     }
 
     // Verify cart updated by checking for "In Cart" button state or cart badge
@@ -287,11 +285,15 @@ export class CheckoutHelpers {
     for (const selector of cartIndicators) {
       const indicator = this.page.locator(selector).first()
       if (await indicator.isVisible({ timeout: 2000 }).catch(() => false)) {
+        console.log(`✅ Cart updated (verified via: ${selector.includes('button') ? 'button text changed' : 'cart badge'})`)
         return
       }
     }
 
-    // Fallback: wait a bit more for state to sync
-    await this.page.waitForTimeout(2000)
+    // Cart update verification failed - throw error instead of silently continuing
+    throw new Error(
+      `Cart update verification failed: none of the expected cart indicators were visible after adding item. `
+      + `Tried indicators: ${cartIndicators.join(', ')}`,
+    )
   }
 }

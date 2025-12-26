@@ -8,14 +8,20 @@
  *
  * Coverage: 10 screenshots
  *
- * NOTE: These tests are currently skipped due to a known issue with
- * orderData calculation showing 0.00 subtotal on checkout page.
- * The checkout store's calculateOrderData isn't properly receiving
- * cart item prices during test execution. This needs investigation
- * into how cart state is synced to checkout store during SSR/hydration.
+ * ⚠️ SKIPPED: These tests are currently skipped due to a known issue.
  *
- * Main checkout-flow.spec.ts tests (22 passed) validate the checkout UI.
- * TODO: Fix orderData sync issue and re-enable these tests.
+ * Issue: Cart state not syncing to checkout store during test execution
+ * - orderData.calculateOrderData shows 0.00€ subtotal
+ * - Shipping methods fail to load (require valid subtotal)
+ * - Root cause: Pinia cart state not persisted during page.goto() navigation
+ *
+ * Tracking: See PR #324 review comments for investigation notes
+ * @see https://github.com/MoldovaDirect/MoldovaDirect/pull/324
+ *
+ * Workaround: Use client-side navigation (click-through) instead of page.goto()
+ * This is implemented in CheckoutHelpers.addProductAndGoToCheckout()
+ *
+ * Re-enable when: Cart → Checkout state sync is fixed for SSR/hydration
  */
 
 import { test, expect } from '@playwright/test'

@@ -153,8 +153,7 @@ export class CheckoutPage {
     this.shippingSectionComplete = this.shippingMethodSection.locator('.section-complete')
     this.paymentSectionComplete = this.paymentSection.locator('.section-complete')
 
-    // Address Form - Updated for Hybrid Checkout with single fullName field
-    // Note: fullName field has id="fullName" but name="name" (not name="fullName")
+    // Address Form - Hybrid Checkout uses single fullName field (split by component)
     this.addressForm = page.locator('[class*="AddressForm"], [data-testid="address-form"]')
     this.addressFields = {
       fullName: page.locator('#fullName'),
@@ -310,8 +309,9 @@ export class CheckoutPage {
   // ===========================================
 
   /**
-   * Fill shipping address form
-   * Uses fullName field which is internally split into firstName/lastName
+   * Fill shipping address form.
+   * The fullName value is split into firstName/lastName by the AddressForm component.
+   * @param address - Address fields to fill
    */
   async fillShippingAddress(address: {
     fullName: string
@@ -321,47 +321,40 @@ export class CheckoutPage {
     country: string
     phone?: string
   }) {
-    // Check if there are saved addresses and we need to select "Use new address"
+    // Handle saved addresses - select "Use new address" if visible
     const useNewAddressOption = this.page.locator('input[type="radio"][value="null"]').filter({ hasText: /use.*new.*address|usar.*nueva.*dirección|folosește.*adresă.*nouă|использовать.*новый.*адрес/i })
     if (await useNewAddressOption.isVisible({ timeout: 2000 }).catch(() => false)) {
       await useNewAddressOption.click()
       await this.page.waitForTimeout(500)
     }
 
-    // Wait for form to be visible - the correct selector is #fullName (has id="fullName" and name="name")
     await this.page.waitForSelector('#fullName', { timeout: 15000 })
-    await this.page.waitForTimeout(500) // Allow form to fully render
+    await this.page.waitForTimeout(500)
 
-    // Fill fullName (has id="fullName" but name="name")
     await expect(this.addressFields.fullName).toBeVisible({ timeout: 5000 })
     await this.addressFields.fullName.fill(address.fullName)
     await this.addressFields.fullName.blur()
     await this.page.waitForTimeout(300)
 
-    // Fill street
     await expect(this.addressFields.street).toBeVisible({ timeout: 5000 })
     await this.addressFields.street.fill(address.street)
     await this.addressFields.street.blur()
     await this.page.waitForTimeout(300)
 
-    // Fill city
     await expect(this.addressFields.city).toBeVisible({ timeout: 5000 })
     await this.addressFields.city.fill(address.city)
     await this.addressFields.city.blur()
     await this.page.waitForTimeout(300)
 
-    // Fill postal code
     await expect(this.addressFields.postalCode).toBeVisible({ timeout: 5000 })
     await this.addressFields.postalCode.fill(address.postalCode)
     await this.addressFields.postalCode.blur()
 
-    // Select country if select exists
     const countryLocator = this.addressFields.country
     if (await countryLocator.isVisible({ timeout: 2000 }).catch(() => false)) {
       await countryLocator.selectOption(address.country)
     }
 
-    // Fill phone if provided
     if (address.phone) {
       const phoneLocator = this.addressFields.phone
       if (await phoneLocator.isVisible({ timeout: 2000 }).catch(() => false)) {
@@ -369,7 +362,6 @@ export class CheckoutPage {
       }
     }
 
-    // Wait for validation and any auto-complete
     await this.page.waitForTimeout(1000)
   }
 

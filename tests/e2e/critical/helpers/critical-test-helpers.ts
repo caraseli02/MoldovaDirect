@@ -325,11 +325,61 @@ export class CriticalTestHelpers {
   }
 
   /**
-   * Navigate to checkout page
+   * Navigate to checkout page using server-side navigation
+   * Note: This may lose Pinia state - use navigateToCheckoutClientSide() instead
    */
   async goToCheckout(): Promise<void> {
     await this.page.goto('/checkout')
     await this.page.waitForURL(/\/checkout/, { timeout: 5000 })
+  }
+
+  /**
+   * Navigate from cart to checkout using client-side navigation
+   * Preserves Pinia store state (cart items, etc.) during navigation
+   *
+   * Use this instead of page.goto('/checkout') which triggers a full page
+   * reload and loses Pinia state before it can be persisted.
+   *
+   * @throws Error if checkout button is not found or navigation fails
+   */
+  async navigateToCheckoutClientSide(): Promise<void> {
+    // Click cart link to navigate to cart page
+    const cartLink = this.page.locator('a[href*="/cart"]').first()
+    await cartLink.click()
+    await this.page.waitForURL(/\/cart/, { timeout: 10000 })
+    await this.page.waitForLoadState('networkidle')
+
+    // Click checkout button (supports multiple locales)
+    const checkoutButton = this.page.locator(
+      'button:has-text("Checkout"), button:has-text("Finalizar compra"), button:has-text("Finalizar Compra"), button:has-text("Оформить")',
+    ).first()
+
+    // Wait for button to be visible
+    try {
+      await checkoutButton.waitFor({ state: 'visible', timeout: 5000 })
+    }
+    catch {
+      throw new Error('Checkout button not found on cart page. Cart may be empty or button text differs from expected.')
+    }
+
+    await checkoutButton.click()
+
+    // Wait for checkout page
+    await this.page.waitForURL(/\/checkout/, { timeout: 10000 })
+    await this.page.waitForLoadState('networkidle')
+    await this.page.waitForTimeout(1000) // Allow Vue components to mount
+  }
+
+  /**
+   * Add product to cart and navigate to checkout (full flow)
+   * Uses client-side navigation to preserve Pinia state
+   *
+   * @throws Error if any step fails
+   */
+  async addProductAndNavigateToCheckout(): Promise<void> {
+    await this.addFirstProductToCart()
+    await this.page.waitForTimeout(500) // Allow cart state to persist
+    await this.navigateToCheckoutClientSide()
   }
 
   /**

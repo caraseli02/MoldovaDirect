@@ -105,30 +105,7 @@ test.describe('Checkout - Empty State (No Items)', () => {
 test.describe('Checkout - Guest Checkout Flow', () => {
   test.beforeEach(async ({ page }) => {
     const helpers = new CriticalTestHelpers(page)
-
-    // Add product to cart
-    await helpers.addFirstProductToCart()
-
-    // Use CLIENT-SIDE navigation to preserve Pinia state
-    // Instead of page.goto() which triggers a full page reload (losing state),
-    // we click the cart link and then the checkout button
-    await page.waitForTimeout(500)
-
-    // Click cart icon to go to cart page (client-side navigation)
-    const cartLink = page.locator('a[href*="/cart"]').first()
-    await cartLink.click()
-    await page.waitForURL(/\/cart/, { timeout: 10000 })
-    await page.waitForLoadState('networkidle')
-
-    // Click Checkout button (client-side navigation preserves Pinia state)
-    const checkoutButton = page.locator('button:has-text("Checkout"), button:has-text("Finalizar compra"), button:has-text("Оформить")').first()
-    await expect(checkoutButton).toBeVisible({ timeout: 5000 })
-    await checkoutButton.click()
-
-    // Wait for checkout page
-    await page.waitForURL(/\/checkout/, { timeout: 10000 })
-    await page.waitForLoadState('networkidle')
-    await page.waitForTimeout(1000)
+    await helpers.addProductAndNavigateToCheckout()
   })
 
   test('guest checkout prompt - desktop EN', async ({ page }) => {
@@ -431,22 +408,7 @@ test.describe('Checkout - Multi-Locale Coverage', () => {
 test.describe('Checkout - Component Screenshots', () => {
   test.beforeEach(async ({ page }) => {
     const helpers = new CriticalTestHelpers(page)
-    await helpers.addFirstProductToCart()
-    await page.waitForTimeout(500)
-
-    // Use client-side navigation to preserve Pinia state
-    const cartLink = page.locator('a[href*="/cart"]').first()
-    await cartLink.click()
-    await page.waitForURL(/\/cart/, { timeout: 10000 })
-    await page.waitForLoadState('networkidle')
-
-    const checkoutButton = page.locator('button:has-text("Checkout"), button:has-text("Finalizar compra"), button:has-text("Оформить")').first()
-    await expect(checkoutButton).toBeVisible({ timeout: 5000 })
-    await checkoutButton.click()
-
-    await page.waitForURL(/\/checkout/, { timeout: 10000 })
-    await page.waitForLoadState('networkidle')
-    await page.waitForTimeout(1000)
+    await helpers.addProductAndNavigateToCheckout()
   })
 
   test('order summary sidebar - desktop', async ({ page }) => {
@@ -550,22 +512,7 @@ test.describe('Checkout - Component Screenshots', () => {
 test.describe('Checkout - Error States', () => {
   test.beforeEach(async ({ page }) => {
     const helpers = new CriticalTestHelpers(page)
-    await helpers.addFirstProductToCart()
-    await page.waitForTimeout(500)
-
-    // Use client-side navigation to preserve Pinia state
-    const cartLink = page.locator('a[href*="/cart"]').first()
-    await cartLink.click()
-    await page.waitForURL(/\/cart/, { timeout: 10000 })
-    await page.waitForLoadState('networkidle')
-
-    const checkoutButton = page.locator('button:has-text("Checkout"), button:has-text("Finalizar compra"), button:has-text("Оформить")').first()
-    await expect(checkoutButton).toBeVisible({ timeout: 5000 })
-    await checkoutButton.click()
-
-    await page.waitForURL(/\/checkout/, { timeout: 10000 })
-    await page.waitForLoadState('networkidle')
-    await page.waitForTimeout(1000)
+    await helpers.addProductAndNavigateToCheckout()
   })
 
   test('address validation errors - desktop', async ({ page }) => {
@@ -711,22 +658,7 @@ test.describe('Checkout - Express Checkout Banner', () => {
 test.describe('Checkout - Tablet Viewport', () => {
   test.beforeEach(async ({ page }) => {
     const helpers = new CriticalTestHelpers(page)
-    await helpers.addFirstProductToCart()
-    await page.waitForTimeout(500)
-
-    // Use client-side navigation to preserve Pinia state
-    const cartLink = page.locator('a[href*="/cart"]').first()
-    await cartLink.click()
-    await page.waitForURL(/\/cart/, { timeout: 10000 })
-    await page.waitForLoadState('networkidle')
-
-    const checkoutButton = page.locator('button:has-text("Checkout"), button:has-text("Finalizar compra"), button:has-text("Оформить")').first()
-    await expect(checkoutButton).toBeVisible({ timeout: 5000 })
-    await checkoutButton.click()
-
-    await page.waitForURL(/\/checkout/, { timeout: 10000 })
-    await page.waitForLoadState('networkidle')
-    await page.waitForTimeout(1000)
+    await helpers.addProductAndNavigateToCheckout()
   })
 
   test('checkout initial state - tablet', async ({ page }) => {
