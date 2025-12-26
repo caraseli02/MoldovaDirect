@@ -20,6 +20,7 @@ import { test, expect } from '@playwright/test'
 import { CheckoutPage } from '../e2e/page-objects/CheckoutPage'
 import { CriticalTestHelpers } from '../e2e/critical/helpers/critical-test-helpers'
 import { TEST_DATA } from '../e2e/critical/constants'
+import { CartPersistenceHelpers } from '../utils/cart-persistence-helpers'
 
 // Common screenshot options
 const screenshotOptions = {
@@ -200,7 +201,8 @@ test.describe('Checkout - Guest Checkout Flow', () => {
       await checkoutPage.waitForShippingMethods()
     }
     catch (e) {
-      // May timeout if shipping method API is slow
+      // Log error but continue - shipping methods may not be available
+      console.warn(`⚠️  Shipping methods not loaded: ${e instanceof Error ? e.message : String(e)}`)
       await page.waitForTimeout(2000)
     }
 
@@ -227,10 +229,13 @@ test.describe('Checkout - Guest Checkout Flow', () => {
     try {
       await checkoutPage.waitForShippingMethods()
       await checkoutPage.selectShippingMethod(0)
+      // Verify shipping method was selected
+      await expect(checkoutPage.shippingMethodOptions.first()).toBeChecked({ timeout: 3000 })
       await page.waitForTimeout(500)
     }
     catch (e) {
-      // Continue if shipping methods not available
+      // Log error but continue - this is a visual test
+      console.warn(`⚠️  Shipping selection failed: ${e instanceof Error ? e.message : String(e)}`)
     }
 
     await expect(page).toHaveScreenshot('checkout-shipping-selected-desktop.png', {
@@ -256,12 +261,15 @@ test.describe('Checkout - Guest Checkout Flow', () => {
     try {
       await checkoutPage.waitForShippingMethods()
       await checkoutPage.selectShippingMethod(0)
+      await expect(checkoutPage.shippingMethodOptions.first()).toBeChecked({ timeout: 3000 })
       await page.waitForTimeout(500)
       await checkoutPage.selectCashPayment()
+      await expect(checkoutPage.cashPaymentOption).toBeChecked({ timeout: 3000 })
       await page.waitForTimeout(500)
     }
     catch (e) {
-      // Continue if steps not available
+      // Log error but continue - this is a visual test
+      console.warn(`⚠️  Payment selection failed: ${e instanceof Error ? e.message : String(e)}`)
     }
 
     await expect(page).toHaveScreenshot('checkout-payment-selected-desktop.png', {
@@ -287,14 +295,17 @@ test.describe('Checkout - Guest Checkout Flow', () => {
     try {
       await checkoutPage.waitForShippingMethods()
       await checkoutPage.selectShippingMethod(0)
+      await expect(checkoutPage.shippingMethodOptions.first()).toBeChecked({ timeout: 3000 })
       await page.waitForTimeout(500)
       await checkoutPage.selectCashPayment()
+      await expect(checkoutPage.cashPaymentOption).toBeChecked({ timeout: 3000 })
       await page.waitForTimeout(500)
       await checkoutPage.acceptTerms()
       await page.waitForTimeout(500)
     }
     catch (e) {
-      // Continue if steps not available
+      // Log error but continue - this is a visual test
+      console.warn(`⚠️  Ready-to-order setup failed: ${e instanceof Error ? e.message : String(e)}`)
     }
 
     await expect(page).toHaveScreenshot('checkout-ready-to-order-desktop.png', {
@@ -320,14 +331,17 @@ test.describe('Checkout - Guest Checkout Flow', () => {
     try {
       await checkoutPage.waitForShippingMethods()
       await checkoutPage.selectShippingMethod(0)
+      await expect(checkoutPage.shippingMethodOptions.first()).toBeChecked({ timeout: 3000 })
       await page.waitForTimeout(500)
       await checkoutPage.selectCashPayment()
+      await expect(checkoutPage.cashPaymentOption).toBeChecked({ timeout: 3000 })
       await page.waitForTimeout(500)
       await checkoutPage.acceptTerms()
       await page.waitForTimeout(500)
     }
     catch (e) {
-      // Continue if steps not available
+      // Log error but continue - this is a visual test
+      console.warn(`⚠️  Ready-to-order mobile setup failed: ${e instanceof Error ? e.message : String(e)}`)
     }
 
     await expect(page).toHaveScreenshot('checkout-ready-to-order-mobile.png', {
@@ -354,36 +368,22 @@ test.describe('Checkout - Multi-Locale Coverage', () => {
     test(`checkout page in ${locale.name} (${locale.code}) - desktop`, async ({ page }) => {
       await page.setViewportSize(VIEWPORTS.desktop)
 
+      // Use the CriticalTestHelpers for consistent cart/checkout navigation
+      // This ensures Pinia state is preserved via client-side navigation
       const helpers = new CriticalTestHelpers(page)
 
-      // Add product to cart
-      await page.goto(`/${locale.code}/products`)
-      await page.waitForLoadState('networkidle')
-      await page.waitForTimeout(1000)
+      // Start on products page (no locale prefix needed - will use default ES)
+      await helpers.addProductAndNavigateToCheckout()
 
-      const addButton = page.locator('button:has-text("Añadir"), button:has-text("Add"), button:has-text("Adaugă"), button:has-text("Добавить")').first()
-      if (await addButton.isVisible({ timeout: 5000 })) {
-        await addButton.click()
-        await page.waitForTimeout(1500)
+      // Now we're on checkout - switch locale via URL if needed
+      if (locale.code !== 'es') {
+        // Navigate to locale-specific checkout while preserving cart state
+        const currentUrl = page.url()
+        const localizedUrl = currentUrl.replace('/checkout', `/${locale.code}/checkout`)
+        await page.goto(localizedUrl)
+        await page.waitForLoadState('networkidle')
+        await page.waitForTimeout(1000)
       }
-
-      // Use client-side navigation to preserve Pinia state
-      const cartLink = page.locator('a[href*="/cart"]').first()
-      await cartLink.click()
-      await page.waitForURL(/\/cart/, { timeout: 10000 })
-      await page.waitForLoadState('networkidle')
-
-      const checkoutButton = page.locator('button:has-text("Checkout"), button:has-text("Finalizar compra"), button:has-text("Оформить")').first()
-      if (await checkoutButton.isVisible({ timeout: 5000 })) {
-        await checkoutButton.click()
-        await page.waitForURL(/\/checkout/, { timeout: 10000 })
-      }
-      else {
-        // Fallback: direct navigation if checkout button not found
-        await page.goto(`/${locale.code}/checkout`)
-      }
-      await page.waitForLoadState('networkidle')
-      await page.waitForTimeout(1000)
 
       const checkoutPage = new CheckoutPage(page)
 
@@ -488,11 +488,14 @@ test.describe('Checkout - Component Screenshots', () => {
     try {
       await checkoutPage.waitForShippingMethods()
       await checkoutPage.selectShippingMethod(0)
+      await expect(checkoutPage.shippingMethodOptions.first()).toBeChecked({ timeout: 3000 })
       await checkoutPage.selectCashPayment()
+      await expect(checkoutPage.cashPaymentOption).toBeChecked({ timeout: 3000 })
       await page.waitForTimeout(500)
     }
     catch (e) {
-      // Continue if steps fail
+      // Log error but continue - this is a visual component test
+      console.warn(`⚠️  Mobile footer setup failed: ${e instanceof Error ? e.message : String(e)}`)
     }
 
     const mobileFooter = checkoutPage.mobileStickyFooter

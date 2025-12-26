@@ -9,6 +9,7 @@
 
 import type { Page } from '@playwright/test'
 import { SELECTORS, TIMEOUTS, TEST_DATA } from '../constants'
+import { CartPersistenceHelpers } from '../../../utils/cart-persistence-helpers'
 
 export class CriticalTestHelpers {
   constructor(private page: Page) {}
@@ -374,12 +375,31 @@ export class CriticalTestHelpers {
    * Add product to cart and navigate to checkout (full flow)
    * Uses client-side navigation to preserve Pinia state
    *
+   * Note: Client-side navigation (via link clicks) preserves Pinia state without
+   * needing cookie persistence. The button state change in addFirstProductToCart
+   * already confirms the cart has items.
+   *
    * @throws Error if any step fails
    */
   async addProductAndNavigateToCheckout(): Promise<void> {
+    // Add product - waitForCartUpdate already verifies cart has items
+    // by checking button text changed to "En el carrito"
     await this.addFirstProductToCart()
-    await this.page.waitForTimeout(500) // Allow cart state to persist
+
+    // Try to force cart save for cookie backup (best effort)
+    // Client-side navigation will preserve Pinia state regardless
+    const cartHelpers = new CartPersistenceHelpers(this.page)
+    await cartHelpers.forceCartSave()
+
+    // Cart verification already happened in addFirstProductToCart
+    // The button showing "En el carrito" confirms items are in Pinia
+    console.log('✅ Cart has items (verified via button state)')
+
+    // Use client-side navigation to preserve Pinia state
     await this.navigateToCheckoutClientSide()
+
+    // Wait for checkout page to be ready
+    await this.page.waitForTimeout(1000)
   }
 
   /**
