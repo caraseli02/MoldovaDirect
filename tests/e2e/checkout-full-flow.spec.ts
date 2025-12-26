@@ -127,13 +127,17 @@ test.describe('Full Checkout Flow - Hybrid Progressive', () => {
     await expect(checkoutPage.placeOrderButton).toBeVisible({ timeout: 5000 })
     console.log('✅ Step 8: Place order button visible')
 
-    // Note: Actually placing order would create real order
-    // For full test, uncomment below:
-    // await checkoutPage.placeOrder()
-    // await expect(page).toHaveURL(/\/checkout\/confirmation/, { timeout: 15000 })
-    // console.log('✅ Step 9: Order placed, on confirmation page')
+    // Place order and verify navigation to confirmation page
+    await checkoutPage.placeOrder()
+    await expect(page).toHaveURL(/\/checkout\/confirmation/, { timeout: 15000 })
+    console.log('✅ Step 9: Order placed, on confirmation page')
 
-    console.log('\n🎉 Full checkout flow completed successfully!')
+    // Verify confirmation page elements
+    const confirmationTitle = page.locator('h1, h2').filter({ hasText: /order.*confirmed|pedido.*confirmado|заказ.*подтвержден|comandă.*confirmată/i })
+    await expect(confirmationTitle).toBeVisible({ timeout: 5000 })
+    console.log('✅ Step 10: Confirmation title visible')
+
+    console.log('\n🎉 Full checkout flow completed successfully - Order placed!')
   })
 
   test('Complete checkout flow as guest user', async ({ page }) => {
@@ -197,7 +201,17 @@ test.describe('Full Checkout Flow - Hybrid Progressive', () => {
     // Verify form is complete
     await expect(checkoutPage.placeOrderButton).toBeVisible({ timeout: 5000 })
 
-    console.log('\n🎉 Guest checkout flow validated successfully!')
+    // Step 10: Place order
+    await checkoutPage.placeOrder()
+    await expect(page).toHaveURL(/\/checkout\/confirmation/, { timeout: 15000 })
+    console.log('✅ Step 10: Order placed, on confirmation page')
+
+    // Verify confirmation page elements
+    const confirmationTitle = page.locator('h1, h2').filter({ hasText: /order.*confirmed|pedido.*confirmado|заказ.*подтвержден|comandă.*confirmată/i })
+    await expect(confirmationTitle).toBeVisible({ timeout: 5000 })
+    console.log('✅ Step 11: Confirmation title visible')
+
+    console.log('\n🎉 Guest checkout flow completed successfully - Order placed!')
   })
 
   test('Express checkout for returning user with saved address', async ({ page }) => {
