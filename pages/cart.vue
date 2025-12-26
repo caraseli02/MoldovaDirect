@@ -1,13 +1,40 @@
 <template>
-  <div class="py-4 md:py-12 pb-32 md:pb-12">
-    <div class="container px-4 md:px-6">
-      <h1 class="text-2xl md:text-4xl font-bold mb-4 md:mb-8 text-gray-900 dark:text-white">
-        {{ $t('common.cart') }}
-      </h1>
+  <div class="min-h-screen bg-zinc-50 dark:bg-zinc-900 py-4 md:py-8 pb-48 md:pb-12">
+    <div class="container px-4 md:px-6 max-w-6xl mx-auto">
+      <!-- Header -->
+      <div class="flex items-center justify-between mb-6 md:mb-8">
+        <div>
+          <h1 class="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">
+            {{ $t('common.cart') }}
+          </h1>
+          <p class="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
+            {{ $t('cart.itemCount', { count: itemCount }) }}
+          </p>
+        </div>
+        <NuxtLink
+          :to="localePath('/products')"
+          class="hidden md:flex items-center gap-2 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium transition-colors"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+            />
+          </svg>
+          {{ $t('common.continueShopping') }}
+        </NuxtLink>
+      </div>
 
       <CommonErrorBoundary
         :fallback-action="() => navigateTo(localePath('/products'))"
-        fallback-action-text="Continuar comprando"
+        :fallback-action-text="$t('common.continueShopping')"
         @error="handleCartError"
       >
         <!-- Loading State -->
@@ -18,10 +45,10 @@
           :aria-label="$t('common.loading')"
         >
           <div
-            class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"
+            class="animate-spin rounded-full h-10 w-10 border-2 border-zinc-200 border-t-primary-600 mx-auto"
             aria-hidden="true"
           ></div>
-          <p class="mt-4 text-gray-600 dark:text-gray-400">
+          <p class="mt-4 text-zinc-500 dark:text-zinc-400">
             {{ $t('common.loading') }}
           </p>
         </div>
@@ -29,158 +56,195 @@
         <!-- Empty Cart -->
         <div
           v-else-if="isEmpty"
-          class="text-center py-20"
+          class="text-center py-20 px-4"
           data-testid="empty-cart-message"
           role="status"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-16 w-16 text-gray-400 dark:text-gray-500 mx-auto mb-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            aria-hidden="true"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-            />
-          </svg>
-          <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-2">
-            {{ $t('products.cartEmpty')
-            }}
+          <div class="w-20 h-20 bg-zinc-100 dark:bg-zinc-800 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg
+              class="h-10 w-10 text-zinc-400 dark:text-zinc-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+              />
+            </svg>
+          </div>
+          <h2 class="text-xl md:text-2xl font-semibold text-zinc-900 dark:text-white mb-2">
+            {{ $t('products.cartEmpty') }}
           </h2>
-          <p class="text-gray-600 dark:text-gray-400 mb-6 px-4">
+          <p class="text-zinc-500 dark:text-zinc-400 mb-8 max-w-md mx-auto">
             {{ $t('products.cartEmptyDescription') }}
           </p>
           <NuxtLink
             :to="localePath('/products')"
             :aria-label="$t('common.continueShopping')"
-            class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors min-h-[44px] inline-flex items-center justify-center focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+            class="inline-flex items-center justify-center gap-2 bg-primary-600 text-white px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors font-medium min-h-[44px] focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
           >
             {{ $t('common.continueShopping') }}
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M17 8l4 4m0 0l-4 4m4-4H3"
+              />
+            </svg>
           </NuxtLink>
         </div>
 
-        <!-- Cart Items -->
+        <!-- Cart Content -->
         <div
           v-else
-          class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8"
+          class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8"
         >
-          <!-- Cart Items List -->
-          <div class="lg:col-span-2 space-y-6">
-            <!-- Bulk Operations -->
-            <CartBulkOperations />
+          <!-- Left Column: Cart Items -->
+          <div class="lg:col-span-2 space-y-4">
+            <!-- Shipping Progress -->
+            <CartShippingProgress :subtotal="subtotal" />
 
             <!-- Cart Items -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-              <div class="p-4 md:p-6">
-                <div class="flex items-center justify-between mb-4">
-                  <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-                    {{ $t('common.cart') }} ({{ itemCount
-                    }})
-                  </h2>
-
-                  <!-- Select All Toggle -->
-                  <div class="flex items-center gap-2">
-                    <UiCheckbox
-                      id="select-all"
-                      :checked="allItemsSelected"
-                      @update:checked="() => toggleSelectAll()"
-                    />
-                    <UiLabel
-                      for="select-all"
-                      class="text-sm text-muted-foreground"
-                    >
-                      {{ $t(allItemsSelected ? 'common.deselectAll' : 'common.selectAll') }}
-                    </UiLabel>
-                  </div>
-                </div>
-
-                <div class="space-y-2 md:space-y-4">
-                  <CartItem
-                    v-for="item in items"
-                    :key="item.id"
-                    :item="{
-                      id: item.id,
-                      product: {
-                        id: item.product.id,
-                        name: item.product.name,
-                        price: item.product.price,
-                        images: [...item.product.images],
-                        stock: item.product.stock,
-                      },
-                      quantity: item.quantity,
-                    }"
-                    :loading="loading"
-                    :data-testid="`cart-item-${item.product.id}`"
-                    @update-quantity="safeUpdateQuantity"
-                    @remove-item="safeRemoveItem"
-                    @swipe-remove="handleSwipeRemove"
-                    @save-for-later="handleSaveForLater"
-                    @toggle-selection="handleToggleSelection"
-                  />
-                </div>
-              </div>
+            <div class="space-y-3">
+              <CartItem
+                v-for="item in items"
+                :key="item.id"
+                :item="{
+                  id: item.id,
+                  product: {
+                    id: item.product.id,
+                    name: item.product.name,
+                    price: item.product.price,
+                    images: [...item.product.images],
+                    stock: item.product.stock,
+                  },
+                  quantity: item.quantity,
+                }"
+                :loading="loading"
+                :data-testid="`cart-item-${item.product.id}`"
+                @update-quantity="safeUpdateQuantity"
+                @remove-item="safeRemoveItem"
+                @swipe-remove="handleSwipeRemove"
+                @save-for-later="handleSaveForLater"
+                @toggle-selection="handleToggleSelection"
+              />
             </div>
 
             <!-- Saved for Later -->
             <CartSavedForLater />
 
-            <!-- Recommendations -->
+            <!-- Recommendations (Mobile: horizontal scroll) -->
             <CartRecommendations />
           </div>
 
-          <!-- Cart Summary - Desktop -->
+          <!-- Right Column: Order Summary (Desktop) -->
           <div class="hidden lg:block lg:col-span-1">
-            <div
-              class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 sticky top-4"
-            >
-              <div class="p-6">
-                <h2 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
-                  {{ $t('common.orderSummary') }}
-                </h2>
+            <div class="bg-white dark:bg-zinc-800/60 rounded-2xl border border-zinc-200 dark:border-zinc-700/50 p-6 sticky top-24">
+              <h2 class="text-lg font-semibold text-zinc-900 dark:text-white mb-6">
+                {{ $t('common.orderSummary') }}
+              </h2>
 
-                <div class="space-y-3">
-                  <div class="flex justify-between text-sm">
-                    <span class="text-gray-600 dark:text-gray-400">{{ $t('common.subtotal') }}</span>
-                    <span class="font-medium text-gray-900 dark:text-white">{{ formattedSubtotal }}</span>
-                  </div>
-
-                  <div class="flex justify-between text-sm">
-                    <span class="text-gray-600 dark:text-gray-400">{{ $t('common.shipping') }}</span>
-                    <span class="font-medium text-gray-900 dark:text-white">{{ $t('cart.shippingCalculatedAtCheckout') }}</span>
-                  </div>
-
-                  <div class="border-t border-gray-200 dark:border-gray-700 pt-3">
-                    <div class="flex justify-between">
-                      <span class="text-base font-semibold text-gray-900 dark:text-white">{{ $t('common.total')
-                      }}</span>
-                      <span class="text-base font-semibold text-gray-900 dark:text-white">{{ formattedSubtotal }}</span>
-                    </div>
-                  </div>
+              <!-- Summary Details -->
+              <div class="space-y-4 pb-4">
+                <div class="flex justify-between">
+                  <span class="text-zinc-500 dark:text-zinc-400">{{ $t('common.subtotal') }}</span>
+                  <span class="text-zinc-900 dark:text-white font-medium">{{ formattedSubtotal }}</span>
                 </div>
+                <div class="flex justify-between">
+                  <span class="text-zinc-500 dark:text-zinc-400">{{ $t('common.shipping') }}</span>
+                  <span class="text-zinc-500 dark:text-zinc-400">{{ $t('cart.shippingCalculatedAtCheckout') }}</span>
+                </div>
+                <div
+                  v-if="savings > 0"
+                  class="flex justify-between text-emerald-600 dark:text-emerald-400"
+                >
+                  <span>{{ $t('cart.youSave') }}</span>
+                  <span class="font-medium">-{{ formatPrice(savings) }}</span>
+                </div>
+              </div>
 
-                <div class="mt-6 space-y-3">
-                  <UiButton
-                    size="lg"
-                    :aria-label="$t('common.proceedToCheckout')"
-                    class="w-full bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium cursor-pointer min-h-[44px] focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
-                    :disabled="loading || isEmpty"
-                    @click="goToCheckout"
-                  >
-                    {{ $t('common.checkout') }}
-                  </UiButton>
+              <!-- Total -->
+              <div class="border-t border-zinc-200 dark:border-zinc-700 pt-4 mb-6">
+                <div class="flex justify-between items-center">
+                  <span class="text-lg font-semibold text-zinc-900 dark:text-white">{{ $t('common.total') }}</span>
+                  <span class="text-2xl font-bold text-zinc-900 dark:text-white">{{ formattedSubtotal }}</span>
+                </div>
+              </div>
 
-                  <NuxtLink
-                    :to="localePath('/products')"
-                    :aria-label="$t('common.continueShopping')"
-                    class="block w-full text-center py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-gray-900 dark:text-white min-h-[44px] inline-flex items-center justify-center focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2"
+              <!-- Checkout Button -->
+              <button
+                :aria-label="$t('common.proceedToCheckout')"
+                :disabled="loading || isEmpty"
+                class="w-full py-4 bg-primary-600 text-white text-base font-semibold rounded-xl hover:bg-primary-700 active:bg-primary-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 min-h-[52px] focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+                @click="goToCheckout"
+              >
+                <span>{{ $t('common.checkout') }}</span>
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
+                </svg>
+              </button>
+
+              <!-- Continue Shopping -->
+              <NuxtLink
+                :to="localePath('/products')"
+                class="block w-full text-center py-3 mt-3 border border-zinc-200 dark:border-zinc-700 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors text-zinc-700 dark:text-zinc-300 font-medium min-h-[48px] flex items-center justify-center"
+              >
+                {{ $t('common.continueShopping') }}
+              </NuxtLink>
+
+              <!-- Trust Signals -->
+              <div class="mt-6 pt-6 border-t border-zinc-100 dark:border-zinc-700/50 space-y-3">
+                <div class="flex items-center gap-3 text-sm text-zinc-500 dark:text-zinc-400">
+                  <svg
+                    class="w-5 h-5 text-emerald-500 flex-shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
-                    {{ $t('common.continueShopping') }}
-                  </NuxtLink>
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                    />
+                  </svg>
+                  <span>{{ $t('cart.secureCheckout') }}</span>
+                </div>
+                <div class="flex items-center gap-3 text-sm text-zinc-500 dark:text-zinc-400">
+                  <svg
+                    class="w-5 h-5 text-emerald-500 flex-shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                    />
+                  </svg>
+                  <span>{{ $t('cart.allCardsAccepted') }}</span>
                 </div>
               </div>
             </div>
@@ -189,94 +253,119 @@
       </CommonErrorBoundary>
     </div>
 
-    <!-- Mobile Sticky Cart Summary -->
+    <!-- Mobile Sticky Bottom Bar -->
     <div
-      v-if="!isEmpty"
-      class="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 shadow-lg z-50"
+      v-if="!isEmpty && !loading"
+      class="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-zinc-900 border-t border-zinc-200 dark:border-zinc-800 shadow-lg z-50"
     >
-      <div class="p-4">
-        <!-- Expandable Summary -->
-        <div class="mb-3">
-          <UiButton
-            variant="ghost"
-            :aria-label="showMobileSummary ? $t('common.hideOrderSummary') : $t('common.showOrderSummary')"
-            :aria-expanded="showMobileSummary"
-            class="w-full flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 p-2 h-auto min-h-[44px]"
-            @click="showMobileSummary = !showMobileSummary"
-          >
-            <span>{{ $t('common.orderSummary') }}</span>
-            <div class="flex items-center space-x-2">
-              <span class="font-semibold text-gray-900 dark:text-white">{{ formattedSubtotal }}</span>
-              <svg
-                :class="['w-4 h-4 transition-transform', showMobileSummary ? 'rotate-180' : '']"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </div>
-          </UiButton>
+      <!-- Expand Handle -->
+      <button
+        class="w-full py-2 flex justify-center"
+        :aria-label="showMobileSummary ? $t('common.hideOrderSummary') : $t('common.showOrderSummary')"
+        :aria-expanded="showMobileSummary"
+        @click="showMobileSummary = !showMobileSummary"
+      >
+        <div class="w-8 h-1 bg-zinc-300 dark:bg-zinc-700 rounded-full"></div>
+      </button>
 
-          <!-- Expanded Summary -->
+      <!-- Expandable Summary -->
+      <div
+        class="overflow-hidden transition-all duration-300 ease-out px-4"
+        :class="showMobileSummary ? 'max-h-40 pb-4' : 'max-h-0'"
+      >
+        <div class="space-y-2 border-b border-zinc-100 dark:border-zinc-800 pb-4">
+          <div class="flex justify-between text-sm">
+            <span class="text-zinc-500 dark:text-zinc-400">{{ $t('common.subtotal') }}</span>
+            <span class="text-zinc-900 dark:text-white">{{ formattedSubtotal }}</span>
+          </div>
+          <div class="flex justify-between text-sm">
+            <span class="text-zinc-500 dark:text-zinc-400">{{ $t('common.shipping') }}</span>
+            <span class="text-zinc-500 dark:text-zinc-400">{{ $t('cart.shippingCalculatedAtCheckout') }}</span>
+          </div>
           <div
-            v-show="showMobileSummary"
-            class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 space-y-2"
+            v-if="savings > 0"
+            class="flex justify-between text-sm text-emerald-600 dark:text-emerald-400"
           >
-            <div class="flex justify-between text-sm">
-              <span class="text-gray-600 dark:text-gray-400">{{ $t('common.subtotal') }}</span>
-              <span class="font-medium text-gray-900 dark:text-white">{{ formattedSubtotal }}</span>
-            </div>
-            <div class="flex justify-between text-sm">
-              <span class="text-gray-600 dark:text-gray-400">{{ $t('common.shipping') }}</span>
-              <span class="font-medium text-gray-900 dark:text-white">{{ $t('cart.shippingCalculatedAtCheckout') }}</span>
-            </div>
+            <span>{{ $t('cart.youSave') }}</span>
+            <span class="font-medium">-{{ formatPrice(savings) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total & CTA -->
+      <div class="p-4 pt-2">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <p class="text-sm text-zinc-500 dark:text-zinc-400">
+              {{ $t('common.total') }}
+            </p>
+            <p class="text-2xl font-bold text-zinc-900 dark:text-white">
+              {{ formattedSubtotal }}
+            </p>
+          </div>
+          <div class="flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/20 px-2.5 py-1.5 rounded-full">
+            <svg
+              class="w-3.5 h-3.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            <span class="font-medium">{{ $t('cart.secureCheckout') }}</span>
           </div>
         </div>
 
-        <!-- Action Buttons -->
-        <div class="space-y-2">
-          <UiButton
-            :class="cn('cursor-pointer min-h-[44px] focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2')"
-            :aria-label="$t('common.proceedToCheckout')"
-            :disabled="loading || isEmpty"
-            @click="goToCheckout"
+        <!-- Checkout Button -->
+        <button
+          :disabled="loading || isEmpty"
+          :aria-label="$t('common.proceedToCheckout')"
+          class="w-full py-4 bg-primary-600 text-white text-base font-semibold rounded-xl hover:bg-primary-700 active:bg-primary-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 min-h-[52px] focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+          @click="goToCheckout"
+        >
+          <span>{{ $t('common.checkout') }}</span>
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
           >
-            {{ $t('common.checkout') }}
-          </UiButton>
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M17 8l4 4m0 0l-4 4m4-4H3"
+            />
+          </svg>
+        </button>
 
-          <NuxtLink
-            :to="localePath('/products')"
-            :aria-label="$t('common.continueShopping')"
-            class="block w-full text-center py-3 px-4 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-gray-900 dark:text-white min-h-[44px] inline-flex items-center justify-center focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2"
-          >
-            {{ $t('common.continueShopping') }}
-          </NuxtLink>
-        </div>
+        <!-- Continue Shopping -->
+        <NuxtLink
+          :to="localePath('/products')"
+          class="block w-full text-center py-3 mt-2 text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors"
+        >
+          {{ $t('common.continueShopping') }}
+        </NuxtLink>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-// Cart allows guest access - users can view cart without authentication
-// Authentication is only required at checkout
-
-// Import advanced cart components
-import CartBulkOperations from '~/components/cart/BulkOperations.vue'
+// Import cart components
+import CartShippingProgress from '~/components/cart/ShippingProgress.vue'
 import CartSavedForLater from '~/components/cart/SavedForLater.vue'
 import CartRecommendations from '~/components/cart/Recommendations.vue'
 import CartItem from '~/components/cart/Item.vue'
-import { cn } from '~/lib/utils'
 
 const localePath = useLocalePath()
 const toast = useToast()
+const { t } = useI18n()
 
 // Mobile UI state
 const showMobileSummary = ref(false)
@@ -291,12 +380,12 @@ const {
   updateQuantity,
   removeItem,
   validateCart,
-  // Advanced features
-  allItemsSelected,
   toggleItemSelection,
-  toggleSelectAll: toggleSelectAllItems,
   addToSavedForLater,
 } = useCart()
+
+// Placeholder for savings calculation (can be connected to promo system)
+const savings = computed(() => 0)
 
 // Utility functions
 const formatPrice = (price: number) => {
@@ -308,19 +397,18 @@ const formatPrice = (price: number) => {
 
 const formattedSubtotal = computed(() => formatPrice(subtotal.value))
 
-// Error handling for cart operations
+// Error handling
 const handleCartError = (error: Error) => {
   console.error('Cart page error:', error)
-  toast.error($t('common.cartError'), error.message)
+  toast.error(t('common.cartError'), error.message)
 }
 
-// Enhanced cart operations with error handling
+// Cart operations with error handling
 const safeUpdateQuantity = async (itemId: string, quantity: number) => {
   try {
     await updateQuantity(itemId, quantity)
   }
   catch (error: any) {
-    // Error is already handled by the store with toast notifications
     console.error('Failed to update quantity:', error)
   }
 }
@@ -330,16 +418,13 @@ const safeRemoveItem = async (itemId: string) => {
     await removeItem(itemId)
   }
   catch (error: any) {
-    // Error is already handled by the store with toast notifications
     console.error('Failed to remove item:', error)
   }
 }
 
-// Handle swipe-to-remove functionality
 const handleSwipeRemove = async (itemId: string) => {
   try {
     await removeItem(itemId)
-    // Add haptic feedback if available
     if ('vibrate' in navigator) {
       navigator.vibrate(50)
     }
@@ -349,16 +434,13 @@ const handleSwipeRemove = async (itemId: string) => {
   }
 }
 
-// Handle save for later
 const handleSaveForLater = async (itemId: string) => {
   try {
-    // Find the item first
     const item = items.value.find(i => i.id === itemId)
     if (item) {
-      // Convert readonly product to mutable for the function
       const mutableProduct = {
         ...item.product,
-        images: [...item.product.images], // Convert readonly array to mutable
+        images: [...item.product.images],
       }
       await addToSavedForLater(mutableProduct, item.quantity)
       await removeItem(itemId)
@@ -369,45 +451,31 @@ const handleSaveForLater = async (itemId: string) => {
   }
 }
 
-// Handle item selection toggle
 const handleToggleSelection = (itemId: string) => {
   toggleItemSelection(itemId)
 }
 
-// Handle select all toggle
-const toggleSelectAll = () => {
-  toggleSelectAllItems()
-}
-
-// Handle checkout navigation
+// Checkout navigation
 const goToCheckout = async () => {
   try {
-    // Validate cart before proceeding to checkout
     await validateCart()
-
-    // Navigate to checkout
     await navigateTo(localePath('/checkout'))
   }
   catch (error: any) {
     console.error('Failed to proceed to checkout:', error)
-    toast.error($t('common.cartError'), $t('cart.error.checkoutFailed'))
+    toast.error(t('common.cartError'), t('cart.error.checkoutFailed'))
   }
 }
 
-// Validate cart on page load with error handling
+// Validate cart on mount
 onMounted(async () => {
   try {
     await validateCart()
   }
   catch (error: any) {
     console.error('Failed to validate cart:', error)
-    toast.error($t('common.cartValidationError'), $t('cart.error.validationFailedDetails'))
+    toast.error(t('common.cartValidationError'), t('cart.error.validationFailedDetails'))
   }
-})
-
-// Component cleanup on unmount
-onUnmounted(() => {
-  // Cleanup
 })
 
 // SEO Meta

@@ -56,7 +56,8 @@
     "cartError": "Error en el carrito",
     "cartValidationError": "Error de validación",
     "proceedToCheckout": "Proceder al Pago",
-    "showOrderSummary": "Mostrar resumen del pedido"
+    "showOrderSummary": "Mostrar resumen del pedido",
+    "hideOrderSummary": "Ocultar resumen del pedido"
   },
   "cart": {
     "shippingCalculatedAtCheckout": "Calculado al finalizar",
@@ -235,7 +236,31 @@
     "recommendedProducts": "Productos recomendados",
     "decreaseQuantity": "Disminuir cantidad",
     "increaseQuantity": "Aumentar cantidad",
-    "removeItem": "Eliminar artículo"
+    "removeItem": "Eliminar artículo",
+    "itemCount": "{count} artículos",
+    "youSave": "Estás ahorrando",
+    "secureCheckout": "Pago seguro",
+    "allCardsAccepted": "Todas las tarjetas aceptadas",
+    "add": "Añadir",
+    "stock": {
+      "inStock": "En stock",
+      "low": "¡Solo quedan {count}!",
+      "outOfStock": "Agotado"
+    },
+    "shipping": {
+      "progress": "Progreso de envío gratis",
+      "freeShipping": "Envío gratis",
+      "qualified": "¡Tu pedido califica para envío gratis!",
+      "addMore": "Añade {amount} más para envío gratis"
+    },
+    "recommendations": {
+      "boughtTogether": "Comprados juntos",
+      "similar": "Similar",
+      "priceDrop": "Precio rebajado",
+      "backInStock": "Disponible de nuevo",
+      "recommended": "Recomendado",
+      "noRecommendations": "No hay recomendaciones disponibles"
+    }
   },
   "auth": {
     "signIn": "Iniciar Sesión",

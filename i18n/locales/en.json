@@ -60,7 +60,9 @@
       "hours": "h",
       "minutes": "m",
       "seconds": "s"
-    }
+    },
+    "showOrderSummary": "Show order summary",
+    "hideOrderSummary": "Hide order summary"
   },
   "cart": {
     "shippingCalculatedAtCheckout": "Calculated at checkout",
@@ -236,7 +238,34 @@
     "each": "each",
     "addToCart": "Add to Cart",
     "inCart": "In Cart",
-    "recommendedProducts": "Recommended Products"
+    "recommendedProducts": "Recommended Products",
+    "decreaseQuantity": "Decrease quantity",
+    "increaseQuantity": "Increase quantity",
+    "removeItem": "Remove item",
+    "itemCount": "{count} items",
+    "youSave": "You're saving",
+    "secureCheckout": "Secure checkout",
+    "allCardsAccepted": "All major cards accepted",
+    "add": "Add",
+    "stock": {
+      "inStock": "In Stock",
+      "low": "Only {count} left!",
+      "outOfStock": "Out of Stock"
+    },
+    "shipping": {
+      "progress": "Free shipping progress",
+      "freeShipping": "Free Shipping",
+      "qualified": "Your order qualifies for free shipping!",
+      "addMore": "Add {amount} more for free shipping"
+    },
+    "recommendations": {
+      "boughtTogether": "Bought together",
+      "similar": "Similar",
+      "priceDrop": "Price drop",
+      "backInStock": "Back in stock",
+      "recommended": "Recommended",
+      "noRecommendations": "No recommendations available"
+    }
   },
   "auth": {
     "signIn": "Sign In",
