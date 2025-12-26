@@ -623,6 +623,29 @@
       "to": "To",
       "clearAll": "Clear All Filters"
     },
+    "metrics": {
+      "active": "Active",
+      "delivered": "Delivered",
+      "total": "Total",
+      "thisMonth": "This Month",
+      "activeOrders": "Active Orders",
+      "deliveredThisMonth": "Delivered This Month",
+      "totalOrders": "Total Orders",
+      "spentThisMonth": "Spent This Month"
+    },
+    "filters": {
+      "quickFilters": "Quick Filters",
+      "inTransit": "In Transit",
+      "deliveredThisMonth": "Delivered This Month",
+      "last3Months": "Last 3 Months",
+      "allOrders": "All Orders"
+    },
+    "progress": {
+      "deliveryProgress": "Delivery progress",
+      "estimatedArrival": "Estimated arrival",
+      "deliveredSuccessfully": "Delivered successfully"
+    },
+    "track": "Track",
     "notifications": {
       "title": "Order Updates",
       "delivered": {
@@ -668,6 +691,7 @@
       "statusBadge": "Order status: {status}",
       "reorderButton": "Reorder all items from this order",
       "viewDetailsButton": "View detailed information for this order",
+      "trackButton": "Track this order",
       "searchInput": "Search orders by order number or product name",
       "clearSearch": "Clear search query",
       "statusFilter": "Filter orders by status",

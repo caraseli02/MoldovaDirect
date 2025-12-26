@@ -96,6 +96,23 @@
         </div>
       </div>
 
+      <!-- Order Metrics Dashboard -->
+      <div class="mb-6">
+        <OrderMetrics
+          :metrics="orderMetrics"
+          :loading="loading"
+        />
+      </div>
+
+      <!-- Smart Filters -->
+      <div class="mb-6">
+        <SmartFilters
+          v-model="smartFilter"
+          :counts="filterCounts"
+          @filter="handleSmartFilter"
+        />
+      </div>
+
       <!-- Search and Filters -->
       <div class="mb-6">
         <OrderSearch
@@ -268,11 +285,12 @@
               : 'space-y-4',
           ]"
         >
-          <OrderCard
+          <OrderCardEnhanced
             v-for="order in ordersValue"
             :key="order.id"
             :order="order"
             :compact="viewMode === 'list'"
+            :show-progress="true"
             @click="handleOrderClick(order)"
             @reorder="handleReorder(order)"
             @view-details="handleViewDetails(order)"
@@ -281,11 +299,12 @@
 
         <!-- Mobile view (always list) -->
         <div class="md:hidden space-y-4">
-          <OrderCard
+          <OrderCardEnhanced
             v-for="order in ordersValue"
             :key="order.id"
             :order="order"
             :compact="true"
+            :show-progress="true"
             @click="handleOrderClick(order)"
             @reorder="handleReorder(order)"
             @view-details="handleViewDetails(order)"
@@ -447,11 +466,54 @@ const searchFilters = ref<{
   dateTo?: string
 }>({})
 const scrollContainer = ref<HTMLElement | null>(null)
+const smartFilter = ref<'in-transit' | 'delivered-month' | 'last-3-months' | null>(null)
 
 // Convert readonly refs to writable for template usage
 const ordersValue = computed(() => unref(orders) as OrderWithItems[])
 const paginationValue = computed(() => unref(pagination))
 const errorValue = computed(() => unref(error))
+
+// Computed properties for metrics and filters
+const orderMetrics = computed(() => {
+  const allOrders = unref(orders) as OrderWithItems[]
+
+  const activeOrders = allOrders.filter(o => ['pending', 'processing', 'shipped'].includes(o.status)).length
+
+  const now = new Date()
+  const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
+
+  const deliveredThisMonth = allOrders.filter(o =>
+    o.status === 'delivered' && new Date(o.createdAt) >= firstDayOfMonth,
+  ).length
+
+  const totalSpentThisMonth = allOrders
+    .filter(o => new Date(o.createdAt) >= firstDayOfMonth)
+    .reduce((sum, o) => sum + (o.totalEur || 0), 0)
+
+  return {
+    activeOrders,
+    deliveredThisMonth,
+    totalOrders: allOrders.length,
+    totalSpentThisMonth,
+  }
+})
+
+const filterCounts = computed(() => {
+  const allOrders = unref(orders) as OrderWithItems[]
+
+  const inTransit = allOrders.filter(o => ['processing', 'shipped'].includes(o.status)).length
+
+  const now = new Date()
+  const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
+  const deliveredMonth = allOrders.filter(o =>
+    o.status === 'delivered' && new Date(o.createdAt) >= firstDayOfMonth,
+  ).length
+
+  return {
+    inTransit,
+    deliveredMonth,
+  }
+})
 
 // Initialize filters from URL query params
 const initializeFromUrl = (): Record<string, any> => {
@@ -531,7 +593,60 @@ const visiblePages = computed(() => {
 })
 
 // Methods
+const handleSmartFilter = async (filter: typeof smartFilter.value) => {
+  const now = new Date()
+  let params: Record<string, any> = {
+    page: 1,
+  }
+
+  if (filter === 'in-transit') {
+    // Filter for processing and shipped orders
+    searchFilters.value = { status: 'shipped' }
+    params.status = 'shipped'
+  }
+  else if (filter === 'delivered-month') {
+    // Filter for delivered orders this month
+    const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
+    const formattedDate = firstDayOfMonth.toISOString().split('T')[0]
+    searchFilters.value = {
+      status: 'delivered',
+      dateFrom: formattedDate,
+    }
+    params = {
+      status: 'delivered',
+      dateFrom: formattedDate,
+      page: 1,
+    }
+  }
+  else if (filter === 'last-3-months') {
+    // Filter for last 3 months
+    const threeMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 3, now.getDate())
+    const formattedDate = threeMonthsAgo.toISOString().split('T')[0]
+    searchFilters.value = {
+      dateFrom: formattedDate,
+    }
+    params = {
+      dateFrom: formattedDate,
+      page: 1,
+    }
+  }
+  else {
+    // Clear all filters
+    searchFilters.value = {}
+    params = { page: 1 }
+  }
+
+  // Update URL
+  updateUrl(params)
+
+  // Fetch orders
+  await fetchOrders(params)
+}
+
 const handleSearch = async (filters: typeof searchFilters.value) => {
+  // Clear smart filter when using manual search
+  smartFilter.value = null
+
   const params = {
     search: filters.search,
     status: filters.status as OrderStatus | undefined,
