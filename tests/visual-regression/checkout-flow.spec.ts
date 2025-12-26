@@ -368,22 +368,43 @@ test.describe('Checkout - Multi-Locale Coverage', () => {
     test(`checkout page in ${locale.name} (${locale.code}) - desktop`, async ({ page }) => {
       await page.setViewportSize(VIEWPORTS.desktop)
 
-      // Use the CriticalTestHelpers for consistent cart/checkout navigation
-      // This ensures Pinia state is preserved via client-side navigation
-      const helpers = new CriticalTestHelpers(page)
+      // Navigate to products page in the target locale
+      const productsUrl = locale.code === 'es' ? '/products' : `/${locale.code}/products`
+      await page.goto(productsUrl)
+      await page.waitForLoadState('networkidle')
 
-      // Start on products page (no locale prefix needed - will use default ES)
-      await helpers.addProductAndNavigateToCheckout()
+      // Add first product to cart - find any "Add to Cart" button in any language
+      const addToCartButton = page.locator('button').filter({
+        hasText: /Añadir al Carrito|Add to Cart|Adaugă în coș|В корзину/i,
+      }).first()
 
-      // Now we're on checkout - switch locale via URL if needed
-      if (locale.code !== 'es') {
-        // Navigate to locale-specific checkout while preserving cart state
-        const currentUrl = page.url()
-        const localizedUrl = currentUrl.replace('/checkout', `/${locale.code}/checkout`)
-        await page.goto(localizedUrl)
-        await page.waitForLoadState('networkidle')
-        await page.waitForTimeout(1000)
-      }
+      await addToCartButton.waitFor({ state: 'visible', timeout: 10000 })
+      await addToCartButton.click()
+
+      // Wait for cart to update (button changes to "In cart" variant)
+      await page.waitForTimeout(1500)
+
+      // Force save cart to cookie
+      const cartHelpers = new CartPersistenceHelpers(page)
+      await cartHelpers.forceCartSave()
+
+      // Navigate to cart first via header link (client-side navigation preserves Pinia state)
+      const cartLink = page.locator('a[href*="/cart"]').first()
+      await cartLink.click()
+      await page.waitForURL(/\/cart/, { timeout: 10000 })
+      await page.waitForLoadState('networkidle')
+
+      // Click checkout button to navigate to checkout (supports multiple locales)
+      const checkoutButton = page.locator(
+        'button:has-text("Checkout"), button:has-text("Finalizar compra"), button:has-text("Finalizar Compra"), '
+        + 'button:has-text("Оформить"), button:has-text("Finalizare Comandă"), button:has-text("Finalizare"), '
+        + 'a:has-text("Checkout"), a:has-text("Finalizar compra"), a:has-text("Finalizare")',
+      ).first()
+      await checkoutButton.waitFor({ state: 'visible', timeout: 5000 })
+      await checkoutButton.click()
+      await page.waitForURL(/\/checkout/, { timeout: 10000 })
+      await page.waitForLoadState('networkidle')
+      await page.waitForTimeout(1000)
 
       const checkoutPage = new CheckoutPage(page)
 
