@@ -103,6 +103,7 @@ test-screenshots/
 playwright.*.config.ts
 !playwright.config.ts
 !playwright.cart.config.ts
+!playwright.visual-regression.config.ts
 
 # Theme and build artifacts
 .themes/
