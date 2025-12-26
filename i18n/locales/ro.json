@@ -1631,6 +1631,10 @@
       "emailRequired": "Email-ul este obligatoriu",
       "emailInvalid": "Te rugăm să introduci o adresă de email validă"
     },
+    "warnings": {
+      "concurrentCheckout": "Sesiuni Multiple de Plată Detectate",
+      "concurrentCheckoutDetails": "Se pare că ai această pagină de plată deschisă într-o altă filă sau fereastră. Te rugăm să finalizezi achiziția într-o singură locație pentru a evita crearea de comenzi duplicate."
+    },
     "addressForm": {
       "shipping": {
         "title": "Adresă de Livrare",

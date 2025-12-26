@@ -174,12 +174,19 @@ export const useCheckoutStore = defineStore('checkout', () => {
         if (lockMessage.includes('already locked') || lockMessage.includes('locked by')) {
           // Critical: Cart may be in use in another tab/session
           console.error('Cart locked by another session - potential concurrent checkout')
-          // Don't throw - allow checkout to continue but user should be aware
-          // The UI should ideally warn users not to use multiple tabs
+
+          // Warn user about potential duplicate order risk
+          const toast = useToast()
+          const { t } = useI18n()
+          toast.warning(
+            t('checkout.warnings.concurrentCheckout'),
+            t('checkout.warnings.concurrentCheckoutDetails'),
+            { duration: 10000 },
+          )
         }
 
         // Continue with checkout even if locking fails (degraded mode)
-        // In production, consider showing a subtle warning to the user
+        // User has been warned about the risks
       }
 
       const restored = session.restore()

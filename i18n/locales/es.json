@@ -1722,6 +1722,10 @@
       "emailRequired": "El email es requerido",
       "emailInvalid": "Por favor ingresa un email válido"
     },
+    "warnings": {
+      "concurrentCheckout": "Múltiples Sesiones de Pago Detectadas",
+      "concurrentCheckoutDetails": "Parece que tienes esta página de pago abierta en otra pestaña o ventana. Por favor, completa tu compra en un solo lugar para evitar crear pedidos duplicados."
+    },
     "addressForm": {
       "shipping": {
         "title": "Dirección de Envío",

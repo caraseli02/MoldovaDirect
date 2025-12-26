@@ -1606,6 +1606,10 @@
       "emailRequired": "Email is required",
       "emailInvalid": "Please enter a valid email address"
     },
+    "warnings": {
+      "concurrentCheckout": "Обнаружены Множественные Сессии Оформления Заказа",
+      "concurrentCheckoutDetails": "Похоже, что эта страница оформления заказа открыта в другой вкладке или окне. Пожалуйста, завершите покупку только в одном месте, чтобы избежать создания дублирующих заказов."
+    },
     "addressForm": {
       "shipping": {
         "title": "Адрес Доставки",

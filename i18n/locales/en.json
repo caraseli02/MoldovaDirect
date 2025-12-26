@@ -1798,6 +1798,10 @@
       "emailRequired": "Email is required",
       "emailInvalid": "Please enter a valid email address"
     },
+    "warnings": {
+      "concurrentCheckout": "Multiple Checkout Sessions Detected",
+      "concurrentCheckoutDetails": "It appears you have this checkout open in another tab or window. Please complete your purchase in one location only to avoid creating duplicate orders."
+    },
     "addressForm": {
       "shipping": {
         "title": "Shipping Address",

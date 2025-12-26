@@ -340,26 +340,10 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
       }
 
       // Prepare customer information
-      // Resolve customer email from available sources (priority order):
-      // 1. contactEmail (set from guest form or user profile)
-      // 2. guestInfo.email (fallback for guest checkout)
-      // 3. authStore.user.email (fallback for authenticated users)
-      const guestEmail = contactEmail.value?.trim()
-        || guestInfo.value?.email?.trim()
-        || authStore.user?.email?.trim()
-        || ''
-
-      if (!guestEmail) {
-        const error = createValidationError(
-          CheckoutErrorCode.VALIDATION_FAILED,
-          'Customer email is required for order confirmation',
-        )
-        logCheckoutError(error, {
-          step: 'payment',
-        })
-        throw error
-      }
-
+      // NOTE: Email hardcoded for development/testing with Resend
+      // Resend requires verified email addresses in test mode
+      // This allows monitoring all order confirmations in one inbox for validation
+      const guestEmail = 'caraseli02@gmail.com'
       const firstName = shippingInfo.value.address.firstName || ''
       const lastName = shippingInfo.value.address.lastName || ''
       const customerName = `${firstName} ${lastName}`.trim() || 'Customer'
