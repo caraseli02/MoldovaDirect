@@ -148,8 +148,8 @@ export const SELECTORS = {
   // ===========================================
 
   /** Order summary card */
-  ORDER_SUMMARY: '[class*="OrderSummaryCard"], [data-testid="order-summary"]',
-  ORDER_SUMMARY_TOTAL: '[class*="OrderSummaryCard"] [class*="total"], [data-testid="order-total"]',
+  ORDER_SUMMARY: '.order-summary-card, [data-testid="order-summary"]',
+  ORDER_SUMMARY_TOTAL: '.order-summary-card [class*="total"], [data-testid="order-total"]',
 
   // ===========================================
   // Mobile Selectors

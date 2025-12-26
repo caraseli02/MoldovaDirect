@@ -80,6 +80,13 @@ test.describe('Critical Checkout Flows', () => {
     // Add product to cart
     await helpers.addFirstProductToCart()
 
+    // Verify cart has items before going to checkout
+    const hasItems = await helpers.verifyCartHasItems()
+    expect(hasItems, 'Cart should have items after adding product').toBe(true)
+
+    // Wait a moment for cart state to fully persist
+    await page.waitForTimeout(TIMEOUTS.SHORT)
+
     // Go to checkout
     await helpers.goToCheckout()
 
@@ -87,21 +94,26 @@ test.describe('Critical Checkout Flows', () => {
     await expect(page).toHaveURL(URL_PATTERNS.CHECKOUT, { timeout: TIMEOUTS.STANDARD })
     await page.waitForLoadState('networkidle')
 
+    // Additional wait for page to fully render
+    await page.waitForTimeout(TIMEOUTS.SHORT)
+
     // Handle guest prompt if shown
     const guestPrompt = page.locator(SELECTORS.GUEST_PROMPT)
     if (await guestPrompt.isVisible({ timeout: TIMEOUTS.SHORT }).catch(() => false)) {
       await page.locator(SELECTORS.CONTINUE_AS_GUEST).click()
-      await page.waitForTimeout(TIMEOUTS.VERY_SHORT)
+      // Wait for sections to render after clicking continue
+      await page.waitForTimeout(TIMEOUTS.SHORT)
     }
 
     // Order summary or checkout section should be visible
     const orderSummary = page.locator(SELECTORS.ORDER_SUMMARY)
     const checkoutSection = page.locator(SELECTORS.CHECKOUT_SECTION)
 
-    const summaryExists = await orderSummary.count() > 0
-    const sectionExists = await checkoutSection.count() > 0
+    // Wait for at least one element to be visible
+    const summaryVisible = await orderSummary.isVisible({ timeout: TIMEOUTS.STANDARD }).catch(() => false)
+    const sectionVisible = await checkoutSection.first().isVisible({ timeout: TIMEOUTS.SHORT }).catch(() => false)
 
-    expect(summaryExists || sectionExists).toBe(true)
+    expect(summaryVisible || sectionVisible).toBe(true)
   })
 
   test('checkout page has form elements', async ({ page }) => {
@@ -147,9 +159,19 @@ test.describe('Critical Checkout Flows', () => {
     // Add product to cart
     await helpers.addFirstProductToCart()
 
+    // Verify cart has items
+    const hasItems = await helpers.verifyCartHasItems()
+    expect(hasItems, 'Cart should have items').toBe(true)
+
+    // Wait for cart state to persist
+    await page.waitForTimeout(TIMEOUTS.SHORT)
+
     // Go to checkout
     await helpers.goToCheckout()
     await page.waitForLoadState('networkidle')
+
+    // Additional wait for page to fully render
+    await page.waitForTimeout(TIMEOUTS.SHORT)
 
     // Handle express banner or guest prompt
     const expressBanner = page.locator(SELECTORS.EXPRESS_BANNER)
@@ -162,15 +184,17 @@ test.describe('Critical Checkout Flows', () => {
     const guestPrompt = page.locator(SELECTORS.GUEST_PROMPT)
     if (await guestPrompt.isVisible({ timeout: TIMEOUTS.SHORT }).catch(() => false)) {
       await page.locator(SELECTORS.CONTINUE_AS_GUEST).click()
-      await page.waitForTimeout(TIMEOUTS.VERY_SHORT)
+      // Wait for sections to render after clicking continue
+      await page.waitForTimeout(TIMEOUTS.SHORT)
     }
 
     // Look for checkout sections (single-page hybrid checkout)
     const checkoutSections = page.locator(SELECTORS.CHECKOUT_SECTION)
     const sectionNumbers = page.locator(SELECTORS.SECTION_NUMBER)
 
-    const hasSections = await checkoutSections.count() > 0
-    const hasNumbers = await sectionNumbers.count() > 0
+    // Wait for sections to be visible
+    const hasSections = await checkoutSections.first().isVisible({ timeout: TIMEOUTS.STANDARD }).catch(() => false)
+    const hasNumbers = await sectionNumbers.first().isVisible({ timeout: TIMEOUTS.SHORT }).catch(() => false)
 
     // Should have sections with numbered headers
     expect(hasSections || hasNumbers).toBe(true)
@@ -182,9 +206,19 @@ test.describe('Critical Checkout Flows', () => {
     // Add product to cart
     await helpers.addFirstProductToCart()
 
+    // Verify cart has items
+    const hasItems = await helpers.verifyCartHasItems()
+    expect(hasItems, 'Cart should have items').toBe(true)
+
+    // Wait for cart state to persist
+    await page.waitForTimeout(TIMEOUTS.SHORT)
+
     // Go to checkout
     await helpers.goToCheckout()
     await page.waitForLoadState('networkidle')
+
+    // Additional wait for page to fully render
+    await page.waitForTimeout(TIMEOUTS.SHORT)
 
     // Handle express banner or guest prompt
     const expressBanner = page.locator(SELECTORS.EXPRESS_BANNER)
@@ -196,23 +230,22 @@ test.describe('Critical Checkout Flows', () => {
     const guestPrompt = page.locator(SELECTORS.GUEST_PROMPT)
     if (await guestPrompt.isVisible({ timeout: TIMEOUTS.SHORT }).catch(() => false)) {
       await page.locator(SELECTORS.CONTINUE_AS_GUEST).click()
-      await page.waitForTimeout(TIMEOUTS.VERY_SHORT)
+      // Wait for form to render after clicking continue
+      await page.waitForTimeout(TIMEOUTS.SHORT)
     }
 
-    // Check for address form fields
-    const firstName = page.locator(SELECTORS.ADDRESS_FIRST_NAME)
-    const lastName = page.locator(SELECTORS.ADDRESS_LAST_NAME)
+    // Check for address form fields - Updated for fullName field
+    const fullName = page.locator(SELECTORS.ADDRESS_FULL_NAME)
     const street = page.locator(SELECTORS.ADDRESS_STREET)
     const city = page.locator(SELECTORS.ADDRESS_CITY)
-    const postalCode = page.locator(SELECTORS.ADDRESS_POSTAL_CODE)
 
-    // At least some address fields should be visible
-    const hasFirstName = await firstName.isVisible({ timeout: TIMEOUTS.STANDARD }).catch(() => false)
-    const hasStreet = await street.isVisible({ timeout: TIMEOUTS.SHORT }).catch(() => false)
-    const hasCity = await city.isVisible({ timeout: TIMEOUTS.SHORT }).catch(() => false)
+    // Wait for at least one address field to be visible
+    const hasFullName = await fullName.first().isVisible({ timeout: TIMEOUTS.STANDARD }).catch(() => false)
+    const hasStreet = await street.first().isVisible({ timeout: TIMEOUTS.SHORT }).catch(() => false)
+    const hasCity = await city.first().isVisible({ timeout: TIMEOUTS.SHORT }).catch(() => false)
 
-    // Should have key address fields visible
-    expect(hasFirstName || hasStreet || hasCity).toBe(true)
+    // Should have key address fields visible (fullName is the new required field)
+    expect(hasFullName || hasStreet || hasCity).toBe(true)
   })
 
   test('empty cart redirects away from checkout', async ({ page }) => {
