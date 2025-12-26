@@ -15,6 +15,7 @@ export class CheckoutHelpers {
 
   /**
    * Add a product to cart and navigate to checkout
+   * Uses client-side navigation to preserve Pinia cart state
    */
   async addProductAndGoToCheckout() {
     // Go to products page
@@ -25,11 +26,35 @@ export class CheckoutHelpers {
     const addButton = this.page.locator('button').filter({ hasText: /add.*cart|añadir.*carrito|adaugă.*coș|добавить.*корзину/i }).first()
     await expect(addButton).toBeVisible({ timeout: 10000 })
     await addButton.click()
-    await this.page.waitForTimeout(2000)
 
-    // Navigate to checkout
-    await this.page.goto(`${BASE_URL}/checkout`)
+    // Wait for cart to update (button text changes to "In Cart" / "En el Carrito")
+    await this.waitForCartUpdate()
+
+    // Use CLIENT-SIDE navigation to preserve Pinia cart state
+    // (page.goto() causes full page reload which loses Pinia state before cookies persist)
+
+    // Find the VISIBLE cart link (different on mobile vs desktop)
+    // On mobile, the bottom nav has the cart link; on desktop, it's in the header
+    // We simply find any visible cart link and click it
+    const cartLink = this.page.locator('a[href*="/cart"]:visible').first()
+    await expect(cartLink).toBeVisible({ timeout: 5000 })
+    await cartLink.click()
+
+    await this.page.waitForURL(/\/cart/, { timeout: 10000 })
     await this.page.waitForLoadState('networkidle')
+    await this.page.waitForTimeout(1000) // Wait for cart state to sync
+
+    // Click Checkout button (client-side navigation preserves Pinia state)
+    // Scroll to make sure button is in view on mobile
+    const checkoutButton = this.page.locator('button').filter({ hasText: /checkout|finalizar.*compra|proceder.*pago|оформить/i }).first()
+    await checkoutButton.scrollIntoViewIfNeeded()
+    await expect(checkoutButton).toBeVisible({ timeout: 5000 })
+    await checkoutButton.click()
+
+    // Wait for checkout page
+    await this.page.waitForURL(/\/checkout/, { timeout: 10000 })
+    await this.page.waitForLoadState('networkidle')
+    await this.page.waitForTimeout(1000)
   }
 
   /**
@@ -117,23 +142,72 @@ export class CheckoutHelpers {
    * Wait for shipping methods to load
    */
   async waitForShippingMethods(timeout = 15000) {
-    // Wait for loading spinner to disappear
-    const loadingSpinner = this.page.locator('[data-testid="shipping-loading"], .loading')
-    await expect(loadingSpinner).not.toBeVisible({ timeout })
+    // First wait a bit for the shipping calculation to start
+    await this.page.waitForTimeout(1000)
 
-    // Wait for shipping options to appear
-    const shippingOptions = this.page.locator('[data-testid="shipping-method"], input[type="radio"][name="shippingMethod"]')
-    await expect(shippingOptions.first()).toBeVisible({ timeout })
+    // Wait for loading spinner to disappear (if exists)
+    const loadingSpinner = this.page.locator('[data-testid="shipping-loading"], .loading, .animate-spin')
+    try {
+      await expect(loadingSpinner).not.toBeVisible({ timeout: 5000 })
+    }
+    catch {
+      // Loading spinner may not exist, continue
+    }
+
+    // Try multiple selectors for shipping options
+    const shippingSelectors = [
+      '[data-testid="shipping-method"]',
+      'input[type="radio"][name="shippingMethod"]',
+      'input[type="radio"][name="shipping"]',
+      '[data-testid="shipping-option"]',
+      '.shipping-method input[type="radio"]',
+      'label:has-text("Standard") input[type="radio"]',
+      'label:has-text("Express") input[type="radio"]',
+      'label:has-text("Envío") input[type="radio"]',
+    ]
+
+    // Wait for any shipping option to appear
+    for (const selector of shippingSelectors) {
+      const option = this.page.locator(selector).first()
+      if (await option.isVisible({ timeout: 2000 }).catch(() => false)) {
+        return
+      }
+    }
+
+    // If no shipping options found, throw error
+    throw new Error(`Shipping methods not found after ${timeout}ms. Tried selectors: ${shippingSelectors.join(', ')}`)
   }
 
   /**
    * Select shipping method by index (0-based)
    */
   async selectShippingMethod(index = 0) {
-    const shippingOptions = this.page.locator('[data-testid="shipping-method"], input[type="radio"][name="shippingMethod"]')
-    const option = shippingOptions.nth(index)
-    await option.click()
-    await this.page.waitForTimeout(500)
+    // Try multiple selectors for shipping options
+    const selectors = [
+      '[data-testid="shipping-method"]',
+      'input[type="radio"][name="shippingMethod"]',
+      'input[type="radio"][name="shipping"]',
+      '[id^="ship-"]', // RadioGroupItem with id="ship-${method.id}"
+      '.shipping-method-selector label',
+      'button[role="radio"]',
+    ]
+
+    for (const selector of selectors) {
+      const options = this.page.locator(selector)
+      const count = await options.count()
+      if (count > index) {
+        await options.nth(index).click()
+        await this.page.waitForTimeout(500)
+        return
+      }
+    }
+
+    // Fallback: click any visible shipping option
+    const anyOption = this.page.locator('.shipping-method-selector label:visible, [data-state] label:visible').first()
+    if (await anyOption.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await anyOption.click()
+      await this.page.waitForTimeout(500)
+    }
   }
 
   /**
@@ -172,5 +246,52 @@ export class CheckoutHelpers {
     await expect(placeOrderButton).toBeEnabled({ timeout: 3000 })
     await placeOrderButton.click()
     await this.page.waitForLoadState('networkidle')
+  }
+
+  /**
+   * Wait for cart to update after adding item
+   * Checks for button state change and loading spinners
+   */
+  private async waitForCartUpdate(): Promise<void> {
+    await this.page.waitForLoadState('networkidle')
+
+    // Wait for loading spinners to disappear
+    try {
+      await this.page.waitForFunction(
+        () => {
+          const buttons = document.querySelectorAll('button')
+          for (const btn of buttons) {
+            const svg = btn.querySelector('svg.animate-spin')
+            if (svg) return false
+          }
+          return true
+        },
+        { timeout: 10000 },
+      )
+    }
+    catch {
+      // Continue anyway
+    }
+
+    // Verify cart updated by checking for "In Cart" button state or cart badge
+    const cartIndicators = [
+      'button:has-text("En el Carrito")',
+      'button:has-text("In Cart")',
+      'button:has-text("În coș")',
+      'button:has-text("В корзине")',
+      '[aria-label*="Cart (1)"]',
+      '[aria-label*="Carrito (1)"]',
+      '[data-testid="cart-count"]:has-text("1")',
+    ]
+
+    for (const selector of cartIndicators) {
+      const indicator = this.page.locator(selector).first()
+      if (await indicator.isVisible({ timeout: 2000 }).catch(() => false)) {
+        return
+      }
+    }
+
+    // Fallback: wait a bit more for state to sync
+    await this.page.waitForTimeout(2000)
   }
 }

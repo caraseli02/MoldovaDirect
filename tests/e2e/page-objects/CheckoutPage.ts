@@ -154,14 +154,15 @@ export class CheckoutPage {
     this.paymentSectionComplete = this.paymentSection.locator('.section-complete')
 
     // Address Form - Updated for Hybrid Checkout with single fullName field
+    // Note: fullName field has id="fullName" but name="name" (not name="fullName")
     this.addressForm = page.locator('[class*="AddressForm"], [data-testid="address-form"]')
     this.addressFields = {
-      fullName: page.locator('input[name="fullName"], input[id="fullName"]'),
-      street: page.locator('input[name="street"], input[id="street"]'),
-      city: page.locator('input[name="city"], input[id="city"]'),
-      postalCode: page.locator('input[name="postalCode"], input[id="postalCode"]'),
-      country: page.locator('select[name="country"], select[id="country"]'),
-      phone: page.locator('input[name="phone"], input[id="phone"], input[type="tel"]'),
+      fullName: page.locator('#fullName'),
+      street: page.locator('#street'),
+      city: page.locator('#city'),
+      postalCode: page.locator('#postalCode'),
+      country: page.locator('#country'),
+      phone: page.locator('#phone, input[type="tel"]'),
     }
     this.savedAddressSelect = page.locator('[data-testid="saved-address-select"], select[name="savedAddress"]')
 
@@ -320,24 +321,56 @@ export class CheckoutPage {
     country: string
     phone?: string
   }) {
-    await this.addressFields.fullName.fill(address.fullName)
-    await this.addressFields.street.fill(address.street)
-    await this.addressFields.city.fill(address.city)
-    await this.addressFields.postalCode.fill(address.postalCode)
+    // Check if there are saved addresses and we need to select "Use new address"
+    const useNewAddressOption = this.page.locator('input[type="radio"][value="null"]').filter({ hasText: /use.*new.*address|usar.*nueva.*dirección|folosește.*adresă.*nouă|использовать.*новый.*адрес/i })
+    if (await useNewAddressOption.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await useNewAddressOption.click()
+      await this.page.waitForTimeout(500)
+    }
 
-    // Handle country select
+    // Wait for form to be visible - the correct selector is #fullName (has id="fullName" and name="name")
+    await this.page.waitForSelector('#fullName', { timeout: 15000 })
+    await this.page.waitForTimeout(500) // Allow form to fully render
+
+    // Fill fullName (has id="fullName" but name="name")
+    await expect(this.addressFields.fullName).toBeVisible({ timeout: 5000 })
+    await this.addressFields.fullName.fill(address.fullName)
+    await this.addressFields.fullName.blur()
+    await this.page.waitForTimeout(300)
+
+    // Fill street
+    await expect(this.addressFields.street).toBeVisible({ timeout: 5000 })
+    await this.addressFields.street.fill(address.street)
+    await this.addressFields.street.blur()
+    await this.page.waitForTimeout(300)
+
+    // Fill city
+    await expect(this.addressFields.city).toBeVisible({ timeout: 5000 })
+    await this.addressFields.city.fill(address.city)
+    await this.addressFields.city.blur()
+    await this.page.waitForTimeout(300)
+
+    // Fill postal code
+    await expect(this.addressFields.postalCode).toBeVisible({ timeout: 5000 })
+    await this.addressFields.postalCode.fill(address.postalCode)
+    await this.addressFields.postalCode.blur()
+
+    // Select country if select exists
     const countryLocator = this.addressFields.country
-    if (await countryLocator.isVisible()) {
+    if (await countryLocator.isVisible({ timeout: 2000 }).catch(() => false)) {
       await countryLocator.selectOption(address.country)
     }
 
+    // Fill phone if provided
     if (address.phone) {
-      await this.addressFields.phone.fill(address.phone)
+      const phoneLocator = this.addressFields.phone
+      if (await phoneLocator.isVisible({ timeout: 2000 }).catch(() => false)) {
+        await phoneLocator.fill(address.phone)
+      }
     }
 
-    // Trigger blur to validate
-    await this.addressFields.postalCode.blur()
-    await this.page.waitForTimeout(500)
+    // Wait for validation and any auto-complete
+    await this.page.waitForTimeout(1000)
   }
 
   /**
