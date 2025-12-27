@@ -180,3 +180,6 @@ debug-*.log
 !CLAUDE.md
 !CONTRIBUTING.md
 !LICENSE.md
+
+# Claude flow metrics (auto-generated)
+.claude-flow/

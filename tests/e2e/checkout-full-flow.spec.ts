@@ -23,10 +23,9 @@ const BASE_URL = process.env.PLAYWRIGHT_TEST_BASE_URL || process.env.BASE_URL ||
 const TEST_USER_EMAIL = process.env.TEST_USER_EMAIL || 'teste2e@example.com'
 const TEST_USER_PASSWORD = process.env.TEST_USER_PASSWORD || 'N7jKAcu2FHbt7cj'
 
-// Test address data
+// Test address data - uses fullName which is split into firstName/lastName internally
 const TEST_ADDRESS = {
-  firstName: 'Test',
-  lastName: 'User',
+  fullName: 'Test User',
   street: '123 Test Street',
   city: 'Madrid',
   postalCode: '28001',
@@ -97,9 +96,9 @@ test.describe('Full Checkout Flow - Hybrid Progressive', () => {
 
     // Step 4: Fill shipping address (single page form)
     // Check if address fields need to be filled
-    const firstNameValue = await checkoutPage.addressFields.firstName.inputValue().catch(() => '')
+    const fullNameValue = await checkoutPage.addressFields.fullName.inputValue().catch(() => '')
 
-    if (!firstNameValue) {
+    if (!fullNameValue) {
       await checkoutPage.fillShippingAddress(TEST_ADDRESS)
       console.log('✅ Step 4: Filled shipping address')
     }
