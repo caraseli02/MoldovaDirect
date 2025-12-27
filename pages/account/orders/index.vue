@@ -113,12 +113,57 @@
         />
       </div>
 
-      <!-- Search and Filters -->
+      <!-- Simple Search -->
       <div class="mb-6">
-        <OrderSearch
-          v-model="searchFilters"
-          @search="handleSearch"
-        />
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg
+              class="h-5 w-5 text-gray-400 dark:text-gray-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+          </div>
+          <input
+            v-model="searchQuery"
+            type="search"
+            :placeholder="$t('orders.search.placeholder')"
+            class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+            @input="handleSearchInput"
+          />
+          <div
+            v-if="searchQuery"
+            class="absolute inset-y-0 right-0 pr-3 flex items-center"
+          >
+            <button
+              type="button"
+              class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none"
+              @click="clearSearch"
+            >
+              <svg
+                class="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
       </div>
 
       <!-- View Toggle (Grid/List) - Hidden on mobile -->
@@ -459,14 +504,17 @@ const {
 
 // Local state
 const viewMode = ref<'grid' | 'list'>('grid')
+const searchQuery = ref('')
+const scrollContainer = ref<HTMLElement | null>(null)
+const smartFilter = ref<'in-transit' | 'delivered-month' | 'last-3-months' | null>(null)
+
+// For compatibility with URL params
 const searchFilters = ref<{
   search?: string
   status?: OrderStatus | ''
   dateFrom?: string
   dateTo?: string
 }>({})
-const scrollContainer = ref<HTMLElement | null>(null)
-const smartFilter = ref<'in-transit' | 'delivered-month' | 'last-3-months' | null>(null)
 
 // Convert readonly refs to writable for template usage
 const ordersValue = computed(() => unref(orders) as OrderWithItems[])
@@ -518,6 +566,9 @@ const filterCounts = computed(() => {
 // Initialize filters from URL query params
 const initializeFromUrl = (): Record<string, any> => {
   const query = route.query
+
+  // Initialize search query from URL
+  searchQuery.value = (query.search as string) || ''
 
   searchFilters.value = {
     search: (query.search as string) || undefined,
@@ -643,15 +694,30 @@ const handleSmartFilter = async (filter: typeof smartFilter.value) => {
   await fetchOrders(params)
 }
 
-const handleSearch = async (filters: typeof searchFilters.value) => {
+// Debounced search
+let searchTimeout: NodeJS.Timeout | null = null
+const DEBOUNCE_DELAY = 500
+
+const handleSearchInput = () => {
+  if (searchTimeout) {
+    clearTimeout(searchTimeout)
+  }
+  searchTimeout = setTimeout(() => {
+    handleSearch()
+  }, DEBOUNCE_DELAY)
+}
+
+const handleSearch = async () => {
   // Clear smart filter when using manual search
-  smartFilter.value = null
+  if (searchQuery.value) {
+    smartFilter.value = null
+  }
 
   const params = {
-    search: filters.search,
-    status: filters.status as OrderStatus | undefined,
-    dateFrom: filters.dateFrom,
-    dateTo: filters.dateTo,
+    search: searchQuery.value || undefined,
+    status: searchFilters.value.status as OrderStatus | undefined,
+    dateFrom: searchFilters.value.dateFrom,
+    dateTo: searchFilters.value.dateTo,
     page: 1,
   }
 
@@ -660,6 +726,11 @@ const handleSearch = async (filters: typeof searchFilters.value) => {
 
   // Fetch orders
   await fetchOrders(params)
+}
+
+const clearSearch = () => {
+  searchQuery.value = ''
+  handleSearch()
 }
 
 const goToPage = async (page: number) => {
