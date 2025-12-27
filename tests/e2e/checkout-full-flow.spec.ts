@@ -137,6 +137,26 @@ test.describe('Full Checkout Flow - Hybrid Progressive', () => {
     await expect(confirmationTitle).toBeVisible({ timeout: 5000 })
     console.log('✅ Step 10: Confirmation title visible')
 
+    // Verify new confirmation page UI elements
+    // 1. Order status progress bar
+    const progressBar = page.locator('.progress-fill, [role="progressbar"]')
+    await expect(progressBar).toBeVisible({ timeout: 3000 })
+    console.log('✅ Step 11: Order status progress bar visible')
+
+    // 2. View Order Details button
+    const viewDetailsButton = page.locator('button').filter({
+      hasText: /view.*order.*details|ver.*detalles|посмотреть.*детали|vezi.*detalii/i,
+    })
+    await expect(viewDetailsButton).toBeVisible({ timeout: 3000 })
+    console.log('✅ Step 12: View Order Details button visible')
+
+    // 3. Quick info cards (delivery and total)
+    const quickInfoCards = page.locator('[class*="bg-zinc-50"], [class*="bg-white"]').filter({
+      has: page.locator('svg'),
+    })
+    expect(await quickInfoCards.count()).toBeGreaterThanOrEqual(1)
+    console.log('✅ Step 13: Quick info cards visible')
+
     console.log('\n🎉 Full checkout flow completed successfully - Order placed!')
   })
 
@@ -368,6 +388,176 @@ test.describe('Full Checkout Flow - Hybrid Progressive', () => {
     else {
       console.log('⚠️ Mobile viewport - order summary may be collapsed')
     }
+  })
+})
+
+test.describe('Confirmation Page UI Elements', () => {
+  test('View Order Details button scrolls to details and expands sections', async ({ page }) => {
+    const checkoutPage = new CheckoutPage(page)
+
+    // Quick checkout flow to reach confirmation
+    await page.context().clearCookies()
+    await page.goto(`${BASE_URL}/products`, { timeout: 30000 })
+    await page.waitForLoadState('networkidle')
+
+    const addButton = page.locator('button:has-text("Añadir al Carrito"), button:has-text("Add to Cart")').first()
+    await expect(addButton).toBeVisible({ timeout: 15000 })
+    await addButton.click()
+    await page.waitForTimeout(2000)
+
+    await page.goto(`${BASE_URL}/checkout`, { timeout: 30000 })
+    await page.waitForLoadState('networkidle')
+
+    if (await checkoutPage.isExpressBannerVisible()) {
+      await checkoutPage.dismissExpressCheckout()
+    }
+    if (await checkoutPage.isGuestPromptVisible()) {
+      await checkoutPage.continueAsGuest()
+    }
+
+    await checkoutPage.fillShippingAddress(TEST_ADDRESS)
+    await checkoutPage.waitForShippingMethods()
+    await checkoutPage.selectShippingMethod(0)
+    await checkoutPage.selectCashPayment()
+    await checkoutPage.acceptTerms()
+    await checkoutPage.placeOrder()
+
+    // Wait for confirmation page
+    await expect(page).toHaveURL(/\/checkout\/confirmation/, { timeout: 15000 })
+    await page.waitForLoadState('networkidle')
+    await page.waitForTimeout(2000)
+
+    // Find and click View Order Details button
+    const viewDetailsButton = page.locator('button').filter({
+      hasText: /view.*order.*details|ver.*detalles|посмотреть.*детали|vezi.*detalii/i,
+    })
+    await expect(viewDetailsButton).toBeVisible({ timeout: 5000 })
+    await viewDetailsButton.click()
+    await page.waitForTimeout(1000)
+
+    // Verify order details section is in viewport
+    const orderDetails = page.locator('#order-details, [id*="order-details"]')
+    if (await orderDetails.count() > 0) {
+      await expect(orderDetails.first()).toBeInViewport({ timeout: 3000 })
+      console.log('✅ Order details section scrolled into view')
+    }
+
+    // Verify at least one expandable section is expanded
+    const expandedSection = page.locator('[aria-expanded="true"]')
+    expect(await expandedSection.count()).toBeGreaterThanOrEqual(1)
+    console.log('✅ Expandable sections expanded after clicking View Order Details')
+
+    console.log('\n🎉 View Order Details button test passed!')
+  })
+
+  test('Order status progress displays correctly', async ({ page }) => {
+    const checkoutPage = new CheckoutPage(page)
+
+    // Quick checkout flow
+    await page.context().clearCookies()
+    await page.goto(`${BASE_URL}/products`, { timeout: 30000 })
+    await page.waitForLoadState('networkidle')
+
+    const addButton = page.locator('button:has-text("Añadir al Carrito"), button:has-text("Add to Cart")').first()
+    await addButton.click()
+    await page.waitForTimeout(2000)
+
+    await page.goto(`${BASE_URL}/checkout`, { timeout: 30000 })
+    await page.waitForLoadState('networkidle')
+
+    if (await checkoutPage.isExpressBannerVisible()) {
+      await checkoutPage.dismissExpressCheckout()
+    }
+    if (await checkoutPage.isGuestPromptVisible()) {
+      await checkoutPage.continueAsGuest()
+    }
+
+    await checkoutPage.fillShippingAddress(TEST_ADDRESS)
+    await checkoutPage.waitForShippingMethods()
+    await checkoutPage.selectShippingMethod(0)
+    await checkoutPage.selectCashPayment()
+    await checkoutPage.acceptTerms()
+    await checkoutPage.placeOrder()
+
+    await expect(page).toHaveURL(/\/checkout\/confirmation/, { timeout: 15000 })
+    await page.waitForTimeout(2000)
+
+    // Verify progress bar exists
+    const progressBar = page.locator('.progress-fill, [role="progressbar"]')
+    await expect(progressBar).toBeVisible({ timeout: 3000 })
+    console.log('✅ Progress bar visible')
+
+    // Verify step indicator shows "Step X of Y" format
+    const stepIndicator = page.locator('text=/\\d+.*\\d+|шаг.*из|paso.*de|step.*of/i')
+    await expect(stepIndicator).toBeVisible({ timeout: 3000 })
+    console.log('✅ Step indicator visible')
+
+    // Verify status labels (confirmed, preparing, shipped)
+    const statusLabels = page.locator('text=/confirmed|confirmado|подтверждён|confirmat/i')
+    await expect(statusLabels.first()).toBeVisible({ timeout: 3000 })
+    console.log('✅ Status labels visible')
+
+    console.log('\n🎉 Order status progress test passed!')
+  })
+
+  test('Expandable sections toggle correctly', async ({ page }) => {
+    const checkoutPage = new CheckoutPage(page)
+
+    // Quick checkout flow
+    await page.context().clearCookies()
+    await page.goto(`${BASE_URL}/products`, { timeout: 30000 })
+    await page.waitForLoadState('networkidle')
+
+    const addButton = page.locator('button:has-text("Añadir al Carrito"), button:has-text("Add to Cart")').first()
+    await addButton.click()
+    await page.waitForTimeout(2000)
+
+    await page.goto(`${BASE_URL}/checkout`, { timeout: 30000 })
+    await page.waitForLoadState('networkidle')
+
+    if (await checkoutPage.isExpressBannerVisible()) {
+      await checkoutPage.dismissExpressCheckout()
+    }
+    if (await checkoutPage.isGuestPromptVisible()) {
+      await checkoutPage.continueAsGuest()
+    }
+
+    await checkoutPage.fillShippingAddress(TEST_ADDRESS)
+    await checkoutPage.waitForShippingMethods()
+    await checkoutPage.selectShippingMethod(0)
+    await checkoutPage.selectCashPayment()
+    await checkoutPage.acceptTerms()
+    await checkoutPage.placeOrder()
+
+    await expect(page).toHaveURL(/\/checkout\/confirmation/, { timeout: 15000 })
+    await page.waitForTimeout(2000)
+
+    // Find expandable section buttons (Order Items, Shipping Info)
+    const expandableButtons = page.locator('button[aria-expanded]')
+    const buttonCount = await expandableButtons.count()
+
+    if (buttonCount > 0) {
+      // Get initial state
+      const firstButton = expandableButtons.first()
+      const initialState = await firstButton.getAttribute('aria-expanded')
+      console.log(`Initial aria-expanded state: ${initialState}`)
+
+      // Click to toggle
+      await firstButton.click()
+      await page.waitForTimeout(500)
+
+      // Verify state changed
+      const newState = await firstButton.getAttribute('aria-expanded')
+      expect(newState).not.toBe(initialState)
+      console.log(`New aria-expanded state: ${newState}`)
+
+      console.log('✅ Expandable section toggle works correctly')
+    }
+    else {
+      console.log('⚠️ No expandable sections found')
+    }
+
+    console.log('\n🎉 Expandable sections test passed!')
   })
 })
 

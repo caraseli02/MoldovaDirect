@@ -825,7 +825,8 @@ test.describe('Checkout - Confirmation Page', () => {
       fullPage: true,
       mask: [
         ...dynamicContentMasks.map(s => page.locator(s)),
-        page.locator('.text-2xl.font-bold.text-green-600'), // Order number
+        page.locator('.text-2xl.font-bold.text-zinc-900'), // Order number (new confirmation UI)
+        page.locator('[data-testid="order-number"]'), // Fallback order number selector
       ],
     })
   })
@@ -885,7 +886,8 @@ test.describe('Checkout - Confirmation Page', () => {
       fullPage: true,
       mask: [
         ...dynamicContentMasks.map(s => page.locator(s)),
-        page.locator('.text-2xl.font-bold.text-green-600'),
+        page.locator('.text-2xl.font-bold.text-zinc-900'), // Order number (new confirmation UI)
+        page.locator('[data-testid="order-number"]'), // Fallback order number selector
       ],
     })
   })
