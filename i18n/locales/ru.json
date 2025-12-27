@@ -54,7 +54,9 @@
     "selectAll": "Выбрать все",
     "deselectAll": "Снять выделение",
     "cartError": "Ошибка корзины",
-    "cartValidationError": "Ошибка проверки"
+    "cartValidationError": "Ошибка проверки",
+    "showOrderSummary": "Показать итог заказа",
+    "hideOrderSummary": "Скрыть итог заказа"
   },
   "cart": {
     "shippingCalculatedAtCheckout": "Рассчитывается при оформлении",
@@ -228,9 +230,39 @@
     "moveToCart": "Move to Cart",
     "savedOn": "Saved on",
     "each": "each",
-    "addToCart": "Add to Cart",
-    "inCart": "In Cart",
-    "recommendedProducts": "Recommended Products"
+    "addToCart": "Добавить в корзину",
+    "inCart": "В корзине",
+    "recommendedProducts": "Рекомендуемые товары",
+    "itemCount": "{count} товаров",
+    "youSave": "Вы экономите",
+    "secureCheckout": "Безопасная оплата",
+    "allCardsAccepted": "Принимаются все карты",
+    "add": "Добавить",
+    "saveForLater": "Сохранить на потом",
+    "stock": {
+      "inStock": "В наличии",
+      "low": "Осталось только {count}!",
+      "outOfStock": "Нет в наличии"
+    },
+    "shipping": {
+      "progress": "До бесплатной доставки",
+      "freeShipping": "Бесплатная доставка",
+      "qualified": "Ваш заказ получает бесплатную доставку!",
+      "addMore": "Добавьте еще на {amount} для бесплатной доставки"
+    },
+    "recommendations": {
+      "boughtTogether": "Покупают вместе",
+      "similar": "Похожие",
+      "priceDrop": "Снижение цены",
+      "backInStock": "Снова в наличии",
+      "recommended": "Рекомендуется",
+      "noRecommendations": "Нет доступных рекомендаций",
+      "loadFailed": "Не удалось загрузить рекомендации"
+    },
+    "decreaseQuantity": "Уменьшить количество",
+    "increaseQuantity": "Увеличить количество",
+    "removeItem": "Удалить товар",
+    "quantity": "{count} товаров"
   },
   "auth": {
     "signIn": "Войти",

@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moldova Direct - Cart UX Proposals v2 (Polished)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#fef2f2',
+              100: '#fee2e2',
+              200: '#fecaca',
+              300: '#fca5a5',
+              400: '#f87171',
+              500: '#ef4444',
+              600: '#dc2626',
+              700: '#b91c1c',
+              800: '#991b1b',
+              900: '#7f1d1d',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+
+    /* Phone frame - refined */
+    .phone-frame {
+      width: 390px;
+      height: 844px;
+      background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+      border-radius: 54px;
+      padding: 14px;
+      box-shadow:
+        0 50px 100px -20px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255,255,255,0.1);
+      position: relative;
+    }
+
+    .phone-frame::before {
+      content: '';
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 126px;
+      height: 37px;
+      background: #1a1a1a;
+      border-radius: 20px;
+      z-index: 20;
+    }
+
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      background: #ffffff;
+      border-radius: 44px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .phone-screen.dark {
+      background: #0c0c0c;
+    }
+
+    /* Desktop frame */
+    .desktop-frame {
+      width: 100%;
+      max-width: 1200px;
+      background: #f8f8f8;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+      border: 1px solid #e5e5e5;
+    }
+
+    .desktop-frame .browser-bar {
+      height: 40px;
+      background: linear-gradient(180deg, #fafafa, #f0f0f0);
+      border-bottom: 1px solid #e5e5e5;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 8px;
+    }
+
+    .desktop-frame .browser-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    @keyframes pulse-ring {
+      0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); }
+      70% { box-shadow: 0 0 0 6px rgba(220, 38, 38, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+    }
+
+    .fade-in-up {
+      animation: fadeInUp 0.4s ease-out forwards;
+    }
+
+    .shimmer {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+
+    .btn-primary:hover {
+      animation: pulse-ring 1.5s ease-out infinite;
+    }
+
+    /* Transitions */
+    .transition-base {
+      transition: all 0.15s ease;
+    }
+
+    .transition-smooth {
+      transition: all 0.2s ease;
+    }
+
+    /* Custom scrollbar */
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #d4d4d8;
+      border-radius: 3px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: #a1a1aa;
+    }
+
+    /* Progress bar animation */
+    .progress-animated {
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Focus states */
+    .focus-ring:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #dc2626;
+    }
+
+    /* Card hover */
+    .card-interactive {
+      transition: all 0.2s ease;
+    }
+    .card-interactive:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Quantity button */
+    .qty-btn {
+      transition: all 0.15s ease;
+    }
+    .qty-btn:hover:not(:disabled) {
+      background-color: #f4f4f5;
+    }
+    .qty-btn:active:not(:disabled) {
+      transform: scale(0.95);
+      background-color: #e4e4e7;
+    }
+    .qty-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body class="bg-zinc-100 text-zinc-900 min-h-screen">
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-zinc-200">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center gap-4">
+          <div class="w-8 h-8 bg-brand-600 rounded-lg flex items-center justify-center">
+            <span class="text-white font-bold text-sm">M</span>
+          </div>
+          <span class="font-semibold text-lg text-zinc-900">Moldova Direct</span>
+          <span class="hidden sm:inline text-zinc-300">|</span>
+          <span class="hidden sm:inline text-zinc-500 text-sm">Cart UX v2</span>
+        </div>
+        <div class="flex items-center gap-6">
+          <button onclick="showView('mobile')" id="btn-mobile" class="text-sm font-medium text-zinc-900 px-3 py-1.5 rounded-md bg-zinc-100">Mobile</button>
+          <button onclick="showView('desktop')" id="btn-desktop" class="text-sm font-medium text-zinc-500 hover:text-zinc-900 px-3 py-1.5 rounded-md transition-base">Desktop</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="pt-28 pb-12 px-6">
+    <div class="max-w-4xl mx-auto text-center">
+      <span class="inline-flex items-center gap-2 px-3 py-1 bg-brand-50 text-brand-700 rounded-full text-sm font-medium mb-6">
+        <span class="w-1.5 h-1.5 bg-brand-500 rounded-full"></span>
+        Version 2 - Polished Designs
+      </span>
+      <h1 class="text-4xl md:text-5xl font-bold text-zinc-900 mb-4 tracking-tight">
+        Professional Cart Designs
+      </h1>
+      <p class="text-lg text-zinc-600 max-w-2xl mx-auto leading-relaxed">
+        Two refined options following modern design principles: clean layouts,
+        neutral colors, proper spacing, and thoughtful interactions.
+      </p>
+    </div>
+  </section>
+
+  <!-- Option Selector -->
+  <section class="px-6 pb-8">
+    <div class="max-w-4xl mx-auto">
+      <div class="flex justify-center gap-4">
+        <button onclick="showOption('b')" id="tab-b" class="option-tab px-6 py-3 rounded-lg font-medium text-sm transition-base bg-white border border-zinc-200 text-zinc-600 hover:border-zinc-300">
+          Option B: Information-Rich
+        </button>
+        <button onclick="showOption('d')" id="tab-d" class="option-tab px-6 py-3 rounded-lg font-medium text-sm transition-base bg-zinc-900 text-white shadow-sm">
+          Option D: Hybrid (Recommended)
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mobile Views -->
+  <div id="mobile-view">
+    <!-- Option B Mobile -->
+    <section id="option-b" class="option-section hidden py-12 px-6">
+      <div class="max-w-7xl mx-auto">
+        <div class="grid lg:grid-cols-2 gap-16 items-start">
+          <!-- Info -->
+          <div class="order-2 lg:order-1">
+            <span class="inline-block px-3 py-1 bg-amber-50 text-amber-700 rounded-full text-sm font-medium mb-4">Option B</span>
+            <h2 class="text-3xl font-bold text-zinc-900 mb-4">Information-Rich Design</h2>
+            <p class="text-base text-zinc-600 mb-8 leading-relaxed">
+              Maximizes conversion through strategic information density. Shows stock levels,
+              delivery estimates, and savings prominently while maintaining visual clarity.
+            </p>
+
+            <div class="space-y-6">
+              <div>
+                <h3 class="text-sm font-semibold text-zinc-500 uppercase tracking-wider mb-3">Used By</h3>
+                <div class="flex flex-wrap gap-2">
+                  <span class="px-3 py-1.5 bg-zinc-100 rounded-md text-sm text-zinc-700">Amazon</span>
+                  <span class="px-3 py-1.5 bg-zinc-100 rounded-md text-sm text-zinc-700">Walmart</span>
+                  <span class="px-3 py-1.5 bg-zinc-100 rounded-md text-sm text-zinc-700">Target</span>
+                </div>
+              </div>
+
+              <div>
+                <h3 class="text-sm font-semibold text-zinc-500 uppercase tracking-wider mb-3">Key Features</h3>
+                <ul class="space-y-3">
+                  <li class="flex items-start gap-3">
+                    <div class="w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <svg class="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                    </div>
+                    <span class="text-zinc-700">Free shipping progress bar with clear threshold</span>
+                  </li>
+                  <li class="flex items-start gap-3">
+                    <div class="w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <svg class="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                    </div>
+                    <span class="text-zinc-700">Stock indicators and urgency messaging</span>
+                  </li>
+                  <li class="flex items-start gap-3">
+                    <div class="w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <svg class="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                    </div>
+                    <span class="text-zinc-700">Inline delivery estimates per item</span>
+                  </li>
+                  <li class="flex items-start gap-3">
+                    <div class="w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <svg class="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                    </div>
+                    <span class="text-zinc-700">Frequently bought together suggestions</span>
+                  </li>
+                  <li class="flex items-start gap-3">
+                    <div class="w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <svg class="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                    </div>
+                    <span class="text-zinc-700">Dropdown quantity selector for easy editing</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="pt-4 border-t border-zinc-200">
+                <div class="grid grid-cols-2 gap-4">
+                  <div class="p-4 bg-emerald-50 rounded-lg">
+                    <h4 class="font-semibold text-emerald-800 text-sm mb-2">Strengths</h4>
+                    <ul class="text-sm text-emerald-700 space-y-1">
+                      <li>• High conversion rate</li>
+                      <li>• Trust signals visible</li>
+                      <li>• Drives upsells</li>
+                    </ul>
+                  </div>
+                  <div class="p-4 bg-amber-50 rounded-lg">
+                    <h4 class="font-semibold text-amber-800 text-sm mb-2">Trade-offs</h4>
+                    <ul class="text-sm text-amber-700 space-y-1">
+                      <li>• More visual density</li>
+                      <li>• Longer page scroll</li>
+                      <li>• Less premium feel</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Phone Demo -->
+          <div class="order-1 lg:order-2 flex justify-center">
+            <div class="phone-frame">
+              <div class="phone-screen custom-scroll overflow-y-auto bg-zinc-50">
+                <!-- Status Bar -->
+                <div class="sticky top-0 z-20 h-12 bg-zinc-50 flex items-center justify-between px-8 pt-8">
+                  <span class="text-sm font-medium text-zinc-900">9:41</span>
+                  <div class="flex items-center gap-1.5">
+                    <svg class="w-4 h-4 text-zinc-900" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8z"/>
+                    </svg>
+                    <svg class="w-4 h-4 text-zinc-900" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/>
+                    </svg>
+                    <div class="w-7 h-3.5 bg-zinc-900 rounded-sm flex items-center justify-end pr-0.5">
+                      <div class="w-5 h-2 bg-emerald-500 rounded-sm"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Header -->
+                <div class="sticky top-12 z-10 bg-zinc-50 px-4 py-3 border-b border-zinc-200">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                      <button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-zinc-100 transition-base">
+                        <svg class="w-5 h-5 text-zinc-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                      </button>
+                      <h1 class="text-xl font-semibold text-zinc-900">Shopping Cart</h1>
+                    </div>
+                    <span class="text-sm text-zinc-500">3 items</span>
+                  </div>
+                </div>
+
+                <!-- Free Shipping Banner -->
+                <div class="mx-4 mt-4 p-4 bg-emerald-50 border border-emerald-200 rounded-xl">
+                  <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center gap-2">
+                      <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
+                      </svg>
+                      <span class="text-sm font-medium text-emerald-800">Add €12.52 for FREE shipping</span>
+                    </div>
+                  </div>
+                  <div class="h-2 bg-emerald-200 rounded-full overflow-hidden">
+                    <div class="h-full bg-emerald-500 rounded-full progress-animated" style="width: 75%"></div>
+                  </div>
+                  <p class="text-xs text-emerald-600 mt-2">€37.48 of €50.00 minimum</p>
+                </div>
+
+                <!-- Cart Items -->
+                <div class="p-4 space-y-4 pb-56">
+                  <!-- Item 1 -->
+                  <div class="bg-white rounded-xl border border-zinc-200 overflow-hidden">
+                    <div class="p-4">
+                      <div class="flex gap-4">
+                        <div class="w-20 h-20 bg-zinc-100 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+                          <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=160&h=160&fit=crop" alt="Wine" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <h3 class="font-medium text-zinc-900 text-base leading-tight">Moldovan Red Wine</h3>
+                          <p class="text-sm text-zinc-500 mt-0.5">Cabernet Sauvignon, 750ml</p>
+                          <div class="flex items-center gap-2 mt-2">
+                            <span class="inline-flex items-center gap-1 text-xs text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">
+                              <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                              In Stock
+                            </span>
+                          </div>
+                          <p class="text-xs text-zinc-400 mt-1">Delivery: Dec 28-30</p>
+                        </div>
+                      </div>
+                      <div class="flex items-center justify-between mt-4 pt-4 border-t border-zinc-100">
+                        <div class="flex items-center gap-4">
+                          <select class="bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2 text-sm font-medium text-zinc-700 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-base cursor-pointer">
+                            <option>Qty: 2</option>
+                            <option>Qty: 1</option>
+                            <option>Qty: 3</option>
+                            <option>Qty: 4</option>
+                            <option>Qty: 5</option>
+                          </select>
+                          <div class="flex items-center gap-3 text-sm">
+                            <button class="text-zinc-500 hover:text-brand-600 transition-base">Delete</button>
+                            <span class="text-zinc-300">|</span>
+                            <button class="text-zinc-500 hover:text-brand-600 transition-base">Save</button>
+                          </div>
+                        </div>
+                        <div class="text-right">
+                          <span class="text-lg font-semibold text-zinc-900">€49.98</span>
+                          <p class="text-xs text-zinc-400">€24.99 each</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Item 2 - Low Stock -->
+                  <div class="bg-white rounded-xl border border-amber-200 overflow-hidden">
+                    <div class="p-4">
+                      <div class="flex gap-4">
+                        <div class="w-20 h-20 bg-zinc-100 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+                          <img src="https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=160&h=160&fit=crop" alt="Cheese" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <h3 class="font-medium text-zinc-900 text-base leading-tight">Traditional Cheese</h3>
+                          <p class="text-sm text-zinc-500 mt-0.5">Brânză de burduf, 500g</p>
+                          <div class="flex items-center gap-2 mt-2">
+                            <span class="inline-flex items-center gap-1 text-xs text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full font-medium">
+                              <span class="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span>
+                              Only 3 left
+                            </span>
+                          </div>
+                          <p class="text-xs text-zinc-400 mt-1">Delivery: Dec 29-31</p>
+                        </div>
+                      </div>
+                      <div class="flex items-center justify-between mt-4 pt-4 border-t border-zinc-100">
+                        <div class="flex items-center gap-4">
+                          <select class="bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2 text-sm font-medium text-zinc-700 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-base cursor-pointer">
+                            <option>Qty: 1</option>
+                            <option>Qty: 2</option>
+                            <option>Qty: 3</option>
+                          </select>
+                          <div class="flex items-center gap-3 text-sm">
+                            <button class="text-zinc-500 hover:text-brand-600 transition-base">Delete</button>
+                            <span class="text-zinc-300">|</span>
+                            <button class="text-zinc-500 hover:text-brand-600 transition-base">Save</button>
+                          </div>
+                        </div>
+                        <span class="text-lg font-semibold text-zinc-900">€12.50</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Frequently Bought Together -->
+                  <div class="bg-white rounded-xl border border-zinc-200 p-4">
+                    <h3 class="font-semibold text-zinc-900 text-sm mb-3">Frequently bought together</h3>
+                    <div class="flex items-center gap-4">
+                      <div class="w-16 h-16 bg-zinc-100 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=128&h=128&fit=crop" alt="Honey" class="w-full h-full object-cover">
+                      </div>
+                      <div class="flex-1">
+                        <h4 class="font-medium text-zinc-900 text-sm">Moldovan Honey</h4>
+                        <p class="text-sm font-semibold text-zinc-900 mt-0.5">€8.99</p>
+                        <p class="text-xs text-emerald-600 mt-0.5">Qualifies for free shipping</p>
+                      </div>
+                      <button class="px-4 py-2 bg-zinc-900 text-white text-sm font-medium rounded-lg hover:bg-zinc-800 active:bg-zinc-950 transition-base">
+                        Add
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Fixed Bottom CTA -->
+                <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-zinc-200 p-4 shadow-lg">
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="text-sm text-zinc-500">Subtotal (3 items)</span>
+                    <span class="text-2xl font-bold text-zinc-900">€62.48</span>
+                  </div>
+                  <div class="flex items-center gap-2 text-xs text-emerald-600 mb-4">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span>Your order qualifies for free delivery</span>
+                  </div>
+                  <button class="btn-primary w-full py-4 bg-brand-600 text-white text-base font-semibold rounded-xl hover:bg-brand-700 active:bg-brand-800 transition-base focus-ring">
+                    Proceed to Checkout
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Option D Mobile -->
+    <section id="option-d" class="option-section py-12 px-6">
+      <div class="max-w-7xl mx-auto">
+        <div class="grid lg:grid-cols-2 gap-16 items-start">
+          <!-- Info -->
+          <div class="order-2 lg:order-1">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-brand-50 text-brand-700 rounded-full text-sm font-medium mb-4">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+              Recommended
+            </div>
+            <h2 class="text-3xl font-bold text-zinc-900 mb-4">Hybrid Design</h2>
+            <p class="text-base text-zinc-600 mb-8 leading-relaxed">
+              The best of both worlds: clean visual hierarchy with strategic information placement.
+              Balances premium aesthetics with conversion-driving elements.
+            </p>
+
+            <div class="bg-brand-50 border border-brand-100 rounded-xl p-4 mb-6">
+              <h3 class="font-semibold text-brand-900 text-sm mb-2">Why This is Recommended</h3>
+              <ul class="text-sm text-brand-800 space-y-1.5">
+                <li class="flex items-start gap-2">
+                  <span class="text-brand-500 mt-0.5">•</span>
+                  <span>Reduces 70% cart abandonment through progressive disclosure</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-brand-500 mt-0.5">•</span>
+                  <span>WCAG 2.2 compliant with 44px touch targets</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-brand-500 mt-0.5">•</span>
+                  <span>Optimized for 68% mobile traffic</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="space-y-6">
+              <div>
+                <h3 class="text-sm font-semibold text-zinc-500 uppercase tracking-wider mb-3">Key Features</h3>
+                <div class="grid grid-cols-2 gap-3">
+                  <div class="flex items-center gap-2 text-sm text-zinc-700">
+                    <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                    <span>Clean visual hierarchy</span>
+                  </div>
+                  <div class="flex items-center gap-2 text-sm text-zinc-700">
+                    <div class="w-2 h-2 bg-amber-500 rounded-full"></div>
+                    <span>Stock urgency cues</span>
+                  </div>
+                  <div class="flex items-center gap-2 text-sm text-zinc-700">
+                    <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
+                    <span>Swipe-to-delete</span>
+                  </div>
+                  <div class="flex items-center gap-2 text-sm text-zinc-700">
+                    <div class="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                    <span>Shipping progress</span>
+                  </div>
+                  <div class="flex items-center gap-2 text-sm text-zinc-700">
+                    <div class="w-2 h-2 bg-pink-500 rounded-full"></div>
+                    <span>Expandable summary</span>
+                  </div>
+                  <div class="flex items-center gap-2 text-sm text-zinc-700">
+                    <div class="w-2 h-2 bg-cyan-500 rounded-full"></div>
+                    <span>Smart recommendations</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pt-4 border-t border-zinc-200">
+                <h3 class="text-sm font-semibold text-zinc-500 uppercase tracking-wider mb-3">Design Principles Applied</h3>
+                <div class="space-y-2">
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-zinc-600">Spacing</span>
+                    <span class="text-zinc-900 font-medium">8px grid system</span>
+                  </div>
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-zinc-600">Colors</span>
+                    <span class="text-zinc-900 font-medium">Zinc + 1 accent</span>
+                  </div>
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-zinc-600">Typography</span>
+                    <span class="text-zinc-900 font-medium">Inter, 16px min</span>
+                  </div>
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-zinc-600">Touch targets</span>
+                    <span class="text-zinc-900 font-medium">44px minimum</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Phone Demo -->
+          <div class="order-1 lg:order-2 flex justify-center">
+            <div class="phone-frame">
+              <div class="phone-screen custom-scroll overflow-y-auto bg-zinc-50">
+                <!-- Status Bar -->
+                <div class="sticky top-0 z-20 h-12 bg-zinc-50 flex items-center justify-between px-8 pt-8">
+                  <span class="text-sm font-medium text-zinc-900">9:41</span>
+                  <div class="flex items-center gap-1.5">
+                    <svg class="w-4 h-4 text-zinc-900" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8z"/>
+                    </svg>
+                    <svg class="w-4 h-4 text-zinc-900" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/>
+                    </svg>
+                    <div class="w-7 h-3.5 bg-zinc-900 rounded-sm flex items-center justify-end pr-0.5">
+                      <div class="w-5 h-2 bg-emerald-500 rounded-sm"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Header -->
+                <div class="sticky top-12 z-10 bg-zinc-50/95 backdrop-blur-sm px-4 py-3 border-b border-zinc-200">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                      <button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-zinc-100 transition-base">
+                        <svg class="w-5 h-5 text-zinc-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                      </button>
+                      <div>
+                        <h1 class="text-lg font-semibold text-zinc-900">Cart</h1>
+                        <p class="text-xs text-zinc-500">3 items</p>
+                      </div>
+                    </div>
+                    <button class="text-sm font-medium text-brand-600 hover:text-brand-700 transition-base">Edit</button>
+                  </div>
+                </div>
+
+                <!-- Shipping Progress - Compact -->
+                <div class="mx-4 mt-4 p-3 bg-white border border-zinc-200 rounded-xl">
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="text-sm font-medium text-zinc-700">Free shipping progress</span>
+                    <span class="text-xs text-zinc-500">€37.48 / €50</span>
+                  </div>
+                  <div class="h-1.5 bg-zinc-100 rounded-full overflow-hidden">
+                    <div class="h-full bg-emerald-500 rounded-full progress-animated" style="width: 75%"></div>
+                  </div>
+                  <p class="text-xs text-emerald-600 mt-2 font-medium">Add €12.52 more to qualify</p>
+                </div>
+
+                <!-- Cart Items -->
+                <div class="p-4 space-y-3 pb-64">
+                  <!-- Item 1 -->
+                  <div class="bg-white rounded-2xl border border-zinc-200 p-4 card-interactive">
+                    <div class="flex gap-4">
+                      <div class="w-24 h-24 bg-zinc-100 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=192&h=192&fit=crop" alt="Wine" class="w-full h-full object-cover">
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <div class="flex items-start justify-between mb-1">
+                          <h3 class="font-semibold text-zinc-900 text-base leading-tight pr-2">Moldovan Red Wine</h3>
+                          <button class="p-2 -mr-2 text-zinc-400 hover:text-brand-600 hover:bg-brand-50 rounded-lg transition-base flex-shrink-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                          </button>
+                        </div>
+                        <p class="text-sm text-zinc-500">Cabernet Sauvignon</p>
+                        <div class="flex items-center gap-2 mt-2">
+                          <span class="text-xs text-emerald-700 bg-emerald-50 px-2 py-1 rounded-md font-medium">In Stock</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flex items-center justify-between mt-4 pt-4 border-t border-zinc-100">
+                      <div class="flex items-center bg-zinc-100 rounded-lg p-1">
+                        <button class="qty-btn w-10 h-10 rounded-md flex items-center justify-center text-zinc-600">
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                          </svg>
+                        </button>
+                        <span class="w-10 text-center font-semibold text-zinc-900">2</span>
+                        <button class="qty-btn w-10 h-10 rounded-md flex items-center justify-center text-zinc-600">
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6"></path>
+                          </svg>
+                        </button>
+                      </div>
+                      <div class="text-right">
+                        <span class="text-xl font-bold text-zinc-900">€49.98</span>
+                        <p class="text-xs text-zinc-400">€24.99 each</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Item 2 - Low Stock -->
+                  <div class="bg-white rounded-2xl border border-amber-200 p-4 card-interactive">
+                    <div class="flex gap-4">
+                      <div class="w-24 h-24 bg-zinc-100 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=192&h=192&fit=crop" alt="Cheese" class="w-full h-full object-cover">
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <div class="flex items-start justify-between mb-1">
+                          <h3 class="font-semibold text-zinc-900 text-base leading-tight pr-2">Traditional Cheese</h3>
+                          <button class="p-2 -mr-2 text-zinc-400 hover:text-brand-600 hover:bg-brand-50 rounded-lg transition-base flex-shrink-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                          </button>
+                        </div>
+                        <p class="text-sm text-zinc-500">Brânză de burduf</p>
+                        <div class="flex items-center gap-2 mt-2">
+                          <span class="text-xs text-amber-700 bg-amber-50 px-2 py-1 rounded-md font-medium">
+                            <span class="inline-block w-1.5 h-1.5 bg-amber-500 rounded-full mr-1 animate-pulse"></span>
+                            Only 3 left
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flex items-center justify-between mt-4 pt-4 border-t border-zinc-100">
+                      <div class="flex items-center bg-zinc-100 rounded-lg p-1">
+                        <button class="qty-btn w-10 h-10 rounded-md flex items-center justify-center text-zinc-600" disabled>
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                          </svg>
+                        </button>
+                        <span class="w-10 text-center font-semibold text-zinc-900">1</span>
+                        <button class="qty-btn w-10 h-10 rounded-md flex items-center justify-center text-zinc-600">
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6"></path>
+                          </svg>
+                        </button>
+                      </div>
+                      <span class="text-xl font-bold text-zinc-900">€12.50</span>
+                    </div>
+                  </div>
+
+                  <!-- Recommendations -->
+                  <div class="mt-6">
+                    <div class="flex items-center justify-between mb-3">
+                      <h3 class="font-semibold text-zinc-900">You might also like</h3>
+                      <button class="text-sm text-zinc-500 hover:text-zinc-700 transition-base">See all</button>
+                    </div>
+                    <div class="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 snap-x">
+                      <div class="flex-shrink-0 w-36 bg-white rounded-xl border border-zinc-200 p-3 snap-start">
+                        <div class="w-full aspect-square bg-zinc-100 rounded-lg mb-3 overflow-hidden">
+                          <img src="https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=256&h=256&fit=crop" alt="Honey" class="w-full h-full object-cover">
+                        </div>
+                        <h4 class="font-medium text-zinc-900 text-sm truncate">Moldovan Honey</h4>
+                        <div class="flex items-center justify-between mt-2">
+                          <span class="font-semibold text-zinc-900">€8.99</span>
+                          <button class="w-8 h-8 bg-brand-600 text-white rounded-lg flex items-center justify-center hover:bg-brand-700 active:bg-brand-800 transition-base">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6"></path>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="flex-shrink-0 w-36 bg-white rounded-xl border border-zinc-200 p-3 snap-start">
+                        <div class="w-full aspect-square bg-zinc-100 rounded-lg mb-3 overflow-hidden">
+                          <img src="https://images.unsplash.com/photo-1595981267035-7b04ca84a82d?w=256&h=256&fit=crop" alt="Preserves" class="w-full h-full object-cover">
+                        </div>
+                        <h4 class="font-medium text-zinc-900 text-sm truncate">Fruit Preserves</h4>
+                        <div class="flex items-center justify-between mt-2">
+                          <span class="font-semibold text-zinc-900">€6.50</span>
+                          <button class="w-8 h-8 bg-brand-600 text-white rounded-lg flex items-center justify-center hover:bg-brand-700 active:bg-brand-800 transition-base">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6"></path>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Fixed Bottom Bar -->
+                <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-zinc-200 shadow-lg">
+                  <!-- Expandable handle -->
+                  <button class="w-full py-2 flex justify-center" onclick="toggleSummary(this)">
+                    <div class="w-8 h-1 bg-zinc-300 rounded-full"></div>
+                  </button>
+
+                  <!-- Summary (hidden by default) -->
+                  <div class="summary-content max-h-0 overflow-hidden transition-all duration-300 ease-out px-4">
+                    <div class="pb-4 space-y-2 border-b border-zinc-100">
+                      <div class="flex justify-between text-sm">
+                        <span class="text-zinc-500">Subtotal</span>
+                        <span class="text-zinc-900">€62.48</span>
+                      </div>
+                      <div class="flex justify-between text-sm">
+                        <span class="text-zinc-500">Shipping</span>
+                        <span class="text-zinc-500">Calculated at checkout</span>
+                      </div>
+                      <div class="flex justify-between text-sm text-emerald-600">
+                        <span>You're saving</span>
+                        <span class="font-medium">-€5.00</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Total & CTA -->
+                  <div class="p-4 pt-2">
+                    <div class="flex items-center justify-between mb-4">
+                      <div>
+                        <p class="text-sm text-zinc-500">Total</p>
+                        <p class="text-2xl font-bold text-zinc-900">€62.48</p>
+                      </div>
+                      <div class="flex items-center gap-1.5 text-xs text-emerald-600 bg-emerald-50 px-2.5 py-1.5 rounded-full">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span class="font-medium">Secure checkout</span>
+                      </div>
+                    </div>
+                    <button class="btn-primary w-full py-4 bg-brand-600 text-white text-base font-semibold rounded-xl hover:bg-brand-700 active:bg-brand-800 transition-base focus-ring flex items-center justify-center gap-2">
+                      <span>Checkout</span>
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                      </svg>
+                    </button>
+                    <button class="w-full py-3 text-sm text-zinc-500 hover:text-zinc-700 transition-base mt-1">
+                      Continue Shopping
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Desktop Views -->
+  <div id="desktop-view" class="hidden">
+    <!-- Option B Desktop -->
+    <section id="option-b-desktop" class="option-section hidden py-12 px-6">
+      <div class="max-w-6xl mx-auto">
+        <div class="mb-8">
+          <span class="inline-block px-3 py-1 bg-amber-50 text-amber-700 rounded-full text-sm font-medium mb-2">Option B - Desktop</span>
+          <h2 class="text-2xl font-bold text-zinc-900">Information-Rich Design</h2>
+        </div>
+
+        <div class="desktop-frame">
+          <div class="browser-bar">
+            <div class="browser-dot bg-red-400"></div>
+            <div class="browser-dot bg-amber-400"></div>
+            <div class="browser-dot bg-emerald-400"></div>
+            <div class="flex-1 mx-4">
+              <div class="bg-white border border-zinc-200 rounded-md px-3 py-1 text-sm text-zinc-500 max-w-md">
+                moldovadirect.com/cart
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-zinc-50 p-8 min-h-[600px]">
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-8">
+              <div class="flex items-center gap-4">
+                <h1 class="text-3xl font-bold text-zinc-900">Shopping Cart</h1>
+                <span class="text-zinc-500">(3 items)</span>
+              </div>
+              <a href="#" class="text-brand-600 hover:text-brand-700 font-medium transition-base">Continue Shopping</a>
+            </div>
+
+            <div class="grid grid-cols-3 gap-8">
+              <!-- Cart Items Column -->
+              <div class="col-span-2 space-y-4">
+                <!-- Free Shipping Banner -->
+                <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 flex items-center justify-between">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center">
+                      <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
+                      </svg>
+                    </div>
+                    <div>
+                      <p class="font-medium text-emerald-800">Add €12.52 for FREE shipping</p>
+                      <p class="text-sm text-emerald-600">€37.48 of €50.00 minimum</p>
+                    </div>
+                  </div>
+                  <div class="w-32 h-2 bg-emerald-200 rounded-full overflow-hidden">
+                    <div class="h-full bg-emerald-500 rounded-full" style="width: 75%"></div>
+                  </div>
+                </div>
+
+                <!-- Item 1 -->
+                <div class="bg-white rounded-xl border border-zinc-200 p-6">
+                  <div class="flex gap-6">
+                    <div class="w-28 h-28 bg-zinc-100 rounded-lg flex-shrink-0 overflow-hidden">
+                      <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=224&h=224&fit=crop" alt="Wine" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex-1">
+                      <div class="flex justify-between">
+                        <div>
+                          <h3 class="font-semibold text-zinc-900 text-lg">Moldovan Red Wine - Cabernet Sauvignon</h3>
+                          <p class="text-zinc-500 mt-1">750ml bottle</p>
+                          <div class="flex items-center gap-3 mt-2">
+                            <span class="inline-flex items-center gap-1 text-sm text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full">
+                              <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                              In Stock
+                            </span>
+                            <span class="text-sm text-zinc-400">Delivery: Dec 28-30</span>
+                          </div>
+                        </div>
+                        <div class="text-right">
+                          <p class="text-xl font-bold text-zinc-900">€49.98</p>
+                          <p class="text-sm text-zinc-400">€24.99 each</p>
+                        </div>
+                      </div>
+                      <div class="flex items-center justify-between mt-4 pt-4 border-t border-zinc-100">
+                        <div class="flex items-center gap-6">
+                          <select class="bg-zinc-50 border border-zinc-200 rounded-lg px-4 py-2 text-sm font-medium cursor-pointer">
+                            <option>Qty: 2</option>
+                            <option>Qty: 1</option>
+                            <option>Qty: 3</option>
+                          </select>
+                          <button class="text-sm text-zinc-500 hover:text-brand-600 transition-base">Delete</button>
+                          <button class="text-sm text-zinc-500 hover:text-brand-600 transition-base">Save for later</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="bg-white rounded-xl border border-amber-200 p-6">
+                  <div class="flex gap-6">
+                    <div class="w-28 h-28 bg-zinc-100 rounded-lg flex-shrink-0 overflow-hidden">
+                      <img src="https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=224&h=224&fit=crop" alt="Cheese" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex-1">
+                      <div class="flex justify-between">
+                        <div>
+                          <h3 class="font-semibold text-zinc-900 text-lg">Traditional Moldovan Cheese</h3>
+                          <p class="text-zinc-500 mt-1">Brânză de burduf, 500g</p>
+                          <div class="flex items-center gap-3 mt-2">
+                            <span class="inline-flex items-center gap-1 text-sm text-amber-700 bg-amber-50 px-2.5 py-1 rounded-full font-medium">
+                              <span class="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span>
+                              Only 3 left
+                            </span>
+                            <span class="text-sm text-zinc-400">Delivery: Dec 29-31</span>
+                          </div>
+                        </div>
+                        <div class="text-right">
+                          <p class="text-xl font-bold text-zinc-900">€12.50</p>
+                        </div>
+                      </div>
+                      <div class="flex items-center justify-between mt-4 pt-4 border-t border-zinc-100">
+                        <div class="flex items-center gap-6">
+                          <select class="bg-zinc-50 border border-zinc-200 rounded-lg px-4 py-2 text-sm font-medium cursor-pointer">
+                            <option>Qty: 1</option>
+                            <option>Qty: 2</option>
+                            <option>Qty: 3</option>
+                          </select>
+                          <button class="text-sm text-zinc-500 hover:text-brand-600 transition-base">Delete</button>
+                          <button class="text-sm text-zinc-500 hover:text-brand-600 transition-base">Save for later</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Frequently Bought Together -->
+                <div class="bg-white rounded-xl border border-zinc-200 p-6">
+                  <h3 class="font-semibold text-zinc-900 mb-4">Frequently bought together</h3>
+                  <div class="flex items-center gap-6">
+                    <div class="w-20 h-20 bg-zinc-100 rounded-lg flex-shrink-0 overflow-hidden">
+                      <img src="https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=160&h=160&fit=crop" alt="Honey" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex-1">
+                      <h4 class="font-medium text-zinc-900">Moldovan Honey - Raw & Organic</h4>
+                      <p class="text-emerald-600 text-sm mt-1">Adds €8.99 - Qualifies for free shipping!</p>
+                    </div>
+                    <div class="text-right">
+                      <p class="font-bold text-zinc-900 text-lg">€8.99</p>
+                    </div>
+                    <button class="px-6 py-2.5 bg-zinc-900 text-white font-medium rounded-lg hover:bg-zinc-800 transition-base">
+                      Add to Cart
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Summary Column -->
+              <div class="col-span-1">
+                <div class="bg-white rounded-xl border border-zinc-200 p-6 sticky top-24">
+                  <h2 class="font-semibold text-zinc-900 text-lg mb-4">Order Summary</h2>
+
+                  <div class="space-y-3 pb-4 border-b border-zinc-100">
+                    <div class="flex justify-between text-sm">
+                      <span class="text-zinc-500">Subtotal (3 items)</span>
+                      <span class="text-zinc-900">€62.48</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                      <span class="text-zinc-500">Shipping</span>
+                      <span class="text-zinc-500">Calculated at checkout</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                      <span class="text-zinc-500">Tax</span>
+                      <span class="text-zinc-500">Calculated at checkout</span>
+                    </div>
+                  </div>
+
+                  <div class="flex justify-between py-4 border-b border-zinc-100">
+                    <span class="font-semibold text-zinc-900">Total</span>
+                    <span class="font-bold text-zinc-900 text-xl">€62.48</span>
+                  </div>
+
+                  <div class="flex items-center gap-2 text-sm text-emerald-600 py-4">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span>Your order qualifies for free delivery</span>
+                  </div>
+
+                  <button class="w-full py-4 bg-brand-600 text-white font-semibold rounded-xl hover:bg-brand-700 active:bg-brand-800 transition-base">
+                    Proceed to Checkout
+                  </button>
+
+                  <div class="flex items-center justify-center gap-2 mt-4 text-sm text-zinc-500">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                    </svg>
+                    <span>Secure 256-bit SSL encryption</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Option D Desktop -->
+    <section id="option-d-desktop" class="option-section py-12 px-6">
+      <div class="max-w-6xl mx-auto">
+        <div class="mb-8">
+          <div class="inline-flex items-center gap-2 px-3 py-1 bg-brand-50 text-brand-700 rounded-full text-sm font-medium mb-2">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            Recommended - Desktop
+          </div>
+          <h2 class="text-2xl font-bold text-zinc-900">Hybrid Design</h2>
+        </div>
+
+        <div class="desktop-frame">
+          <div class="browser-bar">
+            <div class="browser-dot bg-red-400"></div>
+            <div class="browser-dot bg-amber-400"></div>
+            <div class="browser-dot bg-emerald-400"></div>
+            <div class="flex-1 mx-4">
+              <div class="bg-white border border-zinc-200 rounded-md px-3 py-1 text-sm text-zinc-500 max-w-md">
+                moldovadirect.com/cart
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-zinc-50 p-8 min-h-[600px]">
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-8">
+              <div>
+                <h1 class="text-3xl font-bold text-zinc-900">Your Cart</h1>
+                <p class="text-zinc-500 mt-1">3 items in your cart</p>
+              </div>
+              <a href="#" class="text-brand-600 hover:text-brand-700 font-medium transition-base flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Continue Shopping
+              </a>
+            </div>
+
+            <div class="grid grid-cols-3 gap-8">
+              <!-- Cart Items Column -->
+              <div class="col-span-2 space-y-6">
+                <!-- Shipping Progress -->
+                <div class="bg-white rounded-2xl border border-zinc-200 p-5 flex items-center gap-6">
+                  <div class="flex-1">
+                    <div class="flex items-center justify-between mb-2">
+                      <span class="font-medium text-zinc-900">Free shipping progress</span>
+                      <span class="text-sm text-zinc-500">€37.48 / €50.00</span>
+                    </div>
+                    <div class="h-2 bg-zinc-100 rounded-full overflow-hidden">
+                      <div class="h-full bg-emerald-500 rounded-full progress-animated" style="width: 75%"></div>
+                    </div>
+                  </div>
+                  <div class="text-right">
+                    <p class="text-emerald-600 font-medium">€12.52 away</p>
+                    <p class="text-sm text-zinc-500">from free shipping</p>
+                  </div>
+                </div>
+
+                <!-- Cart Items -->
+                <div class="space-y-4">
+                  <!-- Item 1 -->
+                  <div class="bg-white rounded-2xl border border-zinc-200 p-6 card-interactive">
+                    <div class="flex gap-6">
+                      <div class="w-32 h-32 bg-zinc-100 rounded-xl flex-shrink-0 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=256&h=256&fit=crop" alt="Wine" class="w-full h-full object-cover">
+                      </div>
+                      <div class="flex-1">
+                        <div class="flex justify-between items-start">
+                          <div>
+                            <h3 class="font-semibold text-zinc-900 text-lg">Moldovan Red Wine</h3>
+                            <p class="text-zinc-500 mt-1">Cabernet Sauvignon, 750ml</p>
+                            <span class="inline-flex items-center gap-1.5 text-sm text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full mt-3">
+                              <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                              In Stock
+                            </span>
+                          </div>
+                          <button class="p-2 text-zinc-400 hover:text-brand-600 hover:bg-brand-50 rounded-lg transition-base">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                          </button>
+                        </div>
+                        <div class="flex items-center justify-between mt-6 pt-4 border-t border-zinc-100">
+                          <div class="flex items-center bg-zinc-100 rounded-lg p-1">
+                            <button class="qty-btn w-10 h-10 rounded-md flex items-center justify-center text-zinc-600">
+                              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                              </svg>
+                            </button>
+                            <span class="w-12 text-center font-semibold text-zinc-900">2</span>
+                            <button class="qty-btn w-10 h-10 rounded-md flex items-center justify-center text-zinc-600">
+                              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6"></path>
+                              </svg>
+                            </button>
+                          </div>
+                          <div class="text-right">
+                            <p class="text-2xl font-bold text-zinc-900">€49.98</p>
+                            <p class="text-sm text-zinc-400">€24.99 each</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Item 2 -->
+                  <div class="bg-white rounded-2xl border border-amber-200 p-6 card-interactive">
+                    <div class="flex gap-6">
+                      <div class="w-32 h-32 bg-zinc-100 rounded-xl flex-shrink-0 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=256&h=256&fit=crop" alt="Cheese" class="w-full h-full object-cover">
+                      </div>
+                      <div class="flex-1">
+                        <div class="flex justify-between items-start">
+                          <div>
+                            <h3 class="font-semibold text-zinc-900 text-lg">Traditional Cheese</h3>
+                            <p class="text-zinc-500 mt-1">Brânză de burduf, 500g</p>
+                            <span class="inline-flex items-center gap-1.5 text-sm text-amber-700 bg-amber-50 px-2.5 py-1 rounded-full mt-3 font-medium">
+                              <span class="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span>
+                              Only 3 left
+                            </span>
+                          </div>
+                          <button class="p-2 text-zinc-400 hover:text-brand-600 hover:bg-brand-50 rounded-lg transition-base">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                          </button>
+                        </div>
+                        <div class="flex items-center justify-between mt-6 pt-4 border-t border-zinc-100">
+                          <div class="flex items-center bg-zinc-100 rounded-lg p-1">
+                            <button class="qty-btn w-10 h-10 rounded-md flex items-center justify-center text-zinc-600" disabled>
+                              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                              </svg>
+                            </button>
+                            <span class="w-12 text-center font-semibold text-zinc-900">1</span>
+                            <button class="qty-btn w-10 h-10 rounded-md flex items-center justify-center text-zinc-600">
+                              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6"></path>
+                              </svg>
+                            </button>
+                          </div>
+                          <p class="text-2xl font-bold text-zinc-900">€12.50</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Recommendations -->
+                <div>
+                  <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-semibold text-zinc-900 text-lg">You might also like</h3>
+                    <button class="text-sm text-zinc-500 hover:text-zinc-700 transition-base">View all</button>
+                  </div>
+                  <div class="grid grid-cols-3 gap-4">
+                    <div class="bg-white rounded-xl border border-zinc-200 p-4 card-interactive">
+                      <div class="aspect-square bg-zinc-100 rounded-lg mb-3 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=256&h=256&fit=crop" alt="Honey" class="w-full h-full object-cover">
+                      </div>
+                      <h4 class="font-medium text-zinc-900">Moldovan Honey</h4>
+                      <p class="text-sm text-zinc-500 mt-0.5">Raw & Organic, 500g</p>
+                      <div class="flex items-center justify-between mt-3">
+                        <span class="font-bold text-zinc-900 text-lg">€8.99</span>
+                        <button class="px-4 py-2 bg-zinc-900 text-white text-sm font-medium rounded-lg hover:bg-zinc-800 transition-base">Add</button>
+                      </div>
+                    </div>
+                    <div class="bg-white rounded-xl border border-zinc-200 p-4 card-interactive">
+                      <div class="aspect-square bg-zinc-100 rounded-lg mb-3 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1595981267035-7b04ca84a82d?w=256&h=256&fit=crop" alt="Preserves" class="w-full h-full object-cover">
+                      </div>
+                      <h4 class="font-medium text-zinc-900">Fruit Preserves</h4>
+                      <p class="text-sm text-zinc-500 mt-0.5">Homemade, 350g</p>
+                      <div class="flex items-center justify-between mt-3">
+                        <span class="font-bold text-zinc-900 text-lg">€6.50</span>
+                        <button class="px-4 py-2 bg-zinc-900 text-white text-sm font-medium rounded-lg hover:bg-zinc-800 transition-base">Add</button>
+                      </div>
+                    </div>
+                    <div class="bg-white rounded-xl border border-zinc-200 p-4 card-interactive">
+                      <div class="aspect-square bg-zinc-100 rounded-lg mb-3 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?w=256&h=256&fit=crop" alt="Vegetables" class="w-full h-full object-cover">
+                      </div>
+                      <h4 class="font-medium text-zinc-900">Pickled Veggies</h4>
+                      <p class="text-sm text-zinc-500 mt-0.5">Traditional, 720ml</p>
+                      <div class="flex items-center justify-between mt-3">
+                        <span class="font-bold text-zinc-900 text-lg">€5.99</span>
+                        <button class="px-4 py-2 bg-zinc-900 text-white text-sm font-medium rounded-lg hover:bg-zinc-800 transition-base">Add</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Summary Column -->
+              <div class="col-span-1">
+                <div class="bg-white rounded-2xl border border-zinc-200 p-6 sticky top-24">
+                  <h2 class="font-semibold text-zinc-900 text-lg mb-6">Order Summary</h2>
+
+                  <div class="space-y-4 pb-4">
+                    <div class="flex justify-between">
+                      <span class="text-zinc-500">Subtotal</span>
+                      <span class="text-zinc-900 font-medium">€62.48</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-zinc-500">Shipping</span>
+                      <span class="text-zinc-500">Calculated at checkout</span>
+                    </div>
+                    <div class="flex justify-between text-emerald-600">
+                      <span>You're saving</span>
+                      <span class="font-medium">-€5.00</span>
+                    </div>
+                  </div>
+
+                  <div class="border-t border-zinc-200 pt-4 mb-6">
+                    <div class="flex justify-between items-center">
+                      <span class="font-semibold text-zinc-900 text-lg">Total</span>
+                      <span class="font-bold text-zinc-900 text-2xl">€62.48</span>
+                    </div>
+                  </div>
+
+                  <button class="w-full py-4 bg-brand-600 text-white font-semibold rounded-xl hover:bg-brand-700 active:bg-brand-800 transition-base flex items-center justify-center gap-2 mb-3">
+                    <span>Checkout</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                    </svg>
+                  </button>
+
+                  <button class="w-full py-3 border border-zinc-200 text-zinc-700 font-medium rounded-xl hover:bg-zinc-50 transition-base">
+                    Continue Shopping
+                  </button>
+
+                  <div class="mt-6 pt-6 border-t border-zinc-100">
+                    <div class="flex items-center gap-3 text-sm text-zinc-500">
+                      <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                      </svg>
+                      <span>Secure checkout with SSL</span>
+                    </div>
+                    <div class="flex items-center gap-3 text-sm text-zinc-500 mt-2">
+                      <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                      </svg>
+                      <span>All major cards accepted</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Comparison -->
+  <section class="py-16 px-6 bg-white border-t border-zinc-200">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-2xl font-bold text-zinc-900 text-center mb-8">Quick Comparison</h2>
+
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead>
+            <tr class="border-b border-zinc-200">
+              <th class="text-left py-4 px-4 font-medium text-zinc-500">Feature</th>
+              <th class="py-4 px-4 text-center">
+                <span class="inline-block px-3 py-1 bg-amber-50 text-amber-700 rounded-full text-sm font-medium">Option B</span>
+              </th>
+              <th class="py-4 px-4 text-center">
+                <span class="inline-flex items-center gap-1 px-3 py-1 bg-brand-50 text-brand-700 rounded-full text-sm font-medium">
+                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  Option D
+                </span>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="text-sm">
+            <tr class="border-b border-zinc-100">
+              <td class="py-3 px-4 text-zinc-700">Visual Clarity</td>
+              <td class="py-3 px-4 text-center">Good</td>
+              <td class="py-3 px-4 text-center font-medium text-emerald-600">Excellent</td>
+            </tr>
+            <tr class="border-b border-zinc-100">
+              <td class="py-3 px-4 text-zinc-700">Information Density</td>
+              <td class="py-3 px-4 text-center font-medium text-emerald-600">High</td>
+              <td class="py-3 px-4 text-center">Balanced</td>
+            </tr>
+            <tr class="border-b border-zinc-100">
+              <td class="py-3 px-4 text-zinc-700">Conversion Optimization</td>
+              <td class="py-3 px-4 text-center font-medium text-emerald-600">Excellent</td>
+              <td class="py-3 px-4 text-center font-medium text-emerald-600">Excellent</td>
+            </tr>
+            <tr class="border-b border-zinc-100">
+              <td class="py-3 px-4 text-zinc-700">Premium Feel</td>
+              <td class="py-3 px-4 text-center">Good</td>
+              <td class="py-3 px-4 text-center font-medium text-emerald-600">Excellent</td>
+            </tr>
+            <tr class="border-b border-zinc-100">
+              <td class="py-3 px-4 text-zinc-700">Mobile Experience</td>
+              <td class="py-3 px-4 text-center">Good</td>
+              <td class="py-3 px-4 text-center font-medium text-emerald-600">Excellent</td>
+            </tr>
+            <tr>
+              <td class="py-4 px-4 font-medium text-zinc-900">Best For</td>
+              <td class="py-4 px-4 text-center text-zinc-600">High-volume retail</td>
+              <td class="py-4 px-4 text-center text-zinc-600">Premium products</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-8 px-6 bg-zinc-50 border-t border-zinc-200">
+    <div class="max-w-4xl mx-auto text-center">
+      <p class="text-sm text-zinc-500">Moldova Direct Cart UX Proposals v2 • December 2025</p>
+      <p class="text-sm text-zinc-400 mt-1">Built with Tailwind CSS following modern design principles</p>
+    </div>
+  </footer>
+
+  <script>
+    // Show/hide views
+    function showView(view) {
+      const mobileView = document.getElementById('mobile-view');
+      const desktopView = document.getElementById('desktop-view');
+      const btnMobile = document.getElementById('btn-mobile');
+      const btnDesktop = document.getElementById('btn-desktop');
+
+      if (view === 'mobile') {
+        mobileView.classList.remove('hidden');
+        desktopView.classList.add('hidden');
+        btnMobile.classList.add('bg-zinc-100', 'text-zinc-900');
+        btnMobile.classList.remove('text-zinc-500');
+        btnDesktop.classList.remove('bg-zinc-100', 'text-zinc-900');
+        btnDesktop.classList.add('text-zinc-500');
+      } else {
+        mobileView.classList.add('hidden');
+        desktopView.classList.remove('hidden');
+        btnDesktop.classList.add('bg-zinc-100', 'text-zinc-900');
+        btnDesktop.classList.remove('text-zinc-500');
+        btnMobile.classList.remove('bg-zinc-100', 'text-zinc-900');
+        btnMobile.classList.add('text-zinc-500');
+      }
+
+      // Apply current option to new view
+      const currentOption = document.querySelector('.option-tab.bg-zinc-900') ? 'd' : 'b';
+      showOption(currentOption);
+    }
+
+    // Show/hide options
+    function showOption(option) {
+      const isMobile = !document.getElementById('mobile-view').classList.contains('hidden');
+
+      // Hide all sections
+      document.querySelectorAll('.option-section').forEach(section => {
+        section.classList.add('hidden');
+      });
+
+      // Show selected section based on view
+      if (isMobile) {
+        document.getElementById('option-' + option).classList.remove('hidden');
+      } else {
+        document.getElementById('option-' + option + '-desktop').classList.remove('hidden');
+      }
+
+      // Update tabs
+      document.querySelectorAll('.option-tab').forEach(tab => {
+        tab.classList.remove('bg-zinc-900', 'text-white', 'shadow-sm');
+        tab.classList.add('bg-white', 'border', 'border-zinc-200', 'text-zinc-600');
+      });
+
+      const activeTab = document.getElementById('tab-' + option);
+      activeTab.classList.remove('bg-white', 'border', 'border-zinc-200', 'text-zinc-600');
+      activeTab.classList.add('bg-zinc-900', 'text-white', 'shadow-sm');
+    }
+
+    // Toggle summary expansion
+    function toggleSummary(btn) {
+      const summary = btn.parentElement.querySelector('.summary-content');
+      if (summary.classList.contains('max-h-0')) {
+        summary.classList.remove('max-h-0');
+        summary.classList.add('max-h-40');
+      } else {
+        summary.classList.add('max-h-0');
+        summary.classList.remove('max-h-40');
+      }
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      showOption('d');
+    });
+  </script>
+</body>
+</html>
