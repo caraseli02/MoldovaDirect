@@ -72,45 +72,17 @@ console.log('✅ Step 11: Confirmation title visible')
 
 ---
 
-### 2. ⚠️ Confirmation Page Visual Regression Tests (Skipped)
+### 2. 🔮 Confirmation Page Visual Regression Tests (Future Work)
 
-**File:** `tests/visual-regression/confirmation-page.spec.ts` (NEW - 320 lines)
-
-**Status:** Tests are skipped due to a known issue with orderData calculation
+**Status:** Removed - tests were entirely skipped due to known issue
 
 **Issue:** The checkout store's `calculateOrderData` shows 0.00 subtotal during test execution,
 preventing shipping methods from loading. This requires investigation into how cart state
 is synced to checkout store during SSR/hydration.
 
-**Coverage:** 10 planned screenshot tests (currently skipped)
+**TODO:** Re-implement when cart→checkout state sync is fixed for SSR/hydration
 
-#### Guest Checkout Confirmation (3 tests)
-- ✅ Desktop viewport (1920x1080)
-- ✅ Mobile viewport (375x667)
-- ✅ Tablet viewport (768x1024)
-
-#### Multi-Locale Confirmation (4 tests)
-- ✅ English (en) - desktop
-- ✅ Spanish (es) - desktop
-- ✅ Romanian (ro) - desktop
-- ✅ Russian (ru) - desktop
-
-#### Express Checkout Confirmation (1 test)
-- ✅ Express checkout flow - desktop
-- **Note:** Skipped by default (requires `TEST_USER_WITH_ADDRESS` env var)
-
-#### Component Screenshots (1 test)
-- ✅ Order summary section
-
-#### Features Tested
-- Order number display (masked for consistency)
-- Order confirmation title in all 4 locales
-- Order summary with items, subtotal, shipping, tax, total
-- "Continue Shopping" / "View Order" buttons
-- Order date/time display (masked)
-- Payment method confirmation
-- Shipping address display
-- Email confirmation message
+**Planned Coverage:** 10 screenshot tests across guest, multi-locale, and express checkout flows
 
 ---
 
@@ -251,15 +223,6 @@ npx playwright test tests/e2e/critical/checkout-critical.spec.ts
 
 **Expected Result:** All tests pass, orders created in database
 
-### Test Confirmation Page Visual Regression
-
-```bash
-# Generate confirmation page baselines
-npx playwright test tests/visual-regression/confirmation-page.spec.ts --config=playwright.visual-regression.config.ts
-```
-
-**Expected Result:** 10 new screenshots generated in `tests/visual-regression/confirmation-page.spec.ts-snapshots/`
-
 ### Clean Up Test Orders
 
 ```bash
@@ -324,8 +287,7 @@ npx tsx tests/fixtures/order-cleanup.ts
 
 1. ✅ `CHECKOUT-TEST-COVERAGE-ANALYSIS.md` - Comprehensive test coverage analysis
 2. ✅ `END-TO-END-TESTING-COMPLETE.md` - This file (implementation summary)
-3. ✅ `tests/visual-regression/confirmation-page.spec.ts` - New test file with inline documentation
-4. ✅ `tests/fixtures/order-cleanup.ts` - Utility with usage documentation
+3. ✅ `tests/fixtures/order-cleanup.ts` - Utility with usage documentation
 
 ---
 

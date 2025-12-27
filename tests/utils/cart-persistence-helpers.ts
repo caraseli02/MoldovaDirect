@@ -324,8 +324,3 @@ export interface CartItem {
   }
   quantity: number
 }
-
-// Export singleton factory for convenience
-export function createCartHelpers(page: Page): CartPersistenceHelpers {
-  return new CartPersistenceHelpers(page)
-}
