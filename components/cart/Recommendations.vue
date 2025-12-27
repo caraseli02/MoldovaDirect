@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="recommendations && recommendations.length > 0"
+    v-if="showComponent"
     class="mt-6"
   >
     <!-- Header -->
@@ -15,15 +15,27 @@
       >
         {{ $t('common.refresh') }}
       </button>
+      <div
+        v-else
+        class="w-4 h-4 animate-spin rounded-full border-2 border-zinc-300 border-t-primary-600"
+      ></div>
     </div>
 
-    <!-- Loading State -->
+    <!-- Loading State (only show full loading on initial load when no cached data) -->
     <div
-      v-if="recommendationsLoading"
+      v-if="recommendationsLoading && displayRecommendations.length === 0"
       class="flex items-center justify-center py-8"
     >
       <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-primary-600"></div>
       <span class="ml-2 text-sm text-zinc-500 dark:text-zinc-400">{{ $t('common.loading') }}</span>
+    </div>
+
+    <!-- Empty State -->
+    <div
+      v-else-if="!recommendationsLoading && displayRecommendations.length === 0"
+      class="text-center py-6 text-zinc-500 dark:text-zinc-400"
+    >
+      <p class="text-sm">{{ $t('cart.recommendations.noRecommendations', 'No recommendations available') }}</p>
     </div>
 
     <!-- Horizontal Scroll Recommendations -->
@@ -32,7 +44,7 @@
       class="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory scrollbar-hide"
     >
       <div
-        v-for="recommendation in recommendations"
+        v-for="recommendation in displayRecommendations"
         :key="recommendation.id"
         class="flex-shrink-0 w-36 md:w-40 bg-white dark:bg-zinc-800/60 rounded-xl border border-zinc-200 dark:border-zinc-700/50 p-3 snap-start hover:shadow-md transition-shadow"
       >
@@ -106,7 +118,7 @@
     <!-- Desktop Grid View (hidden on mobile) -->
     <div class="hidden lg:grid lg:grid-cols-3 gap-4 mt-4">
       <div
-        v-for="recommendation in recommendations.slice(0, 3)"
+        v-for="recommendation in displayRecommendations.slice(0, 3)"
         :key="`desktop-${recommendation.id}`"
         class="bg-white dark:bg-zinc-800/60 rounded-xl border border-zinc-200 dark:border-zinc-700/50 p-4 hover:shadow-md transition-shadow"
       >
@@ -155,14 +167,47 @@ import type { Product } from '~/stores/cart/types'
 const toast = useToast()
 const { t, locale } = useI18n()
 
-// Cart functionality
-const {
-  recommendations,
-  recommendationsLoading,
-  loadRecommendations,
-  addItem,
-  isInCart,
-} = useCart()
+// Cart functionality - with null safety
+const cart = useCart()
+const recommendations = computed(() => cart.recommendations?.value ?? [])
+const recommendationsLoading = computed(() => cart.recommendationsLoading?.value ?? false)
+const loadRecommendations = cart.loadRecommendations
+const addItem = cart.addItem
+const isInCart = cart.isInCart
+
+// Track if we've ever tried to load recommendations
+const hasAttemptedLoad = ref(false)
+const hasError = ref(false)
+
+// Keep a local cache of recommendations to show while loading new ones
+const cachedRecommendations = ref<any[]>([])
+
+// Update cache when we have new recommendations
+watch(recommendations, (newVal) => {
+  if (newVal && newVal.length > 0) {
+    cachedRecommendations.value = [...newVal]
+    hasError.value = false
+  }
+}, { immediate: true })
+
+// Display recommendations - prefer store data, fall back to cache while loading
+const displayRecommendations = computed(() => {
+  if (recommendations.value && recommendations.value.length > 0) {
+    return recommendations.value
+  }
+  // While loading, show cached data if available
+  if (recommendationsLoading.value && cachedRecommendations.value.length > 0) {
+    return cachedRecommendations.value
+  }
+  return recommendations.value || []
+})
+
+// Show component if loading, has recommendations, has cached recommendations, or has attempted to load
+const showComponent = computed(() => {
+  return recommendationsLoading.value ||
+         displayRecommendations.value.length > 0 ||
+         hasAttemptedLoad.value
+})
 
 // Load recommendations on mount
 onMounted(async () => {
@@ -172,7 +217,10 @@ onMounted(async () => {
     }
     catch {
       // Silently handle recommendation loading errors
+      hasError.value = true
     }
+  } else {
+    hasAttemptedLoad.value = true
   }
 })
 
@@ -214,6 +262,7 @@ const getReasonText = (reason: string) => {
 
 // Handle recommendations operations
 const handleLoadRecommendations = async () => {
+  hasAttemptedLoad.value = true
   try {
     await loadRecommendations()
   }
