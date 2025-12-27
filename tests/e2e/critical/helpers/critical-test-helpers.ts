@@ -344,8 +344,13 @@ export class CriticalTestHelpers {
    * @throws Error if checkout button is not found or navigation fails
    */
   async navigateToCheckoutClientSide(): Promise<void> {
+    // Scroll to top to ensure header cart link is visible
+    await this.page.evaluate(() => window.scrollTo(0, 0))
+    await this.page.waitForTimeout(300)
+
     // Click cart link to navigate to cart page
     const cartLink = this.page.locator('a[href*="/cart"]').first()
+    await cartLink.waitFor({ state: 'visible', timeout: 5000 })
     await cartLink.click()
     await this.page.waitForURL(/\/cart/, { timeout: 10000 })
     await this.page.waitForLoadState('networkidle')

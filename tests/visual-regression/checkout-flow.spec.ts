@@ -590,6 +590,9 @@ test.describe('Checkout - Express Checkout Banner', () => {
     // Login as test user
     await helpers.loginAsTestUser()
 
+    // Clean up existing addresses for consistent screenshot size
+    await helpers.deleteAllSavedAddresses()
+
     // Create a saved address to enable express checkout
     await helpers.createSavedAddressForUser()
 
@@ -628,6 +631,9 @@ test.describe('Checkout - Express Checkout Banner', () => {
 
     const helpers = new CriticalTestHelpers(page)
     await helpers.loginAsTestUser()
+
+    // Clean up existing addresses for consistent screenshot size
+    await helpers.deleteAllSavedAddresses()
     await helpers.createSavedAddressForUser()
 
     // Use client-side navigation to preserve cart state
@@ -662,6 +668,9 @@ test.describe('Checkout - Express Checkout Banner', () => {
 
     const helpers = new CriticalTestHelpers(page)
     await helpers.loginAsTestUser()
+
+    // Clean up existing addresses for consistent screenshot size
+    await helpers.deleteAllSavedAddresses()
     await helpers.createSavedAddressForUser()
 
     // Use client-side navigation to preserve cart state (at desktop size)
