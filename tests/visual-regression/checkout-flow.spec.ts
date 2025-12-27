@@ -590,12 +590,11 @@ test.describe('Checkout - Express Checkout Banner', () => {
     // Login as test user
     await helpers.loginAsTestUser()
 
-    // Add product to cart
-    await helpers.addFirstProductToCart()
+    // Create a saved address to enable express checkout
+    await helpers.createSavedAddressForUser()
 
-    // Navigate to checkout
-    await page.goto('/checkout')
-    await page.waitForLoadState('networkidle')
+    // Add product and navigate to checkout (uses client-side navigation to preserve cart state)
+    await helpers.addProductAndNavigateToCheckout()
     await page.waitForTimeout(1500)
 
     const checkoutPage = new CheckoutPage(page)
@@ -614,6 +613,9 @@ test.describe('Checkout - Express Checkout Banner', () => {
         ],
       })
     }
+    else {
+      console.log('  ⚠️ Express banner not visible - may need to check address/user setup')
+    }
   })
 
   test('express checkout dismissed - show full form', async ({ page }) => {
@@ -626,9 +628,10 @@ test.describe('Checkout - Express Checkout Banner', () => {
 
     const helpers = new CriticalTestHelpers(page)
     await helpers.loginAsTestUser()
-    await helpers.addFirstProductToCart()
-    await page.goto('/checkout')
-    await page.waitForLoadState('networkidle')
+    await helpers.createSavedAddressForUser()
+
+    // Use client-side navigation to preserve cart state
+    await helpers.addProductAndNavigateToCheckout()
     await page.waitForTimeout(1500)
 
     const checkoutPage = new CheckoutPage(page)
@@ -643,6 +646,9 @@ test.describe('Checkout - Express Checkout Banner', () => {
         mask: dynamicContentMasks.map(s => page.locator(s)),
       })
     }
+    else {
+      console.log('  ⚠️ Express banner not visible - cannot test dismissal')
+    }
   })
 
   test('express checkout banner - mobile', async ({ page }) => {
@@ -651,12 +657,19 @@ test.describe('Checkout - Express Checkout Banner', () => {
       return
     }
 
-    await page.setViewportSize(VIEWPORTS.mobile)
+    // Start with desktop viewport for navigation (cart link visible on desktop)
+    await page.setViewportSize(VIEWPORTS.desktop)
 
     const helpers = new CriticalTestHelpers(page)
     await helpers.loginAsTestUser()
-    await helpers.addFirstProductToCart()
-    await page.goto('/checkout')
+    await helpers.createSavedAddressForUser()
+
+    // Use client-side navigation to preserve cart state (at desktop size)
+    await helpers.addProductAndNavigateToCheckout()
+
+    // Now resize to mobile and reload to test mobile layout
+    await page.setViewportSize(VIEWPORTS.mobile)
+    await page.reload()
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(1500)
 
@@ -671,6 +684,9 @@ test.describe('Checkout - Express Checkout Banner', () => {
           page.locator('[data-testid="saved-address"]'),
         ],
       })
+    }
+    else {
+      console.log('  ⚠️ Express banner not visible on mobile - may need to check address/user setup')
     }
   })
 })

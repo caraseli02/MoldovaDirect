@@ -581,4 +581,57 @@ export class CriticalTestHelpers {
     await placeOrderButton.click()
     await this.page.waitForLoadState('networkidle')
   }
+
+  /**
+   * Create a saved address for the test user via API
+   * Required for express checkout banner to appear
+   */
+  async createSavedAddressForUser(): Promise<void> {
+    const address = TEST_DATA.TEST_ADDRESS
+
+    // Make API request to create address (requires authenticated session)
+    const response = await this.page.request.post('/api/checkout/addresses', {
+      data: {
+        firstName: address.fullName.split(' ')[0],
+        lastName: address.fullName.split(' ').slice(1).join(' ') || 'Test',
+        street: address.street,
+        city: address.city,
+        postalCode: address.postalCode,
+        country: address.country,
+        phone: address.phone,
+        type: 'shipping',
+        isDefault: true,
+      },
+    })
+
+    if (response.ok()) {
+      console.log('  ✅ Created saved address for express checkout')
+    }
+    else {
+      const text = await response.text()
+      console.log(`  ⚠️ Could not create address: ${response.status()} - ${text}`)
+    }
+  }
+
+  /**
+   * Delete all saved addresses for the test user
+   * Useful for cleanup after express checkout tests
+   */
+  async deleteAllSavedAddresses(): Promise<void> {
+    // Get all addresses
+    const getResponse = await this.page.request.get('/api/checkout/addresses')
+    if (!getResponse.ok()) return
+
+    const data = await getResponse.json()
+    const addresses = data.addresses || []
+
+    // Delete each address
+    for (const addr of addresses) {
+      await this.page.request.delete(`/api/checkout/addresses/${addr.id}`)
+    }
+
+    if (addresses.length > 0) {
+      console.log(`  🗑️ Deleted ${addresses.length} saved address(es)`)
+    }
+  }
 }
