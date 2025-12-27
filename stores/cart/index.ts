@@ -200,18 +200,35 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   /**
-   * Save cart data to storage using cookies
+   * Save cart data to storage using dual storage strategy (cookie + localStorage backup)
+   * Industry standard: Save to both for maximum reliability
    */
   async function saveToStorage(): Promise<{ success: boolean, error?: string }> {
     try {
       const data = serializeCartData()
-      console.log('💾 Saving cart to cookie:', {
+      console.log('💾 Saving cart to storage:', {
         itemsCount: data.items?.length || 0,
         sessionId: data.sessionId,
         timestamp: data.timestamp,
       })
+
+      // Save to cookie (primary - works with SSR)
       cartCookie.value = data
-      console.log('✅ Cart cookie value set')
+      console.log('   ✅ Cookie saved')
+
+      // Save to localStorage backup (secondary - more reliable for persistence)
+      if (import.meta.client) {
+        try {
+          localStorage.setItem(COOKIE_NAMES.CART + '_backup', JSON.stringify(data))
+          console.log('   ✅ LocalStorage backup saved')
+        }
+        catch (e) {
+          console.warn('   ⚠️ Failed to save localStorage backup:', e)
+          // Don't fail the operation - cookie save succeeded
+        }
+      }
+
+      console.log('✅ Cart saved successfully')
       return { success: true }
     }
     catch (error: any) {
@@ -224,22 +241,80 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   /**
-   * Load cart data from storage using cookies
+   * Load cart data from storage using dual storage strategy (cookie + localStorage backup)
+   * Industry standard: Use localStorage as primary for reliability, cookie for SSR hydration
    */
   async function loadFromStorage(): Promise<{ success: boolean, data?: CartCookieData | null, error?: string }> {
     try {
-      console.log('📥 Loading cart from cookie...')
-      const loadedData = cartCookie.value
-      console.log('   Cookie data:', loadedData ? `${JSON.stringify(loadedData).length} bytes` : 'null')
+      console.log('📥 Loading cart from storage...')
 
-      if (loadedData?.items) {
-        console.log(`   Found ${loadedData.items.length} items in cookie`)
-        deserializeCartData(loadedData)
-        console.log('✅ Cart loaded successfully')
-        return { success: true, data: loadedData }
+      // Strategy 1: Try cookie first (works on SSR and client)
+      const cookieData = cartCookie.value
+      console.log('   Cookie data:', cookieData ? `${JSON.stringify(cookieData).length} bytes` : 'null')
+
+      // Strategy 2: Try localStorage backup (client-only, more reliable for persistence)
+      let localStorageData: CartCookieData | null = null
+      if (import.meta.client) {
+        try {
+          const backupStr = localStorage.getItem(COOKIE_NAMES.CART + '_backup')
+          if (backupStr) {
+            localStorageData = JSON.parse(backupStr) as CartCookieData
+            console.log('   LocalStorage backup:', localStorageData?.items?.length || 0, 'items')
+          }
+        }
+        catch (e) {
+          console.warn('   Failed to read localStorage backup:', e)
+        }
       }
 
-      console.log('   No items in cookie (empty cart)')
+      // Determine which data source to use
+      // Priority: localStorage backup (if newer) > cookie > empty
+      let dataToUse: CartCookieData | null = null
+      let source = 'none'
+
+      if (cookieData?.items?.length && localStorageData?.items?.length) {
+        // Both have data - use the one with more recent timestamp
+        const cookieTime = new Date(cookieData.timestamp || 0).getTime()
+        const localTime = new Date(localStorageData.timestamp || 0).getTime()
+
+        if (localTime > cookieTime) {
+          dataToUse = localStorageData
+          source = 'localStorage (newer)'
+          // Sync cookie with localStorage data
+          cartCookie.value = localStorageData
+        }
+        else {
+          dataToUse = cookieData
+          source = 'cookie (newer or same)'
+          // Sync localStorage with cookie data
+          if (import.meta.client) {
+            localStorage.setItem(COOKIE_NAMES.CART + '_backup', JSON.stringify(cookieData))
+          }
+        }
+      }
+      else if (localStorageData?.items?.length) {
+        dataToUse = localStorageData
+        source = 'localStorage (cookie empty)'
+        // Restore cookie from localStorage backup
+        cartCookie.value = localStorageData
+      }
+      else if (cookieData?.items?.length) {
+        dataToUse = cookieData
+        source = 'cookie'
+        // Create localStorage backup
+        if (import.meta.client) {
+          localStorage.setItem(COOKIE_NAMES.CART + '_backup', JSON.stringify(cookieData))
+        }
+      }
+
+      if (dataToUse?.items?.length) {
+        console.log(`   Using ${source}: ${dataToUse.items.length} items`)
+        deserializeCartData(dataToUse)
+        console.log('✅ Cart loaded successfully')
+        return { success: true, data: dataToUse }
+      }
+
+      console.log('   No items found in any storage (empty cart)')
       return { success: true, data: null }
     }
     catch (error: any) {
@@ -252,11 +327,23 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   /**
-   * Clear cart data from storage using cookies
+   * Clear cart data from storage (both cookie and localStorage backup)
    */
   async function clearStorage(): Promise<{ success: boolean, error?: string }> {
     try {
+      // Clear cookie
       cartCookie.value = null
+
+      // Clear localStorage backup
+      if (import.meta.client) {
+        try {
+          localStorage.removeItem(COOKIE_NAMES.CART + '_backup')
+        }
+        catch (e) {
+          console.warn('Failed to clear localStorage backup:', e)
+        }
+      }
+
       return { success: true }
     }
     catch (error: any) {
@@ -272,14 +359,25 @@ export const useCartStore = defineStore('cart', () => {
   // INITIALIZATION
   // =============================================
 
+  // Track if cart has been initialized to prevent double initialization
+  let isInitialized = false
+
   /**
    * Initialize cart with all modules
+   * This is called by the cart plugin on client-side
    */
   function initializeCart(): void {
-    // Initialize core
+    if (isInitialized) {
+      console.log('⚠️ Cart already initialized, skipping')
+      return
+    }
+
+    console.log('🚀 Initializing cart...')
+
+    // Initialize core (generates sessionId if needed)
     core.initializeCart()
 
-    // Load from storage
+    // Load from storage - use async but don't block
     if (import.meta.client) {
       loadFromStorage().catch((error: any) => {
         console.warn('Failed to load cart from storage:', error)
@@ -302,6 +400,78 @@ export const useCartStore = defineStore('cart', () => {
         console.warn('Failed to load recommendations:', error)
       })
     }
+
+    isInitialized = true
+    console.log('✅ Cart initialization complete')
+  }
+
+  // =============================================
+  // EAGER HYDRATION - Industry Standard Pattern
+  // =============================================
+  // Immediately try to hydrate cart from storage when store is created
+  // This ensures cart items are visible as soon as possible on page load
+
+  if (import.meta.client) {
+    // Only hydrate if cart is currently empty (prevents duplicates on hot reload)
+    if (items.value.length === 0) {
+      // Check if cookie already has data (available immediately on hydration)
+      const existingCookieData = cartCookie.value
+      if (existingCookieData?.items?.length) {
+        console.log('🔄 Eager hydration: Found', existingCookieData.items.length, 'items in cookie')
+        try {
+          // Restore items to core state using directAddItem to bypass analytics/security
+          for (const item of existingCookieData.items) {
+            const product = {
+              id: item.product.id,
+              slug: item.product.slug,
+              name: item.product.name,
+              price: item.product.price,
+              images: item.product.images || [],
+              stock: item.product.stock,
+            }
+            // Use direct add to avoid triggering save (data is already persisted)
+            core.addItem(product, item.quantity)
+          }
+          // Mark as initialized to prevent double-load
+          isInitialized = true
+          console.log('✅ Eager hydration complete')
+        }
+        catch (e) {
+          console.warn('⚠️ Eager hydration failed, will retry on initializeCart:', e)
+        }
+      }
+      else {
+        // Check localStorage backup
+        try {
+          const backupStr = localStorage.getItem(COOKIE_NAMES.CART + '_backup')
+          if (backupStr) {
+            const backupData = JSON.parse(backupStr) as CartCookieData
+            if (backupData?.items?.length) {
+              console.log('🔄 Eager hydration: Found', backupData.items.length, 'items in localStorage backup')
+              for (const item of backupData.items) {
+                const product = {
+                  id: item.product.id,
+                  slug: item.product.slug,
+                  name: item.product.name,
+                  price: item.product.price,
+                  images: item.product.images || [],
+                  stock: item.product.stock,
+                }
+                core.addItem(product, item.quantity)
+              }
+              // Sync to cookie
+              cartCookie.value = backupData
+              // Mark as initialized
+              isInitialized = true
+              console.log('✅ Eager hydration from localStorage complete')
+            }
+          }
+        }
+        catch (e) {
+          console.warn('⚠️ Eager hydration from localStorage failed:', e)
+        }
+      }
+    }
   }
 
   // =============================================
@@ -312,26 +482,23 @@ export const useCartStore = defineStore('cart', () => {
 
   /**
    * Save cart data with debouncing to avoid excessive writes
+   * Industry standard: 300ms debounce for responsive UX with beforeunload backup
    */
   async function saveAndCacheCartData(): Promise<void> {
-    console.log('⏱️  saveAndCacheCartData called - scheduling save in 1 second')
-
     // Clear any existing timeout
     if (saveTimeoutId) {
       clearTimeout(saveTimeoutId)
-      console.log('   Cleared previous save timeout')
     }
 
-    // Set a new timeout for saving
+    // Set a new timeout for saving (300ms - industry standard for e-commerce)
     saveTimeoutId = setTimeout(async () => {
-      console.log('🔔 Save timeout fired - calling saveToStorage()')
       try {
         await saveToStorage()
       }
       catch (error: any) {
         console.warn('❌ Debounced save failed:', error)
       }
-    }, 1000) // 1 second debounce
+    }, 300) // 300ms debounce - fast enough for UX, slow enough to batch rapid changes
   }
 
   // =============================================
@@ -678,8 +845,101 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   // =============================================
-  // LIFECYCLE HOOKS
+  // LIFECYCLE HOOKS - PAGE UNLOAD HANDLERS
   // =============================================
+
+  // Industry standard: Save cart data before page unload to prevent data loss
+  // This handles: page refresh, tab close, browser close, navigation away
+  if (import.meta.client) {
+    // Primary handler: beforeunload fires on page refresh/close
+    const handleBeforeUnload = (_event: BeforeUnloadEvent) => {
+      // Cancel any pending debounced save
+      if (saveTimeoutId) {
+        clearTimeout(saveTimeoutId)
+        saveTimeoutId = null
+      }
+
+      // Synchronously save to localStorage (more reliable than cookie for unload)
+      try {
+        const data = serializeCartData()
+        if (data.items.length > 0) {
+          localStorage.setItem(COOKIE_NAMES.CART + '_backup', JSON.stringify(data))
+          console.log('💾 Cart backup saved to localStorage on unload')
+        }
+      }
+      catch (e) {
+        console.warn('Failed to save cart backup on unload:', e)
+      }
+
+      // Also try to save to cookie (synchronous operation)
+      try {
+        cartCookie.value = serializeCartData()
+      }
+      catch (e) {
+        console.warn('Failed to save cart cookie on unload:', e)
+      }
+    }
+
+    // Secondary handler: visibilitychange for mobile browsers
+    // Mobile browsers may not fire beforeunload reliably
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        // Cancel debounced save and save immediately
+        if (saveTimeoutId) {
+          clearTimeout(saveTimeoutId)
+          saveTimeoutId = null
+        }
+
+        try {
+          const data = serializeCartData()
+          if (data.items.length > 0) {
+            localStorage.setItem(COOKIE_NAMES.CART + '_backup', JSON.stringify(data))
+            cartCookie.value = data
+            console.log('💾 Cart saved on visibility hidden')
+          }
+        }
+        catch (e) {
+          console.warn('Failed to save cart on visibility change:', e)
+        }
+      }
+    }
+
+    // Tertiary handler: pagehide for Safari/iOS
+    const handlePageHide = (_event: PageTransitionEvent) => {
+      if (saveTimeoutId) {
+        clearTimeout(saveTimeoutId)
+        saveTimeoutId = null
+      }
+
+      try {
+        const data = serializeCartData()
+        if (data.items.length > 0) {
+          localStorage.setItem(COOKIE_NAMES.CART + '_backup', JSON.stringify(data))
+          cartCookie.value = data
+        }
+      }
+      catch (e) {
+        console.warn('Failed to save cart on pagehide:', e)
+      }
+    }
+
+    // Register all handlers
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    window.addEventListener('pagehide', handlePageHide)
+
+    // Cleanup on store disposal (though Pinia stores rarely get disposed)
+    // This is a best practice for memory leak prevention
+    if (typeof window !== 'undefined') {
+      const originalUnmount = window.onbeforeunload
+      window.onbeforeunload = (e) => {
+        handleBeforeUnload(e as BeforeUnloadEvent)
+        if (originalUnmount) {
+          return originalUnmount.call(window, e)
+        }
+      }
+    }
+  }
 
   // NOTE: onMounted/onUnmounted don't work in Pinia stores outside components
   // Cart loading is handled by initializeCart() called from plugin
