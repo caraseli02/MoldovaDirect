@@ -598,6 +598,41 @@ export const useCartStore = defineStore('cart', () => {
     return saveToStorage()
   }
 
+  /**
+   * Force immediate save without debouncing
+   * Used in test scenarios and critical operations to ensure state persists before navigation
+   * Cancels any pending debounced save to avoid race conditions
+   */
+  async function forceImmediateSave(): Promise<{ success: boolean, error?: string }> {
+    console.log('🔴 Force immediate save triggered')
+
+    // Cancel any pending debounced save to avoid race conditions
+    if (saveTimeoutId) {
+      clearTimeout(saveTimeoutId)
+      saveTimeoutId = null
+      console.log('   Cancelled pending debounced save')
+    }
+
+    // Save immediately
+    try {
+      const result = await saveToStorage()
+      if (result.success) {
+        console.log('✅ Immediate save complete')
+      }
+      else {
+        console.error('❌ Immediate save failed:', result.error)
+      }
+      return result
+    }
+    catch (error: any) {
+      console.error('❌ Force immediate save threw error:', error)
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      }
+    }
+  }
+
   function toggleBackgroundValidation(): void {
     if (validation.state.value.backgroundValidationEnabled) {
       validation.stopBackgroundValidation()
@@ -746,6 +781,7 @@ export const useCartStore = defineStore('cart', () => {
     directValidateCart,
     recoverCart,
     forceSync,
+    forceImmediateSave,
     toggleBackgroundValidation,
     clearValidationCache,
     performanceMetrics,

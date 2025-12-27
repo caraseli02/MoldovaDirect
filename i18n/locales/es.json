@@ -57,7 +57,10 @@
     "cartError": "Error en el carrito",
     "cartValidationError": "Error de validación",
     "proceedToCheckout": "Proceder al Pago",
-    "showOrderSummary": "Mostrar resumen del pedido"
+    "showOrderSummary": "Mostrar resumen del pedido",
+    "hideOrderSummary": "Ocultar resumen del pedido",
+    "item": "artículo",
+    "items": "artículos"
   },
   "cart": {
     "shippingCalculatedAtCheckout": "Calculado al finalizar",
@@ -236,7 +239,33 @@
     "recommendedProducts": "Productos recomendados",
     "decreaseQuantity": "Disminuir cantidad",
     "increaseQuantity": "Aumentar cantidad",
-    "removeItem": "Eliminar artículo"
+    "removeItem": "Eliminar artículo",
+    "itemCount": "{count} artículos",
+    "youSave": "Estás ahorrando",
+    "secureCheckout": "Pago seguro",
+    "allCardsAccepted": "Todas las tarjetas aceptadas",
+    "add": "Añadir",
+    "stock": {
+      "inStock": "En stock",
+      "low": "¡Solo quedan {count}!",
+      "outOfStock": "Agotado"
+    },
+    "shipping": {
+      "progress": "Progreso de envío gratis",
+      "freeShipping": "Envío gratis",
+      "qualified": "¡Tu pedido califica para envío gratis!",
+      "addMore": "Añade {amount} más para envío gratis"
+    },
+    "recommendations": {
+      "boughtTogether": "Comprados juntos",
+      "similar": "Similar",
+      "priceDrop": "Precio rebajado",
+      "backInStock": "Disponible de nuevo",
+      "recommended": "Recomendado",
+      "noRecommendations": "No hay recomendaciones disponibles",
+      "loadFailed": "No se pudieron cargar las recomendaciones"
+    },
+    "quantity": "{count} artículos"
   },
   "auth": {
     "signIn": "Iniciar Sesión",
@@ -1672,7 +1701,12 @@
       "shippingMethod": "Método de Envío",
       "deliveryInstructions": "Instrucciones de Entrega",
       "paymentMethod": "Método de Pago",
-      "editPayment": "Editar Pago"
+      "editPayment": "Editar Pago",
+      "acceptTerms": "Acepto los",
+      "termsOfService": "Términos y Condiciones",
+      "acceptPrivacy": "Consiento el procesamiento de mis datos personales según la",
+      "privacyPolicy": "Política de Privacidad",
+      "marketingConsent": "Me gustaría recibir comunicaciones de marketing y ofertas especiales"
     },
     "freeShipping": "Gratis",
     "processing": "Procesando...",
@@ -1710,6 +1744,7 @@
       "totalsUpdateFailedDetails": "No se pudieron actualizar los totales. Los precios mostrados pueden estar desactualizados."
     },
     "validation": {
+      "fullNameRequired": "El nombre completo es requerido",
       "firstNameRequired": "El nombre es requerido",
       "orderDataMissing": "Faltan datos del pedido. Por favor, inicia el proceso de pago de nuevo.",
       "shippingInfoMissing": "Falta información de envío. Por favor, completa los datos de envío.",
@@ -1732,6 +1767,10 @@
       "emailRequired": "El email es requerido",
       "emailInvalid": "Por favor ingresa un email válido"
     },
+    "warnings": {
+      "concurrentCheckout": "Múltiples Sesiones de Pago Detectadas",
+      "concurrentCheckoutDetails": "Parece que tienes esta página de pago abierta en otra pestaña o ventana. Por favor, completa tu compra en un solo lugar para evitar crear pedidos duplicados."
+    },
     "addressForm": {
       "shipping": {
         "title": "Dirección de Envío",
@@ -1744,24 +1783,26 @@
       "savedAddresses": "Direcciones Guardadas",
       "useNewAddress": "Usar una nueva dirección",
       "default": "Predeterminada",
+      "fullName": "Nombre Completo",
+      "fullNamePlaceholder": "Ej: Juan García López",
       "firstName": "Nombre",
       "firstNamePlaceholder": "Ingresa tu nombre",
       "lastName": "Apellido",
       "lastNamePlaceholder": "Ingresa tu apellido",
-      "company": "Empresa",
-      "companyPlaceholder": "Nombre de la empresa (opcional)",
       "street": "Dirección",
-      "streetPlaceholder": "Ingresa tu dirección",
+      "streetPlaceholder": "Calle, número, piso...",
       "city": "Ciudad",
       "cityPlaceholder": "Ingresa tu ciudad",
       "postalCode": "Código Postal",
-      "postalCodePlaceholder": "Ingresa el código postal",
+      "postalCodePlaceholder": "Ej: 28001",
       "province": "Provincia/Estado",
       "provincePlaceholder": "Provincia o estado (opcional)",
       "country": "País",
       "selectCountry": "Selecciona un país",
-      "phone": "Número de Teléfono",
-      "phonePlaceholder": "Ingresa tu número de teléfono (opcional)",
+      "phone": "Teléfono",
+      "phoneHelper": "para notificaciones de entrega",
+      "phonePlaceholder": "+34 600 000 000",
+      "phoneDescription": "Para contactarte sobre la entrega",
       "saveAddress": "Guardar esta dirección para futuros pedidos"
     },
     "shippingMethod": {
@@ -1782,6 +1823,11 @@
       "error": "Error cargando métodos de envío",
       "loadError": "Métodos de Envío",
       "usingDefaultOptions": "Usando opciones de envío predeterminadas. Las tarifas reales pueden variar.",
+      "fallbackWarning": {
+        "title": "Tarifas de Envío Estimadas",
+        "description": "No pudimos cargar las tarifas en tiempo real de nuestros transportistas. Mostrando tarifas estimadas a continuación. Las tarifas reales se calcularán antes de la confirmación final.",
+        "retry": "Reintentar cargar tarifas reales"
+      },
       "standard": {
         "name": "Envío Estándar",
         "description": "Entrega en 3-5 días hábiles"
@@ -1924,7 +1970,10 @@
       "failedToSetDefaultAddress": "No se pudo establecer la dirección predeterminada",
       "failedToDeleteAddress": "No se pudo eliminar la dirección",
       "expressCheckoutFailed": "Falló el pago express",
-      "pleaseTryAgain": "Por favor, inténtalo de nuevo o edita tus datos manualmente"
+      "pleaseTryAgain": "Por favor, inténtalo de nuevo o edita tus datos manualmente",
+      "orderFailed": "Error al procesar el pedido",
+      "initFailed": "Error al inicializar el checkout",
+      "loadFailed": "Error al cargar el checkout"
     },
     "expressCheckout": {
       "title": "Pago Express Disponible",
@@ -1940,8 +1989,35 @@
       "countdownMessage": "Redirigiendo al pago en {seconds} segundos...",
       "cancelButton": "Espera, déjame revisar",
       "countdownCancelled": "Cuenta regresiva cancelada",
-      "countdownCancelledDetails": "Tómate tu tiempo para revisar tu pedido"
-    }
+      "countdownCancelledDetails": "Tómate tu tiempo para revisar tu pedido",
+      "oneClickDescription": "Completa tu pedido con un solo clic",
+      "shippingTo": "Enviar a",
+      "paymentMethod": "Pago",
+      "shipping": "Envío",
+      "placeOrderNow": "Realizar Pedido Ahora",
+      "editDetails": "Editar Detalles"
+    },
+    "hybrid": {
+      "contact": "Contacto",
+      "shippingAddress": "Dirección de Envío",
+      "shippingMethod": "Método de Envío",
+      "payment": "Pago",
+      "reviewAndPay": "Revisar y Pagar"
+    },
+    "trustBadges": {
+      "secure": "Seguro",
+      "guaranteed": "Garantizado",
+      "fastDelivery": "Entrega Rápida"
+    },
+    "showItems": "Mostrar artículos",
+    "hideItems": "Ocultar artículos",
+    "estimatedDelivery": "Entrega estimada",
+    "calculatedAtNextStep": "Calculado",
+    "securePayment": "Pago Seguro",
+    "moneyBackGuarantee": "Garantía de Devolución",
+    "needHelp": "¿Necesitas Ayuda?",
+    "secure": "Seguro",
+    "guaranteed": "Garantizado"
   },
   "admin": {
     "navigation": {

@@ -113,16 +113,16 @@ export function useShippingMethods(address: Ref<Address>) {
       lastLoadedAddress.value = addressHash
     }
     catch (e: any) {
-      error.value = e instanceof Error ? e.message : 'Failed to load shipping methods'
-      availableMethods.value = getFallbackMethods()
+      const errorMessage = e instanceof Error ? e.message : 'Failed to load shipping methods'
+      error.value = errorMessage
       console.error('Failed to load shipping methods:', e)
-      // Notify user that fallback methods are being used
-      const toast = useToast()
-      const { t } = useI18n()
-      toast.warning(
-        t('checkout.shippingMethod.loadError') || 'Shipping Methods',
-        t('checkout.shippingMethod.usingDefaultOptions') || 'Using default shipping options. Actual rates may vary.',
-      )
+
+      // Set fallback methods but notify user they are seeing estimated rates
+      availableMethods.value = getFallbackMethods()
+
+      // Note: Toast notification should be handled by the component that uses this composable
+      // to avoid duplicate toasts and allow for proper i18n. The error.value being set
+      // indicates a fallback scenario that the UI can detect and communicate to users.
     }
     finally {
       loading.value = false

@@ -55,7 +55,11 @@
     "selectAll": "Selectează Tot",
     "deselectAll": "Deselectează Tot",
     "cartError": "Eroare Coș",
-    "cartValidationError": "Eroare de Validare"
+    "cartValidationError": "Eroare de Validare",
+    "showOrderSummary": "Arată rezumatul comenzii",
+    "hideOrderSummary": "Ascunde rezumatul comenzii",
+    "item": "articol",
+    "items": "articole"
   },
   "auth": {
     "signIn": "Autentificare",
@@ -1496,7 +1500,37 @@
     "each": "fiecare",
     "addToCart": "Adaugă în Coș",
     "inCart": "În Coș",
-    "recommendedProducts": "Produse Recomandate"
+    "recommendedProducts": "Produse Recomandate",
+    "itemCount": "{count} articole",
+    "youSave": "Economisești",
+    "secureCheckout": "Plată securizată",
+    "allCardsAccepted": "Toate cardurile acceptate",
+    "add": "Adaugă",
+    "saveForLater": "Salvează pentru mai târziu",
+    "stock": {
+      "inStock": "În stoc",
+      "low": "Mai sunt doar {count}!",
+      "outOfStock": "Stoc epuizat"
+    },
+    "shipping": {
+      "progress": "Progres transport gratuit",
+      "freeShipping": "Transport gratuit",
+      "qualified": "Comanda ta beneficiază de transport gratuit!",
+      "addMore": "Adaugă încă {amount} pentru transport gratuit"
+    },
+    "recommendations": {
+      "boughtTogether": "Cumpărate împreună",
+      "similar": "Similar",
+      "priceDrop": "Preț redus",
+      "backInStock": "Disponibil din nou",
+      "recommended": "Recomandat",
+      "noRecommendations": "Nu există recomandări disponibile",
+      "loadFailed": "Nu s-au putut încărca recomandările"
+    },
+    "decreaseQuantity": "Scade cantitatea",
+    "increaseQuantity": "Crește cantitatea",
+    "removeItem": "Elimină articolul",
+    "quantity": "{count} articole"
   },
   "checkout": {
     "title": "Finalizare Comandă",
@@ -1581,7 +1615,12 @@
       "shippingMethod": "Metodă de Livrare",
       "deliveryInstructions": "Instrucțiuni de Livrare",
       "paymentMethod": "Metodă de Plată",
-      "editPayment": "Editează Plata"
+      "editPayment": "Editează Plata",
+      "acceptTerms": "Accept",
+      "termsOfService": "Termenii și Condițiile",
+      "acceptPrivacy": "Consimț la procesarea datelor mele personale conform",
+      "privacyPolicy": "Politicii de Confidențialitate",
+      "marketingConsent": "Doresc să primesc comunicări de marketing și oferte speciale"
     },
     "freeShipping": "Gratuit",
     "processing": "Se procesează...",
@@ -1619,6 +1658,7 @@
       "totalsUpdateFailedDetails": "Nu s-au putut actualiza totalurile. Prețurile afișate pot fi depășite."
     },
     "validation": {
+      "fullNameRequired": "Numele complet este obligatoriu",
       "firstNameRequired": "Prenumele este obligatoriu",
       "orderDataMissing": "Lipsesc datele comenzii. Te rugăm să reîncepi procesul de plată.",
       "shippingInfoMissing": "Lipsesc informațiile de livrare. Te rugăm să completezi detaliile de livrare.",
@@ -1641,6 +1681,10 @@
       "emailRequired": "Email-ul este obligatoriu",
       "emailInvalid": "Te rugăm să introduci o adresă de email validă"
     },
+    "warnings": {
+      "concurrentCheckout": "Sesiuni Multiple de Plată Detectate",
+      "concurrentCheckoutDetails": "Se pare că ai această pagină de plată deschisă într-o altă filă sau fereastră. Te rugăm să finalizezi achiziția într-o singură locație pentru a evita crearea de comenzi duplicate."
+    },
     "addressForm": {
       "shipping": {
         "title": "Adresă de Livrare",
@@ -1653,24 +1697,26 @@
       "savedAddresses": "Adrese Salvate",
       "useNewAddress": "Folosește o adresă nouă",
       "default": "Implicită",
+      "fullName": "Nume Complet",
+      "fullNamePlaceholder": "ex. Ion Popescu",
       "firstName": "Prenume",
       "firstNamePlaceholder": "Introdu prenumele tău",
       "lastName": "Nume de Familie",
       "lastNamePlaceholder": "Introdu numele tău de familie",
-      "company": "Companie",
-      "companyPlaceholder": "Numele companiei (opțional)",
       "street": "Adresa Stradală",
-      "streetPlaceholder": "Introdu adresa ta stradală",
+      "streetPlaceholder": "Strada, număr, apartament...",
       "city": "Oraș",
       "cityPlaceholder": "Introdu orașul tău",
       "postalCode": "Cod Poștal",
-      "postalCodePlaceholder": "Introdu codul poștal",
+      "postalCodePlaceholder": "ex. 012345",
       "province": "Provincie/Județ",
       "provincePlaceholder": "Provincie sau județ (opțional)",
       "country": "Țară",
       "selectCountry": "Selectează o țară",
-      "phone": "Număr de Telefon",
-      "phonePlaceholder": "Introdu numărul tău de telefon (opțional)",
+      "phone": "Telefon",
+      "phoneHelper": "pentru notificări de livrare",
+      "phonePlaceholder": "+40 700 000 000",
+      "phoneDescription": "Te vom contacta despre livrare",
       "saveAddress": "Salvează această adresă pentru comenzi viitoare"
     },
     "shippingMethod": {
@@ -1691,6 +1737,11 @@
       "error": "Eroare la încărcarea metodelor de livrare",
       "loadError": "Metode de Livrare",
       "usingDefaultOptions": "Se folosesc opțiuni de livrare implicite. Tarifele reale pot varia.",
+      "fallbackWarning": {
+        "title": "Tarife de Livrare Estimate",
+        "description": "Nu am putut încărca tarifele în timp real de la transportatori. Arătăm tarife estimate mai jos. Tarifele reale vor fi calculate înainte de confirmarea finală.",
+        "retry": "Reîncercați încărcarea tarifelor reale"
+      },
       "standard": {
         "name": "Livrare Standard",
         "description": "Livrare în 3-5 zile lucrătoare"
@@ -1833,7 +1884,10 @@
       "failedToSetDefaultAddress": "Nu s-a putut seta adresa implicită",
       "failedToDeleteAddress": "Nu s-a putut șterge adresa",
       "expressCheckoutFailed": "Plată express eșuată",
-      "pleaseTryAgain": "Vă rugăm să încercați din nou sau să editați manual detaliile"
+      "pleaseTryAgain": "Vă rugăm să încercați din nou sau să editați manual detaliile",
+      "orderFailed": "Procesarea comenzii a eșuat",
+      "initFailed": "Inițializarea checkout-ului a eșuat",
+      "loadFailed": "Încărcarea checkout-ului a eșuat"
     },
     "expressCheckout": {
       "title": "Plată Express Disponibilă",
@@ -1849,8 +1903,35 @@
       "countdownMessage": "Redirecționare către plată în {seconds} secunde...",
       "cancelButton": "Așteaptă, vreau să revizuiesc",
       "countdownCancelled": "Numărătoare inversă anulată",
-      "countdownCancelledDetails": "Ia-ți timp să revizuiești comanda"
-    }
+      "countdownCancelledDetails": "Ia-ți timp să revizuiești comanda",
+      "oneClickDescription": "Finalizează comanda cu un singur clic",
+      "shippingTo": "Livrare la",
+      "paymentMethod": "Plată",
+      "shipping": "Livrare",
+      "placeOrderNow": "Plasează Comanda Acum",
+      "editDetails": "Editează Detalii"
+    },
+    "hybrid": {
+      "contact": "Contact",
+      "shippingAddress": "Adresa de Livrare",
+      "shippingMethod": "Metoda de Livrare",
+      "payment": "Plată",
+      "reviewAndPay": "Revizuiește și Plătește"
+    },
+    "trustBadges": {
+      "secure": "Securizat",
+      "guaranteed": "Garantat",
+      "fastDelivery": "Livrare Rapidă"
+    },
+    "showItems": "Arată articole",
+    "hideItems": "Ascunde articole",
+    "estimatedDelivery": "Livrare estimată",
+    "calculatedAtNextStep": "Calculat",
+    "securePayment": "Plată Securizată",
+    "moneyBackGuarantee": "Garanție de Returnare",
+    "needHelp": "Ai Nevoie de Ajutor?",
+    "secure": "Securizat",
+    "guaranteed": "Garantat"
   },
   "admin": {
     "navigation": {
