@@ -323,7 +323,7 @@ export default defineEventHandler(async (event) => {
       order: {
         id: order.id,
         orderNumber: order.order_number,
-        total: order.total,
+        total: order.total_eur || order.total,
         status: order.status,
         paymentStatus: order.payment_status,
         createdAt: order.created_at,
