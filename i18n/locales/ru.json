@@ -1776,16 +1776,17 @@
       "processing": "Processing..."
     },
     "confirmation": {
-      "orderNumber": "Order Number",
-      "orderItems": "Order Items",
-      "shippingInfo": "Shipping Information",
-      "shippingAddress": "Shipping Address",
-      "shippingMethod": "Shipping Method",
-      "estimatedDelivery": "Estimated Delivery",
-      "deliveryNote": "Delivery times are estimates and may vary",
-      "trackOrder": "Track Your Order",
-      "trackingAvailable": "Tracking information will be available once your order ships",
-      "printReceipt": "Print Receipt",
+      "orderNumber": "Номер Заказа",
+      "orderStatus": "Статус Заказа",
+      "orderItems": "Товары Заказа",
+      "shippingInfo": "Информация о Доставке",
+      "shippingAddress": "Адрес Доставки",
+      "shippingMethod": "Способ Доставки",
+      "estimatedDelivery": "Ожидаемая Доставка",
+      "deliveryNote": "Сроки доставки являются приблизительными и могут варьироваться",
+      "trackOrder": "Отследить Заказ",
+      "trackingAvailable": "Информация об отслеживании будет доступна после отправки заказа",
+      "printReceipt": "Печать Квитанции",
       "sessionRestoreFailed": "Не удалось загрузить данные заказа",
       "checkEmailForOrder": "Пожалуйста, проверьте вашу электронную почту для подтверждения заказа",
       "errorLoadingOrder": "Ошибка загрузки деталей заказа",
@@ -1793,7 +1794,15 @@
       "orderDataMissing": "Данные заказа недоступны",
       "checkYourEmail": "Ваш заказ успешно выполнен. Проверьте почту для получения подробностей",
       "cartClearFailed": "Не удалось очистить корзину",
-      "cartClearFailedDetails": "Ваш заказ успешно выполнен, но корзина не была очищена автоматически"
+      "cartClearFailedDetails": "Ваш заказ успешно выполнен, но корзина не была очищена автоматически",
+      "status": {
+        "placed": "Заказ Размещен",
+        "processing": "Обрабатывается",
+        "shipped": "Отправлено",
+        "delivered": "Доставлено",
+        "inProgress": "В Процессе",
+        "pending": "Ожидание"
+      }
     },
     "errors": {
       "failedToLoadAddresses": "Не удалось загрузить сохраненные адреса",

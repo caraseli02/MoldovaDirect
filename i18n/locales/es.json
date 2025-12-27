@@ -1868,6 +1868,7 @@
     },
     "confirmation": {
       "orderNumber": "Número de Pedido",
+      "orderStatus": "Estado del Pedido",
       "orderItems": "Artículos del Pedido",
       "shippingInfo": "Información de Envío",
       "shippingAddress": "Dirección de Envío",
@@ -1884,7 +1885,15 @@
       "orderDataMissing": "Datos del pedido no disponibles",
       "checkYourEmail": "Tu pedido se completó correctamente. Revisa tu correo para más detalles",
       "cartClearFailed": "No se pudo vaciar el carrito",
-      "cartClearFailedDetails": "Tu pedido se completó correctamente, pero el carrito no se vació automáticamente"
+      "cartClearFailedDetails": "Tu pedido se completó correctamente, pero el carrito no se vació automáticamente",
+      "status": {
+        "placed": "Pedido Realizado",
+        "processing": "Procesando",
+        "shipped": "Enviado",
+        "delivered": "Entregado",
+        "inProgress": "En Progreso",
+        "pending": "Pendiente"
+      }
     },
     "errors": {
       "failedToLoadAddresses": "No se pudieron cargar las direcciones guardadas",

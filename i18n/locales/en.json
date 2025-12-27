@@ -1945,6 +1945,7 @@
     },
     "confirmation": {
       "orderNumber": "Order Number",
+      "orderStatus": "Order Status",
       "orderItems": "Order Items",
       "shippingInfo": "Shipping Information",
       "shippingAddress": "Shipping Address",
@@ -1961,7 +1962,15 @@
       "orderDataMissing": "Order data not available",
       "checkYourEmail": "Your order completed successfully. Check your email for details",
       "cartClearFailed": "Could not clear cart",
-      "cartClearFailedDetails": "Your order completed successfully, but the cart was not cleared automatically"
+      "cartClearFailedDetails": "Your order completed successfully, but the cart was not cleared automatically",
+      "status": {
+        "placed": "Order Placed",
+        "processing": "Processing",
+        "shipped": "Shipped",
+        "delivered": "Delivered",
+        "inProgress": "In Progress",
+        "pending": "Pending"
+      }
     },
     "errors": {
       "failedToLoadAddresses": "Failed to load saved addresses",
