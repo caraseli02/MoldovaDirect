@@ -103,6 +103,7 @@ test-screenshots/
 playwright.*.config.ts
 !playwright.config.ts
 !playwright.cart.config.ts
+!playwright.visual-regression.config.ts
 
 # Theme and build artifacts
 .themes/
@@ -146,6 +147,9 @@ visual-regression-screenshots/
 *.png
 *.jpg
 *.jpeg
+
+# Exception: Visual regression test snapshots must be tracked
+!tests/visual-regression/*.spec.ts-snapshots/*.png
 
 # Hero video assets are required for builds and MUST be tracked
 # Exceptions for public/videos/hero directory

@@ -3,9 +3,13 @@
  *
  * Shared utilities for critical E2E tests to eliminate code duplication
  * and provide consistent, reliable test operations.
+ *
+ * Updated for Hybrid Progressive Checkout (Option D)
  */
 
 import type { Page } from '@playwright/test'
+import { SELECTORS, TIMEOUTS, TEST_DATA } from '../constants'
+import { CartPersistenceHelpers } from '../../../utils/cart-persistence-helpers'
 
 export class CriticalTestHelpers {
   constructor(private page: Page) {}
@@ -322,11 +326,89 @@ export class CriticalTestHelpers {
   }
 
   /**
-   * Navigate to checkout page
+   * Navigate to checkout page using server-side navigation
+   * Note: This may lose Pinia state - use navigateToCheckoutClientSide() instead
    */
   async goToCheckout(): Promise<void> {
     await this.page.goto('/checkout')
     await this.page.waitForURL(/\/checkout/, { timeout: 5000 })
+  }
+
+  /**
+   * Navigate from cart to checkout using client-side navigation
+   * Preserves Pinia store state (cart items, etc.) during navigation
+   *
+   * Use this instead of page.goto('/checkout') which triggers a full page
+   * reload and loses Pinia state before it can be persisted.
+   *
+   * @throws Error if checkout button is not found or navigation fails
+   */
+  async navigateToCheckoutClientSide(): Promise<void> {
+    // Scroll to top to ensure header cart link is visible
+    await this.page.evaluate(() => window.scrollTo(0, 0))
+    await this.page.waitForTimeout(300)
+
+    // Click cart link to navigate to cart page
+    const cartLink = this.page.locator('a[href*="/cart"]').first()
+    await cartLink.waitFor({ state: 'visible', timeout: 5000 })
+    await cartLink.click()
+    await this.page.waitForURL(/\/cart/, { timeout: 10000 })
+    await this.page.waitForLoadState('networkidle')
+
+    // Click checkout button (supports multiple locales and i18n keys as fallback)
+    const checkoutButton = this.page.locator(
+      'button:has-text("Checkout"), button:has-text("Finalizar compra"), button:has-text("Finalizar Compra"), button:has-text("Оформить"), button:has-text("common.checkout"), button:has-text("Proceed"), button:has-text("Continuar")',
+    ).first()
+
+    // Wait for button to be present in DOM and scroll to it
+    try {
+      await checkoutButton.waitFor({ state: 'attached', timeout: 5000 })
+      // Scroll to bottom to ensure button is visible (mobile sticky footer)
+      await this.page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
+      await this.page.waitForTimeout(500)
+    }
+    catch {
+      throw new Error('Checkout button not found on cart page. Cart may be empty or button text differs from expected.')
+    }
+
+    // Use JavaScript click to bypass visibility check (button may be in fixed footer)
+    await checkoutButton.evaluate((el: HTMLElement) => el.click())
+
+    // Wait for checkout page
+    await this.page.waitForURL(/\/checkout/, { timeout: 10000 })
+    await this.page.waitForLoadState('networkidle')
+    await this.page.waitForTimeout(1000) // Allow Vue components to mount
+  }
+
+  /**
+   * Add product to cart and navigate to checkout (full flow)
+   * Uses client-side navigation to preserve Pinia state
+   *
+   * Note: Client-side navigation (via link clicks) preserves Pinia state without
+   * needing cookie persistence. The button state change in addFirstProductToCart
+   * already confirms the cart has items.
+   *
+   * @throws Error if any step fails
+   */
+  async addProductAndNavigateToCheckout(): Promise<void> {
+    // Add product - waitForCartUpdate already verifies cart has items
+    // by checking button text changed to "En el carrito"
+    await this.addFirstProductToCart()
+
+    // Try to force cart save for cookie backup (best effort)
+    // Client-side navigation will preserve Pinia state regardless
+    const cartHelpers = new CartPersistenceHelpers(this.page)
+    await cartHelpers.forceCartSave()
+
+    // Cart verification already happened in addFirstProductToCart
+    // The button showing "En el carrito" confirms items are in Pinia
+    console.log('✅ Cart has items (verified via button state)')
+
+    // Use client-side navigation to preserve Pinia state
+    await this.navigateToCheckoutClientSide()
+
+    // Wait for checkout page to be ready
+    await this.page.waitForTimeout(1000)
   }
 
   /**
@@ -361,6 +443,200 @@ export class CriticalTestHelpers {
     return {
       email: process.env.TEST_ADMIN_EMAIL || process.env.ADMIN_EMAIL || process.env.TEST_USER_EMAIL || 'admin@example.com',
       password: process.env.TEST_ADMIN_PASSWORD || process.env.ADMIN_PASSWORD || process.env.TEST_USER_PASSWORD,
+    }
+  }
+
+  // ===========================================
+  // Checkout Helpers (Hybrid Progressive)
+  // ===========================================
+
+  /**
+   * Handle express checkout banner or guest prompt
+   * Dismisses banners to show full checkout form
+   */
+  async handleCheckoutPrompts(): Promise<void> {
+    // Handle express checkout banner if visible
+    const expressBanner = this.page.locator(SELECTORS.EXPRESS_BANNER)
+    if (await expressBanner.isVisible({ timeout: TIMEOUTS.SHORT }).catch(() => false)) {
+      await this.page.locator(SELECTORS.EXPRESS_EDIT).click()
+      await this.page.waitForTimeout(TIMEOUTS.VERY_SHORT)
+    }
+
+    // Handle guest prompt if visible
+    const guestPrompt = this.page.locator(SELECTORS.GUEST_PROMPT)
+    if (await guestPrompt.isVisible({ timeout: TIMEOUTS.SHORT }).catch(() => false)) {
+      await this.page.locator(SELECTORS.CONTINUE_AS_GUEST).click()
+      await this.page.waitForTimeout(TIMEOUTS.VERY_SHORT)
+    }
+  }
+
+  /**
+   * Fill shipping address form with test data
+   * Uses fullName field which is internally split into firstName/lastName
+   */
+  async fillShippingAddress(address?: typeof TEST_DATA.TEST_ADDRESS): Promise<void> {
+    const addr = address || TEST_DATA.TEST_ADDRESS
+
+    const fullName = this.page.locator(SELECTORS.ADDRESS_FULL_NAME).first()
+    if (await fullName.isVisible({ timeout: TIMEOUTS.STANDARD }).catch(() => false)) {
+      await fullName.fill(addr.fullName)
+      await this.page.locator(SELECTORS.ADDRESS_STREET).first().fill(addr.street)
+      await this.page.locator(SELECTORS.ADDRESS_CITY).first().fill(addr.city)
+      await this.page.locator(SELECTORS.ADDRESS_POSTAL_CODE).first().fill(addr.postalCode)
+
+      // Select country if available
+      const country = this.page.locator(SELECTORS.ADDRESS_COUNTRY).first()
+      if (await country.isVisible({ timeout: TIMEOUTS.SHORT }).catch(() => false)) {
+        await country.selectOption(addr.country)
+      }
+
+      // Fill phone if available
+      const phone = this.page.locator(SELECTORS.ADDRESS_PHONE).first()
+      if (await phone.isVisible({ timeout: TIMEOUTS.SHORT }).catch(() => false)) {
+        await phone.fill(addr.phone)
+      }
+
+      // Trigger blur to validate
+      await this.page.locator(SELECTORS.ADDRESS_POSTAL_CODE).first().blur()
+      await this.page.waitForTimeout(TIMEOUTS.VERY_SHORT)
+    }
+  }
+
+  /**
+   * Wait for shipping methods to load and select first option
+   */
+  async selectShippingMethod(index: number = 0): Promise<void> {
+    // Wait for loading to finish
+    const loadingSpinner = this.page.locator(SELECTORS.SHIPPING_METHOD_LOADING)
+    await loadingSpinner.waitFor({ state: 'hidden', timeout: TIMEOUTS.LONG }).catch(() => {})
+
+    // Wait for shipping options
+    const shippingOptions = this.page.locator(SELECTORS.SHIPPING_METHOD_OPTIONS)
+    await shippingOptions.first().waitFor({ state: 'visible', timeout: TIMEOUTS.LONG }).catch(() => {})
+
+    // Select option
+    const option = shippingOptions.nth(index)
+    if (await option.isVisible({ timeout: TIMEOUTS.SHORT }).catch(() => false)) {
+      await option.click()
+      await this.page.waitForTimeout(TIMEOUTS.VERY_SHORT)
+    }
+  }
+
+  /**
+   * Select cash payment method
+   */
+  async selectCashPayment(): Promise<void> {
+    const cashOption = this.page.locator(SELECTORS.PAYMENT_CASH)
+    if (await cashOption.isVisible({ timeout: TIMEOUTS.STANDARD }).catch(() => false)) {
+      await cashOption.click()
+      await this.page.waitForTimeout(TIMEOUTS.VERY_SHORT)
+    }
+  }
+
+  /**
+   * Accept terms and privacy checkboxes
+   */
+  async acceptTerms(): Promise<void> {
+    const termsCheckbox = this.page.locator(SELECTORS.TERMS_CHECKBOX)
+    const privacyCheckbox = this.page.locator(SELECTORS.PRIVACY_CHECKBOX)
+
+    if (await termsCheckbox.isVisible({ timeout: TIMEOUTS.STANDARD }).catch(() => false)) {
+      await termsCheckbox.check()
+    }
+
+    if (await privacyCheckbox.isVisible({ timeout: TIMEOUTS.SHORT }).catch(() => false)) {
+      await privacyCheckbox.check()
+    }
+  }
+
+  /**
+   * Complete full checkout form (without placing order)
+   * Fills address, selects shipping, selects payment, accepts terms
+   */
+  async fillCheckoutForm(): Promise<void> {
+    await this.handleCheckoutPrompts()
+    await this.fillShippingAddress()
+    await this.selectShippingMethod()
+    await this.selectCashPayment()
+    await this.acceptTerms()
+  }
+
+  /**
+   * Check if express checkout banner is visible
+   */
+  async isExpressBannerVisible(): Promise<boolean> {
+    const expressBanner = this.page.locator(SELECTORS.EXPRESS_BANNER)
+    return await expressBanner.isVisible({ timeout: TIMEOUTS.SHORT }).catch(() => false)
+  }
+
+  /**
+   * Use express checkout to place order
+   */
+  async useExpressCheckout(): Promise<void> {
+    const expressButton = this.page.locator(SELECTORS.EXPRESS_PLACE_ORDER)
+    await expressButton.click()
+    await this.page.waitForLoadState('networkidle')
+  }
+
+  /**
+   * Click place order button
+   */
+  async placeOrder(): Promise<void> {
+    const placeOrderButton = this.page.locator(SELECTORS.PLACE_ORDER_BUTTON).first()
+    await placeOrderButton.click()
+    await this.page.waitForLoadState('networkidle')
+  }
+
+  /**
+   * Create a saved address for the test user via API
+   * Required for express checkout banner to appear
+   */
+  async createSavedAddressForUser(): Promise<void> {
+    const address = TEST_DATA.TEST_ADDRESS
+
+    // Make API request to create address (requires authenticated session)
+    const response = await this.page.request.post('/api/checkout/addresses', {
+      data: {
+        firstName: address.fullName.split(' ')[0],
+        lastName: address.fullName.split(' ').slice(1).join(' ') || 'Test',
+        street: address.street,
+        city: address.city,
+        postalCode: address.postalCode,
+        country: address.country,
+        phone: address.phone,
+        type: 'shipping',
+        isDefault: true,
+      },
+    })
+
+    if (response.ok()) {
+      console.log('  ✅ Created saved address for express checkout')
+    }
+    else {
+      const text = await response.text()
+      console.log(`  ⚠️ Could not create address: ${response.status()} - ${text}`)
+    }
+  }
+
+  /**
+   * Delete all saved addresses for the test user
+   * Useful for cleanup after express checkout tests
+   */
+  async deleteAllSavedAddresses(): Promise<void> {
+    // Get all addresses
+    const getResponse = await this.page.request.get('/api/checkout/addresses')
+    if (!getResponse.ok()) return
+
+    const data = await getResponse.json()
+    const addresses = data.addresses || []
+
+    // Delete each address
+    for (const addr of addresses) {
+      await this.page.request.delete(`/api/checkout/addresses/${addr.id}`)
+    }
+
+    if (addresses.length > 0) {
+      console.log(`  🗑️ Deleted ${addresses.length} saved address(es)`)
     }
   }
 }

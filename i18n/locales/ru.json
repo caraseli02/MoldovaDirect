@@ -54,7 +54,11 @@
     "selectAll": "Выбрать все",
     "deselectAll": "Снять выделение",
     "cartError": "Ошибка корзины",
-    "cartValidationError": "Ошибка проверки"
+    "cartValidationError": "Ошибка проверки",
+    "showOrderSummary": "Показать итог заказа",
+    "hideOrderSummary": "Скрыть итог заказа",
+    "item": "товар",
+    "items": "товаров"
   },
   "cart": {
     "shippingCalculatedAtCheckout": "Рассчитывается при оформлении",
@@ -228,9 +232,39 @@
     "moveToCart": "Move to Cart",
     "savedOn": "Saved on",
     "each": "each",
-    "addToCart": "Add to Cart",
-    "inCart": "In Cart",
-    "recommendedProducts": "Recommended Products"
+    "addToCart": "Добавить в корзину",
+    "inCart": "В корзине",
+    "recommendedProducts": "Рекомендуемые товары",
+    "itemCount": "{count} товаров",
+    "youSave": "Вы экономите",
+    "secureCheckout": "Безопасная оплата",
+    "allCardsAccepted": "Принимаются все карты",
+    "add": "Добавить",
+    "saveForLater": "Сохранить на потом",
+    "stock": {
+      "inStock": "В наличии",
+      "low": "Осталось только {count}!",
+      "outOfStock": "Нет в наличии"
+    },
+    "shipping": {
+      "progress": "До бесплатной доставки",
+      "freeShipping": "Бесплатная доставка",
+      "qualified": "Ваш заказ получает бесплатную доставку!",
+      "addMore": "Добавьте еще на {amount} для бесплатной доставки"
+    },
+    "recommendations": {
+      "boughtTogether": "Покупают вместе",
+      "similar": "Похожие",
+      "priceDrop": "Снижение цены",
+      "backInStock": "Снова в наличии",
+      "recommended": "Рекомендуется",
+      "noRecommendations": "Нет доступных рекомендаций",
+      "loadFailed": "Не удалось загрузить рекомендации"
+    },
+    "decreaseQuantity": "Уменьшить количество",
+    "increaseQuantity": "Увеличить количество",
+    "removeItem": "Удалить товар",
+    "quantity": "{count} товаров"
   },
   "auth": {
     "signIn": "Войти",
@@ -1078,9 +1112,6 @@
     "outOfStock": "Нет в наличии",
     "inCart": "В корзине",
     "adding": "Добавление...",
-    "addingToCart": "Добавление {name}...",
-    "productInCart": "{name} уже в корзине",
-    "addProductToCart": "Добавить {name} в корзину",
     "cartEmpty": "Your cart is empty",
     "cartEmptyDescription": "Start shopping to add items to your cart",
     "itemsInCart": "items in cart",
@@ -1505,13 +1536,6 @@
   "checkout": {
     "title": "Оформление заказа",
     "secureCheckout": "Безопасное оформление",
-    "trust": {
-      "secureCheckout": "100% Безопасная покупка",
-      "sslEncrypted": "256-битное SSL шифрование",
-      "dataProtected": "Ваши данные защищены",
-      "moneyBackGuarantee": "Гарантия возврата денег",
-      "needHelp": "Нужна помощь? Свяжитесь с нами"
-    },
     "steps": {
       "shipping": {
         "name": "Shipping",
@@ -1549,14 +1573,11 @@
     },
     "continueAsGuest": "Continue as Guest",
     "backToCart": "Back to Cart",
-    "continueToPayment": "Продолжить к оплате",
-    "continueToReview": "Проверить ваш заказ",
-    "backToShipping": "Назад к доставке",
-    "reviewOrder": "Проверить заказ",
-    "backToPayment": "Назад к оплате",
-    "placeOrder": "Оформить заказ",
-    "placeOrderSecure": "Безопасно оформить заказ",
-    "notChargedYet": "Оплата ещё не будет списана",
+    "continueToPayment": "Continue to Payment",
+    "backToShipping": "Back to Shipping",
+    "reviewOrder": "Review Order",
+    "backToPayment": "Back to Payment",
+    "placeOrder": "Place Order",
     "shippingForm": {
       "title": "Shipping Information",
       "placeholder": "Shipping form will be implemented in the next task"
@@ -1570,18 +1591,23 @@
       "placeholder": "Order review will be implemented in the next task"
     },
     "review": {
-      "cartItems": "Cart Items",
-      "editCart": "Edit Cart",
-      "shippingInfo": "Shipping Information",
-      "editShipping": "Edit Shipping",
+      "cartItems": "Товары в корзине",
+      "editCart": "Редактировать корзину",
+      "shippingInfo": "Информация о доставке",
+      "editShipping": "Изменить доставку",
       "emptyCart": "Ваша корзина пуста",
-      "shippingAddress": "Shipping Address",
-      "shippingMethod": "Shipping Method",
-      "deliveryInstructions": "Delivery Instructions",
-      "paymentMethod": "Payment Method",
-      "editPayment": "Edit Payment"
+      "shippingAddress": "Адрес доставки",
+      "shippingMethod": "Способ доставки",
+      "deliveryInstructions": "Инструкции по доставке",
+      "paymentMethod": "Способ оплаты",
+      "editPayment": "Изменить оплату",
+      "acceptTerms": "Я принимаю",
+      "termsOfService": "Условия использования",
+      "acceptPrivacy": "Я согласен на обработку моих персональных данных в соответствии с",
+      "privacyPolicy": "Политикой конфиденциальности",
+      "marketingConsent": "Я хочу получать маркетинговые сообщения и специальные предложения"
     },
-    "freeShipping": "Free",
+    "freeShipping": "Бесплатно",
     "processing": "Processing...",
     "continueToTerms": "Continue to Place Order",
     "terms": {
@@ -1596,33 +1622,22 @@
       "privacyRequired": "You must accept the Privacy Policy to continue"
     },
     "success": {
-      "shippingUpdated": "Доставка обновлена",
-      "shippingInfoSaved": "Информация о доставке сохранена",
-      "paymentUpdated": "Оплата обновлена",
-      "paymentMethodSaved": "Способ оплаты сохранен",
-      "orderCompleted": "Заказ завершен",
-      "orderConfirmation": "Ваш заказ успешно оформлен"
-    },
-    "error": {
-      "title": "Ошибка",
-      "proceedToPayment": "Не удалось перейти к оплате. Пожалуйста, попробуйте снова.",
-      "proceedToReview": "Не удалось перейти к проверке. Пожалуйста, попробуйте снова.",
-      "orderFailed": "Ошибка заказа",
-      "orderProcessingFailed": "Не удалось обработать ваш заказ. Пожалуйста, попробуйте снова."
+      "shippingUpdated": "Shipping Updated",
+      "shippingInfoSaved": "Your shipping information has been saved",
+      "paymentUpdated": "Payment Updated",
+      "paymentMethodSaved": "Your payment method has been saved",
+      "orderCompleted": "Order Completed",
+      "orderConfirmation": "Your order has been successfully placed"
     },
     "validation": {
+      "fullNameRequired": "Полное имя обязательно",
       "firstNameRequired": "Имя обязательно",
-      "orderDataMissing": "Данные заказа отсутствуют. Пожалуйста, начните оформление заново.",
-      "shippingInfoMissing": "Информация о доставке отсутствует. Пожалуйста, заполните данные доставки.",
-      "paymentMethodMissing": "Способ оплаты не выбран. Пожалуйста, выберите способ оплаты.",
-      "cartEmpty": "Ваша корзина пуста. Пожалуйста, добавьте товары перед оформлением.",
-      "invalidTotal": "Неверная сумма заказа. Пожалуйста, попробуйте снова.",
-      "lastNameRequired": "Last name is required",
-      "streetRequired": "Street address is required",
-      "cityRequired": "City is required",
-      "postalCodeRequired": "Postal code is required",
-      "countryRequired": "Country is required",
-      "shippingMethodRequired": "Shipping method is required",
+      "lastNameRequired": "Фамилия обязательна",
+      "streetRequired": "Адрес обязателен",
+      "cityRequired": "Город обязателен",
+      "postalCodeRequired": "Почтовый индекс обязателен",
+      "countryRequired": "Страна обязательна",
+      "shippingMethodRequired": "Способ доставки обязателен",
       "cardNumberRequired": "Card number is required",
       "cardNumberInvalid": "Invalid card number",
       "expiryRequired": "Expiry date is required",
@@ -1633,37 +1648,43 @@
       "emailRequired": "Email is required",
       "emailInvalid": "Please enter a valid email address"
     },
+    "warnings": {
+      "concurrentCheckout": "Обнаружены Множественные Сессии Оформления Заказа",
+      "concurrentCheckoutDetails": "Похоже, что эта страница оформления заказа открыта в другой вкладке или окне. Пожалуйста, завершите покупку только в одном месте, чтобы избежать создания дублирующих заказов."
+    },
     "addressForm": {
       "shipping": {
-        "title": "Shipping Address",
-        "subtitle": "Where should we deliver your order?"
+        "title": "Адрес Доставки",
+        "subtitle": "Куда доставить ваш заказ?"
       },
       "billing": {
-        "title": "Billing Address",
-        "subtitle": "Where should we send your invoice?"
+        "title": "Адрес Выставления Счета",
+        "subtitle": "Куда отправить счет?"
       },
-      "savedAddresses": "Saved Addresses",
-      "useNewAddress": "Use a new address",
-      "default": "Default",
-      "firstName": "First Name",
-      "firstNamePlaceholder": "Enter your first name",
-      "lastName": "Last Name",
-      "lastNamePlaceholder": "Enter your last name",
-      "company": "Company",
-      "companyPlaceholder": "Company name (optional)",
-      "street": "Street Address",
-      "streetPlaceholder": "Enter your street address",
-      "city": "City",
-      "cityPlaceholder": "Enter your city",
-      "postalCode": "Postal Code",
-      "postalCodePlaceholder": "Enter postal code",
-      "province": "Province/State",
-      "provincePlaceholder": "Province or state (optional)",
-      "country": "Country",
-      "selectCountry": "Select a country",
-      "phone": "Phone Number",
-      "phonePlaceholder": "Enter your phone number (optional)",
-      "saveAddress": "Save this address for future orders"
+      "savedAddresses": "Сохранённые Адреса",
+      "useNewAddress": "Использовать новый адрес",
+      "default": "По умолчанию",
+      "fullName": "Полное Имя",
+      "fullNamePlaceholder": "напр. Иван Петров",
+      "firstName": "Имя",
+      "firstNamePlaceholder": "Введите ваше имя",
+      "lastName": "Фамилия",
+      "lastNamePlaceholder": "Введите вашу фамилию",
+      "street": "Адрес",
+      "streetPlaceholder": "Улица, дом, квартира...",
+      "city": "Город",
+      "cityPlaceholder": "Введите ваш город",
+      "postalCode": "Почтовый Индекс",
+      "postalCodePlaceholder": "напр. 101000",
+      "province": "Область/Регион",
+      "provincePlaceholder": "Область или регион (необязательно)",
+      "country": "Страна",
+      "selectCountry": "Выберите страну",
+      "phone": "Телефон",
+      "phoneHelper": "для уведомлений о доставке",
+      "phonePlaceholder": "+7 900 000 0000",
+      "phoneDescription": "Мы свяжемся с вами по поводу доставки",
+      "saveAddress": "Сохранить этот адрес для будущих заказов"
     },
     "shippingMethod": {
       "title": "Shipping Method",
@@ -1678,11 +1699,14 @@
         "name": "Express Shipping",
         "description": "Delivery in 1-2 business days"
       },
-      "noMethods": "Способы доставки недоступны",
-      "noMethodsDescription": "Пожалуйста, проверьте адрес или свяжитесь со службой поддержки",
-      "error": "Ошибка загрузки способов доставки",
-      "loadError": "Способы доставки",
-      "usingDefaultOptions": "Используются стандартные варианты доставки. Фактические тарифы могут отличаться.",
+      "noMethods": "No shipping methods available",
+      "noMethodsDescription": "Please check your address or contact support",
+      "error": "Error loading shipping methods",
+      "fallbackWarning": {
+        "title": "Расчетные Тарифы Доставки",
+        "description": "Не удалось загрузить тарифы в реальном времени от наших перевозчиков. Показываем расчетные тарифы ниже. Фактические тарифы будут рассчитаны перед окончательным подтверждением.",
+        "retry": "Повторить загрузку реальных тарифов"
+      },
       "standard": {
         "name": "Standard Shipping",
         "description": "Delivery in 3-5 business days"
@@ -1807,7 +1831,10 @@
       "failedToSetDefaultAddress": "Не удалось установить адрес по умолчанию",
       "failedToDeleteAddress": "Не удалось удалить адрес",
       "expressCheckoutFailed": "Экспресс-оплата не удалась",
-      "pleaseTryAgain": "Пожалуйста, попробуйте снова или отредактируйте данные вручную"
+      "pleaseTryAgain": "Пожалуйста, попробуйте снова или отредактируйте данные вручную",
+      "orderFailed": "Ошибка обработки заказа",
+      "initFailed": "Ошибка инициализации оформления",
+      "loadFailed": "Ошибка загрузки оформления"
     },
     "expressCheckout": {
       "title": "Доступна Экспресс-Оплата",
@@ -1823,8 +1850,35 @@
       "countdownMessage": "Перенаправление к оплате через {seconds} секунд...",
       "cancelButton": "Подождите, я хочу проверить",
       "countdownCancelled": "Обратный отсчет отменен",
-      "countdownCancelledDetails": "Не спешите, проверьте свой заказ"
-    }
+      "countdownCancelledDetails": "Не спешите, проверьте свой заказ",
+      "oneClickDescription": "Завершите заказ одним кликом",
+      "shippingTo": "Доставка",
+      "paymentMethod": "Оплата",
+      "shipping": "Доставка",
+      "placeOrderNow": "Оформить Заказ",
+      "editDetails": "Изменить Данные"
+    },
+    "hybrid": {
+      "contact": "Контакт",
+      "shippingAddress": "Адрес Доставки",
+      "shippingMethod": "Способ Доставки",
+      "payment": "Оплата",
+      "reviewAndPay": "Проверить и Оплатить"
+    },
+    "trustBadges": {
+      "secure": "Безопасно",
+      "guaranteed": "Гарантировано",
+      "fastDelivery": "Быстрая Доставка"
+    },
+    "showItems": "Показать товары",
+    "hideItems": "Скрыть товары",
+    "estimatedDelivery": "Ожидаемая доставка",
+    "calculatedAtNextStep": "Рассчитано",
+    "securePayment": "Безопасная Оплата",
+    "moneyBackGuarantee": "Гарантия Возврата",
+    "needHelp": "Нужна Помощь?",
+    "secure": "Безопасно",
+    "guaranteed": "Гарантировано"
   },
   "admin": {
     "navigation": {
