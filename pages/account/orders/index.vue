@@ -76,7 +76,7 @@
                 <span class="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
               </span>
               <span class="text-sm font-medium text-blue-700 dark:text-blue-300">
-                {{ unviewedCount }} {{ unviewedCount === 1 ? 'update' : 'updates' }}
+                {{ $t('orders.updateCount', { count: unviewedCount }, unviewedCount) }}
               </span>
             </div>
 
@@ -90,7 +90,7 @@
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                 <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
               </span>
-              <span class="hidden sm:inline">Live</span>
+              <span class="hidden sm:inline">{{ $t('orders.liveStatus') }}</span>
             </div>
           </div>
         </div>
@@ -146,6 +146,7 @@
             <button
               type="button"
               class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none"
+              :aria-label="$t('orders.accessibility.clearSearch')"
               @click="clearSearch"
             >
               <svg
@@ -412,6 +413,7 @@
               <span
                 v-else
                 class="px-2 text-gray-500"
+                aria-hidden="true"
               >...</span>
             </template>
 
@@ -836,6 +838,10 @@ onMounted(async () => {
 
 // Cleanup on unmount
 onUnmounted(() => {
+  // Clear search debounce timeout
+  if (searchTimeout) {
+    clearTimeout(searchTimeout)
+  }
   cleanupMobileFeatures()
   unsubscribeFromOrderUpdates()
 })

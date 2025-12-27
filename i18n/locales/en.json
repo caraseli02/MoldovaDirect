@@ -646,6 +646,8 @@
       "deliveredSuccessfully": "Delivered successfully"
     },
     "track": "Track",
+    "liveStatus": "Live",
+    "updateCount": "{count} update | {count} updates",
     "notifications": {
       "title": "Order Updates",
       "delivered": {
@@ -692,6 +694,7 @@
       "reorderButton": "Reorder all items from this order",
       "viewDetailsButton": "View detailed information for this order",
       "trackButton": "Track this order",
+      "orderActions": "Order actions",
       "searchInput": "Search orders by order number or product name",
       "clearSearch": "Clear search query",
       "statusFilter": "Filter orders by status",

@@ -645,6 +645,8 @@
       "deliveredSuccessfully": "Entregado exitosamente"
     },
     "track": "Seguimiento",
+    "liveStatus": "En vivo",
+    "updateCount": "{count} actualización | {count} actualizaciones",
     "notifications": {
       "title": "Actualizaciones de Pedidos",
       "delivered": {
@@ -691,6 +693,7 @@
       "reorderButton": "Volver a pedir todos los artículos de este pedido",
       "viewDetailsButton": "Ver información detallada de este pedido",
       "trackButton": "Rastrear este pedido",
+      "orderActions": "Acciones del pedido",
       "searchInput": "Buscar pedidos por número de pedido o nombre de producto",
       "clearSearch": "Limpiar búsqueda",
       "statusFilter": "Filtrar pedidos por estado",

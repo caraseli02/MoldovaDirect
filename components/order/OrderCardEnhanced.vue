@@ -165,7 +165,7 @@
       v-if="showActions"
       class="flex space-x-2"
       role="group"
-      aria-label="Order actions"
+      :aria-label="$t('orders.accessibility.orderActions')"
     >
       <!-- Track Button for Active Orders -->
       <Button
@@ -320,8 +320,8 @@ const progressPercentage = computed(() => {
 })
 
 const estimatedDelivery = computed(() => {
-  // You can replace this with actual estimated delivery from tracking data
-  return props.order.estimatedDelivery || null
+  // Uses estimatedShipDate from the order as the estimated delivery date
+  return props.order.estimatedShipDate || null
 })
 
 // Helper functions

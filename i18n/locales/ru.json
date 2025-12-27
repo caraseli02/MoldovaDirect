@@ -563,6 +563,31 @@
       "to": "До",
       "clearAll": "Очистить Все Фильтры"
     },
+    "metrics": {
+      "active": "Активные",
+      "delivered": "Доставлено",
+      "total": "Всего",
+      "thisMonth": "За Месяц",
+      "activeOrders": "Активные Заказы",
+      "deliveredThisMonth": "Доставлено в Этом Месяце",
+      "totalOrders": "Всего Заказов",
+      "spentThisMonth": "Потрачено в Этом Месяце"
+    },
+    "filters": {
+      "quickFilters": "Быстрые Фильтры",
+      "inTransit": "В Пути",
+      "deliveredThisMonth": "Доставлено в Этом Месяце",
+      "last3Months": "Последние 3 Месяца",
+      "allOrders": "Все Заказы"
+    },
+    "progress": {
+      "deliveryProgress": "Прогресс доставки",
+      "estimatedArrival": "Ожидаемая доставка",
+      "deliveredSuccessfully": "Успешно доставлено"
+    },
+    "track": "Отследить",
+    "liveStatus": "Live",
+    "updateCount": "{count} обновление | {count} обновления | {count} обновлений",
     "notifications": {
       "title": "Обновления Заказов",
       "delivered": {
@@ -608,6 +633,8 @@
       "statusBadge": "Статус заказа: {status}",
       "reorderButton": "Заказать снова все товары из этого заказа",
       "viewDetailsButton": "Посмотреть подробную информацию об этом заказе",
+      "trackButton": "Отследить этот заказ",
+      "orderActions": "Действия с заказом",
       "searchInput": "Поиск заказов по номеру заказа или названию товара",
       "clearSearch": "Очистить поиск",
       "statusFilter": "Фильтровать заказы по статусу",
