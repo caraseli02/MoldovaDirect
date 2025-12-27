@@ -55,6 +55,8 @@
     "deselectAll": "Deselectează Tot",
     "cartError": "Eroare Coș",
     "cartValidationError": "Eroare de Validare",
+    "showOrderSummary": "Arată rezumatul comenzii",
+    "hideOrderSummary": "Ascunde rezumatul comenzii",
     "item": "articol",
     "items": "articole"
   },
@@ -1497,7 +1499,37 @@
     "each": "fiecare",
     "addToCart": "Adaugă în Coș",
     "inCart": "În Coș",
-    "recommendedProducts": "Produse Recomandate"
+    "recommendedProducts": "Produse Recomandate",
+    "itemCount": "{count} articole",
+    "youSave": "Economisești",
+    "secureCheckout": "Plată securizată",
+    "allCardsAccepted": "Toate cardurile acceptate",
+    "add": "Adaugă",
+    "saveForLater": "Salvează pentru mai târziu",
+    "stock": {
+      "inStock": "În stoc",
+      "low": "Mai sunt doar {count}!",
+      "outOfStock": "Stoc epuizat"
+    },
+    "shipping": {
+      "progress": "Progres transport gratuit",
+      "freeShipping": "Transport gratuit",
+      "qualified": "Comanda ta beneficiază de transport gratuit!",
+      "addMore": "Adaugă încă {amount} pentru transport gratuit"
+    },
+    "recommendations": {
+      "boughtTogether": "Cumpărate împreună",
+      "similar": "Similar",
+      "priceDrop": "Preț redus",
+      "backInStock": "Disponibil din nou",
+      "recommended": "Recomandat",
+      "noRecommendations": "Nu există recomandări disponibile",
+      "loadFailed": "Nu s-au putut încărca recomandările"
+    },
+    "decreaseQuantity": "Scade cantitatea",
+    "increaseQuantity": "Crește cantitatea",
+    "removeItem": "Elimină articolul",
+    "quantity": "{count} articole"
   },
   "checkout": {
     "title": "Finalizare Comandă",
