@@ -35,7 +35,9 @@
       v-else-if="hasError && displayRecommendations.length === 0"
       class="text-center py-6"
     >
-      <p class="text-sm text-red-500 dark:text-red-400 mb-2">{{ $t('cart.recommendations.loadFailed') }}</p>
+      <p class="text-sm text-red-500 dark:text-red-400 mb-2">
+        {{ $t('cart.recommendations.loadFailed') }}
+      </p>
       <button
         class="text-sm text-primary-600 dark:text-primary-400 hover:underline"
         @click="handleLoadRecommendations"
@@ -49,7 +51,9 @@
       v-else-if="!recommendationsLoading && displayRecommendations.length === 0"
       class="text-center py-6 text-zinc-500 dark:text-zinc-400"
     >
-      <p class="text-sm">{{ $t('cart.recommendations.noRecommendations') }}</p>
+      <p class="text-sm">
+        {{ $t('cart.recommendations.noRecommendations') }}
+      </p>
     </div>
 
     <!-- Horizontal Scroll Recommendations (Mobile only) -->
@@ -221,16 +225,17 @@ const displayRecommendations = computed(() => {
 
 // Show component if loading, has recommendations, has cached recommendations, or has attempted to load
 const showComponent = computed(() => {
-  return recommendationsLoading.value ||
-         displayRecommendations.value.length > 0 ||
-         hasAttemptedLoad.value
+  return recommendationsLoading.value
+    || displayRecommendations.value.length > 0
+    || hasAttemptedLoad.value
 })
 
 // Load recommendations on mount
 onMounted(async () => {
   if (!recommendations.value || recommendations.value.length === 0) {
     await handleLoadRecommendations()
-  } else {
+  }
+  else {
     hasAttemptedLoad.value = true
   }
 })
