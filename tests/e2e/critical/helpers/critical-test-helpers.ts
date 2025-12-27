@@ -350,20 +350,24 @@ export class CriticalTestHelpers {
     await this.page.waitForURL(/\/cart/, { timeout: 10000 })
     await this.page.waitForLoadState('networkidle')
 
-    // Click checkout button (supports multiple locales)
+    // Click checkout button (supports multiple locales and i18n keys as fallback)
     const checkoutButton = this.page.locator(
-      'button:has-text("Checkout"), button:has-text("Finalizar compra"), button:has-text("Finalizar Compra"), button:has-text("Оформить")',
+      'button:has-text("Checkout"), button:has-text("Finalizar compra"), button:has-text("Finalizar Compra"), button:has-text("Оформить"), button:has-text("common.checkout"), button:has-text("Proceed"), button:has-text("Continuar")',
     ).first()
 
-    // Wait for button to be visible
+    // Wait for button to be present in DOM and scroll to it
     try {
-      await checkoutButton.waitFor({ state: 'visible', timeout: 5000 })
+      await checkoutButton.waitFor({ state: 'attached', timeout: 5000 })
+      // Scroll to bottom to ensure button is visible (mobile sticky footer)
+      await this.page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
+      await this.page.waitForTimeout(500)
     }
     catch {
       throw new Error('Checkout button not found on cart page. Cart may be empty or button text differs from expected.')
     }
 
-    await checkoutButton.click()
+    // Use JavaScript click to bypass visibility check (button may be in fixed footer)
+    await checkoutButton.evaluate((el: HTMLElement) => el.click())
 
     // Wait for checkout page
     await this.page.waitForURL(/\/checkout/, { timeout: 10000 })

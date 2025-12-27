@@ -1667,7 +1667,12 @@
       "shippingMethod": "Método de Envío",
       "deliveryInstructions": "Instrucciones de Entrega",
       "paymentMethod": "Método de Pago",
-      "editPayment": "Editar Pago"
+      "editPayment": "Editar Pago",
+      "acceptTerms": "Acepto los",
+      "termsOfService": "Términos y Condiciones",
+      "acceptPrivacy": "Consiento el procesamiento de mis datos personales según la",
+      "privacyPolicy": "Política de Privacidad",
+      "marketingConsent": "Me gustaría recibir comunicaciones de marketing y ofertas especiales"
     },
     "freeShipping": "Gratis",
     "processing": "Procesando...",

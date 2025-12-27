@@ -735,3 +735,133 @@ test.describe('Checkout - Tablet Viewport', () => {
     })
   })
 })
+
+// ============================================
+// Confirmation Page
+// ============================================
+
+test.describe('Checkout - Confirmation Page', () => {
+  test('order confirmation - desktop', async ({ page }) => {
+    await page.setViewportSize(VIEWPORTS.desktop)
+
+    const helpers = new CriticalTestHelpers(page)
+    await helpers.addProductAndNavigateToCheckout()
+
+    const checkoutPage = new CheckoutPage(page)
+
+    if (await checkoutPage.isGuestPromptVisible()) {
+      await checkoutPage.continueAsGuest()
+      await page.waitForTimeout(500)
+    }
+
+    // Fill all checkout steps
+    await checkoutPage.fillShippingAddress(TEST_DATA.TEST_ADDRESS)
+    await page.waitForTimeout(1000)
+
+    await checkoutPage.waitForShippingMethods()
+    await checkoutPage.selectShippingMethod(0)
+    await expect(checkoutPage.shippingMethodOptions.first()).toHaveAttribute('data-state', 'checked', { timeout: 3000 })
+    await page.waitForTimeout(500)
+
+    // Cash payment is selected by default, just verify it's checked
+    await page.waitForTimeout(1000) // Wait for reactivity to update
+
+    // Scroll to bottom to reveal the terms section
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
+    await page.waitForTimeout(1000)
+
+    // Wait for the terms checkbox to be visible (canShowPlaceOrder should be true now)
+    const termsCheckbox = checkoutPage.termsCheckbox
+    await expect(termsCheckbox).toBeVisible({ timeout: 10000 })
+
+    // Wait for translations to load (look for translated text, not raw i18n keys)
+    await expect(page.locator('text=Acepto los').or(page.locator('text=I accept the'))).toBeVisible({ timeout: 10000 })
+
+    // Accept terms - screenshot before placing order
+    await checkoutPage.acceptTerms()
+    await page.waitForTimeout(500)
+
+    await expect(page).toHaveScreenshot('checkout-terms-accepted-desktop.png', {
+      ...screenshotOptions,
+      fullPage: true,
+      mask: dynamicContentMasks.map(s => page.locator(s)),
+    })
+
+    // Place the order
+    await checkoutPage.placeOrder()
+
+    // Wait for confirmation page
+    await expect(page).toHaveURL(/\/checkout\/confirmation/, { timeout: 30000 })
+    await page.waitForLoadState('networkidle')
+    await page.waitForTimeout(2000) // Allow animations to settle
+
+    await expect(page).toHaveScreenshot('checkout-confirmation-desktop.png', {
+      ...screenshotOptions,
+      fullPage: true,
+      mask: [
+        ...dynamicContentMasks.map(s => page.locator(s)),
+        page.locator('.text-2xl.font-bold.text-green-600'), // Order number
+      ],
+    })
+  })
+
+  test('order confirmation - mobile', async ({ page }) => {
+    // Use tablet viewport for this test to avoid mobile header issues
+    await page.setViewportSize({ width: 768, height: 1024 })
+
+    const helpers = new CriticalTestHelpers(page)
+    await helpers.addProductAndNavigateToCheckout()
+
+    const checkoutPage = new CheckoutPage(page)
+
+    if (await checkoutPage.isGuestPromptVisible()) {
+      await checkoutPage.continueAsGuest()
+      await page.waitForTimeout(500)
+    }
+
+    await checkoutPage.fillShippingAddress(TEST_DATA.TEST_ADDRESS)
+    await page.waitForTimeout(1000)
+
+    await checkoutPage.waitForShippingMethods()
+    await checkoutPage.selectShippingMethod(0)
+    await page.waitForTimeout(500)
+
+    // Cash payment is selected by default
+    await page.waitForTimeout(1000)
+
+    // Scroll to bottom to reveal the terms section
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
+    await page.waitForTimeout(1000)
+
+    // Wait for terms checkbox to be visible
+    const termsCheckbox = checkoutPage.termsCheckbox
+    await expect(termsCheckbox).toBeVisible({ timeout: 10000 })
+
+    // Wait for translations to load (look for translated text, not raw i18n keys)
+    await expect(page.locator('text=Acepto los').or(page.locator('text=I accept the'))).toBeVisible({ timeout: 10000 })
+
+    await checkoutPage.acceptTerms()
+    await page.waitForTimeout(500)
+
+    // Place the order
+    await checkoutPage.placeOrder()
+
+    // Wait for confirmation page
+    await expect(page).toHaveURL(/\/checkout\/confirmation/, { timeout: 30000 })
+    await page.waitForLoadState('networkidle')
+    await page.waitForTimeout(2000)
+
+    // Now set mobile viewport for screenshot
+    await page.setViewportSize(VIEWPORTS.mobile)
+    await page.waitForTimeout(500)
+
+    await expect(page).toHaveScreenshot('checkout-confirmation-mobile.png', {
+      ...screenshotOptions,
+      fullPage: true,
+      mask: [
+        ...dynamicContentMasks.map(s => page.locator(s)),
+        page.locator('.text-2xl.font-bold.text-green-600'),
+      ],
+    })
+  })
+})

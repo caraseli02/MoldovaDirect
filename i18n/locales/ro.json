@@ -1576,7 +1576,12 @@
       "shippingMethod": "Metodă de Livrare",
       "deliveryInstructions": "Instrucțiuni de Livrare",
       "paymentMethod": "Metodă de Plată",
-      "editPayment": "Editează Plata"
+      "editPayment": "Editează Plata",
+      "acceptTerms": "Accept",
+      "termsOfService": "Termenii și Condițiile",
+      "acceptPrivacy": "Consimț la procesarea datelor mele personale conform",
+      "privacyPolicy": "Politicii de Confidențialitate",
+      "marketingConsent": "Doresc să primesc comunicări de marketing și oferte speciale"
     },
     "freeShipping": "Gratuit",
     "processing": "Se procesează...",

@@ -1554,18 +1554,23 @@
       "placeholder": "Order review will be implemented in the next task"
     },
     "review": {
-      "cartItems": "Cart Items",
-      "editCart": "Edit Cart",
-      "shippingInfo": "Shipping Information",
-      "editShipping": "Edit Shipping",
+      "cartItems": "Товары в корзине",
+      "editCart": "Редактировать корзину",
+      "shippingInfo": "Информация о доставке",
+      "editShipping": "Изменить доставку",
       "emptyCart": "Ваша корзина пуста",
-      "shippingAddress": "Shipping Address",
-      "shippingMethod": "Shipping Method",
-      "deliveryInstructions": "Delivery Instructions",
-      "paymentMethod": "Payment Method",
-      "editPayment": "Edit Payment"
+      "shippingAddress": "Адрес доставки",
+      "shippingMethod": "Способ доставки",
+      "deliveryInstructions": "Инструкции по доставке",
+      "paymentMethod": "Способ оплаты",
+      "editPayment": "Изменить оплату",
+      "acceptTerms": "Я принимаю",
+      "termsOfService": "Условия использования",
+      "acceptPrivacy": "Я согласен на обработку моих персональных данных в соответствии с",
+      "privacyPolicy": "Политикой конфиденциальности",
+      "marketingConsent": "Я хочу получать маркетинговые сообщения и специальные предложения"
     },
-    "freeShipping": "Free",
+    "freeShipping": "Бесплатно",
     "processing": "Processing...",
     "continueToTerms": "Continue to Place Order",
     "terms": {

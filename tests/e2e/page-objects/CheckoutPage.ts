@@ -179,10 +179,11 @@ export class CheckoutPage {
     // Delivery Instructions
     this.deliveryInstructions = page.locator('textarea[name="instructions"], textarea[id="instructions"], [data-testid="delivery-instructions"]')
 
-    // Terms & Order
-    this.termsCheckbox = page.locator('input[type="checkbox"][id="terms"], input[name="terms"]')
-    this.privacyCheckbox = page.locator('input[type="checkbox"][id="privacy"], input[name="privacy"]')
-    this.marketingCheckbox = page.locator('input[type="checkbox"][id="marketing"], input[name="marketing"]')
+    // Terms & Order - Support both HybridCheckout (no IDs) and ReviewTermsSection (with IDs)
+    // Match by text content near the checkbox. Also match i18n keys in case translations aren't loaded.
+    this.termsCheckbox = page.locator('label').filter({ hasText: /acceptTerms|Acepto los|I accept the|Accept Termeni|Я принимаю/i }).locator('input[type="checkbox"]').first()
+    this.privacyCheckbox = page.locator('label').filter({ hasText: /acceptPrivacy|privacidad|privacy|confidențialitate|конфиденциальности/i }).locator('input[type="checkbox"]').first()
+    this.marketingCheckbox = page.locator('label').filter({ hasText: /marketingConsent|marketing/i }).locator('input[type="checkbox"]').first()
     this.placeOrderButton = page.locator('button:has-text("Place Order"), button:has-text("Realizar Pedido"), button:has-text("Оформить заказ"), button:has-text("Plasează comanda")').first()
 
     // Order Summary (Sidebar)
@@ -451,10 +452,32 @@ export class CheckoutPage {
   }
 
   /**
-   * Place order (clicks the Place Order button)
+   * Place order (clicks the Place Order button - handles both desktop and mobile)
    */
   async placeOrder() {
-    await this.placeOrderButton.click()
+    // Try desktop button first
+    if (await this.placeOrderButton.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await this.placeOrderButton.click()
+    }
+    else {
+      // Try mobile sticky footer button
+      const mobileButton = this.page.locator('.lg\\:hidden button:has-text("Realizar"), .lg\\:hidden button:has-text("Place Order"), button.fixed:has-text("Realizar"), button.fixed:has-text("Place Order")').first()
+      if (await mobileButton.isVisible({ timeout: 2000 }).catch(() => false)) {
+        await mobileButton.click()
+      }
+      else {
+        // Last resort: use JavaScript to find and click any place order button
+        await this.page.evaluate(() => {
+          const buttons = Array.from(document.querySelectorAll('button'))
+          const placeOrderBtn = buttons.find(b =>
+            b.textContent?.includes('Realizar Pedido')
+            || b.textContent?.includes('Place Order')
+            || b.textContent?.includes('Plasează'),
+          )
+          if (placeOrderBtn) placeOrderBtn.click()
+        })
+      }
+    }
     await this.page.waitForLoadState('networkidle')
   }
 

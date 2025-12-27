@@ -1743,7 +1743,12 @@
       "shippingMethod": "Shipping Method",
       "deliveryInstructions": "Delivery Instructions",
       "paymentMethod": "Payment Method",
-      "editPayment": "Edit Payment"
+      "editPayment": "Edit Payment",
+      "acceptTerms": "I accept the",
+      "termsOfService": "Terms and Conditions",
+      "acceptPrivacy": "I consent to the processing of my personal data as described in the",
+      "privacyPolicy": "Privacy Policy",
+      "marketingConsent": "I would like to receive marketing communications and special offers"
     },
     "freeShipping": "Free",
     "processing": "Processing...",
