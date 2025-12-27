@@ -365,7 +365,7 @@ import CartItem from '~/components/cart/Item.vue'
 
 const localePath = useLocalePath()
 const toast = useToast()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 // Mobile UI state
 const showMobileSummary = ref(false)
@@ -389,7 +389,7 @@ const savings = computed(() => 0)
 
 // Utility functions
 const formatPrice = (price: number) => {
-  return new Intl.NumberFormat('es-ES', {
+  return new Intl.NumberFormat(locale.value, {
     style: 'currency',
     currency: 'EUR',
   }).format(price)
@@ -409,7 +409,8 @@ const safeUpdateQuantity = async (itemId: string, quantity: number) => {
     await updateQuantity(itemId, quantity)
   }
   catch (error: any) {
-    console.error('Failed to update quantity:', error)
+    console.error('Failed to update quantity for item:', itemId, 'to quantity:', quantity, error)
+    toast.error(t('cart.error.updateFailed'), t('cart.error.updateFailedDetails'))
   }
 }
 
@@ -418,7 +419,8 @@ const safeRemoveItem = async (itemId: string) => {
     await removeItem(itemId)
   }
   catch (error: any) {
-    console.error('Failed to remove item:', error)
+    console.error('Failed to remove item:', itemId, error)
+    toast.error(t('cart.error.removeFailed'), t('cart.error.removeFailedDetails'))
   }
 }
 
@@ -430,24 +432,33 @@ const handleSwipeRemove = async (itemId: string) => {
     }
   }
   catch (error: any) {
-    console.error('Failed to remove item via swipe:', error)
+    console.error('Failed to remove item via swipe:', itemId, error)
+    if ('vibrate' in navigator) {
+      navigator.vibrate([50, 50, 50]) // Error pattern
+    }
+    toast.error(t('cart.error.removeFailed'), t('cart.error.removeFailedDetails'))
   }
 }
 
 const handleSaveForLater = async (itemId: string) => {
   try {
     const item = items.value.find(i => i.id === itemId)
-    if (item) {
-      const mutableProduct = {
-        ...item.product,
-        images: [...item.product.images],
-      }
-      await addToSavedForLater(mutableProduct, item.quantity)
-      await removeItem(itemId)
+    if (!item) {
+      console.error('Item not found for save-for-later:', itemId)
+      toast.error(t('cart.error.productNotFound'), t('cart.error.productNotFoundDetails'))
+      return
     }
+    const mutableProduct = {
+      ...item.product,
+      images: [...item.product.images],
+    }
+    await addToSavedForLater(mutableProduct, item.quantity)
+    await removeItem(itemId)
+    toast.success(t('cart.success.savedForLater'), t('cart.success.savedForLaterDetails', { product: item.product.name }))
   }
   catch (error: any) {
-    console.error('Failed to save item for later:', error)
+    console.error('Failed to save item for later:', itemId, error)
+    toast.error(t('cart.error.saveFailed'), t('cart.error.saveFailedDetails'))
   }
 }
 

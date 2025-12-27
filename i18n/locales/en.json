@@ -264,8 +264,10 @@
       "priceDrop": "Price drop",
       "backInStock": "Back in stock",
       "recommended": "Recommended",
-      "noRecommendations": "No recommendations available"
-    }
+      "noRecommendations": "No recommendations available",
+      "loadFailed": "Could not load recommendations"
+    },
+    "quantity": "{count} items"
   },
   "auth": {
     "signIn": "Sign In",

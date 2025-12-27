@@ -30,12 +30,26 @@
       <span class="ml-2 text-sm text-zinc-500 dark:text-zinc-400">{{ $t('common.loading') }}</span>
     </div>
 
+    <!-- Error State -->
+    <div
+      v-else-if="hasError && displayRecommendations.length === 0"
+      class="text-center py-6"
+    >
+      <p class="text-sm text-red-500 dark:text-red-400 mb-2">{{ $t('cart.recommendations.loadFailed') }}</p>
+      <button
+        class="text-sm text-primary-600 dark:text-primary-400 hover:underline"
+        @click="handleLoadRecommendations"
+      >
+        {{ $t('actions.retry', 'Retry') }}
+      </button>
+    </div>
+
     <!-- Empty State -->
     <div
       v-else-if="!recommendationsLoading && displayRecommendations.length === 0"
       class="text-center py-6 text-zinc-500 dark:text-zinc-400"
     >
-      <p class="text-sm">{{ $t('cart.recommendations.noRecommendations', 'No recommendations available') }}</p>
+      <p class="text-sm">{{ $t('cart.recommendations.noRecommendations') }}</p>
     </div>
 
     <!-- Horizontal Scroll Recommendations (Mobile only) -->
@@ -75,7 +89,7 @@
             :class="isInCart(recommendation.product.id)
               ? 'bg-zinc-100 dark:bg-zinc-700 text-zinc-400'
               : 'bg-primary-600 text-white hover:bg-primary-700'"
-            @click="handleAddToCart(recommendation.product as any)"
+            @click="handleAddToCart(recommendation.product)"
           >
             <svg
               v-if="isInCart(recommendation.product.id)"
@@ -154,7 +168,7 @@
             :class="isInCart(recommendation.product.id)
               ? 'bg-zinc-100 dark:bg-zinc-700 text-zinc-500'
               : 'bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-100'"
-            @click="handleAddToCart(recommendation.product as any)"
+            @click="handleAddToCart(recommendation.product)"
           >
             {{ isInCart(recommendation.product.id) ? $t('cart.inCart') : $t('cart.add') }}
           </button>
@@ -215,13 +229,7 @@ const showComponent = computed(() => {
 // Load recommendations on mount
 onMounted(async () => {
   if (!recommendations.value || recommendations.value.length === 0) {
-    try {
-      await handleLoadRecommendations()
-    }
-    catch {
-      // Silently handle recommendation loading errors
-      hasError.value = true
-    }
+    await handleLoadRecommendations()
   } else {
     hasAttemptedLoad.value = true
   }
@@ -241,7 +249,7 @@ const getProductName = (name: any): string => {
 
 // Utility functions
 const formatPrice = (price: number) => {
-  return new Intl.NumberFormat('es-ES', {
+  return new Intl.NumberFormat(locale.value, {
     style: 'currency',
     currency: 'EUR',
   }).format(price)
@@ -266,24 +274,27 @@ const getReasonText = (reason: string) => {
 // Handle recommendations operations
 const handleLoadRecommendations = async () => {
   hasAttemptedLoad.value = true
+  hasError.value = false
   try {
     await loadRecommendations()
   }
   catch (error: any) {
+    hasError.value = true
     if (error.statusCode !== 404) {
       console.error('Failed to load recommendations:', error)
+      toast.error(t('common.error'), t('cart.recommendations.loadFailed'))
     }
   }
 }
 
-const handleAddToCart = async (product: Product) => {
+const handleAddToCart = async (product: Product | { id: string, name: any, price: number, images?: string[], stock?: number }) => {
   try {
-    await addItem(product, 1)
+    await addItem(product as Product, 1)
     const productName = getProductName(product.name)
     toast.success(t('cart.success.added'), t('cart.success.productAdded', { product: productName }))
   }
   catch (error: any) {
-    console.error('Failed to add recommended product to cart:', error)
+    console.error('Failed to add recommended product to cart:', product.id, error)
     toast.error(t('common.error'), t('cart.error.addFailedDetails'))
   }
 }

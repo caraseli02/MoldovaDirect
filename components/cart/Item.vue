@@ -100,8 +100,9 @@
         </button>
 
         <span
+          role="status"
+          aria-live="polite"
           class="w-10 text-center font-semibold text-zinc-900 dark:text-white"
-          :aria-label="$t('cart.quantity', { count: item.quantity })"
         >
           {{ item.quantity }}
         </span>
@@ -246,7 +247,7 @@ const getLocalizedText = (text: any): string => {
 }
 
 const formatPrice = (price: number) => {
-  return new Intl.NumberFormat('es-ES', {
+  return new Intl.NumberFormat(locale.value, {
     style: 'currency',
     currency: 'EUR',
   }).format(price)

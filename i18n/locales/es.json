@@ -259,8 +259,10 @@
       "priceDrop": "Precio rebajado",
       "backInStock": "Disponible de nuevo",
       "recommended": "Recomendado",
-      "noRecommendations": "No hay recomendaciones disponibles"
-    }
+      "noRecommendations": "No hay recomendaciones disponibles",
+      "loadFailed": "No se pudieron cargar las recomendaciones"
+    },
+    "quantity": "{count} artículos"
   },
   "auth": {
     "signIn": "Iniciar Sesión",

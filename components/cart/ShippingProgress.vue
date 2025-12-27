@@ -31,7 +31,7 @@
     <div class="h-1.5 bg-zinc-100 dark:bg-zinc-700 rounded-full overflow-hidden">
       <div
         class="h-full rounded-full transition-all duration-500 ease-out"
-        :class="qualifiesForFreeShipping ? 'bg-emerald-500' : 'bg-emerald-500'"
+        :class="qualifiesForFreeShipping ? 'bg-emerald-500' : 'bg-primary-500'"
         :style="{ width: `${progressPercentage}%` }"
       ></div>
     </div>
@@ -39,7 +39,7 @@
     <!-- Status Message -->
     <p
       class="text-xs mt-2 font-medium"
-      :class="qualifiesForFreeShipping ? 'text-emerald-600 dark:text-emerald-400' : 'text-emerald-600 dark:text-emerald-400'"
+      :class="qualifiesForFreeShipping ? 'text-emerald-600 dark:text-emerald-400' : 'text-primary-600 dark:text-primary-400'"
     >
       <template v-if="qualifiesForFreeShipping">
         <svg
@@ -74,7 +74,7 @@ const props = withDefaults(defineProps<Props>(), {
   freeShippingThreshold: 50,
 })
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 // Computed values
 const qualifiesForFreeShipping = computed(() => props.subtotal >= props.freeShippingThreshold)
@@ -97,7 +97,7 @@ const progressText = computed(() => {
 
 // Utility
 const formatPrice = (price: number) => {
-  return new Intl.NumberFormat('es-ES', {
+  return new Intl.NumberFormat(locale.value, {
     style: 'currency',
     currency: 'EUR',
   }).format(price)

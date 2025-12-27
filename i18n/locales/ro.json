@@ -1520,8 +1520,14 @@
       "similar": "Similar",
       "priceDrop": "Preț redus",
       "backInStock": "Disponibil din nou",
-      "recommended": "Recomandat"
-    }
+      "recommended": "Recomandat",
+      "noRecommendations": "Nu există recomandări disponibile",
+      "loadFailed": "Nu s-au putut încărca recomandările"
+    },
+    "decreaseQuantity": "Scade cantitatea",
+    "increaseQuantity": "Crește cantitatea",
+    "removeItem": "Elimină articolul",
+    "quantity": "{count} articole"
   },
   "checkout": {
     "title": "Finalizare Comandă",

@@ -255,8 +255,14 @@
       "similar": "Похожие",
       "priceDrop": "Снижение цены",
       "backInStock": "Снова в наличии",
-      "recommended": "Рекомендуется"
-    }
+      "recommended": "Рекомендуется",
+      "noRecommendations": "Нет доступных рекомендаций",
+      "loadFailed": "Не удалось загрузить рекомендации"
+    },
+    "decreaseQuantity": "Уменьшить количество",
+    "increaseQuantity": "Увеличить количество",
+    "removeItem": "Удалить товар",
+    "quantity": "{count} товаров"
   },
   "auth": {
     "signIn": "Войти",
