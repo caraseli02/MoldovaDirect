@@ -38,10 +38,10 @@
       <p class="text-sm">{{ $t('cart.recommendations.noRecommendations', 'No recommendations available') }}</p>
     </div>
 
-    <!-- Horizontal Scroll Recommendations -->
+    <!-- Horizontal Scroll Recommendations (Mobile only) -->
     <div
       v-else
-      class="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory scrollbar-hide"
+      class="lg:hidden flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory scrollbar-hide"
     >
       <div
         v-for="recommendation in displayRecommendations"
@@ -115,8 +115,11 @@
       </div>
     </div>
 
-    <!-- Desktop Grid View (hidden on mobile) -->
-    <div class="hidden lg:grid lg:grid-cols-3 gap-4 mt-4">
+    <!-- Desktop Grid View (hidden on mobile, only show when we have recommendations) -->
+    <div
+      v-if="displayRecommendations.length > 0"
+      class="hidden lg:grid lg:grid-cols-3 gap-4"
+    >
       <div
         v-for="recommendation in displayRecommendations.slice(0, 3)"
         :key="`desktop-${recommendation.id}`"
