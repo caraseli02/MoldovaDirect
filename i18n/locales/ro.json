@@ -41,6 +41,7 @@
     "release_to_remove": "Eliberează pentru a elimina",
     "help": "Ajutor",
     "each": "fiecare",
+    "items": "articole",
     "refresh": "Reîmprospătează",
     "tryAgain": "Încearcă Din Nou",
     "error": "Eroare",
@@ -1538,7 +1539,10 @@
         "orderDetails": "Detalii Comandă",
         "orderDetailsPlaceholder": "Detaliile comenzii tale vor fi afișate aici",
         "viewOrders": "Vezi Comenzile Mele",
-        "continueShopping": "Continuă Cumpărăturile"
+        "viewOrderDetails": "Vezi Detaliile Comenzii",
+        "continueShopping": "Continuă Cumpărăturile",
+        "pageTitle": "Confirmare Comandă - Checkout",
+        "pageDescription": "Comanda ta a fost plasată cu succes"
       }
     },
     "guestCheckout": {
@@ -1799,6 +1803,7 @@
       "checkYourEmail": "Comanda dvs. a fost finalizată cu succes. Verificați emailul pentru detalii",
       "cartClearFailed": "Nu s-a putut goli coșul",
       "cartClearFailedDetails": "Comanda dvs. a fost finalizată cu succes, dar coșul nu a fost golit automat",
+      "needHelp": "Aveți nevoie de ajutor? Contactați Suportul",
       "preparingOrder": "Pregătim comanda dvs. ({days} zile)",
       "delivery": "Livrare",
       "totalPaid": "Total Plătit",

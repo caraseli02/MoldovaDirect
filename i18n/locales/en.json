@@ -41,6 +41,7 @@
     "release_to_remove": "Release to remove",
     "help": "Help",
     "each": "each",
+    "items": "items",
     "refresh": "Refresh",
     "tryAgain": "Try Again",
     "error": "Error",
@@ -1706,7 +1707,10 @@
         "orderDetails": "Order Details",
         "orderDetailsPlaceholder": "Your order details will be displayed here",
         "viewOrders": "View My Orders",
-        "continueShopping": "Continue Shopping"
+        "viewOrderDetails": "View Order Details",
+        "continueShopping": "Continue Shopping",
+        "pageTitle": "Order Confirmation - Checkout",
+        "pageDescription": "Your order has been successfully placed"
       }
     },
     "guestCheckout": {
@@ -1967,6 +1971,7 @@
       "checkYourEmail": "Your order completed successfully. Check your email for details",
       "cartClearFailed": "Could not clear cart",
       "cartClearFailedDetails": "Your order completed successfully, but the cart was not cleared automatically",
+      "needHelp": "Need help? Contact Support",
       "preparingOrder": "Preparing your order ({days} days)",
       "delivery": "Delivery",
       "totalPaid": "Total Paid",

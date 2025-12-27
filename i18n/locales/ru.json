@@ -41,6 +41,7 @@
     "release_to_remove": "Отпустите для удаления",
     "help": "Помощь",
     "each": "каждый",
+    "items": "товаров",
     "refresh": "Обновить",
     "tryAgain": "Повторите попытку",
     "error": "Ошибка",
@@ -1512,41 +1513,44 @@
     },
     "steps": {
       "shipping": {
-        "name": "Shipping",
-        "description": "Delivery information",
-        "title": "Shipping Information",
-        "subtitle": "Where should we deliver your order?"
+        "name": "Доставка",
+        "description": "Информация о доставке",
+        "title": "Информация о Доставке",
+        "subtitle": "Куда доставить ваш заказ?"
       },
       "payment": {
-        "name": "Payment",
-        "description": "Payment method",
-        "title": "Payment Method",
-        "subtitle": "How would you like to pay?"
+        "name": "Оплата",
+        "description": "Способ оплаты",
+        "title": "Способ Оплаты",
+        "subtitle": "Как вы хотите оплатить?"
       },
       "review": {
-        "name": "Review",
-        "description": "Order summary",
-        "title": "Review Your Order",
-        "subtitle": "Please review your order details before completing your purchase"
+        "name": "Проверка",
+        "description": "Сводка заказа",
+        "title": "Проверьте Ваш Заказ",
+        "subtitle": "Пожалуйста, проверьте детали заказа перед завершением покупки"
       },
       "confirmation": {
-        "name": "Confirmation",
-        "description": "Order complete",
-        "title": "Order Confirmed!",
-        "subtitle": "Thank you for your order. We'll send you a confirmation email shortly.",
-        "emailSent": "A confirmation email has been sent to your email address",
-        "orderDetails": "Order Details",
-        "orderDetailsPlaceholder": "Your order details will be displayed here",
-        "viewOrders": "View My Orders",
-        "continueShopping": "Continue Shopping"
+        "name": "Подтверждение",
+        "description": "Заказ завершён",
+        "title": "Заказ Подтверждён!",
+        "subtitle": "Спасибо за ваш заказ. Мы отправим вам письмо с подтверждением в ближайшее время.",
+        "emailSent": "Письмо с подтверждением отправлено на вашу электронную почту",
+        "orderDetails": "Детали Заказа",
+        "orderDetailsPlaceholder": "Детали вашего заказа будут отображены здесь",
+        "viewOrders": "Мои Заказы",
+        "viewOrderDetails": "Посмотреть Детали Заказа",
+        "continueShopping": "Продолжить Покупки",
+        "pageTitle": "Подтверждение Заказа - Checkout",
+        "pageDescription": "Ваш заказ успешно оформлен"
       }
     },
     "guestCheckout": {
-      "title": "Checkout Options",
-      "description": "You can create an account for faster checkout or continue as a guest."
+      "title": "Варианты Оформления",
+      "description": "Вы можете создать аккаунт для быстрого оформления заказов или продолжить как гость."
     },
-    "continueAsGuest": "Continue as Guest",
-    "backToCart": "Back to Cart",
+    "continueAsGuest": "Продолжить как гость",
+    "backToCart": "Вернуться в корзину",
     "continueToPayment": "Продолжить к оплате",
     "continueToReview": "Проверить ваш заказ",
     "backToShipping": "Назад к доставке",
@@ -1556,42 +1560,42 @@
     "placeOrderSecure": "Безопасно оформить заказ",
     "notChargedYet": "Оплата ещё не будет списана",
     "shippingForm": {
-      "title": "Shipping Information",
-      "placeholder": "Shipping form will be implemented in the next task"
+      "title": "Информация о Доставке",
+      "placeholder": "Форма доставки будет реализована в следующей задаче"
     },
     "paymentForm": {
-      "title": "Payment Method",
-      "placeholder": "Payment form will be implemented in the next task"
+      "title": "Способ Оплаты",
+      "placeholder": "Форма оплаты будет реализована в следующей задаче"
     },
     "orderReview": {
-      "title": "Order Summary",
-      "placeholder": "Order review will be implemented in the next task"
+      "title": "Сводка Заказа",
+      "placeholder": "Обзор заказа будет реализован в следующей задаче"
     },
     "review": {
-      "cartItems": "Cart Items",
-      "editCart": "Edit Cart",
-      "shippingInfo": "Shipping Information",
-      "editShipping": "Edit Shipping",
+      "cartItems": "Товары в Корзине",
+      "editCart": "Редактировать Корзину",
+      "shippingInfo": "Информация о Доставке",
+      "editShipping": "Редактировать Доставку",
       "emptyCart": "Ваша корзина пуста",
-      "shippingAddress": "Shipping Address",
-      "shippingMethod": "Shipping Method",
-      "deliveryInstructions": "Delivery Instructions",
-      "paymentMethod": "Payment Method",
-      "editPayment": "Edit Payment"
+      "shippingAddress": "Адрес Доставки",
+      "shippingMethod": "Способ Доставки",
+      "deliveryInstructions": "Инструкции по Доставке",
+      "paymentMethod": "Способ Оплаты",
+      "editPayment": "Редактировать Оплату"
     },
-    "freeShipping": "Free",
-    "processing": "Processing...",
-    "continueToTerms": "Continue to Place Order",
+    "freeShipping": "Бесплатно",
+    "processing": "Обработка...",
+    "continueToTerms": "Продолжить к Оформлению",
     "terms": {
-      "title": "Terms and Conditions",
-      "acceptTerms": "I accept the",
-      "termsAndConditions": "Terms and Conditions",
-      "privacyPolicy": "Privacy Policy",
-      "acceptPrivacy": "I consent to the processing of my personal data as described in the Privacy Policy",
-      "marketingConsent": "I would like to receive marketing communications and special offers",
-      "marketingDescription": "You can unsubscribe at any time. We respect your privacy.",
-      "termsRequired": "You must accept the Terms and Conditions to continue",
-      "privacyRequired": "You must accept the Privacy Policy to continue"
+      "title": "Условия и Положения",
+      "acceptTerms": "Я принимаю",
+      "termsAndConditions": "Условия и Положения",
+      "privacyPolicy": "Политику Конфиденциальности",
+      "acceptPrivacy": "Я даю согласие на обработку моих персональных данных в соответствии с Политикой конфиденциальности",
+      "marketingConsent": "Я хочу получать маркетинговые сообщения и специальные предложения",
+      "marketingDescription": "Вы можете отписаться в любое время. Мы уважаем вашу конфиденциальность.",
+      "termsRequired": "Вы должны принять Условия и Положения для продолжения",
+      "privacyRequired": "Вы должны принять Политику конфиденциальности для продолжения"
     },
     "success": {
       "shippingUpdated": "Доставка обновлена",
@@ -1799,6 +1803,7 @@
       "checkYourEmail": "Ваш заказ успешно выполнен. Проверьте почту для получения подробностей",
       "cartClearFailed": "Не удалось очистить корзину",
       "cartClearFailedDetails": "Ваш заказ успешно выполнен, но корзина не была очищена автоматически",
+      "needHelp": "Нужна помощь? Связаться с поддержкой",
       "preparingOrder": "Подготовка вашего заказа ({days} дней)",
       "delivery": "Доставка",
       "totalPaid": "Оплачено",
