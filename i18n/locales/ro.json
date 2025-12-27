@@ -1505,7 +1505,10 @@
       "sslEncrypted": "Criptare SSL 256-bit",
       "dataProtected": "Datele tale sunt protejate",
       "moneyBackGuarantee": "Garanția banilor înapoi",
-      "needHelp": "Ai nevoie de ajutor? Contactează-ne la"
+      "needHelp": "Ai nevoie de ajutor? Contactează-ne la",
+      "secure": "Sigur",
+      "easyReturns": "Returnări Ușoare",
+      "support247": "Suport 24/7"
     },
     "steps": {
       "shipping": {
@@ -1778,6 +1781,7 @@
     "confirmation": {
       "orderNumber": "Număr Comandă",
       "orderStatus": "Stare Comandă",
+      "stepIndicator": "Pasul {current} din {total}",
       "orderItems": "Articole Comandă",
       "shippingInfo": "Informații de Livrare",
       "shippingAddress": "Adresă de Livrare",
@@ -1795,9 +1799,16 @@
       "checkYourEmail": "Comanda dvs. a fost finalizată cu succes. Verificați emailul pentru detalii",
       "cartClearFailed": "Nu s-a putut goli coșul",
       "cartClearFailedDetails": "Comanda dvs. a fost finalizată cu succes, dar coșul nu a fost golit automat",
+      "preparingOrder": "Pregătim comanda dvs. ({days} zile)",
+      "delivery": "Livrare",
+      "totalPaid": "Total Plătit",
+      "viewDetails": "Vezi detalii",
+      "businessDays": "{days} zile lucrătoare",
       "status": {
         "placed": "Comandă Plasată",
+        "confirmed": "Confirmat",
         "processing": "În Procesare",
+        "preparing": "În Pregătire",
         "shipped": "Expediat",
         "delivered": "Livrat",
         "inProgress": "În Curs",

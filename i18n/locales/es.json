@@ -1596,7 +1596,10 @@
       "sslEncrypted": "Cifrado SSL de 256 bits",
       "dataProtected": "Tus datos están protegidos",
       "moneyBackGuarantee": "Garantía de devolución del dinero",
-      "needHelp": "¿Necesitas ayuda? Contáctanos en"
+      "needHelp": "¿Necesitas ayuda? Contáctanos en",
+      "secure": "Seguro",
+      "easyReturns": "Devoluciones Fáciles",
+      "support247": "Soporte 24/7"
     },
     "steps": {
       "shipping": {
@@ -1869,6 +1872,7 @@
     "confirmation": {
       "orderNumber": "Número de Pedido",
       "orderStatus": "Estado del Pedido",
+      "stepIndicator": "Paso {current} de {total}",
       "orderItems": "Artículos del Pedido",
       "shippingInfo": "Información de Envío",
       "shippingAddress": "Dirección de Envío",
@@ -1886,9 +1890,16 @@
       "checkYourEmail": "Tu pedido se completó correctamente. Revisa tu correo para más detalles",
       "cartClearFailed": "No se pudo vaciar el carrito",
       "cartClearFailedDetails": "Tu pedido se completó correctamente, pero el carrito no se vació automáticamente",
+      "preparingOrder": "Preparando tu pedido ({days} días)",
+      "delivery": "Entrega",
+      "totalPaid": "Total Pagado",
+      "viewDetails": "Ver detalles",
+      "businessDays": "{days} días hábiles",
       "status": {
         "placed": "Pedido Realizado",
+        "confirmed": "Confirmado",
         "processing": "Procesando",
+        "preparing": "Preparando",
         "shipped": "Enviado",
         "delivered": "Entregado",
         "inProgress": "En Progreso",

@@ -1673,7 +1673,10 @@
       "sslEncrypted": "256-bit SSL Encrypted",
       "dataProtected": "Your data is protected",
       "moneyBackGuarantee": "Money-back guarantee",
-      "needHelp": "Need help? Contact us at"
+      "needHelp": "Need help? Contact us at",
+      "secure": "Secure",
+      "easyReturns": "Easy Returns",
+      "support247": "24/7 Support"
     },
     "steps": {
       "shipping": {
@@ -1946,6 +1949,7 @@
     "confirmation": {
       "orderNumber": "Order Number",
       "orderStatus": "Order Status",
+      "stepIndicator": "Step {current} of {total}",
       "orderItems": "Order Items",
       "shippingInfo": "Shipping Information",
       "shippingAddress": "Shipping Address",
@@ -1963,9 +1967,16 @@
       "checkYourEmail": "Your order completed successfully. Check your email for details",
       "cartClearFailed": "Could not clear cart",
       "cartClearFailedDetails": "Your order completed successfully, but the cart was not cleared automatically",
+      "preparingOrder": "Preparing your order ({days} days)",
+      "delivery": "Delivery",
+      "totalPaid": "Total Paid",
+      "viewDetails": "View details",
+      "businessDays": "{days} business days",
       "status": {
         "placed": "Order Placed",
+        "confirmed": "Confirmed",
         "processing": "Processing",
+        "preparing": "Preparing",
         "shipped": "Shipped",
         "delivered": "Delivered",
         "inProgress": "In Progress",

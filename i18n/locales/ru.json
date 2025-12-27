@@ -1505,7 +1505,10 @@
       "sslEncrypted": "256-битное SSL шифрование",
       "dataProtected": "Ваши данные защищены",
       "moneyBackGuarantee": "Гарантия возврата денег",
-      "needHelp": "Нужна помощь? Свяжитесь с нами"
+      "needHelp": "Нужна помощь? Свяжитесь с нами",
+      "secure": "Безопасно",
+      "easyReturns": "Легкий Возврат",
+      "support247": "Поддержка 24/7"
     },
     "steps": {
       "shipping": {
@@ -1778,6 +1781,7 @@
     "confirmation": {
       "orderNumber": "Номер Заказа",
       "orderStatus": "Статус Заказа",
+      "stepIndicator": "Шаг {current} из {total}",
       "orderItems": "Товары Заказа",
       "shippingInfo": "Информация о Доставке",
       "shippingAddress": "Адрес Доставки",
@@ -1795,9 +1799,16 @@
       "checkYourEmail": "Ваш заказ успешно выполнен. Проверьте почту для получения подробностей",
       "cartClearFailed": "Не удалось очистить корзину",
       "cartClearFailedDetails": "Ваш заказ успешно выполнен, но корзина не была очищена автоматически",
+      "preparingOrder": "Подготовка вашего заказа ({days} дней)",
+      "delivery": "Доставка",
+      "totalPaid": "Оплачено",
+      "viewDetails": "Показать детали",
+      "businessDays": "{days} рабочих дней",
       "status": {
         "placed": "Заказ Размещен",
+        "confirmed": "Подтвержден",
         "processing": "Обрабатывается",
+        "preparing": "Подготовка",
         "shipped": "Отправлено",
         "delivered": "Доставлено",
         "inProgress": "В Процессе",

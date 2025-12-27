@@ -52,63 +52,62 @@
           v-if="orderData"
           class="mb-6"
         >
-          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-            <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-4">
-              {{ $t('checkout.confirmation.orderStatus') }}
-            </h3>
-            <div class="flex items-center justify-between">
-              <!-- Step 1: Order Placed -->
+          <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+            <!-- Header with Step Indicator -->
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                {{ $t('checkout.confirmation.orderStatus') }}
+              </h3>
+              <span class="text-sm text-gray-500 dark:text-gray-400">
+                {{ $t('checkout.confirmation.stepIndicator', { current: 2, total: 3 }) }}
+              </span>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-6">
+              <div class="bg-green-600 h-2 rounded-full transition-all duration-300" style="width: 66%"></div>
+            </div>
+
+            <!-- Status Steps -->
+            <div class="flex items-center justify-between mb-4">
+              <!-- Step 1: Confirmed -->
               <div class="flex flex-col items-center flex-1">
-                <div class="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/20 border-2 border-green-600 dark:border-green-400 flex items-center justify-center mb-2">
-                  <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                <div class="w-12 h-12 rounded-full bg-green-600 dark:bg-green-500 flex items-center justify-center mb-2">
+                  <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                   </svg>
                 </div>
-                <p class="text-xs font-medium text-gray-900 dark:text-white text-center">{{ $t('checkout.confirmation.status.placed') }}</p>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ formatDate(new Date()) }}</p>
+                <p class="text-sm font-medium text-green-600 dark:text-green-400 text-center">
+                  {{ $t('checkout.confirmation.status.confirmed') }}
+                </p>
               </div>
 
-              <!-- Connector Line -->
-              <div class="flex-1 h-0.5 bg-gray-200 dark:bg-gray-700 mx-2"></div>
-
-              <!-- Step 2: Processing -->
+              <!-- Step 2: Preparing (Current) -->
               <div class="flex flex-col items-center flex-1">
-                <div class="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/20 border-2 border-green-600 dark:border-green-400 flex items-center justify-center mb-2">
-                  <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                  </svg>
+                <div class="w-12 h-12 rounded-full bg-gray-900 dark:bg-white flex items-center justify-center mb-2">
+                  <div class="w-3 h-3 rounded-full bg-white dark:bg-gray-900"></div>
                 </div>
-                <p class="text-xs font-medium text-gray-900 dark:text-white text-center">{{ $t('checkout.confirmation.status.processing') }}</p>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ $t('checkout.confirmation.status.inProgress') }}</p>
+                <p class="text-sm font-medium text-gray-900 dark:text-white text-center">
+                  {{ $t('checkout.confirmation.status.preparing') }}
+                </p>
               </div>
 
-              <!-- Connector Line -->
-              <div class="flex-1 h-0.5 bg-gray-200 dark:bg-gray-700 mx-2"></div>
-
-              <!-- Step 3: Shipped -->
+              <!-- Step 3: Shipped (Pending) -->
               <div class="flex flex-col items-center flex-1">
-                <div class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 flex items-center justify-center mb-2">
-                  <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
-                  </svg>
+                <div class="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center mb-2">
+                  <div class="w-3 h-3 rounded-full bg-gray-400 dark:bg-gray-500"></div>
                 </div>
-                <p class="text-xs font-medium text-gray-500 dark:text-gray-400 text-center">{{ $t('checkout.confirmation.status.shipped') }}</p>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ $t('checkout.confirmation.status.pending') }}</p>
+                <p class="text-sm font-medium text-gray-400 dark:text-gray-500 text-center">
+                  {{ $t('checkout.confirmation.status.shipped') }}
+                </p>
               </div>
+            </div>
 
-              <!-- Connector Line -->
-              <div class="flex-1 h-0.5 bg-gray-200 dark:bg-gray-700 mx-2"></div>
-
-              <!-- Step 4: Delivered -->
-              <div class="flex flex-col items-center flex-1">
-                <div class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 flex items-center justify-center mb-2">
-                  <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                  </svg>
-                </div>
-                <p class="text-xs font-medium text-gray-500 dark:text-gray-400 text-center">{{ $t('checkout.confirmation.status.delivered') }}</p>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ $t('checkout.confirmation.status.pending') }}</p>
-              </div>
+            <!-- Status Description -->
+            <div class="text-center">
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                {{ $t('checkout.confirmation.preparingOrder', { days: '2-3' }) }}
+              </p>
             </div>
           </div>
         </div>
@@ -116,51 +115,77 @@
         <!-- Quick Info Cards -->
         <div
           v-if="orderData"
-          class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8"
+          class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8"
         >
-          <!-- Estimated Delivery Card -->
-          <div
-            v-if="estimatedDeliveryDate"
-            class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6"
-          >
-            <div class="flex items-center space-x-3">
-              <div class="flex-shrink-0">
-                <div class="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/20 flex items-center justify-center">
-                  <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                </div>
-              </div>
-              <div class="flex-1 min-w-0">
-                <p class="text-sm font-medium text-gray-900 dark:text-white mb-1">
-                  {{ $t('checkout.confirmation.estimatedDelivery') }}
-                </p>
-                <p class="text-lg font-semibold text-green-600 dark:text-green-400">
-                  {{ formatDate(estimatedDeliveryDate) }}
-                </p>
-              </div>
-            </div>
+          <!-- Delivery Card -->
+          <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+            <h4 class="text-base font-medium text-gray-900 dark:text-white mb-2">
+              {{ $t('checkout.confirmation.delivery') }}
+            </h4>
+            <p
+              v-if="estimatedDeliveryDate"
+              class="text-2xl font-bold text-gray-900 dark:text-white mb-1"
+            >
+              {{ formatShortDate(estimatedDeliveryDate) }}
+            </p>
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+              {{ shippingInfo?.method?.description || $t('checkout.confirmation.businessDays', { days: '3-5' }) }}
+            </p>
           </div>
 
-          <!-- Order Total Card -->
-          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-            <div class="flex items-center space-x-3">
-              <div class="flex-shrink-0">
-                <div class="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/20 flex items-center justify-center">
-                  <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-                  </svg>
-                </div>
-              </div>
-              <div class="flex-1 min-w-0">
-                <p class="text-sm font-medium text-gray-900 dark:text-white mb-1">
-                  {{ $t('common.total') }}
-                </p>
-                <p class="text-lg font-semibold text-gray-900 dark:text-white">
-                  {{ formatPrice(orderData.total || 0) }}
-                </p>
-              </div>
-            </div>
+          <!-- Total Paid Card -->
+          <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+            <h4 class="text-base font-medium text-gray-900 dark:text-white mb-2">
+              {{ $t('checkout.confirmation.totalPaid') }}
+            </h4>
+            <p class="text-2xl font-bold text-gray-900 dark:text-white mb-1">
+              {{ formatPrice(orderData.total || 0) }}
+            </p>
+            <NuxtLink
+              :to="localePath('#order-details')"
+              class="text-sm text-green-600 dark:text-green-400 hover:underline inline-flex items-center"
+            >
+              {{ $t('checkout.confirmation.viewDetails') }}
+              <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </NuxtLink>
+          </div>
+        </div>
+
+        <!-- Trust Badges -->
+        <div
+          v-if="orderData"
+          class="grid grid-cols-3 gap-4 mb-8"
+        >
+          <!-- Secure -->
+          <div class="flex flex-col items-center text-center p-4">
+            <svg class="w-8 h-8 text-gray-600 dark:text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+            <p class="text-sm font-medium text-gray-900 dark:text-white">
+              {{ $t('checkout.trust.secure') }}
+            </p>
+          </div>
+
+          <!-- Easy Returns -->
+          <div class="flex flex-col items-center text-center p-4">
+            <svg class="w-8 h-8 text-gray-600 dark:text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+            </svg>
+            <p class="text-sm font-medium text-gray-900 dark:text-white">
+              {{ $t('checkout.trust.easyReturns') }}
+            </p>
+          </div>
+
+          <!-- 24/7 Support -->
+          <div class="flex flex-col items-center text-center p-4">
+            <svg class="w-8 h-8 text-gray-600 dark:text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+            <p class="text-sm font-medium text-gray-900 dark:text-white">
+              {{ $t('checkout.trust.support247') }}
+            </p>
           </div>
         </div>
 
@@ -507,6 +532,13 @@ const formatDate = (date: Date): string => {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
+    day: 'numeric',
+  }).format(date)
+}
+
+const formatShortDate = (date: Date): string => {
+  return new Intl.DateTimeFormat(locale.value, {
+    month: 'short',
     day: 'numeric',
   }).format(date)
 }
