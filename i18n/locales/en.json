@@ -1780,6 +1780,12 @@
       "orderFailed": "Order Failed",
       "orderProcessingFailed": "Failed to process your order. Please try again."
     },
+    "warning": {
+      "cartLoadFailed": "Cart Load Issue",
+      "cartLoadFailedDetails": "Failed to load your cart. Some items may be missing.",
+      "totalsUpdateFailed": "Price Update Issue",
+      "totalsUpdateFailedDetails": "Failed to update totals. Prices shown may be outdated."
+    },
     "validation": {
       "firstNameRequired": "First name is required",
       "orderDataMissing": "Order data is missing. Please start checkout again.",

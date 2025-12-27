@@ -74,6 +74,10 @@ export function useCheckoutReview() {
       }
       catch (error: any) {
         console.error('Failed to load cart from storage for checkout review:', error)
+        toast.warning(
+          t('checkout.warning.cartLoadFailed') || 'Cart Load Issue',
+          t('checkout.warning.cartLoadFailedDetails') || 'Failed to load your cart. Some items may be missing.',
+        )
       }
     }
   }
@@ -140,6 +144,10 @@ export function useCheckoutReview() {
       }
       catch (error: any) {
         console.error('Failed to refresh checkout totals on review page:', error)
+        toast.warning(
+          t('checkout.warning.totalsUpdateFailed') || 'Price Update Issue',
+          t('checkout.warning.totalsUpdateFailedDetails') || 'Failed to update totals. Prices shown may be outdated.',
+        )
       }
     },
     { deep: true },

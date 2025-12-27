@@ -87,10 +87,11 @@
           </div>
 
           <!-- Progress Bar with Animation -->
+          <!-- Step 1 (Confirmed) complete, Step 2 (Preparing) in progress = 66% -->
           <div class="mb-4 bg-zinc-100 dark:bg-zinc-700 rounded-full h-2 overflow-hidden">
             <div
               class="bg-green-600 h-2 rounded-full progress-fill"
-              :style="{ '--target-width': '33%' }"
+              :style="{ '--target-width': '66%' }"
             ></div>
           </div>
 
@@ -138,7 +139,7 @@
           <!-- Delivery Card -->
           <button
             class="border border-zinc-200 dark:border-zinc-700 rounded-lg p-3 text-left card-interactive bg-white dark:bg-zinc-800"
-            @click="scrollToOrderDetails"
+            @click="scrollToOrderDetails()"
           >
             <p class="text-xs text-zinc-600 dark:text-zinc-400 mb-1">
               {{ $t('checkout.confirmation.delivery') }}
@@ -211,8 +212,11 @@
           v-if="orderData"
           class="flex items-center justify-center gap-6 mb-6 slide-up stagger-6"
         >
-          <!-- Secure -->
-          <div class="text-center">
+          <div
+            v-for="trust in trustElements"
+            :key="trust.key"
+            class="text-center"
+          >
             <div class="w-8 h-8 bg-zinc-100 dark:bg-zinc-700 rounded-full mx-auto mb-1 flex items-center justify-center">
               <svg
                 class="w-4 h-4 text-zinc-700 dark:text-zinc-300"
@@ -224,56 +228,12 @@
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   stroke-width="2"
-                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                  :d="trust.iconPath"
                 />
               </svg>
             </div>
             <p class="text-xs text-zinc-600 dark:text-zinc-400">
-              {{ $t('checkout.trust.secure') }}
-            </p>
-          </div>
-
-          <!-- Easy Returns -->
-          <div class="text-center">
-            <div class="w-8 h-8 bg-zinc-100 dark:bg-zinc-700 rounded-full mx-auto mb-1 flex items-center justify-center">
-              <svg
-                class="w-4 h-4 text-zinc-700 dark:text-zinc-300"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"
-                />
-              </svg>
-            </div>
-            <p class="text-xs text-zinc-600 dark:text-zinc-400">
-              {{ $t('checkout.trust.easyReturns') }}
-            </p>
-          </div>
-
-          <!-- 24/7 Support -->
-          <div class="text-center">
-            <div class="w-8 h-8 bg-zinc-100 dark:bg-zinc-700 rounded-full mx-auto mb-1 flex items-center justify-center">
-              <svg
-                class="w-4 h-4 text-zinc-700 dark:text-zinc-300"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
-                />
-              </svg>
-            </div>
-            <p class="text-xs text-zinc-600 dark:text-zinc-400">
-              {{ $t('checkout.trust.support247') }}
+              {{ $t(trust.labelKey) }}
             </p>
           </div>
         </div>
@@ -405,7 +365,7 @@
                     {{ $t('checkout.confirmation.shippingInfo') }}
                   </h4>
                   <p class="text-sm text-zinc-600 dark:text-zinc-400">
-                    {{ shippingInfo.address.city }}, {{ shippingInfo.address.country }}
+                    {{ shippingInfo?.address?.city }}, {{ shippingInfo?.address?.country }}
                   </p>
                 </div>
               </div>
@@ -535,7 +495,6 @@
 <script setup lang="ts">
 import { useCheckoutStore } from '~/stores/checkout'
 import { useCheckoutSessionStore } from '~/stores/checkout/session'
-import { useAuthStore } from '~/stores/auth'
 import { useCartStore } from '~/stores/cart'
 
 // Layout
@@ -547,7 +506,6 @@ definePageMeta({
 // Stores
 const checkoutStore = useCheckoutStore()
 const sessionStore = useCheckoutSessionStore()
-const authStore = useAuthStore()
 const cartStore = useCartStore()
 
 // Composables
@@ -573,17 +531,16 @@ const getLocalizedText = (text: any): string => {
   return values[0] || ''
 }
 
+const PLACEHOLDER_IMAGE = '/placeholder-product.svg'
+
 /**
- * Get product image URL from snapshot
- * Handles both array of strings and array of image objects
+ * Get product image URL from snapshot.
+ * Handles both array of strings and array of image objects.
  */
-const getProductImage = (snapshot: Record<string, any> | null | undefined): string => {
-  if (!snapshot) return '/placeholder-product.svg'
-  const images = snapshot.images
-  if (!images || !images.length) return '/placeholder-product.svg'
-  const firstImage = images[0]
-  if (typeof firstImage === 'string') return firstImage
-  return firstImage?.url ?? '/placeholder-product.svg'
+function getProductImage(snapshot: Record<string, any> | null | undefined): string {
+  const firstImage = snapshot?.images?.[0]
+  if (!firstImage) return PLACEHOLDER_IMAGE
+  return typeof firstImage === 'string' ? firstImage : (firstImage.url ?? PLACEHOLDER_IMAGE)
 }
 
 // Computed properties
@@ -591,7 +548,6 @@ const getProductImage = (snapshot: Record<string, any> | null | undefined): stri
 // The proxy can return stale refs after restore(), so we use the source directly
 const orderData = computed(() => sessionStore.orderData)
 const shippingInfo = computed(() => sessionStore.shippingInfo)
-const isAuthenticated = computed(() => authStore.isAuthenticated)
 
 const estimatedDeliveryDate = computed(() => {
   if (!shippingInfo.value?.method?.estimatedDays) return null
@@ -618,42 +574,59 @@ const formatShortDate = (date: Date): string => {
   }).format(date)
 }
 
+// Trust elements configuration
+const trustElements = [
+  {
+    key: 'secure',
+    labelKey: 'checkout.trust.secure',
+    iconPath: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z',
+  },
+  {
+    key: 'easyReturns',
+    labelKey: 'checkout.trust.easyReturns',
+    iconPath: 'M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6',
+  },
+  {
+    key: 'support247',
+    labelKey: 'checkout.trust.support247',
+    iconPath: 'M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z',
+  },
+]
+
 // Expandable section states
 const isOrderSummaryExpanded = ref(false)
 const isOrderItemsExpanded = ref(false)
 const isShippingInfoExpanded = ref(false)
 
-// Toggle methods
-const toggleOrderSummary = () => {
-  isOrderSummaryExpanded.value = !isOrderSummaryExpanded.value
-}
-
-const toggleOrderItems = () => {
-  isOrderItemsExpanded.value = !isOrderItemsExpanded.value
-}
-
-const toggleShippingInfo = () => {
-  isShippingInfoExpanded.value = !isShippingInfoExpanded.value
-}
-
-const scrollToOrderDetails = () => {
-  const element = document.getElementById('order-details')
-  if (element) {
-    element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    // Expand the order items section
-    isOrderItemsExpanded.value = true
+// Toggle methods - consolidated into single function with specific exports
+function toggleSection(section: 'orderSummary' | 'orderItems' | 'shippingInfo'): void {
+  if (section === 'orderSummary') {
+    isOrderSummaryExpanded.value = !isOrderSummaryExpanded.value
+  }
+  else if (section === 'orderItems') {
+    isOrderItemsExpanded.value = !isOrderItemsExpanded.value
+  }
+  else if (section === 'shippingInfo') {
+    isShippingInfoExpanded.value = !isShippingInfoExpanded.value
   }
 }
 
-const viewOrderDetails = () => {
+const toggleOrderSummary = () => toggleSection('orderSummary')
+const toggleOrderItems = () => toggleSection('orderItems')
+const toggleShippingInfo = () => toggleSection('shippingInfo')
+
+function scrollToOrderDetails(expandShipping = false): void {
   const element = document.getElementById('order-details')
-  if (element) {
-    element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    // Expand both sections for full view
-    isOrderItemsExpanded.value = true
+  if (!element) return
+
+  element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  isOrderItemsExpanded.value = true
+  if (expandShipping) {
     isShippingInfoExpanded.value = true
   }
 }
+
+const viewOrderDetails = () => scrollToOrderDetails(true)
 
 // Initialize on mount
 onMounted(async () => {

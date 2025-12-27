@@ -1703,6 +1703,12 @@
       "orderFailed": "Pedido Fallido",
       "orderProcessingFailed": "No se pudo procesar tu pedido. Por favor, inténtalo de nuevo."
     },
+    "warning": {
+      "cartLoadFailed": "Problema al Cargar el Carrito",
+      "cartLoadFailedDetails": "No se pudo cargar tu carrito. Algunos artículos pueden faltar.",
+      "totalsUpdateFailed": "Problema al Actualizar Precios",
+      "totalsUpdateFailedDetails": "No se pudieron actualizar los totales. Los precios mostrados pueden estar desactualizados."
+    },
     "validation": {
       "firstNameRequired": "El nombre es requerido",
       "orderDataMissing": "Faltan datos del pedido. Por favor, inicia el proceso de pago de nuevo.",

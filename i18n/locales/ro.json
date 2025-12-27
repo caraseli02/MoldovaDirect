@@ -1612,6 +1612,12 @@
       "orderFailed": "Comandă eșuată",
       "orderProcessingFailed": "Nu s-a putut procesa comanda. Te rugăm să încerci din nou."
     },
+    "warning": {
+      "cartLoadFailed": "Problemă la Încărcarea Coșului",
+      "cartLoadFailedDetails": "Nu s-a putut încărca coșul. Unele articole pot lipsi.",
+      "totalsUpdateFailed": "Problemă la Actualizarea Prețurilor",
+      "totalsUpdateFailedDetails": "Nu s-au putut actualiza totalurile. Prețurile afișate pot fi depășite."
+    },
     "validation": {
       "firstNameRequired": "Prenumele este obligatoriu",
       "orderDataMissing": "Lipsesc datele comenzii. Te rugăm să reîncepi procesul de plată.",
