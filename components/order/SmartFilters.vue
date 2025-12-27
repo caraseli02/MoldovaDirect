@@ -32,11 +32,11 @@
         </svg>
         {{ $t('orders.filters.inTransit') }}
         <span
-          v-if="counts.inTransit > 0"
+          v-if="safeCounts.inTransit > 0"
           class="ml-1.5 px-2 py-0.5 text-xs rounded-full"
           :class="activeFilter === 'in-transit' ? 'bg-blue-500 text-white' : 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'"
         >
-          {{ counts.inTransit }}
+          {{ safeCounts.inTransit }}
         </span>
       </span>
     </button>
@@ -69,11 +69,11 @@
         </svg>
         {{ $t('orders.filters.deliveredThisMonth') }}
         <span
-          v-if="counts.deliveredMonth > 0"
+          v-if="safeCounts.deliveredMonth > 0"
           class="ml-1.5 px-2 py-0.5 text-xs rounded-full"
           :class="activeFilter === 'delivered-month' ? 'bg-green-500 text-white' : 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300'"
         >
-          {{ counts.deliveredMonth }}
+          {{ safeCounts.deliveredMonth }}
         </span>
       </span>
     </button>
@@ -149,12 +149,13 @@ interface FilterCounts {
 }
 
 interface Props {
-  counts: FilterCounts
+  counts?: FilterCounts
   modelValue?: FilterType
 }
 
 const props = withDefaults(defineProps<Props>(), {
   modelValue: null,
+  counts: () => ({ inTransit: 0, deliveredMonth: 0 }),
 })
 
 const emit = defineEmits<{
@@ -163,6 +164,12 @@ const emit = defineEmits<{
 }>()
 
 const activeFilter = ref<FilterType>(props.modelValue)
+
+// Safe counts with defaults
+const safeCounts = computed(() => ({
+  inTransit: props.counts?.inTransit || 0,
+  deliveredMonth: props.counts?.deliveredMonth || 0,
+}))
 
 // Watch for external changes
 watch(() => props.modelValue, (newValue) => {
