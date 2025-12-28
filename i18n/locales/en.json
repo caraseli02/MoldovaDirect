@@ -1981,7 +1981,8 @@
       "phoneHelper": "for delivery updates",
       "phonePlaceholder": "+1 555 000 0000",
       "phoneDescription": "We'll contact you about your delivery",
-      "saveAddress": "Save this address for future orders"
+      "saveAddress": "Save this address for future orders",
+      "autocompleteHint": "Start typing for address suggestions"
     },
     "shippingMethod": {
       "title": "Shipping Method",

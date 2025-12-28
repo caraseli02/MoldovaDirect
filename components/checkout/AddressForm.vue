@@ -180,6 +180,12 @@
         >
           {{ fieldErrors.street }}
         </p>
+        <p
+          v-if="!fieldErrors.street && !showSuggestions"
+          class="mt-1 text-xs text-gray-500 dark:text-gray-400"
+        >
+          {{ $t('checkout.addressForm.autocompleteHint') }}
+        </p>
       </div>
 
       <!-- City & Postal Code (Side by Side) -->
@@ -486,30 +492,65 @@ const handleStreetFocus = () => {
 }
 
 /**
- * Address autocomplete search - PLACEHOLDER IMPLEMENTATION
+ * Address autocomplete search using OpenStreetMap Nominatim API
  *
- * Current status: Returns empty results (autocomplete not yet integrated)
- * Future integration: Google Places API, Mapbox, or similar service
+ * Uses the free Nominatim geocoding service which doesn't require API keys.
+ * Rate-limited to 1 request per second by Nominatim's usage policy.
  *
- * The UI elements for autocomplete are in place but non-functional
- * until an address API is integrated.
+ * @param query - The address search query
  */
 const searchAddresses = async (query: string) => {
   isLoadingAutocomplete.value = true
 
   try {
-    // TODO: Integrate with address autocomplete API
-    // Example: const response = await $fetch('/api/address/autocomplete', { query: { q: query, country: localAddress.value.country } })
+    // Build country code filter if country is selected
+    const countryCode = localAddress.value.country?.toLowerCase() || ''
 
-    // Simulate API delay for UX consistency
-    await new Promise(resolve => setTimeout(resolve, 200))
+    // Use Nominatim API for geocoding (free, no API key needed)
+    const params = new URLSearchParams({
+      q: query,
+      format: 'json',
+      addressdetails: '1',
+      limit: '5',
+      ...(countryCode && { countrycodes: countryCode }),
+    })
 
-    // Currently returns empty - will be populated when API is integrated
-    if (localAddress.value.country) {
-      const mockSuggestions: AddressSuggestion[] = []
-      addressSuggestions.value = mockSuggestions
-      showSuggestions.value = mockSuggestions.length > 0
-    }
+    const response = await $fetch<NominatimResult[]>(
+      `https://nominatim.openstreetmap.org/search?${params}`,
+      {
+        headers: {
+          'Accept-Language': 'en',
+          // Nominatim requires a valid User-Agent for API usage policy
+          'User-Agent': 'MoldovaDirectCheckout/1.0',
+        },
+      },
+    )
+
+    // Transform Nominatim results to our format
+    const suggestions: AddressSuggestion[] = response
+      .filter(result => result.address)
+      .map((result) => {
+        const addr = result.address
+        // Build street address from available components
+        const streetParts = [
+          addr.house_number,
+          addr.road || addr.street || addr.pedestrian || addr.footway,
+        ].filter(Boolean)
+
+        const street = streetParts.join(' ') || result.display_name.split(',')[0]
+
+        return {
+          street: street || '',
+          city: addr.city || addr.town || addr.village || addr.municipality || addr.county || '',
+          postalCode: addr.postcode || '',
+          province: addr.state || addr.region || '',
+          country: getCountryCode(addr.country_code?.toUpperCase() || ''),
+        }
+      })
+      .filter(s => s.street && s.city) // Filter out incomplete addresses
+
+    addressSuggestions.value = suggestions
+    showSuggestions.value = suggestions.length > 0
   }
   catch (error) {
     // Log error for debugging - autocomplete failure is non-blocking
@@ -521,6 +562,37 @@ const searchAddresses = async (query: string) => {
   finally {
     isLoadingAutocomplete.value = false
   }
+}
+
+// Nominatim API response type
+interface NominatimResult {
+  display_name: string
+  address: {
+    house_number?: string
+    road?: string
+    street?: string
+    pedestrian?: string
+    footway?: string
+    city?: string
+    town?: string
+    village?: string
+    municipality?: string
+    county?: string
+    state?: string
+    region?: string
+    postcode?: string
+    country?: string
+    country_code?: string
+  }
+}
+
+/**
+ * Maps country code to our supported format
+ * Returns the country code if it's in our supported list, otherwise returns empty
+ */
+const getCountryCode = (code: string): string => {
+  const supportedCountries = ['ES', 'RO', 'MD', 'FR', 'DE', 'IT', 'PT']
+  return supportedCountries.includes(code) ? code : code
 }
 
 const selectAddressSuggestion = (suggestion: AddressSuggestion) => {

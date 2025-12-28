@@ -1815,7 +1815,8 @@
       "phoneHelper": "pentru notificări de livrare",
       "phonePlaceholder": "+40 700 000 000",
       "phoneDescription": "Te vom contacta despre livrare",
-      "saveAddress": "Salvează această adresă pentru comenzi viitoare"
+      "saveAddress": "Salvează această adresă pentru comenzi viitoare",
+      "autocompleteHint": "Începe să tastezi pentru sugestii de adrese"
     },
     "shippingMethod": {
       "title": "Metodă de Livrare",

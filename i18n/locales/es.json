@@ -1901,7 +1901,8 @@
       "phoneHelper": "para notificaciones de entrega",
       "phonePlaceholder": "+34 600 000 000",
       "phoneDescription": "Para contactarte sobre la entrega",
-      "saveAddress": "Guardar esta dirección para futuros pedidos"
+      "saveAddress": "Guardar esta dirección para futuros pedidos",
+      "autocompleteHint": "Comienza a escribir para sugerencias de direcciones"
     },
     "shippingMethod": {
       "title": "Método de Envío",
