@@ -1,10 +1,9 @@
-import { nextTick } from 'vue'
 import { useCartStore } from '~/stores/cart'
 
 export default defineNuxtPlugin({
   name: 'cart',
 
-  setup(_nuxtApp) {
+  setup(nuxtApp) {
     // Only initialize cart on client-side and for non-admin pages
     if (import.meta.client) {
       const route = useRoute()
@@ -14,8 +13,9 @@ export default defineNuxtPlugin({
         return
       }
 
-      // Defer initialization to allow Pinia to be ready
-      nextTick(() => {
+      // Use onNuxtReady to wait for Vue hydration to complete
+      // This prevents hydration mismatch errors when loading cart from storage
+      nuxtApp.hook('app:suspense:resolve', () => {
         try {
           const cartStore = useCartStore()
           if (!cartStore.sessionId) {
