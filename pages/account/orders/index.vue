@@ -524,38 +524,43 @@ const paginationValue = computed(() => unref(pagination))
 const errorValue = computed(() => unref(error))
 
 // Computed properties for metrics and filters
+// Note: These metrics are computed from currently loaded orders on the page.
+// For accurate totals across all orders, server-side aggregation would be needed.
 const orderMetrics = computed(() => {
-  const allOrders = unref(orders) as OrderWithItems[]
+  const currentPageOrders = unref(orders) as OrderWithItems[]
+  const pag = unref(pagination)
 
-  const activeOrders = allOrders.filter(o => ['pending', 'processing', 'shipped'].includes(o.status)).length
+  const activeOrders = currentPageOrders.filter(o => ['pending', 'processing', 'shipped'].includes(o.status)).length
 
   const now = new Date()
   const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
 
-  const deliveredThisMonth = allOrders.filter(o =>
+  const deliveredThisMonth = currentPageOrders.filter(o =>
     o.status === 'delivered' && new Date(o.createdAt) >= firstDayOfMonth,
   ).length
 
-  const totalSpentThisMonth = allOrders
+  const totalSpentThisMonth = currentPageOrders
     .filter(o => new Date(o.createdAt) >= firstDayOfMonth)
     .reduce((sum, o) => sum + (o.totalEur || 0), 0)
 
   return {
     activeOrders,
     deliveredThisMonth,
-    totalOrders: allOrders.length,
+    // Use pagination total for accurate count across all pages
+    totalOrders: pag?.total || currentPageOrders.length,
     totalSpentThisMonth,
   }
 })
 
 const filterCounts = computed(() => {
-  const allOrders = unref(orders) as OrderWithItems[]
+  const currentPageOrders = unref(orders) as OrderWithItems[]
 
-  const inTransit = allOrders.filter(o => ['processing', 'shipped'].includes(o.status)).length
+  // Count only 'shipped' orders to match the in-transit filter behavior
+  const inTransit = currentPageOrders.filter(o => o.status === 'shipped').length
 
   const now = new Date()
   const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
-  const deliveredMonth = allOrders.filter(o =>
+  const deliveredMonth = currentPageOrders.filter(o =>
     o.status === 'delivered' && new Date(o.createdAt) >= firstDayOfMonth,
   ).length
 
