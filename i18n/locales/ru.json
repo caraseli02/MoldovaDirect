@@ -35,6 +35,7 @@
     "orderSummary": "Итог заказа",
     "retry": "Повторить",
     "cancel": "Отменить",
+    "undo": "Отменить",
     "showMore": "Показать больше",
     "showLess": "Показать меньше",
     "swipe_to_remove": "Проведите для удаления",
@@ -1518,6 +1519,62 @@
       "emailSubject": "Запрос на возврат"
     }
   },
+  "trackOrder": {
+    "title": "Отследить Заказ",
+    "subtitle": "Введите номер заказа и email для отслеживания статуса заказа",
+    "pageTitle": "Отслеживание Заказа",
+    "pageDescription": "Отслеживайте статус заказа и информацию о доставке Moldova Direct",
+    "orderNumber": "Номер Заказа",
+    "orderNumberPlaceholder": "напр., MD-2024-XXXXX",
+    "email": "Email",
+    "emailPlaceholder": "Введите ваш email",
+    "trackButton": "Отследить Заказ",
+    "trackAnother": "Отследить другой заказ",
+    "trackingNumber": "Номер Отслеживания",
+    "estimatedDelivery": "Ожидаемая Доставка",
+    "orderItems": "Товары в Заказе",
+    "trackingHistory": "История Отслеживания",
+    "shippingTo": "Доставка в",
+    "needHelp": "Нужна помощь с заказом?",
+    "contactSupport": "Связаться с Поддержкой",
+    "description": "Отслеживайте статус заказа и информацию о доставке",
+    "status": {
+      "pending": "В Ожидании",
+      "confirmed": "Подтверждён",
+      "processing": "Обрабатывается",
+      "shipped": "Отправлен",
+      "delivered": "Доставлен",
+      "cancelled": "Отменён"
+    },
+    "steps": {
+      "confirmed": "Подтверждён",
+      "processing": "Обработка",
+      "shipped": "Отправлен",
+      "delivered": "Доставлен"
+    },
+    "errors": {
+      "notFound": "Заказ не найден. Пожалуйста, проверьте номер заказа и email.",
+      "generic": "Что-то пошло не так. Пожалуйста, попробуйте позже."
+    }
+  },
+  "invoice": {
+    "title": "Счёт-фактура",
+    "tagline": "Ваш надёжный источник молдавских товаров",
+    "orderNumber": "Номер Заказа",
+    "date": "Дата",
+    "billTo": "Плательщик",
+    "shippingAddress": "Адрес Доставки",
+    "product": "Товар",
+    "quantity": "Кол-во",
+    "unitPrice": "Цена за ед.",
+    "total": "Итого",
+    "thankYou": "Спасибо за покупку в Moldova Direct!",
+    "questions": "Вопросы о вашем заказе?",
+    "print": "Печать Счёта",
+    "download": "Скачать PDF",
+    "error": "Ошибка Счёта",
+    "errorNoData": "Невозможно создать счёт. Данные заказа недоступны."
+  },
   "footer": {
     "terms": "Terms and Conditions",
     "privacy": "Privacy Policy",
@@ -1610,8 +1667,15 @@
       }
     },
     "guestCheckout": {
-      "title": "Варианты Оформления",
-      "description": "Вы можете создать аккаунт для быстрого оформления заказов или продолжить как гость."
+      "title": "Войдите для быстрого оформления",
+      "description": "Вы можете создать аккаунт для быстрого оформления заказов или продолжить как гость.",
+      "benefits": {
+        "savedAddresses": "Используйте сохранённые адреса для быстрого оформления",
+        "fasterCheckout": "Пропустите заполнение данных в следующий раз",
+        "orderHistory": "Отслеживайте заказы и просматривайте историю покупок"
+      },
+      "loginButton": "Войти в аккаунт",
+      "guestButton": "Продолжить как гость"
     },
     "continueAsGuest": "Продолжить как гость",
     "backToCart": "Вернуться в корзину",
@@ -1767,9 +1831,12 @@
         "description": "Delivery in 1-2 business days"
       },
       "freeShipping": {
-        "name": "Free Shipping",
-        "description": "Delivery in 5-7 business days (orders over €50)"
-      }
+        "name": "Бесплатная доставка",
+        "description": "Доставка за 5-7 рабочих дней (заказы от €50)"
+      },
+      "autoApplied": "Применено автоматически",
+      "changeMethod": "Изменить",
+      "estimatedDelivery": "Ориент. {days} рабочих дней"
     },
     "guestInfo": {
       "title": "Контактная Информация",
@@ -1877,6 +1944,16 @@
       "cartClearFailed": "Не удалось очистить корзину",
       "cartClearFailedDetails": "Ваш заказ успешно выполнен, но корзина не была очищена автоматически",
       "needHelp": "Нужна помощь? Связаться с поддержкой",
+      "createAccount": {
+        "title": "Сохраните данные для следующего раза",
+        "description": "Создайте аккаунт, чтобы отслеживать заказ и быстрее оформлять покупки в будущем.",
+        "benefits": {
+          "trackOrders": "Отслеживайте этот заказ и просматривайте историю",
+          "fasterCheckout": "Оформляйте быстрее с сохранёнными адресами",
+          "exclusiveOffers": "Получайте эксклюзивные предложения"
+        },
+        "button": "Создать аккаунт"
+      },
       "preparingOrder": "Подготовка вашего заказа ({days} дней)",
       "delivery": "Доставка",
       "totalPaid": "Оплачено",

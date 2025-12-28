@@ -131,6 +131,7 @@
                 :loading="loadingMethods"
                 :error="methodsError"
                 :validation-error="shippingMethodValidationError"
+                :auto-selected="shippingMethodAutoSelected"
                 @retry="retryLoadingMethods"
               />
             </div>
@@ -500,6 +501,7 @@ const {
   selectedMethod,
   loading: loadingMethods,
   error: methodsError,
+  autoSelected: shippingMethodAutoSelected,
   loadShippingMethods,
   retry: retryLoadingMethods,
 } = useShippingMethods(shippingAddress)

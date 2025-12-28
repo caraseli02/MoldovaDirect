@@ -35,6 +35,7 @@
     "orderSummary": "Rezumat Comandă",
     "retry": "Reîncearcă",
     "cancel": "Anulează",
+    "undo": "Anulează acțiunea",
     "showMore": "Arată Mai Mult",
     "showLess": "Arată Mai Puțin",
     "swipe_to_remove": "Glisează pentru a elimina",
@@ -1316,6 +1317,62 @@
       "emailSubject": "Solicitare retur"
     }
   },
+  "trackOrder": {
+    "title": "Urmărește Comanda Ta",
+    "subtitle": "Introdu numărul comenzii și emailul pentru a urmări statusul comenzii",
+    "pageTitle": "Urmărire Comandă",
+    "pageDescription": "Urmărește statusul comenzii și informațiile de livrare Moldova Direct",
+    "orderNumber": "Număr Comandă",
+    "orderNumberPlaceholder": "ex., MD-2024-XXXXX",
+    "email": "Adresă Email",
+    "emailPlaceholder": "Introdu adresa ta de email",
+    "trackButton": "Urmărește Comanda",
+    "trackAnother": "Urmărește altă comandă",
+    "trackingNumber": "Număr de Urmărire",
+    "estimatedDelivery": "Livrare Estimată",
+    "orderItems": "Articole Comandă",
+    "trackingHistory": "Istoric Urmărire",
+    "shippingTo": "Livrare Către",
+    "needHelp": "Ai nevoie de ajutor cu comanda ta?",
+    "contactSupport": "Contactează Suportul",
+    "description": "Urmărește statusul comenzii și informațiile de livrare",
+    "status": {
+      "pending": "În Așteptare",
+      "confirmed": "Confirmat",
+      "processing": "În Procesare",
+      "shipped": "Expediat",
+      "delivered": "Livrat",
+      "cancelled": "Anulat"
+    },
+    "steps": {
+      "confirmed": "Confirmat",
+      "processing": "Procesare",
+      "shipped": "Expediat",
+      "delivered": "Livrat"
+    },
+    "errors": {
+      "notFound": "Comanda nu a fost găsită. Te rugăm să verifici numărul comenzii și adresa de email.",
+      "generic": "Ceva nu a mers bine. Te rugăm să încerci din nou mai târziu."
+    }
+  },
+  "invoice": {
+    "title": "Factură",
+    "tagline": "Sursa ta de încredere pentru produse moldovenești",
+    "orderNumber": "Număr Comandă",
+    "date": "Data",
+    "billTo": "Facturare către",
+    "shippingAddress": "Adresa de Livrare",
+    "product": "Produs",
+    "quantity": "Cant.",
+    "unitPrice": "Preț Unitar",
+    "total": "Total",
+    "thankYou": "Mulțumim că ai cumpărat de la Moldova Direct!",
+    "questions": "Întrebări despre comanda ta?",
+    "print": "Tipărește Factura",
+    "download": "Descarcă PDF",
+    "error": "Eroare Factură",
+    "errorNoData": "Nu se poate genera factura. Datele comenzii nu sunt disponibile."
+  },
   "footer": {
     "terms": "Termeni și Condiții",
     "privacy": "Politica de Confidențialitate",
@@ -1614,8 +1671,15 @@
       }
     },
     "guestCheckout": {
-      "title": "Opțiuni de Finalizare",
-      "description": "Poți crea un cont pentru finalizare mai rapidă sau continua ca vizitator."
+      "title": "Conectează-te pentru finalizare rapidă",
+      "description": "Poți crea un cont pentru finalizare mai rapidă sau continua ca vizitator.",
+      "benefits": {
+        "savedAddresses": "Folosește adrese salvate pentru finalizare rapidă",
+        "fasterCheckout": "Sari peste completarea datelor data viitoare",
+        "orderHistory": "Urmărește comenzile și vezi istoricul achizițiilor"
+      },
+      "loginButton": "Conectează-te la contul tău",
+      "guestButton": "Continuă ca vizitator"
     },
     "continueAsGuest": "Continuă ca Vizitator",
     "backToCart": "Înapoi la Coș",
@@ -1787,7 +1851,10 @@
       "freeShipping": {
         "name": "Livrare Gratuită",
         "description": "Livrare în 5-7 zile lucrătoare (comenzi peste €50)"
-      }
+      },
+      "autoApplied": "Aplicat automat",
+      "changeMethod": "Schimbă",
+      "estimatedDelivery": "Est. {days} zile lucrătoare"
     },
     "guestInfo": {
       "title": "Informații de Contact",
@@ -1895,6 +1962,16 @@
       "cartClearFailed": "Nu s-a putut goli coșul",
       "cartClearFailedDetails": "Comanda dvs. a fost finalizată cu succes, dar coșul nu a fost golit automat",
       "needHelp": "Aveți nevoie de ajutor? Contactați Suportul",
+      "createAccount": {
+        "title": "Salvează datele pentru data viitoare",
+        "description": "Creează un cont pentru a urmări comanda și a te bucura de finalizare mai rapidă la achizițiile viitoare.",
+        "benefits": {
+          "trackOrders": "Urmărește această comandă și vezi istoricul comenzilor",
+          "fasterCheckout": "Finalizează mai rapid cu adrese salvate",
+          "exclusiveOffers": "Primește oferte exclusive și noutăți"
+        },
+        "button": "Creează contul meu"
+      },
       "preparingOrder": "Pregătim comanda dvs. ({days} zile)",
       "delivery": "Livrare",
       "totalPaid": "Total Plătit",

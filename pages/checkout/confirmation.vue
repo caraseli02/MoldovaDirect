@@ -440,6 +440,101 @@
           <span class="text-zinc-600 dark:text-zinc-400">{{ $t('common.loading') }}</span>
         </div>
 
+        <!-- Guest to Account Conversion Prompt -->
+        <div
+          v-if="orderData && isGuestCheckout && !isLoggedIn"
+          class="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 border border-indigo-200 dark:border-indigo-800 rounded-xl p-5 mb-6 slide-up stagger-6"
+        >
+          <div class="flex items-start gap-4">
+            <div class="flex-shrink-0 w-12 h-12 bg-indigo-100 dark:bg-indigo-800 rounded-full flex items-center justify-center">
+              <svg
+                class="w-6 h-6 text-indigo-600 dark:text-indigo-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
+                />
+              </svg>
+            </div>
+            <div class="flex-1">
+              <h3 class="text-lg font-semibold text-indigo-900 dark:text-indigo-100 mb-2">
+                {{ $t('checkout.confirmation.createAccount.title') }}
+              </h3>
+              <p class="text-sm text-indigo-700 dark:text-indigo-300 mb-4">
+                {{ $t('checkout.confirmation.createAccount.description') }}
+              </p>
+              <ul class="space-y-2 mb-4">
+                <li class="flex items-center gap-2 text-sm text-indigo-700 dark:text-indigo-300">
+                  <svg
+                    class="w-4 h-4 text-green-500 flex-shrink-0"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  {{ $t('checkout.confirmation.createAccount.benefits.trackOrders') }}
+                </li>
+                <li class="flex items-center gap-2 text-sm text-indigo-700 dark:text-indigo-300">
+                  <svg
+                    class="w-4 h-4 text-green-500 flex-shrink-0"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  {{ $t('checkout.confirmation.createAccount.benefits.fasterCheckout') }}
+                </li>
+                <li class="flex items-center gap-2 text-sm text-indigo-700 dark:text-indigo-300">
+                  <svg
+                    class="w-4 h-4 text-green-500 flex-shrink-0"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  {{ $t('checkout.confirmation.createAccount.benefits.exclusiveOffers') }}
+                </li>
+              </ul>
+              <NuxtLink
+                :to="createAccountUrl"
+                class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors"
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
+                  />
+                </svg>
+                {{ $t('checkout.confirmation.createAccount.button') }}
+              </NuxtLink>
+            </div>
+          </div>
+        </div>
+
         <!-- Action Buttons -->
         <div
           v-if="orderData"
@@ -452,6 +547,48 @@
           >
             {{ $t('checkout.steps.confirmation.viewOrderDetails') }}
           </button>
+
+          <!-- Print/Download Invoice Buttons -->
+          <div class="grid grid-cols-2 gap-3">
+            <button
+              class="py-3 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-600 text-zinc-700 dark:text-zinc-300 font-medium rounded-lg btn-secondary flex items-center justify-center gap-2"
+              @click="handlePrintInvoice"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
+                />
+              </svg>
+              {{ $t('invoice.print') }}
+            </button>
+            <button
+              class="py-3 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-600 text-zinc-700 dark:text-zinc-300 font-medium rounded-lg btn-secondary flex items-center justify-center gap-2"
+              @click="handleDownloadInvoice"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+              {{ $t('invoice.download') }}
+            </button>
+          </div>
 
           <!-- Secondary: Continue Shopping -->
           <NuxtLink
@@ -496,6 +633,7 @@
 import { useCheckoutStore } from '~/stores/checkout'
 import { useCheckoutSessionStore } from '~/stores/checkout/session'
 import { useCartStore } from '~/stores/cart'
+import { useInvoice } from '~/composables/useInvoice'
 
 // Layout
 definePageMeta({
@@ -512,6 +650,7 @@ const cartStore = useCartStore()
 const localePath = useLocalePath()
 const { t, locale } = useI18n()
 const toast = useToast()
+const { printInvoice, downloadInvoice } = useInvoice()
 
 /**
  * Get localized text from a translation object or string
@@ -557,6 +696,21 @@ const estimatedDeliveryDate = computed(() => {
   deliveryDate.setDate(today.getDate() + shippingInfo.value.method.estimatedDays)
 
   return deliveryDate
+})
+
+// Guest checkout detection
+const guestInfo = computed(() => sessionStore.guestInfo)
+const isGuestCheckout = computed(() => !!guestInfo.value?.email)
+
+// Check if user is logged in via Supabase
+const user = useSupabaseUser()
+const isLoggedIn = computed(() => !!user.value)
+
+// Create account URL with pre-filled email
+const createAccountUrl = computed(() => {
+  const email = guestInfo.value?.email || ''
+  const encodedEmail = encodeURIComponent(email)
+  return localePath(`/auth/register?email=${encodedEmail}&from=order`)
 })
 
 // Methods
@@ -627,6 +781,37 @@ function scrollToOrderDetails(expandShipping = false): void {
 }
 
 const viewOrderDetails = () => scrollToOrderDetails(true)
+
+// Invoice handlers
+const getInvoiceData = () => {
+  if (!orderData.value) return null
+
+  return {
+    orderData: orderData.value,
+    shippingInfo: shippingInfo.value,
+    orderNumber: orderData.value.orderNumber || 'N/A',
+    orderDate: new Date(),
+    customerEmail: orderData.value.customerEmail || guestInfo.value?.email,
+  }
+}
+
+const handlePrintInvoice = () => {
+  const data = getInvoiceData()
+  if (!data) {
+    toast.error(t('invoice.error'), t('invoice.errorNoData'))
+    return
+  }
+  printInvoice(data)
+}
+
+const handleDownloadInvoice = () => {
+  const data = getInvoiceData()
+  if (!data) {
+    toast.error(t('invoice.error'), t('invoice.errorNoData'))
+    return
+  }
+  downloadInvoice(data)
+}
 
 // Initialize on mount
 onMounted(async () => {
