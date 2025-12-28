@@ -374,6 +374,7 @@
       "passwordMismatch": "Passwords do not match",
       "termsRequired": "You must accept the terms and conditions",
       "sessionExpired": "Your session has expired. Please sign in again",
+      "logoutFailed": "Failed to logout. Please try again.",
       "rateLimitExceeded": "Too many attempts. Try again in {minutes} minutes",
       "tokenExpired": "Verification link has expired",
       "tokenInvalid": "Invalid verification link",

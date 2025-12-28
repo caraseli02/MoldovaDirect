@@ -13,15 +13,35 @@ import { fileURLToPath } from 'url'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-const supabaseUrl = 'https://khvzbjemydddnryreytu.supabase.co'
-const supabaseServiceKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtodnpiamVteWRkZG5yeXJleXR1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NTc4NjQ1NCwiZXhwIjoyMDcxMzYyNDU0fQ.li8R9uS_JdRP4AgUjw31v5z-jRFhySa-GHC1Qu0AEXI'
+const supabaseUrl = process.env.SUPABASE_URL
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY
+const TARGET_EMAIL = process.env.TARGET_EMAIL
+const TARGET_PASSWORD = process.env.TARGET_PASSWORD
+
+if (!supabaseUrl || !supabaseServiceKey) {
+  console.error('❌ Missing required environment variables:')
+  if (!supabaseUrl) console.error('   - SUPABASE_URL')
+  if (!supabaseServiceKey) console.error('   - SUPABASE_SERVICE_KEY')
+  console.error('\nPlease set these environment variables before running the script.')
+  console.error('Example: SUPABASE_URL=xxx SUPABASE_SERVICE_KEY=xxx TARGET_EMAIL=user@example.com TARGET_PASSWORD=xxx npx tsx scripts/setup-order-linking.ts')
+  process.exit(1)
+}
+
+if (!TARGET_EMAIL || !TARGET_PASSWORD) {
+  console.error('❌ Missing target user credentials:')
+  if (!TARGET_EMAIL) console.error('   - TARGET_EMAIL (email to link orders for)')
+  if (!TARGET_PASSWORD) console.error('   - TARGET_PASSWORD (password for the account)')
+  console.error('\nPlease set these environment variables before running the script.')
+  process.exit(1)
+}
+
+// At this point, TypeScript knows these are defined
+const targetEmail: string = TARGET_EMAIL
+const targetPassword: string = TARGET_PASSWORD
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey, {
   auth: { autoRefreshToken: false, persistSession: false }
 })
-
-const TARGET_EMAIL = 'caraseli02@gmail.com'
-const TARGET_PASSWORD = 'MoldovaDirect2024!' // You should change this
 
 async function main() {
   console.log('🚀 Setting up order linking...\n')
@@ -34,22 +54,20 @@ async function main() {
   const { error: migrationError } = await supabase.rpc('exec_sql', { sql: migrationSql }).maybeSingle()
 
   if (migrationError) {
-    // Try direct SQL execution
-    const statements = migrationSql.split(';').filter(s => s.trim())
-    for (const statement of statements) {
-      if (statement.trim()) {
-        const { error } = await supabase.from('_migrations_temp').select().limit(0) // Dummy to check connection
-        // We'll apply via direct connection below
-      }
-    }
-    console.log('⚠️  Migration needs to be applied manually or via Supabase dashboard')
-    console.log('   Copy the SQL from: supabase/migrations/20251228_link_guest_orders_on_signup.sql')
+    console.log('⚠️  Could not apply migration automatically')
+    console.log('   Error:', migrationError.message)
+    console.log('')
+    console.log('   This is expected - Supabase does not expose exec_sql via API.')
+    console.log('   Please apply the migration manually:')
+    console.log('   1. Go to Supabase Dashboard > SQL Editor')
+    console.log('   2. Copy contents from: supabase/migrations/20251228_link_guest_orders_on_signup.sql')
+    console.log('   3. Execute the SQL')
   } else {
     console.log('✅ Database trigger created successfully')
   }
 
   // Step 2: Find or create user account
-  console.log(`\n👤 Step 2: Setting up user account for ${TARGET_EMAIL}...`)
+  console.log(`\n👤 Step 2: Setting up user account for ${targetEmail}...`)
 
   // Search for existing user
   let userId: string | null = null
@@ -67,10 +85,10 @@ async function main() {
       break
     }
 
-    const existingUser = userData?.users?.find(u => u.email === TARGET_EMAIL)
+    const existingUser = userData?.users?.find(u => u.email === targetEmail)
     if (existingUser) {
       userId = existingUser.id
-      console.log(`✅ Found existing user: ${TARGET_EMAIL} (${userId})`)
+      console.log(`✅ Found existing user: ${targetEmail} (${userId})`)
       break
     }
 
@@ -83,8 +101,8 @@ async function main() {
     console.log(`   User not found, creating new account...`)
 
     const { data: newUser, error: createError } = await supabase.auth.admin.createUser({
-      email: TARGET_EMAIL,
-      password: TARGET_PASSWORD,
+      email: targetEmail,
+      password: targetPassword,
       email_confirm: true,
       user_metadata: {
         name: 'Vladislav Caraseli',
@@ -97,8 +115,8 @@ async function main() {
         // User exists but wasn't in the list, try to sign in
         console.log('   User exists, attempting to find via sign-in...')
         const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
-          email: TARGET_EMAIL,
-          password: TARGET_PASSWORD,
+          email: targetEmail,
+          password: targetPassword,
         })
 
         if (signInError) {
@@ -113,8 +131,8 @@ async function main() {
       }
     } else {
       userId = newUser.user?.id || null
-      console.log(`✅ Created new user: ${TARGET_EMAIL} (${userId})`)
-      console.log(`   Password: ${TARGET_PASSWORD}`)
+      console.log(`✅ Created new user: ${targetEmail} (${userId})`)
+      console.log(`   Password: ${targetPassword}`)
     }
   }
 
@@ -130,7 +148,7 @@ async function main() {
   const { count: guestOrderCount } = await supabase
     .from('orders')
     .select('*', { count: 'exact', head: true })
-    .eq('guest_email', TARGET_EMAIL)
+    .eq('guest_email', targetEmail)
     .is('user_id', null)
 
   console.log(`   Found ${guestOrderCount || 0} guest orders to link`)
@@ -140,12 +158,13 @@ async function main() {
     const { data: linkedOrders, error: linkError } = await supabase
       .from('orders')
       .update({ user_id: userId, updated_at: new Date().toISOString() })
-      .eq('guest_email', TARGET_EMAIL)
+      .eq('guest_email', targetEmail)
       .is('user_id', null)
       .select('id, order_number')
 
     if (linkError) {
       console.error('❌ Error linking orders:', linkError)
+      console.error('   Order linking failed. Please check database permissions and try again.')
     } else {
       console.log(`✅ Linked ${linkedOrders?.length || 0} orders to user account`)
       linkedOrders?.slice(0, 5).forEach(o => console.log(`   - ${o.order_number}`))
@@ -166,21 +185,32 @@ async function main() {
   const { count: remainingGuestCount } = await supabase
     .from('orders')
     .select('*', { count: 'exact', head: true })
-    .eq('guest_email', TARGET_EMAIL)
+    .eq('guest_email', targetEmail)
     .is('user_id', null)
 
-  console.log(`   Orders linked to ${TARGET_EMAIL}: ${userOrderCount || 0}`)
+  console.log(`   Orders linked to ${targetEmail}: ${userOrderCount || 0}`)
   console.log(`   Remaining unlinked guest orders: ${remainingGuestCount || 0}`)
 
   console.log('\n✅ Setup complete!')
   console.log(`\n📝 Summary:`)
-  console.log(`   User: ${TARGET_EMAIL}`)
+  console.log(`   User: ${targetEmail}`)
   console.log(`   User ID: ${userId}`)
   console.log(`   Orders: ${userOrderCount || 0}`)
   console.log(`\n🔐 Login credentials:`)
-  console.log(`   Email: ${TARGET_EMAIL}`)
-  console.log(`   Password: ${TARGET_PASSWORD}`)
+  console.log(`   Email: ${targetEmail}`)
+  console.log(`   Password: ${targetPassword}`)
   console.log(`\n⚠️  Remember to change your password after first login!`)
 }
 
-main().catch(console.error)
+main().catch((error) => {
+  console.error('\n====================================')
+  console.error('❌ SCRIPT FAILED')
+  console.error('====================================')
+  console.error('Error:', error.message || error)
+  console.error('\nPossible causes:')
+  console.error('- Invalid or missing Supabase credentials')
+  console.error('- Network connectivity issues')
+  console.error('- Target user credentials are incorrect')
+  console.error('\nFor debugging, ensure all environment variables are set correctly.')
+  process.exit(1)
+})

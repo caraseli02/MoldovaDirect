@@ -147,7 +147,6 @@ const emit = defineEmits<{
 }>()
 
 const { locale } = useI18n()
-const _router = useRouter()
 
 // Computed properties
 const previewItems = computed(() => {

@@ -5,8 +5,17 @@
 
 import { createClient } from '@supabase/supabase-js'
 
-const SUPABASE_URL = process.env.SUPABASE_URL || 'https://khvzbjemydddnryreytu.supabase.co'
-const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtodnpiamVteWRkZG5yeXJleXR1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NTc4NjQ1NCwiZXhwIjoyMDcxMzYyNDU0fQ.li8R9uS_JdRP4AgUjw31v5z-jRFhySa-GHC1Qu0AEXI'
+const SUPABASE_URL = process.env.SUPABASE_URL
+const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY
+
+if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
+  console.error('❌ Missing required environment variables:')
+  if (!SUPABASE_URL) console.error('   - SUPABASE_URL')
+  if (!SUPABASE_SERVICE_KEY) console.error('   - SUPABASE_SERVICE_KEY')
+  console.error('\nPlease set these environment variables before running the script.')
+  console.error('Example: SUPABASE_URL=https://xxx.supabase.co SUPABASE_SERVICE_KEY=xxx npx tsx scripts/seed-customer-orders.ts')
+  process.exit(1)
+}
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY, {
   auth: {
@@ -108,25 +117,33 @@ async function main() {
       console.log(`   Password: ${targetPassword}`)
 
       // Create profile
-      await supabase.from('profiles').upsert({
+      const { error: profileError } = await supabase.from('profiles').upsert({
         id: customerUser.id,
         name: 'Customer User',
         phone: '+34600000001',
         role: 'customer',
         preferred_language: 'es',
       })
+
+      if (profileError) {
+        console.warn('⚠️  Warning: Failed to create profile:', profileError.message)
+        console.warn('   User was created but profile setup may be incomplete')
+      }
     }
   } else {
     console.log(`✅ Found user: ${customerUser.email} (${customerUser.id})`)
   }
 
   // Check existing orders
-  const { count: existingCount } = await supabase
+  const { count: existingCount, error: countError } = await supabase
     .from('orders')
     .select('*', { count: 'exact', head: true })
     .eq('user_id', customerUser.id)
 
-  console.log(`📦 Existing orders for this user: ${existingCount || 0}`)
+  if (countError) {
+    console.warn('⚠️  Warning: Could not count existing orders:', countError.message)
+  }
+  console.log(`📦 Existing orders for this user: ${existingCount ?? 'unknown'}`)
 
   // Create 5 orders
   const orderCount = 5
@@ -239,4 +256,15 @@ async function main() {
   console.log(`\n✅ Done! Total orders for ${customerUser.email}: ${finalCount}`)
 }
 
-main().catch(console.error)
+main().catch((error) => {
+  console.error('\n====================================')
+  console.error('❌ SCRIPT FAILED')
+  console.error('====================================')
+  console.error('Error:', error.message || error)
+  console.error('\nPossible causes:')
+  console.error('- Invalid or missing Supabase credentials')
+  console.error('- Network connectivity issues')
+  console.error('- Database schema changes')
+  console.error('\nFor debugging, check that SUPABASE_URL and SUPABASE_SERVICE_KEY are set correctly.')
+  process.exit(1)
+})

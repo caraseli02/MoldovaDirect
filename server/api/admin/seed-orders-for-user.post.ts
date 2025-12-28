@@ -4,11 +4,42 @@
  *
  * Body options:
  * - userId: UUID of the user to create orders for (required)
- * - count: number of orders to create (default: 5)
+ * - count: number of orders to create (default: 5, max: 100)
  */
 
 import { serverSupabaseServiceRole } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
+
+// Request/Response type definitions
+interface SeedOrdersRequest {
+  userId: string
+  count?: number
+}
+
+interface CreatedOrder {
+  id: number
+  orderNumber: string
+  status: string
+  itemCount: number
+  total: string
+}
+
+interface FailedOrder {
+  orderNumber: string
+  error: string
+  stage: 'order_insert' | 'items_insert' | 'unknown'
+  orderId?: number
+}
+
+interface SeedOrdersResponse {
+  success: boolean
+  partialSuccess?: boolean
+  message: string
+  userId: string
+  userEmail: string
+  orders: CreatedOrder[]
+  errors?: FailedOrder[]
+}
 
 const mockProducts = [
   { name: 'Traditional Moldovan Wine', price: 25.99, sku: 'WINE-001' },
@@ -33,11 +64,22 @@ function randomDate(daysAgo: number): Date {
   return date
 }
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async (event): Promise<SeedOrdersResponse> => {
   await requireAdminRole(event)
   const supabase = serverSupabaseServiceRole(event)
 
-  const body = await readBody(event).catch(() => ({}))
+  // Parse request body with explicit error handling
+  let body: SeedOrdersRequest
+  try {
+    body = await readBody(event)
+  }
+  catch (parseError: any) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: `Invalid request body: ${parseError.message || 'Could not parse JSON'}`,
+    })
+  }
+
   const { userId, count = 5 } = body
 
   if (!userId) {
@@ -45,6 +87,12 @@ export default defineEventHandler(async (event) => {
       statusCode: 400,
       statusMessage: 'userId is required',
     })
+  }
+
+  // Validate count is within reasonable bounds
+  const orderCount = Math.min(Math.max(1, count), 100)
+  if (count !== orderCount) {
+    console.warn(`Adjusted count from ${count} to ${orderCount} (must be 1-100)`)
   }
 
   // Verify user exists
@@ -56,9 +104,10 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const createdOrders = []
+  const createdOrders: CreatedOrder[] = []
+  const failedOrders: FailedOrder[] = []
 
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < orderCount; i++) {
     const status = randomItem(statuses)
     const paymentStatus = status === 'cancelled' ? 'failed' : randomItem(paymentStatuses)
     const createdAt = randomDate(30)
@@ -133,7 +182,11 @@ export default defineEventHandler(async (event) => {
         .single()
 
       if (orderError || !insertedOrder) {
-        console.error(`Failed to insert order:`, orderError)
+        failedOrders.push({
+          orderNumber: order.order_number,
+          error: orderError?.message || 'Unknown error during order insertion',
+          stage: 'order_insert',
+        })
         continue
       }
 
@@ -148,7 +201,13 @@ export default defineEventHandler(async (event) => {
         .insert(orderItems)
 
       if (itemsError) {
-        console.error(`Failed to insert items for order ${order.order_number}:`, itemsError)
+        failedOrders.push({
+          orderNumber: order.order_number,
+          orderId: insertedOrder.id,
+          error: itemsError.message,
+          stage: 'items_insert',
+        })
+        // Note: Order exists but without items - may need cleanup
         continue
       }
 
@@ -161,15 +220,26 @@ export default defineEventHandler(async (event) => {
       })
     }
     catch (error: any) {
-      console.error('Error creating order:', error)
+      failedOrders.push({
+        orderNumber: order.order_number,
+        error: error.message || 'Unexpected error',
+        stage: 'unknown',
+      })
     }
   }
 
+  const hasFailures = failedOrders.length > 0
+  const hasSuccesses = createdOrders.length > 0
+
   return {
-    success: true,
-    message: `Created ${createdOrders.length} mock orders for user ${userData.user.email}`,
+    success: !hasFailures,
+    partialSuccess: hasFailures && hasSuccesses,
+    message: hasFailures
+      ? `Created ${createdOrders.length} orders, ${failedOrders.length} failed`
+      : `Created ${createdOrders.length} mock orders for user ${userData.user.email}`,
     userId,
-    userEmail: userData.user.email,
+    userEmail: userData.user.email || '',
     orders: createdOrders,
+    errors: hasFailures ? failedOrders : undefined,
   }
 })

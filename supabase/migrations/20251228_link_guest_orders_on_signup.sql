@@ -11,21 +11,29 @@ AS $$
 DECLARE
   linked_count INTEGER;
 BEGIN
-  -- Link any guest orders with matching email to the new user
-  UPDATE orders
-  SET user_id = NEW.id,
-      updated_at = NOW()
-  WHERE guest_email = NEW.email
-    AND user_id IS NULL;
+  -- Wrap order linking in its own exception block
+  -- This ensures signup always succeeds even if order linking fails
+  BEGIN
+    -- Link any guest orders with matching email to the new user
+    UPDATE orders
+    SET user_id = NEW.id,
+        updated_at = NOW()
+    WHERE guest_email = NEW.email
+      AND user_id IS NULL;
 
-  -- Get count of linked orders for logging
-  GET DIAGNOSTICS linked_count = ROW_COUNT;
+    -- Get count of linked orders for logging
+    GET DIAGNOSTICS linked_count = ROW_COUNT;
 
-  -- Log if orders were linked (optional, for debugging)
-  IF linked_count > 0 THEN
-    RAISE NOTICE 'Linked % guest orders to user %', linked_count, NEW.email;
-  END IF;
+    -- Log if orders were linked (optional, for debugging)
+    IF linked_count > 0 THEN
+      RAISE NOTICE 'Linked % guest orders to user %', linked_count, NEW.email;
+    END IF;
+  EXCEPTION WHEN OTHERS THEN
+    -- Log the error but don't block signup
+    RAISE WARNING 'Failed to link guest orders for user %: %', NEW.email, SQLERRM;
+  END;
 
+  -- Always return NEW to allow signup to proceed
   RETURN NEW;
 END;
 $$;

@@ -163,6 +163,7 @@
       "passwordMismatch": "Parolele nu se potrivesc",
       "termsRequired": "Trebuie să accepți termenii și condițiile",
       "sessionExpired": "Sesiunea ta a expirat. Te rugăm să te autentifici din nou",
+      "logoutFailed": "Eroare la deconectare. Te rugăm să încerci din nou.",
       "rateLimitExceeded": "Prea multe încercări. Încearcă din nou în {minutes} minute",
       "tokenExpired": "Link-ul de verificare a expirat",
       "tokenInvalid": "Link de verificare invalid",

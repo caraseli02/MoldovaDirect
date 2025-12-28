@@ -56,7 +56,7 @@
           <div class="flex items-center">
             <div class="w-12 h-12 bg-zinc-900 dark:bg-zinc-100 rounded-full flex items-center justify-center">
               <span class="text-xl font-bold text-white dark:text-zinc-900">
-                {{ userProfile?.name?.charAt(0).toUpperCase() }}
+                {{ (userProfile?.name?.charAt(0) || 'U').toUpperCase() }}
               </span>
             </div>
             <div class="ml-4">
@@ -469,7 +469,10 @@ const orderStats = ref<OrderStats>({
   error: null,
 })
 
-// Fetch order summary
+// Constants
+const RECENT_ORDERS_LIMIT = 3
+
+// Fetch order summary with parallel queries for better performance
 const fetchOrderSummary = async () => {
   if (!user.value) return
 
@@ -481,38 +484,42 @@ const fetchOrderSummary = async () => {
     const { data: { session } } = await supabase.auth.getSession()
     if (!session) {
       console.warn('No active session found when fetching orders')
+      orderStats.value.loading = false
+      orderStats.value.error = t('auth.errors.sessionExpired')
       return
     }
 
-    // Fetch total orders count
-    const { count, error: countError } = await supabase
-      .from('orders')
-      .select('*', { count: 'exact', head: true })
-      .eq('user_id', user.value.id)
-
-    if (countError) throw countError
-    orderStats.value.totalOrders = count || 0
-
-    // Fetch recent orders (last 3)
-    const { data: orders, error: ordersError } = await supabase
-      .from('orders')
-      .select(`
-        id,
-        order_number,
-        status,
-        total_eur,
-        created_at,
-        order_items (
+    // Run both queries in parallel for better performance
+    const [countResult, ordersResult] = await Promise.all([
+      // Fetch total orders count
+      supabase
+        .from('orders')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', user.value.id),
+      // Fetch recent orders (last 3)
+      supabase
+        .from('orders')
+        .select(`
           id,
-          product_snapshot
-        )
-      `)
-      .eq('user_id', user.value.id)
-      .order('created_at', { ascending: false })
-      .limit(3)
+          order_number,
+          status,
+          total_eur,
+          created_at,
+          order_items (
+            id,
+            product_snapshot
+          )
+        `)
+        .eq('user_id', user.value.id)
+        .order('created_at', { ascending: false })
+        .limit(RECENT_ORDERS_LIMIT),
+    ])
 
-    if (ordersError) throw ordersError
-    orderStats.value.recentOrders = (orders as OrderSummary[]) || []
+    if (countResult.error) throw countResult.error
+    if (ordersResult.error) throw ordersResult.error
+
+    orderStats.value.totalOrders = countResult.count || 0
+    orderStats.value.recentOrders = (ordersResult.data as OrderSummary[]) || []
   }
   catch (error: any) {
     console.error('Error fetching order summary:', error)
@@ -532,6 +539,8 @@ const handleLogout = async () => {
   }
   catch (error: any) {
     console.error('Logout error:', error)
+    // Show user-facing error message
+    orderStats.value.error = t('auth.errors.logoutFailed')
   }
 }
 
