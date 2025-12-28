@@ -25,7 +25,7 @@
               <div
                 class="bg-blue-600 h-2 rounded-full transition-all duration-500"
                 :style="{ width: `${profileCompletionPercentage}%` }"
-              />
+              ></div>
             </div>
           </div>
         </div>
@@ -89,14 +89,14 @@
                 <button
                   type="button"
                   :aria-label="$t('profile.changePicture')"
-                  class="absolute bottom-0 right-0 h-8 w-8 md:h-9 md:w-9 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-lg flex items-center justify-center transition-all duration-200 group-hover:scale-110"
+                  class="absolute -bottom-1 -right-1 h-11 w-11 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-lg flex items-center justify-center transition-all duration-200 group-hover:scale-110"
                   @click.stop="triggerFileUpload"
                   @keydown.enter.stop="triggerFileUpload"
                   @keydown.space.prevent.stop="triggerFileUpload"
                 >
                   <commonIcon
                     name="lucide:camera"
-                    class="h-4 w-4"
+                    class="h-5 w-5"
                     aria-hidden="true"
                   />
                 </button>
@@ -476,7 +476,7 @@
               :class="{
                 'bg-zinc-800 text-white': saveStatus === 'saving',
                 'bg-green-600 text-white': saveStatus === 'saved',
-                'bg-red-600 text-white': saveStatus === 'error'
+                'bg-red-600 text-white': saveStatus === 'error',
               }"
             >
               <commonIcon
@@ -778,14 +778,17 @@ const profileCompletionPercentage = computed(() => {
   if (form.phone && /^[+]?[0-9\s\-()]{9,}$/.test(form.phone)) completed++
   if (profilePictureUrl.value) completed++
   if (addresses.value.length > 0) completed++
-  if (form.preferredLanguage && form.preferredCurrency) completed++
+  // CRITICAL FIX: Only count preferences if user has explicitly saved them (not using defaults)
+  // Check if preferences exist in user metadata (set via handleSave)
+  const hasExplicitPreferences = user.value?.user_metadata?.preferred_language
+    && user.value?.user_metadata?.preferred_currency
+  if (hasExplicitPreferences) completed++
 
   return Math.round((completed / total) * 100)
 })
 
-// Focus trap utility for modals
-const trapFocus = (event: KeyboardEvent, modalRef: Ref<HTMLElement | undefined>) => {
-  const modal = modalRef.value
+// Focus trap utility for modals - accepts the element directly (Vue template auto-unwraps refs)
+const trapFocus = (event: KeyboardEvent, modal: HTMLElement | undefined) => {
   if (!modal) return
 
   const focusableElements = modal.querySelectorAll(
@@ -1158,7 +1161,8 @@ const handleAddressSave = async (addressData: Address) => {
 
     if (addressData.id) {
       // Update existing address - verify user owns it
-      const { error } = await supabase
+
+      const { error } = await (supabase as any)
         .from('user_addresses')
         .update(dbAddress)
         .eq('id', addressData.id)
@@ -1168,7 +1172,8 @@ const handleAddressSave = async (addressData: Address) => {
     }
     else {
       // Create new address
-      const { error } = await supabase
+
+      const { error } = await (supabase as any)
         .from('user_addresses')
         .insert({
           ...dbAddress,
@@ -1237,15 +1242,18 @@ const executeDeleteAddress = async () => {
   }
 }
 
-// Account deletion
-const handleDeleteAccount = async () => {
+// Account deletion - receives password and reason from DeleteAccountModal
+const handleDeleteAccount = async (data: { password: string, reason?: string }) => {
   try {
     isLoading.value = true
 
-    // This would typically involve calling a server endpoint
-    // that handles account deletion properly
+    // Call server endpoint with password for verification and reason for analytics
     const response = await $fetch<{ success?: boolean, error?: string }>('/api/auth/delete-account', {
       method: 'DELETE',
+      body: {
+        password: data.password,
+        reason: data.reason,
+      },
     })
 
     if (response.error) throw new Error(response.error)
