@@ -538,6 +538,7 @@
     "reorder": "Заказать Снова",
     "estimatedDelivery": "Ожидаемая Доставка",
     "viewAndManage": "Просмотр и управление историей заказов",
+    "viewAllOrders": "Посмотреть Все Заказы",
     "showing": "Показано {start}-{end} из {total} заказов",
     "orders": "заказов",
     "gridView": "Вид сетки",

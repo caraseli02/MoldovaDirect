@@ -193,13 +193,16 @@ const canReorder = computed(() => {
 
 // Helper functions
 const getLocalizedName = (productSnapshot: Record<string, any>) => {
-  if (!productSnapshot?.nameTranslations) return ''
-  return productSnapshot.nameTranslations[locale.value] || productSnapshot.nameTranslations.en || ''
+  // Support both camelCase (API response) and snake_case (database direct)
+  const nameTranslations = productSnapshot?.nameTranslations || productSnapshot?.name_translations
+  if (!nameTranslations) return ''
+  return nameTranslations[locale.value] || nameTranslations.en || ''
 }
 
 const getProductImage = (item: Record<string, any>) => {
   try {
-    const snapshot = item?.productSnapshot
+    // Support both camelCase (API response) and snake_case (database direct)
+    const snapshot = item?.productSnapshot || item?.product_snapshot
     if (!snapshot) return null
 
     // Handle different image formats

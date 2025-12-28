@@ -597,6 +597,7 @@
     "reorder": "Reorder",
     "estimatedDelivery": "Estimated Delivery",
     "viewAndManage": "View and manage your order history",
+    "viewAllOrders": "View All Orders",
     "showing": "Showing {start}-{end} of {total} orders",
     "orders": "orders",
     "gridView": "Grid view",

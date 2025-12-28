@@ -187,10 +187,41 @@
               :key="i"
               class="animate-pulse"
             >
-              <div class="h-4 bg-zinc-200 dark:bg-zinc-700 rounded w-1/4 mb-2" />
-              <div class="h-4 bg-zinc-200 dark:bg-zinc-700 rounded w-1/2" />
+              <div class="h-4 bg-zinc-200 dark:bg-zinc-700 rounded w-1/4 mb-2"></div>
+              <div class="h-4 bg-zinc-200 dark:bg-zinc-700 rounded w-1/2"></div>
             </div>
           </div>
+        </div>
+
+        <!-- Error State -->
+        <div
+          v-else-if="orderStats.error"
+          class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6 text-center"
+        >
+          <div class="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg
+              class="w-6 h-6 text-red-600 dark:text-red-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </div>
+          <p class="text-sm text-red-700 dark:text-red-300 mb-4">
+            {{ orderStats.error }}
+          </p>
+          <button
+            class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
+            @click="fetchOrderSummary"
+          >
+            {{ $t('common.tryAgain') }}
+          </button>
         </div>
 
         <!-- Recent Orders List -->
@@ -412,6 +443,7 @@ interface OrderStats {
   totalOrders: number
   recentOrders: OrderSummary[]
   loading: boolean
+  error: string | null
 }
 
 const supabase = useSupabaseClient()
@@ -434,6 +466,7 @@ const orderStats = ref<OrderStats>({
   totalOrders: 0,
   recentOrders: [],
   loading: true,
+  error: null,
 })
 
 // Fetch order summary
@@ -442,6 +475,14 @@ const fetchOrderSummary = async () => {
 
   try {
     orderStats.value.loading = true
+    orderStats.value.error = null
+
+    // Ensure we have a valid session before querying
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) {
+      console.warn('No active session found when fetching orders')
+      return
+    }
 
     // Fetch total orders count
     const { count, error: countError } = await supabase
@@ -475,6 +516,7 @@ const fetchOrderSummary = async () => {
   }
   catch (error: any) {
     console.error('Error fetching order summary:', error)
+    orderStats.value.error = error?.message || t('common.errorOccurred')
   }
   finally {
     orderStats.value.loading = false

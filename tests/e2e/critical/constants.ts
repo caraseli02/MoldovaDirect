@@ -223,8 +223,8 @@ export const URL_PATTERNS = {
  * Test data constants
  */
 export const TEST_DATA = {
-  /** Default test user email */
-  DEFAULT_TEST_EMAIL: 'teste2e@example.com',
+  /** Default test user email - uses Resend's test address for reliable E2E testing */
+  DEFAULT_TEST_EMAIL: 'delivered@resend.dev',
 
   /** Default admin email fallback */
   DEFAULT_ADMIN_EMAIL: 'admin@example.com',
@@ -242,8 +242,8 @@ export const TEST_DATA = {
     phone: '+34 600 123 456',
   },
 
-  /** Guest test email */
-  GUEST_EMAIL: 'guest.test@example.com',
+  /** Guest test email - uses Resend's test address for reliable E2E testing */
+  GUEST_EMAIL: 'delivered@resend.dev',
 } as const
 
 /**

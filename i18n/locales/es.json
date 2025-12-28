@@ -592,6 +592,7 @@
     "reorder": "Volver a Pedir",
     "estimatedDelivery": "Entrega Estimada",
     "viewAndManage": "Ver y gestionar tu historial de pedidos",
+    "viewAllOrders": "Ver Todos los Pedidos",
     "showing": "Mostrando {start}-{end} de {total} pedidos",
     "orders": "pedidos",
     "gridView": "Vista de cuadrícula",

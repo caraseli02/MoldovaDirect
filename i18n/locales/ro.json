@@ -332,6 +332,7 @@
     "reorder": "Comandă Din Nou",
     "estimatedDelivery": "Livrare Estimată",
     "viewAndManage": "Vezi și gestionează istoricul comenzilor tale",
+    "viewAllOrders": "Vezi Toate Comenzile",
     "showing": "Se afișează {start}-{end} din {total} comenzi",
     "orders": "comenzi",
     "gridView": "Vizualizare grilă",

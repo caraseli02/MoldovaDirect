@@ -16,6 +16,7 @@ const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || ''
 
 // Test email patterns to identify test orders
 const TEST_EMAIL_PATTERNS = [
+  'delivered@resend.dev', // Resend's E2E test address
   'test@example.com',
   'teste2e@example.com',
   'test-visual@example.com',
@@ -27,7 +28,6 @@ const TEST_EMAIL_PATTERNS = [
   'test-ru@example.com',
   'test-summary@example.com',
   'guest.test@example.com',
-  'caraseli02@gmail.com', // Hardcoded test email
 ]
 
 // Order ID patterns to identify test orders
