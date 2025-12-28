@@ -22,6 +22,33 @@ import type {
 } from './types'
 
 // =============================================
+// DEVELOPMENT LOGGING HELPER
+// =============================================
+
+// Only log in development to avoid console noise in production
+const devLog = import.meta.dev
+  ? (...args: unknown[]) => console.log(...args)
+  : () => {}
+
+const devWarn = import.meta.dev
+  ? (...args: unknown[]) => console.warn(...args)
+  : () => {}
+
+// =============================================
+// TIMESTAMP VALIDATION HELPER
+// =============================================
+
+/**
+ * Safely parse a timestamp string to milliseconds
+ * Returns 0 for invalid/missing timestamps to ensure consistent comparisons
+ */
+function parseTimestamp(ts: string | undefined | null): number {
+  if (!ts) return 0
+  const time = new Date(ts).getTime()
+  return Number.isNaN(time) ? 0 : time
+}
+
+// =============================================
 // MAIN CART STORE
 // =============================================
 
@@ -134,7 +161,7 @@ export const useCartStore = defineStore('cart', () => {
    */
   function deserializeCartData(data: CartCookieData): void {
     if (!data?.items) {
-      console.log('   No items to deserialize')
+      devLog('   No items to deserialize')
       return
     }
 
@@ -143,18 +170,18 @@ export const useCartStore = defineStore('cart', () => {
       throw new Error('Invalid cart data: items must be an array')
     }
 
-    console.log(`🔄 Deserializing ${data.items.length} items...`)
+    devLog(`🔄 Deserializing ${data.items.length} items...`)
 
     try {
       // Pause the auto-save watch temporarily to avoid saving during deserialization
       if (stopWatcher) {
         stopWatcher()
-        console.log('   Paused auto-save watch')
+        devLog('   Paused auto-save watch')
       }
 
       // Clear existing items using proper API
       core.clearCart()
-      console.log('   Cleared existing items')
+      devLog('   Cleared existing items')
 
       // Restore each item using the proper addItem API
       for (const item of data.items) {
@@ -168,7 +195,7 @@ export const useCartStore = defineStore('cart', () => {
         }
         core.addItem(product, item.quantity)
       }
-      console.log(`   Restored ${data.items.length} items`)
+      devLog(`   Restored ${data.items.length} items`)
 
       // Note: sessionId and lastSyncAt are managed by core module
       // They will be automatically regenerated/updated as needed
@@ -181,11 +208,12 @@ export const useCartStore = defineStore('cart', () => {
         },
         { deep: true },
       )
-      console.log('   Resumed auto-save watch')
-      console.log('✅ Deserialization complete')
+      devLog('   Resumed auto-save watch')
+      devLog('✅ Deserialization complete')
     }
-    catch (error: any) {
-      console.error('❌ Failed to deserialize cart items:', error)
+    catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : String(error)
+      console.error('[Cart] Failed to deserialize cart items:', errorMessage)
       // Ensure watch is resumed even if deserialization fails
       if (!stopWatcher) {
         stopWatcher = watch(
@@ -206,7 +234,7 @@ export const useCartStore = defineStore('cart', () => {
   async function saveToStorage(): Promise<{ success: boolean, error?: string }> {
     try {
       const data = serializeCartData()
-      console.log('💾 Saving cart to storage:', {
+      devLog('💾 Saving cart to storage:', {
         itemsCount: data.items?.length || 0,
         sessionId: data.sessionId,
         timestamp: data.timestamp,
@@ -214,29 +242,27 @@ export const useCartStore = defineStore('cart', () => {
 
       // Save to cookie (primary - works with SSR)
       cartCookie.value = data
-      console.log('   ✅ Cookie saved')
+      devLog('   ✅ Cookie saved')
 
       // Save to localStorage backup (secondary - more reliable for persistence)
       if (import.meta.client) {
         try {
           localStorage.setItem(COOKIE_NAMES.CART + '_backup', JSON.stringify(data))
-          console.log('   ✅ LocalStorage backup saved')
+          devLog('   ✅ LocalStorage backup saved')
         }
         catch (e) {
-          console.warn('   ⚠️ Failed to save localStorage backup:', e)
-          // Don't fail the operation - cookie save succeeded
+          // Log as error in production since this affects persistence reliability
+          console.error('[Cart] Failed to save localStorage backup:', e)
         }
       }
 
-      console.log('✅ Cart saved successfully')
+      devLog('✅ Cart saved successfully')
       return { success: true }
     }
-    catch (error: any) {
-      console.error('❌ Failed to save cart to storage:', error)
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Save failed',
-      }
+    catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Save failed'
+      console.error('[Cart] Failed to save cart to storage:', errorMessage)
+      return { success: false, error: errorMessage }
     }
   }
 
@@ -246,11 +272,11 @@ export const useCartStore = defineStore('cart', () => {
    */
   async function loadFromStorage(): Promise<{ success: boolean, data?: CartCookieData | null, error?: string }> {
     try {
-      console.log('📥 Loading cart from storage...')
+      devLog('📥 Loading cart from storage...')
 
       // Strategy 1: Try cookie first (works on SSR and client)
       const cookieData = cartCookie.value
-      console.log('   Cookie data:', cookieData ? `${JSON.stringify(cookieData).length} bytes` : 'null')
+      devLog('   Cookie data:', cookieData ? `${JSON.stringify(cookieData).length} bytes` : 'null')
 
       // Strategy 2: Try localStorage backup (client-only, more reliable for persistence)
       let localStorageData: CartCookieData | null = null
@@ -259,11 +285,12 @@ export const useCartStore = defineStore('cart', () => {
           const backupStr = localStorage.getItem(COOKIE_NAMES.CART + '_backup')
           if (backupStr) {
             localStorageData = JSON.parse(backupStr) as CartCookieData
-            console.log('   LocalStorage backup:', localStorageData?.items?.length || 0, 'items')
+            devLog('   LocalStorage backup:', localStorageData?.items?.length || 0, 'items')
           }
         }
         catch (e) {
-          console.warn('   Failed to read localStorage backup:', e)
+          // Log error since this could mean corrupted data
+          console.error('[Cart] Failed to read localStorage backup:', e)
         }
       }
 
@@ -274,8 +301,8 @@ export const useCartStore = defineStore('cart', () => {
 
       if (cookieData?.items?.length && localStorageData?.items?.length) {
         // Both have data - use the one with more recent timestamp
-        const cookieTime = new Date(cookieData.timestamp || 0).getTime()
-        const localTime = new Date(localStorageData.timestamp || 0).getTime()
+        const cookieTime = parseTimestamp(cookieData.timestamp)
+        const localTime = parseTimestamp(localStorageData.timestamp)
 
         if (localTime > cookieTime) {
           dataToUse = localStorageData
@@ -308,21 +335,19 @@ export const useCartStore = defineStore('cart', () => {
       }
 
       if (dataToUse?.items?.length) {
-        console.log(`   Using ${source}: ${dataToUse.items.length} items`)
+        devLog(`   Using ${source}: ${dataToUse.items.length} items`)
         deserializeCartData(dataToUse)
-        console.log('✅ Cart loaded successfully')
+        devLog('✅ Cart loaded successfully')
         return { success: true, data: dataToUse }
       }
 
-      console.log('   No items found in any storage (empty cart)')
+      devLog('   No items found in any storage (empty cart)')
       return { success: true, data: null }
     }
-    catch (error: any) {
-      console.error('❌ Failed to load cart from storage:', error)
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Load failed',
-      }
+    catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Load failed'
+      console.error('[Cart] Failed to load cart from storage:', errorMessage)
+      return { success: false, error: errorMessage }
     }
   }
 
@@ -340,7 +365,7 @@ export const useCartStore = defineStore('cart', () => {
           localStorage.removeItem(COOKIE_NAMES.CART + '_backup')
         }
         catch (e) {
-          console.warn('Failed to clear localStorage backup:', e)
+          devWarn('[Cart] Failed to clear localStorage backup:', e)
         }
       }
 
@@ -368,19 +393,20 @@ export const useCartStore = defineStore('cart', () => {
    */
   function initializeCart(): void {
     if (isInitialized) {
-      console.log('⚠️ Cart already initialized, skipping')
+      devLog('⚠️ Cart already initialized, skipping')
       return
     }
 
-    console.log('🚀 Initializing cart...')
+    devLog('🚀 Initializing cart...')
 
     // Initialize core (generates sessionId if needed)
     core.initializeCart()
 
     // Load from storage - use async but don't block
     if (import.meta.client) {
-      loadFromStorage().catch((error: any) => {
-        console.warn('Failed to load cart from storage:', error)
+      loadFromStorage().catch((error: unknown) => {
+        const errorMessage = error instanceof Error ? error.message : String(error)
+        console.error('[Cart] Failed to load cart from storage:', errorMessage)
       })
     }
 
@@ -396,13 +422,13 @@ export const useCartStore = defineStore('cart', () => {
 
     // Load recommendations if cart has items
     if (import.meta.client && items.value.length > 0) {
-      advanced.loadRecommendations([...items.value] as CartItem[]).catch((error: any) => {
-        console.warn('Failed to load recommendations:', error)
+      advanced.loadRecommendations([...items.value] as CartItem[]).catch((error: unknown) => {
+        devWarn('[Cart] Failed to load recommendations:', error)
       })
     }
 
     isInitialized = true
-    console.log('✅ Cart initialization complete')
+    devLog('✅ Cart initialization complete')
   }
 
   // =============================================
@@ -426,8 +452,9 @@ export const useCartStore = defineStore('cart', () => {
       try {
         await saveToStorage()
       }
-      catch (error: any) {
-        console.warn('❌ Debounced save failed:', error)
+      catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : String(error)
+        console.error('[Cart] Debounced save failed:', errorMessage)
       }
     }, 300) // 300ms debounce - fast enough for UX, slow enough to batch rapid changes
   }
@@ -445,8 +472,12 @@ export const useCartStore = defineStore('cart', () => {
       try {
         await security.secureAddItem(product.id, quantity, sessionId.value)
       }
-      catch (securityError: any) {
-        console.warn('Secure add failed, falling back to regular add:', securityError)
+      catch (securityError: unknown) {
+        // Log security failure - this should not happen in normal operation
+        const errorMessage = securityError instanceof Error ? securityError.message : String(securityError)
+        console.error('[Cart Security] Secure add failed:', errorMessage)
+        // Continue with regular add - security module handles its own validation
+        // The security check is supplementary, not a blocking requirement
       }
     }
 
@@ -484,8 +515,9 @@ export const useCartStore = defineStore('cart', () => {
       try {
         await security.secureRemoveItem(itemId, sessionId.value)
       }
-      catch (securityError: any) {
-        console.warn('Secure remove failed, falling back to regular remove:', securityError)
+      catch (securityError: unknown) {
+        const errorMessage = securityError instanceof Error ? securityError.message : String(securityError)
+        console.error('[Cart Security] Secure remove failed:', errorMessage)
       }
     }
 
@@ -520,8 +552,9 @@ export const useCartStore = defineStore('cart', () => {
       try {
         await security.secureUpdateQuantity(itemId, quantity, sessionId.value)
       }
-      catch (securityError: any) {
-        console.warn('Secure update failed, falling back to regular update:', securityError)
+      catch (securityError: unknown) {
+        const errorMessage = securityError instanceof Error ? securityError.message : String(securityError)
+        console.error('[Cart Security] Secure update failed:', errorMessage)
       }
     }
 
@@ -643,7 +676,7 @@ export const useCartStore = defineStore('cart', () => {
 
       // Handle invalid items
       if (result.invalidItems.length > 0) {
-        console.warn('Some cart items were invalid and removed:', result.invalidItems)
+        devWarn('[Cart] Some cart items were invalid and removed:', result.invalidItems)
       }
 
       // Handle changes
@@ -702,23 +735,23 @@ export const useCartStore = defineStore('cart', () => {
    * Cancels any pending debounced save to avoid race conditions
    */
   async function forceImmediateSave(): Promise<{ success: boolean, error?: string }> {
-    console.log('🔴 Force immediate save triggered')
+    devLog('🔴 Force immediate save triggered')
 
     // Cancel any pending debounced save to avoid race conditions
     if (saveTimeoutId) {
       clearTimeout(saveTimeoutId)
       saveTimeoutId = null
-      console.log('   Cancelled pending debounced save')
+      devLog('   Cancelled pending debounced save')
     }
 
     // Save immediately
     try {
       const result = await saveToStorage()
       if (result.success) {
-        console.log('✅ Immediate save complete')
+        devLog('✅ Immediate save complete')
       }
       else {
-        console.error('❌ Immediate save failed:', result.error)
+        console.error('[Cart] Immediate save failed:', result.error)
       }
       return result
     }
@@ -795,11 +828,11 @@ export const useCartStore = defineStore('cart', () => {
         const data = serializeCartData()
         if (data.items.length > 0) {
           localStorage.setItem(COOKIE_NAMES.CART + '_backup', JSON.stringify(data))
-          console.log('💾 Cart backup saved to localStorage on unload')
+          devLog('💾 Cart backup saved to localStorage on unload')
         }
       }
       catch (e) {
-        console.warn('Failed to save cart backup on unload:', e)
+        console.error('[Cart] Failed to save cart backup on unload:', e)
       }
 
       // Also try to save to cookie (synchronous operation)
@@ -807,7 +840,7 @@ export const useCartStore = defineStore('cart', () => {
         cartCookie.value = serializeCartData()
       }
       catch (e) {
-        console.warn('Failed to save cart cookie on unload:', e)
+        console.error('[Cart] Failed to save cart cookie on unload:', e)
       }
     }
 
@@ -826,11 +859,11 @@ export const useCartStore = defineStore('cart', () => {
           if (data.items.length > 0) {
             localStorage.setItem(COOKIE_NAMES.CART + '_backup', JSON.stringify(data))
             cartCookie.value = data
-            console.log('💾 Cart saved on visibility hidden')
+            devLog('💾 Cart saved on visibility hidden')
           }
         }
         catch (e) {
-          console.warn('Failed to save cart on visibility change:', e)
+          console.error('[Cart] Failed to save cart on visibility change:', e)
         }
       }
     }
@@ -850,7 +883,7 @@ export const useCartStore = defineStore('cart', () => {
         }
       }
       catch (e) {
-        console.warn('Failed to save cart on pagehide:', e)
+        console.error('[Cart] Failed to save cart on pagehide:', e)
       }
     }
 
@@ -859,16 +892,16 @@ export const useCartStore = defineStore('cart', () => {
     document.addEventListener('visibilitychange', handleVisibilityChange)
     window.addEventListener('pagehide', handlePageHide)
 
-    // Cleanup on store disposal (though Pinia stores rarely get disposed)
-    // This is a best practice for memory leak prevention
-    if (typeof window !== 'undefined') {
-      const originalUnmount = window.onbeforeunload
-      window.onbeforeunload = (e) => {
-        handleBeforeUnload(e as BeforeUnloadEvent)
-        if (originalUnmount) {
-          return originalUnmount.call(window, e)
-        }
-      }
+    // Cleanup function for event listeners (prevents memory leaks during HMR)
+    const cleanupEventListeners = () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      window.removeEventListener('pagehide', handlePageHide)
+    }
+
+    // Register cleanup for Hot Module Replacement to prevent duplicate listeners
+    if (import.meta.hot) {
+      import.meta.hot.dispose(cleanupEventListeners)
     }
   }
 

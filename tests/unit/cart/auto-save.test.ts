@@ -35,7 +35,7 @@ describe('Cart Auto-Save Mechanism', () => {
   })
 
   describe('Debounced Save (CRITICAL)', () => {
-    it('should save after 1 second debounce period', async () => {
+    it('should save after 300ms debounce period', async () => {
       const cart = useCartStore()
 
       // Add item
@@ -44,12 +44,12 @@ describe('Cart Auto-Save Mechanism', () => {
       // Should not save immediately
       expect(getCookieSaveCount()).toBe(0)
 
-      // Fast-forward time by 500ms (not enough)
-      vi.advanceTimersByTime(500)
+      // Fast-forward time by 150ms (not enough)
+      vi.advanceTimersByTime(150)
       expect(getCookieSaveCount()).toBe(0)
 
-      // Fast-forward another 500ms (total 1000ms)
-      vi.advanceTimersByTime(500)
+      // Fast-forward another 150ms (total 300ms)
+      vi.advanceTimersByTime(150)
 
       // Wait for async operations
       await vi.runAllTimersAsync()
@@ -65,20 +65,20 @@ describe('Cart Auto-Save Mechanism', () => {
       // Add item
       await cart.addItem(mockProduct, 1)
 
-      // Fast-forward 500ms
-      vi.advanceTimersByTime(500)
+      // Fast-forward 150ms
+      vi.advanceTimersByTime(150)
 
       // Add another item (resets timer)
       await cart.addItem({ ...mockProduct, id: 'product-2' }, 1)
 
-      // Fast-forward another 500ms (not 1000ms from first add)
-      vi.advanceTimersByTime(500)
+      // Fast-forward another 150ms (not 300ms from first add)
+      vi.advanceTimersByTime(150)
 
       // Should not have saved yet
       expect(getCookieSaveCount()).toBe(initialSaveCount)
 
-      // Fast-forward final 500ms (1000ms from second add)
-      vi.advanceTimersByTime(500)
+      // Fast-forward final 150ms (300ms from second add)
+      vi.advanceTimersByTime(150)
       await vi.runAllTimersAsync()
 
       // Now it should have saved once
