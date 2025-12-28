@@ -38,7 +38,8 @@ async function loginUser(page: Page, email: string, password: string) {
 
 test.describe('GDPR Compliance - Account Deletion', () => {
   test('should delete user account atomically with all data', async ({ page, request }) => {
-    const testEmail = process.env.TEST_USER_EMAIL || 'teste2e@example.com'
+    // Use Resend's test address for reliable E2E email testing
+    const testEmail = process.env.TEST_USER_EMAIL || 'delivered@resend.dev'
     const testPassword = process.env.TEST_USER_PASSWORD || 'N7jKAcu2FHbt7cj'
 
     // Login with test credentials

@@ -20,7 +20,8 @@ import { test, expect } from '@playwright/test'
 import { CheckoutPage } from './page-objects/CheckoutPage'
 
 const BASE_URL = process.env.PLAYWRIGHT_TEST_BASE_URL || process.env.BASE_URL || 'http://localhost:3000'
-const TEST_USER_EMAIL = process.env.TEST_USER_EMAIL || 'teste2e@example.com'
+// Use Resend's test address for reliable E2E email testing
+const TEST_USER_EMAIL = process.env.TEST_USER_EMAIL || 'delivered@resend.dev'
 const TEST_USER_PASSWORD = process.env.TEST_USER_PASSWORD || 'N7jKAcu2FHbt7cj'
 
 // Test address data - uses fullName which is split into firstName/lastName internally
@@ -193,10 +194,10 @@ test.describe('Full Checkout Flow - Hybrid Progressive', () => {
       console.log('✅ Step 4: Continued as guest')
     }
 
-    // Step 5: Fill guest email (if shown)
+    // Step 5: Fill guest email (if shown) - uses Resend's test address
     const emailVisible = await checkoutPage.guestEmailInput.isVisible({ timeout: 3000 }).catch(() => false)
     if (emailVisible) {
-      await checkoutPage.fillGuestEmail('guest.test@example.com')
+      await checkoutPage.fillGuestEmail('delivered@resend.dev')
       console.log('✅ Step 5: Filled guest email')
     }
 

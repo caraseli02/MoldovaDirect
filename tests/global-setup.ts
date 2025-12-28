@@ -93,7 +93,8 @@ async function globalSetup(config: FullConfig) {
 
     try {
       // ACTUALLY LOGIN - Get credentials from environment variables
-      const testEmail = process.env.TEST_USER_EMAIL || `test-${locale}@example.test`
+      // Use Resend's test address for reliable E2E email testing
+      const testEmail = process.env.TEST_USER_EMAIL || 'delivered@resend.dev'
       const testPassword = process.env.TEST_USER_PASSWORD
 
       if (!testPassword) {
