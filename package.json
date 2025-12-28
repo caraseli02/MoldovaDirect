@@ -46,7 +46,7 @@
     "test:visual-review": "PLAYWRIGHT_TEST=true playwright test --config=playwright.visual-regression.config.ts --ui",
     "test:visual:orders": "PLAYWRIGHT_TEST=true playwright test tests/e2e/visual/orders.spec.ts --project=chromium-es",
     "test:visual:all": "PLAYWRIGHT_TEST=true playwright test tests/e2e/visual/ --project=chromium-es",
-    "visual:open": "open .visual-testing/reports/index.html",
+    "visual:serve": "node .visual-testing/serve.mjs",
     "test:report": "playwright show-report",
     "test:setup": "playwright install --with-deps",
     "setup:project": "node scripts/setup-github-project.mjs",

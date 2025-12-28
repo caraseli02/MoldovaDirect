@@ -281,8 +281,9 @@ pnpm run test:visual:orders
 # Run all visual tests
 pnpm run test:visual:all
 
-# Open visual review report
-pnpm run visual:open
+# Serve visual review report (starts local server)
+pnpm run visual:serve
+# Then open http://localhost:3333
 ```
 
 ### Naming Convention
