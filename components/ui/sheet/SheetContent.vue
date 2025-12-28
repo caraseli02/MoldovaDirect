@@ -6,6 +6,7 @@ import { X } from 'lucide-vue-next'
 import {
   DialogClose,
   DialogContent,
+  DialogOverlay,
   DialogPortal,
   useForwardPropsEmits,
 } from 'reka-ui'
@@ -27,9 +28,8 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
 
 <template>
   <DialogPortal>
-    <div
+    <DialogOverlay
       class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
-      data-slot="overlay"
     />
     <DialogContent
       data-slot="sheet-content"
@@ -45,7 +45,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
         props.class,
       )"
     >
-      <slot />
+      <slot></slot>
 
       <DialogClose
         class="absolute right-6 top-6 rounded-lg p-2 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:ring-offset-2 disabled:pointer-events-none dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 dark:focus:ring-zinc-300"

@@ -1,7 +1,10 @@
 <template>
   <div class="space-y-8">
     <!-- Price Range Filter -->
-    <div class="space-y-4">
+    <div
+      v-if="availableFilters.priceRange"
+      class="space-y-4"
+    >
       <UiLabel class="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
         {{ $t('products.filters.priceRange') }}
       </UiLabel>
@@ -12,13 +15,16 @@
           :min="availableFilters.priceRange.min"
           :max="availableFilters.priceRange.max"
           :step="1"
-          @update:model-value="updatePriceRange"
           class="w-full"
+          @update:model-value="(v) => v && updatePriceRange(v)"
         />
 
         <div class="grid grid-cols-2 gap-4">
           <div class="space-y-2">
-            <UiLabel for="price-min" class="text-sm text-zinc-600 dark:text-zinc-400">
+            <UiLabel
+              for="price-min"
+              class="text-sm text-zinc-600 dark:text-zinc-400"
+            >
               {{ $t('products.filters.minPrice') }}
             </UiLabel>
             <div class="relative">
@@ -36,7 +42,10 @@
           </div>
 
           <div class="space-y-2">
-            <UiLabel for="price-max" class="text-sm text-zinc-600 dark:text-zinc-400">
+            <UiLabel
+              for="price-max"
+              class="text-sm text-zinc-600 dark:text-zinc-400"
+            >
               {{ $t('products.filters.maxPrice') }}
             </UiLabel>
             <div class="relative">
@@ -72,8 +81,8 @@
           </UiLabel>
           <UiCheckbox
             id="filter-in-stock"
-            :checked="localFilters.inStock"
-            @update:checked="updateFilters({ inStock: $event })"
+            :model-value="localFilters.inStock ?? false"
+            @update:model-value="(val) => updateFilters({ inStock: val === true })"
           />
         </div>
 
@@ -86,8 +95,8 @@
           </UiLabel>
           <UiCheckbox
             id="filter-featured"
-            :checked="localFilters.featured"
-            @update:checked="updateFilters({ featured: $event })"
+            :model-value="localFilters.featured ?? false"
+            @update:model-value="(val) => updateFilters({ featured: val === true })"
           />
         </div>
       </div>
@@ -189,13 +198,9 @@ const localFilters = ref<ProductFilters>({ ...props.filters })
 
 // Computed properties
 const selectedCategories = computed(() => {
-  if (typeof localFilters.value.category === 'string') {
-    return [localFilters.value.category]
-  }
-  else if (typeof localFilters.value.category === 'number') {
-    return [localFilters.value.category.toString()]
-  }
-  return []
+  const category = localFilters.value.category
+  if (category == null) return []
+  return [String(category)]
 })
 
 // Methods
@@ -216,26 +221,45 @@ const updateFilters = (newFilters: Partial<ProductFilters>) => {
 }
 
 const updatePriceRange = (range: number[]) => {
+  // Validate array structure
+  if (!Array.isArray(range) || range.length !== 2) {
+    console.warn('[Filter/Content] updatePriceRange received invalid range:', range)
+    return
+  }
+
   const [min, max] = range
+
+  // Validate numeric values
+  if (typeof min !== 'number' || typeof max !== 'number' || Number.isNaN(min) || Number.isNaN(max)) {
+    console.warn('[Filter/Content] updatePriceRange received non-numeric values:', { min, max })
+    return
+  }
+
   const { min: availableMin, max: availableMax } = props.availableFilters.priceRange
 
   updateFilters({
-    priceMin: min > availableMin ? min : undefined,
-    priceMax: max < availableMax ? max : undefined,
+    priceMin: availableMin !== undefined && min > availableMin ? min : undefined,
+    priceMax: availableMax !== undefined && max < availableMax ? max : undefined,
   })
 }
 
-const updateMinPrice = (value: number) => {
+const updateMinPrice = (value: string | number) => {
+  const numValue = typeof value === 'string' ? Number.parseFloat(value) : value
+  if (Number.isNaN(numValue)) return
+
   const { min: availableMin } = props.availableFilters.priceRange
   updateFilters({
-    priceMin: value > availableMin ? value : undefined,
+    priceMin: availableMin !== undefined && numValue > availableMin ? numValue : undefined,
   })
 }
 
-const updateMaxPrice = (value: number) => {
+const updateMaxPrice = (value: string | number) => {
+  const numValue = typeof value === 'string' ? Number.parseFloat(value) : value
+  if (Number.isNaN(numValue)) return
+
   const { max: availableMax } = props.availableFilters.priceRange
   updateFilters({
-    priceMax: value < availableMax ? value : undefined,
+    priceMax: availableMax !== undefined && numValue < availableMax ? numValue : undefined,
   })
 }
 
@@ -251,23 +275,14 @@ const isAttributeSelected = (attributeName: string, value: string): boolean => {
 
 const toggleAttribute = (attributeName: string, value: string) => {
   const currentValues = localFilters.value.attributes?.[attributeName] || []
-  const isSelected = currentValues.includes(value)
+  const newValues = currentValues.includes(value)
+    ? currentValues.filter(v => v !== value)
+    : [...currentValues, value]
 
-  let newValues: string[]
-  if (isSelected) {
-    newValues = currentValues.filter(v => v !== value)
-  } else {
-    newValues = [...currentValues, value]
-  }
-
-  let attributes = { ...localFilters.value.attributes }
-
-  if (newValues.length > 0) {
-    attributes[attributeName] = newValues
-  } else {
-    const { [attributeName]: _removed, ...rest } = attributes
-    attributes = rest
-  }
+  const { [attributeName]: _, ...rest } = localFilters.value.attributes || {}
+  const attributes = newValues.length > 0
+    ? { ...rest, [attributeName]: newValues }
+    : rest
 
   updateFilters({ attributes })
 }

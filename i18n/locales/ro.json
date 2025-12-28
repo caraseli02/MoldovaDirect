@@ -954,13 +954,16 @@
       "clear": "Șterge filtrele",
       "clearAllFilters": "Șterge toate filtrele active",
       "swipeToClose": "Glisează în jos sau apasă butonul închide pentru a renunța",
-      "apply": "Aplică Filtrele",
+      "apply": "Arată {count} produse | Arată {count} produs | Arată {count} produse",
+      "showingCount": "Se afișează {count} produse | Se afișează {count} produs | Se afișează {count} produse",
       "openFilters": "Deschide panoul de filtre",
       "activeCount": "{count} filtre active",
       "minPrice": "Preț Minim",
       "maxPrice": "Preț Maxim",
       "removeFilter": "Elimină filtrul {filter}",
-      "unknownCategory": "Categorie Necunoscută"
+      "unknownCategory": "Categorie Necunoscută",
+      "description": "Filtrează produsele după preț, disponibilitate și categorii",
+      "applyFilters": "Aplică filtre"
     },
     "hero": {
       "seasonal": "Recomandări de sezon",

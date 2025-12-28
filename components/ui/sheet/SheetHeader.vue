@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type HTMLAttributes, computed } from 'vue'
+import type { HTMLAttributes } from 'vue'
 import { cn } from '~/lib/utils'
 
 const props = defineProps<{
@@ -9,6 +9,6 @@ const props = defineProps<{
 
 <template>
   <div :class="cn('flex flex-col gap-2', props.class)">
-    <slot />
+    <slot></slot>
   </div>
 </template>

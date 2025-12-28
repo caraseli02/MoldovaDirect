@@ -1223,12 +1223,15 @@
       "clearAllFilters": "Limpiar todos los filtros activos",
       "swipeToClose": "Desliza hacia abajo o toca el botón cerrar para descartar",
       "apply": "Mostrar {count} productos | Mostrar {count} producto | Mostrar {count} productos",
+      "showingCount": "Mostrando {count} productos | Mostrando {count} producto | Mostrando {count} productos",
       "minPrice": "Precio Mínimo",
       "maxPrice": "Precio Máximo",
       "removeFilter": "Eliminar filtro {filter}",
       "unknownCategory": "Categoría Desconocida",
       "openFilters": "Abrir panel de filtros",
-      "activeCount": "{count} filtros activos"
+      "activeCount": "{count} filtros activos",
+      "description": "Filtrar productos por precio, disponibilidad y categorías",
+      "applyFilters": "Aplicar filtros"
     },
     "hero": {
       "seasonal": "Destacados de temporada",

@@ -1,9 +1,15 @@
 <template>
   <UiSheet v-model:open="isOpen">
-    <UiSheetContent side="bottom" class="max-h-[90vh] flex flex-col p-0">
+    <UiSheetContent
+      side="bottom"
+      class="max-h-[90vh] flex flex-col p-0"
+    >
       <!-- Drag Handle -->
       <div class="flex justify-center px-4 pt-4 pb-2">
-        <div class="h-1 w-12 rounded-full bg-zinc-300 dark:bg-zinc-700" aria-hidden="true"></div>
+        <div
+          class="h-1 w-12 rounded-full bg-zinc-300 dark:bg-zinc-700"
+          aria-hidden="true"
+        ></div>
       </div>
 
       <!-- Header -->
@@ -20,14 +26,14 @@
             {{ activeFilterCount }}
           </UiBadge>
         </div>
-        <UiSheetDescription v-if="filteredCount !== undefined">
-          {{ $t('products.filters.showingCount', { count: filteredCount }) }}
+        <UiSheetDescription class="sr-only">
+          {{ $t('products.filters.description') }}
         </UiSheetDescription>
       </UiSheetHeader>
 
       <!-- Content -->
       <div class="flex-1 overflow-y-auto px-6 py-6">
-        <slot />
+        <slot></slot>
       </div>
 
       <!-- Footer -->
@@ -48,7 +54,7 @@
             class="flex-1"
             @click="handleApply"
           >
-            {{ applyButtonLabel || $t('products.filters.apply', { count: filteredCount || 0 }) }}
+            {{ applyButtonLabel || $t('products.filters.applyFilters') }}
           </UiButton>
         </div>
       </UiSheetFooter>
@@ -57,8 +63,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
+import { computed } from 'vue'
 
 interface Props {
   modelValue: boolean
@@ -83,22 +88,15 @@ const emit = defineEmits<{
   'close': []
 }>()
 
-const { t } = useI18n()
-
-// Local state for the sheet open/close
-const isOpen = ref(props.modelValue)
-
-// Watch for external changes to modelValue
-watch(() => props.modelValue, (newValue) => {
-  isOpen.value = newValue
-})
-
-// Watch for internal changes to isOpen and emit to parent
-watch(isOpen, (newValue) => {
-  emit('update:modelValue', newValue)
-  if (!newValue) {
-    emit('close')
-  }
+// Computed v-model pattern - single source of truth
+const isOpen = computed({
+  get: () => props.modelValue,
+  set: (value: boolean) => {
+    emit('update:modelValue', value)
+    if (!value) {
+      emit('close')
+    }
+  },
 })
 
 const handleApply = () => {
