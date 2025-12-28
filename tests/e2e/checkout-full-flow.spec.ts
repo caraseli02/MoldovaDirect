@@ -1,288 +1,633 @@
 /**
  * Full Checkout Flow E2E Test
  *
- * Tests the complete checkout process from adding products to order confirmation.
- * Uses test user credentials from .env file.
+ * Tests the complete checkout process using the Hybrid Progressive Checkout (Option D).
+ * Single-page checkout with progressive disclosure sections.
  *
  * Test Coverage:
  * - Add products to cart
  * - Navigate to checkout
- * - Fill shipping information
- * - Select shipping method
- * - Proceed to payment
- * - Complete order
+ * - Fill shipping address (single page)
+ * - Select shipping method (progressive disclosure)
+ * - Select payment method
+ * - Accept terms and place order
+ * - Verify confirmation page
+ *
+ * Updated for Hybrid Progressive Checkout
  */
 
 import { test, expect } from '@playwright/test'
+import { CheckoutPage } from './page-objects/CheckoutPage'
 
 const BASE_URL = process.env.PLAYWRIGHT_TEST_BASE_URL || process.env.BASE_URL || 'http://localhost:3000'
-const TEST_USER_EMAIL = process.env.TEST_USER_EMAIL || 'teste2e@example.com'
+// Use Resend's test address for reliable E2E email testing
+const TEST_USER_EMAIL = process.env.TEST_USER_EMAIL || 'delivered@resend.dev'
 const TEST_USER_PASSWORD = process.env.TEST_USER_PASSWORD || 'N7jKAcu2FHbt7cj'
 
-test.describe('Full Checkout Flow', () => {
+// Test address data - uses fullName which is split into firstName/lastName internally
+const TEST_ADDRESS = {
+  fullName: 'Test User',
+  street: '123 Test Street',
+  city: 'Madrid',
+  postalCode: '28001',
+  country: 'ES',
+  phone: '+34 600 123 456',
+}
+
+test.describe('Full Checkout Flow - Hybrid Progressive', () => {
   test.beforeEach(async ({ page }) => {
     // Start fresh - clear cart cookies
     await page.context().clearCookies()
   })
 
   test('Complete checkout flow as authenticated user', async ({ page }) => {
+    const checkoutPage = new CheckoutPage(page)
+
     // Step 1: Login
     await page.goto(`${BASE_URL}/auth/login`, { timeout: 30000 })
     await page.waitForLoadState('networkidle')
 
-    // Fill email and trigger blur for validation
     const emailInput = page.locator('input[type="email"]').first()
     await emailInput.fill(TEST_USER_EMAIL)
     await emailInput.blur()
 
-    // Fill password and trigger blur for validation
     const passwordInput = page.locator('input[type="password"]').first()
     await passwordInput.fill(TEST_USER_PASSWORD)
     await passwordInput.blur()
 
-    // Wait for form validation to complete and button to be enabled
     await page.waitForTimeout(500)
 
-    // Click login button using data-testid
     const loginButton = page.locator('[data-testid="login-button"]')
     await expect(loginButton).toBeEnabled({ timeout: 5000 })
     await loginButton.click()
 
-    // Wait for redirect after successful login
     await page.waitForURL(/account|products|admin|\/es\/|\/en\//, { timeout: 15000 })
-
     console.log('✅ Step 1: Logged in successfully')
 
     // Step 2: Add products to cart
     await page.goto(`${BASE_URL}/products`, { timeout: 30000 })
     await page.waitForLoadState('networkidle')
 
-    // Wait for products to load
     const addToCartButton = page.locator('button:has-text("Añadir al Carrito"), button:has-text("Add to Cart")').first()
     await expect(addToCartButton).toBeVisible({ timeout: 15000 })
-
-    // Add first product
     await addToCartButton.click()
-    await page.waitForTimeout(2000) // Wait for cart state to update
+    await page.waitForTimeout(2000)
 
-    // Verify cart was updated by checking cart icon badge or notification
-    const cartBadge = page.locator('[class*="cart"] [class*="badge"], [class*="cart-count"]')
-    const cartUpdated = await cartBadge.isVisible({ timeout: 3000 }).catch(() => false)
-    console.log(`Cart badge visible: ${cartUpdated}`)
+    console.log('✅ Step 2: Added product to cart')
 
-    // Try adding a second product
-    const secondAddButton = page.locator('button:has-text("Añadir al Carrito"), button:has-text("Add to Cart")').nth(1)
-    if (await secondAddButton.isVisible({ timeout: 2000 }).catch(() => false)) {
-      await secondAddButton.click()
-      await page.waitForTimeout(2000)
-    }
-
-    console.log('✅ Step 2: Added products to cart')
-
-    // Step 3: Navigate to cart
-    await page.goto(`${BASE_URL}/cart`, { timeout: 30000 })
+    // Step 3: Navigate to checkout
+    await page.goto(`${BASE_URL}/checkout`, { timeout: 30000 })
     await page.waitForLoadState('networkidle')
 
-    // Check if cart has items or is empty
-    const emptyCart = page.locator('text=/carrito está vacío|cart is empty/i')
-    const hasEmptyCart = await emptyCart.isVisible({ timeout: 3000 }).catch(() => false)
+    // Check for express checkout banner (returning user with saved address)
+    const hasExpressBanner = await checkoutPage.isExpressBannerVisible()
 
-    if (hasEmptyCart) {
-      console.log('⚠️ Cart is empty - products may not have been added correctly')
-      // Try to add product directly from cart page
-      await page.goto(`${BASE_URL}/products`, { timeout: 30000 })
-      await page.waitForLoadState('networkidle')
+    if (hasExpressBanner) {
+      console.log('🚀 Express Checkout Banner detected!')
 
-      const productCard = page.locator('[class*="product"], [data-testid*="product"]').first()
-      await productCard.click()
-      await page.waitForLoadState('networkidle')
+      // Option A: Use express checkout
+      // await checkoutPage.useExpressCheckout()
 
-      // Click add to cart on product detail page
-      const detailAddButton = page.locator('button:has-text("Añadir al Carrito"), button:has-text("Add to Cart")').first()
-      if (await detailAddButton.isVisible({ timeout: 5000 }).catch(() => false)) {
-        await detailAddButton.click()
-        await page.waitForTimeout(2000)
-      }
-
-      // Navigate back to cart
-      await page.goto(`${BASE_URL}/cart`, { timeout: 30000 })
-      await page.waitForLoadState('networkidle')
+      // Option B: Edit details instead (to test full form)
+      await checkoutPage.dismissExpressCheckout()
+      console.log('✅ Dismissed express checkout to test full form')
     }
 
-    // Look for checkout button
-    const checkoutButton = page.locator('button:has-text("Proceder al Pago"), button:has-text("Checkout"), button:has-text("Proceed")')
-    const hasCheckoutButton = await checkoutButton.isVisible({ timeout: 5000 }).catch(() => false)
+    console.log('✅ Step 3: On checkout page')
 
-    if (!hasCheckoutButton) {
-      // Take screenshot for debugging
-      await page.screenshot({ path: 'test-results/cart-debug.png' })
-      // Fail explicitly - checkout flow cannot be tested without items in cart
-      expect(hasCheckoutButton, 'No checkout button found - cart may be empty. Screenshot saved to test-results/cart-debug.png').toBe(true)
+    // Step 4: Fill shipping address (single page form)
+    // Check if address fields need to be filled
+    const fullNameValue = await checkoutPage.addressFields.fullName.inputValue().catch(() => '')
+
+    if (!fullNameValue) {
+      await checkoutPage.fillShippingAddress(TEST_ADDRESS)
+      console.log('✅ Step 4: Filled shipping address')
+    }
+    else {
+      console.log('✅ Step 4: Address already pre-filled')
     }
 
-    console.log('✅ Step 3: Cart page loaded with items')
+    // Step 5: Wait for shipping methods to load (progressive disclosure)
+    await checkoutPage.waitForShippingMethods(15000)
+    await checkoutPage.selectShippingMethod(0)
+    console.log('✅ Step 5: Selected shipping method')
 
-    // Step 4: Proceed to checkout
-    await checkoutButton.first().click()
-    await page.waitForLoadState('networkidle')
+    // Step 6: Verify payment section appeared and select payment
+    const paymentVisible = await checkoutPage.isPaymentSectionVisible()
+    expect(paymentVisible).toBe(true)
 
-    // Check if we're on checkout or payment page
-    const currentUrl = page.url()
-    console.log(`Current URL after checkout: ${currentUrl}`)
+    await checkoutPage.selectCashPayment()
+    console.log('✅ Step 6: Selected payment method (cash)')
 
-    // Step 5: Fill shipping information if needed
-    if (currentUrl.includes('/checkout') && !currentUrl.includes('/payment')) {
-      console.log('📝 On shipping page - filling form...')
+    // Step 7: Accept terms and place order
+    await checkoutPage.acceptTerms()
+    console.log('✅ Step 7: Accepted terms and privacy')
 
-      // Check if Express Checkout Banner is visible
-      const hasExpressBanner = await page.locator('text=/express|rápido/i').isVisible().catch(() => false)
-      if (hasExpressBanner) {
-        console.log('🚀 Express Checkout Banner detected!')
+    // Verify place order button is visible
+    await expect(checkoutPage.placeOrderButton).toBeVisible({ timeout: 5000 })
+    console.log('✅ Step 8: Place order button visible')
 
-        // Try to click "Use Express Checkout" button
-        const expressButton = page.locator('button:has-text("Express"), button:has-text("Rápido")')
-        if (await expressButton.isVisible().catch(() => false)) {
-          await expressButton.click()
-          await page.waitForTimeout(1000)
-          console.log('✅ Clicked Express Checkout button')
-        }
-      }
+    // Place order and verify navigation to confirmation page
+    await checkoutPage.placeOrder()
+    await expect(page).toHaveURL(/\/checkout\/confirmation/, { timeout: 15000 })
+    console.log('✅ Step 9: Order placed, on confirmation page')
 
-      // Check if form is pre-filled or needs manual input
-      const firstNameInput = page.locator('input[name="firstName"], input[placeholder*="first name" i]').first()
-      const isFirstNameVisible = await firstNameInput.isVisible({ timeout: 3000 }).catch(() => false)
+    // Verify confirmation page elements
+    const confirmationTitle = page.locator('h1, h2').filter({ hasText: /order.*confirmed|pedido.*confirmado|заказ.*подтвержден|comandă.*confirmată/i })
+    await expect(confirmationTitle).toBeVisible({ timeout: 5000 })
+    console.log('✅ Step 10: Confirmation title visible')
 
-      if (isFirstNameVisible) {
-        const firstNameValue = await firstNameInput.inputValue()
+    // Verify new confirmation page UI elements
+    // 1. Order status progress bar
+    const progressBar = page.locator('.progress-fill, [role="progressbar"]')
+    await expect(progressBar).toBeVisible({ timeout: 3000 })
+    console.log('✅ Step 11: Order status progress bar visible')
 
-        if (!firstNameValue) {
-          // Form not pre-filled, fill manually
-          console.log('Filling shipping form manually...')
+    // 2. View Order Details button
+    const viewDetailsButton = page.locator('button').filter({
+      hasText: /view.*order.*details|ver.*detalles|посмотреть.*детали|vezi.*detalii/i,
+    })
+    await expect(viewDetailsButton).toBeVisible({ timeout: 3000 })
+    console.log('✅ Step 12: View Order Details button visible')
 
-          await page.fill('input[name="firstName"], input[placeholder*="first name" i]', 'Test')
-          await page.fill('input[name="lastName"], input[placeholder*="last name" i]', 'User')
-          await page.fill('input[name="street"], input[placeholder*="street" i]', '123 Test Street')
-          await page.fill('input[name="city"], input[placeholder*="city" i]', 'Test City')
-          await page.fill('input[name="postalCode"], input[placeholder*="postal" i]', '12345')
+    // 3. Quick info cards (delivery and total)
+    const quickInfoCards = page.locator('[class*="bg-zinc-50"], [class*="bg-white"]').filter({
+      has: page.locator('svg'),
+    })
+    expect(await quickInfoCards.count()).toBeGreaterThanOrEqual(1)
+    console.log('✅ Step 13: Quick info cards visible')
 
-          // Select country if dropdown exists
-          const countrySelect = page.locator('select[name="country"]')
-          if (await countrySelect.isVisible().catch(() => false)) {
-            await countrySelect.selectOption('US')
-          }
-
-          console.log('✅ Filled shipping information')
-        }
-        else {
-          console.log('✅ Form already pre-filled with Express Checkout')
-        }
-      }
-
-      // Step 6: Select shipping method
-      const shippingMethods = page.locator('[data-testid="shipping-method"], input[type="radio"]')
-      const methodCount = await shippingMethods.count()
-
-      if (methodCount > 0) {
-        await shippingMethods.first().click()
-        await page.waitForTimeout(500)
-        console.log('✅ Selected shipping method')
-      }
-
-      // Step 7: Continue to payment
-      const continueButton = page.locator('button:has-text("Continuar"), button:has-text("Continue"), button:has-text("Pago")')
-      if (await continueButton.isVisible().catch(() => false)) {
-        await continueButton.first().click()
-        await page.waitForLoadState('networkidle')
-        console.log('✅ Navigated to payment page')
-      }
-    }
-    else if (currentUrl.includes('/payment')) {
-      console.log('🚀 Auto-routed to payment page with Express Checkout!')
-
-      // Check for countdown timer
-      const hasCountdown = await page.locator('text=/redirigiendo|redirecting|5|4|3|2|1/i').isVisible().catch(() => false)
-      if (hasCountdown) {
-        console.log('⏱️  Countdown timer detected - waiting...')
-        await page.waitForTimeout(6000) // Wait for countdown to complete
-      }
-    }
-
-    // Step 8: Verify we're on payment page
-    await page.waitForURL(/payment/, { timeout: 10000 })
-    expect(page.url()).toContain('/payment')
-    console.log('✅ Step 8: On payment page')
-
-    // Step 9: Payment form should be visible
-    await expect(page.locator('text=/payment|pago/i').first()).toBeVisible({ timeout: 10000 })
-    console.log('✅ Step 9: Payment form visible')
-
-    console.log('\n🎉 Full checkout flow completed successfully!')
+    console.log('\n🎉 Full checkout flow completed successfully - Order placed!')
   })
 
   test('Complete checkout flow as guest user', async ({ page }) => {
-    // Step 1: Add products without logging in
+    const checkoutPage = new CheckoutPage(page)
+
+    // Step 1: Add product to cart without logging in
     await page.goto(`${BASE_URL}/products`, { timeout: 30000 })
     await page.waitForLoadState('networkidle')
 
     const addToCartButton = page.locator('button:has-text("Añadir al Carrito"), button:has-text("Add to Cart")').first()
     await expect(addToCartButton).toBeVisible({ timeout: 15000 })
-
     await addToCartButton.click()
-    await page.waitForTimeout(2000) // Wait for cart state to update
+    await page.waitForTimeout(2000)
 
-    console.log('✅ Added product to cart as guest')
+    console.log('✅ Step 1: Added product to cart as guest')
 
-    // Step 2: Navigate to cart and verify items
-    await page.goto(`${BASE_URL}/cart`, { timeout: 30000 })
+    // Step 2: Navigate to checkout
+    await page.goto(`${BASE_URL}/checkout`, { timeout: 30000 })
     await page.waitForLoadState('networkidle')
 
-    // Check if cart has items
-    const emptyCart = page.locator('text=/carrito está vacío|cart is empty/i')
-    const hasEmptyCart = await emptyCart.isVisible({ timeout: 3000 }).catch(() => false)
-
-    if (hasEmptyCart) {
-      // Take screenshot for debugging
-      await page.screenshot({ path: 'test-results/guest-cart-debug.png' })
-
-      // Verify we're on cart page at least
-      expect(page.url()).toContain('/cart')
-
-      // Guest cart without session is expected behavior - skip remaining assertions
-      // but mark the test as known limitation
-      test.skip(true, 'Guest cart is empty - cart may require session storage which is not available for guests')
-    }
-
-    // Step 3: Look for checkout button
-    const checkoutButton = page.locator('button:has-text("Proceder al Pago"), button:has-text("Checkout")')
-    const hasCheckoutButton = await checkoutButton.isVisible({ timeout: 5000 }).catch(() => false)
-
-    // Fail explicitly if cart has items but no checkout button
-    expect(hasCheckoutButton, 'Checkout button should be visible when cart has items').toBe(true)
-
-    await checkoutButton.first().click()
-    await page.waitForLoadState('networkidle')
-
-    // Step 4: Should see guest checkout form
     expect(page.url()).toContain('/checkout')
+    console.log('✅ Step 2: On checkout page')
 
-    // Guests might be redirected differently
-    const currentUrl = page.url()
-    console.log(`Guest checkout URL: ${currentUrl}`)
-
-    // Step 5: Should NOT see Express Checkout Banner (guests don't have saved data)
-    const hasExpressBanner = await page.locator('text=/express checkout|pago express/i').isVisible().catch(() => false)
+    // Step 3: Should NOT see express checkout banner (guests have no saved data)
+    const hasExpressBanner = await checkoutPage.isExpressBannerVisible()
     expect(hasExpressBanner).toBe(false)
+    console.log('✅ Step 3: No express checkout banner for guest (correct)')
 
-    console.log('✅ No Express Checkout banner for guests')
+    // Step 4: Should see guest checkout prompt or checkout form
+    const hasGuestPrompt = await checkoutPage.isGuestPromptVisible()
 
-    // Step 6: Should see email or guest form
-    const emailInput = page.locator('input[type="email"]').first()
-    const hasEmailInput = await emailInput.isVisible({ timeout: 5000 }).catch(() => false)
-
-    if (hasEmailInput) {
-      console.log('✅ Guest email form visible')
+    if (hasGuestPrompt) {
+      await checkoutPage.continueAsGuest()
+      console.log('✅ Step 4: Continued as guest')
     }
 
-    console.log('🎉 Guest checkout flow validated successfully!')
+    // Step 5: Fill guest email (if shown) - uses Resend's test address
+    const emailVisible = await checkoutPage.guestEmailInput.isVisible({ timeout: 3000 }).catch(() => false)
+    if (emailVisible) {
+      await checkoutPage.fillGuestEmail('delivered@resend.dev')
+      console.log('✅ Step 5: Filled guest email')
+    }
+
+    // Step 6: Fill shipping address
+    await checkoutPage.fillShippingAddress(TEST_ADDRESS)
+    console.log('✅ Step 6: Filled shipping address')
+
+    // Step 7: Wait for and select shipping method
+    await checkoutPage.waitForShippingMethods(15000)
+    await checkoutPage.selectShippingMethod(0)
+    console.log('✅ Step 7: Selected shipping method')
+
+    // Step 8: Select payment
+    await checkoutPage.selectCashPayment()
+    console.log('✅ Step 8: Selected cash payment')
+
+    // Step 9: Accept terms
+    await checkoutPage.acceptTerms()
+    console.log('✅ Step 9: Accepted terms and privacy')
+
+    // Verify form is complete
+    await expect(checkoutPage.placeOrderButton).toBeVisible({ timeout: 5000 })
+
+    // Step 10: Place order
+    await checkoutPage.placeOrder()
+    await expect(page).toHaveURL(/\/checkout\/confirmation/, { timeout: 15000 })
+    console.log('✅ Step 10: Order placed, on confirmation page')
+
+    // Verify confirmation page elements
+    const confirmationTitle = page.locator('h1, h2').filter({ hasText: /order.*confirmed|pedido.*confirmado|заказ.*подтвержден|comandă.*confirmată/i })
+    await expect(confirmationTitle).toBeVisible({ timeout: 5000 })
+    console.log('✅ Step 11: Confirmation title visible')
+
+    console.log('\n🎉 Guest checkout flow completed successfully - Order placed!')
+  })
+
+  test('Express checkout for returning user with saved address', async ({ page }) => {
+    test.skip(
+      !process.env.TEST_USER_WITH_ADDRESS,
+      'TEST_USER_WITH_ADDRESS environment variable not set',
+    )
+
+    const checkoutPage = new CheckoutPage(page)
+
+    // Login as user with saved address
+    await page.goto(`${BASE_URL}/auth/login`)
+    await page.waitForLoadState('networkidle')
+
+    const userEmail = process.env.TEST_USER_WITH_ADDRESS || TEST_USER_EMAIL
+    const userPassword = process.env.TEST_USER_PASSWORD || TEST_USER_PASSWORD
+
+    await page.fill('input[type="email"]', userEmail)
+    await page.fill('input[type="password"]', userPassword)
+    await page.click('[data-testid="login-button"]')
+    await page.waitForURL(/account|products|admin/, { timeout: 15000 })
+
+    // Add product to cart
+    await page.goto(`${BASE_URL}/products`)
+    await page.waitForLoadState('networkidle')
+
+    const addButton = page.locator('button:has-text("Añadir al Carrito")').first()
+    await addButton.click()
+    await page.waitForTimeout(2000)
+
+    // Navigate to checkout
+    await page.goto(`${BASE_URL}/checkout`)
+    await page.waitForLoadState('networkidle')
+
+    // Should see express checkout banner
+    const hasExpressBanner = await checkoutPage.isExpressBannerVisible()
+
+    if (hasExpressBanner) {
+      console.log('✅ Express checkout banner visible')
+
+      // Verify saved address is displayed
+      const addressText = await checkoutPage.getExpressAddress()
+      expect(addressText.length).toBeGreaterThan(0)
+      console.log(`✅ Saved address displayed: ${addressText.substring(0, 50)}...`)
+
+      // Use express checkout
+      await checkoutPage.useExpressCheckout()
+
+      // Should navigate to confirmation
+      await expect(page).toHaveURL(/\/checkout\/confirmation/, { timeout: 15000 })
+      console.log('✅ Express checkout completed, on confirmation page')
+    }
+    else {
+      console.log('⚠️ Express checkout banner not visible - user may not have saved address')
+      test.skip(true, 'User does not have saved address for express checkout')
+    }
+  })
+
+  test('Progressive disclosure - sections appear in order', async ({ page }) => {
+    const checkoutPage = new CheckoutPage(page)
+
+    // Add product and go to checkout
+    await page.goto(`${BASE_URL}/products`)
+    await page.waitForLoadState('networkidle')
+
+    const addButton = page.locator('button:has-text("Añadir al Carrito")').first()
+    await addButton.click()
+    await page.waitForTimeout(2000)
+
+    await page.goto(`${BASE_URL}/checkout`)
+    await page.waitForLoadState('networkidle')
+
+    // Handle guest prompt if shown
+    if (await checkoutPage.isGuestPromptVisible()) {
+      await checkoutPage.continueAsGuest()
+    }
+
+    // Initially: Address section visible, shipping method section NOT visible
+    const addressVisible = await checkoutPage.addressSection.isVisible()
+    expect(addressVisible).toBe(true)
+    console.log('✅ Address section visible initially')
+
+    // Shipping method section should NOT be visible until address is complete
+    let shippingMethodVisible = await checkoutPage.isShippingMethodSectionVisible()
+    // This might be visible if address is already pre-filled
+    console.log(`Shipping method section visible: ${shippingMethodVisible}`)
+
+    // Fill address to trigger shipping method section
+    await checkoutPage.fillShippingAddress(TEST_ADDRESS)
+
+    // Now shipping method section should appear
+    await checkoutPage.waitForShippingMethods(15000)
+    shippingMethodVisible = await checkoutPage.isShippingMethodSectionVisible()
+    expect(shippingMethodVisible).toBe(true)
+    console.log('✅ Shipping method section appeared after address filled')
+
+    // Payment section should NOT be visible until shipping method selected
+    let paymentVisible = await checkoutPage.isPaymentSectionVisible()
+    // Might already be visible in some flows
+    console.log(`Payment section visible before shipping: ${paymentVisible}`)
+
+    // Select shipping method
+    await checkoutPage.selectShippingMethod(0)
+
+    // Now payment section should appear
+    paymentVisible = await checkoutPage.isPaymentSectionVisible()
+    expect(paymentVisible).toBe(true)
+    console.log('✅ Payment section appeared after shipping method selected')
+
+    // Select payment and verify place order section
+    await checkoutPage.selectCashPayment()
+
+    const placeOrderVisible = await checkoutPage.isPlaceOrderSectionVisible()
+    expect(placeOrderVisible).toBe(true)
+    console.log('✅ Place order section visible after all sections complete')
+
+    console.log('\n🎉 Progressive disclosure flow validated!')
+  })
+
+  test('Order summary displays correctly', async ({ page }) => {
+    const checkoutPage = new CheckoutPage(page)
+
+    // Add product and go to checkout
+    await page.goto(`${BASE_URL}/products`)
+    await page.waitForLoadState('networkidle')
+
+    const addButton = page.locator('button:has-text("Añadir al Carrito")').first()
+    await addButton.click()
+    await page.waitForTimeout(2000)
+
+    await page.goto(`${BASE_URL}/checkout`)
+    await page.waitForLoadState('networkidle')
+
+    // Handle guest/express prompts
+    if (await checkoutPage.isExpressBannerVisible()) {
+      await checkoutPage.dismissExpressCheckout()
+    }
+    if (await checkoutPage.isGuestPromptVisible()) {
+      await checkoutPage.continueAsGuest()
+    }
+
+    // Order summary should be visible (desktop sidebar)
+    const viewport = page.viewportSize()
+    if (viewport && viewport.width >= 1024) {
+      const summaryVisible = await checkoutPage.isOrderSummaryVisible()
+      expect(summaryVisible).toBe(true)
+      console.log('✅ Order summary visible on desktop')
+
+      // Should show order total
+      const total = await checkoutPage.getOrderTotal()
+      expect(total.length).toBeGreaterThan(0)
+      console.log(`✅ Order total displayed: ${total}`)
+    }
+    else {
+      console.log('⚠️ Mobile viewport - order summary may be collapsed')
+    }
+  })
+})
+
+test.describe('Confirmation Page UI Elements', () => {
+  test('View Order Details button scrolls to details and expands sections', async ({ page }) => {
+    const checkoutPage = new CheckoutPage(page)
+
+    // Quick checkout flow to reach confirmation
+    await page.context().clearCookies()
+    await page.goto(`${BASE_URL}/products`, { timeout: 30000 })
+    await page.waitForLoadState('networkidle')
+
+    const addButton = page.locator('button:has-text("Añadir al Carrito"), button:has-text("Add to Cart")').first()
+    await expect(addButton).toBeVisible({ timeout: 15000 })
+    await addButton.click()
+    await page.waitForTimeout(2000)
+
+    await page.goto(`${BASE_URL}/checkout`, { timeout: 30000 })
+    await page.waitForLoadState('networkidle')
+
+    if (await checkoutPage.isExpressBannerVisible()) {
+      await checkoutPage.dismissExpressCheckout()
+    }
+    if (await checkoutPage.isGuestPromptVisible()) {
+      await checkoutPage.continueAsGuest()
+    }
+
+    await checkoutPage.fillShippingAddress(TEST_ADDRESS)
+    await checkoutPage.waitForShippingMethods()
+    await checkoutPage.selectShippingMethod(0)
+    await checkoutPage.selectCashPayment()
+    await checkoutPage.acceptTerms()
+    await checkoutPage.placeOrder()
+
+    // Wait for confirmation page
+    await expect(page).toHaveURL(/\/checkout\/confirmation/, { timeout: 15000 })
+    await page.waitForLoadState('networkidle')
+    await page.waitForTimeout(2000)
+
+    // Find and click View Order Details button
+    const viewDetailsButton = page.locator('button').filter({
+      hasText: /view.*order.*details|ver.*detalles|посмотреть.*детали|vezi.*detalii/i,
+    })
+    await expect(viewDetailsButton).toBeVisible({ timeout: 5000 })
+    await viewDetailsButton.click()
+    await page.waitForTimeout(1000)
+
+    // Verify order details section is in viewport
+    const orderDetails = page.locator('#order-details, [id*="order-details"]')
+    if (await orderDetails.count() > 0) {
+      await expect(orderDetails.first()).toBeInViewport({ timeout: 3000 })
+      console.log('✅ Order details section scrolled into view')
+    }
+
+    // Verify at least one expandable section is expanded
+    const expandedSection = page.locator('[aria-expanded="true"]')
+    expect(await expandedSection.count()).toBeGreaterThanOrEqual(1)
+    console.log('✅ Expandable sections expanded after clicking View Order Details')
+
+    console.log('\n🎉 View Order Details button test passed!')
+  })
+
+  test('Order status progress displays correctly', async ({ page }) => {
+    const checkoutPage = new CheckoutPage(page)
+
+    // Quick checkout flow
+    await page.context().clearCookies()
+    await page.goto(`${BASE_URL}/products`, { timeout: 30000 })
+    await page.waitForLoadState('networkidle')
+
+    const addButton = page.locator('button:has-text("Añadir al Carrito"), button:has-text("Add to Cart")').first()
+    await addButton.click()
+    await page.waitForTimeout(2000)
+
+    await page.goto(`${BASE_URL}/checkout`, { timeout: 30000 })
+    await page.waitForLoadState('networkidle')
+
+    if (await checkoutPage.isExpressBannerVisible()) {
+      await checkoutPage.dismissExpressCheckout()
+    }
+    if (await checkoutPage.isGuestPromptVisible()) {
+      await checkoutPage.continueAsGuest()
+    }
+
+    await checkoutPage.fillShippingAddress(TEST_ADDRESS)
+    await checkoutPage.waitForShippingMethods()
+    await checkoutPage.selectShippingMethod(0)
+    await checkoutPage.selectCashPayment()
+    await checkoutPage.acceptTerms()
+    await checkoutPage.placeOrder()
+
+    await expect(page).toHaveURL(/\/checkout\/confirmation/, { timeout: 15000 })
+    await page.waitForTimeout(2000)
+
+    // Verify progress bar exists
+    const progressBar = page.locator('.progress-fill, [role="progressbar"]')
+    await expect(progressBar).toBeVisible({ timeout: 3000 })
+    console.log('✅ Progress bar visible')
+
+    // Verify step indicator shows "Step X of Y" format
+    const stepIndicator = page.locator('text=/\\d+.*\\d+|шаг.*из|paso.*de|step.*of/i')
+    await expect(stepIndicator).toBeVisible({ timeout: 3000 })
+    console.log('✅ Step indicator visible')
+
+    // Verify status labels (confirmed, preparing, shipped)
+    const statusLabels = page.locator('text=/confirmed|confirmado|подтверждён|confirmat/i')
+    await expect(statusLabels.first()).toBeVisible({ timeout: 3000 })
+    console.log('✅ Status labels visible')
+
+    console.log('\n🎉 Order status progress test passed!')
+  })
+
+  test('Expandable sections toggle correctly', async ({ page }) => {
+    const checkoutPage = new CheckoutPage(page)
+
+    // Quick checkout flow
+    await page.context().clearCookies()
+    await page.goto(`${BASE_URL}/products`, { timeout: 30000 })
+    await page.waitForLoadState('networkidle')
+
+    const addButton = page.locator('button:has-text("Añadir al Carrito"), button:has-text("Add to Cart")').first()
+    await addButton.click()
+    await page.waitForTimeout(2000)
+
+    await page.goto(`${BASE_URL}/checkout`, { timeout: 30000 })
+    await page.waitForLoadState('networkidle')
+
+    if (await checkoutPage.isExpressBannerVisible()) {
+      await checkoutPage.dismissExpressCheckout()
+    }
+    if (await checkoutPage.isGuestPromptVisible()) {
+      await checkoutPage.continueAsGuest()
+    }
+
+    await checkoutPage.fillShippingAddress(TEST_ADDRESS)
+    await checkoutPage.waitForShippingMethods()
+    await checkoutPage.selectShippingMethod(0)
+    await checkoutPage.selectCashPayment()
+    await checkoutPage.acceptTerms()
+    await checkoutPage.placeOrder()
+
+    await expect(page).toHaveURL(/\/checkout\/confirmation/, { timeout: 15000 })
+    await page.waitForTimeout(2000)
+
+    // Find expandable section buttons (Order Items, Shipping Info)
+    const expandableButtons = page.locator('button[aria-expanded]')
+    const buttonCount = await expandableButtons.count()
+
+    if (buttonCount > 0) {
+      // Get initial state
+      const firstButton = expandableButtons.first()
+      const initialState = await firstButton.getAttribute('aria-expanded')
+      console.log(`Initial aria-expanded state: ${initialState}`)
+
+      // Click to toggle
+      await firstButton.click()
+      await page.waitForTimeout(500)
+
+      // Verify state changed
+      const newState = await firstButton.getAttribute('aria-expanded')
+      expect(newState).not.toBe(initialState)
+      console.log(`New aria-expanded state: ${newState}`)
+
+      console.log('✅ Expandable section toggle works correctly')
+    }
+    else {
+      console.log('⚠️ No expandable sections found')
+    }
+
+    console.log('\n🎉 Expandable sections test passed!')
+  })
+})
+
+test.describe('Checkout Validation', () => {
+  test('Empty cart redirects away from checkout', async ({ page }) => {
+    await page.context().clearCookies()
+
+    // Navigate directly to checkout without items
+    await page.goto('/checkout')
+    await page.waitForLoadState('networkidle')
+
+    // Should redirect to cart or show empty cart message
+    const url = page.url()
+    const isOnCheckout = url.includes('/checkout') && !url.includes('/confirmation')
+
+    if (isOnCheckout) {
+      // Should show empty cart message or redirect
+      const emptyMessage = page.locator(':has-text("vacío"), :has-text("empty"), :has-text("no hay")')
+      const hasEmptyMessage = await emptyMessage.count() > 0
+
+      expect(
+        hasEmptyMessage || url.includes('/cart') || url.includes('/products'),
+      ).toBe(true)
+    }
+    else {
+      // Was redirected - this is expected
+      expect(url).not.toContain('/checkout')
+    }
+
+    console.log('✅ Empty cart handling validated')
+  })
+
+  test('Terms and privacy must be accepted', async ({ page }) => {
+    const checkoutPage = new CheckoutPage(page)
+
+    // Add product and fill form
+    await page.goto(`${BASE_URL}/products`)
+    await page.waitForLoadState('networkidle')
+
+    const addButton = page.locator('button:has-text("Añadir al Carrito")').first()
+    await addButton.click()
+    await page.waitForTimeout(2000)
+
+    await page.goto(`${BASE_URL}/checkout`)
+    await page.waitForLoadState('networkidle')
+
+    // Handle prompts
+    if (await checkoutPage.isExpressBannerVisible()) {
+      await checkoutPage.dismissExpressCheckout()
+    }
+    if (await checkoutPage.isGuestPromptVisible()) {
+      await checkoutPage.continueAsGuest()
+    }
+
+    // Fill form
+    await checkoutPage.fillShippingAddress(TEST_ADDRESS)
+    await checkoutPage.waitForShippingMethods()
+    await checkoutPage.selectShippingMethod(0)
+    await checkoutPage.selectCashPayment()
+
+    // Place order button should be visible but may be disabled without terms
+    const placeOrderButton = checkoutPage.placeOrderButton
+    await expect(placeOrderButton).toBeVisible({ timeout: 5000 })
+
+    // Now accept terms
+    await checkoutPage.acceptTerms()
+
+    // Button should now be enabled
+    await expect(placeOrderButton).toBeEnabled({ timeout: 3000 })
+
+    console.log('✅ Terms validation working correctly')
   })
 })

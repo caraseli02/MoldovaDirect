@@ -55,6 +55,8 @@ test.describe('Homepage Visual Regression', () => {
     await page.setViewportSize({ width: 768, height: 1024 })
 
     await expect(page.locator('main')).toBeVisible()
+    // Wait for page to stabilize (scrollbar/layout changes)
+    await page.waitForTimeout(1000)
 
     await expect(page).toHaveScreenshot('homepage-tablet.png', {
       ...screenshotOptions,
