@@ -128,7 +128,7 @@
 
           <!-- Personal Info Section (Expanded by Default) -->
           <ProfileAccordionSection
-            ref="accordionRefs.personal"
+            ref="personalAccordion"
             :title="$t('profile.sections.personalInfo')"
             :subtitle="$t('profile.sections.personalInfoSubtitle')"
             icon="lucide:user"
@@ -217,7 +217,7 @@
 
           <!-- Preferences Section -->
           <ProfileAccordionSection
-            ref="accordionRefs.preferences"
+            ref="preferencesAccordion"
             :title="$t('profile.sections.preferences')"
             :subtitle="$t('profile.sections.preferencesSubtitle')"
             icon="lucide:settings"
@@ -288,7 +288,7 @@
 
           <!-- Addresses Section -->
           <ProfileAccordionSection
-            ref="accordionRefs.addresses"
+            ref="addressesAccordion"
             :title="$t('profile.addresses')"
             :subtitle="addressCountText"
             icon="lucide:map-pin"
@@ -393,7 +393,7 @@
 
           <!-- Security Section -->
           <ProfileAccordionSection
-            ref="accordionRefs.security"
+            ref="securityAccordion"
             :title="$t('profile.sections.security')"
             :subtitle="$t('profile.sections.securitySubtitle')"
             icon="lucide:lock"
@@ -705,18 +705,24 @@ const deleteAddressModalRef = ref<HTMLElement>()
 const passwordModalCloseBtn = ref<InstanceType<typeof Button>>()
 const twoFAModalCloseBtn = ref<InstanceType<typeof Button>>()
 
-// Accordion refs for keyboard navigation
+// Accordion refs for keyboard navigation using Vue 3.5+ useTemplateRef
 type AccordionKey = 'personal' | 'preferences' | 'addresses' | 'security'
-const accordionRefs = reactive<Record<AccordionKey, InstanceType<typeof ProfileAccordionSection> | null>>({
-  personal: null,
-  preferences: null,
-  addresses: null,
-  security: null,
-})
+const personalAccordionRef = useTemplateRef<InstanceType<typeof ProfileAccordionSection>>('personalAccordion')
+const preferencesAccordionRef = useTemplateRef<InstanceType<typeof ProfileAccordionSection>>('preferencesAccordion')
+const addressesAccordionRef = useTemplateRef<InstanceType<typeof ProfileAccordionSection>>('addressesAccordion')
+const securityAccordionRef = useTemplateRef<InstanceType<typeof ProfileAccordionSection>>('securityAccordion')
+
+// Map for easy lookup
+const accordionRefs: Record<AccordionKey, Ref<InstanceType<typeof ProfileAccordionSection> | null>> = {
+  personal: personalAccordionRef,
+  preferences: preferencesAccordionRef,
+  addresses: addressesAccordionRef,
+  security: securityAccordionRef,
+}
 
 // Focus a specific accordion section for keyboard navigation
 const focusAccordion = (section: AccordionKey) => {
-  const accordion = accordionRefs[section]
+  const accordion = accordionRefs[section].value
   if (accordion?.focus) {
     accordion.focus()
   }
