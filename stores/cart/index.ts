@@ -6,7 +6,7 @@
  */
 
 import { defineStore } from 'pinia'
-import { computed, watch } from 'vue'
+import { computed, watch, nextTick } from 'vue'
 import { useCartCore } from './core'
 import { useCartPersistence } from './persistence'
 import { useCartValidation } from './validation'
@@ -408,70 +408,78 @@ export const useCartStore = defineStore('cart', () => {
   // =============================================
   // EAGER HYDRATION - Industry Standard Pattern
   // =============================================
-  // Immediately try to hydrate cart from storage when store is created
-  // This ensures cart items are visible as soon as possible on page load
+  // Load cart from storage AFTER Vue hydration is complete
+  // This prevents hydration mismatch between SSR (empty cart) and client (cart with items)
+
+  // Flag to track if eager hydration has run
+  let eagerHydrationComplete = false
 
   if (import.meta.client) {
-    // Only hydrate if cart is currently empty (prevents duplicates on hot reload)
-    if (items.value.length === 0) {
-      // Check if cookie already has data (available immediately on hydration)
-      const existingCookieData = cartCookie.value
-      if (existingCookieData?.items?.length) {
-        console.log('🔄 Eager hydration: Found', existingCookieData.items.length, 'items in cookie')
-        try {
-          // Restore items to core state using directAddItem to bypass analytics/security
-          for (const item of existingCookieData.items) {
-            const product = {
-              id: item.product.id,
-              slug: item.product.slug,
-              name: item.product.name,
-              price: item.product.price,
-              images: item.product.images || [],
-              stock: item.product.stock,
-            }
-            // Use direct add to avoid triggering save (data is already persisted)
-            core.addItem(product, item.quantity)
-          }
-          // Mark as initialized to prevent double-load
-          isInitialized = true
-          console.log('✅ Eager hydration complete')
-        }
-        catch (e) {
-          console.warn('⚠️ Eager hydration failed, will retry on initializeCart:', e)
-        }
-      }
-      else {
-        // Check localStorage backup
-        try {
-          const backupStr = localStorage.getItem(COOKIE_NAMES.CART + '_backup')
-          if (backupStr) {
-            const backupData = JSON.parse(backupStr) as CartCookieData
-            if (backupData?.items?.length) {
-              console.log('🔄 Eager hydration: Found', backupData.items.length, 'items in localStorage backup')
-              for (const item of backupData.items) {
-                const product = {
-                  id: item.product.id,
-                  slug: item.product.slug,
-                  name: item.product.name,
-                  price: item.product.price,
-                  images: item.product.images || [],
-                  stock: item.product.stock,
-                }
-                core.addItem(product, item.quantity)
+    // Use nextTick to defer hydration until after Vue's initial hydration phase
+    // This prevents the "Hydration completed but contains mismatches" error
+    nextTick(() => {
+      // Only hydrate if cart is currently empty and hasn't been initialized yet
+      if (items.value.length === 0 && !isInitialized && !eagerHydrationComplete) {
+        eagerHydrationComplete = true
+
+        // Check if cookie already has data
+        const existingCookieData = cartCookie.value
+        if (existingCookieData?.items?.length) {
+          console.log('🔄 Eager hydration: Found', existingCookieData.items.length, 'items in cookie')
+          try {
+            // Restore items to core state
+            for (const item of existingCookieData.items) {
+              const product = {
+                id: item.product.id,
+                slug: item.product.slug,
+                name: item.product.name,
+                price: item.product.price,
+                images: item.product.images || [],
+                stock: item.product.stock,
               }
-              // Sync to cookie
-              cartCookie.value = backupData
-              // Mark as initialized
-              isInitialized = true
-              console.log('✅ Eager hydration from localStorage complete')
+              core.addItem(product, item.quantity)
             }
+            // Mark as initialized to prevent double-load
+            isInitialized = true
+            console.log('✅ Eager hydration complete')
+          }
+          catch (e) {
+            console.warn('⚠️ Eager hydration failed, will retry on initializeCart:', e)
           }
         }
-        catch (e) {
-          console.warn('⚠️ Eager hydration from localStorage failed:', e)
+        else {
+          // Check localStorage backup
+          try {
+            const backupStr = localStorage.getItem(COOKIE_NAMES.CART + '_backup')
+            if (backupStr) {
+              const backupData = JSON.parse(backupStr) as CartCookieData
+              if (backupData?.items?.length) {
+                console.log('🔄 Eager hydration: Found', backupData.items.length, 'items in localStorage backup')
+                for (const item of backupData.items) {
+                  const product = {
+                    id: item.product.id,
+                    slug: item.product.slug,
+                    name: item.product.name,
+                    price: item.product.price,
+                    images: item.product.images || [],
+                    stock: item.product.stock,
+                  }
+                  core.addItem(product, item.quantity)
+                }
+                // Sync to cookie
+                cartCookie.value = backupData
+                // Mark as initialized
+                isInitialized = true
+                console.log('✅ Eager hydration from localStorage complete')
+              }
+            }
+          }
+          catch (e) {
+            console.warn('⚠️ Eager hydration from localStorage failed:', e)
+          }
         }
       }
-    }
+    })
   }
 
   // =============================================
