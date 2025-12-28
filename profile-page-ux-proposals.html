@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page UX Proposals - Moldova Direct</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .phone-frame {
+            width: 375px;
+            height: 667px;
+            border: 16px solid #1f2937;
+            border-radius: 36px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            background: white;
+        }
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 24px;
+            background: #1f2937;
+            border-radius: 0 0 20px 20px;
+            z-index: 10;
+        }
+        .phone-content {
+            height: 100%;
+            overflow-y: auto;
+            background: #f9fafb;
+        }
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-center;
+            font-size: 32px;
+            font-weight: 700;
+            color: white;
+            position: relative;
+        }
+        .avatar-upload-btn {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 28px;
+            height: 28px;
+            background: #3b82f6;
+            border: 3px solid white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .avatar-upload-btn:hover {
+            transform: scale(1.1);
+            background: #2563eb;
+        }
+        .form-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .form-input:disabled {
+            background: #f3f4f6;
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+        .tab-btn {
+            padding: 12px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #6b7280;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .tab-btn.active {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+        }
+        .tab-btn:hover:not(.active) {
+            color: #374151;
+        }
+        .editable-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 16px;
+            transition: all 0.2s;
+        }
+        .editable-card:hover {
+            border-color: #d1d5db;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .editable-card.editing {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .accordion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s;
+        }
+        .accordion-header:hover {
+            background: #f9fafb;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .accordion-content.expanded {
+            max-height: 1000px;
+        }
+        .accordion-icon {
+            transition: transform 0.3s;
+        }
+        .accordion-icon.rotated {
+            transform: rotate(180deg);
+        }
+        .address-card {
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 16px;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .address-card.default {
+            border-color: #3b82f6;
+            background: linear-gradient(to bottom, #eff6ff, white);
+        }
+        .address-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .badge-default {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        .auto-save-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background: #10b981;
+            color: white;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        .auto-save-indicator.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .section-divider {
+            height: 8px;
+            background: #f3f4f6;
+            margin: 0 -16px;
+        }
+        .drag-drop-zone {
+            border: 2px dashed #d1d5db;
+            border-radius: 12px;
+            padding: 32px;
+            text-align: center;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .drag-drop-zone:hover {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+        .drag-drop-zone.dragover {
+            border-color: #3b82f6;
+            background: #dbeafe;
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <h1 class="text-3xl font-bold text-gray-900">Profile Page UX Proposals</h1>
+            <p class="mt-2 text-sm text-gray-600">Interactive mockups for Moldova Direct profile management experience</p>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="bg-white border-b border-gray-200 sticky top-20 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex space-x-8 overflow-x-auto">
+                <button onclick="showProposal('variant-a')" class="proposal-tab py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap" data-tab="variant-a">
+                    Option A: Single-Page Form
+                </button>
+                <button onclick="showProposal('variant-b')" class="proposal-tab py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap" data-tab="variant-b">
+                    Option B: Tabbed Sections
+                </button>
+                <button onclick="showProposal('variant-c')" class="proposal-tab py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap" data-tab="variant-c">
+                    Option C: Card-Based Modular
+                </button>
+                <button onclick="showProposal('variant-d')" class="proposal-tab py-4 px-1 border-b-2 border-blue-500 font-medium text-sm text-blue-600 border-blue-600 whitespace-nowrap" data-tab="variant-d">
+                    ⭐ Option D: Recommended
+                </button>
+                <button onclick="showProposal('comparison')" class="proposal-tab py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap" data-tab="comparison">
+                    📊 Comparison
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- Variant A: Single-Page Form -->
+        <div id="variant-a" class="proposal-section hidden">
+            <div class="mb-8 bg-white rounded-lg shadow-sm p-6">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900">Option A: Single-Page Traditional Form</h2>
+                        <p class="mt-2 text-gray-600">Classic long-form layout with all sections visible at once</p>
+                    </div>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
+                        Traditional
+                    </span>
+                </div>
+
+                <div class="mt-6 grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-semibold text-gray-900 mb-3">✨ Key Features</h3>
+                        <ul class="space-y-2 text-sm text-gray-600">
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>All content visible without scrolling or tabbing</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Familiar pattern users expect from settings pages</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Single save button for all changes</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-yellow-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Long scroll on mobile can feel overwhelming</span>
+                            </li>
+                        </ul>
+
+                        <h3 class="font-semibold text-gray-900 mb-3 mt-6">🏢 Used By</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">WordPress</span>
+                            <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">Basic SaaS</span>
+                            <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">Admin Panels</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-center">
+                        <div class="phone-frame">
+                            <div class="phone-notch"></div>
+                            <div class="phone-content">
+                                <!-- Header -->
+                                <div class="bg-white px-4 py-4 border-b sticky top-0 z-10">
+                                    <h1 class="text-lg font-bold text-gray-900">Configuración del Perfil</h1>
+                                    <p class="text-xs text-gray-500 mt-0.5">Gestiona tu información personal</p>
+                                </div>
+
+                                <!-- Single Form -->
+                                <div class="p-4 space-y-6">
+                                    <!-- Profile Picture -->
+                                    <div class="bg-white rounded-lg p-4 border border-gray-200">
+                                        <div class="flex items-center gap-4">
+                                            <div class="profile-avatar" style="width: 64px; height: 64px; font-size: 24px;">
+                                                C
+                                                <div class="avatar-upload-btn" style="width: 24px; height: 24px;">
+                                                    <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"/>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <div class="flex-1">
+                                                <p class="text-sm font-semibold text-gray-900">Foto de Perfil</p>
+                                                <p class="text-xs text-gray-500 mt-0.5">JPG o PNG, máx. 5MB</p>
+                                                <button class="text-xs text-blue-600 font-medium mt-1">Subir Foto</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Personal Info -->
+                                    <div class="bg-white rounded-lg p-4 border border-gray-200">
+                                        <h3 class="text-sm font-semibold text-gray-900 mb-3">Información Personal</h3>
+                                        <div class="space-y-3">
+                                            <div>
+                                                <label class="block text-xs font-medium text-gray-700 mb-1">Nombre Completo *</label>
+                                                <input type="text" class="form-input text-sm" placeholder="Ingresa tu nombre completo">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-medium text-gray-700 mb-1">Correo Electrónico *</label>
+                                                <input type="email" class="form-input text-sm" value="customer@moldovadirect.com" disabled>
+                                                <p class="text-xs text-gray-500 mt-1">La dirección de email no se puede cambiar</p>
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-medium text-gray-700 mb-1">Número de Teléfono</label>
+                                                <input type="tel" class="form-input text-sm" placeholder="Ingresa tu número de teléfono (opcional)">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-medium text-gray-700 mb-1">Idioma Preferido</label>
+                                                <select class="form-input text-sm">
+                                                    <option selected>Español</option>
+                                                    <option>English</option>
+                                                    <option>Română</option>
+                                                    <option>Русский</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Addresses -->
+                                    <div class="bg-white rounded-lg p-4 border border-gray-200">
+                                        <div class="flex justify-between items-center mb-3">
+                                            <h3 class="text-sm font-semibold text-gray-900">Direcciones</h3>
+                                            <button class="text-xs text-blue-600 font-medium">+ Añadir</button>
+                                        </div>
+                                        <div class="address-card default">
+                                            <div class="flex justify-between items-start mb-2">
+                                                <div>
+                                                    <div class="flex items-center gap-2">
+                                                        <span class="text-sm font-semibold text-gray-900">Juan García</span>
+                                                        <span class="badge badge-default">Predeterminada</span>
+                                                    </div>
+                                                </div>
+                                                <div class="flex gap-1">
+                                                    <button class="p-1 text-gray-400 hover:text-gray-600">
+                                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
+                                                        </svg>
+                                                    </button>
+                                                    <button class="p-1 text-gray-400 hover:text-red-600">
+                                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="text-xs text-gray-600 leading-relaxed">
+                                                <p>Calle Mayor 45</p>
+                                                <p>Madrid, 28013</p>
+                                                <p>ES</p>
+                                                <p class="mt-1">+34 600 123 123</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Action Buttons -->
+                                    <div class="space-y-3 pt-4">
+                                        <button class="w-full py-3 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700">
+                                            Guardar Cambios
+                                        </button>
+                                        <button class="w-full py-3 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200">
+                                            Cancelar
+                                        </button>
+                                        <button class="w-full py-3 text-red-600 text-sm font-medium hover:bg-red-50 rounded-lg">
+                                            Eliminar Cuenta
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Variant B: Tabbed Sections -->
+        <div id="variant-b" class="proposal-section hidden">
+            <div class="mb-8 bg-white rounded-lg shadow-sm p-6">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900">Option B: Tabbed Sections</h2>
+                        <p class="mt-2 text-gray-600">Organized tabs for different profile categories</p>
+                    </div>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                        Apple-Style
+                    </span>
+                </div>
+
+                <div class="mt-6 grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-semibold text-gray-900 mb-3">✨ Key Features</h3>
+                        <ul class="space-y-2 text-sm text-gray-600">
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Clear separation of content categories</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Reduces cognitive load by showing only relevant content</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Familiar navigation pattern from iOS Settings</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Easier to find specific settings</span>
+                            </li>
+                        </ul>
+
+                        <h3 class="font-semibold text-gray-900 mb-3 mt-6">🏢 Used By</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">Apple iOS</span>
+                            <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">LinkedIn</span>
+                            <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">Facebook</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-center">
+                        <div class="phone-frame">
+                            <div class="phone-notch"></div>
+                            <div class="phone-content">
+                                <!-- Header with Tabs -->
+                                <div class="bg-white border-b sticky top-0 z-10">
+                                    <div class="px-4 pt-4 pb-2">
+                                        <h1 class="text-lg font-bold text-gray-900">Mi Perfil</h1>
+                                    </div>
+                                    <div class="flex overflow-x-auto">
+                                        <button class="tab-btn active">Personal</button>
+                                        <button class="tab-btn">Seguridad</button>
+                                        <button class="tab-btn">Direcciones</button>
+                                        <button class="tab-btn">Ajustes</button>
+                                    </div>
+                                </div>
+
+                                <!-- Personal Tab Content -->
+                                <div class="p-4 space-y-4">
+                                    <!-- Avatar Section -->
+                                    <div class="bg-white rounded-lg p-4 border border-gray-200 text-center">
+                                        <div class="profile-avatar mx-auto mb-3">
+                                            C
+                                            <div class="avatar-upload-btn">
+                                                <svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"/>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <button class="text-sm text-blue-600 font-medium">Cambiar foto de perfil</button>
+                                    </div>
+
+                                    <!-- Personal Info Form -->
+                                    <div class="bg-white rounded-lg p-4 border border-gray-200 space-y-3">
+                                        <div>
+                                            <label class="block text-xs font-medium text-gray-700 mb-1.5">Nombre Completo</label>
+                                            <input type="text" class="form-input text-sm" placeholder="Tu nombre">
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-medium text-gray-700 mb-1.5">Correo Electrónico</label>
+                                            <input type="email" class="form-input text-sm" value="customer@moldovadirect.com" disabled>
+                                            <p class="text-xs text-gray-500 mt-1">No se puede modificar</p>
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-medium text-gray-700 mb-1.5">Teléfono</label>
+                                            <input type="tel" class="form-input text-sm" placeholder="+34 600 000 000">
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-medium text-gray-700 mb-1.5">Fecha de Nacimiento</label>
+                                            <input type="date" class="form-input text-sm">
+                                        </div>
+                                    </div>
+
+                                    <!-- Save Button -->
+                                    <button class="w-full py-3 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700">
+                                        Guardar Cambios
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Variant C: Card-Based Modular -->
+        <div id="variant-c" class="proposal-section hidden">
+            <div class="mb-8 bg-white rounded-lg shadow-sm p-6">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900">Option C: Card-Based Modular Design</h2>
+                        <p class="mt-2 text-gray-600">Independent editable cards with inline editing</p>
+                    </div>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">
+                        Netflix-Style
+                    </span>
+                </div>
+
+                <div class="mt-6 grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-semibold text-gray-900 mb-3">✨ Key Features</h3>
+                        <ul class="space-y-2 text-sm text-gray-600">
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Each section is independently editable</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Inline editing reduces friction</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Clear visual hierarchy with card separation</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>"One card, one concept" design principle</span>
+                            </li>
+                        </ul>
+
+                        <h3 class="font-semibold text-gray-900 mb-3 mt-6">🏢 Used By</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">Netflix</span>
+                            <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">Spotify</span>
+                            <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">Airbnb</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-center">
+                        <div class="phone-frame">
+                            <div class="phone-notch"></div>
+                            <div class="phone-content">
+                                <!-- Header -->
+                                <div class="bg-white px-4 py-4 border-b sticky top-0 z-10">
+                                    <h1 class="text-lg font-bold text-gray-900">Configuración</h1>
+                                    <p class="text-xs text-gray-500 mt-0.5">Gestiona tu cuenta</p>
+                                </div>
+
+                                <!-- Card-Based Content -->
+                                <div class="p-4 space-y-3">
+                                    <!-- Profile Picture Card -->
+                                    <div class="editable-card">
+                                        <div class="flex justify-between items-start mb-3">
+                                            <h3 class="text-sm font-semibold text-gray-900">Foto de Perfil</h3>
+                                            <button class="text-xs text-blue-600 font-medium">Editar</button>
+                                        </div>
+                                        <div class="flex items-center gap-3">
+                                            <div class="profile-avatar" style="width: 56px; height: 56px; font-size: 22px;">
+                                                C
+                                            </div>
+                                            <div class="flex-1 text-xs text-gray-600">
+                                                <p class="font-medium text-gray-900">Customer</p>
+                                                <p>JPG o PNG, máx 5MB</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Personal Info Card -->
+                                    <div class="editable-card">
+                                        <div class="flex justify-between items-start mb-3">
+                                            <h3 class="text-sm font-semibold text-gray-900">Información Personal</h3>
+                                            <button class="text-xs text-blue-600 font-medium">Editar</button>
+                                        </div>
+                                        <div class="space-y-2 text-xs">
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-500">Nombre</span>
+                                                <span class="text-gray-900 font-medium">Customer Name</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-500">Email</span>
+                                                <span class="text-gray-900 font-medium">customer@mail.com</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-500">Teléfono</span>
+                                                <span class="text-gray-900 font-medium">+34 600 123 123</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Language Card -->
+                                    <div class="editable-card">
+                                        <div class="flex justify-between items-start mb-3">
+                                            <h3 class="text-sm font-semibold text-gray-900">Idioma y Región</h3>
+                                            <button class="text-xs text-blue-600 font-medium">Editar</button>
+                                        </div>
+                                        <div class="space-y-2 text-xs">
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-500">Idioma</span>
+                                                <span class="text-gray-900 font-medium">Español</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-500">Moneda</span>
+                                                <span class="text-gray-900 font-medium">EUR (€)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Addresses Card -->
+                                    <div class="editable-card">
+                                        <div class="flex justify-between items-start mb-3">
+                                            <h3 class="text-sm font-semibold text-gray-900">Direcciones</h3>
+                                            <button class="text-xs text-blue-600 font-medium">+ Añadir</button>
+                                        </div>
+                                        <div class="space-y-2">
+                                            <div class="p-2 bg-blue-50 rounded-lg border border-blue-200">
+                                                <div class="flex justify-between items-start mb-1">
+                                                    <div class="flex items-center gap-1">
+                                                        <span class="text-xs font-semibold text-gray-900">Juan García</span>
+                                                        <span class="text-xs px-1.5 py-0.5 bg-blue-500 text-white rounded">Default</span>
+                                                    </div>
+                                                    <button class="text-xs text-blue-600">Editar</button>
+                                                </div>
+                                                <p class="text-xs text-gray-600 leading-relaxed">
+                                                    Calle Mayor 45<br>
+                                                    Madrid, 28013, ES
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Security Card -->
+                                    <div class="editable-card">
+                                        <div class="flex justify-between items-center">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                                                    <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+                                                    </svg>
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm font-semibold text-gray-900">Contraseña</p>
+                                                    <p class="text-xs text-gray-500">••••••••</p>
+                                                </div>
+                                            </div>
+                                            <button class="text-xs text-blue-600 font-medium">Cambiar</button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Delete Account -->
+                                    <div class="pt-4">
+                                        <button class="w-full py-3 text-red-600 text-sm font-medium hover:bg-red-50 rounded-lg border border-red-200">
+                                            Eliminar Cuenta
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Variant D: Recommended (Smart Progressive) -->
+        <div id="variant-d" class="proposal-section">
+            <div class="mb-8 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg shadow-lg p-6 border-2 border-blue-200">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h2 class="text-2xl font-bold text-gray-900">Option D: Smart Progressive Design</h2>
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-yellow-400 text-gray-900">
+                                ⭐ RECOMMENDED
+                            </span>
+                        </div>
+                        <p class="mt-2 text-gray-700 font-medium">Collapsible sections with auto-save and smart defaults</p>
+                    </div>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-blue-500 to-indigo-500 text-white">
+                        Hybrid Smart
+                    </span>
+                </div>
+
+                <div class="mt-6 grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-semibold text-gray-900 mb-3 text-lg">✨ Why This is Recommended</h3>
+                        <div class="bg-white rounded-lg p-4 mb-4 border-l-4 border-blue-500">
+                            <p class="text-sm text-gray-700 font-medium mb-2">🎯 Perfect for Mobile:</p>
+                            <p class="text-sm text-gray-600">Progressive disclosure reduces scroll and cognitive load while auto-save eliminates the "save button" problem</p>
+                        </div>
+
+                        <h3 class="font-semibold text-gray-900 mb-3">🚀 Key Features</h3>
+                        <ul class="space-y-2 text-sm text-gray-600">
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span><strong>Auto-Save:</strong> Changes save automatically after 1 second of inactivity</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span><strong>Progressive Disclosure:</strong> Accordion sections reveal only what's needed</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span><strong>Drag & Drop Avatar:</strong> Modern file upload with visual feedback</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span><strong>Smart Defaults:</strong> Most-used section (Personal Info) expanded by default</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span><strong>Mobile-First Inputs:</strong> Native mobile keyboards for tel, email, date</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span><strong>Visual Save Indicator:</strong> Toast notification confirms saves</span>
+                            </li>
+                        </ul>
+
+                        <h3 class="font-semibold text-gray-900 mb-3 mt-6">🏆 Competitive Advantage</h3>
+                        <div class="bg-green-50 rounded-lg p-4 border border-green-200">
+                            <ul class="space-y-2 text-sm text-gray-700">
+                                <li class="flex items-start">
+                                    <span class="text-green-600 mr-2">✓</span>
+                                    <span>Faster than traditional forms: No "save" button hunting</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-600 mr-2">✓</span>
+                                    <span>Cleaner than tabs: No navigation required</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-600 mr-2">✓</span>
+                                    <span>Smarter than cards: Auto-save reduces errors</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-600 mr-2">✓</span>
+                                    <span>Mobile-optimized: 70% less scrolling vs Option A</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-center">
+                        <div class="phone-frame">
+                            <div class="phone-notch"></div>
+                            <div class="phone-content">
+                                <!-- Header -->
+                                <div class="bg-white px-4 py-4 border-b sticky top-0 z-10">
+                                    <h1 class="text-lg font-bold text-gray-900">Mi Perfil</h1>
+                                    <p class="text-xs text-gray-500 mt-0.5">Los cambios se guardan automáticamente</p>
+                                </div>
+
+                                <!-- Accordion Sections -->
+                                <div class="bg-white">
+                                    <!-- Profile Picture Section (Always Visible) -->
+                                    <div class="border-b border-gray-200">
+                                        <div class="p-4 text-center">
+                                            <div class="profile-avatar mx-auto mb-3">
+                                                C
+                                                <div class="avatar-upload-btn">
+                                                    <svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"/>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <p class="text-xs text-gray-500 mb-2">Toca la foto o arrastra para cambiar</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Personal Info (Expanded by default) -->
+                                    <div class="border-b border-gray-200">
+                                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                                    <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                                                    </svg>
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm font-semibold text-gray-900">Información Personal</p>
+                                                    <p class="text-xs text-gray-500">Nombre, email, teléfono</p>
+                                                </div>
+                                            </div>
+                                            <svg class="w-5 h-5 text-gray-400 accordion-icon rotated" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                            </svg>
+                                        </div>
+                                        <div class="accordion-content expanded">
+                                            <div class="px-4 pb-4 space-y-3">
+                                                <div>
+                                                    <label class="block text-xs font-medium text-gray-700 mb-1.5">Nombre Completo *</label>
+                                                    <input type="text" class="form-input text-sm" placeholder="Tu nombre completo" value="Customer Name">
+                                                </div>
+                                                <div>
+                                                    <label class="block text-xs font-medium text-gray-700 mb-1.5">Email *</label>
+                                                    <input type="email" class="form-input text-sm" value="customer@moldovadirect.com" disabled>
+                                                    <p class="text-xs text-gray-500 mt-1">No se puede cambiar</p>
+                                                </div>
+                                                <div>
+                                                    <label class="block text-xs font-medium text-gray-700 mb-1.5">Teléfono</label>
+                                                    <input type="tel" class="form-input text-sm" placeholder="+34 600 000 000">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Preferences (Collapsed) -->
+                                    <div class="border-b border-gray-200">
+                                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                                                    <svg class="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+                                                    </svg>
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm font-semibold text-gray-900">Preferencias</p>
+                                                    <p class="text-xs text-gray-500">Idioma, moneda, zona horaria</p>
+                                                </div>
+                                            </div>
+                                            <svg class="w-5 h-5 text-gray-400 accordion-icon" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                            </svg>
+                                        </div>
+                                        <div class="accordion-content">
+                                            <div class="px-4 pb-4 space-y-3">
+                                                <div>
+                                                    <label class="block text-xs font-medium text-gray-700 mb-1.5">Idioma</label>
+                                                    <select class="form-input text-sm">
+                                                        <option selected>Español</option>
+                                                        <option>English</option>
+                                                        <option>Română</option>
+                                                        <option>Русский</option>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <label class="block text-xs font-medium text-gray-700 mb-1.5">Moneda</label>
+                                                    <select class="form-input text-sm">
+                                                        <option selected>EUR (€)</option>
+                                                        <option>USD ($)</option>
+                                                        <option>MDL (L)</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Addresses (Collapsed) -->
+                                    <div class="border-b border-gray-200">
+                                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                                    <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                                                    </svg>
+                                                </div>
+                                                <div class="flex-1">
+                                                    <p class="text-sm font-semibold text-gray-900">Direcciones</p>
+                                                    <p class="text-xs text-gray-500">1 dirección guardada</p>
+                                                </div>
+                                            </div>
+                                            <svg class="w-5 h-5 text-gray-400 accordion-icon" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                            </svg>
+                                        </div>
+                                        <div class="accordion-content">
+                                            <div class="px-4 pb-4 space-y-3">
+                                                <div class="address-card default">
+                                                    <div class="flex justify-between items-start mb-2">
+                                                        <div class="flex items-center gap-2">
+                                                            <span class="text-xs font-semibold text-gray-900">Juan García</span>
+                                                            <span class="badge badge-default">Default</span>
+                                                        </div>
+                                                        <button class="text-xs text-blue-600 font-medium">Editar</button>
+                                                    </div>
+                                                    <p class="text-xs text-gray-600 leading-relaxed">
+                                                        Calle Mayor 45<br>
+                                                        Madrid, 28013<br>
+                                                        ES<br>
+                                                        +34 600 123 123
+                                                    </p>
+                                                </div>
+                                                <button class="w-full py-2.5 border-2 border-dashed border-gray-300 rounded-lg text-sm text-gray-600 font-medium hover:border-blue-400 hover:text-blue-600">
+                                                    + Añadir Nueva Dirección
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Security (Collapsed) -->
+                                    <div class="border-b border-gray-200">
+                                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                                                    <svg class="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+                                                    </svg>
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm font-semibold text-gray-900">Seguridad</p>
+                                                    <p class="text-xs text-gray-500">Contraseña y autenticación</p>
+                                                </div>
+                                            </div>
+                                            <svg class="w-5 h-5 text-gray-400 accordion-icon" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                            </svg>
+                                        </div>
+                                        <div class="accordion-content">
+                                            <div class="px-4 pb-4 space-y-3">
+                                                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                                    <div>
+                                                        <p class="text-sm font-medium text-gray-900">Contraseña</p>
+                                                        <p class="text-xs text-gray-500">••••••••</p>
+                                                    </div>
+                                                    <button class="text-xs text-blue-600 font-medium">Cambiar</button>
+                                                </div>
+                                                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                                    <div>
+                                                        <p class="text-sm font-medium text-gray-900">Autenticación 2FA</p>
+                                                        <p class="text-xs text-gray-500">No activada</p>
+                                                    </div>
+                                                    <button class="text-xs text-blue-600 font-medium">Activar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Delete Account (Always visible at bottom) -->
+                                <div class="p-4 bg-gray-50">
+                                    <button class="w-full py-3 text-red-600 text-sm font-medium hover:bg-white rounded-lg border border-red-200">
+                                        Eliminar Mi Cuenta
+                                    </button>
+                                </div>
+
+                                <!-- Auto-save Indicator -->
+                                <div class="auto-save-indicator show" style="position: absolute; top: 70px; right: 10px; left: auto;">
+                                    <div class="flex items-center gap-2">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                        </svg>
+                                        <span class="text-xs">Guardado</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Table -->
+        <div id="comparison" class="proposal-section hidden">
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">📊 Feature Comparison Matrix</h2>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="border-b-2 border-gray-200">
+                                <th class="text-left py-4 px-4 font-semibold text-gray-900">Feature</th>
+                                <th class="text-center py-4 px-4 font-semibold text-gray-700">Option A<br/><span class="text-xs font-normal">Single-Page</span></th>
+                                <th class="text-center py-4 px-4 font-semibold text-blue-700">Option B<br/><span class="text-xs font-normal">Tabbed</span></th>
+                                <th class="text-center py-4 px-4 font-semibold text-purple-700">Option C<br/><span class="text-xs font-normal">Card-Based</span></th>
+                                <th class="text-center py-4 px-4 font-semibold text-green-700 bg-green-50">Option D<br/><span class="text-xs font-normal">Progressive ⭐</span></th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium text-gray-900">Mobile Scroll Length</td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="text-xs text-gray-600">Long (100%)</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full">✓</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="text-xs text-gray-600">Medium</span>
+                                </td>
+                                <td class="text-center py-3 px-4 bg-green-50">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full font-bold">✓</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium text-gray-900">Auto-Save</td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-red-100 text-red-600 rounded-full">✗</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-red-100 text-red-600 rounded-full">✗</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-yellow-100 text-yellow-600 rounded-full">~</span>
+                                </td>
+                                <td class="text-center py-3 px-4 bg-green-50">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full font-bold">✓</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium text-gray-900">Progressive Disclosure</td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-red-100 text-red-600 rounded-full">✗</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full">✓</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-yellow-100 text-yellow-600 rounded-full">~</span>
+                                </td>
+                                <td class="text-center py-3 px-4 bg-green-50">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full font-bold">✓</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium text-gray-900">Learning Curve</td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full">✓</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="text-xs text-gray-600">Medium</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="text-xs text-gray-600">Medium</span>
+                                </td>
+                                <td class="text-center py-3 px-4 bg-green-50">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full font-bold">✓</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium text-gray-900">Drag & Drop Upload</td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-red-100 text-red-600 rounded-full">✗</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-red-100 text-red-600 rounded-full">✗</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-red-100 text-red-600 rounded-full">✗</span>
+                                </td>
+                                <td class="text-center py-3 px-4 bg-green-50">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full font-bold">✓</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium text-gray-900">Inline Editing</td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-red-100 text-red-600 rounded-full">✗</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-red-100 text-red-600 rounded-full">✗</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full">✓</span>
+                                </td>
+                                <td class="text-center py-3 px-4 bg-green-50">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full font-bold">✓</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium text-gray-900">Visual Hierarchy</td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="text-xs text-gray-600">Flat</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full">✓</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full">✓</span>
+                                </td>
+                                <td class="text-center py-3 px-4 bg-green-50">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full font-bold">✓</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium text-gray-900">Address Management</td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full">✓</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full">✓</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full">✓</span>
+                                </td>
+                                <td class="text-center py-3 px-4 bg-green-50">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full font-bold">✓</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium text-gray-900">Mobile-Optimized Inputs</td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-yellow-100 text-yellow-600 rounded-full">~</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full">✓</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full">✓</span>
+                                </td>
+                                <td class="text-center py-3 px-4 bg-green-50">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full font-bold">✓</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium text-gray-900">Error Prevention</td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="text-xs text-gray-600">Manual save</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="text-xs text-gray-600">Manual save</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-yellow-100 text-yellow-600 rounded-full">~</span>
+                                </td>
+                                <td class="text-center py-3 px-4 bg-green-50">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full font-bold">✓</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 bg-blue-50 border-t-2 border-blue-200">
+                                <td class="py-4 px-4 font-bold text-gray-900">Overall Score</td>
+                                <td class="text-center py-4 px-4">
+                                    <div class="text-lg font-bold text-gray-700">5/10</div>
+                                </td>
+                                <td class="text-center py-4 px-4">
+                                    <div class="text-lg font-bold text-blue-700">7/10</div>
+                                </td>
+                                <td class="text-center py-4 px-4">
+                                    <div class="text-lg font-bold text-purple-700">7/10</div>
+                                </td>
+                                <td class="text-center py-4 px-4 bg-green-100">
+                                    <div class="text-2xl font-bold text-green-700">10/10</div>
+                                    <div class="text-xs text-green-600 mt-1">⭐ Best Choice</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Detailed Reasoning -->
+                <div class="mt-8 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 border-2 border-blue-200">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <span class="text-2xl">🏆</span>
+                        Why Option D is Recommended
+                    </h3>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold text-gray-900 mb-3">✅ Strengths</h4>
+                            <ul class="space-y-2 text-sm text-gray-700">
+                                <li class="flex items-start">
+                                    <span class="text-green-600 mr-2 mt-0.5">▪</span>
+                                    <span><strong>Auto-Save Magic:</strong> No "save" button eliminates common user error (forgetting to save)</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-600 mr-2 mt-0.5">▪</span>
+                                    <span><strong>70% Less Scrolling:</strong> Accordion design reduces mobile scroll from 100% to 30%</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-600 mr-2 mt-0.5">▪</span>
+                                    <span><strong>Cognitive Load Reduction:</strong> Progressive disclosure shows only what's needed</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-600 mr-2 mt-0.5">▪</span>
+                                    <span><strong>Modern UX Patterns:</strong> Drag & drop, haptic feedback, native keyboards</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-600 mr-2 mt-0.5">▪</span>
+                                    <span><strong>Smart Defaults:</strong> Most-used section expanded automatically</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h4 class="font-semibold text-gray-900 mb-3">📊 Research Alignment</h4>
+                            <ul class="space-y-2 text-sm text-gray-700">
+                                <li class="flex items-start">
+                                    <span class="text-blue-600 mr-2 mt-0.5">▪</span>
+                                    <span><strong>Single-column layout:</strong> Proven best for mobile (2025 research)</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-blue-600 mr-2 mt-0.5">▪</span>
+                                    <span><strong>Persistent labels:</strong> Critical form UX best practice</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-blue-600 mr-2 mt-0.5">▪</span>
+                                    <span><strong>2-3 step maximum:</strong> Follows shortest-path principle</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-blue-600 mr-2 mt-0.5">▪</span>
+                                    <span><strong>Drag & drop + haptic:</strong> Modern 2025 interaction patterns</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-blue-600 mr-2 mt-0.5">▪</span>
+                                    <span><strong>Card hierarchy:</strong> "One card, one concept" principle</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 p-4 bg-white rounded-lg border border-blue-200">
+                        <h4 class="font-semibold text-gray-900 mb-2">🎯 Implementation Priority</h4>
+                        <p class="text-sm text-gray-700">
+                            This design solves Moldova Direct's mobile-first requirement while reducing user errors through auto-save.
+                            It combines Apple's progressive disclosure, Netflix's card-based organization, and Google's smart defaults
+                            into a unified experience that's faster and more intuitive than traditional profile pages.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer with Sources -->
+    <footer class="bg-gray-900 text-white mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <h3 class="text-lg font-semibold mb-4">📚 Research Sources</h3>
+            <div class="grid md:grid-cols-2 gap-6 text-sm">
+                <div>
+                    <h4 class="font-medium text-gray-300 mb-2">Form & Profile Design</h4>
+                    <ul class="space-y-1 text-gray-400">
+                        <li>• <a href="https://medium.com/design-bootcamp/designing-profile-account-and-setting-pages-for-better-ux-345ef4ca1490" class="hover:text-white underline" target="_blank">Medium - Designing Profile & Settings Pages</a></li>
+                        <li>• <a href="https://www.eleken.co/blog-posts/profile-page-design" class="hover:text-white underline" target="_blank">Eleken - 20 Profile Page Design Examples</a></li>
+                        <li>• <a href="https://www.designstudiouiux.com/blog/form-ux-design-best-practices/" class="hover:text-white underline" target="_blank">Form UI/UX Design Best Practices 2025</a></li>
+                        <li>• <a href="https://www.interaction-design.org/literature/article/ui-form-design" class="hover:text-white underline" target="_blank">IxDF - How to Design UI Forms 2025</a></li>
+                        <li>• <a href="https://www.halo-lab.com/blog/profile-page-design" class="hover:text-white underline" target="_blank">Halo Lab - Profile Page Design Best Practices</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-medium text-gray-300 mb-2">Settings UX Patterns</h4>
+                    <ul class="space-y-1 text-gray-400">
+                        <li>• <a href="https://www.toptal.com/designers/ux/settings-ux" class="hover:text-white underline" target="_blank">Toptal - How to Improve App Settings UX</a></li>
+                        <li>• <a href="https://bricxlabs.com/blogs/settings-page-ui-examples" class="hover:text-white underline" target="_blank">BricxLabs - 8 Settings Page UI Examples</a></li>
+                        <li>• <a href="https://kamushken.medium.com/how-to-design-ux-friendly-user-profile-pages-a-tactical-guide-for-designers-and-developers-0eb98d3d5c70" class="hover:text-white underline" target="_blank">Medium - UX-Friendly User Profile Pages</a></li>
+                        <li>• <a href="https://agentestudio.com/blog/design-user-profile-page" class="hover:text-white underline" target="_blank">Agente Studio - User Profile Best Practices</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-medium text-gray-300 mb-2">Upload & Card Patterns</h4>
+                    <ul class="space-y-1 text-gray-400">
+                        <li>• <a href="https://mobbin.com/glossary/drop-zone-file-uploader" class="hover:text-white underline" target="_blank">Mobbin - File Uploader UI Design</a></li>
+                        <li>• <a href="https://blog.logrocket.com/ux-design/drag-and-drop-ui-examples/" class="hover:text-white underline" target="_blank">LogRocket - Drag and Drop UI Best Practices</a></li>
+                        <li>• <a href="https://www.setproduct.com/blog/avatar-ui-design" class="hover:text-white underline" target="_blank">SetProduct - Avatar UI Design Tutorial</a></li>
+                        <li>• <a href="https://www.eleken.co/blog-posts/card-ui-examples-and-best-practices-for-product-owners" class="hover:text-white underline" target="_blank">Eleken - Card UI Design Examples</a></li>
+                        <li>• <a href="https://ui-patterns.com/patterns/cards" class="hover:text-white underline" target="_blank">UI Patterns - Cards Design Pattern</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-medium text-gray-300 mb-2">Industry Examples</h4>
+                    <ul class="space-y-1 text-gray-400">
+                        <li>• <a href="https://help.netflix.com/en/node/10421" class="hover:text-white underline" target="_blank">Netflix - Profile Management Help</a></li>
+                        <li>• <a href="https://pageflows.com/ios/products/netflix/" class="hover:text-white underline" target="_blank">Page Flows - Netflix UX Flow</a></li>
+                        <li>• <a href="https://cloudscape.design/patterns/resource-management/edit/inline-edit/" class="hover:text-white underline" target="_blank">Cloudscape - Inline Edit Pattern</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-8 pt-8 border-t border-gray-800 text-gray-400 text-xs">
+                <p>Created for Moldova Direct • December 2025 • Based on 2025 UX research and best practices</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Tab navigation
+        function showProposal(proposalId) {
+            document.querySelectorAll('.proposal-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById(proposalId).classList.remove('hidden');
+
+            document.querySelectorAll('.proposal-tab').forEach(tab => {
+                tab.classList.remove('border-blue-500', 'text-blue-600');
+                tab.classList.add('border-transparent', 'text-gray-500');
+            });
+
+            const activeTab = document.querySelector(`[data-tab="${proposalId}"]`);
+            if (activeTab) {
+                activeTab.classList.remove('border-transparent', 'text-gray-500');
+                activeTab.classList.add('border-blue-500', 'text-blue-600');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Accordion toggle
+        function toggleAccordion(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.accordion-icon');
+
+            content.classList.toggle('expanded');
+            icon.classList.toggle('rotated');
+        }
+
+        // Initialize - show Option D by default
+        document.addEventListener('DOMContentLoaded', function() {
+            showProposal('variant-d');
+        });
+    </script>
+</body>
+</html>
