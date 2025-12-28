@@ -1,20 +1,15 @@
 <script setup lang="ts">
-import { type HTMLAttributes, computed } from 'vue'
+import type { DialogContentEmits, DialogContentProps } from 'reka-ui'
+import type { HTMLAttributes } from 'vue'
+import { reactiveOmit } from '@vueuse/core'
+import { X } from 'lucide-vue-next'
 import {
   DialogClose,
   DialogContent,
-  type DialogContentEmits,
-  type DialogContentProps,
-  DialogOverlay,
   DialogPortal,
   useForwardPropsEmits,
 } from 'reka-ui'
-import { X } from 'lucide-vue-next'
-import { cn } from '~/lib/utils'
-
-defineOptions({
-  inheritAttrs: false,
-})
+import { cn } from '@/lib/utils'
 
 const props = withDefaults(
   defineProps<DialogContentProps & { class?: HTMLAttributes['class'], side?: 'top' | 'bottom' | 'left' | 'right' }>(),
@@ -25,24 +20,22 @@ const props = withDefaults(
 
 const emits = defineEmits<DialogContentEmits>()
 
-const delegatedProps = computed(() => {
-  const { class: _, side: __, ...delegated } = props
-
-  return delegated
-})
+const delegatedProps = reactiveOmit(props, 'class', 'side')
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
 </script>
 
 <template>
   <DialogPortal>
-    <DialogOverlay
+    <div
       class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
+      data-slot="overlay"
     />
     <DialogContent
-      v-bind="{ ...forwarded, ...$attrs }"
+      data-slot="sheet-content"
+      v-bind="forwarded"
       :class="cn(
-        'fixed z-50 gap-4 bg-white p-6 shadow-lg transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500 dark:bg-zinc-950',
+        'fixed z-50 bg-white shadow-lg transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500 dark:bg-zinc-950',
         {
           'inset-x-0 bottom-0 rounded-t-3xl border-t border-zinc-200 data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom dark:border-zinc-800': side === 'bottom',
           'inset-x-0 top-0 rounded-b-3xl border-b border-zinc-200 data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top dark:border-zinc-800': side === 'top',
@@ -57,7 +50,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
       <DialogClose
         class="absolute right-6 top-6 rounded-lg p-2 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:ring-offset-2 disabled:pointer-events-none dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 dark:focus:ring-zinc-300"
       >
-        <X class="h-5 w-5" />
+        <X class="size-5" />
         <span class="sr-only">Close</span>
       </DialogClose>
     </DialogContent>
