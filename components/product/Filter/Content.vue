@@ -131,8 +131,8 @@
           </span>
           <UiCheckbox
             :id="`category-${category.id}`"
-            :checked="selectedCategories.includes(category.id.toString())"
-            @update:checked="toggleCategory(category.id)"
+            :model-value="selectedCategories.includes(category.id.toString())"
+            @update:model-value="toggleCategory(category.id)"
           />
         </div>
       </div>
@@ -162,8 +162,8 @@
           </UiLabel>
           <UiCheckbox
             :id="`${attribute.name}-${option.value}`"
-            :checked="isAttributeSelected(attribute.name, option.value)"
-            @update:checked="toggleAttribute(attribute.name, option.value)"
+            :model-value="isAttributeSelected(attribute.name, option.value)"
+            @update:model-value="toggleAttribute(attribute.name, option.value)"
           />
         </div>
       </div>
