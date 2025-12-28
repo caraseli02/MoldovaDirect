@@ -399,6 +399,31 @@
       "to": "Până la",
       "clearAll": "Șterge Toate Filtrele"
     },
+    "metrics": {
+      "active": "Active",
+      "delivered": "Livrate",
+      "total": "Total",
+      "thisMonth": "Luna Aceasta",
+      "activeOrders": "Comenzi Active",
+      "deliveredThisMonth": "Livrate Luna Aceasta",
+      "totalOrders": "Total Comenzi",
+      "spentThisMonth": "Cheltuit Luna Aceasta"
+    },
+    "filters": {
+      "quickFilters": "Filtre Rapide",
+      "inTransit": "În Tranzit",
+      "deliveredThisMonth": "Livrate Luna Aceasta",
+      "last3Months": "Ultimele 3 Luni",
+      "allOrders": "Toate Comenzile"
+    },
+    "progress": {
+      "deliveryProgress": "Progres livrare",
+      "estimatedArrival": "Sosire estimată",
+      "deliveredSuccessfully": "Livrat cu succes"
+    },
+    "track": "Urmărește",
+    "liveStatus": "Live",
+    "updateCount": "1 actualizare | {count} actualizări",
     "notifications": {
       "title": "Actualizări Comenzi",
       "delivered": {
@@ -444,6 +469,8 @@
       "statusBadge": "Status comandă: {status}",
       "reorderButton": "Comandă din nou toate articolele din această comandă",
       "viewDetailsButton": "Vezi informații detaliate pentru această comandă",
+      "trackButton": "Urmărește această comandă",
+      "orderActions": "Acțiuni comandă",
       "searchInput": "Caută comenzi după număr de comandă sau nume produs",
       "clearSearch": "Șterge căutarea",
       "statusFilter": "Filtrează comenzile după status",

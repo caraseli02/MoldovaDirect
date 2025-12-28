@@ -659,6 +659,31 @@
       "to": "Hasta",
       "clearAll": "Limpiar Todos los Filtros"
     },
+    "metrics": {
+      "active": "Activos",
+      "delivered": "Entregados",
+      "total": "Total",
+      "thisMonth": "Este Mes",
+      "activeOrders": "Pedidos Activos",
+      "deliveredThisMonth": "Entregados Este Mes",
+      "totalOrders": "Total de Pedidos",
+      "spentThisMonth": "Gastado Este Mes"
+    },
+    "filters": {
+      "quickFilters": "Filtros Rápidos",
+      "inTransit": "En Tránsito",
+      "deliveredThisMonth": "Entregados Este Mes",
+      "last3Months": "Últimos 3 Meses",
+      "allOrders": "Todos los Pedidos"
+    },
+    "progress": {
+      "deliveryProgress": "Progreso de entrega",
+      "estimatedArrival": "Llegada estimada",
+      "deliveredSuccessfully": "Entregado exitosamente"
+    },
+    "track": "Seguimiento",
+    "liveStatus": "En vivo",
+    "updateCount": "{count} actualización | {count} actualizaciones",
     "notifications": {
       "title": "Actualizaciones de Pedidos",
       "delivered": {
@@ -704,6 +729,8 @@
       "statusBadge": "Estado del pedido: {status}",
       "reorderButton": "Volver a pedir todos los artículos de este pedido",
       "viewDetailsButton": "Ver información detallada de este pedido",
+      "trackButton": "Rastrear este pedido",
+      "orderActions": "Acciones del pedido",
       "searchInput": "Buscar pedidos por número de pedido o nombre de producto",
       "clearSearch": "Limpiar búsqueda",
       "statusFilter": "Filtrar pedidos por estado",
