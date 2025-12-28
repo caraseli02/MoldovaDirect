@@ -41,6 +41,7 @@
     "release_to_remove": "Eliberează pentru a elimina",
     "help": "Ajutor",
     "each": "fiecare",
+    "items": "articole",
     "refresh": "Reîmprospătează",
     "tryAgain": "Încearcă Din Nou",
     "error": "Eroare",
@@ -163,6 +164,7 @@
       "passwordMismatch": "Parolele nu se potrivesc",
       "termsRequired": "Trebuie să accepți termenii și condițiile",
       "sessionExpired": "Sesiunea ta a expirat. Te rugăm să te autentifici din nou",
+      "logoutFailed": "Eroare la deconectare. Te rugăm să încerci din nou.",
       "rateLimitExceeded": "Prea multe încercări. Încearcă din nou în {minutes} minute",
       "tokenExpired": "Link-ul de verificare a expirat",
       "tokenInvalid": "Link de verificare invalid",
@@ -307,6 +309,11 @@
     "wishlistItems": "Articole din Lista de Dorințe",
     "recentOrders": "Comenzi Recente",
     "noOrdersYet": "Nu ai încă comenzi",
+    "viewProfile": "Vezi profilul",
+    "quickAccess": "Acces Rapid",
+    "myProfile": "Profilul Meu",
+    "paymentMethods": "Metode de Plată",
+    "returns": "Retururi",
     "sections": {
       "admin": "Administrator",
       "adminUser": "Utilizator Administrator",
@@ -327,6 +334,7 @@
     "reorder": "Comandă Din Nou",
     "estimatedDelivery": "Livrare Estimată",
     "viewAndManage": "Vezi și gestionează istoricul comenzilor tale",
+    "viewAllOrders": "Vezi Toate Comenzile",
     "showing": "Se afișează {start}-{end} din {total} comenzi",
     "orders": "comenzi",
     "gridView": "Vizualizare grilă",
@@ -391,6 +399,31 @@
       "to": "Până la",
       "clearAll": "Șterge Toate Filtrele"
     },
+    "metrics": {
+      "active": "Active",
+      "delivered": "Livrate",
+      "total": "Total",
+      "thisMonth": "Luna Aceasta",
+      "activeOrders": "Comenzi Active",
+      "deliveredThisMonth": "Livrate Luna Aceasta",
+      "totalOrders": "Total Comenzi",
+      "spentThisMonth": "Cheltuit Luna Aceasta"
+    },
+    "filters": {
+      "quickFilters": "Filtre Rapide",
+      "inTransit": "În Tranzit",
+      "deliveredThisMonth": "Livrate Luna Aceasta",
+      "last3Months": "Ultimele 3 Luni",
+      "allOrders": "Toate Comenzile"
+    },
+    "progress": {
+      "deliveryProgress": "Progres livrare",
+      "estimatedArrival": "Sosire estimată",
+      "deliveredSuccessfully": "Livrat cu succes"
+    },
+    "track": "Urmărește",
+    "liveStatus": "Live",
+    "updateCount": "1 actualizare | {count} actualizări",
     "notifications": {
       "title": "Actualizări Comenzi",
       "delivered": {
@@ -436,6 +469,8 @@
       "statusBadge": "Status comandă: {status}",
       "reorderButton": "Comandă din nou toate articolele din această comandă",
       "viewDetailsButton": "Vezi informații detaliate pentru această comandă",
+      "trackButton": "Urmărește această comandă",
+      "orderActions": "Acțiuni comandă",
       "searchInput": "Caută comenzi după număr de comandă sau nume produs",
       "clearSearch": "Șterge căutarea",
       "statusFilter": "Filtrează comenzile după status",
@@ -495,15 +530,42 @@
     }
   },
   "profile": {
-    "title": "Setări Profil",
+    "title": "Profilul Meu",
     "description": "Gestionează informațiile tale personale și preferințele contului",
+    "autoSaveDescription": "Modificările se salvează automat",
     "profilePicture": "Fotografie de Profil",
     "profilePictureDescription": "Încarcă o fotografie de profil pentru a-ți personaliza contul",
+    "dragDropHint": "Atinge fotografia sau trage pentru a schimba",
     "changePicture": "Schimbă Fotografia",
     "uploadPicture": "Încarcă Fotografie",
     "removePicture": "Elimină Fotografia",
     "emailCannotBeChanged": "Adresa de email nu poate fi schimbată",
     "saveChanges": "Salvează Modificările",
+    "saving": "Se salvează...",
+    "saved": "Salvat",
+    "saveError": "Eroare la salvare",
+    "completion": "Completare Profil",
+    "unsavedChangesWarning": "Ai modificări nesalvate. Ești sigur că vrei să pleci?",
+    "addressSingular": "adresă salvată",
+    "addressPlural": "adrese salvate",
+    "sections": {
+      "personalInfo": "Informații Personale",
+      "personalInfoSubtitle": "Nume, email, telefon",
+      "preferences": "Preferințe",
+      "preferencesSubtitle": "Limbă, monedă",
+      "currency": "Monedă",
+      "security": "Securitate",
+      "securitySubtitle": "Parolă și autentificare",
+      "password": "Parolă",
+      "change": "Schimbă",
+      "twoFactor": "Autentificare 2FA",
+      "twoFactorDisabled": "Neactivată",
+      "enable": "Activează",
+      "changePassword": "Schimbă Parola",
+      "changePasswordDescription": "În curând vei putea să-ți schimbi parola de aici.",
+      "enable2FA": "Activează 2FA",
+      "enable2FADescription": "Autentificarea în doi pași va fi disponibilă în curând."
+    },
     "addresses": "Adrese",
     "addressesDescription": "Gestionează adresele tale de livrare și facturare",
     "addAddress": "Adaugă Adresă",
@@ -590,7 +652,10 @@
       "loadAddressesFailed": "Încărcarea adreselor a eșuat",
       "addressSaveFailed": "Salvarea adresei a eșuat. Te rugăm să încerci din nou.",
       "addressDeleteFailed": "Ștergerea adresei a eșuat. Te rugăm să încerci din nou.",
-      "deleteFailed": "Ștergerea contului a eșuat. Te rugăm să încerci din nou."
+      "deleteFailed": "Ștergerea contului a eșuat. Te rugăm să încerci din nou.",
+      "sessionExpired": "Sesiunea ta a expirat. Te rugăm să te autentifici din nou.",
+      "permissionDenied": "Permisiune refuzată. Nu poți efectua această acțiune.",
+      "notAuthenticated": "Te rugăm să te autentifici pentru a continua."
     }
   },
   "home": {
@@ -958,13 +1023,16 @@
       "clear": "Șterge filtrele",
       "clearAllFilters": "Șterge toate filtrele active",
       "swipeToClose": "Glisează în jos sau apasă butonul închide pentru a renunța",
-      "apply": "Aplică Filtrele",
+      "apply": "Arată {count} produse | Arată {count} produs | Arată {count} produse",
+      "showingCount": "Se afișează {count} produse | Se afișează {count} produs | Se afișează {count} produse",
       "openFilters": "Deschide panoul de filtre",
       "activeCount": "{count} filtre active",
       "minPrice": "Preț Minim",
       "maxPrice": "Preț Maxim",
       "removeFilter": "Elimină filtrul {filter}",
-      "unknownCategory": "Categorie Necunoscută"
+      "unknownCategory": "Categorie Necunoscută",
+      "description": "Filtrează produsele după preț, disponibilitate și categorii",
+      "applyFilters": "Aplică filtre"
     },
     "hero": {
       "seasonal": "Recomandări de sezon",
@@ -1539,7 +1607,10 @@
       "sslEncrypted": "Criptare SSL 256-bit",
       "dataProtected": "Datele tale sunt protejate",
       "moneyBackGuarantee": "Garanția banilor înapoi",
-      "needHelp": "Ai nevoie de ajutor? Contactează-ne la"
+      "needHelp": "Ai nevoie de ajutor? Contactează-ne la",
+      "secure": "Sigur",
+      "easyReturns": "Returnări Ușoare",
+      "support247": "Suport 24/7"
     },
     "steps": {
       "shipping": {
@@ -1569,7 +1640,10 @@
         "orderDetails": "Detalii Comandă",
         "orderDetailsPlaceholder": "Detaliile comenzii tale vor fi afișate aici",
         "viewOrders": "Vezi Comenzile Mele",
-        "continueShopping": "Continuă Cumpărăturile"
+        "viewOrderDetails": "Vezi Detaliile Comenzii",
+        "continueShopping": "Continuă Cumpărăturile",
+        "pageTitle": "Confirmare Comandă - Checkout",
+        "pageDescription": "Comanda ta a fost plasată cu succes"
       }
     },
     "guestCheckout": {
@@ -1643,6 +1717,12 @@
       "proceedToReview": "Nu s-a putut continua la verificare. Te rugăm să încerci din nou.",
       "orderFailed": "Comandă eșuată",
       "orderProcessingFailed": "Nu s-a putut procesa comanda. Te rugăm să încerci din nou."
+    },
+    "warning": {
+      "cartLoadFailed": "Problemă la Încărcarea Coșului",
+      "cartLoadFailedDetails": "Nu s-a putut încărca coșul. Unele articole pot lipsi.",
+      "totalsUpdateFailed": "Problemă la Actualizarea Prețurilor",
+      "totalsUpdateFailedDetails": "Nu s-au putut actualiza totalurile. Prețurile afișate pot fi depășite."
     },
     "validation": {
       "fullNameRequired": "Numele complet este obligatoriu",
@@ -1828,6 +1908,8 @@
     },
     "confirmation": {
       "orderNumber": "Număr Comandă",
+      "orderStatus": "Stare Comandă",
+      "stepIndicator": "Pasul {current} din {total}",
       "orderItems": "Articole Comandă",
       "shippingInfo": "Informații de Livrare",
       "shippingAddress": "Adresă de Livrare",
@@ -1844,7 +1926,23 @@
       "orderDataMissing": "Datele comenzii nu sunt disponibile",
       "checkYourEmail": "Comanda dvs. a fost finalizată cu succes. Verificați emailul pentru detalii",
       "cartClearFailed": "Nu s-a putut goli coșul",
-      "cartClearFailedDetails": "Comanda dvs. a fost finalizată cu succes, dar coșul nu a fost golit automat"
+      "cartClearFailedDetails": "Comanda dvs. a fost finalizată cu succes, dar coșul nu a fost golit automat",
+      "needHelp": "Aveți nevoie de ajutor? Contactați Suportul",
+      "preparingOrder": "Pregătim comanda dvs. ({days} zile)",
+      "delivery": "Livrare",
+      "totalPaid": "Total Plătit",
+      "viewDetails": "Vezi detalii",
+      "businessDays": "{days} zile lucrătoare",
+      "status": {
+        "placed": "Comandă Plasată",
+        "confirmed": "Confirmat",
+        "processing": "În Procesare",
+        "preparing": "În Pregătire",
+        "shipped": "Expediat",
+        "delivered": "Livrat",
+        "inProgress": "În Curs",
+        "pending": "În Așteptare"
+      }
     },
     "errors": {
       "failedToLoadAddresses": "Nu s-au putut încărca adresele salvate",

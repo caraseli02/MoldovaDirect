@@ -44,7 +44,8 @@ export const test = base.extend<TestFixtures>({
 
   testUser: async ({ locale }, use) => {
     const user: TestUser = {
-      email: process.env.TEST_USER_EMAIL || `test-${locale}@example.test`,
+      // Use Resend's test address for reliable E2E email testing
+      email: process.env.TEST_USER_EMAIL || 'delivered@resend.dev',
       password: process.env.TEST_USER_PASSWORD || generateSecurePassword(),
       name: `Test User ${locale.toUpperCase()}`,
       locale,

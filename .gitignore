@@ -95,6 +95,12 @@ playwright-report/
 test-run-output.txt
 test-screenshots/
 
+# Visual Testing - snapshots and reports are runtime-only
+.visual-testing/snapshots/
+.visual-testing/reports/
+# Keep baselines tracked
+!.visual-testing/baselines/
+
 # Working test files and directories
 /tests/browser-automation/
 /tests/e2e/vercel/
@@ -180,3 +186,6 @@ debug-*.log
 !CLAUDE.md
 !CONTRIBUTING.md
 !LICENSE.md
+
+# Claude flow metrics (auto-generated)
+.claude-flow/

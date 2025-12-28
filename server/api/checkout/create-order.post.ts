@@ -253,9 +253,10 @@ export default defineEventHandler(async (event) => {
         })
       }
 
+      // Log full error for debugging but return sanitized message to user
       throw createError({
         statusCode: 500,
-        statusMessage: `Failed to create order: ${rpcError.message || 'Unknown error'}`,
+        statusMessage: 'Failed to create order. Please try again or contact support.',
       })
     }
 
@@ -281,8 +282,8 @@ export default defineEventHandler(async (event) => {
     if (user?.id && body.shippingAddress) {
       try {
         // Extract shipping method from the request
-        // The shipping method might be in different formats, we need to extract the ID/name
-        const shippingMethodId = body.shippingAddress?.method || body.shippingCost > 0 ? 'standard' : 'free'
+        // Use explicit method if provided, otherwise determine based on shipping cost
+        const shippingMethodId = body.shippingAddress?.method || (body.shippingCost > 0 ? 'standard' : 'free')
 
         // Upsert user checkout preferences
         const { error: prefError } = await supabase
@@ -323,7 +324,7 @@ export default defineEventHandler(async (event) => {
       order: {
         id: order.id,
         orderNumber: order.order_number,
-        total: order.total,
+        total: order.total_eur || order.total,
         status: order.status,
         paymentStatus: order.payment_status,
         createdAt: order.created_at,

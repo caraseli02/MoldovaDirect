@@ -41,6 +41,7 @@
     "release_to_remove": "Release to remove",
     "help": "Help",
     "each": "each",
+    "items": "items",
     "refresh": "Refresh",
     "tryAgain": "Try Again",
     "error": "Error",
@@ -374,6 +375,7 @@
       "passwordMismatch": "Passwords do not match",
       "termsRequired": "You must accept the terms and conditions",
       "sessionExpired": "Your session has expired. Please sign in again",
+      "logoutFailed": "Failed to logout. Please try again.",
       "rateLimitExceeded": "Too many attempts. Try again in {minutes} minutes",
       "tokenExpired": "Verification link has expired",
       "tokenInvalid": "Invalid verification link",
@@ -572,6 +574,11 @@
     "wishlistItems": "Wishlist Items",
     "recentOrders": "Recent Orders",
     "noOrdersYet": "You don't have any orders yet",
+    "viewProfile": "View profile",
+    "quickAccess": "Quick Access",
+    "myProfile": "My Profile",
+    "paymentMethods": "Payment Methods",
+    "returns": "Returns",
     "sections": {
       "admin": "Admin",
       "adminUser": "Admin User",
@@ -592,6 +599,7 @@
     "reorder": "Reorder",
     "estimatedDelivery": "Estimated Delivery",
     "viewAndManage": "View and manage your order history",
+    "viewAllOrders": "View All Orders",
     "showing": "Showing {start}-{end} of {total} orders",
     "orders": "orders",
     "gridView": "Grid view",
@@ -656,6 +664,31 @@
       "to": "To",
       "clearAll": "Clear All Filters"
     },
+    "metrics": {
+      "active": "Active",
+      "delivered": "Delivered",
+      "total": "Total",
+      "thisMonth": "This Month",
+      "activeOrders": "Active Orders",
+      "deliveredThisMonth": "Delivered This Month",
+      "totalOrders": "Total Orders",
+      "spentThisMonth": "Spent This Month"
+    },
+    "filters": {
+      "quickFilters": "Quick Filters",
+      "inTransit": "In Transit",
+      "deliveredThisMonth": "Delivered This Month",
+      "last3Months": "Last 3 Months",
+      "allOrders": "All Orders"
+    },
+    "progress": {
+      "deliveryProgress": "Delivery progress",
+      "estimatedArrival": "Estimated arrival",
+      "deliveredSuccessfully": "Delivered successfully"
+    },
+    "track": "Track",
+    "liveStatus": "Live",
+    "updateCount": "{count} update | {count} updates",
     "notifications": {
       "title": "Order Updates",
       "delivered": {
@@ -701,6 +734,8 @@
       "statusBadge": "Order status: {status}",
       "reorderButton": "Reorder all items from this order",
       "viewDetailsButton": "View detailed information for this order",
+      "trackButton": "Track this order",
+      "orderActions": "Order actions",
       "searchInput": "Search orders by order number or product name",
       "clearSearch": "Clear search query",
       "statusFilter": "Filter orders by status",
@@ -760,15 +795,42 @@
     }
   },
   "profile": {
-    "title": "Profile Settings",
+    "title": "My Profile",
     "description": "Manage your personal information and account preferences",
+    "autoSaveDescription": "Changes are saved automatically",
     "profilePicture": "Profile Picture",
     "profilePictureDescription": "Upload a profile picture to personalize your account",
+    "dragDropHint": "Tap photo or drag to change",
     "changePicture": "Change Picture",
     "uploadPicture": "Upload Picture",
     "removePicture": "Remove Picture",
     "emailCannotBeChanged": "Email address cannot be changed",
     "saveChanges": "Save Changes",
+    "saving": "Saving...",
+    "saved": "Saved",
+    "saveError": "Error saving",
+    "completion": "Profile Completion",
+    "unsavedChangesWarning": "You have unsaved changes. Are you sure you want to leave?",
+    "addressSingular": "address saved",
+    "addressPlural": "addresses saved",
+    "sections": {
+      "personalInfo": "Personal Information",
+      "personalInfoSubtitle": "Name, email, phone",
+      "preferences": "Preferences",
+      "preferencesSubtitle": "Language, currency",
+      "currency": "Currency",
+      "security": "Security",
+      "securitySubtitle": "Password and authentication",
+      "password": "Password",
+      "change": "Change",
+      "twoFactor": "Two-Factor Authentication",
+      "twoFactorDisabled": "Not enabled",
+      "enable": "Enable",
+      "changePassword": "Change Password",
+      "changePasswordDescription": "You will be able to change your password here soon.",
+      "enable2FA": "Enable 2FA",
+      "enable2FADescription": "Two-factor authentication will be available soon."
+    },
     "addresses": "Addresses",
     "addressesDescription": "Manage your shipping and billing addresses",
     "addAddress": "Add Address",
@@ -855,7 +917,10 @@
       "loadAddressesFailed": "Failed to load addresses",
       "addressSaveFailed": "Failed to save address. Please try again.",
       "addressDeleteFailed": "Failed to delete address. Please try again.",
-      "deleteFailed": "Failed to delete account. Please try again."
+      "deleteFailed": "Failed to delete account. Please try again.",
+      "sessionExpired": "Your session has expired. Please log in again.",
+      "permissionDenied": "Permission denied. You cannot perform this action.",
+      "notAuthenticated": "Please log in to continue."
     }
   },
   "home": {
@@ -1328,12 +1393,15 @@
       "clearAllFilters": "Clear all active filters",
       "swipeToClose": "Swipe down or tap close button to dismiss",
       "apply": "Show {count} products | Show {count} product | Show {count} products",
+      "showingCount": "Showing {count} products | Showing {count} product | Showing {count} products",
       "minPrice": "Min Price",
       "maxPrice": "Max Price",
       "removeFilter": "Remove {filter} filter",
       "unknownCategory": "Unknown Category",
       "openFilters": "Open filters panel",
-      "activeCount": "{count} active filters"
+      "activeCount": "{count} active filters",
+      "description": "Filter products by price, availability, and categories",
+      "applyFilters": "Apply filters"
     },
     "hero": {
       "seasonal": "Seasonal highlights",
@@ -1705,7 +1773,10 @@
       "sslEncrypted": "256-bit SSL Encrypted",
       "dataProtected": "Your data is protected",
       "moneyBackGuarantee": "Money-back guarantee",
-      "needHelp": "Need help? Contact us at"
+      "needHelp": "Need help? Contact us at",
+      "secure": "Secure",
+      "easyReturns": "Easy Returns",
+      "support247": "24/7 Support"
     },
     "steps": {
       "shipping": {
@@ -1735,7 +1806,10 @@
         "orderDetails": "Order Details",
         "orderDetailsPlaceholder": "Your order details will be displayed here",
         "viewOrders": "View My Orders",
-        "continueShopping": "Continue Shopping"
+        "viewOrderDetails": "View Order Details",
+        "continueShopping": "Continue Shopping",
+        "pageTitle": "Order Confirmation - Checkout",
+        "pageDescription": "Your order has been successfully placed"
       }
     },
     "guestCheckout": {
@@ -1809,6 +1883,12 @@
       "proceedToReview": "Failed to proceed to review. Please try again.",
       "orderFailed": "Order Failed",
       "orderProcessingFailed": "Failed to process your order. Please try again."
+    },
+    "warning": {
+      "cartLoadFailed": "Cart Load Issue",
+      "cartLoadFailedDetails": "Failed to load your cart. Some items may be missing.",
+      "totalsUpdateFailed": "Price Update Issue",
+      "totalsUpdateFailedDetails": "Failed to update totals. Prices shown may be outdated."
     },
     "validation": {
       "fullNameRequired": "Full name is required",
@@ -1994,6 +2074,8 @@
     },
     "confirmation": {
       "orderNumber": "Order Number",
+      "orderStatus": "Order Status",
+      "stepIndicator": "Step {current} of {total}",
       "orderItems": "Order Items",
       "shippingInfo": "Shipping Information",
       "shippingAddress": "Shipping Address",
@@ -2010,7 +2092,23 @@
       "orderDataMissing": "Order data not available",
       "checkYourEmail": "Your order completed successfully. Check your email for details",
       "cartClearFailed": "Could not clear cart",
-      "cartClearFailedDetails": "Your order completed successfully, but the cart was not cleared automatically"
+      "cartClearFailedDetails": "Your order completed successfully, but the cart was not cleared automatically",
+      "needHelp": "Need help? Contact Support",
+      "preparingOrder": "Preparing your order ({days} days)",
+      "delivery": "Delivery",
+      "totalPaid": "Total Paid",
+      "viewDetails": "View details",
+      "businessDays": "{days} business days",
+      "status": {
+        "placed": "Order Placed",
+        "confirmed": "Confirmed",
+        "processing": "Processing",
+        "preparing": "Preparing",
+        "shipped": "Shipped",
+        "delivered": "Delivered",
+        "inProgress": "In Progress",
+        "pending": "Pending"
+      }
     },
     "errors": {
       "failedToLoadAddresses": "Failed to load saved addresses",

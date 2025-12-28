@@ -19,7 +19,8 @@ export class CriticalTestHelpers {
    * Uses TEST_USER_EMAIL and TEST_USER_PASSWORD from environment
    */
   async loginAsTestUser(): Promise<void> {
-    const testEmail = process.env.TEST_USER_EMAIL || 'teste2e@example.com'
+    // Use Resend's test address for reliable E2E email testing
+    const testEmail = process.env.TEST_USER_EMAIL || 'delivered@resend.dev'
     const testPassword = process.env.TEST_USER_PASSWORD
 
     if (!testPassword) {
@@ -431,7 +432,8 @@ export class CriticalTestHelpers {
    */
   static getTestUserCredentials() {
     return {
-      email: process.env.TEST_USER_EMAIL || 'teste2e@example.com',
+      // Use Resend's test address for reliable E2E email testing
+      email: process.env.TEST_USER_EMAIL || 'delivered@resend.dev',
       password: process.env.TEST_USER_PASSWORD,
     }
   }
