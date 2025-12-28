@@ -41,6 +41,7 @@
     "release_to_remove": "Suelta para eliminar",
     "help": "Ayuda",
     "each": "cada",
+    "items": "artículos",
     "refresh": "Actualizar",
     "tryAgain": "Intentar de nuevo",
     "error": "Error",
@@ -1632,7 +1633,10 @@
       "sslEncrypted": "Cifrado SSL de 256 bits",
       "dataProtected": "Tus datos están protegidos",
       "moneyBackGuarantee": "Garantía de devolución del dinero",
-      "needHelp": "¿Necesitas ayuda? Contáctanos en"
+      "needHelp": "¿Necesitas ayuda? Contáctanos en",
+      "secure": "Seguro",
+      "easyReturns": "Devoluciones Fáciles",
+      "support247": "Soporte 24/7"
     },
     "steps": {
       "shipping": {
@@ -1662,7 +1666,10 @@
         "orderDetails": "Detalles del Pedido",
         "orderDetailsPlaceholder": "Los detalles de tu pedido se mostrarán aquí",
         "viewOrders": "Ver Mis Pedidos",
-        "continueShopping": "Continuar Comprando"
+        "viewOrderDetails": "Ver Detalles del Pedido",
+        "continueShopping": "Continuar Comprando",
+        "pageTitle": "Confirmación del Pedido - Checkout",
+        "pageDescription": "Tu pedido ha sido realizado correctamente"
       }
     },
     "guestCheckout": {
@@ -1736,6 +1743,12 @@
       "proceedToReview": "No se pudo continuar a la revisión. Por favor, inténtalo de nuevo.",
       "orderFailed": "Pedido Fallido",
       "orderProcessingFailed": "No se pudo procesar tu pedido. Por favor, inténtalo de nuevo."
+    },
+    "warning": {
+      "cartLoadFailed": "Problema al Cargar el Carrito",
+      "cartLoadFailedDetails": "No se pudo cargar tu carrito. Algunos artículos pueden faltar.",
+      "totalsUpdateFailed": "Problema al Actualizar Precios",
+      "totalsUpdateFailedDetails": "No se pudieron actualizar los totales. Los precios mostrados pueden estar desactualizados."
     },
     "validation": {
       "fullNameRequired": "El nombre completo es requerido",
@@ -1921,6 +1934,8 @@
     },
     "confirmation": {
       "orderNumber": "Número de Pedido",
+      "orderStatus": "Estado del Pedido",
+      "stepIndicator": "Paso {current} de {total}",
       "orderItems": "Artículos del Pedido",
       "shippingInfo": "Información de Envío",
       "shippingAddress": "Dirección de Envío",
@@ -1937,7 +1952,23 @@
       "orderDataMissing": "Datos del pedido no disponibles",
       "checkYourEmail": "Tu pedido se completó correctamente. Revisa tu correo para más detalles",
       "cartClearFailed": "No se pudo vaciar el carrito",
-      "cartClearFailedDetails": "Tu pedido se completó correctamente, pero el carrito no se vació automáticamente"
+      "cartClearFailedDetails": "Tu pedido se completó correctamente, pero el carrito no se vació automáticamente",
+      "needHelp": "¿Necesitas ayuda? Contactar Soporte",
+      "preparingOrder": "Preparando tu pedido ({days} días)",
+      "delivery": "Entrega",
+      "totalPaid": "Total Pagado",
+      "viewDetails": "Ver detalles",
+      "businessDays": "{days} días hábiles",
+      "status": {
+        "placed": "Pedido Realizado",
+        "confirmed": "Confirmado",
+        "processing": "Procesando",
+        "preparing": "Preparando",
+        "shipped": "Enviado",
+        "delivered": "Entregado",
+        "inProgress": "En Progreso",
+        "pending": "Pendiente"
+      }
     },
     "errors": {
       "failedToLoadAddresses": "No se pudieron cargar las direcciones guardadas",

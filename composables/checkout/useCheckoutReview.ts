@@ -32,6 +32,8 @@ export function useCheckoutReview() {
   const checkoutSession = useCheckoutSessionStore()
   const cartStore = useCartStore()
   const localePath = useLocalePath()
+  const toast = useToast()
+  const { t } = useI18n()
 
   const {
     orderData,
@@ -72,6 +74,10 @@ export function useCheckoutReview() {
       }
       catch (error: any) {
         console.error('Failed to load cart from storage for checkout review:', error)
+        toast.warning(
+          t('checkout.warning.cartLoadFailed') || 'Cart Load Issue',
+          t('checkout.warning.cartLoadFailedDetails') || 'Failed to load your cart. Some items may be missing.',
+        )
       }
     }
   }
@@ -138,6 +144,10 @@ export function useCheckoutReview() {
       }
       catch (error: any) {
         console.error('Failed to refresh checkout totals on review page:', error)
+        toast.warning(
+          t('checkout.warning.totalsUpdateFailed') || 'Price Update Issue',
+          t('checkout.warning.totalsUpdateFailedDetails') || 'Failed to update totals. Prices shown may be outdated.',
+        )
       }
     },
     { deep: true },
@@ -151,9 +161,6 @@ export function useCheckoutReview() {
   }
 
   const validateOrder = (): boolean => {
-    const toast = useToast()
-    const { t } = useI18n()
-
     if (!orderData.value) {
       console.error('Order data is missing')
       toast.error(
@@ -242,8 +249,6 @@ export function useCheckoutReview() {
     }
     catch (error: any) {
       console.error('Failed to process order:', error)
-      const toast = useToast()
-      const { t } = useI18n()
       toast.error(
         t('checkout.error.orderFailed') || 'Order Failed',
         error.message || t('checkout.error.orderProcessingFailed') || 'Failed to process your order. Please try again.',
