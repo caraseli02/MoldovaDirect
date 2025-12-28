@@ -106,7 +106,7 @@
 
       <!-- Smart Filters -->
       <div class="mb-6">
-        <SmartFilters
+        <OrderSmartFilters
           v-model="smartFilter"
           :counts="filterCounts"
           @filter="handleSmartFilter"
