@@ -1,93 +1,131 @@
 <template>
-  <div class="filter-content space-y-6">
-    <!-- Active Filters -->
-    <div
-      v-if="hasActiveFilters"
-      class="filter-section"
-    >
-      <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-3">
-        {{ $t('products.filters.active') }}
-      </h3>
-      <div class="flex flex-wrap gap-2">
-        <productFilterTag
-          v-for="filter in activeFilters"
-          :key="filter.id"
-          :label="filter.label"
-          @remove="removeFilter(filter.id, filter.type, filter.value)"
+  <div class="space-y-8">
+    <!-- Price Range Filter -->
+    <div class="space-y-4">
+      <UiLabel class="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
+        {{ $t('products.filters.priceRange') }}
+      </UiLabel>
+
+      <div class="space-y-6">
+        <UiSlider
+          :model-value="[localFilters.priceMin || availableFilters.priceRange.min, localFilters.priceMax || availableFilters.priceRange.max]"
+          :min="availableFilters.priceRange.min"
+          :max="availableFilters.priceRange.max"
+          :step="1"
+          @update:model-value="updatePriceRange"
+          class="w-full"
         />
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="space-y-2">
+            <UiLabel for="price-min" class="text-sm text-zinc-600 dark:text-zinc-400">
+              {{ $t('products.filters.minPrice') }}
+            </UiLabel>
+            <div class="relative">
+              <span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-zinc-600 dark:text-zinc-400">€</span>
+              <UiInput
+                id="price-min"
+                type="number"
+                :model-value="localFilters.priceMin || availableFilters.priceRange.min"
+                :min="availableFilters.priceRange.min"
+                :max="localFilters.priceMax || availableFilters.priceRange.max"
+                class="pl-7"
+                @update:model-value="updateMinPrice"
+              />
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <UiLabel for="price-max" class="text-sm text-zinc-600 dark:text-zinc-400">
+              {{ $t('products.filters.maxPrice') }}
+            </UiLabel>
+            <div class="relative">
+              <span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-zinc-600 dark:text-zinc-400">€</span>
+              <UiInput
+                id="price-max"
+                type="number"
+                :model-value="localFilters.priceMax || availableFilters.priceRange.max"
+                :min="localFilters.priceMin || availableFilters.priceRange.min"
+                :max="availableFilters.priceRange.max"
+                class="pl-7"
+                @update:model-value="updateMaxPrice"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Availability Filter -->
+    <div class="space-y-4">
+      <UiLabel class="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
+        {{ $t('products.filters.availability') }}
+      </UiLabel>
+
+      <div class="space-y-3">
+        <div class="flex items-center justify-between rounded-lg bg-zinc-50 p-4 dark:bg-zinc-900">
+          <UiLabel
+            for="filter-in-stock"
+            class="text-sm font-medium text-zinc-900 dark:text-zinc-100 cursor-pointer"
+          >
+            {{ $t('products.filters.inStockOnly') }}
+          </UiLabel>
+          <UiCheckbox
+            id="filter-in-stock"
+            :checked="localFilters.inStock"
+            @update:checked="updateFilters({ inStock: $event })"
+          />
+        </div>
+
+        <div class="flex items-center justify-between rounded-lg bg-zinc-50 p-4 dark:bg-zinc-900">
+          <UiLabel
+            for="filter-featured"
+            class="text-sm font-medium text-zinc-900 dark:text-zinc-100 cursor-pointer"
+          >
+            {{ $t('products.filters.featuredOnly') }}
+          </UiLabel>
+          <UiCheckbox
+            id="filter-featured"
+            :checked="localFilters.featured"
+            @update:checked="updateFilters({ featured: $event })"
+          />
+        </div>
       </div>
     </div>
 
     <!-- Category Filter -->
     <div
-      v-if="availableFilters.categories.length > 0"
-      class="filter-section"
+      v-if="availableFilters.categories && availableFilters.categories.length > 0"
+      class="space-y-4"
     >
-      <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-3">
+      <UiLabel class="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
         {{ $t('products.filters.categories') }}
-      </h3>
-      <productCategoryTree
-        :categories="availableFilters.categories"
-        :selected="selectedCategories"
-        @update:selected="updateCategoryFilter"
-      />
-    </div>
+      </UiLabel>
 
-    <!-- Price Range Filter -->
-    <div
-      v-if="availableFilters.priceRange"
-      class="filter-section"
-    >
-      <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-3">
-        {{ $t('products.filters.priceRange') }}
-      </h3>
-      <productMobilePriceRangeSlider
-        :min="availableFilters.priceRange.min"
-        :max="availableFilters.priceRange.max"
-        :value="[localFilters.priceMin || availableFilters.priceRange.min, localFilters.priceMax || availableFilters.priceRange.max]"
-        @update:value="updatePriceRange"
-      />
-    </div>
-
-    <!-- Stock Filter -->
-    <div class="filter-section">
-      <h3
-        id="availability-filter"
-        class="text-sm font-medium text-gray-900 dark:text-white mb-3"
-      >
-        {{ $t('products.filters.availability') }}
-      </h3>
-      <div
-        class="space-y-2"
-        role="group"
-        aria-labelledby="availability-filter"
-      >
-        <label class="flex items-center cursor-pointer">
-          <input
-            id="filter-in-stock"
-            v-model="localFilters.inStock"
-            type="checkbox"
-            class="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 bg-white dark:bg-gray-700"
-            :aria-label="$t('products.filters.inStockOnly')"
-            @change="updateFilters({ inStock: localFilters.inStock })"
-          />
-          <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
-            {{ $t('products.filters.inStockOnly') }}
+      <div class="space-y-2">
+        <div
+          v-for="category in availableFilters.categories"
+          :key="category.id"
+          class="flex items-center justify-between rounded-lg p-3 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors"
+        >
+          <UiLabel
+            :for="`category-${category.id}`"
+            class="text-sm text-zinc-900 dark:text-zinc-100 cursor-pointer flex-1"
+          >
+            {{ getCategoryName(category) }}
+          </UiLabel>
+          <span
+            v-if="category.count"
+            class="text-sm text-zinc-500 dark:text-zinc-400 mr-3"
+          >
+            {{ category.count }}
           </span>
-        </label>
-        <label class="flex items-center cursor-pointer">
-          <input
-            id="filter-featured"
-            v-model="localFilters.featured"
-            type="checkbox"
-            class="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 bg-white dark:bg-gray-700"
-            :aria-label="$t('products.filters.featuredOnly')"
-            @change="updateFilters({ featured: localFilters.featured })"
+          <UiCheckbox
+            :id="`category-${category.id}`"
+            :checked="selectedCategories.includes(category.id.toString())"
+            @update:checked="toggleCategory(category.id)"
           />
-          <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
-            {{ $t('products.filters.featuredOnly') }}
-          </span>
-        </label>
+        </div>
       </div>
     </div>
 
@@ -95,29 +133,37 @@
     <div
       v-for="attribute in availableFilters.attributes"
       :key="attribute.name"
-      class="filter-section"
+      class="space-y-4"
     >
-      <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-3">
+      <UiLabel class="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
         {{ attribute.label }}
-      </h3>
-      <productAttributeCheckboxGroup
-        :options="attribute.values"
-        :selected="localFilters.attributes?.[attribute.name] || []"
-        @update:selected="updateAttributeFilter(attribute.name, $event)"
-      />
+      </UiLabel>
+
+      <div class="space-y-2">
+        <div
+          v-for="option in attribute.values"
+          :key="option.value"
+          class="flex items-center justify-between rounded-lg p-3 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors"
+        >
+          <UiLabel
+            :for="`${attribute.name}-${option.value}`"
+            class="text-sm text-zinc-900 dark:text-zinc-100 cursor-pointer flex-1"
+          >
+            {{ option.label }}
+          </UiLabel>
+          <UiCheckbox
+            :id="`${attribute.name}-${option.value}`"
+            :checked="isAttributeSelected(attribute.name, option.value)"
+            @update:checked="toggleAttribute(attribute.name, option.value)"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { ProductFilters, CategoryFilter, AttributeFilter, PriceRange } from '~/types'
-
-interface ActiveFilter {
-  id: string
-  label: string
-  type: 'category' | 'price' | 'stock' | 'featured' | 'attribute'
-  value?: { attributeName: string, value: string }
-}
 
 interface Props {
   filters: ProductFilters
@@ -136,7 +182,7 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 // Composables
-const { t, locale } = useI18n()
+const { locale } = useI18n()
 
 // Local reactive state
 const localFilters = ref<ProductFilters>({ ...props.filters })
@@ -152,106 +198,16 @@ const selectedCategories = computed(() => {
   return []
 })
 
-const hasActiveFilters = computed(() => {
-  return !!(
-    localFilters.value.category
-    || localFilters.value.priceMin
-    || localFilters.value.priceMax
-    || localFilters.value.inStock
-    || localFilters.value.featured
-    || (localFilters.value.attributes && Object.keys(localFilters.value.attributes).length > 0)
-  )
-})
-
-const activeFilters = computed((): ActiveFilter[] => {
-  const filters: ActiveFilter[] = []
-
-  // Category filter
-  if (localFilters.value.category) {
-    const categoryName = getCategoryName(localFilters.value.category)
-    filters.push({
-      id: 'category',
-      label: categoryName,
-      type: 'category',
-    })
-  }
-
-  // Price range filter
-  if (localFilters.value.priceMin || localFilters.value.priceMax) {
-    const min = localFilters.value.priceMin || props.availableFilters.priceRange.min
-    const max = localFilters.value.priceMax || props.availableFilters.priceRange.max
-    filters.push({
-      id: 'price',
-      label: `€${min} - €${max}`,
-      type: 'price',
-    })
-  }
-
-  // Stock filter
-  if (localFilters.value.inStock) {
-    filters.push({
-      id: 'stock',
-      label: t('products.filters.inStockOnly'),
-      type: 'stock',
-    })
-  }
-
-  // Featured filter
-  if (localFilters.value.featured) {
-    filters.push({
-      id: 'featured',
-      label: t('products.filters.featuredOnly'),
-      type: 'featured',
-    })
-  }
-
-  // Attribute filters
-  if (localFilters.value.attributes) {
-    Object.entries(localFilters.value.attributes).forEach(([attributeName, values]) => {
-      if (values.length > 0) {
-        const attribute = props.availableFilters.attributes.find(a => a.name === attributeName)
-        values.forEach((value) => {
-          const option = attribute?.values.find(v => v.value === value)
-          if (option && attribute) {
-            filters.push({
-              id: `${attributeName}-${value}`,
-              label: `${attribute.label}: ${option.label}`,
-              type: 'attribute',
-              value: { attributeName, value },
-            })
-          }
-        })
-      }
-    })
-  }
-
-  return filters
-})
-
 // Methods
-const getCategoryName = (categoryId: string | number): string => {
-  const findCategory = (categories: CategoryFilter[], id: string | number): CategoryFilter | undefined => {
-    for (const category of categories) {
-      if (category.id.toString() === id.toString()) {
-        return category
-      }
-      if (category.children) {
-        const found = findCategory(category.children, id)
-        if (found) return found
-      }
-    }
-    return undefined
-  }
-
-  const category = findCategory(props.availableFilters.categories, categoryId)
-  const categoryName = category?.name
+const getCategoryName = (category: CategoryFilter): string => {
+  const categoryName = category.name
   if (typeof categoryName === 'string') {
     return categoryName
   }
   if (categoryName && typeof categoryName === 'object') {
-    return categoryName[locale.value] || categoryName.es || categoryName.en
+    return categoryName[locale.value] || categoryName.es || categoryName.en || ''
   }
-  return t('products.filters.unknownCategory')
+  return ''
 }
 
 const updateFilters = (newFilters: Partial<ProductFilters>) => {
@@ -259,12 +215,7 @@ const updateFilters = (newFilters: Partial<ProductFilters>) => {
   emit('update:filters', localFilters.value)
 }
 
-const updateCategoryFilter = (categories: string[]) => {
-  const category = categories.length > 0 ? categories[0] : undefined
-  updateFilters({ category })
-}
-
-const updatePriceRange = (range: [number, number]) => {
+const updatePriceRange = (range: number[]) => {
   const [min, max] = range
   const { min: availableMin, max: availableMax } = props.availableFilters.priceRange
 
@@ -274,43 +225,51 @@ const updatePriceRange = (range: [number, number]) => {
   })
 }
 
-const updateAttributeFilter = (attributeName: string, values: string[]) => {
+const updateMinPrice = (value: number) => {
+  const { min: availableMin } = props.availableFilters.priceRange
+  updateFilters({
+    priceMin: value > availableMin ? value : undefined,
+  })
+}
+
+const updateMaxPrice = (value: number) => {
+  const { max: availableMax } = props.availableFilters.priceRange
+  updateFilters({
+    priceMax: value < availableMax ? value : undefined,
+  })
+}
+
+const toggleCategory = (categoryId: number | string) => {
+  const isSelected = selectedCategories.value.includes(categoryId.toString())
+  updateFilters({ category: isSelected ? undefined : categoryId })
+}
+
+const isAttributeSelected = (attributeName: string, value: string): boolean => {
+  const values = localFilters.value.attributes?.[attributeName] || []
+  return values.includes(value)
+}
+
+const toggleAttribute = (attributeName: string, value: string) => {
+  const currentValues = localFilters.value.attributes?.[attributeName] || []
+  const isSelected = currentValues.includes(value)
+
+  let newValues: string[]
+  if (isSelected) {
+    newValues = currentValues.filter(v => v !== value)
+  } else {
+    newValues = [...currentValues, value]
+  }
+
   let attributes = { ...localFilters.value.attributes }
 
-  if (values.length > 0) {
-    attributes[attributeName] = values
-  }
-  else {
+  if (newValues.length > 0) {
+    attributes[attributeName] = newValues
+  } else {
     const { [attributeName]: _removed, ...rest } = attributes
     attributes = rest
   }
 
   updateFilters({ attributes })
-}
-
-const removeFilter = (id: string, type: string, value?: { attributeName: string, value: string }) => {
-  switch (type) {
-    case 'category':
-      updateFilters({ category: undefined })
-      break
-    case 'price':
-      updateFilters({ priceMin: undefined, priceMax: undefined })
-      break
-    case 'stock':
-      updateFilters({ inStock: false })
-      break
-    case 'featured':
-      updateFilters({ featured: false })
-      break
-    case 'attribute':
-      if (value) {
-        const { attributeName, value: attributeValue } = value
-        const currentValues = localFilters.value.attributes?.[attributeName] || []
-        const newValues = currentValues.filter(v => v !== attributeValue)
-        updateAttributeFilter(attributeName, newValues)
-      }
-      break
-  }
 }
 
 // Watch for external filter changes
