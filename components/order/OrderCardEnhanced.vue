@@ -238,6 +238,7 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { Button } from '@/components/ui/button'
 import type { OrderWithItems } from '~/types'
 
