@@ -1,10 +1,13 @@
 <template>
   <div
+    ref="modalOverlay"
     class="fixed inset-0 z-50 overflow-y-auto"
     role="dialog"
     aria-modal="true"
     aria-labelledby="delete-account-title"
     aria-describedby="delete-account-description"
+    @keydown.escape="$emit('close')"
+    @keydown.tab="trapFocus"
   >
     <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
       <!-- Background overlay -->
@@ -223,6 +226,11 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button'
 
+interface ToastPlugin {
+  success: (message: string) => void
+  error: (message: string) => void
+}
+
 interface Emits {
   (e: 'confirm', data: { password: string, reason?: string }): void
   (e: 'close'): void
@@ -231,6 +239,11 @@ interface Emits {
 const emit = defineEmits<Emits>()
 
 const { t } = useI18n()
+const nuxtApp = useNuxtApp()
+const $toast = nuxtApp.$toast as ToastPlugin
+
+// Modal ref for focus trap
+const modalOverlay = ref<HTMLElement>()
 
 // Reactive state
 const isLoading = ref(false)
@@ -282,9 +295,45 @@ const handleSubmit = async () => {
   }
   catch (error: any) {
     console.error('Error confirming account deletion:', error)
+    // CRITICAL FIX: Show toast error so user knows action failed
+    const errorMessage = error?.message || t('profile.errors.deleteFailed')
+    $toast.error(errorMessage)
   }
   finally {
     isLoading.value = false
   }
 }
+
+// Focus trap utility for modal accessibility
+const trapFocus = (event: KeyboardEvent) => {
+  const modal = modalOverlay.value
+  if (!modal) return
+
+  const focusableElements = modal.querySelectorAll(
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+  )
+  const firstElement = focusableElements[0] as HTMLElement
+  const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement
+
+  if (event.shiftKey) {
+    if (document.activeElement === firstElement) {
+      event.preventDefault()
+      lastElement.focus()
+    }
+  }
+  else {
+    if (document.activeElement === lastElement) {
+      event.preventDefault()
+      firstElement.focus()
+    }
+  }
+}
+
+// Focus the confirmation input when modal opens
+onMounted(() => {
+  nextTick(() => {
+    const confirmInput = modalOverlay.value?.querySelector('#confirmation') as HTMLElement
+    confirmInput?.focus()
+  })
+})
 </script>

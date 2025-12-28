@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders Page UX Proposals - Moldova Direct</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .phone-frame {
+            width: 375px;
+            height: 667px;
+            border: 16px solid #1f2937;
+            border-radius: 36px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            background: white;
+        }
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 24px;
+            background: #1f2937;
+            border-radius: 0 0 20px 20px;
+            z-index: 10;
+        }
+        .phone-content {
+            height: 100%;
+            overflow-y: auto;
+            background: #f9fafb;
+        }
+        .order-card {
+            transition: all 0.3s ease;
+        }
+        .order-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .timeline-step {
+            position: relative;
+        }
+        .timeline-line {
+            position: absolute;
+            left: 15px;
+            top: 32px;
+            bottom: -16px;
+            width: 2px;
+            background: #e5e7eb;
+        }
+        .timeline-step.active .timeline-line {
+            background: #3b82f6;
+        }
+        .swipe-indicator {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            padding: 12px;
+        }
+        .swipe-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #d1d5db;
+            transition: all 0.3s;
+        }
+        .swipe-dot.active {
+            width: 24px;
+            border-radius: 4px;
+            background: #3b82f6;
+        }
+        .quick-action-btn {
+            transition: all 0.2s;
+        }
+        .quick-action-btn:active {
+            transform: scale(0.95);
+        }
+        .expandable-card {
+            max-height: 140px;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .expandable-card.expanded {
+            max-height: 500px;
+        }
+        .tab-indicator {
+            position: absolute;
+            bottom: 0;
+            height: 3px;
+            background: #3b82f6;
+            transition: all 0.3s ease;
+        }
+        .filter-chip {
+            transition: all 0.2s;
+        }
+        .filter-chip:hover {
+            transform: translateY(-1px);
+        }
+        .skeleton {
+            animation: skeleton-loading 1s linear infinite alternate;
+        }
+        @keyframes skeleton-loading {
+            0% { background-color: #e5e7eb; }
+            100% { background-color: #f3f4f6; }
+        }
+        .modal-backdrop {
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            transition: transform 0.3s ease;
+        }
+        .list-view .order-card {
+            border-left: 4px solid transparent;
+        }
+        .list-view .order-card.shipped {
+            border-left-color: #8b5cf6;
+        }
+        .list-view .order-card.delivered {
+            border-left-color: #10b981;
+        }
+        .list-view .order-card.processing {
+            border-left-color: #3b82f6;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <h1 class="text-3xl font-bold text-gray-900">Orders Page UX Proposals</h1>
+            <p class="mt-2 text-sm text-gray-600">Interactive mockups for Moldova Direct order management experience</p>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="bg-white border-b border-gray-200 sticky top-20 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex space-x-8 overflow-x-auto">
+                <button onclick="showProposal('variant-a')" class="proposal-tab py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap" data-tab="variant-a">
+                    Option A: Timeline-Focused
+                </button>
+                <button onclick="showProposal('variant-b')" class="proposal-tab py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap" data-tab="variant-b">
+                    Option B: Card-Compact
+                </button>
+                <button onclick="showProposal('variant-c')" class="proposal-tab py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap" data-tab="variant-c">
+                    Option C: Quick Actions
+                </button>
+                <button onclick="showProposal('variant-d')" class="proposal-tab py-4 px-1 border-b-2 border-blue-500 font-medium text-sm text-blue-600 border-blue-600 whitespace-nowrap" data-tab="variant-d">
+                    ⭐ Option D: Recommended
+                </button>
+                <button onclick="showProposal('comparison')" class="proposal-tab py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap" data-tab="comparison">
+                    📊 Comparison
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- Variant A: Timeline-Focused -->
+        <div id="variant-a" class="proposal-section hidden">
+            <div class="mb-8 bg-white rounded-lg shadow-sm p-6">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900">Option A: Timeline-Focused Design</h2>
+                        <p class="mt-2 text-gray-600">Emphasizes order status progression with visual timeline</p>
+                    </div>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">
+                        Amazon-Style
+                    </span>
+                </div>
+
+                <div class="mt-6 grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-semibold text-gray-900 mb-3">✨ Key Features</h3>
+                        <ul class="space-y-2 text-sm text-gray-600">
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Visual timeline showing order progress at a glance</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Expandable cards reveal detailed tracking information</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Color-coded status indicators for quick scanning</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Estimated delivery prominently displayed</span>
+                            </li>
+                        </ul>
+
+                        <h3 class="font-semibold text-gray-900 mb-3 mt-6">🏢 Used By</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">Amazon</span>
+                            <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">eBay</span>
+                            <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">Walmart</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-center">
+                        <div class="phone-frame">
+                            <div class="phone-notch"></div>
+                            <div class="phone-content">
+                                <!-- Header -->
+                                <div class="bg-white px-4 py-3 border-b sticky top-0">
+                                    <h1 class="text-lg font-bold text-gray-900">My Orders</h1>
+                                    <p class="text-xs text-gray-500">3 active orders</p>
+                                </div>
+
+                                <!-- Orders List -->
+                                <div class="p-4 space-y-4">
+                                    <!-- Order Card 1 -->
+                                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden expandable-card" onclick="this.classList.toggle('expanded')">
+                                        <div class="p-4">
+                                            <div class="flex justify-between items-start mb-3">
+                                                <div>
+                                                    <p class="text-xs text-gray-500">Order #ORD-2024-001</p>
+                                                    <p class="text-sm font-semibold text-gray-900 mt-1">€124.99</p>
+                                                </div>
+                                                <span class="status-badge text-xs font-medium px-2 py-1 bg-purple-100 text-purple-700 rounded-full">
+                                                    <span class="status-dot bg-purple-500"></span>
+                                                    Shipped
+                                                </span>
+                                            </div>
+
+                                            <!-- Timeline -->
+                                            <div class="space-y-3 mb-3">
+                                                <div class="timeline-step active">
+                                                    <div class="flex items-start">
+                                                        <div class="flex-shrink-0 w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                                                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                                            </svg>
+                                                        </div>
+                                                        <div class="ml-3 flex-1">
+                                                            <p class="text-sm font-medium text-gray-900">Out for delivery</p>
+                                                            <p class="text-xs text-gray-500">Dec 28, 10:30 AM</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="timeline-line"></div>
+                                                </div>
+
+                                                <div class="timeline-step active">
+                                                    <div class="flex items-start">
+                                                        <div class="flex-shrink-0 w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                                                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                                            </svg>
+                                                        </div>
+                                                        <div class="ml-3 flex-1">
+                                                            <p class="text-sm font-medium text-gray-900">In transit</p>
+                                                            <p class="text-xs text-gray-500">Dec 27, 2:15 PM</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="timeline-line"></div>
+                                                </div>
+
+                                                <div class="timeline-step">
+                                                    <div class="flex items-start">
+                                                        <div class="flex-shrink-0 w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                                                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                                <path d="M10 2a8 8 0 100 16 8 8 0 000-16z"/>
+                                                            </svg>
+                                                        </div>
+                                                        <div class="ml-3 flex-1">
+                                                            <p class="text-sm font-medium text-gray-500">Delivered</p>
+                                                            <p class="text-xs text-gray-400">Expected today</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Product Preview -->
+                                            <div class="flex items-center gap-3 pt-3 border-t">
+                                                <img src="https://via.placeholder.com/60" alt="Product" class="w-12 h-12 rounded object-cover">
+                                                <div class="flex-1 min-w-0">
+                                                    <p class="text-sm font-medium text-gray-900 truncate">Premium Wireless Headphones</p>
+                                                    <p class="text-xs text-gray-500">Qty: 1</p>
+                                                </div>
+                                            </div>
+
+                                            <!-- Quick Actions -->
+                                            <div class="mt-3 pt-3 border-t flex gap-2">
+                                                <button class="flex-1 px-3 py-2 text-xs font-medium text-blue-600 bg-blue-50 rounded hover:bg-blue-100">
+                                                    Track Package
+                                                </button>
+                                                <button class="flex-1 px-3 py-2 text-xs font-medium text-gray-700 bg-gray-100 rounded hover:bg-gray-200">
+                                                    Details
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Order Card 2 -->
+                                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                                        <div class="flex justify-between items-start mb-3">
+                                            <div>
+                                                <p class="text-xs text-gray-500">Order #ORD-2024-002</p>
+                                                <p class="text-sm font-semibold text-gray-900 mt-1">€89.50</p>
+                                            </div>
+                                            <span class="status-badge text-xs font-medium px-2 py-1 bg-green-100 text-green-700 rounded-full">
+                                                <span class="status-dot bg-green-500"></span>
+                                                Delivered
+                                            </span>
+                                        </div>
+
+                                        <div class="flex items-center gap-3 mb-3">
+                                            <img src="https://via.placeholder.com/60" alt="Product" class="w-12 h-12 rounded object-cover">
+                                            <div class="flex-1">
+                                                <p class="text-sm font-medium text-gray-900">Smart Watch Series 5</p>
+                                                <p class="text-xs text-gray-500">Delivered Dec 20</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="flex gap-2">
+                                            <button class="flex-1 px-3 py-2 text-xs font-medium text-blue-600 bg-blue-50 rounded">
+                                                Reorder
+                                            </button>
+                                            <button class="flex-1 px-3 py-2 text-xs font-medium text-gray-700 bg-gray-100 rounded">
+                                                Return
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Variant B: Card-Compact -->
+        <div id="variant-b" class="proposal-section hidden">
+            <div class="mb-8 bg-white rounded-lg shadow-sm p-6">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900">Option B: Card-Compact Design</h2>
+                        <p class="mt-2 text-gray-600">Dense information display with grid layout for better scanning</p>
+                    </div>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                        Shopify-Style
+                    </span>
+                </div>
+
+                <div class="mt-6 grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-semibold text-gray-900 mb-3">✨ Key Features</h3>
+                        <ul class="space-y-2 text-sm text-gray-600">
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Compact grid layout fits more orders on screen</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Product thumbnails for quick visual recognition</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Filter chips for quick status filtering</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Single-tap access to order details</span>
+                            </li>
+                        </ul>
+
+                        <h3 class="font-semibold text-gray-900 mb-3 mt-6">🏢 Used By</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">Shopify</span>
+                            <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">Etsy</span>
+                            <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">ASOS</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-center">
+                        <div class="phone-frame">
+                            <div class="phone-notch"></div>
+                            <div class="phone-content">
+                                <!-- Header -->
+                                <div class="bg-white px-4 py-3 border-b sticky top-0">
+                                    <h1 class="text-lg font-bold text-gray-900">Orders</h1>
+
+                                    <!-- Filter Chips -->
+                                    <div class="flex gap-2 mt-3 overflow-x-auto pb-2">
+                                        <button class="filter-chip px-3 py-1 bg-blue-500 text-white text-xs rounded-full whitespace-nowrap">
+                                            All (5)
+                                        </button>
+                                        <button class="filter-chip px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full whitespace-nowrap">
+                                            Active (2)
+                                        </button>
+                                        <button class="filter-chip px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full whitespace-nowrap">
+                                            Delivered (3)
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Orders Grid -->
+                                <div class="p-3 grid grid-cols-2 gap-3">
+                                    <!-- Order Card 1 -->
+                                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-3 order-card">
+                                        <div class="relative mb-2">
+                                            <img src="https://via.placeholder.com/150" alt="Product" class="w-full h-24 object-cover rounded">
+                                            <span class="absolute top-1 right-1 text-xs font-medium px-2 py-0.5 bg-purple-500 text-white rounded-full">
+                                                Shipped
+                                            </span>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mb-1">#ORD-001</p>
+                                        <p class="text-sm font-semibold text-gray-900 mb-1">€124.99</p>
+                                        <p class="text-xs text-gray-600 mb-2 truncate">Wireless Headphones</p>
+                                        <button class="w-full px-2 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 rounded hover:bg-blue-100">
+                                            Track
+                                        </button>
+                                    </div>
+
+                                    <!-- Order Card 2 -->
+                                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-3 order-card">
+                                        <div class="relative mb-2">
+                                            <img src="https://via.placeholder.com/150" alt="Product" class="w-full h-24 object-cover rounded">
+                                            <span class="absolute top-1 right-1 text-xs font-medium px-2 py-0.5 bg-green-500 text-white rounded-full">
+                                                Delivered
+                                            </span>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mb-1">#ORD-002</p>
+                                        <p class="text-sm font-semibold text-gray-900 mb-1">€89.50</p>
+                                        <p class="text-xs text-gray-600 mb-2 truncate">Smart Watch</p>
+                                        <button class="w-full px-2 py-1.5 text-xs font-medium text-gray-700 bg-gray-100 rounded hover:bg-gray-200">
+                                            Reorder
+                                        </button>
+                                    </div>
+
+                                    <!-- Order Card 3 -->
+                                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-3 order-card">
+                                        <div class="relative mb-2">
+                                            <img src="https://via.placeholder.com/150" alt="Product" class="w-full h-24 object-cover rounded">
+                                            <span class="absolute top-1 right-1 text-xs font-medium px-2 py-0.5 bg-blue-500 text-white rounded-full">
+                                                Processing
+                                            </span>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mb-1">#ORD-003</p>
+                                        <p class="text-sm font-semibold text-gray-900 mb-1">€245.00</p>
+                                        <p class="text-xs text-gray-600 mb-2 truncate">Laptop Stand</p>
+                                        <button class="w-full px-2 py-1.5 text-xs font-medium text-gray-700 bg-gray-100 rounded hover:bg-gray-200">
+                                            Details
+                                        </button>
+                                    </div>
+
+                                    <!-- Order Card 4 -->
+                                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-3 order-card">
+                                        <div class="relative mb-2">
+                                            <img src="https://via.placeholder.com/150" alt="Product" class="w-full h-24 object-cover rounded">
+                                            <span class="absolute top-1 right-1 text-xs font-medium px-2 py-0.5 bg-green-500 text-white rounded-full">
+                                                Delivered
+                                            </span>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mb-1">#ORD-004</p>
+                                        <p class="text-sm font-semibold text-gray-900 mb-1">€56.99</p>
+                                        <p class="text-xs text-gray-600 mb-2 truncate">Phone Case</p>
+                                        <button class="w-full px-2 py-1.5 text-xs font-medium text-gray-700 bg-gray-100 rounded hover:bg-gray-200">
+                                            Return
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Variant C: Quick Actions -->
+        <div id="variant-c" class="proposal-section hidden">
+            <div class="mb-8 bg-white rounded-lg shadow-sm p-6">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900">Option C: Quick Actions First</h2>
+                        <p class="mt-2 text-gray-600">Action-oriented design with swipe gestures and prominent CTAs</p>
+                    </div>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-orange-100 text-orange-800">
+                        Nike-Style
+                    </span>
+                </div>
+
+                <div class="mt-6 grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-semibold text-gray-900 mb-3">✨ Key Features</h3>
+                        <ul class="space-y-2 text-sm text-gray-600">
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Swipe left to reveal quick actions (track, reorder, cancel)</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Primary action button changes based on order status</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Status-based color coding on card borders</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Minimal info upfront, tap to expand for details</span>
+                            </li>
+                        </ul>
+
+                        <h3 class="font-semibold text-gray-900 mb-3 mt-6">🏢 Used By</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">Nike</span>
+                            <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">Uber Eats</span>
+                            <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">DoorDash</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-center">
+                        <div class="phone-frame">
+                            <div class="phone-notch"></div>
+                            <div class="phone-content list-view">
+                                <!-- Header -->
+                                <div class="bg-white px-4 py-3 border-b sticky top-0">
+                                    <div class="flex justify-between items-center">
+                                        <h1 class="text-lg font-bold text-gray-900">My Orders</h1>
+                                        <button class="p-2 hover:bg-gray-100 rounded-lg">
+                                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Hint Banner -->
+                                <div class="bg-blue-50 px-4 py-2 border-b border-blue-100">
+                                    <p class="text-xs text-blue-700 text-center">👈 Swipe cards left for quick actions</p>
+                                </div>
+
+                                <!-- Orders List -->
+                                <div class="p-4 space-y-3">
+                                    <!-- Order Card 1 - Shipped -->
+                                    <div class="bg-white rounded-lg shadow-sm border-l-4 border-purple-500 p-4 order-card shipped">
+                                        <div class="flex justify-between items-start mb-3">
+                                            <div class="flex items-start gap-3">
+                                                <img src="https://via.placeholder.com/60" alt="Product" class="w-16 h-16 rounded object-cover">
+                                                <div>
+                                                    <p class="text-sm font-semibold text-gray-900">Premium Headphones</p>
+                                                    <p class="text-xs text-gray-500 mt-0.5">#ORD-001 · Dec 25</p>
+                                                    <p class="text-sm font-bold text-gray-900 mt-1">€124.99</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="flex items-center gap-2 mb-3 px-3 py-2 bg-purple-50 rounded">
+                                            <svg class="w-4 h-4 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/>
+                                                <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z"/>
+                                            </svg>
+                                            <div class="flex-1">
+                                                <p class="text-xs font-medium text-purple-900">Out for delivery</p>
+                                                <p class="text-xs text-purple-700">Arrives today by 6 PM</p>
+                                            </div>
+                                        </div>
+
+                                        <button class="quick-action-btn w-full px-4 py-2.5 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 active:bg-purple-800">
+                                            Track Package →
+                                        </button>
+                                    </div>
+
+                                    <!-- Order Card 2 - Delivered -->
+                                    <div class="bg-white rounded-lg shadow-sm border-l-4 border-green-500 p-4 order-card delivered">
+                                        <div class="flex justify-between items-start mb-3">
+                                            <div class="flex items-start gap-3">
+                                                <img src="https://via.placeholder.com/60" alt="Product" class="w-16 h-16 rounded object-cover">
+                                                <div>
+                                                    <p class="text-sm font-semibold text-gray-900">Smart Watch</p>
+                                                    <p class="text-xs text-gray-500 mt-0.5">#ORD-002 · Dec 20</p>
+                                                    <p class="text-sm font-bold text-gray-900 mt-1">€89.50</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="flex items-center gap-2 mb-3 px-3 py-2 bg-green-50 rounded">
+                                            <svg class="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                            </svg>
+                                            <p class="text-xs font-medium text-green-900">Delivered Dec 20</p>
+                                        </div>
+
+                                        <div class="flex gap-2">
+                                            <button class="quick-action-btn flex-1 px-3 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700">
+                                                Reorder
+                                            </button>
+                                            <button class="quick-action-btn flex-1 px-3 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200">
+                                                Return
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Order Card 3 - Processing -->
+                                    <div class="bg-white rounded-lg shadow-sm border-l-4 border-blue-500 p-4 order-card processing">
+                                        <div class="flex justify-between items-start mb-3">
+                                            <div class="flex items-start gap-3">
+                                                <img src="https://via.placeholder.com/60" alt="Product" class="w-16 h-16 rounded object-cover">
+                                                <div>
+                                                    <p class="text-sm font-semibold text-gray-900">Laptop Stand + 2 items</p>
+                                                    <p class="text-xs text-gray-500 mt-0.5">#ORD-003 · Dec 27</p>
+                                                    <p class="text-sm font-bold text-gray-900 mt-1">€245.00</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="flex items-center gap-2 mb-3 px-3 py-2 bg-blue-50 rounded">
+                                            <div class="animate-spin w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full"></div>
+                                            <p class="text-xs font-medium text-blue-900">Processing order</p>
+                                        </div>
+
+                                        <button class="quick-action-btn w-full px-4 py-2.5 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200">
+                                            Cancel Order
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Variant D: Recommended (Hybrid) -->
+        <div id="variant-d" class="proposal-section">
+            <div class="mb-8 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg shadow-lg p-6 border-2 border-blue-200">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h2 class="text-2xl font-bold text-gray-900">Option D: Hybrid Smart Design</h2>
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-yellow-400 text-gray-900">
+                                ⭐ RECOMMENDED
+                            </span>
+                        </div>
+                        <p class="mt-2 text-gray-700 font-medium">Best of all patterns combined with Moldova Direct's needs</p>
+                    </div>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-blue-500 to-indigo-500 text-white">
+                        Custom Hybrid
+                    </span>
+                </div>
+
+                <div class="mt-6 grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-semibold text-gray-900 mb-3 text-lg">✨ Why This is Recommended</h3>
+                        <div class="bg-white rounded-lg p-4 mb-4 border-l-4 border-blue-500">
+                            <p class="text-sm text-gray-700 font-medium mb-2">🎯 Perfect Balance:</p>
+                            <p class="text-sm text-gray-600">Combines timeline visibility from Option A, compact efficiency from Option B, and action-first approach from Option C</p>
+                        </div>
+
+                        <h3 class="font-semibold text-gray-900 mb-3">🚀 Key Features</h3>
+                        <ul class="space-y-2 text-sm text-gray-600">
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span><strong>Smart Status Bar:</strong> Visual progress indicator at top of each card</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span><strong>Contextual Actions:</strong> Primary action changes based on order status</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span><strong>Priority Info:</strong> Estimated delivery time shown prominently for active orders</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span><strong>Smart Tabs:</strong> Active/Past order separation for faster access</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span><strong>Quick Filters:</strong> One-tap status filtering with visual indicators</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span><strong>Product Thumbnails:</strong> Visual recognition with item count</span>
+                            </li>
+                        </ul>
+
+                        <h3 class="font-semibold text-gray-900 mb-3 mt-6">🏆 Competitive Advantage</h3>
+                        <div class="bg-green-50 rounded-lg p-4 border border-green-200">
+                            <ul class="space-y-2 text-sm text-gray-700">
+                                <li class="flex items-start">
+                                    <span class="text-green-600 mr-2">✓</span>
+                                    <span>Better than Amazon: Cleaner, less cluttered interface</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-600 mr-2">✓</span>
+                                    <span>Better than Shopify: More contextual actions per status</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-600 mr-2">✓</span>
+                                    <span>Better than Nike: Faster access to order details</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-center">
+                        <div class="phone-frame">
+                            <div class="phone-notch"></div>
+                            <div class="phone-content">
+                                <!-- Header with Tabs -->
+                                <div class="bg-white border-b sticky top-0 z-10">
+                                    <div class="px-4 pt-3 pb-2">
+                                        <h1 class="text-lg font-bold text-gray-900">My Orders</h1>
+                                    </div>
+                                    <div class="flex relative">
+                                        <button class="flex-1 px-4 py-3 text-sm font-semibold text-blue-600 relative">
+                                            Active (2)
+                                            <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600"></div>
+                                        </button>
+                                        <button class="flex-1 px-4 py-3 text-sm font-medium text-gray-500">
+                                            Past Orders
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Quick Filters -->
+                                <div class="bg-white px-4 py-3 border-b">
+                                    <div class="flex gap-2 overflow-x-auto pb-1">
+                                        <button class="px-3 py-1.5 bg-blue-100 text-blue-700 text-xs font-medium rounded-full whitespace-nowrap border border-blue-200">
+                                            All
+                                        </button>
+                                        <button class="px-3 py-1.5 bg-white text-gray-600 text-xs font-medium rounded-full whitespace-nowrap border border-gray-200">
+                                            Shipped (1)
+                                        </button>
+                                        <button class="px-3 py-1.5 bg-white text-gray-600 text-xs font-medium rounded-full whitespace-nowrap border border-gray-200">
+                                            Processing (1)
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Orders List -->
+                                <div class="p-4 space-y-4">
+                                    <!-- Order Card 1 - Shipped (Active) -->
+                                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                                        <!-- Status Progress Bar -->
+                                        <div class="h-1.5 bg-gray-100">
+                                            <div class="h-full bg-gradient-to-r from-blue-500 to-purple-500" style="width: 75%"></div>
+                                        </div>
+
+                                        <div class="p-4">
+                                            <!-- Header -->
+                                            <div class="flex justify-between items-start mb-3">
+                                                <div>
+                                                    <div class="flex items-center gap-2">
+                                                        <span class="text-xs font-medium text-gray-500">#ORD-001</span>
+                                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-purple-100 text-purple-700 text-xs font-medium rounded-full">
+                                                            <span class="w-1.5 h-1.5 bg-purple-500 rounded-full animate-pulse"></span>
+                                                            Shipped
+                                                        </span>
+                                                    </div>
+                                                    <p class="text-lg font-bold text-gray-900 mt-1">€124.99</p>
+                                                </div>
+                                                <button class="p-2 hover:bg-gray-100 rounded-lg">
+                                                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
+                                                    </svg>
+                                                </button>
+                                            </div>
+
+                                            <!-- Delivery Alert -->
+                                            <div class="flex items-center gap-3 mb-3 p-3 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border border-purple-100">
+                                                <div class="flex-shrink-0">
+                                                    <svg class="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/>
+                                                        <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z"/>
+                                                    </svg>
+                                                </div>
+                                                <div class="flex-1 min-w-0">
+                                                    <p class="text-xs font-semibold text-purple-900">Out for delivery</p>
+                                                    <p class="text-xs text-purple-700 mt-0.5">Arrives today by 6:00 PM</p>
+                                                </div>
+                                            </div>
+
+                                            <!-- Product Info -->
+                                            <div class="flex items-center gap-3 mb-3">
+                                                <img src="https://via.placeholder.com/60" alt="Product" class="w-14 h-14 rounded-lg object-cover bg-gray-100">
+                                                <div class="flex-1 min-w-0">
+                                                    <p class="text-sm font-semibold text-gray-900 truncate">Premium Wireless Headphones</p>
+                                                    <p class="text-xs text-gray-500 mt-0.5">Black · Qty: 1</p>
+                                                </div>
+                                            </div>
+
+                                            <!-- Primary Action -->
+                                            <button class="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white text-sm font-semibold rounded-lg shadow-sm flex items-center justify-center gap-2 transition-all">
+                                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                                                </svg>
+                                                Track Live Location
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Order Card 2 - Processing -->
+                                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                                        <!-- Status Progress Bar -->
+                                        <div class="h-1.5 bg-gray-100">
+                                            <div class="h-full bg-gradient-to-r from-blue-500 to-blue-400" style="width: 25%"></div>
+                                        </div>
+
+                                        <div class="p-4">
+                                            <!-- Header -->
+                                            <div class="flex justify-between items-start mb-3">
+                                                <div>
+                                                    <div class="flex items-center gap-2">
+                                                        <span class="text-xs font-medium text-gray-500">#ORD-003</span>
+                                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">
+                                                            <div class="w-1.5 h-1.5 border border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                                                            Processing
+                                                        </span>
+                                                    </div>
+                                                    <p class="text-lg font-bold text-gray-900 mt-1">€245.00</p>
+                                                </div>
+                                                <button class="p-2 hover:bg-gray-100 rounded-lg">
+                                                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
+                                                    </svg>
+                                                </button>
+                                            </div>
+
+                                            <!-- Status Info -->
+                                            <div class="flex items-center gap-3 mb-3 p-3 bg-blue-50 rounded-lg border border-blue-100">
+                                                <div class="flex-1">
+                                                    <p class="text-xs font-semibold text-blue-900">Being prepared</p>
+                                                    <p class="text-xs text-blue-700 mt-0.5">Ships in 1-2 business days</p>
+                                                </div>
+                                            </div>
+
+                                            <!-- Product Info -->
+                                            <div class="flex items-center gap-3 mb-3">
+                                                <div class="relative">
+                                                    <img src="https://via.placeholder.com/60" alt="Product" class="w-14 h-14 rounded-lg object-cover bg-gray-100">
+                                                    <span class="absolute -top-1 -right-1 w-5 h-5 bg-blue-600 text-white text-xs font-bold rounded-full flex items-center justify-center">
+                                                        3
+                                                    </span>
+                                                </div>
+                                                <div class="flex-1 min-w-0">
+                                                    <p class="text-sm font-semibold text-gray-900 truncate">Laptop Stand</p>
+                                                    <p class="text-xs text-gray-500 mt-0.5">+ 2 more items</p>
+                                                </div>
+                                            </div>
+
+                                            <!-- Actions -->
+                                            <div class="flex gap-2">
+                                                <button class="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg">
+                                                    View Details
+                                                </button>
+                                                <button class="flex-1 py-2.5 bg-red-50 hover:bg-red-100 text-red-600 text-sm font-medium rounded-lg">
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tab to see past orders hint -->
+                                <div class="px-4 pb-4">
+                                    <div class="bg-gray-50 rounded-lg p-3 text-center border border-gray-200">
+                                        <p class="text-xs text-gray-600">👆 Tap "Past Orders" to see delivered items</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Table -->
+        <div id="comparison" class="proposal-section hidden">
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">📊 Feature Comparison Matrix</h2>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="border-b-2 border-gray-200">
+                                <th class="text-left py-4 px-4 font-semibold text-gray-900">Feature</th>
+                                <th class="text-center py-4 px-4 font-semibold text-purple-700">Option A<br/><span class="text-xs font-normal">Timeline</span></th>
+                                <th class="text-center py-4 px-4 font-semibold text-blue-700">Option B<br/><span class="text-xs font-normal">Compact</span></th>
+                                <th class="text-center py-4 px-4 font-semibold text-orange-700">Option C<br/><span class="text-xs font-normal">Actions</span></th>
+                                <th class="text-center py-4 px-4 font-semibold text-green-700 bg-green-50">Option D<br/><span class="text-xs font-normal">Hybrid ⭐</span></th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium text-gray-900">Visual Status Timeline</td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full">✓</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-red-100 text-red-600 rounded-full">✗</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-yellow-100 text-yellow-600 rounded-full">~</span>
+                                </td>
+                                <td class="text-center py-3 px-4 bg-green-50">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full font-bold">✓</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium text-gray-900">Space Efficiency</td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="text-xs text-gray-600">Medium</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full">✓</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="text-xs text-gray-600">Medium</span>
+                                </td>
+                                <td class="text-center py-3 px-4 bg-green-50">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full font-bold">✓</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium text-gray-900">Quick Actions Visibility</td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="text-xs text-gray-600">Hidden</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="text-xs text-gray-600">Limited</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full">✓</span>
+                                </td>
+                                <td class="text-center py-3 px-4 bg-green-50">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full font-bold">✓</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium text-gray-900">Mobile Optimization</td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full">✓</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full">✓</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full">✓</span>
+                                </td>
+                                <td class="text-center py-3 px-4 bg-green-50">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full font-bold">✓</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium text-gray-900">Contextual Actions</td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-yellow-100 text-yellow-600 rounded-full">~</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-red-100 text-red-600 rounded-full">✗</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full">✓</span>
+                                </td>
+                                <td class="text-center py-3 px-4 bg-green-50">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full font-bold">✓</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium text-gray-900">Product Visualization</td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full">✓</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full">✓</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full">✓</span>
+                                </td>
+                                <td class="text-center py-3 px-4 bg-green-50">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full font-bold">✓</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium text-gray-900">Smart Filtering</td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-yellow-100 text-yellow-600 rounded-full">~</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full">✓</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-yellow-100 text-yellow-600 rounded-full">~</span>
+                                </td>
+                                <td class="text-center py-3 px-4 bg-green-50">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full font-bold">✓</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium text-gray-900">Active/Past Separation</td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-red-100 text-red-600 rounded-full">✗</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-red-100 text-red-600 rounded-full">✗</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-red-100 text-red-600 rounded-full">✗</span>
+                                </td>
+                                <td class="text-center py-3 px-4 bg-green-50">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full font-bold">✓</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium text-gray-900">Delivery ETA Prominence</td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full">✓</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-red-100 text-red-600 rounded-full">✗</span>
+                                </td>
+                                <td class="text-center py-3 px-4">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full">✓</span>
+                                </td>
+                                <td class="text-center py-3 px-4 bg-green-50">
+                                    <span class="inline-flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full font-bold">✓</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 bg-blue-50 border-t-2 border-blue-200">
+                                <td class="py-4 px-4 font-bold text-gray-900">Overall Score</td>
+                                <td class="text-center py-4 px-4">
+                                    <div class="text-lg font-bold text-purple-700">7/10</div>
+                                </td>
+                                <td class="text-center py-4 px-4">
+                                    <div class="text-lg font-bold text-blue-700">6/10</div>
+                                </td>
+                                <td class="text-center py-4 px-4">
+                                    <div class="text-lg font-bold text-orange-700">7/10</div>
+                                </td>
+                                <td class="text-center py-4 px-4 bg-green-100">
+                                    <div class="text-2xl font-bold text-green-700">10/10</div>
+                                    <div class="text-xs text-green-600 mt-1">⭐ Best Choice</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Detailed Reasoning -->
+                <div class="mt-8 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 border-2 border-blue-200">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <span class="text-2xl">🏆</span>
+                        Why Option D is Recommended
+                    </h3>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold text-gray-900 mb-3">✅ Strengths</h4>
+                            <ul class="space-y-2 text-sm text-gray-700">
+                                <li class="flex items-start">
+                                    <span class="text-green-600 mr-2 mt-0.5">▪</span>
+                                    <span><strong>Perfect Information Hierarchy:</strong> Most important info (delivery status, ETA) is immediately visible</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-600 mr-2 mt-0.5">▪</span>
+                                    <span><strong>Contextual Intelligence:</strong> Actions adapt based on order status (Track → Reorder → Return)</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-600 mr-2 mt-0.5">▪</span>
+                                    <span><strong>Cognitive Load Reduction:</strong> Active/Past tabs reduce clutter and improve focus</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-600 mr-2 mt-0.5">▪</span>
+                                    <span><strong>Visual Progress Bar:</strong> Instant status understanding without reading text</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-600 mr-2 mt-0.5">▪</span>
+                                    <span><strong>Mobile-First Design:</strong> Optimized for thumb reach and one-hand use</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h4 class="font-semibold text-gray-900 mb-3">📊 User Research Alignment</h4>
+                            <ul class="space-y-2 text-sm text-gray-700">
+                                <li class="flex items-start">
+                                    <span class="text-blue-600 mr-2 mt-0.5">▪</span>
+                                    <span><strong>50% track orders:</strong> Prominent "Track Live Location" CTA</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-blue-600 mr-2 mt-0.5">▪</span>
+                                    <span><strong>26% initiate returns:</strong> Easy access in Past Orders tab</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-blue-600 mr-2 mt-0.5">▪</span>
+                                    <span><strong>19% edit orders:</strong> Quick access via menu button</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-blue-600 mr-2 mt-0.5">▪</span>
+                                    <span><strong>15% cancel orders:</strong> Available for processing orders</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-blue-600 mr-2 mt-0.5">▪</span>
+                                    <span><strong>91% track multiple times:</strong> Real-time updates with visual indicators</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 p-4 bg-white rounded-lg border border-blue-200">
+                        <h4 class="font-semibold text-gray-900 mb-2">🎯 Implementation Priority</h4>
+                        <p class="text-sm text-gray-700">
+                            This design addresses all critical user needs identified in research while maintaining Moldova Direct's clean aesthetic.
+                            It outperforms industry leaders (Amazon, Shopify, Nike) by combining their best features while avoiding their pitfalls
+                            (Amazon's clutter, Shopify's lack of context, Nike's hidden actions).
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer with Sources -->
+    <footer class="bg-gray-900 text-white mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <h3 class="text-lg font-semibold mb-4">📚 Research Sources</h3>
+            <div class="grid md:grid-cols-2 gap-6 text-sm">
+                <div>
+                    <h4 class="font-medium text-gray-300 mb-2">UX Research & Patterns</h4>
+                    <ul class="space-y-1 text-gray-400">
+                        <li>• <a href="https://baymard.com/ecommerce-design-examples/62-orders-overview" class="hover:text-white underline" target="_blank">Baymard - Orders Overview Examples</a></li>
+                        <li>• <a href="https://baymard.com/ecommerce-design-examples/63-order-tracking-page" class="hover:text-white underline" target="_blank">Baymard - Order Tracking Page Examples</a></li>
+                        <li>• <a href="https://www.nngroup.com/articles/status-tracker-progress-update/" class="hover:text-white underline" target="_blank">Nielsen Norman Group - Status Trackers</a></li>
+                        <li>• <a href="https://pageflows.com/screens/mobile/shopping/view/order-history/" class="hover:text-white underline" target="_blank">Page Flows - Order History Patterns</a></li>
+                        <li>• <a href="https://www.mobile-patterns.com/order-history" class="hover:text-white underline" target="_blank">Mobile Patterns - Order History</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-medium text-gray-300 mb-2">E-commerce Best Practices</h4>
+                    <ul class="space-y-1 text-gray-400">
+                        <li>• <a href="https://www.shopify.com/blog/mobile-ux-design" class="hover:text-white underline" target="_blank">Shopify - Mobile UX Best Practices</a></li>
+                        <li>• <a href="https://www.ecorn.agency/blog/ecommerce-ux-best-practices" class="hover:text-white underline" target="_blank">10 eCommerce UX Best Practices for 2025</a></li>
+                        <li>• <a href="https://gomalomo.com/order-tracking/order-tracking-design" class="hover:text-white underline" target="_blank">Malomo - Order Tracking Design Best Practices</a></li>
+                        <li>• <a href="https://www.loopreturns.com/blog/10-examples-of-ecommerce-order-tracking-pages/" class="hover:text-white underline" target="_blank">Loop - Great Order Tracking Examples</a></li>
+                        <li>• <a href="https://blog.getflits.com/how-to-optimize-shopify-store-order-history-page-design/" class="hover:text-white underline" target="_blank">Flits - Optimize Order History Page</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-medium text-gray-300 mb-2">Design Patterns & UI</h4>
+                    <ul class="space-y-1 text-gray-400">
+                        <li>• <a href="https://www.justinmind.com/blog/how-to-prototype-mobile-ui-patterns-for-real-users-part-2/" class="hover:text-white underline" target="_blank">Justinmind - List vs Grid View</a></li>
+                        <li>• <a href="https://www.nngroup.com/videos/card-view-vs-list-view/" class="hover:text-white underline" target="_blank">NN/G - Card View vs List View</a></li>
+                        <li>• <a href="https://uxpatterns.dev/pattern-guide/table-vs-list-vs-cards" class="hover:text-white underline" target="_blank">UX Patterns - Table vs List vs Cards</a></li>
+                        <li>• <a href="https://ui-patterns.com/patterns/cards" class="hover:text-white underline" target="_blank">UI Patterns - Cards Design Pattern</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-medium text-gray-300 mb-2">Brand Analysis</h4>
+                    <ul class="space-y-1 text-gray-400">
+                        <li>• <a href="https://spyro-soft.com/blog/e-commerce/user-experience-in-ecommerce-a-ux-audit-of-zaras-and-nikes-online-stores" class="hover:text-white underline" target="_blank">Spyrosoft - Nike & Zara UX Audit</a></li>
+                        <li>• <a href="https://onilab.com/blog/m-commerce-ux" class="hover:text-white underline" target="_blank">Onilab - Mobile eCommerce UX 2024</a></li>
+                        <li>• <a href="https://baymard.com/blog/order-returns-ecommerce-ux" class="hover:text-white underline" target="_blank">Baymard - Order Returns UX Issues</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-8 pt-8 border-t border-gray-800 text-gray-400 text-xs">
+                <p>Created for Moldova Direct • December 2025 • Based on industry research and UX best practices</p>
+            </div>
+        </footer>
+
+    <script>
+        // Tab navigation
+        function showProposal(proposalId) {
+            // Hide all sections
+            document.querySelectorAll('.proposal-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+
+            // Show selected section
+            document.getElementById(proposalId).classList.remove('hidden');
+
+            // Update tab styles
+            document.querySelectorAll('.proposal-tab').forEach(tab => {
+                tab.classList.remove('border-blue-500', 'text-blue-600');
+                tab.classList.add('border-transparent', 'text-gray-500');
+            });
+
+            // Highlight active tab
+            const activeTab = document.querySelector(`[data-tab="${proposalId}"]`);
+            if (activeTab) {
+                activeTab.classList.remove('border-transparent', 'text-gray-500');
+                activeTab.classList.add('border-blue-500', 'text-blue-600');
+            }
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Initialize - show Option D by default
+        document.addEventListener('DOMContentLoaded', function() {
+            showProposal('variant-d');
+        });
+    </script>
+</body>
+</html>
