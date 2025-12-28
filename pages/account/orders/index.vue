@@ -715,6 +715,9 @@ const handleSearch = async () => {
     smartFilter.value = null
   }
 
+  // Sync searchQuery to searchFilters so pagination preserves the search
+  searchFilters.value.search = searchQuery.value || undefined
+
   const params = {
     search: searchQuery.value || undefined,
     status: searchFilters.value.status as OrderStatus | undefined,
@@ -740,15 +743,18 @@ const goToPage = async (page: number) => {
   if (page < 1 || page > pag.totalPages) return
 
   const params = {
-    ...searchFilters.value,
+    search: searchFilters.value.search || undefined,
+    status: (searchFilters.value.status || undefined) as OrderStatus | undefined,
+    dateFrom: searchFilters.value.dateFrom,
+    dateTo: searchFilters.value.dateTo,
     page,
   }
 
   // Update URL
   updateUrl(params)
 
-  // Fetch orders
-  await fetchOrders({ page })
+  // Fetch orders with all current filters including search
+  await fetchOrders(params)
 
   // Scroll to top
   window.scrollTo({ top: 0, behavior: 'smooth' })
