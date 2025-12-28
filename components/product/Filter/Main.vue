@@ -33,18 +33,14 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<Emits>()
 
-// Composables
-const { isMobile } = useDevice()
-
 // Reactive state
 const localFilters = ref<ProductFilters>({ ...props.filters })
 
 // Methods
 const updateFilters = (newFilters: Partial<ProductFilters>) => {
   localFilters.value = { ...localFilters.value, ...newFilters }
-  if (!isMobile.value) {
-    emit('update:filters', localFilters.value)
-  }
+  // Always emit filter updates - parent decides when to fetch
+  emit('update:filters', localFilters.value)
 }
 
 // Watch for external filter changes

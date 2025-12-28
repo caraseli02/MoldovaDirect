@@ -1363,12 +1363,15 @@
       "clearAllFilters": "Clear all active filters",
       "swipeToClose": "Swipe down or tap close button to dismiss",
       "apply": "Show {count} products | Show {count} product | Show {count} products",
+      "showingCount": "Showing {count} products | Showing {count} product | Showing {count} products",
       "minPrice": "Min Price",
       "maxPrice": "Max Price",
       "removeFilter": "Remove {filter} filter",
       "unknownCategory": "Unknown Category",
       "openFilters": "Open filters panel",
-      "activeCount": "{count} active filters"
+      "activeCount": "{count} active filters",
+      "description": "Filter products by price, availability, and categories",
+      "applyFilters": "Apply filters"
     },
     "hero": {
       "seasonal": "Seasonal highlights",

@@ -315,7 +315,9 @@ export const useProductCatalog = () => {
       || newFilters.search !== undefined
       || newFilters.priceMin !== undefined
       || newFilters.priceMax !== undefined
-      || newFilters.attributes !== undefined) {
+      || newFilters.attributes !== undefined
+      || newFilters.inStock !== undefined
+      || newFilters.featured !== undefined) {
       filters.value.page = 1
     }
   }
