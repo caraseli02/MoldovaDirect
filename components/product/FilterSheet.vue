@@ -1,5 +1,5 @@
 <template>
-  <UiSheet :open="modelValue" @update:open="handleUpdateOpen">
+  <UiSheet v-model:open="isOpen">
     <UiSheetContent side="bottom" class="max-h-[90vh] flex flex-col p-0">
       <!-- Drag Handle -->
       <div class="flex justify-center px-4 pt-4 pb-2">
@@ -57,6 +57,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 interface Props {
@@ -84,12 +85,21 @@ const emit = defineEmits<{
 
 const { t } = useI18n()
 
-const handleUpdateOpen = (open: boolean) => {
-  emit('update:modelValue', open)
-  if (!open) {
+// Local state for the sheet open/close
+const isOpen = ref(props.modelValue)
+
+// Watch for external changes to modelValue
+watch(() => props.modelValue, (newValue) => {
+  isOpen.value = newValue
+})
+
+// Watch for internal changes to isOpen and emit to parent
+watch(isOpen, (newValue) => {
+  emit('update:modelValue', newValue)
+  if (!newValue) {
     emit('close')
   }
-}
+})
 
 const handleApply = () => {
   emit('apply')
