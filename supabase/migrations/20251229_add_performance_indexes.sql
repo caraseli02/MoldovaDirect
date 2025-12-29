@@ -5,44 +5,51 @@
 -- Description: This migration adds missing indexes identified through analysis
 --              of common e-commerce query patterns to improve performance.
 --
--- IMPORTANT: All indexes use CREATE INDEX IF NOT EXISTS for idempotency
+-- IMPORTANT: Uses CREATE INDEX CONCURRENTLY to avoid blocking writes.
+--            CONCURRENTLY cannot run inside a transaction, so we disable it.
+--
+-- NOTE: Run during low-traffic periods. CONCURRENTLY is non-blocking but
+--       takes longer and uses more resources than regular index creation.
 -- =============================================================================
+
+-- Disable transaction wrapper for CONCURRENTLY support
+-- supabase:disable-transaction
 
 -- =============================================================================
 -- 1. PRODUCTS TABLE INDEXES (7 new indexes)
 -- =============================================================================
 
 -- Index for product price range queries (e.g., filtering by price)
-CREATE INDEX IF NOT EXISTS idx_products_price_eur
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_products_price_eur
   ON products(price_eur);
 
 -- Composite index for category browsing with price sorting
-CREATE INDEX IF NOT EXISTS idx_products_category_price
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_products_category_price
   ON products(category_id, price_eur)
   WHERE is_active = true;
 
 -- Composite index for category browsing with date sorting (newest first)
-CREATE INDEX IF NOT EXISTS idx_products_category_created
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_products_category_created
   ON products(category_id, created_at DESC)
   WHERE is_active = true;
 
 -- Index for products with compare_at_price (sale items)
-CREATE INDEX IF NOT EXISTS idx_products_on_sale
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_products_on_sale
   ON products(category_id, price_eur, compare_at_price_eur)
   WHERE is_active = true AND compare_at_price_eur IS NOT NULL;
 
 -- Index for low stock alerts
-CREATE INDEX IF NOT EXISTS idx_products_low_stock
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_products_low_stock
   ON products(stock_quantity, low_stock_threshold)
   WHERE is_active = true AND stock_quantity <= low_stock_threshold;
 
 -- Index for products needing reorder
-CREATE INDEX IF NOT EXISTS idx_products_needs_reorder
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_products_needs_reorder
   ON products(stock_quantity, reorder_point)
   WHERE is_active = true;
 
 -- Index for product weight (shipping calculations)
-CREATE INDEX IF NOT EXISTS idx_products_weight
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_products_weight
   ON products(weight_kg)
   WHERE is_active = true AND weight_kg IS NOT NULL;
 
@@ -51,12 +58,12 @@ CREATE INDEX IF NOT EXISTS idx_products_weight
 -- =============================================================================
 
 -- Composite index for active categories with sorting
-CREATE INDEX IF NOT EXISTS idx_categories_active_sorted
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_categories_active_sorted
   ON categories(is_active, sort_order)
   WHERE is_active = true;
 
 -- Index for category hierarchy queries (finding children)
-CREATE INDEX IF NOT EXISTS idx_categories_parent_active
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_categories_parent_active
   ON categories(parent_id, is_active, sort_order)
   WHERE is_active = true;
 
@@ -65,16 +72,16 @@ CREATE INDEX IF NOT EXISTS idx_categories_parent_active
 -- =============================================================================
 
 -- Index for finding user's addresses by type
-CREATE INDEX IF NOT EXISTS idx_addresses_user_type
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_addresses_user_type
   ON addresses(user_id, type);
 
 -- Index for finding default addresses
-CREATE INDEX IF NOT EXISTS idx_addresses_user_default
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_addresses_user_default
   ON addresses(user_id, is_default)
   WHERE is_default = true;
 
 -- Index for addresses by country (potential shipping zone filtering)
-CREATE INDEX IF NOT EXISTS idx_addresses_country
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_addresses_country
   ON addresses(country);
 
 -- =============================================================================
@@ -82,26 +89,26 @@ CREATE INDEX IF NOT EXISTS idx_addresses_country
 -- =============================================================================
 
 -- Index for orders by payment method (reporting)
-CREATE INDEX IF NOT EXISTS idx_orders_payment_method
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_orders_payment_method
   ON orders(payment_method);
 
 -- Composite index for revenue reports (date range + status)
-CREATE INDEX IF NOT EXISTS idx_orders_revenue_reporting
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_orders_revenue_reporting
   ON orders(created_at, status, total_eur)
   WHERE status NOT IN ('cancelled');
 
 -- Index for shipped orders tracking
-CREATE INDEX IF NOT EXISTS idx_orders_shipped_at
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_orders_shipped_at
   ON orders(shipped_at DESC)
   WHERE shipped_at IS NOT NULL;
 
 -- Index for delivered orders
-CREATE INDEX IF NOT EXISTS idx_orders_delivered_at
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_orders_delivered_at
   ON orders(delivered_at DESC)
   WHERE delivered_at IS NOT NULL;
 
 -- Composite index for admin search by date and payment status
-CREATE INDEX IF NOT EXISTS idx_orders_date_payment_search
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_orders_date_payment_search
   ON orders(created_at DESC, payment_status, status);
 
 -- =============================================================================
@@ -109,11 +116,11 @@ CREATE INDEX IF NOT EXISTS idx_orders_date_payment_search
 -- =============================================================================
 
 -- Index for calculating product sales totals
-CREATE INDEX IF NOT EXISTS idx_order_items_product_total
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_order_items_product_total
   ON order_items(product_id, total_eur);
 
 -- Index for order item quantity analysis
-CREATE INDEX IF NOT EXISTS idx_order_items_product_quantity
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_order_items_product_quantity
   ON order_items(product_id, quantity);
 
 -- =============================================================================
@@ -121,12 +128,12 @@ CREATE INDEX IF NOT EXISTS idx_order_items_product_quantity
 -- =============================================================================
 
 -- Index for inventory adjustments by creator
-CREATE INDEX IF NOT EXISTS idx_inventory_logs_created_by
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_inventory_logs_created_by
   ON inventory_logs(created_by)
   WHERE created_by IS NOT NULL;
 
 -- Index for inventory changes by date (recent first)
-CREATE INDEX IF NOT EXISTS idx_inventory_logs_created_at_desc
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_inventory_logs_created_at_desc
   ON inventory_logs(created_at DESC);
 
 -- =============================================================================
@@ -134,11 +141,11 @@ CREATE INDEX IF NOT EXISTS idx_inventory_logs_created_at_desc
 -- =============================================================================
 
 -- Index for profiles by language preference (locale-based communications)
-CREATE INDEX IF NOT EXISTS idx_profiles_language
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_profiles_language
   ON profiles(preferred_language);
 
 -- Composite index for admin user listing with date
-CREATE INDEX IF NOT EXISTS idx_profiles_role_created
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_profiles_role_created
   ON profiles(role, created_at DESC);
 
 -- =============================================================================
@@ -146,11 +153,11 @@ CREATE INDEX IF NOT EXISTS idx_profiles_role_created
 -- =============================================================================
 
 -- Composite index for ticket dashboard (status + priority + date)
-CREATE INDEX IF NOT EXISTS idx_support_tickets_dashboard
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_support_tickets_dashboard
   ON support_tickets(status, priority, created_at DESC);
 
 -- Composite index for user's ticket history
-CREATE INDEX IF NOT EXISTS idx_support_tickets_user_status
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_support_tickets_user_status
   ON support_tickets(user_id, status, created_at DESC);
 
 -- =============================================================================
@@ -158,11 +165,11 @@ CREATE INDEX IF NOT EXISTS idx_support_tickets_user_status
 -- =============================================================================
 
 -- Composite index for returns dashboard
-CREATE INDEX IF NOT EXISTS idx_order_returns_dashboard
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_order_returns_dashboard
   ON order_returns(status, requested_at DESC);
 
 -- Composite index for user's return history
-CREATE INDEX IF NOT EXISTS idx_order_returns_user_status
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_order_returns_user_status
   ON order_returns(user_id, status, requested_at DESC);
 
 -- =============================================================================
@@ -170,7 +177,7 @@ CREATE INDEX IF NOT EXISTS idx_order_returns_user_status
 -- =============================================================================
 
 -- Index for finding addresses by city (potential local delivery features)
-CREATE INDEX IF NOT EXISTS idx_user_addresses_city
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_user_addresses_city
   ON user_addresses(city);
 
 -- =============================================================================
@@ -178,11 +185,11 @@ CREATE INDEX IF NOT EXISTS idx_user_addresses_city
 -- =============================================================================
 
 -- Composite index for cart funnel analysis by date and event type
-CREATE INDEX IF NOT EXISTS idx_cart_events_date_type
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_cart_events_date_type
   ON cart_analytics_events(DATE(timestamp), event_type);
 
 -- Index for cart value analysis
-CREATE INDEX IF NOT EXISTS idx_cart_events_value
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_cart_events_value
   ON cart_analytics_events(cart_value DESC)
   WHERE event_type IN ('cart_abandon', 'cart_checkout_complete');
 
@@ -191,7 +198,7 @@ CREATE INDEX IF NOT EXISTS idx_cart_events_value
 -- =============================================================================
 
 -- Composite index for audit log filtering by resource and action
-CREATE INDEX IF NOT EXISTS idx_audit_logs_resource_action
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_audit_logs_resource_action
   ON audit_logs(resource_type, action, created_at DESC);
 
 -- =============================================================================
@@ -199,11 +206,11 @@ CREATE INDEX IF NOT EXISTS idx_audit_logs_resource_action
 -- =============================================================================
 
 -- Composite index for session activity analysis
-CREATE INDEX IF NOT EXISTS idx_user_activity_session
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_user_activity_session
   ON user_activity_logs(session_id, activity_type, created_at);
 
 -- Index for order-related activity
-CREATE INDEX IF NOT EXISTS idx_user_activity_order
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_user_activity_order
   ON user_activity_logs(order_id)
   WHERE order_id IS NOT NULL;
 
