@@ -1251,6 +1251,7 @@
     },
     "addToCart": "Añadir al Carrito",
     "outOfStock": "Agotado",
+    "productOutOfStock": "Producto agotado",
     "inCart": "En el Carrito",
     "adding": "Añadiendo...",
     "addingToCart": "Añadiendo {name}...",
