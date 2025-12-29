@@ -370,6 +370,22 @@ const { t, locale } = useI18n()
 // Mobile UI state
 const showMobileSummary = ref(false)
 
+// Undo deletion state
+interface RemovedItem {
+  id: string
+  product: {
+    id: string
+    slug: string
+    name: string
+    price: number
+    images: string[]
+    stock: number
+  }
+  quantity: number
+}
+const lastRemovedItem = ref<RemovedItem | null>(null)
+const undoTimeoutId = ref<NodeJS.Timeout | null>(null)
+
 // Cart functionality
 const {
   items,
@@ -414,12 +430,102 @@ const safeUpdateQuantity = async (itemId: string, quantity: number) => {
   }
 }
 
-const safeRemoveItem = async (itemId: string) => {
+// Undo the last removed item
+const undoRemoveItem = async () => {
+  if (!lastRemovedItem.value) return
+
+  // Store the item reference before clearing
+  const itemToRestore = lastRemovedItem.value
+
+  // Clear the undo timeout
+  if (undoTimeoutId.value) {
+    clearTimeout(undoTimeoutId.value)
+    undoTimeoutId.value = null
+  }
+
   try {
+    // Re-add the item to the cart
+    const { addItem } = useCart()
+    await addItem(itemToRestore.product, itemToRestore.quantity)
+
+    // Only clear lastRemovedItem after successful restoration
+    lastRemovedItem.value = null
+
+    toast.success(
+      t('cart.success.productRestored'),
+      t('cart.success.productRestoredDetails', { product: getLocalizedText(itemToRestore.product.name) }),
+    )
+  }
+  catch (error: any) {
+    console.error('Failed to restore item:', error)
+    // Keep lastRemovedItem so user can retry
+    toast.error(t('cart.error.addFailed'), t('cart.error.addFailedDetails'))
+  }
+}
+
+// Get localized text helper
+const getLocalizedText = (text: any): string => {
+  if (!text) return ''
+  if (typeof text === 'string') return text
+  const localeText = text[locale.value]
+  if (localeText) return localeText
+  const esText = text.es
+  if (esText) return esText
+  const values = Object.values(text).filter((v): v is string => typeof v === 'string')
+  return values[0] || ''
+}
+
+const safeRemoveItem = async (itemId: string) => {
+  // Store item data BEFORE attempting removal (for potential undo)
+  const item = items.value.find(i => i.id === itemId)
+  if (!item) {
+    console.error('Item not found for removal:', itemId)
+    return
+  }
+
+  // Create a backup of the item data before removal
+  const itemBackup = {
+    id: item.id,
+    product: {
+      id: item.product.id,
+      slug: item.product.slug,
+      name: item.product.name,
+      price: item.product.price,
+      images: [...item.product.images],
+      stock: item.product.stock,
+    },
+    quantity: item.quantity,
+  }
+
+  try {
+    // Wait for removal to succeed first
     await removeItem(itemId)
+
+    // Only set up undo AFTER successful removal
+    if (undoTimeoutId.value) {
+      clearTimeout(undoTimeoutId.value)
+    }
+
+    lastRemovedItem.value = itemBackup
+    undoTimeoutId.value = setTimeout(() => {
+      lastRemovedItem.value = null
+      undoTimeoutId.value = null
+    }, 10000)
+
+    // Show toast with undo action only after successful removal
+    toast.success(
+      t('cart.success.productRemoved'),
+      t('cart.success.productRemovedDetails', { product: getLocalizedText(item.product.name) }),
+      {
+        actionText: t('common.undo'),
+        actionHandler: undoRemoveItem,
+        duration: 8000,
+      },
+    )
   }
   catch (error: any) {
     console.error('Failed to remove item:', itemId, error)
+    // Item is still in cart on error, no cleanup needed
     toast.error(t('cart.error.removeFailed'), t('cart.error.removeFailedDetails'))
   }
 }
@@ -486,6 +592,14 @@ onMounted(async () => {
   catch (error: any) {
     console.error('Failed to validate cart:', error)
     toast.error(t('common.cartValidationError'), t('cart.error.validationFailedDetails'))
+  }
+})
+
+// Clean up undo timeout on unmount to prevent memory leaks
+onBeforeUnmount(() => {
+  if (undoTimeoutId.value) {
+    clearTimeout(undoTimeoutId.value)
+    undoTimeoutId.value = null
   }
 })
 

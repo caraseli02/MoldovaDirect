@@ -35,6 +35,7 @@
     "orderSummary": "Order Summary",
     "retry": "Retry",
     "cancel": "Cancel",
+    "undo": "Undo",
     "showMore": "Show More",
     "showLess": "Show Less",
     "swipe_to_remove": "Swipe to remove",
@@ -305,6 +306,11 @@
     "sendMagicLink": "Send Magic Link",
     "magicLinkSent": "Magic link sent! Check your email to sign in.",
     "magicLinkError": "Failed to send magic link. Please try again.",
+    "continueWithGoogle": "Google",
+    "continueWithApple": "Apple",
+    "socialLoginNote": "By continuing, you agree to our Terms of Service and Privacy Policy",
+    "socialLoginError": "Failed to sign in with {provider}. Please try again.",
+    "socialLoginRedirectFailed": "Sign-in was blocked. Please allow popups for this site and try again.",
     "resendIn": "Resend in",
     "emailRequired": "Please enter your email address",
     "emailVerification": "Email Verification",
@@ -1724,6 +1730,67 @@
       "emailSubject": "Return request"
     }
   },
+  "trackOrder": {
+    "title": "Track Your Order",
+    "subtitle": "Enter your order number and email to track your order status",
+    "pageTitle": "Track Order",
+    "pageDescription": "Track your Moldova Direct order status and shipping information",
+    "orderNumber": "Order Number",
+    "orderNumberPlaceholder": "e.g., MD-2024-XXXXX",
+    "email": "Email Address",
+    "emailPlaceholder": "Enter your email address",
+    "trackButton": "Track Order",
+    "trackAnother": "Track another order",
+    "trackingNumber": "Tracking Number",
+    "estimatedDelivery": "Estimated Delivery",
+    "orderItems": "Order Items",
+    "trackingHistory": "Tracking History",
+    "shippingTo": "Shipping To",
+    "needHelp": "Need help with your order?",
+    "contactSupport": "Contact Support",
+    "description": "Track your order status and shipping information",
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "processing": "Processing",
+      "shipped": "Shipped",
+      "delivered": "Delivered",
+      "cancelled": "Cancelled"
+    },
+    "steps": {
+      "confirmed": "Confirmed",
+      "processing": "Processing",
+      "shipped": "Shipped",
+      "delivered": "Delivered"
+    },
+    "errors": {
+      "notFound": "Order not found. Please check your order number and email address.",
+      "generic": "Something went wrong. Please try again later.",
+      "invalidInput": "Please enter a valid order number and email address.",
+      "tooManyRequests": "Too many requests. Please wait a moment and try again.",
+      "serverError": "Our servers are experiencing issues. Please try again later.",
+      "networkError": "Network error. Please check your internet connection and try again."
+    }
+  },
+  "invoice": {
+    "title": "Invoice",
+    "tagline": "Your trusted source for Moldovan products",
+    "orderNumber": "Order Number",
+    "date": "Date",
+    "billTo": "Bill To",
+    "shippingAddress": "Shipping Address",
+    "product": "Product",
+    "quantity": "Qty",
+    "unitPrice": "Unit Price",
+    "total": "Total",
+    "thankYou": "Thank you for shopping with Moldova Direct!",
+    "questions": "Questions about your order?",
+    "print": "Print Invoice",
+    "download": "Save as PDF",
+    "error": "Invoice Error",
+    "errorNoData": "Unable to generate invoice. Order data not available.",
+    "errorPopupBlocked": "Could not open invoice. Please allow popups for this site and try again."
+  },
   "footer": {
     "terms": "Terms and Conditions",
     "privacy": "Privacy Policy",
@@ -1816,8 +1883,15 @@
       }
     },
     "guestCheckout": {
-      "title": "Checkout Options",
-      "description": "You can create an account for faster checkout or continue as a guest."
+      "title": "Sign in for faster checkout",
+      "description": "You can create an account for faster checkout or continue as a guest.",
+      "benefits": {
+        "savedAddresses": "Use saved addresses for faster checkout",
+        "fasterCheckout": "Skip filling in your details next time",
+        "orderHistory": "Track orders and view purchase history"
+      },
+      "loginButton": "Sign in to your account",
+      "guestButton": "Continue as guest"
     },
     "continueAsGuest": "Continue as Guest",
     "backToCart": "Back to Cart",
@@ -1953,7 +2027,8 @@
       "phoneHelper": "for delivery updates",
       "phonePlaceholder": "+1 555 000 0000",
       "phoneDescription": "We'll contact you about your delivery",
-      "saveAddress": "Save this address for future orders"
+      "saveAddress": "Save this address for future orders",
+      "autocompleteHint": "Start typing for address suggestions"
     },
     "shippingMethod": {
       "title": "Shipping Method",
@@ -1989,7 +2064,10 @@
       "freeShipping": {
         "name": "Free Shipping",
         "description": "Delivery in 5-7 business days (orders over €50)"
-      }
+      },
+      "autoApplied": "Auto-applied",
+      "changeMethod": "Change",
+      "estimatedDelivery": "Est. {days} business days"
     },
     "guestInfo": {
       "title": "Contact Information",
@@ -2097,6 +2175,16 @@
       "cartClearFailed": "Could not clear cart",
       "cartClearFailedDetails": "Your order completed successfully, but the cart was not cleared automatically",
       "needHelp": "Need help? Contact Support",
+      "createAccount": {
+        "title": "Save your details for next time",
+        "description": "Create an account to track your order and enjoy faster checkout on future purchases.",
+        "benefits": {
+          "trackOrders": "Track this order and view order history",
+          "fasterCheckout": "Checkout faster with saved addresses",
+          "exclusiveOffers": "Get exclusive offers and updates"
+        },
+        "button": "Create my account"
+      },
       "preparingOrder": "Preparing your order ({days} days)",
       "delivery": "Delivery",
       "totalPaid": "Total Paid",

@@ -35,6 +35,7 @@
     "orderSummary": "Resumen del Pedido",
     "retry": "Reintentar",
     "cancel": "Cancelar",
+    "undo": "Deshacer",
     "showMore": "Mostrar Más",
     "showLess": "Mostrar Menos",
     "swipe_to_remove": "Desliza para eliminar",
@@ -300,6 +301,11 @@
     "sendMagicLink": "Enviar Enlace Mágico",
     "magicLinkSent": "¡Enlace mágico enviado! Revisa tu correo para iniciar sesión.",
     "magicLinkError": "Error al enviar el enlace mágico. Por favor, inténtalo de nuevo.",
+    "continueWithGoogle": "Google",
+    "continueWithApple": "Apple",
+    "socialLoginNote": "Al continuar, aceptas nuestros Términos de Servicio y Política de Privacidad",
+    "socialLoginError": "Error al iniciar sesión con {provider}. Por favor, inténtalo de nuevo.",
+    "socialLoginRedirectFailed": "El inicio de sesión fue bloqueado. Por favor, permite las ventanas emergentes para este sitio e inténtalo de nuevo.",
     "resendIn": "Reenviar en",
     "emailRequired": "Por favor, introduce tu dirección de correo",
     "emailVerification": "Verificación de Correo",
@@ -1642,6 +1648,67 @@
       "emailSubject": "Solicitud de devolución"
     }
   },
+  "trackOrder": {
+    "title": "Rastrear tu Pedido",
+    "subtitle": "Ingresa tu número de pedido y email para rastrear el estado de tu pedido",
+    "pageTitle": "Rastrear Pedido",
+    "pageDescription": "Rastrea el estado de tu pedido y la información de envío de Moldova Direct",
+    "orderNumber": "Número de Pedido",
+    "orderNumberPlaceholder": "ej., MD-2024-XXXXX",
+    "email": "Correo Electrónico",
+    "emailPlaceholder": "Ingresa tu correo electrónico",
+    "trackButton": "Rastrear Pedido",
+    "trackAnother": "Rastrear otro pedido",
+    "trackingNumber": "Número de Seguimiento",
+    "estimatedDelivery": "Entrega Estimada",
+    "orderItems": "Artículos del Pedido",
+    "trackingHistory": "Historial de Seguimiento",
+    "shippingTo": "Enviar a",
+    "needHelp": "¿Necesitas ayuda con tu pedido?",
+    "contactSupport": "Contactar Soporte",
+    "description": "Rastrea el estado de tu pedido e información de envío",
+    "status": {
+      "pending": "Pendiente",
+      "confirmed": "Confirmado",
+      "processing": "Procesando",
+      "shipped": "Enviado",
+      "delivered": "Entregado",
+      "cancelled": "Cancelado"
+    },
+    "steps": {
+      "confirmed": "Confirmado",
+      "processing": "Procesando",
+      "shipped": "Enviado",
+      "delivered": "Entregado"
+    },
+    "errors": {
+      "notFound": "Pedido no encontrado. Por favor verifica tu número de pedido y correo electrónico.",
+      "generic": "Algo salió mal. Por favor intenta de nuevo más tarde.",
+      "invalidInput": "Por favor ingresa un número de pedido y correo electrónico válidos.",
+      "tooManyRequests": "Demasiados intentos. Por favor espera un momento antes de intentar de nuevo.",
+      "serverError": "Error del servidor. Nuestro equipo ha sido notificado.",
+      "networkError": "Error de red. Por favor verifica tu conexión e intenta de nuevo."
+    }
+  },
+  "invoice": {
+    "title": "Factura",
+    "tagline": "Tu fuente de confianza para productos moldavos",
+    "orderNumber": "Número de Pedido",
+    "date": "Fecha",
+    "billTo": "Facturar a",
+    "shippingAddress": "Dirección de Envío",
+    "product": "Producto",
+    "quantity": "Cant.",
+    "unitPrice": "Precio Unitario",
+    "total": "Total",
+    "thankYou": "¡Gracias por comprar en Moldova Direct!",
+    "questions": "¿Preguntas sobre tu pedido?",
+    "print": "Imprimir Factura",
+    "download": "Guardar como PDF",
+    "error": "Error de Factura",
+    "errorNoData": "No se puede generar la factura. Datos del pedido no disponibles.",
+    "errorPopupBlocked": "El bloqueador de ventanas emergentes impidió abrir la factura. Por favor permite ventanas emergentes e intenta de nuevo."
+  },
   "footer": {
     "terms": "Términos y Condiciones",
     "privacy": "Política de Privacidad",
@@ -1734,8 +1801,15 @@
       }
     },
     "guestCheckout": {
-      "title": "Opciones de Compra",
-      "description": "Puedes crear una cuenta para una compra más rápida o continuar como invitado."
+      "title": "Inicia sesión para comprar más rápido",
+      "description": "Puedes crear una cuenta para una compra más rápida o continuar como invitado.",
+      "benefits": {
+        "savedAddresses": "Usa direcciones guardadas para comprar más rápido",
+        "fasterCheckout": "Salta el llenado de datos la próxima vez",
+        "orderHistory": "Rastrea pedidos y ve tu historial de compras"
+      },
+      "loginButton": "Iniciar sesión en tu cuenta",
+      "guestButton": "Continuar como invitado"
     },
     "continueAsGuest": "Continuar como Invitado",
     "backToCart": "Volver al Carrito",
@@ -1871,7 +1945,8 @@
       "phoneHelper": "para notificaciones de entrega",
       "phonePlaceholder": "+34 600 000 000",
       "phoneDescription": "Para contactarte sobre la entrega",
-      "saveAddress": "Guardar esta dirección para futuros pedidos"
+      "saveAddress": "Guardar esta dirección para futuros pedidos",
+      "autocompleteHint": "Comienza a escribir para sugerencias de direcciones"
     },
     "shippingMethod": {
       "title": "Método de Envío",
@@ -1907,7 +1982,10 @@
       "freeShipping": {
         "name": "Envío Gratis",
         "description": "Entrega en 5-7 días hábiles (pedidos sobre €50)"
-      }
+      },
+      "autoApplied": "Aplicado automáticamente",
+      "changeMethod": "Cambiar",
+      "estimatedDelivery": "Est. {days} días hábiles"
     },
     "guestInfo": {
       "title": "Información de Contacto",
@@ -2015,6 +2093,16 @@
       "cartClearFailed": "No se pudo vaciar el carrito",
       "cartClearFailedDetails": "Tu pedido se completó correctamente, pero el carrito no se vació automáticamente",
       "needHelp": "¿Necesitas ayuda? Contactar Soporte",
+      "createAccount": {
+        "title": "Guarda tus datos para la próxima vez",
+        "description": "Crea una cuenta para rastrear tu pedido y disfrutar de un pago más rápido en futuras compras.",
+        "benefits": {
+          "trackOrders": "Rastrea este pedido y ve el historial de pedidos",
+          "fasterCheckout": "Paga más rápido con direcciones guardadas",
+          "exclusiveOffers": "Obtén ofertas exclusivas y actualizaciones"
+        },
+        "button": "Crear mi cuenta"
+      },
       "preparingOrder": "Preparando tu pedido ({days} días)",
       "delivery": "Entrega",
       "totalPaid": "Total Pagado",
@@ -2879,10 +2967,6 @@
   "faq": {
     "title": "Preguntas Frecuentes",
     "description": "Respuestas a tus dudas más comunes."
-  },
-  "trackOrder": {
-    "title": "Sigue tu Pedido",
-    "description": "Introduce tu número de pedido para conocer su estado."
   },
   "shippingPage": {
     "seo": {

@@ -1,7 +1,87 @@
 <template>
   <div class="shipping-method-selector">
-    <!-- Header -->
-    <div class="mb-6">
+    <!-- Auto-Selected Free Shipping Banner -->
+    <div
+      v-if="autoSelected && modelValue && modelValue.price === 0 && !showAllMethods"
+      class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-800 rounded-xl p-4"
+    >
+      <div class="flex items-center gap-3">
+        <div class="flex-shrink-0 w-10 h-10 bg-green-100 dark:bg-green-800 rounded-full flex items-center justify-center">
+          <svg
+            class="w-5 h-5 text-green-600 dark:text-green-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 13l4 4L19 7"
+            />
+          </svg>
+        </div>
+        <div class="flex-1">
+          <div class="flex items-center gap-2">
+            <span class="text-base font-semibold text-green-800 dark:text-green-200">
+              {{ $t('checkout.shippingMethod.freeShipping') }}
+            </span>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200">
+              {{ $t('checkout.shippingMethod.autoApplied') }}
+            </span>
+          </div>
+          <p class="text-sm text-green-700 dark:text-green-300 mt-0.5">
+            {{ modelValue.name }} - {{ $t('checkout.shippingMethod.estimatedDelivery', { days: modelValue.estimatedDays }) }}
+          </p>
+        </div>
+        <button
+          v-if="availableMethods.length > 1"
+          type="button"
+          class="text-sm text-green-700 dark:text-green-300 hover:text-green-900 dark:hover:text-green-100 underline"
+          @click="showAllMethods = true"
+        >
+          {{ $t('checkout.shippingMethod.changeMethod') }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Auto-Selected Single Method Banner -->
+    <div
+      v-else-if="autoSelected && modelValue && availableMethods.length === 1 && !showAllMethods"
+      class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4"
+    >
+      <div class="flex items-center gap-3">
+        <div class="flex-shrink-0 w-10 h-10 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center">
+          <svg
+            class="w-5 h-5 text-primary-600 dark:text-primary-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
+            />
+          </svg>
+        </div>
+        <div class="flex-1">
+          <span class="text-base font-semibold text-gray-900 dark:text-white">
+            {{ modelValue.name }}
+          </span>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mt-0.5">
+            {{ modelValue.description }} - {{ formatPrice(modelValue.price) }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Standard Header (when showing all methods or not auto-selected) -->
+    <div
+      v-if="!autoSelected || showAllMethods"
+      class="mb-6"
+    >
       <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
         {{ $t('checkout.shippingMethod.title') }}
       </h3>
@@ -75,7 +155,7 @@
 
     <!-- Shipping Methods -->
     <div
-      v-else-if="availableMethods.length > 0"
+      v-else-if="availableMethods.length > 0 && (!autoSelected || showAllMethods)"
       class="space-y-3"
     >
       <RadioGroup
@@ -255,6 +335,7 @@ interface Props {
   loading?: boolean
   error?: string | null
   validationError?: string | null
+  autoSelected?: boolean
 }
 
 interface Emits {
@@ -266,7 +347,21 @@ const props = withDefaults(defineProps<Props>(), {
   loading: false,
   error: null,
   validationError: null,
+  autoSelected: false,
 })
+
+// Local state
+const showAllMethods = ref(false)
+const { locale } = useI18n()
+
+// Format price helper
+const formatPrice = (price: number): string => {
+  if (price === 0) return 'Free'
+  return new Intl.NumberFormat(locale.value, {
+    style: 'currency',
+    currency: 'EUR',
+  }).format(price)
+}
 
 const emit = defineEmits<Emits>()
 
@@ -281,22 +376,6 @@ const selectedMethodId = computed({
     }
   },
 })
-
-// Methods
-const _selectMethod = (method: ShippingMethod) => {
-  // This is now redundant since v-model handles it, but keep for explicit calls
-  emit('update:modelValue', method)
-}
-
-const formatPrice = (price: number): string => {
-  if (price === 0) {
-    return 'Free'
-  }
-  return new Intl.NumberFormat('es-ES', {
-    style: 'currency',
-    currency: 'EUR',
-  }).format(price)
-}
 
 const getDeliveryEstimate = (days: number): string => {
   const today = new Date()
