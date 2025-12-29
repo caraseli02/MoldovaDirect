@@ -120,22 +120,22 @@ export function useShippingMethods(address: Ref<Address>) {
       autoSelected.value = false
       if (availableMethods.value.length === 1) {
         // Only one method - auto select it
-        selectedMethod.value = availableMethods.value[0]
+        selectedMethod.value = availableMethods.value[0] ?? null
         autoSelected.value = true
       }
       else if (availableMethods.value.length > 0) {
         const freeMethods = availableMethods.value.filter(m => m.price === 0)
-        if (freeMethods.length === availableMethods.value.length) {
+        if (freeMethods.length === availableMethods.value.length && freeMethods.length > 0) {
           // All methods are free - select the fastest one
           const fastest = freeMethods.reduce((prev, curr) =>
             prev.estimatedDays < curr.estimatedDays ? prev : curr,
           )
-          selectedMethod.value = fastest
+          selectedMethod.value = fastest ?? null
           autoSelected.value = true
         }
         else if (freeMethods.length === 1 && availableMethods.value.length <= 2) {
           // Only one free option and few total options - auto-select free
-          selectedMethod.value = freeMethods[0]
+          selectedMethod.value = freeMethods[0] ?? null
           autoSelected.value = true
         }
       }

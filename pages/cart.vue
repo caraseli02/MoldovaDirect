@@ -375,10 +375,10 @@ interface RemovedItem {
   id: string
   product: {
     id: string
-    slug?: string
-    name: any
+    slug: string
+    name: string
     price: number
-    images: any[]
+    images: string[]
     stock: number
   }
   quantity: number
