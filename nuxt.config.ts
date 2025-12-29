@@ -82,12 +82,61 @@ export default defineNuxtConfig({
   vite: {
     plugins: [tailwindcss()],
     build: {
-      chunkSizeWarningLimit: 1000,
+      chunkSizeWarningLimit: 1000, // Nuxt handles chunking, allow larger sizes
       sourcemap: process.env.NODE_ENV !== 'production',
+      rollupOptions: {
+        output: {
+          // Vendor chunk splitting for better caching
+          // Nuxt handles page-based code splitting automatically
+          manualChunks: (id) => {
+            // Only split vendor libraries - let Nuxt handle app code splitting
+            if (id.includes('node_modules')) {
+              // Large date utility library - separate for better caching
+              if (id.includes('date-fns')) {
+                return 'vendor-date-fns'
+              }
+              // UI framework - used on most pages
+              if (id.includes('reka-ui')) {
+                return 'vendor-reka-ui'
+              }
+              // Icons - large library
+              if (id.includes('lucide-vue-next')) {
+                return 'vendor-lucide'
+              }
+              // Admin-only libraries - split to avoid loading on public pages
+              if (id.includes('chart.js') || id.includes('chartjs-adapter')) {
+                return 'vendor-charts'
+              }
+              if (id.includes('@tanstack/vue-table') || id.includes('@tanstack/table-core')) {
+                return 'vendor-table'
+              }
+              // Checkout-only - Stripe
+              if (id.includes('@stripe/stripe-js')) {
+                return 'vendor-stripe'
+              }
+              // Homepage-only - Swiper
+              if (id.includes('swiper')) {
+                return 'vendor-swiper'
+              }
+              // Core utilities - group together
+              if (id.includes('@supabase')) {
+                return 'vendor-supabase'
+              }
+              if (id.includes('@vueuse')) {
+                return 'vendor-vueuse'
+              }
+            }
+            // Return undefined for non-matched modules - let Vite/Nuxt decide
+            return undefined
+          },
+        },
+      },
     },
     optimizeDeps: {
-      include: ['vue', 'vue-router', 'pinia', '@vueuse/core', 'zod', '@supabase/supabase-js'],
-      exclude: ['chart.js', '@stripe/stripe-js', '@tanstack/vue-table'],
+      // Pre-bundle frequently used dependencies for faster dev startup
+      include: ['vue', 'vue-router', 'pinia', '@vueuse/core', 'zod'],
+      // Exclude large libraries - they should be lazy-loaded
+      exclude: ['chart.js', '@stripe/stripe-js', '@tanstack/vue-table', 'swiper'],
     },
     server: {
       watch: {

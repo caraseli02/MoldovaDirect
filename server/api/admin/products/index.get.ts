@@ -21,19 +21,6 @@ import { serverSupabaseClient } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
 import { prepareSearchPattern, MAX_SEARCH_LENGTH } from '~/server/utils/searchSanitization'
 
-interface AdminProductFilters {
-  search?: string
-  categoryId?: number
-  active?: boolean
-  inStock?: boolean
-  outOfStock?: boolean
-  lowStock?: boolean
-  sortBy?: 'name' | 'price' | 'stock' | 'created_at'
-  sortOrder?: 'asc' | 'desc'
-  page?: number
-  limit?: number
-}
-
 // NOTE: Caching disabled for admin endpoints to ensure proper header-based authentication
 export default defineEventHandler(async (event) => {
   // Authentication MUST happen first, never caught

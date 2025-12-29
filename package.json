@@ -120,6 +120,7 @@
     "nuxt": "^4.2.2",
     "nuxt-swiper": "1.2.0",
     "playwright": "^1.55.1",
+    "terser": "^5.44.1",
     "typescript": "^5.9.3",
     "vitest": "^3.2.4"
   },
