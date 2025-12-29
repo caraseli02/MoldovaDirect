@@ -221,7 +221,7 @@
         {
           "id": "phase-5-5",
           "description": "Order confirmation system",
-          "implemented": false,
+          "implemented": true,
           "tested": false
         },
         {
@@ -235,31 +235,31 @@
     {
       "id": "phase-6",
       "name": "Phase 6: Order Management",
-      "status": "planned",
+      "status": "in-progress",
       "tested": false,
       "steps": [
         {
           "id": "phase-6-1",
           "description": "Order history in user account",
-          "implemented": false,
+          "implemented": true,
           "tested": false
         },
         {
           "id": "phase-6-2",
           "description": "Order status tracking",
-          "implemented": false,
+          "implemented": true,
           "tested": false
         },
         {
           "id": "phase-6-3",
           "description": "Invoice generation",
-          "implemented": false,
+          "implemented": true,
           "tested": false
         },
         {
           "id": "phase-6-4",
           "description": "Admin order management",
-          "implemented": false,
+          "implemented": true,
           "tested": false
         },
         {
@@ -1024,13 +1024,13 @@
     }
   ],
   "metadata": {
-    "version": "1.1.0",
+    "version": "1.2.0",
     "last_updated": "2025-12-29",
     "project": "Moldova Direct E-commerce Platform",
     "total_features": 18,
     "completed_features": 4,
-    "in_progress_features": 3,
-    "planned_features": 11,
-    "notes": "Added codebase cleanup features from December 2025 audit"
+    "in_progress_features": 4,
+    "planned_features": 10,
+    "notes": "Updated Phase 5-5, Phase 6 features (order history, tracking, invoice, admin orders) as implemented"
   }
 }
