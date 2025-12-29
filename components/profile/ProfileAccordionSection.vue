@@ -2,8 +2,8 @@
   <div :class="{ 'border-b border-zinc-200 dark:border-zinc-700': !isLast }">
     <!-- Accordion Header -->
     <button
-      ref="buttonRef"
       :id="headerId"
+      ref="buttonRef"
       type="button"
       :aria-expanded="expanded"
       :aria-controls="contentId"
@@ -58,7 +58,7 @@
         class="overflow-hidden"
       >
         <div class="px-4 pb-4 md:px-6 md:pb-6">
-          <slot />
+          <slot></slot>
         </div>
       </div>
     </Transition>
@@ -84,7 +84,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 defineEmits<{
-  toggle: []
+  'toggle': []
   'navigate-first': []
   'navigate-last': []
   'navigate-next': []
