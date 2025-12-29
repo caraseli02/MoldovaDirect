@@ -708,8 +708,8 @@
         {
           "id": "td-code-10",
           "description": "Remove 2,550 lines of unnecessary code",
-          "implemented": false,
-          "tested": false,
+          "implemented": true,
+          "tested": true,
           "priority": "high",
           "github_issue": 231
         },
@@ -833,29 +833,29 @@
     {
       "id": "performance-optimization",
       "name": "Performance Optimization",
-      "status": "pending",
+      "status": "in-progress",
       "tested": false,
       "steps": [
         {
           "id": "perf-1",
           "description": "Fix suboptimal bundle splitting (180KB unnecessary)",
-          "implemented": false,
-          "tested": false,
+          "implemented": true,
+          "tested": true,
           "priority": "high",
           "github_issue": 229
         },
         {
           "id": "perf-2",
           "description": "Fix N+1 query pattern in product breadcrumbs",
-          "implemented": false,
-          "tested": false,
+          "implemented": true,
+          "tested": true,
           "priority": "high",
           "github_issue": 227
         },
         {
           "id": "perf-3",
           "description": "Deploy 20+ missing database indexes",
-          "implemented": false,
+          "implemented": true,
           "tested": false,
           "priority": "high",
           "github_issue": 175
@@ -1024,13 +1024,13 @@
     }
   ],
   "metadata": {
-    "version": "1.2.0",
+    "version": "1.3.0",
     "last_updated": "2025-12-29",
     "project": "Moldova Direct E-commerce Platform",
     "total_features": 18,
     "completed_features": 4,
     "in_progress_features": 4,
     "planned_features": 10,
-    "notes": "Updated Phase 5-5, Phase 6 features (order history, tracking, invoice, admin orders) as implemented"
+    "notes": "PR #336: Performance cleanup - N+1 queries fixed (#227), bundle splitting (#229), dead code removal (#231), database indexes migration (#175)"
   }
 }
