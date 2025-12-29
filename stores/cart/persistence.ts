@@ -338,9 +338,6 @@ function createDebouncedSave(delay: number = 1000) {
   }
 }
 
-// Default debounced save instance (reserved for future use)
-// const _debouncedSaveToStorage = createDebouncedSave()
-
 // =============================================
 // CART-SPECIFIC PERSISTENCE USING COOKIES
 // =============================================
