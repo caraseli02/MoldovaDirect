@@ -2,289 +2,228 @@ name: E2E Tests
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 env:
-  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+  CI: true
+  NODE_ENV: test
 
 jobs:
-  # E2E tests are temporarily disabled - uncomment when database setup is configured
-  placeholder:
-    name: Tests Placeholder
+  # Critical E2E tests - fast, runs on every push
+  # Note: Requires GitHub secrets to be configured (SUPABASE_URL, SUPABASE_KEY, etc.)
+  # Skipped for forked PRs where secrets aren't available
+  critical-tests:
+    name: Critical E2E Tests
     runs-on: ubuntu-latest
-    steps:
-      - name: Tests disabled
-        run: echo "E2E tests are temporarily disabled"
+    timeout-minutes: 15
+    # Skip for fork PRs (secrets not available)
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
 
-# Commented out E2E test jobs - will be re-enabled once database setup is configured
-# 
-# jobs:
-#   e2e-tests:
-#     name: E2E Tests
-#     runs-on: ubuntu-latest
-#     timeout-minutes: 30
-#     
-#     services:
-#       postgres:
-#         image: postgres:15
-#         env:
-#           POSTGRES_PASSWORD: postgres
-#           POSTGRES_DB: moldova_direct_test
-#         options: >-
-#           --health-cmd pg_isready
-#           --health-interval 10s
-#           --health-timeout 5s
-#           --health-retries 5
-#         ports:
-#           - 5432:5432
-#
-#     strategy:
-#       fail-fast: false
-#       matrix:
-#         browser: [chromium, firefox, webkit]
-#         locale: [es, en, ro, ru]
-#         exclude:
-#           - browser: webkit
-#             locale: ro
-#           - browser: webkit  
-#             locale: ru
-#           - browser: firefox
-#             locale: ro
-#           - browser: firefox
-#             locale: ru
-#
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v4
-#
-#       - name: Enable Corepack
-#         run: corepack enable
-#
-#       - name: Setup Node.js
-#         uses: actions/setup-node@v4
-#         with:
-#           node-version: 20
-#           cache: 'npm'
-#
-#       - name: Install dependencies
-#         run: npm ci
-#
-#       - name: Install Playwright Browsers
-#         run: npx playwright install --with-deps ${{ matrix.browser }}
-#
-#       - name: Setup test environment
-#         run: |
-#           cp .env.example .env.test
-#           echo "DATABASE_URL=postgresql://postgres:postgres@localhost:5432/moldova_direct_test" >> .env.test
-#           echo "TEST_MODE=true" >> .env.test
-#         
-#       - name: Setup test database
-#         run: |
-#           npm run db:generate
-#           npm run db:push
-#         env:
-#           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/moldova_direct_test
-#
-#       - name: Build application
-#         run: npm run build
-#
-#       - name: Run E2E tests
-#         run: npx playwright test --project=${{ matrix.browser }}-${{ matrix.locale }}
-#         env:
-#           CI: true
-#           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/moldova_direct_test
-#           BASE_URL: http://localhost:3000
-#
-#       - name: Upload test results
-#         uses: actions/upload-artifact@v4
-#         if: always()
-#         with:
-#           name: playwright-results-${{ matrix.browser }}-${{ matrix.locale }}
-#           path: |
-#             test-results/
-#             playwright-report/
-#           retention-days: 7
-#
-#       - name: Upload screenshots on failure
-#         uses: actions/upload-artifact@v4
-#         if: failure()
-#         with:
-#           name: screenshots-${{ matrix.browser }}-${{ matrix.locale }}
-#           path: test-results/screenshots/
-#           retention-days: 3
-#
-#   visual-regression:
-#     name: Visual Regression Tests
-#     runs-on: ubuntu-latest
-#     timeout-minutes: 20
-#     
-#     services:
-#       postgres:
-#         image: postgres:15
-#         env:
-#           POSTGRES_PASSWORD: postgres
-#           POSTGRES_DB: moldova_direct_test
-#         options: >-
-#           --health-cmd pg_isready
-#           --health-interval 10s
-#           --health-timeout 5s
-#           --health-retries 5
-#         ports:
-#           - 5432:5432
-#
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v4
-#
-#       - name: Enable Corepack
-#         run: corepack enable
-#
-#       - name: Setup Node.js
-#         uses: actions/setup-node@v4
-#         with:
-#           node-version: 20
-#           cache: 'npm'
-#
-#       - name: Install dependencies
-#         run: npm ci
-#
-#       - name: Install Playwright Browsers
-#         run: npx playwright install --with-deps chromium
-#
-#       - name: Setup test environment
-#         run: |
-#           cp .env.example .env.test
-#           echo "DATABASE_URL=postgresql://postgres:postgres@localhost:5432/moldova_direct_test" >> .env.test
-#           echo "TEST_MODE=true" >> .env.test
-#
-#       - name: Setup test database
-#         run: |
-#           npm run db:generate
-#           npm run db:push
-#         env:
-#           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/moldova_direct_test
-#
-#       - name: Build application
-#         run: npm run build
-#
-#       - name: Run Visual Tests
-#         run: npx playwright test tests/visual/
-#         env:
-#           CI: true
-#           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/moldova_direct_test
-#           BASE_URL: http://localhost:3000
-#
-#       - name: Upload visual test results
-#         uses: actions/upload-artifact@v4
-#         if: always()
-#         with:
-#           name: visual-test-results
-#           path: |
-#             test-results/
-#             tests/visual/screenshots/
-#           retention-days: 14
-#
-#   test-summary:
-#     name: Test Summary
-#     runs-on: ubuntu-latest
-#     needs: [e2e-tests, visual-regression]
-#     if: always()
-#     
-#     steps:
-#       - name: Download all test results
-#         uses: actions/download-artifact@v4
-#         with:
-#           path: all-test-results
-#
-#       - name: Generate test summary
-#         run: |
-#           echo "# E2E Test Results" >> $GITHUB_STEP_SUMMARY
-#           echo "" >> $GITHUB_STEP_SUMMARY
-#           
-#           if [ "${{ needs.e2e-tests.result }}" == "success" ]; then
-#             echo "✅ E2E Tests: Passed" >> $GITHUB_STEP_SUMMARY
-#           else
-#             echo "❌ E2E Tests: Failed" >> $GITHUB_STEP_SUMMARY
-#           fi
-#           
-#           if [ "${{ needs.visual-regression.result }}" == "success" ]; then
-#             echo "✅ Visual Tests: Passed" >> $GITHUB_STEP_SUMMARY
-#           else
-#             echo "❌ Visual Tests: Failed" >> $GITHUB_STEP_SUMMARY
-#           fi
-#
-#   deploy-preview:
-#     name: Deploy Preview for E2E
-#     runs-on: ubuntu-latest
-#     if: github.event_name == 'pull_request'
-#     outputs:
-#       preview-url: ${{ steps.deploy.outputs.url }}
-#     
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v4
-#
-#       - name: Enable Corepack
-#         run: corepack enable
-#
-#       - name: Setup Node.js
-#         uses: actions/setup-node@v4
-#         with:
-#           node-version: 20
-#           cache: 'npm'
-#
-#       - name: Install dependencies
-#         run: npm ci
-#
-#       - name: Build application
-#         run: npm run build
-#
-#       - name: Deploy preview
-#         id: deploy
-#         uses: nuxt-hub/action@v2
-#         with:
-#           project-key: moldova-direct-na9k
-#           deploy-preview: true
-#
-#   e2e-preview:
-#     name: E2E Tests on Preview
-#     runs-on: ubuntu-latest
-#     needs: deploy-preview
-#     if: github.event_name == 'pull_request'
-#     timeout-minutes: 15
-#     
-#     strategy:
-#       matrix:
-#         browser: [chromium]
-#         locale: [es, en]
-#
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v4
-#
-#       - name: Setup Node.js
-#         uses: actions/setup-node@v4
-#         with:
-#           node-version: 20
-#           cache: 'npm'
-#
-#       - name: Install dependencies
-#         run: npm ci
-#
-#       - name: Install Playwright
-#         run: npx playwright install --with-deps ${{ matrix.browser }}
-#
-#       - name: Run E2E tests on preview
-#         run: npx playwright test --project=${{ matrix.browser }}-${{ matrix.locale }}
-#         env:
-#           CI: true
-#           BASE_URL: ${{ needs.deploy-preview.outputs.preview-url }}
-#
-#       - name: Upload preview test results
-#         uses: actions/upload-artifact@v4
-#         if: always()
-#         with:
-#           name: preview-test-results-${{ matrix.browser }}-${{ matrix.locale }}
-#           path: test-results/
-#           retention-days: 3
+    steps:
+      - name: Check for required secrets
+        id: secrets-check
+        run: |
+          if [ -z "${{ secrets.SUPABASE_URL }}" ]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+            echo "::notice::Supabase secrets not configured. Skipping E2E tests."
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Checkout code
+        if: steps.secrets-check.outputs.skip != 'true'
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        if: steps.secrets-check.outputs.skip != 'true'
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        if: steps.secrets-check.outputs.skip != 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        if: steps.secrets-check.outputs.skip != 'true'
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright Browsers
+        if: steps.secrets-check.outputs.skip != 'true'
+        run: pnpm exec playwright install chromium --with-deps
+
+      - name: Build application
+        if: steps.secrets-check.outputs.skip != 'true'
+        run: pnpm run build
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
+          IMPERSONATION_JWT_SECRET: ${{ secrets.IMPERSONATION_JWT_SECRET }}
+
+      - name: Run Critical E2E Tests
+        if: steps.secrets-check.outputs.skip != 'true'
+        run: pnpm run test:critical
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
+          TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+          TEST_ADMIN_EMAIL: ${{ secrets.TEST_ADMIN_EMAIL }}
+          TEST_ADMIN_PASSWORD: ${{ secrets.TEST_ADMIN_PASSWORD }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
+          IMPERSONATION_JWT_SECRET: ${{ secrets.IMPERSONATION_JWT_SECRET }}
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: steps.secrets-check.outputs.skip != 'true' && always()
+        with:
+          name: critical-test-results
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 7
+
+      - name: Upload screenshots on failure
+        uses: actions/upload-artifact@v4
+        if: steps.secrets-check.outputs.skip != 'true' && failure()
+        with:
+          name: failure-screenshots
+          path: test-results/
+          retention-days: 3
+
+  # Unit tests - runs in parallel with E2E
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run Unit Tests
+        run: pnpm run test:unit
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 7
+
+  # TypeScript type checking
+  typecheck:
+    name: TypeScript Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run TypeScript Check
+        run: pnpm run typecheck
+
+  # Lint check
+  lint:
+    name: ESLint Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run ESLint
+        run: pnpm run lint
+
+  # Summary job - reports overall status
+  test-summary:
+    name: Test Summary
+    runs-on: ubuntu-latest
+    needs: [critical-tests, unit-tests, typecheck, lint]
+    if: always()
+
+    steps:
+      - name: Generate test summary
+        run: |
+          echo "# Test Results Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ needs.critical-tests.result }}" == "success" ] || [ "${{ needs.critical-tests.result }}" == "skipped" ]; then
+            echo "✅ Critical E2E Tests: Passed (or skipped - secrets not configured)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Critical E2E Tests: Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ "${{ needs.unit-tests.result }}" == "success" ]; then
+            echo "✅ Unit Tests: Passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Unit Tests: Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ "${{ needs.typecheck.result }}" == "success" ]; then
+            echo "✅ TypeScript: Passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ TypeScript: Failed" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ "${{ needs.lint.result }}" == "success" ]; then
+            echo "✅ ESLint: Passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ ESLint: Failed" >> $GITHUB_STEP_SUMMARY
+          fi
