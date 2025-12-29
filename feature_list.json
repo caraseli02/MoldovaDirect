@@ -198,19 +198,19 @@
           "id": "phase-5-1",
           "description": "Multi-step checkout flow",
           "implemented": true,
-          "tested": false
+          "tested": true
         },
         {
           "id": "phase-5-2",
           "description": "Shipping address management",
           "implemented": true,
-          "tested": false
+          "tested": true
         },
         {
           "id": "phase-5-3",
           "description": "Delivery options and costs calculation",
           "implemented": true,
-          "tested": false
+          "tested": true
         },
         {
           "id": "phase-5-4",
@@ -222,7 +222,7 @@
           "id": "phase-5-5",
           "description": "Order confirmation system",
           "implemented": true,
-          "tested": false
+          "tested": true
         },
         {
           "id": "phase-5-6",
@@ -242,25 +242,25 @@
           "id": "phase-6-1",
           "description": "Order history in user account",
           "implemented": true,
-          "tested": false
+          "tested": true
         },
         {
           "id": "phase-6-2",
           "description": "Order status tracking",
           "implemented": true,
-          "tested": false
+          "tested": true
         },
         {
           "id": "phase-6-3",
           "description": "Invoice generation",
           "implemented": true,
-          "tested": false
+          "tested": true
         },
         {
           "id": "phase-6-4",
           "description": "Admin order management",
           "implemented": true,
-          "tested": false
+          "tested": true
         },
         {
           "id": "phase-6-5",
