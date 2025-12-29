@@ -499,7 +499,7 @@ const handleStreetFocus = () => {
  *
  * @param query - The address search query
  */
-const searchAddresses = async (_query: string) => {
+const searchAddresses = async (query: string) => {
   isLoadingAutocomplete.value = true
 
   try {
