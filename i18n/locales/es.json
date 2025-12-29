@@ -795,15 +795,42 @@
     }
   },
   "profile": {
-    "title": "Configuración del Perfil",
+    "title": "Mi Perfil",
     "description": "Gestiona tu información personal y preferencias de cuenta",
+    "autoSaveDescription": "Los cambios se guardan automáticamente",
     "profilePicture": "Foto de Perfil",
     "profilePictureDescription": "Sube una foto de perfil para personalizar tu cuenta",
+    "dragDropHint": "Toca la foto o arrastra para cambiar",
     "changePicture": "Cambiar Foto",
     "uploadPicture": "Subir Foto",
     "removePicture": "Eliminar Foto",
     "emailCannotBeChanged": "La dirección de email no se puede cambiar",
     "saveChanges": "Guardar Cambios",
+    "saving": "Guardando...",
+    "saved": "Guardado",
+    "saveError": "Error al guardar",
+    "completion": "Perfil Completado",
+    "unsavedChangesWarning": "Tienes cambios sin guardar. ¿Estás seguro de que quieres salir?",
+    "addressSingular": "dirección guardada",
+    "addressPlural": "direcciones guardadas",
+    "sections": {
+      "personalInfo": "Información Personal",
+      "personalInfoSubtitle": "Nombre, email, teléfono",
+      "preferences": "Preferencias",
+      "preferencesSubtitle": "Idioma, moneda",
+      "currency": "Moneda",
+      "security": "Seguridad",
+      "securitySubtitle": "Contraseña y autenticación",
+      "password": "Contraseña",
+      "change": "Cambiar",
+      "twoFactor": "Autenticación 2FA",
+      "twoFactorDisabled": "No activada",
+      "enable": "Activar",
+      "changePassword": "Cambiar Contraseña",
+      "changePasswordDescription": "Próximamente podrás cambiar tu contraseña desde aquí.",
+      "enable2FA": "Activar 2FA",
+      "enable2FADescription": "La autenticación de dos factores estará disponible próximamente."
+    },
     "addresses": "Direcciones",
     "addressesDescription": "Gestiona tus direcciones de envío y facturación",
     "addAddress": "Añadir Dirección",
@@ -890,7 +917,10 @@
       "loadAddressesFailed": "Error al cargar las direcciones",
       "addressSaveFailed": "Error al guardar la dirección. Por favor, inténtalo de nuevo.",
       "addressDeleteFailed": "Error al eliminar la dirección. Por favor, inténtalo de nuevo.",
-      "deleteFailed": "Error al eliminar la cuenta. Por favor, inténtalo de nuevo."
+      "deleteFailed": "Error al eliminar la cuenta. Por favor, inténtalo de nuevo.",
+      "sessionExpired": "Tu sesión ha expirado. Por favor, inicia sesión de nuevo.",
+      "permissionDenied": "Permiso denegado. No puedes realizar esta acción.",
+      "notAuthenticated": "Por favor, inicia sesión para continuar."
     }
   },
   "home": {
@@ -1292,12 +1322,15 @@
       "clearAllFilters": "Limpiar todos los filtros activos",
       "swipeToClose": "Desliza hacia abajo o toca el botón cerrar para descartar",
       "apply": "Mostrar {count} productos | Mostrar {count} producto | Mostrar {count} productos",
+      "showingCount": "Mostrando {count} productos | Mostrando {count} producto | Mostrando {count} productos",
       "minPrice": "Precio Mínimo",
       "maxPrice": "Precio Máximo",
       "removeFilter": "Eliminar filtro {filter}",
       "unknownCategory": "Categoría Desconocida",
       "openFilters": "Abrir panel de filtros",
-      "activeCount": "{count} filtros activos"
+      "activeCount": "{count} filtros activos",
+      "description": "Filtrar productos por precio, disponibilidad y categorías",
+      "applyFilters": "Aplicar filtros"
     },
     "hero": {
       "seasonal": "Destacados de temporada",

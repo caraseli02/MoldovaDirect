@@ -1,9 +1,18 @@
 <template>
-  <div class="fixed inset-0 z-50 overflow-y-auto">
+  <div
+    ref="modalOverlay"
+    class="fixed inset-0 z-50 overflow-y-auto"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="address-form-title"
+    @keydown.escape="$emit('close')"
+    @keydown.tab="trapFocus"
+  >
     <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
       <!-- Background overlay -->
       <div
         class="fixed inset-0 transition-opacity bg-black/50"
+        aria-hidden="true"
         @click="$emit('close')"
       ></div>
 
@@ -11,7 +20,10 @@
       <div class="inline-block w-full max-w-md my-4 text-left align-middle transition-all transform bg-white dark:bg-gray-800 shadow-xl rounded-lg relative z-10 max-h-[95vh] flex flex-col">
         <!-- Fixed header -->
         <div class="flex justify-between items-center p-6 pb-4 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
-          <h3 class="text-lg font-medium text-gray-900 dark:text-white">
+          <h3
+            id="address-form-title"
+            class="text-lg font-medium text-gray-900 dark:text-white"
+          >
             {{ address?.id ? $t('profile.editAddress') : $t('profile.addAddress') }}
           </h3>
           <Button
@@ -39,24 +51,24 @@
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 {{ $t('profile.addressType.label') }} *
               </label>
-              <div class="flex space-x-4">
-                <label class="flex items-center">
+              <div class="flex space-x-2">
+                <label class="relative flex items-center justify-center min-w-[44px] min-h-[44px] p-2 cursor-pointer rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                   <input
                     v-model="form.type"
                     type="radio"
                     value="shipping"
-                    class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300"
+                    class="h-5 w-5 text-primary-600 focus:ring-primary-500 border-gray-300"
                   />
                   <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
                     {{ $t('profile.addressType.shipping') }}
                   </span>
                 </label>
-                <label class="flex items-center">
+                <label class="relative flex items-center justify-center min-w-[44px] min-h-[44px] p-2 cursor-pointer rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                   <input
                     v-model="form.type"
                     type="radio"
                     value="billing"
-                    class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300"
+                    class="h-5 w-5 text-primary-600 focus:ring-primary-500 border-gray-300"
                   />
                   <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
                     {{ $t('profile.addressType.billing') }}
@@ -346,20 +358,11 @@
 
 <script setup lang="ts">
 import { Button } from '@/components/ui/button'
+import type { Address } from '~/types/address'
 
-interface Address {
-  id?: number // SERIAL id from database
-  type: 'shipping' | 'billing'
-  firstName: string
-  lastName: string
-  company?: string
-  street: string
-  city: string
-  postalCode: string
-  province?: string
-  country: string
-  phone?: string
-  isDefault: boolean
+interface ToastPlugin {
+  success: (message: string) => void
+  error: (message: string) => void
 }
 
 interface Props {
@@ -376,6 +379,11 @@ const emit = defineEmits<Emits>()
 
 const { t } = useI18n()
 const user = useSupabaseUser()
+const nuxtApp = useNuxtApp()
+const $toast = nuxtApp.$toast as ToastPlugin
+
+// Modal ref for focus trap
+const modalOverlay = ref<HTMLElement>()
 
 // Reactive state
 const isLoading = ref(false)
@@ -478,15 +486,48 @@ const handleSubmit = async () => {
   }
   catch (error: any) {
     console.error('Error saving address:', error)
+    // CRITICAL FIX: Show toast error so user knows save failed
+    const errorMessage = error?.message || t('profile.errors.addressSaveFailed')
+    $toast.error(errorMessage)
   }
   finally {
     isLoading.value = false
   }
 }
 
-// Initialize form on mount
+// Focus trap utility for modal accessibility
+const trapFocus = (event: KeyboardEvent) => {
+  const modal = modalOverlay.value
+  if (!modal) return
+
+  const focusableElements = modal.querySelectorAll(
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+  )
+  const firstElement = focusableElements[0] as HTMLElement
+  const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement
+
+  if (event.shiftKey) {
+    if (document.activeElement === firstElement) {
+      event.preventDefault()
+      lastElement.focus()
+    }
+  }
+  else {
+    if (document.activeElement === lastElement) {
+      event.preventDefault()
+      firstElement.focus()
+    }
+  }
+}
+
+// Initialize form on mount and focus first input
 onMounted(() => {
   initializeForm()
+  // Focus the first input for accessibility
+  nextTick(() => {
+    const firstInput = modalOverlay.value?.querySelector('input, select') as HTMLElement
+    firstInput?.focus()
+  })
 })
 
 // Watch for address prop changes

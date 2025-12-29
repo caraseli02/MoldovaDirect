@@ -88,8 +88,6 @@ export default defineNuxtConfig({
     optimizeDeps: {
       include: ['vue', 'vue-router', 'pinia', '@vueuse/core', 'zod', '@supabase/supabase-js'],
       exclude: ['chart.js', '@stripe/stripe-js', '@tanstack/vue-table'],
-      // Force ESM resolution for Supabase to fix "exports is not defined" error
-      needsInterop: ['@supabase/supabase-js'],
     },
     server: {
       watch: {

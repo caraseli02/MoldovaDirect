@@ -800,15 +800,42 @@
     }
   },
   "profile": {
-    "title": "Profile Settings",
+    "title": "My Profile",
     "description": "Manage your personal information and account preferences",
+    "autoSaveDescription": "Changes are saved automatically",
     "profilePicture": "Profile Picture",
     "profilePictureDescription": "Upload a profile picture to personalize your account",
+    "dragDropHint": "Tap photo or drag to change",
     "changePicture": "Change Picture",
     "uploadPicture": "Upload Picture",
     "removePicture": "Remove Picture",
     "emailCannotBeChanged": "Email address cannot be changed",
     "saveChanges": "Save Changes",
+    "saving": "Saving...",
+    "saved": "Saved",
+    "saveError": "Error saving",
+    "completion": "Profile Completion",
+    "unsavedChangesWarning": "You have unsaved changes. Are you sure you want to leave?",
+    "addressSingular": "address saved",
+    "addressPlural": "addresses saved",
+    "sections": {
+      "personalInfo": "Personal Information",
+      "personalInfoSubtitle": "Name, email, phone",
+      "preferences": "Preferences",
+      "preferencesSubtitle": "Language, currency",
+      "currency": "Currency",
+      "security": "Security",
+      "securitySubtitle": "Password and authentication",
+      "password": "Password",
+      "change": "Change",
+      "twoFactor": "Two-Factor Authentication",
+      "twoFactorDisabled": "Not enabled",
+      "enable": "Enable",
+      "changePassword": "Change Password",
+      "changePasswordDescription": "You will be able to change your password here soon.",
+      "enable2FA": "Enable 2FA",
+      "enable2FADescription": "Two-factor authentication will be available soon."
+    },
     "addresses": "Addresses",
     "addressesDescription": "Manage your shipping and billing addresses",
     "addAddress": "Add Address",
@@ -895,7 +922,10 @@
       "loadAddressesFailed": "Failed to load addresses",
       "addressSaveFailed": "Failed to save address. Please try again.",
       "addressDeleteFailed": "Failed to delete address. Please try again.",
-      "deleteFailed": "Failed to delete account. Please try again."
+      "deleteFailed": "Failed to delete account. Please try again.",
+      "sessionExpired": "Your session has expired. Please log in again.",
+      "permissionDenied": "Permission denied. You cannot perform this action.",
+      "notAuthenticated": "Please log in to continue."
     }
   },
   "home": {
@@ -1368,12 +1398,15 @@
       "clearAllFilters": "Clear all active filters",
       "swipeToClose": "Swipe down or tap close button to dismiss",
       "apply": "Show {count} products | Show {count} product | Show {count} products",
+      "showingCount": "Showing {count} products | Showing {count} product | Showing {count} products",
       "minPrice": "Min Price",
       "maxPrice": "Max Price",
       "removeFilter": "Remove {filter} filter",
       "unknownCategory": "Unknown Category",
       "openFilters": "Open filters panel",
-      "activeCount": "{count} active filters"
+      "activeCount": "{count} active filters",
+      "description": "Filter products by price, availability, and categories",
+      "applyFilters": "Apply filters"
     },
     "hero": {
       "seasonal": "Seasonal highlights",
