@@ -929,7 +929,8 @@
       "placeholder": "Introdu adresa de email",
       "cta": "Mă abonez",
       "success": "Îți mulțumim! Vei primi următorul nostru newsletter în curând.",
-      "disclaimer": "Trimitem unul sau două emailuri pe lună și te poți dezabona oricând."
+      "disclaimer": "Trimitem unul sau două emailuri pe lună și te poți dezabona oricând.",
+      "subscribeButton": "Abonează-te"
     },
     "faqPreview": {
       "title": "Întrebări înainte de a comanda?",
@@ -970,11 +971,13 @@
     },
     "addToCart": "Adaugă în Coș",
     "outOfStock": "Stoc Epuizat",
+    "productOutOfStock": "Produs epuizat",
     "inCart": "În Coș",
     "adding": "Se adaugă...",
     "addingToCart": "Se adaugă {name}...",
     "productInCart": "{name} este deja în coș",
     "addProductToCart": "Adaugă {name} în coș",
+    "quickViewProduct": "Vizualizare Rapidă",
     "cartEmpty": "Coșul tău este gol",
     "cartEmptyDescription": "Începe să cumperi pentru a adăuga articole în coș",
     "itemsInCart": "articole în coș",

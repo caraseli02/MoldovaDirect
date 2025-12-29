@@ -1218,7 +1218,8 @@
       "cta": "Join the list",
       "success": "Thank you! Look for our next dispatch in your inbox.",
       "error": "Oops! Something went wrong. Please try again.",
-      "disclaimer": "We send one or two emails per month and you can unsubscribe at any time."
+      "disclaimer": "We send one or two emails per month and you can unsubscribe at any time.",
+      "subscribeButton": "Subscribe"
     },
     "faqPreview": {
       "title": "Questions before you order?",
@@ -1339,11 +1340,13 @@
     },
     "addToCart": "Add to Cart",
     "outOfStock": "Out of Stock",
+    "productOutOfStock": "Product out of stock",
     "inCart": "In Cart",
     "adding": "Adding...",
     "addingToCart": "Adding {name}...",
     "productInCart": "{name} is already in cart",
     "addProductToCart": "Add {name} to cart",
+    "quickViewProduct": "Quick View",
     "cartEmpty": "Your cart is empty",
     "cartEmptyDescription": "Start shopping to add items to your cart",
     "itemsInCart": "items in cart",
