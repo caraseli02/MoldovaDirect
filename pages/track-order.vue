@@ -49,7 +49,7 @@
               :placeholder="$t('trackOrder.orderNumberPlaceholder')"
               class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               required
-            >
+            />
           </div>
           <div>
             <label
@@ -65,7 +65,7 @@
               :placeholder="$t('trackOrder.emailPlaceholder')"
               class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               required
-            >
+            />
           </div>
 
           <!-- Error Message -->
@@ -151,8 +151,12 @@
           <div class="p-6 border-b border-gray-200 dark:border-gray-700">
             <div class="flex items-center justify-between mb-4">
               <div>
-                <p class="text-sm text-gray-500 dark:text-gray-400">{{ $t('trackOrder.orderNumber') }}</p>
-                <p class="text-lg font-bold text-gray-900 dark:text-white">{{ trackingData.orderNumber }}</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                  {{ $t('trackOrder.orderNumber') }}
+                </p>
+                <p class="text-lg font-bold text-gray-900 dark:text-white">
+                  {{ trackingData.orderNumber }}
+                </p>
               </div>
               <span
                 class="px-3 py-1 rounded-full text-sm font-medium"
@@ -250,7 +254,7 @@
                   :src="item.image"
                   :alt="getLocalizedText(item.name)"
                   class="w-full h-full object-cover"
-                >
+                />
                 <div
                   v-else
                   class="w-full h-full flex items-center justify-center text-gray-400"
@@ -318,7 +322,9 @@
                 ></div>
               </div>
               <div class="flex-1 pb-4">
-                <p class="font-medium text-gray-900 dark:text-white">{{ event.status }}</p>
+                <p class="font-medium text-gray-900 dark:text-white">
+                  {{ event.status }}
+                </p>
                 <p
                   v-if="event.description"
                   class="text-sm text-gray-600 dark:text-gray-400"
@@ -395,12 +401,50 @@
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
 
+// TypeScript interfaces for tracking data
+interface TrackingItem {
+  name: string | Record<string, string>
+  quantity: number
+  price: number
+  image?: string
+}
+
+interface TrackingEvent {
+  status: string
+  description: string
+  location?: string
+  timestamp: string
+}
+
+interface TrackingAddress {
+  city: string
+  country: string
+  postalCode: string
+}
+
+interface TrackingData {
+  orderNumber: string
+  status: string
+  trackingNumber?: string
+  carrier?: string
+  estimatedDelivery?: string
+  shippedAt?: string
+  createdAt: string
+  total: number
+  currency: string
+  shippingAddress: TrackingAddress | null
+  items: TrackingItem[]
+  events: TrackingEvent[]
+  lastUpdate: string
+  dataIncomplete?: boolean
+}
+
 // Form state
 const orderNumber = ref('')
 const email = ref('')
 const loading = ref(false)
 const error = ref<string | null>(null)
-const trackingData = ref<any>(null)
+const trackingData = ref<TrackingData | null>(null)
 
 // Status steps for progress display
 const statusSteps = [
@@ -434,13 +478,29 @@ const trackOrder = async () => {
       },
     })
 
-    if (response.success) {
-      trackingData.value = response.data
+    if (response.success && response.data) {
+      trackingData.value = response.data as unknown as TrackingData
     }
   }
   catch (err: any) {
+    // Log error for debugging
+    console.error('Order tracking error:', err)
+
+    // Handle specific error codes
     if (err.statusCode === 404) {
       error.value = t('trackOrder.errors.notFound')
+    }
+    else if (err.statusCode === 400) {
+      error.value = t('trackOrder.errors.invalidInput')
+    }
+    else if (err.statusCode === 429) {
+      error.value = t('trackOrder.errors.tooManyRequests')
+    }
+    else if (err.statusCode >= 500) {
+      error.value = t('trackOrder.errors.serverError')
+    }
+    else if (err.name === 'FetchError' || err.message?.includes('network') || err.message?.includes('Network')) {
+      error.value = t('trackOrder.errors.networkError')
     }
     else {
       error.value = t('trackOrder.errors.generic')
@@ -497,7 +557,7 @@ const getStatusClasses = (status: string): string => {
     delivered: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300',
     cancelled: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300',
   }
-  return statusMap[status] || statusMap.pending
+  return statusMap[status] ?? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300'
 }
 
 const getProgressWidth = (status: string): number => {

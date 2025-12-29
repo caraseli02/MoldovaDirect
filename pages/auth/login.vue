@@ -906,6 +906,10 @@ async function handleMagicLink(): Promise<void> {
 /**
  * Handle OAuth social login with Google or Apple
  * Uses Supabase's signInWithOAuth which handles the OAuth flow
+ *
+ * Note: On success, the page redirects so loadingSocial state persists.
+ * On error or redirect failure, loadingSocial is cleared to allow retry.
+ * A 5-second timeout detects stuck redirects.
  */
 async function handleSocialLogin(provider: 'google' | 'apple'): Promise<void> {
   if (loadingSocial.value) return
@@ -915,14 +919,23 @@ async function handleSocialLogin(provider: 'google' | 'apple'): Promise<void> {
   loadingSocial.value = provider
 
   try {
+    // Preserve original redirect parameter from URL
+    const originalRedirect = route.query.redirect as string
+    const confirmUrl = new URL(`${window.location.origin}${localePath('/auth/confirm')}`)
+    if (originalRedirect) {
+      confirmUrl.searchParams.set('redirect', originalRedirect)
+    }
+
     const { error: authError } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${window.location.origin}${localePath('/auth/confirm')}`,
-        queryParams: provider === 'google' ? {
-          access_type: 'offline',
-          prompt: 'consent',
-        } : undefined,
+        redirectTo: confirmUrl.toString(),
+        queryParams: provider === 'google'
+          ? {
+              access_type: 'offline',
+              prompt: 'consent',
+            }
+          : undefined,
       },
     })
 
@@ -930,7 +943,15 @@ async function handleSocialLogin(provider: 'google' | 'apple'): Promise<void> {
       throw authError
     }
 
-    // OAuth will redirect, so no need to handle success here
+    // Set a timeout to detect if redirect didn't happen
+    // (e.g., blocked by browser extension, CSP, popup blocker)
+    setTimeout(() => {
+      if (loadingSocial.value === provider) {
+        console.error(`${provider} OAuth redirect did not occur within expected timeframe`)
+        localError.value = t('auth.socialLoginRedirectFailed')
+        loadingSocial.value = null
+      }
+    }, 5000)
   }
   catch (err: any) {
     console.error(`${provider} login error:`, err)

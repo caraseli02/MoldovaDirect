@@ -434,19 +434,22 @@ const safeUpdateQuantity = async (itemId: string, quantity: number) => {
 const undoRemoveItem = async () => {
   if (!lastRemovedItem.value) return
 
+  // Store the item reference before clearing
+  const itemToRestore = lastRemovedItem.value
+
+  // Clear the undo timeout
+  if (undoTimeoutId.value) {
+    clearTimeout(undoTimeoutId.value)
+    undoTimeoutId.value = null
+  }
+
   try {
-    // Clear the undo timeout
-    if (undoTimeoutId.value) {
-      clearTimeout(undoTimeoutId.value)
-      undoTimeoutId.value = null
-    }
-
-    const itemToRestore = lastRemovedItem.value
-    lastRemovedItem.value = null
-
     // Re-add the item to the cart
     const { addItem } = useCart()
     await addItem(itemToRestore.product, itemToRestore.quantity)
+
+    // Only clear lastRemovedItem after successful restoration
+    lastRemovedItem.value = null
 
     toast.success(
       t('cart.success.productRestored'),
@@ -455,6 +458,7 @@ const undoRemoveItem = async () => {
   }
   catch (error: any) {
     console.error('Failed to restore item:', error)
+    // Keep lastRemovedItem so user can retry
     toast.error(t('cart.error.addFailed'), t('cart.error.addFailedDetails'))
   }
 }
@@ -472,59 +476,56 @@ const getLocalizedText = (text: any): string => {
 }
 
 const safeRemoveItem = async (itemId: string) => {
+  // Store item data BEFORE attempting removal (for potential undo)
+  const item = items.value.find(i => i.id === itemId)
+  if (!item) {
+    console.error('Item not found for removal:', itemId)
+    return
+  }
+
+  // Create a backup of the item data before removal
+  const itemBackup = {
+    id: item.id,
+    product: {
+      id: item.product.id,
+      slug: item.product.slug,
+      name: item.product.name,
+      price: item.product.price,
+      images: [...item.product.images],
+      stock: item.product.stock,
+    },
+    quantity: item.quantity,
+  }
+
   try {
-    // Store the item before removal for undo functionality
-    const item = items.value.find(i => i.id === itemId)
-    if (item) {
-      // Clear any existing undo timeout
-      if (undoTimeoutId.value) {
-        clearTimeout(undoTimeoutId.value)
-      }
-
-      // Store the removed item
-      lastRemovedItem.value = {
-        id: item.id,
-        product: {
-          id: item.product.id,
-          slug: item.product.slug,
-          name: item.product.name,
-          price: item.product.price,
-          images: [...item.product.images],
-          stock: item.product.stock,
-        },
-        quantity: item.quantity,
-      }
-
-      // Set a timeout to clear the undo option after 10 seconds
-      undoTimeoutId.value = setTimeout(() => {
-        lastRemovedItem.value = null
-        undoTimeoutId.value = null
-      }, 10000)
-    }
-
+    // Wait for removal to succeed first
     await removeItem(itemId)
 
-    // Show toast with undo action
-    if (item) {
-      toast.success(
-        t('cart.success.productRemoved'),
-        t('cart.success.productRemovedDetails', { product: getLocalizedText(item.product.name) }),
-        {
-          actionText: t('common.undo'),
-          actionHandler: undoRemoveItem,
-          duration: 8000,
-        },
-      )
+    // Only set up undo AFTER successful removal
+    if (undoTimeoutId.value) {
+      clearTimeout(undoTimeoutId.value)
     }
+
+    lastRemovedItem.value = itemBackup
+    undoTimeoutId.value = setTimeout(() => {
+      lastRemovedItem.value = null
+      undoTimeoutId.value = null
+    }, 10000)
+
+    // Show toast with undo action only after successful removal
+    toast.success(
+      t('cart.success.productRemoved'),
+      t('cart.success.productRemovedDetails', { product: getLocalizedText(item.product.name) }),
+      {
+        actionText: t('common.undo'),
+        actionHandler: undoRemoveItem,
+        duration: 8000,
+      },
+    )
   }
   catch (error: any) {
     console.error('Failed to remove item:', itemId, error)
-    // Clear the stored item on error
-    lastRemovedItem.value = null
-    if (undoTimeoutId.value) {
-      clearTimeout(undoTimeoutId.value)
-      undoTimeoutId.value = null
-    }
+    // Item is still in cart on error, no cleanup needed
     toast.error(t('cart.error.removeFailed'), t('cart.error.removeFailedDetails'))
   }
 }
@@ -591,6 +592,14 @@ onMounted(async () => {
   catch (error: any) {
     console.error('Failed to validate cart:', error)
     toast.error(t('common.cartValidationError'), t('cart.error.validationFailedDetails'))
+  }
+})
+
+// Clean up undo timeout on unmount to prevent memory leaks
+onBeforeUnmount(() => {
+  if (undoTimeoutId.value) {
+    clearTimeout(undoTimeoutId.value)
+    undoTimeoutId.value = null
   }
 })
 

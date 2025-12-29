@@ -99,6 +99,7 @@
     "continueWithApple": "Apple",
     "socialLoginNote": "Continuând, ești de acord cu Termenii și Condițiile și Politica de Confidențialitate",
     "socialLoginError": "Eroare la autentificarea cu {provider}. Te rugăm să încerci din nou.",
+    "socialLoginRedirectFailed": "Nu s-a putut redirecționa către furnizorul de autentificare. Te rugăm să încerci din nou.",
     "resendIn": "Retrimite în",
     "emailRequired": "Te rugăm să introduci adresa de email",
     "emailVerification": "Verificare Email",
@@ -1389,7 +1390,11 @@
     },
     "errors": {
       "notFound": "Comanda nu a fost găsită. Te rugăm să verifici numărul comenzii și adresa de email.",
-      "generic": "Ceva nu a mers bine. Te rugăm să încerci din nou mai târziu."
+      "generic": "Ceva nu a mers bine. Te rugăm să încerci din nou mai târziu.",
+      "invalidInput": "Te rugăm să introduci un număr de comandă și email valide.",
+      "tooManyRequests": "Prea multe încercări. Te rugăm să aștepți puțin înainte de a încerca din nou.",
+      "serverError": "Eroare de server. Echipa noastră a fost notificată.",
+      "networkError": "Eroare de rețea. Te rugăm să verifici conexiunea și să încerci din nou."
     }
   },
   "invoice": {
@@ -1406,9 +1411,10 @@
     "thankYou": "Mulțumim că ai cumpărat de la Moldova Direct!",
     "questions": "Întrebări despre comanda ta?",
     "print": "Tipărește Factura",
-    "download": "Descarcă PDF",
+    "download": "Salvează ca PDF",
     "error": "Eroare Factură",
-    "errorNoData": "Nu se poate genera factura. Datele comenzii nu sunt disponibile."
+    "errorNoData": "Nu se poate genera factura. Datele comenzii nu sunt disponibile.",
+    "errorPopupBlocked": "Blocatorul de ferestre pop-up a împiedicat deschiderea facturii. Te rugăm să permiți ferestrele pop-up și să încerci din nou."
   },
   "footer": {
     "terms": "Termeni și Condiții",

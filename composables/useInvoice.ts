@@ -12,6 +12,11 @@ export interface InvoiceData {
   customerEmail?: string | null
 }
 
+export interface InvoiceResult {
+  success: boolean
+  error?: 'popup_blocked' | 'unknown_error'
+}
+
 export function useInvoice() {
   const { t, locale } = useI18n()
 
@@ -69,7 +74,8 @@ export function useInvoice() {
       </tr>
     `).join('')
 
-    const shippingAddressHTML = shippingInfo?.address ? `
+    const shippingAddressHTML = shippingInfo?.address
+      ? `
       <div style="margin-bottom: 24px;">
         <h3 style="font-size: 14px; font-weight: 600; color: #374151; margin-bottom: 8px; text-transform: uppercase;">${t('invoice.shippingAddress')}</h3>
         <div style="color: #4b5563; line-height: 1.6;">
@@ -82,7 +88,8 @@ export function useInvoice() {
           ${shippingInfo.address.phone ? `<div>${shippingInfo.address.phone}</div>` : ''}
         </div>
       </div>
-    ` : ''
+    `
+      : ''
 
     return `
 <!DOCTYPE html>
@@ -161,12 +168,14 @@ export function useInvoice() {
       <span style="color: #6b7280;">${t('common.shipping')}</span>
       <span style="font-weight: 500;">${orderData.shippingCost === 0 ? t('checkout.freeShipping') : formatPrice(orderData.shippingCost, currency)}</span>
     </div>
-    ${orderData.tax ? `
+    ${orderData.tax
+      ? `
     <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e5e7eb;">
       <span style="color: #6b7280;">${t('common.tax')}</span>
       <span style="font-weight: 500;">${formatPrice(orderData.tax, currency)}</span>
     </div>
-    ` : ''}
+    `
+      : ''}
     <div style="display: flex; justify-content: space-between; padding: 12px 0; background: #f3f4f6; margin: 8px -8px -8px; padding: 12px 8px; border-radius: 4px;">
       <span style="font-weight: 600; font-size: 16px;">${t('common.total')}</span>
       <span style="font-weight: 700; font-size: 18px; color: #16a34a;">${formatPrice(orderData.total, currency)}</span>
@@ -185,38 +194,59 @@ export function useInvoice() {
 
   /**
    * Open invoice in a new window for printing
+   * Returns a result object indicating success or failure
+   *
+   * @returns InvoiceResult with success status and optional error code
    */
-  const printInvoice = (data: InvoiceData): void => {
-    const html = generateInvoiceHTML(data)
-    const printWindow = window.open('', '_blank')
+  const printInvoice = (data: InvoiceData): InvoiceResult => {
+    try {
+      const html = generateInvoiceHTML(data)
+      const printWindow = window.open('', '_blank')
 
-    if (!printWindow) {
-      console.error('Failed to open print window - popup might be blocked')
-      return
+      if (!printWindow) {
+        console.error('Failed to open print window - popup might be blocked')
+        return {
+          success: false,
+          error: 'popup_blocked',
+        }
+      }
+
+      printWindow.document.write(html)
+      printWindow.document.close()
+
+      // Wait for content to load before printing
+      printWindow.onload = () => {
+        printWindow.focus()
+        printWindow.print()
+      }
+
+      return { success: true }
     }
-
-    printWindow.document.write(html)
-    printWindow.document.close()
-
-    // Wait for content to load before printing
-    printWindow.onload = () => {
-      printWindow.focus()
-      printWindow.print()
+    catch (error) {
+      console.error('Invoice print error:', error)
+      return {
+        success: false,
+        error: 'unknown_error',
+      }
     }
   }
 
   /**
-   * Download invoice as PDF using browser's print-to-PDF
-   * This opens the print dialog where user can select "Save as PDF"
+   * Open invoice for printing/saving as PDF
+   * Opens the browser's print dialog where the user can choose to print or save as PDF
+   *
+   * Note: This does NOT directly download a PDF file. It opens the print dialog
+   * where modern browsers allow saving as PDF via the "Save as PDF" destination.
+   *
+   * @returns InvoiceResult with success status and optional error code
    */
-  const downloadInvoice = (data: InvoiceData): void => {
-    // Use the same print functionality - modern browsers allow saving as PDF
-    printInvoice(data)
+  const openInvoiceForPrint = (data: InvoiceData): InvoiceResult => {
+    return printInvoice(data)
   }
 
   return {
     printInvoice,
-    downloadInvoice,
+    openInvoiceForPrint,
     generateInvoiceHTML,
     formatPrice,
     formatDate,

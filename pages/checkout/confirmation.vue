@@ -650,7 +650,7 @@ const cartStore = useCartStore()
 const localePath = useLocalePath()
 const { t, locale } = useI18n()
 const toast = useToast()
-const { printInvoice, downloadInvoice } = useInvoice()
+const { printInvoice, openInvoiceForPrint } = useInvoice()
 
 /**
  * Get localized text from a translation object or string
@@ -810,7 +810,7 @@ const handleDownloadInvoice = () => {
     toast.error(t('invoice.error'), t('invoice.errorNoData'))
     return
   }
-  downloadInvoice(data)
+  openInvoiceForPrint(data)
 }
 
 // Initialize on mount

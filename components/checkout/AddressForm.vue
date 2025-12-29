@@ -544,7 +544,7 @@ const searchAddresses = async (query: string) => {
           city: addr.city || addr.town || addr.village || addr.municipality || addr.county || '',
           postalCode: addr.postcode || '',
           province: addr.state || addr.region || '',
-          country: getCountryCode(addr.country_code?.toUpperCase() || ''),
+          country: addr.country_code?.toUpperCase() || '',
         }
       })
       .filter(s => s.street && s.city) // Filter out incomplete addresses
@@ -584,15 +584,6 @@ interface NominatimResult {
     country?: string
     country_code?: string
   }
-}
-
-/**
- * Maps country code to our supported format
- * Returns the country code if it's in our supported list, otherwise returns empty
- */
-const getCountryCode = (code: string): string => {
-  const supportedCountries = ['ES', 'RO', 'MD', 'FR', 'DE', 'IT', 'PT']
-  return supportedCountries.includes(code) ? code : code
 }
 
 const selectAddressSuggestion = (suggestion: AddressSuggestion) => {

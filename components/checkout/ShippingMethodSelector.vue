@@ -377,22 +377,6 @@ const selectedMethodId = computed({
   },
 })
 
-// Methods
-const _selectMethod = (method: ShippingMethod) => {
-  // This is now redundant since v-model handles it, but keep for explicit calls
-  emit('update:modelValue', method)
-}
-
-const formatPrice = (price: number): string => {
-  if (price === 0) {
-    return 'Free'
-  }
-  return new Intl.NumberFormat('es-ES', {
-    style: 'currency',
-    currency: 'EUR',
-  }).format(price)
-}
-
 const getDeliveryEstimate = (days: number): string => {
   const today = new Date()
   const deliveryDate = new Date(today)

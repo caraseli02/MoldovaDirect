@@ -310,6 +310,7 @@
     "continueWithApple": "Apple",
     "socialLoginNote": "By continuing, you agree to our Terms of Service and Privacy Policy",
     "socialLoginError": "Failed to sign in with {provider}. Please try again.",
+    "socialLoginRedirectFailed": "Sign-in was blocked. Please allow popups for this site and try again.",
     "resendIn": "Resend in",
     "emailRequired": "Please enter your email address",
     "emailVerification": "Email Verification",
@@ -1761,7 +1762,11 @@
     },
     "errors": {
       "notFound": "Order not found. Please check your order number and email address.",
-      "generic": "Something went wrong. Please try again later."
+      "generic": "Something went wrong. Please try again later.",
+      "invalidInput": "Please enter a valid order number and email address.",
+      "tooManyRequests": "Too many requests. Please wait a moment and try again.",
+      "serverError": "Our servers are experiencing issues. Please try again later.",
+      "networkError": "Network error. Please check your internet connection and try again."
     }
   },
   "invoice": {
@@ -1778,9 +1783,10 @@
     "thankYou": "Thank you for shopping with Moldova Direct!",
     "questions": "Questions about your order?",
     "print": "Print Invoice",
-    "download": "Download PDF",
+    "download": "Save as PDF",
     "error": "Invoice Error",
-    "errorNoData": "Unable to generate invoice. Order data not available."
+    "errorNoData": "Unable to generate invoice. Order data not available.",
+    "errorPopupBlocked": "Could not open invoice. Please allow popups for this site and try again."
   },
   "footer": {
     "terms": "Terms and Conditions",
