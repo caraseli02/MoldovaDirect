@@ -801,7 +801,15 @@ const handlePrintInvoice = () => {
     toast.error(t('invoice.error'), t('invoice.errorNoData'))
     return
   }
-  printInvoice(data)
+  const result = printInvoice(data)
+  if (!result.success) {
+    if (result.error === 'popup_blocked') {
+      toast.error(t('invoice.error'), t('invoice.errorPopupBlocked'))
+    }
+    else {
+      toast.error(t('invoice.error'), t('invoice.errorNoData'))
+    }
+  }
 }
 
 const handleDownloadInvoice = () => {
@@ -810,7 +818,15 @@ const handleDownloadInvoice = () => {
     toast.error(t('invoice.error'), t('invoice.errorNoData'))
     return
   }
-  openInvoiceForPrint(data)
+  const result = openInvoiceForPrint(data)
+  if (!result.success) {
+    if (result.error === 'popup_blocked') {
+      toast.error(t('invoice.error'), t('invoice.errorPopupBlocked'))
+    }
+    else {
+      toast.error(t('invoice.error'), t('invoice.errorNoData'))
+    }
+  }
 }
 
 // Initialize on mount
