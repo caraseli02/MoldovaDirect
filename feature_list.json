@@ -391,20 +391,20 @@
           "id": "security-3",
           "description": "Server-Side Price Verification in checkout",
           "implemented": true,
-          "tested": false
+          "tested": true
         },
         {
           "id": "security-4",
           "description": "Implement Content Security Policy Headers",
-          "implemented": false,
-          "tested": false,
+          "implemented": true,
+          "tested": true,
           "github_issue": 234
         },
         {
           "id": "security-5",
           "description": "Extend CSRF Protection Beyond Cart Endpoints",
-          "implemented": false,
-          "tested": false,
+          "implemented": true,
+          "tested": true,
           "github_issue": 233
         }
       ]

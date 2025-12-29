@@ -1,6 +1,7 @@
 // POST /api/checkout/create-order - Create order from checkout session
 import { serverSupabaseServiceRole } from '#supabase/server'
 import { createLogger } from '~/server/utils/secureLogger'
+import { validateOrigin } from '~/server/utils/csrfProtection'
 
 const logger = createLogger('checkout-create-order')
 
@@ -67,6 +68,21 @@ interface CreateOrderFromCheckoutRequest {
 
 export default defineEventHandler(async (event) => {
   try {
+    // ========================================
+    // CSRF PROTECTION - Validate request origin
+    // ========================================
+    const originResult = validateOrigin(event)
+    if (!originResult.valid) {
+      logger.warn('CSRF origin validation failed', {
+        reason: originResult.reason,
+        ip: getHeader(event, 'x-forwarded-for') || 'unknown',
+      })
+      throw createError({
+        statusCode: 403,
+        statusMessage: 'Forbidden - Invalid request origin',
+      })
+    }
+
     // Create admin client with service role key (bypasses RLS)
     const supabase = serverSupabaseServiceRole(event)
 
