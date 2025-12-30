@@ -44,9 +44,6 @@
       :highlights="heroHighlights"
     />
 
-    <!-- Media mentions "brag bar" (Brightland pattern) -->
-    <LazyHomeMediaMentions v-if="isSectionEnabled('mediaMentions')" />
-
     <!-- Quick category navigation for immediate browsing -->
     <LazyHomeCategoryGrid
       v-if="isSectionEnabled('categoryGrid')"
@@ -78,6 +75,9 @@
       :logos="partnerLogos"
       :testimonials="testimonials"
     />
+
+    <!-- Media mentions "brag bar" (Brightland pattern) -->
+    <LazyHomeMediaMentions v-if="isSectionEnabled('mediaMentions')" />
 
     <!-- User-generated content gallery (Rare Beauty pattern) - DISABLED: 100% fabricated content -->
     <LazyHomeUgcGallery v-if="isSectionEnabled('ugcGallery')" />

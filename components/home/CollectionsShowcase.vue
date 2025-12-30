@@ -1,102 +1,72 @@
 <template>
-  <section class="bg-gray-50 py-20 dark:bg-gray-950 md:py-28">
-    <div class="container">
-      <div class="mx-auto max-w-3xl text-center">
-        <span class="inline-flex items-center gap-2 rounded-full bg-primary-100 px-4 py-2 text-sm font-semibold text-primary-700 dark:bg-primary-500/20 dark:text-primary-200">
-          <commonIcon
-            name="lucide:sparkles"
-            class="h-4 w-4"
-          />
-          {{ t('home.collections.badge') }}
-        </span>
-        <h2 class="mt-4 text-4xl font-bold text-gray-900 dark:text-gray-50 md:text-5xl lg:text-6xl tracking-tight">
+  <section class="luxury-collections">
+    <div class="collections-container">
+      <!-- Section Header -->
+      <div
+        v-motion
+        :initial="{ opacity: 0, y: 30 }"
+        :visible-once="{
+          opacity: 1,
+          y: 0,
+          transition: { duration: 600 },
+        }"
+        class="section-header"
+      >
+        <span class="section-eyebrow">{{ t('home.collections.badge') }}</span>
+        <h2 class="section-title">
           {{ t('home.collections.title') }}
         </h2>
-        <p class="mt-4 text-sm md:text-base text-gray-600 dark:text-gray-400">
+        <p class="section-subtitle">
           {{ t('home.collections.subtitle') }}
         </p>
       </div>
 
-      <!-- Collections - Carousel on mobile, Bento grid on desktop -->
-      <!-- Mobile: Horizontal carousel with native scroll -->
-      <div class="mt-12 lg:hidden">
-        <div
-          class="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-6 -mx-4 px-4 scrollbar-hide"
-        >
-          <div
-            v-for="card in cards"
-            :key="card.key"
-            class="flex-shrink-0 w-[85%] snap-center sm:w-[70%]"
-          >
-            <NuxtLink
-              :to="card.href"
-              class="group relative block overflow-hidden rounded-3xl border border-gray-200 bg-gray-900/95 shadow-xl transition hover:-translate-y-1 hover:shadow-2xl dark:border-gray-800 dark:bg-gray-900"
-            >
-              <NuxtImg
-                :src="card.image"
-                :alt="card.imageAlt"
-                densities="1x 2x"
-                class="absolute inset-0 h-full w-full object-cover brightness-105 transition duration-700 ease-out group-hover:scale-105"
-              />
-              <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/60 to-slate-900/20"></div>
-              <div class="absolute inset-0 bg-gradient-to-br from-slate-900/0 via-slate-900/30 to-slate-950/70 mix-blend-soft-light"></div>
-              <div class="relative flex h-full min-h-[20rem] flex-col justify-between p-8 text-white">
-                <div class="space-y-4">
-                  <span class="inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-900 shadow-lg shadow-slate-900/10">
-                    {{ card.tag }}
-                  </span>
-                  <div class="space-y-3">
-                    <h3 class="text-2xl font-semibold leading-tight">{{ card.title }}</h3>
-                    <p class="text-sm text-white/85">{{ card.description }}</p>
-                  </div>
-                </div>
-                <span class="inline-flex items-center gap-2 text-sm font-semibold text-white transition group-hover:translate-x-1">
-                  {{ card.cta }}
-                  <commonIcon
-                    name="lucide:arrow-right"
-                    class="h-4 w-4"
-                  />
-                </span>
-              </div>
-            </NuxtLink>
-          </div>
-        </div>
-      </div>
-
-      <!-- Desktop: Bento grid layout -->
-      <div class="mt-12 hidden gap-6 lg:grid lg:auto-rows-[minmax(260px,1fr)] lg:grid-cols-12">
+      <!-- Collections Bento Grid -->
+      <div class="collections-grid">
         <NuxtLink
-          v-for="card in cards"
+          v-for="(card, index) in cards"
           :key="card.key"
+          v-motion
+          :initial="{ opacity: 0, y: 40 }"
+          :visible-once="{
+            opacity: 1,
+            y: 0,
+            transition: { duration: 600, delay: index * 100 },
+          }"
           :to="card.href"
-          class="group relative block overflow-hidden rounded-3xl border border-gray-200 bg-gray-900/95 shadow-xl transition hover:-translate-y-1 hover:shadow-2xl dark:border-gray-800 dark:bg-gray-900"
-          :class="[card.colSpan, card.rowSpan, card.colStart]"
+          class="collection-card"
+          :class="card.gridClass"
         >
-          <NuxtImg
-            :src="card.image"
-            :alt="card.imageAlt"
-            densities="1x 2x"
-            class="absolute inset-0 h-full w-full object-cover brightness-105 transition duration-700 ease-out group-hover:scale-105"
-          />
-          <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/60 to-slate-900/20"></div>
-          <div class="absolute inset-0 bg-gradient-to-br from-slate-900/0 via-slate-900/30 to-slate-950/70 mix-blend-soft-light"></div>
-          <div class="relative flex h-full flex-col justify-between p-8 text-white">
-            <div class="space-y-4">
-              <span class="inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-900 shadow-lg shadow-slate-900/10">
-                {{ card.tag }}
-              </span>
-              <div class="space-y-3">
-                <h3 class="text-2xl font-semibold leading-tight">{{ card.title }}</h3>
-                <p class="text-sm text-white/85">{{ card.description }}</p>
-              </div>
+          <div class="card-image-wrapper">
+            <NuxtImg
+              :src="card.image"
+              :alt="card.imageAlt"
+              densities="1x 2x"
+              class="card-image"
+            />
+            <div class="card-overlay"></div>
+          </div>
+          <div class="card-content">
+            <div class="content-top">
+              <span class="card-tag">{{ card.tag }}</span>
             </div>
-            <span class="inline-flex items-center gap-2 text-sm font-semibold text-white transition group-hover:translate-x-1">
-              {{ card.cta }}
-              <commonIcon
-                name="lucide:arrow-right"
-                class="h-4 w-4"
-              />
-            </span>
+            <div class="content-bottom">
+              <h3 class="card-title">{{ card.title }}</h3>
+              <p class="card-description">{{ card.description }}</p>
+              <span class="card-cta">
+                {{ card.cta }}
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </span>
+            </div>
           </div>
         </NuxtLink>
       </div>
@@ -117,13 +87,9 @@ type Card = {
   image: string
   imageAlt: string
   tag: string
-  colSpan: string
-  colStart: string
-  rowSpan: string
+  gridClass: string
 }
 
-// TODO: Replace with actual product photography when available
-// These are temporary placeholder images from Unsplash
 const cards = computed<Card[]>(() => [
   {
     key: 'reserve',
@@ -134,9 +100,7 @@ const cards = computed<Card[]>(() => [
     image: 'https://images.unsplash.com/photo-1566754436750-9393f43f02b3?q=80&w=1200',
     imageAlt: t('home.collections.cards.reserve.imageAlt'),
     tag: t('home.collections.cards.reserve.tag'),
-    colSpan: 'lg:col-span-7',
-    colStart: '',
-    rowSpan: 'lg:row-span-2',
+    gridClass: 'card-large',
   },
   {
     key: 'artisan',
@@ -147,9 +111,7 @@ const cards = computed<Card[]>(() => [
     image: 'https://images.unsplash.com/photo-1452195100486-9cc805987862?q=80&w=1200',
     imageAlt: t('home.collections.cards.artisan.imageAlt'),
     tag: t('home.collections.cards.artisan.tag'),
-    colSpan: 'lg:col-span-5',
-    colStart: 'lg:col-start-8',
-    rowSpan: '',
+    gridClass: 'card-small-top',
   },
   {
     key: 'experience',
@@ -160,21 +122,266 @@ const cards = computed<Card[]>(() => [
     image: 'https://images.unsplash.com/photo-1554939437-ecc492c67b78?q=80&w=1200',
     imageAlt: t('home.collections.cards.experience.imageAlt'),
     tag: t('home.collections.cards.experience.tag'),
-    colSpan: 'lg:col-span-5',
-    colStart: 'lg:col-start-8',
-    rowSpan: '',
+    gridClass: 'card-small-bottom',
   },
 ])
 </script>
 
 <style scoped>
-/* Hide scrollbar for native scroll carousel */
-.scrollbar-hide {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+/* ============================================
+ * LUXURY COLLECTIONS SHOWCASE
+ * Moldova Direct - Premium Design System
+ * ============================================ */
+
+.luxury-collections {
+  --coll-cream: #F8F5EE;
+  --coll-black: #0A0A0A;
+  --coll-charcoal: #151515;
+  --coll-gold: #C9A227;
+  --coll-gold-light: #DDB93D;
+  --coll-wine: #8B2E3B;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, sans-serif;
+  --transition-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  padding: 8rem 4rem;
+  background: var(--coll-charcoal);
 }
 
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;  /* Chrome, Safari, Opera */
+.collections-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Section Header */
+.section-header {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 4rem;
+}
+
+.section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--coll-gold);
+  margin-bottom: 1rem;
+}
+
+.section-eyebrow::before,
+.section-eyebrow::after {
+  content: '';
+  width: 32px;
+  height: 1px;
+  background: var(--coll-gold);
+}
+
+.section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  color: var(--coll-cream);
+  margin-bottom: 1rem;
+}
+
+.section-subtitle {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  color: rgba(248, 245, 238, 0.6);
+  line-height: 1.7;
+}
+
+/* Collections Grid */
+.collections-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(2, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.collection-card {
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+}
+
+.card-large {
+  grid-column: span 7;
+  grid-row: span 2;
+}
+
+.card-small-top {
+  grid-column: span 5;
+  grid-row: span 1;
+}
+
+.card-small-bottom {
+  grid-column: span 5;
+  grid-row: span 1;
+}
+
+/* Card Image */
+.card-image-wrapper {
+  position: absolute;
+  inset: 0;
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s var(--transition-smooth);
+}
+
+.collection-card:hover .card-image {
+  transform: scale(1.08);
+}
+
+.card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(10, 10, 10, 0.85) 0%,
+    rgba(10, 10, 10, 0.4) 40%,
+    rgba(10, 10, 10, 0.2) 100%
+  );
+  transition: background 0.4s ease;
+}
+
+.collection-card:hover .card-overlay {
+  background: linear-gradient(
+    to top,
+    rgba(10, 10, 10, 0.9) 0%,
+    rgba(139, 46, 59, 0.3) 50%,
+    rgba(10, 10, 10, 0.25) 100%
+  );
+}
+
+/* Card Content */
+.card-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: 2rem;
+}
+
+.content-top {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.card-tag {
+  font-family: var(--font-sans);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.5rem 1rem;
+  background: var(--coll-cream);
+  color: var(--coll-black);
+  transition: all 0.4s var(--transition-smooth);
+}
+
+.collection-card:hover .card-tag {
+  background: var(--coll-gold);
+}
+
+/* Content Bottom */
+.content-bottom {
+  color: white;
+}
+
+.card-title {
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  font-weight: 500;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.card-large .card-title {
+  font-size: 2.25rem;
+}
+
+.card-description {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  color: rgba(248, 245, 238, 0.75);
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+}
+
+.card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--coll-gold);
+  transition: all 0.3s ease;
+}
+
+.collection-card:hover .card-cta {
+  color: var(--coll-gold-light);
+}
+
+.card-cta svg {
+  transition: transform 0.3s ease;
+}
+
+.collection-card:hover .card-cta svg {
+  transform: translateX(4px);
+}
+
+/* Mobile Responsive */
+@media (max-width: 1024px) {
+  .luxury-collections {
+    padding: 5rem 1.5rem;
+  }
+
+  .collections-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 1rem;
+  }
+
+  .card-large,
+  .card-small-top,
+  .card-small-bottom {
+    grid-column: span 1;
+    grid-row: span 1;
+    min-height: 320px;
+  }
+
+  .card-large .card-title {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .card-large,
+  .card-small-top,
+  .card-small-bottom {
+    min-height: 280px;
+  }
+
+  .card-content {
+    padding: 1.5rem;
+  }
 }
 </style>

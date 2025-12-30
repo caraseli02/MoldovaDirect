@@ -1,4 +1,10 @@
 {
+  "nav": {
+    "wines": "Wines",
+    "gourmet": "Gourmet",
+    "allProducts": "All Products",
+    "gifts": "Gift Sets"
+  },
   "common": {
     "home": "Home",
     "shop": "Shop",
@@ -1004,6 +1010,7 @@
       }
     },
     "categories": {
+      "eyebrow": "Our Products",
       "title": "Start Your Journey",
       "subtitle": "Explore our most-loved selections and find the perfect pairing for any occasion.",
       "viewAll": "Browse all products",
@@ -1142,6 +1149,7 @@
       }
     },
     "featuredProducts": {
+      "eyebrow": "Curated Selection",
       "title": "Editor's Picks",
       "subtitle": "Limited releases and best-sellers our team is loving this week.",
       "noProducts": "No featured products are available at the moment. Please explore our full catalogue.",
@@ -1212,6 +1220,7 @@
       }
     },
     "newsletter": {
+      "eyebrow": "Stay Connected",
       "title": "Stay on top of new drops",
       "subtitle": "Be the first to hear about seasonal releases, pairing guides, and invitations to private tastings.",
       "placeholder": "Enter your email address",

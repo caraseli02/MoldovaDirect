@@ -284,6 +284,7 @@ export default defineNuxtConfig({
         '/es', '/es/*', '/en', '/ro', '/ru', '/en/*', '/ro/*', '/ru/*',
         '/auth/register', '/auth/forgot-password', '/auth/reset-password', '/auth/verify-email',
         '/test-users', '/test-users/*',
+        '/landing-variation-*', // Landing page variations for A/B testing
       ],
     },
     cookieOptions: {
