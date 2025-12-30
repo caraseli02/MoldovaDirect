@@ -1,12 +1,10 @@
-import { test as base, expect } from '@playwright/test'
+import { test as base } from '@playwright/test'
 import path from 'path'
 import fs from 'fs'
 import {
   captureScreenshot,
   captureResponsiveScreenshots,
   generateVisualReport,
-  VIEWPORTS,
-  type ViewportName,
 } from '../../../.visual-testing/utils'
 
 /**
@@ -28,13 +26,28 @@ if (!TEST_EMAIL || !TEST_PASSWORD) {
   throw new Error('TEST_USER_EMAIL and TEST_USER_PASSWORD required')
 }
 
-// Helper for inline login
+// Helper for inline login - use pressSequentially to trigger Vue reactivity
 async function performLogin(page: any) {
   await page.goto('/auth/login')
   await page.waitForLoadState('networkidle')
-  await page.fill('[data-testid="email-input"]', TEST_EMAIL)
-  await page.fill('[data-testid="password-input"]', TEST_PASSWORD)
-  await page.click('[data-testid="login-button"]')
+  await page.waitForTimeout(1000) // Wait for hydration
+
+  const emailInput = page.locator('[data-testid="email-input"]')
+  const passwordInput = page.locator('[data-testid="password-input"]')
+  const loginButton = page.locator('[data-testid="login-button"]')
+
+  await emailInput.click()
+  await emailInput.clear()
+  await emailInput.pressSequentially(TEST_EMAIL, { delay: 10 })
+  await emailInput.blur()
+
+  await passwordInput.click()
+  await passwordInput.clear()
+  await passwordInput.pressSequentially(TEST_PASSWORD, { delay: 10 })
+  await passwordInput.blur()
+
+  await page.waitForTimeout(500) // Wait for Vue reactivity
+  await loginButton.click({ timeout: 5000 })
   await page.waitForURL(/\/(admin|account|$)/, { timeout: 10000 })
 }
 

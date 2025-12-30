@@ -1025,11 +1025,8 @@ export const useCartStore = defineStore('cart', () => {
 })
 
 // =============================================
-// BACKWARD COMPATIBILITY EXPORTS
+// TYPE EXPORTS
 // =============================================
-
-// Export the main store as default
-export default useCartStore
 
 // Export types for external usage
 export type {
