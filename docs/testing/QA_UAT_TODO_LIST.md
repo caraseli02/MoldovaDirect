@@ -1,6 +1,7 @@
 # Moldova Direct - QA & UAT Development TODO List
 **Created:** 2025-12-30
-**Status:** Validated against codebase
+**Updated:** 2025-12-30 (Post PR #332 & #336 review)
+**Status:** Updated based on recent fixes
 **Target:** Production release blockers and UX improvements
 
 ---
@@ -9,12 +10,17 @@
 
 This document provides a validated, prioritized TODO list based on Q&A and UAT testing performed on https://moldova-direct.vercel.app/. Each item has been cross-referenced with the actual codebase to verify validity and provide accurate technical context.
 
+**⚠️ IMPORTANT UPDATE:** After reviewing PRs #332 and #336, several issues appear to have been FIXED. See `QA_UAT_STATUS_UPDATE.md` for details.
+
+**Next Action Required:** Test production URL to verify which issues are actually resolved.
+
 ---
 
 ## 🔴 P0 - Critical Blockers (Must Fix Before Public Release)
 
-### 1. **Investigate & Fix Search Functionality**
+### 1. ⚠️ **[NEEDS VERIFICATION] Search Functionality**
 **User Report:** Searching for keywords (e.g., "wine") returns the full catalog instead of filtered results.
+**Status After Code Review:** ⚠️ Code appears correct - may already work, needs production testing
 
 **Code Investigation:**
 - ✅ Backend API exists and looks correct: `/server/api/search/index.get.ts`
@@ -61,18 +67,28 @@ const handleSearchInput = debounce(() => {
 
 ---
 
-### 2. **Fix Filters Causing Blank Product Grid**
+### 2. ✅ **[LIKELY FIXED] Filters Causing Blank Product Grid**
 **User Report:** Applying filters (price, availability) results in an empty page or broken state.
+**Status After PR #332:** ✅ Filter bindings fixed, shadcn components added - likely resolved
 
 **Code Investigation:**
 - ✅ Backend supports filters: `/server/api/products/index.get.ts` (lines 143-164)
 - ✅ Frontend filter handling exists: `pages/products/index.vue` (lines 630-651)
 - ✅ Empty state UI exists: `pages/products/index.vue` (lines 349-380)
 
-**Possible Root Cause:**
-- Filter state not properly synced between UI and API call
-- API returns empty results but UI doesn't show empty state message
-- Filter parameters malformed when sent to API
+**What Was Fixed in PR #332 (Dec 28, 2025):**
+```
+- Fixed checkbox bindings (@update:checked → @update:model-value)
+- Fixed Slider component model-value binding
+- Replaced custom FilterSheet with shadcn-vue Sheet component
+- Added proper event handling for inStock/featured filters
+- Improved overall filter state management
+```
+
+**Original Root Cause (Now Fixed):**
+- ✅ Filter checkbox events were using wrong event name
+- ✅ Slider component had binding issues
+- ✅ Custom sheet implementation was buggy
 
 **Technical Details:**
 ```typescript
@@ -92,12 +108,15 @@ const handleApplyFilters = (closePanel = false) => {
 }
 ```
 
-**Action Items:**
-- [ ] Test filter functionality on production
-- [ ] Add logging to `handleApplyFilters` to see what filters are being sent
-- [ ] Check network tab to verify filter parameters in `/api/products` request
-- [ ] Verify empty state is shown when no products match filters
-- [ ] Test filter reset functionality
+**Action Items (Verification Only):**
+- [ ] ✅ Test filter functionality on https://moldova-direct.vercel.app/
+- [ ] Confirm price range slider works correctly
+- [ ] Confirm "In stock only" checkbox works
+- [ ] Confirm "Featured only" checkbox works
+- [ ] Verify empty state shows when no products match
+- [ ] Test "Clear all filters" button
+- [ ] ~~Add logging~~ (not needed unless still broken)
+- [ ] ~~Check network tab~~ (not needed unless still broken)
 
 **Acceptance Criteria:**
 - Applying any combination of filters never blanks the page
@@ -112,8 +131,9 @@ const handleApplyFilters = (closePanel = false) => {
 
 ---
 
-### 3. **Prevent Blank State from Search + Filter Combo**
+### 3. ✅ **[LIKELY FIXED] Search + Filter Combo Issues**
 **User Report:** Using search and filters together leaves the page in a non-recoverable blank state.
+**Status After PR #332:** ✅ Filter fixes should resolve this - both features share same state
 
 **Possible Root Cause:**
 - Search clears filter state or vice versa
