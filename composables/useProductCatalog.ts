@@ -107,8 +107,9 @@ export const useProductCatalog = () => {
         signal,
       })
 
-      products.value = response.products
-      pagination.value = response.pagination
+      // Force reactivity by creating new array/object references
+      products.value = [...response.products]
+      pagination.value = { ...response.pagination }
       filters.value = { ...productFilters }
     }
     catch (err: any) {
@@ -330,12 +331,21 @@ export const useProductCatalog = () => {
   }
 
   // Filter panel UI helpers
+  // Note: Ensure showFilterPanel is explicitly set to boolean to avoid hydration issues
   const openFilterPanel = () => {
+    // Force to true even if currently undefined (SSR hydration edge case)
     showFilterPanel.value = true
   }
 
   const closeFilterPanel = () => {
     showFilterPanel.value = false
+  }
+
+  // Ensure filter panel state is initialized (fixes SSR hydration issue)
+  const ensureFilterPanelInitialized = () => {
+    if (showFilterPanel.value === undefined) {
+      showFilterPanel.value = false
+    }
   }
 
   // Sort helpers
@@ -366,6 +376,7 @@ export const useProductCatalog = () => {
     clearFilters,
     openFilterPanel,
     closeFilterPanel,
+    ensureFilterPanelInitialized,
     updateSort,
 
     // Reactive state
