@@ -1,11 +1,6 @@
 <template>
-  <section class="relative overflow-hidden bg-gradient-to-b from-slate-50 to-white py-16 md:py-24">
-    <!-- Background Decoration -->
-    <div class="absolute inset-0 opacity-[0.03]">
-      <div class="absolute right-0 top-0 h-96 w-96 rounded-full bg-primary blur-3xl"></div>
-    </div>
-
-    <div class="container relative">
+  <section class="pairing-guides-section">
+    <div class="container">
       <!-- Section Header -->
       <div
         v-motion
@@ -15,17 +10,24 @@
           y: 0,
           transition: { duration: 600 },
         }"
-        class="mx-auto max-w-3xl text-center"
+        class="section-header"
       >
-        <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+        <div class="section-badge">
+          <span class="badge-line"></span>
+          <commonIcon name="lucide:utensils" class="badge-icon" />
+          <span>{{ t('wineStory.pairings.badge', 'Pairings') }}</span>
+          <span class="badge-line"></span>
+        </div>
+
+        <h2 class="section-title">
           {{ t('wineStory.pairings.title') }}
         </h2>
-        <p class="mt-4 text-base leading-relaxed text-slate-600 md:mt-6 md:text-lg">
+        <p class="section-subtitle">
           {{ t('wineStory.pairings.subtitle') }}
         </p>
       </div>
 
-      <!-- Filter Tabs - FIXED: Mobile-friendly horizontal scroll -->
+      <!-- Filter Tabs -->
       <div
         v-motion
         :initial="{ opacity: 0, y: 20 }"
@@ -34,18 +36,14 @@
           y: 0,
           transition: { duration: 500, delay: 100 },
         }"
-        class="mt-6 md:mt-8"
+        class="filter-section"
       >
-        <!-- Desktop: Centered button group -->
-        <div class="hidden justify-center md:flex">
-          <div class="inline-flex flex-wrap justify-center gap-2 rounded-full bg-white p-1.5 shadow-lg">
+        <!-- Desktop Filters -->
+        <div class="filter-desktop">
+          <div class="filter-group">
             <button
-              class="rounded-full px-6 py-2.5 text-sm font-semibold transition-all"
-              :class="[
-                activeFilter === 'all'
-                  ? 'bg-primary text-white shadow-md'
-                  : 'text-slate-600 hover:bg-slate-100',
-              ]"
+              class="filter-button"
+              :class="{ active: activeFilter === 'all' }"
               @click="setFilter('all')"
             >
               {{ t('wineStory.pairings.filters.all') }}
@@ -54,12 +52,8 @@
             <button
               v-for="type in wineTypes"
               :key="type"
-              class="rounded-full px-6 py-2.5 text-sm font-semibold transition-all"
-              :class="[
-                activeFilter === type
-                  ? 'bg-primary text-white shadow-md'
-                  : 'text-slate-600 hover:bg-slate-100',
-              ]"
+              class="filter-button"
+              :class="{ active: activeFilter === type }"
               @click="setFilter(type)"
             >
               {{ t(`wineStory.pairings.wineTypes.${type}`) }}
@@ -67,65 +61,38 @@
           </div>
         </div>
 
-        <!-- Mobile: Horizontal scroll -->
-        <div class="md:hidden">
-          <div class="scrollbar-hide -mx-4 flex gap-2 overflow-x-auto px-4 pb-2">
-            <button
-              class="flex-shrink-0 rounded-full px-5 py-2.5 text-sm font-semibold transition-all"
-              :class="[
-                activeFilter === 'all'
-                  ? 'bg-primary text-white shadow-md'
-                  : 'bg-white text-slate-600 shadow-sm',
-              ]"
-              @click="setFilter('all')"
-            >
-              {{ t('wineStory.pairings.filters.all') }}
-            </button>
+        <!-- Mobile Filters -->
+        <div class="filter-mobile">
+          <button
+            class="filter-button-mobile"
+            :class="{ active: activeFilter === 'all' }"
+            @click="setFilter('all')"
+          >
+            {{ t('wineStory.pairings.filters.all') }}
+          </button>
 
-            <button
-              v-for="type in wineTypes"
-              :key="type"
-              class="flex-shrink-0 rounded-full px-5 py-2.5 text-sm font-semibold transition-all"
-              :class="[
-                activeFilter === type
-                  ? 'bg-primary text-white shadow-md'
-                  : 'bg-white text-slate-600 shadow-sm',
-              ]"
-              @click="setFilter(type)"
-            >
-              {{ t(`wineStory.pairings.wineTypes.${type}`) }}
-            </button>
-          </div>
+          <button
+            v-for="type in wineTypes"
+            :key="type"
+            class="filter-button-mobile"
+            :class="{ active: activeFilter === type }"
+            @click="setFilter(type)"
+          >
+            {{ t(`wineStory.pairings.wineTypes.${type}`) }}
+          </button>
         </div>
       </div>
 
       <!-- Loading State -->
-      <div
-        v-if="loading"
-        class="mt-8 grid gap-4 md:mt-12 md:grid-cols-2 md:gap-6 lg:grid-cols-3"
-      >
-        <div
-          v-for="i in 3"
-          :key="i"
-          class="h-[400px] animate-pulse rounded-2xl bg-slate-200 md:h-[480px]"
-        ></div>
+      <div v-if="loading" class="loading-grid">
+        <div v-for="i in 3" :key="i" class="loading-card"></div>
       </div>
 
       <!-- Error State -->
-      <div
-        v-else-if="error"
-        class="mt-8 rounded-lg bg-red-50 p-6 text-center md:mt-12"
-      >
-        <commonIcon
-          name="lucide:alert-circle"
-          class="mx-auto h-12 w-12 text-red-500"
-        />
-        <p class="mt-2 text-lg font-medium text-red-900">
-          {{ t('wineStory.pairings.error') }}
-        </p>
-        <p class="mt-1 text-sm text-red-700">
-          {{ error }}
-        </p>
+      <div v-else-if="error" class="error-state">
+        <commonIcon name="lucide:alert-circle" class="error-icon" />
+        <p class="error-title">{{ t('wineStory.pairings.error') }}</p>
+        <p class="error-message">{{ error }}</p>
       </div>
 
       <!-- Pairing Cards Grid -->
@@ -138,7 +105,7 @@
           y: 0,
           transition: { duration: 600, delay: 200 },
         }"
-        class="mt-8 grid gap-4 md:mt-12 md:grid-cols-2 md:gap-6 lg:grid-cols-3"
+        class="pairings-grid"
       >
         <PairingCard
           v-for="pairing in displayedPairings"
@@ -149,49 +116,26 @@
       </div>
 
       <!-- No Results State -->
-      <div
-        v-else
-        class="mt-8 rounded-lg bg-slate-100 p-12 text-center md:mt-12"
-      >
-        <commonIcon
-          name="lucide:wine"
-          class="mx-auto h-16 w-16 text-slate-400"
-        />
-        <p class="mt-4 text-lg font-medium text-slate-600">
-          {{ t('wineStory.pairings.noResults') }}
-        </p>
-        <button
-          class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary/90"
-          @click="clearFilters"
-        >
+      <div v-else class="empty-state">
+        <commonIcon name="lucide:wine" class="empty-icon" />
+        <p class="empty-text">{{ t('wineStory.pairings.noResults') }}</p>
+        <button class="empty-button" @click="clearFilters">
           {{ t('wineStory.pairings.filters.all') }}
-          <commonIcon
-            name="lucide:x"
-            class="h-4 w-4"
-          />
+          <commonIcon name="lucide:x" class="empty-button-icon" />
         </button>
       </div>
 
       <!-- View All Button -->
       <div
         v-if="!loading && displayedPairings.length > 0"
-        class="mt-6 text-center md:mt-8"
+        class="view-all-section"
       >
-        <NuxtLink
-          :to="localePath('/pairings')"
-          class="cta-button inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-semibold text-white shadow-lg transition-all hover:bg-primary/90 md:px-8"
-        >
+        <NuxtLink :to="localePath('/pairings')" class="btn-view-all">
           {{ t('common.showMore') }}
-          <commonIcon
-            name="lucide:arrow-right"
-            class="h-5 w-5"
-          />
+          <commonIcon name="lucide:arrow-right" class="btn-icon" />
         </NuxtLink>
       </div>
     </div>
-
-    <!-- Pairing Detail Modal (Placeholder for future implementation) -->
-    <!-- <PairingDetailModal v-model:open="isModalOpen" :pairing="selectedPairing" /> -->
   </section>
 </template>
 
@@ -251,30 +195,345 @@ const clearFilters = () => {
 const openPairingModal = (pairing: PairingGuide) => {
   selectedPairing.value = pairing
   isModalOpen.value = true
-  // Modal component to be implemented in future
 }
 </script>
 
 <style scoped>
-/* Hide scrollbar for mobile tabs */
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+/* ===== SECTION ===== */
+.pairing-guides-section {
+  position: relative;
+  padding: 6rem 0;
+  background: linear-gradient(to bottom, var(--md-cream) 0%, #fff 100%);
+  overflow: hidden;
 }
 
-.scrollbar-hide::-webkit-scrollbar {
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ===== SECTION HEADER ===== */
+.section-header {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 3rem;
+}
+
+.section-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(201, 162, 39, 0.1);
+  border: 1px solid rgba(201, 162, 39, 0.2);
+  border-radius: var(--md-radius-full);
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--md-gold);
+  margin-bottom: 2rem;
+}
+
+.badge-line {
+  width: 24px;
+  height: 1px;
+  background: var(--md-gradient-gold-line);
+}
+
+.badge-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--md-gold);
+}
+
+.section-title {
+  font-family: var(--md-font-serif);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: var(--md-tracking-tight);
+  color: var(--md-charcoal);
+  margin-bottom: 1.5rem;
+}
+
+.section-subtitle {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  line-height: 1.6;
+  color: rgba(10, 10, 10, 0.7);
+}
+
+/* ===== FILTERS ===== */
+.filter-section {
+  margin-bottom: 3rem;
+}
+
+.filter-desktop {
   display: none;
 }
 
-/* Ensure smooth transitions */
-button {
-  transition: all 0.2s ease;
+.filter-group {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: #fff;
+  border: 1px solid rgba(10, 10, 10, 0.08);
+  border-radius: var(--md-radius-full);
+  box-shadow: var(--md-shadow-lg);
 }
 
-/* Focus styles for accessibility */
-button:focus-visible {
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-  box-shadow: 0 0 0 2px var(--color-primary), 0 0 0 4px white;
+.filter-button {
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  border: none;
+  border-radius: var(--md-radius-full);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgba(10, 10, 10, 0.6);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-button:hover {
+  background: rgba(10, 10, 10, 0.05);
+  color: var(--md-charcoal);
+}
+
+.filter-button.active {
+  background: var(--md-gold);
+  color: #fff;
+  box-shadow: var(--md-shadow-md);
+}
+
+/* Mobile Filters */
+.filter-mobile {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding: 0 0 1rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.filter-mobile::-webkit-scrollbar {
+  display: none;
+}
+
+.filter-button-mobile {
+  flex-shrink: 0;
+  padding: 0.75rem 1.5rem;
+  background: #fff;
+  border: 1px solid rgba(10, 10, 10, 0.1);
+  border-radius: var(--md-radius-full);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgba(10, 10, 10, 0.6);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--md-shadow-sm);
+}
+
+.filter-button-mobile.active {
+  background: var(--md-gold);
+  border-color: var(--md-gold);
+  color: #fff;
+  box-shadow: var(--md-shadow-md);
+}
+
+/* ===== LOADING STATE ===== */
+.loading-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.loading-card {
+  height: 400px;
+  background: linear-gradient(90deg, rgba(10, 10, 10, 0.05) 0%, rgba(10, 10, 10, 0.1) 50%, rgba(10, 10, 10, 0.05) 100%);
+  background-size: 200% 100%;
+  border-radius: var(--md-radius-2xl);
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ===== ERROR STATE ===== */
+.error-state {
+  padding: 3rem;
+  text-align: center;
+  background: rgba(220, 38, 38, 0.05);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  border-radius: var(--md-radius-2xl);
+}
+
+.error-icon {
+  width: 48px;
+  height: 48px;
+  color: #dc2626;
+  margin: 0 auto;
+}
+
+.error-title {
+  margin-top: 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #991b1b;
+}
+
+.error-message {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: #b91c1c;
+}
+
+/* ===== PAIRINGS GRID ===== */
+.pairings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+  padding: 4rem 2rem;
+  text-align: center;
+  background: rgba(10, 10, 10, 0.03);
+  border-radius: var(--md-radius-2xl);
+}
+
+.empty-icon {
+  width: 64px;
+  height: 64px;
+  color: rgba(10, 10, 10, 0.2);
+  margin: 0 auto;
+}
+
+.empty-text {
+  margin-top: 1.5rem;
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: rgba(10, 10, 10, 0.5);
+}
+
+.empty-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--md-gold);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--md-radius-full);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.empty-button:hover {
+  box-shadow: var(--md-shadow-gold-lg);
+  transform: translateY(-2px);
+}
+
+.empty-button-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* ===== VIEW ALL SECTION ===== */
+.view-all-section {
+  margin-top: 3rem;
+  text-align: center;
+}
+
+.btn-view-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: var(--md-charcoal);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: var(--md-radius-full);
+  box-shadow: var(--md-shadow-lg);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-view-all::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--md-gradient-gold);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.btn-view-all:hover::before {
+  opacity: 1;
+}
+
+.btn-view-all:hover {
+  box-shadow: var(--md-shadow-gold-lg);
+  transform: translateY(-3px);
+}
+
+.btn-view-all > * {
+  position: relative;
+  z-index: 1;
+}
+
+.btn-icon {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease;
+}
+
+.btn-view-all:hover .btn-icon {
+  transform: translateX(4px);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (min-width: 768px) {
+  .pairing-guides-section {
+    padding: 8rem 0;
+  }
+
+  .filter-desktop {
+    display: flex;
+    justify-content: center;
+  }
+
+  .filter-mobile {
+    display: none;
+  }
+
+  .pairings-grid {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 0 1rem;
+  }
+
+  .section-header {
+    margin-bottom: 2rem;
+  }
 }
 </style>
