@@ -616,7 +616,7 @@ const isStepCompleted = (stepKey: string, currentStatus: string): boolean => {
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
-  justify-center;
+  justify-content: center;
   gap: 0.75rem;
 }
 
