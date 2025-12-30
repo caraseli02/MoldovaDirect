@@ -1,13 +1,7 @@
 <template>
-  <section class="relative overflow-hidden bg-gradient-to-b from-white to-slate-50 py-16 md:py-24">
-    <!-- Background Decoration - Reduced opacity for subtlety -->
-    <div class="absolute inset-0 opacity-[0.03]">
-      <div class="absolute left-0 top-0 h-96 w-96 rounded-full bg-primary blur-3xl"></div>
-      <div class="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-primary/50 blur-3xl"></div>
-    </div>
-
-    <div class="container relative">
-      <!-- Section Header - More compact spacing -->
+  <section class="producer-stories-section">
+    <div class="container">
+      <!-- Section Header -->
       <div
         v-motion
         :initial="{ opacity: 0, y: 20 }"
@@ -16,43 +10,33 @@
           y: 0,
           transition: { duration: 600 },
         }"
-        class="mx-auto max-w-3xl text-center"
+        class="section-header"
       >
-        <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+        <div class="section-badge">
+          <span class="badge-line"></span>
+          <commonIcon name="lucide:users" class="badge-icon" />
+          <span>{{ t('wineStory.producers.badge', 'Our Producers') }}</span>
+          <span class="badge-line"></span>
+        </div>
+
+        <h2 class="section-title">
           {{ t('wineStory.producers.title') }}
         </h2>
-        <p class="mt-4 text-base leading-relaxed text-slate-600 md:mt-6 md:text-lg">
+        <p class="section-subtitle">
           {{ t('wineStory.producers.subtitle') }}
         </p>
       </div>
 
       <!-- Loading State -->
-      <div
-        v-if="loading"
-        class="mt-8 grid gap-4 md:mt-12 md:grid-cols-2 md:gap-6 lg:grid-cols-3"
-      >
-        <div
-          v-for="i in 3"
-          :key="i"
-          class="h-[420px] animate-pulse rounded-2xl bg-slate-200 md:h-[480px]"
-        ></div>
+      <div v-if="loading" class="loading-grid">
+        <div v-for="i in 3" :key="i" class="loading-card"></div>
       </div>
 
       <!-- Error State -->
-      <div
-        v-else-if="error"
-        class="mt-8 rounded-lg bg-red-50 p-6 text-center md:mt-12"
-      >
-        <commonIcon
-          name="lucide:alert-circle"
-          class="mx-auto h-12 w-12 text-red-500"
-        />
-        <p class="mt-2 text-lg font-medium text-red-900">
-          {{ t('wineStory.producers.error') }}
-        </p>
-        <p class="mt-1 text-sm text-red-700">
-          {{ error }}
-        </p>
+      <div v-else-if="error" class="error-state">
+        <commonIcon name="lucide:alert-circle" class="error-icon" />
+        <p class="error-title">{{ t('wineStory.producers.error') }}</p>
+        <p class="error-message">{{ error }}</p>
       </div>
 
       <!-- Producer Carousel -->
@@ -65,7 +49,7 @@
           y: 0,
           transition: { duration: 600, delay: 200 },
         }"
-        class="relative mt-8 md:mt-12"
+        class="carousel-wrapper"
       >
         <!-- Swiper Container -->
         <Swiper
@@ -101,14 +85,14 @@
             prevSlideMessage: t('common.previous'),
             nextSlideMessage: t('common.next'),
           }"
-          class="producer-stories-swiper"
+          class="producer-swiper"
           @swiper="onSwiper"
           @slide-change="onSlideChange"
         >
           <SwiperSlide
             v-for="producer in featuredProducers"
             :key="producer.id"
-            class="h-auto"
+            class="swiper-slide-height"
           >
             <ProducerCard
               :producer="producer as Producer"
@@ -117,61 +101,41 @@
           </SwiperSlide>
         </Swiper>
 
-        <!-- Custom Navigation Buttons - Mobile optimized positioning -->
+        <!-- Custom Navigation Buttons -->
         <button
-          class="swiper-button-prev-custom absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white p-2.5 shadow-lg transition-all hover:scale-110 hover:bg-gold-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:opacity-50 md:-left-4 md:p-3 lg:-left-6"
+          class="nav-button nav-prev swiper-button-prev-custom"
           :aria-label="t('common.previous')"
         >
-          <commonIcon
-            name="lucide:chevron-left"
-            class="h-5 w-5 text-slate-700 transition-colors hover:text-gold-600 md:h-6 md:w-6"
-          />
+          <commonIcon name="lucide:chevron-left" class="nav-icon" />
         </button>
 
         <button
-          class="swiper-button-next-custom absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white p-2.5 shadow-lg transition-all hover:scale-110 hover:bg-gold-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:opacity-50 md:-right-4 md:p-3 lg:-right-6"
+          class="nav-button nav-next swiper-button-next-custom"
           :aria-label="t('common.next')"
         >
-          <commonIcon
-            name="lucide:chevron-right"
-            class="h-5 w-5 text-slate-700 transition-colors hover:text-gold-600 md:h-6 md:w-6"
-          />
+          <commonIcon name="lucide:chevron-right" class="nav-icon" />
         </button>
 
         <!-- Custom Pagination -->
-        <div class="swiper-pagination-custom mt-6 flex justify-center md:mt-8"></div>
+        <div class="swiper-pagination-custom pagination-dots"></div>
 
-        <!-- Keyboard/Touch Hints - Smaller on mobile -->
-        <div class="mt-6 flex flex-wrap justify-center gap-3 text-xs text-slate-500 md:gap-4 md:text-sm">
-          <span class="inline-flex items-center gap-1.5 md:gap-2">
-            <commonIcon
-              name="lucide:mouse-pointer-2"
-              class="h-3.5 w-3.5 md:h-4 md:w-4"
-            />
+        <!-- Keyboard/Touch Hints -->
+        <div class="interaction-hints">
+          <span class="hint-item">
+            <commonIcon name="lucide:mouse-pointer-2" class="hint-icon" />
             {{ t('wineStory.producers.swipeHint') }}
           </span>
-          <span class="hidden items-center gap-2 md:inline-flex">
-            <commonIcon
-              name="lucide:keyboard"
-              class="h-4 w-4"
-            />
+          <span class="hint-item hint-desktop">
+            <commonIcon name="lucide:keyboard" class="hint-icon" />
             {{ t('wineStory.producers.keyboardHint') }}
           </span>
         </div>
       </div>
 
       <!-- Empty State -->
-      <div
-        v-else
-        class="mt-8 rounded-lg bg-slate-100 p-12 text-center md:mt-12"
-      >
-        <commonIcon
-          name="lucide:wine"
-          class="mx-auto h-16 w-16 text-slate-400"
-        />
-        <p class="mt-4 text-lg font-medium text-slate-600">
-          {{ t('wineStory.producers.noProducers') }}
-        </p>
+      <div v-else class="empty-state">
+        <commonIcon name="lucide:wine" class="empty-icon" />
+        <p class="empty-text">{{ t('wineStory.producers.noProducers') }}</p>
       </div>
     </div>
 
@@ -210,7 +174,7 @@ const onSwiper = (swiper: SwiperType) => {
   swiperInstance.value = swiper
 }
 
-// Handle slide change (for analytics, etc.)
+// Handle slide change
 const onSlideChange = () => {
   // Could track analytics here if needed
 }
@@ -237,43 +201,314 @@ useEventListener('keydown', (event: KeyboardEvent) => {
 </script>
 
 <style scoped>
-/* Custom Swiper Styles */
-.producer-stories-swiper :deep(.swiper-slide) {
+/* ===== SECTION ===== */
+.producer-stories-section {
+  position: relative;
+  padding: 6rem 0;
+  background: linear-gradient(to bottom, #fff 0%, var(--md-cream) 100%);
+  overflow: hidden;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ===== SECTION HEADER ===== */
+.section-header {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 4rem;
+}
+
+.section-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(201, 162, 39, 0.1);
+  border: 1px solid rgba(201, 162, 39, 0.2);
+  border-radius: var(--md-radius-full);
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--md-gold);
+  margin-bottom: 2rem;
+}
+
+.badge-line {
+  width: 24px;
+  height: 1px;
+  background: var(--md-gradient-gold-line);
+}
+
+.badge-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--md-gold);
+}
+
+.section-title {
+  font-family: var(--md-font-serif);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: var(--md-tracking-tight);
+  color: var(--md-charcoal);
+  margin-bottom: 1.5rem;
+}
+
+.section-subtitle {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  line-height: 1.6;
+  color: rgba(10, 10, 10, 0.7);
+}
+
+/* ===== LOADING STATE ===== */
+.loading-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+.loading-card {
+  height: 420px;
+  background: linear-gradient(90deg, rgba(10, 10, 10, 0.05) 0%, rgba(10, 10, 10, 0.1) 50%, rgba(10, 10, 10, 0.05) 100%);
+  background-size: 200% 100%;
+  border-radius: var(--md-radius-2xl);
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ===== ERROR STATE ===== */
+.error-state {
+  margin-top: 3rem;
+  padding: 3rem;
+  text-align: center;
+  background: rgba(220, 38, 38, 0.05);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  border-radius: var(--md-radius-2xl);
+}
+
+.error-icon {
+  width: 48px;
+  height: 48px;
+  color: #dc2626;
+  margin: 0 auto;
+}
+
+.error-title {
+  margin-top: 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #991b1b;
+}
+
+.error-message {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: #b91c1c;
+}
+
+/* ===== CAROUSEL ===== */
+.carousel-wrapper {
+  position: relative;
+  margin-top: 3rem;
+}
+
+.producer-swiper :deep(.swiper-slide) {
   height: auto;
   display: flex;
 }
 
-/* Pagination Styles - WCAG 2.5.5 compliant touch targets (44x44px) */
-.swiper-pagination-custom :deep(.swiper-pagination-bullet) {
-  height: 0.5rem;
-  width: 0.5rem;
-  background-color: rgb(203 213 225);
-  opacity: 1;
-  transition: all 0.2s ease;
-  /* Expand clickable area to meet WCAG 2.5.5 minimum touch target */
-  padding: 1.125rem; /* (44px - 8px) / 2 = 18px = 1.125rem */
-  cursor: pointer;
+.swiper-slide-height {
+  height: auto;
 }
 
-.swiper-pagination-custom :deep(.swiper-pagination-bullet-active) {
-  width: 2rem;
-  background-color: var(--color-primary);
-}
-
-.swiper-pagination-custom :deep(.swiper-pagination-bullet-active-main) {
-  background-color: var(--color-primary);
-  filter: brightness(0.9);
-}
-
-/* Ensure cards stretch full height */
-.producer-stories-swiper :deep(.swiper-slide > *) {
+.producer-swiper :deep(.swiper-slide > *) {
   height: 100%;
 }
 
-/* Navigation button states */
-.swiper-button-prev-custom:disabled,
-.swiper-button-next-custom:disabled {
-  cursor: not-allowed;
+/* ===== NAVIGATION BUTTONS ===== */
+.nav-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: #fff;
+  border: 1px solid rgba(10, 10, 10, 0.1);
+  border-radius: 50%;
+  box-shadow: var(--md-shadow-lg);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nav-button:hover {
+  background: var(--md-gold);
+  border-color: var(--md-gold);
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: var(--md-shadow-gold-lg);
+}
+
+.nav-button:hover .nav-icon {
+  color: #fff;
+}
+
+.nav-button:disabled {
   opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.nav-button:disabled:hover {
+  transform: translateY(-50%);
+  background: #fff;
+}
+
+.nav-prev {
+  left: -24px;
+}
+
+.nav-next {
+  right: -24px;
+}
+
+.nav-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--md-charcoal);
+  transition: color 0.3s ease;
+}
+
+/* ===== PAGINATION ===== */
+.pagination-dots {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.pagination-dots :deep(.swiper-pagination-bullet) {
+  width: 8px;
+  height: 8px;
+  background: rgba(10, 10, 10, 0.2);
+  opacity: 1;
+  transition: all 0.3s ease;
+  margin: 0 4px;
+  cursor: pointer;
+}
+
+.pagination-dots :deep(.swiper-pagination-bullet-active) {
+  width: 32px;
+  background: var(--md-gold);
+  border-radius: 4px;
+}
+
+/* ===== INTERACTION HINTS ===== */
+.interaction-hints {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  font-size: 0.875rem;
+  color: rgba(10, 10, 10, 0.5);
+}
+
+.hint-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hint-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.hint-desktop {
+  display: none;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+  margin-top: 3rem;
+  padding: 4rem 2rem;
+  text-align: center;
+  background: rgba(10, 10, 10, 0.03);
+  border-radius: var(--md-radius-2xl);
+}
+
+.empty-icon {
+  width: 64px;
+  height: 64px;
+  color: rgba(10, 10, 10, 0.2);
+  margin: 0 auto;
+}
+
+.empty-text {
+  margin-top: 1.5rem;
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: rgba(10, 10, 10, 0.5);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (min-width: 768px) {
+  .producer-stories-section {
+    padding: 8rem 0;
+  }
+
+  .hint-desktop {
+    display: inline-flex;
+  }
+
+  .nav-prev {
+    left: -64px;
+  }
+
+  .nav-next {
+    right: -64px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .nav-prev {
+    left: 8px;
+  }
+
+  .nav-next {
+    right: 8px;
+  }
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 0 1rem;
+  }
+
+  .section-header {
+    margin-bottom: 3rem;
+  }
+
+  .nav-button {
+    width: 40px;
+    height: 40px;
+  }
+
+  .nav-icon {
+    width: 20px;
+    height: 20px;
+  }
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <section class="relative overflow-hidden bg-white py-20 md:py-32">
+  <section class="wine-regions-section">
     <div class="container">
       <!-- Section Header -->
       <div
@@ -10,18 +10,25 @@
           y: 0,
           transition: { duration: 600 },
         }"
-        class="mx-auto max-w-3xl text-center"
+        class="section-header"
       >
-        <h2 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl md:text-6xl">
+        <div class="section-badge">
+          <span class="badge-line"></span>
+          <commonIcon name="lucide:map" class="badge-icon" />
+          <span>{{ t('wineStory.regions.badge', 'Wine Regions') }}</span>
+          <span class="badge-line"></span>
+        </div>
+
+        <h2 class="section-title">
           {{ t('wineStory.regions.title') }}
         </h2>
-        <p class="mt-6 text-xl leading-relaxed text-slate-600">
+        <p class="section-subtitle">
           {{ t('wineStory.regions.subtitle') }}
         </p>
       </div>
 
       <!-- Map and Region Cards -->
-      <div class="mt-12 grid gap-8 lg:grid-cols-2 lg:gap-12">
+      <div class="regions-layout">
         <!-- Interactive SVG Map -->
         <div
           v-motion
@@ -31,39 +38,25 @@
             x: 0,
             transition: { duration: 600, delay: 200 },
           }"
-          class="relative"
+          class="map-column"
         >
-          <div class="sticky top-24 rounded-2xl bg-slate-50 p-8 shadow-lg">
+          <div class="map-card">
             <!-- Loading State -->
-            <div
-              v-if="loading"
-              class="flex h-96 items-center justify-center"
-            >
-              <commonIcon
-                name="lucide:loader-2"
-                class="h-8 w-8 animate-spin text-primary"
-              />
+            <div v-if="loading" class="map-loading">
+              <commonIcon name="lucide:loader-2" class="loading-icon" />
             </div>
 
             <!-- Error State -->
-            <div
-              v-else-if="error"
-              class="flex h-96 flex-col items-center justify-center text-center"
-            >
-              <commonIcon
-                name="lucide:alert-circle"
-                class="h-12 w-12 text-red-500"
-              />
-              <p class="mt-2 text-sm text-red-600">
-                {{ t('wineStory.regions.error') }}
-              </p>
+            <div v-else-if="error" class="map-error">
+              <commonIcon name="lucide:alert-circle" class="error-icon" />
+              <p class="error-text">{{ t('wineStory.regions.error') }}</p>
             </div>
 
             <!-- SVG Map -->
             <svg
               v-else
               viewBox="26 45 5 3"
-              class="h-auto w-full"
+              class="region-map"
               :aria-label="t('wineStory.regions.title')"
               role="img"
             >
@@ -76,7 +69,7 @@
                 role="button"
                 :aria-label="getLocalizedText(region.name)"
                 tabindex="0"
-                class="cursor-pointer transition-all duration-300"
+                class="region-group"
                 @click="selectRegion(region.id)"
                 @keydown.enter="selectRegion(region.id)"
                 @keydown.space.prevent="selectRegion(region.id)"
@@ -87,10 +80,10 @@
                 <path
                   :d="getRegionPath(region.id)"
                   :fill="getRegionColor(region.id)"
-                  :stroke="selectedRegion === region.id ? '#1e293b' : '#64748b'"
+                  :stroke="selectedRegion === region.id ? 'var(--md-charcoal)' : 'rgba(10, 10, 10, 0.3)'"
                   :stroke-width="selectedRegion === region.id ? 0.02 : 0.01"
-                  :opacity="selectedRegion && selectedRegion !== region.id ? 0.4 : 1"
-                  class="transition-all duration-300"
+                  :opacity="selectedRegion && selectedRegion !== region.id ? 0.3 : 1"
+                  class="region-path"
                 />
 
                 <!-- Region Label -->
@@ -98,7 +91,7 @@
                   :x="getRegionCenter(region.id).x"
                   :y="getRegionCenter(region.id).y"
                   text-anchor="middle"
-                  class="pointer-events-none fill-white text-[0.15px] font-bold"
+                  class="region-label"
                   style="paint-order: stroke; stroke: rgba(0,0,0,0.5); stroke-width: 0.01px;"
                 >
                   {{ getLocalizedText(region.name) }}
@@ -107,20 +100,16 @@
             </svg>
 
             <!-- Legend -->
-            <div class="mt-6 flex flex-wrap items-center justify-center gap-4">
+            <div class="map-legend">
               <button
                 v-for="region in regions"
                 :key="`legend-${region.id}`"
-                class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all"
-                :class="[
-                  selectedRegion === region.id
-                    ? 'bg-primary text-white shadow-lg'
-                    : 'bg-white text-slate-700 hover:bg-slate-100',
-                ]"
+                class="legend-button"
+                :class="{ active: selectedRegion === region.id }"
                 @click="selectRegion(region.id)"
               >
                 <span
-                  class="h-3 w-3 rounded-full"
+                  class="legend-color"
                   :style="{ backgroundColor: getRegionColor(region.id) }"
                 ></span>
                 {{ getLocalizedText(region.name) }}
@@ -128,13 +117,10 @@
 
               <button
                 v-if="selectedRegion"
-                class="inline-flex items-center gap-2 rounded-full bg-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-300"
+                class="legend-clear"
                 @click="clearSelection"
               >
-                <commonIcon
-                  name="lucide:x"
-                  class="h-3 w-3"
-                />
+                <commonIcon name="lucide:x" class="clear-icon" />
                 {{ t('wineStory.regions.clearFilter') }}
               </button>
             </div>
@@ -150,72 +136,60 @@
             x: 0,
             transition: { duration: 600, delay: 400 },
           }"
-          class="space-y-6"
+          class="cards-column"
         >
           <div
             v-for="region in displayedRegions"
             :key="region.id"
-            class="group rounded-2xl border-2 border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-primary/30 hover:shadow-lg"
-            :class="{ 'border-primary shadow-lg': selectedRegion === region.id }"
+            class="region-card"
+            :class="{ selected: selectedRegion === region.id }"
           >
             <!-- Region Header -->
-            <div class="flex items-start justify-between">
-              <div class="flex-1">
-                <h3 class="text-xl font-bold text-slate-900">
+            <div class="card-header">
+              <div class="header-content">
+                <h3 class="card-title">
                   {{ getLocalizedText(region.name) }}
                 </h3>
-                <p class="mt-1 text-sm text-slate-600">
+                <p class="card-description">
                   {{ getLocalizedText(region.description) }}
                 </p>
               </div>
               <span
-                class="ml-3 h-4 w-4 rounded-full"
+                class="color-badge"
                 :style="{ backgroundColor: getRegionColor(region.id) }"
               ></span>
             </div>
 
             <!-- Characteristics -->
-            <div class="mt-4 space-y-3">
-              <div class="flex items-start gap-3 text-sm">
-                <commonIcon
-                  name="lucide:layers"
-                  class="mt-0.5 h-4 w-4 flex-shrink-0 text-slate-400"
-                />
-                <div>
-                  <span class="font-medium text-slate-700">{{ t('wineStory.regions.soilType') }}:</span>
-                  <span class="ml-1 text-slate-600">{{ getLocalizedText(region.characteristics.soilType) }}</span>
+            <div class="card-characteristics">
+              <div class="characteristic-item">
+                <commonIcon name="lucide:layers" class="char-icon" />
+                <div class="char-content">
+                  <span class="char-label">{{ t('wineStory.regions.soilType') }}:</span>
+                  <span class="char-value">{{ getLocalizedText(region.characteristics.soilType) }}</span>
                 </div>
               </div>
 
-              <div class="flex items-start gap-3 text-sm">
-                <commonIcon
-                  name="lucide:thermometer"
-                  class="mt-0.5 h-4 w-4 flex-shrink-0 text-slate-400"
-                />
-                <div>
-                  <span class="font-medium text-slate-700">{{ t('wineStory.regions.climate') }}:</span>
-                  <span class="ml-1 text-slate-600">{{ getLocalizedText(region.climate) }}</span>
+              <div class="characteristic-item">
+                <commonIcon name="lucide:thermometer" class="char-icon" />
+                <div class="char-content">
+                  <span class="char-label">{{ t('wineStory.regions.climate') }}:</span>
+                  <span class="char-value">{{ getLocalizedText(region.climate) }}</span>
                 </div>
               </div>
 
-              <div class="flex items-start gap-3 text-sm">
-                <commonIcon
-                  name="lucide:grape"
-                  class="mt-0.5 h-4 w-4 flex-shrink-0 text-slate-400"
-                />
-                <div>
-                  <span class="font-medium text-slate-700">{{ t('wineStory.regions.primaryGrapes') }}:</span>
-                  <span class="ml-1 text-slate-600">{{ region.primaryGrapes.join(', ') }}</span>
+              <div class="characteristic-item">
+                <commonIcon name="lucide:grape" class="char-icon" />
+                <div class="char-content">
+                  <span class="char-label">{{ t('wineStory.regions.primaryGrapes') }}:</span>
+                  <span class="char-value">{{ region.primaryGrapes.join(', ') }}</span>
                 </div>
               </div>
 
-              <div class="flex items-start gap-3 text-sm">
-                <commonIcon
-                  name="lucide:users"
-                  class="mt-0.5 h-4 w-4 flex-shrink-0 text-slate-400"
-                />
-                <div>
-                  <span class="font-medium text-slate-700">
+              <div class="characteristic-item">
+                <commonIcon name="lucide:users" class="char-icon" />
+                <div class="char-content">
+                  <span class="char-label">
                     {{ t('wineStory.regions.producerCount', { count: region.producerCount || 0 }) }}
                   </span>
                 </div>
@@ -223,7 +197,7 @@
             </div>
 
             <!-- Terroir Description -->
-            <p class="mt-4 text-sm leading-relaxed text-slate-600">
+            <p class="card-terroir">
               {{ getLocalizedText(region.terroir) }}
             </p>
           </div>
@@ -262,18 +236,18 @@ const displayedRegions = computed(() => {
   return regions.value
 })
 
-// Region colors
+// Region colors - luxury palette
 const regionColors: Record<WineRegion, string> = {
-  'codru': '#8B5CF6',
-  'stefan-voda': '#EF4444',
-  'valul-lui-traian': '#10B981',
+  'codru': '#8B2E3B', // Wine color
+  'stefan-voda': '#C9A227', // Gold color
+  'valul-lui-traian': '#6B7280', // Neutral gray
 }
 
 const getRegionColor = (regionId: WineRegion): string => {
-  return regionColors[regionId] || '#64748b'
+  return regionColors[regionId] || 'rgba(10, 10, 10, 0.3)'
 }
 
-// SVG path data for each region (simplified Moldova map)
+// SVG path data for each region
 const regionPaths: Record<WineRegion, string> = {
   'codru': 'M 28.2 47.5 L 28.8 47.5 L 29.0 47.2 L 29.2 46.8 L 28.9 46.5 L 28.3 46.6 L 27.9 46.9 L 27.8 47.2 Z',
   'stefan-voda': 'M 29.2 46.8 L 29.8 46.7 L 30.1 46.4 L 30.0 46.0 L 29.5 45.8 L 28.9 45.9 L 28.7 46.2 L 28.9 46.5 Z',
@@ -312,19 +286,380 @@ const clearSelection = () => {
 </script>
 
 <style scoped>
-/* Ensure smooth transitions */
-path {
+/* ===== SECTION ===== */
+.wine-regions-section {
+  position: relative;
+  padding: 6rem 0;
+  background: #fff;
+  overflow: hidden;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ===== SECTION HEADER ===== */
+.section-header {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 4rem;
+}
+
+.section-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(201, 162, 39, 0.1);
+  border: 1px solid rgba(201, 162, 39, 0.2);
+  border-radius: var(--md-radius-full);
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--md-gold);
+  margin-bottom: 2rem;
+}
+
+.badge-line {
+  width: 24px;
+  height: 1px;
+  background: var(--md-gradient-gold-line);
+}
+
+.badge-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--md-gold);
+}
+
+.section-title {
+  font-family: var(--md-font-serif);
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: var(--md-tracking-tight);
+  color: var(--md-charcoal);
+  margin-bottom: 1.5rem;
+}
+
+.section-subtitle {
+  font-size: clamp(1.125rem, 2vw, 1.375rem);
+  line-height: 1.6;
+  color: rgba(10, 10, 10, 0.7);
+}
+
+/* ===== LAYOUT ===== */
+.regions-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .regions-layout {
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
+}
+
+/* ===== MAP COLUMN ===== */
+.map-column {
+  position: relative;
+}
+
+@media (min-width: 1024px) {
+  .map-column {
+    position: sticky;
+    top: 6rem;
+  }
+}
+
+.map-card {
+  background: var(--md-cream);
+  border: 1px solid rgba(10, 10, 10, 0.08);
+  border-radius: var(--md-radius-2xl);
+  padding: 2.5rem;
+  box-shadow: var(--md-shadow-lg);
+}
+
+/* ===== MAP STATES ===== */
+.map-loading,
+.map-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.loading-icon {
+  width: 32px;
+  height: 32px;
+  color: var(--md-gold);
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.error-icon {
+  width: 48px;
+  height: 48px;
+  color: #dc2626;
+}
+
+.error-text {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  color: #b91c1c;
+}
+
+/* ===== SVG MAP ===== */
+.region-map {
+  width: 100%;
+  height: auto;
+}
+
+.region-group {
+  cursor: pointer;
   transition: all 0.3s ease;
 }
 
-/* Focus styles for accessibility */
-g:focus {
-  outline: 2px solid #3b82f6;
-  outline-offset: 2px;
+.region-group:focus {
+  outline: none;
 }
 
-g:focus path {
-  stroke: #1e293b;
+.region-group:focus .region-path {
+  stroke: var(--md-charcoal);
   stroke-width: 0.03;
+}
+
+.region-path {
+  transition: all 0.3s ease;
+}
+
+.region-label {
+  fill: #fff;
+  font-size: 0.15px;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+/* ===== MAP LEGEND ===== */
+.map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.legend-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  background: #fff;
+  border: 1px solid rgba(10, 10, 10, 0.1);
+  border-radius: var(--md-radius-full);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--md-charcoal);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.legend-button:hover {
+  border-color: var(--md-gold);
+  box-shadow: var(--md-shadow-md);
+  transform: translateY(-2px);
+}
+
+.legend-button.active {
+  background: var(--md-gold);
+  border-color: var(--md-gold);
+  color: #fff;
+  box-shadow: var(--md-shadow-gold-lg);
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.legend-clear {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  background: rgba(10, 10, 10, 0.05);
+  border: 1px solid rgba(10, 10, 10, 0.1);
+  border-radius: var(--md-radius-full);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(10, 10, 10, 0.6);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.legend-clear:hover {
+  background: rgba(10, 10, 10, 0.08);
+  color: var(--md-charcoal);
+}
+
+.clear-icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* ===== CARDS COLUMN ===== */
+.cards-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.region-card {
+  background: #fff;
+  border: 1px solid rgba(10, 10, 10, 0.08);
+  border-radius: var(--md-radius-2xl);
+  padding: 2rem;
+  box-shadow: var(--md-shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.region-card:hover {
+  box-shadow: var(--md-shadow-lg);
+  transform: translateY(-4px);
+}
+
+.region-card.selected {
+  border-color: var(--md-gold);
+  box-shadow: var(--md-shadow-gold-lg);
+}
+
+/* ===== CARD HEADER ===== */
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(10, 10, 10, 0.08);
+}
+
+.header-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-title {
+  font-family: var(--md-font-serif);
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--md-charcoal);
+  margin-bottom: 0.5rem;
+}
+
+.card-description {
+  font-size: 0.9375rem;
+  color: rgba(10, 10, 10, 0.6);
+  line-height: 1.5;
+}
+
+.color-badge {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px rgba(10, 10, 10, 0.1);
+}
+
+/* ===== CHARACTERISTICS ===== */
+.card-characteristics {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem 0;
+}
+
+.characteristic-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.char-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--md-gold);
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.char-content {
+  flex: 1;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.char-label {
+  font-weight: 500;
+  color: var(--md-charcoal);
+}
+
+.char-value {
+  margin-left: 0.25rem;
+  color: rgba(10, 10, 10, 0.7);
+}
+
+/* ===== TERROIR ===== */
+.card-terroir {
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(10, 10, 10, 0.08);
+  font-size: 0.9375rem;
+  line-height: 1.75;
+  color: rgba(10, 10, 10, 0.7);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (min-width: 768px) {
+  .wine-regions-section {
+    padding: 8rem 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 0 1rem;
+  }
+
+  .map-card {
+    padding: 1.5rem;
+  }
+
+  .region-card {
+    padding: 1.5rem;
+  }
+
+  .map-legend {
+    gap: 0.5rem;
+  }
+
+  .legend-button,
+  .legend-clear {
+    font-size: 0.8125rem;
+    padding: 0.5rem 1rem;
+  }
 }
 </style>
