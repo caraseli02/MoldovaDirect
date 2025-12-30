@@ -14,7 +14,10 @@
       >
         <div class="section-badge">
           <span class="badge-line"></span>
-          <commonIcon name="lucide:map" class="badge-icon" />
+          <commonIcon
+            name="lucide:map"
+            class="badge-icon"
+          />
           <span>{{ t('wineStory.regions.badge', 'Wine Regions') }}</span>
           <span class="badge-line"></span>
         </div>
@@ -42,14 +45,28 @@
         >
           <div class="map-card">
             <!-- Loading State -->
-            <div v-if="loading" class="map-loading">
-              <commonIcon name="lucide:loader-2" class="loading-icon" />
+            <div
+              v-if="loading"
+              class="map-loading"
+            >
+              <commonIcon
+                name="lucide:loader-2"
+                class="loading-icon"
+              />
             </div>
 
             <!-- Error State -->
-            <div v-else-if="error" class="map-error">
-              <commonIcon name="lucide:alert-circle" class="error-icon" />
-              <p class="error-text">{{ t('wineStory.regions.error') }}</p>
+            <div
+              v-else-if="error"
+              class="map-error"
+            >
+              <commonIcon
+                name="lucide:alert-circle"
+                class="error-icon"
+              />
+              <p class="error-text">
+                {{ t('wineStory.regions.error') }}
+              </p>
             </div>
 
             <!-- SVG Map -->
@@ -120,7 +137,10 @@
                 class="legend-clear"
                 @click="clearSelection"
               >
-                <commonIcon name="lucide:x" class="clear-icon" />
+                <commonIcon
+                  name="lucide:x"
+                  class="clear-icon"
+                />
                 {{ t('wineStory.regions.clearFilter') }}
               </button>
             </div>
@@ -163,7 +183,10 @@
             <!-- Characteristics -->
             <div class="card-characteristics">
               <div class="characteristic-item">
-                <commonIcon name="lucide:layers" class="char-icon" />
+                <commonIcon
+                  name="lucide:layers"
+                  class="char-icon"
+                />
                 <div class="char-content">
                   <span class="char-label">{{ t('wineStory.regions.soilType') }}:</span>
                   <span class="char-value">{{ getLocalizedText(region.characteristics.soilType) }}</span>
@@ -171,7 +194,10 @@
               </div>
 
               <div class="characteristic-item">
-                <commonIcon name="lucide:thermometer" class="char-icon" />
+                <commonIcon
+                  name="lucide:thermometer"
+                  class="char-icon"
+                />
                 <div class="char-content">
                   <span class="char-label">{{ t('wineStory.regions.climate') }}:</span>
                   <span class="char-value">{{ getLocalizedText(region.climate) }}</span>
@@ -179,7 +205,10 @@
               </div>
 
               <div class="characteristic-item">
-                <commonIcon name="lucide:grape" class="char-icon" />
+                <commonIcon
+                  name="lucide:grape"
+                  class="char-icon"
+                />
                 <div class="char-content">
                   <span class="char-label">{{ t('wineStory.regions.primaryGrapes') }}:</span>
                   <span class="char-value">{{ region.primaryGrapes.join(', ') }}</span>
@@ -187,7 +216,10 @@
               </div>
 
               <div class="characteristic-item">
-                <commonIcon name="lucide:users" class="char-icon" />
+                <commonIcon
+                  name="lucide:users"
+                  class="char-icon"
+                />
                 <div class="char-content">
                   <span class="char-label">
                     {{ t('wineStory.regions.producerCount', { count: region.producerCount || 0 }) }}

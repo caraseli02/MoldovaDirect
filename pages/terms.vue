@@ -9,11 +9,17 @@
       </div>
 
       <div class="container">
-        <div v-motion class="hero-content">
+        <div
+          v-motion
+          class="hero-content"
+        >
           <!-- Luxury Badge -->
           <div class="hero-badge">
             <span class="badge-line"></span>
-            <commonIcon name="lucide:scale" class="badge-icon" />
+            <commonIcon
+              name="lucide:scale"
+              class="badge-icon"
+            />
             <span>{{ t('terms.badge', 'Legal') }}</span>
             <span class="badge-line"></span>
           </div>
@@ -41,7 +47,9 @@
           <!-- Sidebar Navigation -->
           <aside class="sidebar">
             <div class="sidebar-sticky">
-              <h3 class="sidebar-title">{{ t('terms.sections', 'Sections') }}</h3>
+              <h3 class="sidebar-title">
+                {{ t('terms.sections', 'Sections') }}
+              </h3>
               <nav class="sidebar-nav">
                 <a
                   v-for="section in sections"
@@ -58,7 +66,10 @@
           <!-- Main Content -->
           <div class="main-content">
             <!-- Section 1: Introduction -->
-            <div id="introduction" class="content-card">
+            <div
+              id="introduction"
+              class="content-card"
+            >
               <div class="section-badge">
                 <span class="badge-line-short"></span>
                 <span>{{ t('terms.section1Badge', 'Section 1') }}</span>
@@ -72,7 +83,10 @@
             </div>
 
             <!-- Section 2: Products and Services -->
-            <div id="products-services" class="content-card">
+            <div
+              id="products-services"
+              class="content-card"
+            >
               <div class="section-badge">
                 <span class="badge-line-short"></span>
                 <span>{{ t('terms.section2Badge', 'Section 2') }}</span>
@@ -86,7 +100,10 @@
             </div>
 
             <!-- Section 3: Pricing and Payment -->
-            <div id="pricing-payment" class="content-card">
+            <div
+              id="pricing-payment"
+              class="content-card"
+            >
               <div class="section-badge">
                 <span class="badge-line-short"></span>
                 <span>{{ t('terms.section3Badge', 'Section 3') }}</span>
@@ -96,26 +113,41 @@
               </h2>
               <ul class="section-list">
                 <li>
-                  <commonIcon name="lucide:check" class="list-icon" />
+                  <commonIcon
+                    name="lucide:check"
+                    class="list-icon"
+                  />
                   <span>{{ t('terms.section3Item1', 'All prices are displayed in EUR and include applicable taxes') }}</span>
                 </li>
                 <li>
-                  <commonIcon name="lucide:check" class="list-icon" />
+                  <commonIcon
+                    name="lucide:check"
+                    class="list-icon"
+                  />
                   <span>{{ t('terms.section3Item2', 'We accept payment via Stripe, PayPal, and Cash on Delivery') }}</span>
                 </li>
                 <li>
-                  <commonIcon name="lucide:check" class="list-icon" />
+                  <commonIcon
+                    name="lucide:check"
+                    class="list-icon"
+                  />
                   <span>{{ t('terms.section3Item3', 'Prices are subject to change without notice') }}</span>
                 </li>
                 <li>
-                  <commonIcon name="lucide:check" class="list-icon" />
+                  <commonIcon
+                    name="lucide:check"
+                    class="list-icon"
+                  />
                   <span>{{ t('terms.section3Item4', 'Payment must be received before order processing') }}</span>
                 </li>
               </ul>
             </div>
 
             <!-- Section 4: Shipping and Delivery -->
-            <div id="shipping-delivery" class="content-card">
+            <div
+              id="shipping-delivery"
+              class="content-card"
+            >
               <div class="section-badge">
                 <span class="badge-line-short"></span>
                 <span>{{ t('terms.section4Badge', 'Section 4') }}</span>
@@ -129,7 +161,10 @@
             </div>
 
             <!-- Section 5: Returns and Refunds -->
-            <div id="returns-refunds" class="content-card">
+            <div
+              id="returns-refunds"
+              class="content-card"
+            >
               <div class="section-badge">
                 <span class="badge-line-short"></span>
                 <span>{{ t('terms.section5Badge', 'Section 5') }}</span>
@@ -143,7 +178,10 @@
             </div>
 
             <!-- Section 6: User Accounts -->
-            <div id="user-accounts" class="content-card">
+            <div
+              id="user-accounts"
+              class="content-card"
+            >
               <div class="section-badge">
                 <span class="badge-line-short"></span>
                 <span>{{ t('terms.section6Badge', 'Section 6') }}</span>
@@ -157,7 +195,10 @@
             </div>
 
             <!-- Section 7: Intellectual Property -->
-            <div id="intellectual-property" class="content-card">
+            <div
+              id="intellectual-property"
+              class="content-card"
+            >
               <div class="section-badge">
                 <span class="badge-line-short"></span>
                 <span>{{ t('terms.section7Badge', 'Section 7') }}</span>
@@ -171,7 +212,10 @@
             </div>
 
             <!-- Section 8: Limitation of Liability -->
-            <div id="limitation-liability" class="content-card">
+            <div
+              id="limitation-liability"
+              class="content-card"
+            >
               <div class="section-badge">
                 <span class="badge-line-short"></span>
                 <span>{{ t('terms.section8Badge', 'Section 8') }}</span>
@@ -185,7 +229,10 @@
             </div>
 
             <!-- Section 9: Governing Law -->
-            <div id="governing-law" class="content-card">
+            <div
+              id="governing-law"
+              class="content-card"
+            >
               <div class="section-badge">
                 <span class="badge-line-short"></span>
                 <span>{{ t('terms.section9Badge', 'Section 9') }}</span>
@@ -199,7 +246,10 @@
             </div>
 
             <!-- Section 10: Contact Information -->
-            <div id="contact" class="content-card contact-card">
+            <div
+              id="contact"
+              class="content-card contact-card"
+            >
               <div class="section-badge">
                 <span class="badge-line-short"></span>
                 <span>{{ t('terms.section10Badge', 'Section 10') }}</span>
@@ -213,26 +263,49 @@
 
               <div class="contact-grid">
                 <div class="contact-item">
-                  <commonIcon name="lucide:mail" class="contact-icon" />
+                  <commonIcon
+                    name="lucide:mail"
+                    class="contact-icon"
+                  />
                   <div>
-                    <div class="contact-label">{{ t('terms.email', 'Email') }}</div>
-                    <a href="mailto:legal@moldovadirect.com" class="contact-value">legal@moldovadirect.com</a>
+                    <div class="contact-label">
+                      {{ t('terms.email', 'Email') }}
+                    </div>
+                    <a
+                      href="mailto:legal@moldovadirect.com"
+                      class="contact-value"
+                    >legal@moldovadirect.com</a>
                   </div>
                 </div>
 
                 <div class="contact-item">
-                  <commonIcon name="lucide:phone" class="contact-icon" />
+                  <commonIcon
+                    name="lucide:phone"
+                    class="contact-icon"
+                  />
                   <div>
-                    <div class="contact-label">{{ t('terms.phone', 'Phone') }}</div>
-                    <a href="tel:+34910000000" class="contact-value">+34 910 000 000</a>
+                    <div class="contact-label">
+                      {{ t('terms.phone', 'Phone') }}
+                    </div>
+                    <a
+                      href="tel:+34910000000"
+                      class="contact-value"
+                    >+34 910 000 000</a>
                   </div>
                 </div>
 
                 <div class="contact-item">
-                  <commonIcon name="lucide:map-pin" class="contact-icon" />
+                  <commonIcon
+                    name="lucide:map-pin"
+                    class="contact-icon"
+                  />
                   <div>
-                    <div class="contact-label">{{ t('terms.address', 'Address') }}</div>
-                    <div class="contact-value">Moldova Direct S.L., Madrid, Spain</div>
+                    <div class="contact-label">
+                      {{ t('terms.address', 'Address') }}
+                    </div>
+                    <div class="contact-value">
+                      Moldova Direct S.L., Madrid, Spain
+                    </div>
                   </div>
                 </div>
               </div>

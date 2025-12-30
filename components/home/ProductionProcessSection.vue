@@ -14,7 +14,10 @@
       >
         <div class="section-badge">
           <span class="badge-line"></span>
-          <commonIcon name="lucide:factory" class="badge-icon" />
+          <commonIcon
+            name="lucide:factory"
+            class="badge-icon"
+          />
           <span>{{ t('wineStory.production.badge', 'Our Process') }}</span>
           <span class="badge-line"></span>
         </div>
@@ -49,7 +52,10 @@
           >
             <div class="step-content">
               <div class="step-badge">
-                <commonIcon name="lucide:calendar" class="badge-icon-sm" />
+                <commonIcon
+                  name="lucide:calendar"
+                  class="badge-icon-sm"
+                />
                 {{ t('wineStory.production.steps.harvest.timing') }}
               </div>
               <h3 class="step-title">
@@ -61,7 +67,10 @@
             </div>
             <div class="step-marker">
               <div class="marker-circle">
-                <commonIcon name="lucide:grape" class="marker-icon" />
+                <commonIcon
+                  name="lucide:grape"
+                  class="marker-icon"
+                />
               </div>
             </div>
             <div class="step-spacer"></div>
@@ -81,12 +90,18 @@
             <div class="step-spacer"></div>
             <div class="step-marker">
               <div class="marker-circle">
-                <commonIcon name="lucide:droplet" class="marker-icon" />
+                <commonIcon
+                  name="lucide:droplet"
+                  class="marker-icon"
+                />
               </div>
             </div>
             <div class="step-content">
               <div class="step-badge">
-                <commonIcon name="lucide:calendar" class="badge-icon-sm" />
+                <commonIcon
+                  name="lucide:calendar"
+                  class="badge-icon-sm"
+                />
                 {{ t('wineStory.production.steps.crushing.timing') }}
               </div>
               <h3 class="step-title">
@@ -111,7 +126,10 @@
           >
             <div class="step-content">
               <div class="step-badge">
-                <commonIcon name="lucide:calendar" class="badge-icon-sm" />
+                <commonIcon
+                  name="lucide:calendar"
+                  class="badge-icon-sm"
+                />
                 {{ t('wineStory.production.steps.aging.timing') }}
               </div>
               <h3 class="step-title">
@@ -123,7 +141,10 @@
             </div>
             <div class="step-marker">
               <div class="marker-circle">
-                <commonIcon name="lucide:clock" class="marker-icon" />
+                <commonIcon
+                  name="lucide:clock"
+                  class="marker-icon"
+                />
               </div>
             </div>
             <div class="step-spacer"></div>
@@ -143,12 +164,18 @@
             <div class="step-spacer"></div>
             <div class="step-marker">
               <div class="marker-circle">
-                <commonIcon name="lucide:wine" class="marker-icon" />
+                <commonIcon
+                  name="lucide:wine"
+                  class="marker-icon"
+                />
               </div>
             </div>
             <div class="step-content">
               <div class="step-badge">
-                <commonIcon name="lucide:calendar" class="badge-icon-sm" />
+                <commonIcon
+                  name="lucide:calendar"
+                  class="badge-icon-sm"
+                />
                 {{ t('wineStory.production.steps.bottling.timing') }}
               </div>
               <h3 class="step-title">
@@ -173,7 +200,10 @@
           >
             <div class="step-content">
               <div class="step-badge">
-                <commonIcon name="lucide:calendar" class="badge-icon-sm" />
+                <commonIcon
+                  name="lucide:calendar"
+                  class="badge-icon-sm"
+                />
                 {{ t('wineStory.production.steps.selection.timing') }}
               </div>
               <h3 class="step-title">
@@ -185,7 +215,10 @@
             </div>
             <div class="step-marker">
               <div class="marker-circle">
-                <commonIcon name="lucide:award" class="marker-icon" />
+                <commonIcon
+                  name="lucide:award"
+                  class="marker-icon"
+                />
               </div>
             </div>
             <div class="step-spacer"></div>
@@ -205,12 +238,18 @@
             <div class="step-spacer"></div>
             <div class="step-marker">
               <div class="marker-circle">
-                <commonIcon name="lucide:truck" class="marker-icon" />
+                <commonIcon
+                  name="lucide:truck"
+                  class="marker-icon"
+                />
               </div>
             </div>
             <div class="step-content">
               <div class="step-badge">
-                <commonIcon name="lucide:calendar" class="badge-icon-sm" />
+                <commonIcon
+                  name="lucide:calendar"
+                  class="badge-icon-sm"
+                />
                 {{ t('wineStory.production.steps.delivery.timing') }}
               </div>
               <h3 class="step-title">
@@ -238,7 +277,10 @@
           class="value-card value-traditions"
         >
           <div class="value-icon-wrapper">
-            <commonIcon name="lucide:scroll-text" class="value-icon" />
+            <commonIcon
+              name="lucide:scroll-text"
+              class="value-icon"
+            />
           </div>
           <h3 class="value-title">
             {{ t('wineStory.production.traditions.title') }}
@@ -260,7 +302,10 @@
           class="value-card value-sustainability"
         >
           <div class="value-icon-wrapper">
-            <commonIcon name="lucide:leaf" class="value-icon" />
+            <commonIcon
+              name="lucide:leaf"
+              class="value-icon"
+            />
           </div>
           <h3 class="value-title">
             {{ t('wineStory.production.sustainability.title') }}

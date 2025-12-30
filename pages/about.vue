@@ -98,8 +98,12 @@
                   class="icon"
                 />
               </div>
-              <div class="stat-number">500+</div>
-              <div class="stat-label">{{ $t('about.stats.products', 'Productos Auténticos') }}</div>
+              <div class="stat-number">
+                500+
+              </div>
+              <div class="stat-label">
+                {{ $t('about.stats.products', 'Productos Auténticos') }}
+              </div>
             </div>
 
             <div class="stat-card">
@@ -109,8 +113,12 @@
                   class="icon"
                 />
               </div>
-              <div class="stat-number">2000+</div>
-              <div class="stat-label">{{ $t('about.stats.customers', 'Clientes Felices') }}</div>
+              <div class="stat-number">
+                2000+
+              </div>
+              <div class="stat-label">
+                {{ $t('about.stats.customers', 'Clientes Felices') }}
+              </div>
             </div>
 
             <div class="stat-card">
@@ -120,8 +128,12 @@
                   class="icon"
                 />
               </div>
-              <div class="stat-number">48h</div>
-              <div class="stat-label">{{ $t('about.stats.delivery', 'Entrega Rápida') }}</div>
+              <div class="stat-number">
+                48h
+              </div>
+              <div class="stat-label">
+                {{ $t('about.stats.delivery', 'Entrega Rápida') }}
+              </div>
             </div>
 
             <div class="stat-card">
@@ -131,8 +143,12 @@
                   class="icon"
                 />
               </div>
-              <div class="stat-number">100%</div>
-              <div class="stat-label">{{ $t('about.stats.authentic', 'Autenticidad') }}</div>
+              <div class="stat-number">
+                100%
+              </div>
+              <div class="stat-label">
+                {{ $t('about.stats.authentic', 'Autenticidad') }}
+              </div>
             </div>
           </div>
         </div>
@@ -170,8 +186,12 @@
                 class="feature-icon"
               />
             </div>
-            <h3 class="feature-title">{{ $t('about.features.partnerships.title', 'Direct Partnerships') }}</h3>
-            <p class="feature-text">{{ $t('about.features.partnerships.text', 'We work directly with Moldovan producers, ensuring authenticity and supporting local artisans.') }}</p>
+            <h3 class="feature-title">
+              {{ $t('about.features.partnerships.title', 'Direct Partnerships') }}
+            </h3>
+            <p class="feature-text">
+              {{ $t('about.features.partnerships.text', 'We work directly with Moldovan producers, ensuring authenticity and supporting local artisans.') }}
+            </p>
           </div>
 
           <div class="feature-card">
@@ -181,8 +201,12 @@
                 class="feature-icon"
               />
             </div>
-            <h3 class="feature-title">{{ $t('about.features.quality.title', 'Guaranteed Quality') }}</h3>
-            <p class="feature-text">{{ $t('about.features.quality.text', 'Every product meets the highest standards – from selection to delivery, quality is our promise.') }}</p>
+            <h3 class="feature-title">
+              {{ $t('about.features.quality.title', 'Guaranteed Quality') }}
+            </h3>
+            <p class="feature-text">
+              {{ $t('about.features.quality.text', 'Every product meets the highest standards – from selection to delivery, quality is our promise.') }}
+            </p>
           </div>
 
           <div class="feature-card">
@@ -192,8 +216,12 @@
                 class="feature-icon"
               />
             </div>
-            <h3 class="feature-title">{{ $t('about.features.delivery.title', 'Fast Delivery') }}</h3>
-            <p class="feature-text">{{ $t('about.features.delivery.text', 'Reliable delivery across Spain within 48 hours – your products arrive fresh and ready to enjoy.') }}</p>
+            <h3 class="feature-title">
+              {{ $t('about.features.delivery.title', 'Fast Delivery') }}
+            </h3>
+            <p class="feature-text">
+              {{ $t('about.features.delivery.text', 'Reliable delivery across Spain within 48 hours – your products arrive fresh and ready to enjoy.') }}
+            </p>
           </div>
 
           <div class="feature-card">
@@ -203,8 +231,12 @@
                 class="feature-icon"
               />
             </div>
-            <h3 class="feature-title">{{ $t('about.features.pricing.title', 'Transparent Pricing') }}</h3>
-            <p class="feature-text">{{ $t('about.features.pricing.text', 'Competitive prices with no hidden fees – what you see is what you pay.') }}</p>
+            <h3 class="feature-title">
+              {{ $t('about.features.pricing.title', 'Transparent Pricing') }}
+            </h3>
+            <p class="feature-text">
+              {{ $t('about.features.pricing.text', 'Competitive prices with no hidden fees – what you see is what you pay.') }}
+            </p>
           </div>
 
           <div class="feature-card">
@@ -214,8 +246,12 @@
                 class="feature-icon"
               />
             </div>
-            <h3 class="feature-title">{{ $t('about.features.support.title', 'Multilingual Support') }}</h3>
-            <p class="feature-text">{{ $t('about.features.support.text', 'Customer support in Spanish, English, Romanian, and Russian – we speak your language.') }}</p>
+            <h3 class="feature-title">
+              {{ $t('about.features.support.title', 'Multilingual Support') }}
+            </h3>
+            <p class="feature-text">
+              {{ $t('about.features.support.text', 'Customer support in Spanish, English, Romanian, and Russian – we speak your language.') }}
+            </p>
           </div>
 
           <div class="feature-card">
@@ -225,8 +261,12 @@
                 class="feature-icon"
               />
             </div>
-            <h3 class="feature-title">{{ $t('about.features.curated.title', 'Curated Selection') }}</h3>
-            <p class="feature-text">{{ $t('about.features.curated.text', 'Hand-picked products from the finest producers – every item is carefully selected for you.') }}</p>
+            <h3 class="feature-title">
+              {{ $t('about.features.curated.title', 'Curated Selection') }}
+            </h3>
+            <p class="feature-text">
+              {{ $t('about.features.curated.text', 'Hand-picked products from the finest producers – every item is carefully selected for you.') }}
+            </p>
           </div>
         </div>
       </div>
@@ -277,7 +317,9 @@
                 {{ $t('about.story.quote', 'Every product tells a story of tradition, craftsmanship, and the rich heritage of Moldova.') }}
               </blockquote>
               <div class="quote-author">
-                <div class="author-name">{{ $t('about.story.author', 'Moldova Direct Team') }}</div>
+                <div class="author-name">
+                  {{ $t('about.story.author', 'Moldova Direct Team') }}
+                </div>
               </div>
             </div>
           </div>

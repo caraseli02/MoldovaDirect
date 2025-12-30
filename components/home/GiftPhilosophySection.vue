@@ -21,7 +21,10 @@
       >
         <div class="section-badge">
           <span class="badge-line"></span>
-          <commonIcon name="lucide:gift" class="badge-icon" />
+          <commonIcon
+            name="lucide:gift"
+            class="badge-icon"
+          />
           <span>{{ t('wineStory.giftPhilosophy.badge', 'Gift Philosophy') }}</span>
           <span class="badge-line"></span>
         </div>
@@ -56,7 +59,10 @@
           <!-- Authenticity -->
           <div class="reason-card">
             <div class="reason-icon-wrapper">
-              <commonIcon name="lucide:heart" class="reason-icon" />
+              <commonIcon
+                name="lucide:heart"
+                class="reason-icon"
+              />
             </div>
             <h4 class="reason-title">
               {{ t('wineStory.giftPhilosophy.reasons.authenticity.title') }}
@@ -69,7 +75,10 @@
           <!-- Quality -->
           <div class="reason-card">
             <div class="reason-icon-wrapper">
-              <commonIcon name="lucide:award" class="reason-icon" />
+              <commonIcon
+                name="lucide:award"
+                class="reason-icon"
+              />
             </div>
             <h4 class="reason-title">
               {{ t('wineStory.giftPhilosophy.reasons.quality.title') }}
@@ -82,7 +91,10 @@
           <!-- Sustainability -->
           <div class="reason-card">
             <div class="reason-icon-wrapper">
-              <commonIcon name="lucide:leaf" class="reason-icon" />
+              <commonIcon
+                name="lucide:leaf"
+                class="reason-icon"
+              />
             </div>
             <h4 class="reason-title">
               {{ t('wineStory.giftPhilosophy.reasons.sustainability.title') }}
@@ -95,7 +107,10 @@
           <!-- Unique -->
           <div class="reason-card">
             <div class="reason-icon-wrapper">
-              <commonIcon name="lucide:sparkles" class="reason-icon" />
+              <commonIcon
+                name="lucide:sparkles"
+                class="reason-icon"
+              />
             </div>
             <h4 class="reason-title">
               {{ t('wineStory.giftPhilosophy.reasons.unique.title') }}
@@ -127,7 +142,10 @@
           <div class="scenario-card">
             <div class="scenario-header">
               <div class="scenario-icon-wrapper">
-                <commonIcon name="lucide:briefcase" class="scenario-icon" />
+                <commonIcon
+                  name="lucide:briefcase"
+                  class="scenario-icon"
+                />
               </div>
               <h4 class="scenario-title">
                 {{ t('wineStory.giftPhilosophy.scenarios.corporate.title') }}
@@ -142,7 +160,10 @@
           <div class="scenario-card">
             <div class="scenario-header">
               <div class="scenario-icon-wrapper">
-                <commonIcon name="lucide:party-popper" class="scenario-icon" />
+                <commonIcon
+                  name="lucide:party-popper"
+                  class="scenario-icon"
+                />
               </div>
               <h4 class="scenario-title">
                 {{ t('wineStory.giftPhilosophy.scenarios.celebration.title') }}
@@ -157,7 +178,10 @@
           <div class="scenario-card">
             <div class="scenario-header">
               <div class="scenario-icon-wrapper">
-                <commonIcon name="lucide:gift" class="scenario-icon" />
+                <commonIcon
+                  name="lucide:gift"
+                  class="scenario-icon"
+                />
               </div>
               <h4 class="scenario-title">
                 {{ t('wineStory.giftPhilosophy.scenarios.gratitude.title') }}
@@ -172,7 +196,10 @@
           <div class="scenario-card">
             <div class="scenario-header">
               <div class="scenario-icon-wrapper">
-                <commonIcon name="lucide:compass" class="scenario-icon" />
+                <commonIcon
+                  name="lucide:compass"
+                  class="scenario-icon"
+                />
               </div>
               <h4 class="scenario-title">
                 {{ t('wineStory.giftPhilosophy.scenarios.exploration.title') }}
@@ -202,9 +229,15 @@
         <p class="cta-description">
           {{ t('wineStory.giftPhilosophy.cta.description') }}
         </p>
-        <NuxtLink :to="localePath('/products')" class="cta-button">
+        <NuxtLink
+          :to="localePath('/products')"
+          class="cta-button"
+        >
           {{ t('wineStory.giftPhilosophy.cta.button') }}
-          <commonIcon name="lucide:arrow-right" class="cta-icon" />
+          <commonIcon
+            name="lucide:arrow-right"
+            class="cta-icon"
+          />
         </NuxtLink>
       </div>
     </div>

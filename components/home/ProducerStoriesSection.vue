@@ -14,7 +14,10 @@
       >
         <div class="section-badge">
           <span class="badge-line"></span>
-          <commonIcon name="lucide:users" class="badge-icon" />
+          <commonIcon
+            name="lucide:users"
+            class="badge-icon"
+          />
           <span>{{ t('wineStory.producers.badge', 'Our Producers') }}</span>
           <span class="badge-line"></span>
         </div>
@@ -28,15 +31,32 @@
       </div>
 
       <!-- Loading State -->
-      <div v-if="loading" class="loading-grid">
-        <div v-for="i in 3" :key="i" class="loading-card"></div>
+      <div
+        v-if="loading"
+        class="loading-grid"
+      >
+        <div
+          v-for="i in 3"
+          :key="i"
+          class="loading-card"
+        ></div>
       </div>
 
       <!-- Error State -->
-      <div v-else-if="error" class="error-state">
-        <commonIcon name="lucide:alert-circle" class="error-icon" />
-        <p class="error-title">{{ t('wineStory.producers.error') }}</p>
-        <p class="error-message">{{ error }}</p>
+      <div
+        v-else-if="error"
+        class="error-state"
+      >
+        <commonIcon
+          name="lucide:alert-circle"
+          class="error-icon"
+        />
+        <p class="error-title">
+          {{ t('wineStory.producers.error') }}
+        </p>
+        <p class="error-message">
+          {{ error }}
+        </p>
       </div>
 
       <!-- Producer Carousel -->
@@ -106,14 +126,20 @@
           class="nav-button nav-prev swiper-button-prev-custom"
           :aria-label="t('common.previous')"
         >
-          <commonIcon name="lucide:chevron-left" class="nav-icon" />
+          <commonIcon
+            name="lucide:chevron-left"
+            class="nav-icon"
+          />
         </button>
 
         <button
           class="nav-button nav-next swiper-button-next-custom"
           :aria-label="t('common.next')"
         >
-          <commonIcon name="lucide:chevron-right" class="nav-icon" />
+          <commonIcon
+            name="lucide:chevron-right"
+            class="nav-icon"
+          />
         </button>
 
         <!-- Custom Pagination -->
@@ -122,20 +148,34 @@
         <!-- Keyboard/Touch Hints -->
         <div class="interaction-hints">
           <span class="hint-item">
-            <commonIcon name="lucide:mouse-pointer-2" class="hint-icon" />
+            <commonIcon
+              name="lucide:mouse-pointer-2"
+              class="hint-icon"
+            />
             {{ t('wineStory.producers.swipeHint') }}
           </span>
           <span class="hint-item hint-desktop">
-            <commonIcon name="lucide:keyboard" class="hint-icon" />
+            <commonIcon
+              name="lucide:keyboard"
+              class="hint-icon"
+            />
             {{ t('wineStory.producers.keyboardHint') }}
           </span>
         </div>
       </div>
 
       <!-- Empty State -->
-      <div v-else class="empty-state">
-        <commonIcon name="lucide:wine" class="empty-icon" />
-        <p class="empty-text">{{ t('wineStory.producers.noProducers') }}</p>
+      <div
+        v-else
+        class="empty-state"
+      >
+        <commonIcon
+          name="lucide:wine"
+          class="empty-icon"
+        />
+        <p class="empty-text">
+          {{ t('wineStory.producers.noProducers') }}
+        </p>
       </div>
     </div>
 

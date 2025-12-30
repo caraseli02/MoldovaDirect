@@ -98,9 +98,15 @@
               :key="item.title"
               class="summary-card"
             >
-              <div class="summary-metric">{{ item.metric }}</div>
-              <div class="summary-title">{{ item.title }}</div>
-              <div class="summary-description">{{ item.description }}</div>
+              <div class="summary-metric">
+                {{ item.metric }}
+              </div>
+              <div class="summary-title">
+                {{ item.title }}
+              </div>
+              <div class="summary-description">
+                {{ item.description }}
+              </div>
             </div>
           </div>
         </div>
@@ -134,8 +140,12 @@
                   class="item-icon"
                 />
                 <div class="item-content">
-                  <p class="item-title">{{ t('returns.eligibility.items.unopened.title', 'Unopened Products') }}</p>
-                  <p class="item-text">{{ t('returns.eligibility.items.unopened.text', 'Unopened pantry items within 30 days of delivery') }}</p>
+                  <p class="item-title">
+                    {{ t('returns.eligibility.items.unopened.title', 'Unopened Products') }}
+                  </p>
+                  <p class="item-text">
+                    {{ t('returns.eligibility.items.unopened.text', 'Unopened pantry items within 30 days of delivery') }}
+                  </p>
                 </div>
               </li>
               <li class="policy-item">
@@ -144,8 +154,12 @@
                   class="item-icon"
                 />
                 <div class="item-content">
-                  <p class="item-title">{{ t('returns.eligibility.items.damaged.title', 'Damaged Items') }}</p>
-                  <p class="item-text">{{ t('returns.eligibility.items.damaged.text', 'Report within 7 days for replacement or refund') }}</p>
+                  <p class="item-title">
+                    {{ t('returns.eligibility.items.damaged.title', 'Damaged Items') }}
+                  </p>
+                  <p class="item-text">
+                    {{ t('returns.eligibility.items.damaged.text', 'Report within 7 days for replacement or refund') }}
+                  </p>
                 </div>
               </li>
               <li class="policy-item">
@@ -154,8 +168,12 @@
                   class="item-icon"
                 />
                 <div class="item-content">
-                  <p class="item-title">{{ t('returns.eligibility.items.incorrect.title', 'Incorrect Orders') }}</p>
-                  <p class="item-text">{{ t('returns.eligibility.items.incorrect.text', 'Wrong items sent? We\'ll make it right immediately') }}</p>
+                  <p class="item-title">
+                    {{ t('returns.eligibility.items.incorrect.title', 'Incorrect Orders') }}
+                  </p>
+                  <p class="item-text">
+                    {{ t('returns.eligibility.items.incorrect.text', 'Wrong items sent? We\'ll make it right immediately') }}
+                  </p>
                 </div>
               </li>
             </ul>
@@ -184,8 +202,12 @@
                   class="item-icon"
                 />
                 <div class="item-content">
-                  <p class="item-title">{{ t('returns.resolution.items.refund.title', 'Full Refund') }}</p>
-                  <p class="item-text">{{ t('returns.resolution.items.refund.text', 'Money back to your original payment method within 2-5 business days') }}</p>
+                  <p class="item-title">
+                    {{ t('returns.resolution.items.refund.title', 'Full Refund') }}
+                  </p>
+                  <p class="item-text">
+                    {{ t('returns.resolution.items.refund.text', 'Money back to your original payment method within 2-5 business days') }}
+                  </p>
                 </div>
               </li>
               <li class="policy-item">
@@ -194,8 +216,12 @@
                   class="item-icon"
                 />
                 <div class="item-content">
-                  <p class="item-title">{{ t('returns.resolution.items.credit.title', 'Store Credit') }}</p>
-                  <p class="item-text">{{ t('returns.resolution.items.credit.text', 'Instant store credit with 10% bonus for future purchases') }}</p>
+                  <p class="item-title">
+                    {{ t('returns.resolution.items.credit.title', 'Store Credit') }}
+                  </p>
+                  <p class="item-text">
+                    {{ t('returns.resolution.items.credit.text', 'Instant store credit with 10% bonus for future purchases') }}
+                  </p>
                 </div>
               </li>
               <li class="policy-item">
@@ -204,8 +230,12 @@
                   class="item-icon"
                 />
                 <div class="item-content">
-                  <p class="item-title">{{ t('returns.resolution.items.exchange.title', 'Exchange') }}</p>
-                  <p class="item-text">{{ t('returns.resolution.items.exchange.text', 'Swap for a different product at no extra cost') }}</p>
+                  <p class="item-title">
+                    {{ t('returns.resolution.items.exchange.title', 'Exchange') }}
+                  </p>
+                  <p class="item-text">
+                    {{ t('returns.resolution.items.exchange.text', 'Swap for a different product at no extra cost') }}
+                  </p>
                 </div>
               </li>
             </ul>
@@ -237,27 +267,51 @@
 
         <ol class="steps-grid">
           <li class="step-card">
-            <div class="step-number">1</div>
-            <h3 class="step-title">{{ t('returns.steps.items.contact.title', 'Contact Us') }}</h3>
-            <p class="step-text">{{ t('returns.steps.items.contact.text', 'Reach out via email, phone, or chat with your order details') }}</p>
+            <div class="step-number">
+              1
+            </div>
+            <h3 class="step-title">
+              {{ t('returns.steps.items.contact.title', 'Contact Us') }}
+            </h3>
+            <p class="step-text">
+              {{ t('returns.steps.items.contact.text', 'Reach out via email, phone, or chat with your order details') }}
+            </p>
           </li>
 
           <li class="step-card">
-            <div class="step-number">2</div>
-            <h3 class="step-title">{{ t('returns.steps.items.approval.title', 'Get Approval') }}</h3>
-            <p class="step-text">{{ t('returns.steps.items.approval.text', 'We\'ll review and approve your return request within 24 hours') }}</p>
+            <div class="step-number">
+              2
+            </div>
+            <h3 class="step-title">
+              {{ t('returns.steps.items.approval.title', 'Get Approval') }}
+            </h3>
+            <p class="step-text">
+              {{ t('returns.steps.items.approval.text', 'We\'ll review and approve your return request within 24 hours') }}
+            </p>
           </li>
 
           <li class="step-card">
-            <div class="step-number">3</div>
-            <h3 class="step-title">{{ t('returns.steps.items.ship.title', 'Ship It Back') }}</h3>
-            <p class="step-text">{{ t('returns.steps.items.ship.text', 'Use our prepaid label (if eligible) or your preferred shipping method') }}</p>
+            <div class="step-number">
+              3
+            </div>
+            <h3 class="step-title">
+              {{ t('returns.steps.items.ship.title', 'Ship It Back') }}
+            </h3>
+            <p class="step-text">
+              {{ t('returns.steps.items.ship.text', 'Use our prepaid label (if eligible) or your preferred shipping method') }}
+            </p>
           </li>
 
           <li class="step-card">
-            <div class="step-number">4</div>
-            <h3 class="step-title">{{ t('returns.steps.items.refund.title', 'Get Refunded') }}</h3>
-            <p class="step-text">{{ t('returns.steps.items.refund.text', 'Receive your refund or store credit once we receive the return') }}</p>
+            <div class="step-number">
+              4
+            </div>
+            <h3 class="step-title">
+              {{ t('returns.steps.items.refund.title', 'Get Refunded') }}
+            </h3>
+            <p class="step-text">
+              {{ t('returns.steps.items.refund.text', 'Receive your refund or store credit once we receive the return') }}
+            </p>
           </li>
         </ol>
       </div>
@@ -273,8 +327,12 @@
               name="lucide:wallet"
               class="info-icon"
             />
-            <h3 class="info-title">{{ t('returns.fees.title', 'Return Fees') }}</h3>
-            <p class="info-description">{{ t('returns.fees.description', 'Transparent pricing for return shipping') }}</p>
+            <h3 class="info-title">
+              {{ t('returns.fees.title', 'Return Fees') }}
+            </h3>
+            <p class="info-description">
+              {{ t('returns.fees.description', 'Transparent pricing for return shipping') }}
+            </p>
 
             <ul class="info-list">
               <li
@@ -297,8 +355,12 @@
               name="lucide:clock"
               class="info-icon"
             />
-            <h3 class="info-title">{{ t('returns.expectations.title', 'What to Expect') }}</h3>
-            <p class="info-description">{{ t('returns.expectations.description', 'Timeline and process details') }}</p>
+            <h3 class="info-title">
+              {{ t('returns.expectations.title', 'What to Expect') }}
+            </h3>
+            <p class="info-description">
+              {{ t('returns.expectations.description', 'Timeline and process details') }}
+            </p>
 
             <ul class="info-list">
               <li
@@ -321,8 +383,12 @@
               name="lucide:headphones"
               class="info-icon"
             />
-            <h3 class="info-title">{{ t('returns.support.title', 'Need Help?') }}</h3>
-            <p class="info-description">{{ t('returns.support.description', 'Our team is here to assist you') }}</p>
+            <h3 class="info-title">
+              {{ t('returns.support.title', 'Need Help?') }}
+            </h3>
+            <p class="info-description">
+              {{ t('returns.support.description', 'Our team is here to assist you') }}
+            </p>
 
             <NuxtLink
               :to="localePath('/contact')"

@@ -71,7 +71,10 @@
             @click="$emit('scroll-to-results')"
           >
             {{ ctaText }}
-            <commonIcon name="lucide:arrow-down" class="cta-icon" />
+            <commonIcon
+              name="lucide:arrow-down"
+              class="cta-icon"
+            />
           </button>
 
           <div

@@ -9,11 +9,17 @@
       </div>
 
       <div class="container">
-        <div v-motion class="hero-content">
+        <div
+          v-motion
+          class="hero-content"
+        >
           <!-- Luxury Badge -->
           <div class="hero-badge">
             <span class="badge-line"></span>
-            <commonIcon name="lucide:shield-check" class="badge-icon" />
+            <commonIcon
+              name="lucide:shield-check"
+              class="badge-icon"
+            />
             <span>{{ t('privacy.badge', 'Privacy') }}</span>
             <span class="badge-line"></span>
           </div>
@@ -41,7 +47,9 @@
           <!-- Sidebar Navigation -->
           <aside class="sidebar">
             <div class="sidebar-sticky">
-              <h3 class="sidebar-title">{{ t('privacy.sections', 'Sections') }}</h3>
+              <h3 class="sidebar-title">
+                {{ t('privacy.sections', 'Sections') }}
+              </h3>
               <nav class="sidebar-nav">
                 <a
                   v-for="section in sections"
@@ -58,7 +66,10 @@
           <!-- Main Content -->
           <div class="main-content">
             <!-- Section 1: Information We Collect -->
-            <div id="information-collect" class="content-card">
+            <div
+              id="information-collect"
+              class="content-card"
+            >
               <div class="section-badge">
                 <span class="badge-line-short"></span>
                 <span>{{ t('privacy.section1Badge', 'Section 1') }}</span>
@@ -71,26 +82,41 @@
               </p>
               <ul class="section-list">
                 <li>
-                  <commonIcon name="lucide:user" class="list-icon" />
+                  <commonIcon
+                    name="lucide:user"
+                    class="list-icon"
+                  />
                   <span>{{ t('privacy.section1Item1', 'Personal information (name, email, phone number)') }}</span>
                 </li>
                 <li>
-                  <commonIcon name="lucide:map-pin" class="list-icon" />
+                  <commonIcon
+                    name="lucide:map-pin"
+                    class="list-icon"
+                  />
                   <span>{{ t('privacy.section1Item2', 'Billing and shipping addresses') }}</span>
                 </li>
                 <li>
-                  <commonIcon name="lucide:credit-card" class="list-icon" />
+                  <commonIcon
+                    name="lucide:credit-card"
+                    class="list-icon"
+                  />
                   <span>{{ t('privacy.section1Item3', 'Payment information (processed securely by our payment providers)') }}</span>
                 </li>
                 <li>
-                  <commonIcon name="lucide:package" class="list-icon" />
+                  <commonIcon
+                    name="lucide:package"
+                    class="list-icon"
+                  />
                   <span>{{ t('privacy.section1Item4', 'Order history and preferences') }}</span>
                 </li>
               </ul>
             </div>
 
             <!-- Section 2: How We Use Your Information -->
-            <div id="information-use" class="content-card">
+            <div
+              id="information-use"
+              class="content-card"
+            >
               <div class="section-badge">
                 <span class="badge-line-short"></span>
                 <span>{{ t('privacy.section2Badge', 'Section 2') }}</span>
@@ -103,34 +129,55 @@
               </p>
               <ul class="section-list">
                 <li>
-                  <commonIcon name="lucide:check" class="list-icon" />
+                  <commonIcon
+                    name="lucide:check"
+                    class="list-icon"
+                  />
                   <span>{{ t('privacy.section2Item1', 'Process and fulfill your orders') }}</span>
                 </li>
                 <li>
-                  <commonIcon name="lucide:check" class="list-icon" />
+                  <commonIcon
+                    name="lucide:check"
+                    class="list-icon"
+                  />
                   <span>{{ t('privacy.section2Item2', 'Send order confirmations and shipping updates') }}</span>
                 </li>
                 <li>
-                  <commonIcon name="lucide:check" class="list-icon" />
+                  <commonIcon
+                    name="lucide:check"
+                    class="list-icon"
+                  />
                   <span>{{ t('privacy.section2Item3', 'Provide customer support') }}</span>
                 </li>
                 <li>
-                  <commonIcon name="lucide:check" class="list-icon" />
+                  <commonIcon
+                    name="lucide:check"
+                    class="list-icon"
+                  />
                   <span>{{ t('privacy.section2Item4', 'Send promotional communications (with your consent)') }}</span>
                 </li>
                 <li>
-                  <commonIcon name="lucide:check" class="list-icon" />
+                  <commonIcon
+                    name="lucide:check"
+                    class="list-icon"
+                  />
                   <span>{{ t('privacy.section2Item5', 'Improve our products and services') }}</span>
                 </li>
                 <li>
-                  <commonIcon name="lucide:check" class="list-icon" />
+                  <commonIcon
+                    name="lucide:check"
+                    class="list-icon"
+                  />
                   <span>{{ t('privacy.section2Item6', 'Comply with legal obligations') }}</span>
                 </li>
               </ul>
             </div>
 
             <!-- Section 3: Information Sharing -->
-            <div id="information-sharing" class="content-card">
+            <div
+              id="information-sharing"
+              class="content-card"
+            >
               <div class="section-badge">
                 <span class="badge-line-short"></span>
                 <span>{{ t('privacy.section3Badge', 'Section 3') }}</span>
@@ -143,26 +190,41 @@
               </p>
               <ul class="section-list">
                 <li>
-                  <commonIcon name="lucide:users" class="list-icon" />
+                  <commonIcon
+                    name="lucide:users"
+                    class="list-icon"
+                  />
                   <span>{{ t('privacy.section3Item1', 'Service providers who help us operate our business') }}</span>
                 </li>
                 <li>
-                  <commonIcon name="lucide:credit-card" class="list-icon" />
+                  <commonIcon
+                    name="lucide:credit-card"
+                    class="list-icon"
+                  />
                   <span>{{ t('privacy.section3Item2', 'Payment processors to handle transactions') }}</span>
                 </li>
                 <li>
-                  <commonIcon name="lucide:truck" class="list-icon" />
+                  <commonIcon
+                    name="lucide:truck"
+                    class="list-icon"
+                  />
                   <span>{{ t('privacy.section3Item3', 'Shipping companies to deliver your orders') }}</span>
                 </li>
                 <li>
-                  <commonIcon name="lucide:scale" class="list-icon" />
+                  <commonIcon
+                    name="lucide:scale"
+                    class="list-icon"
+                  />
                   <span>{{ t('privacy.section3Item4', 'Legal authorities when required by law') }}</span>
                 </li>
               </ul>
             </div>
 
             <!-- Section 4: Data Security -->
-            <div id="data-security" class="content-card">
+            <div
+              id="data-security"
+              class="content-card"
+            >
               <div class="section-badge">
                 <span class="badge-line-short"></span>
                 <span>{{ t('privacy.section4Badge', 'Section 4') }}</span>
@@ -176,7 +238,10 @@
             </div>
 
             <!-- Section 5: Cookies -->
-            <div id="cookies" class="content-card">
+            <div
+              id="cookies"
+              class="content-card"
+            >
               <div class="section-badge">
                 <span class="badge-line-short"></span>
                 <span>{{ t('privacy.section5Badge', 'Section 5') }}</span>
@@ -190,7 +255,10 @@
             </div>
 
             <!-- Section 6: Your Rights -->
-            <div id="your-rights" class="content-card highlight-card">
+            <div
+              id="your-rights"
+              class="content-card highlight-card"
+            >
               <div class="section-badge">
                 <span class="badge-line-short"></span>
                 <span>{{ t('privacy.section6Badge', 'Section 6') }}</span>
@@ -203,34 +271,55 @@
               </p>
               <ul class="section-list">
                 <li>
-                  <commonIcon name="lucide:eye" class="list-icon" />
+                  <commonIcon
+                    name="lucide:eye"
+                    class="list-icon"
+                  />
                   <span>{{ t('privacy.section6Item1', 'Access your personal data') }}</span>
                 </li>
                 <li>
-                  <commonIcon name="lucide:edit" class="list-icon" />
+                  <commonIcon
+                    name="lucide:edit"
+                    class="list-icon"
+                  />
                   <span>{{ t('privacy.section6Item2', 'Correct inaccurate data') }}</span>
                 </li>
                 <li>
-                  <commonIcon name="lucide:trash-2" class="list-icon" />
+                  <commonIcon
+                    name="lucide:trash-2"
+                    class="list-icon"
+                  />
                   <span>{{ t('privacy.section6Item3', 'Delete your data') }}</span>
                 </li>
                 <li>
-                  <commonIcon name="lucide:x-circle" class="list-icon" />
+                  <commonIcon
+                    name="lucide:x-circle"
+                    class="list-icon"
+                  />
                   <span>{{ t('privacy.section6Item4', 'Object to data processing') }}</span>
                 </li>
                 <li>
-                  <commonIcon name="lucide:download" class="list-icon" />
+                  <commonIcon
+                    name="lucide:download"
+                    class="list-icon"
+                  />
                   <span>{{ t('privacy.section6Item5', 'Data portability') }}</span>
                 </li>
                 <li>
-                  <commonIcon name="lucide:shield-off" class="list-icon" />
+                  <commonIcon
+                    name="lucide:shield-off"
+                    class="list-icon"
+                  />
                   <span>{{ t('privacy.section6Item6', 'Withdraw consent') }}</span>
                 </li>
               </ul>
             </div>
 
             <!-- Section 7: International Transfers -->
-            <div id="international-transfers" class="content-card">
+            <div
+              id="international-transfers"
+              class="content-card"
+            >
               <div class="section-badge">
                 <span class="badge-line-short"></span>
                 <span>{{ t('privacy.section7Badge', 'Section 7') }}</span>
@@ -244,7 +333,10 @@
             </div>
 
             <!-- Section 8: Children's Privacy -->
-            <div id="children-privacy" class="content-card">
+            <div
+              id="children-privacy"
+              class="content-card"
+            >
               <div class="section-badge">
                 <span class="badge-line-short"></span>
                 <span>{{ t('privacy.section8Badge', 'Section 8') }}</span>
@@ -258,7 +350,10 @@
             </div>
 
             <!-- Section 9: Changes to This Policy -->
-            <div id="policy-changes" class="content-card">
+            <div
+              id="policy-changes"
+              class="content-card"
+            >
               <div class="section-badge">
                 <span class="badge-line-short"></span>
                 <span>{{ t('privacy.section9Badge', 'Section 9') }}</span>
@@ -272,7 +367,10 @@
             </div>
 
             <!-- Section 10: Contact Us -->
-            <div id="contact" class="content-card contact-card">
+            <div
+              id="contact"
+              class="content-card contact-card"
+            >
               <div class="section-badge">
                 <span class="badge-line-short"></span>
                 <span>{{ t('privacy.section10Badge', 'Section 10') }}</span>
@@ -286,26 +384,49 @@
 
               <div class="contact-grid">
                 <div class="contact-item">
-                  <commonIcon name="lucide:mail" class="contact-icon" />
+                  <commonIcon
+                    name="lucide:mail"
+                    class="contact-icon"
+                  />
                   <div>
-                    <div class="contact-label">{{ t('privacy.email', 'Email') }}</div>
-                    <a href="mailto:privacy@moldovadirect.com" class="contact-value">privacy@moldovadirect.com</a>
+                    <div class="contact-label">
+                      {{ t('privacy.email', 'Email') }}
+                    </div>
+                    <a
+                      href="mailto:privacy@moldovadirect.com"
+                      class="contact-value"
+                    >privacy@moldovadirect.com</a>
                   </div>
                 </div>
 
                 <div class="contact-item">
-                  <commonIcon name="lucide:phone" class="contact-icon" />
+                  <commonIcon
+                    name="lucide:phone"
+                    class="contact-icon"
+                  />
                   <div>
-                    <div class="contact-label">{{ t('privacy.phone', 'Phone') }}</div>
-                    <a href="tel:+34910000000" class="contact-value">+34 910 000 000</a>
+                    <div class="contact-label">
+                      {{ t('privacy.phone', 'Phone') }}
+                    </div>
+                    <a
+                      href="tel:+34910000000"
+                      class="contact-value"
+                    >+34 910 000 000</a>
                   </div>
                 </div>
 
                 <div class="contact-item">
-                  <commonIcon name="lucide:map-pin" class="contact-icon" />
+                  <commonIcon
+                    name="lucide:map-pin"
+                    class="contact-icon"
+                  />
                   <div>
-                    <div class="contact-label">{{ t('privacy.address', 'Address') }}</div>
-                    <div class="contact-value">Moldova Direct S.L., Madrid, Spain</div>
+                    <div class="contact-label">
+                      {{ t('privacy.address', 'Address') }}
+                    </div>
+                    <div class="contact-value">
+                      Moldova Direct S.L., Madrid, Spain
+                    </div>
                   </div>
                 </div>
               </div>

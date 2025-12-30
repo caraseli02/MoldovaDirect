@@ -224,7 +224,9 @@
                     class="info-icon"
                   />
                 </div>
-                <h3 class="info-title">{{ $t('contact.info.email.title', 'Email') }}</h3>
+                <h3 class="info-title">
+                  {{ $t('contact.info.email.title', 'Email') }}
+                </h3>
                 <div class="info-details">
                   <a
                     href="mailto:info@moldovadirect.com"
@@ -249,7 +251,9 @@
                     class="info-icon"
                   />
                 </div>
-                <h3 class="info-title">{{ $t('contact.info.phone.title', 'Phone') }}</h3>
+                <h3 class="info-title">
+                  {{ $t('contact.info.phone.title', 'Phone') }}
+                </h3>
                 <div class="info-details">
                   <a
                     href="tel:+34910000000"
@@ -271,10 +275,16 @@
                     class="info-icon"
                   />
                 </div>
-                <h3 class="info-title">{{ $t('contact.info.office.title', 'Office') }}</h3>
+                <h3 class="info-title">
+                  {{ $t('contact.info.office.title', 'Office') }}
+                </h3>
                 <div class="info-details">
-                  <p class="info-text">Moldova Direct S.L.</p>
-                  <p class="info-text">Madrid, Spain</p>
+                  <p class="info-text">
+                    Moldova Direct S.L.
+                  </p>
+                  <p class="info-text">
+                    Madrid, Spain
+                  </p>
                 </div>
               </div>
 
@@ -286,7 +296,9 @@
                     class="info-icon"
                   />
                 </div>
-                <h3 class="info-title">{{ $t('contact.info.social.title', 'Follow Us') }}</h3>
+                <h3 class="info-title">
+                  {{ $t('contact.info.social.title', 'Follow Us') }}
+                </h3>
                 <div class="info-details">
                   <div class="social-links">
                     <a

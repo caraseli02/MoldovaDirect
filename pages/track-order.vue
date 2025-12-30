@@ -9,11 +9,17 @@
       </div>
 
       <div class="container">
-        <div v-motion class="hero-content">
+        <div
+          v-motion
+          class="hero-content"
+        >
           <!-- Luxury Badge -->
           <div class="hero-badge">
             <span class="badge-line"></span>
-            <commonIcon name="lucide:package-search" class="badge-icon" />
+            <commonIcon
+              name="lucide:package-search"
+              class="badge-icon"
+            />
             <span>{{ t('trackOrder.badge', 'Order Tracking') }}</span>
             <span class="badge-line"></span>
           </div>
@@ -35,11 +41,23 @@
       <div class="container">
         <div class="content-wrapper">
           <!-- Search Form -->
-          <div v-if="!trackingData" class="form-card">
-            <form class="tracking-form" @submit.prevent="trackOrder">
+          <div
+            v-if="!trackingData"
+            class="form-card"
+          >
+            <form
+              class="tracking-form"
+              @submit.prevent="trackOrder"
+            >
               <div class="form-group">
-                <label for="orderNumber" class="form-label">
-                  <commonIcon name="lucide:hash" class="label-icon" />
+                <label
+                  for="orderNumber"
+                  class="form-label"
+                >
+                  <commonIcon
+                    name="lucide:hash"
+                    class="label-icon"
+                  />
                   <span>{{ t('trackOrder.orderNumber', 'Order Number') }}</span>
                 </label>
                 <input
@@ -53,8 +71,14 @@
               </div>
 
               <div class="form-group">
-                <label for="email" class="form-label">
-                  <commonIcon name="lucide:mail" class="label-icon" />
+                <label
+                  for="email"
+                  class="form-label"
+                >
+                  <commonIcon
+                    name="lucide:mail"
+                    class="label-icon"
+                  />
                   <span>{{ t('trackOrder.email', 'Email Address') }}</span>
                 </label>
                 <input
@@ -68,24 +92,52 @@
               </div>
 
               <!-- Error Message -->
-              <div v-if="error" class="error-message">
-                <commonIcon name="lucide:alert-circle" class="error-icon" />
+              <div
+                v-if="error"
+                class="error-message"
+              >
+                <commonIcon
+                  name="lucide:alert-circle"
+                  class="error-icon"
+                />
                 <span>{{ error }}</span>
               </div>
 
-              <button type="submit" :disabled="loading" class="btn-primary">
-                <commonIcon v-if="loading" name="lucide:loader-2" class="btn-icon animate-spin" />
-                <commonIcon v-else name="lucide:search" class="btn-icon" />
+              <button
+                type="submit"
+                :disabled="loading"
+                class="btn-primary"
+              >
+                <commonIcon
+                  v-if="loading"
+                  name="lucide:loader-2"
+                  class="btn-icon animate-spin"
+                />
+                <commonIcon
+                  v-else
+                  name="lucide:search"
+                  class="btn-icon"
+                />
                 <span>{{ loading ? t('common.loading', 'Loading...') : t('trackOrder.trackButton', 'Track Order') }}</span>
               </button>
             </form>
           </div>
 
           <!-- Tracking Results -->
-          <div v-if="trackingData" class="results-wrapper">
+          <div
+            v-if="trackingData"
+            class="results-wrapper"
+          >
             <!-- Back Button -->
-            <button type="button" class="back-button" @click="resetSearch">
-              <commonIcon name="lucide:arrow-left" class="back-icon" />
+            <button
+              type="button"
+              class="back-button"
+              @click="resetSearch"
+            >
+              <commonIcon
+                name="lucide:arrow-left"
+                class="back-icon"
+              />
               <span>{{ t('trackOrder.trackAnother', 'Track another order') }}</span>
             </button>
 
@@ -93,25 +145,47 @@
             <div class="summary-card">
               <div class="summary-header">
                 <div class="summary-info">
-                  <p class="summary-label">{{ t('trackOrder.orderNumber', 'Order Number') }}</p>
-                  <p class="summary-value">{{ trackingData.orderNumber }}</p>
+                  <p class="summary-label">
+                    {{ t('trackOrder.orderNumber', 'Order Number') }}
+                  </p>
+                  <p class="summary-value">
+                    {{ trackingData.orderNumber }}
+                  </p>
                 </div>
-                <span class="status-badge" :class="getStatusClasses(trackingData.status)">
+                <span
+                  class="status-badge"
+                  :class="getStatusClasses(trackingData.status)"
+                >
                   {{ t(`trackOrder.status.${trackingData.status}`) }}
                 </span>
               </div>
 
               <!-- Tracking Number -->
-              <div v-if="trackingData.trackingNumber" class="tracking-info">
-                <commonIcon name="lucide:truck" class="info-icon" />
+              <div
+                v-if="trackingData.trackingNumber"
+                class="tracking-info"
+              >
+                <commonIcon
+                  name="lucide:truck"
+                  class="info-icon"
+                />
                 <span class="info-label">{{ t('trackOrder.trackingNumber', 'Tracking') }}:</span>
                 <span class="info-value">{{ trackingData.trackingNumber }}</span>
-                <span v-if="trackingData.carrier" class="info-carrier">({{ trackingData.carrier }})</span>
+                <span
+                  v-if="trackingData.carrier"
+                  class="info-carrier"
+                >({{ trackingData.carrier }})</span>
               </div>
 
               <!-- Estimated Delivery -->
-              <div v-if="trackingData.estimatedDelivery" class="tracking-info">
-                <commonIcon name="lucide:calendar-clock" class="info-icon" />
+              <div
+                v-if="trackingData.estimatedDelivery"
+                class="tracking-info"
+              >
+                <commonIcon
+                  name="lucide:calendar-clock"
+                  class="info-icon"
+                />
                 <span class="info-label">{{ t('trackOrder.estimatedDelivery', 'Estimated Delivery') }}:</span>
                 <span class="info-value">{{ formatDate(trackingData.estimatedDelivery) }}</span>
               </div>
@@ -120,16 +194,29 @@
               <div class="progress-section">
                 <div class="progress-track">
                   <div class="progress-line"></div>
-                  <div class="progress-fill" :style="{ width: `${getProgressWidth(trackingData.status)}%` }"></div>
+                  <div
+                    class="progress-fill"
+                    :style="{ width: `${getProgressWidth(trackingData.status)}%` }"
+                  ></div>
 
-                  <div v-for="(step, index) in statusSteps" :key="step.key" class="progress-step">
-                    <div class="step-circle" :class="getStepClasses(step.key, trackingData.status)">
+                  <div
+                    v-for="(step, index) in statusSteps"
+                    :key="step.key"
+                    class="progress-step"
+                  >
+                    <div
+                      class="step-circle"
+                      :class="getStepClasses(step.key, trackingData.status)"
+                    >
                       <commonIcon
                         v-if="isStepCompleted(step.key, trackingData.status)"
                         name="lucide:check"
                         class="step-check"
                       />
-                      <span v-else class="step-number">{{ index + 1 }}</span>
+                      <span
+                        v-else
+                        class="step-number"
+                      >{{ index + 1 }}</span>
                     </div>
                     <span class="step-label">
                       {{ t(`trackOrder.steps.${step.key}`) }}
@@ -140,20 +227,42 @@
             </div>
 
             <!-- Order Items -->
-            <div v-if="trackingData.items && trackingData.items.length > 0" class="items-card">
+            <div
+              v-if="trackingData.items && trackingData.items.length > 0"
+              class="items-card"
+            >
               <h3 class="card-title">
-                <commonIcon name="lucide:package" class="title-icon" />
+                <commonIcon
+                  name="lucide:package"
+                  class="title-icon"
+                />
                 {{ t('trackOrder.orderItems', 'Order Items') }}
               </h3>
               <div class="items-list">
-                <div v-for="(item, index) in trackingData.items" :key="index" class="item-row">
+                <div
+                  v-for="(item, index) in trackingData.items"
+                  :key="index"
+                  class="item-row"
+                >
                   <div class="item-image">
-                    <img v-if="item.image" :src="item.image" :alt="getLocalizedText(item.name)" />
-                    <commonIcon v-else name="lucide:package" class="placeholder-icon" />
+                    <img
+                      v-if="item.image"
+                      :src="item.image"
+                      :alt="getLocalizedText(item.name)"
+                    />
+                    <commonIcon
+                      v-else
+                      name="lucide:package"
+                      class="placeholder-icon"
+                    />
                   </div>
                   <div class="item-details">
-                    <p class="item-name">{{ getLocalizedText(item.name) }}</p>
-                    <p class="item-quantity">{{ t('common.quantity', 'Quantity') }}: {{ item.quantity }}</p>
+                    <p class="item-name">
+                      {{ getLocalizedText(item.name) }}
+                    </p>
+                    <p class="item-quantity">
+                      {{ t('common.quantity', 'Quantity') }}: {{ item.quantity }}
+                    </p>
                   </div>
                   <div class="item-price">
                     {{ formatPrice(item.price * item.quantity) }}
@@ -168,24 +277,53 @@
             </div>
 
             <!-- Tracking Events -->
-            <div v-if="trackingData.events && trackingData.events.length > 0" class="timeline-card">
+            <div
+              v-if="trackingData.events && trackingData.events.length > 0"
+              class="timeline-card"
+            >
               <h3 class="card-title">
-                <commonIcon name="lucide:clock" class="title-icon" />
+                <commonIcon
+                  name="lucide:clock"
+                  class="title-icon"
+                />
                 {{ t('trackOrder.trackingHistory', 'Tracking History') }}
               </h3>
               <div class="timeline">
-                <div v-for="(event, index) in trackingData.events" :key="index" class="timeline-event">
+                <div
+                  v-for="(event, index) in trackingData.events"
+                  :key="index"
+                  class="timeline-event"
+                >
                   <div class="timeline-marker">
-                    <div class="marker-dot" :class="{ active: index === 0 }"></div>
-                    <div v-if="index < trackingData.events.length - 1" class="marker-line"></div>
+                    <div
+                      class="marker-dot"
+                      :class="{ active: index === 0 }"
+                    ></div>
+                    <div
+                      v-if="index < trackingData.events.length - 1"
+                      class="marker-line"
+                    ></div>
                   </div>
                   <div class="event-content">
-                    <p class="event-status">{{ event.status }}</p>
-                    <p v-if="event.description" class="event-description">{{ event.description }}</p>
+                    <p class="event-status">
+                      {{ event.status }}
+                    </p>
+                    <p
+                      v-if="event.description"
+                      class="event-description"
+                    >
+                      {{ event.description }}
+                    </p>
                     <div class="event-meta">
                       <span class="event-time">{{ formatDateTime(event.timestamp) }}</span>
-                      <span v-if="event.location" class="event-location">
-                        <commonIcon name="lucide:map-pin" class="location-icon" />
+                      <span
+                        v-if="event.location"
+                        class="event-location"
+                      >
+                        <commonIcon
+                          name="lucide:map-pin"
+                          class="location-icon"
+                        />
                         {{ event.location }}
                       </span>
                     </div>
@@ -195,20 +333,38 @@
             </div>
 
             <!-- Shipping Info -->
-            <div v-if="trackingData.shippingAddress" class="shipping-card">
+            <div
+              v-if="trackingData.shippingAddress"
+              class="shipping-card"
+            >
               <h3 class="card-title">
-                <commonIcon name="lucide:map-pin" class="title-icon" />
+                <commonIcon
+                  name="lucide:map-pin"
+                  class="title-icon"
+                />
                 {{ t('trackOrder.shippingTo', 'Shipping To') }}
               </h3>
-              <p class="shipping-line">{{ trackingData.shippingAddress.city }}, {{ trackingData.shippingAddress.postalCode }}</p>
-              <p class="shipping-line">{{ trackingData.shippingAddress.country }}</p>
+              <p class="shipping-line">
+                {{ trackingData.shippingAddress.city }}, {{ trackingData.shippingAddress.postalCode }}
+              </p>
+              <p class="shipping-line">
+                {{ trackingData.shippingAddress.country }}
+              </p>
             </div>
 
             <!-- Help Section -->
             <div class="help-section">
-              <p class="help-text">{{ t('trackOrder.needHelp', 'Need help with your order?') }}</p>
-              <NuxtLink :to="localePath('/contact')" class="help-link">
-                <commonIcon name="lucide:message-circle" class="help-icon" />
+              <p class="help-text">
+                {{ t('trackOrder.needHelp', 'Need help with your order?') }}
+              </p>
+              <NuxtLink
+                :to="localePath('/contact')"
+                class="help-link"
+              >
+                <commonIcon
+                  name="lucide:message-circle"
+                  class="help-icon"
+                />
                 {{ t('trackOrder.contactSupport', 'Contact Support') }}
               </NuxtLink>
             </div>

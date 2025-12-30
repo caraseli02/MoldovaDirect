@@ -100,8 +100,12 @@
                 class="notice-icon"
               />
               <div class="notice-content">
-                <p class="notice-title">{{ $t('shippingPage.hero.notice', 'Free Shipping on Orders Over €50') }}</p>
-                <p class="notice-text">{{ $t('shippingPage.hero.secondaryNotice', 'Delivered within 24-48h') }}</p>
+                <p class="notice-title">
+                  {{ $t('shippingPage.hero.notice', 'Free Shipping on Orders Over €50') }}
+                </p>
+                <p class="notice-text">
+                  {{ $t('shippingPage.hero.secondaryNotice', 'Delivered within 24-48h') }}
+                </p>
               </div>
             </div>
           </div>
@@ -128,8 +132,12 @@
                   />
                 </div>
                 <div class="highlight-content">
-                  <p class="highlight-title">{{ item.title }}</p>
-                  <p class="highlight-text">{{ item.description }}</p>
+                  <p class="highlight-title">
+                    {{ item.title }}
+                  </p>
+                  <p class="highlight-text">
+                    {{ item.description }}
+                  </p>
                 </div>
               </li>
             </ul>
@@ -176,8 +184,12 @@
                   <span>{{ method.speed }}</span>
                 </div>
 
-                <h3 class="method-title">{{ method.title }}</h3>
-                <p class="method-description">{{ method.description }}</p>
+                <h3 class="method-title">
+                  {{ method.title }}
+                </h3>
+                <p class="method-description">
+                  {{ method.description }}
+                </p>
 
                 <div class="method-note">
                   <commonIcon
@@ -211,7 +223,9 @@
                     <span class="coverage-title">{{ region.title }}</span>
                     <span class="coverage-badge">{{ region.badge }}</span>
                   </div>
-                  <p class="coverage-text">{{ region.description }}</p>
+                  <p class="coverage-text">
+                    {{ region.description }}
+                  </p>
                 </li>
               </ul>
             </div>
@@ -233,8 +247,12 @@
                     class="extra-icon"
                   />
                   <div class="extra-content">
-                    <p class="extra-title">{{ item.title }}</p>
-                    <p class="extra-text">{{ item.description }}</p>
+                    <p class="extra-title">
+                      {{ item.title }}
+                    </p>
+                    <p class="extra-text">
+                      {{ item.description }}
+                    </p>
                   </div>
                 </li>
               </ul>
@@ -276,8 +294,12 @@
             <div class="step-number">
               {{ index + 1 }}
             </div>
-            <h3 class="step-title">{{ step.title }}</h3>
-            <p class="step-description">{{ step.description }}</p>
+            <h3 class="step-title">
+              {{ step.title }}
+            </h3>
+            <p class="step-description">
+              {{ step.description }}
+            </p>
           </li>
         </ol>
       </div>

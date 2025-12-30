@@ -14,7 +14,10 @@
       >
         <div class="section-badge">
           <span class="badge-line"></span>
-          <commonIcon name="lucide:utensils" class="badge-icon" />
+          <commonIcon
+            name="lucide:utensils"
+            class="badge-icon"
+          />
           <span>{{ t('wineStory.pairings.badge', 'Pairings') }}</span>
           <span class="badge-line"></span>
         </div>
@@ -84,15 +87,32 @@
       </div>
 
       <!-- Loading State -->
-      <div v-if="loading" class="loading-grid">
-        <div v-for="i in 3" :key="i" class="loading-card"></div>
+      <div
+        v-if="loading"
+        class="loading-grid"
+      >
+        <div
+          v-for="i in 3"
+          :key="i"
+          class="loading-card"
+        ></div>
       </div>
 
       <!-- Error State -->
-      <div v-else-if="error" class="error-state">
-        <commonIcon name="lucide:alert-circle" class="error-icon" />
-        <p class="error-title">{{ t('wineStory.pairings.error') }}</p>
-        <p class="error-message">{{ error }}</p>
+      <div
+        v-else-if="error"
+        class="error-state"
+      >
+        <commonIcon
+          name="lucide:alert-circle"
+          class="error-icon"
+        />
+        <p class="error-title">
+          {{ t('wineStory.pairings.error') }}
+        </p>
+        <p class="error-message">
+          {{ error }}
+        </p>
       </div>
 
       <!-- Pairing Cards Grid -->
@@ -116,12 +136,26 @@
       </div>
 
       <!-- No Results State -->
-      <div v-else class="empty-state">
-        <commonIcon name="lucide:wine" class="empty-icon" />
-        <p class="empty-text">{{ t('wineStory.pairings.noResults') }}</p>
-        <button class="empty-button" @click="clearFilters">
+      <div
+        v-else
+        class="empty-state"
+      >
+        <commonIcon
+          name="lucide:wine"
+          class="empty-icon"
+        />
+        <p class="empty-text">
+          {{ t('wineStory.pairings.noResults') }}
+        </p>
+        <button
+          class="empty-button"
+          @click="clearFilters"
+        >
           {{ t('wineStory.pairings.filters.all') }}
-          <commonIcon name="lucide:x" class="empty-button-icon" />
+          <commonIcon
+            name="lucide:x"
+            class="empty-button-icon"
+          />
         </button>
       </div>
 
@@ -130,9 +164,15 @@
         v-if="!loading && displayedPairings.length > 0"
         class="view-all-section"
       >
-        <NuxtLink :to="localePath('/pairings')" class="btn-view-all">
+        <NuxtLink
+          :to="localePath('/pairings')"
+          class="btn-view-all"
+        >
           {{ t('common.showMore') }}
-          <commonIcon name="lucide:arrow-right" class="btn-icon" />
+          <commonIcon
+            name="lucide:arrow-right"
+            class="btn-icon"
+          />
         </NuxtLink>
       </div>
     </div>
