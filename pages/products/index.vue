@@ -525,6 +525,7 @@ const {
   clearFilters,
   openFilterPanel,
   closeFilterPanel,
+  ensureFilterPanelInitialized,
   products,
   categoriesTree,
   currentCategory,
@@ -541,6 +542,9 @@ const {
 // During client hydration, state is restored from SSR payload
 await initialize()
 await fetchProducts({ sort: 'created', page: initialPage, limit: initialLimit })
+
+// Ensure filter panel state is properly initialized (fixes SSR hydration edge case)
+ensureFilterPanelInitialized()
 
 // Filter Management
 const {
