@@ -146,9 +146,6 @@
     ],
     "*.{js,mjs,cjs}": [
       "oxlint --deny-warnings"
-    ],
-    "*.{json,md}": [
-      "prettier --write --ignore-unknown"
     ]
   },
   "pnpm": {
