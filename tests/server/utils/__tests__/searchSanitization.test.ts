@@ -15,7 +15,7 @@ import {
   validateMinSearchLength,
   prepareSearchPattern,
   MAX_SEARCH_LENGTH,
-} from '../searchSanitization'
+} from '~/server/utils/searchSanitization'
 
 describe('searchSanitization', () => {
   describe('sanitizeSearchTerm', () => {

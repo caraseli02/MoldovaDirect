@@ -59,6 +59,8 @@ export const DISCOVERY_COLLECTIONS = {
   CELLAR: 'cellar',
 } as const
 
-// Type exports for TypeScript
+// Type exports for TypeScript - derived types for external use
+/** @public */
 export type ProductSortOption = typeof PRODUCT_SORT_OPTIONS[keyof typeof PRODUCT_SORT_OPTIONS]
+/** @public */
 export type DiscoveryCollectionId = typeof DISCOVERY_COLLECTIONS[keyof typeof DISCOVERY_COLLECTIONS]

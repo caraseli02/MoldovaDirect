@@ -4,8 +4,8 @@
  */
 
 import { describe, it, expect } from 'vitest'
-import { transformOrderToEmailData } from '../orderDataTransform'
-import type { DatabaseOrder } from '../emailTemplates/types'
+import { transformOrderToEmailData } from '~/server/utils/orderDataTransform'
+import type { DatabaseOrder } from '~/server/utils/emailTemplates/types'
 
 describe('Order Email Utilities', () => {
   describe('transformOrderToEmailData', () => {

@@ -85,14 +85,12 @@ if [ $TYPECHECK_EXIT -eq 0 ]; then
   echo "✅ TypeScript check passed!"
 else
   ERROR_COUNT=$(echo "$TYPECHECK_OUTPUT" | grep -c "error TS" || echo "0")
-  echo "⚠️  TypeScript found $ERROR_COUNT type errors"
-  echo "   (Note: Pre-existing errors - fix incrementally)"
+  echo "❌ TypeScript found $ERROR_COUNT type errors!"
   echo ""
-  echo "$TYPECHECK_OUTPUT" | grep "error TS" | tail -5
+  echo "$TYPECHECK_OUTPUT" | grep "error TS" | tail -10
   echo ""
-  echo "   Run 'pnpm typecheck' to see all errors"
-  # Don't exit 1 yet - we need to fix pre-existing errors first
-  # TODO: Enable strict mode once errors are fixed: exit 1
+  echo "💡 Tip: Run 'pnpm typecheck' to see all errors"
+  exit 1
 fi
 
 echo ""

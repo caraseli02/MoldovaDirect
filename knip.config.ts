@@ -20,6 +20,8 @@ const config: KnipConfig = {
   // Note: Nuxt auto-imports components, composables, utils from these directories
   // We need to include them as entry points so Knip knows they're used
   entry: [
+    // Nuxt config files (used by Nuxt, not imported)
+    'app.config.ts',
     // Nuxt auto-imported directories (components are auto-registered)
     'components/**/*.vue',
     'composables/**/*.ts',
@@ -57,6 +59,10 @@ const config: KnipConfig = {
     'scripts/**',
     '.github/scripts/**',
 
+    // Standalone test configs and runners (run via CLI, not imported)
+    'tests/playwright-standalone.config.ts',
+    'tests/run-auth-tests.ts',
+
     // Test infrastructure (imported by test framework, not app code)
     'tests/templates/**',
     'tests/fixtures/**',
@@ -72,7 +78,7 @@ const config: KnipConfig = {
     // Documentation
     'docs/**/*.ts',
 
-    // Nuxt modules (custom modules)
+    // Nuxt modules (custom modules - auto-detected by Nuxt plugin)
     'modules/**',
 
     // UI component barrel exports (re-exports for convenience)
@@ -95,24 +101,9 @@ const config: KnipConfig = {
     'tailwindcss', // loaded via CSS
     'tailwindcss-animate',
 
-    // ===== Nuxt Modules =====
-    // Loaded via nuxt.config, not imported
-    'shadcn-nuxt',
-    'nuxt-swiper',
-
     // ===== Testing Tools =====
     // Used via config files, not imported in app code
-    '@axe-core/playwright',
     '@pinia/testing',
-
-    // ===== Dev Tools =====
-    // CLI tools, not imported
-    'husky',
-    'dotenv',
-    'markdown-link-check',
-    'markdownlint-cli',
-    'eslint-plugin-oxlint', // ESLint config plugin
-    'eslint-plugin-sonarjs', // ESLint config plugin
 
     // ===== Type Definitions =====
     '@types/uuid',
@@ -123,11 +114,6 @@ const config: KnipConfig = {
 
   // CLI tools (not npm packages to check)
   ignoreBinaries: [
-    'playwright',
-    'vitest',
-    'eslint',
-    'oxlint',
-    'knip',
     'vercel',
     'prettier',
   ],
